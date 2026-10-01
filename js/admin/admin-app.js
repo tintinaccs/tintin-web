@@ -42,6 +42,7 @@ import {
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1-auth-popup-resolver-1-launch-20260926-1';
+import './settings/cupones-admin.js?v=tintin-20261001-cupones-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261001-stock-pago-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20260928-admin-crud-feedback-4';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260928-admin-crud-feedback-3-domain-cutover-2';

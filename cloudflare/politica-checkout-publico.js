@@ -1,5 +1,12 @@
 import { decodeFirestoreFields, firestoreAdminGet } from './firebase-admin-ligero.js';
 import { SUPERADMIN_EMAIL } from './seguridad-cloudinary.js';
+import {
+  COUPON_TYPE_FREE_SHIPPING,
+  couponDocPath,
+  evaluateCoupon,
+  normalizeCouponCode,
+  redemptionDocPath,
+} from './cupones.js';
 
 // Política del checkout público. El navegador sólo propone un borrador
 // (carrito, contacto, entrega y el total que vio); todo lo comercial se
@@ -317,7 +324,24 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
   if (wantsInvoice && !RUC_PATTERN.test(ruc)) throw checkoutError('ruc_invalid');
 
   const keepsAddress = shipping.method === 'delivery' || doorDelivery;
-  const shippingCost = shipping.cost === null ? 0 : shipping.cost;
+  const baseShippingCost = shipping.cost === null ? 0 : shipping.cost;
+  let shippingCost = baseShippingCost;
+  let coupon = null;
+  const rawCoupon = cleanText(payload.couponCode, 64);
+  if (rawCoupon) {
+    const code = normalizeCouponCode(rawCoupon);
+    if (!code) throw checkoutError('coupon_invalid');
+    const [couponDoc, redemption] = await Promise.all([
+      readDocument(env, get, couponDocPath(code)),
+      readDocument(env, get, redemptionDocPath(code, uid)),
+    ]);
+    const verdict = evaluateCoupon(couponDoc, redemption, {
+      shippingCost: shipping.pending ? 0 : baseShippingCost,
+    });
+    if (!verdict.ok) throw checkoutError(verdict.code, 422);
+    shippingCost = baseShippingCost - verdict.shippingDiscount;
+    coupon = { code, type: COUPON_TYPE_FREE_SHIPPING, shippingDiscount: verdict.shippingDiscount };
+  }
   const input = {
     ...baseInput,
     userPhone: phone,
@@ -330,6 +354,7 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
     address: keepsAddress ? address : '',
     reference: keepsAddress ? referencia : '',
     shippingCost,
+    ...(coupon ? { coupon } : {}),
     shippingPending: shipping.pending,
     shipping: {
       method: shipping.method,

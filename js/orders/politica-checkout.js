@@ -3,7 +3,7 @@ export const CHECKOUT_DRAFT_KEYS = Object.freeze([
   'selectedCity', 'departamento', 'address', 'referencia', 'mapLocation',
   'shippingMethod', 'encomiendaMode', 'paymentMethod', 'expectedSubtotal',
   'expectedShippingCost', 'expectedShippingPending', 'expectedTotal',
-  'wantsInvoice', 'razonSocial', 'ruc', 'ci'
+  'wantsInvoice', 'razonSocial', 'ruc', 'ci', 'couponCode'
 ]);
 
 const clean = value => String(value == null ? '' : value).trim();
@@ -32,7 +32,12 @@ export function aggregateCheckoutCart(items) {
 }
 
 export function composeCheckoutDraft(input) {
-  const shippingCost = input.shipping.cost == null ? 0 : input.shipping.cost;
+  const baseShippingCost = input.shipping.cost == null ? 0 : input.shipping.cost;
+  // Cupón de envío gratis: sólo aplica a delivery con costo conocido. El
+  // servidor lo vuelve a evaluar y decide el costo real.
+  const couponCode = String(input.couponCode || '').trim();
+  const couponApplies = Boolean(couponCode) && input.shipping.method === 'delivery' && !input.shipping.pending && baseShippingCost > 0;
+  const shippingCost = couponApplies ? 0 : baseShippingCost;
   return {
     requestId: input.requestId,
     cartLines: aggregateCheckoutCart(input.items),
@@ -58,6 +63,7 @@ export function composeCheckoutDraft(input) {
     wantsInvoice: Boolean(input.wantsInvoice),
     razonSocial: input.wantsInvoice ? String(input.razonSocial || '') : '',
     ruc: input.wantsInvoice ? String(input.ruc || '') : '',
-    ci: input.shipping.method === 'encomienda' ? String(input.ci || '') : ''
+    ci: input.shipping.method === 'encomienda' ? String(input.ci || '') : '',
+    couponCode: couponApplies ? couponCode : ''
   };
 }

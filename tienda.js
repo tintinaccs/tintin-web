@@ -25,6 +25,21 @@ function formatPrice(num) {
   return 'Gs. ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+/** Previous price (struck-through) + discount %, only when priceBefore > price. */
+function discountInfo(p) {
+  const now = Number(p && p.price);
+  const before = Number(p && p.priceBefore);
+  if (!Number.isFinite(now) || !Number.isFinite(before) || now <= 0 || before <= now) return null;
+  return { before, percent: Math.max(1, Math.round((1 - now / before) * 100)) };
+}
+
+function priceMarkup(p) {
+  const info = discountInfo(p);
+  const current = formatPrice(p.price);
+  if (!info) return current;
+  return `${current} <s class="tt-product-price-old" style="text-decoration:line-through;font-weight:400;font-size:.85em" aria-label="Precio anterior ${formatPrice(info.before)}">${formatPrice(info.before)}</s> <span class="tt-product-discount-pct" style="color:var(--color-state-discount);font-weight:700;font-size:.8em">-${info.percent}%</span>`;
+}
+
 function sanitizePlainText(value, maxLength = 4000) {
   return String(value == null ? '' : value)
     .replace(/[\u0000-\u001f\u007f]/g, ' ')
@@ -262,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -829,7 +844,7 @@ function renderProductCardMarkup(p, options = {}) {
       <div class="tt-product-info">
         <div class="tt-product-cat">${escapeHtml(p.category || p.cat || '')}</div>
         <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
-        <div class="tt-product-price">${formatPrice(p.price)}</div>
+        <div class="tt-product-price">${priceMarkup(p)}</div>
         <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
           <a href="${productHref}" class="tt-btn tt-btn-sm">${primaryLabel}</a>
@@ -968,7 +983,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1256,7 +1271,7 @@ function _renderProductDetail(product) {
   const statusEl = document.getElementById('product-status');
 
   if (nameEl) nameEl.textContent = product.name;
-  if (priceEl) priceEl.textContent = formatPrice(product.price);
+  if (priceEl) priceEl.innerHTML = priceMarkup(product);
   if (catEl) catEl.textContent = (product.category || product.cat || '').toUpperCase();
   // Conditional rendering: an empty/missing description has no place in the DOM at all
   if (descEl) {
@@ -1647,7 +1662,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

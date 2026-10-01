@@ -373,6 +373,9 @@ service cloud.firestore {
       return (!('name' in data) || (data.name is string && data.name.size() <= 120)) &&
         (!('phone' in data) || (data.phone is string && data.phone.size() <= 40)) &&
         (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000)) &&
+        // Libreta de direcciones: la principal sigue en `savedLocation`; acá van
+        // hasta 5 en total (js/pages/profile/libreta-direcciones.mjs).
+        (!('savedLocations' in data) || (data.savedLocations is list && data.savedLocations.size() <= 5)) &&
         (!('username' in data) || (data.username is string && data.username.size() <= 20 &&
           data.username.matches('^[a-z0-9_]{0,20}$'))) &&
         // Igual que en el cliente (validacion-nacimiento.js): edad entre 16 y
@@ -1392,6 +1395,37 @@ service cloud.firestore {
 
     // Las denuncias contienen identidad del denunciante y sólo se consultan
     // desde el endpoint administrativo autenticado como Super Admin.
+    /* Cupones de envío gratis: sólo la super admin los administra. usedCount y
+       couponRedemptions los escribe únicamente el servidor (cuenta de servicio). */
+    function couponDataValid(data) {
+      return data.keys().hasOnly(['code', 'type', 'active', 'description', 'startsAt', 'endsAt',
+          'maxUses', 'maxUsesPerCustomer', 'usedCount', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy']) &&
+        data.code is string && data.code.matches('^[A-Z0-9_-]{3,32}$') &&
+        data.type == 'free_shipping' &&
+        data.active is bool &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 200)) &&
+        (!('startsAt' in data) || data.startsAt == null || data.startsAt is string) &&
+        (!('endsAt' in data) || data.endsAt == null || data.endsAt is string) &&
+        data.maxUses is int && data.maxUses >= 0 && data.maxUses <= 1000000 &&
+        data.maxUsesPerCustomer is int && data.maxUsesPerCustomer >= 0 && data.maxUsesPerCustomer <= 1000;
+    }
+
+    match /coupons/{couponId} {
+      allow read: if isSuperAdmin();
+      allow create: if isSuperAdmin() && couponDataValid(request.resource.data) &&
+        request.resource.data.code == couponId &&
+        request.resource.data.usedCount == 0;
+      allow update: if isSuperAdmin() && couponDataValid(request.resource.data) &&
+        request.resource.data.code == resource.data.code &&
+        request.resource.data.usedCount == resource.data.usedCount;
+      allow delete: if isSuperAdmin();
+    }
+
+    match /couponRedemptions/{redemptionId} {
+      allow read: if isSuperAdmin();
+      allow create, update, delete: if false;
+    }
+
     match /commentReports/{reportId} {
       allow read: if isSuperAdmin();
       allow create, update, delete: if false;
