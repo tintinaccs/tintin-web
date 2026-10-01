@@ -21,3 +21,10 @@ test('tarjeta y ficha de producto usan priceMarkup', () => {
   assert.match(src, /tt-product-price">\$\{priceMarkup\(p\)\}/);
   assert.match(src, /priceEl\.innerHTML = priceMarkup\(product\)/);
 });
+
+test('búsqueda y carrito muestran precio anterior y avisan cambio de precio', () => {
+  assert.match(src, /tt-search-result-price">\$\{priceMarkup\(p\)\}/);
+  assert.match(src, /priceBefore: \(Array\.isArray\(window\.PRODUCTS\)/);
+  assert.match(src, /Cambió el precio de tu carrito/);
+  assert.match(src, /dismiss-price-notice/);
+});

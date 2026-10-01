@@ -379,13 +379,27 @@ function syncCartWithCatalog() {
   return synced;
 }
 
+let cartPriceNotice = [];
+
 function renderCart() {
   const body = document.getElementById('cart-body');
   const footer = document.getElementById('cart-footer');
   const totalEl = document.getElementById('cart-total');
   if (!body) return;
 
+  const priorPrices = new Map(getCart().map(item => [`${item.id}|${item.variant || ''}`, Number(item.price)]));
   const cart = syncCartWithCatalog();
+  const changedPrices = cart.filter(item => {
+    const prior = priorPrices.get(`${item.id}|${item.variant || ''}`);
+    return Number.isFinite(prior) && Number.isFinite(Number(item.price)) && prior !== Number(item.price);
+  }).map(item => ({ name: item.name, from: priorPrices.get(`${item.id}|${item.variant || ''}`), to: Number(item.price) }));
+  if (changedPrices.length) cartPriceNotice = changedPrices;
+  const priceNoticeHtml = cartPriceNotice.length ? `
+    <div class="tt-cart-price-notice" role="status" style="margin:0 0 12px;padding:10px 12px;border-radius:10px;background:#fff4e5;color:#7a4a00;font-size:.8rem;line-height:1.4">
+      <strong>Cambió el precio de tu carrito:</strong>
+      <ul style="margin:6px 0 0;padding-left:18px">${cartPriceNotice.map(c => `<li>${escapeHtml(c.name)}: ${formatPrice(c.from)} → ${formatPrice(c.to)}</li>`).join('')}</ul>
+      <button type="button" data-cart-action="dismiss-price-notice" style="margin-top:8px;background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font:inherit">Entendido</button>
+    </div>` : '';
   const favorites = window.TintinFavorites?.getAll?.() || [];
   const favoritesHtml = favorites.length ? `
     <section class="tt-cart-favorites" aria-label="Tus favoritos">
@@ -417,7 +431,7 @@ function renderCart() {
     return;
   }
 
-  body.innerHTML = cart.map(item => {
+  body.innerHTML = priceNoticeHtml + cart.map(item => {
     const imgUrl = sanitizeClassicImageUrl(item.imageUrl || getProductImage(item.id), 160);
     const safeId = escapeAttribute(item.id);
     const safeName = escapeHtml(item.name);
@@ -433,7 +447,7 @@ function renderCart() {
       <div class="tt-cart-item-info">
         <div class="tt-cart-item-name">${safeName}</div>
         ${item.variant ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">${safeVariant}</div>` : ''}
-        <div class="tt-cart-item-price">${formatPrice(item.price)}</div>
+        <div class="tt-cart-item-price">${priceMarkup({ price: item.price, priceBefore: (Array.isArray(window.PRODUCTS) ? window.PRODUCTS.find(p => String(p.id) === String(item.id)) : null)?.priceBefore })}</div>
         <div class="tt-cart-qty">
           <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="-1" aria-label="Restar">−</button>
           <span class="tt-cart-qty-val">${item.qty}</span>
@@ -698,7 +712,7 @@ function initSearch() {
             <div class="tt-search-result-thumb">${thumb}</div>
             <div class="tt-search-result-info">
               <div class="tt-search-result-name">${escapeHtml(p.name)}</div>
-              <div class="tt-search-result-price">${formatPrice(p.price)}${isInStock(p) ? '' : ' · Agotado'}</div>
+              <div class="tt-search-result-price">${priceMarkup(p)}${isInStock(p) ? '' : ' · Agotado'}</div>
             </div>
           </a>
         `;
@@ -735,6 +749,7 @@ function initCartEvents() {
       if (action === 'quantity' && id) updateQty(id, Number(cartAction.dataset.cartDelta) || 0, variant);
       if (action === 'remove' && id) removeFromCart(id, variant);
       if (action === 'close') closeCart();
+      if (action === 'dismiss-price-notice') { cartPriceNotice = []; renderCart(); }
       return;
     }
     const btn = e.target.closest('.tt-add-to-cart');
