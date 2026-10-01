@@ -513,3 +513,27 @@ Decisión del dueño: el stock se descuenta al confirmar el pago; la última uni
 - Verificado por código: etiqueta "Agotado" existe (tienda.js, catalogo.html); no existe aviso de poco stock (decisión: no mostrar).
 - Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
 - Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.
+
+## 2026-10-01 — Recuperación permisos/App Check (GPT-5.6 Sol)
+
+Estado: **IN_PROGRESS / NOT_VERIFIED en producción**.
+
+Evidencia del código base:
+- `firestore.rules` reconoce al Super Admin por el email autenticado `tintinaccs@gmail.com` y permite sus lecturas administrativas.
+- `settings/appearance` e `settings/imageDefaults` tienen lectura pública en las Rules del repo; un `permission-denied` del navegador sobre esas superficies no se explica sólo por el rol del Super Admin.
+- El cliente y el service worker apuntan al proyecto `tintin-accesorios`.
+- App Check usa reCAPTCHA Enterprise y Firestore depende de un token válido cuando enforcement está activo.
+- Producción puede diferir de las Rules del repo porque su publicación es manual; desde este ciclo no se ejecutó deploy.
+
+Cambios de esta rama:
+- Notificaciones Admin ya no reintentan en bucle listeners rechazados con `permission-denied`/`unauthenticated`.
+- Cupones y consumidores privados de Configuración/Apariencia/Contenido esperan el gate estricto `waitForAdminAppCheck` antes de montar Firestore.
+- Mi perfil no inicia consultas de pedidos cuando App Check resolvió no disponible y reintenta cuando llega el evento real `tintin:app-check-ready`.
+- Productos/Colecciones/Pedidos distinguen `error` de `empty`; los totales dejan de mostrar 0 como si la consulta hubiera sido válida.
+- Flujo de conexiones separa renovación/claims del ID token de la autorización de Firestore y comprueba email/proyecto sin exponer el token.
+
+Pendiente de evidencia:
+- Ejecutar CI del PR.
+- Confirmar en preview autenticado que App Check obtiene token y que las lecturas privadas funcionan.
+- Comparar/publicar Rules en Firebase sólo con autorización de deploy; este ciclo no despliega.
+- Los textos `PAGO SEGUROOXSD`, `opiniónes` y `sesiónes` no aparecen en el código actual y pueden residir en contenido remoto/cache; no se modifican datos reales sin una operación explícitamente autorizada.
