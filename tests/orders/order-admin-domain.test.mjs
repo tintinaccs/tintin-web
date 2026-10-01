@@ -4,6 +4,7 @@ import test from 'node:test';
 import {
   applyOrderAdminMutation,
   createOrderAdmin,
+  resetOrderSequenceAdmin,
 } from '../../cloudflare/order-admin-domain.js';
 import {
   decodeFirestoreFields,
@@ -23,9 +24,22 @@ function document(path, data, updateTime = UPDATED) {
 function fakeStore(entries = {}) {
   const map = new Map(Object.entries(entries));
   const commits = [];
+  const valueAtPath = (data, fieldPath) => String(fieldPath || '')
+    .split('.')
+    .filter(Boolean)
+    .reduce((value, key) => value && typeof value === 'object' ? value[key] : undefined, data);
   return {
     commits,
     get: async (_env, path) => map.get(decodeURIComponent(path)) || null,
+    findFirst: async (_env, collectionId, fieldPaths, value) => {
+      const fields = Array.isArray(fieldPaths) ? fieldPaths : [fieldPaths];
+      for (const [docPath, doc] of map) {
+        if (!String(docPath).startsWith(`${collectionId}/`)) continue;
+        const data = decodeFirestoreFields(doc?.fields || {});
+        if (fields.some(field => String(valueAtPath(data, field) ?? '') === String(value ?? ''))) return doc;
+      }
+      return null;
+    },
     commit: async (_env, writes) => {
       commits.push(writes);
       return { writeResults: writes.map(() => ({})) };
@@ -99,6 +113,66 @@ test('crear pedido manual usa precio canónico, calcula total, descuenta stock (
   assert.equal(sequence.lastNumber, 13);
   assert.equal(sequence.lastCode, 'TINPED13');
   assert.ok(writes.some(write => String(write.path).startsWith('auditLog/')));
+});
+
+test('TINPED no reutiliza códigos históricos aunque la secuencia quede atrasada', async () => {
+  const store = fakeStore({
+    'products/prod_001': document('products/prod_001', {
+      name: 'Aro',
+      category: 'aros',
+      price: 50000,
+      stock: 5,
+      active: true,
+    }),
+    'settings/orderSequence': document('settings/orderSequence', {
+      lastNumber: 0,
+      lastCode: '',
+    }),
+    'orders/pedido_viejo_1': document('orders/pedido_viejo_1', {
+      orderNumber: 'TINPED01',
+      shortId: 'TINPED01',
+    }),
+    'orderTrash/pedido_viejo_2': document('orderTrash/pedido_viejo_2', {
+      orderNumber: 'TINPED02',
+      shortId: 'TINPED02',
+    }),
+    'auditLog/evt_viejo_3': document('auditLog/evt_viejo_3', {
+      after: { orderNumber: 'TINPED03', shortId: 'TINPED03' },
+    }),
+  });
+
+  const result = await createOrderAdmin({}, {
+    userName: 'Cliente',
+    shippingMethod: 'retiro',
+    items: [{ id: 'prod_001', qty: 1 }],
+  }, ACTOR, store);
+
+  assert.equal(result.orderNumber, 'TINPED04');
+  const sequenceWrite = writeFor(store.commits[0], 'settings/orderSequence');
+  const sequence = decodeFirestoreFields(sequenceWrite.fields);
+  assert.equal(sequence.lastNumber, 4);
+  assert.equal(sequence.highWaterMark, 4);
+});
+
+test('la acción histórica de reinicio no puede bajar la secuencia TINPED', async () => {
+  const store = fakeStore({
+    'settings/orderSequence': document('settings/orderSequence', {
+      lastNumber: 12,
+      highWaterMark: 12,
+      lastCode: 'TINPED12',
+    }),
+  });
+
+  const result = await resetOrderSequenceAdmin({}, ACTOR, store);
+  assert.equal(result.reset, false);
+  assert.equal(result.protected, true);
+  assert.equal(result.nextOrderNumber, 'TINPED13');
+
+  const sequenceWrite = writeFor(store.commits[0], 'settings/orderSequence');
+  const patch = decodeFirestoreFields(sequenceWrite.fields);
+  assert.equal(patch.lastNumber, 12);
+  assert.equal(patch.highWaterMark, 12);
+  assert.equal(patch.lastCode, 'TINPED12');
 });
 
 test('crear pedido manual rechaza productos inactivos', async () => {
