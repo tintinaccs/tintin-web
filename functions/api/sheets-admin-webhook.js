@@ -8,6 +8,7 @@ import {
 import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { notifyCustomerOrderChange } from '../../cloudflare/correo-estado-pedido.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
 import { syncEngagementBatchToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
 
@@ -226,6 +227,7 @@ export async function onRequestPost(context) {
       context.waitUntil?.(syncOrderOwnerStats(env, result.order).catch(syncError => {
         console.error('[sheets-admin-webhook] order stats sync failed', syncError?.message || syncError);
       }));
+      if (text(input.action || 'updateOrder', 40) === 'updateOrder') context.waitUntil?.(notifyCustomerOrderChange(env, result));
     }
 
     return jsonResponse({ ok: true, result, revision: ADMIN_SYNC_REVISION }, 200, '', request.url);

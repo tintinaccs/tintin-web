@@ -646,6 +646,8 @@ export async function applyOrderAdminMutation(
     orderId,
     changeId: nextChangeId,
     duplicate: false,
+    previousStatus: auditSummary(beforeOrder).status,
+    previousPaymentStatus: auditSummary(beforeOrder).paymentStatus,
     changedProducts: inventory.deltas.size,
     auditEventId: eventId,
     order: nextOrder,
