@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "faeea58635d267b20cc3325c2130341158421f6231aad898f53041b976e2ea13",
+  "sourceFingerprint": "c3944af10cb84c4e8985436f414b2102a880f7b26517be62d46212e1d12cb748",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 935,
     "textFiles": 894,
-    "totalBytes": 18054278,
+    "totalBytes": 18063065,
     "pages": 19,
     "modules": 643
   },
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197597,
-      "sha256": "f2df313a23b5fafc2151f648beb9001f44a91a030f8fefb0a20dd5e98c78e1fa",
+      "bytes": 197610,
+      "sha256": "42ac9a5f4ef35a1045e0f040005587bcbdd32d6904b0ac35bc33d6ee3714508e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2157,7 +2157,7 @@
           "line": 2044
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261001-cupones-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261001-stock-pago-1-cupones-1",
           "target": "js/admin/admin-app.js",
           "line": 2045
         },
@@ -2433,7 +2433,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261001-cupones-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261001-stock-pago-1-cupones-1",
           "target": "js/admin/admin-app.js",
           "line": 2045,
           "exists": true
@@ -18241,8 +18241,8 @@
     },
     {
       "path": "cloudflare/order-admin-domain.js",
-      "bytes": 26361,
-      "sha256": "0119a384cf69e7889a353dceb5a16b67d949cf281e72234f7653e94b2f6d4c2c",
+      "bytes": 26920,
+      "sha256": "554cf053784d101ec5cee898950b6c282f54c9b3a9c184696a360b001e500496",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18264,13 +18264,13 @@
           "raw": "../js/core/store/modelo-inventario.mjs",
           "target": "js/core/store/modelo-inventario.mjs",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "./cupones.js",
           "target": "cloudflare/cupones.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": []
@@ -18361,8 +18361,8 @@
     },
     {
       "path": "cloudflare/paypal-seguro.js",
-      "bytes": 14171,
-      "sha256": "494131a0513e4ff4ef6e9b78ba9e74d0b3d1a15319539393e7bc89f788bed209",
+      "bytes": 15627,
+      "sha256": "f6f5112cfade684dcc0e5237624a6070c40f17c495a6b9d167068b44412dc089",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18379,16 +18379,22 @@
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
           "line": 10
+        },
+        {
+          "raw": "./order-admin-domain.js",
+          "target": "cloudflare/order-admin-domain.js",
+          "dynamic": false,
+          "line": 11
         }
       ],
       "endpoints": [
         {
           "url": "https://api-m.paypal.com/",
-          "line": 46
+          "line": 47
         },
         {
           "url": "https://api-m.sandbox.paypal.com/",
-          "line": 46
+          "line": 47
         }
       ]
     },
@@ -20766,8 +20772,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 471603,
-      "sha256": "26f6ff780a7af5c85765607e7ded09c69cae2cae5d8a904389f3b113bca62a05",
+      "bytes": 471523,
+      "sha256": "dac9fa5a62ca62ee978bf88a886fd597c7adc6a2907a390cd7e2cae487503d5b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20960,7 +20966,7 @@
           "line": 45
         },
         {
-          "raw": "./products/integridad-inventario-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "./products/integridad-inventario-admin.js?v=tintin-20261001-stock-pago-1",
           "target": "js/admin/products/integridad-inventario-admin.js",
           "dynamic": false,
           "line": 46
@@ -22139,8 +22145,8 @@
     },
     {
       "path": "js/admin/products/integridad-inventario-admin.js",
-      "bytes": 6658,
-      "sha256": "e2655677df1ca44468f04e743d6f2025d53824f89bb0e14b75083ad0064dde31",
+      "bytes": 6656,
+      "sha256": "5592f216ee831ae4d4089d516dde4689bc096e37a15f7b8fd1773355c7b2c652",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22171,7 +22177,7 @@
           "line": 12
         },
         {
-          "raw": "../../core/store/modelo-inventario.mjs?v=tintin-20260827-admin-parity-1",
+          "raw": "../../core/store/modelo-inventario.mjs?v=tintin-20261001-stock-pago-1",
           "target": "js/core/store/modelo-inventario.mjs",
           "dynamic": false,
           "line": 16
@@ -25082,8 +25088,8 @@
     },
     {
       "path": "js/core/store/modelo-inventario.mjs",
-      "bytes": 2420,
-      "sha256": "9217af18db27919ebe39b1df3b69e6ee1d617dd4313b22d3131416178e67b119",
+      "bytes": 3439,
+      "sha256": "780cbf14d896b5da936a659e695dcdc7d38c0a07f23e626570f71f68684a39f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34051,8 +34057,8 @@
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
-      "bytes": 6829,
-      "sha256": "54b3170598183eb2be0401bf4456196e7132a4d0a6bb13bed7195fff6f45e6e5",
+      "bytes": 10895,
+      "sha256": "af4e6cea4d905bb571745ff71317e362cbcea600b7f90c98716e4052a2ba4332",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36070,8 +36076,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197597,
-      "sha256": "f2df313a23b5fafc2151f648beb9001f44a91a030f8fefb0a20dd5e98c78e1fa"
+      "bytes": 197610,
+      "sha256": "42ac9a5f4ef35a1045e0f040005587bcbdd32d6904b0ac35bc33d6ee3714508e"
     },
     {
       "path": "apple-touch-icon.png",
@@ -36448,8 +36454,8 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "extension": ".js",
-      "bytes": 26361,
-      "sha256": "0119a384cf69e7889a353dceb5a16b67d949cf281e72234f7653e94b2f6d4c2c"
+      "bytes": 26920,
+      "sha256": "554cf053784d101ec5cee898950b6c282f54c9b3a9c184696a360b001e500496"
     },
     {
       "path": "cloudflare/order-sheets-sync.js",
@@ -36472,8 +36478,8 @@
     {
       "path": "cloudflare/paypal-seguro.js",
       "extension": ".js",
-      "bytes": 14171,
-      "sha256": "494131a0513e4ff4ef6e9b78ba9e74d0b3d1a15319539393e7bc89f788bed209"
+      "bytes": 15627,
+      "sha256": "f6f5112cfade684dcc0e5237624a6070c40f17c495a6b9d167068b44412dc089"
     },
     {
       "path": "cloudflare/politica-checkout-publico.js",
@@ -37090,8 +37096,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 99238,
-      "sha256": "46e19dd787a546a8066087cd6ddcd7032481ee6b1180fc904486388c840c7064"
+      "bytes": 101063,
+      "sha256": "7a501647ad6ae5f72e4513f0b20fe49a5b6e20d6ddc6f8a42e9f514ccd436af9"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -37924,8 +37930,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 471603,
-      "sha256": "26f6ff780a7af5c85765607e7ded09c69cae2cae5d8a904389f3b113bca62a05"
+      "bytes": 471523,
+      "sha256": "dac9fa5a62ca62ee978bf88a886fd597c7adc6a2907a390cd7e2cae487503d5b"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -38146,8 +38152,8 @@
     {
       "path": "js/admin/products/integridad-inventario-admin.js",
       "extension": ".js",
-      "bytes": 6658,
-      "sha256": "e2655677df1ca44468f04e743d6f2025d53824f89bb0e14b75083ad0064dde31"
+      "bytes": 6656,
+      "sha256": "5592f216ee831ae4d4089d516dde4689bc096e37a15f7b8fd1773355c7b2c652"
     },
     {
       "path": "js/admin/proteccion-cambios-pendientes-admin.js",
@@ -38884,8 +38890,8 @@
     {
       "path": "js/core/store/modelo-inventario.mjs",
       "extension": ".mjs",
-      "bytes": 2420,
-      "sha256": "9217af18db27919ebe39b1df3b69e6ee1d617dd4313b22d3131416178e67b119"
+      "bytes": 3439,
+      "sha256": "780cbf14d896b5da936a659e695dcdc7d38c0a07f23e626570f71f68684a39f9"
     },
     {
       "path": "js/core/store/normalizacion-importacion.mjs",
@@ -40420,8 +40426,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 59647,
-      "sha256": "be1e79961c27104d69fe83d5fb18d5f6aea673e87b05982aabd38c33fc0e2421"
+      "bytes": 59578,
+      "sha256": "84fe08bfcd59e178cfbc1b56ce1ea4abaa97574cd8a3da7ab45ee481a782dc08"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -41146,8 +41152,8 @@
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "extension": ".mjs",
-      "bytes": 6829,
-      "sha256": "54b3170598183eb2be0401bf4456196e7132a4d0a6bb13bed7195fff6f45e6e5"
+      "bytes": 10895,
+      "sha256": "af4e6cea4d905bb571745ff71317e362cbcea600b7f90c98716e4052a2ba4332"
     },
     {
       "path": "tests/payments/paypal-seguro.test.mjs",
