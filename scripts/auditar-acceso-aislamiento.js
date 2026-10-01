@@ -97,7 +97,7 @@ const checks = [
   ['Ningún rol vence la sesión automáticamente', !session.includes('signOut(') && !/INACTIVITY|inactividad|expired/i.test(session)],
   ['Solo superficies explícitas pueden cerrar Firebase Auth', unexpectedSignOutCallers.length === 0],
   ['La persistencia de Auth tiene una sola autoridad', unexpectedPersistenceCallers.length === 0 && persistenceCallers.length === 1],
-  ['Firestore confirma la identidad antes de terminar un login', profileStore.includes('await setDoc(ref, identityPatch, { merge: true })')],
+  ['Firestore confirma la identidad antes de terminar un login', profileStore.includes("await withProfileDeadline(() => setDoc(ref, identityPatch, { merge: true }), 'write')")],
   ['Contacto no contiene lógica de cierre de sesión', !/\bsignOut\s*\(/.test(contactMaintenance)],
   ['El guard de perfil cubre toda página con sesión (sólo login y admin exentos)', !profileGate.includes('GUARDED_PAGES') && /page === 'login' \|\| page\.startsWith\('admin'\)/.test(profileGate)],
   ['El carrito espera restauración Auth antes de observar sesión', cartWaitsForAuthRestore],

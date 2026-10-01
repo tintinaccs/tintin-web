@@ -23,16 +23,68 @@ export const AUTH_METHOD = {
   EMAIL: 'emailOtp',
 };
 
+const PROFILE_OPERATION_TIMEOUT_MS = 8_000;
+const HISTORY_CLAIM_TIMEOUT_MS = 4_500;
+const historyClaimsInFlight = new Map();
+
+function timeoutError(code) {
+  const error = new Error(code);
+  error.code = code;
+  return error;
+}
+
+// Ninguna lectura o escritura de perfil puede dejar a la pantalla de ingreso
+// esperando para siempre. Firestore normalmente rechaza ante una red caída,
+// pero un canal bloqueado puede permanecer pendiente; el login necesita volver
+// a mostrar una salida clara también en ese caso.
+function withProfileDeadline(operation, label) {
+  let timer = 0;
+  return Promise.race([
+    Promise.resolve().then(operation),
+    new Promise((_, reject) => {
+      timer = window.setTimeout(() => reject(timeoutError(`profile_${label}_timeout`)), PROFILE_OPERATION_TIMEOUT_MS);
+    }),
+  ]).finally(() => window.clearTimeout(timer));
+}
+
 async function claimHistoricalCommerce(user) {
-  const token = await user.getIdToken();
-  const response = await fetch(apiUrl('claim-commerce-history'), {
-    method: 'POST',
-    headers: { authorization: `Bearer ${token}` },
-    cache: 'no-store',
+  const controller = typeof AbortController === 'function' ? new AbortController() : null;
+  let timer = 0;
+  const timeout = new Promise((_, reject) => {
+    timer = window.setTimeout(() => {
+      controller?.abort();
+      reject(timeoutError('commerce_history_claim_timeout'));
+    }, HISTORY_CLAIM_TIMEOUT_MS);
   });
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo recuperar el historial comercial.');
-  return result;
+  try {
+    const token = await Promise.race([user.getIdToken(), timeout]);
+    const response = await Promise.race([
+      fetch(apiUrl('claim-commerce-history'), {
+        method: 'POST',
+        headers: { authorization: `Bearer ${token}` },
+        cache: 'no-store',
+        ...(controller ? { signal: controller.signal } : {}),
+      }),
+      timeout,
+    ]);
+    const result = await Promise.race([response.json().catch(() => ({})), timeout]);
+    if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo recuperar el historial comercial.');
+    return result;
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+// Recuperar compras históricas es útil, pero jamás una condición para iniciar
+// sesión o retomar un alta incompleta. Se limita a una corrida por UID y se
+// reintenta en el próximo ingreso si la red o el servidor no responden.
+function queueHistoricalCommerceClaim(user) {
+  const uid = String(user?.uid || '');
+  if (!uid || historyClaimsInFlight.has(uid)) return;
+  const task = claimHistoricalCommerce(user)
+    .catch(error => console.warn('[user-profile] Historial comercial pendiente de recuperar:', error))
+    .finally(() => historyClaimsInFlight.delete(uid));
+  historyClaimsInFlight.set(uid, task);
 }
 
 /**
@@ -62,13 +114,13 @@ export function getRegisteredMethod(profileData) {
  */
 export async function ensureUserProfile(db, user, method) {
   const ref = doc(db, 'users', user.uid);
-  const snap = await getDoc(ref);
+  const snap = await withProfileDeadline(() => getDoc(ref), 'read');
   const normalizedEmail = String(user.email || '').trim().toLowerCase();
 
   if (!snap.exists()) {
     const role = normalizedEmail === SUPER_ADMIN.toLowerCase() ? 'superadmin' : 'client';
     const welcomePending = role === 'client';
-    await setDoc(ref, {
+    await withProfileDeadline(() => setDoc(ref, {
       // Google entrega un nombre; el correo no entrega ninguno. En los dos
       // casos el setup posterior lo confirma o lo pide antes de darlo por
       // bueno — acá sólo se deja el valor de partida.
@@ -93,16 +145,10 @@ export async function ensureUserProfile(db, user, method) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       lastLogin: serverTimestamp(),
-    });
+    }), 'write');
     // La eliminación borra Firebase Auth; este UID es necesariamente nuevo.
     // El servidor vincula sólo compras/métricas tras verificar el mismo email.
-    try {
-      await claimHistoricalCommerce(user);
-    } catch (error) {
-      // La creación limpia nunca depende de una consulta histórica: queda
-      // pendiente y se reintenta en el siguiente ingreso autenticado.
-      console.warn('[user-profile] Historial comercial pendiente de recuperar:', error);
-    }
+    queueHistoricalCommerceClaim(user);
     return { role, blocked: false, isNew: true, welcomePending, method };
   }
 
@@ -113,8 +159,7 @@ export async function ensureUserProfile(db, user, method) {
   }
 
   if (normalizedEmail !== SUPER_ADMIN.toLowerCase() && data.commerceHistoryClaimed !== true) {
-    try { await claimHistoricalCommerce(user); }
-    catch (error) { console.warn('[user-profile] Historial comercial pendiente de recuperar:', error); }
+    queueHistoricalCommerceClaim(user);
   }
 
   if (normalizedEmail === SUPER_ADMIN.toLowerCase() && data.role !== 'superadmin') {
@@ -160,7 +205,7 @@ export async function ensureUserProfile(db, user, method) {
   // fire-and-forget; un login podía considerarse terminado mientras este write
   // seguía pendiente (o fallaba sólo en consola), dejando Auth y Firestore en
   // estados distintos para la siguiente ruta.
-  await setDoc(ref, identityPatch, { merge: true });
+  await withProfileDeadline(() => setDoc(ref, identityPatch, { merge: true }), 'write');
 
   const role = data.role || 'client';
   const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
