@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0b6b059598c804cc7375300d7aec6df72d174aed470f6360573fc0a55803dfc9",
+  "sourceFingerprint": "ae621326b562c7f8d0fcc6246485d00897dab69ac3e461a9eed79a2fdb6937d6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 924,
     "textFiles": 883,
-    "totalBytes": 17980905,
+    "totalBytes": 17982381,
     "pages": 19,
     "modules": 634
   },
@@ -18268,8 +18268,8 @@
     },
     {
       "path": "cloudflare/participacion-clientes.js",
-      "bytes": 46191,
-      "sha256": "310170f33cfc7df853d066b3891d713d71ee8f13d933396f3af398aa50f7479e",
+      "bytes": 46355,
+      "sha256": "2f3440e3e00bd340866f4de038761853c4ab34234e15c19d8728dea4ab416836",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32385,8 +32385,8 @@
     },
     {
       "path": "tests/engagement/comments-reports.test.mjs",
-      "bytes": 3549,
-      "sha256": "8e20fec0c221b2946e0ec763e38a26c093984c1f156d0de9f50a7324850439e6",
+      "bytes": 3914,
+      "sha256": "c79e2cdd44bc4a14a7e83ea63c6ee282e8fff2470cb14e5ccdf13b2ff6e13165",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36117,8 +36117,8 @@
     {
       "path": "cloudflare/participacion-clientes.js",
       "extension": ".js",
-      "bytes": 46191,
-      "sha256": "310170f33cfc7df853d066b3891d713d71ee8f13d933396f3af398aa50f7479e"
+      "bytes": 46355,
+      "sha256": "2f3440e3e00bd340866f4de038761853c4ab34234e15c19d8728dea4ab416836"
     },
     {
       "path": "cloudflare/paypal-seguro.js",
@@ -36735,8 +36735,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 90450,
-      "sha256": "afac02f023065a5d1b0d8470ca369f8544f515838f8b8751a09ba3c138795cdc"
+      "bytes": 91397,
+      "sha256": "18984dae48ef8fded97c50eefeec1b1df7608a6b479165da3e2791a54648cad6"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -40545,8 +40545,8 @@
     {
       "path": "tests/engagement/comments-reports.test.mjs",
       "extension": ".mjs",
-      "bytes": 3549,
-      "sha256": "8e20fec0c221b2946e0ec763e38a26c093984c1f156d0de9f50a7324850439e6"
+      "bytes": 3914,
+      "sha256": "c79e2cdd44bc4a14a7e83ea63c6ee282e8fff2470cb14e5ccdf13b2ff6e13165"
     },
     {
       "path": "tests/engagement/firebase-id-token.test.mjs",
