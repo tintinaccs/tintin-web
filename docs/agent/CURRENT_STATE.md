@@ -443,3 +443,27 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 ## Cuestionario del dueño: matriz de cumplimiento — 2026-10-01
 - Estado: NOT_VERIFIED en producción. Matriz en `docs/agent/DECISIONES_CUESTIONARIO.md` (lectura de código, sin pruebas en vivo).
 - Brechas confirmadas por no encontrar código: cupones (envío gratis, límites, fechas), email al cliente en cada cambio de estado, precio anterior tachado + %, historial de cambios de precio/stock, descuento de stock al confirmar pago.
+
+## Auditoría por áreas — Área 2 (cuentas/login/perfil) — 2026-10-01
+- PASS_LOCAL (lectura de código, sin login real): el acceso es solo Google (popup/redirect) + código OTP por correo (`login.html`, `functions/api/email-otp-*.js`); no existe flujo de contraseña. "@usuario" solo resuelve identificador para el OTP.
+- PASS_LOCAL: teléfono obligatorio en el alta (`needsPhone` en `js/pages/profile/configuracion-inicial-perfil.mjs`), con unicidad por `phoneReservations` + `firestore.rules`.
+- PASS_LOCAL: consentimiento de cookies/estadísticas gobierna GA4 (`js/analytics/analitica.js` usa `hasStatisticsConsent`).
+- PENDING (decisión ya tomada, no implementado): el perfil guarda UNA dirección (`perfil-dir` en `perfil.html`); no hay libreta de varias direcciones.
+- PENDING: el cliente no tiene "eliminar mi cuenta" en `perfil.html`; solo existe la baja desde admin (`functions/api/admin-delete-user.js`, `cloudflare/user-lifecycle-domain.js`).
+- NOT_VERIFIED: sesión autenticada real y producción.
+## Login "Últimos datos" — rejilla responsive (2026-10-01)
+- Causa: `#login-profile-block` usaba áreas con nombre; al ocultarse "Nombre/Apellido" (nombre detectado) quedaba un hueco, el orden DOM no coincidía con el visual, las tarjetas tenían estilos desiguales, `.tt-map-block` anidaba una tarjeta dentro de otra y la tarjeta "Nombre detectado" se inflaba.
+- Cambio: nuevo `css/pages/login/login-onboarding-form-layout.css` (solo `login.html`, tag `tintin-20261001-onboarding-form-grid-1`); no se tocaron CSS existentes ni tokens.
+- PASS_LOCAL: Chromium 320/390/600/768/1024/1440, variantes nombre detectado y editable con DOM inyectado, sin desborde horizontal; `verify:csp`, `verify:diagnostics`, `audit:cache-versioning`, `audit:login-isolation` (35/35), `audit:login-profile` (77/77).
+- NOT_VERIFIED: login real (Google/OTP/Firebase) y producción; mapa sin teselas en el entorno de prueba.
+## Auditoría por áreas — Área 1 (pedidos/stock/checkout/reseñas) — 2026-10-01
+- Reseñas con moderación previa (decisión del dueño): `createReview` crea la reseña de un cliente con `visible:false` y NO escribe el documento público `products/{id}/reviews/{id}`; el admin la publica con `reviewVisibility` (ya escribe el público). Super Admin sigue publicando directo. Aviso al admin: "envió una reseña para aprobar". Verificación: `npm run test:engagement` 45/45, PASS_LOCAL. No probado con Firestore real ni en producción.
+- Brechas vs decisiones, NO cambiadas (alto riesgo, requieren despliegue coordinado de Apps Script por el dueño): (1) el stock se descuenta/reserva al crear el pedido (`CrearPedido.gs`), la decisión es "al confirmar el pago"; (2) no existe sistema de cupones; (3) tope de 4 productos distintos por pedido (`firestore.rules`, `modelo-inventario.mjs`). Estado: PENDING (decisión de producto/despliegue).
+
+## Fase 3 — Catálogo y precios (`feat/catalogo-precios`)
+- Estado: PASS_LOCAL. Producción NOT_VERIFIED.
+- Implementado: precio anterior tachado + `-N%` en tarjetas y ficha de producto cuando `priceBefore > price` (`tienda.js`: `discountInfo`/`priceMarkup`). Usa token existente `--color-state-discount`/`--color-price-old`; sin cambios de CSS global.
+- Implementado: horario de atención en el footer unificado (`scripts/sincronizar-inicio-navegacion-publica.js` → `sync:public-shell`); ya existía en contacto.
+- Verificado por código: etiqueta "Agotado" existe (tienda.js, catalogo.html); no existe aviso de poco stock (decisión: no mostrar).
+- Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
+- Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.

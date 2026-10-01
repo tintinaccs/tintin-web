@@ -336,7 +336,8 @@ export async function createReview(env, user, input) {
       productImageUrl: context.imageUrl,
       rating,
       comment,
-      visible: true,
+      // Moderación previa: la reseña de un cliente queda oculta hasta que el admin la publique.
+      visible: Boolean(context.isSuperAdmin),
       deleted: false,
       storeLiked: false,
       likeCount: 0,
@@ -349,7 +350,7 @@ export async function createReview(env, user, input) {
 
     const writes = [
       { path: `reviewRecords/${reviewId}`, fields: encodeFirestoreFields(record), currentDocument: { exists: false } },
-      { path: `products/${context.productId}/reviews/${reviewId}`, fields: encodeFirestoreFields(reviewPublic(record)), currentDocument: { exists: false } },
+      ...(record.visible ? [{ path: `products/${context.productId}/reviews/${reviewId}`, fields: encodeFirestoreFields(reviewPublic(record)), currentDocument: { exists: false } }] : []),
       { path: `users/${uid}/reviews/${reviewId}`, fields: encodeFirestoreFields(ownerReviewMapping(record)), currentDocument: { exists: false } },
     ];
 
@@ -369,7 +370,7 @@ export async function createReview(env, user, input) {
         actorName: context.realName,
         actorUsername: context.username,
         actorPhotoUrl: context.photoUrl,
-        title: `${context.realName} publicó una reseña en ${context.productName}`,
+        title: `${context.realName} envió una reseña para aprobar en ${context.productName}`,
         body: comment,
         snippet: comment,
         iconKey: 'review',
