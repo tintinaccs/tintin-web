@@ -33,10 +33,6 @@ function timeoutError(code) {
   return error;
 }
 
-// Ninguna lectura o escritura de perfil puede dejar a la pantalla de ingreso
-// esperando para siempre. Firestore normalmente rechaza ante una red caída,
-// pero un canal bloqueado puede permanecer pendiente; el login necesita volver
-// a mostrar una salida clara también en ese caso.
 function withProfileDeadline(operation, label) {
   let timer = 0;
   return Promise.race([
@@ -111,8 +107,9 @@ export function getRegisteredMethod(profileData) {
  * @param {object} db        Instancia de Firestore.
  * @param {object} user      Usuario de Firebase Auth ya autenticado.
  * @param {string} method    AUTH_METHOD.GOOGLE | AUTH_METHOD.EMAIL
+ * @param {{createIfMissing?: boolean}} options  Permite diferir el alta hasta confirmar el formulario.
  */
-export async function ensureUserProfile(db, user, method) {
+export async function ensureUserProfile(db, user, method, options = {}) {
   const ref = doc(db, 'users', user.uid);
   const snap = await withProfileDeadline(() => getDoc(ref), 'read');
   const normalizedEmail = String(user.email || '').trim().toLowerCase();
@@ -120,6 +117,9 @@ export async function ensureUserProfile(db, user, method) {
   if (!snap.exists()) {
     const role = normalizedEmail === SUPER_ADMIN.toLowerCase() ? 'superadmin' : 'client';
     const welcomePending = role === 'client';
+    if (options.createIfMissing === false) {
+      return { role, blocked: false, isNew: true, registrationPending: true, welcomePending, method };
+    }
     await withProfileDeadline(() => setDoc(ref, {
       // Google entrega un nombre; el correo no entrega ninguno. En los dos
       // casos el setup posterior lo confirma o lo pide antes de darlo por

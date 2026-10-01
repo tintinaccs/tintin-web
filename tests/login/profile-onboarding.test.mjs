@@ -195,6 +195,29 @@ test('el alta respeta el orden de foco usuario, nombre, apellido y teléfono', (
   assert.match(login, /id="login-profile-phone"[^>]*enterkeyhint="next"/);
 });
 
+test('Google muestra registro y no crea el perfil hasta confirmar el formulario', () => {
+  const login = readLogin();
+  assert.match(login, /guardarUsuario\(user, \{ createIfMissing: false \}\)/);
+  assert.match(login, /registrationPending \? 'Crear mi cuenta y continuar' : 'Continuar'/);
+  assert.match(login, /if \(registrationPending\) \{[\s\S]*?await ensureUserProfile\(db, user, detectAuthMethod\(user\)\)/);
+});
+
+test('una sesión activa con error no vuelve a mostrar un login ambiguo', () => {
+  const login = readLogin();
+  assert.match(login, /function showActiveSessionState\(message\)/);
+  assert.match(login, /showActiveSessionState\('No pudimos verificar tus datos/);
+  assert.match(login, /login-session-active/);
+  assert.match(login, /Cuenta activa\. \$\{message\}/);
+});
+
+test('las tarjetas del registro son blancas y el teléfono no fuerza una altura', () => {
+  const css = fs.readFileSync(new URL('../../css/pages/login/login-onboarding-flow.css', import.meta.url), 'utf8');
+  assert.match(css, /#login-profile-phone-field[\s\S]*?background: #fff !important/);
+  assert.match(css, /#login-profile-address-field[\s\S]*?background: #fff !important/);
+  assert.match(css, /#login-profile-phone-field\s*\{[\s\S]*?height: auto !important/);
+  assert.match(css, /\.login-phone-row\s*\{[\s\S]*?max-width: 560px !important/);
+});
+
 test('si falta solo el teléfono conserva los demás datos y no vuelve a pedir la ubicación', () => {
   const profile = { ...COMPLETE, phone: '' };
   const plan = getProfileCompletionPlan({

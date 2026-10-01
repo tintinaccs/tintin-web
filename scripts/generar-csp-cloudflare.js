@@ -223,7 +223,7 @@ function cleanRoutes() {
 // permitir que sus reglas de caché inmutable tengan prioridad.
 function cleanRouteCacheControlBlock() {
   return cleanRoutes()
-    .map(route => `${route}\n  Cache-Control: no-cache, must-revalidate`)
+    .map(route => `${route}\n  Cache-Control: ${route === '/login' ? 'no-store, no-cache, must-revalidate' : 'no-cache, must-revalidate'}`)
     .join('\n\n');
 }
 

@@ -136,7 +136,10 @@ export function resolveProfileAction(state) {
  * con un código clasificable en vez de dejar un loader colgado. No reemplaza
  * la resolución real; sólo garantiza una salida.
  */
-export function withDeadline(promise, ms, scheduler = { set: (fn, delay) => setTimeout(fn, delay), clear: id => clearTimeout(id) }) {
+export function withDeadline(promise, ms, scheduler = {
+  set: (...args) => globalThis.setTimeout(...args),
+  clear: (...args) => globalThis.clearTimeout(...args),
+}) {
   let timer;
   const deadline = new Promise((_, reject) => {
     timer = scheduler.set(() => {

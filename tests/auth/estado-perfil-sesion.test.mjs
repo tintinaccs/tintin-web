@@ -139,7 +139,7 @@ test('login.html repara el documento inexistente con la función canónica antes
   const body = login.slice(login.indexOf('async function ensureProfileComplete'), login.indexOf('async function finishGoogleLogin'));
   assert.match(body, /CREATE_THEN_COMPLETE_PROFILE/);
   assert.match(body, /ensureUserProfile\(db, user, detectAuthMethod\(user\)\)/);
-  assert.match(body, /resolved\.state === PROFILE_STATE\.ERROR \|\| resolved\.state === PROFILE_STATE\.MISSING/);
+  assert.match(body, /resolved\.state === PROFILE_STATE\.ERROR[\s\S]{0,120}PROFILE_STATE\.MISSING/);
   // nunca se vuelve a convertir un documento inexistente en `{}` dentro del alta
   assert.doesNotMatch(body, /snap\.exists\(\) \? snap\.data\(\) : \{\}/);
   assert.doesNotMatch(body, /currentSnap\.exists\(\) \? currentSnap\.data\(\) : \{\}/);
@@ -149,7 +149,7 @@ test('login.html repara el documento inexistente con la función canónica antes
 test('la sesión restaurada nunca cierra sesión ni deja un cargador colgado ante un error', () => {
   const start = login.indexOf('subscribeSession(async snapshot');
   const handler = login.slice(start, login.indexOf('// GOOGLE — primera opción', start));
-  assert.match(handler, /try \{\s*await ensureProfileComplete\(user, role\);[\s\S]*?\} catch \(restoreError\) \{[\s\S]*?hideLoginOverlay\(\);[\s\S]*?revealLoginSurface\(\);[\s\S]*?showError\(/);
+  assert.match(handler, /try \{\s*await ensureProfileComplete\(user, role\);[\s\S]*?\} catch \(restoreError\) \{[\s\S]*?hideLoginOverlay\(\);[\s\S]*?revealLoginSurface\(\);[\s\S]*?showActiveSessionState\(/);
   assert.doesNotMatch(handler, /signOut\(/);
   assert.match(handler, /withDeadline\(getDoc/);
 });
