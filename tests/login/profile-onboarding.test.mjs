@@ -48,7 +48,7 @@ test('una cuenta completa entra directo sin volver a abrir el onboarding', () =>
   assert.equal(plan.needsDob, false);
 });
 
-test('un perfil existente ya confirmado nunca vuelve a Últimos datos', () => {
+test('un perfil existente con marca de alta sólo pide lo que realmente le falta', () => {
   const historical = {
     nombre: 'Bárbara',
     apellido: 'Ruiz',
@@ -63,22 +63,24 @@ test('un perfil existente ya confirmado nunca vuelve a Últimos datos', () => {
     role: 'client',
     superAdminEmail,
   });
-  assert.equal(plan.skip, true);
-  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.skip, false);
+  assert.equal(plan.needsName, false);
+  assert.equal(plan.needsPhone, false);
   assert.equal(plan.needsDob, false);
-  assert.equal(plan.needsAddress, false);
+  assert.equal(plan.needsUsername, true);
+  assert.equal(plan.needsAddress, true);
 });
 
-test('una cuenta histórica confirmada por la bienvenida no vuelve a Últimos datos', () => {
+test('una cuenta histórica marcada por la bienvenida pero sin datos va a Últimos datos', () => {
   const plan = getProfileCompletionPlan({
     profile: { welcomeTutorialCompletedAt: new Date('2026-01-10') },
     user: { email: 'cliente@ejemplo.com' },
     role: 'client',
   });
 
-  assert.equal(plan.skip, true);
-  assert.equal(plan.needsUsername, false);
-  assert.equal(plan.needsDob, false);
+  assert.equal(plan.skip, false);
+  assert.equal(plan.needsUsername, true);
+  assert.equal(plan.needsDob, true);
 });
 
 test('un perfil histórico del panel no repite username, fecha ni ubicación ya guardados', () => {
@@ -399,16 +401,59 @@ test('una cuenta incomplete necesita username y fecha de nacimiento cuando falta
   assert.equal(plan.needsAddress, false);
 });
 
-test('profileStatus active es la marca canónica y no reabre el alta', () => {
+test('profileStatus active con todos los datos entra directo', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { ...COMPLETE, profileStatus: 'active' },
+    user: { email: 'cliente@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, true);
+});
+
+test('profileStatus active al que le faltan datos los completa (decide por datos)', () => {
   const plan = getProfileCompletionPlan({
     profile: { ...CORE, profileStatus: 'active' },
     user: { email: 'cliente@hotmail.com' },
     role: 'client',
     superAdminEmail,
   });
-  assert.equal(plan.skip, true);
-  assert.equal(plan.needsUsername, false);
-  assert.equal(plan.needsDob, false);
+  assert.equal(plan.skip, false);
+  assert.equal(plan.needsUsername, true);
+  assert.equal(plan.needsDob, true);
+  assert.equal(plan.needsName, false);
+  assert.equal(plan.needsPhone, false);
+});
+
+test('SIN BUCLE: tras guardar lo que falta, el siguiente ingreso no vuelve a pedir datos', () => {
+  const profiles = [
+    { profileStatus: 'incomplete', name: 'Ana Gómez', phone: '' },
+    { profileStatus: 'legacy', onboardingCompleted: true, welcomeTutorialSeen: true },
+    { profileStatus: 'active', ...CORE },
+    { nombre: 'Bárbara', apellido: 'Ruiz', telefono: '+595981123456', fecha_nacimiento: '1997-05-02' },
+  ];
+  for (const profile of profiles) {
+    const plan = getProfileCompletionPlan({ profile, user: { email: 'c@x.com' }, role: 'client', superAdminEmail });
+    assert.equal(plan.skip, false);
+    const patch = buildMissingProfilePatch({
+      currentProfile: profile,
+      submittedFirstName: plan.needsName ? 'Ana' : '',
+      submittedLastName: plan.needsName ? 'Gómez' : '',
+      submittedPhone: plan.needsPhone ? '+595981000111' : '',
+      submittedAddress: plan.needsAddress ? { lat: -25.3, lng: -57.6, name: 'Casa' } : null,
+      submittedUsername: plan.needsUsername ? 'ana_gomez' : '',
+      submittedDob: plan.needsDob ? '1995-03-10' : '',
+    });
+    const saved = { ...profile, ...patch };
+    const next = getProfileCompletionPlan({ profile: saved, user: { email: 'c@x.com' }, role: 'client', superAdminEmail });
+    assert.equal(next.skip, true, `volvió a pedir datos para ${JSON.stringify(profile)}`);
+  }
+});
+
+test('login.html no usa variables inexistentes en el alta (ReferenceError de data)', () => {
+  const html = readLogin();
+  assert.doesNotMatch(html, /data\.username \|\| data\.userName/);
+  assert.match(html, /readProfileState\(user, role\);\s*\n\s*if \(verified\.state !== PROFILE_STATE\.COMPLETE\)/);
 });
 
 test('profileStatus legacy o ausente no exime username ni DOB', () => {

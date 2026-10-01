@@ -19,13 +19,14 @@ import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260924-auth
 import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1";
+import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261001-ultimos-datos-1";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el
 // uid y no un simple `true`: si se cambia de cuenta en la misma pestaña, el
 // valor deja de coincidir y se vuelve a verificar.
 const COMPLETE_KEY = 'tt_profile_complete_uid';
+const STAFF_ROLES = ['superadmin', 'admin', 'agent', 'viewer'];
 
 function markComplete(uid) {
   try { sessionStorage.setItem(COMPLETE_KEY, uid); } catch {}
@@ -111,7 +112,11 @@ async function enforceProfileComplete(user) {
     return;
   }
 
-  const role = data.role || 'client';
+  // Sólo el personal conocido queda exento. Un rol vacío, mal escrito o
+  // desconocido es una clienta: antes cualquier valor distinto de 'client'
+  // la dejaba navegar sin completar sus datos.
+  const rawRole = String(data.role || '').trim().toLowerCase();
+  const role = STAFF_ROLES.includes(rawRole) ? rawRole : 'client';
   if (role !== 'client') {
     markComplete(user.uid);
     return;

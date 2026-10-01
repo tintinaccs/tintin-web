@@ -226,13 +226,13 @@ import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tin
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-1";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260929-incomplete-flags-1";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261001-ultimos-datos-1";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { showBlockedModal, accountProblemHtml } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260927-account-problem-whatsapp-2";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1";
-import { PROFILE_STATE, PROFILE_ACTION, detectAuthMethod, readProfileSnapshot, resolveProfileState, resolveProfileAction, withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20260930-incomplete-flags-3";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261001-ultimos-datos-1";
+import { PROFILE_STATE, PROFILE_ACTION, detectAuthMethod, readProfileSnapshot, resolveProfileState, resolveProfileAction, withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261001-ultimos-datos-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
@@ -455,7 +455,9 @@ async function readProfileState(user, role) {
   const attempt = await withDeadline(getDoc(doc(db, 'users', user.uid)), PROFILE_READ_DEADLINE_MS)
     .then(snapshot => ({ snapshot }), error => ({ error }));
   const read = readProfileSnapshot(attempt, { online: navigator.onLine !== false });
-  const resolved = resolveProfileState({ read, user, role, superAdminEmail: SUPER_ADMIN });
+  // `clientOnly`: el personal (admin, agente, viewer) entra al panel sin el
+  // alta de clienta, igual que en el resto del sitio (control-acceso-perfil.js).
+  const resolved = resolveProfileState({ read, user, role, superAdminEmail: SUPER_ADMIN, clientOnly: true });
   recordAuthDiagnostic('PROFILE_FETCH_RESULT', { source: 'login', profileState: resolved.state, reason: resolved.reason, errorKind: resolved.errorKind || 'none' });
   return resolved;
 }
@@ -529,7 +531,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260929-incomplete-flags-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20261001-ultimos-datos-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -592,12 +594,13 @@ async function ensureProfileComplete(user, role) {
   phoneInput.value = '';
   usernameInput.value = '';
   dobInput.value = '';
-  // Los perfiles históricos del panel usaban `userName`; no volver a mostrar
-  // el campo si ese valor ya es el username vigente.
-  const usernameMissing = !isValidUsernameFormat(data.username || data.userName || '');
+  // `plan.needsUsername` ya contempla los nombres históricos del campo
+  // (`userName`, `nombreUsuario`…). Antes acá se leía una variable `data` que
+  // no existe en esta función: el ReferenceError cortaba el alta antes de
+  // mostrar el formulario.
   phoneField.style.display = plan.needsPhone ? '' : 'none';
   addressField.style.display = plan.needsAddress ? '' : 'none';
-  usernameField.style.display = (plan.needsUsername || usernameMissing) ? '' : 'none';
+  usernameField.style.display = plan.needsUsername ? '' : 'none';
   dobField.style.display = plan.needsDob ? '' : 'none';
 
   let usernameAvailability = 'idle';
@@ -670,7 +673,7 @@ async function ensureProfileComplete(user, role) {
       return { known: false };
     }
   };
-  if (plan.needsUsername || usernameMissing) {
+  if (plan.needsUsername) {
     usernameInput.addEventListener('input', () => {
       window.clearTimeout(usernameCheckTimer);
       const raw = usernameInput.value.trim();
@@ -890,6 +893,16 @@ async function ensureProfileComplete(user, role) {
             transaction.set(ref, { ...patch, updatedAt: serverTimestamp() }, { merge: true });
           }
         });
+        // Nunca se deja pasar sólo porque el guardado no dio error: se vuelve
+        // a leer el perfil persistido con la misma regla que decide el acceso.
+        // Si todavía faltara algo, se recarga el login, que muestra sólo lo
+        // pendiente (no se arma el formulario dos veces sobre el mismo mapa).
+        const verified = await readProfileState(user, role);
+        if (verified.state !== PROFILE_STATE.COMPLETE) {
+          recordAuthDiagnostic('PROFILE_STILL_INCOMPLETE_AFTER_SAVE', { source: 'login', profileState: verified.state });
+          window.location.replace('/login');
+          return;
+        }
         profileBlock.style.display = 'none';
         document.body.classList.remove('login-setup-open');
         showOverlay();
