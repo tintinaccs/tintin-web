@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { platform } from 'node:process';
 
 const dryRun = process.argv.includes('--dry-run');
 const project = String(process.env.FIREBASE_PROJECT_ID || 'tintin-accesorios').trim();
@@ -6,7 +7,11 @@ const source = String(process.env.FIRESTORE_RESTORE_SOURCE || '').trim().replace
 const database = String(process.env.FIRESTORE_RESTORE_DATABASE || '(default)').trim();
 const confirmation = String(process.env.TINTIN_RESTORE_CONFIRM || '').trim();
 
-if (!/^gs:\/\/[^/\s]+\/[^\s]+$/.test(source)) {
+if (!/^[a-z][a-z0-9-]{4,28}[a-z0-9]$/.test(project)) {
+  console.error('FIREBASE_PROJECT_ID debe ser un ID de proyecto válido.');
+  process.exit(2);
+}
+if (!/^gs:\/\/[A-Za-z0-9._-]+\/[A-Za-z0-9._/-]+$/.test(source)) {
   console.error('FIRESTORE_RESTORE_SOURCE debe indicar un prefijo de exportación gs://bucket/ruta/snapshot.');
   process.exit(2);
 }
@@ -42,7 +47,10 @@ console.log(JSON.stringify({
 }, null, 2));
 if (dryRun) process.exit(0);
 
-const result = spawnSync('gcloud', args, { stdio: 'inherit', shell: false });
+// En Windows el CLI de Google es un .cmd y Node no puede ejecutarlo con
+// shell:false. Proyecto, origen y base se validan arriba y no admiten espacios
+// ni metacaracteres de cmd, por eso el shell sólo se habilita en esa plataforma.
+const result = spawnSync('gcloud', args, { stdio: 'inherit', shell: platform === 'win32' });
 if (result.error) {
   console.error('No se pudo ejecutar gcloud:', result.error.message);
   process.exit(1);

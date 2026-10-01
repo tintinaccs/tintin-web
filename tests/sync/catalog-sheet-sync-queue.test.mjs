@@ -186,7 +186,68 @@ test('el drenaje agrupa producto e inventario en una sola lectura Firestore', as
   });
 
   assert.equal(result.drained, 1);
+  assert.equal(result.failureCode, '');
   assert.equal(fs.batchGetCallCount(), 1, 'los 40 documentos se leen con un batchGet');
+});
+
+test('el drenaje divide el lote lógico en POST pequeños para Apps Script', async () => {
+  const fs = makeFakeFirestore();
+  const notify = makeFakeNotify();
+  const productIds = Array.from({ length: 20 }, (_, index) => `p${index + 1}`);
+  const payloads = [];
+  seedPendingItem(fs, 'small-posts', { productIds });
+  for (const id of productIds.slice(1)) {
+    fs.put(`products/${id}`, { name: `Producto ${id}` });
+    fs.put(`productInventory/${id}`, { stock: 1 });
+  }
+  const fetchImpl = async (_url, request) => {
+    payloads.push(JSON.parse(request.body));
+    return { ok: true, status: 200, json: async () => ({ ok: true, sheetName: 'Productos', synced: 5 }) };
+  };
+
+  const result = await drainCatalogSheetSyncQueueScheduled(env, {
+    deps: buildDeps(fs, fetchImpl, notify),
+  });
+
+  assert.equal(result.drained, 1);
+  assert.deepEqual(payloads.map(payload => payload.items.length), [5, 5, 5, 5]);
+  assert.deepEqual(payloads.flatMap(payload => payload.items.map(item => item.id)), productIds);
+  assert.ok(payloads.every(payload => payload.action === 'syncProductsPayload'));
+  assert.equal(fs.batchGetCallCount(), 1, 'Firestore sigue resolviendo los 40 documentos en una lectura');
+});
+
+test('si falla un sublote, el reintento de la tarea repite IDs estables', async () => {
+  const fs = makeFakeFirestore();
+  const notify = makeFakeNotify();
+  const productIds = Array.from({ length: 20 }, (_, index) => `p${index + 1}`);
+  const payloads = [];
+  let calls = 0;
+  seedPendingItem(fs, 'partial-retry', { productIds });
+  for (const id of productIds.slice(1)) {
+    fs.put(`products/${id}`, { name: `Producto ${id}` });
+    fs.put(`productInventory/${id}`, { stock: 1 });
+  }
+  const fetchImpl = async (_url, request) => {
+    const payload = JSON.parse(request.body);
+    payloads.push(payload);
+    calls += 1;
+    if (calls === 2) throw new Error('La operación superó el tiempo de espera');
+    return { ok: true, status: 200, json: async () => ({ ok: true, sheetName: 'Productos', synced: payload.items.length }) };
+  };
+
+  const result = await drainCatalogSheetSyncQueueScheduled(env, {
+    deps: buildDeps(fs, fetchImpl, notify),
+  });
+
+  assert.equal(result.drained, 1, 'la segunda pasada completa la misma tarea');
+  assert.deepEqual(payloads.map(payload => payload.items.map(item => item.id)), [
+    productIds.slice(0, 5),
+    productIds.slice(5, 10),
+    productIds.slice(0, 5),
+    productIds.slice(5, 10),
+    productIds.slice(10, 15),
+    productIds.slice(15, 20),
+  ]);
 });
 
 test('timeout: un fallo de Apps Script reintenta con backoff sin reprocesar de inmediato', async () => {
@@ -200,6 +261,7 @@ test('timeout: un fallo de Apps Script reintenta con backoff sin reprocesar de i
   assert.equal(first.checked, 1);
   assert.equal(first.drained, 0);
   assert.equal(first.deadLettered, 0);
+  assert.equal(first.failureCode, 'apps_script_timeout');
 
   const afterFirst = fs.readDecoded(`${QUEUE_COLLECTION}/timeout1`);
   assert.equal(afterFirst.status, 'pending');

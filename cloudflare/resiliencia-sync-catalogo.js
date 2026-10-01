@@ -15,6 +15,11 @@ import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
 
 const PRODUCT_SYNC_CHUNK = 20;
+// Keep Apps Script writes smaller than Firestore read batches. Updating 20
+// spreadsheet rows in one Web App execution can exceed SHEETS_TIMEOUT_MS;
+// smaller idempotent POSTs let a queue drain make progress within the request
+// budget without changing the queue's logical product batch.
+const QUEUE_APPS_SCRIPT_POST_CHUNK = 5;
 const MAX_ATTEMPTS = 4;
 const QUEUE_COLLECTION = 'catalogSheetSyncQueue';
 const MAX_PENDING = 200;
@@ -24,6 +29,15 @@ const CLAIM_STALE_MS = 10 * 60 * 1000;
 const SYNC_META_PATH = 'syncMeta/catalogSheetSyncQueue';
 
 const clean = (value, max = 500) => String(value ?? '').trim().slice(0, max);
+function syncFailureCode(error) {
+  const message = clean(error?.message || error, 500).toLowerCase();
+  if (/no autorizado|unauthorized|secret mismatch/.test(message)) return 'apps_script_auth_rejected';
+  if (/sheets_engagement_secret/.test(message)) return 'sheets_secret_missing';
+  if (/no existe la hoja productos/.test(message)) return 'products_sheet_missing';
+  if (/timeout|timed out|tiempo de espera/.test(message)) return 'apps_script_timeout';
+  if (/firestore|batchget|service account|permission denied/.test(message)) return 'firestore_read_failed';
+  return 'products_sync_failed';
+}
 const docId = document => String(document?.name || '').split('/').pop();
 const unique = values => [...new Set((Array.isArray(values) ? values : []).map(value => clean(value, 180)).filter(Boolean))];
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -290,33 +304,36 @@ async function fetchProductPayloadItems(env, ids, deps = REAL_QUEUE_DEPS) {
   });
 }
 
-async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS) {
+async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS, { appScriptChunkSize = PRODUCT_SYNC_CHUNK } = {}) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, batches: 0 };
   const secret = clean(env?.SHEETS_ENGAGEMENT_SECRET, 500);
   if (!secret) throw new Error('SHEETS_ENGAGEMENT_SECRET no está configurado.');
+  const postChunkSize = Math.max(1, Math.min(PRODUCT_SYNC_CHUNK, Number(appScriptChunkSize) || PRODUCT_SYNC_CHUNK));
   let batches = 0;
   for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
     const chunk = ids.slice(i, i + PRODUCT_SYNC_CHUNK);
     const items = await fetchProductPayloadItems(env, chunk, deps);
-    const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify({
-        action: 'syncProductsPayload',
-        sheetName: 'Productos',
-        schemaVersion: 2,
-        secret,
-        items,
-      }),
-    });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok || data.ok !== true) {
-      throw new Error(clean(data.error || `Sheets Productos (payload) respondió ${response.status}`));
+    for (let j = 0; j < items.length; j += postChunkSize) {
+      const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: JSON.stringify({
+          action: 'syncProductsPayload',
+          sheetName: 'Productos',
+          schemaVersion: 2,
+          secret,
+          items: items.slice(j, j + postChunkSize),
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.ok !== true) {
+        throw new Error(clean(data.error || `Sheets Productos (payload) respondió ${response.status}`));
+      }
+      batches += 1;
     }
-    batches += 1;
   }
   return { ok: true, batches };
 }
@@ -368,14 +385,14 @@ export async function syncDeletedProductsPayloadWithRetry(env, productIds, { att
  * documento completo a Apps Script autenticado con el secreto compartido ya
  * usado por syncOrder — Apps Script nunca necesita tirar de Firestore aquí.
  */
-export async function syncProductsPayloadWithRetry(env, productIds, { attempts = 2 } = {}, deps = REAL_QUEUE_DEPS) {
+export async function syncProductsPayloadWithRetry(env, productIds, { attempts = 2, appScriptChunkSize = PRODUCT_SYNC_CHUNK } = {}, deps = REAL_QUEUE_DEPS) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, attempts: 0, batches: 0 };
   let lastError = null;
   const limit = Math.max(1, Math.min(MAX_ATTEMPTS, Number(attempts) || 2));
   for (let attempt = 1; attempt <= limit; attempt += 1) {
     try {
-      const result = await syncProductsPayloadOnce(env, ids, deps);
+      const result = await syncProductsPayloadOnce(env, ids, deps, { appScriptChunkSize });
       return { ...result, attempts: attempt };
     } catch (error) {
       lastError = error;
@@ -407,16 +424,21 @@ export async function drainCatalogSheetSyncQueueScheduled(env, { limit = 1, deps
   let drained = 0;
   let deadLettered = 0;
   let lastError = '';
+  let failureCode = '';
   for (const document of eligible) {
     const claimed = await claimQueueItem(env, document, deps);
     if (!claimed) continue;
     try {
-      await syncProductsPayloadWithRetry(env, claimed.productIds, { attempts: 2 }, deps);
+      await syncProductsPayloadWithRetry(env, claimed.productIds, {
+        attempts: 2,
+        appScriptChunkSize: QUEUE_APPS_SCRIPT_POST_CHUNK,
+      }, deps);
       await deps.firestoreAdminCommit(env, [{ path: `${QUEUE_COLLECTION}/${claimed.id}`, delete: true }]);
       drained += 1;
     } catch (error) {
       const attempts = Number(claimed.attempts || 0) + 1;
       lastError = clean(error?.message || error);
+      failureCode = syncFailureCode(error);
       if (attempts >= MAX_QUEUE_ATTEMPTS) {
         await transitionDeadLetter(env, { ...claimed, attempts }, error, deps);
         deadLettered += 1;
@@ -444,7 +466,13 @@ export async function drainCatalogSheetSyncQueueScheduled(env, { limit = 1, deps
     console.error('[resiliencia-sync-catalogo] No se pudo actualizar syncMeta:', error?.message || error);
   }
 
-  return { checked: eligible.length, drained, deadLettered, remaining: eligible.length - drained - deadLettered };
+  return {
+    checked: eligible.length,
+    drained,
+    deadLettered,
+    remaining: eligible.length - drained - deadLettered,
+    failureCode,
+  };
 }
 
 /** Métrica de solo lectura para el panel de Diagnóstico (Estado del ecosistema). */

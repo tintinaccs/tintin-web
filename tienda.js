@@ -184,6 +184,25 @@ function pickRandom(arr, n) {
   return result;
 }
 
+function productKey(product) {
+  return String(product.id ?? product.slug ?? product.name);
+}
+
+/**
+ * Selección estable: mientras la selección anterior siga completa dentro del
+ * pool (mismo tamaño), se conserva y sólo se refrescan sus datos. Se vuelve a
+ * sortear únicamente si cambió el pool o si el usuario lo pidió (`reroll`).
+ * Así un refresco de datos/imágenes no cambia las tarjetas que ya se ven.
+ */
+function pickStable(pool, n, previousKeys, reroll) {
+  const size = Math.min(n, pool.length);
+  if (!reroll && size > 0 && previousKeys.length === size) {
+    const byKey = new Map(pool.map(product => [productKey(product), product]));
+    if (previousKeys.every(key => byKey.has(key))) return previousKeys.map(key => byKey.get(key));
+  }
+  return pickRandom(pool, size);
+}
+
 /* ──────────────────────────────────────
    CART — localStorage key: tt_cart
 ────────────────────────────────────── */
@@ -714,9 +733,28 @@ function initCartEvents() {
 /* ──────────────────────────────────────
    SKELETON LOADING STATE
 ────────────────────────────────────── */
+// Último HTML pintado por contenedor: un refresco con datos idénticos (p. ej.
+// el re-publicado de la política de colecciones) no vuelve a pintar, así no se
+// reinician imágenes ni se pierde lo que otros módulos agregaron a las tarjetas.
+const _lastGridHtml = new WeakMap();
+function _paintGrid(container, state, html) {
+  if (container.dataset.loadState === state && _lastGridHtml.get(container) === html) return;
+  _setGridState(container, state);
+  container.innerHTML = html;
+  _lastGridHtml.set(container, html);
+}
+
+function _setGridState(container, state) {
+  container.dataset.loadState = state;
+  if (state === 'loading') container.setAttribute('aria-busy', 'true');
+  else container.removeAttribute('aria-busy');
+}
+
 function _showProductsSkeleton(containerId, count = 4) {
   const container = document.getElementById(containerId);
   if (!container) return;
+  _setGridState(container, 'loading');
+  _lastGridHtml.delete(container);
   container.innerHTML = Array.from({ length: count }, () => `
     <div class="tt-product-card tt-skeleton-card" aria-hidden="true">
       <div class="tt-product-img tt-skeleton-img"></div>
@@ -730,16 +768,18 @@ function _showProductsSkeleton(containerId, count = 4) {
   `).join('');
 }
 
-/** Real error state (never fake/demo products) for a product grid that never
- *  got a Firestore response — either the listener errored, or 4s passed
- *  with no response at all yet. */
+/** Estado de error real (nunca productos falsos): la API del catálogo falló o
+ *  agotó su propio límite de tiempo. El botón reintenta la carga sin recargar
+ *  la página (ver retryProductsLoad). */
 function _showProductsLoadError(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
+  _setGridState(container, 'error');
+  _lastGridHtml.delete(container);
   container.innerHTML = `
     <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
       <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo.</p>
-      <button type="button" class="tt-btn" onclick="location.reload()">Reintentar</button>
+      <button type="button" class="tt-btn" data-products-retry>Reintentar</button>
     </div>`;
 }
 
@@ -805,30 +845,36 @@ function renderProductsGrid(containerId, products) {
   if (!container) return;
 
   if (!products.length) {
-    container.innerHTML = `<div class="tt-products-empty" style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">No hay productos disponibles todavía.</div>`;
+    _paintGrid(container, 'empty', `<div class="tt-products-empty" style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">No hay productos disponibles todavía.</div>`);
     return;
   }
 
-  container.innerHTML = products.map(renderProductCardMarkup).join('');
+  _paintGrid(container, 'ready', products.map(renderProductCardMarkup).join(''));
 }
 
-// Home discovery carousel: choose a fresh, duplicate-free selection while
-// reusing the canonical product-card renderer (links, favorites and cart).
-function renderRandomHomeProducts() {
+// Home discovery carousel: duplicate-free selection reusing the canonical
+// product-card renderer (links, favorites and cart). The selection is stable
+// across data refreshes; it is re-rolled only when the user asks for it.
+let homeSelectionKeys = [];
+
+function renderRandomHomeProducts(options = {}) {
   const grid = document.getElementById('products-grid');
   if (!grid) return;
+  // Sin respuesta del catálogo todavía: el esqueleto/error lo gobierna
+  // initProductsLoadState; no se pinta "vacío" por datos no resueltos.
+  if (!Array.isArray(window.PRODUCTS)) return;
   const seen = new Set();
-  const pool = (window.PRODUCTS || []).filter(isFeaturable).filter(product => {
-    const key = String(product.id ?? product.slug ?? product.name);
+  const pool = window.PRODUCTS.filter(isFeaturable).filter(product => {
+    const key = productKey(product);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
-  const shown = Math.min(5, pool.length);
-  renderProductsGrid('products-grid', pickRandom(pool, shown));
+  const selection = pickStable(pool, 5, homeSelectionKeys, options.reroll === true);
+  homeSelectionKeys = selection.map(productKey);
+  renderProductsGrid('products-grid', selection);
   // "Ver otra selección" solo tiene sentido si quedan productos sin mostrar.
-  const refresh = document.getElementById('btn-home-random-products');
-  if (refresh) refresh.style.display = pool.length > shown ? '' : 'none';
+  setHomeRefreshVisible(pool.length > selection.length);
 }
 window.renderRandomHomeProducts = renderRandomHomeProducts;
 
@@ -836,15 +882,46 @@ window.renderRandomHomeProducts = renderRandomHomeProducts;
    COMPLETÁ TU LOOK COMBINATOR
 ────────────────────────────────────── */
 let currentCombo = [];
+let lookSelectionKeys = [];
 
-function renderLookCombo() {
+function setLookSectionVisible(visible) {
+  const section = document.getElementById('look-section');
+  if (section) section.style.display = visible ? '' : 'none';
+  const actions = document.getElementById('look-actions');
+  if (actions) actions.style.display = visible ? '' : 'none';
+}
+
+function setHomeRefreshVisible(visible) {
+  const refresh = document.getElementById('btn-home-random-products');
+  if (refresh) refresh.style.display = visible ? '' : 'none';
+}
+
+function renderLookCombo(options = {}) {
   const grid = document.getElementById('look-grid');
   if (!grid) return;
+  if (!Array.isArray(window.PRODUCTS)) return;
 
- const productPool = (window.PRODUCTS || []).filter(isFeaturable);
-  currentCombo = pickRandom(productPool, 3);
+  const productPool = window.PRODUCTS.filter(isFeaturable);
+  // Sin productos comprables no hay combinación que ofrecer: la sección se
+  // oculta (y vuelve sola cuando llegan datos) en vez de mostrar un hueco.
+  if (!productPool.length) {
+    currentCombo = [];
+    lookSelectionKeys = [];
+    _paintGrid(grid, 'empty', '');
+    grid.setAttribute('aria-busy', 'false');
+    setLookSectionVisible(false);
+    return;
+  }
+  setLookSectionVisible(true);
+  currentCombo = pickStable(productPool, 3, lookSelectionKeys, options.reroll === true);
+  lookSelectionKeys = currentCombo.map(productKey);
+  const otra = document.getElementById('btn-otra-combo');
+  if (otra) otra.style.display = productPool.length > currentCombo.length ? '' : 'none';
+  const add = document.getElementById('btn-add-combo');
+  if (add) add.disabled = false;
 
-  grid.innerHTML = currentCombo.map(p => {
+  grid.setAttribute('aria-busy', 'false');
+  _paintGrid(grid, 'ready', currentCombo.map(p => {
     const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 480);
     const safeId = escapeAttribute(p.id);
     const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;
@@ -864,34 +941,23 @@ function renderLookCombo() {
         <button type="button" class="tt-btn tt-btn-sm tt-add-to-cart" data-id="${safeId}" style="width:100%;">+ Agregar al carrito</button>
       </div>
     </div>`;
-  }).join('');
+  }).join(''));
 }
 
 function initLookCombinator() {
-  const btnOtra    = document.getElementById('btn-otra-combo');
-  const btnAdd     = document.getElementById('btn-add-combo');
-  const lookActions = document.getElementById('look-actions');
-  const lookSection = document.getElementById('look-section');
-
-  const productPool = window.PRODUCTS || [];
-  if (!productPool || productPool.length === 0) {
-    if (lookSection) lookSection.style.display = 'none';
-    return;
-  }
+  const btnOtra = document.getElementById('btn-otra-combo');
+  const btnAdd = document.getElementById('btn-add-combo');
 
   renderLookCombo();
-  if (lookActions) lookActions.style.display = '';
 
-  // Bind exactly once: initLookCombinator() is re-invoked on every Firestore
-  // products snapshot (tienda.js, estado-productos.js and inicio-carga-imagenes.js
-  // all call it so the combo refreshes with live data/images), but
-  // #btn-otra-combo/#btn-add-combo are static persistent buttons — without
-  // this guard each re-invocation stacked another click handler on top of
-  // the last, so a single real click added the combo to the cart N times.
+  // Bind exactly once: initLookCombinator() puede invocarse más de una vez,
+  // pero #btn-otra-combo/#btn-add-combo son botones estáticos — sin esta
+  // guarda cada invocación apilaba otro handler y un solo clic agregaba la
+  // combinación N veces.
   if (btnOtra && !btnOtra.dataset.ttBound) {
     btnOtra.dataset.ttBound = '1';
     btnOtra.addEventListener('click', () => {
-      renderLookCombo();
+      renderLookCombo({ reroll: true });
     });
   }
 
@@ -1518,6 +1584,8 @@ function _renderProductDetail(product) {
           const variantStr = _pdGetSelectedVariant();
           const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
           if (result?.changed) _showProductToast(_pdProduct.name);
+        } catch (error) {
+          _showProductCartError(error);
         } finally {
           delete btnAdd.dataset.busy;
           btnAdd.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;
@@ -1546,6 +1614,8 @@ function _renderProductDetail(product) {
           const variantStr = _pdGetSelectedVariant();
           const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
           if (result?.item) window.location.assign('/checkout');
+        } catch (error) {
+          _showProductCartError(error);
         } finally {
           delete btnBuyNow.dataset.busy;
           btnBuyNow.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;
@@ -1590,6 +1660,27 @@ async function _addToCartWithQty(product, qty, variantStr) {
   });
 }
 window._addToCartWithQty = _addToCartWithQty;
+
+// Si el módulo del carrito no carga (red caída, SDK bloqueado), el cliente debe
+// ver el fallo en lugar de un botón que vuelve a su estado sin explicación.
+function _showProductCartError(error) {
+  console.error('[product] No se pudo agregar al carrito:', error);
+  let node = document.getElementById('tt-cart-feedback');
+  if (!node) {
+    node = document.createElement('div');
+    node.id = 'tt-cart-feedback';
+    node.className = 'tt-cart-feedback';
+    node.setAttribute('role', 'status');
+    node.setAttribute('aria-live', 'polite');
+    node.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(node);
+  }
+  node.textContent = 'No pudimos agregar el producto al carrito. Revisá tu conexión e intentá de nuevo.';
+  node.dataset.state = 'warning';
+  node.classList.add('is-visible');
+  window.clearTimeout(node._hideTimer);
+  node._hideTimer = window.setTimeout(() => node.classList.remove('is-visible'), 4200);
+}
 
 function _showProductToast(productName) {
   const toast = document.getElementById('tt-added-toast');
@@ -1830,7 +1921,7 @@ function initWaFloatVisibility() {
     const ro = new ResizeObserver(() => check());
     ro.observe(document.documentElement);
     ro.observe(document.body);
-    document.querySelectorAll('main,.section,.tt-products-grid,#products-grid,#cat-grid,#colls-products-grid').forEach(node => ro.observe(node));
+    document.querySelectorAll('main,.section,.tt-products-grid,#products-grid,#cat-grid').forEach(node => ro.observe(node));
   }
   document.addEventListener('load', () => check(), true);
   document.fonts?.ready?.then(() => check()).catch(() => {});
@@ -1950,6 +2041,89 @@ function renderCartWhenReady() {
   });
 }
 
+/* ──────────────────────────────────────
+   HOME: estados de carga (esqueleto → datos | vacío | error) y reintento
+   Sin temporizadores: el límite de tiempo real es el AbortController de 8 s
+   de catalogo-publico-api.js, que termina en `tintin:products-error`.
+────────────────────────────────────── */
+function _showLookSkeleton() {
+  const grid = document.getElementById('look-grid');
+  if (!grid) return;
+  grid.setAttribute('aria-busy', 'true');
+  _setGridState(grid, 'loading');
+  _lastGridHtml.delete(grid);
+  grid.innerHTML = Array.from({ length: 3 }, () => `
+    <div class="tt-look-card tt-skeleton-card" aria-hidden="true">
+      <div class="tt-look-card-inner">
+        <div class="tt-look-card-img tt-skeleton-img"></div>
+        <div class="tt-look-card-body">
+          <div class="tt-skeleton-line" style="width:80%;height:14px;margin-bottom:8px;"></div>
+          <div class="tt-skeleton-line" style="width:40%;height:12px;"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function _showHomeLoading() {
+  _showProductsSkeleton('products-grid');
+  setHomeRefreshVisible(false);
+  _showLookSkeleton();
+}
+
+function _showHomeError() {
+  _showProductsLoadError('products-grid');
+  setHomeRefreshVisible(false);
+  // Sin catálogo no hay combinación que ofrecer; no se deja un esqueleto colgado.
+  const look = document.getElementById('look-grid');
+  if (look) {
+    _paintGrid(look, 'error', '');
+    look.setAttribute('aria-busy', 'false');
+  }
+  setLookSectionVisible(false);
+}
+
+function retryProductsLoad() {
+  const store = window.TintinProductsStore;
+  // El módulo del catálogo nunca llegó a cargar: sólo una recarga lo recupera.
+  if (typeof store?.ensureCurrentPage !== 'function') {
+    location.reload();
+    return;
+  }
+  _showHomeLoading();
+  // Un fallo vuelve a emitir `tintin:products-error`, que repinta el error.
+  store.ensureCurrentPage({ force: true }).catch(() => {});
+}
+
+function initProductsLoadState() {
+  const grid = document.getElementById('products-grid');
+  if (!grid) return;
+  // window.PRODUCTS puede estar ya poblado: el módulo del catálogo pudo
+  // responder antes de este DOMContentLoaded. Array.isArray (no el largo)
+  // distingue "respondió con 0 productos" de "todavía no respondió".
+  if (Array.isArray(window.PRODUCTS)) renderRandomHomeProducts();
+  else _showHomeLoading();
+  // Enlaza los botones del look (una sola vez) y pinta si ya hay datos.
+  initLookCombinator();
+
+  window.addEventListener('tintin:products-error', () => {
+    if (grid.dataset.loadState === 'loading') _showHomeError();
+  });
+  grid.addEventListener('click', event => {
+    if (event.target.closest('[data-products-retry]')) retryProductsLoad();
+  });
+  // Reintento automático al volver la conexión o al restaurar la página
+  // desde bfcache, sólo si quedó en error.
+  window.addEventListener('online', () => {
+    if (grid.dataset.loadState === 'error') retryProductsLoad();
+  });
+  window.addEventListener('pageshow', event => {
+    if (event.persisted && grid.dataset.loadState === 'error') retryProductsLoad();
+  });
+  document.getElementById('btn-home-random-products')
+    ?.addEventListener('click', () => renderRandomHomeProducts({ reroll: true }));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Core functionality on all pages
   initHeaderScroll();
@@ -1958,33 +2132,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initCartEvents();
   renderCartWhenReady();
 
-  // Homepage specific — show skeleton while Firebase loads, real error+retry
-  // if it never responds. window.PRODUCTS may already be populated here: the
-  // estado-productos.js module's onSnapshot can resolve (e.g. from a warm
-  // IndexedDB cache) and dispatch tintin:products-loaded before this
-  // DOMContentLoaded handler runs, since both tienda.js and the module
-  // scripts are deferred and execute in document order before
-  // DOMContentLoaded fires. Don't clobber already-rendered real data with a
-  // skeleton in that case. Array.isArray (not truthiness) is what tells
-  // "Firestore already answered, zero products" apart from "hasn't answered
-  // yet" — both are otherwise falsy-length.
-  if (document.getElementById('products-grid')) {
-    if (Array.isArray(window.PRODUCTS)) {
-      renderRandomHomeProducts();
-    } else {
-      _showProductsSkeleton('products-grid');
-      const _fallbackHome = () => {
-        const grid = document.getElementById('products-grid');
-        if (grid && grid.querySelector('.tt-skeleton-card')) _showProductsLoadError('products-grid');
-      };
-      setTimeout(_fallbackHome, 4000);
-      window.addEventListener('tintin:products-error', _fallbackHome);
-    }
-  }
-
-  if (document.getElementById('look-grid')) {
-    initLookCombinator();
-  }
+  // Homepage: esqueleto mientras responde el catálogo, error real con
+  // reintento si la API falla, y selección estable (ver initProductsLoadState).
+  initProductsLoadState();
 
   // Contact page
   if (document.getElementById('contact-form')) {
@@ -1996,24 +2146,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initProductPage();
   }
 
-  // Collections page — same already-loaded guard as above, plus a
-  // skeleton→real-error (timeout + products-error event) so a failed/slow
-  // Firestore listener never leaves it spinning forever, and never gets
-  // replaced by fake demo products.
-  if (document.getElementById('colls-products-grid')) {
-    if (Array.isArray(window.PRODUCTS)) {
-      renderProductsGrid('colls-products-grid', window.PRODUCTS.filter(isFeaturable));
-    } else {
-      _showProductsSkeleton('colls-products-grid');
-      const _fallbackColls = () => {
-        const grid = document.getElementById('colls-products-grid');
-        if (grid && grid.querySelector('.tt-skeleton-card')) _showProductsLoadError('colls-products-grid');
-      };
-      setTimeout(_fallbackColls, 4000);
-      window.addEventListener('tintin:products-error', _fallbackColls);
-    }
-  }
-
   // Back to top
   initBackToTop();
   // FAQ accordion
@@ -2022,15 +2154,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initWaFloatVisibility();
 });
 
-/* expose for inline onclick usage and module re-render */
+/* Re-render cuando llegan datos del catálogo (la selección visible se
+   conserva: sólo se refrescan sus datos/imágenes). */
 window.addEventListener('tintin:products-loaded', () => {
   renderCartWhenReady();
   if (document.getElementById('products-grid')) {
     renderRandomHomeProducts();
-  }
-
-  if (document.getElementById('colls-products-grid')) {
-    renderProductsGrid('colls-products-grid', (window.PRODUCTS || []).filter(isFeaturable));
   }
 
   if (document.getElementById('look-grid')) {
@@ -2040,11 +2169,6 @@ window.addEventListener('tintin:products-loaded', () => {
   if (document.getElementById('product-detail')) {
     initProductPage();
   }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const refresh = document.getElementById('btn-home-random-products');
-  if (refresh) refresh.addEventListener('click', renderRandomHomeProducts);
 });
 
 /* expose for inline onclick usage and module re-render */

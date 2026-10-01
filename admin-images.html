@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-<script src="js/cargador-pagina.js?v=tintin-20260926-loader-contrast-b-1-launch-20260926-1-sec-fix-1-visual-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="robots" content="noindex, nofollow, noarchive">
@@ -15,7 +15,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
-  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1">
+  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1">
   <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -24,7 +24,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
-  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260926-loader-contrast-b-1">
+  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260927-loader-contrast-c-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1">
@@ -403,9 +403,9 @@
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20260929-superadmin-hero-editable-1";
 import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 
@@ -477,6 +477,34 @@ async function saveField(patch, successMessage) {
   }
 }
 
+function prepareHeroPatch(patch) {
+  const current = getAllImages();
+  if (current.hero_bg_configVersion === HERO_IMAGE_CONFIG_VERSION) return patch;
+  // No activar URLs antiguas guardadas por versiones anteriores: el primer
+  // guardado manual empieza desde los artes Tintin visibles en este panel.
+  return {
+    hero_bg_desktop: null,
+    hero_bg_tablet: null,
+    hero_bg_mobile: null,
+    hero_bg_desktop_size: null,
+    hero_bg_desktop_zoom: null,
+    hero_bg_desktop_pos: null,
+    hero_bg_tablet_size: null,
+    hero_bg_tablet_zoom: null,
+    hero_bg_tablet_pos: null,
+    hero_bg_mobile_size: null,
+    hero_bg_mobile_zoom: null,
+    hero_bg_mobile_pos: null,
+    hero_bg_autoReuseDesktop: false,
+    ...patch,
+    hero_bg_configVersion: HERO_IMAGE_CONFIG_VERSION,
+  };
+}
+
+async function saveHeroField(patch, successMessage) {
+  return saveField(prepareHeroPatch(patch), successMessage);
+}
+
 // Hero/Editorial/Nosotros son fotos grandes a pantalla completa: admiten
 // hasta 4K real (3840px) a mayor calidad. El logo y el resto usan el
 // respaldo de 2000px/0.82 de procesamiento-imagenes.js, de sobra para su tamaño.
@@ -492,7 +520,10 @@ function mountDeviceWidget(container, { slotKey, label, hint, currentUrl, maxWid
     quality,
     onOpenLibrary: openMediaLibraryPicker,
     onChange: async url => {
-      await saveField({ [slotKey]: url || null }, url ? '✅ Imagen guardada' : '✅ Imagen quitada');
+      const patch = { [slotKey]: url || null };
+      await (slotKey.startsWith('hero_bg_')
+        ? saveHeroField(patch, url ? '✅ Imagen guardada' : '✅ Imagen quitada')
+        : saveField(patch, url ? '✅ Imagen guardada' : '✅ Imagen quitada'));
     },
   });
 }
@@ -546,15 +577,19 @@ function renderSection(section) {
     card.append(select, top);
 
     if (isHero) {
-      const curSize = getImg(slot.id + '_size') || 'cover';
-      const curPos = getImg(slot.id + '_pos') || 'center center';
+      const heroImages = getAllImages();
+      const heroConfigActive = heroImages.hero_bg_configVersion === HERO_IMAGE_CONFIG_VERSION;
+      const curSize = (heroConfigActive && getImg(slot.id + '_size')) || 'cover';
+      const curPos = (heroConfigActive && getImg(slot.id + '_pos')) || 'center center';
       const widgetMount = document.createElement('div');
       card.appendChild(widgetMount);
       mountDeviceWidget(widgetMount, {
         slotKey: slot.id,
         label: 'Imagen',
-        hint: 'Tamaño recomendado: 1920×1080px o más — se admite hasta 4K (3840px) para máxima nitidez',
-        currentUrl: getImg(slot.id) || '',
+        hint: slot.id === 'hero_bg_tablet'
+          ? 'Esta imagen se usa en tablets verticales y horizontales; se admite hasta 4K (3840px).'
+          : 'Tamaño recomendado: 1920×1080px o más — se admite hasta 4K (3840px) para máxima nitidez',
+        currentUrl: (heroConfigActive && getImg(slot.id)) || slot.defaultUrl || '',
         ...FULL_BLEED_UPLOAD_LIMITS,
       });
 
@@ -593,8 +628,19 @@ function renderSection(section) {
       heroControls.querySelector(`[data-hero-save]`).addEventListener('click', async () => {
         const size = document.getElementById(`size-${slot.id}`)?.value || 'cover';
         const pos = document.getElementById(`pos-${slot.id}`)?.value || 'center center';
-        await saveField({ [`${slot.id}_size`]: size, [`${slot.id}_pos`]: pos }, '✅ Tamaño y posición guardados');
+        await saveHeroField({ [`${slot.id}_size`]: size, [`${slot.id}_pos`]: pos }, '✅ Tamaño y posición guardados');
       });
+      if (slot.id === 'hero_bg_desktop') {
+        const autoReuseKey = 'hero_bg_autoReuseDesktop';
+        const autoReuse = heroConfigActive && heroImages[autoReuseKey] === true;
+        const autoLabel = document.createElement('label');
+        autoLabel.className = 'adm-autoreuse-toggle';
+        autoLabel.innerHTML = `<input type="checkbox" ${autoReuse ? 'checked' : ''}> Reutilizar Desktop en dispositivos sin una imagen propia`;
+        autoLabel.querySelector('input').addEventListener('change', async event => {
+          await saveHeroField({ [autoReuseKey]: event.target.checked }, '✅ Preferencia guardada');
+        });
+        card.appendChild(autoLabel);
+      }
     } else if (isDeviceVariant) {
       const autoReuseKey = `${slot.id}_autoReuseDesktop`;
       const autoReuse = getAllImages()[autoReuseKey] !== false;
@@ -713,7 +759,7 @@ document.getElementById('adm-overlay').addEventListener('click', () => {
 });
 
 // ── Auth guard ──
-onAuthStateChanged(auth, async (user) => {
+subscribeAuthState(async (user) => {
   const denied = document.getElementById('auth-denied');
 
   if (!user) {
@@ -750,7 +796,7 @@ onAuthStateChanged(auth, async (user) => {
   renderSection(currentSection);
 });
 </script>
-<script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
+<script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1"></script>
 </body>
 </html>

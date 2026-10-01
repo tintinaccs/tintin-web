@@ -65,6 +65,12 @@ check(
   'saveOrderEdit debe bloquear a quien no tenga el permiso de edición completa.'
 );
 check(
+  'Crear/editar/eliminar pedido reporta progreso en el panel central',
+  /window\.deleteOrder = async[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('trash'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp) &&
+    /window\.saveOrderEdit = async function\(\)[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('concurrency'\)[\s\S]*?ctx\.start\('save'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp),
+  'Las mutaciones individuales de pedidos deben mostrar las etapas reales y el resultado final.'
+);
+check(
   'La edición valida nombre y teléfono del cliente',
   /El nombre del cliente es obligatorio/.test(adminApp) &&
     /El teléfono del cliente es obligatorio/.test(adminApp),
@@ -136,17 +142,17 @@ check(
 // ===========================================================================
 check(
   'Cambiar estado de pedido: permiso + auditoría + recuperación',
-  /window\.updateOrderStatus[\s\S]{0,120}roleCanDo\('pedidos', 'cambiarEstado'\)/.test(adminApp) &&
+  /window\.updateOrderStatus[\s\S]{0,240}roleCanDo\('pedidos', 'cambiarEstado'\)/.test(adminApp) &&
     /logAudit\('cambiar_estado_pedido'/.test(adminApp) &&
-    /No se pudo guardar el estado\. Probá de nuevo\./.test(adminApp),
-  'El cambio de estado debe validar permiso, auditar y reponer el valor si falla.'
+    /window\.updateOrderStatus[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)/.test(adminApp),
+  'El cambio de estado debe validar permisos, registrar auditoría y mostrar progreso ante fallos.'
 );
 check(
   'Cambiar estado de pago: permiso + auditoría + recuperación',
   /window\.updatePayStatus[\s\S]{0,120}roleCanDo\('pedidos', 'cambiarPago'\)/.test(adminApp) &&
     /logAudit\('cambiar_estado_pago'/.test(adminApp) &&
-    /No se pudo guardar el estado de pago\. Probá de nuevo\./.test(adminApp),
-  'El cambio de estado de pago debe validar permiso, auditar y reponer si falla.'
+    /window\.updatePayStatus[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp),
+  'El cambio de estado de pago debe validar permiso, auditar y exponer progreso y error si falla.'
 );
 check(
   'Eliminar pedido: permiso + confirmación + papelera auditable',

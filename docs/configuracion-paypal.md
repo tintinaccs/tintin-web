@@ -20,3 +20,9 @@ Estado: **preparado en backend y desactivado**. La tienda cobra en PYG, pero PYG
 6. Probar Sandbox: aprobado, rechazado, cancelado, repetido, delivery, encomienda y retiro.
 
 El botón PayPal permanece oculto hasta que estén completas las credenciales, el webhook, la tasa vigente y la activación del método en el catálogo. Así nunca se presenta una opción que el backend no pueda cobrar.
+
+## Lectura pública de disponibilidad — 2026-09-28
+
+Consulta GET a `https://tintinaccesorios.pages.dev/api/paypal-config`: `enabled: false`, entorno `sandbox`, moneda `USD`, `unavailableReasons: ["stale_exchange_rate"]`; la tasa publicada fue actualizada el `2026-09-10T18:59:53Z`. El endpoint oculta intencionalmente `clientId` cuando el método está deshabilitado, así que una cadena vacía en esa respuesta no prueba que falte la credencial.
+
+Esto no impide iniciar la importación del catálogo si la tienda opera con otros medios. Antes de la aceptación de checkout hay que definir y registrar una tasa comercial PYG/USD vigente o confirmar que PayPal no será un medio de lanzamiento, y verificar en el checkout real que efectivo y transferencia estén habilitados según las políticas de entrega. Esta consulta no creó pedidos ni intentó cobrar.

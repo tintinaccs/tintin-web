@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1';
+  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -198,13 +198,13 @@
   let pendingWaits = 0;
   let runtimeBooted = false;
 
-  function versionUrl(url) {
+  function versionUrl(url, version = TT_CACHE_VERSION) {
     try {
       const parsed = new URL(url, window.location.href);
-      parsed.searchParams.set('v', TT_CACHE_VERSION);
+      parsed.searchParams.set('v', version);
       return parsed.href;
     } catch {
-      return url + (url.includes('?') ? '&' : '?') + 'v=' + TT_CACHE_VERSION;
+      return url + (url.includes('?') ? '&' : '?') + 'v=' + version;
     }
   }
 
@@ -410,9 +410,9 @@
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
     '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:brightness(0) invert(1) drop-shadow(0 8px 20px rgba(125,23,58,.14));user-select:none;pointer-events:none}',
-    '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#fff!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
+    '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#7d173a!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
-    '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#fff!important}#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:none!important;display:none!important}',
+    '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#7d173a!important}#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:none!important;display:none!important}',
     '#tt-loader-brand-subtitle{margin-top:clamp(6px,1vw,9px);max-width:100%;padding:0 6px;box-sizing:border-box;color:#2b2b2b!important;font-family:Montserrat;font-size:clamp(12px,1.3vw,14px);font-weight:500;line-height:1.25;letter-spacing:.055em;text-align:center;opacity:0;transform:scale(1.09);white-space:normal}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-brand-subtitle{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
     '.tt-loader-spinner{width:var(--tt-loader-spinner-size);height:var(--tt-loader-spinner-size);display:grid;margin-top:clamp(24px,2.8vw,34px);opacity:0;transform:scale(1.09);animation:tt-loader-spinner-shell 3s infinite}',
@@ -810,12 +810,12 @@
       .finally(() => window.clearTimeout(timer));
   }
 
-  function importSibling(fileName, label, onError) {
+  function importSibling(fileName, label, onError, version = TT_CACHE_VERSION) {
     let url = 'js/' + fileName;
     try {
       if (SCRIPT_SRC) url = new URL(fileName, SCRIPT_SRC).href;
     } catch {}
-    url = versionUrl(url);
+    url = versionUrl(url, version);
     return import(url).catch(error => {
       console.warn('[PageLoader] No se pudo cargar ' + label + ':', error);
       if (typeof onError === 'function') onError(error);
@@ -825,7 +825,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20260930-sheets-reconcile-quality-4');
     }
   }
 
@@ -840,17 +840,13 @@
     }
   }
 
-  function bootHeaderDropdownFix() {
-    if (window.TintinSurfaceController) return;
-    if (!window.TintinHeaderDropdownFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-menus-desplegables.js', 'Header Dropdown Fix');
-    }
-  }
-
+  // Hojas de marca y avatar de la barra inferior. No abre paneles: los menús
+  // los maneja únicamente SurfaceController. Antes se omitía según si el
+  // controlador ya había cargado (carrera) y, en /login y /admin, arrancaba un
+  // segundo sistema de menús.
   function bootHeaderAccountFix() {
-    if (window.TintinSurfaceController) return;
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1');
     }
   }
 
@@ -905,7 +901,7 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20260929-superadmin-hero-editable-1');
     }
   }
 
@@ -949,7 +945,6 @@
     runtimeBooted = true;
     bootGlobalQuality();
     bootHeaderMode();
-    bootHeaderDropdownFix();
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
@@ -975,7 +970,6 @@
     if (runtimeBooted) return;
     runtimeBooted = true;
     bootHeaderMode();
-    bootHeaderDropdownFix();
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();

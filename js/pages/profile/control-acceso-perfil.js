@@ -1,29 +1,25 @@
 // =============================================================
-// TINTIN ACCESORIOS — Sin perfil completo no se compra
+// TINTIN ACCESORIOS — Sin perfil completo no se usa la cuenta
 // =============================================================
-// Un pedido sin nombre, teléfono y ubicación no se puede entregar. Este
-// guardia exige el perfil completo antes de dejar avanzar en el checkout, y
-// manda a terminarlo devolviendo después a donde estaba.
-//
-// Corre SÓLO en el checkout (GUARDED_PAGES), no en todo el sitio. Mirar
-// productos no necesita una dirección de entrega, y pedirla en la entrada
-// espantaba clientas sin frenar a nadie que quisiera ensuciar la base: quien
-// automatiza no navega, llena el formulario con datos inventados y sigue.
-// Lo protegido no cambió — sigue sin poder comprar sin cuenta completa, sin
-// teléfono único y sin ubicación con coordenadas.
+// Una cuenta con sesión iniciada y datos obligatorios faltantes (nombre,
+// teléfono, usuario, fecha de nacimiento o ubicación) no puede usar el sitio:
+// cualquier página autenticada la devuelve al login, donde sólo se muestra el
+// paso con lo que falta. Aplica igual a cuentas nuevas y a cuentas que el
+// equipo eliminó y volvieron a registrarse (nacen con perfil `incomplete`).
 //
 // Alcance: sólo cuentas con rol `client`. El personal (admin, agente,
 // viewer) y el Super Admin entran igual — bloquearles el panel por no tener
-// una dirección de entrega cargada no tendría sentido.
+// una dirección de entrega cargada no tendría sentido. Quien no tiene sesión
+// sigue mirando la tienda sin restricciones.
 //
-// Quien no quiera completarlo tiene salida: el modal del alta cierra la
-// sesión y la devuelve a la tienda, donde puede seguir mirando.
+// Salida: el modal del alta permite cerrar la sesión; la persona vuelve a la
+// tienda como visitante, sin cuenta.
 
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1";
+import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el
@@ -61,31 +57,12 @@ function isLoginPage() {
 }
 
 /**
- * Páginas donde SÍ corre el guardia.
- *
- * Es una lista corta a propósito: el perfil completo hace falta para
- * entregar un pedido, no para mirar productos. Pedirlo en la entrada
- * espantaba clientas —una llega desde Instagram a mirar aros y se choca con
- * un formulario que le pide marcar su casa en un mapa— sin frenar a nadie
- * que quisiera ensuciar la base: quien automatiza no navega, llena el
- * formulario con datos inventados y sigue igual.
- *
- * En el checkout la exigencia sí tiene sentido: sin nombre, teléfono y
- * ubicación no hay pedido que se pueda entregar. Y no se pierde nada de lo
- * que protegía antes — sigue sin poder comprar sin cuenta completa, sin
- * teléfono único y sin ubicación con coordenadas.
+ * El guardia corre en todas las páginas con sesión salvo el login (donde se
+ * completa el perfil) y el panel del personal.
  */
-const GUARDED_PAGES = ['checkout'];
-
-function isGuardedPage() {
-  return GUARDED_PAGES.includes(currentPageName());
-}
-
-/** El guardia no corre acá: login es donde se completa, admin es del personal. */
 function isExemptPage() {
   const page = currentPageName();
-  if (page === 'login' || page.startsWith('admin')) return true;
-  return !isGuardedPage();
+  return page === 'login' || page.startsWith('admin');
 }
 
 let redirecting = false;

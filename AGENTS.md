@@ -11,6 +11,13 @@
 - Do not stop for routine technical decisions that can be resolved from the codebase, official docs, or standard engineering practice.
 - Require confirmation only for destructive/irreversible actions, external writes with material impact, secrets/credentials, purchases, or a material expansion of scope.
 
+## Agent operating protocol
+- Before substantial repository-wide work, read `docs/agent/README.md`.
+- For any requested fix or implementation, follow the relevant repair cycle in `docs/agent/AUTONOMOUS_REPAIR.md`. Run the full applicable `docs/agent/ACCEPTANCE_MATRIX.md` sweep only when the user explicitly requests the exact phrase "reparación integral"; an ordinary fix request does not trigger a repository-wide sweep.
+- Persist evidence and remaining work in `docs/agent/CURRENT_STATE.md`; do not inherit PASS from dated audit reports.
+- Historical audit/closure documents are evidence of their dated run, not authority for the current commit.
+- This protocol does not authorize merge, deploy, destructive production writes, real purchases/orders/emails, force-pushes, or secret handling.
+
 ## Scope and judgment
 - Do exactly the requested task. Do not expand into unrelated refactors or speculative improvements.
 - Inspect existing implementation before declaring something missing.

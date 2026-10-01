@@ -10,9 +10,11 @@ import {
   createCatalogLifecycle,
   createPhase2Plan,
   diffProductAgainstCatalog,
+  isShopifyMediaUrl,
   mediaRetryDecision,
   prepareStagingCatalog,
   rollbackCatalog,
+  rewriteImportedShopifyMedia,
   validateMediaSourceUrl,
 } from '../../js/core/store/shopify-phase2-pipeline.mjs';
 import { detectCsvDelimiter, parseDelimitedRows, parseLocalizedNumber, parseOptionalStock } from '../../js/core/store/normalizacion-importacion.mjs';
@@ -97,4 +99,27 @@ test('staging es idempotente, reanudable y no toca active; activation/rollback s
   assert.equal(lifecycle.activeCatalogId, 'A');
   assert.deepEqual(lifecycle.archived, ['B']);
   assert.throws(() => prepareStagingCatalog(lifecycle, 'A'), /distinta/i);
+});
+
+test('la aplicación reescribe media de Shopify solo con copias HTTPS confirmadas', () => {
+  assert.equal(isShopifyMediaUrl('http://cdn.shopify.com/a.webp'), true);
+  assert.equal(isShopifyMediaUrl('https://cdn.shopify.com.evil.test/a.webp'), false);
+  const product = {
+    name: 'Reloj',
+    imageUrl: 'https://cdn.shopify.com/a.webp',
+    imagesExtra: ['https://cdn.shopify.com/b.webp', 'https://res.cloudinary.com/tintin/image/upload/already.webp'],
+    variants: [{ imageUrl: 'https://cdn.shopify.com/variant.webp' }],
+  };
+  const copied = new Map([
+    [product.imageUrl, { state: 'COPIED', canonicalUrl: 'https://res.cloudinary.com/tintin/image/upload/a.webp' }],
+    [product.imagesExtra[0], { state: 'COPIED', canonicalUrl: 'https://res.cloudinary.com/tintin/image/upload/b.webp' }],
+    [product.variants[0].imageUrl, { state: 'COPIED', canonicalUrl: 'https://res.cloudinary.com/tintin/image/upload/variant.webp' }],
+  ]);
+  const [result] = rewriteImportedShopifyMedia([{ product, errors: [], warnings: [] }], copied);
+  assert.equal(result.product.imageUrl, 'https://res.cloudinary.com/tintin/image/upload/a.webp');
+  assert.equal(result.product.imagesExtra[0], 'https://res.cloudinary.com/tintin/image/upload/b.webp');
+  assert.equal(result.product.imagesExtra[1], product.imagesExtra[1]);
+  assert.equal(result.product.variants[0].imageUrl, 'https://res.cloudinary.com/tintin/image/upload/variant.webp');
+  assert.throws(() => rewriteImportedShopifyMedia([{ product }], new Map()), /no tiene una copia HTTPS verificada/i);
+  assert.throws(() => rewriteImportedShopifyMedia([{ product }], new Map([[product.imageUrl, { state: 'COPIED', canonicalUrl: 'https://cdn.shopify.com/copy.webp' }]])), /no tiene una copia HTTPS verificada/i);
 });

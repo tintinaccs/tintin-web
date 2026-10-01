@@ -41,11 +41,14 @@ function check(name, condition, problem) {
 }
 
 const adminApp    = read('js/admin/admin-app.js');
+const operationsUi = read('js/admin/operaciones/sistema-operaciones-admin.js');
+const operationsBulk = read('js/admin/utilidades-progreso-admin.js');
 const adminHtml   = read('admin.html');
 const contentAdmin = read('js/admin/content/gestion-contenido-admin.js');
 const importJs    = read('js/admin/importacion-admin.js');
 const importCore  = read('js/core/store/shopify-import-core.mjs');
 const importJob   = read('functions/api/admin-import-job.js');
+const importApply = read('js/admin/aplicar-importacion-admin.js');
 const mediaLib    = read('js/components/images/biblioteca-multimedia.js');
 const imageProc   = read('js/components/images/procesamiento-imagenes.js');
 const imageUtils  = read('js/components/images/utilidades-imagenes.js');
@@ -89,6 +92,25 @@ check(
   'El CRUD de productos debe dejar rastro en el registro de auditoría.'
 );
 check(
+  'CRUD individual de productos y colecciones usa progreso y resultado central',
+  /async function prodGuardar\(\)[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?ctx\.ok\('save'\)[\s\S]*?window\.prodToggleActive/.test(adminApp) &&
+    /async function prodEliminar\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('delete'\)[\s\S]*?ctx\.start\('sync'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp) &&
+    /window\.collGuardar = async function\(\)[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?window\.collEliminar/.test(adminApp) &&
+    /window\.collEliminar = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('move'\)[\s\S]*?ctx\.start\('delete'\)/.test(adminApp) &&
+    /window\.collMoveProduct = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)/.test(adminApp) &&
+    /window\.collPickerAddSelected = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('assign'\)/.test(adminApp) &&
+    /window\.collImportarDefaults = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('create'\)/.test(adminApp) &&
+    /centerLoader: true/.test(adminApp) && /centerLoader: true/.test(operationsBulk) &&
+    /\.tt-ops-loader--centered\s*\{/.test(read('css/admin/operaciones-admin.css')) &&
+    /config\.showSuccessDialog === true\) openOperation\(operation\)/.test(operationsUi),
+  'El CRUD individual y las operaciones masivas deben mostrar el progreso en el centro y abrir el resultado al finalizar.'
+);
+check(
+  'El guardado parcial de un producto nuevo se puede reintentar sin duplicarlo',
+  /await setDoc\(newRef, data\);[\s\S]{0,180}getElementById\('prod-id'\)\.value = newRef\.id[\s\S]{0,220}pushProductsToSheets/.test(adminApp),
+  'Tras crear el documento, conservar su ID antes de intentar sincronizaciones que pueden fallar.'
+);
+check(
   'El listado de productos usa un listener en tiempo real con guardia anti-duplicado',
   /_productosUnsub = onSnapshot\(/.test(adminApp) &&
     /if \(_productosUnsub\) return;/.test(adminApp),
@@ -114,9 +136,10 @@ check(
     /window\.tintinPushProductsToSheets = pushProductsToSheets/.test(adminApp) &&
     /await pushProductsToSheets\(\[docId\]\)/.test(adminApp) &&
     /await pushProductsToSheets\(ids0\)/.test(adminApp) &&
-    /APPS_SCRIPT_SYNC_URL/.test(sheetsSyncFunction) &&
-    /idToken: String\(payload\.idToken\)/.test(sheetsSyncFunction),
-  'Todo guardado individual, masivo o importado debe notificar al webhook autenticado de Sheets.'
+    /syncProductsPayloadWithRetry/.test(sheetsSyncFunction) &&
+    /appScriptChunkSize:\s*5/.test(sheetsSyncFunction) &&
+    /queueCatalogSheetSync/.test(sheetsSyncFunction),
+  'Todo guardado individual, masivo o importado debe avisar al sincronizador server-side de Sheets y conservar la cola de recuperación.'
 );
 
 // ===========================================================================
@@ -177,7 +200,7 @@ check(
 );
 
 // ===========================================================================
-// 4. IMPORTACIÓN SEGURA (preview canónico; la migración real queda fuera de esta fase)
+// 4. IMPORTACIÓN SEGURA (preview canónico + aplicación controlada solo-crear)
 // ===========================================================================
 check(
   'La importación usa streaming y no impone un tope artificial de filas',
@@ -226,7 +249,27 @@ check(
     /import_job_created/.test(importJob) &&
     /catalogMigration: 'not-executed'/.test(importJob) &&
     !/collection\(db, 'products'\)/.test(importJs),
-  'La migración real requiere autorización posterior; esta fase solo debe persistir PREVIEW/READY.'
+  'El preview solo persiste el job; la escritura del catálogo vive únicamente en el paso de aplicación controlado.'
+);
+check(
+  'Aplicar al catálogo exige Super Admin, copia operativa y job READY sin errores',
+  /if \(!isSuperAdmin\(\)\)/.test(importApply) &&
+    /!state\.backupAt/.test(importApply) &&
+    /totals\.invalid > 0/.test(importApply) &&
+    /state\.source !== 'shopify-csv'/.test(importApply) &&
+    /APPLY_STATES = new Set\(\['READY', 'RUNNING', 'FAILED'\]\)/.test(importApply) &&
+    /window\.confirm\(/.test(importApply) &&
+    /state\.backupAt = Date\.now\(\)/.test(importJs),
+  'La escritura real solo puede habilitarse con backup descargado, job revisado y confirmación explícita.'
+);
+check(
+  'Aplicar al catálogo solo crea productos nuevos, sin pisar, borrar ni tocar inventario privado',
+  /runTransaction\(db/.test(importApply) &&
+    /stableProductDocumentId\(record\.product\.importFingerprint\)/.test(importApply) &&
+    /refs\.map\(ref => tx\.get\(ref\)\)/.test(importApply) &&
+    /if \(snapshot\.exists\(\)\) return;/.test(importApply) &&
+    !/tx\.update|tx\.delete|deleteDoc|updateDoc|setDoc|productInventory|merge: true/.test(importApply),
+  'Cada lote debe leer antes de escribir y crear solo los ids ausentes: reintentar no duplica y nunca modifica lo existente.'
 );
 check(
   'El import job conserva checkpoint y progreso reanudable',

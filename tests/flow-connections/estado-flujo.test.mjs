@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ESTADOS, EDGES, NODES } from '../../js/admin/flujo-conexiones/datos-flujo-conexiones.js';
-import { EVIDENCIA, baselineState, classifyProbe, resolveState } from '../../js/admin/flujo-conexiones/estado-flujo.js';
+import { EVIDENCIA, baselineState, classifyProbe, liveMarker, resolveState, shouldShowFlowEdge } from '../../js/admin/flujo-conexiones/estado-flujo.js';
 import { buildLiveChecks, buildLiveEdges } from '../../js/admin/flujo-conexiones/live-checks.js';
 
 test('el diagnóstico conserva los estados declarados en el flujo', () => {
@@ -34,6 +34,61 @@ test('evidencia parcial permanece naranja y lectura no promueve una mutación', 
   assert.equal(resolveState({ state: ESTADOS.PARCIAL }, {
     ok: true, status: 200, promote: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
   }, ESTADOS), ESTADOS.PARCIAL);
+  assert.equal(resolveState({ state: ESTADOS.NO_VERIFICADO }, {
+    ok: true, partial: true, status: 200, promote: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+  }, ESTADOS), ESTADOS.PARCIAL, 'una lectura útil debe explicitarse como parcial aunque el estado base estuviera sin verificar');
+});
+
+test('el filtro explícito de atención muestra conexiones aunque sus nodos estén verdes', () => {
+  const edge = { id: 'inventory-sync', from: 'sheets', to: 'inventario' };
+  const visibleNodeIds = new Set(); // ambos extremos pueden quedar fuera del filtro de nodos
+  const matchesEdge = candidate => candidate.id === edge.id;
+  assert.equal(shouldShowFlowEdge(edge, {
+    visibleNodeIds,
+    hasExplicitFilter: true,
+    matchesEdge,
+  }), true);
+  assert.equal(shouldShowFlowEdge(edge, {
+    visibleNodeIds,
+    hasExplicitFilter: false,
+    matchesEdge,
+  }), false, 'sin filtro explícito se conserva el contexto de los nodos visibles');
+  assert.equal(shouldShowFlowEdge(edge, {
+    selectedNodeId: 'sheets',
+    visibleNodeIds,
+    hasExplicitFilter: true,
+    matchesEdge: () => false,
+  }), true, 'al seleccionar un nodo deben mostrarse sus conexiones relacionadas');
+});
+
+test('lecturas de engagement y carrito muestran evidencia parcial sin certificar mutaciones', () => {
+  const at = '2026-09-29T00:00:00.000Z';
+  const protectedProbes = {
+    firestoreRules: { cart: { ok: true, status: 200 } },
+    engagementStats: {
+      likes: { ok: true, status: 200 },
+      reviews: { ok: true, status: 200 },
+    },
+  };
+  const live = buildLiveChecks({ protectedProbes }, at);
+  const edges = buildLiveEdges({ protectedProbes }, at);
+  for (const id of ['likes', 'comentarios', 'carrito']) {
+    assert.equal(live[id].promote, false, `${id}: lectura sola no certifica escritura`);
+    assert.equal(resolveState(NODES.find(node => node.id === id), live[id], ESTADOS), ESTADOS.PARCIAL);
+  }
+  for (const [from, to] of [['apis-internas', 'likes'], ['apis-internas', 'comentarios'], ['firestore', 'carrito']]) {
+    const edge = EDGES.find(item => item.from === from && item.to === to);
+    assert.equal(edges[edge.id].promote, false, `${from} → ${to}: lectura sola no certifica mutación`);
+    assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PARCIAL);
+  }
+});
+
+test('un probe sin respuesta conserva el estado no verificado y no se convierte en 200', () => {
+  const live = buildLiveChecks({
+    protectedProbes: { engagementStats: { likes: { ok: false, status: 0 } } },
+  }, '2026-09-29T00:00:00.000Z');
+  assert.equal(live.likes.status, 0);
+  assert.equal(resolveState(NODES.find(node => node.id === 'likes'), live.likes, ESTADOS), ESTADOS.NO_VERIFICADO);
 });
 
 test('401/403 es falta de evidencia autenticada, no un fallo de producción', () => {
@@ -157,22 +212,68 @@ test('CI del commit actual verifica los flujos de acceso que antes quedaban amar
   }
 });
 
-test('servicios externos solo quedan verdes si Resend, Cloudinary y PayPal están configurados', () => {
+test('servicios externos requieren PayPal Live además de Resend y Cloudinary', () => {
   const complete = {
     status: 200,
     body: { report: { integrations: {
       resend: true,
       cloudinary: true,
-      paypal: { configured: true, enabled: true },
+      paypal: { configured: true, enabled: true, productionReady: true, mode: 'live' },
     } } },
   };
   const live = buildLiveChecks({ systemHealth: complete }, '2026-09-23T00:00:00.000Z');
   assert.equal(resolveState(NODES.find(item => item.id === 'servicios-externos'), live['servicios-externos'], ESTADOS), ESTADOS.PROD);
+  const sandbox = buildLiveChecks({ systemHealth: {
+    status: 200,
+    body: { report: { integrations: { resend: true, cloudinary: true, paypal: {
+      configured: true, enabled: true, productionReady: false, mode: 'sandbox',
+    } } } },
+  } }, '2026-09-23T00:00:00.000Z');
+  assert.notEqual(resolveState(NODES.find(item => item.id === 'servicios-externos'), sandbox['servicios-externos'], ESTADOS), ESTADOS.PROD);
   const disabled = buildLiveChecks({ systemHealth: {
     status: 200,
-    body: { report: { integrations: { resend: true, cloudinary: true, paypal: { configured: false, enabled: false } } } },
+    body: { report: { integrations: { resend: true, cloudinary: true, paypal: { configured: false, enabled: false, productionReady: false } } } },
   } }, '2026-09-23T00:00:00.000Z');
   assert.notEqual(resolveState(NODES.find(item => item.id === 'servicios-externos'), disabled['servicios-externos'], ESTADOS), ESTADOS.PROD);
+});
+
+test('marcador live nunca muestra verde para una evidencia parcial o no promovida', () => {
+  assert.deepEqual(liveMarker({ ok: true }, ESTADOS.PARCIAL, ESTADOS), {
+    symbol: '◐', label: 'parcial', kind: 'partial',
+  });
+  assert.deepEqual(liveMarker({ ok: true }, ESTADOS.NO_VERIFICADO, ESTADOS), {
+    symbol: '◌', label: 'lectura', kind: 'unconfirmed',
+  });
+  assert.deepEqual(liveMarker({ ok: true }, ESTADOS.PROD, ESTADOS), {
+    symbol: '●', label: 'live', kind: 'live',
+  });
+});
+
+test('el probe de Apps Script no pinta Google Sheets verde sin probar la escritura de catálogo', () => {
+  const systemHealth = {
+    status: 200,
+    body: { report: { integrations: {
+      appsScript: { reachable: true, protocolOk: true, httpStatus: 200 },
+      sheets: true,
+    } } },
+  };
+  const at = '2026-09-29T16:00:00.000Z';
+  const live = buildLiveChecks({ systemHealth }, at);
+  const sheets = NODES.find(node => node.id === 'google-sheets');
+  assert.equal(live['google-sheets'].partial, true);
+  assert.equal(live['google-sheets'].promote, false);
+  assert.equal(resolveState(sheets, live['google-sheets'], ESTADOS), ESTADOS.PARCIAL);
+
+  const edges = buildLiveEdges({ systemHealth }, at);
+  const edge = EDGES.find(item => item.from === 'apps-script' && item.to === 'google-sheets');
+  assert.equal(edges[edge.id].partial, true);
+  assert.equal(edges[edge.id].promote, false);
+  assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PARCIAL);
+  for (const [from, to] of [
+    ['google-sheets', 'apps-script'],
+    ['apps-script', 'sheets-products-webhook'],
+    ['sheets-products-webhook', 'firestore'],
+  ]) assert.ok(EDGES.some(item => item.from === from && item.to === to), `${from} → ${to} debe estar dibujada`);
 });
 
 test('lecturas autenticadas verifican favoritos, notificaciones y Rules sin mutarlas', () => {
@@ -253,11 +354,12 @@ test('un deploy de CI pendiente no pisa la evidencia runtime del commit desplega
   assert.equal(resolveState(deployments, live.deployments, ESTADOS), ESTADOS.PROD);
 });
 
-// Regresión: probeClientFirestoreRules devolvía promesas sin esperar, así que
-// `.ok` era undefined y las Rules se reportaban siempre como "no confirmadas".
-test('probeClientFirestoreRules espera ambas lecturas antes de devolver', async () => {
+// Regresión: probeClientFirestoreRules debe esperar todas las lecturas.
+test('probeClientFirestoreRules espera las lecturas antes de devolver', async () => {
   const src = (await import('node:fs')).readFileSync(new URL('../../js/admin/flujo-conexiones/flujo-conexiones-admin.js', import.meta.url), 'utf8');
   const body = src.slice(src.indexOf('async function probeClientFirestoreRules'), src.indexOf('export function initConnectionsFlow'));
   assert.match(body, /await Promise\.all\(\[/, 'debe esperar ambas lecturas con Promise.all');
+  assert.match(body, /collection\(db, 'users', user\.uid, 'cart'\)/, 'debe consultar solo el carrito propio');
+  assert.match(body, /async function probeEngagementStats\(user\)/, 'debe incluir la comprobación de lectura pública de engagement');
   assert.doesNotMatch(body, /return \{\s*favorites: probeClientFirestoreRead/, 'no debe devolver promesas sin resolver');
 });
