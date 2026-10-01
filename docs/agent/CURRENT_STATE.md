@@ -418,3 +418,8 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Causa raíz: en `js/pages/collections/pagina-colecciones.js` un `\n` literal dentro de un comentario `//` (commit 447b594/#917) dejó comentada la línea `const cartSyncPromise = import(...)`; al pulsar "+ Carrito" en destacados se lanzaba ReferenceError y el botón mostraba "Reintentar".
 - Corrección: línea restaurada y tag `?v=` de `collections.html` actualizado (baseline registrada).
 - Verificación: PASS_LOCAL en Chromium (antes: ReferenceError; después: sin error, el flujo llega a `cartSync.addToCart`). Se usó un stub del módulo de carrito porque el SDK de Firebase está bloqueado en el arnés; el agregado real a Firestore/carrito NO verificado. Producción NO verificada.
+
+## Ficha de producto (sector 06): fallo silencioso al agregar — 2026-10-01
+- Causa raíz: en `tienda.js` los botones "Agregar al carrito" y "Comprar ahora" de la PDP usaban `try/finally` sin `catch`. Si el import dinámico del módulo del carrito fallaba (red caída/SDK bloqueado) se producía un error sin capturar y el cliente no veía ningún mensaje.
+- Corrección: `catch` + `_showProductCartError()` (aviso `role=status` reutilizando `#tt-cart-feedback`). Tag canónico de `tienda.js` subido a `tintin-20260930-pdp-cart-error-1` (generador `sync:public-shell` + `404.html`, que el generador no cubre).
+- Verificación: PASS_LOCAL en Chromium 390px (antes: PAGEERR y sin aviso; después: aviso visible). También verificado local: variante obligatoria muestra mensaje, +/- cantidad, producto sin stock deshabilita ambos botones, id inexistente muestra "no encontrado". Agregado real a Firestore y producción NO verificados.

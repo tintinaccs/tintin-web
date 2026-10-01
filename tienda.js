@@ -1584,6 +1584,8 @@ function _renderProductDetail(product) {
           const variantStr = _pdGetSelectedVariant();
           const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
           if (result?.changed) _showProductToast(_pdProduct.name);
+        } catch (error) {
+          _showProductCartError(error);
         } finally {
           delete btnAdd.dataset.busy;
           btnAdd.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;
@@ -1612,6 +1614,8 @@ function _renderProductDetail(product) {
           const variantStr = _pdGetSelectedVariant();
           const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
           if (result?.item) window.location.assign('/checkout');
+        } catch (error) {
+          _showProductCartError(error);
         } finally {
           delete btnBuyNow.dataset.busy;
           btnBuyNow.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;
@@ -1656,6 +1660,27 @@ async function _addToCartWithQty(product, qty, variantStr) {
   });
 }
 window._addToCartWithQty = _addToCartWithQty;
+
+// Si el módulo del carrito no carga (red caída, SDK bloqueado), el cliente debe
+// ver el fallo en lugar de un botón que vuelve a su estado sin explicación.
+function _showProductCartError(error) {
+  console.error('[product] No se pudo agregar al carrito:', error);
+  let node = document.getElementById('tt-cart-feedback');
+  if (!node) {
+    node = document.createElement('div');
+    node.id = 'tt-cart-feedback';
+    node.className = 'tt-cart-feedback';
+    node.setAttribute('role', 'status');
+    node.setAttribute('aria-live', 'polite');
+    node.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(node);
+  }
+  node.textContent = 'No pudimos agregar el producto al carrito. Revisá tu conexión e intentá de nuevo.';
+  node.dataset.state = 'warning';
+  node.classList.add('is-visible');
+  window.clearTimeout(node._hideTimer);
+  node._hideTimer = window.setTimeout(() => node.classList.remove('is-visible'), 4200);
+}
 
 function _showProductToast(productName) {
   const toast = document.getElementById('tt-added-toast');
