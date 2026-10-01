@@ -205,8 +205,12 @@ const scriptPaths = localScripts.map(item => item.path);
 check('admin-script-versioned', 'Todos los scripts locales del Admin tienen versión de caché', localScripts.every(item => item.version));
 check('admin-script-unique', 'Admin no carga dos versiones del mismo módulo', new Set(scriptPaths).size === scriptPaths.length);
 check('admin-script-exists', 'Todos los scripts locales referenciados existen', scriptPaths.every(file => exists(file)));
+// Cada marcador aceptado prueba que el tag de caché es posterior a una
+// corrección real de ese módulo (no una reversión silenciosa a una versión
+// vieja): auto-read/rich/global-session-restore fueron las primeras; el 1-oct
+// corrigió el bucle de reintento ante permission-denied/unauthenticated.
 check('admin-notifications-versioned', 'La autolectura Admin está servida con versión propia actual',
-  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore)/.test(item.version)));
+  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore|firebase-permissions)/.test(item.version)));
 
 // 7. Mutaciones sensibles deben conservar gobierno y trazabilidad.
 check('superadmin-auth', 'El panel conserva guard de autenticación y Super Admin real',
