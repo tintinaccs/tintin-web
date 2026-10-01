@@ -408,3 +408,4 @@
     releaseInitialLoader();
   }, RELEASE_TIMEOUT_MS);
 })();
+// Versión de caché alineada con el runtime del carrito (cupones-1).

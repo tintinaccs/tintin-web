@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4-cupones-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261001-reentry-timeout-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261001-cupones-shell-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261001-reentry-timeout-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261001-cupones-shell-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1">
@@ -255,6 +255,15 @@
         <textarea class="ck-textarea" id="ck-notes" placeholder="Ej: Entregar después de las 17hs, timbre no funciona…"></textarea>
       </div>
 
+      <div class="ck-field" id="ck-coupon-field">
+        <label class="ck-label" for="ck-coupon">Cupón de envío gratis (opcional)</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" class="ck-input" id="ck-coupon" placeholder="Ej: ENVIOGRATIS" maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false" style="flex:1;text-transform:uppercase" />
+          <button type="button" class="ck-btn" id="ck-coupon-apply" style="flex:0 0 auto;width:auto;margin:0;padding:0 18px">Aplicar</button>
+        </div>
+        <p id="ck-coupon-status" role="status" aria-live="polite" style="margin:4px 0 0;font-size:12px;line-height:1.4;color:var(--text-muted)"></p>
+      </div>
+
       <div class="ck-field" id="ck-ci-field" style="display:none">
         <label class="ck-label" for="ck-ci">Cédula de identidad *</label>
         <input type="text" class="ck-input" id="ck-ci" placeholder="Ej: 4123456" inputmode="numeric" maxlength="8" />
@@ -392,7 +401,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260927-account-problem-whatsapp-2";
@@ -406,6 +415,7 @@ import {
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
+import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
@@ -834,7 +844,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1378,12 +1388,60 @@ document.getElementById('btn-step3-next').onclick = () => {
   orderData.phone = phone;
   orderData.email = email;
   orderData.notes = document.getElementById('ck-notes').value.trim();
+  orderData.couponCode = document.getElementById('ck-coupon')?.dataset.applied || '';
   orderData.ci = orderData.shippingMethod === 'encomienda' ? normalizeCi(ciRaw) : '';
   orderData.wantsInvoice = wantsInvoice;
   orderData.razonSocial = wantsInvoice ? razonSocial : '';
   orderData.ruc = wantsInvoice ? normalizeRuc(ruc) : '';
   goToStep(3);
 };
+// Cupón de envío gratis: la validación es informativa; el servidor vuelve a
+// evaluarlo (vigencia, usos y límite por cliente) al crear el pedido.
+(() => {
+  const input = document.getElementById('ck-coupon');
+  const button = document.getElementById('ck-coupon-apply');
+  const status = document.getElementById('ck-coupon-status');
+  if (!input || !button || !status) return;
+  const setStatus = (message, ok) => {
+    status.textContent = message;
+    status.style.color = ok === true ? 'var(--color-state-success, #2f7d4f)' : ok === false ? 'var(--color-state-error, #b3261e)' : 'var(--text-muted)';
+  };
+  input.addEventListener('input', () => {
+    delete input.dataset.applied;
+    setStatus('', null);
+  });
+  button.addEventListener('click', async () => {
+    const code = input.value.trim();
+    delete input.dataset.applied;
+    if (!code) { setStatus('Ingresá el código del cupón.', false); return; }
+    button.disabled = true;
+    setStatus('Comprobando cupón…', null);
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error('login');
+      const token = await user.getIdToken();
+      const response = await fetch(apiUrl('/api/coupon-validate'), {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error('failed');
+      if (result.valid) {
+        input.value = result.code;
+        input.dataset.applied = result.code;
+        setStatus('Cupón válido: el envío a domicilio es gratis. Se confirma al hacer el pedido.', true);
+      } else {
+        setStatus(result.message || 'El cupón no es válido.', false);
+      }
+    } catch {
+      setStatus('No pudimos comprobar el cupón. Intentá de nuevo.', false);
+    } finally {
+      button.disabled = false;
+    }
+  });
+})();
+
 document.getElementById('btn-step3-back').onclick = () => goToStep(1);
 
 // ---- STEP 4: PAYMENT ----
@@ -1415,7 +1473,8 @@ async function buildConfirmation() {
   cartItems = getCartLocal();
   const subtotal = cartTotal(cartItems);
   const shippingPending = orderData.shippingCost == null;
-  const total = subtotal + (orderData.shippingCost || 0);
+  const couponApplies = Boolean(orderData.couponCode) && orderData.shippingMethod === 'delivery' && orderData.shippingCost > 0;
+  const total = subtotal + (couponApplies ? 0 : (orderData.shippingCost || 0));
 
   const ICO = {
     cash: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 6v.01M18 18v-.01"/></svg>',
@@ -1467,8 +1526,9 @@ async function buildConfirmation() {
       </div>
       <div class="ck-summary-total">
         <span>Costo de envío</span>
-        <span class="ck-summary-total-val">${orderData.shippingMethod === 'encomienda' ? 'Se paga al recibir' : shippingPending ? escapeHtml(ICO.phone + 'A confirmar') : escapeHtml(formatPrice(orderData.shippingCost))}</span>
+        <span class="ck-summary-total-val">${orderData.shippingMethod === 'encomienda' ? 'Se paga al recibir' : couponApplies ? escapeHtml('Gratis (cupón ' + orderData.couponCode + ')') : shippingPending ? escapeHtml(ICO.phone + 'A confirmar') : escapeHtml(formatPrice(orderData.shippingCost))}</span>
       </div>
+      ${orderData.couponCode && !couponApplies ? '<div style="margin-top:6px;font-size:12.5px;color:var(--text-muted)">El cupón de envío gratis solo aplica a delivery con costo; no se usará en este pedido.</div>' : ''}
       <div class="ck-summary-total" style="font-size:18px">
         <span>TOTAL${shippingPending ? ' (+ envío)' : ''}</span>
         <span class="ck-summary-total-val">${escapeHtml(formatPrice(total))}</span>
@@ -1671,9 +1731,14 @@ function saveLocationToProfileIfChecked() {
   const checkbox = document.getElementById('ck-save-location');
   if (!checkbox?.checked || !currentUser || currentUser.isAnonymous || !orderData.mapLocation) return;
   const { lat, lng, name, address } = orderData.mapLocation;
-  setDoc(doc(db, 'users', currentUser.uid), {
-    savedLocation: { lat, lng, name, ...(address ? { address } : {}) }
-  }, { merge: true }).catch(() => {});
+  const location = { lat, lng, name, ...(address ? { address } : {}) };
+  const userRef = doc(db, 'users', currentUser.uid);
+  getDoc(userRef).then(snap => {
+    const added = addAddress(readAddressBook(snap.exists() ? snap.data() : {}), location);
+    // Libreta llena o dirección repetida: no se pisa nada (es solo una comodidad).
+    if (!added.ok) return;
+    return setDoc(userRef, { ...addressBookPatch(added.list), updatedAt: serverTimestamp() }, { merge: true });
+  }).catch(() => {});
 }
 
 let _mapPinIcon = null;
@@ -1960,7 +2025,7 @@ subscribeSession(snapshot => {
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script src="tienda.js?v=tintin-20260930-pdp-cart-error-1" defer></script>
+<script src="tienda.js?v=tintin-20261001-precio-anterior-1-cupones-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
@@ -1971,6 +2036,7 @@ subscribeSession(snapshot => {
           <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20260715-15" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Accesorios que acompañan tu brillo. Comprá online con atención cercana desde Paraguay.</p>
+        <p class="tt-footer-hours">Horario de atención: Lunes a Sábado, 8:00 — 20:00 hs</p>
         <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
           <span aria-hidden="true">↗</span><span class="tt-footer-wa-text">Escribirnos por WhatsApp</span>
         </a>
