@@ -91,6 +91,33 @@ function addIf(target, fields, field, value) {
   if (has(fields, field)) target[field] = value;
 }
 
+function assertNoShopifyHostedUrls(value) {
+  const urlPattern = /(?:https?:)?\/\/[^\s"'<>()[\]{}]+/gi;
+  const trailingPunctuation = /[.,;:!?]+$/;
+  const visit = current => {
+    if (typeof current === 'string') {
+      for (const match of current.matchAll(urlPattern)) {
+        const raw = match[0].replace(trailingPunctuation, '');
+        let parsed;
+        try { parsed = new URL(raw.startsWith('//') ? `https:${raw}` : raw); }
+        catch { continue; }
+        const hostname = parsed.hostname.toLowerCase().replace(/\.$/, '');
+        if (hostname === 'shopify.com' || hostname.endsWith('.shopify.com')
+          || hostname === 'myshopify.com' || hostname.endsWith('.myshopify.com')) {
+          throw new Error('El catalogo no puede guardar URLs de Shopify; migrá imágenes y enlaces antes de sincronizar.');
+        }
+      }
+      return;
+    }
+    if (Array.isArray(current)) {
+      current.forEach(visit);
+      return;
+    }
+    if (current && typeof current === 'object') Object.values(current).forEach(visit);
+  };
+  visit(value);
+}
+
 export async function onRequestPost({ request, env }) {
   const authState = classifySheetsWebhookAuth(
     request.headers.get('X-Tintin-Sheets-Secret'),
@@ -159,6 +186,10 @@ export async function onRequestPost({ request, env }) {
     addIf(publicData, fields, 'collection', text(input.collection, 240) || null);
     addIf(publicData, fields, 'tags', stringList(input.tags, 30, 60));
     addIf(publicData, fields, 'variants', variants(input.variants));
+    // Validate only fields selected for this write. A partial edit can carry
+    // stale values in untouched columns; those must neither block a price/stock
+    // change nor be copied back into Firestore.
+    assertNoShopifyHostedUrls(publicData);
     if (Object.keys(publicData).length) publicData.updatedAt = new Date();
 
     const inventoryData = {};

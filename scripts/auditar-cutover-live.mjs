@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { assertNoShopifyHostedUrls } from './lib/referencias-shopify.mjs';
 
 const origin = String(process.env.TINTIN_CUTOVER_ORIGIN || 'https://tintinaccs.com').replace(/\/$/, '');
 const timeoutMs = Number(process.env.TINTIN_CUTOVER_TIMEOUT_MS || 15000);
@@ -52,6 +53,7 @@ for (const route of publicRoutes) {
     strongCsp(response, route);
     if (!body.includes(`<link rel="canonical" href="${expected}">`)) throw new Error(`canonical no apunta a ${expected}.`);
     if (body.includes('tintinaccesorios.pages.dev')) throw new Error('todavía expone el origen pages.dev en HTML público.');
+    if (/https?:\/\/[^\s"'<>]*shopify\.com/i.test(body)) throw new Error('HTML público todavía referencia recursos en dominios Shopify.');
   });
 }
 
@@ -68,6 +70,7 @@ await check('sitemap index del dominio definitivo', async () => {
 });
 
 let sampleProductId = '';
+let publicProducts = [];
 await check('/api/health', async () => {
   const { body } = await fetchChecked('/api/health', 'application/json');
   const data = JSON.parse(body || '{}');
@@ -80,8 +83,26 @@ await check('/api/public-catalog', async () => {
   const { body } = await fetchChecked('/api/public-catalog?resource=products', 'application/json');
   const data = JSON.parse(body || '{}');
   if (data?.ok !== true || !Array.isArray(data?.items) || !data.items.length) throw new Error('catálogo público vacío o contrato inválido.');
+  publicProducts = data.items;
   sampleProductId = String(data.items.find(item => item?.id)?.id || '');
   if (!sampleProductId) throw new Error('no se obtuvo un producto canary.');
+});
+
+await check('imágenes de productos y colecciones no dependen de Shopify', async () => {
+  const productResult = assertNoShopifyHostedUrls(publicProducts, { baseUrl: origin });
+  if (!productResult.ok) {
+    const details = productResult.references.slice(0, 20).map(item => `${item.path}: ${item.host}`).join('; ');
+    throw new Error(`${productResult.references.length} referencia(s) Shopify en productos: ${details}`);
+  }
+  const { body } = await fetchChecked('/api/public-catalog?resource=collections', 'application/json');
+  const data = JSON.parse(body || '{}');
+  if (data?.ok !== true || !Array.isArray(data?.items)) throw new Error('colecciones: contrato público inválido.');
+  const collectionResult = assertNoShopifyHostedUrls(data.items, { baseUrl: origin });
+  if (!collectionResult.ok) {
+    const details = collectionResult.references.slice(0, 20).map(item => `${item.path}: ${item.host}`).join('; ');
+    throw new Error(`${collectionResult.references.length} referencia(s) Shopify en colecciones: ${details}`);
+  }
+  console.log(`  Revisados ${publicProducts.length} productos y ${data.items.length} colecciones.`);
 });
 
 await check('Producto server-side real', async () => {

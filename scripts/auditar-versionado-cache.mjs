@@ -175,7 +175,7 @@ function collectDynamic() {
   {
     const text = readText(LOADER_FILE);
     const tag = constValue(text, 'TT_CACHE_VERSION', LOADER_FILE);
-    for (const m of text.matchAll(/importSibling\('([^']+)'/g)) push('js', m[1], tag, LOADER_FILE, 'importSibling');
+    for (const m of text.matchAll(/importSibling\('([^']+)'\s*,\s*'[^']+'\s*(?:,\s*[^,)]*\s*)?(?:,\s*'([^']+)')?/g)) push('js', m[1], m[2] || tag, LOADER_FILE, 'importSibling');
     for (const m of text.matchAll(/resolveAsset\('([^']+)'\s*(,\s*false\s*)?\)/g)) {
       if (!m[2]) push('.', m[1], tag, LOADER_FILE, 'resolveAsset');
     }
@@ -184,7 +184,7 @@ function collectDynamic() {
   {
     const text = readText(QUALITY_FILE);
     const tag = constValue(text, 'TT_CACHE_VERSION', QUALITY_FILE);
-    for (const m of text.matchAll(/versioned\('([^']+)'\)/g)) push('js/quality', m[1], tag, QUALITY_FILE, 'versioned');
+    for (const m of text.matchAll(/versioned\('([^']+)'(?:,\s*'([^']+)')?\)/g)) push('js/quality', m[1], m[2] || tag, QUALITY_FILE, 'versioned');
     for (const m of text.matchAll(/\['tt-[^']+','([^']+\.css)'(?:,'([^']+)')?\]/g)) {
       push('css', m[1], m[2] || tag, QUALITY_FILE, 'css()');
     }

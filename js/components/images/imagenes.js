@@ -40,12 +40,22 @@ export const HERO_POSITION_VALUES = Object.freeze([
   'left bottom', 'right bottom'
 ]);
 
+// Artes de marca que se muestran por defecto y que también se previsualizan
+// en Super Admin. Firestore puede reemplazar cada variante sin editar código.
+export const HERO_IMAGE_FALLBACKS = Object.freeze({
+  desktop: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png',
+  tablet: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png',
+  tabletLandscape: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png',
+  mobile: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png',
+});
+export const HERO_IMAGE_CONFIG_VERSION = 2;
+
 // Solo aparecen slots que tienen un destino visual real. Las fotos de producto
 // se editan en Productos y las portadas de colección en Colecciones.
 export const IMAGE_SLOTS = Object.freeze([
-  { id: 'hero_bg_desktop', label: 'Hero — Desktop (≥1024px)', section: 'hero', emoji: null, desc: 'Fondo del banner en pantallas grandes (PC / laptop)' },
-  { id: 'hero_bg_tablet',  label: 'Hero — Tablet (768–1023px)', section: 'hero', emoji: null, desc: 'Fondo del banner en tablets' },
-  { id: 'hero_bg_mobile',  label: 'Hero — Mobile (≤767px)', section: 'hero', emoji: null, desc: 'Fondo del banner en celulares' },
+  { id: 'hero_bg_desktop', label: 'Hero — Desktop / Laptop (≥1121px)', section: 'hero', emoji: null, desc: 'Arte Tintin inicial; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.desktop },
+  { id: 'hero_bg_tablet',  label: 'Hero — Tablet (768–1120px)', section: 'hero', emoji: null, desc: 'Arte Tintin inicial para tablet; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.tablet },
+  { id: 'hero_bg_mobile',  label: 'Hero — Mobile (≤767px)', section: 'hero', emoji: null, desc: 'Arte Tintin inicial para celulares; podés reemplazarlo desde este panel.', defaultUrl: HERO_IMAGE_FALLBACKS.mobile },
   { id: 'edit_bolsos',     label: 'Editorial — Bolsos/Bags', section: 'editorial', emoji: '👜', desc: 'Imagen de la sección editorial Bags en la portada' },
   { id: 'edit_relojes',    label: 'Editorial — Relojes', section: 'editorial', emoji: '⌚', desc: 'Imagen de la sección editorial Relojes en la portada' },
   { id: 'about_foto',      label: 'Nosotros — Foto principal', section: 'nosotros', emoji: '🌸', desc: 'Foto principal de la página Nosotros' },
@@ -65,6 +75,7 @@ export const DEVICE_VARIANT_SLOT_IDS = Object.freeze(
 );
 const DEVICE_VARIANT_SLOT_SET = new Set(DEVICE_VARIANT_SLOT_IDS);
 const HERO_GROUP_AUTOREUSE_KEY = 'hero_bg_autoReuseDesktop';
+const HERO_GROUP_CONFIG_KEY = 'hero_bg_configVersion';
 
 function normalizeHeroFit(value) {
   const raw = String(value || '').trim();
@@ -90,7 +101,8 @@ function zoomToScale(zoom) {
 
 export function resolveHeroDisplaySettings(images, device = 'desktop') {
   const safeDevice = ['desktop', 'tablet', 'mobile'].includes(device) ? device : 'desktop';
-  const data = images && typeof images === 'object' ? images : {};
+  const stored = images && typeof images === 'object' ? images : {};
+  const data = stored[HERO_GROUP_CONFIG_KEY] === HERO_IMAGE_CONFIG_VERSION ? stored : {};
   const prefix = `hero_bg_${safeDevice}`;
   const rawSize = data[`${prefix}_size`];
   const mode = normalizeHeroFit(rawSize);
@@ -121,7 +133,7 @@ function deviceVariantKeyInfo(key) {
 function allowedSettingKey(key) {
   if (IMAGE_SLOT_SET.has(key)) return true;
   if (isHeroMetaKey(key)) return true;
-  if (key === HERO_GROUP_AUTOREUSE_KEY) return true;
+  if (key === HERO_GROUP_AUTOREUSE_KEY || key === HERO_GROUP_CONFIG_KEY) return true;
   return Boolean(deviceVariantKeyInfo(key));
 }
 
@@ -163,7 +175,10 @@ export function normalizeImagesData(raw) {
     normalized[zoomKey] = normalizeHeroZoom(source[zoomKey], rawSize);
     normalized[posKey] = normalizeMetaValue(posKey, source[posKey]);
   });
-  normalized[HERO_GROUP_AUTOREUSE_KEY] = normalizeBoolean(source[HERO_GROUP_AUTOREUSE_KEY]);
+  normalized[HERO_GROUP_AUTOREUSE_KEY] = normalizeBoolean(source[HERO_GROUP_AUTOREUSE_KEY], false);
+  normalized[HERO_GROUP_CONFIG_KEY] = source[HERO_GROUP_CONFIG_KEY] === HERO_IMAGE_CONFIG_VERSION
+    ? HERO_IMAGE_CONFIG_VERSION
+    : 0;
 
   DEVICE_VARIANT_SLOT_IDS.forEach(id => {
     const tabletKey = `${id}_tablet`;
@@ -190,6 +205,11 @@ export function normalizeImagePatch(data) {
 
     if (key === HERO_GROUP_AUTOREUSE_KEY || deviceVariantKeyInfo(key)?.suffix === 'autoReuseDesktop') {
       patch[key] = normalizeBoolean(value);
+      return;
+    }
+
+    if (key === HERO_GROUP_CONFIG_KEY) {
+      patch[key] = value === HERO_IMAGE_CONFIG_VERSION ? HERO_IMAGE_CONFIG_VERSION : 0;
       return;
     }
 
@@ -220,12 +240,15 @@ export function normalizeImagePatch(data) {
 export function resolveSlotImage(images, slotId, device = 'desktop') {
   const data = images || {};
   if (slotId === 'hero_bg') {
-    return resolveDeviceImage({
-      desktop: data.hero_bg_desktop,
-      tablet: data.hero_bg_tablet,
-      mobile: data.hero_bg_mobile,
-      autoReuseDesktop: data[HERO_GROUP_AUTOREUSE_KEY] !== false,
-    }, device);
+    if (data[HERO_GROUP_CONFIG_KEY] !== HERO_IMAGE_CONFIG_VERSION) return '';
+    const desktop = sanitizeImageUrl(data.hero_bg_desktop) || '';
+    const tablet = sanitizeImageUrl(data.hero_bg_tablet) || '';
+    const mobile = sanitizeImageUrl(data.hero_bg_mobile) || '';
+    const autoReuseDesktop = data[HERO_GROUP_AUTOREUSE_KEY] === true;
+    if (device === 'desktop') return desktop;
+    if (device === 'tablet') return tablet || (autoReuseDesktop ? desktop : '');
+    if (device === 'mobile') return mobile || (autoReuseDesktop ? desktop : '');
+    return '';
   }
   return resolveDeviceImage({
     desktop: data[slotId],
@@ -260,8 +283,9 @@ function applyHeroDisplayVariables(data) {
   const image = document.getElementById('tt-hero-img');
   if (!(image instanceof HTMLImageElement)) return;
 
+  const activeData = data?.hero_bg_configVersion === HERO_IMAGE_CONFIG_VERSION ? data : {};
   ['desktop', 'tablet', 'mobile'].forEach(device => {
-    const display = resolveHeroDisplaySettings(data, device);
+    const display = resolveHeroDisplaySettings(activeData, device);
     image.style.setProperty(`--tt-hero-fit-${device}`, display.fit);
     image.style.setProperty(`--tt-hero-scale-${device}`, display.scale);
     image.style.setProperty(`--tt-hero-pos-${device}`, display.position);
@@ -375,6 +399,8 @@ export function setImgCache(id, value) {
     }
   } else if (id === HERO_GROUP_AUTOREUSE_KEY) {
     _cache[id] = normalizeBoolean(value);
+  } else if (id === HERO_GROUP_CONFIG_KEY) {
+    _cache[id] = Number(value) === HERO_IMAGE_CONFIG_VERSION ? HERO_IMAGE_CONFIG_VERSION : 0;
   } else {
     _cache[id] = normalizeMetaValue(id, String(value));
   }

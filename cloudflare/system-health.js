@@ -11,7 +11,7 @@ import { getCatalogSheetSyncQueueStatus } from './resiliencia-sync-catalogo.js';
 import { getOrderEmailQueueStatus } from './resiliencia-correo-pedido.js';
 import { getEngagementSheetSyncQueueStatus } from './resiliencia-sync-participacion.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
-import { paypalConfig } from './paypal-seguro.js';
+import { resolvedPaypalConfig } from './paypal-seguro.js';
 
 const REQUIRED_CONFIG = Object.freeze([
   'FIREBASE_SERVICE_ACCOUNT_KEY',
@@ -101,6 +101,7 @@ export async function runSystemHealth(env, {
   catalogSheetQueueStatus = getCatalogSheetSyncQueueStatus,
   orderEmailQueueStatus = getOrderEmailQueueStatus,
   engagementSheetQueueStatus = getEngagementSheetSyncQueueStatus,
+  paypalConfigResolver = resolvedPaypalConfig,
 } = {}) {
   const missingConfig = REQUIRED_CONFIG.filter(key => !configured(env, key));
   let runtimeReport = null;
@@ -147,7 +148,7 @@ export async function runSystemHealth(env, {
     code: 'probe_failed',
   }));
   const admin = compactAdminRuntimeChecks(runtimeReport);
-  const paypal = paypalConfig(env);
+  const paypal = await paypalConfigResolver(env);
   const integrations = {
     firebase: runtimeReport?.ok === true,
     resend: configured(env, 'RESEND_API_KEY'),
@@ -159,6 +160,9 @@ export async function runSystemHealth(env, {
       enabled: paypal.enabled === true,
       environment: paypal.mode,
       missing: paypal.missing,
+      rateSource: paypal.rateSource || 'manual',
+      rateSourceDate: paypal.rateSourceDate || '',
+      productionReady: paypal.enabled === true && paypal.mode === 'live',
     },
     sheets: configured(env, 'SHEETS_ENGAGEMENT_SECRET') && sheets.protocolOk === true,
     appsScript: sheets,
@@ -166,7 +170,8 @@ export async function runSystemHealth(env, {
     orderEmailQueue,
     engagementSheetQueue,
   };
-  const ok = missingConfig.length === 0 && runtimeReport?.ok === true && integrations.sheets === true;
+  const ok = missingConfig.length === 0 && runtimeReport?.ok === true
+    && integrations.sheets === true && integrations.paypal.productionReady === true;
 
   return {
     ok,

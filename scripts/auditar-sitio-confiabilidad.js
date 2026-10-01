@@ -69,8 +69,10 @@ check('El menú de cuenta arranca también en el runtime público',
 check('La capa visual oculta el panel según el contenedor y permite abrirlo',
   parity.includes('#account-dropdown:not(.open):not(.tt-account-open)>.tt-account-panel') &&
   !parity.includes('.tt-account-panel:not(.open):not(.tt-account-open)'));
-check('El click de cuenta no se duplica con el manejador antiguo',
-  accountFix.includes('stopImmediatePropagation()'));
+check('El menú de cuenta no tiene un segundo manejador: sólo SurfaceController abre paneles',
+  !accountFix.includes('accountDropdown') && !accountFix.includes('stopImmediatePropagation()') &&
+  !loader.includes('compatibilidad-menus-desplegables') &&
+  !fs.existsSync(path.join(root, 'js/components/navigation/compartido/compatibilidad-menus-desplegables.js')));
 check('Los dropdowns del header son blancos en desktop, tablet y mobile',
   solidSurfaces.indexOf('html body .tt-dropdown,') >= 0 &&
   solidSurfaces.indexOf('html body .tt-dropdown,') < solidSurfaces.indexOf('@media (min-width: 769px)') &&
@@ -225,11 +227,11 @@ check('La normalización de contenido histórico corrige "TÚ ESTILO" a la forma
   !home.includes('TÚ ESTILO') &&
   contentSchema.includes("return text.replace(/\\bTÚ ESTILO\\b/g, 'TU ESTILO')") &&
   siteContent.includes('normalizeContentValue(pageId, sectionId, item.key, raw)'));
-check('El loader de la portada espera a que la foto del hero cargue antes de ocultarse',
-  home.includes('function heroReady()') &&
-  home.includes("return !media.classList.contains('tt-hero-pending');") &&
-  home.includes('function waitForHeroImageThenRelease()') &&
-  home.includes('HERO_WAIT_CEILING_MS = 0'));
+check('El loader de la portada se libera una sola vez, por estructura estática, sin esperar la foto del hero ni recursos remotos',
+  home.includes('function releaseHomeWhenStructurallyReady()') &&
+  home.includes('window.ttPageReady && window.ttPageReady()') &&
+  !home.includes('waitForHeroImageThenRelease') &&
+  !home.includes('HERO_WAIT_CEILING_MS'));
 check('El loader pasa de un punto a otro sin un cross-fade visible',
   loader.includes("transition:opacity .01s linear,visibility .01s linear") &&
   !loader.includes('.38s ease'));
@@ -256,8 +258,8 @@ check('Las recargas asíncronas conservan agotados visibles y bloquean su compra
   phase7CatalogPolicy.includes('p.active !== false') &&
   catalog.includes("inStock ? 'Disponible' : 'Agotado'") &&
   catalog.includes('disabled aria-disabled="true">Agotado</button>') &&
-  productsStore.includes('featuredProducts.slice(0, 5)') &&
-  loadImagesInit.includes('featuredProducts.slice(0, 5)') &&
+  main.includes('pickStable(pool, 5, homeSelectionKeys') &&
+  loadImagesInit.includes('renderRandomHomeProducts') &&
   main.includes('window.isFeaturable = isFeaturable'));
 
 const forbiddenTerms = [

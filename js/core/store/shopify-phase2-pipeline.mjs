@@ -54,6 +54,45 @@ export function validateMediaSourceUrl(value, { allowedHosts = ALLOWED_MEDIA_HOS
   return { ok: true, url: parsed.href, host };
 }
 
+export function isShopifyMediaUrl(value) {
+  let parsed;
+  try { parsed = new URL(text(value), 'https://tintinaccesorios.pages.dev/'); } catch { return false; }
+  const host = parsed.hostname.toLowerCase();
+  return ['http:', 'https:'].includes(parsed.protocol) && (host === 'shopify.com' || host.endsWith('.shopify.com')
+    || host === 'myshopify.com' || host.endsWith('.myshopify.com'));
+}
+
+/** Replace only known Shopify-hosted media URLs and fail closed on any missing copy. */
+export function rewriteImportedShopifyMedia(records, copiedBySourceUrl) {
+  if (!(copiedBySourceUrl instanceof Map)) throw new Error('Falta el mapa verificado de medios copiados.');
+  return (records || []).map(record => {
+    const product = record?.product || record;
+    const replace = value => {
+      if (!isShopifyMediaUrl(value)) return value;
+      const copied = copiedBySourceUrl.get(value);
+      const canonicalUrl = typeof copied === 'string' ? copied : copied?.canonicalUrl;
+      const state = typeof copied === 'string' ? 'COPIED' : copied?.state;
+      let target;
+      try { target = new URL(canonicalUrl); } catch {}
+      if (state !== 'COPIED' || target?.protocol !== 'https:' || isShopifyMediaUrl(canonicalUrl)) {
+        throw new Error(`La imagen de Shopify no tiene una copia HTTPS verificada: ${value}`);
+      }
+      return target.href;
+    };
+    const nextProduct = {
+      ...product,
+      ...(product?.imageUrl ? { imageUrl: replace(product.imageUrl) } : {}),
+      ...(Array.isArray(product?.imagesExtra) ? { imagesExtra: product.imagesExtra.map(replace) } : {}),
+      ...(Array.isArray(product?.variants) ? {
+        variants: product.variants.map(variant => variant && typeof variant === 'object'
+          ? { ...variant, ...(variant.imageUrl ? { imageUrl: replace(variant.imageUrl) } : {}) }
+          : variant)
+      } : {}),
+    };
+    return record?.product ? { ...record, product: nextProduct } : nextProduct;
+  });
+}
+
 export function classifyMediaResponse({ status, contentType, contentLength, bytes } = {}) {
   const size = Number.isFinite(bytes) ? bytes : Number(contentLength);
   if (!Number.isInteger(Number(status)) || Number(status) < 200 || Number(status) >= 300) {

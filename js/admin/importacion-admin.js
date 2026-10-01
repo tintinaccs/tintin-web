@@ -30,9 +30,10 @@ import {
   sanitizeShopifyBodyHtml,
   summarizeImportRecords,
 } from '../core/store/shopify-import-core.mjs?v=tintin-20260927-shopify-apply-1';
-import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260918-shopify-phase2-safe-1';
+import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1';
+import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20260929-shopify-identity-2';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260927-shopify-apply-1';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260929-shopify-identity-apply-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;
@@ -46,6 +47,7 @@ if (!window.TintinAdminShopifyImportBooted) {
   const state = {
     user: null,
     collections: [],
+    existingProducts: [],
     records: [],
     invalidRows: [],
     fileName: '',
@@ -138,6 +140,7 @@ if (!window.TintinAdminShopifyImportBooted) {
       state.busy = false;
       state.ui.backup.disabled = false;
       state.ui.backup.textContent = 'Descargar copia operativa';
+      renderPreview();
     }
   }
 
@@ -293,6 +296,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     state.ui.summary.textContent = 'Analizando archivo por streaming…';
     try {
       state.collections = await readCollection('collections', 5000);
+      state.existingProducts = extension === 'csv' ? await readCollection('products') : [];
       let grouped;
       if (extension === 'csv') {
         const objects = await csvObjectsFromFile(file);
@@ -300,7 +304,9 @@ if (!window.TintinAdminShopifyImportBooted) {
       } else {
         grouped = { products: validateJsonCollections(jsonRecords(await file.text())), invalidRows: [] };
       }
-      state.records = grouped.products;
+      state.records = extension === 'csv'
+        ? reconcileShopifyImportIdentities(grouped.products, state.existingProducts)
+        : grouped.products;
       state.invalidRows = grouped.invalidRows;
       state.fileName = file.name;
       state.fileBytes = file.size;
@@ -313,6 +319,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     } catch (error) {
       console.error('[admin-import] parse failed', error);
       state.records = [];
+      state.existingProducts = [];
       state.invalidRows = [];
       renderPreview();
       toast(`No se pudo leer el archivo: ${error.message}`, true);
@@ -328,13 +335,14 @@ if (!window.TintinAdminShopifyImportBooted) {
     result.errors = result.invalid;
     result.warnings = state.records.reduce((count, record) => count + (record.warnings?.length || 0), 0);
     result.products = state.records.length;
-    state.plan = state.records.length ? createPhase2Plan({ records: state.records, collections: state.collections, environment: 'TEST', chunkSize: 50 }) : null;
+    state.plan = state.records.length ? createPhase2Plan({ records: state.records, collections: state.collections, existingProducts: state.existingProducts, environment: 'TEST', chunkSize: 50 }) : null;
     return result;
   }
 
   function statusText(record) {
     if (record.errors?.length) return `ERROR: ${record.errors.join(' · ')}`;
-    if (record.duplicate) return 'Duplicado: SKIP por identidad estable';
+    if (record.identityStatus === 'MATCHED_EXISTING') return `Ya existe: SKIP · ${record.identityMessage}`;
+    if (record.duplicate) return 'Duplicado en el archivo: SKIP por identidad estable';
     if (record.warnings?.length) return `READY · ${record.warnings.join(' · ')}`;
     return 'READY';
   }
@@ -348,7 +356,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     if (state.ui.phase2Meta) {
       const plan = state.plan;
       state.ui.phase2Meta.textContent = plan
-        ? `Archivo: ${plan.summary.collections} colección(es) · ${plan.summary.images} imagen(es) · ${plan.summary.warnings} advertencia(s) · ${plan.summary.errors} bloqueo(s)`
+        ? `Catálogo revisado: ${state.existingProducts.length} producto(s) · Archivo: ${plan.summary.collections} colección(es) · ${plan.summary.images} imagen(es) · ${plan.summary.warnings} advertencia(s) · ${plan.summary.errors} bloqueo(s)`
         : 'Cargá el archivo para ver colecciones, imágenes y advertencias.';
     }
     state.ui.tableBody.replaceChildren();
@@ -375,7 +383,20 @@ if (!window.TintinAdminShopifyImportBooted) {
     return result.job;
   }
 
-  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, saveLocalJob, renderPreview, toast, node });
+  async function refreshCatalogIdentitySnapshot() {
+    if (state.source !== 'shopify-csv') return;
+    const existingProducts = await readCollection('products');
+    state.existingProducts = existingProducts;
+    state.records = reconcileShopifyImportIdentities(state.records, existingProducts);
+    state.plan = state.records.length
+      ? createPhase2Plan({ records: state.records, collections: state.collections, existingProducts, environment: 'TEST', chunkSize: 50 })
+      : null;
+    const totals = summary();
+    renderPreview();
+    return totals;
+  }
+
+  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, refreshCatalogIdentitySnapshot, toast, node });
 
   async function createDryRunJob() {
     if (!isSuperAdmin() || state.busy || !state.records.length) return;
@@ -414,8 +435,21 @@ if (!window.TintinAdminShopifyImportBooted) {
 
   async function restoreLocalJob(saved) {
     if (!saved?.records?.length) return;
+    const source = saved.source || 'shopify-csv';
+    let existingProducts = [];
+    let records = saved.records;
+    if (source === 'shopify-csv') {
+      try {
+        existingProducts = await readCollection('products');
+        records = reconcileShopifyImportIdentities(saved.records, existingProducts);
+      } catch (error) {
+        console.error('[admin-import] catalog reconciliation failed while restoring preview', error);
+        toast(`No se pudo revisar el catálogo actual. El preview no se restauró: ${error.message}`, true);
+        return;
+      }
+    }
     state.fileName = saved.fileName || ''; state.fileBytes = saved.fileBytes || 0; state.fileChecksum = saved.fileChecksum || '';
-    state.source = saved.source || 'shopify-csv'; state.records = saved.records; state.invalidRows = saved.invalidRows || [];
+    state.source = source; state.existingProducts = existingProducts; state.records = records; state.invalidRows = saved.invalidRows || [];
     state.jobId = saved.jobId || ''; state.job = saved.job || null;
     if (state.jobId) {
       try { state.job = await apiJob({ action: 'status', jobId: state.jobId }); }
@@ -434,7 +468,7 @@ if (!window.TintinAdminShopifyImportBooted) {
 
   function clearPreview() {
     const previousJobId = state.jobId;
-    state.records = []; state.invalidRows = []; state.fileName = ''; state.fileBytes = 0; state.fileChecksum = ''; state.source = ''; state.jobId = ''; state.job = null;
+    state.records = []; state.existingProducts = []; state.invalidRows = []; state.fileName = ''; state.fileBytes = 0; state.fileChecksum = ''; state.source = ''; state.jobId = ''; state.job = null;
     if (previousJobId) clearLocalJob(previousJobId).catch(() => {});
     renderPreview();
   }
@@ -448,6 +482,39 @@ if (!window.TintinAdminShopifyImportBooted) {
     });
   }
 
+  async function reconcileProductsToSheets() {
+    const button = state.ui?.reconcile;
+    if (button) { button.disabled = true; button.textContent = 'Sincronizando Productos…'; }
+    try {
+      const productsCollection = 'products';
+      const snapshot = await getDocsPaginated(collection(db, productsCollection), { pageSize: 250, maxDocs: 20000 });
+      const ids = snapshot.docs.map(product => product.id).filter(Boolean);
+      if (!ids.length) throw new Error('No hay productos en Firestore para sincronizar.');
+      const pushProducts = window.tintinPushProductsToSheets || (async productIds => {
+        if (!isSuperAdmin()) return false;
+        const idToken = await state.user.getIdToken();
+        for (let index = 0; index < productIds.length; index += 20) {
+          const response = await authenticatedFetch('/api/sheets-product-sync', {
+            method: 'POST',
+            cache: 'no-store',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'syncProducts', productIds: productIds.slice(index, index + 20), idToken }),
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok || result.ok !== true) throw new Error(result.error || apiFailureMessage(response));
+        }
+        return true;
+      });
+      const ok = await pushProducts(ids);
+      if (!ok) throw new Error('Sheets no confirmó todos los lotes; quedaron en la cola persistente de reintento.');
+      toast(`Productos sincronizados con Google Sheets: ${ids.length}.`);
+    } catch (error) {
+      toast(error?.message || 'No se pudo reconciliar Productos con Sheets.', true);
+    } finally {
+      if (button) { button.disabled = false; button.textContent = 'Reconciliar Productos → Sheets'; }
+    }
+  }
+
   function buildPanel() {
     const section = document.getElementById('section-importar');
     if (!section || document.getElementById('shopify-import-canonical-card')) return;
@@ -457,8 +524,8 @@ if (!window.TintinAdminShopifyImportBooted) {
     titleWrap.append(node('div', 'adm-card-title', 'Shopify · migración controlada'), node('p', 'phase10-subtitle', 'Preview, colecciones y job reanudable. «Aplicar al catálogo» solo crea productos nuevos: nunca pisa ni borra.'));
     const badge = node('span', 'phase10-badge', 'SIN ESCRIBIR'); head.append(titleWrap, badge);
     const body = node('div', 'adm-card-body'); const statusGrid = node('div', 'phase10-grid');
-    [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Imágenes', 'URLs de cdn.shopify.com'], ['Catálogo', 'solo crea · id estable por Handle']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
-    const backupWrap = node('div', 'phase10-backup-wrap'); const backup = node('button', 'adm-btn adm-btn-outline', 'Descargar copia operativa'); backup.type = 'button'; backup.addEventListener('click', exportOperationalBackup); backupWrap.append(node('div', '', 'Copia operativa sin usuarios, pedidos ni auditoría.'), backup);
+    [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Imágenes', 'Shopify CDN → Cloudinary antes de guardar'], ['Catálogo', 'solo crea · id estable por Handle']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
+    const backupWrap = node('div', 'phase10-backup-wrap'); const backup = node('button', 'adm-btn adm-btn-outline', 'Descargar copia operativa'); backup.type = 'button'; backup.addEventListener('click', exportOperationalBackup); const reconcile = node('button', 'adm-btn adm-btn-outline', 'Reconciliar Productos → Sheets'); reconcile.type = 'button'; reconcile.addEventListener('click', reconcileProductsToSheets); backupWrap.append(node('div', '', 'Copia operativa sin usuarios, pedidos ni auditoría.'), backup, reconcile);
     const drop = node('div', 'phase10-drop'); drop.tabIndex = 0; drop.setAttribute('role', 'button'); drop.setAttribute('aria-label', 'Seleccionar exportación Shopify CSV o JSON');
     drop.append(node('strong', '', 'Arrastrá un CSV Shopify o JSON'), node('span', '', 'Parser incremental; sin tope artificial de filas. Se conserva Handle, Body HTML permitido, variantes, tags, estado y media detectada.'));
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.csv,.json,application/json,text/csv'; input.hidden = true; drop.appendChild(input);
@@ -466,9 +533,9 @@ if (!window.TintinAdminShopifyImportBooted) {
     drop.addEventListener('dragover', event => { event.preventDefault(); drop.classList.add('is-dragging'); }); drop.addEventListener('dragleave', () => drop.classList.remove('is-dragging')); drop.addEventListener('drop', event => { event.preventDefault(); drop.classList.remove('is-dragging'); processFile(event.dataTransfer.files?.[0]); }); input.addEventListener('change', () => processFile(input.files?.[0]));
     const summaryEl = node('div', 'phase10-summary', 'Seleccioná un archivo CSV o JSON para comenzar.'); const phase2Meta = node('div', 'phase10-phase2-meta', 'Cargá el archivo para ver colecciones, imágenes y advertencias.'); const jobStatus = node('div', 'phase10-job-status', 'Sin import job persistido');
     const preview = node('div', 'phase10-preview'); preview.hidden = true; const tableWrap = node('div', 'adm-table-wrap'); const table = node('table', 'adm-table phase10-table'); const tableHead = document.createElement('thead'); const headRow = document.createElement('tr'); ['#', 'Producto', 'Colección', 'Precio', 'Stock', 'Estado'].forEach(label => headRow.appendChild(node('th', '', label))); tableHead.appendChild(headRow); const tableBody = document.createElement('tbody'); table.append(tableHead, tableBody); tableWrap.appendChild(table); const previewNote = node('small', 'phase10-note');
-    const actions = node('div', 'phase10-actions'); const clear = node('button', 'adm-btn adm-btn-outline', 'Limpiar preview'); clear.type = 'button'; clear.addEventListener('click', clearPreview); const createJob = node('button', 'adm-btn adm-btn-primary', 'Crear import job (dry-run)'); createJob.type = 'button'; createJob.addEventListener('click', createDryRunJob); const ready = node('button', 'adm-btn adm-btn-outline', 'Marcar READY'); ready.type = 'button'; ready.addEventListener('click', markReady); const restore = node('button', 'adm-btn adm-btn-outline'); restore.type = 'button'; restore.hidden = true; actions.append(clear, createJob, ready, restore); preview.append(tableWrap, previewNote, actions); catalogApply.mount(preview, tableWrap);
-    body.append(statusGrid, backupWrap, drop, summaryEl, phase2Meta, jobStatus, preview); card.append(head, body); section.insertBefore(card, section.firstChild);
-    state.ui = { section, card, badge, backup, drop, input, summary: summaryEl, phase2Meta, jobStatus, preview, tableBody, previewNote, createJob, ready, restore }; renderPreview(); offerLocalResume();
+    const actions = node('div', 'phase10-actions'); const clear = node('button', 'adm-btn adm-btn-outline', 'Limpiar preview'); clear.type = 'button'; clear.addEventListener('click', clearPreview); const createJob = node('button', 'adm-btn adm-btn-primary', 'Crear import job (dry-run)'); createJob.type = 'button'; createJob.addEventListener('click', createDryRunJob); const ready = node('button', 'adm-btn adm-btn-outline', 'Marcar READY'); ready.type = 'button'; ready.addEventListener('click', markReady); const restore = node('button', 'adm-btn adm-btn-outline'); restore.type = 'button'; restore.hidden = true; const restoreActions = node('div', 'phase10-actions'); restoreActions.appendChild(restore); actions.append(clear, createJob, ready); preview.append(tableWrap, previewNote, actions); catalogApply.mount(preview, tableWrap);
+    body.append(statusGrid, backupWrap, drop, summaryEl, phase2Meta, jobStatus, restoreActions, preview); card.append(head, body); section.insertBefore(card, section.firstChild);
+    state.ui = { section, card, badge, backup, reconcile, drop, input, summary: summaryEl, phase2Meta, jobStatus, preview, tableBody, previewNote, createJob, ready, restore }; renderPreview(); offerLocalResume();
   }
 
   function injectStyles() {

@@ -51,14 +51,15 @@ requireText(shellRuntime, /currentPage\(\)\s*!==\s*['"]home['"]/, 'La capa de In
 requireText(shellRuntime, /function loadHomeMaintenance\(\)/, 'El runtime modular no encapsula la carga de Inicio.');
 
 requireText(runtime, /DOMContentLoaded/, 'El runtime de Inicio no contempla carga temprana.');
-requireText(runtime, /MutationObserver/, 'El runtime de Inicio no vigila contenido dinámico.');
-requireText(runtime, /tintin:products-loaded/, 'El runtime de Inicio no escucha productos en vivo.');
-requireText(runtime, /online/, 'El runtime de Inicio no contempla reconexión.');
-requireText(runtime, /offline/, 'El runtime de Inicio no contempla modo sin conexión.');
-requireText(runtime, /pageshow/, 'El runtime de Inicio no contempla restauración del navegador.');
-requireText(runtime, /aria-busy/, 'El runtime de Inicio no comunica estados de carga.');
-requireText(runtime, /ttPageReady/, 'El runtime de Inicio no libera explícitamente el loader.');
-requireText(runtime, /normalizePublicMetadata/, 'El runtime de Inicio no normaliza metadatos públicos.');
+requireText(runtime, /MutationObserver/, 'El runtime de Inicio no vigila el color de tema.');
+requireText(runtime, /tintin:products-loaded/, 'El runtime de Inicio no refresca la geometría de imágenes con productos en vivo.');
+requireText(runtime, /tt-home-runtime-ready/, 'El runtime de Inicio no marca la capa como lista.');
+// Un solo dueño por responsabilidad: productos/look en tienda.js, loader en el
+// script inline de index.html, inert/visibilidad en el store gate y los paneles.
+forbid(runtime, /ttPageReady/, 'El runtime de Inicio no debe liberar el loader (lo hace el script inline de index.html).');
+forbid(runtime, /recoverSurface|removeAttribute\(['"]inert['"]\)/, 'El runtime de Inicio no debe revertir inert/visibilidad del store gate.');
+forbid(runtime, /products-grid|look-grid/, 'El runtime de Inicio no debe pintar productos ni el look (dueño: tienda.js).');
+forbid(runtime, /setTimeout|setInterval/, 'El runtime de Inicio no debe usar temporizadores para ocultar carreras.');
 requireText(runtime, /updateFooterYear/, 'El runtime de Inicio no actualiza el año del footer.');
 
 requireText(css, /@media\s*\(min-width:\s*769px\)\s*and\s*\(max-width:\s*1120px\)/, 'No hay tratamiento específico de tablet.');
@@ -91,7 +92,7 @@ else {
 }
 
 if (/tintinaccs\.github\.io\/tintin-web/i.test(html)) {
-  warnings.push('index.html todavía conserva URLs históricas; mantenimiento-inicio.js las normaliza en ejecución. Conviene migrarlas estáticamente cuando se edite el HTML completo.');
+  warnings.push('index.html todavía conserva URLs históricas de github.io. Conviene migrarlas estáticamente cuando se edite el HTML completo.');
 }
 
 if (errors.length) {

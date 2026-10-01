@@ -25,7 +25,6 @@ import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/poli
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';
 const HOME_CACHE_TTL = 60 * 1000;
-const HOME_PRODUCT_LIMIT = 18;
 // El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
 // Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
 // de precio, stock o estado durante diez minutos en otros dispositivos.
@@ -144,25 +143,13 @@ function normalizeList(list) {
 
 function publish(products, source) {
   const normalized = normalizeList(products);
-  const featuredProducts = normalized.filter(product =>
-    typeof window.isFeaturable === 'function'
-      ? window.isFeaturable(product)
-      : !(product.stock != null && Number(product.stock) <= 0)
-  );
   window.PRODUCTS = normalized;
+  // Única vía de pintado de las grillas (Inicio, Colecciones, "Completá tu
+  // look"): tienda.js escucha este evento. Pintar también desde acá producía
+  // dos renders por publicación con selecciones aleatorias distintas.
   window.dispatchEvent(new CustomEvent('tintin:products-loaded', {
     detail: { products: normalized, source }
   }));
-  if (typeof window.renderProductsGrid === 'function') {
-    if (document.getElementById('colls-products-grid')) window.renderProductsGrid('colls-products-grid', normalized);
-    if (document.getElementById('products-grid')) {
-      if (typeof window.renderRandomHomeProducts === 'function') window.renderRandomHomeProducts();
-      else window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
-    }
-  }
-  if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {
-    window.initLookCombinator();
-  }
   if (typeof window.renderCart === 'function') window.renderCart();
   if (document.getElementById('product-detail')) {
     const id = new URLSearchParams(location.search).get('id');
@@ -176,28 +163,6 @@ function publish(products, source) {
     }
   }
   return normalized;
-}
-
-async function fetchAllProductsFromSdk() {
-  const snapshot = await getDocs(query(collection(db, 'products'), limit(1000)));
-  recordFirestoreRead('products:all', snapshot.size);
-  return snapshot.docs.map(item => mapProduct(item.id, item.data()));
-}
-
-async function fetchHomeProductsFromSdk() {
-  const featuredSnapshot = await getDocs(query(
-    collection(db, 'products'),
-    where('destacado', '==', true),
-    limit(HOME_PRODUCT_LIMIT)
-  ));
-  recordFirestoreRead('products:home-featured', featuredSnapshot.size);
-  const featured = featuredSnapshot.docs.map(item => mapProduct(item.id, item.data()));
-  if (featured.length) return featured;
-
-  // Respaldo acotado para tiendas que todavía no marcaron productos destacados.
-  const fallbackSnapshot = await getDocs(query(collection(db, 'products'), limit(HOME_PRODUCT_LIMIT)));
-  recordFirestoreRead('products:home-fallback', fallbackSnapshot.size);
-  return fallbackSnapshot.docs.map(item => mapProduct(item.id, item.data()));
 }
 
 async function fetchHomeProducts() {
@@ -519,12 +484,12 @@ export async function ensureProductsForSearch() {
   return loadAllProducts();
 }
 
-export async function ensureProductsForCurrentPage() {
+export async function ensureProductsForCurrentPage(options = {}) {
   const path = location.pathname.toLowerCase();
-  if (/(^|\/)product(?:\.html)?$/.test(path)) return loadProductPage();
-  if (path.endsWith('/') || /(^|\/)index(?:\.html)?$/.test(path)) return loadHomeProducts();
+  if (/(^|\/)product(?:\.html)?$/.test(path)) return loadProductPage(options);
+  if (path.endsWith('/') || /(^|\/)index(?:\.html)?$/.test(path)) return loadHomeProducts(options);
   if (/(^|\/)(?:catalogo|collections)(?:\.html)?$/.test(path)) {
-    return loadAllProducts();
+    return loadAllProducts(options);
   }
   // Inventario histórico de rutas para auditorías: index|catalogo|collections.
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];

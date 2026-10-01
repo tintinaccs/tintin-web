@@ -96,15 +96,15 @@ check(
 );
 
 check(
-  'El catálogo público mantiene un canal en vivo acotado con respaldo',
-  productsStore.includes('onSnapshot') &&
-    productsStore.includes('startPublicProductsRealtime') &&
-    /query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(productsStore) &&
+  'El catálogo público se lee por la API edge acotada, con caché de respaldo',
+  productsStore.includes('startPublicProductsRealtime') &&
+    productsStore.includes("fetchPublicCatalogResource('products')") &&
+    !/getDocs\(query\(collection\(db,\s*['"]products['"]\)/.test(productsStore) &&
     productsStore.includes('loadAllProducts') &&
     productsStore.includes('loadProductPage') &&
     productsStore.includes('readCached') &&
     productsStore.includes('runSingleFlight'),
-  'Productos debe usar un listener acotado en páginas comerciales y conservar la caché como respaldo.'
+  'Productos debe leerse por la API edge (límite en el servidor), sin enumerar la colección desde el navegador, y conservar la caché como respaldo.'
 );
 
 check(

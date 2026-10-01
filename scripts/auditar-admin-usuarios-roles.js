@@ -21,6 +21,7 @@ function check(name, condition, problem) { checks.push({ name, ok: Boolean(condi
 const roles = read('js/core/auth/roles.js');
 const rolePerms = read('js/core/auth/permisos-roles.js');
 const adminApp = read('js/admin/admin-app.js');
+const operationsUi = read('js/admin/operaciones/sistema-operaciones-admin.js');
 const compat = read('js/admin/users/gestion-usuarios-admin.js');
 const ficha = read('js/admin/users/ficha-usuario-admin.js');
 const rules = read('firestore.rules');
@@ -128,6 +129,14 @@ check(
   /roleBeforeBlock: prevRole,\s*\n\s*role: 'client'/.test(adminApp) &&
     /ASSIGNABLE_ROLES\.includes\(u\?\.roleBeforeBlock\)\s*\?\s*u\.roleBeforeBlock\s*:\s*'client'/.test(adminApp),
   'Una cuenta bloqueada pierde privilegios y al restaurarse recupera un rol anterior válido.'
+);
+check(
+  'CRUD individual de clientes muestra progreso real y resultado central',
+  /window\.blockUser = async[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)[\s\S]*?ctx\.ok\('write'\)[\s\S]*?window\.restoreUser/.test(adminApp) &&
+    /window\.restoreUser = async[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)[\s\S]*?ctx\.ok\('write'\)[\s\S]*?window\.deleteUser/.test(adminApp) &&
+    /window\.deleteUser = async[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('delete'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp) &&
+    /config\.showSuccessDialog === true\) openOperation\(operation\)/.test(operationsUi),
+  'Bloquear, restaurar y eliminar deben ejecutarse dentro del seguimiento central de operaciones.'
 );
 check(
   'Las acciones sensibles dejan auditoría',

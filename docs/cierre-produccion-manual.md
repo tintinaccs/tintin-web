@@ -63,8 +63,8 @@ El flujo es Cloudflare → Apps Script: Cloudflare adjunta el secreto en el head
 
 **Método recomendado — prueba funcional (no requiere ver el valor):**
 1. Ejecutar manualmente `.github/workflows/drenar-cola-sync-catalogo.yml` (o esperar su corrida programada cada 15 min) y revisar el log del paso que llama a `/api/catalog-sheet-sync-drain`.
-2. Si Apps Script responde éxito (200 y confirmación de escritura), el secreto coincide.
-3. Si responde 401/403 o el log de Cloudflare muestra el webhook fallando por secreto inválido, no coincide o falta en alguno de los dos lados.
+2. Un intento real fallido devuelve HTTP 502 con `failureCode: apps_script_auth_rejected` cuando el secreto no coincide. La respuesta no incluye el error interno ni el valor del secreto.
+3. Un HTTP 200 sin elementos drenados no confirma escritura; revisar el Estado del ecosistema autenticado y exigir cero pendientes, cero dead-letter y ninguna falla reciente antes de declarar la conexión sana.
 
 **Método alternativo — huella parcial (si la prueba funcional no es posible ahora):**
 1. En Apps Script (Configuración del proyecto → Propiedades del script), anotar solo la longitud del valor y sus últimos 4 caracteres.

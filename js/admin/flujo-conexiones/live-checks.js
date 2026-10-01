@@ -6,8 +6,8 @@
 // nodo/conexión que estado-flujo.js puede resolver. No depende del DOM ni
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
-import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260925-cache-converge-1';
-import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
+import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260929-profile-gate-all-pages-1';
+import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
 
 function edgeIdFor(from, to) {
   return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
@@ -40,9 +40,10 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     out[id] = {
       ok,
       note,
-      status: Number(options.status || 200),
+      status: Number(options.status ?? 200),
       evidenceLevel: options.evidenceLevel || EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
       promote: options.promote === true,
+      partial: options.partial === true,
       authRequired: options.authRequired === true,
       pending: options.pending === true,
       checkedAt,
@@ -122,11 +123,16 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       `GET /api/system-health · Apps Script ${appsScript.protocolOk ? 'protocolo reconocido' : 'protocolo no confirmado'}`,
       { status: appsScript.httpStatus || systemHealth.status, promote: appsScript.protocolOk === true, evidenceLevel: LP });
     setFrom('google-sheets', integrations.sheets === true,
-      'GET /api/system-health · protocolo de sincronización confirmado', { status: systemHealth.status, promote: integrations.sheets === true, evidenceLevel: LP });
-    const paypalOk = integrations.paypal?.configured === true;
+      'GET /api/system-health · configuración y guard de Apps Script confirmados; sync de catálogo no probado por este probe', {
+        status: systemHealth.status,
+        promote: false,
+        partial: integrations.sheets === true,
+        evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+      });
+    const paypalOk = integrations.paypal?.productionReady === true;
     const externalServicesOk = integrations.resend === true && integrations.cloudinary === true && paypalOk;
     setFrom('servicios-externos', externalServicesOk,
-      `GET /api/system-health · Resend=${integrations.resend === true} · Cloudinary=${integrations.cloudinary === true} · PayPal=${paypalOk ? 'configurado' : 'no configurado'}`,
+      `GET /api/system-health · Resend=${integrations.resend === true} · Cloudinary=${integrations.cloudinary === true} · PayPal=${integrations.paypal?.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'}`,
       { status: systemHealth.status, promote: externalServicesOk, evidenceLevel: LP });
     if (report.deployment?.commitSha) {
       setFrom('deployments', true, `GET /api/system-health · commit ${report.deployment.commitSha.slice(0, 10)} (${report.deployment.branch || 'branch desconocida'})`, { promote: true, evidenceLevel: LP });
@@ -136,10 +142,8 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     setFrom('csp', headers.csp === true, `GET /admin.html · CSP ${headers.csp ? 'presente' : 'ausente'}`, { status: headers.status, promote: headers.csp === true, evidenceLevel: LP });
   }
 
-  // Estas cuatro lecturas no mutan datos: dos pasan por las APIs reales y
-  // dos por el SDK cliente. Juntas comprueban endpoint, Firebase Auth, Rules
-  // desplegadas y la colección correspondiente, sin marcar favoritos ni
-  // notificaciones como leídos.
+  // Estas lecturas no mutan datos: consultan APIs públicas/protegidas y Rules
+  // desplegadas, sin crear engagement ni marcar notificaciones como leídas.
   const favoriteApi = protectedProbes.favoriteApi;
   const notificationApi = protectedProbes.notificationApi;
   const favoriteRules = protectedProbes.firestoreRules?.favorites;
@@ -155,6 +159,23 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     setFrom('notificaciones', notificationsOk,
       `GET /api/notifications?health=200 · SDK Firestore adminNotifications=${notificationRules?.ok === true ? 'permitido' : 'no confirmado'}`,
       { status: notificationApi?.status || notificationRules?.status, promote: notificationsOk, evidenceLevel: LP, authRequired: notificationApi?.status === 401 || notificationRules?.authRequired === true });
+  }
+  const engagementStats = protectedProbes.engagementStats || {};
+  for (const [id, key, label] of [
+    ['likes', 'likes', 'estadísticas públicas de likes'],
+    ['comentarios', 'reviews', 'estadísticas públicas de reseñas'],
+  ]) {
+    const probe = engagementStats[key];
+    if (!probe) continue;
+    setFrom(id, probe.ok === true,
+      `GET /api/engagement · ${label} ${probe.ok === true ? 'disponibles' : 'no confirmadas'}; mutación no probada`,
+      { status: probe.status, promote: false, partial: probe.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
+  }
+  const cartRules = protectedProbes.firestoreRules?.cart;
+  if (cartRules) {
+    setFrom('carrito', cartRules.ok === true,
+      `SDK Firestore autenticado · lectura del carrito propio ${cartRules.ok === true ? 'permitida' : 'no confirmada'}; persistencia/edición no probadas`,
+      { status: cartRules.status, promote: false, partial: cartRules.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
   }
   const rulesOk = favoriteRules?.ok === true && notificationRules?.ok === true;
   if (favoriteRules || notificationRules) {
@@ -240,7 +261,8 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       ok,
       note,
       status,
-      promote: ok,
+      promote: options.promote !== false && ok,
+      partial: options.partial === true,
       pending: options.pending === true,
       evidenceLevel: options.evidenceLevel || EVIDENCIA.LIVE_PRODUCTION,
       checkedAt,
@@ -281,14 +303,19 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       report.integrations.appsScript.httpStatus || systemHealth.status);
   }
   if (report?.integrations?.paypal) {
-    const paypalOk = report.integrations.paypal.configured === true;
+    const paypalOk = report.integrations.paypal.productionReady === true;
     set('apis-internas', 'servicios-externos', paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true,
-      `GET /api/system-health · externos configurados=${paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true}`,
+      `GET /api/system-health · PayPal ${report.integrations.paypal.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'} · externos listos=${paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true}`,
       systemHealth.status);
   }
   if (report?.integrations?.sheets !== undefined) {
     set('apps-script', 'google-sheets', report.integrations.sheets === true,
-      'GET /api/system-health · protocolo Sheets', systemHealth.status);
+      'GET /api/system-health · guard HTTP reconocido; escritura Sheets → Firestore no probada por este probe',
+      systemHealth.status, {
+        promote: false,
+        partial: report.integrations.sheets === true,
+        evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+      });
   }
   const favoriteApi = protectedProbes.favoriteApi;
   const notificationApi = protectedProbes.notificationApi;
@@ -304,6 +331,20 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       `GET /api/notifications?action=health → HTTP ${notificationApi.status || 'sin respuesta'}`,
       notificationApi.status || 0, { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
   }
+  const engagementStats = protectedProbes.engagementStats || {};
+  for (const [to, key, label] of [
+    ['likes', 'likes', 'estadísticas de likes'],
+    ['comentarios', 'reviews', 'estadísticas de reseñas'],
+  ]) {
+    const probe = engagementStats[key];
+    if (probe) set('apis-internas', to, probe.ok === true,
+      `GET /api/engagement · ${label} ${probe.ok === true ? 'disponibles' : 'no confirmadas'}; mutación no probada`,
+      probe.status || 0, { promote: false, partial: probe.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
+  }
+  const cartRules = protectedProbes.firestoreRules?.cart;
+  if (cartRules) set('firestore', 'carrito', cartRules.ok === true,
+    `SDK Firestore autenticado · lectura del carrito propio ${cartRules.ok === true ? 'permitida' : 'no confirmada'}; persistencia/edición no probadas`,
+    cartRules.status || 0, { promote: false, partial: cartRules.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
   const rulesOk = favoriteRules?.ok === true && notificationRules?.ok === true;
   if (favoriteRules || notificationRules) {
     set('cf-functions', 'reglas-firestore', rulesOk,

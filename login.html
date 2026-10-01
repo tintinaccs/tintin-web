@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20260926-loader-contrast-b-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260930-home-canonical-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260930-home-canonical-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1">
@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260925-cache-converge-1">
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
-  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260926-loader-contrast-b-1">
+  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260927-loader-contrast-c-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20260925-cache-converge-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -225,12 +225,13 @@ import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tin
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260923-user-reentry-2-auth-popup-resolver-1-launch-20260926-1";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260918-auth-incident-diagnostics-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260929-incomplete-flags-1";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
-import { showBlockedModal, accountProblemHtml } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260926-account-problem-whatsapp-1";
+import { showBlockedModal, accountProblemHtml } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260927-account-problem-whatsapp-2";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1";
+import { PROFILE_STATE, PROFILE_ACTION, detectAuthMethod, readProfileSnapshot, resolveProfileState, resolveProfileAction, withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20260930-incomplete-flags-2";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
@@ -325,9 +326,18 @@ function hideMessages() {
 }
 
 function errMsg(code, email = '') {
-  // Acceso deshabilitado: la persona solo ve el aviso corto con el enlace a
-  // WhatsApp; el estado real de la cuenta se consulta en el panel.
-  if (code === "auth/user-disabled") return accountProblemHtml(email);
+  // Firebase no permite saber desde el navegador si quedó una identidad
+  // residual de una baja o si la cuenta está bloqueada. Ofrecer el OTP permite
+  // verificar el correo: el servidor habilita una identidad nueva si fue dada
+  // de baja y conserva el rechazo genérico si existe un bloqueo en Firestore.
+  if (code === "auth/user-disabled") {
+    const safeEmail = String(email || '').trim();
+    // Google no siempre informa el correo en este error. Sin correo conocido
+    // el botón abre el paso de correo para que la persona lo escriba, en vez
+    // de dejarla sin salida.
+    const emailRecovery = ` <button type="button" class="login-email-resend" data-login-email-recovery="${isValidEmailFormat(safeEmail) ? escapeHtml(safeEmail) : ''}">Verificar por correo</button>`;
+    return accountProblemHtml(safeEmail) + emailRecovery;
+  }
   const msgs = {
     "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
     "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
@@ -435,6 +445,20 @@ function populateCountrySelect(selectEl) {
   selectEl.value = DEFAULT_COUNTRY.code;
 }
 
+// Lee users/{uid} y lo traduce al estado canónico (estado-perfil-sesion.mjs).
+// Un error de lectura queda como ERROR: nunca se interpreta como "no existe"
+// ni cierra la sesión. El plazo es sólo una salida de seguridad para que el
+// cargador no quede colgado si Firestore no responde.
+const PROFILE_READ_DEADLINE_MS = 15000;
+async function readProfileState(user, role) {
+  const attempt = await withDeadline(getDoc(doc(db, 'users', user.uid)), PROFILE_READ_DEADLINE_MS)
+    .then(snapshot => ({ snapshot }), error => ({ error }));
+  const read = readProfileSnapshot(attempt, { online: navigator.onLine !== false });
+  const resolved = resolveProfileState({ read, user, role, superAdminEmail: SUPER_ADMIN });
+  recordAuthDiagnostic('PROFILE_FETCH_RESULT', { source: 'login', profileState: resolved.state, reason: resolved.reason, errorKind: resolved.errorKind || 'none' });
+  return resolved;
+}
+
 // Solo solicita los campos que realmente faltan. El superadmin queda fuera
 // del onboarding y una cuenta completa pasa directo, sin volver a escribir
 // datos que ya existen. El nombre entregado por Google se confirma antes de
@@ -449,15 +473,28 @@ async function ensureProfileComplete(user, role) {
   if (normalizedEmail === SUPER_ADMIN.toLowerCase() || String(role || '').toLowerCase() === 'superadmin') return;
 
   const ref = doc(db, 'users', user.uid);
-  const snap = await getDoc(ref);
-  const data = snap.exists() ? snap.data() : {};
-  const plan = getProfileCompletionPlan({
-    profile: data,
-    user,
-    role,
-    superAdminEmail: SUPER_ADMIN,
-  });
-  if (plan.skip) return;
+  let resolved = await readProfileState(user, role);
+  if (resolveProfileAction(resolved.state) === PROFILE_ACTION.CREATE_THEN_COMPLETE_PROFILE) {
+    // Auth existe pero users/{uid} no (alta abandonada antes de crearse). El
+    // alta sólo puede continuar sobre un documento `incomplete` creado por la
+    // función canónica: firestore.rules rechaza cualquier otro "create".
+    recordAuthDiagnostic('PROFILE_MISSING', { source: 'login' });
+    try {
+      await ensureUserProfile(db, user, detectAuthMethod(user));
+    } catch (createError) {
+      // Otra pestaña pudo crearlo entre tanto: se vuelve a leer en vez de asumir.
+      recordAuthDiagnostic('PROFILE_CREATE_FAILED', { source: 'login', code: String(createError?.code || 'unknown') });
+    }
+    resolved = await readProfileState(user, role);
+  }
+  if (resolved.state === PROFILE_STATE.ERROR || resolved.state === PROFILE_STATE.MISSING) {
+    const profileError = new Error(`profile/${resolved.state.toLowerCase()}`);
+    profileError.code = `profile/${resolved.state.toLowerCase()}`;
+    profileError.errorKind = resolved.errorKind;
+    throw profileError;
+  }
+  if (resolved.state === PROFILE_STATE.COMPLETE) return;
+  const plan = resolved.plan;
 
   hideLoginOverlay();
   revealLoginSurface();
@@ -491,7 +528,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260918-auth-incident-diagnostics-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260929-incomplete-flags-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -830,7 +867,14 @@ async function ensureProfileComplete(user, role) {
 
         await runTransaction(db, async transaction => {
           const currentSnap = await transaction.get(ref);
-          const currentProfile = currentSnap.exists() ? currentSnap.data() : {};
+          if (!currentSnap.exists()) {
+            // Jamás se "completa" sobre un documento inexistente: las reglas
+            // sólo admiten crearlo vía ensureUserProfile (perfil `incomplete`).
+            const missing = new Error('profile/missing');
+            missing.code = 'profile/missing';
+            throw missing;
+          }
+          const currentProfile = currentSnap.data();
           const patch = buildMissingProfilePatch({
             currentProfile,
             submittedFirstName: firstName,
@@ -888,6 +932,8 @@ async function ensureProfileComplete(user, role) {
           }
           if (plan.needsPhone) document.getElementById('login-phone-help').style.display = '';
           (plan.needsUsername ? usernameInput : phoneInput).focus();
+        } else if (e?.code === 'profile/missing') {
+          showError('Tu cuenta todavía no terminó de crearse. Recargá la página para continuar; no hace falta volver a registrarte.');
         } else {
           console.error('[login] No se pudo guardar el perfil:', e);
           showError('No pudimos guardar tus datos. Probá de nuevo.');
@@ -1030,7 +1076,7 @@ subscribeSession(async snapshot => {
   const [profileResult, storeAccessConfig] = await Promise.all([
     isSuperAdmin
       ? Promise.resolve({ snapshot: null, error: null })
-      : getDoc(doc(db, 'users', user.uid))
+      : withDeadline(getDoc(doc(db, 'users', user.uid)), PROFILE_READ_DEADLINE_MS)
           .then(snapshot => ({ snapshot, error: null }))
           .catch(error => ({ snapshot: null, error })),
     getStoreAccessConfig()
@@ -1061,8 +1107,19 @@ subscribeSession(async snapshot => {
     profileData.onboardingCompleted !== true;
   // La sesión restaurada usa exactamente la misma validación que Google y
   // correo: un perfil incompleto termina el alta; uno completo entra directo.
-  await ensureProfileComplete(user, role);
-  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
+  try {
+    await ensureProfileComplete(user, role);
+    await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
+  } catch (restoreError) {
+    // Toda salida del flujo restaurado tiene un estado visible: nunca un
+    // cargador infinito y nunca un cierre de sesión por un error que no es de
+    // autenticación (la sesión de Firebase sigue válida).
+    recordAuthDiagnostic('PROFILE_RESTORE_FAILED', { source: 'login', code: String(restoreError?.code || 'unknown'), errorKind: restoreError?.errorKind || 'none' });
+    console.warn('[login] No se pudo continuar con la sesión restaurada:', restoreError);
+    hideLoginOverlay();
+    revealLoginSurface();
+    showError('No pudimos terminar de preparar tu cuenta en este momento. Tu sesión sigue activa; recargá la página y no hace falta volver a registrarte.');
+  }
 });
 
 // GOOGLE — primera opción de ingreso. El mismo botón sirve tanto
@@ -1292,6 +1349,20 @@ document.getElementById('btn-toggle-identifier').onclick = () => {
   setIdentifierMode(loginIdentifierMode === 'email' ? 'username' : 'email');
 };
 
+document.getElementById('login-error').addEventListener('click', event => {
+  const recovery = event.target.closest('[data-login-email-recovery]');
+  if (!recovery) return;
+  const email = recovery.getAttribute('data-login-email-recovery') || '';
+  showEmailStep();
+  const emailInput = document.getElementById('login-email-input');
+  if (!isValidEmailFormat(email)) {
+    emailInput.focus();
+    return;
+  }
+  emailInput.value = email;
+  sendOtp(email, 'email');
+});
+
 async function sendOtp(identifier, mode) {
   hideMessages();
   hideGoogleNudge();
@@ -1401,12 +1472,12 @@ document.getElementById('btn-verify-otp').onclick = async () => {
     explicitLoginInProgress = false;
     btn.disabled = false;
     hideLoginOverlay();
-    showError(e.code === 'auth/user-disabled' ? errMsg(e.code, otpEmail) : otpErrorMessage(e.code));
+    showError(e.code === 'auth/user-disabled' || e.code === 'account_blocked' ? accountProblemHtml(otpEmail) : otpErrorMessage(e.code));
   }
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script src="tienda.js?v=tintin-20260927-visual-1" defer></script>
+<script src="tienda.js?v=tintin-20260930-pdp-cart-error-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 </body>
 </html>

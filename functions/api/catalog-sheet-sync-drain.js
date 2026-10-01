@@ -63,11 +63,12 @@ export async function onRequestPost(context) {
     const result = await drainCatalogSheetSyncQueueScheduled(env, { limit: SCHEDULED_DRAIN_LIMIT });
     const engagement = await drainEngagementSheetSyncQueueScheduled(env, { limit: ENGAGEMENT_DRAIN_LIMIT });
     const payload = {
-      ok: true,
+      ok: !result?.failureCode,
       checked: Number(result?.checked || 0),
       drained: Number(result?.drained || 0),
       deadLettered: Number(result?.deadLettered || 0),
       remaining: Number(result?.remaining || 0),
+      ...(result?.failureCode ? { error: 'catalog_sheet_sync_failed', failureCode: result.failureCode } : {}),
       engagement: {
         checked: Number(engagement?.checked || 0),
         drained: Number(engagement?.drained || 0),
@@ -79,7 +80,7 @@ export async function onRequestPost(context) {
       runAttempt: String(claims?.run_attempt || '').slice(0, 20),
     };
     console.log('catalog_sheet_sync_drain', JSON.stringify(payload));
-    return jsonResponse(payload, 200, limit.headers);
+    return jsonResponse(payload, result?.failureCode ? 502 : 200, limit.headers);
   } catch (error) {
     const detail = sanitizeText(error?.message || error, 220);
     const configurationError = /FIREBASE_SERVICE_ACCOUNT|SHEETS_ENGAGEMENT_SECRET|no est[aá] configurad/i.test(detail);

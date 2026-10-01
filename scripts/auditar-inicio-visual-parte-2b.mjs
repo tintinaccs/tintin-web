@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
 const port = 4182;
-const baseURL = `http://${host}:${port}`;
+const baseURL = process.env.TT_AUDIT_BASE_URL || `http://${host}:${port}`;
+const remotePreview = Boolean(process.env.TT_AUDIT_BASE_URL);
 const output = path.join(root, 'artifacts', 'home-part2b');
 fs.rmSync(output, { recursive: true, force: true });
 fs.mkdirSync(output, { recursive: true });
@@ -111,7 +112,9 @@ async function audit(page, width, height) {
     for (const [name, selector] of sections) {
       const node = document.querySelector(selector);
       if (!visible(node)) {
-        issues.push(`${name}: sección ausente u oculta`);
+        // "Completá tu look" se oculta a propósito si el catálogo no responde
+        // o no hay productos comprables (este servidor estático no tiene API).
+        if (name !== 'look') issues.push(`${name}: sección ausente u oculta`);
         continue;
       }
       const box = rect(node);
@@ -177,6 +180,7 @@ async function audit(page, width, height) {
 
     for (const [label, selector] of [['look', '#look-grid']]) {
       const grid = document.querySelector(selector);
+      if (!visible(document.querySelector('#look-section'))) continue;
       if (!visible(grid)) issues.push(`${label}: grilla ausente`);
       else if (grid.scrollWidth > grid.clientWidth + 1) issues.push(`${label}: grilla desborda`);
     }
@@ -213,7 +217,7 @@ async function audit(page, width, height) {
   }, { width, height, sections });
 }
 
-await listen();
+if (!remotePreview) await listen();
 const browser = await chromium.launch({
   headless: true,
   executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
@@ -255,7 +259,7 @@ try {
   }
 } finally {
   await browser.close();
-  await closeServer();
+  if (!remotePreview) await closeServer();
 }
 
 const failures = report.filter(entry => entry.issues.length);

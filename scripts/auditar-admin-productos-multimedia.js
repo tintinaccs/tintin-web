@@ -41,6 +41,8 @@ function check(name, condition, problem) {
 }
 
 const adminApp    = read('js/admin/admin-app.js');
+const operationsUi = read('js/admin/operaciones/sistema-operaciones-admin.js');
+const operationsBulk = read('js/admin/utilidades-progreso-admin.js');
 const adminHtml   = read('admin.html');
 const contentAdmin = read('js/admin/content/gestion-contenido-admin.js');
 const importJs    = read('js/admin/importacion-admin.js');
@@ -90,6 +92,25 @@ check(
   'El CRUD de productos debe dejar rastro en el registro de auditoría.'
 );
 check(
+  'CRUD individual de productos y colecciones usa progreso y resultado central',
+  /async function prodGuardar\(\)[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?ctx\.ok\('save'\)[\s\S]*?window\.prodToggleActive/.test(adminApp) &&
+    /async function prodEliminar\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('delete'\)[\s\S]*?ctx\.start\('sync'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp) &&
+    /window\.collGuardar = async function\(\)[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?window\.collEliminar/.test(adminApp) &&
+    /window\.collEliminar = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('move'\)[\s\S]*?ctx\.start\('delete'\)/.test(adminApp) &&
+    /window\.collMoveProduct = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)/.test(adminApp) &&
+    /window\.collPickerAddSelected = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('assign'\)/.test(adminApp) &&
+    /window\.collImportarDefaults = async function\([\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('create'\)/.test(adminApp) &&
+    /centerLoader: true/.test(adminApp) && /centerLoader: true/.test(operationsBulk) &&
+    /\.tt-ops-loader--centered\s*\{/.test(read('css/admin/operaciones-admin.css')) &&
+    /config\.showSuccessDialog === true\) openOperation\(operation\)/.test(operationsUi),
+  'El CRUD individual y las operaciones masivas deben mostrar el progreso en el centro y abrir el resultado al finalizar.'
+);
+check(
+  'El guardado parcial de un producto nuevo se puede reintentar sin duplicarlo',
+  /await setDoc\(newRef, data\);[\s\S]{0,180}getElementById\('prod-id'\)\.value = newRef\.id[\s\S]{0,220}pushProductsToSheets/.test(adminApp),
+  'Tras crear el documento, conservar su ID antes de intentar sincronizaciones que pueden fallar.'
+);
+check(
   'El listado de productos usa un listener en tiempo real con guardia anti-duplicado',
   /_productosUnsub = onSnapshot\(/.test(adminApp) &&
     /if \(_productosUnsub\) return;/.test(adminApp),
@@ -115,9 +136,10 @@ check(
     /window\.tintinPushProductsToSheets = pushProductsToSheets/.test(adminApp) &&
     /await pushProductsToSheets\(\[docId\]\)/.test(adminApp) &&
     /await pushProductsToSheets\(ids0\)/.test(adminApp) &&
-    /APPS_SCRIPT_SYNC_URL/.test(sheetsSyncFunction) &&
-    /idToken: String\(payload\.idToken\)/.test(sheetsSyncFunction),
-  'Todo guardado individual, masivo o importado debe notificar al webhook autenticado de Sheets.'
+    /syncProductsPayloadWithRetry/.test(sheetsSyncFunction) &&
+    /appScriptChunkSize:\s*5/.test(sheetsSyncFunction) &&
+    /queueCatalogSheetSync/.test(sheetsSyncFunction),
+  'Todo guardado individual, masivo o importado debe avisar al sincronizador server-side de Sheets y conservar la cola de recuperación.'
 );
 
 // ===========================================================================

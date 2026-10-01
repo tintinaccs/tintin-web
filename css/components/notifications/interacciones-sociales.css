@@ -25,9 +25,8 @@
 }
 
 .tt-comment-menu button {
-  position: absolute;
-  right: 0;
-  top: calc(100% + .25rem);
+  position: static;
+  margin-left: .25rem;
   min-width: 8rem;
   padding: .55rem .7rem;
   border: 1px solid var(--tt-color-border, #ddd5ce);

@@ -15,8 +15,13 @@ test('el enlace de soporte abre el WhatsApp de la tienda con el correo de la per
 
 test('el mensaje visible es corto, sin detalle interno, y "WhatsApp" es el enlace', () => {
   const html = accountProblemHtml('clienta@example.com');
-  assert.equal(ACCOUNT_PROBLEM_TEXT, 'Tu cuenta tiene problemas, por favor contáctanos por');
-  assert.match(html, /^Tu cuenta tiene problemas, por favor contáctanos por <a href="https:\/\/wa\.me\/595981299331\?text=[^"]+" target="_blank" rel="noopener"[^>]*>WhatsApp<\/a>\.$/);
+  assert.equal(ACCOUNT_PROBLEM_TEXT, 'Comunícate con nosotros por');
+  assert.ok(html.startsWith(ACCOUNT_PROBLEM_TEXT + ' <a '));
+  assert.ok(html.includes('href="https://wa.me/595981299331?text='));
+  assert.match(html, /rel="noopener noreferrer"/);
+  assert.match(html, /color:#005fcc/);
+  assert.match(html, /text-decoration:underline/);
+  assert.match(html, />WhatsApp<\/a>\.$/);
   assert.doesNotMatch(html, /bloquead|eliminad|desactivad|deshabilitad/i);
 });
 
@@ -30,7 +35,9 @@ test('un correo con caracteres especiales no puede romper el enlace', () => {
 test('login, perfil y checkout muestran solo el mensaje corto con el correo de la persona', () => {
   const login = read('login.html');
   assert.match(login, /import \{[^}]*accountProblemHtml[^}]*\} from ['"]\.\/js\/components\/modals\/modal-bloqueo\.js/);
-  assert.match(login, /code === "auth\/user-disabled"\) return accountProblemHtml\(email\)/);
+  assert.match(login, /code === "auth\/user-disabled"\)[\s\S]*?accountProblemHtml\(safeEmail\) \+ emailRecovery/);
+  assert.match(login, /data-login-email-recovery/);
+  assert.match(login, /e\.code === 'auth\/user-disabled' \|\| e\.code === 'account_blocked' \? accountProblemHtml\(otpEmail\)/);
   for (const page of ['perfil.html', 'checkout.html']) {
     assert.match(read(page), /showBlockedModal\(\{ email: [^}]+\}\)/, `${page} debe pasar el correo al aviso`);
   }
