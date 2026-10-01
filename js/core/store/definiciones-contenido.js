@@ -66,7 +66,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-hero',
         allowVisibility: true,
         fields: [
-          field('title', 'Título', '.tt-hero-title', 'Bienvenida\ntintina', { type: 'multiline', rows: 3, maxLength: 220 }),
+          field('title', 'Título', '.tt-hero-title', 'DETALLES QUE ELEVAN TU ESTILO', { type: 'multiline', rows: 3, maxLength: 220 }),
           field('subtitle', 'Subtítulo', '.tt-hero-subtitle', 'Joyitas únicas, como vos.', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('primaryText', 'Botón principal', '.tt-hero-actions a', 'Comprar ahora', { index: 0, maxLength: 80 }),
           field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', '/catalogo', { index: 0, type: 'href', maxLength: 500 }),
@@ -447,6 +447,9 @@ export function normalizeContentValue(pageId, sectionId, key, value) {
   const text = String(value == null ? '' : value);
   if (pageId === 'index' && sectionId === 'hero' && key === 'title') {
     return text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
+  }
+  if (pageId === 'index' && sectionId === 'trust' && key === 'items.2.label') {
+    return /^\s*PAGO SEGUROOXSD\s*$/i.test(text) ? 'Pago seguro' : text;
   }
   if (pageId === 'index' && sectionId === 'editorial_bag' && key === 'title') {
     if (/tod+o+xd/i.test(text)) return 'EL COMPLEMENTO\nQUE LO CAMBIA TODO';
