@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f52c7b9b86fbf3dd6dd26baedd167cc6763967e519bdffcd382aa41251ba4a2b",
+  "sourceFingerprint": "4ba7614a550e14bc411a96ebea1837b977997068807b565804ab127a21aa9c7f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 916,
     "textFiles": 875,
-    "totalBytes": 17953967,
+    "totalBytes": 17956247,
     "pages": 19,
     "modules": 629
   },
@@ -34243,8 +34243,8 @@
     },
     {
       "path": "tests/sync/admin-mirrors.test.mjs",
-      "bytes": 4181,
-      "sha256": "30f52fb863fa5403ab004f67b21c03ef60d99acabf6f10beb626a1e6ac8f9ace",
+      "bytes": 5840,
+      "sha256": "539f7648f8922a7b31cbba59a8297a5b4e23f8d5eb9db2805a97d81d7515b2b8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34263,13 +34263,24 @@
           "line": 2
         },
         {
-          "raw": "node:test",
+          "raw": "node:vm",
           "target": null,
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 4
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://example.test/api/sheets-sync-snapshot",
+          "line": 82
+        }
+      ]
     },
     {
       "path": "tests/sync/apps-script-sync-endpoint.test.mjs",
@@ -35625,8 +35636,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 50015,
-      "sha256": "cfd4539b7c0d06b54bb3248ae12dcef056029db80fa53392e63a8a602f94870e"
+      "bytes": 50636,
+      "sha256": "9c172e65741131c12075e59851138455dd552178ddcc80a9126512c8edf57cce"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -40683,8 +40694,8 @@
     {
       "path": "tests/sync/admin-mirrors.test.mjs",
       "extension": ".mjs",
-      "bytes": 4181,
-      "sha256": "30f52fb863fa5403ab004f67b21c03ef60d99acabf6f10beb626a1e6ac8f9ace"
+      "bytes": 5840,
+      "sha256": "539f7648f8922a7b31cbba59a8297a5b4e23f8d5eb9db2805a97d81d7515b2b8"
     },
     {
       "path": "tests/sync/apps-script-sync-endpoint.test.mjs",
