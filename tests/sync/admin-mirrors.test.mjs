@@ -5,20 +5,15 @@ import test from 'node:test';
 
 const read = path => fs.readFileSync(path, 'utf8');
 
-test('Sheets elimina cuentas solo a través del dominio canónico de baja', () => {
+test('Sheets no puede eliminar cuentas: sólo activas o bloqueadas', () => {
   const webhook = read('functions/api/sheets-admin-webhook.js');
-  const lifecycle = read('cloudflare/user-lifecycle-domain.js');
   const parity = read('apps-script/AdminParity.gs');
 
-  assert.doesNotMatch(webhook, /deleteFirebaseUser/);
+  assert.doesNotMatch(webhook, /deleteFirebaseUser|applyUserLifecycle/);
   assert.doesNotMatch(webhook, /path:\s*`users\/\$\{uid\}`\s*,\s*delete:\s*true/);
-  assert.match(webhook, /action === 'deleteUser' \|\| action === 'softDeleteUser'/);
-  assert.match(webhook, /applyUserLifecycle\(env, \{[\s\S]*?action: 'delete'/);
-  assert.match(lifecycle, /deleteFirebaseUser\(env, uid\)/);
-  assert.doesNotMatch(lifecycle, /deleted:\s*fsBoolean\(true\)/);
-  assert.match(parity, /'ELIMINAR' \? 'softDeleteUser'/);
+  assert.match(webhook, /La eliminación de cuentas fue retirada/);
+  assert.doesNotMatch(parity, /softDeleteUser|reactivateUser|'ELIMINAR'/);
   assert.match(parity, /tintinPullUsersFromWeb_\(\)/);
-  assert.match(parity, /'REACTIVAR' \? 'reactivateUser'/);
   assert.doesNotMatch(parity, /sheet\.deleteRow/);
 });
 

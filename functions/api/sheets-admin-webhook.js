@@ -6,7 +6,6 @@ import {
   setFirebaseUserDisabled,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloudinary.js';
-import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
 import { notifyCustomerOrderChange } from '../../cloudflare/correo-estado-pedido.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
@@ -67,21 +66,10 @@ async function updateUser(env, input) {
   const baseChangeId = text(input.baseChangeId, 120);
   const origin = text(input.source || 'google-sheets:Usuarios web', 120);
 
-  if (action === 'deleteUser' || action === 'softDeleteUser') {
-    return applyUserLifecycle(env, {
-      uid,
-      action: 'delete',
-      actorId: 'google-sheets',
-      actorEmail: 'google-sheets@tintin.internal',
-      actorRole: 'sheets-sync',
-      reason: 'Acción administrativa desde Usuarios web',
-      origin,
-      changeId: nextChangeId,
-      baseChangeId,
-    });
-  }
-  if (action === 'reactivateUser') {
-    throw new Error('Una cuenta eliminada debe registrarse nuevamente; no se reactiva desde Sheets.');
+  // La eliminación de cuentas se retiró: sólo existen cuentas activas o
+  // bloqueadas. Para sacar a alguien se la bloquea (blocked: true).
+  if (action === 'deleteUser' || action === 'softDeleteUser' || action === 'reactivateUser') {
+    throw new Error('La eliminación de cuentas fue retirada. Usá Bloquear.');
   }
   if (action !== 'updateUser') throw new Error('Acción de usuario no permitida');
 

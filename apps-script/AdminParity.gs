@@ -235,8 +235,9 @@ function tintinHandleUserParityEdit_(e) {
   var at = function(col) { return row[col - 2]; };
   var uid = String(at(TINTIN_USERS_COL.uid) || '').trim();
   if (!uid) return;
-  var actionValue = String(at(TINTIN_USERS_COL.action) || '').trim().toUpperCase();
-  var action = actionValue === 'ELIMINAR' ? 'softDeleteUser' : actionValue === 'REACTIVAR' ? 'reactivateUser' : 'updateUser';
+  // La eliminación de cuentas se retiró: desde Sheets sólo se cambia rol,
+  // bloqueo y notas. Para sacar a alguien se lo bloquea.
+  var action = 'updateUser';
   var changeId = 'sheet_' + Utilities.getUuid().replace(/-/g, '');
   var payload = {
     entity: 'user', action: action, uid: uid,
@@ -249,16 +250,7 @@ function tintinHandleUserParityEdit_(e) {
   try {
     var response = tintinParityCallWebhook_(TINTIN_ADMIN_WEBHOOK_PATH, payload);
     var result = response.result || {};
-    if (action === 'softDeleteUser') {
-      // La baja es definitiva: el espejo se repinta desde Firestore y la fila
-      // desaparece. No se escribe sobre la fila porque cambian las posiciones.
-      tintinPullUsersFromWeb_();
-      tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web eliminada por completo.');
-      return;
-    }
     sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.lastChangeId).setValue(result.changeId || changeId);
-    if (action === 'reactivateUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('No');
-    if (action !== 'updateUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.action).clearContent();
     tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web sincronizada por lifecycle canónico.');
   } catch (error) {
     tintinPullUsersFromWeb_();
@@ -451,8 +443,8 @@ function tintinPrepararHojasParidad_() {
     var actionCol = tintinColumnLetter_(TINTIN_USERS_COL.action);
     users.getRange(roleCol + TINTIN_USERS_FIRST_ROW + ':' + roleCol).setDataValidation(tintinParityValidation_(['client','viewer','agent','admin']));
     users.getRange(blockedCol + TINTIN_USERS_FIRST_ROW + ':' + blockedCol).setDataValidation(tintinParityValidation_(['Sí','No']));
-    users.getRange(actionCol + TINTIN_USERS_FIRST_ROW + ':' + actionCol).setDataValidation(tintinParityValidation_(['ELIMINAR','REACTIVAR']));
-    users.getRange(actionCol + TINTIN_USERS_HEADER_ROW).setNote('Acción administrativa segura: ELIMINAR crea tombstone; REACTIVAR restaura la cuenta. Nunca se destruye el UID histórico desde Sheets.');
+    users.getRange(actionCol + TINTIN_USERS_FIRST_ROW + ':' + actionCol).clearDataValidations();
+    users.getRange(actionCol + TINTIN_USERS_HEADER_ROW).setNote('Sin acciones: la eliminación de cuentas se retiró. Para sacar a alguien, marcá Bloqueado = Sí.');
   }
   tintinParityPrepareNewOrderSheet_();
   return { ok: true, ordersWidth: TINTIN_PARITY_ORDERS_WIDTH, users: !!users, newOrderSheet: true };

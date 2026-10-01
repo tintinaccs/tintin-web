@@ -52,6 +52,8 @@ const allowedSignOutFiles = new Set([
   'perfil.html',
   'js/admin/admin-app.js',
   'js/core/auth/navegacion-autenticacion.js',
+  // Cuenta bloqueada: cierra la sesión en el acto (sólo ante blocked === true).
+  'js/pages/profile/control-acceso-perfil.js',
 ]);
 
 const signOutCallers = productionFiles().filter(file => /\bsignOut\s*\(/.test(read(file)));

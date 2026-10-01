@@ -428,13 +428,12 @@ test('Sheets y Superadmin comparten la autoridad de pedidos; auditoría sigue re
   assert.match(snapshot, /notes:/);
 });
 
-test('Usuarios web permite lifecycle seguro desde Sheets sin destruir identidades', () => {
+test('Usuarios web desde Sheets sólo edita rol/bloqueo/notas: no elimina cuentas', () => {
   const parity = read('apps-script/AdminParity.gs');
   const adminWebhook = read('functions/api/sheets-admin-webhook.js');
-  assert.match(parity, /'ELIMINAR' \? 'softDeleteUser'/);
-  assert.match(parity, /'REACTIVAR' \? 'reactivateUser'/);
-  assert.match(adminWebhook, /applyUserLifecycle/);
-  assert.doesNotMatch(adminWebhook, /deleteFirebaseUser/);
+  assert.doesNotMatch(parity, /softDeleteUser|'ELIMINAR'/);
+  assert.match(parity, /var action = 'updateUser';/);
+  assert.doesNotMatch(adminWebhook, /applyUserLifecycle|deleteFirebaseUser/);
 });
 
 test('Usuarios web es un espejo estricto de Firestore y no conserva dispatcher heredado', () => {

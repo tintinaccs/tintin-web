@@ -3,10 +3,11 @@ import { resolve } from 'node:path';
 
 const root = process.cwd();
 const sources = [
-  ['login.html', ['ensureProfileComplete', 'redirectByRole', 'getProfileCompletionPlan']],
+  ['login.html', ['ensureProfileComplete', 'redirectByRole', 'getProfileCompletionPlan', 'endBlockedSession']],
   ['js/core/store/perfil-usuario.js', ['profileStatus', 'Google Sheets en este proyecto sincroniza productos, no usuarios']],
   ['js/pages/profile/configuracion-inicial-perfil.mjs', ['getProfileCompletionPlan', "profileStatus = 'active'"]],
-  ['functions/api/email-otp-send.js', ['resolveEmailFromUsernameKey']],
+  ['functions/api/email-otp-send.js', ['emailIsValid', 'Sólo correo']],
+  ['js/pages/profile/control-acceso-perfil.js', ['leaveBlockedAccount', 'onSnapshot']],
   ['cloudflare/firebase-admin-ligero.js', ['usernameReservations', 'users']]
 ];
 const verified = [];

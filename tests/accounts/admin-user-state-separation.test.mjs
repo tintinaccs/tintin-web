@@ -13,5 +13,5 @@ test('Usuarios tiene sólo dos pestañas: activos y bloqueados (sin Eliminados)'
   // Un resto histórico eliminado nunca se mezcla con activos ni bloqueados.
   assert.match(admin, /u\.blocked && u\.deleted !== true && u\.profileStatus !== 'deleted'/);
   assert.match(admin, /!u\.blocked && u\.deleted !== true && u\.profileStatus !== 'deleted'/);
-  assert.match(html, /id="users-delete-by-email-btn"/);
+  assert.doesNotMatch(html, /users-delete-by-email-btn|users-bulk-delete-btn/);
 });

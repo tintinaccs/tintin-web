@@ -823,7 +823,7 @@ function tintinHandleUserEdit_(e) {
   if (!uid) return;
   var changeId = Utilities.getUuid();
   var payload = {
-    entity: 'user', action: String(at(TINTIN_USERS_COL.action) || '').trim() === 'ELIMINAR' ? 'softDeleteUser' : 'updateUser',
+    entity: 'user', action: 'updateUser', // la eliminación de cuentas se retiró
     uid: uid, role: String(at(TINTIN_USERS_COL.role) || '').trim().toLowerCase(), blocked: tintinBool_(at(TINTIN_USERS_COL.blocked)),
     internalNotes: String(at(TINTIN_USERS_COL.internalNotes) || ''), changeId: changeId,
     baseChangeId: String(sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.lastChangeId).getValue() || '').trim(),
@@ -832,12 +832,6 @@ function tintinHandleUserEdit_(e) {
   tintinRecordSyncSafely_('SYNCING', sheet.getName(), e.range.getA1Notation(), 'Sincronizando cuenta web.');
   try {
     tintinCallInternalWebhook_(TINTIN_ADMIN_WEBHOOK_PATH, payload);
-    if (payload.action === 'softDeleteUser') {
-      // Baja definitiva: se repinta el espejo y la fila desaparece.
-      tintinPullUsersFromWeb_();
-      tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web eliminada por completo.');
-      return;
-    }
     sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.lastChangeId).setValue(changeId);
     tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web sincronizada.');
   } catch (error) {
@@ -954,7 +948,7 @@ function tintinPullUsersFromWeb_() {
     var actionColumn = tintinColumnLetter_(TINTIN_USERS_COL.action);
     usersSheet.getRange(roleColumn + TINTIN_USERS_FIRST_ROW + ':' + roleColumn).setDataValidation(tintinParityValidation_(['client', 'viewer', 'agent', 'admin']));
     usersSheet.getRange(blockedColumn + TINTIN_USERS_FIRST_ROW + ':' + blockedColumn).setDataValidation(tintinParityValidation_(['Sí', 'No']));
-    usersSheet.getRange(actionColumn + TINTIN_USERS_FIRST_ROW + ':' + actionColumn).setDataValidation(tintinParityValidation_(['ELIMINAR', 'REACTIVAR']));
+    usersSheet.getRange(actionColumn + TINTIN_USERS_FIRST_ROW + ':' + actionColumn).clearDataValidations();
   }
   return count;
 }

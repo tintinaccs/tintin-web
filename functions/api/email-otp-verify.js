@@ -15,11 +15,9 @@ import {
   findOrCreateUserByEmail,
   lookupFirebaseUser,
   firestoreAdminQueryByField,
-  resolveEmailFromUsernameKey,
   fsInteger,
   fsString
 } from '../../cloudflare/firebase-admin-ligero.js';
-import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
 const MAX_ATTEMPTS = 5;
 const MAX_FAILURES_PER_IP_DAY = 40;
@@ -30,7 +28,6 @@ const defaultDeps = {
   merge: firestoreAdminMerge,
   replace: firestoreAdminReplace,
   remove: firestoreAdminDelete,
-  resolveEmailFromUsernameKey,
   findOrCreateUserByEmail,
   lookupUser: lookupFirebaseUser,
   findProfilesByEmail: firestoreAdminQueryByField,
@@ -114,7 +111,6 @@ export async function handleEmailOtpVerify(context, deps = defaultDeps) {
     const rawBody = await request.text();
     if (rawBody.length > 2000) throw new Error('request_too_large');
     const body = JSON.parse(rawBody || '{}');
-    const rawUsername = clean(body.username, 20);
     const code = clean(body.code, 12);
 
     if (!/^\d{6}$/.test(code)) {
@@ -137,23 +133,10 @@ export async function handleEmailOtpVerify(context, deps = defaultDeps) {
       }, 429, origin, requestUrl);
     }
 
-    let email;
-    if (rawUsername) {
-      // Mismo criterio anti-enumeración que email-otp-send: un username que
-      // no resuelve a ninguna cuenta responde exactamente igual que "no hay
-      // código pendiente" (código genérico ya existente), nunca un error
-      // distinto que delate que el username no existe.
-      const key = usernameKey(rawUsername);
-      const resolved = key ? await deps.resolveEmailFromUsernameKey(env, key) : null;
-      if (!resolved) {
-        return jsonResponse({ success: false, error: 'code_not_found' }, 400, origin, requestUrl);
-      }
-      email = resolved;
-    } else {
-      email = clean(body.email, 254).toLowerCase();
-      if (!emailIsValid(email)) {
-        return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
-      }
+    // Sólo correo: el ingreso con @usuario se retiró.
+    const email = clean(body.email, 254).toLowerCase();
+    if (!emailIsValid(email)) {
+      return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
     }
 
     // La cuenta Super Admin entra sólo con Google: un código por correo no

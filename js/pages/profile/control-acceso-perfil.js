@@ -18,7 +18,8 @@
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261001-ultimos-datos-1";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 
@@ -39,6 +40,23 @@ function alreadyKnownComplete(uid) {
 /** Limpia la marca — al cerrar sesión, para que la próxima vuelva a verificar. */
 export function clearProfileGateCache() {
   try { sessionStorage.removeItem(COMPLETE_KEY); } catch {}
+}
+
+// El correo de una cuenta bloqueada viaja al login (sólo en esta pestaña)
+// para que el botón de WhatsApp lo incluya después de cerrar la sesión.
+const BLOCKED_EMAIL_KEY = 'tt_blocked_email';
+
+function rememberBlockedEmail(email) {
+  try { sessionStorage.setItem(BLOCKED_EMAIL_KEY, String(email || '')); } catch {}
+}
+
+/** Devuelve (y borra) el correo de la cuenta bloqueada recién expulsada. */
+export function consumeBlockedEmail() {
+  try {
+    const email = sessionStorage.getItem(BLOCKED_EMAIL_KEY) || '';
+    sessionStorage.removeItem(BLOCKED_EMAIL_KEY);
+    return email;
+  } catch { return ''; }
 }
 
 /**
@@ -90,27 +108,29 @@ function goCompleteProfile() {
   location.replace(`/login?from=${encodeURIComponent(from)}`);
 }
 
-async function enforceProfileComplete(user) {
-  if (!user || user.isAnonymous) return;
-  if (isExemptPage()) return;
+function isSuperAdminUser(user) {
+  return String(user?.email || '').trim().toLowerCase() === SUPER_ADMIN.toLowerCase();
+}
+
+let leaving = false;
+
+// Bloqueo: cierra la sesión en el acto y lleva al aviso con WhatsApp. Se
+// dispara al cargar la página y también si el Super Admin bloquea la cuenta
+// mientras la persona está navegando (el perfil se escucha en vivo).
+async function leaveBlockedAccount(user) {
+  if (leaving) return;
+  leaving = true;
+  redirecting = true;
+  recordAuthDiagnostic('REDIRECT_REASON', { source: 'profile-gate', reason: 'account-blocked' });
+  rememberBlockedEmail(user?.email);
+  clearProfileGateCache();
+  try { await signOut(auth); } catch {}
+  location.replace('/login?blocked=1');
+}
+
+function enforceProfileComplete(user, data) {
+  if (redirecting) return;
   if (alreadyKnownComplete(user.uid)) return;
-
-  if (String(user.email || '').trim().toLowerCase() === SUPER_ADMIN.toLowerCase()) {
-    markComplete(user.uid);
-    return;
-  }
-
-  let data;
-  try {
-    const snapshot = await getDoc(doc(db, 'users', user.uid));
-    data = snapshot.exists() ? snapshot.data() : {};
-  } catch (error) {
-    // Sin poder leer el perfil no se bloquea la navegación: un problema de
-    // red no tiene por qué dejar a alguien afuera de la tienda. Se reintenta
-    // en la próxima carga, porque no se marca como completo.
-    console.warn('[profile-gate] No se pudo verificar el perfil:', error);
-    return;
-  }
 
   // Sólo el personal conocido queda exento. Un rol vacío, mal escrito o
   // desconocido es una clienta: antes cualquier valor distinto de 'client'
@@ -137,6 +157,33 @@ async function enforceProfileComplete(user) {
   goCompleteProfile();
 }
 
+let watchedUid = '';
+let stopWatching = null;
+
+function watchProfile(user) {
+  if (!user || user.isAnonymous || isSuperAdminUser(user)) {
+    if (user && isSuperAdminUser(user)) markComplete(user.uid);
+    if (stopWatching) { stopWatching(); stopWatching = null; watchedUid = ''; }
+    return;
+  }
+  if (watchedUid === user.uid && stopWatching) return;
+  if (stopWatching) stopWatching();
+  watchedUid = user.uid;
+  stopWatching = onSnapshot(doc(db, 'users', user.uid), snapshot => {
+    const data = snapshot.exists() ? (snapshot.data() || {}) : {};
+    if (data.blocked === true) {
+      leaveBlockedAccount(user);
+      return;
+    }
+    enforceProfileComplete(user, data);
+  }, error => {
+    // Sin poder leer el perfil no se bloquea la navegación: un problema de
+    // red no tiene por qué dejar a alguien afuera de la tienda. El bloqueo
+    // real lo siguen imponiendo las reglas de Firestore y el servidor.
+    console.warn('[profile-gate] No se pudo verificar el perfil:', error);
+  });
+}
+
 export function startProfileGate() {
   if (isExemptPage()) return;
   recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'profile-gate' });
@@ -146,6 +193,6 @@ export function startProfileGate() {
     recordAuthDiagnostic('COORDINATOR_READY', { source: 'profile-gate', sessionCoordinatorState: snapshot.status });
     if (snapshot.user) recordAuthDiagnostic('AUTH_USER_AVAILABLE', { source: 'profile-gate', authState: snapshot.status });
     if (!snapshot.user) clearProfileGateCache();
-    enforceProfileComplete(snapshot.user);
+    watchProfile(snapshot.user);
   });
 }
