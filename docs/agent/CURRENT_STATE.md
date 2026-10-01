@@ -499,3 +499,9 @@ Decisión del dueño: el stock se descuenta al confirmar el pago; la última uni
 - Verificado por código: etiqueta "Agotado" existe (tienda.js, catalogo.html); no existe aviso de poco stock (decisión: no mostrar).
 - Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
 - Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.
+
+## Login — restauración de sesión con perfil incompleto — 2026-10-01
+- Causa: `ensureProfileComplete()` referenciaba `data.username`/`data.userName`, aunque `data` no existe en ese alcance. Una sesión Firebase válida podía romperse antes de completar el onboarding y volver a dejar el acceso atrapado.
+- Corrección: el render y el listener del campo username usan únicamente `plan.needsUsername`, calculado por `getProfileCompletionPlan()`.
+- PASS_LOCAL: 61 pruebas dirigidas de autenticación, sesión y onboarding; `audit:cache-versioning` correcto; prueba en Chrome de la vista previa corregida: `withDeadline()` resuelve y vence sin `Illegal invocation`.
+- Pendiente: publicar esta corrección y verificar el flujo real con una cuenta autenticada de perfil incompleto en producción.

@@ -28,3 +28,10 @@ test('una restauración de sesión lenta libera el loader y conserva la cuenta',
   assert.match(login, /try \{\s*await ensureProfileComplete\(user, role\);[\s\S]*?\} catch \(restoreError\) \{[\s\S]*?hideLoginOverlay\(\);[\s\S]*?revealLoginSurface\(\)/);
   assert.match(login, /Tu sesión sigue activa; recargá la página y no hace falta volver a registrarte/);
 });
+
+test('el onboarding restaurado usa únicamente el plan canónico y no referencia data inexistente', () => {
+  assert.doesNotMatch(login, /data\.username\s*\|\|\s*data\.userName/);
+  assert.doesNotMatch(login, /usernameMissing/);
+  assert.match(login, /usernameField\.style\.display = plan\.needsUsername \? '' : 'none'/);
+  assert.match(login, /if \(plan\.needsUsername\) \{/);
+});
