@@ -20,6 +20,14 @@ test('las operaciones canónicas de perfil tienen un plazo finito', () => {
   assert.match(profileStore, /withProfileDeadline\(\(\) => setDoc\(ref,/);
 });
 
+test('la restauración usa el plan canónico de username sin variables inexistentes', () => {
+  const body = login.slice(login.indexOf('async function ensureProfileComplete'), login.indexOf('async function finishGoogleLogin'));
+  assert.doesNotMatch(body, /\busernameMissing\b/);
+  assert.doesNotMatch(body, /\bdata\.(?:username|userName)\b/);
+  assert.match(body, /usernameField\.style\.display = plan\.needsUsername \? '' : 'none'/);
+  assert.match(body, /if \(plan\.needsUsername\) \{[\s\S]*?usernameInput\.addEventListener/);
+});
+
 test('una restauración de sesión lenta libera el loader y conserva la cuenta', () => {
   assert.match(login, /const PROFILE_READ_DEADLINE_MS = 15000/);
   assert.match(login, /withDeadline\(getStoreAccessConfig\(\), PROFILE_READ_DEADLINE_MS\)/);
@@ -29,9 +37,3 @@ test('una restauración de sesión lenta libera el loader y conserva la cuenta',
   assert.match(login, /Tu sesión sigue activa; recargá la página y no hace falta volver a registrarte/);
 });
 
-test('el onboarding restaurado usa únicamente el plan canónico y no referencia data inexistente', () => {
-  assert.doesNotMatch(login, /data\.username\s*\|\|\s*data\.userName/);
-  assert.doesNotMatch(login, /usernameMissing/);
-  assert.match(login, /usernameField\.style\.display = plan\.needsUsername \? '' : 'none'/);
-  assert.match(login, /if \(plan\.needsUsername\) \{/);
-});

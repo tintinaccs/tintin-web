@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9f5a72f616e63240321ff93c1d3aaa75023278af836bce691d023c3b2ec8bcf6",
+  "sourceFingerprint": "88a3d8219207d12d71a924f0370142d4af4801c57f4b548d78c07e03440e15af",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 935,
     "textFiles": 894,
-    "totalBytes": 18063987,
+    "totalBytes": 18064140,
     "pages": 19,
     "modules": 643
   },
@@ -18841,7 +18841,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 357687,
-      "sha256": "07b112a4fe1bf0ce6c0a88b79c672021843af787479800e599ad00daf03d06fe",
+      "sha256": "0f3abeb56fbe15dfa37892099fdd5c99ca51adb58d7200daa838ccd203fc4116",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33441,8 +33441,8 @@
     },
     {
       "path": "tests/login/reentry-no-infinite-loader.test.mjs",
-      "bytes": 2128,
-      "sha256": "07b5a8f6ca4610e19bfd680bf258552bf998437a54a1ed48c29604b964c7d598",
+      "bytes": 2281,
+      "sha256": "f8accf57241140b6ad1e931d7b61c5f530b31cb59ffbc7f3e21fde69a4958834",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36581,13 +36581,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 357687,
-      "sha256": "07b112a4fe1bf0ce6c0a88b79c672021843af787479800e599ad00daf03d06fe"
+      "sha256": "0f3abeb56fbe15dfa37892099fdd5c99ca51adb58d7200daa838ccd203fc4116"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 357602,
-      "sha256": "430d4b607354f72117edbceeb89d14b3815feff302207fdc7793a95a2ba10ee8"
+      "sha256": "2ffc85e9a1881c36c887d18766bf3526c9264015764bb024cf9bdcf6d95e1e98"
     },
     {
       "path": "config/public-site.json",
@@ -41056,8 +41056,8 @@
     {
       "path": "tests/login/reentry-no-infinite-loader.test.mjs",
       "extension": ".mjs",
-      "bytes": 2128,
-      "sha256": "07b5a8f6ca4610e19bfd680bf258552bf998437a54a1ed48c29604b964c7d598"
+      "bytes": 2281,
+      "sha256": "f8accf57241140b6ad1e931d7b61c5f530b31cb59ffbc7f3e21fde69a4958834"
     },
     {
       "path": "tests/navigation/account-panel-contract.test.mjs",
