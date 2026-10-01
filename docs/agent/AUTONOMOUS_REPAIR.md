@@ -17,7 +17,7 @@ Para cada criterio no cerrado:
 7. Si hay interfaz, verificar con navegador en los viewports/estados relevantes cuando el entorno lo permita.
 8. Revisar el diff para detectar cambios accidentales, duplicación, código muerto y artefactos generados.
 9. Ejecutar regresiones relacionadas.
-10. Actualizar `CURRENT_STATE.md` con evidencia.
+10. Actualizar `CURRENT_STATE.md` con evidencia, incluyendo qué agente/modelo la generó.
 11. Continuar con el siguiente criterio. No detenerse solo porque el primer problema quedó corregido.
 
 ## Estados permitidos
@@ -84,3 +84,7 @@ La reparación integral termina únicamente cuando:
 - las verificaciones introducidas o afectadas no presentan fallas conocidas.
 
 No afirmar "todo funciona" cuando una operación manual, una sesión autenticada o producción no fue verificada.
+
+## Incidentes
+
+Si durante la reparación se detecta trabajo concurrente de otro agente sobre los mismos archivos (divergencia al hacer fetch, commits ajenos no integrados), no forzar el push ni descartar el trabajo remoto. Traer los cambios remotos, revisar si ya resuelven el mismo criterio y reconciliar antes de continuar, dejando registro en `CURRENT_STATE.md` si el hallazgo cambia el alcance.
