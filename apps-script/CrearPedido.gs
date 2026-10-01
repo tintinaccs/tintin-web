@@ -39,7 +39,7 @@ var PHASE4_ALLOWED_PAYLOAD_KEYS_ = [
   'referencia', 'mapLocation', 'shippingMethod', 'encomiendaMode',
   'paymentMethod', 'expectedSubtotal', 'expectedShippingCost',
   'expectedShippingPending', 'expectedTotal',
-  'wantsInvoice', 'razonSocial', 'ruc', 'ci'
+  'wantsInvoice', 'razonSocial', 'ruc', 'ci', 'couponCode'
 ];
 // Mismo formato que valida el cliente en
 // js/components/forms/validacion-documentos-py.js — no se recalcula el

@@ -9,6 +9,7 @@ import {
   inventoryStateForStatus,
   statusReservesInventory,
 } from '../js/core/store/modelo-inventario.mjs';
+import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
 
 export const ORDER_ADMIN_STATUSES = Object.freeze([
   'pendiente', 'confirmado', 'preparando', 'listo_retiro',
@@ -272,6 +273,27 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   const total = subtotal + shippingCost;
   const reserves = statusReservesInventory(status);
+
+  // Cupón: sólo el checkout público lo establece. Se vuelve a leer y evaluar
+  // en cada intento y los contadores se escriben con precondición, así dos
+  // pedidos simultáneos no pueden pasar el límite de usos.
+  let couponRecord = null;
+  let couponDocument = null;
+  let redemptionDocument = null;
+  if (input.coupon && context.origin.includes('public-checkout')) {
+    const code = normalizeCouponCode(input.coupon.code);
+    const discount = money(input.coupon.shippingDiscount ?? 0, 'Descuento de envío');
+    if (!code || !(discount > 0)) throw creationError('Cupón inválido.', 'coupon_invalid');
+    couponDocument = await get(env, couponDocPath(code));
+    redemptionDocument = await get(env, redemptionDocPath(code, clean(input.userId, 128)));
+    const verdict = evaluateCoupon(
+      couponDocument ? decodeFirestoreFields(couponDocument.fields || {}) : null,
+      redemptionDocument ? decodeFirestoreFields(redemptionDocument.fields || {}) : null,
+      { shippingCost: discount },
+    );
+    if (!verdict.ok) throw creationError('El cupón ya no es válido.', verdict.code);
+    couponRecord = { code, type: 'free_shipping', shippingDiscount: discount };
+  }
   // Validaciones propias del llamador (checkout público: variantes y total
   // visto por la clienta) con los productos y montos canónicos, antes de escribir.
   if (inspect) await inspect({ items, documents, subtotal, shippingCost, total });
@@ -306,6 +328,7 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
     items,
     subtotal,
     shippingCost,
+    ...(couponRecord ? { coupon: couponRecord, shippingDiscount: couponRecord.shippingDiscount } : {}),
     shippingPending: input.shippingPending === true,
     total,
     shipping,
@@ -360,6 +383,31 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
         currentDocument: precondition(document),
       });
     }
+  }
+
+  if (couponRecord) {
+    const couponData = decodeFirestoreFields(couponDocument.fields || {});
+    const couponPatch = { usedCount: Math.max(0, Math.floor(Number(couponData.usedCount || 0))) + 1, updatedAt: now };
+    writes.push({
+      path: `coupons/${couponRecord.code}`,
+      fields: encodeFirestoreFields(couponPatch),
+      mergeFields: Object.keys(couponPatch),
+      currentDocument: precondition(couponDocument),
+    });
+    const previous = redemptionDocument ? decodeFirestoreFields(redemptionDocument.fields || {}) : {};
+    const redemptionPatch = {
+      code: couponRecord.code,
+      uid: clean(input.userId, 128),
+      count: Math.max(0, Math.floor(Number(previous.count || 0))) + 1,
+      lastOrderId: orderId,
+      updatedAt: now,
+    };
+    writes.push({
+      path: `couponRedemptions/${couponRecord.code}__${clean(input.userId, 128)}`,
+      fields: encodeFirestoreFields(redemptionPatch),
+      ...(redemptionDocument ? { mergeFields: Object.keys(redemptionPatch) } : {}),
+      currentDocument: createPrecondition(redemptionDocument),
+    });
   }
 
   writes.push({
