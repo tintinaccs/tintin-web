@@ -23,7 +23,7 @@ test('catálogo público permanece acotado y usa la ruta edge/cache actual', () 
   assert.match(productStore, /\(\?:catalogo\|collections\)[\s\S]{0,180}loadAllProducts\(options\)/);
   assert.match(productStore, /startPublicProductsRealtime[\s\S]{0,420}publicProductsReady = loadAllProducts\(\)/);
   assert.match(publicCatalogApi, /resource === 'products' \? 1000 : 300/);
-  assert.match(productStore, /limit\(1000\)/);
+  assert.match(productStore, /fetchPublicCatalogResource\('products'\)/);
 });
 
 test('fallo de catálogo termina en error recuperable sin convertirlo en vacío', () => {
