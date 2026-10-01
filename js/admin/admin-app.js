@@ -87,6 +87,9 @@ function addAdminBulkSelection(set, id, checked, label = 'elementos') {
 // falló (permisos/conexión) — en ese caso el indicador muestra "—", igual que
 // los de pedidos/usuarios, y así se diferencia "vacío" de "error/cargando".
 let adminRealtimeReady = { orders: false, users: false, products: false, traffic: false, presence: false };
+let adminRealtimeErrors = { orders: '', users: '' };
+let adminRealtimeAuthRecoveryAttempted = false;
+let adminRealtimeAuthRecoveryPromise = null;
 let statisticsTrafficSessions = [];
 let statisticsTrafficHistorySessions = [];
 let statisticsRangeDays = 7;
@@ -1247,6 +1250,7 @@ async function startAdminAuthGuard() {
         initConnectionsFlow({ role });
       }
       startAdminSettingsRealtime();
+      adminRealtimeAuthRecoveryAttempted = false;
       startAdminRealtimeData();
       loadDashboard();
       loadProductos();
@@ -1709,20 +1713,59 @@ function startAdminSettingsRealtime() {
   }, error => console.warn('[admin-settings] No se pudo cargar shippingRates:', error?.code || error)));
 }
 
+function adminRealtimeErrorCode(error) {
+  return String(error?.code || error?.name || 'unknown').replace(/^firestore\//, '').toLowerCase();
+}
+
+function recoverAdminRealtimeAuth(error, source) {
+  const code = adminRealtimeErrorCode(error);
+  const authRelated = code === 'permission-denied' || code === 'unauthenticated';
+  recordAuthDiagnostic('FIRESTORE_LISTENER_ERROR', {
+    source: `admin-core-${source}`,
+    firestoreCode: code,
+    recovery: authRelated ? 'refresh-once' : 'manual-reload',
+  });
+  if (!authRelated || adminRealtimeAuthRecoveryAttempted || !currentUser) return;
+
+  adminRealtimeAuthRecoveryAttempted = true;
+  const targetUser = currentUser;
+  if (!adminRealtimeAuthRecoveryPromise) {
+    adminRealtimeAuthRecoveryPromise = targetUser.getIdToken(true)
+      .then(() => waitForAdminAppCheck(12000))
+      .then(Boolean)
+      .catch(refreshError => {
+        recordAuthDiagnostic('FIRESTORE_LISTENER_AUTH_REFRESH_FAILED', {
+          source: 'admin-core',
+          firestoreCode: adminRealtimeErrorCode(refreshError),
+        });
+        return false;
+      })
+      .finally(() => { adminRealtimeAuthRecoveryPromise = null; });
+  }
+  void adminRealtimeAuthRecoveryPromise.then(ok => {
+    if (ok && currentUser?.uid === targetUser.uid) startAdminRealtimeData();
+  });
+}
+
 function startAdminRealtimeData() {
   stopAdminRealtimeData();
-  adminRealtimeReady = { orders: false, users: currentRole !== 'superadmin' };
+  adminRealtimeReady = { ...adminRealtimeReady, orders: false, users: currentRole !== 'superadmin' };
+  adminRealtimeErrors = { orders: '', users: '' };
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
     adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
       allOrders = snapshot.docs
         .map(item => ({ id: item.id, ...item.data() }))
         .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
       adminRealtimeReady.orders = true;
+      adminRealtimeErrors.orders = '';
       refreshRealtimeConsumers();
     }, error => {
       adminRealtimeReady.orders = false;
+      adminRealtimeErrors.orders = 'No se pudieron actualizar los pedidos.';
       console.error('Pedidos en tiempo real no disponibles:', error);
       statisticsSetText('statistics-live-status', 'Pedidos no disponibles');
+      recoverAdminRealtimeAuth(error, 'orders');
+      refreshRealtimeConsumers();
     });
   } else {
     adminRealtimeReady.orders = true;
@@ -1736,11 +1779,15 @@ function startAdminRealtimeData() {
       adminUsersLive = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
       mergeAdminUsers();
       adminRealtimeReady.users = true;
+      adminRealtimeErrors.users = '';
       refreshRealtimeConsumers();
     }, error => {
       adminRealtimeReady.users = false;
+      adminRealtimeErrors.users = 'No se pudieron actualizar los usuarios.';
       console.error('Usuarios en tiempo real no disponibles:', error);
       statisticsSetText('statistics-live-status', 'Usuarios no disponibles');
+      recoverAdminRealtimeAuth(error, 'users');
+      refreshRealtimeConsumers();
     });
     listenStatisticsTraffic();
   }
@@ -1964,6 +2011,7 @@ function renderDashboardData() {
 
     // Orders
     const orders = allOrders;
+    const ordersReady = adminRealtimeReady.orders === true;
 
     // Roles y Permisos: cada widget del Dashboard se puede apagar puntualmente
     // por rol (dashboard.verMetricas / verVentas / verPedidosRecientes) sin
@@ -1977,7 +2025,7 @@ function renderDashboardData() {
     const statSalesMonthEl = document.getElementById('stat-sales-month');
     const recentWrap = document.getElementById('dash-recent-orders')?.closest('.adm-card');
 
-    if (canMetricas) {
+    if (canMetricas && ordersReady) {
       statOrdersTotalEl.textContent = orders.length;
       // Orders today
       const today = new Date();
@@ -1993,7 +2041,7 @@ function renderDashboardData() {
       statOrdersTodayEl.textContent = '—';
     }
 
-    if (canVentas) {
+    if (canVentas && ordersReady) {
       const today2 = new Date();
       const monthStart = new Date(today2.getFullYear(), today2.getMonth(), 1);
       const monthSales = orders
@@ -2014,6 +2062,15 @@ function renderDashboardData() {
     }
     if (recentWrap) recentWrap.style.display = '';
 
+    const tbody = document.getElementById('dash-recent-orders');
+    if (!ordersReady) {
+      const message = adminRealtimeErrors.orders
+        ? 'Pedidos no disponibles. Conservamos los últimos datos confirmados sin usarlos como métricas actuales.'
+        : 'Sincronizando pedidos…';
+      tbody.innerHTML = `<tr><td colspan="5" class="adm-loading">${escapeHtmlAdmin(message)}</td></tr>`;
+      return;
+    }
+
     // Recent orders (last 5)
     const recent = [...orders]
       .sort((a,b) => {
@@ -2023,7 +2080,6 @@ function renderDashboardData() {
       })
       .slice(0, 5);
 
-    const tbody = document.getElementById('dash-recent-orders');
     if (!recent.length) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#aaa;padding:24px">Sin pedidos aún</td></tr>';
       return;
