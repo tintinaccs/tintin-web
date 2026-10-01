@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "68a02faca93a13e4b5c7c0e691124231d651725c8f52e2048a50d04a24d2d5bd",
+  "sourceFingerprint": "fb8e875d15e365af99d55078c89c558814b3406a2c0e81fd0152bf7d1a74e053",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 914,
     "textFiles": 873,
-    "totalBytes": 17938830,
+    "totalBytes": 17939066,
     "pages": 19,
     "modules": 628
   },
@@ -30477,8 +30477,8 @@
     },
     {
       "path": "scripts/restore-firestore.mjs",
-      "bytes": 2584,
-      "sha256": "cb2d8771c82ccee8a3bb8d379a16367aae73b67ae2231228f2c7cf8b2da1861e",
+      "bytes": 2736,
+      "sha256": "5f48f84a5b1cafb5c20d9cf645ffd7987909b5904f8be72a7d6db4cc2cf795b0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33203,8 +33203,8 @@
     },
     {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
-      "bytes": 4652,
-      "sha256": "95a9af364f69031047c09e26132985fb90cdcd63ec78915eab8c17cdec56534d",
+      "bytes": 4736,
+      "sha256": "04e66e329fae79a9deea9f8d033aa6b2c2e7b0c1cf1949ff3c8e83a64e0c2337",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39956,8 +39956,8 @@
     {
       "path": "scripts/restore-firestore.mjs",
       "extension": ".mjs",
-      "bytes": 2584,
-      "sha256": "cb2d8771c82ccee8a3bb8d379a16367aae73b67ae2231228f2c7cf8b2da1861e"
+      "bytes": 2736,
+      "sha256": "5f48f84a5b1cafb5c20d9cf645ffd7987909b5904f8be72a7d6db4cc2cf795b0"
     },
     {
       "path": "scripts/resumir-auditoria-dependencias.mjs",
@@ -40460,8 +40460,8 @@
     {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
       "extension": ".mjs",
-      "bytes": 4652,
-      "sha256": "95a9af364f69031047c09e26132985fb90cdcd63ec78915eab8c17cdec56534d"
+      "bytes": 4736,
+      "sha256": "04e66e329fae79a9deea9f8d033aa6b2c2e7b0c1cf1949ff3c8e83a64e0c2337"
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",

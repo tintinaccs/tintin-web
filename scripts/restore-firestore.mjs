@@ -7,6 +7,10 @@ const source = String(process.env.FIRESTORE_RESTORE_SOURCE || '').trim().replace
 const database = String(process.env.FIRESTORE_RESTORE_DATABASE || '(default)').trim();
 const confirmation = String(process.env.TINTIN_RESTORE_CONFIRM || '').trim();
 
+if (!/^[a-z][a-z0-9-]{4,28}[a-z0-9]$/.test(project)) {
+  console.error('FIREBASE_PROJECT_ID debe ser un ID de proyecto válido.');
+  process.exit(2);
+}
 if (!/^gs:\/\/[A-Za-z0-9._-]+\/[A-Za-z0-9._/-]+$/.test(source)) {
   console.error('FIRESTORE_RESTORE_SOURCE debe indicar un prefijo de exportación gs://bucket/ruta/snapshot.');
   process.exit(2);
@@ -44,7 +48,7 @@ console.log(JSON.stringify({
 if (dryRun) process.exit(0);
 
 // En Windows el CLI de Google es un .cmd y Node no puede ejecutarlo con
-// shell:false. Los argumentos ya fueron validados arriba y no admiten espacios
+// shell:false. Proyecto, origen y base se validan arriba y no admiten espacios
 // ni metacaracteres de cmd, por eso el shell sólo se habilita en esa plataforma.
 const result = spawnSync('gcloud', args, { stdio: 'inherit', shell: platform === 'win32' });
 if (result.error) {

@@ -56,6 +56,7 @@ test('restauración rechaza origen incompleto o base inválida', () => {
   assert.equal(run(['--dry-run'], { FIRESTORE_RESTORE_SOURCE: 'gs://bucket' }).status, 2);
   assert.equal(run(['--dry-run'], { FIRESTORE_RESTORE_SOURCE: 'gs://bucket/snapshot&otra-cosa' }).status, 2);
   assert.equal(run(['--dry-run'], { FIRESTORE_RESTORE_DATABASE: '../otra' }).status, 2);
+  assert.equal(run(['--dry-run'], { FIREBASE_PROJECT_ID: 'demo&calc' }).status, 2);
 });
 
 test('sin confirmación explícita no invoca gcloud', () => {
