@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "8fa4e04189d874826ce2a1a30ab7aa9c8172189c44741db430e643050f52a5c1",
+  "sourceFingerprint": "faeea58635d267b20cc3325c2130341158421f6231aad898f53041b976e2ea13",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 933,
-    "textFiles": 892,
-    "totalBytes": 18043610,
+    "files": 935,
+    "textFiles": 894,
+    "totalBytes": 18054278,
     "pages": 19,
-    "modules": 641
+    "modules": 643
   },
   "viewports": [
     {
@@ -18061,6 +18061,24 @@
       "endpoints": []
     },
     {
+      "path": "cloudflare/correo-estado-pedido.js",
+      "bytes": 5961,
+      "sha256": "2261e749ac5dc58c26b7590b12ca72755e766623cbbeeaad62ca54a6268bbe14",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../functions/api/order-email.js",
+          "target": "functions/api/order-email.js",
+          "dynamic": false,
+          "line": 13
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/cupones.js",
       "bytes": 3281,
       "sha256": "5c4870d6187b2660aabb464132c0c2d587d2d232a5ecbb532c630849c9faf5a9",
@@ -18223,8 +18241,8 @@
     },
     {
       "path": "cloudflare/order-admin-domain.js",
-      "bytes": 26239,
-      "sha256": "6fd411dd55818e763fd14c07d359ea0ea5d0a725596c51ecf73405d20277ba6c",
+      "bytes": 26361,
+      "sha256": "0119a384cf69e7889a353dceb5a16b67d949cf281e72234f7653e94b2f6d4c2c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19198,8 +19216,8 @@
     },
     {
       "path": "functions/api/admin-order-mutation.js",
-      "bytes": 4465,
-      "sha256": "d9fe8908f0ff4d3d96911e15acfc6de04c68abffcca2aa72e8d5432f100d0af7",
+      "bytes": 4718,
+      "sha256": "e858867f531003e4678c4b549aceab1400e1a3e75a2aec8aa7a5547f1853b9f7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19224,10 +19242,16 @@
           "line": 11
         },
         {
+          "raw": "../../cloudflare/correo-estado-pedido.js",
+          "target": "cloudflare/correo-estado-pedido.js",
+          "dynamic": false,
+          "line": 12
+        },
+        {
           "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
           "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": []
@@ -19773,8 +19797,8 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 22687,
-      "sha256": "a6e2df77652e8cf46efc8aaa83efbd4446dcd7a51496332db3094d6d469c1829",
+      "bytes": 22743,
+      "sha256": "1465e89d85f1cea04d5379b09e6c2724ae8ba9549c227d763117c51323b4a005",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20186,8 +20210,8 @@
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
-      "bytes": 9202,
-      "sha256": "2296ba4d04a7f8f335ff2b310c0c6774a10943cadd3cbf93697e8968e536d9b5",
+      "bytes": 9418,
+      "sha256": "28afcd272de2d3c3a0408cdfc290c2a19bf77c8c832cd8c20014647809518a5f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20218,16 +20242,22 @@
           "line": 10
         },
         {
+          "raw": "../../cloudflare/correo-estado-pedido.js",
+          "target": "cloudflare/correo-estado-pedido.js",
+          "dynamic": false,
+          "line": 11
+        },
+        {
           "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
           "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../cloudflare/sincronizacion-participacion-sheets.js",
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": []
@@ -29892,8 +29922,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 13591,
-      "sha256": "368b4e3f7c64b17d66b4ab34c65c50c85287587f8f74d7b44ba1736206dde18e",
+      "bytes": 13647,
+      "sha256": "6803f26674fca83651fd0e53535a6ab8efa82d1edf248f0bac901135a58f7dc2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33990,6 +34020,36 @@
       ]
     },
     {
+      "path": "tests/orders/correo-estado-pedido.test.mjs",
+      "bytes": 2731,
+      "sha256": "f16a8e95bfd43313be5081764cc683f553fedfb9bdfe6e4fd02d2f1b14450a6f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/correo-estado-pedido.js",
+          "target": "cloudflare/correo-estado-pedido.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "bytes": 6829,
       "sha256": "54b3170598183eb2be0401bf4456196e7132a4d0a6bb13bed7195fff6f45e6e5",
@@ -36338,6 +36398,12 @@
       "sha256": "5f8b3140a95a0c686faa43b343098f31b4c9726eab814196f213153b4a1e5d70"
     },
     {
+      "path": "cloudflare/correo-estado-pedido.js",
+      "extension": ".js",
+      "bytes": 5961,
+      "sha256": "2261e749ac5dc58c26b7590b12ca72755e766623cbbeeaad62ca54a6268bbe14"
+    },
+    {
       "path": "cloudflare/cupones.js",
       "extension": ".js",
       "bytes": 3281,
@@ -36382,8 +36448,8 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "extension": ".js",
-      "bytes": 26239,
-      "sha256": "6fd411dd55818e763fd14c07d359ea0ea5d0a725596c51ecf73405d20277ba6c"
+      "bytes": 26361,
+      "sha256": "0119a384cf69e7889a353dceb5a16b67d949cf281e72234f7653e94b2f6d4c2c"
     },
     {
       "path": "cloudflare/order-sheets-sync.js",
@@ -37024,8 +37090,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 97965,
-      "sha256": "2fff9e888be2170a5e87fd6cff9a6f75755c4504494dd4a90dc59395a7a1e1d5"
+      "bytes": 99238,
+      "sha256": "46e19dd787a546a8066087cd6ddcd7032481ee6b1180fc904486388c840c7064"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -37480,8 +37546,8 @@
     {
       "path": "functions/api/admin-order-mutation.js",
       "extension": ".js",
-      "bytes": 4465,
-      "sha256": "d9fe8908f0ff4d3d96911e15acfc6de04c68abffcca2aa72e8d5432f100d0af7"
+      "bytes": 4718,
+      "sha256": "e858867f531003e4678c4b549aceab1400e1a3e75a2aec8aa7a5547f1853b9f7"
     },
     {
       "path": "functions/api/admin-runtime-health.js",
@@ -37588,8 +37654,8 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 22687,
-      "sha256": "a6e2df77652e8cf46efc8aaa83efbd4446dcd7a51496332db3094d6d469c1829"
+      "bytes": 22743,
+      "sha256": "1465e89d85f1cea04d5379b09e6c2724ae8ba9549c227d763117c51323b4a005"
     },
     {
       "path": "functions/api/paypal-capture-order.js",
@@ -37672,8 +37738,8 @@
     {
       "path": "functions/api/sheets-admin-webhook.js",
       "extension": ".js",
-      "bytes": 9202,
-      "sha256": "2296ba4d04a7f8f335ff2b310c0c6774a10943cadd3cbf93697e8968e536d9b5"
+      "bytes": 9418,
+      "sha256": "28afcd272de2d3c3a0408cdfc290c2a19bf77c8c832cd8c20014647809518a5f"
     },
     {
       "path": "functions/api/sheets-engagement-webhook.js",
@@ -40300,8 +40366,8 @@
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 13591,
-      "sha256": "368b4e3f7c64b17d66b4ab34c65c50c85287587f8f74d7b44ba1736206dde18e"
+      "bytes": 13647,
+      "sha256": "6803f26674fca83651fd0e53535a6ab8efa82d1edf248f0bac901135a58f7dc2"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
@@ -41070,6 +41136,12 @@
       "extension": ".mjs",
       "bytes": 3130,
       "sha256": "63760de38d6c54ac74b8b89cdd7826670ef17206c0e2275dad37025672155ac7"
+    },
+    {
+      "path": "tests/orders/correo-estado-pedido.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2731,
+      "sha256": "f16a8e95bfd43313be5081764cc683f553fedfb9bdfe6e4fd02d2f1b14450a6f"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
