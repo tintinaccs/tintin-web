@@ -65,3 +65,9 @@ test('likes de comentario y respuesta tienen toggle off transaccional y replies 
   assert.match(product, /INITIAL_REPLY_LIMIT = 3/);
   assert.match(product, /data-thread-toggle/);
 });
+
+test('moderación previa: la reseña de un cliente nace oculta y sin documento público', async () => {
+  const src = await read('cloudflare/participacion-clientes.js');
+  assert.match(src, /visible: Boolean\(context\.isSuperAdmin\)/);
+  assert.match(src, /\.\.\.\(record\.visible \? \[\{ path: `products\/\$\{context\.productId\}\/reviews\/\$\{reviewId\}`/);
+});
