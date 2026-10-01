@@ -2,6 +2,7 @@ import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1-launch-20260926-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -11,6 +12,7 @@ const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png';
 const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
 const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];
 const API_RETRY_DELAYS_MS = [450, 1200];
+const LISTENER_RETRY_DELAYS_MS = [1400, 4000, 12000, 30000];
 const MAX_RECOVERY_ORDERS = 60;
 let user = null;
 let notifications = [];
@@ -20,6 +22,11 @@ let orderState = new Map();
 let ordersPrimed = false;
 let notificationsRetryTimer = 0;
 let ordersRetryTimer = 0;
+let notificationsRetryAttempt = 0;
+let ordersRetryAttempt = 0;
+let notificationsAuthRecoveryAttempted = false;
+let ordersAuthRecoveryAttempted = false;
+let listenerAuthRecoveryPromise = null;
 let markingVisibleRead = false;
 const orderNotificationInFlight = new Set();
 
@@ -280,6 +287,66 @@ function closePanel() {
   button?.setAttribute('aria-expanded', 'false');
 }
 
+function listenerErrorCode(error) {
+  return String(error?.code || error?.name || 'unknown').replace(/^firestore\//, '').toLowerCase();
+}
+
+async function refreshAdminListenerAuth(targetUser) {
+  if (!targetUser || user?.uid !== targetUser.uid) return false;
+  if (listenerAuthRecoveryPromise) return listenerAuthRecoveryPromise;
+  listenerAuthRecoveryPromise = targetUser.getIdToken(true)
+    .then(() => waitForAdminAppCheck(12000))
+    .then(Boolean)
+    .catch(error => {
+      recordAuthDiagnostic('FIRESTORE_LISTENER_AUTH_REFRESH_FAILED', {
+        source: 'admin-notifications',
+        firestoreCode: listenerErrorCode(error),
+      });
+      return false;
+    })
+    .finally(() => { listenerAuthRecoveryPromise = null; });
+  return listenerAuthRecoveryPromise;
+}
+
+function scheduleAdminListenerRecovery(stream, error, retry) {
+  const code = listenerErrorCode(error);
+  const authRelated = code === 'permission-denied' || code === 'unauthenticated';
+  const permanent = ['failed-precondition', 'invalid-argument', 'unimplemented'].includes(code);
+  const retryAttempt = stream === 'notifications' ? notificationsRetryAttempt : ordersRetryAttempt;
+  recordAuthDiagnostic('FIRESTORE_LISTENER_ERROR', {
+    source: `admin-${stream}`,
+    firestoreCode: code,
+    recovery: permanent ? 'stop' : authRelated ? 'refresh-once' : 'bounded-backoff',
+    retryAttempt,
+  });
+  if (!user || permanent) return;
+
+  if (authRelated) {
+    const attempted = stream === 'notifications' ? notificationsAuthRecoveryAttempted : ordersAuthRecoveryAttempted;
+    if (attempted) return;
+    if (stream === 'notifications') notificationsAuthRecoveryAttempted = true;
+    else ordersAuthRecoveryAttempted = true;
+    const targetUser = user;
+    void refreshAdminListenerAuth(targetUser).then(ok => {
+      if (!ok || user?.uid !== targetUser.uid) return;
+      const timer = window.setTimeout(retry, 0);
+      if (stream === 'notifications') notificationsRetryTimer = timer;
+      else ordersRetryTimer = timer;
+    });
+    return;
+  }
+
+  if (retryAttempt >= LISTENER_RETRY_DELAYS_MS.length) return;
+  const delay = LISTENER_RETRY_DELAYS_MS[retryAttempt];
+  if (stream === 'notifications') {
+    notificationsRetryAttempt += 1;
+    notificationsRetryTimer = window.setTimeout(retry, delay);
+  } else {
+    ordersRetryAttempt += 1;
+    ordersRetryTimer = window.setTimeout(retry, delay);
+  }
+}
+
 async function subscribeNotifications() {
   unsubscribeNotifications?.();
   if (!await waitForAdminAppCheck(12000)) return;
@@ -288,13 +355,15 @@ async function subscribeNotifications() {
   notificationsRetryTimer = 0;
   unsubscribeNotifications = onSnapshot(source, snapshot => {
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
+    notificationsRetryAttempt = 0;
+    notificationsAuthRecoveryAttempted = false;
     render();
     if (panelIsOpen()) void markVisibleNotificationsRead();
   }, error => {
     console.warn('[admin-notifications] No se pudo escuchar actividad:', error);
     const root = document.getElementById('adm-notifications-list');
-    if (root) root.innerHTML = '<div class="adm-notifications-error">No se pudo cargar la actividad.</div>';
-    if (user) notificationsRetryTimer = window.setTimeout(() => subscribeNotifications(), 1400);
+    if (root) root.innerHTML = '<div class="adm-notifications-error">No se pudo actualizar la actividad. Se conservan los datos ya cargados.</div>';
+    scheduleAdminListenerRecovery('notifications', error, () => subscribeNotifications());
   });
 }
 
@@ -351,6 +420,8 @@ async function subscribeOrderStatusChanges() {
   if (!await waitForAdminAppCheck(12000)) return;
   const source = query(collection(db, 'orders'), orderBy('updatedAt', 'desc'), limit(150));
   unsubscribeOrders = onSnapshot(source, snapshot => {
+    ordersRetryAttempt = 0;
+    ordersAuthRecoveryAttempted = false;
     const next = new Map();
     const changed = [];
     const recovery = [];
@@ -370,7 +441,7 @@ async function subscribeOrderStatusChanges() {
     changed.forEach(orderId => { void notifyOrderStatusWithRetry(orderId); });
   }, error => {
     console.warn('[admin-notifications] No se pudieron observar estados de pedidos:', error);
-    if (user) ordersRetryTimer = window.setTimeout(() => subscribeOrderStatusChanges(), 1400);
+    scheduleAdminListenerRecovery('orders', error, () => subscribeOrderStatusChanges());
   });
 }
 
@@ -431,11 +502,19 @@ subscribeAuthState(current => {
     notificationsRetryTimer = 0;
     if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
     ordersRetryTimer = 0;
+    notificationsRetryAttempt = 0;
+    ordersRetryAttempt = 0;
+    notificationsAuthRecoveryAttempted = false;
+    ordersAuthRecoveryAttempted = false;
     markingVisibleRead = false;
     orderNotificationInFlight.clear();
     return;
   }
   user = current;
+  notificationsRetryAttempt = 0;
+  ordersRetryAttempt = 0;
+  notificationsAuthRecoveryAttempted = false;
+  ordersAuthRecoveryAttempted = false;
   ensureUi();
   subscribeNotifications();
   subscribeOrderStatusChanges();
