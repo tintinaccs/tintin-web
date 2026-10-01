@@ -527,7 +527,7 @@ Evidencia del código base:
 
 Cambios de esta rama:
 - Notificaciones Admin ya no reintentan en bucle listeners rechazados con `permission-denied`/`unauthenticated`.
-- Cupones y consumidores privados de Configuración/Apariencia/Contenido esperan el gate estricto `waitForAdminAppCheck` antes de montar Firestore.
+- Cupones, que antes podía montar Firestore sin gate de App Check, ahora espera el gate estricto `waitForAdminAppCheck`.
 - Mi perfil no inicia consultas de pedidos cuando App Check resolvió no disponible y reintenta cuando llega el evento real `tintin:app-check-ready`.
 - Productos/Colecciones/Pedidos distinguen `error` de `empty`; los totales dejan de mostrar 0 como si la consulta hubiera sido válida.
 - Flujo de conexiones separa renovación/claims del ID token de la autorización de Firestore y comprueba email/proyecto sin exponer el token.
