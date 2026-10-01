@@ -21,6 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment: production-rules
+    env:
+      HAS_FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON != '' }}
+      HAS_GCP_WORKLOAD_IDENTITY: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER != '' && secrets.GCP_SERVICE_ACCOUNT != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -52,13 +55,13 @@ jobs:
           exit 1
 
       - name: Authenticate with service account JSON
-        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON != '' }}
+        if: env.HAS_FIREBASE_SERVICE_ACCOUNT_JSON == 'true'
         uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}'
 
       - name: Authenticate with Workload Identity Federation
-        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON == '' && secrets.GCP_WORKLOAD_IDENTITY_PROVIDER != '' && secrets.GCP_SERVICE_ACCOUNT != '' }}
+        if: env.HAS_FIREBASE_SERVICE_ACCOUNT_JSON != 'true' && env.HAS_GCP_WORKLOAD_IDENTITY == 'true'
         uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
