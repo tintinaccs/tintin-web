@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c3944af10cb84c4e8985436f414b2102a880f7b26517be62d46212e1d12cb748",
+  "sourceFingerprint": "6ff87a876e34590f571fdfbd70ae5a6b34e25d8977bf85cdb32d3713ea56f5d4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 935,
     "textFiles": 894,
-    "totalBytes": 18063065,
+    "totalBytes": 18063339,
     "pages": 19,
     "modules": 643
   },
@@ -13336,8 +13336,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 80063,
-      "sha256": "c53b10e58d972c937a7e4a8592f3e002b718265ecd793e6b5870aac11de4e857",
+      "bytes": 79802,
+      "sha256": "40067204f786d2a6cd6ca8044ff10ff1563fce5b3bc3934de6d3ade7616c01e8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13395,17 +13395,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1483
+          "line": 1480
         },
         {
           "raw": "tienda.js?v=tintin-20261001-precio-anterior-1-cupones-1",
           "target": "tienda.js",
-          "line": 1484
+          "line": 1481
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1485
+          "line": 1482
         }
       ],
       "styles": [
@@ -13585,19 +13585,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1483,
+          "line": 1480,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261001-precio-anterior-1-cupones-1",
           "target": "tienda.js",
-          "line": 1484,
+          "line": 1481,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1485,
+          "line": 1482,
           "exists": true
         },
         {
@@ -18841,7 +18841,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 357687,
-      "sha256": "07b112a4fe1bf0ce6c0a88b79c672021843af787479800e599ad00daf03d06fe",
+      "sha256": "0f3abeb56fbe15dfa37892099fdd5c99ca51adb58d7200daa838ccd203fc4116",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33441,8 +33441,8 @@
     },
     {
       "path": "tests/login/reentry-no-infinite-loader.test.mjs",
-      "bytes": 1745,
-      "sha256": "7d05dd4d456d8737c5ff0f3329b3d9cbc4a43b6e80993fd0258b46dd103564df",
+      "bytes": 2280,
+      "sha256": "b434f22c37493da4a5190aab9f456705386af5707cf55645297a51c7f4cb86bb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36581,13 +36581,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 357687,
-      "sha256": "07b112a4fe1bf0ce6c0a88b79c672021843af787479800e599ad00daf03d06fe"
+      "sha256": "0f3abeb56fbe15dfa37892099fdd5c99ca51adb58d7200daa838ccd203fc4116"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 357602,
-      "sha256": "430d4b607354f72117edbceeb89d14b3815feff302207fdc7793a95a2ba10ee8"
+      "sha256": "2ffc85e9a1881c36c887d18766bf3526c9264015764bb024cf9bdcf6d95e1e98"
     },
     {
       "path": "config/public-site.json",
@@ -39370,8 +39370,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 80063,
-      "sha256": "c53b10e58d972c937a7e4a8592f3e002b718265ecd793e6b5870aac11de4e857"
+      "bytes": 79802,
+      "sha256": "40067204f786d2a6cd6ca8044ff10ff1563fce5b3bc3934de6d3ade7616c01e8"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -41056,8 +41056,8 @@
     {
       "path": "tests/login/reentry-no-infinite-loader.test.mjs",
       "extension": ".mjs",
-      "bytes": 1745,
-      "sha256": "7d05dd4d456d8737c5ff0f3329b3d9cbc4a43b6e80993fd0258b46dd103564df"
+      "bytes": 2280,
+      "sha256": "b434f22c37493da4a5190aab9f456705386af5707cf55645297a51c7f4cb86bb"
     },
     {
       "path": "tests/navigation/account-panel-contract.test.mjs",
@@ -43259,25 +43259,25 @@
     },
     {
       "file": "login.html",
-      "line": 644,
+      "line": 641,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 661,
+      "line": 658,
       "target": "/api/phone-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 815,
+      "line": 812,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 918,
+      "line": 915,
       "target": "/api/username-availability",
       "method": "POST"
     }
@@ -44754,7 +44754,7 @@
           },
           {
             "file": "login.html",
-            "line": 1080,
+            "line": 1077,
             "operation": "doc"
           },
           {
