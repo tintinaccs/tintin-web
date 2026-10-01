@@ -44,3 +44,40 @@ test('WhatsApp flotante de producto vigila texto y controles no clickeables', as
   assert.match(source, /PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap'/);
   assert.match(source, /querySelectorAll\(collisionSelector\)/);
 });
+
+test('producto presenta slugs técnicos de material como etiquetas legibles', async () => {
+  const source = await read('tienda.js');
+  assert.match(source, /function productSpecDisplayValue/);
+  assert.match(source, /'acero-inoxidable': 'Acero inoxidable'/);
+  assert.match(source, /productSpecDisplayValue\(label, value\)/);
+});
+
+test('copy visible corrige opiniones y sesiones', async () => {
+  const [reviews, admin] = await Promise.all([
+    read('js/pages/product/resenas-producto.js'),
+    read('js/admin/admin-app.js'),
+  ]);
+  assert.match(reviews, /count === 1 \? 'opinión' : 'opiniones'/);
+  assert.doesNotMatch(reviews, /opinión\$\{count === 1 \? '' : 'es'\}/);
+  assert.match(admin, /statisticsTrafficSessions\.length === 1 \? 'sesión' : 'sesiones'/);
+  assert.doesNotMatch(admin, /sesión\$\{statisticsTrafficSessions\.length === 1 \? '' : 'es'\}/);
+});
+
+test('home alinea fallback con el título publicado y sanea el typo de pago seguro', async () => {
+  const [home, definitions] = await Promise.all([
+    read('index.html'),
+    read('js/core/store/definiciones-contenido.js'),
+  ]);
+  assert.match(home, /DETALLES QUE ELEVAN[\s\S]*?TU ESTILO/);
+  assert.doesNotMatch(home, /Un detalle[\s\S]*?cambia todo/);
+  assert.match(definitions, /DETALLES QUE ELEVAN TU ESTILO/);
+  assert.match(definitions, /PAGO SEGUROOXSD/);
+  assert.match(definitions, /'Pago seguro'/);
+});
+
+test('Operaciones aclara que su estado pertenece al navegador actual', async () => {
+  const source = await read('js/admin/operaciones/sistema-operaciones-admin.js');
+  assert.match(source, /Operaciones locales/);
+  assert.match(source, /operaciones registradas en este navegador/);
+  assert.match(source, /Operaciones de este navegador/);
+});
