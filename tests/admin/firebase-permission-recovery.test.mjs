@@ -47,3 +47,14 @@ test('Commerce distinguishes load errors from legitimate empty data', () => {
   assert.match(source, /data-action="collections-retry"/);
   assert.match(source, /state\.ordersError \? "—" : sourceTotal/);
 });
+
+test('Connections diagnostics distinguish ID token claims from Firestore authorization', () => {
+  const flow = read('js/admin/flujo-conexiones/flujo-conexiones-admin.js');
+  const live = read('js/admin/flujo-conexiones/live-checks.js');
+  assert.match(flow, /getIdTokenResult\(true\)/);
+  assert.match(flow, /projectClaim === 'tintin-accesorios'/);
+  assert.match(flow, /firestoreError/);
+  assert.match(flow, /waitForAdminAppCheck\(12000\)/);
+  assert.match(live, /email=\$\{sessionProbe\.emailClaim/);
+  assert.match(live, /proyecto=\$\{sessionProbe\.projectClaim/);
+});
