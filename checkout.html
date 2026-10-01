@@ -406,6 +406,7 @@ import {
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
+import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
@@ -1671,9 +1672,14 @@ function saveLocationToProfileIfChecked() {
   const checkbox = document.getElementById('ck-save-location');
   if (!checkbox?.checked || !currentUser || currentUser.isAnonymous || !orderData.mapLocation) return;
   const { lat, lng, name, address } = orderData.mapLocation;
-  setDoc(doc(db, 'users', currentUser.uid), {
-    savedLocation: { lat, lng, name, ...(address ? { address } : {}) }
-  }, { merge: true }).catch(() => {});
+  const location = { lat, lng, name, ...(address ? { address } : {}) };
+  const userRef = doc(db, 'users', currentUser.uid);
+  getDoc(userRef).then(snap => {
+    const added = addAddress(readAddressBook(snap.exists() ? snap.data() : {}), location);
+    // Libreta llena o dirección repetida: no se pisa nada (es solo una comodidad).
+    if (!added.ok) return;
+    return setDoc(userRef, { ...addressBookPatch(added.list), updatedAt: serverTimestamp() }, { merge: true });
+  }).catch(() => {});
 }
 
 let _mapPinIcon = null;
