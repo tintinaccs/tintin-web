@@ -15,7 +15,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
-} from "../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-1";
+} from "../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-2-active-session-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
 const LOCAL_FUNCTIONS_ORIGIN = 'https://tintinaccesorios.pages.dev';

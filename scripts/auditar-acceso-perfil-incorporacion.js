@@ -7,8 +7,8 @@ const moduleSource = fs.readFileSync(path.join(root, 'js/pages/profile/configura
 
 const checks = [
   ['el alta se valida por el estado real del perfil en todos los ingresos',
-    login.includes('async function ensureProfileComplete(user, role)') &&
-    (login.match(/await ensureProfileComplete\(user, role\);/g) || []).length === 3 &&
+    /async function ensureProfileComplete\(user, role(?:, options = \{\})?\)/.test(login) &&
+    (login.match(/await ensureProfileComplete\(user, role/g) || []).length === 3 &&
     !login.includes('firstLogin') &&
     !login.includes('if (!firstLogin) return;')],
   ['el guardado usa una transacción', login.includes('await runTransaction(db')],

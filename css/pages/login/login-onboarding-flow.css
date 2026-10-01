@@ -422,3 +422,54 @@ body:has(.login-page) .login-heading-sub {
     max-width: 860px !important;
   }
 }
+
+/* Alta limpia: las tarjetas son superficies blancas completas y ninguna
+   columna fuerza una altura artificial sobre el teléfono. */
+body:has(.login-page).login-setup-open :is(
+  #login-profile-name-confirmation,
+  #login-profile-username-field,
+  #login-profile-name-field,
+  #login-profile-phone-field,
+  #login-profile-dob-field,
+  #login-profile-address-field
+) {
+  background: #fff !important;
+  align-self: start !important;
+}
+
+body:has(.login-page).login-setup-open #login-profile-phone-field {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+body:has(.login-page).login-setup-open .login-phone-row {
+  width: min(100%, 560px) !important;
+  max-width: 560px !important;
+}
+
+@media (max-width: 599px) {
+  body:has(.login-page).login-setup-open .login-phone-row {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Una sesión confirmada no debe parecer un login parcialmente abierto. */
+body:has(.login-page).login-session-active :is(
+  #login-google-section,
+  #login-divider-section,
+  #login-email-block,
+  #login-otp-block,
+  #login-profile-block,
+  #login-hint,
+  #login-mode-toggle-wrap
+) {
+  display: none !important;
+}
+
+body:has(.login-page).login-session-active #login-success {
+  display: block !important;
+  background: #eefaf3 !important;
+  border-color: #9bd7b2 !important;
+  color: #176b3a !important;
+}
