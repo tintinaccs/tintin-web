@@ -7,21 +7,14 @@
 // splash bespoke de index.html (#tt-intro), que ahora usa el mismo
 // js/cargador-pagina.js que el resto del sitio (con su propio scroll-lock ya
 // incluido).
-import { loadImages } from './imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { loadImages } from './imagenes.js?v=tintin-20260929-superadmin-hero-editable-1';
 
 loadImages().then(() => {
-  if (typeof window.renderProductsGrid === 'function' && Array.isArray(window.PRODUCTS)) {
-    const featuredProducts = window.PRODUCTS.filter(product =>
-      typeof window.isFeaturable === 'function'
-        ? window.isFeaturable(product)
-        : Boolean(product?.name) && !(product.stock != null && Number(product.stock) <= 0)
-    );
-    ['colls-products-grid'].forEach(id => {
-      if (document.getElementById(id)) window.renderProductsGrid(id, featuredProducts);
-    });
-    if (document.getElementById('products-grid')) {
-      window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
-    }
+  // Con las imágenes ya resueltas sólo se refrescan las tarjetas: tienda.js
+  // conserva la selección visible (no se re-sortea) y es el único que pinta
+  // productos y "Completá tu look".
+  if (typeof window.renderRandomHomeProducts === 'function' && document.getElementById('products-grid')) {
+    window.renderRandomHomeProducts();
   }
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {
     window.initLookCombinator();

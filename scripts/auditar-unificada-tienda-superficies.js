@@ -17,16 +17,15 @@ const policy = read('js/pages/catalog/politica-exhibicion-catalogo.js');
 
 check(
   'Catálogo y colecciones reciben la misma lista visible y ordenada',
-  /renderProductsGrid\('colls-products-grid', normalized\)/.test(products) &&
-    /sortCatalogProducts\(normalized\)/.test(products) &&
+  /sortCatalogProducts\(normalized\)/.test(products) &&
     /TintinCatalogMerchandising\?\.sortCatalogProducts/.test(catalog),
   'Colecciones no puede ocultar agotados ni aplicar un orden distinto del catálogo principal.'
 );
 
 check(
   'La portada conserva solamente productos comprables',
-  /const featuredProducts = normalized\.filter/.test(products) &&
-    /renderProductsGrid\('products-grid', featuredProducts\.slice\(0, 5\)\)/.test(products),
+  /const pool = window\.PRODUCTS\.filter\(isFeaturable\)/.test(storefront) &&
+    /pickStable\(pool, 5, homeSelectionKeys/.test(storefront),
   'Inicio puede promocionar disponibles, mientras Colecciones representa el catálogo completo.'
 );
 

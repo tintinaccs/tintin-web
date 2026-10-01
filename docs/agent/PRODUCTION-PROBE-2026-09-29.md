@@ -1,0 +1,238 @@
+# Production readiness probe — 2026-09-29 04:09 UTC
+
+Read-only revalidation of the live storefront and Pages deployment. The probe made public GET requests and DNS lookups only; it did not change DNS, configuration, catalog data, accounts, orders, or payment settings.
+
+## Observed results
+
+| Check | Result | Meaning |
+| --- | --- | --- |
+| `https://tintinaccs.com/` | HTTP 200; canonical points to `https://tintinaccs.com/`; HTML contains Shopify theme/CDN markers | The commercial apex still serves Shopify. |
+| `tintinaccs.com` DNS | A `23.227.38.65` | The apex still points at Shopify's storefront edge. |
+| `www.tintinaccs.com` DNS and HTTP | CNAME `shops.myshopify.com`; HTTP 301 to the apex | `www` also routes through Shopify before redirecting. |
+| `https://tintinaccs.com/api/health` | HTTP 404 | Pages Functions are not serving on the commercial apex. |
+| `https://tintinaccesorios.pages.dev/` | HTTP 200; canonical points to `https://tintinaccesorios.pages.dev/` | Pages is deployed on its technical hostname; it is not yet the commercial canonical host. |
+| Pages `GET /api/health` | HTTP 200, `ok: true`; runtime, configuration, Firebase, Admin runtime, and Visual Builder checks are true | Core Pages runtime is healthy. This is not a transaction or authenticated Admin acceptance test. |
+| Pages `GET /api/public-catalog?resource=products` and `?resource=collections` | Both HTTP 200; `count: 0`, `items: []` | Catalog and public collections are empty from the storefront's API. |
+| Pages `GET /sitemap-products.xml` | HTTP 200; zero `<url>` entries | There are no product URLs to index or use for a real product canary. |
+| Pages `GET /api/paypal-config` | HTTP 200; enabled in `sandbox`, `rateSource: BCP`, rate date `2026-09-25`, updated `2026-09-28T19:26:01Z`, no unavailable reasons | The exchange rate is within the code's seven-day freshness window, but PayPal is sandbox-only; no real payment was tested. |
+| Pages `GET /api/admin-runtime-health` | HTTP 401 without a session | Expected protected-endpoint behavior; authenticated Admin health remains unverified by this public probe. |
+
+`npm run monitor:production` checked the public routes, health, payment configuration, catalog, sitemaps, and Visual Builder endpoints. It reported three readiness failures, all caused by the empty product catalog: empty product sitemap, no public product for the canary, and no product metadata sample. Other endpoint probes passed, including the expected unauthenticated `401`.
+
+## Decision
+
+**NO-GO for domain cutover and for closing Shopify.** Pages runtime health is green, but the commercial host still serves Shopify and Pages has no public product catalog. The Pages hostname's `200` responses do not establish that the domain, customer login, checkout, payment, email, or authenticated operations are ready.
+
+## Remaining gates
+
+1. Import the owner's real product and collection export into Firestore. Review handles, variants, prices, stock, collection mapping, and visibility. The importer must skip exact existing identities and stop on ambiguous matches; the pre-apply snapshot must be rechecked immediately before writes.
+2. Run the authenticated Cloudinary media preflight and copy Shopify-hosted images. Verify product, variant, collection, and content URLs no longer depend on `cdn.shopify.com` before cancelling Shopify.
+3. Prove the **Google Sheets → Firestore** sync direction using the protected Apps Script webhook and the dedicated inactive canary. Sheets synchronization is a Firestore integration; it is independent of the storefront domain and must not route to Shopify.
+4. Complete purchase, stock update, account re-entry/blocking, App Check, order email, and any chosen live payment acceptance on Pages with the imported catalog.
+5. Confirm Search Console ownership for `tintinaccs.com` and prepare its sitemap after Pages is attached to the commercial domain.
+6. Only after the catalog is present, follow the same-session constraint recorded in PR #929: merge the domain cutover and attach the Pages Custom Domain together, then validate canonical, TLS, OAuth/App Check, redirects, sitemaps, and rollback on the live host.
+
+Keep Shopify available until those gates pass. This recheck did not change the migration decision and does not certify real payment, authenticated CRUD, Apps Script deployment, or Google indexing.
+
+## Observación directa de Apps Script — 2026-09-29
+
+Se revisó en modo lectura el proyecto `Tintin Sync — Motor` y su panel de ejecuciones, sin publicar código ni ejecutar funciones manuales. El historial de los últimos siete días mostraba 9.153 ejecuciones y una tasa de error de 0,32%. Entre los fallos visibles del 28/9, una ejecución de `tintinReconciliarAdminParidad` registró `Address unavailable` al consultar el endpoint de snapshot `sheets-sync-snapshot`; otra ejecución larga terminó con un error temporal genérico del servidor de Google. El listado reciente del 29/9 mostró ejecuciones consecutivas completadas de la reconciliación programada.
+
+El hallazgo es compatible con fallos transitorios de transporte al leer el snapshot, no demuestra pérdida ni divergencia de datos. El PR #956 contiene reintentos acotados para ese caso y permanece draft; su código no se debe considerar desplegado en Apps Script hasta verificar la versión publicada. `npm run test:products-sync` en el HEAD evaluado pasó 76/76; esa prueba no equivale a una escritura real Sheets → Firestore.
+
+La pestaña autenticada del panel de Admin en Pages abrió sin errores pendientes y sirvió el importador con la ruta de preflight de medios (`shopify-media-preflight-1`). La reconciliación de identidad del importador del PR #957 no aparece en el código publicado. No se cargó un CSV ni se ejecutó preflight, sincronización o escritura.
+
+El proyecto de Apps Script registraba 0,32% de errores en la ventana de siete días, pero las últimas ejecuciones automáticas visibles ya estaban completadas. Mantener el gate operativo: desplegar/verificar el código con reintentos en la versión de Apps Script, ejecutar el canary inactivo `CANARY-SHEETS-FIRESTORE` y confirmar Firestore/cola/estado final. No reutilizar productos comerciales para esa prueba.
+
+## Revalidación posterior — 2026-09-29 05:00 UTC
+
+Se volvió a ejecutar `npm run monitor:production` desde el worktree de la revisión. Las rutas públicas, `api/health`, `api/paypal-config`, las APIs del catálogo, los sitemaps y las APIs públicas de Visual Builder respondieron como espera el monitor; `api/admin-runtime-health` devolvió 401 sin sesión, también esperado. El proceso terminó con código 1 por los mismos tres bloqueos de catálogo: sitemap de productos sin URLs, catálogo sin producto canary y metadata de producto sin muestra. No apareció un fallo nuevo de ruta en esta ejecución. Esto confirma el estado de Pages, no el dominio comercial ni los flujos autenticados.
+
+Se preparó en la pestaña `Productos` del inventario conectado la fila de prueba `CANARY-SHEETS-FIRESTORE` / `PRUEBA QA · NO VENDER`: categoría `otros`, precio de prueba 1000, activo `No`, stock calculado 0, fórmulas y validaciones de fila conservadas. La primera lectura encontró que `Imagen URL` (T) había heredado una URL del CDN de Shopify; se limpió esa celda y la lectura posterior confirmó T vacía. La imagen de presentación (C) depende de T y queda vacía. La fila está **solo preparada en Sheets**; no se ejecutó trigger, webhook ni escritura de Firestore, así que todavía no acredita la sincronización.
+
+Revalidación del canario en la hoja conectada: la búsqueda exacta en `Historial sync!A1:J531` no encontró filas para `CANARY-SHEETS-FIRESTORE`. También se detectó y limpió una fecha heredada en `Productos!V720` (`Última actualización`), para que el canario no aparente haberse sincronizado. La lectura posterior de la fila dejó vacía esa marca temporal.
+
+La ausencia de un registro de historial tras esta edición por API es esperada por el contrato de Google Apps Script: las escrituras hechas por APIs/ejecuciones no disparan `onEdit`. Además, el reconciliador periódico `tintinReconciliarAdminParidad()` actualiza usuarios, pedidos y auditoría, no el catálogo de productos. La sincronización de este canario requiere invocar explícitamente `tintinProbarEdicionCatalogo()` después de verificar la versión desplegada del script y del webhook. Esa ejecución aún no está confirmada; el runbook canónico ahora indica los handlers, verificación y evidencia requeridos.
+
+CI de GitHub para `9c13a3de2ca254ae987430dd541c9ac3c7d2ccc7` (PR #957, ejecución #36523002919) terminó correctamente: todos los pasos del trabajo `Repository audit`, incluido Browser/accessibility/SEO/performance, quedaron en success. El PR sigue abierto, draft y mergeable. PR #956 sigue abierto y draft; su descripción confirma que el retry de Apps Script aún no está desplegado. PR #934 sigue abierto y actualmente `mergeable: false`; no se modificaron esas ramas ni se integraron cambios.
+
+**Decisión continúa NO-GO.** La prueba pública mantiene tres gates de catálogo, la fila de Sheets aún no se escribió a Firestore, la reparación de Apps Script no está desplegada y el dominio comercial continúa separado del Pages host. No se cambió tráfico, catálogo Firestore, pedidos, pagos, DNS ni estado de los PRs.
+
+## Revalidación — 2026-09-29 05:55 UTC
+
+Se repitió `npm run monitor:production`: las rutas, APIs públicas de catálogo y Visual Builder, `api/health`, `api/paypal-config`, los sitemaps y los headers respondieron; `api/admin-runtime-health` devolvió el 401 esperado sin sesión. El comando volvió a terminar con código 1 por los mismos tres requisitos que dependen de tener productos públicos: sitemap dinámico de productos vacío, ningún producto para el canary SEO y ninguna muestra de metadata. El catálogo público continúa vacío.
+
+Lectura directa del inventario conectado a las 05:55 UTC: `Productos!A720:AI720` contiene el canary `CANARY-SHEETS-FIRESTORE` / `PRUEBA QA · NO VENDER`, inactivo y sin stock; la URL de imagen, fecha de última actualización y acción están vacías. La búsqueda en `Historial sync!A1:J531` devuelve cero filas para ese ID. Sí hay ejecuciones recientes `SYNCED` del reconciliador administrativo para usuarios, pedidos y auditoría, que no sincroniza productos.
+
+En el commit `bda7e0ebae7b2256262b605e8062006ebd54de98`, GitHub Actions CI #3510 terminó **SUCCESS** en todas las etapas, incluidas reglas de Firestore, navegador, accesibilidad, SEO y rendimiento. `npm run test:products-sync` pasó 77/77, `node scripts/auditar-sync-authority.mjs` pasó y `npm run build:pages` verificó 19 páginas, 625 módulos y 911 archivos. El PR #957 sigue abierto y draft.
+
+La prueba Sheets → Firestore no está acreditada: no hay registro de canary en el historial ni observación Firestore. El proyecto `Tintin Sync — Motor` debe recibir el código actualizado, y la función `tintinProbarEdicionCatalogo()` debe ejecutarse desde Apps Script; la conexión disponible permite leer la hoja, pero no ejecutar funciones del proyecto. **NO-GO continúa** hasta ese resultado, el catálogo/medios reales, la aceptación de compra/pago y los controles de dominio/Search Console. No se alteraron DNS, tráfico, pagos ni cuentas.
+
+## Google Search Console — 2026-09-29 06:09 UTC
+
+La única propiedad GSC conectada y verificada en la cuenta es `https://tintinaccesorios.pages.dev/` (`siteOwner`). No aparece una propiedad URL-prefix ni Domain para `tintinaccs.com`. `https://tintinaccesorios.pages.dev/sitemap.xml` fue enviado el 2026-09-28 01:58 UTC y figura pendiente, con cero advertencias y cero errores. Rendimiento GSC de los últimos 28 días disponibles (hasta 2026-09-26): 0 clics, 1 impresión. La inspección URL de Google da PASS, `Submitted and indexed`, robots ALLOWED, `INDEXING_ALLOWED`, fetch SUCCESSFUL y rastreo móvil para `/` (último rastreo 2026-09-13) y `/catalogo` (2026-09-21). Esto confirma indexación de páginas en el hostname técnico, no propiedad/indexación en el dominio comercial ni URLs de productos; el sitemap de productos y el catálogo dinámico siguen vacíos.
+
+## Apps Script conectado — 2026-09-29 06:44 UTC
+
+Revisión visible del proyecto `Tintin Sync — Motor` en la cuenta de producción, en modo lectura:
+
+- El proyecto contiene `Código.gs`, `ReorganizacionSheets.gs`, `AdminParity.gs`, `Participacion.gs` y `BorradoCatalogoPayload.gs`; no contiene el archivo versionado `ProductosUnificados.gs` del repositorio. Por ello, el canary específico y la implementación vigente en Git no están acreditados como parte de la fuente conectada.
+- La implementación web activa seleccionada muestra la versión 16, fechada el 22 de septiembre de 2026. El formulario indica que se ejecuta como la cuenta propietaria y permite acceso a cualquiera. No se registran aquí el ID ni la URL de implementación.
+- Hay tres activadores instalados: `onOpen`, `tintinReconciliarAdminParidad` (basado en tiempo) y `tintinDespacharEdicionParidad` (al editar). Las ejecuciones recientes observadas del reconciliador terminaron completadas; estas son pruebas de sincronización administrativa, no de productos.
+- La fila `Productos!720` sigue como `CANARY-SHEETS-FIRESTORE` / `PRUEBA QA · NO VENDER`; una lectura de `A720:V720` conserva el ID, el nombre y `Activo = No`. Una búsqueda exacta en `Historial sync!A1:J600` devuelve cero filas para el canary.
+
+La inspección solo abrió el editor, la lista de activadores, ejecuciones y detalles de despliegue; no editó ni guardó código, no ejecutó funciones, no creó activadores y no cambió la implementación. El estado del proyecto explica por qué aún no hay evidencia de ejecución canaria. Seguir el runbook después de integrar el PR: sincronizar cuidadosamente el código con el proyecto conectado, conservar la URL de webhook, revisar la autorización del endpoint para la implementación “cualquiera” y validar el despliegue antes de invocar únicamente el canary inactivo. No actualizar manualmente ni publicar una implementación parcial.
+
+**Decisión: NO-GO para cutover.** Se mantienen además los gates ya registrados: catálogo/sitemap de productos vacíos, dominio comercial todavía en Shopify, ausencia de propiedad GSC verificada para ese dominio y falta de aceptación de pago en producción.
+
+### Revisión complementaria de la fuente guardada — 2026-09-29 06:58 UTC
+
+La primera nota de Apps Script se refería al nombre del archivo, no a la presencia funcional de la integración. Al inspeccionar el editor de `Código.gs`, confirmé que el proyecto sí incluye `tintinProbarEdicionCatalogo()`, `tintinDiagnosticarWebhookProductos()`, `tintinSendProductRow_()` y el handler de edición con estados `SYNCING`, `SYNCED`, `ERROR` y `REJECTED`. La función canaria limita el envío a la fila única con ID/nombre acordados, estado inactivo, stock cero, categoría y precio válidos, sin imagen y sin acción. El helper de envío usa `SHEETS_ENGAGEMENT_SECRET` en `X-Tintin-Sheets-Secret` para el host de `TINTIN_STORE_URL`.
+
+La fuente activa está guardada como `Código.gs` y su SHA-256/tamaño difieren del archivo canónico local `apps-script/ProductosUnificados.gs`; el nombre del archivo por sí solo no demuestra ausencia de lógica ni que la versión desplegada sea idéntica. La implementación consultada sigue mostrando versión 16 (22 sept 2026); aún no se inspeccionó esa versión histórica ni se comprobó que coincida con la fuente guardada. Los triggers y su log de ejecución no prueban productos: la fila canary sigue sin registro en `Historial sync`, y no hay lectura confirmatoria de `products`/`productInventory`.
+
+La inspección estática de `doPost` y sus helpers encontró guards en la fuente guardada: `syncProducts` valida ID token y correo Super Admin; `syncProductsPayload` compara el secreto compartido. Esto es coherente con el despliegue web que ejecuta como propietaria y acepta conexiones públicas, pero no demuestra que versión 16 conserve esos guards. La función diagnóstica y la canaria envían el secreto de sincronización desde Apps Script al endpoint HTTPS `https://tintinaccesorios.pages.dev/api/sheets-products-webhook`. No se ejecutaron: la versión efectiva debe verificarse primero y la función requiere transmitir ese secreto. El canary no debe invocarse hasta confirmar que la revisión del endpoint es `products-canonical-v3`. El repositorio y su PR sí se actualizaron; Apps Script, Cloudflare y Firestore no se modificaron.
+
+### Revalidación de conexiones y muestra QA — 2026-09-29 07:22 UTC
+
+La vista autenticada de Diagnóstico en Admin se actualizó en vivo y devolvió **FAIL**: Firebase/Firestore, catálogo, inventario, colecciones, pedidos, usuarios, auditoría, ajustes, contenido, Visual Builder, Resend y Cloudinary figuran PASS; Google Sheets y Apps Script figuran FAIL. El detalle de Apps Script es `canonical_guard_not_confirmed · HTTP 200`; el detalle de Sheets indica que el secreto del puente y el protocolo de Apps Script no quedaron verificados. La cola reporta 18 pendientes, 2 en dead-letter, tarea más antigua de 4 días y última tarea exitosa alrededor del 28 de septiembre a las 22:02 UTC. Esto es evidencia fresca de salud autenticada; el commit que reporta el panel corresponde al despliegue productivo existente, no al HEAD del PR.
+
+La revalidación en vivo de “Flujo de conexiones” mostró 36 nodos, 37 conexiones, 61 verificadas y 12 que requieren atención. Incluye relaciones de roles/perfil, pedidos/inventario, carrito/Firestore y servicios externos que no están verificadas. La tarjeta externa informó `externos configurados=false`; la respuesta de salud autenticada identificó explícitamente Sheets y Apps Script como fallidos. No se infiere a partir de esto que todos los secretos externos falten.
+
+En Admin existe una muestra QA distinta de la fila canary de Sheets: producto `PRUEBA QA · NO VENDER` en la colección oculta `PRUEBA QA · NO PUBLICAR`, inactivo, sin imagen y con stock 1. No se alteró. Por estar oculto/inactivo no sirve como muestra del catálogo público y no demuestra Sheets → Firestore. La fila de Sheets `CANARY-SHEETS-FIRESTORE` continúa separada y sin registro confirmatorio en el historial de sincronización. El monitor público de aproximadamente 07:10 UTC seguía fallando por sitemap de productos vacío, ausencia de canary público y ausencia de muestra de metadata. No publicar ni activar la muestra QA para hacer pasar estos probes.
+
+La Actions run `36534876930` para HEAD `e451ebba3f016a5573351ed62ed0daefcf77fa74` terminó **SUCCESS**. La API pública de GitHub confirma que PR #957 continúa abierto, draft y mergeable, con ese HEAD. Esto valida el CI del PR; no elimina los bloqueos operativos anteriores. No se ejecutó Apps Script, no se transmitieron secretos, y no se modificaron Firestore, pagos, Cloudflare, DNS, productos ni estado del PR.
+
+**Decisión: NO-GO para migración/cutover.** Siguen pendientes la verificación y despliegue controlado del protocolo Sheets/Apps Script, la ejecución autenticada del canary con comprobación de Firestore, catálogo público/SEO real, pruebas de compra y pago en producción, y dominio/Search Console final. La muestra QA no se publicó y el PR no se integró.
+
+### Monitor público y CI final del parche de reingreso — 2026-09-29 07:47 UTC
+
+Se volvió a ejecutar `npm run monitor:production` desde la rama del PR. Las rutas `/`, `/catalogo`, `/collections`, `/product`, `/login`, `/perfil`, `robots.txt`, los tres sitemaps, `manifest.json`, APIs de salud/configuración/catálogo y Visual Builder devolvieron respuestas esperadas (200; `api/admin-runtime-health` devolvió el 401 esperado sin sesión). El monitor sigue terminando con código 1 únicamente por: `sitemap-products` vacío o inválido, ningún producto público para el canary SEO y ausencia de producto de muestra para probar metadata. El catálogo no se activó ni se cambió.
+
+Durante la auditoría del flujo de cuentas se corrigió otro caso de compatibilidad de bajas antiguas: si sobrevive un perfil tombstone marcado como eliminado mientras Firebase Auth aún conserva una identidad habilitada, el correo OTP verificado ahora reemplaza esa identidad y permite un alta nueva, siempre que no exista un perfil bloqueado vigente. Se agregó regresión en `tests/accounts/email-otp-verify.test.mjs`. Verificación local: `npm run test:accounts` (34/34), OTP (12/12), contratos account-reentry/sync (18/18), `npm run build:pages`, y `npm audit` más `npm audit --omit=dev` (0 vulnerabilidades en esta rama).
+
+La Actions run `36537686515` para HEAD `d2df07b15c99eaa514f3961ff3f4e12afa8a61ed` terminó **SUCCESS**; incluyó Browser, accessibility, SEO and performance gates. El PR #957 sigue abierto, draft, sin merge y mergeable. Los gates externos siguen en NO-GO: no se probó Sheets → Firestore, compra/pago real ni el dominio/propiedad Search Console final; no se ejecutó Apps Script ni se tocó producción.
+
+### Revalidación autenticada posterior — 2026-09-29 07:52 UTC
+
+Una actualización manual de solo lectura en la tarjeta de estado del ecosistema a las 07:51:45 UTC cambió la conclusión de salud de FAIL a **PASS**: Firebase/Firestore, productos, inventario, colecciones, pedidos, usuarios, auditoría, configuración, contenido, Visual Builder, Resend, Cloudinary, Google Sheets y Apps Script aparecen PASS. El puente muestra `apps-script-products-guard-v1 · 4210 ms`. Esto actualiza y supersede el estado FAIL observado a las 07:22 UTC para la comprobación de disponibilidad/protocolo; por sí solo no prueba la transferencia del producto canary a Firestore ni el procesamiento de la cola. La cola aún muestra 18 pendientes, 2 dead-letter y 4 días para la tarea más antigua.
+
+La revalidación de “Flujo de conexiones” a las 07:52:14 UTC conserva 36 nodos, 37 conexiones, 61 verificadas y 12 que requieren atención. Su conexión agrupada de servicios externos aún falla con `GET /api/system-health · externos configurados=false`; 2 flujos cliente↔inicio/perfil, pedido↔inventario, admin↔productos/pedidos, Firestore↔carrito, likes, reseñas y correo siguen sin verificación o confirmación. Por lo tanto el estado se acota: el health check actual confirma que el puente Apps Script/Sheets responde, pero no que todos los flujos estén verdes.
+
+El monitor público de 07:47 UTC sigue marcando los tres gates de catálogo/SEO vacíos. Dominio comercial/Search Console final y pago real tampoco están verificados. **NO-GO para cutover** continúa vigente hasta que se confirme canary Sheets → Firestore y se resuelvan o se acepten explícitamente las conexiones todavía en atención, junto con catálogo/SEO y dominio/pago.
+
+### Corrección del criterio de PayPal en preparación — 2026-09-29 08:20 UTC
+
+Al reconciliar el panel, el endpoint `/api/paypal-config` indicó PayPal habilitado en **sandbox**, con tasa BCP y sin razones de configuración faltante. El diagnóstico anterior trataba `configured=true` como suficiente para poner verdes los servicios externos, aunque Checkout requiere Live para una compra productiva. Se corrigió `/api/system-health` para usar la misma configuración resuelta que Checkout e informar `productionReady` sin exponer credenciales; el panel y el grafo ahora exigen PayPal Live para declarar producción lista. Se añadió regresión que mantiene sandbox en NO-GO aunque la tasa BCP sea válida. Pruebas locales: flujo de conexiones 26/26; system-health 6/6; vista del diagnóstico 1/1. `npm run build:pages` pasó después de regenerar el manifiesto y versionado de caché (19 páginas, 626 módulos, 912 archivos; auditoría de caché 287 archivos versionados y 79 cargas dinámicas resueltas).
+
+Este parche aún no está desplegado. La evidencia sandbox solo describe el host técnico actual, no una transacción; la tasa vigente tampoco demuestra autorización/captura. NO-GO para cutover se mantiene por producto público y SEO vacíos, canary Sheets → Firestore sin confirmación, cola pendiente/dead-letter, 12 conexiones en atención, dominio/GSC comercial y pago Live sin verificar.
+
+### Monitor público repetido — 2026-09-29 08:25 UTC
+
+`npm run monitor:production` volvió a confirmar que las páginas principales, login/perfil, robots, sitemaps, salud, configuración PayPal, APIs públicas, Visual Builder y las rutas administrativas sin sesión responden como se espera. El proceso conserva código 1 solo por los tres gates conocidos: sitemap dinámico de productos sin URLs válidas, catálogo público sin producto de canary SEO y ausencia de muestra de producto para metadata. No hubo cambios de catálogo, Firestore, DNS ni pagos. El CI del commit `4e80239` detectó drift porque esta evidencia documental cambió después del último manifiesto; se regenerará y se volverá a ejecutar CI.
+
+### Preview de la rama y CI vigente — 2026-09-29 08:43 UTC
+
+GitHub Actions run `36542842963` (CI #3525) para el HEAD `e49dcb3c` terminó **SUCCESS** en 10m48s, incluidas auditorías de navegador, accesibilidad, SEO y rendimiento. El PR #957 sigue abierto y Draft, sin merge. Cloudflare creó el preview de rama `https://codex-shopify-import-identit.tintinaccesorios.pages.dev`; esto no modifica la URL comercial ni constituye despliegue de producción.
+
+`npm run monitor:production` ejecutado contra ese host de Preview confirmó respuestas para las páginas principales, login/perfil, robots, sitemaps, las APIs públicas y Visual Builder. El `/api/health` de Preview respondió 503 con `configuration=false`, aunque Firebase, runtime de Admin y Visual Builder aparecieron disponibles; `api/paypal-config` indicó sandbox deshabilitado por faltantes de configuración. El monitor marcó además canonical, sitemaps y catálogo vacíos/sin muestra SEO. Son condiciones del entorno Preview; no se copiaron secretos de producción. El monitor del Pages host de producción a las 08:25 UTC no tuvo 503, pero mantuvo exactamente los tres bloqueos de catálogo/SEO.
+
+Validación local del mismo HEAD: `npm run build:pages` PASS (19 páginas, 626 módulos, 912 archivos); flow-connections 26/26, system-health 6/6, vista system-health 1/1, cuentas 34/34, importación Shopify Phase 2 34/34, PayPal 6/6 y checkout 99/99. La prueba de cuenta cubre eliminación, alta/reingreso posterior, bloqueo y enlace WhatsApp.
+
+Los bloqueos operativos no cambiaron: Apps Script conectado sigue en v16 y no se ha reconciliado con la fuente canónica/desplegada; la fila canaria no tiene historial ni evidencia de escritura en Firestore; el health productivo previo mostró 18 tareas pendientes y 2 dead-letter; PayPal sigue en sandbox; no hay productos públicos ni propiedad GSC para el dominio comercial, que sigue apuntando a Shopify. **NO-GO para migración/cutover.** No se cambiaron datos productivos, DNS, Apps Script, cuentas ni pagos.
+
+### Revalidación productiva del grafo y configuración PayPal — 2026-09-29 08:49 UTC
+
+El panel autenticado de producción ejecutó `REVALIDAR EN VIVO` a las 08:46:12.706 UTC en modo GET/solo lectura, incluido runtime de Admin/Firestore, Rules y probes de favoritos/notificaciones. Reportó 36 nodos, 37 conexiones, 61 verificadas y 12 que requieren atención. Dos rutas de cliente desde Roles a home/perfil y conexiones comerciales de pedidos↔inventario, Admin↔productos/pedidos y Firestore↔carrito siguen implementadas pero sin verificación runtime de flujo/mutación; Likes, reseñas y correo tampoco tienen arista runtime confirmada. Servicios externos permanece en error.
+
+Lectura pública paralela de `/api/paypal-config` respondió `enabled=true`, entorno `sandbox`, USD, tasa BCP fechada 2026-09-25 y `unavailableReasons=[]`. La tarjeta de grafo recibe del `/api/system-health` actualmente desplegado `Resend=true`, `Cloudinary=true`, `PayPal=no configurado`, evidencia del desajuste anterior entre ambos resolvers. El parche en PR #957 hace que system-health use el resolver compartido de Checkout y exige Live para el estado de preparación productiva; no se hizo pago ni se cambió configuración.
+
+El CI #3525 del HEAD `e49dcb3c` había terminado SUCCESS y el preview Pages seguía separado de producción. El resultado vigente de Preview y sus variables faltantes está descrito en la sección 08:43. Ninguna mutación productiva, cambio DNS, ejecución Apps Script ni escritura en Firestore.
+
+**NO-GO para cutover.** Persisten canary Sheets→Firestore sin ejecutar/verificar, producto público/SEO vacío, flujo de pago Live sin probar, 12 conexiones que requieren atención y DNS/GSC del dominio comercial.
+
+### Monitor público y CI verificados — 2026-09-29 09:01 UTC
+
+`npm run monitor:production` completó 31 probes de rutas/APIs del Pages host: páginas principales, login/perfil, robots, sitemap index y sitemap-pages, configuración PayPal, APIs de catálogo/health, protecciones administrativas sin sesión y páginas de Visual Builder respondieron con los códigos esperados. El monitor terminó con exit 1 únicamente por los tres gates de catálogo SEO: sitemap de productos sin URLs válidas, ningún producto disponible para el canary SEO y falta de una ficha para probar metadata. No se hicieron escrituras ni acciones de compra.
+
+El CI #3526 del HEAD `269d0419dc159daa486d7c0445f25024c9190c02` terminó **SUCCESS** a las 09:00:37 UTC. El PR #957 permanece abierto, Draft, mergeable y sin merge; el worktree sigue limpio. El resultado CI verifica el HEAD actual, pero no resuelve los gates operativos: catálogo y sitemap vacíos, canary Sheets→Firestore no acreditado, PayPal Live no probado y dominio/GSC comercial aún pendientes. **NO-GO para cutover.**
+
+### Sheets, Apps Script y Search Console verificados — 2026-09-29 09:25 UTC
+
+Lectura de la hoja activa `TINTIN INVENTARIO 2026 — Google Sheets` (spreadsheet `106Z1A8veL9fGMc4U7R10NVNMsJiEYt9wiGr4YFAav1U`): la pestaña visible `Productos` contiene exactamente una fila `CANARY-SHEETS-FIRESTORE`, en la fila 710. Se verificó `Activo = No`, stock actual 0, categoría `otros`, precio de prueba 1.000 Gs., sin URL de imagen ni acción pendiente. El rango `Historial sync!A8:J531` no tiene entrada para ese ID. No se editó la hoja.
+
+En el proyecto Apps Script `Tintin Sync — Motor`, el historial del proyecto muestra una versión guardada posterior al despliegue (modificación 28-sep frente a versión desplegada 16 del 22-sep). El gestor tiene cuatro despliegues de app web activos, correspondientes a versiones 11, 12, 15 y 16; el registro reciente muestra `doPost` ejecutado correctamente desde la versión 16 y la lista de ejecuciones muestra al menos una falla de `tintinReconciliarAdminParidad` (29-sep 06:11 local, 82,263 s) con error genérico de servidor. El resumen de siete días reporta 9.452 ejecuciones y 0,34% de error. No se ejecutó código, no se guardó ni se desplegó una versión, y no se transmitió el secreto de Sheets.
+
+Google Search Console conectada expone únicamente la propiedad verificada `https://tintinaccesorios.pages.dev/` (`siteOwner`, legible). Su sitemap `/sitemap.xml`, enviado el 28-sep, continúa `pending`, con 0 errores y 0 advertencias. El resumen global de los últimos 28 días asentados (hasta 26-sep) muestra 0 clics y 1 impresión; la consulta de páginas devuelve inicio (1 impresión) y catálogo (1 impresión), cuyos totales no coinciden con el resumen global. Esta discrepancia debe tratarse como inconsistencia de agregación de GSC, no como un conteo exacto de tráfico. No hay propiedad conectada para el dominio comercial en esta cuenta. No se modificó Search Console.
+
+Estos datos confirman que el canario no ha probado la escritura Sheets→Firestore y que la versión de app web que atiende `doPost` no coincide con la última versión guardada del proyecto. Se requiere reconciliar la versión desplegada/URL efectiva antes de ejecutar la prueba. **NO-GO para cutover.**
+
+### Canary ejecutado y fallo de contrato localizado — 2026-09-29 09:43 UTC
+
+Tras autorización específica del usuario, se ejecutó una vez `tintinProbarEdicionCatalogo()` en el proyecto `Tintin Sync — Motor`. La función alcanzó el webhook de Pages, que devolvió `No hay campos de producto permitidos para sincronizar.` La ejecución no alcanzó el commit de Firestore: la respuesta de error se produce antes de `firestoreAdminCommit`. Lectura posterior confirma que `Productos!710` continúa con el mismo ID/nombre/estado, inactivo y sin stock, y la búsqueda de `CANARY-SHEETS-FIRESTORE` en `Historial sync!A1:J531` devuelve cero filas. El canary no quedó sincronizado y no es evidencia verde.
+
+La causa reproducible está en `apps-script/ProductosUnificados.gs`: la prueba llamaba `tintinSendProductRow_(sheet, rowNumber)` sin `changedFields`; `tintinProductPayload_` serializaba `[]`, que el webhook convierte a un conjunto vacío y rechaza sin escrituras. El arreglo declara explícitamente los campos mínimos de catálogo e inventario y una regresión ahora comprueba el payload; `npm run test:products-sync` pasa 77/77. `npm run build:pages` también pasa. El HEAD `343f5ebcf2efa8a14509f534bb100e51c952a33c` del PR #957 recibió **SUCCESS** en CI run `36551900975` a las 10:01:31 UTC, incluidos los gates de navegador, accesibilidad, SEO, rendimiento, CodeQL y preview de Cloudflare. El fix aún requiere integrarse y desplegarse en ambos lados compatibles, y repetir el canary; no declarar Sheets→Firestore verde hasta observar escritura Firestore y resultado confirmado. **NO-GO para cutover.**
+
+### Revalidación después de integrar la protección de medios — 2026-09-29 14:35 UTC
+
+El PR #962 (`fix(sync): prevent Shopify media from re-entering the catalog`) se integró por squash en `main` como commit `91def4de3bdbe35b37fa2da2c53de276a6224dad`. El CI run `36582035994` terminó **SUCCESS**: build/artefactos, migración de dominio no destructiva, contratos estáticos y de integración, Firestore/identidad/reglas, Super Admin y gates de navegador, accesibilidad, SEO y rendimiento.
+
+La publicación de Cloudflare Pages entrega un `diagnostic-manifest.json` cuyo `sourceFingerprint` (`1d8d2fd52a8f2b04fa63a18ed792b369e738cab5c3ca50b1b7779673b72ad256`), recuento de archivos (912) y páginas (19) coinciden exactamente con el artefacto de `main`. Esto acredita la publicación del commit en el host Pages, no el corte del dominio comercial.
+
+`npm run monitor:production` volvió a comprobar 31 rutas y APIs del host Pages con los estados esperados, incluido el 401 esperado para `api/admin-runtime-health` sin sesión. Falló únicamente los tres canaries dependientes de datos reales: sitemap dinámico de productos vacío, catálogo público sin producto para SEO y falta de ficha para validar metadata de producto.
+
+Verificación dirigida local del mismo contenido desplegado: cuentas 34/34, checkout 99/99, carrito 4/4 y PayPal 6/6; CI además pasó los controles de navegador. La semántica de cuentas distingue bloqueo de eliminación, permite nuevo registro tras eliminar y mantiene el mensaje corto de soporte por WhatsApp para cuentas bloqueadas. Las pruebas no sustituyen una sesión autenticada productiva ni una compra real.
+
+La hoja activa de inventario seguía teniendo 106 URLs de imagen `cdn.shopify.com` al revisar el rango `Productos!T7:T710`. El cambio integrado rechaza que Sheets vuelva a guardar URLs de Shopify en los campos públicos de producto enviados, pero no migra la hoja ni copia medios: la importación real y la comprobación posterior de productos, colecciones, variantes, imágenes, descripciones y enlaces aún son necesarias. La prueba canaria de Sheets/Firestore requiere reconciliar la fuente Apps Script con la versión desplegada y confirmar la escritura en Firestore; la respuesta del webhook por sí sola no cuenta como verificación de base de datos.
+
+**NO-GO para migrar el dominio o cerrar Shopify.** Siguen pendientes el catálogo real y sus medios, verificación completa Sheets→Firestore, aceptación autenticada de CRUD/cuenta/compra sobre datos reales, PayPal Live (si se usará), propiedad e indexación de Search Console para el dominio comercial y la comprobación de DNS/TLS al momento del corte. El apex y `www` todavía sirven Shopify según la lectura DNS/HTTP previa de hoy. Esta revisión no cambió DNS, pagos, catálogo real, pedidos ni cuentas.
+
+### Revalidación posterior del canary y auditoría integral — 2026-09-29 15:22 UTC
+
+La fila 710 de `Productos` se leyó de nuevo después de ejecutar `tintinProbarEdicionCatalogo()`: ID `CANARY-SHEETS-FIRESTORE`, nombre `PRUEBA QA · NO VENDER`, categoría `otros`, precio de prueba 1.000 Gs., `Activo = No`, inventario 0 e imagen/acción vacías. Después de la ejecución, el Admin autenticado cargó el mismo ID en su listado conectado al catálogo, también inactivo y con inventario 0. Esto verifica que la fila de prueba llegó al catálogo visible para Admin; no prueba una operación comercial ni permite publicar el producto. El canary se conserva inactivo y excluido del catálogo/SEO público.
+
+`npm run audit:final` terminó con código 0 en este worktree, incluyendo los contratos de arquitectura, estado del ecosistema, cuenta, checkout, pagos, colecciones, importación Shopify, usuarios/roles, pedidos, responsive administrativo (10 viewports), responsive del shell (16 viewports), conexiones y versionado de caché (287 archivos / 79 cargas dinámicas). Esto acredita los gates automatizados locales del commit probado; no reemplaza las operaciones autenticadas que el gate de conexión mantiene sin verificar.
+
+El panel Admin, tras recarga completa y `REVALIDAR EN VIVO` de solo lectura, informó 36 nodos, 37 conexiones, 59 verificadas y 14 que requieren atención. Confirmó que PayPal sigue en `sandbox` y marcó la conexión con los servicios externos como error (`PayPal sandbox · requiere Live · externos listos=false`), coincidente con `/api/paypal-config`. Favoritos, likes y reseñas se verificaron solo parcialmente por sus probes de lectura; no equivalen a probar altas, cambios o borrados. Las conexiones de clientes hacia Inicio/Perfil, mutaciones de pedidos e inventario, CRUD de Admin y persistencia de carrito permanecen sin verificación runtime autenticada; correo no está confirmado.
+
+El `npm run monitor:production` de esta sesión volvió a pasar las rutas y APIs del Pages host, incluido el 401 esperado de runtime Admin sin sesión. Terminó con tres fallas de datos dependientes del catálogo comercial vacío: sitemap dinámico de productos vacío, catálogo público sin un producto para el canary SEO y falta de muestra para metadata de producto. El producto de prueba no resuelve esas fallas porque está inactivo, como debe ser.
+
+**Estado: NO-GO para migración.** El código y sus auditorías automatizadas están verdes, y el canary inactivo aparece en Admin, pero aún falta probar con evidencia transaccional/historial que Sheets→Firestore quedó confirmado; importar/revisar el catálogo comercial y migrar sus medios; ejecutar aceptación autenticada de CRUD, cuenta y compra con datos de prueba controlados; decidir y configurar PayPal Live si será un medio de pago; verificar Search Console para el dominio comercial e indexación; y realizar la comprobación de DNS/TLS al momento del cutover. No se cambió DNS, credenciales, PayPal, catálogo comercial, pedidos ni cuentas.
+
+### Revalidación puntual de Sheets → Firestore — 2026-09-29 16:03 UTC
+
+Se releyó `Productos!A710:AI710`: conserva `CANARY-SHEETS-FIRESTORE` / `PRUEBA QA · NO VENDER`, inactivo, stock 0, precio 1.000 Gs. y última actualización 12:13 local. En Ejecuciones de Apps Script, `tintinProbarEdicionCatalogo` aparece como ejecución manual del Editor a las 12:13:10, completada en 5,259 s. El código canónico enviado a esa función declara los campos `changedFields`; `tintinSendProductRow_` solo continúa tras HTTP 2xx y `body.ok === true`, y `sheets-products-webhook` responde éxito después del `firestoreAdminCommit` atómico a `products/{id}` y `productInventory/{id}`.
+
+Lectura autenticada actual del catálogo Admin —que toma productos de Firestore— muestra ese mismo ID y nombre, inactivo, stock 0, categoría `otros`, 1.000 Gs. y sin foto. La ejecución completada, el sello temporal posterior en Sheets, el contrato de respuesta y el documento coincidente en Admin verifican que el canary llegó a Firestore sin hacerlo público ni vendible. No aparece una fila del canary en `Historial sync!A8:J1000`; `tintinRecordSyncSafely_` silencia el error del registrador, así que la escritura de negocio quedó confirmada, pero el registro de auditoría de ese evento no. Ese faltante debe corregirse por separado.
+
+La prueba productiva `npm run monitor:production` sigue fallando solo en los tres gates de catálogo público: sitemap de productos vacío, ausencia de producto visible para el canary SEO y metadata sin ficha pública. Es el resultado esperado mientras no se publique un producto comercial. El canary inactivo no debe contarse como producto SEO ni habilitarse para la venta. El dominio comercial sigue sin corte; no se modificaron DNS, catálogo comercial, pedidos, pagos ni cuentas.
+
+Se corrigió en la rama de preparación el mapa de conexiones: el `POST /api/system-health` verifica configuración y que Apps Script reconozca su guard, pero ya no se acepta como prueba verde de sincronización Sheets → Firestore. El flujo se dibuja por separado desde el `onEdit` de Google Sheets hasta el webhook autenticado y el commit de Firestore. Los cambios aún requieren CI/revisión antes de publicar el Admin actualizado.
+
+### Continuación de auditoría — 2026-09-29 17:30 UTC (rama `claude/tintin-web-audit-production-2rtwpe`, base `3fbc26ee`)
+
+**Apps Script: diferencia entre v16 y la fuente actual.** El repositorio a fecha 22-sep (`c77dabf1`, previo a v16) y HEAD difieren en tres archivos, por cuatro commits posteriores a v16; los demás (`ContratoCuentas`, `CrearPedido`, `ReorganizacionSheets`, `Seguridad`) son idénticos:
+- `2528c190` (23-sep, #893): `Participacion.gs` añade `tintinHandleEngagementBatch_` y `doPost` enruta `syncEngagementBatch`. Sin él, los lotes de participación son rechazados con "Acción no permitida".
+- `a5334663` (26-sep, #927): `AdminParity.gs` y `ProductosUnificados.gs` — la baja de cuenta repinta el espejo y la fila desaparece (antes marcaba "Bloqueado = Sí").
+- `4f911a58` (28-sep, #952) y `32996511` (29-sep): `tintinProbarEdicionCatalogo()` con guardas de canary, lista explícita de campos y registro `SYNCING`/`SYNCED`/`ERROR` en Historial sync. **En el código de la era v16 esa función no registraba nada en Historial sync.**
+- No se debe desplegar una mezcla parcial: los tres archivos van juntos. La URL configurada (v16) no se cambió. No se pudo abrir el editor de Apps Script desde esta sesión, por lo que la equivalencia byte a byte de la fuente guardada con HEAD **no está verificada**.
+
+**Historial sync.** Causa confirmada en código: `tintinAppendSyncHistory_` devolvía `false` sin avisar cuando faltaba la hoja o la columna `Estado` en la fila 7, y `tintinRecordSyncSafely_` sólo escribía `console.error`, invisible en el resultado de una ejecución manual. Además la versión v16 no tenía el registro. Cambio: ahora se lanzan errores descriptivos, `tintinRecordSyncSafely_` devuelve `{recorded, reason}` y el resultado del canary incluye `historyRecorded` / `historyError`. Sigue sin interrumpir la sincronización. Qué causa concreta impidió la fila del canary en la hoja real **no está confirmado**: los encabezados de la fila 7 no son legibles con el conector disponible (sólo devuelve estructura; `Historial sync` mide A1:J507, es decir, está en su tope de 500 filas). Tests de regresión: 2 nuevos, que fallan con el código anterior y pasan con el actual.
+
+**Firestore directo.** No hay credenciales de Firestore en esta sesión: `products/CANARY-SHEETS-FIRESTORE`, `productInventory/CANARY-SHEETS-FIRESTORE` y su auditoría **no se leyeron directamente**. Sigue vigente sólo la evidencia indirecta (listado Admin). No se repitió el canary. El webhook rechaza URLs de Shopify y esta ruta no invoca la API de Shopify (sin llamadas a hosts Shopify en `sheets-products-webhook.js`, sólo su validación).
+
+**Verificación local (este commit).** cuentas 34/34, checkout 99/99, carrito 4/4, PayPal 6/6, engagement 44/44, conexiones 31/31, sincronización 82/82. `npm run audit:final` terminó con código 0 (el paso de navegador responsive requirió apuntar Playwright al Chromium preinstalado del entorno; no cambia el repositorio). `diagnostic-manifest.json` se regeneró por el cambio en `apps-script/`.
+
+**Producción (Pages), lectura 17:07–17:10 UTC.** `/api/health` 200 `ok:true`; `/api/paypal-config` Sandbox, `rateSource` BCP, `rateSourceDate` 2026-09-25, `rateUpdatedAt` 2026-09-28T19:26Z; `/api/paypal-rate-refresh` sin credenciales → 401. `monitor:production`: 31 rutas OK y exactamente tres fallos, todos por catálogo público vacío (sitemap de productos, canary SEO, metadata de ficha). `robots.txt`, `sitemap.xml` (índice de 3), `sitemap-pages.xml` (10 URL), `sitemap-collections.xml` (0), canonical del host Pages y `X-Robots-Tag: noindex` correctos. `tintinaccs.com` sigue sirviendo Shopify (cdn.shopify.com).
+
+**No verificado en esta sesión:** despliegue/fuente de Apps Script, lecturas Firestore, registro de la ejecución de `syncProducts`, favoritos/carrito/perfil autenticados en producción, cuentas reales, Search Console (propiedades, propiedad, sitemap), redondeo BCP en producción (cubierto sólo por tests locales), y CI/preview de este PR (pendiente).
+
+**Decisión: NO-GO** para migrar dominio o cerrar Shopify: falta catálogo real, verificación Sheets→Firestore con inventario/auditoría, aceptación autenticada de compra/perfil, decisión sobre PayPal Live y propiedad/sitemap del dominio comercial.
+
+### Cierre de implementación y despliegue — 2026-09-29 20:40 UTC
+
+El PR #968 (`feat(home): hero editable desde Super Admin`) pasó la CI completa del contrato único (run 3578: artefactos, contratos estáticos/operativos, emulador Firestore, navegador, accesibilidad, SEO y performance) y se integró a `main` como `aa23fbb2057d7845af997fdbe6c28de4297352f3`. La corrección incluida en CI fue alinear las auditorías de cache del loader con la versión vigente `tintin-20260929-shopify-identity-loader-3` y regenerar los artefactos derivados sin incluir archivos auxiliares locales.
+
+La verificación pública posterior a la integración cargó `https://tintinaccesorios.pages.dev/` y mostró la portada con el hero editable, CTA y navegación; el recurso visual publicado fue `assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.webp` (imagen cargada, 1774 px). Cloudflare Pages sirve el commit integrado. Esto verifica despliegue del sitio Pages, no un corte del dominio comercial: `tintinaccs.com`/Shopify no se tocó.
+
+El estado de producción sigue siendo **NO-GO**: la implementación y el despliegue Pages están confirmados, pero permanecen sin evidencia directa las lecturas Firestore de producto/inventario/auditoría, el registro de Historial sync, la equivalencia de la fuente Apps Script v16 con el código actualizado, las mutaciones autenticadas de cuenta/perfil/carrito/checkout, PayPal Live y Search Console/catálogo comercial. Los tres fallos de `monitor:production` continúan siendo los esperados mientras el catálogo público real esté vacío; el canary permanece inactivo y no vendible.

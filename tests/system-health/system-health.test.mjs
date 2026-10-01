@@ -27,6 +27,14 @@ const COMPLETE_ENV = {
   CF_PAGES_URL: 'https://example.pages.dev',
 };
 
+const livePaypalConfig = async () => ({
+  enabled: true,
+  mode: 'live',
+  missing: [],
+  rateSource: 'BCP',
+  rateSourceDate: '2026-09-29',
+});
+
 test('estado integral pasa solo con runtime y puente Sheets confirmados', async () => {
   const report = await runSystemHealth(COMPLETE_ENV, {
     runtimeRunner: async () => runtimeReport(true),
@@ -40,6 +48,7 @@ test('estado integral pasa solo con runtime y puente Sheets confirmados', async 
       ms: 20,
       code: '',
     }),
+    paypalConfigResolver: livePaypalConfig,
   });
 
   assert.equal(report.ok, true);
@@ -48,10 +57,13 @@ test('estado integral pasa solo con runtime y puente Sheets confirmados', async 
   assert.equal(report.admin.settings, true);
   assert.equal(report.integrations.sheets, true);
   assert.deepEqual(report.integrations.paypal, {
-    configured: false,
-    enabled: false,
-    environment: 'sandbox',
-    missing: ['feature_disabled', 'client_id', 'client_secret', 'webhook_id', 'exchange_rate', 'stale_exchange_rate'],
+    configured: true,
+    enabled: true,
+    environment: 'live',
+    missing: [],
+    rateSource: 'BCP',
+    rateSourceDate: '2026-09-29',
+    productionReady: true,
   });
   assert.equal(report.deployment.commitSha, COMPLETE_ENV.CF_PAGES_COMMIT_SHA);
   assert.equal(SYSTEM_AUTHORITIES.orders.mode, 'admin-parity');
@@ -72,6 +84,7 @@ test('configuración faltante o protocolo Sheets no verificado mantiene FAIL', a
       ms: 15,
       code: 'canonical_guard_not_confirmed',
     }),
+    paypalConfigResolver: async () => ({ enabled: false, mode: 'sandbox', missing: ['stale_exchange_rate'] }),
   });
 
   assert.equal(report.ok, false);
@@ -100,6 +113,7 @@ test('la cola de participación se informa en integraciones sin alterar ok', asy
       ms: 10,
       code: '',
     }),
+    paypalConfigResolver: livePaypalConfig,
     catalogSheetQueueStatus: async () => null,
     orderEmailQueueStatus: async () => null,
     engagementSheetQueueStatus: async () => status,
@@ -107,6 +121,29 @@ test('la cola de participación se informa en integraciones sin alterar ok', asy
 
   assert.deepEqual(report.integrations.engagementSheetQueue, status);
   assert.equal(report.ok, true);
+});
+
+test('PayPal sandbox con tasa BCP vigente no habilita el estado integral de producción', async () => {
+  const report = await runSystemHealth(COMPLETE_ENV, {
+    runtimeRunner: async () => runtimeReport(true),
+    sheetsProbe: async () => ({
+      reachable: true,
+      httpStatus: 200,
+      protocolOk: true,
+      revision: 'apps-script-products-guard-v1',
+    }),
+    paypalConfigResolver: async () => ({
+      enabled: true,
+      mode: 'sandbox',
+      missing: [],
+      rateSource: 'BCP',
+      rateSourceDate: '2026-09-29',
+    }),
+  });
+
+  assert.equal(report.integrations.paypal.configured, true);
+  assert.equal(report.integrations.paypal.productionReady, false);
+  assert.equal(report.ok, false);
 });
 
 test('probe Apps Script confirma el guard canónico sin token y sin escritura', async () => {

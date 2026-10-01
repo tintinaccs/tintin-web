@@ -53,6 +53,9 @@ import {
   function shouldShow(user, data, preview){
     if (!user) return false;
     if (preview) return true;
+    // Sin datos obligatorios completos no hay bienvenida: el tutorial marca el
+    // alta como terminada y dejaría pasar a una cuenta incompleta.
+    if (String(data?.profileStatus || '').toLowerCase() === 'incomplete') return false;
     if (seen(data)) return false;
     const p = new URLSearchParams(location.search);
     return p.get('welcome') === '1' || data?.welcomeTutorialPending === true || data?.onboardingCompleted === false || recentlyCreated(user, data);

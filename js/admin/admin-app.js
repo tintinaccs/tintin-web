@@ -31,7 +31,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260929-profile-gate-all-pages-1";
 import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1-auth-popup-resolver-1-launch-20260926-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
@@ -152,7 +152,9 @@ async function pushProductsToSheets(productIds) {
   if (!ids.length || currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN) return false;
   try {
     const idToken = await currentUser.getIdToken();
-    for (let i = 0; i < ids.length; i += 100) {
+    // Keep browser pushes aligned with the durable queue chunk size. Apps
+    // Script writes several product columns and can time out on large batches.
+    for (let i = 0; i < ids.length; i += 20) {
       await fetch(SHEETS_PRODUCT_SYNC_URL, {
         method: 'POST',
         cache: 'no-store',
@@ -160,7 +162,7 @@ async function pushProductsToSheets(productIds) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'syncProducts',
-          productIds: ids.slice(i, i + 100),
+        productIds: ids.slice(i, i + 20),
           idToken,
         }),
       }).then(async response => {

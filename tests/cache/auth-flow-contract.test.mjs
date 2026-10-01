@@ -149,7 +149,9 @@ test('arranque global no vence ni cierra sesiones automáticamente', () => {
   assert.doesNotMatch(session, /setInterval\(/);
 });
 
-test('guard de perfil sigue limitado a checkout y no redirige durante UNKNOWN', () => {
-  assert.match(profile, /const GUARDED_PAGES = \['checkout'\]/);
+test('guard de perfil cubre toda página con sesión y no redirige durante UNKNOWN', () => {
+  assert.doesNotMatch(profile, /GUARDED_PAGES/);
+  assert.match(profile, /page === 'login' \|\| page\.startsWith\('admin'\)/);
+  assert.match(profile, /AUTH_STATES\.UNKNOWN/);
   assert.match(profilePage, /profile-auth-pending/);
 });

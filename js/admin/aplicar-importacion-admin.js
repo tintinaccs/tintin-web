@@ -26,7 +26,7 @@ const BATCH_SIZE = 50;
 const MEDIA_COPY_BATCH_SIZE = 5;
 const APPLY_STATES = new Set(['READY', 'RUNNING', 'FAILED']);
 
-export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, toast, node }) {
+export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, refreshCatalogIdentitySnapshot, toast, node }) {
   let ui = null;
   let totals = { invalid: 0 };
 
@@ -185,8 +185,8 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
 
   async function apply() {
     if (blockReason() || state.busy) return;
-    const records = applicableRecords();
-    const confirmed = window.confirm(`Se van a crear hasta ${records.length} producto(s) en el catálogo real de la tienda.\n\nLos productos que ya existan no se modifican ni se borran. ¿Continuar?`);
+    const recordsToConfirm = applicableRecords();
+    const confirmed = window.confirm(`Se van a crear hasta ${recordsToConfirm.length} producto(s) en el catálogo real de la tienda.\n\nLos productos que ya existan no se modifican ni se borran. ¿Continuar?`);
     if (!confirmed || blockReason() || state.busy) return;
     state.busy = true;
     ui.button.textContent = 'Aplicando…';
@@ -199,6 +199,14 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     // Creados por este mismo job en un intento anterior (reintento tras FAILED).
     let resumed = 0;
     try {
+      if (typeof refreshCatalogIdentitySnapshot === 'function') {
+        const refreshedTotals = await refreshCatalogIdentitySnapshot();
+        if (refreshedTotals) totals = refreshedTotals;
+        if (totals.invalid > 0) {
+          throw new Error('El catálogo cambió desde que cargaste el CSV. Revisá los productos marcados antes de volver a aplicar.');
+        }
+      }
+      const records = applicableRecords();
       if (state.job.status === 'FAILED') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'READY' });
       if (state.job.status === 'READY') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'RUNNING', processed: 0, lastCheckpoint: 0 });
       await saveLocalJob();

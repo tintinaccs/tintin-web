@@ -49,6 +49,18 @@ function formatAgeMs(ms) {
   return `${Math.floor(hours / 24)} d`;
 }
 
+function paypalMissingLabels(missing = []) {
+  const labels = {
+    feature_disabled: 'activar PayPal',
+    client_id: 'Client ID de PayPal',
+    client_secret: 'Client Secret de PayPal',
+    webhook_id: 'Webhook ID de PayPal',
+    exchange_rate: 'tasa de cambio',
+    stale_exchange_rate: 'actualizar la tasa de cambio',
+  };
+  return [...new Set((Array.isArray(missing) ? missing : []).map(code => labels[code] || String(code)))];
+}
+
 function item(labelText, value, detail = '') {
   const itemState = state(value);
   return `
@@ -148,6 +160,14 @@ function render(payload) {
   const admin = payload?.admin || {};
   const integrations = payload?.integrations || {};
   const appsScript = integrations?.appsScript || {};
+  const paypal = integrations?.paypal || {};
+  const paypalProductionReady = paypal.productionReady === true;
+  const paypalMissing = paypalMissingLabels(paypal.missing);
+  const paypalDetail = paypalProductionReady
+    ? `Activo · entorno Live · tasa ${paypal.rateSource || 'manual'}${paypal.rateSourceDate ? ` · ${paypal.rateSourceDate}` : ''}`
+    : paypal.enabled === true
+      ? `Sandbox habilitado · requiere entorno Live${paypal.rateSourceDate ? ` · tasa ${paypal.rateSource || 'manual'} ${paypal.rateSourceDate}` : ''}`
+      : `Deshabilitado${paypalMissing.length ? ` · falta ${paypalMissing.join(', ')}` : ''}`;
   const areas = document.getElementById('system-health-areas');
   if (!areas) return;
 
@@ -164,13 +184,15 @@ function render(payload) {
     ['Visual Builder', admin.visualBuilder, 'Páginas, borradores e historial'],
     ['Resend', integrations.resend, 'Configuración privada de correo presente'],
     ['Cloudinary', integrations.cloudinary, 'Configuración privada de multimedia presente'],
+    ['PayPal', paypalProductionReady, paypalDetail],
     ['Google Sheets', integrations.sheets, 'Secreto del puente + protocolo de Apps Script verificado'],
     ['Apps Script', appsScript.protocolOk, appsScript.protocolOk
       ? `Protocolo ${appsScript.revision || 'actual'} · ${Number(appsScript.ms || 0)} ms`
       : `Estado ${appsScript.code || 'no_verificado'} · HTTP ${appsScript.httpStatus || 0}`],
   ];
   areas.innerHTML = rows.map(([name, value, detail]) => item(name, value, detail)).join('');
-  setOverall(payload?.ok === true ? 'PASS' : 'FAIL', payload?.checkedAt || '');
+  const allGreen = payload?.ok === true && rows.every(([, value]) => value === true);
+  setOverall(allGreen ? 'PASS' : 'FAIL', payload?.checkedAt || '');
   renderMeta(payload);
   renderAuthorities(payload?.authorities || {});
 
@@ -183,8 +205,8 @@ function render(payload) {
       : sync.available === true && Number(sync.syncing24h || 0) > 0
         ? ` Hay ${Number(sync.syncing24h)} registro(s) SYNCING en las últimas 24 h para revisar.`
         : '';
-    notice.className = `adm-master-notice ${payload?.ok === true ? 'notice-info' : 'notice-error'}`;
-    notice.textContent = payload?.ok === true
+    notice.className = `adm-master-notice ${allGreen ? 'notice-info' : 'notice-error'}`;
+    notice.textContent = allGreen
       ? `Las autoridades operativas y el puente de sincronización respondieron correctamente.${syncSuffix}`
       : `Hay componentes que requieren revisión: ${failures.join(', ') || 'estado general'}.${syncSuffix}`;
   }

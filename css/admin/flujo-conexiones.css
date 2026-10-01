@@ -85,6 +85,8 @@
 .tfc-pill-state, .tfc-pill { border-width: 1px; border-style: solid; }
 
 .tfc-live-dot { font-size: 10px; }
+.tfc-live-dot.is-partial, .tfc-edge-live.is-partial { color: var(--admin-color-warning-text); }
+.tfc-live-dot.is-unconfirmed, .tfc-edge-live.is-unconfirmed { color: var(--admin-color-text-secondary); }
 
 /* Estados — clases generadas por slug() del texto EXACTO de cada estado en
    datos-flujo-conexiones.js (ESTADOS). Si el texto de un estado cambia, esta
