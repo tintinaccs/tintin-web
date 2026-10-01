@@ -99,7 +99,7 @@ const checks = [
   ['La persistencia de Auth tiene una sola autoridad', unexpectedPersistenceCallers.length === 0 && persistenceCallers.length === 1],
   ['Firestore confirma la identidad antes de terminar un login', profileStore.includes('await setDoc(ref, identityPatch, { merge: true })')],
   ['Contacto no contiene lógica de cierre de sesión', !/\bsignOut\s*\(/.test(contactMaintenance)],
-  ['El guard de perfil sólo protege checkout', profileGate.includes("const GUARDED_PAGES = ['checkout']")],
+  ['El guard de perfil cubre toda página con sesión (sólo login y admin exentos)', !profileGate.includes('GUARDED_PAGES') && /page === 'login' \|\| page\.startsWith\('admin'\)/.test(profileGate)],
   ['El carrito espera restauración Auth antes de observar sesión', cartWaitsForAuthRestore],
   ['Firebase persiste sesión local para todas las superficies autenticadas', persistenceAvailableToEverySurface],
 ];

@@ -3,6 +3,8 @@ var TINTIN_PRODUCTS_SHEET = 'Productos';
 var TINTIN_PRODUCTS_HEADER_ROW = 6;
 var TINTIN_PRODUCTS_FIRST_ROW = 7;
 var TINTIN_PRODUCTS_SPREADSHEET_ID = '106Z1A8veL9fGMc4U7R10NVNMsJiEYt9wiGr4YFAav1U';
+var TINTIN_PRODUCTS_CANARY_ID = 'CANARY-SHEETS-FIRESTORE';
+var TINTIN_PRODUCTS_CANARY_NAME = 'PRUEBA QA · NO VENDER';
 var TINTIN_USERS_SHEET = 'Usuarios web';
 var TINTIN_USERS_HEADER_ROW = 6;
 var TINTIN_USERS_FIRST_ROW = 7;
@@ -123,7 +125,7 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
   var allowed = { SYNCED: true, SYNCING: true, ERROR: true, REJECTED: true, LOCAL: true };
   if (!allowed[status]) throw new Error('Estado de sincronizacion invalido.');
   var history = tintinProductsSpreadsheet_().getSheetByName(TINTIN_SYNC_HISTORY_SHEET);
-  if (!history) return false;
+  if (!history) throw new Error('No existe la hoja Historial sync.');
   var width = Math.max(history.getLastColumn(), 1);
   var headers = history.getRange(TINTIN_SYNC_HISTORY_HEADER_ROW, 1, 1, width).getDisplayValues()[0];
   var values = new Array(width).fill('');
@@ -137,8 +139,11 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
     else if (/^(celda|rango|cell)$/.test(key)) { values[index] = cell; matched += 1; }
     else if (/^(detalle|mensaje|descripcion|resultado|error)$/.test(key)) { values[index] = String(detail || '').slice(0, 500); matched += 1; }
   });
-  // No adivina columnas: si la fila 7 no expone estado, conserva el historial intacto.
-  if (!headers.some(function(header) { return /^(estado|status)$/.test(tintinSyncHeaderKey_(header)); })) return false;
+  // No adivina columnas: si la fila 7 no expone estado, conserva el historial intacto
+  // y lo informa; un retorno silencioso ocultaba que el evento no se registró.
+  if (!headers.some(function(header) { return /^(estado|status)$/.test(tintinSyncHeaderKey_(header)); })) {
+    throw new Error('Historial sync no expone una columna Estado en la fila ' + TINTIN_SYNC_HISTORY_HEADER_ROW + '.');
+  }
   // insertRowBefore/deleteRows desplazan filas. Un lock evita que dos onEdit
   // concurrentes calculen límites incompatibles y pierdan el registro.
   var lock = LockService.getScriptLock();
@@ -226,9 +231,18 @@ function tintinClaimProductEdit_(event) {
   return true;
 }
 
+// Nunca interrumpe la sincronización, pero devuelve si el evento quedó
+// registrado para que las pruebas explícitas no lo den por supuesto.
 function tintinRecordSyncSafely_(status, sheetName, cell, detail) {
-  try { tintinAppendSyncHistory_(status, sheetName, cell, detail); }
-  catch (historyError) { console.error('No se pudo registrar Historial sync: ' + historyError.message); }
+  try {
+    if (tintinAppendSyncHistory_(status, sheetName, cell, detail)) return { recorded: true };
+    console.error('Historial sync no registró el evento ' + status + ': ninguna columna reconocida.');
+    return { recorded: false, reason: 'no-recognized-columns' };
+  } catch (historyError) {
+    var reason = String(historyError && historyError.message || historyError);
+    console.error('No se pudo registrar Historial sync: ' + reason);
+    return { recorded: false, reason: reason };
+  }
 }
 
 function tintinCallProductsWebhook_(payload) {
@@ -456,12 +470,21 @@ function tintinDiagnosticarActivadores() {
   });
 }
 
-function tintinFindProductRow_(sheet, productId) {
+function tintinBuildProductRowIndex_(sheet) {
   var lastRow = Math.max(sheet.getLastRow(), TINTIN_PRODUCTS_FIRST_ROW);
   var ids = sheet.getRange(TINTIN_PRODUCTS_FIRST_ROW, 1, lastRow - TINTIN_PRODUCTS_FIRST_ROW + 1, 1).getDisplayValues();
+  var rows = {};
   for (var index = 0; index < ids.length; index += 1) {
-    if (String(ids[index][0] || '').trim() === productId) return TINTIN_PRODUCTS_FIRST_ROW + index;
+    var id = String(ids[index][0] || '').trim();
+    if (id) rows[id] = TINTIN_PRODUCTS_FIRST_ROW + index;
   }
+  return rows;
+}
+
+function tintinFindProductRow_(sheet, productId, rowIndex) {
+  if (rowIndex && rowIndex[productId]) return rowIndex[productId];
+  if (!rowIndex) rowIndex = tintinBuildProductRowIndex_(sheet);
+  if (rowIndex[productId]) return rowIndex[productId];
   return sheet.getLastRow() + 1;
 }
 
@@ -579,18 +602,27 @@ function tintinSyncProductsFromPayload_(body) {
   var items = Array.isArray(body.items) ? body.items.slice(0, 100) : [];
   var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_PRODUCTS_SHEET);
   if (!sheet) throw new Error('No existe la hoja Productos.');
+  // Un POST puede traer cinco productos. Construir el índice una vez evita
+  // leer toda la columna A por cada ítem, que era el costo dominante y hacía
+  // que los lotes legítimos excedieran el timeout de Cloudflare.
+  var rowIndex = tintinBuildProductRowIndex_(sheet);
 
   items.forEach(function(item) {
     var id = String((item && item.id) || '').trim();
     if (!/^[A-Za-z0-9_-]{1,128}$/.test(id)) return;
-    var rowNumber = tintinFindProductRow_(sheet, id);
+    var rowNumber = tintinFindProductRow_(sheet, id, rowIndex);
     if (!item.exists) {
-      if (rowNumber <= sheet.getLastRow()) sheet.deleteRow(rowNumber);
+      if (rowNumber <= sheet.getLastRow()) {
+        sheet.deleteRow(rowNumber);
+        // Al borrar, los números de fila posteriores se desplazan.
+        rowIndex = tintinBuildProductRowIndex_(sheet);
+      }
       return;
     }
     var product = item.product || {};
     sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
     tintinWriteProductRow_(sheet, rowNumber, product, item.inventory || {});
+    rowIndex[id] = rowNumber;
   });
 
   return ContentService.createTextOutput(JSON.stringify({ ok: true, sheetName: TINTIN_PRODUCTS_SHEET, synced: items.length }))
@@ -684,31 +716,74 @@ function tintinProbarConfiguracionCompleta() {
 
 function tintinProbarEdicionCatalogo() {
   var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_PRODUCTS_SHEET);
-  if (!sheet || sheet.getLastRow() < TINTIN_PRODUCTS_FIRST_ROW) {
-    throw new Error('Productos no tiene una fila existente para la prueba segura.');
-  }
-  var rowNumber = 0;
+  if (!sheet || sheet.getLastRow() < TINTIN_PRODUCTS_FIRST_ROW) return {
+    ok: false, destructive: false, error: 'canary-not-found'
+  };
+  var canaryRows = [];
   var names = sheet.getRange(TINTIN_PRODUCTS_FIRST_ROW, 2, sheet.getLastRow() - TINTIN_PRODUCTS_FIRST_ROW + 1, 1).getDisplayValues();
   for (var index = 0; index < names.length; index += 1) {
-    if (String(names[index][0] || '').trim()) {
-      rowNumber = TINTIN_PRODUCTS_FIRST_ROW + index;
-      break;
+    if (String(names[index][0] || '').trim() === TINTIN_PRODUCTS_CANARY_NAME) {
+      canaryRows.push(TINTIN_PRODUCTS_FIRST_ROW + index);
     }
   }
-  if (!rowNumber) throw new Error('No existe un producto válido para la prueba segura.');
-  var before = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
-  if (String(before[34] || '').trim()) throw new Error('La fila de prueba tiene una acción pendiente; elegí otra fila.');
-  tintinSendProductRow_(sheet, rowNumber);
-  var after = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
-  return {
-    ok: true,
-    productId: String(after[0] || ''),
-    row: rowNumber,
-    sameName: String(before[1] || '') === String(after[1] || ''),
-    samePrice: Number(before[5] || 0) === Number(after[5] || 0),
-    sameStock: Number(before[10] || 0) === Number(after[10] || 0),
-    actionCleared: String(after[34] || '') === ''
+  if (!canaryRows.length) return {
+    ok: false, destructive: false, error: 'canary-not-found', requiredProductId: TINTIN_PRODUCTS_CANARY_ID,
+    requiredProductName: TINTIN_PRODUCTS_CANARY_NAME
   };
+  if (canaryRows.length !== 1) return {
+    ok: false, destructive: false, error: 'canary-duplicate', rows: canaryRows
+  };
+  var rowNumber = canaryRows[0];
+  var before = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
+  if (String(before[0] || '').trim() !== TINTIN_PRODUCTS_CANARY_ID) return {
+    ok: false, destructive: false, error: 'canary-id-mismatch', row: rowNumber
+  };
+  if (tintinBool_(before[14]) || Number(before[10] || 0) !== 0 || String(before[34] || '').trim()) return {
+    ok: false, destructive: false, error: 'canary-must-be-inactive-zero-stock-and-action-clear', row: rowNumber
+  };
+  if (!String(before[3] || '').trim() || !(Number(before[5]) > 0) || String(before[19] || '').trim()) return {
+    ok: false, destructive: false, error: 'canary-needs-category-price-and-no-image', row: rowNumber
+  };
+  var cell = sheet.getRange(rowNumber, 1, 1, 35).getA1Notation();
+  var historyStart = tintinRecordSyncSafely_('SYNCING', TINTIN_PRODUCTS_SHEET, cell, 'Ejecutando prueba controlada Sheets → Firestore para el canary inactivo.') || {};
+  try {
+    // El webhook trata changedFields vacío como una actualización parcial sin
+    // campos y la rechaza. La prueba explícita declara el conjunto mínimo que
+    // valida ambos documentos Firestore sin tocar otros productos.
+    tintinSendProductRow_(sheet, rowNumber, [
+      'name', 'category', 'price', 'active', 'stock',
+      'costUnit', 'purchased', 'stockMinimum', 'internalNotes'
+    ]);
+    var after = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
+    var sameName = String(before[1] || '') === String(after[1] || '');
+    var samePrice = Number(before[5] || 0) === Number(after[5] || 0);
+    var sameStock = Number(before[10] || 0) === Number(after[10] || 0);
+    var result = {
+      ok: String(after[0] || '').trim() === TINTIN_PRODUCTS_CANARY_ID &&
+        String(after[1] || '').trim() === TINTIN_PRODUCTS_CANARY_NAME && !tintinBool_(after[14]) &&
+        Number(after[10] || 0) === 0 && String(after[19] || '').trim() === '' &&
+        sameName && samePrice && sameStock && String(after[34] || '').trim() === '',
+      destructive: false,
+      writesFirestore: true,
+      publicCatalogVisible: false,
+      productId: String(after[0] || ''),
+      row: rowNumber,
+      sameName: sameName,
+      samePrice: samePrice,
+      inactive: !tintinBool_(after[14]),
+      zeroStock: sameStock && Number(after[10] || 0) === 0,
+      actionCleared: String(after[34] || '').trim() === ''
+    };
+    var historyEnd = tintinRecordSyncSafely_(result.ok ? 'SYNCED' : 'ERROR', TINTIN_PRODUCTS_SHEET, cell,
+      result.ok ? 'Prueba canary Sheets → Firestore confirmada; producto inactivo y sin stock.' : 'La escritura terminó, pero falló la verificación posterior del canary.') || {};
+    // La escritura de negocio y el registro de auditoría son evidencias distintas.
+    result.historyRecorded = historyStart.recorded === true && historyEnd.recorded === true;
+    if (!result.historyRecorded) result.historyError = String(historyEnd.reason || historyStart.reason || 'unknown');
+    return result;
+  } catch (error) {
+    tintinRecordSyncSafely_('ERROR', TINTIN_PRODUCTS_SHEET, cell, 'Falló la prueba canary Sheets → Firestore: ' + String(error && error.message || error));
+    throw error;
+  }
 }
 
 function tintinWebhookSecret_() {

@@ -117,9 +117,16 @@ async function transitionJob(env, actor, body) {
   if (!STATES.has(next) || !TRANSITIONS.get(job.status)?.has(next)) {
     throw Object.assign(new Error(`Transición de importación no permitida: ${job.status} → ${next}.`), { status: 409 });
   }
+  // Aplicar al catálogo real solo se habilita para un CSV de Shopify sin errores.
+  if (next === 'RUNNING' && (job.source !== 'shopify-csv' || Number(job.errors || 0) !== 0)) {
+    throw Object.assign(new Error('Solo un CSV de Shopify sin errores puede aplicarse al catálogo.'), { status: 409 });
+  }
   const now = new Date();
   const processed = Math.min(finiteInt(body.processed, Number(job.processed || 0)), Number(job.total || 0));
   const progress = Number(job.total || 0) ? Math.round(processed / Number(job.total) * 100) : 0;
+  const created = finiteInt(body.created);
+  const skipped = finiteInt(body.skipped);
+  const migration = { RUNNING: 'running', COMPLETED: 'completed', FAILED: 'failed' }[next];
   const fields = encodeFirestoreFields({
     status: next,
     updatedAt: now,
@@ -127,13 +134,19 @@ async function transitionJob(env, actor, body) {
     progress,
     lastCheckpoint: finiteInt(body.lastCheckpoint, Number(job.lastCheckpoint || 0)),
     ...(body.error ? { lastError: clean(body.error, 800) } : {}),
+    ...(next === 'RUNNING' ? { dryRun: false } : {}),
+    ...(migration ? { catalogMigration: migration } : {}),
+    ...(next === 'COMPLETED' ? { created, skipped } : {}),
   });
+  const detail = next === 'COMPLETED'
+    ? `Estado ${job.status} → ${next}: ${created} producto(s) creado(s), ${skipped} ya existían.`
+    : `Estado ${job.status} → ${next}.`;
   const auditId = `EVT_IMPORT_${crypto.randomUUID().replaceAll('-', '')}`;
   await firestoreAdminBatchCommit(env, [
     { path: `importJobs/${jobId}`, fields, mergeFields: Object.keys(decodeFirestoreFields(fields)), currentDocument: { updateTime: document.updateTime } },
-    { path: `auditLog/${auditId}`, fields: auditFields(actor, `import_job_${next.toLowerCase()}`, jobId, `Estado ${job.status} → ${next}.`) },
+    { path: `auditLog/${auditId}`, fields: auditFields(actor, `import_job_${next.toLowerCase()}`, jobId, detail) },
   ]);
-  return { jobId, status: next, processed, total: Number(job.total || 0), progress, dryRun: true };
+  return { jobId, status: next, processed, total: Number(job.total || 0), progress, dryRun: next === 'RUNNING' ? false : job.dryRun !== false };
 }
 
 export async function onRequest(context) {

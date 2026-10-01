@@ -12,6 +12,7 @@ const firebaseJson = JSON.parse(read('firebase.json'));
 const phase9 = read('js/admin/importacion-admin.js');
 const importCore = read('js/core/store/shopify-import-core.mjs');
 const importJob = read('functions/api/admin-import-job.js');
+const importApply = read('js/admin/aplicar-importacion-admin.js');
 const adminHtml = read('admin.html');
 const normalization = read('js/core/store/normalizacion-importacion.mjs');
 const normalizationTests = read('tests/import/phase9-import-normalization.test.mjs');
@@ -108,7 +109,17 @@ check(
   importJob.includes("catalogMigration: 'not-executed'") &&
     importJob.includes('dryRun: true') &&
     !phase9.includes("collection(db, 'products')"),
-  'La migración real de catálogo debe quedar fuera de esta fase y requerir autorización explícita.'
+  'El preview nunca escribe el catálogo; eso solo ocurre en el paso de aplicación explícito.'
+);
+
+check(
+  'Aplicar al catálogo es explícito, solo-crear y exige job Shopify sin errores',
+  importApply.includes('window.confirm(') &&
+    importApply.includes('!state.backupAt') &&
+    importApply.includes('if (snapshot.exists()) return;') &&
+    !/tx\.update|tx\.delete|deleteDoc|updateDoc|setDoc|productInventory/.test(importApply) &&
+    importJob.includes("next === 'RUNNING' && (job.source !== 'shopify-csv'"),
+  'La escritura real requiere confirmación, backup y un job sin errores, y nunca modifica productos existentes.'
 );
 
 check(

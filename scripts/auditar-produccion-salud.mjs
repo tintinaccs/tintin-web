@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { findShopifyHostedUrls } from './lib/referencias-shopify.mjs';
 
 const publicSite = JSON.parse(fs.readFileSync(path.resolve('config/public-site.json'), 'utf8'));
 const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
@@ -50,14 +51,14 @@ function xmlLocations(body) {
   return [...String(body || '').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 }
 
-async function inspect(relative, expectedType) {
+async function inspect(relative, expectedType, requestHeaders = {}) {
   const requestedUrl = origin + relative;
   const started = Date.now();
   try {
-    const response = await fetchWithRetry(requestedUrl);
+    const response = await fetchWithRetry(requestedUrl, { headers: requestHeaders });
     const body = await response.text();
     const type = response.headers.get('content-type') || '';
-    const headers = Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control','x-tintin-product-meta'].map(name => [name, response.headers.get(name) || '']));
+    const headers = Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control','x-robots-tag','x-tintin-product-meta'].map(name => [name, response.headers.get(name) || '']));
     const ok = response.ok && (!expectedType || type.includes(expectedType));
     results.push({ requestedUrl, finalUrl: response.url, redirected: response.redirected, status: response.status, ms: Date.now() - started, type, ok, bytes: body.length, headers });
     if (!ok) throw new Error('Respuesta inesperada: ' + response.status + ' ' + type);
@@ -122,7 +123,15 @@ await check('home-canonical', async () => {
 
 await check('robots', async () => {
   const robots = await inspect('/robots.txt', 'text/plain');
-  if (!robots.body.includes('Sitemap: ' + origin + '/sitemap.xml')) throw new Error('robots.txt no apunta al sitemap vigente.');
+  const technicalHost = new URL(origin).hostname.toLowerCase().endsWith('.pages.dev');
+  const hasCurrentSitemap = robots.body.includes('Sitemap: ' + origin + '/sitemap.xml');
+  if (technicalHost) {
+    if (hasCurrentSitemap || /^\s*Sitemap\s*:/im.test(robots.body)) throw new Error('El host técnico pages.dev no debe anunciar su sitemap.');
+    if (robots.headers['x-robots-tag'].toLowerCase() !== 'noindex') throw new Error('El host técnico pages.dev debe entregar X-Robots-Tag: noindex.');
+  } else {
+    if (!hasCurrentSitemap) throw new Error('robots.txt no apunta al sitemap vigente.');
+    if (/noindex/i.test(robots.headers['x-robots-tag'])) throw new Error('El dominio comercial no debe recibir noindex global.');
+  }
   for (const route of ['/admin', '/admin-images', '/checkout', '/login', '/perfil']) {
     if (!robots.body.includes('Disallow: ' + route + '\n')) throw new Error('robots.txt no bloquea la ruta limpia ' + route + '.');
   }
@@ -181,6 +190,46 @@ await check('api-health', async () => {
   }
 });
 
+await check('paypal-public-configuration', async () => {
+  const probe = await inspect('/api/paypal-config', 'application/json', { origin });
+  const payload = JSON.parse(probe.body || '{}');
+  const allowedKeys = new Set(['enabled', 'environment', 'currency', 'clientId', 'rateUpdatedAt', 'rateSource', 'rateSourceDate', 'unavailableReasons']);
+  if (
+    typeof payload?.enabled !== 'boolean'
+    || !['sandbox', 'live'].includes(payload?.environment)
+    || typeof payload?.currency !== 'string'
+    || typeof payload?.clientId !== 'string'
+    || !['BCP', 'manual'].includes(payload?.rateSource)
+    || typeof payload?.rateSourceDate !== 'string'
+    || (payload.rateSource === 'BCP' && !/^\d{4}-\d{2}-\d{2}$/.test(payload.rateSourceDate))
+    || !Array.isArray(payload?.unavailableReasons)
+    || Object.keys(payload).some(key => !allowedKeys.has(key))
+  ) {
+    throw new Error('/api/paypal-config no cumple su contrato público mínimo o expone campos no permitidos.');
+  }
+  if (payload.enabled && (!payload.clientId || payload.unavailableReasons.length)) {
+    throw new Error('PayPal se anuncia como habilitado sin client ID público o con motivos de indisponibilidad.');
+  }
+  if (!payload.enabled && (payload.clientId || !payload.unavailableReasons.length)) {
+    throw new Error('PayPal deshabilitado debe ocultar el client ID y explicar su indisponibilidad.');
+  }
+  const recorded = results.find(item => item.requestedUrl === origin + '/api/paypal-config');
+  if (recorded) {
+    recorded.capability = {
+      enabled: payload.enabled,
+      environment: payload.environment,
+      currency: payload.currency,
+      rateUpdatedAt: payload.rateUpdatedAt || '',
+      rateSource: payload.rateSource,
+      rateSourceDate: payload.rateSourceDate,
+      unavailableReasons: payload.unavailableReasons,
+    };
+  }
+  if (!payload.enabled) {
+    console.log(`INFO — PayPal deshabilitado en ${payload.environment}: ${payload.unavailableReasons.join(', ')}. El medio de pago debe confirmarse aparte en el checkout.`);
+  }
+});
+
 await check('admin-runtime-auth-guard', async () => {
   const guarded = await inspectExpectedStatus('/api/admin-runtime-health', [401, 403], 'application/json');
   const payload = JSON.parse(guarded.body || '{}');
@@ -199,8 +248,55 @@ await check('api-public-catalog', async () => {
   if (payload?.ok !== true || payload?.resource !== 'products' || !Array.isArray(payload?.items)) {
     throw new Error('/api/public-catalog no devolvió el contrato esperado.');
   }
+  const shopifyReferences = findShopifyHostedUrls(payload.items, { baseUrl: origin });
+  if (shopifyReferences.length) {
+    const examples = shopifyReferences.slice(0, 5).map(item => `${item.host} (${item.path || 'registro'})`).join(', ');
+    throw new Error(`El catálogo todavía depende de ${shopifyReferences.length} URL(s) alojada(s) en Shopify: ${examples}.`);
+  }
   sampleProductId = String(payload.items.find(item => item?.id)?.id || '');
   if (!sampleProductId) throw new Error('/api/public-catalog no devolvió ningún producto para el canary SEO.');
+});
+
+await check('api-public-collections-shopify-independence', async () => {
+  const catalog = await inspect('/api/public-catalog?resource=collections', 'application/json');
+  const payload = JSON.parse(catalog.body || '{}');
+  if (payload?.ok !== true || payload?.resource !== 'collections' || !Array.isArray(payload?.items)) {
+    throw new Error('/api/public-catalog no devolvió el contrato esperado para colecciones.');
+  }
+  const references = findShopifyHostedUrls(payload.items, { baseUrl: origin });
+  if (references.length) {
+    const examples = references.slice(0, 5).map(item => `${item.host} (${item.path || 'registro'})`).join(', ');
+    throw new Error(`Las colecciones todavía dependen de ${references.length} URL(s) alojada(s) en Shopify: ${examples}.`);
+  }
+});
+
+await check('visual-builder-shopify-independence', async () => {
+  const pageIds = ['index', 'nosotros', 'catalogo', 'collections', 'product', 'contact', 'envios', 'faq', 'cambios', 'terminos', 'privacidad', '404'];
+  for (const pageId of pageIds) {
+    const result = await inspect('/api/visual-builder-public?page=' + encodeURIComponent(pageId), 'application/json');
+    const payload = JSON.parse(result.body || '{}');
+    if (payload?.ok !== true || payload?.pageId !== pageId || !payload?.config) {
+      throw new Error(`El contenido público del editor visual no devolvió el contrato esperado para ${pageId}.`);
+    }
+    const references = findShopifyHostedUrls(payload.config, { baseUrl: origin });
+    if (references.length) {
+      const examples = references.slice(0, 5).map(item => `${item.host} (${item.path || pageId})`).join(', ');
+      throw new Error(`El contenido público de ${pageId} todavía depende de ${references.length} URL(s) alojada(s) en Shopify: ${examples}.`);
+    }
+  }
+});
+
+await check('visual-studio-global-shopify-independence', async () => {
+  const global = await inspect('/api/visual-studio-global-public', 'application/json', { origin });
+  const payload = JSON.parse(global.body || '{}');
+  if (payload?.ok !== true || !payload?.config) {
+    throw new Error('/api/visual-studio-global-public no devolvió la configuración pública esperada.');
+  }
+  const references = findShopifyHostedUrls(payload.config, { baseUrl: origin });
+  if (references.length) {
+    const examples = references.slice(0, 5).map(item => `${item.host} (${item.path || 'configuración global'})`).join(', ');
+    throw new Error(`La configuración global todavía depende de ${references.length} URL(s) alojada(s) en Shopify: ${examples}.`);
+  }
 });
 
 await check('product-server-metadata', async () => {

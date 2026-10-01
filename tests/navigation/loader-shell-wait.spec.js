@@ -61,11 +61,18 @@ test('las rutas limpias institucionales conservan el mismo loader global', async
   for (const route of ['/about', '/contact', '/envios', '/preguntas-frecuentes', '/terminos', '/privacidad']) {
     await page.goto(route, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#tt-loader', { state: 'attached', timeout: 5000 });
-    const visible = await page.evaluate(() => {
+    const state = await page.evaluate(() => {
       const loader = document.getElementById('tt-loader');
-      return Boolean(loader) && getComputedStyle(loader).display !== 'none' && !loader.classList.contains('tt-out');
+      return {
+        loaderPresent: Boolean(loader),
+        loaderVisible: Boolean(loader) && getComputedStyle(loader).display !== 'none' && !loader.classList.contains('tt-out'),
+        shellMounted: document.body.classList.contains('tt-public-shell-mounted'),
+      };
     });
-    expect(visible, `${route} debe usar el shell de carga global`).toBe(true);
+    expect(state.loaderPresent, `${route} debe usar el loader global`).toBe(true);
+    // En una ruta rápida, el shell puede terminar antes de DOMContentLoaded.
+    // En ese caso el loader ya debe haberse retirado con el shell montado.
+    expect(state.loaderVisible || state.shellMounted, `${route} no debe mostrar una página sin shell`).toBe(true);
   }
 });
 

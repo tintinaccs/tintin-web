@@ -39,6 +39,8 @@ const adminApp      = read('js/admin/admin-app.js');
 const welcomeCtrl   = read('js/admin/content/control-bienvenida-admin.js');
 const unsavedGuard  = read('js/admin/proteccion-cambios-pendientes-admin.js');
 const adminCss      = read('css/admin/admin.css');
+const layoutStudio  = read('js/admin/appearance/visual-studio-layout-admin.js');
+const globalStudio  = read('js/admin/appearance/visual-studio-global-admin.js');
 
 // ---------------------------------------------------------------------------
 // Inventario REAL (no supuesto): se extrae del propio HTML.
@@ -161,6 +163,13 @@ check(
   'No hay ids duplicados en admin.html',
   dupIds.length === 0,
   `IDs duplicados: ${[...new Set(dupIds)].join(', ') || '—'}`
+);
+check(
+  'El panel conserva un único main semántico, incluso con overlays de Apariencia',
+  (adminHtml.match(/<main\b/gi) || []).length === 1 &&
+    !/make\('main','visual-global-main'\)/.test(layoutStudio) &&
+    !/make\('main','visual-global-main'\)/.test(globalStudio),
+  'Los editores superpuestos deben usar contenedores neutros: solo el contenido principal del Admin puede ser <main>.'
 );
 
 // ===========================================================================

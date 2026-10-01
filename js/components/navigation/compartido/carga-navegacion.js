@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-visual-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260930-home-canonical-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -101,7 +101,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
   if (!productsRuntimePromise) {
     productsRuntimePromise = import(versionedJsModule('core/store/estado-productos.js')).catch(error => {
       productsRuntimePromise = null;
-      document.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+      window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
       throw error;
     });
   }
@@ -264,7 +264,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-visual-1'),
+      import('./control-busqueda.js?v=tintin-20260930-home-canonical-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

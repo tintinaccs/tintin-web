@@ -159,9 +159,8 @@ async function inspect(page, width, pageInfo) {
   }, { width, pageInfo, shellExpected:expectsPublicShell(pageInfo) });
 }
 
-// Las páginas con auth y las de redirección declarada (nosotros.html usa
-// meta refresh 0) navegan solas tras cargar; evaluarlas antes de que termine
-// esa navegación destruye el contexto de page.evaluate de forma intermitente.
+// Auth routes and aliases with a declared redirect may navigate after the
+// initial document is ready; wait for that transition before inspecting.
 async function settleRedirect(page, pageInfo, startUrl) {
   if (!pageInfo.requiresAuth && !pageInfo.redirectsTo) return;
   try { await page.waitForURL(url => url.toString() !== startUrl, { timeout:2200 }); await page.waitForLoadState('domcontentloaded', { timeout:3000 }).catch(() => {}); } catch {}

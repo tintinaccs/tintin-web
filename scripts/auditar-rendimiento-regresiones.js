@@ -71,14 +71,14 @@ check(
   'El panel perdió su gate.'
 );
 check(
-  'Catálogo público combina canal en vivo acotado y caché de respaldo',
-  products.includes('onSnapshot') &&
-    products.includes('startPublicProductsRealtime') &&
-    /query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(products) &&
+  'Catálogo público combina API edge acotada y caché de respaldo',
+  products.includes('startPublicProductsRealtime') &&
+    products.includes("fetchPublicCatalogResource('products')") &&
+    !/getDocs\(query\(collection\(db,\s*['"]products['"]\)/.test(products) &&
     products.includes('loadAllProducts') &&
     products.includes('readCached') &&
     products.includes('runSingleFlight'),
-  'El catálogo perdió el canal en vivo acotado o su respaldo de caché.'
+  'El catálogo perdió la lectura acotada por API edge o su respaldo de caché.'
 );
 check(
   'Un catálogo vacío nunca queda cacheado como actualizado',

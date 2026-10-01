@@ -6,7 +6,7 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20260929-superadmin-hero-editable-1';
 import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinImagesPhase5Booted) {
@@ -39,12 +39,10 @@ if (!window.TintinImagesPhase5Booted) {
       mobile: 'assets-tintin/images/nosotros/foto-principal/foto-principal-mobile.webp',
       alt: 'Tintin Accesorios y Relojes',
     },
-    // Hero nuevo único. No se permite que la configuración anterior de
-    // Firestore vuelva a reemplazarlo con el banner viejo.
-    hero_bg_desktop: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png',
-    hero_bg_tablet_landscape: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png',
-    hero_bg_tablet: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png',
-    hero_bg_mobile: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png',
+    hero_bg_desktop: HERO_IMAGE_FALLBACKS.desktop,
+    hero_bg_tablet_landscape: HERO_IMAGE_FALLBACKS.tabletLandscape,
+    hero_bg_tablet: HERO_IMAGE_FALLBACKS.tablet,
+    hero_bg_mobile: HERO_IMAGE_FALLBACKS.mobile,
   });
 
   let images = {};
@@ -234,16 +232,23 @@ if (!window.TintinImagesPhase5Booted) {
       revealHeroWhenImageReady(image);
       return;
     }
-    // El hero aprobado es fijo y local. Se ignoran las URLs heredadas del
-    // slot hero_bg para garantizar que el banner anterior no vuelva a salir.
-    const desktop = absolute(STATIC.hero_bg_desktop);
-    const tablet = absolute(STATIC.hero_bg_tablet);
-    const mobile = absolute(STATIC.hero_bg_mobile);
-    const tabletLandscape = absolute(STATIC.hero_bg_tablet_landscape);
+    // Los artes Tintin del repositorio son el valor inicial. Si Super Admin
+    // guarda una URL en settings/images, esa variante reemplaza el respaldo.
+    const heroSettings = images.hero_bg_configVersion === HERO_IMAGE_CONFIG_VERSION ? images : {};
+    const configuredDesktop = resolveSlotImage(heroSettings, 'hero_bg', 'desktop');
+    const configuredTablet = resolveSlotImage(heroSettings, 'hero_bg', 'tablet');
+    const configuredMobile = resolveSlotImage(heroSettings, 'hero_bg', 'mobile');
+    const desktop = configuredDesktop ? absolute(configuredDesktop) : absolute(STATIC.hero_bg_desktop);
+    const tablet = configuredTablet ? absolute(configuredTablet) : absolute(STATIC.hero_bg_tablet);
+    const mobile = configuredMobile ? absolute(configuredMobile) : absolute(STATIC.hero_bg_mobile);
+    // El panel expone un único slot Tablet: al personalizarlo se usa en ambas
+    // orientaciones. Sin configuración, se conserva el arte horizontal propio.
+    const tabletLandscape = configuredTablet ? tablet : absolute(STATIC.hero_bg_tablet_landscape);
     const signature = [desktop, tablet, tabletLandscape, mobile,
-      images.hero_bg_desktop_size, images.hero_bg_desktop_pos,
-      images.hero_bg_tablet_size, images.hero_bg_tablet_pos,
-      images.hero_bg_mobile_size, images.hero_bg_mobile_pos,
+      heroSettings.hero_bg_desktop_size, heroSettings.hero_bg_desktop_pos,
+      heroSettings.hero_bg_tablet_size, heroSettings.hero_bg_tablet_pos,
+      heroSettings.hero_bg_mobile_size, heroSettings.hero_bg_mobile_pos,
+      heroSettings.hero_bg_autoReuseDesktop,
     ].join('|');
 
     if (image.dataset.ttHeroPhase5Signature === signature) {
@@ -316,8 +321,8 @@ if (!window.TintinImagesPhase5Booted) {
     }
 
     ['desktop', 'tablet', 'mobile'].forEach(device => {
-      const display = heroDisplay(images[`hero_bg_${device}_size`]);
-      const position = String(images[`hero_bg_${device}_pos`] ||
+      const display = heroDisplay(heroSettings[`hero_bg_${device}_size`]);
+      const position = String(heroSettings[`hero_bg_${device}_pos`] ||
         (device === 'mobile' ? 'center 42%' : 'center center'));
       image.style.setProperty(`--tt-hero-fit-${device}`, display.fit);
       image.style.setProperty(`--tt-hero-scale-${device}`, display.scale);

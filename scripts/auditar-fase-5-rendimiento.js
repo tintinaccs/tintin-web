@@ -25,11 +25,12 @@ const html = htmlFiles.map(file => [file, read(file)]);
 
 check(
   'La portada usa una consulta acotada sin listener masivo',
-  products.includes("HOME_PRODUCT_LIMIT = 18") &&
-    products.includes("where('destacado', '==', true)") &&
-    products.includes("return loadHomeProducts()") &&
+  products.includes("fetchPublicCatalogResource('products')") &&
+    products.includes("runSingleFlight('products:home', fetchHomeProducts)") &&
+    !/onSnapshot\(\s*(?:query\()?collection\(db,\s*['"]products['"]\)/.test(products) &&
+    products.includes("return loadHomeProducts(") &&
     /catalogo\|collections/.test(products),
-  'Inicio debe leer como máximo 24 productos; catálogo y colecciones conservan el listener completo.'
+  'Inicio debe leer por la API edge (un solo vuelo, sin listener masivo); catálogo y colecciones usan la misma API.'
 );
 check(
   'Páginas informativas no importan products-store al iniciar',

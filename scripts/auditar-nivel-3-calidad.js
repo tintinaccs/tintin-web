@@ -192,7 +192,7 @@ check(
 check('Existe manifest PWA', exists('manifest.json'));
 
 const recoveryFiles = [
-  'js/pages/home/mantenimiento-inicio.js',
+  'tienda.js', // Inicio: el reintento al volver la red vive en el dueño único de productos
   'js/pages/catalog/mantenimiento-catalogo.js',
   'js/pages/collections/mantenimiento-colecciones.js',
   'js/pages/product/mantenimiento-producto.js',

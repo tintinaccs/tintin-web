@@ -31,7 +31,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260929-profile-gate-all-pages-1";
 import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1-auth-popup-resolver-1-launch-20260926-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
@@ -43,8 +43,8 @@ import { contrastRatio, passesWcag } from "../components/color/utilidades-contra
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1-auth-popup-resolver-1-launch-20260926-1';
 import './products/integridad-inventario-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20260925-admin-ops-1';
-import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260925-admin-ops-1';
+import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20260928-admin-crud-feedback-4';
+import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260928-admin-crud-feedback-3-domain-cutover-2';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -152,7 +152,9 @@ async function pushProductsToSheets(productIds) {
   if (!ids.length || currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN) return false;
   try {
     const idToken = await currentUser.getIdToken();
-    for (let i = 0; i < ids.length; i += 100) {
+    // Keep browser pushes aligned with the durable queue chunk size. Apps
+    // Script writes several product columns and can time out on large batches.
+    for (let i = 0; i < ids.length; i += 20) {
       await fetch(SHEETS_PRODUCT_SYNC_URL, {
         method: 'POST',
         cache: 'no-store',
@@ -160,7 +162,7 @@ async function pushProductsToSheets(productIds) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'syncProducts',
-          productIds: ids.slice(i, i + 100),
+        productIds: ids.slice(i, i + 20),
           idToken,
         }),
       }).then(async response => {
@@ -303,11 +305,48 @@ getDoc(doc(db, 'settings', 'general')).then(snap => {
 // Los avisos van al sistema de operaciones (se apilan sin taparse y los
 // errores duran más). #adm-toast queda como respaldo si ese módulo no cargó.
 function toast(msg, duration = 3000) {
+  const message = String(msg || '');
+  const crudResult = [
+    [/^(Producto (?:actualizado|creado|eliminado|activado|desactivado))/i, 'Producto', 'productos'],
+    [/^(Colección (?:renombrada|actualizada|creada|eliminada)|\d+ producto\(s\) movidos)/i, 'Colección', 'colecciones'],
+    [/^(\d+ producto\(s\) agregados a la colección|\d+ colección\(es\) (?:activadas|desactivadas|eliminadas)|Producto quitado de la colección)/i, 'Colección', 'colecciones'],
+    [/^(Usuario (?:bloqueado|restaurado)|Rol actualizado|\d+ usuario\(s\) (?:bloqueados|restaurados)|Rol actualizado en \d+)/i, 'Cliente', 'clientes'],
+    [/^(Pedido (?:actualizado|\S+ movido)|El pedido ya no estaba|Estado actualizado(?::| en)|Estado de pago actualizado|\d+ pedido\(s\) movidos a Borrados)/i, 'Pedido', 'pedidos'],
+    [/^(Cuenta eliminada por completo|\d+ cuenta\(s\) eliminadas por completo)/i, 'Cuenta', 'clientes'],
+    [/^(Producto quitado de su colección|\d+ productos (?:eliminados definitivamente|\w+)|Stock actualizado en \d+ producto|Precio actualizado en \d+ producto|Oferta .* en \d+ producto|Destacado .* en \d+ producto)/i, 'Producto', 'productos'],
+  ].find(([pattern]) => pattern.test(message));
+  if (crudResult && window.TintinAdminOps?.runOperation) {
+    const [, label, module] = crudResult;
+    window.TintinAdminOps.runOperation({
+      title: `${label}: resultado`, name: message, module,
+      stages: [{ id: 'result', label: 'Resultado de la operación' }],
+      notifySuccess: false, showSuccessDialog: true,
+      run: async ctx => { ctx.start('result'); ctx.ok('result', { message }); return message; },
+    }).catch(error => console.error('[admin-crud-feedback] No se pudo mostrar el resultado:', error));
+    return;
+  }
   if (window.toast?.__tintinOps) { window.toast(msg, duration); return; }
   const el = document.getElementById('adm-toast');
   el.textContent = msg;
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), duration);
+}
+
+// Las acciones CRUD individuales usan el mismo historial/progreso que las
+// operaciones masivas y muestran el resultado en el diálogo central.
+async function runAdminCrudOperation({ title, module, name, dangerous = false, stages, action }) {
+  const runOperation = window.TintinAdminOps?.runOperation;
+  if (typeof runOperation !== 'function') {
+    throw new Error('El panel de operaciones no está disponible. Recargá el panel e intentá de nuevo.');
+  }
+  return runOperation({
+    title, name, module, dangerous,
+    centerLoader: true,
+    stages: stages || [{ id: 'crud', label: title }],
+    notifySuccess: false,
+    showSuccessDialog: true,
+    run: action,
+  });
 }
 
 // ======== AUDITORÍA (Fase 2) ========
@@ -2229,17 +2268,23 @@ window.updateUserRole = async (uid, role, email) => {
     toast('Rol no válido');
     return;
   }
-  try {
-    const u = allUsers.find(u => u.uid === uid);
-    const prevRole = u?.role || 'client';
-    await setDoc(doc(db, 'users', uid), { role, updatedAt: serverTimestamp() }, { merge: true });
-    if (u) u.role = role;
-    logAudit('cambiar_rol', 'usuario', uid, email, `Rol: ${ROLE_LABELS[prevRole] || prevRole} → ${ROLE_LABELS[role]}`);
-    toast(`Rol actualizado a ${ROLE_LABELS[role]}`);
-    applyUserFilters();
-  } catch(e) {
-    toast('Error al actualizar rol');
-  }
+  const u = allUsers.find(u => u.uid === uid);
+  const prevRole = u?.role || 'client';
+  await runAdminCrudOperation({
+    title: 'Actualizar rol del cliente', name: u?.name || email || uid, module: 'clientes',
+    stages: [{ id: 'write', label: 'Actualizar rol y permisos' }, { id: 'refresh', label: 'Actualizar lista de clientes' }],
+    action: async ctx => {
+      ctx.start('write');
+      await setDoc(doc(db, 'users', uid), { role, updatedAt: serverTimestamp() }, { merge: true });
+      if (u) u.role = role;
+      await logAudit('cambiar_rol', 'usuario', uid, email, `Rol: ${ROLE_LABELS[prevRole] || prevRole} → ${ROLE_LABELS[role]}`);
+      ctx.ok('write');
+      ctx.start('refresh');
+      applyUserFilters();
+      ctx.ok('refresh');
+      return `Rol actualizado a ${ROLE_LABELS[role]}.`;
+    },
+  });
 };
 
 // Bloquear: pide un motivo opcional, guarda quién y cuándo, y guarda el rol
@@ -2254,23 +2299,27 @@ window.blockUser = async (uid, email) => {
   if (reason === null) return; // canceló el diálogo, no bloqueamos nada
   const prevRole = u.role || 'client';
   if (!confirm(`¿Bloquear a "${u.name || u.email}"?\n\nNo va a poder comprar, entrar a Mi Cuenta${prevRole !== 'client' ? ' ni acceder al panel' : ''} hasta que la restaures.`)) return;
-  try {
-    await updateDoc(doc(db, 'users', uid), {
-      blocked: true,
-      blockedAt: serverTimestamp(),
-      blockedBy: currentUser?.email || '',
-      blockReason: reason,
-      roleBeforeBlock: prevRole,
-      role: 'client',
-      updatedAt: serverTimestamp()
-    });
-    Object.assign(u, { blocked: true, blockedBy: currentUser?.email || '', blockReason: reason, roleBeforeBlock: prevRole, role: 'client' });
-    logAudit('bloquear_usuario', 'usuario', uid, u.name || email, reason ? `Motivo: ${reason}` : 'Sin motivo especificado');
-    toast('Usuario bloqueado');
-    applyUserFilters();
-  } catch(e) {
-    toast('Error al bloquear usuario');
-  }
+  await runAdminCrudOperation({
+    title: 'Bloquear cliente', name: u.name || email || uid, module: 'clientes',
+    stages: [{ id: 'write', label: 'Actualizar estado de la cuenta' }],
+    action: async ctx => {
+      ctx.start('write');
+      await updateDoc(doc(db, 'users', uid), {
+        blocked: true,
+        blockedAt: serverTimestamp(),
+        blockedBy: currentUser?.email || '',
+        blockReason: reason,
+        roleBeforeBlock: prevRole,
+        role: 'client',
+        updatedAt: serverTimestamp()
+      });
+      Object.assign(u, { blocked: true, blockedBy: currentUser?.email || '', blockReason: reason, roleBeforeBlock: prevRole, role: 'client' });
+    await logAudit('bloquear_usuario', 'usuario', uid, u.name || email, reason ? `Motivo: ${reason}` : 'Sin motivo especificado');
+      applyUserFilters();
+      ctx.ok('write');
+      return 'El cliente quedó bloqueado.';
+    },
+  });
 };
 
 async function updateAccountStatusFromAdmin_(uid, action, reason = '') {
@@ -2300,24 +2349,28 @@ window.restoreUser = async (uid) => {
   }
   const targetRole = ASSIGNABLE_ROLES.includes(u.roleBeforeBlock) ? u.roleBeforeBlock : 'client';
   if (!confirm(`¿Restaurar a "${u.name || u.email}" como ${ROLE_LABELS[targetRole] || targetRole}?`)) return;
-  try {
-    await updateDoc(doc(db, 'users', uid), {
-      blocked: false,
-      role: targetRole,
-      blockedAt: deleteField(),
-      blockedBy: deleteField(),
-      blockReason: deleteField(),
-      roleBeforeBlock: deleteField(),
-      updatedAt: serverTimestamp()
-    });
-    Object.assign(u, { blocked: false, role: targetRole });
-    delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock;
-    logAudit('restaurar_usuario', 'usuario', uid, u.name || u.email, `Restaurado como ${ROLE_LABELS[targetRole]}`);
-    toast(`Usuario restaurado como ${ROLE_LABELS[targetRole]}`);
-    applyUserFilters();
-  } catch(e) {
-    toast('Error al restaurar usuario');
-  }
+  await runAdminCrudOperation({
+    title: 'Restaurar cliente', name: u.name || u.email || uid, module: 'clientes',
+    stages: [{ id: 'write', label: 'Restaurar estado y permisos' }],
+    action: async ctx => {
+      ctx.start('write');
+      await updateDoc(doc(db, 'users', uid), {
+        blocked: false,
+        role: targetRole,
+        blockedAt: deleteField(),
+        blockedBy: deleteField(),
+        blockReason: deleteField(),
+        roleBeforeBlock: deleteField(),
+        updatedAt: serverTimestamp()
+      });
+      Object.assign(u, { blocked: false, role: targetRole });
+      delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock;
+      await logAudit('restaurar_usuario', 'usuario', uid, u.name || u.email, `Restaurado como ${ROLE_LABELS[targetRole]}`);
+      applyUserFilters();
+      ctx.ok('write');
+      return `El cliente quedó restaurado como ${ROLE_LABELS[targetRole]}.`;
+    },
+  });
 };
 
 window.deleteUser = async (uid, name) => {
@@ -2335,13 +2388,23 @@ window.deleteUser = async (uid, name) => {
     `Se borran el acceso, el perfil, el carrito, los favoritos, las reseñas, los likes y los avisos, como si nunca se hubiera registrado. ` +
     `Los pedidos se conservan como registro de ventas de la tienda. Esta acción no se puede deshacer.`
   )) return;
-  try {
-    await updateAccountStatusFromAdmin_(uid, 'delete', reason);
-    removeAdminUsersLocally_([uid]);
-    toast('Cuenta eliminada por completo. El correo queda libre para un registro nuevo.');
-  } catch(e) {
-    toast(`No se pudo eliminar la cuenta: ${e.message}`);
-  }
+  await runAdminCrudOperation({
+    title: 'Eliminar cuenta', name: name || _target?.email || uid,
+    module: 'clientes', dangerous: true,
+    stages: [
+      { id: 'delete', label: 'Eliminar acceso y datos de cuenta' },
+      { id: 'refresh', label: 'Actualizar lista de clientes' },
+    ],
+    action: async ctx => {
+      ctx.start('delete');
+      await updateAccountStatusFromAdmin_(uid, 'delete', reason);
+      ctx.ok('delete');
+      ctx.start('refresh');
+      removeAdminUsersLocally_([uid]);
+      ctx.ok('refresh');
+      return 'Cuenta eliminada. El correo queda disponible para un nuevo registro.';
+    },
+  });
 };
 
 // La baja borra el perfil en el servidor; el listener lo quita solo, pero se
@@ -2771,28 +2834,39 @@ window.updateOrderStatus = async (orderId, status) => {
   if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarEstado')) { toast('No tenés permiso para cambiar el estado de pedidos'); return false; }
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.status || 'pendiente';
-  try {
-    if (currentRole === 'superadmin' && status === 'cancelado') {
-      await window.TintinOrderAdmin.trashOrder(orderId, 'Cancelado por Super Admin');
-      allOrders = allOrders.filter(item => item.id !== orderId);
-      logAudit('mover_pedido_borrados', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Cancelado y movido a Borrados desde ${ORDER_STATUS_LABELS[prevStatus] || prevStatus}`);
-      toast(`Pedido ${o?.orderNumber || o?.shortId || ''} movido a Borrados`);
+  const cancelling = currentRole === 'superadmin' && status === 'cancelado';
+  const operation = await runAdminCrudOperation({
+    title: cancelling ? 'Mover pedido a Borrados' : 'Actualizar estado del pedido',
+    name: o?.orderNumber || o?.shortId || orderId, module: 'pedidos', dangerous: cancelling,
+    stages: cancelling
+      ? [{ id: 'trash', label: 'Mover pedido y liberar inventario' }, { id: 'refresh', label: 'Actualizar lista y auditoría' }]
+      : [{ id: 'write', label: 'Actualizar estado e inventario' }, { id: 'refresh', label: 'Actualizar lista y auditoría' }],
+    action: async ctx => {
+      if (cancelling) {
+        ctx.start('trash');
+        await window.TintinOrderAdmin.trashOrder(orderId, 'Cancelado por Super Admin');
+        ctx.ok('trash');
+        ctx.start('refresh');
+        allOrders = allOrders.filter(item => item.id !== orderId);
+        await logAudit('mover_pedido_borrados', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Cancelado y movido a Borrados desde ${ORDER_STATUS_LABELS[prevStatus] || prevStatus}`);
+        applyOrderFilters();
+        ctx.ok('refresh');
+        return true;
+      }
+      ctx.start('write');
+      await window.TintinInventoryIntegrity.transitionStatus(orderId, status);
+      if (o) o.status = status;
+      ctx.ok('write');
+      ctx.start('refresh');
+      await logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
       applyOrderFilters();
+      if (o) maybeSendOrderStatusEmail_(o, 'status', status);
+      ctx.ok('refresh');
       return true;
-    }
-    await window.TintinInventoryIntegrity.transitionStatus(orderId, status);
-    if (o) o.status = status;
-    logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
-    toast(`Estado actualizado: ${ORDER_STATUS_LABELS[status] || status}`);
-    applyOrderFilters();
-    if (o) maybeSendOrderStatusEmail_(o, 'status', status);
-    return true;
-  } catch(e) {
-    console.error('[orders] No se pudo cambiar el estado:', e);
-    toast('No se pudo guardar el estado. Probá de nuevo.');
-    applyOrderFilters();
-    return false;
-  }
+    },
+  });
+  if (operation.status !== 'green') applyOrderFilters();
+  return operation.status === 'green';
 };
 
 // Protección anti-spam para "✉️ Reenviar": cooldown fijo de 60s por pedido
@@ -2854,30 +2928,35 @@ window.updatePayStatus = async (orderId, status) => {
   if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarPago')) { toast('No tenés permiso para cambiar el estado de pago'); return false; }
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.paymentStatus || o?.payment?.status || 'pendiente';
-  try {
-    const user = auth.currentUser;
-    if (!user) throw new Error('La sesión administrativa ya no está disponible.');
-    const response = await authenticatedFetch('/api/admin-order-mutation', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ action: 'updatePayment', orderId, paymentStatus: status,
-        paymentMethod: o?.payment?.method || o?.paymentMethod || 'efectivo',
-        baseChangeId: o?.lastChangeId || '', changeId: `admin_payment_${crypto.randomUUID().replaceAll('-', '')}` })
-    });
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo guardar el estado de pago.');
-    if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
-    logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId,
-      `Estado de pago: ${PAY_STATUS_LABELS[prevStatus] || prevStatus} → ${PAY_STATUS_LABELS[status] || status}`);
-    toast(`Estado de pago: ${PAY_STATUS_LABELS[status] || status}`);
-    applyOrderFilters();
-    if (o) maybeSendOrderStatusEmail_(o, 'payment', status);
-    return true;
-  } catch(e) {
-    toast('No se pudo guardar el estado de pago. Probá de nuevo.');
-    applyOrderFilters();
-    return false;
-  }
+  const operation = await runAdminCrudOperation({
+    title: 'Actualizar estado de pago', name: o?.shortId || orderId, module: 'pedidos',
+    stages: [{ id: 'save', label: 'Guardar estado de pago' }, { id: 'refresh', label: 'Actualizar lista y notificación' }],
+    action: async ctx => {
+      ctx.start('save');
+      const user = auth.currentUser;
+      if (!user) throw new Error('La sesión administrativa ya no está disponible.');
+      const response = await authenticatedFetch('/api/admin-order-mutation', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'updatePayment', orderId, paymentStatus: status,
+          paymentMethod: o?.payment?.method || o?.paymentMethod || 'efectivo',
+          baseChangeId: o?.lastChangeId || '', changeId: `admin_payment_${crypto.randomUUID().replaceAll('-', '')}` })
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo guardar el estado de pago.');
+      if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
+      ctx.ok('save');
+      ctx.start('refresh');
+      await logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId,
+        `Estado de pago: ${PAY_STATUS_LABELS[prevStatus] || prevStatus} → ${PAY_STATUS_LABELS[status] || status}`);
+      applyOrderFilters();
+      if (o) maybeSendOrderStatusEmail_(o, 'payment', status);
+      ctx.ok('refresh');
+      return true;
+    },
+  });
+  if (operation.status !== 'green') applyOrderFilters();
+  return operation.status === 'green';
 };
 
 function orderDeleteErrorMessage_(error) {
@@ -2897,21 +2976,33 @@ window.deleteOrder = async (orderId) => {
   if (!confirm('¿Mover este pedido a Borrados? Podrás restaurarlo después.')) return { moved: false, cancelled: true };
   const orderBefore = allOrders.find(x => x.id === orderId) || null;
   const reason = window.prompt('Motivo (opcional):', '') ?? '';
-  try {
-    const result = await window.TintinOrderAdmin.trashOrder(orderId, reason);
-    allOrders = allOrders.filter(o => o.id !== orderId);
-    if (result.moved) {
-      logAudit('mover_pedido_borrados', 'pedido', orderId, orderBefore?.orderNumber || orderBefore?.shortId || orderId, `Cliente: ${orderBefore?.userName || orderBefore?.userEmail || '—'}${reason ? ` · ${reason}` : ''}`);
-      toast(`Pedido ${orderBefore?.orderNumber || orderBefore?.shortId || ''} movido a Borrados`);
-    } else toast('El pedido ya no estaba en la lista activa.');
-    applyOrderFilters();
-    result.deleted = Boolean(result.moved);
-    return { ...result, orderBefore };
-  } catch(e) {
-    console.error('[orders] No se pudo mover el pedido a Borrados:', e);
-    toast(orderDeleteErrorMessage_(e), 6500);
-    return { moved: false, error: e, orderBefore };
-  }
+  const operation = await runAdminCrudOperation({
+    title: 'Mover pedido a Borrados',
+    name: orderBefore?.orderNumber || orderBefore?.shortId || orderId,
+    module: 'pedidos', dangerous: true,
+    stages: [
+      { id: 'trash', label: 'Mover pedido y liberar inventario' },
+      { id: 'refresh', label: 'Actualizar lista y registrar auditoría' },
+    ],
+    action: async ctx => {
+      ctx.start('trash');
+      const result = await window.TintinOrderAdmin.trashOrder(orderId, reason);
+      ctx.ok('trash');
+      ctx.start('refresh');
+      allOrders = allOrders.filter(o => o.id !== orderId);
+      if (result.moved) {
+        await logAudit('mover_pedido_borrados', 'pedido', orderId, orderBefore?.orderNumber || orderBefore?.shortId || orderId, `Cliente: ${orderBefore?.userName || orderBefore?.userEmail || '—'}${reason ? ` · ${reason}` : ''}`);
+      }
+      applyOrderFilters();
+      result.deleted = Boolean(result.moved);
+      ctx.ok('refresh', { message: result.moved ? 'Pedido movido a Borrados.' : 'El pedido ya no estaba en la lista activa.' });
+      return { ...result, orderBefore };
+    },
+  });
+  if (operation.status === 'green') return operation.value;
+  const error = operation.operation?.error || new Error('No se pudo mover el pedido a Borrados.');
+  console.error('[orders] No se pudo mover el pedido a Borrados:', error);
+  return { moved: false, error, userMessage: orderDeleteErrorMessage_(error), orderBefore };
 };
 
 let _lastFilteredOrders = [];
@@ -5922,6 +6013,12 @@ async function prodGuardar() {
   };
 
   try {
+    const operation = await runAdminCrudOperation({
+      title: _isEdit ? 'Actualizar producto' : 'Crear producto',
+      name, module: 'productos',
+      stages: [{ id: 'save', label: 'Guardar producto, inventario y sincronización' }],
+      action: async ctx => {
+        ctx.start('save');
     const docId = document.getElementById('prod-id').value;
     if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
@@ -5948,22 +6045,32 @@ async function prodGuardar() {
       if (oldProd && (oldProd.active !== false) !== data.active) {
         changes.push(`Activo: ${oldProd.active !== false} → ${data.active}`);
       }
-      logAudit('editar_producto', 'producto', docId, name, changes.join(' · ') || 'Datos actualizados');
-      toast('Producto actualizado');
+      await logAudit('editar_producto', 'producto', docId, name, changes.join(' · ') || 'Datos actualizados');
     } else {
       data.createdAt = serverTimestamp();
       const newRef = doc(collection(db, 'products'));
       await setDoc(newRef, data);
+      // Si falla una etapa posterior (inventario o Sheets), el formulario
+      // conserva el ID ya creado y reintenta como edición, sin duplicar.
+      document.getElementById('prod-id').value = newRef.id;
       if (currentRole === 'superadmin') {
         await setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true });
       }
       await pushProductsToSheets([newRef.id]);
-      logAudit('crear_producto', 'producto', newRef.id, name, `Precio: ${data.price} · Stock: ${data.stock}`);
-      toast('Producto creado');
+      await logAudit('crear_producto', 'producto', newRef.id, name, `Precio: ${data.price} · Stock: ${data.stock}`);
     }
     UnsavedGuard.clear();
     _prodCloseForm();
     loadProductos();
+        ctx.ok('save');
+        return true;
+      },
+    });
+    if (operation.status !== 'green') {
+      errEl.textContent = 'No se pudo completar el guardado. Revisá el detalle de la operación y volvé a intentar.';
+      errEl.style.display = '';
+      return false;
+    }
     return true;
   } catch(e) {
     errEl.textContent = 'Error al guardar: ' + e.message;
@@ -5976,31 +6083,49 @@ async function prodGuardar() {
 
 window.prodToggleActive = async (docId, currentlyActive) => {
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'activarDesactivar')) { toast('No tenés permiso para activar/desactivar productos'); return; }
-  try {
-    await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
-    await pushProductsToSheets([docId]);
-    const p = _allProducts.find(x => x._docId === docId);
-    if (p) p.active = !currentlyActive;
-    toast(currentlyActive ? 'Producto desactivado' : 'Producto activado');
-    renderProductosTable(_allProducts);
-  } catch(e) {
-    toast('Error: ' + e.message);
-  }
+  const p = _allProducts.find(x => x._docId === docId);
+  await runAdminCrudOperation({
+    title: currentlyActive ? 'Desactivar producto' : 'Activar producto', name: p?.name || docId, module: 'productos',
+    stages: [{ id: 'write', label: 'Actualizar estado del producto' }, { id: 'sync', label: 'Sincronizar catálogo y actualizar lista' }],
+    action: async ctx => {
+      ctx.start('write');
+      await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
+      if (p) p.active = !currentlyActive;
+      ctx.ok('write');
+      ctx.start('sync');
+      await pushProductsToSheets([docId]);
+      renderProductosTable(_allProducts);
+      ctx.ok('sync');
+      return currentlyActive ? 'Producto desactivado.' : 'Producto activado.';
+    },
+  });
 };
 
 async function prodEliminar(docId, name) {
   if (!can(currentRole, 'deleteProducts') || !roleCanDo('productos', 'eliminar')) { toast('No tenés permiso para eliminar productos'); return; }
   if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
-  try {
-    await deleteDoc(doc(db, 'products', docId));
-    await deleteDoc(doc(db, 'productInventory', docId));
-    await pushProductsToSheets([docId]);
-    logAudit('eliminar_producto', 'producto', docId, name, 'Producto eliminado');
-    toast('Producto eliminado');
-    loadProductos();
-  } catch(e) {
-    toast('Error al eliminar: ' + e.message);
-  }
+  await runAdminCrudOperation({
+    title: 'Eliminar producto', name, module: 'productos', dangerous: true,
+    stages: [
+      { id: 'delete', label: 'Eliminar producto e inventario' },
+      { id: 'sync', label: 'Sincronizar catálogo' },
+      { id: 'refresh', label: 'Actualizar lista' },
+    ],
+    action: async ctx => {
+      ctx.start('delete');
+      await deleteDoc(doc(db, 'products', docId));
+      await deleteDoc(doc(db, 'productInventory', docId));
+      ctx.ok('delete');
+      ctx.start('sync');
+      await pushProductsToSheets([docId]);
+      await logAudit('eliminar_producto', 'producto', docId, name, 'Producto eliminado');
+      ctx.ok('sync');
+      ctx.start('refresh');
+      loadProductos();
+      ctx.ok('refresh');
+      return 'Producto eliminado y catálogo actualizado.';
+    },
+  });
 }
 // Fix (Fase 2): estaban declaradas solo en el scope del módulo, pero el HTML
 // las llama desde onclick="..." inline — eso solo puede resolver identificadores
@@ -6458,45 +6583,69 @@ window.collMoveProduct = async function(docId, direction) {
   const idx = sorted.findIndex(p => p._docId === docId);
   const swapIdx = idx + direction;
   if (idx < 0 || swapIdx < 0 || swapIdx >= sorted.length) return;
-  // Normalize order values 0..n-1, then swap the two affected items
-  sorted.forEach((p, i) => { p.collectionOrder = i; });
-  const a = sorted[idx], b = sorted[swapIdx];
-  [a.collectionOrder, b.collectionOrder] = [b.collectionOrder, a.collectionOrder];
-  try {
-    const batch = writeBatch(db);
-    sorted.forEach(p => batch.update(doc(db, 'products', p._docId), { collectionOrder: p.collectionOrder }));
-    await batch.commit();
-  } catch (e) {
-    toast('No se pudo reordenar: ' + e.message);
-  }
+  // Calcular fuera del cache local: un fallo de escritura no debe dejar el
+  // orden visible distinto del que realmente quedó guardado.
+  const orderById = new Map(sorted.map((p, i) => [p._docId, i]));
+  const firstId = sorted[idx]._docId, secondId = sorted[swapIdx]._docId;
+  const firstOrder = orderById.get(firstId);
+  orderById.set(firstId, orderById.get(secondId));
+  orderById.set(secondId, firstOrder);
+  await runAdminCrudOperation({
+    title: 'Reordenar producto en la colección', name: sorted[idx].name || docId, module: 'colecciones',
+    stages: [{ id: 'write', label: 'Guardar el orden de los productos' }, { id: 'refresh', label: 'Actualizar el panel' }],
+    action: async ctx => {
+      ctx.start('write');
+      const batch = writeBatch(db);
+      sorted.forEach(p => batch.update(doc(db, 'products', p._docId), { collectionOrder: orderById.get(p._docId) }));
+      await batch.commit();
+      sorted.forEach(p => { p.collectionOrder = orderById.get(p._docId); });
+      ctx.ok('write');
+      ctx.start('refresh');
+      renderCollCurrentList();
+      ctx.ok('refresh');
+      return 'Orden de colección actualizado.';
+    },
+  });
 };
 
 window.collRemoveFromCollection = async function(docId) {
   if (!can(currentRole, 'manageContent') || !roleCanDo('colecciones', 'editar')) { toast('No tenés permiso para editar colecciones'); return; }
   const p = _allProducts.find(x => x._docId === docId);
   if (!confirm(`¿Quitar "${p?.name || 'este producto'}" de la colección?`)) return;
-  try {
-    await updateDoc(doc(db, 'products', docId), { category: '', updatedAt: serverTimestamp() });
-    await pushProductsToSheets([docId]);
-    toast('Producto quitado de la colección');
-  } catch (e) {
-    toast('Error: ' + e.message);
-  }
+  await runAdminCrudOperation({
+    title: 'Quitar producto de la colección', name: p?.name || docId, module: 'colecciones',
+    stages: [{ id: 'write', label: 'Quitar vínculo de colección' }, { id: 'sync', label: 'Sincronizar catálogo' }],
+    action: async ctx => {
+      ctx.start('write');
+      await updateDoc(doc(db, 'products', docId), { category: '', updatedAt: serverTimestamp() });
+      ctx.ok('write');
+      ctx.start('sync');
+      await pushProductsToSheets([docId]);
+      ctx.ok('sync');
+      return 'Producto quitado de la colección.';
+    },
+  });
 };
 
 window.collToggleActive = async function(docId, currentlyActive) {
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'activarDesactivar')) { toast('No tenés permiso para activar/desactivar productos'); return; }
-  try {
-    await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
-    await pushProductsToSheets([docId]);
-    const p = _allProducts.find(x => x._docId === docId);
-    if (p) p.active = !currentlyActive;
-    toast(currentlyActive ? 'Producto desactivado' : 'Producto activado');
-    renderCollCurrentList();
-    renderProductosTable(_allProducts);
-  } catch (e) {
-    toast('Error: ' + e.message);
-  }
+  const p = _allProducts.find(x => x._docId === docId);
+  await runAdminCrudOperation({
+    title: currentlyActive ? 'Desactivar producto' : 'Activar producto', name: p?.name || docId, module: 'productos',
+    stages: [{ id: 'write', label: 'Actualizar estado del producto' }, { id: 'sync', label: 'Sincronizar catálogo y lista' }],
+    action: async ctx => {
+      ctx.start('write');
+      await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
+      if (p) p.active = !currentlyActive;
+      ctx.ok('write');
+      ctx.start('sync');
+      await pushProductsToSheets([docId]);
+      renderCollCurrentList();
+      renderProductosTable(_allProducts);
+      ctx.ok('sync');
+      return currentlyActive ? 'Producto desactivado.' : 'Producto activado.';
+    },
+  });
 };
 
 window.collOpenPicker = function() {
@@ -6575,14 +6724,20 @@ async function batchUpdateChunked(ids, dataFn, collectionName = 'products') {
 
 window.collPickerAddSelected = async function() {
   if (!_collPickerSelected.size) { toast('Seleccioná al menos un producto'); return; }
-  try {
-    const ids = [..._collPickerSelected];
-    await batchUpdateChunked(ids, () => ({ category: _collProductsSlug, updatedAt: serverTimestamp() }));
-    toast(`${ids.length} producto(s) agregados a la colección`);
-    collClosePicker();
-  } catch (e) {
-    toast('Error al agregar: ' + e.message);
-  }
+  const ids = [..._collPickerSelected];
+  await runAdminCrudOperation({
+    title: 'Agregar productos a la colección', name: `${ids.length} producto(s)`, module: 'colecciones',
+    stages: [{ id: 'assign', label: 'Asignar productos por lotes' }, { id: 'sync', label: 'Sincronizar catálogo y cerrar selección' }],
+    action: async ctx => {
+      ctx.start('assign');
+      await batchUpdateChunked(ids, () => ({ category: _collProductsSlug, updatedAt: serverTimestamp() }));
+      ctx.ok('assign', { affected: ids.length });
+      ctx.start('sync');
+      collClosePicker();
+      ctx.ok('sync');
+      return `${ids.length} producto(s) agregados a la colección.`;
+    },
+  });
 };
 
 window.collGuardar = async function() {
@@ -6620,7 +6775,13 @@ window.collGuardar = async function() {
   const btn = document.getElementById('coll-save-btn');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
-    const data = { name, description, image, order, visible, updatedAt: serverTimestamp() };
+    const operation = await runAdminCrudOperation({
+      title: _isEdit ? 'Actualizar colección' : 'Crear colección', name,
+      module: 'colecciones',
+      stages: [{ id: 'save', label: 'Guardar colección y actualizar productos vinculados' }],
+      action: async ctx => {
+        ctx.start('save');
+        const data = { name, description, image, order, visible, updatedAt: serverTimestamp() };
     if (originalSlug && originalSlug !== slug) {
       // Slug changed: create new doc, move products over, delete old doc
       data.createdAt = serverTimestamp();
@@ -6635,20 +6796,26 @@ window.collGuardar = async function() {
       // El CRUD de colección individual ahora deja rastro en Auditoría igual que
       // el de productos y las acciones masivas de colecciones (antes solo se
       // registraban las masivas, dejando huecos en el historial).
-      logAudit('editar_coleccion', 'coleccion', slug, name, `Renombrada "${originalSlug}" → "${slug}" · ${affected.length} producto(s) movidos`);
-      toast(`Colección renombrada — ${affected.length} producto(s) actualizados`);
+      await logAudit('editar_coleccion', 'coleccion', slug, name, `Renombrada "${originalSlug}" → "${slug}" · ${affected.length} producto(s) movidos`);
     } else if (originalSlug) {
       await updateDoc(doc(db, 'collections', originalSlug), data);
-      logAudit('editar_coleccion', 'coleccion', originalSlug, name, 'Datos actualizados');
-      toast('Colección actualizada');
+      await logAudit('editar_coleccion', 'coleccion', originalSlug, name, 'Datos actualizados');
     } else {
       data.createdAt = serverTimestamp();
       await setDoc(doc(db, 'collections', slug), data);
-      logAudit('crear_coleccion', 'coleccion', slug, name, `Orden: ${order} · ${visible ? 'visible' : 'oculta'}`);
-      toast('Colección creada');
+      await logAudit('crear_coleccion', 'coleccion', slug, name, `Orden: ${order} · ${visible ? 'visible' : 'oculta'}`);
     }
     UnsavedGuard.clear();
     _collCloseForm();
+        ctx.ok('save');
+        return true;
+      },
+    });
+    if (operation.status !== 'green') {
+      errEl.textContent = 'No se pudo completar el guardado. Revisá el detalle de la operación y volvé a intentar.';
+      errEl.style.display = '';
+      return false;
+    }
     return true;
   } catch (e) {
     errEl.textContent = 'Error al guardar: ' + e.message;
@@ -6679,28 +6846,45 @@ window.collEliminar = async function(slug, count) {
       return;
     }
     if (!confirm(`¿Mover ${count} producto(s) de "${label}" a "${targetSlug || '(sin colección)'}" y luego eliminar "${label}"?`)) return;
-    try {
-      const affected = _allProducts.filter(p => (p.category || '') === slug);
-      // Chunked (max 450/batch) so reassigning 500+ products never silently
-      // fails on Firestore's 500-write batch cap.
-      await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: targetSlug, updatedAt: serverTimestamp() }));
-      await deleteDoc(doc(db, 'collections', slug));
-      logAudit('eliminar_coleccion', 'coleccion', slug, label, `${affected.length} producto(s) reasignados a "${targetSlug || '(sin colección)'}"`);
-      toast(`${affected.length} producto(s) movidos y "${label}" eliminada`);
-    } catch (e) {
-      toast('Error al eliminar: ' + e.message);
-    }
+    await runAdminCrudOperation({
+      title: 'Eliminar colección y reasignar productos', name: label,
+      module: 'colecciones', dangerous: true,
+      stages: [
+        { id: 'move', label: 'Reasignar productos vinculados' },
+        { id: 'delete', label: 'Eliminar colección' },
+        { id: 'audit', label: 'Registrar y actualizar el resultado' },
+      ],
+      action: async ctx => {
+        const affected = _allProducts.filter(p => (p.category || '') === slug);
+        // Chunked (max 450/batch) so reassigning 500+ products never silently
+        // fails on Firestore's 500-write batch cap.
+        ctx.start('move');
+        await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: targetSlug, updatedAt: serverTimestamp() }));
+        ctx.ok('move', { message: `${affected.length} producto(s)` });
+        ctx.start('delete');
+        await deleteDoc(doc(db, 'collections', slug));
+        ctx.ok('delete');
+        ctx.start('audit');
+        await logAudit('eliminar_coleccion', 'coleccion', slug, label, `${affected.length} producto(s) reasignados a "${targetSlug || '(sin colección)'}"`);
+        ctx.ok('audit');
+        return `${affected.length} producto(s) reasignados; colección eliminada.`;
+      },
+    });
     return;
   }
 
   if (!confirm(`¿Eliminar la colección "${label}"? Esta acción no se puede deshacer.`)) return;
-  try {
-    await deleteDoc(doc(db, 'collections', slug));
-    logAudit('eliminar_coleccion', 'coleccion', slug, label, 'Colección vacía eliminada');
-    toast('Colección eliminada');
-  } catch (e) {
-    toast('Error al eliminar: ' + e.message);
-  }
+  await runAdminCrudOperation({
+    title: 'Eliminar colección', name: label, module: 'colecciones', dangerous: true,
+    stages: [{ id: 'delete', label: 'Eliminar colección y registrar el cambio' }],
+    action: async ctx => {
+      ctx.start('delete');
+      await deleteDoc(doc(db, 'collections', slug));
+      await logAudit('eliminar_coleccion', 'coleccion', slug, label, 'Colección vacía eliminada');
+      ctx.ok('delete');
+      return 'Colección eliminada.';
+    },
+  });
 };
 
 window.collImportarDefaults = async function() {
@@ -6711,18 +6895,22 @@ window.collImportarDefaults = async function() {
     ['brazaletes','Brazaletes'], ['earcuff','Earcuff'], ['armcuff','Armcuff'],
     ['gafas','Gafas'], ['joyeros','Joyeros'],
   ];
-  try {
-    const batch = writeBatch(db);
-    DEFAULTS.forEach(([slug, name], i) => {
-      batch.set(doc(db, 'collections', slug), {
-        name, description: '', image: '', order: i, visible: true, createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+  await runAdminCrudOperation({
+    title: 'Crear colecciones predeterminadas', name: `${DEFAULTS.length} colecciones`, module: 'colecciones',
+    stages: [{ id: 'create', label: 'Crear colecciones en Firestore' }],
+    action: async ctx => {
+      ctx.start('create');
+      const batch = writeBatch(db);
+      DEFAULTS.forEach(([slug, name], i) => {
+        batch.set(doc(db, 'collections', slug), {
+          name, description: '', image: '', order: i, visible: true, createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+        });
       });
-    });
-    await batch.commit();
-    toast('Colecciones importadas');
-  } catch (e) {
-    toast('Error al importar: ' + e.message);
-  }
+      await batch.commit();
+      ctx.ok('create', { affected: DEFAULTS.length });
+      return `${DEFAULTS.length} colecciones creadas.`;
+    },
+  });
 };
 
 // Load collections when section is shown
@@ -7798,51 +7986,67 @@ window.saveOrderEdit = async function() {
   };
 
   try {
-    // Concurrencia optimista: si otro administrador escribió este pedido después
-    // de que se abrió el editor, no pisamos sus cambios en silencio. Fail-open:
-    // si no se puede comparar (sin updatedAt, o falla la lectura), se guarda
-    // igual para no bloquear una edición legítima.
-    try {
-      const freshSnap = await getDoc(doc(db, 'orders', orderId));
-      if (!freshSnap.exists()) { toast('El pedido ya no existe (puede haber sido eliminado).'); return false; }
-      const freshMillis = toJsDate_(freshSnap.data()?.updatedAt)?.getTime() ?? null;
-      if (_orderEditBaselineMillis && freshMillis && freshMillis > _orderEditBaselineMillis) {
-        toast('Otro administrador modificó este pedido mientras lo editabas. Cerralo y volvé a abrirlo para no pisar sus cambios.');
-        return false;
-      }
-    } catch (_) { /* fail-open: no bloquear por un error de lectura */ }
-    await window.TintinInventoryIntegrity.updateEditedOrder(orderId, updateData);
-    // Sync local array
-    const idx = allOrders.findIndex(x => x.id === orderId);
-    if (idx >= 0) {
-      Object.assign(allOrders[idx], {
-        userName: updateData.userName,
-        userPhone: updateData.userPhone,
-        userEmail: updateData.userEmail,
-        status: updateData.status,
-        paymentStatus: updateData.paymentStatus,
-        adminNotes: updateData.adminNotes,
-        items: updateData.items,
-        subtotal,
-        total,
-        payment: { method: updateData['payment.method'], status: updateData['payment.status'] },
-        shipping: {
-          city: updateData['shipping.city'],
-          address: updateData['shipping.address'],
-          referencia: updateData['shipping.referencia'],
-          method: updateData['shipping.method'],
-        },
-      });
-    }
-    const changes = [];
-    if (_beforeStatus !== updateData.status) changes.push(`Estado: ${ORDER_STATUS_LABELS[_beforeStatus] || _beforeStatus || '—'} → ${ORDER_STATUS_LABELS[updateData.status] || updateData.status}`);
-    if (_beforeTotal !== total) changes.push(`Total: ${_beforeTotal ?? 0} → ${total}`);
-    logAudit('editar_pedido', 'pedido', orderId, _before?.shortId || orderId, changes.join(' · ') || 'Datos del pedido actualizados');
-    toast('Pedido actualizado');
-    window.AdminUnsaved?.markClean('order-editor');
-    closeOrderEdit(true);
-    applyOrderFilters();
-    return true;
+    const operation = await runAdminCrudOperation({
+      title: 'Actualizar pedido', name: _before?.shortId || orderId,
+      module: 'pedidos',
+      stages: [
+        { id: 'concurrency', label: 'Comprobar cambios recientes' },
+        { id: 'save', label: 'Guardar pedido y actualizar inventario' },
+        { id: 'refresh', label: 'Actualizar panel y auditoría' },
+      ],
+      action: async ctx => {
+        ctx.start('concurrency');
+        // Concurrencia optimista: no pisar cambios recientes de otra persona.
+        try {
+          const freshSnap = await getDoc(doc(db, 'orders', orderId));
+          if (!freshSnap.exists()) {
+            ctx.fail('concurrency', { detail: 'El pedido ya no existe.' });
+            return false;
+          }
+          const freshMillis = toJsDate_(freshSnap.data()?.updatedAt)?.getTime() ?? null;
+          if (_orderEditBaselineMillis && freshMillis && freshMillis > _orderEditBaselineMillis) {
+            ctx.fail('concurrency', { detail: 'Otro administrador modificó este pedido mientras lo editabas.' });
+            return false;
+          }
+        } catch (_) { /* fail-open: no bloquear por un error de lectura */ }
+        ctx.ok('concurrency');
+        ctx.start('save');
+        await window.TintinInventoryIntegrity.updateEditedOrder(orderId, updateData);
+        ctx.ok('save');
+        ctx.start('refresh');
+        const idx = allOrders.findIndex(x => x.id === orderId);
+        if (idx >= 0) {
+          Object.assign(allOrders[idx], {
+            userName: updateData.userName,
+            userPhone: updateData.userPhone,
+            userEmail: updateData.userEmail,
+            status: updateData.status,
+            paymentStatus: updateData.paymentStatus,
+            adminNotes: updateData.adminNotes,
+            items: updateData.items,
+            subtotal,
+            total,
+            payment: { method: updateData['payment.method'], status: updateData['payment.status'] },
+            shipping: {
+              city: updateData['shipping.city'],
+              address: updateData['shipping.address'],
+              referencia: updateData['shipping.referencia'],
+              method: updateData['shipping.method'],
+            },
+          });
+        }
+        const changes = [];
+        if (_beforeStatus !== updateData.status) changes.push(`Estado: ${ORDER_STATUS_LABELS[_beforeStatus] || _beforeStatus || '—'} → ${ORDER_STATUS_LABELS[updateData.status] || updateData.status}`);
+        if (_beforeTotal !== total) changes.push(`Total: ${_beforeTotal ?? 0} → ${total}`);
+        await logAudit('editar_pedido', 'pedido', orderId, _before?.shortId || orderId, changes.join(' · ') || 'Datos del pedido actualizados');
+        window.AdminUnsaved?.markClean('order-editor');
+        closeOrderEdit(true);
+        applyOrderFilters();
+        ctx.ok('refresh');
+        return true;
+      },
+    });
+    return operation.status === 'green' && operation.value === true;
   } catch(e) {
     toast('Error al guardar: ' + e.message);
     return false;

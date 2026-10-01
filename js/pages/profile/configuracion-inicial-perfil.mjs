@@ -242,10 +242,15 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   // mismo: ya terminaron su alta. No se las puede tratar como altas nuevas
   // ni volver a pedirles datos por haber cambiado la forma interna de
   // guardarlos.
-  const hasPersistedCompletion = profile.onboardingCompleted === true ||
+  // Excepción: un perfil con `profileStatus: incomplete` es un alta nueva (o
+  // una cuenta recreada tras una baja) que todavía no validó sus datos. Sus
+  // marcas de bienvenida las escribe el tutorial al mostrarse, no la
+  // finalización del alta, así que no prueban nada: se decide por los datos.
+  const isOpenSignup = clean(profile.profileStatus).toLowerCase() === 'incomplete';
+  const hasPersistedCompletion = !isOpenSignup && (profile.onboardingCompleted === true ||
     profile.profileCompleted === true ||
     Boolean(profile.onboardingCompletedAt || profile.profileCompletedAt ||
-      profile.welcomeTutorialCompletedAt || profile.welcomeTutorialSeen);
+      profile.welcomeTutorialCompletedAt || profile.welcomeTutorialSeen));
   if (hasPersistedCompletion) {
     exposeSavedLocationForOnboarding(profile);
     return {

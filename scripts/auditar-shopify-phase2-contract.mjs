@@ -6,7 +6,12 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const core = read('js/core/store/shopify-phase2-pipeline.mjs');
 const media = read('functions/api/admin-import-media.js');
 const job = read('functions/api/admin-import-job.js');
+const apply = read('js/admin/aplicar-importacion-admin.js');
+const mediaPipeline = read('js/core/store/shopify-phase2-pipeline.mjs');
 const audit = read('SHOPIFY_PHASE2_AUDIT_2026-09-18.md');
+const mediaCopyIndex = apply.indexOf('await copyShopifyMedia(records)');
+const mediaPreflightIndex = apply.indexOf("JSON.stringify({ action: 'preflight' })");
+const catalogWriteIndex = apply.indexOf('runTransaction(db');
 const checks = [
   ['pipeline es side-effect free', !/setDoc\(|addDoc\(|deleteDoc\(|fetch\(/.test(core)],
   ['staging no pisa active', /catalogState: 'STAGING'/.test(core)],
@@ -15,7 +20,14 @@ const checks = [
   ['media exige Super Admin', /requireSuperAdmin\(request\)/.test(media)],
   ['media copy exige guard explícito', /SHOPIFY_PHASE2_MEDIA_WRITE/.test(media)],
   ['media no usa cliente', !/window\.|document\./.test(media)],
-  ['job production sigue dry-run', /catalogMigration: 'not-executed'/.test(job) && /dryRun: true/.test(job)],
+  ['el importador copia imágenes antes de escribir productos', mediaCopyIndex >= 0 && catalogWriteIndex > mediaCopyIndex],
+  ['preflight autenticado comprueba la preparación antes de cualquier copia', mediaPreflightIndex >= 0 && mediaPreflightIndex < apply.indexOf('for (let offset') && /action === 'preflight'/.test(media) && /mediaCopyPreflight\(env\)/.test(media)],
+  ['la copia del catálogo requiere sesión autenticada', /authenticatedFetch\('\/api\/admin-import-media'/.test(apply)],
+  ['cada producto usa URLs HTTPS confirmadas por Cloudinary', /rewriteImportedShopifyMedia\(records, copiedBySourceUrl\)/.test(apply) && /state !== 'COPIED'/.test(apply)],
+  ['cualquier lote fallido detiene la importación antes de escribir el catálogo', /result\?\.ok !== true/.test(apply) && /No se escribió el catálogo/.test(apply) && mediaCopyIndex < catalogWriteIndex],
+  ['el plan reconoce Shopify CDN independientemente de HTTP/HTTPS', /export function isShopifyMediaUrl/.test(mediaPipeline) && /host\.endsWith\('\.shopify\.com'\)/.test(mediaPipeline)],
+  ['job nace dry-run', /catalogMigration: 'not-executed'/.test(job) && /dryRun: true/.test(job)],
+  ['aplicar exige CSV Shopify sin errores', /next === 'RUNNING' && \(job\.source !== 'shopify-csv' \|\| Number\(job\.errors \|\| 0\) !== 0\)/.test(job)],
   ['documentación declara migración no ejecutada', /REAL COMMERCIAL MIGRATION.*NOT STARTED/s.test(audit)],
 ];
 const failed = checks.filter(([, ok]) => !ok);

@@ -1,0 +1,147 @@
+# Evidencia operativa de producción — 2026-09-28
+
+**Última observación:** 2026-09-28, aproximadamente 19:05 UTC. **Commit evaluado:** `1961362afff29210b807f4a7feb370ce3247eb0c` (`main`). Esta captura describe el estado observado; los servicios externos pueden cambiar después.
+
+## Estado observado
+
+| Área | Evidencia en vivo | Resultado |
+| --- | --- | --- |
+| Cloudflare Pages Functions / Firebase | `GET https://tintinaccesorios.pages.dev/api/health` respondió HTTP 200 con `ok=true`; runtime, configuración, Firebase y runtime Admin aparecen en `true`. | Salud técnica observada. No prueba una compra ni escrituras de negocio. |
+| Catálogo | `GET /api/public-catalog?resource=products` respondió HTTP 200 con `items=[]`, `count=0`. `sitemap-products.xml` contiene cero `<loc>`. | Bloquea la prueba de producto, pedido y compra; no hacer el cutover todavía. |
+| Colecciones | El recurso público depende del mismo catálogo; en el chequeo de cutover devolvió cero colecciones. | Falta importar o crear colecciones de negocio. |
+| Dominio comercial | Los NS públicos son `gemma.ns.cloudflare.com` y `leo.ns.cloudflare.com`; el apex conserva A `23.227.38.65` y AAAA `2620:127:f00f:5::`; `www` apunta a `shops.myshopify.com`. `https://tintinaccs.com/` respondió HTTP 200 con HTML de Shopify. | La zona ya usa nameservers de Cloudflare, pero el tráfico web sigue en Shopify. No es el cutover a Pages. |
+| SEO técnico de Pages | `robots.txt`, `sitemap.xml` y `sitemap-pages.xml` responden. El índice contiene páginas, productos y colecciones. `robots.txt` declara el sitemap de `pages.dev`. | SEO está publicado para el host técnico actual. Aún falta cambiar y validar el host canónico definitivo durante el cutover. |
+| SEO de productos | `sitemap-products.xml` está vacío; `/products/anillo-liso-dorado` respondió 404 en seis intentos durante la auditoría de redirects. | Faltan datos para verificar la cobertura de handles Shopify. |
+| PayPal / tasa | `GET /api/paypal-config` respondió con PayPal deshabilitado, `rateSource=manual`, tasa guardada el 2026-09-10 y motivo `stale_exchange_rate`. | La automatización desde BCP está en `main`; el dato de producción aún no se ha refrescado. El refresco programado corre días hábiles a las 17:00 UTC. No se ejecutó una transacción. |
+| Sincronización Sheets | PR #941 integra que una falla de sincronización de catálogo con Sheets haga fallar GitHub Actions; PR #943 pasó el contrato operativo/de sincronización. La aplicación mantiene Firestore como destino del sitio. | Evidencia de código y CI, no una escritura reciente verificada de punta a punta en la cuenta de producción. |
+| Baja y bloqueo de cuentas | PR #942 está en `main`; CI pasó contratos de cuenta, perfil y reglas de identidad de Firestore. Cuenta eliminada puede reingresar tras verificar correo; cuenta bloqueada sigue bloqueada. | Contrato automatizado verificado. No se inició sesión con cuentas personales reales para esta captura. |
+
+## Validaciones ejecutadas
+
+- GitHub Actions para PR #943 terminó correctamente en todos los gates, incluidos contratos de cuenta/sincronización, reglas de identidad de Firestore, navegador, accesibilidad, SEO y rendimiento.
+- `GET /api/health`: HTTP 200 y checks técnicos verdes.
+- La auditoría `scripts/auditar-cutover-live.mjs` se ejecutó contra `https://tintinaccesorios.pages.dev`. No se toma como aprobado: sus controles de canonical esperan que el host ya sea el dominio definitivo y por eso reportan como error que el origen actual `pages.dev` aparece en HTML. Sus hallazgos válidos para esta captura son catálogo vacío, falta de producto canary y 404 de `/products/anillo-liso-dorado`.
+- `https://tintinaccs.com/` se verificó por separado y sigue sirviendo Shopify.
+
+## Pendientes para autorizar el cutover
+
+1. Importar catálogo/colecciones en Firestore desde el flujo de importación del Admin, conservando `shopifyHandle` para redirects y asegurando que las imágenes ya no dependan de Shopify CDN.
+2. Verificar la sincronización Sheets → Firestore con una corrida real y revisar pendientes/dead-letter en el panel protegido; Sheets no debe volver a Shopify.
+3. Esperar la siguiente corrida hábil de tasa BCP y comprobar que Firestore guarda `paymentFx` reciente y `/api/paypal-config` deja de indicar `stale_exchange_rate`. PayPal continúa desactivado hasta configurar credenciales válidas y completar pruebas de pago en sandbox.
+4. Con un canary real del catálogo, ejecutar auditorías de producto, colecciones y redirects Shopify desde un preview que sirva el build de cutover.
+5. Confirmar que el custom domain está vinculado al proyecto Pages y el TLS está activo antes de cambiar los registros web; verificar por separado que MX, SPF, DKIM y DMARC de correo sigan presentes.
+6. Completar en navegador una prueba autenticada de login, perfil, favoritos, carrito y persistencia entre cuenta/dispositivo; luego una compra controlada en entorno seguro que compruebe pedido, inventario, correo y sincronizaciones.
+7. Tras esos pasos, cambiar `config/public-site.json`, desplegar la preparación de cutover, comprobar OAuth, App Check, canonical, robots/sitemap, redirects y Google Search Console para `tintinaccs.com`.
+
+**Decisión de esta captura: NO-GO para cambiar el dominio.** Se puede continuar con la importación del catálogo sobre Pages sin modificar el tráfico web actual.
+
+## Revalidación posterior — 2026-09-28 19:30 UTC
+
+Esta revalidación se hizo después de integrar el informe y de ejecutar manualmente el workflow de producción. Sustituye los valores antiguos solo para los puntos que se indican; no representa una aprobación de cutover.
+
+| Área | Evidencia nueva | Resultado |
+| --- | --- | --- |
+| PayPal / tasa | `GET /api/paypal-config` a las 19:26 UTC: `rateSource=BCP`, `rateSourceDate=2026-09-25`, `rateUpdatedAt=2026-09-28T19:26:01Z`, `unavailableReasons=[]`, ambiente `sandbox`. El job autenticado `Actualizar tasa PayPal desde BCP` del workflow #157 terminó correctamente. | La tasa se refrescó en Firestore. No se inició checkout ni se hizo un cargo; la configuración observada es Sandbox. |
+| Monitor de producción | Workflow [#157](https://github.com/tintinaccs/tintin-web/actions/runs/36472176083): tasa BCP pasó; `monitor:production` falló por sitemap de productos vacío, catálogo público sin productos y ausencia de producto para metadata. La auditoría de catálogo en navegador informó 0 productos y 0 tarjetas. El smoke de 17 rutas, auditoría de login/perfil y encabezados terminaron correctamente; el gate final permanece en rojo por el monitor y catálogo. | El bloqueo principal es la ausencia de catálogo publicado, no la infraestructura general. El navegador de CI además informó `requestStorageAccess: Permission denied`, que requiere reevaluar con un catálogo presente. |
+| Canarios existentes en Admin | Sesión Super Admin: existe 1 producto `PRUEBA QA · NO VENDER`, inactivo, y 1 colección `PRUEBA QA · NO PUBLICAR`, oculta, con un producto. | Son registros de prueba aislados; no los publiqué. Por su estado inactivo/oculto, no sirven como producto público para canario SEO ni checkout. No se crearon duplicados. |
+| Custom Domain de Cloudflare Pages | En **Workers & Pages → tintinaccesorios → Dominios personalizados**, la UI muestra únicamente la opción “Configurar un dominio personalizado”; el proyecto lista `tintinaccesorios.pages.dev` como dominio de producción. | `tintinaccs.com` todavía no está vinculado a Pages. No se cambió la configuración del dominio. |
+| DNS y verificación de Search Console | Consulta DNS pública: `www` y `account` siguen como CNAME a Shopify; el apex conserva A `23.227.38.65`. Sigue publicado el TXT `google-site-verification`; la presencia del TXT no demuestra que la propiedad esté verificada en Search Console. | El tráfico comercial sigue en Shopify; verificación de Search Console aún debe confirmarse en la cuenta. |
+| Search Console — revalidación de cuenta | Se abrió la propiedad de dominio `sc-domain:tintinaccs.com`. El informe de Sitemaps muestra `0-0 de 0` sitemaps enviados. En la vista general, el informe de indexación indica que Google aún procesa los datos y que el total de clics de búsqueda web es 0 en la ventana mostrada. | La propiedad es accesible con la cuenta conectada; no hay sitemap presentado para el dominio. Presentarlo queda para después de vincular Pages y cambiar el host, para que Google lea el sitemap del sitio correcto. |
+
+**Estado actualizado: NO-GO para cutover.** El refresco BCP sí quedó solucionado. Siguen siendo necesarios: importar catálogo real y medios fuera de Shopify, convertir el canario actual en prueba pública controlada o crear uno dedicado para preview, verificar los recorridos con el catálogo cargado, y completar la asociación de dominio en la sesión de cutover. El pedido de prueba preexistente permanece sin cobro; no se creó otro.
+
+## Revisión de indexación del host técnico — 2026-09-28 20:22 UTC
+
+- En vivo, `https://tintinaccesorios.pages.dev/robots.txt` permite rastrear `/` y anuncia el sitemap de `pages.dev`. La portada responde con canonical `https://tintinaccesorios.pages.dev/` y no declara `noindex`.
+- Cloudflare Pages sigue mostrando solo `tintinaccesorios.pages.dev` en Dominios personalizados; el dominio comercial todavía apunta a Shopify. Por lo tanto, el host técnico público podía indexarse antes del cutover.
+- En la rama local `codex/continued-audit-20260928`, se añadió a `functions/_middleware.js` `X-Robots-Tag: noindex` para las respuestas públicas de `*.pages.dev`; `/__/auth/*` conserva el proxy transparente de Firebase. El `robots.txt` mantiene las rutas privadas bloqueadas, permite rastrear páginas públicas para que Google lea la directiva y deja de anunciar el sitemap técnico. Los dominios comerciales quedan fuera de esa regla.
+- Verificación local: `tests/seo/pages-dev-indexing-middleware.test.mjs` **4/4**; `npm run audit:phase11` **832 comprobaciones**; `npm run audit:headers:production` PASS; `npm run verify:diagnostics` PASS; `npm run audit:diagnostics` PASS.
+- La corrección todavía no está integrada ni desplegada; no atribuirle efecto al sitio en vivo hasta un despliegue verificado. Tras publicarla, revisar `X-Robots-Tag` en `pages.dev`, mantener el host comercial sin `noindex` y validar la respuesta de Googlebot en Search Console.
+
+**Decisión del dominio sin cambio: NO-GO para cutover.** El catálogo sigue vacío, falta asociar el dominio a Pages y todavía se necesita completar la aceptación de compra y datos reales.
+
+## Revalidación de host técnico y cobertura de middleware — 2026-09-28 20:46 UTC
+
+- El PR #946 se integró en `main` como `bd34687b599d51285ea0077138caedbd183d99cd`, después de que su CI completo terminara correctamente. La portada pública de Pages ya entrega `X-Robots-Tag: noindex`; `tintinaccs.com` continúa fuera de la regla y sirve Shopify.
+- La prueba HTTP directa a `https://tintinaccesorios.pages.dev/robots.txt?audit=20260928-2045` reveló que el recurso seguía estático: sin `X-Robots-Tag` y con `Sitemap: https://tintinaccesorios.pages.dev/sitemap.xml`. La causa fue que `/robots.txt` no figuraba en `include` de `_routes.json`, así que la prueba unitaria de middleware no representaba el enrutamiento real de Pages.
+- Se está corrigiendo la configuración y se añadió un contrato que exige enrutar `robots.txt` al middleware. En esta rama, las 5 pruebas de `tests/seo/pages-dev-indexing-middleware.test.mjs`, las 832 comprobaciones de `npm run audit:phase11`, las 22 de `npm run audit:final-integration` y `npm run verify:diagnostics` pasan. El segundo arreglo aún no está integrado ni publicado; repetir la comprobación HTTP después de desplegarlo.
+- Producción observada a las 20:40 UTC: API de salud 200; catálogo público con cero productos y cero colecciones; PayPal activo solo en Sandbox con tasa BCP fechada 2026-09-25; apex A `23.227.38.65`, `www` y `account` CNAME a Shopify.
+
+**Decisión vigente: NO-GO para cutover.** Además del enrutamiento de `robots.txt` pendiente de despliegue, faltan el catálogo comercial, las pruebas autenticadas de extremo a extremo y asociar el dominio a Cloudflare Pages.
+
+## Revalidación posterior — 2026-09-28 21:18 UTC
+
+Esta captura reemplaza los estados anteriores únicamente donde indica evidencia nueva. Se verificaron los endpoints públicos, Search Console y la hoja de inventario; las lecturas de Google fueron de solo lectura.
+
+| Área | Evidencia nueva | Resultado |
+| --- | --- | --- |
+| Noindex del host Pages | `GET https://tintinaccesorios.pages.dev/robots.txt` responde HTTP 200 con `X-Robots-Tag: noindex`; la portada y las APIs públicas también entregan esa cabecera. El cuerpo de `robots.txt` no anuncia el sitemap técnico. | La corrección que faltaba para enrutar `robots.txt` quedó desplegada y verificada. No aplicar esta regla al dominio comercial. |
+| Catálogo público | `GET /api/public-catalog?resource=products` y `?resource=collections` responden HTTP 200; ambos devuelven `count: 0` e `items: []`. | Firestore público sigue sin productos ni colecciones; bloquea la prueba de compra e indexación de fichas. |
+| Hoja Productos | La hoja `Productos` contiene 136 filas con ID Firestore, 106 marcadas activas y 87 con stock positivo. Algunas filas consultadas tienen campos de foto vacíos. | La planilla contiene registros, pero no se reflejan en el catálogo público. No se importaron ni alteraron registros en esta revalidación. |
+| Historial de sincronización | La cabecera indica `SINCRONIZADO`, pero las últimas entradas observadas son `Google Sheets / Sistema / web→sheets`. | Ese indicador demuestra el espejo web→Sheets, no Sheets→Firestore. La dirección requerida por la tienda sigue sin verificación de extremo a extremo. |
+| Google Search Console | La cuenta conectada tiene solo la propiedad URL-prefix `https://tintinaccesorios.pages.dev/`. Su sitemap `https://tintinaccesorios.pages.dev/sitemap.xml` figura enviado el 2026-09-28, con 0 advertencias y 0 errores, pero `isPending=true`. No hay Indexing Tracker configurado. | La propiedad temporal está conectada; no hay datos que prueben cobertura/indexación final, ni está conectada la propiedad del dominio comercial `tintinaccs.com`. El host Pages permanece deliberadamente en noindex. |
+| Dominio comercial | `https://tintinaccs.com/robots.txt` devuelve HTTP 200 con contenido de Shopify. | El dominio comercial todavía no sirve Pages; no hacer cutover hasta vincularlo y validar TLS, canonical, robots y sitemap en el dominio objetivo. |
+| Cuentas | `npm run test:accounts` pasó 74/74; `npm run audit:login-profile` terminó correctamente. | Contrato automatizado de eliminación/reingreso y bloqueo pasa; no sustituye una prueba con sesión autenticada en navegador. |
+| Acceso operativo | La conexión a la pestaña autenticada del Admin falló al solicitar foco CDP (`Emulation.setFocusEmulationEnabled`). | No se ejecutaron acciones ni mutaciones en Admin; la publicación del Apps Script y el canary real siguen sin evidencia directa. |
+
+**Decisión actual: NO-GO para cutover.** La protección anti-indexación del host técnico ya está confirmada. Los bloqueos operativos principales son catálogo Firestore vacío, sincronización Sheets→Firestore no demostrada, pruebas de compra/autenticación en runtime pendientes, dominio sin vincular a Pages y Search Console del dominio comercial aún no conectada/verificada. La sincronización de Google Sheets debe permanecer orientada a Firestore; Shopify no es el destino.
+
+## Revalidación del monitor integral — 2026-09-28 21:42 UTC
+
+- `npm run monitor:production` volvió a consultar las rutas públicas de `pages.dev`: inicio, catálogo, colecciones, producto, login, perfil, robots, sitemaps, `/api/health`, PayPal y contenido del editor respondieron. El rechazo `401` de `/api/admin-runtime-health` es el comportamiento esperado sin autenticación.
+- Se corrigieron dos contratos obsoletos del monitor: ya reconoce la política `noindex`/sin sitemap para `*.pages.dev` y acepta los campos públicos `rateSource`/`rateSourceDate` de PayPal sin permitir campos secretos.
+- Tras el ajuste, los controles de `robots` y `paypal-public-configuration` pasaron. El monitor conserva tres fallos relacionados con la misma ausencia real: sitemap de productos vacío, catálogo público sin producto y falta de producto para validar metadata.
+- `node scripts/produccion-smoke-fase-12.mjs` pasó las 17 rutas públicas con HTTPS/CSP y URLs limpias en el host de Pages. Esta prueba no valida inicio de sesión real, pago ni compra.
+- La corrección del monitor está en una rama/PR aparte y aún requiere CI. No cambia Workers, DNS ni datos de clientes.
+
+**Decisión vigente: NO-GO para cutover.** La infraestructura y el smoke de rutas están respondiendo; la tienda aún no puede validar catálogo, fichas ni checkout por falta de productos públicos y de evidencia de escritura Sheets→Firestore. El host técnico debe conservar `noindex`; la política de sitemap indexable se validará en el dominio comercial después de asociarlo a Pages.
+
+## Auditoría de medios Shopify — 2026-09-28 21:59 UTC
+
+- Lectura de solo lectura de `Productos!T7:T739` en la hoja de inventario: 136 de 136 filas con `Imagen URL`; las 136 apuntan a `cdn.shopify.com`.
+- La API pública de Firestore sigue devolviendo 0 productos. Los datos de la hoja no están sincronizados al catálogo público.
+- El repositorio ya contiene el preflight autenticado y el copiador por lotes a Cloudinary (`functions/api/admin-import-media.js`), con escritura desactivada hasta habilitar su variable protegida. Esta revalidación no cambió ni copió imágenes.
+- Antes de declarar independencia total de Shopify, habrá que ejecutar el preflight, copiar las imágenes a Cloudinary, confirmar que Firestore y Sheets referencien las URL nuevas, y repetir una auditoría sin referencias `cdn.shopify.com`. Conservar Shopify mientras esas imágenes sean el único original accesible.
+
+**Decisión: NO-GO para cerrar Shopify o cortar el dominio.** El sitio y los datos de productos aún requieren el catálogo en Firestore y la migración de esas 136 imágenes.
+
+## Verificación no destructiva del webhook de Productos — 2026-09-28 22:15 UTC
+
+- `POST /api/sheets-products-webhook` en el host Pages, sin encabezado secreto, respondió **401** con `x-tintin-products-webhook: products-canonical-v3` y `x-tintin-auth-state: missing-header`.
+- El resultado confirma que la versión canónica del endpoint está desplegada y que exige autenticación. No revela ni prueba el secreto de producción, el despliegue del proyecto Apps Script, una edición real de una fila ni escritura en Firestore.
+- La respuesta es la esperada para esta prueba deliberadamente no autenticada. No se envió ningún producto ni se modificó dato alguno.
+
+**Siguiente evidencia necesaria:** ejecutar `tintinDiagnosticarWebhookProductos()` desde el Apps Script conectado a la planilla, verificar `products-canonical-v3` con autenticación y después sincronizar un canary oculto/inactivo para confirmar la escritura real en Firestore. Mientras no se complete, Sheets→Firestore sigue sin comprobarse y la migración permanece en NO-GO.
+
+## Protección del canary Sheets → Firestore — 2026-09-28 22:23 UTC
+
+- Búsqueda de solo lectura en `Productos!A6:AI739`: no existe una fila `PRUEBA QA`.
+- Auditoría del código encontró que la versión anterior de `tintinProbarEdicionCatalogo()` escogía la primera fila no vacía y la reenviaba a Firestore. Con la planilla actual, eso habría usado un producto comercial; no ejecuté la función.
+- La versión versionada ahora exige ID `CANARY-SHEETS-FIRESTORE`, nombre `PRUEBA QA · NO VENDER`, estado inactivo, stock cero, categoría/precio válidos, sin URL de imagen y sin acción pendiente. Si falta, está duplicado o no cumple esas condiciones, no envía ninguna fila.
+- Contrato local del Apps Script ejecutado en VM con escrituras sustituidas por un espía: producto comercial no seleccionado; canary seguro aceptado; canary activo, duplicado, con stock, ID incorrecto o imagen Shopify rechazado. `tests/sync/productos-canonicos.test.mjs` pasó **16/16**; `npm run test:products-sync` pasó **74/74**.
+
+El cambio protege el próximo despliegue del Apps Script; no modifica el proyecto Apps Script remoto ni crea el canary en la hoja. Primero se debe desplegar el código canónico y luego crear el registro canary con esos valores exactos. Hasta entonces, la prueba de escritura real sigue pendiente.
+
+## Revalidación de Apps Script y canary — 2026-09-28 22:56 UTC
+
+- En la consola de Apps Script, la cuenta de producción abrió el proyecto **Tintin Sync — Motor**. En `Código.gs`, `tintinProbarEdicionCatalogo()` todavía elegía la primera fila con nombre, contrario al contrato del repositorio.
+- Guardé en ese proyecto solo la protección del canary: busca exactamente `PRUEBA QA · NO VENDER`, exige ID `CANARY-SHEETS-FIRESTORE`, inactivo, stock cero, categoría/precio válidos, sin imagen ni acción pendiente, y se niega ante ausencia, duplicado o estado inseguro. La fuente persistió tras recargar el editor.
+- En `Productos!B7:B739`, búsqueda acotada de `PRUEBA QA` devolvió 0 filas. Ejecuté la función nueva desde el editor; el registro de Apps Script mostró que terminó sin error. Según la rama verificada del código y la búsqueda actual, salió por `canary-not-found` antes de llamar al webhook; el editor no expone el objeto de retorno en el registro. No se creó ningún canary ni se escribió en Firestore.
+- Esta edición **no actualizó el deployment `/exec`**, no instaló triggers y no sincronizó productos. El proyecto remoto sigue requiriendo reconciliar sus demás archivos con los `.gs` canónicos versionados; la fuente guardada no prueba que el Web App publicado use el código actual.
+- El monitor de producción, ejecutado de nuevo desde el repositorio, conserva exactamente tres bloqueos: sitemap de productos vacío, catálogo público sin producto y ausencia de un producto para validar metadata. Las demás rutas públicas y políticas de indexación pasan.
+- `npm run test:accounts`: **33/33**. La prueba confirma que bloquear impide el acceso/reingreso y que eliminar permite un registro nuevo; sigue siendo evidencia automatizada, no una sesión cliente real en producción.
+
+**Decisión vigente: NO-GO para cutover y para cerrar Shopify.** Se corrigió la selección insegura de la fila de prueba y se verificó su guardia en la fuente conectada. Aún falta reconciliar y desplegar el Apps Script canónico, crear el canary, demostrar Sheets→Firestore con una escritura autenticada, cargar el catálogo real, migrar sus imágenes y completar checkout/host/Search Console sobre el dominio comercial.
+
+## Estado protegido del ecosistema y colas — 2026-09-28 23:17 UTC
+
+- Desde **Admin → Diagnóstico**, el chequeo protegido de producción terminó en **PASS** contra el commit desplegado `97a00cf15b` en `main`. Firebase/Firestore, Resend, Cloudinary, Google Sheets y el protocolo Apps Script `apps-script-products-guard-v1` respondieron correctamente. Esta comprobación prueba disponibilidad/configuración y el contrato no destructivo del puente; **no** prueba que una edición de producto en Sheets haya escrito un producto en Firestore.
+- El mismo chequeo informó que los documentos de productos, inventario, colecciones, pedidos, usuarios, auditoría, configuración, contenido y Visual Builder son legibles por el runtime de servicio. Esto no contradice que las APIs públicas de catálogo sigan devolviendo cero productos/colecciones: el diagnóstico de servicio no valida publicación ni una ficha comprable.
+- La cola de sincronización de catálogo reportó **20 pendientes**, **2 en dead-letter**, tarea más antigua de **4 días**, último éxito `27/9/26 7:33:53 p. m.` (hora local del panel) y último sync reciente **sin verificar**. La cola de reseñas/me gusta y la cola de correos reportaron cero tareas/dead-letter. No se reintentaron trabajos: una repetición podría escribir en Sheets/Firestore o enviar correo y requiere revisar cada carga fallida primero.
+- GitHub Actions identifica el motivo del último drenaje fallido: ejecución programada **#183**, job `109138667486`, respondió **HTTP 502** con `failureCode: apps_script_timeout` (`checked: 1`, `drained: 0`, `deadLettered: 0`, `remaining: 1`). El reintento automático dejó la tarea pendiente; no la borró ni la pasó a dead-letter. La solicitud duró unos 27 segundos en total. El contrato del worker permite dos intentos de Apps Script con `SHEETS_TIMEOUT_MS=12000`; la evidencia es compatible con dos esperas agotadas, pero el log no desglosa cuánto duró cada intento.
+- El proyecto Apps Script **Tintin Sync — Motor** conserva el deployment Web App versión **16** (“Compatibilidad borrado seguro de productos”) y tres activadores instalados: `onOpen`, el trigger temporal `tintinReconciliarAdminParidad` y el dispatcher instalable `tintinDespacharEdicionParidad`. En las ejecuciones recientes, `doPost` de v16 terminó en 0.6–0.8 s; no se puede equiparar esa muestra con una escritura de lote de productos. La rutina temporal corre cada minuto y suele durar varios segundos; no hay evidencia suficiente para atribuirle el timeout.
+- El monitor público `npm run monitor:production` volvió a pasar las rutas y APIs de lectura, pero terminó con los mismos tres bloqueos de catálogo: `sitemap-products.xml` vacío, catálogo público sin productos y sin producto para probar metadata.
+- El panel de Flujo de conexiones, revalidado a las `2026-09-28T23:16:03.736Z`, mostró **45 verificadas y 28 que requieren atención** de 37 conexiones. Login/redirect y perfil quedaron como implementados pero no verificados; compra/pedidos, carrito, reseñas y correos siguen sin aceptación real documentada. El estado agregado del nodo Apps Script→Sheets no se toma como prueba de la dirección requerida Sheets→Firestore.
+- El Diagnóstico Maestro aún presenta como resultado actual un run del **2 de septiembre** (run #105, con fallo de la cola). La sección confirma commit desplegado `97a00cf15b`, pero la acción para iniciar un diagnóstico maestro está deshabilitada por falta de la credencial privada del backend. El chequeo de ecosistema independiente sí es actual; el resultado histórico no se cuenta como evidencia actual de calidad integral.
+
+**Decisión: NO-GO para cutover.** Las integraciones básicas y el endpoint de salud Apps Script pasan, pero quedan sin comprobar la escritura Sheets→Firestore, el drenaje seguro de dos dead-letter, la publicación del catálogo, la aceptación real de cuenta/checkout y el corte de dominio. No se modificaron pedidos, productos, colas, secretos ni tráfico web durante esta revalidación.

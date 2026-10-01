@@ -496,3 +496,20 @@
   .tt-ops-detail summary::after { transition: none; }
   .tt-ops-stage--running .tt-ops-stage__symbol { animation: none; }
 }
+
+/* El CRUD abre el progreso en el centro para que la operación en curso sea visible. */
+body.tt-ops-centered-active::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 10005;
+  background: rgba(20, 10, 14, .42);
+}
+.tt-ops-loader--centered {
+  top: 50%;
+  right: auto;
+  left: 50%;
+  z-index: 10010;
+  width: min(520px, calc(100vw - 32px));
+  transform: translate(-50%, -50%);
+}

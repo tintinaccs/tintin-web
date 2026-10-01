@@ -14,6 +14,7 @@ const MUTATION_LIMITS = Object.freeze([
   [/^\/api\/email-otp-(send|verify)$/, 10, 60_000, 'auth'],
   [/^\/api\/engagement$/, 45, 60_000, 'engagement'],
   [/^\/api\/(order-email|apps-script-bridge|paypal-create-order|paypal-capture-order)$/, 12, 60_000, 'checkout'],
+  [/^\/api\/paypal-rate-refresh$/, 4, 60_000, 'paypal-rate-refresh'],
   [/^\/api\/push-(subscription|order-event|test|admin)$/, 20, 60_000, 'push'],
   [/^\/api\/(profile-avatar-upload|cloudinary-sign-upload|cloudinary-sign-audio-upload)$/, 20, 60_000, 'upload'],
   [/^\/api\/admin-/, 60, 60_000, 'admin']
@@ -95,22 +96,56 @@ function withRuntimeScripts(response) {
     .transform(response);
 }
 
+function isPagesDevHostname(hostname) {
+  const host = String(hostname || '').toLowerCase();
+  return host === 'pages.dev' || host.endsWith('.pages.dev');
+}
+
+async function applyPagesDevIndexPolicy(request, pathname, response) {
+  const hostname = new URL(request.url).hostname;
+  if (!isPagesDevHostname(hostname)) return response;
+
+  const headers = new Headers(response.headers);
+  headers.set('X-Robots-Tag', 'noindex');
+
+  // Pages.dev is the technical/preview host. Keep it crawlable so search
+  // engines can observe noindex, but do not advertise its sitemap as the
+  // storefront's canonical inventory.
+  if (pathname === '/robots.txt' && request.method !== 'HEAD') {
+    const body = (await response.text())
+      .split(/\r?\n/)
+      .filter(line => !/^\s*Sitemap\s*:/i.test(line))
+      .join('\n');
+    headers.delete('content-length');
+    headers.delete('content-encoding');
+    headers.delete('etag');
+    headers.delete('content-md5');
+    return new Response(body, { status: response.status, statusText: response.statusText, headers });
+  }
+
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 export async function onRequest(context) {
   const pathname = new URL(context.request.url).pathname;
   if (pathname.startsWith('/__/auth/')) return context.next();
 
   const blocked = enforceMutationLimit(context.request, pathname);
-  if (blocked) return blocked;
+  if (blocked) return applyPagesDevIndexPolicy(context.request, pathname, blocked);
   const readBlocked = enforceReadLimit(context.request, pathname);
-  if (readBlocked) return readBlocked;
+  if (readBlocked) return applyPagesDevIndexPolicy(context.request, pathname, readBlocked);
 
   const response = await context.next();
   const contentType = response.headers.get('content-type') || '';
-  if (!contentType.toLowerCase().includes('text/html')) return response;
-  if (!runtimeReady()) return failClosed();
+  if (!contentType.toLowerCase().includes('text/html')) {
+    return applyPagesDevIndexPolicy(context.request, pathname, response);
+  }
+  if (!runtimeReady()) return applyPagesDevIndexPolicy(context.request, pathname, failClosed());
 
   const policy = policyForPath(pathname);
-  if (!policy || !policy.includes("default-src 'self'")) return failClosed();
+  if (!policy || !policy.includes("default-src 'self'")) {
+    return applyPagesDevIndexPolicy(context.request, pathname, failClosed());
+  }
 
   const headers = new Headers(response.headers);
   headers.set('Content-Security-Policy', policy);
@@ -119,5 +154,5 @@ export async function onRequest(context) {
   headers.set('X-Tintin-CSP', 'edge-runtime');
 
   const secured = new Response(response.body, { status: response.status, statusText: response.statusText, headers });
-  return withRuntimeScripts(secured);
+  return applyPagesDevIndexPolicy(context.request, pathname, withRuntimeScripts(secured));
 }

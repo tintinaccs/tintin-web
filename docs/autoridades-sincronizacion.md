@@ -20,3 +20,4 @@ Este contrato evita que Firestore, Superadmin y Google Sheets compitan por el mi
 - Checkout, Superadmin y Sheets convergen en `orders`; el resultado confirmado se refleja en `Pedidos web`. Si el push inmediato a Sheets falla, el pedido sigue válido y el reconciliador periódico repara el espejo.
 - `Auditoría web` e `Historial sync` no son superficies de edición.
 - Productos mantiene su guard contra el bucle Firestore → Sheets → Firestore y su webhook autenticado independiente.
+- El webhook de productos no permite que una escritura desde Sheets guarde URLs alojadas en Shopify dentro de los campos públicos del catálogo; las imágenes deben copiarse a Cloudinary durante la importación y los enlaces públicos deben migrarse a un destino independiente. La validación solo inspecciona los campos incluidos en `changedFields`, así que una URL antigua en otra celda no bloquea cambios de precio o inventario ni vuelve a escribirse por accidente.
