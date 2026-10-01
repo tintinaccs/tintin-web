@@ -439,3 +439,7 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - `audit:admin-responsive`: PASS 16/16 viewports.
 - `scripts/auditar-escritorio-correcciones.mjs`: fallaba "Checkout vacío permite continuar" porque leía `#btn-step1-next` en `domcontentloaded`, antes de que `renderCart()` (async, módulos Firebase) fijara `disabled`/`aria-disabled`. Evidencia: en producción (`tintinaccesorios.pages.dev/checkout`, carrito vacío) el botón queda `disabled=true`, `aria-disabled="true"`; local con red hacia gstatic también (10 s). Corrección: la auditoría espera hasta 15 s el estado final. Sin red a gstatic (este contenedor sin proxy en Chromium) la auditoría sigue fallando por entorno; no se pudo ejecutar la auditoría completa con la corrección en este contenedor.
 - Producción (solo lecturas): carrito invitado agregar → checkout con subtotal correcto: PASS. Login: solo carga de pantalla; inicio de sesión real NO probado.
+
+## Cuestionario del dueño: matriz de cumplimiento — 2026-10-01
+- Estado: NOT_VERIFIED en producción. Matriz en `docs/agent/DECISIONES_CUESTIONARIO.md` (lectura de código, sin pruebas en vivo).
+- Brechas confirmadas por no encontrar código: cupones (envío gratis, límites, fechas), email al cliente en cada cambio de estado, precio anterior tachado + %, historial de cambios de precio/stock, descuento de stock al confirmar pago.
