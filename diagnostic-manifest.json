@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d9d5ff0906447a4092f4be6fc606b70dcf9dc29550770c77e3c4b06b04e593ec",
+  "sourceFingerprint": "c48f48e3c366f0e67b2b8a7710f8e135e80222ee4b49926917c42349b881e54d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 937,
     "textFiles": 896,
-    "totalBytes": 18072895,
+    "totalBytes": 18076317,
     "pages": 19,
     "modules": 645
   },
@@ -13336,8 +13336,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 80108,
-      "sha256": "71211d3209321b37561e7b72b13985ae50a06cddee0ad84e7786d8cbc83daae3",
+      "bytes": 83530,
+      "sha256": "bec419e87e15c4fa906c2d6ca5e5d2da987b64a29a8b73d6187a48478cbce14a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13346,7 +13346,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          72
+          71
         ]
       },
       "duplicateIds": [],
@@ -13358,13 +13358,13 @@
           "error": ""
         },
         {
-          "line": 57,
+          "line": 56,
           "module": false,
           "ok": true,
           "error": ""
         },
         {
-          "line": 205,
+          "line": 204,
           "module": true,
           "ok": true,
           "error": ""
@@ -13395,17 +13395,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1483
+          "line": 1558
         },
         {
           "raw": "tienda.js?v=tintin-20261001-precio-anterior-4",
           "target": "tienda.js",
-          "line": 1484
+          "line": 1559
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1485
+          "line": 1560
         }
       ],
       "styles": [
@@ -13505,24 +13505,19 @@
           "line": 51
         },
         {
-          "raw": "css/pages/login/login-onboarding-form-layout.css?v=tintin-20261001-onboarding-form-grid-1",
-          "target": "css/pages/login/login-onboarding-form-layout.css",
-          "line": 52
-        },
-        {
           "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
-          "line": 53
+          "line": 52
         },
         {
           "raw": "css/quality/contraste.css?v=tintin-20260927-visual-1",
           "target": "css/quality/contraste.css",
-          "line": 54
+          "line": 53
         },
         {
           "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1",
           "target": "css/theme/sistema-superficies-tintin.css",
-          "line": 55
+          "line": 54
         }
       ],
       "images": [
@@ -13532,7 +13527,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "Tintin Accesorios y Relojes",
           "hasAlt": true,
-          "line": 66
+          "line": 65
         }
       ],
       "links": [
@@ -13544,7 +13539,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 147
+          "line": 146
         },
         {
           "raw": "/",
@@ -13554,7 +13549,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 179
+          "line": 178
         }
       ],
       "references": [
@@ -13585,19 +13580,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1483,
+          "line": 1558,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261001-precio-anterior-4",
           "target": "tienda.js",
-          "line": 1484,
+          "line": 1559,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1485,
+          "line": 1560,
           "exists": true
         },
         {
@@ -13709,33 +13704,27 @@
           "exists": true
         },
         {
-          "raw": "css/pages/login/login-onboarding-form-layout.css?v=tintin-20261001-onboarding-form-grid-1",
-          "target": "css/pages/login/login-onboarding-form-layout.css",
-          "line": 52,
-          "exists": true
-        },
-        {
           "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
-          "line": 53,
+          "line": 52,
           "exists": true
         },
         {
           "raw": "css/quality/contraste.css?v=tintin-20260927-visual-1",
           "target": "css/quality/contraste.css",
-          "line": 54,
+          "line": 53,
           "exists": true
         },
         {
           "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1",
           "target": "css/theme/sistema-superficies-tintin.css",
-          "line": 55,
+          "line": 54,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/general/logo.png",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 66,
+          "line": 65,
           "exists": true
         }
       ],
@@ -13746,7 +13735,7 @@
           "id": "login-exit-modal",
           "role": "dialog",
           "classes": "login-exit-modal",
-          "line": 192
+          "line": 191
         }
       ],
       "tabs": [],
@@ -13764,7 +13753,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 79
+          "line": 78
         },
         {
           "id": "btn-send-otp",
@@ -13778,7 +13767,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 97
+          "line": 96
         },
         {
           "id": "btn-toggle-identifier",
@@ -13792,7 +13781,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 98
+          "line": 97
         },
         {
           "id": "btn-paste-otp",
@@ -13806,7 +13795,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 109
+          "line": 108
         },
         {
           "id": "btn-verify-otp",
@@ -13820,7 +13809,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 112
+          "line": 111
         },
         {
           "id": "btn-resend-otp",
@@ -13834,7 +13823,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 113
+          "line": 112
         },
         {
           "id": "btn-change-email",
@@ -13848,7 +13837,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 114
+          "line": 113
         },
         {
           "id": "btn-change-profile-name",
@@ -13862,7 +13851,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 121
+          "line": 120
         },
         {
           "id": "login-profile-locate",
@@ -13876,7 +13865,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 162
+          "line": 161
         },
         {
           "id": "btn-save-profile",
@@ -13890,7 +13879,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 169
+          "line": 168
         },
         {
           "id": "login-mode-toggle",
@@ -13904,7 +13893,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 175
+          "line": 174
         },
         {
           "id": "btn-exit-continue",
@@ -13918,7 +13907,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 200
+          "line": 199
         },
         {
           "id": "btn-exit-logout",
@@ -13932,7 +13921,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 201
+          "line": 200
         }
       ],
       "controls": [
@@ -13942,7 +13931,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 96,
+          "line": 95,
           "labeled": true
         },
         {
@@ -13951,7 +13940,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 107,
+          "line": 106,
           "labeled": true
         },
         {
@@ -13960,7 +13949,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 126,
+          "line": 125,
           "labeled": true
         },
         {
@@ -13969,7 +13958,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 133,
+          "line": 132,
           "labeled": true
         },
         {
@@ -13978,7 +13967,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 136,
+          "line": 135,
           "labeled": true
         },
         {
@@ -13987,7 +13976,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Prefijo de Paraguay",
-          "line": 142,
+          "line": 141,
           "labeled": true
         },
         {
@@ -13996,7 +13985,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 143,
+          "line": 142,
           "labeled": true
         },
         {
@@ -14005,7 +13994,7 @@
           "name": "",
           "type": "date",
           "ariaLabel": "",
-          "line": 152,
+          "line": 151,
           "labeled": true
         },
         {
@@ -14014,7 +14003,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 159,
+          "line": 158,
           "labeled": true
         },
         {
@@ -14023,7 +14012,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 166,
+          "line": 165,
           "labeled": true
         }
       ]
@@ -18841,7 +18830,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 357687,
-      "sha256": "d0beb271c3525d149dd21eac7765890fe25e723f887593f8e9d0a1cb971a7548",
+      "sha256": "57dac81b527f5796e0aeaee7700c3856b2e6ba718b046f9efd7ad20624994b27",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36647,13 +36636,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 357687,
-      "sha256": "d0beb271c3525d149dd21eac7765890fe25e723f887593f8e9d0a1cb971a7548"
+      "sha256": "57dac81b527f5796e0aeaee7700c3856b2e6ba718b046f9efd7ad20624994b27"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 357602,
-      "sha256": "0d3c37dd5b0620b60a358f7bb3e34eee03eb8e6342267bc893ef3609ca7327e8"
+      "sha256": "42bd037122b65de65880bd3f29fa2ccdbe43729612c1efb39aac80a0b0e3f925"
     },
     {
       "path": "config/public-site.json",
@@ -39436,8 +39425,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 80108,
-      "sha256": "71211d3209321b37561e7b72b13985ae50a06cddee0ad84e7786d8cbc83daae3"
+      "bytes": 83530,
+      "sha256": "bec419e87e15c4fa906c2d6ca5e5d2da987b64a29a8b73d6187a48478cbce14a"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -43014,119 +43003,119 @@
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/about.html",
       "target": "about.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/envios.html",
       "target": "envios.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/cambios-devoluciones.html",
       "target": "cambios-devoluciones.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/preguntas-frecuentes.html",
       "target": "preguntas-frecuentes.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/privacidad.html",
       "target": "privacidad.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 363,
+      "line": 371,
       "raw": "/terminos.html",
       "target": "terminos.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 421,
+      "line": 429,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 433,
+      "line": 441,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 433,
+      "line": 441,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 560,
+      "line": 578,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -43196,7 +43185,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 433
+          "line": 441
         }
       ]
     },
@@ -43331,31 +43320,31 @@
     },
     {
       "file": "login.html",
-      "line": 266,
+      "line": 265,
       "target": "/api/notifications",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 644,
+      "line": 663,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 661,
+      "line": 680,
       "target": "/api/phone-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 815,
+      "line": 834,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 918,
+      "line": 943,
       "target": "/api/username-availability",
       "method": "POST"
     }
@@ -44822,17 +44811,17 @@
           },
           {
             "file": "login.html",
-            "line": 455,
+            "line": 463,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 476,
+            "line": 485,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 1080,
+            "line": 1146,
             "operation": "doc"
           },
           {
