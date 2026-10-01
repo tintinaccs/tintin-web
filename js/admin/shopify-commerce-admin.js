@@ -14,6 +14,7 @@
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { recordAuthDiagnostic } from '../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import {
   collection,
   getDocs,
@@ -71,6 +72,8 @@ const state = {
   ordersCursor: null,
   ordersHasMore: false,
   ordersLoadingMore: false,
+  productsError: '',
+  collectionsError: '',
   ordersError: '',
   productTab: 'all',
   collectionTab: 'all',
@@ -97,6 +100,19 @@ const state = {
   unsubscribers: [],
   trashUnsubscribe: null
 };
+
+let commerceAuthRecoveryAttempted = false;
+let commerceAuthRecoveryPromise = null;
+
+function listenerErrorCode(error) {
+  return String(error?.code || error?.name || 'unknown').replace(/^firestore\//, '').toLowerCase();
+}
+
+function rangeLabel(page, noun, unavailable = false) {
+  if (unavailable && page.total === 0) return 'No disponible';
+  if (page.total === 0) return '0 resultados';
+  return `Mostrando ${page.page * ADMIN_PAGE_SIZE + 1}–${page.page * ADMIN_PAGE_SIZE + page.items.length} de ${page.total} ${noun}`;
+}
 
 function ensureCss() {
   if (document.querySelector(`link[href*="shopify-commerce-admin.css"]`)) return;
@@ -425,11 +441,15 @@ function renderProducts() {
   const canDelete = perm('productos', 'eliminar', 'deleteProducts');
   const canBulk = perm('productos', 'accionesMasivas', 'editProducts');
   const canExport = perm('productos', 'exportar', 'editProducts') || state.role === 'viewer';
+  const productsUnavailable = Boolean(state.productsError && !state.products.length);
+  const productsWarning = state.productsError
+    ? `<div class="tt-commerce-error" role="alert">${esc(state.productsError)}${state.products.length ? ' Se muestran los últimos datos confirmados.' : ''} <button type="button" class="tt-commerce-btn" data-action="products-retry">Reintentar</button></div>`
+    : '';
 
   root.innerHTML = `
     <div class="tt-commerce-pagehead">
       <div class="tt-commerce-titlegroup">
-        <h1 class="tt-commerce-title">Productos <span class="tt-commerce-count">${state.products.length}</span></h1>
+        <h1 class="tt-commerce-title">Productos <span class="tt-commerce-count">${productsUnavailable ? '—' : state.products.length}</span></h1>
         <div class="tt-commerce-subtitle">Catálogo conectado en tiempo real con la tienda.</div>
       </div>
       <div class="tt-commerce-actions">
@@ -476,7 +496,8 @@ function renderProducts() {
         ${canExport ? button('Exportar selección', 'products-export-selected') : ''}
         ${button('Limpiar', 'products-clear-selection')}
       </div>
-      ${!state.productsReady ? '<div class="tt-commerce-loading">Cargando productos…</div>' : page.items.length ? `
+      ${productsWarning}
+      ${!state.productsReady ? '<div class="tt-commerce-loading">Cargando productos…</div>' : productsUnavailable ? '' : page.items.length ? `
       <div class="tt-commerce-tablewrap">
         <table class="tt-commerce-table">
           <thead><tr>
@@ -501,7 +522,7 @@ function renderProducts() {
           }).join('')}</tbody>
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay productos que coincidan con esta vista.</div>'}
-      <div class="tt-commerce-footer"><span>Mostrando ${page.page * ADMIN_PAGE_SIZE + 1}–${page.page * ADMIN_PAGE_SIZE + page.items.length} de ${page.total} productos</span><span>Los cambios se sincronizan automáticamente.</span>${pageControls('products-page', page.page, page.pages)}</div>
+      <div class="tt-commerce-footer"><span>${rangeLabel(page, 'productos', productsUnavailable)}</span><span>Los cambios se sincronizan automáticamente.</span>${pageControls('products-page', page.page, page.pages)}</div>
     </div>`;
 }
 
@@ -519,11 +540,15 @@ function renderCollections() {
   const canToggle = perm('colecciones', 'activarDesactivar', 'manageContent');
   const canDelete = perm('colecciones', 'eliminar', 'deleteCollections');
   const canBulk = perm('colecciones', 'accionesMasivas', 'manageContent');
+  const collectionsUnavailable = Boolean(state.collectionsError && !state.collections.length);
+  const collectionsWarning = state.collectionsError
+    ? `<div class="tt-commerce-error" role="alert">${esc(state.collectionsError)}${state.collections.length ? ' Se muestran los últimos datos confirmados.' : ''} <button type="button" class="tt-commerce-btn" data-action="collections-retry">Reintentar</button></div>`
+    : '';
 
   root.innerHTML = `
     <div class="tt-commerce-pagehead">
       <div class="tt-commerce-titlegroup">
-        <h1 class="tt-commerce-title">Colecciones <span class="tt-commerce-count">${state.collections.length}</span></h1>
+        <h1 class="tt-commerce-title">Colecciones <span class="tt-commerce-count">${collectionsUnavailable ? '—' : state.collections.length}</span></h1>
         <div class="tt-commerce-subtitle">Agrupación real del catálogo de Tintin. Cada producto conserva su colección principal.</div>
       </div>
       <div class="tt-commerce-actions">${canCreate ? button('Crear colección', 'collection-new', { primary: true }) : ''}</div>
@@ -555,7 +580,8 @@ function renderCollections() {
         ${button('Exportar selección', 'collections-export-selected')}
         ${button('Limpiar', 'collections-clear-selection')}
       </div>
-      ${!state.collectionsReady ? '<div class="tt-commerce-loading">Cargando colecciones…</div>' : page.items.length ? `
+      ${collectionsWarning}
+      ${!state.collectionsReady ? '<div class="tt-commerce-loading">Cargando colecciones…</div>' : collectionsUnavailable ? '' : page.items.length ? `
       <div class="tt-commerce-tablewrap">
         <table class="tt-commerce-table">
           <thead><tr><th class="checkcol"><input type="checkbox" data-check-all="collections" ${allVisibleSelected ? 'checked' : ''}></th><th>Colección</th><th>Visibilidad</th><th>Productos</th><th>Orden</th><th></th></tr></thead>
@@ -573,7 +599,7 @@ function renderCollections() {
           }).join('')}</tbody>
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay colecciones que coincidan con esta vista.</div>'}
-      <div class="tt-commerce-footer"><span>Mostrando ${page.page * ADMIN_PAGE_SIZE + 1}–${page.page * ADMIN_PAGE_SIZE + page.items.length} de ${page.total} colecciones</span><span>El orden y la visibilidad impactan la tienda pública.</span>${pageControls('collections-page', page.page, page.pages)}</div>
+      <div class="tt-commerce-footer"><span>${rangeLabel(page, 'colecciones', collectionsUnavailable)}</span><span>El orden y la visibilidad impactan la tienda pública.</span>${pageControls('collections-page', page.page, page.pages)}</div>
     </div>`;
 }
 
@@ -604,6 +630,12 @@ function renderOrders() {
   const canUpdate = !showingTrash && perm('pedidos', 'cambiarEstado', 'manageOrders');
   const canUpdatePay = !showingTrash && perm('pedidos', 'cambiarPago', 'manageOrders');
   const isSuper = state.role === 'superadmin';
+  const ordersUnavailable = Boolean(!showingTrash && state.ordersError && !state.orders.length);
+  const ordersWarning = !showingTrash && state.ordersError && state.orders.length
+    ? `<div class="tt-commerce-error" role="alert">${esc(state.ordersError)} Se muestran los últimos datos confirmados. <button type="button" class="tt-commerce-btn" data-action="orders-retry">Reintentar</button></div>`
+    : '';
+  const metricValue = value => ordersUnavailable ? '—' : value;
+  const metricMoney = value => ordersUnavailable ? '—' : formatMoney(value);
   const tableRows = page.items.map(order => {
     const customer = orderCustomer(order);
     const shipping = orderShipping(order);
@@ -642,9 +674,9 @@ function renderOrders() {
   const pagination = !showingTrash ? pageControls('orders-page', page.page, page.pages, { hasMore: canLoadMore, loading: state.ordersLoadingMore }) : '';
   const loadedHint = !showingTrash && (state.ordersHasMore || page.pages > 1) ? 'La vista está paginada en bloques de 30.' : '';
   root.innerHTML = `
-    <div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${sourceTotal}</span></h1><div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div></div><div class="tt-commerce-actions">${isSuper ? button('Reiniciar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div></div>
-    ${!showingTrash ? `<div class="tt-commerce-order-metrics" aria-label="Resumen del grupo cargado de pedidos"><div><strong>${metrics.today}</strong><span>Pedidos hoy</span></div><div><strong>${formatMoney(metrics.revenue)}</strong><span>Ventas de hoy</span></div><div><strong>${metrics.pending}</strong><span>Pagos pendientes</span></div><div><strong>${metrics.unfulfilled}</strong><span>Sin preparar</span></div><div><strong>${metrics.delivered}</strong><span>Entregados</span></div><div><strong>${metrics.items}</strong><span>Artículos hoy</span></div></div>` : ''}
-    <div class="tt-commerce-card"><div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>Mostrando ${page.page * ADMIN_PAGE_SIZE + 1}–${page.page * ADMIN_PAGE_SIZE + page.items.length} de ${page.total} pedidos cargados</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
+    <div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${ordersUnavailable ? '—' : sourceTotal}</span></h1><div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div></div><div class="tt-commerce-actions">${isSuper ? button('Verificar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div></div>
+    ${!showingTrash ? `<div class="tt-commerce-order-metrics" aria-label="Resumen del grupo cargado de pedidos"><div><strong>${metricValue(metrics.today)}</strong><span>Pedidos hoy</span></div><div><strong>${metricMoney(metrics.revenue)}</strong><span>Ventas de hoy</span></div><div><strong>${metricValue(metrics.pending)}</strong><span>Pagos pendientes</span></div><div><strong>${metricValue(metrics.unfulfilled)}</strong><span>Sin preparar</span></div><div><strong>${metricValue(metrics.delivered)}</strong><span>Entregados</span></div><div><strong>${metricValue(metrics.items)}</strong><span>Artículos hoy</span></div></div>` : ''}
+    <div class="tt-commerce-card">${ordersWarning}<div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>${rangeLabel(page, 'pedidos cargados', ordersUnavailable)}</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
 }
 
 function renderAll() {
@@ -997,6 +1029,7 @@ async function handleAction(action, element) {
   if (action === 'drawer-close') return closeDrawer();
   if (action === 'product-new') { closeDrawer(); return window.prodNuevo?.(); }
   if (action === 'products-import') return clickSection('importar');
+  if (action === 'products-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
   if (action === 'products-export') return exportProducts(false);
   if (action === 'products-export-selected') return exportProducts(true);
   if (action === 'products-clear-selection') { state.productSelected.clear(); return renderProducts(); }
@@ -1018,6 +1051,7 @@ async function handleAction(action, element) {
 
   if (action === 'collection-new') { closeDrawer(); return window.collNueva?.(); }
   if (action === 'collections-export-selected') return exportCollections(true);
+  if (action === 'collections-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
   if (action === 'collections-bulk-delete') {
     if (typeof window.bulkDeleteCollections !== 'function') return toast('La eliminación masiva todavía no está disponible.');
     return window.bulkDeleteCollections([...state.collectionSelected]);
@@ -1045,7 +1079,7 @@ async function handleAction(action, element) {
     state.orderPage += 1;
     return renderOrders();
   }
-  if (action === 'orders-retry') return subscribeData();
+  if (action === 'orders-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
   if (action === 'order-edit-advanced') { closeDrawer(); return window.TintinOrderAdmin?.openAdvancedOrderEditor(id); }
   if (action === 'order-restore') return window.TintinOrderAdmin?.restoreOrder(id).then(() => toast('Pedido restaurado en estado Cancelado; podés reactivarlo desde CRUD completo.'));
   if (action === 'order-delete-permanent') return window.TintinOrderAdmin?.deleteTrashPermanently(id);
@@ -1226,6 +1260,36 @@ function observeLegacyForms() {
   targets.forEach(el => observer.observe(el, { attributes: true, attributeFilter: ['style', 'hidden', 'class'] }));
 }
 
+function recoverCommerceAuth(error, source) {
+  const code = listenerErrorCode(error);
+  const authRelated = code === 'permission-denied' || code === 'unauthenticated';
+  recordAuthDiagnostic('FIRESTORE_LISTENER_ERROR', {
+    source: `admin-commerce-${source}`,
+    firestoreCode: code,
+    recovery: authRelated ? 'refresh-once' : 'manual-retry',
+  });
+  if (!authRelated || commerceAuthRecoveryAttempted || !state.user) return;
+
+  commerceAuthRecoveryAttempted = true;
+  const targetUser = state.user;
+  if (!commerceAuthRecoveryPromise) {
+    commerceAuthRecoveryPromise = targetUser.getIdToken(true)
+      .then(() => waitForAdminAppCheck(12000))
+      .then(Boolean)
+      .catch(refreshError => {
+        recordAuthDiagnostic('FIRESTORE_LISTENER_AUTH_REFRESH_FAILED', {
+          source: 'admin-commerce',
+          firestoreCode: listenerErrorCode(refreshError),
+        });
+        return false;
+      })
+      .finally(() => { commerceAuthRecoveryPromise = null; });
+  }
+  void commerceAuthRecoveryPromise.then(ok => {
+    if (ok && state.user?.uid === targetUser.uid) subscribeData();
+  });
+}
+
 function subscribeData() {
   state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
   state.unsubscribers = [];
@@ -1237,12 +1301,15 @@ function subscribeData() {
   state.unsubscribers.push(onSnapshot(query(collection(db, 'products'), limit(1000)), snapshot => {
     state.products = snapshot.docs.map(snap => ({ _docId: snap.id, ...snap.data() }));
     state.productsReady = true;
+    state.productsError = '';
     state.productSelected = new Set([...state.productSelected].filter(id => state.products.some(p => p._docId === id)));
     renderProducts(); renderCollections(); renderDrawer();
   }, error => {
     state.productsReady = true;
+    state.productsError = 'No se pudieron actualizar los productos.';
     console.error('[shopify-commerce] products:', error);
     toast('No se pudieron actualizar los productos en tiempo real.', 5000);
+    recoverCommerceAuth(error, 'products');
     renderProducts();
   }));
 
@@ -1250,17 +1317,19 @@ function subscribeData() {
   state.unsubscribers.push(onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
     state.collections = snapshot.docs.map(snap => normalizeCollectionDoc(snap.id, snap.data())).filter(Boolean);
     state.collectionsReady = true;
+    state.collectionsError = '';
     state.collectionSelected = new Set([...state.collectionSelected].filter(slug => state.collections.some(c => c.slug === slug)));
     renderCollections(); renderProducts(); renderDrawer();
   }, error => {
     state.collectionsReady = true;
+    state.collectionsError = 'No se pudieron actualizar las colecciones.';
     console.error('[shopify-commerce] collections:', error);
     toast('No se pudieron actualizar las colecciones en tiempo real.', 5000);
+    recoverCommerceAuth(error, 'collections');
     renderCollections();
   }));
 
   const ordersPage = query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ORDER_PAGE_SIZE));
-  state.ordersError = '';
   state.ordersCursor = null;
   state.ordersHasMore = false;
   state.unsubscribers.push(onSnapshot(ordersPage, snapshot => {
@@ -1268,6 +1337,7 @@ function subscribeData() {
     state.ordersCursor = snapshot.docs.at(-1) || null;
     state.ordersHasMore = snapshot.docs.length === ORDER_PAGE_SIZE;
     state.ordersReady = true;
+    state.ordersError = '';
     state.orderSelected = new Set([...state.orderSelected].filter(id => state.orders.some(o => o.id === id)));
     if (state.role === 'superadmin') window.TintinOrderAdmin?.ensureMissingOrderNumbers(state.orders);
     renderOrders(); renderDrawer();
@@ -1276,6 +1346,7 @@ function subscribeData() {
     state.ordersError = 'No se pudieron cargar los pedidos.';
     console.error('[shopify-commerce] orders:', error);
     toast('No se pudieron actualizar los pedidos en tiempo real.', 5000);
+    recoverCommerceAuth(error, 'orders');
     renderOrders();
   }));
 
@@ -1335,6 +1406,7 @@ function ensureTrashSubscription() {
 async function bootForUser(user) {
   if (!user || user.isAnonymous) return;
   state.user = user;
+  commerceAuthRecoveryAttempted = false;
   await loadRolePermissions();
   state.role = await getUserRole(user.uid, user.email);
   state.ready = true;
@@ -1377,6 +1449,8 @@ function boot() {
     // por separado con "Missing or insufficient permissions" en Firestore.
     state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
     state.unsubscribers = [];
+    state.user = null;
+    commerceAuthRecoveryAttempted = false;
     if (state.trashUnsubscribe) { try { state.trashUnsubscribe(); } catch {} state.trashUnsubscribe = null; }
   });
 }
