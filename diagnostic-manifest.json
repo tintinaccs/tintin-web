@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7270f8646ae871852463e4b015fa8e59f4548d5d57b280810271242bfa04a24c",
+  "sourceFingerprint": "95adfc4dcb017719cc0f6db8b5edb55f8b1f8dae22cdc40b295621080ab83115",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 925,
-    "textFiles": 884,
-    "totalBytes": 17990466,
+    "files": 927,
+    "textFiles": 886,
+    "totalBytes": 17999805,
     "pages": 19,
-    "modules": 634
+    "modules": 636
   },
   "viewports": [
     {
@@ -18038,6 +18038,24 @@
       "endpoints": []
     },
     {
+      "path": "cloudflare/correo-estado-pedido.js",
+      "bytes": 5961,
+      "sha256": "2261e749ac5dc58c26b7590b12ca72755e766623cbbeeaad62ca54a6268bbe14",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../functions/api/order-email.js",
+          "target": "functions/api/order-email.js",
+          "dynamic": false,
+          "line": 13
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/firebase-admin-ligero.js",
       "bytes": 29133,
       "sha256": "a5ba958eb8b4f2dac54972bc625e86ca6406b9ced14050a496e00cf8567ca75a",
@@ -18189,8 +18207,8 @@
     },
     {
       "path": "cloudflare/order-admin-domain.js",
-      "bytes": 23768,
-      "sha256": "1a2b78711a091826ef961cb13b067a230604c2df20a6a3aaba99675347d83f6a",
+      "bytes": 23890,
+      "sha256": "ae853884822217f71e0254e727b4b30ee0a5b99d8c4c400988fa7a37e262f44d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19152,8 +19170,8 @@
     },
     {
       "path": "functions/api/admin-order-mutation.js",
-      "bytes": 4465,
-      "sha256": "d9fe8908f0ff4d3d96911e15acfc6de04c68abffcca2aa72e8d5432f100d0af7",
+      "bytes": 4718,
+      "sha256": "e858867f531003e4678c4b549aceab1400e1a3e75a2aec8aa7a5547f1853b9f7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19178,10 +19196,16 @@
           "line": 11
         },
         {
+          "raw": "../../cloudflare/correo-estado-pedido.js",
+          "target": "cloudflare/correo-estado-pedido.js",
+          "dynamic": false,
+          "line": 12
+        },
+        {
           "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
           "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": []
@@ -19697,8 +19721,8 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 22687,
-      "sha256": "a6e2df77652e8cf46efc8aaa83efbd4446dcd7a51496332db3094d6d469c1829",
+      "bytes": 22743,
+      "sha256": "1465e89d85f1cea04d5379b09e6c2724ae8ba9549c227d763117c51323b4a005",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20110,8 +20134,8 @@
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
-      "bytes": 9202,
-      "sha256": "2296ba4d04a7f8f335ff2b310c0c6774a10943cadd3cbf93697e8968e536d9b5",
+      "bytes": 9418,
+      "sha256": "28afcd272de2d3c3a0408cdfc290c2a19bf77c8c832cd8c20014647809518a5f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20142,16 +20166,22 @@
           "line": 10
         },
         {
+          "raw": "../../cloudflare/correo-estado-pedido.js",
+          "target": "cloudflare/correo-estado-pedido.js",
+          "dynamic": false,
+          "line": 11
+        },
+        {
           "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
           "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../cloudflare/sincronizacion-participacion-sheets.js",
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": []
@@ -33760,6 +33790,36 @@
       ]
     },
     {
+      "path": "tests/orders/correo-estado-pedido.test.mjs",
+      "bytes": 2731,
+      "sha256": "f16a8e95bfd43313be5081764cc683f553fedfb9bdfe6e4fd02d2f1b14450a6f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/correo-estado-pedido.js",
+          "target": "cloudflare/correo-estado-pedido.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "bytes": 6829,
       "sha256": "54b3170598183eb2be0401bf4456196e7132a4d0a6bb13bed7195fff6f45e6e5",
@@ -36072,6 +36132,12 @@
       "sha256": "5f8b3140a95a0c686faa43b343098f31b4c9726eab814196f213153b4a1e5d70"
     },
     {
+      "path": "cloudflare/correo-estado-pedido.js",
+      "extension": ".js",
+      "bytes": 5961,
+      "sha256": "2261e749ac5dc58c26b7590b12ca72755e766623cbbeeaad62ca54a6268bbe14"
+    },
+    {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
       "bytes": 29133,
@@ -36110,8 +36176,8 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "extension": ".js",
-      "bytes": 23768,
-      "sha256": "1a2b78711a091826ef961cb13b067a230604c2df20a6a3aaba99675347d83f6a"
+      "bytes": 23890,
+      "sha256": "ae853884822217f71e0254e727b4b30ee0a5b99d8c4c400988fa7a37e262f44d"
     },
     {
       "path": "cloudflare/order-sheets-sync.js",
@@ -37202,8 +37268,8 @@
     {
       "path": "functions/api/admin-order-mutation.js",
       "extension": ".js",
-      "bytes": 4465,
-      "sha256": "d9fe8908f0ff4d3d96911e15acfc6de04c68abffcca2aa72e8d5432f100d0af7"
+      "bytes": 4718,
+      "sha256": "e858867f531003e4678c4b549aceab1400e1a3e75a2aec8aa7a5547f1853b9f7"
     },
     {
       "path": "functions/api/admin-runtime-health.js",
@@ -37304,8 +37370,8 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 22687,
-      "sha256": "a6e2df77652e8cf46efc8aaa83efbd4446dcd7a51496332db3094d6d469c1829"
+      "bytes": 22743,
+      "sha256": "1465e89d85f1cea04d5379b09e6c2724ae8ba9549c227d763117c51323b4a005"
     },
     {
       "path": "functions/api/paypal-capture-order.js",
@@ -37388,8 +37454,8 @@
     {
       "path": "functions/api/sheets-admin-webhook.js",
       "extension": ".js",
-      "bytes": 9202,
-      "sha256": "2296ba4d04a7f8f335ff2b310c0c6774a10943cadd3cbf93697e8968e536d9b5"
+      "bytes": 9418,
+      "sha256": "28afcd272de2d3c3a0408cdfc290c2a19bf77c8c832cd8c20014647809518a5f"
     },
     {
       "path": "functions/api/sheets-engagement-webhook.js",
@@ -40762,6 +40828,12 @@
       "extension": ".mjs",
       "bytes": 3130,
       "sha256": "63760de38d6c54ac74b8b89cdd7826670ef17206c0e2275dad37025672155ac7"
+    },
+    {
+      "path": "tests/orders/correo-estado-pedido.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2731,
+      "sha256": "f16a8e95bfd43313be5081764cc683f553fedfb9bdfe6e4fd02d2f1b14450a6f"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
