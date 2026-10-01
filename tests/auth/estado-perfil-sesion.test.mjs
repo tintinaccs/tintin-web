@@ -137,3 +137,9 @@ test('la sesión restaurada nunca cierra sesión ni deja un cargador colgado ant
   assert.doesNotMatch(handler, /signOut\(/);
   assert.match(handler, /withDeadline\(getDoc/);
 });
+
+test('withDeadline por defecto no llama setTimeout/clearTimeout como métodos de un objeto (Illegal invocation en navegador)', async () => {
+  const src = await (await import('node:fs/promises')).readFile(new URL('../../js/core/auth/estado-perfil-sesion.mjs', import.meta.url), 'utf8');
+  assert.doesNotMatch(src, /scheduler = \{ set: setTimeout, clear: clearTimeout \}/);
+  assert.equal(await withDeadline(Promise.resolve('ok'), 10), 'ok');
+});
