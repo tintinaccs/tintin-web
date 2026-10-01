@@ -37,7 +37,7 @@ function writeFor(writes, prefix) {
   return writes.find(write => String(write.path || '').startsWith(prefix));
 }
 
-test('crear pedido manual usa precio canónico, calcula total, reserva stock y asigna TINPED', async () => {
+test('crear pedido manual usa precio canónico, calcula total, descuenta stock (pago confirmado) y asigna TINPED', async () => {
   const store = fakeStore({
     'products/prod_001': document('products/prod_001', {
       name: 'ARO CANÓNICO',
@@ -60,6 +60,7 @@ test('crear pedido manual usa precio canónico, calcula total, reserva stock y a
     shippingMethod: 'delivery',
     shippingCity: 'San Lorenzo',
     shippingCost: 5000,
+    paymentStatus: 'pagado',
     // Estos datos comerciales son deliberadamente falsos. El servidor debe ignorarlos.
     items: [{ id: 'prod_001', qty: 2, price: 1, name: 'PRECIO FALSO' }],
   }, {
@@ -204,4 +205,75 @@ test('edición de Sheets con baseChangeId viejo devuelve conflicto y no escribe'
     error => Number(error?.status) === 409 && /cambió después/i.test(error.message),
   );
   assert.equal(store.commits.length, 0);
+});
+
+const ACTOR = { uid: 'admin-test', email: 'admin@example.com', role: 'superadmin', origin: 'superadmin' };
+const aro = stock => document('products/prod_001', { name: 'Aro', price: 50000, stock, active: true });
+const pedido = (extra = {}) => document('orders/pedido_prueba_1', {
+  orderNumber: 'TINPED50', status: 'pendiente', paymentStatus: 'pendiente',
+  inventoryState: 'unreserved', inventoryRevision: 1, lastChangeId: 'c0',
+  items: [{ id: 'prod_001', name: 'Aro', price: 50000, qty: 2 }],
+  subtotal: 100000, shippingCost: 0, total: 100000, ...extra,
+});
+const stockWrites = store => store.commits.flat().filter(w => String(w.path).startsWith('products/'));
+
+test('pedido nuevo pendiente no descuenta stock pero valida disponibilidad', async () => {
+  const entries = {
+    'products/prod_001': aro(4),
+    'settings/orderSequence': document('settings/orderSequence', { lastNumber: 1, lastCode: 'TINPED01' }),
+  };
+  const store = fakeStore(entries);
+  const result = await createOrderAdmin({}, {
+    userName: 'Cli', contactEmail: 'c@example.com', shippingMethod: 'retiro',
+    items: [{ id: 'prod_001', qty: 2 }],
+  }, ACTOR, store);
+  assert.equal(result.order.inventoryState, 'unreserved');
+  assert.equal(stockWrites(store).length, 0);
+
+  const sinStock = fakeStore({ ...entries, 'products/prod_001': aro(1) });
+  await assert.rejects(
+    createOrderAdmin({}, { userName: 'Cli', contactEmail: 'c@example.com', shippingMethod: 'retiro', items: [{ id: 'prod_001', qty: 2 }] }, ACTOR, sinStock),
+    /Stock insuficiente/,
+  );
+});
+
+test('confirmar el pago descuenta el stock una sola vez y exige stock suficiente', async () => {
+  const store = fakeStore({ 'orders/pedido_prueba_1': pedido(), 'products/prod_001': aro(5) });
+  const result = await applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', paymentStatus: 'pagado' }, ACTOR, store);
+  assert.equal(result.inventoryState, 'reserved');
+  const [write] = stockWrites(store);
+  assert.equal(decodeFirestoreFields(write.fields).stock, 3);
+  assert.equal(decodeFirestoreFields(write.fields).lastInventoryAction, 'reserve');
+
+  const ultima = fakeStore({ 'orders/pedido_prueba_1': pedido(), 'products/prod_001': aro(1) });
+  await assert.rejects(
+    applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', paymentStatus: 'pagado' }, ACTOR, ultima),
+    /Stock insuficiente/,
+  );
+  assert.equal(ultima.commits.length, 0);
+});
+
+test('reconciliar tras pago externo (PayPal) descuenta stock con pedido ya pagado', async () => {
+  const store = fakeStore({ 'orders/pedido_prueba_1': pedido({ paymentStatus: 'pagado' }), 'products/prod_001': aro(5) });
+  const result = await applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', reconcileInventory: true }, ACTOR, store);
+  assert.equal(result.inventoryState, 'reserved');
+  assert.equal(decodeFirestoreFields(stockWrites(store)[0].fields).stock, 3);
+});
+
+test('avanzar el estado descuenta; cancelar un pedido sin descuento no devuelve stock', async () => {
+  const avanza = fakeStore({ 'orders/pedido_prueba_1': pedido(), 'products/prod_001': aro(5) });
+  await applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', status: 'confirmado' }, ACTOR, avanza);
+  assert.equal(decodeFirestoreFields(stockWrites(avanza)[0].fields).stock, 3);
+
+  const cancela = fakeStore({ 'orders/pedido_prueba_1': pedido(), 'products/prod_001': aro(5) });
+  const result = await applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', status: 'cancelado' }, ACTOR, cancela);
+  assert.equal(result.inventoryState, 'released');
+  assert.equal(stockWrites(cancela).length, 0);
+});
+
+test('pedido anterior ya reservado conserva su reserva al editarlo sin pago', async () => {
+  const store = fakeStore({ 'orders/pedido_prueba_1': pedido({ inventoryState: 'reserved' }), 'products/prod_001': aro(5) });
+  const result = await applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', notes: 'nota' }, ACTOR, store);
+  assert.equal(result.inventoryState, 'reserved');
+  assert.equal(stockWrites(store).length, 0);
 });

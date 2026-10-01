@@ -22,10 +22,19 @@ export function statusReservesInventory(status) {
   return !TERMINAL_STATUSES.has(String(status || 'pendiente'));
 }
 
+// Modelo "descontar al confirmar": un pedido nuevo (pendiente y sin pago) no
+// toca el stock. Se descuenta cuando el pago queda 'pagado' o cuando el equipo
+// lo avanza más allá de 'pendiente'. Cancelado/rechazado nunca descuentan.
+export function orderConfirmsInventory({ status, paymentStatus } = {}) {
+  if (!statusReservesInventory(status)) return false;
+  return String(paymentStatus || '') === 'pagado' || String(status || 'pendiente') !== 'pendiente';
+}
+
 export function orderReservesInventory(order) {
   const state = String(order?.inventoryState || '');
   if (state === 'reserved') return true;
   if (state === 'released') return false;
+  if (state === 'unreserved') return false;
   return statusReservesInventory(order?.status);
 }
 
@@ -39,7 +48,13 @@ export function computeInventoryDeltas(beforeOrder, patch = {}, maxDistinct = 4)
   const afterStatus = Object.prototype.hasOwnProperty.call(patch, 'status')
     ? patch.status
     : beforeOrder?.status;
-  const afterReserved = statusReservesInventory(afterStatus);
+  const afterPaymentStatus = Object.prototype.hasOwnProperty.call(patch, 'paymentStatus')
+    ? patch.paymentStatus
+    : beforeOrder?.paymentStatus || beforeOrder?.payment?.status;
+  // Lo ya descontado se conserva (pedidos anteriores a este modelo incluidos)
+  // hasta que el pedido termine; lo no descontado solo se descuenta al confirmar.
+  const afterReserved = statusReservesInventory(afterStatus) &&
+    (beforeReserved || orderConfirmsInventory({ status: afterStatus, paymentStatus: afterPaymentStatus }));
   const ids = new Set([...beforeItems.keys(), ...afterItems.keys()]);
   const deltas = new Map();
 
@@ -57,6 +72,7 @@ export function computeInventoryDeltas(beforeOrder, patch = {}, maxDistinct = 4)
   };
 }
 
-export function inventoryStateForStatus(status) {
-  return statusReservesInventory(status) ? 'reserved' : 'released';
+export function inventoryStateForStatus(status, reserved = true) {
+  if (!statusReservesInventory(status)) return 'released';
+  return reserved ? 'reserved' : 'unreserved';
 }

@@ -6,6 +6,7 @@ import {
 import { firestoreAdminBatchCommit } from './firestore-admin-batch.js';
 import {
   computeInventoryDeltas,
+  orderConfirmsInventory,
   inventoryStateForStatus,
   statusReservesInventory,
 } from '../js/core/store/modelo-inventario.mjs';
@@ -102,7 +103,7 @@ function normalizedShippingMethod(value, fallback = 'delivery') {
   return method;
 }
 
-function buildPatch(input, beforeOrder) {
+function buildPatch(input, beforeOrder, { allowEmpty = false } = {}) {
   const patch = {};
   const has = key => Object.prototype.hasOwnProperty.call(input, key);
 
@@ -171,7 +172,7 @@ function buildPatch(input, beforeOrder) {
     patch.total = subtotal + shippingCost;
   }
 
-  if (!Object.keys(patch).length) throw new Error('No hay cambios administrativos permitidos.');
+  if (!Object.keys(patch).length && !allowEmpty) throw new Error('No hay cambios administrativos permitidos.');
   return patch;
 }
 
@@ -272,7 +273,8 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
   const shippingCost = money(input.shippingCost ?? 0, 'Costo de envío');
   const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   const total = subtotal + shippingCost;
-  const reserves = statusReservesInventory(status);
+  const reserves = orderConfirmsInventory({ status, paymentStatus });
+  const checksAvailability = statusReservesInventory(status);
 
   // Cupón: sólo el checkout público lo establece. Se vuelve a leer y evaluar
   // en cada intento y los contadores se escriben con precondición, así dos
@@ -343,7 +345,7 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
     notes: clean(input.notes, 1000),
     invoice: input.invoice && typeof input.invoice === 'object' ? input.invoice : { wanted: false, razonSocial: '', ruc: '' },
     notificationStatus: 'pending',
-    inventoryState: inventoryStateForStatus(status),
+    inventoryState: inventoryStateForStatus(status, reserves),
     inventoryRevision: 1,
     inventoryUpdatedAt: now,
     inventoryUpdatedBy: context.email,
@@ -355,7 +357,7 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
   };
 
   const writes = [];
-  if (reserves) {
+  if (checksAvailability) {
     for (const [productId, requestedQty] of byProduct) {
       const document = documents.get(productId);
       const product = decodeFirestoreFields(document.fields || {});
@@ -370,6 +372,9 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
           requested: requestedQty,
         });
       }
+      // Sin confirmación solo se valida disponibilidad; el descuento ocurre
+      // cuando el pedido se paga o se confirma.
+      if (!reserves) continue;
       const productPatch = {
         stock: nextStock,
         lastInventoryOrderId: orderId,
@@ -555,7 +560,9 @@ export async function applyOrderAdminMutation(
     throw error;
   }
 
-  const patch = buildPatch(input, beforeOrder);
+  // reconcileInventory: el pago ya quedó registrado por otra vía (PayPal) y solo
+  // falta descontar el stock con las mismas precondiciones atómicas.
+  const patch = buildPatch(input, beforeOrder, { allowEmpty: input.reconcileInventory === true });
   const inventory = computeInventoryDeltas(beforeOrder, patch, MAX_ADMIN_DISTINCT_PRODUCTS);
   const productDocuments = new Map();
   for (const productId of inventory.deltas.keys()) {
@@ -592,7 +599,7 @@ export async function applyOrderAdminMutation(
     ...beforeOrder,
     ...patch,
     status: inventory.afterStatus,
-    inventoryState: inventoryStateForStatus(inventory.afterStatus),
+    inventoryState: inventoryStateForStatus(inventory.afterStatus, inventory.afterReserved),
     inventoryRevision: Math.max(0, Number(beforeOrder.inventoryRevision || 0)) + 1,
     inventoryUpdatedAt: now,
     inventoryUpdatedBy: context.email,
