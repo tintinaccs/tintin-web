@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fb8e875d15e365af99d55078c89c558814b3406a2c0e81fd0152bf7d1a74e053",
+  "sourceFingerprint": "761883291fecbf9a0c9b6f768ff5c08e8190134841078af7c89e29d745623f18",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 914,
-    "textFiles": 873,
-    "totalBytes": 17939066,
+    "files": 916,
+    "textFiles": 875,
+    "totalBytes": 17951072,
     "pages": 19,
-    "modules": 628
+    "modules": 629
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 12352,
-      "sha256": "7ebc027f1c587b132ef024dae3a56ab6c10afa5b4601629a0844dbbd9c6699be",
+      "bytes": 12346,
+      "sha256": "648bad9f58d2923bce9749b388010527df5b061e5ef5a90e1559a455d0ea6b68",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -129,12 +129,12 @@
           "line": 174
         },
         {
-          "raw": "/js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "/js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 175
         },
         {
-          "raw": "/tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "/tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 176
         },
@@ -541,13 +541,13 @@
           "exists": true
         },
         {
-          "raw": "/js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "/js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 175,
           "exists": true
         },
         {
-          "raw": "/tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "/tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 176,
           "exists": true
@@ -802,8 +802,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22076,
-      "sha256": "f318cf63cbf0e250365efd61a5cb065b496d4b94997f63cbdce9735950732151",
+      "bytes": 22070,
+      "sha256": "ffd504f76eb0104e9714e088ef3b83334234cf396d63758e9ffc8cd58d75dd67",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -853,7 +853,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 264
         },
@@ -868,7 +868,7 @@
           "line": 266
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 267
         },
@@ -1256,7 +1256,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 264,
           "exists": true
@@ -1274,7 +1274,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 267,
           "exists": true
@@ -1543,8 +1543,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43673,
-      "sha256": "893781e0d0b38bc6257ef043d6b98cd60924d10495aac1b142c58637a0e3e41d",
+      "bytes": 43667,
+      "sha256": "6249a3b6a1dd0126533e3345be0685c085bb9035a4b1ea0b66b0589b487e8295",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1589,7 +1589,7 @@
           "line": 799
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 800
         }
@@ -1709,7 +1709,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 800,
           "exists": true
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197602,
-      "sha256": "2e761df2812b16c08c9d2262403c529036dcfbb9b2e98c9b0c0a939baed8e789",
+      "bytes": 197596,
+      "sha256": "55e22c4a0bb6669e98b7ffc2fe02b78243515865e6f37b19ced7a3785e59726f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2197,7 +2197,7 @@
           "line": 2261
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 2262
         },
@@ -2481,7 +2481,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 2262,
           "exists": true
@@ -7822,8 +7822,8 @@
         "guest",
         "client"
       ],
-      "bytes": 13547,
-      "sha256": "40b9c3d86742f2cd9def8369cd5cb2ec7f68c498f9780f99d8064ccd3bbfc6e7",
+      "bytes": 13541,
+      "sha256": "e4e36e55cc2fa8e535318dd56b2198b86aa6c1571714c66d362d9e08ecfa08bd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7867,7 +7867,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 173
         },
@@ -7882,7 +7882,7 @@
           "line": 175
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 176
         },
@@ -8212,7 +8212,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 173,
           "exists": true
@@ -8230,7 +8230,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 176,
           "exists": true
@@ -8449,8 +8449,8 @@
         "guest",
         "client"
       ],
-      "bytes": 53562,
-      "sha256": "2a4b133e345590fbfc0ee583a0ae0f58a0ed01c07898096a46664ea9df048fc9",
+      "bytes": 54124,
+      "sha256": "81dd0ce4c56dcf589603d55002f07628667ba20ddf6b93027a77321af6435114",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8506,7 +8506,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 502
         },
@@ -8518,32 +8518,32 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 984
+          "line": 990
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 985
+          "line": 991
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 986
+          "line": 992
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 987
+          "line": 993
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 988
+          "line": 994
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 989
+          "line": 995
         }
       ],
       "styles": [
@@ -8841,7 +8841,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 502,
           "exists": true
@@ -8855,37 +8855,37 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 984,
+          "line": 990,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 985,
+          "line": 991,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 986,
+          "line": 992,
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 987,
+          "line": 993,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 988,
+          "line": 994,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 989,
+          "line": 995,
           "exists": true
         },
         {
@@ -9204,8 +9204,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 117077,
-      "sha256": "b55f07d6d48f49da8d587d1db8dcac682e104f3d37c1963e86dca4662cf433c2",
+      "bytes": 117071,
+      "sha256": "8ebc0aae7e39566c9a0e9b32c2c2cc04c6559e4a1474c1d81fb37f0511b63f78",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9260,7 +9260,7 @@
           "line": 1960
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 1961
         },
@@ -9270,7 +9270,7 @@
           "line": 1962
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 1963
         },
@@ -9616,7 +9616,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 1961,
           "exists": true
@@ -9628,7 +9628,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 1963,
           "exists": true
@@ -10199,8 +10199,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15274,
-      "sha256": "f0519f67ec6415a69938ec62bf83d113c71ad31637d24fb4f1d5c4e731a33a4f",
+      "bytes": 15293,
+      "sha256": "7f3f21ea952409e12a55b32acc943290727f7901a0568e355ab0d0ec9c59c4aa",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10250,12 +10250,12 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 193
         },
         {
-          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-coll-cart-fix-20261001-1",
           "target": "js/pages/collections/pagina-colecciones.js",
           "line": 194
         },
@@ -10270,7 +10270,7 @@
           "line": 196
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 197
         },
@@ -10610,13 +10610,13 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 193,
           "exists": true
         },
         {
-          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-coll-cart-fix-20261001-1",
           "target": "js/pages/collections/pagina-colecciones.js",
           "line": 194,
           "exists": true
@@ -10634,7 +10634,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 197,
           "exists": true
@@ -10859,8 +10859,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19731,
-      "sha256": "55a712e097e1783af45137c21dbbe81807a24260a6d8e8622b84aaf2b5970d88",
+      "bytes": 19725,
+      "sha256": "c3697e4d2e6eec17ef152727518b6b105b0fffd03d1142208c1a70149e190264",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10910,7 +10910,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 214
         },
@@ -10925,7 +10925,7 @@
           "line": 247
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 248
         },
@@ -11295,7 +11295,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 214,
           "exists": true
@@ -11313,7 +11313,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 248,
           "exists": true
@@ -11592,8 +11592,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16949,
-      "sha256": "93c5f532ed3a02cf7709dfca02791db0c1b72e45b49051e3afca8ca37361cb74",
+      "bytes": 16943,
+      "sha256": "b59165451566272a8d06c74902f6679db6059ed6d60ae0d9644acee54fbaabe1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11643,7 +11643,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 180
         },
@@ -11658,7 +11658,7 @@
           "line": 182
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 183
         },
@@ -11988,7 +11988,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 180,
           "exists": true
@@ -12006,7 +12006,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 183,
           "exists": true
@@ -12265,8 +12265,8 @@
         "guest",
         "client"
       ],
-      "bytes": 33733,
-      "sha256": "ce347d99094e3e7a03f628b85595236d1da958389787681615207f48dee1514b",
+      "bytes": 33727,
+      "sha256": "11ec5f3b884feb3e3a007eb8709719084b986410c36ce8bfb79158cc708eab2e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12322,7 +12322,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 462
         },
@@ -12347,7 +12347,7 @@
           "line": 466
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 467
         },
@@ -12849,7 +12849,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 462,
           "exists": true
@@ -12879,7 +12879,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 467,
           "exists": true
@@ -13313,8 +13313,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 79619,
-      "sha256": "16101e4dbc8eb2baef323341d1aad7b6e4bd57138589891edcf523438d7f855f",
+      "bytes": 79608,
+      "sha256": "ce70ad3bea38e559b69a07f42d5e1c479701555a6fc3d69a91521e6a3ce59ac0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13375,7 +13375,7 @@
           "line": 1479
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 1480
         },
@@ -13561,7 +13561,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 1480,
           "exists": true
@@ -14138,8 +14138,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43537,
-      "sha256": "3e41148c89bcc4b7ac0a65dc27f3a00d781de4b93a79b36186568de364d031d7",
+      "bytes": 43529,
+      "sha256": "9c652057057f355d5551a444e9dd7a6500ebcf43dbbe35ace9ae0a66c251801a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14195,7 +14195,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 326
         },
@@ -14225,7 +14225,7 @@
           "line": 707
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 708
         },
@@ -14585,7 +14585,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 326,
           "exists": true
@@ -14621,7 +14621,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 708,
           "exists": true
@@ -14967,8 +14967,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14720,
-      "sha256": "67bad61052334e455c613f2a04641fb2de3751f1c6b58d5f71f5fb4b16f89885",
+      "bytes": 14714,
+      "sha256": "ef0629bf3ab7725ee29fc0043bbf10978d91f113ee6fbaa16d7c98c92efafb46",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15012,7 +15012,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 198
         },
@@ -15027,7 +15027,7 @@
           "line": 200
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 201
         },
@@ -15357,7 +15357,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 198,
           "exists": true
@@ -15375,7 +15375,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 201,
           "exists": true
@@ -15594,8 +15594,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17289,
-      "sha256": "bf21f13d8c17d824f9aff058378f53d7a4baba5c9dd50792023f7987cc5e335e",
+      "bytes": 17283,
+      "sha256": "5b237d8b3756eeae2eea47de9c46d13fbd37dfa3b2bd6c2274d0c11e64f24814",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15639,7 +15639,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 211
         },
@@ -15654,7 +15654,7 @@
           "line": 213
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 214
         },
@@ -16009,7 +16009,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 211,
           "exists": true
@@ -16027,7 +16027,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 214,
           "exists": true
@@ -16257,8 +16257,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25021,
-      "sha256": "b8ed64e00c67b81ce3da9eda22a6c6cd339a595b1ebeb2f535b834638a25f0a8",
+      "bytes": 25018,
+      "sha256": "954e0e15423821cd536ceab7629cd65efa87fdbf99a4424b359aa3fbb7be1ea7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16302,7 +16302,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 345
         },
@@ -16322,7 +16322,7 @@
           "line": 348
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 349
         },
@@ -16439,7 +16439,7 @@
           "line": 57
         },
         {
-          "raw": "css/components/notifications/interacciones-sociales.css?v=tintin-20260917-comments-reports-2",
+          "raw": "css/components/notifications/interacciones-sociales.css?v=tintin-20261001-comment-menu-inflow-1",
           "target": "css/components/notifications/interacciones-sociales.css",
           "line": 58
         },
@@ -16722,7 +16722,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 345,
           "exists": true
@@ -16746,7 +16746,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 349,
           "exists": true
@@ -16884,7 +16884,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/notifications/interacciones-sociales.css?v=tintin-20260917-comments-reports-2",
+          "raw": "css/components/notifications/interacciones-sociales.css?v=tintin-20261001-comment-menu-inflow-1",
           "target": "css/components/notifications/interacciones-sociales.css",
           "line": 58,
           "exists": true
@@ -17249,8 +17249,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15083,
-      "sha256": "6cda0b0c4c70c40e46f135a30afdc1315d3b2438a3e83ef3e0cbdebd81864c36",
+      "bytes": 15077,
+      "sha256": "372c42579cfe1615e621bd56e945f612f92a260a6bb5497d4eb5cf505bae62b2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17287,7 +17287,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 192
         },
@@ -17302,7 +17302,7 @@
           "line": 194
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 195
         },
@@ -17667,7 +17667,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260930-home-canonical-1",
+          "raw": "tienda.js?v=tintin-20260930-pdp-cart-error-1",
           "target": "tienda.js",
           "line": 192,
           "exists": true
@@ -17685,7 +17685,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 195,
           "exists": true
@@ -18736,7 +18736,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 357687,
-      "sha256": "23564ee19d792eccc7177f10fc93c87fd1709015be2842af7087c30be54e5f09",
+      "sha256": "4a35feb5b5d9c76e376e957e824881634ab26b82d4cb994e24bbc56413c74508",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23991,8 +23991,8 @@
     },
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
-      "bytes": 15992,
-      "sha256": "f92b664861158d757e165c4a56ad94454253864eb7d838742ce853d0e3170d72",
+      "bytes": 16229,
+      "sha256": "571853683ddc315d21159a5202ed767f1d17739bedeb9f6d8754396455c0de96",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24119,15 +24119,15 @@
     },
     {
       "path": "js/core/auth/estado-perfil-sesion.mjs",
-      "bytes": 6800,
-      "sha256": "ac9976640d844792288b3afd41358d288167433098f75ec4879e4c3ec391bdf4",
+      "bytes": 6798,
+      "sha256": "a63140dec2962141deca912adf59c68d038732c24dea4132841444c8b433bda2",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1",
+          "raw": "../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1",
           "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
           "dynamic": false,
           "line": 18
@@ -24312,15 +24312,15 @@
     },
     {
       "path": "js/core/auth/proteccion-sesion.js",
-      "bytes": 752,
-      "sha256": "cccf7848f518e898c299b156a653cb8b8130b479cc41c0e688bffb28b983af4b",
+      "bytes": 746,
+      "sha256": "b3e81b586c879e86f3b68cfbd5e9cecb6831e1dbbb22cbe66d8e1a2cb7b565f7",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../pages/profile/control-acceso-perfil.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "../../pages/profile/control-acceso-perfil.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/pages/profile/control-acceso-perfil.js",
           "dynamic": false,
           "line": 12
@@ -25845,13 +25845,20 @@
     },
     {
       "path": "js/pages/collections/pagina-colecciones.js",
-      "bytes": 10998,
-      "sha256": "43449b4952e701ed12dc7e4a84a61c5e84d4139d95382847023cee40b2b5e9ca",
+      "bytes": 10997,
+      "sha256": "74017d54679c357cbc9b6fd866d3a03f7929c2a2cb307f8f80bb002a6e4be7ad",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "target": "js/components/cart/sincronizacion-carrito.js",
+          "dynamic": true,
+          "line": 7
+        }
+      ],
       "endpoints": []
     },
     {
@@ -26181,8 +26188,8 @@
     },
     {
       "path": "js/pages/profile/configuracion-inicial-perfil.mjs",
-      "bytes": 16737,
-      "sha256": "12dc5c7bebd45ebd1ce7f9f2514b2bb0950ce4aa3a97fd01a53ca1a7968dbcd7",
+      "bytes": 17148,
+      "sha256": "fcc4021b0f77448de2beaf74451e28a8717986bfa0473c10be879da59a60dc16",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26205,8 +26212,8 @@
     },
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
-      "bytes": 6103,
-      "sha256": "4cca0522a9ba67b736d2dca0388bb49ef4498866f068ccf07725f08fdb8b7d66",
+      "bytes": 6101,
+      "sha256": "37a2818c80c7ddd39dcf1bb21bbf170e0bc64a0e8ac49ef031a45d9445de9bb4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26237,7 +26244,7 @@
           "line": 21
         },
         {
-          "raw": "./configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1",
+          "raw": "./configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1",
           "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
           "dynamic": false,
           "line": 22
@@ -30602,8 +30609,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 15015,
-      "sha256": "22e5e7673a256eded952c443e04860285fbeb6ca58c41d12620eb45e71e61d33",
+      "bytes": 15003,
+      "sha256": "f3e49a66b4cb7d86e21613840977f3d566bfc0310227a034b045a604b3dd6fb5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31011,6 +31018,42 @@
           "line": 9
         }
       ]
+    },
+    {
+      "path": "tests/accounts/incomplete-profile-flags.test.mjs",
+      "bytes": 1397,
+      "sha256": "00c527cbeed06b13b4f17378ad56b41884d234f9480374db25ecfbe12d9514a7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../js/pages/profile/configuracion-inicial-perfil.mjs",
+          "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "tests/accounts/profile-gate-all-pages.test.mjs",
@@ -35260,8 +35303,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 102544,
-      "sha256": "79b71a9ade89a1e1173d70feaa8e48889971a0d2967a9c9cc82fae30c0463b2e",
+      "bytes": 103620,
+      "sha256": "66bb0412d9c4462cb8eb48f628ba568e15966b988d8fffcc54c7dfd6bdeebdb5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35283,7 +35326,7 @@
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 1646
+          "line": 1650
         }
       ],
       "endpoints": [
@@ -35414,8 +35457,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 12352,
-      "sha256": "7ebc027f1c587b132ef024dae3a56ab6c10afa5b4601629a0844dbbd9c6699be"
+      "bytes": 12346,
+      "sha256": "648bad9f58d2923bce9749b388010527df5b061e5ef5a90e1559a455d0ea6b68"
     },
     {
       "path": "AGENTS.md",
@@ -35528,14 +35571,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 22076,
-      "sha256": "f318cf63cbf0e250365efd61a5cb065b496d4b94997f63cbdce9735950732151"
+      "bytes": 22070,
+      "sha256": "ffd504f76eb0104e9714e088ef3b83334234cf396d63758e9ffc8cd58d75dd67"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 43673,
-      "sha256": "893781e0d0b38bc6257ef043d6b98cd60924d10495aac1b142c58637a0e3e41d"
+      "bytes": 43667,
+      "sha256": "6249a3b6a1dd0126533e3345be0685c085bb9035a4b1ea0b66b0589b487e8295"
     },
     {
       "path": "admin-manifest.json",
@@ -35546,8 +35589,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197602,
-      "sha256": "2e761df2812b16c08c9d2262403c529036dcfbb9b2e98c9b0c0a939baed8e789"
+      "bytes": 197596,
+      "sha256": "55e22c4a0bb6669e98b7ffc2fe02b78243515865e6f37b19ced7a3785e59726f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35822,20 +35865,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 13547,
-      "sha256": "40b9c3d86742f2cd9def8369cd5cb2ec7f68c498f9780f99d8064ccd3bbfc6e7"
+      "bytes": 13541,
+      "sha256": "e4e36e55cc2fa8e535318dd56b2198b86aa6c1571714c66d362d9e08ecfa08bd"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 53562,
-      "sha256": "2a4b133e345590fbfc0ee583a0ae0f58a0ed01c07898096a46664ea9df048fc9"
+      "bytes": 54124,
+      "sha256": "81dd0ce4c56dcf589603d55002f07628667ba20ddf6b93027a77321af6435114"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 117077,
-      "sha256": "b55f07d6d48f49da8d587d1db8dcac682e104f3d37c1963e86dca4662cf433c2"
+      "bytes": 117071,
+      "sha256": "8ebc0aae7e39566c9a0e9b32c2c2cc04c6559e4a1474c1d81fb37f0511b63f78"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -36020,8 +36063,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 15274,
-      "sha256": "f0519f67ec6415a69938ec62bf83d113c71ad31637d24fb4f1d5c4e731a33a4f"
+      "bytes": 15293,
+      "sha256": "7f3f21ea952409e12a55b32acc943290727f7901a0568e355ab0d0ec9c59c4aa"
     },
     {
       "path": "config/account-contract.json",
@@ -36033,13 +36076,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 357687,
-      "sha256": "23564ee19d792eccc7177f10fc93c87fd1709015be2842af7087c30be54e5f09"
+      "sha256": "4a35feb5b5d9c76e376e957e824881634ab26b82d4cb994e24bbc56413c74508"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 357602,
-      "sha256": "c2dd540090d202ac7fa802f22c7f607d45dfafadf399e6bb8fca0831f9c5b754"
+      "sha256": "d3916534e2ac515f6331b41abea1941fe6e85f780583f9db4df020aa98980bcf"
     },
     {
       "path": "config/public-site.json",
@@ -36056,8 +36099,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 19731,
-      "sha256": "55a712e097e1783af45137c21dbbe81807a24260a6d8e8622b84aaf2b5970d88"
+      "bytes": 19725,
+      "sha256": "c3697e4d2e6eec17ef152727518b6b105b0fffd03d1142208c1a70149e190264"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -36248,8 +36291,8 @@
     {
       "path": "css/components/notifications/interacciones-sociales.css",
       "extension": ".css",
-      "bytes": 2729,
-      "sha256": "35caa4b9e60d682b54ce68a15bce103dbffb5f630eb8cee43775b7ddce320bcd"
+      "bytes": 2710,
+      "sha256": "facfd9c105e1df68c8a34f3a03e9d779b66e73da7ed57e7050ac52d42c34a829"
     },
     {
       "path": "css/components/notifications/notificaciones-sociales.css",
@@ -36542,8 +36585,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 83612,
-      "sha256": "a7d5d847c8063c9b09c69d156f2f4f64554562cb4a1d582453f990a382cea904"
+      "bytes": 89264,
+      "sha256": "e2b76db320f0be5977da6c65a8fe2323dc1ddeac6b0fd1266de7fd136ae1e7f5"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -36556,6 +36599,12 @@
       "extension": ".md",
       "bytes": 47708,
       "sha256": "d13f1f06342cb23d435ce3a67f4a6ab9d40283f677443f495a3773600818f1e5"
+    },
+    {
+      "path": "docs/agent/PRUEBA-ESCRITURA-LIKES-RESENAS.md",
+      "extension": ".md",
+      "bytes": 2771,
+      "sha256": "2a11a075c62ce1ff6a7a4da08fa77a7910de43d36cec00dc3844e5a75c27f172"
     },
     {
       "path": "docs/agent/README.md",
@@ -36848,8 +36897,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 16949,
-      "sha256": "93c5f532ed3a02cf7709dfca02791db0c1b72e45b49051e3afca8ca37361cb74"
+      "bytes": 16943,
+      "sha256": "b59165451566272a8d06c74902f6679db6059ed6d60ae0d9644acee54fbaabe1"
     },
     {
       "path": "favicon-16x16.png",
@@ -37334,8 +37383,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 33733,
-      "sha256": "ce347d99094e3e7a03f628b85595236d1da958389787681615207f48dee1514b"
+      "bytes": 33727,
+      "sha256": "11ec5f3b884feb3e3a007eb8709719084b986410c36ce8bfb79158cc708eab2e"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -38096,8 +38145,8 @@
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
       "extension": ".js",
-      "bytes": 15992,
-      "sha256": "f92b664861158d757e165c4a56ad94454253864eb7d838742ce853d0e3170d72"
+      "bytes": 16229,
+      "sha256": "571853683ddc315d21159a5202ed767f1d17739bedeb9f6d8754396455c0de96"
     },
     {
       "path": "js/core/auth/cliente-api-autenticado.js",
@@ -38126,8 +38175,8 @@
     {
       "path": "js/core/auth/estado-perfil-sesion.mjs",
       "extension": ".mjs",
-      "bytes": 6800,
-      "sha256": "ac9976640d844792288b3afd41358d288167433098f75ec4879e4c3ec391bdf4"
+      "bytes": 6798,
+      "sha256": "a63140dec2962141deca912adf59c68d038732c24dea4132841444c8b433bda2"
     },
     {
       "path": "js/core/auth/estado-sesion.mjs",
@@ -38162,8 +38211,8 @@
     {
       "path": "js/core/auth/proteccion-sesion.js",
       "extension": ".js",
-      "bytes": 752,
-      "sha256": "cccf7848f518e898c299b156a653cb8b8130b479cc41c0e688bffb28b983af4b"
+      "bytes": 746,
+      "sha256": "b3e81b586c879e86f3b68cfbd5e9cecb6831e1dbbb22cbe66d8e1a2cb7b565f7"
     },
     {
       "path": "js/core/auth/roles.js",
@@ -38546,8 +38595,8 @@
     {
       "path": "js/pages/collections/pagina-colecciones.js",
       "extension": ".js",
-      "bytes": 10998,
-      "sha256": "43449b4952e701ed12dc7e4a84a61c5e84d4139d95382847023cee40b2b5e9ca"
+      "bytes": 10997,
+      "sha256": "74017d54679c357cbc9b6fd866d3a03f7929c2a2cb307f8f80bb002a6e4be7ad"
     },
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
@@ -38642,14 +38691,14 @@
     {
       "path": "js/pages/profile/configuracion-inicial-perfil.mjs",
       "extension": ".mjs",
-      "bytes": 16737,
-      "sha256": "12dc5c7bebd45ebd1ce7f9f2514b2bb0950ce4aa3a97fd01a53ca1a7968dbcd7"
+      "bytes": 17148,
+      "sha256": "fcc4021b0f77448de2beaf74451e28a8717986bfa0473c10be879da59a60dc16"
     },
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
       "extension": ".js",
-      "bytes": 6103,
-      "sha256": "4cca0522a9ba67b736d2dca0388bb49ef4498866f068ccf07725f08fdb8b7d66"
+      "bytes": 6101,
+      "sha256": "37a2818c80c7ddd39dcf1bb21bbf170e0bc64a0e8ac49ef031a45d9445de9bb4"
     },
     {
       "path": "js/pages/profile/estado-canonico-perfil.mjs",
@@ -38768,8 +38817,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 79619,
-      "sha256": "16101e4dbc8eb2baef323341d1aad7b6e4bd57138589891edcf523438d7f855f"
+      "bytes": 79608,
+      "sha256": "ce70ad3bea38e559b69a07f42d5e1c479701555a6fc3d69a91521e6a3ce59ac0"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -38972,8 +39021,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 43537,
-      "sha256": "3e41148c89bcc4b7ac0a65dc27f3a00d781de4b93a79b36186568de364d031d7"
+      "bytes": 43529,
+      "sha256": "9c652057057f355d5551a444e9dd7a6500ebcf43dbbe35ace9ae0a66c251801a"
     },
     {
       "path": "playwright.config.js",
@@ -38990,20 +39039,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 14720,
-      "sha256": "67bad61052334e455c613f2a04641fb2de3751f1c6b58d5f71f5fb4b16f89885"
+      "bytes": 14714,
+      "sha256": "ef0629bf3ab7725ee29fc0043bbf10978d91f113ee6fbaa16d7c98c92efafb46"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 17289,
-      "sha256": "bf21f13d8c17d824f9aff058378f53d7a4baba5c9dd50792023f7987cc5e335e"
+      "bytes": 17283,
+      "sha256": "5b237d8b3756eeae2eea47de9c46d13fbd37dfa3b2bd6c2274d0c11e64f24814"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 25021,
-      "sha256": "b8ed64e00c67b81ce3da9eda22a6c6cd339a595b1ebeb2f535b834638a25f0a8"
+      "bytes": 25018,
+      "sha256": "954e0e15423821cd536ceab7629cd65efa87fdbf99a4424b359aa3fbb7be1ea7"
     },
     {
       "path": "robots.txt",
@@ -39818,8 +39867,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 59131,
-      "sha256": "57dfef3761512c97e30a588366ecc0eb293a3b735e7828ee97c6347af35c87ce"
+      "bytes": 59148,
+      "sha256": "f7dba3f4d8a4a7ee447cfccabbebf3d3886512be5a138335f5f8c12307a3ca36"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -39980,8 +40029,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 15015,
-      "sha256": "22e5e7673a256eded952c443e04860285fbeb6ca58c41d12620eb45e71e61d33"
+      "bytes": 15003,
+      "sha256": "f3e49a66b4cb7d86e21613840977f3d566bfc0310227a034b045a604b3dd6fb5"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -40058,8 +40107,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 15083,
-      "sha256": "6cda0b0c4c70c40e46f135a30afdc1315d3b2438a3e83ef3e0cbdebd81864c36"
+      "bytes": 15077,
+      "sha256": "372c42579cfe1615e621bd56e945f612f92a260a6bb5497d4eb5cf505bae62b2"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -40090,6 +40139,12 @@
       "extension": ".mjs",
       "bytes": 10794,
       "sha256": "73d390dc834b6158d7a8c3a151288051949ec81c8272adca9f18931f887da16e"
+    },
+    {
+      "path": "tests/accounts/incomplete-profile-flags.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1397,
+      "sha256": "00c527cbeed06b13b4f17378ad56b41884d234f9480374db25ecfbe12d9514a7"
     },
     {
       "path": "tests/accounts/profile-gate-all-pages.test.mjs",
@@ -40808,8 +40863,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 102544,
-      "sha256": "79b71a9ade89a1e1173d70feaa8e48889971a0d2967a9c9cc82fae30c0463b2e"
+      "bytes": 103620,
+      "sha256": "66bb0412d9c4462cb8eb48f628ba568e15966b988d8fffcc54c7dfd6bdeebdb5"
     }
   ],
   "sitemapRoutes": [],
@@ -40817,7 +40872,7 @@
   "routeReferences": [
     {
       "file": "catalogo.html",
-      "line": 723,
+      "line": 724,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -42493,7 +42548,7 @@
       "references": [
         {
           "file": "catalogo.html",
-          "line": 723
+          "line": 724
         }
       ]
     }
@@ -43598,7 +43653,7 @@
           },
           {
             "file": "js/components/welcome/tutorial-bienvenida.js",
-            "line": 70,
+            "line": 73,
             "operation": "doc"
           },
           {
@@ -43968,12 +44023,12 @@
           },
           {
             "file": "js/components/welcome/tutorial-bienvenida.js",
-            "line": 82,
+            "line": 85,
             "operation": "doc"
           },
           {
             "file": "js/components/welcome/tutorial-bienvenida.js",
-            "line": 92,
+            "line": 95,
             "operation": "doc"
           },
           {

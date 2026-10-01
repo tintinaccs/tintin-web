@@ -400,3 +400,34 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - CI del commit `5bdee0f` (Repository audit): falló `auditar-nivel-3-calidad` (exigía `online` en `mantenimiento-inicio.js`; ese reintento vive ahora solo en `tienda.js`, sin listener duplicado) y cuatro auditorías de rendimiento que solo pasaban por el código muerto `fetchAllProductsFromSdk`/`HOME_PRODUCT_LIMIT`. Se reescribieron para verificar el contrato real: lectura por API edge (límite de 1000 en `functions/api/public-catalog.js`), sin enumerar `products` desde el navegador, caché de respaldo y un solo vuelo. `audit:final` completo corrido en local, incluidos los dos pasos con Playwright (enlace temporal, retirado), en PASS.
 - Residuales: F11 colecciones vacías ocultan todo el catálogo (regla de negocio vigente, no cambiada); colecciones se piden hasta 4 veces ante fallo por consumidores independientes; `detailGuardTimer` en `politica-visibilidad-catalogo.js`; doble `tintin:products-error`; selectores muertos `.tt-home-runtime-state` en `experiencia-interfaz.css` y `tema-unificado-tintin.css` (no se tocan para no subir el `TT_CACHE_VERSION` global); `auditar-inicio-visual-parte-2b.mjs` no ejecutable sin Playwright en el repo; sin pruebas contra Firebase real.
 - Decisión sin cambios: **NO-GO** para migración de dominio/cierre de Shopify.
+
+## Cuentas: perfil `incomplete` no debe saltarse por banderas del tutorial — 2026-09-29
+- Causa: el tutorial de bienvenida escribía `onboardingCompleted/welcomeTutorialSeen` en altas nuevas (`profileStatus:'incomplete'`) y `getProfileCompletionPlan` las leía como "ya completó", saltándose el paso de datos obligatorios.
+- Cambio: el plan ignora esas banderas si `profileStatus==='incomplete'`; el tutorial no se muestra a perfiles `incomplete`. Tag de caché `tintin-20260929-incomplete-flags-1` (y `estado-perfil-sesion.mjs` a `tintin-20260930-incomplete-flags-2`).
+- Probado localmente: `tests/accounts/incomplete-profile-flags.test.mjs` y pruebas dirigidas; `npm run build:pages`.
+- NO probado en producción. La cuenta de ejemplo solo se vuelve a pedir si su `profileStatus` guardado es `incomplete` (no verificable desde aquí).
+- NO-GO de migración/cierre Shopify sin cambios.
+
+## Catálogo (sector 04): grilla, vacío y "Mostrar más" — 2026-10-01
+- Estado: PASS_LOCAL (Chromium con productos inyectados y CDN externos bloqueados; NO probado con Firebase/colecciones reales ni en producción).
+- Causas y cambios en `catalogo.html`: (1) la tarjeta mostraba el slug crudo porque `const catLabel` local tapaba la función `catLabel()`; ahora usa el nombre de la colección. (2) El vacío ofrecía un enlace a `/catalogo` (la misma página) y decía "en esta categoría" aunque el vacío viniera de búsqueda/precio; ahora el botón limpia los filtros y el texto es neutral. (3) "Mostrar más" reconstruye la grilla y el foco del teclado se perdía; ahora pasa al primer producto nuevo.
+- Verificación: sonda Chromium 390px (48→60 tarjetas, foco en `p48`, vacío y restablecer OK); `node --test` completo 684/684; `verify:csp`, `verify:diagnostics`, `audit:cache-versioning` OK tras `build:csp`/`build:diagnostics`.
+- Sin cambio (regla de negocio vigente): colecciones visibles vacías ocultan todo el catálogo (`politica-visibilidad-catalogo.js`). NO-GO de migración/cierre Shopify sin cambios.
+
+## Colecciones (sector 05): "+ Carrito" de destacados — 2026-10-01
+- Causa raíz: en `js/pages/collections/pagina-colecciones.js` un `\n` literal dentro de un comentario `//` (commit 447b594/#917) dejó comentada la línea `const cartSyncPromise = import(...)`; al pulsar "+ Carrito" en destacados se lanzaba ReferenceError y el botón mostraba "Reintentar".
+- Corrección: línea restaurada y tag `?v=` de `collections.html` actualizado (baseline registrada).
+- Verificación: PASS_LOCAL en Chromium (antes: ReferenceError; después: sin error, el flujo llega a `cartSync.addToCart`). Se usó un stub del módulo de carrito porque el SDK de Firebase está bloqueado en el arnés; el agregado real a Firestore/carrito NO verificado. Producción NO verificada.
+
+## Ficha de producto (sector 06): fallo silencioso al agregar — 2026-10-01
+- Causa raíz: en `tienda.js` los botones "Agregar al carrito" y "Comprar ahora" de la PDP usaban `try/finally` sin `catch`. Si el import dinámico del módulo del carrito fallaba (red caída/SDK bloqueado) se producía un error sin capturar y el cliente no veía ningún mensaje.
+- Corrección: `catch` + `_showProductCartError()` (aviso `role=status` reutilizando `#tt-cart-feedback`). Tag canónico de `tienda.js` subido a `tintin-20260930-pdp-cart-error-1` (generador `sync:public-shell` + `404.html`, que el generador no cubre).
+- Verificación: PASS_LOCAL en Chromium 390px (antes: PAGEERR y sin aviso; después: aviso visible). También verificado local: variante obligatoria muestra mensaje, +/- cantidad, producto sin stock deshabilita ambos botones, id inexistente muestra "no encontrado". Agregado real a Firestore y producción NO verificados.
+
+## Sectores 07–30: evidencia del 2026-10-01 (commit 7a0e985, sin cambios de código)
+- Sector 07 (búsqueda/filtros/orden): PASS_LOCAL en Chromium (búsqueda sin acentos, etiquetas/descripción/variantes, vacío con restablecer, rango de precio inválido, solo con stock) y orden verificado en Node. Sin bugs. Sin tests unitarios de `sortCatalogProducts` (pendiente menor).
+- Sector 08 (carrito): lectura de `sincronizacion-carrito.js` (tope de stock por producto, líneas por variante, singleton) + `tests/cart` 4/4 + `audit:cart` OK. NO recorrido en navegador con Firebase real; el módulo clásico de `tienda.js` aplica sus propios +/− y pasa por el `Storage` parcheado (normaliza y aplica stock).
+- Sectores 09–10 (checkout/pagos): `audit:secure-orders`, `audit:checkout-delivery`, `tests/checkout`, `tests/payments` OK. El servidor valida dueño del pedido, total y moneda de PayPal (`cloudflare/paypal-seguro.js`); `firestore.rules` solo permite crear pedidos a Super Admin desde navegador. NO se creó ningún pedido ni cobro; PayPal Live no verificado.
+- Sectores 11–30: cubiertos solo por la suite estática. `npm run audit:final` corrió completa salvo `audit:flow-connections-responsive` y `audit:admin-responsive`, que fallan por falta del binario Chromium headless-shell en este contenedor (entorno, idéntico en árbol limpio). El resto de las auditorías de la cadena (incluidas `audit:security`, `audit:cache-versioning`, `audit:public-operational-contract`) dio código 0 y `node --test` 684/684. Esto NO equivale a recorrido manual de cada sector ni a verificación en producción.
+- Pendiente real: ejecutar en un entorno con navegador las dos auditorías responsive; verificación en producción (carrito con Firebase real, login/perfil, #971); prueba de escritura de likes/reseñas (`PRUEBA-ESCRITURA-LIKES-RESENAS.md`, requiere autorización).
+- NO-GO de migración de dominio/cierre de Shopify sin cambios.
