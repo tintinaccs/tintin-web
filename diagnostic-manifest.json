@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "02c0df4b2111c7a7e2a073f0cce7ce96895c3e03a5fff7e6d5a965bba09b4e2b",
+  "sourceFingerprint": "5157e1a31d01e10962658bc494ab6a2760c571a6167777602304948b6c678eab",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 926,
-    "textFiles": 885,
-    "totalBytes": 17994780,
+    "files": 927,
+    "textFiles": 886,
+    "totalBytes": 17999157,
     "pages": 19,
     "modules": 635
   },
@@ -36782,8 +36782,14 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 94289,
-      "sha256": "a00c76d8a714ddc32dfc78a2ba499f86c89bb80a253738bd1debd08dd0d48e35"
+      "bytes": 94727,
+      "sha256": "c60ce1e374fbd0ae50b5e2c831915fe7f815341acd23f46dac38e13a02d16589"
+    },
+    {
+      "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
+      "extension": ".md",
+      "bytes": 3939,
+      "sha256": "6d53d246bff62f4f77b11f5f4b4e72819edef540631c7d3ec1a535f6d4b9c272"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
