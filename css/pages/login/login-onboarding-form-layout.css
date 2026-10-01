@@ -1,0 +1,123 @@
+/* Formulario "Últimos datos": rejilla y tarjetas consistentes en móvil, tablet y escritorio. Se carga después de login-onboarding-flow.css. */
+
+/* =============================================================
+   Alta de cuenta: cuadrícula estable en todos los tamaños.
+   - Las tarjetas se colocan por flujo (no por áreas con nombre), así un
+     campo oculto (p. ej. nombre ya detectado) no deja un hueco.
+   - Usuario y fecha usan la misma tarjeta que nombre/teléfono/ubicación.
+   - El mapa no se envuelve en una segunda tarjeta blanca con sombra.
+   ============================================================= */
+body:has(.login-page).login-setup-open #login-profile-block {
+  grid-template-areas: none !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+body:has(.login-page).login-setup-open :is(
+  #login-profile-name-confirmation,
+  #login-profile-name-field,
+  #login-profile-username-field,
+  #login-profile-dob-field,
+  #login-profile-phone-field,
+  #login-profile-address-field,
+  #btn-save-profile
+) {
+  grid-area: auto !important;
+}
+body:has(.login-page).login-setup-open :is(#login-profile-username-field, #login-profile-dob-field) {
+  border: 1px solid color-mix(in srgb, var(--login-border) 78%, transparent);
+  border-radius: 16px;
+  background: #fff;
+  padding: clamp(16px, 2vw, 22px);
+}
+body:has(.login-page).login-setup-open #login-profile-block :is(
+  #login-profile-username-field,
+  #login-profile-dob-field
+) .login-email-label { margin-bottom: 8px !important; }
+
+@media (min-width: 600px) {
+  body:has(.login-page).login-setup-open #login-profile-block {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: clamp(14px, 2vw, 28px) !important;
+    row-gap: clamp(14px, 1.6vw, 22px) !important;
+  }
+  body:has(.login-page).login-setup-open :is(
+    #login-profile-name-confirmation,
+    #login-profile-name-field,
+    #login-profile-phone-field,
+    #login-profile-address-field,
+    #btn-save-profile
+  ) { grid-column: 1 / -1 !important; }
+  body:has(.login-page).login-setup-open :is(#login-profile-username-field, #login-profile-dob-field) {
+    grid-column: auto;
+    align-self: stretch !important;
+  }
+  /* Si solo queda uno de los dos, ocupa todo el ancho. */
+  body:has(.login-page).login-setup-open #login-profile-block:has(#login-profile-dob-field:is([style*="display:none"], [style*="display: none"])) #login-profile-username-field,
+  body:has(.login-page).login-setup-open #login-profile-block:has(#login-profile-username-field:is([style*="display:none"], [style*="display: none"])) #login-profile-dob-field {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 880px) {
+  body:has(.login-page).login-setup-open #login-profile-block {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  body:has(.login-page).login-setup-open :is(#login-profile-name-field, #login-profile-phone-field) {
+    grid-column: auto !important;
+    align-self: stretch !important;
+    height: auto !important;
+  }
+  /* Nombre o teléfono solos: ancho completo, sin hueco al lado. */
+  body:has(.login-page).login-setup-open #login-profile-block:has(#login-profile-name-field:is([style*="display:none"], [style*="display: none"])) #login-profile-phone-field,
+  body:has(.login-page).login-setup-open #login-profile-block:has(#login-profile-phone-field:is([style*="display:none"], [style*="display: none"])) #login-profile-name-field {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+body:has(.login-page).login-setup-open .tt-map-block {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+body:has(.login-page).login-setup-open #login-profile-address-field .tt-map-locate { box-shadow: none !important; }
+
+/* Tarjeta "Nombre detectado": texto a la izquierda, acción centrada a la
+   derecha, sin filas infladas por el alto táctil del botón. */
+body:has(.login-page) #login-profile-name-confirmation {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 2px 12px;
+  padding: clamp(12px, 1.4vw, 16px) clamp(14px, 1.8vw, 20px);
+}
+body:has(.login-page) #login-profile-name-confirmation .login-profile-confirmation-label { grid-column: 1; grid-row: 1; align-self: end; }
+body:has(.login-page) #login-profile-name-confirmation .login-profile-confirmation-value { grid-column: 1; grid-row: 2; align-self: start; font-size: clamp(15px, 1.2vw, 17px); }
+body:has(.login-page) #login-profile-name-confirmation .login-profile-change {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: auto;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--login-wine) 35%, transparent);
+  border-radius: 999px;
+  background: #fff;
+}
+
+/* El HTML declara el teléfono antes que la fecha; el orden visual es
+   usuario → fecha → nombre → teléfono → ubicación → continuar. */
+body:has(.login-page).login-setup-open #login-profile-name-confirmation { order: 0; }
+body:has(.login-page).login-setup-open #login-profile-username-field { order: 1; }
+body:has(.login-page).login-setup-open #login-profile-dob-field { order: 2; }
+body:has(.login-page).login-setup-open #login-profile-name-field { order: 3; }
+body:has(.login-page).login-setup-open #login-profile-phone-field { order: 4; }
+body:has(.login-page).login-setup-open #login-profile-address-field { order: 5; }
+body:has(.login-page).login-setup-open #btn-save-profile { order: 6; }
+
+/* Las tarjetas hermanas igualan altura, pero su contenido se queda arriba
+   (sin separar la etiqueta del campo). */
+body:has(.login-page).login-setup-open :is(#login-profile-name-field, #login-profile-phone-field) {
+  align-content: start !important;
+  grid-auto-rows: max-content;
+}

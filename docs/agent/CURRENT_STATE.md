@@ -439,3 +439,9 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - `audit:admin-responsive`: PASS 16/16 viewports.
 - `scripts/auditar-escritorio-correcciones.mjs`: fallaba "Checkout vacío permite continuar" porque leía `#btn-step1-next` en `domcontentloaded`, antes de que `renderCart()` (async, módulos Firebase) fijara `disabled`/`aria-disabled`. Evidencia: en producción (`tintinaccesorios.pages.dev/checkout`, carrito vacío) el botón queda `disabled=true`, `aria-disabled="true"`; local con red hacia gstatic también (10 s). Corrección: la auditoría espera hasta 15 s el estado final. Sin red a gstatic (este contenedor sin proxy en Chromium) la auditoría sigue fallando por entorno; no se pudo ejecutar la auditoría completa con la corrección en este contenedor.
 - Producción (solo lecturas): carrito invitado agregar → checkout con subtotal correcto: PASS. Login: solo carga de pantalla; inicio de sesión real NO probado.
+
+## Login "Últimos datos" — rejilla responsive (2026-10-01)
+- Causa: `#login-profile-block` usaba áreas con nombre; al ocultarse "Nombre/Apellido" (nombre detectado) quedaba un hueco, el orden DOM no coincidía con el visual, las tarjetas tenían estilos desiguales, `.tt-map-block` anidaba una tarjeta dentro de otra y la tarjeta "Nombre detectado" se inflaba.
+- Cambio: nuevo `css/pages/login/login-onboarding-form-layout.css` (solo `login.html`, tag `tintin-20261001-onboarding-form-grid-1`); no se tocaron CSS existentes ni tokens.
+- PASS_LOCAL: Chromium 320/390/600/768/1024/1440, variantes nombre detectado y editable con DOM inyectado, sin desborde horizontal; `verify:csp`, `verify:diagnostics`, `audit:cache-versioning`, `audit:login-isolation` (35/35), `audit:login-profile` (77/77).
+- NOT_VERIFIED: login real (Google/OTP/Firebase) y producción; mapa sin teselas en el entorno de prueba.
