@@ -22,6 +22,7 @@ const EXCLUDED_FILES = new Set([
 const EMAIL_TEMPLATE_FILES = new Set([
   path.normalize('functions/api/order-email.js'),
   path.normalize('functions/api/email-otp-send.js'),
+  path.normalize('cloudflare/correo-estado-pedido.js'),
 ]);
 const REQUIRED_FONT_FILES = [
   'montserrat-cyrillic-ext-wght-normal.woff2',

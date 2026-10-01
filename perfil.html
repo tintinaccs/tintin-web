@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4-cupones-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261001-reentry-timeout-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261001-cupones-shell-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -20,7 +20,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261001-reentry-timeout-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261001-cupones-shell-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1">
@@ -219,9 +219,9 @@
   <!-- Ubicación guardada (se completa sola en el checkout) -->
   <div class="perfil-card">
     <div class="perfil-body">
-      <div class="perfil-section-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Mi ubicación guardada</div>
+      <div class="perfil-section-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Mis direcciones guardadas (hasta 5)</div>
       <div id="perfil-location-content"></div>
-      <button type="button" class="perfil-btn perfil-btn-outline" id="btn-cambiar-ubicacion" style="margin-top:12px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Elegir ubicación</button>
+      <button type="button" class="perfil-btn perfil-btn-outline" id="btn-cambiar-ubicacion" style="margin-top:12px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Agregar dirección</button>
       <div id="perfil-location-editor" hidden>
         <label class="perfil-label" for="perfil-location-search">Buscá tu dirección</label>
         <div class="tt-address-search">
@@ -323,7 +323,7 @@
 
 
 <!-- Scripts -->
-<script src="tienda.js?v=tintin-20260930-pdp-cart-error-1"></script>
+<script src="tienda.js?v=tintin-20261001-precio-anterior-4"></script>
 
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
@@ -335,10 +335,11 @@ import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1";
+import { MAX_SAVED_LOCATIONS, readAddressBook, addressBookPatch, addAddress, removeAddress, makePrimary } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
 import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20260908-profile-canonical-1";
 import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-1";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
@@ -371,36 +372,37 @@ function escapeHtmlPerfil(s) {
   return div.innerHTML;
 }
 
-// Ubicación guardada — se completa sola en el checkout (paso Envío, delivery
-// a domicilio) cuando la clienta marca "Guardar esta ubicación en mi perfil".
-// Acá es solo de lectura + borrar: para cambiarla, se vuelve a marcar en el
-// mapa del checkout (ahí está el buscador completo por nombre/negocio).
-function renderSavedLocation(loc) {
+// Libreta de direcciones (hasta 5). La primera es la principal y es la que el
+// checkout precarga sola (`savedLocation`); `savedLocations` guarda la lista.
+let addressBook = [];
+function renderSavedLocation(list) {
+  addressBook = Array.isArray(list) ? list : [];
   const el = document.getElementById('perfil-location-content');
-  if (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number' && loc.name) {
-    el.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-        <div>
-          <div style="font-weight:800;font-size:14px;color:var(--text)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escapeHtmlPerfil(loc.name)}</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Se usa para completar sola tu ubicación la próxima vez que compres con envío a domicilio.</div>
+  if (addressBook.length) {
+    el.innerHTML = addressBook.map((loc, index) => `
+      <div class="perfil-address-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 0;${index ? 'border-top:1px solid var(--border,#eee);' : ''}">
+        <div style="min-width:0">
+          <div style="font-weight:800;font-size:14px;color:var(--text)">${escapeHtmlPerfil(loc.name)}${index === 0 ? ' <span style="font-size:11px;font-weight:700;color:var(--brand,#c2185b)">· Principal</span>' : ''}</div>
+          ${loc.address ? `<div style="font-size:12px;color:var(--text-muted);margin-top:2px">${escapeHtmlPerfil(loc.address)}</div>` : ''}
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a href="https://maps.google.com/?q=${loc.lat},${loc.lng}" target="_blank" rel="noopener" class="perfil-btn perfil-btn-outline"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>Ver en el mapa</a>
-          <button type="button" class="perfil-btn perfil-btn-danger" id="btn-borrar-ubicacion"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>Borrar</button>
+          ${index ? `<button type="button" class="perfil-btn perfil-btn-outline" data-address-primary="${index}">Hacer principal</button>` : ''}
+          <a href="https://maps.google.com/?q=${loc.lat},${loc.lng}" target="_blank" rel="noopener" class="perfil-btn perfil-btn-outline">Ver en mapa</a>
+          <button type="button" class="perfil-btn perfil-btn-danger" data-address-remove="${index}">Eliminar</button>
         </div>
-      </div>`;
+      </div>`).join('') + `
+      <div style="font-size:12px;color:var(--text-muted);margin-top:8px">La principal se usa para completar sola tu ubicación cuando comprás con envío a domicilio. ${addressBook.length} de ${MAX_SAVED_LOCATIONS} guardadas.</div>`;
   } else {
     el.innerHTML = `
       <div style="font-size:13px;color:var(--text-muted);line-height:1.6">
-        Todavía no guardaste una ubicación. Elegila acá y se completa sola la próxima vez que compres con envío a domicilio — también podés marcarla en el mapa del checkout.
+        Todavía no guardaste una dirección. Agregala acá y se completa sola la próxima vez que compres con envío a domicilio — también podés marcarla en el mapa del checkout.
       </div>`;
   }
-  // El botón vive en el markup estático (un solo id): sólo cambia su ícono+texto.
-  const changeButton = document.getElementById('btn-cambiar-ubicacion');
-  if (changeButton) {
-    changeButton.innerHTML = loc
-      ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>Cambiar ubicación'
-      : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Elegir ubicación';
+  const addButton = document.getElementById('btn-cambiar-ubicacion');
+  if (addButton) {
+    const full = addressBook.length >= MAX_SAVED_LOCATIONS;
+    addButton.disabled = full;
+    addButton.title = full ? `Ya guardaste ${MAX_SAVED_LOCATIONS} direcciones. Eliminá una para agregar otra.` : '';
   }
 }
 
@@ -542,7 +544,7 @@ async function startProfileAuthGuard() {
   document.getElementById('perfil-ultimo-ingreso').textContent = formatProfileDate(userData?.lastLogin);
 
   // Ubicación guardada — el mismo campo `savedLocation` que usa el checkout.
-  renderSavedLocation(userData?.savedLocation);
+  renderSavedLocation(readAddressBook(userData || {}));
 
   const locationEditor = document.getElementById('perfil-location-editor');
   const locationPicker = attachLocationPicker({
@@ -564,37 +566,47 @@ async function startProfileAuthGuard() {
     window.TintinReleaseProfileButton?.('btn-cambiar-ubicacion');
   };
 
+  const persistAddressBook = async (list) => {
+    await setDoc(ref, { ...addressBookPatch(list), updatedAt: serverTimestamp() }, { merge: true });
+    const patch = addressBookPatch(list);
+    if (patch.address) document.getElementById('perfil-dir').value = patch.address;
+    renderSavedLocation(list);
+  };
+
   document.getElementById('perfil-location-content').addEventListener('click', async (e) => {
-    if (e.target.id !== 'btn-borrar-ubicacion') return;
+    const button = e.target.closest('[data-address-remove],[data-address-primary]');
+    if (!button) return;
+    const isRemove = button.hasAttribute('data-address-remove');
+    const index = Number(button.getAttribute(isRemove ? 'data-address-remove' : 'data-address-primary'));
     try {
-      await setDoc(ref, { savedLocation: null }, { merge: true });
-      renderSavedLocation(null);
-      closeLocationEditor();
-      toast('✅ Ubicación borrada');
-    } catch (e) { toast('❌ Error al borrar'); }
-    finally { window.TintinReleaseProfileButton?.('btn-borrar-ubicacion'); }
+      await persistAddressBook(isRemove ? removeAddress(addressBook, index) : makePrimary(addressBook, index));
+      toast(isRemove ? '✅ Dirección eliminada' : '✅ Dirección principal actualizada');
+    } catch (err) { toast(isRemove ? '❌ Error al eliminar' : '❌ Error al actualizar'); }
+    finally { window.TintinReleaseProfileButton?.(button.id); }
   });
 
   document.getElementById('btn-cancelar-ubicacion').onclick = closeLocationEditor;
 
   document.getElementById('btn-guardar-ubicacion').onclick = async () => {
-    const savedLocation = toSavedLocation(locationPicker.getSelected() || {});
-    if (!savedLocation) {
-      toast('❌ Elegí una de las sugerencias para guardar la ubicación');
+    const selected = toSavedLocation(locationPicker.getSelected() || {});
+    if (!selected) {
+      toast('❌ Elegí una de las sugerencias para guardar la dirección');
+      window.TintinReleaseProfileButton?.('btn-guardar-ubicacion');
+      return;
+    }
+    const added = addAddress(addressBook, selected);
+    if (!added.ok) {
+      toast(added.reason === 'full'
+        ? `❌ Ya guardaste ${MAX_SAVED_LOCATIONS} direcciones. Eliminá una para agregar otra.`
+        : '❌ Esa dirección ya está guardada');
       window.TintinReleaseProfileButton?.('btn-guardar-ubicacion');
       return;
     }
     try {
-      await setDoc(ref, {
-        savedLocation,
-        address: savedLocation.address || savedLocation.name,
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
-      document.getElementById('perfil-dir').value = savedLocation.address || savedLocation.name;
-      renderSavedLocation(savedLocation);
+      await persistAddressBook(added.list);
       closeLocationEditor();
-      toast('✅ Ubicación guardada');
-    } catch (e) { toast('❌ Error al guardar la ubicación'); }
+      toast('✅ Dirección guardada');
+    } catch (err) { toast('❌ Error al guardar la dirección'); }
     finally { window.TintinReleaseProfileButton?.('btn-guardar-ubicacion'); }
   };
 
@@ -701,7 +713,7 @@ startProfileAuthGuard();
 
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-cupones-1"></script>
 <script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20260925-cache-converge-1-launch-20260926-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
@@ -716,6 +728,7 @@ startProfileAuthGuard();
           <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20260715-15" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Accesorios que acompañan tu brillo. Comprá online con atención cercana desde Paraguay.</p>
+        <p class="tt-footer-hours">Horario de atención: Lunes a Sábado, 8:00 — 20:00 hs</p>
         <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
           <span aria-hidden="true">↗</span><span class="tt-footer-wa-text">Escribirnos por WhatsApp</span>
         </a>

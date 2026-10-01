@@ -439,3 +439,63 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - `audit:admin-responsive`: PASS 16/16 viewports.
 - `scripts/auditar-escritorio-correcciones.mjs`: fallaba "Checkout vacío permite continuar" porque leía `#btn-step1-next` en `domcontentloaded`, antes de que `renderCart()` (async, módulos Firebase) fijara `disabled`/`aria-disabled`. Evidencia: en producción (`tintinaccesorios.pages.dev/checkout`, carrito vacío) el botón queda `disabled=true`, `aria-disabled="true"`; local con red hacia gstatic también (10 s). Corrección: la auditoría espera hasta 15 s el estado final. Sin red a gstatic (este contenedor sin proxy en Chromium) la auditoría sigue fallando por entorno; no se pudo ejecutar la auditoría completa con la corrección en este contenedor.
 - Producción (solo lecturas): carrito invitado agregar → checkout con subtotal correcto: PASS. Login: solo carga de pantalla; inicio de sesión real NO probado.
+
+## Área 2: libreta de direcciones (hasta 5) — 2026-10-01
+- Implementado: `js/pages/profile/libreta-direcciones.mjs` (lógica pura), `perfil.html` (lista con "Principal", "Hacer principal", "Eliminar", contador y botón deshabilitado al llegar a 5), `checkout.html` ("Guardar en mi perfil" agrega a la libreta sin pisar; si está llena o repetida no hace nada) y `firestore.rules` (`savedLocations` es lista de ≤5). `savedLocation` sigue siendo la principal, así que checkout y completitud de perfil no cambian.
+- Estado: PASS_LOCAL (`tests/profile` 12/12 incluyendo 7 nuevos, `tests/accounts`+`tests/checkout` 144/144, security/auth/login/architecture 132/132, `node --check` de los módulos de perfil y checkout, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`). NO probado contra Firestore real ni en producción; la regla nueva NO está desplegada hasta que corra el flujo de reglas.
+- Riesgo conocido: hasta que la regla se despliegue, las reglas vigentes aceptan `savedLocations` sin tope (no rompe nada; el tope de 5 también se aplica en el cliente).
+- Diferido por decisión del usuario: eliminación de cuenta de cliente (no implementada).
+
+## Cuestionario del dueño: matriz de cumplimiento — 2026-10-01
+- Estado: NOT_VERIFIED en producción. Matriz en `docs/agent/DECISIONES_CUESTIONARIO.md` (lectura de código, sin pruebas en vivo).
+- Brechas confirmadas por no encontrar código: cupones (envío gratis, límites, fechas), email al cliente en cada cambio de estado, precio anterior tachado + %, historial de cambios de precio/stock, descuento de stock al confirmar pago.
+
+## Auditoría por áreas — Área 2 (cuentas/login/perfil) — 2026-10-01
+- PASS_LOCAL (lectura de código, sin login real): el acceso es solo Google (popup/redirect) + código OTP por correo (`login.html`, `functions/api/email-otp-*.js`); no existe flujo de contraseña. "@usuario" solo resuelve identificador para el OTP.
+- PASS_LOCAL: teléfono obligatorio en el alta (`needsPhone` en `js/pages/profile/configuracion-inicial-perfil.mjs`), con unicidad por `phoneReservations` + `firestore.rules`.
+- PASS_LOCAL: consentimiento de cookies/estadísticas gobierna GA4 (`js/analytics/analitica.js` usa `hasStatisticsConsent`).
+- PENDING (decisión ya tomada, no implementado): el perfil guarda UNA dirección (`perfil-dir` en `perfil.html`); no hay libreta de varias direcciones.
+- PENDING: el cliente no tiene "eliminar mi cuenta" en `perfil.html`; solo existe la baja desde admin (`functions/api/admin-delete-user.js`, `cloudflare/user-lifecycle-domain.js`).
+- NOT_VERIFIED: sesión autenticada real y producción.
+## Login "Últimos datos" — rejilla responsive (2026-10-01)
+- Causa: `#login-profile-block` usaba áreas con nombre; al ocultarse "Nombre/Apellido" (nombre detectado) quedaba un hueco, el orden DOM no coincidía con el visual, las tarjetas tenían estilos desiguales, `.tt-map-block` anidaba una tarjeta dentro de otra y la tarjeta "Nombre detectado" se inflaba.
+- Cambio: nuevo `css/pages/login/login-onboarding-form-layout.css` (solo `login.html`, tag `tintin-20261001-onboarding-form-grid-1`); no se tocaron CSS existentes ni tokens.
+- PASS_LOCAL: Chromium 320/390/600/768/1024/1440, variantes nombre detectado y editable con DOM inyectado, sin desborde horizontal; `verify:csp`, `verify:diagnostics`, `audit:cache-versioning`, `audit:login-isolation` (35/35), `audit:login-profile` (77/77).
+- NOT_VERIFIED: login real (Google/OTP/Firebase) y producción; mapa sin teselas en el entorno de prueba.
+## Auditoría por áreas — Área 1 (pedidos/stock/checkout/reseñas) — 2026-10-01
+- Reseñas con moderación previa (decisión del dueño): `createReview` crea la reseña de un cliente con `visible:false` y NO escribe el documento público `products/{id}/reviews/{id}`; el admin la publica con `reviewVisibility` (ya escribe el público). Super Admin sigue publicando directo. Aviso al admin: "envió una reseña para aprobar". Verificación: `npm run test:engagement` 45/45, PASS_LOCAL. No probado con Firestore real ni en producción.
+- Brechas vs decisiones, NO cambiadas (alto riesgo, requieren despliegue coordinado de Apps Script por el dueño): (1) el stock se descuenta/reserva al crear el pedido (`CrearPedido.gs`), la decisión es "al confirmar el pago"; (2) no existe sistema de cupones; (3) tope de 4 productos distintos por pedido (`firestore.rules`, `modelo-inventario.mjs`). Estado: PENDING (decisión de producto/despliegue).
+
+## Fase 6 — Stock se descuenta al confirmar el pago
+
+Decisión del dueño: el stock se descuenta al confirmar el pago; la última unidad la gana quien confirma.
+
+- **Modelo**: un pedido nuevo (pendiente y sin pago) ya no descuenta stock; solo valida disponibilidad y queda con `inventoryState: 'unreserved'`. Se descuenta (con las mismas precondiciones atómicas sobre el producto) cuando `paymentStatus` pasa a `pagado` o cuando el equipo avanza el estado más allá de `pendiente`. Cancelado/rechazado nunca descuentan; cancelar un pedido sin descuento no devuelve stock. Los pedidos anteriores ya `reserved` conservan su reserva. Cambios: `js/core/store/modelo-inventario.mjs` (`orderConfirmsInventory`), `cloudflare/order-admin-domain.js` (creación y mutación), `cloudflare/paypal-seguro.js` (descuenta tras capturar el pago; si el stock ya no alcanza, el cobro queda registrado y se avisa al admin con una notificación).
+- **Reglas de Firestore**: sin cambios. `unreserved` no reserva en `orderStateReservesInventory`, y todas las ediciones/estados del panel pasan por el dominio del servidor.
+- PASS_LOCAL: `tests/orders|sync|checkout|payments|public-commerce|functions` (206 pass, incluye 5 tests nuevos de este modelo), `test:paypal`, `audit:critical-healing`, `audit:level2`, `audit:admin-orders`, `audit:secure-orders`, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`.
+- NOT_VERIFIED: flujo real con PayPal/Firebase en producción.
+- Riesgo aceptado (decisión del dueño): dos clientas pueden pedir la última unidad; quien confirma primero la obtiene y la otra recibe "Stock insuficiente" al confirmar (en PayPal, aviso al admin porque el cobro ya ocurrió).
+- Pendiente: la limpieza `cleanupStalePendingOrders` y el checkout legacy de cliente siguen usando el estado `pending`; no se tocaron.
+
+## Fase 5 — Correos de estado de pedido (rama `feat/correos-estado`)
+- Implementado: `cloudflare/correo-estado-pedido.js`. Tras cada cambio confirmado de estado del pedido (`confirmado`, `preparando`, `listo_retiro`, `en_camino`, `entregado`, `cancelado`, `rechazado`) o de pago (`pagado`, `rechazado`, `reembolsado`) se envía un correo a la clienta. Se invoca desde `admin-order-mutation` (edición de estado y de pago) y desde `sheets-admin-webhook` (`updateOrder`). Clave idempotente `order-<id>-status-<changeId>`; best-effort con `waitUntil` (un fallo de Resend no revierte el cambio). Sin `RESEND_API_KEY`, duplicado, correo inválido o sin cambio: no envía.
+- Ya existía y no se tocó: correo "Recibimos tu pedido" (clienta y dueña) con cola de reintento.
+- Aviso por WhatsApp al admin: no existe envío automático en el repo (solo enlaces `wa.me` desde el cliente). Hacerlo exige WhatsApp Business API (integración nueva): NO implementado, requiere decisión.
+- PASS_LOCAL: `tests/orders/correo-estado-pedido.test.mjs`, suite completa, audits. NOT_VERIFIED: envío real con Resend y producción (no se enviaron correos reales).
+- Limitación: si Resend falla en el cambio de estado no hay reintento por cola (solo el correo de "pedido recibido" la tiene).
+
+## Fase 4 — Cupones de envío gratis (2026-10-01, rama feat/cupones)
+- Implementado: colección `coupons/{CÓDIGO}` (solo super admin; `usedCount` solo lo mueve el servidor) y `couponRedemptions/{CÓDIGO}__{uid}` (solo servidor). Regla de negocio única en `cloudflare/cupones.js`: activo, fechas inicio/fin (Paraguay -03:00), límite total y por cliente (0 = sin límite), aplica solo a delivery con costo conocido > 0.
+- El servidor reevalúa el cupón en `preparePublicCheckoutOrder` (422 con código `coupon_*`) y de nuevo, de forma atómica con precondiciones, en `createOrderAdmin` (suma `usedCount` y el canje del cliente en el mismo commit que el pedido; guarda `coupon` y `shippingDiscount` en el pedido). `couponCode` entró a `CHECKOUT_DRAFT_KEYS` y a la lista de Apps Script heredado.
+- Cliente: campo "Cupón" en `checkout.html` + `POST /api/coupon-validate` (informativo; autoridad final = servidor); resumen muestra "Gratis (cupón X)". Admin: `js/admin/settings/cupones-admin.js` (alta/edición/activar/borrar, solo super admin) montado en Configuración.
+- Etiquetas de caché: subir el tag de `pedido-checkout-seguro.js`/`politica-checkout.js` obligó a bumpear `sincronizacion-carrito.js`, loader, shell público y `tienda.js` (`-cupones-1` / `cupones-shell-1`); `esquema-color-instantaneo.js` recibió un comentario para poder alinear su tag con el del carrito (test `navegacion-inmediata`).
+- PASS_LOCAL: `tests/checkout/cupones.test.mjs` (6), `node --test tests/*/*.test.mjs` 703/703, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`, audits public-shell/cart/secure-orders/checkout-delivery/app-check/phase8/phase10/page-loading/security/store-gate/admin-foundation/admin-orders/release.
+- NOT_VERIFIED: producción; flujo real en navegador con Firebase; la UI admin de cupones no se ejecutó contra Firestore. Las reglas de Firestore se publican a mano (workflow "Publicar reglas Firestore"): sin publicarlas el admin de cupones no podrá leer/escribir. Un pedido cancelado no libera el uso del cupón (sin decisión del dueño).
+
+## Fase 3 — Catálogo y precios (`feat/catalogo-precios`)
+- Estado: PASS_LOCAL. Producción NOT_VERIFIED.
+- Implementado: precio anterior tachado + `-N%` en tarjetas y ficha de producto cuando `priceBefore > price` (`tienda.js`: `discountInfo`/`priceMarkup`). Usa token existente `--color-state-discount`/`--color-price-old`; sin cambios de CSS global.
+- Implementado: horario de atención en el footer unificado (`scripts/sincronizar-inicio-navegacion-publica.js` → `sync:public-shell`); ya existía en contacto.
+- Verificado por código: etiqueta "Agotado" existe (tienda.js, catalogo.html); no existe aviso de poco stock (decisión: no mostrar).
+- Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
+- Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.

@@ -6,21 +6,22 @@ import {
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-push.js';
 import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
+import { normalizePaymentCatalog } from '../../js/orders/nucleo-metodos-pago.js';
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
 const ADMIN_EMAIL = SUPERADMIN_EMAIL;
-const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
-const EMAIL_MARK = 'https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png';
-const REPLY_TO = ADMIN_EMAIL;
+export const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
+export const EMAIL_MARK = 'https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png';
+export const REPLY_TO = ADMIN_EMAIL;
 const ADMIN_PANEL = 'https://tintinaccesorios.pages.dev/admin';
 const STORE_NAME = 'Tintin Accesorios';
 
-function clean(value, maxLength = 1000) {
+export function clean(value, maxLength = 1000) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
 }
 
-function escapeHtml(value) {
+export function escapeHtml(value) {
   return clean(value, 5000)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -29,7 +30,7 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
-function emailIsValid(value) {
+export function emailIsValid(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(clean(value, 254));
 }
 
@@ -115,7 +116,35 @@ async function fetchOrder(orderId, idToken) {
   return decodeFirestoreFields(data.fields || {});
 }
 
-function fmtPrice(value) {
+// Datos para pagar por transferencia. Es de mejor esfuerzo: si la lectura de
+// los ajustes falla, el correo sale igual sin estos datos.
+export function transferInstructionsFromSettings(settings, methodId = 'transferencia') {
+  const methods = normalizePaymentCatalog(settings || {})
+    .filter(method => method.kind === 'transferencia' && method.enabled !== false);
+  const method = methods.find(item => item.id === methodId) || methods[0];
+  if (!method) return null;
+  const details = (method.details || [])
+    .map(item => ({ label: clean(item.label, 80), value: clean(item.value, 240) }))
+    .filter(item => item.label && item.value);
+  const instructions = clean(method.instructions, 600);
+  if (!details.length && !instructions) return null;
+  return { title: clean(method.title, 80), instructions, details };
+}
+
+async function fetchTransferInstructions(idToken, order) {
+  if (clean(order?.payment?.method, 40) !== 'transferencia') return null;
+  try {
+    const endpoint = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/settings/general`;
+    const response = await fetch(endpoint, { headers: { authorization: `Bearer ${idToken}` } });
+    if (!response.ok) return null;
+    const data = await response.json().catch(() => ({}));
+    return transferInstructionsFromSettings(decodeFirestoreFields(data.fields || {}), 'transferencia');
+  } catch {
+    return null;
+  }
+}
+
+export function fmtPrice(value) {
   return `Gs. ${Number(value || 0).toLocaleString('es-PY')}`;
 }
 
@@ -171,7 +200,7 @@ function cityDepartmentLabel(order) {
   return `${city} (${departamento})`;
 }
 
-function customerEmail(order, orderId) {
+export function customerEmail(order, orderId, transfer = null) {
   const shortId = clean(order.shortId, 30) || clean(orderId, 8).toUpperCase();
   const items = Array.isArray(order.items) ? order.items : [];
   const rows = items.map(item => `
@@ -188,6 +217,16 @@ function customerEmail(order, orderId) {
   const textItems = items
     .map(item => `${item.qty}x ${clean(item.name, 180)} — ${fmtPrice(Number(item.price || 0) * Number(item.qty || 0))}`)
     .join('\n');
+
+  const transferHtml = transfer ? `
+        <div style="margin-top:14px;padding:16px 18px;background:#fdf6f9;border-radius:14px;font-size:13px;line-height:1.7;color:#5e5357">
+          <strong style="color:#2b2226">${escapeHtml(transfer.title || 'Datos para la transferencia')}</strong><br>
+          ${transfer.details.map(item => `${escapeHtml(item.label)}: <strong style="color:#2b2226">${escapeHtml(item.value)}</strong>`).join('<br>')}
+          ${transfer.instructions ? `<div style="margin-top:8px">${escapeHtml(transfer.instructions)}</div>` : ''}
+        </div>` : '';
+  const transferText = transfer
+    ? `\n\n${transfer.title || 'Datos para la transferencia'}:\n${[...transfer.details.map(item => `${item.label}: ${item.value}`), transfer.instructions].filter(Boolean).join('\n')}`
+    : '';
 
   const html = `<!doctype html>
 <html lang="es"><head><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"></head>
@@ -213,7 +252,7 @@ function customerEmail(order, orderId) {
         <div style="margin-top:18px;padding:16px 18px;background:#fdf6f9;border-radius:14px;font-size:13px;line-height:1.7;color:#5e5357">
           <strong style="color:#2b2226">Entrega:</strong> ${escapeHtml(shippingLabel(order))}<br>
           <strong style="color:#2b2226">Pago:</strong> ${escapeHtml(paymentLabel(order))}
-        </div>
+        </div>${transferHtml}
         <p style="margin:22px 0 0;font-size:12.5px;line-height:1.65;color:#8a7d81">
           Podés responder directamente a este correo si necesitás comunicarte con Tintin.
         </p>
@@ -236,7 +275,7 @@ Subtotal: ${fmtPrice(order.subtotal)}
 Envío: ${order.shippingPending ? 'A confirmar' : fmtPrice(order.shippingCost)}
 Total: ${fmtPrice(order.total)}
 Entrega: ${shippingLabel(order)}
-Pago: ${paymentLabel(order)}
+Pago: ${paymentLabel(order)}${transferText}
 
 Podés responder directamente a este correo para comunicarte con Tintin.`;
 
@@ -332,7 +371,7 @@ Super Admin: ${ADMIN_PANEL}`;
   };
 }
 
-async function sendResendEmail(apiKey, payload, idempotencyKey) {
+export async function sendResendEmail(apiKey, payload, idempotencyKey) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -349,7 +388,7 @@ async function sendResendEmail(apiKey, payload, idempotencyKey) {
   return data;
 }
 
-export async function sendOrderEmails({ apiKey, orderId, order, isResend, sendAdmin, sendCustomer }) {
+export async function sendOrderEmails({ apiKey, orderId, order, isResend, sendAdmin, sendCustomer, transfer = null }) {
   const suffix = isResend ? `resend-${Date.now()}` : 'new-v1';
   let adminSent = null;
   let customerSent = null;
@@ -380,7 +419,7 @@ export async function sendOrderEmails({ apiKey, orderId, order, isResend, sendAd
       errors.push('Clienta: correo inválido');
     } else {
       try {
-        const content = customerEmail(order, orderId);
+        const content = customerEmail(order, orderId, transfer);
         await sendResendEmail(apiKey, {
           from: FROM_EMAIL,
           to: [recipient],
@@ -455,13 +494,15 @@ export async function onRequest(context) {
 
     const sendAdmin = body.sendAdmin !== false;
     const sendCustomer = body.sendCustomer !== false;
+    const transfer = sendCustomer ? await fetchTransferInstructions(idToken, order) : null;
     const result = await sendOrderEmails({
       apiKey,
       orderId,
       order,
       isResend,
       sendAdmin,
-      sendCustomer
+      sendCustomer,
+      transfer
     });
 
     // Encolado de reintento: si el envío inmediato falló para algún canal,

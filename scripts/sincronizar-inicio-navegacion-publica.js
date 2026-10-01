@@ -8,13 +8,13 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20260930-pdp-cart-error-1';
-const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-const LOADER_VERSION = 'tintin-20260930-sheets-reconcile-loader-4';
+const TIENDA_VERSION = 'tintin-20261001-precio-anterior-4';
+const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1';
+const LOADER_VERSION = 'tintin-20260930-sheets-reconcile-loader-4-cupones-1';
 const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260925-cache-converge-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261001-reentry-timeout-1';
-const NAV_ENTRY_VERSION = 'tintin-20261001-reentry-timeout-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261001-cupones-shell-1';
+const NAV_ENTRY_VERSION = 'tintin-20261001-cupones-shell-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260929-incomplete-flags-1';
@@ -111,6 +111,7 @@ function sharedFooter() {
           <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20260715-15" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Accesorios que acompañan tu brillo. Comprá online con atención cercana desde Paraguay.</p>
+        <p class="tt-footer-hours">Horario de atención: Lunes a Sábado, 8:00 — 20:00 hs</p>
         <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
           <span aria-hidden="true">↗</span><span class="tt-footer-wa-text">Escribirnos por WhatsApp</span>
         </a>
