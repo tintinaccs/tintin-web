@@ -431,3 +431,11 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Sectores 11–30: cubiertos solo por la suite estática. `npm run audit:final` corrió completa salvo `audit:flow-connections-responsive` y `audit:admin-responsive`, que fallan por falta del binario Chromium headless-shell en este contenedor (entorno, idéntico en árbol limpio). El resto de las auditorías de la cadena (incluidas `audit:security`, `audit:cache-versioning`, `audit:public-operational-contract`) dio código 0 y `node --test` 684/684. Esto NO equivale a recorrido manual de cada sector ni a verificación en producción.
 - Pendiente real: ejecutar en un entorno con navegador las dos auditorías responsive; verificación en producción (carrito con Firebase real, login/perfil, #971); prueba de escritura de likes/reseñas (`PRUEBA-ESCRITURA-LIKES-RESENAS.md`, requiere autorización).
 - NO-GO de migración de dominio/cierre de Shopify sin cambios.
+
+## Auditorías responsive/escritorio: evidencia del 2026-10-01 (sobre 78a3751)
+
+- Chromium headless shell: el entorno traía la build 1194 y Playwright pedía la 1243; se enlazó fuera del repo (cambio de entorno, no de código).
+- `audit:flow-connections-responsive`: PASS (desktop/laptop/tablet/mobile).
+- `audit:admin-responsive`: PASS 16/16 viewports.
+- `scripts/auditar-escritorio-correcciones.mjs`: fallaba "Checkout vacío permite continuar" porque leía `#btn-step1-next` en `domcontentloaded`, antes de que `renderCart()` (async, módulos Firebase) fijara `disabled`/`aria-disabled`. Evidencia: en producción (`tintinaccesorios.pages.dev/checkout`, carrito vacío) el botón queda `disabled=true`, `aria-disabled="true"`; local con red hacia gstatic también (10 s). Corrección: la auditoría espera hasta 15 s el estado final. Sin red a gstatic (este contenedor sin proxy en Chromium) la auditoría sigue fallando por entorno; no se pudo ejecutar la auditoría completa con la corrección en este contenedor.
+- Producción (solo lecturas): carrito invitado agregar → checkout con subtotal correcto: PASS. Login: solo carga de pantalla; inicio de sesión real NO probado.

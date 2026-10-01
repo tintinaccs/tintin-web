@@ -83,6 +83,12 @@ try {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`${baseURL}/checkout.html`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#btn-step1-next');
+  // renderCart() es asíncrono (módulos Firebase): esperar el estado final en vez de leerlo al cargar el DOM.
+  await page.waitForFunction(
+    () => document.getElementById('btn-step1-next')?.getAttribute('aria-disabled') === 'true',
+    null,
+    { timeout: 15000 },
+  ).catch(() => {});
   check(await page.locator('#btn-step1-next').isDisabled(), 'Checkout vacío permite continuar');
   check(
     await page.locator('#btn-step1-next').getAttribute('aria-disabled') === 'true',
