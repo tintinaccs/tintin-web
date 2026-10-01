@@ -440,6 +440,13 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - `scripts/auditar-escritorio-correcciones.mjs`: fallaba "Checkout vacío permite continuar" porque leía `#btn-step1-next` en `domcontentloaded`, antes de que `renderCart()` (async, módulos Firebase) fijara `disabled`/`aria-disabled`. Evidencia: en producción (`tintinaccesorios.pages.dev/checkout`, carrito vacío) el botón queda `disabled=true`, `aria-disabled="true"`; local con red hacia gstatic también (10 s). Corrección: la auditoría espera hasta 15 s el estado final. Sin red a gstatic (este contenedor sin proxy en Chromium) la auditoría sigue fallando por entorno; no se pudo ejecutar la auditoría completa con la corrección en este contenedor.
 - Producción (solo lecturas): carrito invitado agregar → checkout con subtotal correcto: PASS. Login: solo carga de pantalla; inicio de sesión real NO probado.
 
+## Auditoría por áreas — Área 2 (cuentas/login/perfil) — 2026-10-01
+- PASS_LOCAL (lectura de código, sin login real): el acceso es solo Google (popup/redirect) + código OTP por correo (`login.html`, `functions/api/email-otp-*.js`); no existe flujo de contraseña. "@usuario" solo resuelve identificador para el OTP.
+- PASS_LOCAL: teléfono obligatorio en el alta (`needsPhone` en `js/pages/profile/configuracion-inicial-perfil.mjs`), con unicidad por `phoneReservations` + `firestore.rules`.
+- PASS_LOCAL: consentimiento de cookies/estadísticas gobierna GA4 (`js/analytics/analitica.js` usa `hasStatisticsConsent`).
+- PENDING (decisión ya tomada, no implementado): el perfil guarda UNA dirección (`perfil-dir` en `perfil.html`); no hay libreta de varias direcciones.
+- PENDING: el cliente no tiene "eliminar mi cuenta" en `perfil.html`; solo existe la baja desde admin (`functions/api/admin-delete-user.js`, `cloudflare/user-lifecycle-domain.js`).
+- NOT_VERIFIED: sesión autenticada real y producción.
 ## Login "Últimos datos" — rejilla responsive (2026-10-01)
 - Causa: `#login-profile-block` usaba áreas con nombre; al ocultarse "Nombre/Apellido" (nombre detectado) quedaba un hueco, el orden DOM no coincidía con el visual, las tarjetas tenían estilos desiguales, `.tt-map-block` anidaba una tarjeta dentro de otra y la tarjeta "Nombre detectado" se inflaba.
 - Cambio: nuevo `css/pages/login/login-onboarding-form-layout.css` (solo `login.html`, tag `tintin-20261001-onboarding-form-grid-1`); no se tocaron CSS existentes ni tokens.
