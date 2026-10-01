@@ -63,8 +63,11 @@ const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 
 // Estos contratos se validan por semántica observable, no por una frase o
 // una forma sintáctica única. Así el gate sigue protegiendo Auth aunque el
 // copy del loader o la forma de encadenar una Promise cambien legítimamente.
-const googleHandoffKeepsOverlay =
-  login.includes('const cred = await signInWithPopup(auth, provider)') &&
+  const googlePopupPath =
+    login.includes('const cred = await signInWithPopup(auth, provider)') ||
+    login.includes('const popupAttempt = signInWithPopup(auth, provider)');
+  const googleHandoffKeepsOverlay =
+    googlePopupPath &&
   login.includes('showOverlay()') &&
   /setOverlayText\(['"](?:Entrando…|Redireccionando a tu cuenta…|Completando el inicio de sesión con Google…)['"]\)/.test(login) &&
   login.includes('await finishGoogleLogin(cred.user)');
@@ -87,7 +90,7 @@ const checks = [
   ['Carrito y búsqueda ocultos en Login', css.includes('body:has(.login-page) #cart-drawer') && css.includes('body:has(.login-page) #search-panel')],
   ['Login no reserva espacio del shell', css.includes('body:has(.login-page).tt-public-shell-mounted') && css.includes('padding-top: 0 !important')],
   ['Loader de Login muestra la marca oficial completa', loginLoaderVisible && officialLogoImmediate],
-  ['Google usa popup como camino principal', login.includes('const cred = await signInWithPopup(auth, provider)')],
+    ['Google usa popup como camino principal', googlePopupPath],
   ['Google mantiene loader hasta terminar el handoff', googleHandoffKeepsOverlay],
   ['OTP mantiene loader hasta terminar el handoff', login.includes("setOverlayText('Verificando tu código…')") && login.includes('await finishOtpLogin(user)')],
   ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
