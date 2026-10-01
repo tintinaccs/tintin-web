@@ -7,7 +7,7 @@
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260930-home-canonical-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261001-reentry-timeout-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260930-home-canonical-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261001-reentry-timeout-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1">
@@ -217,14 +217,14 @@ import { ASSIGNABLE_ROLES } from './js/core/auth/contrato-cuentas-generado.js?v=
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email/correo-autenticacion.js?v=tintin-20260923-user-reentry-1-auth-popup-resolver-1-launch-20260926-1-otp-limit-1";
+} from "./js/email/correo-autenticacion.js?v=tintin-20261001-reentry-timeout-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidUsernameFormat, isReservedUsername, normalizeUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
 import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
-import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260923-user-reentry-2-auth-popup-resolver-1-launch-20260926-1";
+import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-1";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260929-incomplete-flags-1";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
@@ -384,7 +384,7 @@ async function waitForPersistedAuthRecord(timeoutMs = 1500, intervalMs = 120) {
 }
 
 async function redirectByRole(role, email, options = {}) {
-  const cfg = options.storeAccessConfig || await getStoreAccessConfig();
+  const cfg = options.storeAccessConfig || await withDeadline(getStoreAccessConfig(), PROFILE_READ_DEADLINE_MS);
   if (!isAccessAllowed(cfg, role, email)) {
     // Cierre no confirmado (lectura degradada/sin red) nunca cierra la
     // sesión — sólo un cierre confirmado (__storeConfigStatus === 'ok') lo
@@ -948,7 +948,7 @@ async function finishGoogleLogin(user) {
   // en paralelo para conservar ambos sin sumar sus tiempos de espera.
   const [profile, storeAccessConfig] = await Promise.all([
     guardarUsuario(user),
-    getStoreAccessConfig()
+    withDeadline(getStoreAccessConfig(), PROFILE_READ_DEADLINE_MS)
   ]);
   const { role, blocked, welcomePending } = profile;
   if (blocked) {
@@ -964,7 +964,7 @@ async function finishGoogleLogin(user) {
 async function finishOtpLogin(user) {
   const [profile, storeAccessConfig] = await Promise.all([
     ensureUserDocForEmailLogin(user),
-    getStoreAccessConfig()
+    withDeadline(getStoreAccessConfig(), PROFILE_READ_DEADLINE_MS)
   ]);
   const { role, blocked, welcomePending } = profile;
   if (blocked) {
@@ -1073,21 +1073,24 @@ subscribeSession(async snapshot => {
   if (explicitLoginInProgress) return;
   const normalizedEmail = String(user.email || '').trim().toLowerCase();
   const isSuperAdmin = normalizedEmail === SUPER_ADMIN.toLowerCase();
-  const [profileResult, storeAccessConfig] = await Promise.all([
+  const [profileResult, storeAccessResult] = await Promise.all([
     isSuperAdmin
       ? Promise.resolve({ snapshot: null, error: null })
       : withDeadline(getDoc(doc(db, 'users', user.uid)), PROFILE_READ_DEADLINE_MS)
           .then(snapshot => ({ snapshot, error: null }))
           .catch(error => ({ snapshot: null, error })),
-    getStoreAccessConfig()
+    withDeadline(getStoreAccessConfig(), PROFILE_READ_DEADLINE_MS)
+      .then(config => ({ config, error: null }))
+      .catch(error => ({ config: null, error }))
   ]);
-  if (profileResult.error) {
-    console.warn('[login] No se pudo verificar el perfil de la sesión:', profileResult.error);
+  if (profileResult.error || storeAccessResult.error) {
+    console.warn('[login] No se pudo preparar la sesión restaurada:', profileResult.error || storeAccessResult.error);
     hideLoginOverlay();
     revealLoginSurface();
-    showError('No pudimos verificar tu cuenta en este momento. Tu sesión sigue activa; recargá la página y no hace falta volver a registrarte.');
+    showError('No pudimos preparar tu acceso en este momento. Tu sesión sigue activa; recargá o reintentá sin volver a registrarte.');
     return;
   }
+  const storeAccessConfig = storeAccessResult.config;
   const profileSnapshot = profileResult.snapshot;
   const profileData = profileSnapshot?.exists() ? profileSnapshot.data() : {};
   if (!isSuperAdmin && profileData.blocked === true) {
