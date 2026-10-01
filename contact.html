@@ -219,16 +219,25 @@
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     var nombre = (document.getElementById('f-nombre').value || '').trim();
+    var emailInput = document.getElementById('f-email');
+    var email  = (emailInput.value || '').trim();
     var tel    = (document.getElementById('f-tel').value || '').trim();
     var msg    = (document.getElementById('f-msg').value || '').trim();
     if (!nombre || !msg) {
       alert('Por favor completá tu nombre y tu mensaje.');
       return;
     }
+    if (email && !emailInput.checkValidity()) {
+      alert('Ingresá un email válido.');
+      emailInput.focus();
+      return;
+    }
     var texto = '¡Hola Tintin! 💕\n';
     texto += 'Soy ' + nombre;
     if (tel) texto += ' (' + tel + ')';
-    texto += '.\n' + msg;
+    texto += '.';
+    if (email) texto += '\nEmail: ' + email;
+    texto += '\n' + msg;
     var waUrl = 'https://wa.me/595981299331?text=' + encodeURIComponent(texto);
     // window.open debe llamarse de forma síncrona, en la misma pila del click —
     // si se llama dentro de un setTimeout se pierde el "user gesture" y Safari/
