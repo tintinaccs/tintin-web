@@ -440,6 +440,23 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - `scripts/auditar-escritorio-correcciones.mjs`: fallaba "Checkout vacío permite continuar" porque leía `#btn-step1-next` en `domcontentloaded`, antes de que `renderCart()` (async, módulos Firebase) fijara `disabled`/`aria-disabled`. Evidencia: en producción (`tintinaccesorios.pages.dev/checkout`, carrito vacío) el botón queda `disabled=true`, `aria-disabled="true"`; local con red hacia gstatic también (10 s). Corrección: la auditoría espera hasta 15 s el estado final. Sin red a gstatic (este contenedor sin proxy en Chromium) la auditoría sigue fallando por entorno; no se pudo ejecutar la auditoría completa con la corrección en este contenedor.
 - Producción (solo lecturas): carrito invitado agregar → checkout con subtotal correcto: PASS. Login: solo carga de pantalla; inicio de sesión real NO probado.
 
+## Área 2: libreta de direcciones (hasta 5) — 2026-10-01
+- Implementado: `js/pages/profile/libreta-direcciones.mjs` (lógica pura), `perfil.html` (lista con "Principal", "Hacer principal", "Eliminar", contador y botón deshabilitado al llegar a 5), `checkout.html` ("Guardar en mi perfil" agrega a la libreta sin pisar; si está llena o repetida no hace nada) y `firestore.rules` (`savedLocations` es lista de ≤5). `savedLocation` sigue siendo la principal, así que checkout y completitud de perfil no cambian.
+- Estado: PASS_LOCAL (`tests/profile` 12/12 incluyendo 7 nuevos, `tests/accounts`+`tests/checkout` 144/144, security/auth/login/architecture 132/132, `node --check` de los módulos de perfil y checkout, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`). NO probado contra Firestore real ni en producción; la regla nueva NO está desplegada hasta que corra el flujo de reglas.
+- Riesgo conocido: hasta que la regla se despliegue, las reglas vigentes aceptan `savedLocations` sin tope (no rompe nada; el tope de 5 también se aplica en el cliente).
+- Diferido por decisión del usuario: eliminación de cuenta de cliente (no implementada).
+
+## Cuestionario del dueño: matriz de cumplimiento — 2026-10-01
+- Estado: NOT_VERIFIED en producción. Matriz en `docs/agent/DECISIONES_CUESTIONARIO.md` (lectura de código, sin pruebas en vivo).
+- Brechas confirmadas por no encontrar código: cupones (envío gratis, límites, fechas), email al cliente en cada cambio de estado, precio anterior tachado + %, historial de cambios de precio/stock, descuento de stock al confirmar pago.
+
+## Auditoría por áreas — Área 2 (cuentas/login/perfil) — 2026-10-01
+- PASS_LOCAL (lectura de código, sin login real): el acceso es solo Google (popup/redirect) + código OTP por correo (`login.html`, `functions/api/email-otp-*.js`); no existe flujo de contraseña. "@usuario" solo resuelve identificador para el OTP.
+- PASS_LOCAL: teléfono obligatorio en el alta (`needsPhone` en `js/pages/profile/configuracion-inicial-perfil.mjs`), con unicidad por `phoneReservations` + `firestore.rules`.
+- PASS_LOCAL: consentimiento de cookies/estadísticas gobierna GA4 (`js/analytics/analitica.js` usa `hasStatisticsConsent`).
+- PENDING (decisión ya tomada, no implementado): el perfil guarda UNA dirección (`perfil-dir` en `perfil.html`); no hay libreta de varias direcciones.
+- PENDING: el cliente no tiene "eliminar mi cuenta" en `perfil.html`; solo existe la baja desde admin (`functions/api/admin-delete-user.js`, `cloudflare/user-lifecycle-domain.js`).
+- NOT_VERIFIED: sesión autenticada real y producción.
 ## Login "Últimos datos" — rejilla responsive (2026-10-01)
 - Causa: `#login-profile-block` usaba áreas con nombre; al ocultarse "Nombre/Apellido" (nombre detectado) quedaba un hueco, el orden DOM no coincidía con el visual, las tarjetas tenían estilos desiguales, `.tt-map-block` anidaba una tarjeta dentro de otra y la tarjeta "Nombre detectado" se inflaba.
 - Cambio: nuevo `css/pages/login/login-onboarding-form-layout.css` (solo `login.html`, tag `tintin-20261001-onboarding-form-grid-1`); no se tocaron CSS existentes ni tokens.
@@ -456,3 +473,11 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Etiquetas de caché: subir el tag de `pedido-checkout-seguro.js`/`politica-checkout.js` obligó a bumpear `sincronizacion-carrito.js`, loader, shell público y `tienda.js` (`-cupones-1` / `cupones-shell-1`); `esquema-color-instantaneo.js` recibió un comentario para poder alinear su tag con el del carrito (test `navegacion-inmediata`).
 - PASS_LOCAL: `tests/checkout/cupones.test.mjs` (6), `node --test tests/*/*.test.mjs` 703/703, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`, audits public-shell/cart/secure-orders/checkout-delivery/app-check/phase8/phase10/page-loading/security/store-gate/admin-foundation/admin-orders/release.
 - NOT_VERIFIED: producción; flujo real en navegador con Firebase; la UI admin de cupones no se ejecutó contra Firestore. Las reglas de Firestore se publican a mano (workflow "Publicar reglas Firestore"): sin publicarlas el admin de cupones no podrá leer/escribir. Un pedido cancelado no libera el uso del cupón (sin decisión del dueño).
+
+## Fase 3 — Catálogo y precios (`feat/catalogo-precios`)
+- Estado: PASS_LOCAL. Producción NOT_VERIFIED.
+- Implementado: precio anterior tachado + `-N%` en tarjetas y ficha de producto cuando `priceBefore > price` (`tienda.js`: `discountInfo`/`priceMarkup`). Usa token existente `--color-state-discount`/`--color-price-old`; sin cambios de CSS global.
+- Implementado: horario de atención en el footer unificado (`scripts/sincronizar-inicio-navegacion-publica.js` → `sync:public-shell`); ya existía en contacto.
+- Verificado por código: etiqueta "Agotado" existe (tienda.js, catalogo.html); no existe aviso de poco stock (decisión: no mostrar).
+- Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
+- Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.
