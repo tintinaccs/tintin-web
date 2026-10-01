@@ -440,6 +440,12 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - `scripts/auditar-escritorio-correcciones.mjs`: fallaba "Checkout vacío permite continuar" porque leía `#btn-step1-next` en `domcontentloaded`, antes de que `renderCart()` (async, módulos Firebase) fijara `disabled`/`aria-disabled`. Evidencia: en producción (`tintinaccesorios.pages.dev/checkout`, carrito vacío) el botón queda `disabled=true`, `aria-disabled="true"`; local con red hacia gstatic también (10 s). Corrección: la auditoría espera hasta 15 s el estado final. Sin red a gstatic (este contenedor sin proxy en Chromium) la auditoría sigue fallando por entorno; no se pudo ejecutar la auditoría completa con la corrección en este contenedor.
 - Producción (solo lecturas): carrito invitado agregar → checkout con subtotal correcto: PASS. Login: solo carga de pantalla; inicio de sesión real NO probado.
 
+## Área 2: libreta de direcciones (hasta 5) — 2026-10-01
+- Implementado: `js/pages/profile/libreta-direcciones.mjs` (lógica pura), `perfil.html` (lista con "Principal", "Hacer principal", "Eliminar", contador y botón deshabilitado al llegar a 5), `checkout.html` ("Guardar en mi perfil" agrega a la libreta sin pisar; si está llena o repetida no hace nada) y `firestore.rules` (`savedLocations` es lista de ≤5). `savedLocation` sigue siendo la principal, así que checkout y completitud de perfil no cambian.
+- Estado: PASS_LOCAL (`tests/profile` 12/12 incluyendo 7 nuevos, `tests/accounts`+`tests/checkout` 144/144, security/auth/login/architecture 132/132, `node --check` de los módulos de perfil y checkout, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`). NO probado contra Firestore real ni en producción; la regla nueva NO está desplegada hasta que corra el flujo de reglas.
+- Riesgo conocido: hasta que la regla se despliegue, las reglas vigentes aceptan `savedLocations` sin tope (no rompe nada; el tope de 5 también se aplica en el cliente).
+- Diferido por decisión del usuario: eliminación de cuenta de cliente (no implementada).
+
 ## Cuestionario del dueño: matriz de cumplimiento — 2026-10-01
 - Estado: NOT_VERIFIED en producción. Matriz en `docs/agent/DECISIONES_CUESTIONARIO.md` (lectura de código, sin pruebas en vivo).
 - Brechas confirmadas por no encontrar código: cupones (envío gratis, límites, fechas), email al cliente en cada cambio de estado, precio anterior tachado + %, historial de cambios de precio/stock, descuento de stock al confirmar pago.

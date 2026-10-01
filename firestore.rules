@@ -373,6 +373,9 @@ service cloud.firestore {
       return (!('name' in data) || (data.name is string && data.name.size() <= 120)) &&
         (!('phone' in data) || (data.phone is string && data.phone.size() <= 40)) &&
         (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000)) &&
+        // Libreta de direcciones: la principal sigue en `savedLocation`; acá van
+        // hasta 5 en total (js/pages/profile/libreta-direcciones.mjs).
+        (!('savedLocations' in data) || (data.savedLocations is list && data.savedLocations.size() <= 5)) &&
         (!('username' in data) || (data.username is string && data.username.size() <= 20 &&
           data.username.matches('^[a-z0-9_]{0,20}$'))) &&
         // Igual que en el cliente (validacion-nacimiento.js): edad entre 16 y
