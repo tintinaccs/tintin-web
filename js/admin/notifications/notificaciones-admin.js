@@ -29,6 +29,11 @@ const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character =>
 
 const sleep = ms => new Promise(resolve => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
 
+function shouldRetryFirestoreListener(error) {
+  const code = String(error?.code || '').trim().toLowerCase();
+  return !['permission-denied', 'unauthenticated'].includes(code);
+}
+
 function ensureStyles() {
   if (document.querySelector('link[data-adm-social-notifications]')) return;
   const link = document.createElement('link');
@@ -294,7 +299,7 @@ async function subscribeNotifications() {
     console.warn('[admin-notifications] No se pudo escuchar actividad:', error);
     const root = document.getElementById('adm-notifications-list');
     if (root) root.innerHTML = '<div class="adm-notifications-error">No se pudo cargar la actividad.</div>';
-    if (user) notificationsRetryTimer = window.setTimeout(() => subscribeNotifications(), 1400);
+    if (user && shouldRetryFirestoreListener(error)) notificationsRetryTimer = window.setTimeout(() => subscribeNotifications(), 1400);
   });
 }
 
@@ -370,7 +375,7 @@ async function subscribeOrderStatusChanges() {
     changed.forEach(orderId => { void notifyOrderStatusWithRetry(orderId); });
   }, error => {
     console.warn('[admin-notifications] No se pudieron observar estados de pedidos:', error);
-    if (user) ordersRetryTimer = window.setTimeout(() => subscribeOrderStatusChanges(), 1400);
+    if (user && shouldRetryFirestoreListener(error)) ordersRetryTimer = window.setTimeout(() => subscribeOrderStatusChanges(), 1400);
   });
 }
 
