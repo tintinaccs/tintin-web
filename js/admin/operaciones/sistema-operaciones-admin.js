@@ -495,14 +495,14 @@ function createSystem() {
     if (red) parts.push(['red', `✕ ${red}`]);
     if (yellow) parts.push(['yellow', `! ${yellow}`]);
     if (!parts.length) parts.push(['green', '✓']);
-    const label = el('span', 'tt-ops-indicator__label', 'Operaciones');
+    const label = el('span', 'tt-ops-indicator__label', 'Operaciones locales');
     indicator.replaceChildren(label, ...parts.map(([kind, text]) => el('span', `tt-ops-indicator__count tt-ops-indicator__count--${kind}`, text)));
     const description = [
       running ? `${running} en curso` : '',
       red ? `${red} con error sin revisar` : '',
       yellow ? `${yellow} con advertencia sin revisar` : '',
-    ].filter(Boolean).join(', ') || 'Sin errores ni advertencias pendientes';
-    indicator.setAttribute('aria-label', `Operaciones del panel: ${description}. Abrir detalle.`);
+    ].filter(Boolean).join(', ') || 'Sin errores ni advertencias pendientes en operaciones registradas en este navegador';
+    indicator.setAttribute('aria-label', `Operaciones de este navegador: ${description}. Abrir detalle.`);
     indicator.title = `${description}. Cuenta las operaciones hechas desde este navegador.`;
   }
 
