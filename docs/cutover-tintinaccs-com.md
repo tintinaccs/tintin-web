@@ -120,6 +120,10 @@ Solo cuando el dueño confirme el traslado DNS y las autorizaciones de A; las co
    - Sumar `tintinaccs.com` y `www.tintinaccs.com` a `appCheckDomains`, conservando `tintinaccesorios.pages.dev`, `localhost` y `127.0.0.1`. Sin el dominio activo en esa lista falla el check «App Check incluye dominio activo» de `node scripts/auditar-preparacion-dominio.mjs`.
 2. Mantener `cutover` como referencia del destino aprobado.
 3. Ejecutar el build normal. `scripts/sincronizar-origen-publico.js` propaga la fuente única a canonical, OG, JSON-LD, robots, sitemaps, Firebase Auth, Functions y auditorías.
+   - Ese primer build **falla a propósito** en `audit:cache-versioning`: cambiar el origen modifica los bytes de muchos JS publicados y cada uno necesita un `?v=` nuevo. Converger con un tag único (por ejemplo `tintin-AAAAMMDD-domain-cutover-1`) en cascada hasta que la auditoría solo informe «SIN REGISTRAR»: subir las referencias literales `?v=` de cada archivo marcado «CONTENIDO CAMBIÓ SIN BUMP» y, en cada conflicto «tags distintos», subir también la carga dinámica equivalente (`TT_CACHE_VERSION` de `js/cargador-pagina.js`, las constantes de `js/cargador-mantenimiento-pagina.js` y de `js/components/navigation/compartido/configuracion.js`, y las `*_VERSION` de `scripts/sincronizar-inicio-navegacion-publica.js`, que regeneran el shell público).
+   - Registrar con `npm run cache-versioning:write`.
+   - Actualizar auditorías y pruebas que citan literalmente una versión que dejó de existir (incluida la regex del prefijo de `TT_CACHE_VERSION` en `scripts/auditar-fase-8-ui-ux.js`). Conservar los finales de línea originales: el sync normaliza a LF los archivos que reescribe.
+   - Correr `npm run build:pages` dos veces sin drift (`git diff --exit-code`), luego `npm run audit:final` y `node scripts/auditar-preparacion-dominio.mjs`.
 4. Regenerar CSP. `scripts/generar-csp-cloudflare.js` incorpora el origen público activo antes de calcular hashes.
 5. No mezclar este commit con cambios visuales o comerciales no relacionados.
 
