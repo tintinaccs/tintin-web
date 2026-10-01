@@ -1,5 +1,7 @@
 # Operación de agentes — Tintin Web
 
+> Versión: 2026-09-28. Antes de iniciar un ciclo de reparación, verificar que esta versión coincide con la vigente en la rama base; si cambió durante el ciclo, releer este directorio antes de cerrar.
+
 Este directorio es el punto de entrada operativo para agentes de código. No reemplaza los contratos técnicos del repositorio: los organiza y define cómo usarlos.
 
 ## Orden de autoridad
