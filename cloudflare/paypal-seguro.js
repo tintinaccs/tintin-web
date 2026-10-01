@@ -8,6 +8,7 @@ import {
   fsTimestamp,
 } from './firebase-admin-ligero.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
+import { applyOrderAdminMutation } from './order-admin-domain.js';
 
 const MAX_RATE_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 const MIN_PYG_PER_USD = 1000;
@@ -242,7 +243,33 @@ async function markPaid(env, mapping, capture) {
     status: fsString('COMPLETED'), captureId: fsString(captureId), updatedAt: fsTimestamp(confirmedAt),
   });
 
+  await deductStockForPaidOrder(env, mapping);
   await notifyOrderConfirmed(env, mapping, cents, currency);
+}
+
+// El pedido nace sin descontar stock; al confirmarse el pago se descuenta con
+// las mismas precondiciones atómicas del dominio de pedidos. Si el stock ya no
+// alcanza, el cobro queda registrado y se avisa al equipo para resolverlo.
+async function deductStockForPaidOrder(env, mapping) {
+  try {
+    await applyOrderAdminMutation(env, {
+      orderId: mapping.orderId, reconcileInventory: true, source: 'paypal-payment',
+    }, { uid: 'paypal', email: 'paypal@system', role: 'system', origin: 'paypal-payment' });
+  } catch (error) {
+    console.error('[paypal] No se pudo descontar stock tras el pago', mapping.orderId, error?.message || error);
+    try {
+      await notifyAdminIfAbsent(env, {
+        kind: 'order_stock_conflict', actorType: 'system', actorName: 'PayPal',
+        title: `Pago recibido sin stock suficiente (${mapping.orderId})`,
+        body: 'El pago se confirmó pero el stock no alcanzó. Revisá el pedido y contactá a la clienta.',
+        iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
+        orderId: mapping.orderId, status: 'stock_conflict',
+        sourceType: 'order', sourceId: mapping.orderId, createdAt: new Date(),
+      }, `stock_conflict:${mapping.orderId}`);
+    } catch (notifyError) {
+      console.warn('[paypal] No se pudo avisar el conflicto de stock:', notifyError);
+    }
+  }
 }
 
 async function notifyOrderConfirmed(env, mapping, cents, currency) {
