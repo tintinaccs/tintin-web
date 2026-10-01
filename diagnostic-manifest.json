@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "77a8cf6d32f376f4671a002e3c1df2f8db22863ab6f274a419914ab2d6f482d4",
+  "sourceFingerprint": "572a4cbcbc6c9b558402749fb4880fe379c8854ed30568c4b4f0448816d1256d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 914,
     "textFiles": 873,
-    "totalBytes": 17932969,
+    "totalBytes": 17938006,
     "pages": 19,
     "modules": 628
   },
@@ -12266,7 +12266,7 @@
         "client"
       ],
       "bytes": 33733,
-      "sha256": "73fc096d30a2065091f1e5b7379da6d88c8172c58a0f208ef6c17f5cb6a1ec88",
+      "sha256": "ce347d99094e3e7a03f628b85595236d1da958389787681615207f48dee1514b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12434,7 +12434,7 @@
           "line": 72
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260911-hero-single-layer-1",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260930-hero-touch-target-1",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 82
         },
@@ -12981,7 +12981,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260911-hero-single-layer-1",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260930-hero-touch-target-1",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 82,
           "exists": true
@@ -28467,8 +28467,8 @@
     },
     {
       "path": "scripts/auditar-inicio-visual-parte-2b.mjs",
-      "bytes": 13668,
-      "sha256": "437d6600a41cc86b496364b589f31e3fb3d112b42fb4c29a337372b51012ad32",
+      "bytes": 13803,
+      "sha256": "8164661c36259891c843d80ab8bf8beb9e4e0396545e0dc67ea076aad85abf2d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33132,8 +33132,8 @@
     },
     {
       "path": "tests/navigation/loader-shell-wait.spec.js",
-      "bytes": 9695,
-      "sha256": "68b50bfcd4492ef19fbf915ee535f44aa2fc0c57ca3d84b86402eee78c483488",
+      "bytes": 10125,
+      "sha256": "045f2684746a1def386a9141bb9561b00d829c909046b49cf826c368ee82f421",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36332,8 +36332,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 18600,
-      "sha256": "35f4a577a06d043bb890ce53dbc346f2fb53c5a9c7c7734465f47ef96c923be4"
+      "bytes": 18603,
+      "sha256": "3ad791afecca5f3531d26b71f47fc71d1da0aba3d825233a589e1f306f9618ac"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -36530,8 +36530,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 79135,
-      "sha256": "e1b3a6db3c1e4d29df7bfc32e6aeb636ab1f30694a976b554c8e50702fea434b"
+      "bytes": 83604,
+      "sha256": "c9a95c25a98a7fa51f5a756aa2857ad9c72d56ce664fc655fadc06ef23a4d2e0"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -37323,7 +37323,7 @@
       "path": "index.html",
       "extension": ".html",
       "bytes": 33733,
-      "sha256": "73fc096d30a2065091f1e5b7379da6d88c8172c58a0f208ef6c17f5cb6a1ec88"
+      "sha256": "ce347d99094e3e7a03f628b85595236d1da958389787681615207f48dee1514b"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -39458,8 +39458,8 @@
     {
       "path": "scripts/auditar-inicio-visual-parte-2b.mjs",
       "extension": ".mjs",
-      "bytes": 13668,
-      "sha256": "437d6600a41cc86b496364b589f31e3fb3d112b42fb4c29a337372b51012ad32"
+      "bytes": 13803,
+      "sha256": "8164661c36259891c843d80ab8bf8beb9e4e0396545e0dc67ea076aad85abf2d"
     },
     {
       "path": "scripts/auditar-institucional-ayuda-legal-parte-2e-v2.mjs",
@@ -39807,7 +39807,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 59131,
-      "sha256": "17f8057bcec0112355d0488ec691853fe8d75e9f093d68b7fa6667dab8141e94"
+      "sha256": "57dfef3761512c97e30a588366ecc0eb293a3b735e7828ee97c6347af35c87ce"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -40430,8 +40430,8 @@
     {
       "path": "tests/navigation/loader-shell-wait.spec.js",
       "extension": ".js",
-      "bytes": 9695,
-      "sha256": "68b50bfcd4492ef19fbf915ee535f44aa2fc0c57ca3d84b86402eee78c483488"
+      "bytes": 10125,
+      "sha256": "045f2684746a1def386a9141bb9561b00d829c909046b49cf826c368ee82f421"
     },
     {
       "path": "tests/operations/apps-script-fetch.test.mjs",

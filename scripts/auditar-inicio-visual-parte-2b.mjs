@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
 const port = 4182;
-const baseURL = `http://${host}:${port}`;
+const baseURL = process.env.TT_AUDIT_BASE_URL || `http://${host}:${port}`;
+const remotePreview = Boolean(process.env.TT_AUDIT_BASE_URL);
 const output = path.join(root, 'artifacts', 'home-part2b');
 fs.rmSync(output, { recursive: true, force: true });
 fs.mkdirSync(output, { recursive: true });
@@ -216,7 +217,7 @@ async function audit(page, width, height) {
   }, { width, height, sections });
 }
 
-await listen();
+if (!remotePreview) await listen();
 const browser = await chromium.launch({
   headless: true,
   executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
@@ -258,7 +259,7 @@ try {
   }
 } finally {
   await browser.close();
-  await closeServer();
+  if (!remotePreview) await closeServer();
 }
 
 const failures = report.filter(entry => entry.issues.length);
