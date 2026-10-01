@@ -710,9 +710,10 @@ function renderGrid(lista) {
       <div class="cat-empty">
         <div class="cat-empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
         <div style="font-size:16px;font-weight:800;text-transform:uppercase;margin-bottom:6px">Sin resultados</div>
-        <div style="font-size:13px;margin-bottom:20px">No hay productos disponibles en esta categoría</div>
-        <a href="/catalogo" class="tt-btn tt-btn-sm">Ver todo el catálogo →</a>
+        <div style="font-size:13px;margin-bottom:20px">No encontramos productos con los filtros elegidos</div>
+        <button type="button" class="tt-btn tt-btn-sm" id="cat-empty-reset">Ver todo el catálogo →</button>
       </div>`;
+    document.getElementById('cat-empty-reset')?.addEventListener('click', () => document.getElementById('btn-limpiar-filtros').click());
     return;
   }
 
@@ -735,7 +736,8 @@ function renderGrid(lista) {
       : isNew
         ? `<span class="tt-card-badge">NUEVO</span>`
         : p.badge ? `<span class="tt-card-badge">${escapeCatalogHtml(p.badge)}</span>` : '';
-    const catLabel = p.category || p.cat || '';
+    const rawCategory = p.category || p.cat || '';
+    const cardCategory = rawCategory ? catLabel(rawCategory) : '';
     const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
     return `
       <article class="tt-card" data-product-id="${safeId}">
@@ -745,7 +747,7 @@ function renderGrid(lista) {
           ${badgeHtml}
         </a>
         <div class="tt-card-info">
-          ${catLabel ? `<div class="tt-card-cat">${escapeCatalogHtml(catLabel)}</div>` : ''}
+          ${cardCategory ? `<div class="tt-card-cat">${escapeCatalogHtml(cardCategory)}</div>` : ''}
           <h2 class="tt-card-name"><a href="${productHref}">${safeAlt}</a></h2>
           <div class="tt-card-price">${fmt(p.price)}</div>
           <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
@@ -774,8 +776,12 @@ function renderGrid(lista) {
   });
 
   document.getElementById('cat-load-more')?.addEventListener('click', () => {
+    const previousCount = grid.querySelectorAll('.tt-card').length;
     visibleProductLimit += PRODUCT_BATCH_SIZE;
     renderGrid(filteredProducts);
+    // La grilla se reconstruye y el botón enfocado desaparece: devolver el
+    // foco al primer producto nuevo para no perder la posición del teclado.
+    grid.querySelectorAll('.tt-card')[previousCount]?.querySelector('a.tt-card-img-wrap')?.focus();
   });
 }
 

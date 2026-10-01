@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "23f55ab7c22b4c3a67da1d58315975489e16c599fcdd93dc3a5182f49748f5ff",
+  "sourceFingerprint": "5329c4f7bc3d05541c802eb0a3ebdd6364a0a1e1fa86b5dd76f3050deaa0c4c5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 916,
     "textFiles": 875,
-    "totalBytes": 17944619,
+    "totalBytes": 17946311,
     "pages": 19,
     "modules": 629
   },
@@ -8449,8 +8449,8 @@
         "guest",
         "client"
       ],
-      "bytes": 53556,
-      "sha256": "4049652a21351f02ab397cf5bdd1144ee05f0642136b3bf73ed0d67e6136663c",
+      "bytes": 54124,
+      "sha256": "59a7ef9a931d901b47445d3c19d1c11c17d07b8a3025894eac48c84ac09a79d4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8518,32 +8518,32 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 984
+          "line": 990
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 985
+          "line": 991
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 986
+          "line": 992
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 987
+          "line": 993
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 988
+          "line": 994
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 989
+          "line": 995
         }
       ],
       "styles": [
@@ -8855,37 +8855,37 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 984,
+          "line": 990,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 985,
+          "line": 991,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 986,
+          "line": 992,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-incomplete-flags-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 987,
+          "line": 993,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 988,
+          "line": 994,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 989,
+          "line": 995,
           "exists": true
         },
         {
@@ -18736,7 +18736,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 357687,
-      "sha256": "e6dbdd209303748c64dbcfe7ef646fcac14d465777673b67ef6fe684a81539da",
+      "sha256": "4a35feb5b5d9c76e376e957e824881634ab26b82d4cb994e24bbc56413c74508",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35864,8 +35864,8 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 53556,
-      "sha256": "4049652a21351f02ab397cf5bdd1144ee05f0642136b3bf73ed0d67e6136663c"
+      "bytes": 54124,
+      "sha256": "59a7ef9a931d901b47445d3c19d1c11c17d07b8a3025894eac48c84ac09a79d4"
     },
     {
       "path": "checkout.html",
@@ -36069,13 +36069,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 357687,
-      "sha256": "e6dbdd209303748c64dbcfe7ef646fcac14d465777673b67ef6fe684a81539da"
+      "sha256": "4a35feb5b5d9c76e376e957e824881634ab26b82d4cb994e24bbc56413c74508"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 357602,
-      "sha256": "d670b9c12402f918e676382ca7a80df9b190cc06686d82935249d92e045b58ed"
+      "sha256": "d3916534e2ac515f6331b41abea1941fe6e85f780583f9db4df020aa98980bcf"
     },
     {
       "path": "config/public-site.json",
@@ -36578,8 +36578,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 84504,
-      "sha256": "f1be10cac8a269c7e2ff7dbebb27c76b4feae16d94c2e499f8eb48fcbb9754c7"
+      "bytes": 85628,
+      "sha256": "73cd7c52f28bc387accfcc306b326c94843cb7e57ebed97acb8a7a32b274fa82"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -40865,7 +40865,7 @@
   "routeReferences": [
     {
       "file": "catalogo.html",
-      "line": 723,
+      "line": 724,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -42541,7 +42541,7 @@
       "references": [
         {
           "file": "catalogo.html",
-          "line": 723
+          "line": 724
         }
       ]
     }

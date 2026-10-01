@@ -407,3 +407,9 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Probado localmente: `tests/accounts/incomplete-profile-flags.test.mjs` y pruebas dirigidas; `npm run build:pages`.
 - NO probado en producción. La cuenta de ejemplo solo se vuelve a pedir si su `profileStatus` guardado es `incomplete` (no verificable desde aquí).
 - NO-GO de migración/cierre Shopify sin cambios.
+
+## Catálogo (sector 04): grilla, vacío y "Mostrar más" — 2026-10-01
+- Estado: PASS_LOCAL (Chromium con productos inyectados y CDN externos bloqueados; NO probado con Firebase/colecciones reales ni en producción).
+- Causas y cambios en `catalogo.html`: (1) la tarjeta mostraba el slug crudo porque `const catLabel` local tapaba la función `catLabel()`; ahora usa el nombre de la colección. (2) El vacío ofrecía un enlace a `/catalogo` (la misma página) y decía "en esta categoría" aunque el vacío viniera de búsqueda/precio; ahora el botón limpia los filtros y el texto es neutral. (3) "Mostrar más" reconstruye la grilla y el foco del teclado se perdía; ahora pasa al primer producto nuevo.
+- Verificación: sonda Chromium 390px (48→60 tarjetas, foco en `p48`, vacío y restablecer OK); `node --test` completo 684/684; `verify:csp`, `verify:diagnostics`, `audit:cache-versioning` OK tras `build:csp`/`build:diagnostics`.
+- Sin cambio (regla de negocio vigente): colecciones visibles vacías ocultan todo el catálogo (`politica-visibilidad-catalogo.js`). NO-GO de migración/cierre Shopify sin cambios.
