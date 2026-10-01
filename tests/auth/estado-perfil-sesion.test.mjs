@@ -130,6 +130,14 @@ test('login.html repara el documento inexistente con la función canónica antes
   assert.match(body, /if \(!currentSnap\.exists\(\)\)[\s\S]{0,300}profile\/missing/);
 });
 
+test('ensureProfileComplete usa el plan canónico para username y no referencia datos inexistentes', () => {
+  const body = login.slice(login.indexOf('async function ensureProfileComplete'), login.indexOf('async function finishGoogleLogin'));
+  assert.doesNotMatch(body, /\busernameMissing\b/);
+  assert.doesNotMatch(body, /\bdata\.(?:username|userName)\b/);
+  assert.match(body, /usernameField\.style\.display = plan\.needsUsername \? '' : 'none'/);
+  assert.match(body, /if \(plan\.needsUsername\) \{[\s\S]*?usernameInput\.addEventListener/);
+});
+
 test('la sesión restaurada nunca cierra sesión ni deja un cargador colgado ante un error', () => {
   const start = login.indexOf('subscribeSession(async snapshot');
   const handler = login.slice(start, login.indexOf('// GOOGLE — primera opción', start));
