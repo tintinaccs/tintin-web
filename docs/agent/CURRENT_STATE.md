@@ -455,3 +455,11 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 ## Auditoría por áreas — Área 1 (pedidos/stock/checkout/reseñas) — 2026-10-01
 - Reseñas con moderación previa (decisión del dueño): `createReview` crea la reseña de un cliente con `visible:false` y NO escribe el documento público `products/{id}/reviews/{id}`; el admin la publica con `reviewVisibility` (ya escribe el público). Super Admin sigue publicando directo. Aviso al admin: "envió una reseña para aprobar". Verificación: `npm run test:engagement` 45/45, PASS_LOCAL. No probado con Firestore real ni en producción.
 - Brechas vs decisiones, NO cambiadas (alto riesgo, requieren despliegue coordinado de Apps Script por el dueño): (1) el stock se descuenta/reserva al crear el pedido (`CrearPedido.gs`), la decisión es "al confirmar el pago"; (2) no existe sistema de cupones; (3) tope de 4 productos distintos por pedido (`firestore.rules`, `modelo-inventario.mjs`). Estado: PENDING (decisión de producto/despliegue).
+
+## Fase 3 — Catálogo y precios (`feat/catalogo-precios`)
+- Estado: PASS_LOCAL. Producción NOT_VERIFIED.
+- Implementado: precio anterior tachado + `-N%` en tarjetas y ficha de producto cuando `priceBefore > price` (`tienda.js`: `discountInfo`/`priceMarkup`). Usa token existente `--color-state-discount`/`--color-price-old`; sin cambios de CSS global.
+- Implementado: horario de atención en el footer unificado (`scripts/sincronizar-inicio-navegacion-publica.js` → `sync:public-shell`); ya existía en contacto.
+- Verificado por código: etiqueta "Agotado" existe (tienda.js, catalogo.html); no existe aviso de poco stock (decisión: no mostrar).
+- Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
+- Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.
