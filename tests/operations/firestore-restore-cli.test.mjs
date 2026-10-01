@@ -3,10 +3,12 @@ import { spawnSync } from 'node:child_process';
 import { chmodSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { delimiter, join } from 'node:path';
+import { platform } from 'node:process';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const script = fileURLToPath(new URL('../../scripts/restore-firestore.mjs', import.meta.url));
+const isWindows = platform === 'win32';
 const commonEnv = {
   ...process.env,
   FIREBASE_PROJECT_ID: 'demo-tintin-restore',
@@ -24,9 +26,11 @@ function run(args = [], env = {}) {
 function withFakeGcloud(callback) {
   const dir = mkdtempSync(join(tmpdir(), 'tintin-restore-'));
   const argsFile = join(dir, 'gcloud-args.txt');
-  const binary = join(dir, 'gcloud');
-  writeFileSync(binary, '#!/bin/sh\nprintf "%s\\n" "$@" > "$GCLOUD_ARGS_FILE"\nexit "$GCLOUD_EXIT"\n');
-  chmodSync(binary, 0o755);
+  const binary = join(dir, isWindows ? 'gcloud.cmd' : 'gcloud');
+  writeFileSync(binary, isWindows
+    ? '@echo off\r\n:args\r\nif "%~1"=="" goto done\r\n>> "%GCLOUD_ARGS_FILE%" echo %~1\r\nshift\r\ngoto args\r\n:done\r\nexit /b %GCLOUD_EXIT%\r\n'
+    : '#!/bin/sh\nprintf "%s\\n" "$@" > "$GCLOUD_ARGS_FILE"\nexit "$GCLOUD_EXIT"\n');
+  if (!isWindows) chmodSync(binary, 0o755);
   const env = {
     PATH: [dir, process.env.PATH || ''].join(delimiter),
     GCLOUD_ARGS_FILE: argsFile,
@@ -50,6 +54,7 @@ test('dry-run muestra proyecto, base y snapshot sin ejecutar gcloud', () => {
 
 test('restauración rechaza origen incompleto o base inválida', () => {
   assert.equal(run(['--dry-run'], { FIRESTORE_RESTORE_SOURCE: 'gs://bucket' }).status, 2);
+  assert.equal(run(['--dry-run'], { FIRESTORE_RESTORE_SOURCE: 'gs://bucket/snapshot&otra-cosa' }).status, 2);
   assert.equal(run(['--dry-run'], { FIRESTORE_RESTORE_DATABASE: '../otra' }).status, 2);
 });
 
@@ -86,10 +91,12 @@ test('importa en base aislada y no pasa --async=false', () => {
       TINTIN_RESTORE_CONFIRM: 'RESTORE:demo-tintin-restore:restauracion-prueba'
     });
     assert.equal(result.status, 0, result.stderr);
-    assert.deepEqual(readFileSync(argsFile, 'utf8').trim().split('\n'), [
+    const expectedArgs = [
       'firestore', 'import', 'gs://example-backups/snapshot-001',
-      '--project', 'demo-tintin-restore', '--database=restauracion-prueba'
-    ]);
+      '--project', 'demo-tintin-restore',
+      ...(isWindows ? ['--database', 'restauracion-prueba'] : ['--database=restauracion-prueba'])
+    ];
+    assert.deepEqual(readFileSync(argsFile, 'utf8').trim().split(/\r?\n/), expectedArgs);
   });
 });
 

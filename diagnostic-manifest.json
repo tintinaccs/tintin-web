@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "572a4cbcbc6c9b558402749fb4880fe379c8854ed30568c4b4f0448816d1256d",
+  "sourceFingerprint": "68a02faca93a13e4b5c7c0e691124231d651725c8f52e2048a50d04a24d2d5bd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 914,
     "textFiles": 873,
-    "totalBytes": 17938006,
+    "totalBytes": 17938830,
     "pages": 19,
     "modules": 628
   },
@@ -30477,8 +30477,8 @@
     },
     {
       "path": "scripts/restore-firestore.mjs",
-      "bytes": 2274,
-      "sha256": "a1deb30f5ceba24c57c60d60e953242802e0d0f25667e8be4a783c112634a9c7",
+      "bytes": 2584,
+      "sha256": "cb2d8771c82ccee8a3bb8d379a16367aae73b67ae2231228f2c7cf8b2da1861e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30489,6 +30489,12 @@
           "target": null,
           "dynamic": false,
           "line": 1
+        },
+        {
+          "raw": "node:process",
+          "target": null,
+          "dynamic": false,
+          "line": 2
         }
       ],
       "endpoints": []
@@ -33197,8 +33203,8 @@
     },
     {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
-      "bytes": 4146,
-      "sha256": "0786963bf3b1131687eb1684cd9f6aabaea0086985027eb202fe96ff9f7e8a4e",
+      "bytes": 4652,
+      "sha256": "95a9af364f69031047c09e26132985fb90cdcd63ec78915eab8c17cdec56534d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33235,16 +33241,22 @@
           "line": 5
         },
         {
-          "raw": "node:url",
+          "raw": "node:process",
           "target": null,
           "dynamic": false,
           "line": 6
         },
         {
-          "raw": "node:test",
+          "raw": "node:url",
           "target": null,
           "dynamic": false,
           "line": 7
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 8
         }
       ],
       "endpoints": []
@@ -36530,8 +36542,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 83604,
-      "sha256": "c9a95c25a98a7fa51f5a756aa2857ad9c72d56ce664fc655fadc06ef23a4d2e0"
+      "bytes": 83612,
+      "sha256": "a7d5d847c8063c9b09c69d156f2f4f64554562cb4a1d582453f990a382cea904"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -39944,8 +39956,8 @@
     {
       "path": "scripts/restore-firestore.mjs",
       "extension": ".mjs",
-      "bytes": 2274,
-      "sha256": "a1deb30f5ceba24c57c60d60e953242802e0d0f25667e8be4a783c112634a9c7"
+      "bytes": 2584,
+      "sha256": "cb2d8771c82ccee8a3bb8d379a16367aae73b67ae2231228f2c7cf8b2da1861e"
     },
     {
       "path": "scripts/resumir-auditoria-dependencias.mjs",
@@ -40448,8 +40460,8 @@
     {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
       "extension": ".mjs",
-      "bytes": 4146,
-      "sha256": "0786963bf3b1131687eb1684cd9f6aabaea0086985027eb202fe96ff9f7e8a4e"
+      "bytes": 4652,
+      "sha256": "95a9af364f69031047c09e26132985fb90cdcd63ec78915eab8c17cdec56534d"
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
