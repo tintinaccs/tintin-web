@@ -882,13 +882,24 @@ function _showCatalogLoadError() {
     const grid = document.getElementById('cat-grid');
     if (!grid) return;
     grid.setAttribute('aria-busy', 'false');
-    document.getElementById('cat-count').textContent = 'Actualizando catálogo';
+    document.getElementById('cat-count').textContent = 'Catálogo no disponible';
     grid.innerHTML = `
-      <div class="cat-empty">
-        <p style="margin-bottom:14px;font-size:0.95rem">Estamos actualizando el catálogo. Intentá nuevamente en unos instantes.</p>
+      <div class="cat-empty tt-catalog-runtime-state" data-state="error" role="alert">
+        <p style="margin-bottom:14px;font-size:0.95rem">No pudimos actualizar el catálogo. Podés reintentar sin perder tus filtros.</p>
         <button type="button" class="tt-btn" id="cat-retry">Reintentar</button>
       </div>`;
-    document.getElementById('cat-retry')?.addEventListener('click', () => location.reload());
+    document.getElementById('cat-retry')?.addEventListener('click', async event => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      button.textContent = 'Reintentando…';
+      try {
+        await window.TintinProductsStore?.loadAll?.({ force: true });
+      } catch (error) {
+        console.warn('[catalog] retry failed', error?.message || error);
+        button.disabled = false;
+        button.textContent = 'Reintentar';
+      }
+    });
     window.ttPageReady && window.ttPageReady();
   }, 10000);
 }
