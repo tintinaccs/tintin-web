@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "252ebb7ec63f912e8ec1f56417fbefb7c8bcb55d4eb9fc506112e9a6ac43f593",
+  "sourceFingerprint": "dd0f3df13814d48ff4a146da17315b08d3fdd215e0543a0a6dbe587796970589",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 916,
     "textFiles": 875,
-    "totalBytes": 17953840,
+    "totalBytes": 17955257,
     "pages": 19,
     "modules": 629
   },
@@ -27724,8 +27724,8 @@
     },
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
-      "bytes": 8748,
-      "sha256": "66ddb3bf96189f70f2ef02e16fcf019032d01d6cf572fa15b0b168f47fab803b",
+      "bytes": 8905,
+      "sha256": "d4ccc1902fecde5b2e96f9546df98fce1b22b816ecabc643ac590f6846987dc5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36717,8 +36717,8 @@
     {
       "path": "docs/cutover-tintinaccs-com.md",
       "extension": ".md",
-      "bytes": 14270,
-      "sha256": "313401926ee5140f53187b1228364f98718c23ae5068404adf290b370a566e95"
+      "bytes": 15530,
+      "sha256": "88fdd4418b5a543aa242f236e61ccb6ba0dc0a88a74309685dce68e68620e542"
     },
     {
       "path": "docs/diagnostico-maestro.md",
@@ -39339,8 +39339,8 @@
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
       "extension": ".js",
-      "bytes": 8748,
-      "sha256": "66ddb3bf96189f70f2ef02e16fcf019032d01d6cf572fa15b0b168f47fab803b"
+      "bytes": 8905,
+      "sha256": "d4ccc1902fecde5b2e96f9546df98fce1b22b816ecabc643ac590f6846987dc5"
     },
     {
       "path": "scripts/auditar-diagnostico.js",
@@ -43098,7 +43098,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 87,
+            "line": 89,
             "operation": "collection"
           }
         ]
@@ -43218,7 +43218,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 85,
+            "line": 87,
             "operation": "collection"
           },
           {
@@ -44143,7 +44143,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 86,
+            "line": 88,
             "operation": "collection"
           },
           {

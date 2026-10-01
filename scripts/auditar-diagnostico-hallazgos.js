@@ -8,6 +8,8 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const exists = file => fs.existsSync(path.join(root, file));
+const publicOrigin = JSON.parse(read('config/public-site.json')).origin;
+const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const failures = [];
 
 function check(label, condition) {
@@ -144,7 +146,7 @@ check(
 check(
   'nosotros.html es un alias no indexable con canonical absoluto limpio',
   /name=["']robots["'][^>]+content=["']noindex,\s*follow["']/i.test(nosotros) &&
-    /rel=["']canonical["'][^>]+href=["']https:\/\/tintinaccesorios\.pages\.dev\/about["']/i.test(nosotros) &&
+    new RegExp(`rel=["']canonical["'][^>]+href=["']${escapeRegExp(publicOrigin)}\\/about["']`, 'i').test(nosotros) &&
     /http-equiv=["']refresh["'][^>]+url=\/about["']/i.test(nosotros)
 );
 check('nosotros.html no aparece en sitemap.xml', !/nosotros\.html/i.test(sitemap));
