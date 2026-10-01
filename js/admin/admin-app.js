@@ -1521,7 +1521,7 @@ function renderGeneralStatistics() {
   statisticsSetText('statistics-active-users', adminRealtimeReady.users ? String(activeUsers) : '—');
   statisticsSetText('statistics-blocked-users', adminRealtimeReady.users ? `${blockedUsers} bloqueado${blockedUsers === 1 ? '' : 's'}` : '—');
   statisticsSetText('statistics-visitors', adminRealtimeReady.traffic ? String(uniqueVisitors) : '—');
-  statisticsSetText('statistics-sessions', adminRealtimeReady.traffic ? `${statisticsTrafficSessions.length} sesión${statisticsTrafficSessions.length === 1 ? '' : 'es'}` : '—');
+  statisticsSetText('statistics-sessions', adminRealtimeReady.traffic ? `${statisticsTrafficSessions.length} ${statisticsTrafficSessions.length === 1 ? 'sesión' : 'sesiones'}` : '—');
   statisticsSetText('statistics-conversion', adminRealtimeReady.orders && adminRealtimeReady.traffic && uniqueVisitors ? `${(validOrders.length / uniqueVisitors * 100).toFixed(1)}%` : '—');
   statisticsSetText('statistics-online', adminRealtimeReady.presence ? String(activePresence.length) : '—');
   statisticsSetText('statistics-active-products', adminRealtimeReady.products ? String(activeProducts.length) : '—');
@@ -1572,7 +1572,7 @@ function renderGeneralStatistics() {
     .map(([name, value]) => ({ name, value, displayValue: value, meta: `${value} pedido${value === 1 ? '' : 's'}` }))
     .sort((a, b) => b.value - a.value));
   renderStatisticsRanking('statistics-visit-locations', [...visitLocations.entries()]
-    .map(([name, value]) => ({ name, value, displayValue: value, meta: `${value} sesión${value === 1 ? '' : 'es'}` }))
+    .map(([name, value]) => ({ name, value, displayValue: value, meta: `${value} ${value === 1 ? 'sesión' : 'sesiones'}` }))
     .sort((a, b) => b.value - a.value));
   renderStatisticsRanking('statistics-entry-pages', [...entryPages.entries()]
     .map(([name, value]) => ({ name, value, displayValue: value, meta: `${value} entrada${value === 1 ? '' : 's'}` }))
