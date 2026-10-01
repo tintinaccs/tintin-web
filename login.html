@@ -592,12 +592,9 @@ async function ensureProfileComplete(user, role) {
   phoneInput.value = '';
   usernameInput.value = '';
   dobInput.value = '';
-  // Los perfiles históricos del panel usaban `userName`; no volver a mostrar
-  // el campo si ese valor ya es el username vigente.
-  const usernameMissing = !isValidUsernameFormat(data.username || data.userName || '');
   phoneField.style.display = plan.needsPhone ? '' : 'none';
   addressField.style.display = plan.needsAddress ? '' : 'none';
-  usernameField.style.display = (plan.needsUsername || usernameMissing) ? '' : 'none';
+  usernameField.style.display = plan.needsUsername ? '' : 'none';
   dobField.style.display = plan.needsDob ? '' : 'none';
 
   let usernameAvailability = 'idle';
@@ -670,7 +667,7 @@ async function ensureProfileComplete(user, role) {
       return { known: false };
     }
   };
-  if (plan.needsUsername || usernameMissing) {
+  if (plan.needsUsername) {
     usernameInput.addEventListener('input', () => {
       window.clearTimeout(usernameCheckTimer);
       const raw = usernameInput.value.trim();
