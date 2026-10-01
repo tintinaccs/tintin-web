@@ -1,5 +1,5 @@
 import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
-import { logoUrl } from '../compartido/configuracion.js?v=tintin-20261001-reentry-timeout-1';
+import { logoUrl } from '../compartido/configuracion.js?v=tintin-20261001-cupones-shell-1';
 
 function renderTabletCategories() {
   return CATEGORIES.map(({ slug, label }) => `

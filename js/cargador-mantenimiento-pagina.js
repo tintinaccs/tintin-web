@@ -21,7 +21,7 @@ export function loadPageMaintenance() {
     const version = 'tintin-20260925-cache-converge-1-launch-20260926-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', version),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261001-cupones-shell-1'),
       load('pages/checkout/checkout-mantenimiento.js', version),
       load('pages/checkout/checkout-metodos-pago.js', version),
       load('pages/checkout/checkout-control-cuota.js', version),
@@ -29,7 +29,7 @@ export function loadPageMaintenance() {
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {
-    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261001-reentry-timeout-1');
+    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261001-cupones-shell-1');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20260908-profile-canonical-2');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');
