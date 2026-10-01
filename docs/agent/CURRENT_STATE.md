@@ -466,6 +466,17 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Reseñas con moderación previa (decisión del dueño): `createReview` crea la reseña de un cliente con `visible:false` y NO escribe el documento público `products/{id}/reviews/{id}`; el admin la publica con `reviewVisibility` (ya escribe el público). Super Admin sigue publicando directo. Aviso al admin: "envió una reseña para aprobar". Verificación: `npm run test:engagement` 45/45, PASS_LOCAL. No probado con Firestore real ni en producción.
 - Brechas vs decisiones, NO cambiadas (alto riesgo, requieren despliegue coordinado de Apps Script por el dueño): (1) el stock se descuenta/reserva al crear el pedido (`CrearPedido.gs`), la decisión es "al confirmar el pago"; (2) no existe sistema de cupones; (3) tope de 4 productos distintos por pedido (`firestore.rules`, `modelo-inventario.mjs`). Estado: PENDING (decisión de producto/despliegue).
 
+## Fase 6 — Stock se descuenta al confirmar el pago
+
+Decisión del dueño: el stock se descuenta al confirmar el pago; la última unidad la gana quien confirma.
+
+- **Modelo**: un pedido nuevo (pendiente y sin pago) ya no descuenta stock; solo valida disponibilidad y queda con `inventoryState: 'unreserved'`. Se descuenta (con las mismas precondiciones atómicas sobre el producto) cuando `paymentStatus` pasa a `pagado` o cuando el equipo avanza el estado más allá de `pendiente`. Cancelado/rechazado nunca descuentan; cancelar un pedido sin descuento no devuelve stock. Los pedidos anteriores ya `reserved` conservan su reserva. Cambios: `js/core/store/modelo-inventario.mjs` (`orderConfirmsInventory`), `cloudflare/order-admin-domain.js` (creación y mutación), `cloudflare/paypal-seguro.js` (descuenta tras capturar el pago; si el stock ya no alcanza, el cobro queda registrado y se avisa al admin con una notificación).
+- **Reglas de Firestore**: sin cambios. `unreserved` no reserva en `orderStateReservesInventory`, y todas las ediciones/estados del panel pasan por el dominio del servidor.
+- PASS_LOCAL: `tests/orders|sync|checkout|payments|public-commerce|functions` (206 pass, incluye 5 tests nuevos de este modelo), `test:paypal`, `audit:critical-healing`, `audit:level2`, `audit:admin-orders`, `audit:secure-orders`, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`.
+- NOT_VERIFIED: flujo real con PayPal/Firebase en producción.
+- Riesgo aceptado (decisión del dueño): dos clientas pueden pedir la última unidad; quien confirma primero la obtiene y la otra recibe "Stock insuficiente" al confirmar (en PayPal, aviso al admin porque el cobro ya ocurrió).
+- Pendiente: la limpieza `cleanupStalePendingOrders` y el checkout legacy de cliente siguen usando el estado `pending`; no se tocaron.
+
 ## Fase 5 — Correos de estado de pedido (rama `feat/correos-estado`)
 - Implementado: `cloudflare/correo-estado-pedido.js`. Tras cada cambio confirmado de estado del pedido (`confirmado`, `preparando`, `listo_retiro`, `en_camino`, `entregado`, `cancelado`, `rechazado`) o de pago (`pagado`, `rechazado`, `reembolsado`) se envía un correo a la clienta. Se invoca desde `admin-order-mutation` (edición de estado y de pago) y desde `sheets-admin-webhook` (`updateOrder`). Clave idempotente `order-<id>-status-<changeId>`; best-effort con `waitUntil` (un fallo de Resend no revierte el cambio). Sin `RESEND_API_KEY`, duplicado, correo inválido o sin cambio: no envía.
 - Ya existía y no se tocó: correo "Recibimos tu pedido" (clienta y dueña) con cola de reintento.
