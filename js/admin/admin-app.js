@@ -2064,9 +2064,11 @@ function loadDashboard() {
 }
 
 // ======== USUARIOS ========
-// Estados separados: una cuenta eliminada conserva un tombstone histórico,
-// pero no es un usuario bloqueado. La interfaz debe mostrarla en Eliminados,
-// nunca mezclarla con Bloqueados.
+// Dos pestañas: Usuarios (activos) y Bloqueados. La eliminación borra la
+// cuenta por completo (queda sólo la auditoría), así que no existe una lista
+// de eliminados. Un resto histórico marcado como eliminado (tombstone del
+// sistema anterior) no se muestra en ninguna de las dos: se limpia con
+// "Eliminar por correo".
 let userStatusFilter = 'active';
 let userSortMode = 'recent';
 let usersPage = 0;
@@ -2091,11 +2093,9 @@ function applyUserFilters() {
     (u.name||'').toLowerCase().includes(q) ||
     (u.email||'').toLowerCase().includes(q)
   );
-  filtered = userStatusFilter === 'deleted'
-    ? filtered.filter(u => u.deleted === true || u.profileStatus === 'deleted')
-    : userStatusFilter === 'blocked'
-      ? filtered.filter(u => u.blocked && u.deleted !== true && u.profileStatus !== 'deleted')
-      : filtered.filter(u => !u.blocked && u.deleted !== true && u.profileStatus !== 'deleted');
+  filtered = userStatusFilter === 'blocked'
+    ? filtered.filter(u => u.blocked && u.deleted !== true && u.profileStatus !== 'deleted')
+    : filtered.filter(u => !u.blocked && u.deleted !== true && u.profileStatus !== 'deleted');
   filtered = userSortMode === 'totalSpent'
     ? [...filtered].sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0))
     : userSortMode === 'purchaseCount'
@@ -2109,7 +2109,6 @@ function applyUserFilters() {
   [..._selectedUsers].forEach(uid => { if (!visibleIds.has(uid)) _selectedUsers.delete(uid); });
   renderUsersTable(filtered);
   updateBlockedCount();
-  updateDeletedCount();
   updateUsersBulkToolbar();
 }
 
@@ -2120,18 +2119,9 @@ function updateBlockedCount() {
   el.textContent = n ? `(${n})` : '';
 }
 
-function updateDeletedCount() {
-  const el = document.getElementById('users-deleted-count');
-  if (!el) return;
-  const n = allUsers.filter(u => u.deleted === true || u.profileStatus === 'deleted').length;
-  el.textContent = n ? `(${n})` : '';
-}
-
 window.filterUsersByStatus = (status) => {
   userStatusFilter = status;
   document.querySelectorAll('.user-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.userTab === status));
-  const deletedGuidance = document.getElementById('users-deleted-guidance');
-  if (deletedGuidance) deletedGuidance.hidden = status !== 'deleted';
   applyUserFilters();
 };
 
@@ -2145,9 +2135,7 @@ function renderUsersTable(users) {
     pager.innerHTML = totalPages > 1 ? `<button type="button" class="adm-btn adm-btn-sm" onclick="window.setUsersPage(${usersPage - 1})" ${usersPage <= 0 ? 'disabled' : ''}>Anterior</button><span>Página ${usersPage + 1} de ${totalPages}</span><button type="button" class="adm-btn adm-btn-sm" onclick="window.setUsersPage(${usersPage + 1})" ${usersPage >= totalPages - 1 ? 'disabled' : ''}>Siguiente</button>` : '';
   }
   if (!users.length) {
-    const emptyMsg = userStatusFilter === 'deleted'
-      ? 'No hay usuarios eliminados'
-      : userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
+    const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
     tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
@@ -2513,8 +2501,8 @@ function updateUsersBulkToolbar() {
   if (blockBtn) blockBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
   if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
   if (deleteBtn) deleteBtn.style.display = '';
-  if (roleSelect) roleSelect.style.display = userStatusFilter === 'deleted' ? 'none' : '';
-  if (roleApplyBtn) roleApplyBtn.style.display = userStatusFilter === 'deleted' ? 'none' : '';
+  if (roleSelect) roleSelect.style.display = '';
+  if (roleApplyBtn) roleApplyBtn.style.display = '';
 }
 
 window.clearUsersSelection = function() {
@@ -2591,10 +2579,8 @@ window.bulkBlockUsers = async function() {
 window.bulkRestoreUsers = async function() {
   if (!_selectedUsers.size) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
-  if (userStatusFilter === 'deleted') {
-    toast('Las cuentas eliminadas no se reactivan. Eliminalas por completo para liberar el correo; la persona debe registrarse nuevamente.');
-    return;
-  }
+  // Las cuentas eliminadas no se reactivan desde acá: se borran por completo
+  // y la persona debe registrarse nuevamente (vuelve como cuenta nueva).
   const selected = [..._selectedUsers].map(uid => allUsers.find(x => x.uid === uid)).filter(Boolean);
   const ids = selected.filter(u => {
     return u && u.email !== SUPER_ADMIN && u.blocked && u.deleted !== true && u.profileStatus !== 'deleted';

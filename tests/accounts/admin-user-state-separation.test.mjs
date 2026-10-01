@@ -5,11 +5,13 @@ import fs from 'node:fs';
 const admin = fs.readFileSync('js/admin/admin-app.js', 'utf8');
 const html = fs.readFileSync('admin.html', 'utf8');
 
-test('Usuarios separa activos, bloqueados y eliminados', () => {
+test('Usuarios tiene sólo dos pestañas: activos y bloqueados (sin Eliminados)', () => {
   assert.match(html, /data-user-tab="active"/);
   assert.match(html, /data-user-tab="blocked"/);
-  assert.match(html, /data-user-tab="deleted"/);
-  assert.match(admin, /userStatusFilter === 'deleted'/);
-  assert.match(admin, /u\.blocked && u\.deleted !== true/);
-  assert.match(admin, /u\.deleted === true \|\| u\.profileStatus === 'deleted'/);
+  assert.doesNotMatch(html, /data-user-tab="deleted"/);
+  assert.doesNotMatch(admin, /userStatusFilter === 'deleted'/);
+  // Un resto histórico eliminado nunca se mezcla con activos ni bloqueados.
+  assert.match(admin, /u\.blocked && u\.deleted !== true && u\.profileStatus !== 'deleted'/);
+  assert.match(admin, /!u\.blocked && u\.deleted !== true && u\.profileStatus !== 'deleted'/);
+  assert.match(html, /id="users-delete-by-email-btn"/);
 });
