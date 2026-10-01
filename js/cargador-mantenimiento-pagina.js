@@ -29,7 +29,7 @@ export function loadPageMaintenance() {
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {
-    return load('pages/login/mantenimiento-acceso.js', 'tintin-20260925-cache-converge-1-launch-20260926-1');
+    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261001-reentry-timeout-1');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20260908-profile-canonical-2');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');

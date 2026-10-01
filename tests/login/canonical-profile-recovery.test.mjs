@@ -37,5 +37,5 @@ test('un login existente no degrada active o incomplete a legacy', () => {
 
 test('el login de un perfil existente sólo sincroniza metadata salvo bootstrap realmente legacy', () => {
   assert.match(profileStore, /const identityPatch = \{[\s\S]*?updatedAt:[\s\S]*?lastLogin:[\s\S]*?lastAuthMethod:[\s\S]*?authMethods/);
-  assert.match(profileStore, /await setDoc\(ref, identityPatch, \{ merge: true \}\)/);
+  assert.match(profileStore, /await withProfileDeadline\(\(\) => setDoc\(ref, identityPatch, \{ merge: true \}\), 'write'\)/);
 });
