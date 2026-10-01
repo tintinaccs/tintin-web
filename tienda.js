@@ -398,7 +398,7 @@ function renderCart() {
     <div class="tt-cart-price-notice" role="status" style="margin:0 0 12px;padding:10px 12px;border-radius:10px;background:#fff4e5;color:#7a4a00;font-size:.8rem;line-height:1.4">
       <strong>Cambió el precio de tu carrito:</strong>
       <ul style="margin:6px 0 0;padding-left:18px">${cartPriceNotice.map(c => `<li>${escapeHtml(c.name)}: ${formatPrice(c.from)} → ${formatPrice(c.to)}</li>`).join('')}</ul>
-      <button type="button" data-cart-action="dismiss-price-notice" style="margin-top:8px;background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font:inherit">Entendido</button>
+      <button type="button" data-cart-action="dismiss-price-notice" style="margin-top:8px;background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font-family:Montserrat;font-size:inherit">Entendido</button>
     </div>` : '';
   const favorites = window.TintinFavorites?.getAll?.() || [];
   const favoritesHtml = favorites.length ? `
