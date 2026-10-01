@@ -2,6 +2,7 @@ import {
   decodeFirestoreFields,
   encodeFirestoreFields,
   firestoreAdminGet,
+  firestoreAdminFindFirstByFields,
 } from './firebase-admin-ligero.js';
 import { firestoreAdminBatchCommit } from './firestore-admin-batch.js';
 import {
@@ -182,6 +183,9 @@ function auditSummary(order) {
     paymentStatus: order?.paymentStatus || order?.payment?.status || 'pendiente',
     total: Number(order?.total || 0),
     inventoryState: order?.inventoryState || '',
+    orderNumber: clean(order?.orderNumber || order?.shortId, 80),
+    shortId: clean(order?.shortId || order?.orderNumber, 80),
+    orderSequenceNumber: Math.max(0, Math.floor(Number(order?.orderSequenceNumber || 0))),
   };
 }
 
@@ -199,6 +203,33 @@ function actorContext(input, actor) {
 function formatOrderNumber(number) {
   const n = Math.max(1, Math.floor(Number(number) || 1));
   return `TINPED${String(n).padStart(2, '0')}`;
+}
+
+async function orderNumberWasIssued(env, orderNumber, findFirst = firestoreAdminFindFirstByFields) {
+  const code = clean(orderNumber, 80);
+  if (!code) return false;
+  const sources = [
+    ['orders', ['orderNumber', 'shortId']],
+    ['orderTrash', ['orderNumber', 'shortId']],
+    ['auditLog', ['after.orderNumber', 'after.shortId']],
+  ];
+  for (const [collectionId, fields] of sources) {
+    if (await findFirst(env, collectionId, fields, code)) return true;
+  }
+  return false;
+}
+
+async function allocateOrderSequence(env, sequence = {}, findFirst = firestoreAdminFindFirstByFields) {
+  const highWaterMark = Math.max(
+    0,
+    Math.floor(Number(sequence.lastNumber || 0)),
+    Math.floor(Number(sequence.highWaterMark || 0)),
+  );
+  for (let number = highWaterMark + 1, checked = 0; checked < 500; number += 1, checked += 1) {
+    const code = formatOrderNumber(number);
+    if (!await orderNumberWasIssued(env, code, findFirst)) return { number, code };
+  }
+  throw creationError('No se pudo reservar un código TINPED único.', 'order_sequence_exhausted');
 }
 
 async function resolveCanonicalCreationItems(env, rawItems, get) {
@@ -233,7 +264,7 @@ async function resolveCanonicalCreationItems(env, rawItems, get) {
   return { items, byProduct, documents };
 }
 
-async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
+async function createOrderAttempt(env, input, actor, { get, commit, inspect, findFirst }) {
   const context = actorContext(input, actor);
   const status = normalizedStatus(input.status || 'pendiente');
   const paymentStatus = normalizedPaymentStatus(input.paymentStatus || input.payment?.status || 'pendiente');
@@ -265,8 +296,9 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
 
   const sequenceDocument = await get(env, 'settings/orderSequence');
   const sequence = sequenceDocument ? decodeFirestoreFields(sequenceDocument.fields || {}) : {};
-  const sequenceNumber = Math.max(0, Math.floor(Number(sequence.lastNumber || 0))) + 1;
-  const orderNumber = formatOrderNumber(sequenceNumber);
+  const allocatedSequence = await allocateOrderSequence(env, sequence, findFirst);
+  const sequenceNumber = allocatedSequence.number;
+  const orderNumber = allocatedSequence.code;
   const orderId = requestedOrderId || `manual_${crypto.randomUUID().replaceAll('-', '')}`;
   const now = new Date();
   const changeId = clean(input.changeId, 120) || makeChangeId(context.origin.includes('sheets') ? 'sheet_create' : 'admin_create');
@@ -423,6 +455,7 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
 
   const sequencePatch = {
     lastNumber: sequenceNumber,
+    highWaterMark: sequenceNumber,
     lastCode: orderNumber,
     updatedAt: now,
     updatedBy: context.email,
@@ -474,12 +507,17 @@ export async function createOrderAdmin(
   env,
   input = {},
   actor = {},
-  { get = firestoreAdminGet, commit = firestoreAdminBatchCommit, inspect = null } = {},
+  {
+    get = firestoreAdminGet,
+    commit = firestoreAdminBatchCommit,
+    inspect = null,
+    findFirst = firestoreAdminFindFirstByFields,
+  } = {},
 ) {
   let lastError = null;
   for (let attempt = 1; attempt <= MAX_CREATE_ATTEMPTS; attempt += 1) {
     try {
-      return await createOrderAttempt(env, input, actor, { get, commit, inspect });
+      return await createOrderAttempt(env, input, actor, { get, commit, inspect, findFirst });
     } catch (error) {
       lastError = error;
       if (Number(error?.status) !== 409 || attempt === MAX_CREATE_ATTEMPTS) throw error;
@@ -488,23 +526,29 @@ export async function createOrderAdmin(
   throw lastError || new Error('No se pudo crear el pedido.');
 }
 
-// La secuencia es autoridad de Firestore. Nunca se reinicia desde el
-// navegador: el siguiente pedido (web o Sheets) leerá este mismo documento y
-// su espejo de Sheets recibirá el TINPED canónico al crearse.
+// Compatibilidad con el endpoint histórico "resetOrderSequence": desde 2026-10-01
+// la secuencia TINPED es monotónica y esta acción ya no puede reducirla.
 export async function resetOrderSequenceAdmin(
   env,
   actor = {},
   { get = firestoreAdminGet, commit = firestoreAdminBatchCommit } = {},
 ) {
-  const context = actorContext({ source: 'superadmin-sequence-reset' }, actor);
+  const context = actorContext({ source: 'superadmin-sequence-protect' }, actor);
   const document = await get(env, 'settings/orderSequence');
+  const sequence = document ? decodeFirestoreFields(document.fields || {}) : {};
+  const current = Math.max(
+    0,
+    Math.floor(Number(sequence.lastNumber || 0)),
+    Math.floor(Number(sequence.highWaterMark || 0)),
+  );
   const now = new Date();
-  const eventId = makeChangeId('order_sequence_reset');
+  const eventId = makeChangeId('order_sequence_protect');
   const patch = {
-    lastNumber: 0,
-    lastCode: '',
-    resetAt: now,
-    resetBy: context.email,
+    lastNumber: current,
+    highWaterMark: current,
+    lastCode: current > 0 ? formatOrderNumber(current) : clean(sequence.lastCode, 80),
+    resetBlockedAt: now,
+    resetBlockedBy: context.email,
     updatedAt: now,
     updatedBy: context.email,
     syncOrigin: context.origin,
@@ -513,23 +557,29 @@ export async function resetOrderSequenceAdmin(
     {
       path: 'settings/orderSequence',
       fields: encodeFirestoreFields(patch),
-      mergeFields: Object.keys(patch),
-      currentDocument: precondition(document),
+      ...(document ? { mergeFields: Object.keys(patch) } : {}),
+      currentDocument: createPrecondition(document),
     },
     {
       path: `auditLog/${eventId}`,
       fields: encodeFirestoreFields({
         eventId,
-        action: 'reset_order_sequence',
+        action: 'protect_order_sequence',
         entity: 'settings/orderSequence',
-        actorUid: context.uid,
+        actorUid: context.id,
         actorEmail: context.email,
         createdAt: now,
-        details: 'Secuencia TINPED reiniciada; los pedidos históricos no se modifican.',
+        details: 'La secuencia TINPED es monotónica; no se permite reiniciarla ni reutilizar códigos históricos.',
       }),
+      currentDocument: { exists: false },
     },
   ]);
-  return { reset: true, nextOrderNumber: formatOrderNumber(1), sequence: patch };
+  return {
+    reset: false,
+    protected: true,
+    nextOrderNumber: formatOrderNumber(current + 1),
+    sequence: { ...sequence, ...patch },
+  };
 }
 
 export async function applyOrderAdminMutation(
