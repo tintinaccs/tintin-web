@@ -71,7 +71,8 @@ const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 
   const googleHandoffKeepsOverlay =
     googlePopupPath &&
   login.includes('showOverlay()') &&
-  /setOverlayText\(['"](?:Entrando…|Redireccionando a tu cuenta…|Completando el inicio de sesión con Google…)['"]\)/.test(login) &&
+  login.includes('window.TintinLoader?.beginWait()') &&
+  login.includes("setOverlayText('')") &&
   login.includes('await finishGoogleLogin(cred.user)');
 
 const cartWaitsForAuthRestore =
@@ -94,7 +95,7 @@ const checks = [
   ['Loader de Login muestra la marca oficial completa', loginLoaderVisible && officialLogoImmediate],
     ['Google usa popup como camino principal', googlePopupPath],
   ['Google mantiene loader hasta terminar el handoff', googleHandoffKeepsOverlay],
-  ['OTP mantiene loader hasta terminar el handoff', login.includes("setOverlayText('Verificando tu código…')") && login.includes('await finishOtpLogin(user)')],
+  ['OTP mantiene loader hasta terminar el handoff', login.includes('window.TintinLoader?.beginWait()') && login.includes('await finishOtpLogin(user)')],
   ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
   ['Retorno de Google se completa una sola vez y sin bucle', login.includes('getRedirectResult(auth)') && login.includes('GOOGLE_REDIRECT_PENDING_KEY') && login.includes('handleGoogleRedirectReturn(user)')],
   ['Solo el correo oficial entra automáticamente al panel', login.includes("normalizedEmail === SUPER_ADMIN.toLowerCase()") && login.includes("window.location.replace('admin.html')")],

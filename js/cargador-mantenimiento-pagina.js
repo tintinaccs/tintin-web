@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260925-cache-converge-1-launch-20260926-1';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-admin-ready-20261002-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
