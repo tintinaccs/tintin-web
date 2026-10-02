@@ -1414,12 +1414,17 @@ async function bootForUser(user) {
   if (!user || user.isAnonymous) return;
   state.user = user;
   commerceAuthRecoveryAttempted = false;
+  // Ninguna lectura privada debe adelantarse al gate. Antes loadRolePermissions
+  // y getUserRole podían tocar Firestore durante la propagación de la
+  // credencial restaurada, aunque subscribeData sí esperara App Check.
+  if (!await waitForAdminAppCheck(12000)) return;
+  if (state.user?.uid !== user.uid) return;
   await loadRolePermissions();
   state.role = await getUserRole(user.uid, user.email);
+  if (state.user?.uid !== user.uid) return;
   state.ready = true;
   mountShells();
   observeLegacyForms();
-  if (!await waitForAdminAppCheck(12000)) return;
   subscribeData();
 }
 
