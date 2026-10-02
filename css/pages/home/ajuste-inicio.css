@@ -582,7 +582,7 @@ html body.tt-home-premium .tt-hero-media .tt-hero-img {
   html body.tt-home-premium .tt-hero {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "content" "media";
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto !important;
     gap: 26px;
     min-height: 0;
     height: auto !important;

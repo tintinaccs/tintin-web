@@ -21,7 +21,7 @@ test('el hero contiene texto e imagen sin recorte al cambiar de escritorio a mó
   const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
   const hero = home.match(/<section class="tt-hero"[\s\S]*?<\/section>/)?.[0];
   assert.ok(hero);
-  const css = await Promise.all(['styles.min.css', 'css/pages/home/hero-bienvenida-inicio.css', 'css/pages/home/ajuste-inicio.css', 'css/theme/paridad-segura-tintin.css'].map(file => fs.readFile(path.join(root, file), 'utf8')));
+  const css = await Promise.all(['styles.min.css', 'css/pages/home/hero-bienvenida-inicio.css', 'css/pages/home/ajuste-inicio.css', 'css/theme/paridad-segura-tintin.css', 'css/components/navigation/compartido/paneles.css'].map(file => fs.readFile(path.join(root, file), 'utf8')));
   const browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
   try {
     const page = await browser.newPage({ reducedMotion: 'reduce' });
@@ -48,6 +48,7 @@ test('el hero contiene texto e imagen sin recorte al cambiar de escritorio a mó
       assert.ok(geometry.scrollWidth <= width + 2, `Overflow a ${width}`);
       assert.ok(geometry.contentLeft > geometry.heroLeft + 10, `Sin margen de lectura a ${width}`);
       if (width <= 1023) assert.ok(geometry.mediaTop - geometry.actionsBottom <= 48, `Espacio vacío excesivo a ${width}: ${JSON.stringify(geometry)}`);
+      if (width <= 1023) assert.ok(geometry.mediaTop - geometry.actionsBottom >= 20, `CTA y foto demasiado cerca a ${width}: ${JSON.stringify(geometry)}`);
       if (width < 768) assert.ok(geometry.mediaTop >= geometry.contentBottomRaw, `Imagen y contenido se pisan a ${width}`);
     }
   } finally { await browser.close(); }
