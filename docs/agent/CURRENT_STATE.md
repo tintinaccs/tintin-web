@@ -1,5 +1,37 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Cierre de CI del PR #1001 (permisos Firebase/App Check) — 2026-10-01/02 (rama `fix/firebase-permissions-recovery-20261001`)
+
+**Alcance de este ciclo: no se tocó el fix de autorización ya presente en el PR #1001.** Esa rama (abierta por el propio dueño, commits `271c752d`…`b66baa10`) ya contenía el diagnóstico y la corrección correctos para "panel dice SUPER ADMIN pero Firestore devuelve `permission-denied`": ver detalle en su propia nota de `docs/agent/CURRENT_STATE.md` (sección "Recuperación permisos/App Check") y en el cuerpo del PR. Este ciclo auditó ese diagnóstico, lo verificó con pruebas reales y desbloqueó su CI, que estaba en rojo.
+
+**Causa raíz confirmada por lectura de código (no solo hipótesis):** `firestore.rules` → `isSuperAdmin()` se basa en `request.auth.token.email == "tintinaccs@gmail.com"` (no en custom claims; el repo no despliega Firebase Functions/Admin SDK, así que no hay otra forma de fijar un claim de rol). Ese campo lo llena Firebase Auth automáticamente al autenticar, así que el rol en sí no es la causa del `permission-denied`. La causa real son módulos que montaban listeners/escrituras de Firestore sin esperar un App Check verificado (`waitForAdminAppCheck`), y que al fallar la lectura: (a) reintentaban notificaciones cada ~1.4 s sin límite aunque el error fuera permanente, y (b) convertían un error de lectura en "0 productos/colecciones/pedidos" indistinguible de una base vacía. Confirmado también que `settings/appearance` e `imageDefaults` son de lectura pública en las Rules — un `permission-denied` ahí tampoco es un problema de rol sino de la misma causa de App Check/escritura.
+
+**Lo que corrigió el PR #1001 (ya en la rama, no modificado por este ciclo):** gate estricto de App Check en Cupones y en los módulos privados de Configuración/Apariencia/Contenido/Correo/Métodos de pago; corte del reintento automático de Notificaciones ante `permission-denied`/`unauthenticated` (se reactiva solo con reautenticación real vía `subscribeAuthState`, no con un timer); "Mi perfil" deja de consultar pedidos si App Check resolvió no disponible y se recupera con el evento `tintin:app-check-ready`; Productos/Colecciones/Pedidos del admin separan `error` de `empty` y ya no muestran "0" por una lectura fallida; el panel de Flujo de conexiones separa explícitamente claims del ID token (`email`, `aud`) de la autorización real de Firestore.
+
+**Lo que corrigió este ciclo (CI estaba en rojo, nunca llegó a correr los gates de navegador/reglas):**
+- `diagnostic-manifest.json` estaba desincronizado con el código del último commit del PR (`b66baa10`) → fallaba el paso "Reject generated artifact drift". Se regeneró con `npm run build:pages`.
+- `scripts/auditar-superadmin-cierre-total.mjs` exigía que `notificaciones-admin.js` se sirviera con un tag de caché que contuviera `notifications-(auto-read|rich)` o `global-session-restore`; el bump legítimo de este PR a `?v=tintin-20261001-firebase-permissions-1` (por el fix real del bucle de reintento) no matcheaba ese patrón viejo y el check fallaba (72/73) aunque el contenido era correcto. Se amplió el regex para aceptar también `firebase-permissions` como evidencia de que el tag es posterior a una corrección real (no una reversión silenciosa). No se tocó `admin.html`: el `?v=` ya era correcto, solo la auditoría estaba desactualizada.
+- Se instaló Temurin JDK 21 en este entorno (no estaba disponible) para poder ejecutar realmente el emulador de Firestore en local, en vez de dejar esos checks como NOT_VERIFIED.
+
+**Verificación local real (este commit, `57f96f75`), no solo "compiló":**
+- `node --test` sobre todos los `tests/**/*.test.{mjs,js}`: **751/751 PASS**, incluye las 5 regresiones nuevas de `tests/admin/firebase-permission-recovery.test.mjs`.
+- `npm run build:pages` y `git diff --exit-code -- .`: **sin drift**.
+- `npm run audit:final`: **PASS** (832 checks de Fase 11 incluidos).
+- Firestore real contra el emulador (Java 21 instalado en esta sesión): `test:rules-critical` 78/78, `test:rules-phone` 12/12, `test:rules-username` 13/13 — **todos PASS**, incluida la verificación adversarial de que un usuario no-superadmin no puede escribir donde no debe.
+- Los 6 scripts de "Super Admin master contracts": **PASS**, incluido `auditar-superadmin-cierre-total.mjs` ahora en **73/73** (antes 72/73).
+- `scripts/auditar-preparacion-dominio.mjs` y `scripts/auditar-integraciones-canonicas.mjs`: PASS.
+- `backup-firestore.mjs --dry-run` y `restore-firestore.mjs --dry-run`: PASS (no tocan Firestore real).
+- Gates de navegador (Chromium real vía Playwright, servidor estático local en el commit exacto): `test:admin-operations-browser` 2/2, `test:navigation-header` 10/10 (+1 skip preexistente no relacionado), `test:cart-quantity-browser` 1/1 (incluye el caso de stock=3 con botón `+` deshabilitado correctamente en el límite), `test:phase8-ui` 2/2, `test:phase10-a11y` 5/5, `test:phase11-seo` 6/6, `test:performance` 30/30, `audit:canonical-viewports` 126/126, `audit:global-responsive-geometry` 187/187, `test:pages` 18 rutas OK, `auditar-legal-paginas.js` OK. **Esto reproduce exactamente la secuencia completa de `.github/workflows/auditar-tintin.yml`.**
+- Commit `57f96f75` empujado a `origin/fix/firebase-permissions-recovery-20261001` (PR #1001); CI de GitHub Actions debería volver a correr sobre ese SHA. No se hizo merge ni deploy.
+
+**Hallazgos del resto del alcance pedido, sin cambios de código porque ya están correctos o no son reproducibles desde el repo:**
+- El botón `+` de cantidad en producto (`tienda.js`) se deshabilita exactamente cuando `_pdQty >= _pdMaxQty` y `_pdMaxQty = Math.max(stock, 0)`; cuando el límite es por stock bajo, el texto `qty-stock` muestra "Solo N disponibles" junto al control. No hay bug: el límite ya es explicable para el usuario. Cubierto por `tests/cart/quantity-browser.spec.js`.
+- Los textos `PAGO SEGUROOXSD`, `opiniónes` y `sesiónes` reportados por el dueño **no existen en el código fuente actual** (grep de todo el repo, cero coincidencias). Confirma el hallazgo de la nota anterior del 2026-10-01: si el dueño los vio, es contenido remoto/caché de un build/CDN anterior, no algo que este repo pueda corregir sin verlo reproducido en vivo.
+- Reglas de Firestore **desplegadas en producción vs. las del repo**: su publicación es manual (`firebase deploy --only firestore:rules`, workflow "Publicar reglas Firestore") y esta sesión no tiene credenciales/acceso a la consola de Firebase ni al proyecto real `tintin-accesorios` — **NOT_VERIFIED**, no asumir que coinciden. Es el mismo bloqueo que ya documentaban los ciclos anteriores.
+- Producción real (Pages, Firebase Auth real, usuarios reales, App Check en el dominio real): **NOT_VERIFIED** en esta sesión, sin credenciales de navegador autenticado ni acceso a Cloudflare/Firebase console. Todo lo reportado arriba es evidencia de código + emulador + navegador local contra el commit exacto, no contra producción.
+
+**Pendiente real:** confirmar en CI de GitHub (no solo local) que los 5 checks vuelven a verde para `57f96f75`; validar en preview/producción autenticada que un login real de `tintinaccs@gmail.com` deja de ver `permission-denied` en Productos/Colecciones/Pedidos/Notificaciones/Apariencia/Mi perfil; decidir si se quiere mergear el PR #1001 (esta sesión no mergea sin autorización explícita).
+
 ## Cierre del cuestionario del dueño — 2026-10-01 (rama `feat/cuestionario-cierre`)
 
 **Comprobación respuesta por respuesta, sólo en código y tests locales; nada probado en producción.** El detalle está en `docs/agent/DECISIONES_CUESTIONARIO.md`. Lo que estaba marcado FALTA/REVISAR quedó implementado en #991-#998 o confirmado ya existente: botón de pago del admin, sin pago preseleccionado, sin aviso de poco stock, archivado por `active:false`, horario en el pie, sesión persistente sin límite de inactividad del admin, push a todos los dispositivos con sonido, y la clienta sin permiso para editar pedidos.
@@ -513,3 +545,27 @@ Decisión del dueño: el stock se descuenta al confirmar el pago; la última uni
 - Verificado por código: etiqueta "Agotado" existe (tienda.js, catalogo.html); no existe aviso de poco stock (decisión: no mostrar).
 - Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
 - Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.
+
+## 2026-10-01 — Recuperación permisos/App Check (GPT-5.6 Sol)
+
+Estado: **IN_PROGRESS / NOT_VERIFIED en producción**.
+
+Evidencia del código base:
+- `firestore.rules` reconoce al Super Admin por el email autenticado `tintinaccs@gmail.com` y permite sus lecturas administrativas.
+- `settings/appearance` e `settings/imageDefaults` tienen lectura pública en las Rules del repo; un `permission-denied` del navegador sobre esas superficies no se explica sólo por el rol del Super Admin.
+- El cliente y el service worker apuntan al proyecto `tintin-accesorios`.
+- App Check usa reCAPTCHA Enterprise y Firestore depende de un token válido cuando enforcement está activo.
+- Producción puede diferir de las Rules del repo porque su publicación es manual; desde este ciclo no se ejecutó deploy.
+
+Cambios de esta rama:
+- Notificaciones Admin ya no reintentan en bucle listeners rechazados con `permission-denied`/`unauthenticated`.
+- Cupones, que antes podía montar Firestore sin gate de App Check, ahora espera el gate estricto `waitForAdminAppCheck`.
+- Mi perfil no inicia consultas de pedidos cuando App Check resolvió no disponible y reintenta cuando llega el evento real `tintin:app-check-ready`.
+- Productos/Colecciones/Pedidos distinguen `error` de `empty`; los totales dejan de mostrar 0 como si la consulta hubiera sido válida.
+- Flujo de conexiones separa renovación/claims del ID token de la autorización de Firestore y comprueba email/proyecto sin exponer el token.
+
+Pendiente de evidencia:
+- Ejecutar CI del PR.
+- Confirmar en preview autenticado que App Check obtiene token y que las lecturas privadas funcionan.
+- Comparar/publicar Rules en Firebase sólo con autorización de deploy; este ciclo no despliega.
+- Los textos `PAGO SEGUROOXSD`, `opiniónes` y `sesiónes` no aparecen en el código actual y pueden residir en contenido remoto/cache; no se modifican datos reales sin una operación explícitamente autorizada.
