@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "766bd70966c47275795926fa211b4de8d5d1b13141cb2668922c919feadf398a",
+  "sourceFingerprint": "20881d69dfed1fd48acf49b90f370b2e927534f060c982c491ef2ecafde3bc57",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 942,
     "textFiles": 901,
-    "totalBytes": 18162077,
+    "totalBytes": 18162169,
     "pages": 19,
     "modules": 650
   },
@@ -28586,8 +28586,8 @@
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
-      "bytes": 10316,
-      "sha256": "84a73b3fc55bd8b23dc1eb28e5af5118b89ee4d6e023174423b0d7ac7febee99",
+      "bytes": 10408,
+      "sha256": "29496d38105e257d205971eb66579e12153a5fbc490abf09788850eacf7db55c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28597,7 +28597,7 @@
           "raw": "./control-busqueda.js?v=",
           "target": "scripts/control-busqueda.js",
           "dynamic": true,
-          "line": 95
+          "line": 99
         }
       ],
       "endpoints": []
@@ -40256,8 +40256,8 @@
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 10316,
-      "sha256": "84a73b3fc55bd8b23dc1eb28e5af5118b89ee4d6e023174423b0d7ac7febee99"
+      "bytes": 10408,
+      "sha256": "29496d38105e257d205971eb66579e12153a5fbc490abf09788850eacf7db55c"
     },
     {
       "path": "scripts/auditar-inicio-pagina.js",

@@ -89,7 +89,11 @@ const runtime = read('js/components/navigation/compartido/carga-navegacion.js');
 check(runtime.includes("components/navigation/escritorio/indicador-navegacion-escritorio.js"), 'runtime: falta indicador de navegación de escritorio');
 check(runtime.includes("components/navigation/tableta/control-menu-tableta.js"), 'runtime: falta control del menú de tableta');
 check(runtime.includes("components/navigation/movil/indicador-navegacion-movil.js"), 'runtime: falta indicador de navegación móvil');
-check(runtime.includes("components/navigation/compartido/carga-colecciones.js"), 'runtime: colecciones todavía dependen del archivo legado');
+check(
+  runtime.includes("components/navigation/compartido/carga-colecciones.js")
+    || runtime.includes("const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v="),
+  'runtime: colecciones todavía dependen del archivo legado'
+);
 check(
   runtime.includes("components/navigation/compartido/control-busqueda.js")
     || runtime.includes("import('./control-busqueda.js?v="),
