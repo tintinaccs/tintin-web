@@ -5,12 +5,12 @@
 Síntoma reportado por el dueño (consola del admin): `Missing or insufficient permissions` en casi todas las lecturas (incluidas `settings/appearance`, `products`, `collections`) y `502` de `/api/master-diagnostics` con "GitHub alcanzó temporalmente el límite de consultas".
 
 Evidencia (solo lecturas, sin escrituras ni datos reales):
-- `settings/appearance` tiene `allow read: if true` en `firestore.rules` desde #917 (2026-09-25). Que ese documento también falle prueba que la denegación **no** depende de reglas de rol ni de la versión de reglas publicada: Firestore rechaza la petición antes de evaluar reglas, lo que corresponde a App Check en modo enforcement sin token válido.
+- `settings/appearance` tiene `allow read: if true` en las reglas del repositorio desde #917 (2026-09-25). Su denegación hace probable un problema de App Check, pero no prueba la causa ni permite descartar reglas desplegadas distintas: falta comparar la consola y medir el intercambio de reCAPTCHA Enterprise.
 - `firestore.rules`, `js/core/firebase/firebase.js` y la directiva `connect-src` de la CSP no cambiaron en #996/#1000/#1001/ab260e61; la CSP servida en producción permite `*.googleapis.com`, `*.google.com` y `*.gstatic.com`.
 - reCAPTCHA Enterprise acepta el dominio: el `anchor` de la clave `6Ldh…` para `https://tintinaccesorios.pages.dev` devuelve `recaptcha-token`.
 - REST de Firestore sin token App Check → 403 `PERMISSION_DENIED` (esperable con enforcement; no distingue causa).
 - Producción sirve exactamente `origin/main` (`diagnostic-manifest.json` idéntico, `3dee5626`).
-- `/api/master-diagnostics` usa `Authorization: Bearer` cuando existe `GITHUB_TOKEN`; el mensaje de límite corresponde al límite anónimo de GitHub, es decir, una implementación de Cloudflare que todavía no tenía el secreto. Los secretos solo se aplican en implementaciones nuevas.
+- `/api/master-diagnostics` usa `Authorization: Bearer` cuando existe `GITHUB_TOKEN`. El mensaje de límite no basta para demostrar que falta el secreto en el runtime; hay que verificar su presencia, el despliegue y la respuesta autenticada. Los secretos solo se aplican en implementaciones nuevas.
 
 Estado: **NOT_VERIFIED / requiere acción en consola**. No se hizo cambio de código porque no hay defecto en el repo que lo explique; alterar el gate de App Check o las reglas sería maquillar el síntoma. Pendiente: confirmar `window.TintinAppCheckStatus` en el navegador del dueño, revisar Firebase Console → App Check (registro de la app web con reCAPTCHA Enterprise y métricas de solicitudes no verificadas de Cloud Firestore) y la cuota/facturación de reCAPTCHA Enterprise en Google Cloud; luego verificar el Diagnóstico Maestro después de una implementación posterior al guardado del secreto.
 
@@ -596,3 +596,23 @@ Pendiente de evidencia:
 - Confirmar en preview autenticado que App Check obtiene token y que las lecturas privadas funcionan.
 - Comparar/publicar Rules en Firebase sólo con autorización de deploy; este ciclo no despliega.
 - Los textos `PAGO SEGUROOXSD`, `opiniónes` y `sesiónes` no aparecen en el código actual y pueden residir en contenido remoto/cache; no se modifican datos reales sin una operación explícitamente autorizada.
+
+## Cierre post-#1002 — runtime producción, Auth/App Check, ubicación y pendientes — 2026-10-02
+
+Evidencia de Codex en el Chrome del dueño y consultas HTTP de solo lectura, 2026-10-02 11:46 UTC; base `origin/main@3dee5626f4da4ab9889a72d15da19d2eac510035`. No se heredan verificaciones históricas de preview a producción.
+
+- F0: **BLOCKED**. #1002 sigue abierto y no mergeado (`8ba0f0d9`); se pasó de draft a revisión, sin merge. GitHub informa conflictos en `admin.html`, `diagnostic-manifest.json` y `scripts/cache-version-baseline.json`. No se creó la rama post-#1002 ni se copiaron sus cambios a main.
+- A1–A4: **BLOCKED**. Firebase Console, con la cuenta actual, informa que el proyecto no existe o no hay permisos. La capacidad CDP pide actualizar la extensión y no permitió capturar HTTP/error del intercambio Enterprise. La evaluación aislada retornó `undefined` para `window.TintinAppCheckStatus`; no se acepta como medición del contexto real. Se observaron datos en Dashboard y Productos, pero eso no certifica rol Super Admin, token válido, ausencia de errores ni todas las pestañas. Pendiente: cuenta del dueño en consola y medición real, sin registrar tokens; cualquier cambio mantiene P1.
+- B1–B4: **BLOCKED** por acceso a consola. No se compararon ni publicaron reglas. No hay respaldo de reglas desplegadas; P2 sigue pendiente.
+- C1: presencia de `GITHUB_TOKEN` confirmada por su nombre en Variables y secretos, entorno Producción; ningún valor leído. C2/C3 siguen **BLOCKED** hasta repetir el commit actual y verificar el endpoint autenticado.
+- Producción/main: **VERIFIED_FIXED** para la coincidencia del manifiesto; SHA-256 de ambos `063788ba4c001cfebe4a89dc4988f91f0e5bb640e3dd60f06b2a5e707abebd39`. Cloudflare muestra Production/main `3dee562`, deployment `ff14b86c-8ca4-4e9b-a748-0ae133e74a1c`.
+- E4 monitor: **VERIFIED_FIXED** para su contrato HTTP. `npm run monitor:production` terminó exit 0, con catálogo, ficha de muestra, metadatos, headers, sitemaps y APIs correctos. No certifica compras, correos, App Check ni lecturas privadas autenticadas.
+- F09: **STILL_FAILING** respecto de los marcadores pedidos: el `tienda.js` servido no contiene las dos líneas de validación de email. No se envió WhatsApp ni se ejecutó la prueba de apertura stubeada.
+- F14: **STILL_FAILING**. En el DOM de home, después de cargar, se ve `PAGO SEGUROOXSD`; no aparece en HTML inicial ni en los dos JS consultados (`tienda.js`, `contenido-sitio.js`). El endpoint público de Visual Builder de index tampoco contiene ese texto. El renderer de `site_content/index` sí es una fuente remota posible; falta lectura directa para atribuir el campo exacto. En Dashboard también se observó `sesiónes`. No se modificó contenido real.
+- F15: **STILL_FAILING**. El H1 del HTML inicial es `Un detalle <span class="tt-hero-title-line--accent">cambia todo.</span>`; el DOM posterior muestra `DETALLES QUE ELEVAN TU ESTILO`. La corrección de fallback aún depende de #1002.
+- CSP /perfil: **STILL_FAILING**. Revalidación con If-None-Match devuelve 304, sin `X-Tintin-CSP` y sin `https://api.cloudinary.com` en CSP. No se subió foto.
+- F01–F08/F10–F13/F17, robustez, ubicación F4 y F5: **BLOCKED** para el cierre post-#1002. No se afirma prueba de mocks, pestañas, Slow 3G, geolocalización ni sellos verdes. No se selló el flujo.
+- D1 #1003: **STILL_FAILING** al inicio, 4/5 checks; Repository audit run `36999431240` falla en Reject generated artifact drift porque cambió CURRENT_STATE y no se regeneró el manifiesto. Corrección por generador canónico en curso; merge sólo con CI verde y sin hilos abiertos.
+- D3/D4 #984/#940: **BLOCKED** para merge; ambos abiertos, anteriores a main y con conflictos. P3 sigue pendiente. #929 y #985 no se tocaron.
+- F6 negocio/F18/dominio: **BLOCKED** hasta decisiones específicas y evidencia requerida. No se moderó reseña, no se usó PayPal ni se tocó DNS/Shopify.
+- F7–F10: el PR post-#1002 no corresponde mientras F0 esté bloqueado. Esta nota pertenece a #1003; no contiene cambios de aplicación. **NO MERGEADO** al registrar la evidencia.
