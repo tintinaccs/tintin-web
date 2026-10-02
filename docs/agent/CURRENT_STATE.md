@@ -1,5 +1,19 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Diagnóstico `permission-denied` masivo en admin de producción — 2026-10-02 (rama `claude/funny-keller-205w4v`)
+
+Síntoma reportado por el dueño (consola del admin): `Missing or insufficient permissions` en casi todas las lecturas (incluidas `settings/appearance`, `products`, `collections`) y `502` de `/api/master-diagnostics` con "GitHub alcanzó temporalmente el límite de consultas".
+
+Evidencia (solo lecturas, sin escrituras ni datos reales):
+- `settings/appearance` tiene `allow read: if true` en `firestore.rules` desde #917 (2026-09-25). Que ese documento también falle prueba que la denegación **no** depende de reglas de rol ni de la versión de reglas publicada: Firestore rechaza la petición antes de evaluar reglas, lo que corresponde a App Check en modo enforcement sin token válido.
+- `firestore.rules`, `js/core/firebase/firebase.js` y la directiva `connect-src` de la CSP no cambiaron en #996/#1000/#1001/ab260e61; la CSP servida en producción permite `*.googleapis.com`, `*.google.com` y `*.gstatic.com`.
+- reCAPTCHA Enterprise acepta el dominio: el `anchor` de la clave `6Ldh…` para `https://tintinaccesorios.pages.dev` devuelve `recaptcha-token`.
+- REST de Firestore sin token App Check → 403 `PERMISSION_DENIED` (esperable con enforcement; no distingue causa).
+- Producción sirve exactamente `origin/main` (`diagnostic-manifest.json` idéntico, `3dee5626`).
+- `/api/master-diagnostics` usa `Authorization: Bearer` cuando existe `GITHUB_TOKEN`; el mensaje de límite corresponde al límite anónimo de GitHub, es decir, una implementación de Cloudflare que todavía no tenía el secreto. Los secretos solo se aplican en implementaciones nuevas.
+
+Estado: **NOT_VERIFIED / requiere acción en consola**. No se hizo cambio de código porque no hay defecto en el repo que lo explique; alterar el gate de App Check o las reglas sería maquillar el síntoma. Pendiente: confirmar `window.TintinAppCheckStatus` en el navegador del dueño, revisar Firebase Console → App Check (registro de la app web con reCAPTCHA Enterprise y métricas de solicitudes no verificadas de Cloud Firestore) y la cuota/facturación de reCAPTCHA Enterprise en Google Cloud; luego verificar el Diagnóstico Maestro después de una implementación posterior al guardado del secreto.
+
 ## Cierre de CI del PR #1001 (permisos Firebase/App Check) — 2026-10-01/02 (rama `fix/firebase-permissions-recovery-20261001`)
 
 **Alcance de este ciclo: no se tocó el fix de autorización ya presente en el PR #1001.** Esa rama (abierta por el propio dueño, commits `271c752d`…`b66baa10`) ya contenía el diagnóstico y la corrección correctos para "panel dice SUPER ADMIN pero Firestore devuelve `permission-denied`": ver detalle en su propia nota de `docs/agent/CURRENT_STATE.md` (sección "Recuperación permisos/App Check") y en el cuerpo del PR. Este ciclo auditó ese diagnóstico, lo verificó con pruebas reales y desbloqueó su CI, que estaba en rojo.
