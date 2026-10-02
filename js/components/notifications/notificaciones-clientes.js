@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { appCheckReady, auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import {
@@ -17,6 +17,7 @@ const LISTENER_RETRY_DELAYS_MS = [1400, 4000, 12000, 30000];
 let subscribeRetryTimer = 0;
 let subscribeRetryAttempt = 0;
 let subscribeAuthRecoveryAttempted = false;
+let listenerFailed = false;
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -272,6 +273,7 @@ function scheduleSubscriptionRecovery(targetUser, error) {
     if (subscribeAuthRecoveryAttempted) return;
     subscribeAuthRecoveryAttempted = true;
     void targetUser.getIdToken(true)
+      .then(() => appCheckReady)
       .then(() => {
         if (currentUser?.uid !== targetUser.uid) return;
         subscribeRetryTimer = window.setTimeout(() => subscribe(currentUser, { preserve: true }), 0);
@@ -297,6 +299,7 @@ function subscribe(user, { preserve = false } = {}) {
   if (subscribeRetryTimer) window.clearTimeout(subscribeRetryTimer);
   subscribeRetryTimer = 0;
   if (!preserve) {
+    listenerFailed = false;
     notifications = [];
     subscribeRetryAttempt = 0;
     subscribeAuthRecoveryAttempted = false;
@@ -308,6 +311,7 @@ function subscribe(user, { preserve = false } = {}) {
     notifications = snapshot.docs
       .map(document => ({ id: document.id, ...document.data() }))
       .filter(isVisibleCustomerNotification);
+    listenerFailed = false;
     subscribeRetryAttempt = 0;
     subscribeAuthRecoveryAttempted = false;
     render();
@@ -315,6 +319,7 @@ function subscribe(user, { preserve = false } = {}) {
   }, error => {
     console.warn('[notifications] No se pudo escuchar la actividad:', error);
     const root = document.getElementById('tt-notifications-list');
+    listenerFailed = true;
     if (root) root.innerHTML = '<div class="tt-notifications-error">No pudimos actualizar las notificaciones. Conservamos la actividad ya cargada y podés volver a abrir este panel para reintentar.</div>';
     scheduleSubscriptionRecovery(user, error);
   });
@@ -346,6 +351,12 @@ function wireEvents() {
     const surface = String(event.detail?.surface || '');
     const state = String(event.detail?.state || '');
     if (surface === 'notifications' && (state === 'opening' || state === 'open')) {
+      // Reintento manual: sólo cuando la recuperación automática ya se detuvo.
+      if (listenerFailed && currentUser && !subscribeRetryTimer) {
+        subscribeRetryAttempt = 0;
+        subscribeAuthRecoveryAttempted = false;
+        subscribe(currentUser, { preserve: true });
+      }
       void markVisibleNotificationsRead();
     }
   });

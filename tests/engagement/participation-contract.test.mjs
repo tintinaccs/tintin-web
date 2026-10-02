@@ -219,6 +219,13 @@ test('headers and admin notification feeds recover without infinite permission r
   assert.match(admin, /PROFILE_AVATAR_FALLBACK/);
 });
 
+test('customer notification recovery waits for App Check and reopening retries only after it stopped', async () => {
+  const notifications = await read('js/components/notifications/notificaciones-clientes.js');
+  assert.match(notifications, /getIdToken\(true\)\s*\.then\(\(\) => appCheckReady\)/);
+  assert.match(notifications, /listenerFailed && currentUser && !subscribeRetryTimer/);
+  assert.doesNotMatch(notifications, /setTimeout\(\(\) => subscribe\(currentUser\), 1400\)/);
+});
+
 test('opening notifications marks current unread alerts as seen automatically', async () => {
   const notifications = await read('js/components/notifications/notificaciones-clientes.js');
   assert.match(notifications, /markVisibleNotificationsRead/);
