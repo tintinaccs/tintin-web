@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7fb3adf0e2563e6b04b79b540843cb94cf94591477d1014db69cdb9bf5eac910",
+  "sourceFingerprint": "378496f1148a81fd7dae8b3c62fcf37d105f7d993d3685c032a8b017fecb0b81",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 939,
     "textFiles": 898,
-    "totalBytes": 18105012,
+    "totalBytes": 18105034,
     "pages": 19,
     "modules": 647
   },
@@ -34456,8 +34456,8 @@
     },
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
-      "bytes": 6233,
-      "sha256": "83af424d485de1c1fd755a0fc1955bca4e44c5b57a344202b75deef485d5e969",
+      "bytes": 6255,
+      "sha256": "f7842a7acefbe304da2f2ff0da8172da2e8cdd91129fe370d4b3bea6eb3b67a0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34495,10 +34495,6 @@
         }
       ],
       "endpoints": [
-        {
-          "url": "https://api.cloudinary.com/",
-          "line": 53
-        },
         {
           "url": "https://tintinaccesorios.pages.dev/perfil",
           "line": 98
@@ -41313,8 +41309,8 @@
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
       "extension": ".mjs",
-      "bytes": 6233,
-      "sha256": "83af424d485de1c1fd755a0fc1955bca4e44c5b57a344202b75deef485d5e969"
+      "bytes": 6255,
+      "sha256": "f7842a7acefbe304da2f2ff0da8172da2e8cdd91129fe370d4b3bea6eb3b67a0"
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",

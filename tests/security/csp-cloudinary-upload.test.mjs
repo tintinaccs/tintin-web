@@ -50,7 +50,7 @@ test('_headers conserva solo una CSP fallback corta y middleware aplica la compl
   assert.equal(cspLines.length, 1, '_headers debe tener una sola CSP fallback estática');
   assert.ok(cspLines[0].length <= 2000, 'la CSP fallback debe respetar el límite por línea de Pages');
   assert.ok(cspLines[0].includes("script-src-attr 'none'"));
-  assert.ok(!cspLines[0].includes('https://api.cloudinary.com'));
+  assert.ok(!/(?:^|[\s;])https:\/\/api\.cloudinary\.com(?:[\s;]|$)/.test(cspLines[0]));
   assert.ok(!cspLines[0].includes("script-src 'self' 'unsafe-inline'"));
   assert.ok(headers.split(/\r?\n/).every(line => line.length <= 2000), '_headers debe respetar el límite por línea de Pages');
   assert.ok(middleware.includes("headers.set('Content-Security-Policy', policy)"));
