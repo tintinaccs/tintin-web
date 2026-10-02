@@ -84,7 +84,8 @@ async function checkout(payload, store = fakeStore(), user = USER) {
     {},
     prepared.input,
     { uid: user.uid, email: user.email, role: 'client', origin: 'public-checkout' },
-    { get: store.get, commit: store.commit, inspect: prepared.inspect },
+    // Sin historial TINPED en el fake: la secuencia sólo se concilia contra sí misma.
+    { get: store.get, commit: store.commit, inspect: prepared.inspect, findFirst: async () => null, maxNumber: async () => 0 },
   );
   return { created, store };
 }

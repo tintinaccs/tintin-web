@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "254ca58c824c48e89670f4a07a1c11ceef4e170847b1cf9aff6144bf714d6a27",
+  "sourceFingerprint": "317d8858255cbfaa0d63b637ade3180ddc86511f51196f00b51f04c28663f451",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 938,
     "textFiles": 897,
-    "totalBytes": 18068383,
+    "totalBytes": 18081243,
     "pages": 19,
     "modules": 646
   },
@@ -18013,8 +18013,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
-      "bytes": 29133,
-      "sha256": "a5ba958eb8b4f2dac54972bc625e86ca6406b9ced14050a496e00cf8567ca75a",
+      "bytes": 30972,
+      "sha256": "a348f5bc989e263978fda304cdde27a2e05b09b75297c4fa254cebd82a913810",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18163,8 +18163,8 @@
     },
     {
       "path": "cloudflare/order-admin-domain.js",
-      "bytes": 28860,
-      "sha256": "71284ba0943d8a09e32a224a7e82f5a184ebf377143e175f2a873dbb8cbd4971",
+      "bytes": 30453,
+      "sha256": "e24f24a4cefe2ede31adf7099639a43619a4c00ba5c7c110862dc7dcc37fe4ee",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18174,25 +18174,25 @@
           "raw": "./firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "./firestore-admin-batch.js",
           "target": "cloudflare/firestore-admin-batch.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../js/core/store/modelo-inventario.mjs",
           "target": "js/core/store/modelo-inventario.mjs",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "./cupones.js",
           "target": "cloudflare/cupones.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         }
       ],
       "endpoints": []
@@ -32147,8 +32147,8 @@
     },
     {
       "path": "tests/checkout/cupones.test.mjs",
-      "bytes": 7600,
-      "sha256": "f3319772e1b0f6a3e47c0e27d02125c861a578bddf143e6cbf68442ae5eef4b9",
+      "bytes": 7655,
+      "sha256": "63b2ae6d0077c2a4f1b6cd961455b9cb96d5f65104132dda34a882417b4b2482",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32393,8 +32393,8 @@
     },
     {
       "path": "tests/checkout/public-checkout-policy.test.mjs",
-      "bytes": 10467,
-      "sha256": "b1a1082f049636e51332035d00df05d5c29664971d81b06d87dffcad6b45eb63",
+      "bytes": 10611,
+      "sha256": "66fd2432c9aa7e0147d5346f736cd35d1fa5cb329142e6677105cab40467f0bc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34007,8 +34007,8 @@
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
-      "bytes": 13581,
-      "sha256": "d48f8f3a9c884afc960612d5533c679f3daadbdc54e8939a2337e64d4e6f94e4",
+      "bytes": 22810,
+      "sha256": "c65058c7fc3e7dc3cdd09ecffd9340b7dced2e73df67e4d2cee7dc36dea0447b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34042,7 +34042,7 @@
       "endpoints": [
         {
           "url": "https://cdn.example.test/aro.png",
-          "line": 62
+          "line": 112
         }
       ]
     },
@@ -36409,8 +36409,8 @@
     {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
-      "bytes": 29133,
-      "sha256": "a5ba958eb8b4f2dac54972bc625e86ca6406b9ced14050a496e00cf8567ca75a"
+      "bytes": 30972,
+      "sha256": "a348f5bc989e263978fda304cdde27a2e05b09b75297c4fa254cebd82a913810"
     },
     {
       "path": "cloudflare/firebase-id-token.js",
@@ -36445,8 +36445,8 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "extension": ".js",
-      "bytes": 28860,
-      "sha256": "71284ba0943d8a09e32a224a7e82f5a184ebf377143e175f2a873dbb8cbd4971"
+      "bytes": 30453,
+      "sha256": "e24f24a4cefe2ede31adf7099639a43619a4c00ba5c7c110862dc7dcc37fe4ee"
     },
     {
       "path": "cloudflare/order-sheets-sync.js",
@@ -40873,8 +40873,8 @@
     {
       "path": "tests/checkout/cupones.test.mjs",
       "extension": ".mjs",
-      "bytes": 7600,
-      "sha256": "f3319772e1b0f6a3e47c0e27d02125c861a578bddf143e6cbf68442ae5eef4b9"
+      "bytes": 7655,
+      "sha256": "63b2ae6d0077c2a4f1b6cd961455b9cb96d5f65104132dda34a882417b4b2482"
     },
     {
       "path": "tests/checkout/documentos-py.test.mjs",
@@ -40909,8 +40909,8 @@
     {
       "path": "tests/checkout/public-checkout-policy.test.mjs",
       "extension": ".mjs",
-      "bytes": 10467,
-      "sha256": "b1a1082f049636e51332035d00df05d5c29664971d81b06d87dffcad6b45eb63"
+      "bytes": 10611,
+      "sha256": "66fd2432c9aa7e0147d5346f736cd35d1fa5cb329142e6677105cab40467f0bc"
     },
     {
       "path": "tests/checkout/saved-location.test.mjs",
@@ -41155,8 +41155,8 @@
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "extension": ".mjs",
-      "bytes": 13581,
-      "sha256": "d48f8f3a9c884afc960612d5533c679f3daadbdc54e8939a2337e64d4e6f94e4"
+      "bytes": 22810,
+      "sha256": "c65058c7fc3e7dc3cdd09ecffd9340b7dced2e73df67e4d2cee7dc36dea0447b"
     },
     {
       "path": "tests/payments/paypal-seguro.test.mjs",

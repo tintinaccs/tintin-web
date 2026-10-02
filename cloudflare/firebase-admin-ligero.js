@@ -430,6 +430,50 @@ export async function firestoreAdminFindFirstByFields(env, collectionId, fieldPa
 }
 
 /**
+ * Mayor valor numérico (>= 0) de un campo en una colección, o 0 si ningún
+ * documento lo tiene. El filtro de desigualdad deja fuera valores no
+ * numéricos; ordenar por el mismo campo usa el índice automático.
+ */
+export async function firestoreAdminMaxNumberField(env, collectionId, fieldPath) {
+  const safeCollection = String(collectionId || '').trim();
+  if (!/^[A-Za-z0-9_-]{1,120}$/.test(safeCollection)) throw new Error('Colección inválida para query Firestore');
+  const field = String(fieldPath || '').trim();
+  if (!/^[A-Za-z0-9_.]{1,120}$/.test(field)) throw new Error('Campo inválido para query Firestore');
+
+  const sa = parseServiceAccount(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:runQuery`, {
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: safeCollection }],
+        where: {
+          fieldFilter: {
+            field: { fieldPath: field },
+            op: 'GREATER_THAN_OR_EQUAL',
+            value: { integerValue: '0' }
+          }
+        },
+        orderBy: [{ field: { fieldPath: field }, direction: 'DESCENDING' }],
+        limit: 1
+      }
+    })
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(`Firestore RUN QUERY falló (${response.status}): ${data?.error?.message || ''}`);
+  }
+  const rows = await response.json().catch(() => []);
+  const document = Array.isArray(rows) ? rows.find(row => row?.document)?.document : null;
+  const value = document ? decodeFirestoreFields(document.fields || {})[field] : 0;
+  return Math.max(0, Math.floor(Number(value) || 0));
+}
+
+/**
  * Todos los documentos (hasta `maxDocuments`) de una colección cuyo campo
  * string coincide exactamente con `value`. Consulta de un solo campo: usa el
  * índice automático de Firestore, sin índices compuestos.

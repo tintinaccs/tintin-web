@@ -3,6 +3,7 @@ import {
   encodeFirestoreFields,
   firestoreAdminGet,
   firestoreAdminFindFirstByFields,
+  firestoreAdminMaxNumberField,
 } from './firebase-admin-ligero.js';
 import { firestoreAdminBatchCommit } from './firestore-admin-batch.js';
 import {
@@ -205,31 +206,57 @@ function formatOrderNumber(number) {
   return `TINPED${String(n).padStart(2, '0')}`;
 }
 
-async function orderNumberWasIssued(env, orderNumber, findFirst = firestoreAdminFindFirstByFields) {
-  const code = clean(orderNumber, 80);
-  if (!code) return false;
-  const sources = [
-    ['orders', ['orderNumber', 'shortId']],
-    ['orderTrash', ['orderNumber', 'shortId']],
-    ['auditLog', ['after.orderNumber', 'after.shortId']],
-  ];
+// Lugares donde un TINPED pudo quedar emitido: pedidos activos, papelera y
+// la auditoría de creación (cubre pedidos eliminados definitivamente).
+const ORDER_NUMBER_SOURCES = [
+  ['orders', ['orderNumber', 'shortId']],
+  ['orderTrash', ['orderNumber', 'shortId']],
+  ['auditLog', ['after.orderNumber', 'after.shortId']],
+];
+const MAX_SEQUENCE_PROBES = 50;
+
+function sequenceFloor(sequence = {}) {
+  return Math.max(
+    0,
+    Math.floor(Number(sequence.lastNumber || 0)),
+    Math.floor(Number(sequence.highWaterMark || 0)),
+  );
+}
+
+async function orderNumberWasIssued(env, code, findFirst, sources = ORDER_NUMBER_SOURCES) {
   for (const [collectionId, fields] of sources) {
     if (await findFirst(env, collectionId, fields, code)) return true;
   }
   return false;
 }
 
-async function allocateOrderSequence(env, sequence = {}, findFirst = firestoreAdminFindFirstByFields) {
-  const highWaterMark = Math.max(
-    0,
-    Math.floor(Number(sequence.lastNumber || 0)),
-    Math.floor(Number(sequence.highWaterMark || 0)),
-  );
-  for (let number = highWaterMark + 1, checked = 0; checked < 500; number += 1, checked += 1) {
+// Una sola vez por secuencia (o si aparece un código ya usado): parte del
+// mayor TINPED numerado en pedidos y papelera y avanza mientras el código
+// figure en cualquier fuente histórica.
+async function reconcileOrderSequence(env, sequence, { findFirst, maxNumber }) {
+  let number = sequenceFloor(sequence);
+  for (const collectionId of ['orders', 'orderTrash']) {
+    number = Math.max(number, await maxNumber(env, collectionId, 'orderSequenceNumber'));
+  }
+  for (let probes = 0; probes < MAX_SEQUENCE_PROBES; probes += 1) {
+    number += 1;
     const code = formatOrderNumber(number);
-    if (!await orderNumberWasIssued(env, code, findFirst)) return { number, code };
+    if (!await orderNumberWasIssued(env, code, findFirst)) return { number, code, reconciled: true };
   }
   throw creationError('No se pudo reservar un código TINPED único.', 'order_sequence_exhausted');
+}
+
+// Camino normal: una secuencia ya conciliada sólo avanza (todas las altas
+// pasan por este dominio), así que basta una consulta de defensa.
+async function allocateOrderSequence(env, sequence, deps) {
+  if (sequence.historyReconciledAt) {
+    const number = sequenceFloor(sequence) + 1;
+    const code = formatOrderNumber(number);
+    if (!await orderNumberWasIssued(env, code, deps.findFirst, [['orders', ['orderNumber']]])) {
+      return { number, code, reconciled: false };
+    }
+  }
+  return reconcileOrderSequence(env, sequence, deps);
 }
 
 async function resolveCanonicalCreationItems(env, rawItems, get) {
@@ -264,7 +291,7 @@ async function resolveCanonicalCreationItems(env, rawItems, get) {
   return { items, byProduct, documents };
 }
 
-async function createOrderAttempt(env, input, actor, { get, commit, inspect, findFirst }) {
+async function createOrderAttempt(env, input, actor, { get, commit, inspect, findFirst, maxNumber }) {
   const context = actorContext(input, actor);
   const status = normalizedStatus(input.status || 'pendiente');
   const paymentStatus = normalizedPaymentStatus(input.paymentStatus || input.payment?.status || 'pendiente');
@@ -294,11 +321,6 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
     }
   }
 
-  const sequenceDocument = await get(env, 'settings/orderSequence');
-  const sequence = sequenceDocument ? decodeFirestoreFields(sequenceDocument.fields || {}) : {};
-  const allocatedSequence = await allocateOrderSequence(env, sequence, findFirst);
-  const sequenceNumber = allocatedSequence.number;
-  const orderNumber = allocatedSequence.code;
   const orderId = requestedOrderId || `manual_${crypto.randomUUID().replaceAll('-', '')}`;
   const now = new Date();
   const changeId = clean(input.changeId, 120) || makeChangeId(context.origin.includes('sheets') ? 'sheet_create' : 'admin_create');
@@ -331,6 +353,12 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
   // Validaciones propias del llamador (checkout público: variantes y total
   // visto por la clienta) con los productos y montos canónicos, antes de escribir.
   if (inspect) await inspect({ items, documents, subtotal, shippingCost, total });
+
+  const sequenceDocument = await get(env, 'settings/orderSequence');
+  const sequence = sequenceDocument ? decodeFirestoreFields(sequenceDocument.fields || {}) : {};
+  const allocatedSequence = await allocateOrderSequence(env, sequence, { findFirst, maxNumber });
+  const sequenceNumber = allocatedSequence.number;
+  const orderNumber = allocatedSequence.code;
 
   const shipping = {
     ...(input.shipping && typeof input.shipping === 'object' ? input.shipping : {}),
@@ -457,6 +485,7 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
     lastNumber: sequenceNumber,
     highWaterMark: sequenceNumber,
     lastCode: orderNumber,
+    ...(allocatedSequence.reconciled ? { historyReconciledAt: now } : {}),
     updatedAt: now,
     updatedBy: context.email,
   };
@@ -512,12 +541,13 @@ export async function createOrderAdmin(
     commit = firestoreAdminBatchCommit,
     inspect = null,
     findFirst = firestoreAdminFindFirstByFields,
+    maxNumber = firestoreAdminMaxNumberField,
   } = {},
 ) {
   let lastError = null;
   for (let attempt = 1; attempt <= MAX_CREATE_ATTEMPTS; attempt += 1) {
     try {
-      return await createOrderAttempt(env, input, actor, { get, commit, inspect, findFirst });
+      return await createOrderAttempt(env, input, actor, { get, commit, inspect, findFirst, maxNumber });
     } catch (error) {
       lastError = error;
       if (Number(error?.status) !== 409 || attempt === MAX_CREATE_ATTEMPTS) throw error;
@@ -531,22 +561,28 @@ export async function createOrderAdmin(
 export async function resetOrderSequenceAdmin(
   env,
   actor = {},
-  { get = firestoreAdminGet, commit = firestoreAdminBatchCommit } = {},
+  {
+    get = firestoreAdminGet,
+    commit = firestoreAdminBatchCommit,
+    findFirst = firestoreAdminFindFirstByFields,
+    maxNumber = firestoreAdminMaxNumberField,
+  } = {},
 ) {
   const context = actorContext({ source: 'superadmin-sequence-protect' }, actor);
   const document = await get(env, 'settings/orderSequence');
   const sequence = document ? decodeFirestoreFields(document.fields || {}) : {};
-  const current = Math.max(
-    0,
-    Math.floor(Number(sequence.lastNumber || 0)),
-    Math.floor(Number(sequence.highWaterMark || 0)),
-  );
+  // Una secuencia sin conciliar pudo quedar en 0 por el reinicio anterior:
+  // el último código emitido sale del historial, nunca del documento solo.
+  const current = sequence.historyReconciledAt
+    ? sequenceFloor(sequence)
+    : (await reconcileOrderSequence(env, sequence, { findFirst, maxNumber })).number - 1;
   const now = new Date();
   const eventId = makeChangeId('order_sequence_protect');
   const patch = {
     lastNumber: current,
     highWaterMark: current,
     lastCode: current > 0 ? formatOrderNumber(current) : clean(sequence.lastCode, 80),
+    historyReconciledAt: sequence.historyReconciledAt || now,
     resetBlockedAt: now,
     resetBlockedBy: context.email,
     updatedAt: now,
