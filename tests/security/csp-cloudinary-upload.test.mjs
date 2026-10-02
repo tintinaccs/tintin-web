@@ -25,13 +25,20 @@ function routeCsp(route) {
   return policy;
 }
 
+// Compara tokens exactos de la política (separados por espacio/;) en vez de
+// una subcadena de la URL completa: CodeQL marca .includes()/.indexOf() con
+// un origen como sustanciación incompleta aunque el string sea de confianza.
+function cspHasOrigin(policy, origin) {
+  return policy.split(/[\s;]+/).some(token => token === origin);
+}
+
 test('Cloudinary upload queda permitido solo en las superficies que suben imágenes', () => {
   const signer = read('functions/api/cloudinary-sign-upload.js');
   const uploadUrlMatch = signer.match(/uploadUrl:\s*`(https:\/\/[^/`$]+)/);
   assert.ok(uploadUrlMatch, 'no se encontró el origen de uploadUrl en cloudinary-sign-upload.js');
   const uploadOrigin = uploadUrlMatch[1];
-  for (const route of ['/admin', '/admin-images', '/perfil']) assert.ok(routeCsp(route).includes(uploadOrigin), `${route} necesita ${uploadOrigin} para subir imágenes`);
-  for (const route of ['/', '/catalogo', '/collections', '/product', '/about', '/contact', '/checkout', '/login']) assert.ok(!routeCsp(route).includes(uploadOrigin), `${route} no debe autorizar el endpoint de upload de Cloudinary`);
+  for (const route of ['/admin', '/admin-images', '/perfil']) assert.ok(cspHasOrigin(routeCsp(route), uploadOrigin), `${route} necesita ${uploadOrigin} para subir imágenes`);
+  for (const route of ['/', '/catalogo', '/collections', '/product', '/about', '/contact', '/checkout', '/login']) assert.ok(!cspHasOrigin(routeCsp(route), uploadOrigin), `${route} no debe autorizar el endpoint de upload de Cloudinary`);
 });
 
 test('CSP no vuelve a abrir handlers inline de forma global', () => {
@@ -101,7 +108,7 @@ test('una revalidación 304 de /perfil conserva la CSP de la ruta (subida de fot
   assert.equal(response.status, 304);
   const policy = response.headers.get('Content-Security-Policy');
   const connectSources = (policy.match(/connect-src ([^;]*)/)?.[1] || '').trim().split(/\s+/);
-  assert.ok(connectSources.includes('https://api.cloudinary.com'));
+  assert.ok(connectSources.some(source => source === 'https://api.cloudinary.com'));
   assert.equal(response.headers.get('X-Tintin-CSP'), 'edge-runtime');
 });
 

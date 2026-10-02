@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "15a82567ce72a59e6c5f33c1deefe1fdbd5ef9c0617fae078b0ea2a4b8586577",
+  "sourceFingerprint": "876af1f9ede8514ab080b8901e3ea67bebed58306f26845c3eed50b8a165b83c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 939,
     "textFiles": 898,
-    "totalBytes": 18114048,
+    "totalBytes": 18114417,
     "pages": 19,
     "modules": 647
   },
@@ -34456,8 +34456,8 @@
     },
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
-      "bytes": 6343,
-      "sha256": "e63269ceea563838bb5d5f3f42f5bb38b2af712171614dc4f0dd514fba4af135",
+      "bytes": 6712,
+      "sha256": "719686b60084b18ffb0bb24993f14e11025a79b254bba0b13bdc9f72b82cba8f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34497,15 +34497,15 @@
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/perfil",
-          "line": 98
+          "line": 105
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 104
+          "line": 111
         },
         {
           "url": "https://tintinaccesorios.pages.dev/tienda.js",
-          "line": 110
+          "line": 117
         }
       ]
     },
@@ -41313,8 +41313,8 @@
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
       "extension": ".mjs",
-      "bytes": 6343,
-      "sha256": "e63269ceea563838bb5d5f3f42f5bb38b2af712171614dc4f0dd514fba4af135"
+      "bytes": 6712,
+      "sha256": "719686b60084b18ffb0bb24993f14e11025a79b254bba0b13bdc9f72b82cba8f"
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
