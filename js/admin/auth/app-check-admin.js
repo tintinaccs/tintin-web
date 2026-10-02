@@ -6,9 +6,11 @@ import {
   auth,
   authPersistenceReady,
   appCheck,
-  appCheckReady
+  appCheckReady,
+  db
 } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { getToken as getAppCheckToken } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
+import { doc, getDocFromServer } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 function waitForReadyEvent(timeoutMs) {
   return new Promise(resolve => {
@@ -31,6 +33,8 @@ function waitForReadyEvent(timeoutMs) {
 
 const ADMIN_APP_CHECK_GATE_KEY = '__TINTIN_ADMIN_APP_CHECK_GATE__';
 const ADMIN_AUTH_GATE_KEY = '__TINTIN_ADMIN_AUTH_GATE__';
+const ADMIN_FIRESTORE_READY_GATE_KEY = '__TINTIN_ADMIN_FIRESTORE_READY_GATE__';
+const FIRESTORE_READY_RETRY_MS = Object.freeze([0, 80, 220]);
 
 // App Check listo no confirma Auth. Los módulos auxiliares deben esperar la
 // restauración y una credencial fresca antes del primer listener privado.
@@ -58,6 +62,53 @@ async function waitForAdminAuth(timeoutMs) {
     return Boolean(ok);
   });
   window[ADMIN_AUTH_GATE_KEY] = gate;
+  return gate.promise;
+}
+
+async function waitForAdminFirestoreReady(timeoutMs) {
+  const user = auth.currentUser;
+  if (!user) return false;
+  const existing = window[ADMIN_FIRESTORE_READY_GATE_KEY];
+  if (existing && existing.uid === user.uid) return existing.promise;
+
+  const gate = { uid: user.uid, promise: null };
+  let timeoutId = 0;
+  const attempt = (async () => {
+    for (let index = 0; index < FIRESTORE_READY_RETRY_MS.length; index += 1) {
+      if (auth.currentUser?.uid !== user.uid) return false;
+      const delay = FIRESTORE_READY_RETRY_MS[index];
+      if (delay) await new Promise(resolve => window.setTimeout(resolve, delay));
+      try {
+        // Una lectura forzada al servidor confirma que Firestore ya absorbió
+        // la identidad renovada y el token de App Check. getIdToken(true)
+        // puede resolver antes de que el proveedor de credenciales de
+        // Firestore procese el cambio, que era la ventana que abría decenas
+        // de listeners con permission-denied durante una recarga fría.
+        await getDocFromServer(doc(db, 'users', user.uid));
+        return auth.currentUser?.uid === user.uid;
+      } catch (error) {
+        const code = String(error?.code || error?.name || '').replace(/^firestore\//, '').toLowerCase();
+        const retryable = code === 'permission-denied' || code === 'unauthenticated' ||
+          code === 'unavailable' || code === 'deadline-exceeded' || code === 'network-request-failed';
+        if (!retryable || index === FIRESTORE_READY_RETRY_MS.length - 1) return false;
+      }
+    }
+    return false;
+  })();
+
+  gate.promise = Promise.race([
+    attempt,
+    new Promise(resolve => {
+      timeoutId = window.setTimeout(() => resolve(false), Math.max(1500, Number(timeoutMs) || 12000));
+    }),
+  ]).then(ok => {
+    window.clearTimeout(timeoutId);
+    if (!ok && window[ADMIN_FIRESTORE_READY_GATE_KEY] === gate) {
+      window[ADMIN_FIRESTORE_READY_GATE_KEY] = null;
+    }
+    return Boolean(ok);
+  });
+  window[ADMIN_FIRESTORE_READY_GATE_KEY] = gate;
   return gate.promise;
 }
 
@@ -92,21 +143,30 @@ async function resolveAdminAppCheck(timeoutMs) {
 
 export async function waitForAdminAppCheck(timeoutMs = 12000) {
   if (!await waitForAdminAuth(timeoutMs)) return false;
-  if (window.TintinAppCheckStatus === 'enabled') return true;
 
-  // Todos los módulos del Admin comparten una sola verificación/reintento.
-  // Evita que 6-10 listeners privados disparen getToken al mismo tiempo.
-  const existing = window[ADMIN_APP_CHECK_GATE_KEY];
-  if (existing) return existing;
-
-  const gate = resolveAdminAppCheck(timeoutMs);
-  window[ADMIN_APP_CHECK_GATE_KEY] = gate;
-  try {
-    return await gate;
-  } finally {
-    // Un resultado negativo se puede reintentar más tarde sin recargar Auth.
-    if (window.TintinAppCheckStatus !== 'enabled') {
-      window[ADMIN_APP_CHECK_GATE_KEY] = null;
+  let appCheckOk = window.TintinAppCheckStatus === 'enabled';
+  if (!appCheckOk) {
+    // Todos los módulos del Admin comparten una sola verificación/reintento.
+    // Evita que 6-10 listeners privados disparen getToken al mismo tiempo.
+    const existing = window[ADMIN_APP_CHECK_GATE_KEY];
+    if (existing) {
+      appCheckOk = await existing;
+    } else {
+      const gate = resolveAdminAppCheck(timeoutMs);
+      window[ADMIN_APP_CHECK_GATE_KEY] = gate;
+      try {
+        appCheckOk = await gate;
+      } finally {
+        // Un resultado negativo se puede reintentar más tarde sin recargar Auth.
+        if (window.TintinAppCheckStatus !== 'enabled') {
+          window[ADMIN_APP_CHECK_GATE_KEY] = null;
+        }
+      }
     }
   }
+  if (!appCheckOk || auth.currentUser == null) return false;
+
+  // App Check + Auth listos no bastan: antes de liberar listeners privados,
+  // confirma una lectura server-side con el mismo SDK de Firestore.
+  return waitForAdminFirestoreReady(timeoutMs);
 }
