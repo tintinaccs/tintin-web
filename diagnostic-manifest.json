@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "93b7e9b53b0ba1b2e7e76e63a0ab32125c4347c69547095af7535c4364096ca0",
+  "sourceFingerprint": "4d86be4c39941c0c141d36d794f38c7bab54af3cae840521f3b6e885e51bcbd4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 943,
     "textFiles": 902,
-    "totalBytes": 18184224,
+    "totalBytes": 18185057,
     "pages": 19,
     "modules": 651
   },
@@ -12236,7 +12236,7 @@
         "client"
       ],
       "bytes": 33982,
-      "sha256": "0e4a30c4f7bb1a372e6dd51b2fcc40c3d21bb5f9520a4c9fa838cc351069f34f",
+      "sha256": "af48efa4256a37cbffa2ee651ee725060dab448e6e22f2cf1eae862d128a2e80",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12409,7 +12409,7 @@
           "line": 82
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261002-home-layout-2",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261002-home-layout-3",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 83
         },
@@ -12957,7 +12957,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261002-home-layout-2",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261002-home-layout-3",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 83,
           "exists": true
@@ -35469,8 +35469,8 @@
     },
     {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
-      "bytes": 4227,
-      "sha256": "8ccebbb5686f62b20121662d0ca147a588090ee269df45c5a6947fced575459c",
+      "bytes": 4290,
+      "sha256": "f766cf8cdd0ab138c56e4eedbb52d12b70f2bd2c969c302bc21d6251245ad3fe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37124,8 +37124,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 23960,
-      "sha256": "b211037f08ef80be5ca42f363707b879be1ebf678c9774697c5a4f9e31282209"
+      "bytes": 23980,
+      "sha256": "7c1ee1cb9057f8a9663a10dd8f2acdf897b121e50a623e90e0dc60d10ad3e0db"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -37346,8 +37346,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 147329,
-      "sha256": "2657b4c491591b5178fffd9407c528428d54137f5ccc46b7263383789bb20328"
+      "bytes": 148079,
+      "sha256": "701355d23818211776054a52d428ef7076de994af35f15a103814f21d6857211"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -38169,7 +38169,7 @@
       "path": "index.html",
       "extension": ".html",
       "bytes": 33982,
-      "sha256": "0e4a30c4f7bb1a372e6dd51b2fcc40c3d21bb5f9520a4c9fa838cc351069f34f"
+      "sha256": "af48efa4256a37cbffa2ee651ee725060dab448e6e22f2cf1eae862d128a2e80"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -40677,7 +40677,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 60553,
-      "sha256": "1e64b38ecaef3a3fd7cd657ae28d04965788e7811e753a232cfc872ab7f612b9"
+      "sha256": "22ebc5ff4704c9fa04bfa2c2637465e7b844a165507149e295cdc120252d6585"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -41660,8 +41660,8 @@
     {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
       "extension": ".mjs",
-      "bytes": 4227,
-      "sha256": "8ccebbb5686f62b20121662d0ca147a588090ee269df45c5a6947fced575459c"
+      "bytes": 4290,
+      "sha256": "f766cf8cdd0ab138c56e4eedbb52d12b70f2bd2c969c302bc21d6251245ad3fe"
     },
     {
       "path": "tests/ui-ux/inventory-regressions.test.mjs",

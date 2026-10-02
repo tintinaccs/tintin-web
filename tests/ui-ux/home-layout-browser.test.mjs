@@ -21,7 +21,7 @@ test('el hero contiene texto e imagen sin recorte al cambiar de escritorio a mó
   const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
   const hero = home.match(/<section class="tt-hero"[\s\S]*?<\/section>/)?.[0];
   assert.ok(hero);
-  const css = await Promise.all(['styles.min.css', 'css/pages/home/hero-bienvenida-inicio.css', 'css/pages/home/ajuste-inicio.css'].map(file => fs.readFile(path.join(root, file), 'utf8')));
+  const css = await Promise.all(['styles.min.css', 'css/pages/home/hero-bienvenida-inicio.css', 'css/pages/home/ajuste-inicio.css', 'css/theme/paridad-segura-tintin.css'].map(file => fs.readFile(path.join(root, file), 'utf8')));
   const browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
   try {
     const page = await browser.newPage({ reducedMotion: 'reduce' });
@@ -32,7 +32,7 @@ test('el hero contiene texto e imagen sin recorte al cambiar de escritorio a mó
       try { await route.fulfill({ status: 200, body: await fs.readFile(file) }); }
       catch { await route.abort(); }
     });
-    await page.setContent(`<!doctype html><html><head><base href="https://tintin.test/"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}html,body{margin:0}*,*::before,*::after{animation:none!important;transition:none!important}</style>${css.map(source => `<style>${source}</style>`).join('')}</head><body class="tt-home-premium tt-hero-atomic-ready tt-home-runtime-ready">${hero}</body></html>`);
+    await page.setContent(`<!doctype html><html><head><base href="https://tintin.test/"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}html,body{margin:0}*,*::before,*::after{animation:none!important;transition:none!important}</style>${css.map(source => `<style>${source}</style>`).join('')}</head><body class="tt-home-premium tt-hero-atomic-ready tt-home-runtime-ready tt-public-shell-mounted">${hero}</body></html>`);
     await page.evaluate(() => document.fonts.ready);
     for (const [width, height] of [[1920,1080],[1440,900],[1280,720],[1024,768],[768,1024],[390,844],[320,568]]) {
       await page.setViewportSize({ width, height });
