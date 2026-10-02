@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "876af1f9ede8514ab080b8901e3ea67bebed58306f26845c3eed50b8a165b83c",
+  "sourceFingerprint": "dca7e2e227ae01213cda71450b71e47184d22617a7d3425a2b352cbc0c42f512",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 939,
     "textFiles": 898,
-    "totalBytes": 18114417,
+    "totalBytes": 18124264,
     "pages": 19,
     "modules": 647
   },
@@ -17984,18 +17984,24 @@
     },
     {
       "path": "cloudflare/correo-estado-pedido.js",
-      "bytes": 5961,
-      "sha256": "2261e749ac5dc58c26b7590b12ca72755e766623cbbeeaad62ca54a6268bbe14",
+      "bytes": 8290,
+      "sha256": "6ca61b4286dc57abd0d6b46f01c7e4530464dd5caab085c81a4ce9df84e982af",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
           "raw": "../functions/api/order-email.js",
           "target": "functions/api/order-email.js",
           "dynamic": false,
-          "line": 13
+          "line": 16
         }
       ],
       "endpoints": []
@@ -18352,8 +18358,8 @@
     },
     {
       "path": "cloudflare/resiliencia-correo-pedido.js",
-      "bytes": 9266,
-      "sha256": "0324180d5a63dd2735fec65cac82cb5e637b83928a67d7eb2d3d21fec570c2d3",
+      "bytes": 11013,
+      "sha256": "a5657c03c8c2aa993347323d06e7df05a34e7be9a9de1cc38e64b7bbf23f544c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18376,6 +18382,12 @@
           "target": "functions/api/order-email.js",
           "dynamic": false,
           "line": 13
+        },
+        {
+          "raw": "./correo-estado-pedido.js",
+          "target": "cloudflare/correo-estado-pedido.js",
+          "dynamic": false,
+          "line": 14
         }
       ],
       "endpoints": []
@@ -33989,8 +34001,8 @@
     },
     {
       "path": "tests/orders/correo-estado-pedido.test.mjs",
-      "bytes": 2731,
-      "sha256": "f16a8e95bfd43313be5081764cc683f553fedfb9bdfe6e4fd02d2f1b14450a6f",
+      "bytes": 4303,
+      "sha256": "d8038feabb7c80256a0a43ed22a370461863463d4ff84a01ddc4f66824761623",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34013,6 +34025,12 @@
           "target": "cloudflare/correo-estado-pedido.js",
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -34957,8 +34975,8 @@
     },
     {
       "path": "tests/sync/order-email-queue.test.mjs",
-      "bytes": 9442,
-      "sha256": "149d4beb6127dc1337126cfd40b1098999f252a5c62a8ff1be21487fb63cde0a",
+      "bytes": 12212,
+      "sha256": "ede11a2b133945055e9d5fb5b2c8b8179511ae953f9dd7fb576a284062887a2e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36453,8 +36471,8 @@
     {
       "path": "cloudflare/correo-estado-pedido.js",
       "extension": ".js",
-      "bytes": 5961,
-      "sha256": "2261e749ac5dc58c26b7590b12ca72755e766623cbbeeaad62ca54a6268bbe14"
+      "bytes": 8290,
+      "sha256": "6ca61b4286dc57abd0d6b46f01c7e4530464dd5caab085c81a4ce9df84e982af"
     },
     {
       "path": "cloudflare/cupones.js",
@@ -36537,8 +36555,8 @@
     {
       "path": "cloudflare/resiliencia-correo-pedido.js",
       "extension": ".js",
-      "bytes": 9266,
-      "sha256": "0324180d5a63dd2735fec65cac82cb5e637b83928a67d7eb2d3d21fec570c2d3"
+      "bytes": 11013,
+      "sha256": "a5657c03c8c2aa993347323d06e7df05a34e7be9a9de1cc38e64b7bbf23f544c"
     },
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
@@ -37137,8 +37155,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 120700,
-      "sha256": "ea3034423b55defecb0e4815606480fd35008252bf8d29848399a64567b73cc5"
+      "bytes": 122129,
+      "sha256": "1d44c23ba23ce9ce222c4f7653f779d0d72268ff297622322de4b0d79b1c9bb3"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41205,8 +41223,8 @@
     {
       "path": "tests/orders/correo-estado-pedido.test.mjs",
       "extension": ".mjs",
-      "bytes": 2731,
-      "sha256": "f16a8e95bfd43313be5081764cc683f553fedfb9bdfe6e4fd02d2f1b14450a6f"
+      "bytes": 4303,
+      "sha256": "d8038feabb7c80256a0a43ed22a370461863463d4ff84a01ddc4f66824761623"
     },
     {
       "path": "tests/orders/correo-transferencia.test.mjs",
@@ -41385,8 +41403,8 @@
     {
       "path": "tests/sync/order-email-queue.test.mjs",
       "extension": ".mjs",
-      "bytes": 9442,
-      "sha256": "149d4beb6127dc1337126cfd40b1098999f252a5c62a8ff1be21487fb63cde0a"
+      "bytes": 12212,
+      "sha256": "ede11a2b133945055e9d5fb5b2c8b8179511ae953f9dd7fb576a284062887a2e"
     },
     {
       "path": "tests/sync/order-sheets-sync.test.mjs",
