@@ -52,6 +52,8 @@ const allowedSignOutFiles = new Set([
   'perfil.html',
   'js/admin/admin-app.js',
   'js/core/auth/navegacion-autenticacion.js',
+  // Cuenta bloqueada: cierra la sesión en el acto (sólo ante blocked === true).
+  'js/pages/profile/control-acceso-perfil.js',
 ]);
 
 const signOutCallers = productionFiles().filter(file => /\bsignOut\s*\(/.test(read(file)));
@@ -63,8 +65,11 @@ const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 
 // Estos contratos se validan por semántica observable, no por una frase o
 // una forma sintáctica única. Así el gate sigue protegiendo Auth aunque el
 // copy del loader o la forma de encadenar una Promise cambien legítimamente.
-const googleHandoffKeepsOverlay =
-  login.includes('const cred = await signInWithPopup(auth, provider)') &&
+  const googlePopupPath =
+    login.includes('const cred = await signInWithPopup(auth, provider)') ||
+    login.includes('const popupAttempt = signInWithPopup(auth, provider)');
+  const googleHandoffKeepsOverlay =
+    googlePopupPath &&
   login.includes('showOverlay()') &&
   /setOverlayText\(['"](?:Entrando…|Redireccionando a tu cuenta…|Completando el inicio de sesión con Google…)['"]\)/.test(login) &&
   login.includes('await finishGoogleLogin(cred.user)');
@@ -87,7 +92,7 @@ const checks = [
   ['Carrito y búsqueda ocultos en Login', css.includes('body:has(.login-page) #cart-drawer') && css.includes('body:has(.login-page) #search-panel')],
   ['Login no reserva espacio del shell', css.includes('body:has(.login-page).tt-public-shell-mounted') && css.includes('padding-top: 0 !important')],
   ['Loader de Login muestra la marca oficial completa', loginLoaderVisible && officialLogoImmediate],
-  ['Google usa popup como camino principal', login.includes('const cred = await signInWithPopup(auth, provider)')],
+    ['Google usa popup como camino principal', googlePopupPath],
   ['Google mantiene loader hasta terminar el handoff', googleHandoffKeepsOverlay],
   ['OTP mantiene loader hasta terminar el handoff', login.includes("setOverlayText('Verificando tu código…')") && login.includes('await finishOtpLogin(user)')],
   ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
@@ -97,7 +102,7 @@ const checks = [
   ['Ningún rol vence la sesión automáticamente', !session.includes('signOut(') && !/INACTIVITY|inactividad|expired/i.test(session)],
   ['Solo superficies explícitas pueden cerrar Firebase Auth', unexpectedSignOutCallers.length === 0],
   ['La persistencia de Auth tiene una sola autoridad', unexpectedPersistenceCallers.length === 0 && persistenceCallers.length === 1],
-  ['Firestore confirma la identidad antes de terminar un login', profileStore.includes('await setDoc(ref, identityPatch, { merge: true })')],
+  ['Firestore confirma la identidad antes de terminar un login', profileStore.includes("await withProfileDeadline(() => setDoc(ref, identityPatch, { merge: true }), 'write')")],
   ['Contacto no contiene lógica de cierre de sesión', !/\bsignOut\s*\(/.test(contactMaintenance)],
   ['El guard de perfil cubre toda página con sesión (sólo login y admin exentos)', !profileGate.includes('GUARDED_PAGES') && /page === 'login' \|\| page\.startsWith\('admin'\)/.test(profileGate)],
   ['El carrito espera restauración Auth antes de observar sesión', cartWaitsForAuthRestore],

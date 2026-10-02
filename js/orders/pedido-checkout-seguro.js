@@ -35,7 +35,7 @@ import {
   isValidRazonSocial
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
 import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2-cupones-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -611,7 +611,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       ci: shipping.method === 'encomienda' ? normalizeCi(ciRaw) : '',
       wantsInvoice,
       razonSocial: wantsInvoice ? razonSocial : '',
-      ruc: wantsInvoice ? normalizeRuc(rucRaw) : ''
+      ruc: wantsInvoice ? normalizeRuc(rucRaw) : '',
+      couponCode: document.getElementById('ck-coupon')?.dataset.applied || ''
     });
   }
 
@@ -832,6 +833,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       too_many_products: error?.message || 'Tu pedido tiene demasiados productos distintos. Escribinos por WhatsApp para coordinarlo.',
       invalid_cart: error?.message,
       invalid_price: 'No pudimos comprobar el precio de uno de los productos.',
+      coupon_invalid: 'El código del cupón no es válido.',
+      coupon_not_found: 'El cupón no existe.',
+      coupon_inactive: 'El cupón no está activo.',
+      coupon_not_started: 'El cupón todavía no está vigente.',
+      coupon_expired: 'El cupón venció. Quitalo para continuar sin descuento.',
+      coupon_exhausted: 'El cupón ya alcanzó su límite de usos. Quitalo para continuar.',
+      coupon_customer_limit: 'Ya usaste este cupón el máximo de veces permitido. Quitalo para continuar.',
+      coupon_not_applicable: 'El cupón de envío gratis solo aplica a delivery con costo.',
       quote_changed: 'Cambió un precio o el costo de envío. Confirmá de nuevo para continuar con los valores actuales.',
       order_state_invalid: 'Este pedido ya no puede reanudarse. Volvé a intentar desde el carrito.',
       checkout_guard_missing: 'No pudimos confirmar tu turno de compra. Volvé a intentar.',

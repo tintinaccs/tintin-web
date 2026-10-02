@@ -15,7 +15,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
-} from "../core/store/perfil-usuario.js?v=tintin-20260923-user-reentry-2-auth-popup-resolver-1-launch-20260926-1";
+} from "../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-2-active-session-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
 const LOCAL_FUNCTIONS_ORIGIN = 'https://tintinaccesorios.pages.dev';
@@ -25,9 +25,9 @@ export function isValidEmailFormat(email) {
 }
 
 /** Arma el body del POST según el identificador sea un email o un username. */
+// El ingreso por código es sólo con correo (el ingreso con @usuario se retiró).
 function identifierBody(identifier) {
-  const value = String(identifier || '').trim();
-  return isValidEmailFormat(value) ? { email: value.toLowerCase() } : { username: value };
+  return { email: String(identifier || '').trim().toLowerCase() };
 }
 
 async function postJson(name, body) {
@@ -75,7 +75,6 @@ async function postJson(name, body) {
 
 /**
  * Pide que se mande un código de 6 dígitos al correo (vence en 5 minutos).
- * `identifier` puede ser el email de la cuenta o su username de login.
  */
 export async function requestOtpCode(identifier) {
   await postJson('email-otp-send', identifierBody(identifier));
@@ -84,8 +83,7 @@ export async function requestOtpCode(identifier) {
 /**
  * Verifica el código contra el backend y, si es correcto, firma la sesión
  * real de Firebase Auth con el Custom Token que devuelve — recién ahí existe
- * un usuario autenticado de verdad, nunca antes. `identifier` puede ser el
- * email de la cuenta o su username de login.
+ * un usuario autenticado de verdad, nunca antes. `identifier` es el correo.
  */
 export async function verifyOtpCode(identifier, code) {
   const data = await postJson('email-otp-verify', { ...identifierBody(identifier), code });

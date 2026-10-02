@@ -15,7 +15,8 @@ const resolve = (result, extra = {}) => resolveProfileState({ read: read(result)
 
 const COMPLETE_PROFILE = {
   role: 'client', profileStatus: 'active', firstName: 'Ana', lastName: 'Gómez', name: 'Ana Gómez',
-  phone: '+595981123456', username: 'ana_g',
+  phone: '+595981123456', username: 'ana_g', dob: new Date('1995-03-10'),
+  savedLocation: { lat: -25.29, lng: -57.63, name: 'Casa' },
 };
 
 test('CASO CRÍTICO: Auth sin documento => MISSING => crear y completar perfil (no loader, no login)', () => {
@@ -45,8 +46,23 @@ test('perfil activo => COMPLETE => entra y nunca reabre "Últimos datos"', () =>
   assert.equal(resolveProfileAction(state.state), PROFILE_ACTION.ENTER);
 });
 
-test('perfil legacy con marca de alta terminada => COMPLETE', () => {
-  assert.equal(resolve({ snapshot: snap({ role: 'client', onboardingCompleted: true }) }).state, PROFILE_STATE.COMPLETE);
+test('perfil legacy con marca de alta terminada pero sin datos => INCOMPLETE', () => {
+  assert.equal(resolve({ snapshot: snap({ role: 'client', onboardingCompleted: true }) }).state, PROFILE_STATE.INCOMPLETE);
+});
+
+test('perfil activo al que le falta un dato => INCOMPLETE (decide por datos, no por la marca)', () => {
+  const { dob, ...withoutDob } = COMPLETE_PROFILE;
+  const state = resolve({ snapshot: snap(withoutDob) });
+  assert.equal(state.state, PROFILE_STATE.INCOMPLETE);
+  assert.equal(state.plan.needsDob, true);
+  assert.equal(state.plan.needsUsername, false);
+});
+
+test('personal (admin/agente/viewer) con clientOnly entra al panel sin alta de clienta', () => {
+  for (const role of ['admin', 'agent', 'viewer']) {
+    const state = resolve({ snapshot: snap({ role }) }, { clientOnly: true });
+    assert.equal(state.state, PROFILE_STATE.COMPLETE);
+  }
 });
 
 test('un error de lectura NUNCA es MISSING ni incompleto: es ERROR clasificado y no navega', () => {
@@ -123,7 +139,7 @@ test('login.html repara el documento inexistente con la función canónica antes
   const body = login.slice(login.indexOf('async function ensureProfileComplete'), login.indexOf('async function finishGoogleLogin'));
   assert.match(body, /CREATE_THEN_COMPLETE_PROFILE/);
   assert.match(body, /ensureUserProfile\(db, user, detectAuthMethod\(user\)\)/);
-  assert.match(body, /resolved\.state === PROFILE_STATE\.ERROR \|\| resolved\.state === PROFILE_STATE\.MISSING/);
+  assert.match(body, /resolved\.state === PROFILE_STATE\.ERROR[\s\S]{0,120}PROFILE_STATE\.MISSING/);
   // nunca se vuelve a convertir un documento inexistente en `{}` dentro del alta
   assert.doesNotMatch(body, /snap\.exists\(\) \? snap\.data\(\) : \{\}/);
   assert.doesNotMatch(body, /currentSnap\.exists\(\) \? currentSnap\.data\(\) : \{\}/);
@@ -133,7 +149,13 @@ test('login.html repara el documento inexistente con la función canónica antes
 test('la sesión restaurada nunca cierra sesión ni deja un cargador colgado ante un error', () => {
   const start = login.indexOf('subscribeSession(async snapshot');
   const handler = login.slice(start, login.indexOf('// GOOGLE — primera opción', start));
-  assert.match(handler, /try \{\s*await ensureProfileComplete\(user, role\);[\s\S]*?\} catch \(restoreError\) \{[\s\S]*?hideLoginOverlay\(\);[\s\S]*?revealLoginSurface\(\);[\s\S]*?showError\(/);
+  assert.match(handler, /try \{\s*await ensureProfileComplete\(user, role\);[\s\S]*?\} catch \(restoreError\) \{[\s\S]*?hideLoginOverlay\(\);[\s\S]*?revealLoginSurface\(\);[\s\S]*?showActiveSessionState\(/);
   assert.doesNotMatch(handler, /signOut\(/);
   assert.match(handler, /withDeadline\(getDoc/);
+});
+
+test('withDeadline por defecto no llama setTimeout/clearTimeout como métodos de un objeto (Illegal invocation en navegador)', async () => {
+  const src = await (await import('node:fs/promises')).readFile(new URL('../../js/core/auth/estado-perfil-sesion.mjs', import.meta.url), 'utf8');
+  assert.doesNotMatch(src, /scheduler = \{ set: setTimeout, clear: clearTimeout \}/);
+  assert.equal(await withDeadline(Promise.resolve('ok'), 10), 'ok');
 });

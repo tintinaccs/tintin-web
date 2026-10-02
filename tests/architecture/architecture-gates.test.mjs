@@ -36,9 +36,7 @@ test('Superadmin y Sheets deben delegar a las autoridades canónicas', () => {
   const errors = auditDomainConsumerSources({
     adminOrderCrud: "fetch('/api/admin-order-mutation'); const action = { action: 'createOrder' };",
     inventoryAdmin: "fetch('/api/admin-order-mutation');",
-    sheetsAdminWebhook: 'createOrderAdmin(); applyOrderAdminMutation(); applyUserLifecycle();',
-    adminDeleteUser: 'applyUserLifecycle();',
-    userLifecycle: 'export async function applyUserLifecycle() {}',
+    sheetsAdminWebhook: "createOrderAdmin(); applyOrderAdminMutation(); throw new Error('La eliminación de cuentas fue retirada. Usá Bloquear.');",
     orderDomain: 'export async function createOrderAdmin() {}\nexport async function applyOrderAdminMutation() {}',
   });
   assert.deepEqual(errors, []);

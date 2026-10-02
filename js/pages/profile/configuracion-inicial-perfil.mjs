@@ -218,49 +218,13 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     };
   }
 
-  // `profileStatus: active` es la marca canónica que escribe el alta cuando
-  // ya validó nombre, teléfono, username, fecha y ubicación en una misma
-  // transición. No volver a inferir lo contrario en cada login: hacerlo
-  // reabría el formulario para perfiles históricos aunque sus campos ya
-  // estuvieran aprobados por Firestore.
-  if (clean(profile.profileStatus).toLowerCase() === 'active') {
-    exposeSavedLocationForOnboarding(profile);
-    return {
-      skip: true, needsName: false, needsPhone: false, needsAddress: false,
-      needsUsername: false, needsDob: false,
-      addressAlreadySaved: hasUsableAddress(profile),
-      suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
-    };
-  }
-
-  // Las cuentas creadas antes del formulario actual ya marcaban el alta como
-  // terminada con `onboardingCompleted`. Es una confirmación persistida de
-  // que no son cuentas nuevas: jamás se les debe reabrir "Últimos datos" por
-  // cambios posteriores de nombres internos de campos.
-  // Algunas cuentas existentes fueron confirmadas por la bienvenida antes de
-  // que existiera `profileStatus: active`. Todas estas marcas significan lo
-  // mismo: ya terminaron su alta. No se las puede tratar como altas nuevas
-  // ni volver a pedirles datos por haber cambiado la forma interna de
-  // guardarlos.
-  // Excepción: un perfil con `profileStatus: incomplete` es un alta nueva (o
-  // una cuenta recreada tras una baja) que todavía no validó sus datos. Sus
-  // marcas de bienvenida las escribe el tutorial al mostrarse, no la
-  // finalización del alta, así que no prueban nada: se decide por los datos.
-  const isOpenSignup = clean(profile.profileStatus).toLowerCase() === 'incomplete';
-  const hasPersistedCompletion = !isOpenSignup && (profile.onboardingCompleted === true ||
-    profile.profileCompleted === true ||
-    Boolean(profile.onboardingCompletedAt || profile.profileCompletedAt ||
-      profile.welcomeTutorialCompletedAt || profile.welcomeTutorialSeen));
-  if (hasPersistedCompletion) {
-    exposeSavedLocationForOnboarding(profile);
-    return {
-      skip: true, needsName: false, needsPhone: false, needsAddress: false,
-      needsUsername: false, needsDob: false,
-      addressAlreadySaved: hasUsableAddress(profile),
-      suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
-    };
-  }
-
+  // Regla del negocio: una cuenta client está completa sólo si TIENE los datos
+  // obligatorios, sin importar su antigüedad ni sus marcas (`profileStatus:
+  // active`, `onboardingCompleted`, `welcomeTutorialSeen`…). Esas marcas antes
+  // daban el alta por terminada aunque faltaran datos, y por eso una cuenta
+  // incompleta podía entrar directo a la tienda. Se decide siempre por los
+  // datos: lo mismo que valida el guardado de "Últimos datos", así que una
+  // vez completados no se vuelven a pedir.
   const stored = readProfileName(profile);
   const storedNameIsValid = isValidFullName(stored.firstName, stored.lastName);
   const storedPhone = storedPhoneValue(profile);

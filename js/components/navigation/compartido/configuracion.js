@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260930-home-canonical-1';
+export const SHELL_VERSION = 'tintin-20261001-active-session-shell-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,

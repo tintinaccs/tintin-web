@@ -26,8 +26,7 @@ const compat = read('js/admin/users/gestion-usuarios-admin.js');
 const ficha = read('js/admin/users/ficha-usuario-admin.js');
 const rules = read('firestore.rules');
 const accountContract = JSON.parse(read('config/account-contract.json'));
-const accountStatusFunction = read('functions/api/admin-delete-user.js');
-const userLifecycle = read('cloudflare/user-lifecycle-domain.js');
+const adminHtml = read('admin.html');
 
 // 1. Identidad y techo de roles
 check(
@@ -107,10 +106,10 @@ check(
   'La protección debe existir en la acción, no solo en el botón.'
 );
 check(
-  'Eliminar protege al Super Admin y valida permiso',
-  /_target\.email === SUPER_ADMIN/.test(adminApp) &&
-    /window\.deleteUser[\s\S]{0,800}if \(!can\(currentRole, 'deleteUsers'\)\)/.test(adminApp),
-  'deleteUser no puede borrar la cuenta oficial ni correr sin permiso.'
+  'La eliminación de cuentas no existe en el panel',
+  !/window\.deleteUser\b|bulkDeleteUsers|deleteUserByEmail|\/api\/admin-delete-user/.test(adminApp) &&
+    !/users-bulk-delete-btn|users-delete-by-email-btn|data-user-tab="deleted"/.test(adminHtml),
+  'Sólo existen cuentas activas o bloqueadas: ni botones ni funciones de eliminar cuentas.'
 );
 check(
   'Cambiar rol protege Super Admin y limita roles',
@@ -133,19 +132,16 @@ check(
 check(
   'CRUD individual de clientes muestra progreso real y resultado central',
   /window\.blockUser = async[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)[\s\S]*?ctx\.ok\('write'\)[\s\S]*?window\.restoreUser/.test(adminApp) &&
-    /window\.restoreUser = async[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)[\s\S]*?ctx\.ok\('write'\)[\s\S]*?window\.deleteUser/.test(adminApp) &&
-    /window\.deleteUser = async[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('delete'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp) &&
+    /window\.restoreUser = async[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)[\s\S]*?ctx\.ok\('write'\)/.test(adminApp) &&
     /config\.showSuccessDialog === true\) openOperation\(operation\)/.test(operationsUi),
-  'Bloquear, restaurar y eliminar deben ejecutarse dentro del seguimiento central de operaciones.'
+  'Bloquear y desbloquear deben ejecutarse dentro del seguimiento central de operaciones.'
 );
 check(
   'Las acciones sensibles dejan auditoría',
   /logAudit\('cambiar_rol'/.test(adminApp) &&
     /logAudit\('bloquear_usuario'/.test(adminApp) &&
-    /logAudit\('restaurar_usuario'/.test(adminApp) &&
-    /applyUserLifecycle/.test(accountStatusFunction) &&
-    /auditLog\/\$\{eventId\}/.test(userLifecycle),
-  'Rol, bloqueo, restauración y eliminación deben quedar trazados desde su autoridad canónica.'
+    /logAudit\('restaurar_usuario'/.test(adminApp),
+  'Rol, bloqueo y desbloqueo deben quedar trazados en auditoría.'
 );
 check(
   'La tabla escapa nombre, email y avatar',

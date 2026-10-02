@@ -15,7 +15,7 @@
 // ni en un cierre de sesión. MISSING sólo sale de una lectura exitosa que dice
 // que el documento no existe.
 
-import { getProfileCompletionPlan } from '../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1';
+import { getProfileCompletionPlan } from '../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261001-ultimos-datos-1';
 
 export const PROFILE_STATE = Object.freeze({
   NOT_REQUESTED: 'NOT_REQUESTED',
@@ -136,7 +136,10 @@ export function resolveProfileAction(state) {
  * con un código clasificable en vez de dejar un loader colgado. No reemplaza
  * la resolución real; sólo garantiza una salida.
  */
-export function withDeadline(promise, ms, scheduler = { set: setTimeout, clear: clearTimeout }) {
+export function withDeadline(promise, ms, scheduler = {
+  set: (...args) => globalThis.setTimeout(...args),
+  clear: (...args) => globalThis.clearTimeout(...args),
+}) {
   let timer;
   const deadline = new Promise((_, reject) => {
     timer = scheduler.set(() => {

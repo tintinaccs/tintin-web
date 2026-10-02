@@ -9,6 +9,7 @@ import {
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyOrderAdminMutation, createOrderAdmin, resetOrderSequenceAdmin } from '../../cloudflare/order-admin-domain.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
+import { notifyCustomerOrderChange } from '../../cloudflare/correo-estado-pedido.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
 
 function safeText(value, max = 500) {
@@ -43,6 +44,7 @@ export async function onRequest(context) {
         source: 'admin-payment'
       }, { uid: actor.uid, email: actor.email, role: actor.role, origin: 'admin-payment' });
       context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
+      context.waitUntil?.(notifyCustomerOrderChange(env, result));
       return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
     }
     const actorContext = {
@@ -66,6 +68,7 @@ export async function onRequest(context) {
     // después y en best-effort: una caída de Google nunca convierte en fallido
     // un pedido que ya fue confirmado por el dominio canónico.
     context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
+    if (body.action !== 'createOrder') context.waitUntil?.(notifyCustomerOrderChange(env, result));
     return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
   } catch (error) {
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);

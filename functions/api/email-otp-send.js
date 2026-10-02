@@ -8,12 +8,10 @@ import {
   firestoreAdminGet,
   firestoreAdminReplace,
   decodeFirestoreFields,
-  resolveEmailFromUsernameKey,
   fsString,
   fsInteger,
   fsTimestamp
 } from '../../cloudflare/firebase-admin-ligero.js';
-import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
 const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
 const EMAIL_MARK = 'https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png';
@@ -180,7 +178,6 @@ export async function onRequest(context) {
     const rawBody = await request.text();
     if (rawBody.length > 2000) throw new Error('request_too_large');
     const body = JSON.parse(rawBody || '{}');
-    const rawUsername = clean(body.username, 20);
     const rawEmail = clean(body.email, 254).toLowerCase();
 
     const now = Date.now();
@@ -197,19 +194,10 @@ export async function onRequest(context) {
       throw rateError;
     }
 
-    let email;
-    if (rawUsername) {
-      const key = usernameKey(rawUsername);
-      const resolved = key ? await resolveEmailFromUsernameKey(env, key) : null;
-      if (!resolved) {
-        return jsonResponse({ success: true }, 200, origin, requestUrl);
-      }
-      email = resolved;
-    } else {
-      email = rawEmail;
-      if (!emailIsValid(email)) {
-        return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
-      }
+    // Sólo correo: el ingreso con @usuario se retiró.
+    const email = rawEmail;
+    if (!emailIsValid(email)) {
+      return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
     }
 
     // La cuenta Super Admin entra sólo con Google (email-otp-verify también

@@ -24,14 +24,14 @@ test('un alta incompleta no se salta la completación aunque el tutorial haya ma
   assert.equal(plan.skip, false);
 });
 
-test('un perfil legacy con banderas de onboarding sigue exento', () => {
+test('un perfil legacy con banderas de onboarding pero sin datos debe completarlos', () => {
   const plan = getProfileCompletionPlan({
     profile: { profileStatus: 'legacy', onboardingCompleted: true },
     user,
     role: 'client',
     superAdminEmail,
   });
-  assert.equal(plan.skip, true);
+  assert.equal(plan.skip, false);
 });
 
 test('el tutorial de bienvenida no se muestra a un perfil incompleto', () => {

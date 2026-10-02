@@ -1,5 +1,51 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Cierre de CI del PR #1001 (permisos Firebase/App Check) — 2026-10-01/02 (rama `fix/firebase-permissions-recovery-20261001`)
+
+**Alcance de este ciclo: no se tocó el fix de autorización ya presente en el PR #1001.** Esa rama (abierta por el propio dueño, commits `271c752d`…`b66baa10`) ya contenía el diagnóstico y la corrección correctos para "panel dice SUPER ADMIN pero Firestore devuelve `permission-denied`": ver detalle en su propia nota de `docs/agent/CURRENT_STATE.md` (sección "Recuperación permisos/App Check") y en el cuerpo del PR. Este ciclo auditó ese diagnóstico, lo verificó con pruebas reales y desbloqueó su CI, que estaba en rojo.
+
+**Causa raíz confirmada por lectura de código (no solo hipótesis):** `firestore.rules` → `isSuperAdmin()` se basa en `request.auth.token.email == "tintinaccs@gmail.com"` (no en custom claims; el repo no despliega Firebase Functions/Admin SDK, así que no hay otra forma de fijar un claim de rol). Ese campo lo llena Firebase Auth automáticamente al autenticar, así que el rol en sí no es la causa del `permission-denied`. La causa real son módulos que montaban listeners/escrituras de Firestore sin esperar un App Check verificado (`waitForAdminAppCheck`), y que al fallar la lectura: (a) reintentaban notificaciones cada ~1.4 s sin límite aunque el error fuera permanente, y (b) convertían un error de lectura en "0 productos/colecciones/pedidos" indistinguible de una base vacía. Confirmado también que `settings/appearance` e `imageDefaults` son de lectura pública en las Rules — un `permission-denied` ahí tampoco es un problema de rol sino de la misma causa de App Check/escritura.
+
+**Lo que corrigió el PR #1001 (ya en la rama, no modificado por este ciclo):** gate estricto de App Check en Cupones y en los módulos privados de Configuración/Apariencia/Contenido/Correo/Métodos de pago; corte del reintento automático de Notificaciones ante `permission-denied`/`unauthenticated` (se reactiva solo con reautenticación real vía `subscribeAuthState`, no con un timer); "Mi perfil" deja de consultar pedidos si App Check resolvió no disponible y se recupera con el evento `tintin:app-check-ready`; Productos/Colecciones/Pedidos del admin separan `error` de `empty` y ya no muestran "0" por una lectura fallida; el panel de Flujo de conexiones separa explícitamente claims del ID token (`email`, `aud`) de la autorización real de Firestore.
+
+**Lo que corrigió este ciclo (CI estaba en rojo, nunca llegó a correr los gates de navegador/reglas):**
+- `diagnostic-manifest.json` estaba desincronizado con el código del último commit del PR (`b66baa10`) → fallaba el paso "Reject generated artifact drift". Se regeneró con `npm run build:pages`.
+- `scripts/auditar-superadmin-cierre-total.mjs` exigía que `notificaciones-admin.js` se sirviera con un tag de caché que contuviera `notifications-(auto-read|rich)` o `global-session-restore`; el bump legítimo de este PR a `?v=tintin-20261001-firebase-permissions-1` (por el fix real del bucle de reintento) no matcheaba ese patrón viejo y el check fallaba (72/73) aunque el contenido era correcto. Se amplió el regex para aceptar también `firebase-permissions` como evidencia de que el tag es posterior a una corrección real (no una reversión silenciosa). No se tocó `admin.html`: el `?v=` ya era correcto, solo la auditoría estaba desactualizada.
+- Se instaló Temurin JDK 21 en este entorno (no estaba disponible) para poder ejecutar realmente el emulador de Firestore en local, en vez de dejar esos checks como NOT_VERIFIED.
+
+**Verificación local real (este commit, `57f96f75`), no solo "compiló":**
+- `node --test` sobre todos los `tests/**/*.test.{mjs,js}`: **751/751 PASS**, incluye las 5 regresiones nuevas de `tests/admin/firebase-permission-recovery.test.mjs`.
+- `npm run build:pages` y `git diff --exit-code -- .`: **sin drift**.
+- `npm run audit:final`: **PASS** (832 checks de Fase 11 incluidos).
+- Firestore real contra el emulador (Java 21 instalado en esta sesión): `test:rules-critical` 78/78, `test:rules-phone` 12/12, `test:rules-username` 13/13 — **todos PASS**, incluida la verificación adversarial de que un usuario no-superadmin no puede escribir donde no debe.
+- Los 6 scripts de "Super Admin master contracts": **PASS**, incluido `auditar-superadmin-cierre-total.mjs` ahora en **73/73** (antes 72/73).
+- `scripts/auditar-preparacion-dominio.mjs` y `scripts/auditar-integraciones-canonicas.mjs`: PASS.
+- `backup-firestore.mjs --dry-run` y `restore-firestore.mjs --dry-run`: PASS (no tocan Firestore real).
+- Gates de navegador (Chromium real vía Playwright, servidor estático local en el commit exacto): `test:admin-operations-browser` 2/2, `test:navigation-header` 10/10 (+1 skip preexistente no relacionado), `test:cart-quantity-browser` 1/1 (incluye el caso de stock=3 con botón `+` deshabilitado correctamente en el límite), `test:phase8-ui` 2/2, `test:phase10-a11y` 5/5, `test:phase11-seo` 6/6, `test:performance` 30/30, `audit:canonical-viewports` 126/126, `audit:global-responsive-geometry` 187/187, `test:pages` 18 rutas OK, `auditar-legal-paginas.js` OK. **Esto reproduce exactamente la secuencia completa de `.github/workflows/auditar-tintin.yml`.**
+- Commit `57f96f75` empujado a `origin/fix/firebase-permissions-recovery-20261001` (PR #1001); CI de GitHub Actions debería volver a correr sobre ese SHA. No se hizo merge ni deploy.
+
+**Hallazgos del resto del alcance pedido, sin cambios de código porque ya están correctos o no son reproducibles desde el repo:**
+- El botón `+` de cantidad en producto (`tienda.js`) se deshabilita exactamente cuando `_pdQty >= _pdMaxQty` y `_pdMaxQty = Math.max(stock, 0)`; cuando el límite es por stock bajo, el texto `qty-stock` muestra "Solo N disponibles" junto al control. No hay bug: el límite ya es explicable para el usuario. Cubierto por `tests/cart/quantity-browser.spec.js`.
+- Los textos `PAGO SEGUROOXSD`, `opiniónes` y `sesiónes` reportados por el dueño **no existen en el código fuente actual** (grep de todo el repo, cero coincidencias). Confirma el hallazgo de la nota anterior del 2026-10-01: si el dueño los vio, es contenido remoto/caché de un build/CDN anterior, no algo que este repo pueda corregir sin verlo reproducido en vivo.
+- Reglas de Firestore **desplegadas en producción vs. las del repo**: su publicación es manual (`firebase deploy --only firestore:rules`, workflow "Publicar reglas Firestore") y esta sesión no tiene credenciales/acceso a la consola de Firebase ni al proyecto real `tintin-accesorios` — **NOT_VERIFIED**, no asumir que coinciden. Es el mismo bloqueo que ya documentaban los ciclos anteriores.
+- Producción real (Pages, Firebase Auth real, usuarios reales, App Check en el dominio real): **NOT_VERIFIED** en esta sesión, sin credenciales de navegador autenticado ni acceso a Cloudflare/Firebase console. Todo lo reportado arriba es evidencia de código + emulador + navegador local contra el commit exacto, no contra producción.
+
+**Pendiente real:** confirmar en CI de GitHub (no solo local) que los 5 checks vuelven a verde para `57f96f75`; validar en preview/producción autenticada que un login real de `tintinaccs@gmail.com` deja de ver `permission-denied` en Productos/Colecciones/Pedidos/Notificaciones/Apariencia/Mi perfil; decidir si se quiere mergear el PR #1001 (esta sesión no mergea sin autorización explícita).
+
+## Cierre del cuestionario del dueño — 2026-10-01 (rama `feat/cuestionario-cierre`)
+
+**Comprobación respuesta por respuesta, sólo en código y tests locales; nada probado en producción.** El detalle está en `docs/agent/DECISIONES_CUESTIONARIO.md`. Lo que estaba marcado FALTA/REVISAR quedó implementado en #991-#998 o confirmado ya existente: botón de pago del admin, sin pago preseleccionado, sin aviso de poco stock, archivado por `active:false`, horario en el pie, sesión persistente sin límite de inactividad del admin, push a todos los dispositivos con sonido, y la clienta sin permiso para editar pedidos.
+
+**Cambio de esta rama:** activar/desactivar un producto desde el botón rápido del admin (`prodToggleActive` y el de colecciones) ahora escribe en `auditLog`, igual que la edición completa, que ya registraba precio, stock y activo.
+
+**Límites abiertos, sin implementar a propósito:**
+- WhatsApp automático al admin: requiere una cuenta de WhatsApp Business API.
+- Sheets "solo espejo": la hoja `Productos` todavía escribe el catálogo vía webhook; cortarla requiere confirmación del dueño.
+- Eliminar cuenta: diferido por el dueño.
+- Cancelar un pedido no devuelve el uso del cupón.
+- El correo de estado no tiene reintento.
+- Las reglas de Firestore (cupones, direcciones) hay que publicarlas a mano.
+
 ## Verificación PR #978 en preview real — 2026-09-30 (base `f84c51b`, rama `claude/funny-keller-205w4v`)
 
 **HOME — probado en preview real, parcialmente funcional.** Chromium sin interceptar respuestas normales: `/` HTTP 200 en 390×844, 768×1024 y 1280×900; un solo hero y shell montado, sin overflow horizontal, loader retirado, sin `tt-surface-locked` ni elementos `inert` al quedar estable. Se observaron dos solicitudes distintas a `/api/public-catalog`, una para `collections` y una para `products` (una por recurso; no afirmar una sola solicitud total). La consola emitió `requestStorageAccess: Permission denied` y una respuesta 403 en las tres pantallas; no hubo excepciones `pageerror`. Prueba de fallo de catálogo: primer request de products abortado → `#products-grid` en `error`, botón Reintentar y look oculto; segundo request permitido → `ready`, sin navegación adicional. El preview conserva la versión anterior del CSS mientras este PR no se publique.
@@ -439,3 +485,87 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - `audit:admin-responsive`: PASS 16/16 viewports.
 - `scripts/auditar-escritorio-correcciones.mjs`: fallaba "Checkout vacío permite continuar" porque leía `#btn-step1-next` en `domcontentloaded`, antes de que `renderCart()` (async, módulos Firebase) fijara `disabled`/`aria-disabled`. Evidencia: en producción (`tintinaccesorios.pages.dev/checkout`, carrito vacío) el botón queda `disabled=true`, `aria-disabled="true"`; local con red hacia gstatic también (10 s). Corrección: la auditoría espera hasta 15 s el estado final. Sin red a gstatic (este contenedor sin proxy en Chromium) la auditoría sigue fallando por entorno; no se pudo ejecutar la auditoría completa con la corrección en este contenedor.
 - Producción (solo lecturas): carrito invitado agregar → checkout con subtotal correcto: PASS. Login: solo carga de pantalla; inicio de sesión real NO probado.
+
+## Área 2: libreta de direcciones (hasta 5) — 2026-10-01
+- Implementado: `js/pages/profile/libreta-direcciones.mjs` (lógica pura), `perfil.html` (lista con "Principal", "Hacer principal", "Eliminar", contador y botón deshabilitado al llegar a 5), `checkout.html` ("Guardar en mi perfil" agrega a la libreta sin pisar; si está llena o repetida no hace nada) y `firestore.rules` (`savedLocations` es lista de ≤5). `savedLocation` sigue siendo la principal, así que checkout y completitud de perfil no cambian.
+- Estado: PASS_LOCAL (`tests/profile` 12/12 incluyendo 7 nuevos, `tests/accounts`+`tests/checkout` 144/144, security/auth/login/architecture 132/132, `node --check` de los módulos de perfil y checkout, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`). NO probado contra Firestore real ni en producción; la regla nueva NO está desplegada hasta que corra el flujo de reglas.
+- Riesgo conocido: hasta que la regla se despliegue, las reglas vigentes aceptan `savedLocations` sin tope (no rompe nada; el tope de 5 también se aplica en el cliente).
+- Diferido por decisión del usuario: eliminación de cuenta de cliente (no implementada).
+
+## Cuestionario del dueño: matriz de cumplimiento — 2026-10-01
+- Estado: NOT_VERIFIED en producción. Matriz en `docs/agent/DECISIONES_CUESTIONARIO.md` (lectura de código, sin pruebas en vivo).
+- Brechas confirmadas por no encontrar código: cupones (envío gratis, límites, fechas), email al cliente en cada cambio de estado, precio anterior tachado + %, historial de cambios de precio/stock, descuento de stock al confirmar pago.
+
+## Auditoría por áreas — Área 2 (cuentas/login/perfil) — 2026-10-01
+- PASS_LOCAL (lectura de código, sin login real): el acceso es solo Google (popup/redirect) + código OTP por correo (`login.html`, `functions/api/email-otp-*.js`); no existe flujo de contraseña. "@usuario" solo resuelve identificador para el OTP.
+- PASS_LOCAL: teléfono obligatorio en el alta (`needsPhone` en `js/pages/profile/configuracion-inicial-perfil.mjs`), con unicidad por `phoneReservations` + `firestore.rules`.
+- PASS_LOCAL: consentimiento de cookies/estadísticas gobierna GA4 (`js/analytics/analitica.js` usa `hasStatisticsConsent`).
+- PENDING (decisión ya tomada, no implementado): el perfil guarda UNA dirección (`perfil-dir` en `perfil.html`); no hay libreta de varias direcciones.
+- PENDING: el cliente no tiene "eliminar mi cuenta" en `perfil.html`; solo existe la baja desde admin (`functions/api/admin-delete-user.js`, `cloudflare/user-lifecycle-domain.js`).
+- NOT_VERIFIED: sesión autenticada real y producción.
+## Login "Últimos datos" — rejilla responsive (2026-10-01)
+- Causa: `#login-profile-block` usaba áreas con nombre; al ocultarse "Nombre/Apellido" (nombre detectado) quedaba un hueco, el orden DOM no coincidía con el visual, las tarjetas tenían estilos desiguales, `.tt-map-block` anidaba una tarjeta dentro de otra y la tarjeta "Nombre detectado" se inflaba.
+- Cambio: nuevo `css/pages/login/login-onboarding-form-layout.css` (solo `login.html`, tag `tintin-20261001-onboarding-form-grid-1`); no se tocaron CSS existentes ni tokens.
+- PASS_LOCAL: Chromium 320/390/600/768/1024/1440, variantes nombre detectado y editable con DOM inyectado, sin desborde horizontal; `verify:csp`, `verify:diagnostics`, `audit:cache-versioning`, `audit:login-isolation` (35/35), `audit:login-profile` (77/77).
+- NOT_VERIFIED: login real (Google/OTP/Firebase) y producción; mapa sin teselas en el entorno de prueba.
+## Auditoría por áreas — Área 1 (pedidos/stock/checkout/reseñas) — 2026-10-01
+- Reseñas con moderación previa (decisión del dueño): `createReview` crea la reseña de un cliente con `visible:false` y NO escribe el documento público `products/{id}/reviews/{id}`; el admin la publica con `reviewVisibility` (ya escribe el público). Super Admin sigue publicando directo. Aviso al admin: "envió una reseña para aprobar". Verificación: `npm run test:engagement` 45/45, PASS_LOCAL. No probado con Firestore real ni en producción.
+- Brechas vs decisiones, NO cambiadas (alto riesgo, requieren despliegue coordinado de Apps Script por el dueño): (1) el stock se descuenta/reserva al crear el pedido (`CrearPedido.gs`), la decisión es "al confirmar el pago"; (2) no existe sistema de cupones; (3) tope de 4 productos distintos por pedido (`firestore.rules`, `modelo-inventario.mjs`). Estado: PENDING (decisión de producto/despliegue).
+
+## Fase 6 — Stock se descuenta al confirmar el pago
+
+Decisión del dueño: el stock se descuenta al confirmar el pago; la última unidad la gana quien confirma.
+
+- **Modelo**: un pedido nuevo (pendiente y sin pago) ya no descuenta stock; solo valida disponibilidad y queda con `inventoryState: 'unreserved'`. Se descuenta (con las mismas precondiciones atómicas sobre el producto) cuando `paymentStatus` pasa a `pagado` o cuando el equipo avanza el estado más allá de `pendiente`. Cancelado/rechazado nunca descuentan; cancelar un pedido sin descuento no devuelve stock. Los pedidos anteriores ya `reserved` conservan su reserva. Cambios: `js/core/store/modelo-inventario.mjs` (`orderConfirmsInventory`), `cloudflare/order-admin-domain.js` (creación y mutación), `cloudflare/paypal-seguro.js` (descuenta tras capturar el pago; si el stock ya no alcanza, el cobro queda registrado y se avisa al admin con una notificación).
+- **Reglas de Firestore**: sin cambios. `unreserved` no reserva en `orderStateReservesInventory`, y todas las ediciones/estados del panel pasan por el dominio del servidor.
+- PASS_LOCAL: `tests/orders|sync|checkout|payments|public-commerce|functions` (206 pass, incluye 5 tests nuevos de este modelo), `test:paypal`, `audit:critical-healing`, `audit:level2`, `audit:admin-orders`, `audit:secure-orders`, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`.
+- NOT_VERIFIED: flujo real con PayPal/Firebase en producción.
+- Riesgo aceptado (decisión del dueño): dos clientas pueden pedir la última unidad; quien confirma primero la obtiene y la otra recibe "Stock insuficiente" al confirmar (en PayPal, aviso al admin porque el cobro ya ocurrió).
+- Pendiente: la limpieza `cleanupStalePendingOrders` y el checkout legacy de cliente siguen usando el estado `pending`; no se tocaron.
+
+## Fase 5 — Correos de estado de pedido (rama `feat/correos-estado`)
+- Implementado: `cloudflare/correo-estado-pedido.js`. Tras cada cambio confirmado de estado del pedido (`confirmado`, `preparando`, `listo_retiro`, `en_camino`, `entregado`, `cancelado`, `rechazado`) o de pago (`pagado`, `rechazado`, `reembolsado`) se envía un correo a la clienta. Se invoca desde `admin-order-mutation` (edición de estado y de pago) y desde `sheets-admin-webhook` (`updateOrder`). Clave idempotente `order-<id>-status-<changeId>`; best-effort con `waitUntil` (un fallo de Resend no revierte el cambio). Sin `RESEND_API_KEY`, duplicado, correo inválido o sin cambio: no envía.
+- Ya existía y no se tocó: correo "Recibimos tu pedido" (clienta y dueña) con cola de reintento.
+- Aviso por WhatsApp al admin: no existe envío automático en el repo (solo enlaces `wa.me` desde el cliente). Hacerlo exige WhatsApp Business API (integración nueva): NO implementado, requiere decisión.
+- PASS_LOCAL: `tests/orders/correo-estado-pedido.test.mjs`, suite completa, audits. NOT_VERIFIED: envío real con Resend y producción (no se enviaron correos reales).
+- Limitación: si Resend falla en el cambio de estado no hay reintento por cola (solo el correo de "pedido recibido" la tiene).
+
+## Fase 4 — Cupones de envío gratis (2026-10-01, rama feat/cupones)
+- Implementado: colección `coupons/{CÓDIGO}` (solo super admin; `usedCount` solo lo mueve el servidor) y `couponRedemptions/{CÓDIGO}__{uid}` (solo servidor). Regla de negocio única en `cloudflare/cupones.js`: activo, fechas inicio/fin (Paraguay -03:00), límite total y por cliente (0 = sin límite), aplica solo a delivery con costo conocido > 0.
+- El servidor reevalúa el cupón en `preparePublicCheckoutOrder` (422 con código `coupon_*`) y de nuevo, de forma atómica con precondiciones, en `createOrderAdmin` (suma `usedCount` y el canje del cliente en el mismo commit que el pedido; guarda `coupon` y `shippingDiscount` en el pedido). `couponCode` entró a `CHECKOUT_DRAFT_KEYS` y a la lista de Apps Script heredado.
+- Cliente: campo "Cupón" en `checkout.html` + `POST /api/coupon-validate` (informativo; autoridad final = servidor); resumen muestra "Gratis (cupón X)". Admin: `js/admin/settings/cupones-admin.js` (alta/edición/activar/borrar, solo super admin) montado en Configuración.
+- Etiquetas de caché: subir el tag de `pedido-checkout-seguro.js`/`politica-checkout.js` obligó a bumpear `sincronizacion-carrito.js`, loader, shell público y `tienda.js` (`-cupones-1` / `cupones-shell-1`); `esquema-color-instantaneo.js` recibió un comentario para poder alinear su tag con el del carrito (test `navegacion-inmediata`).
+- PASS_LOCAL: `tests/checkout/cupones.test.mjs` (6), `node --test tests/*/*.test.mjs` 703/703, `audit:cache-versioning`, `verify:csp`, `verify:diagnostics`, audits public-shell/cart/secure-orders/checkout-delivery/app-check/phase8/phase10/page-loading/security/store-gate/admin-foundation/admin-orders/release.
+- NOT_VERIFIED: producción; flujo real en navegador con Firebase; la UI admin de cupones no se ejecutó contra Firestore. Las reglas de Firestore se publican a mano (workflow "Publicar reglas Firestore"): sin publicarlas el admin de cupones no podrá leer/escribir. Un pedido cancelado no libera el uso del cupón (sin decisión del dueño).
+
+## Fase 3 — Catálogo y precios (`feat/catalogo-precios`)
+- Estado: PASS_LOCAL. Producción NOT_VERIFIED.
+- Implementado: precio anterior tachado + `-N%` en tarjetas y ficha de producto cuando `priceBefore > price` (`tienda.js`: `discountInfo`/`priceMarkup`). Usa token existente `--color-state-discount`/`--color-price-old`; sin cambios de CSS global.
+- Implementado: horario de atención en el footer unificado (`scripts/sincronizar-inicio-navegacion-publica.js` → `sync:public-shell`); ya existía en contacto.
+- Verificado por código: etiqueta "Agotado" existe (tienda.js, catalogo.html); no existe aviso de poco stock (decisión: no mostrar).
+- Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
+- Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.
+
+## 2026-10-01 — Recuperación permisos/App Check (GPT-5.6 Sol)
+
+Estado: **IN_PROGRESS / NOT_VERIFIED en producción**.
+
+Evidencia del código base:
+- `firestore.rules` reconoce al Super Admin por el email autenticado `tintinaccs@gmail.com` y permite sus lecturas administrativas.
+- `settings/appearance` e `settings/imageDefaults` tienen lectura pública en las Rules del repo; un `permission-denied` del navegador sobre esas superficies no se explica sólo por el rol del Super Admin.
+- El cliente y el service worker apuntan al proyecto `tintin-accesorios`.
+- App Check usa reCAPTCHA Enterprise y Firestore depende de un token válido cuando enforcement está activo.
+- Producción puede diferir de las Rules del repo porque su publicación es manual; desde este ciclo no se ejecutó deploy.
+
+Cambios de esta rama:
+- Notificaciones Admin ya no reintentan en bucle listeners rechazados con `permission-denied`/`unauthenticated`.
+- Cupones, que antes podía montar Firestore sin gate de App Check, ahora espera el gate estricto `waitForAdminAppCheck`.
+- Mi perfil no inicia consultas de pedidos cuando App Check resolvió no disponible y reintenta cuando llega el evento real `tintin:app-check-ready`.
+- Productos/Colecciones/Pedidos distinguen `error` de `empty`; los totales dejan de mostrar 0 como si la consulta hubiera sido válida.
+- Flujo de conexiones separa renovación/claims del ID token de la autorización de Firestore y comprueba email/proyecto sin exponer el token.
+
+Pendiente de evidencia:
+- Ejecutar CI del PR.
+- Confirmar en preview autenticado que App Check obtiene token y que las lecturas privadas funcionan.
+- Comparar/publicar Rules en Firebase sólo con autorización de deploy; este ciclo no despliega.
+- Los textos `PAGO SEGUROOXSD`, `opiniónes` y `sesiónes` no aparecen en el código actual y pueden residir en contenido remoto/cache; no se modifican datos reales sin una operación explícitamente autorizada.
