@@ -1,1 +1,1 @@
-import './gestion-participacion-admin-v2.js?v=tintin-20260928-admin-crud-feedback-4';
+import './gestion-participacion-admin-v2.js?v=tintin-20261001-inventory-fix-1';

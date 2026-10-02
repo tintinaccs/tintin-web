@@ -1,5 +1,6 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { appCheckReady, auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -12,7 +13,11 @@ let notifications = [];
 let unsubscribe = null;
 let authUnsubscribe = null;
 let markingVisibleRead = false;
+const LISTENER_RETRY_DELAYS_MS = [1400, 4000, 12000, 30000];
 let subscribeRetryTimer = 0;
+let subscribeRetryAttempt = 0;
+let subscribeAuthRecoveryAttempted = false;
+let listenerFailed = false;
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -248,26 +253,75 @@ function notificationsSurfaceIsOpen() {
       && ['opening', 'open'].includes(window.TintinSurfaceController?.state));
 }
 
-function subscribe(user) {
+function listenerErrorCode(error) {
+  return String(error?.code || error?.name || 'unknown').replace(/^firestore\//, '').toLowerCase();
+}
+
+function scheduleSubscriptionRecovery(targetUser, error) {
+  const code = listenerErrorCode(error);
+  const authRelated = code === 'permission-denied' || code === 'unauthenticated';
+  const permanent = ['failed-precondition', 'invalid-argument', 'unimplemented'].includes(code);
+  recordAuthDiagnostic('FIRESTORE_LISTENER_ERROR', {
+    source: 'customer-notifications',
+    firestoreCode: code,
+    recovery: permanent ? 'stop' : authRelated ? 'refresh-once' : 'bounded-backoff',
+    retryAttempt: subscribeRetryAttempt,
+  });
+  if (!targetUser || currentUser?.uid !== targetUser.uid || permanent) return;
+
+  if (authRelated) {
+    if (subscribeAuthRecoveryAttempted) return;
+    subscribeAuthRecoveryAttempted = true;
+    void targetUser.getIdToken(true)
+      .then(() => appCheckReady)
+      .then(() => {
+        if (currentUser?.uid !== targetUser.uid) return;
+        subscribeRetryTimer = window.setTimeout(() => subscribe(currentUser, { preserve: true }), 0);
+      })
+      .catch(refreshError => {
+        recordAuthDiagnostic('FIRESTORE_LISTENER_AUTH_REFRESH_FAILED', {
+          source: 'customer-notifications',
+          firestoreCode: listenerErrorCode(refreshError),
+        });
+      });
+    return;
+  }
+
+  if (subscribeRetryAttempt >= LISTENER_RETRY_DELAYS_MS.length) return;
+  const delay = LISTENER_RETRY_DELAYS_MS[subscribeRetryAttempt];
+  subscribeRetryAttempt += 1;
+  subscribeRetryTimer = window.setTimeout(() => subscribe(currentUser, { preserve: true }), delay);
+}
+
+function subscribe(user, { preserve = false } = {}) {
   unsubscribe?.();
   unsubscribe = null;
   if (subscribeRetryTimer) window.clearTimeout(subscribeRetryTimer);
   subscribeRetryTimer = 0;
-  notifications = [];
-  render();
+  if (!preserve) {
+    listenerFailed = false;
+    notifications = [];
+    subscribeRetryAttempt = 0;
+    subscribeAuthRecoveryAttempted = false;
+    render();
+  }
   if (!user) return;
   const source = query(collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(100));
   unsubscribe = onSnapshot(source, snapshot => {
     notifications = snapshot.docs
       .map(document => ({ id: document.id, ...document.data() }))
       .filter(isVisibleCustomerNotification);
+    listenerFailed = false;
+    subscribeRetryAttempt = 0;
+    subscribeAuthRecoveryAttempted = false;
     render();
     if (notificationsSurfaceIsOpen()) void markVisibleNotificationsRead();
   }, error => {
     console.warn('[notifications] No se pudo escuchar la actividad:', error);
     const root = document.getElementById('tt-notifications-list');
-    if (root) root.innerHTML = '<div class="tt-notifications-error">No pudimos cargar las notificaciones. Volvé a intentar en unos segundos.</div>';
-    if (currentUser) subscribeRetryTimer = window.setTimeout(() => subscribe(currentUser), 1400);
+    listenerFailed = true;
+    if (root) root.innerHTML = '<div class="tt-notifications-error">No pudimos actualizar las notificaciones. Conservamos la actividad ya cargada y podés volver a abrir este panel para reintentar.</div>';
+    scheduleSubscriptionRecovery(user, error);
   });
 }
 
@@ -297,6 +351,12 @@ function wireEvents() {
     const surface = String(event.detail?.surface || '');
     const state = String(event.detail?.state || '');
     if (surface === 'notifications' && (state === 'opening' || state === 'open')) {
+      // Reintento manual: sólo cuando la recuperación automática ya se detuvo.
+      if (listenerFailed && currentUser && !subscribeRetryTimer) {
+        subscribeRetryAttempt = 0;
+        subscribeAuthRecoveryAttempted = false;
+        subscribe(currentUser, { preserve: true });
+      }
       void markVisibleNotificationsRead();
     }
   });

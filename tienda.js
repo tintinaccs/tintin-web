@@ -1249,6 +1249,29 @@ function _updateProductMeta(product, mainImgUrl) {
   setMeta('link-canonical', 'href', url);
 }
 
+function productSpecDisplayValue(label, value) {
+  const text = sanitizePlainText(value, 500).trim();
+  // Acabados cargados en minúscula ("dorado") se presentan capitalizados.
+  if (label === 'Color / acabado' && text && text === text.toLowerCase()) {
+    const readable = text.replace(/[-_]+/g, ' ');
+    return readable.charAt(0).toUpperCase() + readable.slice(1);
+  }
+  if (label !== 'Material' || !text) return text;
+  const materialKey = text.toLowerCase().replace(/\s+/g, '-').replace(/_/g, '-');
+  const knownMaterials = {
+    'acero-inoxidable': 'Acero inoxidable',
+    'acero-quirurgico': 'Acero quirúrgico',
+    'plata-925': 'Plata 925',
+    'enchapado-en-oro': 'Enchapado en oro',
+  };
+  if (knownMaterials[materialKey]) return knownMaterials[materialKey];
+  if (/^[a-z0-9]+(?:[-_][a-z0-9]+)+$/i.test(text)) {
+    const readable = text.replace(/[-_]+/g, ' ').toLowerCase();
+    return readable.charAt(0).toUpperCase() + readable.slice(1);
+  }
+  return text;
+}
+
 function _renderProductDetail(product) {
   const catalogPolicy = window.TintinCatalogPolicy;
   const isVisible = catalogPolicy?.isCatalogVisible
@@ -1314,7 +1337,7 @@ function _renderProductDetail(product) {
       ['Contenido del paquete', product.packageContents],
     ].filter(([, value]) => value && String(value).trim());
     specsEl.hidden = specs.length === 0;
-    specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(sanitizePlainText(value, 500))}</dd></div>`).join('');
+    specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(productSpecDisplayValue(label, value))}</dd></div>`).join('');
     const specsTrigger = document.getElementById('specs-trigger');
     if (specsTrigger) specsTrigger.hidden = specs.length === 0;
   }
@@ -1879,11 +1902,17 @@ function initWaFloatVisibility() {
   const wa = document.getElementById('wa-float');
   if (!wa) return;
   const EXCLUDE = '.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header';
+  const PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap,p,h1,h2,h3,li,dd,dt';
+  const CONTROL_TARGETS = 'a,button,input,textarea,select';
+  const collisionSelector = /(?:^|\/)product(?:\.html)?\/?$/i.test(location.pathname || '')
+    ? `${CONTROL_TARGETS},${PRODUCT_COLLISION_TARGETS}`
+    : CONTROL_TARGETS;
   const overlapsRect = (a, b, t = 2) => a.left < b.right - t && a.right > b.left + t && a.top < b.bottom - t && a.bottom > b.top + t;
   let ticking = false;
-  // El botón es position:fixed, así que cualquier enlace/botón del contenido
+  // El botón es position:fixed, así que cualquier control del contenido
   // normal puede terminar exactamente detrás de él según el scroll y el alto
-  // del viewport (tabla de contenidos de términos/privacidad, última fila de
+  // del viewport. En producto también se vigilan descripción, variantes,
+  // especificaciones, cantidad y bloques de texto para no tapar contenido aunque no sea clickeable (tabla de contenidos de términos/privacidad, última fila de
   // tarjetas de catálogo, footer en páginas cortas, etc.) — en vez de intentar
   // reservar espacio para cada caso, se detecta el solape real y se oculta.
   // Histéresis: ocultar es inmediato (el botón está tapando algo AHORA),
@@ -1903,13 +1932,14 @@ function initWaFloatVisibility() {
     stats.checks++;
     const r = wa.getBoundingClientRect();
     if (r.width <= 0 || r.height <= 0) { stats.zeroRect++; return; }
-    const collided = [...document.querySelectorAll('a,button')].some(node => {
+    const collided = [...document.querySelectorAll(collisionSelector)].some(node => {
       if (node === wa || node.closest(EXCLUDE)) return false;
-      const style = getComputedStyle(node);
-      if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01) return false;
+      // Geometría primero: descarta casi todo sin calcular estilos.
       const nr = node.getBoundingClientRect();
       if (nr.width <= 0 || nr.height <= 0 || nr.bottom <= 0 || nr.top >= innerHeight) return false;
-      return overlapsRect(r, nr);
+      if (!overlapsRect(r, nr)) return false;
+      const style = getComputedStyle(node);
+      return !(style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01);
     });
     const hidden = wa.classList.contains('tt-wa-float-hidden');
     if (collided) {
@@ -2019,12 +2049,18 @@ function initContactForm() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const nombre = form.querySelector('#f-nombre').value.trim();
-    const email = form.querySelector('#f-email').value.trim();
+    const emailInput = form.querySelector('#f-email');
+    const email = emailInput.value.trim();
     const tel = form.querySelector('#f-tel').value.trim();
     const msg = form.querySelector('#f-msg').value.trim();
 
     if (!nombre || !msg) {
       alert('Por favor completá al menos tu nombre y tu mensaje.');
+      return;
+    }
+    if (email && !emailInput.checkValidity()) {
+      alert('Ingresá un email válido.');
+      emailInput.focus();
       return;
     }
 

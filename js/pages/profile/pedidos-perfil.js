@@ -48,8 +48,13 @@ function timeline(order) {
   const index = stages.indexOf(normalized);
   return `<div class="tt-profile-timeline" aria-label="Seguimiento del pedido">${stages.map((stage,i) => `<span class="tt-profile-step ${i <= index ? 'is-done' : ''}">${statusLabels[stage]}</span>`).join('')}</div>`;
 }
+function orderDisplayNumber(order) {
+  return clean(order.orderNumber || order.shortId || order.id) || 'Sin número';
+}
+
 function orderMarkup(order) {
   const id = clean(order.id);
+  const displayNumber = orderDisplayNumber(order);
   const anchor = id.replace(/[^A-Za-z0-9_-]/g,'').slice(0,200);
   const date = dateOf(order.createdAt || order.updatedAt);
   const dateText = date && Number.isFinite(date.getTime()) ? date.toLocaleDateString('es-PY',{day:'2-digit',month:'2-digit',year:'numeric'}) : 'Fecha no disponible';
@@ -60,7 +65,7 @@ function orderMarkup(order) {
   }).join('');
   const summary = items.slice(0,3).map(item => `${Math.max(1,Number(item.qty || item.quantity)||1)}x ${escapeHtml(item.name || 'Producto')}`).join(', ');
   const extra = items.length > 3 ? ` +${items.length-3} más` : '';
-  return `<article class="perfil-order-row" id="pedido-${anchor}" data-order-id="${escapeHtml(id)}"><div class="tt-profile-order-head"><span class="tt-profile-order-meta">#${escapeHtml(id.slice(-6).toUpperCase())} · ${dateText}</span>${statusBadge(order)}</div><div class="tt-profile-order-items">${summary || 'Sin detalle de productos'}${extra}</div><div class="tt-profile-order-total">Total: ${money(order.total)}</div><details class="tt-profile-order-details"><summary>Ver seguimiento y detalle</summary>${timeline(order)}<div class="tt-profile-order-grid"><div><strong>Pago</strong>${escapeHtml(paymentText(order))}</div><div><strong>Entrega</strong>${escapeHtml(deliveryText(order))}</div><div><strong>Dirección</strong>${escapeHtml(addressText(order))}</div><div><strong>Número de pedido</strong>${escapeHtml(id)}</div><div class="tt-profile-order-lines"><strong>Productos</strong>${lines || 'Sin detalle de productos'}<div class="tt-profile-order-line"><span>Total</span><strong>${money(order.total)}</strong></div></div></div></details></article>`;
+  return `<article class="perfil-order-row" id="pedido-${anchor}" data-order-id="${escapeHtml(id)}"><div class="tt-profile-order-head"><span class="tt-profile-order-meta">#${escapeHtml(displayNumber)} · ${dateText}</span>${statusBadge(order)}</div><div class="tt-profile-order-items">${summary || 'Sin detalle de productos'}${extra}</div><div class="tt-profile-order-total">Total: ${money(order.total)}</div><details class="tt-profile-order-details"><summary>Ver seguimiento y detalle</summary>${timeline(order)}<div class="tt-profile-order-grid"><div><strong>Pago</strong>${escapeHtml(paymentText(order))}</div><div><strong>Entrega</strong>${escapeHtml(deliveryText(order))}</div><div><strong>Dirección</strong>${escapeHtml(addressText(order))}</div><div><strong>Número de pedido</strong>${escapeHtml(displayNumber)}</div><div class="tt-profile-order-lines"><strong>Productos</strong>${lines || 'Sin detalle de productos'}<div class="tt-profile-order-line"><span>Total</span><strong>${money(order.total)}</strong></div></div></div></details></article>`;
 }
 
 export function createProfileOrdersController({ subscribe, render, onStatus, onStats }) {
@@ -91,14 +96,19 @@ export function createProfileOrdersController({ subscribe, render, onStatus, onS
         slices[index] = rows;
         ready[index] = true;
         current = reconcileAccountOrders(slices).sort((a,b) => timestamp(b)-timestamp(a));
-        onStats(calculateOrderStats(current));
-        render(current,{empty:current.length===0});
+        // Compras/total sólo son confirmados cuando respondieron todas las
+        // identidades sin error; si no, "—" en vez de un cero o un parcial.
+        const complete = ready.every(Boolean) && !failures.some(Boolean);
+        onStats(complete ? calculateOrderStats(current) : null);
+        if (!current.length && !ready.every(Boolean)) return;
+        render(current,{empty:current.length===0 && complete});
         onStatus('ready', failures.some(Boolean) ? failures.find(Boolean) : null);
       },
       fail: failure => {
         if (token !== generation) return;
         failures[index] = failure;
         ready[index] = true;
+        onStats(null);
         // Una consulta secundaria (por correo) no debe ocultar los pedidos
         // ya encontrados por UID ni cancelar su onSnapshot.
         if (current.length || slices.some(rows => rows.length)) {
@@ -138,6 +148,7 @@ export function startProfileOrders() {
   let lastOptions = {};
   let currentUser = null;
   let authStop = null;
+  let permissionRecoveryAttempted = false;
   let stopped = false;
   const render = (orders,options={}) => {
     lastOrders = orders;
@@ -158,13 +169,35 @@ export function startProfileOrders() {
     const ready = await Promise.resolve(appCheckReady).catch(() => false);
     return ready === true || window.TintinAppCheckStatus === 'enabled';
   };
+  const secureUnavailable = () => { status.dataset.state='error'; status.textContent='No pudimos validar la conexión segura para sincronizar tus pedidos. Reintentaremos cuando esté disponible.'; };
   const controller = createProfileOrdersController({
     subscribe: (field,value,next,fail) => onSnapshot(query(collection(db,'orders'),where(field,'==',value)),snapshot=>next(snapshot.docs.map(doc=>({id:doc.id,...doc.data()}))),fail),
     render,
-    onStatus: (state,error) => { status.dataset.state=state; status.textContent=state==='ready'?'Pedidos sincronizados':state==='loading'?'Sincronizando pedidos…':state==='signed-out'?'':state==='error'?(navigator.onLine===false?'Sin conexión. Tus pedidos no se pudieron actualizar.':'No pudimos sincronizar tus pedidos. Se conservan los últimos datos confirmados.'):''; if(error) console.warn('[profile-orders]',error); },
+    onStatus: (state,error) => {
+      status.dataset.state=state;
+      status.textContent=state==='ready'?'Pedidos sincronizados':state==='loading'?'Sincronizando pedidos…':state==='signed-out'?'':state==='error'?(navigator.onLine===false?'Sin conexión. Tus pedidos no se pudieron actualizar.':'No pudimos sincronizar tus pedidos. Se conservan los últimos datos confirmados.'):'';
+      if (state === 'ready' && !error) permissionRecoveryAttempted = false;
+      if (error) {
+        console.warn('[profile-orders]',error);
+        const code = String(error?.code || error?.name || '').replace(/^firestore\//,'').toLowerCase();
+        if (state === 'error' && ['permission-denied','unauthenticated'].includes(code) && !permissionRecoveryAttempted) {
+          permissionRecoveryAttempted = true;
+          window.setTimeout(() => void retry(true), 0);
+        }
+      }
+    },
     onStats: stats => { if(count)count.textContent=stats?String(stats.totalOrders):'—'; if(total)total.textContent=stats?money(stats.totalSpent):'—'; if(stats)window.dispatchEvent(new CustomEvent('tintin:profile-orders',{detail:{count:stats.totalOrders,total:stats.totalSpent}})); }
   });
-  const retry = async () => { if (!currentUser || stopped) return; status.textContent='Sincronizando pedidos…'; const secure = await profileAppCheckReady(); if (!secure) { status.dataset.state='error'; status.textContent='No pudimos validar la conexión segura para sincronizar tus pedidos. Reintentaremos cuando esté disponible.'; return; } if (!stopped && getSessionUser()?.uid===currentUser.uid) controller.start(currentUser); };
+  const retry = async (refreshIdentity = false) => {
+    if (!currentUser || stopped) return;
+    status.textContent='Sincronizando pedidos…';
+    if (refreshIdentity) {
+      try { await currentUser.getIdToken(true); } catch (error) { console.warn('[profile-orders] No se pudo refrescar la identidad:', error); return; }
+    }
+    const secure = await profileAppCheckReady();
+    if (!secure) { secureUnavailable(); return; }
+    if (!stopped && getSessionUser()?.uid===currentUser.uid) controller.start(currentUser);
+  };
   list.addEventListener('click',event=>{ if(event.target.closest('[data-profile-orders-more]')){visible+=10;render(lastOrders,lastOptions);} if(event.target.closest('[data-profile-orders-retry]'))void retry(); });
   const onOnline = () => void retry();
   const onVisible = () => { if(!document.hidden && status.dataset.state==='error')void retry(); };
@@ -178,8 +211,9 @@ export function startProfileOrders() {
     if(snapshot.status===AUTH_STATES.UNKNOWN){ status.textContent='Verificando tu sesión…'; return; }
     const user=snapshot.user;
     currentUser=user;
+    permissionRecoveryAttempted=false;
     visible=5;
-    void (async()=>{const secure=user?await profileAppCheckReady():true;if(user&&!secure){status.dataset.state='error';status.textContent='No pudimos validar la conexión segura para sincronizar tus pedidos. Reintentaremos cuando esté disponible.';return;}if(!stopped && getSessionUser()?.uid===user?.uid)controller.start(user);})();
+    void (async()=>{const secure=user?await profileAppCheckReady():true;if(user&&!secure){secureUnavailable();return;}if(!stopped && getSessionUser()?.uid===user?.uid)controller.start(user);})();
   });
   window.TintinProfileOrders={refresh:retry,stop:()=>controller.stop()};
 }

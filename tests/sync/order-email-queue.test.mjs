@@ -236,3 +236,64 @@ test('diagnóstico: getOrderEmailQueueStatus reporta pendientes, dead-letter, ed
   assert.ok(status.oldestPendingAgeMs >= 59 * 60 * 1000, 'toma la tarea pendiente más antigua, no la más reciente');
   assert.equal(status.lastSuccessAt, lastSuccessAt.toISOString());
 });
+
+function seedStatusItem(fs, overrides = {}) {
+  const id = 'status__ORDER_9__chg-7';
+  fs.put(`${QUEUE_COLLECTION}/${id}`, {
+    schemaVersion: 1, kind: 'status', status: 'pending', orderId: 'ORDER_9', changeId: 'chg-7',
+    orderStatus: 'en_camino', paymentStatus: 'pagado', previousStatus: 'preparando', previousPaymentStatus: 'pagado',
+    lastError: 'Resend 500', attempts: 0, nextAttemptAt: new Date(0), claimedAt: null, claimedBy: '',
+    ...overrides,
+  });
+  return id;
+}
+
+function statusDeps(fs, impl) {
+  const notify = makeFakeNotify();
+  return { ...buildDeps(fs, makeSuccessSend(), notify), sendOrderStatusEmailImpl: impl };
+}
+
+test('estado: el drenaje reenvía el cambio pendiente con su clave de idempotencia y lo quita', async () => {
+  const fs = makeFakeFirestore();
+  const id = seedStatusItem(fs);
+  fs.put('orders/ORDER_9', { status: 'en_camino', paymentStatus: 'pagado', userEmail: 'ana@example.com', shortId: 'TINPED09', total: 1 });
+  const sent = [];
+  const result = await drainOrderEmailQueueScheduled({ RESEND_API_KEY: 'k' }, {
+    deps: statusDeps(fs, async (key, args) => { sent.push(args); return { sent: true }; }),
+  });
+  assert.equal(result.drained, 1);
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].changeId, 'chg-7');
+  assert.match(sent[0].change.title, /camino/);
+  assert.equal(fs.readDecoded(`${QUEUE_COLLECTION}/${id}`), null);
+});
+
+test('estado: si el pedido volvió a cambiar o ya no existe, el aviso viejo se descarta sin enviar', async () => {
+  for (const order of [{ status: 'entregado', paymentStatus: 'pagado' }, null]) {
+    const fs = makeFakeFirestore();
+    const id = seedStatusItem(fs);
+    if (order) fs.put('orders/ORDER_9', { ...order, userEmail: 'ana@example.com' });
+    let calls = 0;
+    const result = await drainOrderEmailQueueScheduled({ RESEND_API_KEY: 'k' }, {
+      deps: statusDeps(fs, async () => { calls += 1; return { sent: true }; }),
+    });
+    assert.equal(calls, 0);
+    assert.equal(result.obsolete, 1);
+    assert.equal(fs.readDecoded(`${QUEUE_COLLECTION}/${id}`), null);
+  }
+});
+
+test('estado: un fallo de Resend deja el trabajo pendiente con backoff', async () => {
+  const fs = makeFakeFirestore();
+  const id = seedStatusItem(fs);
+  fs.put('orders/ORDER_9', { status: 'en_camino', paymentStatus: 'pagado', userEmail: 'ana@example.com' });
+  const result = await drainOrderEmailQueueScheduled({ RESEND_API_KEY: 'k' }, {
+    deps: statusDeps(fs, async () => { throw new Error('Resend 503'); }),
+  });
+  assert.equal(result.drained, 0);
+  const item = fs.readDecoded(`${QUEUE_COLLECTION}/${id}`);
+  assert.equal(item.status, 'pending');
+  assert.equal(item.attempts, 1);
+  assert.equal(item.lastError, 'Resend 503');
+  assert.ok(Date.parse(item.nextAttemptAt) > Date.now());
+});

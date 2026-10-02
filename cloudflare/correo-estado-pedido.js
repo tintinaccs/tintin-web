@@ -1,6 +1,9 @@
 // Correo a la clienta en cada cambio de estado del pedido o del pago.
-// Se dispara después del commit del pedido y es best-effort: un fallo de
-// Resend nunca revierte ni falla el cambio ya confirmado.
+// Se dispara después del commit del pedido: un fallo de Resend nunca revierte
+// ni falla el cambio ya confirmado. Si el envío falla, el cambio queda en
+// orderEmailQueue y el drenaje programado (resiliencia-correo-pedido.js) lo
+// reintenta con la misma clave de idempotencia.
+import { encodeFirestoreFields, firestoreAdminCommit } from './firebase-admin-ligero.js';
 import {
   EMAIL_MARK,
   FROM_EMAIL,
@@ -68,36 +71,88 @@ export function buildOrderStatusEmail(order, orderId, change) {
   return { subject: `${change.title} · pedido #${shortId} — Tintin`, html, text };
 }
 
+export const ORDER_EMAIL_QUEUE_COLLECTION = 'orderEmailQueue';
+
+/** Envía el correo de un cambio ya descrito. Misma clave de idempotencia en el reintento. */
+export async function sendOrderStatusEmail(apiKey, { order, orderId, change, changeId }, send = sendResendEmail) {
+  const recipient = clean(order?.userEmail || order?.contactEmail, 254).toLowerCase();
+  if (!emailIsValid(recipient)) return { sent: false, reason: 'invalid_email' };
+  const content = buildOrderStatusEmail(order, orderId, change);
+  await send(apiKey, {
+    from: FROM_EMAIL,
+    to: [recipient],
+    reply_to: REPLY_TO,
+    subject: content.subject,
+    html: content.html,
+    text: content.text,
+  }, `order-${orderId}-status-${clean(changeId, 100)}`);
+  return { sent: true };
+}
+
+/**
+ * Deja el cambio pendiente en la cola durable. Un documento por cambio
+ * (pedido + changeId): dos cambios fallidos seguidos no se pisan, y el mismo
+ * cambio reintentado no se duplica (precondición de inexistencia).
+ */
+export async function queueOrderStatusEmail(env, result, error, commit = firestoreAdminCommit) {
+  const orderId = clean(result?.orderId, 200);
+  const changeId = clean(result?.changeId, 100);
+  if (!orderId || !changeId) return null;
+  const id = `status__${orderId}__${changeId}`.replace(/[^A-Za-z0-9_-]/g, '_');
+  const now = new Date();
+  try {
+    await commit(env, [{
+      path: `${ORDER_EMAIL_QUEUE_COLLECTION}/${id}`,
+      fields: encodeFirestoreFields({
+        schemaVersion: 1,
+        kind: 'status',
+        status: 'pending',
+        orderId,
+        changeId,
+        orderStatus: clean(result.status, 40),
+        paymentStatus: clean(result.paymentStatus, 40),
+        previousStatus: clean(result.previousStatus, 40),
+        previousPaymentStatus: clean(result.previousPaymentStatus, 40),
+        lastError: clean(error?.message || error),
+        attempts: 0,
+        nextAttemptAt: now,
+        claimedAt: null,
+        claimedBy: '',
+        createdAt: now,
+        updatedAt: now,
+      }),
+      currentDocument: { exists: false },
+    }]);
+    return id;
+  } catch (queueError) {
+    if (queueError?.code === 'version_conflict') return id;
+    console.error('[correo-estado-pedido] No se pudo encolar el reintento:', queueError?.message || queueError);
+    return null;
+  }
+}
+
 /**
  * `result` es el resultado de applyOrderAdminMutation. No hace nada si fue un
  * duplicado, si no cambió el estado o si falta la clave de Resend o el correo.
+ * Si Resend falla, el cambio queda encolado para el drenaje programado.
  */
-export async function notifyCustomerOrderChange(env, result, { send = sendResendEmail } = {}) {
+export async function notifyCustomerOrderChange(env, result, { send = sendResendEmail, enqueue = queueOrderStatusEmail } = {}) {
+  let change = null;
   try {
     if (!result || result.duplicate || !result.order) return { sent: false, reason: 'no_change' };
     const apiKey = clean(env?.RESEND_API_KEY, 500);
     if (!apiKey) return { sent: false, reason: 'no_api_key' };
-    const change = describeOrderChange({
+    change = describeOrderChange({
       status: result.status,
       paymentStatus: result.paymentStatus,
       previousStatus: result.previousStatus,
       previousPaymentStatus: result.previousPaymentStatus,
     });
     if (!change) return { sent: false, reason: 'no_change' };
-    const recipient = clean(result.order.userEmail || result.order.contactEmail, 254).toLowerCase();
-    if (!emailIsValid(recipient)) return { sent: false, reason: 'invalid_email' };
-    const content = buildOrderStatusEmail(result.order, result.orderId, change);
-    await send(apiKey, {
-      from: FROM_EMAIL,
-      to: [recipient],
-      reply_to: REPLY_TO,
-      subject: content.subject,
-      html: content.html,
-      text: content.text,
-    }, `order-${result.orderId}-status-${clean(result.changeId, 100)}`);
-    return { sent: true };
+    return await sendOrderStatusEmail(apiKey, { order: result.order, orderId: result.orderId, change, changeId: result.changeId }, send);
   } catch (error) {
     console.error('[correo-estado-pedido]', error?.message || error);
-    return { sent: false, reason: 'error' };
+    const queued = change ? Boolean(await enqueue(env, result, error)) : false;
+    return { sent: false, reason: 'error', queued };
   }
 }

@@ -52,7 +52,7 @@ function draft(over = {}) {
 
 async function run(payload, st) {
   const prepared = await preparePublicCheckoutOrder({}, payload, USER, { get: st.get });
-  const created = await createOrderAdmin({}, prepared.input, { uid: UID, email: USER.email, role: 'client', origin: 'public-checkout' }, { get: st.get, commit: st.commit, inspect: prepared.inspect });
+  const created = await createOrderAdmin({}, prepared.input, { uid: UID, email: USER.email, role: 'client', origin: 'public-checkout' }, { get: st.get, commit: st.commit, inspect: prepared.inspect, findFirst: async () => null, maxNumber: async () => 0 });
   return { prepared, created };
 }
 
