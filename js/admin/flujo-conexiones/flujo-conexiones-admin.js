@@ -10,9 +10,10 @@
 // del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261001-bloqueo-1';
 import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261001-bloqueo-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261001-firebase-permissions-1';
 import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261001-sellos-1';
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1-launch-20260926-1';
 import { collection, doc, getDoc, getDocs, limit, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {
@@ -123,7 +124,7 @@ async function probeClientFirestoreRead(label, read) {
 }
 
 async function probeClientFirestoreRules(user) {
-  if (!user || !await appCheckReady) {
+  if (!user || !await waitForAdminAppCheck(12000)) {
     const unavailable = { ok: false, status: 0, authRequired: true, error: 'App Check o sesión no disponible' };
     return {
       favorites: { label: 'Favoritos', ...unavailable },
@@ -152,7 +153,7 @@ async function probeClientFirestoreRules(user) {
 // un producto existente. Son GETs sin mutación: no dejan likes/reseñas de prueba.
 async function probeEngagementStats(user) {
   const unavailable = { ok: false, status: 0, error: 'sin sesión o App Check' };
-  if (!user || !await appCheckReady) return { likes: unavailable, reviews: unavailable };
+  if (!user || !await waitForAdminAppCheck(12000)) return { likes: unavailable, reviews: unavailable };
   try {
     const products = await getDocs(query(collection(db, 'products'), limit(1)));
     const productId = products.docs[0]?.id;
@@ -191,27 +192,53 @@ async function probeCurrentSession(user, role) {
   if (!user) {
     return { authenticated: false, token: false, role: false, profile: false, status: 401, authRequired: true };
   }
+
+  let tokenResult;
   try {
-    await user.getIdToken();
+    tokenResult = await user.getIdTokenResult(true);
+  } catch (error) {
+    const code = String(error?.code || '');
+    return {
+      authenticated: true,
+      token: false,
+      role: role === 'superadmin',
+      profile: false,
+      status: /unauthenticated/i.test(code) ? 401 : 0,
+      authRequired: true,
+      error: code || error?.message || 'no se pudo renovar el token de la sesión actual',
+    };
+  }
+
+  const emailClaim = String(tokenResult?.claims?.email || '').trim().toLowerCase();
+  const projectClaim = String(tokenResult?.claims?.aud || '').trim();
+  const identityClaimsOk =
+    emailClaim === String(user.email || '').trim().toLowerCase() &&
+    projectClaim === 'tintin-accesorios';
+
+  try {
     const profile = await getDoc(doc(db, 'users', user.uid));
     return {
       authenticated: true,
-      token: true,
+      token: identityClaimsOk,
       role: role === 'superadmin',
       profile: profile.exists(),
+      emailClaim: emailClaim === String(user.email || '').trim().toLowerCase(),
+      projectClaim: projectClaim === 'tintin-accesorios',
       status: 200,
     };
   } catch (error) {
     const code = String(error?.code || '');
     const status = /permission-denied|unauthenticated/i.test(code) ? 403 : 0;
     return {
-      authenticated: false,
-      token: false,
-      role: false,
+      authenticated: true,
+      token: identityClaimsOk,
+      role: role === 'superadmin',
       profile: false,
+      emailClaim: emailClaim === String(user.email || '').trim().toLowerCase(),
+      projectClaim: projectClaim === 'tintin-accesorios',
       status,
       authRequired: status === 403,
-      error: code || error?.message || 'no se pudo leer la sesión actual',
+      firestoreError: code || error?.message || 'no se pudo leer el perfil actual',
     };
   }
 }
