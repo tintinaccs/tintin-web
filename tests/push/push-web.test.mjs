@@ -141,8 +141,20 @@ test('el mensaje FCM viaja sólo como data, con TTL y sin enlace FCM relativo', 
   assert.equal(message.notification, undefined);
   assert.equal(message.webpush.notification, undefined);
   assert.equal(message.webpush.headers.TTL, '3600');
+  assert.equal(message.webpush.headers.Urgency, 'high');
   assert.equal(message.webpush.fcm_options, undefined);
   assert.equal(message.data.tag, `order.created:${ORDER_ID}`);
+});
+
+test('los pagos tienen urgencia alta sin elevar avisos sociales ni reemplazar una prioridad explícita', () => {
+  for (const type of ['payment.completed', 'payment.failed', 'payment.refunded']) {
+    const content = buildPushContent({ type, orderId: ORDER_ID, order: ORDER });
+    assert.equal(buildFcmMessage({ token: 'fixture', content }).message.webpush.headers.Urgency, 'high');
+    assert.equal(buildFcmMessage({ token: 'fixture', content, urgency: 'low' }).message.webpush.headers.Urgency, 'low');
+  }
+  for (const type of ['social.review.created', 'admin.user.joined', 'push.test']) {
+    assert.equal(buildFcmMessage({ token: 'fixture', content: { data: { type } } }).message.webpush.headers.Urgency, 'normal');
+  }
 });
 
 test('la notificación de prueba usa el pedido simulado fijo del servidor', () => {

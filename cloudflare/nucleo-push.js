@@ -171,7 +171,10 @@ export function buildTestPushContent(eventId, foregroundSound = 'default', foreg
  * destino interno que viaja en `data.url`. Mantenerlo fuera evita que FCM
  * rechace todo el mensaje por recibir una ruta relativa como `/admin.html`.
  */
-export function buildFcmMessage({ token, content, ttlSeconds = 3600, urgency = 'normal' }) {
+export function buildFcmMessage({ token, content, ttlSeconds = 3600, urgency }) {
+  // Urgencia de transporte Web Push; no altera Silencio/Concentración del SO.
+  const operational = ['order.created', 'payment.completed', 'payment.failed', 'payment.refunded'].includes(content.data?.type);
+  const priority = urgency ?? (operational ? 'high' : 'normal');
   return {
     message: {
       token,
@@ -179,7 +182,7 @@ export function buildFcmMessage({ token, content, ttlSeconds = 3600, urgency = '
       webpush: {
         headers: {
           TTL: String(Math.max(0, Math.trunc(ttlSeconds))),
-          Urgency: urgency
+          Urgency: priority
         }
       }
     }
