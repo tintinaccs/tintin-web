@@ -164,6 +164,12 @@ export function startProfileOrders() {
     const requested = String(location.hash||'').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
     if (requested) { const target=document.getElementById(`pedido-${requested}`); if (target){target.querySelector('details')?.setAttribute('open',''); if(!target.dataset.ttFocused){target.dataset.ttFocused='1';target.scrollIntoView({block:'center'});}} }
   };
+  const profileAppCheckReady = async () => {
+    if (window.TintinAppCheckStatus === 'enabled') return true;
+    const ready = await Promise.resolve(appCheckReady).catch(() => false);
+    return ready === true || window.TintinAppCheckStatus === 'enabled';
+  };
+  const secureUnavailable = () => { status.dataset.state='error'; status.textContent='No pudimos validar la conexión segura para sincronizar tus pedidos. Reintentaremos cuando esté disponible.'; };
   const controller = createProfileOrdersController({
     subscribe: (field,value,next,fail) => onSnapshot(query(collection(db,'orders'),where(field,'==',value)),snapshot=>next(snapshot.docs.map(doc=>({id:doc.id,...doc.data()}))),fail),
     render,
@@ -188,15 +194,18 @@ export function startProfileOrders() {
     if (refreshIdentity) {
       try { await currentUser.getIdToken(true); } catch (error) { console.warn('[profile-orders] No se pudo refrescar la identidad:', error); return; }
     }
-    await appCheckReady;
+    const secure = await profileAppCheckReady();
+    if (!secure) { secureUnavailable(); return; }
     if (!stopped && getSessionUser()?.uid===currentUser.uid) controller.start(currentUser);
   };
   list.addEventListener('click',event=>{ if(event.target.closest('[data-profile-orders-more]')){visible+=10;render(lastOrders,lastOptions);} if(event.target.closest('[data-profile-orders-retry]'))void retry(); });
   const onOnline = () => void retry();
   const onVisible = () => { if(!document.hidden && status.dataset.state==='error')void retry(); };
+  const onAppCheckReady = event => { if (event?.detail?.ready === true) void retry(); };
   window.addEventListener('online',onOnline);
+  window.addEventListener('tintin:app-check-ready',onAppCheckReady);
   document.addEventListener('visibilitychange',onVisible);
-  window.addEventListener('pagehide',()=>{stopped=true;controller.stop();authStop?.();window.removeEventListener('online',onOnline);document.removeEventListener('visibilitychange',onVisible);},{once:true});
+  window.addEventListener('pagehide',()=>{stopped=true;controller.stop();authStop?.();window.removeEventListener('online',onOnline);window.removeEventListener('tintin:app-check-ready',onAppCheckReady);document.removeEventListener('visibilitychange',onVisible);},{once:true});
   authStop=subscribeSession(snapshot=>{
     if(stopped || snapshot.status===AUTH_STATES.RESTORING) return;
     if(snapshot.status===AUTH_STATES.UNKNOWN){ status.textContent='Verificando tu sesión…'; return; }
@@ -204,7 +213,7 @@ export function startProfileOrders() {
     currentUser=user;
     permissionRecoveryAttempted=false;
     visible=5;
-    void (async()=>{if(user)await appCheckReady;if(!stopped && getSessionUser()?.uid===user?.uid)controller.start(user);})();
+    void (async()=>{const secure=user?await profileAppCheckReady():true;if(user&&!secure){secureUnavailable();return;}if(!stopped && getSessionUser()?.uid===user?.uid)controller.start(user);})();
   });
   window.TintinProfileOrders={refresh:retry,stop:()=>controller.stop()};
 }

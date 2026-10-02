@@ -64,6 +64,8 @@ const state = {
   productsReady: false,
   collectionsReady: false,
   ordersReady: false,
+  productsError: '',
+  collectionsError: '',
   trashReady: false,
   products: [],
   collections: [],
@@ -449,7 +451,7 @@ function renderProducts() {
   root.innerHTML = `
     <div class="tt-commerce-pagehead">
       <div class="tt-commerce-titlegroup">
-        <h1 class="tt-commerce-title">Productos <span class="tt-commerce-count">${productsUnavailable ? '—' : state.products.length}</span></h1>
+        <h1 class="tt-commerce-title">Productos <span class="tt-commerce-count">${state.productsError ? "—" : state.products.length}</span></h1>
         <div class="tt-commerce-subtitle">Catálogo conectado en tiempo real con la tienda.</div>
       </div>
       <div class="tt-commerce-actions">
@@ -548,7 +550,7 @@ function renderCollections() {
   root.innerHTML = `
     <div class="tt-commerce-pagehead">
       <div class="tt-commerce-titlegroup">
-        <h1 class="tt-commerce-title">Colecciones <span class="tt-commerce-count">${collectionsUnavailable ? '—' : state.collections.length}</span></h1>
+        <h1 class="tt-commerce-title">Colecciones <span class="tt-commerce-count">${state.collectionsError ? "—" : state.collections.length}</span></h1>
         <div class="tt-commerce-subtitle">Agrupación real del catálogo de Tintin. Cada producto conserva su colección principal.</div>
       </div>
       <div class="tt-commerce-actions">${canCreate ? button('Crear colección', 'collection-new', { primary: true }) : ''}</div>
@@ -634,8 +636,10 @@ function renderOrders() {
   const ordersWarning = !showingTrash && state.ordersError && state.orders.length
     ? `<div class="tt-commerce-error" role="alert">${esc(state.ordersError)} Se muestran los últimos datos confirmados. <button type="button" class="tt-commerce-btn" data-action="orders-retry">Reintentar</button></div>`
     : '';
-  const metricValue = value => ordersUnavailable ? '—' : value;
-  const metricMoney = value => ordersUnavailable ? '—' : formatMoney(value);
+  // Con error, las métricas no son actuales aunque haya filas confirmadas previas.
+  const metricsUnavailable = Boolean(!showingTrash && state.ordersError);
+  const metricValue = value => metricsUnavailable ? '—' : value;
+  const metricMoney = value => metricsUnavailable ? '—' : formatMoney(value);
   const tableRows = page.items.map(order => {
     const customer = orderCustomer(order);
     const shipping = orderShipping(order);
@@ -674,7 +678,7 @@ function renderOrders() {
   const pagination = !showingTrash ? pageControls('orders-page', page.page, page.pages, { hasMore: canLoadMore, loading: state.ordersLoadingMore }) : '';
   const loadedHint = !showingTrash && (state.ordersHasMore || page.pages > 1) ? 'La vista está paginada en bloques de 30.' : '';
   root.innerHTML = `
-    <div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${ordersUnavailable ? '—' : sourceTotal}</span></h1><div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div></div><div class="tt-commerce-actions">${isSuper ? button('Verificar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div></div>
+    <div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${!showingTrash && state.ordersError ? "—" : sourceTotal}</span></h1><div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div></div><div class="tt-commerce-actions">${isSuper ? button('Verificar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div></div>
     ${!showingTrash ? `<div class="tt-commerce-order-metrics" aria-label="Resumen del grupo cargado de pedidos"><div><strong>${metricValue(metrics.today)}</strong><span>Pedidos hoy</span></div><div><strong>${metricMoney(metrics.revenue)}</strong><span>Ventas de hoy</span></div><div><strong>${metricValue(metrics.pending)}</strong><span>Pagos pendientes</span></div><div><strong>${metricValue(metrics.unfulfilled)}</strong><span>Sin preparar</span></div><div><strong>${metricValue(metrics.delivered)}</strong><span>Entregados</span></div><div><strong>${metricValue(metrics.items)}</strong><span>Artículos hoy</span></div></div>` : ''}
     <div class="tt-commerce-card">${ordersWarning}<div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>${rangeLabel(page, 'pedidos cargados', ordersUnavailable)}</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
 }
@@ -1029,7 +1033,6 @@ async function handleAction(action, element) {
   if (action === 'drawer-close') return closeDrawer();
   if (action === 'product-new') { closeDrawer(); return window.prodNuevo?.(); }
   if (action === 'products-import') return clickSection('importar');
-  if (action === 'products-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
   if (action === 'products-export') return exportProducts(false);
   if (action === 'products-export-selected') return exportProducts(true);
   if (action === 'products-clear-selection') { state.productSelected.clear(); return renderProducts(); }
@@ -1051,7 +1054,6 @@ async function handleAction(action, element) {
 
   if (action === 'collection-new') { closeDrawer(); return window.collNueva?.(); }
   if (action === 'collections-export-selected') return exportCollections(true);
-  if (action === 'collections-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
   if (action === 'collections-bulk-delete') {
     if (typeof window.bulkDeleteCollections !== 'function') return toast('La eliminación masiva todavía no está disponible.');
     return window.bulkDeleteCollections([...state.collectionSelected]);
@@ -1079,7 +1081,7 @@ async function handleAction(action, element) {
     state.orderPage += 1;
     return renderOrders();
   }
-  if (action === 'orders-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
+  if (action === 'products-retry' || action === 'collections-retry' || action === 'orders-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
   if (action === 'order-edit-advanced') { closeDrawer(); return window.TintinOrderAdmin?.openAdvancedOrderEditor(id); }
   if (action === 'order-restore') return window.TintinOrderAdmin?.restoreOrder(id).then(() => toast('Pedido restaurado en estado Cancelado; podés reactivarlo desde CRUD completo.'));
   if (action === 'order-delete-permanent') return window.TintinOrderAdmin?.deleteTrashPermanently(id);
@@ -1298,6 +1300,11 @@ function subscribeData() {
     state.trashUnsubscribe = null;
   }
 
+  state.productsError = '';
+  state.collectionsError = '';
+  state.productsReady = false;
+  state.collectionsReady = false;
+  state.ordersReady = false;
   state.unsubscribers.push(onSnapshot(query(collection(db, 'products'), limit(1000)), snapshot => {
     state.products = snapshot.docs.map(snap => ({ _docId: snap.id, ...snap.data() }));
     state.productsReady = true;
@@ -1306,7 +1313,7 @@ function subscribeData() {
     renderProducts(); renderCollections(); renderDrawer();
   }, error => {
     state.productsReady = true;
-    state.productsError = 'No se pudieron actualizar los productos.';
+    state.productsError = 'No se pudieron cargar los productos. El total no está disponible.';
     console.error('[shopify-commerce] products:', error);
     toast('No se pudieron actualizar los productos en tiempo real.', 5000);
     recoverCommerceAuth(error, 'products');
@@ -1322,7 +1329,7 @@ function subscribeData() {
     renderCollections(); renderProducts(); renderDrawer();
   }, error => {
     state.collectionsReady = true;
-    state.collectionsError = 'No se pudieron actualizar las colecciones.';
+    state.collectionsError = 'No se pudieron cargar las colecciones. El total no está disponible.';
     console.error('[shopify-commerce] collections:', error);
     toast('No se pudieron actualizar las colecciones en tiempo real.', 5000);
     recoverCommerceAuth(error, 'collections');

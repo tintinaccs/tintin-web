@@ -65,7 +65,7 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
   const sessionOk = sessionProbe.authenticated === true && sessionProbe.token === true;
   if (sessionProbe.status !== undefined || sessionOk) {
     setFrom('firebase-auth', sessionOk,
-      `SDK Firebase Auth · token de la sesión actual ${sessionOk ? 'válido' : 'no confirmado'}`,
+      `SDK Firebase Auth · token ${sessionOk ? 'válido' : 'no confirmado'} · email=${sessionProbe.emailClaim === true ? 'ok' : 'no confirmado'} · proyecto=${sessionProbe.projectClaim === true ? 'ok' : 'no confirmado'}`,
       { status: sessionProbe.status, promote: sessionOk, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
     setFrom('sesion-estado', sessionOk,
       `onAuthStateChanged · usuario actual ${sessionOk ? 'disponible' : 'no confirmado'}`,
@@ -74,7 +74,7 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       `Rol efectivo del panel · ${sessionProbe.role === true ? 'superadmin confirmado' : 'no confirmado'}`,
       { status: sessionProbe.status, promote: sessionProbe.role === true, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
     setFrom('perfil', sessionProbe.profile === true,
-      `SDK Firestore · perfil de la sesión actual ${sessionProbe.profile === true ? 'disponible' : 'no confirmado'}`,
+      `SDK Firestore · perfil de la sesión actual ${sessionProbe.profile === true ? 'disponible' : 'no confirmado'}${sessionProbe.firestoreError ? ` · ${sessionProbe.firestoreError}` : ''}`,
       { status: sessionProbe.status, promote: sessionProbe.profile === true, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
     // El guard client-side de admin-app.js ya se ejecutó antes de montar este
     // panel: solo llega aquí una sesión con role=superadmin verificado. Que
