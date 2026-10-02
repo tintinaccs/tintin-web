@@ -396,6 +396,8 @@ html body.tt-home-premium .tt-hero-content {
   position: relative !important;
   inset: auto !important;
   display: flex !important;
+  height: auto !important;
+  min-height: 0;
   align-items: flex-start;
   justify-content: center;
   width: 100%;
