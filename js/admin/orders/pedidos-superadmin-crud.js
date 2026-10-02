@@ -112,17 +112,18 @@ function ensureMissingOrderNumbers(orders) {
 
 async function resetOrderSequence() {
   assertSuperAdmin();
-  const typed = window.prompt('Esto hará que el PRÓXIMO pedido vuelva a TINPED01. Los pedidos históricos conservan su código. Escribí REINICIAR TINPED para continuar:');
-  if (typed !== 'REINICIAR TINPED') return { reset: false, cancelled: true };
+  const typed = window.prompt('TINPED ya no se puede reiniciar porque los códigos no deben reutilizarse. Escribí VERIFICAR TINPED para confirmar la protección de la secuencia:');
+  if (typed !== 'VERIFICAR TINPED') return { reset: false, cancelled: true };
   const response = await authenticatedFetch('/api/admin-order-mutation', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ action: 'resetOrderSequence' }),
   });
   const body = await response.json().catch(() => ({}));
-  if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo reiniciar la secuencia TINPED.');
-  toast('Secuencia reiniciada en Firestore. El próximo pedido será TINPED01 y se sincronizará a Sheets.');
-  return body.result || { reset: true };
+  if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo verificar la secuencia TINPED.');
+  const next = body.result?.nextOrderNumber || 'el siguiente código correlativo';
+  toast(`Secuencia protegida. Próximo código previsto: ${next}.`);
+  return body.result || { reset: false, protected: true };
 }
 
 async function trashOrder(orderId, reason = '') {

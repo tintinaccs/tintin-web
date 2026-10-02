@@ -1,3 +1,4 @@
+import { onRequest } from '../../functions/_middleware.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -24,13 +25,20 @@ function routeCsp(route) {
   return policy;
 }
 
+// Compara tokens exactos de la política (separados por espacio/;) en vez de
+// una subcadena de la URL completa: CodeQL marca .includes()/.indexOf() con
+// un origen como sustanciación incompleta aunque el string sea de confianza.
+function cspHasOrigin(policy, origin) {
+  return policy.split(/[\s;]+/).some(token => token === origin);
+}
+
 test('Cloudinary upload queda permitido solo en las superficies que suben imágenes', () => {
   const signer = read('functions/api/cloudinary-sign-upload.js');
   const uploadUrlMatch = signer.match(/uploadUrl:\s*`(https:\/\/[^/`$]+)/);
   assert.ok(uploadUrlMatch, 'no se encontró el origen de uploadUrl en cloudinary-sign-upload.js');
   const uploadOrigin = uploadUrlMatch[1];
-  for (const route of ['/admin', '/admin-images', '/perfil']) assert.ok(routeCsp(route).includes(uploadOrigin), `${route} necesita ${uploadOrigin} para subir imágenes`);
-  for (const route of ['/', '/catalogo', '/collections', '/product', '/about', '/contact', '/checkout', '/login']) assert.ok(!routeCsp(route).includes(uploadOrigin), `${route} no debe autorizar el endpoint de upload de Cloudinary`);
+  for (const route of ['/admin', '/admin-images', '/perfil']) assert.ok(cspHasOrigin(routeCsp(route), uploadOrigin), `${route} necesita ${uploadOrigin} para subir imágenes`);
+  for (const route of ['/', '/catalogo', '/collections', '/product', '/about', '/contact', '/checkout', '/login']) assert.ok(!cspHasOrigin(routeCsp(route), uploadOrigin), `${route} no debe autorizar el endpoint de upload de Cloudinary`);
 });
 
 test('CSP no vuelve a abrir handlers inline de forma global', () => {
@@ -49,7 +57,7 @@ test('_headers conserva solo una CSP fallback corta y middleware aplica la compl
   assert.equal(cspLines.length, 1, '_headers debe tener una sola CSP fallback estática');
   assert.ok(cspLines[0].length <= 2000, 'la CSP fallback debe respetar el límite por línea de Pages');
   assert.ok(cspLines[0].includes("script-src-attr 'none'"));
-  assert.ok(!cspLines[0].includes('https://api.cloudinary.com'));
+  assert.ok(!/(?:^|[\s;])https:\/\/api\.cloudinary\.com(?:[\s;]|$)/.test(cspLines[0]));
   assert.ok(!cspLines[0].includes("script-src 'self' 'unsafe-inline'"));
   assert.ok(headers.split(/\r?\n/).every(line => line.length <= 2000), '_headers debe respetar el límite por línea de Pages');
   assert.ok(middleware.includes("headers.set('Content-Security-Policy', policy)"));
@@ -86,4 +94,29 @@ test('perfil puede ejecutar sus scripts con la CSP estática y la de runtime', (
       assert.ok(policy.includes(hash), `perfil bloqueado: ${hash}`);
     }
   }
+});
+
+test('una revalidación 304 de /perfil conserva la CSP de la ruta (subida de foto a Cloudinary)', async () => {
+  const stale = new Response(null, {
+    status: 304,
+    headers: { 'Content-Security-Policy': "default-src 'self'; connect-src 'self'" },
+  });
+  const response = await onRequest({
+    request: new Request('https://tintinaccesorios.pages.dev/perfil', { headers: { 'If-None-Match': '"x"' } }),
+    next: async () => stale,
+  });
+  assert.equal(response.status, 304);
+  const policy = response.headers.get('Content-Security-Policy');
+  const connectSources = (policy.match(/connect-src ([^;]*)/)?.[1] || '').trim().split(/\s+/);
+  assert.ok(connectSources.some(source => source === 'https://api.cloudinary.com'));
+  assert.equal(response.headers.get('X-Tintin-CSP'), 'edge-runtime');
+});
+
+test('un 304 de un recurso que no es página se deja intacto', async () => {
+  const response = await onRequest({
+    request: new Request('https://tintinaccesorios.pages.dev/tienda.js'),
+    next: async () => new Response(null, { status: 304 }),
+  });
+  assert.equal(response.status, 304);
+  assert.equal(response.headers.get('X-Tintin-CSP'), null);
 });

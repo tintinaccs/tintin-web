@@ -8,13 +8,13 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261001-precio-anterior-4';
+const TIENDA_VERSION = 'tintin-20261001-inventory-fix-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1';
 const LOADER_VERSION = 'tintin-20260930-sheets-reconcile-loader-4-cupones-1';
 const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260925-cache-converge-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261001-active-session-shell-1';
-const NAV_ENTRY_VERSION = 'tintin-20261001-active-session-shell-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261001-inventory-fix-1';
+const NAV_ENTRY_VERSION = 'tintin-20261001-inventory-fix-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261001-bloqueo-1';
@@ -90,8 +90,20 @@ function removeElementById(html, id) {
   throw new Error(`No se encontro el cierre de #${id}`);
 }
 
+// Repite el reemplazo hasta que el texto deja de cambiar: un borrado de una
+// sola pasada puede dejar fragmentos que vuelven a formar la etiqueta.
+function replaceUntilStable(text, pattern, replacement) {
+  let previous;
+  let out = text;
+  do {
+    previous = out;
+    out = out.replace(pattern, replacement);
+  } while (out !== previous);
+  return out;
+}
+
 function removeLegacyComments(html) {
-  return html.replace(/<!--[\s\S]*?-->/g, comment => {
+  return replaceUntilStable(html, /<!--[\s\S]*?-->/g, comment => {
     const marker = comment.slice(4, -3).replace(/[═─\s]/g, ' ').trim().toUpperCase();
     const legacyMarkers = new Set([
       'HEADER', 'MOBILE MENU OVERLAY', 'MOBILE TABBAR', 'CART DRAWER',
@@ -232,11 +244,13 @@ function ensureNavigationPreloads(html) {
 }
 
 function ensureShellScript(html) {
-  let out = html
-    .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script\s*>/gi, '')
-    .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script\s*>/gi, '')
-    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script\s*>/gi, '')
-    .replace(/\s*<script\b[^>]*data-tt-shell-startup-hold[^>]*>[\s\S]*?<\/script\s*>/gi, '');
+  let out = html;
+  for (const pattern of [
+    /\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script\s*>/gi,
+    /\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script\s*>/gi,
+    /\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script\s*>/gi,
+    /\s*<script\b[^>]*data-tt-shell-startup-hold[^>]*>[\s\S]*?<\/script\s*>/gi,
+  ]) out = replaceUntilStable(out, pattern, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
 
@@ -244,7 +258,8 @@ function ensureShellScript(html) {
 }
 
 function centralizeRuntime(html) {
-  let out = html.replace(
+  let out = replaceUntilStable(
+    html,
     /\s*<script\b[^>]*src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js[^"']*["'][^>]*><\/script\s*>/gi,
     ''
   );

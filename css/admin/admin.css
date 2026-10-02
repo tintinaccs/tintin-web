@@ -1757,11 +1757,16 @@
       #adm-mobile-tabs > .adm-mobile-tab:not([data-mobile-primary]):not(#adm-mobile-more-toggle) {
         display: none;
       }
+      /* Ancho según la etiqueta (PRODUCTOS necesita más que MÁS): con
+         celdas iguales las etiquetas largas se pisaban a 320–390 px. */
       #adm-mobile-tabs > .adm-mobile-tab {
-        flex: 1 1 0;
-        min-width: 0;
+        flex: 1 1 auto;
+        min-width: 44px;
         padding: 5px 3px;
         font-size: 9.5px;
+      }
+      @media (max-width: 360px) {
+        #adm-mobile-tabs > .adm-mobile-tab { letter-spacing: 0; }
       }
       #adm-mobile-more-toggle .adm-nav-icon {
         display: grid;

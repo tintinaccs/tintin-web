@@ -210,7 +210,7 @@ check('admin-script-exists', 'Todos los scripts locales referenciados existen', 
 // vieja): auto-read/rich/global-session-restore fueron las primeras; el 1-oct
 // corrigió el bucle de reintento ante permission-denied/unauthenticated.
 check('admin-notifications-versioned', 'La autolectura Admin está servida con versión propia actual',
-  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore|firebase-permissions)/.test(item.version)));
+  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore|firebase-permissions|inventory-fix)/.test(item.version)));
 
 // 7. Mutaciones sensibles deben conservar gobierno y trazabilidad.
 check('superadmin-auth', 'El panel conserva guard de autenticación y Super Admin real',

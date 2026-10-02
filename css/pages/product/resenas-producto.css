@@ -325,10 +325,25 @@
 }
 
 .tt-review-form-actions small {
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: 520px;
   color: var(--tt-review-muted);
   font-size: .72rem;
   line-height: 1.45;
+}
+
+.tt-review-form-actions .tt-btn,
+.tt-review-reply-actions .tt-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 940px) {
+  .tt-review-form-actions,
+  .tt-review-reply-actions {
+    flex-wrap: wrap;
+  }
 }
 
 .tt-reviews-product .tt-btn {
