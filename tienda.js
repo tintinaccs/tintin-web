@@ -1251,6 +1251,11 @@ function _updateProductMeta(product, mainImgUrl) {
 
 function productSpecDisplayValue(label, value) {
   const text = sanitizePlainText(value, 500).trim();
+  // Acabados cargados en minúscula ("dorado") se presentan capitalizados.
+  if (label === 'Color / acabado' && text && text === text.toLowerCase()) {
+    const readable = text.replace(/[-_]+/g, ' ');
+    return readable.charAt(0).toUpperCase() + readable.slice(1);
+  }
   if (label !== 'Material' || !text) return text;
   const materialKey = text.toLowerCase().replace(/\s+/g, '-').replace(/_/g, '-');
   const knownMaterials = {
@@ -1897,16 +1902,17 @@ function initWaFloatVisibility() {
   const wa = document.getElementById('wa-float');
   if (!wa) return;
   const EXCLUDE = '.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header';
-  const PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap';
+  const PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap,p,h1,h2,h3,li,dd,dt';
+  const CONTROL_TARGETS = 'a,button,input,textarea,select';
   const collisionSelector = /(?:^|\/)product(?:\.html)?\/?$/i.test(location.pathname || '')
-    ? `a,button,${PRODUCT_COLLISION_TARGETS}`
-    : 'a,button';
+    ? `${CONTROL_TARGETS},${PRODUCT_COLLISION_TARGETS}`
+    : CONTROL_TARGETS;
   const overlapsRect = (a, b, t = 2) => a.left < b.right - t && a.right > b.left + t && a.top < b.bottom - t && a.bottom > b.top + t;
   let ticking = false;
   // El botón es position:fixed, así que cualquier control del contenido
   // normal puede terminar exactamente detrás de él según el scroll y el alto
   // del viewport. En producto también se vigilan descripción, variantes,
-  // especificaciones y cantidad para no tapar texto aunque no sea clickeable (tabla de contenidos de términos/privacidad, última fila de
+  // especificaciones, cantidad y bloques de texto para no tapar contenido aunque no sea clickeable (tabla de contenidos de términos/privacidad, última fila de
   // tarjetas de catálogo, footer en páginas cortas, etc.) — en vez de intentar
   // reservar espacio para cada caso, se detecta el solape real y se oculta.
   // Histéresis: ocultar es inmediato (el botón está tapando algo AHORA),
@@ -1928,11 +1934,12 @@ function initWaFloatVisibility() {
     if (r.width <= 0 || r.height <= 0) { stats.zeroRect++; return; }
     const collided = [...document.querySelectorAll(collisionSelector)].some(node => {
       if (node === wa || node.closest(EXCLUDE)) return false;
-      const style = getComputedStyle(node);
-      if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01) return false;
+      // Geometría primero: descarta casi todo sin calcular estilos.
       const nr = node.getBoundingClientRect();
       if (nr.width <= 0 || nr.height <= 0 || nr.bottom <= 0 || nr.top >= innerHeight) return false;
-      return overlapsRect(r, nr);
+      if (!overlapsRect(r, nr)) return false;
+      const style = getComputedStyle(node);
+      return !(style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01);
     });
     const hidden = wa.classList.contains('tt-wa-float-hidden');
     if (collided) {

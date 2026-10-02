@@ -44,7 +44,10 @@ test('admin móvil mantiene cinco accesos principales con etiquetas cortas y Má
 
 test('WhatsApp flotante de producto vigila texto y controles no clickeables', async () => {
   const source = await read('tienda.js');
-  assert.match(source, /PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap'/);
+  assert.match(source, /PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap,p,h1,h2,h3,li,dd,dt'/);
+  assert.match(source, /CONTROL_TARGETS = 'a,button,input,textarea,select'/);
+  // La geometría se descarta antes de getComputedStyle para que la lista ampliada siga siendo barata.
+  assert.match(source, /if \(!overlapsRect\(r, nr\)\) return false;\s*const style = getComputedStyle\(node\);/);
   assert.match(source, /querySelectorAll\(collisionSelector\)/);
 });
 
@@ -93,4 +96,26 @@ test('perfil no presenta compras ni "sin pedidos" sin confirmar todas las consul
   assert.match(profile, /onStats\(complete \? calculateOrderStats\(current\) : null\)/);
   assert.match(profile, /empty:current\.length===0 && complete/);
   assert.match(profile, /failures\[index\] = failure;\s*ready\[index\] = true;\s*onStats\(null\);/);
+});
+
+test('presentación de especificaciones: slugs y acabados legibles sin tocar texto libre', async () => {
+  const source = await read('tienda.js');
+  const body = source.match(/function productSpecDisplayValue\(label, value\) \{[\s\S]*?\r?\n\}\r?\n/)[0];
+  const sanitizePlainText = (value, max) => String(value ?? '').slice(0, max);
+  const display = new Function('sanitizePlainText', `${body}; return productSpecDisplayValue;`)(sanitizePlainText);
+  assert.equal(display('Material', 'acero-inoxidable'), 'Acero inoxidable');
+  assert.equal(display('Material', 'acero-quirurgico'), 'Acero quirúrgico');
+  assert.equal(display('Material', 'plata-925'), 'Plata 925');
+  assert.equal(display('Material', 'enchapado-en-oro'), 'Enchapado en oro');
+  assert.equal(display('Material', 'Acero 316L con baño PVD'), 'Acero 316L con baño PVD');
+  assert.equal(display('Color / acabado', 'dorado'), 'Dorado');
+  assert.equal(display('Color / acabado', 'Oro rosa'), 'Oro rosa');
+  assert.equal(display('Medidas', 'aro de 2 cm'), 'aro de 2 cm');
+});
+
+test('pestañas móviles del admin se dimensionan por etiqueta y no se pisan a 320–390 px', async () => {
+  const css = await read('css/admin/admin.css');
+  assert.match(css, /#adm-mobile-tabs > \.adm-mobile-tab \{\s*flex: 1 1 auto;\s*min-width: 44px;/);
+  assert.doesNotMatch(css, /#adm-mobile-tabs > \.adm-mobile-tab \{\s*flex: 1 1 0;/);
+  assert.match(css, /@media \(max-width: 360px\) \{\s*#adm-mobile-tabs > \.adm-mobile-tab \{ letter-spacing: 0; \}/);
 });
