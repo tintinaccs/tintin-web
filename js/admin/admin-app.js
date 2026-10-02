@@ -361,7 +361,7 @@ async function runAdminCrudOperation({ title, module, name, dangerous = false, s
 // acciones fueron "de a una" y cuáles "en lote".
 async function logAudit(action, targetType, targetId, targetLabel, details, meta) {
   try {
-    await addDoc(collection(db, 'auditLog'), {
+    const entry = {
       action,
       targetType,
       targetId: targetId || '',
@@ -372,7 +372,14 @@ async function logAudit(action, targetType, targetId, targetLabel, details, meta
       actorEmail: currentUser?.email || '',
       actorRole: currentRole || '',
       createdAt: serverTimestamp()
-    });
+    };
+    // Los cambios de precio/stock necesitan una trazabilidad consultable,
+    // no solamente una frase humana. Se mantienen en el mismo auditLog
+    // canónico para no crear una segunda autoridad ni otra colección paralela.
+    if (meta?.productHistory) {
+      entry.productHistory = meta.productHistory;
+    }
+    await addDoc(collection(db, 'auditLog'), entry);
   } catch (e) {
     console.error('No se pudo registrar en auditLog:', e);
   }
@@ -460,13 +467,17 @@ function renderAuditLogTable() {
   tbody.innerHTML = _allAuditLogs.map(l => {
     const actionLabel = AUDIT_ACTION_LABELS[l.action] || l.action;
     const bulkTag = l.bulk ? `<span class="adm-badge" style="background:#fff3e0;color:#bf360c;margin-left:6px">Masivo${l.bulkCount ? ` (${l.bulkCount})` : ''}</span>` : '';
+    const history = Array.isArray(l.productHistory) ? l.productHistory : [];
+    const historyText = history.length
+      ? ` · Historial: ${history.length === 1 ? `precio ${history[0].priceBefore ?? '—'} → ${history[0].priceAfter ?? '—'} · stock ${history[0].stockBefore ?? 'ilimitado'} → ${history[0].stockAfter ?? 'ilimitado'}` : `${history.length} productos con valores anteriores y posteriores`}`
+      : '';
     return `
       <tr>
         <td class="col-select"><input type="checkbox" class="audit-row-check" data-id="${escapeHtmlAdmin(l.id)}" onclick="toggleAuditSelect(this)" ${_selectedAuditLogs.has(l.id) ? 'checked' : ''}></td>
         <td style="white-space:nowrap;font-size:12px">${formatDate(l.createdAt)}</td>
         <td style="font-size:12px">${escapeHtmlAdmin(l.actorEmail || '—')}</td>
         <td style="font-size:12px">${escapeHtmlAdmin(actionLabel)}${bulkTag}</td>
-        <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${escapeHtmlAdmin(l.targetLabel)}</strong> — ` : ''}${escapeHtmlAdmin(l.details || '')}</td>
+        <td style="font-size:12px;color:var(--adm-muted)">${l.targetLabel ? `<strong>${escapeHtmlAdmin(l.targetLabel)}</strong> — ` : ''}${escapeHtmlAdmin((l.details || '') + historyText)}</td>
       </tr>
     `;
   }).join('');
@@ -5927,6 +5938,13 @@ async function prodGuardar() {
       }
       await pushProductsToSheets([docId]);
       const changes = [];
+      const productHistory = {
+        productId: docId,
+        priceBefore: oldProd?.price ?? null,
+        priceAfter: data.price ?? null,
+        stockBefore: oldProd?.stock ?? null,
+        stockAfter: data.stock ?? null,
+      };
       if (oldProd) {
         // Comparación directa (no Number(x || 0)): stock null (ilimitado) y
         // stock 0 (agotado de verdad) son estados distintos a propósito en
@@ -5944,7 +5962,7 @@ async function prodGuardar() {
       if (oldProd && (oldProd.active !== false) !== data.active) {
         changes.push(`Activo: ${oldProd.active !== false} → ${data.active}`);
       }
-      await logAudit('editar_producto', 'producto', docId, name, changes.join(' · ') || 'Datos actualizados');
+      await logAudit('editar_producto', 'producto', docId, name, changes.join(' · ') || 'Datos actualizados', { productHistory });
     } else {
       data.createdAt = serverTimestamp();
       const newRef = doc(collection(db, 'products'));
@@ -7643,9 +7661,13 @@ window.bulkSetStock = async function() {
   if (!confirm(`¿Cambiar el stock a ${stock} en ${n} producto(s)?`)) return;
   try {
     const ids = [..._selectedProducts];
+    const productHistory = ids.map(id => {
+      const product = _allProducts.find(item => item._docId === id);
+      return { productId: id, priceBefore: product?.price ?? null, priceAfter: product?.price ?? null, stockBefore: product?.stock ?? null, stockAfter: stock };
+    });
     await batchUpdateChunked(ids, () => ({ stock, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.stock = stock; });
-    logAudit('editar_producto', 'producto', '', '', `Stock → ${stock}`, { bulk: true, count: n });
+    await logAudit('editar_producto', 'producto', '', '', `Stock → ${stock}`, { bulk: true, count: n, productHistory });
     toast(`Stock actualizado en ${n} producto(s)`);
     clearSelection();
     applyProductFilters();
@@ -7662,9 +7684,13 @@ window.bulkSetPrice = async function() {
   if (!confirm(`¿Cambiar el precio a ${formatPrice(price)} en ${n} producto(s)?`)) return;
   try {
     const ids = [..._selectedProducts];
+    const productHistory = ids.map(id => {
+      const product = _allProducts.find(item => item._docId === id);
+      return { productId: id, priceBefore: product?.price ?? null, priceAfter: price, stockBefore: product?.stock ?? null, stockAfter: product?.stock ?? null };
+    });
     await batchUpdateChunked(ids, () => ({ price, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.price = price; });
-    logAudit('editar_producto', 'producto', '', '', `Precio → ${formatPrice(price)}`, { bulk: true, count: n });
+    await logAudit('editar_producto', 'producto', '', '', `Precio → ${formatPrice(price)}`, { bulk: true, count: n, productHistory });
     toast(`Precio actualizado en ${n} producto(s)`);
     clearSelection();
     applyProductFilters();

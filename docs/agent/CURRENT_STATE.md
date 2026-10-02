@@ -546,6 +546,19 @@ Decisión del dueño: el stock se descuenta al confirmar el pago; la última uni
 - Pruebas: `tests/catalog/precio-anterior.test.mjs`, `tests/catalog|cart`, verify:diagnostics, verify:csp, audit:cache-versioning, audit:public-shell, audit:cart, audit:phase7-catalog → OK.
 - Pendiente: precio anterior en carrito/búsqueda; historial de cambios de precio/stock; aviso de cambio de precio en carrito.
 
+## Login — restauración de sesión con perfil incompleto — 2026-10-01
+- Causa: `ensureProfileComplete()` referenciaba `data.username`/`data.userName`, aunque `data` no existe en ese alcance. Una sesión Firebase válida podía romperse antes de completar el onboarding y volver a dejar el acceso atrapado.
+- Corrección: el render y el listener del campo username usan únicamente `plan.needsUsername`, calculado por `getProfileCompletionPlan()`.
+- PASS_LOCAL: 61 pruebas dirigidas de autenticación, sesión y onboarding; `audit:cache-versioning` correcto; prueba en Chrome de la vista previa corregida: `withDeadline()` resuelve y vence sin `Illegal invocation`.
+- Pendiente: publicar esta corrección y verificar el flujo real con una cuenta autenticada de perfil incompleto en producción.
+
+## Productos — historial estructurado de precio y stock — 2026-10-01
+- Se conserva el mismo `auditLog` canónico; no se creó una colección paralela.
+- Cada edición individual registra `productHistory` con producto, precio/stock anterior y posterior, actor y `createdAt`.
+- Las ediciones masivas de precio y stock también guardan los valores anteriores y posteriores por producto.
+- Verificación: `tests/admin/product-history-audit.test.mjs`, permisos de pago y dominio de pedidos pasan.
+- Pendiente externo: desplegar el commit y verificar una edición real en producción.
+
 ## 2026-10-01 — Recuperación permisos/App Check (GPT-5.6 Sol)
 
 Estado: **IN_PROGRESS / NOT_VERIFIED en producción**.
@@ -626,3 +639,7 @@ R01 noindex en pages.dev: correcto para preview; requiere cutover de dominio (do
 - **R03 resuelto en código:** si Resend falla al avisar un cambio de estado/pago, el cambio queda en `orderEmailQueue` (`status__<pedido>__<changeId>`, precondición de inexistencia) y el drenaje programado existente (`drenar-cola-correo-pedidos`, cada 15 min) lo reintenta con la misma clave de idempotencia de Resend. Si el pedido volvió a cambiar o ya no existe, el aviso viejo se descarta sin enviar; fallos repetidos usan el backoff y el dead-letter ya existentes. Tests: `tests/orders/correo-estado-pedido.test.mjs` y `tests/sync/order-email-queue.test.mjs` (13/13); suite completa 805/805. **No verificado contra Resend real** (sin envíos reales).
 - **Fines de línea:** commits anteriores de esta sesión guardaron 15 archivos con CRLF por un clon inicial con `autocrlf=true`; `61f8b8c0` (del dueño) los normalizó a LF. Se rehizo la copia de trabajo para que coincida byte a byte con el índice. Los 9 archivos que siguen con CRLF ya lo estaban en `main`.
 - Siguen pendientes de acción del dueño: sesión Super Admin en el preview (F01 y verificaciones autenticadas), moderar la reseña de prueba (F18), síntoma exacto de la ubicación en "Últimos datos", decisión sobre devolver el cupón al cancelar (R02), credenciales PayPal Live y credencial del Diagnóstico Maestro, y merge/deploy para que el arreglo de la foto de perfil llegue a producción.
+
+### Actualización de #1002 contra main — 2026-10-02 (Codex)
+
+Se fusionó `origin/main@3dee5626` en esta rama, sin rebase ni force-push. Se conservaron las correcciones de listeners/estado de #1002 y el historial de precio/stock de main. El conflicto de `admin.html` era el tag de admin-app: se asignó `tintin-20261002-inventory-fix-4-history-1`, porque los bytes combinados son nuevos; baseline y manifiesto se regeneraron con sus herramientas canónicas. Build pages y suite Node completa: **808/808**, 0 fallos. Esto es evidencia local, no cierra runtime productivo. Pendiente CI del nuevo HEAD y aprobación P3 antes de mergear a main. NO MERGEADO en main.
