@@ -23,7 +23,9 @@ export async function fetchAppsScript(url, init = {}, fetchImpl = fetch) {
     const redirectUrl = new URL(location, fromUrl);
     if (!ALLOWED_HOSTS.has(redirectUrl.hostname)) throw new Error('Redirección de Apps Script no permitida.');
 
-    response = await fetchImpl(redirectUrl, { method: 'GET', redirect: 'manual' });
+    // El límite pertenece a toda la operación, también al resultado redirigido.
+    // No reenviar el cuerpo ni las credenciales del POST a ese resultado.
+    response = await fetchImpl(redirectUrl, { method: 'GET', redirect: 'manual', signal: init.signal });
     fromUrl = redirectUrl;
   }
 

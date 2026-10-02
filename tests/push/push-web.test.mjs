@@ -19,19 +19,34 @@ import {
   eventDocumentId,
   formatGuarani,
   normalizePrivateKey,
+  normalizePushToneUrl,
   parseWebhookEvent,
   sanitizeError,
   signWebhook,
   verifyWebhookSignature,
   webhookSigningPayload
 } from '../../cloudflare/nucleo-push.js';
-import { pushEnabled } from '../../cloudflare/servicio-push.js';
+import { pushEnabled, savePushSettings } from '../../cloudflare/servicio-push.js';
 import { adminNotificationPushPresentation } from '../../cloudflare/notificaciones-sociales.js';
 
 test('Push queda cerrado por defecto y sólo acepta una habilitación explícita', () => {
   assert.equal(pushEnabled({}), false);
   assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'false' }), false);
   assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'true' }), true);
+});
+
+test('un tono push acepta MP3 directo y rechaza páginas, credenciales y protocolos inseguros', () => {
+  assert.equal(normalizePushToneUrl('https://cdn.example.com/tono.mp3?version=2'), 'https://cdn.example.com/tono.mp3?version=2');
+  for (const value of ['https://www.youtube.com/shorts/fixture', 'https://cdn.example.com/page', 'http://cdn.example.com/tono.mp3', 'https://user:password@cdn.example.com/tono.mp3', 'javascript:alert(1)', '']) {
+    assert.equal(normalizePushToneUrl(value), '');
+  }
+});
+
+test('un tono inválido detiene el guardado completo antes de acceder a Firebase', async () => {
+  await assert.rejects(savePushSettings({}, {
+    foregroundSound: 'default', foregroundSoundOrder: 'custom',
+    foregroundSoundOrderUrl: 'https://www.youtube.com/shorts/fixture',
+  }), /enlace HTTPS directo a un archivo MP3/);
 });
 
 test('Web Push se entrega únicamente por Firebase FCM', () => {
@@ -126,8 +141,20 @@ test('el mensaje FCM viaja sólo como data, con TTL y sin enlace FCM relativo', 
   assert.equal(message.notification, undefined);
   assert.equal(message.webpush.notification, undefined);
   assert.equal(message.webpush.headers.TTL, '3600');
+  assert.equal(message.webpush.headers.Urgency, 'high');
   assert.equal(message.webpush.fcm_options, undefined);
   assert.equal(message.data.tag, `order.created:${ORDER_ID}`);
+});
+
+test('los pagos tienen urgencia alta sin elevar avisos sociales ni reemplazar una prioridad explícita', () => {
+  for (const type of ['payment.completed', 'payment.failed', 'payment.refunded']) {
+    const content = buildPushContent({ type, orderId: ORDER_ID, order: ORDER });
+    assert.equal(buildFcmMessage({ token: 'fixture', content }).message.webpush.headers.Urgency, 'high');
+    assert.equal(buildFcmMessage({ token: 'fixture', content, urgency: 'low' }).message.webpush.headers.Urgency, 'low');
+  }
+  for (const type of ['social.review.created', 'admin.user.joined', 'push.test']) {
+    assert.equal(buildFcmMessage({ token: 'fixture', content: { data: { type } } }).message.webpush.headers.Urgency, 'normal');
+  }
 });
 
 test('la notificación de prueba usa el pedido simulado fijo del servidor', () => {

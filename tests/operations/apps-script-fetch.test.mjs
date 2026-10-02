@@ -46,3 +46,22 @@ test('rechaza redirects de Apps Script hacia hosts no permitidos', async () => {
     /no permitida/
   );
 });
+
+test('cancelar la solicitud también interrumpe la descarga redirigida', { timeout: 250 }, async () => {
+  const controller = new AbortController();
+  const reason = new DOMException('Presupuesto agotado', 'TimeoutError');
+  let calls = 0;
+  const pending = fetchAppsScript('https://script.google.com/macros/s/demo/exec', {
+    method: 'POST', body: 'fixture', signal: controller.signal,
+  }, async (_url, init) => {
+    calls += 1;
+    if (calls === 1) return new Response(null, { status: 302, headers: { location: 'https://script.googleusercontent.com/macros/echo' } });
+    return new Promise((_resolve, reject) => {
+      if (init.signal?.aborted) reject(init.signal.reason);
+      else init.signal?.addEventListener('abort', () => reject(init.signal.reason), { once: true });
+      queueMicrotask(() => controller.abort(reason));
+    });
+  });
+  await assert.rejects(pending, error => error === reason);
+  assert.equal(calls, 2);
+});
