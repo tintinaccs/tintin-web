@@ -1,23 +1,19 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import vm from 'node:vm';
 import test from 'node:test';
 
 const read = path => fs.readFileSync(path, 'utf8');
 
-test('Sheets elimina cuentas solo a través del dominio canónico de baja', () => {
+test('Sheets no puede eliminar cuentas: sólo activas o bloqueadas', () => {
   const webhook = read('functions/api/sheets-admin-webhook.js');
-  const lifecycle = read('cloudflare/user-lifecycle-domain.js');
   const parity = read('apps-script/AdminParity.gs');
 
-  assert.doesNotMatch(webhook, /deleteFirebaseUser/);
+  assert.doesNotMatch(webhook, /deleteFirebaseUser|applyUserLifecycle/);
   assert.doesNotMatch(webhook, /path:\s*`users\/\$\{uid\}`\s*,\s*delete:\s*true/);
-  assert.match(webhook, /action === 'deleteUser' \|\| action === 'softDeleteUser'/);
-  assert.match(webhook, /applyUserLifecycle\(env, \{[\s\S]*?action: 'delete'/);
-  assert.match(lifecycle, /deleteFirebaseUser\(env, uid\)/);
-  assert.doesNotMatch(lifecycle, /deleted:\s*fsBoolean\(true\)/);
-  assert.match(parity, /'ELIMINAR' \? 'softDeleteUser'/);
+  assert.match(webhook, /La eliminación de cuentas fue retirada/);
+  assert.doesNotMatch(parity, /softDeleteUser|reactivateUser|'ELIMINAR'/);
   assert.match(parity, /tintinPullUsersFromWeb_\(\)/);
-  assert.match(parity, /'REACTIVAR' \? 'reactivateUser'/);
   assert.doesNotMatch(parity, /sheet\.deleteRow/);
 });
 
@@ -62,6 +58,41 @@ test('Snapshot administrativo pagina hasta 5000 y recupera cédula de checkout',
   assert.match(snapshot, /locationName: savedLocation\.name/);
   assert.match(snapshot, /ruc: invoice\.ruc/);
   assert.match(snapshot, /return \{ \.\.\.record, eventId: documentId\(document\), timestamp: asIso/);
+});
+
+test('Reconciliación Sheets reintenta solo errores de red transitorios del snapshot de solo lectura', async () => {
+  const productsScript = read('apps-script/ProductosUnificados.gs');
+  const snapshot = productsScript.match(/function tintinSnapshot_\(entity\) \{[\s\S]*?\n\}/)?.[0] || '';
+  assert.match(snapshot, /TINTIN_SNAPSHOT_PATH/);
+  const makeContext = (call, waits = []) => {
+    const context = { tintinCallInternalWebhook_: call, TINTIN_SNAPSHOT_PATH: '/api/sheets-sync-snapshot', Utilities: { sleep: ms => waits.push(ms) } };
+    vm.runInNewContext(`${snapshot}\nthis.runSnapshot = tintinSnapshot_;`, context);
+    return context;
+  };
+
+  let calls = 0;
+  const waits = [];
+  const retryContext = makeContext(() => {
+    calls += 1;
+    if (calls < 3) throw new Error('Exception: Address unavailable: https://example.test/api/sheets-sync-snapshot');
+    return { records: [{ uid: 'fixture' }] };
+  }, waits);
+  assert.deepEqual(retryContext.runSnapshot('users'), [{ uid: 'fixture' }]);
+  assert.equal(calls, 3);
+  assert.deepEqual(waits, [250, 750]);
+
+  calls = 0;
+  const apiError = new Error('HTTP 503: service unavailable');
+  const noRetryContext = makeContext(() => { calls += 1; throw apiError; });
+  assert.throws(() => noRetryContext.runSnapshot('users'), /HTTP 503/);
+  assert.equal(calls, 1);
+
+  calls = 0;
+  const offlineWaits = [];
+  const offlineContext = makeContext(() => { calls += 1; throw new Error('Address unavailable'); }, offlineWaits);
+  assert.throws(() => offlineContext.runSnapshot('users'), /Address unavailable/);
+  assert.equal(calls, 3);
+  assert.deepEqual(offlineWaits, [250, 750]);
 });
 
 test('Bloqueo desde Sheets compensa Firebase Auth si falla Firestore', () => {

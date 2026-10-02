@@ -27,14 +27,12 @@ test('el carrito agrega líneas sin reemplazar las existentes', async () => {
   assert.match(runtime, /GUEST_CART_TTL_MS/);
 });
 
-test('favoritos está conectado y solo se borra con la eliminación definitiva de la cuenta', async () => {
-  const [favorites, product, cart, rules, deletion, lifecycle] = await Promise.all([
+test('favoritos está conectado y persiste con la cuenta (no hay eliminación de cuentas)', async () => {
+  const [favorites, product, cart, rules] = await Promise.all([
     read('js/components/favorites/sincronizacion-favoritos.js'),
     read('product.html'),
     read('tienda.js'),
     read('firestore.rules'),
-    read('functions/api/admin-delete-user.js'),
-    read('cloudflare/user-lifecycle-domain.js'),
   ]);
   assert.match(favorites, /users', currentUser\.uid, 'favorites'/);
   // La ficha usa el control social canónico de producto. No se permite
@@ -43,10 +41,4 @@ test('favoritos está conectado y solo se borra con la eliminación definitiva d
   assert.doesNotMatch(product, /btn-product-favorite/);
   assert.match(cart, /tt-cart-favorites/);
   assert.match(rules, /match \/favorites\/\{productId\}/);
-  assert.match(deletion, /applyUserLifecycle/);
-  // El endpoint no borra favoritos por su cuenta: la baja completa vive en el
-  // dominio de ciclo de vida, que incluye la subcolección entre las que purga.
-  assert.doesNotMatch(deletion, /favoriteDocs|favorites\//);
-  assert.match(lifecycle, /USER_SUBCOLLECTIONS = \[[^\]]*'favorites'/);
-  assert.doesNotMatch(lifecycle, /deleted:\s*fsBoolean\(true\)/);
 });

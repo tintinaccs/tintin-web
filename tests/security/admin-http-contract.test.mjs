@@ -16,7 +16,6 @@ test('statusFromError conserva estados HTTP válidos y usa fallback para errores
 test('endpoints sensibles no degradan autenticación/autorización a 400', async () => {
   const files = [
     'functions/api/admin-order-mutation.js',
-    'functions/api/admin-delete-user.js',
     'functions/api/admin-catalog-delete.js',
     'functions/api/admin-engagement.js',
     'functions/api/notifications.js',

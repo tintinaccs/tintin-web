@@ -58,7 +58,8 @@ export function showBlockedModal({ email = '' } = {}) {
         <h2 class="tt-blocked-title" id="tt-blocked-title">No podés ingresar</h2>
         <p class="tt-blocked-message" id="tt-blocked-message">${accountProblemHtml(email)}</p>
         <div class="tt-blocked-actions">
-          <a class="tt-blocked-action tt-blocked-action-primary" href="/">Volver al inicio</a>
+          <a class="tt-blocked-action tt-blocked-action-primary" href="${escapeAttribute(accountSupportUrl(email))}" target="_blank" rel="noopener noreferrer">Escribir a soporte por WhatsApp</a>
+          <a class="tt-blocked-action tt-blocked-action-secondary" href="/">Volver al inicio</a>
         </div>
       </section>`;
 

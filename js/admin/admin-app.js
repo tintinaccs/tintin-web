@@ -31,7 +31,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260929-profile-gate-all-pages-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261001-firebase-permissions-1";
 import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1-auth-popup-resolver-1-launch-20260926-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
@@ -42,7 +42,7 @@ import {
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1-auth-popup-resolver-1-launch-20260926-1';
-import './settings/cupones-admin.js?v=tintin-20261001-cupones-1';
+import './settings/cupones-admin.js?v=tintin-20261001-firebase-permissions-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261001-stock-pago-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20260928-admin-crud-feedback-4';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260928-admin-crud-feedback-3-domain-cutover-2';
@@ -60,9 +60,7 @@ let allUsers = [];
 let allOrders = [];
 let adminOrdersUnsubscribe = null;
 let adminUsersUnsubscribe = null;
-let adminLegacyDeletedUsersLoadToken = 0;
 let adminUsersLive = [];
-let adminLegacyDeletedUsers = [];
 // Nunca volver a descargar miles de documentos al abrir el panel. El panel
 // debe trabajar con la ventana operativa reciente; las fichas y exportaciones
 // consultan el documento o la página concreta que se necesita.
@@ -1666,7 +1664,6 @@ function stopAdminRealtimeData() {
   statisticsTrafficLoadToken += 1;
   adminOrdersUnsubscribe = null;
   adminUsersUnsubscribe = null;
-  adminLegacyDeletedUsersLoadToken += 1;
   _auditUnsubscribe = null;
 }
 
@@ -1742,25 +1739,10 @@ function startAdminRealtimeData() {
     adminRealtimeReady.orders = true;
   }
   if (currentRole === 'superadmin') {
-    // Las bajas del sistema anterior reemplazaban el perfil sin `createdAt` y
-    // quedaban fuera del orden principal: invisibles e imposibles de borrar.
-    // Ya no se generan (la baja actual borra el perfil), así que alcanza con
-    // leerlas una vez al abrir el panel para que Superadmin pueda eliminarlas.
     const mergeAdminUsers = () => {
-      const byUid = new Map();
-      [...adminLegacyDeletedUsers, ...adminUsersLive].forEach(user => byUid.set(user.uid, user));
-      allUsers = [...byUid.values()]
+      allUsers = [...adminUsersLive]
         .sort((a, b) => activityTimestampMillis(b.createdAt || b.updatedAt || b.lastAccess) - activityTimestampMillis(a.createdAt || a.updatedAt || a.lastAccess) || String(a.uid || '').localeCompare(String(b.uid || '')));
     };
-    const legacyLoadToken = ++adminLegacyDeletedUsersLoadToken;
-    getDocs(query(collection(db, 'users'), where('deleted', '==', true), limit(ADMIN_REALTIME_LIMIT))).then(snapshot => {
-      if (legacyLoadToken !== adminLegacyDeletedUsersLoadToken) return;
-      adminLegacyDeletedUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
-      mergeAdminUsers();
-      if (adminRealtimeReady.users) refreshRealtimeConsumers();
-    }).catch(error => {
-      console.error('Bajas anteriores no disponibles:', error);
-    });
     adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
       adminUsersLive = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
       mergeAdminUsers();
@@ -2075,9 +2057,11 @@ function loadDashboard() {
 }
 
 // ======== USUARIOS ========
-// Estados separados: una cuenta eliminada conserva un tombstone histórico,
-// pero no es un usuario bloqueado. La interfaz debe mostrarla en Eliminados,
-// nunca mezclarla con Bloqueados.
+// Dos pestañas: Usuarios (activos) y Bloqueados. La eliminación borra la
+// cuenta por completo (queda sólo la auditoría), así que no existe una lista
+// de eliminados. Un resto histórico marcado como eliminado (tombstone del
+// sistema anterior) no se muestra en ninguna de las dos: se limpia con
+// "Eliminar por correo".
 let userStatusFilter = 'active';
 let userSortMode = 'recent';
 let usersPage = 0;
@@ -2102,11 +2086,9 @@ function applyUserFilters() {
     (u.name||'').toLowerCase().includes(q) ||
     (u.email||'').toLowerCase().includes(q)
   );
-  filtered = userStatusFilter === 'deleted'
-    ? filtered.filter(u => u.deleted === true || u.profileStatus === 'deleted')
-    : userStatusFilter === 'blocked'
-      ? filtered.filter(u => u.blocked && u.deleted !== true && u.profileStatus !== 'deleted')
-      : filtered.filter(u => !u.blocked && u.deleted !== true && u.profileStatus !== 'deleted');
+  filtered = userStatusFilter === 'blocked'
+    ? filtered.filter(u => u.blocked && u.deleted !== true && u.profileStatus !== 'deleted')
+    : filtered.filter(u => !u.blocked && u.deleted !== true && u.profileStatus !== 'deleted');
   filtered = userSortMode === 'totalSpent'
     ? [...filtered].sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0))
     : userSortMode === 'purchaseCount'
@@ -2120,7 +2102,6 @@ function applyUserFilters() {
   [..._selectedUsers].forEach(uid => { if (!visibleIds.has(uid)) _selectedUsers.delete(uid); });
   renderUsersTable(filtered);
   updateBlockedCount();
-  updateDeletedCount();
   updateUsersBulkToolbar();
 }
 
@@ -2131,18 +2112,9 @@ function updateBlockedCount() {
   el.textContent = n ? `(${n})` : '';
 }
 
-function updateDeletedCount() {
-  const el = document.getElementById('users-deleted-count');
-  if (!el) return;
-  const n = allUsers.filter(u => u.deleted === true || u.profileStatus === 'deleted').length;
-  el.textContent = n ? `(${n})` : '';
-}
-
 window.filterUsersByStatus = (status) => {
   userStatusFilter = status;
   document.querySelectorAll('.user-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.userTab === status));
-  const deletedGuidance = document.getElementById('users-deleted-guidance');
-  if (deletedGuidance) deletedGuidance.hidden = status !== 'deleted';
   applyUserFilters();
 };
 
@@ -2156,9 +2128,7 @@ function renderUsersTable(users) {
     pager.innerHTML = totalPages > 1 ? `<button type="button" class="adm-btn adm-btn-sm" onclick="window.setUsersPage(${usersPage - 1})" ${usersPage <= 0 ? 'disabled' : ''}>Anterior</button><span>Página ${usersPage + 1} de ${totalPages}</span><button type="button" class="adm-btn adm-btn-sm" onclick="window.setUsersPage(${usersPage + 1})" ${usersPage >= totalPages - 1 ? 'disabled' : ''}>Siguiente</button>` : '';
   }
   if (!users.length) {
-    const emptyMsg = userStatusFilter === 'deleted'
-      ? 'No hay usuarios eliminados'
-      : userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
+    const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
     tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
@@ -2214,17 +2184,10 @@ function renderUsersTable(users) {
 
     const actions = canEdit ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        ${!isSuperAdmin ? (deleted
-          ? `<span class="adm-badge" title="Baja incompleta del sistema anterior: el correo sigue ocupado hasta eliminarla.">Baja incompleta</span>`
-          : u.blocked
-          ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Restaurar</button>`
+        ${!isSuperAdmin ? (u.blocked
+          ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Desbloquear</button>`
           : `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.blockUser(${uidArg}, ${emailArg})">Bloquear</button>`
         ) : ''}
-        ${can(currentRole,'deleteUsers') && !isSuperAdmin ? `
-          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger"
-            onclick="window.deleteUser(${uidArg}, ${nameArg})">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>Eliminar
-          </button>` : ''}
       </div>
     ` : '<span style="color:#ccc;font-size:12px">—</span>';
 
@@ -2334,21 +2297,6 @@ window.blockUser = async (uid, email) => {
   });
 };
 
-async function updateAccountStatusFromAdmin_(uid, action, reason = '') {
-  if (!currentUser || currentRole !== 'superadmin' || currentUser.email !== SUPER_ADMIN) {
-    throw new Error('Solo el Super Admin puede cambiar el estado de una cuenta');
-  }
-  const response = await authenticatedFetch('/api/admin-delete-user', {
-    method: 'POST',
-    cache: 'no-store',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ uid, action, reason })
-  });
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo actualizar la cuenta');
-  return result;
-}
-
 // Restaurar: si tenía un rol elevado antes del bloqueo, pide confirmación
 // explícita para devolvérselo; si no hay historial (o decide no confirmarlo),
 // restaura como Cliente por seguridad — tal como pidió Tintin.
@@ -2385,88 +2333,9 @@ window.restoreUser = async (uid) => {
   });
 };
 
-window.deleteUser = async (uid, name) => {
-  // El perfil del Super Admin real no se puede eliminar (firestore.rules también
-  // lo bloquea del lado servidor, línea 692-693). Sin esta guarda el botón solo
-  // se oculta en la fila, y "ocultar un botón no cuenta como seguridad".
-  const _target = allUsers.find(x => x.uid === uid);
-  if (_target && _target.email === SUPER_ADMIN) { toast('El perfil del Super Admin no se puede eliminar'); return; }
-  // Cada acción sensible valida el permiso del actor, no solo la UI.
-  if (!can(currentRole, 'deleteUsers')) { toast('No tenés permiso para eliminar usuarios'); return; }
-  const reason = window.prompt('Motivo de la eliminación (queda en auditoría):', '') ?? null;
-  if (reason === null) return;
-  if (!confirm(
-    `¿Eliminar DEFINITIVAMENTE la cuenta de "${name}"?\n\n` +
-    `Se borran el acceso, el perfil, el carrito, los favoritos, las reseñas, los likes y los avisos, como si nunca se hubiera registrado. ` +
-    `Los pedidos se conservan como registro de ventas de la tienda. Esta acción no se puede deshacer.`
-  )) return;
-  await runAdminCrudOperation({
-    title: 'Eliminar cuenta', name: name || _target?.email || uid,
-    module: 'clientes', dangerous: true,
-    stages: [
-      { id: 'delete', label: 'Eliminar acceso y datos de cuenta' },
-      { id: 'refresh', label: 'Actualizar lista de clientes' },
-    ],
-    action: async ctx => {
-      ctx.start('delete');
-      await updateAccountStatusFromAdmin_(uid, 'delete', reason);
-      ctx.ok('delete');
-      ctx.start('refresh');
-      removeAdminUsersLocally_([uid]);
-      ctx.ok('refresh');
-      return 'Cuenta eliminada. El correo queda disponible para un nuevo registro.';
-    },
-  });
-};
-
-// La baja borra el perfil en el servidor; el listener lo quita solo, pero se
-// saca ya de la vista para no mostrar una fila que dejó de existir.
-function removeAdminUsersLocally_(uids) {
-  const removed = new Set(uids);
-  allUsers = allUsers.filter(user => !removed.has(user.uid));
-  adminUsersLive = adminUsersLive.filter(user => !removed.has(user.uid));
-  adminLegacyDeletedUsers = adminLegacyDeletedUsers.filter(user => !removed.has(user.uid));
-  removed.forEach(uid => _selectedUsers.delete(uid));
-  applyUserFilters();
-}
-
-// Para cuentas que no aparecen en la lista (por ejemplo, un acceso que quedó
-// deshabilitado sin perfil). El servidor borra una cuenta por llamada y avisa
-// cuántas quedan con ese correo.
-window.deleteUserByEmail = async () => {
-  if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
-  const email = String(window.prompt('Correo de la cuenta a eliminar por completo:', '') || '').trim().toLowerCase();
-  if (!email) return;
-  if (email === SUPER_ADMIN) { toast('La cuenta Super Admin está protegida'); return; }
-  if (!/^[^\s@/]+@[^\s@/]+\.[^\s@/]{2,}$/.test(email)) { toast('Correo inválido'); return; }
-  if (!confirm(
-    `¿Eliminar DEFINITIVAMENTE todo lo asociado a ${email}?\n\n` +
-    `Se borran el acceso, el perfil y su participación, como si nunca se hubiera registrado. Los pedidos se conservan. No se puede deshacer.`
-  )) return;
-  let deleted = 0;
-  try {
-    for (let attempt = 0; attempt < 6; attempt++) {
-      const response = await authenticatedFetch('/api/admin-delete-user', {
-        method: 'POST',
-        cache: 'no-store',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ email, reason: 'Eliminación por correo desde Super Admin' })
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo eliminar la cuenta');
-      if (result.result?.uid) {
-        deleted++;
-        removeAdminUsersLocally_([result.result.uid]);
-      }
-      if (!(result.remainingAccounts > 0)) break;
-    }
-    toast(deleted
-      ? `Se eliminó por completo ${deleted === 1 ? 'la cuenta' : `${deleted} cuentas`} de ${email}.`
-      : `No había ninguna cuenta con ${email}. El correo está libre.`);
-  } catch (e) {
-    toast(`No se pudo terminar la eliminación${deleted ? ` (${deleted} ya eliminada(s))` : ''}: ${e.message}`);
-  }
-};
+// Cuentas: sólo Activas o Bloqueadas. La eliminación de cuentas se retiró
+// por completo (panel, servidor y Google Sheets): para sacar a alguien se lo
+// bloquea, y vuelve sólo cuando el Super Admin lo desbloquea manualmente.
 
 // ══════════════════════════════════════════════
 // USUARIOS: SELECCIÓN MÚLTIPLE Y ACCIONES MASIVAS
@@ -2513,7 +2382,6 @@ function updateUsersBulkToolbar() {
   const countEl = document.getElementById('users-bulk-count');
   const blockBtn = document.getElementById('users-bulk-block-btn');
   const restoreBtn = document.getElementById('users-bulk-restore-btn');
-  const deleteBtn = document.getElementById('users-bulk-delete-btn');
   const roleSelect = document.getElementById('users-bulk-role');
   const roleApplyBtn = document.getElementById('users-bulk-role-apply-btn');
   // Todo el módulo Usuarios (individual y masivo) es exclusivo de Super
@@ -2523,9 +2391,8 @@ function updateUsersBulkToolbar() {
   if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   if (blockBtn) blockBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
   if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
-  if (deleteBtn) deleteBtn.style.display = '';
-  if (roleSelect) roleSelect.style.display = userStatusFilter === 'deleted' ? 'none' : '';
-  if (roleApplyBtn) roleApplyBtn.style.display = userStatusFilter === 'deleted' ? 'none' : '';
+  if (roleSelect) roleSelect.style.display = '';
+  if (roleApplyBtn) roleApplyBtn.style.display = '';
 }
 
 window.clearUsersSelection = function() {
@@ -2563,6 +2430,7 @@ window.bulkChangeUserRole = async function() {
 
 window.bulkBlockUsers = async function() {
   if (!_selectedUsers.size) return;
+  if (rejectOversizedAdminBulkSelection(_selectedUsers, 'usuarios')) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para bloquear usuarios'); return; }
   const ids = [..._selectedUsers].filter(uid => {
     const u = allUsers.find(x => x.uid === uid);
@@ -2602,10 +2470,8 @@ window.bulkBlockUsers = async function() {
 window.bulkRestoreUsers = async function() {
   if (!_selectedUsers.size) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
-  if (userStatusFilter === 'deleted') {
-    toast('Las cuentas eliminadas no se reactivan. Eliminalas por completo para liberar el correo; la persona debe registrarse nuevamente.');
-    return;
-  }
+  // Las cuentas eliminadas no se reactivan desde acá: se borran por completo
+  // y la persona debe registrarse nuevamente (vuelve como cuenta nueva).
   const selected = [..._selectedUsers].map(uid => allUsers.find(x => x.uid === uid)).filter(Boolean);
   const ids = selected.filter(u => {
     return u && u.email !== SUPER_ADMIN && u.blocked && u.deleted !== true && u.profileStatus !== 'deleted';
@@ -2642,30 +2508,6 @@ window.bulkRestoreUsers = async function() {
   } catch (e) { toast('Error al restaurar: ' + e.message); }
 };
 
-window.bulkDeleteUsers = async function() {
-  if (!_selectedUsers.size) return;
-  if (rejectOversizedAdminBulkSelection(_selectedUsers, 'usuarios')) return;
-  if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
-  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN);
-  if (!targets.length) { toast('No hay cuentas elegibles (el Super Admin está protegido)'); return; }
-  const phrase = 'ELIMINAR CUENTAS SELECCIONADAS';
-  if (!confirm(`Se eliminarán DEFINITIVAMENTE ${targets.length} cuenta(s): acceso, perfil, carrito, favoritos, reseñas, likes y avisos, como si nunca se hubieran registrado. Los pedidos se conservan como registro de ventas. ¿Continuar?`)) return;
-  if (prompt(`Escribí exactamente para confirmar:\n\n${phrase}`, '') !== phrase) { toast('Confirmación cancelada.'); return; }
-  // Concurrencia 1: cada baja recorre la participación social y dos bajas en
-  // paralelo competirían por las mismas estadísticas de producto.
-  const results = await runAdminBulk(targets, user => updateAccountStatusFromAdmin_(user.uid, 'delete', 'Eliminación masiva desde Super Admin'), {
-    title: 'Eliminando cuentas', name: 'EliminarCuentas', module: 'Usuarios', concurrency: 1,
-  });
-  const removed = [];
-  let fail = 0;
-  results.forEach((result, index) => {
-    if (result.status === 'fulfilled') removed.push(targets[index].uid);
-    else fail++;
-  });
-  clearUsersSelection();
-  removeAdminUsersLocally_(removed);
-  toast(`${removed.length} cuenta(s) eliminadas por completo${fail ? `; ${fail} fallaron (reintentá)` : ''}`);
-};
 
 function userRowsToCsv_(users) {
   const header = ['UID', 'Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Total gastado', 'Notas internas'];
@@ -6110,6 +5952,7 @@ window.prodToggleActive = async (docId, currentlyActive) => {
       ctx.start('write');
       await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
       if (p) p.active = !currentlyActive;
+      await logAudit('editar_producto', 'producto', docId, p?.name || docId, `Activo: ${currentlyActive} → ${!currentlyActive}`);
       ctx.ok('write');
       ctx.start('sync');
       await pushProductsToSheets([docId]);
@@ -6656,6 +6499,7 @@ window.collToggleActive = async function(docId, currentlyActive) {
       ctx.start('write');
       await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
       if (p) p.active = !currentlyActive;
+      await logAudit('editar_producto', 'producto', docId, p?.name || docId, `Activo: ${currentlyActive} → ${!currentlyActive}`);
       ctx.ok('write');
       ctx.start('sync');
       await pushProductsToSheets([docId]);

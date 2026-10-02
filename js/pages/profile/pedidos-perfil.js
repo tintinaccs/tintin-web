@@ -153,26 +153,33 @@ export function startProfileOrders() {
     const requested = String(location.hash||'').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
     if (requested) { const target=document.getElementById(`pedido-${requested}`); if (target){target.querySelector('details')?.setAttribute('open',''); if(!target.dataset.ttFocused){target.dataset.ttFocused='1';target.scrollIntoView({block:'center'});}} }
   };
+  const profileAppCheckReady = async () => {
+    if (window.TintinAppCheckStatus === 'enabled') return true;
+    const ready = await Promise.resolve(appCheckReady).catch(() => false);
+    return ready === true || window.TintinAppCheckStatus === 'enabled';
+  };
   const controller = createProfileOrdersController({
     subscribe: (field,value,next,fail) => onSnapshot(query(collection(db,'orders'),where(field,'==',value)),snapshot=>next(snapshot.docs.map(doc=>({id:doc.id,...doc.data()}))),fail),
     render,
     onStatus: (state,error) => { status.dataset.state=state; status.textContent=state==='ready'?'Pedidos sincronizados':state==='loading'?'Sincronizando pedidos…':state==='signed-out'?'':state==='error'?(navigator.onLine===false?'Sin conexión. Tus pedidos no se pudieron actualizar.':'No pudimos sincronizar tus pedidos. Se conservan los últimos datos confirmados.'):''; if(error) console.warn('[profile-orders]',error); },
     onStats: stats => { if(count)count.textContent=stats?String(stats.totalOrders):'—'; if(total)total.textContent=stats?money(stats.totalSpent):'—'; if(stats)window.dispatchEvent(new CustomEvent('tintin:profile-orders',{detail:{count:stats.totalOrders,total:stats.totalSpent}})); }
   });
-  const retry = async () => { if (!currentUser || stopped) return; status.textContent='Sincronizando pedidos…'; await appCheckReady; if (!stopped && getSessionUser()?.uid===currentUser.uid) controller.start(currentUser); };
+  const retry = async () => { if (!currentUser || stopped) return; status.textContent='Sincronizando pedidos…'; const secure = await profileAppCheckReady(); if (!secure) { status.dataset.state='error'; status.textContent='No pudimos validar la conexión segura para sincronizar tus pedidos. Reintentaremos cuando esté disponible.'; return; } if (!stopped && getSessionUser()?.uid===currentUser.uid) controller.start(currentUser); };
   list.addEventListener('click',event=>{ if(event.target.closest('[data-profile-orders-more]')){visible+=10;render(lastOrders,lastOptions);} if(event.target.closest('[data-profile-orders-retry]'))void retry(); });
   const onOnline = () => void retry();
   const onVisible = () => { if(!document.hidden && status.dataset.state==='error')void retry(); };
+  const onAppCheckReady = event => { if (event?.detail?.ready === true) void retry(); };
   window.addEventListener('online',onOnline);
+  window.addEventListener('tintin:app-check-ready',onAppCheckReady);
   document.addEventListener('visibilitychange',onVisible);
-  window.addEventListener('pagehide',()=>{stopped=true;controller.stop();authStop?.();window.removeEventListener('online',onOnline);document.removeEventListener('visibilitychange',onVisible);},{once:true});
+  window.addEventListener('pagehide',()=>{stopped=true;controller.stop();authStop?.();window.removeEventListener('online',onOnline);window.removeEventListener('tintin:app-check-ready',onAppCheckReady);document.removeEventListener('visibilitychange',onVisible);},{once:true});
   authStop=subscribeSession(snapshot=>{
     if(stopped || snapshot.status===AUTH_STATES.RESTORING) return;
     if(snapshot.status===AUTH_STATES.UNKNOWN){ status.textContent='Verificando tu sesión…'; return; }
     const user=snapshot.user;
     currentUser=user;
     visible=5;
-    void (async()=>{if(user)await appCheckReady;if(!stopped && getSessionUser()?.uid===user?.uid)controller.start(user);})();
+    void (async()=>{const secure=user?await profileAppCheckReady():true;if(user&&!secure){status.dataset.state='error';status.textContent='No pudimos validar la conexión segura para sincronizar tus pedidos. Reintentaremos cuando esté disponible.';return;}if(!stopped && getSessionUser()?.uid===user?.uid)controller.start(user);})();
   });
   window.TintinProfileOrders={refresh:retry,stop:()=>controller.stop()};
 }

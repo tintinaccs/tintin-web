@@ -15,9 +15,19 @@ test('el guardia de perfil cubre toda página con sesión salvo login y admin', 
 
 test('sin poder leer el perfil el guardia no bloquea y no marca como completo', async () => {
   const gate = await read('js/pages/profile/control-acceso-perfil.js');
-  const catchBlock = gate.slice(gate.indexOf('} catch (error) {'), gate.indexOf('const role ='));
-  assert.match(catchBlock, /return;/);
-  assert.doesNotMatch(catchBlock, /markComplete/);
+  const errorBlock = gate.slice(gate.indexOf('}, error => {'), gate.indexOf('export function startProfileGate'));
+  assert.match(errorBlock, /console\.warn/);
+  assert.doesNotMatch(errorBlock, /markComplete|goCompleteProfile|leaveBlockedAccount|signOut/);
+});
+
+test('una cuenta bloqueada pierde la sesión al instante (también si se bloquea mientras navega)', async () => {
+  const gate = await read('js/pages/profile/control-acceso-perfil.js');
+  assert.match(gate, /onSnapshot\(doc\(db, 'users', user\.uid\)/);
+  assert.match(gate, /data\.blocked === true\) \{\s*leaveBlockedAccount\(user\)/);
+  assert.match(gate, /await signOut\(auth\)[\s\S]{0,80}location\.replace\('\/login\?blocked=1'\)/);
+  const login = await read('login.html');
+  assert.match(login, /async function endBlockedSession[\s\S]{0,500}showBlockedModal\(\{ email \}\)[\s\S]{0,200}await signOut\(auth\)/);
+  assert.equal((login.match(/await endBlockedSession\(user\.email\)/g) || []).length, 3);
 });
 
 test('un perfil nuevo o recreado tras una baja nace incompleto y sin teléfono', async () => {

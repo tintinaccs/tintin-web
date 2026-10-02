@@ -12,7 +12,8 @@
       "tokens": [
         "ensureProfileComplete",
         "redirectByRole",
-        "getProfileCompletionPlan"
+        "getProfileCompletionPlan",
+        "endBlockedSession"
       ]
     },
     {
@@ -32,7 +33,15 @@
     {
       "file": "functions/api/email-otp-send.js",
       "tokens": [
-        "resolveEmailFromUsernameKey"
+        "emailIsValid",
+        "Sólo correo"
+      ]
+    },
+    {
+      "file": "js/pages/profile/control-acceso-perfil.js",
+      "tokens": [
+        "leaveBlockedAccount",
+        "onSnapshot"
       ]
     },
     {

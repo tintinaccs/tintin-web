@@ -25,18 +25,18 @@ export const ESTADOS = {
 // "Revalidar" del panel actualiza `lastLiveCheck` de los nodos que sí tienen
 // una prueba en vivo real (ver flujo-conexiones-admin.js); todo lo demás
 // conserva esta fecha como "última revisión de código".
-export const GENERATED_AT = '2026-09-17';
+export const GENERATED_AT = '2026-10-01';
 
 const RAW_NODES = [
   { id: 'entrada-login', label: 'Login', category: 'entrada', state: ESTADOS.PROD,
-    evidence: [{ file: 'login.html', note: 'Página única de acceso; renderiza Google, correo/usuario+código.' }] },
+    evidence: [{ file: 'login.html', note: 'Página única de acceso: Google o correo + código (el ingreso con @usuario se retiró).' }] },
   { id: 'google-btn', label: 'Continuar con Google', category: 'entrada', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', line: 1012, note: 'signInWithPopup(auth, provider)' },
                { file: 'login.html', line: 1031, note: 'Fallback a signInWithRedirect si el popup falla' }] },
-  { id: 'login-codigo', label: 'Login por correo/usuario + código', category: 'entrada', state: ESTADOS.PROD,
-    evidence: [{ file: 'login.html', line: 1191, note: 'sendOtp(identifier, mode)' },
-               { file: 'functions/api/email-otp-send.js' }, { file: 'functions/api/email-otp-verify.js' }],
-    notes: 'Código evidente y endpoints reales; sin corrida de prueba confirmada en esta sesión.' },
+  { id: 'login-codigo', label: 'Login por correo + código', category: 'entrada', state: ESTADOS.PROD,
+    evidence: [{ file: 'login.html', note: 'sendOtp(correo): sólo correo, sin @usuario' },
+               { file: 'functions/api/email-otp-send.js', note: 'Sólo correo; rechaza cuentas bloqueadas' }, { file: 'functions/api/email-otp-verify.js' }],
+    notes: 'Desde 2026-10-01 el ingreso es sólo con correo (o Google). El servidor ya no resuelve @usuario.' },
   { id: 'firebase-auth', label: 'Firebase Auth', category: 'auth', state: ESTADOS.PROD,
     evidence: [{ file: 'js/core/firebase/firebase.js', line: 132, note: 'browserLocalPersistence' }] },
   { id: 'redirect-result', label: 'Resultado de redirect (getRedirectResult)', category: 'auth', state: ESTADOS.PROD,
@@ -60,9 +60,16 @@ const RAW_NODES = [
     evidence: [{ file: 'login.html', line: 378, note: 'ensureProfileComplete()' },
                { file: 'js/pages/profile/mantenimiento-perfil.js' }] },
   { id: 'ultimos-datos', label: '"Últimos datos" (perfil incompleto)', category: 'perfil', state: ESTADOS.PROD,
-    evidence: [{ file: 'login.html', line: 394, note: 'heading "Últimos datos" cuando falta más de un campo' },
+    evidence: [{ file: 'login.html', note: 'ensureProfileComplete: muestra lo que falta y, tras guardar, vuelve a leer el perfil antes de dejar pasar' },
+               { file: 'js/pages/profile/configuracion-inicial-perfil.mjs', note: 'Completo = tiene todos los datos (sin excepciones por marcas)' },
                { file: 'js/pages/profile/control-acceso-perfil.js', note: 'isExemptPage(): sólo login y admin quedan fuera' }],
-    notes: 'El gate de perfil completo se verifica en toda página con sesión (cuentas client); sólo login (donde se completa) y admin quedan exentos.' },
+    notes: 'Clienta con cualquier dato obligatorio faltante (nueva o vieja) queda en "Últimos datos" hasta completarlo; sólo sale cerrando sesión. Login y admin quedan exentos del guardia.' },
+  { id: 'cuenta-bloqueada', label: 'Cuenta bloqueada → soporte por WhatsApp', category: 'auth', state: ESTADOS.NO_VERIFICADO,
+    evidence: [{ file: 'login.html', note: 'endBlockedSession: aviso con WhatsApp y cierre de sesión (Google, correo y sesión guardada)' },
+               { file: 'js/pages/profile/control-acceso-perfil.js', note: 'Escucha users/{uid} en vivo: blocked=true → cierra la sesión y lleva a /login?blocked=1' },
+               { file: 'js/components/modals/modal-bloqueo.js', note: 'Botón "Escribir a soporte por WhatsApp"' },
+               { file: 'functions/api/email-otp-verify.js', note: 'El código por correo se rechaza con account_blocked' }],
+    notes: 'Sólo existen cuentas activas o bloqueadas (la eliminación se retiró). Desbloqueo manual del Super Admin. Implementado y probado localmente el 2026-10-01; falta verificarlo en producción con una cuenta bloqueada real.' },
   { id: 'pagina-principal', label: 'Página principal', category: 'destino', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', line: 358, note: 'redirectByRole → index.html' }] },
   { id: 'pagina-perfil', label: 'Página de perfil', category: 'destino', state: ESTADOS.PROD,
@@ -122,7 +129,8 @@ const RAW_NODES = [
   { id: 'deployments', label: 'Deployments', category: 'infra', state: ESTADOS.DOCUMENTADO,
     evidence: [{ file: 'docs/arquitectura-operativa-canonica.md' }], notes: 'Cloudflare Pages despliega desde GitHub; sin verificación de un deploy real ejecutado en esta sesión.' },
   { id: 'pruebas-automatizadas', label: 'Pruebas automatizadas', category: 'infra', state: ESTADOS.NO_VERIFICADO,
-    evidence: [{ file: 'tests/', note: '~59 archivos de test detectados' }], notes: 'Existencia confirmada; no se corrió la suite completa en esta sesión (solo un gate puntual).' },
+    evidence: [{ file: 'tests/', note: '~134 archivos de test' }, { file: '.github/workflows/auditar-tintin.yml', note: 'Repository audit en cada PR y en main' }],
+    notes: '2026-10-01: suite completa local 737/737 y audit:final OK. Pasa a verde con la prueba en vivo del panel cuando el Repository audit de CI termina OK.' },
   { id: 'servicios-externos', label: 'Servicios externos (Resend/Cloudinary/PayPal)', category: 'servicio-externo', state: ESTADOS.PROD,
     evidence: [{ file: 'docs/arquitectura-operativa-canonica.md' }] },
 ];
@@ -139,6 +147,8 @@ const RAW_EDGES = [
   { from: 'users-uid', to: 'roles', label: 'campo role (o email exacto)', state: ESTADOS.PROD, evidence: [{ file: 'js/core/auth/roles.js', line: 179 }] },
   { from: 'roles', to: 'perfil', label: 'verificación de perfil', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 378 }] },
   { from: 'perfil', to: 'ultimos-datos', label: 'si faltan campos', state: ESTADOS.PROD },
+  { from: 'users-uid', to: 'cuenta-bloqueada', label: 'blocked=true → cierra sesión + WhatsApp', state: ESTADOS.NO_VERIFICADO,
+    evidence: [{ file: 'js/pages/profile/control-acceso-perfil.js' }, { file: 'login.html' }] },
   { from: 'ultimos-datos', to: 'perfil', label: 'completar → guardar → revalidar', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 745 }] },
   { from: 'roles', to: 'super-panel', label: 'role=superadmin → destino', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 349 }] },
   { from: 'super-panel', to: 'admin-guard', label: 'valida sesión al montar', state: ESTADOS.PROD },

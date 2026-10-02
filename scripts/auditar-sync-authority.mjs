@@ -3,7 +3,6 @@ import fs from 'node:fs';
 
 const read = path => fs.readFileSync(path, 'utf8');
 const webhook = read('functions/api/sheets-admin-webhook.js');
-const lifecycle = read('cloudflare/user-lifecycle-domain.js');
 const orderDomain = read('cloudflare/order-admin-domain.js');
 const appsScript = read('apps-script/ProductosUnificados.gs');
 const parity = read('apps-script/AdminParity.gs');
@@ -14,8 +13,7 @@ const check = (condition, message) => { if (!condition) errors.push(message); };
 
 check(!/deleteFirebaseUser/.test(webhook), 'Sheets no debe eliminar Firebase Auth físicamente.');
 check(!/delete:\s*true/.test(webhook), 'Sheets no debe borrar users/orders de Firestore.');
-check(/softDeleteUser/.test(webhook) && /applyUserLifecycle/.test(webhook), 'Sheets debe usar lifecycle canónico para usuarios.');
-check(/deleteFirebaseUser\(env, uid\)/.test(lifecycle) && !/orders\//.test(lifecycle), 'La baja canónica debe borrar la cuenta completa sin tocar pedidos.');
+check(/La eliminación de cuentas fue retirada/.test(webhook) && !/applyUserLifecycle/.test(webhook), 'Sheets no puede eliminar cuentas: sólo activas o bloqueadas.');
 
 // Pedidos sí es una superficie administrativa editable, pero nunca una
 // autoridad paralela: Sheets debe pasar creación/edición por el mismo dominio

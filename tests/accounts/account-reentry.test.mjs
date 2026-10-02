@@ -16,17 +16,15 @@ test('un nuevo registro reclama solo el historial comercial por ID token y hash 
   assert.doesNotMatch(endpoint, /phone: source\./);
 });
 
-test('el perfil eliminado no se reactiva desde el panel: vuelve por un registro nuevo', () => {
+test('el panel sólo bloquea/desbloquea: no existe eliminar cuentas', () => {
   const admin = read('js/admin/admin-app.js');
-  assert.match(admin, /debe registrarse nuevamente/);
-  assert.match(admin, /userStatusFilter === 'deleted'[\s\S]*?no se reactivan/);
+  assert.doesNotMatch(admin, /window\.deleteUser|bulkDeleteUsers|deleteUserByEmail|\/api\/admin-delete-user/);
+  assert.match(admin, /window\.blockUser = async/);
+  assert.match(admin, /window\.restoreUser = async/);
   const login = read('login.html');
   assert.match(login, /code === "auth\/user-disabled"\)[\s\S]*?Verificar por correo/);
   assert.match(login, /data-login-email-recovery/);
-  assert.match(login, /sendOtp\(email, 'email'\)/);
-  assert.doesNotMatch(login, /figura como Eliminada|Tu acceso está desactivado/);
-  assert.doesNotMatch(admin, /onclick="window\.restoreUser\(\$\{uidArg\}\)">Reactivar/);
-  assert.match(admin, /bulkDeleteUsers/);
+  assert.match(login, /sendOtp\(email\);/);
   assert.match(admin, /toggleSelectAllUsers/);
 });
 

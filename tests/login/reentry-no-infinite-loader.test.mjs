@@ -34,6 +34,7 @@ test('una restauración de sesión lenta libera el loader y conserva la cuenta',
   assert.match(login, /const \[profileResult, storeAccessResult\] = await Promise\.all/);
   assert.match(login, /if \(profileResult\.error \|\| storeAccessResult\.error\)/);
   assert.match(login, /try \{\s*await ensureProfileComplete\(user, role\);[\s\S]*?\} catch \(restoreError\) \{[\s\S]*?hideLoginOverlay\(\);[\s\S]*?revealLoginSurface\(\)/);
-  assert.match(login, /Tu sesión sigue activa; recargá la página y no hace falta volver a registrarte/);
+  assert.match(login, /showActiveSessionState\('No pudimos preparar el acceso en este navegador/);
+  assert.match(login, /Cuenta activa/);
 });
 
