@@ -100,7 +100,8 @@ test('una revalidación 304 de /perfil conserva la CSP de la ruta (subida de fot
   });
   assert.equal(response.status, 304);
   const policy = response.headers.get('Content-Security-Policy');
-  assert.match(policy, /connect-src [^;]*https:\/\/api\.cloudinary\.com/);
+  const connectSources = (policy.match(/connect-src ([^;]*)/)?.[1] || '').trim().split(/\s+/);
+  assert.ok(connectSources.includes('https://api.cloudinary.com'));
   assert.equal(response.headers.get('X-Tintin-CSP'), 'edge-runtime');
 });
 

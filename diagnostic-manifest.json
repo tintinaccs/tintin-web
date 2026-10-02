@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "378496f1148a81fd7dae8b3c62fcf37d105f7d993d3685c032a8b017fecb0b81",
+  "sourceFingerprint": "15a82567ce72a59e6c5f33c1deefe1fdbd5ef9c0617fae078b0ea2a4b8586577",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 939,
     "textFiles": 898,
-    "totalBytes": 18105034,
+    "totalBytes": 18114048,
     "pages": 19,
     "modules": 647
   },
@@ -34456,8 +34456,8 @@
     },
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
-      "bytes": 6255,
-      "sha256": "f7842a7acefbe304da2f2ff0da8172da2e8cdd91129fe370d4b3bea6eb3b67a0",
+      "bytes": 6343,
+      "sha256": "e63269ceea563838bb5d5f3f42f5bb38b2af712171614dc4f0dd514fba4af135",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34500,8 +34500,12 @@
           "line": 98
         },
         {
+          "url": "https://api.cloudinary.com/",
+          "line": 104
+        },
+        {
           "url": "https://tintinaccesorios.pages.dev/tienda.js",
-          "line": 109
+          "line": 110
         }
       ]
     },
@@ -37133,8 +37137,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 111774,
-      "sha256": "3e6b87c538a9f862a909cc89db8e91b10c2bb573799fb45d7ec02ede321798c7"
+      "bytes": 120700,
+      "sha256": "ea3034423b55defecb0e4815606480fd35008252bf8d29848399a64567b73cc5"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41309,8 +41313,8 @@
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
       "extension": ".mjs",
-      "bytes": 6255,
-      "sha256": "f7842a7acefbe304da2f2ff0da8172da2e8cdd91129fe370d4b3bea6eb3b67a0"
+      "bytes": 6343,
+      "sha256": "e63269ceea563838bb5d5f3f42f5bb38b2af712171614dc4f0dd514fba4af135"
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",

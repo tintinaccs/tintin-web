@@ -569,3 +569,55 @@ Pendiente de evidencia:
 - Confirmar en preview autenticado que App Check obtiene token y que las lecturas privadas funcionan.
 - Comparar/publicar Rules en Firebase sólo con autorización de deploy; este ciclo no despliega.
 - Los textos `PAGO SEGUROOXSD`, `opiniónes` y `sesiónes` no aparecen en el código actual y pueden residir en contenido remoto/cache; no se modifican datos reales sin una operación explícitamente autorizada.
+
+## Cierre del inventario F01–F18 — 2026-10-01/02 (rama `codex/fix-inventory-critical-20261001`, PR #1002) — Claude Opus 5.5
+
+**Código verificado:** `e7a13c00` (+ commit final de este documento y del ajuste de test CodeQL). Base: `main` `98ab3d9f` fusionado (PR #1001). **CI `CI Tintin — contrato único`:** run 3792 (`a4af5e96`) PASS y run 3793 (`e7a13c00`) PASS, 21 pasos OK; único omitido "Save failure evidence" (sólo corre si falla). Cloudflare Pages PASS. CodeQL marcó 1 alerta en un test (`includes` de URL); corregida en el commit de cierre. **Preview probado:** `https://codex-fix-inventory-critical.tintinaccesorios.pages.dev`, contenido comparado byte a byte contra `e7a13c00` (9/9 assets clave). Sin merge, sin deploy a producción, sin pedidos/pagos/correos reales, sin mutaciones en Firestore productivo, Rules sin cambios.
+
+### Causa del CI rojo inicial (run 3787)
+`Build exact public artifact` fallaba porque 10 assets cambiaron bytes con su `?v=` anterior. Se subieron al tag `tintin-20261001-inventory-fix-1` desde su fuente canónica (TIENDA_VERSION y SHELL_VERSION vía sincronizador, importadores de `sistema-operaciones-admin.js` y transitivos), luego `-2/-3` para URLs que el preview ya había servido con otros bytes. Run 3790 cayó en "Super Admin master contracts": el PR se prueba fusionado con `main`, que había recibido #1001 en los mismos archivos; se fusionó `main` y `auditar-superadmin-cierre-total.mjs` acepta `inventory-fix` como tag posterior a la corrección (mismo criterio que #1001 aplicó a `firebase-permissions`).
+
+### Fusión con #1001
+Se conservaron ambas intenciones: recuperación acotada de notificaciones de esta rama (superconjunto de `shouldRetryFirestoreListener`, que seguía reintentando errores transitorios cada 1,4 s sin límite; su test se adaptó al contrato equivalente), gate estricto de App Check de #1001 en perfil/cupones, y en Comercio el total pasa a "—" ante cualquier error mientras la tabla conserva las últimas filas confirmadas con aviso.
+
+### Estado F01–F18
+| ID | Estado | Evidencia |
+|---|---|---|
+| F01 sesión/Auth/App Check intermitente | BLOCKED (causa raíz) / FIXED_NOT_RUNTIME_VERIFIED (recuperación) | Recuperación: refresh de ID token una vez + espera de App Check, diagnósticos `FIRESTORE_LISTENER_ERROR`; #1001 agrega gate estricto de App Check. Matriz de pestañas/refresh/background no ejecutada: el navegador del agente no tiene sesión Super Admin y el agente no ingresa credenciales. |
+| F02 reintentos infinitos | FIXED_NOT_RUNTIME_VERIFIED | Cliente y admin: auth → 1 refresh + App Check; transitorio → 4 reintentos con backoff; permanente → stop; éxito resetea; cambio de usuario/logout cancela. Cliente ahora espera App Check y "reabrir panel" reintenta sólo si la recuperación se detuvo. Tests de contrato. |
+| F03 productos/colecciones vacíos ante error | FIXED_NOT_RUNTIME_VERIFIED | `productsError/collectionsError`, Reintentar, conserva snapshot; requiere admin autenticado para verlo en vivo. |
+| F04 métricas falsas en 0 | FIXED_NOT_RUNTIME_VERIFIED | Dashboard y Pedidos muestran "—" con error aunque haya filas previas. |
+| F05 "Mostrando 1–0 de 0" | FIXED_NOT_RUNTIME_VERIFIED | `rangeLabel` → "0 resultados" / "No disponible". |
+| F06 perfil sin valores | FIXED_NOT_RUNTIME_VERIFIED | Compras/total "—" salvo que todas las consultas respondan sin error; "Todavía no tenés pedidos" sólo con todas respondidas. |
+| F07 ID interno en perfil | FIXED_NOT_RUNTIME_VERIFIED | `orderNumber || shortId || id` en resumen y detalle; requiere clienta con pedidos. |
+| F08 TINPED reutilizable | FIXED_NOT_RUNTIME_VERIFIED (cubierto por tests; sin pedidos reales a propósito) | Rehecho: camino normal 1 consulta; conciliación única desde el mayor `orderSequenceNumber` de `orders`/`orderTrash` y avance mientras el código figure en `orderNumber/shortId`/`auditLog.after.*`; asignación después de validar; "proteger" nunca deja 0 si hubo códigos. Nuevo `firestoreAdminMaxNumberField`. Paths anidados `after.*` válidos en REST. 24 tests incl. concurrencia real con precondiciones, 409, documento inexistente, atrasado/adelantado. |
+| F09 contacto pierde email | VERIFIED_FIXED | Preview: email conservado, inválido bloqueado (`aria-invalid`), vacío OK, una sola URL de WhatsApp. `tienda.js` ahora valida. |
+| F10 "Publicar opinión" recortado | VERIFIED_FIXED | Preview 1920…320 y 900/923/924/925/940/941: sin recorte ni overflow, ambas etiquetas. |
+| F11 nav admin móvil | VERIFIED_FIXED | "PRODUCTOS" se pisaba a 320/390 (celdas iguales). Ahora `flex:1 1 auto`, mínimo 44 px, sin letter-spacing ≤360. Preview 320/360/390/540 sin recorte ni solape (barra medida forzando display: oculta sin sesión por el gate). |
+| F12 WhatsApp tapa producto | VERIFIED_FIXED | Preview, barrido completo hasta footer: 0 colisiones a 320/390/768/1440 (antes 8 a 390: textarea de reseña, beneficios, footer). Objetivos: controles en todo el sitio + bloques de texto en producto. |
+| F13 material técnico | VERIFIED_FIXED | Preview: "Acero inoxidable", acabado "Dorado"; dato guardado intacto. |
+| F14 copy | VERIFIED_FIXED | Preview portada: "PAGO SEGURO", sin "opiniónes/sesiónes". Se corrigió además un "sesiónes" restante en el dashboard. |
+| F15 hero fallback | VERIFIED_FIXED | HTML inicial del preview = "DETALLES QUE ELEVAN TU ESTILO"; normalización limitada al valor corrupto conocido. |
+| F16 Diagnóstico Maestro histórico | ALREADY_FIXED (lógica) / BLOCKED (credencial de ejecución en backend) | Muestra commit auditado y "Resultado anterior · main actual …". |
+| F17 "Operaciones ✓" | FIXED_NOT_RUNTIME_VERIFIED | "Operaciones locales", alcance "este navegador". |
+| F18 reseña "asdadasd" | BLOCKED | Requiere moderación desde el admin (dato real); no se modificó. |
+
+### Hallazgos adicionales corregidos en este ciclo
+- **Foto de perfil bloqueada por CSP (reportado por el dueño):** un 304 de revalidación llegaba con la CSP genérica de `_headers` (sin `api.cloudinary.com`) porque el middleware ignoraba respuestas sin Content-Type; el navegador aplica esas cabeceras a la página cacheada. Reproducido en producción con `If-None-Match`. El middleware ahora aplica la CSP de la ruta a los 304 de páginas conocidas. Verificado en el preview (304 con `X-Tintin-CSP` y Cloudinary). **Producción sigue con el bug hasta el merge/deploy.**
+- **Flujo de conexiones "Carrito" en rojo:** falso negativo del probe (iframe 1×1, `innerWidth` 0, el carrito nunca monta). Ahora viewport 390×844 invisible; reproducido antes/después.
+- **Flujo "Cuenta bloqueada":** se promueve sólo con el Repository audit del commit actual en PASS (`test:accounts`).
+- Los demás amarillos del flujo (Google, código, redirect, Últimos datos, GitHub Actions, Pruebas) dependen de sellos rotos por cambios de archivos o de la evidencia CI del commit desplegado: se vuelven verdes al desplegar un commit con CI verde y re-sellar en vivo. Likes/Comentarios/Sheets "parcial" y Servicios externos (PayPal no Live) no se pintan de verde sin prueba de escritura o credenciales Live.
+
+### Riesgos R01–R06
+R01 noindex en pages.dev: correcto para preview; requiere cutover de dominio (documentación). R02 cupón no se devuelve al cancelar: decisión de negocio pendiente. R03 correo de estado sin cola de reintento: pendiente (cambio de backend). R04/R05 límites de lectura sin paginación remota: riesgo a escala, sin cambio. R06 PayPal sandbox / Sheets parcial: requiere credenciales y prueba sandbox externas.
+
+### Pruebas
+- `node --test` completo: **801/801 PASS** (`e7a13c00`).
+- Explícitos: order-admin-domain 24/24, participation-contract 24/24, realtime-error-contracts 3/3, inventory-regressions 13/13, firebase-permission-recovery 5/5, flow-connections 31/31.
+- `npm run audit:final` en worktree limpio de `e7a13c00`: **PASS** (134 pasos, 0 drift). `build:pages` PASS, cache audit PASS, `verify:diagnostics` PASS.
+- Gates: admin-orders, admin-responsive (16/16), products-media, content-appearance, appearance-unified, final-integration, performance, performance-regressions, page-loading, critical-healing, login-isolation (38/38), login-profile (83/83), app-check-bootstrap, phase8-ui, phase10, phase11 (832): PASS. `audit:global-responsive-geometry` 187/187. Super Admin master contracts (6 scripts) PASS, cierre total 73/73.
+
+### No verificado / pendiente
+- F01 en vivo y todo lo que exige sesión Super Admin o de clienta en el preview (admin, perfil, notificaciones, F02–F07, F17).
+- "Últimos datos" → ubicación: el componente funciona aislado en `/login` de producción (Leaflet, 4/4 teselas, búsqueda 200, permiso de geolocalización); falta el síntoma exacto del dueño para reproducir el fallo.
+- Compra completa y roles viewer/agent/admin/bloqueada/vencida en vivo: no ejecutado (sin cuentas de prueba en el preview; no se crean usuarios en producción).
