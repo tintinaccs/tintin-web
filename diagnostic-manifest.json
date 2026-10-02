@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "20881d69dfed1fd48acf49b90f370b2e927534f060c982c491ef2ecafde3bc57",
+  "sourceFingerprint": "2ba9ad61cb5e4f5921c82625c670e764d45e5b8b2a5ae0e9658e29f07336b6eb",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 942,
     "textFiles": 901,
-    "totalBytes": 18162169,
+    "totalBytes": 18162083,
     "pages": 19,
     "modules": 650
   },
@@ -27693,20 +27693,13 @@
     },
     {
       "path": "scripts/auditar-correo-fase-3.js",
-      "bytes": 5253,
-      "sha256": "858626e523612cf70f311203231025d97c23b536b29922febfb83c9df3c29207",
+      "bytes": 5167,
+      "sha256": "dece6e1badf9b4fd282e52fca34995e08adaea77cee0b5f8b6ee2c2e6dea9754",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [
-        {
-          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
-          "target": "scripts/sincronizacion-correo-admin.js",
-          "dynamic": true,
-          "line": 79
-        }
-      ],
+      "imports": [],
       "endpoints": []
     },
     {
@@ -40058,8 +40051,8 @@
     {
       "path": "scripts/auditar-correo-fase-3.js",
       "extension": ".js",
-      "bytes": 5253,
-      "sha256": "858626e523612cf70f311203231025d97c23b536b29922febfb83c9df3c29207"
+      "bytes": 5167,
+      "sha256": "dece6e1badf9b4fd282e52fca34995e08adaea77cee0b5f8b6ee2c2e6dea9754"
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
