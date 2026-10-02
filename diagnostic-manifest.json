@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "317d8858255cbfaa0d63b637ade3180ddc86511f51196f00b51f04c28663f451",
+  "sourceFingerprint": "e934d2ade53cbf7a3c0d6d6f2eff6a7043410b2f708614e882d26ceebe87f03b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 938,
     "textFiles": 897,
-    "totalBytes": 18081243,
+    "totalBytes": 18083666,
     "pages": 19,
     "modules": 646
   },
@@ -20616,8 +20616,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 465327,
-      "sha256": "f77d3e2ddb518ed0e20f053911668476982bb59f75b35e10245f13eae6180fe5",
+      "bytes": 465333,
+      "sha256": "df53a77211b5be5c9153cfeb17367e61e81899af374abde14397b5eec07daa0a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23976,8 +23976,8 @@
     },
     {
       "path": "js/components/notifications/notificaciones-clientes.js",
-      "bytes": 17408,
-      "sha256": "582c232050d229e94f4eb46144b5ce4e8c3a7f789f74d8e37b12e6b19f537142",
+      "bytes": 17860,
+      "sha256": "8d72f8e48578e2c7f35b3a3e3d65a8972abf391d00a4034fca607a725b7153f7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26434,8 +26434,8 @@
     },
     {
       "path": "js/pages/profile/pedidos-perfil.js",
-      "bytes": 13583,
-      "sha256": "7f0345824ccad586fa7e3826c0caefd4f4bcff8d4f89094c051f050a93bccea2",
+      "bytes": 13928,
+      "sha256": "73a3bafe75d6f5ff74ac0670ab260e89c305713625b2e739bab5e7462f8a3982",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32659,8 +32659,8 @@
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
-      "bytes": 13374,
-      "sha256": "45600e3c2a21c29f288aebcb9aae75bbf9f874f11a6497816b1e4eb89c6fa423",
+      "bytes": 13859,
+      "sha256": "7701dd745275abe24f1723dc06a9d05ad1e543be4b59f4bc269ac5ab7eee8290",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35257,8 +35257,8 @@
     },
     {
       "path": "tests/ui-ux/inventory-regressions.test.mjs",
-      "bytes": 3989,
-      "sha256": "7138ee9715574eb0fa00af32aa7f47162cd0ec361d7bd5b35971da0dfe3b6602",
+      "bytes": 4952,
+      "sha256": "d73e1bd6938187cf49337764340ccdc403fd07f63dab0165dc78dadb2fdd725c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35781,8 +35781,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 107107,
-      "sha256": "87b5067245b2c6a9b62db2a70eeaa979bfafa8f4e0be7c68a0f76c4a7b58229c",
+      "bytes": 107279,
+      "sha256": "86fdcae6e257db354bad2c5f1953ba5035eb3ef756f5611b56f881aca3adeea2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37909,8 +37909,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 465327,
-      "sha256": "f77d3e2ddb518ed0e20f053911668476982bb59f75b35e10245f13eae6180fe5"
+      "bytes": 465333,
+      "sha256": "df53a77211b5be5c9153cfeb17367e61e81899af374abde14397b5eec07daa0a"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -38659,8 +38659,8 @@
     {
       "path": "js/components/notifications/notificaciones-clientes.js",
       "extension": ".js",
-      "bytes": 17408,
-      "sha256": "582c232050d229e94f4eb46144b5ce4e8c3a7f789f74d8e37b12e6b19f537142"
+      "bytes": 17860,
+      "sha256": "8d72f8e48578e2c7f35b3a3e3d65a8972abf391d00a4034fca607a725b7153f7"
     },
     {
       "path": "js/components/reviews/valoraciones-catalogo.js",
@@ -39265,8 +39265,8 @@
     {
       "path": "js/pages/profile/pedidos-perfil.js",
       "extension": ".js",
-      "bytes": 13583,
-      "sha256": "7f0345824ccad586fa7e3826c0caefd4f4bcff8d4f89094c051f050a93bccea2"
+      "bytes": 13928,
+      "sha256": "73a3bafe75d6f5ff74ac0670ab260e89c305713625b2e739bab5e7462f8a3982"
     },
     {
       "path": "js/quality/accesibilidad-global.js",
@@ -40412,7 +40412,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 59375,
-      "sha256": "2ac2712ca72b443b4a81738bf08fd22cce951f8deebac6b1eb76291e7c92d4cc"
+      "sha256": "074af7719f0ad66b038bc58ad5cdab0944197a0c98ecfde765ed99a79c5534fa"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -40951,8 +40951,8 @@
     {
       "path": "tests/engagement/participation-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 13374,
-      "sha256": "45600e3c2a21c29f288aebcb9aae75bbf9f874f11a6497816b1e4eb89c6fa423"
+      "bytes": 13859,
+      "sha256": "7701dd745275abe24f1723dc06a9d05ad1e543be4b59f4bc269ac5ab7eee8290"
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
@@ -41371,8 +41371,8 @@
     {
       "path": "tests/ui-ux/inventory-regressions.test.mjs",
       "extension": ".mjs",
-      "bytes": 3989,
-      "sha256": "7138ee9715574eb0fa00af32aa7f47162cd0ec361d7bd5b35971da0dfe3b6602"
+      "bytes": 4952,
+      "sha256": "d73e1bd6938187cf49337764340ccdc403fd07f63dab0165dc78dadb2fdd725c"
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
@@ -41473,8 +41473,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 107107,
-      "sha256": "87b5067245b2c6a9b62db2a70eeaa979bfafa8f4e0be7c68a0f76c4a7b58229c"
+      "bytes": 107279,
+      "sha256": "86fdcae6e257db354bad2c5f1953ba5035eb3ef756f5611b56f881aca3adeea2"
     }
   ],
   "sitemapRoutes": [],
@@ -42112,14 +42112,14 @@
     },
     {
       "file": "js/components/notifications/notificaciones-clientes.js",
-      "line": 48,
+      "line": 49,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/components/notifications/notificaciones-clientes.js",
-      "line": 49,
+      "line": 50,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -43246,7 +43246,7 @@
     },
     {
       "file": "js/components/notifications/notificaciones-clientes.js",
-      "line": 216,
+      "line": 217,
       "target": "/api/notifications",
       "method": "POST"
     },
@@ -43863,7 +43863,7 @@
           },
           {
             "file": "js/pages/profile/pedidos-perfil.js",
-            "line": 163,
+            "line": 168,
             "operation": "collection"
           },
           {
@@ -44673,7 +44673,7 @@
           },
           {
             "file": "js/components/notifications/notificaciones-clientes.js",
-            "line": 306,
+            "line": 309,
             "operation": "collection"
           },
           {

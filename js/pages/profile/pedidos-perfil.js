@@ -96,14 +96,19 @@ export function createProfileOrdersController({ subscribe, render, onStatus, onS
         slices[index] = rows;
         ready[index] = true;
         current = reconcileAccountOrders(slices).sort((a,b) => timestamp(b)-timestamp(a));
-        onStats(calculateOrderStats(current));
-        render(current,{empty:current.length===0});
+        // Compras/total sólo son confirmados cuando respondieron todas las
+        // identidades sin error; si no, "—" en vez de un cero o un parcial.
+        const complete = ready.every(Boolean) && !failures.some(Boolean);
+        onStats(complete ? calculateOrderStats(current) : null);
+        if (!current.length && !ready.every(Boolean)) return;
+        render(current,{empty:current.length===0 && complete});
         onStatus('ready', failures.some(Boolean) ? failures.find(Boolean) : null);
       },
       fail: failure => {
         if (token !== generation) return;
         failures[index] = failure;
         ready[index] = true;
+        onStats(null);
         // Una consulta secundaria (por correo) no debe ocultar los pedidos
         // ya encontrados por UID ni cancelar su onSnapshot.
         if (current.length || slices.some(rows => rows.length)) {

@@ -2042,12 +2042,18 @@ function initContactForm() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const nombre = form.querySelector('#f-nombre').value.trim();
-    const email = form.querySelector('#f-email').value.trim();
+    const emailInput = form.querySelector('#f-email');
+    const email = emailInput.value.trim();
     const tel = form.querySelector('#f-tel').value.trim();
     const msg = form.querySelector('#f-msg').value.trim();
 
     if (!nombre || !msg) {
       alert('Por favor completá al menos tu nombre y tu mensaje.');
+      return;
+    }
+    if (email && !emailInput.checkValidity()) {
+      alert('Ingresá un email válido.');
+      emailInput.focus();
       return;
     }
 

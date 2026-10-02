@@ -21,6 +21,9 @@ test('contacto conserva email en todas las rutas de WhatsApp', async () => {
   assert.match(html, /Email: ' \+ email/);
   assert.match(runtime, /Mi correo es \$\{values\.email\}/);
   assert.match(tienda, /\*Email:\* \$\{email \|\| 'No indicado'\}/);
+  // Las tres rutas validan el email opcional antes de armar el mensaje.
+  assert.match(tienda, /if \(email && !emailInput\.checkValidity\(\)\)/);
+  assert.ok(runtime.includes("values.email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(values.email)"));
 });
 
 test('reseñas no encoge el CTA y permite wrap cerca de 924px', async () => {
@@ -61,6 +64,8 @@ test('copy visible corrige opiniones y sesiones', async () => {
   assert.doesNotMatch(reviews, /opinión\$\{count === 1 \? '' : 'es'\}/);
   assert.match(admin, /statisticsTrafficSessions\.length === 1 \? 'sesión' : 'sesiones'/);
   assert.doesNotMatch(admin, /sesión\$\{statisticsTrafficSessions\.length === 1 \? '' : 'es'\}/);
+  // Cualquier "…ión${… ? '' : 'es'}" produce "…iónes" (tilde mal puesta).
+  for (const source of [reviews, admin]) assert.doesNotMatch(source, /ión\$\{[^}]*\? '' : 'es'\}/);
 });
 
 test('home alinea fallback con el título publicado y sanea el typo de pago seguro', async () => {
@@ -80,4 +85,12 @@ test('Operaciones aclara que su estado pertenece al navegador actual', async () 
   assert.match(source, /Operaciones locales/);
   assert.match(source, /operaciones registradas en este navegador/);
   assert.match(source, /Operaciones de este navegador/);
+});
+
+test('perfil no presenta compras ni "sin pedidos" sin confirmar todas las consultas', async () => {
+  const profile = await read('js/pages/profile/pedidos-perfil.js');
+  assert.match(profile, /const complete = ready\.every\(Boolean\) && !failures\.some\(Boolean\);/);
+  assert.match(profile, /onStats\(complete \? calculateOrderStats\(current\) : null\)/);
+  assert.match(profile, /empty:current\.length===0 && complete/);
+  assert.match(profile, /failures\[index\] = failure;\s*ready\[index\] = true;\s*onStats\(null\);/);
 });

@@ -1828,7 +1828,7 @@ function renderOnlineLocations(active, now) {
 function renderTodayLocations(sessions, now) {
   const container = document.getElementById('dashboard-today-locations');
   const detail = document.getElementById('dashboard-today-detail');
-  if (detail) detail.textContent = `${sessions.length} sesión${sessions.length === 1 ? '' : 'es'}`;
+  if (detail) detail.textContent = `${sessions.length} ${sessions.length === 1 ? 'sesión' : 'sesiones'}`;
   if (!container) return;
   if (!sessions.length) {
     container.innerHTML = '<div class="adm-visitor-empty">Todavía no hay sesiones registradas hoy.</div>';
