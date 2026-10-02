@@ -39,6 +39,16 @@ export function cleanText(value, maxLength = 200) {
     .slice(0, maxLength);
 }
 
+// Un enlace a una página (por ejemplo YouTube) no es un archivo de sonido.
+export function normalizePushToneUrl(value) {
+  const text = cleanText(value, 500);
+  try {
+    const url = new URL(text);
+    if (url.protocol !== 'https:' || url.username || url.password || !/\.mp3$/i.test(url.pathname)) return '';
+    return url.href;
+  } catch { return ''; }
+}
+
 /**
  * Guaraníes sin decimales y con punto como separador de miles: "Gs. 180.000".
  * No se usa toLocaleString: su salida depende del ICU del runtime y acá el

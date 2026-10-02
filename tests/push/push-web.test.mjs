@@ -19,19 +19,34 @@ import {
   eventDocumentId,
   formatGuarani,
   normalizePrivateKey,
+  normalizePushToneUrl,
   parseWebhookEvent,
   sanitizeError,
   signWebhook,
   verifyWebhookSignature,
   webhookSigningPayload
 } from '../../cloudflare/nucleo-push.js';
-import { pushEnabled } from '../../cloudflare/servicio-push.js';
+import { pushEnabled, savePushSettings } from '../../cloudflare/servicio-push.js';
 import { adminNotificationPushPresentation } from '../../cloudflare/notificaciones-sociales.js';
 
 test('Push queda cerrado por defecto y sólo acepta una habilitación explícita', () => {
   assert.equal(pushEnabled({}), false);
   assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'false' }), false);
   assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'true' }), true);
+});
+
+test('un tono push acepta MP3 directo y rechaza páginas, credenciales y protocolos inseguros', () => {
+  assert.equal(normalizePushToneUrl('https://cdn.example.com/tono.mp3?version=2'), 'https://cdn.example.com/tono.mp3?version=2');
+  for (const value of ['https://www.youtube.com/shorts/fixture', 'https://cdn.example.com/page', 'http://cdn.example.com/tono.mp3', 'https://user:password@cdn.example.com/tono.mp3', 'javascript:alert(1)', '']) {
+    assert.equal(normalizePushToneUrl(value), '');
+  }
+});
+
+test('un tono inválido detiene el guardado completo antes de acceder a Firebase', async () => {
+  await assert.rejects(savePushSettings({}, {
+    foregroundSound: 'default', foregroundSoundOrder: 'custom',
+    foregroundSoundOrderUrl: 'https://www.youtube.com/shorts/fixture',
+  }), /enlace HTTPS directo a un archivo MP3/);
 });
 
 test('Web Push se entrega únicamente por Firebase FCM', () => {

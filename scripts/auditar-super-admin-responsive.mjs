@@ -95,6 +95,9 @@ console.log(`\nResponsive Super Admin: CORRECTO · ${results.length}/${results.l
 // tablas de comercio lo detecte.
 const adminShellCss = fs.readFileSync(path.join(root, 'css/admin/admin.css'), 'utf8');
 const sidebarRuntime = fs.readFileSync(path.join(root, 'js/admin/sidebar-expandible-admin.js'), 'utf8');
+const operationsCss = fs.readFileSync(path.join(root, 'css/admin/operaciones-admin.css'), 'utf8');
+const brandMarkup = fs.readFileSync(path.join(root, 'admin.html'), 'utf8').match(/<div class="adm-sidebar-logo">[\s\S]*?<div class="adm-sidebar-logo-sub">[\s\S]*?<\/div>\s*<\/div>/)?.[0];
+if (!brandMarkup) throw new Error('No se encontró la marca real del panel.');
 const shellViewports = [
   [1920, 1080], [1440, 900], [1280, 800], [1024, 768], [901, 768],
   [900, 900], [820, 1180], [768, 1024], [600, 900], [541, 900],
@@ -105,18 +108,18 @@ const shellFixture = `<!doctype html><html class="adm-auth-ready"><head><meta ch
 *{box-sizing:border-box}html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden}
 :root{--admin-color-background-sidebar:#fff;--admin-color-background-sidebar-active:#FDECF2;--admin-color-text-sidebar:#2B2B2B;--admin-color-background-page:#FFF6FA;--admin-color-background-surface:#fff;--admin-color-brand:#AD3F67;--admin-color-text-primary:#2B2B2B;--admin-color-text-secondary:#7B6F72;--admin-color-text-title:#2B2B2B;--admin-color-border:#F1E4E7;--admin-color-table-row-hover:#FFF9FC;--rose:#8B2642}
 .adm-notifications-button{width:46px;height:46px;border:0;border-radius:50%}
-</style><style>${adminShellCss}</style></head><body>
+</style><style>${adminShellCss}</style><style>${operationsCss}</style></head><body>
 <div class="adm-overlay" id="adm-overlay"></div>
 <aside class="adm-sidebar" id="adm-sidebar">
-  <div class="adm-sidebar-logo"><div class="adm-sidebar-logo-text">TINTIN</div><div class="adm-sidebar-logo-sub">Panel de administración</div><button class="adm-sidebar-toggle" id="adm-sidebar-toggle" type="button" aria-pressed="false">‹</button></div>
+  ${brandMarkup}
   <div class="adm-user-info"><div class="adm-user-avatar">TT</div><div><div class="adm-user-name">Tintin Accesorios y Relojes</div><span class="adm-user-role-badge role-superadmin">SUPER ADMIN</span><div class="adm-live-clock">24/09/2026 · 14:30</div></div></div>
   <nav class="adm-nav">${Array.from({length:12},(_,i)=>`<button class="adm-nav-item${i===2?' active':''}" type="button"><span class="adm-nav-icon">◆</span><span>Sección ${i+1}</span></button>`).join('')}</nav>
 </aside>
 <main class="adm-main">
   <header class="adm-topbar">
     <button class="adm-hamburger" id="adm-hamburger" type="button" aria-label="Abrir menú de módulos" aria-controls="adm-sidebar" aria-expanded="false">☰</button>
-    <div class="adm-topbar-title">Productos</div>
-    <div class="adm-topbar-actions"><div class="adm-notifications-wrap"><button class="adm-notifications-button" type="button">○</button></div><a class="adm-topbar-btn" href="#">+ Nuevo pedido</a></div>
+    <div class="adm-topbar-title">Flujo de conexiones</div>
+    <div class="adm-topbar-actions"><button class="tt-ops-indicator" type="button"><span class="tt-ops-indicator__label">Operaciones locales</span><span>✓</span></button><div class="adm-notifications-wrap"><button class="adm-notifications-button" type="button">○</button></div><a class="adm-topbar-btn" href="#">+ Nuevo pedido</a></div>
   </header>
   <div class="adm-content"><section class="adm-section active"><div class="adm-card"><div class="adm-card-body"><h1>Productos</h1><p>Contenido del panel sin superposición.</p></div></div></section></div>
 </main>
@@ -141,9 +144,20 @@ try {
       const toggledClass = await page.evaluate(() => document.documentElement.classList.contains('adm-sidebar-is-collapsed'));
       const toggledNavDirection = await page.locator('.adm-nav-item').first().evaluate(element => getComputedStyle(element).flexDirection);
       const brandFontSize = await page.locator('.adm-sidebar-logo-text').evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize));
+      const compactBrand = await page.evaluate(() => {
+        const brand = document.querySelector('.adm-sidebar-logo-text');
+        const toggle = document.querySelector('#adm-sidebar-toggle');
+        const header = document.querySelector('.adm-sidebar-logo');
+        const b = brand.getBoundingClientRect(), t = toggle.getBoundingClientRect(), h = header.getBoundingClientRect();
+        return {
+          centered: Math.abs((b.left + b.right) / 2 - (h.left + h.right) / 2) < 2,
+          gap: b.top - t.bottom,
+          pseudo: getComputedStyle(brand, '::before').content,
+        };
+      });
       await toggle.click();
       await page.waitForTimeout(250);
-      toggleState = { targetWidth: target?.width || 0, targetHeight: target?.height || 0, toggledWidth, toggledClass, toggledNavDirection, brandFontSize };
+      toggleState = { targetWidth: target?.width || 0, targetHeight: target?.height || 0, toggledWidth, toggledClass, toggledNavDirection, brandFontSize, compactBrand };
     } else {
       const hamburger = page.locator('#adm-hamburger');
       const target = await hamburger.boundingBox();
@@ -190,6 +204,8 @@ try {
     const issues = [];
     if (state.docWidth > width + 2 || state.bodyWidth > width + 2) issues.push(`overflow global ${state.docWidth}/${state.bodyWidth} > ${width}`);
     if (width > 900) {
+      if (!toggleState?.compactBrand?.centered || toggleState.compactBrand.gap < 6) issues.push('marca compacta descentrada o pegada al botón');
+      if (!['none', 'normal'].includes(toggleState?.compactBrand?.pseudo)) issues.push('marca compacta conserva badge TT');
       if (Math.abs((toggleState?.toggledWidth || 0) - 74) > 2 || !toggleState?.toggledClass) issues.push(`botón desktop no contrae: ${toggleState?.toggledWidth}px`);
       if (toggleState?.targetWidth < 34 || toggleState?.targetHeight < 44) issues.push('botón desktop demasiado pequeño');
       if (Math.abs(state.sidebarWidth - 260) > 2) issues.push(`sidebar desktop ${state.sidebarWidth}px, esperado 260px`);

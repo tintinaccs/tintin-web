@@ -19,6 +19,7 @@ import {
   buildTestPushContent,
   classifyFcmError,
   cleanText,
+  normalizePushToneUrl,
   deviceDocumentId,
   eventDocumentId,
   sanitizeError,
@@ -203,22 +204,29 @@ export async function readPushSettings(env) {
 
 export async function savePushSettings(env, { enabled, foregroundSound, foregroundSoundUrl, foregroundSoundOrder, foregroundSoundOrderUrl, foregroundSoundReview, foregroundSoundReviewUrl, foregroundSoundLike, foregroundSoundLikeUrl, updatedBy }) {
   const mode = ['default', 'none', 'custom'].includes(foregroundSound) ? foregroundSound : 'default';
-  const url = mode === 'custom' && /^https:\/\//i.test(String(foregroundSoundUrl || '').trim())
-    ? cleanText(foregroundSoundUrl, 500)
-    : '';
   const tone = value => ['default', 'none', 'custom'].includes(value) ? value : 'default';
-  const toneUrl = (value, valueUrl) => tone(value) === 'custom' && /^https:\/\//i.test(String(valueUrl || '').trim()) ? cleanText(valueUrl, 500) : '';
+  const toneUrl = (value, valueUrl) => {
+    if (tone(value) !== 'custom') return '';
+    const result = normalizePushToneUrl(valueUrl);
+    if (!result) throw new Error('El tono personalizado necesita un enlace HTTPS directo a un archivo MP3. Subí el tono con el botón correspondiente.');
+    return result;
+  };
+  // Validar todos los tonos antes de escribir para no guardar parcialmente.
+  const url = toneUrl(mode, foregroundSoundUrl);
+  const orderUrl = toneUrl(foregroundSoundOrder, foregroundSoundOrderUrl);
+  const reviewUrl = toneUrl(foregroundSoundReview, foregroundSoundReviewUrl);
+  const likeUrl = toneUrl(foregroundSoundLike, foregroundSoundLikeUrl);
   const now = new Date();
   await patchDocument(env, PUSH_SETTINGS_PATH, {
     enabled: fsBool(enabled !== false),
     foregroundSound: fsString(mode),
     foregroundSoundUrl: fsString(url),
     foregroundSoundOrder: fsString(tone(foregroundSoundOrder)),
-    foregroundSoundOrderUrl: fsString(toneUrl(foregroundSoundOrder, foregroundSoundOrderUrl)),
+    foregroundSoundOrderUrl: fsString(orderUrl),
     foregroundSoundReview: fsString(tone(foregroundSoundReview)),
-    foregroundSoundReviewUrl: fsString(toneUrl(foregroundSoundReview, foregroundSoundReviewUrl)),
+    foregroundSoundReviewUrl: fsString(reviewUrl),
     foregroundSoundLike: fsString(tone(foregroundSoundLike)),
-    foregroundSoundLikeUrl: fsString(toneUrl(foregroundSoundLike, foregroundSoundLikeUrl)),
+    foregroundSoundLikeUrl: fsString(likeUrl),
     updatedAt: fsTime(now),
     updatedBy: fsString(cleanText(updatedBy, 160))
   });

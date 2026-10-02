@@ -4,8 +4,8 @@
     "sha256": "57766f334dd8a160efc73f8b5585de884c0649a76561be7a6745711a82fd29d5"
   },
   "css/admin/admin.css": {
-    "version": "tintin-20261001-inventory-fix-1",
-    "sha256": "a57f9e2c3cfddc16a3b34938a1392328b758208c60979a536d299c87e2ee2671"
+    "version": "tintin-20261002-admin-brand-layout-1",
+    "sha256": "89f573138777746232a648bfe57c9266a1d1a1bb620c100a814cf937e2926c39"
   },
   "css/admin/diagnostico-maestro.css": {
     "version": "tintin-20260817-master-diagnostics-3",
@@ -148,8 +148,8 @@
     "sha256": "6fa87a8f948850ef32034ec3131014a8b2bce3c31ea29f5bb247ee7e36e63f0e"
   },
   "css/pages/home/ajuste-inicio.css": {
-    "version": "tintin-20260930-home-canonical-1",
-    "sha256": "5f82ad49d782c125bc25dabc521b6088fa19877d3641dc88cc7b639b0fff093e"
+    "version": "tintin-20261002-home-layout-1",
+    "sha256": "4cf0a2c737802bf9d323d3f768150726f308bb2a3a49846f345306b7a2bbc65a"
   },
   "css/pages/home/carrusel-colecciones.css": {
     "version": "tintin-20260927-visual-1",
@@ -284,8 +284,8 @@
     "sha256": "517b2f712722c10fb46f88f5375a2ce38f9b6e3c9d248200bcf257868465c402"
   },
   "js/admin/appearance/editor-visual-admin.js": {
-    "version": "tintin-20260925-cache-converge-1-launch-20260926-1",
-    "sha256": "ebab4d847b6eb79a859d88a5b76e45dc139e711ad27b5105d5c09d7c234f5143"
+    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-complete-ui-20261002-1",
+    "sha256": "44969bb4108291f02204b46c8b0351997cba1f6a7128d938e871e65cabcc4f3f"
   },
   "js/admin/appearance/preview-dynamic-targets.js": {
     "version": "tintin-20260812-preview-dinamico-1",
@@ -316,8 +316,8 @@
     "sha256": "06c34316a35f7d35e220267ce850c52090f1f71e50e307d0d5b7f316295c0ef2"
   },
   "js/admin/content/gestion-contenido-admin.js": {
-    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1",
-    "sha256": "0f15bd20f3b2bd377d5f6fe5a3db27039a3342e44e2191772a7ee8cb4558e24e"
+    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-complete-ui-20261002-1",
+    "sha256": "0ef9fac51ab4d07ea7287f5e4e9e5bbaebd4689462119706c80e3dfb04dc4252"
   },
   "js/admin/diagnostics/diagnostico-maestro-admin.js": {
     "version": "tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
@@ -500,8 +500,8 @@
     "sha256": "f742b82b91adff8ea67713b3d00a7da7eeb4916920d96167aea1478ab0fc69d6"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20261002-login-single-flow-1",
-    "sha256": "702fa07cc1d37c36bc786afde6a231e8e3dbbfa3a6947216a9f0e079182aa834"
+    "version": "tintin-20261002-complete-ui-loader-1",
+    "sha256": "406df1f4d3e99beb0860babfa0a29a8f39773c4dd10f9da533795e10e2489281"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -852,8 +852,8 @@
     "sha256": "3bb88d6530e632f09edd6b177abb3ca437a144fbaa178c92325786e8b8c6aa99"
   },
   "js/core/store/contenido-sitio.js": {
-    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
-    "sha256": "895cccc41306d96406bad80b1dde283373d3e50e6a49b7e5f0d522620d87d67f"
+    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1",
+    "sha256": "ca27131fb22c740615566fb1718627b5998cf2ccbe3de2cda21a00a04b52bc54"
   },
   "js/core/store/contratos-visual-builder.js": {
     "version": "tintin-20260810-visual-studio-v2-1",
@@ -863,13 +863,17 @@
     "version": "tintin-20260810-visual-studio-v2-1",
     "sha256": "0f2f73f97a7373d32ff17cdae2ff86f389746459dc97803862824205194e74ba"
   },
+  "js/core/store/definiciones-contenido.js": {
+    "version": "tintin-20261002-content-schema-1",
+    "sha256": "571e7a72bf36a259688859e8765690dc6880fb7a34651f795fa4f36f12034fd1"
+  },
   "js/core/store/editor-visual-runtime.js": {
-    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
-    "sha256": "8a102c5ab282e539c60457394679e7eb8b1af16af490405954a7ca118f4908cd"
+    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1",
+    "sha256": "ff94573dae821dfcd42819a7ccdb5507bef92c3d53427e04a7a7ddae0625889c"
   },
   "js/core/store/esquema-contenido.js": {
-    "version": "tintin-20260925-cache-converge-1",
-    "sha256": "6c8c20dc03af8b87b502058a679b639dda95b7447001ba5f8ced636590478cd7"
+    "version": "tintin-20260925-cache-converge-1-complete-ui-20261002-1",
+    "sha256": "79d3db6feda7066dab60e57a1ac5cf1c817b9fce2c3eff742cbdde788c2ea289"
   },
   "js/core/store/estadisticas-pedidos.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1",
@@ -1116,8 +1120,8 @@
     "sha256": "d765782bb4eb36dff36b4e96992281d5de78a726e77ff664dea1b587dd2b663f"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20260930-sheets-reconcile-quality-4-admin-ready-20261002-1",
-    "sha256": "0e64f832fa8aa511ba6fc08df33cc650fb3c53c0f188ab7eda387d9a58044021"
+    "version": "tintin-20260930-sheets-reconcile-quality-4-admin-ready-20261002-1-complete-ui-20261002-1",
+    "sha256": "7e08cf07a27a691cf0bf9db41c841fc0a5494ad3f78f059db313938b6fdaf937"
   },
   "js/quality/correccion-auditoria-pagina.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
@@ -1156,8 +1160,8 @@
     "sha256": "96c01b81f44a3290e2b4532f55e2c9534b2adc43273a19f3756b2cb41f0fd0b6"
   },
   "js/visual-builder-bootstrap.js": {
-    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
-    "sha256": "dc28e4ccd7e31391df4a77eb2ceff89f535090230bda9a3c7d60d93e149da8a7"
+    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1",
+    "sha256": "5f732ff51839f652fc13f7049657cb3afd16d6d2c85145f698079ae0d84a57b2"
   },
   "styles.min.css": {
     "version": "tintin-20260925-cache-converge-1",

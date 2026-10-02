@@ -2665,69 +2665,55 @@ body:has(.adm-main) .adm-table-wrap {
   overflow-wrap: break-word;
 }
 
-/* La marca no se imprime en columna en el rail comprimido. La flecha ocupa
-   su propia línea y el monograma queda centrado por debajo. */
-@media (min-width: 541px) and (max-width: 900px) {
+/* Rail compacto: control y marca reales en dos filas independientes. */
+@media (min-width: 541px) {
   html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo {
     display: flex !important;
-    flex: 0 0 106px;
-    height: 106px;
-    min-height: 106px;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 8px;
-    padding: 8px 6px 10px;
-  }
-  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-toggle {
-    top: 8px;
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-text {
-    flex: 0 0 42px;
-  }
-  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-sub { display: none !important; }
-}
-
-@media (min-width: 901px) {
-  html.adm-sidebar-is-collapsed .adm-sidebar-logo {
-    display: flex;
-    height: 106px;
-    min-height: 106px;
-    flex-basis: 106px;
+    flex: 0 0 100px;
+    height: 100px;
+    min-height: 100px;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 8px;
-    padding: 8px 6px 10px;
+    padding: 12px 6px;
   }
-  html.adm-sidebar-is-collapsed .adm-sidebar-toggle {
-    top: 8px;
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-toggle {
+    position: static;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    order: 0;
+    transform: none;
   }
-  html.adm-sidebar-is-collapsed .adm-sidebar-logo-text {
-    display: grid !important;
-    flex: 0 0 42px;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: var(--admin-color-brand);
-    color: #fff;
-    font-size: 0;
-    letter-spacing: 0;
-    line-height: 1;
-  }
-  html.adm-sidebar-is-collapsed .adm-sidebar-logo-text::before {
-    content: 'TT';
-    font-size: 13px;
-    font-weight: 900;
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-text {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 20px;
+    order: 1;
+    width: 100%;
+    height: 20px;
+    border-radius: 0;
+    background: transparent;
+    color: var(--admin-color-text-title);
+    font-size: 11px;
+    font-weight: 800;
     letter-spacing: .08em;
+    line-height: 20px;
+    white-space: nowrap;
   }
-  html.adm-sidebar-is-collapsed .adm-sidebar-logo-sub { display: none; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-text::before { content: none; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-sub { display: none !important; }
+
+  /* Las acciones dinámicas tienen su ancho propio y no invaden el título. */
+  body:has(.adm-main) .adm-topbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  body:has(.adm-main) .adm-topbar-title { grid-column: 1; justify-self: stretch; max-width: 100%; }
+  body:has(.adm-main) .adm-topbar-actions { grid-column: 2; }
 }
 
 @media (max-width: 540px) {

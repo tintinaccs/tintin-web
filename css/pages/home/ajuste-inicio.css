@@ -379,11 +379,13 @@ html body.tt-home-premium .tt-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
   grid-template-areas: "content media";
+  grid-template-rows: auto;
+  aspect-ratio: auto;
   align-items: center;
   gap: clamp(28px, 5vw, 76px);
   min-height: clamp(520px, 70svh, 760px);
   height: auto !important;
-  padding: clamp(32px, 5vw, 72px) clamp(24px, 7vw, 104px);
+  padding: clamp(32px, 5vw, 72px) clamp(24px, 7vw, 104px) !important;
   overflow: clip;
   color: #2B2B2B;
   background: #FFF6FA !important;
@@ -578,10 +580,11 @@ html body.tt-home-premium .tt-hero-media .tt-hero-img {
   html body.tt-home-premium .tt-hero {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "content" "media";
+    grid-template-rows: auto auto;
     gap: 26px;
     min-height: 0;
     height: auto !important;
-    padding: clamp(32px, 8vw, 54px) 20px clamp(36px, 8vw, 56px);
+    padding: clamp(32px, 8vw, 54px) 20px clamp(36px, 8vw, 56px) !important;
   }
   html body.tt-home-premium .tt-hero-content { max-width: 720px; }
   html body.tt-home-premium .tt-hero-eyebrow { margin-bottom: 14px; font-size: .68rem; }
