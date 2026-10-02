@@ -1,3 +1,4 @@
+import { onRequest } from '../../functions/_middleware.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -86,4 +87,28 @@ test('perfil puede ejecutar sus scripts con la CSP estática y la de runtime', (
       assert.ok(policy.includes(hash), `perfil bloqueado: ${hash}`);
     }
   }
+});
+
+test('una revalidación 304 de /perfil conserva la CSP de la ruta (subida de foto a Cloudinary)', async () => {
+  const stale = new Response(null, {
+    status: 304,
+    headers: { 'Content-Security-Policy': "default-src 'self'; connect-src 'self'" },
+  });
+  const response = await onRequest({
+    request: new Request('https://tintinaccesorios.pages.dev/perfil', { headers: { 'If-None-Match': '"x"' } }),
+    next: async () => stale,
+  });
+  assert.equal(response.status, 304);
+  const policy = response.headers.get('Content-Security-Policy');
+  assert.match(policy, /connect-src [^;]*https:\/\/api\.cloudinary\.com/);
+  assert.equal(response.headers.get('X-Tintin-CSP'), 'edge-runtime');
+});
+
+test('un 304 de un recurso que no es página se deja intacto', async () => {
+  const response = await onRequest({
+    request: new Request('https://tintinaccesorios.pages.dev/tienda.js'),
+    next: async () => new Response(null, { status: 304 }),
+  });
+  assert.equal(response.status, 304);
+  assert.equal(response.headers.get('X-Tintin-CSP'), null);
 });

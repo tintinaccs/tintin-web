@@ -137,7 +137,11 @@ export async function onRequest(context) {
 
   const response = await context.next();
   const contentType = response.headers.get('content-type') || '';
-  if (!contentType.toLowerCase().includes('text/html')) {
+  // Un 304 no trae Content-Type, pero el navegador adopta sus cabeceras sobre
+  // la página cacheada: sin esto, una revalidación de /perfil dejaba la CSP
+  // genérica de _headers y bloqueaba la subida de foto a Cloudinary.
+  const revalidatedPage = response.status === 304 && Object.hasOwn(cspRuntime?.routes || {}, pathname);
+  if (!contentType.toLowerCase().includes('text/html') && !revalidatedPage) {
     return applyPagesDevIndexPolicy(context.request, pathname, response);
   }
   if (!runtimeReady()) return applyPagesDevIndexPolicy(context.request, pathname, failClosed());
@@ -152,6 +156,9 @@ export async function onRequest(context) {
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) headers.set(name, value);
   headers.set('X-Frame-Options', policy.includes("frame-ancestors 'self'") ? 'SAMEORIGIN' : 'DENY');
   headers.set('X-Tintin-CSP', 'edge-runtime');
+  if (revalidatedPage) {
+    return applyPagesDevIndexPolicy(context.request, pathname, new Response(null, { status: 304, statusText: response.statusText, headers }));
+  }
 
   const secured = new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   return applyPagesDevIndexPolicy(context.request, pathname, withRuntimeScripts(secured));
