@@ -10,7 +10,7 @@
 // del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261001-bloqueo-1';
 import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261001-firebase-permissions-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261001-inventory-fix-2';
 import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261001-sellos-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1-launch-20260926-1';
@@ -92,7 +92,10 @@ async function probeRenderedCart() {
     // El sitio evita inicializar algunos componentes cuando el documento queda
     // fuera del árbol de renderizado. Lo mantenemos imperceptible y fuera de la
     // pantalla, pero renderizable, para observar el mismo panel que ve un cliente.
-    frame.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;opacity:0;pointer-events:none;border:0';
+    // Con 1×1 px la página reporta innerWidth 0, nunca sale de
+    // tt-store-gate-pending y el carrito no llega a montarse: el probe daba
+    // rojo aunque el carrito real funcionara. Se usa un viewport de teléfono.
+    frame.style.cssText = 'position:fixed;left:-10000px;top:0;width:390px;height:844px;opacity:0;pointer-events:none;border:0';
     frame.tabIndex = -1;
     frame.setAttribute('aria-hidden', 'true');
     frame.addEventListener('load', () => {

@@ -363,3 +363,15 @@ test('probeClientFirestoreRules espera las lecturas antes de devolver', async ()
   assert.match(body, /async function probeEngagementStats\(user\)/, 'debe incluir la comprobación de lectura pública de engagement');
   assert.doesNotMatch(body, /return \{\s*favorites: probeClientFirestoreRead/, 'no debe devolver promesas sin resolver');
 });
+
+test('cuenta bloqueada sólo se promueve con el Repository audit del commit actual en PASS', () => {
+  const node = NODES.find(item => item.id === 'cuenta-bloqueada');
+  const at = '2026-10-02T00:00:00.000Z';
+  const commit = '1212c8a8d7d98dd8db30356c97539a4a8d857971';
+  const passed = buildLiveChecks({ currentEvidence: { commit, checks: { repositoryAudit: { state: 'PASS' } } } }, at);
+  assert.equal(passed['cuenta-bloqueada'].evidenceLevel, EVIDENCIA.CI_VERIFIED);
+  assert.equal(resolveState(node, passed['cuenta-bloqueada'], ESTADOS), ESTADOS.PROD);
+  const failed = buildLiveChecks({ currentEvidence: { commit, checks: { repositoryAudit: { state: 'FAIL' } } } }, at);
+  assert.notEqual(resolveState(node, failed['cuenta-bloqueada'], ESTADOS), ESTADOS.PROD);
+  assert.equal(buildLiveChecks({}, at)['cuenta-bloqueada'], undefined);
+});

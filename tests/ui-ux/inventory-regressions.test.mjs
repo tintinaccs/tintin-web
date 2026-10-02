@@ -119,3 +119,9 @@ test('pestañas móviles del admin se dimensionan por etiqueta y no se pisan a 3
   assert.doesNotMatch(css, /#adm-mobile-tabs > \.adm-mobile-tab \{\s*flex: 1 1 0;/);
   assert.match(css, /@media \(max-width: 360px\) \{\s*#adm-mobile-tabs > \.adm-mobile-tab \{ letter-spacing: 0; \}/);
 });
+
+test('el probe del carrito en Flujo de conexiones monta la portada con viewport real', async () => {
+  const flow = await read('js/admin/flujo-conexiones/flujo-conexiones-admin.js');
+  assert.match(flow, /frame\.style\.cssText = 'position:fixed;left:-10000px;top:0;width:390px;height:844px;opacity:0;pointer-events:none;border:0'/);
+  assert.doesNotMatch(flow, /width:1px;height:1px/);
+});
