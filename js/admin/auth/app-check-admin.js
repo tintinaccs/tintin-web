@@ -3,6 +3,8 @@
 // runtime from js/core/firebase/firebase.js and waits for a real App Check
 // token before private Firestore listeners are mounted.
 import {
+  auth,
+  authPersistenceReady,
   appCheck,
   appCheckReady
 } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
@@ -28,6 +30,36 @@ function waitForReadyEvent(timeoutMs) {
 }
 
 const ADMIN_APP_CHECK_GATE_KEY = '__TINTIN_ADMIN_APP_CHECK_GATE__';
+const ADMIN_AUTH_GATE_KEY = '__TINTIN_ADMIN_AUTH_GATE__';
+
+// App Check listo no confirma Auth. Los módulos auxiliares deben esperar la
+// restauración y una credencial fresca antes del primer listener privado.
+// Todos comparten la misma renovación; sólo se conserva un booleano, no tokens.
+async function waitForAdminAuth(timeoutMs) {
+  const existing = window[ADMIN_AUTH_GATE_KEY];
+  if (existing && (!existing.uid || existing.uid === auth.currentUser?.uid)) return existing.promise;
+  const gate = { uid: '', promise: null };
+  let timer;
+  const attempt = (async () => {
+    await authPersistenceReady;
+    await auth.authStateReady();
+    const user = auth.currentUser;
+    if (!user) return false;
+    gate.uid = user.uid;
+    await user.getIdToken(true);
+    return auth.currentUser?.uid === user.uid;
+  })().catch(() => false);
+  gate.promise = Promise.race([
+    attempt,
+    new Promise(resolve => { timer = window.setTimeout(() => resolve(false), Math.max(1500, Number(timeoutMs) || 12000)); })
+  ]).then(ok => {
+    window.clearTimeout(timer);
+    if (!ok && window[ADMIN_AUTH_GATE_KEY] === gate) window[ADMIN_AUTH_GATE_KEY] = null;
+    return Boolean(ok);
+  });
+  window[ADMIN_AUTH_GATE_KEY] = gate;
+  return gate.promise;
+}
 
 async function resolveAdminAppCheck(timeoutMs) {
   const initial = await Promise.resolve(appCheckReady).catch(() => false);
@@ -59,6 +91,7 @@ async function resolveAdminAppCheck(timeoutMs) {
 }
 
 export async function waitForAdminAppCheck(timeoutMs = 12000) {
+  if (!await waitForAdminAuth(timeoutMs)) return false;
   if (window.TintinAppCheckStatus === 'enabled') return true;
 
   // Todos los módulos del Admin comparten una sola verificación/reintento.

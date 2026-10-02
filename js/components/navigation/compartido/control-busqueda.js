@@ -1,6 +1,6 @@
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-import { versionedJsModule } from './configuracion.js?v=tintin-20261001-inventory-fix-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261001-inventory-fix-1-admin-ready-20261002-1-contact-busy-20261002-1';
 
 const MAX_RESULTS = 10;
 const INPUT_DELAY_MS = 120;
@@ -248,7 +248,7 @@ async function ensureProducts(force = false) {
     results.replaceChildren(stateNode('Cargando catálogo…'));
   }
 
-  loadPromise = import(versionedJsModule('core/store/estado-productos.js'))
+  loadPromise = import(PRODUCTS_RUNTIME_URL)
     .then(module => {
       const load = window.TintinProductsStore?.ensureSearch || module.ensureProductsForSearch || module.loadAllProducts;
       return typeof load === 'function' ? load({ force }) : window.PRODUCTS || [];

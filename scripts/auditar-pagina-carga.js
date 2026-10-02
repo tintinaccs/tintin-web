@@ -239,7 +239,9 @@ if (!/components\/navigation\/entrada-navegacion-publica\.js/.test(publicShell))
 }
 if (
   !/function loadProductsRuntime\(/.test(publicShellRuntime) ||
-  !/import\(versionedJsModule\(['"]core\/store\/estado-productos\.js['"]\)\)/.test(publicShellRuntime)
+  !(/import\(versionedJsModule\(['"]core\/store\/estado-productos\.js['"]\)\)/.test(publicShellRuntime)
+    || (/const PRODUCTS_RUNTIME_URL = ['"]\.\.\/\.\.\/\.\.\/core\/store\/estado-productos\.js\?v=tintin-[A-Za-z0-9-]+['"]/.test(publicShellRuntime)
+      && publicShellRuntime.includes('import(PRODUCTS_RUNTIME_URL)')))
 ) {
   fail('js/components/navigation/compartido/carga-navegacion.js', 'no carga estado-productos.js mediante el runtime modular.');
 }

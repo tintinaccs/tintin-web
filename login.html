@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4-cupones-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261002-login-single-flow-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261001-inventory-fix-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261001-inventory-fix-1-admin-ready-20261002-1-contact-busy-20261002-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261001-inventory-fix-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261001-inventory-fix-1-admin-ready-20261002-1-contact-busy-20261002-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1">
@@ -291,10 +291,15 @@ let explicitLoginInProgress = googleRedirectWasExpected;
 // js/cargador-pagina.js — acá solo se reusa su API para mostrarlo/ocultarlo/
 // cambiarle el texto durante el flujo interactivo de Google, en vez de
 // tener un segundo overlay propio compitiendo con el genérico.
-function showOverlay() { window.TintinLoader && window.TintinLoader.show(); }
+function showOverlay() {
+  window.TintinLoader?.show();
+  window.TintinLoader?.beginWait();
+  setOverlayText('');
+}
 // Siempre vuelve el texto a "Cargando…" al ocultarlo — por si se reusa para
 // otra cosa más adelante en la misma carga de página.
 function hideLoginOverlay() {
+  window.TintinLoader?.endWait();
   window.TintinLoader && window.TintinLoader.hide();
   setOverlayText('Cargando…');
 }
@@ -735,6 +740,7 @@ async function ensureProfileComplete(user, role, options = {}) {
         mapEl: document.getElementById('login-profile-map'),
         searchInput: document.getElementById('login-profile-address'),
         resultsEl: document.getElementById('login-profile-address-results'),
+        locateButton: document.getElementById('login-profile-locate'),
         onChange: place => { hideMessages(); renderAddressStatus(place); },
         onError: message => showError(message),
       });
@@ -742,17 +748,6 @@ async function ensureProfileComplete(user, role, options = {}) {
       showError('No pudimos cargar el mapa. Revisá tu conexión y recargá la página.');
     }
 
-    document.getElementById('login-profile-locate').onclick = () => {
-      if (!navigator.geolocation) {
-        showError('Tu navegador no permite compartir la ubicación. Buscala o tocá el mapa.');
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        position => addressMap?.setLocation({ lat: position.coords.latitude, lng: position.coords.longitude }),
-        () => showError('No pudimos obtener tu ubicación. Buscala o tocá el mapa para marcarla.'),
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
-    };
   }
 
   let explicitNameChange = false;
@@ -929,7 +924,6 @@ async function ensureProfileComplete(user, role, options = {}) {
         profileBlock.style.display = 'none';
         document.body.classList.remove('login-setup-open');
         showOverlay();
-        setOverlayText('Redireccionando a tu cuenta…');
         resolve();
       } catch (e) {
         btn.disabled = false;
@@ -1060,7 +1054,6 @@ async function handleGoogleRedirectReturn(observedUser) {
   if (redirectUser) {
     explicitLoginInProgress = true;
     showOverlay();
-    setOverlayText('Completando el inicio de sesión con Google…');
     try {
       await finishGoogleLogin(redirectUser);
     } catch (finishError) {
@@ -1099,6 +1092,9 @@ authPersistenceReady.then(() => {
 });
 subscribeSession(async snapshot => {
   if (snapshot.status === AUTH_STATES.RESTORING) return;
+  // El intento interactivo es dueño del loader y de su resultado. Un evento
+  // intermedio de Auth no debe revelar login ni competir con popup/OTP.
+  if (explicitLoginInProgress && !googleRedirectWasExpected) return;
   if (!loginAuthReadyDiagnosticRecorded) {
     loginAuthReadyDiagnosticRecorded = true;
     recordAuthDiagnostic('AUTH_STATE_READY', { source: 'login', authState: snapshot.status, reason: snapshot.reason || 'coordinator-resolution' });
@@ -1150,12 +1146,13 @@ subscribeSession(async snapshot => {
   }
   recordAuthDiagnostic('AUTH_USER_AVAILABLE', { source: 'login', authState: snapshot.status });
   if (explicitLoginInProgress) return;
+  showOverlay();
   // Super Admin puede borrar la identidad Auth mientras una pestaña vieja aún
   // conserva su sesión local. Confirmar la identidad antes de leer el perfil
   // evita convertir ese caso en un `profile/error` genérico: Firebase informa
   // user-not-found/user-disabled y se ofrece el reingreso por correo.
   try {
-    await user.reload();
+    await withDeadline(user.reload(), PROFILE_READ_DEADLINE_MS);
   } catch (identityError) {
     if (await recoverUnavailableRestoredSession(user, identityError)) return;
     console.warn('[login] No se pudo actualizar la identidad restaurada:', identityError);
@@ -1230,8 +1227,8 @@ subscribeSession(async snapshot => {
 // se procesa arriba una sola vez y nunca vuelve a lanzar Google en bucle.
 
 let _googleLoginToken = 0;
-const GOOGLE_POPUP_DEADLINE_MS = 7000;
 const loginConGoogle = async () => {
+  if (explicitLoginInProgress) return;
   hideMessages();
   if (!loginPersistenceReady) {
     showError('Estamos preparando el acceso seguro. Esperá un momento y probá de nuevo.');
@@ -1248,13 +1245,11 @@ const loginConGoogle = async () => {
   const googleButtonLabel = document.getElementById('btn-google-label');
   googleButton.disabled = true;
   document.body.classList.add('tt-login-busy');
-  googleButtonLabel.textContent = 'Abriendo Google…';
   // La pantalla de carga de marca cubre la página de entrada (no recién a los
   // 1.5s) y se mantiene así durante todo el flujo: el formulario de login no
   // debe volver a mostrarse una vez que la persona eligió continuar con
   // Google, hasta llegar a su perfil o hasta que el intento se cancele/falle.
   showOverlay();
-  setOverlayText('Esperando que completes el inicio de sesión con Google…');
   const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
   try {
     // La apertura debe ocurrir dentro del gesto original del clic. Esperar
@@ -1262,26 +1257,17 @@ const loginConGoogle = async () => {
     // consideren el popup una apertura asíncrona y lo bloqueen. La persistencia
     // ya se inicia al cargar firebase.js; se espera después del popup para no
     // romper la activación del usuario.
-    const popupAttempt = signInWithPopup(auth, provider);
-    const cred = await Promise.race([
-      popupAttempt,
-      new Promise((_, reject) => window.setTimeout(() => {
-        const timeoutError = new Error('Google popup did not resolve in time');
-        timeoutError.code = 'auth/popup-blocked';
-        reject(timeoutError);
-      }, GOOGLE_POPUP_DEADLINE_MS))
-    ]);
+    // Tardar en elegir una cuenta no es evidencia de bloqueo. Sólo Firebase
+    // puede confirmar que no abrió el popup; no se inicia otro flujo en paralelo.
+    const cred = await signInWithPopup(auth, provider);
     await authPersistenceReady.catch(() => {});
     if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
-    googleButtonLabel.textContent = 'Entrando…';
-    setOverlayText('Redireccionando a tu cuenta…');
     await finishGoogleLogin(cred.user);
   } catch(e) {
     if (myAttempt !== _googleLoginToken) return;
 
     if (e.code === 'auth/popup-blocked') {
       markGoogleRedirectPending();
-      setOverlayText('Abriendo Google en esta pestaña…');
       try {
         // El popup se abre dentro del gesto original, pero el redirect no
         // tiene esa restricción. Esperar acá garantiza que la persistencia
@@ -1519,6 +1505,7 @@ document.getElementById('login-email-input').addEventListener('keydown', e => {
 });
 
 document.getElementById('btn-verify-otp').onclick = async () => {
+  if (explicitLoginInProgress) return;
   hideMessages();
   const code = document.getElementById('login-otp-input').value.trim();
   if (!/^\d{6}$/.test(code)) {
@@ -1529,10 +1516,8 @@ document.getElementById('btn-verify-otp').onclick = async () => {
   btn.disabled = true;
   explicitLoginInProgress = true;
   showOverlay();
-  setOverlayText('Verificando tu código…');
   try {
     const user = await verifyOtpCode(otpEmail, code);
-    setOverlayText('Redireccionando a tu cuenta…');
     await finishOtpLogin(user);
   } catch (e) {
     explicitLoginInProgress = false;

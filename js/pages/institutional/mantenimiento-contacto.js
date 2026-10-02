@@ -72,6 +72,9 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
     success?.setAttribute('role','status');
     success?.setAttribute('aria-live','polite');
     submit?.classList.add('tt-contact-submit');
+    // Este flujo termina al abrir WhatsApp y administra su propio estado.
+    // El busy genérico no debe anunciar una escritura pendiente tras el éxito.
+    if (submit) submit.dataset.ttNoBusy = '1';
     const status = document.createElement('div');
     status.id = 'tt-contact-form-status';
     status.className = 'tt-sr-only';

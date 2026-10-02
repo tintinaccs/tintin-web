@@ -825,7 +825,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20260930-sheets-reconcile-quality-4');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20260930-sheets-reconcile-quality-4-admin-ready-20261002-1');
     }
   }
 
@@ -881,9 +881,9 @@
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
       importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
-      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync');
+      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1');
     }
   }
 
@@ -907,7 +907,7 @@
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1');
     }
   }
 
@@ -1037,7 +1037,10 @@
     if (storeGateRequired && !gateResolved && !gateEmergencyShown) {
       showEmergencyStoreGate();
     }
-    hideNow();
+    // El límite de arranque no termina un ingreso interactivo. Google puede
+    // seguir abierto mientras la persona elige su cuenta; login libera esta
+    // espera al cancelar, fallar o mostrar el onboarding.
+    if (!(isLoginPage && pendingWaits > 0)) hideNow();
     // Si el store gate nunca emitió ningún estado (ni "allowed", ni
     // "degraded", ni bloqueado), bootPublicRuntime()/bootPageRuntime()
     // jamás corrieron: sin esto, tt-initializing quedaba pegado para

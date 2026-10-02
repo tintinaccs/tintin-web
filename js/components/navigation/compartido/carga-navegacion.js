@@ -14,6 +14,8 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261001-inventory-fix-1-admin-ready-20261002-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261001-inventory-fix-1-admin-ready-20261002-1-contact-busy-20261002-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -99,7 +101,7 @@ function loadHomeMaintenance() {
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
   if (!productsRuntimePromise) {
-    productsRuntimePromise = import(versionedJsModule('core/store/estado-productos.js')).catch(error => {
+    productsRuntimePromise = import(PRODUCTS_RUNTIME_URL).catch(error => {
       productsRuntimePromise = null;
       window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
       throw error;
@@ -151,7 +153,7 @@ function loadNotificationsRuntime() {
 
 function loadCollectionsRuntime() {
   if (!collectionsRuntimePromise) {
-    collectionsRuntimePromise = import(versionedJsModule('components/navigation/compartido/carga-colecciones.js'))
+    collectionsRuntimePromise = import(COLLECTIONS_RUNTIME_URL)
       .then(module => {
         // Informational pages do not auto-start this module. Initialize it
         // after the idle import so the first open uses the canonical snapshot.
@@ -264,7 +266,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20261001-inventory-fix-1'),
+      import('./control-busqueda.js?v=tintin-20261001-inventory-fix-1-admin-ready-20261002-1-contact-busy-20261002-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

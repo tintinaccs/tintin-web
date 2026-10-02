@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260925-cache-converge-1-launch-20260926-1';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-admin-ready-20261002-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
@@ -7,6 +7,7 @@ function pathName() {
 
 // Mismo ?v= que inyecta functions/[page].js: una sola instancia del módulo por página.
 const INSTITUTIONAL_RUNTIME_VERSION = 'tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+const CONTACT_RUNTIME_VERSION = 'tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-contact-busy-20261002-1';
 
 function load(file, version = 'tintin-20260927-visual-1') {
   return import(`./${file}?v=${version}`);
@@ -33,7 +34,7 @@ export function loadPageMaintenance() {
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20260908-profile-canonical-2');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');
-  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', INSTITUTIONAL_RUNTIME_VERSION);
+  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', CONTACT_RUNTIME_VERSION);
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
     return load('pages/institutional/mantenimiento-legal.js', INSTITUTIONAL_RUNTIME_VERSION);
   }
