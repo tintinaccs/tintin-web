@@ -47,7 +47,7 @@ check(
 check(
   'La fachada canónica combina estructura y campos por responsabilidad',
   gateway.includes("from './contrato-estructura-sitio.js'") &&
-    gateway.includes("from './definiciones-contenido.js'") &&
+    /from\s+['"]\.\/definiciones-contenido\.js(?:\?v=[\w.-]+)?['"]/.test(gateway) &&
     gateway.includes('structural.root') &&
     gateway.includes('content?.fields || []'),
   'esquema-contenido.js debe proyectar roots del contrato y campos de definiciones-contenido.'

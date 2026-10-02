@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c9118b10a00e8f67ff107270553a83cab6a8b183d91c05bfc1990cce764e293c",
+  "sourceFingerprint": "c51bfc6f0d783ee50426fb624f415f6002f62c08184749848213761eb4ead0ca",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 943,
     "textFiles": 902,
-    "totalBytes": 18179664,
+    "totalBytes": 18179710,
     "pages": 19,
     "modules": 651
   },
@@ -27575,8 +27575,8 @@
     },
     {
       "path": "scripts/auditar-contrato-estructura-sitio.mjs",
-      "bytes": 13497,
-      "sha256": "ff5b6da7138f1a8e0ef1000804bbad38f3a52de7066037a47a40d3d36003f69a",
+      "bytes": 13520,
+      "sha256": "44140cbc527fb88e8f99ad3c0dc0bde6da9b5171a260510b88e725403de74559",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27605,12 +27605,6 @@
           "target": null,
           "dynamic": false,
           "line": 4
-        },
-        {
-          "raw": "./definiciones-contenido.js",
-          "target": "scripts/definiciones-contenido.js",
-          "dynamic": false,
-          "line": 105
         },
         {
           "raw": "./contrato-estructura-sitio.js",
@@ -28077,8 +28071,8 @@
     },
     {
       "path": "scripts/auditar-estructura-canonica-sitio.js",
-      "bytes": 6055,
-      "sha256": "8307dde3c0d353bee489cd5d4a38d49916876a7a94bec5e5378d04103a7a5780",
+      "bytes": 6078,
+      "sha256": "fcba8cf94a84ec92c52a61232cf28edfb63512250ec1b1f84fdd38841a86d6c8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28089,12 +28083,6 @@
           "target": "scripts/contrato-estructura-sitio.js",
           "dynamic": false,
           "line": 49
-        },
-        {
-          "raw": "./definiciones-contenido.js",
-          "target": "scripts/definiciones-contenido.js",
-          "dynamic": false,
-          "line": 50
         }
       ],
       "endpoints": []
@@ -40094,8 +40082,8 @@
     {
       "path": "scripts/auditar-contrato-estructura-sitio.mjs",
       "extension": ".mjs",
-      "bytes": 13497,
-      "sha256": "ff5b6da7138f1a8e0ef1000804bbad38f3a52de7066037a47a40d3d36003f69a"
+      "bytes": 13520,
+      "sha256": "44140cbc527fb88e8f99ad3c0dc0bde6da9b5171a260510b88e725403de74559"
     },
     {
       "path": "scripts/auditar-contratos-arquitectura.mjs",
@@ -40202,8 +40190,8 @@
     {
       "path": "scripts/auditar-estructura-canonica-sitio.js",
       "extension": ".js",
-      "bytes": 6055,
-      "sha256": "8307dde3c0d353bee489cd5d4a38d49916876a7a94bec5e5378d04103a7a5780"
+      "bytes": 6078,
+      "sha256": "fcba8cf94a84ec92c52a61232cf28edfb63512250ec1b1f84fdd38841a86d6c8"
     },
     {
       "path": "scripts/auditar-faq-interaccion-parte-2e.mjs",

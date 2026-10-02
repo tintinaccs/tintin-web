@@ -102,7 +102,7 @@ const notes = [];
 const fail = message => errors.push(message);
 
 if (structure.SITE_STRUCTURE_VERSION < 2) fail('SITE_STRUCTURE_VERSION debe ser >= 2 para soportar zonas seguras.');
-if (!gateway.includes("from './definiciones-contenido.js'")) fail('La fachada debe importar las definiciones de campos aisladas.');
+if (!/from\s+['"]\.\/definiciones-contenido\.js(?:\?v=[\w.-]+)?['"]/.test(gateway)) fail('La fachada debe importar las definiciones de campos aisladas.');
 if (!gateway.includes("from './contrato-estructura-sitio.js'")) fail('La fachada debe importar el contrato estructural canónico.');
 if (!gateway.includes('structural.root')) fail('La fachada debe proyectar el root desde el contrato estructural.');
 if (!gateway.includes('SITE_STRUCTURE_MODES.protected')) fail('La fachada debe excluir las páginas protegidas del CMS libre.');
