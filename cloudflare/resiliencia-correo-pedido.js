@@ -11,6 +11,7 @@ import {
 } from './firebase-admin-ligero.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 import { sendOrderEmails } from '../functions/api/order-email.js';
+import { describeOrderChange, sendOrderStatusEmail } from './correo-estado-pedido.js';
 
 const QUEUE_COLLECTION = 'orderEmailQueue';
 const MAX_PENDING = 200;
@@ -40,7 +41,10 @@ const REAL_QUEUE_DEPS = {
   firestoreAdminMerge,
   notifyAdminIfAbsent,
   sendOrderEmailsImpl: sendOrderEmails,
+  sendOrderStatusEmailImpl: sendOrderStatusEmail,
 };
+
+const orderPaymentStatus = order => clean(order?.paymentStatus || order?.payment?.status, 40);
 
 /**
  * Registra (o reemplaza) el reintento pendiente de un pedido cuyo envío
@@ -135,6 +139,28 @@ async function fetchOrderForRetry(env, orderId, deps = REAL_QUEUE_DEPS) {
 }
 
 /**
+ * Reintento de un correo de cambio de estado. Devuelve 'sent' u 'obsolete'
+ * (el pedido ya cambió otra vez o no existe: ese cambio posterior tiene su
+ * propio correo, reenviar el viejo confundiría a la clienta). Lanza si falla.
+ */
+async function retryStatusEmail(env, apiKey, item, deps) {
+  const order = await fetchOrderForRetry(env, item.orderId, deps);
+  if (!order) return 'obsolete';
+  if (clean(order.status, 40) !== clean(item.orderStatus, 40) || orderPaymentStatus(order) !== clean(item.paymentStatus, 40)) return 'obsolete';
+  const change = describeOrderChange({
+    status: item.orderStatus,
+    paymentStatus: item.paymentStatus,
+    previousStatus: item.previousStatus,
+    previousPaymentStatus: item.previousPaymentStatus,
+  });
+  if (!change) return 'obsolete';
+  const result = await deps.sendOrderStatusEmailImpl(apiKey, { order, orderId: item.orderId, change, changeId: item.changeId });
+  if (!result?.sent && result?.reason === 'invalid_email') return 'obsolete';
+  if (!result?.sent) throw new Error(result?.reason || 'Reintento de correo de estado falló.');
+  return 'sent';
+}
+
+/**
  * Worker programado: vacía orderEmailQueue sin sesión humana. Cada tarea se
  * reclama con bloqueo optimista, se reintenta con backoff creciente entre
  * corridas y, al superar MAX_QUEUE_ATTEMPTS, pasa a dead_letter con una
@@ -149,7 +175,8 @@ export async function drainOrderEmailQueueScheduled(env, { limit = 25, deps = RE
   const documents = await deps.firestoreAdminListAll(env, QUEUE_COLLECTION, MAX_PENDING);
   const eligible = documents.filter(document => {
     const item = decoded(document);
-    if (!item || item.status !== 'pending' || (!item.retryAdmin && !item.retryCustomer)) return false;
+    if (!item || item.status !== 'pending') return false;
+    if (item.kind !== 'status' && !item.retryAdmin && !item.retryCustomer) return false;
     if (item.claimedAt && !isStale(item.claimedAt)) return false;
     const nextAt = Date.parse(item.nextAttemptAt || '');
     if (Number.isFinite(nextAt) && nextAt > now) return false;
@@ -157,6 +184,7 @@ export async function drainOrderEmailQueueScheduled(env, { limit = 25, deps = RE
   }).slice(0, Math.max(1, Math.min(MAX_PENDING, Number(limit) || 25)));
 
   let drained = 0;
+  let obsolete = 0;
   let deadLettered = 0;
   let lastError = '';
   for (const document of eligible) {
@@ -164,6 +192,12 @@ export async function drainOrderEmailQueueScheduled(env, { limit = 25, deps = RE
     if (!claimed) continue;
     try {
       if (!apiKey) throw new Error('RESEND_API_KEY no está configurada');
+      if (claimed.kind === 'status') {
+        const outcome = await retryStatusEmail(env, apiKey, claimed, deps);
+        await deps.firestoreAdminCommit(env, [{ path: `${QUEUE_COLLECTION}/${claimed.id}`, delete: true }]);
+        if (outcome === 'sent') drained += 1; else obsolete += 1;
+        continue;
+      }
       const order = await fetchOrderForRetry(env, claimed.orderId, deps);
       if (!order) throw new Error('El pedido ya no existe.');
       const result = await deps.sendOrderEmailsImpl({
@@ -207,7 +241,7 @@ export async function drainOrderEmailQueueScheduled(env, { limit = 25, deps = RE
     console.error('[resiliencia-correo-pedido] No se pudo actualizar syncMeta:', error?.message || error);
   }
 
-  return { checked: eligible.length, drained, deadLettered, remaining: eligible.length - drained - deadLettered };
+  return { checked: eligible.length, drained, obsolete, deadLettered, remaining: eligible.length - drained - obsolete - deadLettered };
 }
 
 /** Métrica de solo lectura para el panel de Diagnóstico (Estado del ecosistema). */

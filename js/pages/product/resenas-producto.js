@@ -278,7 +278,7 @@ function renderSummary() {
   root.innerHTML = `
     <div class="tt-community-metrics">
       <div class="tt-reviews-score"><strong>${count ? average.toFixed(1).replace('.', ',') : '—'}</strong><span>de 5</span></div>
-      <div><div class="tt-review-stars" aria-label="${average.toFixed(1)} de 5 estrellas">${starText(Math.round(average))}</div><div class="tt-review-date">${count} opinión${count === 1 ? '' : 'es'}</div></div>
+      <div><div class="tt-review-stars" aria-label="${average.toFixed(1)} de 5 estrellas">${starText(Math.round(average))}</div><div class="tt-review-date">${count} ${count === 1 ? 'opinión' : 'opiniones'}</div></div>
     </div>
     <div class="tt-review-stats-distribution" aria-label="Distribución de puntuaciones">${rows}</div>`;
 }

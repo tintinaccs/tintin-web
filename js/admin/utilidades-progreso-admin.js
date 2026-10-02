@@ -4,7 +4,7 @@
  * detalle por elemento en la ventana de diagnóstico. Sin esperas
  * artificiales ni renders completos durante el proceso.
  */
-import { runOperation } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260928-admin-crud-feedback-3-domain-cutover-2';
+import { runOperation } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261001-inventory-fix-1';
 
 const MAX_LISTED_FAILURES = 20;
 

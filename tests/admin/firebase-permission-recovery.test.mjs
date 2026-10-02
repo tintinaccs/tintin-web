@@ -6,11 +6,12 @@ const read = path => fs.readFileSync(path, 'utf8');
 
 test('Admin notifications stop retrying permanent Firestore denials', () => {
   const source = read('js/admin/notifications/notificaciones-admin.js');
-  assert.match(source, /function shouldRetryFirestoreListener\(error\)/);
-  assert.match(source, /permission-denied/);
-  assert.match(source, /unauthenticated/);
-  assert.match(source, /user && shouldRetryFirestoreListener\(error\).*subscribeNotifications/);
-  assert.match(source, /user && shouldRetryFirestoreListener\(error\).*subscribeOrderStatusChanges/);
+  // Permisos/auth: un único refresh de identidad + App Check, nunca un timer fijo.
+  assert.match(source, /code === 'permission-denied' \|\| code === 'unauthenticated'/);
+  assert.match(source, /getIdToken\(true\)\s*\.then\(\(\) => waitForAdminAppCheck\(12000\)\)/);
+  assert.match(source, /scheduleAdminListenerRecovery\('notifications', error, \(\) => subscribeNotifications\(\)\)/);
+  assert.match(source, /scheduleAdminListenerRecovery\('orders', error, \(\) => subscribeOrderStatusChanges\(\)\)/);
+  assert.doesNotMatch(source, /setTimeout\(\(\) => subscribe(Notifications|OrderStatusChanges)\(\), 1400\)/);
 });
 
 test('Coupons use the strict Admin App Check gate before Firestore', () => {

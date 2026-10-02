@@ -219,6 +219,14 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
         pending: auditPending,
         evidenceLevel: EVIDENCIA.CI_VERIFIED,
       }));
+    // test:accounts (blocked-account-message) corre en el mismo Repository
+    // audit: comprueba aviso, enlace a WhatsApp y cierre en login/perfil/checkout.
+    setFrom('cuenta-bloqueada', auditPassed,
+      `${ciNote(currentEvidence, 'repositoryAudit', 'contrato de cuenta bloqueada')} · test:accounts`, {
+        promote: auditPassed,
+        pending: auditPending,
+        evidenceLevel: EVIDENCIA.CI_VERIFIED,
+      });
     // Si el CI de Cloudflare Pages aún no terminó, no se pisa la evidencia
     // runtime ya obtenida de /api/system-health (commit realmente desplegado).
     if (!(deploymentPending && out.deployments?.ok === true)) {

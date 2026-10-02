@@ -190,7 +190,7 @@ test('product comments render immediately with profile photo or Tintin logo fall
   assert.doesNotMatch(product, /await updateReviewStats/);
 });
 
-test('headers and admin notification feeds recover their live subscriptions', async () => {
+test('headers and admin notification feeds recover without infinite permission retry loops', async () => {
   const [navigation, client, admin] = await Promise.all([
     read('js/components/navigation/compartido/carga-navegacion.js'),
     read('js/components/notifications/notificaciones-clientes.js'),
@@ -198,13 +198,32 @@ test('headers and admin notification feeds recover their live subscriptions', as
   ]);
   assert.match(navigation, /loadNotificationsRuntime/);
   assert.match(navigation, /tintin:auth-nav-updated/);
-  assert.match(client, /subscribeRetryTimer/);
-  assert.match(client, /setTimeout\(\(\) => subscribe\(currentUser\), 1400\)/);
-  assert.match(admin, /notificationsRetryTimer/);
-  assert.match(admin, /setTimeout\(\(\) => subscribeNotifications\(\), 1400\)/);
-  assert.match(admin, /ordersRetryTimer/);
-  assert.match(admin, /setTimeout\(\(\) => subscribeOrderStatusChanges\(\), 1400\)/);
+
+  assert.match(client, /LISTENER_RETRY_DELAYS_MS/);
+  assert.match(client, /permission-denied/);
+  assert.match(client, /getIdToken\(true\)/);
+  assert.match(client, /subscribeAuthRecoveryAttempted/);
+  assert.match(client, /recordAuthDiagnostic/);
+  assert.match(client, /failed-precondition/);
+  assert.doesNotMatch(client, /setTimeout\(\(\) => subscribe\(currentUser\), 1400\)/);
+
+  assert.match(admin, /LISTENER_RETRY_DELAYS_MS/);
+  assert.match(admin, /permission-denied/);
+  assert.match(admin, /getIdToken\(true\)/);
+  assert.match(admin, /waitForAdminAppCheck\(12000\)/);
+  assert.match(admin, /notificationsAuthRecoveryAttempted/);
+  assert.match(admin, /ordersAuthRecoveryAttempted/);
+  assert.match(admin, /recordAuthDiagnostic/);
+  assert.doesNotMatch(admin, /setTimeout\(\(\) => subscribeNotifications\(\), 1400\)/);
+  assert.doesNotMatch(admin, /setTimeout\(\(\) => subscribeOrderStatusChanges\(\), 1400\)/);
   assert.match(admin, /PROFILE_AVATAR_FALLBACK/);
+});
+
+test('customer notification recovery waits for App Check and reopening retries only after it stopped', async () => {
+  const notifications = await read('js/components/notifications/notificaciones-clientes.js');
+  assert.match(notifications, /getIdToken\(true\)\s*\.then\(\(\) => appCheckReady\)/);
+  assert.match(notifications, /listenerFailed && currentUser && !subscribeRetryTimer/);
+  assert.doesNotMatch(notifications, /setTimeout\(\(\) => subscribe\(currentUser\), 1400\)/);
 });
 
 test('opening notifications marks current unread alerts as seen automatically', async () => {
