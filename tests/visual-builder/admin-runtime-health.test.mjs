@@ -35,6 +35,35 @@ test('admin runtime health recorre todas las superficies sin devolver datos', as
   assert.ok(calls.some(([, path]) => path === 'likeRecords'));
 });
 
+test('admin runtime health calienta OAuth primero y limita la concurrencia de lecturas', async () => {
+  let tokenWarmed = false;
+  let active = 0;
+  let maximumActive = 0;
+  const read = async path => {
+    if (path === 'products') {
+      await new Promise(resolve => setTimeout(resolve, 5));
+      tokenWarmed = true;
+      return [];
+    }
+    assert.equal(tokenWarmed, true, 'la primera lectura debe completar antes de las concurrentes');
+    active += 1;
+    maximumActive = Math.max(maximumActive, active);
+    await new Promise(resolve => setTimeout(resolve, 10));
+    active -= 1;
+    return [];
+  };
+  const report = await runAdminRuntimeChecks({}, {
+    access: {
+      get: (_env, path) => read(path),
+      list: (_env, path) => read(path),
+    },
+  });
+
+  assert.equal(report.ok, true);
+  assert.ok(maximumActive > 1, 'las lecturas posteriores al calentamiento se agrupan');
+  assert.ok(maximumActive <= 4, `la concurrencia debe quedar acotada a cuatro, obtuvo ${maximumActive}`);
+});
+
 test('un fallo de un módulo queda aislado y los demás probes siguen corriendo', async () => {
   const visited = [];
   const access = {
