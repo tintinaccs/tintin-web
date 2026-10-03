@@ -14,6 +14,7 @@ function check(name, condition, problem) {
 const runtime = read('js/quality/experiencia-interfaz.js');
 const styles = read('css/quality/experiencia-interfaz.css');
 const loader = read('js/cargador-pagina.js');
+const loaderVersion = read('scripts/sincronizar-inicio-navegacion-publica.js').match(/const LOADER_VERSION = '([^']+)'/)?.[1] || '';
 const packageJson = JSON.parse(read('package.json'));
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
@@ -36,9 +37,9 @@ check(
 
 check(
   'Todas las páginas HTML usan la nueva versión de page-loader',
-  htmlFiles.every(file => {
+  Boolean(loaderVersion) && htmlFiles.every(file => {
     const html = read(file);
-  return !html.includes('js/cargador-pagina.js') || html.includes('js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1');
+    return !html.includes('js/cargador-pagina.js') || html.includes(`js/cargador-pagina.js?v=${loaderVersion}`);
   }),
   'No debe quedar una página cargando el runtime anterior.'
 );

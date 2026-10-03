@@ -14,6 +14,7 @@ const moduleFiles = fs.readdirSync(path.join(root, 'js'))
   .map(file => `js/${file}`);
 
 const loader = read('js/cargador-pagina.js');
+const loaderVersion = read('scripts/sincronizar-inicio-navegacion-publica.js').match(/const LOADER_VERSION = '([^']+)'/)?.[1] || '';
 const firebase = read('js/core/firebase/firebase.js');
 const storeGate = read('js/core/store-gate/nucleo-control-tienda.js');
 const storeGateRuntime = read('js/core/store-gate/control-tienda.js');
@@ -116,10 +117,11 @@ const checks = [
       allRuntime.includes('firebase.js?v=tintin-20260924-auth-popup-resolver-1')
   ],
   [
-    'Todas las páginas fuerzan el loader corregido',
-    htmlFiles.every(file =>
-      read(file).includes('cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1')
-    )
+      'Todas las páginas fuerzan el loader corregido',
+      Boolean(loaderVersion) &&
+      htmlFiles.every(file =>
+        read(file).includes(`cargador-pagina.js?v=${loaderVersion}`)
+      )
   ],
   [
     'La portada no precarga dos veces la hoja principal',

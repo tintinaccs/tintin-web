@@ -105,13 +105,13 @@ body:has(.login-page) #login-profile-name-confirmation .login-profile-change {
   background: #fff;
 }
 
-/* El HTML declara el teléfono antes que la fecha; el orden visual es
-   usuario → fecha → nombre → teléfono → ubicación → continuar. */
+/* El orden visual coincide siempre con el orden de teclado y con el diálogo:
+   nombre, apellido, usuario, teléfono, fecha y ubicación. */
 body:has(.login-page).login-setup-open #login-profile-name-confirmation { order: 0; }
-body:has(.login-page).login-setup-open #login-profile-username-field { order: 1; }
-body:has(.login-page).login-setup-open #login-profile-dob-field { order: 2; }
-body:has(.login-page).login-setup-open #login-profile-name-field { order: 3; }
-body:has(.login-page).login-setup-open #login-profile-phone-field { order: 4; }
+body:has(.login-page).login-setup-open #login-profile-name-field { order: 1; }
+body:has(.login-page).login-setup-open #login-profile-username-field { order: 2; }
+body:has(.login-page).login-setup-open #login-profile-phone-field { order: 3; }
+body:has(.login-page).login-setup-open #login-profile-dob-field { order: 4; }
 body:has(.login-page).login-setup-open #login-profile-address-field { order: 5; }
 body:has(.login-page).login-setup-open #btn-save-profile { order: 6; }
 

@@ -177,13 +177,14 @@ test('una fecha histórica inválida sí se considera faltante', () => {
   assert.equal(plan.needsAddress, false);
 });
 
-test('el alta respeta el orden de foco usuario, nombre, apellido y teléfono', () => {
+test('el alta respeta el orden de foco nombre, apellido, usuario, teléfono y fecha', () => {
   const login = readLogin();
   const fields = [
-    'login-profile-username',
     'login-profile-first-name',
     'login-profile-last-name',
+    'login-profile-username',
     'login-profile-phone',
+    'login-profile-dob',
   ];
   const positions = fields.map((id) => login.indexOf(`id="${id}"`));
 
@@ -193,6 +194,10 @@ test('el alta respeta el orden de foco usuario, nombre, apellido y teléfono', (
   assert.match(login, /id="login-profile-first-name"[^>]*enterkeyhint="next"/);
   assert.match(login, /id="login-profile-last-name"[^>]*enterkeyhint="next"/);
   assert.match(login, /id="login-profile-phone"[^>]*enterkeyhint="next"/);
+  assert.doesNotMatch(
+    fs.readFileSync(new URL('../../css/pages/login/login-onboarding-form-layout.css', import.meta.url), 'utf8'),
+    /#login-profile-username-field\s*\{\s*order:\s*1;/,
+  );
 });
 
 test('Google muestra registro y no crea el perfil hasta confirmar el formulario', () => {

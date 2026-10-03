@@ -19,6 +19,7 @@ import {
     return p.endsWith('/') || p.endsWith('/index.html') || p === '';
   }
   if (!isHome()) return;
+  const releaseWelcomeGate = () => document.documentElement.classList.remove('tt-welcome-pending');
 
   function previewMode(){
     const p = new URLSearchParams(location.search);
@@ -171,7 +172,7 @@ import {
     cleanUrl(); styles();
     let i = 0;
     const steps = (config.steps || DEFAULT_WELCOME_STEPS).filter(s => s && s.active !== false);
-    if (!steps.length) return;
+    if (!steps.length) { releaseWelcomeGate(); return; }
     const ov = document.createElement('div');
     ov.id = 'tt-welcome-tutorial';
     ov.className = 'tt-welcome-overlay';
@@ -189,6 +190,7 @@ import {
       setTimeout(() => {
         ov.remove();
         unlock();
+        releaseWelcomeGate();
         window.dispatchEvent(new CustomEvent('tintin:welcome:closed', { detail: { reason } }));
       }, 240);
     };
@@ -235,38 +237,44 @@ import {
   // paso 1 — se veía como si "se cerrara solo" sin que nadie lo tocara.
   let handled = false;
   subscribeAuthState(async user => {
-    if (!user || handled) return;
+    if (!user) { releaseWelcomeGate(); return; }
+    if (handled) return;
     handled = true;
     try {
       const previewRequested = previewMode() && user.email === SUPER_ADMIN;
       const role = await getUserRole(user.uid, user.email);
-      if (!previewRequested && role !== 'client') return;
+      if (!previewRequested && role !== 'client') { releaseWelcomeGate(); return; }
       const [data, config] = await Promise.all([readUser(user.uid), readConfig()]);
       const preview = previewRequested && config.previewEnabled;
       if (previewRequested && !preview) {
         clearPreviewMode();
         cleanUrl();
+        releaseWelcomeGate();
         return;
       }
       if (!preview && !config.enabled) {
         cleanUrl();
         await markSeen(user.uid, 'disabled').catch(error => console.warn('[welcome-runtime] no se pudo cerrar bienvenida desactivada', error));
+        releaseWelcomeGate();
         return;
       }
       if (!config.steps.some(step => step && step.active !== false)) {
         if (previewRequested) clearPreviewMode();
         else await markSeen(user.uid, 'no_active_steps').catch(error => console.warn('[welcome-runtime] no se pudo cerrar bienvenida vacía', error));
         cleanUrl();
+        releaseWelcomeGate();
         return;
       }
       if (!shouldShow(user, data, preview)) {
         cleanUrl();
+        releaseWelcomeGate();
         return;
       }
       await waitReady();
       show(user, config, preview);
     } catch (e) {
       console.warn('[welcome-runtime] Tutorial omitido:', e);
+      releaseWelcomeGate();
     }
   });
 })();
