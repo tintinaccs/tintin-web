@@ -7,7 +7,7 @@ import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout, crea
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs';
+import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1';
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 // La vista previa embebida es sólo visual: no debe suscribirse a Auth ni leer

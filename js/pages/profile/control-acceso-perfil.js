@@ -76,12 +76,12 @@ function isLoginPage() {
 }
 
 /**
- * El guardia corre en todas las páginas con sesión salvo el login (donde se
- * completa el perfil) y el panel del personal.
+ * El guardia corre en todas las páginas con sesión salvo login, Mi perfil
+ * (donde también se puede completar la cuenta) y el panel del personal.
  */
 function isExemptPage() {
   const page = currentPageName();
-  return page === 'login' || page.startsWith('admin');
+  return page === 'login' || page === 'perfil' || page.startsWith('admin');
 }
 
 let redirecting = false;

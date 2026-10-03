@@ -57,6 +57,11 @@ function injectStyles() {
     .tt-profile-hero{background:#fff;border:1px solid var(--border);border-radius:22px;padding:22px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 12px 34px rgba(85,34,53,.06)}
     .tt-profile-hero-main{display:flex;align-items:center;gap:16px;min-width:0}
     .tt-profile-avatar-actions{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+    .tt-profile-avatar-actions .perfil-avatar{inline-size:72px!important;block-size:72px!important;aspect-ratio:1!important;line-height:0!important;overflow:hidden!important;border-radius:50%!important;flex:0 0 72px!important}
+    .tt-profile-avatar-actions .perfil-avatar>img{inline-size:100%!important;block-size:100%!important;min-inline-size:100%!important;min-block-size:100%!important;max-inline-size:none!important;max-block-size:none!important;object-fit:cover!important;object-position:center!important;display:block!important}
+    [data-auth-account-button]{display:grid!important;place-items:center!important;overflow:hidden!important}
+    [data-auth-account-button]>.tt-account-avatar-btn{inline-size:26px!important;block-size:26px!important;max-inline-size:none!important;max-block-size:none!important;flex:0 0 26px!important;border-radius:50%!important;object-fit:cover!important;object-position:center!important;display:block!important}
+    #tt-tabbar .tt-tabbar-avatar{inline-size:100%!important;block-size:100%!important;max-inline-size:none!important;max-block-size:none!important;border-radius:50%!important;object-fit:cover!important;object-position:center!important;display:block!important}
     .tt-profile-photo-btn{border:1px solid #eac7d4;background:#fff;color:#9e4062;border-radius:999px;padding:7px 11px;font:700 10px/1 Montserrat;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
     .tt-profile-photo-btn:disabled{opacity:.55;cursor:wait}
     .tt-profile-meta{min-width:0}
@@ -220,6 +225,9 @@ async function enhanceProfile() {
         const photoURL = String(uploaded.secure_url);
         await authApi.updateProfile(user, { photoURL });
         await firestoreApi.setDoc(firestoreApi.doc(db, 'users', user.uid), {
+          avatarURL: photoURL,
+          // Se conserva por compatibilidad de paneles antiguos. Las pantallas
+          // nuevas priorizan avatarURL sólo cuando fue una elección explícita.
           photoURL,
           updatedAt: firestoreApi.serverTimestamp(),
         }, { merge: true });
@@ -271,13 +279,17 @@ async function enhanceProfile() {
     <div class="tt-profile-summary-card"><span>Ubicación</span><strong data-profile-summary-location>Sin ubicación guardada</strong></div>`;
 
   const panels = new Map();
-  definitions.forEach((definition, index) => {
+  const requestedPanel = location.hash.replace('#', '');
+  const initialPanel = definitions.some(definition => definition.id === requestedPanel)
+    ? requestedPanel
+    : 'datos';
+  definitions.forEach((definition) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'tt-profile-tab';
     button.dataset.profileTab = definition.id;
     button.setAttribute('role', 'tab');
-    button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+    button.setAttribute('aria-selected', definition.id === initialPanel ? 'true' : 'false');
     button.textContent = definition.label;
     if (definition.id === 'pedidos') {
       const badge = document.createElement('span');
@@ -292,7 +304,7 @@ async function enhanceProfile() {
     panel.className = 'tt-profile-panel';
     panel.dataset.profilePanel = definition.id;
     panel.setAttribute('role', 'tabpanel');
-    panel.hidden = index !== 0;
+    panel.hidden = definition.id !== initialPanel;
     if (definition.id === 'resumen') panel.appendChild(summary);
     definition.nodes.filter(Boolean).forEach(node => panel.appendChild(node));
     host.appendChild(panel);
@@ -327,8 +339,7 @@ async function enhanceProfile() {
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
   await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1');
-  const initial = location.hash.replace('#', '');
-  if (panels.has(initial)) activate(initial);
+  activate(initialPanel);
 }
 
 function boot() {

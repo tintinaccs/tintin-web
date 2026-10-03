@@ -1,12 +1,28 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readAccountIdentity, buildAccountNamePatch, accountReadState, reconcileAccountOrders } from '../../js/pages/profile/estado-canonico-perfil.mjs';
+import { readAccountIdentity, resolveAccountAvatar, buildAccountNamePatch, accountReadState, reconcileAccountOrders } from '../../js/pages/profile/estado-canonico-perfil.mjs';
 
-test('Firestore prevalece sobre el nombre y avatar antiguos de Auth', () => {
+test('Firestore prevalece sobre el nombre, pero un avatar vacío no tapa la foto de Auth', () => {
   const identity = readAccountIdentity({ firstName: 'María', lastName: 'Pérez', name: 'María Pérez', photoURL: '' }, { displayName: 'Nombre viejo', photoURL: 'https://example.com/old.jpg', email: 'cliente@example.com' });
   assert.equal(identity.name, 'María Pérez');
-  assert.equal(identity.photoURL, '');
+  assert.equal(identity.photoURL, 'https://example.com/old.jpg');
   assert.equal(identity.email, 'cliente@example.com');
+});
+
+test('la foto de Google prevalece sobre el valor histórico del perfil', () => {
+  const photoURL = resolveAccountAvatar(
+    { photoURL: 'https://cdn.example.com/legacy-profile.png' },
+    { photoURL: 'https://cdn.example.com/current-auth.png', providerData: [{ providerId: 'google.com', photoURL: 'https://lh3.googleusercontent.com/a/google-photo' }] },
+  );
+  assert.equal(photoURL, 'https://lh3.googleusercontent.com/a/google-photo');
+});
+
+test('una foto elegida explícitamente conserva prioridad sobre Google', () => {
+  const photoURL = resolveAccountAvatar(
+    { avatarURL: 'https://res.cloudinary.com/tintin/image/upload/avatar.png' },
+    { providerData: [{ providerId: 'google.com', photoURL: 'https://lh3.googleusercontent.com/a/google-photo' }] },
+  );
+  assert.equal(photoURL, 'https://res.cloudinary.com/tintin/image/upload/avatar.png');
 });
 
 test('un perfil histórico conserva sus nombres y demás datos', () => {
