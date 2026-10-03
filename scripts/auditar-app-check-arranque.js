@@ -118,7 +118,7 @@ const checks = [
   [
     'Todas las páginas fuerzan el loader corregido',
     htmlFiles.every(file =>
-      read(file).includes('cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1')
+      read(file).includes('cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1')
     )
   ],
   [

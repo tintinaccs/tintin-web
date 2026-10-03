@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1cffa5bfda758bb1e0a08c03aaf8c090cb72d5fe1adc3c03410cd4ea54c74649",
+  "sourceFingerprint": "a23bec7fda4c35f77ad69fb1e7aac521400d5f4280010b484e1dd13701d5dd21",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 943,
     "textFiles": 902,
-    "totalBytes": 18196263,
+    "totalBytes": 18205439,
     "pages": 19,
     "modules": 651
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 12385,
-      "sha256": "177fe431a07dcbe2d2e7b2a6fbc31faec2b87b5297c99556c6b3f6312aa8367c",
+      "bytes": 12389,
+      "sha256": "89943b14f8af52d11929e9983fbe117afad805fbe21bb1078c8096ddcba89679",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -104,7 +104,7 @@
           "line": 6
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -511,7 +511,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -802,8 +802,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22228,
-      "sha256": "f71d4f32a5bf332c4c2467bd6843dd83cd8bda9dfe49a8f37698d585d95f194a",
+      "bytes": 22232,
+      "sha256": "a6eb6eda2d2c0fee1a9c74329deee2623dee0c0c4ccd5b317b6a8fbc75a5bac1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -838,7 +838,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1238,7 +1238,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1543,8 +1543,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43682,
-      "sha256": "f0fc4d5e9023b923eb2e9d9f1474dd403667f9e304dcc3f0d4ba06f7c43fe433",
+      "bytes": 45264,
+      "sha256": "9d591acb461f8c53a0da7a35a26d79a16ba143415404f6b82ff90ac795858fc7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1553,7 +1553,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          385
+          421
         ]
       },
       "duplicateIds": [],
@@ -1565,7 +1565,7 @@
           "error": ""
         },
         {
-          "line": 403,
+          "line": 439,
           "module": true,
           "ok": true,
           "error": ""
@@ -1574,7 +1574,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1586,12 +1586,12 @@
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1-admin-ready-20261002-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 799
+          "line": 835
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 800
+          "line": 836
         }
       ],
       "styles": [
@@ -1648,12 +1648,12 @@
         {
           "raw": "css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1",
           "target": "css/pages/secundarias-minimal.css",
-          "line": 313
+          "line": 349
         },
         {
           "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1",
           "target": "css/theme/sistema-superficies-tintin.css",
-          "line": 314
+          "line": 350
         }
       ],
       "images": [],
@@ -1666,7 +1666,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 323
+          "line": 359
         },
         {
           "raw": "/admin",
@@ -1676,7 +1676,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 339
+          "line": 375
         },
         {
           "raw": "/admin",
@@ -1686,12 +1686,12 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 378
+          "line": 414
         }
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1705,13 +1705,13 @@
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1-admin-ready-20261002-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 799,
+          "line": 835,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 800,
+          "line": 836,
           "exists": true
         },
         {
@@ -1777,31 +1777,31 @@
         {
           "raw": "css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1",
           "target": "css/pages/secundarias-minimal.css",
-          "line": 313,
+          "line": 349,
           "exists": true
         },
         {
           "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1",
           "target": "css/theme/sistema-superficies-tintin.css",
-          "line": 314,
+          "line": 350,
           "exists": true
         },
         {
           "raw": "/login",
           "target": "login.html",
-          "line": 323,
+          "line": 359,
           "exists": true
         },
         {
           "raw": "/admin",
           "target": "admin.html",
-          "line": 339,
+          "line": 375,
           "exists": true
         },
         {
           "raw": "/admin",
           "target": "admin.html",
-          "line": 378,
+          "line": 414,
           "exists": true
         }
       ],
@@ -1823,7 +1823,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 332
+          "line": 368
         },
         {
           "id": "",
@@ -1840,7 +1840,7 @@
             "data-section": "hero"
           },
           "hasSourceReference": true,
-          "line": 346
+          "line": 382
         },
         {
           "id": "",
@@ -1856,7 +1856,7 @@
             "data-section": "productos"
           },
           "hasSourceReference": "",
-          "line": 349
+          "line": 385
         },
         {
           "id": "",
@@ -1872,7 +1872,7 @@
             "data-section": "editorial"
           },
           "hasSourceReference": "",
-          "line": 352
+          "line": 388
         },
         {
           "id": "",
@@ -1888,7 +1888,7 @@
             "data-section": "iconos"
           },
           "hasSourceReference": "",
-          "line": 355
+          "line": 391
         },
         {
           "id": "",
@@ -1904,7 +1904,7 @@
             "data-section": "nosotros"
           },
           "hasSourceReference": "",
-          "line": 358
+          "line": 394
         },
         {
           "id": "",
@@ -1920,7 +1920,7 @@
             "data-section": "branding"
           },
           "hasSourceReference": "",
-          "line": 361
+          "line": 397
         },
         {
           "id": "",
@@ -1936,7 +1936,7 @@
             "data-section": "biblioteca"
           },
           "hasSourceReference": "",
-          "line": 364
+          "line": 400
         },
         {
           "id": "",
@@ -1953,7 +1953,7 @@
             "data-section": "hero"
           },
           "hasSourceReference": true,
-          "line": 371
+          "line": 407
         },
         {
           "id": "",
@@ -1969,7 +1969,7 @@
             "data-section": "productos"
           },
           "hasSourceReference": true,
-          "line": 372
+          "line": 408
         },
         {
           "id": "",
@@ -1985,7 +1985,7 @@
             "data-section": "editorial"
           },
           "hasSourceReference": true,
-          "line": 373
+          "line": 409
         },
         {
           "id": "",
@@ -2001,7 +2001,7 @@
             "data-section": "iconos"
           },
           "hasSourceReference": true,
-          "line": 374
+          "line": 410
         },
         {
           "id": "",
@@ -2017,7 +2017,7 @@
             "data-section": "nosotros"
           },
           "hasSourceReference": true,
-          "line": 375
+          "line": 411
         },
         {
           "id": "",
@@ -2033,7 +2033,7 @@
             "data-section": "branding"
           },
           "hasSourceReference": true,
-          "line": 376
+          "line": 412
         },
         {
           "id": "",
@@ -2049,7 +2049,7 @@
             "data-section": "biblioteca"
           },
           "hasSourceReference": true,
-          "line": 377
+          "line": 413
         },
         {
           "id": "btn-img-bulk-clear",
@@ -2064,7 +2064,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 390
+          "line": 426
         },
         {
           "id": "btn-img-bulk-export",
@@ -2078,7 +2078,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 391
+          "line": 427
         },
         {
           "id": "btn-img-bulk-clear-sel",
@@ -2092,7 +2092,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 392
+          "line": 428
         }
       ],
       "controls": []
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 196636,
-      "sha256": "375b73f2c0ec80ca01970ddcb5d34f0b62d63d5e1310ad4c97d319437245e410",
+      "bytes": 196800,
+      "sha256": "02a8a4a97b13b7df108c1c74d71fb80d304241a3eb0a6fb3222c3df0b2d9655e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2137,7 +2137,7 @@
       "ids": 557,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2157,7 +2157,7 @@
           "line": 2037
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261003-order-email-resend-canonical-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/admin/admin-app.js",
           "line": 2038
         },
@@ -2167,7 +2167,7 @@
           "line": 2039
         },
         {
-          "raw": "js/admin/importacion-admin.js?v=tintin-20260930-sheets-reconcile-3",
+          "raw": "js/admin/importacion-admin.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/admin/importacion-admin.js",
           "line": 2040
         },
@@ -2279,7 +2279,7 @@
           "line": 35
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20261002-admin-brand-layout-1",
+          "raw": "css/admin/admin.css?v=tintin-20261003-superadmin-white-icons-1",
           "target": "css/admin/admin.css",
           "line": 36
         },
@@ -2409,7 +2409,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2433,7 +2433,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261003-order-email-resend-canonical-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/admin/admin-app.js",
           "line": 2038,
           "exists": true
@@ -2445,7 +2445,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/importacion-admin.js?v=tintin-20260930-sheets-reconcile-3",
+          "raw": "js/admin/importacion-admin.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/admin/importacion-admin.js",
           "line": 2040,
           "exists": true
@@ -2577,7 +2577,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20261002-admin-brand-layout-1",
+          "raw": "css/admin/admin.css?v=tintin-20261003-superadmin-white-icons-1",
           "target": "css/admin/admin.css",
           "line": 36,
           "exists": true
@@ -7769,8 +7769,8 @@
         "guest",
         "client"
       ],
-      "bytes": 13699,
-      "sha256": "4fd0effc55070514f58101666e2ec0902693a23a36347432bc384e54d02c8c4b",
+      "bytes": 13703,
+      "sha256": "c1d0a3c06221a3b1a2471b3c6212770ec3514509a62db93a88f7eed01e8ef2fe",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7799,7 +7799,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -8141,7 +8141,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -8396,8 +8396,8 @@
         "guest",
         "client"
       ],
-      "bytes": 54757,
-      "sha256": "b1b3d63ecb871660a700fecbcc1818caf4f17fe4a04c68f88ee7c8b025ab48bb",
+      "bytes": 54761,
+      "sha256": "cae49e176cc22e11b2cf57388201e5507e1c00974b3cf108b6136a78c03aa6c0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8438,7 +8438,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8770,7 +8770,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -9151,8 +9151,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 120864,
-      "sha256": "b803d8f82845424c93673abbf7f917d88d5c628a5bed07e7e0526ebeb3a40033",
+      "bytes": 120868,
+      "sha256": "6edbdd8a458ed3b544898e924d01955cceb3bb1b7a725d5d93dbe37c831ace2c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9187,7 +9187,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -9539,7 +9539,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -10169,8 +10169,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15461,
-      "sha256": "e632832e717eb5145046a0f52cca26ca3338119db0655d3f2e6e5dd09d1bf793",
+      "bytes": 15465,
+      "sha256": "b0da536ca22a353038c1ac8053b1d1732c3d905c691df5f9b1c84a3c4b546291",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10205,7 +10205,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -10562,7 +10562,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -10829,8 +10829,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20189,
-      "sha256": "09d41c55daf838e3cb0cb5d1ca61af0a5aed99cd4722a46debfa9d1055493876",
+      "bytes": 20193,
+      "sha256": "8d9f3f2e5a2cb615f7993bce393a01ccb9e3138e89c80d46b83379d5f06dfe1c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10865,7 +10865,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -11247,7 +11247,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -11562,8 +11562,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17101,
-      "sha256": "b1c458ba1f7d3ca90c2b235876b0270e67784a663d9400ebaee36e43a139c7a9",
+      "bytes": 17105,
+      "sha256": "1097cf94c1cc128b23351ce8e14a6a89e20afadfb7eb196f60dad371cbef2261",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11598,7 +11598,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -11940,7 +11940,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -12235,8 +12235,8 @@
         "guest",
         "client"
       ],
-      "bytes": 33911,
-      "sha256": "5cf072de740d1d0b8930d01a92febd1c8193a9fbff81da4bfed5c7808aa7beae",
+      "bytes": 33915,
+      "sha256": "4ef4d77087db8eb7b1efa2b9380e27659dd63c19aa5dfe8b02b064e9b6470156",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12277,7 +12277,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -12801,7 +12801,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -13283,8 +13283,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 82431,
-      "sha256": "af414b5f3e47edf89827834ffe08de35c19cf43be2248c5b42a02671fbb6da5d",
+      "bytes": 82435,
+      "sha256": "659379d8a3afa9a1bb8f6669a6da52b7d0768447926b84c68c3ba1ffdd3b93fc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13325,7 +13325,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -13507,7 +13507,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -13963,8 +13963,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1833,
-      "sha256": "cda0d934acbc7a0b9f7022f0155dda5669ff283219310927ae303266d6dd657d",
+      "bytes": 1837,
+      "sha256": "b61e74e9d3e4d44100a70ee04b00305819c99804799c39c86c47f00555aa5e9b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13981,7 +13981,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 23
         }
@@ -14028,7 +14028,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 23,
           "exists": true
@@ -14094,8 +14094,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43476,
-      "sha256": "d24fb2553e5bc34038087e37ccccdca604d41260f80ad794f72a54e552b366b3",
+      "bytes": 43480,
+      "sha256": "1d4c8891c7171bdb3a7525d2c435c788db69cb7a5413c6934b097c41a585bd1c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14136,7 +14136,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -14523,7 +14523,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -14923,8 +14923,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14872,
-      "sha256": "2e69b0a5f6b64c9c83f3549409e8151be07392f69bbf5aed584529e2dfcd0587",
+      "bytes": 14876,
+      "sha256": "a88a121ab49b24fa7484b1802f92d6f52c4056ce4396770012aa3ee6fad46f46",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14953,7 +14953,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -15295,7 +15295,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -15550,8 +15550,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17418,
-      "sha256": "dc8ab60e9d266f916784de4fc5ba388a142a25903e7c8b16648d28621c8a824f",
+      "bytes": 17422,
+      "sha256": "e9a1106f168d195abd3e46e9e3c5023180b3ea9e7e277260f322d0b1dd12c930",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15580,7 +15580,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -15947,7 +15947,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -16213,8 +16213,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25075,
-      "sha256": "06950e44a096dd4877cc9ab83275f25e5b7bc65153ec27f2165a28117f7eb24c",
+      "bytes": 25079,
+      "sha256": "68360d54dd204506a59a9ff5631673ea076455aa5668d12a43a0b3618b8d1b27",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16243,7 +16243,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -16660,7 +16660,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -17205,8 +17205,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15212,
-      "sha256": "e1457543b85519dc23c6b683e00a9d2d4498149df972471ecfef9fae40602c6f",
+      "bytes": 15216,
+      "sha256": "2bda5a59cdf22c24761729059dd9bd98f8a42ccc1d6d38e7278e652391adee3e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17228,7 +17228,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -17605,7 +17605,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261002-complete-ui-loader-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -18739,7 +18739,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 351045,
-      "sha256": "adc9a5c4cde71a8c219ca870826bd7f0dc2aca0901c092814fb42b6ba88081d4",
+      "sha256": "3cce49eee9ad75733e7dc489cab9ef63c002eda2b6d352b41ec3ce74c7fe40ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20628,8 +20628,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 467365,
-      "sha256": "54bb77c3961fad9505fa36e6f28359d39c4970f3b1fcfb4c596012886b319425",
+      "bytes": 467240,
+      "sha256": "0a4cf7e01efbf4b859b0ba407357585b3657586bd036f9c9a5e261cb167fc85b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20744,13 +20744,13 @@
           "line": 30
         },
         {
-          "raw": "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 31
         },
         {
-          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1",
           "target": "js/admin/products/biblioteca-multimedia-admin.js",
           "dynamic": false,
           "line": 32
@@ -21487,8 +21487,8 @@
     },
     {
       "path": "js/admin/importacion-admin.js",
-      "bytes": 33794,
-      "sha256": "3a35a7a73989fa8a69c59b7dd443631280b0f555adebfe20486254f22aba69a6",
+      "bytes": 34362,
+      "sha256": "318e30616100d420bddd8498abd395ab298375c19b60ee0c83ac94060767ef51",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21964,8 +21964,8 @@
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
-      "bytes": 15024,
-      "sha256": "204b61be950587a13a421b03ebc5f7b795d7c7fa369f50df6dbc4ce51f4439f1",
+      "bytes": 15479,
+      "sha256": "fc4f55fb9c048c620de0177fbe5d0e638ccf4e68c79355906e447ea7147dac28",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22712,8 +22712,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 46385,
-      "sha256": "406df1f4d3e99beb0860babfa0a29a8f39773c4dd10f9da533795e10e2489281",
+      "bytes": 46337,
+      "sha256": "4527eecda01421f7464dcf5de1367cab6fcdb9d8bbc8414befbce09d0836be59",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23140,8 +23140,8 @@
     },
     {
       "path": "js/components/images/carga-imagenes.js",
-      "bytes": 13167,
-      "sha256": "49127ef68250abea5f86c7b8c8d02756d40abfc2db1d7e42e9bb555f16d3ee34",
+      "bytes": 13726,
+      "sha256": "c23e6c5506223f8620fb2ac63a89804df15bcd61c19dc7dc93cb54eb25d35b04",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26545,8 +26545,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 10153,
-      "sha256": "7e08cf07a27a691cf0bf9db41c841fc0a5494ad3f78f059db313938b6fdaf937",
+      "bytes": 10159,
+      "sha256": "f034f535615627ecc522592255cf53a1d279348b6dd3c230ee7bb80532b63caa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27046,8 +27046,8 @@
     },
     {
       "path": "scripts/auditar-app-check-arranque.js",
-      "bytes": 6286,
-      "sha256": "11cfdb014bf878fe89967c69c26e4a4aa44ea1d408af9e5c4edada9ae406749b",
+      "bytes": 6290,
+      "sha256": "34bba193f0d73aec7eae087dc3caa2125a721712a57a0fe4cd0f5140c6219619",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28140,8 +28140,8 @@
     },
     {
       "path": "scripts/auditar-fase-10-accessibility.js",
-      "bytes": 4651,
-      "sha256": "ac767444c87299d1eabca0f9bb45370b4caedc5a44e1ca80db4802bedc06668c",
+      "bytes": 4655,
+      "sha256": "c16805c6eac6c9c06ea086c0dcc9afeb9aa51b2c547ef07afd7b18a90239bd3f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28245,8 +28245,8 @@
     },
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",
-      "bytes": 6454,
-      "sha256": "86ee1024889c78f6974bc5812f0e446f8f12acf43efef27e3ac1cb51b3bc27e1",
+      "bytes": 6458,
+      "sha256": "bf7aa05698ebe4d29685b43db0247718318fdfbc20072e52341111788a948e3e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28516,8 +28516,8 @@
     },
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
-      "bytes": 26638,
-      "sha256": "160d7f53b272375cc7e96995832cfe62a1bf4cada006704c71ef09c639b5a8bf",
+      "bytes": 26649,
+      "sha256": "28a3a6938213826fd7df37ef798d3d783fe4ac53c61d739ad2a254d43067ddd6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30702,8 +30702,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 15546,
-      "sha256": "43c48d83d97b145cdd6a77d11e192bb988aea5e1e67ab514e8153f8b4ca79067",
+      "bytes": 15550,
+      "sha256": "f190d1b9db34230de0786c6597fdc975750624fff510f618c4bae417c643909c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36216,8 +36216,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 12385,
-      "sha256": "177fe431a07dcbe2d2e7b2a6fbc31faec2b87b5297c99556c6b3f6312aa8367c"
+      "bytes": 12389,
+      "sha256": "89943b14f8af52d11929e9983fbe117afad805fbe21bb1078c8096ddcba89679"
     },
     {
       "path": "AGENTS.md",
@@ -36330,14 +36330,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 22228,
-      "sha256": "f71d4f32a5bf332c4c2467bd6843dd83cd8bda9dfe49a8f37698d585d95f194a"
+      "bytes": 22232,
+      "sha256": "a6eb6eda2d2c0fee1a9c74329deee2623dee0c0c4ccd5b317b6a8fbc75a5bac1"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 43682,
-      "sha256": "f0fc4d5e9023b923eb2e9d9f1474dd403667f9e304dcc3f0d4ba06f7c43fe433"
+      "bytes": 45264,
+      "sha256": "9d591acb461f8c53a0da7a35a26d79a16ba143415404f6b82ff90ac795858fc7"
     },
     {
       "path": "admin-manifest.json",
@@ -36348,8 +36348,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 196636,
-      "sha256": "375b73f2c0ec80ca01970ddcb5d34f0b62d63d5e1310ad4c97d319437245e410"
+      "bytes": 196800,
+      "sha256": "02a8a4a97b13b7df108c1c74d71fb80d304241a3eb0a6fb3222c3df0b2d9655e"
     },
     {
       "path": "apple-touch-icon.png",
@@ -36624,20 +36624,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 13699,
-      "sha256": "4fd0effc55070514f58101666e2ec0902693a23a36347432bc384e54d02c8c4b"
+      "bytes": 13703,
+      "sha256": "c1d0a3c06221a3b1a2471b3c6212770ec3514509a62db93a88f7eed01e8ef2fe"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 54757,
-      "sha256": "b1b3d63ecb871660a700fecbcc1818caf4f17fe4a04c68f88ee7c8b025ab48bb"
+      "bytes": 54761,
+      "sha256": "cae49e176cc22e11b2cf57388201e5507e1c00974b3cf108b6136a78c03aa6c0"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 120864,
-      "sha256": "b803d8f82845424c93673abbf7f917d88d5c628a5bed07e7e0526ebeb3a40033"
+      "bytes": 120868,
+      "sha256": "6edbdd8a458ed3b544898e924d01955cceb3bb1b7a725d5d93dbe37c831ace2c"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -36834,8 +36834,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 15461,
-      "sha256": "e632832e717eb5145046a0f52cca26ca3338119db0655d3f2e6e5dd09d1bf793"
+      "bytes": 15465,
+      "sha256": "b0da536ca22a353038c1ac8053b1d1732c3d905c691df5f9b1c84a3c4b546291"
     },
     {
       "path": "config/account-contract.json",
@@ -36847,13 +36847,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 351045,
-      "sha256": "adc9a5c4cde71a8c219ca870826bd7f0dc2aca0901c092814fb42b6ba88081d4"
+      "sha256": "3cce49eee9ad75733e7dc489cab9ef63c002eda2b6d352b41ec3ce74c7fe40ed"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 350960,
-      "sha256": "2814f76c625fe8e30e5a9f750c8fd473f136198f930c773ea0c8d7b304200a1a"
+      "sha256": "7d83b6a3baf8a8da83c10cfe5596e64c7cf2e21eb6f15504aec170e1eac908a6"
     },
     {
       "path": "config/public-site.json",
@@ -36870,8 +36870,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 20189,
-      "sha256": "09d41c55daf838e3cb0cb5d1ca61af0a5aed99cd4722a46debfa9d1055493876"
+      "bytes": 20193,
+      "sha256": "8d9f3f2e5a2cb615f7993bce393a01ccb9e3138e89c80d46b83379d5f06dfe1c"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -36882,8 +36882,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 97513,
-      "sha256": "89f573138777746232a648bfe57c9266a1d1a1bb620c100a814cf937e2926c39"
+      "bytes": 100190,
+      "sha256": "3c5db43eba04f46a838d9612e9aa53628bf492503e6bb65ba59aee1a5194c891"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -37362,8 +37362,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 150630,
-      "sha256": "6c47df63cc69d9f31cb9c1cf6e07895f63c35f050a450731980bded992afb144"
+      "bytes": 154042,
+      "sha256": "d38d56080afca7c372f6a8df114024f9a20540c9cc3e9be519b7728a34e8e153"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -37698,8 +37698,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 17101,
-      "sha256": "b1c458ba1f7d3ca90c2b235876b0270e67784a663d9400ebaee36e43a139c7a9"
+      "bytes": 17105,
+      "sha256": "1097cf94c1cc128b23351ce8e14a6a89e20afadfb7eb196f60dad371cbef2261"
     },
     {
       "path": "favicon-16x16.png",
@@ -38184,14 +38184,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 33911,
-      "sha256": "5cf072de740d1d0b8930d01a92febd1c8193a9fbff81da4bfed5c7808aa7beae"
+      "bytes": 33915,
+      "sha256": "4ef4d77087db8eb7b1efa2b9380e27659dd63c19aa5dfe8b02b064e9b6470156"
     },
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 467365,
-      "sha256": "54bb77c3961fad9505fa36e6f28359d39c4970f3b1fcfb4c596012886b319425"
+      "bytes": 467240,
+      "sha256": "0a4cf7e01efbf4b859b0ba407357585b3657586bd036f9c9a5e261cb167fc85b"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -38316,8 +38316,8 @@
     {
       "path": "js/admin/importacion-admin.js",
       "extension": ".js",
-      "bytes": 33794,
-      "sha256": "3a35a7a73989fa8a69c59b7dd443631280b0f555adebfe20486254f22aba69a6"
+      "bytes": 34362,
+      "sha256": "318e30616100d420bddd8498abd395ab298375c19b60ee0c83ac94060767ef51"
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
@@ -38400,8 +38400,8 @@
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
       "extension": ".js",
-      "bytes": 15024,
-      "sha256": "204b61be950587a13a421b03ebc5f7b795d7c7fa369f50df6dbc4ce51f4439f1"
+      "bytes": 15479,
+      "sha256": "fc4f55fb9c048c620de0177fbe5d0e638ccf4e68c79355906e447ea7147dac28"
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
@@ -38538,8 +38538,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 46385,
-      "sha256": "406df1f4d3e99beb0860babfa0a29a8f39773c4dd10f9da533795e10e2489281"
+      "bytes": 46337,
+      "sha256": "4527eecda01421f7464dcf5de1367cab6fcdb9d8bbc8414befbce09d0836be59"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -38658,8 +38658,8 @@
     {
       "path": "js/components/images/carga-imagenes.js",
       "extension": ".js",
-      "bytes": 13167,
-      "sha256": "49127ef68250abea5f86c7b8c8d02756d40abfc2db1d7e42e9bb555f16d3ee34"
+      "bytes": 13726,
+      "sha256": "c23e6c5506223f8620fb2ac63a89804df15bcd61c19dc7dc93cb54eb25d35b04"
     },
     {
       "path": "js/components/images/gestion-imagenes.js",
@@ -39558,8 +39558,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 10153,
-      "sha256": "7e08cf07a27a691cf0bf9db41c841fc0a5494ad3f78f059db313938b6fdaf937"
+      "bytes": 10159,
+      "sha256": "f034f535615627ecc522592255cf53a1d279348b6dd3c230ee7bb80532b63caa"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -39636,8 +39636,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 82431,
-      "sha256": "af414b5f3e47edf89827834ffe08de35c19cf43be2248c5b42a02671fbb6da5d"
+      "bytes": 82435,
+      "sha256": "659379d8a3afa9a1bb8f6669a6da52b7d0768447926b84c68c3ba1ffdd3b93fc"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -39822,8 +39822,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1833,
-      "sha256": "cda0d934acbc7a0b9f7022f0155dda5669ff283219310927ae303266d6dd657d"
+      "bytes": 1837,
+      "sha256": "b61e74e9d3e4d44100a70ee04b00305819c99804799c39c86c47f00555aa5e9b"
     },
     {
       "path": "package-lock.json",
@@ -39840,8 +39840,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 43476,
-      "sha256": "d24fb2553e5bc34038087e37ccccdca604d41260f80ad794f72a54e552b366b3"
+      "bytes": 43480,
+      "sha256": "1d4c8891c7171bdb3a7525d2c435c788db69cb7a5413c6934b097c41a585bd1c"
     },
     {
       "path": "playwright.config.js",
@@ -39858,20 +39858,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 14872,
-      "sha256": "2e69b0a5f6b64c9c83f3549409e8151be07392f69bbf5aed584529e2dfcd0587"
+      "bytes": 14876,
+      "sha256": "a88a121ab49b24fa7484b1802f92d6f52c4056ce4396770012aa3ee6fad46f46"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 17418,
-      "sha256": "dc8ab60e9d266f916784de4fc5ba388a142a25903e7c8b16648d28621c8a824f"
+      "bytes": 17422,
+      "sha256": "e9a1106f168d195abd3e46e9e3c5023180b3ea9e7e277260f322d0b1dd12c930"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 25075,
-      "sha256": "06950e44a096dd4877cc9ab83275f25e5b7bc65153ec27f2165a28117f7eb24c"
+      "bytes": 25079,
+      "sha256": "68360d54dd204506a59a9ff5631673ea076455aa5668d12a43a0b3618b8d1b27"
     },
     {
       "path": "robots.txt",
@@ -39966,8 +39966,8 @@
     {
       "path": "scripts/auditar-app-check-arranque.js",
       "extension": ".js",
-      "bytes": 6286,
-      "sha256": "11cfdb014bf878fe89967c69c26e4a4aa44ea1d408af9e5c4edada9ae406749b"
+      "bytes": 6290,
+      "sha256": "34bba193f0d73aec7eae087dc3caa2125a721712a57a0fe4cd0f5140c6219619"
     },
     {
       "path": "scripts/auditar-artefacto-produccion.mjs",
@@ -40218,8 +40218,8 @@
     {
       "path": "scripts/auditar-fase-10-accessibility.js",
       "extension": ".js",
-      "bytes": 4651,
-      "sha256": "ac767444c87299d1eabca0f9bb45370b4caedc5a44e1ca80db4802bedc06668c"
+      "bytes": 4655,
+      "sha256": "c16805c6eac6c9c06ea086c0dcc9afeb9aa51b2c547ef07afd7b18a90239bd3f"
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
@@ -40254,8 +40254,8 @@
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",
       "extension": ".js",
-      "bytes": 6454,
-      "sha256": "86ee1024889c78f6974bc5812f0e446f8f12acf43efef27e3ac1cb51b3bc27e1"
+      "bytes": 6458,
+      "sha256": "bf7aa05698ebe4d29685b43db0247718318fdfbc20072e52341111788a948e3e"
     },
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
@@ -40320,8 +40320,8 @@
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
       "extension": ".js",
-      "bytes": 26638,
-      "sha256": "160d7f53b272375cc7e96995832cfe62a1bf4cada006704c71ef09c639b5a8bf"
+      "bytes": 26649,
+      "sha256": "28a3a6938213826fd7df37ef798d3d783fe4ac53c61d739ad2a254d43067ddd6"
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
@@ -40692,8 +40692,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 60352,
-      "sha256": "da35290b6360384c77a28a94fad31e9742b476db57f9a804a7766430a25da61c"
+      "bytes": 60187,
+      "sha256": "45b367c18955d35fd2899c0b83d0271ac06966c0f311a16cdc7b963302c75207"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -40848,8 +40848,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 15546,
-      "sha256": "43c48d83d97b145cdd6a77d11e192bb988aea5e1e67ab514e8153f8b4ca79067"
+      "bytes": 15550,
+      "sha256": "f190d1b9db34230de0786c6597fdc975750624fff510f618c4bae417c643909c"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -40926,8 +40926,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 15212,
-      "sha256": "e1457543b85519dc23c6b683e00a9d2d4498149df972471ecfef9fae40602c6f"
+      "bytes": 15216,
+      "sha256": "2bda5a59cdf22c24761729059dd9bd98f8a42ccc1d6d38e7278e652391adee3e"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -44864,7 +44864,7 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 775,
+            "line": 811,
             "operation": "doc"
           },
           {

@@ -42,6 +42,7 @@ function ensureStyles() {
     .tt-iuw-preview img{width:100%;height:100%;object-fit:cover;display:block}
     .tt-iuw-preview-empty{font-size:11px;color:#b98a9c;text-align:center;padding:6px}
     .tt-iuw-drop{flex:1 1 180px;min-width:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 10px;border-radius:10px;cursor:pointer;text-align:center;background:rgba(173,63,103,.03)}
+    .tt-iuw-drop>svg{box-sizing:content-box;width:22px;height:22px;padding:8px;border-radius:10px;background:#8B2642;color:#fff;stroke:currentColor}
     .tt-iuw-drop:hover{background:rgba(173,63,103,.07)}
     .tt-iuw-drop-text{font:600 12px Montserrat,sans-serif;color:#AD3F67}
     .tt-iuw-drop-sub{font:400 10.5px Montserrat,sans-serif;color:#9a9a9a}
@@ -51,6 +52,7 @@ function ensureStyles() {
     .tt-iuw-btn:disabled{opacity:.5;cursor:not-allowed}
     .tt-iuw-btn-danger{color:#b23a3a;border-color:#e8c3c3}
     .tt-iuw-btn-primary{background:#AD3F67;border-color:#AD3F67;color:#fff;flex:1 1 150px;min-width:150px}
+    .tt-iuw-upload-action-icon{display:inline-flex;align-items:center;margin-right:6px;color:#fff;vertical-align:middle}
     .tt-iuw-btn-primary:hover{background:#95355a}
     .tt-iuw-btn-primary:disabled:hover{background:#AD3F67}
     .tt-iuw-progress{margin-top:8px;height:6px;border-radius:999px;background:#f1e3e8;overflow:hidden;display:none}
@@ -67,7 +69,7 @@ function ensureStyles() {
 }
 
 function iconSvg() {
-  return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 16.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/><path d="M7 9l5-5 5 5"/><path d="M12 4v13"/></svg>`;
+  return `<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/><path d="M7 9l5-5 5 5"/><path d="M12 4v13"/></svg>`;
 }
 
 /**
@@ -160,6 +162,12 @@ export function attachImageUploadWidget(container, options = {}) {
     button.type = 'button';
     button.className = className;
     button.textContent = text;
+    if (className.includes('tt-iuw-btn-primary')) {
+      const icon = document.createElement('span');
+      icon.className = 'tt-iuw-upload-action-icon';
+      icon.innerHTML = iconSvg();
+      button.prepend(icon);
+    }
     button.addEventListener('click', handler);
     return button;
   }
