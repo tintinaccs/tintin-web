@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d19c6bc0f918cc7ff9cad3b86fefdc36f4957b451036a8d3c0757a4ace15ac93",
+  "sourceFingerprint": "04a7c37cc080c4d5795bb6aa810ec4d7ed8affc66da40bb0a6a6b862b9e896f3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 944,
     "textFiles": 903,
-    "totalBytes": 18211184,
+    "totalBytes": 18212255,
     "pages": 19,
     "modules": 652
   },
@@ -17863,8 +17863,8 @@
   "modules": [
     {
       "path": "cloudflare/admin-runtime-health.js",
-      "bytes": 3655,
-      "sha256": "108f248a16155c32b9c167d42989c764d353046256f7433c35591dea15ed5e7b",
+      "bytes": 3726,
+      "sha256": "457b5a70c6ff31f928276f5bf123f36c470c2014f00081b72cccd32dc7bcb8e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35649,8 +35649,8 @@
     },
     {
       "path": "tests/visual-builder/admin-runtime-health.test.mjs",
-      "bytes": 4357,
-      "sha256": "11c07807e55ee0d27bd760f6b3005e623030d23ee07ce30254656ee6a98cb383",
+      "bytes": 5357,
+      "sha256": "b60235cc06c4f57c5770842b400fb410dd896c265390e062ec4f19986bb1a84c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35696,15 +35696,15 @@
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/api/admin-runtime-health",
-          "line": 71
+          "line": 100
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 73
+          "line": 102
         },
         {
           "url": "https://tintinaccesorios.pages.dev/api/system-health",
-          "line": 84
+          "line": 113
         }
       ]
     },
@@ -36690,8 +36690,8 @@
     {
       "path": "cloudflare/admin-runtime-health.js",
       "extension": ".js",
-      "bytes": 3655,
-      "sha256": "108f248a16155c32b9c167d42989c764d353046256f7433c35591dea15ed5e7b"
+      "bytes": 3726,
+      "sha256": "457b5a70c6ff31f928276f5bf123f36c470c2014f00081b72cccd32dc7bcb8e9"
     },
     {
       "path": "cloudflare/apps-script-fetch.js",
@@ -41760,8 +41760,8 @@
     {
       "path": "tests/visual-builder/admin-runtime-health.test.mjs",
       "extension": ".mjs",
-      "bytes": 4357,
-      "sha256": "11c07807e55ee0d27bd760f6b3005e623030d23ee07ce30254656ee6a98cb383"
+      "bytes": 5357,
+      "sha256": "b60235cc06c4f57c5770842b400fb410dd896c265390e062ec4f19986bb1a84c"
     },
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
