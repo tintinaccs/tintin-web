@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "16bf5e694c972d492d319bdee1ac2f8c2b73b9fb6833a238f997518b1ecaaaf6",
+  "sourceFingerprint": "1d8fb11c12ee42b06ee7f55b269fb0a4d97f77ec176b7e5eaee7a9fce50fa48d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 944,
     "textFiles": 903,
-    "totalBytes": 18208480,
+    "totalBytes": 18208629,
     "pages": 19,
     "modules": 652
   },
@@ -27071,8 +27071,8 @@
     },
     {
       "path": "scripts/auditar-app-check-arranque.js",
-      "bytes": 6290,
-      "sha256": "34bba193f0d73aec7eae087dc3caa2125a721712a57a0fe4cd0f5140c6219619",
+      "bytes": 6439,
+      "sha256": "5a66d3b06a438cd63dd39cbcfefc382a974513887d168cf60dc797967dc1308b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27081,7 +27081,7 @@
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 35
+          "line": 36
         }
       ]
     },
@@ -40021,8 +40021,8 @@
     {
       "path": "scripts/auditar-app-check-arranque.js",
       "extension": ".js",
-      "bytes": 6290,
-      "sha256": "34bba193f0d73aec7eae087dc3caa2125a721712a57a0fe4cd0f5140c6219619"
+      "bytes": 6439,
+      "sha256": "5a66d3b06a438cd63dd39cbcfefc382a974513887d168cf60dc797967dc1308b"
     },
     {
       "path": "scripts/auditar-artefacto-produccion.mjs",
