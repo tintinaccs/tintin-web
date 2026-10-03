@@ -19,7 +19,7 @@ test('la bienvenida mantiene la tienda oculta hasta cerrar el mensaje', () => {
   const home = fs.readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
   assert.match(home, /tt-welcome-pending/);
   assert.match(welcome, /releaseWelcomeGate/);
-  assert.match(welcome, /releaseWelcomeGate\(\);\n        window\.dispatchEvent/);
+  assert.match(welcome, /releaseWelcomeGate\(\);\r?\n        window\.dispatchEvent/);
 });
 
 test('avatar de cuenta y pie público conservan una superficie limpia', () => {
