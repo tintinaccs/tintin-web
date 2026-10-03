@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const loaderVersion = read('scripts/sincronizar-inicio-navegacion-publica.js').match(/const LOADER_VERSION = '([^']+)'/)?.[1] || '';
 const checks = [];
 function check(name, condition, problem) { checks.push({ name, ok: Boolean(condition), problem }); }
 
@@ -17,7 +18,7 @@ const pkg = JSON.parse(read('package.json'));
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
 check('La Fase 10 se inicia desde el runtime compartido', /accesibilidad-global\.js/.test(loader) && /TintinPhase10ImportStarted/.test(loader), 'Debe cargarse una sola vez en todas las páginas que usan page-loader.');
-check('Todas las páginas usan la versión de caché vigente', htmlFiles.every(file => !read(file).includes('js/cargador-pagina.js') || read(file).includes('js/cargador-pagina.js?v=tintin-20261003-superadmin-white-icons-1')), 'No debe quedar una página con el loader anterior.');
+check('Todas las páginas usan la versión de caché vigente', Boolean(loaderVersion) && htmlFiles.every(file => !read(file).includes('js/cargador-pagina.js') || read(file).includes(`js/cargador-pagina.js?v=${loaderVersion}`)), 'Cada página debe coincidir con LOADER_VERSION, la autoridad canónica.');
 check('Existe enlace para saltar al contenido', /ensureSkipLink/.test(runtime) && /Saltar al contenido principal/.test(runtime) && /tt-skip-link/.test(css), 'La navegación por teclado debe poder evitar cabeceras repetidas.');
 check(
   'Los controles personalizados funcionan con teclado',
