@@ -61,25 +61,31 @@ export async function runAdminRuntimeChecks(env, { access = DEFAULT_ACCESS } = {
     checks[id] = await runProbe(id, callback);
   };
 
-  // La primera lectura calienta el token OAuth cacheado del helper. El resto
-  // se ejecuta secuencialmente para no disparar múltiples intercambios OAuth
-  // simultáneos en un isolate nuevo de Cloudflare.
+  // La primera lectura calienta el token OAuth cacheado del helper. Después
+  // agrupamos hasta cuatro lecturas en paralelo: evita intercambios OAuth
+  // simultáneos en un isolate frío sin sumar latencia de red por cada sonda.
   await probe('products', () => access.list(env, 'products', 1));
-  await probe('productInventory', () => access.list(env, 'productInventory', 1));
-  await probe('collections', () => access.list(env, 'collections', 1));
-  await probe('orders', () => access.list(env, 'orders', 1));
-  await probe('users', () => access.list(env, 'users', 1));
-  await probe('reviews', () => access.list(env, 'reviewRecords', 1));
-  await probe('likes', () => access.list(env, 'likeRecords', 1));
-  await probe('emailLogs', () => access.list(env, 'emailLogs', 1));
-  await probe('auditLog', () => access.list(env, 'auditLog', 1));
-  await probe('settings', () => access.get(env, 'settings/general'));
-  await probe('siteContent', () => access.get(env, 'site_content/index'));
-  await probe('visualBuilder', async () => {
-    await access.get(env, 'visualBuilderPages/index');
-    await access.get(env, 'visualBuilderDrafts/index');
-    await access.list(env, 'visualBuilderHistory', 1);
-  });
+  await Promise.all([
+    probe('productInventory', () => access.list(env, 'productInventory', 1)),
+    probe('collections', () => access.list(env, 'collections', 1)),
+    probe('orders', () => access.list(env, 'orders', 1)),
+    probe('users', () => access.list(env, 'users', 1)),
+  ]);
+  await Promise.all([
+    probe('reviews', () => access.list(env, 'reviewRecords', 1)),
+    probe('likes', () => access.list(env, 'likeRecords', 1)),
+    probe('emailLogs', () => access.list(env, 'emailLogs', 1)),
+    probe('auditLog', () => access.list(env, 'auditLog', 1)),
+  ]);
+  await Promise.all([
+    probe('settings', () => access.get(env, 'settings/general')),
+    probe('siteContent', () => access.get(env, 'site_content/index')),
+    probe('visualBuilder', async () => {
+      await access.get(env, 'visualBuilderPages/index');
+      await access.get(env, 'visualBuilderDrafts/index');
+      await access.list(env, 'visualBuilderHistory', 1);
+    }),
+  ]);
 
   const ok = ADMIN_RUNTIME_CHECK_IDS.every(id => checks[id]?.ok === true);
   return {
