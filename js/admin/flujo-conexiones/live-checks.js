@@ -33,6 +33,27 @@ function ciNote(currentEvidence, key, label) {
   return `GitHub CI · ${label}=${check.state || 'NOT_VERIFIED'} · commit ${commit}`;
 }
 
+// El webhook de productos se prueba con un POST SIN secreto: el guard lo
+// rechaza (401) antes de leer el cuerpo, así que no escribe nada. Confirma
+// que la revisión esperada está desplegada y que el servidor tiene el secreto
+// configurado ('missing-header' y no 'server-secret-missing'). No repite la
+// escritura Sheets → Firestore: por eso queda parcial, nunca verde.
+export const PRODUCTS_WEBHOOK_EXPECTED_REVISION = 'products-canonical-v3';
+
+export function classifySheetsWebhookProbe(probe) {
+  if (!probe) return null;
+  const revisionOk = probe.revision === PRODUCTS_WEBHOOK_EXPECTED_REVISION;
+  const guardOk = probe.status === 401 && probe.authState === 'missing-header';
+  const ok = revisionOk && guardOk;
+  const note = `POST /api/sheets-products-webhook sin secreto → HTTP ${probe.status || 'sin respuesta'}`
+    + ` · revisión=${probe.revision || 'ausente'} · guard=${probe.authState || 'desconocido'}`
+    + (ok ? '; escritura Sheets → Firestore no probada' : '');
+  // El 401 esperado es el éxito de esta sonda; si falla, se informa con el
+  // estado real (o 500 cuando el guard responde pero algo no coincide).
+  const status = ok ? 200 : (probe.status === 401 || (probe.status >= 200 && probe.status < 300) ? 500 : Number(probe.status || 0));
+  return { ok, note, status };
+}
+
 export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, protectedProbes = {}, sessionProbe = {}, currentEvidence }, checkedAt) {
   const out = {};
   const setFrom = (id, ok, note, options = {}) => {
@@ -170,6 +191,11 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     setFrom(id, probe.ok === true,
       `GET /api/engagement · ${label} ${probe.ok === true ? 'disponibles' : 'no confirmadas'}; mutación no probada`,
       { status: probe.status, promote: false, partial: probe.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
+  }
+  const sheetsWebhook = classifySheetsWebhookProbe(protectedProbes.sheetsWebhook);
+  if (sheetsWebhook) {
+    setFrom('sheets-products-webhook', sheetsWebhook.ok, sheetsWebhook.note,
+      { status: sheetsWebhook.status, promote: false, partial: sheetsWebhook.ok, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
   }
   const cartRules = protectedProbes.firestoreRules?.cart;
   if (cartRules) {
@@ -349,6 +375,9 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       `GET /api/engagement · ${label} ${probe.ok === true ? 'disponibles' : 'no confirmadas'}; mutación no probada`,
       probe.status || 0, { promote: false, partial: probe.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
   }
+  const sheetsWebhook = classifySheetsWebhookProbe(protectedProbes.sheetsWebhook);
+  if (sheetsWebhook) set('apps-script', 'sheets-products-webhook', sheetsWebhook.ok, sheetsWebhook.note,
+    sheetsWebhook.status, { promote: false, partial: sheetsWebhook.ok, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
   const cartRules = protectedProbes.firestoreRules?.cart;
   if (cartRules) set('firestore', 'carrito', cartRules.ok === true,
     `SDK Firestore autenticado · lectura del carrito propio ${cartRules.ok === true ? 'permitida' : 'no confirmada'}; persistencia/edición no probadas`,

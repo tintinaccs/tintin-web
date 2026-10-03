@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ec63eee13620695fff45ac0a240ad82d84018dbd21ed9515cefd8ec2822b07d9",
+  "sourceFingerprint": "373a66fef300a51cd86546a5cddad319d82badad2c458ddb433632269060a7af",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 944,
-    "textFiles": 903,
-    "totalBytes": 18209993,
+    "files": 945,
+    "textFiles": 904,
+    "totalBytes": 18215738,
     "pages": 19,
-    "modules": 652
+    "modules": 653
   },
   "viewports": [
     {
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 196650,
-      "sha256": "422771f53eab8ac9cb55e5b55108ddc40a15ed7e5916fdf74b75f02d84b6f7a9",
+      "bytes": 196648,
+      "sha256": "7270674701888d633af6b753c9d786e8c028201d88b0e01cc51e4fdd1237f2a3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2157,7 +2157,7 @@
           "line": 2037
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261003-superadmin-white-icons-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261003-sheets-webhook-probe-1",
           "target": "js/admin/admin-app.js",
           "line": 2038
         },
@@ -2433,7 +2433,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261003-superadmin-white-icons-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261003-sheets-webhook-probe-1",
           "target": "js/admin/admin-app.js",
           "line": 2038,
           "exists": true
@@ -20653,8 +20653,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 467240,
-      "sha256": "0a4cf7e01efbf4b859b0ba407357585b3657586bd036f9c9a5e261cb167fc85b",
+      "bytes": 467232,
+      "sha256": "13291434818d35596d00ffdd6c91a5bc207fd1f806070657613886c0eb5a10e7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20787,7 +20787,7 @@
           "line": 33
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-order-email-resend-canonical-2",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-sheets-webhook-probe-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 34
@@ -21407,8 +21407,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 33019,
-      "sha256": "d515713437c0fb01631580507ae69b91fb3e8eb1afa4d7f09b58a7e2071dc84e",
+      "bytes": 33942,
+      "sha256": "0b93d89f51f9c3f559e4f627fe03e86f48ebf3f9fe580899a468f5986c6bec53",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21427,7 +21427,7 @@
           "line": 12
         },
         {
-          "raw": "./live-checks.js?v=tintin-20261003-order-email-resend-canonical-2",
+          "raw": "./live-checks.js?v=tintin-20261003-sheets-webhook-probe-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 13
@@ -21466,8 +21466,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 24801,
-      "sha256": "cc8e0ed8427539a759a1a0275bc67aef2fe0330fdba7275229ca086bdf7fd8d1",
+      "bytes": 26752,
+      "sha256": "10b923348f4759a5131568be75347b8a3e8ed503cee7502dfe0721c63e847098",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32975,6 +32975,54 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/sheets-webhook-probe.test.mjs",
+      "bytes": 2899,
+      "sha256": "49a9a1b2ce608e46be8461a8f13c137ad3722d4f0d529d9034f195cbd2d58100",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+          "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/estado-flujo.js",
+          "target": "js/admin/flujo-conexiones/estado-flujo.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/live-checks.js",
+          "target": "js/admin/flujo-conexiones/live-checks.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "../../functions/api/sheets-products-webhook.js",
+          "target": "functions/api/sheets-products-webhook.js",
+          "dynamic": false,
+          "line": 11
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/functions/page-loader-route.test.mjs",
       "bytes": 541,
       "sha256": "e94bd70268f012462fbdbc295a866308e8bea882d1e2ba6870ce025e4f404fe7",
@@ -36403,8 +36451,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 196650,
-      "sha256": "422771f53eab8ac9cb55e5b55108ddc40a15ed7e5916fdf74b75f02d84b6f7a9"
+      "bytes": 196648,
+      "sha256": "7270674701888d633af6b753c9d786e8c028201d88b0e01cc51e4fdd1237f2a3"
     },
     {
       "path": "apple-touch-icon.png",
@@ -38245,8 +38293,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 467240,
-      "sha256": "0a4cf7e01efbf4b859b0ba407357585b3657586bd036f9c9a5e261cb167fc85b"
+      "bytes": 467232,
+      "sha256": "13291434818d35596d00ffdd6c91a5bc207fd1f806070657613886c0eb5a10e7"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -38347,14 +38395,14 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 33019,
-      "sha256": "d515713437c0fb01631580507ae69b91fb3e8eb1afa4d7f09b58a7e2071dc84e"
+      "bytes": 33942,
+      "sha256": "0b93d89f51f9c3f559e4f627fe03e86f48ebf3f9fe580899a468f5986c6bec53"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 24801,
-      "sha256": "cc8e0ed8427539a759a1a0275bc67aef2fe0330fdba7275229ca086bdf7fd8d1"
+      "bytes": 26752,
+      "sha256": "10b923348f4759a5131568be75347b8a3e8ed503cee7502dfe0721c63e847098"
     },
     {
       "path": "js/admin/flujo-conexiones/sellos-flujo.js",
@@ -40747,8 +40795,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 60037,
-      "sha256": "8f4f1c0f42b37baeb254320f1c432e9c681b9dd3f81e501011ef34e4eb439721"
+      "bytes": 60019,
+      "sha256": "1d369f7cb9f95542f527fb9aaa87d877e8eb0509f744c55a83263ca75c0a3fae"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -41325,6 +41373,12 @@
       "extension": ".mjs",
       "bytes": 2622,
       "sha256": "2f27bbcf5e38f0b342f6fc128e009a5692ba783bfaded662e38cbcdf610ff88d"
+    },
+    {
+      "path": "tests/flow-connections/sheets-webhook-probe.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2899,
+      "sha256": "49a9a1b2ce608e46be8461a8f13c137ad3722d4f0d529d9034f195cbd2d58100"
     },
     {
       "path": "tests/functions/page-loader-route.test.mjs",
@@ -42190,7 +42244,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 534,
+      "line": 557,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -43582,13 +43636,19 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 534,
+      "line": 194,
+      "target": "/api/sheets-products-webhook",
+      "method": "POST"
+    },
+    {
+      "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
+      "line": 557,
       "target": "/admin.html",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 617,
+      "line": 640,
       "target": "/diagnostic-manifest.json",
       "method": "GET"
     },
@@ -45000,7 +45060,7 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 222,
+            "line": 244,
             "operation": "doc"
           },
           {
