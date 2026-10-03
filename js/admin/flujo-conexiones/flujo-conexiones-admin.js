@@ -10,7 +10,7 @@
 // del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261003-order-email-resend-canonical-2';
 import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261003-order-email-resend-canonical-2';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261003-sheets-webhook-probe-1';
 import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261001-sellos-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1-launch-20260926-1-admin-ready-20261002-1';
@@ -183,6 +183,28 @@ async function probeEngagementStats(user) {
   } catch {
     const unreadable = { ok: false, status: 0, error: 'no se pudo leer un producto para el probe' };
     return { likes: unreadable, reviews: unreadable };
+  }
+}
+
+// POST sin el secreto de Sheets: el webhook lo rechaza con 401 antes de leer
+// el cuerpo, así que no escribe productos. Sólo lee los headers de revisión y
+// de estado del guard (ver classifySheetsWebhookProbe en live-checks.js).
+async function probeSheetsWebhook() {
+  try {
+    const response = await fetch('/api/sheets-products-webhook', {
+      method: 'POST',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: { 'content-type': 'application/json' },
+      body: '{}',
+    });
+    return {
+      status: response.status,
+      revision: response.headers.get('x-tintin-products-webhook') || '',
+      authState: response.headers.get('x-tintin-auth-state') || '',
+    };
+  } catch (error) {
+    return { status: 0, revision: '', authState: '', error: error?.message || 'fallo de red' };
   }
 }
 
@@ -522,7 +544,7 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
-      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, engagementStats, sessionProbe, pageProbe, ...routeProbes] = await Promise.all([
+      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, engagementStats, sheetsWebhook, sessionProbe, pageProbe, ...routeProbes] = await Promise.all([
         user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
@@ -530,6 +552,7 @@ export function initConnectionsFlow({ role } = {}) {
         user ? readJson('/api/notifications?action=health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         probeClientFirestoreRules(user),
         probeEngagementStats(user),
+        user ? probeSheetsWebhook() : Promise.resolve(null),
         probeCurrentSession(user, role),
         fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
           status: response.status,
@@ -568,11 +591,11 @@ export function initConnectionsFlow({ role } = {}) {
         adminHealth: { ...adminHealth, checks: adminHealth.body?.checks },
         headers: pageProbe,
         routeProbes: routeProbeMap,
-        protectedProbes: { favoriteApi, notificationApi, firestoreRules, engagementStats },
+        protectedProbes: { favoriteApi, notificationApi, firestoreRules, engagementStats, sheetsWebhook },
         sessionProbe,
         currentEvidence: masterDiagnostics.body?.currentEvidence,
       }, checkedAt);
-      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, protectedProbes: { favoriteApi, notificationApi, firestoreRules, engagementStats }, sessionProbe, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
+      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, protectedProbes: { favoriteApi, notificationApi, firestoreRules, engagementStats, sheetsWebhook }, sessionProbe, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
       liveTimestampEl.textContent = `Última verificación en vivo: ${checkedAt} (${Object.keys(liveState.byId).length} nodos y ${Object.keys(liveState.byEdgeId).length} conexiones con probe).`;
 
       if (errors.length) {

@@ -31,7 +31,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-order-email-resend-canonical-2";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-sheets-webhook-probe-1";
 import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1-auth-popup-resolver-1-launch-20260926-1-admin-ready-20261002-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {

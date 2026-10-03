@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a23bec7fda4c35f77ad69fb1e7aac521400d5f4280010b484e1dd13701d5dd21",
+  "sourceFingerprint": "0bda253945f0f8f3793a371622f239b4bbaec4996866a2ed279d4460c37540de",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 943,
-    "textFiles": 902,
-    "totalBytes": 18205439,
+    "files": 944,
+    "textFiles": 903,
+    "totalBytes": 18211202,
     "pages": 19,
-    "modules": 651
+    "modules": 652
   },
   "viewports": [
     {
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 196800,
-      "sha256": "02a8a4a97b13b7df108c1c74d71fb80d304241a3eb0a6fb3222c3df0b2d9655e",
+      "bytes": 196798,
+      "sha256": "583863495dd08199b30a3f74a35d2f68b51e5c01c6e9bdc659b041f2b18b1f4d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2157,7 +2157,7 @@
           "line": 2037
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261003-superadmin-white-icons-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261003-sheets-webhook-probe-1",
           "target": "js/admin/admin-app.js",
           "line": 2038
         },
@@ -2433,7 +2433,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261003-superadmin-white-icons-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261003-sheets-webhook-probe-1",
           "target": "js/admin/admin-app.js",
           "line": 2038,
           "exists": true
@@ -20628,8 +20628,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 467240,
-      "sha256": "0a4cf7e01efbf4b859b0ba407357585b3657586bd036f9c9a5e261cb167fc85b",
+      "bytes": 467232,
+      "sha256": "13291434818d35596d00ffdd6c91a5bc207fd1f806070657613886c0eb5a10e7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20762,7 +20762,7 @@
           "line": 33
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-order-email-resend-canonical-2",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-sheets-webhook-probe-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 34
@@ -21382,8 +21382,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 33019,
-      "sha256": "d515713437c0fb01631580507ae69b91fb3e8eb1afa4d7f09b58a7e2071dc84e",
+      "bytes": 33942,
+      "sha256": "0b93d89f51f9c3f559e4f627fe03e86f48ebf3f9fe580899a468f5986c6bec53",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21402,7 +21402,7 @@
           "line": 12
         },
         {
-          "raw": "./live-checks.js?v=tintin-20261003-order-email-resend-canonical-2",
+          "raw": "./live-checks.js?v=tintin-20261003-sheets-webhook-probe-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 13
@@ -21441,8 +21441,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 24801,
-      "sha256": "cc8e0ed8427539a759a1a0275bc67aef2fe0330fdba7275229ca086bdf7fd8d1",
+      "bytes": 26752,
+      "sha256": "10b923348f4759a5131568be75347b8a3e8ed503cee7502dfe0721c63e847098",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32950,6 +32950,54 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/sheets-webhook-probe.test.mjs",
+      "bytes": 2899,
+      "sha256": "49a9a1b2ce608e46be8461a8f13c137ad3722d4f0d529d9034f195cbd2d58100",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+          "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/estado-flujo.js",
+          "target": "js/admin/flujo-conexiones/estado-flujo.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/live-checks.js",
+          "target": "js/admin/flujo-conexiones/live-checks.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "../../functions/api/sheets-products-webhook.js",
+          "target": "functions/api/sheets-products-webhook.js",
+          "dynamic": false,
+          "line": 11
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/functions/page-loader-route.test.mjs",
       "bytes": 541,
       "sha256": "e94bd70268f012462fbdbc295a866308e8bea882d1e2ba6870ce025e4f404fe7",
@@ -36348,8 +36396,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 196800,
-      "sha256": "02a8a4a97b13b7df108c1c74d71fb80d304241a3eb0a6fb3222c3df0b2d9655e"
+      "bytes": 196798,
+      "sha256": "583863495dd08199b30a3f74a35d2f68b51e5c01c6e9bdc659b041f2b18b1f4d"
     },
     {
       "path": "apple-touch-icon.png",
@@ -38190,8 +38238,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 467240,
-      "sha256": "0a4cf7e01efbf4b859b0ba407357585b3657586bd036f9c9a5e261cb167fc85b"
+      "bytes": 467232,
+      "sha256": "13291434818d35596d00ffdd6c91a5bc207fd1f806070657613886c0eb5a10e7"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -38292,14 +38340,14 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 33019,
-      "sha256": "d515713437c0fb01631580507ae69b91fb3e8eb1afa4d7f09b58a7e2071dc84e"
+      "bytes": 33942,
+      "sha256": "0b93d89f51f9c3f559e4f627fe03e86f48ebf3f9fe580899a468f5986c6bec53"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 24801,
-      "sha256": "cc8e0ed8427539a759a1a0275bc67aef2fe0330fdba7275229ca086bdf7fd8d1"
+      "bytes": 26752,
+      "sha256": "10b923348f4759a5131568be75347b8a3e8ed503cee7502dfe0721c63e847098"
     },
     {
       "path": "js/admin/flujo-conexiones/sellos-flujo.js",
@@ -41272,6 +41320,12 @@
       "sha256": "2f27bbcf5e38f0b342f6fc128e009a5692ba783bfaded662e38cbcdf610ff88d"
     },
     {
+      "path": "tests/flow-connections/sheets-webhook-probe.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2899,
+      "sha256": "49a9a1b2ce608e46be8461a8f13c137ad3722d4f0d529d9034f195cbd2d58100"
+    },
+    {
       "path": "tests/functions/page-loader-route.test.mjs",
       "extension": ".mjs",
       "bytes": 541,
@@ -42129,7 +42183,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 534,
+      "line": 557,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -43521,13 +43575,19 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 534,
+      "line": 194,
+      "target": "/api/sheets-products-webhook",
+      "method": "POST"
+    },
+    {
+      "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
+      "line": 557,
       "target": "/admin.html",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 617,
+      "line": 640,
       "target": "/diagnostic-manifest.json",
       "method": "GET"
     },
@@ -44939,7 +44999,7 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 222,
+            "line": 244,
             "operation": "doc"
           },
           {
