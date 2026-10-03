@@ -7,6 +7,14 @@
 - Verificación: `npm run build:pages` PASS; `npm run audit:cache-versioning` PASS (291 recursos versionados, 75 cargas dinámicas); `audit:admin-foundation` PASS; responsive del admin 16/16 y responsive Maestro 5/5; multimedia 41/41; pedidos 32/32; usuarios/roles 25/25; apariencia/contenido 21/21; correo/mensajería 22/22; analítica/auditoría 31/31; Maestro 27/27; conexiones Maestro 25/25; cierre Maestro 73/73; módulos 118/118.
 - Alcance de evidencia: son comprobaciones locales del código y responsive; no representan una sesión autenticada real ni confirman publicación/despliegue en producción.
 
+## Revisión del shell público y páginas de tienda — 2026-10-03 (PR #1008)
+
+- No se encontró una segunda implementación de header que requiriera reemplazo: el shell común y su versionado canónico ya estaban sincronizados. Se confirmó consistencia entre páginas y dispositivos y no se forzó un único `?v=` para archivos distintos; el control de caché del repo requiere versionado por recurso para detectar cambios de bytes y evitar URLs duplicadas por módulo.
+- Audits del commit actual: headers 0 problemas en anchos 320–1920; navegación compartida 14 páginas públicas × 3 breakpoints, menú dropdown/tablet y header scroll-hide; navegación responsive 12 anchos y 13 rutas; geometría global 187/187; viewports canónicos 126/126; login/aislamiento y perfil 21/21 más contrato de perfil PASS; colecciones 7 viewports y Fase 4 PASS; catálogo 7 viewports y Fase 7 15/15; checkout 7 viewports y entrega 6/6; carrito Fase 7 PASS; páginas auxiliares 15/15; integración final 22/22; carga 18 páginas PASS; colores 153 tokens globales + 36 administrativos PASS; caché 291 recursos/75 cargas dinámicas PASS.
+- La comprobación browser `audit:contraste` se inició pero se detuvo antes de producir resultado, porque visita cada página dos veces con una espera fija de 10 s. El contrato de color sí confirmó que Apariencia valida contraste antes de publicar, pero esto no sustituye un barrido runtime completo de contraste: mantenerlo `NOT_VERIFIED`.
+- Los timeouts iniciales de la auditoría canónica y navegación responsive ocurrieron mientras varios navegadores corrían en paralelo. En repetición aislada: canónicos 126/126 y responsive-navigation PASS; no se reprodujeron.
+- Evidencia local únicamente; autenticación real del cliente y despliegue siguen sin verificarse.
+
 ## Diagnóstico `permission-denied` masivo en admin de producción — 2026-10-02 (rama `claude/funny-keller-205w4v`)
 
 Síntoma reportado por el dueño (consola del admin): `Missing or insufficient permissions` en casi todas las lecturas (incluidas `settings/appearance`, `products`, `collections`) y `502` de `/api/master-diagnostics` con "GitHub alcanzó temporalmente el límite de consultas".
