@@ -12,7 +12,7 @@ var DEFAULT_LOGO=(isHomePage()?HOME_LOADER_IMAGE:INNER_LOADER_IMAGE)+'?v='+TT_CA
 function realLogo(){try{var data=JSON.parse(localStorage.getItem('tt_images')||'{}');var url=data&&data.logo_main;if(url&&!isOldLogo(url))return url}catch(e){}return DEFAULT_LOGO}
 function css(){
  // Mismo ?v= que los <link> literales del HTML: una sola URL por archivo en todo el sitio.
- var files=[['tt-ui-quality-css','quality/calidad-interfaz.css','tintin-20260916-final-production-stability-quality-2'],['tt-unified-theme-css','core/tema-unificado-tintin.css','tintin-20260925-contrast-1'],['tt-theme-cleanup-css','core/limpieza-tema-tintin.css','tintin-20260811-cls-desktop-stable-2'],['tt-parity-safe-css','theme/paridad-segura-tintin.css','tintin-20260811-cls-desktop-stable-2']];
+ var files=[['tt-ui-quality-css','quality/calidad-interfaz.css','tintin-20260916-final-production-stability-quality-2'],['tt-unified-theme-css','core/tema-unificado-tintin.css','tintin-20261003-ux-maps-onboarding-1'],['tt-theme-cleanup-css','core/limpieza-tema-tintin.css','tintin-20260811-cls-desktop-stable-2'],['tt-parity-safe-css','theme/paridad-segura-tintin.css','tintin-20260811-cls-desktop-stable-2']];
  files.forEach(function(f){
   var id=f[0],file=f[1];
   if(document.getElementById(id))return;

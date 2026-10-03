@@ -207,11 +207,12 @@ function renderAccountButtonPhoto(user,profile={}){
   if(user&&photoUrl){
    const name=identity.name||identity.username||user.displayName||user.email||'Mi cuenta';
    const img=document.createElement('img');
-   img.className='tt-account-avatar-btn';img.src=photoUrl;img.alt=name;img.referrerPolicy='no-referrer';img.width=26;img.height=26;
-   img.style.cssText='width:26px;height:26px;max-width:none;max-height:none;flex-shrink:0;border-radius:50%;object-fit:cover;display:block';
-   img.onerror=()=>{btn.innerHTML=accountBtnDefaults.get(btn);};
+   img.className='tt-account-avatar-btn';img.src=photoUrl;img.alt=name;img.referrerPolicy='no-referrer';img.width=48;img.height=48;
+   img.style.cssText='width:100%;height:100%;max-width:none;max-height:none;flex-shrink:0;border-radius:inherit;object-fit:cover;display:block';
+   btn.dataset.ttAccountAvatar='true';
+   img.onerror=()=>{delete btn.dataset.ttAccountAvatar;btn.innerHTML=accountBtnDefaults.get(btn);};
    btn.innerHTML='';btn.appendChild(img);
-  }else btn.innerHTML=accountBtnDefaults.get(btn);
+  }else { delete btn.dataset.ttAccountAvatar;btn.innerHTML=accountBtnDefaults.get(btn); }
  });
 }
 

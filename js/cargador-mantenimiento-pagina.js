@@ -32,7 +32,7 @@ export function loadPageMaintenance() {
   if (/\/login(?:\.html)?$/.test(path)) {
     return load('pages/login/mantenimiento-acceso.js', 'tintin-20261001-inventory-fix-1');
   }
-  if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20260908-profile-canonical-2');
+  if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261003-ux-maps-1');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');
   if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', CONTACT_RUNTIME_VERSION);
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
