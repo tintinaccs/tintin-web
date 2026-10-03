@@ -25,6 +25,8 @@ function ensureStyles() {
     .tt-mlib-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
     .tt-mlib-btn{min-height:34px;padding:7px 11px;border:1px solid #e3c3cf;border-radius:9px;background:#fff;color:#8b2642;font:700 11px Montserrat,sans-serif;cursor:pointer}
     .tt-mlib-btn.primary{background:#ad3f67;border-color:#ad3f67;color:#fff}
+    .tt-mlib-btn.primary{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+    .tt-mlib-btn.primary svg{width:15px;height:15px;color:#fff;stroke:currentColor;flex:0 0 auto}
     .tt-mlib-btn:disabled{opacity:.55;cursor:not-allowed}
     .tt-mlib-search{margin:12px 18px 0;padding:9px 12px;border:1px solid #e3c3cf;border-radius:9px;font:500 12.5px Montserrat,sans-serif;width:calc(100% - 36px)}
     .tt-mlib-drop{margin:12px 18px 0;padding:14px;border:1px dashed #d98ca6;border-radius:11px;background:#fff8fb;color:#8a5868;font:600 11px Montserrat,sans-serif;text-align:center;cursor:pointer}
@@ -143,7 +145,7 @@ function mountLibraryUI(host, { title, onSelect, showDelete, showOrphanScan }) {
   const fileInput = document.createElement('input');
   fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.multiple = true; fileInput.hidden = true;
   const uploadBtn = document.createElement('button');
-  uploadBtn.type = 'button'; uploadBtn.className = 'tt-mlib-btn primary'; uploadBtn.textContent = 'Subir imágenes';
+  uploadBtn.type = 'button'; uploadBtn.className = 'tt-mlib-btn primary'; uploadBtn.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/><path d="M7 9l5-5 5 5"/><path d="M12 4v13"/></svg><span>Subir imágenes</span>';
   uploadBtn.addEventListener('click', () => fileInput.click());
   actions.append(uploadBtn, fileInput);
 

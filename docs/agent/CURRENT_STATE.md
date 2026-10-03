@@ -1,5 +1,12 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Revisión y pulido del Super Admin — 2026-10-03 (rama `codex/super-admin-full-remediation-20261003`)
+
+- Auditorías previas del panel no detectaron fallos funcionales que justificaran alterar contratos, permisos o estados de conexión. Se corrigió el problema visible de contraste en la navegación desktop/móvil y en las cargas de imágenes, importación CSV/JSON y tonos de notificaciones: iconos blancos sobre superficies de marca oscuras, con foco y estados activos conservados.
+- Archivos principales: `css/admin/admin.css`, `admin.html`, `admin-images.html`, `js/admin/importacion-admin.js`, `js/admin/products/biblioteca-multimedia-admin.js`, `js/components/images/carga-imagenes.js`. Se actualizaron identificadores compartidos de caché y sus referencias/auditorías; `diagnostic-manifest.json`, CSP y baseline fueron regenerados por los flujos canónicos.
+- Verificación: `npm run build:pages` PASS; `npm run audit:cache-versioning` PASS (291 recursos versionados, 75 cargas dinámicas); `audit:admin-foundation` PASS; responsive del admin 16/16 y responsive Maestro 5/5; multimedia 41/41; pedidos 32/32; usuarios/roles 25/25; apariencia/contenido 21/21; correo/mensajería 22/22; analítica/auditoría 31/31; Maestro 27/27; conexiones Maestro 25/25; cierre Maestro 73/73; módulos 118/118.
+- Alcance de evidencia: son comprobaciones locales del código y responsive; no representan una sesión autenticada real ni confirman publicación/despliegue en producción.
+
 ## Diagnóstico `permission-denied` masivo en admin de producción — 2026-10-02 (rama `claude/funny-keller-205w4v`)
 
 Síntoma reportado por el dueño (consola del admin): `Missing or insufficient permissions` en casi todas las lecturas (incluidas `settings/appearance`, `products`, `collections`) y `502` de `/api/master-diagnostics` con "GitHub alcanzó temporalmente el límite de consultas".

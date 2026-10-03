@@ -2163,6 +2163,98 @@ html:not(.adm-auth-ready) [data-admin-panel] {
     white-space: nowrap;
   }
 }
+
+/* Super Admin: iconografía blanca con superficies de marca de contraste alto.
+   La barra móvil es oscura para que iconos y etiquetas blancas sigan legibles. */
+.adm-sidebar-logo {
+  background: var(--admin-color-brand-hover);
+  border-bottom-color: color-mix(in srgb, #fff 22%, transparent);
+}
+.adm-sidebar-logo-text,
+html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-text { color: #fff; }
+.adm-sidebar-logo-sub,
+html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-sub { color: rgba(255,255,255,.78); }
+.adm-sidebar-toggle {
+  border-color: color-mix(in srgb, #fff 35%, transparent);
+  color: #fff;
+}
+.adm-sidebar-toggle:hover,
+.adm-sidebar-toggle:focus-visible {
+  background: var(--admin-color-brand);
+  color: #fff;
+}
+.adm-nav-item { min-height: 48px; }
+.adm-nav-item:hover {
+  background: var(--admin-color-brand-hover);
+  color: #fff;
+}
+.adm-nav-item.active {
+  background: var(--admin-color-badge-background);
+  color: var(--adm-text);
+}
+.adm-nav-icon {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 9px;
+  background: var(--admin-color-brand-hover);
+  color: #fff;
+}
+.adm-nav-icon svg {
+  width: 16px;
+  height: 16px;
+  color: #fff;
+  stroke: currentColor;
+}
+.adm-nav-item:hover .adm-nav-icon,
+.adm-nav-item.active .adm-nav-icon {
+  background: var(--admin-color-brand);
+  color: #fff;
+}
+.adm-mobile-tabs {
+  background: var(--admin-color-brand-hover);
+  border-top-color: color-mix(in srgb, #fff 24%, transparent);
+}
+.adm-mobile-tab,
+.adm-mobile-tab:hover,
+.adm-mobile-tab.active { color: #fff; }
+.adm-mobile-tab:hover,
+.adm-mobile-tab.active { background: var(--admin-color-brand); }
+.adm-mobile-tab svg { color: #fff; stroke: currentColor; }
+.adm-mobile-more-grid .adm-mobile-tab .adm-nav-icon {
+  background: var(--admin-color-brand-hover);
+  color: #fff;
+}
+.adm-mobile-more-grid .adm-mobile-tab:hover .adm-nav-icon,
+.adm-mobile-more-grid .adm-mobile-tab.active .adm-nav-icon {
+  background: var(--admin-color-brand);
+  color: #fff;
+}
+
+/* Acciones de carga del panel: icono de subir blanco sobre el botón de marca. */
+#btn-push-master-upload,
+[data-push-tone-upload] {
+  background: var(--admin-color-button-primary-background);
+  border-color: var(--admin-color-button-primary-background);
+  color: #fff;
+}
+#btn-push-master-upload::before,
+[data-push-tone-upload]::before {
+  content: '↑';
+  display: inline-block;
+  margin-right: 6px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: .8;
+  vertical-align: -1px;
+}
+#btn-push-master-upload:hover,
+[data-push-tone-upload]:hover {
+  background: var(--admin-color-button-primary-hover);
+  border-color: var(--admin-color-button-primary-hover);
+}
 .adm-diagnostic-head p {
   max-width: 760px;
   margin: 5px 0 0;
