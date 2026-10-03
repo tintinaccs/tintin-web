@@ -9,6 +9,6 @@
 // páginas de la tienda. Su única responsabilidad restante es arrancar el
 // control de perfil global, sin alterar Firebase Auth.
 
-import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20261001-bloqueo-1";
+import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20261003-profile-route-1";
 
 startProfileGate();

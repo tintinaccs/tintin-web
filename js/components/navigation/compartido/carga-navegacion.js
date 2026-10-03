@@ -118,7 +118,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260923-auth-preview-isolation-1-auth-popup-resolver-1-launch-20260926-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261003-profile-avatar-identity-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });

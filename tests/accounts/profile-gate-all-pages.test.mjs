@@ -4,10 +4,10 @@ import test from 'node:test';
 
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 
-test('el guardia de perfil cubre toda página con sesión salvo login y admin', async () => {
+test('el guardia de perfil deja accesible Mi perfil para completar una cuenta nueva', async () => {
   const gate = await read('js/pages/profile/control-acceso-perfil.js');
   assert.doesNotMatch(gate, /GUARDED_PAGES|isGuardedPage/);
-  assert.match(gate, /page === 'login' \|\| page\.startsWith\('admin'\)/);
+  assert.match(gate, /page === 'login' \|\| page === 'perfil' \|\| page\.startsWith\('admin'\)/);
   assert.match(gate, /role !== 'client'/);
   assert.match(gate, /plan\.skip/);
   assert.match(gate, /goCompleteProfile\(\)/);
