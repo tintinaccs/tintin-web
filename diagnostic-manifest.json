@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "daff3db065c701256c7298640211d2cf7849f034c1851a3ff808c49f7eeb2fba",
+  "sourceFingerprint": "aa28686ffe8246140695458c1a7448aca251d2fd8d1a8ae6c885b1b805d6ed92",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 943,
     "textFiles": 902,
-    "totalBytes": 18203345,
+    "totalBytes": 18205315,
     "pages": 19,
     "modules": 651
   },
@@ -1543,8 +1543,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 45098,
-      "sha256": "961a5d3bd308567ef5b29c503516c5014226f4a0c0a3c156261388163ff83477",
+      "bytes": 45264,
+      "sha256": "9d591acb461f8c53a0da7a35a26d79a16ba143415404f6b82ff90ac795858fc7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1553,7 +1553,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          419
+          421
         ]
       },
       "duplicateIds": [],
@@ -1565,7 +1565,7 @@
           "error": ""
         },
         {
-          "line": 437,
+          "line": 439,
           "module": true,
           "ok": true,
           "error": ""
@@ -1586,12 +1586,12 @@
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1-admin-ready-20261002-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 833
+          "line": 835
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 834
+          "line": 836
         }
       ],
       "styles": [
@@ -1648,12 +1648,12 @@
         {
           "raw": "css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1",
           "target": "css/pages/secundarias-minimal.css",
-          "line": 347
+          "line": 349
         },
         {
           "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1",
           "target": "css/theme/sistema-superficies-tintin.css",
-          "line": 348
+          "line": 350
         }
       ],
       "images": [],
@@ -1666,7 +1666,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 357
+          "line": 359
         },
         {
           "raw": "/admin",
@@ -1676,7 +1676,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 373
+          "line": 375
         },
         {
           "raw": "/admin",
@@ -1686,7 +1686,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 412
+          "line": 414
         }
       ],
       "references": [
@@ -1705,13 +1705,13 @@
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1-admin-ready-20261002-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 833,
+          "line": 835,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 834,
+          "line": 836,
           "exists": true
         },
         {
@@ -1777,31 +1777,31 @@
         {
           "raw": "css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1",
           "target": "css/pages/secundarias-minimal.css",
-          "line": 347,
+          "line": 349,
           "exists": true
         },
         {
           "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1",
           "target": "css/theme/sistema-superficies-tintin.css",
-          "line": 348,
+          "line": 350,
           "exists": true
         },
         {
           "raw": "/login",
           "target": "login.html",
-          "line": 357,
+          "line": 359,
           "exists": true
         },
         {
           "raw": "/admin",
           "target": "admin.html",
-          "line": 373,
+          "line": 375,
           "exists": true
         },
         {
           "raw": "/admin",
           "target": "admin.html",
-          "line": 412,
+          "line": 414,
           "exists": true
         }
       ],
@@ -1823,7 +1823,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 366
+          "line": 368
         },
         {
           "id": "",
@@ -1840,7 +1840,7 @@
             "data-section": "hero"
           },
           "hasSourceReference": true,
-          "line": 380
+          "line": 382
         },
         {
           "id": "",
@@ -1856,7 +1856,7 @@
             "data-section": "productos"
           },
           "hasSourceReference": "",
-          "line": 383
+          "line": 385
         },
         {
           "id": "",
@@ -1872,7 +1872,7 @@
             "data-section": "editorial"
           },
           "hasSourceReference": "",
-          "line": 386
+          "line": 388
         },
         {
           "id": "",
@@ -1888,7 +1888,7 @@
             "data-section": "iconos"
           },
           "hasSourceReference": "",
-          "line": 389
+          "line": 391
         },
         {
           "id": "",
@@ -1904,7 +1904,7 @@
             "data-section": "nosotros"
           },
           "hasSourceReference": "",
-          "line": 392
+          "line": 394
         },
         {
           "id": "",
@@ -1920,7 +1920,7 @@
             "data-section": "branding"
           },
           "hasSourceReference": "",
-          "line": 395
+          "line": 397
         },
         {
           "id": "",
@@ -1936,7 +1936,7 @@
             "data-section": "biblioteca"
           },
           "hasSourceReference": "",
-          "line": 398
+          "line": 400
         },
         {
           "id": "",
@@ -1953,7 +1953,7 @@
             "data-section": "hero"
           },
           "hasSourceReference": true,
-          "line": 405
+          "line": 407
         },
         {
           "id": "",
@@ -1969,7 +1969,7 @@
             "data-section": "productos"
           },
           "hasSourceReference": true,
-          "line": 406
+          "line": 408
         },
         {
           "id": "",
@@ -1985,7 +1985,7 @@
             "data-section": "editorial"
           },
           "hasSourceReference": true,
-          "line": 407
+          "line": 409
         },
         {
           "id": "",
@@ -2001,7 +2001,7 @@
             "data-section": "iconos"
           },
           "hasSourceReference": true,
-          "line": 408
+          "line": 410
         },
         {
           "id": "",
@@ -2017,7 +2017,7 @@
             "data-section": "nosotros"
           },
           "hasSourceReference": true,
-          "line": 409
+          "line": 411
         },
         {
           "id": "",
@@ -2033,7 +2033,7 @@
             "data-section": "branding"
           },
           "hasSourceReference": true,
-          "line": 410
+          "line": 412
         },
         {
           "id": "",
@@ -2049,7 +2049,7 @@
             "data-section": "biblioteca"
           },
           "hasSourceReference": true,
-          "line": 411
+          "line": 413
         },
         {
           "id": "btn-img-bulk-clear",
@@ -2064,7 +2064,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 424
+          "line": 426
         },
         {
           "id": "btn-img-bulk-export",
@@ -2078,7 +2078,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 425
+          "line": 427
         },
         {
           "id": "btn-img-bulk-clear-sel",
@@ -2092,7 +2092,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 426
+          "line": 428
         }
       ],
       "controls": []
@@ -36336,8 +36336,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 45098,
-      "sha256": "961a5d3bd308567ef5b29c503516c5014226f4a0c0a3c156261388163ff83477"
+      "bytes": 45264,
+      "sha256": "9d591acb461f8c53a0da7a35a26d79a16ba143415404f6b82ff90ac795858fc7"
     },
     {
       "path": "admin-manifest.json",
@@ -37362,8 +37362,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 152114,
-      "sha256": "deda3189d057375e918f8d1e69aff0b70df39f32beef4d25abc99c3c811120d2"
+      "bytes": 153918,
+      "sha256": "de914e167cdb518a9eec5d3e444c204d9ad964e568cafc989ee17ba6b5d66b66"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44864,7 +44864,7 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 809,
+            "line": 811,
             "operation": "doc"
           },
           {
