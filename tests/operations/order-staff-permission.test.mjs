@@ -12,6 +12,12 @@ test('cambiarPago: sin valor guardado rige el predeterminado de admin y agent', 
   assert.equal(orderStaffPermissionAllows('agent', undefined, 'pedidos', 'cambiarPago'), true);
 });
 
+test('reenviarCorreo: conserva el permiso predeterminado de gestión de pedidos para admin y agent', () => {
+  assert.equal(orderStaffPermissionAllows('admin', {}, 'pedidos', 'reenviarCorreo'), true);
+  assert.equal(orderStaffPermissionAllows('agent', undefined, 'pedidos', 'reenviarCorreo'), true);
+  assert.equal(orderStaffPermissionAllows('agent', { agent: { pedidos: { reenviarCorreo: false } } }, 'pedidos', 'reenviarCorreo'), false);
+});
+
 test('cambiarPago: el switch apagado por el Super Admin bloquea al rol', () => {
   const saved = { agent: { pedidos: { cambiarPago: false } }, admin: { pedidos: { cambiarPago: true } } };
   assert.equal(orderStaffPermissionAllows('agent', saved, 'pedidos', 'cambiarPago'), false);
@@ -60,4 +66,12 @@ test('/api/admin-order-mutation verifica cambiarPago antes de tocar el pedido', 
   const check = branch.indexOf("assertOrderStaffPermission(env, actor, 'pedidos', 'cambiarPago')");
   const mutation = branch.indexOf('applyOrderAdminMutation(');
   assert.ok(check > 0 && mutation > check, 'el permiso debe verificarse antes de aplicar la mutación');
+});
+
+test('/api/admin-order-mutation verifica reenviarCorreo antes de registrar el reenvío', () => {
+  const source = readFileSync(new URL('../../functions/api/admin-order-mutation.js', import.meta.url), 'utf8');
+  const branch = source.slice(source.indexOf("if (body.action === 'recordEmailResend') {"));
+  const check = branch.indexOf("assertOrderStaffPermission(env, actor, 'pedidos', 'reenviarCorreo')");
+  const mutation = branch.indexOf('recordOrderEmailResend(');
+  assert.ok(check >= 0 && mutation > check, 'el permiso debe verificarse antes de aplicar la mutación');
 });

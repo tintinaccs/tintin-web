@@ -7,7 +7,7 @@ import {
   requireOrderStaff,
   statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
-import { applyOrderAdminMutation, createOrderAdmin, resetOrderSequenceAdmin } from '../../cloudflare/order-admin-domain.js';
+import { applyOrderAdminMutation, createOrderAdmin, recordOrderEmailResend, resetOrderSequenceAdmin } from '../../cloudflare/order-admin-domain.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
 import { notifyCustomerOrderChange } from '../../cloudflare/correo-estado-pedido.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
@@ -30,7 +30,7 @@ export async function onRequest(context) {
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > 64 * 1024) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
-    const actor = body.action === 'updatePayment'
+    const actor = body.action === 'updatePayment' || body.action === 'recordEmailResend'
       ? await requireOrderStaff(request, env)
       : await requireSuperAdmin(request);
     if (body.action === 'updatePayment') {
@@ -45,6 +45,17 @@ export async function onRequest(context) {
       }, { uid: actor.uid, email: actor.email, role: actor.role, origin: 'admin-payment' });
       context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
       context.waitUntil?.(notifyCustomerOrderChange(env, result));
+      return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
+    }
+    if (body.action === 'recordEmailResend') {
+      await assertOrderStaffPermission(env, actor, 'pedidos', 'reenviarCorreo');
+      const result = await recordOrderEmailResend(env, body, {
+        uid: actor.uid,
+        email: actor.email,
+        role: actor.role,
+        origin: 'admin-email-resend',
+      });
+      context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
       return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
     }
     const actorContext = {

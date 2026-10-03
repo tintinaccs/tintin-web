@@ -747,3 +747,78 @@ export async function applyOrderAdminMutation(
     ...auditSummary(nextOrder),
   };
 }
+
+export async function recordOrderEmailResend(
+  env,
+  input = {},
+  actor = {},
+  { get = firestoreAdminGet, commit = firestoreAdminBatchCommit } = {},
+) {
+  const orderId = clean(input.orderId, 220);
+  const changeId = clean(input.changeId, 120);
+  if (!ORDER_ID_PATTERN.test(orderId)) throw new Error('Pedido inválido.');
+  if (!/^[A-Za-z0-9_-]{8,120}$/.test(changeId)) throw new Error('Solicitud inválida.');
+
+  const orderDocument = await get(env, `orders/${encodeURIComponent(orderId)}`);
+  if (!orderDocument) throw new Error('El pedido ya no existe.');
+  const beforeOrder = decodeFirestoreFields(orderDocument.fields || {});
+  if (clean(beforeOrder.lastChangeId, 120) === changeId) {
+    return { orderId, changeId, duplicate: true, order: beforeOrder };
+  }
+
+  const previousCount = Number(beforeOrder.resendCount || 0);
+  if (!Number.isSafeInteger(previousCount) || previousCount < 0) {
+    throw new Error('El contador de reenvíos del pedido es inválido.');
+  }
+
+  const context = actorContext({ origin: 'admin-email-resend' }, actor);
+  const now = new Date();
+  const order = {
+    ...beforeOrder,
+    resendCount: previousCount + 1,
+    lastResendAt: now,
+    notificationStatus: 'sent',
+    updatedAt: now,
+    lastChangeId: changeId,
+    syncOrigin: context.origin,
+  };
+  const eventId = `EVT_${crypto.randomUUID().replaceAll('-', '')}`;
+  await commit(env, [
+    {
+      path: `orders/${orderId}`,
+      fields: encodeFirestoreFields({
+        resendCount: order.resendCount,
+        lastResendAt: now,
+        notificationStatus: order.notificationStatus,
+        updatedAt: now,
+        lastChangeId: changeId,
+        syncOrigin: context.origin,
+      }),
+      mergeFields: ['resendCount', 'lastResendAt', 'notificationStatus', 'updatedAt', 'lastChangeId', 'syncOrigin'],
+      currentDocument: precondition(orderDocument),
+    },
+    {
+      path: `auditLog/${eventId}`,
+      fields: encodeFirestoreFields({
+        eventId,
+        timestamp: now,
+        createdAt: now,
+        customerId: beforeOrder.customerId || '',
+        actorId: context.id,
+        actorEmail: context.email,
+        actorRole: context.role,
+        action: 'reenviar_correo_pedido',
+        entityType: 'pedido',
+        entityId: orderId,
+        before: { resendCount: previousCount },
+        after: { resendCount: order.resendCount, notificationStatus: order.notificationStatus },
+        origin: context.origin,
+        result: 'success',
+        changeId,
+      }),
+      currentDocument: { exists: false },
+    },
+  ]);
+
+  return { orderId, changeId, duplicate: false, order };
+}

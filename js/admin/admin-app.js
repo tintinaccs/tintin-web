@@ -31,7 +31,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-profile-route-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-order-email-resend-canonical-2";
 import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1-auth-popup-resolver-1-launch-20260926-1-admin-ready-20261002-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
@@ -2803,6 +2803,22 @@ function emailErrorMessage_(code) {
   return map[code] || null;
 }
 
+async function recordOrderEmailResend_(orderId) {
+  if (!auth.currentUser) throw new Error('La sesión administrativa ya no está disponible.');
+  const response = await authenticatedFetch('/api/admin-order-mutation', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      action: 'recordEmailResend',
+      orderId,
+      changeId: `admin_email_${crypto.randomUUID().replaceAll('-', '')}`,
+    }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo registrar el reenvío.');
+  return body.result?.order || null;
+}
+
 window.resendOrderEmail = async (orderId) => {
   if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'reenviarCorreo')) { toast('No tenés permiso para reenviar correos de pedido'); return; }
   const o = allOrders.find(x => x.id === orderId);
@@ -2816,15 +2832,8 @@ window.resendOrderEmail = async (orderId) => {
     const result = await sendOrderNotification(orderId, orderForEmail, true);
     if (!result.success) throw new Error(emailErrorMessage_(result.error) || result.error || 'Error desconocido — revisá que js/email/configuracion-correo.js esté configurado');
 
-    await updateDoc(doc(db, 'orders', orderId), {
-      resendCount: increment(1),
-      lastResendAt: serverTimestamp(),
-      notificationStatus: 'sent',
-      updatedAt: serverTimestamp()
-    });
-    o.resendCount = (o.resendCount || 0) + 1;
-    o.notificationStatus = 'sent';
-    o.lastResendAt = { toDate: () => new Date() };
+    const recordedOrder = await recordOrderEmailResend_(orderId);
+    if (recordedOrder) Object.assign(o, recordedOrder);
     logAudit('reenviar_correo_pedido', 'pedido', orderId, o.shortId || orderId, `Reenvío #${o.resendCount}`);
     toast('Correo reenviado correctamente');
     applyOrderFilters();
@@ -3084,12 +3093,8 @@ window.bulkResendOrderEmails = async function() {
     const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
     const result = await sendOrderNotification(id, orderForEmail, true);
     if (!result.success) throw new Error(result.error || 'error desconocido');
-    await updateDoc(doc(db, 'orders', id), {
-      resendCount: increment(1), lastResendAt: serverTimestamp(), notificationStatus: 'sent', updatedAt: serverTimestamp()
-    });
-    o.resendCount = (o.resendCount || 0) + 1;
-    o.notificationStatus = 'sent';
-    o.lastResendAt = { toDate: () => new Date() };
+    const recordedOrder = await recordOrderEmailResend_(id);
+    if (recordedOrder) Object.assign(o, recordedOrder);
     return 'sent';
   }, {
     // De a uno, como antes: cada envío pasa por el tope diario de Apps Script.

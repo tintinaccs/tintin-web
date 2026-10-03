@@ -11,10 +11,14 @@ test('el panel superadmin usa la autoridad canónica para todas las mutaciones c
   const adminApp = read('js/admin/admin-app.js');
   const crud = read('js/admin/orders/pedidos-superadmin-crud.js');
   const flow = read('js/admin/flujo-conexiones/datos-flujo-conexiones.js');
+  const endpoint = read('functions/api/admin-order-mutation.js');
 
   assert.match(adminApp, /window\.updatePayStatus[\s\S]*?authenticatedFetch\('\/api\/admin-order-mutation'/);
   assert.match(crud, /authenticatedFetch\('\/api\/admin-order-mutation'/);
   assert.doesNotMatch(adminApp, /updateDoc\(doc\(db, ['"]orders['"], orderId\), \{[\s\S]{0,500}['"]payment\.status['"]/);
+  assert.match(adminApp, /recordOrderEmailResend_\(orderId\)[\s\S]*?authenticatedFetch\('\/api\/admin-order-mutation'/);
+  assert.doesNotMatch(adminApp, /updateDoc\(doc\(db, ['"]orders['"]/);
+  assert.match(endpoint, /body\.action === 'recordEmailResend'[\s\S]*?assertOrderStaffPermission\(env, actor, 'pedidos', 'reenviarCorreo'\)[\s\S]*?recordOrderEmailResend\(env, body/);
   assert.match(flow, /id: 'pedidos',[\s\S]*?state: ESTADOS\.PROD/);
   assert.match(flow, /from: 'super-panel', to: 'pedidos', state: ESTADOS\.PROD/);
 });

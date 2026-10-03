@@ -112,7 +112,7 @@ export async function requireOrderStaff(request, env) {
 // rolePermissions/main manda y, si no guardó nada, rige el predeterminado del
 // rol (manageOrders en roles.js, activo para admin y agent).
 const ORDER_STAFF_ACTION_DEFAULTS = {
-  pedidos: { cambiarPago: true },
+  pedidos: { cambiarPago: true, reenviarCorreo: true },
 };
 
 export function orderStaffPermissionAllows(role, savedPermissions, moduleKey, actionKey) {

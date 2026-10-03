@@ -4,6 +4,7 @@ import test from 'node:test';
 import {
   applyOrderAdminMutation,
   createOrderAdmin,
+  recordOrderEmailResend,
   resetOrderSequenceAdmin,
 } from '../../cloudflare/order-admin-domain.js';
 import {
@@ -82,6 +83,31 @@ function fakeStore(entries = {}, { transactional = false } = {}) {
     },
   };
 }
+
+test('recordOrderEmailResend actualiza pedido y auditoría en un commit e impide replay', async () => {
+  const store = fakeStore({
+    'orders/pedido_correo_1': document('orders/pedido_correo_1', {
+      orderNumber: 'TINPED31', resendCount: 2, notificationStatus: 'sent', lastChangeId: 'admin_before',
+    }),
+  });
+  const input = { orderId: 'pedido_correo_1', changeId: 'admin_email_change_123' };
+  const actor = { uid: 'admin-test', email: 'admin@example.com', role: 'admin' };
+  const result = await recordOrderEmailResend({}, input, actor, store);
+
+  assert.equal(result.order.resendCount, 3);
+  assert.equal(result.order.notificationStatus, 'sent');
+  assert.ok(result.order.lastResendAt instanceof Date);
+  assert.equal(store.commits.length, 1);
+  assert.equal(store.commits[0].length, 2, 'pedido y bitácora deben confirmarse juntos');
+  assert.ok(store.commits[0].some(write => write.path.startsWith('auditLog/')));
+
+  const replay = await recordOrderEmailResend({}, input, actor, {
+    ...store,
+    get: async () => document('orders/pedido_correo_1', result.order),
+  });
+  assert.equal(replay.duplicate, true);
+  assert.equal(replay.order.resendCount, 3);
+});
 
 const RETIRO = {
   userName: 'Cliente',
