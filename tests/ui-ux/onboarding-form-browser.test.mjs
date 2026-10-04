@@ -13,7 +13,7 @@ test('Últimos datos mantiene una columna, foco continuo y errores junto al camp
   let html = await fs.readFile(path.join(root, 'login.html'), 'utf8');
   const files = [...html.matchAll(/<link[^>]*rel="stylesheet"[^>]*href="([^"?]+)[^"]*"/g)]
     .map(match => match[1]).filter(file => !file.startsWith('http'));
-  files.push('css/pages/login/login-onboarding-form-layout.css');
+  assert.equal(files.filter(file => file === 'css/pages/login/login-onboarding-form-layout.css').length, 1, 'Login debe cargar realmente la hoja de últimos datos una sola vez');
   const css = await Promise.all(files.map(file => fs.readFile(path.join(root, file), 'utf8')));
   // Bloquea todos los scripts y la red: el fixture solo prueba el HTML/CSS real.
   html = html.replace('<head>', `<head><meta http-equiv="Content-Security-Policy" content="script-src 'none'; connect-src 'none'; style-src 'unsafe-inline'; img-src data:">`)
