@@ -7,8 +7,10 @@ import {
 
 let legacyFallbackMapPromise = null;
 
-function safeHandle(value) {
-  const handle = String(value || '').trim().toLowerCase();
+export function normalizeShopifyHandle(value) {
+  const raw = String(value || '').trim().toLowerCase();
+  if (!/^[a-z0-9][a-z0-9_-]{0,179}$/.test(raw)) return '';
+  const handle = slugify(raw);
   return /^[a-z0-9][a-z0-9-]{0,179}$/.test(handle) ? handle : '';
 }
 
@@ -79,7 +81,7 @@ export async function onRequest({ request, env, params }) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
-  const handle = safeHandle(params?.handle);
+  const handle = normalizeShopifyHandle(params?.handle);
   if (!handle) return new Response('Producto no encontrado', { status: 404, headers: { 'cache-control': 'no-store' } });
 
   try {
