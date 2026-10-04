@@ -30,7 +30,7 @@ const systemHealth = read('cloudflare/system-health.js');
 
 // 1. Producto: contenido visible y sin acordeón obligatorio, sin observer recursivo.
 ok(has(publicEntry, "estabilidad-producto.js?v=tintin-20260831-product-stability-2"), 'Producto no carga su estabilización acotada y segura.');
-ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20261003-profile-avatar-layout-1"), 'El shell público no conserva la estabilización final para las demás superficies.');
+ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20261003-profile-avatar-layout-1-brand-runtime-20261004-1"), 'El shell público no conserva la estabilización final para las demás superficies.');
 ok(has(productStability, "document.body.dataset.ttProductStable"), 'Producto no activa el contrato estable.');
 ok(has(productStability, "setDataIfChanged(specsBlock, 'collapsed', 'false')"), 'Características no se fuerzan abiertas de forma idempotente.');
 ok(has(productStability, "setDataIfChanged(related, 'collapsed', 'false')"), 'Otros productos no se fuerzan abiertos de forma idempotente.');
@@ -66,7 +66,7 @@ ok(has(cart, /users\/\{uid\}\/cart|users\/\$\{uid\}/) || has(cart, "collection(d
 ok(has(rules, 'function cartItemValid'), 'Firestore no conserva validación server-side del carrito.');
 
 // 6. Super Admin: ficha integral reutilizando autoridad canónica.
-ok(has(adminLoader, 'perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1'), 'Usuarios no carga la ficha integral nueva.');
+ok(has(adminLoader, 'perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1-brand-runtime-20261004-1'), 'Usuarios no carga la ficha integral nueva.');
 ok(!has(adminProfile, /onSnapshot\s*\(/), 'La ficha integral crea un listener paralelo de users.');
 ok(!has(adminProfile, /setDoc\s*\(|updateDoc\s*\(|deleteDoc\s*\(/), 'La ficha integral crea mutaciones paralelas a admin-app.js.');
 ok(has(adminProfile, 'Ir a gestión del usuario'), 'La ficha integral no devuelve a la gestión canónica CRUD.');

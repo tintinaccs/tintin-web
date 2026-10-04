@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-brand-20261004-1';
+  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-brand-20261004-1-brand-runtime-20261004-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -825,7 +825,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261004-import-identity-review-1-brand-20261004-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261004-import-identity-review-1-brand-20261004-1-brand-runtime-20261004-1');
     }
   }
 
@@ -881,9 +881,9 @@
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
       importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1-brand-runtime-20261004-1');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
-      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1');
+      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1-brand-runtime-20261004-1');
     }
   }
 
@@ -901,18 +901,18 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20260929-superadmin-hero-editable-1-brand-20261004-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20260929-superadmin-hero-editable-1-brand-20261004-1-brand-runtime-20261004-1');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1-brand-runtime-20261004-1');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261003-variant-inventory-1-brand-20261004-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261003-variant-inventory-1-brand-20261004-1-brand-runtime-20261004-1');
   }
 
   function bootThemeColorSanitizerPublic() {

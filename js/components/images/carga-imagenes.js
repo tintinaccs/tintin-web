@@ -33,7 +33,7 @@ function ensureStyles() {
   style.id = 'tt-image-upload-widget-style';
   style.textContent = `
     .tt-iuw{border:1.5px dashed #d9b9c6;border-radius:12px;padding:14px;background:#fff8fa;position:relative}
-    .tt-iuw.tt-iuw-drag{border-color:#AD3F67;background:#fdf0f5}
+    .tt-iuw.tt-iuw-drag{border-color:#C52F68;background:#fdf0f5}
     .tt-iuw-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
     .tt-iuw-label{font:700 12px/1.3 Montserrat,sans-serif;color:#2B2B2B}
     .tt-iuw-hint{font:400 11px/1.4 Montserrat,sans-serif;color:#8a8a8a;margin-top:2px}
@@ -42,22 +42,22 @@ function ensureStyles() {
     .tt-iuw-preview img{width:100%;height:100%;object-fit:cover;display:block}
     .tt-iuw-preview-empty{font-size:11px;color:#b98a9c;text-align:center;padding:6px}
     .tt-iuw-drop{flex:1 1 180px;min-width:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 10px;border-radius:10px;cursor:pointer;text-align:center;background:rgba(173,63,103,.03)}
-    .tt-iuw-drop>svg{box-sizing:content-box;width:22px;height:22px;padding:8px;border-radius:10px;background:#8B2642;color:#fff;stroke:currentColor}
+    .tt-iuw-drop>svg{box-sizing:content-box;width:22px;height:22px;padding:8px;border-radius:10px;background:#C52F68;color:#fff;stroke:currentColor}
     .tt-iuw-drop:hover{background:rgba(173,63,103,.07)}
-    .tt-iuw-drop-text{font:600 12px Montserrat,sans-serif;color:#AD3F67}
+    .tt-iuw-drop-text{font:600 12px Montserrat,sans-serif;color:#C52F68}
     .tt-iuw-drop-sub{font:400 10.5px Montserrat,sans-serif;color:#9a9a9a}
     .tt-iuw-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .tt-iuw-btn{border:1px solid #e3c3cf;background:#fff;border-radius:8px;padding:6px 12px;font:600 11.5px Montserrat,sans-serif;color:#7a3a4d;cursor:pointer}
+    .tt-iuw-btn{border:1px solid #e3c3cf;background:#fff;border-radius:8px;padding:6px 12px;font:600 11.5px Montserrat,sans-serif;color:#C52F68;cursor:pointer}
     .tt-iuw-btn:hover{background:#fdf0f5}
     .tt-iuw-btn:disabled{opacity:.5;cursor:not-allowed}
     .tt-iuw-btn-danger{color:#b23a3a;border-color:#e8c3c3}
-    .tt-iuw-btn-primary{background:#AD3F67;border-color:#AD3F67;color:#fff;flex:1 1 150px;min-width:150px}
+    .tt-iuw-btn-primary{background:#C52F68;border-color:#C52F68;color:#fff;flex:1 1 150px;min-width:150px}
     .tt-iuw-upload-action-icon{display:inline-flex;align-items:center;margin-right:6px;color:#fff;vertical-align:middle}
-    .tt-iuw-btn-primary:hover{background:#95355a}
-    .tt-iuw-btn-primary:disabled:hover{background:#AD3F67}
+    .tt-iuw-btn-primary:hover{background:#C52F68}
+    .tt-iuw-btn-primary:disabled:hover{background:#C52F68}
     .tt-iuw-progress{margin-top:8px;height:6px;border-radius:999px;background:#f1e3e8;overflow:hidden;display:none}
     .tt-iuw-progress.show{display:block}
-    .tt-iuw-progress-bar{height:100%;width:35%;background:#AD3F67;border-radius:999px;animation:tt-iuw-indeterminate 1.1s ease-in-out infinite}
+    .tt-iuw-progress-bar{height:100%;width:35%;background:#C52F68;border-radius:999px;animation:tt-iuw-indeterminate 1.1s ease-in-out infinite}
     @keyframes tt-iuw-indeterminate{0%{transform:translateX(-100%)}100%{transform:translateX(340%)}}
     .tt-iuw-status{margin-top:8px;font:600 11.5px Montserrat,sans-serif;min-height:14px}
     .tt-iuw-status.error{color:#b23a3a}

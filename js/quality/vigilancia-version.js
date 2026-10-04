@@ -81,9 +81,9 @@ function ensureStyle() {
 #${NOTICE_ID}[hidden]{display:none}
 #${NOTICE_ID} p{flex:1 1 180px;margin:0}
 #${NOTICE_ID} .tt-vn-actions{display:flex;gap:8px;margin-left:auto}
-#${NOTICE_ID} button{min-height:40px;padding:0 14px;border-radius:8px;border:1px solid #ad3f67;font:inherit;font-weight:600;line-height:1;cursor:pointer}
-#${NOTICE_ID} .tt-vn-update{background:#ad3f67;color:#fff}
-#${NOTICE_ID} .tt-vn-later{background:#fff;color:#ad3f67}
+#${NOTICE_ID} button{min-height:40px;padding:0 14px;border-radius:8px;border:1px solid #C52F68;font:inherit;font-weight:600;line-height:1;cursor:pointer}
+#${NOTICE_ID} .tt-vn-update{background:#C52F68;color:#fff}
+#${NOTICE_ID} .tt-vn-later{background:#fff;color:#C52F68}
 #${NOTICE_ID} button:focus-visible{outline:3px solid #2b2b2b;outline-offset:2px}
 @media (max-width:767px){body:has(#tt-tabbar) #${NOTICE_ID}{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 84px)}}
 @media (max-width:420px){#${NOTICE_ID}{left:max(16px,env(safe-area-inset-left));max-width:none}}

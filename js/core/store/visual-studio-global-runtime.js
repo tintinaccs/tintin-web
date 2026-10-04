@@ -112,7 +112,7 @@ function renderCampaign(config) {
   document.documentElement.style.removeProperty('--tt-global-campaign-bar-h');
   if (!campaign) return;
   document.documentElement.dataset.ttGlobalCampaignActive = campaign.id;
-  document.documentElement.style.setProperty('--tt-global-campaign-accent', campaign.accentColor || '#ad3f67');
+  document.documentElement.style.setProperty('--tt-global-campaign-accent', campaign.accentColor || '#C52F68');
 
   if (campaign.announcement && storageGet(window.sessionStorage, `tt_campaign_bar_${campaign.id}`) !== 'closed') {
     const bar = make('div', 'tt-global-campaign-bar'); bar.dataset.ttGlobalCampaign = campaign.id;

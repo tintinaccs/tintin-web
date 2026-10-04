@@ -113,7 +113,7 @@ function injectGateStyle() {
 
     #${OVERLAY_ID} .tt-store-gate-title {
       margin: 0 0 12px !important;
-      color: #8b2642 !important;
+      color: #C52F68 !important;
       font: 800 clamp(19px, 3.2vw, 22px)/1.25 Montserrat !important;
       overflow-wrap: anywhere !important;
     }
@@ -154,12 +154,12 @@ function injectGateStyle() {
     #${LOGIN_CONTROL_ID} {
       border: 1.5px solid #d9a9b8 !important;
       background: #fff !important;
-      color: #8b2642 !important;
+      color: #C52F68 !important;
     }
 
     #${LOGIN_CONTROL_ID}:hover,
     #${LOGIN_CONTROL_ID}:focus-visible {
-      border-color: #8b2642 !important;
+      border-color: #C52F68 !important;
       background: #fff6fa !important;
       outline: 3px solid rgba(212, 106, 138, .22) !important;
       outline-offset: 2px !important;
@@ -167,7 +167,7 @@ function injectGateStyle() {
 
     #tt-store-gate-retry {
       border: 0 !important;
-      background: #8b2642 !important;
+      background: #C52F68 !important;
       color: #fff !important;
     }
 
@@ -215,7 +215,7 @@ function injectGateStyle() {
       padding: 8px 12px !important;
       border: 0 !important;
       border-radius: 999px !important;
-      background: #ad3f67 !important;
+      background: #C52F68 !important;
       color: #fff !important;
       font: 800 12px/1 Montserrat, sans-serif !important;
       cursor: pointer !important;

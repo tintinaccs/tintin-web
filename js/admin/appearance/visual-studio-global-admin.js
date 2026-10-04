@@ -10,11 +10,11 @@ const PAGE_OPTIONS = [
 ];
 const DEVICE_OPTIONS = [['desktop','Escritorio'],['tablet','Tablet'],['mobile','Celular']];
 const CAMPAIGN_PRESETS = [
-  { name:'San Valentín', announcement:'Un detalle especial para regalar o regalarte 💗', effect:'hearts', background:'#f7d9e5', textColor:'#5b2339', accentColor:'#ad3f67' },
-  { name:'Día de la Amistad', announcement:'Regalitos para celebrar a tu persona favorita ✨', effect:'sparkles', background:'#fbe9f0', textColor:'#5b2339', accentColor:'#ad3f67' },
+  { name:'San Valentín', announcement:'Un detalle especial para regalar o regalarte 💗', effect:'hearts', background:'#f7d9e5', textColor:'#5b2339', accentColor:'#C52F68' },
+  { name:'Día de la Amistad', announcement:'Regalitos para celebrar a tu persona favorita ✨', effect:'sparkles', background:'#fbe9f0', textColor:'#5b2339', accentColor:'#C52F68' },
   { name:'Navidad', announcement:'La temporada más linda para regalar 🎁', effect:'snow', background:'#234d3b', textColor:'#ffffff', accentColor:'#c7a24d' },
   { name:'Black Friday', announcement:'Promos especiales por tiempo limitado', effect:'confetti', background:'#161216', textColor:'#ffffff', accentColor:'#e65c95' },
-  { name:'Aniversario Tintin', announcement:'Estamos de festejo ✨ Gracias por ser parte de Tintin', effect:'sparkles', background:'#ad3f67', textColor:'#ffffff', accentColor:'#f7d9e5' },
+  { name:'Aniversario Tintin', announcement:'Estamos de festejo ✨ Gracias por ser parte de Tintin', effect:'sparkles', background:'#C52F68', textColor:'#ffffff', accentColor:'#f7d9e5' },
 ];
 
 let config = { campaigns: [], popups: [] };
