@@ -34,6 +34,7 @@ import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=ti
 import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20260929-shopify-identity-2';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261003-variant-inventory-1';
+import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261003-inventory-review-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;
@@ -140,6 +141,30 @@ if (!window.TintinAdminShopifyImportBooted) {
       state.busy = false;
       state.ui.backup.disabled = false;
       state.ui.backup.textContent = 'Descargar copia operativa';
+      renderPreview();
+    }
+  }
+
+  async function exportInventoryReservationReview(event) {
+    if (!isSuperAdmin() || state.busy) return;
+    const button = event.currentTarget;
+    state.busy = true;
+    button.disabled = true;
+    button.textContent = 'Revisando reservas…';
+    try {
+      const orders = await readCollection('orders');
+      const report = buildInventoryReservationReview(orders);
+      downloadJson(`tintin-reservas-inventario-${new Date().toISOString().slice(0, 10)}.json`, {
+        ...report, projectId: PROJECT_ID, exportedAt: new Date().toISOString(),
+      });
+      toast(`Revisión descargada: ${report.summary.reservedOrders} pedidos con reservas; ${report.summary.issues} incidencias para revisar.`);
+    } catch (error) {
+      console.error('[admin-import] inventory reservation review failed', error);
+      toast(`No se pudo completar la revisión de reservas: ${error.message}`, true);
+    } finally {
+      state.busy = false;
+      button.disabled = false;
+      button.textContent = 'Descargar revisión de reservas';
       renderPreview();
     }
   }
@@ -526,6 +551,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     const body = node('div', 'adm-card-body'); const statusGrid = node('div', 'phase10-grid');
     [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Imágenes', 'Shopify CDN → Cloudinary antes de guardar'], ['Catálogo', 'solo crea · id estable por Handle']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
     const backupWrap = node('div', 'phase10-backup-wrap'); const backup = node('button', 'adm-btn adm-btn-outline', 'Descargar copia operativa'); backup.type = 'button'; backup.addEventListener('click', exportOperationalBackup); const reconcile = node('button', 'adm-btn adm-btn-outline', 'Reconciliar Productos → Sheets'); reconcile.type = 'button'; reconcile.addEventListener('click', reconcileProductsToSheets); backupWrap.append(node('div', '', 'Copia operativa sin usuarios, pedidos ni auditoría.'), backup, reconcile);
+    const reservations = node('button', 'adm-btn adm-btn-outline', 'Descargar revisión de reservas'); reservations.type = 'button'; reservations.addEventListener('click', exportInventoryReservationReview); backupWrap.append(reservations, node('small', 'phase10-note', 'Solo lectura: revisa el stock reservado antes de conciliar. No exporta datos de clientes ni modifica pedidos.'));
     const drop = node('div', 'phase10-drop'); drop.tabIndex = 0; drop.setAttribute('role', 'button'); drop.setAttribute('aria-label', 'Seleccionar exportación Shopify CSV o JSON');
     const uploadIcon = node('span', 'phase10-upload-icon'); uploadIcon.setAttribute('aria-hidden', 'true');
     uploadIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/><path d="M7 9l5-5 5 5"/><path d="M12 4v13"/></svg>';
