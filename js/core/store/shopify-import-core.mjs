@@ -300,10 +300,12 @@ function numberValue(value, parseNumber) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function variantFromRow(row, parseNumber, parseStock) {
+function variantFromRow(row, parseNumber, parseStock, optionNames = []) {
   const options = {};
-  for (const [nameKey, valueKey] of [['option1 name', 'option1 value'], ['option2 name', 'option2 value'], ['option3 name', 'option3 value']]) {
-    const name = cleanImportText(row?.[nameKey], 80);
+  for (let index = 0; index < 3; index += 1) {
+    const nameKey = `option${index + 1} name`;
+    const valueKey = `option${index + 1} value`;
+    const name = cleanImportText(row?.[nameKey] || optionNames[index], 80);
     const value = cleanImportText(row?.[valueKey], 220);
     if (name && value && !/^default title$/i.test(value)) options[name] = value;
   }
@@ -401,6 +403,7 @@ export function groupShopifyRows(rows, collections, { parseNumber, parseStock })
         sourceKey: handle,
         _images: [],
         _variants: [],
+        _optionNames: [],
         _variantKeys: new Set(),
         _stockKeys: new Set(),
         _missingStockKeys: new Set(),
@@ -419,7 +422,13 @@ export function groupShopifyRows(rows, collections, { parseNumber, parseStock })
     product._ambiguousCollection = product._ambiguousCollection || collection.ambiguous;
     if (image) product._images.push({ url: image, position: imagePosition });
 
-    const variantInfo = variantFromRow(row, parseNumberFn, parseStockFn);
+    // Shopify only supplies option names on the first row of each product.
+    // Carry the names within that Handle, while values remain row-specific.
+    for (let index = 0; index < 3; index += 1) {
+      const name = cleanImportText(row?.[`option${index + 1} name`], 80);
+      if (name) product._optionNames[index] = name;
+    }
+    const variantInfo = variantFromRow(row, parseNumberFn, parseStockFn, product._optionNames);
     if (variantInfo.variant && !product._variantKeys.has(variantInfo.key)) {
       product._variantKeys.add(variantInfo.key);
       product._variants.push(variantInfo.variant);
