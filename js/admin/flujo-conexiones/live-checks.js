@@ -43,9 +43,9 @@ export const PRODUCTS_WEBHOOK_EXPECTED_REVISION = 'products-canonical-v3';
 export function classifySheetsWebhookProbe(probe) {
   if (!probe) return null;
   const revisionOk = probe.revision === PRODUCTS_WEBHOOK_EXPECTED_REVISION;
-  const guardOk = probe.status === 401 && probe.authState === 'missing-header';
+  const guardOk = (probe.status === 200 && probe.authState === 'configured') || (probe.status === 401 && probe.authState === 'missing-header');
   const ok = revisionOk && guardOk;
-  const note = `POST /api/sheets-products-webhook sin secreto → HTTP ${probe.status || 'sin respuesta'}`
+  const note = `${probe.status === 401 ? 'POST sin secreto' : 'GET diagnóstico'} /api/sheets-products-webhook → HTTP ${probe.status || 'sin respuesta'}`
     + ` · revisión=${probe.revision || 'ausente'} · guard=${probe.authState || 'desconocido'}`
     + (ok ? '; escritura Sheets → Firestore no probada' : '');
   // El 401 esperado es el éxito de esta sonda; si falla, se informa con el
@@ -151,10 +151,11 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
         evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
       });
     const paypalOk = integrations.paypal?.productionReady === true;
-    const externalServicesOk = integrations.resend === true && integrations.cloudinary === true && paypalOk;
+    const sandbox = integrations.paypal?.environment === 'sandbox';
+    const externalServicesOk = integrations.resend === true && integrations.cloudinary === true && (paypalOk || sandbox);
     setFrom('servicios-externos', externalServicesOk,
       `GET /api/system-health · Resend=${integrations.resend === true} · Cloudinary=${integrations.cloudinary === true} · PayPal=${integrations.paypal?.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'}`,
-      { status: systemHealth.status, promote: externalServicesOk, evidenceLevel: LP });
+      { status: systemHealth.status, promote: externalServicesOk && paypalOk, partial: externalServicesOk && sandbox && !paypalOk, evidenceLevel: LP });
     if (report.deployment?.commitSha) {
       setFrom('deployments', true, `GET /api/system-health · commit ${report.deployment.commitSha.slice(0, 10)} (${report.deployment.branch || 'branch desconocida'})`, { promote: true, evidenceLevel: LP });
     }
@@ -338,9 +339,11 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
   }
   if (report?.integrations?.paypal) {
     const paypalOk = report.integrations.paypal.productionReady === true;
-    set('apis-internas', 'servicios-externos', paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true,
+    const sandbox = report.integrations.paypal.environment === 'sandbox';
+    const available = (paypalOk || sandbox) && report.integrations.resend === true && report.integrations.cloudinary === true;
+    set('apis-internas', 'servicios-externos', available,
       `GET /api/system-health · PayPal ${report.integrations.paypal.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'} · externos listos=${paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true}`,
-      systemHealth.status);
+      systemHealth.status, { promote: available && paypalOk, partial: available && sandbox && !paypalOk });
   }
   if (report?.integrations?.sheets !== undefined) {
     set('apps-script', 'google-sheets', report.integrations.sheets === true,

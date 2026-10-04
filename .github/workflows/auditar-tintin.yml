@@ -71,6 +71,7 @@ jobs:
           FIRESTORE_RESTORE_SOURCE: gs://example-backups/snapshot
         run: |
           node --test tests/operations/*.test.mjs
+          node --test tests/admin/lecturas-admin.test.mjs tests/admin/webhook-diagnostico.test.mjs tests/admin/firebase-permission-recovery.test.mjs
           npm run test:phase2-import
           node --test tests/import/inventory-reservation-review.test.mjs
           npm run audit:phase2-contract
@@ -125,6 +126,7 @@ jobs:
           npm run test:cart-quantity-browser
           npm run test:phase8-ui
           npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium
+          npx playwright test tests/ui-ux/admin-sidebar-interaction.spec.js --project=chromium
           npx playwright test tests/ui-ux/inventory-reservation-review.spec.js --project=chromium
           npx playwright test tests/ui-ux/import-identity-review.spec.js --project=chromium
           npm run test:phase10-a11y

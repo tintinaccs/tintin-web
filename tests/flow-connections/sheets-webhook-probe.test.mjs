@@ -60,3 +60,10 @@ test('sin sonda no se inventa evidencia', () => {
   assert.equal(classifySheetsWebhookProbe(null), null);
   assert.equal(run(null).live, undefined);
 });
+
+test('GET diagnóstico confirma configuración sin ejecutar POST ni simular una escritura', () => {
+  const {live}=run({status:200,revision:PRODUCTS_WEBHOOK_REVISION,authState:'configured'});
+  assert.equal(live.ok,true);
+  assert.equal(resolveState(node,live,ESTADOS),ESTADOS.PARCIAL);
+  assert.match(live.note,/GET diagnóstico/);
+});

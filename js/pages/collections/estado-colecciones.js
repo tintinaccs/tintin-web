@@ -21,7 +21,7 @@ import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260925-cache-converge-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261004-location-consistency-1')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261004-admin-connections-1')
   ]);
 }
 
@@ -118,9 +118,11 @@ export function onCollectionsUpdate(cb, onError) {
   return () => publicSubscribers.delete(cb);
 }
 
-function startAdminListener() {
+async function startAdminListener() {
   if (adminUnsubscribe) return;
-  adminUnsubscribe = onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
+  const { subscribeAdminSnapshot } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261004-admin-connections-1');
+  if (adminUnsubscribe || !adminSubscribers.size) return;
+  adminUnsubscribe = subscribeAdminSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
     recordFirestoreRead('collections:admin-live', snapshot.size);
     const list = sortCols(snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data())));
     adminSubscribers.forEach(cb => cb(list, null));

@@ -118,6 +118,17 @@ function assertNoShopifyHostedUrls(value) {
   visit(value);
 }
 
+// Metadatos públicos de diagnóstico, iguales a los headers del guard.
+// No lee el cuerpo, Firestore ni expone el secreto del servidor.
+export function onRequestGet({ request, env }) {
+  return webhookResponse({
+    ok: true,
+    revision: PRODUCTS_WEBHOOK_REVISION,
+    authState: env.SHEETS_ENGAGEMENT_SECRET ? 'configured' : 'server-secret-missing',
+    destructive: false,
+  }, 200, request.url, env.SHEETS_ENGAGEMENT_SECRET ? 'configured' : 'server-secret-missing');
+}
+
 export async function onRequestPost({ request, env }) {
   const authState = classifySheetsWebhookAuth(
     request.headers.get('X-Tintin-Sheets-Secret'),
