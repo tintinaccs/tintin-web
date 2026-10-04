@@ -4,7 +4,7 @@
 // Registro y checkout usan el mismo formato {lat,lng,name,address}, el mismo
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
-import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261004-location-consistency-1";
+import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261004-final-integration-1";
 import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1';
 
 const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
@@ -58,6 +58,7 @@ export async function createLocationMap({
   locateButton,
   onChange,
   onError,
+  readOnly = false,
 } = {}) {
   if (!mapEl) throw new Error('createLocationMap necesita un contenedor');
 
@@ -161,7 +162,7 @@ export async function createLocationMap({
     if (!icon) icon = pinIcon(L);
     const latlng = L.latLng(lat, lng);
     if (marker) marker.setLatLng(latlng);
-    else marker = L.marker(latlng, { icon, draggable: true }).addTo(map);
+    else marker = L.marker(latlng, { icon, draggable: !readOnly }).addTo(map);
 
     marker.off('dragend').on('dragend', () => {
       searchGeneration += 1;
@@ -195,7 +196,7 @@ export async function createLocationMap({
     if (scroll) mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  map.on('click', event => {
+  if (!readOnly) map.on('click', event => {
     clearTimeout(debounce);
     searchGeneration += 1;
     inFlight?.abort();

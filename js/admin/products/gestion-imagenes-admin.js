@@ -8,7 +8,7 @@
    y de explicar por qué, igual que antes.
    ============================================================= */
 
-import { IMAGE_SLOTS } from '../../components/images/imagenes.js?v=tintin-20261004-admin-connections-1';
+import { IMAGE_SLOTS } from '../../components/images/imagenes.js?v=tintin-20261004-admin-connections-3';
 
 if (!window.TintinAdminImagesPhase5Booted) {
   window.TintinAdminImagesPhase5Booted = true;
@@ -34,7 +34,7 @@ if (!window.TintinAdminImagesPhase5Booted) {
           const note = document.createElement('div');
           note.id = 'tt-image-source-note';
           note.style.cssText =
-            'margin-top:12px;padding:12px 14px;border:1px solid #f0c8d6;background:#fff3f7;border-radius:10px;font-size:12px;line-height:1.55;color:#666;';
+            'margin-top:12px;padding:12px 14px;border:1px solid #f0c8d6;background:#fff3f7;border-radius:10px;font-size:12px;line-height:1.55;color:#713C53;';
           note.textContent =
             'Fotos de productos: se cambian desde Productos. Portadas de colecciones: desde Colecciones. Este panel administra Hero, editoriales, Nosotros, el logo y la biblioteca multimedia compartida.';
           header.appendChild(note);

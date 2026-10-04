@@ -54,7 +54,7 @@ function ensureCss() {
   const link = document.createElement('link');
   link.id = 'tt-visual-builder-runtime-css';
   link.rel = 'stylesheet';
-  link.href = 'css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1';
+  link.href = 'css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1';
   document.head.appendChild(link);
 }
 

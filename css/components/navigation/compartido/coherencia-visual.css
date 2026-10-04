@@ -4,8 +4,8 @@
    componentes ni sus reglas de acceso. */
 :root {
   /* Rosa Tintin estable: evita heredar violetas de temas legacy. */
-  --tt-drawer-accent: var(--color-brand-primary, #C52F68);
-  --tt-drawer-accent-strong: var(--color-brand-primary, #C52F68);
+  --tt-drawer-accent: var(--color-brand-primary, #F8AACA);
+  --tt-drawer-accent-strong: var(--color-brand-primary, #F8AACA);
   --tt-drawer-soft: #fff0f5;
   --tt-drawer-border: #edbfd0;
   --tt-drawer-text: #2b1b23;
@@ -39,7 +39,7 @@ body.tt-home-premium .tt-hero-media {
   border-bottom: 1px solid rgba(255,255,255,.18) !important;
   background: var(--tt-drawer-accent) !important;
   background-image: none !important;
-  color: #fff !important;
+  color:#713C53 !important;
   box-shadow: 0 8px 24px rgba(92, 24, 50, .12) !important;
 }
 
@@ -47,7 +47,7 @@ body.tt-home-premium .tt-hero-media {
 .tt-account-drawer-header h2,
 .tt-notifications-title,
 .tt-notifications-kicker {
-  color: #fff !important;
+  color: #713C53 !important;
 }
 
 .tt-cart-title,
@@ -89,7 +89,7 @@ body.tt-home-premium .tt-hero-media {
   border: 1px solid rgba(255,255,255,.65) !important;
   border-radius: 999px !important;
   background: rgba(255,255,255,.08) !important;
-  color: #fff !important;
+  color: #713C53 !important;
   box-shadow: none !important;
 }
 .tt-cart-close:hover,
@@ -145,7 +145,7 @@ body.tt-home-premium .tt-hero-media {
   align-items: center !important;
   justify-content: center !important;
   background: var(--tt-drawer-accent) !important;
-  color: #fff !important;
+  color:#713C53 !important;
   font-size: .82rem !important;
   font-weight: 800 !important;
   letter-spacing: .04em;
@@ -205,16 +205,16 @@ body.tt-home-premium .tt-hero-media {
 }
 /* Las cabeceras y CTA conservan su contraste incluso frente a la tipografía global. */
 html body :is(#account-drawer, #cart-drawer, #notifications-drawer) :is(.tt-account-drawer-header, .tt-cart-header, .tt-notifications-head) {
-  background: var(--color-brand-primary, #C52F68) !important;
+  background: var(--color-brand-primary, #F8AACA) !important;
   background-image: none !important;
-  color: #fff !important;
+  color:#713C53 !important;
 }
 html body :is(#account-drawer, #cart-drawer, #notifications-drawer) :is(.tt-account-drawer-header, .tt-cart-header, .tt-notifications-head) :is(h2, span, button, svg) {
-  color: #fff !important;
+  color: #713C53 !important;
 }
 html body #account-drawer .tt-account-primary,
 html body #account-drawer .tt-account-primary:is(:visited, :hover, :focus-visible) {
-  color: #fff !important;
+  color: #713C53 !important;
 }
 html body #account-drawer .tt-account-drawer-header {
   display: flex !important;
@@ -269,7 +269,7 @@ html body #account-drawer .tt-account-drawer-header h2::before { content: none; 
   justify-content: center !important;
   border-color: var(--tt-drawer-accent) !important;
   background: var(--tt-drawer-accent) !important;
-  color: #fff !important;
+  color:#713C53 !important;
 }
 .tt-account-drawer .tt-account-primary:hover,
 .tt-account-drawer .tt-account-primary:focus-visible {
@@ -285,7 +285,7 @@ html body .tt-account-drawer .tt-account-primary:visited {
   background: var(--tt-drawer-accent) !important;
   background-color: var(--tt-drawer-accent) !important;
   border: 1px solid var(--tt-drawer-accent) !important;
-  color: #fff !important;
+  color:#713C53 !important;
   font-weight: 800 !important;
   letter-spacing: .01em;
   opacity: 1 !important;
@@ -296,7 +296,7 @@ html body .tt-account-drawer .tt-account-primary:focus-visible {
   background: var(--tt-drawer-accent-strong) !important;
   background-color: var(--tt-drawer-accent-strong) !important;
   border-color: var(--tt-drawer-accent-strong) !important;
-  color: #fff !important;
+  color:#713C53 !important;
 }
 
 html body .tt-account-drawer .tt-account-item {
@@ -305,7 +305,7 @@ html body .tt-account-drawer .tt-account-item {
 html body .tt-account-drawer .tt-account-primary,
 html body .tt-account-drawer .tt-account-primary:hover,
 html body .tt-account-drawer .tt-account-primary:focus-visible {
-  color: #fff !important;
+  color: #713C53 !important;
 }
 html body .tt-account-drawer .tt-account-internal {
   background: var(--tt-drawer-soft) !important;

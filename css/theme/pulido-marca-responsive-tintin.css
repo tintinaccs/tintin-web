@@ -11,7 +11,7 @@
   display: block;
   width: max-content;
   margin-bottom: 8px;
-  color: #fff !important;
+  color:#713C53 !important;
   font-size: clamp(1.04rem, 2.2vw, 1.34rem);
   font-weight: 900;
   line-height: 1;
@@ -32,18 +32,18 @@
 /* Superficies modales con cabecera de marca cuando ya existe un header. */
 :is(.modal-header, .adm-modal-header, .ck-modal-header, .perfil-modal-header) {
   border-bottom-color: transparent !important;
-  background: linear-gradient(135deg, var(--color-brand-primary, #C52F68), var(--color-brand-primary, #C52F68)) !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, var(--color-brand-primary, #F8AACA), var(--color-brand-primary, #F8AACA)) !important;
+  color:#713C53 !important;
 }
 
 :is(.modal-header, .adm-modal-header, .ck-modal-header, .perfil-modal-header) :is(h1,h2,h3,span,strong) {
-  color: #fff !important;
+  color:#713C53 !important;
 }
 
 :is(.modal-header, .adm-modal-header, .ck-modal-header, .perfil-modal-header) button {
   border-color: rgba(255,255,255,.7) !important;
   background: rgba(255,255,255,.15) !important;
-  color: #fff !important;
+  color:#713C53 !important;
 }
 
 /* Mantener márgenes fluidos en las pantallas largas. */

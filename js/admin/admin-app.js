@@ -1,5 +1,5 @@
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
-import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261004-admin-connections-1";
+import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261004-admin-connections-3";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -20,30 +20,30 @@ import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=ti
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20261004-admin-connections-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20261004-admin-connections-3";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261004-admin-connections-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261004-admin-connections-3";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261004-admin-connections-1";
-import "./pages/paginas-admin.js?v=tintin-20261004-admin-connections-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261004-admin-connections-3";
+import "./pages/paginas-admin.js?v=tintin-20261004-admin-connections-3";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
-} from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1";
+} from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
-import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1";
+import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261001-inventory-fix-1';
-import './settings/cupones-admin.js?v=tintin-20261004-admin-connections-1';
+import './settings/cupones-admin.js?v=tintin-20261004-admin-connections-3';
 import './products/integridad-inventario-admin.js?v=tintin-20261003-variant-inventory-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261001-inventory-fix-1';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261001-inventory-fix-1';
@@ -980,11 +980,11 @@ function showAdminInitFailure() {
     overlay = document.createElement('div');
     overlay.id = 'adm-init-error';
     overlay.setAttribute('role', 'alert');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#C52F68';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#713C53';
     overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
       '<h1 style="font-size:22px;margin:0 0 10px">No se pudo iniciar el panel</h1>' +
       '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Hubo un problema al cargar datos o componentes del panel; no se cerró la sesión ni se volvió al login.</p>' +
-      '<button type="button" id="adm-init-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#C52F68;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '<button type="button" id="adm-init-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#F8AACA;color:#713C53;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
       '</div>';
     document.body.appendChild(overlay);
     overlay.querySelector('#adm-init-retry')?.addEventListener('click', () => window.location.reload());
@@ -1003,11 +1003,11 @@ function showAdminAppCheckUnavailable() {
     overlay = document.createElement('div');
     overlay.id = 'adm-appcheck-unavailable';
     overlay.setAttribute('role', 'status');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#C52F68';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#713C53';
     overlay.innerHTML = '<div style="max-width:580px;text-align:center">' +
       '<h1 style="font-size:22px;margin:0 0 10px">Verificación de seguridad no disponible</h1>' +
       '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Firebase App Check no pudo confirmar este navegador todavía, así que el panel no abrirá lecturas privadas hasta que la verificación esté disponible.</p>' +
-      '<button type="button" id="adm-appcheck-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#C52F68;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '<button type="button" id="adm-appcheck-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#F8AACA;color:#713C53;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
       '</div>';
     document.body.appendChild(overlay);
     overlay.querySelector('#adm-appcheck-retry')?.addEventListener('click', () => window.location.reload());
@@ -1029,13 +1029,13 @@ function showAdminAuthUnknown() {
     overlay = document.createElement('div');
     overlay.id = 'adm-auth-unknown';
     overlay.setAttribute('role', 'status');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#C52F68';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#713C53';
     overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
       '<h1 style="font-size:22px;margin:0 0 10px">No pudimos restaurar tu sesión</h1>' +
       '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">La sesión de Firebase no se confirmó en este momento. No se cerró tu cuenta ni se borró ningún dato.</p>' +
       '<div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">' +
-      '<button type="button" id="adm-auth-unknown-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#C52F68;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
-      '<a href="login.html" id="adm-auth-login" style="display:inline-flex;align-items:center;border:1px solid #C52F68;border-radius:10px;padding:10px 17px;color:#C52F68;font:inherit;font-weight:700;text-decoration:none">Ingresar nuevamente</a>' +
+      '<button type="button" id="adm-auth-unknown-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#F8AACA;color:#713C53;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '<a href="login.html" id="adm-auth-login" style="display:inline-flex;align-items:center;border:1px solid #F8AACA;border-radius:10px;padding:10px 17px;color:#713C53;font:inherit;font-weight:700;text-decoration:none">Ingresar nuevamente</a>' +
       '</div>' +
       '</div>';
     document.body.appendChild(overlay);
@@ -2098,7 +2098,7 @@ function renderDashboardData() {
     tbody.innerHTML = recent.map(o => `
       <tr>
         <td><strong>${escapeHtmlAdmin(o.userName || o.userEmail || '—')}</strong><br><small style="color:#777">${escapeHtmlAdmin(o.userPhone || '')}</small></td>
-        <td style="font-weight:700;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
+        <td style="font-weight:700;color:var(--color-text-primary,#713C53)">${formatPrice(o.total || 0)}</td>
         <td>${orderStatusBadgeHtml(o.status)}</td>
         <td>${escapeHtmlAdmin(o.shipping?.city || '—')}</td>
         <td>${formatDate(o.createdAt)}</td>
@@ -2257,12 +2257,12 @@ function renderUsersTable(users) {
         <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
         <td>${avatar}</td>
         <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
-        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.email || '—')}</td>
-        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.phone || '—')}</td>
+        <td style="font-size:12px;color:#713C53">${escapeHtmlAdmin(u.email || '—')}</td>
+        <td style="font-size:12px;color:#713C53">${escapeHtmlAdmin(u.phone || '—')}</td>
         <td>${roleSelect}</td>
         <td>${blockedBadge}${blockedDetail}</td>
-        <td style="font-size:12px;color:#666">${u.purchaseCount || 0}</td>
-        <td style="font-size:12px;color:#666">${formatPrice(u.totalSpent || 0)}</td>
+        <td style="font-size:12px;color:#713C53">${u.purchaseCount || 0}</td>
+        <td style="font-size:12px;color:#713C53">${formatPrice(u.totalSpent || 0)}</td>
         <td>${actions}</td>
       </tr>
     `;
@@ -2653,7 +2653,7 @@ function renderOrdersTable(orders) {
           <small style="color:#777;font-size:10px">${escapeHtmlAdmin(o.userEmail || '')}</small>
         </td>
         <td data-label="Productos" style="font-size:12px;max-width:160px">${escapeHtmlAdmin(itemsText || '—')}</td>
-        <td data-label="Total" style="font-weight:800;color:var(--adm-accent)">${formatPrice(o.total || 0)}</td>
+        <td data-label="Total" style="font-weight:800;color:var(--color-text-primary,#713C53)">${formatPrice(o.total || 0)}</td>
         <td data-label="Estado" onclick="event.stopPropagation()">
           ${orderStatusBadgeHtml(orderStatus)}
           ${canUpdate ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updateOrderStatus(${orderArg}, this.value)">
@@ -2662,7 +2662,7 @@ function renderOrdersTable(orders) {
         </td>
         <td data-label="Ciudad">${escapeHtmlAdmin(o.shipping?.city || o.city || '—')}</td>
         <td data-label="Pago" onclick="event.stopPropagation()">
-          <div style="font-size:11px;color:#666">${escapeHtmlAdmin(o.payment?.method || o.paymentMethod || '—')}</div>
+          <div style="font-size:11px;color:#713C53">${escapeHtmlAdmin(o.payment?.method || o.paymentMethod || '—')}</div>
           ${payStatusBadgeHtml(payStatus)}
           ${canUpdatePay ? `<br><select class="adm-select" style="width:auto;font-size:10px;padding:2px 6px;margin-top:4px" onchange="window.updatePayStatus(${orderArg}, this.value)">
             ${payStatusOptions(payStatus)}
@@ -2685,7 +2685,7 @@ function renderOrdersTable(orders) {
       <tr id="${escapeHtmlAdmin(detailId)}" class="adm-order-detail-row" style="display:none">
         <td colspan="12" style="padding:0 14px 12px;background:#fef5f8">
           <div class="adm-order-detail open">
-            <div style="font-weight:800;margin-bottom:8px;color:var(--adm-accent)">Detalle del pedido #${escapeHtmlAdmin(o.id.slice(-6).toUpperCase())}</div>
+            <div style="font-weight:800;margin-bottom:8px;color:var(--color-text-primary,#713C53)">Detalle del pedido #${escapeHtmlAdmin(o.id.slice(-6).toUpperCase())}</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
               <div class="adm-detail-row"><span class="adm-detail-label">Cliente:</span> ${escapeHtmlAdmin(o.userName || '—')}</div>
               <div class="adm-detail-row"><span class="adm-detail-label">Email:</span> ${escapeHtmlAdmin(o.userEmail || '—')}</div>
@@ -2709,7 +2709,7 @@ function renderOrdersTable(orders) {
                     ${itemImage ? `<img src="${escapeHtmlAdmin(itemImage)}" alt="" style="width:40px;height:40px;object-fit:cover;border-radius:4px" onerror="this.style.display='none'">` : ''}
                     <div>
                       <div style="font-weight:700">${escapeHtmlAdmin(it.qty)}x ${escapeHtmlAdmin(it.name)}</div>
-                      <div style="color:var(--adm-accent)">${formatPrice(it.price * it.qty)}</div>
+                      <div style="color:var(--color-text-primary,#713C53)">${formatPrice(it.price * it.qty)}</div>
                     </div>
                   </div>
                 `;
@@ -2719,7 +2719,7 @@ function renderOrdersTable(orders) {
             <div style="margin-top:12px;padding-top:10px;border-top:1px solid #f0d8e0;font-size:13px">
               Subtotal: <strong>${formatPrice(o.subtotal||0)}</strong> &nbsp;|&nbsp;
               Envío: <strong>${o.shippingCost == null ? 'Consultar precio' : formatPrice(o.shippingCost)}</strong> &nbsp;|&nbsp;
-              <span style="color:var(--adm-accent);font-weight:900;font-size:15px">TOTAL: ${formatPrice(o.total||0)}</span>
+              <span style="color:var(--color-text-primary,#713C53);font-weight:900;font-size:15px">TOTAL: ${formatPrice(o.total||0)}</span>
             </div>
             ${o.userPhone ? `
             <div style="margin-top:12px">
@@ -3583,7 +3583,7 @@ function buildPreviewHtml_(t, vars) {
   const buttonText = renderVarsClient_(t.buttonText, v);
   const buttonUrl = t.buttonUrl || '';
   const buttonHtml = (buttonText && buttonUrl)
-    ? `<p style="text-align:center;margin:24px 0"><a href="${buttonUrl}" style="background:#C52F68;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">${buttonText}</a></p>`
+    ? `<p style="text-align:center;margin:24px 0"><a href="${buttonUrl}" style="background:#F8AACA;color:#713C53;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">${buttonText}</a></p>`
     : '';
   const fontBase = new URL('assets-tintin/fonts/', document.baseURI).href;
   const fontCss = `<style>` +
@@ -3591,14 +3591,14 @@ function buildPreviewHtml_(t, vars) {
     `@font-face{font-family:Montserrat;font-style:italic;font-weight:100 900;font-display:block;src:url("${fontBase}montserrat-latin-wght-italic.woff2") format("woff2")}` +
     `html,body,body *{font-family:Montserrat!important;font-synthesis:none}` +
     `</style>`;
-  return `<!DOCTYPE html><html><head>${fontCss}</head><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">` +
+  return `<!DOCTYPE html><html><head>${fontCss}</head><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#713C53">` +
     `<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">` +
-    (brandPhrase ? `<p style="color:#C52F68;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
-    (greeting ? `<h2 style="color:#C52F68;margin:0 0 14px;font-size:18px">${greeting}</h2>` : '') +
-    (intro ? `<p style="color:#555;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${intro}</p>` : '') +
-    (promoText ? `<p style="color:#333;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${promoText}</p>` : '') +
+    (brandPhrase ? `<p style="color:#713C53;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
+    (greeting ? `<h2 style="color:#713C53;margin:0 0 14px;font-size:18px">${greeting}</h2>` : '') +
+    (intro ? `<p style="color:#713C53;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${intro}</p>` : '') +
+    (promoText ? `<p style="color:#713C53;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${promoText}</p>` : '') +
     buttonHtml +
-    (closing ? `<p style="color:#555;line-height:1.6;margin:16px 0 0;font-size:14px;white-space:pre-line">${closing}</p>` : '') +
+    (closing ? `<p style="color:#713C53;line-height:1.6;margin:16px 0 0;font-size:14px;white-space:pre-line">${closing}</p>` : '') +
     `<div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e5e5">` +
     `<p style="color:#999;font-size:12px;margin:0;white-space:pre-line">${signature}</p>` +
     (footer ? `<p style="color:#bbb;font-size:11px;margin:10px 0 0;white-space:pre-line">${footer}</p>` : '') +
@@ -7253,7 +7253,7 @@ function loadImportar() {
             ).join('')}
           </select>
         </td>
-        <td style="font-weight:700;color:var(--adm-accent)">Gs. ${p.price.toLocaleString('es-PY')}</td>
+        <td style="font-weight:700;color:var(--color-text-primary,#713C53)">Gs. ${p.price.toLocaleString('es-PY')}</td>
         <td style="font-weight:700">${p.stock}</td>
         <td><span class="adm-badge ${p.active ? 'badge-entregado' : 'badge-cancelado'}">${p.active ? 'Activo' : 'Inactivo'}</span></td>
       </tr>

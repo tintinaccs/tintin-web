@@ -1,7 +1,7 @@
 /* TINTIN — Mantenimiento integral de Producto */
 body.tt-product-maintenance {
   background: var(--color-background-page, #FFF6FA) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #713C53) !important;
   overflow-x: clip;
 }
 
@@ -32,7 +32,7 @@ body.tt-product-maintenance #product-loading,
 body.tt-product-maintenance #product-not-found {
   background: var(--color-background-surface, #FFFFFF) !important;
   border-color: var(--color-card-border, #F1E4E7) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #713C53) !important;
 }
 
 body.tt-product-maintenance .tt-product-info-panel,
@@ -72,7 +72,7 @@ body.tt-product-maintenance .tt-section-title,
 body.tt-product-maintenance .tt-related-card-name,
 body.tt-product-maintenance #product-not-found h2,
 body.tt-product-maintenance .tt-product-state h2 {
-  color: var(--color-text-title, #2B2B2B) !important;
+  color: var(--color-text-title, #713C53) !important;
 }
 
 body.tt-product-maintenance .tt-product-detail-desc,
@@ -96,14 +96,14 @@ body.tt-product-maintenance .tinsel-item-price,
 body.tt-product-maintenance .tinsel-footer-amount,
 body.tt-product-maintenance .tt-section-sub,
 body.tt-product-maintenance .tt-related-card-price {
-  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68)) !important;
+  color:var(--color-text-primary,#713C53) !important;
 }
 
 body.tt-product-maintenance .tt-product-status,
 body.tt-product-maintenance .tt-product-badge,
 body.tt-product-maintenance .tinsel-badge {
   background: var(--color-badge-background, #FDECF2) !important;
-  color: var(--color-badge-text, var(--color-brand-primary, #C52F68)) !important;
+  color: var(--color-badge-text, var(--color-brand-primary, #F8AACA)) !important;
   border: 1px solid var(--color-card-border, #F1E4E7);
 }
 
@@ -118,8 +118,8 @@ body.tt-product-maintenance .tt-share-btn,
 body.tt-product-maintenance .tinsel-qty,
 body.tt-product-maintenance .tinsel-btn-secondary {
   background: var(--color-button-secondary-background, #FFFFFF) !important;
-  border-color: var(--color-button-secondary-border, var(--color-brand-primary, #C52F68)) !important;
-  color: var(--color-button-secondary-text, var(--color-brand-primary, #C52F68)) !important;
+  border-color: var(--color-button-secondary-border, var(--color-brand-primary, #F8AACA)) !important;
+  color: var(--color-button-secondary-text, var(--color-brand-primary, #F8AACA)) !important;
 }
 
 body.tt-product-maintenance .tt-variant-option.active,
@@ -127,8 +127,8 @@ body.tt-product-maintenance .tt-btn-primary-full,
 body.tt-product-maintenance .tinsel-btn-primary,
 body.tt-product-maintenance #tinsel-checkout-btn,
 body.tt-product-maintenance .tt-added-toast-checkout {
-  background: var(--color-button-primary-background, var(--color-brand-primary, #C52F68)) !important;
-  border-color: var(--color-button-primary-border, var(--color-brand-primary, #C52F68)) !important;
+  background: var(--color-button-primary-background, var(--color-brand-primary, #F8AACA)) !important;
+  border-color: var(--color-button-primary-border, var(--color-brand-primary, #F8AACA)) !important;
   color: var(--color-button-primary-text, #FFFFFF) !important;
 }
 
@@ -152,7 +152,7 @@ body.tt-product-maintenance .tinsel-item-img {
 body.tt-product-maintenance .tinsel-toast,
 body.tt-product-maintenance .tt-added-toast {
   background: var(--color-background-elevated, #FFFFFF) !important;
-  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68)) !important;
+  color:var(--color-text-primary,#713C53) !important;
   border-color: var(--color-card-border, #F1E4E7) !important;
   box-shadow: 0 12px 40px var(--color-card-shadow, rgba(212,106,138,.16)) !important;
 }
@@ -173,7 +173,7 @@ body.tt-product-maintenance .tt-added-toast {
 .tt-product-runtime-state strong {
   display: block;
   margin-bottom: 7px;
-  color: var(--color-text-title, #2B2B2B);
+  color: var(--color-text-title, #713C53);
   font-size: 16px;
 }
 
@@ -230,7 +230,7 @@ body.tt-product-maintenance .tt-related-grid:has(> .tt-related-slot:only-child) 
 
 body.tt-product-maintenance .tt-footer {
   background: var(--color-background-footer, #FFFFFF) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #713C53) !important;
   border-top: 1px solid var(--color-border-primary, #F1E4E7);
 }
 
@@ -238,7 +238,7 @@ body.tt-product-maintenance .tt-footer a,
 body.tt-product-maintenance .tt-footer-col-title,
 body.tt-product-maintenance .tt-footer-bottom,
 body.tt-product-maintenance .tt-footer-tagline {
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #713C53) !important;
 }
 
 @media (min-width: 1025px) {
@@ -371,7 +371,7 @@ body.tt-product-maintenance .tt-gallery-thumbs{display:flex;align-items:stretch;
 body.tt-product-maintenance .tt-gallery-thumb{width:clamp(72px,11vw,112px);height:clamp(72px,11vw,112px);flex:0 0 clamp(72px,11vw,112px);aspect-ratio:1;padding:5px;border:1px solid #e9dfe4!important;border-radius:14px;background:#fff!important;box-shadow:none!important}
 body.tt-product-maintenance .tt-gallery-thumb.active{border:2px solid var(--pink-dark)!important;box-shadow:0 0 0 3px rgba(173,63,103,.1)!important}
 body.tt-product-maintenance .tt-gallery-thumb-img{width:100%;height:100%;object-fit:contain;background:#fff!important;mix-blend-mode:normal}
-body.tt-product-maintenance .tt-product-detail-desc{margin-bottom:20px;padding:18px 0;border-top:1px solid #eee7ea;border-bottom:1px solid #eee7ea;color:#5f5358}
+body.tt-product-maintenance .tt-product-detail-desc{margin-bottom:20px;padding:18px 0;border-top:1px solid #eee7ea;border-bottom:1px solid #eee7ea;color:#713C53}
 body.tt-product-maintenance .tt-product-specifications{margin-top:0;border-top:0}
 body.tt-product-maintenance .tt-product-specifications>div{min-width:0;grid-template-columns:minmax(120px,150px) minmax(0,1fr);padding:12px 0;border-bottom:1px solid #eee7ea}
 body.tt-product-maintenance .tt-product-specifications dd{min-width:0;overflow-wrap:anywhere}
@@ -449,7 +449,7 @@ body.tt-product-maintenance .tt-trust-badge-icon {
   place-items: center;
   width: 24px;
   height: 24px;
-  color: var(--pink-dark);
+  color:var(--color-text-primary,#713C53);
   flex: 0 0 24px;
 }
 body.tt-product-maintenance .tt-product-social-bar {

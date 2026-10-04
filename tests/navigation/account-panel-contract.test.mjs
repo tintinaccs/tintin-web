@@ -17,6 +17,6 @@ test('el panel de cuenta conserva destinos por rol y CTA legible', () => {
   assert.match(authNav, /href="\/perfil#mis-pedidos"/);
   assert.match(authNav, /hasAdminAccess\(user,role\)[\s\S]*href="\/admin"/);
   assert.match(authNav, /href="\$\{loginHref\}"/);
-  assert.match(css, /\.tt-account-primary[\s\S]*color: #fff !important/);
-  assert.match(css, /--tt-drawer-accent: var\(--color-brand-primary, #C52F68\)/);
+  assert.match(css, /\.tt-account-primary[\s\S]*color:\s*#713C53 !important/);
+  assert.match(css, /--tt-drawer-accent: var\(--color-brand-primary, #F8AACA\)/);
 });

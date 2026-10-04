@@ -1,5 +1,5 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-1';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
 /* =============================================================
    TINTIN — Sincronización segura del estado global de la tienda
    =============================================================
@@ -79,7 +79,7 @@ function ensureStatusPanel(checkbox) {
   panel.id = 'cfg-store-sync-status';
   panel.setAttribute('role', 'status');
   panel.style.cssText =
-    'margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12px;line-height:1.5;background:#f5f5f5;color:#666;border:1px solid var(--adm-border)';
+    'margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12px;line-height:1.5;background:#f5f5f5;color:#713C53;border:1px solid var(--adm-border)';
   panel.textContent = 'Comprobando el estado real de la tienda…';
 
   const wrap = checkbox.closest('.adm-toggle-wrap');
@@ -411,6 +411,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./sincronizacion-correo-admin.js?v=tintin-20261004-admin-connections-1').catch(error => {
+import('./sincronizacion-correo-admin.js?v=tintin-20261004-admin-connections-3').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

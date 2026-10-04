@@ -8,7 +8,7 @@
     if (document.querySelector('link[data-tt-about-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'css/pages/institutional/about-maintenance.css?v=tintin-20260925-cache-converge-1-brand-20261004-1';
+    link.href = 'css/pages/institutional/about-maintenance.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
     link.dataset.ttAboutMaintenance = '1';
     document.head.appendChild(link);
   };

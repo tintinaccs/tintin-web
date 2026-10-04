@@ -5,7 +5,7 @@
 
 body.tt-home-premium {
   background: var(--color-background-page, #FFF6FA) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #713C53) !important;
   overflow-x: clip;
 }
 
@@ -58,7 +58,7 @@ body.tt-home-premium .tt-hero-content,
 body.tt-home-premium .tt-hero-title,
 body.tt-home-premium .tt-hero-subtitle {
   color: var(--color-text-inverse, #FFFFFF) !important;
-  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, var(--color-brand-primary, #C52F68)) 54%, transparent);
+  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, var(--color-brand-primary, #F8AACA)) 54%, transparent);
 }
 
 body.tt-home-premium .tt-hero-content {
@@ -83,7 +83,7 @@ body.tt-home-premium .tt-look-card,
 body.tt-home-premium .tt-trust-item {
   background-color: var(--color-background-surface, #FFFFFF) !important;
   border-color: var(--color-card-border, #F1E4E7) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #713C53) !important;
 }
 
 body.tt-home-premium .tt-section-title,
@@ -92,7 +92,7 @@ body.tt-home-premium .tt-watch-title,
 body.tt-home-premium .tt-trust-title,
 body.tt-home-premium .tt-review-name,
 body.tt-home-premium .tt-product-name {
-  color: var(--color-text-title, #2B2B2B) !important;
+  color: var(--color-text-title, #713C53) !important;
 }
 
 body.tt-home-premium .tt-section-sub,
@@ -100,7 +100,7 @@ body.tt-home-premium .tt-editorial-eyebrow,
 body.tt-home-premium .tt-watch-eyebrow,
 body.tt-home-premium .tt-product-price,
 body.tt-home-premium .tt-review-stars {
-  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68)) !important;
+  color:var(--color-text-primary,#713C53) !important;
 }
 
 body.tt-home-premium .tt-section-desc,
@@ -113,15 +113,15 @@ body.tt-home-premium .tt-review-product {
 }
 
 body.tt-home-premium .tt-btn {
-  background-color: var(--color-button-primary-background, var(--color-brand-primary, #C52F68));
-  border-color: var(--color-button-primary-border, var(--color-brand-primary, #C52F68));
+  background-color: var(--color-button-primary-background, var(--color-brand-primary, #F8AACA));
+  border-color: var(--color-button-primary-border, var(--color-brand-primary, #F8AACA));
   color: var(--color-button-primary-text, #FFFFFF) !important;
 }
 
 body.tt-home-premium .tt-btn-outline {
   background-color: var(--color-button-secondary-background, #FFFFFF);
-  border-color: var(--color-button-secondary-border, var(--color-brand-primary, #C52F68));
-  color: var(--color-button-secondary-text, var(--color-brand-primary, #C52F68)) !important;
+  border-color: var(--color-button-secondary-border, var(--color-brand-primary, #F8AACA));
+  color: var(--color-button-secondary-text, var(--color-brand-primary, #F8AACA)) !important;
 }
 
 body.tt-home-premium .tt-btn:focus-visible,
@@ -161,7 +161,7 @@ body.tt-home-premium .tt-look-card-img img {
 
 body.tt-home-premium .tt-footer {
   background: var(--color-background-footer, #FFFFFF) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #713C53) !important;
   border-top: 1px solid var(--color-border-primary, #F1E4E7);
 }
 
@@ -169,7 +169,7 @@ body.tt-home-premium .tt-footer a,
 body.tt-home-premium .tt-footer-col-title,
 body.tt-home-premium .tt-footer-bottom,
 body.tt-home-premium .tt-footer-tagline {
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #713C53) !important;
 }
 
 body.tt-home-premium .tt-footer-wa {

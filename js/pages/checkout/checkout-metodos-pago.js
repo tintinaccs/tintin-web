@@ -2,7 +2,7 @@ import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=ti
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261004-location-consistency-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261004-final-integration-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?$/i;
 const VIEWPORTS = [1920, 1440, 1280, 1024, 768, 390, 320];
@@ -32,7 +32,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1-brand-20261004-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1-brand-20261004-1-owner-pink-20261004-1';
   document.head.appendChild(link);
 }
 

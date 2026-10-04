@@ -1,4 +1,4 @@
-const LAYOUT_CSS_VERSION = 'tintin-20260817-footer-contrast-1-brand-20261004-1';
+const LAYOUT_CSS_VERSION = 'tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1';
 let loaded = false;
 let globalConfigPromise = null;
 
@@ -70,7 +70,7 @@ function relativeLuminance(hex) {
 }
 
 function readableTextColor(backgroundHex) {
-  return relativeLuminance(backgroundHex) > 0.5 ? '#2b2b2b' : '#ffffff';
+  return relativeLuminance(backgroundHex) > 0.5 ? '#713C53' : '#ffffff';
 }
 
 function setCustomColor(root, attribute, cssVar, value) {

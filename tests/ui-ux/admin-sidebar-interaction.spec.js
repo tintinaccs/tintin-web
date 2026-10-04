@@ -36,8 +36,8 @@ for(const width of [541,600,768,900,1024,1440]) {
     await toggle.click();await page.mouse.move(width-10,300);
     await expect.poll(async()=>Math.round((await sidebar.boundingBox()).width)).toBe(74);
     expect(await page.locator('#adm-nav .adm-nav-item').first().evaluate(e=>getComputedStyle(e).fontSize)).toBe('0px');
-    expect(await page.locator('#adm-nav .adm-nav-icon svg').first().evaluate(e=>getComputedStyle(e).color)).toBe('rgb(255, 255, 255)');
-    expect(await page.locator('#adm-nav .adm-nav-icon svg rect').first().evaluate(e=>getComputedStyle(e).stroke)).toBe('rgb(255, 255, 255)');
+    expect(await page.locator('#adm-nav .adm-nav-icon svg').first().evaluate(e=>getComputedStyle(e).color)).toBe('rgb(113, 60, 83)');
+    expect(await page.locator('#adm-nav .adm-nav-icon svg rect').first().evaluate(e=>getComputedStyle(e).stroke)).toBe('rgb(113, 60, 83)');
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     if(width===768||width===1440) await page.screenshot({path:path.resolve(root,'../../outputs',`panel-lateral-${width}.png`)});
   });

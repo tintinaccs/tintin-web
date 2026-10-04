@@ -1,4 +1,4 @@
-import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-1";
+import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3";
 // =============================================================
 // TINTIN ACCESORIOS — Flujo real de decisiones y conexiones (render)
 // =============================================================
@@ -11,10 +11,10 @@ import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-
 // del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261003-order-email-resend-canonical-2';
 import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261004-admin-connections-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261004-admin-connections-3';
 import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261001-sellos-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
 import { collection, doc, getDoc, getDocs, limit, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {
