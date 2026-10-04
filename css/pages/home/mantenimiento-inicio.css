@@ -58,7 +58,7 @@ body.tt-home-premium .tt-hero-content,
 body.tt-home-premium .tt-hero-title,
 body.tt-home-premium .tt-hero-subtitle {
   color: var(--color-text-inverse, #FFFFFF) !important;
-  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 54%, transparent);
+  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, var(--color-brand-primary, #C52F68)) 54%, transparent);
 }
 
 body.tt-home-premium .tt-hero-content {
@@ -100,7 +100,7 @@ body.tt-home-premium .tt-editorial-eyebrow,
 body.tt-home-premium .tt-watch-eyebrow,
 body.tt-home-premium .tt-product-price,
 body.tt-home-premium .tt-review-stars {
-  color: var(--color-brand-primary, #AD3F67) !important;
+  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68)) !important;
 }
 
 body.tt-home-premium .tt-section-desc,
@@ -113,15 +113,15 @@ body.tt-home-premium .tt-review-product {
 }
 
 body.tt-home-premium .tt-btn {
-  background-color: var(--color-button-primary-background, #AD3F67);
-  border-color: var(--color-button-primary-border, #AD3F67);
+  background-color: var(--color-button-primary-background, var(--color-brand-primary, #C52F68));
+  border-color: var(--color-button-primary-border, var(--color-brand-primary, #C52F68));
   color: var(--color-button-primary-text, #FFFFFF) !important;
 }
 
 body.tt-home-premium .tt-btn-outline {
   background-color: var(--color-button-secondary-background, #FFFFFF);
-  border-color: var(--color-button-secondary-border, #AD3F67);
-  color: var(--color-button-secondary-text, #AD3F67) !important;
+  border-color: var(--color-button-secondary-border, var(--color-brand-primary, #C52F68));
+  color: var(--color-button-secondary-text, var(--color-brand-primary, #C52F68)) !important;
 }
 
 body.tt-home-premium .tt-btn:focus-visible,

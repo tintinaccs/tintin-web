@@ -32,7 +32,7 @@
 /* Superficies modales con cabecera de marca cuando ya existe un header. */
 :is(.modal-header, .adm-modal-header, .ck-modal-header, .perfil-modal-header) {
   border-bottom-color: transparent !important;
-  background: linear-gradient(135deg, #d81779, #9b0051) !important;
+  background: linear-gradient(135deg, var(--color-brand-primary, #C52F68), var(--color-brand-primary, #C52F68)) !important;
   color: #fff !important;
 }
 

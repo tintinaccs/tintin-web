@@ -7,8 +7,8 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const read = relative => fs.readFileSync(path.join(ROOT, relative), 'utf8');
 const failures = [];
-// Color oficial del loader desde #649 (css/theme/fondo-solido-cargador.css).
-const OFFICIAL_LOADER_BACKGROUND = '#F7BFD3';
+// Rosa uniforme solicitado para loader y superficies de marca.
+const OFFICIAL_LOADER_BACKGROUND = '#C52F68';
 
 function check(condition, message) {
   if (!condition) failures.push(message);
@@ -19,7 +19,7 @@ const solidCss = read('css/theme/fondo-solido-cargador.css');
 const loaderBrand = read('assets-tintin/images/general/tintin-loader-brand.svg');
 
 check(
-  /#tt-loader\{[^}]*background:#F7BFD3/i.test(loaderRuntime),
+  /#tt-loader\{[^}]*background:#C52F68/i.test(loaderRuntime),
   `js/cargador-pagina.js debe conservar el fondo sólido oficial ${OFFICIAL_LOADER_BACKGROUND} desde la primera pintura.`
 );
 // Antes esto se cargaba con un @import dentro de tokens-color.css y la
@@ -47,7 +47,7 @@ pagesWithTokens.forEach(({ name, source }) => {
   );
 });
 check(
-  /html body #tt-loader\s*\{[^}]*background:\s*#F7BFD3\s*!important[^}]*background-color:\s*#F7BFD3\s*!important/is.test(solidCss),
+  /html body #tt-loader\s*\{[^}]*background:\s*#C52F68\s*!important[^}]*background-color:\s*#C52F68\s*!important/is.test(solidCss),
   `El contenedor del loader debe forzar fondo y background-color sólidos en ${OFFICIAL_LOADER_BACKGROUND}.`
 );
 const wordmarkRule = solidCss.match(/html body #tt-loader-wordmark,\s*html body #tt-loader-wordmark \.tt-loader-wordmark-i\s*\{([^}]*)\}/i)?.[1] || '';
@@ -58,15 +58,17 @@ function relativeLuminance(hex) {
   const linear = rgb.map(channel => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4);
   return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
 }
+const bgLum = relativeLuminance(OFFICIAL_LOADER_BACKGROUND);
+const textLum = relativeLuminance(wordmarkColor);
 const wordmarkContrast = wordmarkColor
-  ? (relativeLuminance(OFFICIAL_LOADER_BACKGROUND) + 0.05) / (relativeLuminance(wordmarkColor) + 0.05)
+  ? (Math.max(bgLum, textLum) + 0.05) / (Math.min(bgLum, textLum) + 0.05)
   : 0;
 check(
-  wordmarkContrast >= 4.5 && /color:#7d173a!important/i.test(loaderRuntime),
+  wordmarkContrast >= 4.5 && /color:#ffffff!important/i.test(loaderRuntime),
   `El wordmark del loader debe superar contraste AA 4.5:1 sobre ${OFFICIAL_LOADER_BACKGROUND} en CSS y runtime (actual ${wordmarkContrast.toFixed(2)}:1).`
 );
 check(
-  /html body #tt-loader::before\s*\{[^}]*background:\s*#F7BFD3\s*!important[^}]*opacity:\s*1\s*!important/is.test(solidCss),
+  /html body #tt-loader::before\s*\{[^}]*background:\s*#C52F68\s*!important[^}]*opacity:\s*1\s*!important/is.test(solidCss),
   `El loader debe conservar una capa sólida ${OFFICIAL_LOADER_BACKGROUND} independiente detrás del logo.`
 );
 check(

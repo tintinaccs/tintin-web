@@ -20,7 +20,7 @@
       border: 2px solid #FDF0F5;
       background-clip: padding-box;
     }
-    ::-webkit-scrollbar-thumb:hover { background: #D9648C; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--admin-color-brand, #C52F68); }
     ::-webkit-scrollbar-corner { background: #FDF0F5; }
 
     /* Los tokens --adm-* ahora vienen de css/admin/admin-color-tokens.css (Super
@@ -125,9 +125,9 @@
       letter-spacing: .06em;
       margin-top: 3px;
     }
-    .role-superadmin { background: #8b2642; color: #fff; }
-    .role-admin      { background: #b84c72; color: #fff; border:1px solid rgba(255,255,255,.3); }
-    .role-agent      { background: #5f4bcf; color: #fff; }
+    .role-superadmin { background: var(--admin-color-brand); color: #fff; }
+    .role-admin      { background: var(--admin-color-brand, #C52F68); color: #fff; border:1px solid rgba(255,255,255,.3); }
+    .role-agent      { background: var(--admin-color-brand, #C52F68); color: #fff; }
 
     /* Reloj en vivo debajo del badge de rol — hora real del dispositivo,
        actualizado solo (un setInterval de 1s), no un valor fijo. */
@@ -610,7 +610,7 @@
     .adm-bar-row { display: grid; grid-template-columns: minmax(92px, .7fr) minmax(100px, 1.3fr) auto; align-items: center; gap: 10px; }
     .adm-bar-label { overflow: hidden; color: var(--adm-text); font-size: 11px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
     .adm-bar-track { height: 8px; overflow: hidden; border-radius: 999px; background: #f1e5e9; }
-    .adm-bar-fill { width: var(--adm-bar-width, 0%); height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ad3f67, #d7799a); transform-origin: left; transition: width .38s cubic-bezier(.16,1,.3,1); }
+    .adm-bar-fill { width: var(--adm-bar-width, 0%); height: 100%; border-radius: inherit; background: var(--admin-color-brand); transform-origin: left; transition: width .38s cubic-bezier(.16,1,.3,1); }
     .adm-bar-value { min-width: 28px; color: var(--adm-accent); font-size: 11px; font-weight: 900; text-align: right; }
     .adm-rank-row { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #f3e9ed; }
     .adm-rank-row:last-child { padding-bottom: 0; border-bottom: 0; }
@@ -630,7 +630,7 @@
     }
     .adm-trend-day { display: grid; grid-template-rows: 150px auto auto; gap: 6px; min-width: 48px; text-align: center; }
     .adm-trend-bars { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 150px; border-bottom: 1px solid #eadde2; }
-    .adm-trend-bar { width: 15px; min-height: 3px; height: var(--adm-trend-height, 3px); border-radius: 6px 6px 2px 2px; background: #ad3f67; transition: height .4s cubic-bezier(.16,1,.3,1); }
+    .adm-trend-bar { width: 15px; min-height: 3px; height: var(--adm-trend-height, 3px); border-radius: 6px 6px 2px 2px; background: var(--admin-color-brand); transition: height .4s cubic-bezier(.16,1,.3,1); }
     .adm-trend-bar-orders { background: #d997ad; }
     .adm-trend-bar-visits { background: #7263a8; }
     .adm-trend-day strong { color: var(--adm-text); font-size: 10px; }
@@ -894,7 +894,7 @@
     }
     .badge-pendiente  { background: #fef3c7; color: #92400e; }
     .badge-confirmado { background: #dbeafe; color: #1e40af; }
-    .badge-enviado    { background: #ede9fe; color: #5b21b6; }
+    .badge-enviado    { background: #ede9fe; color: var(--admin-color-brand, #C52F68); }
     .badge-entregado  { background: #d1fae5; color: #065f46; }
     .badge-cancelado  { background: #fee2e2; color: #991b1b; }
     .badge-preparando  { background: #fef9c3; color: #713f12; }
@@ -903,7 +903,7 @@
        puedan distinguir de un vistazo en la misma columna — son estados
        "terminales" distintos, no el mismo. */
     .badge-rechazado   { background: var(--admin-color-error-background); color: var(--admin-color-error-text); }
-    .badge-reembolsado { background: #ede9fe; color: #5b21b6; }
+    .badge-reembolsado { background: #ede9fe; color: var(--admin-color-brand, #C52F68); }
     /* Listo para retirar: único estado de pedido con el rosa de marca en vez
        de la paleta semántica genérica — es un hito positivo específico de
        Tintin (retiro en tienda), no un estado de logística estándar. */
@@ -2475,7 +2475,7 @@ html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-sub { color: rgba(255,255,
 .adm-diagnostic-badge-confirmed { background: #fee4e2; color: #b42318; }
 .adm-diagnostic-badge-manual { background: #fff1cc; color: #7a4a00; }
 .adm-diagnostic-badge-new { background: #e0f2fe; color: #075985; }
-.adm-diagnostic-badge-recurrent { background: #ede9fe; color: #5b21b6; }
+.adm-diagnostic-badge-recurrent { background: #ede9fe; color: var(--admin-color-brand, #C52F68); }
 .adm-diagnostic-item details {
   margin-top: 9px;
   border-top: 1px solid rgba(0,0,0,.08);

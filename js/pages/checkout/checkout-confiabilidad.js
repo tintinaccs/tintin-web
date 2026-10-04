@@ -9,11 +9,8 @@
      completos de Google Maps sin reemplazar la validación original del checkout.
    ============================================================= */
 
-import { parseLocationSearchInput, searchPlaces } from '../../components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1';
 
 const BAG_ICON_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>';
-const PIN_ICON_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg>';
-const MAP_ICON_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21"/><line x1="8" y1="3" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="21"/></svg>';
 
 const CHECKOUT_PATH_RE = /(?:^|\/)checkout(?:\.html)?\/?$/i;
 if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheckoutReliabilityBooted) {
@@ -25,9 +22,6 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
   const RESUME_KEY = 'tt_checkout_resume_step';
   const ROOT = document.documentElement;
   let lastCartFingerprint = '';
-  let checkoutMap = null;
-  let mapSearchTimer = 0;
-  let mapSearchGeneration = 0;
   let syncHideTimer = 0;
 
   function clearResumeState() {
@@ -99,70 +93,6 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
       #tt-checkout-sync-state[data-state="saving"]::before { background:#D39A42;box-shadow:0 0 0 3px rgba(211,154,66,.14); }
       #tt-checkout-sync-state[data-state="offline"]::before,
       #tt-checkout-sync-state[data-state="error"]::before { background:#CC4B4B;box-shadow:0 0 0 3px rgba(204,75,75,.14); }
-      .tt-map-smart-tools {
-        display:grid;
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:9px;
-        margin:10px 0 8px;
-      }
-      .tt-map-smart-button {
-        min-height:44px;
-        border:1.5px solid #F1C8D5;
-        border-radius:999px;
-        background:#FFFFFF;
-        color:#8B2642;
-        font:800 12px/1.2 Montserrat;
-        padding:10px 14px;
-        cursor:pointer;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:7px;
-        text-decoration:none;
-        text-align:center;
-      }
-      .tt-map-smart-button:hover,
-      .tt-map-smart-button:focus-visible { border-color:#AD3F67;box-shadow:0 0 0 3px rgba(173,63,103,.10);outline:0; }
-      .tt-map-smart-help {
-        margin:0 2px 8px;
-        color:#755F67;
-        font:600 11px/1.55 Montserrat;
-      }
-      #tt-map-smart-results {
-        display:none;
-        position:relative;
-        z-index:500;
-        margin:4px 0 10px;
-        max-height:280px;
-        overflow:auto;
-        background:#FFFFFF;
-        border:1.5px solid #F1C8D5;
-        border-radius:16px;
-        box-shadow:0 14px 34px rgba(82,27,49,.15);
-      }
-      #tt-map-smart-results.show { display:block; }
-      .tt-map-smart-result {
-        width:100%;
-        border:0;
-        border-bottom:1px solid #F8E6EC;
-        background:#FFFFFF;
-        color:#2B2B2B;
-        padding:12px 14px;
-        text-align:left;
-        cursor:pointer;
-        font-family:Montserrat;
-      }
-      .tt-map-smart-result:last-child { border-bottom:0; }
-      .tt-map-smart-result:hover,
-      .tt-map-smart-result:focus-visible { background:#FFF6FA;outline:0; }
-      .tt-map-smart-result-name { font-size:12px;font-weight:800;line-height:1.35; }
-      .tt-map-smart-result-address { margin-top:3px;font-size:10px;line-height:1.45;color:#7B6F72; }
-      .tt-map-smart-empty { padding:14px;color:#755F67;font:600 11px/1.5 Montserrat;text-align:center; }
-      @media(max-width:600px) {
-        .tt-map-smart-tools { grid-template-columns:1fr;gap:8px; }
-        .tt-map-smart-button { width:100%; }
-        #tt-map-smart-results { max-height:240px; }
-      }
     `;
     document.head.appendChild(style);
   }
@@ -257,7 +187,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
           <div class="ck-empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
           <div class="ck-empty-text">Tu carrito está vacío</div>
           <p style="color:#8B5B6B;font-size:13px;margin:6px 0 16px">Agregá un producto para comenzar una compra nueva.</p>
-          <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#AD3F67;color:#fff!important;font-weight:800">Ver catálogo →</a>
+          <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#C52F68;color:#fff!important;font-weight:800">Ver catálogo →</a>
         </div>`;
       subtotalNode.textContent = 'Gs. 0';
       return;
@@ -324,220 +254,10 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     }
   }
 
-  function hookLeafletLibrary(leaflet) {
-    if (!leaflet?.map || leaflet.map.__ttCheckoutCapture) return;
-    const originalMap = leaflet.map;
-    const wrappedMap = function (...args) {
-      const instance = originalMap.apply(this, args);
-      const target = args[0];
-      const targetId = typeof target === 'string' ? target : target?.id;
-      if (targetId === 'ck-map') checkoutMap = instance;
-      return instance;
-    };
-    Object.assign(wrappedMap, originalMap);
-    wrappedMap.__ttCheckoutCapture = true;
-    wrappedMap.__ttOriginal = originalMap;
-    leaflet.map = wrappedMap;
-  }
-
-  function installLeafletCapture() {
-    if (window.L) {
-      hookLeafletLibrary(window.L);
-      return;
-    }
-    const descriptor = Object.getOwnPropertyDescriptor(window, 'L');
-    if (descriptor && descriptor.configurable === false) return;
-    let storedLeaflet = descriptor?.get ? descriptor.get.call(window) : descriptor?.value;
-    Object.defineProperty(window, 'L', {
-      configurable: true,
-      enumerable: true,
-      get() { return storedLeaflet; },
-      set(value) {
-        storedLeaflet = value;
-        hookLeafletLibrary(value);
-      },
-    });
-  }
-
-  function waitForCheckoutMap(timeoutMs = 4500) {
-    if (checkoutMap) return Promise.resolve(checkoutMap);
-    return new Promise(resolve => {
-      const started = Date.now();
-      const timer = setInterval(() => {
-        if (checkoutMap || Date.now() - started >= timeoutMs) {
-          clearInterval(timer);
-          resolve(checkoutMap);
-        }
-      }, 60);
-    });
-  }
-
-  async function applyMapPlace(place) {
-    const map = await waitForCheckoutMap();
-    const results = document.getElementById('tt-map-smart-results');
-    if (!map || !window.L) {
-      if (results) {
-        results.innerHTML = '<div class="tt-map-smart-empty">El mapa todavía se está preparando. Esperá un instante y volvé a tocar la ubicación.</div>';
-        results.classList.add('show');
-      }
-      return;
-    }
-    const latlng = window.L.latLng(place.lat, place.lng);
-    map.setView(latlng, 17, { animate: false });
-    map.fire('click', { latlng, originalEvent: null });
-
-    const searchInput = document.getElementById('ck-map-search');
-    const nameInput = document.getElementById('ck-location-name');
-    const addressInput = document.getElementById('ck-address');
-    if (searchInput) searchInput.value = place.name || place.address || '';
-    if (nameInput && (!nameInput.value.trim() || nameInput.dataset.ttAutoFilled === '1')) {
-      nameInput.value = place.name || 'Mi ubicación';
-      nameInput.dataset.ttAutoFilled = '1';
-      nameInput.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    if (addressInput && !addressInput.value.trim() && place.address) {
-      addressInput.value = place.address;
-      addressInput.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    results?.classList.remove('show');
-    document.getElementById('ck-map')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-
-  function renderSmartResults(places, message = '') {
-    const results = document.getElementById('tt-map-smart-results');
-    if (!results) return;
-    if (message) {
-      results.innerHTML = `<div class="tt-map-smart-empty">${escapeHtml(message)}</div>`;
-      results.classList.add('show');
-      return;
-    }
-    if (!places.length) {
-      results.innerHTML = '<div class="tt-map-smart-empty">No encontramos ese nombre. Podés mover el mapa y tocar el punto exacto; después escribí el nombre que quieras en “Nombre de esta ubicación”.</div>';
-      results.classList.add('show');
-      return;
-    }
-    results.innerHTML = places.map((place, index) => `
-      <button type="button" class="tt-map-smart-result" data-smart-place="${index}">
-        <div class="tt-map-smart-result-name">${PIN_ICON_SVG} ${escapeHtml(place.name)}</div>
-        <div class="tt-map-smart-result-address">${escapeHtml(place.address)} · ${escapeHtml(place.source || '')}</div>
-      </button>`).join('');
-    results.classList.add('show');
-    results.querySelectorAll('[data-smart-place]').forEach(button => {
-      button.addEventListener('click', () => applyMapPlace(places[Number(button.dataset.smartPlace)]));
-    });
-  }
-
-  async function runSmartSearch(rawValue) {
-    const generation = ++mapSearchGeneration;
-    const raw = String(rawValue || '').trim();
-    const existingResults = document.getElementById('ck-map-search-results');
-    existingResults?.classList.remove('show');
-    if (raw.length < 3) {
-      document.getElementById('tt-map-smart-results')?.classList.remove('show');
-      return;
-    }
-
-    const parsed = parseLocationSearchInput(raw);
-    if (parsed?.lat != null) {
-      await applyMapPlace(parsed);
-      return;
-    }
-    if (parsed?.shortGoogleUrl) {
-      renderSmartResults([], 'Ese es un enlace corto de Google Maps. Abrilo y copiá el enlace completo que contiene las coordenadas, o buscá el nombre directamente acá.');
-      return;
-    }
-
-    const query = parsed?.query || raw;
-    renderSmartResults([], 'Buscando lugares, negocios, calles y puntos de referencia…');
-    try {
-      const places = await searchPlaces(query);
-      if (generation !== mapSearchGeneration) return;
-      renderSmartResults(places);
-    } catch (error) {
-      console.warn('[checkout-map] No se pudo completar la búsqueda ampliada:', error);
-      if (generation === mapSearchGeneration) {
-        renderSmartResults([], 'No pudimos consultar el buscador ahora. Igual podés tocar directamente el punto exacto en el mapa.');
-      }
-    }
-  }
-
-  function enhanceMapSearch() {
-    const searchWrap = document.querySelector('.ck-map-search-wrap');
-    const input = document.getElementById('ck-map-search');
-    if (!searchWrap || !input || document.getElementById('tt-map-smart-tools')) return;
-
-    input.placeholder = 'Buscar negocio, local, calle, barrio, referencia o pegar enlace de Google Maps…';
-    input.setAttribute('aria-autocomplete', 'list');
-    input.setAttribute('aria-controls', 'tt-map-smart-results');
-
-    const tools = document.createElement('div');
-    tools.id = 'tt-map-smart-tools';
-    tools.className = 'tt-map-smart-tools';
-    tools.innerHTML = `
-      <button type="button" class="tt-map-smart-button" id="tt-use-current-location">${PIN_ICON_SVG} Usar mi ubicación actual</button>
-      <a class="tt-map-smart-button" id="tt-open-google-maps" href="https://www.google.com/maps/search/?api=1&query=Paraguay" target="_blank" rel="noopener">${MAP_ICON_SVG} Buscar en Google Maps</a>`;
-
-    const help = document.createElement('div');
-    help.className = 'tt-map-smart-help';
-    help.textContent = 'Buscá el lugar, usá tu ubicación o tocá el punto exacto en el mapa.';
-
-    const results = document.createElement('div');
-    results.id = 'tt-map-smart-results';
-    results.setAttribute('role', 'listbox');
-
-    searchWrap.insertAdjacentElement('afterend', results);
-    results.insertAdjacentElement('beforebegin', help);
-    help.insertAdjacentElement('beforebegin', tools);
-
-    input.addEventListener('input', event => {
-      event.stopImmediatePropagation();
-      clearTimeout(mapSearchTimer);
-      const value = input.value;
-      const googleLink = document.getElementById('tt-open-google-maps');
-      if (googleLink) googleLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(value || 'Paraguay')}`;
-      mapSearchTimer = setTimeout(() => runSmartSearch(value), 320);
-    }, { capture: true });
-
-    input.addEventListener('keydown', event => {
-      if (event.key === 'Escape') results.classList.remove('show');
-    });
-
-    document.addEventListener('click', event => {
-      if (event.target !== input && !results.contains(event.target) && !tools.contains(event.target)) results.classList.remove('show');
-    });
-
-    document.getElementById('tt-use-current-location')?.addEventListener('click', () => {
-      const button = document.getElementById('tt-use-current-location');
-      if (!navigator.geolocation) {
-        renderSmartResults([], 'Este navegador no permite obtener la ubicación actual. Podés buscarla o marcarla manualmente en el mapa.');
-        return;
-      }
-      if (button) { button.disabled = true; button.textContent = '📍 Obteniendo ubicación…'; }
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          if (button) { button.disabled = false; button.textContent = '📍 Usar mi ubicación actual'; }
-          applyMapPlace({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            name: 'Mi ubicación actual',
-            address: 'Ubicación obtenida desde este dispositivo',
-          });
-        },
-        () => {
-          if (button) { button.disabled = false; button.textContent = '📍 Usar mi ubicación actual'; }
-          renderSmartResults([], 'No pudimos obtener tu ubicación. Revisá el permiso del navegador o marcá el punto manualmente.');
-        },
-        { enableHighAccuracy: true, timeout: 9000, maximumAge: 60000 },
-      );
-    });
-  }
-
   function boot() {
     injectStyles();
     clearResumeState();
     resetVisualStep();
-    installLeafletCapture();
-    enhanceMapSearch();
     ensureSyncStateNode();
 
     // El carrito local se puede pintar de inmediato. Cuando cart-sync termine de

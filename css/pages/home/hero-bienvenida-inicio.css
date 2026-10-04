@@ -75,7 +75,7 @@ html body.tt-home-premium .tt-hero-title-line {
 
 html body.tt-home-premium .tt-hero-title-line--accent {
   margin-left: clamp(56px, 10vw, 150px);
-  color: #f24498;
+  color: var(--color-brand-primary, #C52F68);
     font-family: "Montserrat", sans-serif;
     font-size: 1.02em;
     font-style: italic;
@@ -93,7 +93,7 @@ html body.tt-home-premium .tt-hero-actions {
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
   background: #fff !important;
   background-color: #fff !important;
-  color: #f24498 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
   border: 0 !important;
   min-height: 52px;
   border-radius: 999px;
@@ -118,7 +118,7 @@ html body.tt-home-premium .tt-hero-link {
 }
 
 html body.tt-home-premium .tt-hero-link:hover {
-  color: #ad3f67;
+  color: var(--color-brand-primary, #C52F68);
 }
 
 /* Desktop y tablet horizontal (≥1121px, o tablet en orientación horizontal):
@@ -480,7 +480,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
   align-items: center;
   justify-content: center;
   padding: 0 .8em !important;
-  color: #f24498 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
   background: #fff !important;
   background-color: #fff !important;
   border-color: #fff !important;
@@ -506,7 +506,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta:active {
   background-color: #fff !important;
   border-color: #fff !important;
   box-shadow: none !important;
-  color: #f24498 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
   transform: none !important;
 }
 
@@ -522,7 +522,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta::after {
 html body.tt-home-premium .tt-hero-actions .tt-hero-cta:hover *,
 html body.tt-home-premium .tt-hero-actions .tt-hero-cta:focus-visible *,
 html body.tt-home-premium .tt-hero-actions .tt-hero-cta:active * {
-  color: #f24498 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-hero-link {

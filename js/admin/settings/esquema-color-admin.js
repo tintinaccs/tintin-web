@@ -10,7 +10,7 @@ import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-202609
  */
 import { db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { ADMIN_TOKENS, buildDefaultTokenMap } from '../../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1';
+import { ADMIN_TOKENS, buildDefaultTokenMap, normalizeLegacyBrandColor } from '../../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1';
 
 const CACHE_KEY = 'tt_color_scheme_admin';
 const APPEARANCE_DOC = { col: 'settings', id: 'appearance' };
@@ -23,7 +23,7 @@ function keyMapToCssVarMap(tokensByKey) {
   const out = {};
   if (!tokensByKey) return out;
   ADMIN_TOKENS.forEach(t => {
-    if (tokensByKey[t.key] != null && tokensByKey[t.key] !== '') out[t.cssVar] = tokensByKey[t.key];
+    if (tokensByKey[t.key] != null && tokensByKey[t.key] !== '') out[t.cssVar] = normalizeLegacyBrandColor(t, tokensByKey[t.key]);
   });
   return out;
 }
@@ -76,5 +76,5 @@ async function subscribeToScheme(schemeId) {
 // admin-images.html comparte este motor de colores, pero no debe cargar ese
 // editor ni dejar observadores esperando una interfaz que allí no existe.
 if (document.getElementById('visual-editor')) {
-  import('../appearance/visual-studio-global-admin.js?v=tintin-20260930-semantic-main-cache-1');
+  import('../appearance/visual-studio-global-admin.js?v=tintin-20260930-semantic-main-cache-1-brand-20261004-1-brand-runtime-20261004-1');
 }

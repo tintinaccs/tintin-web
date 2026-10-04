@@ -28,9 +28,9 @@ html body:not(:has(.adm-main)) #tt-privacy-consent.tt-privacy-consent{
   box-shadow:0 24px 64px rgba(38,24,30,.14),0 2px 8px rgba(38,24,30,.05)!important;
 }
 html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-primary{
-  background:var(--tt-accent,#AD3F67)!important;
-  background-color:var(--tt-accent,#AD3F67)!important;
-  border:1px solid var(--tt-accent,#AD3F67)!important;
+  background:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
+  background-color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
+  border:1px solid var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
   color:#FFFFFF!important;
   opacity:1!important;
 }
@@ -38,8 +38,8 @@ html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-primary *{col
 html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-secondary{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
-  border:1px solid var(--tt-accent,#AD3F67)!important;
-  color:var(--tt-accent,#AD3F67)!important;
+  border:1px solid var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
+  color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
   opacity:1!important;
 }
 
@@ -48,14 +48,14 @@ html body:not(:has(.adm-main)) #tt-privacy-consent .tt-privacy-btn-secondary{
    color de enlace de la marca. La flecha es texto y adopta el mismo color. */
 #btn-tienda,
 #btn-mobile-tienda{
-  color:var(--tt-accent,#AD3F67)!important;
+  color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
 }
 .tt-header.scrolled #btn-tienda,
 #btn-tienda:hover,
 #btn-tienda[aria-expanded="true"],
 #btn-mobile-tienda:hover,
 #btn-mobile-tienda[aria-expanded="true"]{
-  color:var(--tt-accent,#AD3F67)!important;
+  color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
 }
 
 /* Parte 2A: los dos flotantes usan lados opuestos en mobile para no pisarse. */

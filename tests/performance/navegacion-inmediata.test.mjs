@@ -102,8 +102,9 @@ test('el carrito se inicia únicamente desde la navegación modular', () => {
   assert.doesNotMatch(quality, /bootCartPhase7/);
   const cartRuntimeUrl = navigation.match(/const CART_RUNTIME_URL = '([^']+)'/)?.[1];
   assert.ok(cartRuntimeUrl, 'La navegación modular debe declarar la URL del runtime del carrito.');
+  const baseline = JSON.parse(fs.readFileSync('scripts/cache-version-baseline.json', 'utf8'));
   assert.ok(
-    cartRuntimeUrl.endsWith(`?v=${colorVersion}`),
-    'El runtime del carrito debe conservar la versión canónica compartida de primer paint.'
+    cartRuntimeUrl.endsWith(`?v=${baseline['js/components/cart/sincronizacion-carrito.js'].version}`),
+    'El runtime del carrito debe usar la versión registrada de sus propios bytes.'
   );
 });

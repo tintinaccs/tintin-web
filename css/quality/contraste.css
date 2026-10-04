@@ -38,7 +38,7 @@ button.tt-inline-theme-cleaned svg {
 .perfil-wa-box,
 a.perfil-btn.perfil-btn-outline,
 a.perfil-wa-box {
-  color: #8b2642;
+  color: var(--color-brand-primary, #C52F68);
 }
 
 /* Gris de apoyo: 3.51:1 sobre blanco. Este da 6.43:1. */

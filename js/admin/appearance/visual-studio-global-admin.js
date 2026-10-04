@@ -10,11 +10,11 @@ const PAGE_OPTIONS = [
 ];
 const DEVICE_OPTIONS = [['desktop','Escritorio'],['tablet','Tablet'],['mobile','Celular']];
 const CAMPAIGN_PRESETS = [
-  { name:'San Valentín', announcement:'Un detalle especial para regalar o regalarte 💗', effect:'hearts', background:'#f7d9e5', textColor:'#5b2339', accentColor:'#ad3f67' },
-  { name:'Día de la Amistad', announcement:'Regalitos para celebrar a tu persona favorita ✨', effect:'sparkles', background:'#fbe9f0', textColor:'#5b2339', accentColor:'#ad3f67' },
+  { name:'San Valentín', announcement:'Un detalle especial para regalar o regalarte 💗', effect:'hearts', background:'#f7d9e5', textColor:'#5b2339', accentColor:'#C52F68' },
+  { name:'Día de la Amistad', announcement:'Regalitos para celebrar a tu persona favorita ✨', effect:'sparkles', background:'#fbe9f0', textColor:'#5b2339', accentColor:'#C52F68' },
   { name:'Navidad', announcement:'La temporada más linda para regalar 🎁', effect:'snow', background:'#234d3b', textColor:'#ffffff', accentColor:'#c7a24d' },
   { name:'Black Friday', announcement:'Promos especiales por tiempo limitado', effect:'confetti', background:'#161216', textColor:'#ffffff', accentColor:'#e65c95' },
-  { name:'Aniversario Tintin', announcement:'Estamos de festejo ✨ Gracias por ser parte de Tintin', effect:'sparkles', background:'#ad3f67', textColor:'#ffffff', accentColor:'#f7d9e5' },
+  { name:'Aniversario Tintin', announcement:'Estamos de festejo ✨ Gracias por ser parte de Tintin', effect:'sparkles', background:'#C52F68', textColor:'#ffffff', accentColor:'#f7d9e5' },
 ];
 
 let config = { campaigns: [], popups: [] };
@@ -30,7 +30,7 @@ function $(id) { return document.getElementById(id); }
 function make(tag, className = '', text = '') { const node=document.createElement(tag); if(className)node.className=className; if(text!=='')node.textContent=text; return node; }
 function ensureCss() {
   if (document.getElementById('visual-studio-global-admin-css')) return;
-  const link=document.createElement('link'); link.id='visual-studio-global-admin-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-global-admin.css?v=tintin-20260810-global-studio-3'; document.head.appendChild(link);
+  const link=document.createElement('link'); link.id='visual-studio-global-admin-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-global-admin.css?v=tintin-20260810-global-studio-3-brand-20261004-1'; document.head.appendChild(link);
 }
 function setStatus(message, kind='') { const node=$('visual-global-status'); if(!node)return; node.textContent=message; node.className=`visual-global-status${kind?` is-${kind}`:''}`; }
 function setDirty(value=true) { dirty=Boolean(value); updateActions(); window.AdminUnsaved?.notify?.(); }

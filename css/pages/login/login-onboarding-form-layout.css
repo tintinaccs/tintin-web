@@ -33,45 +33,6 @@ body:has(.login-page).login-setup-open #login-profile-block :is(
   #login-profile-dob-field
 ) .login-email-label { margin-bottom: 8px !important; }
 
-@media (min-width: 600px) {
-  body:has(.login-page).login-setup-open #login-profile-block {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    column-gap: clamp(14px, 2vw, 28px) !important;
-    row-gap: clamp(14px, 1.6vw, 22px) !important;
-  }
-  body:has(.login-page).login-setup-open :is(
-    #login-profile-name-confirmation,
-    #login-profile-name-field,
-    #login-profile-phone-field,
-    #login-profile-address-field,
-    #btn-save-profile
-  ) { grid-column: 1 / -1 !important; }
-  body:has(.login-page).login-setup-open :is(#login-profile-username-field, #login-profile-dob-field) {
-    grid-column: auto;
-    align-self: stretch !important;
-  }
-  /* Si solo queda uno de los dos, ocupa todo el ancho. */
-  body:has(.login-page).login-setup-open #login-profile-block:has(#login-profile-dob-field:is([style*="display:none"], [style*="display: none"])) #login-profile-username-field,
-  body:has(.login-page).login-setup-open #login-profile-block:has(#login-profile-username-field:is([style*="display:none"], [style*="display: none"])) #login-profile-dob-field {
-    grid-column: 1 / -1;
-  }
-}
-@media (min-width: 880px) {
-  body:has(.login-page).login-setup-open #login-profile-block {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-  body:has(.login-page).login-setup-open :is(#login-profile-name-field, #login-profile-phone-field) {
-    grid-column: auto !important;
-    align-self: stretch !important;
-    height: auto !important;
-  }
-  /* Nombre o teléfono solos: ancho completo, sin hueco al lado. */
-  body:has(.login-page).login-setup-open #login-profile-block:has(#login-profile-name-field:is([style*="display:none"], [style*="display: none"])) #login-profile-phone-field,
-  body:has(.login-page).login-setup-open #login-profile-block:has(#login-profile-phone-field:is([style*="display:none"], [style*="display: none"])) #login-profile-name-field {
-    grid-column: 1 / -1 !important;
-  }
-}
-
 body:has(.login-page).login-setup-open .tt-map-block {
   background: transparent !important;
   border: 0 !important;
@@ -120,4 +81,35 @@ body:has(.login-page).login-setup-open #btn-save-profile { order: 6; }
 body:has(.login-page).login-setup-open :is(#login-profile-name-field, #login-profile-phone-field) {
   align-content: start !important;
   grid-auto-rows: max-content;
+}
+
+/* Una columna centrada: el teclado y la lectura siguen el mismo recorrido. */
+body:has(.login-page).login-setup-open .login-shell {
+  width: min(100%, 720px) !important;
+  max-width: 720px !important;
+}
+body:has(.login-page).login-setup-open #login-profile-block {
+  width: min(100%, 600px) !important;
+  margin-inline: auto !important;
+  gap: 14px !important;
+}
+body:has(.login-page).login-setup-open #login-profile-block > * {
+  grid-column: 1 / -1 !important;
+  height: auto !important;
+  min-width: 0;
+}
+body:has(.login-page).login-setup-open #login-profile-name-field {
+  display: flex !important;
+  flex-direction: column;
+  gap: 8px !important;
+}
+body:has(.login-page).login-setup-open #login-profile-name-field label[for='login-profile-last-name'] {
+  margin-top: 8px !important;
+}
+body:has(.login-page).login-setup-open .login-phone-row {
+  width: 100% !important;
+  max-width: none !important;
+}
+body:has(.login-page).login-setup-open :is(.login-email-input, .tt-map-search input) {
+  font-size: 16px !important;
 }

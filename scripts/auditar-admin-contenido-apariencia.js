@@ -95,7 +95,7 @@ async function main() {
   check(
     'El apply global solo aplica valores que sean un color estricto (HEX/rgb/hsl)',
     /function isSafeColorValue\(value\)/.test(colorScheme) &&
-      /out\[token\.cssVar\] = value;/.test(colorScheme) &&
+      /out\[token\.cssVar\] = normalizeLegacyBrandColor\(token, value\);/.test(colorScheme) &&
       /value != null && value !== '' && isSafeColorValue\(value\)/.test(colorScheme),
     'esquema-color.js debe validar el valor antes de setProperty (no URLs ni CSS arbitrario).'
   );

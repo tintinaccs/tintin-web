@@ -9,7 +9,7 @@
  */
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap } from './esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1';
+import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap, normalizeLegacyBrandColor } from './esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1';
 
 const CACHE_KEY = 'tt_color_scheme_global';
 const APPEARANCE_DOC = { col: 'settings', id: 'appearance' };
@@ -43,7 +43,7 @@ function keyMapToCssVarMap(tokensByKey) {
   GLOBAL_TOKENS.forEach(token => {
     const value = tokensByKey[token.key];
     if (value != null && value !== '' && isSafeColorValue(value)) {
-      out[token.cssVar] = value;
+      out[token.cssVar] = normalizeLegacyBrandColor(token, value);
     }
   });
   return out;

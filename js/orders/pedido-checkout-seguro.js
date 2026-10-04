@@ -346,44 +346,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }, 0))
     .catch(error => console.warn('[secure-checkout-order] Carrito inicial no disponible:', error));
 
-  function installLeafletCapture() {
-    if (!window.L?.marker || window.L.__ttCheckoutCapture) return false;
-    window.L.__ttCheckoutCapture = true;
-    const original = window.L.marker;
-    window.L.marker = function(...args) {
-      const marker = original.apply(this, args);
-      window.__TintinCheckoutMarker = marker;
-      const save = () => {
-        try {
-          const point = marker.getLatLng();
-          window.__TintinCheckoutPoint = {
-            lat: Number(point.lat.toFixed(6)),
-            lng: Number(point.lng.toFixed(6))
-          };
-        } catch {}
-      };
-      marker.on?.('add move dragend', save);
-      queueMicrotask(save);
-      return marker;
-    };
-    return true;
-  }
-
-  const leafletTimer = window.setInterval(() => {
-    if (installLeafletCapture()) window.clearInterval(leafletTimer);
-  }, 300);
-
   function mapLocation() {
     let point = window.__TintinCheckoutPoint || null;
-    try {
-      const current = window.__TintinCheckoutMarker?.getLatLng?.();
-      if (current) {
-        point = {
-          lat: Number(current.lat.toFixed(6)),
-          lng: Number(current.lng.toFixed(6))
-        };
-      }
-    } catch {}
 
     if (!point) {
       const match = (document.getElementById('ck-map-coords')?.textContent || '')

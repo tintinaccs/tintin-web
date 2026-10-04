@@ -1,12 +1,12 @@
 html:has(body #tt-loader:not(.tt-out)),
 html:has(body #tt-loader:not(.tt-out)) body {
-  background: #F7BFD3 !important;
-  background-color: #F7BFD3 !important;
+  background: #C52F68 !important;
+  background-color: #C52F68 !important;
 }
 
 html body #tt-loader {
-  background: #F7BFD3 !important;
-  background-color: #F7BFD3 !important;
+  background: #C52F68 !important;
+  background-color: #C52F68 !important;
   background-image: none !important;
   background-blend-mode: normal !important;
   backdrop-filter: none !important;
@@ -26,8 +26,8 @@ html body #tt-loader::before {
   inset: 0;
   z-index: 0;
   display: block;
-  background: #F7BFD3 !important;
-  background-color: #F7BFD3 !important;
+  background: #C52F68 !important;
+  background-color: #C52F68 !important;
   background-image: none !important;
   opacity: 1 !important;
   pointer-events: none;
@@ -101,18 +101,17 @@ html body #tt-loader-brand-subtitle {
   visibility: visible !important;
 }
 
-/* El wordmark usa ciruela oscuro para conservar contraste AA sobre el rosa. */
+/* La identidad blanca conserva contraste AA sobre el rosa de marca. */
 html body #tt-loader-wordmark,
 html body #tt-loader-wordmark .tt-loader-wordmark-i {
-  color: #7d173a !important;
+  color: #ffffff !important;
 }
 
-/* Los textos que hay que leer (sección y mensajes de estado) van en gris
-   oscuro: blanco sobre #F7BFD3 da 1.57:1; #2b2b2b da 9:1 (WCAG AA). */
+/* Títulos y mensajes blancos sobre el rosa uniforme de marca (AA). */
 html body #tt-loader-brand-subtitle,
 html body #tt-loader-title,
 html body #tt-loader-subtitle {
-  color: #2b2b2b !important;
+  color: #ffffff !important;
 }
 
 html body #tt-loader-wordmark .tt-loader-wordmark-i::before,
@@ -169,8 +168,8 @@ html body:has(.login-page).tt-public-shell-mounted {
    sitio. Esta regla final anula únicamente la excepción visual antigua; el
    estado interno tt-auth-silent-transition conserva su comportamiento. */
 html:has(.login-page) body #tt-loader {
-  background: #F7BFD3 !important;
-  background-color: #F7BFD3 !important;
+  background: #C52F68 !important;
+  background-color: #C52F68 !important;
 }
 
 html:has(.login-page) body #tt-loader-spin-wrap {

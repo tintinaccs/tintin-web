@@ -4,20 +4,16 @@
 // Registro y checkout usan el mismo formato {lat,lng,name,address}, el mismo
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
-import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
+import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261004-location-consistency-1";
+import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1';
 
 const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
 const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
 const DEFAULT_CENTER = [-25.2867, -57.6467];
 const DEFAULT_ZOOM = 13;
 const PICKED_ZOOM = 17;
-const SEARCH_DEBOUNCE_MS = 320;
+const SEARCH_DEBOUNCE_MS = 600;
 const MIN_QUERY_LENGTH = 3;
-const GEOLOCATION_OPTIONS = {
-  enableHighAccuracy: true,
-  timeout: 9000,
-  maximumAge: 60000,
-};
 
 let leafletPromise = null;
 
@@ -26,11 +22,13 @@ function loadLeaflet() {
   if (leafletPromise) return leafletPromise;
   leafletPromise = new Promise((resolve, reject) => {
     const script = document.createElement('script');
+    const failed = () => { clearTimeout(timer); leafletPromise = null; script.remove(); reject(new Error('No se pudo cargar el mapa')); };
+    const timer = setTimeout(failed, 12000);
     script.src = LEAFLET_JS;
     script.integrity = LEAFLET_JS_INTEGRITY;
     script.crossOrigin = 'anonymous';
-    script.onload = () => resolve(window.L);
-    script.onerror = () => reject(new Error('No se pudo cargar el mapa'));
+    script.onload = () => { clearTimeout(timer); resolve(window.L); };
+    script.onerror = failed;
     document.head.appendChild(script);
   });
   return leafletPromise;
@@ -39,30 +37,18 @@ function loadLeaflet() {
 function pinIcon(L) {
   return L.divIcon({
     className: '',
-    html: '<div style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))"><svg width="32" height="32" viewBox="0 0 24 24" fill="#e91e8c" stroke="#e91e8c" stroke-width="1"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z" stroke="none"/><circle cx="12" cy="10" r="3" fill="#fff" stroke="none"/></svg></div>',
+    html: '<div class="tt-location-pin"><svg width="32" height="38" viewBox="0 0 24 28" fill="currentColor" aria-hidden="true"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg></div>',
     iconSize: [32, 32],
     iconAnchor: [16, 32],
   });
 }
 
-function geolocationErrorMessage(error) {
-  if (error?.code === 1) {
-    return 'El permiso de ubicación está bloqueado. Permitilo desde el icono junto a la dirección del sitio o marcá el punto manualmente.';
-  }
-  if (error?.code === 2) {
-    return 'El dispositivo no pudo determinar tu ubicación. Activá la ubicación del sistema o marcá el punto manualmente.';
-  }
-  if (error?.code === 3) {
-    return 'La ubicación tardó demasiado. Volvé a intentarlo o marcá el punto manualmente.';
-  }
-  return 'No pudimos obtener tu ubicación. Revisá el permiso del navegador o marcá el punto manualmente.';
-}
-
 function usablePlace(place) {
   if (!place) return false;
+  if (place.lat == null || place.lng == null || place.lat === '' || place.lng === '') return false;
   const lat = Number(place.lat);
   const lng = Number(place.lng);
-  return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+  return Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180 && (lat !== 0 || lng !== 0);
 }
 
 export async function createLocationMap({
@@ -76,8 +62,9 @@ export async function createLocationMap({
   if (!mapEl) throw new Error('createLocationMap necesita un contenedor');
 
   const L = await loadLeaflet();
-  const map = L.map(mapEl, { zoomControl: true }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  const map = L.map(mapEl, { zoomControl: true, scrollWheelZoom: false }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+  mapEl.classList.add('tt-map-canvas');
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 19,
   }).addTo(map);
@@ -98,15 +85,35 @@ export async function createLocationMap({
   let locating = false;
   let searchGeneration = 0;
   let resizeObserver = null;
+  let destroyed = false;
+  let inFlight = null;
+  let resultPlaces = [];
+  let activeIndex = -1;
+  const status = document.createElement('p');
+  status.className = 'tt-map-status';
+  status.setAttribute('role', 'status');
+  status.hidden = true;
+  mapEl.before(status);
+  const tools = document.createElement('div');
+  tools.className = 'tt-map-navigation';
+  tools.hidden = true;
+  const googleLink = document.createElement('a');
+  const wazeLink = document.createElement('a');
+  [googleLink, wazeLink].forEach(link => { link.target = '_blank'; link.rel = 'noopener noreferrer'; });
+  googleLink.textContent = 'Ver en Google Maps';
+  wazeLink.textContent = 'Ir con Waze';
+  tools.append(googleLink, wazeLink);
+  mapEl.after(tools);
 
   const emit = () => { if (typeof onChange === 'function') onChange(location); };
 
   const setButtonLoading = loading => {
     if (!resolvedLocateButton) return;
     resolvedLocateButton.disabled = loading;
+    resolvedLocateButton.setAttribute('aria-busy', String(loading));
     resolvedLocateButton.textContent = loading
       ? '📍 Obteniendo ubicación…'
-      : '📍 Usar mi ubicación actual';
+      : 'Usar mi ubicación actual';
   };
 
   const syncLocationFields = place => {
@@ -131,15 +138,21 @@ export async function createLocationMap({
   resolvedLocationNameInput?.addEventListener('input', onLocationNameInput);
 
   const setLocation = (lat, lng, place) => {
+    if (!usablePlace({ lat, lng })) return;
     const hasPlace = Boolean(place);
     const hasName = hasPlace && Object.prototype.hasOwnProperty.call(place, 'name');
     const hasAddress = hasPlace && Object.prototype.hasOwnProperty.call(place, 'address');
     location = {
       lat: +Number(lat).toFixed(6),
       lng: +Number(lng).toFixed(6),
-      name: hasName ? String(place.name || '') : location?.name || '',
-      address: hasAddress ? String(place.address || '') : location?.address || '',
+      name: hasName ? String(place.name || '') : 'Punto marcado',
+      // Un nuevo punto no conserva una calle que pertenecía a otro lugar.
+      address: hasAddress ? String(place.address || '') : '',
     };
+    googleLink.href = `https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`;
+    wazeLink.href = `https://waze.com/ul?ll=${location.lat},${location.lng}&navigate=yes`;
+    tools.hidden = false;
+    status.hidden = true;
     syncLocationFields(location);
     emit();
   };
@@ -151,6 +164,9 @@ export async function createLocationMap({
     else marker = L.marker(latlng, { icon, draggable: true }).addTo(map);
 
     marker.off('dragend').on('dragend', () => {
+      searchGeneration += 1;
+      inFlight?.abort();
+      closeResults();
       const position = marker.getLatLng();
       setLocation(position.lat, position.lng);
     });
@@ -163,57 +179,50 @@ export async function createLocationMap({
     resultsEl.replaceChildren();
     resultsEl.classList.remove('show');
     searchInput?.setAttribute('aria-expanded', 'false');
+    searchInput?.removeAttribute('aria-activedescendant');
+    resultPlaces = [];
+    activeIndex = -1;
   };
 
   const applyPlace = (place, { scroll = true } = {}) => {
     if (!usablePlace(place)) return;
     map.setView([Number(place.lat), Number(place.lng)], PICKED_ZOOM, { animate: false });
     placeMarker(Number(place.lat), Number(place.lng), place);
+    searchGeneration += 1;
+    inFlight?.abort();
     closeResults();
     requestAnimationFrame(() => map.invalidateSize());
     if (scroll) mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  map.on('click', event => placeMarker(event.latlng.lat, event.latlng.lng));
+  map.on('click', event => {
+    clearTimeout(debounce);
+    searchGeneration += 1;
+    inFlight?.abort();
+    closeResults();
+    placeMarker(event.latlng.lat, event.latlng.lng);
+  });
 
-  const locateCurrent = () => new Promise(resolve => {
-    if (locating) { resolve(false); return; }
-    if (!window.isSecureContext) {
-      if (typeof onError === 'function') onError('La ubicación actual solo funciona en una conexión segura HTTPS.');
-      resolve(false);
-      return;
-    }
-    if (!navigator.geolocation) {
-      if (typeof onError === 'function') {
-        onError('Este navegador no permite obtener la ubicación actual. Podés buscarla o marcarla manualmente en el mapa.');
-      }
-      resolve(false);
-      return;
-    }
-
+  const locateCurrent = async () => {
+    if (locating || destroyed) return false;
     locating = true;
     setButtonLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        locating = false;
-        setButtonLoading(false);
-        applyPlace({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          name: 'Mi ubicación actual',
-          address: 'Ubicación obtenida desde este dispositivo',
-        });
-        resolve(true);
-      },
-      error => {
-        locating = false;
-        setButtonLoading(false);
-        if (typeof onError === 'function') onError(geolocationErrorMessage(error));
-        resolve(false);
-      },
-      GEOLOCATION_OPTIONS,
-    );
-  });
+    status.hidden = false;
+    status.textContent = 'Buscando tu ubicación…';
+    try {
+      const position = await requestCurrentLocation();
+      if (destroyed) return false;
+      applyPlace({ ...position, name: 'Mi ubicación actual', address: '' }, { scroll: false });
+      status.hidden = false;
+      status.textContent = Number(position.accuracy) > 100
+        ? 'La ubicación es aproximada. Mové el pin hasta el lugar exacto antes de guardar.'
+        : 'Ubicación encontrada. Revisá el punto antes de guardar.';
+      return true;
+    } catch (error) {
+      if (!destroyed) { status.hidden = false; status.textContent = error.message; }
+      return false;
+    } finally { locating = false; if (!destroyed) setButtonLoading(false); }
+  };
 
   const onLocateClick = event => {
     event.preventDefault();
@@ -230,6 +239,8 @@ export async function createLocationMap({
     resultsEl.replaceChildren(item);
     resultsEl.classList.add('show');
     searchInput?.setAttribute('aria-expanded', 'true');
+    resultPlaces = [];
+    activeIndex = -1;
   };
 
   const renderResults = places => {
@@ -239,11 +250,15 @@ export async function createLocationMap({
       return;
     }
 
-    resultsEl.replaceChildren(...places.map(place => {
+    resultPlaces = places;
+    activeIndex = -1;
+    resultsEl.replaceChildren(...places.map((place, index) => {
       const item = document.createElement('button');
       item.type = 'button';
       item.className = 'tt-map-result';
       item.setAttribute('role', 'option');
+      item.id = `${resultsEl.id}-option-${index}`;
+      item.setAttribute('aria-selected', 'false');
 
       const name = document.createElement('div');
       name.className = 'tt-map-result-name';
@@ -258,7 +273,7 @@ export async function createLocationMap({
         event.stopPropagation();
         applyPlace(place);
       };
-      item.addEventListener('pointerdown', choosePlace);
+      item.addEventListener('pointerdown', event => event.preventDefault());
       item.addEventListener('click', choosePlace);
       return item;
     }));
@@ -269,6 +284,8 @@ export async function createLocationMap({
 
   const runSearch = async rawQuery => {
     const generation = ++searchGeneration;
+    inFlight?.abort();
+    inFlight = new AbortController();
     const parsed = parseLocationSearchInput(rawQuery);
     if (parsed?.lat != null) {
       applyPlace(parsed);
@@ -283,7 +300,7 @@ export async function createLocationMap({
 
     renderMessage('Buscando lugares, negocios, calles y puntos de referencia…');
     try {
-      const places = await searchPlaces(query);
+      const places = await searchPlaces(query, { signal: inFlight.signal });
       if (generation !== searchGeneration) return;
       renderResults(places);
     } catch {
@@ -298,6 +315,8 @@ export async function createLocationMap({
   const onSearchInput = event => {
     event.stopImmediatePropagation();
     clearTimeout(debounce);
+    searchGeneration += 1;
+    inFlight?.abort();
     const query = searchInput.value.trim();
     if (query.length < MIN_QUERY_LENGTH) {
       closeResults();
@@ -308,6 +327,20 @@ export async function createLocationMap({
 
   const onSearchKeyDown = event => {
     if (event.key === 'Escape') closeResults();
+    if (['ArrowDown', 'ArrowUp'].includes(event.key) && resultPlaces.length) {
+      event.preventDefault();
+      activeIndex = (activeIndex + (event.key === 'ArrowDown' ? 1 : -1) + resultPlaces.length) % resultPlaces.length;
+      [...resultsEl.children].forEach((item, index) => item.setAttribute('aria-selected', String(index === activeIndex)));
+      const selected = resultsEl.children[activeIndex];
+      searchInput.setAttribute('aria-activedescendant', selected.id);
+      selected.scrollIntoView({ block: 'nearest' });
+    }
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      clearTimeout(debounce);
+      if (activeIndex >= 0 && resultPlaces[activeIndex]) applyPlace(resultPlaces[activeIndex], { scroll: false });
+      else if (searchInput.value.trim().length >= MIN_QUERY_LENGTH) runSearch(searchInput.value.trim());
+    }
   };
 
   const onDocumentClick = event => {
@@ -316,6 +349,8 @@ export async function createLocationMap({
 
   if (searchInput && resultsEl) {
     searchInput.placeholder = 'Buscá un lugar, pegá un enlace de Google Maps o tocá el mapa…';
+    searchInput.setAttribute('role', 'combobox');
+    resultsEl.setAttribute('role', 'listbox');
     searchInput.setAttribute('aria-autocomplete', 'list');
     searchInput.setAttribute('aria-controls', resultsEl.id);
     searchInput.setAttribute('aria-expanded', 'false');
@@ -324,7 +359,7 @@ export async function createLocationMap({
     document.addEventListener('click', onDocumentClick);
   }
 
-  [100, 350, 900].forEach(delay => setTimeout(() => map.invalidateSize(), delay));
+  const resizeTimers = [100, 350, 900].map(delay => setTimeout(() => { if (!destroyed) map.invalidateSize(); }, delay));
   if ('ResizeObserver' in window) {
     resizeObserver = new ResizeObserver(() => map.invalidateSize());
     resizeObserver.observe(mapEl);
@@ -338,6 +373,7 @@ export async function createLocationMap({
     : null;
   if (usablePlace(onboardingSavedLocation)) {
     requestAnimationFrame(() => {
+      if (destroyed) return;
       applyPlace(onboardingSavedLocation, { scroll: false });
       mapEl.dataset.ttSavedLocationLoaded = '1';
     });
@@ -345,11 +381,15 @@ export async function createLocationMap({
 
   return {
     getLocation: () => location,
-    setLocation: place => applyPlace(place),
+    setLocation: (place, options) => applyPlace(place, options),
+    clearLocation: () => { clearTimeout(debounce); searchGeneration += 1; inFlight?.abort(); location = null; if (marker) { marker.remove(); marker = null; } tools.hidden = true; status.hidden = true; closeResults(); emit(); },
     locateCurrent,
     invalidateSize: () => map.invalidateSize(),
     destroy: () => {
+      destroyed = true;
+      inFlight?.abort();
       clearTimeout(debounce);
+      resizeTimers.forEach(clearTimeout);
       searchGeneration += 1;
       if (searchInput) {
         searchInput.removeEventListener('input', onSearchInput, true);
@@ -359,7 +399,33 @@ export async function createLocationMap({
       resolvedLocateButton?.removeEventListener('click', onLocateClick, true);
       resolvedLocationNameInput?.removeEventListener('input', onLocationNameInput);
       resizeObserver?.disconnect();
+      status.remove();
+      tools.remove();
       map.remove();
     },
   };
+}
+
+const previewControllers = new WeakMap();
+export function renderSavedMapPreviews(root, addresses) {
+  previewControllers.get(root)?.();
+  const maps = [];
+  let disposed = false;
+  const observer = new IntersectionObserver(entries => {
+    entries.filter(entry => entry.isIntersecting).forEach(async ({ target }) => {
+      observer.unobserve(target);
+      const place = addresses[Number(target.dataset.savedMap)];
+      if (!usablePlace(place)) return;
+      try {
+        const L = await loadLeaflet();
+        if (disposed || !target.isConnected) return;
+        const map = L.map(target, { zoomControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false }).setView([place.lat, place.lng], 15);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>', maxZoom: 19 }).addTo(map);
+        L.marker([place.lat, place.lng], { icon: pinIcon(L), interactive: false }).addTo(map);
+        maps.push(map);
+      } catch { target.textContent = 'Vista del mapa no disponible · usá Ver en mapa'; }
+    });
+  });
+  root.querySelectorAll('[data-saved-map]').forEach(target => observer.observe(target));
+  previewControllers.set(root, () => { disposed = true; observer.disconnect(); maps.forEach(map => map.remove()); });
 }

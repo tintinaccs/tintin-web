@@ -73,23 +73,23 @@ body.tt-catalog-maintenance .tt-card-price,
 body.tt-catalog-maintenance .cat-filter-title,
 body.tt-catalog-maintenance .cat-filter-option.active,
 body.tt-catalog-maintenance .cat-card-placeholder {
-  color: var(--color-brand-primary, #AD3F67) !important;
+  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68)) !important;
 }
 
 body.tt-catalog-maintenance .tt-card-btn-cart,
 body.tt-catalog-maintenance .cat-filter-toggle,
 body.tt-catalog-maintenance .tt-filtro-btn.activo,
 body.tt-catalog-maintenance .tt-filtro-btn.active {
-  background: var(--color-button-primary-background, #AD3F67) !important;
-  border-color: var(--color-button-primary-border, #AD3F67) !important;
+  background: var(--color-button-primary-background, var(--color-brand-primary, #C52F68)) !important;
+  border-color: var(--color-button-primary-border, var(--color-brand-primary, #C52F68)) !important;
   color: var(--color-button-primary-text, #FFFFFF) !important;
 }
 
 body.tt-catalog-maintenance .tt-card-btn-view,
 body.tt-catalog-maintenance .tt-filtro-btn:not(.activo):not(.active) {
   background: var(--color-button-secondary-background, #FFFFFF) !important;
-  border-color: var(--color-button-secondary-border, #AD3F67) !important;
-  color: var(--color-button-secondary-text, #AD3F67) !important;
+  border-color: var(--color-button-secondary-border, var(--color-brand-primary, #C52F68)) !important;
+  color: var(--color-button-secondary-text, var(--color-brand-primary, #C52F68)) !important;
 }
 
 body.tt-catalog-maintenance .tt-card-btn:focus-visible,
@@ -106,7 +106,7 @@ body.tt-catalog-maintenance a:focus-visible {
 
 body.tt-catalog-maintenance .tt-card-badge {
   background: var(--color-badge-background, #FDECF2) !important;
-  color: var(--color-badge-text, #AD3F67) !important;
+  color: var(--color-badge-text, var(--color-brand-primary, #C52F68)) !important;
   border: 1px solid var(--color-card-border, #F1E4E7);
 }
 
@@ -127,7 +127,7 @@ body.tt-catalog-maintenance .cat-filter-dot {
   background: var(--color-state-disabled, #6B6367) !important;
 }
 body.tt-catalog-maintenance .cat-filter-option.active .cat-filter-dot {
-  background: var(--color-state-selected, #AD3F67) !important;
+  background: var(--color-state-selected, var(--color-brand-primary, #C52F68)) !important;
 }
 
 .tt-catalog-runtime-state {
@@ -154,9 +154,9 @@ body.tt-catalog-maintenance .cat-filter-option.active .cat-filter-dot {
   min-height: 44px;
   margin-top: 14px;
   padding: 10px 20px;
-  border: 1.5px solid var(--color-button-primary-border, #AD3F67);
+  border: 1.5px solid var(--color-button-primary-border, var(--color-brand-primary, #C52F68));
   border-radius: 999px;
-  background: var(--color-button-primary-background, #AD3F67);
+  background: var(--color-button-primary-background, var(--color-brand-primary, #C52F68));
   color: var(--color-button-primary-text, #FFFFFF) !important;
   font: 800 12px/1.2 Montserrat;
   text-decoration: none;

@@ -22,15 +22,15 @@ import {
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-sec-fix-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-admin-ready-20261002-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261004-location-consistency-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261003-sheets-webhook-probe-1";
 import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1-auth-popup-resolver-1-launch-20260926-1-admin-ready-20261002-1";
@@ -39,9 +39,9 @@ import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
-} from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1";
+} from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
-import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1";
+import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261001-inventory-fix-1';
 import './settings/cupones-admin.js?v=tintin-20261001-firebase-permissions-1-admin-ready-20261002-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261003-variant-inventory-1';
@@ -980,11 +980,11 @@ function showAdminInitFailure() {
     overlay = document.createElement('div');
     overlay.id = 'adm-init-error';
     overlay.setAttribute('role', 'alert');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#C52F68';
     overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
       '<h1 style="font-size:22px;margin:0 0 10px">No se pudo iniciar el panel</h1>' +
       '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Hubo un problema al cargar datos o componentes del panel; no se cerró la sesión ni se volvió al login.</p>' +
-      '<button type="button" id="adm-init-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '<button type="button" id="adm-init-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#C52F68;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
       '</div>';
     document.body.appendChild(overlay);
     overlay.querySelector('#adm-init-retry')?.addEventListener('click', () => window.location.reload());
@@ -1003,11 +1003,11 @@ function showAdminAppCheckUnavailable() {
     overlay = document.createElement('div');
     overlay.id = 'adm-appcheck-unavailable';
     overlay.setAttribute('role', 'status');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#C52F68';
     overlay.innerHTML = '<div style="max-width:580px;text-align:center">' +
       '<h1 style="font-size:22px;margin:0 0 10px">Verificación de seguridad no disponible</h1>' +
       '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Firebase App Check no pudo confirmar este navegador todavía, así que el panel no abrirá lecturas privadas hasta que la verificación esté disponible.</p>' +
-      '<button type="button" id="adm-appcheck-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '<button type="button" id="adm-appcheck-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#C52F68;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
       '</div>';
     document.body.appendChild(overlay);
     overlay.querySelector('#adm-appcheck-retry')?.addEventListener('click', () => window.location.reload());
@@ -1029,13 +1029,13 @@ function showAdminAuthUnknown() {
     overlay = document.createElement('div');
     overlay.id = 'adm-auth-unknown';
     overlay.setAttribute('role', 'status');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#C52F68';
     overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
       '<h1 style="font-size:22px;margin:0 0 10px">No pudimos restaurar tu sesión</h1>' +
       '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">La sesión de Firebase no se confirmó en este momento. No se cerró tu cuenta ni se borró ningún dato.</p>' +
       '<div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">' +
-      '<button type="button" id="adm-auth-unknown-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
-      '<a href="login.html" id="adm-auth-login" style="display:inline-flex;align-items:center;border:1px solid #ad3f67;border-radius:10px;padding:10px 17px;color:#ad3f67;font:inherit;font-weight:700;text-decoration:none">Ingresar nuevamente</a>' +
+      '<button type="button" id="adm-auth-unknown-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#C52F68;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '<a href="login.html" id="adm-auth-login" style="display:inline-flex;align-items:center;border:1px solid #C52F68;border-radius:10px;padding:10px 17px;color:#C52F68;font:inherit;font-weight:700;text-decoration:none">Ingresar nuevamente</a>' +
       '</div>' +
       '</div>';
     document.body.appendChild(overlay);
@@ -3584,7 +3584,7 @@ function buildPreviewHtml_(t, vars) {
   const buttonText = renderVarsClient_(t.buttonText, v);
   const buttonUrl = t.buttonUrl || '';
   const buttonHtml = (buttonText && buttonUrl)
-    ? `<p style="text-align:center;margin:24px 0"><a href="${buttonUrl}" style="background:#b84c72;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">${buttonText}</a></p>`
+    ? `<p style="text-align:center;margin:24px 0"><a href="${buttonUrl}" style="background:#C52F68;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block">${buttonText}</a></p>`
     : '';
   const fontBase = new URL('assets-tintin/fonts/', document.baseURI).href;
   const fontCss = `<style>` +
@@ -3594,8 +3594,8 @@ function buildPreviewHtml_(t, vars) {
     `</style>`;
   return `<!DOCTYPE html><html><head>${fontCss}</head><body style="font-family:Montserrat;max-width:600px;margin:auto;background:#ffffff;padding:24px;color:#333">` +
     `<div style="border:1px solid #e5e5e5;border-radius:8px;padding:28px">` +
-    (brandPhrase ? `<p style="color:#b84c72;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
-    (greeting ? `<h2 style="color:#b84c72;margin:0 0 14px;font-size:18px">${greeting}</h2>` : '') +
+    (brandPhrase ? `<p style="color:#C52F68;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px">${brandPhrase}</p>` : '') +
+    (greeting ? `<h2 style="color:#C52F68;margin:0 0 14px;font-size:18px">${greeting}</h2>` : '') +
     (intro ? `<p style="color:#555;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${intro}</p>` : '') +
     (promoText ? `<p style="color:#333;line-height:1.6;margin:0 0 16px;font-size:14px;white-space:pre-line">${promoText}</p>` : '') +
     buttonHtml +

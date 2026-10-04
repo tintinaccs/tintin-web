@@ -291,3 +291,23 @@ test('Alertas usa la superficie compartida sólida y conserva el foco', async ({
   await page.keyboard.press('Escape');
   await expect(drawer).toHaveAttribute('aria-hidden', 'true');
 });
+
+test('cuenta mantiene cabecera sólida y CTA legible con todas las capas de marca', async ({ page }) => {
+  for (const viewport of [{width:1440,height:900},{width:768,height:1024},{width:390,height:844},{width:320,height:568}]) {
+    await openPublicPage(page, viewport, '/contact');
+    await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes('pulido-marca-responsive-tintin.css') && link.sheet));
+    const trigger = viewport.width < 768 ? '#tabbar-cuenta' : viewport.width <= 1024 ? '#btn-cuenta-tablet' : '#btn-cuenta';
+    await page.locator(trigger).click();
+    const drawer=page.locator('#account-drawer');
+    await expect(drawer).toBeVisible();
+    const header=drawer.locator('.tt-account-drawer-header');
+    await expect(header).toHaveCSS('background-image','none');
+    await expect(header).toHaveCSS('background-color','rgb(197, 47, 104)');
+    await expect(header.locator('h2')).toHaveCSS('color','rgb(255, 255, 255)');
+    await expect(drawer.locator('.tt-account-primary')).toHaveCSS('color','rgb(255, 255, 255)');
+    const overlap=await header.evaluate(el => { const logo=getComputedStyle(el,'::before'); const title=el.querySelector('h2').getBoundingClientRect(); const close=el.querySelector('button').getBoundingClientRect(); return {logo:parseFloat(logo.width),titleRight:title.right,closeLeft:close.left}; });
+    expect(overlap.logo).toBe(44);
+    expect(overlap.titleRight).toBeLessThanOrEqual(overlap.closeLeft);
+    await page.keyboard.press('Escape');
+  }
+});

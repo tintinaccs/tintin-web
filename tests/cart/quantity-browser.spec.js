@@ -10,7 +10,7 @@ test('admin stock editor labels each option, sums quantities and resets for a ne
   await page.evaluate(async editor => {
     document.body.innerHTML = '<input id="prod-stock" value="3"><div><textarea id="prod-variants-text"></textarea></div>';
     const inventoryUrl = new URL('/js/core/store/inventario-variantes.mjs', location.origin);
-    inventoryUrl.searchParams.set('v', 'tintin-20261003-variant-inventory-1');
+    inventoryUrl.searchParams.set('v', 'tintin-20261003-variant-inventory-1-brand-20261004-1-brand-runtime-20261004-1');
     const { variantInventoryEntries } = await import(inventoryUrl.href);
     window.qaRenderStock = new Function('variantInventoryEntries', editor + '\nreturn renderProductVariantStock;')(variantInventoryEntries);
     window.qaRenderStock({ stock: 3, variants: { Talla: ['6', '7'] }, variantInventory: [{ variant: '6', stock: 1 }, { variant: '7', stock: 2 }] });

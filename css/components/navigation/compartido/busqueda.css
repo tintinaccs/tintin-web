@@ -140,13 +140,13 @@
   padding: 9px 18px;
   border: 0;
   border-radius: 999px;
-  background: #9b2853;
+  background: var(--color-brand-primary, #C52F68);
   color: #fff;
   font-weight: 750;
   cursor: pointer;
 }
 .tt-search-retry:hover,
-.tt-search-retry:focus-visible { background: #7d173a; outline: 3px solid rgba(173,63,103,.22); outline-offset: 2px; }
+.tt-search-retry:focus-visible { background: var(--color-brand-primary, #C52F68); outline: 3px solid rgba(173,63,103,.22); outline-offset: 2px; }
 
 @media (max-width: 767px) {
   #search-panel.tt-search-panel .tt-search-results { padding-top: 12px !important; }

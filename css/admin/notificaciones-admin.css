@@ -58,7 +58,7 @@
 
 .adm-notifications-header h3 {
   margin: 2px 0 0;
-  color: #9f315c;
+  color: var(--admin-color-brand, #C52F68);
   font-size: 18px;
 }
 
@@ -134,7 +134,7 @@
   border: 1px solid #efc8d7;
   border-radius: 999px;
   background: #fff;
-  color: #9f315c;
+  color: var(--admin-color-brand, #C52F68);
   font: inherit;
   font-size: 10px;
   font-weight: 800;
@@ -155,7 +155,7 @@
   border: 1px solid #efc8d7;
   border-radius: 50%;
   background: #fff;
-  color: #a23b64;
+  color: var(--admin-color-brand, #C52F68);
 }
 
 .adm-notification-icon[data-icon="order"] {
@@ -209,7 +209,7 @@
 .adm-notification-avatar-fallback {
   display: grid;
   place-items: center;
-  color: #9f315c;
+  color: var(--admin-color-brand, #C52F68);
   background: #fff2f7;
   font-weight: 800;
 }

@@ -32,8 +32,8 @@ body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__heading .t
 }
 
 body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__description {
-  /* #c66b8c daba 3.3:1 sobre #fff2f6; este tono de la misma familia da 4.7:1. */
-  color: #a35576 !important;
+  /* var(--color-brand-primary, #C52F68) daba 3.3:1 sobre #fff2f6; este tono de la misma familia da 4.7:1. */
+  color: var(--color-brand-primary, #C52F68) !important;
   font-size: clamp(0.58rem, 0.63vw, 0.72rem);
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -75,7 +75,7 @@ body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__descriptio
 .tt-collection-carousel__button:last-child { right: max(16px, calc(var(--tt-carousel-gutter) / 2 - 19px)); }
 
 .tt-collection-carousel__button:hover {
-  background: #eb78a3;
+  background: var(--color-brand-primary, #C52F68);
   transform: translateY(-50%) scale(1.06);
 }
 
@@ -142,7 +142,7 @@ body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__descriptio
   border: 1px solid rgba(215, 133, 164, 0.08);
   border-radius: 8px;
   box-shadow: 0 7px 18px rgba(122, 64, 87, 0.045);
-  color: #e875a0;
+  color: var(--color-brand-primary, #C52F68);
   display: flex;
   flex: 0 0 calc((100vw - (var(--tt-carousel-gutter) * 2) - (var(--tt-carousel-gap) * 4)) / 5);
   flex-direction: column;
@@ -176,7 +176,7 @@ body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__descriptio
 
 html body:not(:has(.adm-main)) .tt-collection-card,
 html body:not(:has(.adm-main)) .tt-collection-card:hover,
-html body:not(:has(.adm-main)) .tt-collection-card * { color: #e875a0 !important; }
+html body:not(:has(.adm-main)) .tt-collection-card * { color: var(--color-brand-primary, #C52F68) !important; }
 
 .tt-collection-card__content {
   align-items: center;
@@ -190,7 +190,7 @@ html body:not(:has(.adm-main)) .tt-collection-card * { color: #e875a0 !important
 }
 
 .tt-collection-card__title {
-  color: #e875a0;
+  color: var(--color-brand-primary, #C52F68);
   font-size: clamp(0.68rem, 0.77vw, 0.88rem);
   font-weight: 750;
   letter-spacing: -0.015em;
@@ -249,7 +249,7 @@ html body:not(:has(.adm-main)) .tt-collection-card * { color: #e875a0 !important
 }
 
 .tt-collection-carousel__dot.is-active {
-  background: #e875a0;
+  background: var(--color-brand-primary, #C52F68);
   width: 22px;
 }
 
