@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3b3fe6a741ee71d77db7f149096cd8a5ae5fef39d94a308efd3928a446045f27",
+  "sourceFingerprint": "10f7f61abf147c157d8005a5fae49b7efdaebcdd14b3fd4a9593a27bbed756b9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 960,
     "textFiles": 919,
-    "totalBytes": 18316754,
+    "totalBytes": 18318264,
     "pages": 19,
     "modules": 668
   },
@@ -9152,7 +9152,7 @@
         "viewer"
       ],
       "bytes": 111082,
-      "sha256": "685f7a31f98975f06c2ad19bf9abca4f02f46e86542976c08ba6c42d5e4ce8dd",
+      "sha256": "0a69d79026cbf5f36071b164bc98c17bc4ce197389cf419747795a1f66e1cde0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9234,7 +9234,7 @@
           "line": 29
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 32
         },
@@ -9598,7 +9598,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 32,
           "exists": true
@@ -13315,7 +13315,7 @@
         "viewer"
       ],
       "bytes": 82964,
-      "sha256": "e7ed0fed85ad737416cf90be6d7f103c1942de53b527e5543a975873b4ca591c",
+      "sha256": "fdb5833dbc4e2d8429735322e3faac417894240b9bfda1cc3c3cf944c987188f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13463,7 +13463,7 @@
           "line": 47
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 48
         },
@@ -13663,7 +13663,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 48,
           "exists": true
@@ -14137,7 +14137,7 @@
         "viewer"
       ],
       "bytes": 46711,
-      "sha256": "a7cfbe89e88ad53c1f105418154164f096d2b3b5c8d340b41aa6a5a53751a421",
+      "sha256": "cba008a9c7f4bab66949dd7917f080e0864c2fd5071cd7a69d8232b416829139",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14300,7 +14300,7 @@
           "line": 41
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 42
         },
@@ -14714,7 +14714,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20261004-location-consistency-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 42,
           "exists": true
@@ -27558,21 +27558,21 @@
     },
     {
       "path": "scripts/auditar-colecciones-fase-4.js",
-      "bytes": 8772,
-      "sha256": "3db721f73b267cec3cd319b243115dbfd4509debcd7c56a38eaafbd8fb47f94a",
+      "bytes": 8764,
+      "sha256": "f13e1d73b5adde2fb46732fd480e7a3d7d53353ed8f9b7e1171d9b4ff25eb0af",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./js/pages/collections/estado-colecciones.js?v=tintin-20261004-location-consistency-1",
+          "raw": "./js/pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "scripts/js/pages/collections/estado-colecciones.js",
           "dynamic": true,
           "line": 138
         },
         {
-          "raw": "./estado-colecciones.js?v=tintin-20261004-location-consistency-1",
+          "raw": "./estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "scripts/estado-colecciones.js",
           "dynamic": true,
           "line": 139
@@ -28368,8 +28368,8 @@
     },
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
-      "bytes": 4587,
-      "sha256": "2a53d9982356567d1fcc165d5c15557c36c61ad0fb497035ae18ab0f621855be",
+      "bytes": 4857,
+      "sha256": "0b98eece75f3f36ac80e98c4910561b680d5c0371d2ea82c2ae59722d7de1385",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28919,15 +28919,15 @@
     },
     {
       "path": "scripts/auditar-integral-plataforma.js",
-      "bytes": 8312,
-      "sha256": "ce9c0ed67abe8b32685f59f29cd8fbe8135f9dab7b6aa62dc8aeb538b1ad0c74",
+      "bytes": 8308,
+      "sha256": "49d07cda947ae2a59c36122c7523d47984b31e2e778e8b9ea974016b0a4f0168",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./js/pages/collections/estado-colecciones.js?v=tintin-20261004-location-consistency-1",
+          "raw": "./js/pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "scripts/js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 36
@@ -31920,8 +31920,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 8088,
-      "sha256": "95a4700973526c6a163e76669244586d6cd44154c740208b6b91b9674acabfbf",
+      "bytes": 8111,
+      "sha256": "471ad86ce66dd5db839afaba4a9557bb1b4132b91f4e7abf1a9a688303323c7d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33175,8 +33175,8 @@
     },
     {
       "path": "tests/functions/page-loader-route.test.mjs",
-      "bytes": 541,
-      "sha256": "2e584dd54f8bad20cc7e5e0431059fab5eefd9f4166cdb13ece876b1364a9ded",
+      "bytes": 495,
+      "sha256": "beaca2bbe68e9f705482c1174c9d3f9c88331f2596c7d883e59e9523beeee8c4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33612,7 +33612,7 @@
     {
       "path": "tests/login/location-map-browser.spec.js",
       "bytes": 4522,
-      "sha256": "58c4360117fa26d65c7104e0c5b4bcc660c37b4e709c034199f2b4ab58c71fe9",
+      "sha256": "f9bf9e5d55d77df83452146efe264cb77cf3af81d26813ead69cee851b608ab6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33970,8 +33970,8 @@
     },
     {
       "path": "tests/navigation/account-panel-contract.test.mjs",
-      "bytes": 1084,
-      "sha256": "5745adceabc29ae28425da813b6e1a710b13f474a7218303bd77e19b151ad44a",
+      "bytes": 1114,
+      "sha256": "b96498e7106b84b3393785497fa47052a111175ff8b3e63c5e926188998edd12",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34762,8 +34762,8 @@
     },
     {
       "path": "tests/performance/navegacion-inmediata.test.mjs",
-      "bytes": 5247,
-      "sha256": "ca6ab832614971a065abf81f328785d8415ca992f316578c205fb3d0ab64dc71",
+      "bytes": 5384,
+      "sha256": "52edac75b1331ceb26431913d2d31b1faa14b1c5ac7333a487607b2cdce20ed0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37220,7 +37220,7 @@
       "path": "checkout.html",
       "extension": ".html",
       "bytes": 111082,
-      "sha256": "685f7a31f98975f06c2ad19bf9abca4f02f46e86542976c08ba6c42d5e4ce8dd"
+      "sha256": "0a69d79026cbf5f36071b164bc98c17bc4ce197389cf419747795a1f66e1cde0"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -37549,8 +37549,8 @@
     {
       "path": "css/components/location/selector-ubicacion.css",
       "extension": ".css",
-      "bytes": 6302,
-      "sha256": "5af0c3dafa237db2496d3b66a23b1755709a046aceaab9995755ae2ae8f21a8a"
+      "bytes": 6307,
+      "sha256": "3c61d62073f689b0de6bbe0404a8dcb6bfd25331c97fc350f0f129cc373845e2"
     },
     {
       "path": "css/components/navigation/compartido/apariencia-global.css",
@@ -37945,8 +37945,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 176669,
-      "sha256": "9b5a1534934d57edc0792f876aa15611affbd5b5620610bea1bee52f953906e8"
+      "bytes": 177772,
+      "sha256": "f37945723cbdd1ec02b03c6a175e667786161e100adefea9e3e94863a51b262c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -40244,7 +40244,7 @@
       "path": "login.html",
       "extension": ".html",
       "bytes": 82964,
-      "sha256": "e7ed0fed85ad737416cf90be6d7f103c1942de53b527e5543a975873b4ca591c"
+      "sha256": "fdb5833dbc4e2d8429735322e3faac417894240b9bfda1cc3c3cf944c987188f"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -40448,7 +40448,7 @@
       "path": "perfil.html",
       "extension": ".html",
       "bytes": 46711,
-      "sha256": "a7cfbe89e88ad53c1f105418154164f096d2b3b5c8d340b41aa6a5a53751a421"
+      "sha256": "cba008a9c7f4bab66949dd7917f080e0864c2fd5071cd7a69d8232b416829139"
     },
     {
       "path": "playwright.config.js",
@@ -40663,8 +40663,8 @@
     {
       "path": "scripts/auditar-colecciones-fase-4.js",
       "extension": ".js",
-      "bytes": 8772,
-      "sha256": "3db721f73b267cec3cd319b243115dbfd4509debcd7c56a38eaafbd8fb47f94a"
+      "bytes": 8764,
+      "sha256": "f13e1d73b5adde2fb46732fd480e7a3d7d53353ed8f9b7e1171d9b4ff25eb0af"
     },
     {
       "path": "scripts/auditar-colecciones-pagina.js",
@@ -40843,8 +40843,8 @@
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
       "extension": ".js",
-      "bytes": 4587,
-      "sha256": "2a53d9982356567d1fcc165d5c15557c36c61ad0fb497035ae18ab0f621855be"
+      "bytes": 4857,
+      "sha256": "0b98eece75f3f36ac80e98c4910561b680d5c0371d2ea82c2ae59722d7de1385"
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
@@ -40969,8 +40969,8 @@
     {
       "path": "scripts/auditar-integral-plataforma.js",
       "extension": ".js",
-      "bytes": 8312,
-      "sha256": "ce9c0ed67abe8b32685f59f29cd8fbe8135f9dab7b6aa62dc8aeb538b1ad0c74"
+      "bytes": 8308,
+      "sha256": "49d07cda947ae2a59c36122c7523d47984b31e2e778e8b9ea974016b0a4f0168"
     },
     {
       "path": "scripts/auditar-interaccion-latencia.mjs",
@@ -41300,7 +41300,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 63096,
-      "sha256": "3530d1f7592ba909434e66353e6c596257289d7c5387b24f0a21e5196cd0eb68"
+      "sha256": "fe36ebd18d1c562da194dee40a865caf3c9adf3b0a99e6747ba40a7c1ac2392c"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -41677,8 +41677,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 8088,
-      "sha256": "95a4700973526c6a163e76669244586d6cd44154c740208b6b91b9674acabfbf"
+      "bytes": 8111,
+      "sha256": "471ad86ce66dd5db839afaba4a9557bb1b4132b91f4e7abf1a9a688303323c7d"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",
@@ -41887,8 +41887,8 @@
     {
       "path": "tests/functions/page-loader-route.test.mjs",
       "extension": ".mjs",
-      "bytes": 541,
-      "sha256": "2e584dd54f8bad20cc7e5e0431059fab5eefd9f4166cdb13ece876b1364a9ded"
+      "bytes": 495,
+      "sha256": "beaca2bbe68e9f705482c1174c9d3f9c88331f2596c7d883e59e9523beeee8c4"
     },
     {
       "path": "tests/import/admin-import-job-contract.test.mjs",
@@ -41948,7 +41948,7 @@
       "path": "tests/login/location-map-browser.spec.js",
       "extension": ".js",
       "bytes": 4522,
-      "sha256": "58c4360117fa26d65c7104e0c5b4bcc660c37b4e709c034199f2b4ab58c71fe9"
+      "sha256": "f9bf9e5d55d77df83452146efe264cb77cf3af81d26813ead69cee851b608ab6"
     },
     {
       "path": "tests/login/location-picker.test.mjs",
@@ -42007,8 +42007,8 @@
     {
       "path": "tests/navigation/account-panel-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 1084,
-      "sha256": "5745adceabc29ae28425da813b6e1a710b13f474a7218303bd77e19b151ad44a"
+      "bytes": 1114,
+      "sha256": "b96498e7106b84b3393785497fa47052a111175ff8b3e63c5e926188998edd12"
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
@@ -42145,8 +42145,8 @@
     {
       "path": "tests/performance/navegacion-inmediata.test.mjs",
       "extension": ".mjs",
-      "bytes": 5247,
-      "sha256": "ca6ab832614971a065abf81f328785d8415ca992f316578c205fb3d0ab64dc71"
+      "bytes": 5384,
+      "sha256": "52edac75b1331ceb26431913d2d31b1faa14b1c5ac7333a487607b2cdce20ed0"
     },
     {
       "path": "tests/performance/offline-recovery.spec.js",
