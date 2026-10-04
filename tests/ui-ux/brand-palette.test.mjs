@@ -1,6 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
 import { GLOBAL_TOKENS, ADMIN_TOKENS, normalizeLegacyBrandColor } from '../../js/components/color/esquema-color-catalogo.js';
+
+test('el normalizador conserva tokens y colores hex completos sin crear ciclos', () => {
+  const elements = [
+    '--color-text-primary: #713C53; --color-button-primary-text: #713C53; --color-background-page: #FFF6FA;',
+    'color:#713C53;background:#fff6fa;border-color:#ffffff;',
+    'color:#ffffff;background:#fff;'
+  ].map(style => ({ style, getAttribute() { return this.style; }, setAttribute(name, value) { this.style=value; }, classList:{add(){}} }));
+  vm.runInNewContext(fs.readFileSync(new URL('../../js/components/color/normalizador-color-tema.js', import.meta.url), 'utf8'), {
+    window:{}, document:{readyState:'complete',querySelectorAll(selector){return selector==='[style]'?elements:[];}}
+  });
+  assert.equal(elements[0].style, '--color-text-primary: #713C53; --color-button-primary-text: #713C53; --color-background-page: #FFF6FA;');
+  assert.equal(elements[1].style, 'color:var(--tt-text);background:#fff6fa;border-color:var(--tt-surface);');
+  assert.equal(elements[2].style, 'color:var(--tt-surface);background:var(--tt-surface);');
+});
 
 test('los esquemas históricos migran el rosa de marca y conservan personalizaciones explícitas', () => {
   for (const tokens of [GLOBAL_TOKENS, ADMIN_TOKENS]) {

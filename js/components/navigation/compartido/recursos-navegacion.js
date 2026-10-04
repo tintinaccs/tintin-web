@@ -1,4 +1,4 @@
-import { versionedSiteAsset } from './configuracion.js?v=tintin-20261004-final-integration-1';
+import { versionedSiteAsset } from './configuracion.js?v=tintin-20261004-final-integration-2';
 
 const HEADER_DESKTOP_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1';

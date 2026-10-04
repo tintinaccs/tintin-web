@@ -19,18 +19,18 @@ export function loadPageMaintenance() {
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
-    const version = 'tintin-20261004-final-integration-1';
+    const version = 'tintin-20261004-final-integration-2';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261004-final-integration-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261004-final-integration-2'),
       load('pages/checkout/checkout-mantenimiento.js', version),
-      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-1'),
+      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2'),
       load('pages/checkout/checkout-control-cuota.js', version),
       load('pages/checkout/estado-navegacion-checkout.js', stateVersion)
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {
-    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261004-final-integration-1');
+    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261004-final-integration-2');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261003-ux-maps-1-brand-runtime-20261004-1-owner-pink-20261004-1');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');

@@ -10,6 +10,23 @@ const root = path.resolve(__dirname, '../..');
 const shell = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
 const fixtureCsp = "default-src 'self'; script-src 'none'; connect-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; object-src 'none'";
 
+for (const width of [390,768,1440]) {
+  test(`los tokens del catálogo siguen legibles después de normalizar estilos a ${width}px`, async ({page}) => {
+    await page.setViewportSize({width,height:900});
+    await page.route('**/__catalog-color-fixture', route => route.fulfill({contentType:'text/html',body:`<!doctype html>
+      <html style="--color-text-primary:#713C53;--color-button-primary-text:#713C53;--color-brand-primary:#F8AACA;--color-button-primary-background:#F8AACA;--color-background-page:#FFF6FA">
+      <head><link rel="stylesheet" href="/css/core/tema-unificado-tintin.css"><link rel="stylesheet" href="/css/pages/catalog/catalog-maintenance.css"></head>
+      <body class="tt-catalog-maintenance"><button class="cat-filter-toggle" style="display:block">Filtrar por categoría</button><button class="tt-filtro-btn activo">Todos</button><button class="tt-card-btn-cart">Agregar</button></body></html>`}));
+    await page.goto('/__catalog-color-fixture',{waitUntil:'load'});
+    await page.addScriptTag({content:fs.readFileSync(path.join(root,'js/components/color/normalizador-color-tema.js'),'utf8')});
+    for (const selector of ['.cat-filter-toggle','.tt-filtro-btn.activo','.tt-card-btn-cart']) {
+      await expect(page.locator(selector)).toHaveCSS('color','rgb(113, 60, 83)');
+      await expect(page.locator(selector)).toHaveCSS('background-color','rgb(248, 170, 202)');
+    }
+    expect(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--color-background-page').trim())).toBe('#FFF6FA');
+  });
+}
+
 for (const width of [390, 768, 1440]) {
   test(`iconos malva legibles sobre el rosa aprobado a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });

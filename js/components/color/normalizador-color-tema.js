@@ -18,7 +18,7 @@ var HARD_COLORS={
 function replaceHardColors(value){
  if(!value)return value;
  var out=String(value);
- Object.keys(HARD_COLORS).forEach(function(k){out=out.replace(new RegExp(k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),HARD_COLORS[k]);});
+ Object.keys(HARD_COLORS).forEach(function(k){var pattern=k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+(k.charAt(0)==='#'?'(?![a-f0-9])':'');out=out.replace(new RegExp(pattern,'gi'),HARD_COLORS[k]);});
  out=out.replace(/linear-gradient\([^)]*#713C53[^)]*#7b6f72[^)]*\)/gi,'var(--tt-accent)');
  return out;
 }
@@ -35,7 +35,11 @@ function sanitizeAttrs(root){
 function sanitizeStyles(root){
  (root||document).querySelectorAll('[style]').forEach(function(el){
   var v=el.getAttribute('style')||'';
-  var next=replaceHardColors(v);
+  // Tokens are the authority: rewriting their values to aliases creates
+  // cycles (e.g. --color-text-primary -> --tt-text -> --color-text-primary).
+  var next=v.replace(/(^|;)(\s*([\w-]+)\s*:)([^;]*)/g,function(match,separator,declaration,property,value){
+   return property.indexOf('--')===0?match:separator+declaration+replaceHardColors(value);
+  });
   if(next!==v){el.setAttribute('style',next);el.classList.add('tt-inline-theme-cleaned');}
  });
 }
