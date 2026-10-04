@@ -59,9 +59,6 @@ function injectStyles() {
     .tt-profile-avatar-actions{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
     .tt-profile-avatar-actions .perfil-avatar{inline-size:72px!important;block-size:72px!important;aspect-ratio:1!important;line-height:0!important;overflow:hidden!important;border-radius:50%!important;flex:0 0 72px!important}
     .tt-profile-avatar-actions .perfil-avatar>img{inline-size:100%!important;block-size:100%!important;min-inline-size:100%!important;min-block-size:100%!important;max-inline-size:none!important;max-block-size:none!important;object-fit:cover!important;object-position:center!important;display:block!important}
-    [data-auth-account-button]{display:grid!important;place-items:center!important;overflow:hidden!important}
-    [data-auth-account-button]>.tt-account-avatar-btn{inline-size:26px!important;block-size:26px!important;max-inline-size:none!important;max-block-size:none!important;flex:0 0 26px!important;border-radius:50%!important;object-fit:cover!important;object-position:center!important;display:block!important}
-    #tt-tabbar .tt-tabbar-avatar{inline-size:100%!important;block-size:100%!important;max-inline-size:none!important;max-block-size:none!important;border-radius:50%!important;object-fit:cover!important;object-position:center!important;display:block!important}
     .tt-profile-photo-btn{border:1px solid #eac7d4;background:#fff;color:#713C53;border-radius:999px;padding:7px 11px;font:700 10px/1 Montserrat;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
     .tt-profile-photo-btn:disabled{opacity:.55;cursor:wait}
     .tt-profile-meta{min-width:0}

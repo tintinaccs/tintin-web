@@ -24,5 +24,5 @@ test('la bienvenida mantiene la tienda oculta hasta cerrar el mensaje', () => {
 
 test('avatar de cuenta y pie público conservan una superficie limpia', () => {
   assert.match(theme, /--tt-footer-surface:#fff/);
-  assert.match(theme, /\[data-auth-account-button\]\[data-tt-account-avatar="true"\]/);
+  assert.match(theme, /:is\(#tt-header-desktop-tablet,#tt-header-tablet\) \.tt-account-avatar-btn/);
 });

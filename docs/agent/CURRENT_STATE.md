@@ -1,5 +1,14 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Headers coherentes y avatar acotado — 2026-10-04
+
+- Rama codex/unify-header-layout-20261004, base main bd3311df. El dueño pidió imagen de cuenta del tamaño del icono, sin sobresalir, consistencia entre páginas y merge directo tras validar.
+- Causa: estabilidad-final-publica aplicaba inline-size/block-size 100% al img directo del tab, ampliándolo al botón entero en Perfil; competía además con tamaños 26/48 px de desktop/tablet. Se retiraron esas reglas de navegación de la capa de Perfil. Tema compartido define iconos/foto desktop/tablet 24 px y mantiene áreas táctiles nativas; CSS móvil define dimensiones físicas/lógicas iguales para SVG y foto (23 px expandido, 24 px compacto), círculo cover centrado. La foto grande del perfil conserva su componente propio.
+- Navegación pública mantiene una única fuente modular por breakpoint en todas sus páginas. Login conserva aislamiento de autenticación y admin su shell operativo; no se agregaron menús de tienda a esos flujos. Paleta aprobada #F8AACA/blanco/malva preservada.
+- Evidencia actual: test:navigation-header 19 PASS, 1 skip preexistente de rutas institucionales condicionado al servidor; ocho regresiones nuevas con imágenes y seis acciones en 320/390/767/768/1024/1025/1280/1920 px. audit:all-navigation-surfaces PASS: 14 páginas × 6 breakpoints, indicadores, Tienda, foco, cierre tablet, scroll y headers admin. audit:unified-navigation PASS: 12 anchos/13 rutas, buscador y teclado.
+- Caché incrementada únicamente para los ocho recursos modificados y sus referencias transitivas; 297 recursos registrados. No se reutilizaron URLs publicadas con bytes diferentes. Se están comprobando build/audit final, CI, preview y deploy antes de afirmar cierre/merge. La primera build coincidió con el archivo temporal de la auditoría de navegación; se ejecutará nuevamente de forma secuencial.
+- No se modificaron credenciales, reglas, permisos, datos, pedidos ni integraciones. Validaciones físicas de compra, GPS y push iPhone bloqueado, y migración de dominio, siguen diferenciadas del alcance de headers.
+
 ## Integración final con main actualizado — 2026-10-04
 
 - Se integró main 8f7aa5be (PR #1020 mapas/acceso, #1021 importación concurrente, #1023 plugin Claude) dentro de PR #1019. Conflictos de URLs resueltos con familias nuevas; no se retiraron las mejoras funcionales de main ni se modificaron credenciales/roles/reglas.
