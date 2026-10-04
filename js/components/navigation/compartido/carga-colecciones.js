@@ -245,7 +245,7 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-admin-ready-20261002-1-brand-20261004-1-owner-pink-20261004-1')
+  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20261004-final-integration-1')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

@@ -8,5 +8,17 @@
   "outputStyle": "Programador Directo",
   "verbose": false,
   "workflowKeywordTriggerEnabled": false,
-  "workflowSizeGuideline": "small"
+  "workflowSizeGuideline": "small",
+  "extraKnownMarketplaces": {
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail",
+        "ref": "v4.10.3"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "ponytail@ponytail": true
+  }
 }

@@ -60,7 +60,8 @@ function normalizeDetails(value) {
     .slice(0, 24)
     .map((entry, index) => ({
       id: paymentMethodId(entry?.id || `dato-${index + 1}`) || `dato-${index + 1}`,
-      label: cleanPaymentText(entry?.label || '', 100),
+      label: /^ueno\s*\(banco gnb\)$/i.test(cleanPaymentText(entry?.label || '', 100))
+        ? 'ueno bank' : cleanPaymentText(entry?.label || '', 100),
       value: cleanPaymentMultiline(entry?.value || '', 800),
     }))
     .filter(entry => entry.label || entry.value);
@@ -91,7 +92,7 @@ function legacyMethods(settings = {}) {
       return { ...method, enabled: enabled.efectivo !== false };
     }
     const details = [];
-    if (accounts.ueno) details.push({ id: 'ueno', label: 'Ueno (Banco GNB)', value: accounts.ueno });
+    if (accounts.ueno) details.push({ id: 'ueno', label: 'ueno bank', value: accounts.ueno });
     if (accounts.atlas) details.push({ id: 'atlas', label: 'Atlas (Banco Nacional)', value: accounts.atlas });
     return {
       ...method,

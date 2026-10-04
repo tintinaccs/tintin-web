@@ -17,7 +17,7 @@ const doc = elements => ({ querySelectorAll: () => elements });
 
 test('solo cuenta referencias same-origin con ?v= que se ejecutan', () => {
   const refs = versionedRefs(doc([
-    el('SCRIPT', { src: 'js/cargador-pagina.js?v=tag-2' }),
+    el('SCRIPT', { src: 'js/cargador-pagina.js?v=tintin-20261004-location-consistency-1' }),
     el('LINK', { href: '/css/base.css?v=tag-2' }),
     el('SCRIPT', { src: 'js/sin-version.js' }),
     el('SCRIPT', { src: 'https://www.gstatic.com/firebasejs/app.js?v=9' }),
@@ -26,7 +26,7 @@ test('solo cuenta referencias same-origin con ?v= que se ejecutan', () => {
   ]), 'https://tintinaccesorios.pages.dev/catalogo');
 
   assert.deepEqual(refs, [
-    { raw: 'js/cargador-pagina.js?v=tag-2', href: 'https://tintinaccesorios.pages.dev/js/cargador-pagina.js?v=tag-2' },
+    { raw: 'js/cargador-pagina.js?v=tintin-20261004-location-consistency-1', href: 'https://tintinaccesorios.pages.dev/js/cargador-pagina.js?v=tintin-20261004-location-consistency-1' },
     { raw: '/css/base.css?v=tag-2', href: 'https://tintinaccesorios.pages.dev/css/base.css?v=tag-2' },
   ]);
 });

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const source=fs.readFileSync(new URL('../../js/components/location/mapa-ubicacion.js',import.meta.url),'utf8')
-  .replace(/^import .*;\r?\n/m,'').replace('export async function createLocationMap','async function createLocationMap');
+  .replace(/^import .*;\r?\n/gm,'').replace(/\bexport\s/g,'');
 
 function runtime({loadLibrary=true}={}) {
   const handlers={},scripts=[],markers=[];
@@ -13,8 +13,8 @@ function runtime({loadLibrary=true}={}) {
     const marker={point,options,addTo(){return this;},off(){return this;},on(){return this;},setLatLng(value){this.point=value;}};
     markers.push(marker);return marker;
   }};
-  const context=vm.createContext({window:loadLibrary?{L}:{},document:{createElement:()=>({remove(){}}),head:{appendChild:s=>scripts.push(s)},addEventListener(){},removeEventListener(){},getElementById:()=>null},requestAnimationFrame:callback=>callback(),setTimeout:()=>0,clearTimeout(){},searchPlaces:async()=>[],parseLocationSearchInput:()=>null});
-  vm.runInContext(source+';globalThis.makeMap=createLocationMap;',context);
+  const context=vm.createContext({window:loadLibrary?{L}:{},document:{createElement:()=>({remove(){},setAttribute(){},append(){}}),head:{appendChild:s=>scripts.push(s)},addEventListener(){},removeEventListener(){},getElementById:()=>null},requestAnimationFrame:callback=>callback(),setTimeout:()=>0,clearTimeout(){},searchPlaces:async()=>[],parseLocationSearchInput:()=>null});
+  vm.runInContext(source+';globalThis.makeMap=options=>{Object.assign(options.mapEl,{classList:{add(){}},before(){},after(){}});return createLocationMap(options);};',context);
   return {context,L,handlers,scripts,markers};
 }
 

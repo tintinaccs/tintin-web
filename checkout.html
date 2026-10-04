@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261004-final-integration-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261003-variant-inventory-1-brand-20261004-2-brand-runtime-20261004-1-owner-pink-20261004-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261004-final-integration-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,13 +23,14 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261003-variant-inventory-1-brand-20261004-2-brand-runtime-20261004-1-owner-pink-20261004-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261004-final-integration-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/checkout.html" />
+  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261004-final-integration-1" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous" />
   <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1">
@@ -42,8 +43,8 @@
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261003-admin-white-icons-1-brand-20261004-1-owner-pink-20261004-1">
-  <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2-brand-20261004-1-owner-pink-20261004-1">
-  <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2-brand-20261004-1-owner-pink-20261004-1">
+  <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-1">
+  <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261004-final-integration-1">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1">
@@ -207,11 +208,12 @@
             <button type="button" class="ck-saved-confirm-no" id="ck-saved-location-change">Marcar otra</button>
           </div>
         </div>
-        <div class="ck-map-search-wrap">
+        <div class="ck-map-search-wrap tt-map-search">
           <input type="text" class="ck-input" id="ck-map-search" placeholder="Buscar local, calle o punto de referencia…" autocomplete="off" />
-          <div class="ck-map-search-results" id="ck-map-search-results"></div>
+          <div class="tt-map-results" id="ck-map-search-results" role="listbox"></div>
         </div>
-        <div id="ck-map"></div>
+        <button type="button" class="tt-map-locate" id="ck-map-locate">Usar mi ubicación actual</button>
+        <div id="ck-map" class="tt-map-canvas"></div>
         <div class="ck-map-coords ck-map-coords-missing" id="ck-map-coords"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Todavía no marcaste tu ubicación — es obligatoria para continuar</div>
         <div class="ck-map-name-wrap">
           <label class="ck-label" for="ck-location-name">Guardá este punto como *</label>
@@ -244,7 +246,7 @@
         <label class="ck-label" for="ck-phone-number">Teléfono / WhatsApp *</label>
         <div style="display:flex;gap:8px">
           <select class="ck-select" id="ck-phone-country" aria-label="Prefijo de Paraguay" style="flex:0 0 88px" disabled><option value="PY">+595</option></select>
-          <input type="tel" class="ck-input" id="ck-phone-number" placeholder="Ej: 0981 336 401" autocomplete="tel-national" inputmode="numeric" maxlength="10" style="flex:1" />
+          <input type="tel" class="ck-input" id="ck-phone-number" placeholder="Ej: 0912345678" autocomplete="tel-national" inputmode="numeric" maxlength="10" style="flex:1" />
         </div>
       </div>
       <div class="ck-field">
@@ -402,7 +404,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261003-variant-inventory-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261004-final-integration-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -414,8 +416,9 @@ import {
   removeStoreClosedOverlay
 } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
+import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20261004-final-integration-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
+import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261004-final-integration-1";
 import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
@@ -593,7 +596,7 @@ function applyBankAccounts(bankAccounts) {
   const ba = bankAccounts || {};
   const lines = [];
   const bankIco = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><line x1="3" y1="21" x2="21" y2="21"/><line x1="5" y1="21" x2="5" y2="10"/><line x1="19" y1="21" x2="19" y2="10"/><polygon points="12 3 21 9 3 9"/><line x1="9" y1="21" x2="9" y2="10"/><line x1="15" y1="21" x2="15" y2="10"/></svg>';
-  if (ba.ueno)  lines.push(`<div class="ck-bank-line">${bankIco}<strong>Ueno (Banco GNB):</strong> ${escapeSearchHtml(ba.ueno)}</div>`);
+  if (ba.ueno)  lines.push(`<div class="ck-bank-line">${bankIco}<strong>ueno bank:</strong> ${escapeSearchHtml(ba.ueno)}</div>`);
   if (ba.atlas) lines.push(`<div class="ck-bank-line">${bankIco}<strong>Atlas (Banco Nacional):</strong> ${escapeSearchHtml(ba.atlas)}</div>`);
   const el = document.getElementById('bank-details-lines');
   if (!el) return;
@@ -845,7 +848,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261003-variant-inventory-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261004-final-integration-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1610,25 +1613,40 @@ async function buildConfirmation() {
   }
 }
 
-// ---- MAP (Leaflet — only for delivery) ----
+// Un único mapa para checkout, registro y perfil.
+function escapeSearchHtml(value) {
+  const node = document.createElement('div');
+  node.textContent = String(value ?? '');
+  return node.innerHTML;
+}
 let _mapInstance = null;
-let _mapMarker   = null;
-
-function initMap() {
-  // Only initialize once
-  if (_mapInstance) {
-    setTimeout(() => _mapInstance.invalidateSize(), 200);
-    return;
-  }
-  // Lazy-load Leaflet JS
-  if (!window.L) {
-    const s = document.createElement('script');
-    s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-    s.onload = () => _buildMap();
-    document.head.appendChild(s);
-  } else {
-    _buildMap();
-  }
+let _mapPromise = null;
+async function initMap() {
+  if (_mapInstance) { _mapInstance.invalidateSize(); return; }
+  if (_mapPromise) return _mapPromise;
+  _mapPromise = createLocationMap({
+    mapEl: document.getElementById('ck-map'),
+    searchInput: document.getElementById('ck-map-search'),
+    resultsEl: document.getElementById('ck-map-search-results'),
+    locateButton: document.getElementById('ck-map-locate'),
+    onChange: place => {
+      window.__TintinCheckoutPoint = place ? { lat: place.lat, lng: place.lng } : null;
+      if (!place) { orderData.mapLocation = null; return; }
+      document.getElementById('error-2')?.classList.remove('show');
+      hideSavedLocationHint();
+      saveMapLocation(place.lat, place.lng, place);
+    },
+    onError: message => showError(2, message)
+  }).then(map => { _mapInstance = map; maybeApplySavedLocation(); return map; })
+    .catch(() => {
+      showError(2, 'No pudimos cargar el mapa. Reintentá con el botón de ubicación.');
+      document.getElementById('ck-map-locate').onclick = async () => {
+        await initMap();
+        if (_mapInstance) { document.getElementById('ck-map-locate').onclick = null; await _mapInstance.locateCurrent(); }
+      };
+    })
+    .finally(() => { _mapPromise = null; });
+  return _mapPromise;
 }
 
 // Shared by map clicks, marker drag, and the search box below —
@@ -1652,9 +1670,8 @@ function saveMapLocation(lat, lng, place) {
   // Un resultado de búsqueda ya trae su propio nombre de negocio/lugar — se
   // usa para completar el campo de nombre solo. Un click/arrastre manual NO
   // toca lo que la clienta ya haya escrito ahí.
-  if (place && place.name) {
-    document.getElementById('ck-location-name').value = place.name;
-  }
+  const nameInput = document.getElementById('ck-location-name');
+  if (place?.name && !nameInput.value.trim()) nameInput.value = place.name;
 }
 
 function hideSavedLocationHint() {
@@ -1662,29 +1679,6 @@ function hideSavedLocationHint() {
   // confirmar.
   const card = document.getElementById('ck-saved-location-hint');
   if (card) card.style.display = 'none';
-}
-
-function placeMarker(lat, lng, place) {
-  const L = window.L;
-  const latlng = L.latLng(lat, lng);
-  if (!_mapPinIcon) {
-    _mapPinIcon = L.divIcon({
-      className: '',
-      html: '<div style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));color:#C86B86"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="#fff" stroke-width="1.2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="#fff" stroke="none"/></svg></div>',
-      iconSize: [32, 32],
-      iconAnchor: [16, 32]
-    });
-  }
-  if (_mapMarker) _mapMarker.setLatLng(latlng);
-  else _mapMarker = L.marker(latlng, { icon: _mapPinIcon, draggable: true }).addTo(_mapInstance);
-
-  _mapMarker.off('dragend').on('dragend', () => {
-    const pos = _mapMarker.getLatLng();
-    hideSavedLocationHint(); // ajustó el pin a mano — ya no es "la guardada tal cual"
-    saveMapLocation(pos.lat, pos.lng); // dragged away from the searched spot — treat as a manual pin now
-  });
-
-  saveMapLocation(lat, lng, place);
 }
 
 // Si el perfil ya tiene una ubicación guardada (con nombre) y todavía no se
@@ -1702,8 +1696,7 @@ function maybeApplySavedLocation() {
   // Se precarga en el mapa para que se vea dónde es, y se pide confirmarla de
   // un toque en vez de darla por buena en silencio (la gente se muda, o el
   // pedido va a otra dirección).
-  _mapInstance.setView([saved.lat, saved.lng], 16);
-  placeMarker(saved.lat, saved.lng, { name: saved.name, address: saved.address });
+  _mapInstance.setLocation(saved, { scroll: false });
 
   if (_savedLocationConfirm) return;
   _savedLocationConfirm = attachSavedLocationConfirm({
@@ -1717,6 +1710,7 @@ function maybeApplySavedLocation() {
     onChange: () => {
       // Empieza de cero: sin punto marcado y con el buscador enfocado.
       orderData.mapLocation = null;
+      _mapInstance.clearLocation();
       const coordsEl = document.getElementById('ck-map-coords');
       coordsEl.classList.add('ck-map-coords-missing');
       coordsEl.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Todavía no marcaste tu ubicación — es obligatoria para continuar';
@@ -1740,211 +1734,6 @@ function saveLocationToProfileIfChecked() {
     if (!added.ok) return;
     return setDoc(userRef, { ...addressBookPatch(added.list), updatedAt: serverTimestamp() }, { merge: true });
   }).catch(() => {});
-}
-
-let _mapPinIcon = null;
-
-function _buildMap() {
-  const L = window.L;
-  // Center on Asunción, Paraguay
-  _mapInstance = L.map('ck-map', { zoomControl: true }).setView([-25.2867, -57.6467], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 19
-  }).addTo(_mapInstance);
-
-  _mapInstance.on('click', e => { hideSavedLocationHint(); placeMarker(e.latlng.lat, e.latlng.lng); });
-  initMapSearch();
-
-  // Resize fix when map container becomes visible
-  setTimeout(() => {
-    _mapInstance.invalidateSize();
-    maybeApplySavedLocation();
-  }, 300);
-}
-
-// ---- MAP SEARCH (Nominatim + Overpass / OpenStreetMap — free, no API key) ----
-// Two free OSM services combined so category words ("farmacia", "estación de
-// servicio") work like Google's "search nearby type" instead of only matching
-// literal names: Nominatim finds named places/addresses; Overpass finds
-// everything tagged with a given category inside the delivery zone.
-let _mapSearchDebounce = null;
-
-// Gran Asunción / zona de reparto (ver DELIVERY_CITIES) — usado para sesgar
-// Nominatim hacia resultados relevantes y acotar las búsquedas por categoría.
-const DELIVERY_BBOX = { south: -25.75, west: -57.75, north: -25.05, east: -57.15 };
-
-// Cada categoría puede mapear a más de una etiqueta OSM (ej. restaurante
-// incluye fast_food) — searchOverpassCategory las combina en una sola
-// consulta, así que agregar categorías no agrega llamadas de red extra.
-const CATEGORY_MAP = [
-  { keys: ['estacion de servicio', 'gasolinera', 'combustible', 'nafta', 'servicentro'], tags: ['amenity=fuel'], label: 'Estación de servicio' },
-  { keys: ['farmacia'], tags: ['amenity=pharmacy'], label: 'Farmacia' },
-  { keys: ['supermercado', 'super', 'almacen', 'despensa'], tags: ['shop=supermarket', 'shop=convenience'], label: 'Supermercado' },
-  { keys: ['kiosco', 'kiosko'], tags: ['shop=kiosk', 'shop=convenience'], label: 'Kiosco' },
-  { keys: ['shopping', 'centro comercial', 'mall'], tags: ['shop=mall'], label: 'Shopping' },
-  { keys: ['banco'], tags: ['amenity=bank'], label: 'Banco' },
-  { keys: ['cajero automatico', 'cajero'], tags: ['amenity=atm'], label: 'Cajero automático' },
-  { keys: ['hospital', 'sanatorio', 'clinica', 'clínica'], tags: ['amenity=hospital', 'amenity=clinic'], label: 'Hospital' },
-  { keys: ['terminal de omnibus', 'terminal de ómnibus', 'terminal'], tags: ['amenity=bus_station'], label: 'Terminal de ómnibus' },
-  { keys: ['ferreteria', 'ferretería'], tags: ['shop=hardware'], label: 'Ferretería' },
-  { keys: ['panaderia', 'panadería'], tags: ['shop=bakery'], label: 'Panadería' },
-  { keys: ['veterinaria'], tags: ['amenity=veterinary'], label: 'Veterinaria' },
-  { keys: ['peluqueria', 'peluquería', 'salon de belleza', 'salón de belleza'], tags: ['shop=hairdresser', 'shop=beauty'], label: 'Peluquería' },
-  { keys: ['restaurante', 'restaurant'], tags: ['amenity=restaurant', 'amenity=fast_food'], label: 'Restaurante' },
-  { keys: ['heladeria', 'heladería'], tags: ['amenity=ice_cream'], label: 'Heladería' },
-  { keys: ['ropa', 'tienda de ropa'], tags: ['shop=clothes'], label: 'Tienda de ropa' },
-  { keys: ['iglesia', 'parroquia', 'capilla'], tags: ['amenity=place_of_worship'], label: 'Iglesia' },
-  { keys: ['escuela', 'colegio'], tags: ['amenity=school'], label: 'Escuela/Colegio' },
-  { keys: ['universidad'], tags: ['amenity=university', 'amenity=college'], label: 'Universidad' },
-  { keys: ['plaza', 'parque'], tags: ['leisure=park'], label: 'Plaza/Parque' },
-  { keys: ['comisaria', 'comisaría', 'policia', 'policía'], tags: ['amenity=police'], label: 'Comisaría' },
-  { keys: ['municipalidad', 'intendencia'], tags: ['amenity=townhall', 'office=government'], label: 'Municipalidad' },
-  { keys: ['papeleria', 'papelería', 'libreria', 'librería'], tags: ['shop=stationery', 'shop=books'], label: 'Papelería/Librería' },
-  { keys: ['correo'], tags: ['amenity=post_office'], label: 'Correo' },
-  { keys: ['lavanderia', 'lavandería'], tags: ['shop=laundry'], label: 'Lavandería' },
-  { keys: ['gimnasio'], tags: ['leisure=fitness_centre'], label: 'Gimnasio' },
-];
-
-function normalizeSearchText(s) {
-  return (s || '').toLowerCase().normalize('NFD').replace(new RegExp('[\u0300-\u036f]', 'g'), '').trim();
-}
-
-function matchCategory(query) {
-  const q = normalizeSearchText(query);
-  return CATEGORY_MAP.find(c => c.keys.some(k => q.includes(normalizeSearchText(k)))) || null;
-}
-
-function escapeSearchHtml(s) {
-  const div = document.createElement('div');
-  div.textContent = s || '';
-  return div.innerHTML;
-}
-
-function initMapSearch() {
-  const input = document.getElementById('ck-map-search');
-  const results = document.getElementById('ck-map-search-results');
-  if (!input || input.dataset.wired) return;
-  input.dataset.wired = '1';
-
-  input.addEventListener('input', () => {
-    clearTimeout(_mapSearchDebounce);
-    const q = input.value.trim();
-    if (q.length < 3) { results.classList.remove('show'); results.innerHTML = ''; return; }
-    _mapSearchDebounce = setTimeout(() => searchMapPlace(q), 450);
-  });
-
-  document.addEventListener('click', (e) => {
-    if (e.target !== input && !results.contains(e.target)) results.classList.remove('show');
-  });
-}
-
-// Named places, addresses, streets, barrios — matches by name/text.
-// La llamada al proxy /api/geo-search vive en js/components/location/selector-ubicacion.js, el mismo
-// módulo que usa el buscador de dirección del alta de cuenta y del perfil: un
-// solo lugar que sabe cómo se llama a ese endpoint y qué forma tiene su
-// respuesta. Acá sólo se traduce `lng` a `lon`, que es como lo nombra el
-// resto del código del mapa.
-//
-// Un fallo de la búsqueda no rompe el checkout: se devuelve vacío y siguen
-// estando el buscador por categoría y el click manual sobre el mapa.
-async function searchNominatim(query) {
-  try {
-    const places = await searchPlaces(query);
-    return places.map(p => ({ lat: Number(p.lat), lon: Number(p.lng), name: p.name, address: p.address }));
-  } catch {
-    return [];
-  }
-}
-
-// Category search ("farmacia", "estación de servicio"...) — everything tagged
-// with that type inside the delivery zone, since these are category words,
-// not proper names, and plain name-matching search won't find them.
-// A category can list more than one OSM tag (e.g. restaurante = restaurant +
-// fast_food) — they're all combined into this same single request, so more
-// categories/tags never means more network calls per search.
-async function searchOverpassCategory(cat) {
-  const { south, west, north, east } = DELIVERY_BBOX;
-  const bbox = `${south},${west},${north},${east}`;
-  const filters = cat.tags.map(t => {
-    const [tagKey, tagVal] = t.split('=');
-    return `node["${tagKey}"="${tagVal}"](${bbox});way["${tagKey}"="${tagVal}"](${bbox});`;
-  }).join('');
-  const query = `[out:json][timeout:8];(${filters});out center 15;`;
-  const res = await fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'data=' + encodeURIComponent(query)
-  });
-  const data = await res.json();
-  return (data.elements || [])
-    .map(el => {
-      const lat = el.lat ?? el.center?.lat;
-      const lon = el.lon ?? el.center?.lon;
-      const tags = el.tags || {};
-      const street = [tags['addr:street'], tags['addr:housenumber']].filter(Boolean).join(' ');
-      const locality = tags['addr:city'] || tags['addr:suburb'] || '';
-      return {
-        lat, lon,
-        name: tags.name || cat.label,
-        address: [street, locality].filter(Boolean).join(', ') || cat.label
-      };
-    })
-    .filter(r => r.lat && r.lon);
-}
-
-async function searchMapPlace(query) {
-  const results = document.getElementById('ck-map-search-results');
-  results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">Buscando…</div>';
-  results.classList.add('show');
-
-  const cat = matchCategory(query);
-  let places;
-  try {
-    const [nominatimResults, overpassResults] = await Promise.all([
-      searchNominatim(query),
-      // Overpass is a secondary/best-effort source: if it fails or times out,
-      // the search still works with Nominatim's name-based results alone.
-      cat ? searchOverpassCategory(cat).catch(() => []) : Promise.resolve([])
-    ]);
-    // Category matches surface first since that's literally what was typed.
-    places = [...overpassResults, ...nominatimResults];
-  } catch (e) {
-    console.error('Error buscando ubicación:', e);
-    results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">No se pudo buscar — probá de nuevo o marcá manualmente en el mapa</div>';
-    return;
-  }
-
-  // Overpass and Nominatim can both return the same POI — dedupe by rounded coords.
-  const seen = new Set();
-  places = places.filter(p => {
-    const key = `${p.lat.toFixed(4)},${p.lon.toFixed(4)}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  }).slice(0, 8);
-
-  if (!places.length) {
-    results.innerHTML = '<div class="ck-map-search-item ck-map-search-empty">Sin resultados — probá con otro nombre o marcá manualmente en el mapa</div>';
-    return;
-  }
-
-  results.innerHTML = places.map((p, i) => `
-    <div class="ck-map-search-item" data-idx="${i}">
-      <div class="ck-map-search-item-name"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${escapeSearchHtml(p.name)}</div>
-      <div class="ck-map-search-item-addr">${escapeSearchHtml(p.address)}</div>
-    </div>
-  `).join('');
-  results.querySelectorAll('.ck-map-search-item[data-idx]').forEach(el => {
-    el.onclick = () => {
-      const p = places[+el.dataset.idx];
-      hideSavedLocationHint();
-      _mapInstance.setView([p.lat, p.lon], 17);
-      placeMarker(p.lat, p.lon, { name: p.name, address: p.address });
-      document.getElementById('ck-map-search').value = p.name;
-      results.classList.remove('show');
-    };
-  });
 }
 
 // ---- INIT ----
@@ -2026,7 +1815,7 @@ subscribeSession(snapshot => {
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script src="tienda.js?v=tintin-20261003-variant-inventory-1" defer></script>
+<script src="tienda.js?v=tintin-20261004-final-integration-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

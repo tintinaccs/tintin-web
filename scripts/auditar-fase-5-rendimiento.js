@@ -18,7 +18,7 @@ const shellRuntime = read('js/components/navigation/compartido/carga-navegacion.
 const routeState = read('js/components/navigation/compartido/estado-ruta.js');
 const products = read('js/core/store/estado-productos.js');
 const publicShellGenerator = read('scripts/sincronizar-inicio-navegacion-publica.js');
-const publicRuntimeVersion = publicShellGenerator.match(/const VERSION = '([^']+)'\s*;/)?.[1] || '';
+const publicRuntimeVersion = publicShellGenerator.match(/const PUBLIC_SHELL_VERSION = '([^']+)'\s*;/)?.[1] || '';
 const tiendaRuntimeVersion = publicShellGenerator.match(/const TIENDA_VERSION = '([^']+)'\s*;/)?.[1] || '';
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 const html = htmlFiles.map(file => [file, read(file)]);
@@ -40,7 +40,8 @@ check(
 );
 check(
   'Checkout reliability se limita a Checkout',
-  shellRuntime.includes("if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')))"),
+  /if \(page === 'cart'\) critical\.push\(import\('[^']*pages\/checkout\/checkout-confiabilidad\.js\?v=[^']+'\)\)/.test(shellRuntime) &&
+    (shellRuntime.match(/checkout-confiabilidad\.js/g) || []).length === 1,
   'El módulo de mapa y recuperación del checkout no debe descargarse en todas las páginas.'
 );
 check(
@@ -50,11 +51,12 @@ check(
   'La carga condicional no puede depender de que la URL termine en .html.'
 );
 
-const staleShell = html.filter(([, source]) => source.includes('js/inicio-navegacion-publica.js?v=tintin-20260726-login-session-1-owner-pink-20261004-1'));
+const shellConsumers = html.filter(([, source]) => /(?:^|["'/])js\/inicio-navegacion-publica\.js\?v=/.test(source));
+const staleShell = shellConsumers.filter(([, source]) => !source.includes(`js/inicio-navegacion-publica.js?v=${publicRuntimeVersion}`));
 const tiendaConsumers = html.filter(([, source]) => /(?:^|["'/])tienda\.js\?v=/.test(source));
 const staleTiendaConsumers = tiendaConsumers.filter(([, source]) => !source.includes(`tienda.js?v=${tiendaRuntimeVersion}`));
 const italicPreloads = html.filter(([, source]) => source.includes('montserrat-latin-wght-italic.woff2" as="font"'));
-check('Public shell tiene cache bust nuevo en todos los HTML', staleShell.length === 0, staleShell.map(([file]) => file).join(', '));
+check('Public shell usa la versión canónica en todos los HTML', Boolean(publicRuntimeVersion) && shellConsumers.length > 0 && staleShell.length === 0, staleShell.map(([file]) => file).join(', '));
 check(
   'tienda.js usa la revisión canónica del generador público',
   Boolean(tiendaRuntimeVersion) && tiendaConsumers.length > 0 && staleTiendaConsumers.length === 0,
