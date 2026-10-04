@@ -2,9 +2,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 :root {
-  --login-wine: #7d173a;
-  --login-rose: #ad3f67;
-  --login-pink: #d8688d;
+  --login-wine: var(--color-brand-primary, #C52F68);
+  --login-rose: var(--color-brand-primary, #C52F68);
+  --login-pink: var(--color-brand-primary, #C52F68);
   --login-blush: #fff3f7;
   --login-ink: #2c2226;
   --login-muted: #75666c;
@@ -372,7 +372,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   place-items: center;
   padding: 12px 20px;
   border: 0;
-  background: linear-gradient(135deg, #b84970, #8e274d) !important;
+  background: linear-gradient(135deg, var(--color-brand-primary, #C52F68), var(--color-brand-primary, #C52F68)) !important;
   color: #fff !important;
   box-shadow: 0 12px 28px rgba(142,39,77,.24), inset 0 1px 0 rgba(255,255,255,.18);
 }
@@ -548,7 +548,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   display: block;
   border-color: #efbec8;
   background: #fff0f3 !important;
-  color: #94263d !important;
+  color: var(--color-brand-primary, #C52F68) !important;
 }
 .login-success.show {
   display: block;
@@ -609,7 +609,7 @@ body.login-setup-open { --login-shell-width: 560px; }
 }
 
 .login-phone-help a {
-  color: var(--color-brand-primary, #ad3f67);
+  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68));
   font-weight: 650;
 }
 
@@ -667,11 +667,11 @@ body.login-exit-open { overflow: hidden; }
 .login-exit-primary {
   margin-bottom: 10px;
   border: none;
-  background: var(--color-brand-primary, #ad3f67);
+  background: var(--color-brand-primary, var(--color-brand-primary, #C52F68));
   color: #fff;
 }
 
-.login-exit-primary:hover { background: var(--color-brand-primary-hover, #8b2642); }
+.login-exit-primary:hover { background: var(--color-brand-primary-hover, var(--color-brand-primary, #C52F68)); }
 
 .login-exit-secondary {
   border: 1px solid rgba(125,23,58,.22);

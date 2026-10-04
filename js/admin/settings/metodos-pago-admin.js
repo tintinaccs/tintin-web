@@ -35,7 +35,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1-brand-20261004-1';
   document.head.appendChild(link);
 }
 

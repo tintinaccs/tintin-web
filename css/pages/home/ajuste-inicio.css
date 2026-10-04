@@ -62,17 +62,17 @@ html body.tt-home-premium #tt-privacy-consent.tt-privacy-consent{
   box-shadow:0 24px 64px rgba(38,24,30,.14),0 2px 8px rgba(38,24,30,.05)!important;
 }
 html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-primary{
-  background:var(--tt-accent,#AD3F67)!important;
-  background-color:var(--tt-accent,#AD3F67)!important;
-  border-color:var(--tt-accent,#AD3F67)!important;
+  background:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
+  background-color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
+  border-color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
   color:#FFFFFF!important;
   opacity:1!important;
 }
 html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
-  border-color:var(--tt-accent,#AD3F67)!important;
-  color:var(--tt-accent,#AD3F67)!important;
+  border-color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
+  color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
   opacity:1!important;
 }
 
@@ -135,15 +135,15 @@ body.tt-home-premium #tt-hero-img{
 body.tt-home-premium .tt-hero-actions .tt-btn-outline{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
-  border-color:var(--tt-accent,#AD3F67)!important;
-  color:var(--tt-accent,#AD3F67)!important;
+  border-color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
+  color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
   box-shadow:0 8px 24px rgba(38,24,30,.12)!important;
   opacity:1!important;
 }
 body.tt-home-premium .tt-hero-actions .tt-btn-outline:hover,
 body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
-  background:var(--tt-accent,#AD3F67)!important;
-  background-color:var(--tt-accent,#AD3F67)!important;
+  background:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
+  background-color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important;
   color:#FFFFFF!important;
 }
 .tt-home-premium .tt-trust-bar,
@@ -171,8 +171,8 @@ body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
 .tt-scroll-up .tt-home-motion:not(.is-visible){transform:translateY(-28px) scale(.985)}
 .tt-home-motion.tt-home-hero{opacity:1;filter:blur(0);transform:none}
 .tt-home-premium .tt-footer,.tt-home-premium .tt-footer *{color:#2B2B2B!important;opacity:1!important;text-shadow:none!important}
-.tt-home-premium .tt-footer a{color:#2B2B2B!important;text-decoration-color:#AD3F67!important}
-.tt-home-premium .tt-footer a:hover{color:#AD3F67!important}
+.tt-home-premium .tt-footer a{color:#2B2B2B!important;text-decoration-color:var(--color-brand-primary, #C52F68)!important}
+.tt-home-premium .tt-footer a:hover{color:var(--color-brand-primary, #C52F68)!important}
 .tt-home-premium .tt-footer a.tt-footer-wa,.tt-home-premium .tt-footer a.tt-footer-wa *{color:#fff!important;text-decoration-color:transparent!important}
 .tt-home-premium .tt-footer a.tt-footer-wa:hover{color:#fff!important}
 .tt-home-premium .tt-footer-col-title,.tt-home-premium .tt-footer-brand,.tt-home-premium .tt-footer-logo,.tt-home-premium .tt-footer h2,.tt-home-premium .tt-footer h3{color:#2B2B2B!important;font-weight:800!important;opacity:1!important}
@@ -217,12 +217,12 @@ body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--info::
   width:34px;
   height:34px;
   border:3px solid var(--color-progress-track,#F1E4E7);
-  border-top-color:var(--color-progress-fill,#AD3F67);
+  border-top-color:var(--color-progress-fill,var(--color-brand-primary, #C52F68));
   border-radius:50%;
   animation:tt-home-collections-spin .8s linear infinite;
 }
 body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--error{
-  border-color:color-mix(in srgb,var(--color-brand-primary,#AD3F67) 28%,#FFFFFF);
+  border-color:color-mix(in srgb,var(--color-brand-primary,var(--color-brand-primary, #C52F68)) 28%,#FFFFFF);
 }
 @keyframes tt-home-collections-spin{to{transform:rotate(360deg)}}
 
@@ -414,7 +414,7 @@ html body.tt-home-premium .tt-hero-eyebrow {
   height: auto !important;
   overflow: visible !important;
   margin: 0 0 clamp(16px, 2vw, 24px);
-  color: #AD3F67;
+  color: var(--color-brand-primary, #C52F68);
   font-size: .76rem;
   font-weight: 700;
   letter-spacing: .16em;
@@ -445,7 +445,7 @@ html body.tt-home-premium .tt-hero-title {
 html body.tt-home-premium .tt-hero-title-line--accent {
   display: block;
   margin: .08em 0 0;
-  color: #AD3F67;
+  color: var(--color-brand-primary, #C52F68);
   font: inherit;
   letter-spacing: inherit;
 }
@@ -486,10 +486,10 @@ html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
   min-width: 190px;
   min-height: 54px;
   padding: 0 26px !important;
-  border: 1px solid #AD3F67 !important;
+  border: 1px solid var(--color-brand-primary, #C52F68) !important;
   border-radius: 999px;
   color: #FFFFFF !important;
-  background: #AD3F67 !important;
+  background: var(--color-brand-primary, #C52F68) !important;
   box-shadow: 0 10px 24px rgba(173, 63, 103, .16) !important;
   font-size: .98rem !important;
   font-weight: 650;
@@ -504,7 +504,7 @@ html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta:hover,
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta:focus-visible {
   color: #FFFFFF !important;
-  background: #923454 !important;
+  background: var(--color-brand-primary, #C52F68) !important;
   box-shadow: 0 12px 28px rgba(173, 63, 103, .24) !important;
 }
 
@@ -515,7 +515,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
   justify-content: center;
   width: auto !important;
   min-height: 44px;
-  color: #AD3F67 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
   font-size: .94rem;
   font-weight: 600;
   text-decoration: underline;

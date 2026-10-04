@@ -47,7 +47,7 @@
 }
 
 .tt-collections-page .tt-section-sub {
-  color: var(--color-brand-primary, #AD3F67) !important;
+  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68)) !important;
 }
 
 .tt-collections-page .tt-page-hero-sub,
@@ -140,7 +140,7 @@
   margin-bottom: 4px;
   border-radius: 50%;
   background: var(--color-badge-background, #FDECF2);
-  color: var(--color-badge-text, #AD3F67) !important;
+  color: var(--color-badge-text, var(--color-brand-primary, #C52F68)) !important;
   font-size: 1.4rem;
   line-height: 1;
 }
@@ -160,7 +160,7 @@
   border: 1px solid var(--color-card-border, #F1E4E7);
   border-radius: 999px;
   background: var(--color-badge-background, #FDECF2);
-  color: var(--color-badge-text, #AD3F67) !important;
+  color: var(--color-badge-text, var(--color-brand-primary, #C52F68)) !important;
   font-size: .7rem;
   font-weight: 800;
 }
@@ -169,8 +169,8 @@
 .tt-collections-page .tt-collections-actions .tt-btn,
 .tt-collections-page .tt-collections-state .tt-btn {
   min-height: 44px;
-  background: var(--color-button-primary-background, #AD3F67) !important;
-  border-color: var(--color-button-primary-border, #AD3F67) !important;
+  background: var(--color-button-primary-background, var(--color-brand-primary, #C52F68)) !important;
+  border-color: var(--color-button-primary-border, var(--color-brand-primary, #C52F68)) !important;
   color: var(--color-button-primary-text, #FFFFFF) !important;
 }
 

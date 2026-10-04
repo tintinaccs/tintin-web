@@ -2,7 +2,7 @@
  * No crea autoridades paralelas: solo fortalece las superficies ya renderizadas
  * por Producto, Perfil y el shell modular de navegación. */
 
-const VERSION = 'tintin-20260829-final-stability-1';
+const VERSION = 'tintin-20260829-final-stability-1-brand-runtime-20261004-1';
 const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
 function injectStyles() {
@@ -62,7 +62,7 @@ function injectStyles() {
     [data-auth-account-button]{display:grid!important;place-items:center!important;overflow:hidden!important}
     [data-auth-account-button]>.tt-account-avatar-btn{inline-size:26px!important;block-size:26px!important;max-inline-size:none!important;max-block-size:none!important;flex:0 0 26px!important;border-radius:50%!important;object-fit:cover!important;object-position:center!important;display:block!important}
     #tt-tabbar .tt-tabbar-avatar{inline-size:100%!important;block-size:100%!important;max-inline-size:none!important;max-block-size:none!important;border-radius:50%!important;object-fit:cover!important;object-position:center!important;display:block!important}
-    .tt-profile-photo-btn{border:1px solid #eac7d4;background:#fff;color:#9e4062;border-radius:999px;padding:7px 11px;font:700 10px/1 Montserrat;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+    .tt-profile-photo-btn{border:1px solid #eac7d4;background:#fff;color:#C52F68;border-radius:999px;padding:7px 11px;font:700 10px/1 Montserrat;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
     .tt-profile-photo-btn:disabled{opacity:.55;cursor:wait}
     .tt-profile-meta{min-width:0}
     .tt-profile-meta .perfil-name{text-transform:none!important;letter-spacing:-.02em!important;font-size:clamp(20px,3vw,30px)!important}
@@ -70,8 +70,8 @@ function injectStyles() {
     .tt-profile-tabs{position:sticky;top:8px;z-index:30;display:flex;gap:6px;overflow-x:auto;padding:7px;background:rgba(255,255,255,.96);border:1px solid #ecd4dd;border-radius:16px;margin:0 0 18px;box-shadow:0 8px 24px rgba(83,33,52,.07);scrollbar-width:none}
     .tt-profile-tabs::-webkit-scrollbar{display:none}
     .tt-profile-tab{position:relative;flex:0 0 auto;border:0;background:transparent;color:#6d5b62;border-radius:11px;padding:11px 14px;font:700 11px/1 Montserrat;cursor:pointer;white-space:nowrap}
-    .tt-profile-tab[aria-selected="true"]{background:#fde8f0;color:#8b2642}
-    .tt-profile-tab-badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;margin-left:6px;border-radius:999px;background:#a3154b;color:#fff;font-size:9px;vertical-align:1px}
+    .tt-profile-tab[aria-selected="true"]{background:#fde8f0;color:#C52F68}
+    .tt-profile-tab-badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;margin-left:6px;border-radius:999px;background:#C52F68;color:#fff;font-size:9px;vertical-align:1px}
     .tt-profile-panel[hidden]{display:none!important}
     .tt-profile-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
     .tt-profile-summary-card{background:#fff;border:1px solid #ecd9e1;border-radius:16px;padding:18px;min-width:0}

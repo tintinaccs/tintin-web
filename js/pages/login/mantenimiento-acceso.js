@@ -18,17 +18,17 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
   function loadStyles() {
     ensureStyle(
       'link[data-tt-login-maintenance]',
-      '../../../css/pages/login/login-maintenance.css?v=tintin-20260925-contrast-1',
+      '../../../css/pages/login/login-maintenance.css?v=tintin-20260925-contrast-1-brand-20261004-1',
       'ttLoginMaintenance'
     );
     ensureStyle(
       'link[data-tt-login-fluid]',
-      '../../../css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1',
+      '../../../css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1-brand-20261004-1',
       'ttLoginFluid'
     );
     ensureStyle(
       'link[data-tt-login-onboarding-flow]',
-      '../../../css/pages/login/login-onboarding-flow.css?v=tintin-20261001-registration-white-cards-2',
+      '../../../css/pages/login/login-onboarding-flow.css?v=tintin-20261001-registration-white-cards-2-brand-20261004-1',
       'ttLoginOnboardingFlow'
     );
   }

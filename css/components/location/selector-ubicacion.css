@@ -80,6 +80,21 @@
 
 .tt-map-search {
   position: relative;
+  width: 100%;
+}
+
+.tt-map-search input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-field-border);
+  border-radius: 14px;
+  background: var(--color-field-background);
+  color: var(--color-field-text);
+  font: inherit;
 }
 
 .tt-map-results {
@@ -137,7 +152,7 @@
   border: 1px solid rgba(125,23,58,.18);
   border-radius: 14px;
   background: #fff;
-  color: var(--color-brand-primary, #ad3f67);
+  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68));
   font: 650 13.5px/1 "Montserrat", sans-serif;
   cursor: pointer;
 }

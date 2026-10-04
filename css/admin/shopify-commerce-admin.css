@@ -7,8 +7,8 @@
    ======================================================================== */
 
 :root {
-  --tt-commerce-brand: var(--admin-color-brand, #AD3F67);
-  --tt-commerce-brand-hover: var(--admin-color-brand-hover, #8B2642);
+  --tt-commerce-brand: var(--admin-color-brand, var(--admin-color-brand, #C52F68));
+  --tt-commerce-brand-hover: var(--admin-color-brand-hover, var(--admin-color-brand, #C52F68));
   --tt-commerce-page: var(--admin-color-background-page, #FFF6FA);
   --tt-commerce-surface: var(--admin-color-background-surface, #FFFFFF);
   --tt-commerce-border: var(--admin-color-border, #F1E4E7);

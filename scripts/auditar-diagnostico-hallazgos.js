@@ -158,7 +158,7 @@ check(
     nosotrosPage?.metadata?.redirectsTo === '/about'
 );
 
-const checkoutColor = /#tinsel-checkout-btn\s*\{[\s\S]*?background:\s*(#[0-9a-f]{6})/i.exec(productExtras)?.[1];
+const checkoutColor = /#tinsel-checkout-btn\s*\{[\s\S]*?background:\s*(?:var\(--color-brand-primary,\s*)?(#[0-9a-f]{6})/i.exec(productExtras)?.[1];
 check(
   'El botón de checkout supera 4.5:1 contra texto blanco',
   Boolean(checkoutColor) && contrastRatio(checkoutColor, '#ffffff') >= 4.5

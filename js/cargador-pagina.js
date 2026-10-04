@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1';
+  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-brand-20261004-1-brand-runtime-20261004-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -402,18 +402,18 @@
   const CSS = [
     'html.tt-scroll-locked,html.tt-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}',
     'body.tt-scroll-locked{position:fixed!important;left:0!important;right:0!important;width:100%!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}',
-    'html.tt-store-gate-pending,html.tt-store-gate-blocked{background:#F7BFD3!important}',
+    'html.tt-store-gate-pending,html.tt-store-gate-blocked{background:#C52F68!important}',
     'html.tt-store-gate-pending body> *:not(#tt-loader):not(#tt-store-closed-overlay),html.tt-store-gate-blocked body> *:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important;pointer-events:none!important;user-select:none!important}',
     'html.tt-store-gate-pending body,html.tt-store-gate-blocked body{overflow:hidden!important;overscroll-behavior:none!important}',
     '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
-    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#F7BFD3;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
+    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#C52F68;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
     '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:brightness(0) invert(1) drop-shadow(0 8px 20px rgba(125,23,58,.14));user-select:none;pointer-events:none}',
-    '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#7d173a!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
+    '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#ffffff!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
-    '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#7d173a!important}#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:none!important;display:none!important}',
-    '#tt-loader-brand-subtitle{margin-top:clamp(6px,1vw,9px);max-width:100%;padding:0 6px;box-sizing:border-box;color:#2b2b2b!important;font-family:Montserrat;font-size:clamp(12px,1.3vw,14px);font-weight:500;line-height:1.25;letter-spacing:.055em;text-align:center;opacity:0;transform:scale(1.09);white-space:normal}',
+    '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#ffffff!important}#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:none!important;display:none!important}',
+    '#tt-loader-brand-subtitle{margin-top:clamp(6px,1vw,9px);max-width:100%;padding:0 6px;box-sizing:border-box;color:#ffffff!important;font-family:Montserrat;font-size:clamp(12px,1.3vw,14px);font-weight:500;line-height:1.25;letter-spacing:.055em;text-align:center;opacity:0;transform:scale(1.09);white-space:normal}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-brand-subtitle{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
     '.tt-loader-spinner{width:var(--tt-loader-spinner-size);height:var(--tt-loader-spinner-size);display:grid;margin-top:clamp(24px,2.8vw,34px);opacity:0;transform:scale(1.09);animation:tt-loader-spinner-shell 3s infinite}',
     '#tt-loader-spin-wrap.tt-ready .tt-loader-spinner{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both,tt-loader-spinner-shell 3s infinite}',
@@ -423,8 +423,8 @@
     '@keyframes tt-loader-spinner-ring{100%{transform:rotate(1turn)}}',
     '#tt-loader-status{display:flex;flex-direction:column;align-items:center;max-width:min(86vw,440px);margin-top:clamp(15px,2vw,22px);padding:0 12px;box-sizing:border-box}',
     '#tt-loader-status:empty{display:none}',
-    '#tt-loader-title{font-family:Montserrat;font-size:clamp(11px,1.5vw,13px);font-weight:750;line-height:1.35;letter-spacing:.04em;color:#2b2b2b!important;text-align:center;overflow-wrap:anywhere}',
-    '#tt-loader-subtitle{margin-top:5px;font-family:Montserrat;font-size:clamp(10px,1.35vw,12px);font-weight:600;line-height:1.45;color:#2b2b2b!important;text-align:center;opacity:.88;overflow-wrap:anywhere}',
+    '#tt-loader-title{font-family:Montserrat;font-size:clamp(11px,1.5vw,13px);font-weight:750;line-height:1.35;letter-spacing:.04em;color:#ffffff!important;text-align:center;overflow-wrap:anywhere}',
+    '#tt-loader-subtitle{margin-top:5px;font-family:Montserrat;font-size:clamp(10px,1.35vw,12px);font-weight:600;line-height:1.45;color:#ffffff!important;text-align:center;opacity:.88;overflow-wrap:anywhere}',
     '@media (min-width:601px) and (max-width:1024px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(178px,29vw,220px);--tt-loader-spinner-size:38px;--tt-loader-spinner-border:7px;width:min(100%,310px)}#tt-loader-brand-subtitle{font-size:clamp(12px,1.8vw,15px);margin-top:11px}.tt-loader-spinner{margin-top:25px}}',
     '@media (max-width:600px){#tt-loader{padding:max(16px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(120px,43vw,158px);--tt-loader-spinner-size:30px;--tt-loader-spinner-border:5px;width:min(100%,230px);max-width:calc(100vw - 28px)}#tt-loader-brand-subtitle{font-size:clamp(10px,3.2vw,12px);margin-top:8px;letter-spacing:.045em}.tt-loader-spinner{margin-top:20px}#tt-loader-status{margin-top:14px;padding:0 8px}#tt-loader-title{font-size:clamp(10px,3.1vw,12px)}#tt-loader-subtitle{font-size:clamp(9px,2.8vw,11px)}}',
     '@media (max-width:360px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(112px,42vw,140px);--tt-loader-spinner-size:27px;--tt-loader-spinner-border:4px}#tt-loader-brand-subtitle{font-size:10px}.tt-loader-spinner{margin-top:17px}}',
@@ -727,7 +727,7 @@
           'position:fixed;z-index:2147482988;right:14px;bottom:14px;display:flex;align-items:center;gap:10px;width:min(calc(100vw - 28px),470px);min-height:48px;padding:10px 12px 10px 16px;border:1px solid rgba(173,63,103,.18);border-radius:18px;background:rgba(255,255,255,.96);color:#3a2d32;box-shadow:0 14px 40px rgba(58,20,35,.16);box-sizing:border-box;visibility:visible;pointer-events:auto';
         notice.innerHTML =
           '<span style="min-width:0;flex:1;font:600 12px/1.45 Montserrat">Conexión inestable. Podés explorar la tienda; las compras se habilitan al reconectar.</span>' +
-          '<button type="button" aria-label="Reintentar conexión" style="min-width:44px;min-height:44px;padding:8px 12px;border:0;border-radius:999px;background:#ad3f67;color:#fff;font:800 12px/1 Montserrat;cursor:pointer">Reintentar</button>';
+          '<button type="button" aria-label="Reintentar conexión" style="min-width:44px;min-height:44px;padding:8px 12px;border:0;border-radius:999px;background:#C52F68;color:#fff;font:800 12px/1 Montserrat;cursor:pointer">Reintentar</button>';
         notice
           .querySelector('button')
           ?.addEventListener('click', () => window.location.reload());
@@ -825,7 +825,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261004-import-identity-review-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261004-import-identity-review-1-brand-20261004-1-brand-runtime-20261004-1');
     }
   }
 
@@ -846,7 +846,7 @@
   // segundo sistema de menús.
   function bootHeaderAccountFix() {
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1-brand-20261004-1');
     }
   }
 
@@ -881,9 +881,9 @@
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
       importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1-brand-runtime-20261004-1');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
-      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1');
+      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1-brand-runtime-20261004-1');
     }
   }
 
@@ -901,18 +901,18 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20260929-superadmin-hero-editable-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20260929-superadmin-hero-editable-1-brand-20261004-1-brand-runtime-20261004-1');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-admin-ready-20261002-1-brand-20261004-1-brand-runtime-20261004-1');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261003-variant-inventory-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261003-variant-inventory-1-brand-20261004-1-brand-runtime-20261004-1');
   }
 
   function bootThemeColorSanitizerPublic() {

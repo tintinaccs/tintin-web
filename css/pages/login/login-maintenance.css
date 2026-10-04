@@ -2,10 +2,10 @@
 body:has(.login-page) {
   --login-page-bg: var(--tt-page-bg, #fff8fb);
   --login-surface: var(--tt-surface, #fff);
-  --login-brand: #CA0169;
-  --login-brand-deep: #A00055;
-  --login-copy: #8A2756;
-  --login-muted: #A35576; /* #A85B7C quedaba en 4.48:1 sobre el fondo del login */
+  --login-brand: var(--color-brand-primary, #C52F68);
+  --login-brand-deep: var(--color-brand-primary, #C52F68);
+  --login-copy: var(--color-brand-primary, #C52F68);
+  --login-muted: var(--color-brand-primary, #C52F68); /* var(--color-brand-primary, #C52F68) quedaba en 4.48:1 sobre el fondo del login */
   --login-soft: #FFF0F7;
   --login-border: #F1BDD4;
   --header-h: 0px;
@@ -189,7 +189,7 @@ body:has(.login-page) :is(
 }
 
 body:has(.login-page) .login-email-input::placeholder {
-  color: #BE7898 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
   opacity: 1;
 }
 
@@ -211,7 +211,7 @@ body:has(.login-page) :is(button, a, input, select):focus-visible {
 }
 
 body:has(.login-page) .login-email-btn {
-  background: linear-gradient(135deg, #D20A72, #A00055) !important;
+  background: linear-gradient(135deg, var(--color-brand-primary, #C52F68), var(--color-brand-primary, #C52F68)) !important;
   color: #fff !important;
   box-shadow: 0 13px 28px rgba(160, 0, 85, .24);
 }
@@ -230,13 +230,13 @@ body:has(.login-page) .tt-map-canvas {
 }
 
 body:has(.login-page) .login-error {
-  color: #B22653 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
   border-color: #F0A8BF !important;
   background: #FFF0F4 !important;
 }
 
 body:has(.login-page) .login-success {
-  color: #8D2854 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
   border-color: #EDB5CB !important;
   background: #FFF3F8 !important;
 }
@@ -401,7 +401,7 @@ body:has(.login-page).tt-login-offline .login-box::before {
   border: 1px solid #efbec8;
   border-radius: 12px;
   background: #fff0f3;
-  color: #94263d;
+  color: var(--color-brand-primary, #C52F68);
   font-size: 12px;
   font-weight: 650;
   line-height: 1.45;

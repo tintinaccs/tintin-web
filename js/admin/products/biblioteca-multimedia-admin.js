@@ -23,28 +23,28 @@ function ensureStyles() {
     .tt-mlib-title{font:800 15px Montserrat,sans-serif;color:#2B2B2B}
     .tt-mlib-close{border:0;background:none;font-size:20px;line-height:1;cursor:pointer;color:#8a8a8a;padding:4px 8px}
     .tt-mlib-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-    .tt-mlib-btn{min-height:34px;padding:7px 11px;border:1px solid #e3c3cf;border-radius:9px;background:#fff;color:#8b2642;font:700 11px Montserrat,sans-serif;cursor:pointer}
-    .tt-mlib-btn.primary{background:#ad3f67;border-color:#ad3f67;color:#fff}
+    .tt-mlib-btn{min-height:34px;padding:7px 11px;border:1px solid #e3c3cf;border-radius:9px;background:#fff;color:#C52F68;font:700 11px Montserrat,sans-serif;cursor:pointer}
+    .tt-mlib-btn.primary{background:#C52F68;border-color:#C52F68;color:#fff}
     .tt-mlib-btn.primary{display:inline-flex;align-items:center;justify-content:center;gap:7px}
     .tt-mlib-btn.primary svg{width:15px;height:15px;color:#fff;stroke:currentColor;flex:0 0 auto}
     .tt-mlib-btn:disabled{opacity:.55;cursor:not-allowed}
     .tt-mlib-search{margin:12px 18px 0;padding:9px 12px;border:1px solid #e3c3cf;border-radius:9px;font:500 12.5px Montserrat,sans-serif;width:calc(100% - 36px)}
     .tt-mlib-drop{margin:12px 18px 0;padding:14px;border:1px dashed #d98ca6;border-radius:11px;background:#fff8fb;color:#8a5868;font:600 11px Montserrat,sans-serif;text-align:center;cursor:pointer}
-    .tt-mlib-drop.is-drag{background:#fdebf2;border-color:#ad3f67}
+    .tt-mlib-drop.is-drag{background:#fdebf2;border-color:#C52F68}
     .tt-mlib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;padding:14px 18px;overflow-y:auto}
     .tt-mlib-item{border:1px solid #f0dbe3;border-radius:10px;overflow:hidden;background:#fff8fa;cursor:pointer;display:flex;flex-direction:column;text-align:left}
-    .tt-mlib-item:hover{border-color:#AD3F67}
+    .tt-mlib-item:hover{border-color:#C52F68}
     .tt-mlib-thumb{width:100%;aspect-ratio:1;object-fit:cover;background:#f1e3e8;display:block}
     .tt-mlib-meta{padding:8px;font:500 10px Montserrat,sans-serif;color:#8a8a8a;line-height:1.4}
     .tt-mlib-meta strong{display:block;color:#2B2B2B;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .tt-mlib-meta small{display:block;margin-top:3px;color:#9b7d89}
     .tt-mlib-meta input{width:100%;margin-top:6px;padding:5px 6px;border:1px solid #ead3dc;border-radius:6px;font:500 10px Montserrat,sans-serif}
-    .tt-mlib-meta button{margin-top:6px;border:0;background:transparent;color:#ad3f67;font:700 10px Montserrat,sans-serif;cursor:pointer;padding:0}
+    .tt-mlib-meta button{margin-top:6px;border:0;background:transparent;color:#C52F68;font:700 10px Montserrat,sans-serif;cursor:pointer;padding:0}
     .tt-mlib-empty{padding:30px;text-align:center;color:#9a9a9a;font:500 12px Montserrat,sans-serif}
     .tt-mlib-del{margin:0 8px 8px;border:1px solid #e8c3c3;background:#fff;color:#b23a3a;border-radius:7px;font:600 10.5px Montserrat,sans-serif;padding:4px 0;cursor:pointer}
     .tt-mlib-del:hover{background:#fdf2f2}
     .tt-mlib-orphan-status{width:100%;margin-top:4px;padding:8px 10px;border:1px solid #f2d9a8;background:#fff8e8;color:#8a6a2b;border-radius:8px;font:600 11px Montserrat,sans-serif;display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .tt-mlib-orphan-status button{border:0;background:none;color:#ad3f67;font:700 10.5px Montserrat,sans-serif;cursor:pointer;padding:0;white-space:nowrap}
+    .tt-mlib-orphan-status button{border:0;background:none;color:#C52F68;font:700 10.5px Montserrat,sans-serif;cursor:pointer;padding:0;white-space:nowrap}
   `;
   document.head.appendChild(style);
 }

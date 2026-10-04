@@ -130,7 +130,7 @@ check(desktopStyles.includes('.tt-nav-dropdown:not(.open) .tt-dropdown'), 'escri
 check(desktopStyles.includes('width: 84px !important'), 'escritorio: las imágenes de colecciones no fueron ampliadas');
 check(surfaceStyles.includes('grid-template-columns: auto minmax(0, 1fr) auto'), 'buscar: falta la estructura grid estable');
 check(surfaceStyles.includes('width: min(1120px, calc(100vw - 64px))'), 'buscar escritorio: falta el tamaño ampliado');
-check(surfaceStyles.includes('linear-gradient(135deg, #8f204b, #c53f75)'), 'cuenta: falta el encabezado sólido de alto contraste');
+check(/\.tt-account-drawer-header\s*\{[^}]*background:\s*var\(--color-brand-primary, #C52F68\) !important;[^}]*color:\s*#fff !important;/s.test(surfaceStyles), 'cuenta: falta el encabezado sólido de marca con texto blanco');
 
 [
   ['js/components/navigation/compatibilidad/navegacion-escritorio.js', 'components/navigation/escritorio/indicador-navegacion-escritorio.js'],
