@@ -504,6 +504,71 @@ test('edición de Sheets con baseChangeId viejo devuelve conflicto y no escribe'
 });
 
 const ACTOR = { uid: 'admin-test', email: 'admin@example.com', role: 'superadmin', origin: 'superadmin' };
+
+function variantStore() {
+  return fakeStore({ 'products/ring': document('products/ring', {
+    name: 'Anillo', category: 'anillos', price: 100, active: true, stock: 5,
+    variants: { Talla: ['6', '7'] }, variantInventory: [{ variant: '6', stock: 2 }, { variant: '7', stock: 3 }],
+  }) }, { transactional: true });
+}
+
+test('variant inventory reserves atomically, switches options and releases once on cancellation', async () => {
+  const store = variantStore();
+  const created = await createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', paymentStatus: 'pagado', items: [{ id: 'ring', qty: 2, variant: '6' }] }, ACTOR, store);
+  const product = () => decodeFirestoreFields(store.map.get('products/ring').fields);
+  assert.equal(product().stock, 3);
+  assert.deepEqual(product().variantInventory, [{ variant: '6', stock: 0 }, { variant: '7', stock: 3 }]);
+  assert.deepEqual(created.order.variantInventoryItems, [{ id: 'ring', variant: '6', qty: 2 }]);
+  const changed = await applyOrderAdminMutation({}, { orderId: created.orderId, items: [{ id: 'ring', name: 'Anillo', price: 100, qty: 2, variant: '7' }], changeId: 'switch_variant_123' }, ACTOR, store);
+  assert.equal(product().stock, 3, 'switching options keeps aggregate stock');
+  assert.equal(changed.changedProducts, 1);
+  assert.deepEqual(product().variantInventory, [{ variant: '6', stock: 2 }, { variant: '7', stock: 1 }]);
+  await applyOrderAdminMutation({}, { orderId: created.orderId, status: 'cancelado', changeId: 'cancel_variant_123' }, ACTOR, store);
+  assert.equal(product().stock, 5);
+  assert.deepEqual(product().variantInventory, [{ variant: '6', stock: 2 }, { variant: '7', stock: 3 }]);
+  const count = store.commits.length;
+  await applyOrderAdminMutation({}, { orderId: created.orderId, status: 'cancelado', changeId: 'cancel_variant_123' }, ACTOR, store);
+  assert.equal(store.commits.length, count);
+});
+
+test('pending order validates option stock without reserving; confirmation rejects sold-out option', async () => {
+  const store = variantStore();
+  await assert.rejects(createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', items: [{ id: 'ring', qty: 3, variant: '6' }] }, ACTOR, store), /Stock insuficiente/);
+  assert.equal(store.commits.length, 0);
+  await assert.rejects(createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', items: [{ id: 'ring', qty: 1, variant: '8' }] }, ACTOR, store), /variante.*no existe/);
+  const created = await createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', items: [{ id: 'ring', qty: 2, variant: '6' }] }, ACTOR, store);
+  assert.deepEqual(created.order.variantInventoryItems, []);
+  assert.equal(decodeFirestoreFields(store.map.get('products/ring').fields).stock, 5);
+  const data = decodeFirestoreFields(store.map.get('products/ring').fields);
+  data.variantInventory[0].stock = 0;
+  store.map.set('products/ring', document('products/ring', data));
+  const count = store.commits.length;
+  await assert.rejects(applyOrderAdminMutation({}, { orderId: created.orderId, status: 'confirmado', changeId: 'confirm_variant_123' }, ACTOR, store), /Stock insuficiente/);
+  assert.equal(store.commits.length, count);
+});
+
+test('legacy reserved order releases aggregate stock without inventing option inventory', async () => {
+  const store = variantStore();
+  store.map.set('orders/legacy_ring', document('orders/legacy_ring', { status: 'confirmado', inventoryState: 'reserved', items: [{ id: 'ring', qty: 1, variant: '6' }] }));
+  await assert.rejects(applyOrderAdminMutation({}, { orderId: 'legacy_ring', items: [{ id: 'ring', name: 'Anillo', price: 100, qty: 1, variant: '7' }], changeId: 'legacy_switch_123' }, ACTOR, store), /requiere revisar/);
+  assert.equal(store.commits.length, 0);
+  await applyOrderAdminMutation({}, { orderId: 'legacy_ring', status: 'cancelado', changeId: 'legacy_cancel_123' }, ACTOR, store);
+  const product = decodeFirestoreFields(store.map.get('products/ring').fields);
+  assert.equal(product.stock, 6);
+  assert.deepEqual(product.variantInventory, [{ variant: '6', stock: 2 }, { variant: '7', stock: 3 }]);
+});
+
+test('concurrent paid orders cannot reserve the same last option twice', async () => {
+  const store = variantStore();
+  const input = { userName: 'Cliente', shippingMethod: 'retiro', paymentStatus: 'pagado', items: [{ id: 'ring', qty: 2, variant: '6' }] };
+  const results = await Promise.allSettled([createOrderAdmin({}, input, ACTOR, store), createOrderAdmin({}, input, ACTOR, store)]);
+  assert.equal(results.filter(result => result.status === 'fulfilled').length, 1);
+  assert.equal(results.filter(result => result.status === 'rejected').length, 1);
+  const product = decodeFirestoreFields(store.map.get('products/ring').fields);
+  assert.equal(product.stock, 3);
+  assert.equal(product.variantInventory[0].stock, 0);
+  assert.equal(store.commits.length, 1);
+});
 const aro = stock => document('products/prod_001', { name: 'Aro', price: 50000, stock, active: true });
 const pedido = (extra = {}) => document('orders/pedido_prueba_1', {
   orderNumber: 'TINPED50', status: 'pendiente', paymentStatus: 'pendiente',

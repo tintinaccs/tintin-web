@@ -5,6 +5,7 @@ import {
   collection,
   doc,
   getDocs,
+  getDoc,
   query,
   runTransaction,
   serverTimestamp,
@@ -66,6 +67,10 @@ async function deleteOrder(orderId) {
   if (actorEmail() !== SUPER_ADMIN_EMAIL) {
     throw new Error('Solo Super Admin puede eliminar pedidos definitivamente.');
   }
+  const initialOrder = await getDoc(doc(db, 'orders', safeOrderId));
+  if (initialOrder.exists() && initialOrder.data()?.variantInventoryItems?.length && orderReservesInventory(initialOrder.data())) {
+    await transitionStatus(safeOrderId, 'cancelado');
+  }
 
   // La eliminación definitiva conserva su flujo de dos transacciones: primero
   // libera stock y marca el pedido como released; después elimina el documento.
@@ -81,6 +86,9 @@ async function deleteOrder(orderId) {
     const order = orderSnapshot.data() || {};
     const items = normalizeInventoryItems(order.items || [], 100);
     const shouldRestore = orderReservesInventory(order);
+    if (shouldRestore && order.variantInventoryItems?.length) {
+      throw new Error('El pedido cambió mientras se eliminaba. Volvé a intentarlo para liberar sus variantes.');
+    }
     const refs = shouldRestore ? [...items.keys()].map(id => [id, productRef(id)]) : [];
     const snapshots = new Map();
     const missingProducts = [];

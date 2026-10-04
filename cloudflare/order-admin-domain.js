@@ -11,7 +11,9 @@ import {
   orderConfirmsInventory,
   inventoryStateForStatus,
   statusReservesInventory,
+  orderReservesInventory,
 } from '../js/core/store/modelo-inventario.mjs';
+import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantInventoryDeltas, variantInventoryDeltas } from '../js/core/store/inventario-variantes.mjs';
 import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
 
 export const ORDER_ADMIN_STATUSES = Object.freeze([
@@ -417,15 +419,21 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
   };
 
   const writes = [];
+  order.variantInventoryItems = [];
   if (checksAvailability) {
     for (const [productId, requestedQty] of byProduct) {
       const document = documents.get(productId);
       const product = decodeFirestoreFields(document.fields || {});
+      const variantItems = normalizeVariantInventoryItems(items.filter(item => item.id === productId));
+      let variantInventory = null;
+      try {
+        if (variantInventoryEntries(product) !== null) variantInventory = applyVariantInventoryDeltas(product, variantItems);
+      } catch (error) { error.productId = productId; throw error; }
+      if (reserves && variantInventory !== null) order.variantInventoryItems.push(...variantItems);
       const stock = product.stock === null || product.stock === undefined || product.stock === '' ? null : Number(product.stock);
-      if (stock === null) continue;
-      if (!Number.isFinite(stock) || stock < 0) throw new Error(`Stock inválido para ${productId}.`);
-      const nextStock = Math.floor(stock) - requestedQty;
-      if (nextStock < 0) {
+      if (stock !== null && (!Number.isFinite(stock) || stock < 0)) throw new Error(`Stock inválido para ${productId}.`);
+      const nextStock = stock === null ? null : Math.floor(stock) - requestedQty;
+      if (nextStock !== null && nextStock < 0) {
         throw creationError(`Stock insuficiente para ${productId}. Disponible: ${Math.floor(stock)}.`, 'insufficient_stock', {
           productId,
           available: Math.floor(stock),
@@ -435,8 +443,10 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
       // Sin confirmación solo se valida disponibilidad; el descuento ocurre
       // cuando el pedido se paga o se confirma.
       if (!reserves) continue;
+      if (stock === null && variantInventory === null) continue;
       const productPatch = {
-        stock: nextStock,
+        ...(stock === null ? {} : { stock: nextStock }),
+        ...(variantInventory === null ? {} : { variantInventory }),
         lastInventoryOrderId: orderId,
         lastInventoryAction: 'reserve',
         updatedAt: now,
@@ -650,25 +660,48 @@ export async function applyOrderAdminMutation(
   // falta descontar el stock con las mismas precondiciones atómicas.
   const patch = buildPatch(input, beforeOrder, { allowEmpty: input.reconcileInventory === true });
   const inventory = computeInventoryDeltas(beforeOrder, patch, MAX_ADMIN_DISTINCT_PRODUCTS);
+  const beforeVariantItems = normalizeVariantInventoryItems(beforeOrder.variantInventoryItems || []);
+  const afterItems = normalizeVariantInventoryItems(patch.items || beforeOrder.items);
+  const beforeItems = normalizeVariantInventoryItems(beforeOrder.items);
+  const afterVariantItems = [];
   const productDocuments = new Map();
-  for (const productId of inventory.deltas.keys()) {
+  const productIds = new Set([...inventory.deltas.keys(), ...beforeVariantItems.map(item => item.id),
+    ...(inventory.afterReserved && (!orderReservesInventory(beforeOrder) || patch.items) ? afterItems.map(item => item.id) : [])]);
+  for (const productId of productIds) {
     const document = await get(env, `products/${encodeURIComponent(productId)}`);
     if (!document) throw new Error(`No se puede reconciliar el stock: el producto ${productId} ya no existe.`);
     productDocuments.set(productId, document);
+    const product = decodeFirestoreFields(document.fields || {});
+    if (!inventory.afterReserved || variantInventoryEntries(product) === null) continue;
+    const legacyReservation = orderReservesInventory(beforeOrder) && beforeItems.some(item => item.id === productId) && !beforeVariantItems.some(item => item.id === productId);
+    if (legacyReservation) {
+      // Existing aggregate reservations cannot be assigned to an option by guess.
+      const before = beforeItems.filter(item => item.id === productId);
+      const after = afterItems.filter(item => item.id === productId);
+      if (JSON.stringify(before) !== JSON.stringify(after)) throw new Error('El pedido anterior requiere revisar su reserva por variante antes de cambiar sus artículos.');
+      continue;
+    }
+    afterVariantItems.push(...afterItems.filter(item => item.id === productId));
   }
+  const variantDeltas = variantInventoryDeltas(beforeVariantItems, afterVariantItems);
 
   const now = new Date();
   const writes = [];
-  for (const [productId, reserveDelta] of inventory.deltas) {
+  const changedProductIds = new Set([...inventory.deltas.keys(), ...variantDeltas.map(item => item.id)]);
+  for (const productId of changedProductIds) {
+    const reserveDelta = inventory.deltas.get(productId) || 0;
     const document = productDocuments.get(productId);
     const product = decodeFirestoreFields(document.fields || {});
+    const deltas = variantDeltas.filter(item => item.id === productId);
+    const variantInventory = deltas.length ? applyVariantInventoryDeltas(product, deltas) : null;
     const currentStock = product.stock === null || product.stock === undefined || product.stock === '' ? null : Number(product.stock);
-    if (currentStock === null) continue;
-    if (!Number.isFinite(currentStock) || currentStock < 0) throw new Error(`Stock inválido para ${productId}.`);
-    const nextStock = Math.floor(currentStock) - reserveDelta;
-    if (nextStock < 0) throw new Error(`Stock insuficiente para volver a activar o ampliar el pedido (${productId}).`);
+    if (currentStock !== null && (!Number.isFinite(currentStock) || currentStock < 0)) throw new Error(`Stock inválido para ${productId}.`);
+    const nextStock = currentStock === null ? null : Math.floor(currentStock) - reserveDelta;
+    if (nextStock !== null && nextStock < 0) throw new Error(`Stock insuficiente para volver a activar o ampliar el pedido (${productId}).`);
+    if (currentStock === null && variantInventory === null) continue;
     const productPatch = {
-      stock: nextStock,
+      ...(currentStock === null ? {} : { stock: nextStock }),
+      ...(variantInventory === null ? {} : { variantInventory }),
       lastInventoryOrderId: orderId,
       lastInventoryAction: reserveDelta > 0 ? 'reserve' : 'release',
       updatedAt: now,
@@ -686,6 +719,7 @@ export async function applyOrderAdminMutation(
     ...patch,
     status: inventory.afterStatus,
     inventoryState: inventoryStateForStatus(inventory.afterStatus, inventory.afterReserved),
+    variantInventoryItems: afterVariantItems,
     inventoryRevision: Math.max(0, Number(beforeOrder.inventoryRevision || 0)) + 1,
     inventoryUpdatedAt: now,
     inventoryUpdatedBy: context.email,
@@ -697,6 +731,7 @@ export async function applyOrderAdminMutation(
     ...patch,
     status: nextOrder.status,
     inventoryState: nextOrder.inventoryState,
+    variantInventoryItems: nextOrder.variantInventoryItems,
     inventoryRevision: nextOrder.inventoryRevision,
     inventoryUpdatedAt: now,
     inventoryUpdatedBy: context.email,
@@ -741,7 +776,7 @@ export async function applyOrderAdminMutation(
     duplicate: false,
     previousStatus: auditSummary(beforeOrder).status,
     previousPaymentStatus: auditSummary(beforeOrder).paymentStatus,
-    changedProducts: inventory.deltas.size,
+    changedProducts: changedProductIds.size,
     auditEventId: eventId,
     order: nextOrder,
     ...auditSummary(nextOrder),

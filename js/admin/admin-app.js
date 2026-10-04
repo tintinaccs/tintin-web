@@ -7,7 +7,7 @@ import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, cle
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
-  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
+  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
@@ -26,6 +26,7 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, render
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-admin-ready-20261002-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
+import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1";
@@ -43,7 +44,7 @@ import { contrastRatio, passesWcag } from "../components/color/utilidades-contra
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261001-inventory-fix-1';
 import './settings/cupones-admin.js?v=tintin-20261001-firebase-permissions-1-admin-ready-20261002-1';
-import './products/integridad-inventario-admin.js?v=tintin-20261001-stock-pago-1';
+import './products/integridad-inventario-admin.js?v=tintin-20261003-variant-inventory-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261001-inventory-fix-1';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261001-inventory-fix-1';
 
@@ -5642,6 +5643,40 @@ function mountFormImageWidget(containerId, hiddenInputId, { value, label, hint }
   _formImageWidgets.set(containerId, controller);
 }
 
+let productVariantStockBaseline = null;
+function renderProductVariantStock(product) {
+  productVariantStockBaseline = null;
+  let panel = document.getElementById('prod-variant-stock');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'prod-variant-stock';
+    document.getElementById('prod-variants-text').parentElement.append(panel);
+  }
+  panel.replaceChildren();
+  const stockInput = document.getElementById('prod-stock');
+  const optionsInput = document.getElementById('prod-variants-text');
+  stockInput.readOnly = false;
+  optionsInput.readOnly = false;
+  if (product?.variantInventory == null) return;
+  productVariantStockBaseline = { stock: product.stock, entries: variantInventoryEntries(product), variants: product.variants };
+  stockInput.readOnly = true;
+  optionsInput.readOnly = true;
+  const hint = document.createElement('p');
+  hint.textContent = 'Stock por opción. El total se calcula con estas cantidades.';
+  panel.append(hint);
+  for (const entry of productVariantStockBaseline.entries) {
+    const label = document.createElement('label');
+    label.textContent = `${entry.variant} `;
+    const input = document.createElement('input');
+    input.type = 'number'; input.min = '0'; input.max = '1000000'; input.step = '1';
+    input.className = 'adm-input'; input.value = String(entry.stock);
+    input.addEventListener('input', () => {
+      stockInput.value = String([...panel.querySelectorAll('input')].reduce((sum, item) => sum + Number(item.value || 0), 0));
+    });
+    label.append(input); panel.append(label);
+  }
+}
+
 function serializeProductForm() {
   return {
     name: document.getElementById('prod-name').value,
@@ -5666,6 +5701,7 @@ function serializeProductForm() {
     internalNotes: document.getElementById('prod-internal-notes').value,
     tags: document.getElementById('prod-tags').value,
     variants: document.getElementById('prod-variants-text').value,
+    variantStock: [...document.querySelectorAll('#prod-variant-stock input')].map(input => input.value),
     badge: document.getElementById('prod-badge').value,
     collection: document.getElementById('prod-collection').value,
     active: document.getElementById('prod-active').checked,
@@ -5679,6 +5715,7 @@ window.prodNuevo = function() {
 };
 
 function _prodNuevoNow() {
+  renderProductVariantStock(null);
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = '';
   document.getElementById('prod-form-title').textContent = 'Nuevo producto';
@@ -5778,6 +5815,7 @@ function _prodEditarNow(docId) {
     }
   }
   document.getElementById('prod-variants-text').value = variantsText;
+  renderProductVariantStock(p);
   document.getElementById('prod-active').checked = p.active !== false;
   document.getElementById('prod-oferta').checked = !!p.oferta;
   document.getElementById('prod-destacado').checked = !!p.destacado;
@@ -5937,7 +5975,26 @@ async function prodGuardar() {
     const docId = document.getElementById('prod-id').value;
     if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
-      await updateDoc(doc(db, 'products', docId), data);
+      if (productVariantStockBaseline) {
+        const original = productVariantStockBaseline;
+        const inputs = [...document.querySelectorAll('#prod-variant-stock input')];
+        const entries = original.entries.map((entry, index) => ({ variant: entry.variant, stock: inputs[index]?.value === '' ? NaN : Number(inputs[index]?.value) }));
+        data.variantInventory = variantInventoryEntries({ variantInventory: entries });
+        data.stock = entries.reduce((sum, entry) => sum + entry.stock, 0);
+        if (data.stock > 1000000) throw new Error('El stock total supera 1.000.000.');
+        data.variants = original.variants;
+        await runTransaction(db, async transaction => {
+          const ref = doc(db, 'products', docId);
+          const snapshot = await transaction.get(ref);
+          const current = snapshot.data();
+          if (!snapshot.exists() || current.stock !== original.stock || JSON.stringify(variantInventoryEntries(current)) !== JSON.stringify(original.entries) || JSON.stringify(current.variants) !== JSON.stringify(original.variants)) {
+            throw new Error('El stock o las opciones cambiaron mientras editabas. Volvé a abrir el producto antes de guardar.');
+          }
+          transaction.update(ref, data);
+        });
+      } else {
+        await updateDoc(doc(db, 'products', docId), data);
+      }
       if (currentRole === 'superadmin') {
         await setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true });
       }
@@ -7659,6 +7716,9 @@ document.addEventListener('click', (e) => {
 window.bulkSetStock = async function() {
   if (!_selectedProducts.size) return;
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
+  if (_allProducts.some(product => _selectedProducts.has(product._docId) && product.variantInventory != null)) {
+    toast('Los productos con stock por opción se actualizan desde Editar producto.'); return;
+  }
   const val = document.getElementById('bulk-stock-input')?.value;
   if (val === '' || val == null || Number(val) < 0) { toast('Escribí un stock válido (0 o más)'); return; }
   const stock = Math.round(Number(val));
@@ -7670,7 +7730,15 @@ window.bulkSetStock = async function() {
       const product = _allProducts.find(item => item._docId === id);
       return { productId: id, priceBefore: product?.price ?? null, priceAfter: product?.price ?? null, stockBefore: product?.stock ?? null, stockAfter: stock };
     });
-    await batchUpdateChunked(ids, () => ({ stock, updatedAt: serverTimestamp() }));
+    await runTransaction(db, async transaction => {
+      const refs = ids.map(id => doc(db, 'products', id));
+      const snapshots = [];
+      for (const ref of refs) snapshots.push(await transaction.get(ref));
+      if (snapshots.some(snapshot => !snapshot.exists() || snapshot.data()?.variantInventory != null)) {
+        throw new Error('Un producto cambió o controla stock por opción. Actualizá la lista y editá sus cantidades individuales.');
+      }
+      for (const ref of refs) transaction.update(ref, { stock, updatedAt: serverTimestamp() });
+    });
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.stock = stock; });
     await logAudit('editar_producto', 'producto', '', '', `Stock → ${stock}`, { bulk: true, count: n, productHistory });
     toast(`Stock actualizado en ${n} producto(s)`);

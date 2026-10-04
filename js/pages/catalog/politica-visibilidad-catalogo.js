@@ -7,6 +7,7 @@
 import { loadCollections } from '../collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-admin-ready-20261002-1';
 import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
+import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 
 const CART_KEY = 'tt_cart';
 let visibleCollectionSlugs = null;
@@ -121,6 +122,7 @@ export function hasVariants(product) {
 }
 
 function variantIsValid(product, selectedVariant) {
+  if (variantStockLimit(product, selectedVariant) === 0) return false;
   const variants = normalizeVariantOptions(product?.variants);
   if (!variants) return true;
   const selected = String(selectedVariant || '').split('/').map(value => clean(value, 120)).filter(Boolean);
@@ -155,7 +157,7 @@ export function reconcileCatalogCart(products = window.PRODUCTS || []) {
     const product = catalog.get(String(raw.id || ''));
     if (!product || !variantIsValid(product, raw.variant)) return null;
     const requested = Number(raw.qty);
-    const max = product.stock == null ? 99 : product.stock;
+    const max = Math.min(product.stock == null ? 99 : product.stock, variantStockLimit(product, raw.variant) ?? 99);
     const qty = Math.max(1, Math.min(max, Number.isFinite(requested) ? Math.floor(requested) : 1));
     return {
       ...raw,
@@ -271,6 +273,7 @@ window.addEventListener('pagehide', () => {
 }, { once: true });
 
 window.TintinCatalogPolicy = {
+  variantStockLimit,
   normalizeProduct,
   normalizeVariantOptions,
   isCatalogVisible,

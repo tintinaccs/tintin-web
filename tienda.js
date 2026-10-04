@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261003-variant-inventory-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -998,7 +998,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261003-variant-inventory-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1100,12 +1100,23 @@ let _pdLoadTimer = 0;
 const PRODUCT_PAGE_LOAD_DEADLINE_MS = 12000;
 
 function _pdUpdateQtyUI() {
+  const total = _pdProduct?.stock == null ? 99 : Math.max(0, Number(_pdProduct.stock) || 0);
+  const selected = _pdGetSelectedVariant();
+  const variantLimit = selected ? window.TintinCatalogPolicy?.variantStockLimit?.(_pdProduct, selected) : null;
+  _pdMaxQty = Math.min(total, variantLimit ?? 99);
+  _pdQty = Math.max(1, Math.min(_pdQty, _pdMaxQty));
   const qtyVal = document.getElementById('qty-val');
   const qtyMinus = document.getElementById('btn-qty-minus');
   const qtyPlus = document.getElementById('btn-qty-plus');
   if (qtyVal) qtyVal.textContent = _pdQty;
   if (qtyMinus) qtyMinus.disabled = _pdQty <= 1;
   if (qtyPlus) qtyPlus.disabled = _pdQty >= _pdMaxQty;
+  const qtyStock = document.getElementById('qty-stock');
+  if (variantLimit != null && qtyStock) qtyStock.textContent = variantLimit === 0 ? 'Esta opción está sin stock' : `Disponibles en esta opción: ${_pdMaxQty}`;
+  for (const id of ['btn-product-add-cart', 'btn-product-buy-now']) {
+    const button = document.getElementById(id);
+    if (button && !button.dataset.busy) button.disabled = _pdMaxQty <= 0;
+  }
 }
 
 function _pdGetSelectedVariant() {
@@ -1641,7 +1652,7 @@ function _renderProductDetail(product) {
           _showProductCartError(error);
         } finally {
           delete btnAdd.dataset.busy;
-          btnAdd.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;
+          _pdUpdateQtyUI();
         }
       });
     }
@@ -1671,11 +1682,12 @@ function _renderProductDetail(product) {
           _showProductCartError(error);
         } finally {
           delete btnBuyNow.dataset.busy;
-          btnBuyNow.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;
+          _pdUpdateQtyUI();
         }
       });
     }
   }
+  _pdUpdateQtyUI();
   window.dispatchEvent(new CustomEvent('tintin:product-rendered', { detail: { product } }));
 }
 
@@ -1700,7 +1712,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261003-variant-inventory-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1759,6 +1771,7 @@ function selectVariant(btn) {
   if (!group) return;
   group.querySelectorAll('.tt-variant-option').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  _pdUpdateQtyUI();
   group.classList.remove('tt-variant-required');
   if (group.nextElementSibling?.classList.contains('tt-variant-required-msg')) {
     group.nextElementSibling.remove();

@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261003-ux-maps-onboarding-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261003-variant-inventory-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -86,6 +86,7 @@ export function mapProduct(id, d) {
       ? d.tags.map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30)
       : String(d.tags || '').split(',').map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30),
     variants: sanitizeVariantData(d.variants || null),
+    variantInventory: d.variantInventory ?? null,
     collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999,
     createdAt: timestampToMillis(d.createdAt ?? d.created_at ?? d.importedAt),
     updatedAt: timestampToMillis(d.updatedAt ?? d.updated_at ?? d.modifiedAt),
@@ -117,6 +118,7 @@ function compactProduct(product) {
     imagesExtra: product.imagesExtra,
     tags: product.tags,
     variants: product.variants,
+    variantInventory: product.variantInventory,
     stock: product.stock,
     active: product.active,
     oferta: product.oferta,
