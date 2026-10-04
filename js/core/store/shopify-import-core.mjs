@@ -585,7 +585,18 @@ export function buildCatalogProductFromImport(product) {
     sourceMetadata: { platform: 'shopify', handle },
     importFingerprint: cleanImportText(source.importFingerprint, 420),
   };
-  if (Object.keys(groups).length) data.variants = groups;
+  if (Object.keys(groups).length) {
+    data.variants = groups;
+    if (source.variants.every(variant => Number.isInteger(variant.stock) && variant.stock >= 0)) {
+      const seen = new Set();
+      data.variantInventory = source.variants.map(variant => {
+        const selection = Object.keys(groups).map(key => cleanImportText(variant[key], 120).replace(/\s*\/\s*/g, ' - ')).join(' / ');
+        if (!selection || selection.length > 120 || seen.has(selection)) throw new Error('Opciones de variante ambiguas; revisá el producto antes de importar.');
+        seen.add(selection);
+        return { variant: selection, stock: Math.min(1000000, variant.stock) };
+      });
+    }
+  }
   return data;
 }
 

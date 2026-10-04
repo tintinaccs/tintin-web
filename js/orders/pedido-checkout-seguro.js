@@ -910,9 +910,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       } else if (code === 'insufficient_stock') {
         const productId = String(error.details?.productId || '');
         const available = Number(error.details?.available || 0);
+        const variant = String(error.details?.variant || '');
         setCartLocal(
           getCartLocal()
-            .map(item => String(item.id) === productId
+            .map(item => String(item.id) === productId && (!variant || String(item.variant || '').split('/').map(part => part.trim()).join(' / ') === variant)
               ? (available > 0 ? { ...item, qty: Math.min(Number(item.qty || 1), available) } : null)
               : item)
             .filter(Boolean)

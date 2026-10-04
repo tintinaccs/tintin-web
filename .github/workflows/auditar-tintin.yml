@@ -79,6 +79,7 @@ jobs:
           node scripts/restore-firestore.mjs --dry-run
           npm run test:accounts
           npm run test:checkout-contract
+          node --test tests/orders/order-admin-domain.test.mjs tests/orders/variant-inventory.test.mjs
           npm run test:cart-persistence
           npm run test:web-push
           npm run test:engagement

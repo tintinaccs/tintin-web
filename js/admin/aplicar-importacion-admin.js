@@ -16,7 +16,7 @@ import {
   chunkImportRecords,
   pendingCollectionGroups,
   stableProductDocumentId,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20261003-shopify-continuation-options-1';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20261003-variant-inventory-1';
 import {
   isShopifyMediaUrl,
   rewriteImportedShopifyMedia,

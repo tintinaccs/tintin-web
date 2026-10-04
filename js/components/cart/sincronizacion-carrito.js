@@ -18,6 +18,7 @@ import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tinti
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
+import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 import {
   collection,
   doc,
@@ -851,6 +852,14 @@ function createRuntime() {
     );
   }
 
+  function availableVariantQuantity(items, item) {
+    const product = window.PRODUCTS?.find(entry => String(entry.id) === String(item.id));
+    const limit = variantStockLimit(product, item.variant);
+    if (limit === null) return MAX_QTY;
+    const used = items.filter(entry => entry.lineId === item.lineId).reduce((sum, entry) => sum + entry.qty, 0);
+    return Math.max(0, limit - used);
+  }
+
   async function addToCart(item) {
     const incoming = normalizeItem(item);
     if (!incoming) return { item: null, capped: false, changed: false, reason: 'invalid' };
@@ -862,7 +871,7 @@ function createRuntime() {
         .filter(entry => String(entry.id) === String(incoming.id))
         .reduce((sum, entry) => sum + entry.qty, 0);
       const requested = Math.max(1, Number(incoming.qty || 1));
-      const available = Math.max(0, limit - currentProductQty);
+      const available = Math.min(Math.max(0, limit - currentProductQty), availableVariantQuantity(items, incoming));
       const accepted = Math.min(requested, available);
       const capped = accepted < requested;
 
@@ -923,7 +932,7 @@ function createRuntime() {
         const currentProductQty = items
           .filter(item => String(item.id) === String(line.id))
           .reduce((sum, item) => sum + item.qty, 0);
-        const allowedDelta = Math.max(0, Math.min(numericDelta, limit - currentProductQty));
+        const allowedDelta = Math.max(0, Math.min(numericDelta, limit - currentProductQty, availableVariantQuantity(items, line)));
         capped = allowedDelta < numericDelta;
         changed = allowedDelta > 0;
         line.qty = Math.min(MAX_QTY, line.qty + allowedDelta);
@@ -1111,7 +1120,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261003-variant-inventory-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

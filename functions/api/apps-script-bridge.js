@@ -437,6 +437,7 @@ export async function onRequest(context) {
     const failure = { ok: false, error: clean(error?.code, 120) || 'upstream_unavailable' };
     if (error?.quote && typeof error.quote === 'object') failure.quote = error.quote;
     if (error?.productId) failure.productId = clean(error.productId, 180);
+    if (error?.variant) failure.variant = clean(error.variant, 120);
     if (Number.isFinite(error?.available)) failure.available = error.available;
     if (Number.isFinite(error?.requested)) failure.requested = error.requested;
     return jsonResponse(failure, Number(error?.status) || 502, origin, requestUrl);
