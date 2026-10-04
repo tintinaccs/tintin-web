@@ -1,5 +1,14 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Marca uniforme y formularios responsive — 2026-10-04 (`codex/unified-brand-review-20261004`)
+
+- Pedido del dueño: continuar la revisión completa, unificar los acentos decorativos con el rosa del loader y blanco, y disponer Últimos datos de login/checkout en una columna centrada en desktop, laptop, tablet y móvil. Merge autorizado; migración de dominio queda para el cierre posterior.
+- Implementación: rosa de marca `#C52F68` en tokens públicos/admin, loader con texto/logo blancos, panel de cuenta sólido, footer blanco y normalización de los antiguos colores guardados sin aceptar CSS arbitrario. Se mantienen colores semánticos y fotografías. El campo de búsqueda del mapa ocupa el ancho disponible.
+- Últimos datos: tarjetas verticales, shell centrado, campos con ancho disponible, errores debajo del campo correspondiente. Checkout: panel Tus datos centrado y controles que pueden encogerse correctamente a 320px.
+- Evidencia actual: pruebas de paleta, formulario login/checkout y hero 6/6 PASS; geometría y Tab de formularios verificados en 1920, 1440, 1280, 1024, 768, 390 y 320px. Inspección visual local en Chrome de formulario tablet/móvil y portada desktop. Las pruebas usan HTML/CSS reales con scripts/red bloqueados; no crean cuentas ni pedidos.
+- Las auditorías estáticas se actualizaron para comprobar la nueva paleta y sus referencias de caché; no se reducen umbrales AA ni validación de colores. En curso: cierre de build, auditoría final, contraste global, viewports canónicos y CI del PR. Estos estados requieren la evidencia del commit final antes de declararse PASS.
+- Límite del cierre: no se ejecutó una compra real, envío real de correos ni push a un iPhone bloqueado. La entrega real de push, App Check con la cuenta del dueño y la compra de producción requieren la prueba final del entorno/dispositivo; no se deducen de contratos o fixtures. No se migró el dominio ni se alteraron credenciales, roles o reglas de seguridad.
+
 ## Revisión y pulido del Super Admin — 2026-10-03 (rama `codex/super-admin-full-remediation-20261003`)
 
 - Auditorías previas del panel no detectaron fallos funcionales que justificaran alterar contratos, permisos o estados de conexión. Se corrigió el problema visible de contraste en la navegación desktop/móvil y en las cargas de imágenes, importación CSV/JSON y tonos de notificaciones: iconos blancos sobre superficies de marca oscuras, con foco y estados activos conservados.

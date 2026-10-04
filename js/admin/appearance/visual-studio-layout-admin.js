@@ -27,7 +27,7 @@ function normalize(raw={}) { return { header:{...clone(DEFAULT_LAYOUT.header),..
 function same(a,b) { return JSON.stringify(normalize(a))===JSON.stringify(normalize(b)); }
 function allowed() { return String(auth.currentUser?.email||'').trim().toLowerCase()===SUPER_ADMIN; }
 function ensureStyles() {
-  if(!$('visual-studio-global-admin-css')){const link=document.createElement('link');link.id='visual-studio-global-admin-css';link.rel='stylesheet';link.href='css/admin/visual-studio-global-admin.css?v=tintin-20260810-global-studio-3';document.head.appendChild(link);}
+  if(!$('visual-studio-global-admin-css')){const link=document.createElement('link');link.id='visual-studio-global-admin-css';link.rel='stylesheet';link.href='css/admin/visual-studio-global-admin.css?v=tintin-20260810-global-studio-3-brand-20261004-1';document.head.appendChild(link);}
   if($('visual-layout-admin-style'))return;const style=document.createElement('style');style.id='visual-layout-admin-style';style.textContent=`
     .visual-layout-launcher{width:calc(100% - 24px);margin:8px 12px 2px;border:1px solid var(--adm-border);background:var(--adm-card);border-radius:13px;padding:11px 12px;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;color:var(--adm-text)}
     .visual-layout-launcher>span:first-child{width:31px;height:31px;border-radius:9px;display:grid;place-items:center;background:rgba(173,63,103,.1);color:#ad3f67;font-weight:900}.visual-layout-launcher strong,.visual-layout-launcher small{display:block}.visual-layout-launcher small{margin-top:2px;color:var(--adm-muted);font-size:10px}

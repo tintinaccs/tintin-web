@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261003-variant-inventory-1';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261003-variant-inventory-1-brand-20261004-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
@@ -9,7 +9,7 @@ function pathName() {
 const INSTITUTIONAL_RUNTIME_VERSION = 'tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 const CONTACT_RUNTIME_VERSION = 'tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-contact-busy-20261002-1';
 
-function load(file, version = 'tintin-20260927-visual-1') {
+function load(file, version = 'tintin-20260927-visual-1-brand-20261004-1') {
   return import(`./${file}?v=${version}`);
 }
 
@@ -19,10 +19,10 @@ export function loadPageMaintenance() {
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
-    const version = 'tintin-20260925-cache-converge-1-launch-20260926-1';
+    const version = 'tintin-20260925-cache-converge-1-launch-20260926-1-brand-20261004-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261003-variant-inventory-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261003-variant-inventory-1-brand-20261004-1'),
       load('pages/checkout/checkout-mantenimiento.js', version),
       load('pages/checkout/checkout-metodos-pago.js', version),
       load('pages/checkout/checkout-control-cuota.js', version),
@@ -30,7 +30,7 @@ export function loadPageMaintenance() {
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {
-    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261001-inventory-fix-1');
+    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261001-inventory-fix-1-brand-20261004-1');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261003-ux-maps-1');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');

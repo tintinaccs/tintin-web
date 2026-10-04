@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20261001-inventory-fix-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20261001-inventory-fix-1-brand-20261004-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -14,8 +14,8 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261003-variant-inventory-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261001-inventory-fix-1-admin-ready-20261002-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261003-variant-inventory-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261001-inventory-fix-1-admin-ready-20261002-1-brand-20261004-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261003-variant-inventory-1-brand-20261004-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -266,7 +266,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20261003-variant-inventory-1'),
+      import('./control-busqueda.js?v=tintin-20261003-variant-inventory-1-brand-20261004-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

@@ -33,7 +33,9 @@
     var key;
     for (key in map) {
       if (Object.prototype.hasOwnProperty.call(map, key) && isSafeColorValue(map[key])) {
-        root.style.setProperty(key, map[key]);
+        var value = map[key];
+        if (/^--(?:admin-)?color-/.test(key) && /^#(?:ad3f67|8b2642|711f35|c64273|9e2451)$/i.test(value.trim())) value = '#C52F68';
+        root.style.setProperty(key, value);
       }
     }
   }

@@ -1,6 +1,6 @@
 import { isGlobalStudioActiveWindow, pickHighestPriority } from './contratos-visual-studio-global.js?v=tintin-20260810-visual-studio-v2-1';
 
-const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-4';
+const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-4-brand-20261004-1';
 const PAGE_BY_FILE = Object.freeze({
   '': 'index', 'index.html': 'index', 'about.html': 'nosotros', 'nosotros.html': 'nosotros',
   'catalogo.html': 'catalogo', 'collections.html': 'collections', 'product.html': 'product', 'checkout.html': 'checkout',

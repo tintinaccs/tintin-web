@@ -4,7 +4,7 @@
   --about-soft: var(--pink-pale, #fff6fa);
   --about-text: var(--text, #2b2b2b);
   --about-muted: var(--text-muted, #6f6267);
-  --about-accent: var(--pink-dark, #ad3f67);
+  --about-accent: var(--pink-dark, var(--color-brand-primary, #C52F68));
   --about-border: var(--border, #f0d6df);
   background: var(--about-surface);
   color: var(--about-text);

@@ -8,7 +8,7 @@ const handler = source.slice(source.indexOf('  async function exportInventoryRes
 test('revisión protegida del panel lee reservas y descarga solo la proyección', async ({ page }) => {
   const html = `<!doctype html><html><head><meta charset="utf-8"></head><body><button id="review">Descargar revisión de reservas</button><script type="module">
     const reviewModuleUrl = new URL('/js/core/store/revision-reservas-inventario.mjs', location.href);
-    reviewModuleUrl.searchParams.set('v', 'tintin-20261003-inventory-review-1');
+    reviewModuleUrl.searchParams.set('v', 'tintin-20261003-inventory-review-1-brand-20261004-1');
     const { buildInventoryReservationReview } = await import(reviewModuleUrl.href);
     const PROJECT_ID='demo-tintin';const state={busy:false};window.__allowed=true;window.__reads=[];window.__downloads=[];window.__messages=[];
     const isSuperAdmin=()=>window.__allowed;

@@ -78,7 +78,7 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
 }
 .login-username-status[data-state="available"] { color:#1f7a50; }
 .login-username-status[data-state="available"]::before { content:"✓"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#e7f7ee; font-size:12px; }
-.login-username-status[data-state="taken"],.login-username-status[data-state="invalid"] { color:#b3264c; }
+.login-username-status[data-state="taken"],.login-username-status[data-state="invalid"] { color:var(--color-brand-primary, #C52F68); }
 .login-username-status[data-state="taken"]::before,.login-username-status[data-state="invalid"]::before { content:"×"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#fff0f3; font-size:15px; }
 .login-username-status[data-state="checking"] { color:var(--login-muted); }
 
@@ -87,7 +87,7 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
 .login-profile-field-error {
   display:none;
   margin:7px 0 12px;
-  color:#a1264b;
+  color:var(--color-brand-primary, #C52F68);
   font-size:12px;
   font-weight:700;
   line-height:1.35;
@@ -104,7 +104,7 @@ body:has(.login-page).login-setup-open #login-profile-phone-field .login-profile
 }
 body:has(.login-page) .login-username-status.show {
   display:flex !important;
-  color:#a1264b;
+  color:var(--color-brand-primary, #C52F68);
   margin-top:8px;
   min-height:20px;
 }
@@ -165,11 +165,11 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
   background:#fff; padding:clamp(16px,2vw,22px);
 }
 body:has(.login-page) .login-email-btn {
-  background:#d84f86 !important; color:#fff !important; border:0 !important;
+  background:var(--color-brand-primary, #C52F68) !important; color:#fff !important; border:0 !important;
   box-shadow:0 8px 18px rgba(216,79,134,.22) !important;
 }
 body:has(.login-page) .login-email-btn:hover,
-body:has(.login-page) .login-email-btn:focus-visible { background:#c94378 !important; }
+body:has(.login-page) .login-email-btn:focus-visible { background:var(--color-brand-primary, #C52F68) !important; }
 body:has(.login-page) .login-field-hint { margin:4px 0 0 !important; min-height:0; line-height:1.35; }
 body:has(.login-page) .login-username-control { margin-bottom:0; }
 body:has(.login-page) .login-username-control .login-email-input { padding-right:16px; }

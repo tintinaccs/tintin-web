@@ -4,7 +4,7 @@ body:has(.ck-body) {
   --ck-page: var(--tt-page-bg, #fff8fb);
   --ck-text: var(--tt-text, #352b2f);
   --ck-muted: var(--tt-text-muted, #75666c);
-  --ck-accent: var(--tt-accent, #ad3f67);
+  --ck-accent: var(--tt-accent, var(--color-brand-primary, #C52F68));
   --ck-accent-soft: var(--tt-accent-soft, #f9e8ef);
   --ck-border: var(--tt-border, #edcbd7);
   background: var(--ck-page) !important;
@@ -114,7 +114,7 @@ body:has(.ck-body) :is(button, a, input, select, textarea):focus-visible {
 
 body:has(.ck-body) .ck-error.show,
 body:has(.ck-body) .ck-map-coords-missing {
-  color: #9f263c !important;
+  color: var(--color-brand-primary, #C52F68) !important;
   background: #fff0f3 !important;
   border-color: #e9a8b6 !important;
 }
@@ -205,4 +205,17 @@ body:has(.ck-body) .ck-post-confirm-back a { color:var(--ck-muted)!important; fo
   body:has(.ck-body) #tt-loader .tt-loader-spinner::after {
     animation: tt-loader-spinner-ring 1.6s infinite linear !important;
   }
+}
+
+/* Tus datos conserva una lectura vertical y controles completos, también en 320px. */
+body:has(.ck-body) #panel-2 .ck-panel-body {
+  width: min(100%, 640px);
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+body:has(.ck-body) .ck-field { min-width: 0; }
+body:has(.ck-body) :is(.ck-input, .ck-select, .ck-textarea) {
+  min-width: 0;
+  box-sizing: border-box;
+  font-size: 16px;
 }

@@ -1,6 +1,6 @@
 :root {
-  --tt-notif-pink: #b84c72;
-  --tt-notif-pink-strong: #9f315c;
+  --tt-notif-pink: var(--color-brand-primary, #C52F68);
+  --tt-notif-pink-strong: var(--color-brand-primary, #C52F68);
   --tt-notif-pink-soft: #fff2f7;
   --tt-notif-pink-border: #efc8d7;
   --tt-notif-gold: #c79a3b;
@@ -62,7 +62,7 @@
   justify-content: center;
   border: 2px solid #fff;
   border-radius: 999px;
-  background: #e52d4f;
+  background: var(--color-brand-primary, #C52F68);
   color: #fff;
   font-size: 10px;
   font-weight: 800;
@@ -99,7 +99,7 @@
   justify-content: center;
   border: 2px solid #fff;
   border-radius: 999px;
-  background: #e52d4f;
+  background: var(--color-brand-primary, #C52F68);
   color: #fff;
   font-size: 10px;
   font-weight: 800;
@@ -264,7 +264,7 @@
 }
 
 .tt-notification-icon[data-icon="heart"] {
-  color: #b94670;
+  color: var(--color-brand-primary, #C52F68);
   background: #fff1f6;
 }
 
@@ -276,7 +276,7 @@
 
 .tt-notification-icon[data-icon="comment"],
 .tt-notification-icon[data-icon="review"] {
-  color: #a34569;
+  color: var(--color-brand-primary, #C52F68);
   background: #fff7fa;
 }
 
@@ -353,7 +353,7 @@
 }
 
 .tt-notifications-error {
-  color: #9f315c;
+  color: var(--color-brand-primary, #C52F68);
 }
 
 .tt-review-card.tt-review-deeplink-highlight {

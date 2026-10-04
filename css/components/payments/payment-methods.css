@@ -132,7 +132,7 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 }
 
 .tt-payment-admin-status[data-state='error'] {
-  color: #a61b35;
+  color: var(--color-brand-primary, #C52F68);
 }
 
 .tt-payment-admin-status[data-state='success'] {
@@ -192,7 +192,7 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 
 .tt-payment-admin-badge.is-disabled {
   background: #fce8ee;
-  color: #a61b35;
+  color: var(--color-brand-primary, #C52F68);
 }
 
 .tt-payment-admin-editor {

@@ -119,6 +119,7 @@ jobs:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
           PERF_BASE_URL: http://127.0.0.1:4173
         run: |
+          node --test tests/ui-ux/brand-palette.test.mjs tests/ui-ux/onboarding-form-browser.test.mjs tests/ui-ux/home-layout-browser.test.mjs
           npm run test:admin-operations-browser
           npm run test:navigation-header
           npm run test:cart-quantity-browser

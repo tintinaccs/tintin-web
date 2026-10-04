@@ -122,7 +122,7 @@
 
 .tt-blocked-title {
   margin: 0 0 10px;
-  color: #8b2642;
+  color: var(--color-brand-primary, #C52F68);
   font-size: 17px;
   font-weight: 800;
   line-height: 1.3;
@@ -150,7 +150,7 @@
   align-items: center;
   justify-content: center;
   padding: 11px 22px;
-  border: 1.5px solid #b84c72;
+  border: 1.5px solid var(--color-brand-primary, #C52F68);
   border-radius: 999px;
   font-size: 13px;
   font-weight: 700;
@@ -161,14 +161,14 @@
 
 #tt-blocked-overlay .tt-blocked-action-primary,
 #tt-blocked-overlay .tt-blocked-action-primary:visited {
-  background: #b84c72;
+  background: var(--color-brand-primary, #C52F68);
   color: #fff !important;
 }
 
 #tt-blocked-overlay .tt-blocked-action-secondary,
 #tt-blocked-overlay .tt-blocked-action-secondary:visited {
   background: #fff;
-  color: #8b2642 !important;
+  color: var(--color-brand-primary, #C52F68) !important;
 }
 
 .tt-blocked-action:focus-visible {

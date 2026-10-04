@@ -198,8 +198,8 @@ check('Las reglas aceptan solo geografía aproximada y campos conocidos',
 check('El rosa principal cumple contraste AA sobre blanco',
   theme.includes('--tt-accent:var(--color-brand-primary)') &&
   theme.includes('--tt-accent-hover:var(--color-brand-primary-hover)') &&
-  read('css/core/tokens-color.css').includes('--color-brand-primary: #AD3F67') &&
-  read('css/core/tokens-color.css').includes('--color-brand-primary-hover: #8B2642'));
+  read('css/core/tokens-color.css').includes('--color-brand-primary: #C52F68') &&
+  read('css/core/tokens-color.css').includes('--color-brand-primary-hover: #C52F68'));
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));
@@ -308,7 +308,7 @@ for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-brand-20261004-1'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, colores y el fix de auditoría de página; el carrito queda en la navegación como única autoridad',
