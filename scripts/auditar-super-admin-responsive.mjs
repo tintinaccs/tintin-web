@@ -95,6 +95,7 @@ console.log(`\nResponsive Super Admin: CORRECTO · ${results.length}/${results.l
 // tablas de comercio lo detecte.
 const adminShellCss = fs.readFileSync(path.join(root, 'css/admin/admin.css'), 'utf8');
 const sidebarRuntime = fs.readFileSync(path.join(root, 'js/admin/sidebar-expandible-admin.js'), 'utf8');
+const sidebarCss = fs.readFileSync(path.join(root, 'css/admin/sidebar-interaccion.css'), 'utf8');
 const operationsCss = fs.readFileSync(path.join(root, 'css/admin/operaciones-admin.css'), 'utf8');
 const brandMarkup = fs.readFileSync(path.join(root, 'admin.html'), 'utf8').match(/<div class="adm-sidebar-logo">[\s\S]*?<div class="adm-sidebar-logo-sub">[\s\S]*?<\/div>\s*<\/div>/)?.[0];
 if (!brandMarkup) throw new Error('No se encontró la marca real del panel.');
@@ -108,7 +109,7 @@ const shellFixture = `<!doctype html><html class="adm-auth-ready"><head><meta ch
 *{box-sizing:border-box}html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden}
 :root{--admin-color-background-sidebar:#fff;--admin-color-background-sidebar-active:#FDECF2;--admin-color-text-sidebar:#2B2B2B;--admin-color-background-page:#FFF6FA;--admin-color-background-surface:#fff;--admin-color-brand:#AD3F67;--admin-color-text-primary:#2B2B2B;--admin-color-text-secondary:#7B6F72;--admin-color-text-title:#2B2B2B;--admin-color-border:#F1E4E7;--admin-color-table-row-hover:#FFF9FC;--rose:#8B2642}
 .adm-notifications-button{width:46px;height:46px;border:0;border-radius:50%}
-</style><style>${adminShellCss}</style><style>${operationsCss}</style></head><body>
+</style><style>${adminShellCss}</style><style>${operationsCss}</style><style>${sidebarCss}</style></head><body>
 <div class="adm-overlay" id="adm-overlay"></div>
 <aside class="adm-sidebar" id="adm-sidebar">
   ${brandMarkup}
@@ -138,12 +139,7 @@ try {
     let toggleState = null;
     if (width > 540) {
       const target = await toggle.boundingBox();
-      await toggle.click();
-      await page.waitForTimeout(250);
-      const toggledWidth = await page.locator('.adm-sidebar').evaluate(element => element.getBoundingClientRect().width);
-      const toggledClass = await page.evaluate(() => document.documentElement.classList.contains('adm-sidebar-is-collapsed'));
-      const toggledNavDirection = await page.locator('.adm-nav-item').first().evaluate(element => getComputedStyle(element).flexDirection);
-      const brandFontSize = await page.locator('.adm-sidebar-logo-text').evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize));
+      const compactWidth = await page.locator('.adm-sidebar').evaluate(e => e.getBoundingClientRect().width);
       const compactBrand = await page.evaluate(() => {
         const brand = document.querySelector('.adm-sidebar-logo-text');
         const toggle = document.querySelector('#adm-sidebar-toggle');
@@ -155,9 +151,19 @@ try {
           pseudo: getComputedStyle(brand, '::before').content,
         };
       });
-      await toggle.click();
+      await page.locator('.adm-sidebar').hover();
       await page.waitForTimeout(250);
-      toggleState = { targetWidth: target?.width || 0, targetHeight: target?.height || 0, toggledWidth, toggledClass, toggledNavDirection, brandFontSize, compactBrand };
+      const peek = await page.evaluate(() => ({width:document.querySelector('.adm-sidebar').getBoundingClientRect().width,left:document.querySelector('.adm-main').getBoundingClientRect().left}));
+      await toggle.click();
+      await page.mouse.move(width-10,300);
+      await page.waitForTimeout(250);
+      const pinned = await page.evaluate(() => ({width:document.querySelector('.adm-sidebar').getBoundingClientRect().width,left:document.querySelector('.adm-main').getBoundingClientRect().left,pressed:document.querySelector('#adm-sidebar-toggle').getAttribute('aria-pressed')}));
+      const toggledNavDirection = await page.locator('.adm-nav-item').first().evaluate(e => getComputedStyle(e).flexDirection);
+      const brandFontSize = await page.locator('.adm-sidebar-logo-text').evaluate(e => Number.parseFloat(getComputedStyle(e).fontSize));
+      await toggle.click();
+      await page.mouse.move(width-10,300);
+      await page.waitForTimeout(250);
+      toggleState = {targetWidth:target?.width||0,targetHeight:target?.height||0,compactWidth,compactBrand,peek,pinned,toggledNavDirection,brandFontSize};
     } else {
       const hamburger = page.locator('#adm-hamburger');
       const target = await hamburger.boundingBox();
@@ -203,23 +209,17 @@ try {
     });
     const issues = [];
     if (state.docWidth > width + 2 || state.bodyWidth > width + 2) issues.push(`overflow global ${state.docWidth}/${state.bodyWidth} > ${width}`);
-    if (width > 900) {
+    if (width > 540) {
       if (!toggleState?.compactBrand?.centered || toggleState.compactBrand.gap < 6) issues.push('marca compacta descentrada o pegada al botón');
       if (!['none', 'normal'].includes(toggleState?.compactBrand?.pseudo)) issues.push('marca compacta conserva badge TT');
-      if (Math.abs((toggleState?.toggledWidth || 0) - 74) > 2 || !toggleState?.toggledClass) issues.push(`botón desktop no contrae: ${toggleState?.toggledWidth}px`);
-      if (toggleState?.targetWidth < 34 || toggleState?.targetHeight < 44) issues.push('botón desktop demasiado pequeño');
-      if (Math.abs(state.sidebarWidth - 260) > 2) issues.push(`sidebar desktop ${state.sidebarWidth}px, esperado 260px`);
-      if (state.mainLeft < 258) issues.push(`main desktop invade sidebar: left=${state.mainLeft}`);
-      if (state.mobileTabsDisplay !== 'none') issues.push('tabs móviles visibles en desktop');
-    } else if (width >= 541) {
-      if ((toggleState?.targetWidth || 0) < 44 || (toggleState?.targetHeight || 0) < 44) issues.push(`botón tablet menor que 44×44px: ${toggleState?.targetWidth}×${toggleState?.targetHeight}`);
-      if (Math.abs((toggleState?.toggledWidth || 0) - 260) > 2 || toggleState?.toggledClass) issues.push(`barra tablet no expande a 260px: ${toggleState?.toggledWidth}`);
-      if (toggleState?.toggledNavDirection !== 'row') issues.push(`menú tablet expandido conserva formato compacto: ${toggleState?.toggledNavDirection}`);
-      if ((toggleState?.brandFontSize || 0) < 13) issues.push('marca tablet expandida queda comprimida');
-      if (Math.abs(state.sidebarWidth - 84) > 2) issues.push(`rail tablet ${state.sidebarWidth}px, esperado 84px`);
-      if (state.mainLeft < 82) issues.push(`main tablet invade rail: left=${state.mainLeft}`);
-      if (state.logoBottom > state.userTop + 1) issues.push(`logo y usuario se pisan: ${state.logoBottom} > ${state.userTop}`);
-      if (state.mobileTabsDisplay !== 'none') issues.push('tabs móviles visibles en tablet');
+      if (Math.abs(toggleState.compactWidth-74)>2) issues.push('rail inicial no mide 74px');
+      if (Math.abs(toggleState.peek.width-260)>2 || Math.abs(toggleState.peek.left-74)>2) issues.push('hover desplaza contenido o no expande');
+      if (Math.abs(toggleState.pinned.width-260)>2 || Math.abs(toggleState.pinned.left-260)>2 || toggleState.pinned.pressed!=='true') issues.push('fijado no reserva espacio o pierde su estado');
+      if (toggleState.targetWidth<44 || toggleState.targetHeight<44) issues.push('botón menor que 44×44px');
+      if (toggleState.toggledNavDirection!=='row' || toggleState.brandFontSize<13) issues.push('contenido expandido conserva formato compacto');
+      if (Math.abs(state.sidebarWidth-74)>2 || Math.abs(state.mainLeft-74)>2) issues.push('al soltar y alejarse no recupera rail/contenido de 74px');
+      if (state.logoBottom>state.userTop+1) issues.push('logo y usuario se pisan');
+      if (state.mobileTabsDisplay!=='none') issues.push('tabs móviles visibles fuera de móvil');
     } else {
       if ((toggleState?.targetWidth || 0) < 44 || (toggleState?.targetHeight || 0) < 44) issues.push('botón móvil menor que 44×44px');
       if (toggleState?.open?.sidebarVisible !== 'visible' || toggleState?.open?.expanded !== 'true') issues.push('menú móvil no abre');
