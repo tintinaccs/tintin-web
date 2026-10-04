@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { summarizeImportRecords, stableProductDocumentId } from '../../js/core/store/shopify-import-core.mjs';
-import { reconcileShopifyImportIdentities } from '../../js/core/store/shopify-import-identity.mjs';
+import { reconcileShopifyImportIdentities, confirmDistinctShopifyImport } from '../../js/core/store/shopify-import-identity.mjs';
 
 const read = path => fs.readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
 
@@ -84,4 +84,64 @@ test('el preview Admin concilia el catálogo de Firestore y las filas reconocida
   assert.ok(apply.indexOf('await refreshCatalogIdentitySnapshot()') < apply.indexOf("action: 'transition', jobId: state.jobId, status: 'RUNNING'"), 'la verificación fresca debe ocurrir antes de marcar el job RUNNING');
   assert.ok(apply.indexOf('await refreshCatalogIdentitySnapshot()') < apply.indexOf('await copyShopifyMedia(records)'), 'la verificación fresca debe ocurrir antes de copiar imágenes o escribir el catálogo');
   assert.match(apply, /El catálogo cambió desde que cargaste el CSV/);
+});
+
+const reviewCatalog = () => [{ id: 'legacy-1', name: 'Reloj Aurora', shopifyHandle: 'reloj-aurora-anterior', price: 100,
+  imageUrl: 'https://images.test/old.webp', variants: [{ sku: 'AUR-001' }] }];
+
+test('la decisión expresa permite un producto distinto solo con la misma revisión fresca', () => {
+  const catalog = reviewCatalog();
+  const before = JSON.stringify(catalog);
+  const [pending] = reconcileShopifyImportIdentities([record({ price: 150 })], catalog);
+  const confirmed = confirmDistinctShopifyImport(pending);
+  assert.equal(pending.identityDecision, undefined);
+  const [fresh] = reconcileShopifyImportIdentities([confirmed], catalog);
+  assert.equal(fresh.identityStatus, 'NEW_CONFIRMED_DISTINCT');
+  assert.equal(fresh.duplicate, false);
+  assert.deepEqual(fresh.errors, []);
+  assert.equal(JSON.stringify(catalog), before);
+  const [restored] = reconcileShopifyImportIdentities(JSON.parse(JSON.stringify([fresh])), catalog);
+  assert.equal(restored.identityStatus, 'NEW_CONFIRMED_DISTINCT');
+});
+
+test('una decisión pendiente o inventada nunca elimina la revisión', () => {
+  const [pending] = reconcileShopifyImportIdentities([record()], reviewCatalog());
+  assert.equal(reconcileShopifyImportIdentities([pending], reviewCatalog())[0].identityStatus, 'REVIEW_REQUIRED');
+  const forged = { ...pending, identityDecision: { type: 'CREATE_DISTINCT', reviewKey: 'inventado' } };
+  assert.equal(reconcileShopifyImportIdentities([forged], reviewCatalog())[0].identityStatus, 'REVIEW_REQUIRED');
+});
+
+test('precio, imagen, SKU, fuente y nuevos candidatos cambian la revisión y vuelven a bloquear', () => {
+  const catalog = reviewCatalog();
+  const [pending] = reconcileShopifyImportIdentities([record({ price: 150 })], catalog);
+  const confirmed = confirmDistinctShopifyImport(pending);
+  const changedCatalogs = [
+    [{ ...catalog[0], price: 101 }], [{ ...catalog[0], imageUrl: 'https://images.test/new.webp' }],
+    [{ ...catalog[0], variants: [{ sku: 'AUR-002' }] }], [...catalog, { ...catalog[0], id: 'legacy-2' }]
+  ];
+  for (const changed of changedCatalogs) assert.equal(reconcileShopifyImportIdentities([confirmed], changed)[0].identityStatus, 'REVIEW_REQUIRED');
+  assert.equal(reconcileShopifyImportIdentities([{ ...confirmed, product: { ...confirmed.product, price: 151 } }], catalog)[0].identityStatus, 'REVIEW_REQUIRED');
+});
+
+test('confirmar distinto nunca pisa una identidad exacta ni oculta otras validaciones', () => {
+  const [pending] = reconcileShopifyImportIdentities([{ ...record(), errors: ['Precio inválido'] }], reviewCatalog());
+  const confirmed = confirmDistinctShopifyImport(pending);
+  const [stillInvalid] = reconcileShopifyImportIdentities([confirmed], reviewCatalog());
+  assert.deepEqual(stillInvalid.errors, ['Precio inválido']);
+  const [exact] = reconcileShopifyImportIdentities([confirmed], [{ ...reviewCatalog()[0], shopifyHandle: 'reloj-aurora' }]);
+  assert.equal(exact.identityStatus, 'MATCHED_EXISTING');
+  assert.equal(exact.existingProductId, 'legacy-1');
+  assert.equal(exact.duplicate, true);
+  const [ambiguous] = reconcileShopifyImportIdentities([confirmed], [{ id:'a', shopifyHandle:'reloj-aurora' }, { id:'b', shopifyHandle:'reloj-aurora' }]);
+  assert.throws(() => confirmDistinctShopifyImport(ambiguous), /no permite/);
+});
+
+test('el orden de candidatos no invalida una decisión y los duplicados de la fuente siguen omitidos', () => {
+  const catalog = [...reviewCatalog(), { ...reviewCatalog()[0], id: 'legacy-2' }];
+  const [pending] = reconcileShopifyImportIdentities([{ ...record(), duplicate: true, sourceDuplicate: true }], catalog);
+  const confirmed = confirmDistinctShopifyImport(pending);
+  const [fresh] = reconcileShopifyImportIdentities([confirmed], [...catalog].reverse());
+  assert.equal(fresh.identityStatus, 'NEW_CONFIRMED_DISTINCT');
+  assert.equal(fresh.sourceDuplicate, true);
+  assert.equal(fresh.duplicate, true);
 });
