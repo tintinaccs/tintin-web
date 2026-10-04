@@ -7,7 +7,7 @@
 // splash bespoke de index.html (#tt-intro), que ahora usa el mismo
 // js/cargador-pagina.js que el resto del sitio (con su propio scroll-lock ya
 // incluido).
-import { loadImages } from './imagenes.js?v=tintin-20260929-superadmin-hero-editable-1';
+import { loadImages } from './imagenes.js?v=tintin-20261004-admin-connections-3';
 
 loadImages().then(() => {
   // Con las imágenes ya resueltas sólo se refrescan las tarjetas: tienda.js

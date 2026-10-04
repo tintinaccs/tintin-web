@@ -419,9 +419,12 @@ export function onImagesUpdate(callback, onError) {
 
   if (!_listenerStarted) {
     _listenerStarted = true;
-    appCheckReady.then(ready => {
-      if (!ready) return;
-      onSnapshot(
+    appCheckReady.then(async ready => {
+      if (!ready) { _listenerStarted = false; return; }
+      const listen = /^\/admin(?:[-/.]|$)/.test(location.pathname)
+        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3')).subscribeAdminSnapshot
+        : onSnapshot;
+      listen(
         doc(db, FIRESTORE_DOC),
         snap => publish(snap.exists() ? snap.data() : {}),
         error => {

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../../js/admin/auth/app-check-admin.js', import.meta.url), 'utf8')
-  .replace(/^import[\s\S]*?;\r?\n/gm, '').replace('export async function', 'async function');
+  .replace(/^import[\s\S]*?;\r?\n/gm, '').replace(/^export /gm, '');
 const deferred = () => { let resolve; const promise = new Promise(ok => { resolve = ok; }); return { promise, resolve }; };
 function fixture() {
   const restored = deferred(), credential = deferred();
@@ -76,6 +76,23 @@ test('un plazo vencido devuelve control sin convertirlo en autenticación', asyn
   const gate = f.context.wait();
   f.timers[0]();
   assert.equal(await gate, false);
+});
+
+test('recuperación comparte credenciales frescas de Auth y App Check; no alcanza el booleano habilitado', async () => {
+  const f=fixture();f.auth.currentUser=f.user;let appRefreshes=0;
+  f.context.getAppCheckToken=async(instance,force)=>{assert.equal(force,true);appRefreshes++;return {token:'fixture-app-check'};};
+  vm.runInContext('globalThis.recover=recoverAdminSecurity;',f.context);
+  const gates=Array.from({length:8},()=>f.context.recover('fixture-a'));
+  await flush();assert.equal(f.refreshes(),1);f.credential.resolve('fixture-auth');
+  assert.deepEqual(await Promise.all(gates),Array(8).fill(true));assert.equal(appRefreshes,1);
+});
+
+test('recuperación no acepta un App Check fallido ni una identidad que cambió', async () => {
+  const f=fixture();f.auth.currentUser=f.user;f.credential.resolve('fixture-auth');
+  f.context.getAppCheckToken=async()=>{throw new Error('fixture security denied');};
+  vm.runInContext('globalThis.recover=recoverAdminSecurity;',f.context);
+  assert.equal(await f.context.recover('fixture-a'),false);
+  f.auth.currentUser={uid:'other'};assert.equal(await f.context.recover('fixture-a'),false);
 });
 
 test('las seis superficies auxiliares consumen el gate estricto, no el timeout público', () => {
