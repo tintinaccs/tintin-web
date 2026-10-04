@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "69a2f67d32c223d0364cdee5b6e72a8bb901f517100192017b43480114ab8c2d",
+  "sourceFingerprint": "9be9b37a003aa560c8ba8ef827790705167319a53dcadfc749e9475c994fd17f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 952,
-    "textFiles": 911,
-    "totalBytes": 18283298,
+    "files": 953,
+    "textFiles": 912,
+    "totalBytes": 18289863,
     "pages": 19,
-    "modules": 660
+    "modules": 661
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 12393,
-      "sha256": "87fd619e9a44e2f2d2244afdc97f980872d4d54ce21802483c831f0c05226ff7",
+      "bytes": 12389,
+      "sha256": "e34c8a96c31bdd1f1203254d7c224c2b2fb60a08ad6687315d3f6bf02226b557",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -104,7 +104,7 @@
           "line": 6
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -511,7 +511,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -802,8 +802,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22236,
-      "sha256": "1059319135d586d2da5bb6b067941b37ffe8209f6d6497990e5aa83132f80323",
+      "bytes": 22232,
+      "sha256": "5f87949c8573ccb49d573fac5474a27e9a783523a80b37a7d5779a30ee4033a5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -838,7 +838,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1238,7 +1238,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1543,8 +1543,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43561,
-      "sha256": "ee850b5ce42597d8421ee5c15af3b0d515dad44e5ed010c70ffe6bb8b0c49041",
+      "bytes": 43557,
+      "sha256": "f7ed146f5b7f3fd727b6e874145de7b3448fd519e880f78537718676ff26dc62",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1574,7 +1574,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1691,7 +1691,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 196648,
-      "sha256": "9d0434a4135ac6c6112159b2c76fefb79c3e78bbbb44d584d766c77bab43f492",
+      "bytes": 196640,
+      "sha256": "850decbf10e44e92ceacbb06783b4af864c2b736da9b14b553632ca5b7593ac2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2137,7 +2137,7 @@
       "ids": 557,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2167,7 +2167,7 @@
           "line": 2039
         },
         {
-          "raw": "js/admin/importacion-admin.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/admin/importacion-admin.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/admin/importacion-admin.js",
           "line": 2040
         },
@@ -2409,7 +2409,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2445,7 +2445,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/importacion-admin.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/admin/importacion-admin.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/admin/importacion-admin.js",
           "line": 2040,
           "exists": true
@@ -7769,8 +7769,8 @@
         "guest",
         "client"
       ],
-      "bytes": 13707,
-      "sha256": "eb66a54a358442c0834cc53396efc2ab752edcb478d6328ae4d4b7006ce8b688",
+      "bytes": 13703,
+      "sha256": "f59eb6ee5b235a2c47aa998ab03b983255fa541361f232ebe2e9a6bb486bc1b7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7799,7 +7799,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -8141,7 +8141,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -8396,8 +8396,8 @@
         "guest",
         "client"
       ],
-      "bytes": 54682,
-      "sha256": "6e690aa241196e0229b520741a27a71c9916334667057a811232bc469f854dc9",
+      "bytes": 54678,
+      "sha256": "f9a8fd159de234d9e00d519ddec7fbfed0a8adce0bd510ef9354821610c8d00c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8438,7 +8438,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8770,7 +8770,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -9151,8 +9151,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 120706,
-      "sha256": "ac015e5c0b6ca28c25fa78b8fd7209de8bc6154a9c3299b61d6e91245e3c0a29",
+      "bytes": 120702,
+      "sha256": "23baff3ed801f31e8cb11b93524a3af3dd193b27437b09f71d5cc2eeb745c511",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9187,7 +9187,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -9539,7 +9539,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -10169,8 +10169,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15361,
-      "sha256": "39db64a58e8fbd3414f9515f6efb62475b38eec2696b6f057c99ae61016435fb",
+      "bytes": 15357,
+      "sha256": "ec85ef9c0b578c4dc48468e96eb894ad0755cc2a71f4aac7e5b55d4a80b46d89",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10205,7 +10205,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -10562,7 +10562,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -10829,8 +10829,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20197,
-      "sha256": "f860598c341319b42aeb9ee2f2000b0e0eb40f166a0132494416d083f3dd9b65",
+      "bytes": 20193,
+      "sha256": "a13f6366eac55012eaf3ccf4f87ddf97098828724c3b5eb31f2ace0eb028dd07",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10865,7 +10865,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -11247,7 +11247,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -11562,8 +11562,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17109,
-      "sha256": "7895013b44074b7d0e90c097f8efbcad3b5524768bb23c2d2ab75f29971cf85b",
+      "bytes": 17105,
+      "sha256": "6b5304ec255a106322be1e624085720cb714510e0beb512d43377d88c5fb385e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11598,7 +11598,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -11940,7 +11940,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -12235,8 +12235,8 @@
         "guest",
         "client"
       ],
-      "bytes": 34174,
-      "sha256": "e55ad65110a1ca0e8c5309501df44915845f73bd4288cd1871f0478f983a3706",
+      "bytes": 34170,
+      "sha256": "7a0c0349d38e16e7bc03a381900416c39ba0753968045c1c75bd90a7065931e5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12283,7 +12283,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -12807,7 +12807,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -13289,8 +13289,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 82439,
-      "sha256": "e8f34402a29659896402ed5b1979b5064ee369083cbc0e1850ec0c73e66189c0",
+      "bytes": 82435,
+      "sha256": "8dc54739cb9a669eca5370ff3b455ed999092ff48fb112cdfd02852e3ebeb00a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13331,7 +13331,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -13513,7 +13513,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -13969,8 +13969,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1837,
-      "sha256": "cc081cab11abd7ce72f70f47dbe6305dc712c6e6840fbb75fb74ebd131cfb93a",
+      "bytes": 1833,
+      "sha256": "b41cfe4cf4af48006a253113477f00413217689605243796f262507ef8b6efb3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13987,7 +13987,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 23
         }
@@ -14034,7 +14034,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 23,
           "exists": true
@@ -14100,8 +14100,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44927,
-      "sha256": "a9b076966eef41488c31eab9e34911eb5523aaa0150f8592c37bac873c4cf66c",
+      "bytes": 44923,
+      "sha256": "2585eee12c95cde9fd4da957651cf19a9ba0f4b7491f76231ab6935d113d846c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14142,7 +14142,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -14534,7 +14534,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -14948,8 +14948,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14880,
-      "sha256": "0ab822c2baa3f5386ad38b565174c71a0e148aef27b72a85ca8227e5301fc336",
+      "bytes": 14876,
+      "sha256": "c8e45b82de449515ba154a42b53c55601f0314f200c5583fda55ae0be538b2cf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14978,7 +14978,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -15320,7 +15320,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -15575,8 +15575,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17426,
-      "sha256": "5b5752bbf4ff708f043b2734bd5b02fbca5d170b2d3cd926ef445fdf2062d8dc",
+      "bytes": 17422,
+      "sha256": "f7aaae8e8473116a34916b9128b7281f9816c7e7d5c3e42a70e37518b1d1718e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15605,7 +15605,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -15972,7 +15972,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -16238,8 +16238,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25083,
-      "sha256": "107f028d5ee661af1d476120382149bc74f802c4255d1d5800b542a5e796a15f",
+      "bytes": 25079,
+      "sha256": "931c394c1644a037479e7b6818c1ec5568cdaaea7ddee6b0fac90a23b45408d8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16268,7 +16268,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -16685,7 +16685,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -17230,8 +17230,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15220,
-      "sha256": "8e4129286aaee4aa67e0227770e034cb9c97fe8ac4b3ffaa4953ce49ffbaca6d",
+      "bytes": 15216,
+      "sha256": "efef3094894d037da65e8fb07019717652b862781a721555d40b9f687374958e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17253,7 +17253,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -17630,7 +17630,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-identity-review-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-import-concurrency-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -21530,8 +21530,8 @@
     },
     {
       "path": "js/admin/importacion-admin.js",
-      "bytes": 35953,
-      "sha256": "a5a9bc106fb0529f851edd862db0b601439b4ae73c4ea392bf09ab759f4af64a",
+      "bytes": 36296,
+      "sha256": "fd7620ca3b518dc24211ddb4f9585d1a153510d0b58c745341f7f27cd1162dff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22761,8 +22761,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 46277,
-      "sha256": "7817e303cdc795eec31a69ddf690f178144cfb6066dd8fca454abcc4271938ea",
+      "bytes": 46273,
+      "sha256": "0571f2b82c771fbb5ac8f1b53a756802f7ee82762ad79988f1899d970f51e3f8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26641,8 +26641,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 10168,
-      "sha256": "a9ec79abd49d5b8827501d7e0ce5c3334d56f70043ee9d98abbe8510e40ee045",
+      "bytes": 10164,
+      "sha256": "173739b6d2168d4c0c646c5fad8143d8f30a0d1d4f9fedb62e60124c54a1f192",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30798,8 +30798,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 15554,
-      "sha256": "cfe6e7f581759adda1165cfff420e914bb02d3443c49dfc77171db7e667b46ea",
+      "bytes": 15550,
+      "sha256": "74c6022cf5694b9aa668b0f84823dcdc308e00457e1af0606996786dc81d2768",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33117,6 +33117,42 @@
         {
           "raw": "../../functions/[page].js",
           "target": "functions/[page].js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/import/admin-import-concurrency.test.mjs",
+      "bytes": 4558,
+      "sha256": "12e2fbc7b650c509b270c54372376c8292d6e7e727c5de6d538f30ce9971e275",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
           "dynamic": false,
           "line": 4
         }
@@ -36507,8 +36543,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 12393,
-      "sha256": "87fd619e9a44e2f2d2244afdc97f980872d4d54ce21802483c831f0c05226ff7"
+      "bytes": 12389,
+      "sha256": "e34c8a96c31bdd1f1203254d7c224c2b2fb60a08ad6687315d3f6bf02226b557"
     },
     {
       "path": "AGENTS.md",
@@ -36621,14 +36657,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 22236,
-      "sha256": "1059319135d586d2da5bb6b067941b37ffe8209f6d6497990e5aa83132f80323"
+      "bytes": 22232,
+      "sha256": "5f87949c8573ccb49d573fac5474a27e9a783523a80b37a7d5779a30ee4033a5"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 43561,
-      "sha256": "ee850b5ce42597d8421ee5c15af3b0d515dad44e5ed010c70ffe6bb8b0c49041"
+      "bytes": 43557,
+      "sha256": "f7ed146f5b7f3fd727b6e874145de7b3448fd519e880f78537718676ff26dc62"
     },
     {
       "path": "admin-manifest.json",
@@ -36639,8 +36675,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 196648,
-      "sha256": "9d0434a4135ac6c6112159b2c76fefb79c3e78bbbb44d584d766c77bab43f492"
+      "bytes": 196640,
+      "sha256": "850decbf10e44e92ceacbb06783b4af864c2b736da9b14b553632ca5b7593ac2"
     },
     {
       "path": "apple-touch-icon.png",
@@ -36915,20 +36951,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 13707,
-      "sha256": "eb66a54a358442c0834cc53396efc2ab752edcb478d6328ae4d4b7006ce8b688"
+      "bytes": 13703,
+      "sha256": "f59eb6ee5b235a2c47aa998ab03b983255fa541361f232ebe2e9a6bb486bc1b7"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 54682,
-      "sha256": "6e690aa241196e0229b520741a27a71c9916334667057a811232bc469f854dc9"
+      "bytes": 54678,
+      "sha256": "f9a8fd159de234d9e00d519ddec7fbfed0a8adce0bd510ef9354821610c8d00c"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 120706,
-      "sha256": "ac015e5c0b6ca28c25fa78b8fd7209de8bc6154a9c3299b61d6e91245e3c0a29"
+      "bytes": 120702,
+      "sha256": "23baff3ed801f31e8cb11b93524a3af3dd193b27437b09f71d5cc2eeb745c511"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -37125,8 +37161,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 15361,
-      "sha256": "39db64a58e8fbd3414f9515f6efb62475b38eec2696b6f057c99ae61016435fb"
+      "bytes": 15357,
+      "sha256": "ec85ef9c0b578c4dc48468e96eb894ad0755cc2a71f4aac7e5b55d4a80b46d89"
     },
     {
       "path": "config/account-contract.json",
@@ -37161,8 +37197,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 20197,
-      "sha256": "f860598c341319b42aeb9ee2f2000b0e0eb40f166a0132494416d083f3dd9b65"
+      "bytes": 20193,
+      "sha256": "a13f6366eac55012eaf3ccf4f87ddf97098828724c3b5eb31f2ace0eb028dd07"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -37653,8 +37689,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 168417,
-      "sha256": "bb500343522a715db7e4888fe4b76fbc2e754c74baaba85b4818876a67d61a75"
+      "bytes": 170134,
+      "sha256": "23e6b1c3c57ab37071bfe8bc76ba3a401b92444c9f2deab2b8c8b0736be325d7"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -37989,8 +38025,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 17109,
-      "sha256": "7895013b44074b7d0e90c097f8efbcad3b5524768bb23c2d2ab75f29971cf85b"
+      "bytes": 17105,
+      "sha256": "6b5304ec255a106322be1e624085720cb714510e0beb512d43377d88c5fb385e"
     },
     {
       "path": "favicon-16x16.png",
@@ -38475,8 +38511,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 34174,
-      "sha256": "e55ad65110a1ca0e8c5309501df44915845f73bd4288cd1871f0478f983a3706"
+      "bytes": 34170,
+      "sha256": "7a0c0349d38e16e7bc03a381900416c39ba0753968045c1c75bd90a7065931e5"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -38607,8 +38643,8 @@
     {
       "path": "js/admin/importacion-admin.js",
       "extension": ".js",
-      "bytes": 35953,
-      "sha256": "a5a9bc106fb0529f851edd862db0b601439b4ae73c4ea392bf09ab759f4af64a"
+      "bytes": 36296,
+      "sha256": "fd7620ca3b518dc24211ddb4f9585d1a153510d0b58c745341f7f27cd1162dff"
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
@@ -38829,8 +38865,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 46277,
-      "sha256": "7817e303cdc795eec31a69ddf690f178144cfb6066dd8fca454abcc4271938ea"
+      "bytes": 46273,
+      "sha256": "0571f2b82c771fbb5ac8f1b53a756802f7ee82762ad79988f1899d970f51e3f8"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -39861,8 +39897,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 10168,
-      "sha256": "a9ec79abd49d5b8827501d7e0ce5c3334d56f70043ee9d98abbe8510e40ee045"
+      "bytes": 10164,
+      "sha256": "173739b6d2168d4c0c646c5fad8143d8f30a0d1d4f9fedb62e60124c54a1f192"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -39939,8 +39975,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 82439,
-      "sha256": "e8f34402a29659896402ed5b1979b5064ee369083cbc0e1850ec0c73e66189c0"
+      "bytes": 82435,
+      "sha256": "8dc54739cb9a669eca5370ff3b455ed999092ff48fb112cdfd02852e3ebeb00a"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -40125,8 +40161,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1837,
-      "sha256": "cc081cab11abd7ce72f70f47dbe6305dc712c6e6840fbb75fb74ebd131cfb93a"
+      "bytes": 1833,
+      "sha256": "b41cfe4cf4af48006a253113477f00413217689605243796f262507ef8b6efb3"
     },
     {
       "path": "package-lock.json",
@@ -40137,14 +40173,14 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 14179,
-      "sha256": "bf11436e35dbe7f1092103d3db3f01b230a9d6ed944823ea1b7b587139a8309f"
+      "bytes": 14226,
+      "sha256": "3f4e8d1d1d5711658c5a89b0c26232fa5421dfd4aa051acb9ebbf510c753465b"
     },
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 44927,
-      "sha256": "a9b076966eef41488c31eab9e34911eb5523aaa0150f8592c37bac873c4cf66c"
+      "bytes": 44923,
+      "sha256": "2585eee12c95cde9fd4da957651cf19a9ba0f4b7491f76231ab6935d113d846c"
     },
     {
       "path": "playwright.config.js",
@@ -40161,20 +40197,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 14880,
-      "sha256": "0ab822c2baa3f5386ad38b565174c71a0e148aef27b72a85ca8227e5301fc336"
+      "bytes": 14876,
+      "sha256": "c8e45b82de449515ba154a42b53c55601f0314f200c5583fda55ae0be538b2cf"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 17426,
-      "sha256": "5b5752bbf4ff708f043b2734bd5b02fbca5d170b2d3cd926ef445fdf2062d8dc"
+      "bytes": 17422,
+      "sha256": "f7aaae8e8473116a34916b9128b7281f9816c7e7d5c3e42a70e37518b1d1718e"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 25083,
-      "sha256": "107f028d5ee661af1d476120382149bc74f802c4255d1d5800b542a5e796a15f"
+      "bytes": 25079,
+      "sha256": "931c394c1644a037479e7b6818c1ec5568cdaaea7ddee6b0fac90a23b45408d8"
     },
     {
       "path": "robots.txt",
@@ -40995,8 +41031,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 60049,
-      "sha256": "22580860385d9d8c4c2aa7b8d8f1984c823ee5ea28f573c884909c3eb01ce543"
+      "bytes": 60037,
+      "sha256": "a10714377179ec28c3950faa7f5c74cd7381205388a93665b89e0a182ab3d2a4"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -41151,8 +41187,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 15554,
-      "sha256": "cfe6e7f581759adda1165cfff420e914bb02d3443c49dfc77171db7e667b46ea"
+      "bytes": 15550,
+      "sha256": "74c6022cf5694b9aa668b0f84823dcdc308e00457e1af0606996786dc81d2768"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -41229,8 +41265,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 15220,
-      "sha256": "8e4129286aaee4aa67e0227770e034cb9c97fe8ac4b3ffaa4953ce49ffbaca6d"
+      "bytes": 15216,
+      "sha256": "efef3094894d037da65e8fb07019717652b862781a721555d40b9f687374958e"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -41585,6 +41621,12 @@
       "extension": ".mjs",
       "bytes": 541,
       "sha256": "e94bd70268f012462fbdbc295a866308e8bea882d1e2ba6870ce025e4f404fe7"
+    },
+    {
+      "path": "tests/import/admin-import-concurrency.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4558,
+      "sha256": "12e2fbc7b650c509b270c54372376c8292d6e7e727c5de6d538f30ce9971e275"
     },
     {
       "path": "tests/import/admin-import-job-contract.test.mjs",

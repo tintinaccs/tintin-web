@@ -313,10 +313,12 @@ if (!window.TintinAdminShopifyImportBooted) {
   }
 
   async function processFile(file) {
-    if (!file || state.busy) return;
+    if (!isSuperAdmin() || !file || state.busy) return;
     if (file.size > MAX_FILE_BYTES) return toast('El archivo supera el límite operativo de 250 MB.', true);
     const extension = file.name.split('.').pop()?.toLowerCase();
     if (!['csv', 'json'].includes(extension)) return toast('Usá un archivo .csv o .json.', true);
+    state.busy = true;
+    renderPreview();
     state.ui.drop.classList.add('is-loading');
     state.ui.summary.textContent = 'Analizando archivo por streaming…';
     try {
@@ -349,8 +351,10 @@ if (!window.TintinAdminShopifyImportBooted) {
       renderPreview();
       toast(`No se pudo leer el archivo: ${error.message}`, true);
     } finally {
+      state.busy = false;
       state.ui.drop.classList.remove('is-loading');
       state.ui.input.value = '';
+      renderPreview();
     }
   }
 
@@ -459,28 +463,32 @@ if (!window.TintinAdminShopifyImportBooted) {
   }
 
   async function restoreLocalJob(saved) {
-    if (!saved?.records?.length) return;
-    const source = saved.source || 'shopify-csv';
-    let existingProducts = [];
-    let records = saved.records;
-    if (source === 'shopify-csv') {
-      try {
-        existingProducts = await readCollection('products');
-        records = reconcileShopifyImportIdentities(saved.records, existingProducts);
-      } catch (error) {
-        console.error('[admin-import] catalog reconciliation failed while restoring preview', error);
-        toast(`No se pudo revisar el catálogo actual. El preview no se restauró: ${error.message}`, true);
-        return;
+    if (!isSuperAdmin() || state.busy || !saved?.records?.length) return;
+    state.busy = true;
+    renderPreview();
+    try {
+      const source = saved.source || 'shopify-csv';
+      let existingProducts = [];
+      let records = saved.records;
+      if (source === 'shopify-csv') {
+        try {
+          existingProducts = await readCollection('products');
+          records = reconcileShopifyImportIdentities(saved.records, existingProducts);
+        } catch (error) {
+          console.error('[admin-import] catalog reconciliation failed while restoring preview', error);
+          toast(`No se pudo revisar el catálogo actual. El preview no se restauró: ${error.message}`, true);
+          return;
+        }
       }
-    }
-    state.fileName = saved.fileName || ''; state.fileBytes = saved.fileBytes || 0; state.fileChecksum = saved.fileChecksum || '';
-    state.source = source; state.existingProducts = existingProducts; state.records = records; state.invalidRows = saved.invalidRows || [];
-    state.jobId = saved.jobId || ''; state.job = saved.job || null;
-    if (state.jobId) {
-      try { state.job = await apiJob({ action: 'status', jobId: state.jobId }); }
-      catch (error) { console.warn('[admin-import] local job status unavailable', error); }
-    }
-    renderPreview(); toast(`Preview restaurado: ${state.records.length} producto(s).`);
+      state.fileName = saved.fileName || ''; state.fileBytes = saved.fileBytes || 0; state.fileChecksum = saved.fileChecksum || '';
+      state.source = source; state.existingProducts = existingProducts; state.records = records; state.invalidRows = saved.invalidRows || [];
+      state.jobId = saved.jobId || ''; state.job = saved.job || null;
+      if (state.jobId) {
+        try { state.job = await apiJob({ action: 'status', jobId: state.jobId }); }
+        catch (error) { console.warn('[admin-import] local job status unavailable', error); }
+      }
+      renderPreview(); toast(`Preview restaurado: ${state.records.length} producto(s).`);
+    } finally { state.busy = false; renderPreview(); }
   }
 
   async function offerLocalResume() {
@@ -492,6 +500,7 @@ if (!window.TintinAdminShopifyImportBooted) {
   }
 
   function clearPreview() {
+    if (!isSuperAdmin() || state.busy) return;
     const previousJobId = state.jobId;
     state.records = []; state.existingProducts = []; state.invalidRows = []; state.fileName = ''; state.fileBytes = 0; state.fileChecksum = ''; state.source = ''; state.jobId = ''; state.job = null;
     if (previousJobId) clearLocalJob(previousJobId).catch(() => {});
