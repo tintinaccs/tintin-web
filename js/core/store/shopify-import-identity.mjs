@@ -32,6 +32,27 @@ function candidateReason(imported, existing) {
   return reasons;
 }
 
+function reviewSnapshot(product) {
+  return { id: String(product?.id || ''), handle: productHandle(product), fingerprint: productFingerprint(product),
+    name: productName(product), skus: [...productSkus(product)].sort(), price: product?.price ?? null,
+    imageUrl: String(product?.imageUrl || '') };
+}
+
+function reviewKey(product, candidates) {
+  return JSON.stringify({ source: reviewSnapshot(product),
+    candidates: candidates.map(({ existing }) => reviewSnapshot(existing)).sort((a, b) => a.id.localeCompare(b.id)) });
+}
+
+/** Records an explicit operator decision; fresh reconciliation still validates it. */
+export function confirmDistinctShopifyImport(sourceRecord) {
+  const record = asRecord(sourceRecord);
+  if (record.identityStatus !== 'REVIEW_REQUIRED' || !record.identityReviewKey || !record.identityCandidates?.length
+    || !productHandle(record.product) || !productFingerprint(record.product)) {
+    throw new Error('La identidad no permite confirmar un producto distinto.');
+  }
+  return { ...record, identityDecision: { type: 'CREATE_DISTINCT', reviewKey: record.identityReviewKey } };
+}
+
 /**
  * Reconciles a Shopify preview with a read-only Firestore catalog snapshot.
  * Exact Shopify identities are skipped to preserve the existing document ID.
@@ -51,6 +72,7 @@ export function reconcileShopifyImportIdentities(records, existingProducts = [])
       identityMessage: _oldIdentityMessage,
       identityError: _oldIdentityError,
       identityCandidates: _oldIdentityCandidates,
+      identityReviewKey: _oldIdentityReviewKey,
       existingProductId: _oldExistingProductId,
       identityDuplicate: _oldIdentityDuplicate,
       sourceDuplicate: _oldSourceDuplicate,
@@ -97,6 +119,13 @@ export function reconcileShopifyImportIdentities(records, existingProducts = [])
       .map(existing => ({ existing, reasons: candidateReason(product, existing) }))
       .filter(candidate => candidate.reasons.length);
     if (candidates.length) {
+      const identityReviewKey = reviewKey(product, candidates);
+      const confirmedDistinct = record.identityDecision?.type === 'CREATE_DISTINCT'
+        && record.identityDecision.reviewKey === identityReviewKey;
+      if (confirmedDistinct) return {
+        ...record, sourceDuplicate, identityStatus: 'NEW_CONFIRMED_DISTINCT', identityReviewKey,
+        identityMessage: 'Confirmado expresamente como otro producto. Se conserva el Handle nuevo y no se modifica el producto coincidente.',
+      };
       const examples = candidates.slice(0, 3).map(({ existing, reasons }) =>
         `«${String(existing.name || 'sin nombre')}» (${reasons.join(', ')}, ID ${String(existing.id || 'desconocido')})`,
       );
@@ -104,7 +133,9 @@ export function reconcileShopifyImportIdentities(records, existingProducts = [])
       return {
         ...record,
         identityStatus: 'REVIEW_REQUIRED',
-        identityCandidates: candidates.map(({ existing, reasons }) => ({ id: String(existing.id || ''), name: String(existing.name || ''), reasons })),
+        identityCandidates: candidates.map(({ existing, reasons }) => ({ id: String(existing.id || ''), name: String(existing.name || ''),
+          handle: productHandle(existing), price: existing.price ?? null, reasons })),
+        identityReviewKey,
         identityError,
         sourceDuplicate,
         errors: [...errors, identityError],

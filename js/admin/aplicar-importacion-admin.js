@@ -21,6 +21,7 @@ import {
   isShopifyMediaUrl,
   rewriteImportedShopifyMedia,
 } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1';
+import { confirmDistinctShopifyImport } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1';
 
 const BATCH_SIZE = 50;
 const MEDIA_COPY_BATCH_SIZE = 5;
@@ -170,9 +171,11 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     if (!ui) return;
     totals = currentTotals || totals;
     ui.mapping.hidden = true;
+    ui.identity.hidden = true;
     ui.apply.hidden = !state.records.length || state.source !== 'shopify-csv';
     if (!state.records.length) return;
     renderMapping();
+    renderIdentityReview();
     const unlimited = state.records.filter(record => record.product?.stock == null).length;
     ui.stock.hidden = !unlimited;
     ui.stock.textContent = `${unlimited} producto(s) no traen cantidad de stock en el CSV y quedan «Sin límite». Revisalos después en Productos si querés controlar su stock.`;
@@ -180,6 +183,35 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     ui.button.disabled = Boolean(reason) || state.busy;
     if (!state.busy) {
       ui.reason.textContent = reason || `Crea hasta ${applicableRecords().length} producto(s) nuevos en el catálogo real. Los que ya existen no se modifican ni se borran.`;
+    }
+  }
+
+  function renderIdentityReview() {
+    const pending = state.records.map((record, index) => ({ record, index })).filter(({ record }) => record.identityStatus === 'REVIEW_REQUIRED');
+    ui.identity.hidden = !pending.length;
+    ui.identityList.replaceChildren();
+    for (const { record, index } of pending) {
+      const row = node('div', 'phase10-map-row');
+      const label = node('div', 'phase10-map-label');
+      const product = record.product || {};
+      const candidates = (record.identityCandidates || []).map(candidate => `${candidate.name} · Handle ${candidate.handle || 'sin Handle'} · precio ${candidate.price ?? 'no disponible'}`).join(' / ');
+      label.append(node('strong', '', `${product.name || 'Producto sin nombre'} · Handle ${product.sourceMetadata?.handle || product.shopifyHandle || 'sin Handle'} · precio ${product.price ?? 'no disponible'}`), node('span', '', candidates || record.identityError));
+      const decision = node('button', 'adm-btn adm-btn-outline', 'Confirmar que es otro producto');
+      decision.type = 'button';
+      decision.setAttribute('aria-label', `Confirmar otro producto: ${product.name || 'sin nombre'}`);
+      decision.disabled = Boolean(state.jobId) || state.busy || !record.identityReviewKey;
+      decision.addEventListener('click', async () => {
+        if (!isSuperAdmin() || state.jobId || state.busy) return;
+        if (!window.confirm(`¿Confirmás que «${product.name}» con Handle «${product.sourceMetadata?.handle || product.shopifyHandle}» es un producto distinto de ${candidates}? Se creará con su propio ID; los existentes se conservan. Esta decisión no escribe el catálogo.`)) return;
+        state.busy = true;
+        try {
+          state.records[index] = confirmDistinctShopifyImport(record);
+          await refreshCatalogIdentitySnapshot();
+        } catch (error) { toast(`No se pudo confirmar la identidad: ${error.message}`, true); }
+        finally { state.busy = false; renderPreview(); }
+      });
+      row.append(label, decision);
+      ui.identityList.appendChild(row);
     }
   }
 
@@ -267,6 +299,10 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
   }
 
   function mount(preview, before) {
+    const identity = node('div', 'phase10-map'); identity.hidden = true;
+    const identityList = node('div', 'phase10-map-list');
+    identity.append(node('strong', 'phase10-map-title', 'Identidades a confirmar'), node('p', 'phase10-note', 'Un nombre o SKU coincidente requiere revisión. Confirmar otro producto conserva ambos IDs y exige una comprobación fresca antes de aplicar.'), identityList);
+    preview.insertBefore(identity, before);
     const mapping = node('div', 'phase10-map');
     mapping.hidden = true;
     const mapHint = node('p', 'phase10-note');
@@ -288,7 +324,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     row.append(reason, button);
     applyBox.append(node('strong', 'phase10-map-title', 'Aplicar al catálogo real'), stock, row);
     preview.appendChild(applyBox);
-    ui = { mapping, mapHint, mapList, apply: applyBox, stock, reason, button };
+    ui = { identity, identityList, mapping, mapHint, mapList, apply: applyBox, stock, reason, button };
   }
 
   return { mount, render };
