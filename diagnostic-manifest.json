@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "cd34a8e41609f4274db45e882d45716e091e7558e4e83d9ef9fb8d3ff45f53a0",
+  "sourceFingerprint": "de19f27243184ffa8b051f74364353247070a4ac3b2d2c31c4303aaec5cf3997",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 956,
-    "textFiles": 915,
-    "totalBytes": 18350652,
+    "files": 957,
+    "textFiles": 916,
+    "totalBytes": 18353517,
     "pages": 19,
-    "modules": 663
+    "modules": 664
   },
   "viewports": [
     {
@@ -33754,6 +33754,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/login/saved-address-map-browser.spec.js",
+      "bytes": 2333,
+      "sha256": "23c46fb17abff120bd1b01476ebe18f6a3034733e79c5ccfb2504129ad1a1f1a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/login/saved-address-map.test.mjs",
       "bytes": 2733,
       "sha256": "fa4bc6baaad1858efa063ab2d90842718882899209789fe7cacbf822468a5abd",
@@ -37784,8 +37795,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 174959,
-      "sha256": "95a37bfbd1132da19126fd0e584016952d64d73e363c566db2a2e01262bc9890"
+      "bytes": 175491,
+      "sha256": "37aeb40a845cffe3b33de496745ffc42c3e17fd251599f5a8132ea4740c7c6b0"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41806,6 +41817,12 @@
       "extension": ".mjs",
       "bytes": 2312,
       "sha256": "c9caeee813456f55eeacc10993855fdf80eedba481f9329fcc65fe0909abab45"
+    },
+    {
+      "path": "tests/login/saved-address-map-browser.spec.js",
+      "extension": ".js",
+      "bytes": 2333,
+      "sha256": "23c46fb17abff120bd1b01476ebe18f6a3034733e79c5ccfb2504129ad1a1f1a"
     },
     {
       "path": "tests/login/saved-address-map.test.mjs",
