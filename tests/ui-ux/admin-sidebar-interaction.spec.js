@@ -13,6 +13,9 @@ async function load(page,width) {
   await page.route('**/admin-sidebar-fixture',route=>route.fulfill({contentType:'text/html',headers:{'Content-Security-Policy':"default-src 'self'; script-src 'self'; connect-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; frame-src 'none'"},body:shell}));
   await page.goto('/admin-sidebar-fixture',{waitUntil:'load'});
   await page.evaluate(()=>document.documentElement.classList.add('adm-auth-ready'));
+  // Chromium Linux puede reubicar el puntero al navegar; estabilizar el
+  // estado cerrado después de que el rail ya sea visible, sin forzar clases.
+  await page.mouse.move(width-10,350);
 }
 for(const width of [541,600,768,900,1024,1440]) {
   test(`rail, hover y fijar sin saltos ni etiquetas rotas a ${width}px`,async({page})=>{
