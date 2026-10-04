@@ -139,6 +139,20 @@ test('formato nuevo de Shopify: URL handle, variantes, galería y compare-at sin
   assert.match(warnings.join(' '), /Stock sumado de 2 variantes/);
 });
 
+test('continuation rows inherit option names within their Handle without multiplying gallery inventory', () => {
+  const { products } = groupShopifyRows([
+    { handle: 'anillo', title: 'Anillo', type: 'Relojes', 'option1 name': 'Color', 'option1 value': 'Dorado', 'option2 name': 'Talla', 'option2 value': '6', 'variant price': '50000', 'variant inventory qty': '2' },
+    { handle: 'anillo', 'option1 value': 'Dorado', 'option2 value': '7', 'variant price': '50000', 'variant inventory qty': '3' },
+    { handle: 'anillo', 'option1 value': 'Dorado', 'option2 value': '7', 'image src': 'https://cdn.example/gallery.png' },
+    { handle: 'otro', title: 'Otro', type: 'Relojes', 'option1 value': 'Default Title', 'variant price': '50000', 'variant inventory qty': '1' },
+  ], collections, { parseNumber: parseLocalizedNumber, parseStock: parseOptionalStock });
+  assert.equal(products[0].product.stock, 5);
+  assert.equal(products[0].product.variants.length, 2);
+  assert.deepEqual(buildCatalogProductFromImport(products[0].product).variants, { Talla: ['6', '7'] });
+  assert.equal(products[1].product.stock, 1);
+  assert.equal(buildCatalogProductFromImport(products[1].product).variants, undefined);
+});
+
 test('stock del formato nuevo: sin seguimiento, seguir vendiendo, sin cantidad y negativo', () => {
   const row = (handle, fields) => newFormatRow({ 'url handle': handle, title: `Collar ${handle}`, status: 'active', price: '50000', ...fields });
   const { products } = groupShopifyRows([
