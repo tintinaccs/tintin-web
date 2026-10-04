@@ -9,12 +9,12 @@
   --tt-motion-slow: 360ms;
   --tt-motion-ease: cubic-bezier(.22, .61, .36, 1);
   --tt-state-bg: color-mix(in srgb, var(--tt-page-bg, #fff6fa) 84%, #fff);
-  --tt-state-border: color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #C52F68)) 20%, transparent);
-  --tt-state-text: var(--tt-text, #2b2b2b);
+  --tt-state-border: color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #F8AACA)) 20%, transparent);
+  --tt-state-text: var(--tt-text, #713C53);
   --tt-state-muted: var(--tt-text-muted, #666);
-  --tt-danger: var(--color-brand-primary, #C52F68);
+  --tt-danger: var(--color-brand-primary, #F8AACA);
   --tt-success: #287a55;
-  --tt-loader-strong: var(--color-brand-primary, #C52F68);
+  --tt-loader-strong: var(--color-brand-primary, #F8AACA);
   --tt-loader-soft: rgba(202, 1, 105, .22);
 }
 
@@ -34,7 +34,7 @@
 
 .tt-interactive-control:focus-visible,
 .tt-state-action:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #C52F68)) 35%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #F8AACA)) 35%, transparent);
   outline-offset: 3px;
 }
 
@@ -128,8 +128,8 @@
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #C52F68)) 12%, #fff);
-  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68));
+  background: color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #F8AACA)) 12%, #fff);
+  color:var(--color-text-primary,#713C53);
 }
 
 .tt-state-icon::before {
@@ -210,10 +210,10 @@
   justify-content: center;
   margin-top: 4px;
   padding: 10px 20px;
-  border: 1px solid var(--color-brand-primary, var(--color-brand-primary, #C52F68));
+  border: 1px solid var(--color-brand-primary, var(--color-brand-primary, #F8AACA));
   border-radius: 999px;
-  background: var(--color-brand-primary, var(--color-brand-primary, #C52F68));
-  color: #fff !important;
+  background: var(--color-brand-primary, var(--color-brand-primary, #F8AACA));
+  color:#713C53 !important;
   font: inherit;
   font-size: .84rem;
   font-weight: 700;
@@ -222,8 +222,8 @@
 }
 
 .tt-state-action:hover {
-  background: var(--color-brand-primary-hover, var(--color-brand-primary, #C52F68));
-  border-color: var(--color-brand-primary-hover, var(--color-brand-primary, #C52F68));
+  background: var(--color-brand-primary-hover, var(--color-brand-primary, #F8AACA));
+  border-color: var(--color-brand-primary-hover, var(--color-brand-primary, #F8AACA));
 }
 
 .tt-skeleton,
@@ -231,7 +231,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #C52F68)) 8%, #fff);
+  background: color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #F8AACA)) 8%, #fff);
 }
 
 .tt-skeleton::after,
@@ -250,7 +250,7 @@
 
 .tt-img-error {
   min-height: 72px;
-  border: 1px dashed color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #C52F68)) 28%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #F8AACA)) 28%, transparent);
   border-radius: 10px;
   background: linear-gradient(135deg, #fff6fa, #f9e5ed);
   opacity: .58;

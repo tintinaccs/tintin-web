@@ -17,7 +17,7 @@ function ensureStyles() {
     .tt-admin-user-tabs{display:flex;gap:6px;overflow-x:auto;padding:6px;background:#fff7fa;border:1px solid #edd6df;border-radius:13px;position:sticky;top:0;z-index:2;scrollbar-width:none}
     .tt-admin-user-tabs::-webkit-scrollbar{display:none}
     .tt-admin-user-tab{border:0;background:transparent;border-radius:9px;padding:9px 12px;white-space:nowrap;font:700 11px/1 Montserrat;color:#705e65;cursor:pointer}
-    .tt-admin-user-tab[aria-selected="true"]{background:#f8dfe8;color:#C52F68}
+    .tt-admin-user-tab[aria-selected="true"]{background:#f8dfe8;color:#713C53}
     .tt-admin-user-panel[hidden]{display:none!important}
     .tt-admin-user-panel{display:flex;flex-direction:column;gap:14px}
     .tt-admin-user-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 14px;background:#faf7f8;border:1px solid #eee1e6;border-radius:12px}

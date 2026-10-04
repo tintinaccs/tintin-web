@@ -7,12 +7,12 @@
    ======================================================================== */
 
 :root {
-  --tt-commerce-brand: var(--admin-color-brand, var(--admin-color-brand, #C52F68));
-  --tt-commerce-brand-hover: var(--admin-color-brand-hover, var(--admin-color-brand, #C52F68));
+  --tt-commerce-brand: var(--admin-color-brand, var(--admin-color-brand, #F8AACA));
+  --tt-commerce-brand-hover: var(--admin-color-brand-hover, var(--admin-color-brand, #F8AACA));
   --tt-commerce-page: var(--admin-color-background-page, #FFF6FA);
   --tt-commerce-surface: var(--admin-color-background-surface, #FFFFFF);
   --tt-commerce-border: var(--admin-color-border, #F1E4E7);
-  --tt-commerce-text: var(--admin-color-text-primary, #2B2B2B);
+  --tt-commerce-text: var(--admin-color-text-primary, #713C53);
   --tt-commerce-muted: var(--admin-color-text-secondary, #7B6F72);
   --tt-commerce-soft: var(--admin-color-background-sidebar-active, #FDECF2);
   --tt-commerce-hover: var(--admin-color-table-row-hover, #FFF9FC);
@@ -391,7 +391,7 @@
 .tt-commerce-badge.success { background: var(--tt-commerce-success-bg); color: var(--tt-commerce-success); }
 .tt-commerce-badge.warning { background: var(--tt-commerce-warning-bg); color: var(--tt-commerce-warning); }
 .tt-commerce-badge.error { background: var(--tt-commerce-error-bg); color: var(--tt-commerce-error); }
-.tt-commerce-badge.neutral { background: #f2f2f2; color: #5d5d5d; }
+.tt-commerce-badge.neutral { background: #f2f2f2; color:#713C53; }
 
 .tt-commerce-iconbtn {
   appearance: none;

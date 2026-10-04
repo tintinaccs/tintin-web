@@ -228,9 +228,9 @@ if (!window.TintinAdminUserFichaBooted) {
       .ficha-section-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-primary);margin-bottom:10px}
       .ficha-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
       .ficha-field-label{font-size:11px;color:#888;margin-bottom:2px}
-      .ficha-field-value{font-size:13px;color:#222;font-weight:600;word-break:break-word}
+      .ficha-field-value{font-size:13px;color:#713C53;font-weight:600;word-break:break-word}
       .ficha-orders-list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-      .ficha-order-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#444;padding:8px 10px;background:#f7f7f8;border-radius:8px}
+      .ficha-order-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#713C53;padding:8px 10px;background:#f7f7f8;border-radius:8px}
       @media(max-width:640px){.ficha-grid{grid-template-columns:1fr}.ficha-order-row{flex-direction:column}}
     `;
     document.head.appendChild(style);

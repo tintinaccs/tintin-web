@@ -37,7 +37,7 @@ function arraySection(source, exportName) {
 
 function parseTokens(section) {
   const tokens = [];
-  const pattern = /\{\s*key:\s*'([^']+)',\s*cssVar:\s*'([^']+)',\s*label:\s*'([^']+)',\s*category:\s*'([^']+)',\s*default:\s*'([^']+)'\s*\}/g;
+  const pattern = /\{\s*key:\s*'([^']+)',\s*cssVar:\s*'([^']+)',\s*label:\s*'([^']+)',\s*category:\s*'([^']+)',\s*default:\s*'([^']+)'(?:,\s*legacyDefault:\s*'[^']+')?\s*\}/g;
   let match;
   while ((match = pattern.exec(section))) {
     tokens.push({ key: match[1], cssVar: match[2], label: match[3], category: match[4], default: match[5] });

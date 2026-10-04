@@ -27,7 +27,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
       .perfil-btn:focus-visible,
       .perfil-back:focus-visible,
       .perfil-wa-box:focus-visible {
-        outline:3px solid color-mix(in srgb,var(--pink-dark,#C52F68) 34%,transparent)!important;
+        outline:3px solid color-mix(in srgb,var(--pink-dark,#F8AACA) 34%,transparent)!important;
         outline-offset:3px!important;
       }
       .perfil-wa-box { color:var(--text,#382d31)!important; }
@@ -42,8 +42,8 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
       .tt-profile-order-head { display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px; }
       .tt-profile-order-meta { font-size:11px;color:var(--text-muted,#755f67);font-weight:750; }
       .tt-profile-order-items { font-size:13px;color:var(--text,#382d31);line-height:1.55; }
-      .tt-profile-order-total { font-size:14px;font-weight:850;color:var(--pink-dark,#C52F68);margin-top:4px; }
-      .tt-profile-order-details{margin-top:10px;border-top:1px solid var(--border,#ecd5de);padding-top:10px}.tt-profile-order-details summary{cursor:pointer;font-size:12px;font-weight:800;color:var(--pink-dark,#C52F68)}
+      .tt-profile-order-total { font-size:14px;font-weight:850;color:var(--color-text-primary,#713C53);margin-top:4px; }
+      .tt-profile-order-details{margin-top:10px;border-top:1px solid var(--border,#ecd5de);padding-top:10px}.tt-profile-order-details summary{cursor:pointer;font-size:12px;font-weight:800;color:var(--color-text-primary,#713C53)}
       .tt-profile-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:14px 0}.tt-profile-step{font-size:10px;text-align:center;color:var(--text-muted,#755f67);border-top:3px solid var(--border,#ecd5de);padding-top:7px}.tt-profile-step.is-done{border-color:var(--success,#267a41);color:var(--success,#267a41);font-weight:800}
       .tt-profile-order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;line-height:1.55}.tt-profile-order-grid strong{display:block}.tt-profile-order-lines{grid-column:1/-1;border-top:1px solid var(--border,#ecd5de);padding-top:8px}.tt-profile-order-line{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
       .tt-profile-status { display:inline-flex;align-items:center;min-height:26px;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.04em;border:1px solid currentColor; }

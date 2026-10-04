@@ -78,7 +78,7 @@ function ensureStatusPanel(checkbox) {
   panel.id = 'cfg-store-sync-status';
   panel.setAttribute('role', 'status');
   panel.style.cssText =
-    'margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12px;line-height:1.5;background:#f5f5f5;color:#666;border:1px solid var(--adm-border)';
+    'margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12px;line-height:1.5;background:#f5f5f5;color:#713C53;border:1px solid var(--adm-border)';
   panel.textContent = 'Comprobando el estado real de la tienda…';
 
   const wrap = checkbox.closest('.adm-toggle-wrap');

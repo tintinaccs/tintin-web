@@ -98,7 +98,7 @@ function injectGateStyle() {
       border: 1px solid rgba(212, 106, 138, .14) !important;
       border-radius: 20px !important;
       background: #fff !important;
-      color: #2f2529 !important;
+      color:#713C53 !important;
       text-align: center !important;
       box-shadow: 0 18px 60px rgba(35, 12, 22, .28) !important;
       pointer-events: auto !important;
@@ -113,7 +113,7 @@ function injectGateStyle() {
 
     #${OVERLAY_ID} .tt-store-gate-title {
       margin: 0 0 12px !important;
-      color: #C52F68 !important;
+      color:#713C53 !important;
       font: 800 clamp(19px, 3.2vw, 22px)/1.25 Montserrat !important;
       overflow-wrap: anywhere !important;
     }
@@ -121,7 +121,7 @@ function injectGateStyle() {
     #${OVERLAY_ID} .tt-store-gate-message {
       max-width: 360px !important;
       margin: 0 auto 26px !important;
-      color: #555 !important;
+      color:#713C53 !important;
       font: 400 clamp(13px, 2.4vw, 14px)/1.65 Montserrat !important;
     }
 
@@ -154,12 +154,12 @@ function injectGateStyle() {
     #${LOGIN_CONTROL_ID} {
       border: 1.5px solid #d9a9b8 !important;
       background: #fff !important;
-      color: #C52F68 !important;
+      color:#713C53 !important;
     }
 
     #${LOGIN_CONTROL_ID}:hover,
     #${LOGIN_CONTROL_ID}:focus-visible {
-      border-color: #C52F68 !important;
+      border-color: #F8AACA !important;
       background: #fff6fa !important;
       outline: 3px solid rgba(212, 106, 138, .22) !important;
       outline-offset: 2px !important;
@@ -167,8 +167,8 @@ function injectGateStyle() {
 
     #tt-store-gate-retry {
       border: 0 !important;
-      background: #C52F68 !important;
-      color: #fff !important;
+      background: #F8AACA !important;
+      color:#713C53 !important;
     }
 
     html.tt-store-gate-degraded {
@@ -190,7 +190,7 @@ function injectGateStyle() {
       border: 1px solid rgba(173, 63, 103, .18) !important;
       border-radius: 18px !important;
       background: rgba(255, 255, 255, .96) !important;
-      color: #3a2d32 !important;
+      color:#713C53 !important;
       box-shadow: 0 14px 40px rgba(58, 20, 35, .16) !important;
       -webkit-backdrop-filter: blur(18px) saturate(1.15) !important;
       backdrop-filter: blur(18px) saturate(1.15) !important;
@@ -215,8 +215,8 @@ function injectGateStyle() {
       padding: 8px 12px !important;
       border: 0 !important;
       border-radius: 999px !important;
-      background: #C52F68 !important;
-      color: #fff !important;
+      background: #F8AACA !important;
+      color:#713C53 !important;
       font: 800 12px/1 Montserrat, sans-serif !important;
       cursor: pointer !important;
       touch-action: manipulation !important;

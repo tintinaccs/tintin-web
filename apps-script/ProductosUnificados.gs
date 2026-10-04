@@ -534,7 +534,16 @@ function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
   ]]);
   sheet.getRange(rowNumber, 9).setValue(purchased == null ? '' : purchased);
   sheet.getRange(rowNumber, 12).setValue(inventory.stockMinimum == null ? '' : inventory.stockMinimum);
-  sheet.getRange(rowNumber, 14, 1, 21).setValues([[
+  // Los campos descriptivos (material, acabado, talles, colección, etiquetas)
+  // pueden combinar opciones o contener texto del catálogo canónico. Apps
+  // Script no acepta esa representación en los desplegables multiselección.
+  // Suspender sus reglas solamente durante la escritura y restaurarlas aun
+  // si el lote falla. Precios, stock, estado y fórmulas conservan sus reglas.
+  var detailRange = sheet.getRange(rowNumber, 23, 1, 12);
+  var detailValidations = detailRange.getDataValidations();
+  try {
+    detailRange.clearDataValidations();
+    sheet.getRange(rowNumber, 14, 1, 21).setValues([[
     inventory.internalNotes || '',
     tintinYesNo_(product.active !== false),
     tintinYesNo_(product.oferta === true),
@@ -556,7 +565,11 @@ function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
     product.collection || '',
     Array.isArray(product.tags) ? product.tags.join(', ') : '',
     product.variants ? JSON.stringify(product.variants) : ''
-  ]]);
+    ]]);
+    SpreadsheetApp.flush();
+  } finally {
+    detailRange.setDataValidations(detailValidations);
+  }
 }
 
 function tintinSyncProductsFromFirestore_(body) {
@@ -1002,8 +1015,20 @@ function doPost(e) {
       phase4CreateOrder_(body, body.idToken)
     )).setMimeType(ContentService.MimeType.JSON);
   }
-  var response = tintinHandleUnifiedProductsPost_(body);
-  if (response) return response;
+  // Apps Script convierte excepciones sin capturar en HTML con HTTP 200.
+  // Mantener ok:false permite a Cloudflare conservar la cola y mostrar la causa.
+  try {
+    var response = tintinHandleUnifiedProductsPost_(body);
+    if (response) return response;
+  } catch (error) {
+    var message = String(error && error.message || error);
+    [body.secret, body.idToken].forEach(function(credential) {
+      if (credential) message = message.split(String(credential)).join('[redacted]');
+    });
+    return ContentService.createTextOutput(JSON.stringify({
+      ok: false, error: message.slice(0, 300), code: 'products_sync_failed'
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
   if (typeof tintinParityHandleServerOrderSync_ === 'function') {
     var orderSyncResponse = tintinParityHandleServerOrderSync_(body);
     if (orderSyncResponse) return orderSyncResponse;

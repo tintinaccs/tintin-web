@@ -112,52 +112,52 @@ input::placeholder,textarea::placeholder{color:var(--tt-muted)!important;opacity
 input:focus,textarea:focus,select:focus,.perfil-input:focus,.ck-input:focus,.ck-select:focus,.login-email-input:focus{border-color:var(--tt-accent);box-shadow:0 0 0 3px var(--tt-focus);outline:none!important}
 body:has(.adm-main) .adm-input:focus,body:has(.adm-main) .adm-select:focus{border-color:var(--admin-color-field-border-focus);box-shadow:0 0 0 3px var(--admin-color-brand);outline:none!important}
 
-.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--tt-accent)!important;background-color:var(--tt-accent)!important;border-color:var(--tt-accent);color:#fff!important}
-.tt-btn *,.tt-btn-primary-full *,.tt-cart-checkout-btn *,.tt-wa-float *,.tt-footer-wa *,.tt-contact-wa-link *,.ck-btn *,.login-google *,.login-email-btn *,.tt-welcome-primary *,.tt-welcome-test-btn *{color:#fff!important}
-.tt-btn:hover,.tt-cart-checkout-btn:hover,.tt-wa-float:hover,.tt-footer-wa:hover,.tt-contact-wa-link:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover{background:var(--tt-accent-hover)!important;background-color:var(--tt-accent-hover)!important;color:#fff!important}
+.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--tt-accent)!important;background-color:var(--tt-accent)!important;border-color:var(--tt-accent);color:#713C53!important}
+.tt-btn *,.tt-btn-primary-full *,.tt-cart-checkout-btn *,.tt-wa-float *,.tt-footer-wa *,.tt-contact-wa-link *,.ck-btn *,.login-google *,.login-email-btn *,.tt-welcome-primary *,.tt-welcome-test-btn *{color:#713C53!important}
+.tt-btn:hover,.tt-cart-checkout-btn:hover,.tt-wa-float:hover,.tt-footer-wa:hover,.tt-contact-wa-link:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover{background:var(--tt-accent-hover)!important;background-color:var(--tt-accent-hover)!important;color:#713C53!important}
 body:has(.adm-main) .adm-btn-primary,body:has(.adm-main) .adm-btn-save{background:var(--admin-color-button-primary-background)!important;background-color:var(--admin-color-button-primary-background)!important;border-color:var(--admin-color-button-primary-background);color:var(--admin-color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-primary *,body:has(.adm-main) .adm-btn-save *{color:var(--admin-color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-primary:hover,body:has(.adm-main) .adm-btn-save:hover{background:var(--admin-color-button-primary-hover)!important;background-color:var(--admin-color-button-primary-hover)!important;color:var(--admin-color-button-primary-text)!important}
 body:has(.adm-main) .adm-btn-danger,body:has(.adm-main) .adm-btn-danger *{color:var(--admin-color-button-danger-text)!important;background:var(--admin-color-button-danger-background)!important}
-.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.login-email-resend,.tt-added-toast-continue{background:var(--tt-surface)!important;border-color:var(--tt-accent);color:var(--tt-accent)!important}
-.tt-btn-outline *,.tt-btn-outline-full *,.ck-btn-back *,.perfil-btn-outline *,.login-email-resend *,.tt-added-toast-continue *{color:var(--tt-accent)!important}
+.tt-btn-outline,.tt-btn-outline-full,.ck-btn-back,.perfil-btn-outline,.login-email-resend,.tt-added-toast-continue{background:var(--tt-surface)!important;border-color:var(--tt-accent);color:var(--color-text-primary,#713C53)!important}
+.tt-btn-outline *,.tt-btn-outline-full *,.ck-btn-back *,.perfil-btn-outline *,.login-email-resend *,.tt-added-toast-continue *{color:var(--color-text-primary,#713C53)!important}
 body:has(.adm-main) .adm-btn-outline,body:has(.adm-main) .adm-btn:not(.adm-btn-primary):not(.adm-btn-danger):not(.adm-btn-save){background:var(--admin-color-background-surface)!important;border-color:var(--admin-color-brand);color:var(--admin-color-button-outline-text)!important}
 body:has(.adm-main) .adm-btn-outline *,body:has(.adm-main) .adm-btn:not(.adm-btn-primary):not(.adm-btn-danger):not(.adm-btn-save) *{color:var(--admin-color-button-outline-text)!important}
 
 .tt-cart-badge,.tt-card-badge,.tt-product-status,.tt-product-badge,.cat-filter-dot,.ck-step-num,.perfil-role-badge,[class*="badge"]:not([class*="adm-"]):not([class*="trust-badge"]),[class*="status"]:not([class*="adm-"]){background:var(--color-badge-background)!important;color:var(--color-badge-text)!important;border-color:var(--tt-accent-mid)}
 body:has(.adm-main) .adm-user-role-badge,body:has(.adm-main) .adm-nav-badge,body:has(.adm-main) .adm-section-badge{background:var(--admin-color-badge-background)!important;color:var(--admin-color-badge-text)!important;border-color:var(--admin-color-brand)}
-.ck-step.active .ck-step-num,.ck-step.active,.cat-filter-option.active,.tt-nav a.active,.tt-mobile-nav a.active,.tt-tabbar-btn.active{background:var(--tt-accent-soft)!important;color:var(--tt-accent)!important;border-color:var(--tt-accent-mid)}
+.ck-step.active .ck-step-num,.ck-step.active,.cat-filter-option.active,.tt-nav a.active,.tt-mobile-nav a.active,.tt-tabbar-btn.active{background:var(--tt-accent-soft)!important;color:var(--color-text-primary,#713C53)!important;border-color:var(--tt-accent-mid)}
 body:has(.adm-main) .adm-nav-item.active,body:has(.adm-main) .adm-mobile-tab.active,body:has(.adm-main) .adm-nav-item:hover,body:has(.adm-main) .adm-mobile-tab:hover{background:var(--admin-color-background-sidebar-active)!important;color:var(--admin-color-text-sidebar-active)!important}
 
 thead{background:var(--tt-accent-soft)!important;color:var(--tt-title)!important;border-color:var(--tt-border)}
 body:has(.adm-main) .adm-table thead,body:has(.adm-main) .adm-table th,body:has(.adm-main) .adm-bulk-toolbar,body:has(.adm-main) #bulk-toolbar,body:has(.adm-main) #orders-bulk-toolbar{background:var(--admin-color-table-header-background)!important;color:var(--admin-color-text-title)!important;border-color:var(--admin-color-border)}
-.cat-filter-option:hover,.tt-dropdown-card:hover,.tt-sheet-item:hover,.tt-quick-cat:hover,.tt-mobile-cat-card:hover{background:var(--tt-surface-soft)!important;color:var(--tt-accent)!important}
-body:has(.adm-main) .adm-table tr:hover{background:var(--admin-color-table-row-hover)!important;color:var(--admin-color-brand)!important}
+.cat-filter-option:hover,.tt-dropdown-card:hover,.tt-sheet-item:hover,.tt-quick-cat:hover,.tt-mobile-cat-card:hover{background:var(--tt-surface-soft)!important;color:var(--color-text-primary,#713C53)!important}
+body:has(.adm-main) .adm-table tr:hover{background:var(--admin-color-table-row-hover)!important;color:var(--color-text-primary,#713C53)!important}
 
 hr,.tt-footer,.tt-footer-bottom,.tt-cart-header,.tt-cart-footer,.tt-sheet-header,.tt-sheet-footer,.perfil-section-title,.tt-info-title,.ck-panel-head{border-color:var(--tt-border)}
 body:has(.adm-main) .adm-nav-divider,body:has(.adm-main) .adm-card-head{border-color:var(--admin-color-border)}
 .tt-footer,.tt-footer-bottom,.tt-tabbar{background:rgba(255,255,255,.97)!important;color:var(--tt-text)!important;border-color:var(--tt-border)}
 body:has(.adm-main) .adm-mobile-tabs{background:var(--admin-color-background-surface)!important;color:var(--admin-color-text-primary)!important;border-color:var(--admin-color-border)}
-a,.tt-footer a:hover,.tt-contact-email{color:var(--tt-accent)!important}
+a,.tt-footer a:hover,.tt-contact-email{color:var(--color-text-primary,#713C53)!important}
 
 svg,.tt-trust-icon,.tt-dropdown-icon,.tt-contact-info-icon,.perfil-wa-icon,.nav-icon,.tt-404-icon{color:var(--tt-muted)!important}
 /* Los iconos blancos necesitan su superficie de marca. La regla genérica de
    svg y los títulos del tema no deben recolorear estos consumidores del panel. */
-body:has(.adm-main) :is(.adm-nav-icon,.adm-stat-icon){background:var(--admin-color-brand-hover)!important;color:#fff!important}
+body:has(.adm-main) :is(.adm-nav-icon,.adm-stat-icon){background:var(--admin-color-brand-hover)!important;color:#713C53!important}
 body:has(.adm-main) .adm-stat-icon{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px}
-body:has(.adm-main) :is(.adm-nav-icon,.adm-stat-icon) svg{color:#fff!important;stroke:currentColor}
+body:has(.adm-main) :is(.adm-nav-icon,.adm-stat-icon) svg{color:#713C53!important;stroke:currentColor}
 html body:has(.adm-main) .adm-sidebar .adm-sidebar-logo{background:var(--admin-color-brand-hover)!important}
-body:has(.adm-main) :is(.adm-sidebar-logo-text,.adm-sidebar-logo-sub,.adm-sidebar-toggle,.adm-sidebar-toggle svg){color:#fff!important}
-body:has(.adm-main) .adm-mobile-tab svg{color:#fff!important;stroke:currentColor}
-body:has(.adm-main) .adm-mobile-tab{background:var(--admin-color-brand-hover)!important;color:#fff!important}
-body:has(.adm-main) .adm-mobile-tab :is(span,div){color:#fff!important}
-.tt-btn svg,.ck-btn svg,.login-google svg,.tt-wa-float svg,.tt-footer-wa svg,.tt-contact-wa-link svg{color:#fff!important}
+body:has(.adm-main) :is(.adm-sidebar-logo-text,.adm-sidebar-logo-sub,.adm-sidebar-toggle,.adm-sidebar-toggle svg){color:#713C53!important}
+body:has(.adm-main) .adm-mobile-tab svg{color:#713C53!important;stroke:currentColor}
+body:has(.adm-main) .adm-mobile-tab{background:var(--admin-color-brand-hover)!important;color:#713C53!important}
+body:has(.adm-main) .adm-mobile-tab :is(span,div){color:#713C53!important}
+.tt-btn svg,.ck-btn svg,.login-google svg,.tt-wa-float svg,.tt-footer-wa svg,.tt-contact-wa-link svg{color:#713C53!important}
 body:has(.adm-main) .adm-btn-primary svg{color:var(--admin-color-button-primary-text)!important}
 
 .login-error,.ck-error,.perfil-toast,.tt-added-toast,.tt-store-closed-box,.login-success,.ck-ship-reminder,.ck-pay-note,.perfil-wa-box,.tt-empty,.cat-empty{background:var(--tt-surface)!important;color:var(--tt-text)!important;border-color:var(--tt-border)}
 body:has(.adm-main) .adm-error{background:var(--admin-color-background-surface)!important;color:var(--admin-color-text-primary)!important;border-color:var(--admin-color-border)}
 #tt-loader,#tt-intro{background:var(--tt-page-bg)!important;gap:0}
-::selection{background:var(--tt-accent)!important;color:#fff!important}
+::selection{background:var(--tt-accent)!important;color:#713C53!important}
 .tt-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 
 /* Enlaces semánticos del Esquema de colores.
@@ -232,7 +232,7 @@ body:not(:has(.adm-main)) :is(.tt-btn-transparent,[data-button-variant="transpar
 
 /* El selector global de texto de la interfaz también alcanza a los botones.
    Mantener el texto de las acciones primarias en blanco evita que el token
-   de texto de página (#2B2B2B) reemplace el contraste de la superficie rosa. */
+   de texto de página (#713C53) reemplace el contraste de la superficie rosa. */
 html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline):not(.tt-btn-outline-full),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary){
   color:var(--color-button-primary-text,#FFFFFF)!important;
 }
@@ -243,11 +243,10 @@ html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline):not(.tt-btn-outl
   color:inherit!important;
 }
 
-/* Las etiquetas de colecciones viven sobre fotografías: la pastilla oscura
-   mantiene legibilidad estable aunque cambie la imagen o su recorte. */
+/* Etiquetas de colecciones: tarjeta blanca legible sobre la fotografía. */
 html body:not(:has(.adm-main)) .tt-coll-card-label{
-  color:#FFFFFF!important;
-  background:rgba(43,43,43,.72)!important;
+  color:#713C53!important;
+  background:#FFFFFF!important;
   border-radius:999px;
   padding:6px 10px;
   text-shadow:none;

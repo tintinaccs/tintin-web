@@ -110,7 +110,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
         border:1.5px solid #F1C8D5;
         border-radius:999px;
         background:#FFFFFF;
-        color:#C52F68;
+        color:#713C53;
         font:800 12px/1.2 Montserrat;
         padding:10px 14px;
         cursor:pointer;
@@ -122,7 +122,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
         text-align:center;
       }
       .tt-map-smart-button:hover,
-      .tt-map-smart-button:focus-visible { border-color:#C52F68;box-shadow:0 0 0 3px rgba(173,63,103,.10);outline:0; }
+      .tt-map-smart-button:focus-visible { border-color:#F8AACA;box-shadow:0 0 0 3px rgba(173,63,103,.10);outline:0; }
       .tt-map-smart-help {
         margin:0 2px 8px;
         color:#755F67;
@@ -146,7 +146,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
         border:0;
         border-bottom:1px solid #F8E6EC;
         background:#FFFFFF;
-        color:#2B2B2B;
+        color:#713C53;
         padding:12px 14px;
         text-align:left;
         cursor:pointer;
@@ -256,8 +256,8 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
         <div class="ck-empty">
           <div class="ck-empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
           <div class="ck-empty-text">Tu carrito está vacío</div>
-          <p style="color:#8B5B6B;font-size:13px;margin:6px 0 16px">Agregá un producto para comenzar una compra nueva.</p>
-          <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#C52F68;color:#fff!important;font-weight:800">Ver catálogo →</a>
+          <p style="color:var(--color-text-primary,#713C53);font-size:13px;margin:6px 0 16px">Agregá un producto para comenzar una compra nueva.</p>
+          <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#F8AACA;color:#713C53!important;font-weight:800">Ver catálogo →</a>
         </div>`;
       subtotalNode.textContent = 'Gs. 0';
       return;

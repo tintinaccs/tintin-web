@@ -18,7 +18,7 @@ function injectStyles() {
   style.textContent = `
     .tcp-pop{position:fixed;z-index:9000;width:min(344px,calc(100vw - 20px));max-height:calc(100vh - 20px);overflow:auto;background:var(--admin-color-background-surface,#fff);border:1px solid var(--admin-color-border,#F1E4E7);border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:14px;font-family:"Montserrat"}
     .tcp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
-    .tcp-title{font-size:13px;font-weight:800;color:var(--admin-color-text-title,#2B2B2B)}
+    .tcp-title{font-size:13px;font-weight:800;color:var(--admin-color-text-title,#713C53)}
     .tcp-subtitle{font-size:10.5px;line-height:1.35;color:var(--admin-color-text-secondary,#7B6F72);margin-top:2px;overflow-wrap:anywhere}
     .tcp-close{width:28px;height:28px;padding:0;border-radius:8px}
     .tcp-sv{position:relative;width:100%;height:142px;border-radius:10px;cursor:crosshair;margin-bottom:12px;overflow:hidden;touch-action:none}
@@ -27,23 +27,23 @@ function injectStyles() {
     .tcp-sv-cursor{position:absolute;width:15px;height:15px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:none}
     .tcp-control{display:grid;grid-template-columns:24px minmax(0,1fr) 50px;align-items:center;gap:8px;margin-bottom:8px}
     .tcp-control label{font-size:10.5px;font-weight:800;color:var(--admin-color-text-secondary,#7B6F72);text-align:center}
-    .tcp-range{width:100%;accent-color:var(--admin-color-brand,#C52F68);cursor:pointer}
-    .tcp-number{width:50px;padding:5px 4px;border:1px solid var(--admin-color-field-border,#F1E4E7);border-radius:7px;font-size:11px;text-align:center;font-family:"Montserrat";color:var(--admin-color-text-primary,#2B2B2B);background:var(--admin-color-field-background,#fff)}
+    .tcp-range{width:100%;accent-color:var(--admin-color-brand,#F8AACA);cursor:pointer}
+    .tcp-number{width:50px;padding:5px 4px;border:1px solid var(--admin-color-field-border,#F1E4E7);border-radius:7px;font-size:11px;text-align:center;font-family:"Montserrat";color:var(--admin-color-text-primary,#713C53);background:var(--admin-color-field-background,#fff)}
     .tcp-preview-row{display:flex;gap:8px;align-items:center;margin:11px 0}
     .tcp-preview{flex:1;height:38px;border-radius:9px;border:1px solid var(--admin-color-border,#F1E4E7);position:relative;overflow:hidden;background-image:linear-gradient(45deg,#ddd 25%,transparent 25%),linear-gradient(-45deg,#ddd 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ddd 75%),linear-gradient(-45deg,transparent 75%,#ddd 75%);background-size:8px 8px;background-position:0 0,0 4px,4px -4px,-4px 0}
     .tcp-preview-color{position:absolute;inset:0}
     .tcp-preview-label{position:absolute;z-index:1;bottom:3px;left:6px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:rgba(0,0,0,.62);background:rgba(255,255,255,.82);padding:1px 5px;border-radius:4px}
     .tcp-input-row{display:flex;gap:6px;margin-bottom:6px}
-    .tcp-input{flex:1;min-width:0;padding:8px 9px;border:1px solid var(--admin-color-field-border,#F1E4E7);border-radius:9px;font-size:12px;font-family:"Montserrat";color:var(--admin-color-text-primary,#2B2B2B);background:var(--admin-color-field-background,#fff)}
+    .tcp-input{flex:1;min-width:0;padding:8px 9px;border:1px solid var(--admin-color-field-border,#F1E4E7);border-radius:9px;font-size:12px;font-family:"Montserrat";color:var(--admin-color-text-primary,#713C53);background:var(--admin-color-field-background,#fff)}
     .tcp-input.tcp-invalid{border-color:var(--admin-color-error-text,#b8341f);box-shadow:0 0 0 2px var(--admin-color-error-background,#fde3e1)}
     .tcp-err{font-size:10.5px;color:var(--admin-color-error-text,#b8341f);margin:0 0 8px}
     .tcp-btnrow{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-    .tcp-btn{border:1px solid var(--admin-color-border,#F1E4E7);background:var(--admin-color-background-surface,#fff);color:var(--admin-color-text-primary,#2B2B2B);border-radius:8px;padding:7px 9px;font-size:11px;font-family:"Montserrat";font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px}
+    .tcp-btn{border:1px solid var(--admin-color-border,#F1E4E7);background:var(--admin-color-background-surface,#fff);color:var(--admin-color-text-primary,#713C53);border-radius:8px;padding:7px 9px;font-size:11px;font-family:"Montserrat";font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px}
     .tcp-btn:hover{background:var(--admin-color-background-page,#FFF6FA)}
     .tcp-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:10px;border-top:1px solid var(--admin-color-border,#F1E4E7)}
-    .tcp-cancel{background:var(--admin-color-background-surface,#fff);color:var(--admin-color-button-outline-text,#C52F68);border-color:var(--admin-color-button-outline-text,#C52F68)}
-    .tcp-confirm{background:var(--admin-color-button-primary-background,#C52F68);color:var(--admin-color-button-primary-text,#fff);border-color:var(--admin-color-button-primary-background,#C52F68)}
-    .tcp-confirm:hover{background:var(--admin-color-button-primary-hover,#C52F68)}
+    .tcp-cancel{background:var(--admin-color-background-surface,#fff);color:var(--admin-color-button-outline-text,#F8AACA);border-color:var(--admin-color-button-outline-text,#F8AACA)}
+    .tcp-confirm{background:var(--admin-color-button-primary-background,#F8AACA);color:var(--admin-color-button-primary-text,#fff);border-color:var(--admin-color-button-primary-background,#F8AACA)}
+    .tcp-confirm:hover{background:var(--admin-color-button-primary-hover,#F8AACA)}
     .tcp-swatch{width:30px;height:30px;border-radius:8px;border:1px solid var(--admin-color-border,#F1E4E7);cursor:pointer;flex-shrink:0;background-size:8px 8px}
     @media (max-width:520px){.tcp-pop{width:calc(100vw - 16px);padding:12px}.tcp-sv{height:128px}}
   `;
@@ -102,7 +102,7 @@ function hslToRgb(h, s, l) {
   };
 }
 
-function normalizedColor(value, fallback = '#C52F68') {
+function normalizedColor(value, fallback = '#F8AACA') {
   const parsed = parseColor(value) || parseColor(fallback);
   const hsl = rgbToHsl(parsed.r, parsed.g, parsed.b);
   return { h: hsl.h, s: hsl.s, l: hsl.l, a: parsed.a };
@@ -110,7 +110,7 @@ function normalizedColor(value, fallback = '#C52F68') {
 
 export function attachColorPicker(triggerEl, opts = {}) {
   injectStyles();
-  const initialValue = isValidColor(opts.value) ? opts.value : '#C52F68';
+  const initialValue = isValidColor(opts.value) ? opts.value : '#F8AACA';
   const initial = normalizedColor(initialValue);
   const state = {
     committed: initialValue,
@@ -247,7 +247,7 @@ export function attachColorPicker(triggerEl, opts = {}) {
         <div class="tcp-preview"><div class="tcp-preview-color" data-tcp="preview-now"></div><span class="tcp-preview-label">Nuevo</span></div>
       </div>
       <div class="tcp-input-row">
-        <input type="text" class="tcp-input" data-tcp="text-input" spellcheck="false" aria-label="Color en HEX, RGB o HSL" placeholder="#C52F68, rgb(...), hsl(...)">
+        <input type="text" class="tcp-input" data-tcp="text-input" spellcheck="false" aria-label="Color en HEX, RGB o HSL" placeholder="#F8AACA, rgb(...), hsl(...)">
       </div>
       <div class="tcp-err" data-tcp="err" role="alert" style="display:none">Ingresá un valor HEX, RGB o HSL válido.</div>
       <div class="tcp-btnrow">

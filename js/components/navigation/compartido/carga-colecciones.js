@@ -170,7 +170,7 @@ function createStateNode(message, kind = 'info') {
     const retry = document.createElement('button');
     retry.type = 'button';
     retry.textContent = 'Reintentar';
-    retry.style.cssText = 'margin-top:8px;border:0;border-radius:999px;padding:7px 14px;background:#b84c72;color:#fff!important;font:700 11px Montserrat;cursor:pointer;';
+    retry.style.cssText = 'margin-top:8px;border:0;border-radius:999px;padding:7px 14px;background:#F8AACA;color:#713C53!important;font:700 11px Montserrat;cursor:pointer;';
     retry.addEventListener('click', () => {
       started = false;
       initNavCollections(true);
@@ -245,7 +245,7 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-admin-ready-20261002-1-brand-20261004-1')
+  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-admin-ready-20261002-1-brand-20261004-1-owner-pink-20261004-1')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

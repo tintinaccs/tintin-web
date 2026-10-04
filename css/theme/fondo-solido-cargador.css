@@ -1,12 +1,12 @@
 html:has(body #tt-loader:not(.tt-out)),
 html:has(body #tt-loader:not(.tt-out)) body {
-  background: #C52F68 !important;
-  background-color: #C52F68 !important;
+  background: #F8AACA !important;
+  background-color: #F8AACA !important;
 }
 
 html body #tt-loader {
-  background: #C52F68 !important;
-  background-color: #C52F68 !important;
+  background: #F8AACA !important;
+  background-color: #F8AACA !important;
   background-image: none !important;
   background-blend-mode: normal !important;
   backdrop-filter: none !important;
@@ -26,8 +26,8 @@ html body #tt-loader::before {
   inset: 0;
   z-index: 0;
   display: block;
-  background: #C52F68 !important;
-  background-color: #C52F68 !important;
+  background: #F8AACA !important;
+  background-color: #F8AACA !important;
   background-image: none !important;
   opacity: 1 !important;
   pointer-events: none;
@@ -104,14 +104,14 @@ html body #tt-loader-brand-subtitle {
 /* La identidad blanca conserva contraste AA sobre el rosa de marca. */
 html body #tt-loader-wordmark,
 html body #tt-loader-wordmark .tt-loader-wordmark-i {
-  color: #ffffff !important;
+  color: #713C53 !important;
 }
 
-/* Títulos y mensajes blancos sobre el rosa uniforme de marca (AA). */
+/* Títulos y mensajes malva sobre el rosa claro de marca (AA). */
 html body #tt-loader-brand-subtitle,
 html body #tt-loader-title,
 html body #tt-loader-subtitle {
-  color: #ffffff !important;
+  color: #713C53 !important;
 }
 
 html body #tt-loader-wordmark .tt-loader-wordmark-i::before,
@@ -168,8 +168,8 @@ html body:has(.login-page).tt-public-shell-mounted {
    sitio. Esta regla final anula únicamente la excepción visual antigua; el
    estado interno tt-auth-silent-transition conserva su comportamiento. */
 html:has(.login-page) body #tt-loader {
-  background: #C52F68 !important;
-  background-color: #C52F68 !important;
+  background: #F8AACA !important;
+  background-color: #F8AACA !important;
 }
 
 html:has(.login-page) body #tt-loader-spin-wrap {

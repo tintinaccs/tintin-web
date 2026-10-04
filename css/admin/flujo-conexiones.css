@@ -96,11 +96,11 @@
 .tfc-state-implementado-pero-no-verificado { background: #fff8e1; color: #8d6e00; border-color: #ffe082; }
 .tfc-state-conectado-parcialmente { background: var(--admin-color-warning-background); color: var(--admin-color-warning-text); border-color: #ffd9a8; }
 .tfc-state-con-error { background: var(--admin-color-error-background); color: var(--admin-color-error-text); border-color: #f5b7ae; }
-.tfc-state-desconectado { background: #f3f3f3; color: #5a5a5a; border-color: #dcdcdc; }
-.tfc-state-no-implementado { background: #ececec; color: #333; border-color: #d5d5d5; }
-.tfc-state-documentado-pero-no-confirmado { background: #ede7f6; color: var(--admin-color-brand, #C52F68); border-color: #d1c4e9; }
+.tfc-state-desconectado { background: #f3f3f3; color:#713C53; border-color: #dcdcdc; }
+.tfc-state-no-implementado { background: #ececec; color:#713C53; border-color: #d5d5d5; }
+.tfc-state-documentado-pero-no-confirmado { background: #ede7f6; color:var(--color-text-primary,#713C53); border-color: #d1c4e9; }
 .tfc-state-duplicado-o-en-conflicto { background: #fde3e1; color: #b8341f; border-color: #f5b7ae; }
-.tfc-state-desconocido { background: #eeeeee; color: #616161; border-color: #d5d5d5; }
+.tfc-state-desconocido { background: #eeeeee; color:#713C53; border-color: #d5d5d5; }
 
 .tfc-pill-state {
   border-radius: 999px;

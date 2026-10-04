@@ -12,7 +12,7 @@
   border: 0;
   border-radius: 50%;
   background: #eef1f4;
-  color: #101114;
+  color:#713C53;
   cursor: pointer;
   box-shadow: none;
 }
@@ -22,7 +22,7 @@
 .adm-notifications-button[aria-expanded="true"] {
   background: #e1e6eb;
   border-color: transparent;
-  color: #101114;
+  color:#713C53;
   outline: none;
 }
 
@@ -58,7 +58,7 @@
 
 .adm-notifications-header h3 {
   margin: 2px 0 0;
-  color: var(--admin-color-brand, #C52F68);
+  color:var(--color-text-primary,#713C53);
   font-size: 18px;
 }
 
@@ -97,7 +97,7 @@
   border: 1px solid transparent;
   border-radius: 17px;
   background: transparent;
-  color: #4a3540;
+  color:#713C53;
 }
 
 .adm-notification-card:hover,
@@ -134,7 +134,7 @@
   border: 1px solid #efc8d7;
   border-radius: 999px;
   background: #fff;
-  color: var(--admin-color-brand, #C52F68);
+  color:var(--color-text-primary,#713C53);
   font: inherit;
   font-size: 10px;
   font-weight: 800;
@@ -155,7 +155,7 @@
   border: 1px solid #efc8d7;
   border-radius: 50%;
   background: #fff;
-  color: var(--admin-color-brand, #C52F68);
+  color:var(--color-text-primary,#713C53);
 }
 
 .adm-notification-icon[data-icon="order"] {
@@ -209,7 +209,7 @@
 .adm-notification-avatar-fallback {
   display: grid;
   place-items: center;
-  color: var(--admin-color-brand, #C52F68);
+  color:var(--color-text-primary,#713C53);
   background: #fff2f7;
   font-weight: 800;
 }

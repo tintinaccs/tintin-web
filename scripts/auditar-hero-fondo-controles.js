@@ -15,7 +15,7 @@ const checks = [
   ['Ajuste independiente en mobile', home.includes('object-fit:var(--tt-hero-fit-mobile,cover)!important') && home.includes('--tt-hero-scale-mobile')],
   ['Botón secundario del hero siempre legible', home.includes('.tt-hero-actions .tt-btn-outline') && home.includes('background:#FFFFFF!important')],
   ['Consentimiento de privacidad sólido', cleanup.includes('#tt-privacy-consent.tt-privacy-consent') && cleanup.includes('isolation:isolate!important')],
-  ['Botón Tienda conserva color de marca', cleanup.includes('#btn-tienda') && cleanup.includes('color:var(--tt-accent,var(--color-brand-primary, #C52F68))!important')]
+  ['Botón Tienda conserva color de marca', cleanup.includes('#btn-tienda') && cleanup.includes('color:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important')]
 ];
 
 let failed = 0;

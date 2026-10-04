@@ -30,7 +30,11 @@ function loadLeaflet() {
     script.integrity = LEAFLET_JS_INTEGRITY;
     script.crossOrigin = 'anonymous';
     script.onload = () => resolve(window.L);
-    script.onerror = () => reject(new Error('No se pudo cargar el mapa'));
+    script.onerror = () => {
+      leafletPromise = null;
+      script.remove();
+      reject(new Error('No se pudo cargar el mapa'));
+    };
     document.head.appendChild(script);
   });
   return leafletPromise;
@@ -39,7 +43,7 @@ function loadLeaflet() {
 function pinIcon(L) {
   return L.divIcon({
     className: '',
-    html: '<div style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))"><svg width="32" height="32" viewBox="0 0 24 24" fill="#e91e8c" stroke="#e91e8c" stroke-width="1"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z" stroke="none"/><circle cx="12" cy="10" r="3" fill="#fff" stroke="none"/></svg></div>',
+    html: '<div style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))"><svg width="32" height="32" viewBox="0 0 24 24" fill="#F8AACA" stroke="#F8AACA" stroke-width="1"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z" stroke="none"/><circle cx="12" cy="10" r="3" fill="#fff" stroke="none"/></svg></div>',
     iconSize: [32, 32],
     iconAnchor: [16, 32],
   });
@@ -72,6 +76,7 @@ export async function createLocationMap({
   locateButton,
   onChange,
   onError,
+  readOnly = false,
 } = {}) {
   if (!mapEl) throw new Error('createLocationMap necesita un contenedor');
 
@@ -148,7 +153,7 @@ export async function createLocationMap({
     if (!icon) icon = pinIcon(L);
     const latlng = L.latLng(lat, lng);
     if (marker) marker.setLatLng(latlng);
-    else marker = L.marker(latlng, { icon, draggable: true }).addTo(map);
+    else marker = L.marker(latlng, { icon, draggable: !readOnly }).addTo(map);
 
     marker.off('dragend').on('dragend', () => {
       const position = marker.getLatLng();
@@ -174,7 +179,7 @@ export async function createLocationMap({
     if (scroll) mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-  map.on('click', event => placeMarker(event.latlng.lat, event.latlng.lng));
+  if (!readOnly) map.on('click', event => placeMarker(event.latlng.lat, event.latlng.lng));
 
   const locateCurrent = () => new Promise(resolve => {
     if (locating) { resolve(false); return; }
@@ -345,7 +350,7 @@ export async function createLocationMap({
 
   return {
     getLocation: () => location,
-    setLocation: place => applyPlace(place),
+    setLocation: (place, options) => applyPlace(place, options),
     locateCurrent,
     invalidateSize: () => map.invalidateSize(),
     destroy: () => {

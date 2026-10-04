@@ -3,7 +3,7 @@
 if(window.TintinThemeColorSanitizerBooted)return;
 window.TintinThemeColorSanitizerBooted=true;
 var HARD_COLORS={
- '#2b2b2b':'var(--tt-text)',
+ '#713C53':'var(--tt-text)',
  '#7b6f72':'var(--tt-muted)',
  '#d46a8a':'var(--tt-accent)',
  '#f6b7c8':'var(--tt-accent-mid)',
@@ -19,7 +19,7 @@ function replaceHardColors(value){
  if(!value)return value;
  var out=String(value);
  Object.keys(HARD_COLORS).forEach(function(k){out=out.replace(new RegExp(k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),HARD_COLORS[k]);});
- out=out.replace(/linear-gradient\([^)]*#2b2b2b[^)]*#7b6f72[^)]*\)/gi,'var(--tt-accent)');
+ out=out.replace(/linear-gradient\([^)]*#713C53[^)]*#7b6f72[^)]*\)/gi,'var(--tt-accent)');
  return out;
 }
 function sanitizeAttrs(root){

@@ -74,20 +74,20 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
 .login-username-status {
   position:absolute; right:14px; top:50%; transform:translateY(-50%);
   display:inline-flex; align-items:center; gap:6px; max-width:135px;
-  color:var(--login-muted); font-size:11px; font-weight:700; line-height:1.2; text-align:right;
+  color:var(--color-text-primary,#713C53); font-size:11px; font-weight:700; line-height:1.2; text-align:right;
 }
 .login-username-status[data-state="available"] { color:#1f7a50; }
 .login-username-status[data-state="available"]::before { content:"✓"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#e7f7ee; font-size:12px; }
-.login-username-status[data-state="taken"],.login-username-status[data-state="invalid"] { color:var(--color-brand-primary, #C52F68); }
+.login-username-status[data-state="taken"],.login-username-status[data-state="invalid"] { color:var(--color-text-primary,#713C53); }
 .login-username-status[data-state="taken"]::before,.login-username-status[data-state="invalid"]::before { content:"×"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#fff0f3; font-size:15px; }
-.login-username-status[data-state="checking"] { color:var(--login-muted); }
+.login-username-status[data-state="checking"] { color:var(--color-text-primary,#713C53); }
 
 /* Los conflictos pertenecen al campo exacto: el contenedor crece de forma
    natural y no superpone el aviso sobre el siguiente pill. */
 .login-profile-field-error {
   display:none;
   margin:7px 0 12px;
-  color:var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
   font-size:12px;
   font-weight:700;
   line-height:1.35;
@@ -104,7 +104,7 @@ body:has(.login-page).login-setup-open #login-profile-phone-field .login-profile
 }
 body:has(.login-page) .login-username-status.show {
   display:flex !important;
-  color:var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
   margin-top:8px;
   min-height:20px;
 }
@@ -165,11 +165,11 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
   background:#fff; padding:clamp(16px,2vw,22px);
 }
 body:has(.login-page) .login-email-btn {
-  background:var(--color-brand-primary, #C52F68) !important; color:#fff !important; border:0 !important;
+  background:var(--color-brand-primary, #F8AACA) !important; color:#713C53 !important; border:0 !important;
   box-shadow:0 8px 18px rgba(216,79,134,.22) !important;
 }
 body:has(.login-page) .login-email-btn:hover,
-body:has(.login-page) .login-email-btn:focus-visible { background:var(--color-brand-primary, #C52F68) !important; }
+body:has(.login-page) .login-email-btn:focus-visible { background:var(--color-brand-primary, #F8AACA) !important; }
 body:has(.login-page) .login-field-hint { margin:4px 0 0 !important; min-height:0; line-height:1.35; }
 body:has(.login-page) .login-username-control { margin-bottom:0; }
 body:has(.login-page) .login-username-control .login-email-input { padding-right:16px; }
@@ -184,7 +184,7 @@ body:has(.login-page) .login-username-status {
 }
 body:has(.login-page) .login-username-status[data-state="idle"] { display:none; }
 body:has(.login-page) .login-phone-country {
-  flex-basis:88px !important; color:#604653 !important; background:#f9edf1 !important;
+  flex-basis:88px !important; color:#713C53 !important; background:#f9edf1 !important;
   opacity:1; cursor:default;
 }
 @media (max-width:599px) {

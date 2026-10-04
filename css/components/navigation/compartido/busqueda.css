@@ -80,7 +80,7 @@
   border: 1px solid rgba(173, 63, 103, .14);
   border-radius: 16px;
   background: #fff;
-  color: #2f252a;
+  color:#713C53;
   text-decoration: none;
   transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
@@ -117,7 +117,7 @@
 
 .tt-search-result-copy strong {
   overflow: hidden;
-  color: #2e2429;
+  color:#713C53;
   font-size: .94rem;
   line-height: 1.3;
   text-overflow: ellipsis;
@@ -140,13 +140,13 @@
   padding: 9px 18px;
   border: 0;
   border-radius: 999px;
-  background: var(--color-brand-primary, #C52F68);
-  color: #fff;
+  background: var(--color-brand-primary, #F8AACA);
+  color:#713C53;
   font-weight: 750;
   cursor: pointer;
 }
 .tt-search-retry:hover,
-.tt-search-retry:focus-visible { background: var(--color-brand-primary, #C52F68); outline: 3px solid rgba(173,63,103,.22); outline-offset: 2px; }
+.tt-search-retry:focus-visible { background: var(--color-brand-primary, #F8AACA); outline: 3px solid rgba(173,63,103,.22); outline-offset: 2px; }
 
 @media (max-width: 767px) {
   #search-panel.tt-search-panel .tt-search-results { padding-top: 12px !important; }
