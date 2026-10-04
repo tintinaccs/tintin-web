@@ -72,6 +72,7 @@ jobs:
         run: |
           node --test tests/operations/*.test.mjs
           npm run test:phase2-import
+          node --test tests/import/inventory-reservation-review.test.mjs
           npm run audit:phase2-contract
           node --test tests/seo/shopify-independent-media.test.mjs
           node --test tests/seo/pages-dev-indexing-middleware.test.mjs
@@ -123,6 +124,7 @@ jobs:
           npm run test:cart-quantity-browser
           npm run test:phase8-ui
           npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium
+          npx playwright test tests/ui-ux/inventory-reservation-review.spec.js --project=chromium
           npm run test:phase10-a11y
           npm run test:phase11-seo
           npm run test:performance
