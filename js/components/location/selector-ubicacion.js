@@ -6,7 +6,7 @@
 
 import { apiUrl } from "../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
-const DEBOUNCE_MS = 320;
+const DEBOUNCE_MS = 600;
 const MIN_QUERY_LENGTH = 3;
 
 function isUsableCoord(value) {
@@ -17,7 +17,7 @@ function isUsableCoord(value) {
 function normalizePlaces(data) {
   const places = Array.isArray(data?.places) ? data.places : [];
   return places
-    .filter(place => isUsableCoord(place?.lat) && isUsableCoord(place?.lng))
+    .filter(place => isUsableCoord(place?.lat) && isUsableCoord(place?.lng) && Math.abs(Number(place.lat)) <= 90 && Math.abs(Number(place.lng)) <= 180)
     .map(place => ({
       lat: Number(place.lat),
       lng: Number(place.lng),
@@ -36,8 +36,8 @@ export function parseLocationSearchInput(rawValue) {
   const raw = String(rawValue || '').trim();
   if (!raw) return null;
   const coordinatePatterns = [
-    /@(-?\d{1,3}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/,
     /!3d(-?\d{1,3}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i,
+    /@(-?\d{1,3}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/,
     /(?:query|q|ll|center|destination|origin)=(-?\d{1,3}(?:\.\d+)?)(?:%2C|,|%252C)(-?\d{1,3}(?:\.\d+)?)/i,
     /^\s*(-?\d{1,3}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)\s*$/,
   ];
@@ -98,10 +98,9 @@ export async function searchPlaces(query, { signal } = {}) {
         sawSuccessfulResponse = true;
         const data = await response.json();
       const places = normalizePlaces(data);
-      if (places.length) return places;
-      lastError = new Error('location_search_empty');
+      return places; // La ruta alternativa tiene el mismo backend: no repetir una lista vacía.
     } catch (error) {
-      if (error?.name === 'AbortError') return [];
+      if (error?.name === 'AbortError' || signal?.aborted) throw error;
       lastError = error;
     }
   }

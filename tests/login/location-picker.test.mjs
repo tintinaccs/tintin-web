@@ -97,7 +97,7 @@ test('el buscador convierte un enlace de Google Maps con coordenadas en un lugar
 });
 
 test('checkout acepta enlaces completos de Google Maps con coordenadas', () => {
-    const source = fs.readFileSync(path.join(root, 'js/pages/checkout/checkout-confiabilidad.js'), 'utf8');
+    const source = fs.readFileSync(path.join(root, 'js/components/location/mapa-ubicacion.js'), 'utf8');
     const selectorSource = fs.readFileSync(path.join(root, 'js/components/location/selector-ubicacion.js'), 'utf8');
     assert.match(selectorSource, /!3d/);
     assert.match(selectorSource, /center\|destination\|origin/);

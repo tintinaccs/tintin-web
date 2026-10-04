@@ -98,7 +98,7 @@ function fixtureHtml() {
       window.openOrderEdit=id=>call('openOrderEdit',id); window.updateOrderStatus=(id,s)=>{call('updateOrderStatus',id,s);return true}; window.updatePayStatus=(id,s)=>{call('updatePayStatus',id,s);return true};
       window.resendOrderEmail=id=>call('resendOrderEmail',id); window.deleteOrder=id=>call('deleteOrder',id);
     </script>
-    <script type="module" src="/js/admin/shopify-commerce-admin.js?v=tintin-20260908-appcheck-ready-1-admin-ready-20261002-1"></script>
+    <script type="module" src="/js/admin/shopify-commerce-admin.js?v=tintin-20261004-location-consistency-1"></script>
   </body></html>`;
 }
 
