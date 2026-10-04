@@ -134,6 +134,9 @@ try {
     const context = await shellBrowser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.setContent(shellFixture, { waitUntil: 'load' });
+    // El puntero inicial (0,0) está sobre el rail: medir compacto requiere
+    // colocarlo fuera antes de activar la apertura por hover.
+    await page.mouse.move(width - 10, 300);
     await page.addScriptTag({ content: sidebarRuntime });
     const toggle = page.locator('#adm-sidebar-toggle');
     let toggleState = null;
@@ -210,7 +213,7 @@ try {
     const issues = [];
     if (state.docWidth > width + 2 || state.bodyWidth > width + 2) issues.push(`overflow global ${state.docWidth}/${state.bodyWidth} > ${width}`);
     if (width > 540) {
-      if (!toggleState?.compactBrand?.centered || toggleState.compactBrand.gap < 6) issues.push('marca compacta descentrada o pegada al botón');
+      if (!toggleState?.compactBrand?.centered || toggleState.compactBrand.gap < 6) issues.push(`marca compacta descentrada o pegada al botón: ${JSON.stringify(toggleState.compactBrand)}`);
       if (!['none', 'normal'].includes(toggleState?.compactBrand?.pseudo)) issues.push('marca compacta conserva badge TT');
       if (Math.abs(toggleState.compactWidth-74)>2) issues.push('rail inicial no mide 74px');
       if (Math.abs(toggleState.peek.width-260)>2 || Math.abs(toggleState.peek.left-74)>2) issues.push('hover desplaza contenido o no expande');

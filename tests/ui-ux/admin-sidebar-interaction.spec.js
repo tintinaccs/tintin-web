@@ -6,6 +6,7 @@ const shell=fs.readFileSync(path.join(root,'admin.html'),'utf8');
 const runtime=fs.readFileSync(path.join(root,'js/admin/sidebar-expandible-admin.js'),'utf8');
 async function load(page,width) {
   await page.setViewportSize({width,height:1000});
+  await page.mouse.move(width-10,300);
   // Real markup/cascade and sidebar runtime; all business scripts/connections
   // are blocked. This fixture cannot authenticate or write business data.
   await page.route('**/*.js*',route=>route.fulfill({contentType:'text/javascript',body:route.request().url().includes('/sidebar-expandible-admin.js')?runtime:''}));
