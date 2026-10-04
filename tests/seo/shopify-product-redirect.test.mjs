@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { legacyProductHandleAliases } from '../../functions/products/[handle].js';
+import { legacyProductHandleAliases, normalizeShopifyHandle } from '../../functions/products/[handle].js';
+
+test('Shopify handles with underscores normalize to the legacy alias format', () => {
+  assert.equal(normalizeShopifyHandle('sin-nombre-21feb_17-25'), 'sin-nombre-21feb-17-25');
+  assert.equal(normalizeShopifyHandle('gafas__royal'), 'gafas-royal');
+  assert.equal(normalizeShopifyHandle('invalid/handle'), '');
+});
 
 test('legacy product aliases include the Shopify handle preserved by import', () => {
   const aliases = legacyProductHandleAliases({

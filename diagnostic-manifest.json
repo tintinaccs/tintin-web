@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "373a66fef300a51cd86546a5cddad319d82badad2c458ddb433632269060a7af",
+  "sourceFingerprint": "e8a92acde6b5c9f9f87cc08ac711a3788fbb5c9305858ca596cb1c1f86d9af86",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 945,
     "textFiles": 904,
-    "totalBytes": 18215738,
+    "totalBytes": 18218599,
     "pages": 19,
     "modules": 653
   },
@@ -20581,8 +20581,8 @@
     },
     {
       "path": "functions/products/[handle].js",
-      "bytes": 3410,
-      "sha256": "a974f26f06f73f6ef58c816a8665f4acc8dff9adf5c6a38b09ca0d5853b28119",
+      "bytes": 3528,
+      "sha256": "48d993f4e18629554936aee3482afa9cac32bf165dc66041765438eb5ae961ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34951,8 +34951,8 @@
     },
     {
       "path": "tests/seo/shopify-product-redirect.test.mjs",
-      "bytes": 806,
-      "sha256": "e9eb2bf1841ce377af9eb9059f2724e1c632dd597d86f696530c226e3a221f76",
+      "bytes": 1146,
+      "sha256": "a2f8ec86afffd3d5a4c3b3a8a5fef85bf84fd7048ab090dc62c6781013fc9872",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37465,8 +37465,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 154042,
-      "sha256": "d38d56080afca7c372f6a8df114024f9a20540c9cc3e9be519b7728a34e8e153"
+      "bytes": 156445,
+      "sha256": "155df699e5bf209af950eda10681843f346d198d754460444d9c30474fa21f7e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -38263,8 +38263,8 @@
     {
       "path": "functions/products/[handle].js",
       "extension": ".js",
-      "bytes": 3410,
-      "sha256": "a974f26f06f73f6ef58c816a8665f4acc8dff9adf5c6a38b09ca0d5853b28119"
+      "bytes": 3528,
+      "sha256": "48d993f4e18629554936aee3482afa9cac32bf165dc66041765438eb5ae961ed"
     },
     {
       "path": "functions/sitemap-collections.xml.js",
@@ -41695,8 +41695,8 @@
     {
       "path": "tests/seo/shopify-product-redirect.test.mjs",
       "extension": ".mjs",
-      "bytes": 806,
-      "sha256": "e9eb2bf1841ce377af9eb9059f2724e1c632dd597d86f696530c226e3a221f76"
+      "bytes": 1146,
+      "sha256": "a2f8ec86afffd3d5a4c3b3a8a5fef85bf84fd7048ab090dc62c6781013fc9872"
     },
     {
       "path": "tests/sync/admin-catalog-delete-preflight.test.mjs",
