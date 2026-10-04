@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4b47f56f204ec1688289edaeca21679ec422126afe601e47b51694a7d92a528c",
+  "sourceFingerprint": "614ef996321aedb7ed1fe551d5d1d4091d684df30acc2a087b7b4c41e19d01cc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 965,
-    "textFiles": 924,
-    "totalBytes": 18344343,
+    "files": 966,
+    "textFiles": 925,
+    "totalBytes": 18351675,
     "pages": 19,
-    "modules": 672
+    "modules": 673
   },
   "viewports": [
     {
@@ -82,7 +82,7 @@
         "client"
       ],
       "bytes": 12714,
-      "sha256": "81a0701da9bb7c4fc11361a14d1356372e6bd24a3141e138cb6b6e567586dc72",
+      "sha256": "96073ca50c7c58a0ba95ef7f18fb40a6aecfef51c95606ad7f29af0137ed42a2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -104,7 +104,7 @@
           "line": 6
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -511,7 +511,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -803,7 +803,7 @@
         "client"
       ],
       "bytes": 22433,
-      "sha256": "238fd8f74ecaa735ac91b19292a768e3f04aa1da83a3dba0d507f0f6b208616a",
+      "sha256": "240c6b497d757981d897fdf64db5510a260f144c2422e2881000c98596dca9e3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -838,7 +838,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1238,7 +1238,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1544,7 +1544,7 @@
         "viewer"
       ],
       "bytes": 43696,
-      "sha256": "23aecfbd570fca7a1997e0d65e94ae5ab8a897b2e6253a34ca0ecd594db3aae8",
+      "sha256": "489dbf7835b09ed746a2b4760189ad830cadfed7359aca67597fd2b97228a23a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1574,7 +1574,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1691,7 +1691,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 196968,
-      "sha256": "64ec46b80aa750cda6a3d872048f03e31b91898cf3325c9325a44b3bdaff09cf",
+      "bytes": 196922,
+      "sha256": "9afb1cf6245b055030aba67b5fe61795a9b1fa43035f53bb823176f21be1374b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2137,7 +2137,7 @@
       "ids": 557,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2167,7 +2167,7 @@
           "line": 2040
         },
         {
-          "raw": "js/admin/importacion-admin.js?v=tintin-20261004-import-identity-review-1-brand-20261004-1-brand-runtime-20261004-1",
+          "raw": "js/admin/importacion-admin.js?v=tintin-20261004-import-concurrency-2",
           "target": "js/admin/importacion-admin.js",
           "line": 2041
         },
@@ -2414,7 +2414,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2450,7 +2450,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/importacion-admin.js?v=tintin-20261004-import-identity-review-1-brand-20261004-1-brand-runtime-20261004-1",
+          "raw": "js/admin/importacion-admin.js?v=tintin-20261004-import-concurrency-2",
           "target": "js/admin/importacion-admin.js",
           "line": 2041,
           "exists": true
@@ -7781,7 +7781,7 @@
         "client"
       ],
       "bytes": 13911,
-      "sha256": "56bbad790c13c51994697f9d0a9a90fb9b9c33c0486c203138bae987080a58d6",
+      "sha256": "50281a139c51bbe45b28fe131f48d89ae760a6432be0ba7272c1f14c172bb3d5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7810,7 +7810,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -8152,7 +8152,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -8408,7 +8408,7 @@
         "client"
       ],
       "bytes": 54851,
-      "sha256": "bcdd52f89162f115a75c7d578c68275bb9f25fc17edda269a3959bf8bcbb6b30",
+      "sha256": "0dfc74f064a6b588bc91581819b85b6c06817fadb9f5901be094c2e15337e63e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8449,7 +8449,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8781,7 +8781,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -9163,7 +9163,7 @@
         "viewer"
       ],
       "bytes": 111073,
-      "sha256": "0d99cf4ba148f8592bc08f3cebbf93502b45de3a24775474982573369ff7b685",
+      "sha256": "ae267f5496a93b1331d0cf4415171de2f3af9762ee55645df0c42de67f556e9d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9198,7 +9198,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -9555,7 +9555,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -10206,7 +10206,7 @@
         "client"
       ],
       "bytes": 15585,
-      "sha256": "fefd1b98aa914d9939c87930957ae043da526b4cce99cd56c382267685de57dd",
+      "sha256": "4b4e3967b751c24e2806e1e418213c6eb4f5a0f36bf4c897272f8dcb05efb469",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10241,7 +10241,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -10598,7 +10598,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -10866,7 +10866,7 @@
         "client"
       ],
       "bytes": 20401,
-      "sha256": "61ca5c27ef17b25eddf32f5fb6dc5fdd5459df223fd44fdeaffe26773eec9c94",
+      "sha256": "4d50a48fef8973e5718a2a4f3c5cd49a587d366d6eef0ac3ca1ac4bf6ba81605",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10901,7 +10901,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -11283,7 +11283,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -11599,7 +11599,7 @@
         "client"
       ],
       "bytes": 17313,
-      "sha256": "f3f7fb88b4c6cdf967be5633e0c03f08ecd1c43738ff48e71c57dce14670a388",
+      "sha256": "2b57e99218d6473e20d229c591a762ec6a9ad8936dce7938a6fb67b08581b1e1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11634,7 +11634,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -11976,7 +11976,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -12272,7 +12272,7 @@
         "client"
       ],
       "bytes": 34471,
-      "sha256": "a803a1749df39af8d6981e38e40fe59db0e70a1f18e2d790c079d38b36155e9e",
+      "sha256": "6cd7366f009a6c64e2c6d070d4280ec700ef0f1d56704aa94b31d2fb76fbc41a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12319,7 +12319,7 @@
           "line": 9
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 10
         },
@@ -12843,7 +12843,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 10,
           "exists": true
@@ -13326,7 +13326,7 @@
         "viewer"
       ],
       "bytes": 82955,
-      "sha256": "08b788fe9b4720fe4c195c7be0a9c69cf527627932e88290f40ccde96a684664",
+      "sha256": "ac3ca93db6c0786f5370025b92830c915661f9d433cbbdcfef7667557a1fe5eb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13367,7 +13367,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -13554,7 +13554,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -14017,7 +14017,7 @@
         "client"
       ],
       "bytes": 1866,
-      "sha256": "63744a586a15d748747196dcc71afa81abb31521f9e015471be299bbb1d0e398",
+      "sha256": "454c5fb404435d0c9d14470641a6332aaa023d23acadfea51114c080dc450f85",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14034,7 +14034,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 23
         }
@@ -14081,7 +14081,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 23,
           "exists": true
@@ -14148,7 +14148,7 @@
         "viewer"
       ],
       "bytes": 46702,
-      "sha256": "5f4c36b43a17d824e59a62172bba29931e3a0d993628735d4a33694e348bce5f",
+      "sha256": "ec8a018cbf35251709c986987dacbc3b4adeeef31639f4e5edb9e2b6f0571313",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14189,7 +14189,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -14581,7 +14581,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -15014,7 +15014,7 @@
         "client"
       ],
       "bytes": 15084,
-      "sha256": "426d15c96b9f00f08ec88ebe33a4ef0232b17b4776efc70965d931f3861765a4",
+      "sha256": "a3663291d117a55d621f3148a4fd40c03065f095319af61f5beb0bf72e28a418",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15043,7 +15043,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -15385,7 +15385,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -15641,7 +15641,7 @@
         "client"
       ],
       "bytes": 17696,
-      "sha256": "e7fb60ab70b86569e7f81580753ebd26bde210076fbed65f3a612904ef08278b",
+      "sha256": "17d6ebe82b2bee17a1fa093b0cf004a5976de8b5149dbbb0b2f70f86f8126cc3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15670,7 +15670,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -16037,7 +16037,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -16304,7 +16304,7 @@
         "client"
       ],
       "bytes": 25407,
-      "sha256": "107686e53838bf841ff167530531eb8aaa008121dc96f670fcd0c1526a31430f",
+      "sha256": "37f2c27ce430e06849ef773a0fc712ec4747102bb4cb595fdecd721d802a19a3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16333,7 +16333,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -16750,7 +16750,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -17296,7 +17296,7 @@
         "client"
       ],
       "bytes": 15490,
-      "sha256": "ac6f6ec6ad2404d21110548f03145d47abca5c93cdfb20fcaf552318aee77850",
+      "sha256": "ef128a796cf3a1e949b7a17decdbb48ac32483c865820d187f6ed88fcd5ae85a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17318,7 +17318,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -17695,7 +17695,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261004-admin-connections-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -21644,8 +21644,8 @@
     },
     {
       "path": "js/admin/importacion-admin.js",
-      "bytes": 35953,
-      "sha256": "376ce5fa906ea4f9a60e6a130f65e8f957e0e148764f71372685c645decaeb47",
+      "bytes": 36296,
+      "sha256": "63cbc6e264e87fc5038282a97aa7a6457ce0aa84f1ed26924c90eef7666e7439",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22900,7 +22900,7 @@
     {
       "path": "js/cargador-pagina.js",
       "bytes": 46150,
-      "sha256": "c138cbb62bc4e95ac980601480ea72afa84dab1f00c392a347146806b3ad1224",
+      "sha256": "5997ef9c5edec5ec59ae018c6a6e8c3bfbfe0bf8287ba5296850f225428a8eb0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26827,8 +26827,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 10081,
-      "sha256": "52dd4b02df661ad9ecdb3c0cf95e73a68c803e30f9e59f3882ef28f48cfa9902",
+      "bytes": 10035,
+      "sha256": "3a58b30e896c15e1fde1b724935aeb08ec3ebfe6927e7edfb77e64c76b8da1ff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30979,7 +30979,7 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "bytes": 15696,
-      "sha256": "5c4a253d2c10e6b7cf97f15b29e00271ed361b74de9fda6ad93c3ce9bba39b43",
+      "sha256": "0d8117e75ad6eb7de2f404e4e2bc1e9a7e64ab4e3c4d2f963f1d63b83b3d0e38",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33386,6 +33386,42 @@
         {
           "raw": "../../functions/[page].js",
           "target": "functions/[page].js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/import/admin-import-concurrency.test.mjs",
+      "bytes": 4558,
+      "sha256": "12e2fbc7b650c509b270c54372376c8292d6e7e727c5de6d538f30ce9971e275",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
           "dynamic": false,
           "line": 4
         }
@@ -37000,7 +37036,7 @@
       "path": "404.html",
       "extension": ".html",
       "bytes": 12714,
-      "sha256": "81a0701da9bb7c4fc11361a14d1356372e6bd24a3141e138cb6b6e567586dc72"
+      "sha256": "96073ca50c7c58a0ba95ef7f18fb40a6aecfef51c95606ad7f29af0137ed42a2"
     },
     {
       "path": "AGENTS.md",
@@ -37114,13 +37150,13 @@
       "path": "about.html",
       "extension": ".html",
       "bytes": 22433,
-      "sha256": "238fd8f74ecaa735ac91b19292a768e3f04aa1da83a3dba0d507f0f6b208616a"
+      "sha256": "240c6b497d757981d897fdf64db5510a260f144c2422e2881000c98596dca9e3"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
       "bytes": 43696,
-      "sha256": "23aecfbd570fca7a1997e0d65e94ae5ab8a897b2e6253a34ca0ecd594db3aae8"
+      "sha256": "489dbf7835b09ed746a2b4760189ad830cadfed7359aca67597fd2b97228a23a"
     },
     {
       "path": "admin-manifest.json",
@@ -37131,8 +37167,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 196968,
-      "sha256": "64ec46b80aa750cda6a3d872048f03e31b91898cf3325c9325a44b3bdaff09cf"
+      "bytes": 196922,
+      "sha256": "9afb1cf6245b055030aba67b5fe61795a9b1fa43035f53bb823176f21be1374b"
     },
     {
       "path": "apple-touch-icon.png",
@@ -37408,19 +37444,19 @@
       "path": "cambios-devoluciones.html",
       "extension": ".html",
       "bytes": 13911,
-      "sha256": "56bbad790c13c51994697f9d0a9a90fb9b9c33c0486c203138bae987080a58d6"
+      "sha256": "50281a139c51bbe45b28fe131f48d89ae760a6432be0ba7272c1f14c172bb3d5"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
       "bytes": 54851,
-      "sha256": "bcdd52f89162f115a75c7d578c68275bb9f25fc17edda269a3959bf8bcbb6b30"
+      "sha256": "0dfc74f064a6b588bc91581819b85b6c06817fadb9f5901be094c2e15337e63e"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
       "bytes": 111073,
-      "sha256": "0d99cf4ba148f8592bc08f3cebbf93502b45de3a24775474982573369ff7b685"
+      "sha256": "ae267f5496a93b1331d0cf4415171de2f3af9762ee55645df0c42de67f556e9d"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -37618,7 +37654,7 @@
       "path": "collections.html",
       "extension": ".html",
       "bytes": 15585,
-      "sha256": "fefd1b98aa914d9939c87930957ae043da526b4cce99cd56c382267685de57dd"
+      "sha256": "4b4e3967b751c24e2806e1e418213c6eb4f5a0f36bf4c897272f8dcb05efb469"
     },
     {
       "path": "config/account-contract.json",
@@ -37654,7 +37690,7 @@
       "path": "contact.html",
       "extension": ".html",
       "bytes": 20401,
-      "sha256": "61ca5c27ef17b25eddf32f5fb6dc5fdd5459df223fd44fdeaffe26773eec9c94"
+      "sha256": "4d50a48fef8973e5718a2a4f3c5cd49a587d366d6eef0ac3ca1ac4bf6ba81605"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -38151,8 +38187,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 182229,
-      "sha256": "2b4c0068ace4e469a19c23578eb396db8cfb6b261ced07a04681d82da153bc35"
+      "bytes": 184751,
+      "sha256": "facddd39423b47276a1ab40e5301db2a6d2c487c35ded3fd8d02607be135c728"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -38488,7 +38524,7 @@
       "path": "envios.html",
       "extension": ".html",
       "bytes": 17313,
-      "sha256": "f3f7fb88b4c6cdf967be5633e0c03f08ecd1c43738ff48e71c57dce14670a388"
+      "sha256": "2b57e99218d6473e20d229c591a762ec6a9ad8936dce7938a6fb67b08581b1e1"
     },
     {
       "path": "favicon-16x16.png",
@@ -38974,7 +39010,7 @@
       "path": "index.html",
       "extension": ".html",
       "bytes": 34471,
-      "sha256": "a803a1749df39af8d6981e38e40fe59db0e70a1f18e2d790c079d38b36155e9e"
+      "sha256": "6cd7366f009a6c64e2c6d070d4280ec700ef0f1d56704aa94b31d2fb76fbc41a"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -39111,8 +39147,8 @@
     {
       "path": "js/admin/importacion-admin.js",
       "extension": ".js",
-      "bytes": 35953,
-      "sha256": "376ce5fa906ea4f9a60e6a130f65e8f957e0e148764f71372685c645decaeb47"
+      "bytes": 36296,
+      "sha256": "63cbc6e264e87fc5038282a97aa7a6457ce0aa84f1ed26924c90eef7666e7439"
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
@@ -39334,7 +39370,7 @@
       "path": "js/cargador-pagina.js",
       "extension": ".js",
       "bytes": 46150,
-      "sha256": "c138cbb62bc4e95ac980601480ea72afa84dab1f00c392a347146806b3ad1224"
+      "sha256": "5997ef9c5edec5ec59ae018c6a6e8c3bfbfe0bf8287ba5296850f225428a8eb0"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -40377,8 +40413,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 10081,
-      "sha256": "52dd4b02df661ad9ecdb3c0cf95e73a68c803e30f9e59f3882ef28f48cfa9902"
+      "bytes": 10035,
+      "sha256": "3a58b30e896c15e1fde1b724935aeb08ec3ebfe6927e7edfb77e64c76b8da1ff"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -40456,7 +40492,7 @@
       "path": "login.html",
       "extension": ".html",
       "bytes": 82955,
-      "sha256": "08b788fe9b4720fe4c195c7be0a9c69cf527627932e88290f40ccde96a684664"
+      "sha256": "ac3ca93db6c0786f5370025b92830c915661f9d433cbbdcfef7667557a1fe5eb"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -40642,7 +40678,7 @@
       "path": "nosotros.html",
       "extension": ".html",
       "bytes": 1866,
-      "sha256": "63744a586a15d748747196dcc71afa81abb31521f9e015471be299bbb1d0e398"
+      "sha256": "454c5fb404435d0c9d14470641a6332aaa023d23acadfea51114c080dc450f85"
     },
     {
       "path": "package-lock.json",
@@ -40653,14 +40689,14 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 14179,
-      "sha256": "bf11436e35dbe7f1092103d3db3f01b230a9d6ed944823ea1b7b587139a8309f"
+      "bytes": 14226,
+      "sha256": "3f4e8d1d1d5711658c5a89b0c26232fa5421dfd4aa051acb9ebbf510c753465b"
     },
     {
       "path": "perfil.html",
       "extension": ".html",
       "bytes": 46702,
-      "sha256": "5f4c36b43a17d824e59a62172bba29931e3a0d993628735d4a33694e348bce5f"
+      "sha256": "ec8a018cbf35251709c986987dacbc3b4adeeef31639f4e5edb9e2b6f0571313"
     },
     {
       "path": "playwright.config.js",
@@ -40678,19 +40714,19 @@
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
       "bytes": 15084,
-      "sha256": "426d15c96b9f00f08ec88ebe33a4ef0232b17b4776efc70965d931f3861765a4"
+      "sha256": "a3663291d117a55d621f3148a4fd40c03065f095319af61f5beb0bf72e28a418"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
       "bytes": 17696,
-      "sha256": "e7fb60ab70b86569e7f81580753ebd26bde210076fbed65f3a612904ef08278b"
+      "sha256": "17d6ebe82b2bee17a1fa093b0cf004a5976de8b5149dbbb0b2f70f86f8126cc3"
     },
     {
       "path": "product.html",
       "extension": ".html",
       "bytes": 25407,
-      "sha256": "107686e53838bf841ff167530531eb8aaa008121dc96f670fcd0c1526a31430f"
+      "sha256": "37f2c27ce430e06849ef773a0fc712ec4747102bb4cb595fdecd721d802a19a3"
     },
     {
       "path": "robots.txt",
@@ -41511,8 +41547,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 62400,
-      "sha256": "526e47f6add49622221367d202b12e8f79349db8b2287e1b1253ece29c64d37b"
+      "bytes": 62354,
+      "sha256": "a3f99f4d7b300d2e9baf9befb91dba8f63160f8630baeaca1ce25cb6bb098cb9"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -41668,7 +41704,7 @@
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
       "bytes": 15696,
-      "sha256": "5c4a253d2c10e6b7cf97f15b29e00271ed361b74de9fda6ad93c3ce9bba39b43"
+      "sha256": "0d8117e75ad6eb7de2f404e4e2bc1e9a7e64ab4e3c4d2f963f1d63b83b3d0e38"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -41746,7 +41782,7 @@
       "path": "terminos.html",
       "extension": ".html",
       "bytes": 15490,
-      "sha256": "ac6f6ec6ad2404d21110548f03145d47abca5c93cdfb20fcaf552318aee77850"
+      "sha256": "ef128a796cf3a1e949b7a17decdbb48ac32483c865820d187f6ed88fcd5ae85a"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -42113,6 +42149,12 @@
       "extension": ".mjs",
       "bytes": 495,
       "sha256": "beaca2bbe68e9f705482c1174c9d3f9c88331f2596c7d883e59e9523beeee8c4"
+    },
+    {
+      "path": "tests/import/admin-import-concurrency.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4558,
+      "sha256": "12e2fbc7b650c509b270c54372376c8292d6e7e727c5de6d538f30ce9971e275"
     },
     {
       "path": "tests/import/admin-import-job-contract.test.mjs",
