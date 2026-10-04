@@ -203,6 +203,34 @@ body.tt-home-premium .tt-hero-media {
   box-shadow: none !important;
   transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease !important;
 }
+/* Las cabeceras y CTA conservan su contraste incluso frente a la tipografía global. */
+html body :is(#account-drawer, #cart-drawer, #notifications-drawer) :is(.tt-account-drawer-header, .tt-cart-header, .tt-notifications-head) {
+  background: var(--color-brand-primary, #C52F68) !important;
+  background-image: none !important;
+  color: #fff !important;
+}
+html body :is(#account-drawer, #cart-drawer, #notifications-drawer) :is(.tt-account-drawer-header, .tt-cart-header, .tt-notifications-head) :is(h2, span, button, svg) {
+  color: #fff !important;
+}
+html body #account-drawer .tt-account-primary,
+html body #account-drawer .tt-account-primary:is(:visited, :hover, :focus-visible) {
+  color: #fff !important;
+}
+html body #account-drawer .tt-account-drawer-header {
+  display: flex !important;
+  min-height: 84px !important;
+  padding: 18px 22px !important;
+}
+html body #account-drawer .tt-account-drawer-header::before {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+}
+html body #account-drawer .tt-account-drawer-heading { flex: 1; }
+html body #account-drawer .tt-account-drawer-kicker { display: none; }
+html body #account-drawer .tt-account-drawer-header h2 { margin: 0 !important; }
+html body #account-drawer .tt-account-drawer-header h2::before { content: none; }
+
 .tt-account-drawer .tt-account-item:hover,
 .tt-account-drawer .tt-account-item:focus-visible {
   border-color: var(--tt-drawer-border) !important;
