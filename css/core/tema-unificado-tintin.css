@@ -141,7 +141,16 @@ body:has(.adm-main) .adm-mobile-tabs{background:var(--admin-color-background-sur
 a,.tt-footer a:hover,.tt-contact-email{color:var(--tt-accent)!important}
 
 svg,.tt-trust-icon,.tt-dropdown-icon,.tt-contact-info-icon,.perfil-wa-icon,.nav-icon,.tt-404-icon{color:var(--tt-muted)!important}
-body:has(.adm-main) .adm-nav-icon{color:var(--admin-color-text-secondary)!important}
+/* Los iconos blancos necesitan su superficie de marca. La regla genérica de
+   svg y los títulos del tema no deben recolorear estos consumidores del panel. */
+body:has(.adm-main) :is(.adm-nav-icon,.adm-stat-icon){background:var(--admin-color-brand-hover)!important;color:#fff!important}
+body:has(.adm-main) .adm-stat-icon{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px}
+body:has(.adm-main) :is(.adm-nav-icon,.adm-stat-icon) svg{color:#fff!important;stroke:currentColor}
+html body:has(.adm-main) .adm-sidebar .adm-sidebar-logo{background:var(--admin-color-brand-hover)!important}
+body:has(.adm-main) :is(.adm-sidebar-logo-text,.adm-sidebar-logo-sub,.adm-sidebar-toggle,.adm-sidebar-toggle svg){color:#fff!important}
+body:has(.adm-main) .adm-mobile-tab svg{color:#fff!important;stroke:currentColor}
+body:has(.adm-main) .adm-mobile-tab{background:var(--admin-color-brand-hover)!important;color:#fff!important}
+body:has(.adm-main) .adm-mobile-tab :is(span,div){color:#fff!important}
 .tt-btn svg,.ck-btn svg,.login-google svg,.tt-wa-float svg,.tt-footer-wa svg,.tt-contact-wa-link svg{color:#fff!important}
 body:has(.adm-main) .adm-btn-primary svg{color:var(--admin-color-button-primary-text)!important}
 

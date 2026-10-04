@@ -122,6 +122,7 @@ jobs:
           npm run test:navigation-header
           npm run test:cart-quantity-browser
           npm run test:phase8-ui
+          npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium
           npm run test:phase10-a11y
           npm run test:phase11-seo
           npm run test:performance
