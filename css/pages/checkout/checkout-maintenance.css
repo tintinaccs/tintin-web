@@ -4,7 +4,7 @@ body:has(.ck-body) {
   --ck-page: var(--tt-page-bg, #fff8fb);
   --ck-text: var(--tt-text, #352b2f);
   --ck-muted: var(--tt-text-muted, #75666c);
-  --ck-accent: var(--tt-accent, var(--color-brand-primary, #C52F68));
+  --ck-accent: var(--tt-accent, var(--color-brand-primary, #F8AACA));
   --ck-accent-soft: var(--tt-accent-soft, #f9e8ef);
   --ck-border: var(--tt-border, #edcbd7);
   background: var(--ck-page) !important;
@@ -77,27 +77,27 @@ body:has(.ck-body) .ck-btn,
 body:has(.ck-body) #ck-confirm-btn {
   min-height: 48px;
   background: var(--ck-accent) !important;
-  color: #fff !important;
+  color:#713C53 !important;
   border: 1px solid var(--ck-accent) !important;
 }
 
 body:has(.ck-body) .ck-btn-back,
 body:has(.ck-body) .ck-header-back,
 body:has(.ck-body) .ck-saved-location-hint button {
-  color: var(--ck-accent) !important;
+  color:var(--color-text-primary,#713C53) !important;
 }
 
 body:has(.ck-body) .ck-step-num,
 body:has(.ck-body) .ck-product-status,
 body:has(.ck-body) .ck-map-coords {
   background: var(--ck-accent-soft) !important;
-  color: var(--ck-accent) !important;
+  color:var(--color-text-primary,#713C53) !important;
 }
 
 body:has(.ck-body) .ck-step.active .ck-step-num,
 body:has(.ck-body) .ck-step.done .ck-step-num {
   background: var(--ck-accent) !important;
-  color: #fff !important;
+  color:#713C53 !important;
 }
 
 body:has(.ck-body) .ck-item-img,
@@ -114,7 +114,7 @@ body:has(.ck-body) :is(button, a, input, select, textarea):focus-visible {
 
 body:has(.ck-body) .ck-error.show,
 body:has(.ck-body) .ck-map-coords-missing {
-  color: var(--color-brand-primary, #C52F68) !important;
+  color:var(--color-text-primary,#713C53) !important;
   background: #fff0f3 !important;
   border-color: #e9a8b6 !important;
 }
@@ -143,7 +143,7 @@ body:has(.ck-body) .ck-confirm-next li {
   min-width:0; padding:11px 10px; border:1px solid var(--ck-border); border-radius:12px;
   color:var(--ck-muted); font-size:.72rem; line-height:1.4; text-align:left;
 }
-body:has(.ck-body) .ck-confirm-next li::before { counter-increment:step; content:counter(step); display:inline-grid; place-items:center; width:18px; height:18px; margin:0 6px 4px 0; border-radius:50%; background:var(--ck-accent-soft); color:var(--ck-accent); font-size:.68rem; font-weight:800; }
+body:has(.ck-body) .ck-confirm-next li::before { counter-increment:step; content:counter(step); display:inline-grid; place-items:center; width:18px; height:18px; margin:0 6px 4px 0; border-radius:50%; background:var(--ck-accent-soft); color:var(--color-text-primary,#713C53); font-size:.68rem; font-weight:800; }
 body:has(.ck-body) .ck-post-confirm { margin-top:18px; text-align:center; }
 body:has(.ck-body) .ck-post-confirm-card { padding:16px; border:1px solid var(--ck-border); border-radius:16px; background:var(--ck-surface); }
 body:has(.ck-body) .ck-post-confirm-card p { margin:0 0 8px; color:var(--ck-muted); font-size:.78rem; }

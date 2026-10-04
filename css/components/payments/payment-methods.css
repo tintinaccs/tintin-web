@@ -51,7 +51,7 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
   place-items: center;
   border-color: var(--ck-accent, var(--acc));
   background: var(--ck-accent, var(--acc));
-  color: #fff;
+  color:#713C53;
   font-size: 13px;
   font-weight: 900;
 }
@@ -132,7 +132,7 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 }
 
 .tt-payment-admin-status[data-state='error'] {
-  color: var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
 }
 
 .tt-payment-admin-status[data-state='success'] {
@@ -192,7 +192,7 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 
 .tt-payment-admin-badge.is-disabled {
   background: #fce8ee;
-  color: var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
 }
 
 .tt-payment-admin-editor {

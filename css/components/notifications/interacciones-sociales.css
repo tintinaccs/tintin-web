@@ -52,7 +52,7 @@
   padding: 7px 12px;
   border: 1px solid #efc8d7;
   background: #fff;
-  color: var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
   cursor: pointer;
   transition: background .18s ease, border-color .18s ease, transform .18s ease;
 }
@@ -70,12 +70,12 @@
 
 .tt-review-like-button.is-liked {
   background: #fff0f5;
-  border-color: var(--color-brand-primary, #C52F68);
-  color: var(--color-brand-primary, #C52F68);
+  border-color: var(--color-brand-primary, #F8AACA);
+  color:var(--color-text-primary,#713C53);
 }
 
 .tt-review-like-button.is-liked span:first-child {
-  color: var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
   filter: drop-shadow(0 2px 4px rgba(181,63,109,.15));
 }
 
@@ -94,7 +94,7 @@
   padding: 6px 0;
   border: 0;
   background: transparent;
-  color: var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
   font: inherit;
   font-size: 12px;
   font-weight: 700;
@@ -103,7 +103,7 @@
 
 .tt-review-thread-toggle:hover,
 .tt-review-thread-toggle:focus-visible {
-  color: var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
   text-decoration: underline;
   outline: none;
 }
@@ -113,7 +113,7 @@
 }
 
 .tt-review-message:not(.tt-review-message--store) strong {
-  color: var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
 }
 
 .tt-review-message--store {

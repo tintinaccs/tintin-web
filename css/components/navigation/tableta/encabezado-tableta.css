@@ -35,7 +35,7 @@
     min-width: 0;
     max-width: min(240px, 31vw);
     transform: none;
-    color:var(--color-brand-primary, #C52F68);
+    color:var(--color-text-primary,#713C53);
     text-decoration:none;
   }
 
@@ -54,7 +54,7 @@
     width: 46px;
     height: 46px;
     padding: 0;
-    color: #252225;
+    color:#713C53;
     background: #fff;
     border: 1px solid rgba(139,38,66,.14);
     border-radius: 50%;
@@ -79,7 +79,7 @@
   .tt-tablet-actions button:hover,
   .tt-tablet-actions a:hover,
   .tt-tablet-actions button[aria-expanded="true"] {
-    color:var(--color-brand-primary, #C52F68);
+    color:var(--color-text-primary,#713C53);
     background:#fff4f8;
     border-color: rgba(139,38,66,.22);
     transform:translateY(-1px);
@@ -116,9 +116,9 @@
   }
 
   .tt-tablet-menu-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:clamp(20px,3.5vh,36px); }
-  .tt-tablet-menu-logo { display:flex; align-items:center; gap:11px; color:var(--color-brand-primary, #C52F68); text-decoration:none; }
+  .tt-tablet-menu-logo { display:flex; align-items:center; gap:11px; color:var(--color-text-primary,#713C53); text-decoration:none; }
   .tt-tablet-menu-logo-img { height:46px; width:auto; max-width:min(260px,50vw); object-fit:contain; }
-  .tt-tablet-menu-close { display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border:1px solid rgba(139,38,66,.14); border-radius:50%; background:#fff; color:#292429; cursor:pointer; transition:transform .22s cubic-bezier(.2,.85,.2,1), border-color .2s ease; }
+  .tt-tablet-menu-close { display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border:1px solid rgba(139,38,66,.14); border-radius:50%; background:#fff; color:#713C53; cursor:pointer; transition:transform .22s cubic-bezier(.2,.85,.2,1), border-color .2s ease; }
   .tt-tablet-menu-close:hover { transform:translateY(-1px); border-color:rgba(139,38,66,.22); }
   .tt-tablet-nav { width:min(100%,780px); margin:0 auto; }
   .tt-tablet-nav > a,
@@ -132,7 +132,7 @@
     border:0;
     border-bottom:1px solid rgba(139,38,66,.1);
     background:transparent;
-    color:#362c31;
+    color:#713C53;
     font:600 clamp(1rem,2.3vw,1.25rem)/1.2 Montserrat;
     letter-spacing:.04em;
     text-decoration:none;
@@ -142,7 +142,7 @@
 
   .tt-tablet-nav > .active,
   .tt-tablet-nav > [aria-current="page"] {
-    color:var(--color-brand-primary, #C52F68);
+    color:var(--color-text-primary,#713C53);
     background:#fde9f0;
     border-radius:16px;
     border-bottom-color:transparent;
@@ -150,10 +150,10 @@
   .tt-tablet-cats { max-height:0; overflow:hidden; opacity:0; transition:max-height .32s cubic-bezier(.2,.8,.2,1),opacity .2s ease; }
   .tt-tablet-cats.open { max-height:620px; opacity:1; }
   .tt-tablet-cats-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; padding:14px 0; }
-  .tt-tablet-cat-card { display:flex; flex-direction:column; align-items:center; gap:7px; min-width:0; padding:10px 6px; color:#5b414b; font:650 .7rem/1.2 Montserrat; text-decoration:none; }
+  .tt-tablet-cat-card { display:flex; flex-direction:column; align-items:center; gap:7px; min-width:0; padding:10px 6px; color:#713C53; font:650 .7rem/1.2 Montserrat; text-decoration:none; }
   .tt-tablet-cat-img { display:flex; align-items:center; justify-content:center; width:74px; height:74px; border-radius:18px; overflow:hidden; }
   .tt-tablet-cat-img img { width:100%; height:100%; object-fit:cover; }
-  .tt-tablet-ver-todo { display:flex; justify-content:center; padding:13px; color:var(--color-brand-primary, #C52F68); font-weight:700; text-decoration:none; }
+  .tt-tablet-ver-todo { display:flex; justify-content:center; padding:13px; color:var(--color-text-primary,#713C53); font-weight:700; text-decoration:none; }
   .tt-tablet-account-entry {
     width:min(100%,780px);
     min-height:50px;
@@ -162,7 +162,7 @@
     border:1px solid #efcbd8;
     border-radius:16px;
     background:#fff6f9;
-    color:var(--color-brand-primary, #C52F68);
+    color:var(--color-text-primary,#713C53);
     font-weight:750;
     text-align:left;
     cursor:pointer;

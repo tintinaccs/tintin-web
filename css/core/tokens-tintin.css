@@ -1,12 +1,12 @@
 :root {
   --tt-page-bg: #FFF6FA;
-  --tt-title: #2B2B2B;
-  --tt-text: #2B2B2B;
+  --tt-title: #713C53;
+  --tt-text: #713C53;
   --tt-muted: #7B6F72;
   --tt-card: #FFFFFF;
   /* Rosa de marca oscurecido lo justo para que texto, iconos y botones
      alcancen contraste AA sobre blanco y sobre el fondo rosa claro. */
-  --tt-primary: var(--color-brand-primary, #C52F68);
+  --tt-primary: var(--color-brand-primary, #F8AACA);
   --tt-soft: #FFF9FC;
   --tt-light: #FDECF2;
   --tt-border: #F1E4E7;

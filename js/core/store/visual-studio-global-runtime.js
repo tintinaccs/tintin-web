@@ -1,6 +1,6 @@
 import { isGlobalStudioActiveWindow, pickHighestPriority } from './contratos-visual-studio-global.js?v=tintin-20260810-visual-studio-v2-1';
 
-const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-4-brand-20261004-1';
+const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1';
 const PAGE_BY_FILE = Object.freeze({
   '': 'index', 'index.html': 'index', 'about.html': 'nosotros', 'nosotros.html': 'nosotros',
   'catalogo.html': 'catalogo', 'collections.html': 'collections', 'product.html': 'product', 'checkout.html': 'checkout',
@@ -112,7 +112,7 @@ function renderCampaign(config) {
   document.documentElement.style.removeProperty('--tt-global-campaign-bar-h');
   if (!campaign) return;
   document.documentElement.dataset.ttGlobalCampaignActive = campaign.id;
-  document.documentElement.style.setProperty('--tt-global-campaign-accent', campaign.accentColor || '#C52F68');
+  document.documentElement.style.setProperty('--tt-global-campaign-accent', campaign.accentColor || '#F8AACA');
 
   if (campaign.announcement && storageGet(window.sessionStorage, `tt_campaign_bar_${campaign.id}`) !== 'closed') {
     const bar = make('div', 'tt-global-campaign-bar'); bar.dataset.ttGlobalCampaign = campaign.id;

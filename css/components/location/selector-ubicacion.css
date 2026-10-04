@@ -44,7 +44,7 @@
 
 .tt-address-result span {
   /* Contraste ≥ 4.5:1 sobre blanco para el renglón secundario. */
-  color: #6b5259;
+  color:#713C53;
   font-size: 12.5px;
   line-height: 1.35;
 }
@@ -56,7 +56,7 @@
 
 .tt-address-selected {
   margin: -4px 0 12px;
-  color: #6b5259;
+  color:#713C53;
   font-size: 12.5px;
   line-height: 1.4;
 }
@@ -73,7 +73,7 @@
 
 .tt-map-tip {
   margin: 0 0 8px;
-  color: #6b5259;
+  color:#713C53;
   font-size: 12.5px;
   line-height: 1.45;
 }
@@ -129,23 +129,23 @@
 }
 
 .tt-map-result:hover { background: rgba(173,63,103,.09); }
-.tt-map-result[aria-selected="true"], .tt-map-result:focus-visible { background: #fff1f6; outline: 2px solid var(--color-brand-primary, #C52F68); outline-offset: -2px; }
+.tt-map-result[aria-selected="true"], .tt-map-result:focus-visible { background: #fff1f6; outline: 2px solid var(--color-brand-primary, #F8AACA); outline-offset: -2px; }
 
 .tt-map-result-name {
-  color: var(--login-ink, #2b2b2b);
+  color: var(--login-ink, #713C53);
   font-size: 14px;
   font-weight: 650;
 }
 
 .tt-map-result-addr {
   margin-top: 2px;
-  color: #6b5259;
+  color:#713C53;
   font-size: 12.5px;
   line-height: 1.35;
 }
 
 .tt-map-result-empty {
-  color: #6b5259;
+  color:#713C53;
   font-size: 13px;
   cursor: default;
 }
@@ -160,7 +160,7 @@
   border: 1px solid rgba(125,23,58,.18);
   border-radius: 14px;
   background: #fff;
-  color: var(--color-brand-primary, var(--color-brand-primary, #C52F68));
+  color:var(--color-text-primary,#713C53);
   font: 650 13.5px/1 "Montserrat", sans-serif;
   cursor: pointer;
 }
@@ -177,7 +177,7 @@
 
 .tt-map-coords {
   margin: 0 0 12px;
-  color: #6b5259;
+  color:#713C53;
   font-size: 12.5px;
   line-height: 1.4;
 }
@@ -185,20 +185,20 @@
 /* Contraste ≥ 4.5:1 sobre blanco para el aviso de "falta marcar". */
 .tt-map-coords-missing { color: #9a2c2c; }
 
-.tt-location-pin { color: var(--color-brand-primary, #C52F68); filter: drop-shadow(0 3px 3px rgba(80,25,45,.25)); }
+.tt-location-pin { color: var(--color-brand-primary, #F8AACA); filter: drop-shadow(0 3px 3px rgba(80,25,45,.25)); }
 .tt-map-canvas { background: #f4f0ec; isolation: isolate; }
 .tt-map-status { padding: 12px 14px; margin: 8px 0; border: 1px solid #ead4dc; border-radius: 12px; background: #fff6f9; color: #643d4b; font-size: 13px; line-height: 1.5; }
 .tt-map-navigation { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 12px; }
 .tt-map-navigation[hidden], .tt-map-status[hidden] { display: none; }
-.tt-map-navigation a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid #e4bdcb; border-radius: 999px; background: #fff; color: #8B2642; font-family: "Montserrat"; font-size: 12px; font-weight: 650; text-decoration: none; }
+.tt-map-navigation a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid #e4bdcb; border-radius: 999px; background: #fff; color: #713C53; font-family: "Montserrat"; font-size: 12px; font-weight: 650; text-decoration: none; }
 .tt-map-navigation a:hover { background: #fff1f6; }
-.tt-map-navigation a:focus-visible { outline: 2px solid #8B2642; outline-offset: 3px; }
+.tt-map-navigation a:focus-visible { outline: 2px solid #713C53; outline-offset: 3px; }
 .perfil-address-row { display: grid; grid-template-columns: 190px minmax(0,1fr); gap: 18px; margin: 14px 0; border: 1px solid #ecd8e0; border-radius: 18px; overflow: hidden; background: #fff; }
 .tt-saved-map { min-height: 170px; background: #f4f0ec; isolation: isolate; }
 .tt-saved-map .leaflet-control-attribution { font-size: 9px; }
 .tt-saved-address-body { min-width: 0; padding: 16px 16px 16px 0; }
-.tt-saved-address-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: #38252d; font-size: 15px; }
-.tt-address-badge { padding: 4px 9px; border-radius: 999px; background: #fff0f5; color: #8B2642; font-size: 11px; font-weight: 700; }
+.tt-saved-address-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: #713C53; font-size: 15px; }
+.tt-address-badge { padding: 4px 9px; border-radius: 999px; background: #fff0f5; color: #713C53; font-size: 11px; font-weight: 700; }
 .tt-saved-address-detail { color: #6b5259; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; margin: 8px 0 12px; }
 .tt-saved-address-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .tt-saved-address-actions .perfil-btn { width: auto; max-width: 100%; box-sizing: border-box; min-height: 44px; font-size: 11px; }

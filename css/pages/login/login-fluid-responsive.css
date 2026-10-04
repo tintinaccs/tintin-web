@@ -2,8 +2,8 @@
    Esta capa se carga después de login.css y login-maintenance.css. */
 
 body:has(.login-page) {
-  --login-accent: var(--tt-brand, var(--color-brand-primary, #C52F68));
-  --login-accent-deep: var(--tt-brand-deep, var(--color-brand-primary, #C52F68));
+  --login-accent: var(--tt-brand, var(--color-brand-primary, #F8AACA));
+  --login-accent-deep: var(--tt-brand-deep, var(--color-brand-primary, #F8AACA));
   --login-surface: var(--tt-surface, #FFFFFF);
   --login-surface-soft: var(--tt-surface-soft, #FFF5FA);
   --login-page-fluid: var(--tt-page-bg, #FFF8FC);

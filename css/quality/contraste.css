@@ -8,16 +8,12 @@
   font-weight: 800;
 }
 
-/* Texto oscuro sobre el rosa de marca daba 2.30:1. En blanco da 5.70:1.
-   Acotado a controles con fondo de marca real (inline o los IDs conocidos):
-   .tt-interactive-control solo no alcanza porque se agrega a TODOS los
-   botones del sitio, incluidos los de fondo claro (ahí el blanco los
-   volvía invisibles). */
+/* El rosa claro aprobado requiere texto malva: contraste 4.69:1. */
 button.tt-inline-theme-cleaned,
 [style*="background"].tt-interactive-control,
 #btn-send-otp,
 #btn-verify-otp {
-  color: #fff !important;
+  color:#713C53 !important;
 }
 
 .tt-interactive-control svg,
@@ -29,7 +25,7 @@ button.tt-inline-theme-cleaned svg {
 /* Los controles sin fondo de marca conservan el texto oscuro: la regla de
    arriba solo debe aplicar cuando el fondo es el rosa. */
 .tt-interactive-control:not([style*="background"]):not(.tt-btn):not(.ck-btn):not(#btn-send-otp):not(#btn-verify-otp) {
-  color: var(--color-text-primary, #2b2b2b);
+  color: var(--color-text-primary, #713C53);
 }
 
 /* El rosa de marca sobre fondos claros daba 3.30:1. Este tono da 8.56:1
@@ -38,7 +34,7 @@ button.tt-inline-theme-cleaned svg {
 .perfil-wa-box,
 a.perfil-btn.perfil-btn-outline,
 a.perfil-wa-box {
-  color: var(--color-brand-primary, #C52F68);
+  color:var(--color-text-primary,#713C53);
 }
 
 /* Gris de apoyo: 3.51:1 sobre blanco. Este da 6.43:1. */
@@ -46,7 +42,7 @@ a.perfil-wa-box {
 .login-legal,
 .login-box small,
 .login-box .login-muted {
-  color: #6b5a63;
+  color:#713C53;
 }
 
 /* Pie público "© … TINTIN ACCESORIOS": #a56680 sobre #fff6fa daba 4.12:1 con
@@ -80,7 +76,7 @@ html body.tt-catalog-maintenance .cat-hero,
 /* "obligatoria" en el formulario de reseñas: 4.43:1 con ~11px. Mismo gris
    de apoyo que login (6.43:1 sobre blanco). */
 .tt-rating-label em {
-  color: #6b5a63;
+  color:#713C53;
 }
 
 /* Indicador "+" del acordeón del pie: solo donde el acordeón pliega

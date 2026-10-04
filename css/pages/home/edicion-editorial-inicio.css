@@ -17,7 +17,7 @@ body.tt-home-premium .tt-section-sub,
 body.tt-home-premium .tt-editorial-eyebrow,
 body.tt-home-premium .tt-watch-eyebrow {
   margin-bottom: 10px;
-  color: var(--tt-accent, var(--color-brand-primary, #C52F68)) !important;
+  color:var(--color-text-primary,#713C53) !important;
   font-size: .68rem;
   font-weight: 800;
   letter-spacing: .19em;
@@ -153,15 +153,15 @@ body.tt-home-premium :is(.tt-editorial, .tt-watch-feature, .tt-home-random-produ
 }
 
 body.tt-home-premium :is(.tt-editorial, .tt-watch-feature, .tt-home-random-products) .tt-btn:not(.tt-btn-outline) {
-  background: var(--tt-accent, var(--color-brand-primary, #C52F68)) !important;
-  border-color: var(--tt-accent, var(--color-brand-primary, #C52F68)) !important;
-  color: #fff !important;
+  background: var(--tt-accent, var(--color-brand-primary, #F8AACA)) !important;
+  border-color: var(--tt-accent, var(--color-brand-primary, #F8AACA)) !important;
+  color:#713C53 !important;
 }
 
 body.tt-home-premium :is(.tt-editorial, .tt-watch-feature, .tt-home-random-products) .tt-btn-outline {
   background: transparent !important;
   border-color: rgba(173, 63, 103, .35) !important;
-  color: var(--tt-accent, var(--color-brand-primary, #C52F68)) !important;
+  color:var(--color-text-primary,#713C53) !important;
 }
 
 @media (hover: hover) {

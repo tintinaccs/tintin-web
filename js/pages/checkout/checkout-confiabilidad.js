@@ -186,8 +186,8 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
         <div class="ck-empty">
           <div class="ck-empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
           <div class="ck-empty-text">Tu carrito está vacío</div>
-          <p style="color:#8B5B6B;font-size:13px;margin:6px 0 16px">Agregá un producto para comenzar una compra nueva.</p>
-          <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#C52F68;color:#fff!important;font-weight:800">Ver catálogo →</a>
+          <p style="color:var(--color-text-primary,#713C53);font-size:13px;margin:6px 0 16px">Agregá un producto para comenzar una compra nueva.</p>
+          <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#F8AACA;color:#713C53!important;font-weight:800">Ver catálogo →</a>
         </div>`;
       subtotalNode.textContent = 'Gs. 0';
       return;

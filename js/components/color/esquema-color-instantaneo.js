@@ -34,7 +34,15 @@
     for (key in map) {
       if (Object.prototype.hasOwnProperty.call(map, key) && isSafeColorValue(map[key])) {
         var value = map[key];
-        if (/^--(?:admin-)?color-/.test(key) && /^#(?:ad3f67|8b2642|711f35|c64273|9e2451)$/i.test(value.trim())) value = '#C52F68';
+        if (/^--(?:admin-)?color-/.test(key)) {
+          if (/^--color-button-whatsapp-(?:background|hover)$/.test(key) && /^#(?:0d8043|0a6835)$/i.test(value.trim())) {
+            value = '#F8AACA';
+          } else if (/^#(?:c52f68|ad3f67|8b2642|711f35|c64273|9e2451)$/i.test(value.trim())) {
+            value = /text|price|breadcrumb/.test(key) ? '#713C53' : '#F8AACA';
+          } else if (/^#2b2b2b$/i.test(value.trim()) || (
+            /^#ffffff$/i.test(value.trim()) && /(?:button-(?:primary|floating|sticky|whatsapp)|tab-active|selection)-text$/.test(key)
+          )) value = '#713C53';
+        }
         root.style.setProperty(key, value);
       }
     }

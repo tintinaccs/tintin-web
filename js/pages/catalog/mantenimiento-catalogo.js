@@ -23,7 +23,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     if (document.querySelector('link[data-tt-catalog-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../../../css/pages/catalog/catalog-maintenance.css?v=tintin-20260817-margin-consistency-2-brand-20261004-1', import.meta.url).href;
+    link.href = new URL('../../../css/pages/catalog/catalog-maintenance.css?v=tintin-20260817-margin-consistency-2-brand-20261004-1-owner-pink-20261004-1', import.meta.url).href;
     link.dataset.ttCatalogMaintenance = '1';
     document.head.appendChild(link);
   }

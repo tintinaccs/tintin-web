@@ -18,18 +18,18 @@
   border: 1px solid var(--tt-brand-border, #efbdd2) !important;
   border-radius: clamp(20px, 2.5vw, 30px) !important;
   background: #fff !important;
-  color: var(--tt-brand-copy, var(--color-brand-primary, #C52F68)) !important;
+  color:var(--color-text-primary,#713C53) !important;
   box-shadow: 0 24px 68px rgba(122, 0, 61, .2) !important;
 }
 
 :is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content)
 :is(h1,h2,h3,h4,label,strong) {
-  color: var(--tt-brand-copy, var(--color-brand-primary, #C52F68)) !important;
+  color:var(--color-text-primary,#713C53) !important;
 }
 
 :is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content)
 :is(p,small,.muted) {
-  color: var(--tt-brand-muted, var(--color-brand-primary, #C52F68)) !important;
+  color:var(--color-text-primary,#713C53) !important;
 }
 
 /* Contenedores reales que existen en perfil y checkout. */
@@ -55,8 +55,8 @@
   .adm-modal-header
 ) {
   border-bottom-color: transparent !important;
-  background: linear-gradient(135deg, var(--color-brand-primary, #C52F68), var(--color-brand-primary, #C52F68)) !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, var(--color-brand-primary, #F8AACA), var(--color-brand-primary, #F8AACA)) !important;
+  color:#713C53 !important;
 }
 
 :is(
@@ -67,7 +67,7 @@
   .modal-header,
   .adm-modal-header
 ) :is(h1,h2,h3,h4,span,strong,p) {
-  color: #fff !important;
+  color:#713C53 !important;
 }
 
 @media (min-width: 768px) and (max-width: 1099px) {

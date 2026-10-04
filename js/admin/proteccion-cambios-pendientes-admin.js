@@ -177,9 +177,9 @@
       #unsaved-modal-save:disabled,#unsaved-modal-discard:disabled,#unsaved-modal-stay:disabled{opacity:.58;cursor:wait}
       .correos-tabs,.ship-tabs,.user-tabs{align-items:center;background:rgba(255,255,255,.82);border:1px solid rgba(173,63,103,.10)!important;border-radius:18px;padding:8px!important;box-shadow:0 8px 24px rgba(91,29,51,.045);flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
       .correos-tabs::-webkit-scrollbar,.ship-tabs::-webkit-scrollbar,.user-tabs::-webkit-scrollbar{display:none}
-      .correos-tab-btn,.ship-tab-btn,.user-tab-btn{min-height:42px;display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 auto;border-color:rgba(173,63,103,.14)!important;color:#4b3b41!important;background:#fff!important;box-shadow:none!important}
-      .correos-tab-btn:hover,.ship-tab-btn:hover,.user-tab-btn:hover{border-color:rgba(173,63,103,.42)!important;color:#C52F68!important;background:#fff9fb!important}
-      .correos-tab-btn.active,.ship-tab-btn.active,.user-tab-btn.active{background:#C52F68!important;color:#fff!important;border-color:#C52F68!important;box-shadow:0 8px 20px rgba(173,63,103,.18)!important}
+      .correos-tab-btn,.ship-tab-btn,.user-tab-btn{min-height:42px;display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 auto;border-color:rgba(173,63,103,.14)!important;color:#713C53!important;background:#fff!important;box-shadow:none!important}
+      .correos-tab-btn:hover,.ship-tab-btn:hover,.user-tab-btn:hover{border-color:rgba(173,63,103,.42)!important;color:#713C53!important;background:#fff9fb!important}
+      .correos-tab-btn.active,.ship-tab-btn.active,.user-tab-btn.active{background:#F8AACA!important;color:#713C53!important;border-color:#F8AACA!important;box-shadow:0 8px 20px rgba(173,63,103,.18)!important}
       .correos-tab-btn:focus-visible,.ship-tab-btn:focus-visible,.user-tab-btn:focus-visible{outline:3px solid rgba(212,106,138,.28);outline-offset:2px}
       @media(max-width:640px){#unsaved-modal>div{padding:24px 18px!important;border-radius:20px!important}#unsaved-modal>div>div:last-child{flex-direction:column}#unsaved-modal button{width:100%}.correos-tabs,.ship-tabs,.user-tabs{border-radius:15px;padding:6px!important}.correos-tab-btn,.ship-tab-btn,.user-tab-btn{min-height:40px;padding:8px 15px!important}}
     `;
@@ -193,12 +193,12 @@
         <div id="unsaved-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="unsaved-modal-title" aria-describedby="unsaved-modal-detail" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4000;align-items:center;justify-content:center;padding:16px">
           <div style="background:#fff;border-radius:16px;max-width:480px;width:100%;padding:28px;box-shadow:0 18px 60px rgba(0,0,0,.24);text-align:center">
             <div style="width:48px;height:48px;border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;background:#fff4e8;color:#b15f00;font-size:24px;font-weight:900" aria-hidden="true">!</div>
-            <div id="unsaved-modal-title" style="font-size:17px;font-weight:800;margin-bottom:8px;color:#2b2b2b">Tenés cambios sin guardar</div>
-            <div id="unsaved-modal-detail" style="font-size:13px;color:#685b60;margin-bottom:22px">Si salís ahora vas a perder lo que modificaste.</div>
+            <div id="unsaved-modal-title" style="font-size:17px;font-weight:800;margin-bottom:8px;color:#713C53">Tenés cambios sin guardar</div>
+            <div id="unsaved-modal-detail" style="font-size:13px;color:#713C53;margin-bottom:22px">Si salís ahora vas a perder lo que modificaste.</div>
             <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-              <button type="button" id="unsaved-modal-save" style="border:0;border-radius:999px;background:#C52F68;color:#fff;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer">Guardar y continuar</button>
-              <button type="button" id="unsaved-modal-discard" style="border:1px solid #e3c4cf;border-radius:999px;background:#fff;color:#C52F68;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer">Descartar cambios</button>
-              <button type="button" id="unsaved-modal-stay" style="border:1px solid #d7c7cd;border-radius:999px;background:#fff;color:#493c41;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer">Seguir editando</button>
+              <button type="button" id="unsaved-modal-save" style="border:0;border-radius:999px;background:#F8AACA;color:#713C53;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer">Guardar y continuar</button>
+              <button type="button" id="unsaved-modal-discard" style="border:1px solid #e3c4cf;border-radius:999px;background:#fff;color:#713C53;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer">Descartar cambios</button>
+              <button type="button" id="unsaved-modal-stay" style="border:1px solid #d7c7cd;border-radius:999px;background:#fff;color:#713C53;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer">Seguir editando</button>
             </div>
           </div>
         </div>`;

@@ -1,6 +1,6 @@
 :root {
-  --tintin-primary: var(--color-brand-primary, #C52F68);
-  --tintin-primary-dark: var(--color-brand-primary, #C52F68);
+  --tintin-primary: var(--color-brand-primary, #F8AACA);
+  --tintin-primary-dark: var(--color-brand-primary, #F8AACA);
   --tintin-primary-soft: var(--primary-soft, #fde8f0);
   --tintin-surface: #fff;
   --tintin-text: var(--text, #171217);
@@ -206,8 +206,8 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   justify-content: space-between;
   padding: 18px 22px;
   border-bottom: 1px solid rgba(255,255,255,.32);
-  background: var(--color-brand-primary, #C52F68) !important;
-  color: #fff !important;
+  background: var(--color-brand-primary, #F8AACA) !important;
+  color:#713C53 !important;
   box-shadow: 0 10px 24px rgba(95,22,51,.16);
 }
 
