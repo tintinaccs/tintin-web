@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { requestCurrentLocation } from '../../js/components/location/geolocalizacion.mjs';
 
 const login = fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf8');
 const googleHandler = login.slice(login.indexOf('let _googleLoginToken'), login.indexOf('// ======== TOGGLE'));
@@ -126,19 +127,22 @@ test('ubicación de Últimos datos tiene un solo dueño: un clic solicita geoloc
   assert.match(login, /locateButton: document\.getElementById\('login-profile-locate'\)/);
   assert.doesNotMatch(login, /getElementById\('login-profile-locate'\)\.onclick/);
   const source = fs.readFileSync(new URL('../../js/components/location/mapa-ubicacion.js', import.meta.url), 'utf8')
-    .replace(/^import[^\n]*\n/m, '').replace('export async function', 'async function');
+    .replace(/^import[^\n]*\n/gm, '').replace(/export (async )?function/g, '$1function');
   let locationCalls = 0;
   let handler;
-  const button = { addEventListener(type, fn) { if (type === 'click') handler = fn; }, removeEventListener() {} };
+  const button = { setAttribute() {}, addEventListener(type, fn) { if (type === 'click') handler = fn; }, removeEventListener() {} };
   const map = { setView() { return this; }, on() {}, invalidateSize() {}, remove() {} };
+  const fakeElement = () => ({ setAttribute() {}, remove() {}, append() {}, hidden: false });
+  const navigator = { geolocation: { getCurrentPosition() { locationCalls++; } } };
   const context = vm.createContext({
+    requestCurrentLocation: () => requestCurrentLocation({ navigator, secure: true }),
     window: { isSecureContext: true, L: { map: () => map, tileLayer: () => ({addTo() {}}) } },
-    document: { getElementById: () => null, removeEventListener() {} },
-    navigator: { geolocation: { getCurrentPosition() { locationCalls++; } } },
+    document: { createElement: fakeElement, getElementById: () => null, removeEventListener() {} },
+    navigator,
     setTimeout() {}, clearTimeout() {}, requestAnimationFrame() {},
   });
   vm.runInContext(source + '; globalThis.mountMap = createLocationMap;', context);
-  const mounted = await context.mountMap({ mapEl: { id: 'login-profile-map' }, locateButton: button });
+  const mounted = await context.mountMap({ mapEl: { id: 'login-profile-map', classList: { add() {} }, before() {}, after() {} }, locateButton: button });
   handler({ preventDefault() {}, stopImmediatePropagation() {} });
   assert.equal(locationCalls, 1);
   // Mientras el dispositivo resuelve, otro clic tampoco duplica la solicitud.

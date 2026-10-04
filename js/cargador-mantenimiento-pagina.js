@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261003-variant-inventory-1-brand-20261004-1';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261004-location-consistency-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
@@ -22,9 +22,9 @@ export function loadPageMaintenance() {
     const version = 'tintin-20260925-cache-converge-1-launch-20260926-1-brand-20261004-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261003-variant-inventory-1-brand-20261004-1-brand-runtime-20261004-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261004-location-consistency-1'),
       load('pages/checkout/checkout-mantenimiento.js', version),
-      load('pages/checkout/checkout-metodos-pago.js', version),
+      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-location-consistency-1'),
       load('pages/checkout/checkout-control-cuota.js', version),
       load('pages/checkout/estado-navegacion-checkout.js', stateVersion)
     ]);
