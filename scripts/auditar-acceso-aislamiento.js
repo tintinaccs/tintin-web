@@ -52,6 +52,8 @@ const allowedSignOutFiles = new Set([
   'perfil.html',
   'js/admin/admin-app.js',
   'js/core/auth/navegacion-autenticacion.js',
+  // Cierre explícito compartido por los botones de tienda, perfil y panel.
+  'js/core/auth/salida-sesion.js',
   // Cuenta bloqueada: cierra la sesión en el acto (sólo ante blocked === true).
   'js/pages/profile/control-acceso-perfil.js',
 ]);
@@ -96,7 +98,7 @@ const checks = [
     ['Google usa popup como camino principal', googlePopupPath],
   ['Google mantiene loader hasta terminar el handoff', googleHandoffKeepsOverlay],
   ['OTP mantiene loader hasta terminar el handoff', login.includes('window.TintinLoader?.beginWait()') && login.includes('await finishOtpLogin(user)')],
-  ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
+  ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && /await withDeadline\(signInWithRedirect\(auth, provider\), AUTH_NETWORK_DEADLINE_MS\)/.test(login)],
   ['Retorno de Google se completa una sola vez y sin bucle', login.includes('getRedirectResult(auth)') && login.includes('GOOGLE_REDIRECT_PENDING_KEY') && login.includes('handleGoogleRedirectReturn(user)')],
   ['Solo el correo oficial entra automáticamente al panel', login.includes("normalizedEmail === SUPER_ADMIN.toLowerCase()") && login.includes("window.location.replace('admin.html')")],
   ['Auth compartido no compite con el Login', /if\(IS_LOGIN_PAGE(?:\|\|IS_VISUAL_PREVIEW_FRAME)?\)return;/.test(authNav) && !authNav.includes('redirectAuthenticatedLogin')],

@@ -127,6 +127,7 @@ jobs:
           npm run test:phase8-ui
           npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium
           npx playwright test tests/ui-ux/admin-sidebar-interaction.spec.js --project=chromium
+          npx playwright test tests/login/google-loader-recovery.spec.js --project=chromium
           npx playwright test tests/ui-ux/inventory-reservation-review.spec.js --project=chromium
           npx playwright test tests/ui-ux/import-identity-review.spec.js --project=chromium
           npm run test:phase10-a11y

@@ -1,9 +1,7 @@
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261004-admin-connections-3";
-import {
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
+import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261005-auth-loader-1';
+import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
@@ -946,9 +944,10 @@ const mtabLogout = document.getElementById('mtab-logout');
 if (mtabLogout) mtabLogout.onclick = () => {
   const leave = async () => {
     recordAuthDiagnostic('EXPLICIT_LOGOUT', { source: 'admin-mobile-logout' });
-    markExplicitLogout();
-    await signOut(auth);
-    window.location.href = '/login';
+    try {
+      await logoutSession();
+      window.location.href = '/login';
+    } catch { toast('No pudimos cerrar tu sesión. Volvé a intentarlo.'); }
   };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
@@ -957,9 +956,10 @@ if (mtabLogout) mtabLogout.onclick = () => {
 document.getElementById('adm-logout').onclick = () => {
   const leave = async () => {
     recordAuthDiagnostic('EXPLICIT_LOGOUT', { source: 'admin-logout' });
-    markExplicitLogout();
-    await signOut(auth);
-    window.location.href = '/login';
+    try {
+      await logoutSession();
+      window.location.href = '/login';
+    } catch { toast('No pudimos cerrar tu sesión. Volvé a intentarlo.'); }
   };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
