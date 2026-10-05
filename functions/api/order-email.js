@@ -392,8 +392,12 @@ export async function sendResendEmail(apiKey, payload, idempotencyKey) {
 
 export async function sendOrderEmails({ env, apiKey, orderId, order, isResend, sendAdmin, sendCustomer, transfer = null }) {
   const suffix = isResend ? `resend-${Date.now()}` : 'new-v1';
+  const deliveryKeys = {
+    admin: `order-${orderId}-admin-${suffix}`,
+    customer: `order-${orderId}-customer-${suffix}`,
+  };
   const deliver = (channel, payload) => {
-    const send = () => sendResendEmail(apiKey, payload, `order-${orderId}-${channel}-${suffix}`);
+    const send = () => sendResendEmail(apiKey, payload, deliveryKeys[channel]);
     return isResend ? send() : sendInitialOrderEmailOnce(env, { orderId, channel, send });
   };
   let adminSent = null;
