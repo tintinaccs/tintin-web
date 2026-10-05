@@ -20,7 +20,7 @@ function tintinParityCallWebhook_(path, payload) {
     method: 'post',
     contentType: 'application/json',
     muteHttpExceptions: true,
-    headers: { 'X-Tintin-Sheets-Secret': tintinWebhookSecret_() },
+    headers: { 'X-Tintin-Sheets-Secret': tintinWebhookSecret_(path) },
     payload: JSON.stringify(payload)
   });
   var body = tintinParseJsonResponse_(response);

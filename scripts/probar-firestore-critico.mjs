@@ -34,6 +34,7 @@ const claims = {
   viewer1: { email: 'viewer@example.com', email_verified: true },
   super1: { email: 'tintinaccs@gmail.com', email_verified: true },
   superCase: { email: 'TintinAccs@Gmail.com', email_verified: true },
+  superUnverified: { email: 'tintinaccs@gmail.com', email_verified: false },
   blocked1: { email: 'bloqueada@example.com', email_verified: true }
 };
 
@@ -282,6 +283,12 @@ try {
   await fails(setDoc(doc(viewer, 'products', 'viewer_product'), {
     name: 'No permitido', price: 1, active: true
   }));
+
+  // Un token con el correo del Super Admin pero sin verificar no vale como Super Admin.
+  const superUnverified = ctx('superUnverified');
+  await fails(getDoc(doc(superUnverified, 'settings', 'privateSecrets')));
+  await fails(getDoc(doc(superUnverified, 'users', 'client1')));
+  await fails(updateDoc(doc(superUnverified, 'users', 'client1'), { role: 'admin' }));
 
   const superDb = ctx('super1');
   await succeeds(getDoc(doc(superDb, 'wholesaleQuotes', 'WQ_client2_req_abcdef123456')));

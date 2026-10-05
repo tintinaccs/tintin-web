@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0d7157a53cd3eee37e09dbc465bad43592fee5cb9ad91000536f069ecf655852",
+  "sourceFingerprint": "ea10cd894e85a66140b7e6ec98edfa89555690cc9a4cf3ae0bd8020ac62bf0ed",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 993,
-    "textFiles": 952,
-    "totalBytes": 18557882,
+    "files": 996,
+    "textFiles": 955,
+    "totalBytes": 18582266,
     "pages": 19,
-    "modules": 697
+    "modules": 700
   },
   "viewports": [
     {
@@ -18658,8 +18658,8 @@
     },
     {
       "path": "cloudflare/paypal-seguro.js",
-      "bytes": 15627,
-      "sha256": "f6f5112cfade684dcc0e5237624a6070c40f17c495a6b9d167068b44412dc089",
+      "bytes": 25004,
+      "sha256": "650258e13196102ba7191650fb926a46bb4adb323c8bec27bc98ee468cba80b1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18669,29 +18669,29 @@
           "raw": "./firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 9
+          "line": 12
         },
         {
           "raw": "./notificaciones-sociales.js",
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
-          "line": 10
+          "line": 13
         },
         {
           "raw": "./order-admin-domain.js",
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
-          "line": 11
+          "line": 14
         }
       ],
       "endpoints": [
         {
           "url": "https://api-m.paypal.com/",
-          "line": 47
+          "line": 50
         },
         {
           "url": "https://api-m.sandbox.paypal.com/",
-          "line": 47
+          "line": 50
         }
       ]
     },
@@ -18831,6 +18831,17 @@
           "line": 29
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "cloudflare/secretos-sheets.js",
+      "bytes": 1583,
+      "sha256": "feb5b64c49bdf68d1f097bb69a6aee4e605c318e2cca87550d72352814219441",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -20473,8 +20484,8 @@
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
-      "bytes": 9132,
-      "sha256": "15189b70e0ea781135c4cca80f4b558bc0e1202603d85970c945d62aa6f33bc9",
+      "bytes": 9212,
+      "sha256": "a47b06c3e74e5a131f6ae984ac0011bb78fc4e54eb7f545e96139d00fb137f2a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20515,6 +20526,12 @@
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
           "line": 12
+        },
+        {
+          "raw": "../../cloudflare/secretos-sheets.js",
+          "target": "cloudflare/secretos-sheets.js",
+          "dynamic": false,
+          "line": 13
         }
       ],
       "endpoints": []
@@ -20569,8 +20586,8 @@
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
-      "bytes": 10756,
-      "sha256": "cf7991b46378e6f80bd21098eb99213c9d03d1c41270d9a7b5791d168190df13",
+      "bytes": 10855,
+      "sha256": "12863e351894edb7789a9d13f17426a87634e45de1a52b8adc8615689ad19914",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20583,18 +20600,24 @@
           "line": 1
         },
         {
+          "raw": "../../cloudflare/secretos-sheets.js",
+          "target": "cloudflare/secretos-sheets.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/sheets-sync-snapshot.js",
-      "bytes": 8832,
-      "sha256": "2bf3c33463597166255dae2f2b05061c3669ffc17804c49be4dcaf9eea1887e0",
+      "bytes": 8915,
+      "sha256": "ca76d1aceb708768a6ad8b0decb7b9eeb7dbbbbeaed8634b6c7562c0a154d44e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20611,6 +20634,12 @@
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "../../cloudflare/secretos-sheets.js",
+          "target": "cloudflare/secretos-sheets.js",
+          "dynamic": false,
+          "line": 6
         }
       ],
       "endpoints": []
@@ -31160,8 +31189,8 @@
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",
-      "bytes": 15672,
-      "sha256": "f2e27d9b6b6b3eb3e5d94ac3cfcde941f04c23c2ce756ab2d116224d3041297f",
+      "bytes": 16116,
+      "sha256": "93aed1822bad408e840a35c41ee4d66e4273943fe59840d00aa275ae17a4f729",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35788,9 +35817,9 @@
       "endpoints": []
     },
     {
-      "path": "tests/payments/paypal-seguro.test.mjs",
-      "bytes": 2965,
-      "sha256": "a8d5698a7e1ab65d00a9164030c693df99fbd2c8ee35e39619dc914411265cf4",
+      "path": "tests/payments/paypal-refund-reconciliation.test.mjs",
+      "bytes": 4242,
+      "sha256": "cc382ae178f477774d2b4a93c529d2aaf9f3af95398ac52e8aa7b0d139a5cdff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35815,16 +35844,56 @@
           "line": 3
         },
         {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/payments/paypal-seguro.test.mjs",
+      "bytes": 5236,
+      "sha256": "4b153309c69e2a4cccfd3d4e4cebb30f10faff5c1097008f8ca6e0b43dc22517",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/paypal-seguro.js",
+          "target": "cloudflare/paypal-seguro.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
           "raw": "../../functions/api/paypal-rate-refresh.js",
           "target": "functions/api/paypal-rate-refresh.js",
           "dynamic": false,
-          "line": 4
+          "line": 11
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/api/paypal-rate-refresh",
-          "line": 40
+          "line": 47
+        },
+        {
+          "url": "https://api-m.paypal.com/v2/payments/captures/CAP123456/",
+          "line": 81
         }
       ]
     },
@@ -36271,6 +36340,47 @@
         {
           "url": "https://tintinaccesorios.pages.dev/tienda.js",
           "line": 117
+        }
+      ]
+    },
+    {
+      "path": "tests/security/secretos-sheets.test.mjs",
+      "bytes": 1665,
+      "sha256": "a28bedb6490f650dc9cb99cfcded8b21899e4610313dbd80b47bdbd51453fa3b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/secretos-sheets.js",
+          "target": "cloudflare/secretos-sheets.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../functions/api/sheets-products-webhook.js",
+          "target": "functions/api/sheets-products-webhook.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/api/sheets-products-webhook",
+          "line": 20
         }
       ]
     },
@@ -38219,8 +38329,8 @@
     {
       "path": "apps-script/AdminParity.gs",
       "extension": ".gs",
-      "bytes": 26685,
-      "sha256": "f0d53a667cd79304262cfbdcc7060839854023614de3bc8fa1756650686e426c"
+      "bytes": 26689,
+      "sha256": "16f496c94d8444fd5645c90d484ea1149c5402cc228ee634ff4c3cfc49e3e282"
     },
     {
       "path": "apps-script/BorradoCatalogoPayload.gs",
@@ -38255,8 +38365,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 51650,
-      "sha256": "0ebb8eb8d7b87453f0f67acf8b4ff8efda2e4808e551b6de580380c97bd96418"
+      "bytes": 52134,
+      "sha256": "d2d21acc2a8c4021b85e04bae4a099ed1d6ad89ed168c4df0e5fba1d0dee8aad"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -38633,8 +38743,8 @@
     {
       "path": "cloudflare/paypal-seguro.js",
       "extension": ".js",
-      "bytes": 15627,
-      "sha256": "f6f5112cfade684dcc0e5237624a6070c40f17c495a6b9d167068b44412dc089"
+      "bytes": 25004,
+      "sha256": "650258e13196102ba7191650fb926a46bb4adb323c8bec27bc98ee468cba80b1"
     },
     {
       "path": "cloudflare/politica-checkout-publico.js",
@@ -38659,6 +38769,12 @@
       "extension": ".js",
       "bytes": 15725,
       "sha256": "552c78a87c50281869b4f537f0e83b307fdd163bb0224eaa12617a121ae3a8d2"
+    },
+    {
+      "path": "cloudflare/secretos-sheets.js",
+      "extension": ".js",
+      "bytes": 1583,
+      "sha256": "feb5b64c49bdf68d1f097bb69a6aee4e605c318e2cca87550d72352814219441"
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
@@ -39251,8 +39367,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 212763,
-      "sha256": "b717b9d509c2fa6ce64932137796dd01cea810e8951740a0b7875ad55cab6836"
+      "bytes": 214628,
+      "sha256": "70b312af28eef970b4a79d87853869528989a311675953b1845d20ca35fe1081"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -39329,8 +39445,8 @@
     {
       "path": "docs/cierre-produccion-manual.md",
       "extension": ".md",
-      "bytes": 5549,
-      "sha256": "512bda1ec40060769158507bd16e4c39e7154be335a562ad3c2bcf23832aa4a9"
+      "bytes": 6943,
+      "sha256": "c867e8db914130cd4c9f24d2768504b27c695b350a3345d986a224078e886a34"
     },
     {
       "path": "docs/como-hacer-cambios.md",
@@ -39341,8 +39457,8 @@
     {
       "path": "docs/configuracion-paypal.md",
       "extension": ".md",
-      "bytes": 2835,
-      "sha256": "7d2b04e34a0dd0a2600a9e579f0b2b465420eb9e9e0b8ffca1afd35a87a4ecd9"
+      "bytes": 3357,
+      "sha256": "439f818c5ce415594fa700f5fc3912e4d62fd512d0a3958ed07f21607472caac"
     },
     {
       "path": "docs/configuracion-push-web-firebase.md",
@@ -39641,8 +39757,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 69810,
-      "sha256": "1e7587d2bbdb9f677feca3fc689473ea1bc71797b6bbe135acf319b0089d9ba9"
+      "bytes": 70081,
+      "sha256": "903ea8d5720ad0ecef7d89bd951ff5c8914145d72a9188c82714734a4df02e71"
     },
     {
       "path": "functions/[page].js",
@@ -39905,8 +40021,8 @@
     {
       "path": "functions/api/sheets-admin-webhook.js",
       "extension": ".js",
-      "bytes": 9132,
-      "sha256": "15189b70e0ea781135c4cca80f4b558bc0e1202603d85970c945d62aa6f33bc9"
+      "bytes": 9212,
+      "sha256": "a47b06c3e74e5a131f6ae984ac0011bb78fc4e54eb7f545e96139d00fb137f2a"
     },
     {
       "path": "functions/api/sheets-engagement-webhook.js",
@@ -39923,14 +40039,14 @@
     {
       "path": "functions/api/sheets-products-webhook.js",
       "extension": ".js",
-      "bytes": 10756,
-      "sha256": "cf7991b46378e6f80bd21098eb99213c9d03d1c41270d9a7b5791d168190df13"
+      "bytes": 10855,
+      "sha256": "12863e351894edb7789a9d13f17426a87634e45de1a52b8adc8615689ad19914"
     },
     {
       "path": "functions/api/sheets-sync-snapshot.js",
       "extension": ".js",
-      "bytes": 8832,
-      "sha256": "2bf3c33463597166255dae2f2b05061c3669ffc17804c49be4dcaf9eea1887e0"
+      "bytes": 8915,
+      "sha256": "ca76d1aceb708768a6ad8b0decb7b9eeb7dbbbbeaed8634b6c7562c0a154d44e"
     },
     {
       "path": "functions/api/system-health.js",
@@ -42749,8 +42865,8 @@
     {
       "path": "scripts/probar-firestore-critico.mjs",
       "extension": ".mjs",
-      "bytes": 15672,
-      "sha256": "f2e27d9b6b6b3eb3e5d94ac3cfcde941f04c23c2ce756ab2d116224d3041297f"
+      "bytes": 16116,
+      "sha256": "93aed1822bad408e840a35c41ee4d66e4273943fe59840d00aa275ae17a4f729"
     },
     {
       "path": "scripts/probar-firestore-notificaciones.mjs",
@@ -43563,10 +43679,16 @@
       "sha256": "dbdcde92f5365af49f76fe0c2410a1a7fbb04ef7192b3431ba3e33d0d9fef515"
     },
     {
+      "path": "tests/payments/paypal-refund-reconciliation.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4242,
+      "sha256": "cc382ae178f477774d2b4a93c529d2aaf9f3af95398ac52e8aa7b0d139a5cdff"
+    },
+    {
       "path": "tests/payments/paypal-seguro.test.mjs",
       "extension": ".mjs",
-      "bytes": 2965,
-      "sha256": "a8d5698a7e1ab65d00a9164030c693df99fbd2c8ee35e39619dc914411265cf4"
+      "bytes": 5236,
+      "sha256": "4b153309c69e2a4cccfd3d4e4cebb30f10faff5c1097008f8ca6e0b43dc22517"
     },
     {
       "path": "tests/payments/ueno-name.test.mjs",
@@ -43663,6 +43785,12 @@
       "extension": ".mjs",
       "bytes": 6712,
       "sha256": "719686b60084b18ffb0bb24993f14e11025a79b254bba0b13bdc9f72b82cba8f"
+    },
+    {
+      "path": "tests/security/secretos-sheets.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1665,
+      "sha256": "a28bedb6490f650dc9cb99cfcded8b21899e4610313dbd80b47bdbd51453fa3b"
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",

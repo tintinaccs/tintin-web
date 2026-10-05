@@ -3,6 +3,7 @@ import {
   firestoreAdminListAll,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { jsonResponse } from '../../cloudflare/seguridad-cloudinary.js';
+import { sheetsInboundSecret } from '../../cloudflare/secretos-sheets.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
 // El helper ya pagina Firestore; 5000 evita truncar espejos administrativos
@@ -127,7 +128,7 @@ async function snapshot(env, entity) {
 }
 
 export async function onRequestPost({ request, env }) {
-  if (!sameSecret(request.headers.get('X-Tintin-Sheets-Secret'), env.SHEETS_ENGAGEMENT_SECRET)) {
+  if (!sameSecret(request.headers.get('X-Tintin-Sheets-Secret'), sheetsInboundSecret(env, 'snapshot'))) {
     return jsonResponse({ ok: false, error: 'No autorizado' }, 401, '', request.url);
   }
   try {

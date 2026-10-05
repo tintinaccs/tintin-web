@@ -70,3 +70,20 @@ El flujo es Cloudflare → Apps Script: Cloudflare adjunta el secreto en el head
 1. En Apps Script (Configuración del proyecto → Propiedades del script), anotar solo la longitud del valor y sus últimos 4 caracteres.
 2. En Cloudflare Pages (Settings → Environment variables): si la variable está definida como texto plano, comparar longitud + últimos 4 caracteres con lo anotado. Si está definida como "Secret" (cifrada), Cloudflare no permite volver a leerla — en ese caso usar únicamente el método funcional, o regenerar un valor nuevo y cargarlo idéntico en ambos paneles a la vez (así la igualdad queda garantizada por construcción, no por lectura posterior).
 3. No registrar el valor completo en ningún documento, log ni mensaje.
+
+## 7. Secretos propios para los webhooks sensibles de Sheets (recomendado)
+
+Hasta ahora un único `SHEETS_ENGAGEMENT_SECRET` autorizaba también los webhooks que **cambian roles y bloquean usuarios**, **editan el catálogo** y **exportan datos de clientes**. Desde `cloudflare/secretos-sheets.js` cada uno acepta su propio secreto; mientras no se cargue, sigue valiendo el compartido, así que activar esto no corta nada.
+
+| Webhook | Secreto propio (Cloudflare **y** Propiedades del script) |
+| --- | --- |
+| `/api/sheets-admin-webhook` (usuarios, roles, pedidos desde la hoja) | `SHEETS_ADMIN_WEBHOOK_SECRET` |
+| `/api/sheets-products-webhook` (catálogo e inventario) | `SHEETS_PRODUCTS_WEBHOOK_SECRET` |
+| `/api/sheets-sync-snapshot` (exportación a la hoja) | `SHEETS_SNAPSHOT_SECRET` |
+
+Para cada fila, de a una:
+1. Generar un valor aleatorio largo (por ejemplo 48+ caracteres) que **no** sea el compartido.
+2. Cargarlo con el mismo nombre en Apps Script (Configuración del proyecto → Propiedades del script) **primero**, y enseguida en Cloudflare Pages (Production, tipo Secret).
+3. Disparar una edición de prueba desde la hoja correspondiente y confirmar que la tienda la aceptó.
+
+Si se carga solo en uno de los dos lados, ese webhook responde 401 hasta completar el otro. El tráfico Cloudflare → Apps Script (colas de sincronización) sigue usando `SHEETS_ENGAGEMENT_SECRET`.

@@ -10,6 +10,7 @@ import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/orde
 import { notifyCustomerOrderChange } from '../../cloudflare/correo-estado-pedido.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
 import { syncEngagementBatchToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
+import { sheetsInboundSecret } from '../../cloudflare/secretos-sheets.js';
 
 const MAX_BODY_BYTES = 64 * 1024;
 const ROLES = new Set(['client', 'viewer', 'agent', 'admin']);
@@ -174,7 +175,7 @@ async function handleOrder(env, input) {
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  if (!sameSecret(request.headers.get('X-Tintin-Sheets-Secret'), env.SHEETS_ENGAGEMENT_SECRET)) {
+  if (!sameSecret(request.headers.get('X-Tintin-Sheets-Secret'), sheetsInboundSecret(env, 'admin'))) {
     return jsonResponse({ ok: false, error: 'No autorizado', revision: ADMIN_SYNC_REVISION }, 401, '', request.url);
   }
   try {
