@@ -141,6 +141,14 @@ try {
     const toggle = page.locator('#adm-sidebar-toggle');
     let toggleState = null;
     if (width > 540) {
+      // El runtime cambia el layout de 260 a 74 px. Esperar su geometría
+      // final mantiene la misma exigencia de centrado sin medir a mitad del cambio.
+      await page.waitForFunction(() => {
+        const b = document.querySelector('.adm-sidebar-logo-text').getBoundingClientRect();
+        const h = document.querySelector('.adm-sidebar-logo').getBoundingClientRect();
+        return Math.abs(document.querySelector('.adm-sidebar').getBoundingClientRect().width - 74) < 2
+          && Math.abs((b.left + b.right) / 2 - (h.left + h.right) / 2) < 2;
+      }, null, { polling: 50, timeout: 2000 });
       const target = await toggle.boundingBox();
       const compactWidth = await page.locator('.adm-sidebar').evaluate(e => e.getBoundingClientRect().width);
       const compactBrand = await page.evaluate(() => {
@@ -152,6 +160,8 @@ try {
           centered: Math.abs((b.left + b.right) / 2 - (h.left + h.right) / 2) < 2,
           gap: b.top - t.bottom,
           pseudo: getComputedStyle(brand, '::before').content,
+          brandBox: b.toJSON(),
+          headerBox: h.toJSON(),
         };
       });
       await page.locator('.adm-sidebar').hover();
