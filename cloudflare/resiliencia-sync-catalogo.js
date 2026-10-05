@@ -10,7 +10,7 @@ import {
   fsString,
   fsTimestamp,
 } from './firebase-admin-ligero.js';
-import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS } from './sheets-sync-config.js';
+import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS, SHEETS_HEALTH_TIMEOUT_MS } from './sheets-sync-config.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
 
@@ -118,7 +118,10 @@ export async function syncProductsWithRetry(idToken, productIds, { attempts = MA
 export async function preflightProductsSheet(env, productIds) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, skipped: true };
-  const result = await syncProductsPayloadWithRetry(env, [ids[0]], { attempts: 2 });
+  const result = await syncProductsPayloadWithRetry(env, [ids[0]], {
+    attempts: 1,
+    timeoutMs: SHEETS_HEALTH_TIMEOUT_MS,
+  });
   return { ok: true, sampleProductId: ids[0], attempts: result.attempts };
 }
 
@@ -304,7 +307,7 @@ async function fetchProductPayloadItems(env, ids, deps = REAL_QUEUE_DEPS) {
   });
 }
 
-async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS, { appScriptChunkSize = PRODUCT_SYNC_CHUNK } = {}) {
+async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS, { appScriptChunkSize = PRODUCT_SYNC_CHUNK, timeoutMs = SHEETS_TIMEOUT_MS } = {}) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, batches: 0 };
   const secret = clean(env?.SHEETS_ENGAGEMENT_SECRET, 500);
@@ -318,7 +321,7 @@ async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS, 
       const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
         method: 'POST',
         redirect: 'follow',
-        signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
+        signal: AbortSignal.timeout(timeoutMs),
         headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
         body: JSON.stringify({
           action: 'syncProductsPayload',
@@ -385,14 +388,14 @@ export async function syncDeletedProductsPayloadWithRetry(env, productIds, { att
  * documento completo a Apps Script autenticado con el secreto compartido ya
  * usado por syncOrder — Apps Script nunca necesita tirar de Firestore aquí.
  */
-export async function syncProductsPayloadWithRetry(env, productIds, { attempts = 2, appScriptChunkSize = PRODUCT_SYNC_CHUNK } = {}, deps = REAL_QUEUE_DEPS) {
+export async function syncProductsPayloadWithRetry(env, productIds, { attempts = 2, appScriptChunkSize = PRODUCT_SYNC_CHUNK, timeoutMs = SHEETS_TIMEOUT_MS } = {}, deps = REAL_QUEUE_DEPS) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, attempts: 0, batches: 0 };
   let lastError = null;
   const limit = Math.max(1, Math.min(MAX_ATTEMPTS, Number(attempts) || 2));
   for (let attempt = 1; attempt <= limit; attempt += 1) {
     try {
-      const result = await syncProductsPayloadOnce(env, ids, deps, { appScriptChunkSize });
+      const result = await syncProductsPayloadOnce(env, ids, deps, { appScriptChunkSize, timeoutMs });
       return { ...result, attempts: attempt };
     } catch (error) {
       lastError = error;
