@@ -230,10 +230,6 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
   if (!ids.length) return { dryRun: false, deletedProducts: 0, sheets: { products: true, social: true } };
 
   const social = await collectSocialReferences(env, ids);
-  // Se intenta limpiar el espejo social antes de borrar. Si Google Sheets
-  // está caído, Firestore sigue siendo canónico y se completa el borrado;
-  // el resultado marca explícitamente la sincronización pendiente.
-  const socialSheet = await syncSocialPurgeToSheets(env, social);
 
   const deletePaths = new Set();
   social.privateReviews.forEach(document => deletePaths.add(firestorePathFromName(document.name)));
@@ -250,6 +246,7 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
 
   const result = {
     deletedProducts: ids.length,
+    productIds: ids,
     deletedFirestoreDocuments: deletePaths.size,
     socialPurged: {
       reviewRecords: social.privateReviews.length,
@@ -259,6 +256,11 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
     },
     preservedHistory: ['orders', 'auditLog'],
   };
+
+  // Firestore es la autoridad canónica: el borrado ya quedó aplicado antes
+  // de esperar a Apps Script. Así el listener del Admin puede reflejar la baja
+  // inmediatamente aunque Google Sheets esté lento o temporalmente caído.
+  const socialSheet = await syncSocialPurgeToSheets(env, social);
 
   let productsSheets = false;
   const errors = [];
