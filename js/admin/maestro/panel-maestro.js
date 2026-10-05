@@ -5,7 +5,7 @@ import {
   BASE_ADMIN_SECTIONS,
   MAESTRO_MODULES,
   capabilityLabel
-} from './registro-maestro.js?v=tintin-20260920-admin-status-fixes-1';
+} from './registro-maestro.js?v=tintin-20261005-wholesale-master-1';
 
 (function () {
   'use strict';

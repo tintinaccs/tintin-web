@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bd08e5b7d73da73af5beef9b6eca13a9af72ebd904a17391c42f5e362a6aa7b3",
+  "sourceFingerprint": "7ba3dc8fc1074f91f4a8350d6a7da09e89d10a23ffed9c96865166faa3489bd5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 992,
-    "textFiles": 951,
-    "totalBytes": 18553113,
+    "files": 993,
+    "textFiles": 952,
+    "totalBytes": 18555470,
     "pages": 19,
-    "modules": 696
+    "modules": 697
   },
   "viewports": [
     {
@@ -2134,8 +2134,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 198315,
-      "sha256": "549b7a378db6f86790784fc8bd79580b09891e177bab0a619b7414ad542fb073",
+      "bytes": 198214,
+      "sha256": "6e1fb82327481a9b92377f7b89ff5788586c0f22de0fea3d8e8217f4a4f2c39a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2249,7 +2249,7 @@
           "line": 2269
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-2-auth-popup-resolver-1-admin-ops-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261005-wholesale-master-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2270
         }
@@ -2544,7 +2544,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-2-auth-popup-resolver-1-admin-ops-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261005-wholesale-master-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2270,
           "exists": true
@@ -22068,8 +22068,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 28373,
-      "sha256": "68b675db821462608cdbcaaa19ea23f3150e9c1f335330360954ecea85c789ed",
+      "bytes": 28371,
+      "sha256": "1078634797d937d7ddb343de9ab87a3c36ac7039d2716fb4d83fec443766861f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22094,7 +22094,7 @@
           "line": 3
         },
         {
-          "raw": "./registro-maestro.js?v=tintin-20260920-admin-status-fixes-1",
+          "raw": "./registro-maestro.js?v=tintin-20261005-wholesale-master-1",
           "target": "js/admin/maestro/registro-maestro.js",
           "dynamic": false,
           "line": 8
@@ -22104,8 +22104,8 @@
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
-      "bytes": 9116,
-      "sha256": "8442d81aa3fc9d78dbc43c4664cd234eec6b9a26a3744f431916016ef5656e76",
+      "bytes": 9504,
+      "sha256": "49317a2a32364046abc024885d8c3df1ae45d0f8f66829eedcc0e79158b6efe3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30405,8 +30405,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
-      "bytes": 7678,
-      "sha256": "1796e94d5c0056f80db2d6ea41fed682b6c9f730fc68d158a910a39a4c3f6d2b",
+      "bytes": 7476,
+      "sha256": "9012db2624c1f82883b4e9e5bba9d86a68d85313b603a9a68d4bb1027862fe88",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30471,8 +30471,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
-      "bytes": 8824,
-      "sha256": "186426aece5b09217af20d97ad334395c1895c57b373215ac1c33856e6942c94",
+      "bytes": 8723,
+      "sha256": "6bb23b28ef32d03733a96cb49f2a0316dbfeab3ec30108e7573fb48d5bb44f69",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30495,8 +30495,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",
-      "bytes": 5333,
-      "sha256": "48ea21c1fbeff9224942d3a8ccfc5ad1f70b2c625d936501283837db7ce2e505",
+      "bytes": 5434,
+      "sha256": "9b6343d3c1d06af584397e16f3422a1ee40833b9dcd46b8a6568bd367ac7a5d5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37804,9 +37804,50 @@
       "endpoints": []
     },
     {
+      "path": "tests/wholesale/mayoristas-sheets.test.mjs",
+      "bytes": 1064,
+      "sha256": "ea6accaf7fe796e007723aeae203980be4c7047f61a7b80d738defc57099ef2f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://evil.example/",
+          "line": 10
+        }
+      ]
+    },
+    {
       "path": "tests/wholesale/mayoristas.test.mjs",
-      "bytes": 10576,
-      "sha256": "a6665cfeeb3909cb548d0bfaf0e83be42223d17d7d343958eeac485f3e866fb0",
+      "bytes": 10727,
+      "sha256": "a93456583156649de184408748c687d81b12ea408f98574d503d20512a0fab16",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37862,19 +37903,19 @@
         },
         {
           "url": "https://tintinaccesorios.pages.dev/api/wholesale-quote",
-          "line": 175
+          "line": 178
         },
         {
           "url": "https://evil.example/",
-          "line": 175
+          "line": 178
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 177
+          "line": 180
         },
         {
           "url": "https://tintinaccesorios.pages.dev/api/admin-wholesale",
-          "line": 179
+          "line": 182
         }
       ]
     },
@@ -38166,8 +38207,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 198315,
-      "sha256": "549b7a378db6f86790784fc8bd79580b09891e177bab0a619b7414ad542fb073"
+      "bytes": 198214,
+      "sha256": "6e1fb82327481a9b92377f7b89ff5788586c0f22de0fea3d8e8217f4a4f2c39a"
     },
     {
       "path": "apple-touch-icon.png",
@@ -38202,8 +38243,8 @@
     {
       "path": "apps-script/Mayoristas.gs",
       "extension": ".gs",
-      "bytes": 3933,
-      "sha256": "b4dedad94abdbc256c7087c63b3b6d6f6a42231b73e8b45ea5f03b21a1fa6a06"
+      "bytes": 4205,
+      "sha256": "c65ff6d1cfce356bc2dfbe14b92c0b2670b9486dc2ef52b6b743a3b58635b43d"
     },
     {
       "path": "apps-script/Participacion.gs",
@@ -39210,8 +39251,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 211873,
-      "sha256": "1420d3fdcb8ed14c858d2ca21fd618eb238ed3a0b0a34f68be381a4ba2d3adb4"
+      "bytes": 212763,
+      "sha256": "b717b9d509c2fa6ce64932137796dd01cea810e8951740a0b7875ad55cab6836"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -40194,14 +40235,14 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 28373,
-      "sha256": "68b675db821462608cdbcaaa19ea23f3150e9c1f335330360954ecea85c789ed"
+      "bytes": 28371,
+      "sha256": "1078634797d937d7ddb343de9ab87a3c36ac7039d2716fb4d83fec443766861f"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
       "extension": ".js",
-      "bytes": 9116,
-      "sha256": "8442d81aa3fc9d78dbc43c4664cd234eec6b9a26a3744f431916016ef5656e76"
+      "bytes": 9504,
+      "sha256": "49317a2a32364046abc024885d8c3df1ae45d0f8f66829eedcc0e79158b6efe3"
     },
     {
       "path": "js/admin/mayoristas/mayoristas-admin.js",
@@ -42510,8 +42551,8 @@
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
       "extension": ".mjs",
-      "bytes": 7678,
-      "sha256": "1796e94d5c0056f80db2d6ea41fed682b6c9f730fc68d158a910a39a4c3f6d2b"
+      "bytes": 7476,
+      "sha256": "9012db2624c1f82883b4e9e5bba9d86a68d85313b603a9a68d4bb1027862fe88"
     },
     {
       "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
@@ -42522,14 +42563,14 @@
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "extension": ".mjs",
-      "bytes": 8824,
-      "sha256": "186426aece5b09217af20d97ad334395c1895c57b373215ac1c33856e6942c94"
+      "bytes": 8723,
+      "sha256": "6bb23b28ef32d03733a96cb49f2a0316dbfeab3ec30108e7573fb48d5bb44f69"
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",
       "extension": ".mjs",
-      "bytes": 5333,
-      "sha256": "48ea21c1fbeff9224942d3a8ccfc5ad1f70b2c625d936501283837db7ce2e505"
+      "bytes": 5434,
+      "sha256": "9b6343d3c1d06af584397e16f3422a1ee40833b9dcd46b8a6568bd367ac7a5d5"
     },
     {
       "path": "scripts/auditar-sync-authority.mjs",
@@ -42612,8 +42653,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 62860,
-      "sha256": "77f78c8ff663b7a2430442e0d76e76d4f6e2a3a51c546f03cde41e3abab1da14"
+      "bytes": 62757,
+      "sha256": "3f3b7f76ddfea3587da2dc4f78d1c550c28086f64203402bfd44026848841845"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -43888,10 +43929,16 @@
       "sha256": "c3e398c4588b3e5967c5e9f7214e5730395a2e8425702809d7ad9017997612ac"
     },
     {
+      "path": "tests/wholesale/mayoristas-sheets.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1064,
+      "sha256": "ea6accaf7fe796e007723aeae203980be4c7047f61a7b80d738defc57099ef2f"
+    },
+    {
       "path": "tests/wholesale/mayoristas.test.mjs",
       "extension": ".mjs",
-      "bytes": 10576,
-      "sha256": "a6665cfeeb3909cb548d0bfaf0e83be42223d17d7d343958eeac485f3e866fb0"
+      "bytes": 10727,
+      "sha256": "a93456583156649de184408748c687d81b12ea408f98574d503d20512a0fab16"
     },
     {
       "path": "tienda.js",

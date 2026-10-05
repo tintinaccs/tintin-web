@@ -1,5 +1,11 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Revisión de PR #1034 — 2026-10-05
+
+- Agente/modelo: Codex (GPT-6). Corrección y merge autorizados. Base a7cf5408; se conserva el trabajo del módulo mayorista. Se clasifica Mayoristas en el registro Maestro, igualando sidebar/mobile. La alerta CodeQL estaba en la aserción incompleta del test HTML; ahora comprueba contenido escapado incluso en mayúsculas sin usar ese filtro regex.
+- Hallazgo adicional confirmado: setValues puede interpretar textos externos como fórmulas. Se protegen todas las celdas textuales del espejo, incluyendo el detalle de productos, manteniendo importes numéricos. Regresión Node ejecuta el código Apps Script real con entradas de fórmula; sin escrituras en Sheets.
+- PASS_LOCAL actual: once pruebas mayoristas y 27/27 contratos Maestro. Build/gates finales, CI, publicación Apps Script y merge pendientes; no se acredita pago ni correo reales.
+
 ## Revisión de flujos públicos — 2026-10-05 (`codex/public-flows-review-20261005`)
 
 - Agente/modelo: Codex (GPT-6). Base main 81747e36 (#1029). Revisión y reparación de checkout, producto, login e Inicio autorizadas en esta conversación, incluyendo merge/publicación. Se preservan paleta y trabajos ajenos; los cambios de otras páginas son referencias transitivas de caché del shell compartido. Sin cambios de reglas, roles, pagos, inventario ni escrituras productivas.

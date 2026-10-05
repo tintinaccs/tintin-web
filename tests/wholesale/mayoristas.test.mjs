@@ -162,12 +162,15 @@ test('una cotización nueva avisa al panel (con push de pedido) y a la clienta; 
 
 test('el correo de aprobación confirma, menciona WhatsApp y escapa el contenido', () => {
   const email = buildWholesaleApprovedEmail({
-    quoteNumber: 'MAY-000001', customerName: 'Ana <script>', total: 600000, adminNote: '',
+    quoteNumber: 'MAY-000001', customerName: 'Ana <SCRIPT>', total: 600000, adminNote: '',
     items: [{ name: 'Aros <b>', qty: 15, lineTotal: 450000 }],
   });
   assert.match(email.subject, /MAY-000001 fue aceptada/);
   assert.match(email.text, /WhatsApp/);
-  assert.doesNotMatch(email.html, /<script>|<b>/);
+  assert.ok(email.html.includes('Ana &lt;SCRIPT&gt;'));
+  assert.ok(email.html.includes('Aros &lt;b&gt;'));
+  assert.ok(!email.html.includes('<SCRIPT>'));
+  assert.ok(!email.html.includes('Aros <b>'));
 });
 
 test('los endpoints exigen origen permitido y sesión', async () => {

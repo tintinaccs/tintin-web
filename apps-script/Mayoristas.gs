@@ -53,7 +53,11 @@ function tintinWholesaleRow_(quoteId, quote) {
     tintinWholesaleText_(quote.notes, 1000),
     tintinWholesaleText_(quote.adminNote, 1000),
     tintinWholesaleText_(quote.respondedBy, 254)
-  ];
+  ].map(function(value) {
+    // setValues interpreta las cadenas que empiezan con '=' como fórmulas.
+    // Los textos de clientas y catálogo deben almacenarse como texto literal.
+    return typeof value === 'string' && /^\s*[=+@-]/.test(value) ? "'" + value : value;
+  });
 }
 
 function tintinUpsertWholesaleQuote_(quoteId, quote) {
