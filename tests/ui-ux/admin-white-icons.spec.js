@@ -65,6 +65,7 @@ for (const width of [390,768,1440]) {
     for(const selector of ['#tt-loader-wordmark','#tt-loader-brand-subtitle','#tt-loader-title','#tt-loader-subtitle']) {
       await expect(page.locator(selector)).toHaveCSS('color','rgb(255, 255, 255)');
     }
+    expect(await page.locator('#tt-loader-spin-wrap').evaluate(e=>getComputedStyle(e,'::before').filter)).not.toContain('drop-shadow');
     await expect(page.locator('#tt-loader')).toHaveCSS('background-color','rgb(248, 170, 202)');
     expect(await page.locator('.tt-loader-spinner').evaluate(e=>getComputedStyle(e,'::after').borderBottomColor)).toBe('rgb(255, 255, 255)');
   });

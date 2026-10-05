@@ -410,7 +410,7 @@
     '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#F8AACA;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
-    '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:brightness(0) invert(1) drop-shadow(0 8px 20px rgba(125,23,58,.14));user-select:none;pointer-events:none}',
+    '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:brightness(0) invert(1);user-select:none;pointer-events:none}',
     '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#FFFFFF!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
     '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#FFFFFF!important}#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:none!important;display:none!important}',
@@ -564,7 +564,7 @@
   // alcanza a mostrar el PNG negro durante el primer fotograma mientras aún
   // llegan las hojas de estilo: sobre el fondo rosa la marca siempre nace
   // blanca, igual que el texto y el indicador de carga.
-  logo?.style.setProperty('filter', 'brightness(0) invert(1) drop-shadow(0 8px 20px rgba(125,23,58,.14))', 'important');
+  logo?.style.setProperty('filter', 'brightness(0) invert(1)', 'important');
 
   function markLogoReady() {
     logoReady = true;
