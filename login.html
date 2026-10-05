@@ -1571,6 +1571,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
   const btn = document.getElementById('btn-verify-otp');
   btn.disabled = true;
   explicitLoginInProgress = true;
+  loginSessionGeneration++;
   showOverlay();
   try {
     const user = await verifyOtpCode(otpEmail, code);

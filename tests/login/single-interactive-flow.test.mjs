@@ -161,6 +161,26 @@ test('la salida visible del arranque no inventa un estado de Auth ni borra persi
   assert.equal(ctx.auth.currentUser,user);
 });
 
+test('verificar correo descarta una restauración anterior todavía pendiente', async () => {
+  const f=fixture(),reload=deferred(),verification=deferred();
+  const user={uid:'old',email:'fixture@example.invalid',reload:()=>reload.promise};
+  Object.assign(f.context,{auth:{currentUser:user},loginPersistenceFailed:false,
+    URLSearchParams,
+    loginAuthReadyDiagnosticRecorded:false,loginCoordinatorReadyDiagnosticRecorded:false,
+    googleRedirectHandlingPromise:null,handleGoogleRedirectReturn:async()=>false,
+    recordAuthDiagnostic(){},PROFILE_READ_DEADLINE_MS:15000,
+    verifyOtpCode:()=>verification.promise});
+  f.context.window.location={search:''};
+  const old=f.context.observer({status:'authenticated',user});
+  await new Promise(resolve=>setImmediate(resolve));
+  const attempt=f.otp();
+  reload.resolve();await old;
+  assert.equal(f.calls.finish,0);assert.equal(f.calls.hide,0);
+  assert.equal(f.calls.reveal,0);assert.equal(f.calls.errors.length,0);
+  verification.resolve({uid:'new'});await attempt;
+  assert.equal(f.calls.finish,1);
+});
+
 test('OTP válido finaliza una sola vez con loader, sin textos intermedios', async () => {
   const f = fixture();
   const attempt = f.otp();

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7a58d6272fe636298829c8ef3f9f6f1e2b5108d4411dbd4129b363a255dc9c91",
+  "sourceFingerprint": "c2fa9dca27f3ab8d8d1086ed619e15f93f85f99092c5980397a7f8937272308f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 974,
     "textFiles": 933,
-    "totalBytes": 18414264,
+    "totalBytes": 18415646,
     "pages": 19,
     "modules": 680
   },
@@ -13424,8 +13424,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 85875,
-      "sha256": "20563159db9cb09879cd68719601bec4e27f6a917ccd3d3dc6851ae46dbf5d79",
+      "bytes": 85903,
+      "sha256": "a433aec84737f8568ac176bd4b93ac3d4b1858860e08ce8dfd9dd18f1e991a8e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13488,17 +13488,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1586
+          "line": 1587
         },
         {
           "raw": "tienda.js?v=tintin-20261004-final-integration-1",
           "target": "tienda.js",
-          "line": 1587
+          "line": 1588
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1588
+          "line": 1589
         }
       ],
       "styles": [
@@ -13684,19 +13684,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1586,
+          "line": 1587,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261004-final-integration-1",
           "target": "tienda.js",
-          "line": 1587,
+          "line": 1588,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1588,
+          "line": 1589,
           "exists": true
         },
         {
@@ -19000,7 +19000,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 351279,
-      "sha256": "557566f85ecdb511b68a3f67a887594b9a00df24daaab3bb13bcddafb8fa7365",
+      "sha256": "daf0f626901f9182b5da16f9a18accbf7d47b75de5e21c9b16acf0b0c7777f08",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34527,8 +34527,8 @@
     },
     {
       "path": "tests/login/single-interactive-flow.test.mjs",
-      "bytes": 11530,
-      "sha256": "b17656ec3f8ec3af208d4655ab489c098c1b3b7ee0ac81dc0c772772db137c45",
+      "bytes": 12589,
+      "sha256": "708cad90b023063a21432938c3b7872ff54b414cf871fa4c2cd2e93d13ba1fe7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38070,13 +38070,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 351279,
-      "sha256": "557566f85ecdb511b68a3f67a887594b9a00df24daaab3bb13bcddafb8fa7365"
+      "sha256": "daf0f626901f9182b5da16f9a18accbf7d47b75de5e21c9b16acf0b0c7777f08"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 351194,
-      "sha256": "5ea8b114d650679b6bbf071d40fc7bafb22a650ce6572a7feebb15f20730238c"
+      "sha256": "32fb761bdcdc185927568210fc585741c3f7152b7083d39182eae45537dae08d"
     },
     {
       "path": "config/public-site.json",
@@ -38591,8 +38591,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 200291,
-      "sha256": "eb548306f85838426ee974b73e24aec672330d47a6f8e710b2b49b3a8122dbf2"
+      "bytes": 200586,
+      "sha256": "3160f974a25836e5c02cd3ddc6654de90a3f58b455f0314e12be3ceb83020649"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -40907,8 +40907,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 85875,
-      "sha256": "20563159db9cb09879cd68719601bec4e27f6a917ccd3d3dc6851ae46dbf5d79"
+      "bytes": 85903,
+      "sha256": "a433aec84737f8568ac176bd4b93ac3d4b1858860e08ce8dfd9dd18f1e991a8e"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -42713,8 +42713,8 @@
     {
       "path": "tests/login/single-interactive-flow.test.mjs",
       "extension": ".mjs",
-      "bytes": 11530,
-      "sha256": "b17656ec3f8ec3af208d4655ab489c098c1b3b7ee0ac81dc0c772772db137c45"
+      "bytes": 12589,
+      "sha256": "708cad90b023063a21432938c3b7872ff54b414cf871fa4c2cd2e93d13ba1fe7"
     },
     {
       "path": "tests/navigation/account-panel-contract.test.mjs",
