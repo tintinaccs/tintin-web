@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d9928d1bebb7181d5beccf90f0c83de0ba9b72e2c0d05715fb597bd10037d3bd",
+  "sourceFingerprint": "0d7157a53cd3eee37e09dbc465bad43592fee5cb9ad91000536f069ecf655852",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 993,
     "textFiles": 952,
-    "totalBytes": 18556335,
+    "totalBytes": 18557882,
     "pages": 19,
     "modules": 697
   },
@@ -37805,8 +37805,8 @@
     },
     {
       "path": "tests/wholesale/mayoristas-sheets.test.mjs",
-      "bytes": 1064,
-      "sha256": "ea6accaf7fe796e007723aeae203980be4c7047f61a7b80d738defc57099ef2f",
+      "bytes": 2191,
+      "sha256": "4f2d7e708d6fe9af2914b613ec9897076552862e00057254aeafa128ede3866e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37840,7 +37840,7 @@
       "endpoints": [
         {
           "url": "https://evil.example/",
-          "line": 10
+          "line": 29
         }
       ]
     },
@@ -38243,8 +38243,8 @@
     {
       "path": "apps-script/Mayoristas.gs",
       "extension": ".gs",
-      "bytes": 4205,
-      "sha256": "c65ff6d1cfce356bc2dfbe14b92c0b2670b9486dc2ef52b6b743a3b58635b43d"
+      "bytes": 4625,
+      "sha256": "74dbe065b4add8d88b1d61816d0e22960623460056354defed93bae646902096"
     },
     {
       "path": "apps-script/Participacion.gs",
@@ -43931,8 +43931,8 @@
     {
       "path": "tests/wholesale/mayoristas-sheets.test.mjs",
       "extension": ".mjs",
-      "bytes": 1064,
-      "sha256": "ea6accaf7fe796e007723aeae203980be4c7047f61a7b80d738defc57099ef2f"
+      "bytes": 2191,
+      "sha256": "4f2d7e708d6fe9af2914b613ec9897076552862e00057254aeafa128ede3866e"
     },
     {
       "path": "tests/wholesale/mayoristas.test.mjs",

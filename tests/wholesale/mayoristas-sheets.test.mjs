@@ -3,6 +3,25 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
+test('prepara Mayoristas en la planilla canónica sin depender de una planilla activa', () => {
+  let locked = false;
+  let released = false;
+  let headers;
+  let frozenRows;
+  const range = { setValues: value => { headers = value; return range; }, setFontWeight: () => range };
+  const sheet = { getLastRow: () => 0, getName: () => 'Mayoristas', getRange: () => range, setFrozenRows: value => { frozenRows = value; } };
+  const context = vm.createContext({
+    SpreadsheetApp: { getActiveSpreadsheet: () => { throw new Error('No hay planilla activa'); } },
+    tintinProductsSpreadsheet_: () => ({ getSheetByName: () => null, insertSheet: name => { assert.equal(name, 'Mayoristas'); return sheet; } }),
+    LockService: { getScriptLock: () => ({ waitLock: () => { locked = true; }, releaseLock: () => { released = true; } }) },
+  });
+  vm.runInContext(fs.readFileSync(new URL('../../apps-script/Mayoristas.gs', import.meta.url), 'utf8'), context);
+  assert.equal(context.tintinPrepararMayoristas().ok, true);
+  assert.equal(headers[0].length, 18);
+  assert.equal(frozenRows, 1);
+  assert.equal(locked && released, true);
+});
+
 test('el espejo de mayoristas guarda textos externos sin ejecutar fórmulas y conserva los importes', () => {
   const context = vm.createContext({});
   vm.runInContext(fs.readFileSync(new URL('../../apps-script/Mayoristas.gs', import.meta.url), 'utf8'), context);

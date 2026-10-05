@@ -14,13 +14,26 @@ var TINTIN_WHOLESALE_HEADERS = [
 ];
 
 function tintinWholesaleSheet_() {
-  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  // El webhook no tiene una planilla activa: usar la misma fuente canónica
+  // que Productos y la paridad administrativa.
+  var spreadsheet = tintinProductsSpreadsheet_();
   var sheet = spreadsheet.getSheetByName(TINTIN_WHOLESALE_SHEET) || spreadsheet.insertSheet(TINTIN_WHOLESALE_SHEET);
   if (sheet.getLastRow() === 0) {
     sheet.getRange(1, 1, 1, TINTIN_WHOLESALE_HEADERS.length).setValues([TINTIN_WHOLESALE_HEADERS]).setFontWeight('bold');
     sheet.setFrozenRows(1);
   }
   return sheet;
+}
+
+// Preparación manual desde Apps Script, sin fabricar cotizaciones ni pedidos.
+function tintinPrepararMayoristas() {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    return { ok: true, sheet: tintinWholesaleSheet_().getName() };
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function tintinWholesaleText_(value, max) {
