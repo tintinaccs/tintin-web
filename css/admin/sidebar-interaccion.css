@@ -47,6 +47,8 @@ body:has(.adm-main) .adm-nav-item:focus-visible { outline: 2px solid var(--admin
   html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-sub { display: block; }
 }
 @media (max-width: 540px) {
+  /* El sistema global fija el lateral en 300; el fondo móvil está en 310. */
+  html.adm-mobile-sidebar-open body:has(.adm-main) #adm-sidebar.open { z-index: 320 !important; }
   html.adm-sidebar-auto .adm-sidebar-toggle svg { transform: none; }
   body:has(.adm-main) .adm-nav-item { font-size: 12px; padding: 8px 12px; }
 }
