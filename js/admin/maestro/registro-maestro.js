@@ -1,7 +1,7 @@
 export const MAESTRO_SCHEMA_VERSION = 2;
 
 export const BASE_ADMIN_SECTIONS = Object.freeze([
-  'dashboard', 'estadisticas', 'usuarios', 'pedidos', 'productos', 'resenas',
+  'dashboard', 'estadisticas', 'usuarios', 'pedidos', 'mayoristas', 'productos', 'resenas',
   'me-gusta', 'colecciones', 'paginas', 'importar', 'mensajes',
   'notificaciones-push', 'auditoria', 'diagnostico', 'flujo-conexiones', 'correos',
   'configuracion', 'permisos', 'apariencia'
@@ -65,6 +65,10 @@ export const MAESTRO_MODULES = Object.freeze([
     quickAction: { type: 'global', path: 'TintinOrderAdmin.openManualOrder', label: 'Nuevo pedido' },
     evidence: ['TintinOrderAdmin.openManualOrder', 'TintinOrderAdmin.openAdvancedOrderEditor', 'trashOrder', 'restoreOrder']
   }),
+
+  moduleDef('mayoristas', 'Mayoristas', 'lifecycle', 'Cotizaciones creadas por clientas. Solo Super Admin fija precios y responde mediante la API protegida; no se cobran ni se borran desde este módulo.', {
+    read: YES, update: GUARDED, search: YES, sync: YES
+  }, { evidence: ['section-mayoristas', 'js/admin/mayoristas/mayoristas-admin.js', '/api/admin-wholesale'] }),
 
   moduleDef('productos', 'Productos', 'crud', 'CRUD completo de catálogo, inventario, precio, visibilidad, multimedia y variantes.', {
     create: YES, read: YES, update: YES, archive: YES, delete: GUARDED, search: YES, export: YES, sync: YES

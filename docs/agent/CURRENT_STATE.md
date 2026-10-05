@@ -1,5 +1,12 @@
 # Estado actual de reparación — independencia de Shopify
 
+- Integración con main b8269fe8 (#1032 mergeado, CI y preview exactos PASS): ProductosUnificados.gs y reglas se combinan sin conflictos de fuentes. Mayoristas ahora resuelve la planilla canónica en webhooks y expone tintinPrepararMayoristas para crear pestaña/18 encabezados sin cotizaciones de prueba. PASS_LOCAL previo: 12 pruebas Node, 89 controles Firestore demo, módulos 124/124 y contratos 77/77. PASS_LOCAL combinado: 14/14 Node Mayoristas/secretos, 92 controles Firestore demo y build:pages. CI del nuevo head pendiente.
+
+## Revisión de PR #1034 — 2026-10-05
+
+- Agente/modelo: Codex (GPT-6). Corrección y merge autorizados. Base a7cf5408; se conserva el trabajo del módulo mayorista. Se clasifica Mayoristas en el registro Maestro, igualando sidebar/mobile. La alerta CodeQL estaba en la aserción incompleta del test HTML; ahora comprueba contenido escapado incluso en mayúsculas sin usar ese filtro regex.
+- Hallazgo adicional confirmado: setValues puede interpretar textos externos como fórmulas. Se protegen todas las celdas textuales del espejo, incluyendo el detalle de productos, manteniendo importes numéricos. Regresión Node ejecuta el código Apps Script real con entradas de fórmula; sin escrituras en Sheets.
+- PASS_LOCAL actual: once pruebas mayoristas y 27/27 contratos Maestro. Build/gates finales, CI, publicación Apps Script y merge pendientes; no se acredita pago ni correo reales.
 ## Conciliación PayPal y secretos Sheets — revisión PR #1032, 2026-10-05
 
 - Agente/modelo: Codex (GPT-6). Corrección y merge autorizados; base a7cf5408. Hallazgos en el head e5ccd1eb: deduplicar por estado perdía el segundo reembolso parcial; escribir conciliación antes que pedido permitía fallos parciales irrecuperables. Ahora se registra cada refundId, se suma sin duplicar, se conserva el estado terminal y se condiciona un commit atómico a la versión leída. También la confirmación de cobro usa esa versión para no revivir un pago devuelto concurrentemente. Sin movimientos de dinero ni devoluciones reales.
