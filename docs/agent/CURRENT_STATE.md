@@ -1,5 +1,10 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Cierre de PR #1033 — 2026-10-05
+
+- Agente/modelo: Codex (GPT-6). Revisión, corrección y merge autorizados por el dueño; base a7cf5408. CI del head eb96be31 falló en audit:typography por el fallback de fuente de avisos-en-vivo.css. Se utiliza la familia Montserrat canónica y se regeneran caché/manifiesto desde origin/main para las URLs aún sin publicar.
+- PASS_LOCAL actual: audit:typography (27051 comprobaciones), build:pages, dos pruebas Node de hero y nueve Chromium de avisos/colecciones a 390/768/1440, sin reintentos. CI y merge del nuevo head pendientes. Sin escrituras comerciales ni pruebas de OAuth/pago reales.
+
 ## Colecciones, actividad pública y hero — 2026-10-05 (`codex/public-navigation-sync-20261005`)
 
 - Agente/modelo: Codex (GPT-6). Base inicial main 969a7f30, PR #1030 mergeado; se integra main a7cf5408 con #1031 antes de publicar. Se verificó el guardado real de 41 sellos de #1030; los commits posteriores requieren nueva evidencia y revalidación. El dueño autorizó estas correcciones y merge; no se crean pedidos, cuentas ni actividad comercial de prueba en producción.
