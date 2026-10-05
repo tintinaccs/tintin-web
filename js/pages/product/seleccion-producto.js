@@ -82,6 +82,7 @@ function render(){
       var img = item.imageUrl || item.imgUrl || '';
       var url = '/product?id=' + encodeURIComponent(item.id);
       var isFavorite = Boolean(window.TintinFavorites && window.TintinFavorites.has && window.TintinFavorites.has(item.id));
+      var favoriteLabel = escapeHtml((isFavorite ? 'Quitar ' : 'Guardar ') + String(item.name || 'producto') + (isFavorite ? ' de favoritos' : ' en favoritos'));
       return (
         '<div class="tinsel-item" data-id="' + safeId + '">' +
           '<a class="tinsel-item-img" href="' + url + '">' +
@@ -98,7 +99,7 @@ function render(){
             '<button type="button" class="tinsel-qbtn" data-cart-action="quantity" data-cart-id="' + safeId + '" data-cart-variant="' + safeVariantAttr + '" data-cart-delta="1" aria-label="Sumar">+</button>' +
           '</div>' +
           '<div class="tinsel-item-actions">' +
-            '<button type="button" class="tinsel-favorite' + (isFavorite ? ' is-favorite' : '') + '" data-favorite-id="' + safeId + '" data-favorite-name="' + safeName + '" data-favorite-price="' + escapeHtml(item.price) + '" data-favorite-image="' + escapeHtml(img) + '" aria-pressed="' + isFavorite + '"><span data-favorite-icon aria-hidden="true">' + heartIconMarkup(isFavorite) + '</span></button>' +
+            '<button type="button" class="tinsel-favorite' + (isFavorite ? ' is-favorite' : '') + '" data-favorite-id="' + safeId + '" data-favorite-name="' + safeName + '" data-favorite-price="' + escapeHtml(item.price) + '" data-favorite-image="' + escapeHtml(img) + '" aria-label="' + favoriteLabel + '" aria-pressed="' + isFavorite + '"><span data-favorite-icon aria-hidden="true">' + heartIconMarkup(isFavorite) + '</span></button>' +
             '<button type="button" class="tinsel-del" data-cart-action="remove" data-cart-id="' + safeId + '" data-cart-variant="' + safeVariantAttr + '" data-tinsel-remove="1" aria-label="Eliminar">' +
               '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
             '</button>' +

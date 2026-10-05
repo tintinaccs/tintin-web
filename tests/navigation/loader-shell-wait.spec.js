@@ -169,21 +169,32 @@ test('el loader no se retira mientras la respuesta del logo inicial sigue pendie
   const logoGate = new Promise(resolve => { releaseLogo = resolve; });
   let markLogoRequested;
   const logoRequested = new Promise(resolve => { markLogoRequested = resolve; });
-
-  await page.route('**/assets-tintin/images/general/tintin-loader-brand.svg*', async route => {
+  // Chromium puede compartir imágenes SVG decodificadas entre los contextos
+  // del runner. Un recurso exclusivo de este intento obliga a probar un logo
+  // realmente pendiente, sin confundir una imagen ya usable con red pendiente.
+  const fs = require('node:fs');
+  const logoName = `tintin-loader-brand-${require('node:crypto').randomUUID()}.svg`;
+  const loaderSource = fs.readFileSync('js/cargador-pagina.js', 'utf8')
+    .replace('assets-tintin/images/general/tintin-loader-brand.svg', `assets-tintin/images/general/${logoName}`);
+  await page.route('**/js/cargador-pagina.js*', route => route.fulfill({ contentType: 'text/javascript', body: loaderSource }));
+  await page.route(`**/assets-tintin/images/general/${logoName}*`, async route => {
     markLogoRequested();
     await logoGate;
-    await route.continue();
+    await route.fulfill({ contentType: 'image/svg+xml', body: fs.readFileSync('assets-tintin/images/general/tintin-loader-brand.svg', 'utf8') });
+  });
+  // La configuración visual puede reemplazar el SVG por la marca PNG.
+  // Ambas respuestas quedan pendientes: se prueba la imagen efectivamente usada.
+  await page.route('**/assets-tintin/images/general/logo.png*', async route => {
+    markLogoRequested();
+    await logoGate;
+    await route.fulfill({ contentType: 'image/png', body: fs.readFileSync('assets-tintin/images/general/logo.png') });
   });
 
   const navigation = page.goto('/about.html', { waitUntil: 'domcontentloaded' });
   await logoRequested;
   await page.waitForSelector('#tt-loader-logo', { state: 'attached', timeout: 5000 });
 
-  // La condición que importa no es naturalWidth: Chromium puede conservar un
-  // recurso decodificado entre solicitudes aun cuando la respuesta actual esté
-  // interceptada. El contrato real es que, mientras esta solicitud crítica
-  // continúa bloqueada, el loader no puede revelar la página.
+  // Mantiene el contrato del primer reveal con un logo que no pudo resolverse.
   const whileLogoBlocked = await page.evaluate(() => {
     const loader = document.getElementById('tt-loader');
     return {

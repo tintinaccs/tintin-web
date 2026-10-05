@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const categories = ['relojes', 'bolsos', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
 
 for (const width of [390, 768, 1440]) {
   for (const route of ['/', '/about']) {
@@ -9,8 +10,8 @@ for (const width of [390, 768, 1440]) {
         const resource = new URL(request.request().url()).searchParams.get('resource');
         if (!['products', 'collections'].includes(resource)) return request.continue();
         const items = resource === 'collections'
-          ? [{ id: 'relojes', data: { name: 'Relojes', visible: true } }, { id: 'bolsos', data: { name: 'Bags', visible: true } }]
-          : ['relojes', 'bolsos'].map((category, i) => ({ id: `fixture-${i}`, data: { name: `Producto ${i}`, price: 100000, stock: 5, active: true, category, imageUrl: `${origin}/__collection-test-${category}.svg`, createdAt: '2026-01-01' } }));
+          ? categories.map(id => ({ id, data: { name: id === 'bolsos' ? 'Bags' : id, visible: true } }))
+          : categories.map((category, i) => ({ id: `fixture-${i}`, data: { name: `Producto ${i}`, price: 100000, stock: 5, active: true, category, imageUrl: `${origin}/__collection-test-${category}.svg`, createdAt: '2026-01-01' } }));
         return request.fulfill({ json: { ok: true, resource, items } });
       });
       await page.route('**/__collection-test-*.svg', request => request.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200"><rect width="600" height="200" fill="#F8AACA"/></svg>' }));
@@ -27,8 +28,8 @@ for (const width of [390, 768, 1440]) {
       }
       const grid = page.locator(`[data-collections-nav="${surface}"]`);
       await expect(grid).toHaveAttribute('data-phase4-collections-state', 'ready');
-      await expect(grid.locator('a')).toHaveCount(2);
-      for (const slug of ['relojes', 'bolsos']) {
+      await expect(grid.locator('a')).toHaveCount(categories.length);
+      for (const slug of categories) {
         const card = grid.locator(`a[href="/catalogo?cat=${slug}"]`);
         const image = card.locator('img');
         await expect(image).toHaveAttribute('src', `${origin}/__collection-test-${slug}.svg`);
