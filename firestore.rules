@@ -20,8 +20,12 @@ service cloud.firestore {
     // requiere el Admin SDK en un entorno privilegiado — ver
     // El runtime vigente no despliega Firebase Functions.
     function isSuperAdmin() {
+      // email_verified: el servidor (verifyFirebaseIdToken) ya lo exige; las
+      // reglas también, para que un token con el correo sin verificar nunca
+      // valga como Super Admin aunque un proveedor lo emita.
       return isSignedIn() &&
         request.auth.token.email != null &&
+        request.auth.token.email_verified == true &&
         request.auth.token.email.lower() == "tintinaccs@gmail.com";
     }
 

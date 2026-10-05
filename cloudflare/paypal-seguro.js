@@ -1,5 +1,6 @@
 import {
   decodeFirestoreFields,
+  firestoreAdminFindFirstByFields,
   firestoreAdminGet,
   firestoreAdminMerge,
   firestoreAdminReplace,
@@ -156,14 +157,32 @@ async function assertAccountNotBlocked(env, uid) {
   if (profile.blocked === true) throw new Error('La cuenta está bloqueada y no puede completar pagos');
 }
 
-function validatePayableOrder(order, uid) {
+// Un pedido cancelado, rechazado o ya reembolsado no se puede volver a cobrar:
+// el cobro quedaría registrado sobre un pedido que el equipo ya cerró.
+const CLOSED_ORDER_STATUSES = new Set(['cancelado', 'rechazado']);
+const CLOSED_PAYMENT_STATUSES = new Set(['pagado', 'cancelado', 'rechazado', 'reembolsado']);
+
+export function validatePayableOrder(order, uid) {
   if (clean(order.userId, 128) !== uid) throw new Error('El pedido no pertenece a la cuenta iniciada');
   if (clean(order?.payment?.method, 30) !== 'paypal') throw new Error('El pedido no seleccionó PayPal');
-  if (clean(order?.payment?.status, 30) === 'pagado' || clean(order.paymentStatus, 30) === 'pagado') {
+  const paymentStatus = clean(order?.payment?.status || order.paymentStatus, 30).toLowerCase();
+  if (paymentStatus === 'pagado' || clean(order.paymentStatus, 30) === 'pagado') {
     throw new Error('El pedido ya está pagado');
+  }
+  if (CLOSED_PAYMENT_STATUSES.has(paymentStatus) || CLOSED_ORDER_STATUSES.has(clean(order.status, 30).toLowerCase())) {
+    throw new Error('El pedido está cerrado y no admite pagos');
   }
   if (order.shippingPending === true) throw new Error('El envío todavía no tiene un total cobrable');
   return Number(order.total);
+}
+
+// PayPal-Request-Id admite hasta 108 caracteres y PayPal devuelve la orden
+// original si se repite: incluir el importe evita reutilizar una orden con un
+// total viejo cuando el pedido cambió, y el hash mantiene el largo acotado.
+export async function paypalCreateRequestId(orderId, cents) {
+  const bytes = new TextEncoder().encode(`${orderId}:${cents}`);
+  const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes));
+  return `tintin-create-${[...digest.slice(0, 20)].map(byte => byte.toString(16).padStart(2, '0')).join('')}`;
 }
 
 export async function createPaypalOrder(env, { orderId, uid }) {
@@ -174,7 +193,7 @@ export async function createPaypalOrder(env, { orderId, uid }) {
   const amount = paypalAmountFromPyg(validatePayableOrder(order, uid), config.rate);
   const provider = await paypalRequest(config, '/v2/checkout/orders', {
     method: 'POST',
-    headers: { 'PayPal-Request-Id': `tintin-create-${order.id}` },
+    headers: { 'PayPal-Request-Id': await paypalCreateRequestId(order.id, amount.cents) },
     body: JSON.stringify({
       intent: 'CAPTURE',
       purchase_units: [{
@@ -218,6 +237,9 @@ async function markPaid(env, mapping, capture) {
   if (mapping.status === 'COMPLETED' && mapping.captureId && mapping.captureId === captureId) {
     return { idempotent: true };
   }
+  // PayPal no garantiza el orden de los webhooks: un "cobro completado" que
+  // llega tarde no puede volver a marcar como pagado algo ya devuelto.
+  if (mapping.status === 'REFUNDED' || mapping.status === 'REVERSED') return { idempotent: true, reversed: true };
   if (!captureId) throw new Error('PayPal no devolvió el identificador de captura');
   const currency = clean(capture?.amount?.currency_code, 3).toUpperCase();
   const cents = Math.round(Number(capture?.amount?.value) * 100);
@@ -303,7 +325,9 @@ export async function capturePaypalOrder(env, { providerOrderId, uid }) {
   }
   await assertAccountNotBlocked(env, uid);
   const provider = await paypalRequest(config, `/v2/checkout/orders/${encodeURIComponent(mapping.id)}/capture`, {
-    method: 'POST', headers: { 'PayPal-Request-Id': `tintin-capture-${mapping.orderId}` }, body: '{}',
+    // Por orden de PayPal (no por pedido): si el pedido tuvo que generar una
+    // orden nueva, repetir el id del pedido devolvería la captura de la vieja.
+    method: 'POST', headers: { 'PayPal-Request-Id': `tintin-capture-${mapping.id}` }, body: '{}',
   });
   const capture = completedCapture(provider);
   if (!capture) throw new Error('PayPal no confirmó el cobro');
@@ -324,9 +348,94 @@ export async function processPaypalWebhook(env, request, rawBody) {
     }),
   });
   if (verification.verification_status !== 'SUCCESS') throw new Error('Firma de webhook PayPal inválida');
+  if (REVERSAL_EVENTS.has(event.event_type)) {
+    const reversal = paypalReversalDetails(event);
+    const mapping = await loadMappingForReversal(env, reversal);
+    await markReversed(env, mapping, reversal);
+    return { accepted: true, handled: true, orderId: mapping.orderId };
+  }
   if (event.event_type !== 'PAYMENT.CAPTURE.COMPLETED') return { accepted: true, handled: false };
   const providerOrderId = clean(event?.resource?.supplementary_data?.related_ids?.order_id, 80);
   const mapping = await loadMapping(env, providerOrderId);
   await markPaid(env, mapping, event.resource);
   return { accepted: true, handled: true, orderId: mapping.orderId };
+}
+
+// Reembolsos y contracargos. Antes sólo se escuchaba el cobro completado, así
+// que un pedido reembolsado o revertido seguía figurando como pagado.
+const REVERSAL_EVENTS = new Set(['PAYMENT.CAPTURE.REFUNDED', 'PAYMENT.CAPTURE.REVERSED']);
+
+/**
+ * Extrae de un evento de reembolso/contracargo la captura afectada y el monto.
+ * En REVERSED el recurso es la propia captura; en REFUNDED es el reembolso,
+ * que apunta a su captura con el enlace rel="up".
+ */
+export function paypalReversalDetails(event) {
+  const resource = event?.resource || {};
+  const kind = event?.event_type === 'PAYMENT.CAPTURE.REVERSED' ? 'reversed' : 'refunded';
+  const upLink = (Array.isArray(resource.links) ? resource.links : []).find(link => link?.rel === 'up');
+  const linkedCapture = clean(String(upLink?.href || '').split('/captures/')[1]?.split(/[/?#]/)[0], 100);
+  const captureId = kind === 'reversed' ? clean(resource.id, 100) : linkedCapture;
+  const amount = resource?.amount || {};
+  const cents = Math.round(Number(amount.value) * 100);
+  return {
+    kind,
+    captureId,
+    providerOrderId: clean(resource?.supplementary_data?.related_ids?.order_id, 80),
+    currency: clean(amount.currency_code, 3).toUpperCase(),
+    cents: Number.isSafeInteger(cents) && cents > 0 ? cents : 0,
+    eventId: clean(event?.id, 120),
+  };
+}
+
+async function loadMappingForReversal(env, reversal) {
+  if (reversal.providerOrderId && PROVIDER_ID_RE.test(reversal.providerOrderId)) {
+    return loadMapping(env, reversal.providerOrderId);
+  }
+  if (!/^[A-Za-z0-9_-]{6,100}$/.test(reversal.captureId)) throw new Error('El evento no identifica la captura');
+  const document = await firestoreAdminFindFirstByFields(env, 'paypalOrders', ['captureId'], reversal.captureId);
+  if (!document) throw new Error('No existe conciliación para esa captura PayPal');
+  const id = clean(String(document.name || '').split('/').pop(), 80);
+  return { id, ...decodeFirestoreFields(document.fields || {}) };
+}
+
+async function markReversed(env, mapping, reversal) {
+  const now = new Date();
+  // Un reembolso parcial no cierra el pago: se registra y se avisa al equipo.
+  const full = reversal.kind === 'reversed' || !reversal.cents || reversal.cents >= Number(mapping.expectedCents);
+  const mappingStatus = reversal.kind === 'reversed' ? 'REVERSED' : (full ? 'REFUNDED' : 'PARTIALLY_REFUNDED');
+  if (mapping.status === mappingStatus) return { idempotent: true };
+  await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
+    status: fsString(mappingStatus),
+    reversalCents: fsInteger(reversal.cents),
+    reversalAt: fsTimestamp(now),
+  });
+  if (full) {
+    await firestoreAdminMerge(env, `orders/${mapping.orderId}`, {
+      payment: { mapValue: { fields: {
+        method: fsString('paypal'), status: fsString('reembolsado'), providerOrderId: fsString(mapping.id),
+        captureId: fsString(clean(mapping.captureId || reversal.captureId, 100)), currency: fsString(mapping.currency),
+        reversalKind: fsString(reversal.kind), reversedAt: fsTimestamp(now),
+      } } },
+      paymentStatus: fsString('reembolsado'), updatedAt: fsTimestamp(now),
+    });
+  }
+  try {
+    const title = reversal.kind === 'reversed'
+      ? `Contracargo PayPal en el pedido ${mapping.orderId}`
+      : `${full ? 'Reembolso' : 'Reembolso parcial'} PayPal en el pedido ${mapping.orderId}`;
+    await notifyAdminIfAbsent(env, {
+      kind: 'order_payment_reversed', actorType: 'system', actorName: 'PayPal',
+      title,
+      body: full
+        ? 'El pago quedó marcado como reembolsado. Revisá el pedido y el stock antes de entregar.'
+        : `Se devolvieron USD ${(reversal.cents / 100).toFixed(2)}; el pago sigue figurando como pagado.`,
+      iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
+      orderId: mapping.orderId, status: full ? 'reembolsado' : 'pagado',
+      sourceType: 'order', sourceId: mapping.orderId, createdAt: now,
+    }, `payment_${mappingStatus.toLowerCase()}:${mapping.orderId}`);
+  } catch (error) {
+    console.warn('[paypal] No se pudo avisar el reembolso/contracargo:', error);
+  }
+  return { idempotent: false, full };
 }

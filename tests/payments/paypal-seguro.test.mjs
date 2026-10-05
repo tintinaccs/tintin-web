@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { paypalAmountFromPyg, paypalConfig, publicPaypalConfig } from '../../cloudflare/paypal-seguro.js';
+import {
+  paypalAmountFromPyg,
+  paypalConfig,
+  paypalCreateRequestId,
+  paypalReversalDetails,
+  publicPaypalConfig,
+  validatePayableOrder,
+} from '../../cloudflare/paypal-seguro.js';
 import { onRequestPost, parseBcpUsdRate } from '../../functions/api/paypal-rate-refresh.js';
 
 const now = Date.parse('2026-08-08T12:00:00Z');
@@ -46,4 +53,40 @@ test('la actualización BCP exige token OIDC antes de consultar o escribir datos
 test('tasa fuera del rango plausible del guaraní deja PayPal deshabilitado', () => {
   assert.equal(paypalConfig({ ...complete, PAYPAL_PYG_PER_USD: '1' }, now).enabled, false);
   assert.equal(paypalConfig({ ...complete, PAYPAL_PYG_PER_USD: '900000' }, now).enabled, false);
+});
+
+const payable = { userId: 'uid1', payment: { method: 'paypal', status: 'pendiente' }, paymentStatus: 'pendiente', status: 'pendiente', total: 70000 };
+
+test('un pedido cerrado no se puede cobrar por PayPal', () => {
+  assert.equal(validatePayableOrder(payable, 'uid1'), 70000);
+  assert.throws(() => validatePayableOrder({ ...payable, status: 'cancelado' }, 'uid1'), /cerrado/);
+  assert.throws(() => validatePayableOrder({ ...payable, status: 'rechazado' }, 'uid1'), /cerrado/);
+  assert.throws(() => validatePayableOrder({ ...payable, payment: { method: 'paypal', status: 'reembolsado' }, paymentStatus: 'reembolsado' }, 'uid1'), /cerrado/);
+  assert.throws(() => validatePayableOrder({ ...payable, paymentStatus: 'pagado' }, 'uid1'), /ya está pagado/);
+  assert.throws(() => validatePayableOrder(payable, 'otra'), /no pertenece/);
+});
+
+test('el id de creación PayPal cambia con el importe y respeta el máximo de 108 caracteres', async () => {
+  const longId = `public_${'u'.repeat(28)}_${'r'.repeat(100)}`;
+  const first = await paypalCreateRequestId(longId, 933);
+  assert.equal(first, await paypalCreateRequestId(longId, 933));
+  assert.notEqual(first, await paypalCreateRequestId(longId, 1000));
+  assert.ok(first.length <= 108);
+});
+
+test('reembolsos y contracargos identifican la captura y el monto', () => {
+  const refund = paypalReversalDetails({
+    id: 'WH-1', event_type: 'PAYMENT.CAPTURE.REFUNDED',
+    resource: { id: 'REF1', amount: { value: '9.33', currency_code: 'USD' },
+      links: [{ rel: 'up', href: 'https://api-m.paypal.com/v2/payments/captures/CAP123456/' }] },
+  });
+  assert.deepEqual(refund, { kind: 'refunded', captureId: 'CAP123456', providerOrderId: '', currency: 'USD', cents: 933, eventId: 'WH-1' });
+  const reversal = paypalReversalDetails({
+    event_type: 'PAYMENT.CAPTURE.REVERSED',
+    resource: { id: 'CAP999999', amount: { value: '-9.33', currency_code: 'USD' }, supplementary_data: { related_ids: { order_id: 'ORDER12345' } } },
+  });
+  assert.equal(reversal.kind, 'reversed');
+  assert.equal(reversal.captureId, 'CAP999999');
+  assert.equal(reversal.providerOrderId, 'ORDER12345');
+  assert.equal(reversal.cents, 0);
 });
