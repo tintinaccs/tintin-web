@@ -48,6 +48,11 @@ html body:has(.adm-main) #adm-sidebar .adm-nav-item { margin-inline: 0; }
   html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-sub { display: block; }
 }
 @media (max-width: 540px) {
+  /* Restaurar Auth no debe revelar ni enfocar el cajón móvil cerrado. */
+  html.adm-auth-ready:not(.adm-mobile-sidebar-open) body:has(.adm-main) #adm-sidebar,
+  html.adm-auth-ready body:has(.adm-main) #adm-sidebar:not(.open) {
+    visibility: hidden !important;
+  }
   /* El sistema global fija el lateral en 300; el fondo móvil está en 310. */
   html.adm-mobile-sidebar-open body:has(.adm-main) #adm-sidebar.open { z-index: 320 !important; }
   html.adm-sidebar-auto .adm-sidebar-toggle svg { transform: none; }

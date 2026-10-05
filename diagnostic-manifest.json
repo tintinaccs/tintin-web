@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "016f290821ad8d3c4bc7440d9ae967bbf38db6eeba43d4c7406b0f00b59a745e",
+  "sourceFingerprint": "e8da7b917fcea4d54a7b7eb2c9d3598157815a56d81c7f6916ef2184ed2b7ae2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1003,
     "textFiles": 962,
-    "totalBytes": 18630346,
+    "totalBytes": 18633618,
     "pages": 19,
     "modules": 706
   },
@@ -2134,8 +2134,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 198119,
-      "sha256": "632aa29ac63934d6431df25751906472cb852cbf9b38ec18949d75947eb2b896",
+      "bytes": 198115,
+      "sha256": "d40882302f9362b96070cc83891e70eea445a52ad3e23a19060b06040aaba03d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2306,7 +2306,7 @@
           "line": 36
         },
         {
-          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-flow-progress-1",
+          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-readiness-1",
           "target": "css/admin/sidebar-interaccion.css",
           "line": 37
         },
@@ -2610,7 +2610,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-flow-progress-1",
+          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-readiness-1",
           "target": "css/admin/sidebar-interaccion.css",
           "line": 37,
           "exists": true
@@ -27817,8 +27817,8 @@
     },
     {
       "path": "scripts/auditar-admin-visual-parte-2f-v3.mjs",
-      "bytes": 13914,
-      "sha256": "30bb6de1729d991ec49a30dd790084978a83225186921640a5b09f2472c284b3",
+      "bytes": 14915,
+      "sha256": "676034d49f4d9846599946f86a02539973f227e36b528d0c293adf2623e6d507",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27866,7 +27866,7 @@
         },
         {
           "url": "https://cdn.example.com/ruta/muy/larga/imagen-tintin-$%7Bi+1%7D.webp",
-          "line": 176
+          "line": 192
         }
       ]
     },
@@ -38409,8 +38409,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 198119,
-      "sha256": "632aa29ac63934d6431df25751906472cb852cbf9b38ec18949d75947eb2b896"
+      "bytes": 198115,
+      "sha256": "d40882302f9362b96070cc83891e70eea445a52ad3e23a19060b06040aaba03d"
     },
     {
       "path": "apple-touch-icon.png",
@@ -39117,8 +39117,8 @@
     {
       "path": "css/admin/sidebar-interaccion.css",
       "extension": ".css",
-      "bytes": 4720,
-      "sha256": "d08394376dd5fb0bb42d26d7e92456e217950242ba0bf77e76eb7fcc07069733"
+      "bytes": 4989,
+      "sha256": "6cc14c5f1fdff9dfba3275ffa8fe0a5ec6b833c5159754bf21c1275bac5185d1"
     },
     {
       "path": "css/admin/visual-studio-global-admin.css",
@@ -39543,8 +39543,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 224685,
-      "sha256": "faa61860484f64f8ed0658eee15d8894b48dedcd18eb05bf5cb250126fa26e84"
+      "bytes": 226695,
+      "sha256": "2ea7da5ec2853be6e5094be966d0174d1b734f5c1576dc2c6c7b561cf375507d"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -42094,13 +42094,13 @@
       "path": "package-lock.json",
       "extension": ".json",
       "bytes": 332089,
-      "sha256": "fc65978a30cdd12893d3ddf4a3856c217d8c8c2edb7e4bcf12effc2cb91c7c18"
+      "sha256": "f8c557d0f01b1824e96b96696ef216abca61187d3bac286f84f13cc1a600a2d6"
     },
     {
       "path": "package.json",
       "extension": ".json",
       "bytes": 14226,
-      "sha256": "3f4e8d1d1d5711658c5a89b0c26232fa5421dfd4aa051acb9ebbf510c753465b"
+      "sha256": "c39e0929c51e7a2c3735d13c407b00bff523abd01b82601f3c9764ee21f47aec"
     },
     {
       "path": "perfil.html",
@@ -42231,8 +42231,8 @@
     {
       "path": "scripts/auditar-admin-visual-parte-2f-v3.mjs",
       "extension": ".mjs",
-      "bytes": 13914,
-      "sha256": "30bb6de1729d991ec49a30dd790084978a83225186921640a5b09f2472c284b3"
+      "bytes": 14915,
+      "sha256": "676034d49f4d9846599946f86a02539973f227e36b528d0c293adf2623e6d507"
     },
     {
       "path": "scripts/auditar-app-check-arranque.js",
@@ -42963,8 +42963,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 62976,
-      "sha256": "6b3fb61849b334a59823358507c18f68731d640bcc310b8d24da4d04eaedfb33"
+      "bytes": 62972,
+      "sha256": "a527b5e53c88c6ebb1bea517d09e625035bc71c4b951ba09a052a62560fc4301"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
