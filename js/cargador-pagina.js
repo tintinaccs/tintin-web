@@ -836,7 +836,7 @@
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261004-final-integration-2');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261004-final-integration-2-repair-20261005-1');
   }
 
   function bootHeaderMode() {

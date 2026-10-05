@@ -20,9 +20,9 @@ export function loadPageMaintenance() {
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20261004-final-integration-2';
-    const stateVersion = 'tintin-20260912-checkout-state-navigation-1';
+    const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261005-public-flows-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261005-public-flows-1-repair-20261005-1'),
       load('pages/checkout/checkout-mantenimiento.js', version),
       load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2'),
       load('pages/checkout/checkout-control-cuota.js', version),

@@ -687,8 +687,9 @@ export function getDesiredStoreOverlay() {
 }
 
 export async function getStoreAccessConfigFromRest() {
+  let sharedRequest;
   try {
-    const sharedRequest = window.__TINTIN_STORE_GATE_REST_PROMISE__ || fetch('/api/public-catalog?resource=storeGate', {
+    sharedRequest = window.__TINTIN_STORE_GATE_REST_PROMISE__ || fetch('/api/public-catalog?resource=storeGate', {
       method: 'GET',
       // El endpoint público puede aprovechar la caché del navegador y del
       // edge; las operaciones protegidas mantienen sus propias garantías.
@@ -698,7 +699,7 @@ export async function getStoreAccessConfigFromRest() {
     if (!window.__TINTIN_STORE_GATE_REST_PROMISE__) {
       window.__TINTIN_STORE_GATE_REST_PROMISE__ = sharedRequest;
     }
-    const payload = await sharedRequest;
+    const payload = await boundedConfigRead(sharedRequest, 3000);
     if (payload?.ok === true && payload.resource === 'storeGate') {
       // exists === false: el documento no existe todavía. No es un cierre
       // confirmado — se deja como 'missing' para que el llamador lo trate
@@ -709,10 +710,23 @@ export async function getStoreAccessConfigFromRest() {
       return rememberConfig(normalizeStoreAccessConfig(payload.data, 'ok'));
     }
   } catch {}
+  // Una promesa rechazada o sin respuesta no puede envenenar los reintentos
+  // de esta pestaña. El siguiente intento vuelve a consultar la API.
+  if (window.__TINTIN_STORE_GATE_REST_PROMISE__ === sharedRequest) delete window.__TINTIN_STORE_GATE_REST_PROMISE__;
 
   const document = await getPublicDocumentRest('settings/storeGate');
   if (!document) return null;
   return rememberConfig(normalizeStoreAccessConfig(document.data, 'ok'));
+}
+
+async function boundedConfigRead(promise, ms) {
+  let timer;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise(resolve => { timer = window.setTimeout(() => resolve(null), ms); })
+    ]);
+  } finally { window.clearTimeout(timer); }
 }
 
 /**
@@ -725,9 +739,9 @@ export async function getStoreAccessConfig() {
   // Ambos caminos arrancan juntos. El SDK conserva tiempo real y sesión;
   // REST permite resolver el mismo documento público cuando un navegador,
   // antivirus o red bloquea el canal interno de Firestore/reCAPTCHA.
-  const restAttempt = getStoreAccessConfigFromRest().catch(() => null);
-  const sdkAttempt = getDoc(STORE_GATE_REF)
-    .then(snap => snap.exists()
+  const restAttempt = boundedConfigRead(getStoreAccessConfigFromRest(), 10000).catch(() => null);
+  const sdkAttempt = boundedConfigRead(getDoc(STORE_GATE_REF), 10000)
+    .then(snap => snap?.exists()
       ? rememberConfig(normalizeStoreAccessConfig(snap.data(), 'ok'))
       : null)
     .catch(error => {
@@ -749,8 +763,8 @@ export async function getStoreAccessConfig() {
   // después las reglas sin abrir ni romper la tienda. Con las reglas finales,
   // settings/general deja de ser público durante el cierre.
   try {
-    const legacySnap = await getDoc(LEGACY_GENERAL_REF);
-    if (legacySnap.exists()) {
+    const legacySnap = await boundedConfigRead(getDoc(LEGACY_GENERAL_REF), 2000);
+    if (legacySnap?.exists()) {
       return rememberConfig({
         ...normalizeStoreAccessConfig(legacySnap.data(), 'ok'),
         __storeConfigSource: 'legacy-general'

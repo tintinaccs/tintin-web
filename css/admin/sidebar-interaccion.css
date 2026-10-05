@@ -28,6 +28,10 @@ body:has(.adm-main) .adm-nav-item.active {
 body:has(.adm-main) .adm-nav-icon { border-radius: 10px; background: var(--admin-color-brand); flex: 0 0 32px; }
 body:has(.adm-main) .adm-nav-item:focus-visible { outline: 2px solid var(--admin-color-brand); outline-offset: -2px; }
 html body:has(.adm-main) #adm-sidebar .adm-nav-item { margin-inline: 0; }
+/* Nombre y fecha pueden ocupar varias líneas sin invadir la cabecera. */
+html body:has(.adm-main) #adm-sidebar .adm-user-info { flex: 0 0 auto; height: auto; min-width: 0; }
+html body:has(.adm-main) #adm-sidebar .adm-user-info > :not(.adm-user-avatar) { min-width: 0; }
+html body:has(.adm-main) #adm-sidebar .adm-user-name { overflow-wrap: anywhere; }
 @media (min-width: 541px) {
   body:has(.adm-main) .adm-sidebar { width: 260px; }
   body:has(.adm-main) .adm-main { margin-left: 260px; transition: margin-left 160ms ease; }
@@ -39,11 +43,13 @@ html body:has(.adm-main) #adm-sidebar .adm-nav-item { margin-inline: 0; }
   html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-nav-icon { margin: 0; width: 32px; min-width: 32px; height: 32px; font-size: 16px; line-height: 1; }
   html.adm-sidebar-is-collapsed body:has(.adm-main) #adm-sidebar .adm-sidebar-logo { min-height: 94px; height: 94px; flex-basis: 94px; padding: 10px 6px !important; }
   html.adm-sidebar-is-collapsed body:has(.adm-main) #adm-sidebar .adm-sidebar-logo-text { display: flex !important; width: 100%; height: 20px; flex: 0 0 20px; font-size: 11px; line-height: 20px; color: var(--admin-color-text-primary); background: transparent; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) #adm-sidebar .adm-user-info { gap: 0; padding-inline: 0; justify-content: center; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) #adm-sidebar .adm-user-info > :not(.adm-user-avatar) { display: none; }
   html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) #adm-sidebar .adm-nav-item {
     flex-direction: row; justify-content: flex-start; gap: 12px; padding: 8px 12px; font-size: 12px; line-height: 1.4; text-align: left;
   }
   html.adm-sidebar-peek body:has(.adm-main) .adm-sidebar { width: 260px; box-shadow: 12px 0 24px color-mix(in srgb, var(--admin-color-brand) 12%, transparent); z-index: 320; }
-  html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) #adm-sidebar .adm-sidebar-logo { display: block !important; min-height: 94px; padding: 22px 62px 16px 20px !important; }
+  html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) #adm-sidebar .adm-sidebar-logo { display: block !important; flex: 0 0 auto; height: auto; min-height: 94px; padding: 22px 62px 16px 20px !important; }
   html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-text { font-size: 17px; letter-spacing: .08em; color: var(--admin-color-text-primary); }
   html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-sub { display: block; }
 }

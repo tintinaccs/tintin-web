@@ -14,6 +14,7 @@ if(location.pathname==='/google-chooser-fixture'){
 }else{
 ${deadline}
 const auth={currentUser:null},provider={},authPersistenceReady=Promise.resolve();
+window.__fixtureAuth=auth;
 let loginPersistenceReady=true,loginSessionGeneration=0;
 window.__calls={redirect:0,popup:0,finish:0};window.__popupMode="blocked";window.__redirectMode='navigate';
 function recordAuthDiagnostic(){}
@@ -24,7 +25,7 @@ const layer=document.createElement('div');layer.id='auth-test-overlay';layer.hid
 window.TintinLoader={show(){layer.hidden=false;},hide(){layer.hidden=true;},beginWait(){},endWait(){},setText(){}};
 function signInWithPopup(){window.__calls.popup++;if(window.__popupMode==='success')return Promise.resolve({user:{uid:'isolated-popup'}});if(window.__popupMode==='pending')return new Promise(resolve=>{window.__resolvePopup=resolve;});return Promise.reject({code:window.__popupMode==='blocked'?'auth/popup-blocked':window.__popupMode});}
 function signInWithRedirect(){window.__calls.redirect++;if(window.__redirectMode==='error')return Promise.reject({code:'auth/network-request-failed'});if(window.__redirectMode==='navigate')location.assign('/google-chooser-fixture');return new Promise(()=>{});}
-function finishGoogleLogin(){window.__calls.finish++;window.TintinLoader.hide();const status=document.createElement('p');status.id='fixture-confirmed';status.textContent='Credencial de prueba confirmada';document.body.appendChild(status);return Promise.resolve();}
+function finishGoogleLogin(){window.__calls.finish++;if(window.__profileFails)return Promise.reject({code:'profile/deadline'});window.TintinLoader.hide();const status=document.createElement('p');status.id='fixture-confirmed';status.textContent='Credencial de prueba confirmada';document.body.appendChild(status);return Promise.resolve();}
 function googleIdleLabel(){return 'Continuar con Google';}
 function hideMessages(){document.getElementById('login-error').classList.remove('show');}
 function showError(message){const e=document.getElementById('login-error');e.textContent=message;e.classList.add('show');}
@@ -116,4 +117,17 @@ test('elegir cuenta puede tardar sin disparar un redirect paralelo', async ({ pa
   await page.evaluate(() => window.__resolvePopup({ user: { uid: 'late-popup' } }));
   await expect(page.locator('#fixture-confirmed')).toBeVisible();
   expect(await page.evaluate(() => window.__calls.finish)).toBe(1);
+});
+
+test('un plazo de perfil agotado conserva Auth y devuelve controles sin culpar al selector Google',async({page})=>{
+  await load(page,768);
+  await page.evaluate(()=>{window.__popupMode='success';window.__profileFails=true;window.__fixtureAuth.currentUser={uid:'fixture-authenticated'};});
+  await page.locator('#btn-google').click();
+  await expect(page.locator('#btn-google')).toBeEnabled();
+  await expect(page.locator('#auth-test-overlay')).toBeHidden();
+  // El harness devuelve el código recibido por errMsg; comprueba que se usa
+  // el traductor canónico de perfil en vez del mensaje de apertura de Google.
+  await expect(page.locator('#login-error')).toHaveText('profile/deadline');
+  expect(await page.evaluate(()=>window.__fixtureAuth.currentUser.uid)).toBe('fixture-authenticated');
+  expect(await page.evaluate(()=>window.__calls.redirect)).toBe(0);
 });

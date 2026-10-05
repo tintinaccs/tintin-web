@@ -5,6 +5,7 @@ html:has(body #tt-loader:not(.tt-out)) body {
 }
 
 html body #tt-loader {
+  color: #FFFFFF !important;
   background: #F8AACA !important;
   background-color: #F8AACA !important;
   background-image: none !important;
@@ -106,6 +107,13 @@ html body #tt-loader-wordmark,
 html body #tt-loader-wordmark .tt-loader-wordmark-i {
   color: #FFFFFF !important;
 }
+
+/* Mensajes dinámicos y acciones de recuperación también pertenecen a la
+   identidad de carga, independientemente de la paleta de la página. */
+html body #tt-loader * { color: #FFFFFF !important; }
+html body #tt-loader :is(#tt-loader-wordmark,#tt-loader-brand-subtitle,#tt-loader-title,#tt-loader-subtitle) { opacity: 1 !important; }
+html body #tt-loader .tt-loader-spinner::before,
+html body #tt-loader .tt-loader-spinner::after { opacity: 1 !important; }
 
 /* Todos los títulos y mensajes comparten el blanco del logo. */
 html body #tt-loader-brand-subtitle,
