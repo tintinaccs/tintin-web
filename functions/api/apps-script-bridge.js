@@ -18,6 +18,7 @@ import { preparePublicCheckoutOrder } from '../../cloudflare/politica-checkout-p
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
 import { dispatchOrderPushEvent } from '../../cloudflare/servicio-push.js';
 import { sendOrderEmails } from './order-email.js';
+import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
 
 // Apps Script sigue ejecutando únicamente la transacción privilegiada heredada
 // de creación de pedidos y las rutas de correo antiguas que aún puedan invocarse
@@ -356,6 +357,7 @@ export async function onRequest(context) {
       let emailResult = { success: false, adminSent: null, customerSent: null, error: 'RESEND_API_KEY no está configurada' };
       if (!created.duplicate && env.RESEND_API_KEY) {
         emailResult = await sendOrderEmails({
+          env,
           apiKey: env.RESEND_API_KEY,
           orderId: created.orderId,
           order: created.order,
@@ -365,6 +367,16 @@ export async function onRequest(context) {
         });
       }
       if (!created.duplicate) {
+        if (!emailResult.success) {
+          const pendingRetry = queuePendingOrderEmail(env, {
+            orderId: created.orderId,
+            retryAdmin: emailResult.adminSent !== true,
+            retryCustomer: emailResult.customerSent !== true,
+            lastError: emailResult.error,
+          }).catch(() => {});
+          if (context.waitUntil) context.waitUntil(pendingRetry);
+          else await pendingRetry;
+        }
         context.waitUntil?.(syncOrderOwnerStats(env, created.order).catch(error => {
           console.error('[apps-script-bridge] order stats sync failed', error?.message || error);
         }));

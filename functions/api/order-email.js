@@ -7,6 +7,7 @@ import {
 import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-push.js';
 import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
 import { normalizePaymentCatalog } from '../../js/orders/nucleo-metodos-pago.js';
+import { sendInitialOrderEmailOnce } from '../../cloudflare/recibo-correo-pedido.js';
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
@@ -374,6 +375,7 @@ Super Admin: ${ADMIN_PANEL}`;
 export async function sendResendEmail(apiKey, payload, idempotencyKey) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
+    signal: AbortSignal.timeout(20000),
     headers: {
       authorization: `Bearer ${apiKey}`,
       'content-type': 'application/json',
@@ -388,8 +390,16 @@ export async function sendResendEmail(apiKey, payload, idempotencyKey) {
   return data;
 }
 
-export async function sendOrderEmails({ apiKey, orderId, order, isResend, sendAdmin, sendCustomer, transfer = null }) {
+export async function sendOrderEmails({ env, apiKey, orderId, order, isResend, sendAdmin, sendCustomer, transfer = null }) {
   const suffix = isResend ? `resend-${Date.now()}` : 'new-v1';
+  const deliveryKeys = {
+    admin: `order-${orderId}-admin-${suffix}`,
+    customer: `order-${orderId}-customer-${suffix}`,
+  };
+  const deliver = (channel, payload) => {
+    const send = () => sendResendEmail(apiKey, payload, deliveryKeys[channel]);
+    return isResend ? send() : sendInitialOrderEmailOnce(env, { orderId, channel, send });
+  };
   let adminSent = null;
   let customerSent = null;
   const errors = [];
@@ -397,14 +407,14 @@ export async function sendOrderEmails({ apiKey, orderId, order, isResend, sendAd
   if (sendAdmin) {
     try {
       const content = adminEmail(order, orderId);
-      await sendResendEmail(apiKey, {
+      await deliver('admin', {
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
         reply_to: REPLY_TO,
         subject: isResend ? `[Reenviado] ${content.subject}` : content.subject,
         html: content.html,
         text: content.text
-      }, `order-${orderId}-admin-${suffix}`);
+      });
       adminSent = true;
     } catch (error) {
       adminSent = false;
@@ -420,14 +430,14 @@ export async function sendOrderEmails({ apiKey, orderId, order, isResend, sendAd
     } else {
       try {
         const content = customerEmail(order, orderId, transfer);
-        await sendResendEmail(apiKey, {
+        await deliver('customer', {
           from: FROM_EMAIL,
           to: [recipient],
           reply_to: REPLY_TO,
           subject: isResend ? `[Reenviado] ${content.subject}` : content.subject,
           html: content.html,
           text: content.text
-        }, `order-${orderId}-customer-${suffix}`);
+        });
         customerSent = true;
       } catch (error) {
         customerSent = false;
@@ -496,6 +506,7 @@ export async function onRequest(context) {
     const sendCustomer = body.sendCustomer !== false;
     const transfer = sendCustomer ? await fetchTransferInstructions(idToken, order) : null;
     const result = await sendOrderEmails({
+      env,
       apiKey,
       orderId,
       order,
@@ -510,12 +521,14 @@ export async function onRequest(context) {
     // Nunca bloquea ni rompe la respuesta al cliente; un reenvío manual
     // (isResend) no se encola porque ya es la vía de reintento explícita.
     if (!isResend && !result.success) {
-      queuePendingOrderEmail(env, {
+      const pendingRetry = queuePendingOrderEmail(env, {
         orderId,
         retryAdmin: result.adminSent === false,
         retryCustomer: result.customerSent === false,
         lastError: result.error
       }).catch(() => {});
+      if (context.waitUntil) context.waitUntil(pendingRetry);
+      else await pendingRetry;
     }
 
     // Respaldo del aviso push: este camino ya validó a la usuaria y leyó el
