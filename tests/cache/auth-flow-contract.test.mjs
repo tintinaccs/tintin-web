@@ -47,7 +47,7 @@ test('persistencia Auth se instrumenta sin exponer identidad y el login espera s
     assert.match(coordinator, new RegExp(code));
   }
   assert.match(login, /if \(!loginPersistenceReady\)/);
-  assert.match(login, /await authPersistenceReady\.catch\(\(\) => \{\}\)/);
+  assert.match(login, /await withDeadline\(authPersistenceReady, AUTH_NETWORK_DEADLINE_MS\)/);
   assert.doesNotMatch(firebase, /console\.(log|info|debug).*\b(uid|email|token|credential)\b/i);
 });
 

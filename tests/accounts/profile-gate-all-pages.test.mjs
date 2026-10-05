@@ -26,7 +26,7 @@ test('una cuenta bloqueada pierde la sesión al instante (también si se bloquea
   assert.match(gate, /data\.blocked === true\) \{\s*leaveBlockedAccount\(user\)/);
   assert.match(gate, /await signOut\(auth\)[\s\S]{0,80}location\.replace\('\/login\?blocked=1'\)/);
   const login = await read('login.html');
-  assert.match(login, /async function endBlockedSession[\s\S]{0,500}showBlockedModal\(\{ email \}\)[\s\S]{0,200}await signOut\(auth\)/);
+  assert.match(login, /async function endBlockedSession[\s\S]{0,500}showBlockedModal\(\{ email \}\)[\s\S]{0,200}await withDeadline\(signOut\(auth\), 8000\)/);
   assert.equal((login.match(/await endBlockedSession\(user\.email\)/g) || []).length, 3);
 });
 

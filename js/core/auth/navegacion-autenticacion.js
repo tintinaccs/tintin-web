@@ -1,9 +1,9 @@
 // cargador-pagina.js es el único responsable de iniciar los módulos globales de
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
 import { auth, db } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { logoutSession } from './salida-sesion.js?v=tintin-20261005-auth-loader-1';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
@@ -44,14 +44,19 @@ function doLogout(){
  if(silentLogoutStarted)return;
  silentLogoutStarted=true;
  recordAuthDiagnostic('EXPLICIT_LOGOUT', { source: 'public-account-menu' });
- markExplicitLogout();
  beginSilentAuthTransition();
- signOut(auth)
+ logoutSession()
   .then(()=>window.location.replace('/'))
   .catch(error=>{
    console.error('[auth-nav] No se pudo cerrar sesión:',error);
    silentLogoutStarted=false;
    endSilentAuthTransition();
+   const panel=document.getElementById('account-panel');
+   if(panel){
+    let notice=panel.querySelector('[data-logout-error]');
+    if(!notice){notice=document.createElement('p');notice.dataset.logoutError='';notice.className='tt-account-help';notice.setAttribute('role','alert');panel.appendChild(notice);}
+    notice.textContent='No pudimos cerrar tu sesión. Volvé a intentarlo.';
+   }
   });
 }
 function hasAdminAccess(user,role){if(!user)return false;if(String(user.email||'').trim().toLowerCase()===SUPER_ADMIN)return true;return can(role,'viewDashboard')===true;}
@@ -115,11 +120,9 @@ function captureNavigationHandoff(anchor){
  });
 }
 
-/* Apenas se toca Google, la página de Login desaparece debajo de una superficie
-   sólida. Solo vuelve a mostrarse si el popup se cierra o el ingreso falla. */
+// Login administra su propio intento y loader; el menú público sólo administra
+// navegación y salida de la cuenta, sin capturar el clic de Google.
 document.addEventListener('click',event=>{
- const googleButton=event.target.closest?.('#btn-google');
- if(googleButton)beginSilentAuthTransition();
  const adminLink=event.target.closest?.('a[data-internal-admin-link],a[href="/admin"]');
  if(adminLink){
   const user=getSessionUser();

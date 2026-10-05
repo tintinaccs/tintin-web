@@ -8,7 +8,7 @@ test('una sesión restaurada con identidad Auth eliminada se limpia y ofrece rei
   assert.match(login, /function isUnavailableAuthIdentity\(error\)/);
   assert.match(login, /auth\/user-not-found/);
   assert.match(login, /auth\/user-disabled/);
-  assert.match(login, /await signOut\(auth\)/);
+  assert.match(login, /await withDeadline\(signOut\(auth\), 8000\)/);
   assert.match(login, /RESTORED_SESSION_INVALID/);
   assert.match(login, /data-login-email-recovery/);
   assert.match(login, /Verificá tu correo para volver a entrar/);

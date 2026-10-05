@@ -17,6 +17,7 @@ import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
 } from "../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-2-active-session-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
+import { withDeadline } from '../core/auth/estado-perfil-sesion.mjs?v=tintin-20261001-fusion-main-1';
 
 const LOCAL_FUNCTIONS_ORIGIN = 'https://tintinaccesorios.pages.dev';
 
@@ -40,24 +41,28 @@ async function postJson(name, body) {
   // username intente llamar a un /api inexistente en localhost.
   const localHost = typeof window !== 'undefined' && /^(?:localhost|127\.0\.0\.1)$/.test(window.location.hostname);
   const path = localHost ? `${LOCAL_FUNCTIONS_ORIGIN}/api/${name}` : relativePath;
-  let response;
+  let response, data;
+  const controller = new AbortController();
   try {
-    response = await fetch(path, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    await withDeadline((async () => {
+      response = await fetch(path, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: controller.signal
+      });
+      data = await response.json().catch(() => ({}));
+    })(), 20000);
   } catch (networkError) {
-    // fetch sólo rechaza cuando el pedido no llegó a destino: sin conexión,
-    // DNS caído, o una extensión del navegador bloqueando la llamada. No es
-    // lo mismo que un error del servidor y no debe leerse igual.
+    controller.abort();
+    // La conexión o lectura puede fallar o vencer el plazo. No equivale a un
+    // rechazo del código por el servidor ni confirma que el correo fue enviado.
     console.error(`[email-auth] ${path} no se pudo enviar:`, networkError);
     const err = new Error('network_error');
     err.code = 'network_error';
     throw err;
   }
 
-  const data = await response.json().catch(() => ({}));
   if (!response.ok || !data.success) {
     // Una respuesta sin cuerpo JSON (502/504 de la plataforma, HTML de error)
     // dejaba `undefined` como código y caía en el mensaje genérico.
@@ -87,8 +92,14 @@ export async function requestOtpCode(identifier) {
  */
 export async function verifyOtpCode(identifier, code) {
   const data = await postJson('email-otp-verify', { ...identifierBody(identifier), code });
-  await authPersistenceReady;
-  const cred = await signInWithCustomToken(auth, data.customToken);
+  let cred;
+  try {
+    await withDeadline(authPersistenceReady, 15000);
+    cred = await withDeadline(signInWithCustomToken(auth, data.customToken), 15000);
+  } catch (error) {
+    if (error?.code === 'profile/deadline') error.code = 'login_failed';
+    throw error;
+  }
   return cred.user;
 }
 
