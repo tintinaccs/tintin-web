@@ -2,6 +2,8 @@
 
 ## Cierre de PR #1033 — 2026-10-05
 
+- Integración actual con main b8269fe8 (#1032 mergeado tras CI y preview exactos PASS): se preservan pagos/reglas/secretos. El gate Chromium detectó dos peticiones de productos porque el menú iniciaba búsqueda sobre páginas que ya cargan catálogo. Se reutiliza su lectura en Inicio/Catálogo/Colecciones, conservando la carga en rutas informativas. PASS_LOCAL: 12 regresiones de paridad con una petición exacta a 390/768/1440 y diez pruebas de rendimiento público sin duplicados, 22/22 sin reintentos. CI del nuevo head pendiente.
+
 - Agente/modelo: Codex (GPT-6). Revisión, corrección y merge autorizados por el dueño; base a7cf5408. CI del head eb96be31 falló en audit:typography por el fallback de fuente de avisos-en-vivo.css. Se utiliza la familia Montserrat canónica y se regeneran caché/manifiesto desde origin/main para las URLs aún sin publicar.
 - PASS_LOCAL actual: audit:typography (27051 comprobaciones), build:pages, dos pruebas Node de hero y nueve Chromium de avisos/colecciones a 390/768/1440, sin reintentos. CI y merge del nuevo head pendientes. Sin escrituras comerciales ni pruebas de OAuth/pago reales.
 
@@ -15,6 +17,12 @@
 - PASS_LOCAL combinado con #1031: 70/70 Node (hero, engagement, cupón, sesión/perfil y controles de producto), 33/33 Chromium (menú, avisos, header/footer, cupón y controles de producto). PASS_LOCAL adicional: build:pages, verify:diagnostics, audit:cache-versioning, audit:public-shell y audit:hero-background-controls. La revisión del diff detectó y revirtió seis modificaciones accidentales del script de versionado a rutas con corchetes; functions/ quedó idéntico a main antes de publicar. Caché generada canónicamente, sin dos URLs para un mismo módulo. CI/preview/merge del nuevo commit siguen IN_PROGRESS.
 - #1030 PASS_PRODUCTION: confirmación interna y guardado real de 41 sellos verificados, mensaje productivo de éxito; captura artifacts/brand-review/seals-production-41.png. Auditoría del merge 969a7f30 todavía en curso al guardar: no se sella evidencia CI pendiente.
 - NOT_VERIFIED: OAuth real, checkout/pagos, escrituras Sheets y entrega push en iPhone bloqueado; no son demostrables con estos fixtures ni lecturas. El módulo de conexiones conserva estados parciales/no confirmados cuando falta evidencia real. Avisos dentro del sitio no equivalen a entrega push del sistema operativo.
+## Conciliación PayPal y secretos Sheets — revisión PR #1032, 2026-10-05
+
+- Agente/modelo: Codex (GPT-6). Corrección y merge autorizados; base a7cf5408. Hallazgos en el head e5ccd1eb: deduplicar por estado perdía el segundo reembolso parcial; escribir conciliación antes que pedido permitía fallos parciales irrecuperables. Ahora se registra cada refundId, se suma sin duplicar, se conserva el estado terminal y se condiciona un commit atómico a la versión leída. También la confirmación de cobro usa esa versión para no revivir un pago devuelto concurrentemente. Sin movimientos de dinero ni devoluciones reales.
+- PASS_LOCAL: audit:secure-orders; 17 pruebas de pagos, incluidas siete regresiones de reembolsos, duplicados, recuperación y cobros tardíos; dos pruebas de secretos Sheets; 81 ataques/controles de Firestore en proyecto demo. Firma PayPal sigue obligatoria. Conflictos fallan para que PayPal reintente, sin anunciar éxito parcial. CI/preview/merge del nuevo head pendientes.
+- PASS_EXTERNAL_CONFIG: webhook Sandbox de Default Application conserva PAYMENT.CAPTURE.COMPLETED y agrega PAYMENT.CAPTURE.REFUNDED/REVERSED; PayPal muestra Webhook updated successfully. Evidencia fuera del repo en outputs/paypal-webhook-sandbox.jpg. Live no activado; las pruebas locales no acreditan una transacción real.
+
 ## Revisión de flujos públicos — 2026-10-05 (`codex/public-flows-review-20261005`)
 
 - Agente/modelo: Codex (GPT-6). Base main 81747e36 (#1029). Revisión y reparación de checkout, producto, login e Inicio autorizadas en esta conversación, incluyendo merge/publicación. Se preservan paleta y trabajos ajenos; los cambios de otras páginas son referencias transitivas de caché del shell compartido. Sin cambios de reglas, roles, pagos, inventario ni escrituras productivas.

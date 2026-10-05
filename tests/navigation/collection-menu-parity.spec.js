@@ -2,12 +2,14 @@ const { test, expect } = require('@playwright/test');
 const categories = ['relojes', 'bolsos', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
 
 for (const width of [390, 768, 1440]) {
-  for (const route of ['/', '/about']) {
+  for (const route of ['/', '/about', '/catalogo', '/collections']) {
     test(`colecciones e imágenes compartidas ${route} en ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 1000 });
       const origin = new URL(test.info().project.use.baseURL).origin;
+      let productRequests = 0;
       await page.route('**/api/public-catalog?resource=*', async request => {
         const resource = new URL(request.request().url()).searchParams.get('resource');
+        if (resource === 'products') productRequests += 1;
         if (!['products', 'collections'].includes(resource)) return request.continue();
         const items = resource === 'collections'
           ? categories.map(id => ({ id, data: { name: id === 'bolsos' ? 'Bags' : id, visible: true } }))
@@ -47,6 +49,7 @@ for (const width of [390, 768, 1440]) {
         expect(geometry.labelRight).toBeLessThanOrEqual(geometry.right);
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
+      expect(productRequests).toBe(1);
     });
   }
 }
