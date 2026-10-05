@@ -73,6 +73,7 @@
 
     .adm-sidebar-logo {
       position: relative;
+      flex-shrink: 0;
       padding: 28px 24px 20px;
       border-bottom: 1px solid rgba(255,255,255,.15);
     }
@@ -99,6 +100,7 @@
     }
 
     .adm-user-info {
+      flex-shrink: 0;
       padding: 16px 24px;
       display: flex;
       align-items: center;
@@ -2799,6 +2801,14 @@ body:has(.adm-main) .adm-table-wrap {
   }
   html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-text::before { content: none; }
   html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-sub { display: none !important; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-user-info {
+    justify-content: center;
+    padding-inline: 0;
+  }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-nav-item {
+    justify-content: center;
+    padding-inline: 0;
+  }
 
   /* Las acciones dinámicas tienen su ancho propio y no invaden el título. */
   body:has(.adm-main) .adm-topbar {

@@ -138,7 +138,7 @@ function loadCartRuntime() {
 
 function loadNotificationsRuntime() {
   if (!notificationsRuntimePromise) {
-    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261005-public-navigation-3')
+    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261005-flow-progress-1')
       .then(module => {
         module.initClientNotifications?.();
         return module;

@@ -1,3 +1,12 @@
+## 2026-10-05 — PR1033: CI, revalidación y correcciones añadidas por el usuario
+
+- CI de eb96be31 falló en Full static contract: Montserrat sin comillas en avisos-en-vivo.css. Se corrige la declaración canónica; auditoría tipográfica local PASS.
+- Revalidación muestra barra nativa accesible y porcentaje según etapas completadas (salud, seguridad y 16 comprobaciones), no según tiempo ni cantidad de verdes. Fallos interrumpen sin 100 ficticio; callbacks tardíos no alteran el reintento. Rutas HTTP tienen plazo de 15 s. Prueba Node: 54/54 PASS. Browser: 10 pruebas Google, 11 sidebar y 9 marca/loader PASS en ejecución local aislada.
+- Login vuelve a popup invocado desde el clic con persistencia previamente confirmada. Sólo popup-blocked/entorno no compatible habilitan redirect; cancelación/red lenta nunca disparan otro flujo. No se impone plazo al usuario eligiendo su cuenta. Redirect conserva plazo y recuperación existentes. profile/deadline tiene mensaje útil sin borrar sesión.
+- Loader: textos, logo y spinner blancos puros sobre #F8AACA, por solicitud explícita del usuario. Se actualiza el contrato de marca; blanco sobre este rosa claro no alcanza AA para texto normal, no se declara conformidad AA.
+- Sidebar: cabecera/cuenta no encogen con menú largo. Se elimina margen horizontal heredado de 12px que descentraba iconos respecto al avatar. Se añaden pruebas de geometría con altura de 500px y nombre largo.
+- Los errores ERR_CACHE_READ_FAILURE de recursos de Google corresponden al caché del navegador; la aplicación no modifica CSP de accounts.google.com ni elimina caché/credenciales del usuario. El flujo del SDK se prueba aislado sin cuenta real; la prueba física de Google queda separada.
+- Mantiene las correcciones anteriores de colecciones, notificaciones y hero, y los cambios de main/PR1031. No altera reglas, permisos ni pedidos. Merge sólo después de CI verde del nuevo HEAD. El porcentaje 100 significa pruebas terminadas, no todas las conexiones sanas.
 # Estado actual de reparación — independencia de Shopify
 
 ## Colecciones, actividad pública y hero — 2026-10-05 (`codex/public-navigation-sync-20261005`)

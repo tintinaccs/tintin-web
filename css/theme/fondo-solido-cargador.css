@@ -101,17 +101,17 @@ html body #tt-loader-brand-subtitle {
   visibility: visible !important;
 }
 
-/* La identidad blanca conserva contraste AA sobre el rosa de marca. */
+/* Identidad de carga solicitada: fondo rosa y elementos blancos. */
 html body #tt-loader-wordmark,
 html body #tt-loader-wordmark .tt-loader-wordmark-i {
-  color: #713C53 !important;
+  color: #FFFFFF !important;
 }
 
-/* Títulos y mensajes malva sobre el rosa claro de marca (AA). */
+/* Todos los títulos y mensajes comparten el blanco del logo. */
 html body #tt-loader-brand-subtitle,
 html body #tt-loader-title,
 html body #tt-loader-subtitle {
-  color: #713C53 !important;
+  color: #FFFFFF !important;
 }
 
 html body #tt-loader-wordmark .tt-loader-wordmark-i::before,
@@ -126,7 +126,7 @@ html body #tt-loader .tt-loader-spinner::before {
 }
 
 html body #tt-loader .tt-loader-spinner::after {
-  border-color: transparent transparent rgba(255,255,255,.38) rgba(255,255,255,.38) !important;
+  border-color: transparent transparent #fff #fff !important;
   mix-blend-mode: normal !important;
 }
 

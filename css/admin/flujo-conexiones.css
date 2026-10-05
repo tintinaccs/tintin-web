@@ -192,3 +192,14 @@
   .tfc-detail-head { align-items: flex-start; }
   .tfc-detail-head .tfc-pill-state { white-space: normal; }
 }
+.tfc-revalidation-progress { margin-bottom: 16px; }
+.tfc-revalidation-progress[hidden] { display: none; }
+.tfc-revalidation-progress p { margin: 0 0 8px; color: var(--color-text-primary, #713C53); font-size: 13px; }
+.tfc-revalidation-progress progress {
+  display: block; width: 100%; height: 10px; border: 0; border-radius: 999px;
+  overflow: hidden; appearance: none; accent-color: var(--color-brand-primary, #F8AACA);
+  background: #FFF6FA;
+}
+.tfc-revalidation-progress progress::-webkit-progress-bar { background: #FFF6FA; border-radius: 999px; }
+.tfc-revalidation-progress progress::-webkit-progress-value { background: var(--color-brand-primary, #F8AACA); border-radius: 999px; }
+.tfc-revalidation-progress progress::-moz-progress-bar { background: var(--color-brand-primary, #F8AACA); border-radius: 999px; }
