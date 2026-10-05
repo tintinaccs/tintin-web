@@ -41,15 +41,16 @@ test('el hero contiene texto e imagen sin recorte al cambiar de escritorio a mó
         const media = document.querySelector('.tt-hero-media').getBoundingClientRect();
         const content = document.querySelector('.tt-hero-content').getBoundingClientRect();
         const actions = document.querySelector('.tt-hero-actions').getBoundingClientRect();
-        return { heroBottom:hero.bottom,mediaBottom:media.bottom,contentBottom:content.bottom,heroLeft:hero.left,contentLeft:content.left,mediaTop:media.top,actionsBottom:actions.bottom,contentBottomRaw:content.bottom,scrollWidth:document.documentElement.scrollWidth,width:innerWidth };
+        const title = document.querySelector('.tt-hero-title').getBoundingClientRect();
+        return { heroBottom:hero.bottom,heroWidth:hero.width,mediaWidth:media.width,mediaLeft:media.left,mediaBottom:media.bottom,contentTop:content.top,contentBottom:content.bottom,heroLeft:hero.left,titleLeft:title.left,titleRight:title.right,scrollWidth:document.documentElement.scrollWidth,width:innerWidth };
       });
       assert.ok(geometry.mediaBottom <= geometry.heroBottom + 2, `Imagen recortada a ${width}: ${JSON.stringify(geometry)}`);
       assert.ok(geometry.contentBottom <= geometry.heroBottom + 2, `Texto recortado a ${width}`);
       assert.ok(geometry.scrollWidth <= width + 2, `Overflow a ${width}`);
-      assert.ok(geometry.contentLeft > geometry.heroLeft + 10, `Sin margen de lectura a ${width}`);
-      if (width <= 1023) assert.ok(geometry.mediaTop - geometry.actionsBottom <= 48, `Espacio vacío excesivo a ${width}: ${JSON.stringify(geometry)}`);
-      if (width <= 1023) assert.ok(geometry.mediaTop - geometry.actionsBottom >= 20, `CTA y foto demasiado cerca a ${width}: ${JSON.stringify(geometry)}`);
-      if (width < 768) assert.ok(geometry.mediaTop >= geometry.contentBottomRaw, `Imagen y contenido se pisan a ${width}`);
+      assert.ok(geometry.titleLeft >= geometry.heroLeft + 19 && geometry.titleRight <= width - 19, `Sin margen de lectura a ${width}`);
+      assert.ok(Math.abs(geometry.mediaWidth - geometry.heroWidth) <= 2 && Math.abs(geometry.heroWidth - width) <= 12, `Banner no ocupa el ancho a ${width}: ${JSON.stringify(geometry)}`);
+      assert.ok(Math.abs(geometry.mediaLeft - geometry.heroLeft) <= 1, `Banner desplazado a ${width}`);
+      assert.ok(geometry.contentTop >= geometry.mediaBottom - 1 && geometry.contentTop - geometry.mediaBottom <= 2, `Superposición o espacio vacío entre banner y contenido a ${width}: ${JSON.stringify(geometry)}`);
     }
   } finally { await browser.close(); }
 });

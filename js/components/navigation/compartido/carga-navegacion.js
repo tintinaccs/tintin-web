@@ -14,7 +14,7 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261004-final-integration-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261004-admin-connections-3';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261005-public-navigation-1';
 const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261004-admin-connections-3';
 
 function reportRuntimeFailures(results) {
@@ -138,7 +138,7 @@ function loadCartRuntime() {
 
 function loadNotificationsRuntime() {
   if (!notificationsRuntimePromise) {
-    notificationsRuntimePromise = import(versionedJsModule('components/notifications/notificaciones-clientes.js'))
+    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261005-public-navigation-2')
       .then(module => {
         module.initClientNotifications?.();
         return module;
@@ -157,8 +157,16 @@ function loadCollectionsRuntime() {
       .then(module => {
         // Informational pages do not auto-start this module. Initialize it
         // after the idle import so the first open uses the canonical snapshot.
-        module.initNavCollections?.();
-        return module;
+        // La foto de respaldo depende del catálogo, también en Nosotros,
+        // Contacto y cualquier otra ruta. La misma API edge/cache alimenta
+        // todas las superficies; nunca se abre un listener público de Firestore.
+        return Promise.allSettled([
+          module.initNavCollections?.(),
+          loadProductsRuntime({ forSearch: true }),
+        ]).then(results => {
+          reportRuntimeFailures(results);
+          return module;
+        });
       })
       .catch(error => {
         collectionsRuntimePromise = null;
@@ -200,7 +208,7 @@ function attachLightweightCommerceDemand() {
     loadCartRuntime
   );
   bindDemand(
-    '#btn-tienda,#btn-tablet-tienda,[data-collections-nav],#collections-sheet',
+    '#btn-tienda,#btn-tablet-tienda,#tabbar-tienda,[data-collections-nav],#collections-sheet',
     loadCollectionsRuntime,
     // El menú ya ofrece enlaces e imágenes locales. En páginas informativas,
     // un simple paso del puntero no debe generar una lectura remota.

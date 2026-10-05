@@ -634,3 +634,52 @@ html body.tt-home-premium .tt-hero-media .tt-hero-img {
 @media (prefers-reduced-motion: reduce) {
   html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta { transition: none !important; }
 }
+
+/* La pieza de bienvenida lleva texto dentro de la imagen: se muestra a todo
+   el ancho y el contenido editable ocupa su propia fila, sin superposición. */
+html body.tt-home-premium .tt-hero {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "media" "content";
+  grid-template-rows: auto auto !important;
+  gap: 0;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+html body.tt-home-premium .tt-hero-media {
+  width: 100% !important;
+  justify-self: stretch;
+  aspect-ratio: 2 / 1;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+html body.tt-home-premium .tt-hero .tt-hero-content {
+  box-sizing: border-box;
+  justify-self: center;
+  max-width: 1000px;
+  align-items: center;
+  text-align: center;
+  padding: clamp(24px, 4vw, 48px) clamp(20px, 4vw, 48px) !important;
+}
+html body.tt-home-premium .tt-hero-eyebrow { margin-bottom: 12px; }
+html body.tt-home-premium .tt-hero-title {
+  font-size: clamp(1.9rem, 4.3vw, 3.5rem);
+  line-height: 1.1;
+  text-align: center;
+}
+html body.tt-home-premium .tt-hero-subtitle { margin-top: 14px; }
+html body.tt-home-premium .tt-hero-actions {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 20px;
+  margin-top: 20px !important;
+}
+@media (min-width: 768px) and (max-width: 1120px) and (orientation: landscape) {
+  html body.tt-home-premium .tt-hero-media { aspect-ratio: 3 / 2; }
+}
+@media (min-width: 768px) and (max-width: 1120px) and (orientation: portrait) {
+  html body.tt-home-premium .tt-hero-media { aspect-ratio: 3 / 4; }
+}
+@media (max-width: 767px) {
+  html body.tt-home-premium .tt-hero-media { aspect-ratio: 4 / 5; }
+}
