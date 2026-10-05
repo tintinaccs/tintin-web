@@ -1,4 +1,5 @@
 import { corsHeaders } from '../../cloudflare/seguridad-cloudinary.js';
+import { sheetsInboundSecret } from '../../cloudflare/secretos-sheets.js';
 import {
   encodeFirestoreFields,
   firestoreAdminCommit,
@@ -124,15 +125,15 @@ export function onRequestGet({ request, env }) {
   return webhookResponse({
     ok: true,
     revision: PRODUCTS_WEBHOOK_REVISION,
-    authState: env.SHEETS_ENGAGEMENT_SECRET ? 'configured' : 'server-secret-missing',
+    authState: sheetsInboundSecret(env, 'products') ? 'configured' : 'server-secret-missing',
     destructive: false,
-  }, 200, request.url, env.SHEETS_ENGAGEMENT_SECRET ? 'configured' : 'server-secret-missing');
+  }, 200, request.url, sheetsInboundSecret(env, 'products') ? 'configured' : 'server-secret-missing');
 }
 
 export async function onRequestPost({ request, env }) {
   const authState = classifySheetsWebhookAuth(
     request.headers.get('X-Tintin-Sheets-Secret'),
-    env.SHEETS_ENGAGEMENT_SECRET,
+    sheetsInboundSecret(env, 'products'),
   );
   if (authState !== 'authenticated') {
     return webhookResponse({ ok: false, error: 'No autorizado' }, 401, request.url, authState);
