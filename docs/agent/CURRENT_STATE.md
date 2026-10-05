@@ -1,5 +1,13 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Disponibilidad de Últimos datos — 2026-10-05 (`codex/profile-availability-recovery-20261005`)
+
+- Agente/modelo: Codex (GPT-6). Base main 0e1f000f (#1028). Revisión adicional autorizada por el dueño; merge/publicación mantienen la autorización de la conversación. Alcance: consultas orientativas de teléfono/username en Últimos datos, su prevalidación al guardar y explicación de conflictos. Sin cambios de roles, reglas, reservas, escrituras, checkout, mapas, pagos ni paleta de otros agentes.
+- Fallos con evidencia en login.html: token/fetch/cuerpo sin plazo podían dejar la comprobación o prevalidación pendiente; la secuencia username sólo cambiaba al ejecutar el debounce, permitiendo pintar la respuesta anterior durante 360 ms tras editar. Respuestas sin booleano también se interpretaban como libres en prevalidación y ocupadas en el indicador.
+- Corrección: un único helper local limita las cuatro consultas a 15 s incluyendo token, red y cuerpo; aborta la petición al terminar y no inicia fetch si el token resuelve tras vencer. Sólo un booleano confirmado es disponibilidad conocida. El input invalida la consulta anterior inmediatamente y limpia su estado. Las reservas y Firestore Rules conservan la autoridad final al guardar; disponibilidad desconocida no promete éxito ni se convierte en ocupada.
+- PASS_LOCAL: ocho regresiones ejecutan los handlers reales con token/red/cuerpo pendientes, respuesta tardía tras edición, payload teléfono y cuerpos inválidos. Login/perfil 127/127; aislamiento 49/49. Chromium 9/9, incluido indicador real en HTML/CSS de login a 390/768/1440 y seis regresiones de Google/retorno. SDK/endpoints aislados; no cuentas, correos, reservas ni datos reales. build:pages y audit:final PASS (exit 0), incluido manifiesto reproducible y versionado. CI y producción pendientes del nuevo commit; no se heredan resultados anteriores.
+- NOT_VERIFIED: alta con cuenta real y selección OAuth del dueño; no se acreditan mediante los fixtures. Las escrituras del perfil conservan su funcionamiento previo, fuera de esta reparación de consultas de disponibilidad.
+
 ## Google en la misma pestaña — 2026-10-05 (`codex/google-same-tab-recovery-20261005`)
 
 - Agente/modelo: Codex (GPT-6). Base main 5c2479e4 (#1027). El dueño muestra selector Google abierto y reporta que no puede pulsar su cuenta. La captura no demuestra la causa del clic ni que COOP bloquee ese botón. Chrome sigue ausente de CUA; no se inspeccionaron sus cookies/credenciales ni se reproduce OAuth real. Clarificación opcional enviada; se continúa con una integración que evita esa ventana emergente.

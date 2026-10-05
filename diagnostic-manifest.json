@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "308b51d2eb4408687b651f478612378bce276c6522cf83a9ff0e463bfb29a2c0",
+  "sourceFingerprint": "54a7e70aeeda923e663e277e823f9133bbf0a91fb4c56b2e21602a8316b83643",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 974,
-    "textFiles": 933,
-    "totalBytes": 18420951,
+    "files": 976,
+    "textFiles": 935,
+    "totalBytes": 18429726,
     "pages": 19,
-    "modules": 680
+    "modules": 682
   },
   "viewports": [
     {
@@ -13424,8 +13424,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 83613,
-      "sha256": "a97d3762c07a610277f9a67b96c410dcfc8d4eef5654ecf855d6750a607ca400",
+      "bytes": 82928,
+      "sha256": "286daaf4a58c20341eea31111f4514d79ed93572be54c49799e6bef377dbcb29",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13488,17 +13488,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1541
+          "line": 1526
         },
         {
           "raw": "tienda.js?v=tintin-20261004-final-integration-1",
           "target": "tienda.js",
-          "line": 1542
+          "line": 1527
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1543
+          "line": 1528
         }
       ],
       "styles": [
@@ -13684,19 +13684,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1541,
+          "line": 1526,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261004-final-integration-1",
           "target": "tienda.js",
-          "line": 1542,
+          "line": 1527,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1543,
+          "line": 1528,
           "exists": true
         },
         {
@@ -19000,7 +19000,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 351279,
-      "sha256": "3e38eb515516039269fb3c189e372a37435b4d76dc5ddac747b37041e6c1018a",
+      "sha256": "ca422ea8c6f06b24fbf58a9cc204c971e7ddc7934282b6c5631462c6a255466b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34371,6 +34371,59 @@
       "endpoints": []
     },
     {
+      "path": "tests/login/profile-availability-recovery.spec.js",
+      "bytes": 2811,
+      "sha256": "18e776b456151db26c8c90ab509e16e1681ab1e97c31a8f1a3550ac3a0ca7055",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/login/profile-availability-recovery.test.mjs",
+      "bytes": 4521,
+      "sha256": "7229bc0a73d25bb054642120f218f980b85ff78b00c167960b08e1fc7a470c4b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../js/core/auth/estado-perfil-sesion.mjs",
+          "target": "js/core/auth/estado-perfil-sesion.mjs",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/login/profile-location-map-contract.test.mjs",
       "bytes": 1424,
       "sha256": "fbcc8a555375cc8e9421395664b7e15902a8998f6d5a04eed1d29befe1bf5f3f",
@@ -38070,13 +38123,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 351279,
-      "sha256": "3e38eb515516039269fb3c189e372a37435b4d76dc5ddac747b37041e6c1018a"
+      "sha256": "ca422ea8c6f06b24fbf58a9cc204c971e7ddc7934282b6c5631462c6a255466b"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 351194,
-      "sha256": "0ac0b1d078000c121bfe03399f17481845b2803076c8c4f540e1216d0a219c1f"
+      "sha256": "bdf2ef96a961d8a9d4579eb5ffdc8211cc8d941aabf5c9259974531ed76882f2"
     },
     {
       "path": "config/public-site.json",
@@ -38591,8 +38644,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 202885,
-      "sha256": "2719563b2203235c678ab54649aa640344c151b9951d6cb723287e60011002a6"
+      "bytes": 205013,
+      "sha256": "c3a24de3b88958d930b74198df48a5d3b44779112b1509f4ac6078905665df87"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -40907,8 +40960,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 83613,
-      "sha256": "a97d3762c07a610277f9a67b96c410dcfc8d4eef5654ecf855d6750a607ca400"
+      "bytes": 82928,
+      "sha256": "286daaf4a58c20341eea31111f4514d79ed93572be54c49799e6bef377dbcb29"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -42679,6 +42732,18 @@
       "extension": ".mjs",
       "bytes": 2695,
       "sha256": "fc71d15e26bc0a6ec7fade92b45df9a27d78682c3980d09de801046319537559"
+    },
+    {
+      "path": "tests/login/profile-availability-recovery.spec.js",
+      "extension": ".js",
+      "bytes": 2811,
+      "sha256": "18e776b456151db26c8c90ab509e16e1681ab1e97c31a8f1a3550ac3a0ca7055"
+    },
+    {
+      "path": "tests/login/profile-availability-recovery.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4521,
+      "sha256": "7229bc0a73d25bb054642120f218f980b85ff78b00c167960b08e1fc7a470c4b"
     },
     {
       "path": "tests/login/profile-location-map-contract.test.mjs",
@@ -44992,30 +45057,6 @@
       "line": 266,
       "target": "/api/notifications",
       "method": "POST"
-    },
-    {
-      "file": "login.html",
-      "line": 695,
-      "target": "/api/username-availability",
-      "method": "POST"
-    },
-    {
-      "file": "login.html",
-      "line": 712,
-      "target": "/api/phone-availability",
-      "method": "POST"
-    },
-    {
-      "file": "login.html",
-      "line": 856,
-      "target": "/api/username-availability",
-      "method": "POST"
-    },
-    {
-      "file": "login.html",
-      "line": 974,
-      "target": "/api/username-availability",
-      "method": "POST"
     }
   ],
   "firestore": {
@@ -46490,7 +46531,7 @@
           },
           {
             "file": "login.html",
-            "line": 1203,
+            "line": 1188,
             "operation": "doc"
           },
           {
