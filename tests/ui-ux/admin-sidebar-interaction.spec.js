@@ -66,3 +66,21 @@ for(const width of [320,390,540]) {
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   });
 }
+
+for (const width of [768,1440]) {
+  test(`cabecera sin superposición y centros iguales con menú largo a ${width}px`, async ({page}) => {
+    await load(page,width); await page.setViewportSize({width,height:500});
+    await page.evaluate(()=>{document.querySelector('.adm-user-name').textContent='TINTIN ACCESORIOS Y RELOJES';});
+    await page.mouse.move(width-10,350);
+    const boxes=await page.evaluate(()=>{
+      const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {top:r.top,bottom:r.bottom,center:r.left+r.width/2};};
+      return {logo:rect('.adm-sidebar-logo'),user:rect('.adm-user-info'),avatar:rect('.adm-user-avatar'),icon:rect('.adm-nav-icon')};
+    });
+    expect(boxes.user.top).toBeGreaterThanOrEqual(boxes.logo.bottom);
+    expect(Math.abs(boxes.avatar.center-boxes.icon.center)).toBeLessThanOrEqual(1);
+    await page.locator('#adm-sidebar').hover();
+    await expect.poll(()=>page.locator('#adm-sidebar').evaluate(e=>Math.round(e.getBoundingClientRect().width))).toBe(260);
+    const expanded=await page.evaluate(()=>({logo:document.querySelector('.adm-sidebar-logo').getBoundingClientRect().bottom,user:document.querySelector('.adm-user-info').getBoundingClientRect().top}));
+    expect(expanded.user).toBeGreaterThanOrEqual(expanded.logo);
+  });
+}

@@ -9,9 +9,9 @@ import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. La única escritura es "Sellar verdes", que guarda sólo los sellos
 // del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
-import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261005-google-same-tab-1';
+import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261005-flow-progress-1';
 import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261005-google-same-tab-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261005-flow-progress-1';
 import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261001-sellos-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
@@ -280,6 +280,10 @@ export function initConnectionsFlow({ role } = {}) {
         </div>
       </div>
       <div class="adm-card-body">
+        <div id="tfc-revalidation-progress" class="tfc-revalidation-progress" hidden>
+          <p id="tfc-revalidation-status" role="status" aria-live="polite"></p>
+          <progress id="tfc-revalidation-bar" max="100" value="0" aria-label="Avance de la revalidación"></progress>
+        </div>
         <div class="adm-diagnostic-safety" role="note">
           <strong>Modo de solo lectura.</strong>
           "Revalidar" solo ejecuta lecturas GET de producción (<code>/api/health</code>,
@@ -516,9 +520,24 @@ export function initConnectionsFlow({ role } = {}) {
   const liveErrorTextEl = root.querySelector("#tfc-live-error-text");
   root.querySelector("#tfc-live-error-close").addEventListener("click", () => { liveErrorEl.hidden = true; });
   const revalidateBtn = root.querySelector('#tfc-btn-revalidate');
+  const progressPanel = root.querySelector('#tfc-revalidation-progress');
+  const progressStatus = root.querySelector('#tfc-revalidation-status');
+  const progressBar = root.querySelector('#tfc-revalidation-bar');
   revalidateBtn.addEventListener('click', async () => {
+    if (revalidateBtn.disabled) return;
     revalidateBtn.disabled = true;
     revalidateBtn.textContent = 'Revalidando…';
+    progressPanel.hidden = false;
+    root.setAttribute('aria-busy', 'true');
+    let percentage = 0;
+    let progressActive = true;
+    const showProgress = (value, label) => {
+      if (!progressActive) return;
+      percentage = value;
+      progressBar.value = value;
+      progressStatus.textContent = `${label} · ${value}%`;
+    };
+    showProgress(0, 'Comprobando salud de producción');
     liveErrorEl.hidden = true;
     liveErrorTextEl.textContent = '';
     try {
@@ -533,6 +552,7 @@ export function initConnectionsFlow({ role } = {}) {
         }
       };
       const publicHealth = await readJson('/api/health');
+      showProgress(5, 'Verificando sesión y seguridad');
       if (!publicHealth.ok || publicHealth.body?.ok !== true) errors.push(`/api/health respondió ${publicHealth.status || 'sin respuesta'}`);
 
       let authHeaders = {};
@@ -544,7 +564,8 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
-      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, engagementStats, sheetsWebhook, sessionProbe, pageProbe, ...routeProbes] = await Promise.all([
+      showProgress(10, 'Comprobando conexiones');
+      const checks = [
         user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
@@ -554,7 +575,7 @@ export function initConnectionsFlow({ role } = {}) {
         probeEngagementStats(user),
         user ? probeSheetsWebhook() : Promise.resolve(null),
         probeCurrentSession(user, role),
-        fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
+        fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(15000) }).then(response => ({
           status: response.status,
           csp: Boolean(response.headers.get('content-security-policy')),
         })).catch(error => ({ status: 0, csp: false, error: error?.message || 'fallo de red' })),
@@ -566,7 +587,7 @@ export function initConnectionsFlow({ role } = {}) {
           ['checkout', '/checkout'],
         ].map(async ([key, path]) => {
           try {
-            const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store' });
+            const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(15000) });
             return [key, {
               path,
               status: response.status,
@@ -577,7 +598,12 @@ export function initConnectionsFlow({ role } = {}) {
           }
         }),
         probeRenderedCart(),
-      ]);
+      ];
+      let completed = 0;
+      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, engagementStats, sheetsWebhook, sessionProbe, pageProbe, ...routeProbes] = await Promise.all(checks.map(check => Promise.resolve(check).finally(() => {
+        completed += 1;
+        showProgress(10 + Math.floor(85 * completed / checks.length), `Comprobaciones terminadas: ${completed} de ${checks.length}`);
+      })));
       if (user && (!systemHealth.ok || systemHealth.body?.ok !== true)) errors.push(`/api/system-health respondió ${systemHealth.status || 'sin respuesta'}`);
       if (user && (!adminHealth.ok || adminHealth.body?.ok !== true)) errors.push(`/api/admin-runtime-health respondió ${adminHealth.status || 'sin respuesta'}`);
 
@@ -602,10 +628,14 @@ export function initConnectionsFlow({ role } = {}) {
         liveErrorEl.hidden = false;
         liveErrorTextEl.textContent = `Algunas pruebas no se pudieron confirmar: ${errors.join(' · ')}`;
       }
+      showProgress(100, errors.length ? 'Revalidación finalizada con avisos' : 'Revalidación finalizada');
     } catch (error) {
+      showProgress(percentage, 'Revalidación interrumpida');
       liveErrorEl.hidden = false;
       liveErrorTextEl.textContent = `No se pudo revalidar: ${error?.message || error}`;
     } finally {
+      progressActive = false;
+      root.setAttribute('aria-busy', 'false');
       revalidateBtn.disabled = false;
       revalidateBtn.textContent = 'Revalidar en vivo';
       renderAll();

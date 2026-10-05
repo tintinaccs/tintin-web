@@ -53,3 +53,20 @@ for (const width of [390, 768, 1440]) {
     }
   });
 }
+
+for (const width of [390,768,1440]) {
+  test(`loader oficial sólo tiene rosa y blanco a ${width}px`, async ({page})=>{
+    await page.setViewportSize({width,height:900});
+    const runtime=fs.readFileSync(path.join(root,'js/cargador-pagina.js'),'utf8');
+    await page.route('**/*.js*',route=>route.fulfill({contentType:'text/javascript',body:route.request().url().endsWith('/loader-brand-fixture.js')?'window.TT_PAGE_LOADER_WAIT=true;'+runtime+';window.TintinLoader.setText("Restaurando tu sesión…","El panel se abrirá cuando termine la restauración.");':''}));
+    await page.route('**/loader-brand-fixture',route=>route.fulfill({contentType:'text/html',headers:{'Content-Security-Policy':"default-src 'self'; script-src 'self'; connect-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"},body:shell.replace('</body>','<script src="/loader-brand-fixture.js"></script></body>')}));
+    await page.goto('/loader-brand-fixture');
+    await expect(page.locator('#tt-loader')).toBeVisible();
+    for(const selector of ['#tt-loader-wordmark','#tt-loader-brand-subtitle','#tt-loader-title','#tt-loader-subtitle']) {
+      await expect(page.locator(selector)).toHaveCSS('color','rgb(255, 255, 255)');
+    }
+    expect(await page.locator('#tt-loader-spin-wrap').evaluate(e=>getComputedStyle(e,'::before').filter)).not.toContain('drop-shadow');
+    await expect(page.locator('#tt-loader')).toHaveCSS('background-color','rgb(248, 170, 202)');
+    expect(await page.locator('.tt-loader-spinner').evaluate(e=>getComputedStyle(e,'::after').borderBottomColor)).toBe('rgb(255, 255, 255)');
+  });
+}

@@ -31,7 +31,7 @@ const RAW_NODES = [
   { id: 'entrada-login', label: 'Login', category: 'entrada', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', note: 'Página única de acceso: Google o correo + código (el ingreso con @usuario se retiró).' }] },
   { id: 'google-btn', label: 'Continuar con Google', category: 'entrada', state: ESTADOS.PROD,
-    evidence: [{ file: 'login.html', line: 1301, note: 'signInWithRedirect abre Google en la misma pestaña, con persistencia confirmada y plazo limitado.' },
+    evidence: [{ file: 'login.html', line: 1301, note: 'signInWithPopup abre Google; sólo un rechazo explícito de apertura habilita signInWithRedirect con plazo limitado.' },
                { file: 'functions/__/auth/[[path]].js', note: 'Proxy de Firebase Auth en el mismo origen para recuperar el resultado.' }] },
   { id: 'login-codigo', label: 'Login por correo + código', category: 'entrada', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', note: 'sendOtp(correo): sólo correo, sin @usuario' },
@@ -139,7 +139,7 @@ const RAW_NODES = [
 const RAW_EDGES = [
   { from: 'entrada-login', to: 'google-btn', label: 'elige Google', state: ESTADOS.PROD },
   { from: 'entrada-login', to: 'login-codigo', label: 'elige correo/código', state: ESTADOS.PROD },
-  { from: 'google-btn', to: 'firebase-auth', label: 'Google en la misma pestaña', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 1301 }] },
+  { from: 'google-btn', to: 'firebase-auth', label: 'Google: popup o fallback por bloqueo', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 1301 }] },
   { from: 'login-codigo', to: 'firebase-auth', label: 'verifica código → login', state: ESTADOS.PROD, evidence: [{ file: 'functions/api/email-otp-verify.js' }] },
   { from: 'firebase-auth', to: 'redirect-result', label: 'recupera resultado de Google', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 1075 }] },
   { from: 'redirect-result', to: 'sesion-estado', label: 'sesión activa', state: ESTADOS.PROD },

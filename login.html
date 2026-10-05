@@ -6,7 +6,7 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261005-public-flows-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261005-flow-progress-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-public-navigation-3" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
-  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260927-loader-contrast-c-1-brand-20261004-1-owner-pink-20261004-1">
+  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261005-flow-progress-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20260925-cache-converge-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -206,6 +206,7 @@
 import { auth, db, provider, authPersistenceReady, inspectAuthPersistenceStorage } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import {
   signInWithRedirect,
+  signInWithPopup,
   getRedirectResult,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -376,6 +377,7 @@ function errMsg(code, email = '') {
     "auth/unauthorized-domain":       "Este dominio todavía no está autorizado para entrar con Google. Usá el acceso por correo o avisá al equipo de Tintin.",
     "auth/operation-not-allowed":     "El acceso con Google está temporalmente deshabilitado. Usá el acceso por correo e intentá más tarde.",
     "auth/internal-error":            "Google no pudo completar el ingreso. Recargá la página e intentá de nuevo.",
+    "profile/deadline":              "La conexión está tardando en verificar tu cuenta. Podés reintentar sin borrar tu sesión.",
   };
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
@@ -1279,11 +1281,24 @@ const loginConGoogle = async () => {
   document.body.classList.add('tt-login-busy');
   const myAttempt = ++_googleLoginToken;
   try {
-    await withDeadline(authPersistenceReady, AUTH_NETWORK_DEADLINE_MS);
-    if (myAttempt !== _googleLoginToken) return;
-    markGoogleRedirectPending();
     showOverlay();
-    await withDeadline(signInWithRedirect(auth, provider), AUTH_NETWORK_DEADLINE_MS);
+    // Invocar desde el clic, sin un await previo que pierda la activación del
+    // navegador. La persistencia ya fue confirmada antes de habilitar el acceso.
+    let result;
+    try {
+      result = await signInWithPopup(auth, provider);
+    } catch (popupError) {
+      // Sólo un rechazo explícito de apertura permite el fallback. Cancelar,
+      // perder la red o tardar en elegir cuenta nunca abre un segundo flujo.
+      if (!['auth/popup-blocked', 'auth/operation-not-supported-in-this-environment'].includes(popupError?.code)) throw popupError;
+      if (myAttempt !== _googleLoginToken) return;
+      await withDeadline(authPersistenceReady, AUTH_NETWORK_DEADLINE_MS);
+      markGoogleRedirectPending();
+      await withDeadline(signInWithRedirect(auth, provider), AUTH_NETWORK_DEADLINE_MS);
+      return;
+    }
+    if (myAttempt !== _googleLoginToken) return;
+    await finishGoogleLogin(result.user);
   } catch (error) {
     if (myAttempt !== _googleLoginToken) return;
     window.dispatchEvent(new CustomEvent('tintin:login-failed'));

@@ -15,14 +15,14 @@ if(location.pathname==='/google-chooser-fixture'){
 ${deadline}
 const auth={currentUser:null},provider={},authPersistenceReady=Promise.resolve();
 let loginPersistenceReady=true,loginSessionGeneration=0;
-window.__calls={redirect:0,finish:0};window.__redirectMode='navigate';
+window.__calls={redirect:0,popup:0,finish:0};window.__popupMode="blocked";window.__redirectMode='navigate';
 function recordAuthDiagnostic(){}
 ${markers}
 function getRedirectResult(){const selected=sessionStorage.getItem('fixture-selected')==='1';sessionStorage.removeItem('fixture-selected');return Promise.resolve(selected?{user:{uid:'isolated-fixture'}}:null);}
 ${redirectInit}
 const layer=document.createElement('div');layer.id='auth-test-overlay';layer.hidden=true;layer.textContent='Abriendo Google';layer.style.cssText='position:fixed;inset:0;background:#F8AACA;z-index:999999';document.body.appendChild(layer);
 window.TintinLoader={show(){layer.hidden=false;},hide(){layer.hidden=true;},beginWait(){},endWait(){},setText(){}};
-function signInWithPopup(){throw new Error('No popup permitted');}
+function signInWithPopup(){window.__calls.popup++;if(window.__popupMode==='success')return Promise.resolve({user:{uid:'isolated-popup'}});if(window.__popupMode==='pending')return new Promise(resolve=>{window.__resolvePopup=resolve;});return Promise.reject({code:window.__popupMode==='blocked'?'auth/popup-blocked':window.__popupMode});}
 function signInWithRedirect(){window.__calls.redirect++;if(window.__redirectMode==='error')return Promise.reject({code:'auth/network-request-failed'});if(window.__redirectMode==='navigate')location.assign('/google-chooser-fixture');return new Promise(()=>{});}
 function finishGoogleLogin(){window.__calls.finish++;window.TintinLoader.hide();const status=document.createElement('p');status.id='fixture-confirmed';status.textContent='Credencial de prueba confirmada';document.body.appendChild(status);return Promise.resolve();}
 function googleIdleLabel(){return 'Continuar con Google';}
@@ -51,7 +51,7 @@ async function load(page, width) {
   await page.goto('/auth-loader-fixture');
 }
 for (const width of [390, 768, 1440]) {
-  test(`Google y su retorno usan una sola pestaña a ${width}px`, async ({ page, context }) => {
+  test(`Popup bloqueado usa un único redirect y retorno a ${width}px`, async ({ page, context }) => {
     let popups = 0; page.on('popup', () => popups++);
     await load(page, width); await page.locator('#btn-google').click();
     await expect(page).toHaveURL(/google-chooser-fixture$/);
@@ -89,4 +89,31 @@ test('volver con Atrás sin elegir cuenta devuelve controles y no relanza Google
   await expect(page.locator('#login-error')).toContainText(/Google.*(?:no pudo completar|no se completó)/);
   await expect(page.locator('#auth-test-overlay')).toBeHidden();
   expect(await page.evaluate(() => window.__calls.redirect)).toBe(0);
+});
+
+test('popup resuelto termina una vez sin redirección', async ({ page }) => {
+  await load(page, 768); await page.evaluate(() => { window.__popupMode = 'success'; });
+  await page.locator('#btn-google').click();
+  await expect(page.locator('#fixture-confirmed')).toBeVisible();
+  expect(await page.evaluate(() => window.__calls)).toEqual({ popup: 1, redirect: 0, finish: 1 });
+  await expect(page).toHaveURL(/auth-loader-fixture$/);
+});
+for (const code of ['auth/popup-closed-by-user', 'auth/network-request-failed']) {
+  test(`${code} devuelve controles sin abrir otro flujo`, async ({ page }) => {
+    await load(page, 390); await page.evaluate(code => { window.__popupMode = code; }, code);
+    await page.locator('#btn-google').click();
+    await expect(page.locator('#login-error')).toHaveText(code);
+    await expect(page.locator('#btn-google')).toBeEnabled();
+    expect(await page.evaluate(() => window.__calls.redirect)).toBe(0);
+  });
+}
+test('elegir cuenta puede tardar sin disparar un redirect paralelo', async ({ page }) => {
+  await load(page, 1440); await page.evaluate(() => { window.__popupMode = 'pending'; });
+  await page.locator('#btn-google').click(); await page.clock.runFor(60000);
+  await expect(page.locator('#btn-google')).toBeDisabled();
+  await expect(page.locator('#auth-test-overlay')).toBeVisible();
+  expect(await page.evaluate(() => window.__calls.redirect)).toBe(0);
+  await page.evaluate(() => window.__resolvePopup({ user: { uid: 'late-popup' } }));
+  await expect(page.locator('#fixture-confirmed')).toBeVisible();
+  expect(await page.evaluate(() => window.__calls.finish)).toBe(1);
 });
