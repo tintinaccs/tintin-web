@@ -144,6 +144,7 @@ export async function afterWholesaleQuoteCreated(env, result, deps = {}) {
 
 /** Avisos al aprobar o rechazar (guardar precios no avisa a la clienta). */
 export async function afterWholesaleQuoteResponded(env, result, deps = {}) {
+  if (result?.decision === 'ver') return { skipped: true };
   const quote = result?.quote;
   if (!quote) return { skipped: true };
   const notifyUser = deps.notifyUser || notifyUserIfAbsent;

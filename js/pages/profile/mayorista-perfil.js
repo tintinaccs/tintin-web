@@ -88,7 +88,7 @@ function render() {
         <label style="font-size:12px;font-weight:600">Emprendimiento
           <input class="perfil-input" name="businessName" maxlength="120" placeholder="Nombre de tu tienda" required></label>
         <label style="font-size:12px;font-weight:600">WhatsApp
-          <input class="perfil-input" name="whatsapp" inputmode="tel" maxlength="30" placeholder="0981 123 456" required></label>
+          <input class="perfil-input" name="whatsapp" inputmode="tel" maxlength="30" placeholder="0912 345 678" required></label>
         <label style="font-size:12px;font-weight:600">Ciudad
           <input class="perfil-input" name="city" maxlength="120" placeholder="Ej: Luque"></label>
       </div>
@@ -276,7 +276,7 @@ function start() {
       if (getSessionUser()?.uid === user.uid) watchQuotes(user);
     });
   });
-  if (location.hash === '#mayorista') setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 600);
+
 }
 
 if (typeof document !== 'undefined') {

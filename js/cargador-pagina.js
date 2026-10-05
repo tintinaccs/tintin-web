@@ -830,7 +830,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261004-header-consistency-2');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261004-header-consistency-2-profile-wholesale-20261005-1');
     }
   }
 

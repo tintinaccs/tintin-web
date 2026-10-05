@@ -213,6 +213,7 @@ async function createAttempt(env, request, { uid, email, quoteId }, { get, commi
     userEmail: email,
     customerId: cleanText(profile.data.customerId, 180) || `CUS_${uid}`,
     customerName,
+    customerAvatarURL: cleanText(profile.data.avatarURL || profile.data.avatarUrl || profile.data.photoURL || '', 1200),
     businessName: request.businessName,
     whatsapp: request.whatsapp,
     city: request.city,
@@ -269,7 +270,7 @@ async function createAttempt(env, request, { uid, email, quoteId }, { get, commi
   return { quoteId, quoteNumber, duplicate: false, quote };
 }
 
-const DECISIONS = new Set(['guardar', 'aprobar', 'rechazar']);
+const DECISIONS = new Set(['guardar', 'aprobar', 'rechazar', 'ver']);
 
 /**
  * Respuesta del Super Admin: guardar precios, aprobar o rechazar.
@@ -288,6 +289,18 @@ export async function respondWholesaleQuote(env, input = {}, actor = {}, {
   const current = await readDecoded(get, env, `${WHOLESALE_COLLECTION}/${quoteId}`);
   if (!current.data) throw wholesaleError('quote_not_found', 404);
   const before = current.data;
+  // Leer no cambia precios, revisión comercial, aprobación ni dispara avisos.
+  // La precondición evita pisar una respuesta concurrente de otra pestaña.
+  if (decision === 'ver') {
+    if (before.seenAt) return { quoteId, decision, quote: before };
+    const patch = { seenAt: new Date(), seenBy: actorEmail };
+    await commit(env, [{
+      path: `${WHOLESALE_COLLECTION}/${quoteId}`,
+      fields: encodeFirestoreFields(patch), mergeFields: Object.keys(patch),
+      currentDocument: precondition(current.document),
+    }]);
+    return { quoteId, decision, quote: { ...before, ...patch } };
+  }
   if (before.status !== 'pendiente') throw wholesaleError('quote_closed', 409, { status: before.status });
   const expectedRevision = Number(input.expectedRevision);
   if (Number.isInteger(expectedRevision) && expectedRevision !== Number(before.revision || 1)) {

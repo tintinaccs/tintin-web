@@ -7,7 +7,7 @@
 import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261004-final-integration-1";
 import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1';
 
-const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+const LEAFLET_JS = '/js/vendor/leaflet/leaflet.js?v=leaflet-1.9.4';
 const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
 const DEFAULT_CENTER = [-25.2867, -57.6467];
 const DEFAULT_ZOOM = 13;
@@ -27,7 +27,7 @@ function loadLeaflet() {
     script.src = LEAFLET_JS;
     script.integrity = LEAFLET_JS_INTEGRITY;
     script.crossOrigin = 'anonymous';
-    script.onload = () => { clearTimeout(timer); resolve(window.L); };
+    script.onload = () => { if(!window.L){failed();return;} clearTimeout(timer); resolve(window.L); };
     script.onerror = failed;
     document.head.appendChild(script);
   });
@@ -424,7 +424,15 @@ export function renderSavedMapPreviews(root, addresses) {
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>', maxZoom: 19 }).addTo(map);
         L.marker([place.lat, place.lng], { icon: pinIcon(L), interactive: false }).addTo(map);
         maps.push(map);
-      } catch { target.textContent = 'Vista del mapa no disponible · usá Ver en mapa'; }
+      } catch {
+        if(disposed || !target.isConnected)return;
+        target.replaceChildren();
+        const retry=document.createElement('button');
+        retry.type='button';retry.textContent='Reintentar vista del mapa';
+        retry.className='perfil-btn';
+        retry.addEventListener('click',()=>{if(disposed)return;target.replaceChildren();observer.observe(target);},{once:true});
+        target.appendChild(retry);
+      }
     });
   });
   root.querySelectorAll('[data-saved-map]').forEach(target => observer.observe(target));

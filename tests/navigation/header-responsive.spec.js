@@ -50,11 +50,12 @@ for (const width of [320, 390, 767, 768, 1024, 1025, 1280, 1920]) {
         const shell = image.closest('#tt-tabbar,#tt-header-tablet,#tt-header-desktop-tablet');
         const icon = [...shell.querySelectorAll('svg')].find(e => visible(e) && e.closest('button,a')?.getAttribute('aria-label') !== 'Tienda');
         const rect = e => { const r = e.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
-        return { image:rect(image), icon:rect(icon), button:rect(button), shell:rect(shell), radius:getComputedStyle(image).borderRadius, fit:getComputedStyle(image).objectFit, overflow:document.documentElement.scrollWidth > innerWidth };
+        return { image:rect(image), icon:rect(icon), button:rect(button), buttonInnerWidth:button.getBoundingClientRect().width-parseFloat(getComputedStyle(button).borderLeftWidth)-parseFloat(getComputedStyle(button).borderRightWidth), shell:rect(shell), radius:getComputedStyle(image).borderRadius, fit:getComputedStyle(image).objectFit, overflow:document.documentElement.scrollWidth > innerWidth };
       });
-      expect(result.image.width).toBeLessThanOrEqual(26);
+      if(width<768)expect(result.image.width).toBeLessThanOrEqual(26);
+      else expect(result.image.width).toBeCloseTo(result.buttonInnerWidth,0);
       expect(result.image.width).toBeCloseTo(result.image.height, 1);
-      expect(Math.abs(result.image.width - result.icon.width)).toBeLessThan(2);
+      if(width<768)expect(Math.abs(result.image.width - result.icon.width)).toBeLessThan(2);
       expect(result.radius).toBe('50%');
       expect(result.fit).toBe('cover');
       expect(result.button.width).toBeGreaterThanOrEqual(44);

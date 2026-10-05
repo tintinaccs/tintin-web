@@ -436,3 +436,15 @@ html[data-tt-footer-accent-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-
   body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-col>ul{padding:4px 0 12px}
   body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-bottom{font-size:.62rem;line-height:1.55}
 }
+
+/* La identidad ocupa todo el círculo en cada variante de header. */
+[data-auth-account-button][data-tt-account-avatar="true"]{padding:0!important;overflow:hidden!important;position:relative;}
+:is(#tt-header-desktop-tablet,#tt-header-tablet) [data-auth-account-button][data-tt-account-avatar="true"] img.tt-account-avatar-btn,
+[data-auth-account-button][data-tt-account-avatar="true"] img.tt-account-avatar-btn{width:100%!important;height:100%!important;inline-size:100%!important;block-size:100%!important;max-width:none!important;max-height:none!important;flex:1 1 auto!important;object-fit:cover!important;border-radius:50%!important;}
+.tt-wholesale-invitation{animation:tt-wholesale-breathe 3s ease-in-out infinite;}
+@keyframes tt-wholesale-breathe{50%{box-shadow:inset 0 0 0 2px #f8aaca;}}
+@media(prefers-reduced-motion:reduce){.tt-wholesale-invitation{animation:none;}}
+
+.tt-wholesale-invitation-label{display:inline-block;animation:tt-wholesale-label 3s ease-in-out infinite;}
+@keyframes tt-wholesale-label{50%{transform:translateY(-1px);}}
+@media(prefers-reduced-motion:reduce){.tt-wholesale-invitation-label{animation:none;}}

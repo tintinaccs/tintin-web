@@ -253,6 +253,7 @@ async function enhanceProfile() {
   const tabs = document.createElement('nav');
   tabs.className = 'tt-profile-tabs';
   tabs.setAttribute('aria-label', 'Secciones de mi perfil');
+  tabs.setAttribute('role','tablist');
   hero.insertAdjacentElement('afterend', tabs);
 
   const host = document.createElement('div');
@@ -264,6 +265,7 @@ async function enhanceProfile() {
     { id: 'datos', label: 'Mis datos', nodes: [identityCard, locationCard] },
     { id: 'pedidos', label: 'Pedidos', nodes: [ordersCard] },
     { id: 'favoritos', label: 'Favoritos', nodes: [favoritesCard] },
+    { id: 'mayorista', label: '¿Querés ser mayorista?', nodes: [document.getElementById('perfil-wholesale-card')] },
     { id: 'cuenta', label: 'Cuenta y seguridad', nodes: [accountCard, roleCard, accountActions] },
     { id: 'ayuda', label: 'Ayuda', nodes: [helpCard, quickCard] },
   ];
@@ -285,6 +287,8 @@ async function enhanceProfile() {
     button.type = 'button';
     button.className = 'tt-profile-tab';
     button.dataset.profileTab = definition.id;
+    button.id='profile-tab-'+definition.id;
+    button.setAttribute('aria-controls','profile-panel-'+definition.id);
     button.setAttribute('role', 'tab');
     button.setAttribute('aria-selected', definition.id === initialPanel ? 'true' : 'false');
     button.textContent = definition.label;
@@ -295,11 +299,14 @@ async function enhanceProfile() {
       badge.hidden = true;
       button.appendChild(badge);
     }
+    if(definition.id==='mayorista')button.classList.add('tt-wholesale-invitation');
     tabs.appendChild(button);
 
     const panel = document.createElement('section');
     panel.className = 'tt-profile-panel';
     panel.dataset.profilePanel = definition.id;
+    panel.id='profile-panel-'+definition.id;
+    panel.setAttribute('aria-labelledby','profile-tab-'+definition.id);
     panel.setAttribute('role', 'tabpanel');
     panel.hidden = definition.id !== initialPanel;
     if (definition.id === 'resumen') panel.appendChild(summary);
@@ -317,6 +324,16 @@ async function enhanceProfile() {
     const button = event.target.closest?.('[data-profile-tab]');
     if (button) activate(button.dataset.profileTab);
   });
+
+  function updateWholesaleTab(approved){
+    const button=tabs.querySelector('[data-profile-tab="mayorista"]');
+    if(!button)return;
+    button.innerHTML=approved?'Mayoristas':'<span class="tt-wholesale-invitation-label">¿Querés ser mayorista?</span>';
+    button.classList.toggle('tt-wholesale-invitation',!approved);
+  }
+  window.addEventListener('tintin:auth-nav-updated',event=>updateWholesaleTab(event.detail?.wholesaleApproved===true));
+  updateWholesaleTab(document.documentElement.dataset.ttWholesaleApproved==='true');
+  window.addEventListener('hashchange',()=>{const id=location.hash.slice(1);if(panels.has(id))activate(id);});
 
   function updateSummary() {
     const count = Math.max(0, Number(document.getElementById('perfil-purchase-count')?.textContent?.replace(/\D/g, '') || 0));
