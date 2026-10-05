@@ -67,15 +67,15 @@ const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 
 // Estos contratos se validan por semántica observable, no por una frase o
 // una forma sintáctica única. Así el gate sigue protegiendo Auth aunque el
 // copy del loader o la forma de encadenar una Promise cambien legítimamente.
-  const googlePopupPath =
-    login.includes('const cred = await signInWithPopup(auth, provider)') ||
-    login.includes('const popupAttempt = signInWithPopup(auth, provider)');
+  const googleRedirectPath =
+    /await withDeadline\(signInWithRedirect\(auth, provider\), AUTH_NETWORK_DEADLINE_MS\)/.test(login) &&
+    !/signInWithPopup/.test(login);
   const googleHandoffKeepsOverlay =
-    googlePopupPath &&
+    googleRedirectPath &&
   login.includes('showOverlay()') &&
   login.includes('window.TintinLoader?.beginWait()') &&
   login.includes("setOverlayText('')") &&
-  login.includes('await finishGoogleLogin(cred.user)');
+  login.includes('await finishGoogleLogin(redirectUser)');
 
 const cartWaitsForAuthRestore =
   /subscribeAuthState\(activateIdentity\)/.test(cartSync) &&
@@ -95,10 +95,10 @@ const checks = [
   ['Carrito y búsqueda ocultos en Login', css.includes('body:has(.login-page) #cart-drawer') && css.includes('body:has(.login-page) #search-panel')],
   ['Login no reserva espacio del shell', css.includes('body:has(.login-page).tt-public-shell-mounted') && css.includes('padding-top: 0 !important')],
   ['Loader de Login muestra la marca oficial completa', loginLoaderVisible && officialLogoImmediate],
-    ['Google usa popup como camino principal', googlePopupPath],
+    ['Google abre en la misma pestaña con espera limitada', googleRedirectPath],
   ['Google mantiene loader hasta terminar el handoff', googleHandoffKeepsOverlay],
   ['OTP mantiene loader hasta terminar el handoff', login.includes('window.TintinLoader?.beginWait()') && login.includes('await finishOtpLogin(user)')],
-  ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && /await withDeadline\(signInWithRedirect\(auth, provider\), AUTH_NETWORK_DEADLINE_MS\)/.test(login)],
+  ['Google confirma persistencia antes del redirect y limpia intentos fallidos', /await withDeadline\(authPersistenceReady, AUTH_NETWORK_DEADLINE_MS\)[\s\S]{0,160}markGoogleRedirectPending\(\)/.test(login) && login.includes('clearGoogleRedirectPending()')],
   ['Retorno de Google se completa una sola vez y sin bucle', login.includes('getRedirectResult(auth)') && login.includes('GOOGLE_REDIRECT_PENDING_KEY') && login.includes('handleGoogleRedirectReturn(user)')],
   ['Solo el correo oficial entra automáticamente al panel', login.includes("normalizedEmail === SUPER_ADMIN.toLowerCase()") && login.includes("window.location.replace('admin.html')")],
   ['Auth compartido no compite con el Login', /if\(IS_LOGIN_PAGE(?:\|\|IS_VISUAL_PREVIEW_FRAME)?\)return;/.test(authNav) && !authNav.includes('redirectAuthenticatedLogin')],

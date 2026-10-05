@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c2fa9dca27f3ab8d8d1086ed619e15f93f85f99092c5980397a7f8937272308f",
+  "sourceFingerprint": "308b51d2eb4408687b651f478612378bce276c6522cf83a9ff0e463bfb29a2c0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 974,
     "textFiles": 933,
-    "totalBytes": 18415646,
+    "totalBytes": 18420951,
     "pages": 19,
     "modules": 680
   },
@@ -2134,8 +2134,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197216,
-      "sha256": "01bb75fed7d614ab4233a150d30bf28c08ef7318b82e3f37d42e20b439afba16",
+      "bytes": 197220,
+      "sha256": "c33ea6b508b15ae873fbf931c1ce6657d0ef255610d8907a6522923170b7e9d9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2179,7 +2179,7 @@
           "line": 2038
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261005-auth-loader-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261005-google-same-tab-1",
           "target": "js/admin/admin-app.js",
           "line": 2039
         },
@@ -2460,7 +2460,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261005-auth-loader-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261005-google-same-tab-1",
           "target": "js/admin/admin-app.js",
           "line": 2039,
           "exists": true
@@ -13424,8 +13424,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 85903,
-      "sha256": "a433aec84737f8568ac176bd4b93ac3d4b1858860e08ce8dfd9dd18f1e991a8e",
+      "bytes": 83613,
+      "sha256": "a97d3762c07a610277f9a67b96c410dcfc8d4eef5654ecf855d6750a607ca400",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13488,17 +13488,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1587
+          "line": 1541
         },
         {
           "raw": "tienda.js?v=tintin-20261004-final-integration-1",
           "target": "tienda.js",
-          "line": 1588
+          "line": 1542
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1589
+          "line": 1543
         }
       ],
       "styles": [
@@ -13684,19 +13684,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1587,
+          "line": 1541,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261004-final-integration-1",
           "target": "tienda.js",
-          "line": 1588,
+          "line": 1542,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1589,
+          "line": 1543,
           "exists": true
         },
         {
@@ -19000,7 +19000,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 351279,
-      "sha256": "daf0f626901f9182b5da16f9a18accbf7d47b75de5e21c9b16acf0b0c7777f08",
+      "sha256": "3e38eb515516039269fb3c189e372a37435b4d76dc5ddac747b37041e6c1018a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20885,8 +20885,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 471308,
-      "sha256": "d7e6a23d4425f763d55a5c412fe2ad07e1dd9b68cfeaae38c5088fa0f8a01322",
+      "bytes": 471306,
+      "sha256": "bae8ac1dcaa2610696922b1616916a1b77978946b37649c7fa6a67ec0307a0eb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21025,7 +21025,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261004-admin-connections-3",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261005-google-same-tab-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -21672,8 +21672,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "bytes": 19913,
-      "sha256": "a35c256b764facb4754256e62acc4965f2c1b5cb86dd435a6d1d37295f08993d",
+      "bytes": 20016,
+      "sha256": "52ea5612398857eadbdf525a6d9152cf08d5f4de97f404ee8f62786c0352bffb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21694,8 +21694,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 34347,
-      "sha256": "a2ee383bba35e1fcb08d9a960c28fde27073e08a8a21573b9a8097ef1a4da081",
+      "bytes": 34332,
+      "sha256": "51bd09fd6b8a71b613d6abee6ad3a4ffa7dd27e9d6076e1a2312d7e8d424408b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21708,7 +21708,7 @@
           "line": 1
         },
         {
-          "raw": "./datos-flujo-conexiones.js?v=tintin-20261003-order-email-resend-canonical-2",
+          "raw": "./datos-flujo-conexiones.js?v=tintin-20261005-google-same-tab-1",
           "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
           "dynamic": false,
           "line": 12
@@ -21720,7 +21720,7 @@
           "line": 13
         },
         {
-          "raw": "./live-checks.js?v=tintin-20261004-admin-connections-3",
+          "raw": "./live-checks.js?v=tintin-20261005-google-same-tab-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 14
@@ -21759,15 +21759,15 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 27211,
-      "sha256": "16f1952a640c012aaf9766a29a02ccef0413a87a5360cbd23836e9368b96a1f1",
+      "bytes": 27198,
+      "sha256": "03cb0a2036af95b0e2f9f37a1b0a2026cea779de0ef1151cd663534b0b05bc01",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./datos-flujo-conexiones.js?v=tintin-20261003-order-email-resend-canonical-2",
+          "raw": "./datos-flujo-conexiones.js?v=tintin-20261005-google-same-tab-1",
           "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
           "dynamic": false,
           "line": 9
@@ -27312,8 +27312,8 @@
     },
     {
       "path": "scripts/auditar-acceso-aislamiento.js",
-      "bytes": 7356,
-      "sha256": "642dc010e918519450bf4da0dbac88a16d87f7b7b9b2c6625ab8682c56404c61",
+      "bytes": 7415,
+      "sha256": "6e659d4ed6e058f723b5d8ab6c6f0250c0f9ddeca13652e19cbd7e29a2fc7a48",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34140,8 +34140,8 @@
     },
     {
       "path": "tests/login/google-loader-recovery.spec.js",
-      "bytes": 4400,
-      "sha256": "2fa7c3985f0eef8d3d53b1f128826757c5b16f641d54bbc8094868e9499e27bf",
+      "bytes": 7023,
+      "sha256": "6740483c97518ed2b7fdf33dad3d78adb26c1bd386b461b05f6ca92a23fac805",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34527,8 +34527,8 @@
     },
     {
       "path": "tests/login/single-interactive-flow.test.mjs",
-      "bytes": 12589,
-      "sha256": "708cad90b023063a21432938c3b7872ff54b414cf871fa4c2cd2e93d13ba1fe7",
+      "bytes": 15139,
+      "sha256": "9932e900b81e49a2efd02b026e085138eb564967a438ef51f9c108b9a780dc71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37565,8 +37565,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197216,
-      "sha256": "01bb75fed7d614ab4233a150d30bf28c08ef7318b82e3f37d42e20b439afba16"
+      "bytes": 197220,
+      "sha256": "c33ea6b508b15ae873fbf931c1ce6657d0ef255610d8907a6522923170b7e9d9"
     },
     {
       "path": "apple-touch-icon.png",
@@ -38070,13 +38070,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 351279,
-      "sha256": "daf0f626901f9182b5da16f9a18accbf7d47b75de5e21c9b16acf0b0c7777f08"
+      "sha256": "3e38eb515516039269fb3c189e372a37435b4d76dc5ddac747b37041e6c1018a"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 351194,
-      "sha256": "32fb761bdcdc185927568210fc585741c3f7152b7083d39182eae45537dae08d"
+      "sha256": "0ac0b1d078000c121bfe03399f17481845b2803076c8c4f540e1216d0a219c1f"
     },
     {
       "path": "config/public-site.json",
@@ -38591,8 +38591,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 200586,
-      "sha256": "3160f974a25836e5c02cd3ddc6654de90a3f58b455f0314e12be3ceb83020649"
+      "bytes": 202885,
+      "sha256": "2719563b2203235c678ab54649aa640344c151b9951d6cb723287e60011002a6"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -39419,8 +39419,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 471308,
-      "sha256": "d7e6a23d4425f763d55a5c412fe2ad07e1dd9b68cfeaae38c5088fa0f8a01322"
+      "bytes": 471306,
+      "sha256": "bae8ac1dcaa2610696922b1616916a1b77978946b37649c7fa6a67ec0307a0eb"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -39515,8 +39515,8 @@
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
       "extension": ".js",
-      "bytes": 19913,
-      "sha256": "a35c256b764facb4754256e62acc4965f2c1b5cb86dd435a6d1d37295f08993d"
+      "bytes": 20016,
+      "sha256": "52ea5612398857eadbdf525a6d9152cf08d5f4de97f404ee8f62786c0352bffb"
     },
     {
       "path": "js/admin/flujo-conexiones/estado-flujo.js",
@@ -39527,14 +39527,14 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 34347,
-      "sha256": "a2ee383bba35e1fcb08d9a960c28fde27073e08a8a21573b9a8097ef1a4da081"
+      "bytes": 34332,
+      "sha256": "51bd09fd6b8a71b613d6abee6ad3a4ffa7dd27e9d6076e1a2312d7e8d424408b"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 27211,
-      "sha256": "16f1952a640c012aaf9766a29a02ccef0413a87a5360cbd23836e9368b96a1f1"
+      "bytes": 27198,
+      "sha256": "03cb0a2036af95b0e2f9f37a1b0a2026cea779de0ef1151cd663534b0b05bc01"
     },
     {
       "path": "js/admin/flujo-conexiones/sellos-flujo.js",
@@ -40907,8 +40907,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 85903,
-      "sha256": "a433aec84737f8568ac176bd4b93ac3d4b1858860e08ce8dfd9dd18f1e991a8e"
+      "bytes": 83613,
+      "sha256": "a97d3762c07a610277f9a67b96c410dcfc8d4eef5654ecf855d6750a607ca400"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -41153,8 +41153,8 @@
     {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "extension": ".js",
-      "bytes": 7356,
-      "sha256": "642dc010e918519450bf4da0dbac88a16d87f7b7b9b2c6625ab8682c56404c61"
+      "bytes": 7415,
+      "sha256": "6e659d4ed6e058f723b5d8ab6c6f0250c0f9ddeca13652e19cbd7e29a2fc7a48"
     },
     {
       "path": "scripts/auditar-acceso-pagina.js",
@@ -41963,8 +41963,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 62549,
-      "sha256": "478ba049ab3fc82506727bb212fbda015934acabbf10107cbfb3c39d06dfe826"
+      "bytes": 62536,
+      "sha256": "440dc574bfaf17c61ca0364ca2a60d06e93099676fd2d6ff6550fb7f5d26c174"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -42641,8 +42641,8 @@
     {
       "path": "tests/login/google-loader-recovery.spec.js",
       "extension": ".js",
-      "bytes": 4400,
-      "sha256": "2fa7c3985f0eef8d3d53b1f128826757c5b16f641d54bbc8094868e9499e27bf"
+      "bytes": 7023,
+      "sha256": "6740483c97518ed2b7fdf33dad3d78adb26c1bd386b461b05f6ca92a23fac805"
     },
     {
       "path": "tests/login/location-map-browser.spec.js",
@@ -42713,8 +42713,8 @@
     {
       "path": "tests/login/single-interactive-flow.test.mjs",
       "extension": ".mjs",
-      "bytes": 12589,
-      "sha256": "708cad90b023063a21432938c3b7872ff54b414cf871fa4c2cd2e93d13ba1fe7"
+      "bytes": 15139,
+      "sha256": "9932e900b81e49a2efd02b026e085138eb564967a438ef51f9c108b9a780dc71"
     },
     {
       "path": "tests/navigation/account-panel-contract.test.mjs",
@@ -43400,13 +43400,6 @@
     {
       "file": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
       "line": 34,
-      "raw": "login.html",
-      "target": "login.html",
-      "exists": true
-    },
-    {
-      "file": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "line": 35,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -44673,119 +44666,119 @@
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/about.html",
       "target": "about.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/envios.html",
       "target": "envios.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/cambios-devoluciones.html",
       "target": "cambios-devoluciones.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/preguntas-frecuentes.html",
       "target": "preguntas-frecuentes.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/privacidad.html",
       "target": "privacidad.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 393,
+      "line": 391,
       "raw": "/terminos.html",
       "target": "terminos.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 451,
+      "line": 449,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 463,
+      "line": 461,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 463,
+      "line": 461,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 606,
+      "line": 604,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -44855,7 +44848,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 463
+          "line": 461
         }
       ]
     },
@@ -44996,31 +44989,31 @@
     },
     {
       "file": "login.html",
-      "line": 267,
+      "line": 266,
       "target": "/api/notifications",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 697,
+      "line": 695,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 714,
+      "line": 712,
       "target": "/api/phone-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 858,
+      "line": 856,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 976,
+      "line": 974,
       "target": "/api/username-availability",
       "method": "POST"
     }
@@ -46487,17 +46480,17 @@
           },
           {
             "file": "login.html",
-            "line": 485,
+            "line": 483,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 509,
+            "line": 507,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 1204,
+            "line": 1203,
             "operation": "doc"
           },
           {
