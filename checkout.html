@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261004-header-consistency-2"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261005-public-flows-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-footer-demand-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-public-flows-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261005-footer-demand-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261005-public-flows-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261004-header-consistency-2">
@@ -423,6 +423,7 @@ import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profil
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
+import { withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261001-fusion-main-1";
 
 function sanitizeCheckoutProduct(id, raw = {}) {
   return {
@@ -1406,32 +1407,50 @@ document.getElementById('btn-step3-next').onclick = () => {
   const button = document.getElementById('ck-coupon-apply');
   const status = document.getElementById('ck-coupon-status');
   if (!input || !button || !status) return;
+  let attemptSequence = 0;
+  let activeController = null;
   const setStatus = (message, ok) => {
     status.textContent = message;
     status.style.color = ok === true ? 'var(--color-state-success, #2f7d4f)' : ok === false ? 'var(--color-state-error, #b3261e)' : 'var(--text-muted)';
   };
   input.addEventListener('input', () => {
+    attemptSequence++;
+    activeController?.abort();
+    activeController = null;
+    button.disabled = false;
     delete input.dataset.applied;
     setStatus('', null);
   });
   button.addEventListener('click', async () => {
+    if (button.disabled) return;
     const code = input.value.trim();
     delete input.dataset.applied;
     if (!code) { setStatus('Ingresá el código del cupón.', false); return; }
     button.disabled = true;
+    const requestId = ++attemptSequence;
+    const controller = new AbortController();
+    activeController = controller;
+    const user = auth.currentUser;
+    const isCurrentAttempt = () => requestId === attemptSequence &&
+      user?.uid === auth.currentUser?.uid && input.value.trim() === code;
     setStatus('Comprobando cupón…', null);
     try {
-      const user = auth.currentUser;
       if (!user) throw new Error('login');
-      const token = await user.getIdToken();
-      const response = await fetch(apiUrl('/api/coupon-validate'), {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code }),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error('failed');
-      if (result.valid) {
+      const result = await withDeadline((async () => {
+        const token = await user.getIdToken();
+        if (controller.signal.aborted || !isCurrentAttempt()) throw new Error('cancelled');
+        const response = await fetch(apiUrl('/api/coupon-validate'), {
+          method: 'POST', signal: controller.signal,
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code }),
+        });
+        const data = await response.json();
+        if (!response.ok || typeof data?.valid !== 'boolean' ||
+          (data.valid && (typeof data.code !== 'string' || !data.code.trim()))) throw new Error('failed');
+        return data;
+      })(), 15000);
+      if (!isCurrentAttempt()) return;
+      if (result.valid === true && typeof result.code === 'string' && result.code.trim()) {
         input.value = result.code;
         input.dataset.applied = result.code;
         setStatus('Cupón válido: el envío a domicilio es gratis. Se confirma al hacer el pedido.', true);
@@ -1439,9 +1458,14 @@ document.getElementById('btn-step3-next').onclick = () => {
         setStatus(result.message || 'El cupón no es válido.', false);
       }
     } catch {
-      setStatus('No pudimos comprobar el cupón. Intentá de nuevo.', false);
+      if (isCurrentAttempt()) setStatus('No pudimos comprobar el cupón. Intentá de nuevo.', false);
     } finally {
-      button.disabled = false;
+      controller.abort();
+      if (requestId === attemptSequence) {
+        activeController = null;
+        button.disabled = false;
+        if (user?.uid !== auth.currentUser?.uid) setStatus('Tu sesión cambió. Volvé a comprobar el cupón.', false);
+      }
     }
   });
 })();
@@ -1766,9 +1790,11 @@ window.addEventListener('tt_cart_updated', () => renderCart());
 // desde el header). Esperamos a que el estado inicial se estabilice antes de
 // conectar el listener; así no convertimos una cuenta válida en invitado ni
 // mostramos el guard de login durante ese instante.
+let checkoutProfileGeneration = 0;
 subscribeSession(snapshot => {
   sessionStatus = snapshot.status;
   if (snapshot.status === AUTH_STATES.RESTORING) return;
+  const profileGeneration = ++checkoutProfileGeneration;
   if (snapshot.status === AUTH_STATES.UNKNOWN) {
     authReady = false;
     currentUser = null;
@@ -1797,6 +1823,7 @@ subscribeSession(snapshot => {
   // guardada) para prellenar los pasos siguientes.
   getDoc(doc(db, 'users', user.uid))
     .then(snap => {
+      if (profileGeneration !== checkoutProfileGeneration || currentUser?.uid !== user.uid) return;
       currentUserProfile = snap.exists() ? snap.data() : null;
       // Fase E: cuenta bloqueada — no puede comprar, se tapa el checkout entero
       // apenas se sabe, sin esperar a que llegue a "Confirmar pedido".
@@ -1809,13 +1836,15 @@ subscribeSession(snapshot => {
       tryResumeCheckoutStep();
       maybeApplySavedLocation();
     })
-    .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
+    .catch(e => {
+      if (profileGeneration === checkoutProfileGeneration) console.error('No se pudo cargar el perfil del usuario:', e);
+    });
 });
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script src="tienda.js?v=tintin-20261004-final-integration-1" defer></script>
+<script src="tienda.js?v=tintin-20261005-public-flows-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

@@ -17,6 +17,7 @@ const replaying = new WeakSet();
 let cartReady = false;
 let profilePromise = Promise.resolve({ ok: false, reason: 'auth_unknown' });
 let profileState = { ok: false, loading: true, user: null, profile: null, reason: 'loading' };
+let profileGeneration = 0;
 let annotateQueued = false;
 const PROFILE_READ_TIMEOUT_MS = 5000;
 const CART_READY_TIMEOUT_MS = 2500;
@@ -103,6 +104,8 @@ function eventuallyClearResumeBackup() {
 }
 
 async function loadProfile(user) {
+  const generation = ++profileGeneration;
+  const staleResult = () => ({ ok: false, loading: false, user: null, profile: null, reason: 'session_changed' });
   if (!user || user.isAnonymous) {
     profileState = { ok: false, loading: false, user: user || null, profile: null, reason: 'signed_out' };
     return profileState;
@@ -112,11 +115,13 @@ async function loadProfile(user) {
     return profileState;
   }
   profileState = { ok: false, loading: true, user, profile: null, reason: 'loading' };
+  let readTimer;
   try {
     const timeout = new Promise((_, reject) => {
-      window.setTimeout(() => reject(new Error('profile_read_timeout')), PROFILE_READ_TIMEOUT_MS);
+      readTimer = window.setTimeout(() => reject(new Error('profile_read_timeout')), PROFILE_READ_TIMEOUT_MS);
     });
     const snap = await Promise.race([getDoc(doc(db, 'users', user.uid)), timeout]);
+    if (generation !== profileGeneration) return staleResult();
     const profile = snap.exists() ? snap.data() : null;
     if (!profile) {
       profileState = { ok: false, loading: false, user, profile: null, reason: 'profile_missing' };
@@ -126,9 +131,10 @@ async function loadProfile(user) {
       profileState = { ok: true, loading: false, user, profile, reason: '' };
     }
   } catch (error) {
+    if (generation !== profileGeneration) return staleResult();
     console.error('[checkout-hardening] No se pudo validar el perfil:', error);
     profileState = { ok: false, loading: false, user, profile: null, reason: 'profile_error' };
-  }
+  } finally { window.clearTimeout(readTimer); }
   return profileState;
 }
 
@@ -227,7 +233,12 @@ async function guardForwardClick(event, control) {
     return;
   }
 
+  const pendingProfile = profilePromise;
   const state = await profilePromise;
+  if (pendingProfile !== profilePromise) {
+    showError('Tu sesión cambió. Reintentá para continuar con la cuenta actual.', Math.max(0, activeStep()));
+    return;
+  }
   if (!state.ok) {
     // El primer avance solo abre el formulario de envío. Si la lectura
     // secundaria del perfil falla (red, reglas o timeout de Firestore), no
@@ -295,7 +306,9 @@ function boot() {
     if (snapshot.status === AUTH_STATES.RESTORING) return;
     restoreResumeState();
     if (snapshot.status === AUTH_STATES.UNKNOWN) {
-      profilePromise = Promise.resolve({ ok: false, user: null, profile: null, reason: 'auth_unknown' });
+      profileGeneration++;
+      profileState = { ok: false, loading: false, user: null, profile: null, reason: 'auth_unknown' };
+      profilePromise = Promise.resolve(profileState);
       return;
     }
     profilePromise = loadProfile(snapshot.user);

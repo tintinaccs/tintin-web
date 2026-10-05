@@ -1283,6 +1283,23 @@ function productSpecDisplayValue(label, value) {
   return text;
 }
 
+async function _copyProductLink(url) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(url);
+    return;
+  }
+  const input = document.createElement('textarea');
+  input.value = url;
+  input.setAttribute('readonly', '');
+  input.style.position = 'fixed';
+  input.style.opacity = '0';
+  document.body.appendChild(input);
+  input.select();
+  try {
+    if (!document.execCommand('copy')) throw new Error('clipboard_unavailable');
+  } finally { input.remove(); }
+}
+
 function _renderProductDetail(product) {
   const catalogPolicy = window.TintinCatalogPolicy;
   const isVisible = catalogPolicy?.isCatalogVisible
@@ -1571,18 +1588,7 @@ function _renderProductDetail(product) {
         if (button.dataset.shareAction === 'copy') {
           const original = button.innerHTML;
           try {
-            if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(currentUrl);
-            else {
-              const input = document.createElement('textarea');
-              input.value = currentUrl;
-              input.setAttribute('readonly', '');
-              input.style.position = 'fixed';
-              input.style.opacity = '0';
-              document.body.appendChild(input);
-              input.select();
-              document.execCommand('copy');
-              input.remove();
-            }
+            await _copyProductLink(currentUrl);
             button.textContent = '✓ ¡Copiado!';
             window.setTimeout(() => { if (button.isConnected) button.innerHTML = original; }, 2000);
           } catch {
@@ -1619,7 +1625,15 @@ function _renderProductDetail(product) {
       const url = window.location.href;
       const text = `¡Mirá este accesorio de TINTIN! ${_pdProduct.name}`;
       if (navigator.share) { await navigator.share({ title: _pdProduct.name, text, url }).catch(() => {}); return; }
-      try { await navigator.clipboard?.writeText(url); const label = compactShare.querySelector('[data-share-product-label]'); if (label) label.textContent = 'Enlace copiado'; window.setTimeout(() => { if (label?.isConnected) label.textContent = 'Compartir'; }, 1800); } catch {}
+      const label = compactShare.querySelector('[data-share-product-label]');
+      try {
+        await _copyProductLink(url);
+        if (label) label.textContent = 'Enlace copiado';
+      } catch {
+        if (label) label.textContent = 'No se pudo copiar';
+      } finally {
+        window.setTimeout(() => { if (label?.isConnected) label.textContent = 'Compartir'; }, 1800);
+      }
     });
   }
 

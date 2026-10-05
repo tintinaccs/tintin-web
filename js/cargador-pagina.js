@@ -182,6 +182,7 @@
   let previousBodyStyle = null;
   let previousHtmlStyle = null;
   let hidden = false;
+  let initialRevealDone = false;
   let contentReady = false;
   let logoReady = false;
   let inserted = false;
@@ -611,6 +612,7 @@
 
   function hideNow() {
     if (hidden) return;
+    initialRevealDone = true;
     hidden = true;
     loader.dataset.state = 'out';
     loader.style.touchAction = 'auto';
@@ -628,6 +630,9 @@
 
   function tryHideElegant() {
     if (hidden) return;
+    // El primer reveal espera la marca real (load/error), además del shell.
+    // Las esperas interactivas posteriores no vuelven a depender de la imagen.
+    if (!initialRevealDone && !logoReady) return;
     // El gate de tienda sigue validando acceso en segundo plano; no debe
     // bloquear la lectura de páginas públicas mientras responde la red.
     // Checkout conserva el bloqueo hasta comprobar que se puede comprar.
@@ -1060,7 +1065,9 @@
 
   window.TintinLoader = {
     ready,
-    hide: hideNow,
+    // Los consumidores públicos respetan las mismas esperas que ready().
+    // hideNow queda reservado a la recuperación y al bloqueo de tienda.
+    hide: ready,
     show,
     setText,
     lockScroll,
