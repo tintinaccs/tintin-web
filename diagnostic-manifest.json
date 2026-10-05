@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "54a7e70aeeda923e663e277e823f9133bbf0a91fb4c56b2e21602a8316b83643",
+  "sourceFingerprint": "65b8502ea202f0a6a9996bd53b24ae9c4910276122e76f0ed274f2ab60a2dc33",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 976,
-    "textFiles": 935,
-    "totalBytes": 18429726,
+    "files": 977,
+    "textFiles": 936,
+    "totalBytes": 18437552,
     "pages": 19,
-    "modules": 682
+    "modules": 683
   },
   "viewports": [
     {
@@ -2134,8 +2134,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197220,
-      "sha256": "c33ea6b508b15ae873fbf931c1ce6657d0ef255610d8907a6522923170b7e9d9",
+      "bytes": 197227,
+      "sha256": "4ef85f70ab8c79e682be454b95b657667d90f18891772b1c98d23fbdb59d613e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2179,7 +2179,7 @@
           "line": 2038
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261005-google-same-tab-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261005-flow-seal-confirmation-1",
           "target": "js/admin/admin-app.js",
           "line": 2039
         },
@@ -2460,7 +2460,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261005-google-same-tab-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261005-flow-seal-confirmation-1",
           "target": "js/admin/admin-app.js",
           "line": 2039,
           "exists": true
@@ -20885,8 +20885,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 471306,
-      "sha256": "bae8ac1dcaa2610696922b1616916a1b77978946b37649c7fa6a67ec0307a0eb",
+      "bytes": 471313,
+      "sha256": "c225646ef9733fc66f4bbe627fd121c936b18bd142cead34ea4a1462d69795e3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21025,7 +21025,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261005-google-same-tab-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261005-flow-seal-confirmation-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -21694,8 +21694,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 34332,
-      "sha256": "51bd09fd6b8a71b613d6abee6ad3a4ffa7dd27e9d6076e1a2312d7e8d424408b",
+      "bytes": 36655,
+      "sha256": "da5df576e69a09c8ccf7611e3602ecdcfb37196da72ce78424df592a82e0ea68",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33547,6 +33547,42 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/sellado-interactivo.test.mjs",
+      "bytes": 4066,
+      "sha256": "78f4183cd7ff564991ea46ce04bbc68852679f32bedd8ddc11a02defeffa661d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/flow-connections/sellos-flujo.test.mjs",
       "bytes": 2622,
       "sha256": "2f27bbcf5e38f0b342f6fc128e009a5692ba783bfaded662e38cbcdf610ff88d",
@@ -37618,8 +37654,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197220,
-      "sha256": "c33ea6b508b15ae873fbf931c1ce6657d0ef255610d8907a6522923170b7e9d9"
+      "bytes": 197227,
+      "sha256": "4ef85f70ab8c79e682be454b95b657667d90f18891772b1c98d23fbdb59d613e"
     },
     {
       "path": "apple-touch-icon.png",
@@ -38644,8 +38680,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 205013,
-      "sha256": "c3a24de3b88958d930b74198df48a5d3b44779112b1509f4ac6078905665df87"
+      "bytes": 206422,
+      "sha256": "710f3f49c9a3800d13666b5c4df290dc400a991e453bfc53ee9f53d63f7e2974"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -39472,8 +39508,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 471306,
-      "sha256": "bae8ac1dcaa2610696922b1616916a1b77978946b37649c7fa6a67ec0307a0eb"
+      "bytes": 471313,
+      "sha256": "c225646ef9733fc66f4bbe627fd121c936b18bd142cead34ea4a1462d69795e3"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -39580,8 +39616,8 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 34332,
-      "sha256": "51bd09fd6b8a71b613d6abee6ad3a4ffa7dd27e9d6076e1a2312d7e8d424408b"
+      "bytes": 36655,
+      "sha256": "da5df576e69a09c8ccf7611e3602ecdcfb37196da72ce78424df592a82e0ea68"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
@@ -42016,8 +42052,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 62536,
-      "sha256": "440dc574bfaf17c61ca0364ca2a60d06e93099676fd2d6ff6550fb7f5d26c174"
+      "bytes": 62550,
+      "sha256": "b684ce990cdc301d1ea8d42f035a9ede66eaaf59256ea755c107ec794e92b7ec"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -42606,6 +42642,12 @@
       "extension": ".mjs",
       "bytes": 1547,
       "sha256": "1f0cfbbdff39a9bc81bb0b9b66d1353141dce0cb8ca0fb02efd33caadaea55aa"
+    },
+    {
+      "path": "tests/flow-connections/sellado-interactivo.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4066,
+      "sha256": "78f4183cd7ff564991ea46ce04bbc68852679f32bedd8ddc11a02defeffa661d"
     },
     {
       "path": "tests/flow-connections/sellos-flujo.test.mjs",
@@ -43590,7 +43632,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 551,
+      "line": 557,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -44982,13 +45024,13 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 551,
+      "line": 557,
       "target": "/admin.html",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 634,
+      "line": 681,
       "target": "/diagnostic-manifest.json",
       "method": "GET"
     },
