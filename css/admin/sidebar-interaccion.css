@@ -1,0 +1,55 @@
+/* Interacción del panel: conserva la paleta configurable de marca. */
+body:has(.adm-main) .adm-sidebar {
+  background: var(--admin-color-background-sidebar);
+  border-right: 1px solid var(--adm-border);
+  transition: width 160ms ease, transform 160ms ease, visibility 160ms ease;
+  overscroll-behavior: contain;
+}
+html body:has(.adm-main) #adm-sidebar .adm-sidebar-logo { background: var(--admin-color-brand) !important; }
+html body:has(.adm-main) #adm-sidebar :is(.adm-sidebar-logo-text,.adm-sidebar-logo-sub,.adm-sidebar-toggle,.adm-sidebar-toggle svg,.adm-nav-icon,.adm-nav-icon svg) { color: var(--admin-color-text-primary) !important; }
+html body:has(.adm-main) #adm-sidebar .adm-nav-icon { background: var(--admin-color-brand) !important; }
+html body:has(.adm-main) #adm-sidebar :is(.adm-nav-icon svg,.adm-sidebar-toggle svg) { stroke: currentColor !important; }
+html body:has(.adm-main) #adm-sidebar :is(.adm-nav-icon svg,.adm-sidebar-toggle svg) * { color: inherit !important; stroke: inherit !important; }
+html body:has(.adm-main) #adm-sidebar svg[fill="currentColor"] { fill: currentColor !important; }
+body:has(.adm-main) .adm-sidebar-toggle { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+body:has(.adm-main) .adm-sidebar-toggle svg { transition: transform 160ms ease; }
+html.adm-sidebar-auto .adm-sidebar-toggle svg { transform: rotate(180deg); }
+body:has(.adm-main) .adm-nav { padding: 10px 8px; }
+body:has(.adm-main) .adm-nav-item {
+  min-height: 46px; border-radius: 12px; margin-block: 3px; overflow: hidden;
+  overflow-wrap: normal; word-break: normal; white-space: nowrap;
+}
+body:has(.adm-main) .adm-nav-item:hover {
+  background: color-mix(in srgb, var(--admin-color-brand) 9%, white); color: var(--adm-text);
+}
+body:has(.adm-main) .adm-nav-item.active {
+  background: color-mix(in srgb, var(--admin-color-brand) 14%, white); color: var(--adm-text);
+}
+body:has(.adm-main) .adm-nav-icon { border-radius: 10px; background: var(--admin-color-brand); flex: 0 0 32px; }
+body:has(.adm-main) .adm-nav-item:focus-visible { outline: 2px solid var(--admin-color-brand); outline-offset: -2px; }
+@media (min-width: 541px) {
+  body:has(.adm-main) .adm-sidebar { width: 260px; }
+  body:has(.adm-main) .adm-main { margin-left: 260px; transition: margin-left 160ms ease; }
+  html.adm-sidebar-auto body:has(.adm-main) .adm-main { margin-left: 74px; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar { width: 74px; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) #adm-sidebar .adm-nav-item {
+    flex-direction: row; justify-content: center; gap: 0; padding: 6px; min-height: 46px; font-size: 0; line-height: 0;
+  }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-nav-icon { margin: 0; width: 32px; min-width: 32px; height: 32px; font-size: 16px; line-height: 1; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) #adm-sidebar .adm-sidebar-logo { min-height: 94px; height: 94px; flex-basis: 94px; padding: 10px 6px !important; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) #adm-sidebar .adm-sidebar-logo-text { display: flex !important; width: 100%; height: 20px; flex: 0 0 20px; font-size: 11px; line-height: 20px; color: var(--admin-color-text-primary); background: transparent; }
+  html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) #adm-sidebar .adm-nav-item {
+    flex-direction: row; justify-content: flex-start; gap: 12px; padding: 8px 12px; font-size: 12px; line-height: 1.4; text-align: left;
+  }
+  html.adm-sidebar-peek body:has(.adm-main) .adm-sidebar { width: 260px; box-shadow: 12px 0 24px color-mix(in srgb, var(--admin-color-brand) 12%, transparent); z-index: 320; }
+  html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) #adm-sidebar .adm-sidebar-logo { display: block !important; min-height: 94px; padding: 22px 62px 16px 20px !important; }
+  html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-text { font-size: 17px; letter-spacing: .08em; color: var(--admin-color-text-primary); }
+  html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-sub { display: block; }
+}
+@media (max-width: 540px) {
+  html.adm-sidebar-auto .adm-sidebar-toggle svg { transform: none; }
+  body:has(.adm-main) .adm-nav-item { font-size: 12px; padding: 8px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(.adm-main) .adm-sidebar, body:has(.adm-main) .adm-main, body:has(.adm-main) .adm-sidebar-toggle svg { transition: none; }
+}

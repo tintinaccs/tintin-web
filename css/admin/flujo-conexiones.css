@@ -12,13 +12,21 @@
 }
 
 .tfc-live-error {
+  position: relative;
   background: var(--admin-color-error-background);
   color: var(--admin-color-error-text);
   border-radius: 8px;
-  padding: 10px 14px;
+  padding: 10px 58px 10px 14px;
   font-size: 13px;
   margin-bottom: 12px;
 }
+.tfc-live-error[hidden] { display: none; }
+#tfc-live-error-close {
+  position: absolute; right: 6px; top: 4px; width: 44px; height: 44px;
+  border: 0; border-radius: 10px; background: transparent; color: inherit;
+  font-family: "Montserrat"; font-size: 22px; cursor: pointer;
+}
+#tfc-live-error-close:focus-visible { outline: 2px solid currentColor; }
 
 .tfc-toolbar {
   display: flex;

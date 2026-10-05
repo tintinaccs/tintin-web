@@ -146,7 +146,8 @@ export async function loadRolePermissions(forceReload = false) {
   if (_cache && !forceReload) return _cache;
   const defaults = buildDefaultRolePermissions();
   try {
-    const snap = await getDoc(doc(db, ROLE_PERM_DOC.col, ROLE_PERM_DOC.id));
+    const { readAdminFirestore } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3');
+    const snap = await readAdminFirestore(() => getDoc(doc(db, ROLE_PERM_DOC.col, ROLE_PERM_DOC.id)));
     const saved = snap.exists() ? snap.data() : {};
     const merged = {};
     EDITABLE_ROLES.forEach(role => {
@@ -158,7 +159,8 @@ export async function loadRolePermissions(forceReload = false) {
     _cache = merged;
   } catch (e) {
     console.error('[role-permissions] No se pudo cargar rolePermissions/main, se usan los valores por defecto:', e);
-    _cache = defaults;
+    // Un fallo transitorio no convierte el fallback en una caché permanente.
+    return _cache || defaults;
   }
   return _cache;
 }

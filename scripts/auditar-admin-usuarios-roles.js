@@ -63,7 +63,7 @@ check(
 );
 check(
   'Una matriz ausente o inválida usa defaults fail-safe',
-  /catch \(e\)[\s\S]{0,160}_cache = defaults/.test(rolePerms) &&
+  /catch \(e\)[\s\S]{0,400}return _cache \|\| defaults/.test(rolePerms) &&
     /if \(!_cache\)[\s\S]{0,220}return !!\(PERMISSIONS\[role\]\?\.\[act\.defaultFrom\]\)/.test(rolePerms),
   'La ausencia del documento no debe abrir permisos ni bloquear al Super Admin.'
 );

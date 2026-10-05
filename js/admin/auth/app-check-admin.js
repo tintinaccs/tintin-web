@@ -91,7 +91,9 @@ async function resolveAdminAppCheck(timeoutMs) {
 }
 
 export async function waitForAdminAppCheck(timeoutMs = 12000) {
+  const expectedUid = auth.currentUser?.uid;
   if (!await waitForAdminAuth(timeoutMs)) return false;
+  if (!auth.currentUser || (expectedUid && expectedUid !== auth.currentUser.uid)) return false;
   if (window.TintinAppCheckStatus === 'enabled') return true;
 
   // Todos los módulos del Admin comparten una sola verificación/reintento.
@@ -109,4 +111,31 @@ export async function waitForAdminAppCheck(timeoutMs = 12000) {
       window[ADMIN_APP_CHECK_GATE_KEY] = null;
     }
   }
+}
+
+// Un rechazo de Firestore requiere credenciales nuevas de ambos SDKs;
+// el booleano de arranque no prueba que App Check siga siendo válido.
+let securityRecovery = null;
+export function recoverAdminSecurity(expectedUid = auth.currentUser?.uid) {
+  if (!expectedUid || auth.currentUser?.uid !== expectedUid) return Promise.resolve(false);
+  if (securityRecovery?.uid === expectedUid) return securityRecovery.promise;
+  const gate = { uid: expectedUid, promise: null };
+  let timer;
+  gate.promise = Promise.race([
+    (async () => {
+      const user = auth.currentUser;
+      await user.getIdToken(true);
+      if (auth.currentUser?.uid !== expectedUid || !appCheck) return false;
+      const result = await getAppCheckToken(appCheck, true);
+      if (!result?.token || auth.currentUser?.uid !== expectedUid) return false;
+      window.TintinAppCheckStatus = 'enabled';
+      return true;
+    })().catch(() => false),
+    new Promise(resolve => { timer = window.setTimeout(() => resolve(false), 12000); })
+  ]).finally(() => {
+    window.clearTimeout(timer);
+    if (securityRecovery === gate) securityRecovery = null;
+  });
+  securityRecovery = gate;
+  return gate.promise;
 }

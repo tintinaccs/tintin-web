@@ -1,3 +1,4 @@
+import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3";
 // =============================================================
 // TINTIN ACCESORIOS — Flujo real de decisiones y conexiones (render)
 // =============================================================
@@ -10,10 +11,10 @@
 // del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261003-order-email-resend-canonical-2';
 import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261003-sheets-webhook-probe-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261004-admin-connections-3';
 import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261001-sellos-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1-launch-20260926-1-admin-ready-20261002-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
 import { collection, doc, getDoc, getDocs, limit, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {
@@ -186,23 +187,13 @@ async function probeEngagementStats(user) {
   }
 }
 
-// POST sin el secreto de Sheets: el webhook lo rechaza con 401 antes de leer
-// el cuerpo, así que no escribe productos. Sólo lee los headers de revisión y
-// de estado del guard (ver classifySheetsWebhookProbe en live-checks.js).
+// GET diagnóstico: no envía secretos ni escribe productos. El estado del
+// guard se consulta sin provocar rechazos HTTP esperados en la consola.
 async function probeSheetsWebhook() {
   try {
-    const response = await fetch('/api/sheets-products-webhook', {
-      method: 'POST',
-      credentials: 'same-origin',
-      cache: 'no-store',
-      headers: { 'content-type': 'application/json' },
-      body: '{}',
-    });
-    return {
-      status: response.status,
-      revision: response.headers.get('x-tintin-products-webhook') || '',
-      authState: response.headers.get('x-tintin-auth-state') || '',
-    };
+    const response = await fetch('/api/sheets-products-webhook', { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(12000) });
+    const body = await response.json().catch(() => null);
+    return { status: response.status, revision: body?.revision || '', authState: body?.authState || '' };
   } catch (error) {
     return { status: 0, revision: '', authState: '', error: error?.message || 'fallo de red' };
   }
@@ -220,7 +211,7 @@ async function probeCurrentSession(user, role) {
 
   let tokenResult;
   try {
-    tokenResult = await user.getIdTokenResult(true);
+    tokenResult = await user.getIdTokenResult();
   } catch (error) {
     const code = String(error?.code || '');
     return {
@@ -293,7 +284,7 @@ export function initConnectionsFlow({ role } = {}) {
           <strong>Modo de solo lectura.</strong>
           "Revalidar" solo ejecuta lecturas GET de producción (<code>/api/health</code>,
           <code>/api/system-health</code>, <code>/api/admin-runtime-health</code>, los endpoints de lectura
-          de participación y los headers de <code>/admin.html</code>). También hace dos lecturas mínimas con
+          de participación y los headers de <code>/admin.html</code>). También hace tres lecturas mínimas con
           el SDK de Firestore para comprobar Rules ya desplegadas y carga temporalmente la portada aislada
           para comprobar el panel de carrito ya renderizado. Ningún botón de este panel invoca una mutación de negocio ni
           crea, actualiza ni elimina pedidos, productos ni datos reales. El único que guarda algo es
@@ -304,7 +295,7 @@ export function initConnectionsFlow({ role } = {}) {
           <span id="tfc-live-timestamp">Sin verificación en vivo todavía.</span>
           <span id="tfc-seal-status">Cargando sellos…</span>
         </div>
-        <div id="tfc-live-error" class="tfc-live-error" hidden></div>
+        <div id="tfc-live-error" class="tfc-live-error" role="status" hidden><span id="tfc-live-error-text"></span><button type="button" id="tfc-live-error-close" aria-label="Cerrar aviso de conexión">×</button></div>
         <div id="tfc-summary" class="tfc-summary" aria-label="Resumen del flujo"></div>
         <div class="tfc-toolbar">
           <input type="search" id="tfc-search" class="adm-select" placeholder="Buscar nodo, conexión, servicio, archivo o estado…">
@@ -516,17 +507,19 @@ export function initConnectionsFlow({ role } = {}) {
   searchEl.addEventListener('input', renderAll);
   stateFilterEl.addEventListener('change', renderAll);
 
+  const liveErrorTextEl = root.querySelector("#tfc-live-error-text");
+  root.querySelector("#tfc-live-error-close").addEventListener("click", () => { liveErrorEl.hidden = true; });
   const revalidateBtn = root.querySelector('#tfc-btn-revalidate');
   revalidateBtn.addEventListener('click', async () => {
     revalidateBtn.disabled = true;
     revalidateBtn.textContent = 'Revalidando…';
     liveErrorEl.hidden = true;
-    liveErrorEl.textContent = '';
+    liveErrorTextEl.textContent = '';
     try {
       const errors = [];
       const readJson = async (url, options = {}) => {
         try {
-          const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store', ...options });
+          const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(15000), ...options });
           const body = await response.json().catch(() => null);
           return { status: response.status, ok: response.ok, body };
         } catch (error) {
@@ -539,6 +532,7 @@ export function initConnectionsFlow({ role } = {}) {
       let authHeaders = {};
       const user = auth.currentUser;
       if (user) {
+        if (!await waitForAdminAppCheck(12000)) throw new Error('La verificación de seguridad está pendiente. Tu sesión sigue activa; podés reintentar.');
         const idToken = await user.getIdToken();
         authHeaders = { authorization: `Bearer ${idToken}` };
       } else {
@@ -600,11 +594,11 @@ export function initConnectionsFlow({ role } = {}) {
 
       if (errors.length) {
         liveErrorEl.hidden = false;
-        liveErrorEl.textContent = `Algunas pruebas no se pudieron confirmar: ${errors.join(' · ')}`;
+        liveErrorTextEl.textContent = `Algunas pruebas no se pudieron confirmar: ${errors.join(' · ')}`;
       }
     } catch (error) {
       liveErrorEl.hidden = false;
-      liveErrorEl.textContent = `No se pudo revalidar: ${error?.message || error}`;
+      liveErrorTextEl.textContent = `No se pudo revalidar: ${error?.message || error}`;
     } finally {
       revalidateBtn.disabled = false;
       revalidateBtn.textContent = 'Revalidar en vivo';
@@ -641,7 +635,7 @@ export function initConnectionsFlow({ role } = {}) {
       if (!response.ok) throw new Error(`manifiesto ${response.status}`);
       return response.json();
     }),
-    getDoc(doc(db, ...SEALS_DOC)),
+    readAdminFirestore(() => getDoc(doc(db, ...SEALS_DOC))),
   ]).then(([manifest, snapshot]) => {
     sealState.shaByPath = shaMapFromManifest(manifest);
     const data = snapshot.exists() ? snapshot.data() : {};

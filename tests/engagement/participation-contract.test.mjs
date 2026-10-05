@@ -209,7 +209,7 @@ test('headers and admin notification feeds recover without infinite permission r
 
   assert.match(admin, /LISTENER_RETRY_DELAYS_MS/);
   assert.match(admin, /permission-denied/);
-  assert.match(admin, /getIdToken\(true\)/);
+  assert.match(admin, /recoverAdminSecurity\(targetUser.uid\)/);
   assert.match(admin, /waitForAdminAppCheck\(12000\)/);
   assert.match(admin, /notificationsAuthRecoveryAttempted/);
   assert.match(admin, /ordersAuthRecoveryAttempted/);

@@ -1,4 +1,4 @@
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1-launch-20260926-1-admin-ready-20261002-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
 /* =============================================================
    TINTIN — Fase 6: editor seguro de contenido
 
@@ -16,7 +16,7 @@ import {
   increment,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-sec-fix-1';
+import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20261004-admin-connections-3';
 import {
   CONTENT_PAGE_IDS,
   SITE_CONTENT_SCHEMA,

@@ -8,7 +8,7 @@ test('Admin notifications stop retrying permanent Firestore denials', () => {
   const source = read('js/admin/notifications/notificaciones-admin.js');
   // Permisos/auth: un único refresh de identidad + App Check, nunca un timer fijo.
   assert.match(source, /code === 'permission-denied' \|\| code === 'unauthenticated'/);
-  assert.match(source, /getIdToken\(true\)\s*\.then\(\(\) => waitForAdminAppCheck\(12000\)\)/);
+  assert.match(source, /recoverAdminSecurity\(targetUser.uid\)/);
   assert.match(source, /scheduleAdminListenerRecovery\('notifications', error, \(\) => subscribeNotifications\(\)\)/);
   assert.match(source, /scheduleAdminListenerRecovery\('orders', error, \(\) => subscribeOrderStatusChanges\(\)\)/);
   assert.doesNotMatch(source, /setTimeout\(\(\) => subscribe(Notifications|OrderStatusChanges)\(\), 1400\)/);
@@ -42,7 +42,7 @@ test('Commerce distinguishes load errors from legitimate empty data', () => {
 test('Connections diagnostics distinguish ID token claims from Firestore authorization', () => {
   const flow = read('js/admin/flujo-conexiones/flujo-conexiones-admin.js');
   const live = read('js/admin/flujo-conexiones/live-checks.js');
-  assert.match(flow, /getIdTokenResult\(true\)/);
+  assert.match(flow, /getIdTokenResult\(\)/);
   assert.match(flow, /projectClaim === 'tintin-accesorios'/);
   assert.match(flow, /firestoreError/);
   assert.match(flow, /waitForAdminAppCheck\(12000\)/);

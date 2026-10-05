@@ -108,7 +108,10 @@ check(
   'Los guardados incluyen actualización y sincronización',
   files.images.includes('serverTimestamp()') &&
     files.images.includes('return publish(next)') &&
-    files.images.includes('onSnapshot('),
+    files.images.includes('listen(') &&
+    files.images.includes('subscribeAdminSnapshot') &&
+    files.images.includes(': onSnapshot;') &&
+    read('js/admin/auth/lecturas-admin.js').includes('onSnapshot(reference'),
   'Firestore y pestañas abiertas deben recibir el mismo estado'
 );
 
@@ -214,7 +217,7 @@ check(
   files.resolver.includes('export function resolveDeviceImage') &&
     files.resolver.includes('export function resolveCollectionImage') &&
     files.resolver.includes('export function firstEligibleProductImage') &&
-    files.runtime.includes("from './imagenes.js?v=tintin-20260929-superadmin-hero-editable-1'") &&
+    /from ['"]\.\/imagenes\.js\?v=[^'"]+['"]/.test(files.runtime) &&
     files.runtime.includes('resolveSlotImage'),
   'ninguna página debe reimplementar la prioridad responsive'
 );
