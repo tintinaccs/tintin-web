@@ -23,6 +23,7 @@ const SERVER_REPORT = 'Cloudflare (respuesta de la purga)';
 // fallo del lote social; el resto de errores corresponde a la hoja Productos.
 const SOCIAL_SHEETS_ERROR = 'Algunas filas sociales no pudieron sincronizarse con Google Sheets.';
 const MAX_QUEUE_ROUNDS = 10;
+const CATALOG_DELETE_REQUEST_TIMEOUT_MS = 90_000;
 
 const toast = (message, options) => notify(message, options);
 
@@ -83,9 +84,17 @@ async function postCatalogDelete(payload) {
         Authorization: `Bearer ${idToken}`,
       },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(CATALOG_DELETE_REQUEST_TIMEOUT_MS),
     });
   } catch (error) {
-    throw catalogApiError(`Sin respuesta del servidor: ${error?.message || 'error de red'}`, 0, 'network-request-failed');
+    const timedOut = error?.name === 'TimeoutError';
+    throw catalogApiError(
+      timedOut
+        ? 'El servidor tardó más de 90 segundos. No repitas el borrado: usá «Reintentar» para comprobar qué quedó aplicado.'
+        : `Sin respuesta del servidor: ${error?.message || 'error de red'}`,
+      0,
+      timedOut ? 'request-timeout' : 'network-request-failed'
+    );
   }
   const data = await response.json().catch(() => ({}));
   if (!response.ok && response.status !== 207) throw catalogApiError(data.error || `Error ${response.status}`, response.status);
