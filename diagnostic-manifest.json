@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e8da7b917fcea4d54a7b7eb2c9d3598157815a56d81c7f6916ef2184ed2b7ae2",
+  "sourceFingerprint": "7c760930e4a30e7aba8e5d4f6b3e23230484d6ef4bab60220d44eb69590cc01c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1003,
     "textFiles": 962,
-    "totalBytes": 18633618,
+    "totalBytes": 18634629,
     "pages": 19,
     "modules": 706
   },
@@ -2135,7 +2135,7 @@
         "viewer"
       ],
       "bytes": 198115,
-      "sha256": "d40882302f9362b96070cc83891e70eea445a52ad3e23a19060b06040aaba03d",
+      "sha256": "8493bca86c8783d7ff522c0c508c992a0ddb2051cdbb00be2c476b7aa8065611",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2306,7 +2306,7 @@
           "line": 36
         },
         {
-          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-readiness-1",
+          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-readiness-2",
           "target": "css/admin/sidebar-interaccion.css",
           "line": 37
         },
@@ -2610,7 +2610,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-readiness-1",
+          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-readiness-2",
           "target": "css/admin/sidebar-interaccion.css",
           "line": 37,
           "exists": true
@@ -37376,8 +37376,8 @@
     },
     {
       "path": "tests/ui-ux/admin-sidebar-interaction.spec.js",
-      "bytes": 6262,
-      "sha256": "09476271356f377aaa27c924e4eff0aceca1c648d759618806a90be0989ff38e",
+      "bytes": 6342,
+      "sha256": "987ae92df543634358ada09d79faeed3a4d8b72cc9470d6e5a2264ea14caec65",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38410,7 +38410,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 198115,
-      "sha256": "d40882302f9362b96070cc83891e70eea445a52ad3e23a19060b06040aaba03d"
+      "sha256": "8493bca86c8783d7ff522c0c508c992a0ddb2051cdbb00be2c476b7aa8065611"
     },
     {
       "path": "apple-touch-icon.png",
@@ -39117,8 +39117,8 @@
     {
       "path": "css/admin/sidebar-interaccion.css",
       "extension": ".css",
-      "bytes": 4989,
-      "sha256": "6cc14c5f1fdff9dfba3275ffa8fe0a5ec6b833c5159754bf21c1275bac5185d1"
+      "bytes": 5137,
+      "sha256": "6f4c7829f3ba48331f8c5348fa4528e94f73a4c1be7aa09978f0268ff6eac1bc"
     },
     {
       "path": "css/admin/visual-studio-global-admin.css",
@@ -39543,8 +39543,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 226695,
-      "sha256": "2ea7da5ec2853be6e5094be966d0174d1b734f5c1576dc2c6c7b561cf375507d"
+      "bytes": 227478,
+      "sha256": "1422b44458c5ea4c76b63975c4838f286bb146012393d0dca18058cf5363369f"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -42964,7 +42964,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 62972,
-      "sha256": "a527b5e53c88c6ebb1bea517d09e625035bc71c4b951ba09a052a62560fc4301"
+      "sha256": "976445322b24dcd10b6dbb1b1cde3a8ac0cb227c8f484ba6d7f7a202661c49a0"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -44133,8 +44133,8 @@
     {
       "path": "tests/ui-ux/admin-sidebar-interaction.spec.js",
       "extension": ".js",
-      "bytes": 6262,
-      "sha256": "09476271356f377aaa27c924e4eff0aceca1c648d759618806a90be0989ff38e"
+      "bytes": 6342,
+      "sha256": "987ae92df543634358ada09d79faeed3a4d8b72cc9470d6e5a2264ea14caec65"
     },
     {
       "path": "tests/ui-ux/admin-white-icons.spec.js",

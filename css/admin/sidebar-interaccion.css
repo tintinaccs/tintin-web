@@ -48,6 +48,8 @@ html body:has(.adm-main) #adm-sidebar .adm-nav-item { margin-inline: 0; }
   html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar-logo-sub { display: block; }
 }
 @media (max-width: 540px) {
+  /* La visibilidad cambia antes del focus síncrono al abrir el menú. */
+  body:has(.adm-main) .adm-sidebar { transition: transform 160ms ease; }
   /* Restaurar Auth no debe revelar ni enfocar el cajón móvil cerrado. */
   html.adm-auth-ready:not(.adm-mobile-sidebar-open) body:has(.adm-main) #adm-sidebar,
   html.adm-auth-ready body:has(.adm-main) #adm-sidebar:not(.open) {

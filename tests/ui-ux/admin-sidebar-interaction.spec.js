@@ -46,6 +46,7 @@ for(const width of [320,390,540]) {
   test(`menú táctil, foco y escape a ${width}px`,async({page})=>{
     await load(page,width);
     const hamburger=page.locator('#adm-hamburger'),sidebar=page.locator('#adm-sidebar');
+    await expect(sidebar).toBeHidden();
     await expect(hamburger).toBeVisible();await hamburger.click();
     await expect(hamburger).toHaveAttribute('aria-expanded','true');
     await expect(sidebar).toBeVisible();
@@ -59,6 +60,7 @@ for(const width of [320,390,540]) {
     expect(await page.locator('#adm-sidebar').evaluate(e=>e.contains(document.activeElement))).toBe(true);
     await page.locator('#adm-sidebar-toggle').click();
     await expect(hamburger).toHaveAttribute('aria-expanded','false');
+    await expect(sidebar).toBeHidden();
     await hamburger.click();
     if(width===390)await page.screenshot({path:path.resolve(root,'../../outputs','panel-lateral-390.png')});
     await page.keyboard.press('Escape');await expect(hamburger).toHaveAttribute('aria-expanded','false');await expect(hamburger).toBeFocused();
