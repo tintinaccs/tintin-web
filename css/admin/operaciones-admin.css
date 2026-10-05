@@ -513,3 +513,18 @@ body.tt-ops-centered-active::before {
   width: min(520px, calc(100vw - 32px));
   transform: translate(-50%, -50%);
 }
+
+/* El progreso comparte los dos colores del cargador de navegación. Los
+   resultados conservan sus símbolos y su texto en el diálogo posterior. */
+html body #tt-ops-loader {
+  background: #F8AACA !important;
+  background-image: none !important;
+  border-color: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+html body #tt-ops-loader * { color: #FFFFFF !important; }
+html body #tt-ops-loader .tt-ops-loader__bar { background: #F8AACA !important; border: 1px solid #FFFFFF; }
+html body #tt-ops-loader .tt-ops-loader__bar i { background: #FFFFFF !important; }
+html body:has(.adm-main) .adm-loading { background: #F8AACA !important; color: #FFFFFF !important; }
+html body:has(.adm-main) .adm-loading * { color: #FFFFFF !important; }
+html body:has(.adm-main) .adm-loading .adm-spinner { border-color: #FFFFFF !important; border-top-color: transparent !important; }

@@ -72,7 +72,10 @@ for(const width of [320,390,540]) {
 for (const width of [768,1440]) {
   test(`cabecera sin superposición y centros iguales con menú largo a ${width}px`, async ({page}) => {
     await load(page,width); await page.setViewportSize({width,height:500});
-    await page.evaluate(()=>{document.querySelector('.adm-user-name').textContent='TINTIN ACCESORIOS Y RELOJES';});
+    await page.evaluate(()=>{
+      document.querySelector('.adm-user-name').textContent='TINTIN ACCESORIOS Y RELOJES';
+      document.querySelector('.adm-live-clock').textContent='Lunes, 05 de octubre de 2026, 10:42:50';
+    });
     await page.mouse.move(width-10,350);
     const boxes=await page.evaluate(()=>{
       const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {top:r.top,bottom:r.bottom,center:r.left+r.width/2};};
@@ -84,5 +87,8 @@ for (const width of [768,1440]) {
     await expect.poll(()=>page.locator('#adm-sidebar').evaluate(e=>Math.round(e.getBoundingClientRect().width))).toBe(260);
     const expanded=await page.evaluate(()=>({logo:document.querySelector('.adm-sidebar-logo').getBoundingClientRect().bottom,user:document.querySelector('.adm-user-info').getBoundingClientRect().top}));
     expect(expanded.user).toBeGreaterThanOrEqual(expanded.logo);
+    const textTop=await page.locator('.adm-user-name').evaluate(e=>e.getBoundingClientRect().top);
+    expect(textTop).toBeGreaterThanOrEqual(expanded.user);
+    await page.screenshot({path:path.resolve(root,'../../outputs',`sidebar-identidad-${width}.png`)});
   });
 }

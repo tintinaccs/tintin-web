@@ -186,8 +186,11 @@ function annotateCartRows() {
       return;
     }
     if (existing) {
-      existing.textContent = variant;
-      existing.dataset.cartVariant = variant;
+      // La lista observa childList. Reescribir el mismo texto genera otra
+      // mutación y encola esta normalización de nuevo, sin dejar pintar ni
+      // responder al siguiente clic cuando el carrito tiene variantes.
+      if (existing.textContent !== variant) existing.textContent = variant;
+      if (existing.dataset.cartVariant !== variant) existing.dataset.cartVariant = variant;
       return;
     }
     const cat = row.querySelector('.ck-item-cat');

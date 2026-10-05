@@ -297,11 +297,12 @@ function boot() {
       rememberValidatedStep();
       syncStepAccessibility();
     });
-    mutationObserver.observe(document.querySelector('.ck-body') || document.body, {
-      subtree: true,
+    // El indicador escribe sus propias clases. Sólo los paneles confirman
+    // un cambio de paso; observar el indicador realimentaba este callback.
+    document.querySelectorAll(PANEL_SELECTOR).forEach(panel => mutationObserver.observe(panel, {
       attributes: true,
       attributeFilter: ['class'],
-    });
+    }));
   }
 
   window.addEventListener('pagehide', persistDraft);
