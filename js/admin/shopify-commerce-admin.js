@@ -1433,11 +1433,25 @@ function boot() {
   }, true);
   window.addEventListener('resize', closeMenu, { passive: true });
   window.addEventListener('scroll', closeMenu, { passive: true, capture: true });
-  window.addEventListener('tintin:catalog-mutated', () => {
+  window.addEventListener('tintin:catalog-mutated', event => {
+    const detail = event.detail || {};
+    const result = detail.result || {};
+    const deletedIds = detail.type === 'products'
+      ? result.productIds
+      : result.productMode === 'delete'
+        ? result.productPurge?.productIds
+        : [];
+    if (Array.isArray(deletedIds) && deletedIds.length) {
+      const deleted = new Set(deletedIds.map(id => String(id || '')).filter(Boolean));
+      state.products = state.products.filter(product => !deleted.has(String(product?._docId || '')));
+      state.productsReady = true;
+      state.productsError = '';
+    }
     state.productSelected.clear();
     state.collectionSelected.clear();
     renderProducts();
     renderCollections();
+    renderDrawer();
   }, { passive: true });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') { closeMenu(); closeDrawer(); }
