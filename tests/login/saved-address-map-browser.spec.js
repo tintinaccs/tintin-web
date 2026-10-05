@@ -4,11 +4,12 @@ const path = require('node:path');
 
 // The real profile renderer and shared Leaflet module; no Firebase session or write.
 test('direcciones guardadas muestran mapas diferidos de solo lectura y liberan sus instancias', async ({ page }) => {
+  await page.route('https://unpkg.com/**',route=>route.abort());
   const profile = fs.readFileSync(path.join(__dirname, '../../perfil.html'), 'utf8');
   const fragment = profile.slice(profile.indexOf('let addressBook = [];'), profile.indexOf('/** Fecha legible'));
   const escape = profile.slice(profile.indexOf('function escapeHtmlPerfil('), profile.indexOf('// Libreta de direcciones'));
-  await page.route('**/__saved-address-map', route => route.fulfill({contentType:'text/html',body:`<!doctype html><html><head><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/css/components/location/selector-ubicacion.css"></head><body><div style="height:1600px"></div><main id="saved-fixture"><div id="perfil-location-content"></div></main><script type="module">
-    import {renderSavedMapPreviews} from '../../js/components/location/mapa-ubicacion.js?v=tintin-20261004-final-integration-1';
+  await page.route('**/__saved-address-map', route => route.fulfill({contentType:'text/html',body:`<!doctype html><html><head><link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-1"><link rel="stylesheet" href="/css/components/location/selector-ubicacion.css"></head><body><div style="height:1600px"></div><main id="saved-fixture"><div id="perfil-location-content"></div></main><script type="module">
+    import {renderSavedMapPreviews} from '../../js/components/location/mapa-ubicacion.js?v=tintin-20261004-final-integration-1-profile-wholesale-20261005-1';
     const MAX_SAVED_LOCATIONS=5;
     ${escape}
     ${fragment}

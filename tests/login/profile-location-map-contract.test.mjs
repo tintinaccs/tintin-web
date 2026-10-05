@@ -7,7 +7,7 @@ const welcome = fs.readFileSync(new URL('../../js/components/welcome/tutorial-bi
 const theme = fs.readFileSync(new URL('../../css/core/tema-unificado-tintin.css', import.meta.url), 'utf8');
 
 test('Perfil usa el mismo mapa interactivo y geolocalización que el alta', () => {
-  assert.match(profile, /leaflet@1\.9\.4\/dist\/leaflet\.css/);
+  assert.match(profile, /\/js\/vendor\/leaflet\/leaflet\.css\?v=leaflet-1\.9\.4/);
   assert.match(profile, /createLocationMap/);
   assert.match(profile, /id="perfil-location-map"/);
   assert.match(profile, /id="perfil-location-locate"/);

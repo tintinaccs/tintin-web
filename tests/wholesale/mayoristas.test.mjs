@@ -182,3 +182,23 @@ test('los endpoints exigen origen permitido y sesión', async () => {
   const adminAnonymous = await adminEndpoint({ request: request('https://tintinaccesorios.pages.dev/api/admin-wholesale', { origin: 'https://tintinaccesorios.pages.dev' }), env: {} });
   assert.ok([401, 403].includes(adminAnonymous.status));
 });
+
+test('marcar como vista persiste sin tocar revisión, precios, status ni enviar avisos',async()=>{
+ const quoteId='WQ_uid1_req_abcdef123456';
+ const initial={quoteId,status:'pendiente',revision:3,total:12345,items:[{id:'p1',qty:5,unitPrice:2469}]};
+ const store=memoryStore({['wholesaleQuotes/'+quoteId]:initial});
+ const result=await respondWholesaleQuote({}, {quoteId,decision:'ver'},{uid:'admin',email:'admin@example.com'},store);
+ assert.equal(result.quote.status,'pendiente');assert.equal(result.quote.revision,3);assert.equal(result.quote.total,12345);
+ assert.ok(result.quote.seenAt instanceof Date);assert.equal(result.quote.seenBy,'admin@example.com');
+ assert.equal(store.commits.length,1);
+ await respondWholesaleQuote({}, {quoteId,decision:'ver'},{uid:'admin',email:'admin@example.com'},store);
+ assert.equal(store.commits.length,1);
+ const fail=async()=>{throw new Error('No debe ejecutar avisos ni sincronización comercial');};
+ assert.deepEqual(await afterWholesaleQuoteResponded({},result,{notifyUser:fail,sendEmail:fail,sync:fail}),{skipped:true});
+});
+test('leer cotización ya respondida no modifica la decisión',async()=>{
+ const quoteId='WQ_uid1_req_abcdef123456';
+ const store=memoryStore({['wholesaleQuotes/'+quoteId]:{quoteId,status:'aprobada',revision:2,total:50000}});
+ const result=await respondWholesaleQuote({}, {quoteId,decision:'ver'},{uid:'admin',email:'admin@example.com'},store);
+ assert.equal(result.quote.status,'aprobada');assert.equal(result.quote.revision,2);
+});

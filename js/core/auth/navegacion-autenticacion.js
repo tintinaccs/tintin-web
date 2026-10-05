@@ -2,7 +2,7 @@
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
 import { auth, db } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { logoutSession } from './salida-sesion.js?v=tintin-20261005-auth-loader-1';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
@@ -21,11 +21,14 @@ let authReadyDiagnosticRecorded = false;
 let coordinatorReadyDiagnosticRecorded = false;
 const PROFILE_READ_TIMEOUT_MS = 5000;
 const initialAuthHandoff = readAuthHandoff();
+let stopNavigationProfile = null;
+let navigationUid;
+let navigationProfile = {};
 
 if (!IS_LOGIN_PAGE && !IS_VISUAL_PREVIEW_FRAME) document.documentElement.classList.add('tt-auth-restoring');
 if (!IS_LOGIN_PAGE && !IS_VISUAL_PREVIEW_FRAME) recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'public-auth-navigation' });
 
-function escapeHtmlNav(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function escapeHtmlNav(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function loginHrefForCurrentLocation(){
  const path=`${window.location.pathname||'/'}${window.location.search||''}${window.location.hash||''}`;
  const onHome=/^\/(?:index(?:\.html)?)?\/?$/i.test(window.location.pathname||'/');
@@ -74,16 +77,34 @@ function roleFromProfile(user,profile={}){
  return [ROLES.ADMIN,ROLES.AGENT,ROLES.VIEWER,ROLES.CLIENT].includes(role)?role:ROLES.CLIENT;
 }
 
-async function readNavigationProfile(user){
- if(!user?.uid)return {};
- try{
-   const timeout=new Promise((_,reject)=>window.setTimeout(()=>reject(new Error('navigation_profile_timeout')),PROFILE_READ_TIMEOUT_MS));
-   const snap=await Promise.race([getDoc(doc(db,'users',user.uid)),timeout]);
-   return snap.exists()?snap.data():{};
- }catch(error){
+function watchNavigationProfile(user, generation){
+ let firstPaint = false;
+ const publish = profile => {
+  if(generation!==authRenderGeneration || getSessionUser()?.uid!==user.uid)return;
+  firstPaint = true;
+  clearTimeout(timer);
+  navigationProfile=profile;
+  document.documentElement.dataset.ttWholesaleApproved=String(profile.wholesaleStatus==='aprobado');
+  const role=roleFromProfile(user,profile);
+  publishStaffVisibility(user,role);
+  renderAccountButtonPhoto(user,profile);
+  renderMobileTabbarPhoto(user,profile);
+  renderAccountPanel(user,role,profile);
+  renderProfileIdentity(user,profile);
+  const visual=readAccountIdentity(profile,user);
+  createAuthHandoff(user.uid,{photoURL:visual.photoURL,displayName:visual.name});
+  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
+   detail:{authenticated:true,role,wholesaleApproved:profile.wholesaleStatus==='aprobado'}
+  }));
+ };
+ // Nunca pintar primero la foto del proveedor encima de una foto elegida.
+ // El handoff es sólo visual; el listener confirma perfil y permisos.
+ const timer=window.setTimeout(()=>{if(!firstPaint)publish({});},PROFILE_READ_TIMEOUT_MS);
+ const unsubscribe=onSnapshot(doc(db,'users',user.uid),snap=>publish(snap.exists()?snap.data():{}),error=>{
   console.warn('[auth-nav] No se pudo leer el perfil de la cuenta:',error?.code||error);
-  return {};
- }
+  if(!firstPaint)publish({});
+ });
+ return ()=>{clearTimeout(timer);unsubscribe();};
 }
 
 const accountBtnDefaults=new Map();
@@ -169,37 +190,37 @@ subscribeSession(async snapshot=>{
  document.documentElement.classList.remove('tt-auth-restoring');
  const user=snapshot.user;
  if(user) recordAuthDiagnostic('AUTH_USER_AVAILABLE',{source:'public-auth-navigation',authState:snapshot.status});
- // Firebase ya confirmó la identidad: actualizamos el botón inmediatamente,
- // sin esperar la lectura secundaria del perfil/rol.
- renderAccountButtonPhoto(user,{});
- renderMobileTabbarPhoto(user,{});
+ if(navigationUid===(user?.uid||null) && (stopNavigationProfile || !user))return;
  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
   detail:{authenticated:Boolean(user),role:ROLES.CLIENT,provisional:Boolean(user)}
  }));
+ stopNavigationProfile?.();
+ stopNavigationProfile=null;
+ navigationUid=user?.uid||null;
+ navigationProfile={};
  const generation=++authRenderGeneration;
- let role=ROLES.CLIENT;
- let profile={};
- try{
-  if(user){
-   // Una sola lectura de users/{uid} resuelve simultáneamente identidad y rol.
-   // El correo autenticado sigue siendo la única elevación a Super Admin.
-   profile=await readNavigationProfile(user);
-   role=roleFromProfile(user,profile);
-  }
- }catch(error){
-  console.warn('[auth-nav] No se pudo resolver la cuenta completa:',error);
+ if(!user){
+  clearAuthHandoff();
+  delete document.documentElement.dataset.ttWholesaleApproved;
+  publishStaffVisibility(null,ROLES.CLIENT);
+  renderAccountButtonPhoto(null,{});
+  renderMobileTabbarPhoto(null,{});
+  renderAccountPanel(null);
+  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{detail:{authenticated:false,role:ROLES.CLIENT}}));
+  return;
  }
- if(generation!==authRenderGeneration)return;
- const activeUid=getSessionUser()?.uid||null;
- if(activeUid!==(user?.uid||null))return;
- publishStaffVisibility(user,role);
- renderAccountButtonPhoto(user,profile);
- renderMobileTabbarPhoto(user,profile);
- renderAccountPanel(user,role,profile);
- clearAuthHandoff();
- window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
-  detail:{authenticated:Boolean(user),role}
- }));
+ if(initialAuthHandoff?.uid!==user.uid){
+  // No reutilizar la identidad de una cuenta anterior.
+  renderAccountButtonPhoto(null,{});
+  renderMobileTabbarPhoto(null,{});
+ }
+ if(initialAuthHandoff?.uid===user.uid){
+  renderAccountPanel(user,ROLES.CLIENT,{avatarURL:initialAuthHandoff.photoURL,name:initialAuthHandoff.displayName});
+ }else{
+  const panel=document.getElementById('account-panel');
+  if(panel)panel.innerHTML='<p class="tt-account-help" role="status">Cargando tu cuenta…</p>';
+ }
+ stopNavigationProfile=watchNavigationProfile(user,generation);
 });
 
 function renderAccountButtonPhoto(user,profile={}){
@@ -209,6 +230,8 @@ function renderAccountButtonPhoto(user,profile={}){
   const photoUrl=sanitizeImageUrl(identity.photoURL||user?.photoURL||'');
   if(user&&photoUrl){
    const name=identity.name||identity.username||user.displayName||user.email||'Mi cuenta';
+   const current=btn.querySelector('img.tt-account-avatar-btn');
+   if(current?.getAttribute('src')===photoUrl){current.alt=name;return;}
    const img=document.createElement('img');
    img.className='tt-account-avatar-btn';img.src=photoUrl;img.alt=name;img.referrerPolicy='no-referrer';img.width=48;img.height=48;
    img.style.cssText='width:100%;height:100%;max-width:none;max-height:none;flex-shrink:0;border-radius:inherit;object-fit:cover;display:block';
@@ -249,8 +272,36 @@ function renderAccountPanel(user,role=ROLES.CLIENT,profile={}){
  const photoUrl=sanitizeImageUrl(identity.photoURL||user.photoURL||'');
  const photo=photoUrl?`<img class="tt-account-panel-avatar" src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" width="44" height="44">`:`<span class="tt-account-panel-avatar tt-account-panel-initials">${initials(rawName)}</span>`;
  const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item tt-account-internal" href="/admin" data-internal-admin-link="true" data-account-role="${escapeHtmlNav(role)}">${roleLabel(role)}</a>`:'';
- panel.innerHTML=`<div class="tt-account-header">${photo}<div class="tt-account-identity"><strong>${name}</strong>${secondary?`<span>${secondary}</span>`:''}</div></div><nav class="tt-account-links" aria-label="Opciones de la cuenta">${adminLink}<a class="tt-account-item" href="/perfil">Mi cuenta</a><a class="tt-account-item" href="/perfil#mis-pedidos">Mis pedidos</a></nav><button type="button" class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
+ panel.innerHTML=`<div class="tt-account-header">${photo}<div class="tt-account-identity"><strong>${name}</strong>${secondary?`<span>${secondary}</span>`:''}</div></div><nav class="tt-account-links" aria-label="Opciones de la cuenta">${adminLink}<a class="tt-account-item" href="/perfil">Mi cuenta</a><a class="tt-account-item" href="/perfil#mis-pedidos">Mis pedidos</a><a class="tt-account-item${profile.wholesaleStatus==='aprobado'?'':' tt-wholesale-invitation'}" href="/perfil#mayorista">${profile.wholesaleStatus==='aprobado'?'Mayoristas':'<span class="tt-wholesale-invitation-label">¿Querés ser mayorista?</span>'}</a></nav><button type="button" class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
  wireLogout(panel);
 }
 
 function wireLogout(panel){const btn=panel.querySelector('#account-logout-btn');if(btn)btn.onclick=doLogout;}
+
+function renderProfileIdentity(user,profile){
+ const avatar=document.getElementById('perfil-avatar');
+ if(!avatar)return;
+ const identity=readAccountIdentity(profile,user);
+ const url=sanitizeImageUrl(identity.photoURL||'');
+ const name=document.getElementById('perfil-nombre-display');
+ if(name)name.textContent=identity.name||identity.email||'Cuenta Tintin';
+ if(!url){avatar.textContent=initials(identity.name||identity.email);return;}
+ if(avatar.querySelector('img')?.getAttribute('src')===url)return;
+ const image=document.createElement('img');
+ image.src=url;image.alt='Foto de perfil';image.referrerPolicy='no-referrer';
+ image.addEventListener('error',()=>{if(image.isConnected)avatar.textContent=initials(identity.name||identity.email);},{once:true});
+ avatar.replaceChildren(image);
+}
+
+// La subida propia ya fue guardada: actualiza el menú en este mismo documento.
+document.addEventListener('tintin:profile-photo-updated',event=>{
+ const user=getSessionUser();
+ if(!user || navigationUid!==user.uid || !event.detail?.photoURL)return;
+ navigationProfile={...navigationProfile,avatarURL:event.detail.photoURL};
+ renderAccountButtonPhoto(user,navigationProfile);
+ renderMobileTabbarPhoto(user,navigationProfile);
+ renderAccountPanel(user,roleFromProfile(user,navigationProfile),navigationProfile);
+ renderProfileIdentity(user,navigationProfile);
+ const visual=readAccountIdentity(navigationProfile,user);
+ createAuthHandoff(user.uid,{photoURL:visual.photoURL,displayName:visual.name});
+});
