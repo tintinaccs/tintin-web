@@ -29,6 +29,8 @@
   if (window.TintinHeaderModeBooted) return;
   window.TintinHeaderModeBooted = true;
 
+  var IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
+    && window.parent !== window;
   var DEFAULT_MODE = { desktopTablet: true, mobile: true };
   window.__ttHeaderMode = DEFAULT_MODE;
 
@@ -75,6 +77,14 @@
   }
 
   (async function () {
+    // La preview del Visual Builder es únicamente visual. No debe abrir un
+    // canal Firestore Listen propio: el panel padre ya administra el estado
+    // real y esos listeners extra pueden provocar reconexiones/400 WebChannel.
+    if (IS_VISUAL_PREVIEW_FRAME) {
+      apply(DEFAULT_MODE);
+      markReady(DEFAULT_MODE);
+      return;
+    }
     try {
       var fbMod = await import('../../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1');
       var fs = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
