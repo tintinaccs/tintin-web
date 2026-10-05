@@ -49,10 +49,17 @@ for(const width of [320,390,540]) {
     await expect(hamburger).toBeVisible();await hamburger.click();
     await expect(hamburger).toHaveAttribute('aria-expanded','true');
     await expect(sidebar).toBeVisible();
+    await expect.poll(()=>sidebar.evaluate(element=>{
+      const rect=element.getBoundingClientRect();
+      return element.contains(document.elementFromPoint(rect.left+20,rect.top+120));
+    })).toBe(true);
     expect(await page.locator('.adm-main').evaluate(e=>e.inert)).toBe(true);
     await expect(page.locator('#adm-sidebar-toggle')).toBeFocused();
     await page.keyboard.press('Shift+Tab');
     expect(await page.locator('#adm-sidebar').evaluate(e=>e.contains(document.activeElement))).toBe(true);
+    await page.locator('#adm-sidebar-toggle').click();
+    await expect(hamburger).toHaveAttribute('aria-expanded','false');
+    await hamburger.click();
     if(width===390)await page.screenshot({path:path.resolve(root,'../../outputs','panel-lateral-390.png')});
     await page.keyboard.press('Escape');await expect(hamburger).toHaveAttribute('aria-expanded','false');await expect(hamburger).toBeFocused();
     expect(await page.locator('.adm-main').evaluate(e=>e.inert)).toBe(false);

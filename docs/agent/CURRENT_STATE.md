@@ -1,5 +1,10 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Capa del drawer móvil — 2026-10-05
+
+- #1022 mergeado por autorización del dueño: squash 3e7caa97. CI 37244960925 SUCCESS, Cloudflare Production y control Producción real 37245658702 SUCCESS. HTTP productivo: admin 200 con recurso admin-connections-3; webhook GET 200/authState=configured/destructive=false. Chrome dejó de estar disponible, por lo que la consola de la sesión autenticada posterior al despliegue no se acredita.
+- La revisión de la captura móvil reveló un problema adicional concreto: sistema-superficies-tintin.css fija z-index:300 !important con mayor especificidad que admin.css. El backdrop móvil está en 310 y recibía los clics sobre el drawer. Se corrige con una regla scoped al drawer móvil abierto (320), sin alterar capas de modales ni paleta. Regresión: elementFromPoint dentro del drawer debe pertenecer al menú; cerrar con clic real, reabrir, Tab y Escape en 320/390/540. Nueve pruebas Chromium PASS. Nueva URL CSS admin-connections-4; build/CI/merge de esta corrección pendientes.
+
 ## Conexiones Admin y lateral responsive — 2026-10-04 (`codex/admin-connections-sidebar-20261004`)
 
 - PR #1020 mergeado por autorización explícita del dueño, squash `347fbd93a1bf64ee9664f4ca375ab5750f5ed14b`; CI 37226463763 SUCCESS. Esta reparación parte de ese main en el worktree aislado; conserva los trabajos ajenos y la paleta de marca vigente.
