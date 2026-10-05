@@ -1,5 +1,7 @@
 import {
   decodeFirestoreFields,
+  encodeFirestoreFields,
+  firestoreAdminCommit,
   firestoreAdminFindFirstByFields,
   firestoreAdminGet,
   firestoreAdminMerge,
@@ -224,7 +226,7 @@ async function loadMapping(env, providerOrderId) {
   if (!PROVIDER_ID_RE.test(id)) throw new Error('Orden PayPal inválida');
   const document = await firestoreAdminGet(env, `paypalOrders/${id}`);
   if (!document) throw new Error('No existe conciliación para esa orden PayPal');
-  return { id, ...decodeFirestoreFields(document.fields || {}) };
+  return { ...decodeFirestoreFields(document.fields || {}), id, updateTime: document.updateTime };
 }
 
 function completedCapture(provider) {
@@ -232,41 +234,48 @@ function completedCapture(provider) {
   return units.flatMap(unit => unit?.payments?.captures || []).find(capture => capture?.status === 'COMPLETED') || null;
 }
 
-async function markPaid(env, mapping, capture) {
+export async function markPaid(env, mapping, capture, deps = {}) {
   const captureId = clean(capture?.id, 100);
   if (mapping.status === 'COMPLETED' && mapping.captureId && mapping.captureId === captureId) {
     return { idempotent: true };
   }
   // PayPal no garantiza el orden de los webhooks: un "cobro completado" que
   // llega tarde no puede volver a marcar como pagado algo ya devuelto.
-  if (mapping.status === 'REFUNDED' || mapping.status === 'REVERSED') return { idempotent: true, reversed: true };
+  if (['REFUNDED', 'REVERSED'].includes(mapping.status)) return { idempotent: true, reversed: true };
   if (!captureId) throw new Error('PayPal no devolvió el identificador de captura');
   const currency = clean(capture?.amount?.currency_code, 3).toUpperCase();
   const cents = Math.round(Number(capture?.amount?.value) * 100);
   if (currency !== mapping.currency || cents !== Number(mapping.expectedCents)) {
-    await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
+    const discrepancyFields = {
       status: fsString('DISCREPANCY'),
       discrepancyAt: fsTimestamp(new Date()),
       discrepancyCurrency: fsString(currency),
       discrepancyCents: fsInteger(Number.isSafeInteger(cents) ? cents : 0),
-    });
+    };
+    if (!mapping.updateTime) throw new Error('No se pudo verificar la versión de la conciliación');
+    await (deps.commit || firestoreAdminCommit)(env, [{ path: `paypalOrders/${mapping.id}`, fields: discrepancyFields, mergeFields: Object.keys(discrepancyFields), currentDocument: { updateTime: mapping.updateTime } }]);
     throw new Error('El importe confirmado por PayPal no coincide con el pedido');
   }
   const confirmedAt = new Date();
-  await firestoreAdminMerge(env, `orders/${mapping.orderId}`, {
+  const orderFields = {
     payment: { mapValue: { fields: {
       method: fsString('paypal'), status: fsString('pagado'), providerOrderId: fsString(mapping.id),
       captureId: fsString(captureId), currency: fsString(currency),
       amount: fsString((cents / 100).toFixed(2)), confirmedAt: fsTimestamp(confirmedAt),
     } } },
     paymentStatus: fsString('pagado'), updatedAt: fsTimestamp(confirmedAt),
-  });
-  await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
-    status: fsString('COMPLETED'), captureId: fsString(captureId), updatedAt: fsTimestamp(confirmedAt),
-  });
+  };
+  const mappingFields = {
+    status: fsString(mapping.status === 'PARTIALLY_REFUNDED' ? mapping.status : 'COMPLETED'), captureId: fsString(captureId), updatedAt: fsTimestamp(confirmedAt),
+  };
+  if (!mapping.updateTime) throw new Error('No se pudo verificar la versión de la conciliación');
+  await (deps.commit || firestoreAdminCommit)(env, [
+    { path: `orders/${mapping.orderId}`, fields: orderFields, mergeFields: Object.keys(orderFields), currentDocument: { exists: true } },
+    { path: `paypalOrders/${mapping.id}`, fields: mappingFields, mergeFields: Object.keys(mappingFields), currentDocument: { updateTime: mapping.updateTime } },
+  ]);
 
-  await deductStockForPaidOrder(env, mapping);
-  await notifyOrderConfirmed(env, mapping, cents, currency);
+  await (deps.deductStock || deductStockForPaidOrder)(env, mapping);
+  await (deps.notify || notifyOrderConfirmed)(env, mapping, cents, currency);
 }
 
 // El pedido nace sin descontar stock; al confirmarse el pago se descuenta con
@@ -320,6 +329,7 @@ export async function capturePaypalOrder(env, { providerOrderId, uid }) {
   if (!config.enabled) throw new Error('PayPal no está habilitado');
   const mapping = await loadMapping(env, providerOrderId);
   if (mapping.uid !== uid) throw new Error('La orden PayPal no pertenece a la cuenta iniciada');
+  if (['REFUNDED', 'REVERSED', 'PARTIALLY_REFUNDED'].includes(mapping.status)) throw new Error('El pago tiene un reembolso o reversión; revisá el pedido con Tintin');
   if (mapping.status === 'COMPLETED' && mapping.captureId) {
     return { paid: true, orderId: mapping.orderId, captureId: mapping.captureId, idempotent: true };
   }
@@ -377,7 +387,7 @@ export function paypalReversalDetails(event) {
   const linkedCapture = clean(String(upLink?.href || '').split('/captures/')[1]?.split(/[/?#]/)[0], 100);
   const captureId = kind === 'reversed' ? clean(resource.id, 100) : linkedCapture;
   const amount = resource?.amount || {};
-  const cents = Math.round(Number(amount.value) * 100);
+  const cents = Math.round((kind === 'reversed' ? Math.abs(Number(amount.value)) : Number(amount.value)) * 100);
   return {
     kind,
     captureId,
@@ -385,6 +395,7 @@ export function paypalReversalDetails(event) {
     currency: clean(amount.currency_code, 3).toUpperCase(),
     cents: Number.isSafeInteger(cents) && cents > 0 ? cents : 0,
     eventId: clean(event?.id, 120),
+    refundId: kind === 'refunded' ? clean(resource.id, 120) : '',
   };
 }
 
@@ -396,35 +407,58 @@ async function loadMappingForReversal(env, reversal) {
   const document = await firestoreAdminFindFirstByFields(env, 'paypalOrders', ['captureId'], reversal.captureId);
   if (!document) throw new Error('No existe conciliación para esa captura PayPal');
   const id = clean(String(document.name || '').split('/').pop(), 80);
-  return { id, ...decodeFirestoreFields(document.fields || {}) };
+  return { ...decodeFirestoreFields(document.fields || {}), id, updateTime: document.updateTime };
 }
 
-async function markReversed(env, mapping, reversal) {
+export function paypalReversalTransition(mapping, reversal) {
+  if (!reversal.captureId || (mapping.captureId && reversal.captureId !== mapping.captureId)) throw new Error('La captura del evento no coincide con el pedido');
+  if (reversal.currency !== mapping.currency || !Number.isSafeInteger(reversal.cents) || reversal.cents <= 0) throw new Error('Importe de reembolso PayPal inválido');
+  const expected = Number(mapping.expectedCents);
+  if (!Number.isSafeInteger(expected) || expected <= 0 || reversal.cents > expected) throw new Error('El reembolso supera el importe conciliado');
+  const refundId = reversal.refundId || reversal.eventId;
+  if (!refundId) throw new Error('El evento de reembolso no tiene identificador');
+  const records = Array.isArray(mapping.refundRecords) ? mapping.refundRecords : [];
+  const duplicate = records.some(record => record.id === refundId);
+  const nextRecords = duplicate ? records : [...records, { id: refundId, cents: reversal.cents, kind: reversal.kind }];
+  const cumulative = nextRecords.filter(record => record.kind !== 'reversed').reduce((total, record) => total + Number(record.cents || 0), 0);
+  if (!Number.isSafeInteger(cumulative)) throw new Error('Total de reembolsos inválido');
+  const status = mapping.status === 'REVERSED' || reversal.kind === 'reversed' ? 'REVERSED'
+    : mapping.status === 'REFUNDED' || cumulative >= expected ? 'REFUNDED' : 'PARTIALLY_REFUNDED';
+  return { status, full: status !== 'PARTIALLY_REFUNDED', cumulative: status === 'REVERSED' ? expected : cumulative, records: nextRecords, duplicate };
+}
+
+export async function markReversed(env, mapping, reversal, deps = {}) {
   const now = new Date();
-  // Un reembolso parcial no cierra el pago: se registra y se avisa al equipo.
-  const full = reversal.kind === 'reversed' || !reversal.cents || reversal.cents >= Number(mapping.expectedCents);
-  const mappingStatus = reversal.kind === 'reversed' ? 'REVERSED' : (full ? 'REFUNDED' : 'PARTIALLY_REFUNDED');
-  if (mapping.status === mappingStatus) return { idempotent: true };
-  await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
+  const transition = paypalReversalTransition(mapping, reversal);
+  const { full, status: mappingStatus } = transition;
+  const mappingFields = {
     status: fsString(mappingStatus),
-    reversalCents: fsInteger(reversal.cents),
+    captureId: fsString(mapping.captureId || reversal.captureId),
+    reversalCents: fsInteger(transition.cumulative),
+    ...encodeFirestoreFields({ refundRecords: transition.records }),
     reversalAt: fsTimestamp(now),
-  });
+  };
+  if (!mapping.updateTime) throw new Error('No se pudo verificar la versión de la conciliación');
+  const writes = [{ path: `paypalOrders/${mapping.id}`, fields: mappingFields, mergeFields: Object.keys(mappingFields), currentDocument: { updateTime: mapping.updateTime } }];
   if (full) {
-    await firestoreAdminMerge(env, `orders/${mapping.orderId}`, {
+    const orderFields = {
       payment: { mapValue: { fields: {
         method: fsString('paypal'), status: fsString('reembolsado'), providerOrderId: fsString(mapping.id),
         captureId: fsString(clean(mapping.captureId || reversal.captureId, 100)), currency: fsString(mapping.currency),
-        reversalKind: fsString(reversal.kind), reversedAt: fsTimestamp(now),
+        reversalKind: fsString(mappingStatus === 'REVERSED' ? 'reversed' : 'refunded'), reversedAt: fsTimestamp(now),
       } } },
       paymentStatus: fsString('reembolsado'), updatedAt: fsTimestamp(now),
-    });
+    };
+    writes.push({ path: `orders/${mapping.orderId}`, fields: orderFields, mergeFields: Object.keys(orderFields), currentDocument: { exists: true } });
   }
+  // Atomicidad y versión protegen contra fallos parciales y eventos concurrentes.
+  // Ante conflicto el webhook falla y PayPal reintenta con la versión actual.
+  await (deps.commit || firestoreAdminCommit)(env, writes);
   try {
     const title = reversal.kind === 'reversed'
       ? `Contracargo PayPal en el pedido ${mapping.orderId}`
       : `${full ? 'Reembolso' : 'Reembolso parcial'} PayPal en el pedido ${mapping.orderId}`;
-    await notifyAdminIfAbsent(env, {
+    await (deps.notify || notifyAdminIfAbsent)(env, {
       kind: 'order_payment_reversed', actorType: 'system', actorName: 'PayPal',
       title,
       body: full
@@ -433,9 +467,9 @@ async function markReversed(env, mapping, reversal) {
       iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
       orderId: mapping.orderId, status: full ? 'reembolsado' : 'pagado',
       sourceType: 'order', sourceId: mapping.orderId, createdAt: now,
-    }, `payment_${mappingStatus.toLowerCase()}:${mapping.orderId}`);
+    }, `payment_${mappingStatus.toLowerCase()}:${mapping.orderId}:${reversal.refundId || reversal.eventId}`);
   } catch (error) {
     console.warn('[paypal] No se pudo avisar el reembolso/contracargo:', error);
   }
-  return { idempotent: false, full };
+  return { idempotent: transition.duplicate, full };
 }

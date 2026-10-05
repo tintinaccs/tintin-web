@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "15df0713f71d12df76414600d798c61ea3351895510022f045e24be3586ca832",
+  "sourceFingerprint": "8b315bd88c9ecc241f7b3b3f4e4f34e3e77edfa48beea2fd4559a3e789fd2fa2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 985,
-    "textFiles": 944,
-    "totalBytes": 18483534,
+    "files": 986,
+    "textFiles": 945,
+    "totalBytes": 18492474,
     "pages": 19,
-    "modules": 691
+    "modules": 692
   },
   "viewports": [
     {
@@ -18550,8 +18550,8 @@
     },
     {
       "path": "cloudflare/paypal-seguro.js",
-      "bytes": 21658,
-      "sha256": "bfc8c46588138d54a42200e0b3c2bcc3387491cabd627a2183772f77d7c94e1e",
+      "bytes": 25004,
+      "sha256": "650258e13196102ba7191650fb926a46bb4adb323c8bec27bc98ee468cba80b1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18561,29 +18561,29 @@
           "raw": "./firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 10
+          "line": 12
         },
         {
           "raw": "./notificaciones-sociales.js",
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
-          "line": 11
+          "line": 13
         },
         {
           "raw": "./order-admin-domain.js",
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
-          "line": 12
+          "line": 14
         }
       ],
       "endpoints": [
         {
           "url": "https://api-m.paypal.com/",
-          "line": 48
+          "line": 50
         },
         {
           "url": "https://api-m.sandbox.paypal.com/",
-          "line": 48
+          "line": 50
         }
       ]
     },
@@ -35557,9 +35557,45 @@
       "endpoints": []
     },
     {
+      "path": "tests/payments/paypal-refund-reconciliation.test.mjs",
+      "bytes": 4242,
+      "sha256": "cc382ae178f477774d2b4a93c529d2aaf9f3af95398ac52e8aa7b0d139a5cdff",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/paypal-seguro.js",
+          "target": "cloudflare/paypal-seguro.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/payments/paypal-seguro.test.mjs",
-      "bytes": 5216,
-      "sha256": "8ae4e4c96dd11600525038689a80eb9c8bc26a103534d20eddf55b0947a2ffa8",
+      "bytes": 5236,
+      "sha256": "4b153309c69e2a4cccfd3d4e4cebb30f10faff5c1097008f8ca6e0b43dc22517",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38313,8 +38349,8 @@
     {
       "path": "cloudflare/paypal-seguro.js",
       "extension": ".js",
-      "bytes": 21658,
-      "sha256": "bfc8c46588138d54a42200e0b3c2bcc3387491cabd627a2183772f77d7c94e1e"
+      "bytes": 25004,
+      "sha256": "650258e13196102ba7191650fb926a46bb4adb323c8bec27bc98ee468cba80b1"
     },
     {
       "path": "cloudflare/politica-checkout-publico.js",
@@ -38937,8 +38973,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 211873,
-      "sha256": "1420d3fdcb8ed14c858d2ca21fd618eb238ed3a0b0a34f68be381a4ba2d3adb4"
+      "bytes": 213205,
+      "sha256": "8b861bcff1b5f77b2e9e8b6b29781256c708c4bd9b5f4aaf65c1e6474c156e66"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -43219,10 +43255,16 @@
       "sha256": "dbdcde92f5365af49f76fe0c2410a1a7fbb04ef7192b3431ba3e33d0d9fef515"
     },
     {
+      "path": "tests/payments/paypal-refund-reconciliation.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4242,
+      "sha256": "cc382ae178f477774d2b4a93c529d2aaf9f3af95398ac52e8aa7b0d139a5cdff"
+    },
+    {
       "path": "tests/payments/paypal-seguro.test.mjs",
       "extension": ".mjs",
-      "bytes": 5216,
-      "sha256": "8ae4e4c96dd11600525038689a80eb9c8bc26a103534d20eddf55b0947a2ffa8"
+      "bytes": 5236,
+      "sha256": "4b153309c69e2a4cccfd3d4e4cebb30f10faff5c1097008f8ca6e0b43dc22517"
     },
     {
       "path": "tests/payments/ueno-name.test.mjs",

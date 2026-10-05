@@ -80,7 +80,7 @@ test('reembolsos y contracargos identifican la captura y el monto', () => {
     resource: { id: 'REF1', amount: { value: '9.33', currency_code: 'USD' },
       links: [{ rel: 'up', href: 'https://api-m.paypal.com/v2/payments/captures/CAP123456/' }] },
   });
-  assert.deepEqual(refund, { kind: 'refunded', captureId: 'CAP123456', providerOrderId: '', currency: 'USD', cents: 933, eventId: 'WH-1' });
+  assert.deepEqual(refund, { kind: 'refunded', captureId: 'CAP123456', providerOrderId: '', currency: 'USD', cents: 933, eventId: 'WH-1', refundId: 'REF1' });
   const reversal = paypalReversalDetails({
     event_type: 'PAYMENT.CAPTURE.REVERSED',
     resource: { id: 'CAP999999', amount: { value: '-9.33', currency_code: 'USD' }, supplementary_data: { related_ids: { order_id: 'ORDER12345' } } },
@@ -88,5 +88,5 @@ test('reembolsos y contracargos identifican la captura y el monto', () => {
   assert.equal(reversal.kind, 'reversed');
   assert.equal(reversal.captureId, 'CAP999999');
   assert.equal(reversal.providerOrderId, 'ORDER12345');
-  assert.equal(reversal.cents, 0);
+  assert.equal(reversal.cents, 933);
 });

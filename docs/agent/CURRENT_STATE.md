@@ -1,5 +1,11 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Conciliación PayPal y secretos Sheets — revisión PR #1032, 2026-10-05
+
+- Agente/modelo: Codex (GPT-6). Corrección y merge autorizados; base a7cf5408. Hallazgos en el head e5ccd1eb: deduplicar por estado perdía el segundo reembolso parcial; escribir conciliación antes que pedido permitía fallos parciales irrecuperables. Ahora se registra cada refundId, se suma sin duplicar, se conserva el estado terminal y se condiciona un commit atómico a la versión leída. También la confirmación de cobro usa esa versión para no revivir un pago devuelto concurrentemente. Sin movimientos de dinero ni devoluciones reales.
+- PASS_LOCAL: audit:secure-orders; 17 pruebas de pagos, incluidas siete regresiones de reembolsos, duplicados, recuperación y cobros tardíos; dos pruebas de secretos Sheets; 81 ataques/controles de Firestore en proyecto demo. Firma PayPal sigue obligatoria. Conflictos fallan para que PayPal reintente, sin anunciar éxito parcial. CI/preview/merge del nuevo head pendientes.
+- PASS_EXTERNAL_CONFIG: webhook Sandbox de Default Application conserva PAYMENT.CAPTURE.COMPLETED y agrega PAYMENT.CAPTURE.REFUNDED/REVERSED; PayPal muestra Webhook updated successfully. Evidencia fuera del repo en outputs/paypal-webhook-sandbox.jpg. Live no activado; las pruebas locales no acreditan una transacción real.
+
 ## Revisión de flujos públicos — 2026-10-05 (`codex/public-flows-review-20261005`)
 
 - Agente/modelo: Codex (GPT-6). Base main 81747e36 (#1029). Revisión y reparación de checkout, producto, login e Inicio autorizadas en esta conversación, incluyendo merge/publicación. Se preservan paleta y trabajos ajenos; los cambios de otras páginas son referencias transitivas de caché del shell compartido. Sin cambios de reglas, roles, pagos, inventario ni escrituras productivas.
