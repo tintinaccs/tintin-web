@@ -1,6 +1,8 @@
 import { appCheckReady, auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
+import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
+import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261005-notification-parity-2';
 import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -18,6 +20,8 @@ let subscribeRetryTimer = 0;
 let subscribeRetryAttempt = 0;
 let subscribeAuthRecoveryAttempted = false;
 let listenerFailed = false;
+let subscriptionGeneration = 0;
+const liveNotices = createLiveActivityNotices();
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -182,6 +186,9 @@ function groupedNotifications(items) {
 }
 
 function render() {
+  const adminFeed = isSuperAdmin(currentUser);
+  const kicker = document.querySelector('#notifications-drawer .tt-notifications-kicker');
+  if (kicker) kicker.textContent = adminFeed ? 'Actividad de Tintin' : 'Tu actividad';
   const root = document.getElementById('tt-notifications-list');
   if (!root) return;
   if (!currentUser) {
@@ -190,7 +197,7 @@ function render() {
     return;
   }
   if (!notifications.length) {
-    root.innerHTML = '<div class="tt-notifications-empty">Todavía no tenés notificaciones. Cuando haya novedades de tus pedidos o interacciones, van a aparecer acá.</div>';
+    root.textContent = adminFeed ? 'Todavía no hay actividad administrativa.' : 'Todavía no tenés notificaciones. Cuando haya novedades de tus pedidos o interacciones, van a aparecer acá.';
     updateBadge();
     return;
   }
@@ -213,7 +220,9 @@ function render() {
 
 async function api(action, payload = {}, forceRefresh = false) {
   if (!currentUser) throw new Error('Necesitás iniciar sesión');
-  const token = await currentUser.getIdToken(forceRefresh);
+  const targetUser = currentUser;
+  const token = await targetUser.getIdToken(forceRefresh);
+  if (currentUser?.uid !== targetUser.uid) throw new Error('La sesión cambió');
   const response = await fetch('/api/notifications', {
     method: 'POST', cache: 'no-store', keepalive: true,
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -230,7 +239,9 @@ async function api(action, payload = {}, forceRefresh = false) {
 
 async function apiWithRetry(action, payload = {}, attempts = 3) {
   let lastError = null;
+  const targetUid = currentUser?.uid;
   for (let attempt = 0; attempt < attempts; attempt += 1) {
+    if (!targetUid || currentUser?.uid !== targetUid) throw new Error('La sesión cambió');
     try {
       return await api(action, payload, attempt > 0 && lastError?.status === 401);
     } catch (error) {
@@ -294,6 +305,7 @@ function scheduleSubscriptionRecovery(targetUser, error) {
 }
 
 function subscribe(user, { preserve = false } = {}) {
+  const generation = ++subscriptionGeneration;
   unsubscribe?.();
   unsubscribe = null;
   if (subscribeRetryTimer) window.clearTimeout(subscribeRetryTimer);
@@ -306,17 +318,23 @@ function subscribe(user, { preserve = false } = {}) {
     render();
   }
   if (!user) return;
-  const source = query(collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(100));
+  const adminFeed = isSuperAdmin(user);
+  // Rules y API mantienen la autorización: sólo Super Admin lee actividad
+  // global. El resto de roles conserva su bandeja privada por UID.
+  const source = query(adminFeed ? collection(db, 'adminNotifications') : collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(100));
   unsubscribe = onSnapshot(source, snapshot => {
+    if (generation !== subscriptionGeneration || currentUser?.uid !== user.uid) return;
     notifications = snapshot.docs
       .map(document => ({ id: document.id, ...document.data() }))
-      .filter(isVisibleCustomerNotification);
+      .filter(item => adminFeed || isVisibleCustomerNotification(item));
+    liveNotices.update(`${adminFeed ? 'admin' : 'user'}:${user.uid}`, notifications);
     listenerFailed = false;
     subscribeRetryAttempt = 0;
     subscribeAuthRecoveryAttempted = false;
     render();
     if (notificationsSurfaceIsOpen()) void markVisibleNotificationsRead();
   }, error => {
+    if (generation !== subscriptionGeneration || currentUser?.uid !== user.uid) return;
     console.warn('[notifications] No se pudo escuchar la actividad:', error);
     const root = document.getElementById('tt-notifications-list');
     listenerFailed = true;
@@ -333,16 +351,17 @@ function optimisticRead(id) {
 
 async function markVisibleNotificationsRead() {
   if (!currentUser || markingVisibleRead || !notifications.some(item => item.read !== true)) return;
+  const targetUser = currentUser;
   markingVisibleRead = true;
   notifications.forEach(item => { if (item.read !== true) item.read = true; });
   render();
   try {
-    await apiWithRetry('notificationsSeenAll');
+    await apiWithRetry(isSuperAdmin(targetUser) ? 'adminNotificationsSeenAll' : 'notificationsSeenAll');
   } catch (error) {
     console.warn('[notifications] No se pudieron confirmar como vistas:', error);
-    subscribe(currentUser);
+    if (currentUser?.uid === targetUser.uid) subscribe(currentUser);
   } finally {
-    markingVisibleRead = false;
+    if (currentUser?.uid === targetUser.uid) markingVisibleRead = false;
   }
 }
 
@@ -368,7 +387,7 @@ function wireEvents() {
       const id = card.dataset.notificationId;
       const target = safeTarget(card.dataset.notificationTarget);
       optimisticRead(id);
-      const work = api('notificationSeen', { notificationId: id }).catch(error => console.warn('[notifications] No se pudo marcar como leída:', error));
+      const work = api(isSuperAdmin(currentUser) ? 'adminNotificationSeen' : 'notificationSeen', { notificationId: id }).catch(error => console.warn('[notifications] No se pudo marcar como leída:', error));
       Promise.race([work, new Promise(resolve => setTimeout(resolve, 220))]).finally(() => {
         window.location.href = target;
       });
@@ -384,6 +403,7 @@ export function initClientNotifications() {
   wireEvents();
   setTriggersVisible(false);
   authUnsubscribe = subscribeAuthState(user => {
+    if (currentUser?.uid !== user?.uid) { liveNotices.clear(); markingVisibleRead = false; }
     currentUser = user || null;
     setTriggersVisible(Boolean(user));
     subscribe(currentUser);
@@ -394,6 +414,8 @@ export function initClientNotifications() {
 }
 
 window.addEventListener('pagehide', () => {
+  subscriptionGeneration += 1;
+  liveNotices.clear();
   unsubscribe?.();
   authUnsubscribe?.();
   if (subscribeRetryTimer) window.clearTimeout(subscribeRetryTimer);

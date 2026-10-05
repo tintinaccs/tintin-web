@@ -377,3 +377,38 @@ html body .tt-account-drawer .tt-account-internal {
     animation: none !important;
   }
 }
+
+/* Colecciones: toda la fotografía cabe en su tarjeta y el nombre comparte
+   el mismo eje inferior en escritorio, tablet y el panel móvil. */
+:is(.tt-dropdown-grid,.tt-tablet-cats-grid,.tt-mobile-cats-grid,.tt-sheet-grid)
+  :is(.tt-dropdown-card,.tt-tablet-cat-card,.tt-mobile-cat-card,.tt-sheet-item) {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  background: #fff;
+}
+html body :is(.tt-dropdown-icon,.tt-tablet-cat-img,.tt-mobile-cat-img,.tt-sheet-item-img) {
+  width: 100% !important;
+  height: clamp(92px, 10vw, 132px) !important;
+  max-width: 100%;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+html body :is(.tt-dropdown-icon,.tt-tablet-cat-img,.tt-mobile-cat-img,.tt-sheet-item-img) img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  border-radius: 0;
+}
+html body :is(.tt-dropdown-label,.tt-tablet-cat-card > span,.tt-mobile-cat-card > span,.tt-sheet-item > span:last-child) {
+  width: 100%;
+  text-align: center;
+  font-size: clamp(12px, 1.1vw, 15px);
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}

@@ -140,7 +140,7 @@ test('clientas tienen bandeja de 100, saneado, autolectura canónica y reintento
   assert.match(clientUi, /surface === 'notifications'/);
   assert.match(clientUi, /state === 'opening' \|\| state === 'open'/);
   assert.match(clientUi, /if \(notificationsSurfaceIsOpen\(\)\) void markVisibleNotificationsRead\(\)/);
-  assert.match(clientUi, /apiWithRetry\('notificationsSeenAll'/);
+  assert.match(clientUi, /apiWithRetry\(isSuperAdmin\(targetUser\) \? 'adminNotificationsSeenAll' : 'notificationsSeenAll'\)/);
   assert.match(clientUi, /apiWithRetry\('profileCreated'/);
   assert.doesNotMatch(clientUi, /id="tt-notifications-mark-all"/);
 });
