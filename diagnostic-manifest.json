@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2257c38b51ff7860d99daf0695c5561118e4f593a364afcb8d3311b4187f0394",
+  "sourceFingerprint": "6105cd3dce4e4ac6a88c52349a17f762086e29085175acd0f89f20941cf9c2b5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 982,
-    "textFiles": 941,
-    "totalBytes": 18455464,
+    "files": 983,
+    "textFiles": 942,
+    "totalBytes": 18468623,
     "pages": 19,
-    "modules": 688
+    "modules": 689
   },
   "viewports": [
     {
@@ -2134,8 +2134,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197214,
-      "sha256": "6daf1beafa6295c8b6a5a762a02cc92b3d82d02f3a84c9c1a881cab8191c3a28",
+      "bytes": 197221,
+      "sha256": "b57a19cf79c2982e62ed1c3e3c039a9021ef45a40af54f98a7eb3c604ee2f045",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2179,7 +2179,7 @@
           "line": 2038
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261005-google-same-tab-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261005-flow-seal-confirmation-1",
           "target": "js/admin/admin-app.js",
           "line": 2039
         },
@@ -2460,7 +2460,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261005-google-same-tab-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261005-flow-seal-confirmation-1",
           "target": "js/admin/admin-app.js",
           "line": 2039,
           "exists": true
@@ -20885,8 +20885,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 471306,
-      "sha256": "bae8ac1dcaa2610696922b1616916a1b77978946b37649c7fa6a67ec0307a0eb",
+      "bytes": 471313,
+      "sha256": "c225646ef9733fc66f4bbe627fd121c936b18bd142cead34ea4a1462d69795e3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21025,7 +21025,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261005-google-same-tab-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261005-flow-seal-confirmation-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -21694,8 +21694,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 34332,
-      "sha256": "51bd09fd6b8a71b613d6abee6ad3a4ffa7dd27e9d6076e1a2312d7e8d424408b",
+      "bytes": 36655,
+      "sha256": "da5df576e69a09c8ccf7611e3602ecdcfb37196da72ce78424df592a82e0ea68",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24206,8 +24206,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 11324,
-      "sha256": "3e027ffeae3046e30f5aa356bab20d18097b19eab1c486b25e02b48d3e5b29a9",
+      "bytes": 12052,
+      "sha256": "0954ca6615a7637259ad244559c66106e2b5237d86d6167638aee8a0aab59487",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24280,46 +24280,46 @@
           "line": 11
         },
         {
-          "raw": "./compartido/acordeon-pie-pagina.js?v=tintin-20260916-final-production-stability-footer-1",
-          "target": "js/components/navigation/compartido/acordeon-pie-pagina.js",
-          "dynamic": false,
-          "line": 12
-        },
-        {
           "raw": "./compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1",
           "target": "js/components/navigation/compartido/registro-paneles.js",
           "dynamic": false,
-          "line": 13
+          "line": 12
         },
         {
           "raw": "./compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/navigation/compartido/apariencia-global.js",
           "dynamic": false,
-          "line": 14
+          "line": 13
         },
         {
           "raw": "../../core/store/visual-studio-global-runtime.js?v=tintin-20260815-global-studio-10-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1",
           "target": "js/core/store/visual-studio-global-runtime.js",
           "dynamic": false,
-          "line": 15
+          "line": 14
+        },
+        {
+          "raw": "./compartido/acordeon-pie-pagina.js?v=tintin-20260916-final-production-stability-footer-1",
+          "target": "js/components/navigation/compartido/acordeon-pie-pagina.js",
+          "dynamic": true,
+          "line": 43
         },
         {
           "raw": "../../quality/experiencia-interfaz.js?v=tintin-20261004-final-integration-2",
           "target": "js/quality/experiencia-interfaz.js",
           "dynamic": true,
-          "line": 45
+          "line": 61
         },
         {
           "raw": "../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2",
           "target": "js/quality/estabilidad-producto.js",
           "dynamic": true,
-          "line": 174
+          "line": 190
         },
         {
           "raw": "../../quality/estabilidad-final-publica.js?v=tintin-20261004-header-consistency-2",
           "target": "js/quality/estabilidad-final-publica.js",
           "dynamic": true,
-          "line": 177
+          "line": 193
         }
       ],
       "endpoints": []
@@ -30079,8 +30079,8 @@
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
-      "bytes": 20294,
-      "sha256": "4a5f7b0674b689db4a4812874701692368770a90a53520314cefed1cbd91c84b",
+      "bytes": 20966,
+      "sha256": "04d139d016fef57d5d355bdea3350ce6b2838d801714bfa9d858a96765bbb614",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33677,6 +33677,42 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/sellado-interactivo.test.mjs",
+      "bytes": 4066,
+      "sha256": "78f4183cd7ff564991ea46ce04bbc68852679f32bedd8ddc11a02defeffa661d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/flow-connections/sellos-flujo.test.mjs",
       "bytes": 2622,
       "sha256": "2f27bbcf5e38f0b342f6fc128e009a5692ba783bfaded662e38cbcdf610ff88d",
@@ -34800,8 +34836,8 @@
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
-      "bytes": 19833,
-      "sha256": "71ecc4a729b2f0065c841cd66b4d09ed20378dff4ae137d8a8a5fe0ab3698bc9",
+      "bytes": 21054,
+      "sha256": "e99be8aa95bcc4f9eb3a24da6870101350c195b703e0753e5a4b44017ac1370a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37597,8 +37633,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 5779,
-      "sha256": "809026ba9a6588f80341063a60fd8f2c8f1726707d354b7f80e14f30720bcb16"
+      "bytes": 5885,
+      "sha256": "fef64871bae63bb3f69138fc83e9f211eb7a4518638792b59dd798b1cd92b6d0"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -37795,8 +37831,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197214,
-      "sha256": "6daf1beafa6295c8b6a5a762a02cc92b3d82d02f3a84c9c1a881cab8191c3a28"
+      "bytes": 197221,
+      "sha256": "b57a19cf79c2982e62ed1c3e3c039a9021ef45a40af54f98a7eb3c604ee2f045"
     },
     {
       "path": "apple-touch-icon.png",
@@ -38821,8 +38857,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 207858,
-      "sha256": "fff4f6cadec4ccb90ee35ca97264e1ffddcb6aac9a4e7be2d31ea02ce47177d7"
+      "bytes": 211873,
+      "sha256": "1420d3fdcb8ed14c858d2ca21fd618eb238ed3a0b0a34f68be381a4ba2d3adb4"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -39649,8 +39685,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 471306,
-      "sha256": "bae8ac1dcaa2610696922b1616916a1b77978946b37649c7fa6a67ec0307a0eb"
+      "bytes": 471313,
+      "sha256": "c225646ef9733fc66f4bbe627fd121c936b18bd142cead34ea4a1462d69795e3"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -39757,8 +39793,8 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 34332,
-      "sha256": "51bd09fd6b8a71b613d6abee6ad3a4ffa7dd27e9d6076e1a2312d7e8d424408b"
+      "bytes": 36655,
+      "sha256": "da5df576e69a09c8ccf7611e3602ecdcfb37196da72ce78424df592a82e0ea68"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
@@ -40369,8 +40405,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 11324,
-      "sha256": "3e027ffeae3046e30f5aa356bab20d18097b19eab1c486b25e02b48d3e5b29a9"
+      "bytes": 12052,
+      "sha256": "0954ca6615a7637259ad244559c66106e2b5237d86d6167638aee8a0aab59487"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -42079,8 +42115,8 @@
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
       "extension": ".mjs",
-      "bytes": 20294,
-      "sha256": "4a5f7b0674b689db4a4812874701692368770a90a53520314cefed1cbd91c84b"
+      "bytes": 20966,
+      "sha256": "04d139d016fef57d5d355bdea3350ce6b2838d801714bfa9d858a96765bbb614"
     },
     {
       "path": "scripts/auditar-superadmin-cierre-total.mjs",
@@ -42193,8 +42229,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 62501,
-      "sha256": "5067072dd5d0f70eadb30d8a36d83bec61455eeace0caf82b7258cf82f41564a"
+      "bytes": 62515,
+      "sha256": "a3dd1dc3896a394d734bfd25fbd80c7b21facc85dd03eb8ecdb4fd4158407740"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -42809,6 +42845,12 @@
       "sha256": "1f0cfbbdff39a9bc81bb0b9b66d1353141dce0cb8ca0fb02efd33caadaea55aa"
     },
     {
+      "path": "tests/flow-connections/sellado-interactivo.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4066,
+      "sha256": "78f4183cd7ff564991ea46ce04bbc68852679f32bedd8ddc11a02defeffa661d"
+    },
+    {
       "path": "tests/flow-connections/sellos-flujo.test.mjs",
       "extension": ".mjs",
       "bytes": 2622,
@@ -42991,8 +43033,8 @@
     {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
-      "bytes": 19833,
-      "sha256": "71ecc4a729b2f0065c841cd66b4d09ed20378dff4ae137d8a8a5fe0ab3698bc9"
+      "bytes": 21054,
+      "sha256": "e99be8aa95bcc4f9eb3a24da6870101350c195b703e0753e5a4b44017ac1370a"
     },
     {
       "path": "tests/navigation/home-collection-links.test.mjs",
@@ -43803,7 +43845,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 551,
+      "line": 557,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -45195,13 +45237,13 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 551,
+      "line": 557,
       "target": "/admin.html",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 634,
+      "line": 681,
       "target": "/diagnostic-manifest.json",
       "method": "GET"
     },

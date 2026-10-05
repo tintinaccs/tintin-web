@@ -296,6 +296,12 @@ export function initConnectionsFlow({ role } = {}) {
           <span id="tfc-seal-status">Cargando sellos…</span>
         </div>
         <div id="tfc-live-error" class="tfc-live-error" role="status" hidden><span id="tfc-live-error-text"></span><button type="button" id="tfc-live-error-close" aria-label="Cerrar aviso de conexión">×</button></div>
+        <div id="tfc-seal-confirmation" class="adm-diagnostic-safety" role="group" aria-label="Confirmar sellado" hidden>
+          <p id="tfc-seal-confirmation-text"></p>
+          <button type="button" class="adm-btn adm-btn-primary" id="tfc-seal-save">Confirmar sellado</button>
+          <button type="button" class="adm-btn adm-btn-outline" id="tfc-seal-cancel">Cancelar</button>
+        </div>
+        <p id="tfc-seal-feedback" role="status" aria-live="polite"></p>
         <div id="tfc-summary" class="tfc-summary" aria-label="Resumen del flujo"></div>
         <div class="tfc-toolbar">
           <input type="search" id="tfc-search" class="adm-select" placeholder="Buscar nodo, conexión, servicio, archivo o estado…">
@@ -606,26 +612,67 @@ export function initConnectionsFlow({ role } = {}) {
     }
   });
 
-  sealBtn.addEventListener('click', async () => {
-    if (!liveState.checkedAt) { window.alert('Primero revalidá en vivo: sólo se sella lo que hoy está verde.'); return; }
-    if (!sealState.loaded) { window.alert('Los sellos todavía no cargaron. Probá de nuevo en unos segundos.'); return; }
+  const sealConfirmation = root.querySelector('#tfc-seal-confirmation');
+  const sealConfirmationText = root.querySelector('#tfc-seal-confirmation-text');
+  const sealSaveBtn = root.querySelector('#tfc-seal-save');
+  const sealCancelBtn = root.querySelector('#tfc-seal-cancel');
+  const sealFeedback = root.querySelector('#tfc-seal-feedback');
+  let sealSaving = false;
+
+  function prepareSeals() {
+    if (!liveState.checkedAt) throw new Error('Primero revalidá en vivo: sólo se sella lo que hoy está verde.');
+    if (!sealState.loaded) throw new Error('Los sellos todavía no cargaron. Probá de nuevo en unos segundos.');
+    if (revalidateBtn.disabled) throw new Error('Esperá a que termine la revalidación antes de sellar.');
     const sealedAt = new Date().toISOString();
     const sealedBy = auth.currentUser?.email || '';
     const entries = {};
     for (const node of NODES) if (liveOnlyState(node) === ESTADOS.PROD) entries[node.id] = buildSeal(recordFiles(node, NODES_BY_ID), sealState.shaByPath, { sealedAt, sealedBy });
     for (const edge of EDGES) if (liveOnlyState(edge, true) === ESTADOS.PROD) entries[edge.id] = buildSeal(recordFiles(edge, NODES_BY_ID), sealState.shaByPath, { sealedAt, sealedBy });
     const count = Object.keys(entries).length;
-    if (!count) { window.alert('No hay nada en verde para sellar.'); return; }
-    if (!window.confirm(`Se van a sellar ${count} nodo(s)/conexión(es) en verde.\n\nSi después cambia el código de alguno, va a volver a amarillo hasta que lo revalides y lo vuelvas a sellar.`)) return;
-    sealBtn.disabled = true;
+    if (!count) throw new Error('No hay nada en verde para sellar.');
+    return { entries, count, sealedAt, sealedBy };
+  }
+
+  sealBtn.addEventListener('click', () => {
+    if (sealSaving) return;
+    sealFeedback.textContent = '';
     try {
+      const { count } = prepareSeals();
+      sealConfirmationText.textContent = `Se guardarán ${count} nodos/conexiones verificados. Si cambia su código, vuelven a amarillo hasta revalidar y confirmar otra vez.`;
+      sealConfirmation.hidden = false;
+      sealSaveBtn.focus();
+    } catch (error) {
+      sealFeedback.textContent = error.message;
+    }
+  });
+  sealCancelBtn.addEventListener('click', () => {
+    if (sealSaving) return;
+    sealConfirmation.hidden = true;
+    sealBtn.focus();
+  });
+  sealSaveBtn.addEventListener('click', async () => {
+    if (sealSaving || sealConfirmation.hidden) return;
+    const revalidationWasDisabled = revalidateBtn.disabled;
+    sealSaving = true;
+    sealBtn.disabled = sealSaveBtn.disabled = sealCancelBtn.disabled = true;
+    sealFeedback.textContent = 'Guardando sellos…';
+    try {
+      // Releer la evidencia al confirmar: no guardar una selección vieja si
+      // otra revalidación cambió el estado mientras se mostraba la pregunta.
+      const { entries, count, sealedAt, sealedBy } = prepareSeals();
+      revalidateBtn.disabled = true;
+      if (!await waitForAdminAppCheck(12000)) throw new Error('La verificación de seguridad está pendiente. Podés reintentar.');
       await setDoc(doc(db, ...SEALS_DOC), { entries, updatedAt: sealedAt, updatedBy: sealedBy }, { merge: true });
       sealState.entries = { ...sealState.entries, ...entries };
+      sealConfirmation.hidden = true;
+      sealFeedback.textContent = `Se guardaron ${count} sellos verificados.`;
       renderAll();
     } catch (error) {
-      window.alert(`No se pudieron guardar los sellos: ${error?.message || error}`);
+      sealFeedback.textContent = `No se pudieron guardar los sellos: ${error?.message || error}`;
     } finally {
-      sealBtn.disabled = false;
+      sealSaving = false;
+      sealBtn.disabled = sealSaveBtn.disabled = sealCancelBtn.disabled = false;
+      revalidateBtn.disabled = revalidationWasDisabled;
     }
   });
 

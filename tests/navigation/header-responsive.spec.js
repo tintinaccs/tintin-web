@@ -1,5 +1,27 @@
 const { test, expect } = require('@playwright/test');
 
+test('el acordeón del footer se carga al pasar de desktop a móvil y conserva sus enlaces', async ({ page }) => {
+  const footerRequests = [];
+  page.on('request', request => {
+    if (request.url().includes('/acordeon-pie-pagina.js')) footerRequests.push(request.url());
+  });
+  await openPublicPage(page, { width: 1440, height: 900 }, '/cambios-devoluciones.html');
+  expect(footerRequests).toHaveLength(0);
+  await expect(page.locator('.tt-footer-col ul').first()).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  const toggle = page.locator('.tt-footer-accordion-toggle').first();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('.tt-footer-col ul').first()).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('.tt-footer-col ul').first()).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('.tt-footer-accordion-toggle')).toHaveCount(3);
+  expect(footerRequests).toHaveLength(1);
+});
+
 for (const width of [320, 390, 767, 768, 1024, 1025, 1280, 1920]) {
   test(`foto de cuenta respeta el espacio del icono y del botón en ${width}px`, async ({ page }) => {
     await openPublicPage(page, { width, height: 900 });
