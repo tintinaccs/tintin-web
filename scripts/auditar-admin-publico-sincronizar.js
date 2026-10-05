@@ -59,6 +59,13 @@ check(
   'El header perdió sincronización o defaults.'
 );
 check(
+  'Preview visual no abre listener Firestore del header',
+  headerMode.includes("ttVisualPreview") &&
+    headerMode.includes('window.parent !== window') &&
+    /if \(IS_VISUAL_PREVIEW_FRAME\)[\s\S]*?apply\(DEFAULT_MODE\)[\s\S]*?markReady\(DEFAULT_MODE\)[\s\S]*?return;/.test(headerMode),
+  'La preview del Admin no debe abrir un canal Firestore Listen propio.'
+);
+check(
   'Desktop/tablet y mobile usan rangos separados',
   headerMode.includes('min-width:768px') &&
     headerMode.includes('#tt-header-desktop-tablet') &&
