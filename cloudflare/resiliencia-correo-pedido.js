@@ -201,6 +201,7 @@ export async function drainOrderEmailQueueScheduled(env, { limit = 25, deps = RE
       const order = await fetchOrderForRetry(env, claimed.orderId, deps);
       if (!order) throw new Error('El pedido ya no existe.');
       const result = await deps.sendOrderEmailsImpl({
+        env,
         apiKey,
         orderId: claimed.orderId,
         order,

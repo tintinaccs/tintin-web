@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7c760930e4a30e7aba8e5d4f6b3e23230484d6ef4bab60220d44eb69590cc01c",
+  "sourceFingerprint": "4aea424e39cbbde0a4624f30c445fe201d562b0199301f24e8b1978cfff2c030",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1003,
-    "textFiles": 962,
-    "totalBytes": 18634629,
+    "files": 1005,
+    "textFiles": 964,
+    "totalBytes": 18644066,
     "pages": 19,
-    "modules": 706
+    "modules": 708
   },
   "viewports": [
     {
@@ -18726,9 +18726,27 @@
       "endpoints": []
     },
     {
+      "path": "cloudflare/recibo-correo-pedido.js",
+      "bytes": 2388,
+      "sha256": "87f607a539920e2fbf98e4f68139424202ad04fed35dc01f610e1e720dd9d2d3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/resiliencia-correo-pedido.js",
-      "bytes": 11013,
-      "sha256": "a5657c03c8c2aa993347323d06e7df05a34e7be9a9de1cc38e64b7bbf23f544c",
+      "bytes": 11026,
+      "sha256": "32ba06357d472c75ded3ad954a208c2989c8aab495826c0ed82080ca5c9bb376",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19566,8 +19584,8 @@
     },
     {
       "path": "functions/api/apps-script-bridge.js",
-      "bytes": 17406,
-      "sha256": "2366dc88173460dbc0d364ea74486c1d1cfd9e1c4d23e5b840b11eca2d9cc844",
+      "bytes": 17945,
+      "sha256": "4a80984c1c7202f9e941a00121ddd53c629ff9df20e748f8d612dc157b7a2016",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19638,12 +19656,18 @@
           "target": "functions/api/order-email.js",
           "dynamic": false,
           "line": 20
+        },
+        {
+          "raw": "../../cloudflare/resiliencia-correo-pedido.js",
+          "target": "cloudflare/resiliencia-correo-pedido.js",
+          "dynamic": false,
+          "line": 21
         }
       ],
       "endpoints": [
         {
           "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
-          "line": 26
+          "line": 27
         }
       ]
     },
@@ -20065,8 +20089,8 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 25253,
-      "sha256": "5a3a5fad770bd9b8288a6b0e04ab3b32bca9df37978f29194cb89d105d7b2e15",
+      "bytes": 25659,
+      "sha256": "d598539a1e07f5d54f3fec7137b5344c50cb66b1d8bc02cb7c71085f8035f716",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20095,32 +20119,38 @@
           "target": "js/orders/nucleo-metodos-pago.js",
           "dynamic": false,
           "line": 9
+        },
+        {
+          "raw": "../../cloudflare/recibo-correo-pedido.js",
+          "target": "cloudflare/recibo-correo-pedido.js",
+          "dynamic": false,
+          "line": 10
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png",
-          "line": 15
+          "line": 16
         },
         {
           "url": "https://tintinaccesorios.pages.dev/admin",
-          "line": 17
+          "line": 18
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 45
+          "line": 46
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BFIREBASE_PROJECT_ID%7D/databases/(default",
-          "line": 103
+          "line": 104
         },
         {
           "url": "https://maps.google.com/",
-          "line": 301
+          "line": 302
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 375
+          "line": 376
         }
       ]
     },
@@ -37055,6 +37085,42 @@
       "endpoints": []
     },
     {
+      "path": "tests/sync/order-email-receipt.test.mjs",
+      "bytes": 4506,
+      "sha256": "d480765db3523dc92d7f0df2a3e97d3264f1ec5d17f8d4595d6440d7171c8fc8",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/recibo-correo-pedido.js",
+          "target": "cloudflare/recibo-correo-pedido.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/sync/order-sheets-sync.test.mjs",
       "bytes": 2184,
       "sha256": "1b7b33d9c25308a2f16be116518b0a9a1ac77e3f1a1f816e2eef35776c33ce3a",
@@ -38923,10 +38989,16 @@
       "sha256": "e3be69645351e5deca3dfe741c1053510c9263fb9407243dfc69ffadf36e7753"
     },
     {
+      "path": "cloudflare/recibo-correo-pedido.js",
+      "extension": ".js",
+      "bytes": 2388,
+      "sha256": "87f607a539920e2fbf98e4f68139424202ad04fed35dc01f610e1e720dd9d2d3"
+    },
+    {
       "path": "cloudflare/resiliencia-correo-pedido.js",
       "extension": ".js",
-      "bytes": 11013,
-      "sha256": "a5657c03c8c2aa993347323d06e7df05a34e7be9a9de1cc38e64b7bbf23f544c"
+      "bytes": 11026,
+      "sha256": "32ba06357d472c75ded3ad954a208c2989c8aab495826c0ed82080ca5c9bb376"
     },
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
@@ -39543,8 +39615,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 227478,
-      "sha256": "1422b44458c5ea4c76b63975c4838f286bb146012393d0dca18058cf5363369f"
+      "bytes": 229063,
+      "sha256": "143fade5e15daa406adec7e54ad5165ce4c31319526038ea755f065beb10e5bb"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -40023,8 +40095,8 @@
     {
       "path": "functions/api/apps-script-bridge.js",
       "extension": ".js",
-      "bytes": 17406,
-      "sha256": "2366dc88173460dbc0d364ea74486c1d1cfd9e1c4d23e5b840b11eca2d9cc844"
+      "bytes": 17945,
+      "sha256": "4a80984c1c7202f9e941a00121ddd53c629ff9df20e748f8d612dc157b7a2016"
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
@@ -40119,8 +40191,8 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 25253,
-      "sha256": "5a3a5fad770bd9b8288a6b0e04ab3b32bca9df37978f29194cb89d105d7b2e15"
+      "bytes": 25659,
+      "sha256": "d598539a1e07f5d54f3fec7137b5344c50cb66b1d8bc02cb7c71085f8035f716"
     },
     {
       "path": "functions/api/paypal-capture-order.js",
@@ -44087,6 +44159,12 @@
       "extension": ".mjs",
       "bytes": 12212,
       "sha256": "ede11a2b133945055e9d5fb5b2c8b8179511ae953f9dd7fb576a284062887a2e"
+    },
+    {
+      "path": "tests/sync/order-email-receipt.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4506,
+      "sha256": "d480765db3523dc92d7f0df2a3e97d3264f1ec5d17f8d4595d6440d7171c8fc8"
     },
     {
       "path": "tests/sync/order-sheets-sync.test.mjs",
