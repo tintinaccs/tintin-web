@@ -69,7 +69,9 @@ const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 
 // copy del loader o la forma de encadenar una Promise cambien legítimamente.
   const googleRedirectPath =
     /await withDeadline\(signInWithRedirect\(auth, provider\), AUTH_NETWORK_DEADLINE_MS\)/.test(login) &&
-    !/signInWithPopup/.test(login);
+    /result = await signInWithPopup\(auth, provider\)/.test(login) &&
+    login.includes("['auth/popup-blocked', 'auth/operation-not-supported-in-this-environment'].includes(popupError?.code)") &&
+    login.includes('await finishGoogleLogin(result.user)');
   const googleHandoffKeepsOverlay =
     googleRedirectPath &&
   login.includes('showOverlay()') &&
@@ -95,7 +97,7 @@ const checks = [
   ['Carrito y búsqueda ocultos en Login', css.includes('body:has(.login-page) #cart-drawer') && css.includes('body:has(.login-page) #search-panel')],
   ['Login no reserva espacio del shell', css.includes('body:has(.login-page).tt-public-shell-mounted') && css.includes('padding-top: 0 !important')],
   ['Loader de Login muestra la marca oficial completa', loginLoaderVisible && officialLogoImmediate],
-    ['Google abre en la misma pestaña con espera limitada', googleRedirectPath],
+    ['Google abre popup y sólo redirige ante rechazo explícito de apertura', googleRedirectPath],
   ['Google mantiene loader hasta terminar el handoff', googleHandoffKeepsOverlay],
   ['OTP mantiene loader hasta terminar el handoff', login.includes('window.TintinLoader?.beginWait()') && login.includes('await finishOtpLogin(user)')],
   ['Google confirma persistencia antes del redirect y limpia intentos fallidos', /await withDeadline\(authPersistenceReady, AUTH_NETWORK_DEADLINE_MS\)[\s\S]{0,160}markGoogleRedirectPending\(\)/.test(login) && login.includes('clearGoogleRedirectPending()')],

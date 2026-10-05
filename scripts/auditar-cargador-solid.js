@@ -64,8 +64,8 @@ const wordmarkContrast = wordmarkColor
   ? (Math.max(bgLum, textLum) + 0.05) / (Math.min(bgLum, textLum) + 0.05)
   : 0;
 check(
-  wordmarkContrast >= 4.5 && /color:#713C53!important/i.test(loaderRuntime),
-  `El wordmark del loader debe superar contraste AA 4.5:1 sobre ${OFFICIAL_LOADER_BACKGROUND} en CSS y runtime (actual ${wordmarkContrast.toFixed(2)}:1).`
+  wordmarkColor.toUpperCase() === '#FFFFFF' && /color:#FFFFFF!important/i.test(loaderRuntime),
+  'El loader debe usar blanco puro en CSS y runtime según la identidad solicitada. El blanco sobre rosa claro no alcanza AA para texto normal; no se declara conformidad AA.'
 );
 check(
   /html body #tt-loader::before\s*\{[^}]*background:\s*#F8AACA\s*!important[^}]*opacity:\s*1\s*!important/is.test(solidCss),

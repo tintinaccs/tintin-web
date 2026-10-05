@@ -128,6 +128,7 @@ jobs:
           npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium
           npx playwright test tests/ui-ux/admin-sidebar-interaction.spec.js --project=chromium
           npx playwright test tests/navigation/header-responsive.spec.js --grep footer --project=chromium
+          npx playwright test tests/navigation/collection-menu-parity.spec.js tests/navigation/live-activity-notices.spec.js --project=chromium
           npx playwright test tests/login/google-loader-recovery.spec.js --project=chromium
           npx playwright test tests/checkout/coupon-recovery.spec.js tests/ui-ux/product-small-controls.spec.js tests/login/profile-availability-recovery.spec.js --project=chromium
           npx playwright test tests/ui-ux/inventory-reservation-review.spec.js --project=chromium

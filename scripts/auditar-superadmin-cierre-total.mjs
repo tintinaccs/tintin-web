@@ -121,6 +121,13 @@ const connectionContracts = {
     && /rolePermissions|users/.test(firestoreRules),
   pedidos: () => hasAll(fullAdminSource, ['/api/admin-order-mutation', 'TintinInventoryIntegrity', 'trashOrder', 'restoreOrder'])
     && hasAny(fullAdminSource + serverSources, ['syncOrder', 'Sheets', 'sheets']),
+  mayoristas: () => hasAll(safeRead('js/admin/mayoristas/mayoristas-admin.js'), ['/api/admin-wholesale', 'wholesaleQuotes', 'onSnapshot'])
+    && hasAll(safeRead('js/pages/profile/mayorista-perfil.js'), ['/api/wholesale-quote', 'wholesaleQuotes', 'onSnapshot'])
+    && hasAll(safeRead('functions/api/admin-wholesale.js'), ['requireSuperAdmin', 'respondWholesaleQuote', 'afterWholesaleQuoteResponded'])
+    && hasAll(safeRead('cloudflare/mayoristas-avisos.js'), ['syncWholesaleQuote', 'SHEETS_ENGAGEMENT_SECRET', 'notifyUserIfAbsent'])
+    && hasAll(safeRead('apps-script/Mayoristas.gs'), ['Mayoristas', 'tintinParitySecretMatches_', 'tintinUpsertWholesaleQuote_'])
+    && hasAll(firestoreRules, ['wholesaleQuotes', 'allow create, update, delete: if false'])
+    && routes.include.includes('/api/admin-wholesale') && routes.include.includes('/api/wholesale-quote'),
   productos: () => hasAll(fullAdminSource, ['prodGuardar', 'prod-stock', 'prod-price'])
     && hasAll(catalogDeleteApi + catalogDeleteCore + catalogResilience, ['products', 'productInventory'])
     && hasAny(catalogDeleteApi + catalogDeleteCore + catalogResilience, ['syncProducts', 'catalogSheetSyncQueue']),
@@ -210,8 +217,9 @@ check('admin-script-exists', 'Todos los scripts locales referenciados existen', 
 // vieja): auto-read/rich/global-session-restore fueron las primeras; el 1-oct
 // corrigió el bucle de reintento ante permission-denied/unauthenticated.
 // El 4-oct admin-connections agrega renovación compartida Auth + App Check.
+// El 5-oct public-navigation-3 conserva esa renovación y unifica los avisos.
 check('admin-notifications-versioned', 'La autolectura Admin está servida con versión propia actual',
-  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore|firebase-permissions|inventory-fix|admin-connections)/.test(item.version)));
+  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore|firebase-permissions|inventory-fix|admin-connections|^tintin-20261005-public-navigation-3$)/.test(item.version)));
 
 // 7. Mutaciones sensibles deben conservar gobierno y trazabilidad.
 check('superadmin-auth', 'El panel conserva guard de autenticación y Super Admin real',

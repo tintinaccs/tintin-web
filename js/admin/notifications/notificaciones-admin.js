@@ -3,6 +3,7 @@ import { waitForAdminAppCheck, recoverAdminSecurity } from '../auth/app-check-ad
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
+import { createLiveActivityNotices } from '../../components/notifications/avisos-en-vivo.mjs?v=tintin-20261005-notification-parity-2';
 import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -29,6 +30,8 @@ let ordersAuthRecoveryAttempted = false;
 let listenerAuthRecoveryPromise = null;
 let markingVisibleRead = false;
 const orderNotificationInFlight = new Set();
+const liveNotices = createLiveActivityNotices();
+let notificationGeneration = 0;
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -347,18 +350,26 @@ function scheduleAdminListenerRecovery(stream, error, retry) {
 }
 
 async function subscribeNotifications() {
+  const generation = ++notificationGeneration;
+  const targetUser = user;
   unsubscribeNotifications?.();
+  unsubscribeNotifications = null;
+  if (!targetUser) return;
   if (!await waitForAdminAppCheck(12000)) return;
+  if (generation !== notificationGeneration || user?.uid !== targetUser.uid) return;
   const source = query(collection(db, 'adminNotifications'), orderBy('createdAt', 'desc'), limit(100));
   if (notificationsRetryTimer) window.clearTimeout(notificationsRetryTimer);
   notificationsRetryTimer = 0;
   unsubscribeNotifications = onSnapshot(source, snapshot => {
+    if (generation !== notificationGeneration || user?.uid !== targetUser.uid) return;
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
+    liveNotices.update(`admin:${targetUser.uid}`, notifications);
     notificationsRetryAttempt = 0;
     notificationsAuthRecoveryAttempted = false;
     render();
     if (panelIsOpen()) void markVisibleNotificationsRead();
   }, error => {
+    if (generation !== notificationGeneration || user?.uid !== targetUser.uid) return;
     console.warn('[admin-notifications] No se pudo escuchar actividad:', error);
     const root = document.getElementById('adm-notifications-list');
     if (root) root.innerHTML = '<div class="adm-notifications-error">No se pudo actualizar la actividad. Se conservan los datos ya cargados.</div>';
@@ -492,8 +503,11 @@ function wireEvents() {
 ensureStyles();
 wireEvents();
 subscribeAuthState(current => {
+  notificationGeneration += 1;
+  if (user?.uid !== current?.uid) liveNotices.clear();
   if (String(current?.email || '').trim().toLowerCase() !== String(SUPER_ADMIN || '').trim().toLowerCase()) {
     user = null;
+    notifications = [];
     document.getElementById('adm-notifications-wrap')?.remove();
     unsubscribeNotifications?.();
     unsubscribeOrders?.();

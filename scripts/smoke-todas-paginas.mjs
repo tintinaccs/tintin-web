@@ -3,6 +3,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { publicPaypalConfig } from '../cloudflare/paypal-seguro.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
@@ -232,6 +233,14 @@ try {
     const page = await context.newPage();
     const pageErrors = [];
     const localHttpErrors = [];
+
+    // Este smoke sirve HTML estático, sin Pages Functions ni credenciales.
+    // Modelar la lectura pública de PayPal deshabilitado evita un 404 del
+    // harness; no se simulan ni se permiten operaciones de pago.
+    await page.route(`${baseURL}/api/paypal-config`, request => {
+      if (request.request().method() !== 'GET') return request.continue();
+      return request.fulfill({ json: publicPaypalConfig({}) });
+    });
 
     // Perfil es una superficie protegida: en este smoke sin credenciales debe
     // poder resolver su redirección a login sin quedar supeditado al gate

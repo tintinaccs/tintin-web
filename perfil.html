@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261005-public-flows-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261005-flow-progress-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-public-flows-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-public-navigation-3" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -21,7 +21,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261005-public-flows-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261005-public-navigation-3">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261004-header-consistency-2">
@@ -30,7 +30,7 @@
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/perfil.html" />
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
-  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260927-loader-contrast-c-1-brand-20261004-1-owner-pink-20261004-1">
+  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261005-flow-progress-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20260925-cache-converge-1" />
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -280,6 +280,15 @@
     <div class="perfil-body">
       <div class="perfil-section-title">Mis favoritos</div>
       <div id="perfil-favorites-list"><div style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Cargando favoritos...</div></div>
+    </div>
+  </div>
+
+  <!-- Compras por mayor: cotizaciones mayoristas (js/pages/profile/mayorista-perfil.js) -->
+  <span id="mayorista" aria-hidden="true"></span>
+  <div class="perfil-card" id="perfil-wholesale-card" hidden>
+    <div class="perfil-body">
+      <div class="perfil-section-title">Compras por mayor</div>
+      <div id="perfil-wholesale-root"></div>
     </div>
   </div>
 
@@ -764,6 +773,7 @@ startProfileAuthGuard();
 <script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20261004-final-integration-2"></script>
 <script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-owner-pink-20261004-1"></script>
 <script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20261003-profile-avatar-identity-1"></script>
+<script type="module" src="js/pages/profile/mayorista-perfil.js?v=tintin-20261005-mayoristas-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>

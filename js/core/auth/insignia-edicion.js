@@ -1,7 +1,7 @@
 import { auth } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { EDITABLE_ROLES, loadRolePermissions, canDo } from './permisos-roles.js?v=tintin-20261004-admin-connections-3';
+
 
 const BADGE_Z = 1250;
 const tracked = new Map();
@@ -111,6 +111,8 @@ function startDomObserver() {
 
 async function canEditContent(user) {
   if (user.email === SUPER_ADMIN) return true;
+  // Los visitantes no descargan la matriz de permisos del editor.
+  const { EDITABLE_ROLES, loadRolePermissions, canDo } = await import('./permisos-roles.js?v=tintin-20261004-admin-connections-3');
   const role = await getUserRole(user.uid, user.email);
   if (!EDITABLE_ROLES.includes(role)) return false;
   await loadRolePermissions();
@@ -128,12 +130,14 @@ function bootAuthorized() {
   placeBadges();
 }
 
+let permissionEpoch = 0;
 subscribeAuthState(async user => {
+  const epoch = ++permissionEpoch;
   authorized = false;
   removeBadges();
   if (!user || user.isAnonymous) return;
   try {
-    if (await canEditContent(user)) bootAuthorized();
+    if (await canEditContent(user) && epoch === permissionEpoch) bootAuthorized();
   } catch (error) {
     console.warn('[edit-badge] no se pudo comprobar el permiso:', error);
   }

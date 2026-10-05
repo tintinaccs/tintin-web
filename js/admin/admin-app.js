@@ -30,7 +30,8 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261005-flow-seal-confirmation-1";
+import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261005-mayoristas-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261005-flow-progress-1";
 import "./pages/paginas-admin.js?v=tintin-20261004-admin-connections-3";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
@@ -628,6 +629,7 @@ const SECTION_LABELS = {
   estadisticas: 'Estadísticas',
   usuarios: 'Usuarios',
   pedidos: 'Pedidos',
+  mayoristas: 'Pedidos mayoristas',
   productos: 'Productos',
   resenas: 'Reseñas',
   'me-gusta': 'Me gusta',
@@ -675,6 +677,9 @@ const SECTION_PERMISSION = {
   // acciones en Pedidos puedan disparar un correo automático configurado acá).
   correos:       'manageSettings',
   'notificaciones-push': 'manageSettings',
+  // Pedidos mayoristas: fija precios y aprueba cuentas mayoristas. Exclusivo
+  // del Super Admin titular (además se bloquea por correo en switchSection).
+  mayoristas:    'manageSettings',
   // Apariencia: cambia el esquema de colores de TODA la plataforma (o del
   // panel) — mismo criterio de sensibilidad que Configuración/Correos.
   apariencia:    'manageSettings',
@@ -731,6 +736,10 @@ function switchSection(target) {
     toast('Flujo de conexiones es exclusivo de Super Admin');
     target = 'dashboard';
   }
+  if (target === 'mayoristas' && (currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN)) {
+    toast('Pedidos mayoristas es exclusivo de Super Admin');
+    target = 'dashboard';
+  }
   // IMPORTANTE: se consultan en vivo (no las NodeList estáticas navItems /
   // sections capturadas al cargar el módulo). Módulos que se inicializan
   // después — p. ej. control-bienvenida-admin.js agrega la sección "Mensaje de
@@ -776,6 +785,7 @@ function switchSection(target) {
   if (target === 'permisos') loadPermisosSection();
   if (target === 'apariencia') loadApariencia();
   if (target === 'paginas') window.TintinPagesAdminRefresh?.();
+  if (target === 'mayoristas') window.TintinWholesaleAdminRefresh?.();
 }
 
 navItems.forEach(btn => {
@@ -1260,6 +1270,7 @@ async function startAdminAuthGuard() {
       if (role === 'superadmin' && String(user.email || '').trim().toLowerCase() === SUPER_ADMIN.toLowerCase()) {
         initSiteDiagnostics({ role });
         initConnectionsFlow({ role });
+        initWholesaleAdmin();
       }
       startAdminSettingsRealtime();
       adminRealtimeAuthRecoveryAttempted = false;
@@ -1334,6 +1345,9 @@ function setupPermissions(role) {
       el.style.display = 'none';
     });
     document.querySelectorAll('[data-section="flujo-conexiones"]').forEach(el => {
+      el.style.display = 'none';
+    });
+    document.querySelectorAll('[data-section="mayoristas"]').forEach(el => {
       el.style.display = 'none';
     });
   }

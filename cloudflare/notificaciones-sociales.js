@@ -233,7 +233,8 @@ function pushTypeForAdminNotification(record = {}) {
   if (kind.includes('reply_like')) return 'social.like.reply';
   if (kind.includes('product_like')) return 'social.like.product';
   if (kind.includes('review_created')) return 'social.review.created';
-  if (kind === 'order_created' || kind === 'new_order') return 'order.created';
+  // Una cotización mayorista nueva suena y se presenta como un pedido nuevo.
+  if (kind === 'order_created' || kind === 'new_order' || kind === 'wholesale_quote_created') return 'order.created';
   if (kind === 'order_confirmed' || kind === 'payment_completed') return 'payment.completed';
   if (kind === 'user_joined' || kind === 'profile_created') return 'admin.user.joined';
   if (kind === 'user_login') return 'admin.user.login';

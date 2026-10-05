@@ -16,7 +16,7 @@ body:has(.adm-main) .adm-sidebar-toggle svg { transition: transform 160ms ease; 
 html.adm-sidebar-auto .adm-sidebar-toggle svg { transform: rotate(180deg); }
 body:has(.adm-main) .adm-nav { padding: 10px 8px; }
 body:has(.adm-main) .adm-nav-item {
-  min-height: 46px; border-radius: 12px; margin-block: 3px; overflow: hidden;
+  min-height: 46px; border-radius: 12px; margin-block: 3px; margin-inline: 0; overflow: hidden;
   overflow-wrap: normal; word-break: normal; white-space: nowrap;
 }
 body:has(.adm-main) .adm-nav-item:hover {
@@ -27,6 +27,7 @@ body:has(.adm-main) .adm-nav-item.active {
 }
 body:has(.adm-main) .adm-nav-icon { border-radius: 10px; background: var(--admin-color-brand); flex: 0 0 32px; }
 body:has(.adm-main) .adm-nav-item:focus-visible { outline: 2px solid var(--admin-color-brand); outline-offset: -2px; }
+html body:has(.adm-main) #adm-sidebar .adm-nav-item { margin-inline: 0; }
 @media (min-width: 541px) {
   body:has(.adm-main) .adm-sidebar { width: 260px; }
   body:has(.adm-main) .adm-main { margin-left: 260px; transition: margin-left 160ms ease; }

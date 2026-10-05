@@ -246,8 +246,7 @@ function tintinRecordSyncSafely_(status, sheetName, cell, detail) {
 }
 
 function tintinCallProductsWebhook_(payload) {
-  var secret = String(PropertiesService.getScriptProperties().getProperty('SHEETS_ENGAGEMENT_SECRET') || '');
-  if (!secret) throw new Error('Falta SHEETS_ENGAGEMENT_SECRET en Propiedades del script.');
+  var secret = tintinWebhookSecret_(TINTIN_PRODUCTS_WEBHOOK_PATH);
   var response = UrlFetchApp.fetch(tintinStoreOrigin_() + TINTIN_PRODUCTS_WEBHOOK_PATH, {
     method: 'post',
     contentType: 'application/json',
@@ -799,8 +798,19 @@ function tintinProbarEdicionCatalogo() {
   }
 }
 
-function tintinWebhookSecret_() {
-  var secret = String(PropertiesService.getScriptProperties().getProperty('SHEETS_ENGAGEMENT_SECRET') || '');
+// Cada webhook sensible de la tienda acepta su propio secreto (ver
+// cloudflare/secretos-sheets.js). Si la propiedad dedicada no existe se usa el
+// secreto compartido, igual que hace Cloudflare, para migrar sin cortes.
+var TINTIN_WEBHOOK_SECRET_PROPERTIES = {
+  '/api/sheets-admin-webhook': 'SHEETS_ADMIN_WEBHOOK_SECRET',
+  '/api/sheets-products-webhook': 'SHEETS_PRODUCTS_WEBHOOK_SECRET',
+  '/api/sheets-sync-snapshot': 'SHEETS_SNAPSHOT_SECRET'
+};
+
+function tintinWebhookSecret_(path) {
+  var properties = PropertiesService.getScriptProperties();
+  var dedicatedName = TINTIN_WEBHOOK_SECRET_PROPERTIES[path] || '';
+  var secret = String((dedicatedName && properties.getProperty(dedicatedName)) || properties.getProperty('SHEETS_ENGAGEMENT_SECRET') || '');
   if (!secret) throw new Error('Falta SHEETS_ENGAGEMENT_SECRET en Propiedades del script.');
   return secret;
 }
@@ -808,7 +818,7 @@ function tintinWebhookSecret_() {
 function tintinCallInternalWebhook_(path, payload) {
   var response = UrlFetchApp.fetch(tintinStoreOrigin_() + path, {
     method: 'post', contentType: 'application/json', muteHttpExceptions: true,
-    headers: { 'X-Tintin-Sheets-Secret': tintinWebhookSecret_() },
+    headers: { 'X-Tintin-Sheets-Secret': tintinWebhookSecret_(path) },
     payload: JSON.stringify(payload)
   });
   var body = tintinParseJsonResponse_(response);
@@ -1033,6 +1043,7 @@ function doPost(e) {
     var orderSyncResponse = tintinParityHandleServerOrderSync_(body);
     if (orderSyncResponse) return orderSyncResponse;
   }
+  if (body.action === 'syncWholesaleQuote' && typeof tintinHandleWholesaleSync_ === 'function') return tintinHandleWholesaleSync_(body);
   if (body.action === 'syncEngagement' && typeof tintinHandleEngagement_ === 'function') return tintinHandleEngagement_(body);
   if (body.action === 'syncEngagementBatch' && typeof tintinHandleEngagementBatch_ === 'function') return tintinHandleEngagementBatch_(body);
   return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'Acción no permitida' })).setMimeType(ContentService.MimeType.JSON);
