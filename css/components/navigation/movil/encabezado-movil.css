@@ -48,11 +48,16 @@
   #tt-tabbar .tt-tabbar-avatar {
     width:23px !important;
     height:23px !important;
+    inline-size:23px !important;
+    block-size:23px !important;
+    flex:0 0 auto;
     transition:transform .34s cubic-bezier(.2,.85,.2,1),color .2s ease;
   }
 
   #tt-tabbar .tt-tabbar-avatar {
-    border-radius:7px !important;
+    border-radius:50% !important;
+    object-position:center;
+    display:block;
     object-fit:cover !important;
   }
 
@@ -92,6 +97,8 @@
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-avatar {
     width:24px !important;
     height:24px !important;
+    inline-size:24px !important;
+    block-size:24px !important;
   }
 
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn.active svg,
