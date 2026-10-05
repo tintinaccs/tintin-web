@@ -9,9 +9,12 @@
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { authenticatedFetch, apiFailureMessage } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { withDeadline } from '../../core/auth/estado-perfil-sesion.mjs?v=tintin-20261001-fusion-main-1';
 import { collection, limit, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const MAX_LINES = 60;
+const NETWORK_DEADLINE_MS = 15000;
+let catalogRequest = null;
 const STATUS_COPY = {
   pendiente: ['En revisión', '#b7791f'],
   aprobada: ['Confirmada', '#2f855a'],
@@ -42,6 +45,8 @@ const state = {
   requestId: '',
   sending: false,
   unsubscribe: null,
+  generation: 0,
+  submission: null,
 };
 
 function newRequestId() {
@@ -56,18 +61,29 @@ function dateText(value) {
 
 async function loadCatalog() {
   if (state.catalog) return state.catalog;
-  const response = await fetch('/api/public-catalog?resource=products', { headers: { accept: 'application/json' } });
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok || body.ok !== true || !Array.isArray(body.items)) throw new Error('catalog_unavailable');
-  state.catalog = body.items
-    .map(item => ({
-      id: item.id,
-      name: String(item.data?.name || item.data?.title || '').trim(),
-      price: Number(item.data?.price) || 0,
-      image: String(item.data?.imageUrl || item.data?.image || '').trim(),
-    }))
-    .filter(item => item.id && item.name);
-  return state.catalog;
+  if (catalogRequest) return catalogRequest;
+  const controller = new AbortController();
+  catalogRequest = withDeadline((async () => {
+    const response = await fetch('/api/public-catalog?resource=products', { headers: { accept: 'application/json' }, signal: controller.signal });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok || body.ok !== true || !Array.isArray(body.items)) throw new Error('catalog_unavailable');
+    const catalog = body.items
+      .map(item => ({
+        id: item.id,
+        name: String(item.data?.name || item.data?.title || '').trim(),
+        price: Number(item.data?.price) || 0,
+        image: String(item.data?.imageUrl || item.data?.image || '').trim(),
+      }))
+      .filter(item => item.id && item.name);
+    return catalog;
+  })(), NETWORK_DEADLINE_MS).then(catalog => {
+    state.catalog = catalog;
+    return catalog;
+  }).finally(() => {
+    controller.abort();
+    catalogRequest = null;
+  });
+  return catalogRequest;
 }
 
 function root() {
@@ -111,11 +127,7 @@ function render() {
 
 function quotesHtml() {
   if (!state.quotes.length) return '<p style="margin:0;font-size:13px;color:var(--text-muted)">Todavía no enviaste cotizaciones.</p>';
-  const approved = state.quotes.some(quote => quote.status === 'aprobada');
-  const banner = approved
-    ? '<p style="margin:0 0 10px;padding:10px 12px;border-radius:10px;background:rgba(47,133,90,.1);color:#276749;font-size:13px;font-weight:600">Sos mayorista aprobada de Tintin. Podés pedir nuevas cotizaciones cuando quieras.</p>'
-    : '';
-  return banner + state.quotes.map(quote => {
+  return state.quotes.map(quote => {
     const [label, tone] = STATUS_COPY[quote.status] || [quote.status, 'inherit'];
     const items = Array.isArray(quote.items) ? quote.items : [];
     const priced = quote.status === 'aprobada';
@@ -171,9 +183,20 @@ function message(text, tone = 'muted') {
 function bindForm(container) {
   const form = container.querySelector('[data-wholesale-form]');
   const search = container.querySelector('[data-wholesale-search]');
-  search.addEventListener('focus', () => { loadCatalog().catch(() => message('No pudimos cargar el catálogo. Probá de nuevo en un momento.', 'error')); }, { once: true });
+  search.addEventListener('focus', () => {
+    const generation = state.generation;
+    loadCatalog().catch(() => {
+      if (generation === state.generation) message('No pudimos cargar el catálogo. Probá de nuevo en un momento.', 'error');
+    });
+  }, { once: true });
   search.addEventListener('input', async () => {
-    try { await loadCatalog(); } catch { return; }
+    const generation = state.generation;
+    try { await loadCatalog(); } catch {
+      if (generation === state.generation) message('No pudimos cargar los productos. Volvé a buscar para reintentar.', 'error');
+      return;
+    }
+    if (generation !== state.generation) return;
+    message('');
     renderResults(search.value);
   });
   container.querySelector('[data-wholesale-results]').addEventListener('click', event => {
@@ -207,28 +230,37 @@ function bindForm(container) {
 
 async function submit(form) {
   if (state.sending) return;
+  if (!state.user) { message(ERROR_COPY.authentication_required, 'error'); return; }
   if (!state.lines.length) { message(ERROR_COPY.empty_quote, 'error'); return; }
   if (state.lines.some(line => !Number.isInteger(line.qty) || line.qty < 1 || line.qty > 9999)) { message(ERROR_COPY.invalid_line, 'error'); return; }
   const data = new FormData(form);
   state.requestId ||= newRequestId();
   state.sending = true;
+  const generation = state.generation;
+  const controller = new AbortController();
+  state.submission = controller;
   const button = form.querySelector('[type="submit"]');
   button.disabled = true;
   message('Enviando tu cotización…');
   try {
-    const response = await authenticatedFetch('/api/wholesale-quote', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        requestId: state.requestId,
-        businessName: String(data.get('businessName') || ''),
-        whatsapp: String(data.get('whatsapp') || ''),
-        city: String(data.get('city') || ''),
-        notes: String(data.get('notes') || ''),
-        items: state.lines.map(line => ({ id: line.id, qty: line.qty, variant: line.variant.trim() })),
-      }),
-    });
-    const body = await response.json().catch(() => ({}));
+    const { response, body } = await withDeadline((async () => {
+      const response = await authenticatedFetch('/api/wholesale-quote', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          requestId: state.requestId,
+          businessName: String(data.get('businessName') || ''),
+          whatsapp: String(data.get('whatsapp') || ''),
+          city: String(data.get('city') || ''),
+          notes: String(data.get('notes') || ''),
+          items: state.lines.map(line => ({ id: line.id, qty: line.qty, variant: line.variant.trim() })),
+        }),
+      });
+      const body = await response.json().catch(() => ({}));
+      return { response, body };
+    })(), NETWORK_DEADLINE_MS);
+    if (generation !== state.generation) return;
     if (!response.ok || body.ok !== true) {
       message(ERROR_COPY[body.error] || apiFailureMessage(response, 'No pudimos enviar la cotización. Probá de nuevo.'), 'error');
       return;
@@ -239,9 +271,14 @@ async function submit(form) {
     renderLines();
     message(`¡Listo! Recibimos tu cotización ${body.quoteNumber || ''}. Te avisamos cuando tengamos los precios.`, 'ok');
   } catch (error) {
+    if (generation !== state.generation) return;
     message(error?.code === 'auth/missing-user' ? ERROR_COPY.authentication_required : 'No pudimos enviar la cotización. Revisá tu conexión.', 'error');
   } finally {
-    state.sending = false;
+    controller.abort();
+    if (generation === state.generation) {
+      state.sending = false;
+      state.submission = null;
+    }
     button.disabled = false;
   }
 }
@@ -251,8 +288,10 @@ function watchQuotes(user) {
   state.unsubscribe = null;
   state.quotes = [];
   if (!user) return;
+  const generation = state.generation;
   const quotesQuery = query(collection(db, 'wholesaleQuotes'), where('userId', '==', user.uid), limit(50));
   state.unsubscribe = onSnapshot(quotesQuery, snapshot => {
+    if (generation !== state.generation) return;
     state.quotes = snapshot.docs
       .map(document => ({ id: document.id, ...document.data() }))
       .sort((a, b) => String(b.quoteNumber || '').localeCompare(String(a.quoteNumber || '')));
@@ -268,12 +307,20 @@ function start() {
     if (snapshot.status === AUTH_STATES.RESTORING || snapshot.status === AUTH_STATES.UNKNOWN) return;
     const user = snapshot.user || null;
     if (user?.uid === state.user?.uid) return;
+    state.generation += 1;
+    state.submission?.abort();
+    state.submission = null;
+    state.lines = [];
+    state.requestId = '';
+    state.sending = false;
+    watchQuotes(null);
     state.user = user;
     card.hidden = !user;
-    if (!user) { watchQuotes(null); return; }
+    if (!user) return;
     render();
+    const generation = state.generation;
     void Promise.resolve(appCheckReady).catch(() => false).then(() => {
-      if (getSessionUser()?.uid === user.uid) watchQuotes(user);
+      if (generation === state.generation && getSessionUser()?.uid === user.uid) watchQuotes(user);
     });
   });
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "75f0295ecfd49e01e647280884e3098ea7e132c9d31c7744c8da8b2554e49b9f",
+  "sourceFingerprint": "b65ad03a6e66e1031b4f470f975cdbda087682b9ad85921aca0ff75e8c586353",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1017,
-    "textFiles": 971,
-    "totalBytes": 18863607,
+    "files": 1019,
+    "textFiles": 973,
+    "totalBytes": 18876808,
     "pages": 19,
-    "modules": 713
+    "modules": 715
   },
   "viewports": [
     {
@@ -14306,8 +14306,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 47753,
-      "sha256": "362e81e71ffeb625ebb4e97d6e29f698ebb3b34fc9e3888f693afa785c4ca002",
+      "bytes": 47773,
+      "sha256": "cb23c2cf282629826408dd1c50cde5ca1bdc5832bb8255fba0accaf242cabd17",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14393,7 +14393,7 @@
           "line": 775
         },
         {
-          "raw": "js/pages/profile/mayorista-perfil.js?v=tintin-20261005-mayoristas-1-profile-wholesale-20261005-1",
+          "raw": "js/pages/profile/mayorista-perfil.js?v=tintin-20261005-mayoristas-1-profile-wholesale-20261005-1-critical-closeout-1",
           "target": "js/pages/profile/mayorista-perfil.js",
           "line": 776
         },
@@ -14804,7 +14804,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/profile/mayorista-perfil.js?v=tintin-20261005-mayoristas-1-profile-wholesale-20261005-1",
+          "raw": "js/pages/profile/mayorista-perfil.js?v=tintin-20261005-mayoristas-1-profile-wholesale-20261005-1-critical-closeout-1",
           "target": "js/pages/profile/mayorista-perfil.js",
           "line": 776,
           "exists": true
@@ -27328,8 +27328,8 @@
     },
     {
       "path": "js/pages/profile/mayorista-perfil.js",
-      "bytes": 15831,
-      "sha256": "682c4eef5bd85cd308aee7c329fd320ffe57a957b82b5fd917703257c634ef1e",
+      "bytes": 17328,
+      "sha256": "b1d3c7d0b70c7d7ffb33a33d98eb2a0cc8bee2c386efec74598c279d3e5226bb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27354,16 +27354,22 @@
           "line": 11
         },
         {
+          "raw": "../../core/auth/estado-perfil-sesion.mjs?v=tintin-20261001-fusion-main-1",
+          "target": "js/core/auth/estado-perfil-sesion.mjs",
+          "dynamic": false,
+          "line": 12
+        },
+        {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 12
+          "line": 13
         }
       ]
     },
@@ -36455,6 +36461,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/profile/wholesale-session-recovery.spec.js",
+      "bytes": 2893,
+      "sha256": "6ecbe366472486d1badca7394bac7715694d09b41592cf248edea7ac8a32c027",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/public-commerce/closeout-contracts.test.mjs",
       "bytes": 3661,
       "sha256": "6281b71987527df8da5e0036f3a16141551b992c4191463cc985050e765272fb",
@@ -38393,6 +38410,48 @@
       ]
     },
     {
+      "path": "tests/wholesale/profile-session-recovery.test.mjs",
+      "bytes": 5704,
+      "sha256": "1ff46a33a33bbdf4cfe3a7d8933831e0c7240030c5df820d2b32049a31d53306",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../js/core/auth/estado-perfil-sesion.mjs",
+          "target": "js/core/auth/estado-perfil-sesion.mjs",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tienda.js",
       "bytes": 108302,
       "sha256": "8df4c98319053fd848b25c5257f8f5c2cbc236cbab60a80c0a1f9e8e5c201a77",
@@ -38482,8 +38541,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 6208,
-      "sha256": "eac7750e709c6fc7e6b53fa071b0366ecfd5f01b1f27ffd90dd89806f6b05c14"
+      "bytes": 6355,
+      "sha256": "f8fbc8b5477e19ca88201a8ad2c80e6135fc838b32a71a34756ed3fe6adf3463"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -39730,8 +39789,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 233054,
-      "sha256": "d20586647a30d0c0eee2f5e6d4f8b9599a51cdb16d154975554230740c84d5a1"
+      "bytes": 235974,
+      "sha256": "e3f44d732e61ddd99517f04e34513cea8ffc7b913145f6ec67d2edd12e8636e5"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41992,8 +42051,8 @@
     {
       "path": "js/pages/profile/mayorista-perfil.js",
       "extension": ".js",
-      "bytes": 15831,
-      "sha256": "682c4eef5bd85cd308aee7c329fd320ffe57a957b82b5fd917703257c634ef1e"
+      "bytes": 17328,
+      "sha256": "b1d3c7d0b70c7d7ffb33a33d98eb2a0cc8bee2c386efec74598c279d3e5226bb"
     },
     {
       "path": "js/pages/profile/pedidos-perfil.js",
@@ -42340,8 +42399,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 47753,
-      "sha256": "362e81e71ffeb625ebb4e97d6e29f698ebb3b34fc9e3888f693afa785c4ca002"
+      "bytes": 47773,
+      "sha256": "cb23c2cf282629826408dd1c50cde5ca1bdc5832bb8255fba0accaf242cabd17"
     },
     {
       "path": "playwright.config.js",
@@ -43198,8 +43257,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 63937,
-      "sha256": "23fbf4216e49ca2572c8b5562998fbb8599f73cf1f28c4e022b4b73a6ffc2fc1"
+      "bytes": 63957,
+      "sha256": "63724934db9976513e12be3a89d3c67d237950c8ca1b2840f2d83a8bcb1fae5f"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -44246,6 +44305,12 @@
       "sha256": "6d03eb453a6a168dfef267503c73795daee7c5a21b237205f33f69969e2cdc0e"
     },
     {
+      "path": "tests/profile/wholesale-session-recovery.spec.js",
+      "extension": ".js",
+      "bytes": 2893,
+      "sha256": "6ecbe366472486d1badca7394bac7715694d09b41592cf248edea7ac8a32c027"
+    },
+    {
       "path": "tests/public-commerce/closeout-contracts.test.mjs",
       "extension": ".mjs",
       "bytes": 3661,
@@ -44556,6 +44621,12 @@
       "extension": ".mjs",
       "bytes": 12233,
       "sha256": "3c83ce74109ef4d9a196769a1bed16679bd6189bb10edbf8d75bda27d18b0295"
+    },
+    {
+      "path": "tests/wholesale/profile-session-recovery.test.mjs",
+      "extension": ".mjs",
+      "bytes": 5704,
+      "sha256": "1ff46a33a33bbdf4cfe3a7d8933831e0c7240030c5df820d2b32049a31d53306"
     },
     {
       "path": "tienda.js",
@@ -46356,7 +46427,7 @@
     },
     {
       "file": "js/pages/profile/mayorista-perfil.js",
-      "line": 59,
+      "line": 67,
       "target": "/api/public-catalog",
       "method": "GET"
     },
@@ -47900,7 +47971,7 @@
           },
           {
             "file": "js/pages/profile/mayorista-perfil.js",
-            "line": 254,
+            "line": 292,
             "operation": "collection"
           }
         ]
