@@ -11,8 +11,8 @@ const otpHandler = login.slice(login.indexOf("document.getElementById('btn-verif
 const subscriber = login.slice(login.indexOf('subscribeSession(async snapshot =>'), login.indexOf('// GOOGLE —'));
 const deferred = () => { let resolve, reject; const promise = new Promise((ok, fail) => { resolve = ok; reject = fail; }); return { promise, resolve, reject }; };
 
-function fixture() {
-  const redirect = deferred();
+function fixture({ popupBlocked = true } = {}) {
+  const redirect = deferred(), popup = deferred();
   const calls = { popup: 0, redirect: 0, finish: 0, show: 0, hide: 0, reveal: 0, errors: [], texts: [], timers: [], otp: 0 };
   const elements = new Map();
   const element = id => {
@@ -32,7 +32,7 @@ function fixture() {
     setOverlayText(value) { calls.texts.push(value); },
     showError(value) { calls.errors.push(value); }, errMsg: code => code, otpErrorMessage: code => code,
     googleIdleLabel: () => 'Continuar con Google',
-    signInWithPopup() { calls.popup++; throw new Error('Popup prohibido en este flujo'); },
+    signInWithPopup() { calls.popup++; if (popupBlocked) throw { code: 'auth/popup-blocked' }; return popup.promise; },
     signInWithRedirect: () => { calls.redirect++; return redirect.promise; },
     markGoogleRedirectPending() { calls.marked = true; }, clearGoogleRedirectPending() { calls.marked = false; },
     hasGoogleRedirectPending:()=>calls.marked===true,
@@ -42,14 +42,14 @@ function fixture() {
     subscribeSession(handler) { context.observer = handler; },
   });
   vm.runInContext(googleHandler + otpHandler + subscriber, context);
-  return { context, calls, redirect, element, google: () => element('btn-google').onclick(), otp: () => element('btn-verify-otp').onclick() };
+  return { context, calls, redirect, popup, element, google: () => element('btn-google').onclick(), otp: () => element('btn-verify-otp').onclick() };
 }
 
-test('Google abre sólo esta pestaña después de confirmar persistencia', async () => {
+test('Popup bloqueado redirige después de confirmar persistencia', async () => {
   const f=fixture(),persistence=deferred();
   f.context.authPersistenceReady=persistence.promise;
   const attempt=f.google();
-  assert.equal(f.calls.redirect,0);assert.equal(f.calls.popup,0);
+  assert.equal(f.calls.redirect,0);assert.equal(f.calls.popup,1);
   assert.equal(f.element('btn-google-label').textContent,'Abriendo Google…');
   persistence.resolve();await new Promise(resolve=>setImmediate(resolve));
   assert.equal(f.calls.redirect,1);assert.equal(f.calls.marked,true);
@@ -60,7 +60,7 @@ test('Google abre sólo esta pestaña después de confirmar persistencia', async
 test('doble clic y correo concurrente no abren otra operación', async () => {
   const f=fixture();const attempt=f.google();
   await f.google();await f.otp();await new Promise(resolve=>setImmediate(resolve));
-  assert.equal(f.calls.redirect,1);assert.equal(f.calls.popup,0);assert.equal(f.calls.otp,0);
+  assert.equal(f.calls.redirect,1);assert.equal(f.calls.popup,1);assert.equal(f.calls.otp,0);
   f.redirect.resolve();await attempt;
 });
 
@@ -90,7 +90,7 @@ for(const code of ['auth/network-request-failed','auth/unauthorized-domain','aut
   test(`${code} libera controles y limpia el retorno esperado`, async()=>{
     const f=fixture();const attempt=f.google();await new Promise(resolve=>setImmediate(resolve));
     f.redirect.reject({code});await attempt;
-    assert.equal(f.calls.popup,0);assert.equal(f.calls.hide,1);assert.equal(f.calls.marked,false);
+    assert.equal(f.calls.popup,1);assert.equal(f.calls.hide,1);assert.equal(f.calls.marked,false);
     assert.equal(f.element('btn-google').disabled,false);assert.deepEqual(f.calls.errors,[code]);
   });
 }
@@ -243,3 +243,21 @@ test('ubicación de Últimos datos tiene un solo dueño: un clic solicita geoloc
   assert.equal(locationCalls, 1);
   mounted.destroy();
 });
+
+test('popup conserva activación del clic y finaliza sin redirect ni carreras de sesión',async()=>{
+  const f=fixture({popupBlocked:false});const attempt=f.google();
+  assert.equal(f.calls.popup,1);assert.equal(f.calls.redirect,0);
+  await f.google();await f.otp();
+  await f.context.observer({status:'unauthenticated',user:null});
+  assert.equal(f.calls.hide,0);assert.equal(f.calls.otp,0);assert.equal(f.calls.popup,1);
+  f.popup.resolve({user:{uid:'popup-confirmed'}});await attempt;
+  assert.equal(f.calls.finish,1);assert.equal(f.calls.redirect,0);
+});
+for(const code of ['auth/popup-closed-by-user','auth/network-request-failed']){
+  test(`popup ${code} no dispara redirect`,async()=>{
+    const f=fixture({popupBlocked:false});const attempt=f.google();
+    f.popup.reject({code});await attempt;
+    assert.equal(f.calls.redirect,0);assert.equal(f.element('btn-google').disabled,false);
+    assert.deepEqual(f.calls.errors,[code]);assert.equal(f.calls.finish,0);
+  });
+}
