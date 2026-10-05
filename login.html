@@ -682,6 +682,27 @@ async function ensureProfileComplete(user, role, options = {}) {
     usernameStatus.dataset.state = state;
     usernameStatus.textContent = message;
   };
+  // Una consulta orientativa no debe bloquear el alta. El límite abarca
+  // token, petición y cuerpo; la reserva y las reglas siguen siendo autoridad.
+  const requestProfileAvailability = async (path, payload) => {
+    const controller = new AbortController();
+    try {
+      return await withDeadline((async () => {
+        const token = await user.getIdToken();
+        if (controller.signal.aborted) return { known: false };
+        const response = await fetch(path, {
+          method: 'POST', signal: controller.signal,
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        return response.ok && typeof result?.available === 'boolean'
+          ? { known: true, available: result.available } : { known: false };
+      })(), AUTH_NETWORK_DEADLINE_MS);
+    } catch { return { known: false }; }
+    finally { controller.abort(); }
+  };
+  const queryUsernameAvailability = raw => requestProfileAvailability('/api/username-availability', { username: normalizeUsername(raw) });
   const checkUsernameAvailability = async () => {
     const raw = usernameInput.value.trim();
     const requestId = ++usernameCheckSequence;
@@ -690,40 +711,22 @@ async function ensureProfileComplete(user, role, options = {}) {
     if (isReservedUsername(raw)) return setUsernameStatus('taken', 'Ese nombre no está disponible.');
 
     setUsernameStatus('checking', 'Comprobando disponibilidad…');
-    try {
-      const token = await user.getIdToken();
-      const response = await fetch('/api/username-availability', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: normalizeUsername(raw) }),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (requestId !== usernameCheckSequence) return;
-      if (!response.ok) throw new Error(result?.error || 'availability_failed');
-      setUsernameStatus(result.available ? 'available' : 'taken', result.available ? 'Disponible' : 'Ese nombre ya está en uso.');
-    } catch {
-      if (requestId === usernameCheckSequence) setUsernameStatus('unknown', 'Lo confirmaremos al continuar.');
-    }
+    const result = await queryUsernameAvailability(raw);
+    if (requestId !== usernameCheckSequence) return;
+    if (!result.known) return setUsernameStatus('unknown', 'Lo confirmaremos al continuar.');
+    setUsernameStatus(result.available ? 'available' : 'taken', result.available ? 'Disponible' : 'Ese nombre ya está en uso.');
   };
 
   const checkPhoneAvailability = async (rawPhone, country) => {
-    try {
-      const token = await user.getIdToken();
-      const response = await fetch('/api/phone-availability', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: rawPhone, country: country.code }),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) return { known: false };
-      return { known: true, available: result.available !== false };
-    } catch {
-      return { known: false };
-    }
+    return requestProfileAvailability('/api/phone-availability', { phone: rawPhone, country: country.code });
   };
   if (plan.needsUsername) {
     usernameInput.addEventListener('input', () => {
       window.clearTimeout(usernameCheckTimer);
+      // Invalidar al escribir, antes del debounce: una respuesta del nombre
+      // anterior no puede pintar el estado del nuevo durante esos 360 ms.
+      usernameCheckSequence++;
+      setUsernameStatus('idle');
       const raw = usernameInput.value.trim();
       if (!raw || !isValidUsernameFormat(raw) || isReservedUsername(raw)) {
         void checkUsernameAvailability();
@@ -850,18 +853,7 @@ async function ensureProfileComplete(user, role, options = {}) {
       if (plan.needsPhone || (plan.needsUsername && usernameRaw)) {
         const [phoneAvailability, usernameAvailabilityResult] = await Promise.all([
           plan.needsPhone ? checkPhoneAvailability(phoneRaw, country) : Promise.resolve({ known: true, available: true }),
-          (plan.needsUsername && usernameRaw) ? (async () => {
-            try {
-              const token = await user.getIdToken();
-              const response = await fetch('/api/username-availability', {
-                method: 'POST',
-                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: normalizeUsername(usernameRaw) }),
-              });
-              const result = await response.json().catch(() => ({}));
-              return response.ok ? { known: true, available: result.available !== false } : { known: false };
-            } catch { return { known: false }; }
-          })() : Promise.resolve({ known: true, available: true }),
+          (plan.needsUsername && usernameRaw) ? queryUsernameAvailability(usernameRaw) : Promise.resolve({ known: true, available: true }),
         ]);
         let availabilityBlocked = false;
         if (phoneAvailability.known && !phoneAvailability.available) {
@@ -968,14 +960,7 @@ async function ensureProfileComplete(user, role, options = {}) {
           // otra cuenta, así que se avisan los dos campos posibles.
           const [phoneAvailability, usernameAvailabilityResult] = await Promise.all([
             plan.needsPhone ? checkPhoneAvailability(phoneRaw, country) : Promise.resolve({ known: true, available: true }),
-            (plan.needsUsername && usernameRaw) ? (async () => {
-              try {
-                const token = await user.getIdToken();
-                const response = await fetch('/api/username-availability', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ username: normalizeUsername(usernameRaw) }) });
-                const result = await response.json().catch(() => ({}));
-                return response.ok ? { known: true, available: result.available !== false } : { known: false };
-              } catch { return { known: false }; }
-            })() : Promise.resolve({ known: true, available: true }),
+            (plan.needsUsername && usernameRaw) ? queryUsernameAvailability(usernameRaw) : Promise.resolve({ known: true, available: true }),
           ]);
           if (phoneAvailability.known && !phoneAvailability.available) {
             setProfileFieldError('phone', `El teléfono ${phoneRaw} ya está registrado.`);
