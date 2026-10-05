@@ -9,7 +9,6 @@ import { renderSurfaceLayer } from './compartido/capas-paneles.js?v=tintin-20260
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261004-header-consistency-2';
 import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261005-auth-loader-1';
-import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js?v=tintin-20260916-final-production-stability-footer-1';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1';
 import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260815-global-studio-10-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1';
@@ -32,6 +31,23 @@ const LEGACY_SHELL_IDS = Object.freeze([
 ]);
 
 let mountPromise = null;
+
+// El pie de escritorio ya muestra todos los enlaces. Descargar el acordeón
+// sólo cuando corresponde evita una solicitud sin uso en cada visita desktop,
+// y conserva su activación al cambiar la ventana a un tamaño móvil.
+const mobileFooterLayout = window.matchMedia('(max-width: 480px)');
+let footerModulePromise = null;
+function enhanceMobileFooter() {
+  if (!mobileFooterLayout.matches) return;
+  if (!footerModulePromise) {
+    footerModulePromise = import('./compartido/acordeon-pie-pagina.js?v=tintin-20260916-final-production-stability-footer-1');
+  }
+  return footerModulePromise.then(module => module.enhanceMobileFooter()).catch(error => {
+    footerModulePromise = null;
+    console.warn('[PublicShell] No se pudo iniciar el acordeón del pie.', error);
+  });
+}
+mobileFooterLayout.addEventListener('change', () => enhanceMobileFooter());
 
 function bootGlobalUiUx() {
   if (!document.getElementById('tt-phase8-ui-ux-css')) {
