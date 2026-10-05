@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f26b26f00f1af1fdd1ef73511092bd17db0f9fe3b0286b662f2d56ca585c2a37",
+  "sourceFingerprint": "7c760930e4a30e7aba8e5d4f6b3e23230484d6ef4bab60220d44eb69590cc01c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1003,
     "textFiles": 962,
-    "totalBytes": 18628851,
+    "totalBytes": 18634629,
     "pages": 19,
     "modules": 706
   },
@@ -2134,8 +2134,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 198119,
-      "sha256": "632aa29ac63934d6431df25751906472cb852cbf9b38ec18949d75947eb2b896",
+      "bytes": 198115,
+      "sha256": "8493bca86c8783d7ff522c0c508c992a0ddb2051cdbb00be2c476b7aa8065611",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2306,7 +2306,7 @@
           "line": 36
         },
         {
-          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-flow-progress-1",
+          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-readiness-2",
           "target": "css/admin/sidebar-interaccion.css",
           "line": 37
         },
@@ -2610,7 +2610,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-flow-progress-1",
+          "raw": "css/admin/sidebar-interaccion.css?v=tintin-20261005-readiness-2",
           "target": "css/admin/sidebar-interaccion.css",
           "line": 37,
           "exists": true
@@ -27817,8 +27817,8 @@
     },
     {
       "path": "scripts/auditar-admin-visual-parte-2f-v3.mjs",
-      "bytes": 13914,
-      "sha256": "30bb6de1729d991ec49a30dd790084978a83225186921640a5b09f2472c284b3",
+      "bytes": 14915,
+      "sha256": "676034d49f4d9846599946f86a02539973f227e36b528d0c293adf2623e6d507",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27866,7 +27866,7 @@
         },
         {
           "url": "https://cdn.example.com/ruta/muy/larga/imagen-tintin-$%7Bi+1%7D.webp",
-          "line": 176
+          "line": 192
         }
       ]
     },
@@ -30270,8 +30270,8 @@
     },
     {
       "path": "scripts/auditar-shopify-phase2-contract.mjs",
-      "bytes": 2909,
-      "sha256": "ae18be097b8178f8e11949a788cf12b76cff3d512f9fbdba2506604e949216cf",
+      "bytes": 2913,
+      "sha256": "84907fbe39e04c3d8fc855c8407df0a0547eb6ef21d3dfac93444251b9ca7fa5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37376,8 +37376,8 @@
     },
     {
       "path": "tests/ui-ux/admin-sidebar-interaction.spec.js",
-      "bytes": 6262,
-      "sha256": "09476271356f377aaa27c924e4eff0aceca1c648d759618806a90be0989ff38e",
+      "bytes": 6342,
+      "sha256": "987ae92df543634358ada09d79faeed3a4d8b72cc9470d6e5a2264ea14caec65",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38377,100 +38377,10 @@
       "sha256": "a522599c625e5847c89736134cb97f72a015869022663d85cb0976a87ff4b46d"
     },
     {
-      "path": "COMMENTS_AND_NOTIFICATIONS_ARCHITECTURE_2026-09-17.md",
-      "extension": ".md",
-      "bytes": 5299,
-      "sha256": "68001b5ea52655a4ae4a8dc9b975e0cbb52b75c00badc0cbd319ab268d30afa3"
-    },
-    {
-      "path": "COMMENTS_AND_NOTIFICATIONS_AUDIT_2026-09-17.md",
-      "extension": ".md",
-      "bytes": 4080,
-      "sha256": "b84cfeda362b1ceabb5f82935d515305b945ae8d21972e928e0af7e58f31fcbb"
-    },
-    {
-      "path": "FINAL_PRODUCTION_CLOSURE_2026-09-17.md",
-      "extension": ".md",
-      "bytes": 8871,
-      "sha256": "082afcad4cff6c3786a1b52e29bb77635a2d0d5f15308becf503f150c012d033"
-    },
-    {
-      "path": "FLOW_CONNECTIONS_PRODUCTION_AUDIT_2026-09-17.md",
-      "extension": ".md",
-      "bytes": 5294,
-      "sha256": "e709a303cf7981b08833ae8353cc2afb5f7f7896f4a3a289bda39c02d1bd64eb"
-    },
-    {
-      "path": "FRONTEND_VISUAL_AUDIT.md",
-      "extension": ".md",
-      "bytes": 9167,
-      "sha256": "922e724e81a87ad46faf0bb5eefb6636a5d52c0a0ef0ec3c5256e5c274a481e8"
-    },
-    {
-      "path": "FRONTEND_VISUAL_FINAL_STATUS.md",
-      "extension": ".md",
-      "bytes": 1481,
-      "sha256": "4e9891bacd485960a19a98866479de93d1464950139eacab0b996a025aee5c5f"
-    },
-    {
-      "path": "FULL_JOURNEY_CODE_AUDIT.md",
-      "extension": ".md",
-      "bytes": 22614,
-      "sha256": "97952a75be4a9e68ea7da14964ba19b66a690a77432ed37bedd797dc620a3a07"
-    },
-    {
-      "path": "GLOBAL_SESSION_RESTORE_AUDIT_2026-09-18.md",
-      "extension": ".md",
-      "bytes": 7176,
-      "sha256": "3e1c660b7ccd813a29c61f4bc08208ba1c37438ee9b013d67b2ece752562bfe8"
-    },
-    {
-      "path": "HEADER_SYSTEM_AUDIT_2026-09-18.md",
-      "extension": ".md",
-      "bytes": 12182,
-      "sha256": "81797dd1b0d454723ffb1df09e31ef683c939ef0368dad5537b66dd0c28696bf"
-    },
-    {
-      "path": "PREMIUM_PERFORMANCE_AUDIT.md",
-      "extension": ".md",
-      "bytes": 5367,
-      "sha256": "31fd7b13b0a36d649592718a62fe5c7439508c15c944a8d8c9a1cf9b34cf9d4d"
-    },
-    {
-      "path": "PRODUCT_LCP_SURGICAL_AUDIT.md",
-      "extension": ".md",
-      "bytes": 8785,
-      "sha256": "94b222bfe57784f77b99dff4f89889b6087de53bd79197e1f5e4dbd32a8b1867"
-    },
-    {
       "path": "README.md",
       "extension": ".md",
       "bytes": 1104,
       "sha256": "cab74b29dfffe152abfd26442dbad4d774a7cd9bb5b460a7d270188dd993cb05"
-    },
-    {
-      "path": "SHOPIFY_CATALOG_MIGRATION_ARCHITECTURE.md",
-      "extension": ".md",
-      "bytes": 5199,
-      "sha256": "ff9d8e0ad055b971eea891b8e364bf293e326ef34566be9dce042464638ae6f2"
-    },
-    {
-      "path": "SHOPIFY_MIGRATION_RUNBOOK_2026-09-18.md",
-      "extension": ".md",
-      "bytes": 1801,
-      "sha256": "632bc5d91a7159c54a9ab8f6342fbd7d1a1fb8c11bbc7c4c41f1d3378f9b55ef"
-    },
-    {
-      "path": "SHOPIFY_PHASE2_AUDIT_2026-09-18.md",
-      "extension": ".md",
-      "bytes": 6432,
-      "sha256": "cfc7d5cceca918567fa81bf3119bbaa519d8f4b68e4b267c0e3ae2926135df7b"
-    },
-    {
-      "path": "SUPER_ADMIN_AUDIT_2026-09-17.md",
-      "extension": ".md",
-      "bytes": 10867,
-      "sha256": "d0b7f5779dc4769b99310932dc5cb7e856f7021e8ceeb8a132df5bf4b7a937d0"
     },
     {
       "path": "_routes.json",
@@ -38499,8 +38409,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 198119,
-      "sha256": "632aa29ac63934d6431df25751906472cb852cbf9b38ec18949d75947eb2b896"
+      "bytes": 198115,
+      "sha256": "8493bca86c8783d7ff522c0c508c992a0ddb2051cdbb00be2c476b7aa8065611"
     },
     {
       "path": "apple-touch-icon.png",
@@ -38561,6 +38471,18 @@
       "extension": ".gs",
       "bytes": 11527,
       "sha256": "00592ea91fce0181d85cb03e21d56ec1f309d987715e635da9176e46d4409cbb"
+    },
+    {
+      "path": "arquitectura-comentarios-notificaciones-2026-09-17.md",
+      "extension": ".md",
+      "bytes": 5299,
+      "sha256": "68001b5ea52655a4ae4a8dc9b975e0cbb52b75c00badc0cbd319ab268d30afa3"
+    },
+    {
+      "path": "arquitectura-migracion-catalogo-shopify.md",
+      "extension": ".md",
+      "bytes": 5199,
+      "sha256": "ff9d8e0ad055b971eea891b8e364bf293e326ef34566be9dce042464638ae6f2"
     },
     {
       "path": "assets-tintin/fonts/OFL-1.1.txt",
@@ -38785,6 +38707,66 @@
       "sha256": "1552438a3a45db43297f6cf58133d288c8c8943e662c1cf046a98a9a0707d7bb"
     },
     {
+      "path": "auditoria-codigo-recorrido-completo.md",
+      "extension": ".md",
+      "bytes": 22614,
+      "sha256": "97952a75be4a9e68ea7da14964ba19b66a690a77432ed37bedd797dc620a3a07"
+    },
+    {
+      "path": "auditoria-comentarios-notificaciones-2026-09-17.md",
+      "extension": ".md",
+      "bytes": 4080,
+      "sha256": "b84cfeda362b1ceabb5f82935d515305b945ae8d21972e928e0af7e58f31fcbb"
+    },
+    {
+      "path": "auditoria-conexiones-produccion-2026-09-17.md",
+      "extension": ".md",
+      "bytes": 5294,
+      "sha256": "e709a303cf7981b08833ae8353cc2afb5f7f7896f4a3a289bda39c02d1bd64eb"
+    },
+    {
+      "path": "auditoria-lcp-producto.md",
+      "extension": ".md",
+      "bytes": 8785,
+      "sha256": "94b222bfe57784f77b99dff4f89889b6087de53bd79197e1f5e4dbd32a8b1867"
+    },
+    {
+      "path": "auditoria-rendimiento-premium.md",
+      "extension": ".md",
+      "bytes": 5367,
+      "sha256": "31fd7b13b0a36d649592718a62fe5c7439508c15c944a8d8c9a1cf9b34cf9d4d"
+    },
+    {
+      "path": "auditoria-restauracion-sesion-global-2026-09-18.md",
+      "extension": ".md",
+      "bytes": 7176,
+      "sha256": "3e1c660b7ccd813a29c61f4bc08208ba1c37438ee9b013d67b2ece752562bfe8"
+    },
+    {
+      "path": "auditoria-shopify-fase-2-2026-09-18.md",
+      "extension": ".md",
+      "bytes": 6432,
+      "sha256": "cfc7d5cceca918567fa81bf3119bbaa519d8f4b68e4b267c0e3ae2926135df7b"
+    },
+    {
+      "path": "auditoria-sistema-cabeceras-2026-09-18.md",
+      "extension": ".md",
+      "bytes": 12182,
+      "sha256": "81797dd1b0d454723ffb1df09e31ef683c939ef0368dad5537b66dd0c28696bf"
+    },
+    {
+      "path": "auditoria-super-admin-2026-09-17.md",
+      "extension": ".md",
+      "bytes": 10867,
+      "sha256": "d0b7f5779dc4769b99310932dc5cb7e856f7021e8ceeb8a132df5bf4b7a937d0"
+    },
+    {
+      "path": "auditoria-visual-frontend.md",
+      "extension": ".md",
+      "bytes": 9167,
+      "sha256": "922e724e81a87ad46faf0bb5eefb6636a5d52c0a0ef0ec3c5256e5c274a481e8"
+    },
+    {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
       "bytes": 14153,
@@ -38801,6 +38783,12 @@
       "extension": ".html",
       "bytes": 112851,
       "sha256": "845726f5fb8f94d06e7d5728c6c2d4206e656598193f67a46870115f6ab10f37"
+    },
+    {
+      "path": "cierre-produccion-2026-09-17.md",
+      "extension": ".md",
+      "bytes": 8871,
+      "sha256": "082afcad4cff6c3786a1b52e29bb77635a2d0d5f15308becf503f150c012d033"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -39129,8 +39117,8 @@
     {
       "path": "css/admin/sidebar-interaccion.css",
       "extension": ".css",
-      "bytes": 4720,
-      "sha256": "d08394376dd5fb0bb42d26d7e92456e217950242ba0bf77e76eb7fcc07069733"
+      "bytes": 5137,
+      "sha256": "6f4c7829f3ba48331f8c5348fa4528e94f73a4c1be7aa09978f0268ff6eac1bc"
     },
     {
       "path": "css/admin/visual-studio-global-admin.css",
@@ -39555,8 +39543,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 223198,
-      "sha256": "6c7398b8244ae7aabcb14a2b6214b8f0dd255654b4444925a03ba420d5497781"
+      "bytes": 227478,
+      "sha256": "1422b44458c5ea4c76b63975c4838f286bb146012393d0dca18058cf5363369f"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -39899,6 +39887,12 @@
       "extension": ".html",
       "bytes": 17572,
       "sha256": "6992b6ff187d19ef2d51b5333ec31c519317a45f3bd7bf46ed3e2facb6e02c1b"
+    },
+    {
+      "path": "estado-final-visual-frontend.md",
+      "extension": ".md",
+      "bytes": 1485,
+      "sha256": "f6935fa33223b45e82cdf07532ef1e773072b21283e490b11888bf76f24cc55b"
     },
     {
       "path": "favicon-16x16.png",
@@ -42100,13 +42094,13 @@
       "path": "package-lock.json",
       "extension": ".json",
       "bytes": 332089,
-      "sha256": "fc65978a30cdd12893d3ddf4a3856c217d8c8c2edb7e4bcf12effc2cb91c7c18"
+      "sha256": "f8c557d0f01b1824e96b96696ef216abca61187d3bac286f84f13cc1a600a2d6"
     },
     {
       "path": "package.json",
       "extension": ".json",
       "bytes": 14226,
-      "sha256": "3f4e8d1d1d5711658c5a89b0c26232fa5421dfd4aa051acb9ebbf510c753465b"
+      "sha256": "c39e0929c51e7a2c3735d13c407b00bff523abd01b82601f3c9764ee21f47aec"
     },
     {
       "path": "perfil.html",
@@ -42137,6 +42131,12 @@
       "extension": ".html",
       "bytes": 17920,
       "sha256": "52e91eb3ec9162e5960de5f38fc9f0707e6bfe7af814f5962f4c37b695b643ba"
+    },
+    {
+      "path": "procedimiento-migracion-shopify-2026-09-18.md",
+      "extension": ".md",
+      "bytes": 1801,
+      "sha256": "632bc5d91a7159c54a9ab8f6342fbd7d1a1fb8c11bbc7c4c41f1d3378f9b55ef"
     },
     {
       "path": "product.html",
@@ -42231,8 +42231,8 @@
     {
       "path": "scripts/auditar-admin-visual-parte-2f-v3.mjs",
       "extension": ".mjs",
-      "bytes": 13914,
-      "sha256": "30bb6de1729d991ec49a30dd790084978a83225186921640a5b09f2472c284b3"
+      "bytes": 14915,
+      "sha256": "676034d49f4d9846599946f86a02539973f227e36b528d0c293adf2623e6d507"
     },
     {
       "path": "scripts/auditar-app-check-arranque.js",
@@ -42825,8 +42825,8 @@
     {
       "path": "scripts/auditar-shopify-phase2-contract.mjs",
       "extension": ".mjs",
-      "bytes": 2909,
-      "sha256": "ae18be097b8178f8e11949a788cf12b76cff3d512f9fbdba2506604e949216cf"
+      "bytes": 2913,
+      "sha256": "84907fbe39e04c3d8fc855c8407df0a0547eb6ef21d3dfac93444251b9ca7fa5"
     },
     {
       "path": "scripts/auditar-shopify-redirects.mjs",
@@ -42963,8 +42963,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 62976,
-      "sha256": "6b3fb61849b334a59823358507c18f68731d640bcc310b8d24da4d04eaedfb33"
+      "bytes": 62972,
+      "sha256": "976445322b24dcd10b6dbb1b1cde3a8ac0cb227c8f484ba6d7f7a202661c49a0"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -44133,8 +44133,8 @@
     {
       "path": "tests/ui-ux/admin-sidebar-interaction.spec.js",
       "extension": ".js",
-      "bytes": 6262,
-      "sha256": "09476271356f377aaa27c924e4eff0aceca1c648d759618806a90be0989ff38e"
+      "bytes": 6342,
+      "sha256": "987ae92df543634358ada09d79faeed3a4d8b72cc9470d6e5a2264ea14caec65"
     },
     {
       "path": "tests/ui-ux/admin-white-icons.spec.js",

@@ -33,5 +33,5 @@ Desktop: header responsive validado por Playwright.
 - `css/components/navigation/tableta/encabezado-tableta.css`
 - `css/components/notifications/notificaciones-sociales.css`
 - `scripts/cache-version-baseline.json`
-- `FRONTEND_VISUAL_AUDIT.md`
-- `FRONTEND_VISUAL_FINAL_STATUS.md`
+- `auditoria-visual-frontend.md`
+- `estado-final-visual-frontend.md`

@@ -84,7 +84,7 @@ async function geometry(page) {
 
 async function prepareAdmin(page) {
   await loadStatic(page,'admin.html',`
-    #adm-sidebar,#adm-mobile-tabs,.adm-main{visibility:visible!important}
+    #adm-mobile-tabs,.adm-main{visibility:visible!important}
     .adm-section{display:none!important}.adm-section.active{display:block!important}
     .adm-overlay{display:none!important}
   `);
@@ -130,6 +130,22 @@ async function activate(page,section) {
 
 async function auditAdmin(page,viewport) {
   const sections=await prepareAdmin(page);
+  if (viewport.width <= 540) {
+    const sidebar = page.locator('#adm-sidebar');
+    if (await sidebar.isVisible()) failures.push({page:'admin',viewport:viewport.name,state:'sidebar-closed',message:'La barra móvil cerrada sigue visible tras restaurar Auth.'});
+    await page.evaluate(() => {
+      document.documentElement.classList.add('adm-mobile-sidebar-open');
+      document.getElementById('adm-sidebar').classList.add('open');
+    });
+    await page.waitForTimeout(30);
+    const openGeometry = await geometry(page);
+    if (!(await sidebar.isVisible()) || openGeometry.bad.length || openGeometry.controls.length) failures.push({page:'admin',viewport:viewport.name,state:'sidebar-open',message:'La barra móvil abierta no es accesible dentro del viewport.',result:openGeometry});
+    await page.evaluate(() => {
+      document.documentElement.classList.remove('adm-mobile-sidebar-open');
+      document.getElementById('adm-sidebar').classList.remove('open');
+    });
+    await page.waitForTimeout(30);
+  }
   if(sections.length<12) failures.push({page:'admin',viewport:viewport.name,state:'inventory',message:'Faltan secciones en el inventario.',data:sections});
   for(const section of sections) {
     await activate(page,section);
