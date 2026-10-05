@@ -205,7 +205,6 @@
 <script type="module">
 import { auth, db, provider, authPersistenceReady, inspectAuthPersistenceStorage } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import {
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   signOut
@@ -276,11 +275,9 @@ function reportLoginToSuperAdmin(user) {
   })();
 }
 
-// Se consulta siempre al cargar: normalmente devuelve null. Si el navegador
-// bloqueó el popup y Google tuvo que abrirse en esta misma pestaña, recupera
-// ese resultado antes de que el formulario de Login llegue a mostrarse.
+// Cuando Google regresa a esta pestaña, se recupera su resultado antes de
+// mostrar el formulario. La carga normal no inicia otra operación de acceso.
 const googleRedirectWasExpected = hasGoogleRedirectPending();
-const GOOGLE_POPUP_DEADLINE_MS = 120000;
 const AUTH_NETWORK_DEADLINE_MS = 15000;
 // Solo se consulta Firebase por un resultado de redirect cuando este navegador
 // realmente inició uno. La carga normal deja de esperar una red que no necesita.
@@ -290,6 +287,7 @@ const googleRedirectResultPromise = googleRedirectWasExpected
       .catch(error => ({ result: null, error }))
   : Promise.resolve({ result: null, error: null });
 let googleRedirectHandlingPromise = null;
+let googleRedirectHandledUserUid = null;
 let explicitLoginInProgress = googleRedirectWasExpected;
 
 // El loader de marca (logo Tintin, fondo rosa) es el mismo overlay de
@@ -1080,6 +1078,7 @@ async function handleGoogleRedirectReturn(observedUser) {
 
   const redirectUser = result?.user || (googleRedirectWasExpected ? observedUser : null);
   if (redirectUser) {
+    googleRedirectHandledUserUid = redirectUser.uid;
     explicitLoginInProgress = true;
     showOverlay();
     try {
@@ -1166,8 +1165,8 @@ subscribeSession(async snapshot => {
     const handledRedirect = await googleRedirectHandlingPromise;
     if (!currentSessionAttempt() || handledRedirect) return;
   } else {
-    await googleRedirectHandlingPromise;
-    if (!currentSessionAttempt()) return;
+    const handledRedirect = await googleRedirectHandlingPromise;
+    if (!currentSessionAttempt() || (handledRedirect && user?.uid === googleRedirectHandledUserUid)) return;
   }
 
   if (!user) {
@@ -1252,108 +1251,63 @@ subscribeSession(async snapshot => {
   }
 });
 
-// GOOGLE — primera opción de ingreso. El mismo botón sirve tanto
-// para crear la cuenta la primera vez como para iniciar sesión después.
-//
-// Elegir una cuenta es una interacción externa, no una carga de la página.
-// El formulario sigue visible mientras Google responde; el loader sólo cubre
-// la preparación posterior de la cuenta. Un popup sin respuesta devuelve
-// control con un plazo amplio, sin iniciar otro proveedor en paralelo.
-// El popup es la primera opción en todas las pantallas porque conserva la
-// sesión en el mismo origen de Tintin. Si un navegador lo bloquea, se cambia
-// automáticamente al redirect de Firebase en esa misma pestaña. El retorno
-// se procesa arriba una sola vez y nunca vuelve a lanzar Google en bucle.
-
+// GOOGLE — el selector se abre en esta misma pestaña. El proxy /__/auth/
+// conserva el origen de Firebase al volver; no dependemos de una ventana
+// emergente, su foco ni el sondeo de window.closed del SDK.
 let _googleLoginToken = 0;
+function releaseGoogleAttempt(message) {
+  clearGoogleRedirectPending();
+  explicitLoginInProgress = false;
+  const button = document.getElementById('btn-google');
+  button.disabled = false;
+  button.removeAttribute('aria-busy');
+  document.body.classList.remove('tt-login-busy');
+  document.getElementById('btn-google-label').textContent = googleIdleLabel();
+  hideLoginOverlay();
+  revealLoginSurface();
+  showError(message);
+}
+// Atrás puede recuperar el documento desde la caché del navegador sin volver
+// a ejecutar el módulo. En ese caso se abandona la espera local y se devuelve
+// el formulario; Firebase conserva la autoridad sobre cualquier sesión real.
+window.addEventListener('pageshow', event => {
+  if (!event.persisted || !hasGoogleRedirectPending()) return;
+  _googleLoginToken++;
+  loginSessionGeneration++;
+  releaseGoogleAttempt('El ingreso con Google no se completó. Podés volver a intentar o usar tu correo.');
+  window.dispatchEvent(new CustomEvent('tintin:login-cancelled'));
+});
 const loginConGoogle = async () => {
   if (explicitLoginInProgress) return;
   hideMessages();
   if (!loginPersistenceReady) {
-    showError('Estamos preparando el acceso seguro. Esperá un momento y probá de nuevo.');
+    showError('Todavía estamos preparando el acceso seguro. Esperá un instante y volvé a intentar.');
     return;
   }
   explicitLoginInProgress = true;
   loginSessionGeneration++;
   const googleButton = document.getElementById('btn-google');
-  // OJO: no usar `querySelector('span:last-child')` acá — dentro del botón
-  // el primer span que matchea :last-child en orden de documento es el ícono
-  // interno (.login-google-g, el que tiene el degradé de colores de Google),
-  // no el texto del botón. Eso pisaba la "G" con "Abriendo Google…"/"Entrando…"
-  // y como ese span mide 30x30px el texto largo se veía partido letra por
-  // letra y superpuesto con "Continuar con Google". El id evita ambigüedad.
   const googleButtonLabel = document.getElementById('btn-google-label');
   googleButton.disabled = true;
   googleButton.setAttribute('aria-busy', 'true');
-  googleButtonLabel.textContent = 'Esperando Google…';
+  googleButtonLabel.textContent = 'Abriendo Google…';
   document.body.classList.add('tt-login-busy');
-  const initialUserUid = auth.currentUser?.uid || null;
-  const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
+  const myAttempt = ++_googleLoginToken;
   try {
-    // La apertura debe ocurrir dentro del gesto original del clic. Esperar
-    // authPersistenceReady antes de invocar Firebase hace que Safari/Chrome
-    // consideren el popup una apertura asíncrona y lo bloqueen. La persistencia
-    // ya se inicia al cargar firebase.js; se espera después del popup para no
-    // romper la activación del usuario.
-    // Tardar en elegir una cuenta no es evidencia de bloqueo. Sólo Firebase
-    // puede confirmar que no abrió el popup; no se inicia otro flujo en paralelo.
-    const popupAttempt = signInWithPopup(auth, provider);
-    const cred = await withDeadline(popupAttempt, GOOGLE_POPUP_DEADLINE_MS).catch(error => {
-      if (error?.code === 'profile/deadline') error.code = 'auth/popup-timeout';
-      throw error;
-    });
     await withDeadline(authPersistenceReady, AUTH_NETWORK_DEADLINE_MS);
-    if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
-    showOverlay();
-    await finishGoogleLogin(cred.user);
-  } catch(e) {
     if (myAttempt !== _googleLoginToken) return;
-
-    // El canal del popup puede cerrarse cuando Auth ya confirmó la cuenta.
-    // Sólo se recupera una identidad nueva de Firebase, nunca una sesión previa.
-    if (!initialUserUid && auth.currentUser &&
-        ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(e.code)) {
-      try {
-        showOverlay();
-        await finishGoogleLogin(auth.currentUser);
-        return;
-      } catch (finishError) { e = finishError; }
-    }
-
-    if (e.code === 'auth/popup-blocked') {
-      markGoogleRedirectPending();
-      try {
-        // El popup se abre dentro del gesto original, pero el redirect no
-        // tiene esa restricción. Esperar acá garantiza que la persistencia
-        // local quedó elegida antes de que Firebase abandone esta página;
-        // de lo contrario el retorno puede restaurar user=null y el guard
-        // de /admin vuelve a mandar a /login.
-        showOverlay();
-        await withDeadline(authPersistenceReady, AUTH_NETWORK_DEADLINE_MS);
-        await withDeadline(signInWithRedirect(auth, provider), AUTH_NETWORK_DEADLINE_MS);
-        return;
-      } catch (redirectError) {
-        clearGoogleRedirectPending();
-        e = redirectError;
-      }
-    }
-
-    explicitLoginInProgress = false;
-    googleButton.disabled = false;
-    googleButton.removeAttribute('aria-busy');
-    document.body.classList.remove('tt-login-busy');
-    googleButtonLabel.textContent = googleIdleLabel();
-    hideLoginOverlay();
-    revealLoginSurface();
-    window.dispatchEvent(new CustomEvent(
-      e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'
-        ? 'tintin:login-cancelled'
-        : 'tintin:login-failed'
-    ));
-    showError(errMsg(e.code, e.customData?.email));
+    markGoogleRedirectPending();
+    showOverlay();
+    await withDeadline(signInWithRedirect(auth, provider), AUTH_NETWORK_DEADLINE_MS);
+  } catch (error) {
+    if (myAttempt !== _googleLoginToken) return;
+    window.dispatchEvent(new CustomEvent('tintin:login-failed'));
+    releaseGoogleAttempt(error?.code === 'profile/deadline'
+      ? 'Google está tardando en abrir. Revisá tu conexión y volvé a intentar.'
+      : errMsg(error?.code, error?.customData?.email));
   }
 };
-document.getElementById("btn-google").onclick = loginConGoogle;
-
+document.getElementById('btn-google').onclick = loginConGoogle;
 // ======== TOGGLE INGRESAR / REGISTRARSE (solo texto, mismo flujo) ========
 // Google y el código por correo ya crean la cuenta la primera vez que se
 // usan (ver ensureUserProfile en perfil-usuario.js): no existe un "modo
