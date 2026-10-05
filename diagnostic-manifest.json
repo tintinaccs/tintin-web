@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b65ad03a6e66e1031b4f470f975cdbda087682b9ad85921aca0ff75e8c586353",
+  "sourceFingerprint": "6d9fc92c12af5948430ecc2b306850b34f1951aac4ce95ffc9298f19aa69ca1a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1019,
     "textFiles": 973,
-    "totalBytes": 18876808,
+    "totalBytes": 18880975,
     "pages": 19,
     "modules": 715
   },
@@ -2134,8 +2134,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 198321,
-      "sha256": "c1a275efbcdaa4f953964a1e71aaac6ac8fb126eae31078b4fa58f8734d40cfd",
+      "bytes": 198352,
+      "sha256": "cc971b5438306cf9a29a48c273a5515c76d9edd6dc47c8201f53dd6e6993007c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2244,7 +2244,7 @@
           "line": 2268
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261001-inventory-fix-1-owner-pink-20261004-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261001-inventory-fix-1-owner-pink-20261004-1-bulk-delete-latency-20261005-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2269
         },
@@ -2538,7 +2538,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261001-inventory-fix-1-owner-pink-20261004-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261001-inventory-fix-1-owner-pink-20261004-1-bulk-delete-latency-20261005-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2269,
           "exists": true
@@ -18213,8 +18213,8 @@
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
-      "bytes": 15031,
-      "sha256": "095e97d008366820aac7ee3348481695f70f223d8766f07e4aa4483040348d31",
+      "bytes": 15841,
+      "sha256": "2049d891ff8b38396d82b6fcb8b8ce0d51f15aeb2c268753ee5cb08470e53cbd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19381,8 +19381,8 @@
     },
     {
       "path": "functions/api/admin-catalog-delete.js",
-      "bytes": 6325,
-      "sha256": "7beff0d454afd135ac3b6775fabbc22d59a5afaa18705b834a65bd95271fb4a9",
+      "bytes": 7149,
+      "sha256": "35cd3e83d728ececf4378325e6e5d96a4cf63468bb2075ad986a9c57c9461dff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22626,8 +22626,8 @@
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
-      "bytes": 30201,
-      "sha256": "3ca1ac29098b22e1f4408338d42452d5a1f14da72aa9a6c60434321b4b9f1215",
+      "bytes": 30541,
+      "sha256": "6b0982dc854a41eb355abdcc4e901cf98266112f696d16168364e283dca6d875",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33028,8 +33028,8 @@
     },
     {
       "path": "tests/catalog/catalog-delete-reference-resilience.test.mjs",
-      "bytes": 1589,
-      "sha256": "c9e596fdb865761a23b5f55098e2c052a5d205920fabdc9cd0e20e6662260c42",
+      "bytes": 3720,
+      "sha256": "133c0758fccbb4f914a6d53c1f87f3f0ee728b446c6e7c757b02e8e520b0934d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38649,8 +38649,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 198321,
-      "sha256": "c1a275efbcdaa4f953964a1e71aaac6ac8fb126eae31078b4fa58f8734d40cfd"
+      "bytes": 198352,
+      "sha256": "cc971b5438306cf9a29a48c273a5515c76d9edd6dc47c8201f53dd6e6993007c"
     },
     {
       "path": "apple-touch-icon.png",
@@ -39045,8 +39045,8 @@
     {
       "path": "cloudflare/borrado-global-catalogo.js",
       "extension": ".js",
-      "bytes": 15031,
-      "sha256": "095e97d008366820aac7ee3348481695f70f223d8766f07e4aa4483040348d31"
+      "bytes": 15841,
+      "sha256": "2049d891ff8b38396d82b6fcb8b8ce0d51f15aeb2c268753ee5cb08470e53cbd"
     },
     {
       "path": "cloudflare/checkout-operational-health.js",
@@ -40227,8 +40227,8 @@
     {
       "path": "functions/api/admin-catalog-delete.js",
       "extension": ".js",
-      "bytes": 6325,
-      "sha256": "7beff0d454afd135ac3b6775fabbc22d59a5afaa18705b834a65bd95271fb4a9"
+      "bytes": 7149,
+      "sha256": "35cd3e83d728ececf4378325e6e5d96a4cf63468bb2075ad986a9c57c9461dff"
     },
     {
       "path": "functions/api/admin-engagement.js",
@@ -40869,8 +40869,8 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
-      "bytes": 30201,
-      "sha256": "3ca1ac29098b22e1f4408338d42452d5a1f14da72aa9a6c60434321b4b9f1215"
+      "bytes": 30541,
+      "sha256": "6b0982dc854a41eb355abdcc4e901cf98266112f696d16168364e283dca6d875"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -43257,8 +43257,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 63957,
-      "sha256": "63724934db9976513e12be3a89d3c67d237950c8ca1b2840f2d83a8bcb1fae5f"
+      "bytes": 63988,
+      "sha256": "4afb5118406544b990d85568a11044a34d4bdef04fd5683193c8154069bc708f"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -43701,8 +43701,8 @@
     {
       "path": "tests/catalog/catalog-delete-reference-resilience.test.mjs",
       "extension": ".mjs",
-      "bytes": 1589,
-      "sha256": "c9e596fdb865761a23b5f55098e2c052a5d205920fabdc9cd0e20e6662260c42"
+      "bytes": 3720,
+      "sha256": "133c0758fccbb4f914a6d53c1f87f3f0ee728b446c6e7c757b02e8e520b0934d"
     },
     {
       "path": "tests/catalog/precio-anterior.test.mjs",
