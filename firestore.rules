@@ -20,8 +20,12 @@ service cloud.firestore {
     // requiere el Admin SDK en un entorno privilegiado — ver
     // El runtime vigente no despliega Firebase Functions.
     function isSuperAdmin() {
+      // email_verified: el servidor (verifyFirebaseIdToken) ya lo exige; las
+      // reglas también, para que un token con el correo sin verificar nunca
+      // valga como Super Admin aunque un proveedor lo emita.
       return isSignedIn() &&
         request.auth.token.email != null &&
+        request.auth.token.email_verified == true &&
         request.auth.token.email.lower() == "tintinaccs@gmail.com";
     }
 
@@ -364,7 +368,10 @@ service cloud.firestore {
         'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
         'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
         'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId',
-        'commerceHistoryClaimed', 'commerceHistorySourceUid'
+        'commerceHistoryClaimed', 'commerceHistorySourceUid',
+        // Estado mayorista: lo escribe solo el servidor (cotizaciones).
+        'wholesaleInterest', 'wholesaleStatus', 'wholesaleBusinessName',
+        'wholesaleRequestedAt', 'wholesaleQuoteCount', 'wholesaleApprovedAt', 'wholesaleApprovedBy'
       ]);
     }
 
@@ -1545,6 +1552,27 @@ service cloud.firestore {
 
     match /orderTrash/{orderId} {
       allow read, create, update, delete: if isSuperAdmin();
+    }
+
+    /* ============================================================
+       PEDIDOS MAYORISTAS (cotizaciones)
+       Las crea /api/wholesale-quote y las responde /api/admin-wholesale
+       con la cuenta de servicio. Ningún navegador escribe acá: la clienta
+       solo lee las suyas y el precio lo fija exclusivamente Super Admin.
+       ============================================================ */
+
+    match /wholesaleQuotes/{quoteId} {
+      allow get: if isSuperAdmin() ||
+        (isSignedIn() && !isBlockedUser() && resource.data.userId == request.auth.uid);
+      allow list: if isSuperAdmin() ||
+        (
+          isSignedIn() &&
+          !isBlockedUser() &&
+          resource.data.userId == request.auth.uid &&
+          request.query.limit != null &&
+          request.query.limit <= 100
+        );
+      allow create, update, delete: if false;
     }
 
     /* ============================================================

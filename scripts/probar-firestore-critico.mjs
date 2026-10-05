@@ -10,9 +10,13 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
+  limit,
+  query,
   serverTimestamp,
   setDoc,
-  updateDoc
+  updateDoc,
+  where
 } from 'firebase/firestore';
 
 const projectId = 'demo-tintin-critical';
@@ -30,6 +34,7 @@ const claims = {
   viewer1: { email: 'viewer@example.com', email_verified: true },
   super1: { email: 'tintinaccs@gmail.com', email_verified: true },
   superCase: { email: 'TintinAccs@Gmail.com', email_verified: true },
+  superUnverified: { email: 'tintinaccs@gmail.com', email_verified: false },
   blocked1: { email: 'bloqueada@example.com', email_verified: true }
 };
 
@@ -125,6 +130,12 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     });
+    await setDoc(doc(db, 'wholesaleQuotes', 'WQ_client1_req_abcdef123456'), {
+      userId: 'client1', status: 'pendiente', quoteNumber: 'MAY-000001', items: [], total: null
+    });
+    await setDoc(doc(db, 'wholesaleQuotes', 'WQ_client2_req_abcdef123456'), {
+      userId: 'client2', status: 'pendiente', quoteNumber: 'MAY-000002', items: [], total: null
+    });
     await setDoc(doc(db, 'auditLog', 'audit1'), {
       action: 'seed', createdAt: new Date(), actorEmail: claims.super1.email
     });
@@ -212,6 +223,17 @@ try {
   await fails(updateDoc(doc(client1, 'users', 'client1'), { role: 'admin' }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { blocked: true }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { customerId: 'CUS_otro' }));
+  // Pedidos mayoristas: la clienta ve solo sus cotizaciones y nunca escribe
+  // precios, estados ni su condición de mayorista.
+  await succeeds(getDoc(doc(client1, 'wholesaleQuotes', 'WQ_client1_req_abcdef123456')));
+  await fails(getDoc(doc(client1, 'wholesaleQuotes', 'WQ_client2_req_abcdef123456')));
+  await succeeds(getDocs(query(collection(client1, 'wholesaleQuotes'), where('userId', '==', 'client1'), limit(50))));
+  await fails(getDocs(query(collection(client1, 'wholesaleQuotes'), limit(50))));
+  await fails(updateDoc(doc(client1, 'wholesaleQuotes', 'WQ_client1_req_abcdef123456'), { status: 'aprobada', total: 1 }));
+  await fails(setDoc(doc(client1, 'wholesaleQuotes', 'WQ_client1_req_nuevo1234567'), { userId: 'client1', status: 'aprobada' }));
+  await fails(updateDoc(doc(client1, 'users', 'client1'), { wholesaleStatus: 'aprobado' }));
+  await fails(updateDoc(doc(client1, 'users', 'client1'), { wholesaleInterest: true }));
+  await fails(getDoc(doc(anon, 'wholesaleQuotes', 'WQ_client1_req_abcdef123456')));
   await fails(deleteDoc(doc(client1, 'users', 'client1')));
   await succeeds(updateDoc(doc(ctx('client2'), 'users', 'client2'), {
     customerId: 'CUS_client2',
@@ -262,7 +284,15 @@ try {
     name: 'No permitido', price: 1, active: true
   }));
 
+  // Un token con el correo del Super Admin pero sin verificar no vale como Super Admin.
+  const superUnverified = ctx('superUnverified');
+  await fails(getDoc(doc(superUnverified, 'settings', 'privateSecrets')));
+  await fails(getDoc(doc(superUnverified, 'users', 'client1')));
+  await fails(updateDoc(doc(superUnverified, 'users', 'client1'), { role: 'admin' }));
+
   const superDb = ctx('super1');
+  await succeeds(getDoc(doc(superDb, 'wholesaleQuotes', 'WQ_client2_req_abcdef123456')));
+  await fails(updateDoc(doc(superDb, 'wholesaleQuotes', 'WQ_client2_req_abcdef123456'), { status: 'aprobada' }));
   await succeeds(getDoc(doc(superDb, 'settings', 'privateSecrets')));
   await succeeds(getDoc(doc(superDb, 'users', 'client1')));
   await succeeds(getDoc(doc(superDb, 'auditLog', 'audit1')));

@@ -24,6 +24,7 @@ const SPECIALIZED_VALIDATORS = {
   estadisticas: ['scripts/auditar-admin-analitica-auditar.js'],
   usuarios: ['scripts/auditar-admin-usuarios-roles.js'],
   pedidos: ['scripts/auditar-admin-pedidos.js'],
+  mayoristas: ['tests/wholesale/mayoristas.test.mjs', 'tests/wholesale/mayoristas-sheets.test.mjs'],
   productos: ['scripts/auditar-admin-productos-multimedia.js', 'scripts/auditar-borrado-global-catalogo.mjs'],
   resenas: ['tests/engagement/participation-contract.test.mjs', 'tests/engagement/notificaciones-sociales.test.mjs'],
   'me-gusta': ['tests/engagement/participation-contract.test.mjs', 'tests/engagement/notificaciones-sociales.test.mjs'],

@@ -160,9 +160,13 @@ function loadCollectionsRuntime() {
         // La foto de respaldo depende del catálogo, también en Nosotros,
         // Contacto y cualquier otra ruta. La misma API edge/cache alimenta
         // todas las superficies; nunca se abre un listener público de Firestore.
+        // Inicio y las páginas de catálogo ya inician su propia lectura.
+        // Reutilizarla evita otra petición desde la búsqueda del menú.
+        const path = window.location.pathname.toLowerCase();
+        const pageLoadsCatalog = path.endsWith('/') || /(?:^|\/)(?:index|catalogo|collections)(?:\.html)?$/.test(path);
         return Promise.allSettled([
           module.initNavCollections?.(),
-          loadProductsRuntime({ forSearch: true }),
+          loadProductsRuntime({ forSearch: !pageLoadsCatalog }),
         ]).then(results => {
           reportRuntimeFailures(results);
           return module;
