@@ -121,6 +121,13 @@ const connectionContracts = {
     && /rolePermissions|users/.test(firestoreRules),
   pedidos: () => hasAll(fullAdminSource, ['/api/admin-order-mutation', 'TintinInventoryIntegrity', 'trashOrder', 'restoreOrder'])
     && hasAny(fullAdminSource + serverSources, ['syncOrder', 'Sheets', 'sheets']),
+  mayoristas: () => hasAll(safeRead('js/admin/mayoristas/mayoristas-admin.js'), ['/api/admin-wholesale', 'wholesaleQuotes', 'onSnapshot'])
+    && hasAll(safeRead('js/pages/profile/mayorista-perfil.js'), ['/api/wholesale-quote', 'wholesaleQuotes', 'onSnapshot'])
+    && hasAll(safeRead('functions/api/admin-wholesale.js'), ['requireSuperAdmin', 'respondWholesaleQuote', 'afterWholesaleQuoteResponded'])
+    && hasAll(safeRead('cloudflare/mayoristas-avisos.js'), ['syncWholesaleQuote', 'SHEETS_ENGAGEMENT_SECRET', 'notifyUserIfAbsent'])
+    && hasAll(safeRead('apps-script/Mayoristas.gs'), ['Mayoristas', 'tintinParitySecretMatches_', 'tintinUpsertWholesaleQuote_'])
+    && hasAll(firestoreRules, ['wholesaleQuotes', 'allow create, update, delete: if false'])
+    && routes.include.includes('/api/admin-wholesale') && routes.include.includes('/api/wholesale-quote'),
   productos: () => hasAll(fullAdminSource, ['prodGuardar', 'prod-stock', 'prod-price'])
     && hasAll(catalogDeleteApi + catalogDeleteCore + catalogResilience, ['products', 'productInventory'])
     && hasAny(catalogDeleteApi + catalogDeleteCore + catalogResilience, ['syncProducts', 'catalogSheetSyncQueue']),

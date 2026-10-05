@@ -1,5 +1,20 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Cierre final de PR #1033 — 2026-10-05
+
+- Agente/modelo: Codex (GPT-6). Se integra main ccca0588: #1032 y #1034 mergeados con todos los checks verdes y manifiestos de preview idénticos a sus heads. CI 875ae857 pasó geometría 126/126 y 187/187, pero falló el smoke por 404 /api/paypal-config en el servidor estático de pruebas, que no ejecuta Pages Functions. El harness modela exclusivamente GET de configuración deshabilitada con publicPaypalConfig({}); no excluye errores HTTP ni permite pagos. PASS_LOCAL de la combinación: 12 casos de paridad en cuatro rutas/tres tamaños y smoke de 18 páginas con loaders/recursos/header; sin datos comerciales. Se regeneran caché/derivados contra el nuevo main publicado, CI/preview del nuevo head pendientes. Apps Script versión 22 ya publicada, claves separadas y login GitHub requieren intervención del dueño.
+
+## Integración final #1032 / #1033 / #1034 — 2026-10-05
+
+- Agente/modelo: Codex (GPT-6). #1032 mergeado b8269fe8; se integra el head 875ae857 de navegación en Mayoristas antes de su merge para comprobar la combinación y regenerar derivados. Se conservan todas las fuentes y evidencias previas; los PASS de cada rama no se heredan a esta combinación. Apps Script versión 22 publicada en la URL canónica, archivos copiados por editor y comparados completos; tintinPrepararMayoristas terminó correctamente sin cotizaciones ficticias. Claves separadas preparadas para entrada manual del dueño (no configuradas todavía); Rules productivas requieren sesión GitHub para workflow. CI/preview/merge combinados pendientes.
+
+- Integración con main b8269fe8 (#1032 mergeado, CI y preview exactos PASS): ProductosUnificados.gs y reglas se combinan sin conflictos de fuentes. Mayoristas ahora resuelve la planilla canónica en webhooks y expone tintinPrepararMayoristas para crear pestaña/18 encabezados sin cotizaciones de prueba. PASS_LOCAL previo: 12 pruebas Node, 89 controles Firestore demo, módulos 124/124 y contratos 77/77. PASS_LOCAL combinado: 14/14 Node Mayoristas/secretos, 92 controles Firestore demo y build:pages. CI del nuevo head pendiente.
+
+## Revisión de PR #1034 — 2026-10-05
+
+- Agente/modelo: Codex (GPT-6). Corrección y merge autorizados. Base a7cf5408; se conserva el trabajo del módulo mayorista. Se clasifica Mayoristas en el registro Maestro, igualando sidebar/mobile. La alerta CodeQL estaba en la aserción incompleta del test HTML; ahora comprueba contenido escapado incluso en mayúsculas sin usar ese filtro regex.
+- Hallazgo adicional confirmado: setValues puede interpretar textos externos como fórmulas. Se protegen todas las celdas textuales del espejo, incluyendo el detalle de productos, manteniendo importes numéricos. Regresión Node ejecuta el código Apps Script real con entradas de fórmula; sin escrituras en Sheets.
+- PASS_LOCAL actual: once pruebas mayoristas y 27/27 contratos Maestro. Build/gates finales, CI, publicación Apps Script y merge pendientes; no se acredita pago ni correo reales.
 ## Cierre de PR #1033 — 2026-10-05
 
 - Integración actual con main b8269fe8 (#1032 mergeado tras CI y preview exactos PASS): se preservan pagos/reglas/secretos. El gate Chromium detectó dos peticiones de productos porque el menú iniciaba búsqueda sobre páginas que ya cargan catálogo. Se reutiliza su lectura en Inicio/Catálogo/Colecciones, conservando la carga en rutas informativas. PASS_LOCAL: 12 regresiones de paridad con una petición exacta a 390/768/1440 y diez pruebas de rendimiento público sin duplicados, 22/22 sin reintentos. CI del nuevo head pendiente.
