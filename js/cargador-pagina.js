@@ -396,7 +396,7 @@
 
   const BRAND_LABEL = computeBrandLabel();
   const DEFAULT_LOGO_SRC = resolveAsset(
-    'assets-tintin/images/general/tintin-loader-brand.svg'
+    'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2', false
   );
   const LOGO_SRC = DEFAULT_LOGO_SRC;
 
