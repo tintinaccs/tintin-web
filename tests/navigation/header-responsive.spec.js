@@ -1,5 +1,59 @@
 const { test, expect } = require('@playwright/test');
 
+for (const width of [320, 390, 767, 768, 1024, 1025, 1280, 1920]) {
+  test(`foto de cuenta respeta el espacio del icono y del botón en ${width}px`, async ({ page }) => {
+    await openPublicPage(page, { width, height: 900 });
+    // Reproduce la capa tardía que se carga en producto/perfil, además del
+    // estado autenticado de seis acciones; el caso con SVG no descubre este bug.
+    await page.evaluate(async modulePath => {
+      await import(modulePath);
+      document.querySelector('#tabbar-notifications').hidden = false;
+      const source = document.querySelector('.tt-logo-img,.tt-tablet-logo-img').src;
+      for (const button of document.querySelectorAll('[data-auth-account-button],#tabbar-cuenta')) {
+        const image = document.createElement('img');
+        image.src = source;
+        image.alt = 'Foto de prueba';
+        image.className = button.id === 'tabbar-cuenta' ? 'tt-tabbar-avatar' : 'tt-account-avatar-btn';
+        image.width = image.height = 24;
+        button.dataset.ttAccountAvatar = 'true';
+        const previous = button.querySelector('svg,img');
+        if (previous) previous.replaceWith(image);
+      }
+    }, '/js/quality/estabilidad-final-publica.js');
+    async function assertGeometry() {
+      const result = await page.evaluate(() => {
+        const visible = e => e.getBoundingClientRect().width > 0 && getComputedStyle(e).visibility !== 'hidden';
+        const image = [...document.querySelectorAll('.tt-tabbar-avatar,.tt-account-avatar-btn')].find(visible);
+        const button = image.closest('button,a');
+        const shell = image.closest('#tt-tabbar,#tt-header-tablet,#tt-header-desktop-tablet');
+        const icon = [...shell.querySelectorAll('svg')].find(e => visible(e) && e.closest('button,a')?.getAttribute('aria-label') !== 'Tienda');
+        const rect = e => { const r = e.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
+        return { image:rect(image), icon:rect(icon), button:rect(button), shell:rect(shell), radius:getComputedStyle(image).borderRadius, fit:getComputedStyle(image).objectFit, overflow:document.documentElement.scrollWidth > innerWidth };
+      });
+      expect(result.image.width).toBeLessThanOrEqual(26);
+      expect(result.image.width).toBeCloseTo(result.image.height, 1);
+      expect(Math.abs(result.image.width - result.icon.width)).toBeLessThan(2);
+      expect(result.radius).toBe('50%');
+      expect(result.fit).toBe('cover');
+      expect(result.button.width).toBeGreaterThanOrEqual(44);
+      expect(result.button.height).toBeGreaterThanOrEqual(44);
+      for (const bounds of [result.button, result.shell]) {
+        expect(result.image.left).toBeGreaterThanOrEqual(bounds.left - 1);
+        expect(result.image.right).toBeLessThanOrEqual(bounds.right + 1);
+        expect(result.image.top).toBeGreaterThanOrEqual(bounds.top - 1);
+        expect(result.image.bottom).toBeLessThanOrEqual(bounds.bottom + 1);
+      }
+      expect(result.overflow).toBe(false);
+    }
+    await assertGeometry();
+    if (width < 768) {
+      await page.evaluate(() => document.querySelector('#tt-tabbar').classList.add('tt-tabbar-compact'));
+      await expect(page.locator('#tt-tabbar .tt-tabbar-avatar')).toHaveCSS('inline-size', '24px');
+      await assertGeometry();
+    }
+  });
+}
+
 async function openPublicPage(page, viewport, path = '/index.html') {
   await page.setViewportSize(viewport);
   await page.goto(path, { waitUntil: 'domcontentloaded' });

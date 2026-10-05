@@ -7,7 +7,7 @@ import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20260
 import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tintin-20260916-final-production-stability-collections-panel-1';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js?v=tintin-20260916-final-production-stability-surface-layer-1';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261004-final-integration-2';
+import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261004-header-consistency-2';
 import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261004-admin-connections-3';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js?v=tintin-20260916-final-production-stability-footer-1';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
@@ -174,7 +174,7 @@ async function loadFinalStability() {
     await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2');
     return 'tintin-20260831-product-stability-2';
   }
-  await import('../../quality/estabilidad-final-publica.js?v=tintin-20261003-profile-avatar-layout-1-brand-runtime-20261004-1-owner-pink-20261004-1');
+  await import('../../quality/estabilidad-final-publica.js?v=tintin-20261004-header-consistency-2');
   return 'tintin-20260829-final-stability-1-brand-runtime-20261004-1';
 }
 

@@ -369,13 +369,15 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"]{
   box-shadow:none!important;
   padding:clamp(24px,3.25vw,44px) 0 0!important;
 }
-/* La foto es una identidad visual, no un ícono dentro de un segundo círculo. */
-[data-auth-account-button][data-tt-account-avatar="true"]{
-  width:48px!important;height:48px!important;padding:0!important;border:0!important;
-  border-radius:50%!important;background:transparent!important;box-shadow:none!important;overflow:hidden!important;
+/* La imagen ocupa el espacio del icono; el botón conserva su área táctil. */
+:is(#tt-header-desktop-tablet,#tt-header-tablet) [data-auth-account-button]{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
 }
-[data-auth-account-button][data-tt-account-avatar="true"] .tt-account-avatar-btn{
-  width:100%!important;height:100%!important;border-radius:inherit!important;object-fit:cover!important;
+:is(#tt-header-desktop-tablet,#tt-header-tablet) :is(.tt-header-actions,.tt-tablet-actions) :is(svg,.tt-account-avatar-btn){
+  width:24px!important;height:24px!important;inline-size:24px!important;block-size:24px!important;flex:0 0 24px!important;
+}
+:is(#tt-header-desktop-tablet,#tt-header-tablet) .tt-account-avatar-btn{
+  display:block;border-radius:50%!important;object-fit:cover!important;object-position:center;border:0!important;padding:0!important;
 }
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-shell{max-width:1240px}
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-grid{
