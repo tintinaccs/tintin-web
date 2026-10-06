@@ -63,7 +63,7 @@ export function applyCatalogPreflightOutcome(result, preflightError) {
   return result;
 }
 
-async function runCatalogAction(action, env, body, scope, dryRun, idToken, actorContext) {
+async function runCatalogAction(action, env, body, scope, dryRun, idToken, actorContext, { deferProductsSheet = false } = {}) {
   if (action === 'deleteProducts') {
     return deleteProductsGlobally(env, {
       scope,
@@ -71,6 +71,7 @@ async function runCatalogAction(action, env, body, scope, dryRun, idToken, actor
       dryRun,
       idToken,
       actor: actorContext,
+      deferProductsSheet,
     });
   }
   return deleteCollectionsGlobally(env, {
@@ -124,18 +125,31 @@ export async function onRequest(context) {
     const serverPreview = await runCatalogAction(action, env, body, scope, true, idToken, actorContext);
     const affectedProductIds = productIdsFromPreview(serverPreview);
 
+    // El borrado de productos no espera a Google Sheets: Firestore se borra,
+    // la hoja Productos queda en catalogSheetSyncQueue y se drena después de
+    // responder. Esperar la sonda y la sincronización en línea dejaba el
+    // panel varios minutos en la etapa de Firestore con lotes de 30.
+    const deferProductsSheet = action === 'deleteProducts' && typeof context.waitUntil === 'function';
+
     // La sonda valida Sheets antes de mutar. Si falla transitoriamente, la
     // eliminación autorizada continúa y el resultado final decide si quedó
     // pendiente o si la sincronización posterior logró recuperarse.
     let preflightError = '';
-    try {
-      await preflightProductsSheet(env, affectedProductIds);
-    } catch (error) {
-      preflightError = safeMessage(error);
-      console.warn('[admin-catalog-delete] preflight de Sheets pendiente:', preflightError);
+    if (!deferProductsSheet) {
+      try {
+        await preflightProductsSheet(env, affectedProductIds);
+      } catch (error) {
+        preflightError = safeMessage(error);
+        console.warn('[admin-catalog-delete] preflight de Sheets pendiente:', preflightError);
+      }
     }
 
-    const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
+    const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext, { deferProductsSheet });
+    if (result?.sheets?.productsQueued) {
+      context.waitUntil(retryPendingCatalogSheets(env, idToken, { limit: 5 }).catch(error => {
+        console.warn('[admin-catalog-delete] La cola de Sheets queda para el reintento programado:', error?.message || error);
+      }));
+    }
 
     applyCatalogPreflightOutcome(result, preflightError);
     const status = result?.partial ? 207 : 200;

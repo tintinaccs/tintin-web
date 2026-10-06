@@ -149,7 +149,11 @@ function reportSheets(ctx, result, { productRows, socialPurged }) {
   if (!productRows) ctx.skip('sheets-products', 'No aplica: ningún producto cambió.');
   else {
     ctx.start('sheets-products');
-    if (result?.sheets?.products === true) {
+    if (result?.sheets?.productsQueued === true) {
+      // La tarea persistente ya existe: el servidor la drena al responder y
+      // la cola programada la reintenta. No hay nada que reintentar acá.
+      ctx.ok('sheets-products', { received: `${productRows} fila(s) en cola: la hoja Productos se actualiza en segundo plano` });
+    } else if (result?.sheets?.products === true) {
       ctx.ok('sheets-products', {
         received: result.preflightRecovered
           ? `${productRows} fila(s) confirmadas por Apps Script (la sonda previa había fallado y el cierre final se recuperó)`

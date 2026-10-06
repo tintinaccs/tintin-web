@@ -220,7 +220,20 @@ async function previewProductDeletion(env, products) {
   };
 }
 
-export async function deleteProductsGlobally(env, { scope = 'selected', productIds = [], dryRun = true, idToken = '', actor = null } = {}) {
+// Encola la hoja Productos antes de responder: la tarea persistente existe
+// aunque el Worker se corte, y el drenaje posterior (waitUntil, cola
+// programada o «Reintentar») la cierra sin volver a borrar nada.
+async function queueDeletedProductsSheet(env, ids, actor) {
+  try {
+    await queueCatalogSheetSync(env, ids, 'Borrado aplicado en Firestore; la hoja Productos se sincroniza en segundo plano.', actor);
+    return true;
+  } catch (error) {
+    console.warn('[catalog-delete] No se pudo encolar la hoja Productos; se sincroniza en línea:', error?.message || error);
+    return false;
+  }
+}
+
+export async function deleteProductsGlobally(env, { scope = 'selected', productIds = [], dryRun = true, idToken = '', actor = null, deferProductsSheet = false } = {}) {
   const products = await resolveProducts(env, scope, productIds);
   const ids = products.map(product => product.id);
   if (dryRun) {
@@ -230,10 +243,6 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
   if (!ids.length) return { dryRun: false, deletedProducts: 0, sheets: { products: true, social: true } };
 
   const social = await collectSocialReferences(env, ids);
-  // Se intenta limpiar el espejo social antes de borrar. Si Google Sheets
-  // está caído, Firestore sigue siendo canónico y se completa el borrado;
-  // el resultado marca explícitamente la sincronización pendiente.
-  const socialSheet = await syncSocialPurgeToSheets(env, social);
 
   const deletePaths = new Set();
   social.privateReviews.forEach(document => deletePaths.add(firestorePathFromName(document.name)));
@@ -246,7 +255,11 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
     deletePaths.add(`productEngagementStats/${id}`);
     deletePaths.add(`products/${id}`);
   });
+  // Firestore es canónico: se borra antes de cualquier llamada a Google
+  // Sheets, que puede tardar hasta SHEETS_TIMEOUT_MS por intento. Los datos
+  // sociales ya están leídos, así que el espejo se limpia después igual.
   await commitWrites(env, [...deletePaths].filter(Boolean).map(path => ({ path, delete: true })));
+  const socialSheet = await syncSocialPurgeToSheets(env, social);
 
   const result = {
     deletedProducts: ids.length,
@@ -261,11 +274,15 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
   };
 
   let productsSheets = false;
+  let productsQueued = false;
   const errors = [];
-  try { await syncProductsToSheets(env, idToken, ids, actor); productsSheets = true; }
-  catch (error) { errors.push(clean(error?.message, 500)); }
+  if (deferProductsSheet) productsQueued = await queueDeletedProductsSheet(env, ids, actor);
+  if (!productsQueued) {
+    try { await syncProductsToSheets(env, idToken, ids, actor); productsSheets = true; }
+    catch (error) { errors.push(clean(error?.message, 500)); }
+  }
   if (!socialSheet.ok) errors.push('Algunas filas sociales no pudieron sincronizarse con Google Sheets.');
-  result.sheets = { products: productsSheets, social: socialSheet.ok };
+  result.sheets = { products: productsSheets, productsQueued, social: socialSheet.ok };
   result.partial = errors.length > 0;
   result.errors = errors;
   await appendAudit(env, actor, 'eliminar_producto_global', result);

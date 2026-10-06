@@ -1,3 +1,10 @@
+## 2026-10-05 — Borrado masivo de productos detenido en 40 % (`fix/catalog-bulk-delete-latency`)
+
+- Síntoma reportado: eliminar 30 productos quedaba en la etapa «Eliminar productos en Firestore» (40 %) y los productos desaparecían tarde.
+- Causa confirmada en código: el POST destructivo esperaba la sonda previa de Sheets (hasta 2×25 s) y la limpieza social en Sheets (hasta 25 s) antes de borrar Firestore, y luego la hoja Productos en línea (2 lotes × 2 intentos × 25 s). El panel no recibe respuesta ni refresca hasta el final.
+- Corrección: Firestore se borra antes de cualquier llamada a Sheets. En el borrado de productos la hoja Productos se encola en catalogSheetSyncQueue antes de responder (si no se puede encolar, vuelve a la sincronización en línea) y se drena con waitUntil; la cola programada cada 15 min y «Reintentar» siguen como respaldo. Se omite la sonda previa en ese camino (nunca bloqueaba). Colecciones sin cambio de comportamiento.
+- Verificación local: 4 pruebas nuevas (2 fallan con el código anterior), tests catalog+sync 123/123, test:products-sync 98/98, auditoría de borrado global, cierre Super Admin 77/77, módulos 124/124, admin-sync, build y versionado de caché PASS. No probado contra Firebase/Sheets reales; requiere CI y una prueba en producción con productos de prueba.
+
 ## 2026-10-05 — Revalidación, popup y loader: correcciones añadidas por el usuario
 
 - CI de eb96be31 falló en Full static contract: Montserrat sin comillas en avisos-en-vivo.css. Se corrige la declaración canónica; auditoría tipográfica local PASS.
