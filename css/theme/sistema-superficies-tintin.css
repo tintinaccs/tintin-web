@@ -294,3 +294,13 @@ html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea):focus {
   outline: 3px solid rgba(196, 63, 112, .45) !important;
   outline-offset: 2px;
 }
+
+/* Tarjetas compartidas de producto: la etiqueta (Nuevo, Agotado o texto libre del panel) va arriba a la
+   izquierda y el corazón (44 px, a 12 px del borde) arriba a la derecha. Un texto largo se corta con
+   puntos suspensivos antes del corazón en lugar de meterse debajo. */
+.tt-product-card .tt-product-badge {
+  max-width: calc(100% - 76px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
