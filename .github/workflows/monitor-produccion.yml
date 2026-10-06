@@ -13,9 +13,11 @@ permissions:
   issues: write
   id-token: write
 
+# Un push a main verifica el deploy de ese commit: una corrida programada no
+# debe cancelarlo a mitad de camino. Se encolan en vez de cancelarse.
 concurrency:
   group: production-health
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   paypal_fx:
