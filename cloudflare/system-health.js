@@ -13,6 +13,7 @@ import { getOrderEmailQueueStatus } from './resiliencia-correo-pedido.js';
 import { getEngagementSheetSyncQueueStatus } from './resiliencia-sync-participacion.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
 import { resolvedPaypalConfig } from './paypal-seguro.js';
+import { getSheetsFlowEvidence } from './evidencia-sync-sheets.js';
 
 const REQUIRED_CONFIG = Object.freeze([
   'FIREBASE_SERVICE_ACCOUNT_KEY',
@@ -117,6 +118,7 @@ export async function runSystemHealth(env, {
   engagementSheetQueueStatus = getEngagementSheetSyncQueueStatus,
   checkoutInspector = inspectCheckoutOperationalHealth,
   paypalConfigResolver = resolvedPaypalConfig,
+  sheetsEvidenceReader = getSheetsFlowEvidence,
 } = {}) {
   const missingConfig = REQUIRED_CONFIG.filter(key => !configured(env, key));
   let runtimeReport = null;
@@ -149,6 +151,18 @@ export async function runSystemHealth(env, {
       engagementSheetQueue = await engagementSheetQueueStatus(env);
     } catch (error) {
       console.error('[system-health] Estado de engagementSheetSyncQueue no disponible:', error?.message || error);
+    }
+  }
+  // Resultado de la última sincronización REAL con Sheets en cada sentido
+  // (no es una sonda: lo anotan el webhook de productos y los envíos de
+  // pedidos y participación). null = no se pudo leer; no altera `ok`.
+  let sheetsEvidence = null;
+  if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
+    try {
+      const evidence = await sheetsEvidenceReader(env);
+      sheetsEvidence = evidence?.available === true ? evidence : null;
+    } catch (error) {
+      console.error('[system-health] Acuse de sincronización con Sheets no disponible:', error?.message || error);
     }
   }
 
@@ -184,6 +198,7 @@ export async function runSystemHealth(env, {
     catalogSheetQueue,
     orderEmailQueue,
     engagementSheetQueue,
+    sheetsEvidence,
   };
 
   let checkout = emptyCheckoutSummary();

@@ -27,6 +27,7 @@ import {
 import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS } from './sheets-sync-config.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
+import { recordSheetsEvidence } from './evidencia-sync-sheets.js';
 
 const QUEUE_COLLECTION = 'engagementSheetSyncQueue';
 const QUEUE_META_PATH = 'syncMeta/engagementSheetSyncQueue';
@@ -63,7 +64,17 @@ const REAL_DEPS = {
   firestoreAdminMerge,
   notifyAdminIfAbsent,
   fetchImpl: fetchAppsScript,
+  recordSheetsEvidence,
 };
+
+// Constancia de que Apps Script aceptó (o rechazó) un registro real, para el
+// panel Flujo/Conexiones. Opcional en las dependencias inyectadas y nunca
+// cambia el resultado de la sincronización.
+async function acknowledgeMirror(env, deps, outcome) {
+  try {
+    await deps.recordSheetsEvidence?.(env, 'mirror', outcome);
+  } catch {}
+}
 
 function recordKey(event) {
   const record = event?.record || {};
@@ -209,6 +220,7 @@ export async function syncEngagementEventOrQueue(env, event, deps = REAL_DEPS) {
     await postEngagementEvent(env, event, deps.fetchImpl);
   } catch (error) {
     console.warn('[engagement-sheets] Sincronización pendiente:', error?.message || error);
+    await acknowledgeMirror(env, deps, { ok: false, kind: `engagement:${event.type}`, error });
     try {
       await queueEngagementSheetSync(env, event, error, deps);
     } catch (queueError) {
@@ -216,6 +228,7 @@ export async function syncEngagementEventOrQueue(env, event, deps = REAL_DEPS) {
     }
     return false;
   }
+  await acknowledgeMirror(env, deps, { ok: true, kind: `engagement:${event.type}` });
   try {
     await discardOlderQueuedSnapshot(env, event, startedAt, deps);
   } catch (error) {
@@ -306,6 +319,8 @@ export async function drainEngagementSheetSyncQueueScheduled(env, { limit = 3, d
       // Si mientras tanto entró una instantánea más nueva, el documento cambió
       // y la precondición falla: la nueva queda para la próxima corrida.
       if (await commitIfUnchanged(env, claimed.id, claimed.updateTime, { delete: true }, deps)) drained += 1;
+      // El reintento llegó a Sheets: el último resultado real vuelve a ser un éxito.
+      await acknowledgeMirror(env, deps, { ok: true, kind: `engagement:${event.type}:retry` });
     } catch (error) {
       lastError = clean(error?.message || error);
       const attempts = Number(claimed.attempts || 0) + 1;

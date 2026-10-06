@@ -12,6 +12,7 @@ import {
   getDoc,
   getDocs,
   limit,
+  orderBy,
   query,
   serverTimestamp,
   setDoc,
@@ -347,6 +348,66 @@ try {
   await fails(updateDoc(doc(superDb, 'authDiagnosticFailures', 'fixed_event'), { reason: 'auth-restore-fallback' }));
   await fails(deleteDoc(doc(anon, 'authDiagnosticFailures', 'fixed_event')));
   await fails(deleteDoc(doc(superDb, 'authDiagnosticFailures', 'fixed_event')));
+
+  // Carrito: única colección que la clienta escribe directo desde el sitio.
+  // El panel Flujo/Conexiones acepta `firestore → carrito` en verde sólo si
+  // estos controles pasan en el Repository audit del commit: alta, edición y
+  // baja del carrito propio con las Rules reales, y cada rechazo que protege
+  // stock, precios ajenos y cuentas de otras personas.
+  await testEnv.withSecurityRulesDisabled(async context => {
+    await setDoc(doc(context.firestore(), 'products', 'p_pausado'), {
+      name: 'Producto pausado', category: 'aros', price: 1000, stock: 5, active: false
+    });
+  });
+  const cartLine = (overrides = {}) => ({
+    schemaVersion: 2,
+    lineId: 'p1__default',
+    id: 'p1',
+    variant: '',
+    qty: 2,
+    name: 'Producto 1',
+    cat: 'aros',
+    price: 50000,
+    imageUrl: '',
+    updatedAt: serverTimestamp(),
+    updatedByDevice: 'device-prueba-01',
+    ...overrides
+  });
+  const ownCartLine = doc(client1, 'users', 'client1', 'cart', 'p1__default');
+  await succeeds(setDoc(ownCartLine, cartLine()));
+  await succeeds(getDoc(ownCartLine));
+  await succeeds(getDocs(query(collection(client1, 'users', 'client1', 'cart'), limit(1))));
+  await succeeds(setDoc(ownCartLine, cartLine({ qty: 3 })));
+  await fails(setDoc(ownCartLine, cartLine({ qty: 11 })));
+  await fails(setDoc(ownCartLine, cartLine({ qty: 0 })));
+  await fails(setDoc(ownCartLine, cartLine({ updatedAt: new Date('2020-01-01T00:00:00Z') })));
+  await fails(setDoc(ownCartLine, cartLine({ lineId: 'otra-linea' })));
+  await fails(setDoc(ownCartLine, cartLine({ discount: 100 })));
+  await fails(setDoc(doc(client1, 'users', 'client1', 'cart', 'p_pausado__default'), cartLine({ lineId: 'p_pausado__default', id: 'p_pausado' })));
+  await fails(setDoc(doc(client1, 'users', 'client1', 'cart', 'fantasma__default'), cartLine({ lineId: 'fantasma__default', id: 'fantasma' })));
+  await fails(setDoc(doc(client1, 'users', 'client2', 'cart', 'p1__default'), cartLine()));
+  await fails(getDoc(doc(ctx('client2'), 'users', 'client1', 'cart', 'p1__default')));
+  await fails(deleteDoc(doc(ctx('client2'), 'users', 'client1', 'cart', 'p1__default')));
+  await fails(setDoc(doc(anon, 'users', 'client1', 'cart', 'p1__default'), cartLine()));
+  await fails(setDoc(doc(ctx('blocked1'), 'users', 'blocked1', 'cart', 'p1__default'), cartLine()));
+  await succeeds(deleteDoc(ownCartLine));
+
+  // Me gusta y reseñas: el registro privado sólo lo escribe el servidor
+  // (/api/engagement). Por eso un documento en estas colecciones prueba una
+  // escritura real de la API; sólo el Super Admin puede leerlos.
+  await testEnv.withSecurityRulesDisabled(async context => {
+    await setDoc(doc(context.firestore(), 'likeRecords', 'like_seed'), { ownerUid: 'client1', productId: 'p1', createdAt: new Date() });
+    await setDoc(doc(context.firestore(), 'reviewRecords', 'review_seed'), { ownerUid: 'client1', productId: 'p1', createdAt: new Date() });
+  });
+  for (const collectionId of ['likeRecords', 'reviewRecords']) {
+    await fails(setDoc(doc(client1, collectionId, 'propio'), { ownerUid: 'client1', productId: 'p1', createdAt: serverTimestamp() }));
+    await fails(setDoc(doc(admin, collectionId, 'desde_admin'), { ownerUid: 'admin1', productId: 'p1', createdAt: serverTimestamp() }));
+    await fails(setDoc(doc(superDb, collectionId, 'desde_super'), { ownerUid: 'super1', productId: 'p1', createdAt: serverTimestamp() }));
+    await fails(getDocs(query(collection(client1, collectionId), limit(1))));
+    await fails(getDocs(query(collection(anon, collectionId), limit(1))));
+    // Misma consulta que hace el panel para leer el último registro real.
+    await succeeds(getDocs(query(collection(superDb, collectionId), orderBy('createdAt', 'desc'), limit(1))));
+  }
 
   console.log('Reglas Fase 6: ' + checks + ' ataques/controles verificados.');
 } finally {

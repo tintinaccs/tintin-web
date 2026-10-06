@@ -6,7 +6,7 @@
 // nodo/conexión que estado-flujo.js puede resolver. No depende del DOM ni
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
-import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20261005-flow-progress-1';
+import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20261006-flow-evidence-1';
 import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
 
 function edgeIdFor(from, to) {
@@ -52,6 +52,147 @@ export function classifySheetsWebhookProbe(probe) {
   // estado real (o 500 cuando el guard responde pero algo no coincide).
   const status = ok ? 200 : (probe.status === 401 || (probe.status >= 200 && probe.status < 300) ? 500 : Number(probe.status || 0));
   return { ok, note, status };
+}
+
+// Conexiones de decisión de acceso y la prueba que ejecuta su código real.
+// Cada archivo corre dentro del Repository audit (test:accounts,
+// audit:login-profile y audit:login-isolation): si esa prueba falla, el
+// audit del commit falla y la conexión deja de estar verde.
+export const ACCESS_DECISION_EDGES = Object.freeze([
+  ['users-uid', 'cuenta-bloqueada', 'tests/accounts/blocked-account-listener.test.mjs'],
+  ['roles', 'pagina-principal', 'tests/login/redirect-by-role.test.mjs'],
+  ['roles', 'pagina-perfil', 'tests/auth/admin-guard-role-destination.test.mjs'],
+]);
+
+// Pruebas del Repository audit que ejecutan el código de cada escritura.
+export const WRITE_CONTRACT_SUITES = Object.freeze({
+  orders: 'dominio de pedidos ejecutado: tests/orders/order-admin-domain.test.mjs',
+  stock: 'transición de stock ejecutada: tests/orders/order-admin-domain.test.mjs + tests/orders/variant-inventory.test.mjs',
+  panel: 'Rules reales en emulador con escrituras del panel: test:rules-critical',
+  cart: 'Rules reales en emulador con alta, edición y baja del carrito propio: test:rules-critical',
+  engagement: 'escritura de "me gusta" y reseñas ejecutada: tests/engagement/escritura-participacion.test.mjs',
+});
+
+// Resultado de la ÚLTIMA sincronización real con Sheets en un sentido, tal
+// como la anotó el servidor (cloudflare/evidencia-sync-sheets.js). No es una
+// sonda: sólo existe si una operación real terminó.
+//   confirmed → la última operación real terminó bien (y con la revisión esperada).
+//   failed    → la última operación real falló.
+//   none      → todavía no hubo ninguna operación real desde que existe el acuse.
+//   stale     → el último éxito es de una revisión anterior del webhook.
+export function classifySheetsChannel(channel, { expectedRevision = '' } = {}) {
+  if (!channel || typeof channel !== 'object') {
+    return { state: 'none', note: 'el servidor todavía no entrega el acuse de sincronizaciones reales' };
+  }
+  const successAt = Date.parse(channel.lastSuccessAt || '');
+  const errorAt = Date.parse(channel.lastErrorAt || '');
+  const hasSuccess = Number.isFinite(successAt);
+  if (Number.isFinite(errorAt) && (!hasSuccess || errorAt > successAt)) {
+    return {
+      state: 'failed',
+      note: `la última sincronización real falló el ${channel.lastErrorAt} (${channel.lastErrorKind || 'operación'}): ${channel.lastError || 'sin detalle'}`,
+    };
+  }
+  if (!hasSuccess) return { state: 'none', note: 'todavía no se registró ninguna sincronización real' };
+  if (expectedRevision && channel.revision !== expectedRevision) {
+    return {
+      state: 'stale',
+      note: `la última sincronización real (${channel.lastSuccessAt}) fue con la revisión ${channel.revision || 'desconocida'}, no con ${expectedRevision}`,
+    };
+  }
+  return {
+    state: 'confirmed',
+    note: `última sincronización real confirmada el ${channel.lastSuccessAt} (${channel.lastSuccessKind || 'operación'})`,
+  };
+}
+
+// Opciones de evidencia para un registro cuya única prueba posible es el
+// acuse: verde si se confirmó, rojo si la última operación real falló y "sin
+// confirmar" (conserva el estado base) mientras no haya ninguna.
+function sheetsChannelOutcome(result) {
+  if (result.state === 'confirmed') return { ok: true, status: 200, promote: true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION };
+  if (result.state === 'failed') return { ok: false, status: 502, promote: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION };
+  return { ok: true, status: 200, promote: false, pending: true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY };
+}
+
+// Una sonda de lectura (guard del webhook, guard de Apps Script) combinada
+// con el acuse de escritura real. La lectura sola deja evidencia parcial.
+function sheetsGuardOutcome(guardOk, guardStatus, results) {
+  if (guardOk !== true) return { ok: false, status: Number(guardStatus || 0), promote: false, partial: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY };
+  if (results.some(result => result.state === 'failed')) return { ok: false, status: 502, promote: false, partial: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION };
+  if (results.every(result => result.state === 'confirmed')) return { ok: true, status: 200, promote: true, partial: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION };
+  return { ok: true, status: 200, promote: false, partial: true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY };
+}
+
+// "Me gusta" y reseñas. Verde sólo con las tres evidencias a la vez:
+//  1. las estadísticas públicas responden en producción (lectura real);
+//  2. existe un registro real en likeRecords/reviewRecords, colecciones que
+//     únicamente escribe /api/engagement (las Rules niegan toda escritura de
+//     cliente): es una escritura real de la API en producción;
+//  3. el Repository audit del commit actual, que ejecuta ese código de escritura.
+// Sin registro real o sin CI queda parcial; con el audit en FAIL, rojo.
+function engagementWriteOutcome(statsProbe, recordProbe, currentEvidence, label) {
+  if (!statsProbe) return null;
+  const statsOk = statsProbe.ok === true;
+  const statsNote = `GET /api/engagement · estadísticas públicas de ${label} ${statsOk ? 'disponibles' : 'no confirmadas'}`;
+  const readOnly = EVIDENCIA.LIVE_PRODUCTION_READ_ONLY;
+  if (!statsOk) {
+    return { ok: false, note: `${statsNote}; mutación no probada`, status: Number(statsProbe.status || 0), promote: false, partial: false, evidenceLevel: readOnly };
+  }
+  const partial = reason => ({ ok: true, note: `${statsNote}; ${reason}`, status: Number(statsProbe.status || 200), promote: false, partial: true, evidenceLevel: readOnly });
+  if (!recordProbe || recordProbe.ok !== true) return partial(`mutación no probada: no se pudo leer el registro real de ${label} con esta sesión`);
+  if (recordProbe.exists !== true) return partial(`mutación no probada: todavía no hay ningún registro real de ${label} escrito por la API en producción`);
+  const liveNote = `${statsNote} · registro real escrito por /api/engagement en producción${recordProbe.lastAt ? ` (último: ${recordProbe.lastAt})` : ''}`;
+  if (!currentEvidence?.commit) return partial(`registro real presente${recordProbe.lastAt ? ` (último: ${recordProbe.lastAt})` : ''}, pero falta la evidencia de CI del commit actual (${WRITE_CONTRACT_SUITES.engagement})`);
+  const note = `${liveNote} · ${ciNote(currentEvidence, 'repositoryAudit', 'Repository audit')} · ${WRITE_CONTRACT_SUITES.engagement}`;
+  if (ciCheckFailed(currentEvidence, 'repositoryAudit')) return { ok: false, note, status: 200, promote: false, partial: false, evidenceLevel: EVIDENCIA.CI_VERIFIED };
+  return {
+    ok: true,
+    note,
+    status: Number(statsProbe.status || 200),
+    promote: ciCheckPassed(currentEvidence, 'repositoryAudit'),
+    partial: false,
+    pending: ciCheckPending(currentEvidence, 'repositoryAudit'),
+    evidenceLevel: EVIDENCIA.LIVE_PRODUCTION,
+  };
+}
+
+// Entrega de correos de pedido a partir de /api/system-health. Sólo lee lo que
+// producción ya registró: no envía nada. `delivered` exige pedidos pagados
+// reales, todos con correo confirmado, y ningún correo abandonado en la cola.
+export function classifyOrderEmailDelivery(report) {
+  const integrations = report?.integrations;
+  if (!integrations || typeof integrations.resend !== 'boolean') return null;
+  if (integrations.resend !== true) {
+    return { ok: false, delivered: false, note: 'GET /api/system-health · Resend sin configurar en producción' };
+  }
+  const checkout = report.checkout;
+  const queue = integrations.orderEmailQueue;
+  if (checkout?.available !== true || !queue) {
+    return { ok: true, delivered: false, note: 'GET /api/system-health · Resend configurado; conciliación de pedidos o cola de correos no disponible, entrega sin confirmar' };
+  }
+  const paid = Number(checkout.paidOrders) || 0;
+  const withoutEmail = Number(checkout.paidWithoutEmail) || 0;
+  const deadLetter = Number(queue.deadLetterCount) || 0;
+  const pending = Number(queue.pendingCount) || 0;
+  const delivered = paid > 0 && withoutEmail === 0 && deadLetter === 0;
+  const reason = paid === 0 ? ' · sin pedidos pagados en la muestra para confirmar entrega'
+    : withoutEmail > 0 ? ` · ${withoutEmail} pedido(s) pagado(s) sin correo confirmado`
+      : deadLetter > 0 ? ` · ${deadLetter} correo(s) sin entregar en la cola` : '';
+  return {
+    ok: true,
+    delivered,
+    note: `GET /api/system-health · Resend configurado · pedidos pagados con correo confirmado: ${paid - withoutEmail}/${paid}`
+      + ` · cola: ${pending} pendiente(s), ${deadLetter} sin entregar${reason}`,
+  };
+}
+
+// Si /api/master-diagnostics no entrega la evidencia de CI del commit actual,
+// todo lo que depende del Repository audit queda sin confirmar. Se avisa en
+// el panel en vez de dejarlo amarillo sin explicación.
+export function ciEvidenceProblem(masterDiagnostics) {
+  if (masterDiagnostics?.body?.currentEvidence?.commit) return '';
+  return `/api/master-diagnostics respondió ${masterDiagnostics?.status || 'sin respuesta'} sin evidencia de CI del commit actual: lo que depende del Repository audit queda sin confirmar`;
 }
 
 export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, protectedProbes = {}, sessionProbe = {}, currentEvidence }, checkedAt) {
@@ -143,12 +284,18 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     if (appsScript) setFrom('apps-script', appsScript.protocolOk === true,
       `GET /api/system-health · Apps Script ${appsScript.protocolOk ? 'protocolo reconocido' : 'protocolo no confirmado'}`,
       { status: appsScript.httpStatus || systemHealth.status, promote: appsScript.protocolOk === true, evidenceLevel: LP });
-    setFrom('google-sheets', integrations.sheets === true,
-      'GET /api/system-health · configuración y guard de Apps Script confirmados; sync de catálogo no probado por este probe', {
-        status: systemHealth.status,
-        promote: false,
-        partial: integrations.sheets === true,
-        evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+    // La hoja queda verde sólo si además hay constancia de una sincronización
+    // real en cada sentido (hoja → Firestore y Firestore → hoja).
+    const sheetsInbound = classifySheetsChannel(integrations.sheetsEvidence?.inbound, { expectedRevision: PRODUCTS_WEBHOOK_EXPECTED_REVISION });
+    const sheetsMirror = classifySheetsChannel(integrations.sheetsEvidence?.mirror);
+    const sheetsNode = sheetsGuardOutcome(integrations.sheets === true, systemHealth.status, [sheetsInbound, sheetsMirror]);
+    setFrom('google-sheets', sheetsNode.ok,
+      `GET /api/system-health · configuración y guard de Apps Script ${integrations.sheets === true ? 'confirmados' : 'no confirmados'}`
+        + ` · hoja → Firestore: ${sheetsInbound.note} · Firestore → hoja: ${sheetsMirror.note}`, {
+        status: sheetsNode.ok ? systemHealth.status : sheetsNode.status,
+        promote: sheetsNode.promote,
+        partial: sheetsNode.partial,
+        evidenceLevel: sheetsNode.evidenceLevel,
       });
     const paypalOk = integrations.paypal?.productionReady === true;
     const sandbox = integrations.paypal?.environment === 'sandbox';
@@ -183,20 +330,26 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       { status: notificationApi?.status || notificationRules?.status, promote: notificationsOk, evidenceLevel: LP, authRequired: notificationApi?.status === 401 || notificationRules?.authRequired === true });
   }
   const engagementStats = protectedProbes.engagementStats || {};
+  const engagementRecords = protectedProbes.engagementRecords || {};
   for (const [id, key, label] of [
-    ['likes', 'likes', 'estadísticas públicas de likes'],
-    ['comentarios', 'reviews', 'estadísticas públicas de reseñas'],
+    ['likes', 'likes', 'likes'],
+    ['comentarios', 'reviews', 'reseñas'],
   ]) {
-    const probe = engagementStats[key];
-    if (!probe) continue;
-    setFrom(id, probe.ok === true,
-      `GET /api/engagement · ${label} ${probe.ok === true ? 'disponibles' : 'no confirmadas'}; mutación no probada`,
-      { status: probe.status, promote: false, partial: probe.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
+    const outcome = engagementWriteOutcome(engagementStats[key], engagementRecords[key], currentEvidence, label);
+    if (!outcome) continue;
+    setFrom(id, outcome.ok, outcome.note, outcome);
   }
   const sheetsWebhook = classifySheetsWebhookProbe(protectedProbes.sheetsWebhook);
   if (sheetsWebhook) {
-    setFrom('sheets-products-webhook', sheetsWebhook.ok, sheetsWebhook.note,
-      { status: sheetsWebhook.status, promote: false, partial: sheetsWebhook.ok, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
+    // El guard prueba que el webhook está desplegado y protegido; la
+    // escritura sólo la prueba el acuse de una edición real de la hoja.
+    const report = systemHealth?.body?.report;
+    const inbound = report?.integrations
+      ? classifySheetsChannel(report.integrations.sheetsEvidence?.inbound, { expectedRevision: PRODUCTS_WEBHOOK_EXPECTED_REVISION })
+      : { state: 'none', note: 'acuse de escritura no consultado (falta /api/system-health)' };
+    const outcome = sheetsGuardOutcome(sheetsWebhook.ok, sheetsWebhook.status, [inbound]);
+    setFrom('sheets-products-webhook', outcome.ok, `${sheetsWebhook.note} · ${inbound.note}`,
+      { status: outcome.ok ? sheetsWebhook.status : outcome.status, promote: outcome.promote, partial: outcome.partial, evidenceLevel: outcome.evidenceLevel });
   }
   const cartRules = protectedProbes.firestoreRules?.cart;
   if (cartRules) {
@@ -345,14 +498,33 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       `GET /api/system-health · PayPal ${report.integrations.paypal.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'} · externos listos=${paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true}`,
       systemHealth.status, { promote: available && paypalOk, partial: available && sandbox && !paypalOk });
   }
+  // Sheets: el guard HTTP sólo prueba que el puente está desplegado. Cada
+  // conexión queda verde únicamente con el acuse de una sincronización real
+  // en su sentido; si la última falló, se muestra el fallo.
+  const sheetsInbound = report?.integrations
+    ? classifySheetsChannel(report.integrations.sheetsEvidence?.inbound, { expectedRevision: PRODUCTS_WEBHOOK_EXPECTED_REVISION })
+    : null;
+  const sheetsMirror = report?.integrations ? classifySheetsChannel(report.integrations.sheetsEvidence?.mirror) : null;
   if (report?.integrations?.sheets !== undefined) {
-    set('apps-script', 'google-sheets', report.integrations.sheets === true,
-      'GET /api/system-health · guard HTTP reconocido; escritura Sheets → Firestore no probada por este probe',
-      systemHealth.status, {
-        promote: false,
-        partial: report.integrations.sheets === true,
-        evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+    const outcome = sheetsGuardOutcome(report.integrations.sheets === true, systemHealth.status, [sheetsMirror]);
+    set('apps-script', 'google-sheets', outcome.ok,
+      `GET /api/system-health · guard HTTP ${report.integrations.sheets === true ? 'reconocido' : 'no confirmado'} · Firestore → hoja: ${sheetsMirror.note}`,
+      outcome.ok ? systemHealth.status : outcome.status, {
+        promote: outcome.promote,
+        partial: outcome.partial,
+        evidenceLevel: outcome.evidenceLevel,
       });
+  }
+  if (sheetsInbound && sheetsMirror) {
+    for (const [from, to, result, label] of [
+      ['google-sheets', 'apps-script', sheetsInbound, 'Edición real de la hoja recibida por el webhook con el secreto de Apps Script'],
+      ['sheets-products-webhook', 'firestore', sheetsInbound, 'Commit de producto e inventario pedido por la hoja'],
+      ['firestore', 'apps-script', sheetsMirror, 'Registro real de Firestore aceptado por Apps Script'],
+    ]) {
+      const outcome = sheetsChannelOutcome(result);
+      set(from, to, outcome.ok, `${label} · ${result.note}`, outcome.status,
+        { promote: outcome.promote, pending: outcome.pending === true, evidenceLevel: outcome.evidenceLevel });
+    }
   }
   const favoriteApi = protectedProbes.favoriteApi;
   const notificationApi = protectedProbes.notificationApi;
@@ -369,22 +541,22 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       notificationApi.status || 0, { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
   }
   const engagementStats = protectedProbes.engagementStats || {};
+  const engagementRecords = protectedProbes.engagementRecords || {};
   for (const [to, key, label] of [
-    ['likes', 'likes', 'estadísticas de likes'],
-    ['comentarios', 'reviews', 'estadísticas de reseñas'],
+    ['likes', 'likes', 'likes'],
+    ['comentarios', 'reviews', 'reseñas'],
   ]) {
-    const probe = engagementStats[key];
-    if (probe) set('apis-internas', to, probe.ok === true,
-      `GET /api/engagement · ${label} ${probe.ok === true ? 'disponibles' : 'no confirmadas'}; mutación no probada`,
-      probe.status || 0, { promote: false, partial: probe.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
+    const outcome = engagementWriteOutcome(engagementStats[key], engagementRecords[key], currentEvidence, label);
+    if (outcome) set('apis-internas', to, outcome.ok, outcome.note, outcome.status,
+      { promote: outcome.promote, partial: outcome.partial, pending: outcome.pending === true, evidenceLevel: outcome.evidenceLevel });
   }
   const sheetsWebhook = classifySheetsWebhookProbe(protectedProbes.sheetsWebhook);
-  if (sheetsWebhook) set('apps-script', 'sheets-products-webhook', sheetsWebhook.ok, sheetsWebhook.note,
-    sheetsWebhook.status, { promote: false, partial: sheetsWebhook.ok, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
-  const cartRules = protectedProbes.firestoreRules?.cart;
-  if (cartRules) set('firestore', 'carrito', cartRules.ok === true,
-    `SDK Firestore autenticado · lectura del carrito propio ${cartRules.ok === true ? 'permitida' : 'no confirmada'}; persistencia/edición no probadas`,
-    cartRules.status || 0, { promote: false, partial: cartRules.ok === true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
+  if (sheetsWebhook) {
+    const inbound = sheetsInbound || { state: 'none', note: 'acuse de escritura no consultado (falta /api/system-health)' };
+    const outcome = sheetsGuardOutcome(sheetsWebhook.ok, sheetsWebhook.status, [inbound]);
+    set('apps-script', 'sheets-products-webhook', outcome.ok, `${sheetsWebhook.note} · ${inbound.note}`,
+      outcome.ok ? sheetsWebhook.status : outcome.status, { promote: outcome.promote, partial: outcome.partial, evidenceLevel: outcome.evidenceLevel });
+  }
   const rulesOk = favoriteRules?.ok === true && notificationRules?.ok === true;
   if (favoriteRules || notificationRules) {
     set('cf-functions', 'reglas-firestore', rulesOk,
@@ -428,6 +600,80 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
         `${ciNote(currentEvidence, 'repositoryAudit', 'contratos de acceso/perfil')} · login-profile + login-isolation`,
         200, { evidenceLevel: EVIDENCIA.CI_VERIFIED, pending: ciCheckPending(currentEvidence, 'repositoryAudit') });
     }
+    // Bloqueo de cuenta y destino por rol son decisiones del propio sitio.
+    // El Repository audit del commit actual ejecuta ese código real (no lee su
+    // texto), así que su PASS es la evidencia; sin él no hay verde.
+    for (const [from, to, suite] of ACCESS_DECISION_EDGES) {
+      set(from, to, auditPassed,
+        `${ciNote(currentEvidence, 'repositoryAudit', 'Repository audit')} · ${suite}`,
+        200, { evidenceLevel: EVIDENCIA.CI_VERIFIED, pending: ciCheckPending(currentEvidence, 'repositoryAudit') });
+    }
+  }
+
+  // Conexiones que incluyen una escritura (pedido, stock, edición desde el
+  // panel). Una lectura sola no la certifica y un test solo no prueba
+  // producción: quedan verdes únicamente con las dos evidencias a la vez —
+  // la lectura real de producción y el Repository audit del commit actual,
+  // que ejecuta el código de esa escritura.
+  const auditPending = ciCheckPending(currentEvidence, 'repositoryAudit');
+  const auditFailed = ciCheckFailed(currentEvidence, 'repositoryAudit');
+  const setLiveAndCi = (from, to, liveOk, liveNote, liveStatus, suite) => {
+    if (typeof liveOk !== 'boolean') return;
+    const status = Number(liveStatus || 0);
+    if (!liveOk) {
+      set(from, to, false, liveNote, status);
+      return;
+    }
+    if (!currentEvidence?.commit) {
+      set(from, to, true, `${liveNote}; falta la evidencia de CI del commit actual (${suite})`, status,
+        { promote: false, partial: true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY });
+      return;
+    }
+    const note = `${liveNote} · ${ciNote(currentEvidence, 'repositoryAudit', 'Repository audit')} · ${suite}`;
+    if (auditFailed) {
+      set(from, to, false, note, 200, { evidenceLevel: EVIDENCIA.CI_VERIFIED });
+      return;
+    }
+    set(from, to, true, note, status, { promote: auditPassed, pending: auditPending, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
+  };
+  setLiveAndCi('apis-internas', 'pedidos', typeof admin.orders === 'boolean' ? admin.orders : undefined,
+    `GET /api/health · admin.orders=${admin.orders === true} (lectura server-side de pedidos)`,
+    publicHealth?.status, WRITE_CONTRACT_SUITES.orders);
+  setLiveAndCi('pedidos', 'inventario',
+    typeof admin.orders === 'boolean' && typeof admin.productInventory === 'boolean' ? admin.orders && admin.productInventory : undefined,
+    `GET /api/health · admin.orders=${admin.orders === true} · admin.productInventory=${admin.productInventory === true}`,
+    publicHealth?.status, WRITE_CONTRACT_SUITES.stock);
+  for (const [to, key, label] of [
+    ['productos', 'products', 'productos'],
+    ['pedidos', 'orders', 'pedidos'],
+  ]) {
+    const probe = protectedProbes.firestoreRules?.[key];
+    if (!probe) continue;
+    setLiveAndCi('super-panel', to, probe.ok === true,
+      `SDK Firestore con la sesión del panel · lectura de ${label} ${probe.ok === true ? 'permitida' : 'no confirmada'}`,
+      probe.status, WRITE_CONTRACT_SUITES.panel);
+  }
+
+  // Carrito: la clienta escribe directo en users/{uid}/cart. La lectura con
+  // la sesión real prueba las Rules desplegadas; el alta, la edición y la
+  // baja las ejecuta el Repository audit contra esas mismas Rules.
+  const cartRules = protectedProbes.firestoreRules?.cart;
+  if (cartRules) {
+    setLiveAndCi('firestore', 'carrito', cartRules.ok === true,
+      `SDK Firestore autenticado · lectura del carrito propio ${cartRules.ok === true ? 'permitida' : 'no confirmada'}`,
+      cartRules.status, WRITE_CONTRACT_SUITES.cart);
+  }
+
+  // Correos: la evidencia real es la entrega confirmada de cada pedido pagado
+  // (notificationStatus=sent lo escribe el servidor cuando Resend acepta) y la
+  // cola de reintentos sin correos perdidos. No envía ningún correo de prueba.
+  const emailDelivery = classifyOrderEmailDelivery(report);
+  if (emailDelivery) {
+    set('apis-internas', 'correos', emailDelivery.ok, emailDelivery.note, emailDelivery.ok ? systemHealth.status : 503, {
+      promote: emailDelivery.delivered,
+      partial: emailDelivery.ok && !emailDelivery.delivered,
+      evidenceLevel: emailDelivery.delivered ? EVIDENCIA.LIVE_PRODUCTION : EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+    });
   }
   return out;
 }
