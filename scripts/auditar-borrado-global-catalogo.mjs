@@ -38,6 +38,15 @@ expect(domain.includes("runProductIdQuery(env, 'reviewLikeProducts'"), 'La purga
 expect(domain.includes("type: 'review'") && domain.includes("productId: ''") && domain.includes("productName: ''"), 'Las reseñas de Sheets no se anonimizan al purgar producto.');
 expect(domain.includes("type: 'like'") && domain.includes("operation: 'delete'"), 'Los likes de Sheets no se eliminan al purgar producto.');
 expect(domain.includes('syncEngagementBatchToSheets(env, events)'), 'Las filas sociales deben sincronizarse en un único lote para no agotar subrequests.');
+expect(domain.includes('productIds: ids'), 'La respuesta de borrado debe devolver los IDs confirmados para reconciliar la UI sin esperar al listener.');
+expect(
+  domain.indexOf('await commitWrites(env, [...deletePaths]') < domain.indexOf('const socialSheet = await syncSocialPurgeToSheets(env, social)'),
+  'Firestore debe aplicar el borrado antes de esperar la reconciliación con Google Sheets.'
+);
+expect(ui.includes('CATALOG_DELETE_REQUEST_TIMEOUT_MS = 90_000'), 'El POST destructivo no puede quedar esperando indefinidamente.');
+expect(ui.includes("timedOut ? 'request-timeout'"), 'El timeout del borrado debe quedar diagnosticado como resultado incierto y reintentable.');
+expect(resilience.includes('SHEETS_HEALTH_TIMEOUT_MS'), 'El preflight de Sheets debe usar el timeout corto de salud.');
+expect(/preflightProductsSheet[\s\S]*?attempts:\s*1[\s\S]*?timeoutMs:\s*SHEETS_HEALTH_TIMEOUT_MS/.test(resilience), 'El preflight no debe bloquear el borrado con dos esperas largas de Apps Script.');
 expect(domain.includes('syncDeletedProductsPayloadWithRetry(env, ids, { attempts: 2 })'), 'Falta sincronización por tombstones server-side hacia la hoja Productos después del borrado.');
 expect(appsScript.includes('if (!productResult.ok)') && appsScript.includes('sheet.deleteRow(rowNumber)'), 'Apps Script Productos no elimina la fila cuando el producto ya no existe.');
 expect(engagement.includes("event.operation === 'delete'") && engagement.includes('likes.deleteRow(row)'), 'Apps Script social no soporta borrado de likes.');

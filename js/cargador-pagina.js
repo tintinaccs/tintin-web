@@ -841,7 +841,7 @@
 
   function bootHeaderMode() {
     if (!window.TintinHeaderModeBooted) {
-      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode');
+      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261005-catalog-delete-ui-reconcile-1');
     }
   }
 

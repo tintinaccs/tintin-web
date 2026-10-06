@@ -85,6 +85,13 @@ check(
   'La eliminación de producto debe confirmarse y respetar deleteProducts.'
 );
 check(
+  'Borrado global reconcilia la tabla avanzada sin esperar al listener',
+  /tintin:catalog-mutated/.test(read('js/admin/shopify-commerce-admin.js')) &&
+    /result\.productIds/.test(read('js/admin/shopify-commerce-admin.js')) &&
+    /state\.products\s*=\s*state\.products\.filter/.test(read('js/admin/shopify-commerce-admin.js')),
+  'La tabla debe retirar inmediatamente los IDs que el servidor confirmó como eliminados.'
+);
+check(
   'Crear/editar/eliminar producto se registran en Auditoría',
   /logAudit\('crear_producto'/.test(adminApp) &&
     /logAudit\('editar_producto'/.test(adminApp) &&

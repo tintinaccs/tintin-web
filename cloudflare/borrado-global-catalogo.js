@@ -263,6 +263,7 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
 
   const result = {
     deletedProducts: ids.length,
+    productIds: ids,
     deletedFirestoreDocuments: deletePaths.size,
     socialPurged: {
       reviewRecords: social.privateReviews.length,
