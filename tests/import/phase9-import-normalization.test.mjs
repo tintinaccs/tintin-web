@@ -54,5 +54,9 @@ test('valida proyecto, formato y versión de copias operativas', () => {
   assert.deepEqual(validateOperationalBackupEnvelope(valid), valid.data.products);
   assert.throws(() => validateOperationalBackupEnvelope({ ...valid, projectId: 'otro' }), /otro proyecto/i);
   assert.throws(() => validateOperationalBackupEnvelope({ ...valid, schemaVersion: 2 }), /versión/i);
-  assert.throws(() => validateOperationalBackupEnvelope({ ...valid, format: 'otro' }), /formato/i);
+  assert.throws(() => validateOperationalBackupEnvelope({ ...valid, format: 'otro' }), /formato.*CSV exportado desde Shopify/i);
+  assert.throws(
+    () => validateOperationalBackupEnvelope({ ...valid, format: 'tintin-inventory-reservation-review', data: undefined }),
+    /revisión de reservas.*no se puede importar/i,
+  );
 });
