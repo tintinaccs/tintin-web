@@ -274,11 +274,6 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
     preservedHistory: ['orders', 'auditLog'],
   };
 
-  // Firestore es la autoridad canónica: el borrado ya quedó aplicado antes
-  // de esperar a Apps Script. Así el listener del Admin puede reflejar la baja
-  // inmediatamente aunque Google Sheets esté lento o temporalmente caído.
-  const socialSheet = await syncSocialPurgeToSheets(env, social);
-
   let productsSheets = false;
   let productsQueued = false;
   const errors = [];
