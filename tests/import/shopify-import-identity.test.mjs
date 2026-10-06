@@ -145,3 +145,12 @@ test('el orden de candidatos no invalida una decisión y los duplicados de la fu
   assert.equal(fresh.sourceDuplicate, true);
   assert.equal(fresh.duplicate, true);
 });
+
+test('el catch de aplicar puede informar el error: records está declarado fuera del try', () => {
+  const apply = read('js/admin/aplicar-importacion-admin.js');
+  const body = apply.slice(apply.indexOf('async function apply()'), apply.indexOf('function mount('));
+  const tryIndex = body.indexOf('    try {');
+  assert.ok(body.indexOf('let records = [];') > -1 && body.indexOf('let records = [];') < tryIndex, 'records debe declararse antes del try');
+  assert.doesNotMatch(body, /const records\s*=/, 'un const records dentro del try deja al catch con ReferenceError y oculta el error real');
+  assert.match(body.slice(body.indexOf('} catch (error) {')), /\$\{processed\}\/\$\{records\.length\}/);
+});

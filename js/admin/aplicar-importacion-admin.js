@@ -1,8 +1,9 @@
 /*
  * Tintin Admin — aplicar al catálogo real un CSV de Shopify ya revisado.
  *
- * Lo monta importacion-admin.js. Exige Super Admin, la copia operativa
- * descargada en esta sesión y un import job READY sin errores. Cada lote es
+ * Lo monta importacion-admin.js. Un solo botón «Importar al catálogo» exige
+ * Super Admin y un preview sin errores; descarga la copia operativa, crea el
+ * import job y lo marca READY antes de escribir. Cada lote es
  * una transacción que primero lee y después crea solo los productos que no
  * existen (id estable por Handle): reintentar nunca duplica, nunca pisa un
  * producto ya editado y nunca borra nada. No escribe el inventario privado.
@@ -16,7 +17,7 @@ import {
   chunkImportRecords,
   pendingCollectionGroups,
   stableProductDocumentId,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20261003-variant-inventory-1';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20261005-import-one-click-1';
 import {
   isShopifyMediaUrl,
   rewriteImportedShopifyMedia,
@@ -27,9 +28,12 @@ const BATCH_SIZE = 50;
 const MEDIA_COPY_BATCH_SIZE = 5;
 const APPLY_STATES = new Set(['READY', 'RUNNING', 'FAILED']);
 
-export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, refreshCatalogIdentitySnapshot, toast, node }) {
+export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, refreshCatalogIdentitySnapshot, ensureReadyJob, takeBackup, toast, node }) {
   let ui = null;
   let totals = { invalid: 0 };
+  // Resultado de la comprobación de imágenes del archivo cargado, para avisar
+  // antes del clic si Cloudflare no tiene habilitada la copia a Cloudinary.
+  let media = { key: '', status: '', message: '' };
 
   function collectionOptions() {
     return state.collections
@@ -69,10 +73,8 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     return [...candidates.values()];
   }
 
-  async function copyShopifyMedia(records) {
-    const candidates = mediaCandidates(records);
-    if (!candidates.length) return records;
-    ui.reason.textContent = 'Comprobando que la copia de imágenes esté preparada…';
+  /** Devuelve '' si la copia de imágenes está lista, o el motivo legible si no. */
+  async function mediaPreflightProblem() {
     const preflightResponse = await authenticatedFetch('/api/admin-import-media', {
       method: 'POST',
       cache: 'no-store',
@@ -80,14 +82,38 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
       body: JSON.stringify({ action: 'preflight' }),
     });
     const preflight = await preflightResponse.json().catch(() => ({}));
-    if (!preflightResponse.ok || preflight?.ready !== true) {
-      const reasons = Array.isArray(preflight?.reasons) ? preflight.reasons : [];
-      const message = reasons.includes('MEDIA_COPY_DISABLED')
-        ? 'La copia de imágenes está desactivada. Habilitá temporalmente SHOPIFY_PHASE2_MEDIA_WRITE=1 en Cloudflare Pages para esta importación.'
-        : reasons.includes('CLOUDINARY_NOT_CONFIGURED')
-          ? 'Cloudinary no está configurado en Cloudflare Pages; no se modificó el catálogo.'
-          : preflight?.error || `No se pudo preparar la copia de imágenes (HTTP ${preflightResponse.status}).`;
-      throw new Error(message);
+    if (preflightResponse.ok && preflight?.ready === true) return '';
+    const reasons = Array.isArray(preflight?.reasons) ? preflight.reasons : [];
+    return reasons.includes('MEDIA_COPY_DISABLED')
+      ? 'La copia de imágenes está desactivada. Habilitá temporalmente SHOPIFY_PHASE2_MEDIA_WRITE=1 en Cloudflare Pages para esta importación.'
+      : reasons.includes('CLOUDINARY_NOT_CONFIGURED')
+        ? 'Cloudinary no está configurado en Cloudflare Pages; no se modificó el catálogo.'
+        : preflight?.error || `No se pudo preparar la copia de imágenes (HTTP ${preflightResponse.status}).`;
+  }
+
+  /** Comprueba una vez por archivo, sin escribir nada, si las imágenes se van a poder copiar. */
+  function checkMediaReadiness() {
+    if (!isSuperAdmin() || state.source !== 'shopify-csv' || !state.records.length) return;
+    const key = `${state.fileChecksum}:${state.records.length}`;
+    if (media.key === key) return;
+    let count = 0;
+    try { count = mediaCandidates(applicableRecords()).length; } catch (error) { media = { key, status: 'blocked', message: error.message }; return; }
+    if (!count) { media = { key, status: 'ready', message: '' }; return; }
+    media = { key, status: 'checking', message: `Comprobando que las ${count} imagen(es) se puedan copiar…` };
+    mediaPreflightProblem()
+      .then(problem => { if (media.key === key) media = { key, status: problem ? 'blocked' : 'ready', message: problem || `${count} imagen(es) listas para copiarse a Cloudinary.` }; })
+      .catch(error => { if (media.key === key) media = { key, status: 'blocked', message: `No se pudo comprobar la copia de imágenes: ${error.message}` }; })
+      .finally(() => { if (media.key === key && !state.busy) renderPreview(); });
+  }
+
+  async function copyShopifyMedia(records) {
+    const candidates = mediaCandidates(records);
+    if (!candidates.length) return records;
+    ui.reason.textContent = 'Comprobando que la copia de imágenes esté preparada…';
+    const problem = await mediaPreflightProblem();
+    if (problem) {
+      media = { ...media, status: 'blocked', message: problem };
+      throw new Error(problem);
     }
     const copiedBySourceUrl = new Map();
     for (let offset = 0; offset < candidates.length; offset += MEDIA_COPY_BATCH_SIZE) {
@@ -124,11 +150,11 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     const status = state.job?.status || '';
     if (!isSuperAdmin()) return 'Solo el Super Admin puede aplicar la importación.';
     if (state.source !== 'shopify-csv') return 'Solo un CSV exportado de Shopify se aplica al catálogo.';
-    if (totals.invalid > 0) return 'Resolvé primero los productos con error (colección, precio o stock).';
-    if (!state.jobId) return 'Creá el import job y marcalo READY.';
-    if (status === 'COMPLETED') return 'Este import job ya se aplicó al catálogo.';
-    if (!APPLY_STATES.has(status)) return 'Marcá el import job como READY para habilitar la aplicación.';
-    if (!state.backupAt) return 'Descargá la copia operativa en esta sesión antes de aplicar.';
+    if (totals.invalid > 0) return 'Elegí arriba la colección de los productos marcados (o corregí su precio/stock) para poder importar.';
+    if (status === 'COMPLETED') return 'Este archivo ya se importó al catálogo. Para importar otro, limpiá el preview y cargá el nuevo CSV.';
+    if (state.jobId && status !== 'PREVIEW' && !APPLY_STATES.has(status)) return `El import job quedó en estado ${status || 'desconocido'}; limpiá el preview y volvé a cargar el CSV.`;
+    if (media.status === 'blocked') return media.message;
+    if (media.status === 'checking') return media.message;
     return '';
   }
 
@@ -143,7 +169,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
       ? 'No hay colecciones creadas. Creálas primero en Colecciones → «Importar las 12 colecciones actuales» y volvé a cargar el CSV.'
       : locked
         ? 'El import job ya se creó con estas colecciones. Para cambiarlas, limpiá el preview y volvé a cargar el CSV.'
-        : 'Estos productos no se reconocieron solos. Elegí la colección de cada grupo; se aplica a todos los productos del grupo.';
+        : 'Estos productos no se reconocieron solos. Elegí la colección del grupo y se aplica a todos sus productos.';
     groups.forEach(entry => {
       const row = node('div', 'phase10-map-row');
       const label = node('div', 'phase10-map-label');
@@ -174,6 +200,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     ui.identity.hidden = true;
     ui.apply.hidden = !state.records.length || state.source !== 'shopify-csv';
     if (!state.records.length) return;
+    checkMediaReadiness();
     renderMapping();
     renderIdentityReview();
     const unlimited = state.records.filter(record => record.product?.stock == null).length;
@@ -182,7 +209,9 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     const reason = blockReason();
     ui.button.disabled = Boolean(reason) || state.busy;
     if (!state.busy) {
-      ui.reason.textContent = reason || `Crea hasta ${applicableRecords().length} producto(s) nuevos en el catálogo real. Los que ya existen no se modifican ni se borran.`;
+      const pending = applicableRecords().filter(record => record.identityStatus !== 'MATCHED_EXISTING').length;
+      ui.reason.textContent = reason || `Todo listo: se van a crear ${pending} producto(s) nuevos${media.message ? ` · ${media.message}` : ''}. Los que ya existen no se modifican ni se borran.`;
+      ui.reason.dataset.state = reason ? 'blocked' : 'ready';
     }
   }
 
@@ -218,10 +247,10 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
   async function apply() {
     if (blockReason() || state.busy) return;
     const recordsToConfirm = applicableRecords();
-    const confirmed = window.confirm(`Se van a crear hasta ${recordsToConfirm.length} producto(s) en el catálogo real de la tienda.\n\nLos productos que ya existan no se modifican ni se borran. ¿Continuar?`);
+    const confirmed = window.confirm(`Se van a crear hasta ${recordsToConfirm.length} producto(s) en el catálogo real de la tienda.\n\nAntes se descarga una copia de seguridad. Los productos que ya existan no se modifican ni se borran. ¿Continuar?`);
     if (!confirmed || blockReason() || state.busy) return;
     state.busy = true;
-    ui.button.textContent = 'Aplicando…';
+    ui.button.textContent = 'Importando…';
     renderPreview();
     let batches = [];
     const seen = new Set();
@@ -230,7 +259,14 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     let skipped = 0;
     // Creados por este mismo job en un intento anterior (reintento tras FAILED).
     let resumed = 0;
+    // Fuera del try: el catch informa el avance aunque falle antes de leerlos.
+    let records = [];
     try {
+      if (!state.backupAt) {
+        ui.reason.textContent = 'Descargando la copia de seguridad del catálogo…';
+        await takeBackup();
+      }
+      if (!state.backupAt) throw new Error('No se pudo descargar la copia de seguridad; no se modificó el catálogo');
       if (typeof refreshCatalogIdentitySnapshot === 'function') {
         const refreshedTotals = await refreshCatalogIdentitySnapshot();
         if (refreshedTotals) totals = refreshedTotals;
@@ -238,7 +274,9 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
           throw new Error('El catálogo cambió desde que cargaste el CSV. Revisá los productos marcados antes de volver a aplicar.');
         }
       }
-      const records = applicableRecords();
+      records = applicableRecords();
+      ui.reason.textContent = 'Preparando la importación…';
+      await ensureReadyJob();
       if (state.job.status === 'FAILED') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'READY' });
       if (state.job.status === 'READY') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'RUNNING', processed: 0, lastCheckpoint: 0 });
       await saveLocalJob();
@@ -270,11 +308,13 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
         processed += batch.length;
         ui.reason.textContent = `Aplicando… ${processed}/${records.length} · ${createdIds.length + resumed} creado(s) · ${skipped} ya existían.`;
       }
-      await window.tintinPushProductsToSheets?.(createdIds);
+      ui.reason.textContent = 'Sincronizando con Google Sheets…';
+      const sheetsSynced = createdIds.length ? await window.tintinPushProductsToSheets?.(createdIds) : true;
       const created = createdIds.length + resumed;
       state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'COMPLETED', processed, lastCheckpoint: batches.length, created, skipped });
       await saveLocalJob();
-      ui.reason.textContent = `Listo: ${created} producto(s) creado(s) · ${skipped} ya existían y no se tocaron.`;
+      const sheetsText = sheetsSynced ? 'Google Sheets sincronizado' : 'Google Sheets se completa solo con el reintento automático (≈1 min)';
+      ui.reason.textContent = `Listo: ${created} producto(s) creado(s) · ${skipped} ya existían y no se tocaron. Ya están en la web y en el panel; ${sheetsText}.`;
       toast(`Catálogo actualizado: ${created} producto(s) creado(s), ${skipped} ya existían.`);
     } catch (error) {
       console.error('[admin-import] catalog apply failed', error);
@@ -291,7 +331,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
       toast(`La aplicación se detuvo: ${error.message}. Podés reintentar sin duplicar productos.`, true);
     } finally {
       state.busy = false;
-      ui.button.textContent = 'Aplicar al catálogo';
+      ui.button.textContent = 'Importar al catálogo';
       const message = ui.reason.textContent;
       renderPreview();
       ui.reason.textContent = message;
@@ -318,11 +358,11 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     const reason = node('p', 'phase10-note');
     reason.setAttribute('role', 'status');
     reason.setAttribute('aria-live', 'polite');
-    const button = node('button', 'adm-btn adm-btn-primary', 'Aplicar al catálogo');
+    const button = node('button', 'adm-btn adm-btn-primary', 'Importar al catálogo');
     button.type = 'button';
     button.addEventListener('click', apply);
     row.append(reason, button);
-    applyBox.append(node('strong', 'phase10-map-title', 'Aplicar al catálogo real'), stock, row);
+    applyBox.append(node('strong', 'phase10-map-title', 'Importar al catálogo'), stock, row);
     preview.appendChild(applyBox);
     ui = { identity, identityList, mapping, mapHint, mapList, apply: applyBox, stock, reason, button };
   }

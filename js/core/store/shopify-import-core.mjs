@@ -190,7 +190,62 @@ function collectionCandidates(collections) {
     .filter(item => item.slug);
 }
 
-export function resolveShopifyCollection({ explicit, type, tags, title }, collections) {
+// Nombres habituales de la tienda (palabra inicial del título) que no
+// coinciden literalmente con el slug de su colección.
+const TITLE_COLLECTION_ALIASES = Object.freeze({
+  arete: 'aros', argolla: 'aros', hoop: 'aros', hoops: 'aros', pendiente: 'aros', earring: 'aros',
+  cadena: 'collares', necklace: 'collares',
+  esclava: 'brazaletes',
+  bag: 'bolsos', bolso: 'bolsos', cartera: 'bolsos',
+  joyerito: 'joyeros',
+  lente: 'gafas', lentes: 'gafas', sunglasses: 'gafas',
+  watch: 'relojes',
+});
+
+// Hojas de la taxonomía estándar de Shopify («Product Category») en español.
+const SHOPIFY_CATEGORY_ALIASES = Object.freeze({
+  pendientes: 'aros', aretes: 'aros',
+  collares: 'collares',
+  pulseras: 'pulseras',
+  anillos: 'anillos',
+  tobilleras: 'tobilleras',
+  relojes: 'relojes', 'relojes-de-pulsera-y-de-bolsillo': 'relojes', 'accesorios-para-reloj': 'relojes',
+  gafas: 'gafas', 'gafas-de-sol': 'gafas',
+  'cajas-de-joyeria': 'joyeros', 'estuches-de-joyeria-de-viaje': 'joyeros', 'porta-anillos': 'joyeros', 'soportes-para-joyeria': 'joyeros',
+  bolsos: 'bolsos',
+});
+
+function existingSlug(candidates, slug) {
+  return slug && candidates.some(item => item.slug === slug) ? slug : '';
+}
+
+/** Primera palabra del título contra colecciones de una palabra, plurales y alias. */
+function titleWordSlug(title, candidates) {
+  const titleForms = singularForms(titleGroupKey(title));
+  if (!titleForms.length) return '';
+  const matches = new Set(candidates
+    .filter(item => [item.slug, normalizeImportKey(item.name)]
+      .filter(key => key && !key.includes('-'))
+      .some(key => singularForms(key).some(form => titleForms.includes(form))))
+    .map(item => item.slug));
+  if (matches.size === 1) return [...matches][0];
+  if (matches.size > 1) return '';
+  return titleForms.map(form => existingSlug(candidates, TITLE_COLLECTION_ALIASES[form])).find(Boolean) || '';
+}
+
+/** Recorre «A > B > C» de la hoja a la raíz y devuelve la primera colección existente. */
+function shopifyCategorySlug(category, candidates) {
+  const segments = asText(category).split('>').map(normalizeImportKey).filter(Boolean).reverse();
+  for (const segment of segments) {
+    const direct = candidates.find(item => item.slug === segment || normalizeImportKey(item.name) === segment);
+    if (direct) return direct.slug;
+    const alias = existingSlug(candidates, SHOPIFY_CATEGORY_ALIASES[segment]);
+    if (alias) return alias;
+  }
+  return '';
+}
+
+export function resolveShopifyCollection({ explicit, type, tags, title, shopifyCategory }, collections) {
   const candidates = collectionCandidates(collections);
   const signals = [explicit, type, tags, title].map(normalizeImportKey).filter(Boolean);
   const directMatches = [...new Map(candidates
@@ -198,6 +253,12 @@ export function resolveShopifyCollection({ explicit, type, tags, title }, collec
     .map(item => [item.slug, item])).values()];
   if (directMatches.length === 1) return { slug: directMatches[0].slug, suggestions: [], ambiguous: false };
   if (directMatches.length > 1) return { slug: '', suggestions: directMatches.map(item => item.slug), ambiguous: true };
+
+  // El nombre del producto («Cadena Lumi», «Hoops Vera») es más específico
+  // que la categoría de Shopify, que p. ej. archiva relojes en «Pulseras»; la
+  // categoría resuelve el resto (sets, porta anillos, joyeros…).
+  const aliased = titleWordSlug(title, candidates) || shopifyCategorySlug(shopifyCategory, candidates);
+  if (aliased) return { slug: aliased, suggestions: [], ambiguous: false };
 
   const matches = candidates.filter(item => signals.some(signal => signal.includes(item.slug) || item.slug.includes(signal)));
   const uniqueMatches = [...new Map(matches.map(item => [item.slug, item])).values()];
@@ -379,7 +440,8 @@ export function groupShopifyRows(rows, collections, { parseNumber, parseStock })
     const explicitCollection = firstShopifyValue(row, ['category', 'collection', 'categoría', 'categoria']);
     const type = firstShopifyValue(row, ['type', 'product type', 'tipo']);
     const tags = firstShopifyValue(row, ['tags', 'etiquetas']);
-    const collection = resolveShopifyCollection({ explicit: explicitCollection, type, tags, title }, collections);
+    const shopifyCategory = firstShopifyValue(row, ['product category']);
+    const collection = resolveShopifyCollection({ explicit: explicitCollection, type, tags, title, shopifyCategory }, collections);
     const image = imageFromRow(row);
     const imagePosition = Number(firstShopifyValue(row, ['image position', 'image_position'])) || 999999;
     const body = firstShopifyValue(row, ['body (html)', 'body html', 'description', 'descripción', 'descripcion']);
