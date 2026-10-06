@@ -33,7 +33,7 @@ import {
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1';
 import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261004-import-identity-review-1';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261005-import-apply-error-1';
 import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261003-inventory-review-1';
 
 if (!window.TintinAdminShopifyImportBooted) {

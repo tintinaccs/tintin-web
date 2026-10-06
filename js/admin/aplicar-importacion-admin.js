@@ -230,6 +230,8 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     let skipped = 0;
     // Creados por este mismo job en un intento anterior (reintento tras FAILED).
     let resumed = 0;
+    // Fuera del try: el catch informa el avance aunque falle antes de leerlos.
+    let records = [];
     try {
       if (typeof refreshCatalogIdentitySnapshot === 'function') {
         const refreshedTotals = await refreshCatalogIdentitySnapshot();
@@ -238,7 +240,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
           throw new Error('El catálogo cambió desde que cargaste el CSV. Revisá los productos marcados antes de volver a aplicar.');
         }
       }
-      const records = applicableRecords();
+      records = applicableRecords();
       if (state.job.status === 'FAILED') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'READY' });
       if (state.job.status === 'READY') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'RUNNING', processed: 0, lastCheckpoint: 0 });
       await saveLocalJob();
