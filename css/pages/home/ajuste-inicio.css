@@ -635,51 +635,295 @@ html body.tt-home-premium .tt-hero-media .tt-hero-img {
   html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta { transition: none !important; }
 }
 
-/* La pieza de bienvenida lleva texto dentro de la imagen: se muestra a todo
-   el ancho y el contenido editable ocupa su propia fila, sin superposición. */
+/* HERO A PANTALLA COMPLETA.
+   El hero ocupa exactamente la primera pantalla (alto visible menos el
+   encabezado fijo) y se arma con piezas sueltas: fondo degradado en CSS,
+   rótulo "Bienvenida tintina" vectorial (.tt-hero-welcome), foto en su
+   tarjeta (.tt-hero-media) y contenido editable en HTML.
+
+   Cada disposición se dibujó sobre un lienzo de referencia y todas sus
+   medidas van en la unidad --u, que es el menor entre "ancho disponible /
+   ancho del lienzo" y "alto disponible / alto del lienzo". Así la
+   composición completa escala para entrar en ancho Y en alto: nada queda
+   cortado y la sección siguiente recién aparece al hacer scroll. Los textos
+   tienen un mínimo legible; si en una ventana muy baja no entran, la sección
+   crece en vez de recortar.
+
+   · Desktop/laptop y tablet horizontal: rótulo y contenido a la izquierda,
+     foto a la derecha.
+   · Tablet vertical y celular: rótulo, foto y contenido apilados y centrados;
+     el contenido queda debajo del borde inferior de la tarjeta. */
 html body.tt-home-premium .tt-hero {
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: "media" "content";
+  --tt-hero-top: var(--header-h, 72px);
+  --tt-hero-h: calc(100vh - var(--tt-hero-top));
+  --u: min(calc(100vw / 1440), calc(var(--tt-hero-h) / 715));
+  isolation: isolate;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "welcome media" "content media";
   grid-template-rows: auto auto !important;
-  gap: 0;
-  min-height: 0 !important;
-  padding: 0 !important;
+  align-content: center;
+  align-items: center;
+  gap: 0 calc(36 * var(--u));
+  min-height: var(--tt-hero-h) !important;
+  padding: calc(20 * var(--u)) max(calc(52 * var(--u)), calc((100% - 1600 * var(--u)) / 2)) calc(20 * var(--u)) max(calc(73 * var(--u)), calc((100% - 1600 * var(--u)) / 2)) !important;
 }
+@supports (height: 100svh) {
+  html body.tt-home-premium .tt-hero { --tt-hero-h: calc(100svh - var(--tt-hero-top)); }
+}
+/* El sistema global de superficies deja .tt-hero transparente: el degradado
+   del banner vive en esta capa propia, detrás de todo el contenido. */
+html body.tt-home-premium .tt-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(98deg, #F89ACC 0%, #FAA9D5 26%, #FBBAE0 52%, #FCCDEA 78%, #FDE0F5 100%);
+}
+html body.tt-home-premium .tt-hero-welcome {
+  grid-area: welcome;
+  z-index: 2;
+  position: relative;
+  justify-self: start;
+  align-self: end;
+  width: calc(671 * var(--u));
+  height: auto;
+  max-width: none;
+  margin: 0 0 0 calc(-6 * var(--u));
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* !important en caja y tamaño: hero-bienvenida-inicio.css los fijaba con
+   !important para la composición anterior (imagen a todo el ancho). */
 html body.tt-home-premium .tt-hero-media {
-  width: 100% !important;
-  justify-self: stretch;
-  aspect-ratio: 2 / 1;
+  grid-area: media;
+  justify-self: end;
+  align-self: center;
+  width: calc(581 * var(--u)) !important;
+  aspect-ratio: 718 / 744 !important;
   border: 0;
-  border-radius: 0;
+  border-radius: calc(30 * var(--u)) !important;
   box-shadow: none;
 }
 html body.tt-home-premium .tt-hero .tt-hero-content {
+  grid-area: content;
+  z-index: 2;
   box-sizing: border-box;
-  justify-self: center;
-  max-width: 1000px;
-  align-items: center;
-  text-align: center;
-  padding: clamp(24px, 4vw, 48px) clamp(20px, 4vw, 48px) !important;
+  justify-self: start;
+  align-self: start;
+  align-items: flex-start;
+  width: 100% !important;
+  max-width: calc(665 * var(--u)) !important;
+  margin: calc(30 * var(--u)) 0 0 !important;
+  padding: 0 !important;
+  text-align: left;
 }
-html body.tt-home-premium .tt-hero-eyebrow { margin-bottom: 12px; }
+html body.tt-home-premium .tt-hero-eyebrow {
+  justify-content: flex-start;
+  margin-bottom: calc(13 * var(--u));
+  font-size: max(10.5px, calc(12.2 * var(--u)));
+}
 html body.tt-home-premium .tt-hero-title {
-  font-size: clamp(1.9rem, 4.3vw, 3.5rem);
-  line-height: 1.1;
-  text-align: center;
+  font-size: max(24px, calc(46 * var(--u)));
+  line-height: 1.06;
+  text-align: left;
 }
-html body.tt-home-premium .tt-hero-subtitle { margin-top: 14px; }
+/* El gris del subtítulo no se lee sobre el degradado rosa: dentro del
+   banner usa el color principal de texto. */
+html body.tt-home-premium .tt-hero-subtitle {
+  margin-top: calc(18 * var(--u)) !important;
+  color: var(--color-text-primary, #713C53) !important;
+  font-size: max(14px, calc(22 * var(--u))) !important;
+  text-align: left;
+}
 html body.tt-home-premium .tt-hero-actions {
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px 20px;
-  margin-top: 20px !important;
+  justify-content: flex-start;
+  gap: calc(8 * var(--u)) calc(26 * var(--u));
+  margin-top: calc(28 * var(--u)) !important;
 }
+html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
+  min-width: 0;
+  height: max(44px, calc(55 * var(--u))) !important;
+  min-height: 0 !important;
+  padding: 0 max(18px, calc(29 * var(--u))) !important;
+  font-size: max(12.5px, calc(15.5 * var(--u))) !important;
+}
+html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+  font-size: max(12.5px, calc(20 * var(--u))) !important;
+  text-decoration-color: rgba(113, 60, 83, .55);
+}
+
+/* Tablet horizontal — lienzo de referencia 1014 × 676. */
 @media (min-width: 768px) and (max-width: 1120px) and (orientation: landscape) {
-  html body.tt-home-premium .tt-hero-media { aspect-ratio: 3 / 2; }
+  html body.tt-home-premium .tt-hero {
+    --u: min(calc(100vw / 1014), calc(var(--tt-hero-h) / 676));
+    /* Ancho del conjunto centrado. En ventanas muy bajas la foto se achica con
+       la altura, pero la columna de textos conserva 360 px: los textos ya
+       están en su tamaño mínimo y, más angosta, sumarían renglones. */
+    --tt-hero-comp: max(calc(1100 * var(--u)), calc(360px + 471 * var(--u)));
+    column-gap: calc(22 * var(--u));
+    padding: calc(16 * var(--u)) max(calc(42 * var(--u)), calc((100% - var(--tt-hero-comp)) / 2)) calc(16 * var(--u)) max(calc(51 * var(--u)), calc((100% - var(--tt-hero-comp)) / 2)) !important;
+  }
+  html body.tt-home-premium .tt-hero::before {
+    background: linear-gradient(180deg, #F389BE 0%, #F48DC2 10%, #F7A0CE 25%, #FCBFE2 50%, #FDD5EF 75%, #FDE6F8 90%, #FDEDFB 100%);
+  }
+  html body.tt-home-premium .tt-hero-welcome { width: calc(428 * var(--u)); margin-left: calc(-5 * var(--u)); }
+  html body.tt-home-premium .tt-hero-media {
+    width: calc(449 * var(--u)) !important;
+    aspect-ratio: 677 / 923 !important;
+    border-radius: calc(22 * var(--u)) !important;
+  }
+  html body.tt-home-premium .tt-hero .tt-hero-content {
+    max-width: max(360px, calc(446 * var(--u))) !important;
+    margin-top: calc(22 * var(--u)) !important;
+  }
+  html body.tt-home-premium .tt-hero-eyebrow { margin-bottom: calc(10 * var(--u)); font-size: max(10px, calc(11 * var(--u))); }
+  html body.tt-home-premium .tt-hero-title { font-size: max(20px, calc(32.8 * var(--u))); }
+  html body.tt-home-premium .tt-hero-subtitle { margin-top: calc(13 * var(--u)) !important; font-size: max(13px, calc(17 * var(--u))) !important; }
+  html body.tt-home-premium .tt-hero-actions { gap: calc(6 * var(--u)) calc(18 * var(--u)); margin-top: calc(20 * var(--u)) !important; }
+  html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
+    height: max(44px, calc(48 * var(--u))) !important;
+    padding: 0 max(16px, calc(24 * var(--u))) !important;
+    font-size: max(12px, calc(14 * var(--u))) !important;
+  }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link { font-size: max(12px, calc(15 * var(--u))) !important; }
 }
+
+/* Tablet vertical y celular: una sola columna centrada. El rótulo monta
+   apenas sobre el borde superior de la tarjeta, como en el arte original. */
+@media (max-width: 767px),
+       (min-width: 768px) and (max-width: 1120px) and (orientation: portrait) {
+  html body.tt-home-premium .tt-hero {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "welcome" "media" "content";
+    grid-template-rows: auto auto auto !important;
+    justify-items: center;
+    gap: 0;
+  }
+  html body.tt-home-premium .tt-hero-welcome { justify-self: center; align-self: auto; }
+  html body.tt-home-premium .tt-hero-media { justify-self: center; }
+  html body.tt-home-premium .tt-hero .tt-hero-content {
+    justify-self: center;
+    align-items: center;
+    max-width: none !important;
+    text-align: center;
+  }
+  html body.tt-home-premium .tt-hero-eyebrow { justify-content: center; }
+  html body.tt-home-premium .tt-hero-title,
+  html body.tt-home-premium .tt-hero-subtitle { text-align: center; }
+  html body.tt-home-premium .tt-hero-actions { justify-content: center; }
+}
+
+/* Tablet vertical — lienzo de referencia 810 × 1100. */
 @media (min-width: 768px) and (max-width: 1120px) and (orientation: portrait) {
-  html body.tt-home-premium .tt-hero-media { aspect-ratio: 3 / 4; }
+  html body.tt-home-premium .tt-hero {
+    --u: min(calc(100vw / 810), calc(var(--tt-hero-h) / 1100));
+    padding: calc(40 * var(--u)) calc(32 * var(--u)) calc(36 * var(--u)) !important;
+  }
+  html body.tt-home-premium .tt-hero::before {
+    background: linear-gradient(180deg, #F789C2 0%, #F792C8 10%, #F9A2D2 25%, #FBB8E0 50%, #FDD2EF 75%, #FDE4F7 90%, #FEEFFD 100%);
+  }
+  html body.tt-home-premium .tt-hero-welcome { width: calc(560 * var(--u)); margin: 0 0 calc(-18 * var(--u)); }
+  html body.tt-home-premium .tt-hero-media {
+    width: calc(566 * var(--u)) !important;
+    aspect-ratio: 755 / 842 !important;
+    border-radius: calc(20 * var(--u)) !important;
+  }
+  html body.tt-home-premium .tt-hero .tt-hero-content { margin-top: calc(22 * var(--u)) !important; }
+  html body.tt-home-premium .tt-hero-eyebrow { margin-bottom: calc(9 * var(--u)); font-size: max(10px, calc(12 * var(--u))); }
+  html body.tt-home-premium .tt-hero-title { font-size: max(20px, calc(30 * var(--u))); }
+  html body.tt-home-premium .tt-hero-subtitle { margin-top: calc(10 * var(--u)) !important; font-size: max(13px, calc(17 * var(--u))) !important; }
+  html body.tt-home-premium .tt-hero-actions { gap: calc(6 * var(--u)) calc(22 * var(--u)); margin-top: calc(16 * var(--u)) !important; }
+  html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
+    height: max(44px, calc(48 * var(--u))) !important;
+    padding: 0 max(18px, calc(26 * var(--u))) !important;
+    font-size: max(12.5px, calc(14.5 * var(--u))) !important;
+  }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link { font-size: max(12.5px, calc(15 * var(--u))) !important; }
 }
+
+/* Celular — lienzo de referencia 380 × 646 (deja lugar para un subtítulo de
+   dos renglones). No hay encabezado arriba; abajo flotan la barra de
+   navegación y, 16 px por encima, el botón de WhatsApp. La composición se
+   calcula sobre el alto visible menos esa franja (barra + 52 px), así los
+   botones del hero nunca quedan debajo de ninguno de los dos, y el fondo
+   llega hasta el borde de la pantalla.
+
+   Rótulo y foto comparten la fila "art", que ocupa lo que sobra de la
+   primera pantalla después de los textos. Los textos tienen un tamaño mínimo
+   legible, así que en pantallas bajas la única pieza que se achica es el
+   arte (rótulo y foto juntos, en la misma proporción). Las dos piezas van
+   posicionadas dentro de esa fila para que su tamaño natural no la estire.
+   Recién por debajo de 112 px de arte la sección crece en vez de achicar. */
 @media (max-width: 767px) {
-  html body.tt-home-premium .tt-hero-media { aspect-ratio: 4 / 5; }
+  html body.tt-home-premium .tt-hero {
+    --tt-hero-top: 0px;
+    --tt-hero-nav: calc(var(--tt-mobile-nav-clearance, 100px) + 52px);
+    --u: min(calc(100vw / 380), calc((var(--tt-hero-h) - var(--tt-hero-nav)) / 646));
+    grid-template-areas: "art" "content";
+    grid-template-rows: minmax(112px, 1fr) auto !important;
+    /* En pantallas altas sobra lugar: la mitad va abajo para que el conjunto
+       quede centrado sobre la barra de navegación. */
+    padding: calc(18 * var(--u)) 20px calc(var(--tt-hero-nav) + max(0px, (var(--tt-hero-h) - var(--tt-hero-nav) - 646 * var(--u)) / 2)) !important;
+  }
+  html body.tt-home-premium .tt-hero::before {
+    background: linear-gradient(180deg, #F389BE 0%, #F48DC3 10%, #F79ECD 25%, #FAB6DD 50%, #FCCFEB 75%, #FCDFF3 90%, #FDEAF9 100%);
+  }
+  html body.tt-home-premium .tt-hero-welcome {
+    grid-area: art;
+    position: absolute;
+    left: 50%;
+    bottom: min(74.1%, calc(311.5 * var(--u)));
+    width: auto;
+    height: min(25.9%, calc(108.9 * var(--u)));
+    margin: 0;
+    transform: translateX(-50%);
+  }
+  html body.tt-home-premium .tt-hero-media {
+    grid-area: art;
+    position: absolute !important;
+    inset: auto auto 0 50% !important;
+    width: auto !important;
+    height: min(77.2%, calc(324.5 * var(--u))) !important;
+    aspect-ratio: 787 / 798 !important;
+    border-radius: calc(13 * var(--u)) !important;
+    transform: translateX(-50%);
+  }
+  html body.tt-home-premium .tt-hero .tt-hero-content { margin-top: calc(14 * var(--u)) !important; }
+  html body.tt-home-premium .tt-hero-eyebrow { margin-bottom: calc(6 * var(--u)); font-size: max(9.5px, calc(10.5 * var(--u))); }
+  html body.tt-home-premium .tt-hero-title { font-size: max(18px, calc(24 * var(--u))); line-height: 1.08; }
+  html body.tt-home-premium .tt-hero-subtitle { margin-top: calc(6 * var(--u)) !important; font-size: max(12px, calc(14 * var(--u))) !important; }
+  html body.tt-home-premium .tt-hero-actions { gap: 2px 8px; margin-top: calc(14 * var(--u)) !important; }
+  html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
+    height: max(44px, calc(46 * var(--u))) !important;
+    padding: 0 max(12px, calc(18 * var(--u))) !important;
+    font-size: max(11.5px, calc(13 * var(--u))) !important;
+  }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link { font-size: max(11.5px, calc(13 * var(--u))) !important; }
+}
+/* Celular acostado: la pantalla es tan baja que apilar arte y textos no entra.
+   El arte pasa a la izquierda y los textos a la derecha, en una sola fila que
+   ocupa la primera pantalla. --tt-hero-art es el alto del conjunto rótulo +
+   foto: todo el alto de la fila, sin pasarse del ancho de su columna. */
+@media (max-width: 767px) and (orientation: landscape) and (max-height: 479px) {
+  html body.tt-home-premium .tt-hero {
+    --tt-hero-art: min(100%, calc((100vw - 56px) * .53));
+    grid-template-columns: minmax(0, .7fr) minmax(0, 1fr);
+    grid-template-areas: "art content";
+    grid-template-rows: minmax(112px, 1fr) !important;
+    column-gap: 16px;
+    padding: 10px 20px var(--tt-hero-nav) !important;
+  }
+  html body.tt-home-premium .tt-hero-welcome {
+    bottom: calc(var(--tt-hero-art) * .741);
+    height: calc(var(--tt-hero-art) * .259);
+  }
+  html body.tt-home-premium .tt-hero-media { height: calc(var(--tt-hero-art) * .772) !important; }
+  html body.tt-home-premium .tt-hero .tt-hero-content { align-self: center; margin-top: 0 !important; }
+}
+/* Entre 768 y 1024 px el encabezado fijo de tablet mide 84 px. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  html body.tt-home-premium .tt-hero { --tt-hero-top: 84px; }
 }

@@ -18,6 +18,10 @@ if (!window.TintinImagesPhase5Booted) {
     } catch {}
   };
 
+  // /assets-tintin/images/* se sirve con caché inmutable (un año): cuando cambia
+  // el arte del hero tiene que cambiar su URL. Mismo tag que los <source> de
+  // index.html.
+  const HERO_ART_QUERY = '?v=tintin-20261006-hero-rotulo-1';
   const STATIC = Object.freeze({
     logo: 'assets-tintin/images/general/logo.png',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
@@ -39,10 +43,10 @@ if (!window.TintinImagesPhase5Booted) {
       mobile: 'assets-tintin/images/nosotros/foto-principal/foto-principal-mobile.webp',
       alt: 'Tintin Accesorios y Relojes',
     },
-    hero_bg_desktop: HERO_IMAGE_FALLBACKS.desktop,
-    hero_bg_tablet_landscape: HERO_IMAGE_FALLBACKS.tabletLandscape,
-    hero_bg_tablet: HERO_IMAGE_FALLBACKS.tablet,
-    hero_bg_mobile: HERO_IMAGE_FALLBACKS.mobile,
+    hero_bg_desktop: HERO_IMAGE_FALLBACKS.desktop + HERO_ART_QUERY,
+    hero_bg_tablet_landscape: HERO_IMAGE_FALLBACKS.tabletLandscape + HERO_ART_QUERY,
+    hero_bg_tablet: HERO_IMAGE_FALLBACKS.tablet + HERO_ART_QUERY,
+    hero_bg_mobile: HERO_IMAGE_FALLBACKS.mobile + HERO_ART_QUERY,
   });
 
   let images = {};
