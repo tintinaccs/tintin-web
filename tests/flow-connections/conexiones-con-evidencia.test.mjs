@@ -178,7 +178,7 @@ const LIVE_PAYPAL = { configured: true, enabled: true, environment: 'live', prod
 const SANDBOX_PAYPAL = { configured: true, enabled: true, environment: 'sandbox', productionReady: false };
 const REAL_RECORD = { ok: true, status: 200, exists: true, lastAt: '2026-10-05T14:30:00.000Z' };
 const NO_RECORD = { ok: true, status: 200, exists: false, lastAt: '' };
-const channel = (overrides = {}) => ({ lastSuccessAt: '', lastSuccessKind: '', revision: '', lastErrorAt: '', lastErrorKind: '', lastError: '', ...overrides });
+const channel = (overrides = {}) => ({ deploymentRevision: 'test-current', currentDeploymentRevision: 'test-current', lastSuccessAt: '', lastSuccessKind: '', revision: '', lastErrorAt: '', lastErrorKind: '', lastError: '', ...overrides });
 const INBOUND_OK = channel({ lastSuccessAt: '2026-10-06T10:00:00.000Z', lastSuccessKind: 'saveProduct', revision: PRODUCTS_WEBHOOK_EXPECTED_REVISION });
 const MIRROR_OK = channel({ lastSuccessAt: '2026-10-06T11:00:00.000Z', lastSuccessKind: 'order' });
 const fullInput = ({ paypal = LIVE_PAYPAL, engagementRecords, sheetsEvidence, audit = 'PASS', sheets = true, webhook } = {}) => ({
@@ -408,9 +408,9 @@ test('cada conexión con Sheets queda verde sólo con el acuse de su sentido', (
 
 test('los acuses de Sheets los escribe sólo el servidor después de una operación real', () => {
   const webhook = read('functions/api/sheets-products-webhook.js');
-  assert.match(webhook, /await firestoreAdminCommit\(env, writes\);\s+committing = '';\s+await acknowledge\(\{ ok: true, kind: 'saveProduct', revision: PRODUCTS_WEBHOOK_REVISION \}\);/);
-  assert.match(webhook, /if \(committing\) await acknowledge\(\{ ok: false, kind: committing, error \}\);/);
-  assert.match(read('cloudflare/order-sheets-sync.js'), /await acknowledge\(env, recordEvidence, \{ ok: true, kind: 'order' \}\);/);
+  assert.match(webhook, /await firestoreAdminCommit\(env, writes\);\s+committing = '';\s+await acknowledge\(\{ \.\.\.operation, ok: true, kind: 'saveProduct', revision: PRODUCTS_WEBHOOK_REVISION \}\);/);
+  assert.match(webhook, /if \(committing\) await acknowledge\(\{ \.\.\.operation, ok: false, kind: committing, error \}\);/);
+  assert.match(read('cloudflare/order-sheets-sync.js'), /await acknowledge\(env, recordEvidence, \{ \.\.\.operation, ok: true, kind: 'order' \}\);/);
   assert.match(read('cloudflare/system-health.js'), /engagementSheetQueue,\s+sheetsEvidence,\s+\};/);
   // El navegador nunca escribe el acuse: la colección queda bajo la negación general de las Rules.
   assert.doesNotMatch(read('firestore.rules'), /match \/syncMeta\//);
@@ -459,4 +459,12 @@ test('sin evidencia de CI del commit actual el panel recibe un aviso explícito'
   for (const [from, to] of ACCESS_DECISION_EDGES) {
     assert.notEqual(edgeState(from, to, { publicHealth: health() }), ESTADOS.PROD);
   }
+});
+
+
+test('evidencia de Sheets de otro despliegue queda parcial y un fallo explícito prevalece', () => {
+  const evidence = { lastSuccessAt: '2026-01-01T00:00:00Z', deploymentRevision: 'old', currentDeploymentRevision: 'new', result: 'success' };
+  assert.equal(classifySheetsChannel(evidence).state, 'stale');
+  assert.equal(classifySheetsChannel({ ...evidence, currentDeploymentRevision: '' }).state, 'stale', 'sin revisión del runtime no se inventa vigencia');
+  assert.equal(classifySheetsChannel({ ...evidence, result: 'failed', lastErrorAt: evidence.lastSuccessAt }).state, 'failed');
 });

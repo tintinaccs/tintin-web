@@ -1,6 +1,6 @@
 import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS } from './sheets-sync-config.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
-import { recordSheetsEvidence } from './evidencia-sync-sheets.js';
+import { beginSheetsOperation, recordSheetsEvidence } from './evidencia-sync-sheets.js';
 
 function clean(value, max = 500) {
   return String(value == null ? '' : value).trim().slice(0, max);
@@ -37,6 +37,7 @@ export async function syncOrderToSheetsBestEffort(env, result, fetchImpl = fetch
     return { ok: false, deferred: true, reason: 'missing_sheets_secret' };
   }
 
+  const operation = beginSheetsOperation();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), SHEETS_TIMEOUT_MS);
   try {
@@ -58,11 +59,11 @@ export async function syncOrderToSheetsBestEffort(env, result, fetchImpl = fetch
     }
     // Apps Script escribió la fila y lo confirmó: es la constancia real de
     // que el espejo de pedidos funciona (panel Flujo/Conexiones).
-    await acknowledge(env, recordEvidence, { ok: true, kind: 'order' });
+    await acknowledge(env, recordEvidence, { ...operation, ok: true, kind: 'order' });
     return { ok: true, deferred: false, row: Number(body.row || 0) || null };
   } catch (error) {
     console.warn('[Tintin Orders] Push inmediato a Sheets diferido; el reconciliador lo recuperará.', error);
-    await acknowledge(env, recordEvidence, { ok: false, kind: 'order', error });
+    await acknowledge(env, recordEvidence, { ...operation, ok: false, kind: 'order', error });
     return { ok: false, deferred: true, error: errorMessage(error) };
   } finally {
     clearTimeout(timeout);

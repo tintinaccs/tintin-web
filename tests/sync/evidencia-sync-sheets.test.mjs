@@ -22,14 +22,21 @@ const SECRET = 'test-only-shared-secret';
 function memoryDocument() {
   const merges = [];
   let fields = null;
+  let version = 0;
   return {
     merges,
-    firestoreAdminMerge: async (_env, path, patch) => {
-      merges.push({ path, keys: Object.keys(patch) });
-      fields = { ...(fields || {}), ...patch };
+    firestoreAdminCommit: async (_env, writes) => {
+      const write = writes[0];
+      if ((write.currentDocument.exists === false && fields) ||
+        (write.currentDocument.updateTime && write.currentDocument.updateTime !== `v${version}`)) {
+        throw Object.assign(new Error('conflict'), { code: 'version_conflict' });
+      }
+      merges.push({ path: write.path, keys: Object.keys(write.fields) });
+      fields = { ...(fields || {}), ...write.fields };
+      version += 1;
       return {};
     },
-    firestoreAdminGet: async (_env, path) => (fields && path === SHEETS_EVIDENCE_PATH ? { name: path, fields } : null),
+    firestoreAdminGet: async (_env, path) => (fields && path === SHEETS_EVIDENCE_PATH ? { name: path, fields: { ...fields }, updateTime: `v${version}` } : null),
     read: () => (fields ? decodeFirestoreFields(fields) : null),
   };
 }
@@ -37,7 +44,10 @@ function memoryDocument() {
 function recorder({ fail = false } = {}) {
   const calls = [];
   const record = async (_env, channel, outcome) => {
-    calls.push({ channel, ...outcome, error: outcome.error ? String(outcome.error?.message || outcome.error) : '' });
+    const { startedAt, operationId, ...result } = outcome;
+    assert.ok(Number.isFinite(Date.parse(startedAt)), "fecha de inicio del intento");
+    assert.ok(operationId, "identidad del intento");
+    calls.push({ channel, ...result, error: outcome.error ? String(outcome.error?.message || outcome.error) : '' });
     if (fail) throw new Error('acuse no disponible');
     return true;
   };
@@ -51,15 +61,15 @@ test('un éxito guarda fecha, tipo y revisión; un fallo posterior no borra el �
   assert.equal(await recordSheetsEvidence({}, 'mirror', { ok: true, kind: 'order' }, doc), true);
 
   assert.deepEqual(doc.merges.map(item => item.path), [SHEETS_EVIDENCE_PATH, SHEETS_EVIDENCE_PATH, SHEETS_EVIDENCE_PATH]);
-  assert.deepEqual(doc.merges[0].keys, ['inboundLastSuccessAt', 'inboundLastSuccessKind', 'inboundRevision']);
-  assert.deepEqual(doc.merges[1].keys, ['inboundLastErrorAt', 'inboundLastErrorKind', 'inboundLastError']);
+  assert.deepEqual(doc.merges[0].keys.filter(key => /LastSuccess|Revision$/.test(key) && !key.endsWith('DeploymentRevision')), ['inboundLastSuccessAt', 'inboundLastSuccessKind', 'inboundRevision']);
+  assert.deepEqual(doc.merges[1].keys.filter(key => /LastError/.test(key)), ['inboundLastErrorAt', 'inboundLastErrorKind', 'inboundLastError']);
 
   const evidence = await getSheetsFlowEvidence({}, doc);
   assert.equal(evidence.available, true);
   assert.equal(evidence.inbound.lastSuccessKind, 'saveProduct');
   assert.equal(evidence.inbound.revision, 'rev-1');
   assert.ok(Number.isFinite(Date.parse(evidence.inbound.lastSuccessAt)));
-  assert.equal(evidence.inbound.lastError, 'Firestore COMMIT falló (502).');
+  assert.equal(evidence.inbound.lastError, 'upstream_http_502');
   assert.ok(Number.isFinite(Date.parse(evidence.inbound.lastErrorAt)));
   assert.equal(evidence.mirror.lastSuccessKind, 'order');
   assert.equal(evidence.mirror.lastErrorAt, '');
@@ -69,7 +79,7 @@ test('el acuse nunca lanza y no acepta canales desconocidos', async () => {
   const doc = memoryDocument();
   assert.equal(await recordSheetsEvidence({}, 'otro-canal', { ok: true }, doc), false);
   assert.equal(doc.merges.length, 0);
-  const broken = { firestoreAdminMerge: async () => { throw new Error('Firestore PATCH falló (503)'); } };
+  const broken = { firestoreAdminGet: async () => null, firestoreAdminCommit: async () => { throw new Error('Firestore PATCH falló (503)'); } };
   assert.equal(await recordSheetsEvidence({}, 'mirror', { ok: true, kind: 'order' }, broken), false);
   // Sin credenciales (entorno de pruebas) tampoco lanza ni sale a la red.
   assert.equal(await recordSheetsEvidence({}, 'mirror', { ok: true, kind: 'order' }), false);
@@ -320,4 +330,64 @@ test('system-health entrega el acuse leído y no lo inventa cuando no se puede l
   const throwing = await runSystemHealth(HEALTH_ENV, healthDeps({ sheetsEvidenceReader: async () => { throw new Error('caído'); } }));
   assert.equal(throwing.integrations.sheetsEvidence, null);
   assert.equal(throwing.ok, true, 'el acuse es informativo: no cambia el estado integral');
+});
+
+
+test('un reintento real fallido registra fallo; un evento ilegible no altera el acuse', async () => {
+  const spy = recorder();
+  const deps = engagementDeps(sheetsDown, spy.record);
+  await syncEngagementEventOrQueue(ORDER_ENV, LIKE_EVENT, deps);
+  await drainEngagementSheetSyncQueueScheduled(ORDER_ENV, { deps });
+  assert.equal(spy.calls.at(-1).ok, false);
+  assert.equal(spy.calls.at(-1).kind, 'engagement:like:retry');
+  const invalid = recorder();
+  assert.equal(await syncEngagementEventOrQueue(ORDER_ENV, { type: 'bad' }, engagementDeps(sheetsDown, invalid.record)), false);
+  assert.equal(invalid.calls.length, 0);
+});
+
+test('la operación antigua que termina tarde no sobrescribe la más nueva', async () => {
+  const doc = memoryDocument();
+  const newer = { startedAt: '2026-10-06T14:00:01Z', operationId: 'B', ok: false, kind: 'order', error: 'failure' };
+  const older = { startedAt: '2026-10-06T14:00:00Z', operationId: 'A', ok: true, kind: 'order' };
+  assert.equal(await recordSheetsEvidence({}, 'mirror', newer, doc), true);
+  assert.equal(await recordSheetsEvidence({}, 'mirror', older, doc), false);
+  assert.equal(doc.read().mirrorResult, 'failed');
+  assert.equal(doc.read().mirrorOperationId, 'B');
+});
+
+test('dos primeras operaciones concurrentes resuelven CAS sin perder el resultado nuevo', async () => {
+  const doc = memoryDocument();
+  await Promise.all([
+    recordSheetsEvidence({}, 'mirror', { startedAt: '2026-10-06T14:00:00Z', operationId: 'A', ok: true }, doc),
+    recordSheetsEvidence({}, 'mirror', { startedAt: '2026-10-06T14:00:01Z', operationId: 'B', ok: false }, doc),
+  ]);
+  assert.equal(doc.read().mirrorOperationId, 'B');
+  assert.equal(doc.read().mirrorResult, 'failed');
+});
+
+test('el acuse no almacena URLs, credenciales ni datos personales del error', async () => {
+  const doc = memoryDocument();
+  await recordSheetsEvidence({}, 'mirror', { ok: false, error: new Error('secret=private-token email=cliente@example.com https://signed.example/?token=abc') }, doc);
+  const evidence = JSON.stringify(await getSheetsFlowEvidence({}, doc));
+  assert.doesNotMatch(evidence, /private-token|cliente@|signed.example|token=abc/);
+  assert.equal(doc.read().mirrorLastError, 'sync_failed');
+});
+
+test('purga agrupada: registra rechazo, timeout y éxito sin inventar evidencia para lote vacío o sin secreto', async () => {
+  const { syncEngagementBatchToSheets } = await import('../../cloudflare/sincronizacion-participacion-sheets.js');
+  const spy = recorder();
+  const deps = {
+    recordSheetsEvidence: spy.record,
+    supersedeQueuedEngagementEvents: async () => {},
+    fetchImpl: async () => new Response(JSON.stringify({ ok: false }), { status: 200 }),
+  };
+  const event = { type: 'like', record: { likeId: 'test-only', deleted: true } };
+  assert.equal(await syncEngagementBatchToSheets({ SHEETS_ENGAGEMENT_SECRET: SECRET }, [event], deps), false);
+  deps.fetchImpl = async () => { throw new DOMException('Timeout', 'TimeoutError'); };
+  assert.equal(await syncEngagementBatchToSheets({ SHEETS_ENGAGEMENT_SECRET: SECRET }, [event], deps), false);
+  deps.fetchImpl = async () => new Response(JSON.stringify({ ok: true }), { status: 200 });
+  assert.equal(await syncEngagementBatchToSheets({ SHEETS_ENGAGEMENT_SECRET: SECRET }, [event], deps), true);
+  await syncEngagementBatchToSheets({}, [event], deps);
+  await syncEngagementBatchToSheets({ SHEETS_ENGAGEMENT_SECRET: SECRET }, [], deps);
+  assert.deepEqual(spy.calls.map(c => [c.channel, c.ok, c.kind]), [['mirror', false, 'engagementBatch'], ['mirror', false, 'engagementBatch'], ['mirror', true, 'engagementBatch']]);
 });

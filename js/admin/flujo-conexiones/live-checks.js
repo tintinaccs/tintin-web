@@ -6,7 +6,7 @@
 // nodo/conexión que estado-flujo.js puede resolver. No depende del DOM ni
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
-import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20261006-flow-evidence-1';
+import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20261006-production-audit-1';
 import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
 
 function edgeIdFor(from, to) {
@@ -87,13 +87,19 @@ export function classifySheetsChannel(channel, { expectedRevision = '' } = {}) {
   const successAt = Date.parse(channel.lastSuccessAt || '');
   const errorAt = Date.parse(channel.lastErrorAt || '');
   const hasSuccess = Number.isFinite(successAt);
-  if (Number.isFinite(errorAt) && (!hasSuccess || errorAt > successAt)) {
+  if (channel.result === 'failed' || (!channel.result && Number.isFinite(errorAt) && (!hasSuccess || errorAt >= successAt))) {
     return {
       state: 'failed',
       note: `la última sincronización real falló el ${channel.lastErrorAt} (${channel.lastErrorKind || 'operación'}): ${channel.lastError || 'sin detalle'}`,
     };
   }
   if (!hasSuccess) return { state: 'none', note: 'todavía no se registró ninguna sincronización real' };
+  if (!channel.currentDeploymentRevision) {
+    return { state: 'stale', note: `última operación ${channel.completedAt || channel.lastSuccessAt}; el runtime no informa la revisión desplegada, no se puede confirmar la vigencia del acuse` };
+  }
+  if (channel.deploymentRevision !== channel.currentDeploymentRevision) {
+    return { state: 'stale', note: `última operación ${channel.completedAt || channel.lastSuccessAt}; evidencia de otro despliegue, requiere operación real en la versión actual` };
+  }
   if (expectedRevision && channel.revision !== expectedRevision) {
     return {
       state: 'stale',

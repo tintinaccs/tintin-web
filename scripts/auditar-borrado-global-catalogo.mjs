@@ -67,7 +67,7 @@ expect(resilience.includes("const QUEUE_COLLECTION = 'catalogSheetSyncQueue'"), 
 expect(resilience.includes("status: 'pending'"), 'La cola de Sheets no registra estado pendiente explícito.');
 expect(resilience.includes('export async function queueCatalogSheetSync'), 'La ruta de borrado no puede guardar fallos en la cola persistente.');
 expect(resilience.includes('export async function syncDeletedProductsPayloadWithRetry'), 'La purga no transmite tombstones sin releer productos borrados.');
-expect(resilience.includes('syncProductsWithRetry(idToken, ids, { attempts: MAX_ATTEMPTS })'), 'El cierre no reintenta la sincronización completa.');
+expect(resilience.includes('syncProductsWithRetry(idToken, ids, { attempts: MAX_ATTEMPTS, env })'), 'El cierre no reintenta la sincronización completa.');
 expect(resilience.includes('firestoreAdminListAll(env, QUEUE_COLLECTION, MAX_PENDING)'), 'Las reconciliaciones pendientes no se vuelven a leer para su cierre.');
 expect(resilience.includes('const PRODUCT_SYNC_CHUNK = 20'), 'La cola no limita cada trabajo a un lote apto para Workers Free.');
 expect(engagement.includes('function tintinHandleEngagementBatch_') && appsScript.includes("body.action === 'syncEngagementBatch'"), 'Apps Script no acepta la sincronización social agrupada.');

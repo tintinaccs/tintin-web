@@ -152,7 +152,13 @@
     },
     "@opentelemetry/core": "^2.11.0",
     "csv-parse": "^7.0.2",
-    "qs": "^6.16.0"
+    "qs": "^6.16.0",
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "compression": "^1.8.2",
+    "proxy-addr": "^2.0.8",
+    "firebase-tools": {
+      "chokidar": "4.0.3"
+    }
   },
   "engines": {
     "node": ">=22"

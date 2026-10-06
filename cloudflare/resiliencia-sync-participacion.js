@@ -27,7 +27,7 @@ import {
 import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS } from './sheets-sync-config.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
-import { recordSheetsEvidence } from './evidencia-sync-sheets.js';
+import { beginSheetsOperation, recordSheetsEvidence } from './evidencia-sync-sheets.js';
 
 const QUEUE_COLLECTION = 'engagementSheetSyncQueue';
 const QUEUE_META_PATH = 'syncMeta/engagementSheetSyncQueue';
@@ -215,12 +215,13 @@ async function discardOlderQueuedSnapshot(env, event, startedAt, deps) {
  */
 export async function syncEngagementEventOrQueue(env, event, deps = REAL_DEPS) {
   if (!isEngagementEvent(event)) return false;
-  const startedAt = Date.now();
+  const operation = beginSheetsOperation();
+  const startedAt = Date.parse(operation.startedAt);
   try {
     await postEngagementEvent(env, event, deps.fetchImpl);
   } catch (error) {
     console.warn('[engagement-sheets] Sincronización pendiente:', error?.message || error);
-    await acknowledgeMirror(env, deps, { ok: false, kind: `engagement:${event.type}`, error });
+    await acknowledgeMirror(env, deps, { ...operation, ok: false, kind: `engagement:${event.type}`, error });
     try {
       await queueEngagementSheetSync(env, event, error, deps);
     } catch (queueError) {
@@ -228,7 +229,7 @@ export async function syncEngagementEventOrQueue(env, event, deps = REAL_DEPS) {
     }
     return false;
   }
-  await acknowledgeMirror(env, deps, { ok: true, kind: `engagement:${event.type}` });
+  await acknowledgeMirror(env, deps, { ...operation, ok: true, kind: `engagement:${event.type}` });
   try {
     await discardOlderQueuedSnapshot(env, event, startedAt, deps);
   } catch (error) {
@@ -313,15 +314,19 @@ export async function drainEngagementSheetSyncQueueScheduled(env, { limit = 3, d
     } catch {
       event = null;
     }
+    const operation = beginSheetsOperation();
+    let attempted = false;
     try {
       if (!isEngagementEvent(event)) throw new Error('Evento guardado ilegible.');
+      attempted = true;
       await postEngagementEvent(env, event, deps.fetchImpl);
       // Si mientras tanto entró una instantánea más nueva, el documento cambió
       // y la precondición falla: la nueva queda para la próxima corrida.
       if (await commitIfUnchanged(env, claimed.id, claimed.updateTime, { delete: true }, deps)) drained += 1;
       // El reintento llegó a Sheets: el último resultado real vuelve a ser un éxito.
-      await acknowledgeMirror(env, deps, { ok: true, kind: `engagement:${event.type}:retry` });
+      await acknowledgeMirror(env, deps, { ...operation, ok: true, kind: `engagement:${event.type}:retry` });
     } catch (error) {
+      if (attempted) await acknowledgeMirror(env, deps, { ...operation, ok: false, kind: `engagement:${event.type}:retry`, error });
       lastError = clean(error?.message || error);
       const attempts = Number(claimed.attempts || 0) + 1;
       const toDeadLetter = attempts >= MAX_QUEUE_ATTEMPTS;

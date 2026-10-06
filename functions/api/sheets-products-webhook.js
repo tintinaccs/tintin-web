@@ -4,7 +4,7 @@ import {
   encodeFirestoreFields,
   firestoreAdminCommit,
 } from '../../cloudflare/firebase-admin-ligero.js';
-import { recordSheetsEvidence } from '../../cloudflare/evidencia-sync-sheets.js';
+import { beginSheetsOperation, recordSheetsEvidence } from '../../cloudflare/evidencia-sync-sheets.js';
 
 const MAX_BODY_BYTES = 32 * 1024;
 export const PRODUCTS_WEBHOOK_REVISION = 'products-canonical-v3';
@@ -156,6 +156,7 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
     return pending;
   };
   let committing = '';
+  let operation = null;
 
   try {
     const raw = await request.text();
@@ -176,13 +177,14 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
     const id = productId(input.productId, input.action === 'saveProduct');
 
     if (input.action === 'deleteProduct') {
+      operation = beginSheetsOperation();
       committing = 'deleteProduct';
       await firestoreAdminCommit(env, [
         { path: `products/${id}`, delete: true },
         { path: `productInventory/${id}`, delete: true },
       ]);
       committing = '';
-      await acknowledge({ ok: true, kind: 'deleteProduct', revision: PRODUCTS_WEBHOOK_REVISION });
+      await acknowledge({ ...operation, ok: true, kind: 'deleteProduct', revision: PRODUCTS_WEBHOOK_REVISION });
       return webhookResponse({ ok: true, productId: id, deleted: true }, 200, request.url);
     }
     if (input.action !== 'saveProduct') throw new Error('Accion no permitida.');
@@ -240,15 +242,16 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
     if (Object.keys(publicFields).length) writes.push({ path: `products/${id}`, fields: publicFields, mergeFields: Object.keys(publicFields) });
     if (Object.keys(inventoryFields).length) writes.push({ path: `productInventory/${id}`, fields: inventoryFields, mergeFields: Object.keys(inventoryFields) });
     if (!writes.length) throw new Error('No hay campos de producto permitidos para sincronizar.');
+    operation = beginSheetsOperation();
     committing = 'saveProduct';
     await firestoreAdminCommit(env, writes);
     committing = '';
-    await acknowledge({ ok: true, kind: 'saveProduct', revision: PRODUCTS_WEBHOOK_REVISION });
+    await acknowledge({ ...operation, ok: true, kind: 'saveProduct', revision: PRODUCTS_WEBHOOK_REVISION });
     return webhookResponse({ ok: true, productId: id }, 200, request.url);
   } catch (error) {
     // Sólo un commit que Firestore no aceptó cuenta como sincronización
     // fallida; una fila con datos inválidos no es un fallo de la conexión.
-    if (committing) await acknowledge({ ok: false, kind: committing, error });
+    if (committing) await acknowledge({ ...operation, ok: false, kind: committing, error });
     const upstreamStatus = Number(error?.status);
     const responseStatus = upstreamStatus === 409 || upstreamStatus === 502 ? upstreamStatus : 400;
     return webhookResponse({

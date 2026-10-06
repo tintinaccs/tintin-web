@@ -283,42 +283,55 @@ if (!window.TintinImagesPhase5Booted) {
     }
     tabletLandscapeSource.media = '(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)';
     tabletSource.media = '(max-width: 1120px)';
-    const yaVisible = image.currentSrc && image.complete && image.naturalWidth > 0;
-    const cambiaFuente = yaVisible && desktop && image.currentSrc !== desktop;
-
+    const sourceDevice = source => source.media?.includes('767') ? 'mobile'
+      : source.media?.includes('landscape') ? 'tabletLandscape'
+      : source.media ? 'tablet' : 'desktop';
+    const configured = { desktop: configuredDesktop, tablet: configuredTablet, tabletLandscape: configuredTablet, mobile: configuredMobile };
+    const defaults = { desktop: STATIC.hero_bg_desktop, tablet: STATIC.hero_bg_tablet, tabletLandscape: STATIC.hero_bg_tablet_landscape, mobile: STATIC.hero_bg_mobile };
     const aplicarFuentes = () => {
-      if (mobile) mobileSource.srcset = mobile; else mobileSource.removeAttribute('srcset');
-      tabletLandscapeSource.srcset = tabletLandscape;
-      if (tablet) tabletSource.srcset = tablet; else tabletSource.removeAttribute('srcset');
-      if (desktop) image.src = desktop; else image.removeAttribute('src');
+      for (const source of picture.querySelectorAll('source')) {
+        if (!source.dataset.ttHeroOriginalType) source.dataset.ttHeroOriginalType = source.type || 'fallback';
+        const device = sourceDevice(source);
+        const custom = configured[device];
+        const originalType = source.dataset.ttHeroOriginalType;
+        // Un WebP disponible sigue siendo la URL principal. PNG es respaldo
+        // para navegadores sin WebP o para un error real de carga.
+        source.srcset = custom ? absolute(custom) : absolute(originalType === 'image/webp'
+          ? defaults[device].replace('.png?', '.webp?') : defaults[device]);
+        if (custom || originalType === 'fallback') source.removeAttribute('type');
+        else source.type = originalType;
+      }
+      image.src = desktop;
+      delete image.dataset.ttHeroFallbackApplied;
     };
-
-    if (cambiaFuente) {
-      // El caché local pinta una imagen antes de que llegue la de Firestore.
-      // Se decodifica la nueva fuera de pantalla y recién ahí se cambia, sin
-      // fade ni timeout: la foto nunca desaparece durante el reemplazo.
+    const activeDevice = window.matchMedia('(max-width: 767px)').matches ? 'mobile'
+      : window.matchMedia('(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)').matches ? 'tabletLandscape'
+      : window.matchMedia('(max-width: 1120px)').matches ? 'tablet' : 'desktop';
+    const nextActive = configured[activeDevice] ? absolute(configured[activeDevice]) : '';
+    if (nextActive && image.currentSrc && image.currentSrc !== nextActive && image.complete && image.naturalWidth > 0) {
       const previa = new Image();
       previa.decoding = 'async';
-      previa.src = desktop;
+      previa.src = nextActive;
       const cambiar = () => {
+        // Una confirmación vieja no puede pisar un snapshot más reciente.
+        if (image.dataset.ttHeroPhase5Signature !== signature) return;
         aplicarFuentes();
         image.style.removeProperty('transition');
         image.style.removeProperty('opacity');
       };
       if (previa.decode) previa.decode().then(cambiar).catch(cambiar);
       else { previa.onload = cambiar; previa.onerror = cambiar; }
-    } else {
-      aplicarFuentes();
-    }
+    } else aplicarFuentes();
 
     if (!image.dataset.ttHeroPhase5ErrorBound) {
       image.dataset.ttHeroPhase5ErrorBound = '1';
       image.addEventListener('error', () => {
-        // Si una URL dinámica falla, conserva la última portada válida en vez
-        // de desmontar la imagen y revelar el fondo rosa.
-        mobileSource.srcset = absolute(STATIC.hero_bg_mobile);
-        tabletLandscapeSource.srcset = tabletLandscape;
-        tabletSource.srcset = absolute(STATIC.hero_bg_tablet);
+        if (image.dataset.ttHeroFallbackApplied) return;
+        image.dataset.ttHeroFallbackApplied = '1';
+        for (const source of picture.querySelectorAll('source')) {
+          source.removeAttribute('type');
+          source.srcset = absolute(defaults[sourceDevice(source)]);
+        }
         image.src = absolute(STATIC.hero_bg_desktop);
         media?.classList.remove('tt-hero-pending');
       });
@@ -345,9 +358,18 @@ if (!window.TintinImagesPhase5Booted) {
   }
 
   function applyLogos() {
-    const src = resolveSlotImage(images, 'logo_main', currentDevice()) || absolute(STATIC.logo);
+    const configuredLogo = resolveSlotImage(images, 'logo_main', currentDevice());
+    const fallback = absolute(STATIC.logo);
     document.querySelectorAll('.tt-logo-img,#tt-loader-logo,#tt-intro-logo').forEach(image => {
       if (!(image instanceof HTMLImageElement)) return;
+      let src = configuredLogo || fallback;
+      // El shell ya publicó el mismo logo con su tag de caché. Confirmar un
+      // snapshot sin personalización no debe quitarlo y descargarlo de nuevo.
+      if (!configuredLogo && image.src) {
+        const current = new URL(image.src);
+        const packaged = new URL(fallback, document.baseURI);
+        if (current.origin === packaged.origin && current.pathname === packaged.pathname && current.searchParams.has('v')) src = image.src;
+      }
       if (image.dataset.ttLogoPhase5Src === src && image.src === src) return;
 
       image.dataset.ttLogoPhase5Src = src;
