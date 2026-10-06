@@ -330,3 +330,28 @@ test('borrado de lote: Sheets recibe tombstones sin releer productos eliminados'
   assert.ok(payloads.flatMap(payload => payload.items).every(item => item.exists === false && item.product === null));
   assert.deepEqual(payloads.flatMap(payload => payload.items).map(item => item.id), ids);
 });
+
+test('catálogo: registra cada fallo/reintento confirmado y no registra lotes vacíos', async () => {
+  const { syncProductsPayloadWithRetry } = await import('../../cloudflare/resiliencia-sync-catalogo.js');
+  const fs = makeFakeFirestore();
+  seedPendingItem(fs, 'evidence');
+  const outcomes = [];
+  let calls = 0;
+  const deps = buildDeps(fs, async () => {
+    calls += 1;
+    if (calls === 1) throw new Error('timeout');
+    return { ok: true, status: 200, json: async () => ({ ok: true }) };
+  }, makeFakeNotify());
+  deps.recordSheetsEvidence = async (_env, channel, outcome) => { outcomes.push({ channel, ...outcome }); };
+  const result = await syncProductsPayloadWithRetry(env, ['p1'], { attempts: 2 }, deps);
+  assert.equal(result.attempts, 2);
+  assert.deepEqual(outcomes.map(o => [o.channel, o.ok, o.kind]), [['mirror', false, 'products'], ['mirror', true, 'products']]);
+  assert.ok(Date.parse(outcomes[1].startedAt) > Date.parse(outcomes[0].startedAt));
+  await syncProductsPayloadWithRetry(env, [], {}, deps);
+  await assert.rejects(syncProductsPayloadWithRetry({}, ['p1'], { attempts: 1 }, deps), /SECRET/);
+  assert.equal(outcomes.length, 2);
+  await syncDeletedProductsPayloadWithRetry(env, ['p1'], { attempts: 1 }, deps);
+  assert.equal(outcomes.at(-1).ok, true);
+  deps.recordSheetsEvidence = async () => { throw new Error('evidence unavailable'); };
+  assert.equal((await syncProductsPayloadWithRetry(env, ['p1'], { attempts: 1 }, deps)).ok, true);
+});

@@ -13,6 +13,7 @@ import {
 import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS, SHEETS_HEALTH_TIMEOUT_MS } from './sheets-sync-config.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
+import { beginSheetsOperation, recordSheetsEvidence } from './evidencia-sync-sheets.js';
 
 const PRODUCT_SYNC_CHUNK = 20;
 // Keep Apps Script writes smaller than Firestore read batches. Updating 20
@@ -64,7 +65,23 @@ const REAL_QUEUE_DEPS = {
   firestoreAdminMerge,
   notifyAdminIfAbsent,
   fetchImpl: fetchAppsScript,
+  recordSheetsEvidence,
 };
+
+async function trackCatalogMirror(env, run, deps = REAL_QUEUE_DEPS) {
+  const operation = beginSheetsOperation();
+  const acknowledge = async outcome => {
+    try { await deps.recordSheetsEvidence?.(env, 'mirror', { ...operation, kind: 'products', ...outcome }); } catch {}
+  };
+  try {
+    const result = await run();
+    await acknowledge({ ok: true });
+    return result;
+  } catch (error) {
+    await acknowledge({ ok: false, error });
+    throw error;
+  }
+}
 
 async function syncProductsOnce(idToken, productIds) {
   const ids = unique(productIds);
@@ -93,14 +110,14 @@ async function syncProductsOnce(idToken, productIds) {
   return { ok: true, batches };
 }
 
-export async function syncProductsWithRetry(idToken, productIds, { attempts = MAX_ATTEMPTS } = {}) {
+export async function syncProductsWithRetry(idToken, productIds, { attempts = MAX_ATTEMPTS, env } = {}) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, attempts: 0, batches: 0 };
   let lastError = null;
   const limit = Math.max(1, Math.min(MAX_ATTEMPTS, Number(attempts) || MAX_ATTEMPTS));
   for (let attempt = 1; attempt <= limit; attempt += 1) {
     try {
-      const result = await syncProductsOnce(idToken, ids);
+      const result = await trackCatalogMirror(env, () => syncProductsOnce(idToken, ids));
       return { ...result, attempts: attempt };
     } catch (error) {
       lastError = error;
@@ -164,7 +181,7 @@ export async function finalizeProductsSheet(env, idToken, productIds, actor = nu
   if (!ids.length) return { ok: true, attempts: 0, queued: false };
   try {
     const result = idToken
-      ? await syncProductsWithRetry(idToken, ids, { attempts: MAX_ATTEMPTS })
+      ? await syncProductsWithRetry(idToken, ids, { attempts: MAX_ATTEMPTS, env })
       : await syncProductsPayloadWithRetry(env, ids, { attempts: MAX_ATTEMPTS });
     return { ok: true, attempts: result.attempts, queued: false };
   } catch (error) {
@@ -252,7 +269,7 @@ export async function retryPendingCatalogSheets(env, idToken, { limit = 1 } = {}
     const claimed = await claimQueueItem(env, document);
     if (!claimed) continue;
     try {
-      await syncProductsWithRetry(idToken, claimed.productIds, { attempts: 2 });
+      await syncProductsWithRetry(idToken, claimed.productIds, { attempts: 2, env });
       deleteWrites.push({ path: `${QUEUE_COLLECTION}/${claimed.id}`, delete: true });
       resolved += 1;
     } catch {
@@ -313,32 +330,34 @@ async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS, 
   const secret = clean(env?.SHEETS_ENGAGEMENT_SECRET, 500);
   if (!secret) throw new Error('SHEETS_ENGAGEMENT_SECRET no está configurado.');
   const postChunkSize = Math.max(1, Math.min(PRODUCT_SYNC_CHUNK, Number(appScriptChunkSize) || PRODUCT_SYNC_CHUNK));
-  let batches = 0;
-  for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
-    const chunk = ids.slice(i, i + PRODUCT_SYNC_CHUNK);
-    const items = await fetchProductPayloadItems(env, chunk, deps);
-    for (let j = 0; j < items.length; j += postChunkSize) {
-      const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
-        method: 'POST',
-        redirect: 'follow',
-        signal: AbortSignal.timeout(timeoutMs),
-        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-        body: JSON.stringify({
-          action: 'syncProductsPayload',
-          sheetName: 'Productos',
-          schemaVersion: 2,
-          secret,
-          items: items.slice(j, j + postChunkSize),
-        }),
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || data.ok !== true) {
-        throw new Error(clean(data.error || `Sheets Productos (payload) respondió ${response.status}`));
+  return trackCatalogMirror(env, async () => {
+    let batches = 0;
+    for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
+      const chunk = ids.slice(i, i + PRODUCT_SYNC_CHUNK);
+      const items = await fetchProductPayloadItems(env, chunk, deps);
+      for (let j = 0; j < items.length; j += postChunkSize) {
+        const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
+          method: 'POST',
+          redirect: 'follow',
+          signal: AbortSignal.timeout(timeoutMs),
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify({
+            action: 'syncProductsPayload',
+            sheetName: 'Productos',
+            schemaVersion: 2,
+            secret,
+            items: items.slice(j, j + postChunkSize),
+          }),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.ok !== true) {
+          throw new Error(clean(data.error || `Sheets Productos (payload) respondió ${response.status}`));
+        }
+        batches += 1;
       }
-      batches += 1;
     }
-  }
-  return { ok: true, batches };
+    return { ok: true, batches };
+  }, deps);
 }
 
 /**
@@ -356,23 +375,25 @@ export async function syncDeletedProductsPayloadWithRetry(env, productIds, { att
   let lastError = null;
   for (let attempt = 1; attempt <= limit; attempt += 1) {
     try {
-      let batches = 0;
-      for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
-        const items = ids.slice(i, i + PRODUCT_SYNC_CHUNK).map(id => ({ id, exists: false, product: null, inventory: null }));
-        const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
-          method: 'POST',
-          redirect: 'follow',
-          signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
-          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-          body: JSON.stringify({ action: 'syncProductsPayload', sheetName: 'Productos', schemaVersion: 2, secret, items }),
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok || data.ok !== true) {
-          throw new Error(clean(data.error || `Sheets Productos (payload) respondió ${response.status}`));
+      return await trackCatalogMirror(env, async () => {
+        let batches = 0;
+        for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
+          const items = ids.slice(i, i + PRODUCT_SYNC_CHUNK).map(id => ({ id, exists: false, product: null, inventory: null }));
+          const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
+            method: 'POST',
+            redirect: 'follow',
+            signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
+            headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+            body: JSON.stringify({ action: 'syncProductsPayload', sheetName: 'Productos', schemaVersion: 2, secret, items }),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || data.ok !== true) {
+            throw new Error(clean(data.error || `Sheets Productos (payload) respondió ${response.status}`));
+          }
+          batches += 1;
         }
-        batches += 1;
-      }
-      return { ok: true, batches, attempts: attempt };
+        return { ok: true, batches, attempts: attempt };
+      }, deps);
     } catch (error) {
       lastError = error;
       if (attempt < limit) await sleep(250 * (2 ** (attempt - 1)));

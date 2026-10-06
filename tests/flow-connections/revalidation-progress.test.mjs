@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { ciEvidenceProblem } from '../../js/admin/flujo-conexiones/live-checks.js';
 
 const source = fs.readFileSync(new URL('../../js/admin/flujo-conexiones/flujo-conexiones-admin.js', import.meta.url), 'utf8');
 const handler = source.slice(source.indexOf('  const revalidateBtn ='), source.indexOf('  const sealConfirmation ='));
@@ -18,8 +19,11 @@ function fixture() {
     liveErrorEl: control('error'), liveErrorTextEl: control('errorText'), liveTimestampEl: control('time'),
     auth: { currentUser: { getIdToken: async () => 'test' } }, role: 'superadmin',
     waitForAdminAppCheck: async () => true, AbortSignal,
-    fetch: async () => ({ status: 200, ok: true, json: async () => ({ ok: true }), headers: { get: () => 'csp' } }),
-    probeClientFirestoreRules: () => firestore.promise, probeEngagementStats: async () => ({}),
+    fetch: async url => ({ status: 200, ok: true, headers: { get: () => 'csp' }, json: async () => (
+      String(url).includes('/api/master-diagnostics') ? { ok: true, currentEvidence: { commit: 'abc123', checks: {} } } : { ok: true }
+    ) }),
+    ciEvidenceProblem,
+    probeClientFirestoreRules: () => firestore.promise, probeEngagementStats: async () => ({}), probeEngagementRecords: async () => ({}),
     probeSheetsWebhook: async () => ({}), probeCurrentSession: async () => ({}), probeRenderedCart: () => cart.promise,
     liveState: {}, buildLiveChecks: () => ({ a: {} }), buildLiveEdges: () => ({ b: {} }), renderAll() {},
   };
@@ -57,4 +61,18 @@ test('failed HTTP checks complete without claiming their health', async () => {
   const f = fixture(); f.env.fetch = async () => ({ status: 503, ok: false, json: async () => ({ ok: false }), headers: { get: () => null } });
   f.firestore.resolve({}); f.cart.resolve(['cart', {}]); await f.click();
   assert.equal(f.bar.value, 100); assert.match(f.status.textContent, /con avisos/); assert.equal(f.env.liveErrorEl.hidden, false);
+});
+test('una revalidación sana no muestra avisos', async () => {
+  const f = fixture(); f.firestore.resolve({}); f.cart.resolve(['cart', {}]); await f.click();
+  assert.equal(f.bar.value, 100); assert.equal(f.env.liveErrorEl.hidden, true); assert.doesNotMatch(f.status.textContent, /con avisos/);
+});
+test('sin evidencia de CI la revalidación termina y avisa qué quedó sin confirmar', async () => {
+  for (const [status, body] of [[502, { ok: false, error: 'GitHub alcanzó temporalmente el límite de consultas.' }], [200, { ok: true, currentEvidence: null }]]) {
+    const f = fixture();
+    f.env.fetch = async url => ({ status: String(url).includes('/api/master-diagnostics') ? status : 200, ok: String(url).includes('/api/master-diagnostics') ? status === 200 : true, headers: { get: () => 'csp' }, json: async () => (String(url).includes('/api/master-diagnostics') ? body : { ok: true }) });
+    f.firestore.resolve({}); f.cart.resolve(['cart', {}]); await f.click();
+    assert.equal(f.bar.value, 100); assert.match(f.status.textContent, /con avisos/); assert.equal(f.env.liveErrorEl.hidden, false);
+    assert.match(f.env.liveErrorTextEl.textContent, new RegExp(`/api/master-diagnostics respondió ${status} sin evidencia de CI`));
+    assert.match(f.env.liveErrorTextEl.textContent, /Repository audit queda sin confirmar/);
+  }
 });

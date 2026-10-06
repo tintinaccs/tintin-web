@@ -120,8 +120,8 @@ check(
   files.runtime.includes('hero_bg_desktop') &&
     files.runtime.includes('hero_bg_tablet') &&
     files.runtime.includes('hero_bg_mobile') &&
-    files.runtime.includes("if (mobile) mobileSource.srcset = mobile;") &&
-    files.runtime.includes("if (tablet) tabletSource.srcset = tablet;"),
+    files.runtime.includes("const configured = { desktop: configuredDesktop, tablet: configuredTablet, tabletLandscape: configuredTablet, mobile: configuredMobile };") &&
+    files.runtime.includes("for (const source of picture.querySelectorAll('source'))") && files.runtime.includes('source.srcset = custom ? absolute(custom)'),
   'los tres controles del panel deben tener efecto visual real'
 );
 
@@ -172,7 +172,7 @@ check(
   files.runtime.includes('function revealHeroWhenImageReady(image)') &&
     files.runtime.includes("image.addEventListener('load', onLoad, { once: true });") &&
     files.runtime.includes("image.addEventListener('error', onError, { once: true });") &&
-    files.runtime.includes("image.removeAttribute('src');") &&
+    files.runtime.includes('ttHeroFallbackApplied') && files.runtime.includes('source.srcset = absolute(defaults[sourceDevice(source)])') &&
     (files.runtime.match(/revealHeroWhenImageReady\(image\)/g) || []).length >= 2,
   'sin esto, Firestore puede confirmar la URL antes de que la foto termine de descargarse, dejando ver el fondo de .tt-hero-media un instante'
 );
