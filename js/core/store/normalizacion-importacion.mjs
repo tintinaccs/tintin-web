@@ -184,7 +184,13 @@ export function validateOperationalBackupEnvelope(value, {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('La copia operativa debe ser un objeto JSON.');
   }
-  if (value.format !== format) throw new Error('El formato de la copia operativa no es compatible.');
+  if (value.format !== format) {
+    const shopifyHint = 'Para productos de Shopify usá el CSV exportado desde Shopify (Productos → Exportar).';
+    if (value.format === 'tintin-inventory-reservation-review') {
+      throw new Error(`Este archivo es la revisión de reservas (solo lectura) y no se puede importar. ${shopifyHint}`);
+    }
+    throw new Error(`El formato de este JSON no es una copia operativa de productos. ${shopifyHint}`);
+  }
   if (value.projectId !== projectId) throw new Error('La copia pertenece a otro proyecto Firebase.');
   if (value.schemaVersion !== schemaVersion) throw new Error('La versión de la copia operativa no es compatible.');
   if (!value.data || typeof value.data !== 'object' || !Array.isArray(value.data.products)) {
