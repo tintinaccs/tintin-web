@@ -6,7 +6,7 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261005-import-one-click-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261006-hero-rotulo-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1" defer></script>
   <title>Catálogo de Accesorios | TINTIN Accesorios & Relojes</title>
@@ -54,7 +54,7 @@
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261004-final-integration-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1">
-  <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1">
+  <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1">
   <style>
     /* Alias variables so catalog styles stay consistent with the rest of the site */
     :root {
@@ -133,10 +133,13 @@
     .tt-card-btn-cart:disabled { background: #8a7d82; border-color: #8a7d82; cursor: not-allowed; opacity: 1; }
     .tt-card-btn-view { background: transparent; color: var(--acc, #c9597a); }
     .tt-card-btn-view:hover { background: #fce4ec; }
+    /* La etiqueta va arriba a la izquierda y el corazón arriba a la derecha:
+       antes compartían esquina y el corazón tapaba "Nuevo"/"Agotado". */
     .tt-card-badge {
-      position: absolute; top: 10px; right: 10px; background: var(--acc, #c9597a);
+      position: absolute; top: 10px; left: 10px; background: var(--acc, #c9597a);
       color: #fff; font-size: 10px; font-weight: 800; text-transform: uppercase;
       letter-spacing: .08em; padding: 3px 8px; border-radius: 50px;
+      max-width: calc(100% - 74px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     .tt-card-badge--out { background: #e53935; }
     .cat-card-placeholder {
@@ -344,7 +347,7 @@
       .tt-card-price { font-size: 13px; }
       .tt-card-btns { flex-direction: column; gap: 6px; }
       .tt-card-btn { min-height: 40px; font-size: 10px; padding: 7px 5px; }
-      .tt-card-badge { top: 7px; right: 7px; font-size: 8px; padding: 3px 6px; }
+      .tt-card-badge { top: 7px; left: 7px; font-size: 8px; padding: 3px 6px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .tt-card, .tt-card-img-wrap img, .cat-sidebar, .cat-filter-toggle { transition: none !important; }

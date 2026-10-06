@@ -8,7 +8,7 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261005-import-one-click-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261006-hero-rotulo-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
@@ -83,12 +83,12 @@
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260930-hero-touch-target-1-brand-20261004-1-owner-pink-20261004-1">
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20261005-public-navigation-3">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20261006-hero-rotulo-1">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/pages/home/edicion-editorial-inicio.css?v=tintin-20260911-home-editorial-2-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1">
-  <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1">
+  <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1">
   <script type="application/ld+json" id="tt-store-jsonld">{"@context":"https://schema.org","@type":"Store","@id":"https://tintinaccesorios.pages.dev/#store","name":"Tintin Accesorios & Relojes","url":"https://tintinaccesorios.pages.dev/","logo":"https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png","image":"https://tintinaccesorios.pages.dev/assets/og-cover.jpg","description":"Tintin Accesorios & Relojes — tienda de accesorios femeninos elegantes en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más.","areaServed":{"@type":"Country","name":"Paraguay"},"currenciesAccepted":"PYG"}</script>
 </head>
 <body class="tt-home-premium">
@@ -99,24 +99,36 @@
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
-  <!-- Los archivos y encuadres por dispositivo se administran desde Super Admin.
-       El texto y las acciones son HTML para no depender de texto incrustado en el arte. -->
+  <!-- El hero ocupa exactamente la primera pantalla y se arma con piezas sueltas:
+       fondo en CSS, rótulo "Bienvenida tintina" vectorial, foto en su tarjeta y
+       texto/acciones en HTML. La foto y su encuadre por dispositivo se administran
+       desde Super Admin. -->
+  <img
+    class="tt-hero-welcome"
+    src="assets-tintin/images/home/hero-nuevo/bienvenida-tintina.svg?v=tintin-20261006-hero-rotulo-1"
+    alt="Bienvenida tintina"
+    width="832"
+    height="278"
+    loading="eager"
+    decoding="async"
+    draggable="false"
+  >
   <div class="tt-hero-media" id="tt-hero-media">
     <picture>
-      <source type="image/webp" media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.webp?v=tintin-20260916-premium-hero-1">
-      <source type="image/webp" media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.webp?v=tintin-20260916-premium-hero-1">
-      <source type="image/webp" media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.webp?v=tintin-20260916-premium-hero-1">
-      <source type="image/webp" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.webp?v=tintin-20260916-premium-hero-1">
-      <source media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20260910-hero-button-clear-1">
-      <source media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png?v=tintin-20260910-hero-button-clear-1">
-      <source media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png?v=tintin-20260910-hero-button-clear-1">
+      <source type="image/webp" media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.webp?v=tintin-20261006-hero-rotulo-1">
+      <source type="image/webp" media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.webp?v=tintin-20261006-hero-rotulo-1">
+      <source type="image/webp" media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.webp?v=tintin-20261006-hero-rotulo-1">
+      <source type="image/webp" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.webp?v=tintin-20261006-hero-rotulo-1">
+      <source media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20261006-hero-rotulo-1">
+      <source media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png?v=tintin-20261006-hero-rotulo-1">
+      <source media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png?v=tintin-20261006-hero-rotulo-1">
       <img
         id="tt-hero-img"
         class="tt-hero-img"
-        src="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png?v=tintin-20260910-hero-button-clear-1"
+        src="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png?v=tintin-20261006-hero-rotulo-1"
         alt=""
-        width="1920"
-        height="1080"
+        width="718"
+        height="744"
         loading="eager"
         decoding="async"
         fetchpriority="high"

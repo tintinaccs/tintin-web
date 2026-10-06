@@ -21,3 +21,7 @@ html body .tt-product-social-bar{justify-content:flex-start!important;text-align
 .tt-product-name-row{display:block}.tt-product-favorite-icon{display:none!important}
 @media(max-width:767px){.tt-product-social-bar{justify-content:center!important;flex-wrap:wrap;overflow:visible}.tt-social-action,.tt-social-share{min-height:44px;padding-inline:12px}}
 body[data-tt-product-server-preview="1"] #product-loading{display:none!important}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"]{display:grid!important}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"] .tt-product-info-panel{visibility:hidden;pointer-events:none}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"] .tt-gallery-main{cursor:default}
+/* La regla de arriba apaga .tt-product-badge para el panel de detalle, pero también apagaba la etiqueta
+   Nuevo/Agotado de las tarjetas de "También te puede gustar". En tarjetas va arriba a la izquierda y el
+   corazón arriba a la derecha; con tres tarjetas por fila, debajo de 600 px no entran las dos sin pisarse. */
+@media (min-width:600px){.tt-related-grid .tt-product-card .tt-product-badge{display:block!important}}
