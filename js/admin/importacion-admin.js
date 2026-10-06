@@ -29,11 +29,11 @@ import {
   safeImportUrl,
   sanitizeShopifyBodyHtml,
   summarizeImportRecords,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20261003-variant-inventory-1';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20261005-import-one-click-1';
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1';
 import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261005-import-apply-error-1';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261005-import-one-click-1';
 import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261003-inventory-review-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
@@ -115,24 +115,29 @@ if (!window.TintinAdminShopifyImportBooted) {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
+  /** Descarga la copia operativa y habilita la escritura en esta sesión. */
+  async function downloadOperationalBackup() {
+    const [products, collectionsData, siteContent, settings, rolePermissions] = await Promise.all([
+      readCollection('products'), readCollection('collections', 5000), readCollection('site_content', 5000),
+      readCollection('settings', 5000), readCollection('rolePermissions', 1000),
+    ]);
+    downloadJson(`tintin-copia-operativa-${new Date().toISOString().slice(0, 10)}.json`, {
+      format: 'tintin-operational-backup', schemaVersion: 1, projectId: PROJECT_ID,
+      exportedAt: new Date().toISOString(), exportedBy: state.user.email,
+      excludes: ['users', 'orders', 'carts', 'auditLog', 'emailLogs'],
+      counts: { products: products.length, collections: collectionsData.length, siteContent: siteContent.length, settings: settings.length, rolePermissions: rolePermissions.length },
+      data: { products, collections: collectionsData, siteContent, settings, rolePermissions },
+    });
+    state.backupAt = Date.now();
+  }
+
   async function exportOperationalBackup() {
     if (!isSuperAdmin() || state.busy) return;
     state.busy = true;
     state.ui.backup.disabled = true;
     state.ui.backup.textContent = 'Preparando copia…';
     try {
-      const [products, collectionsData, siteContent, settings, rolePermissions] = await Promise.all([
-        readCollection('products'), readCollection('collections', 5000), readCollection('site_content', 5000),
-        readCollection('settings', 5000), readCollection('rolePermissions', 1000),
-      ]);
-      downloadJson(`tintin-copia-operativa-${new Date().toISOString().slice(0, 10)}.json`, {
-        format: 'tintin-operational-backup', schemaVersion: 1, projectId: PROJECT_ID,
-        exportedAt: new Date().toISOString(), exportedBy: state.user.email,
-        excludes: ['users', 'orders', 'carts', 'auditLog', 'emailLogs'],
-        counts: { products: products.length, collections: collectionsData.length, siteContent: siteContent.length, settings: settings.length, rolePermissions: rolePermissions.length },
-        data: { products, collections: collectionsData, siteContent, settings, rolePermissions },
-      });
-      state.backupAt = Date.now();
+      await downloadOperationalBackup();
       toast('Copia operativa descargada.');
     } catch (error) {
       console.error('[admin-import] backup failed', error);
@@ -341,6 +346,7 @@ if (!window.TintinAdminShopifyImportBooted) {
       state.source = extension === 'csv' ? 'shopify-csv' : 'tintin-json';
       state.jobId = '';
       state.job = null;
+      state.showAll = false;
       renderPreview();
       toast(`Preview listo: ${state.records.length} producto(s) agrupado(s) por Handle.`);
     } catch (error) {
@@ -368,6 +374,11 @@ if (!window.TintinAdminShopifyImportBooted) {
     return result;
   }
 
+  /** Filas que el admin debe mirar: errores, identidades a confirmar o duplicados. */
+  function needsAttention(record) {
+    return Boolean(record.errors?.length || record.identityStatus === 'REVIEW_REQUIRED' || record.duplicate);
+  }
+
   function statusText(record) {
     if (record.errors?.length) return `ERROR: ${record.errors.join(' · ')}`;
     if (record.identityStatus === 'MATCHED_EXISTING') return `Ya existe: SKIP · ${record.identityMessage}`;
@@ -390,16 +401,21 @@ if (!window.TintinAdminShopifyImportBooted) {
     }
     state.ui.tableBody.replaceChildren();
     state.ui.preview.hidden = !state.records.length;
-    state.ui.createJob.disabled = !state.records.length || totals.invalid > 0 || state.busy;
-    state.ui.ready.disabled = !state.jobId || totals.invalid > 0 || state.busy || state.job?.status !== 'PREVIEW';
-    state.records.slice(0, PREVIEW_ROWS).forEach((record, index) => {
+    const attention = state.records.map((record, index) => ({ record, index })).filter(({ record }) => needsAttention(record));
+    const visible = state.showAll ? state.records.map((record, index) => ({ record, index })) : attention;
+    state.ui.tableWrap.hidden = !visible.length;
+    state.ui.toggleAll.hidden = !state.records.length || attention.length === state.records.length;
+    state.ui.toggleAll.textContent = state.showAll ? 'Ver solo lo que requiere atención' : `Ver los ${state.records.length} productos`;
+    visible.slice(0, PREVIEW_ROWS).forEach(({ record, index }) => {
       const row = document.createElement('tr');
       row.append(node('td', '', String(index + 1)), node('td', '', record.product.name || '—'), node('td', '', record.product.category || 'Confirmar colección'), node('td', '', `Gs. ${Number(record.product.price || 0).toLocaleString('es-PY')}`), node('td', '', record.product.stock == null ? 'Sin límite' : String(record.product.stock)), node('td', '', statusText(record)));
       state.ui.tableBody.appendChild(row);
     });
-    state.ui.previewNote.textContent = state.records.length > PREVIEW_ROWS
-      ? `Vista acotada a ${PREVIEW_ROWS}; el job conserva los ${state.records.length} productos. No se descartan filas.`
-      : 'La vista previa no escribe productos ni descarga media.';
+    state.ui.previewNote.textContent = !state.records.length ? ''
+      : visible.length > PREVIEW_ROWS ? `Vista acotada a ${PREVIEW_ROWS}; se importan los ${state.records.length} productos. No se descartan filas.`
+        : state.showAll ? 'La vista previa no escribe productos ni descarga media.'
+          : attention.length ? `${attention.length} producto(s) requieren atención; los otros ${state.records.length - attention.length} están listos.`
+            : `Los ${state.records.length} productos están listos: colección, precio y stock reconocidos.`;
     state.ui.jobStatus.textContent = state.job ? `${state.job.status} · ${state.job.jobId || state.jobId}` : 'Sin import job persistido';
     state.ui.badge.textContent = state.job?.status === 'COMPLETED' ? 'APLICADO' : state.job?.status === 'RUNNING' ? 'APLICANDO' : 'SIN ESCRIBIR';
     catalogApply.render(totals);
@@ -425,41 +441,26 @@ if (!window.TintinAdminShopifyImportBooted) {
     return totals;
   }
 
-  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, refreshCatalogIdentitySnapshot, toast, node });
+  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, refreshCatalogIdentitySnapshot, ensureReadyJob, takeBackup: downloadOperationalBackup, toast, node });
 
+  /** Persiste el preview revisado como import job dry-run (no escribe productos). */
   async function createDryRunJob() {
-    if (!isSuperAdmin() || state.busy || !state.records.length) return;
     const totals = summary();
-    if (totals.invalid) return toast('Corregí los errores de la vista previa antes de preparar el job.', true);
-    state.busy = true;
-    state.ui.createJob.disabled = true;
-    state.ui.createJob.textContent = 'Guardando preview…';
-    try {
-      state.jobId = `imp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
-      state.job = await apiJob({ action: 'create', jobId: state.jobId, source: state.source, fileName: state.fileName, fileBytes: state.fileBytes, fileChecksum: state.fileChecksum, total: state.records.length, strategy: 'SKIP', batchCount: chunkImportRecords(state.records, 50).length, summary: totals });
-      await saveLocalJob();
-      renderPreview();
-      toast(`Preview persistido como ${state.jobId}. Todavía no se escribió el catálogo.`);
-    } catch (error) {
-      console.error('[admin-import] job create failed', error);
-      state.jobId = ''; state.job = null;
-      toast(`No se pudo persistir el preview: ${error.message}`, true);
-    } finally {
-      state.busy = false;
-      state.ui.createJob.textContent = 'Crear import job (dry-run)';
-      renderPreview();
-    }
+    if (totals.invalid) throw new Error('Corregí los errores de la vista previa antes de importar.');
+    const jobId = `imp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+    const job = await apiJob({ action: 'create', jobId, source: state.source, fileName: state.fileName, fileBytes: state.fileBytes, fileChecksum: state.fileChecksum, total: state.records.length, strategy: 'SKIP', batchCount: chunkImportRecords(state.records, 50).length, summary: totals });
+    state.jobId = jobId;
+    state.job = job;
+    await saveLocalJob();
   }
 
-  async function markReady() {
-    if (!state.jobId || state.busy || state.job?.status !== 'PREVIEW') return;
-    state.busy = true;
-    try {
+  /** Crear el job y marcarlo READY ya no son botones aparte: los hace «Importar al catálogo». */
+  async function ensureReadyJob() {
+    if (!state.jobId) await createDryRunJob();
+    if (state.job?.status === 'PREVIEW') {
       state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'READY', processed: 0, lastCheckpoint: 0 });
-      await saveLocalJob(); renderPreview();
-      toast('Job READY. No se ejecutó ninguna escritura de catálogo.');
-    } catch (error) { toast(`No se pudo marcar READY: ${error.message}`, true); }
-    finally { state.busy = false; renderPreview(); }
+      await saveLocalJob();
+    }
   }
 
   async function restoreLocalJob(saved) {
@@ -555,7 +556,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     hideLegacyImporters(section);
     const card = node('div', 'adm-card phase10-card'); card.id = 'shopify-import-canonical-card';
     const head = node('div', 'adm-card-head phase10-head'); const titleWrap = node('div');
-    titleWrap.append(node('div', 'adm-card-title', 'Shopify · migración controlada'), node('p', 'phase10-subtitle', 'Preview, colecciones y job reanudable. «Aplicar al catálogo» solo crea productos nuevos: nunca pisa ni borra.'));
+    titleWrap.append(node('div', 'adm-card-title', 'Shopify · migración controlada'), node('p', 'phase10-subtitle', 'Subí el CSV exportado de Shopify y tocá «Importar al catálogo»: guarda una copia de seguridad, copia las imágenes y crea los productos en la web, el panel y Google Sheets. Solo crea productos nuevos: nunca pisa ni borra.'));
     const badge = node('span', 'phase10-badge', 'SIN ESCRIBIR'); head.append(titleWrap, badge);
     const body = node('div', 'adm-card-body'); const statusGrid = node('div', 'phase10-grid');
     [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Imágenes', 'Shopify CDN → Cloudinary antes de guardar'], ['Catálogo', 'solo crea · id estable por Handle']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
@@ -570,9 +571,9 @@ if (!window.TintinAdminShopifyImportBooted) {
     drop.addEventListener('dragover', event => { event.preventDefault(); drop.classList.add('is-dragging'); }); drop.addEventListener('dragleave', () => drop.classList.remove('is-dragging')); drop.addEventListener('drop', event => { event.preventDefault(); drop.classList.remove('is-dragging'); processFile(event.dataTransfer.files?.[0]); }); input.addEventListener('change', () => processFile(input.files?.[0]));
     const summaryEl = node('div', 'phase10-summary', 'Seleccioná un archivo CSV o JSON para comenzar.'); const phase2Meta = node('div', 'phase10-phase2-meta', 'Cargá el archivo para ver colecciones, imágenes y advertencias.'); const jobStatus = node('div', 'phase10-job-status', 'Sin import job persistido');
     const preview = node('div', 'phase10-preview'); preview.hidden = true; const tableWrap = node('div', 'adm-table-wrap'); const table = node('table', 'adm-table phase10-table'); const tableHead = document.createElement('thead'); const headRow = document.createElement('tr'); ['#', 'Producto', 'Colección', 'Precio', 'Stock', 'Estado'].forEach(label => headRow.appendChild(node('th', '', label))); tableHead.appendChild(headRow); const tableBody = document.createElement('tbody'); table.append(tableHead, tableBody); tableWrap.appendChild(table); const previewNote = node('small', 'phase10-note');
-    const actions = node('div', 'phase10-actions'); const clear = node('button', 'adm-btn adm-btn-outline', 'Limpiar preview'); clear.type = 'button'; clear.addEventListener('click', clearPreview); const createJob = node('button', 'adm-btn adm-btn-primary', 'Crear import job (dry-run)'); createJob.type = 'button'; createJob.addEventListener('click', createDryRunJob); const ready = node('button', 'adm-btn adm-btn-outline', 'Marcar READY'); ready.type = 'button'; ready.addEventListener('click', markReady); const restore = node('button', 'adm-btn adm-btn-outline'); restore.type = 'button'; restore.hidden = true; const restoreActions = node('div', 'phase10-actions'); restoreActions.appendChild(restore); actions.append(clear, createJob, ready); preview.append(tableWrap, previewNote, actions); catalogApply.mount(preview, tableWrap);
+    const actions = node('div', 'phase10-actions'); const clear = node('button', 'adm-btn adm-btn-outline', 'Limpiar preview'); clear.type = 'button'; clear.addEventListener('click', clearPreview); const toggleAll = node('button', 'adm-btn adm-btn-outline'); toggleAll.type = 'button'; toggleAll.hidden = true; toggleAll.addEventListener('click', () => { state.showAll = !state.showAll; renderPreview(); }); const restore = node('button', 'adm-btn adm-btn-outline'); restore.type = 'button'; restore.hidden = true; const restoreActions = node('div', 'phase10-actions'); restoreActions.appendChild(restore); actions.append(toggleAll, clear); preview.append(tableWrap, previewNote, actions); catalogApply.mount(preview, tableWrap);
     body.append(statusGrid, backupWrap, drop, summaryEl, phase2Meta, jobStatus, restoreActions, preview); card.append(head, body); section.insertBefore(card, section.firstChild);
-    state.ui = { section, card, badge, backup, reconcile, drop, input, summary: summaryEl, phase2Meta, jobStatus, preview, tableBody, previewNote, createJob, ready, restore }; renderPreview(); offerLocalResume();
+    state.ui = { section, card, badge, backup, reconcile, drop, input, summary: summaryEl, phase2Meta, jobStatus, preview, tableWrap, tableBody, previewNote, toggleAll, restore }; renderPreview(); offerLocalResume();
   }
 
   function injectStyles() {

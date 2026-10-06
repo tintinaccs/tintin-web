@@ -185,10 +185,10 @@ test('colección por la primera palabra del título tolera plurales y no adivina
     newFormatRow({ 'url handle': 'collar-ismera-1', title: 'Collar Ismera', price: '100' }),
     newFormatRow({ 'url handle': 'aro-luna', title: 'Aro Luna', price: '100' }),
     newFormatRow({ 'url handle': 'bolso-mia', title: 'Bolso Mia', price: '100' }),
-    newFormatRow({ 'url handle': 'cadena-fina', title: 'Cadena fina', price: '100' }),
+    newFormatRow({ 'url handle': 'llavero-fino', title: 'Llavero fino', price: '100' }),
   ], catalogCollections, parsers).products;
   assert.deepEqual(grouped.map(item => item.product.category), ['relojes', 'collares', 'aros', 'bolsos', '']);
-  assert.equal(grouped[4].product._group, 'cadena');
+  assert.equal(grouped[4].product._group, 'llavero');
   assert.match(grouped[4].errors.join(' '), /no pudo mapearse/);
 
   const ambiguous = groupShopifyRows([
@@ -256,22 +256,42 @@ test('producto de catálogo respeta los límites del formulario del Admin', () =
 
 test('grupos sin colección se asignan a mano, se pueden corregir y no aceptan colecciones inexistentes', () => {
   const { products } = groupShopifyRows([
-    newFormatRow({ 'url handle': 'cadena-fina', title: 'Cadena fina', price: '100' }),
-    newFormatRow({ 'url handle': 'cadena-gruesa', title: 'CADENA gruesa', price: '100' }),
-    newFormatRow({ 'url handle': 'hoops-oro', title: 'Hoops oro', price: '100' }),
+    newFormatRow({ 'url handle': 'llavero-fino', title: 'Llavero fino', price: '100' }),
+    newFormatRow({ 'url handle': 'llavero-grueso', title: 'LLAVERO grueso', price: '100' }),
+    newFormatRow({ 'url handle': 'broche-oro', title: 'Broche oro', price: '100' }),
     newFormatRow({ 'url handle': 'reloj-x', title: 'Reloj X', price: '100' }),
   ], catalogCollections, parsers);
-  assert.deepEqual(pendingCollectionGroups(products).map(item => [item.group, item.count, item.category]), [['cadena', 2, ''], ['hoops', 1, '']]);
+  assert.deepEqual(pendingCollectionGroups(products).map(item => [item.group, item.count, item.category]), [['llavero', 2, ''], ['broche', 1, '']]);
 
-  assert.equal(assignGroupCollection(products, 'cadena', 'no-existe', catalogCollections), 0);
-  assert.equal(assignGroupCollection(products, 'cadena', 'collares', catalogCollections), 2);
+  assert.equal(assignGroupCollection(products, 'llavero', 'no-existe', catalogCollections), 0);
+  assert.equal(assignGroupCollection(products, 'llavero', 'collares', catalogCollections), 2);
   assert.deepEqual(products.slice(0, 2).map(item => [item.product.category, item.errors.length]), [['collares', 0], ['collares', 0]]);
   assert.equal(products[3].product.category, 'relojes');
-  assert.deepEqual(pendingCollectionGroups(products).map(item => [item.group, item.category]), [['cadena', 'collares'], ['hoops', '']]);
+  assert.deepEqual(pendingCollectionGroups(products).map(item => [item.group, item.category]), [['llavero', 'collares'], ['broche', '']]);
 
-  assert.equal(assignGroupCollection(products, 'cadena', 'relojes', catalogCollections), 2);
+  assert.equal(assignGroupCollection(products, 'llavero', 'relojes', catalogCollections), 2);
   assert.equal(products[0].product.category, 'relojes');
-  assert.equal(assignGroupCollection(products, 'hoops', 'aros', catalogCollections), 1);
+  assert.equal(assignGroupCollection(products, 'broche', 'aros', catalogCollections), 1);
   assert.equal(products.every(item => item.errors.length === 0), true);
   assert.equal('_manualCollection' in buildCatalogProductFromImport(products[0].product), false);
 });
+
+test('reconoce alias de la tienda y la categoría estándar de Shopify sin pisar el título', () => {
+  const rows = [
+    ['cadena-fina', 'Cadena fina', ''],
+    ['hoops-oro', 'Hoops oro', 'Ropa y accesorios > Joyería > Pendientes'],
+    ['esclava-lisa', 'Esclava lisa', ''],
+    ['reloj-malla', 'Reloj malla', 'Ropa y accesorios > Joyería > Pulseras'],
+    ['set-luna', 'Set Luna', 'Ropa y accesorios > Joyería > Collares'],
+    ['porta-anillos', 'Porta anillos', 'Salud y belleza > Limpieza y cuidado de joyas > Soportes para joyería > Porta anillos'],
+    ['set-sol', 'Set Sol', 'Ropa y accesorios > Joyería > Conjuntos de joyas'],
+  ].map(([handle, title, category]) => newFormatRow({ 'url handle': handle, title, price: '100', 'product category': category }));
+  const collections = [...catalogCollections, { slug: 'brazaletes', name: 'Brazaletes' }, { slug: 'joyeros', name: 'Joyeros' }];
+  const { products } = groupShopifyRows(rows, collections, parsers);
+  assert.deepEqual(products.map(item => item.product.category), ['collares', 'aros', 'brazaletes', 'relojes', 'collares', 'joyeros', '']);
+  assert.deepEqual(pendingCollectionGroups(products).map(item => [item.group, item.count]), [['set', 1]]);
+
+  const missing = groupShopifyRows([rows[2]], catalogCollections, parsers).products[0];
+  assert.equal(missing.product.category, '', 'un alias nunca asigna una colección que no existe');
+});
+

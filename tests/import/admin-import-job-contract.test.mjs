@@ -26,7 +26,7 @@ test('admin import job solo deja aplicar un CSV de Shopify sin errores y registr
 });
 
 test('la restauración local queda visible aunque el preview esté vacío', () => {
-  assert.match(importUiSource, /actions\.append\(clear, createJob, ready\)/);
+  assert.match(importUiSource, /actions\.append\(toggleAll, clear\)/);
   assert.match(importUiSource, /body\.append\(statusGrid, backupWrap, drop, summaryEl, phase2Meta, jobStatus, restoreActions, preview\)/);
   assert.match(importUiSource, /const restoreActions = node\('div', 'phase10-actions'\); restoreActions\.appendChild\(restore\)/);
 });
