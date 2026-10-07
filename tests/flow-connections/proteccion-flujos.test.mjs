@@ -28,3 +28,17 @@ test('una huella nueva falsa y un intento de salir del repositorio fallan', () =
   const errors = checkProtectedFlows(baseline, candidate, path => { reads.push(path); return 'green'; });
   assert.equal(errors.length, 2); assert.ok(!reads.includes('../outside'));
 });
+test('las rutas dinámicas de Pages se congelan sin admitir escapes del repositorio', () => {
+  const route = 'functions/__/auth/[[path]].js';
+  const candidate = copy(); candidate.files[route] = flowFileHash('route'); candidate.records.route = [route];
+  const read = path => path === route ? 'route' : 'green';
+  assert.deepEqual(checkProtectedFlows(baseline, candidate, read), []);
+  assert.deepEqual(checkProtectedFlows(candidate, structuredClone(candidate), read), []);
+  assert.ok(checkProtectedFlows(candidate, structuredClone(candidate), () => 'changed').some(e => e.includes('Archivo protegido modificado')));
+  for (const path of ['../[[path]].js', '/[[path]].js', 'functions/../../[[path]].js', 'functions\\[[path]].js']) {
+    const escape = copy(); escape.files[path] = flowFileHash('route');
+    const reads = [];
+    assert.ok(checkProtectedFlows(baseline, escape, p => {reads.push(p);return 'green';}).length);
+    assert.ok(!reads.includes(path));
+  }
+});
