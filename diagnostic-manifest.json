@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7416f2513982fc025a00c180f7c01de88046d60f51d28f08f9372e18162162bd",
+  "sourceFingerprint": "0a922ea10a2a39719bb40b4c9c6898fdd76296c06ae59a0c8614b1eb27952653",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1052,
     "textFiles": 1004,
-    "totalBytes": 15824075,
+    "totalBytes": 15888145,
     "pages": 19,
     "modules": 742
   },
@@ -30316,8 +30316,8 @@
     },
     {
       "path": "scripts/auditar-proteccion-flujos.mjs",
-      "bytes": 5121,
-      "sha256": "1201489a7a7a355b98d41e3256b7d89c6914799b34a4253fe6d9b5f3d5fc7926",
+      "bytes": 5129,
+      "sha256": "491e4cba5b0ee0ef702f36c47c6a22ce8f45e418e86426cdccf5e8717fed1cc8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34921,8 +34921,8 @@
     },
     {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",
-      "bytes": 1980,
-      "sha256": "d4b30b05b6326654bd1882c0dcd45c16ad7c0a2d55e5ba26dcc160fbb653046e",
+      "bytes": 2953,
+      "sha256": "3bd931b17a19a21595e170203e374733f3554e0f68b05c57a0126fad2b50cbba",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40501,8 +40501,8 @@
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 41656,
-      "sha256": "66c3ba8a6daefdf2cfa9e2905508067b2377c61215a6b0e895cde6dd46a4c14c"
+      "bytes": 102724,
+      "sha256": "2ce8c2066819834bee068ef58616ba84d6afceac1d85b8be9ac710daa431306e"
     },
     {
       "path": "config/public-site.json",
@@ -41023,8 +41023,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 288327,
-      "sha256": "ace9daa8325162547ab944df3da6fc61a33402fe59f5e895507f93e8118d02aa"
+      "bytes": 290348,
+      "sha256": "d3dd5a1ac1490ed961a6de6ce741f4f7d88ae1848d7bfe02acd52bf46ec947ea"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44323,8 +44323,8 @@
     {
       "path": "scripts/auditar-proteccion-flujos.mjs",
       "extension": ".mjs",
-      "bytes": 5121,
-      "sha256": "1201489a7a7a355b98d41e3256b7d89c6914799b34a4253fe6d9b5f3d5fc7926"
+      "bytes": 5129,
+      "sha256": "491e4cba5b0ee0ef702f36c47c6a22ce8f45e418e86426cdccf5e8717fed1cc8"
     },
     {
       "path": "scripts/auditar-publico-operativo-contrato.js",
@@ -45241,8 +45241,8 @@
     {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",
       "extension": ".mjs",
-      "bytes": 1980,
-      "sha256": "d4b30b05b6326654bd1882c0dcd45c16ad7c0a2d55e5ba26dcc160fbb653046e"
+      "bytes": 2953,
+      "sha256": "3bd931b17a19a21595e170203e374733f3554e0f68b05c57a0126fad2b50cbba"
     },
     {
       "path": "tests/flow-connections/revalidation-progress.test.mjs",

@@ -1,3 +1,15 @@
+# Estado vigente — 2026-10-07: restauración y protección de 74 flujos
+
+Agente: Codex. Base: `bf8052669d3add73de2d8060ba27511443e26131`.
+Alcance autorizado: conservar los verdes, recuperar los amarillos con evidencia real y ampliar el bloqueo preventivo; publicación autorizada en la conversación. Sin pagos.
+
+- PASS_PRODUCTION directo no destructivo: revalidación autenticada del 2026-10-07T20:58:04.365Z y 2026-10-07T21:00:21.864Z. Los 41 sellos afectados por la publicación #1058 se renovaron individualmente desde la UI después del Repository audit exitoso de la base (run 37682031746). Tras recargar: 74 verdes y 6 parciales. Los 33 sellos ya verdes conservaron exactamente archivos, hashes, fecha y autor. Esta evidencia corresponde a la base; no se hereda como CI del nuevo candidato.
+- Recuperado el check obligatorio `Protected flow integrity` en main, junto con Repository audit, ambos CodeQL y Cloudflare Pages; strict y enforce_admins activos, force-push y borrado deshabilitados.
+- Ampliada la línea base de 29 a 74 registros y de 107 a 122 archivos/imports. Se mantienen los 29 alcances anteriores y los 106 hashes ajenos al auditor. Única renovación técnica: el validador admite los corchetes de la ruta legítima `functions/__/auth/[[path]].js`, sin admitir rutas absolutas, escapes ni huellas falsas. El workflow confiable no cambia.
+- PASS_LOCAL: 13 pruebas específicas de protección y sellos. CI del candidato y publicación todavía pendientes al escribir esta entrada. El control contra la base anterior debe rechazar la renovación del auditor por diseño; no se presenta ese rechazo como PASS.
+- Pendientes reales: PayPal Live y escrituras de likes/reseñas por la API (6 registros contando sus conexiones). No se inventaron opiniones ni pagos para convertirlos en verdes. Las correcciones de mapa, factura y teléfono permanecen en otra rama sin publicar; esta publicación conserva todos los archivos de evidencia de los 74 sellos vigentes.
+
+## Historial previo (evidencia fechada)
 # Estado vigente — 2026-10-07: correcciones de auditoría pública
 
 Agente: Codex. Base: `0b6955dfe60151e99af45a04955998e06adea203`.
