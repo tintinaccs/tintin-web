@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d82b2d72e719052b96887cb5081904008a5cd81d6a9483fd1120a8467dfcf991",
+  "sourceFingerprint": "1470f025b952f07a85d093f045589402405af4f5386e1a2aec477c6be8511d5c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1048,
     "textFiles": 1000,
-    "totalBytes": 15787466,
+    "totalBytes": 15788320,
     "pages": 19,
     "modules": 738
   },
@@ -39542,8 +39542,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 6401,
-      "sha256": "4bf7747b88d7be61caf1da4b739bdebeb6b2d9a555ed7068921adc9db569a5cd"
+      "bytes": 7824,
+      "sha256": "c72c4c3d8c67c362bcb5568ea86965036bb9a95828cf4fe1fe1b602380f36b7e"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -39598,12 +39598,6 @@
       "extension": ".yml",
       "bytes": 5419,
       "sha256": "ebff82232537e6bb518aa1e502ff0791d7ecae742c39d7dcf1168bf4787d35b0"
-    },
-    {
-      "path": ".github/workflows/proteger-flujos.yml",
-      "extension": ".yml",
-      "bytes": 1464,
-      "sha256": "178344c61e38a151b02df0cd0008eeff801fde638399d4022865222e05e37df9"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
@@ -39700,6 +39694,12 @@
       "extension": ".gs",
       "bytes": 34826,
       "sha256": "0823761a644e57ce3aa18a09590744fee79b59ca5c9827be80736311525ef0fd"
+    },
+    {
+      "path": "apps-script/DiagnosticoFlujos.gs",
+      "extension": ".gs",
+      "bytes": 896,
+      "sha256": "e01a8790d25870cab5d3f1b4a026cab29f59e5a1a866f9a4e56843c4ffaa7baf"
     },
     {
       "path": "apps-script/Mayoristas.gs",
@@ -40304,8 +40304,8 @@
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 41657,
-      "sha256": "576a7660504d31d017f6da5cdb137ebc79c559e5260a5684e8639b8ea117c10c"
+      "bytes": 41656,
+      "sha256": "9dda81123f66cac2c49e7687c580987384efab2929caf36a76e309d5b846c5aa"
     },
     {
       "path": "config/public-site.json",

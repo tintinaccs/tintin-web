@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_target:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   workflow_dispatch:
@@ -18,6 +21,7 @@ concurrency:
 
 jobs:
   audit:
+    if: github.event_name != 'pull_request_target'
     name: Repository audit
     runs-on: ubuntu-24.04
     timeout-minutes: 75
@@ -158,3 +162,34 @@ jobs:
             /tmp/tintin-ci-http.log
           if-no-files-found: warn
           retention-days: 14
+
+  protected-flows:
+    if: github.event_name == 'pull_request_target' || github.event_name == 'workflow_dispatch'
+    name: Protected flows
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      # Código de la base confiable; el candidato se lee sólo como datos.
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Fetch candidate without checking it out
+        if: github.event_name == 'pull_request_target'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]
+          git fetch --no-tags origin "refs/pull/${PR_NUMBER}/head"
+      - name: Verify protected files against trusted baseline
+        if: github.event_name == 'pull_request_target'
+        env:
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/auditar-proteccion-flujos.mjs --candidate "$CANDIDATE_SHA"
+      - name: Verify main baseline
+        if: github.event_name == 'workflow_dispatch'
+        run: node scripts/auditar-proteccion-flujos.mjs
