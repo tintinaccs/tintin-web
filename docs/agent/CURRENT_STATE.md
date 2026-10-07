@@ -1,3 +1,24 @@
+# 2026-10-07 — Flujos protegidos (Codex, autorización completa vigente)
+
+- Usuario autorizó explícitamente publicación y trabajo completo; abrió Apps Script y Sheets de producción. No se heredan autorizaciones de informes anteriores.
+- Implementado: sellos individuales, preservación de sellos anteriores, huellas completas incluyendo `_headers`/`_redirects`; gate `Protected flows` que ejecuta únicamente código de la base confiable y compara el candidato como datos. Línea base inicial de 29 registros verdes y 107 archivos/imports; no se puede retirar una protección o cambiar la huella del archivo en el mismo PR para eludirla.
+- Corrección del diagnóstico: un timeout de Apps Script (HTTP0) se convertía indebidamente en HTTP200 de system-health y luego en rojo. Se conserva el estado sin respuesta, se muestra su código y se amplía el margen de arranque frío de 5 a 10 segundos; system-health tiene 30 segundos en el panel. Ningún fallo confirmado se oculta ni se promueve a verde.
+- PASS_LOCAL: flujo 84/84 y salud/redirects 39/39. Pendiente CI del commit final, merge, despliegue, activación del nuevo check obligatorio y verificación autenticada. Las protecciones existentes de main ya exigen Repository audit, CodeQL y Cloudflare Pages, con enforce_admins, sin force-push ni borrado.
+- Diagnóstico autenticado 2026-10-07: CI/main a3b0c34 PASS; bridge Apps Script responde guard canónico en una lectura; sincronización inbound aún sin acuse y mirror del despliegue anterior. 9 elementos pendientes en cola de catálogo; 2 pedidos pagados con correo pendiente. PayPal sigue Sandbox. No se envían correos ni se cambia el estado comercial de pedidos para fabricar evidencias.
+
+---
+
+# 2026-10-07 — Sellos individuales del flujo (Codex, copia local)
+
+- Base: main `a3b0c3467f623b0a0f3cd510fc53b16f5ede258b`. Alcance: sellos del panel; sin cambios en auth, Rules, pedidos, inventario ni servicios externos.
+- Corrección: sellado general sólo agrega sellos nuevos; conserva intactos y cambiados. Un sello cambiado se confirma de forma explícita desde el detalle del nodo/enlace y sólo actualiza su identificador. Huellas incompletas o vacías no certifican verde. El generador incluye `_headers` y `_redirects`, antes omitidos: CSP tenía evidencia sin huella.
+- PASS_LOCAL: suite flujo 77/77 sin skips; generación CSP y versionado de los tres módulos editados. No se atribuye CI ni producción a esta copia. Resultado final del manifiesto y gates se registra en el informe de outputs.
+- Producción sólo lectura: 2026-10-07T11:52:58.360Z `/api/health` HTTP200, ok=true y checks disponibles; `/api/paypal-config` HTTP200, enabled=true, environment=sandbox. El panel seleccionado reportaba 29 verdes y 51 con atención (80 registros), Apps Script/Sheets con error y 35 huellas cambiadas. No se conoce todavía la causa autenticada de esos errores.
+- BLOCKED: Chrome conectado identifica la pestaña pero Runtime.evaluate agota el tiempo; no se verificó UI autenticada ni system-health. GitHub CLI sin sesión. Ningún merge, deploy ni mutación de producción ejecutado.
+- Pendientes: acceso al diagnóstico autenticado y corrección de Apps Script/Sheets; evidencia CI/operaciones reales para los restantes; decisión sobre PayPal Live; controles del repositorio/despliegue para bloquear cambios reales de dependencias compartidas. Un sello detecta cambios, no impide editar código ni garantiza disponibilidad futura. No se declara todo verde ni bloqueo de seguridad implementado.
+
+---
+
 # Continuación — 2026-10-07: PR #1054
 
 - Red y terminal recuperadas; push de e9e66281 y PR #1054 creados, autorización push/merge/deploy vigente.

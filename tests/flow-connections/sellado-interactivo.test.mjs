@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { prepareSealEntries } from '../../js/admin/flujo-conexiones/sellos-flujo.js';
 
 const source = fs.readFileSync(new URL('../../js/admin/flujo-conexiones/flujo-conexiones-admin.js', import.meta.url), 'utf8');
 const handler = source.slice(source.indexOf('  const sealConfirmation ='), source.indexOf('  // Huella actual de cada archivo'));
@@ -19,7 +20,8 @@ function fixture(write = async () => {}) {
     root: { querySelector: control }, sealBtn: control('request'), revalidateBtn: control('revalidate'),
     liveState: { checkedAt: '2026-10-05T00:00:00Z' }, sealState: state,
     auth: { currentUser: { email: 'test@example.invalid' } }, db: {}, SEALS_DOC: ['settings', 'flowSeals'],
-    NODES: [{ id: 'verified' }, { id: 'unverified' }], EDGES: [], NODES_BY_ID: {}, ESTADOS: { PROD: 'green' },
+    NODES: [{ id: 'verified', evidence: [{ file: 'sample.js' }] }, { id: 'unverified', evidence: [{ file: 'sample.js' }] }], EDGES: [], NODES_BY_ID: {}, ESTADOS: { PROD: 'green' },
+    prepareSealEntries,
     liveOnlyState: record => greens.has(record.id) ? 'green' : 'pending',
     recordFiles: () => ['sample.js'], buildSeal: (files, hashes, meta) => ({ files, hashes, ...meta }),
     waitForAdminAppCheck: async () => true, doc: (...args) => args,
@@ -38,6 +40,28 @@ test('confirmación visible y cancelación no escriben ni usan diálogos nativos
   await f.click('#tfc-seal-cancel');
   await f.click('#tfc-seal-save');
   assert.equal(f.writes.length, 0);
+});
+
+test('sellado general conserva sellos existentes y no reconfirma otros amarillos', async () => {
+  const f = fixture();
+  const previous = { files: [{ path: 'sample.js', sha: 'old' }], sealedAt: 'original' };
+  f.state.entries.unverified = previous;
+  f.greens.add('unverified');
+  await f.click('request'); await f.click('#tfc-seal-save');
+  assert.deepEqual(Object.keys(f.writes[0][1].entries), ['verified']);
+  assert.equal(f.state.entries.unverified, previous);
+});
+
+test('confirmación individual escribe únicamente el elemento seleccionado', async () => {
+  const f = fixture();
+  const previous = { files: [{ path: 'sample.js', sha: 'hash' }], sealedAt: 'original' };
+  f.state.entries.verified = previous;
+  f.state.entries.unverified = { files: [{ path: 'sample.js', sha: 'old' }] };
+  f.greens.add('unverified');
+  f.env.requestSeal('unverified');
+  await f.click('#tfc-seal-save');
+  assert.deepEqual(Object.keys(f.writes[0][1].entries), ['unverified']);
+  assert.equal(f.state.entries.verified, previous);
 });
 
 test('confirmar vuelve a leer la evidencia y el doble clic produce una sola escritura', async () => {

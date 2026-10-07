@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f0c1c4f1af18902cecf5913cd9a680080672c719d1ad8d196b70607296945e98",
+  "sourceFingerprint": "d82b2d72e719052b96887cb5081904008a5cd81d6a9483fd1120a8467dfcf991",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1042,
-    "textFiles": 996,
-    "totalBytes": 15726222,
+    "files": 1048,
+    "textFiles": 1000,
+    "totalBytes": 15787466,
     "pages": 19,
-    "modules": 736
+    "modules": 738
   },
   "viewports": [
     {
@@ -2134,8 +2134,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 198306,
-      "sha256": "2af0561d59c68cf79968a5d3fd2f8c33cb3a92a044adc01d12f24f8de1c7c138",
+      "bytes": 198305,
+      "sha256": "24b20258962437edc166d803720a76175c0fa0bd24d6bc3a9666631aab9f7c23",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2179,7 +2179,7 @@
           "line": 2046
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261006-production-audit-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261007-protected-flows-1",
           "target": "js/admin/admin-app.js",
           "line": 2047
         },
@@ -2460,7 +2460,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261006-production-audit-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261007-protected-flows-1",
           "target": "js/admin/admin-app.js",
           "line": 2047,
           "exists": true
@@ -19026,8 +19026,8 @@
     },
     {
       "path": "cloudflare/sheets-sync-config.js",
-      "bytes": 705,
-      "sha256": "8042ad81d6a231b3d8575d71a2a4b70757a5049f15817783fe2cacf451fab6a5",
+      "bytes": 859,
+      "sha256": "c1a4a90100b320464d05feb8cc6b4e76e4302977cb9eab66a0fbcbe991a2fcdf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21198,8 +21198,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 472099,
-      "sha256": "569ced8df650c5bfc2d94fc31701183926ab8afac98e04f3a8e3a49947806021",
+      "bytes": 472098,
+      "sha256": "be2aec9cf9358410c723b951c6ca925fef317ca15fbf5c34b6c5a533e96cc82a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21344,7 +21344,7 @@
           "line": 33
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261006-production-audit-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261007-protected-flows-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 34
@@ -22013,8 +22013,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 40754,
-      "sha256": "de95ba1cdee5666aa32cdfccd0955b1669fa552be1f16a3130b8b5069cbd6f5e",
+      "bytes": 41409,
+      "sha256": "8a1ce17ea95399396dee42f841cc8df359b45bbf1e81642dd5a0f0282e3e94ba",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22039,13 +22039,13 @@
           "line": 13
         },
         {
-          "raw": "./live-checks.js?v=tintin-20261006-production-audit-1",
+          "raw": "./live-checks.js?v=tintin-20261007-protected-flows-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 14
         },
         {
-          "raw": "./sellos-flujo.js?v=tintin-20261001-sellos-1",
+          "raw": "./sellos-flujo.js?v=tintin-20261007-selective-seals-1",
           "target": "js/admin/flujo-conexiones/sellos-flujo.js",
           "dynamic": false,
           "line": 15
@@ -22078,8 +22078,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 43503,
-      "sha256": "66b1da247f611a5e371507b2942406da673c414d09a162f6944202a2985b91fd",
+      "bytes": 43625,
+      "sha256": "9dbc6b8a7e25606b240cea44ab1a509cfa365343a6b9ca53e1afb0a8586e0583",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22102,8 +22102,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/sellos-flujo.js",
-      "bytes": 3519,
-      "sha256": "865d919f114b35b0a944692fcdb8725bf80d4f98189ef5f34ce6f4fd8c897b72",
+      "bytes": 4523,
+      "sha256": "e964e3be93d299498587df64c89fc59663c1425848db37764c6b0bf43f02e1ad",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30282,6 +30282,42 @@
       "endpoints": []
     },
     {
+      "path": "scripts/auditar-proteccion-flujos.mjs",
+      "bytes": 3169,
+      "sha256": "7ac09eb886de97fe88cde0e5ba204aed7820a5b18f633b02b0bbd79ab8f45e11",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-publico-operativo-contrato.js",
       "bytes": 3380,
       "sha256": "9a91cdc776d374ebbd5560d12430a81e6618631f42aef810ed3e5ab679d8592e",
@@ -31109,8 +31145,8 @@
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
-      "bytes": 25935,
-      "sha256": "0da7445567a0bbff23279a45589781848ded5dd5b1aaf1dea5a62e9bb7087489",
+      "bytes": 25961,
+      "sha256": "ebb9962b5e714c114878ce378f0d980117672ff7aa4822010e817bfd3434ad31",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34712,8 +34748,8 @@
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
-      "bytes": 20082,
-      "sha256": "07862596782e49b0fca5a42bea13322e9370646994f9c0ff6d60497790ce5c31",
+      "bytes": 20988,
+      "sha256": "84bd551f523bb43dbcaf802ec451f9469bbf7c4dc203f29cf19e736d49ccea97",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34753,7 +34789,7 @@
           "raw": "node:fs",
           "target": null,
           "dynamic": true,
-          "line": 359
+          "line": 376
         }
       ],
       "endpoints": []
@@ -34796,6 +34832,36 @@
           "target": null,
           "dynamic": false,
           "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/flow-connections/proteccion-flujos.test.mjs",
+      "bytes": 1980,
+      "sha256": "d4b30b05b6326654bd1882c0dcd45c16ad7c0a2d55e5ba26dcc160fbb653046e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../scripts/auditar-proteccion-flujos.mjs",
+          "target": "scripts/auditar-proteccion-flujos.mjs",
+          "dynamic": false,
+          "line": 3
         }
       ],
       "endpoints": []
@@ -34844,8 +34910,8 @@
     },
     {
       "path": "tests/flow-connections/sellado-interactivo.test.mjs",
-      "bytes": 4066,
-      "sha256": "78f4183cd7ff564991ea46ce04bbc68852679f32bedd8ddc11a02defeffa661d",
+      "bytes": 5270,
+      "sha256": "192c5139ae9196c57be8bed4091fc483392a466b48e87a690d5437f73956e87d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34874,14 +34940,20 @@
           "target": null,
           "dynamic": false,
           "line": 4
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/sellos-flujo.js",
+          "target": "js/admin/flujo-conexiones/sellos-flujo.js",
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": []
     },
     {
       "path": "tests/flow-connections/sellos-flujo.test.mjs",
-      "bytes": 2622,
-      "sha256": "2f27bbcf5e38f0b342f6fc128e009a5692ba783bfaded662e38cbcdf610ff88d",
+      "bytes": 3549,
+      "sha256": "2af709dba272167f5914fb44b41424b97e7ca7885837822ee4fee0feadf3bb6b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34900,10 +34972,22 @@
           "line": 2
         },
         {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
           "raw": "../../js/admin/flujo-conexiones/sellos-flujo.js",
           "target": "js/admin/flujo-conexiones/sellos-flujo.js",
           "dynamic": false,
-          "line": 3
+          "line": 5
         }
       ],
       "endpoints": []
@@ -39516,6 +39600,12 @@
       "sha256": "ebff82232537e6bb518aa1e502ff0791d7ecae742c39d7dcf1168bf4787d35b0"
     },
     {
+      "path": ".github/workflows/proteger-flujos.yml",
+      "extension": ".yml",
+      "bytes": 1464,
+      "sha256": "178344c61e38a151b02df0cd0008eeff801fde638399d4022865222e05e37df9"
+    },
+    {
       "path": ".github/workflows/respaldo-repositorio.yml",
       "extension": ".yml",
       "bytes": 1171,
@@ -39538,6 +39628,18 @@
       "extension": ".md",
       "bytes": 1104,
       "sha256": "cab74b29dfffe152abfd26442dbad4d774a7cd9bb5b460a7d270188dd993cb05"
+    },
+    {
+      "path": "_headers",
+      "extension": "",
+      "bytes": 4027,
+      "sha256": "97df26a084de41027369c3db23206dcffd671c0f343c31db2c718189f58e2777"
+    },
+    {
+      "path": "_redirects",
+      "extension": "",
+      "bytes": 418,
+      "sha256": "6410b0866350e31170e950063f1b03307c4fabccddf50b561716ced996f3a4c3"
     },
     {
       "path": "_routes.json",
@@ -39566,8 +39668,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 198306,
-      "sha256": "2af0561d59c68cf79968a5d3fd2f8c33cb3a92a044adc01d12f24f8de1c7c138"
+      "bytes": 198305,
+      "sha256": "24b20258962437edc166d803720a76175c0fa0bd24d6bc3a9666631aab9f7c23"
     },
     {
       "path": "apple-touch-icon.png",
@@ -40142,8 +40244,8 @@
     {
       "path": "cloudflare/sheets-sync-config.js",
       "extension": ".js",
-      "bytes": 705,
-      "sha256": "8042ad81d6a231b3d8575d71a2a4b70757a5049f15817783fe2cacf451fab6a5"
+      "bytes": 859,
+      "sha256": "c1a4a90100b320464d05feb8cc6b4e76e4302977cb9eab66a0fbcbe991a2fcdf"
     },
     {
       "path": "cloudflare/sincronizacion-estadisticas-pedido.js",
@@ -40198,6 +40300,12 @@
       "extension": ".json",
       "bytes": 350978,
       "sha256": "4d0ea4434f16d02f5fe85e542b924f33aa7eede0abc7902774fd9b19c5e121ca"
+    },
+    {
+      "path": "config/proteccion-flujos.json",
+      "extension": ".json",
+      "bytes": 41657,
+      "sha256": "576a7660504d31d017f6da5cdb137ebc79c559e5260a5684e8639b8ea117c10c"
     },
     {
       "path": "config/public-site.json",
@@ -40718,8 +40826,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 271292,
-      "sha256": "e04a3fa137481c1f9b745da1587eb5825fe103acefdaae941e3a2461fa49b81b"
+      "bytes": 274819,
+      "sha256": "3874f5c9324b112a4325b543953658a2c9f036f3578b9c7237199a983c807cdf"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41576,8 +41684,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 472099,
-      "sha256": "569ced8df650c5bfc2d94fc31701183926ab8afac98e04f3a8e3a49947806021"
+      "bytes": 472098,
+      "sha256": "be2aec9cf9358410c723b951c6ca925fef317ca15fbf5c34b6c5a533e96cc82a"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -41684,20 +41792,20 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 40754,
-      "sha256": "de95ba1cdee5666aa32cdfccd0955b1669fa552be1f16a3130b8b5069cbd6f5e"
+      "bytes": 41409,
+      "sha256": "8a1ce17ea95399396dee42f841cc8df359b45bbf1e81642dd5a0f0282e3e94ba"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 43503,
-      "sha256": "66b1da247f611a5e371507b2942406da673c414d09a162f6944202a2985b91fd"
+      "bytes": 43625,
+      "sha256": "9dbc6b8a7e25606b240cea44ab1a509cfa365343a6b9ca53e1afb0a8586e0583"
     },
     {
       "path": "js/admin/flujo-conexiones/sellos-flujo.js",
       "extension": ".js",
-      "bytes": 3519,
-      "sha256": "865d919f114b35b0a944692fcdb8725bf80d4f98189ef5f34ce6f4fd8c897b72"
+      "bytes": 4523,
+      "sha256": "e964e3be93d299498587df64c89fc59663c1425848db37764c6b0bf43f02e1ad"
     },
     {
       "path": "js/admin/flujo-decisiones/flujo-decisiones-admin.js",
@@ -44010,6 +44118,12 @@
       "sha256": "343e0d702b833ad2aac5bd93804d8ae0ebca078f9955d5dca117c2d84a3f9f28"
     },
     {
+      "path": "scripts/auditar-proteccion-flujos.mjs",
+      "extension": ".mjs",
+      "bytes": 3169,
+      "sha256": "7ac09eb886de97fe88cde0e5ba204aed7820a5b18f633b02b0bbd79ab8f45e11"
+    },
+    {
       "path": "scripts/auditar-publico-operativo-contrato.js",
       "extension": ".js",
       "bytes": 3380,
@@ -44210,14 +44324,14 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 64779,
-      "sha256": "deae8544f713ed07af70057b877d887a28f5604f46e92e2594bf0965ee5b33c6"
+      "bytes": 64785,
+      "sha256": "2a39ae1ec2e8b42314e11a88229d169c040b9a78f9010834f2d1dad5f7d12d96"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "extension": ".js",
-      "bytes": 25935,
-      "sha256": "0da7445567a0bbff23279a45589781848ded5dd5b1aaf1dea5a62e9bb7087489"
+      "bytes": 25961,
+      "sha256": "ebb9962b5e714c114878ce378f0d980117672ff7aa4822010e817bfd3434ad31"
     },
     {
       "path": "scripts/corregir-fuente-tintin.js",
@@ -44906,14 +45020,20 @@
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
       "extension": ".mjs",
-      "bytes": 20082,
-      "sha256": "07862596782e49b0fca5a42bea13322e9370646994f9c0ff6d60497790ce5c31"
+      "bytes": 20988,
+      "sha256": "84bd551f523bb43dbcaf802ec451f9469bbf7c4dc203f29cf19e736d49ccea97"
     },
     {
       "path": "tests/flow-connections/pedidos-authority.test.mjs",
       "extension": ".mjs",
       "bytes": 1547,
       "sha256": "1f0cfbbdff39a9bc81bb0b9b66d1353141dce0cb8ca0fb02efd33caadaea55aa"
+    },
+    {
+      "path": "tests/flow-connections/proteccion-flujos.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1980,
+      "sha256": "d4b30b05b6326654bd1882c0dcd45c16ad7c0a2d55e5ba26dcc160fbb653046e"
     },
     {
       "path": "tests/flow-connections/revalidation-progress.test.mjs",
@@ -44924,14 +45044,14 @@
     {
       "path": "tests/flow-connections/sellado-interactivo.test.mjs",
       "extension": ".mjs",
-      "bytes": 4066,
-      "sha256": "78f4183cd7ff564991ea46ce04bbc68852679f32bedd8ddc11a02defeffa661d"
+      "bytes": 5270,
+      "sha256": "192c5139ae9196c57be8bed4091fc483392a466b48e87a690d5437f73956e87d"
     },
     {
       "path": "tests/flow-connections/sellos-flujo.test.mjs",
       "extension": ".mjs",
-      "bytes": 2622,
-      "sha256": "2f27bbcf5e38f0b342f6fc128e009a5692ba783bfaded662e38cbcdf610ff88d"
+      "bytes": 3549,
+      "sha256": "2af709dba272167f5914fb44b41424b97e7ca7885837822ee4fee0feadf3bb6b"
     },
     {
       "path": "tests/flow-connections/sheets-webhook-probe.test.mjs",
@@ -46024,7 +46144,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 615,
+      "line": 617,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -47416,13 +47536,13 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 615,
+      "line": 617,
       "target": "/admin.html",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 750,
+      "line": 758,
       "target": "/diagnostic-manifest.json",
       "method": "GET"
     },

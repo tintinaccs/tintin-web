@@ -11,8 +11,8 @@ import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-
 // del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261006-production-audit-1';
 import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261006-production-audit-1';
-import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261001-sellos-1';
+import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261007-protected-flows-1';
+import { recordFiles, fingerprint, checkSeal, applySeal, prepareSealEntries, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261007-selective-seals-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
 import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -312,7 +312,7 @@ export function initConnectionsFlow({ role } = {}) {
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button type="button" class="adm-btn adm-btn-primary" id="tfc-btn-revalidate">Revalidar en vivo</button>
-          <button type="button" class="adm-btn adm-btn-outline" id="tfc-btn-seal" title="Fija en verde lo que hoy está verde. Si después cambia su código, vuelve a amarillo hasta que lo vuelvas a sellar.">🔒 Sellar verdes</button>
+          <button type="button" class="adm-btn adm-btn-outline" id="tfc-btn-seal" title="Sella sólo elementos verificados sin sello. Conserva los sellos existentes; los cambiados se confirman individualmente.">🔒 Sellar verdes nuevos</button>
         </div>
       </div>
       <div class="adm-card-body">
@@ -515,6 +515,7 @@ export function initConnectionsFlow({ role } = {}) {
       <p class="tfc-detail-meta"><strong>Identificador:</strong> <code>${escapeHtml(record.id)}</code> · <strong>Nivel:</strong> ${escapeHtml(live?.evidenceLevel || record.evidenceLevel || 'DOCUMENTATION_ONLY')}</p>
       ${liveHtml}
       ${sealHtml(record)}
+      <button type="button" class="adm-btn adm-btn-outline" id="tfc-seal-selected" ${liveOnlyState(record, isEdge) !== ESTADOS.PROD || sealCheckFor(record)?.intact ? 'disabled' : ''}>🔒 Sellar sólo este ${isEdge ? 'enlace' : 'nodo'}</button>
       ${record.notes ? `<p class="tfc-detail-notes">${escapeHtml(record.notes)}</p>` : ''}
       <ul class="tfc-detail-evidence">${evidenceHtml(record.evidence)}</ul>
     `;
@@ -523,6 +524,7 @@ export function initConnectionsFlow({ role } = {}) {
       selectedEdgeId = null;
       renderAll();
     });
+    detailEl.querySelector('#tfc-seal-selected').addEventListener('click', () => requestSeal(record.id));
   }
 
   function renderAll() {
@@ -602,7 +604,7 @@ export function initConnectionsFlow({ role } = {}) {
       }
       showProgress(10, 'Comprobando conexiones');
       const checks = [
-        user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
+        user ? readJson('/api/system-health', { headers: authHeaders, signal: AbortSignal.timeout(30000) }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/engagement?action=ownFavorite&productId=__tfc_health_probe__', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
@@ -687,6 +689,7 @@ export function initConnectionsFlow({ role } = {}) {
   const sealCancelBtn = root.querySelector('#tfc-seal-cancel');
   const sealFeedback = root.querySelector('#tfc-seal-feedback');
   let sealSaving = false;
+  let sealTargetId = null;
 
   function prepareSeals() {
     if (!liveState.checkedAt) throw new Error('Primero revalidá en vivo: sólo se sella lo que hoy está verde.');
@@ -695,25 +698,30 @@ export function initConnectionsFlow({ role } = {}) {
     const sealedAt = new Date().toISOString();
     const sealedBy = auth.currentUser?.email || '';
     const entries = {};
-    for (const node of NODES) if (liveOnlyState(node) === ESTADOS.PROD) entries[node.id] = buildSeal(recordFiles(node, NODES_BY_ID), sealState.shaByPath, { sealedAt, sealedBy });
-    for (const edge of EDGES) if (liveOnlyState(edge, true) === ESTADOS.PROD) entries[edge.id] = buildSeal(recordFiles(edge, NODES_BY_ID), sealState.shaByPath, { sealedAt, sealedBy });
+    Object.assign(entries, prepareSealEntries([...NODES, ...EDGES], {
+      targetId: sealTargetId, entries: sealState.entries, nodesById: NODES_BY_ID,
+      shaByPath: sealState.shaByPath, sealedAt, sealedBy,
+      isVerified: record => liveOnlyState(record, Boolean(record.from || record.to)) === ESTADOS.PROD,
+    }));
     const count = Object.keys(entries).length;
-    if (!count) throw new Error('No hay nada en verde para sellar.');
+    if (!count) throw new Error('No hay sellos nuevos verificados para guardar. Los sellos cambiados se confirman seleccionando cada nodo o enlace.');
     return { entries, count, sealedAt, sealedBy };
   }
 
-  sealBtn.addEventListener('click', () => {
+  function requestSeal(targetId = null) {
     if (sealSaving) return;
+    sealTargetId = targetId;
     sealFeedback.textContent = '';
     try {
       const { count } = prepareSeals();
-      sealConfirmationText.textContent = `Se guardarán ${count} nodos/conexiones verificados. Si cambia su código, vuelven a amarillo hasta revalidar y confirmar otra vez.`;
+      sealConfirmationText.textContent = `Se guardarán ${count} nodos/conexiones verificados${targetId ? ' de la selección' : ' sin sello'}. Los demás sellos se conservan. El sello detecta cambios de código; no bloquea ediciones ni oculta fallos en producción.`;
       sealConfirmation.hidden = false;
       sealSaveBtn.focus();
     } catch (error) {
       sealFeedback.textContent = error.message;
     }
-  });
+  }
+  sealBtn.addEventListener('click', () => requestSeal());
   sealCancelBtn.addEventListener('click', () => {
     if (sealSaving) return;
     sealConfirmation.hidden = true;
