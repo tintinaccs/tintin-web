@@ -129,10 +129,10 @@ Los resultados de fixtures no prueban todos los estados de infraestructura, sesi
 
 ## 20. Conclusión
 
-¿Sigue existiendo alguna doble carga innecesaria conocida? **NO VERIFICADO globalmente**: las causas identificadas fueron corregidas, pero falta la captura final con red disponible y los estados autenticados reales.
+¿Sigue existiendo alguna doble carga innecesaria conocida? **NO VERIFICADO globalmente**: las causas identificadas fueron corregidas y el barrido final invitado de 209 navegaciones fue completado; faltan los estados autenticados reales y las condiciones de caché/red real.
 
 ¿Sigue existiendo algún doble render innecesario conocido? **NO VERIFICADO globalmente**: el renderer duplicado identificado fue eliminado y sus regresiones pasan.
 
-¿Existen dos versiones del mismo recurso en una misma navegación? **NO VERIFICADO en ejecución final**: gate estático canónico y casos del logo pasan; último barrido fue intermedio.
+¿Existen dos versiones del mismo recurso en una misma navegación? **VERIFICADO en el barrido final invitado documentado**: 209/209 navegaciones sin conflictos de versión. Los estados autenticados y Safari/iOS siguen NO VERIFICADOS.
 
 ¿Fuente de verdad clara para los datos principales? **PARCIAL**: checkout usa coordinador de sesión, cart store y lector compartido de perfil; el servidor sigue siendo autoridad comercial. El resto del sitio no se certifica con cuentas reales en esta auditoría.

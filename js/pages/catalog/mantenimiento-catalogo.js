@@ -69,7 +69,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
   }
 
   function hasRealCards() {
-    return !!grid?.querySelector('.tt-card:not([aria-hidden="true"]), [data-product-id], .cat-empty');
+    return !!grid?.querySelector('.tt-card:not([aria-hidden="true"]), [data-product-id], .cat-empty:not([data-state="error"])');
   }
 
   function renderState(state, title, message) {
@@ -87,6 +87,12 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
   function guardCatalogSurface() {
     if (!grid) return;
     const signature = currentSignature();
+    if (grid.querySelector('[data-state="error"]')) {
+      clearTimeout(loadingTimer);
+      setSync('error');
+      setReady();
+      return;
+    }
     if (hasRealCards()) {
       clearTimeout(loadingTimer);
       gridObserver?.disconnect();
@@ -231,6 +237,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     guardCatalogSurface();
 
     loadingTimer = setTimeout(() => {
+      if (grid?.querySelector('[data-state="error"]')) return;
       if (!hasRealCards()) {
         if (navigator.onLine === false) {
           renderState('loading', 'Actualizando catálogo', 'Mostramos el catálogo apenas se recupere la conexión.');

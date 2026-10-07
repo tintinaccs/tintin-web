@@ -245,7 +245,7 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20261004-admin-connections-3')
+  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

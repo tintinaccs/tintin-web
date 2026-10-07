@@ -41,6 +41,27 @@ export function normalizeCollectionDoc(id, data) {
   };
 }
 
+export function normalizeCollectionSlug(value) {
+  return String(value ?? '').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+    .replace(/^bags?$/, 'bolsos').replace(/^ear-cuffs?$/, 'earcuff')
+    .replace(/^arm-cuffs?$/, 'armcuff').replace(/^jewelry-box$/, 'joyeros');
+}
+
+export function canonicalPublicCollections(collections) {
+  const seen = new Set();
+  return sortCols(collections.filter(item => item.visible !== false)).flatMap(item => {
+    const slug = normalizeCollectionSlug(item.slug);
+    if (!slug) return [];
+    if (seen.has(slug)) {
+      console.warn('[collections-store] slug público duplicado:', slug);
+      return [];
+    }
+    seen.add(slug);
+    return [{ ...item, slug }];
+  });
+}
+
 function sortCols(list) {
   return list.slice().sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
 }
@@ -75,7 +96,7 @@ function attachProductsReactivity() {
 }
 
 function publishPublic(collections, source) {
-  latestVisibleCollections = collections.filter(item => item.visible !== false);
+  latestVisibleCollections = canonicalPublicCollections(collections);
   republishToPublicSubscribers(source);
   return sortCols(withResolvedImages(latestVisibleCollections));
 }
@@ -102,7 +123,7 @@ export async function loadCollections(options = {}) {
   try {
     return await runSingleFlight('collections:public', fetchPublicCollections);
   } catch (error) {
-    if (Array.isArray(stale) && stale.length) return stale;
+    if (Array.isArray(stale) && stale.length) return publishPublic(stale, 'stale-cache');
     throw error;
   }
 }

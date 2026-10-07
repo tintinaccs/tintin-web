@@ -1,3 +1,17 @@
+# Estado vigente — 2026-10-07: correcciones de auditoría pública
+
+Agente: Codex. Base: `0b6955dfe60151e99af45a04955998e06adea203`.
+Alcance autorizado: corregir F01–F12 de la auditoría pública, reconciliar F13 documental, crear PR y mergear cuando los controles lo permitan. El panel/diagrama de conexiones, sellos y probes quedan fuera del alcance.
+
+- Corregidos: autoridad SDK sobre respuestas edge tardías; invalidación de relacionados al eliminar/ocultar/cambiar categoría; tarjetas relacionadas con datos actuales; limpieza de favoritos por identidad; colecciones públicas canónicas sin duplicados; historial parcialmente sincronizado explícito y recuperación; error del catálogo conservado; stock ilimitado en JSON-LD; validación estructural compartida catálogo/metadata/sitemap; política GET/HEAD equivalente; TTL del mapa de aliases heredados.
+- F13: la conclusión del informe de cargas reconoce el barrido final invitado de 209 navegaciones documentado en ese mismo informe. Las secciones posteriores de este archivo son historia fechada, no estados vigentes ni PASS heredados.
+- PASS_LOCAL: 13 regresiones específicas nuevas; suite transversal de 813 pruebas sin fallas ni skips. Build canónico, caché (309 archivos/73 cargas dinámicas), arquitectura, sincronización, colecciones, visibilidad de catálogo, confiabilidad, perfil, inventario, SEO y rutas verificados localmente. El cierre audit:final se interrumpió en reproducibilidad del manifiesto durante ediciones concurrentes del candidato; el gate específico de reproducibilidad fue repetido con éxito una vez congelado el diff; no se atribuye PASS al cierre completo.
+- MANTENIMIENTO AUTORIZADO: el usuario autorizó expresamente renovar las seis huellas de `_headers`, `catalogo.html`, `config/csp-runtime.js`, `js/admin/admin-app.js`, `js/pages/collections/estado-colecciones.js` y `login.html` para integrar la PR #1058. Se conservan los otros 101 hashes, los 107 archivos protegidos y los 29 alcances; el auditor y el workflow confiables no se modifican. La comprobación local valida los nuevos bytes. El gate contra la base anterior rechaza esta renovación por diseño y no se presenta como PASS: se requiere que GitHub acepte la operación autorizada de mantenimiento. No se desactiva protección de rama ni se altera un estado de check.
+- NOT_VERIFIED: UI real móvil/desktop y Safari, Rules/índices desplegados y producción. El entorno anterior no pudo instalar Chromium ni leer Pages; los fixtures verifican las regresiones, no una sesión productiva.
+- Datos: sin escrituras Firestore/Sheets, pedidos, pagos, correos, usuarios ni migraciones de datos. Sin cambios de Rules/permisos, CSS/layout ni servicios externos.
+
+## Historial de ciclos anteriores (evidencia fechada)
+
 ## 2026-10-07 — Mantenimiento autorizado de Correos
 
 El usuario autorizó expresamente la actualización puntual de los nueve archivos protegidos del parche de App Check y su posterior revalidación y sellado. La petición de correo conserva Firebase Auth y las comprobaciones de dueño/superadmin; adjunta el token de la instancia canónica de App Check y lo reenvía únicamente a Firestore. Las URLs inmutables se actualizan en todos los consumidores y en el generador público.

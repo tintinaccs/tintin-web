@@ -329,6 +329,13 @@ if (grid && !window.TintinRelatedProducts) {
       && new Set(state.visible.map(categoryKey)).size === Math.min(state.visible.length, groups.size);
 
     if (!stillValid) renderAll(state.visible.length ? buildCombination() : buildInitialCombination());
+    else {
+      const latest = new Map(validProducts().map(product => [String(product.id), product]));
+      const refreshed = state.visible.map(product => latest.get(String(product.id)));
+      const changed = refreshed.some((product, index) => cardMarkup(product) !== cardMarkup(state.visible[index]));
+      if (changed) renderAll(refreshed);
+      else state.visible = refreshed;
+    }
     updateEmptyState();
   }
 

@@ -94,6 +94,7 @@ export function createProfileOrdersController({ subscribe, render, onStatus, onS
       next: rows => {
         if (token !== generation || !identity) return;
         slices[index] = rows;
+        failures[index] = null;
         ready[index] = true;
         current = reconcileAccountOrders(slices).sort((a,b) => timestamp(b)-timestamp(a));
         // Compras/total sólo son confirmados cuando respondieron todas las
@@ -101,8 +102,8 @@ export function createProfileOrdersController({ subscribe, render, onStatus, onS
         const complete = ready.every(Boolean) && !failures.some(Boolean);
         onStats(complete ? calculateOrderStats(current) : null);
         if (!current.length && !ready.every(Boolean)) return;
-        render(current,{empty:current.length===0 && complete});
-        onStatus('ready', failures.some(Boolean) ? failures.find(Boolean) : null);
+        render(current,{empty:current.length===0 && complete,partial:failures.some(Boolean)});
+        onStatus(failures.some(Boolean) ? 'partial' : complete ? 'ready' : 'loading', failures.find(Boolean) || null);
       },
       fail: failure => {
         if (token !== generation) return;
@@ -112,7 +113,8 @@ export function createProfileOrdersController({ subscribe, render, onStatus, onS
         // Una consulta secundaria (por correo) no debe ocultar los pedidos
         // ya encontrados por UID ni cancelar su onSnapshot.
         if (current.length || slices.some(rows => rows.length)) {
-          onStatus('ready', failure);
+          render(current,{partial:true});
+          onStatus('partial', failure);
           return;
         }
         if (ready.every(Boolean)) {
@@ -158,7 +160,7 @@ export function startProfileOrders() {
     if (options.error && !options.stale) { list.innerHTML = '<div class="tt-profile-state" role="alert">No pudimos cargar tus pedidos. <button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-retry>Reintentar</button></div>'; list.setAttribute('aria-busy','false'); return; }
     if (options.empty) { list.innerHTML = '<div class="tt-profile-state">Todavía no tenés pedidos.<br><a href="/catalogo" class="perfil-btn perfil-btn-outline">Ver productos →</a></div>'; list.setAttribute('aria-busy','false'); return; }
     const openIds = new Set([...list.querySelectorAll('article[data-order-id] details[open]')].map(node=>node.closest('article').dataset.orderId));
-    list.innerHTML = orders.slice(0,visible).map(orderMarkup).join('') + (orders.length > visible ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-more>Cargar más pedidos</button>' : '');
+    list.innerHTML = orders.slice(0,visible).map(orderMarkup).join('') + (orders.length > visible ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-more>Cargar más pedidos</button>' : '') + (options.partial ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-retry>Reintentar sincronización</button>' : '');
     for (const article of list.querySelectorAll('article[data-order-id]')) if (openIds.has(article.dataset.orderId)) article.querySelector('details')?.setAttribute('open','');
     list.setAttribute('aria-busy','false');
     const requested = String(location.hash||'').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
@@ -175,12 +177,12 @@ export function startProfileOrders() {
     render,
     onStatus: (state,error) => {
       status.dataset.state=state;
-      status.textContent=state==='ready'?'Pedidos sincronizados':state==='loading'?'Sincronizando pedidos…':state==='signed-out'?'':state==='error'?(navigator.onLine===false?'Sin conexión. Tus pedidos no se pudieron actualizar.':'No pudimos sincronizar tus pedidos. Se conservan los últimos datos confirmados.'):'';
+      status.textContent=state==='partial'?'Sincronización incompleta. Se muestran los pedidos disponibles; reintentá para completar el historial.':state==='ready'?'Pedidos sincronizados':state==='loading'?'Sincronizando pedidos…':state==='signed-out'?'':state==='error'?(navigator.onLine===false?'Sin conexión. Tus pedidos no se pudieron actualizar.':'No pudimos sincronizar tus pedidos. Se conservan los últimos datos confirmados.'):'';
       if (state === 'ready' && !error) permissionRecoveryAttempted = false;
       if (error) {
         console.warn('[profile-orders]',error);
         const code = String(error?.code || error?.name || '').replace(/^firestore\//,'').toLowerCase();
-        if (state === 'error' && ['permission-denied','unauthenticated'].includes(code) && !permissionRecoveryAttempted) {
+        if (['error','partial'].includes(state) && ['permission-denied','unauthenticated'].includes(code) && !permissionRecoveryAttempted) {
           permissionRecoveryAttempted = true;
           window.setTimeout(() => void retry(true), 0);
         }
@@ -200,7 +202,7 @@ export function startProfileOrders() {
   };
   list.addEventListener('click',event=>{ if(event.target.closest('[data-profile-orders-more]')){visible+=10;render(lastOrders,lastOptions);} if(event.target.closest('[data-profile-orders-retry]'))void retry(); });
   const onOnline = () => void retry();
-  const onVisible = () => { if(!document.hidden && status.dataset.state==='error')void retry(); };
+  const onVisible = () => { if(!document.hidden && ['error','partial'].includes(status.dataset.state))void retry(); };
   const onAppCheckReady = event => { if (event?.detail?.ready === true) void retry(); };
   window.addEventListener('online',onOnline);
   window.addEventListener('tintin:app-check-ready',onAppCheckReady);
