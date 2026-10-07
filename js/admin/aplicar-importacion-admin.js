@@ -21,8 +21,8 @@ import {
 import {
   isShopifyMediaUrl,
   rewriteImportedShopifyMedia,
-} from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1';
-import { confirmDistinctShopifyImport } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1';
+} from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1-loads-20261007-1';
+import { confirmDistinctShopifyImport } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1-loads-20261007-1';
 
 const BATCH_SIZE = 50;
 const MEDIA_COPY_BATCH_SIZE = 5;

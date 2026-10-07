@@ -1,4 +1,4 @@
-import { normalizeImportKey, stableProductDocumentId } from './shopify-import-core.mjs';
+import { normalizeImportKey, stableProductDocumentId } from './shopify-import-core.mjs?v=tintin-20261005-import-one-click-1';
 
 function asRecord(record) {
   return record?.product ? record : { product: record, errors: [], warnings: [] };

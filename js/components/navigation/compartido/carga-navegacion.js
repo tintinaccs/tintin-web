@@ -15,7 +15,7 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261004-final-integration-1';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261005-public-navigation-3';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261005-public-flows-1-repair-20261005-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261005-public-flows-1-repair-20261005-1-checkout-20261007-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -278,7 +278,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20261005-public-flows-1-repair-20261005-1'),
+      import('./control-busqueda.js?v=tintin-20261005-public-flows-1-repair-20261005-1-checkout-20261007-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);
@@ -326,7 +326,7 @@ export function loadSharedRuntime() {
 
   const critical = [loadAuthRuntime(), loadCartRuntime()];
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
-  if (page === 'cart') critical.push(import('../../../pages/checkout/checkout-confiabilidad.js?v=tintin-20261004-final-integration-1'));
+  if (page === 'cart') critical.push(import('../../../pages/checkout/checkout-confiabilidad.js?v=tintin-20261004-final-integration-1-loads-20261007-1'));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
 

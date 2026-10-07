@@ -1,25 +1,24 @@
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import {
   awaitCartReady,
   getCartLocal,
   updateQty,
   removeFromCart,
 } from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261004-final-integration-1';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { AUTH_STATES, subscribeSession, waitForSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261007-checkout-session-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?\/?$/i;
 const RESUME_KEY = 'tt_checkout_resume_step';
 const RESUME_BACKUP_KEY = 'tt_checkout_resume_step_backup_v2';
 const FORWARD_SELECTOR = '#btn-step1-next,#btn-step2-next,#btn-step3-next,#btn-step4-next,#ck-confirm-btn';
 const replaying = new WeakSet();
+const pendingControls = new WeakSet();
 
 let cartReady = false;
 let profilePromise = Promise.resolve({ ok: false, reason: 'auth_unknown' });
 let profileState = { ok: false, loading: true, user: null, profile: null, reason: 'loading' };
 let profileGeneration = 0;
 let annotateQueued = false;
-const PROFILE_READ_TIMEOUT_MS = 5000;
 const CART_READY_TIMEOUT_MS = 2500;
 
 function waitForCheckoutCartReady() {
@@ -115,14 +114,9 @@ async function loadProfile(user) {
     return profileState;
   }
   profileState = { ok: false, loading: true, user, profile: null, reason: 'loading' };
-  let readTimer;
   try {
-    const timeout = new Promise((_, reject) => {
-      readTimer = window.setTimeout(() => reject(new Error('profile_read_timeout')), PROFILE_READ_TIMEOUT_MS);
-    });
-    const snap = await Promise.race([getDoc(doc(db, 'users', user.uid)), timeout]);
+    const profile = await readCheckoutProfile(user);
     if (generation !== profileGeneration) return staleResult();
-    const profile = snap.exists() ? snap.data() : null;
     if (!profile) {
       profileState = { ok: false, loading: false, user, profile: null, reason: 'profile_missing' };
     } else if (profile.blocked === true) {
@@ -134,7 +128,7 @@ async function loadProfile(user) {
     if (generation !== profileGeneration) return staleResult();
     console.error('[checkout-hardening] No se pudo validar el perfil:', error);
     profileState = { ok: false, loading: false, user, profile: null, reason: 'profile_error' };
-  } finally { window.clearTimeout(readTimer); }
+  }
   return profileState;
 }
 
@@ -225,51 +219,70 @@ async function guardForwardClick(event, control) {
   event.stopImmediatePropagation();
   event.stopPropagation();
 
-  // El paso de envío usa la copia local del carrito. Si la sincronización
-  // remota o App Check no responden, no se debe congelar el botón inicial.
-  await waitForCheckoutCartReady();
-  cartReady = true;
-  scheduleAnnotations();
-
-  if (!getCartLocal().length) {
-    forceCart('Tu carrito está vacío. Agregá productos antes de continuar.');
-    return;
-  }
-
-  const pendingProfile = profilePromise;
-  const state = await profilePromise;
-  if (pendingProfile !== profilePromise) {
-    showError('Tu sesión cambió. Reintentá para continuar con la cuenta actual.', Math.max(0, activeStep()));
-    return;
-  }
-  if (!state.ok) {
-    // El primer avance solo abre el formulario de envío. Si la lectura
-    // secundaria del perfil falla (red, reglas o timeout de Firestore), no
-    // hay motivo para dejar el carrito inutilizable: el control de cuenta
-    // bloqueada/login se mantiene en el flujo original y en la confirmación.
-    if (
-      control.id === 'btn-step1-next' &&
-      (state.reason === 'profile_error' || state.reason === 'profile_missing')
-    ) {
-      await replay(control);
-      return;
-    }
-    if (state.reason === 'auth_unknown') {
-      showError(profileMessage(state), 0);
-      return;
-    }
-    if (state.reason === 'signed_out') {
-      // Dejar que el checkout original abra su modal de acceso, pero con el
-      // carrito ya resuelto y sin permitir que una carga incompleta lo saltee.
+  if (pendingControls.has(control)) return;
+  pendingControls.add(control);
+  try {
+    // La capa de captura también debe esperar al coordinador. Antes cancelaba
+    // el handler original y trataba un clic durante RESTORING como error,
+    // obligando a la visitante a clicar nuevamente para ver el acceso.
+    await waitForSession();
+    if (profileState.reason === 'signed_out') {
+      // La identidad ausente ya es definitiva: pedir acceso directamente.
+      // El handler original conserva la comprobación del carrito local;
+      // no hay una sincronización remota de invitada que esperar.
       await replay(control);
       mirrorResumeState();
       return;
     }
-    forceCart(profileMessage(state));
-    return;
-  }
 
-  await replay(control);
+    // El paso de envío usa la copia local del carrito. Si la sincronización
+    // remota o App Check no responden, no se debe congelar el botón inicial.
+    await waitForCheckoutCartReady();
+    cartReady = true;
+    scheduleAnnotations();
+
+    if (!getCartLocal().length) {
+      forceCart('Tu carrito está vacío. Agregá productos antes de continuar.');
+      return;
+    }
+
+    const pendingProfile = profilePromise;
+    const state = await profilePromise;
+    if (pendingProfile !== profilePromise) {
+      showError('Tu sesión cambió. Reintentá para continuar con la cuenta actual.', Math.max(0, activeStep()));
+      return;
+    }
+    if (!state.ok) {
+      // El primer avance solo abre el formulario de envío. Si la lectura
+      // secundaria del perfil falla (red, reglas o timeout de Firestore), no
+      // hay motivo para dejar el carrito inutilizable: el control de cuenta
+      // bloqueada/login se mantiene en el flujo original y en la confirmación.
+      if (
+        control.id === 'btn-step1-next' &&
+        (state.reason === 'profile_error' || state.reason === 'profile_missing')
+      ) {
+        await replay(control);
+        return;
+      }
+      if (state.reason === 'auth_unknown') {
+        showError(profileMessage(state), 0);
+        return;
+      }
+      if (state.reason === 'signed_out') {
+        // Dejar que el checkout original abra su modal de acceso, pero con el
+        // carrito ya resuelto y sin permitir que una carga incompleta lo saltee.
+        await replay(control);
+        mirrorResumeState();
+        return;
+      }
+      forceCart(profileMessage(state));
+      return;
+    }
+
+    await replay(control);
+  } finally {
+    pendingControls.delete(control);
+  }
 }
 
 async function handleCartControl(event, button) {

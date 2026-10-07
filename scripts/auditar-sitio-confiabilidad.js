@@ -123,9 +123,9 @@ check('La tarjeta de privacidad no bloquea ni cubre toda la página',
   /width\s*:\s*min\(400px,\s*calc\(100vw\s*-\s*36px\)\)/.test(styles) &&
   !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
 check('La actividad propia y Google Analytics esperan el permiso opcional',
-  activity.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1'") &&
+  activity.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1'") &&
   activity.includes('if (hasConsent() && analyticsWritable) startActivity()') &&
-  analytics.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1'") &&
+  analytics.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1'") &&
   analytics.includes('!isTrackablePage() || !hasStatisticsConsent()') &&
   analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',

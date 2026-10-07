@@ -1,3 +1,18 @@
+# Estado actual — 2026-10-07: cargas y checkout
+
+- Solicitud: auditoría independiente de dobles cargas en todo el sitio y checkout funcional; usuario autorizó push, merge y deploy.
+- Base producción/main verificada antes de editar: `2c3c07fe1efa0387f45823994d1ed66b68bffc06`; rama `codex/auditoria-checkout-20261006`.
+- Implementado: primer clic espera identidad y abre acceso para invitadas; perfil compartido por sesión; renderer único idempotente y generación async; URLs del logo/imports del admin coherentes con cache immutable.
+- Evidencia local: Node final 1104/1104 (sin skips); 13/13 regresiones específicas; checkout browser 15/15 (11 widths + restauración); reglas emulador 121+12+13 PASS. Controles negativos de auth/perfil/versiones/logo/render/async fallan al remover protecciones y fueron restaurados.
+- Barridos anteriores con TLS verificado: 38 navegaciones base y 209 intermedias (19 HTML × 11 widths). Conflictos 34→8 en 38 comparables; los últimos fondos CSS se corrigieron después. No declarar captura final ni métricas de cold/warm reales: routing desactiva caché.
+- PASS_LOCAL: build:pages y build completos, audit:final completo (exit 0), CSP/rutas/decisiones/manifiesto y cache 307 archivos + 73 cargas dinámicas. Anteriores fallos de JSON de capturas y manifiesto stale corregidos sin debilitar gates. Regresión browser de login requerida agregada a CI. Después del audit final: política del instrumento readonly permite bootstrap de seguridad, bloquea comercio/cuentas/correos; 20/20 gates arquitectura y Node 1104/1104 reverificados. Manifiesto regenerado tras este cierre documental. Informe completo: `docs/auditoria-cargas-checkout-20261007.md`.
+- BLOCKED externo: túnel de salida HTTP 503 para GitHub, producción y gstatic; git ls-remote falla también fuera del sandbox. No falta autorización ni otra allowlist. Pendientes push, CI, merge, Pages deploy, fingerprint/health/headers y nueva captura final.
+- npm audit inicial: cero vulnerabilidades; repetición final BLOCKED por 503 del registro. Monitor/headers finales fallan por 503; artefacto no reverificado.
+- Producción comercial sin escrituras: no pedidos/pagos/correos/users/Firestore/Sheets reales. NO VERIFICADO: cliente/admin autenticados reales, Safari, transferencia fría/caliente/red lenta.
+- Setup: Node22.23.3, Chromium Playwright1243, Java21, caches externos y variables Firebase soportadas; borrador reutilizable actualizado y guardado (publicación del entorno por UI aún independiente).
+
+---
+
 ## 2026-10-06 — Integración local preservada para autorización de publicación
 
 - Agente: Codex. Fase autorizada: rama y commits LOCALES; push, PR nuevo, merge y deploy requieren las autorizaciones expresas del dueño. Rama `codex/cierre-auditoria-20261006`; base remota comprobada `origin/main@7f2c534a8635b0926dd61c2356d1e79fca5f1020`; PR #1052 abierto, HEAD `b35e7cd17bd4ca7357ed938561667bacab9dca36`, sin cambios desde la auditoría. #1050/#1051 incluidos por ascendencia. #929 no se integra; #1045/#1046 no se incorporan por separado.

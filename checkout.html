@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261006-production-audit-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261006-production-audit-1-loads-20261007-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1-checkout-20261007-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1-checkout-20261007-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261004-header-consistency-2">
@@ -397,6 +397,7 @@
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { AUTH_STATES, sessionReady, subscribeSession } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
+import { readCheckoutProfile } from "./js/pages/checkout/perfil-checkout.js?v=tintin-20261007-checkout-session-1";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
   updateDoc, increment, serverTimestamp, setDoc, onSnapshot
@@ -763,7 +764,10 @@ function getCityPrice(cityName) {
 }
 
 // ---- CART RENDERING ----
+let lastCartRenderKey = null;
+let cartRenderGeneration = 0;
 async function renderCart() {
+  if (!sessionCanMakeCheckoutDecision()) return;
   cartItems = getCartLocal();
 
   // Drop items whose product was deleted/deactivated and refresh price/name from
@@ -783,6 +787,10 @@ async function renderCart() {
   }
 
   const container = document.getElementById('ck-items');
+  const key = JSON.stringify({ items: cartItems, recommendations: cartItems.length ? null : window.PRODUCTS?.map(p => [p.id, p.name, p.price, p.imageUrl, p.active, p.stock]) });
+  if (key === lastCartRenderKey) return;
+  lastCartRenderKey = key;
+  const generation = ++cartRenderGeneration;
   const subtotalEl = document.getElementById('ck-subtotal-val');
   const nextButton = document.getElementById('btn-step1-next');
   if (nextButton) {
@@ -812,6 +820,7 @@ async function renderCart() {
       .filter((p, index, list) => list.findIndex(item => String(item.id) === String(p.id)) === index)
       .slice(0, 5);
 
+    if (generation !== cartRenderGeneration) return;
     container.innerHTML = `
       <div class="ck-empty">
         <div class="ck-empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
@@ -1773,6 +1782,7 @@ subscribeStoreConfig().then(() => {
 // activateIdentity() dispara tt_cart_updated siempre —invitada o cuenta—
 // apenas resuelve, así que se deja el primer render real para ese evento
 // (escuchado más abajo) en vez de arriesgar leer el carrito equivocado.
+window.TintinCheckoutCartRenderer = renderCart;
 document.getElementById('ck-items').innerHTML = '<div style="padding:32px 0;text-align:center;color:#C86B86;font-size:13px;">Cargando tu carrito…</div>';
 // Re-sync cart once real Firestore products arrive (in case they load after this page renders)
 window.addEventListener('tintin:products-loaded', () => renderCart(), { once: true });
@@ -1821,10 +1831,10 @@ subscribeSession(snapshot => {
   }
   // Cuenta real logueada: precargamos su perfil (nombre/teléfono/ubicación
   // guardada) para prellenar los pasos siguientes.
-  getDoc(doc(db, 'users', user.uid))
-    .then(snap => {
+  readCheckoutProfile(user)
+    .then(profile => {
       if (profileGeneration !== checkoutProfileGeneration || currentUser?.uid !== user.uid) return;
-      currentUserProfile = snap.exists() ? snap.data() : null;
+      currentUserProfile = profile;
       // Fase E: cuenta bloqueada — no puede comprar, se tapa el checkout entero
       // apenas se sabe, sin esperar a que llegue a "Confirmar pedido".
       if (currentUserProfile?.blocked) showBlockedOverlay();
@@ -1841,7 +1851,7 @@ subscribeSession(snapshot => {
     });
 });
 </script>
-<script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script src="tienda.js?v=tintin-20261005-public-flows-1" defer></script>
@@ -1852,7 +1862,7 @@ subscribeSession(snapshot => {
     <div class="tt-footer-grid">
       <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
         <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
-          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20260715-15" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Accesorios que acompañan tu brillo. Comprá online con atención cercana desde Paraguay.</p>
         <p class="tt-footer-hours">Horario de atención: Lunes a Sábado, 8:00 — 20:00 hs</p>
