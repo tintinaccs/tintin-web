@@ -43,7 +43,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1').catch(error => {
+    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261007-email-app-check-1').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }

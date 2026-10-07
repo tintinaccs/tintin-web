@@ -1,3 +1,9 @@
+## 2026-10-07 — Mantenimiento autorizado de Correos
+
+El usuario autorizó expresamente la actualización puntual de los nueve archivos protegidos del parche de App Check y su posterior revalidación y sellado. La petición de correo conserva Firebase Auth y las comprobaciones de dueño/superadmin; adjunta el token de la instancia canónica de App Check y lo reenvía únicamente a Firestore. Las URLs inmutables se actualizan en todos los consumidores y en el generador público.
+
+Validación local: 27 pruebas de correo, build:pages y auditoría de caché correctos. Las huellas de nueve archivos se actualizan; los otros 98 archivos y los 29 alcances protegidos se conservan. El control contra la base previa debe rechazar esta migración por diseño; no se presenta ese rechazo como PASS. No se ha confirmado entrega real hasta probar el despliegue publicado.
+
 # 2026-10-07 — Flujos protegidos (Codex, autorización completa vigente)
 
 - Usuario autorizó explícitamente publicación y trabajo completo; abrió Apps Script y Sheets de producción. No se heredan autorizaciones de informes anteriores.

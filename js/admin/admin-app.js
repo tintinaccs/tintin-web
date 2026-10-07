@@ -7,12 +7,12 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261007-email-app-check-1";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
 // automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
 // de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
-import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
+import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20261007-email-app-check-1";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import {
