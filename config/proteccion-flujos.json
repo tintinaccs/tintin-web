@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "verifiedAt": "2026-10-07T21:00:21.864Z",
-  "evidenceCommit": "bf8052669d3add73de2d8060ba27511443e26131",
+  "verifiedAt": "2026-10-07T22:15:11.184Z",
+  "evidenceCommit": "c5a7721a63a6f9370ba904121343144f2e4d28b3",
   "records": {
     "firebase-auth": [
       "js/core/auth/diagnostico-sesion.js",
@@ -1999,6 +1999,56 @@
       "js/pages/collections/estado-colecciones.js",
       "js/pages/profile/configuracion-inicial-perfil.mjs",
       "js/pages/profile/estado-canonico-perfil.mjs"
+    ],
+    "apis-internas__likes__38": [
+      "cloudflare/apps-script-fetch.js",
+      "cloudflare/comentarios-sociales.js",
+      "cloudflare/contrato-cuentas-generado.js",
+      "cloudflare/correo-estado-pedido.js",
+      "cloudflare/cupones.js",
+      "cloudflare/evidencia-sync-sheets.js",
+      "cloudflare/firebase-admin-ligero.js",
+      "cloudflare/firebase-id-token.js",
+      "cloudflare/firestore-admin-batch.js",
+      "cloudflare/notificaciones-sociales.js",
+      "cloudflare/nucleo-push.js",
+      "cloudflare/order-admin-domain.js",
+      "cloudflare/order-sheets-sync.js",
+      "cloudflare/participacion-clientes.js",
+      "cloudflare/recibo-correo-pedido.js",
+      "cloudflare/resiliencia-correo-pedido.js",
+      "cloudflare/resiliencia-sync-participacion.js",
+      "cloudflare/seguridad-cloudinary.js",
+      "cloudflare/servicio-push.js",
+      "cloudflare/sheets-sync-config.js",
+      "cloudflare/sincronizacion-estadisticas-pedido.js",
+      "cloudflare/sincronizacion-participacion-sheets.js",
+      "functions/api/admin-order-mutation.js",
+      "functions/api/email-otp-send.js",
+      "functions/api/engagement.js",
+      "functions/api/order-email.js",
+      "js/core/store/inventario-variantes.mjs",
+      "js/core/store/modelo-inventario.mjs",
+      "js/orders/nucleo-metodos-pago.js",
+      "tests/engagement/escritura-participacion.test.mjs"
+    ],
+    "likes": [
+      "cloudflare/apps-script-fetch.js",
+      "cloudflare/comentarios-sociales.js",
+      "cloudflare/contrato-cuentas-generado.js",
+      "cloudflare/evidencia-sync-sheets.js",
+      "cloudflare/firebase-admin-ligero.js",
+      "cloudflare/firebase-id-token.js",
+      "cloudflare/notificaciones-sociales.js",
+      "cloudflare/nucleo-push.js",
+      "cloudflare/participacion-clientes.js",
+      "cloudflare/resiliencia-sync-participacion.js",
+      "cloudflare/seguridad-cloudinary.js",
+      "cloudflare/servicio-push.js",
+      "cloudflare/sheets-sync-config.js",
+      "cloudflare/sincronizacion-participacion-sheets.js",
+      "functions/api/engagement.js",
+      "tests/engagement/escritura-participacion.test.mjs"
     ]
   },
   "files": {
@@ -2123,6 +2173,7 @@
     "functions/__/auth/[[path]].js": "0857982f406351f2eb25e5f55431c1d524a6b0cfe3f64e559907bbfbe129dee5",
     "js/core/auth/navegacion-autenticacion.js": "1dae713bd748e64da086ea0c5732871f731b31bef7172ec6737ae1fb1e86e119",
     "js/core/auth/proteccion-sesion.js": "67b2f534711170e2c1b1c053f61441594a6fe7abcea581d45283156cbb8b3016",
-    "js/pages/profile/mantenimiento-perfil.js": "8433b02707da4a598a3d3f2a7752bdcce61ede58f6903de1024efe9312a312f4"
+    "js/pages/profile/mantenimiento-perfil.js": "8433b02707da4a598a3d3f2a7752bdcce61ede58f6903de1024efe9312a312f4",
+    "tests/engagement/escritura-participacion.test.mjs": "01f585487ede8bad9362f22f71db325b11f3c092a59b95bfa986161da3b90130"
   }
 }
