@@ -133,6 +133,23 @@ test('la salud operativa explícita promueve disponibilidad, pero una lectura ge
   assert.notEqual(resolveState(productos, genericRead, ESTADOS), ESTADOS.PROD);
 });
 
+test('el timeout de Apps Script conserva HTTP 0 aunque system-health responda 200', () => {
+  const systemHealth = { status: 200, body: { report: { integrations: {
+    appsScript: { protocolOk: false, httpStatus: 0, code: 'timeout' }, sheets: false,
+  } } } };
+  const nodes = buildLiveChecks({ systemHealth }, 'now');
+  const edges = buildLiveEdges({ systemHealth }, 'now');
+  for (const id of ['apps-script', 'google-sheets']) {
+    assert.equal(nodes[id].status, 0);
+    assert.equal(resolveState(NODES.find(node => node.id === id), nodes[id], ESTADOS), ESTADOS.NO_VERIFICADO);
+  }
+  for (const [from, to] of [['apis-internas', 'apps-script'], ['apps-script', 'google-sheets']]) {
+    const record = EDGES.find(edge => edge.from === from && edge.to === to);
+    assert.equal(edges[record.id].status, 0);
+    assert.equal(resolveState(record, edges[record.id], ESTADOS), ESTADOS.NO_VERIFICADO);
+  }
+});
+
 test('una ruta pública comprobada en producción promueve su nodo de destino', () => {
   const live = buildLiveChecks({
     publicHealth: { status: 200, body: { ok: true } },

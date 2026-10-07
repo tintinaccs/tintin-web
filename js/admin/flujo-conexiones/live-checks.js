@@ -288,13 +288,13 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     setFrom('firestore', integrations.firebase, 'GET /api/system-health · runtime Firestore', { status: systemHealth.status, promote: integrations.firebase === true, evidenceLevel: LP });
     const appsScript = integrations.appsScript;
     if (appsScript) setFrom('apps-script', appsScript.protocolOk === true,
-      `GET /api/system-health · Apps Script ${appsScript.protocolOk ? 'protocolo reconocido' : 'protocolo no confirmado'}`,
-      { status: appsScript.httpStatus || systemHealth.status, promote: appsScript.protocolOk === true, evidenceLevel: LP });
+      `GET /api/system-health · Apps Script ${appsScript.protocolOk ? 'protocolo reconocido' : 'protocolo no confirmado'}${appsScript.code ? ` · ${appsScript.code}` : ''}`,
+      { status: appsScript.httpStatus ?? systemHealth.status, promote: appsScript.protocolOk === true, evidenceLevel: LP });
     // La hoja queda verde sólo si además hay constancia de una sincronización
     // real en cada sentido (hoja → Firestore y Firestore → hoja).
     const sheetsInbound = classifySheetsChannel(integrations.sheetsEvidence?.inbound, { expectedRevision: PRODUCTS_WEBHOOK_EXPECTED_REVISION });
     const sheetsMirror = classifySheetsChannel(integrations.sheetsEvidence?.mirror);
-    const sheetsNode = sheetsGuardOutcome(integrations.sheets === true, systemHealth.status, [sheetsInbound, sheetsMirror]);
+    const sheetsNode = sheetsGuardOutcome(integrations.sheets === true, appsScript?.httpStatus ?? systemHealth.status, [sheetsInbound, sheetsMirror]);
     setFrom('google-sheets', sheetsNode.ok,
       `GET /api/system-health · configuración y guard de Apps Script ${integrations.sheets === true ? 'confirmados' : 'no confirmados'}`
         + ` · hoja → Firestore: ${sheetsInbound.note} · Firestore → hoja: ${sheetsMirror.note}`, {
@@ -494,7 +494,7 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
   if (report?.integrations?.appsScript) {
     set('apis-internas', 'apps-script', report.integrations.appsScript.protocolOk === true,
       `GET /api/system-health · Apps Script ${report.integrations.appsScript.protocolOk ? 'OK' : 'no confirmado'}`,
-      report.integrations.appsScript.httpStatus || systemHealth.status);
+      report.integrations.appsScript.httpStatus ?? systemHealth.status);
   }
   if (report?.integrations?.paypal) {
     const paypalOk = report.integrations.paypal.productionReady === true;
@@ -512,7 +512,7 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
     : null;
   const sheetsMirror = report?.integrations ? classifySheetsChannel(report.integrations.sheetsEvidence?.mirror) : null;
   if (report?.integrations?.sheets !== undefined) {
-    const outcome = sheetsGuardOutcome(report.integrations.sheets === true, systemHealth.status, [sheetsMirror]);
+    const outcome = sheetsGuardOutcome(report.integrations.sheets === true, report.integrations.appsScript?.httpStatus ?? systemHealth.status, [sheetsMirror]);
     set('apps-script', 'google-sheets', outcome.ok,
       `GET /api/system-health · guard HTTP ${report.integrations.sheets === true ? 'reconocido' : 'no confirmado'} · Firestore → hoja: ${sheetsMirror.note}`,
       outcome.ok ? systemHealth.status : outcome.status, {

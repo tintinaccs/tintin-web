@@ -31,7 +31,7 @@ const PUBLIC_EXTENSIONS = new Set([
   '.gs', '.yml', '.yaml', '.toml',
   '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.ico'
 ]);
-const PUBLIC_FILENAMES = new Set(['.firebaserc']);
+const PUBLIC_FILENAMES = new Set(['.firebaserc', '_headers', '_redirects']);
 
 function walk(directory, prefix = '') {
   const entries = fs.readdirSync(directory, { withFileTypes: true });

@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import crypto from 'node:crypto';
 import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from '../../js/admin/flujo-conexiones/sellos-flujo.js';
 
 const ESTADOS = { PROD: 'FUNCIONANDO EN PRODUCCIÓN', NO_VERIFICADO: 'IMPLEMENTADO PERO NO VERIFICADO', ERROR: 'CON ERROR' };
@@ -42,4 +44,19 @@ test('sin sello no cambia nada; el manifiesto se traduce a huellas', () => {
   assert.equal(applySeal(ESTADOS.NO_VERIFICADO, null, undefined, ESTADOS), ESTADOS.NO_VERIFICADO);
   assert.equal(checkSeal(null, {}), null);
   assert.deepEqual(shaMapFromManifest({ files: [{ path: 'a.js', sha256: 's' }, { path: 'b' }] }), { 'a.js': 's' });
+});
+
+test('huellas ausentes nunca certifican un sello intacto', () => {
+  assert.throws(() => buildSeal(['missing.js'], {}, {}), /huellas completas/);
+  assert.throws(() => buildSeal([], {}, {}), /huellas completas/);
+  const legacy = { files: [{ path: 'missing.js', sha: null }] };
+  assert.equal(checkSeal(legacy, { 'missing.js': null }).intact, false);
+  assert.equal(checkSeal({ files: [] }, {}).intact, false);
+});
+
+test('el manifiesto incluye la huella vigente de los headers que protegen CSP', () => {
+  const root = new URL('../../', import.meta.url);
+  const manifest = JSON.parse(fs.readFileSync(new URL('diagnostic-manifest.json', root), 'utf8'));
+  const headers = fs.readFileSync(new URL('_headers', root), 'utf8').replace(/\r\n?/g, '\n');
+  assert.equal(shaMapFromManifest(manifest)._headers, crypto.createHash('sha256').update(headers).digest('hex'));
 });
