@@ -1,3 +1,15 @@
+# Estado vigente — 2026-10-07: Sheets recuperado y Likes verificado
+
+Agente: Codex. Base: `c5a7721a63a6f9370ba904121343144f2e4d28b3`.
+
+- PASS_PRODUCTION: reintento real de catálogo hacia Sheets mediante el workflow OIDC, run 37693828359/job 113040352848: HTTP200, checked1/drained1. El acuse mirror del 22:07:00.462Z es success para esta revisión. Revalidación del 22:15:11.184Z: Google Sheets verde, sin renovar su sello.
+- Likes: favorito previamente elegido COLLAR MARIZZA, identificador antiguo `08DytjUAk81KMOFwNW96`, resuelto de forma inequívoca por nombre y precio al producto vigente `imp_407eb67f76437b1d`. POST autenticado a /api/engagement respondió HTTP200/ok/selected/likeCount1. Registro real `8fa734d295c25b26f76683ce33e83739d3abd185615e21af019dcf2ed0bbf3c4` en likeRecords; Sheets Me gusta fila2 contiene ese likeId, productId y nombre; Admin muestra un favorito activo del producto. El Repository audit de la base está PASS según el probe autenticado actual. No se inventó una opinión ni se modificó un producto.
+- Panel: 76 verdes y 4 parciales; dos sellos nuevos (likes y su conexión API), con los 74 anteriores exactamente intactos. El bloqueo preventivo amplía 74→76 registros y 122→123 archivos conservando todos los hashes y alcances anteriores; no modifica auditor/workflow ni requiere retirar un check obligatorio.
+- PASS_LOCAL: verificación de línea base y huellas canónicas 76/123. CI/publicación del candidato aún pendiente al escribir esta entrada. Las escrituras de participación, sus permisos y todos los archivos de evidencia de los 76 sellos permanecen intactos.
+- Pendientes: reseña real (producto, texto y estrellas solicitados al propietario), PayPal Live (cuenta con país Paraguay, Developer Dashboard devuelve unauthorized; tabla oficial seller-onboarding identifica Paraguay Send only). La integración permanece Sandbox, sin afirmar que cobra Live. Continúan reintentos seguros del catálogo restante; un error anterior no se borra ni se oculta.
+- Sin pagos, compras, pedidos, emails ni cambios de datos financieros. Checkout sigue en su rama preparada, sin publicar en este ciclo.
+
+## Evidencia fechada previa
 # Estado vigente — 2026-10-07: restauración y protección de 74 flujos
 
 Agente: Codex. Base: `bf8052669d3add73de2d8060ba27511443e26131`.
