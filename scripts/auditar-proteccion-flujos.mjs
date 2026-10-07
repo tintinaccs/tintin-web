@@ -35,10 +35,42 @@ export function checkProtectedFlows(baseline, candidate, readFile) {
 if (process.argv[1] && fileURLToPath(import.meta.url) === fs.realpathSync(process.argv[1])) {
   try {
     const baseline = JSON.parse(fs.readFileSync(policyPath, 'utf8'));
-    const index = process.argv.indexOf('--candidate');
+    const remoteIndex = process.argv.indexOf('--remote-candidate');
+    const index = remoteIndex >= 0 ? remoteIndex : process.argv.indexOf('--candidate');
     const candidateSha = index < 0 ? '' : process.argv[index + 1];
     if (index >= 0 && !/^[a-f0-9]{40}$/.test(candidateSha || '')) throw new Error('Se requiere un SHA completo de candidato.');
-    const readFile = candidateSha
+    let remoteFiles;
+    if (remoteIndex >= 0) {
+      const githubRead = async path => {
+        const response = await fetch(`https://api.github.com/repos/tintinaccs/tintin-web/${path}`, {
+          headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${process.env.GH_TOKEN || ''}` },
+          signal: AbortSignal.timeout(30000),
+        });
+        if (!response.ok) throw new Error(`Lectura de candidato rechazada: HTTP ${response.status}`);
+        return response.json();
+      };
+      // Sólo JSON y bytes: no se descarga ni ejecuta el árbol de trabajo candidato.
+      const tree = await githubRead(`git/trees/${candidateSha}?recursive=1`);
+      if (tree.truncated) throw new Error('Árbol candidato incompleto.');
+      const blobs = new Map(tree.tree.filter(item => item.type === 'blob').map(item => [item.path, item.sha]));
+      remoteFiles = new Map();
+      const readBlob = async path => {
+        const sha = blobs.get(path);
+        if (!sha) throw new Error(`Archivo candidato ausente: ${path}`);
+        const blob = await githubRead(`git/blobs/${sha}`);
+        if (blob.encoding !== 'base64') throw new Error('Codificación candidata inválida.');
+        remoteFiles.set(path, Buffer.from(blob.content, 'base64'));
+      };
+      await readBlob(policyPath);
+      const policy = JSON.parse(remoteFiles.get(policyPath).toString('utf8'));
+      const paths = [...new Set([...Object.keys(baseline.files), ...Object.keys(policy.files || {})])];
+      if (paths.length > 1000) throw new Error('El candidato excede el límite de archivos protegidos.');
+      for (let i = 0; i < paths.length; i += 8) await Promise.all(paths.slice(i, i + 8).map(readBlob));
+    }
+    const readFile = remoteFiles ? path => {
+      if (!remoteFiles.has(path)) throw new Error('Archivo remoto ausente.');
+      return remoteFiles.get(path);
+    } : candidateSha
       ? path => execFileSync('git', ['show', `${candidateSha}:${path}`], { stdio: ['ignore', 'pipe', 'pipe'] })
       : path => fs.readFileSync(path);
     const candidate = JSON.parse(readFile(policyPath).toString('utf8'));

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d5d3dee4b81629678e3d23a3eb13da4fa9cf2252c954f73ea37da9445f6407c3",
+  "sourceFingerprint": "5b428047a117dcae795c5909ba5724269deced1b81bec99a511b708108b94140",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1048,
     "textFiles": 1000,
-    "totalBytes": 15789029,
+    "totalBytes": 15790722,
     "pages": 19,
     "modules": 738
   },
@@ -30283,8 +30283,8 @@
     },
     {
       "path": "scripts/auditar-proteccion-flujos.mjs",
-      "bytes": 3169,
-      "sha256": "7ac09eb886de97fe88cde0e5ba204aed7820a5b18f633b02b0bbd79ab8f45e11",
+      "bytes": 5121,
+      "sha256": "1201489a7a7a355b98d41e3256b7d89c6914799b34a4253fe6d9b5f3d5fc7926",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30315,7 +30315,12 @@
           "line": 4
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://api.github.com/repos/tintinaccs/tintin-web/$%7Bpath%7D",
+          "line": 45
+        }
+      ]
     },
     {
       "path": "scripts/auditar-publico-operativo-contrato.js",
@@ -39542,8 +39547,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 8533,
-      "sha256": "11df032377d683dbd5d013abfc326aeb18318af5419b1b5b98d80c16d99ccd28"
+      "bytes": 8274,
+      "sha256": "0c55273b78ab0ab16b1c6c512ebdcf90223147c1f4c3f84e6cbe91963880f69c"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -40305,7 +40310,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 41656,
-      "sha256": "4f799f26abbceceaaca3ee324e2a624a49fff00afbd50ac4e3dff0df04f2823a"
+      "sha256": "60835fd96d23a23090a981dd4aeca1887bef562df593ef4be69dda18d0c983c3"
     },
     {
       "path": "config/public-site.json",
@@ -44120,8 +44125,8 @@
     {
       "path": "scripts/auditar-proteccion-flujos.mjs",
       "extension": ".mjs",
-      "bytes": 3169,
-      "sha256": "7ac09eb886de97fe88cde0e5ba204aed7820a5b18f633b02b0bbd79ab8f45e11"
+      "bytes": 5121,
+      "sha256": "1201489a7a7a355b98d41e3256b7d89c6914799b34a4253fe6d9b5f3d5fc7926"
     },
     {
       "path": "scripts/auditar-publico-operativo-contrato.js",

@@ -181,19 +181,13 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: Fetch candidate without checking it out
-        if: github.event_name == 'pull_request_target'
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]
-          git fetch --no-tags origin "refs/pull/${PR_NUMBER}/head"
       - name: Verify protected files against trusted baseline
         id: verify_protected
         if: github.event_name == 'pull_request_target'
         env:
           CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
-        run: node scripts/auditar-proteccion-flujos.mjs --candidate "$CANDIDATE_SHA"
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/auditar-proteccion-flujos.mjs --remote-candidate "$CANDIDATE_SHA"
       - name: Report trusted verdict on candidate commit
         if: always() && github.event_name == 'pull_request_target'
         env:
