@@ -61,7 +61,7 @@ test('profile read errors do not strand the cart before the shipping step', () =
   assert.match(hardening, /state\.reason === 'profile_missing'/);
   assert.match(profileReader, /PROFILE_READ_TIMEOUT_MS/);
   assert.match(profileReader, /Promise\.race\(/);
-  assert.match(hardening, /await replay\(control\);\s*return;/);
+  assert.match(hardening, /replayValidatedForward\(control, event, 'profile'\);\s*return;/);
 });
 
 test('los cinco pasos conservan validación y confirmación sin cerrar sesión', () => {

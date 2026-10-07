@@ -6,7 +6,7 @@ Auditoría independiente de los informes históricos. Base local/remota/producci
 
 Se corrigieron el bloqueo del primer clic durante restauración de sesión, la hidratación duplicada del perfil, dos renderizadores competidores del carrito, la respuesta atrasada de recomendaciones y URLs inconsistentes del logo y de dos dependencias del admin. El primer intento de «Elegir cómo lo recibo» solicita acceso si la identidad resuelta es invitada; conserva el carrito y el paso pendiente.
 
-Estado: correcciones locales verificadas; publicación pendiente por indisponibilidad del túnel del entorno. No se declara una auditoría completa de todos los estados de cuentas reales ni un despliegue realizado.
+Actualización tras recuperar el entorno: push inicial y PR #1054 realizados. CI inicial detectó un marcador estático obsoleto de notificaciones Admin; corregido, cierre Admin 77/77 PASS. El clic real encontró un bucle entre la guardia cart de window y la guardia profile de document: cada una reenviaba un evento que la otra volvía a cancelar. La corrección conserva etapas validadas sólo para ese avance y cada clic nuevo empieza vacío. La ejecución antes del arreglo produjo 111.006 clics sintéticos sin modal; después, 11/11 anchos con SDK real y transporte TLS verificado abren un único modal al primer clic. Browser conjunto 17/17 (incluye cuenta bloqueada/carrito vacío); Node 1104/1104, cache 308 archivos y 73 cargas dinámicas. Merge y deploy quedan pendientes de CI del nuevo commit; no se declara compra/admin autenticado real.
 
 ## 2. Mapa por página
 
@@ -33,6 +33,8 @@ Inventario estático de los 19 HTML de raíz y sus consumidores. Primer barrido 
 | `privacidad.html` | 150 → 117 / 156 → 110 | 0 → 0 / 1 → 1 | Sin nuevo conflicto identificado; red final pendiente |
 | `product.html` | 211 → 153 / 224 → 150 | 1 → 1 / 1 → 1 | CSS del logo pendiente de reverificación en red |
 | `terminos.html` | 150 → 118 / 155 → 116 | 0 → 0 / 1 → 0 | Sin nuevo conflicto identificado; red final pendiente |
+
+Barrido final con la red recuperada: 209/209 navegaciones ready y **cero conflictos de versiones**. Hubo 197 repeticiones en marcos aislados de seguridad y 34 candidatos repetidos: 32 durante redirect nosotros→about (ambos documentos comparten recursos), y 2 refrescos de reviewStats tras error del listener Firestore (fallback real). Los 165 errores de Listen corresponden al buffering/timeout del bridge; no se presentan como errores de negocio ni como ejecución sin errores. El barrido fue previo al ajuste de coordinación de guardias, que tiene verificación real 11/11 y gates de URL coherentes.
 
 ## 3. Doble render
 
@@ -82,6 +84,8 @@ El repositorio tiene integración automática de Cloudflare Pages. Tras push/CI/
 
 ## 13. Storage y auth
 
+`validacion-avance.js` usa WeakMap por evento y una marca síncrona temporal del control durante replay. La guardia del carrito sólo omite su etapa ya verificada; la de perfil sigue validando su etapa. Un evento nuevo no hereda validaciones previas. Se conserva `.click()` y su comportamiento para controles deshabilitados. Esto evita el ping-pong sin deshabilitar guards ni la validación comercial del servidor.
+
 El estado desconocido/restaurando conserva loading y no inventa identidad invitada. Hardening espera `waitForSession`, evita intentos simultáneos y reproduce el handler native una vez. Una invitada recibe el modal directamente sin depender de cart sync remoto. La reanudación conserva el paso y no borra el carrito. Se mantienen email verificado, bloqueo de cuenta y validación del pedido en servidor. Pruebas con identidad simulada cubren restauración, salida/reentrada, carrera de perfil, acceso y cierre/reapertura del modal; no acreditan login real con Google en producción.
 
 ## 14. Matriz de hallazgos y cambios
@@ -94,7 +98,8 @@ El estado desconocido/restaurando conserva loading y no inventa identidad invita
 | CK-04 media | HTML: recomendaciones async antiguas; carrera | vacío tardío sustituye filas → generación descarta resultado | resolución tardía tras carrito lleno; control negativo sin generación falla | PASS local |
 | LOAD-01 media | footer/login/privacy/fallbacks/CSS: varias URLs del logo; descarga duplicada | tags antiguos/sin tag → URL del shell | 34 conflictos base, 8 intermedios en 38 navegaciones; gate URLs incluyendo CSS | PASS estático; último CSS pendiente de red |
 | LOAD-02 media | imports del admin: módulo con/sin versión; inicialización duplicada | URLs ES distintas → URL única canónica | captura admin base + gate imports; auditoría cache transitiva | PASS estático; admin real no verificado |
-| ENV-01 bloqueo | túnel de salida del entorno | acceso previo correcto → 503 a GitHub/producción/gstatic | curl, gh y git ls-remote, también fuera de sandbox; DNS directo no disponible | BLOCKED externo |
+| CK-05 alta | guardias cart/profile independientes; replay recursivo | 111.006 eventos sin modal → único avance con etapas por evento | 17/17 browser conjunto; cuenta bloqueada y carrito vacío siguen bloqueados; SDK real 11/11 anchos | PASS local |
+| ENV-01 bloqueo histórico | túnel de salida del entorno | acceso previo correcto → 503 a GitHub/producción/gstatic | curl, gh y git ls-remote, también fuera de sandbox; DNS directo no disponible | BLOCKED externo |
 
 ## 15. Pruebas
 
@@ -110,13 +115,13 @@ LCP/CLS se recolectaron como observaciones de render bajo bridge. Transferencia 
 
 ## 17. Producción
 
-La base coincidía con main antes de editar. No hubo órdenes, pagos, correos, creación de cuentas ni escrituras Firestore/Sheets reales. El usuario autorizó posteriormente push, merge y deploy; no falta aprobación. La nueva publicación queda pendiente del acceso a GitHub y luego de CI/check Cloudflare + artefacto publicado. El error actual contiene `remote address:envoy://cloudflare_https_tunnel/`, HTTP 503 en todos los hosts probados; no es otro dominio faltante en la allowlist.
+La base coincidía con main antes de editar. No hubo órdenes, pagos, correos, creación de cuentas ni escrituras Firestore/Sheets reales. El usuario autorizó posteriormente push, merge y deploy; no falta aprobación. El acceso se recuperó y la PR #1054 está abierta; la nueva publicación queda pendiente de CI/check Cloudflare y artefacto publicado. El error actual contiene `remote address:envoy://cloudflare_https_tunnel/`, HTTP 503 en todos los hosts probados; no es otro dominio faltante en la allowlist.
 
 ## 18. Pendientes reales
 
 La consulta inicial de npm audit reportó cero vulnerabilidades con este lockfile; repetirla al cierre devolvió 503 del registro y no acredita un resultado actualizado. Los intentos finales de monitor de producción y headers fallaron con 503; la espera del artefacto fue interrumpida al confirmar el mismo fallo de transporte.
 
-Restablecer transporte del entorno; repetir barrido de red tras los últimos ajustes; ejecutar CI oficial en el commit, push/PR/merge y verificar despliegue automático/fingerprint/health/headers. Verificar caché real fría/caliente y red lenta, y flujos autenticados de cliente/admin bajo condiciones autorizadas sin transacciones reales. Safari/iOS no probado.
+Transporte recuperado, npm audit actualizado: cero vulnerabilidades, barrido final 209/209 y checkout guest real 11/11. Ejecutar CI oficial del commit de coordinación de guardias, push/merge y verificar despliegue automático/fingerprint/health/headers. Verificar caché real fría/caliente y red lenta, y flujos autenticados de cliente/admin bajo condiciones autorizadas sin transacciones reales. Safari/iOS no probado.
 
 ## 19. Riesgos
 

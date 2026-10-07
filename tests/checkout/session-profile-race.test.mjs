@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const html = fs.readFileSync(new URL('../../checkout.html', import.meta.url), 'utf8');
-const runtime = fs.readFileSync(new URL('../../js/pages/checkout/checkout-hardening.js', import.meta.url), 'utf8').replace(/^import[\s\S]*?;\s*/gm, '');
+const forwardValidation = fs.readFileSync(new URL('../../js/pages/checkout/validacion-avance.js', import.meta.url), 'utf8').replace(/export function/g, 'function');
+const runtime = forwardValidation + fs.readFileSync(new URL('../../js/pages/checkout/checkout-hardening.js', import.meta.url), 'utf8').replace(/^import[\s\S]*?;\s*/gm, '');
 const deferred = () => { let resolve; const promise = new Promise(r => { resolve = r; }); return { promise, resolve }; };
 const tick = () => new Promise(resolve => setImmediate(resolve));
 const user = uid => ({ uid, emailVerified: true });

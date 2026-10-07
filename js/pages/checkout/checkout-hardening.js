@@ -1,9 +1,10 @@
+import { hasForwardValidation, replayValidatedForward } from './validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import {
   awaitCartReady,
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261004-final-integration-1';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261004-final-integration-1-guards-20261007-1';
 import { AUTH_STATES, subscribeSession, waitForSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261007-checkout-session-1';
 
@@ -11,7 +12,6 @@ const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?\/?$/i;
 const RESUME_KEY = 'tt_checkout_resume_step';
 const RESUME_BACKUP_KEY = 'tt_checkout_resume_step_backup_v2';
 const FORWARD_SELECTOR = '#btn-step1-next,#btn-step2-next,#btn-step3-next,#btn-step4-next,#ck-confirm-btn';
-const replaying = new WeakSet();
 const pendingControls = new WeakSet();
 
 let cartReady = false;
@@ -207,14 +207,8 @@ function scheduleAnnotations() {
   });
 }
 
-async function replay(control) {
-  replaying.add(control);
-  try { control.click(); }
-  finally { queueMicrotask(() => replaying.delete(control)); }
-}
-
 async function guardForwardClick(event, control) {
-  if (replaying.has(control)) return;
+  if (hasForwardValidation(event, control, 'profile')) return;
   event.preventDefault();
   event.stopImmediatePropagation();
   event.stopPropagation();
@@ -230,7 +224,7 @@ async function guardForwardClick(event, control) {
       // La identidad ausente ya es definitiva: pedir acceso directamente.
       // El handler original conserva la comprobación del carrito local;
       // no hay una sincronización remota de invitada que esperar.
-      await replay(control);
+      replayValidatedForward(control, event, 'profile');
       mirrorResumeState();
       return;
     }
@@ -261,7 +255,7 @@ async function guardForwardClick(event, control) {
         control.id === 'btn-step1-next' &&
         (state.reason === 'profile_error' || state.reason === 'profile_missing')
       ) {
-        await replay(control);
+        replayValidatedForward(control, event, 'profile');
         return;
       }
       if (state.reason === 'auth_unknown') {
@@ -271,7 +265,7 @@ async function guardForwardClick(event, control) {
       if (state.reason === 'signed_out') {
         // Dejar que el checkout original abra su modal de acceso, pero con el
         // carrito ya resuelto y sin permitir que una carga incompleta lo saltee.
-        await replay(control);
+        replayValidatedForward(control, event, 'profile');
         mirrorResumeState();
         return;
       }
@@ -279,7 +273,7 @@ async function guardForwardClick(event, control) {
       return;
     }
 
-    await replay(control);
+    replayValidatedForward(control, event, 'profile');
   } finally {
     pendingControls.delete(control);
   }

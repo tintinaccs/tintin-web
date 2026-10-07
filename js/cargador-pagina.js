@@ -917,7 +917,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261004-final-integration-2');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261004-final-integration-2-guards-20261007-1');
   }
 
   function bootThemeColorSanitizerPublic() {

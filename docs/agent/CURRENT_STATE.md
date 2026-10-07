@@ -1,3 +1,15 @@
+# Continuación — 2026-10-07: PR #1054
+
+- Red y terminal recuperadas; push de e9e66281 y PR #1054 creados, autorización push/merge/deploy vigente.
+- CI inicial: Repository audit falló sólo el marcador de versión de notificaciones Admin. Corregido aceptando el suffix explícito loads-20261007-1; cierre Admin 77/77 PASS. CodeQL y Cloudflare PASS iniciales, no atribuidos al siguiente commit.
+- Hallazgo y corrección adicional: guardias de window/cart y document/profile reenviaban clics entre sí; diagnóstico real 111006 eventos sintéticos. validacion-avance.js conserva etapas de ese evento en WeakMap y scope síncrono de replay; nuevo clic no hereda etapas. No se omite profile por validar cart. Native y servidor conservan validación comercial.
+- PASS actuales: Node 1104/1104 tras regenerar CSP; browser conjunto 17/17 (11 widths invitados, restauración, vacío y perfil bloqueado); SDK real guest 11/11 con un modal y resume=1. Versionado cache 308 archivos/73 dinámicas PASS; nuevos tags guards-20261007-1 propagados por consumidores/generador.
+- Barrido final de red previo al ajuste guards: 209/209 ready; cero conflictos de versiones; 197 marcos aislados; 32 repeticiones en redirect nosotros/about y dos fallback reviewStats tras error del listener. 165 timeout de Listen son limitación del bridge; cold/warm/transferencia real no acreditados. npm audit final actualizado:0.
+- Build/manifiesto final regenerado después de esta entrada; requiere CI verde del follow-up antes de merge y verificación del despliegue automático de Pages. PR https://github.com/tintinaccs/tintin-web/pull/1054.
+- Sin transacciones/escrituras comerciales reales. Cliente/admin autenticados reales, Safari y cache real siguen NO VERIFICADOS.
+
+---
+
 # Estado actual — 2026-10-07: cargas y checkout
 
 - Solicitud: auditoría independiente de dobles cargas en todo el sitio y checkout funcional; usuario autorizó push, merge y deploy.
