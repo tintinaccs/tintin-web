@@ -8,13 +8,13 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261005-public-flows-1';
+const TIENDA_VERSION = 'tintin-20261005-public-flows-1-guards-20261007-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1';
-const LOADER_VERSION = 'tintin-20261006-production-audit-1';
+const LOADER_VERSION = 'tintin-20261006-production-audit-1-loads-20261007-1-guards-20261007-1';
 const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1';
-const NAV_ENTRY_VERSION = 'tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1-checkout-20261007-1-guards-20261007-1';
+const NAV_ENTRY_VERSION = 'tintin-20261005-public-navigation-3-repair-20261005-1-profile-wholesale-20261005-1-checkout-20261007-1-guards-20261007-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261003-profile-route-1';
@@ -120,7 +120,7 @@ function sharedFooter() {
     <div class="tt-footer-grid">
       <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
         <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
-          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20260715-15" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Accesorios que acompañan tu brillo. Comprá online con atención cercana desde Paraguay.</p>
         <p class="tt-footer-hours">Horario de atención: Lunes a Sábado, 8:00 — 20:00 hs</p>

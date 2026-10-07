@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const html = fs.readFileSync(new URL('../../checkout.html', import.meta.url), 'utf8');
-const runtime = fs.readFileSync(new URL('../../js/pages/checkout/checkout-hardening.js', import.meta.url), 'utf8').replace(/^import[\s\S]*?;\s*/gm, '');
+const forwardValidation = fs.readFileSync(new URL('../../js/pages/checkout/validacion-avance.js', import.meta.url), 'utf8').replace(/export function/g, 'function');
+const runtime = forwardValidation + fs.readFileSync(new URL('../../js/pages/checkout/checkout-hardening.js', import.meta.url), 'utf8').replace(/^import[\s\S]*?;\s*/gm, '');
 const deferred = () => { let resolve; const promise = new Promise(r => { resolve = r; }); return { promise, resolve }; };
 const tick = () => new Promise(resolve => setImmediate(resolve));
 const user = uid => ({ uid, emailVerified: true });
@@ -16,7 +17,8 @@ function hardeningFixture() {
   const context = vm.createContext({
     window, location: { pathname: '/checkout' }, db: {}, console: { error() {} },
     AUTH_STATES: { RESTORING: 'restoring', UNKNOWN: 'unknown' }, subscribeSession(fn) { context.observer = fn; },
-    doc: (_, __, uid) => uid, getDoc(uid) { const read = deferred(); reads.set(uid, read); return read.promise; },
+    waitForSession: async () => {},
+    readCheckoutProfile(user) { const read = deferred(); reads.set(user.uid, read); return read.promise.then(snap => snap.exists() ? snap.data() : null); },
     document: { readyState: 'complete', body: { classList: { contains: () => false } }, addEventListener() {}, querySelectorAll: () => [], getElementById: id => id.startsWith('error-') ? { set textContent(v) { errors.push(v); }, classList: { add() {} }, setAttribute() {} } : null },
     sessionStorage: { getItem: () => null, setItem() {}, removeItem() {} },
     awaitCartReady: async () => {}, getCartLocal: () => [{ id: 'fixture', qty: 1 }], updateQty() {}, removeFromCart() {},
@@ -58,7 +60,7 @@ test('precarga nativa no prellena dirección ni bloquea con datos de otra sesió
     AUTH_STATES: { RESTORING: 'restoring', UNKNOWN: 'unknown' }, db: {}, window: {}, console: { error() {} },
     currentUser: null, currentUserProfile: null, authReady: false, sessionStatus: null,
     subscribeSession(fn) { context.observer = fn; }, doc: (_, __, uid) => uid,
-    getDoc(uid) { const read = deferred(); reads.set(uid, read); return read.promise; },
+    readCheckoutProfile(user) { const read = deferred(); reads.set(user.uid, read); return read.promise.then(snap => snap.exists() ? snap.data() : null); },
     reevaluateStoreGate_() {}, enforceCheckoutGuard() {}, tryResumeCheckoutStep() {},
     maybeApplySavedLocation() { applied.push(context.currentUserProfile); }, showBlockedOverlay() { applied.push('blocked'); },
   });
@@ -69,4 +71,32 @@ test('precarga nativa no prellena dirección ni bloquea con datos de otra sesió
   reads.get('old').resolve(snapshot({ name: 'Old', blocked: true, address: 'Private previous' })); await tick();
   assert.equal(context.currentUserProfile.name, 'New'); assert.equal(applied.length, 1);
   context.observer({ status: 'unknown', user: null }); assert.equal(context.currentUserProfile, null);
+});
+
+test('primer clic espera restauración y abre acceso una sola vez sin exigir otro clic', async () => {
+  const f = hardeningFixture();
+  const ready = deferred();
+  f.context.waitForSession = () => ready.promise;
+  f.context.observer({ status: 'restoring', user: null });
+  let replays = 0;
+  const event = { preventDefault() {}, stopImmediatePropagation() {}, stopPropagation() {} };
+  const control = { id: 'btn-step1-next', click() { replays++; } };
+  const first = f.context.guardForwardClick(event, control);
+  const second = f.context.guardForwardClick(event, control);
+  await tick();
+  assert.equal(replays, 0);
+  assert.equal(f.errors.length, 0, 'restauración pendiente no debe producir un error de sesión');
+  f.context.observer({ status: 'unauthenticated', user: null });
+  ready.resolve();
+  await Promise.all([first, second]);
+  assert.equal(replays, 1, 'un intento pendiente debe abrir un único modal');
+  assert.equal(f.errors.length, 0);
+});
+
+test('visitante resuelta no espera la sincronización remota antes de pedir acceso', async () => {
+  const f = hardeningFixture();let replays=0;
+  f.context.awaitCartReady = () => new Promise(() => {});
+  f.context.observer({status:'unauthenticated',user:null});
+  await f.context.guardForwardClick({preventDefault(){},stopImmediatePropagation(){},stopPropagation(){}},{id:'btn-step1-next',click(){replays++;}});
+  assert.equal(replays,1);
 });

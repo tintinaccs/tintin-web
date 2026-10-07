@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { aggregateCheckoutCart } from '../../js/orders/politica-checkout.js';
 
 const hardening = readFileSync(new URL('../../js/pages/checkout/checkout-hardening.js', import.meta.url), 'utf8');
+const profileReader = readFileSync(new URL('../../js/pages/checkout/perfil-checkout.js', import.meta.url), 'utf8');
 const checkoutPage = readFileSync(new URL('../../checkout.html', import.meta.url), 'utf8');
 const loader = readFileSync(new URL('../../js/cargador-mantenimiento-pagina.js', import.meta.url), 'utf8');
 const quota = readFileSync(new URL('../../js/pages/checkout/checkout-control-cuota.js', import.meta.url), 'utf8');
@@ -31,7 +32,7 @@ test('el listener del checkout deriva la identidad local del snapshot resuelto',
   assert.ok(listener, 'falta el listener canónico del checkout');
   assert.match(listener[0], /const user = snapshot\.user;/);
   assert.match(listener[0], /if \(!user \|\| user\.isAnonymous\)/);
-  assert.match(listener[0], /getDoc\(doc\(db, 'users', user\.uid\)\)/);
+  assert.match(listener[0], /readCheckoutProfile\(user\)/);
 });
 
 test('el avance al envío no queda bloqueado por una sincronización remota pendiente', () => {
@@ -49,7 +50,7 @@ test('cart controls use lineId so variants cannot mutate the wrong row', () => {
 });
 
 test('profile must load and not be blocked before forward navigation', () => {
-  assert.match(hardening, /getDoc\(doc\(db, 'users', user\.uid\)\)/);
+  assert.match(hardening, /readCheckoutProfile\(user\)/);
   assert.match(hardening, /profile\.blocked === true/);
   assert.match(hardening, /const state = await profilePromise/);
 });
@@ -58,9 +59,9 @@ test('profile read errors do not strand the cart before the shipping step', () =
   assert.match(hardening, /control\.id === 'btn-step1-next'/);
   assert.match(hardening, /state\.reason === 'profile_error'/);
   assert.match(hardening, /state\.reason === 'profile_missing'/);
-  assert.match(hardening, /PROFILE_READ_TIMEOUT_MS/);
-  assert.match(hardening, /Promise\.race\(\[getDoc\(doc\(db, 'users', user\.uid\)\), timeout\]\)/);
-  assert.match(hardening, /await replay\(control\);\s*return;/);
+  assert.match(profileReader, /PROFILE_READ_TIMEOUT_MS/);
+  assert.match(profileReader, /Promise\.race\(/);
+  assert.match(hardening, /replayValidatedForward\(control, event, 'profile'\);\s*return;/);
 });
 
 test('los cinco pasos conservan validación y confirmación sin cerrar sesión', () => {

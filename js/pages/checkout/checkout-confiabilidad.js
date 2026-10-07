@@ -10,8 +10,6 @@
    ============================================================= */
 
 
-const BAG_ICON_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>';
-
 const CHECKOUT_PATH_RE = /(?:^|\/)checkout(?:\.html)?\/?$/i;
 if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheckoutReliabilityBooted) {
   // Este módulo se importa desde el shell compartido, pero no hace nada fuera
@@ -21,33 +19,10 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
 
   const RESUME_KEY = 'tt_checkout_resume_step';
   const ROOT = document.documentElement;
-  let lastCartFingerprint = '';
   let syncHideTimer = 0;
 
   function clearResumeState() {
     try { sessionStorage.removeItem(RESUME_KEY); } catch {}
-  }
-
-  function escapeHtml(value) {
-    const node = document.createElement('div');
-    node.textContent = String(value ?? '');
-    return node.innerHTML;
-  }
-
-  function safeImageUrl(value) {
-    const raw = String(value || '').trim();
-    if (!raw) return '';
-    try {
-      const url = new URL(raw, window.location.href);
-      return ['http:', 'https:', 'data:', 'blob:'].includes(url.protocol) ? url.href : '';
-    } catch {
-      return '';
-    }
-  }
-
-  function formatPrice(value) {
-    const number = Number(value) || 0;
-    return `Gs. ${Math.round(number).toLocaleString('es-PY')}`;
   }
 
   function injectStyles() {
@@ -145,77 +120,10 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     requestAnimationFrame(() => window.TintinLoader?.hide?.());
   }
 
-  function readActiveCart() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem('tt_cart') || '[]');
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function normalizeCart(items) {
-    return (Array.isArray(items) ? items : [])
-      .filter(item => item && item.id != null)
-      .map(item => ({
-        id: String(item.id),
-        name: String(item.name || item.title || 'Producto'),
-        cat: String(item.cat || item.category || ''),
-        price: Math.max(0, Number(item.price) || 0),
-        qty: Math.max(1, Math.min(99, Math.floor(Number(item.qty) || 1))),
-        imageUrl: safeImageUrl(item.imageUrl || item.imgUrl || item.image || ''),
-      }));
-  }
-
-  function cartFingerprint(items) {
-    return JSON.stringify(items.map(item => [item.id, item.qty, item.price, item.name, item.imageUrl]));
-  }
-
-  function renderLiveCart(inputItems, force = false) {
-    const container = document.getElementById('ck-items');
-    const subtotalNode = document.getElementById('ck-subtotal-val');
-    if (!container || !subtotalNode) return;
-
-    const items = normalizeCart(inputItems);
-    const fingerprint = cartFingerprint(items);
-    if (!force && fingerprint === lastCartFingerprint && container.children.length) return;
-    lastCartFingerprint = fingerprint;
-
-    if (!items.length) {
-      container.innerHTML = `
-        <div class="ck-empty">
-          <div class="ck-empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
-          <div class="ck-empty-text">Tu carrito está vacío</div>
-          <p style="color:var(--color-text-primary,#713C53);font-size:13px;margin:6px 0 16px">Agregá un producto para comenzar una compra nueva.</p>
-          <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#F8AACA;color:#713C53!important;font-weight:800">Ver catálogo →</a>
-        </div>`;
-      subtotalNode.textContent = 'Gs. 0';
-      return;
-    }
-
-    container.innerHTML = items.map(item => {
-      const id = escapeHtml(item.id);
-      const name = escapeHtml(item.name);
-      const cat = escapeHtml(item.cat);
-      const image = item.imageUrl
-        ? `<img class="ck-item-img" src="${escapeHtml(item.imageUrl)}" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ck-item-img-placeholder" style="display:none">${BAG_ICON_SVG}</div>`
-        : `<div class="ck-item-img-placeholder">${BAG_ICON_SVG}</div>`;
-      return `<div class="ck-item" data-id="${id}">
-        ${image}
-        <div class="ck-item-info">
-          <div class="ck-item-name">${name}</div>
-          <div class="ck-item-cat">${cat}</div>
-          <div class="ck-item-price">${formatPrice(item.price)}</div>
-        </div>
-        <div class="ck-item-controls">
-          <button type="button" class="ck-qty-btn" data-action="minus" data-id="${id}" aria-label="Restar una unidad">−</button>
-          <span class="ck-qty-num">${item.qty}</span>
-          <button type="button" class="ck-qty-btn" data-action="plus" data-id="${id}" aria-label="Sumar una unidad">+</button>
-          <button type="button" class="ck-remove-btn" data-action="remove" data-id="${id}" title="Eliminar" aria-label="Eliminar producto">×</button>
-        </div>
-      </div>`;
-    }).join('');
-    subtotalNode.textContent = formatPrice(items.reduce((sum, item) => sum + item.price * item.qty, 0));
+  // La fiabilidad recupera la superficie, pero no posee un segundo renderer.
+  // Mientras el runtime canónico restaura identidad se conserva su loading.
+  function renderLiveCart() {
+    return window.TintinCheckoutCartRenderer?.();
   }
 
   function ensureSyncStateNode() {
@@ -260,39 +168,37 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     resetVisualStep();
     ensureSyncStateNode();
 
-    // El carrito local se puede pintar de inmediato. Cuando cart-sync termine de
-    // resolver la cuenta, el evento tt_cart_updated lo reemplaza sin recargar.
-    renderLiveCart(readActiveCart(), true);
+    // El runtime canónico decide cuándo la identidad permite pintar el carrito.
+    // La recuperación visual no lee ni sustituye su fuente de datos.
+    renderLiveCart();
     ensureCheckoutSurface();
 
     window.addEventListener('tt_cart_updated', event => {
-      renderLiveCart(event.detail?.items ?? readActiveCart(), true);
       updateSyncState(event.detail?.status || 'synced');
       ensureCheckoutSurface();
     });
     window.addEventListener('tintin:cart-sync-status', event => {
       updateSyncState(event.detail?.status || 'synced');
-      renderLiveCart(readActiveCart());
+      renderLiveCart();
     });
     window.addEventListener('storage', event => {
-      if (!event.key || event.key.includes('tt_cart')) renderLiveCart(readActiveCart(), true);
+      if (!event.key || event.key.includes('tt_cart')) renderLiveCart();
     });
-    window.addEventListener('tintin:products-loaded', () => renderLiveCart(readActiveCart(), true));
     window.addEventListener('online', () => {
       updateSyncState('loading', 'Conexión recuperada · sincronizando…');
-      renderLiveCart(readActiveCart(), true);
+      renderLiveCart();
     });
     window.addEventListener('offline', () => updateSyncState('offline'));
     window.addEventListener('tintin:store-gate-state', event => {
       if (event.detail?.state === 'allowed') {
         ensureCheckoutSurface();
-        renderLiveCart(readActiveCart(), true);
+        renderLiveCart();
       }
     });
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
         clearResumeState();
-        renderLiveCart(readActiveCart(), true);
+        renderLiveCart();
         ensureCheckoutSurface();
       }
     });
@@ -314,7 +220,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
       }
       ROOT.classList.remove('tt-checkout-leaving', 'tt-checkout-hard-reset');
       resetVisualStep();
-      renderLiveCart(readActiveCart(), true);
+      renderLiveCart();
       ensureCheckoutSurface();
     });
 
@@ -322,7 +228,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     // porque una consulta o un módulo llegó fuera de orden.
     setTimeout(ensureCheckoutSurface, 350);
     setTimeout(() => {
-      renderLiveCart(readActiveCart(), true);
+      renderLiveCart();
       ensureCheckoutSurface();
     }, 1200);
     setTimeout(ensureCheckoutSurface, 3200);

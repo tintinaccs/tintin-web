@@ -218,8 +218,9 @@ check('admin-script-exists', 'Todos los scripts locales referenciados existen', 
 // corrigió el bucle de reintento ante permission-denied/unauthenticated.
 // El 4-oct admin-connections agrega renovación compartida Auth + App Check.
 // El 5-oct public-navigation-3 conserva esa renovación y unifica los avisos.
+// El 7-oct loads alinea el fallback del avatar con la URL canónica del logo.
 check('admin-notifications-versioned', 'La autolectura Admin está servida con versión propia actual',
-  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore|firebase-permissions|inventory-fix|admin-connections|^tintin-20261005-public-navigation-3$)/.test(item.version)));
+  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore|firebase-permissions|inventory-fix|admin-connections|^tintin-20261005-public-navigation-3(?:-loads-20261007-1)?$)/.test(item.version)));
 
 // 7. Mutaciones sensibles deben conservar gobierno y trazabilidad.
 check('superadmin-auth', 'El panel conserva guard de autenticación y Super Admin real',

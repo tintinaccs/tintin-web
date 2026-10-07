@@ -132,7 +132,7 @@ jobs:
           npx playwright test tests/navigation/collection-menu-parity.spec.js tests/navigation/live-activity-notices.spec.js --project=chromium
           npx playwright test tests/login/google-loader-recovery.spec.js --project=chromium
           npx playwright test tests/checkout/coupon-recovery.spec.js tests/ui-ux/product-small-controls.spec.js tests/login/profile-availability-recovery.spec.js --project=chromium
-          npx playwright test tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium
+          npx playwright test tests/checkout/login-required-browser.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium
           npx playwright test tests/profile/wholesale-session-recovery.spec.js --project=chromium
           npx playwright test tests/ui-ux/inventory-reservation-review.spec.js --project=chromium
           npx playwright test tests/ui-ux/import-identity-review.spec.js --project=chromium

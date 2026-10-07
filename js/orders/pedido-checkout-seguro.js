@@ -1,3 +1,4 @@
+import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 import { AUTH_STATES, getSessionUser, waitForSession, subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
@@ -55,7 +56,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   const CHECKOUT_DEFAULTS_FIELD = 'checkoutDefaults';
   let submitting = false;
   let orderCompleted = false;
-  let replayingForwardClick = false;
   let cartGuardTimer = 0;
   let lastProfilePrefillUid = '';
   let pendingPaypal = null;
@@ -291,7 +291,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const button = event.target?.closest?.(
       '#btn-step1-next,#btn-step2-next,#btn-step3-next,#btn-step4-next'
     );
-    if (!button || replayingForwardClick || orderCompleted) return;
+    if (!button || orderCompleted || hasForwardValidation(event, button, 'cart')) return;
     event.preventDefault();
     event.stopImmediatePropagation();
     event.stopPropagation();
@@ -299,12 +299,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     Promise.resolve().then(async () => {
       const items = await ensureCartAvailable();
       if (!items.length) return;
-      replayingForwardClick = true;
-      try {
-        button.click();
-      } finally {
-        replayingForwardClick = false;
-      }
+      replayValidatedForward(button, event, 'cart');
     }).catch(error => {
       console.error('[secure-checkout-order] No se pudo validar el carrito antes de avanzar:', error);
       forceBackToCart('No pudimos cargar tu carrito. Recargá la página e intentá de nuevo.');

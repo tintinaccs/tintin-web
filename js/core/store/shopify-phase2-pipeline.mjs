@@ -6,7 +6,7 @@
  * stay behind server-side guards in the API layer.
  */
 
-import { buildImportFingerprint, normalizeImportKey, stableProductDocumentId } from './shopify-import-core.mjs';
+import { buildImportFingerprint, normalizeImportKey, stableProductDocumentId } from './shopify-import-core.mjs?v=tintin-20261005-import-one-click-1';
 
 export const PHASE2_JOB_STATES = Object.freeze([
   'CREATED', 'VALIDATING', 'READY_FOR_DRY_RUN', 'DRY_RUNNING', 'STAGING',
