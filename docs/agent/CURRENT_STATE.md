@@ -1,10 +1,11 @@
 # 2026-10-07 — Verificación de bloqueo y producción
 
 - PR #1055 integrado con todos sus checks aprobados; producción `31aa77396d26b68e587817035f16300e95adee4e` desplegada y health autenticado HTTP200. CodeQL sin alertas nuevas. La protección lee blobs de GitHub como datos y publica `Protected flow integrity` sobre el SHA candidato; nunca hace checkout ni ejecuta código candidato.
-- Línea base: 29 registros y 107 archivos/imports. Este cambio documental no modifica ningún archivo protegido y ejercita el nuevo gate desde la base confiable de main antes de exigirlo en la protección de rama.
+- Línea base: 29 registros y 107 archivos/imports. Protected flow integrity aprobado sobre dead113 y activado como quinto check obligatorio de main, con strict/enforce_admins y sin force push ni borrado. Los 107 archivos protegidos permanecen intactos.
 - Apps Script: diagnóstico acotado ok=true, superadmin protegido, un dispatcher y un reconciliador. Canary existente en fila 634 probado: ok=true, destructive=false, inactive=true, zeroStock=true, actionCleared=true, historyRecorded=true. El webhook acredita el commit de producción actual.
 - Reenvíos específicos de TINPED13/TINPED15 autorizados por el usuario y realmente intentados. Ambos registrados como failed: el endpoint de correo recibió HTTP403 de Firestore al leer el pedido. No se cambia notificationStatus para inventar éxito ni se debilitan Rules/App Check.
-- Persisten PayPal Sandbox, falta de escritura real de likes/reviews y 9 elementos de catálogo pendientes. La disponibilidad de servicios externos puede variar: los sellos nunca convierten un fallo real en verde. No se declara todo verde.
+- Apps Script: URL canónica actualizada de versión 22 a 23, usando el código guardado que suspende/restaura las validaciones multiselección. El worker real de catálogo siguió excediendo 25 s con cinco filas por POST. La corrección reduce ese sublote a dos sin cambiar el batchGet, los IDs, el backoff o el timeout; las pruebas acreditan entrega completa y recuperación de un sublote fallido. Esta corrección no toca archivos protegidos.
+- Panel real tras revalidación y 49 sellos individuales: 68/80 verdes; 22 sellos no seleccionados conservan idénticos valores/huellas/fechas. Persisten PayPal Sandbox, falta de escritura real de likes/reviews y 9 elementos de catálogo pendientes. La disponibilidad de servicios externos puede variar: los sellos nunca convierten un fallo real en verde. No se declara todo verde.
 
 ---
 

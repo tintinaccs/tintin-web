@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9d2b2b29f3e89e9392c0d0ca91dd818a0d88be52248e9187bfebaf7daeb044fb",
+  "sourceFingerprint": "f172f76ddfdb33f865f3407b6262a76034b512771a4f52b76c786e07f9c0f029",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1048,
     "textFiles": 1000,
-    "totalBytes": 15792151,
+    "totalBytes": 15793388,
     "pages": 19,
     "modules": 738
   },
@@ -18837,8 +18837,8 @@
     },
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
-      "bytes": 21918,
-      "sha256": "bc9df3a0eb83cfdcce01d4569319422f1d4d3b1f40bbeeaf9b5235cfb958c053",
+      "bytes": 22162,
+      "sha256": "9930aed689ebe36bd051ca9d116428a3e6bb4be932de28959b8b56bea9efed04",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37842,8 +37842,8 @@
     },
     {
       "path": "tests/sync/catalog-sheet-sync-queue.test.mjs",
-      "bytes": 14996,
-      "sha256": "7a1503a0ea62b08c4bb360e0ff20a8b02585d514cc1a671a9d8c330b332eb76c",
+      "bytes": 15362,
+      "sha256": "c9ab6b911afcc6557a26071b0202c36a9cb7b7a9e2bafc5a95425ba18d954d02",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37877,7 +37877,7 @@
           "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": true,
-          "line": 335
+          "line": 334
         }
       ],
       "endpoints": []
@@ -40213,8 +40213,8 @@
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
       "extension": ".js",
-      "bytes": 21918,
-      "sha256": "bc9df3a0eb83cfdcce01d4569319422f1d4d3b1f40bbeeaf9b5235cfb958c053"
+      "bytes": 22162,
+      "sha256": "9930aed689ebe36bd051ca9d116428a3e6bb4be932de28959b8b56bea9efed04"
     },
     {
       "path": "cloudflare/resiliencia-sync-participacion.js",
@@ -40831,8 +40831,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 276248,
-      "sha256": "3a40eab89fb431c4b9b9bde3a527f33e6ba6587e806729b3b9a0753bffdca7a3"
+      "bytes": 276875,
+      "sha256": "c9e2cd06f3793cf7ecc1396b24e3cd97b9492afe0bbee8181c0550914445f77b"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -45547,8 +45547,8 @@
     {
       "path": "tests/sync/catalog-sheet-sync-queue.test.mjs",
       "extension": ".mjs",
-      "bytes": 14996,
-      "sha256": "7a1503a0ea62b08c4bb360e0ff20a8b02585d514cc1a671a9d8c330b332eb76c"
+      "bytes": 15362,
+      "sha256": "c9ab6b911afcc6557a26071b0202c36a9cb7b7a9e2bafc5a95425ba18d954d02"
     },
     {
       "path": "tests/sync/engagement-sheet-sync-queue.test.mjs",

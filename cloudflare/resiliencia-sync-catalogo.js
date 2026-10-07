@@ -20,7 +20,10 @@ const PRODUCT_SYNC_CHUNK = 20;
 // spreadsheet rows in one Web App execution can exceed SHEETS_TIMEOUT_MS;
 // smaller idempotent POSTs let a queue drain make progress within the request
 // budget without changing the queue's logical product batch.
-const QUEUE_APPS_SCRIPT_POST_CHUNK = 5;
+// Cinco filas con flush y restauración de validaciones excedieron en producción
+// los 25 s del puente. Dos conservan el batchGet de Firestore y dejan margen
+// a las fórmulas de Sheets sin ampliar el timeout ni cambiar la fuente de datos.
+const QUEUE_APPS_SCRIPT_POST_CHUNK = 2;
 const MAX_ATTEMPTS = 4;
 const QUEUE_COLLECTION = 'catalogSheetSyncQueue';
 const MAX_PENDING = 200;
