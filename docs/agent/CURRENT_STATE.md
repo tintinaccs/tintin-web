@@ -1,3 +1,16 @@
+## 2026-10-07 — Ampliación del bloqueo a los 74 verdes comprobados
+
+Agente: Codex (GPT-6). Alcance autorizado por la usuaria: reparar los flujos, proteger los verdes y publicar; restricción vigente: ningún pago, compra ni cargo.
+
+- PASS_PRODUCTION en `0b6955dfe60151e99af45a04955998e06adea203`: Repository audit de main, ejecución 37649844016, aprobado. Revalidación del panel 2026-10-07T16:22:38.463Z: 74/80 verdes y seis parciales.
+- TINPED13 y TINPED15: un reenvío autorizado por pedido; ambos con notificationStatus=sent y resendCount=1. Se conserva el estado comercial y de pago.
+- Cola canónica de catálogo: ejecución OIDC 37650413152, HTTP 200, checked=1, drained=1, deadLettered=0, remaining=0. Acuses reales de ambos sentidos de Sheets en la revisión publicada; canary existente inactivo, stock cero, acción limpia e historial confirmado.
+- Sellos del panel: 46 selecciones confirmadas individualmente; los 28 sellos restantes conservaron exactamente sus archivos, fecha y autor. Total 74 sellos intactos.
+- Protección propuesta: conserva los 29 alcances existentes y 106 de 107 huellas; agrega 45 registros y 15 archivos, para 74 registros y 122 archivos. La única huella congelada que cambia es la del verificador: admite corchetes de rutas dinámicas de Cloudflare Pages. Continúa rechazando segmentos `..`, rutas absolutas, barras inversas y huellas falsas.
+- PASS_LOCAL: 13 tests de protección/sellos; validación de las 122 huellas vigentes. Pendiente PASS_CI y publicación de esta ampliación; no se hereda la auditoría de la revisión funcional anterior.
+- Impacto: sólo política de bloqueo, verificador, test adversarial y esta evidencia. Sin HTML, CSS, reglas de Firestore, autenticación, datos comerciales, secretos ni configuración de pagos modificados. Los viewports y roles del producto no cambian en esta ampliación.
+- Pendientes externos reales: dos elementos PayPal requieren credenciales Live/habilitación para recibir pagos; cuatro elementos likes/reseñas requieren una interacción real en las colecciones canónicas. Las estadísticas públicas sí responden. No se crean reseñas ni likes ficticios para certificar el panel.
+
 ## 2026-10-07 — Mantenimiento autorizado de Correos
 
 El usuario autorizó expresamente la actualización puntual de los nueve archivos protegidos del parche de App Check y su posterior revalidación y sellado. La petición de correo conserva Firebase Auth y las comprobaciones de dueño/superadmin; adjunta el token de la instancia canónica de App Check y lo reenvía únicamente a Firestore. Las URLs inmutables se actualizan en todos los consumidores y en el generador público.

@@ -13,7 +13,7 @@ export function checkProtectedFlows(baseline, candidate, readFile) {
   if (baseline?.schemaVersion !== 1 || !Object.keys(baseline.files || {}).length) throw new Error('Línea base de protección ausente o inválida.');
   if (candidate?.schemaVersion !== 1) return ['La política candidata no tiene el formato protegido.'];
   for (const [path, expected] of Object.entries(baseline.files)) {
-    if (!/^[a-zA-Z0-9_.\/-]+$/.test(path) || path.split('/').includes('..') || path.startsWith('/') || !/^[a-f0-9]{64}$/.test(expected)) throw new Error('Entrada de protección inválida.');
+    if (!/^[a-zA-Z0-9_.\/\[\]-]+$/.test(path) || path.split('/').includes('..') || path.startsWith('/') || !/^[a-f0-9]{64}$/.test(expected)) throw new Error('Entrada de protección inválida.');
     if (candidate.files?.[path] !== expected) errors.push(`Se intentó cambiar o retirar la protección de ${path}`);
     try {
       if (flowFileHash(readFile(path)) !== expected) errors.push(`Archivo protegido modificado: ${path}`);
@@ -25,7 +25,7 @@ export function checkProtectedFlows(baseline, candidate, readFile) {
   // Se pueden incorporar nuevos verdes, pero todas sus huellas deben ser reales.
   for (const [path, hash] of Object.entries(candidate.files || {})) {
     if (Object.hasOwn(baseline.files, path)) continue;
-    if (!/^[a-zA-Z0-9_.\/-]+$/.test(path) || path.split('/').includes('..') || path.startsWith('/') || !/^[a-f0-9]{64}$/.test(hash)) { errors.push('Nueva entrada de protección inválida.'); continue; }
+    if (!/^[a-zA-Z0-9_.\/\[\]-]+$/.test(path) || path.split('/').includes('..') || path.startsWith('/') || !/^[a-f0-9]{64}$/.test(hash)) { errors.push('Nueva entrada de protección inválida.'); continue; }
     try { if (flowFileHash(readFile(path)) !== hash) errors.push(`Huella nueva inválida: ${path}`); }
     catch { errors.push(`Archivo nuevo protegido ausente: ${path}`); }
   }
