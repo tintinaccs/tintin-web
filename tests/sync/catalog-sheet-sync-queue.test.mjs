@@ -202,7 +202,9 @@ test('el drenaje divide el lote lógico en POST pequeños para Apps Script', asy
   }
   const fetchImpl = async (_url, request) => {
     payloads.push(JSON.parse(request.body));
-    return { ok: true, status: 200, json: async () => ({ ok: true, sheetName: 'Productos', synced: 5 }) };
+    const count = payloads.at(-1).items.length;
+    if (count > 2) throw new Error('La operación superó el tiempo de espera');
+    return { ok: true, status: 200, json: async () => ({ ok: true, sheetName: 'Productos', synced: count }) };
   };
 
   const result = await drainCatalogSheetSyncQueueScheduled(env, {
@@ -210,7 +212,8 @@ test('el drenaje divide el lote lógico en POST pequeños para Apps Script', asy
   });
 
   assert.equal(result.drained, 1);
-  assert.deepEqual(payloads.map(payload => payload.items.length), [5, 5, 5, 5]);
+  assert.ok(payloads.every(payload => payload.items.length <= 2), 'cada lote cabe en el margen real de Sheets');
+  assert.ok(payloads.length <= 10, 'un batch de veinte productos mantiene acotadas las llamadas externas');
   assert.deepEqual(payloads.flatMap(payload => payload.items.map(item => item.id)), productIds);
   assert.ok(payloads.every(payload => payload.action === 'syncProductsPayload'));
   assert.equal(fs.batchGetCallCount(), 1, 'Firestore sigue resolviendo los 40 documentos en una lectura');
@@ -240,14 +243,10 @@ test('si falla un sublote, el reintento de la tarea repite IDs estables', async 
   });
 
   assert.equal(result.drained, 1, 'la segunda pasada completa la misma tarea');
-  assert.deepEqual(payloads.map(payload => payload.items.map(item => item.id)), [
-    productIds.slice(0, 5),
-    productIds.slice(5, 10),
-    productIds.slice(0, 5),
-    productIds.slice(5, 10),
-    productIds.slice(10, 15),
-    productIds.slice(15, 20),
-  ]);
+  assert.deepEqual(payloads[0].items.map(item => item.id), productIds.slice(0, 2));
+  assert.deepEqual(payloads[1].items.map(item => item.id), productIds.slice(2, 4));
+  assert.deepEqual(payloads.slice(2).flatMap(payload => payload.items.map(item => item.id)), productIds,
+    'el reintento repite todos los IDs estables y no pierde el lote que falló');
 });
 
 test('timeout: un fallo de Apps Script reintenta con backoff sin reprocesar de inmediato', async () => {

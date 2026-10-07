@@ -52,6 +52,66 @@ Validación local: 27 pruebas de correo, build:pages y auditoría de caché corr
 
 ---
 
+
+# 2026-10-07 — Verificación de bloqueo y producción
+
+- PR #1055 integrado con todos sus checks aprobados; producción `31aa77396d26b68e587817035f16300e95adee4e` desplegada y health autenticado HTTP200. CodeQL sin alertas nuevas. La protección lee blobs de GitHub como datos y publica `Protected flow integrity` sobre el SHA candidato; nunca hace checkout ni ejecuta código candidato.
+- Línea base: 29 registros y 107 archivos/imports. Protected flow integrity aprobado sobre dead113 y activado como quinto check obligatorio de main, con strict/enforce_admins y sin force push ni borrado. Los 107 archivos protegidos permanecen intactos.
+- Apps Script: diagnóstico acotado ok=true, superadmin protegido, un dispatcher y un reconciliador. Canary existente en fila 634 probado: ok=true, destructive=false, inactive=true, zeroStock=true, actionCleared=true, historyRecorded=true. El webhook acredita el commit de producción actual.
+- Reenvíos específicos de TINPED13/TINPED15 autorizados por el usuario y realmente intentados. Ambos registrados como failed: el endpoint de correo recibió HTTP403 de Firestore al leer el pedido. No se cambia notificationStatus para inventar éxito ni se debilitan Rules/App Check.
+- Apps Script: URL canónica actualizada de versión 22 a 23, usando el código guardado que suspende/restaura las validaciones multiselección. El worker real de catálogo siguió excediendo 25 s con cinco filas por POST. La corrección reduce ese sublote a dos sin cambiar el batchGet, los IDs, el backoff o el timeout; las pruebas acreditan entrega completa y recuperación de un sublote fallido. Esta corrección no toca archivos protegidos.
+- Panel real tras revalidación y 49 sellos individuales: 68/80 verdes; 22 sellos no seleccionados conservan idénticos valores/huellas/fechas. Persisten PayPal Sandbox, falta de escritura real de likes/reviews y 9 elementos de catálogo pendientes. La disponibilidad de servicios externos puede variar: los sellos nunca convierten un fallo real en verde. No se declara todo verde.
+
+---
+
+# 2026-10-07 — Flujos protegidos (Codex, autorización completa vigente)
+
+- Usuario autorizó explícitamente publicación y trabajo completo; abrió Apps Script y Sheets de producción. No se heredan autorizaciones de informes anteriores.
+- Implementado: sellos individuales, preservación de sellos anteriores, huellas completas incluyendo `_headers`/`_redirects`; gate `Protected flows` que ejecuta únicamente código de la base confiable y compara el candidato como datos. Línea base inicial de 29 registros verdes y 107 archivos/imports; no se puede retirar una protección o cambiar la huella del archivo en el mismo PR para eludirla.
+- Corrección del diagnóstico: un timeout de Apps Script (HTTP0) se convertía indebidamente en HTTP200 de system-health y luego en rojo. Se conserva el estado sin respuesta, se muestra su código y se amplía el margen de arranque frío de 5 a 10 segundos; system-health tiene 30 segundos en el panel. Ningún fallo confirmado se oculta ni se promueve a verde.
+- PASS_LOCAL: flujo 84/84 y salud/redirects 39/39. Pendiente CI del commit final, merge, despliegue, activación del nuevo check obligatorio y verificación autenticada. Las protecciones existentes de main ya exigen Repository audit, CodeQL y Cloudflare Pages, con enforce_admins, sin force-push ni borrado.
+- Diagnóstico autenticado 2026-10-07: CI/main a3b0c34 PASS; bridge Apps Script responde guard canónico en una lectura; sincronización inbound aún sin acuse y mirror del despliegue anterior. 9 elementos pendientes en cola de catálogo; 2 pedidos pagados con correo pendiente. PayPal sigue Sandbox. No se envían correos ni se cambia el estado comercial de pedidos para fabricar evidencias.
+
+---
+
+# 2026-10-07 — Sellos individuales del flujo (Codex, copia local)
+
+- Base: main `a3b0c3467f623b0a0f3cd510fc53b16f5ede258b`. Alcance: sellos del panel; sin cambios en auth, Rules, pedidos, inventario ni servicios externos.
+- Corrección: sellado general sólo agrega sellos nuevos; conserva intactos y cambiados. Un sello cambiado se confirma de forma explícita desde el detalle del nodo/enlace y sólo actualiza su identificador. Huellas incompletas o vacías no certifican verde. El generador incluye `_headers` y `_redirects`, antes omitidos: CSP tenía evidencia sin huella.
+- PASS_LOCAL: suite flujo 77/77 sin skips; generación CSP y versionado de los tres módulos editados. No se atribuye CI ni producción a esta copia. Resultado final del manifiesto y gates se registra en el informe de outputs.
+- Producción sólo lectura: 2026-10-07T11:52:58.360Z `/api/health` HTTP200, ok=true y checks disponibles; `/api/paypal-config` HTTP200, enabled=true, environment=sandbox. El panel seleccionado reportaba 29 verdes y 51 con atención (80 registros), Apps Script/Sheets con error y 35 huellas cambiadas. No se conoce todavía la causa autenticada de esos errores.
+- BLOCKED: Chrome conectado identifica la pestaña pero Runtime.evaluate agota el tiempo; no se verificó UI autenticada ni system-health. GitHub CLI sin sesión. Ningún merge, deploy ni mutación de producción ejecutado.
+- Pendientes: acceso al diagnóstico autenticado y corrección de Apps Script/Sheets; evidencia CI/operaciones reales para los restantes; decisión sobre PayPal Live; controles del repositorio/despliegue para bloquear cambios reales de dependencias compartidas. Un sello detecta cambios, no impide editar código ni garantiza disponibilidad futura. No se declara todo verde ni bloqueo de seguridad implementado.
+
+---
+
+# Continuación — 2026-10-07: PR #1054
+
+- Red y terminal recuperadas; push de e9e66281 y PR #1054 creados, autorización push/merge/deploy vigente.
+- CI inicial: Repository audit falló sólo el marcador de versión de notificaciones Admin. Corregido aceptando el suffix explícito loads-20261007-1; cierre Admin 77/77 PASS. CodeQL y Cloudflare PASS iniciales, no atribuidos al siguiente commit.
+- Hallazgo y corrección adicional: guardias de window/cart y document/profile reenviaban clics entre sí; diagnóstico real 111006 eventos sintéticos. validacion-avance.js conserva etapas de ese evento en WeakMap y scope síncrono de replay; nuevo clic no hereda etapas. No se omite profile por validar cart. Native y servidor conservan validación comercial.
+- PASS actuales: Node 1104/1104 tras regenerar CSP; browser conjunto 17/17 (11 widths invitados, restauración, vacío y perfil bloqueado); SDK real guest 11/11 con un modal y resume=1. Versionado cache 308 archivos/73 dinámicas PASS; nuevos tags guards-20261007-1 propagados por consumidores/generador.
+- Barrido final de red previo al ajuste guards: 209/209 ready; cero conflictos de versiones; 197 marcos aislados; 32 repeticiones en redirect nosotros/about y dos fallback reviewStats tras error del listener. 165 timeout de Listen son limitación del bridge; cold/warm/transferencia real no acreditados. npm audit final actualizado:0.
+- Build/manifiesto final regenerado después de esta entrada; requiere CI verde del follow-up antes de merge y verificación del despliegue automático de Pages. PR https://github.com/tintinaccs/tintin-web/pull/1054.
+- Sin transacciones/escrituras comerciales reales. Cliente/admin autenticados reales, Safari y cache real siguen NO VERIFICADOS.
+
+---
+
+# Estado actual — 2026-10-07: cargas y checkout
+
+- Solicitud: auditoría independiente de dobles cargas en todo el sitio y checkout funcional; usuario autorizó push, merge y deploy.
+- Base producción/main verificada antes de editar: `2c3c07fe1efa0387f45823994d1ed66b68bffc06`; rama `codex/auditoria-checkout-20261006`.
+- Implementado: primer clic espera identidad y abre acceso para invitadas; perfil compartido por sesión; renderer único idempotente y generación async; URLs del logo/imports del admin coherentes con cache immutable.
+- Evidencia local: Node final 1104/1104 (sin skips); 13/13 regresiones específicas; checkout browser 15/15 (11 widths + restauración); reglas emulador 121+12+13 PASS. Controles negativos de auth/perfil/versiones/logo/render/async fallan al remover protecciones y fueron restaurados.
+- Barridos anteriores con TLS verificado: 38 navegaciones base y 209 intermedias (19 HTML × 11 widths). Conflictos 34→8 en 38 comparables; los últimos fondos CSS se corrigieron después. No declarar captura final ni métricas de cold/warm reales: routing desactiva caché.
+- PASS_LOCAL: build:pages y build completos, audit:final completo (exit 0), CSP/rutas/decisiones/manifiesto y cache 307 archivos + 73 cargas dinámicas. Anteriores fallos de JSON de capturas y manifiesto stale corregidos sin debilitar gates. Regresión browser de login requerida agregada a CI. Después del audit final: política del instrumento readonly permite bootstrap de seguridad, bloquea comercio/cuentas/correos; 20/20 gates arquitectura y Node 1104/1104 reverificados. Manifiesto regenerado tras este cierre documental. Informe completo: `docs/auditoria-cargas-checkout-20261007.md`.
+- BLOCKED externo: túnel de salida HTTP 503 para GitHub, producción y gstatic; git ls-remote falla también fuera del sandbox. No falta autorización ni otra allowlist. Pendientes push, CI, merge, Pages deploy, fingerprint/health/headers y nueva captura final.
+- npm audit inicial: cero vulnerabilidades; repetición final BLOCKED por 503 del registro. Monitor/headers finales fallan por 503; artefacto no reverificado.
+- Producción comercial sin escrituras: no pedidos/pagos/correos/users/Firestore/Sheets reales. NO VERIFICADO: cliente/admin autenticados reales, Safari, transferencia fría/caliente/red lenta.
+- Setup: Node22.23.3, Chromium Playwright1243, Java21, caches externos y variables Firebase soportadas; borrador reutilizable actualizado y guardado (publicación del entorno por UI aún independiente).
+
+---
+
 ## 2026-10-06 — Integración local preservada para autorización de publicación
 
 - Agente: Codex. Fase autorizada: rama y commits LOCALES; push, PR nuevo, merge y deploy requieren las autorizaciones expresas del dueño. Rama `codex/cierre-auditoria-20261006`; base remota comprobada `origin/main@7f2c534a8635b0926dd61c2356d1e79fca5f1020`; PR #1052 abierto, HEAD `b35e7cd17bd4ca7357ed938561667bacab9dca36`, sin cambios desde la auditoría. #1050/#1051 incluidos por ascendencia. #929 no se integra; #1045/#1046 no se incorporan por separado.
