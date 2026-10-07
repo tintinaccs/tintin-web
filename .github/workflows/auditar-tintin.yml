@@ -16,7 +16,7 @@ permissions:
   checks: read
 
 concurrency:
-  group: repository-audit-${{ github.event.pull_request.number || github.ref }}
+  group: repository-audit-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -168,6 +168,9 @@ jobs:
     name: Protected flows
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    permissions:
+      contents: read
+      checks: write
     steps:
       # Código de la base confiable; el candidato se lee sólo como datos.
       - uses: actions/checkout@v5
@@ -186,10 +189,22 @@ jobs:
           [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]
           git fetch --no-tags origin "refs/pull/${PR_NUMBER}/head"
       - name: Verify protected files against trusted baseline
+        id: verify_protected
         if: github.event_name == 'pull_request_target'
         env:
           CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
         run: node scripts/auditar-proteccion-flujos.mjs --candidate "$CANDIDATE_SHA"
+      - name: Report trusted verdict on candidate commit
+        if: always() && github.event_name == 'pull_request_target'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          CANDIDATE_SHA: ${{ github.event.pull_request.head.sha }}
+          VERDICT: ${{ steps.verify_protected.outcome == 'success' && 'success' || 'failure' }}
+        run: |
+          gh api --method POST "repos/${GH_REPO}/check-runs" \
+            -f name='Protected flow integrity' -f head_sha="$CANDIDATE_SHA" \
+            -f status=completed -f conclusion="$VERDICT"
       - name: Verify main baseline
         if: github.event_name == 'workflow_dispatch'
         run: node scripts/auditar-proteccion-flujos.mjs
