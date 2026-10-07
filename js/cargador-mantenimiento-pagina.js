@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261004-admin-connections-3';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261007-public-consistency-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
@@ -15,7 +15,7 @@ function load(file, version = 'tintin-20260927-visual-1-brand-20261004-1-owner-p
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261007-public-consistency-1');
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {

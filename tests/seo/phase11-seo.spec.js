@@ -74,7 +74,7 @@ test('ficha sin producto válido no es indexable; los errores transitorios no to
   const firestore = {
     'products/inexistente': { status: 404, body: {} },
     'products/inactivo': { status: 200, body: { fields: { active: { booleanValue: false }, name: { stringValue: 'Oculto' } } } },
-    'products/activo': { status: 200, body: { fields: { active: { booleanValue: true }, name: { stringValue: 'Reloj Test' } } } },
+    'products/activo': { status: 200, body: { fields: { active: { booleanValue: true }, name: { stringValue: 'Reloj Test' }, category: { stringValue: 'relojes' }, price: { integerValue: '150000' } } } },
     'products/transitorio': { status: 503, body: {} }
   };
   const originalFetch = globalThis.fetch;

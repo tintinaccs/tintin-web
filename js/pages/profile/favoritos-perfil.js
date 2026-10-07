@@ -45,6 +45,8 @@ let generation = 0;
 subscribeAuthState(async user => {
   const myGeneration = ++generation;
   if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+  const root = document.getElementById('perfil-favorites-list');
+  if (root) root.innerHTML = user ? '<div class="tt-profile-state" role="status">Sincronizando favoritos…</div>' : '';
   if (!user) return;
   await appCheckReady;
   if (myGeneration !== generation) return;

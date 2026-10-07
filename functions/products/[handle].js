@@ -6,6 +6,8 @@ import {
 } from '../../cloudflare/firebase-admin-ligero.js';
 
 let legacyFallbackMapPromise = null;
+let legacyFallbackMapExpiresAt = 0;
+const LEGACY_MAP_TTL_MS = 5 * 60 * 1000;
 
 export function normalizeShopifyHandle(value) {
   const raw = String(value || '').trim().toLowerCase();
@@ -43,7 +45,8 @@ function documentId(document) {
 }
 
 async function legacyFallbackMap(env) {
-  if (!legacyFallbackMapPromise) {
+  if (!legacyFallbackMapPromise || Date.now() >= legacyFallbackMapExpiresAt) {
+    legacyFallbackMapExpiresAt = Infinity;
     legacyFallbackMapPromise = firestoreAdminListAll(env, 'products', 1000)
       .then(documents => {
         const map = new Map();
@@ -54,10 +57,12 @@ async function legacyFallbackMap(env) {
           const keys = legacyProductHandleAliases(data);
           keys.forEach(key => { if (!map.has(key)) map.set(key, document); });
         }
+        legacyFallbackMapExpiresAt = Date.now() + LEGACY_MAP_TTL_MS;
         return map;
       })
       .catch(error => {
         legacyFallbackMapPromise = null;
+        legacyFallbackMapExpiresAt = 0;
         throw error;
       });
   }

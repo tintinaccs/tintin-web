@@ -255,7 +255,7 @@ check('Las recargas asíncronas conservan agotados visibles y bloquean su compra
   phase7CatalogPolicy.includes('export function isCatalogVisible') &&
   phase7CatalogPolicy.includes('export function isPurchasable') &&
   phase7CatalogPolicy.includes('return isCatalogVisible(p) && (p.stock == null || p.stock > 0)') &&
-  phase7CatalogPolicy.includes('p.active !== false') &&
+  phase7CatalogPolicy.includes('hasPublicProductFields(p)') && read('js/core/store/publicacion-producto.mjs').includes('p.active !== false') &&
   catalog.includes("inStock ? 'Disponible' : 'Agotado'") &&
   catalog.includes('disabled aria-disabled="true">Agotado</button>') &&
   main.includes('pickStable(pool, 5, homeSelectionKeys') &&

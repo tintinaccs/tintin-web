@@ -3,6 +3,8 @@ import {
   firestoreAdminListAll
 } from '../cloudflare/firebase-admin-ligero.js';
 
+import { hasPublicProductFields } from '../js/core/store/publicacion-producto.mjs';
+
 const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 
 function xml(value) {
@@ -34,7 +36,9 @@ export async function onRequest({ request, env }) {
       const id = documentId(document);
       if (!id) return [];
       const data = decodeFirestoreFields(document?.fields || {});
-      if (data.active === false) return [];
+      if (!hasPublicProductFields({ ...data, id, name: data.name || data.title || data.Title,
+        category: data.category || data.collectionSlug || data.collection || data.cat || data.type,
+        price: data.price ?? data['Variant Price'] })) return [];
       const loc = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(id)}`;
       const lastmod = isoDate(
         data.updatedAt || data.updated_at || data.modifiedAt || data.catalogActivityAt || document.updateTime

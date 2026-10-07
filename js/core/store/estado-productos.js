@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261007-email-app-check-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261007-public-consistency-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -334,6 +334,8 @@ async function startProductRealtime(id) {
   stopProductRealtime();
   publicProductId = normalizedId;
   const requestVersion = publicProductRequestVersion;
+  let realtimeConfirmed = false;
+  let relatedRequestVersion = 0;
 
   const cachedProduct = readCached(`product:${normalizedId}`, PRODUCT_CACHE_TTL);
   if (cachedProduct) publish([cachedProduct], 'cache');
@@ -347,7 +349,7 @@ async function startProductRealtime(id) {
     `product:edge:${normalizedId}`,
     () => fetchSingleProductFromEdge(normalizedId)
   ).then(product => {
-    if (!isCurrentProductRequest(normalizedId, requestVersion)) return { ok: true, product, published: null };
+    if (!isCurrentProductRequest(normalizedId, requestVersion) || realtimeConfirmed) return { ok: true, product, published: null };
     if (product) {
       publicProductCurrent = product;
       return { ok: true, product, published: publish([product], 'edge-product') };
@@ -379,8 +381,13 @@ async function startProductRealtime(id) {
       doc(db, 'products', normalizedId),
       snapshot => {
         if (!isCurrentProductRequest(normalizedId, requestVersion)) return;
+        realtimeConfirmed = true;
         recordFirestoreRead('products:single-realtime', 1);
         if (!snapshot.exists()) {
+          publicProductCurrent = null;
+          publicProductRelated = [];
+          publicProductCategory = '';
+          relatedRequestVersion += 1;
           settle(publish([], 'realtime-product-missing'));
           return;
         }
@@ -389,10 +396,17 @@ async function startProductRealtime(id) {
         if (product.active === false || !product.name ||
             (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product))) {
           publicProductCurrent = null;
+          publicProductRelated = [];
+          publicProductCategory = '';
+          relatedRequestVersion += 1;
           settle(publish([], 'realtime-product-unavailable'));
           return;
         }
 
+        if (publicProductCategory !== product.category) {
+          publicProductRelated = [];
+          relatedRequestVersion += 1;
+        }
         publicProductCurrent = product;
         writeCached(`product:${normalizedId}`, product);
         const current = publish(
@@ -403,11 +417,13 @@ async function startProductRealtime(id) {
 
         if (publicProductCategory === product.category && publicProductRelated.length) return;
         publicProductCategory = product.category;
+        const relatedVersion = ++relatedRequestVersion;
         runSingleFlight(
           `products:related:${product.category}`,
           () => fetchRelatedProducts(product)
         ).then(related => {
           if (!isCurrentProductRequest(normalizedId, requestVersion)) return;
+          if (relatedVersion !== relatedRequestVersion || publicProductCategory !== product.category) return;
           publicProductRelated = related;
           const latestProduct = publicProductCurrent;
           if (!latestProduct) return;
@@ -426,6 +442,10 @@ async function startProductRealtime(id) {
         }
         publicProductUnsubscribe = null;
         publicProductReady = null;
+        if (realtimeConfirmed) {
+          settle(publish(publicProductCurrent ? [publicProductCurrent, ...publicProductRelated] : [], 'realtime-product-retained'));
+          return;
+        }
         // No se emite products-error todavía: ese evento es terminal para la
         // ficha y antes reiniciaba su watchdog aun cuando el fallback seguía vivo.
         // Primero agotamos las autoridades ya existentes; recién el rechazo final

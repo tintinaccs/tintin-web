@@ -3,6 +3,8 @@ import {
   firestoreAdminGet
 } from '../cloudflare/firebase-admin-ligero.js';
 
+import { hasPublicProductFields } from '../js/core/store/publicacion-producto.mjs';
+
 const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const CLOUDINARY_HOST = 'res.cloudinary.com';
 const CLOUDINARY_UPLOAD = '/upload/';
@@ -164,7 +166,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
     canonical,
     price,
     active: data?.active,
-    stock: firstValue(data, ['stock', 'Variant Inventory Qty']),
+    stock: data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null,
     sku: firstValue(data, ['handle', 'Handle'])
   });
   const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" fetchpriority="high" id="tt-product-image-preload">`;
@@ -241,20 +243,34 @@ export async function onRequest(context) {
   // Pedir /product.html explícitamente hace que Pages lo canonice de vuelta a
   // /product con 308 y puede producir un rebote. Conservamos la URL pública.
   const asset = await env.ASSETS.fetch(request);
-  if (request.method === 'HEAD') return asset;
+  const responseForMethod = response => request.method === 'HEAD'
+    ? new Response(null, { status: response.status, statusText: response.statusText, headers: response.headers })
+    : response;
   if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
 
   const url = new URL(request.url);
   const id = String(url.searchParams.get('id') || '').trim();
-  if (!id || !/^[A-Za-z0-9_-]{1,180}$/.test(id)) return withNoindex(asset);
+  if (!id || !/^[A-Za-z0-9_-]{1,180}$/.test(id)) return responseForMethod(withNoindex(asset));
 
   try {
     const document = await resolveProductMetadataWithin(
       firestoreAdminGet(env, `products/${id}`)
     );
-    if (!document?.fields) return withNoindex(asset);
+    if (!document?.fields) return responseForMethod(withNoindex(asset));
     const data = decodeFirestoreFields(document.fields);
-    if (data.active === false) return withNoindex(asset);
+    if (!hasPublicProductFields({ ...data, id,
+      name: stripHtml(firstValue(data, ['name', 'title', 'Title'])),
+      category: firstValue(data, ['category', 'collectionSlug', 'collection', 'cat', 'type']),
+      price: firstValue(data, ['price', 'Variant Price'])
+    })) return responseForMethod(withNoindex(asset));
+    if (request.method === 'HEAD') {
+      const headers = new Headers(asset.headers);
+      headers.set('cache-control', 'public, max-age=30, s-maxage=120, stale-while-revalidate=300');
+      headers.set('x-tintin-product-meta', 'server');
+      headers.set('x-tintin-product-image-preload', 'server');
+      headers.delete('content-length');
+      return new Response(null, { status: asset.status, statusText: asset.statusText, headers });
+    }
 
     const rendered = renderProductMetadataHtml(await asset.text(), id, data);
     const headers = new Headers(asset.headers);
@@ -270,6 +286,6 @@ export async function onRequest(context) {
     } else {
       console.error('[product-meta] no se pudo renderizar metadata:', reason);
     }
-    return asset;
+    return responseForMethod(asset);
   }
 }

@@ -1,4 +1,4 @@
-import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261004-admin-connections-3';
+import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1';
 
 const IMAGE_BASE = '/assets-tintin/images/collections/';
 const PLACEHOLDER = `${IMAGE_BASE}col-placeholder.webp`;

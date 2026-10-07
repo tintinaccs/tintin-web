@@ -11,6 +11,7 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
+const publication = read('js/core/store/publicacion-producto.mjs');
 const policy = read('js/pages/catalog/politica-visibilidad-catalogo.js');
 const merchandising = read('js/pages/catalog/politica-exhibicion-catalogo.js');
 const products = read('js/core/store/estado-productos.js');
@@ -24,9 +25,9 @@ const pkg = JSON.parse(read('package.json'));
 
 check(
   'Existe una política única de producto comprable',
-  /export function isPurchasable/.test(policy) &&
-    /p\.active !== false/.test(policy) &&
-    /p\.price > 0/.test(policy) &&
+  /export function isPurchasable/.test(policy) && /hasPublicProductFields\(p\)/.test(policy) &&
+    /p\.active !== false/.test(publication) &&
+    /Math\.round\(price\) > 0/.test(publication) &&
     /p\.stock == null \|\|/.test(policy) &&
     /categoryIsVisible/.test(policy),
   'La tienda debe validar estado, nombre, categoría, precio, stock y colección visible desde un único módulo.'
