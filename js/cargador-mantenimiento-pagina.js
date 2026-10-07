@@ -22,7 +22,7 @@ export function loadPageMaintenance() {
     const version = 'tintin-20261004-final-integration-2';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261007-checkout-session-1-guards-20261007-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261007-email-app-check-1'),
       load('pages/checkout/checkout-mantenimiento.js', version),
       load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2'),
       load('pages/checkout/checkout-control-cuota.js', version),

@@ -11,7 +11,7 @@ import {
 import {
   sendOrderNotification,
   notificationStatusFromResult
-} from '../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+} from '../../email/notificacion-pedido-resend.js?v=tintin-20261007-email-app-check-1';
 
 if (!window.TintinCheckoutEmailBridgeBooted) {
   window.TintinCheckoutEmailBridgeBooted = true;

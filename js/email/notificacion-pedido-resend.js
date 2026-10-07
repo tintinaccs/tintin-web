@@ -1,4 +1,5 @@
-import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { db, auth, appCheck } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { getToken as getAppCheckToken } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
@@ -123,10 +124,14 @@ async function postOrderNotification(payload, idToken, attempt) {
   const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
+    if (!appCheck) throw new Error('La verificación de seguridad todavía no está disponible.');
+    const appCheckToken = (await getAppCheckToken(appCheck, false)).token;
+    if (!appCheckToken) throw new Error('No se pudo verificar la seguridad del envío.');
     const response = await fetch(ORDER_EMAIL_API, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${idToken}`,
+        'X-Firebase-AppCheck': appCheckToken,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload),

@@ -55,7 +55,7 @@ check(
 );
 check(
   'El puente del checkout, si se carga, usa el MISMO canal Resend',
-  bridge.includes("from '../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1'") &&
+  /from ['"]\.\.\/\.\.\/email\/notificacion-pedido-resend\.js\?v=[^'"]+['"]/.test(bridge) &&
     !bridge.includes('notificaciones-correo.js'),
   'El puente no debe introducir un segundo backend de correo distinto al del checkout.'
 );
@@ -77,7 +77,7 @@ check(
 );
 check(
   'El servidor vuelve a leer el pedido real',
-  orderEmailFn.includes('const order = await fetchOrder(orderId, idToken)') &&
+  orderEmailFn.includes('const order = await fetchOrder(orderId, idToken, appCheckToken)') &&
     orderEmailFn.includes('documents/orders/${encodeURIComponent(safeOrderId)}'),
   'El correo no debe confiar en datos del navegador.'
 );

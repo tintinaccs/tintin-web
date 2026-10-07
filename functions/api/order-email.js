@@ -95,7 +95,7 @@ function decodeFirestoreFields(fields) {
   );
 }
 
-async function fetchOrder(orderId, idToken) {
+async function fetchOrder(orderId, idToken, appCheckToken) {
   const safeOrderId = clean(orderId, 220);
   if (!safeOrderId || !/^[A-Za-z0-9_-]{12,220}$/.test(safeOrderId)) {
     throw new Error('Pedido inválido.');
@@ -103,7 +103,7 @@ async function fetchOrder(orderId, idToken) {
 
   const endpoint = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/orders/${encodeURIComponent(safeOrderId)}`;
   const response = await fetch(endpoint, {
-    headers: { authorization: `Bearer ${idToken}` }
+    headers: { authorization: `Bearer ${idToken}`, ...(appCheckToken ? { 'X-Firebase-AppCheck': appCheckToken } : {}) }
   });
   const data = await response.json().catch(() => ({}));
 
@@ -132,11 +132,11 @@ export function transferInstructionsFromSettings(settings, methodId = 'transfere
   return { title: clean(method.title, 80), instructions, details };
 }
 
-async function fetchTransferInstructions(idToken, order) {
+async function fetchTransferInstructions(idToken, order, appCheckToken) {
   if (clean(order?.payment?.method, 40) !== 'transferencia') return null;
   try {
     const endpoint = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/settings/general`;
-    const response = await fetch(endpoint, { headers: { authorization: `Bearer ${idToken}` } });
+    const response = await fetch(endpoint, { headers: { authorization: `Bearer ${idToken}`, ...(appCheckToken ? { 'X-Firebase-AppCheck': appCheckToken } : {}) } });
     if (!response.ok) return null;
     const data = await response.json().catch(() => ({}));
     return transferInstructionsFromSettings(decodeFirestoreFields(data.fields || {}), 'transferencia');
@@ -477,6 +477,7 @@ export async function onRequest(context) {
 
   try {
     const idToken = getBearerToken(request);
+    const appCheckToken = request.headers.get('X-Firebase-AppCheck') || '';
     const user = await verifyFirebaseUser(idToken);
     const rawBody = await request.text();
     if (rawBody.length > 12000) throw new Error('Solicitud demasiado grande.');
@@ -488,7 +489,7 @@ export async function onRequest(context) {
     }
 
     const orderId = clean(body.orderId, 220);
-    const order = await fetchOrder(orderId, idToken);
+    const order = await fetchOrder(orderId, idToken, appCheckToken);
     const isSuperAdmin = user.email === ADMIN_EMAIL;
     if (!isSuperAdmin && clean(order.userId, 128) !== user.uid) {
       throw new Error('Este pedido no pertenece a la cuenta iniciada.');
@@ -504,7 +505,7 @@ export async function onRequest(context) {
 
     const sendAdmin = body.sendAdmin !== false;
     const sendCustomer = body.sendCustomer !== false;
-    const transfer = sendCustomer ? await fetchTransferInstructions(idToken, order) : null;
+    const transfer = sendCustomer ? await fetchTransferInstructions(idToken, order, appCheckToken) : null;
     const result = await sendOrderEmails({
       env,
       apiKey,
