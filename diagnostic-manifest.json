@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3e6be45625871dbc2d7cba851f5e345342d17ef34426b18b06c77e5a9c4ee576",
+  "sourceFingerprint": "50cfc96a4e1068ddfc55159fa133c660d75accfe7aeacd2e8057faa1c32c254f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1049,
     "textFiles": 1001,
-    "totalBytes": 15800448,
+    "totalBytes": 15802875,
     "pages": 19,
     "modules": 739
   },
@@ -27927,8 +27927,8 @@
     },
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
-      "bytes": 9228,
-      "sha256": "3b1e6c50bde29f7a1d79eabe028b93cdccfe4f1c41ba4e42d310c2e3ae241f28",
+      "bytes": 9154,
+      "sha256": "be55b87ebd9218825f597349d49e462e2053892fe96cde74a3e59e0efce97c8c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27945,12 +27945,6 @@
           "target": null,
           "dynamic": false,
           "line": 51
-        },
-        {
-          "raw": "../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
-          "target": null,
-          "dynamic": false,
-          "line": 58
         }
       ],
       "endpoints": [
@@ -30083,8 +30077,8 @@
     },
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
-      "bytes": 10710,
-      "sha256": "69bcd3a6dd12d64f2e79263699bfa3243214d1b00e02cccc134c1fa9231f3afe",
+      "bytes": 10725,
+      "sha256": "fd8b802d796e989d93e373dc67aa9a92198e67a728f4972e802b79396d78045b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31858,7 +31852,7 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "bytes": 15828,
-      "sha256": "37629475c67e3b83f68922104b5d7836c9cdf3fc0268f70f30462c73757632d8",
+      "sha256": "50f65b333f52a83f6dab91467e54819545e159cb60cb2fffbe83c2bf5721c7f8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34151,8 +34145,8 @@
     },
     {
       "path": "tests/checkout/order-email-app-check.test.mjs",
-      "bytes": 3107,
-      "sha256": "92876f0db017b11e44d93f4d765cd8699c1168e415b7bd5e90edee82b51b2ad8",
+      "bytes": 5593,
+      "sha256": "eedd52b671889716428772d225a427993e0276166082b4e7713e95169570adef",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34183,7 +34177,16 @@
           "line": 4
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://shop.example.test/api/order-email",
+          "line": 34
+        },
+        {
+          "url": "https://shop.example.test/",
+          "line": 35
+        }
+      ]
     },
     {
       "path": "tests/checkout/order-routing-identity.test.mjs",
@@ -43595,8 +43598,8 @@
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
       "extension": ".js",
-      "bytes": 9228,
-      "sha256": "3b1e6c50bde29f7a1d79eabe028b93cdccfe4f1c41ba4e42d310c2e3ae241f28"
+      "bytes": 9154,
+      "sha256": "be55b87ebd9218825f597349d49e462e2053892fe96cde74a3e59e0efce97c8c"
     },
     {
       "path": "scripts/auditar-admin-fundamentos.js",
@@ -44093,8 +44096,8 @@
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
       "extension": ".js",
-      "bytes": 10710,
-      "sha256": "69bcd3a6dd12d64f2e79263699bfa3243214d1b00e02cccc134c1fa9231f3afe"
+      "bytes": 10725,
+      "sha256": "fd8b802d796e989d93e373dc67aa9a92198e67a728f4972e802b79396d78045b"
     },
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
@@ -44544,7 +44547,7 @@
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
       "bytes": 15828,
-      "sha256": "37629475c67e3b83f68922104b5d7836c9cdf3fc0268f70f30462c73757632d8"
+      "sha256": "50f65b333f52a83f6dab91467e54819545e159cb60cb2fffbe83c2bf5721c7f8"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -44981,8 +44984,8 @@
     {
       "path": "tests/checkout/order-email-app-check.test.mjs",
       "extension": ".mjs",
-      "bytes": 3107,
-      "sha256": "92876f0db017b11e44d93f4d765cd8699c1168e415b7bd5e90edee82b51b2ad8"
+      "bytes": 5593,
+      "sha256": "eedd52b671889716428772d225a427993e0276166082b4e7713e95169570adef"
     },
     {
       "path": "tests/checkout/order-routing-identity.test.mjs",

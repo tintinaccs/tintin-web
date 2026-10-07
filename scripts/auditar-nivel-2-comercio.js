@@ -203,7 +203,7 @@ check(
 );
 check(
   'El endpoint vuelve a leer el pedido y valida propiedad',
-  emailServer.includes('const order = await fetchOrder(orderId, idToken)') &&
+  emailServer.includes('const order = await fetchOrder(orderId, idToken, appCheckToken)') &&
     emailServer.includes('clean(order.userId, 128) !== user.uid') &&
     emailServer.includes('clean(order.userEmail, 254).toLowerCase() !== user.email')
 );

@@ -7,6 +7,48 @@ const backend = fs.readFileSync(new URL('../../functions/api/order-email.js', im
 const frontend = fs.readFileSync(new URL('../../js/email/notificacion-pedido-resend.js', import.meta.url), 'utf8');
 const clean = value => String(value ?? '').trim();
 
+test('App Check no permite saltarse identidad, propiedad ni el permiso de reenvío', async () => {
+  let actor = { uid: 'owner', email: 'owner@example.test' };
+  let order = { userId: 'owner', userEmail: 'owner@example.test' };
+  let sends = 0;
+  const context = vm.createContext({
+    clean, FIREBASE_PROJECT_ID: 'test-project', ADMIN_EMAIL: 'admin@example.test',
+    decodeFirestoreFields: fields => fields,
+    originIsAllowed: () => true,
+    getBearerToken: request => request.headers.get('authorization').slice(7),
+    verifyFirebaseUser: async token => {
+      if (token !== 'valid-user') throw new Error('Sesión inválida');
+      return actor;
+    },
+    jsonResponse: (body, status) => ({ body, status }),
+    fetch: async (_url, init) => ({
+      ok: init.headers['X-Firebase-AppCheck'] === 'valid-app-check', status: 403,
+      json: async () => ({ fields: order }),
+    }),
+    fetchTransferInstructions: async () => null,
+    sendOrderEmails: async () => { sends++; return { success: true }; },
+    pushEnabled: () => false,
+  });
+  vm.runInContext(backend.slice(backend.indexOf('async function fetchOrder('), backend.indexOf('// Datos para pagar')), context);
+  vm.runInContext(backend.slice(backend.indexOf('export async function onRequest(')).replace('export async function', 'async function'), context);
+  const request = (action = 'sendOrderEmail', token = 'valid-user') => new Request('https://shop.example.test/api/order-email', {
+    method: 'POST', headers: { origin: 'https://shop.example.test', authorization: `Bearer ${token}`, 'X-Firebase-AppCheck': 'valid-app-check' },
+    body: JSON.stringify({ action, orderId: 'ORDER_123456789' }),
+  });
+  const invoke = req => context.onRequest({ request: req, env: { RESEND_API_KEY: 'test-only' } });
+  assert.match((await invoke(request('sendOrderEmail', 'invalid-user'))).body.error, /Sesión inválida/);
+  order = { userId: 'another-owner', userEmail: actor.email };
+  assert.match((await invoke(request())).body.error, /no pertenece/);
+  order = { userId: actor.uid, userEmail: 'another@example.test' };
+  assert.match((await invoke(request())).body.error, /no coincide/);
+  order = { userId: actor.uid, userEmail: actor.email };
+  assert.match((await invoke(request('resendOrderEmail'))).body.error, /Solo el Super Admin/);
+  assert.equal(sends, 0);
+  actor = { uid: 'admin', email: 'admin@example.test' };
+  assert.equal((await invoke(request('resendOrderEmail'))).status, 200);
+  assert.equal(sends, 1);
+});
+
 test('la lectura canónica conserva Auth y App Check; sin App Check Firestore sigue rechazando', async () => {
   const requests = [];
   const context = vm.createContext({
