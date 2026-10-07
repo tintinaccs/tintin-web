@@ -1,3 +1,13 @@
+# 2026-10-07 — Verificación de bloqueo y producción
+
+- PR #1055 integrado con todos sus checks aprobados; producción `31aa77396d26b68e587817035f16300e95adee4e` desplegada y health autenticado HTTP200. CodeQL sin alertas nuevas. La protección lee blobs de GitHub como datos y publica `Protected flow integrity` sobre el SHA candidato; nunca hace checkout ni ejecuta código candidato.
+- Línea base: 29 registros y 107 archivos/imports. Este cambio documental no modifica ningún archivo protegido y ejercita el nuevo gate desde la base confiable de main antes de exigirlo en la protección de rama.
+- Apps Script: diagnóstico acotado ok=true, superadmin protegido, un dispatcher y un reconciliador. Canary existente en fila 634 probado: ok=true, destructive=false, inactive=true, zeroStock=true, actionCleared=true, historyRecorded=true. El webhook acredita el commit de producción actual.
+- Reenvíos específicos de TINPED13/TINPED15 autorizados por el usuario y realmente intentados. Ambos registrados como failed: el endpoint de correo recibió HTTP403 de Firestore al leer el pedido. No se cambia notificationStatus para inventar éxito ni se debilitan Rules/App Check.
+- Persisten PayPal Sandbox, falta de escritura real de likes/reviews y 9 elementos de catálogo pendientes. La disponibilidad de servicios externos puede variar: los sellos nunca convierten un fallo real en verde. No se declara todo verde.
+
+---
+
 # 2026-10-07 — Flujos protegidos (Codex, autorización completa vigente)
 
 - Usuario autorizó explícitamente publicación y trabajo completo; abrió Apps Script y Sheets de producción. No se heredan autorizaciones de informes anteriores.
