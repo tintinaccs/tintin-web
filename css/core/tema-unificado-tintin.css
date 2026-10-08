@@ -450,9 +450,9 @@ html[data-tt-footer-accent-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-
 @media(prefers-reduced-motion:reduce){.tt-wholesale-invitation-label{animation:none;}}
 
 /* Disponibilidad accesible en todas las tarjetas y opciones. */
-.tt-stock-unavailable :is(.tt-product-img-real,.tt-search-result-image,.tt-color-swatch), #gallery-main.tt-stock-unavailable img { filter:grayscale(1); }
+.tt-stock-unavailable :is(.tt-product-img-real,.tt-search-result-image), #gallery-main.tt-stock-unavailable img { filter:grayscale(1); }
 .tt-stock-unavailable :is(.tt-product-img,.tt-color-swatch), #gallery-main.tt-stock-unavailable { position:relative; overflow:hidden; }
-.tt-stock-unavailable .tt-product-img::after, .tt-stock-unavailable .tt-color-swatch::after, #gallery-main.tt-stock-unavailable::after { content:''; position:absolute; width:145%; height:5px; background:#bf2437; border-block:3px solid #fff; left:50%; top:50%; transform:translate(-50%,-50%) rotate(45deg); pointer-events:none; }
+.tt-stock-unavailable .tt-product-img::after, .tt-stock-unavailable .tt-color-swatch::after, #gallery-main.tt-stock-unavailable::after { content:''; box-sizing:content-box; position:absolute; width:145%; height:5px; background:#bf2437; border-block:3px solid #fff; left:50%; top:50%; transform:translate(-50%,-50%) rotate(45deg); pointer-events:none; }
 .tt-search-result-item.tt-stock-unavailable { position:relative; }
 .tt-search-result-item.tt-stock-unavailable .tt-search-result-image { outline:2px solid #bf2437; }
 .tt-footer-wa svg, a[href*="wa.me"] svg, .tt-product-wa-link svg { color:#168541; }
@@ -465,3 +465,5 @@ html[data-tt-footer-accent-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-
 .tt-stock-unavailable .tt-search-result-media::after { content:''; position:absolute; width:145%; height:4px; border-block:2px solid #fff; background:#bf2437; left:50%; top:50%; transform:translate(-50%,-50%) rotate(45deg); pointer-events:none; }
 .tt-search-result-item.tt-stock-unavailable .tt-search-result-image { outline:0; }
 .perfil-wrap, .perfil-card { box-sizing:border-box; min-width:0; }
+
+.tt-stock-unavailable .tt-color-swatch { background:#b8b8b8!important; }
