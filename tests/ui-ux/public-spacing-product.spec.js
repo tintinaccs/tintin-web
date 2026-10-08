@@ -138,21 +138,28 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       const first = page.locator(card).first();
       await expect(first).toBeVisible();
       await expect(first.locator('a').first()).toHaveAttribute('href', /product|catalogo/);
-      const issues = await first.evaluate(node => {
-        const body = node.querySelector('.tt-product-info,.tt-card-info,.tt-coll-page-body');
-        const style = getComputedStyle(body), rect = node.getBoundingClientRect();
-        const title = node.querySelector('.tt-product-name,.tt-card-name,.tt-coll-page-name');
-        return {
-          outside: rect.left < 0 || rect.right > innerWidth,
-          overflow: body.scrollWidth > body.clientWidth + 1,
-          inset: Math.min(parseFloat(style.paddingLeft), parseFloat(style.paddingRight)),
-          titleClamped: getComputedStyle(title).webkitLineClamp !== 'none'
-        };
-      });
-      expect(issues.outside).toBe(false);
-      expect(issues.overflow).toBe(false);
-      expect(issues.inset).toBeGreaterThanOrEqual(12);
-      expect(issues.titleClamped).toBe(false);
+      await expect(first.locator('.tt-product-name,.tt-card-name,.tt-coll-page-name')).toHaveText(
+        route === '/collections.html' ? 'Relojes y accesorios con un nombre de colección largo'.toUpperCase() : product.name);
+      // Resolver el nodo y medirlo en la misma tarea del navegador: el catálogo
+      // puede reemplazar tarjetas entre una consulta de locator y su evaluate.
+      await expect(async () => {
+        const issues = await page.evaluate(selector => {
+          const node = document.querySelector(selector);
+          const body = node.querySelector('.tt-product-info,.tt-card-info,.tt-coll-page-body');
+          const style = getComputedStyle(body), rect = node.getBoundingClientRect();
+          const title = node.querySelector('.tt-product-name,.tt-card-name,.tt-coll-page-name');
+          return {
+            outside: rect.left < 0 || rect.right > innerWidth,
+            overflow: body.scrollWidth > body.clientWidth + 1,
+            inset: Math.min(parseFloat(style.paddingLeft), parseFloat(style.paddingRight)),
+            titleClamped: getComputedStyle(title).webkitLineClamp !== 'none'
+          };
+        }, card);
+        expect(issues.outside).toBe(false);
+        expect(issues.overflow).toBe(false);
+        expect(issues.inset).toBeGreaterThanOrEqual(12);
+        expect(issues.titleClamped).toBe(false);
+      }).toPass({ timeout: 10000 });
     });
   }
 }

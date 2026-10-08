@@ -1,3 +1,9 @@
+# Cierre de carrera en prueba visual — 2026-10-08: PR #1062
+
+- CI de `395d21223dd427c5949dd6c3ff48e3ee8ff472f7`: Repository audit falló en la medición de padding del catálogo (NaN, job 113127071276/run 37720470395); tres tamaños pasaron sólo al reintentar y 1280 px falló también en reintento. CodeQL y vista previa Cloudflare PASS. La protección de flujos permanece FAIL por las renovaciones contra la base anterior.
+- Corregida la prueba para resolver y medir el nodo en una sola tarea del navegador, evitando medir un elemento que el renderer reemplaza entre locator y evaluate. La espera acotada a 10 s conserva las cuatro exigencias originales: límites de viewport, ausencia de overflow, padding mínimo 12 px y título completo. Se agrega comparación del texto completo del título contra la fixture, respetando mayúsculas canónicas de colecciones.
+- PASS_LOCAL: 28 pruebas visuales en siete tamaños, sin reintentos, en 18.7 s. No cambia código ni estilos productivos ni las dos huellas aprobadas. CI del nuevo commit pendiente; no se hereda PASS del candidato anterior ni se publica mientras los controles no lo permitan.
+
 # Mantenimiento autorizado — 2026-10-08: espacios públicos, PR #1062
 
 El usuario autorizó expresamente el mantenimiento puntual de las huellas de catálogo/acceso y la integración/publicación cuando los controles lo permitan. Se renuevan sólo `catalogo.html` y `login.html` por referencias de recursos visuales; los otros 121 hashes, los 123 archivos y los 76 alcances permanecen exactamente intactos. Auditor, workflow y checks de protección sin cambios. Los metadatos de evidencia productiva anteriores no se renuevan ni se presentan como prueba de esta actualización.
