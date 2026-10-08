@@ -3,6 +3,8 @@ const fs=require('node:fs');
 const path=require('node:path');
 const root=path.resolve(__dirname,'../..');
 const source=fs.readFileSync(path.join(root,'checkout.html'),'utf8');
+const leafletStylesheet=source.match(/<link[^>]*href="\/js\/vendor\/leaflet\/leaflet\.css[^>]*>/)[0];
+const navigationStyles=[...fs.readFileSync(path.join(root,'js/components/navigation/compartido/recursos-navegacion.js'),'utf8').matchAll(/\['tt-[^']+', '(css\/[^']+)'/g)].map(([,href])=>`<link rel="stylesheet" href="/${href}">`).join('');
 const goToStep=source.slice(source.indexOf('function goToStep(n)'),source.indexOf('function showError(stepIdx'));
 const forwardValidation=fs.readFileSync('js/pages/checkout/validacion-avance.js','utf8').replace(/export function/g,'function');
 const hardening=forwardValidation+fs.readFileSync(path.join(root,'js/pages/checkout/checkout-hardening.js'),'utf8').replace(/^import[\s\S]*?;\r?\n/gm,'');
@@ -70,4 +72,30 @@ for(const width of [320,768,1440]) test(`opciones reales del panel excluyen efec
  await page.locator('label[for="pay-runtime-transferencia"]').click();await expect(page.locator('input[name="ck-pay"]:checked')).toHaveValue('transferencia');
  await expect(page.locator('#ck-encomienda-payment-policy')).toContainText('Sólo el costo del envío se paga a la transportadora al recibir');
  await page.screenshot({path:`../encomienda-runtime-${width}.png`,fullPage:true});
+});
+
+for(const width of [320,768,1440]) test(`el mapa real carga sus estilos firmados y cubre el contenedor (${width}px)`,async({page})=>{
+ const pixel=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aWQAAAABJRU5ErkJggg==','base64');
+ await page.route('https://tile.openstreetmap.org/**',r=>r.fulfill({contentType:'image/png',body:pixel}));
+ await page.route('**/__map-integrity',r=>r.fulfill({contentType:'text/html',body:`<!doctype html><html><head>${leafletStylesheet}</head><body><div id="map" style="height:260px;width:100%;display:none"></div><script type="module">import {createLocationMap} from '../../js/components/location/mapa-ubicacion.js';window.mapApi=await createLocationMap({mapEl:document.getElementById('map')});document.getElementById('map').style.display='block';window.mapApi.invalidateSize();window.mapApi.setLocation({lat:-25.3,lng:-57.6,name:'Punto de prueba'},{scroll:false});</script></body></html>`}));
+ await page.setViewportSize({width,height:800});await page.goto('/__map-integrity');
+ await expect(page.locator('.leaflet-tile-pane')).toHaveCSS('position','absolute');
+ await expect(page.locator('.leaflet-tile-loaded').first()).toBeVisible();
+ const boxes=await page.locator('#map').evaluate(el=>{const box=el.getBoundingClientRect();return {map:{left:box.left,right:box.right,top:box.top,bottom:box.bottom},tiles:[...el.querySelectorAll('.leaflet-tile')].map(i=>{const b=i.getBoundingClientRect();return {left:b.left,right:b.right,top:b.top,bottom:b.bottom};})};});
+ for(const x of [boxes.map.left+10,boxes.map.right-10])for(const y of [boxes.map.top+10,boxes.map.bottom-10])expect(boxes.tiles.some(t=>t.left<=x&&t.right>=x&&t.top<=y&&t.bottom>=y)).toBe(true);
+});
+
+for(const width of [320,390,767])for(const route of ['index.html','catalogo.html','checkout.html','login.html','perfil.html'])test(`halo centrado y visible en ${route} (${width}px)`,async({page})=>{
+ const html=fs.readFileSync(path.join(root,route),'utf8');
+ const styles=(html.match(/<link\b[^>]*rel="stylesheet"[^>]*>/g)||[]).filter(s=>!s.includes('https:')).join('');
+ await page.route('**/__header-halo',r=>r.fulfill({contentType:'text/html',body:`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">${styles}${navigationStyles}</head><body><div style="position:fixed;inset:0;background:white;z-index:1000"></div><script type="module">import {renderMobileTabbar} from '../../js/components/navigation/movil/encabezado-movil.js';document.body.insertAdjacentHTML('beforeend',renderMobileTabbar());document.getElementById('tabbar-cart').classList.add('active');document.getElementById('cart-badge-mobile').classList.remove('hidden');document.getElementById('cart-badge-mobile').textContent='1';await import('../../js/components/navigation/movil/indicador-navegacion-movil.js');</script></body></html>`}));
+ await page.setViewportSize({width,height:800});await page.goto('/__header-halo');
+ const nav=page.locator('#tt-tabbar');await expect(nav).toHaveClass(/tt-mobile-nav-ready/);
+ for(const compact of [false,true]){
+  await nav.evaluate((el,compact)=>el.classList.toggle('tt-tabbar-compact',compact),compact);
+  await expect.poll(async()=>page.evaluate(()=>{const icon=document.querySelector('#tabbar-cart svg').getBoundingClientRect(),halo=document.querySelector('.tt-mobile-nav-halo').getBoundingClientRect();return Math.max(Math.abs((icon.left+icon.right-halo.left-halo.right)/2),Math.abs((icon.top+icon.bottom-halo.top-halo.bottom)/2));})).toBeLessThan(1);
+  await expect(page.locator('#tabbar-cart')).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
+  expect(await nav.evaluate(el=>{const box=el.getBoundingClientRect();return !!document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)?.closest('#tt-tabbar');})).toBe(true);
+ }
+ if(width===390&&route==='checkout.html')await page.screenshot({path:'../checkout-halo-corregido.png',clip:{x:0,y:660,width:390,height:140}});
 });
