@@ -207,6 +207,14 @@ test('encomienda exige CI, modo válido y únicamente transferencia', async () =
   await rejectsWith(checkout(draft({ ...base, shippingMethod: 'delivery' })), 'shipping_invalid');
 });
 
+test('una tarifa legacy de Pedro Juan Caballero se cotiza bajo Amambay', async () => {
+  const base={selectedCity:'Pedro Juan Caballero',departamento:'Amambay',shippingMethod:'encomienda',encomiendaMode:'agencia',mapLocation:null,expectedShippingCost:0,expectedTotal:100000,ci:'1234567'};
+  const store=fakeStore({'settings/shippingRates':{encomiendaCities:[{name:'Pedro Juan Caballero',price:25000}]}});
+  const result=await checkout(draft(base),store);
+  assert.equal(orderWrite(result.store).shipping.departamento,'Amambay');
+  await rejectsWith(checkout(draft({...base,departamento:'Central'}),store),'shipping_invalid');
+});
+
 test('delivery exige ubicación nombrada y factura exige RUC válido', async () => {
   await rejectsWith(checkout(draft({ mapLocation: null })), 'map_required');
   await rejectsWith(checkout(draft({ wantsInvoice: true, razonSocial: 'Empresa SA', ruc: '123' })), 'ruc_invalid');

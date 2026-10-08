@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4-photos-20261008-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-photos-20261008-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -21,7 +21,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-photos-20261008-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261004-header-consistency-2-checkout-20261008-2-halo-20261008-4">
@@ -335,7 +335,7 @@
 
 
 <!-- Scripts -->
-<script src="tienda.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1"></script>
+<script src="tienda.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1"></script>
 
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
@@ -345,7 +345,7 @@ import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { createLocationMap, renderSavedMapPreviews } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261008-location-search-1";
 import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261001-ultimos-datos-1";
@@ -761,7 +761,7 @@ startProfileAuthGuard();
 
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1"></script>
 <script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20261007-public-consistency-1"></script>
 <script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2"></script>

@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-photos-20261008-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -86,6 +86,10 @@ export function mapProduct(id, d) {
       ? d.tags.map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30)
       : String(d.tags || '').split(',').map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30),
     variants: sanitizeVariantData(d.variants || null),
+    variantMedia: Array.isArray(d.variantMedia) ? d.variantMedia.slice(0, 100)
+      .filter(row => row && typeof row === 'object' && !Array.isArray(row))
+      .map(row => ({ ...row, imageUrl: sanitizeProductImage(row.imageUrl || ''),
+        imageUrls: uniqueSafeImageUrls(Array.isArray(row.imageUrls) ? row.imageUrls : []).slice(0, 24) })) : undefined,
     variantInventory: d.variantInventory ?? null,
     collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999,
     createdAt: timestampToMillis(d.createdAt ?? d.created_at ?? d.importedAt),
@@ -119,6 +123,7 @@ function compactProduct(product) {
     tags: product.tags,
     variants: product.variants,
     variantInventory: product.variantInventory,
+    variantMedia: product.variantMedia,
     stock: product.stock,
     active: product.active,
     oferta: product.oferta,

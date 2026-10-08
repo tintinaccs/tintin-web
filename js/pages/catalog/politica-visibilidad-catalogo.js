@@ -58,7 +58,7 @@ export function normalizeVariantOptions(value) {
     value.slice(0, 100).forEach(item => {
       if (!item || typeof item !== 'object' || Array.isArray(item)) return;
       Object.entries(item).forEach(([key, itemValue]) => {
-        if (!['price', 'sku', 'imageUrl', 'stock', 'active'].includes(key)) add(key, itemValue);
+        if (!['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active'].includes(key)) add(key, itemValue);
       });
     });
   } else if (typeof value === 'object') {
@@ -92,7 +92,7 @@ export function normalizeProduct(product) {
     variants: normalizeVariantOptions(p.variants),
     // Conserva la relación opción/foto cuando el store transforma las filas
     // importadas en grupos. También sobrevive a normalizaciones posteriores.
-    variantMedia: (Array.isArray(p.variants) ? p.variants : Array.isArray(p.variantMedia) ? p.variantMedia : [])
+    variantMedia: (Array.isArray(p.variantMedia) ? p.variantMedia : Array.isArray(p.variants) ? p.variants : [])
       .slice(0, 100).filter(row => row && typeof row === 'object' && !Array.isArray(row))
       .map(row => ({ ...row })),
   };

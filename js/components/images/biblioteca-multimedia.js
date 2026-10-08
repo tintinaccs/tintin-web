@@ -1,3 +1,5 @@
+import './galeria-producto.js?v=tintin-20261008-product-gallery-1';
+import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 /* =============================================================
    TINTIN — Biblioteca multimedia de Super Admin
 
@@ -226,7 +228,7 @@ export async function uploadImageToLibrary(file, options = {}) {
  * Revisa si una URL de imagen sigue en uso en algún lugar de la plataforma
  * antes de borrarla: settings/images, products.imageUrl y collections.image.
  */
-export async function findImageUsage(url) {
+export async function findImageUsage(url, { productsSnapshot = null } = {}) {
   if (!url) return [];
   const usages = [];
 
@@ -243,12 +245,21 @@ export async function findImageUsage(url) {
   }
 
   try {
-    const productsSnap = await getDocs(query(collection(db, 'products'), where('imageUrl', '==', url), limit(5)));
-    productsSnap.forEach(docSnap => {
-      usages.push(`Producto · ${docSnap.data()?.name || docSnap.id}`);
-    });
+    const primary = productsSnapshot ? { empty: true, forEach() {} } : await getDocs(query(collection(db, 'products'), where('imageUrl', '==', url), limit(5)));
+    primary.forEach(docSnap => usages.push(`Producto · ${docSnap.data()?.name || docSnap.id}`));
+    if (primary.empty) {
+      const productsSnap = productsSnapshot || await getDocsPaginated(collection(db, 'products'));
+      if (productsSnap.truncated) throw new Error('No se pudo revisar todo el catálogo.');
+      productsSnap.docs.forEach(docSnap => {
+        const product = docSnap.data() || {};
+        if (window.TintinProductMedia.galleryImages(product).some(image => window.TintinProductMedia.imageKey(image) === window.TintinProductMedia.imageKey(url))) {
+          usages.push(`Producto · ${product.name || docSnap.id}`);
+        }
+      });
+    }
   } catch (error) {
     console.warn('[media-library] No se pudo revisar products:', error);
+    throw new Error('No se pudo verificar si la foto está en uso. Reintentá antes de borrarla.');
   }
 
   try {
@@ -347,8 +358,10 @@ export async function findOrphanedMedia() {
   const snap = await getDocs(query(collection(db, MEDIA_COLLECTION), orderBy('uploadedAt', 'desc'), limit(500)));
   const items = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
   const orphans = [];
+  const productsSnapshot = await getDocsPaginated(collection(db, 'products'));
+  if (productsSnapshot.truncated) throw new Error('No se pudo revisar todo el catálogo.');
   for (const item of items) {
-    const usage = await findImageUsage(item.url);
+    const usage = await findImageUsage(item.url, { productsSnapshot });
     if (!usage.length) orphans.push(item);
   }
   return orphans;
