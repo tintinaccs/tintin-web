@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "verifiedAt": "2026-10-07T22:15:11.184Z",
-  "evidenceCommit": "c5a7721a63a6f9370ba904121343144f2e4d28b3",
+  "verifiedAt": "2026-10-08T00:08:20.089Z",
+  "evidenceCommit": "64426ba148444ac2d66d4f7a465b13f02beccbb4",
   "records": {
     "firebase-auth": [
       "js/core/auth/diagnostico-sesion.js",
@@ -2049,6 +2049,62 @@
       "cloudflare/sincronizacion-participacion-sheets.js",
       "functions/api/engagement.js",
       "tests/engagement/escritura-participacion.test.mjs"
+    ],
+    "apis-internas__comentarios__39": [
+      "cloudflare/apps-script-fetch.js",
+      "cloudflare/comentarios-sociales.js",
+      "cloudflare/contrato-cuentas-generado.js",
+      "cloudflare/correo-estado-pedido.js",
+      "cloudflare/cupones.js",
+      "cloudflare/evidencia-sync-sheets.js",
+      "cloudflare/firebase-admin-ligero.js",
+      "cloudflare/firebase-id-token.js",
+      "cloudflare/firestore-admin-batch.js",
+      "cloudflare/notificaciones-sociales.js",
+      "cloudflare/nucleo-push.js",
+      "cloudflare/order-admin-domain.js",
+      "cloudflare/order-sheets-sync.js",
+      "cloudflare/participacion-admin.js",
+      "cloudflare/participacion-clientes.js",
+      "cloudflare/recibo-correo-pedido.js",
+      "cloudflare/resiliencia-correo-pedido.js",
+      "cloudflare/resiliencia-sync-participacion.js",
+      "cloudflare/seguridad-cloudinary.js",
+      "cloudflare/servicio-push.js",
+      "cloudflare/sheets-sync-config.js",
+      "cloudflare/sincronizacion-estadisticas-pedido.js",
+      "cloudflare/sincronizacion-participacion-sheets.js",
+      "firestore.rules",
+      "functions/api/admin-engagement.js",
+      "functions/api/admin-order-mutation.js",
+      "functions/api/email-otp-send.js",
+      "functions/api/engagement.js",
+      "functions/api/order-email.js",
+      "js/core/store/inventario-variantes.mjs",
+      "js/core/store/modelo-inventario.mjs",
+      "js/orders/nucleo-metodos-pago.js",
+      "tests/engagement/escritura-participacion.test.mjs"
+    ],
+    "comentarios": [
+      "cloudflare/apps-script-fetch.js",
+      "cloudflare/comentarios-sociales.js",
+      "cloudflare/contrato-cuentas-generado.js",
+      "cloudflare/evidencia-sync-sheets.js",
+      "cloudflare/firebase-admin-ligero.js",
+      "cloudflare/firebase-id-token.js",
+      "cloudflare/firestore-admin-batch.js",
+      "cloudflare/notificaciones-sociales.js",
+      "cloudflare/nucleo-push.js",
+      "cloudflare/participacion-admin.js",
+      "cloudflare/participacion-clientes.js",
+      "cloudflare/resiliencia-sync-participacion.js",
+      "cloudflare/seguridad-cloudinary.js",
+      "cloudflare/servicio-push.js",
+      "cloudflare/sheets-sync-config.js",
+      "cloudflare/sincronizacion-participacion-sheets.js",
+      "firestore.rules",
+      "functions/api/admin-engagement.js",
+      "tests/engagement/escritura-participacion.test.mjs"
     ]
   },
   "files": {
@@ -2180,6 +2236,8 @@
     "scripts/mantenimiento-flujos-github.mjs": "6b92b260889813f739579740a14cfea7a0511169f3ed7b669b603b04ef6f2e69",
     "scripts/preparar-mantenimiento-flujos.mjs": "36e43d2653b0205536b05bf9202df0c39baeaa203cff0eba2c338a14bc35a314",
     "tests/flow-connections/mantenimiento-flujos.test.mjs": "3ec50779b33824112c5e1d47e0bebeab1a0cddd70b11f9e08d536379c0f993ad",
-    ".github/workflows/auditoria-dependencias.yml": "2ebba61bac5cdd06e4027f0630cf0bade0041a70730245ee9aa0975efc2ae552"
+    ".github/workflows/auditoria-dependencias.yml": "2ebba61bac5cdd06e4027f0630cf0bade0041a70730245ee9aa0975efc2ae552",
+    "functions/api/admin-engagement.js": "087441c63414f730f01a18ecb6e162d49a20fb268dec25cdcc0980fd507e6e3d",
+    "cloudflare/participacion-admin.js": "86ff4b9f01a0e4407666f97f453aa39e065f1f7e8b402ce2d1be599395fbe109"
   }
 }
