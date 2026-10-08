@@ -2908,3 +2908,10 @@ body:has(.adm-main) .adm-table-wrap {
     overflow-wrap: normal;
   }
 }
+
+.adm-color-photos{margin:12px 0;padding:12px;border:1px solid var(--adm-border,#ead3dc);border-radius:12px;min-width:0}
+.adm-color-photos legend{font-weight:700;padding:0 6px}
+.adm-color-photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-bottom:12px}
+.adm-color-photo-grid label{display:flex;flex-direction:column;align-items:center;gap:6px;border:1px solid var(--adm-border,#ead3dc);border-radius:10px;padding:8px;cursor:pointer}
+.adm-color-photo-grid label:has(input:checked){border-color:var(--adm-primary,#713C53);background:var(--adm-bg,#fff6fa)}
+.adm-color-photo-grid img{width:100%;height:80px;object-fit:contain}

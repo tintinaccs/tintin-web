@@ -55,3 +55,10 @@ test('product sitemap excludes structurally invalid and inactive documents', asy
  const response=await vm.runInContext('onRequest(context)',c);const body=await response.text();
  assert.match(body,/product\?id=valid/);assert(!body.includes('id=invalid'));assert(!body.includes('id=inactive'));
 });
+
+test('el catálogo público conserva asociaciones de fotos por color y excluye datos privados', () => {
+  const c=vm.createContext({});vm.runInContext(strip(read('functions/api/public-catalog.js')),c);
+  c.product={name:'Aro',variantMedia:[{Color:'Dorado',imageUrls:['https://example.test/a.webp']}],internalNotes:'private',costUnit:12};
+  const result=vm.runInContext('pickKnownFields(product,PRODUCT_FIELDS)',c);
+  assert.equal(result.variantMedia[0].imageUrls.length,1);assert.equal(result.internalNotes,undefined);assert.equal(result.costUnit,undefined);
+});
