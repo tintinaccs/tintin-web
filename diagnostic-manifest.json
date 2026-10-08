@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0426975085468ddcb17c2212f6f648c20200d9be19d89ce2647493c7cf97013b",
+  "sourceFingerprint": "6c36b1007b860db7e276cf591bd5d65d8470c739b58e5a3b008ea913aa5928a0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1080,
-    "textFiles": 1032,
-    "totalBytes": 16139821,
+    "files": 1082,
+    "textFiles": 1034,
+    "totalBytes": 16147830,
     "pages": 19,
-    "modules": 765
+    "modules": 767
   },
   "viewports": [
     {
@@ -30809,6 +30809,35 @@
       "endpoints": []
     },
     {
+      "path": "scripts/diagnosticar-github-acceso.mjs",
+      "bytes": 967,
+      "sha256": "75f1959faa0e2f247d82c8e709567daae7976c0e2bb8218a27796056b22f63e1",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.github.com/repos/tintinaccs/tintin-web/$%7Bpath%7D",
+          "line": 10
+        }
+      ]
+    },
+    {
       "path": "scripts/ejecutar-auditoria-responsive-con-reintento.mjs",
       "bytes": 1203,
       "sha256": "009fdda057952e348dfb3763cee79767256522d9d02bf46809cfcb9daa41a7f3",
@@ -31147,8 +31176,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
-      "bytes": 8276,
-      "sha256": "6b92b260889813f739579740a14cfea7a0511169f3ed7b669b603b04ef6f2e69",
+      "bytes": 10143,
+      "sha256": "4cc444c237f97ea1aad1a8c75f61c74b6867e8bd0cf32712d1d7b3331c75ff93",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31176,11 +31205,11 @@
       "endpoints": [
         {
           "url": "https://api.github.com/repos/$%7Bconfig.repository%7D/$%7Bpath%7D",
-          "line": 15
+          "line": 49
         },
         {
           "url": "https://github.com/$%7Bconfig.repository%7D/actions/runs/$%7BrunId%7D",
-          "line": 129
+          "line": 163
         }
       ]
     },
@@ -34986,6 +35015,42 @@
           "target": null,
           "dynamic": true,
           "line": 376
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/flow-connections/github-failure-diagnostics.test.mjs",
+      "bytes": 3011,
+      "sha256": "8c3cd4ad50ddddd85da065916378791f56b6b328a92e596e82f0b38a30a6fad3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -39997,8 +40062,8 @@
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
       "extension": ".yml",
-      "bytes": 4482,
-      "sha256": "2ebba61bac5cdd06e4027f0630cf0bade0041a70730245ee9aa0975efc2ae552"
+      "bytes": 5142,
+      "sha256": "82ca04ce172b114aa77b5bcc6f02b864907688b61e26ead916b05d015f75a032"
     },
     {
       "path": ".github/workflows/auditoria-visual.yml",
@@ -41287,8 +41352,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 316376,
-      "sha256": "7c19ffdd3ebadbdfe0fc4acd54daf8b83aef7e94416d688260d5e175dbbde6cf"
+      "bytes": 317880,
+      "sha256": "d2eebb7bac9327c1c35abc6e4bd0d73e084961a7d4f5c3ed7a4cc67b37d83455"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44855,6 +44920,12 @@
       "sha256": "258aa91331c0c2ffff924ad4ee6f0852cf7edf6dc49029a8f4cb1719468de726"
     },
     {
+      "path": "scripts/diagnosticar-github-acceso.mjs",
+      "extension": ".mjs",
+      "bytes": 967,
+      "sha256": "75f1959faa0e2f247d82c8e709567daae7976c0e2bb8218a27796056b22f63e1"
+    },
+    {
       "path": "scripts/ejecutar-auditoria-responsive-con-reintento.mjs",
       "extension": ".mjs",
       "bytes": 1203,
@@ -44935,8 +45006,8 @@
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
       "extension": ".mjs",
-      "bytes": 8276,
-      "sha256": "6b92b260889813f739579740a14cfea7a0511169f3ed7b669b603b04ef6f2e69"
+      "bytes": 10143,
+      "sha256": "4cc444c237f97ea1aad1a8c75f61c74b6867e8bd0cf32712d1d7b3331c75ff93"
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
@@ -45621,6 +45692,12 @@
       "extension": ".mjs",
       "bytes": 20988,
       "sha256": "84bd551f523bb43dbcaf802ec451f9469bbf7c4dc203f29cf19e736d49ccea97"
+    },
+    {
+      "path": "tests/flow-connections/github-failure-diagnostics.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3011,
+      "sha256": "8c3cd4ad50ddddd85da065916378791f56b6b328a92e596e82f0b38a30a6fad3"
     },
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
