@@ -1,3 +1,14 @@
+# Estado vigente — 2026-10-08: plan de mantenimiento del PR #1061
+
+Agente: Codex. Base de mantenimiento: `1110cf9e54ed3010a363972c815cec64380b1f88`.
+
+- Instalación integrada por PR #1063 después de los cinco checks obligatorios PASS del candidato dbdfb66c2dd5ddd3a282681219601beacf13adc1 (Repository audit run 37720437054). Workflow activo en main y entorno real verificado: revisor tintinaccs ID 274170818, ramas protegidas, bypass de administradores deshabilitado. No se hereda ese PASS para este nuevo candidato.
+- Preparación: se conserva todo el código funcional del PR #1061 y se integra main sin reescritura de historia. Se prepara plan exacto de nueve archivos protegidos y sus 53 registros afectados, con huellas reales. Todos los alcances y metadatos/sellos permanecen históricos; esta renovación de código no certifica producción. Los auditores, workflows y revisores de main permanecen intactos.
+- NOT_VERIFIED al redactar: CI del nuevo commit y aprobación humana de su SHA. El check histórico permanece obligatorio y debe rechazar la renovación por diseño. La migración sólo puede exigir y verificar el nuevo control antes de sustituir el requisito histórico; no se fabrica success ni se modifica el guard para pasar.
+- Sin pagos, pedidos, emails, escrituras comerciales ni renovación de sellos. La producción funcional del PR #1061 aún no se publica.
+
+## Evidencia fechada anterior del PR #1061
+
 # Estado vigente — 2026-10-07: propuesta del prompt maestro, sin publicar
 
 Agente: Codex. Base comprobada: 64426ba148444ac2d66d4f7a465b13f02beccbb4. Rama: codex/tintin-master-audit-20261007.
@@ -10,6 +21,18 @@ Agente: Codex. Base comprobada: 64426ba148444ac2d66d4f7a465b13f02beccbb4. Rama: 
 - Límites: sin operaciones comerciales de prueba, credenciales, pagos, pedidos, correos ni escrituras a Firebase/Sheets. Sin Safari ni dispositivos físicos. Sin validar inscripción/dígito matemático del RUC. Precios diferentes por variante requieren evolución del contrato comercial; no se inventan ni sustituyen precios reales. Avatares históricos públicos requieren una solución compatible con la anonimización; las nuevas publicaciones ahora priorizan la foto personalizada canónica. OAuth y compras reales no se declaran verificados.
 
 ## Historia previa (no constituye evidencia del candidato)
+
+# Estado vigente — 2026-10-07: instalación aditiva de mantenimiento protegido
+
+Agente: Codex. Base: `64426ba148444ac2d66d4f7a465b13f02beccbb4`. Rama: `codex/protected-flow-maintenance-20261007`.
+
+- PASS_LOCAL: 47 pruebas de protección histórica y mantenimiento, 126 de flujos y 20 de arquitectura; YAML del workflow válido; contratos arquitectónicos alineados. Helper CLI probado con hashes reales y rechazo de cambios omitidos; lectura remota del PR de instalación verificada desde la base confiable. Los casos adversariales rechazan retiro de protección, hashes falsos, planes incompletos, cambios de scope/sellos/control, aprobación ajena/ausente/bot, bypass, origen/evento/app de CI incorrectos y avance de main/head.
+- Implementado: plan con base y hashes exactos, helper de preparación sin aprobación, lectura de blobs candidatos sin ejecutar su código, CI obligatorio con verificación de origen, revisión de entorno por ID del propietario y veredicto ligado a SHA/ejecución. No se reutilizan aprobaciones de runs reintentados.
+- Conservados: todos los 123 hashes históricos, los 76 alcances, metadata/evidencia, auditor y workflow históricos. Se agregan seis archivos del mecanismo a la protección con sus hashes reales; no se inventan nuevos registros verdes.
+- CI inicial: el guard histórico y Cloudflare pasaron; Repository audit detectó el límite de 12 workflows. Se corrigió consolidando los jobs en auditoria-dependencias.yml, sin ampliar el presupuesto, preservando cron/dispatch/npm y evitando ejecutar npm en pull_request_target. NOT_VERIFIED: CI de la revisión final, ejecución del mecanismo instalado y aprobación real del entorno. La migración administrativa requiere habilitar y verificar el nuevo check obligatorio antes de sustituir el requisito histórico; se documenta en MANTENIMIENTO_FLUJOS.md. No se alteran las protecciones de GitHub en este commit.
+- PR #1061 permanece bloqueado por sus cambios protegidos; instalar este mecanismo no aprueba esa renovación. Sin escrituras comerciales, pagos, pedidos, emails ni renovación de sellos en producción.
+
+## Evidencia fechada previa
 
 # Estado vigente — 2026-10-07: Sheets recuperado y Likes verificado
 

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "repository": "tintinaccs/tintin-web",
+  "branch": "main",
+  "environment": "protected-flow-maintenance",
+  "reviewerIds": [274170818],
+  "checkName": "Protected flow maintenance",
+  "requiredChecks": [
+    { "name": "Repository audit", "appId": 15368, "workflowPath": ".github/workflows/auditar-tintin.yml", "workflowEvent": "pull_request" },
+    { "name": "Analyze (actions)", "appId": 15368, "workflowPath": "dynamic/github-code-scanning/codeql", "workflowEvent": "dynamic" },
+    { "name": "Analyze (javascript-typescript)", "appId": 15368, "workflowPath": "dynamic/github-code-scanning/codeql", "workflowEvent": "dynamic" },
+    { "name": "Cloudflare Pages", "appId": 85455 }
+  ]
+}
