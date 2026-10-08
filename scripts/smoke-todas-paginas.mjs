@@ -349,16 +349,18 @@ try {
         }));
       });
       const borderedPanels = new Set(['search-panel', 'cart-drawer', 'collections-sheet']);
+      const transparentActions = new Set(['tabbar-tienda', 'tabbar-search', 'tabbar-cart', 'tabbar-cuenta']);
       for (const [id, style] of Object.entries(surfaces)) {
         if (!style) { failures.push(`Header mobile ${width}px: falta #${id}.`); continue; }
-        if (style.backgroundColor !== 'rgb(255, 255, 255)') failures.push(`Header mobile ${width}px: #${id} no es blanco (${style.backgroundColor}).`);
+        const expectedBackground = transparentActions.has(id) ? 'rgba(0, 0, 0, 0)' : 'rgb(255, 255, 255)';
+        if (style.backgroundColor !== expectedBackground) failures.push(`Header mobile ${width}px: #${id} no conserva el fondo esperado (${style.backgroundColor}).`);
         if (style.backgroundImage !== 'none') failures.push(`Header mobile ${width}px: #${id} conserva imagen o degradado de fondo.`);
         if (style.opacity !== '1') failures.push(`Header mobile ${width}px: #${id} conserva opacidad ${style.opacity}.`);
         if (borderedPanels.has(id) && (style.borderColor !== 'rgb(241, 200, 213)' || style.borderStyle === 'none' || style.borderWidth === '0px')) {
           failures.push(`Header mobile ${width}px: #${id} no conserva el borde rosado sólido.`);
         }
       }
-      console.log(`OK — Header mobile ${width}px · Tienda · Buscar · Carrito · Cuenta · fondos blancos`);
+      console.log(`OK — Header mobile ${width}px · barra y paneles blancos; acciones que dejan visible el halo`);
     } catch (error) {
       failures.push(`Header mobile ${width}px: ${error.message || String(error)}.`);
     } finally {

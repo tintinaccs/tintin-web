@@ -2,7 +2,7 @@ import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=ti
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261004-final-integration-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261004-final-integration-1-encomienda-20261008-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?$/i;
 const VIEWPORTS = [1920, 1440, 1280, 1024, 768, 390, 320];
@@ -100,6 +100,11 @@ function boot() {
   bridge.setAttribute('aria-hidden', 'true');
   anchor.parentElement.insertBefore(bridge, anchor);
 
+  let catalog = [];
+  let shippingMethod = '';
+  const selectedCity = document.getElementById('ck-city');
+  const readShippingMethod = () => selectedCity?.value === '__retiro__' ? 'retiro' : selectedCity?.selectedOptions?.[0]?.parentElement?.id === 'ck-city-encomienda-group' ? 'encomienda' : selectedCity?.value ? 'delivery' : '';
+  shippingMethod = readShippingMethod();
   let methods = [];
   let legacyRemoved = false;
   let selectedMethodId = '';
@@ -118,6 +123,7 @@ function boot() {
       item.setAttribute('aria-selected', String(selected));
     });
     const selected = selectedMethod();
+    bridge.disabled = !selected;
     selectedMethodId = selected?.id || '';
     bridge.checked = Boolean(selected);
     bridge.value = selected?.kind || '';
@@ -130,7 +136,11 @@ function boot() {
   }
 
   function render(nextMethods) {
-    methods = nextMethods.filter(method => method.enabled);
+    catalog = nextMethods;
+    methods = catalog.filter(method => method.enabled && (shippingMethod === 'encomienda' ? method.kind === 'transferencia' : method.kind !== 'efectivo' || shippingMethod === 'delivery'));
+    const policyNote = document.getElementById('ck-encomienda-payment-policy') || root.insertAdjacentElement('beforebegin', Object.assign(document.createElement('p'), { id: 'ck-encomienda-payment-policy', className: 'ck-pay-note' }));
+    policyNote.hidden = shippingMethod !== 'encomienda';
+    policyNote.textContent = 'El producto se paga previamente por transferencia. Sólo el costo del envío se paga a la transportadora al recibir. No hay contra entrega en encomienda.';
     const legacyChecked = document.querySelector('input[name="ck-pay"]:checked');
     if (!selectedMethodId && legacyChecked && legacyChecked !== bridge) {
       selectedMethodId = methods.find(method => method.kind === legacyChecked.value)?.id || '';
@@ -165,6 +175,12 @@ function boot() {
     }
     syncSelection();
   }
+
+  window.addEventListener('tintin:checkout-shipping-changed', event => {
+    shippingMethod = event.detail?.method || readShippingMethod();
+    render(catalog);
+  });
+  selectedCity?.addEventListener('change', () => { shippingMethod = readShippingMethod(); render(catalog); });
 
   root.addEventListener('change', event => {
     const input = event.target.closest('input[name="tt-ck-pay"]');

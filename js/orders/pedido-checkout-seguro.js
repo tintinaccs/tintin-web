@@ -531,6 +531,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (!['efectivo', 'transferencia', 'paypal'].includes(paymentMethod)) {
       throw appError('payment_required', 'Seleccioná un método de pago disponible.');
     }
+    if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && shipping.method !== 'delivery')) {
+      throw appError('payment_unavailable', 'El producto por encomienda se paga previamente por transferencia. Efectivo contra entrega sólo para delivery.');
+    }
     if (shipping.method === 'delivery' && (!shipping.mapLocation || !shipping.mapLocation.name)) {
       throw appError('map_required', 'Marcá y nombrá tu ubicación en el mapa.');
     }
@@ -604,7 +607,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }));
   }
 
-  function renderQuote(quote) {
+  function renderQuote(quote, shippingMethod) {
     setCartLocal(authoritativeCartFromQuote(quote));
     const target = document.getElementById('ck-summary-quote') || document.getElementById('ck-confirm-summary');
     if (!target) return;
@@ -615,7 +618,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           <span style="font-weight:700">${escapeHtml(formatPrice(item.price * item.qty))}</span>
         </div>`).join('')}</div>
       <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.subtotal))}</span></div>
-      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
+      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${shippingMethod === 'encomienda' ? 'Sólo el envío: se paga a la transportadora al recibir' : quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
       <div class="ck-summary-total" style="font-size:18px"><span>${escapeHtml(`TOTAL${quote.shippingPending ? ' (+ envío)' : ''}`)}</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.total))}</span></div>`;
   }
 
@@ -700,7 +703,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const itemLines = (result.items || [])
       .map(item => `• ${item.qty}x ${item.name} — ${formatPrice(item.price * item.qty)}`)
       .join('\n');
-    const shippingText = result.shippingPending
+    const shippingText = draft?.shippingMethod === 'encomienda'
+      ? 'Sólo el costo del envío se paga a la transportadora al recibir; el producto se paga previamente por transferencia'
+      : result.shippingPending
       ? 'A confirmar'
       : formatPrice(result.shippingCost || 0);
 
@@ -843,8 +848,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     button.disabled = true;
     button.innerHTML = '<span class="ck-spinner"></span> Comprobando precios y stock…';
 
+    let draft;
     try {
-      const draft = await buildDraft();
+      draft = await buildDraft();
       try {
         await persistCheckoutDefaults(draft);
       } catch (profileError) {
@@ -874,7 +880,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       console.error('[spark-checkout]', error);
       const code = error?.details?.code || error?.code;
       if (code === 'quote_changed' && error.details?.quote) {
-        renderQuote(error.details.quote);
+        renderQuote(error.details.quote, draft?.shippingMethod);
         showError('Cambió un precio o el costo de envío. Revisá el resumen actualizado y confirmá nuevamente.');
         button.disabled = false;
         button.textContent = '✓ Confirmar pedido actualizado';

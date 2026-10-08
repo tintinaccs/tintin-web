@@ -13,13 +13,13 @@ function injectStyles() {
     /* Header mobile: una sola jerarquía visual, sin capas compitiendo. */
     @media (max-width:767px){
       #tt-tabbar{isolation:isolate!important}
-      #tt-tabbar .tt-mobile-nav-halo{z-index:0!important;top:1px!important;box-shadow:0 6px 16px rgba(139,38,66,.10)!important}
+      #tt-tabbar .tt-mobile-nav-halo{z-index:0!important;box-shadow:0 6px 16px rgba(139,38,66,.10)!important}
       #tt-tabbar .tt-mobile-nav-indicator{z-index:1!important;bottom:4px!important}
       #tt-tabbar .tt-tabbar-btn{position:relative!important;z-index:2!important}
       #tt-tabbar .tt-tabbar-btn.active,#tt-tabbar .tt-tabbar-btn[aria-expanded="true"]{z-index:3!important}
       #tt-tabbar .tt-tabbar-btn.active svg,#tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,
       #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] svg,#tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar{
-        transform:translateY(-3px) scale(1.06)!important
+        transform:scale(1.06)!important
       }
       #tt-tabbar .tt-notification-badge,#tt-tabbar .tt-cart-badge{z-index:5!important}
     }

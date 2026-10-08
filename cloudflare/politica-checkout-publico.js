@@ -300,7 +300,7 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
     requestedMethod,
   );
   if (requestedMethod !== shipping.method) throw checkoutError('shipping_changed', 409);
-  if (shipping.method === 'encomienda' && paymentMethod === 'efectivo') throw checkoutError('payment_unavailable', 409);
+  if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && shipping.method !== 'delivery')) throw checkoutError('payment_unavailable', 409);
 
   const encomiendaMode = cleanText(payload.encomiendaMode, 20);
   if (shipping.method !== 'encomienda' && encomiendaMode) throw checkoutError('shipping_invalid');

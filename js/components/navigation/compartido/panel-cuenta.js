@@ -5,7 +5,7 @@ export function renderAccountDrawer() {
     <div class="tt-account-drawer" id="account-drawer" role="dialog" aria-modal="true" aria-label="Mi cuenta" aria-hidden="true">
       <div class="tt-account-drawer-header">
         <div class="tt-account-drawer-heading">
-          <img class="tt-account-drawer-logo" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1" alt="Tintin" width="160" height="80" loading="lazy" decoding="async">
+          <img class="tt-account-drawer-logo" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="Tintin" width="160" height="80" loading="lazy" decoding="async">
           <h2>MI CUENTA</h2>
         </div>
         <button type="button" id="btn-account-close" aria-label="Cerrar cuenta">${svgIcon(UI_ICONS.close, { size: 16 })}</button>
