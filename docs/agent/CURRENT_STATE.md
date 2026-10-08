@@ -1,3 +1,14 @@
+# Estado vigente — 2026-10-08: comentario técnico verificado y oculto
+
+Base del candidato: 1110cf9e54ed3010a363972c815cec64380b1f88. Evidencia productiva: 64426ba148444ac2d66d4f7a465b13f02beccbb4, revalidación 00:08:20.089Z.
+
+- Autorización expresa del propietario: agregar el comentario y completar su registro. Se creó un único comentario identificado como PRUEBA TÉCNICA DE TINTIN, autor store, sin simular una compra/opinión; rating3 es sólo dato de prueba. POST /api/engagement HTTP200 y moderación reviewVisibility false HTTP200. Registro real 55cf102531c651b309ce5cf5f5583a59d44d9f2be39b804cc275467be9ff7179 en reviewRecords; visible false, documento público ausente. No se reescribieron Rules ni se inyectaron documentos SDK.
+- Sheets Resenas fila2 contiene ID/producto/texto; Admin muestra una reseña oculta y la etiqueta Tintin. Revalidación: 78 verdes, dos parciales (PayPal sandbox y su conexión). Sellos guardados78; los76 anteriores exactamente intactos.
+- Protección aditiva: 76→78 alcances,129→131 archivos. Agrega moderación y API administrativa; conserva todos los hashes/alcances anteriores, incluido mecanismo de mantenimiento. Sin código de negocio, auditor/workflow, renovación de huellas, retiro de checks o aprobación de un entorno por el agente.
+- PASS_LOCAL: validador puro contra base real: changes[] y todos los archivos protegidos intactos. CI y publicación de este candidato pendientes al escribir. No heredar PASS productivo para un commit nuevo.
+- Pendientes ajenos a este cambio: PayPal Live con Dashboard autorizado; correcciones checkout de mapa/factura/teléfono preparadas previamente aún sin publicar en esta rama. No pagos, pedidos, correos ni opiniones de compra inventadas.
+
+## Evidencia histórica
 # Estado vigente — 2026-10-07: instalación aditiva de mantenimiento protegido
 
 Agente: Codex. Base: `64426ba148444ac2d66d4f7a465b13f02beccbb4`. Rama: `codex/protected-flow-maintenance-20261007`.
@@ -1320,3 +1331,4 @@ Producción, sólo lectura, 2026-10-06 ~16:00 UTC: `monitor:production` y `audit
 PENDING (requiere al dueño): commit/PR, CI exacto y deploy; después, Revalidar + «Sellar verdes» con la sesión del Super Admin; una edición real en la hoja Productos y un pedido o «me gusta» real para que existan los acuses; PayPal en Live cuando corresponda. PASS_CI y PASS_PRODUCTION pendientes para todo lo de esta entrada.
 
 Reconciliación 2026-10-06 ~16:45 UTC: `main` avanzó a `004aa284` (#1050, hero de inicio) durante este trabajo. Rama rebasada sobre ese commit a pedido del dueño para commit, push y merge; único conflicto `diagnostic-manifest.json` (regenerado con `build:pages`; baseline de caché re-registrado desde `origin/main`). Verificación repetida sobre el árbol rebasado en el espejo Linux: `build:pages` exit 0, suite Node 1073/1074 (la misma falla previa de `page-loader-route`), `audit:final` exit 0, Rules 121 + 12 + 13. PASS_CI y PASS_PRODUCTION se registran en el PR.
+
