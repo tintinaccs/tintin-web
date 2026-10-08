@@ -86,9 +86,10 @@ export function mapProduct(id, d) {
       ? d.tags.map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30)
       : String(d.tags || '').split(',').map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30),
     variants: sanitizeVariantData(d.variants || null),
-    variantMedia: (Array.isArray(d.variantMedia) ? d.variantMedia : Array.isArray(d.variants) ? d.variants : [])
-      .slice(0, 100).filter(row => row && typeof row === 'object' && !Array.isArray(row))
-      .map(row => ({ ...row, imageUrl: sanitizeProductImage(row.imageUrl) })),
+    variantMedia: (Array.isArray(d.variantMedia) ? d.variantMedia : Array.isArray(d.variants) ? d.variants : []).slice(0, 100)
+      .filter(row => row && typeof row === 'object' && !Array.isArray(row))
+      .map(row => ({ ...row, imageUrl: sanitizeProductImage(row.imageUrl || ''),
+        imageUrls: uniqueSafeImageUrls(Array.isArray(row.imageUrls) ? row.imageUrls : []).slice(0, 24) })),
     variantInventory: d.variantInventory ?? null,
     collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999,
     createdAt: timestampToMillis(d.createdAt ?? d.created_at ?? d.importedAt),
@@ -123,6 +124,7 @@ function compactProduct(product) {
     variants: product.variants,
     variantMedia: product.variantMedia,
     variantInventory: product.variantInventory,
+    variantMedia: product.variantMedia,
     stock: product.stock,
     active: product.active,
     oferta: product.oferta,

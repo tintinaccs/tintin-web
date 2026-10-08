@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261005-flow-progress-2-encomienda-20261008-1-master-20261007-1-repair-20261005-1-master-20261007-1-checkout-20261008-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20260925-cache-converge-1">
-  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260915-final-polish-1-brand-20261004-1-owner-pink-20261004-1">
+  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260915-final-polish-1-brand-20261004-1-owner-pink-20261004-1-photos-20261008-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2">
@@ -405,6 +405,7 @@
 </div><!-- /ck-body -->
 
 <script type="module">
+import { shippingDepartment } from './js/components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { canonicalDeliveryCities } from './js/components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
 
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
@@ -433,7 +434,7 @@ import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=t
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1-encomienda-20261008-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261008-producto-superficies-1";
 import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
-import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1";
+import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1-photos-20261008-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 import { withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261001-fusion-main-1";
@@ -463,9 +464,9 @@ let DEFAULT_ENCOMIENDA_COST = 25000;
 // checkout y el panel de administración de ciudades queden consistentes.
 function normalizeCities(arr, defaultCost) {
   return (arr || []).map(c => {
-    if (typeof c === 'string') return { name: c, price: defaultCost, departamento: '' };
+    if (typeof c === 'string') return { name: c, price: defaultCost, departamento: shippingDepartment(c) };
     const price = c.price === null ? null : (c.price ?? defaultCost);
-    return { name: c.name, price, departamento: c.departamento || '' };
+    return { name: c.name, price, departamento: shippingDepartment(c.name, c.departamento) };
   });
 }
 
@@ -658,22 +659,13 @@ function cityCostLabel(price) {
 }
 
 // ---- DEPARTAMENTO → CIUDAD EN CASCADA ----
-// El departamento de cada ciudad es un dato más de settings/general
-// (deliveryCities/encomiendaCities), cargado por Super Admin igual que el
-// nombre y el precio — acá solo se usa para agrupar. Ninguna ciudad ni
-// departamento se inventa: si Super Admin no cargó el departamento de una
-// ciudad vieja, esa ciudad queda en el grupo "Sin departamento" en vez de
-// desaparecer.
+// Las tarifas son configuración comercial; el departamento ausente se
+// resuelve con la referencia geográfica compartida con la cotización.
 const RETIRO_VALUE = '__retiro__';
-// Departamento real donde cae toda ciudad sin uno cargado en Super Admin —
-// hoy son, de hecho, todas ciudades del Gran Asunción/Central. Ya no existe
-// un "Sin departamento" separado: se agrupan en el departamento real que les
-// corresponde en vez de un cajón aparte.
-const DEPARTAMENTO_POR_DEFECTO = 'Central';
 
 function departamentosDisponibles() {
   const set = new Set();
-  [...DELIVERY_CITIES, ...ENCOMIENDA_CITIES].forEach(c => set.add(c.departamento || DEPARTAMENTO_POR_DEFECTO));
+  [...DELIVERY_CITIES, ...ENCOMIENDA_CITIES].forEach(c => set.add(shippingDepartment(c.name, c.departamento)));
   return [...set].sort((a, b) => a.localeCompare(b, 'es'));
 }
 
@@ -717,7 +709,7 @@ function resetCitySelect() {
 
 function populateCitiesForDepartamento(dep, keepCityIfPresent) {
   const select = document.getElementById('ck-city');
-  const inDept = c => (c.departamento || DEPARTAMENTO_POR_DEFECTO) === dep;
+  const inDept = c => (shippingDepartment(c.name, c.departamento)) === dep;
   const delivery = DELIVERY_CITIES.filter(inDept);
   const encomienda = ENCOMIENDA_CITIES.filter(inDept);
 
@@ -1285,6 +1277,15 @@ document.getElementById('btn-step2-next').onclick = () => {
   const city = document.getElementById('ck-city').value;
   if (!city) { showError(1, 'Seleccioná tu ciudad.'); return; }
 
+  const needsLocation = orderData.shippingMethod === 'delivery' ||
+    (orderData.shippingMethod === 'encomienda' && orderData.encomiendaMode === ENCOMIENDA_MODES.PUERTA);
+  if (needsLocation && _savedLocationConfirm?.isPending()) {
+    showError(1, 'Confirmá si te lo llevamos a tu ubicación guardada o marcá otra para continuar.');
+    document.getElementById('ck-saved-location-hint')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('ck-saved-location-confirm')?.focus();
+    return;
+  }
+
   if (orderData.shippingMethod === 'delivery') {
     // La ubicación marcada en el mapa es obligatoria para delivery — el
     // texto de dirección queda como dato extra opcional, no la reemplaza.
@@ -1750,6 +1751,7 @@ function hideSavedLocationHint() {
   // confirmar.
   const card = document.getElementById('ck-saved-location-hint');
   if (card) card.style.display = 'none';
+  _savedLocationConfirm?.reset();
 }
 
 // Si el perfil ya tiene una ubicación guardada (con nombre) y todavía no se
@@ -1769,7 +1771,7 @@ function maybeApplySavedLocation() {
   // pedido va a otra dirección).
   _mapInstance.setLocation(saved, { scroll: false });
 
-  if (_savedLocationConfirm) return;
+  if (_savedLocationConfirm) { _savedLocationConfirm.show(saved); return; }
   _savedLocationConfirm = attachSavedLocationConfirm({
     card: document.getElementById('ck-saved-location-hint'),
     titleEl: document.getElementById('ck-saved-confirm-title'),

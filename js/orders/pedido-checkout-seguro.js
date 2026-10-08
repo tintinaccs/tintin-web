@@ -1,3 +1,4 @@
+import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
@@ -366,7 +367,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           return {
             name: text(item),
             price: parseMoney(fallback),
-            departamento: 'Central',
+            departamento: shippingDepartment(item),
             sourceIndex
           };
         }
@@ -377,7 +378,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         return {
           name: text(item.name),
           price: Number.isFinite(price) ? price : null,
-          departamento: text(item.departamento) || 'Central',
+          departamento: shippingDepartment(item.name, text(item.departamento)),
           sourceIndex
         };
       })

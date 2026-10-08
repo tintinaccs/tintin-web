@@ -79,7 +79,7 @@ function withCloudinaryWidth(href, width) {
     if (idx === -1) return href;
     const insertAt = idx + CLOUDINARY_UPLOAD_MARKER.length;
     const before = url.pathname.slice(0, insertAt);
-    const after = url.pathname.slice(insertAt).replace(CLOUDINARY_TT_TRANSFORM_RE, '');
+    const after = url.pathname.slice(insertAt).replace(/^(?:(?:f_auto,q_auto(?:,c_limit,w_\d+,dpr_auto)?)\/)+/, '');
     url.pathname = `${before}f_auto,q_auto,c_limit,w_${width},dpr_auto/${after}`;
     return url.href;
   } catch {
@@ -1141,7 +1141,7 @@ function productVariantGroups(product) {
     if (options.length) groups.set(key, options);
   };
   if (Array.isArray(product?.variants)) {
-    const metadata = new Set(['price', 'sku', 'imageUrl', 'stock', 'active']);
+    const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active']);
     for (const row of product.variants) {
       if (!row || typeof row !== 'object') continue;
       for (const key of Object.keys(row)) if (!metadata.has(key)) add(key, row[key]);
@@ -1193,7 +1193,7 @@ function productPhotoIdentity(src) {
 }
 
 function _pdSyncVariantToImage(src) {
-  const row = productVariantMediaRows(_pdProduct).find(item => productPhotoIdentity(item.imageUrl) === productPhotoIdentity(src));
+  const row = productVariantMediaRows(_pdProduct).find(item => [item.imageUrl, ...(Array.isArray(item.imageUrls) ? item.imageUrls : [])].some(image => productPhotoIdentity(image) === productPhotoIdentity(src)));
   if (!row) return;
   document.querySelectorAll('#product-variants .tt-product-variants').forEach(group => {
     const value = String(row[group.dataset.variantKey] ?? '').trim();
@@ -1387,6 +1387,82 @@ async function _copyProductLink(url) {
   } finally { input.remove(); }
 }
 
+function _pdSelectedValues() {
+  return Object.fromEntries([...document.querySelectorAll('#product-variants .tt-product-variants')].flatMap(group => {
+    const option = group.querySelector('.tt-variant-option.active');
+    return option ? [[group.dataset.variantKey, option.textContent.trim()]] : [];
+  }));
+}
+
+function _renderProductGallery(product, selected = {}, resetIndex = false) {
+  const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '', 900);
+  const favoriteButton = document.getElementById('btn-product-favorite');
+  if (favoriteButton) {
+    favoriteButton.dataset.favoriteId = String(product.id);
+    favoriteButton.dataset.favoriteName = product.name || '';
+    favoriteButton.dataset.favoritePrice = String(product.price || 0);
+    favoriteButton.dataset.favoriteImage = mainImgUrl;
+    favoriteButton.dataset.favoriteCat = product.category || product.cat || '';
+    window.TintinFavorites?.refresh?.();
+  }
+  const allImages = window.TintinProductMedia.uniqueImages(window.TintinProductMedia.galleryImages({ ...product, imageUrl: mainImgUrl }, selected).map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean));
+  _pdGalleryImages = allImages;
+  if (resetIndex) _pdGalleryIndex = 0;
+  if (_pdGalleryIndex >= allImages.length) _pdGalleryIndex = 0;
+
+  const galleryMain = document.getElementById('gallery-main');
+  if (galleryMain) {
+    const selectedImage = allImages[_pdGalleryIndex] || '';
+    galleryMain.style.display = '';
+    galleryMain.style.removeProperty('align-items');
+    galleryMain.style.removeProperty('justify-content');
+    galleryMain.disabled = !selectedImage;
+    if (selectedImage) {
+      const serverImage = galleryMain.querySelector('img[data-tt-server-image="1"]');
+      const serverImageMatches = serverImage && (
+        serverImage.getAttribute('src') === selectedImage || serverImage.currentSrc === selectedImage
+      );
+      if (serverImageMatches) {
+        serverImage.alt = product.name || '';
+        serverImage.loading = 'eager';
+        serverImage.fetchPriority = 'high';
+        serverImage.decoding = 'async';
+      } else {
+        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+      }
+    } else {
+      galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+      galleryMain.style.display = 'flex';
+      galleryMain.style.alignItems = 'center';
+      galleryMain.style.justifyContent = 'center';
+    }
+  }
+
+  // Thumbs — only show if more than 1 image
+  const thumbsEl = document.getElementById('gallery-thumbs');
+  if (thumbsEl) {
+    thumbsEl.style.display = allImages.length > 1 ? '' : 'none';
+    thumbsEl.innerHTML = allImages.length > 1 ? allImages.map((url, i) => `
+      <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}">
+        <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
+      </button>
+    `).join('') : '';
+    if (!thumbsEl.dataset.ttBound) {
+      thumbsEl.dataset.ttBound = '1';
+      thumbsEl.addEventListener('click', event => {
+        const thumb = event.target.closest('.tt-gallery-thumb');
+        if (!thumb) return;
+        _pdGalleryIndex = Number(thumb.dataset.galleryIndex) || 0;
+        _galleryThumbClick(thumb);
+      });
+    }
+  }
+
+  _injectProductJsonLd(product, mainImgUrl, allImages.filter(url => window.TintinProductMedia.imageKey(url) !== window.TintinProductMedia.imageKey(mainImgUrl)), product.stock);
+  _updateProductMeta(product, mainImgUrl);
+
+}
+
 function _renderProductDetail(product) {
   const catalogPolicy = window.TintinCatalogPolicy;
   const isVisible = catalogPolicy?.isCatalogVisible
@@ -1477,76 +1553,7 @@ function _renderProductDetail(product) {
     }
   }
 
-  // Gallery
-  const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '', 900);
-  const favoriteButton = document.getElementById('btn-product-favorite');
-  if (favoriteButton) {
-    favoriteButton.dataset.favoriteId = String(product.id);
-    favoriteButton.dataset.favoriteName = product.name || '';
-    favoriteButton.dataset.favoritePrice = String(product.price || 0);
-    favoriteButton.dataset.favoriteImage = mainImgUrl;
-    favoriteButton.dataset.favoriteCat = product.category || product.cat || '';
-    window.TintinFavorites?.refresh?.();
-  }
-  const extraImages = Array.isArray(product.imagesExtra)
-    ? product.imagesExtra.map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean)
-    : [];
-  const variantImages = productVariantMediaRows(product).map(row => sanitizeClassicImageUrl(row?.imageUrl || '', 900)).filter(Boolean);
-  const allImages = [...new Map([mainImgUrl, ...extraImages, ...variantImages].filter(Boolean).map(src => [productPhotoIdentity(src), src])).values()];
-  _pdGalleryImages = allImages;
-  if (!isSameProduct) _pdGalleryIndex = 0;
-  if (_pdGalleryIndex >= allImages.length) _pdGalleryIndex = 0;
-
-  const galleryMain = document.getElementById('gallery-main');
-  if (galleryMain) {
-    const selectedImage = allImages[_pdGalleryIndex] || '';
-    galleryMain.style.display = '';
-    galleryMain.style.removeProperty('align-items');
-    galleryMain.style.removeProperty('justify-content');
-    galleryMain.disabled = !selectedImage;
-    if (selectedImage) {
-      const serverImage = galleryMain.querySelector('img[data-tt-server-image="1"]');
-      const serverImageMatches = serverImage && (
-        serverImage.getAttribute('src') === selectedImage || serverImage.currentSrc === selectedImage
-      );
-      if (serverImageMatches) {
-        serverImage.alt = product.name || '';
-        serverImage.loading = 'eager';
-        serverImage.fetchPriority = 'high';
-        serverImage.decoding = 'async';
-      } else {
-        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
-      }
-    } else {
-      galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
-      galleryMain.style.display = 'flex';
-      galleryMain.style.alignItems = 'center';
-      galleryMain.style.justifyContent = 'center';
-    }
-  }
-
-  // Thumbs — only show if more than 1 image
-  const thumbsEl = document.getElementById('gallery-thumbs');
-  if (thumbsEl) {
-    thumbsEl.style.display = allImages.length > 1 ? '' : 'none';
-    thumbsEl.innerHTML = allImages.length > 1 ? allImages.map((url, i) => `
-      <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}">
-        <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
-      </button>
-    `).join('') : '';
-    if (!thumbsEl.dataset.ttBound) {
-      thumbsEl.dataset.ttBound = '1';
-      thumbsEl.addEventListener('click', event => {
-        const thumb = event.target.closest('.tt-gallery-thumb');
-        if (!thumb) return;
-        _pdGalleryIndex = Number(thumb.dataset.galleryIndex) || 0;
-        _galleryThumbClick(thumb);
-      });
-    }
-  }
-
-  _injectProductJsonLd(product, mainImgUrl, extraImages, stock);
-  _updateProductMeta(product, mainImgUrl);
+  _renderProductGallery(product, isSameProduct ? _pdSelectedValues() : {}, !isSameProduct);
 
   // Variants
   const variantsContainer = document.getElementById('product-variants');
@@ -1582,7 +1589,7 @@ function _renderProductDetail(product) {
     }
   }
 
-  _pdSyncVariantToImage(allImages[_pdGalleryIndex]);
+  _pdSyncVariantToImage(_pdGalleryImages[_pdGalleryIndex]);
 
   // Quantity selector — _pdQty/_pdMaxQty are shared across re-renders (see
   // definition above _showProductNotFound) so the +/- buttons stay correct
@@ -1692,6 +1699,7 @@ function _renderProductDetail(product) {
     }
   }
 
+  const galleryMain = document.getElementById('gallery-main');
   // Gallery: click to open lightbox. Bound once; reads the current image
   // list fresh from _pdProduct at click time instead of a closure snapshot,
   // so it never goes stale across re-renders.
@@ -1882,18 +1890,7 @@ function selectVariant(btn) {
   group.querySelectorAll('.tt-variant-option').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
   btn.classList.add('active');
   btn.setAttribute('aria-pressed', 'true');
-  const selected = _pdGetSelectedVariant();
-  const groups = productVariantGroups(_pdProduct);
-  const values = selected?.split(' / ') || [];
-  const row = values.length === groups.length
-    ? productVariantMediaRows(_pdProduct).find(item => groups.every(([key], index) => String(item[key]).trim() === values[index])) : null;
-  const key = btn.closest('.tt-product-variants')?.dataset.variantKey;
-  const media = sanitizeClassicImageUrl(row?.imageUrl || productMediaForOption(_pdProduct, key, btn.textContent.trim()), 900);
-  if (media) {
-    const index = _pdGalleryImages.findIndex(src => productPhotoIdentity(src) === productPhotoIdentity(media));
-    const thumb = document.querySelector(`.tt-gallery-thumb[data-gallery-index="${index}"]`);
-    if (thumb) { _pdGalleryIndex = index; _galleryThumbClick(thumb); }
-  }
+  _renderProductGallery(_pdProduct, _pdSelectedValues(), true);
   _pdUpdateQtyUI();
   group.classList.remove('tt-variant-required');
   if (group.nextElementSibling?.classList.contains('tt-variant-required-msg')) {
