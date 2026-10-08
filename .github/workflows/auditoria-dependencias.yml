@@ -1,133 +1,37 @@
-name: Mantenimiento — dependencias y flujos protegidos
-
+name: Diagnóstico de lectura del token de mantenimiento
 on:
-  pull_request_target:
-    branches: [main]
-    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
-    inputs:
-      maintenance:
-        description: Revisar una renovación de archivos protegidos (requiere PR y SHA)
-        required: true
-        default: false
-        type: boolean
-      pr:
-        description: Número del PR abierto contra main (solo mantenimiento de flujos)
-        required: false
-        type: string
-      head_sha:
-        description: SHA completo del candidato (solo mantenimiento de flujos)
-        required: false
-        type: string
-  schedule:
-    - cron: '15 12 * * 1'
-
 permissions:
   contents: read
   pull-requests: read
   actions: read
   checks: read
-
-concurrency:
-  group: ${{ (github.event_name == 'pull_request_target' || inputs.maintenance) && format('protected-maintenance-{0}', github.event.pull_request.number || inputs.pr) || 'dependency-maintenance' }}
-  cancel-in-progress: true
-
-env:
-  PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr }}
-  CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || inputs.head_sha }}
-
 jobs:
-  audit:
-    if: github.event_name != 'pull_request_target' && !inputs.maintenance
-    name: Dependencias npm
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - name: Capture audit evidence
-        run: |
-          npm audit --json > npm-audit-full.json || true
-          npm audit --omit=dev --json > npm-audit-production.json || true
-          node scripts/resumir-auditoria-dependencias.mjs
-      - name: Enforce dependency policy
-        run: |
-          npm audit --audit-level=high
-          npm audit --omit=dev --audit-level=moderate
-      - uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: npm-audit-${{ github.run_id }}
-          path: |
-            npm-audit-full.json
-            npm-audit-production.json
-          retention-days: 30
-          if-no-files-found: error
-
-  inspect:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'pull_request_target' || inputs.maintenance)
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    outputs:
-      maintenance: ${{ steps.plan.outputs.maintenance }}
-      base_sha: ${{ steps.plan.outputs.base_sha }}
-      head_sha: ${{ steps.plan.outputs.head_sha }}
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.pull_request.base.sha || github.sha }}
-          persist-credentials: false
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-      - name: Validar datos candidatos y CI sin ejecutar código del PR
-        id: plan
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: node scripts/mantenimiento-flujos-github.mjs inspect
-
-  approval:
-    needs: inspect
-    if: needs.inspect.outputs.maintenance == 'true'
-    name: Aprobar PR ${{ github.event.pull_request.number || inputs.pr }} commit ${{ needs.inspect.outputs.head_sha }}
+  diagnostico:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
-    permissions: {}
-    environment:
-      name: protected-flow-maintenance
-      url: https://github.com/tintinaccs/tintin-web/pull/${{ github.event.pull_request.number || inputs.pr }}
     steps:
-      - name: Registrar que GitHub habilitó el job tras revisión del entorno
-        run: echo "Revisión del entorno completada. La verificación final comprobará autor, ejecución, CI y SHA."
-
-  verdict:
-    needs: [inspect, approval]
-    if: always() && github.ref == 'refs/heads/main' && (github.event_name == 'pull_request_target' || inputs.maintenance)
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    permissions:
-      contents: read
-      pull-requests: read
-      actions: read
-      checks: write
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.pull_request.base.sha || github.sha }}
-          persist-credentials: false
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: Publicar veredicto para el SHA exacto
+      - name: Consultar endpoints sin publicar cambios ni credenciales
         env:
           GH_TOKEN: ${{ github.token }}
-          APPROVAL_RESULT: ${{ needs.approval.result }}
-        run: node scripts/mantenimiento-flujos-github.mjs publish
+          REPO: ${{ github.repository }}
+        run: |
+          node --input-type=module <<'JS'
+          const root = `https://api.github.com/repos/${process.env.REPO}`;
+          const requests = [
+            ['rate_limit', 'https://api.github.com/rate_limit'],
+            ['pulls/1067', `${root}/pulls/1067`],
+            ['git/ref/heads/main', `${root}/git/ref/heads/main`],
+            ['git/trees/candidato', `${root}/git/trees/85649e8d3e878b4d794be1a597cd4c6a0247754b?recursive=1`],
+            ['check-runs', `${root}/commits/85649e8d3e878b4d794be1a597cd4c6a0247754b/check-runs?filter=latest`],
+            ['environment', `${root}/environments/protected-flow-maintenance`],
+          ];
+          for (const [endpoint, url] of requests) {
+            const response = await fetch(url, {headers: {accept:'application/vnd.github+json', authorization:`Bearer ${process.env.GH_TOKEN}`, 'content-type':'application/json', 'X-GitHub-Api-Version':'2026-03-10'}, signal:AbortSignal.timeout(30000)});
+            const data = await response.json().catch(() => ({}));
+            console.log(JSON.stringify({endpoint, status:response.status, message:response.ok ? undefined : data.message, documentation_url:response.ok ? undefined : data.documentation_url, rate_limit:response.headers.get('x-ratelimit-limit'), rate_remaining:response.headers.get('x-ratelimit-remaining'), rate_reset:response.headers.get('x-ratelimit-reset'), retry_after:response.headers.get('retry-after'), accepted_permissions:response.headers.get('x-accepted-github-permissions')}));
+          }
+          JS
