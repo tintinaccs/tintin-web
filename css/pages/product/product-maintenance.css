@@ -718,3 +718,15 @@ body.tt-product-maintenance .tt-product-specifications>div { padding-inline:12px
 body.tt-product-maintenance .tt-product-share { margin-block:12px; }
 body.tt-product-maintenance .tt-product-social-bar { margin-top:16px; padding:12px; }
 body.tt-product-maintenance .tt-review-form, body.tt-product-maintenance .tt-review-card { padding:20px; }
+
+body.tt-product-maintenance .tt-product-actions-panel { padding:16px; border-radius:16px; }
+body.tt-product-maintenance .tt-product-actions-panel .tt-btn { box-sizing:border-box; border:1px solid var(--pink-dark); box-shadow:none; }
+body.tt-product-maintenance .tt-product-specifications { overflow:hidden; border:1px solid var(--border); border-radius:14px; margin-block:12px; }
+body.tt-product-maintenance .tt-product-specifications>div:last-child { border-bottom:0; }
+body.tt-product-maintenance .tt-related-section { padding-block:20px; margin-block:0; }
+body.tt-product-maintenance .tt-related-head { margin-bottom:16px; }
+body.tt-product-maintenance .tt-related-section .tt-product-info { padding:12px 10px; }
+body.tt-product-maintenance .tt-related-section .tt-product-actions { margin-top:10px; }
+body.tt-product-maintenance .tt-product-community { margin-block:0; padding-block:24px; }
+body.tt-product-maintenance .tt-product-social-bar { margin-block:8px; }
+body.tt-product-maintenance #product-variants .tt-variant-option.active { outline:0; border:2px solid var(--pink-dark); padding:7px; }

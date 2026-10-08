@@ -38,7 +38,7 @@ function subscriptionHarness() {
     collection: (_db, ...path) => path, orderBy: field => field, limit: count => count,
     query: (...args) => args,
     onSnapshot: (query, next, error) => { subscriptions.push({ query, next, error }); return () => {}; },
-    liveNotices: { update: (...args) => notices.push(args) }, render() {},
+    liveNotices: { update: (...args) => notices.push(args), clear() {} }, render() {},
     notificationsSurfaceIsOpen: () => false, markVisibleNotificationsRead() {}, scheduleSubscriptionRecovery() {},
   });
   vm.runInContext(source.slice(source.indexOf('function isVisibleCustomerNotification'), source.indexOf('function groupedNotifications')), context);
@@ -48,18 +48,20 @@ function subscriptionHarness() {
 const snapshot = items => ({ docs: items.map(item => ({ id: item.id, data: () => item })) });
 
 test('Super Admin usa la misma colección global del panel; el cliente sólo su UID', () => {
-  const { context, subscriptions } = subscriptionHarness();
+  const { context, subscriptions, notices } = subscriptionHarness();
   context.currentUser = { uid: 'owner', email: 'admin@example.invalid' };
   context.subscribe(context.currentUser);
   assert.equal(subscriptions[0].query[0].join('/'), 'adminNotifications');
   assert.equal(subscriptions[0].query[2], 100);
   subscriptions[0].next(snapshot([notification('like', { kind: 'product_like' })]));
   assert.equal(context.notifications.length, 1);
+  const adminNoticeCount = notices.length;
   context.currentUser = { uid: 'client', email: 'client@example.invalid' };
   context.subscribe(context.currentUser);
   assert.equal(subscriptions[1].query[0].join('/'), 'users/client/notifications');
   subscriptions[1].next(snapshot([notification('like', { kind: 'product_like' }), notification('order', { kind: 'order_created' })]));
   assert.deepEqual(Array.from(context.notifications, item => item.id), ['order']);
+  assert.equal(notices.length, adminNoticeCount, 'el cliente no recibe avisos flotantes de actividad');
 });
 
 test('un snapshot administrativo tardío no reaparece después de cambiar de cuenta', () => {

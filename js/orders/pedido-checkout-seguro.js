@@ -28,7 +28,7 @@ import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
-} from '../components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1';
+} from '../components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1';
 import {
   isValidCi,
   normalizeCi,

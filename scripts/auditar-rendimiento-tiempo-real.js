@@ -108,12 +108,15 @@ check(
 );
 
 check(
-  'Producto lee el documento solicitado y limita relacionados',
+  'Producto escucha su documento y carga recomendaciones por edge en segundo plano',
   /getDoc\(doc\(db, 'products', id\)\)/.test(productsStore) &&
     /onSnapshot\(\s*doc\(db, 'products', normalizedId\)/.test(productsStore) &&
-    /where\('category', '==', product\.category\)/.test(productsStore) &&
-    /limit\(12\)/.test(productsStore),
-  'La ficha debe escuchar su documento en vivo sin descargar el catálogo completo.'
+    productsStore.includes("void runSingleFlight('products:related:all'") &&
+    productsStore.includes("runSingleFlight('products:catalog:related-fetch'") &&
+    productsStore.includes('readCached(ALL_CACHE_KEY, ALL_CACHE_TTL)') &&
+    productsStore.includes("fetchPublicCatalogResource('products')") &&
+    !/getDocs\(collection\(db, ['"]products['"]\)\)/.test(productsStore),
+  'La ficha debe cargar y escuchar sólo su documento; el ciclo entre colecciones usa catálogo edge compartido, caché y single-flight sin bloquear la ficha ni enumerar Firestore desde el cliente.'
 );
 
 check(

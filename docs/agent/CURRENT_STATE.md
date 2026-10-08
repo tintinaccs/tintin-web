@@ -1,3 +1,16 @@
+# Estado vigente — 2026-10-08: producto, avisos y superficies responsive
+
+Base: 89d268ee7a7cda2c48f1ab7263534429449ca2c5. Rama codex/producto-colores-recomendaciones-20261008. Candidato integrado con main #1066 y #1068; auditoría final y 618 pruebas PASS. Pendiente CI del SHA final y publicación protegida. La autorización del usuario incluye reparar y publicar, sin pagos. La revisión manual del entorno protected-flow-maintenance corresponde al propietario; no aprobar en su nombre.
+
+- Reparación productiva de metadata: 24 productos/56 fotos con asociaciones de color verificadas visualmente. Transacción modifica únicamente variants y updatedAt; mantiene precio, stock e inventario. Lectura getDocFromServer confirmó 24 coincidencias. Sincronización autenticada /api/sheets-product-sync: ambos lotes HTTP200 ok:true, sin cola. Evidencia local outputs/variantes-firestore-verificacion.json y variantes-sheets-sincronizacion.json.
+- Checkout: cinco etiquetas blancas con fondo de contraste, Confirmación sin cortar ni dividir, contenedores sin fondo blanco. Medición real en Chrome local de 320/390/768/1024/1280/1440/1920: todas completas y dentro del viewport. outputs/checkout-responsive-verificacion.json y checkout-mobile-corregido.png. Fuente aún no publicada.
+- Teléfono: corrige precarga que cortaba tres dígitos del número nacional; perfil y checkout requieren celular PY local con cero opcional/espacios. Pruebas de formatos requeridos e inválidos y checkout: 148/148 PASS.
+- Producto: prueba Chrome confirma dos fotos únicas, dorado inicial seleccionado, plateado cambia a plata y miniatura dorada vuelve a seleccionar dorado. Identidad de fotos ignora transformaciones Cloudinary conservando versión/archivo. Nuevas pruebas de identidad y variantes: 5 PASS.
+- Recomendaciones: catálogo completo, otras categorías, ciclos sin repetición. Avisos deduplicados por evento, singleton público/admin. Pruebas de ciclos/avisos/regresiones de sincronización: 13 PASS. Se corrigió referencia sobrante favoritesHtml descubierta en Chrome tras retirar favoritos del carrito.
+- Verificado en Chrome: logo oficial blanco de Mi cuenta, mapas completos con CSS Leaflet e integridad SRI corregida, checkout y carga siempre arriba en siete anchos. Build Pages PASS y 618/618 pruebas PASS. Plan exacto conserva 541 archivos/78 registros (67 archivos renovados/34 registros afectados). Auditoría final PASS. Pendiente PR/CI y revisión manual del propietario. Push todavía espera permiso de Chrome (default); PayPal Live sigue pendiente. Revalidación productiva 15:46:12Z detecta 45 cambios desde sellos anteriores, que se conservan sin ocultarlos.
+
+## Evidencia histórica (conservada de main)
+
 # Corrección — fotos por color y errores de checkout, 2026-10-08
 
 Agente: Codex / GPT-6. Base publicada 89d268ee7a7cda2c48f1ab7263534429449ca2c5 (PR 1068). Pedido expreso: corregir los tres hallazgos de la revisión y las miniaturas duplicadas, ampliado a asignar varias fotos por color desde Super Admin para todos los productos.

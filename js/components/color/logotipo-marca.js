@@ -15,6 +15,6 @@
   }, { once: true });
   var style = document.createElement('style');
   style.id = 'tt-brand-logo-tint-style';
-  style.textContent = 'html body img[src*="/images/general/logo.png"]:not(#tt-loader-logo){filter:url("#tt-brand-logo-tint")!important}';
+  style.textContent = 'html body img[src*="/images/general/logo.png"]:not(#tt-loader-logo){filter:url("#tt-brand-logo-tint")!important}html body :is(#account-drawer,#cart-drawer,#notifications-drawer,#collections-sheet) img[src*="/images/general/logo.png"]{filter:brightness(0) invert(1)!important}';
   document.head.appendChild(style);
 })();

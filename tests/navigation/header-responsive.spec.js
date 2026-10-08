@@ -371,8 +371,8 @@ test('Alertas usa la superficie compartida sólida y conserva el foco', async ({
   await expect(drawer).toHaveAttribute('aria-hidden', 'true');
 });
 
-test('cuenta mantiene cabecera sólida y CTA legible con todas las capas de marca', async ({ page }) => {
-  for (const viewport of [{width:1440,height:900},{width:768,height:1024},{width:390,height:844},{width:320,height:568}]) {
+test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA legible', async ({ page }) => {
+  for (const viewport of [{width:1920,height:1080},{width:1440,height:900},{width:1280,height:720},{width:1024,height:768},{width:768,height:1024},{width:390,height:844},{width:320,height:568}]) {
     await openPublicPage(page, viewport, '/contact');
     await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes('pulido-marca-responsive-tintin.css') && link.sheet));
     const trigger = viewport.width < 768 ? '#tabbar-cuenta' : viewport.width <= 1024 ? '#btn-cuenta-tablet' : '#btn-cuenta';
@@ -382,12 +382,14 @@ test('cuenta mantiene cabecera sólida y CTA legible con todas las capas de marc
     const header=drawer.locator('.tt-account-drawer-header');
     await expect(header).toHaveCSS('background-image','none');
     await expect(header).toHaveCSS('background-color','rgb(248, 170, 202)');
-    await expect(header.locator('h2')).toHaveCSS('color','rgb(113, 60, 83)');
+    await expect(header.locator('h2')).toHaveCSS('color','rgb(255, 255, 255)');
     await expect(drawer.locator('.tt-account-primary')).toHaveCSS('color','rgb(113, 60, 83)');
     await expect(header.locator('.tt-account-drawer-logo')).toBeVisible();
-    const overlap=await header.evaluate(el => { const logo=getComputedStyle(el,'::before'); const title=el.querySelector('h2').getBoundingClientRect(); const close=el.querySelector('button').getBoundingClientRect(); return {duplicateLogo:logo.content,titleRight:title.right,closeLeft:close.left}; });
+    await expect(header.locator('.tt-account-drawer-logo')).toHaveCSS('filter','brightness(0) invert(1)');
+    const overlap=await header.evaluate(el => { const logo=getComputedStyle(el,'::before'); const title=el.querySelector('h2').getBoundingClientRect(); const close=el.querySelector('button').getBoundingClientRect(); const box=el.getBoundingClientRect(); return {duplicateLogo:logo.content,titleRight:title.right,closeLeft:close.left,centerOffset:Math.abs(title.x+title.width/2-(box.x+box.width/2))}; });
     expect(overlap.duplicateLogo).toBe('none');
     expect(overlap.titleRight).toBeLessThanOrEqual(overlap.closeLeft);
+    expect(overlap.centerOffset).toBeLessThanOrEqual(1);
     await page.keyboard.press('Escape');
   }
 });
