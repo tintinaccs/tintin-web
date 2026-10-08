@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f3b0e251d122e4c57ba462ea3db598186ce16965f38545496e84e5062742680f",
+  "sourceFingerprint": "aef402a259eb0fed6ae832883157fc1328810ffdef1d4a7c1951a8b368093072",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1067,
-    "textFiles": 1019,
-    "totalBytes": 16031864,
+    "files": 1068,
+    "textFiles": 1020,
+    "totalBytes": 16043199,
     "pages": 19,
-    "modules": 753
+    "modules": 754
   },
   "viewports": [
     {
@@ -17836,8 +17836,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
-      "bytes": 30972,
-      "sha256": "a348f5bc989e263978fda304cdde27a2e05b09b75297c4fa254cebd82a913810",
+      "bytes": 32360,
+      "sha256": "bb77fbd9983c072a8ccfc5d893c062f8857ca4709300c28320ba1f6b5e21a698",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17861,24 +17861,24 @@
           "line": 145
         },
         {
+          "url": "https://identitytoolkit.googleapis.com/v1/accounts:update",
+          "line": 212
+        },
+        {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:signUp",
-          "line": 205
+          "line": 232
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:delete",
-          "line": 225
-        },
-        {
-          "url": "https://identitytoolkit.googleapis.com/v1/accounts:update",
-          "line": 242
+          "line": 255
         },
         {
           "url": "https://www.googleapis.com/auth/datastore",
-          "line": 254
+          "line": 284
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7Bsa.project_id%7D/databases/(default",
-          "line": 257
+          "line": 287
         }
       ]
     },
@@ -31168,8 +31168,8 @@
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",
-      "bytes": 19892,
-      "sha256": "c0712c91d19920d866daeeadb392bffc4b788cd1475575fb2cc83de5cb49f357",
+      "bytes": 21565,
+      "sha256": "0790f45ecbe60a5a3daec8edaa71bcb139b06636440068efc4dd99f701f4ca1d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31915,6 +31915,51 @@
         {
           "url": "https://tintin.test/",
           "line": 9
+        }
+      ]
+    },
+    {
+      "path": "tests/accounts/email-owner-account-security.test.mjs",
+      "bytes": 6089,
+      "sha256": "37adf37bd9a50ffd83c82b9b91cdf08a1b69449b5045471e234601ed59c4a21f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 8
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 10
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://identitytoolkit.googleapis.com/v1/",
+          "line": 13
+        },
+        {
+          "url": "https://oauth2.googleapis.com/token",
+          "line": 36
         }
       ]
     },
@@ -40071,8 +40116,8 @@
     {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
-      "bytes": 30972,
-      "sha256": "a348f5bc989e263978fda304cdde27a2e05b09b75297c4fa254cebd82a913810"
+      "bytes": 32360,
+      "sha256": "bb77fbd9983c072a8ccfc5d893c062f8857ca4709300c28320ba1f6b5e21a698"
     },
     {
       "path": "cloudflare/firebase-id-token.js",
@@ -40263,8 +40308,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 3940,
-      "sha256": "2bb15a9e531dd54534365919fabd001a03c3e5dd1274b89a1b5dabe72fd95203"
+      "bytes": 2393,
+      "sha256": "aeb2ca9b469341c4b50bc6925b9a7242b16fbe25212bd994bb3ffa099ba9ed22"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -40276,7 +40321,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155156,
-      "sha256": "5b69ba34a895a1e034077c36ee6241477746b78a4ae09907d73943c2c775ff44"
+      "sha256": "64e3716ebbd2864afb25ec62faa4758fd869cb45f5c75016d600eabf3ed147cd"
     },
     {
       "path": "config/public-site.json",
@@ -40797,8 +40842,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 303186,
-      "sha256": "6ebae7b7de5d0194517be67701fdb29aeb91b0c9045e049cef534e087437b4dd"
+      "bytes": 306433,
+      "sha256": "e2ba1adae7b93d3becf19900bec408067b524d14fa8e16f2cd2305a360a23f86"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41211,8 +41256,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 70081,
-      "sha256": "903ea8d5720ad0ecef7d89bd951ff5c8914145d72a9188c82714734a4df02e71"
+      "bytes": 70566,
+      "sha256": "8dfc13f9f010b2e57f6cb8ca20e6b2a5e7e2be9ed5315674caf7c54626a900da"
     },
     {
       "path": "functions/[page].js",
@@ -44445,8 +44490,8 @@
     {
       "path": "scripts/probar-firestore-critico.mjs",
       "extension": ".mjs",
-      "bytes": 19892,
-      "sha256": "c0712c91d19920d866daeeadb392bffc4b788cd1475575fb2cc83de5cb49f357"
+      "bytes": 21565,
+      "sha256": "0790f45ecbe60a5a3daec8edaa71bcb139b06636440068efc4dd99f701f4ca1d"
     },
     {
       "path": "scripts/probar-firestore-notificaciones.mjs",
@@ -44621,6 +44666,12 @@
       "extension": ".mjs",
       "bytes": 10794,
       "sha256": "73d390dc834b6158d7a8c3a151288051949ec81c8272adca9f18931f887da16e"
+    },
+    {
+      "path": "tests/accounts/email-owner-account-security.test.mjs",
+      "extension": ".mjs",
+      "bytes": 6089,
+      "sha256": "37adf37bd9a50ffd83c82b9b91cdf08a1b69449b5045471e234601ed59c4a21f"
     },
     {
       "path": "tests/accounts/incomplete-profile-flags.test.mjs",
