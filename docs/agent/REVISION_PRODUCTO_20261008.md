@@ -1,6 +1,6 @@
 # Revisión activa de producto y superficies compartidas
 
-Base: b8ec93d45d9b155a618c174e09747b48a7351120. Agente: Codex. Autorización de cambios/publicación vigente; sin pagos. El mantenimiento protegido requiere revisión manual del propietario para el SHA final; no se aprobará en su nombre.
+Base: 435a9c416e08cafe74e57810211c1bc845b3abbb. Agente: Codex. Autorización de cambios/publicación vigente; sin pagos. El mantenimiento protegido requiere revisión manual del propietario para el SHA final; no se aprobará en su nombre.
 
 ## Alcance pendiente de cierre
 
@@ -24,8 +24,13 @@ Base: b8ec93d45d9b155a618c174e09747b48a7351120. Agente: Codex. Autorización de 
 
 - Comprobación real Chrome: checkout blanco/contraste y textos completos; mapas con tiles256 y overflow:hidden; recarga desde abajo termina scrollY0/restoration manual. Siete anchos 320 a1920. Logo blanco cuenta verificado visualmente. Nuevo requerimiento: carga siempre arriba, sin auto scroll de enlaces iniciales a pedido/reseña; dos pruebas de entrada/load/pageshow pasan.
 - Firma SRI Leaflet corregida tomando bytes verificados de #1066; se mantiene la protección de integridad. Backend/control de acceso sin rebajar permisos.
-- Regresión ampliada: 406/406 pruebas PASS. Los contratos se actualizaron a los requisitos actuales: favoritos en perfil, reseñas antes del footer y mock clear del presentador. Las auditorías de relacionados ahora exigen lectura individual realtime, API edge compartida, caché y single-flight sin enumerar Firestore ni bloquear la ficha; se retiró la expectativa incompatible de mostrar únicamente 12 productos de la misma categoría.
+- Regresión ampliada: 613/613 pruebas PASS. Los contratos se actualizaron a los requisitos actuales: favoritos en perfil, reseñas antes del footer y mock clear del presentador. Las auditorías de relacionados ahora exigen lectura individual realtime, API edge compartida, caché y single-flight sin enumerar Firestore ni bloquear la ficha; se retiró la expectativa incompatible de mostrar únicamente 12 productos de la misma categoría.
 - Build Pages PASS: rutas, CSP con hashes, manifiesto de 19 páginas y versionado de 309 recursos/73 cargas dinámicas. La validación de carga admite el argumento explícito de versión del módulo de producto.
-- Protección: 541 archivos y 78 registros conservados. Plan de renovación exacto: 68 archivos y 34 registros afectados; no cambia alcances, sellos ni mecanismo de aprobación. Pendiente CI y revisión humana del SHA final.
+- Protección: 541 archivos y 78 registros conservados. Plan de renovación exacto: 67 archivos y 34 registros afectados; no cambia alcances, sellos ni mecanismo de aprobación. Pendiente CI y revisión humana del SHA final.
 - Producción revalidada a las 15:46:12Z: 33 sellados verdes y 45 cambios detectados desde sellos anteriores. No se renuevan ni se ocultan esos estados como sustituto de pruebas reales. PayPal Live permanece pendiente; sandbox no cumple LIVE_PRODUCTION.
 - Push: se solicitó permiso mediante el botón real de activación. Chrome continúa con permiso default; falta autorización del navegador y prueba de recepción. No se fabricaron compras ni se pagó nada.
+
+- Amore y Cristal: acabado dorado confirmado en las fotos y registrado únicamente en colorFinish/updatedAt. getDocFromServer confirma ambos; Sheets HTTP200 ok:true sin cola. Variantes de diseño/forma e inventario intactos.
+- Main #1066 integrado (435a9c4): conserva pago por encomienda, mapa firmado y halo del header. Auditoría completa y build se repiten sobre la combinación; no se reemplaza main por la base anterior.
+
+- Cierre local sobre main 435a9c4: audit:final exit0; pruebas de catálogo/carrito/checkout/engagement/login/navegación/perfil/push/sync/visual-builder 613/613 PASS. Cuenta, carrito y colores verificados con Chrome. Falta CI del SHA final y aprobación manual del entorno, no se presenta como deploy.
