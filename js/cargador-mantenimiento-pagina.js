@@ -9,20 +9,20 @@ function pathName() {
 const INSTITUTIONAL_RUNTIME_VERSION = 'tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1';
 const CONTACT_RUNTIME_VERSION = 'tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-contact-busy-20261002-1-brand-runtime-20261004-1-owner-pink-20261004-1';
 
-function load(file, version = 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1') {
+function load(file, version = 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-minimal-product-20261008-1') {
   return import(`./${file}?v=${version}`);
 }
 
 export function loadPageMaintenance() {
   const path = pathName();
   if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4');
-  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
+  if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1'),
       load('pages/checkout/checkout-mantenimiento.js', version),
       load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'),
       load('pages/checkout/checkout-control-cuota.js', version),
@@ -33,7 +33,7 @@ export function loadPageMaintenance() {
     return load('pages/login/mantenimiento-acceso.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-loads-20261007-1');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261003-ux-maps-1-brand-runtime-20261004-1-owner-pink-20261004-1');
-  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');
+  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1');
   if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', CONTACT_RUNTIME_VERSION);
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
     return load('pages/institutional/mantenimiento-legal.js', INSTITUTIONAL_RUNTIME_VERSION);

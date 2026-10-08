@@ -1145,10 +1145,10 @@ function productVariantGroups(product) {
   return [...groups];
 }
 
-function productColorSwatch(value) {
-  const key = String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
-  const colors = { dorado:'#b58a36', oro:'#b58a36', gold:'#b58a36', plateado:'#b8bcc3', plata:'#b8bcc3', silver:'#b8bcc3', rosa:'#efa0bc', rosado:'#efa0bc', rojo:'#be2734', red:'#be2734', negro:'#202020', black:'#202020', blanco:'#ffffff', white:'#ffffff', azul:'#2563a6', verde:'#29814d' };
-  return colors[key] || null;
+function productColorSwatch(value, product) {
+  const key = window.TintinProductMedia.colorKey(product);
+  const row = window.TintinProductMedia.mediaRows(product).find(row => String(row?.[key] || '').trim() === String(value));
+  return window.TintinProductColors.swatch(value, row);
 }
 
 function productOptionUnavailable(product, groupIndex, option) {
@@ -1394,11 +1394,11 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     }
   }
 
-  // Thumbs — only show if more than 1 image
+  // La miniatura conserva su lugar incluso si un color tiene una sola foto.
   const thumbsEl = document.getElementById('gallery-thumbs');
   if (thumbsEl) {
-    thumbsEl.style.display = allImages.length > 1 ? '' : 'none';
-    thumbsEl.innerHTML = allImages.length > 1 ? allImages.map((url, i) => `
+    thumbsEl.style.display = allImages.length ? '' : 'none';
+    thumbsEl.innerHTML = allImages.length ? allImages.map((url, i) => `
       <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}">
         <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
       </button>
@@ -1408,8 +1408,17 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
       thumbsEl.addEventListener('click', event => {
         const thumb = event.target.closest('.tt-gallery-thumb');
         if (!thumb) return;
-        _pdGalleryIndex = Number(thumb.dataset.galleryIndex) || 0;
-        _galleryThumbClick(thumb);
+        const image = thumb.dataset.src;
+        const colorKey = window.TintinProductMedia.colorKey(_pdProduct);
+        const matchingColors = [...new Set(window.TintinProductMedia.mediaRows(_pdProduct).filter(row => window.TintinProductMedia.rowImages(row).some(url => window.TintinProductMedia.imageKey(url) === window.TintinProductMedia.imageKey(image))).map(row => row[colorKey]).filter(Boolean))];
+        if (matchingColors.length === 1) {
+          const group = [...document.querySelectorAll('#product-variants .tt-product-variants')].find(group => group.dataset.variantKey === colorKey);
+          const option = [...(group?.querySelectorAll('.tt-variant-option') || [])].find(option => option.dataset.variantValue === matchingColors[0]);
+          if (option && !option.classList.contains('active')) selectVariant(option);
+        }
+        _pdGalleryIndex = Math.max(0, _pdGalleryImages.findIndex(url => window.TintinProductMedia.imageKey(url) === window.TintinProductMedia.imageKey(image)));
+        const currentThumb = thumbsEl.querySelector(`[data-gallery-index="${_pdGalleryIndex}"]`);
+        if (currentThumb) _galleryThumbClick(currentThumb);
       });
     }
   }
@@ -1524,11 +1533,11 @@ function _renderProductDetail(product) {
     const variantGroups = productVariantGroups(product);
     if (variantGroups.length) {
       variantsContainer.innerHTML = variantGroups.map(([key, values], groupIndex) => `
-        <div class="tt-product-variants" data-variant-key="${escapeAttribute(key)}">
+        <div class="tt-product-variants${/^colou?r$/i.test(key) ? ' tt-variant-color-group' : ''}" data-variant-key="${escapeAttribute(key)}">
           <div class="tt-variant-label">${escapeHtml(key.charAt(0).toUpperCase() + key.slice(1))}</div>
           <div class="tt-variant-options">
             ${Array.isArray(values) ? values.map(v => `
-              <button type="button" class="tt-variant-option${selectedVariants.get(key) === String(v) ? ' active' : ''}${productOptionUnavailable(product, groupIndex, String(v)) ? ' tt-stock-unavailable' : ''}" aria-pressed="${selectedVariants.get(key) === String(v)}" aria-label="${escapeAttribute(v)}${productOptionUnavailable(product, groupIndex, String(v)) ? ' — Agotado, podés verlo' : ''}">${/colou?r/i.test(key) ? `<span class="tt-color-swatch" aria-hidden="true"${productColorSwatch(v) ? ` style="background:${productColorSwatch(v)}"` : ''}></span>` : ''}<span>${escapeHtml(v)}</span></button>
+              <button type="button" data-variant-value="${escapeAttribute(v)}" class="tt-variant-option${/^colou?r$/i.test(key) ? ' tt-color-option' : ''}${selectedVariants.get(key) === String(v) ? ' active' : ''}${productOptionUnavailable(product, groupIndex, String(v)) ? ' tt-stock-unavailable' : ''}" aria-pressed="${selectedVariants.get(key) === String(v)}" aria-label="${escapeAttribute(v)}${productOptionUnavailable(product, groupIndex, String(v)) ? ' — Agotado, podés verlo' : ''}">${/^colou?r$/i.test(key) ? `<span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(v, product)}"></span>` : ''}<span class="tt-variant-name">${escapeHtml(v)}</span></button>
             `).join('') : ''}
           </div>
         </div>

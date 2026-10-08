@@ -917,7 +917,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1');
   }
 
   function bootThemeColorSanitizerPublic() {
