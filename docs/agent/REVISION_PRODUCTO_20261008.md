@@ -1,6 +1,6 @@
 # Revisión activa de producto y superficies compartidas
 
-Base: 435a9c416e08cafe74e57810211c1bc845b3abbb. Agente: Codex. Autorización de cambios/publicación vigente; sin pagos. El mantenimiento protegido requiere revisión manual del propietario para el SHA final; no se aprobará en su nombre.
+Base: 89d268ee7a7cda2c48f1ab7263534429449ca2c5. Agente: Codex. Autorización de cambios/publicación vigente; sin pagos. El mantenimiento protegido requiere revisión manual del propietario para el SHA final; no se aprobará en su nombre.
 
 ## Alcance pendiente de cierre
 
@@ -34,3 +34,5 @@ Base: 435a9c416e08cafe74e57810211c1bc845b3abbb. Agente: Codex. Autorización de 
 - Main #1066 integrado (435a9c4): conserva pago por encomienda, mapa firmado y halo del header. Auditoría completa y build se repiten sobre la combinación; no se reemplaza main por la base anterior.
 
 - Cierre local sobre main 435a9c4: audit:final exit0; pruebas de catálogo/carrito/checkout/engagement/login/navegación/perfil/push/sync/visual-builder 613/613 PASS. Cuenta, carrito y colores verificados con Chrome. Falta CI del SHA final y aprobación manual del entorno, no se presenta como deploy.
+
+- Cierre definitivo contra main 89d268e (#1068): audit:final exit0; 618/618 pruebas PASS y 33/33 push tras actualizar los textos de actividad. Centrado de logo/título Mi cuenta: offset0, abierto y blanco en los siete anchos. Pedidos: renderizador real con datos locales, tarjetas separadas y sin overflow en siete anchos; sin pedidos de producción creados.

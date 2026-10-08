@@ -317,7 +317,7 @@ const enableNotifications = withBusy(async () => {
 
   const token = await requestToken();
   await saveTokenOnServer(token);
-  setState('active', 'Este dispositivo va a recibir un aviso por cada pedido nuevo.');
+  setState('active', 'Este dispositivo recibirá avisos de Me gusta, comentarios, inicios de sesión, registros y compras.');
   notice('Notificaciones activadas en este dispositivo.');
 });
 
@@ -400,7 +400,7 @@ async function refreshInitialState() {
   try {
     const token = await requestToken();
     await saveTokenOnServer(token);
-    setState('active', 'Este dispositivo va a recibir un aviso por cada pedido nuevo.');
+    setState('active', 'Este dispositivo recibirá avisos de Me gusta, comentarios, inicios de sesión, registros y compras.');
   } catch (error) {
     setState('error', 'Las notificaciones necesitan que vuelvas a tocar "Activar notificaciones".');
     notice(String(error?.message || ''), 'error');
