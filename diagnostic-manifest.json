@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "14b5fe58ffb07e842642540a985f07f332e6d9e76b30b959c0a0d38dc1cc9afa",
+  "sourceFingerprint": "f3b0e251d122e4c57ba462ea3db598186ce16965f38545496e84e5062742680f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1066,
-    "textFiles": 1018,
-    "totalBytes": 15981639,
+    "files": 1067,
+    "textFiles": 1019,
+    "totalBytes": 16031864,
     "pages": 19,
     "modules": 753
   },
@@ -40275,8 +40275,8 @@
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 108262,
-      "sha256": "b8e786d9cd10b9bf45c89705ab4f0ed2676a1d1676a0bef2a471a0abd9b853aa"
+      "bytes": 155156,
+      "sha256": "5b69ba34a895a1e034077c36ee6241477746b78a4ae09907d73943c2c775ff44"
     },
     {
       "path": "config/public-site.json",
@@ -40797,8 +40797,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 301443,
-      "sha256": "b1402e3cb1c85a72653b9714f8111a5168d323cc1b60a3be88927abd2ca3a01d"
+      "bytes": 303186,
+      "sha256": "6ebae7b7de5d0194517be67701fdb29aeb91b0c9045e049cef534e087437b4dd"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41087,6 +41087,12 @@
       "extension": ".md",
       "bytes": 7138,
       "sha256": "4f774ef6a7d6f3d19d8bcef869ad7f20d8cc7191236fced080c3ff0afb764a24"
+    },
+    {
+      "path": "docs/proteccion-anticambios.md",
+      "extension": ".md",
+      "bytes": 1588,
+      "sha256": "dd55add5baa33d2ca22c8337a64b5a5f90d17c962b2bea4698ee5c7bb82d2f11"
     },
     {
       "path": "docs/prueba-compra-real.md",
