@@ -7,10 +7,10 @@
   <style>html.tt-welcome-pending :is(.tt-header,main,.tt-footer,#tt-tabbar){visibility:hidden!important}</style>
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
-  <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4-photos-20261008-1"></script>
+  <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261008-producto-superficies-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-photos-20261008-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261008-producto-superficies-1" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. cargador-pagina.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -50,7 +50,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-photos-20261008-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261008-producto-superficies-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261004-header-consistency-2-checkout-20261008-2-halo-20261008-4">
@@ -70,7 +70,7 @@
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261004-header-consistency-2-checkout-20261008-2-halo-20261008-4-profile-wholesale-20261005-1-master-20261007-1-stock-line-2">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261008-producto-superficies-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
   <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/components/images/imagenes.js,
@@ -139,14 +139,13 @@
   <!-- Content -->
   <div class="tt-hero-content">
     <p class="tt-hero-eyebrow">ACCESORIOS &amp; RELOJES</p>
-    <h1 class="tt-hero-title">DETALLES QUE ELEVAN <span class="tt-hero-title-line--accent">TU ESTILO</span></h1>
-    <p class="tt-hero-subtitle">Accesorios y relojes para acompañar tu estilo, todos los días.</p>
+    <h1 class="tt-hero-title"><span class="tt-hero-title-line">DETALLES QUE ELEVAN</span><span class="tt-hero-title-line tt-hero-title-line--accent">TU ESTILO</span></h1>
+    <p class="tt-hero-subtitle">Joyitas únicas, como vos.</p>
     <div class="tt-hero-actions">
       <a href="/catalogo" class="tt-btn tt-btn-lg tt-hero-cta">
-        Descubrir Tintin
-        <span class="tt-hero-cta-arrow" aria-hidden="true">→</span>
+        Comprar ahora
       </a>
-      <a href="/about" class="tt-hero-link">¿Quiénes somos?</a>
+      <a href="/about" class="tt-hero-link">¿Quiénes somos? →</a>
     </div>
   </div>
 
@@ -416,7 +415,7 @@
   requestAnimationFrame(releaseHomeWhenStructurallyReady);
 })();
 </script>
-<script src="tienda.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1" defer></script>
+<script src="tienda.js?v=tintin-20261008-producto-superficies-1" defer></script>
 <script type="module" src="js/pages/home/carrusel-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1"></script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
@@ -424,7 +423,7 @@
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1"></script>
 <script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20261004-admin-connections-3"></script>
 <script type="module">
-import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-encomienda-20261008-1-encomienda-20261008-1-encomienda-20261008-1';
+import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20261008-producto-superficies-1';
 initSiteContent('index');
 </script>
 <script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2"></script>
@@ -463,7 +462,7 @@ initSiteContent('index');
   ]
 }
 </script>
-<script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-encomienda-20261008-1-encomienda-20261008-1-encomienda-20261008-1"></script>
+<script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20261008-producto-superficies-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 </body>
 </html>

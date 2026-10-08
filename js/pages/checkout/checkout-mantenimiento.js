@@ -11,7 +11,7 @@ if (CHECKOUT_RE.test(location.pathname || '') && !window.TintinCheckoutMaintenan
     if (document.querySelector('link[data-tt-checkout-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../../../css/pages/checkout/checkout-maintenance.css?v=20260828-minimal-confirmation-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-photos-20261008-1', import.meta.url).href;
+    link.href = new URL('../../../css/pages/checkout/checkout-maintenance.css?v=tintin-20261008-producto-superficies-1', import.meta.url).href;
     link.dataset.ttCheckoutMaintenance = '1';
     document.head.appendChild(link);
   }

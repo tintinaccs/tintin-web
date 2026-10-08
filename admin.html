@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-<script src="js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4-photos-20261008-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261008-producto-superficies-1"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1-brand-runtime-20261004-1-owner-pink-20261004-1" defer></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><meta name="description" content="Panel privado de administración de Tintin Accesorios.">
@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="css/admin/paginas-admin.css?v=tintin-20260825-pages-1">
   <link rel="stylesheet" href="css/admin/flujo-conexiones.css?v=tintin-20261005-flow-progress-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261004-header-consistency-2-checkout-20261008-2-halo-20261008-4-profile-wholesale-20261005-1-master-20261007-1-stock-line-2">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261008-producto-superficies-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -1696,11 +1696,11 @@
 
       <div class="adm-card" id="push-card" style="margin-bottom:20px;display:none">
         <div class="adm-card-head" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-          <div class="adm-card-title">🔔 Notificaciones de pedidos</div>
+          <div class="adm-card-title">🔔 Notificaciones de actividad</div>
           <span class="adm-badge" id="push-status-pill">No configuradas</span>
         </div>
         <div class="adm-card-body">
-          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px" id="push-status-detail">Activá las notificaciones para recibir un aviso en este dispositivo cada vez que una clienta completa un pedido, aunque el panel esté cerrado.</p>
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px" id="push-status-detail">Activá las notificaciones de Super Admin para recibir Me gusta, comentarios, inicios de sesión, registros y compras en este dispositivo, aunque el panel esté cerrado.</p>
           <label class="adm-label" for="push-device-label">Nombre de este dispositivo</label>
           <input type="text" class="adm-input" id="push-device-label" maxlength="60" placeholder="Ej: iPhone de Barbi" autocomplete="off">
           <div style="font-size:12px;color:var(--adm-muted);margin:12px 0">Último registro correcto: <strong id="push-last-register" style="color:var(--adm-text)">—</strong></div>
@@ -1710,7 +1710,7 @@
             <button type="button" class="adm-btn adm-btn-danger adm-btn-sm" id="btn-push-disable" style="display:none">Desactivar en este dispositivo</button>
           </div>
           <p id="push-notice" style="display:none;font-size:12px;margin:14px 0 0;color:var(--adm-muted)"></p>
-          <p style="font-size:12px;color:var(--adm-muted);margin:14px 0 0;padding-top:14px;border-top:1px solid var(--adm-border)">🔒 La pantalla bloqueada sólo muestra número de pedido, total y tipo de entrega.</p>
+          <p style="font-size:12px;color:var(--adm-muted);margin:14px 0 0;padding-top:14px;border-top:1px solid var(--adm-border)">🔒 Los avisos de actividad son exclusivos de Super Admin. Los clientes reciben únicamente avisos de su propio perfil.</p>
         </div>
       </div>
       <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
@@ -2049,7 +2049,7 @@
 <script type="module" src="js/admin/importacion-admin.js?v=tintin-20261005-import-one-click-1-loads-20261007-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261004-admin-connections-3"></script>
 <script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1"></script>
-<script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-encomienda-20261008-1"></script>
+<script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20261008-producto-superficies-1"></script>
 
 
 <!-- ══════════════════════════════════════
@@ -2262,8 +2262,8 @@
 <script type="module" src="js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260930-semantic-main-cache-1-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1"></script>
 <script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20261004-admin-connections-3"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1"></script>
-    <script type="module" src="js/admin/notifications/notificaciones-admin.js?v=tintin-20261008-notifications-auto-read-checkout-1"></script>
-<script type="module" src="js/admin/notifications/notificaciones-push.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1"></script>
+    <script type="module" src="js/admin/notifications/notificaciones-admin.js?v=tintin-20261008-producto-superficies-1"></script>
+<script type="module" src="js/admin/notifications/notificaciones-push.js?v=tintin-20261008-producto-superficies-1"></script>
 <script type="module" src="js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20260923-push-broadcast-all-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1"></script>
 <script type="module" src="js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2"></script>
 <script type="module" src="js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261005-catalog-delete-ui-reconcile-1"></script>

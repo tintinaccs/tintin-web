@@ -110,6 +110,13 @@ export function isRealisticPhone(rawInput, country) {
   return !looksFabricated(national);
 }
 
+/** Entrada local PY: nueve dígitos, con un único cero inicial opcional. */
+export function isNationalMobileInput(rawInput) {
+  const raw = String(rawInput || '').trim();
+  if (!/^[0-9 ]+$/.test(raw)) return false;
+  return /^0?9\d{8}$/.test(raw.replace(/ /g, '')) && isRealisticPhone(raw, DEFAULT_COUNTRY);
+}
+
 /**
  * Clave para detectar el mismo número escrito distinto.
  *

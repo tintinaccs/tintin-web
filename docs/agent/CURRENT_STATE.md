@@ -1,6 +1,6 @@
 # PR #1067 — actualización del candidato, 2026-10-08
 
-Agente: Codex. Solicitud explícita del propietario: arreglar y fusionar. Base vigente: 3c33641e810e5c9ae820415b5ac8505339d781e0. Se integra main sin descartar los cambios concurrentes y se resuelven conflictos del plan, manifiesto y este registro; el manifiesto se regenera con build:pages. Plan renovado exclusivamente para los tres archivos protegidos de seguridad, conservando los demás sellos y alcances.
+Agente: Codex. Solicitud explícita del propietario: arreglar y fusionar. Base vigente: a347b87be8296d14f3483fcfb03579e09b63dfc0 (#1069 integrado concurrentemente y preservado). Se integra main sin descartar los cambios concurrentes y se resuelven conflictos del plan, manifiesto y este registro; el manifiesto se regenera con build:pages. Plan renovado exclusivamente para los tres archivos protegidos de seguridad, conservando los demás sellos y alcances.
 
 PASS_LOCAL del árbol actualizado: build:pages; 114 pruebas de cuentas/autenticación; 47 pruebas de protección/mantenimiento; 127 controles de reglas críticas en emulador; smoke de páginas completo exit 0 tras habilitar www.gstatic.com. Auditoría final en ejecución y CI del nuevo commit pendientes. No se hereda PASS_CI o PASS_PRODUCTION del texto anterior. No se modifica interfaz ni se debilitan protecciones. No se crean usuarios, pedidos o correos reales durante validación.
 
@@ -22,6 +22,19 @@ Agente: Claude Code. Base: `b8ec93d45d9b155a618c174e09747b48a7351120`. Rama: `cl
 - NO recomendado por ahora: App Check exigido en Firestore rompería `js/core/firebase/respaldo-rest-firestore.js` (lectura REST sólo con clave, sin cabecera App Check). NOT APPLICABLE: Bot Fight Mode/WAF de Cloudflare; producción vive en `tintinaccesorios.pages.dev`, sin zona/dominio propio donde configurarlos.
 
 ## Evidencia previa
+# Estado vigente — 2026-10-08: producto, avisos y superficies responsive
+
+Base: 89d268ee7a7cda2c48f1ab7263534429449ca2c5. Rama codex/producto-colores-recomendaciones-20261008. Candidato integrado con main #1066 y #1068; auditoría final y 618 pruebas PASS. Pendiente CI del SHA final y publicación protegida. La autorización del usuario incluye reparar y publicar, sin pagos. La revisión manual del entorno protected-flow-maintenance corresponde al propietario; no aprobar en su nombre.
+
+- Reparación productiva de metadata: 24 productos/56 fotos con asociaciones de color verificadas visualmente. Transacción modifica únicamente variants y updatedAt; mantiene precio, stock e inventario. Lectura getDocFromServer confirmó 24 coincidencias. Sincronización autenticada /api/sheets-product-sync: ambos lotes HTTP200 ok:true, sin cola. Evidencia local outputs/variantes-firestore-verificacion.json y variantes-sheets-sincronizacion.json.
+- Checkout: cinco etiquetas blancas con fondo de contraste, Confirmación sin cortar ni dividir, contenedores sin fondo blanco. Medición real en Chrome local de 320/390/768/1024/1280/1440/1920: todas completas y dentro del viewport. outputs/checkout-responsive-verificacion.json y checkout-mobile-corregido.png. Fuente aún no publicada.
+- Teléfono: corrige precarga que cortaba tres dígitos del número nacional; perfil y checkout requieren celular PY local con cero opcional/espacios. Pruebas de formatos requeridos e inválidos y checkout: 148/148 PASS.
+- Producto: prueba Chrome confirma dos fotos únicas, dorado inicial seleccionado, plateado cambia a plata y miniatura dorada vuelve a seleccionar dorado. Identidad de fotos ignora transformaciones Cloudinary conservando versión/archivo. Nuevas pruebas de identidad y variantes: 5 PASS.
+- Recomendaciones: catálogo completo, otras categorías, ciclos sin repetición. Avisos deduplicados por evento, singleton público/admin. Pruebas de ciclos/avisos/regresiones de sincronización: 13 PASS. Se corrigió referencia sobrante favoritesHtml descubierta en Chrome tras retirar favoritos del carrito.
+- Verificado en Chrome: logo oficial blanco de Mi cuenta, mapas completos con CSS Leaflet e integridad SRI corregida, checkout y carga siempre arriba en siete anchos. Build Pages PASS y 618/618 pruebas PASS. Plan exacto conserva 541 archivos/78 registros (67 archivos renovados/34 registros afectados). Auditoría final PASS. Pendiente PR/CI y revisión manual del propietario. Push todavía espera permiso de Chrome (default); PayPal Live sigue pendiente. Revalidación productiva 15:46:12Z detecta 45 cambios desde sellos anteriores, que se conservan sin ocultarlos.
+
+## Evidencia histórica (conservada de main)
+
 # Corrección — fotos por color y errores de checkout, 2026-10-08
 
 Agente: Codex / GPT-6. Base publicada 89d268ee7a7cda2c48f1ab7263534429449ca2c5 (PR 1068). Pedido expreso: corregir los tres hallazgos de la revisión y las miniaturas duplicadas, ampliado a asignar varias fotos por color desde Super Admin para todos los productos.

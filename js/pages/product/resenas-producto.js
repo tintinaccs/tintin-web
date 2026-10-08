@@ -179,15 +179,9 @@ function ensureSection() {
       </div>
     </div>`;
 
-  const socialBar = document.querySelector('.tt-product-social-bar');
-  const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
-  const tinsel = document.querySelector('.tinsel, #tinsel-root');
-  const productDetail = document.getElementById('product-detail');
-  if (socialBar?.parentNode) socialBar.insertAdjacentElement('afterend', section);
-  else if (related?.parentNode) related.parentNode.insertBefore(section, related);
-  else if (tinsel?.parentNode) tinsel.insertAdjacentElement('afterend', section);
-  else if (productDetail?.parentNode) productDetail.insertAdjacentElement('afterend', section);
-  else document.body.insertBefore(section, document.querySelector('.tt-footer'));
+  const footer = document.querySelector('.tt-footer');
+  if (footer?.parentNode) footer.parentNode.insertBefore(section, footer);
+  else document.body.appendChild(section);
   return section;
 }
 
@@ -299,7 +293,7 @@ function highlightDeepLink() {
   deepLinkHandled = true;
   requestAnimationFrame(() => {
     target.classList.add('tt-review-deeplink-highlight');
-    target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    // Al entrar por enlace se destaca la reseña sin desplazar la página.
     window.setTimeout(() => target.classList.remove('tt-review-deeplink-highlight'), 2200);
   });
 }

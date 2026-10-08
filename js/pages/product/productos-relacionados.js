@@ -60,6 +60,7 @@ if (grid && !window.TintinRelatedProducts) {
     currentProduct: null,
     visible: [],
     history: new Map(),
+    categoryHistory: new Set(),
     replacing: false,
   };
 
@@ -122,6 +123,8 @@ if (grid && !window.TintinRelatedProducts) {
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(product);
     });
+    const currentCategory = categoryKey(state.currentProduct);
+    if (groups.size > 1) groups.delete(currentCategory);
     return groups;
   }
 
@@ -135,11 +138,8 @@ if (grid && !window.TintinRelatedProducts) {
     if (!available.length) return null;
 
     const history = historyFor(category);
-    let unused = available.filter(product => !history.has(String(product.id)));
-    if (!unused.length) {
-      history.clear();
-      unused = available;
-    }
+    const unused = available.filter(product => !history.has(String(product.id)));
+    if (!unused.length) return null;
 
     const selected = unused[randomIndex(unused.length)];
     history.add(String(selected.id));
@@ -156,53 +156,31 @@ if (grid && !window.TintinRelatedProducts) {
 
   function buildCombination({ excludeVisible = false } = {}) {
     const groups = groupedProducts();
-    const pool = validProducts();
-    const targetCount = Math.min(LIMIT, pool.length);
-    const visibleIds = excludeVisible
-      ? new Set(state.visible.map(product => String(product.id)))
-      : new Set();
-    const visibleCategories = excludeVisible
-      ? new Set(state.visible.map(categoryKey))
-      : new Set();
-
-    let categories = categoryOrder(groups, visibleCategories);
-    if (categories.length < targetCount) {
-      categories = [
-        ...categories,
-        ...categoryOrder(groups).filter(category => !categories.includes(category)),
-      ];
+    if (!groups.size) return [];
+    const hasUnused = category => (groups.get(category) || []).some(product => !historyFor(category).has(String(product.id)));
+    if (![...groups.keys()].some(hasUnused)) {
+      state.history.clear();
+      state.categoryHistory.clear();
     }
-
+    // A product only re-enters after the entire eligible pool is exhausted.
+    // With uneven collection sizes the end of a cycle can have fewer cards;
+    // duplicating a collection to fill the row would violate the contract.
+    const availableCategories = [...groups.keys()].filter(hasUnused);
+    const targetCount = Math.min(LIMIT, availableCategories.length);
     const result = [];
-    for (const category of categories) {
-      const selected = chooseFromCategory(category, groups.get(category) || [], visibleIds);
-      if (!selected) continue;
+    const visibleCategories = new Set(excludeVisible ? state.visible.map(categoryKey) : []);
+    while (result.length < targetCount) {
+      const used = new Set(result.map(categoryKey));
+      const remaining = availableCategories.filter(category => !used.has(category));
+      let categories = remaining.filter(category => !state.categoryHistory.has(category));
+      if (!categories.length) { state.categoryHistory.clear(); categories = remaining; }
+      const preferred = categories.filter(category => !visibleCategories.has(category));
+      const choices = preferred.length ? preferred : categories;
+      const category = choices[randomIndex(choices.length)];
+      const selected = chooseFromCategory(category, groups.get(category) || []);
+      if (!selected) break;
       result.push(selected);
-      visibleIds.add(String(selected.id));
-      if (result.length === targetCount) break;
-    }
-
-    if (excludeVisible && result.length < targetCount) {
-      const usedCategories = new Set(result.map(categoryKey));
-      for (const product of shuffled(state.visible)) {
-        const category = categoryKey(product);
-        if (usedCategories.has(category)) continue;
-        const stillExists = (groups.get(category) || []).some(candidate =>
-          String(candidate.id) === String(product.id)
-        );
-        if (!stillExists) continue;
-        result.push(product);
-        usedCategories.add(category);
-        if (result.length === targetCount) break;
-      }
-    }
-
-    if (result.length < targetCount) {
-      for (const product of shuffled(pool.filter(item => !visibleIds.has(String(item.id))))) {
-        result.push(product);
-        visibleIds.add(String(product.id));
-        if (result.length === targetCount) break;
-      }
+      state.categoryHistory.add(category);
     }
 
     return result;
@@ -232,6 +210,10 @@ if (grid && !window.TintinRelatedProducts) {
     let combination = buildCombination();
     if (!remembered || combination.length < 2) return combination;
     for (let attempt = 0; attempt < 8 && combination.map(product => String(product.id)).join('|') === remembered; attempt += 1) {
+      // A rejected initial draw is not a viewed product and must not consume
+      // the browsing cycle.
+      state.history.clear();
+      state.categoryHistory.clear();
       combination = buildCombination();
     }
     return combination;
@@ -265,7 +247,7 @@ if (grid && !window.TintinRelatedProducts) {
     if (section) section.hidden = !hasProducts;
     if (refreshButton) {
       refreshButton.disabled = !hasProducts;
-      refreshButton.hidden = state.visible.length < 2;
+      refreshButton.hidden = validProducts().length < 2;
     }
   }
 
@@ -302,7 +284,10 @@ if (grid && !window.TintinRelatedProducts) {
     if (!motionQuery.matches) {
       await new Promise(resolve => window.setTimeout(resolve, EXIT_MS));
     }
-    renderAll(combination, { announceChange: true });
+    const eligible = groupedProducts();
+    const latest = new Map([...eligible.values()].flat().map(product => [String(product.id), product]));
+    const currentCombination = combination.map(product => latest.get(String(product.id))).filter(Boolean);
+    renderAll(currentCombination.length ? currentCombination : buildCombination(), { announceChange: true });
     refreshButton?.classList.remove('is-refreshing');
     state.replacing = false;
   }
@@ -319,9 +304,9 @@ if (grid && !window.TintinRelatedProducts) {
     }
 
     const groups = groupedProducts();
-    const targetCount = Math.min(LIMIT, validProducts().length);
+    const targetCount = Math.min(LIMIT, groups.size);
     const stillValid = state.visible.length > 0
-      && state.visible.length === targetCount
+      && state.visible.length <= targetCount
       && state.visible.every(product => {
         const group = groups.get(categoryKey(product)) || [];
         return group.some(candidate => String(candidate.id) === String(product.id));
