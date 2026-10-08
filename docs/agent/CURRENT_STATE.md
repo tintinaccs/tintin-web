@@ -11,6 +11,12 @@ Base: 435a9c416e08cafe74e57810211c1bc845b3abbb. Rama codex/producto-colores-reco
 
 ## Evidencia histórica (conservada de main)
 
+# Corrección — búsqueda de ubicación lenta, 2026-10-08
+
+Base publicada 435a9c416e08cafe74e57810211c1bc845b3abbb (PR 1066). Evidencia de la consulta pública «Shopping San Lorenzo»: primera respuesta 6671 ms; repetida 162 ms con caché edge. El frontend demoraba 600 ms al escribir, no conservaba resultados y repetía fallos mediante un alias del mismo backend. Se reduce debounce a 300 ms, se agrega caché sólo en memoria (40 consultas, 10 minutos; vacíos 30 segundos, copias de objetos) y presupuesto total de 8 segundos con cancelación. El alias sólo se consulta ante 404; errores de proveedor/red no duplican el tráfico. Se preservan proveedor Photon, parser Google Maps, validación de coordenadas y confirmación explícita del punto. La primera búsqueda nueva sigue dependiendo del proveedor externo: no se promete respuesta inmediata. Impacto: componentes compartidos de checkout/alta/perfil y URLs immutable; no cambia datos, permisos, Rules, pedidos ni tarifas.
+
+PASS_LOCAL: 32 pruebas Node de búsqueda/geolocalización/ubicación guardada, incluidas caché, objetos mutables, fallo sin duplicados, respaldo 404, cancelación y deadline. 28 casos Chromium: navegación de checkout, encomienda, mapa firmado, halos móviles y contrato de ubicación/nombre/confirmación. Build:pages y versionado correctos antes del registro final; se regeneran después de esta evidencia. CI exacto y aprobación humana de mantenimiento pendientes; aún no publicado.
+
 # Corrección — encomienda sólo por transferencia, 2026-10-08
 
 Seguimiento 388239e6: audit:final y build:pages completos PASS_LOCAL sin drift. CI pasó las etapas estáticas, operativas, Rules y Super Admin; se detuvo en header-responsive porque Alertas aún exigía su fondo blanco anterior. Se actualiza exclusivamente el contrato visual solicitado: botón transparente para mostrar el halo, barra blanca explícitamente verificada; se mantienen todos los controles de etiquetas, columnas, compactación, colisiones, panel y foco. Caso afectado completo PASS_LOCAL. Nuevo candidato pendiente de CI exacto y revisión humana del entorno, sin retirar ni saltar pruebas.

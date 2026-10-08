@@ -2,7 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { parseLocationSearchInput, searchPlaces } from '../../js/components/location/selector-ubicacion.js';
+import { parseLocationSearchInput } from '../../js/components/location/selector-ubicacion.js';
+let searchPlaces;
+let searchCase = 0;
+test.beforeEach(async () => {
+  ({ searchPlaces } = await import(`../../js/components/location/selector-ubicacion.js?case=${++searchCase}`));
+});
 
 const root = path.resolve(import.meta.dirname, '../..');
 
@@ -102,4 +107,69 @@ test('checkout acepta enlaces completos de Google Maps con coordenadas', () => {
     assert.match(selectorSource, /!3d/);
     assert.match(selectorSource, /center\|destination\|origin/);
     assert.match(source, /parseLocationSearchInput/);
+});
+
+test('repetir una búsqueda responde de memoria sin consultar de nuevo ni compartir objetos mutables', async () => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; return Response.json(API_RESPONSE); };
+  try {
+    const first = await searchPlaces('Shopping del Sol');
+    first[0].lat = 0;
+    const second = await searchPlaces('SHOPPING   DEL SOL');
+    assert.equal(calls, 1);
+    assert.equal(second[0].lat, API_RESPONSE.places[0].lat);
+  } finally { globalThis.fetch = original; }
+});
+
+test('un proveedor caído no se consulta dos veces mediante rutas idénticas', async () => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; return new Response('', { status: 503 }); };
+  try {
+    await assert.rejects(searchPlaces('Shopping del Sol'));
+    assert.equal(calls, 1);
+  } finally { globalThis.fetch = original; }
+});
+
+test('una ruta ausente conserva el respaldo y una cancelación impide guardar resultados', async () => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => ++calls === 1 ? new Response('', { status: 404 }) : Response.json(API_RESPONSE);
+  try {
+    assert.equal((await searchPlaces('Shopping del Sol')).length, 2);
+    assert.equal(calls, 2);
+    const controller = new AbortController();
+    controller.abort();
+    await assert.rejects(searchPlaces('Shopping del Sol', { signal: controller.signal }), { name: 'AbortError' });
+  } finally { globalThis.fetch = original; }
+});
+
+test('una búsqueda que no responde termina a los ocho segundos sin reintento duplicado', async t => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  globalThis.fetch = async (_, { signal }) => { calls++; return new Promise((_, reject) => signal.addEventListener('abort', () => reject(signal.reason), { once: true })); };
+  try {
+    const pending = searchPlaces('Shopping del Sol');
+    const rejected = assert.rejects(pending, { name: 'TimeoutError' });
+    t.mock.timers.tick(8000);
+    await rejected;
+    assert.equal(calls, 1);
+  } finally { globalThis.fetch = original; t.mock.timers.reset(); }
+});
+
+test('los resultados cancelados no vuelven como resultados cacheados', async () => {
+  const original = globalThis.fetch;
+  const controller = new AbortController();
+  let calls = 0;
+  globalThis.fetch = async () => {
+    if (++calls === 1) controller.abort();
+    return Response.json(API_RESPONSE);
+  };
+  try {
+    await assert.rejects(searchPlaces('Shopping del Sol', { signal: controller.signal }), { name: 'AbortError' });
+    assert.equal((await searchPlaces('Shopping del Sol')).length, 2);
+    assert.equal(calls, 2);
+  } finally { globalThis.fetch = original; }
 });
