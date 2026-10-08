@@ -1,3 +1,18 @@
+# Actualización de mantenimiento — PR #1061
+
+La revisión humana del run 37763253834 quedó registrada, pero el veredicto rechazó correctamente la base obsoleta después de integrar #1064. Se incorpora main fbfacb6d7afcfcafc8593b5f28106bf3e4e1d2b0, preservando sus 78 alcances y metadatos. El nuevo candidato requiere CI y una nueva revisión humana; no hereda la autorización anterior.
+
+# Estado vigente — 2026-10-08: comentario técnico verificado y oculto
+
+Base del candidato: 1110cf9e54ed3010a363972c815cec64380b1f88. Evidencia productiva: 64426ba148444ac2d66d4f7a465b13f02beccbb4, revalidación 00:08:20.089Z.
+
+- Autorización expresa del propietario: agregar el comentario y completar su registro. Se creó un único comentario identificado como PRUEBA TÉCNICA DE TINTIN, autor store, sin simular una compra/opinión; rating3 es sólo dato de prueba. POST /api/engagement HTTP200 y moderación reviewVisibility false HTTP200. Registro real 55cf102531c651b309ce5cf5f5583a59d44d9f2be39b804cc275467be9ff7179 en reviewRecords; visible false, documento público ausente. No se reescribieron Rules ni se inyectaron documentos SDK.
+- Sheets Resenas fila2 contiene ID/producto/texto; Admin muestra una reseña oculta y la etiqueta Tintin. Revalidación: 78 verdes, dos parciales (PayPal sandbox y su conexión). Sellos guardados78; los76 anteriores exactamente intactos.
+- Protección aditiva: 76→78 alcances,129→131 archivos. Agrega moderación y API administrativa; conserva todos los hashes/alcances anteriores, incluido mecanismo de mantenimiento. Sin código de negocio, auditor/workflow, renovación de huellas, retiro de checks o aprobación de un entorno por el agente.
+- PASS_LOCAL: validador puro contra base real: changes[] y todos los archivos protegidos intactos. CI y publicación de este candidato pendientes al escribir. No heredar PASS productivo para un commit nuevo.
+- Pendientes ajenos a este cambio: PayPal Live con Dashboard autorizado; correcciones checkout de mapa/factura/teléfono preparadas previamente aún sin publicar en esta rama. No pagos, pedidos, correos ni opiniones de compra inventadas.
+
+## Evidencia histórica
 # Estado vigente — 2026-10-08: plan de mantenimiento del PR #1061
 
 Agente: Codex. Base de mantenimiento: `1110cf9e54ed3010a363972c815cec64380b1f88`.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "1110cf9e54ed3010a363972c815cec64380b1f88",
+  "baseCommit": "fbfacb6d7afcfcafc8593b5f28106bf3e4e1d2b0",
   "reason": "Correcciones del PR 1061: CSP, tarifas compartidas, colecciones públicas, navegación y versiones; CI completo y pruebas de compra, cuenta y catálogo obligatorios antes de revisión.",
   "files": [
     {
@@ -54,6 +54,7 @@
     "admin-guard__firestore-fuente-verdad__16",
     "apis-internas",
     "apis-internas__apps-script__22",
+    "apis-internas__comentarios__39",
     "apis-internas__correos__41",
     "apis-internas__favoritos__37",
     "apis-internas__firestore__21",
@@ -65,6 +66,7 @@
     "cf-functions__csp__29",
     "cf-functions__reglas-firestore__28",
     "cf-pages__cf-functions__19",
+    "comentarios",
     "correos",
     "csp",
     "cuenta-bloqueada",
