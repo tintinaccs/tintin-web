@@ -3,7 +3,7 @@ export const CHECKOUT_DRAFT_KEYS = Object.freeze([
   'selectedCity', 'departamento', 'address', 'referencia', 'mapLocation',
   'shippingMethod', 'encomiendaMode', 'paymentMethod', 'expectedSubtotal',
   'expectedShippingCost', 'expectedShippingPending', 'expectedTotal',
-  'wantsInvoice', 'razonSocial', 'ruc', 'ci', 'couponCode'
+  'wantsInvoice', 'taxpayerType', 'razonSocial', 'ruc', 'ci', 'couponCode'
 ]);
 
 const clean = value => String(value == null ? '' : value).trim();
@@ -61,6 +61,7 @@ export function composeCheckoutDraft(input) {
     // obligatorio. CI sólo se pide para encomienda porque la transportadora
     // lo exige para el retiro/entrega — si además pide factura, van los tres.
     wantsInvoice: Boolean(input.wantsInvoice),
+    ...(input.wantsInvoice ? { taxpayerType: String(input.taxpayerType || '') } : {}),
     razonSocial: input.wantsInvoice ? String(input.razonSocial || '') : '',
     ruc: input.wantsInvoice ? String(input.ruc || '') : '',
     ci: input.shipping.method === 'encomienda' ? String(input.ci || '') : '',

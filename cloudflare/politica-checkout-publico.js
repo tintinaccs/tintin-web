@@ -1,5 +1,7 @@
+import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../js/components/location/tarifas-delivery.mjs';
 import { decodeFirestoreFields, firestoreAdminGet } from './firebase-admin-ligero.js';
 import { SUPERADMIN_EMAIL } from './seguridad-cloudinary.js';
+import { isValidRuc, isValidTaxpayerType } from '../js/components/forms/validacion-documentos-py.js';
 import {
   COUPON_TYPE_FREE_SHIPPING,
   couponDocPath,
@@ -21,7 +23,6 @@ const CHECKOUT_GUARD_WINDOW_MS = 5 * 60 * 1000;
 const REQUEST_ID_PATTERN = /^[A-Za-z0-9_-]{12,100}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CI_PATTERN = /^\d{5,8}$/;
-const RUC_PATTERN = /^\d{5,8}-\d$/;
 const PAYMENT_METHODS = new Set(['efectivo', 'transferencia', 'paypal']);
 const CART_LINE_KEYS = new Set(['id', 'qty', 'variant', 'variants']);
 const MAP_KEYS = new Set(['lat', 'lng', 'name', 'address']);
@@ -140,7 +141,7 @@ function resolveShipping(rates, selectedCity, selectedDepartment, requestedMetho
     if (requestedMethod && requestedMethod !== 'retiro') throw checkoutError('shipping_changed');
     return { method: 'retiro', city: 'Retiro coordinado', departamento: 'Central', cost: 0, pending: false, rateIndex: -1 };
   }
-  const wanted = selectedCity.toLocaleLowerCase('es');
+  const wanted = normalizeDeliveryCityName(selectedCity).toLocaleLowerCase('es');
   const wantedDepartment = cleanText(selectedDepartment, 80).toLocaleLowerCase('es');
   const matches = city =>
     city.name.toLocaleLowerCase('es') === wanted &&
@@ -148,7 +149,7 @@ function resolveShipping(rates, selectedCity, selectedDepartment, requestedMetho
 
   const delivery = requestedMethod && requestedMethod !== 'delivery'
     ? null
-    : normalizeCities(rates.deliveryCities, rates.deliveryCost).find(matches);
+    : canonicalDeliveryCities(normalizeCities(rates.deliveryCities, rates.deliveryCost)).find(matches);
   if (delivery) {
     return {
       method: 'delivery',
@@ -310,6 +311,7 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
   const referencia = cleanText(payload.referencia, 300);
   const doorDelivery = shipping.method === 'encomienda' && encomiendaMode === 'puerta';
   if (shipping.method === 'delivery' && !mapLocation?.name) throw checkoutError('map_required');
+  if (shipping.method === 'delivery' && referencia.length < 5) throw checkoutError('reference_required');
   if (doorDelivery) {
     if (address.length < 5) throw checkoutError('address_required');
     if (!mapLocation?.name) throw checkoutError('map_required');
@@ -321,7 +323,9 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
   const razonSocial = cleanText(payload.razonSocial, 180);
   const ruc = cleanText(payload.ruc, 40).replace(/\s/g, '');
   if (wantsInvoice && razonSocial.length < 3) throw checkoutError('razon_social_required');
-  if (wantsInvoice && !RUC_PATTERN.test(ruc)) throw checkoutError('ruc_invalid');
+  if (wantsInvoice && !isValidRuc(ruc)) throw checkoutError('ruc_invalid');
+  const taxpayerType = cleanText(payload.taxpayerType, 20);
+  if (wantsInvoice && !isValidTaxpayerType(taxpayerType)) throw checkoutError('taxpayer_type_required');
 
   const keepsAddress = shipping.method === 'delivery' || doorDelivery;
   const baseShippingCost = shipping.cost === null ? 0 : shipping.cost;
@@ -347,7 +351,7 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
     userPhone: phone,
     notes: cleanText(payload.notes, 1000),
     ci: shipping.method === 'encomienda' ? ci : '',
-    invoice: { wanted: wantsInvoice, razonSocial: wantsInvoice ? razonSocial : '', ruc: wantsInvoice ? ruc : '' },
+    invoice: { wanted: wantsInvoice, razonSocial: wantsInvoice ? razonSocial : '', ruc: wantsInvoice ? ruc : '', ...(wantsInvoice ? { taxpayerType } : {}) },
     shippingMethod: shipping.method,
     shippingCity: shipping.city,
     departamento: shipping.departamento,

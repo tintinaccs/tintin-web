@@ -120,7 +120,7 @@ export const FITOXPRESS_DELIVERY_CITIES = [
   { name: 'Capiatá', price: 25000 },
   { name: 'Ñemby', price: 25000 },
   { name: 'Ypané', price: 30000 },
-  { name: 'Fernando de la Mora', price: 20000 },
+  { name: 'Fernando de la Mora', price: 25000 },
   { name: 'Luque', price: 30000 },
   { name: 'Asunción', price: 30000 },
   { name: 'Villa Elisa', price: 25000 },

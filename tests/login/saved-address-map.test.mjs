@@ -9,7 +9,7 @@ const source=fs.readFileSync(new URL('../../js/components/location/mapa-ubicacio
 function runtime({loadLibrary=true}={}) {
   const handlers={},scripts=[],markers=[];
   const map={setView(){return this;},on(name,callback){handlers[name]=callback;return this;},invalidateSize(){},remove(){}};
-  const L={map:()=>map,tileLayer:()=>({addTo(){}}),latLng:(lat,lng)=>({lat,lng}),divIcon:()=>({}),marker:(point,options)=>{
+  const L={map:()=>map,tileLayer:()=>({addTo(){return this;},on(name,callback){handlers[name]=callback;return this;}}),latLng:(lat,lng)=>({lat,lng}),divIcon:()=>({}),marker:(point,options)=>{
     const marker={point,options,addTo(){return this;},off(){return this;},on(){return this;},setLatLng(value){this.point=value;}};
     markers.push(marker);return marker;
   }};

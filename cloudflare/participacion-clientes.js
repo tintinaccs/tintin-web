@@ -1,3 +1,4 @@
+import { resolveAccountAvatar } from '../js/pages/profile/estado-canonico-perfil.mjs';
 import {
   decodeFirestoreFields,
   encodeFirestoreFields,
@@ -85,7 +86,7 @@ async function readContext(env, user, productId) {
     realName,
     username: customerUsername(profile, user.email),
     publicName: admin ? 'Tintin Accesorios' : publicCustomerName(realName),
-    photoUrl: clean(profile.photoURL || profile.photoUrl || '', 1200),
+    photoUrl: clean(resolveAccountAvatar(profile, user), 1200),
     isSuperAdmin: admin,
   };
 }

@@ -21,6 +21,10 @@ test('CI acepta 5 a 8 dígitos, con o sin puntos, y rechaza letras', () => {
 test('RUC exige dígitos, guion y dígito verificador', () => {
   assert.equal(isValidRuc('80012345-6'), true);
   assert.equal(isValidRuc('4123456-8'), true);
+  assert.equal(isValidRuc('123-4'), true, 'longitud mínima del formato SIFEN');
+  assert.equal(isValidRuc('80123456-7'), true, 'no se impone prefijo 800');
+  assert.equal(isValidRuc('12-4'), false);
+  assert.equal(isValidRuc('123456789-0'), false);
   assert.equal(isValidRuc('80012345'), false, 'sin guion ni verificador');
   assert.equal(isValidRuc('80012345-'), false, 'sin dígito verificador');
   assert.equal(isValidRuc('80012345-6x'), false);

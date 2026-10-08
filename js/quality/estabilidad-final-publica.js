@@ -265,7 +265,6 @@ async function enhanceProfile() {
     { id: 'datos', label: 'Mis datos', nodes: [identityCard, locationCard] },
     { id: 'pedidos', label: 'Pedidos', nodes: [ordersCard] },
     { id: 'favoritos', label: 'Favoritos', nodes: [favoritesCard] },
-    { id: 'mayorista', label: '¿Querés ser mayorista?', nodes: [document.getElementById('perfil-wholesale-card')] },
     { id: 'cuenta', label: 'Cuenta y seguridad', nodes: [accountCard, roleCard, accountActions] },
     { id: 'ayuda', label: 'Ayuda', nodes: [helpCard, quickCard] },
   ];
@@ -299,7 +298,6 @@ async function enhanceProfile() {
       badge.hidden = true;
       button.appendChild(badge);
     }
-    if(definition.id==='mayorista')button.classList.add('tt-wholesale-invitation');
     tabs.appendChild(button);
 
     const panel = document.createElement('section');
@@ -325,19 +323,12 @@ async function enhanceProfile() {
     if (button) activate(button.dataset.profileTab);
   });
 
-  function updateWholesaleTab(approved){
-    const button=tabs.querySelector('[data-profile-tab="mayorista"]');
-    if(!button)return;
-    button.innerHTML=approved?'Mayoristas':'<span class="tt-wholesale-invitation-label">¿Querés ser mayorista?</span>';
-    button.classList.toggle('tt-wholesale-invitation',!approved);
-  }
-  window.addEventListener('tintin:auth-nav-updated',event=>updateWholesaleTab(event.detail?.wholesaleApproved===true));
-  updateWholesaleTab(document.documentElement.dataset.ttWholesaleApproved==='true');
   window.addEventListener('hashchange',()=>{const id=location.hash.slice(1);if(panels.has(id))activate(id);});
 
   function updateSummary() {
-    const count = Math.max(0, Number(document.getElementById('perfil-purchase-count')?.textContent?.replace(/\D/g, '') || 0));
-    const spent = textOf('#perfil-total-spent', 'Gs. 0');
+    const countText = document.getElementById('perfil-purchase-count')?.textContent?.trim() || '—';
+    const count = /^\d+$/.test(countText) ? String(Number(countText)) : '—';
+    const spent = textOf('#perfil-total-spent', '—');
     const location = document.getElementById('perfil-location-content')?.textContent?.replace(/\s+/g, ' ').trim() || 'Sin ubicación guardada';
     const countNode = document.querySelector('[data-profile-summary-orders]');
     const spentNode = document.querySelector('[data-profile-summary-spent]');
