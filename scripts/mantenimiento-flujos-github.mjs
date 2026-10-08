@@ -11,13 +11,47 @@ const prNumber = process.env.PR_NUMBER || '';
 const baseSha = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 const runId = process.env.GITHUB_RUN_ID;
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
+// Sólo datos de diagnóstico permitidos: nunca cuerpo completo, cabeceras de
+// autenticación ni mensajes arbitrarios que puedan reflejar una credencial.
+const githubFailure = async (response, path, method) => {
+  let message = '';
+  try { message = (await response.json())?.message || ''; } catch { /* Sin JSON. */ }
+  const numeric = name => {
+    const value = response.headers.get(name);
+    return /^\d{1,16}$/.test(value || '') ? value : 'no disponible';
+  };
+  let cause = 'GitHub no informó una causa reconocida; conservar el identificador de solicitud para soporte.';
+  if (response.status === 429 || (response.status === 403 && numeric('x-ratelimit-remaining') === '0') ||
+      /API rate limit exceeded|secondary rate limit|abuse detection/i.test(message)) {
+    cause = 'Límite de consultas de GitHub alcanzado.';
+  } else if (message === 'Resource not accessible by integration' || message === 'Resource not accessible by personal access token') {
+    cause = 'El token no tiene acceso a este recurso.';
+  } else if (message === 'Bad credentials') {
+    cause = 'GitHub rechazó la credencial.';
+  } else if (message === 'Not Found') {
+    cause = 'Recurso inexistente o sin acceso para este token.';
+  }
+  const endpoint = path.split('?')[0];
+  const requestId = response.headers.get('x-github-request-id') || '';
+  const fields = [
+    `Lectura/escritura de GitHub rechazada: HTTP ${response.status}`,
+    `${method} ${/^[a-zA-Z0-9_/.-]{1,240}$/.test(endpoint) ? endpoint : '(ruta omitida)'}`,
+    cause,
+    `request-id=${/^[a-fA-F0-9:]{1,100}$/.test(requestId) ? requestId : 'no disponible'}`,
+    `rate-limit=${numeric('x-ratelimit-limit')}`,
+    `remaining=${numeric('x-ratelimit-remaining')}`,
+    `reset-unix=${numeric('x-ratelimit-reset')}`,
+    `retry-after-seconds=${numeric('retry-after')}`,
+  ];
+  return fields.join(' | ');
+};
 const api = async (path, body) => {
   const response = await fetch(`https://api.github.com/repos/${config.repository}/${path}`, {
     method: body ? 'POST' : 'GET',
     headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${process.env.GH_TOKEN || ''}`, 'content-type': 'application/json', 'X-GitHub-Api-Version': '2026-03-10' },
     ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(30000),
   });
-  assert(response.ok, `Lectura/escritura de GitHub rechazada: HTTP ${response.status}`);
+  if (!response.ok) throw new Error(await githubFailure(response, path, body ? 'POST' : 'GET'));
   return response.json();
 };
 const list = async (path, key) => {
