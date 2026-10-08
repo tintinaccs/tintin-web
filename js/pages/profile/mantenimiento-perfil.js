@@ -37,10 +37,11 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
         color:var(--danger,#b42345)!important;
       }
       .perfil-btn-danger:hover { background:var(--danger,#b42345)!important;color:#fff!important; }
-      .perfil-order-row { padding:14px!important;border-radius:14px;margin-bottom:10px;border:1px solid var(--border,#ecd5de)!important; }
+      .perfil-order-row { padding:14px!important;border-radius:14px;margin-bottom:20px;border:1px solid var(--border,#ecd5de)!important;box-shadow:0 5px 16px rgba(113,60,83,.08); }
       .perfil-order-row.tt-profile-order-focus { box-shadow:0 0 0 4px rgba(199,154,59,.24),0 18px 38px rgba(173,63,103,.14)!important; }
       .tt-profile-order-head { display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px; }
-      .tt-profile-order-meta { font-size:11px;color:var(--text-muted,#755f67);font-weight:750; }
+      .tt-profile-order-date { display:block;font-size:11px;font-weight:500;margin-top:4px; }
+      .tt-profile-order-meta { margin:0;font-size:15px;color:var(--text-muted,#755f67);font-weight:750; }
       .tt-profile-order-items { font-size:13px;color:var(--text,#382d31);line-height:1.55; }
       .tt-profile-order-total { font-size:14px;font-weight:850;color:var(--color-text-primary,#713C53);margin-top:4px; }
       .tt-profile-order-details{margin-top:10px;border-top:1px solid var(--border,#ecd5de);padding-top:10px}.tt-profile-order-details summary{cursor:pointer;font-size:12px;font-weight:800;color:var(--color-text-primary,#713C53)}

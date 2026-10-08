@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -400,22 +400,6 @@ function renderCart() {
       <ul style="margin:6px 0 0;padding-left:18px">${cartPriceNotice.map(c => `<li>${escapeHtml(c.name)}: ${formatPrice(c.from)} → ${formatPrice(c.to)}</li>`).join('')}</ul>
       <button type="button" data-cart-action="dismiss-price-notice" style="margin-top:8px;background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font-family:Montserrat;font-size:inherit">Entendido</button>
     </div>` : '';
-  const favorites = window.TintinFavorites?.getAll?.() || [];
-  const favoritesHtml = favorites.length ? `
-    <section class="tt-cart-favorites" aria-label="Tus favoritos">
-      <h3>Tus favoritos</h3>
-      ${favorites.map(item => {
-        const safeFavoriteId = escapeAttribute(item.id);
-        const favoriteImage = sanitizeClassicImageUrl(item.imageUrl || getProductImage(item.id), 120);
-        return `<div class="tt-cart-favorite-item">
-          <a href="/product?id=${encodeURIComponent(String(item.id))}" class="tt-cart-favorite-img" aria-label="Ver ${escapeAttribute(item.name)}">${favoriteImage ? `<img src="${escapeAttribute(favoriteImage)}" alt="${escapeAttribute(item.name)}" loading="lazy">` : ''}</a>
-          <div class="tt-cart-favorite-info"><strong>${escapeHtml(item.name)}</strong><span>${formatPrice(item.price)}</span></div>
-          <button type="button" class="tt-cart-favorite-add" data-favorite-add-cart="${safeFavoriteId}" aria-label="Agregar ${escapeAttribute(item.name)} al carrito">+ Carrito</button>
-          <button type="button" class="tt-cart-favorite-toggle is-favorite" data-favorite-id="${safeFavoriteId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" aria-pressed="true"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(true)}</span></button>
-        </div>`;
-      }).join('')}
-    </section>` : '';
-
   if (cart.length === 0) {
     body.innerHTML = `
       <div class="tt-cart-empty">
@@ -425,7 +409,6 @@ function renderCart() {
         <div class="tt-cart-empty-text">Tu carrito está vacío.<br>¡Agregá algo hermoso!</div>
         <a href="/checkout" class="tt-cart-goto-btn">IR A MI CARRITO →</a>
       </div>
-      ${favoritesHtml}
     `;
     if (footer) footer.style.display = 'none';
     return;
@@ -460,7 +443,7 @@ function renderCart() {
       </div>
     </div>
   `;
-  }).join('') + favoritesHtml;
+  }).join('');
 
   if (footer) {
     footer.style.display = 'block';
@@ -822,13 +805,36 @@ function _onProductImgError(img) {
 }
 window._onProductImgError = _onProductImgError;
 
+const cardColorSelections = new Map();
+document.addEventListener('click', event => {
+  const button = event.target.closest?.('[data-card-color]');
+  if (!button) return;
+  const card = button.closest('.tt-product-card');
+  if (!card) return;
+  event.preventDefault();
+  cardColorSelections.set(card.dataset.id, button.dataset.cardColor);
+  if (cardColorSelections.size > 500) cardColorSelections.delete(cardColorSelections.keys().next().value);
+  card.querySelectorAll('[data-card-color]').forEach(option => option.setAttribute('aria-pressed', String(option === button)));
+  const image = card.querySelector('.tt-product-img-real');
+  const src = sanitizeClassicImageUrl(button.dataset.cardImage, 480);
+  if (image && src) { image.src = src; image.alt = `${button.dataset.productName} — ${button.dataset.cardColor}`; }
+});
+
 function renderProductCardMarkup(p, options = {}) {
   const inStock = isInStock(p);
   const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
   const displayBadge = !inStock ? 'Agotado' : (isNew ? 'Nuevo' : p.badge);
   const badgeClass = displayBadge === 'Nuevo' ? 'nuevo' : '';
   const badgeHTML = displayBadge ? `<span class="tt-product-badge ${badgeClass}">${escapeHtml(displayBadge)}</span>` : '';
-  const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 480);
+  const colorGroup = productCardColorOptions(p);
+  const selectedColor = colorGroup?.[1].includes(cardColorSelections.get(String(p.id))) ? cardColorSelections.get(String(p.id)) : '';
+  const imgUrl = sanitizeClassicImageUrl((selectedColor && productMediaForOption(p, colorGroup[0], selectedColor)) || p.imageUrl || p.image || getProductImage(p.id), 480);
+  const initialRow = productVariantMediaRows(p).find(row => productPhotoIdentity(row.imageUrl) === productPhotoIdentity(imgUrl));
+  const activeColor = selectedColor || (colorGroup && initialRow?.[colorGroup[0]]) || (colorGroup?.[1].length === 1 ? colorGroup[1][0] : '');
+  const colorsHTML = colorGroup ? `<div class="tt-card-colors" role="group" aria-label="Colores de ${escapeAttribute(p.name)}">${colorGroup[1].map(color => {
+    const media = productMediaForOption(p, colorGroup[0], color) || (productVariantGroups(p).some(([key]) => /colou?r/i.test(key)) ? '' : p.imageUrl || p.image || '');
+    return `<button type="button" class="tt-card-color" data-card-color="${escapeAttribute(color)}" data-card-image="${escapeAttribute(media)}" data-product-name="${escapeAttribute(p.name)}" aria-label="${escapeAttribute(color)}" title="${escapeAttribute(color)}" aria-pressed="${activeColor === color}"><span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(color) || 'repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px)'}"></span></button>`;
+  }).join('')}</div>` : '';
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
   const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
@@ -858,6 +864,7 @@ function renderProductCardMarkup(p, options = {}) {
         <div class="tt-product-cat">${escapeHtml(p.category || p.cat || '')}</div>
         <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
         <div class="tt-product-price">${priceMarkup(p)}</div>
+        ${colorsHTML}
         <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
           <a href="${productHref}" class="tt-btn tt-btn-sm">${primaryLabel}</a>
@@ -996,7 +1003,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1160,6 +1167,43 @@ function productOptionUnavailable(product, groupIndex, option) {
 
 function productVariantMediaRows(product) {
   return Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(product?.variants) ? product.variants : [];
+}
+
+function productMediaForOption(product, key, value) {
+  const normalized = text => String(text ?? '').trim().toLocaleLowerCase('es');
+  return productVariantMediaRows(product).find(row => normalized(row[key]) === normalized(value) && row.imageUrl)?.imageUrl || '';
+}
+
+function productCardColorOptions(product) {
+  const group = productVariantGroups(product).find(([key]) => /colou?r/i.test(key));
+  if (group) return group;
+  const colors = [...new Set(String(product?.colorFinish || '').split(/[,/;·]/).map(value => value.split(':').at(-1).trim()).filter(productColorSwatch))];
+  return colors.length ? ['Color', colors] : null;
+}
+
+function productPhotoIdentity(src) {
+  const safe = sanitizeClassicImageUrl(src);
+  if (!safe) return '';
+  const url = new URL(safe, window.location.href);
+  if (url.hostname === 'res.cloudinary.com') {
+    const versioned = url.pathname.match(/^(.*\/image\/upload\/)?.*\/(v\d+\/.*)$/);
+    if (versioned) return `${url.origin}/${url.pathname.split('/')[1]}/${versioned[2]}`;
+  }
+  return safe;
+}
+
+function _pdSyncVariantToImage(src) {
+  const row = productVariantMediaRows(_pdProduct).find(item => [item.imageUrl, ...(Array.isArray(item.imageUrls) ? item.imageUrls : [])].some(image => productPhotoIdentity(image) === productPhotoIdentity(src)));
+  if (!row) return;
+  document.querySelectorAll('#product-variants .tt-product-variants').forEach(group => {
+    const value = String(row[group.dataset.variantKey] ?? '').trim();
+    if (!value) return;
+    group.querySelectorAll('.tt-variant-option').forEach(option => {
+      const selected = option.textContent.trim() === value;
+      option.classList.toggle('active', selected);
+      option.setAttribute('aria-pressed', String(selected));
+    });
+  });
 }
 
 function _pdGetSelectedVariant() {
@@ -1557,6 +1601,8 @@ function _renderProductDetail(product) {
     }
   }
 
+  _pdSyncVariantToImage(_pdGalleryImages[_pdGalleryIndex]);
+
   // Quantity selector — _pdQty/_pdMaxQty are shared across re-renders (see
   // definition above _showProductNotFound) so the +/- buttons stay correct
   // even after a live stock/price update re-renders this same product.
@@ -1775,6 +1821,9 @@ function _galleryThumbClick(thumb) {
   if (thumbsEl) thumbsEl.querySelectorAll('.tt-gallery-thumb').forEach(t => t.classList.remove('active'));
   thumb.classList.add('active');
   const src = sanitizeClassicImageUrl(thumb.dataset.src);
+  _pdGalleryIndex = Number(thumb.dataset.galleryIndex) || 0;
+  _pdSyncVariantToImage(src);
+  _pdUpdateQtyUI();
   if (galleryMain && src) {
     const img = galleryMain.querySelector('img');
     if (img) img.src = src;
@@ -1793,7 +1842,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

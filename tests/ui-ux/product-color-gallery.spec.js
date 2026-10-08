@@ -57,7 +57,8 @@ test('el inventario conserva sus colores y destruir el editor cancela la detecci
 
 const productHtml = fs.readFileSync('product.html', 'utf8');
 const styleLinks = [...productHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)].map(match => match[0]).join('');
-const productSection = productHtml.slice(productHtml.indexOf('<section class="tt-product-page"'), productHtml.indexOf('<!-- BENEFICIOS RÁPIDOS -->'));
+const productSectionStart = productHtml.indexOf('<section class="tt-product-page"');
+const productSection = productHtml.slice(productSectionStart, productHtml.indexOf('</section>', productSectionStart) + '</section>'.length);
 const minimalFixture = `<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${styleLinks}<link rel="stylesheet" href="/css/pages/product/product-maintenance.css"></head><body class="tt-product-maintenance tt-product-runtime-ready">${productSection}<script src="/js/components/images/galeria-producto.js"></script><script src="/gallery-fixture.js"></script></body></html>`;
 for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real minimalista, orden y controles en ${width}px`, async ({page}) => {
   const pageErrors=[];page.on('pageerror',error=>pageErrors.push(error.message));

@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-photos-20261008-1-minimal-product-20261008-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -86,10 +86,10 @@ export function mapProduct(id, d) {
       ? d.tags.map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30)
       : String(d.tags || '').split(',').map(tag => cleanText(tag, 60)).filter(Boolean).slice(0, 30),
     variants: sanitizeVariantData(d.variants || null),
-    variantMedia: Array.isArray(d.variantMedia) ? d.variantMedia.slice(0, 100)
+    variantMedia: (Array.isArray(d.variantMedia) ? d.variantMedia : Array.isArray(d.variants) ? d.variants : []).slice(0, 100)
       .filter(row => row && typeof row === 'object' && !Array.isArray(row))
       .map(row => ({ ...row, imageUrl: sanitizeProductImage(row.imageUrl || ''),
-        imageUrls: uniqueSafeImageUrls(Array.isArray(row.imageUrls) ? row.imageUrls : []).slice(0, 24) })) : undefined,
+        imageUrls: uniqueSafeImageUrls(Array.isArray(row.imageUrls) ? row.imageUrls : []).slice(0, 24) })),
     variantInventory: d.variantInventory ?? null,
     collectionOrder: Number.isFinite(Number(d.collectionOrder)) ? Number(d.collectionOrder) : 9999,
     createdAt: timestampToMillis(d.createdAt ?? d.created_at ?? d.importedAt),
@@ -122,6 +122,7 @@ function compactProduct(product) {
     imagesExtra: product.imagesExtra,
     tags: product.tags,
     variants: product.variants,
+    variantMedia: product.variantMedia,
     variantInventory: product.variantInventory,
     variantMedia: product.variantMedia,
     stock: product.stock,
@@ -287,19 +288,18 @@ async function fetchSingleProductFromEdge(id) {
 
 async function fetchRelatedProducts(product) {
   if (!product?.category) return [];
-  if (!await appCheckReady) return [];
-  try {
-    const snapshot = await getDocs(query(
-      collection(db, 'products'),
-      where('category', '==', product.category),
-      limit(12)
-    ));
-    recordFirestoreRead('products:related', snapshot.size);
-    return normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())))
-      .map(compactProduct);
-  } catch {
-    return [];
-  }
+  return runSingleFlight('products:catalog:related-fetch', async () => {
+    try {
+      const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
+      if (Array.isArray(cached) && cached.length) return cached;
+      const items = await fetchPublicCatalogResource('products');
+      const products = normalizeList(items.map(item => mapProduct(item.id, item.data)));
+      if (products.length) writeCached(ALL_CACHE_KEY, products.map(compactProduct));
+      return products.map(compactProduct);
+    } catch {
+      return [];
+    }
+  });
 }
 
 function stopProductRealtime() {
@@ -504,7 +504,19 @@ export async function loadProductPage(options = {}) {
     return [];
   }
   if (options.force === true) stopProductRealtime();
-  return startProductRealtime(id);
+  const products = await startProductRealtime(id);
+  const version = publicProductRequestVersion;
+  const product = products.find(item => String(item.id) === id);
+  if (product) {
+    // Resolve the detail immediately. Recommendations use the shared edge
+    // catalog in parallel, including when App Check/realtime is unavailable.
+    void runSingleFlight('products:related:all', () => fetchRelatedProducts(product)).then(related => {
+      if (!isCurrentProductRequest(id, version) || !publicProductCurrent) return;
+      publicProductRelated = related;
+      publish([publicProductCurrent, ...related.filter(item => item.id !== id)], 'product-related-catalog');
+    });
+  }
+  return products;
 }
 
 export async function ensureProductsForSearch() {

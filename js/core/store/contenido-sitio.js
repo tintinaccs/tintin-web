@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20260925-cache-converge-1-complete-ui-20261002-1-master-20261007-1-encomienda-20261008-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-encomienda-20261008-1-encomienda-20261008-1-encomienda-20261008-1';
+} from './esquema-contenido.js?v=tintin-20261008-producto-superficies-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261008-producto-superficies-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

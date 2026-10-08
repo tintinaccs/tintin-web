@@ -830,7 +830,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261008-producto-superficies-1');
     }
   }
 
@@ -917,7 +917,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
   }
 
   function bootThemeColorSanitizerPublic() {

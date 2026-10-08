@@ -13,7 +13,8 @@ export function createActivityTracker() {
       if (scope !== nextScope) { scope = nextScope; primed = false; seen.clear(); }
       const fresh = [];
       for (const item of items) {
-        const signature = JSON.stringify([timestamp(item.createdAt), timestamp(item.updatedAt), item.aggregateCount, item.title, item.body, item.actorUid]);
+        // Delivery bookkeeping/read receipts do not represent a second event.
+        const signature = JSON.stringify([timestamp(item.createdAt), item.aggregateCount, item.title, item.body, item.actorUid]);
         if (primed && item.read !== true && seen.get(item.id) !== signature) fresh.push(item);
         seen.set(item.id, signature);
       }
@@ -24,15 +25,21 @@ export function createActivityTracker() {
   };
 }
 
+let sharedNotices = null;
 export function createLiveActivityNotices() {
+  // Public shell and admin can both subscribe to the owner's feed. They
+  // share one presenter and tracker, so one event cannot produce two toasts.
+  if (sharedNotices) return sharedNotices;
   const tracker = createActivityTracker();
   const timers = new Map();
+  const active = new Map();
   let root = null, scope = '', generation = 0;
   let stylesReady = null;
   function clear() {
     generation += 1;
     timers.forEach(timer => window.clearTimeout(timer));
     timers.clear();
+    active.clear();
     root?.replaceChildren();
     tracker.reset();
     scope = '';
@@ -64,7 +71,7 @@ export function createLiveActivityNotices() {
     }
     return root;
   }
-  return {
+  sharedNotices = {
     clear,
     async update(nextScope, items) {
       if (scope !== nextScope) { clear(); scope = nextScope; }
@@ -75,7 +82,15 @@ export function createLiveActivityNotices() {
       // Un máximo de tres avisos; toda la actividad permanece en la campana.
       for (const item of fresh.slice(0, 3).reverse()) {
         const host = ensureRoot();
+        const key = String(item.eventId || item.id);
+        const previous = active.get(key);
+        if (previous) {
+          window.clearTimeout(timers.get(previous));
+          timers.delete(previous);
+          previous.remove();
+        }
         const notice = document.createElement('div');
+        active.set(key, notice);
         notice.className = 'tt-live-activity-notice';
         const title = document.createElement('strong');
         title.textContent = item.title || 'Nueva actividad';
@@ -90,10 +105,15 @@ export function createLiveActivityNotices() {
           const old = host.firstElementChild;
           window.clearTimeout(timers.get(old));
           timers.delete(old);
+          for (const [oldKey, node] of active) if (node === old) active.delete(oldKey);
           old.remove();
         }
-        timers.set(notice, window.setTimeout(() => { notice.remove(); timers.delete(notice); }, 3000));
+        timers.set(notice, window.setTimeout(() => {
+          notice.remove(); timers.delete(notice);
+          if (active.get(key) === notice) active.delete(key);
+        }, 3000));
       }
     },
   };
+  return sharedNotices;
 }
