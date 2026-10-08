@@ -5,7 +5,7 @@ permissions:
   contents: read
   pull-requests: read
   actions: read
-  checks: read
+  checks: write
 jobs:
   diagnostico:
     runs-on: ubuntu-24.04
@@ -25,8 +25,8 @@ jobs:
             ['rate_limit', 'https://api.github.com/rate_limit'],
             ['pulls/1067', `${root}/pulls/1067`],
             ['git/ref/heads/main', `${root}/git/ref/heads/main`],
-            ['git/trees/candidato', `${root}/git/trees/85649e8d3e878b4d794be1a597cd4c6a0247754b?recursive=1`],
-            ['check-runs', `${root}/commits/85649e8d3e878b4d794be1a597cd4c6a0247754b/check-runs?filter=latest`],
+            ['git/trees/candidato', `${root}/git/trees/c1e2ecb3acba9488e7e16cc00a5882a8ebea8171?recursive=1`],
+            ['check-runs', `${root}/commits/c1e2ecb3acba9488e7e16cc00a5882a8ebea8171/check-runs?filter=latest`],
             ['environment', `${root}/environments/protected-flow-maintenance`],
           ];
           for (const [endpoint, url] of requests) {
