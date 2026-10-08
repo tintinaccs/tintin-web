@@ -179,15 +179,13 @@ function ensureSection() {
       </div>
     </div>`;
 
-  const socialBar = document.querySelector('.tt-product-social-bar');
-  const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
-  const tinsel = document.querySelector('.tinsel, #tinsel-root');
-  const productDetail = document.getElementById('product-detail');
-  if (socialBar?.parentNode) socialBar.insertAdjacentElement('afterend', section);
-  else if (related?.parentNode) related.parentNode.insertBefore(section, related);
-  else if (tinsel?.parentNode) tinsel.insertAdjacentElement('afterend', section);
-  else if (productDetail?.parentNode) productDetail.insertAdjacentElement('afterend', section);
-  else document.body.insertBefore(section, document.querySelector('.tt-footer'));
+  section.setAttribute('aria-labelledby', 'product-reviews-title');
+  section.tabIndex = -1;
+  // La comunidad cierra el contenido del producto, después del carrito y
+  // las recomendaciones. Su ubicación no depende de cuándo lleguen los datos.
+  const footer = document.querySelector('.tt-footer');
+  if (footer?.parentNode) footer.parentNode.insertBefore(section, footer);
+  else document.body.appendChild(section);
   return section;
 }
 
@@ -553,8 +551,9 @@ document.addEventListener('click', async event => {
   const openCommunity = event.target.closest('[data-open-community]');
   if (openCommunity) {
     event.preventDefault();
-    ensureSection().scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-    window.setTimeout(() => document.querySelector('#tt-review-editor textarea')?.focus(), 350);
+    const section = ensureSection();
+    section.focus({ preventScroll: true });
+    section.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
     return;
   }
 

@@ -245,7 +245,7 @@ if (
 ) {
   fail('js/components/navigation/compartido/carga-navegacion.js', 'no carga estado-productos.js mediante el runtime modular.');
 }
-if (!/product[\s\S]*load\('pages\/product\/mantenimiento-producto\.js'\)/.test(pageMaintenanceLoader)) {
+if (!/product[\s\S]*load\('pages\/product\/mantenimiento-producto\.js'(?:,\s*'tintin-[^']+')?\)/.test(pageMaintenanceLoader)) {
   fail('js/cargador-mantenimiento-pagina.js', 'no carga mantenimiento-producto.js en Producto.');
 }
 

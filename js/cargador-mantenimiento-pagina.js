@@ -17,7 +17,7 @@ export function loadPageMaintenance() {
   const path = pathName();
   if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261007-public-consistency-1');
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
-  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
+  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261008-product-layout-1');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20261004-final-integration-2';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';

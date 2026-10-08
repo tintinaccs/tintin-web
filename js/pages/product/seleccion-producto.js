@@ -121,7 +121,7 @@ function render(){
 if (itemsEl) {
   itemsEl.addEventListener('click', function(e){
     var btn = e.target.closest('[data-tinsel-remove]');
-    if (btn) showToast('Eliminado de tu selección');
+    if (btn) showToast('Eliminado del carrito');
   });
 }
 

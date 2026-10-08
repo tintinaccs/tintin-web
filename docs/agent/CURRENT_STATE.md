@@ -1,3 +1,19 @@
+# Estado vigente — 2026-10-08: espacios públicos y ficha de producto
+
+Agente: Codex. Base: `64426ba148444ac2d66d4f7a465b13f02beccbb4`. Rama: `fix/public-spacing-product-layout`.
+Alcance autorizado: ordenar todas las páginas del cliente, respetar separaciones internas, conservar contenido y adaptar producto/comentarios a distintos dispositivos. No se heredan autorizaciones de publicación de entradas históricas.
+
+- Implementado: sistema compartido de espacios en las 15 pantallas del contrato público; tarjetas con separaciones internas consistentes, textos completos y acciones que se adaptan. Retiradas reservas de altura vacías y el recorte de títulos/descripciones. Contenedores centrados sin forzar centrado del texto de lectura.
+- Producto: imagen/información arriba, descripción antes de «Tu selección» (opciones, cantidad y acciones), «Tu carrito» separado con total y finalizar compra. El carrito conserva su función; no se elimina como supuesta selección duplicada. Beneficios promocionales «Comprá con confianza» conservados como comentario HTML. Estado, distintivos, especificaciones, favoritos y compartir conservan visibilidad.
+- Comentarios: sección situada después de relacionados y antes del pie; «Comentar» mueve foco y desplaza al bloque sin el segundo salto causado por el foco tardío del formulario. Respeta movimiento reducido.
+- PASS_LOCAL: 28 pruebas Chromium nuevas con renderizadores reales y transporte/sesión aislados, sin Firestore productivo: producto/carrito/comentarios, portada, catálogo y colecciones a 320, 390, 768, 1024, 1280, 1440 y 1920 px. Verifican contenido largo, padding, desbordamiento, opciones/cantidad, total del carrito y navegación a comentarios. Suite Node relacionada: 218 pruebas, sin fallas ni skips. Cierre de navegador: 36 pruebas correctas (las 28 nuevas y ocho controles/reseñas existentes). Barrido adicional de 14 rutas × 7 tamaños sin desbordamiento de los contenedores inspeccionados; dicho barrido utiliza estados públicos aislados y no certifica todos los datos reales.
+- Cambios de caché: etiquetas inmutables actualizadas en consumidores/generador; cadena de imports actualizada para que los clientes reciban los estilos nuevos. Sin cambios de lógica de autenticación, sesión, checkout, pagos, permisos o datos comerciales. Referencias compartidas de CSS en Admin actualizadas; no se modifica su diseño.
+- Auditor de carga: reconoce la llamada con su segundo argumento de versión explícita, además de la llamada original; se mantiene la comprobación de ruta y el auditor canónico de versiones.
+- BLOCKED: el auditor de flujos protegidos rechaza los nuevos bytes de `catalogo.html` y `login.html` (referencias de recursos). La política, sus 76 registros/123 archivos, auditor y workflow permanecen intactos. No se retiran hashes, checks ni protección de rama. La actualización visual necesita mantenimiento explícitamente autorizado de estas dos huellas antes de integrarse.
+- NOT_VERIFIED: CI del candidato, publicación, Safari/WebKit, dispositivos físicos y sesiones reales de producción. Las pruebas de navegador no crean compras, pedidos, pagos, correos, likes o reseñas reales. No se declara «todo perfecto» ni se heredan PASS_PRODUCTION históricos.
+
+## Evidencia fechada previa
+
 # Estado vigente — 2026-10-07: Sheets recuperado y Likes verificado
 
 Agente: Codex. Base: `c5a7721a63a6f9370ba904121343144f2e4d28b3`.
