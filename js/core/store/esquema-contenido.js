@@ -26,7 +26,7 @@ import {
   getVisualBlockAnchorIds,
   isTopVisualAnchorAllowed,
   sanitizeSiteSectionOrder,
-} from './contrato-estructura-sitio.js';
+} from './contrato-estructura-sitio.js?v=tintin-20261008-producto-superficies-1';
 
 export {
   SITE_PUBLIC_PAGE_IDS,

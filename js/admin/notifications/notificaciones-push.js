@@ -12,7 +12,7 @@
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 
 const DEVICE_ID_KEY = 'tt_push_device_id';
@@ -44,6 +44,7 @@ let currentToken = '';
 let currentState = 'unconfigured';
 let busy = false;
 let foregroundCount = 0;
+const foregroundEvents = new Set();
 
 // --- Utilidades pequeñas ---------------------------------------------------
 
@@ -206,7 +207,12 @@ async function ensureMessaging() {
   // segunda aplicación Firebase y el error de registro [DEFAULT].
   messagingInstance = sdk.getMessaging(auth.app);
   sdk.onMessage(messagingInstance, payload => {
+    if (!isSuperAdmin(auth.currentUser)) return;
     const data = payload?.data || {};
+    const eventId = String(data.eventId || payload?.messageId || '');
+    if (eventId && foregroundEvents.has(eventId)) return;
+    if (eventId) foregroundEvents.add(eventId);
+    if (foregroundEvents.size > 500) foregroundEvents.delete(foregroundEvents.values().next().value);
     const title = data.title || 'Tintin Pedidos';
     const body = data.body || 'Nuevo aviso';
     foregroundCount += 1;
@@ -216,18 +222,16 @@ async function ensureMessaging() {
     // service worker does in the background (without relying on a toast).
     if (Notification.permission === 'granted') {
       try {
-        const notification = new Notification(title, {
+        const target = String(data.url || '/admin?section=notificaciones-push');
+        const url = target.startsWith('/') && !target.startsWith('//') ? target : '/admin?section=notificaciones-push';
+        void swRegistration.showNotification(title, {
           body,
           icon: '/favicon-192x192.png',
           badge: '/favicon-192x192.png',
           tag: String(data.tag || data.eventId || 'tintin-push'),
-          silent: false
-        });
-        notification.onclick = () => {
-          notification.close();
-          window.focus();
-          window.location.href = '/admin?section=pedidos';
-        };
+          silent: false,
+          data: { url }
+        }).catch(() => notice(`${title} — ${body}`));
       } catch {
         // Some installed-browser shells expose permission but block the
         // constructor; the in-panel notice above remains the fallback.
@@ -382,7 +386,7 @@ async function refreshInitialState() {
   setLastRegistered(status.updatedAt || '');
 
   if (Notification.permission !== 'granted') {
-    setState(status.registered ? 'ready' : 'unconfigured', 'Tocá "Activar notificaciones" para recibir los pedidos en este dispositivo.');
+    setState(status.registered ? 'ready' : 'unconfigured', 'Tocá "Activar notificaciones" para recibir Me gusta, comentarios, inicios de sesión, registros y compras en este dispositivo.');
     return;
   }
   if (!status.registered) {
@@ -425,11 +429,14 @@ function bindDom() {
 }
 
 function boot() {
-  if (!bindDom()) return;
+  bindDom();
   subscribeAuthState(user => {
-    const isSuperAdmin = user?.email === SUPER_ADMIN;
-    dom.card.style.display = isSuperAdmin ? '' : 'none';
-    if (!isSuperAdmin) return;
+    const owner = isSuperAdmin(user);
+    if (dom.card) dom.card.style.display = owner ? '' : 'none';
+    if (!owner) { foregroundEvents.clear(); return; }
+    // Outside the panel, reconnect only an already-authorized device. Never
+    // request browser permission on page load or initialize push for clients.
+    if (!dom.card && (typeof Notification === 'undefined' || Notification.permission !== 'granted')) return;
     setLastRegistered('');
     // Un fallo de Messaging nunca puede frenar la carga del panel.
     refreshInitialState().catch(() => setState('error', 'No se pudo iniciar el módulo de notificaciones.'));

@@ -2,7 +2,8 @@ import { appCheckReady, auth, db } from '../../core/firebase/firebase.js?v=tinti
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
-import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261005-notification-parity-2';
+import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1';
+import '../../admin/notifications/notificaciones-push.js?v=tintin-20261008-producto-superficies-1';
 import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -102,7 +103,7 @@ function ensureDrawer() {
   drawer.setAttribute('aria-labelledby', 'tt-notifications-title');
   drawer.innerHTML = `
     <div class="tt-notifications-head">
-      <div><p class="tt-notifications-kicker">Tu actividad</p><h2 class="tt-notifications-title" id="tt-notifications-title">Notificaciones</h2></div>
+      <div class="tt-drawer-brand-heading"><img class="tt-drawer-brand-logo" src="/assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1" alt="Tintin" width="110" height="46"><p class="tt-notifications-kicker">Tu actividad</p><h2 class="tt-notifications-title" id="tt-notifications-title">Notificaciones</h2></div>
       <button type="button" class="tt-notifications-close" id="btn-notifications-close" aria-label="Cerrar notificaciones">×</button>
     </div>
     <div class="tt-notifications-toolbar">
@@ -327,7 +328,8 @@ function subscribe(user, { preserve = false } = {}) {
     notifications = snapshot.docs
       .map(document => ({ id: document.id, ...document.data() }))
       .filter(item => adminFeed || isVisibleCustomerNotification(item));
-    liveNotices.update(`${adminFeed ? 'admin' : 'user'}:${user.uid}`, notifications);
+    if (adminFeed) liveNotices.update(`admin:${user.uid}`, notifications);
+    else liveNotices.clear();
     listenerFailed = false;
     subscribeRetryAttempt = 0;
     subscribeAuthRecoveryAttempted = false;

@@ -91,7 +91,15 @@ check(
   /const\s+ALL_CACHE_TTL\s*=\s*60\s*\*\s*1000/.test(products),
   'La caché pública puede conservar precio o stock obsoleto más de un minuto.'
 );
-check('La ficha lee un producto y limita relacionados', /getDoc\(doc\(db, 'products', id\)\)/.test(products) && /limit\(12\)/.test(products), 'Producto descarga demasiado.');
+check('La ficha mantiene su lectura individual y comparte relacionados por API edge',
+  /getDoc\(doc\(db, 'products', id\)\)/.test(products) &&
+  /onSnapshot\(\s*doc\(db, 'products', normalizedId\)/.test(products) &&
+  products.includes("void runSingleFlight('products:related:all'") &&
+  products.includes("runSingleFlight('products:catalog:related-fetch'") &&
+  products.includes('readCached(ALL_CACHE_KEY, ALL_CACHE_TTL)') &&
+  products.includes("fetchPublicCatalogResource('products')") &&
+  !/getDocs\(collection\(db, ['"]products['"]\)\)/.test(products),
+  'La ficha bloquea su carga con relacionados o vuelve a enumerar Firestore sin caché compartida.');
 check('Colecciones públicas usan caché y Admin tiempo real', collections.includes('loadCollections') && collections.includes('readCached') && collections.includes('startAdminListener') && collections.includes('onSnapshot'), 'Las estrategias pública y administrativa se mezclaron.');
 check('Pedidos Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'orders'\),[\s\S]*?limit\(/.test(read('js/admin/admin-app.js')), 'Pedidos perdió su listener limitado.');
 check('Usuarios Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'users'\),[\s\S]*?limit\(/.test(read('js/admin/admin-app.js')), 'Usuarios perdió su listener limitado.');

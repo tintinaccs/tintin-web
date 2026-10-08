@@ -422,6 +422,7 @@ const previewControllers = new WeakMap();
 export function renderSavedMapPreviews(root, addresses) {
   previewControllers.get(root)?.();
   const maps = [];
+  const resizeObservers = [];
   let disposed = false;
   const observer = new IntersectionObserver(entries => {
     entries.filter(entry => entry.isIntersecting).forEach(async ({ target }) => {
@@ -435,6 +436,18 @@ export function renderSavedMapPreviews(root, addresses) {
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>', maxZoom: 19 }).addTo(map);
         L.marker([place.lat, place.lng], { icon: pinIcon(L), interactive: false }).addTo(map);
         maps.push(map);
+        const resize = () => {
+          if (!disposed && target.isConnected && target.getClientRects().length) {
+            map.invalidateSize({ pan: false });
+            map.setView([place.lat, place.lng], 15, { animate: false });
+          }
+        };
+        requestAnimationFrame(resize);
+        if ('ResizeObserver' in window) {
+          const sizeObserver = new ResizeObserver(resize);
+          sizeObserver.observe(target);
+          resizeObservers.push(sizeObserver);
+        }
       } catch {
         if(disposed || !target.isConnected)return;
         target.replaceChildren();
@@ -447,5 +460,9 @@ export function renderSavedMapPreviews(root, addresses) {
     });
   });
   root.querySelectorAll('[data-saved-map]').forEach(target => observer.observe(target));
-  previewControllers.set(root, () => { disposed = true; observer.disconnect(); maps.forEach(map => map.remove()); });
+  previewControllers.set(root, () => {
+    disposed = true; observer.disconnect();
+    resizeObservers.forEach(observer => observer.disconnect());
+    maps.forEach(map => map.remove());
+  });
 }

@@ -5,11 +5,17 @@ import {
   normalizePhone,
   isValidPhone,
   isRealisticPhone,
+  isNationalMobileInput,
   phoneKey,
 } from '../../js/components/forms/utilidades-telefono.js';
 
 const PY = findCountryByCode('PY');
 const AR = findCountryByCode('AR');
+
+test('checkout y perfil aceptan únicamente el formato móvil nacional solicitado', () => {
+  for (const value of ['981299331','0981299331','0912 345 678','912 345 678']) assert.equal(isNationalMobileInput(value),true,value);
+  for (const value of ['1299331','','+595981299331','595981299331','0981-299-331','00981299331','9812993310','(0981)299331','0981111111']) assert.equal(isNationalMobileInput(value),false,value);
+});
 
 test('el mismo número escrito distinto da la misma clave', () => {
   const esperado = '595981123456';

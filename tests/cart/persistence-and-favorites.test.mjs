@@ -39,6 +39,7 @@ test('favoritos está conectado y persiste con la cuenta (no hay eliminación de
   // reintroducir el antiguo btn-product-favorite como segunda capa paralela.
   assert.match(product, /id="btn-product-like"/);
   assert.doesNotMatch(product, /btn-product-favorite/);
-  assert.match(cart, /tt-cart-favorites/);
+  assert.doesNotMatch(cart, /tt-cart-favorites/);
+  assert.match(await read('perfil.html'), /id="perfil-favorites-list"/);
   assert.match(rules, /match \/favorites\/\{productId\}/);
 });

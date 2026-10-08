@@ -1,3 +1,15 @@
+# Estado vigente — 2026-10-08: producto, avisos y superficies responsive
+
+Base: b8ec93d45d9b155a618c174e09747b48a7351120. Rama codex/producto-colores-recomendaciones-20261008. Cambios preparados, todavía sin commit/CI/publicación. La autorización del usuario incluye reparar y publicar, sin pagos. La revisión manual del entorno protected-flow-maintenance corresponde al propietario; no aprobar en su nombre.
+
+- Reparación productiva de metadata: 24 productos/56 fotos con asociaciones de color verificadas visualmente. Transacción modifica únicamente variants y updatedAt; mantiene precio, stock e inventario. Lectura getDocFromServer confirmó 24 coincidencias. Sincronización autenticada /api/sheets-product-sync: ambos lotes HTTP200 ok:true, sin cola. Evidencia local outputs/variantes-firestore-verificacion.json y variantes-sheets-sincronizacion.json.
+- Checkout: cinco etiquetas blancas con fondo de contraste, Confirmación sin cortar ni dividir, contenedores sin fondo blanco. Medición real en Chrome local de 320/390/768/1024/1280/1440/1920: todas completas y dentro del viewport. outputs/checkout-responsive-verificacion.json y checkout-mobile-corregido.png. Fuente aún no publicada.
+- Teléfono: corrige precarga que cortaba tres dígitos del número nacional; perfil y checkout requieren celular PY local con cero opcional/espacios. Pruebas de formatos requeridos e inválidos y checkout: 148/148 PASS.
+- Producto: prueba Chrome confirma dos fotos únicas, dorado inicial seleccionado, plateado cambia a plata y miniatura dorada vuelve a seleccionar dorado. Identidad de fotos ignora transformaciones Cloudinary conservando versión/archivo. Nuevas pruebas de identidad y variantes: 5 PASS.
+- Recomendaciones: catálogo completo, otras categorías, ciclos sin repetición. Avisos deduplicados por evento, singleton público/admin. Pruebas de ciclos/avisos/regresiones de sincronización: 13 PASS. Se corrigió referencia sobrante favoritesHtml descubierta en Chrome tras retirar favoritos del carrito.
+- Verificado en Chrome: logo oficial blanco de Mi cuenta, mapas completos con CSS Leaflet e integridad SRI corregida, checkout y carga siempre arriba en siete anchos. Build Pages PASS y 406/406 pruebas PASS. Plan exacto conserva 541 archivos/78 registros (68 archivos renovados/34 registros afectados). Pendiente cierre de auditoría final, PR/CI y revisión manual del propietario. Push todavía espera permiso de Chrome (default); PayPal Live sigue pendiente. Revalidación productiva 15:46:12Z detecta 45 cambios desde sellos anteriores, que se conservan sin ocultarlos.
+
+## Evidencia histórica (no estado del candidato actual)
 # Actualización de mantenimiento — PR #1061
 
 La revisión humana del run 37763253834 quedó registrada, pero el veredicto rechazó correctamente la base obsoleta después de integrar #1064. Se incorpora main fbfacb6d7afcfcafc8593b5f28106bf3e4e1d2b0, preservando sus 78 alcances y metadatos. El nuevo candidato requiere CI y una nueva revisión humana; no hereda la autorización anterior.

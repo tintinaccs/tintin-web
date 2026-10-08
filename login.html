@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
-  <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261004-approved-logo-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-stock-line-2"></script>
+  <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261008-producto-superficies-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261007-public-consistency-1-master-20261007-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261008-producto-superficies-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261007-public-consistency-1-master-20261007-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261008-producto-superficies-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261004-header-consistency-2">
@@ -41,12 +41,12 @@
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261004-header-consistency-2-profile-wholesale-20261005-1-master-20261007-1-stock-line-2">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261008-producto-superficies-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1">
   <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260906-login-mode-toggle-1-brand-20261004-1-owner-pink-20261004-1">
-  <link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-1" integrity="sha256-4CR4Qg4UppwxhCh7cJHetaT0HRpT5t8p8PHsnh7QL2E=" crossorigin="anonymous" />
-  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261004-final-integration-1">
+  <link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-2" integrity="sha256-ugti1XvT9fCYo/vrONAf0r5FKu/U8H04PwZikxySCts=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261008-producto-superficies-1">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1" data-tt-login-maintenance>
   <link rel="stylesheet" href="css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1-brand-20261004-1-owner-pink-20261004-1" data-tt-login-fluid>
   <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20261001-registration-white-cards-2-brand-20261004-1-owner-pink-20261004-1" data-tt-login-onboarding-flow>
@@ -220,8 +220,8 @@ import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
 } from "./js/email/correo-autenticacion.js?v=tintin-20261005-auth-loader-1";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
-import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
+import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidUsernameFormat, isReservedUsername, normalizeUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
 import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
@@ -234,7 +234,7 @@ import { showBlockedModal, accountProblemHtml } from "./js/components/modals/mod
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261001-ultimos-datos-1";
 import { PROFILE_STATE, PROFILE_ACTION, detectAuthMethod, readProfileSnapshot, resolveProfileState, resolveProfileAction, withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261001-fusion-main-1";
-import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261004-final-integration-1-profile-wholesale-20261005-1-master-20261007-1";
+import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261008-producto-superficies-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
@@ -1541,7 +1541,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1-master-20261007-1"></script>
-<script src="tienda.js?v=tintin-20261007-email-app-check-1-master-20261007-1" defer></script>
+<script src="tienda.js?v=tintin-20261008-producto-superficies-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 </body>
 </html>

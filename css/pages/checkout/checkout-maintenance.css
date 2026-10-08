@@ -228,3 +228,9 @@ body:has(.ck-body) #ck-wants-invoice-row small { display:block; margin-top:4px; 
 body:has(.ck-body) .ck-field-help { margin:4px 0 0; font-size:13px; line-height:1.5; }
 body:has(.ck-body) .ck-ship-reminder { border-left-width:2px; }
 body:has(.ck-body) .ck-body { margin-bottom:32px; }
+
+html body:has(.ck-body) :is(.ck-back-row,.ck-steps) { background:transparent !important; box-shadow:none !important; border:0 !important; }
+html body:has(.ck-body) .ck-back-row { padding-top:16px !important; padding-bottom:8px !important; }
+html body:has(.ck-body) .ck-steps { display:grid !important; grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.6fr); width:min(700px,calc(100% - 24px)) !important; box-sizing:border-box; padding:12px 0 !important; gap:0; overflow:visible; }
+html body:has(.ck-body) .ck-step { min-width:0; }
+html body:has(.ck-body) .ck-step-label { display:block; color:#fff !important; background:#9f395b !important; border-radius:6px; padding:4px 3px; margin:8px 2px 0; white-space:nowrap !important; word-break:normal !important; font-size:clamp(8px,1.1vw,10px) !important; letter-spacing:0 !important; line-height:1.4; }
