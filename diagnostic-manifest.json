@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9d0d0dbed1d1e9ed0601fda0d16b1008b26995594b79fd0d265a84cf6701bd98",
+  "sourceFingerprint": "9482e78b25a7a6706ddeda295de4b59a2e897e9190b39e783aef0eafee19094e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1067,
     "textFiles": 1019,
-    "totalBytes": 16090779,
+    "totalBytes": 16077441,
     "pages": 19,
     "modules": 753
   },
@@ -9147,8 +9147,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 118558,
-      "sha256": "d2bd245b5e743326fdbd16d59434dca2609c61c1fb566513ed939a7ae4f04429",
+      "bytes": 118507,
+      "sha256": "7f3383ddf028a5763dba5bde987d5104673a2868b31f06ad3efa3ff56f4612b0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13116,8 +13116,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 85022,
-      "sha256": "9ae1868ad9537000ffad426e3753269207c260b7040b1369dd6bfef8a0e47feb",
+      "bytes": 84973,
+      "sha256": "24cf6a9c10c1d15a35a5627521bde58b9dd85de414b1c5dc6f6fd7510887e84b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13955,8 +13955,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48617,
-      "sha256": "3cd344811d59a4611014f9e0dafe93b3105eb1028ca866e4beae379390e8a459",
+      "bytes": 48568,
+      "sha256": "3d5ad0e68f9060670a1a3c81f998e9a7d71ff4af56af4e24204485364a1af77c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18699,7 +18699,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 351063,
-      "sha256": "f4f70c8eb3ea48716a1abebfea540fcce3a0e015694c3ec7148d9e20528923e2",
+      "sha256": "5ded3bc642acf4e77a80bfb592b2f764c032d6cbd96d9c9c7607e95c3f37411f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23590,15 +23590,15 @@
     },
     {
       "path": "js/components/location/mapa-ubicacion.js",
-      "bytes": 18098,
-      "sha256": "9c13e79d5f100649fe6e76dc93854a3fcfabfd83aad60d62c2478a59703bfc44",
+      "bytes": 18096,
+      "sha256": "a646442c8032f823c864915015f761d150d3cd6c1919f41e906de7d6e3040f1f",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./selector-ubicacion.js?v=tintin-20261004-final-integration-1",
+          "raw": "./selector-ubicacion.js?v=tintin-20261008-location-search-1",
           "target": "js/components/location/selector-ubicacion.js",
           "dynamic": false,
           "line": 7
@@ -23631,8 +23631,8 @@
     },
     {
       "path": "js/components/location/selector-ubicacion.js",
-      "bytes": 9794,
-      "sha256": "09b7d1a0ed4b5d9ca69c09cd08297f4ba9ed88189901eb13a16a621885e6d6ea",
+      "bytes": 10704,
+      "sha256": "9b07cc66ed92feaf525d617c596f8f329695cc750117785d0ffdbf68e83cd9a2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35520,8 +35520,8 @@
     },
     {
       "path": "tests/login/location-picker.test.mjs",
-      "bytes": 4582,
-      "sha256": "cff528c092cb5b4d0eaba2f8c7e5f07be24599ce67ebf47a7205a5e1ba01661c",
+      "bytes": 7533,
+      "sha256": "f1e366abd5e905eb6c5df19c42395ac6e7b0b8f74cb5a5b20a3812b9558efd84",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35561,11 +35561,11 @@
       "endpoints": [
         {
           "url": "https://www.google.com/maps/search/Shopping+del+Sol,+Asunci%C3%B3n",
-          "line": 88
+          "line": 93
         },
         {
           "url": "https://www.google.com/maps/search/Shopping+del+Sol/@-25.2867,-57.6467,17z",
-          "line": 93
+          "line": 98
         }
       ]
     },
@@ -39628,7 +39628,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 4027,
-      "sha256": "24c9ea6a295d23f98f1e2600c772d4c38392ee1af2fb67f029bbc9163367aa15"
+      "sha256": "a73a30de8e90790b05315dc667974b724568e97794e8542b8fbdcf65708a1345"
     },
     {
       "path": "_redirects",
@@ -40047,8 +40047,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 118558,
-      "sha256": "d2bd245b5e743326fdbd16d59434dca2609c61c1fb566513ed939a7ae4f04429"
+      "bytes": 118507,
+      "sha256": "7f3383ddf028a5763dba5bde987d5104673a2868b31f06ad3efa3ff56f4612b0"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -40294,19 +40294,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 351063,
-      "sha256": "f4f70c8eb3ea48716a1abebfea540fcce3a0e015694c3ec7148d9e20528923e2"
+      "sha256": "5ded3bc642acf4e77a80bfb592b2f764c032d6cbd96d9c9c7607e95c3f37411f"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 350978,
-      "sha256": "562ccf564d52c0e0833f5f93f05da123324d41a106322f630c220c6c5b874e82"
+      "sha256": "b171f0f5b407cfcb05a06c0106da2d97b6ad72e9ae8e912fcc7207b7eb0e9e9f"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 21676,
-      "sha256": "6fc59c90c268423a3391dc741f378d7759486bdc9ce0925ebd1b753659a88fcb"
+      "bytes": 3202,
+      "sha256": "a0d89c6ef2d68093fd43f863dcc413193f8aaf0ab0da206e6ae73fc621302250"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -40318,7 +40318,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155156,
-      "sha256": "067dabe20e86f375fdda2b3cd6e26f737fd6d0e590b2b04b41db7d15c16e360b"
+      "sha256": "94d841d136c966060eb285fbb6159c892d4a4f93cbbeb7f1eca0635e5941e30c"
     },
     {
       "path": "config/public-site.json",
@@ -40839,8 +40839,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 308567,
-      "sha256": "294c212f2d521d1429a0020625ee6832368168b346f15cb6e24e1033e2c7a97c"
+      "bytes": 310044,
+      "sha256": "83ac03872a64a1c17c260aa95a56a7a095ee22fd8ac20c9b6dc7ed702c5f6e81"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -42249,14 +42249,14 @@
     {
       "path": "js/components/location/mapa-ubicacion.js",
       "extension": ".js",
-      "bytes": 18098,
-      "sha256": "9c13e79d5f100649fe6e76dc93854a3fcfabfd83aad60d62c2478a59703bfc44"
+      "bytes": 18096,
+      "sha256": "a646442c8032f823c864915015f761d150d3cd6c1919f41e906de7d6e3040f1f"
     },
     {
       "path": "js/components/location/selector-ubicacion.js",
       "extension": ".js",
-      "bytes": 9794,
-      "sha256": "09b7d1a0ed4b5d9ca69c09cd08297f4ba9ed88189901eb13a16a621885e6d6ea"
+      "bytes": 10704,
+      "sha256": "9b07cc66ed92feaf525d617c596f8f329695cc750117785d0ffdbf68e83cd9a2"
     },
     {
       "path": "js/components/location/tarifas-delivery.mjs",
@@ -43287,8 +43287,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 85022,
-      "sha256": "9ae1868ad9537000ffad426e3753269207c260b7040b1369dd6bfef8a0e47feb"
+      "bytes": 84973,
+      "sha256": "24cf6a9c10c1d15a35a5627521bde58b9dd85de414b1c5dc6f6fd7510887e84b"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -43491,8 +43491,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 48617,
-      "sha256": "3cd344811d59a4611014f9e0dafe93b3105eb1028ca866e4beae379390e8a459"
+      "bytes": 48568,
+      "sha256": "3d5ad0e68f9060670a1a3c81f998e9a7d71ff4af56af4e24204485364a1af77c"
     },
     {
       "path": "playwright.config.js",
@@ -44361,8 +44361,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 69916,
-      "sha256": "6017b5999d8f11d1f555967a2b9c4495a8254ee85de5413bfb653a47ba8cd952"
+      "bytes": 69865,
+      "sha256": "3734ec222c7c0967f54d29e161960c00785a0b463faf3553e81dde64071ecc14"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -45249,8 +45249,8 @@
     {
       "path": "tests/login/location-picker.test.mjs",
       "extension": ".mjs",
-      "bytes": 4582,
-      "sha256": "cff528c092cb5b4d0eaba2f8c7e5f07be24599ce67ebf47a7205a5e1ba01661c"
+      "bytes": 7533,
+      "sha256": "f1e366abd5e905eb6c5df19c42395ac6e7b0b8f74cb5a5b20a3812b9558efd84"
     },
     {
       "path": "tests/login/location-search-api.test.mjs",
