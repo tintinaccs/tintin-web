@@ -65,7 +65,7 @@ export async function createLocationMap({
   const L = await loadLeaflet();
   const map = L.map(mapEl, { zoomControl: true, scrollWheelZoom: false }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
   mapEl.classList.add('tt-map-canvas');
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 19,
   }).addTo(map);
@@ -105,6 +105,12 @@ export async function createLocationMap({
   wazeLink.textContent = 'Ir con Waze';
   tools.append(googleLink, wazeLink);
   mapEl.after(tools);
+  tiles.on('tileerror', () => {
+    if (destroyed) return;
+    status.hidden = false;
+    status.textContent = 'No pudimos cargar el fondo del mapa. Tu ubicación se conserva. Podés buscar un lugar o abrir el punto en Google Maps o Waze.';
+    if (typeof onError === 'function') onError(status.textContent);
+  });
 
   const emit = () => { if (typeof onChange === 'function') onChange(location); };
 
@@ -360,9 +366,14 @@ export async function createLocationMap({
     document.addEventListener('click', onDocumentClick);
   }
 
-  const resizeTimers = [100, 350, 900].map(delay => setTimeout(() => { if (!destroyed) map.invalidateSize(); }, delay));
+  const refreshMapSize = () => {
+    if (destroyed || !mapEl.getClientRects().length) return;
+    map.invalidateSize({ pan: false });
+    if (location) map.setView([location.lat, location.lng], map.getZoom(), { animate: false });
+  };
+  const resizeTimers = [100, 350, 900].map(delay => setTimeout(refreshMapSize, delay));
   if ('ResizeObserver' in window) {
-    resizeObserver = new ResizeObserver(() => map.invalidateSize());
+    resizeObserver = new ResizeObserver(refreshMapSize);
     resizeObserver.observe(mapEl);
   }
 

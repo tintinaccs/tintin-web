@@ -74,7 +74,10 @@ test('el hero entra exacto en la primera pantalla: rótulo, foto y texto adentro
       const detail = `${width}x${height}: ${JSON.stringify(g)}`;
       const inside = (inner, outer, slack = 1) => inner.left >= outer.left - slack && inner.right <= outer.right + slack && inner.top >= outer.top - slack && inner.bottom <= outer.bottom + slack;
       // Primera pantalla: el hero termina justo en el borde inferior visible y la sección siguiente arranca ahí.
-      if (exact) {
+      if (phone) {
+        assert.ok(g.hero.bottom - g.content.bottom >= 23 && g.hero.bottom - g.content.bottom <= 32, `Relleno inferior móvil excesivo a ${detail}`);
+        assert.ok(Math.abs(g.next.top - g.hero.bottom) <= 1, `Hueco después del hero a ${detail}`);
+      } else if (exact) {
         assert.ok(Math.abs(g.hero.bottom - g.viewport) <= 1, `El hero no ocupa exactamente la primera pantalla a ${detail}`);
         assert.ok(g.next.top >= g.viewport - 1, `La sección siguiente asoma en la primera pantalla a ${detail}`);
         // En celular los botones quedan por encima de la barra de navegación flotante (88 px desde abajo)

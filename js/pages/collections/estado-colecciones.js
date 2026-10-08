@@ -52,7 +52,7 @@ export function canonicalPublicCollections(collections) {
   const seen = new Set();
   return sortCols(collections.filter(item => item.visible !== false)).flatMap(item => {
     const slug = normalizeCollectionSlug(item.slug);
-    if (!slug) return [];
+    if (!slug || slug === 'bolsos') return [];
     if (seen.has(slug)) {
       console.warn('[collections-store] slug público duplicado:', slug);
       return [];

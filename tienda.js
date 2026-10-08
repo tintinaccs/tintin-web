@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -836,9 +836,7 @@ function renderProductCardMarkup(p, options = {}) {
   const imgContent = imgUrl
     ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
     : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
-  const hasVariants = p.variants && Object.keys(p.variants).some(key =>
-    Array.isArray(p.variants[key]) && p.variants[key].length
-  );
+  const hasVariants = productVariantGroups(p).length > 0;
   // El bloque "También te puede gustar" muestra tarjetas más angostas (3 por
   // fila en todas las pantallas) — con esos textos completos los botones se
   // partían en 3-4 líneas ilegibles, así que ahí van etiquetas cortas.
@@ -850,7 +848,7 @@ function renderProductCardMarkup(p, options = {}) {
       : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">${options.related ? 'Agregar' : '+ Carrito'}</button>`;
 
   return `
-    <article class="tt-product-card" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
+    <article class="tt-product-card${inStock ? '' : ' tt-stock-unavailable'}" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
       <button type="button" class="tt-product-favorite-button${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(p.name)}" data-favorite-price="${escapeAttribute(p.price)}" data-favorite-image="${escapeAttribute(imgUrl)}" data-favorite-cat="${escapeAttribute(p.category || p.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
       <a href="${productHref}" class="tt-product-img tt-product-card-img-link" aria-label="Ver ${escapeAttribute(p.name)}">
         ${badgeHTML}
@@ -998,7 +996,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1096,6 +1094,7 @@ let _pdProduct = null;
 let _pdQty = 1;
 let _pdMaxQty = 99;
 let _pdGalleryIndex = 0;
+let _pdGalleryImages = [];
 let _pdLoadTimer = 0;
 const PRODUCT_PAGE_LOAD_DEADLINE_MS = 12000;
 
@@ -1113,10 +1112,54 @@ function _pdUpdateQtyUI() {
   if (qtyPlus) qtyPlus.disabled = _pdQty >= _pdMaxQty;
   const qtyStock = document.getElementById('qty-stock');
   if (variantLimit != null && qtyStock) qtyStock.textContent = variantLimit === 0 ? 'Esta opción está sin stock' : `Disponibles en esta opción: ${_pdMaxQty}`;
+  const unavailable = _pdMaxQty <= 0;
+  document.getElementById('gallery-main')?.classList.toggle('tt-stock-unavailable', unavailable);
+  const status = document.getElementById('product-status');
+  if (status) status.textContent = unavailable ? 'Agotado' : 'Disponible';
   for (const id of ['btn-product-add-cart', 'btn-product-buy-now']) {
     const button = document.getElementById(id);
     if (button && !button.dataset.busy) button.disabled = _pdMaxQty <= 0;
   }
+}
+
+function productVariantGroups(product) {
+  const groups = new Map();
+  const add = (key, raw) => {
+    const values = Array.isArray(raw) ? raw : String(raw ?? '').split(',');
+    const options = groups.get(key) || [];
+    for (const value of values) {
+      const text = String(value ?? '').trim();
+      if (text && !options.includes(text)) options.push(text);
+    }
+    if (options.length) groups.set(key, options);
+  };
+  if (Array.isArray(product?.variants)) {
+    const metadata = new Set(['price', 'sku', 'imageUrl', 'stock', 'active']);
+    for (const row of product.variants) {
+      if (!row || typeof row !== 'object') continue;
+      for (const key of Object.keys(row)) if (!metadata.has(key)) add(key, row[key]);
+    }
+  } else {
+    for (const [key, values] of Object.entries(product?.variants || {})) add(key, values);
+  }
+  return [...groups];
+}
+
+function productColorSwatch(value) {
+  const key = String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+  const colors = { dorado:'#b58a36', oro:'#b58a36', gold:'#b58a36', plateado:'#b8bcc3', plata:'#b8bcc3', silver:'#b8bcc3', rosa:'#efa0bc', rosado:'#efa0bc', rojo:'#be2734', red:'#be2734', negro:'#202020', black:'#202020', blanco:'#ffffff', white:'#ffffff', azul:'#2563a6', verde:'#29814d' };
+  return colors[key] || null;
+}
+
+function productOptionUnavailable(product, groupIndex, option) {
+  if (product?.stock != null && Number(product.stock) <= 0) return true;
+  if (!Array.isArray(product?.variantInventory)) return false;
+  const entries = product.variantInventory.filter(row => String(row.variant || '').split('/').map(v => v.trim())[groupIndex] === option);
+  return !entries.some(row => Number.isInteger(row.stock) && row.stock > 0);
+}
+
+function productVariantMediaRows(product) {
+  return Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(product?.variants) ? product.variants : [];
 }
 
 function _pdGetSelectedVariant() {
@@ -1404,7 +1447,9 @@ function _renderProductDetail(product) {
   const extraImages = Array.isArray(product.imagesExtra)
     ? product.imagesExtra.map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean)
     : [];
-  const allImages = [...new Set(mainImgUrl ? [mainImgUrl, ...extraImages] : extraImages)];
+  const variantImages = productVariantMediaRows(product).map(row => sanitizeClassicImageUrl(row?.imageUrl || '', 900)).filter(Boolean);
+  const allImages = [...new Set([mainImgUrl, ...extraImages, ...variantImages].filter(Boolean))];
+  _pdGalleryImages = allImages;
   if (!isSameProduct) _pdGalleryIndex = 0;
   if (_pdGalleryIndex >= allImages.length) _pdGalleryIndex = 0;
 
@@ -1426,7 +1471,7 @@ function _renderProductDetail(product) {
         serverImage.fetchPriority = 'high';
         serverImage.decoding = 'async';
       } else {
-        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
       }
     } else {
       galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
@@ -1469,13 +1514,14 @@ function _renderProductDetail(product) {
         if (selected) selectedVariants.set(group.dataset.variantKey, selected.textContent.trim());
       });
     }
-    if (product.variants && Object.keys(product.variants).length) {
-      variantsContainer.innerHTML = Object.entries(product.variants).map(([key, values]) => `
+    const variantGroups = productVariantGroups(product);
+    if (variantGroups.length) {
+      variantsContainer.innerHTML = variantGroups.map(([key, values], groupIndex) => `
         <div class="tt-product-variants" data-variant-key="${escapeAttribute(key)}">
           <div class="tt-variant-label">${escapeHtml(key.charAt(0).toUpperCase() + key.slice(1))}</div>
           <div class="tt-variant-options">
             ${Array.isArray(values) ? values.map(v => `
-              <button type="button" class="tt-variant-option${selectedVariants.get(key) === String(v) ? ' active' : ''}">${escapeHtml(v)}</button>
+              <button type="button" class="tt-variant-option${selectedVariants.get(key) === String(v) ? ' active' : ''}${productOptionUnavailable(product, groupIndex, String(v)) ? ' tt-stock-unavailable' : ''}" aria-pressed="${selectedVariants.get(key) === String(v)}" aria-label="${escapeAttribute(v)}${productOptionUnavailable(product, groupIndex, String(v)) ? ' — Agotado, podés verlo' : ''}">${/colou?r/i.test(key) ? `<span class="tt-color-swatch" aria-hidden="true"${productColorSwatch(v) ? ` style="background:${productColorSwatch(v)}"` : ''}></span>` : ''}<span>${escapeHtml(v)}</span></button>
             `).join('') : ''}
           </div>
         </div>
@@ -1542,7 +1588,7 @@ function _renderProductDetail(product) {
         <span class="tt-trust-badge-icon">${b.icon}</span>
         <span class="tt-trust-badge-text">${b.text}</span>
       </div>
-    `).join('');
+    `).join('') + (isWatch ? `<details class="tt-wrist-guide"><summary>¿Cómo medir tu muñeca?</summary><ol><li>Rodeá tu muñeca con una cinta métrica flexible.</li><li>Si no tenés cinta, usá un cordón, hilo o cable flexible, incluso el de un cargador.</li><li>Marcá el punto donde se encuentran ambos extremos.</li><li>Extendé el objeto sobre una regla.</li><li>Medí la longitud en centímetros.</li><li>Indicá esa medida al comprar cuando corresponda.</li></ol></details>` : '');
   }
 
   // WA button
@@ -1608,9 +1654,7 @@ function _renderProductDetail(product) {
     galleryMain.addEventListener('click', () => {
       const p = _pdProduct;
       if (!p) return;
-      const main = p.imageUrl || p.image || getProductImage(p.id) || '';
-      const extra = Array.isArray(p.imagesExtra) ? p.imagesExtra : [];
-      const images = [...new Set(main ? [main, ...extra] : extra)]
+      const images = _pdGalleryImages
         .map(url => sanitizeClassicImageUrl(url, 1600))
         .filter(Boolean);
       if (images.length > 0) _openLightbox(images, Math.min(_pdGalleryIndex, images.length - 1));
@@ -1722,11 +1766,14 @@ function _galleryThumbClick(thumb) {
       galleryMain.replaceChildren(created);
     }
   }
+  // Precarga acotada: la siguiente fotografía, sin bajar toda la galería.
+  const nextUrl = _pdGalleryImages[(Number(thumb.dataset.galleryIndex) + 1) % _pdGalleryImages.length];
+  if (nextUrl && nextUrl !== src) { const next = new Image(); next.decoding = 'async'; next.src = nextUrl; }
 }
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1783,8 +1830,20 @@ window._showProductToast = _showProductToast;
 function selectVariant(btn) {
   const group = btn.closest('.tt-variant-options');
   if (!group) return;
-  group.querySelectorAll('.tt-variant-option').forEach(b => b.classList.remove('active'));
+  group.querySelectorAll('.tt-variant-option').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
   btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
+  const selected = _pdGetSelectedVariant();
+  const groups = productVariantGroups(_pdProduct);
+  const values = selected?.split(' / ') || [];
+  const row = values.length === groups.length
+    ? productVariantMediaRows(_pdProduct).find(item => groups.every(([key], index) => String(item[key]).trim() === values[index])) : null;
+  const media = sanitizeClassicImageUrl(row?.imageUrl || _pdProduct?.imageUrl || _pdProduct?.image || '', 900);
+  if (media) {
+    const index = _pdGalleryImages.indexOf(media);
+    const thumb = document.querySelector(`.tt-gallery-thumb[data-gallery-index="${index}"]`);
+    if (thumb) { _pdGalleryIndex = index; _galleryThumbClick(thumb); }
+  }
   _pdUpdateQtyUI();
   group.classList.remove('tt-variant-required');
   if (group.nextElementSibling?.classList.contains('tt-variant-required-msg')) {

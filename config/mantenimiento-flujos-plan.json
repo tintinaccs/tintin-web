@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "fbfacb6d7afcfcafc8593b5f28106bf3e4e1d2b0",
+  "reason": "Correcciones del PR 1061: CSP, tarifas compartidas, colecciones públicas, navegación y versiones; CI completo y pruebas de compra, cuenta y catálogo obligatorios antes de revisión.",
+  "files": [
+    {
+      "path": "_headers",
+      "oldHash": "dbca021e080c6a8618ee9a8907aee01e844bdfc4b1c48b9864c278812b91b1be",
+      "newHash": "9b8c0031d69fb21a05b943b274d55cd45053a6b3f41ae91d7a2ca1658015d038"
+    },
+    {
+      "path": "catalogo.html",
+      "oldHash": "c7224a25e22264818d238946d1b05d7f28a80f43c6843b3af64a91ab68329cca",
+      "newHash": "2cb0f953522c72760b57d3d6be76f6b3786ef3e3797dfb7fe7728d25e0f5d277"
+    },
+    {
+      "path": "cloudflare/participacion-clientes.js",
+      "oldHash": "2f3440e3e00bd340866f4de038761853c4ab34234e15c19d8728dea4ab416836",
+      "newHash": "0701ed0781690e9b23ade7466651d1808e8e5f695acf0ddc43a6d4f64907dee4"
+    },
+    {
+      "path": "config/csp-runtime.js",
+      "oldHash": "769a3ac92e92f4b5163b32688f0190aebfe4a27a529b25afdf0c8cc480b91c31",
+      "newHash": "9b48b36142ace2b2109fa2f94ea910b005f89567e0a687cee5ae4fbc87caa466"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "cd2c9d16fa4cd9181e196e15f64f59a9f59352ab63507196c4a58f247863afde",
+      "newHash": "4619ec59e15661a036e0c1c538a59d313752a9fcb8e9053c9c99eda488bc0c66"
+    },
+    {
+      "path": "js/components/location/ubicaciones-paraguay.js",
+      "oldHash": "a30dbb45982f9607d1282ccdd47718f764f62f29ea6dde834f252e4552aed455",
+      "newHash": "09ac1e23dc91c661559d004222c0c7fd13c8f408a1a1ae4ff538b92d7ed19b9c"
+    },
+    {
+      "path": "js/core/auth/navegacion-autenticacion.js",
+      "oldHash": "1dae713bd748e64da086ea0c5732871f731b31bef7172ec6737ae1fb1e86e119",
+      "newHash": "1f3ee27956541f46a9e8e68b678ca40435251d33f35b0df9b73643f6df355aec"
+    },
+    {
+      "path": "js/pages/collections/estado-colecciones.js",
+      "oldHash": "6db44b70564f84977f2d624de44bd9d66a92aaab8cc6413a1146ef3811a4ba9a",
+      "newHash": "c9b43cfcda59e4d8adcce3b6b4a5d05031b4bfbea435d6ef13dfb93122234daf"
+    },
+    {
+      "path": "login.html",
+      "oldHash": "7ce27b146a9ba860beac4202fab9a0317679e907cdfb22f913d8aa9aaa943d29",
+      "newHash": "21587d82b5681b8b7ff200dbf9149f90e43447031df4f8658f3096176882bc6b"
+    }
+  ],
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas",
+    "apis-internas__apps-script__22",
+    "apis-internas__comentarios__39",
+    "apis-internas__correos__41",
+    "apis-internas__favoritos__37",
+    "apis-internas__firestore__21",
+    "apis-internas__likes__38",
+    "apis-internas__notificaciones__40",
+    "apis-internas__pedidos__32",
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
+    "comentarios",
+    "correos",
+    "csp",
+    "cuenta-bloqueada",
+    "entrada-login",
+    "entrada-login__google-btn__1",
+    "entrada-login__login-codigo__2",
+    "favoritos",
+    "firebase-auth__redirect-result__5",
+    "firestore__users-uid__8",
+    "google-btn",
+    "google-btn__firebase-auth__3",
+    "likes",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
+    "pagina-perfil",
+    "pagina-principal",
+    "pedidos",
+    "pedidos__inventario__33",
+    "perfil",
+    "perfil__ultimos-datos__11",
+    "productos",
+    "redirect-result",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__pagina-principal__17",
+    "roles__perfil__10",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34",
+    "ultimos-datos",
+    "ultimos-datos__perfil__13",
+    "users-uid",
+    "users-uid__cuenta-bloqueada__12",
+    "users-uid__roles__9"
+  ]
+}

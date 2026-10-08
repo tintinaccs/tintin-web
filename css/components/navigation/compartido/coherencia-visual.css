@@ -222,9 +222,8 @@ html body #account-drawer .tt-account-drawer-header {
   padding: 18px 22px !important;
 }
 html body #account-drawer .tt-account-drawer-header::before {
-  flex: 0 0 44px;
-  width: 44px;
-  height: 44px;
+  content: none;
+  display: none;
 }
 html body #account-drawer .tt-account-drawer-heading { flex: 1; }
 html body #account-drawer .tt-account-drawer-kicker { display: none; }

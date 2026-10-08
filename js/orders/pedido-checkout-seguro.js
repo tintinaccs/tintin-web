@@ -33,10 +33,11 @@ import {
   normalizeCi,
   isValidRuc,
   normalizeRuc,
-  isValidRazonSocial
-} from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
+  isValidRazonSocial,
+  isValidTaxpayerType
+} from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1';
 import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2-cupones-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2-cupones-1-master-20261007-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -520,6 +521,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     );
     const name = text(document.getElementById('ck-name')?.value);
     const address = text(document.getElementById('ck-address')?.value);
+    const reference = text(document.getElementById('ck-referencia')?.value);
+    if (shipping.method === 'delivery' && reference.length < 5) {
+      throw appError('reference_required', 'Ingresá una referencia útil para encontrar tu entrega (al menos 5 caracteres).');
+    }
     const paymentMethod = text(document.querySelector('input[name="ck-pay"]:checked')?.value);
 
     if (name.length < 2) throw appError('name_required', 'Ingresá tu nombre completo.');
@@ -543,6 +548,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError('ci_invalid', 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).');
     }
     const wantsInvoice = document.getElementById('ck-wants-invoice')?.checked === true;
+    const taxpayerType = text(document.getElementById('ck-taxpayer-type')?.value);
+    if (wantsInvoice && !isValidTaxpayerType(taxpayerType)) {
+      throw appError('taxpayer_type_required', 'Elegí el tipo de contribuyente para tu factura.');
+    }
     const razonSocial = text(document.getElementById('ck-razon-social')?.value);
     const rucRaw = text(document.getElementById('ck-ruc')?.value);
     if (wantsInvoice && !isValidRazonSocial(razonSocial)) {
@@ -569,6 +578,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       subtotal: localSubtotal,
       ci: shipping.method === 'encomienda' ? normalizeCi(ciRaw) : '',
       wantsInvoice,
+      taxpayerType,
       razonSocial: wantsInvoice ? razonSocial : '',
       ruc: wantsInvoice ? normalizeRuc(rucRaw) : '',
       couponCode: document.getElementById('ck-coupon')?.dataset.applied || ''
@@ -775,6 +785,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       phone_invalid: 'Ingresá un teléfono o WhatsApp válido.',
       payment_required: 'Seleccioná un método de pago.',
       map_required: 'Marcá y nombrá tu ubicación en el mapa.',
+      reference_required: 'Ingresá una referencia útil para encontrar tu entrega (al menos 5 caracteres).',
+      taxpayer_type_required: 'Elegí el tipo de contribuyente para tu factura.',
       address_required: 'Ingresá la dirección para la encomienda.',
       ci_invalid: 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).',
       razon_social_required: 'Ingresá la razón social para la factura.',

@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const visibleCategories = ['relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
 const categories = ['relojes', 'bolsos', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
 
 for (const width of [390, 768, 1440]) {
@@ -30,8 +31,9 @@ for (const width of [390, 768, 1440]) {
       }
       const grid = page.locator(`[data-collections-nav="${surface}"]`);
       await expect(grid).toHaveAttribute('data-phase4-collections-state', 'ready');
-      await expect(grid.locator('a')).toHaveCount(categories.length);
-      for (const slug of categories) {
+      await expect(grid.locator('a')).toHaveCount(visibleCategories.length);
+      await expect(grid.locator('a[href="/catalogo?cat=bolsos"]')).toHaveCount(0);
+      for (const slug of visibleCategories) {
         const card = grid.locator(`a[href="/catalogo?cat=${slug}"]`);
         const image = card.locator('img');
         await expect(image).toHaveAttribute('src', `${origin}/__collection-test-${slug}.svg`);

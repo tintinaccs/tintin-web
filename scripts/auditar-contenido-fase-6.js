@@ -218,7 +218,7 @@ async function main() {
   const shippingDefaults = schemaModule.getPageDefaults('envios');
   const cleanDefaultLinks = homeDefaults?.hero?.primaryHref === '/catalogo' &&
     homeDefaults?.hero?.btnHref === '/about' &&
-    homeDefaults?.editorial_bag?.btnHref === '/catalogo?cat=bolsos' &&
+    homeDefaults?.editorial_bag === undefined &&
     homeDefaults?.editorial_relojes?.btnHref === '/catalogo?cat=relojes';
   const pickupDefault = shippingDefaults?.details?.blocks?.[2]?.title === 'Retiro en San Lorenzo — Gratis' &&
     String(shippingDefaults?.details?.blocks?.[2]?.body || '').includes('San Lorenzo');

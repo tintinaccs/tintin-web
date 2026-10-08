@@ -1,3 +1,7 @@
+# Actualización de mantenimiento — PR #1061
+
+La revisión humana del run 37763253834 quedó registrada, pero el veredicto rechazó correctamente la base obsoleta después de integrar #1064. Se incorpora main fbfacb6d7afcfcafc8593b5f28106bf3e4e1d2b0, preservando sus 78 alcances y metadatos. El nuevo candidato requiere CI y una nueva revisión humana; no hereda la autorización anterior.
+
 # Estado vigente — 2026-10-08: comentario técnico verificado y oculto
 
 Base del candidato: 1110cf9e54ed3010a363972c815cec64380b1f88. Evidencia productiva: 64426ba148444ac2d66d4f7a465b13f02beccbb4, revalidación 00:08:20.089Z.
@@ -9,6 +13,30 @@ Base del candidato: 1110cf9e54ed3010a363972c815cec64380b1f88. Evidencia producti
 - Pendientes ajenos a este cambio: PayPal Live con Dashboard autorizado; correcciones checkout de mapa/factura/teléfono preparadas previamente aún sin publicar en esta rama. No pagos, pedidos, correos ni opiniones de compra inventadas.
 
 ## Evidencia histórica
+# Estado vigente — 2026-10-08: plan de mantenimiento del PR #1061
+
+Agente: Codex. Base de mantenimiento: `1110cf9e54ed3010a363972c815cec64380b1f88`.
+
+- Instalación integrada por PR #1063 después de los cinco checks obligatorios PASS del candidato dbdfb66c2dd5ddd3a282681219601beacf13adc1 (Repository audit run 37720437054). Workflow activo en main y entorno real verificado: revisor tintinaccs ID 274170818, ramas protegidas, bypass de administradores deshabilitado. No se hereda ese PASS para este nuevo candidato.
+- Preparación: se conserva todo el código funcional del PR #1061 y se integra main sin reescritura de historia. Se prepara plan exacto de nueve archivos protegidos y sus 53 registros afectados, con huellas reales. Todos los alcances y metadatos/sellos permanecen históricos; esta renovación de código no certifica producción. Los auditores, workflows y revisores de main permanecen intactos.
+- NOT_VERIFIED al redactar: CI del nuevo commit y aprobación humana de su SHA. El check histórico permanece obligatorio y debe rechazar la renovación por diseño. La migración sólo puede exigir y verificar el nuevo control antes de sustituir el requisito histórico; no se fabrica success ni se modifica el guard para pasar.
+- Sin pagos, pedidos, emails, escrituras comerciales ni renovación de sellos. La producción funcional del PR #1061 aún no se publica.
+
+## Evidencia fechada anterior del PR #1061
+
+# Estado vigente — 2026-10-07: propuesta del prompt maestro, sin publicar
+
+Agente: Codex. Base comprobada: 64426ba148444ac2d66d4f7a465b13f02beccbb4. Rama: codex/tintin-master-audit-20261007.
+
+- Correcciones candidatas: factura opcional con tipo de contribuyente y formato DNIT; referencia útil exigida por servidor para delivery; mapas que recuperan geometría al mostrarse y comunican fallos de tiles; tarifas compartidas San Lorenzo/Fernando de la Mora 25.000 sin reescribir pedidos históricos; fotos asociadas a opciones conservadas al normalizar catálogo; agotados seleccionables con compra bloqueada; selector bajo la imagen; instrucciones de muñeca; desglose histórico de pedidos y estadísticas desconocidas sin cero ficticio; Catálogo en navegación; retiro de superficies públicas Bags/look/descubrimiento/mayorista; footer y política de envíos simplificados.
+- PASS_LOCAL dirigido: 465 pruebas transversales sin skips antes de la última ampliación; 27 pruebas Chromium de factura, galería, mapas y navegación; smoke de 18 rutas. Se agregaron regresiones para formato, tipos, referencia, tarifas, media importada e importes históricos. Los contratos de secciones retiradas y los dobles de Leaflet se actualizaron para el comportamiento solicitado. El cierre completo del manifiesto/build y audit:final se informa por separado; no se heredan verdes históricos.
+- Auditoría de cargas: 42 navegaciones invitadas de la base y 42 del candidato, 14 páginas x 3 resoluciones, con guardia de sólo lectura. Routing desactiva la caché de navegador: los resultados no prueban bytes de red fría/caliente ni rendimiento de campo. Recursos CSS/JS cambian versión y se registran por el generador canónico, incluidas dependencias transitivas.
+- BLOCKED_MERGE: Protected flow integrity rechaza nueve archivos de flujos vigentes: _headers, catalogo.html, cloudflare/participacion-clientes.js, config/csp-runtime.js, js/admin/admin-app.js, js/components/location/ubicaciones-paraguay.js, js/pages/collections/estado-colecciones.js, login.html, js/core/auth/navegacion-autenticacion.js. No se modificó config/proteccion-flujos.json, su auditor, workflow, sellos, ni los cinco checks requeridos; strict/enforce_admins continúan activos. Requiere coordinación de mantenimiento; no se intenta mergear con ese rechazo.
+- PRODUCCIÓN_BASE: monitor HTTP de páginas, CSP, metadatos, sitemaps y backend responde OK para la versión desplegada de main; esto no verifica el candidato. PR/deploy del candidato pendientes al redactar esta entrada. PR #929 permanece intacto.
+- Límites: sin operaciones comerciales de prueba, credenciales, pagos, pedidos, correos ni escrituras a Firebase/Sheets. Sin Safari ni dispositivos físicos. Sin validar inscripción/dígito matemático del RUC. Precios diferentes por variante requieren evolución del contrato comercial; no se inventan ni sustituyen precios reales. Avatares históricos públicos requieren una solución compatible con la anonimización; las nuevas publicaciones ahora priorizan la foto personalizada canónica. OAuth y compras reales no se declaran verificados.
+
+## Historia previa (no constituye evidencia del candidato)
+
 # Estado vigente — 2026-10-07: instalación aditiva de mantenimiento protegido
 
 Agente: Codex. Base: `64426ba148444ac2d66d4f7a465b13f02beccbb4`. Rama: `codex/protected-flow-maintenance-20261007`.
@@ -1331,4 +1359,3 @@ Producción, sólo lectura, 2026-10-06 ~16:00 UTC: `monitor:production` y `audit
 PENDING (requiere al dueño): commit/PR, CI exacto y deploy; después, Revalidar + «Sellar verdes» con la sesión del Super Admin; una edición real en la hoja Productos y un pedido o «me gusta» real para que existan los acuses; PayPal en Live cuando corresponda. PASS_CI y PASS_PRODUCTION pendientes para todo lo de esta entrada.
 
 Reconciliación 2026-10-06 ~16:45 UTC: `main` avanzó a `004aa284` (#1050, hero de inicio) durante este trabajo. Rama rebasada sobre ese commit a pedido del dueño para commit, push y merge; único conflicto `diagnostic-manifest.json` (regenerado con `build:pages`; baseline de caché re-registrado desde `origin/main`). Verificación repetida sobre el árbol rebasado en el espejo Linux: `build:pages` exit 0, suite Node 1073/1074 (la misma falla previa de `page-loader-route`), `audit:final` exit 0, Rules 121 + 12 + 13. PASS_CI y PASS_PRODUCTION se registran en el PR.
-

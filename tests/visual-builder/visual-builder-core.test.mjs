@@ -139,7 +139,7 @@ test('el orden de secciones se sanea: solo ids reales, sin duplicados, nunca pie
   assert.ok(new Set(clean.sectionOrder).size === clean.sectionOrder.length);
 
   const empty = sanitizeVisualConfig('index', {});
-  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'collections_carousel', 'look', 'editorial_bag', 'random_products', 'editorial_relojes', 'reviews']);
+  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'collections_carousel', 'editorial_relojes', 'reviews']);
 });
 
 test('referencias de secciones viejas se reconectan a la implementación canónica sin copiar datos incompatibles', () => {
@@ -155,11 +155,11 @@ test('referencias de secciones viejas se reconectan a la implementación canóni
     ],
   });
 
-  assert.deepEqual(clean.sectionOrder.slice(0, 4), ['hero', 'look', 'collections_carousel', 'reviews']);
-  assert.equal(clean.customBlocks[0].afterSection, 'look');
+  assert.deepEqual(clean.sectionOrder.slice(0, 4), ['hero', 'collections_carousel', 'reviews', 'trust']);
+  assert.equal(clean.customBlocks[0].afterSection, 'collections_carousel');
   assert.equal(clean.customBlocks[1].afterSection, 'collections_carousel');
-  assert.equal(clean.sections.look.textColor, '#abcdef');
-  assert.equal(clean.sections.look.background, '');
+  assert.equal(clean.sections.look, undefined);
+  assert.equal(clean.sections.collections_carousel.background, '');
   assert.equal(clean.sections.products_header, undefined);
   assert.equal(clean.sections.collections_header, undefined);
 
@@ -167,8 +167,8 @@ test('referencias de secciones viejas se reconectan a la implementación canóni
     products_header: { title: 'No debe contaminar la sección nueva' },
     look: { visible: false },
   });
-  assert.equal(content.look.visible, false);
-  assert.equal(content.look.title, undefined);
+  assert.equal(content.look, undefined);
+  assert.equal(content.products_header, undefined);
 });
 
 test('draft no puede cambiar de página ni restaurar auditoría no publicada', () => {

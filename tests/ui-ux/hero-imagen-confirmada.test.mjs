@@ -54,7 +54,7 @@ test('Firestore conserva WebP por dispositivo, no precarga desktop móvil y PNG 
       await page.evaluate(()=>window.confirmImages({}));
       await page.waitForFunction(()=>document.getElementById('tt-hero-img').currentSrc.includes('.webp?'));
       await page.evaluate(()=>document.getElementById('tt-hero-img').dispatchEvent(new Event('error')));
-      await page.waitForFunction(()=>document.getElementById('tt-hero-img').currentSrc.endsWith('.png?v=tintin-20261006-hero-rotulo-1'));
+      await page.waitForFunction(()=>{const img=document.getElementById('tt-hero-img');return /\.png\?v=/.test(img.currentSrc)&&img.complete&&img.naturalWidth>0;});
       assert.match(await page.locator('#tt-hero-img').evaluate(img=>img.currentSrc),new RegExp(`hero-nuevo-${art}\\.png`));
       await page.close();
     }

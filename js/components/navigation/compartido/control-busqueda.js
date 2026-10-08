@@ -1,6 +1,6 @@
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261007-public-consistency-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261007-public-consistency-1-master-20261007-1';
 
 const MAX_RESULTS = 10;
 const INPUT_DELAY_MS = 120;
@@ -104,12 +104,17 @@ function stateNode(message, { error = false, retry = false } = {}) {
 function createResult(product, position) {
   const link = document.createElement('a');
   link.className = 'tt-search-result-item';
+  const inStock = window.TintinCatalogPolicy?.isInStock?.(product) ?? (product.stock == null || Number(product.stock) > 0);
+  link.classList.toggle('tt-stock-unavailable', !inStock);
   link.id = `tt-search-result-${position}`;
   link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;
   link.setAttribute('role', 'option');
   link.setAttribute('aria-selected', 'false');
   link.dataset.searchPosition = String(position);
 
+  const media = document.createElement('span');
+  media.className = 'tt-search-result-media';
+  link.appendChild(media);
   const imageUrl = safeImageUrl(product.imageUrl || product.imgUrl || product.image);
   if (imageUrl) {
     const image = document.createElement('img');
@@ -118,12 +123,12 @@ function createResult(product, position) {
     image.alt = '';
     image.loading = 'lazy';
     image.decoding = 'async';
-    link.appendChild(image);
+    media.appendChild(image);
   } else {
     const placeholder = document.createElement('span');
     placeholder.className = 'tt-search-result-image tt-search-result-image--empty';
     placeholder.setAttribute('aria-hidden', 'true');
-    link.appendChild(placeholder);
+    media.appendChild(placeholder);
   }
 
   const body = document.createElement('span');
@@ -132,6 +137,7 @@ function createResult(product, position) {
   name.textContent = String(product.name || 'Producto');
   const meta = document.createElement('span');
   meta.textContent = [String(product.category || product.cat || '').trim(), formatPrice(product.price)].filter(Boolean).join(' · ');
+  if (!inStock) meta.textContent += ' · Agotado';
   body.append(name, meta);
   link.appendChild(body);
   return link;

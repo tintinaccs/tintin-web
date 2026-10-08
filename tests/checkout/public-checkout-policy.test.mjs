@@ -208,8 +208,8 @@ test('encomienda exige CI, modo válido y no acepta efectivo', async () => {
 test('delivery exige ubicación nombrada y factura exige RUC válido', async () => {
   await rejectsWith(checkout(draft({ mapLocation: null })), 'map_required');
   await rejectsWith(checkout(draft({ wantsInvoice: true, razonSocial: 'Empresa SA', ruc: '123' })), 'ruc_invalid');
-  const { store } = await checkout(draft({ wantsInvoice: true, razonSocial: 'Empresa SA', ruc: '80012345-6' }));
-  assert.deepEqual(orderWrite(store).invoice, { wanted: true, razonSocial: 'Empresa SA', ruc: '80012345-6' });
+  const { store } = await checkout(draft({ wantsInvoice: true, razonSocial: 'Empresa SA', ruc: '80012345-6', taxpayerType: 'juridica' }));
+  assert.deepEqual(orderWrite(store).invoice, { wanted: true, razonSocial: 'Empresa SA', ruc: '80012345-6', taxpayerType: 'juridica' });
 });
 
 test('variantes: requerida, inválida y válida', async () => {
@@ -220,6 +220,24 @@ test('variantes: requerida, inválida y válida', async () => {
   assert.equal(orderWrite(store).items[0].variant, '7');
   assert.equal(variantIsValid({ variants: [{ Color: 'Oro', price: 1 }] }, 'Oro'), true);
   assert.equal(variantIsValid({}, 'Oro'), false);
+});
+
+test('delivery exige referencia útil, pero retiro no conserva dirección ni referencia', async () => {
+  await rejectsWith(checkout(draft({ referencia: '' })), 'reference_required');
+  await rejectsWith(checkout(draft({ referencia: '  a  ' })), 'reference_required');
+  const { store } = await checkout(draft({ selectedCity: '__retiro__', shippingMethod: 'retiro', referencia: '', mapLocation: null, expectedShippingCost: 0, expectedTotal: 100000 }));
+  assert.equal(orderWrite(store).shipping.referencia, '');
+});
+
+test('factura conserva tipo oficial; no obliga datos fiscales cuando no se solicita', async () => {
+  await rejectsWith(checkout(draft({ wantsInvoice: true, razonSocial: 'Nombre Fiscal', ruc: '1234567-8' })), 'taxpayer_type_required');
+  await rejectsWith(checkout(draft({ wantsInvoice: true, razonSocial: 'Nombre Fiscal', ruc: '1234567-8', taxpayerType: '<script>' })), 'taxpayer_type_required');
+  for (const taxpayerType of ['fisica', 'juridica']) {
+    const { store } = await checkout(draft({ wantsInvoice: true, razonSocial: 'Nombre Fiscal', ruc: '1234567-8', taxpayerType }));
+    assert.equal(orderWrite(store).invoice.taxpayerType, taxpayerType);
+  }
+  const { store } = await checkout(draft({ wantsInvoice: false, taxpayerType: 'invalid', ruc: 'invalid' }));
+  assert.deepEqual(orderWrite(store).invoice, { wanted: false, razonSocial: '', ruc: '' });
 });
 
 test('stock insuficiente devuelve datos para corregir el carrito', async () => {
@@ -253,4 +271,12 @@ test('reintento del mismo requestId devuelve el pedido existente sin escribir', 
   const { created } = await checkout(draft({ expectedTotal: 1 }), store);
   assert.equal(created.duplicate, true);
   assert.equal(store.commits.length, 0);
+});
+
+test('cotización canónica aplica 25.000 a ambas ciudades aunque settings conserve las zonas antiguas', async () => {
+ for (const selectedCity of ['San Lorenzo','San Lorenzo Centro','San Lorenzo Alrededores','Fernando de la Mora']) {
+  const store=fakeStore({'settings/shippingRates':{deliveryCities:[{name:'San Lorenzo Centro',price:15000},{name:'San Lorenzo Alrededores',price:20000},{name:'Fernando de la Mora',price:20000}]}});
+  await checkout(draft({selectedCity,expectedShippingCost:25000,expectedTotal:125000}),store);
+  assert.equal(orderWrite(store).shippingCost,25000);assert.equal(orderWrite(store).total,125000);
+ }
 });

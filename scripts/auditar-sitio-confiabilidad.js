@@ -123,9 +123,9 @@ check('La tarjeta de privacidad no bloquea ni cubre toda la página',
   /width\s*:\s*min\(400px,\s*calc\(100vw\s*-\s*36px\)\)/.test(styles) &&
   !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
 check('La actividad propia y Google Analytics esperan el permiso opcional',
-  activity.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1'") &&
+  activity.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1-master-20261007-1'") &&
   activity.includes('if (hasConsent() && analyticsWritable) startActivity()') &&
-  analytics.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1'") &&
+  analytics.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1-master-20261007-1'") &&
   analytics.includes('!isTrackablePage() || !hasStatisticsConsent()') &&
   analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
@@ -203,9 +203,10 @@ check('El rosa principal cumple contraste AA sobre blanco',
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));
-check('El reveal se repite al volver al viewport, es liviano y procesa solo nodos agregados',
-  scrollReveal.includes('function hideForRepeat(element)') &&
-  scrollReveal.includes('else hideForRepeat(entry.target)') &&
+check('El reveal conserva contenido visible al volver, es liviano y procesa solo nodos agregados',
+  !scrollReveal.includes('function hideForRepeat(element)') &&
+  scrollReveal.includes('observer.unobserve(entry.target)') &&
+  scrollReveal.includes('.tt-auto-reveal{opacity:1;') &&
   scrollReveal.includes("element.classList.add('tt-visible')") &&
   scrollReveal.includes('scheduleScan(node)') &&
   !scrollReveal.includes('filter:blur'));
@@ -308,7 +309,7 @@ for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20261004-final-integration-2'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, colores y el fix de auditoría de página; el carrito queda en la navegación como única autoridad',
