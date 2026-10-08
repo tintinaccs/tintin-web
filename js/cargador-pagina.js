@@ -917,7 +917,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261008-producto-superficies-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
   }
 
   function bootThemeColorSanitizerPublic() {

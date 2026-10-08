@@ -1,3 +1,9 @@
+# PR #1067 — reconciliación tras aprobación, 2026-10-08
+
+Agente: Codex. El propietario aprobó mantenimiento 37856633442 y el veredicto pasó. Main avanzó concurrentemente a cbeccc36c3f70dc6770ded7adf40b335956105ee (#1071), generando conflictos antes del merge automático. Se conserva ese cambio completo, se actualiza el plan de los tres archivos originales y se regenera el manifiesto. No se reutiliza la aprobación del SHA anterior. CI previo 37851260994 aprobado; CI y revisión del candidato nuevo pendientes. No hay merge ni despliegue de este PR todavía. El diagnóstico de HTTP 403 confirmó cupo de API agotado y el mantenimiento avanzó tras renovarse; no se cambiaron permisos ni se debilitaron protecciones.
+
+## Evidencia anterior
+
 # PR #1067 — actualización del candidato, 2026-10-08
 
 Agente: Codex. Solicitud explícita del propietario: arreglar y fusionar. Base vigente: a347b87be8296d14f3483fcfb03579e09b63dfc0 (#1069 integrado concurrentemente y preservado). Se integra main sin descartar los cambios concurrentes y se resuelven conflictos del plan, manifiesto y este registro; el manifiesto se regenera con build:pages. Plan renovado exclusivamente para los tres archivos protegidos de seguridad, conservando los demás sellos y alcances.
@@ -1432,3 +1438,27 @@ La lista de evidencia anterior congelaba 131 archivos, pero no todas las página
 PASS_LOCAL: build:pages completo; 47 pruebas de protección/mantenimiento; controles negativos en memoria demuestran que modificar index.html, admin.html, checkout.html, styles.min.css, package-lock.json, js/cargador-pagina.js, el generador de rutas o el workflow de despliegue se rechaza. Auditor de protección sin alteraciones. Evidencia detallada: outputs/proteccion-dependencias-ampliada.json en el workspace.
 
 Impacto: cambios de política/documentación/manifiesto; sin cambios en HTML/JS/CSS/Rules/contratos operativos ni datos de negocio. No requiere pruebas visuales por cambio de interfaz. Pendiente CI del candidato exacto y publicación mediante merge normal. Se conservan los cinco checks obligatorios actuales, strict/enforce_admins, sin force-push ni eliminación de ramas protegidas. No se aprueba mantenimiento por el propietario. El bloqueo actúa sobre publicación a main, no sobre copias locales ni permisos de servicios externos.
+
+
+## Producto minimalista, paleta y sugerencias locales — 2026-10-08
+
+Autor: Codex, agente principal. Base origin/main 3c33641e810e5c9ae820415b5ac8505339d781e0. Alcance solicitado: toda la ficha de producto, galería por color y edición de colores en Super Admin.
+
+La galería mantiene foto principal, miniaturas centradas y luego círculos de color sin nombres visibles; los nombres accesibles y el valor real del carrito se conservan. Elegir una miniatura con asociación inequívoca selecciona su color y mantiene activa la foto correcta. La superficie de información/compra pierde marcos y sombras anidados, con cantidad y botones alineados. Beneficios, selección y reseñas reciben el mismo tratamiento visual ligero. Los botones de opciones que no son colores conservan sus nombres.
+
+La paleta ofrece 27 colores y una elección HEX personalizada por color. Dorado y plateado tienen acabados metálicos distintos del marrón. El editor conserva sus fotos y apariencia en variantMedia. Detecta aproximadamente colores de fotos sin asignar mediante canvas local, sin servicio externo; omite fondos blancos/señal insuficiente/CORS fallido. Cada sugerencia se puede cambiar. Las asignaciones preexistentes/manuales prevalecen y la detección se cancela al cerrar el editor. Con variantes de inventario, no se agregan nuevos colores ni stock automáticamente. El guardado no contiene valores undefined. No se realizaron escrituras de prueba sobre productos reales.
+
+PASS_LOCAL: 18 pruebas Chromium de galería/editor y geometría con HTML/CSS completos, en 320, 390, 709, 768, 1024, 1280, 1440 y 1920 px; 168 pruebas Node de catálogo/carrito/sincronización; auditoría específica de Producto y auditorías de colores, tipografía e integridad CSS. Regresiones de navegación/reseñas/favoritos: 27 PASS, una prueba de loader PASS al reintentar por timeout y una omitida por condición del entorno; no se alteró esa prueba. La vista previa local usa datos/fotos públicos reales de CELINA y el renderer actual, sin SDK ni acciones comerciales. Captura fuera del repo: outputs/celina-minimalista-previa.png.
+
+Impacto: product.html, tienda.js, estilos limitados a Producto, editor y estilos admin, helper compartido de medios. Otras páginas/módulos sólo actualizan referencias de caché transitivas; se generan CSP/manifiesto con los comandos canónicos. Rules, credenciales, precios, contratos de pagos y datos reales permanecen sin cambios. El pedido canónico reconstruye únicamente la foto correspondiente al color, sin confiar en fotos enviadas por el navegador. Sin migración masiva; compatibilidad con variantes y fotos ya guardadas. El plan de mantenimiento renueva sólo huellas afectadas y mantiene controles/aprobación humana.
+
+PASS_LOCAL adicional: build:pages y regeneración final del manifiesto; 47 pruebas de protección/mantenimiento. El foco vuelve a la miniatura activa cuando cambia su galería por color. La vista previa móvil descubrió un margen exterior ausente; se agrega un mínimo de 16 px a ambos lados y se exige en los ocho anchos del test con CSS completo.
+
+PASS_LOCAL selección: 23 pruebas Chromium de selección, cantidades, galería/editor y ocho anchos; 216 pruebas Node de carrito, catálogo, checkout y pedidos; prueba Chromium con botones reales verifica que seleccionar no agrega, dos colores crean líneas/fotos distintas, las cantidades y eliminaciones son independientes y el borrador conserva ambas variantes. El renderer de checkout se verifica aislado de autenticación, sin enviar pedidos. Se corrige además el límite del stub nosotros.html quitando una referencia redundante de favicon de la redirección; CI había detectado que el nuevo tag del loader superaba los 2000 caracteres.
+
+PENDING: CI del SHA exacto, revisión humana de mantenimiento en GitHub y publicación. PASS_CI/PASS_PRODUCTION no se infieren de la vista previa ni de informes anteriores. La clasificación de fotos es orientativa y no reconoce con certeza todos los materiales/colores.
+
+
+Integración de main a347b87be8296d14f3483fcfb03579e09b63dfc0: main avanzó durante el CI y la inspección protegida rechazó la base antigua. Se resuelven conflictos preservando recomendaciones cíclicas, avisos por rol, teléfono y navegación ya publicados, junto con la ficha minimalista y la foto por color hasta el pedido. Se regenera el plan sobre la nueva base; PASS anteriores no se trasladan al SHA combinado. Pendiente reverificación y aprobación humana nueva.
+
+PASS_LOCAL combinado: 301 pruebas Node de catálogo/carrito/checkout/pedidos y regresiones de avisos, teléfono, navegación y sincronización. El test visual extrae el cierre real de la sección de Producto: main eliminó el comentario usado anteriormente como separador, que hacía incluir scripts ajenos y fallaba el fixture por declaraciones duplicadas. No se debilitan sus aserciones.
