@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "286117fb0b6e5a0f0233760dfd393585edfee75a474fead80e79674a46c41ffb",
+  "sourceFingerprint": "a614c0df0b29972afffb0730b0c29745bb7e7451e7ad0e65d37be9e0628708c7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1067,
-    "textFiles": 1019,
-    "totalBytes": 15997178,
+    "files": 1068,
+    "textFiles": 1020,
+    "totalBytes": 16063568,
     "pages": 19,
     "modules": 754
   },
@@ -33706,8 +33706,8 @@
     },
     {
       "path": "tests/checkout/encomienda-payment-ui.spec.js",
-      "bytes": 1858,
-      "sha256": "6074682cb1c7fe672307406a8c7968ff734d66bc911a3004dec59546155fae8b",
+      "bytes": 2003,
+      "sha256": "8eda8419c884cddb5f281cc44d5b0ca2ccf3d0f2beab3a6a0e12178815674737",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40274,8 +40274,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 3940,
-      "sha256": "2bb15a9e531dd54534365919fabd001a03c3e5dd1274b89a1b5dabe72fd95203"
+      "bytes": 20105,
+      "sha256": "de33c7ce92cae93c2308059b0b70db74176ca3a61a8d976735f297fa9157078a"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -40286,8 +40286,8 @@
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 108262,
-      "sha256": "b8e786d9cd10b9bf45c89705ab4f0ed2676a1d1676a0bef2a471a0abd9b853aa"
+      "bytes": 155156,
+      "sha256": "cafcb994757bea80c86e3e8a2ecb39bc03ae97a3cb1c8f16db8c82bc010b5bb5"
     },
     {
       "path": "config/public-site.json",
@@ -40808,8 +40808,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 302254,
-      "sha256": "e7baf746825b867358cc712342c7fb31f1ef61898183db7976cbe02f2c046a3d"
+      "bytes": 303997,
+      "sha256": "f632e4051dcddfc0946825474b5985dfd85193cf9081289ea945e87927daa600"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41098,6 +41098,12 @@
       "extension": ".md",
       "bytes": 7138,
       "sha256": "4f774ef6a7d6f3d19d8bcef869ad7f20d8cc7191236fced080c3ff0afb764a24"
+    },
+    {
+      "path": "docs/proteccion-anticambios.md",
+      "extension": ".md",
+      "bytes": 1588,
+      "sha256": "dd55add5baa33d2ca22c8337a64b5a5f90d17c962b2bea4698ee5c7bb82d2f11"
     },
     {
       "path": "docs/prueba-compra-real.md",

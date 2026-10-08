@@ -590,8 +590,10 @@ function refreshPaymentOptions() {
   const noneEl = document.getElementById('error-3-none');
 
   if (efectivoEl) efectivoEl.style.display = showEfectivo ? '' : 'none';
-  document.getElementById('pay-efectivo').disabled = !showEfectivo;
-  document.getElementById('pay-transferencia').disabled = !showTransferencia;
+  if (efectivoEl) efectivoEl.querySelector('input').disabled = !showEfectivo;
+  if (transferenciaEl) transferenciaEl.querySelector('input').disabled = !showTransferencia;
+  window.dispatchEvent(new CustomEvent('tintin:checkout-shipping-changed', { detail: { method: orderData.shippingMethod } }));
+  if (window.TintinPaymentMethods) return;
   if (transferenciaEl) transferenciaEl.style.display = showTransferencia ? '' : 'none';
   if (noneEl) noneEl.style.display = (showEfectivo || showTransferencia) ? 'none' : 'block';
 
@@ -601,7 +603,7 @@ function refreshPaymentOptions() {
   const checked = document.querySelector('input[name="ck-pay"]:checked');
   if (checked) {
     const stillVisible = checked.id === 'pay-efectivo' ? showEfectivo : showTransferencia;
-    if (!stillVisible) { checked.checked = false; orderData.paymentMethod = ''; document.getElementById('bank-details').classList.remove('show'); }
+    if (!stillVisible) { checked.checked = false; orderData.paymentMethod = ''; document.getElementById('bank-details')?.classList.remove('show'); }
   }
 }
 
