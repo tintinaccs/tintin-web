@@ -1,3 +1,15 @@
+# Estado vigente — 2026-10-07: instalación aditiva de mantenimiento protegido
+
+Agente: Codex. Base: `64426ba148444ac2d66d4f7a465b13f02beccbb4`. Rama: `codex/protected-flow-maintenance-20261007`.
+
+- PASS_LOCAL: 47 pruebas de protección histórica y mantenimiento; YAML del workflow válido; contratos arquitectónicos alineados. Los casos adversariales rechazan retiro de protección, hashes falsos, planes incompletos, cambios de scope/sellos/control, aprobación ajena/ausente/bot, bypass, origen/evento/app de CI incorrectos y avance de main/head.
+- Implementado: plan con base y hashes exactos, helper de preparación sin aprobación, lectura de blobs candidatos sin ejecutar su código, CI obligatorio con verificación de origen, revisión de entorno por ID del propietario y veredicto ligado a SHA/ejecución. No se reutilizan aprobaciones de runs reintentados.
+- Conservados: todos los 123 hashes históricos, los 76 alcances, metadata/evidencia, auditor y workflow históricos. Se agregan seis archivos del mecanismo a la protección con sus hashes reales; no se inventan nuevos registros verdes.
+- NOT_VERIFIED: CI del nuevo PR, ejecución del workflow instalado y aprobación real del entorno. El workflow nuevo aún no está instalado en main. La migración administrativa requiere habilitar y verificar el nuevo check obligatorio antes de sustituir el requisito histórico; se documenta en MANTENIMIENTO_FLUJOS.md. No se alteran las protecciones de GitHub en este commit.
+- PR #1061 permanece bloqueado por sus cambios protegidos; instalar este mecanismo no aprueba esa renovación. Sin escrituras comerciales, pagos, pedidos, emails ni renovación de sellos en producción.
+
+## Evidencia fechada previa
+
 # Estado vigente — 2026-10-07: Sheets recuperado y Likes verificado
 
 Agente: Codex. Base: `c5a7721a63a6f9370ba904121343144f2e4d28b3`.

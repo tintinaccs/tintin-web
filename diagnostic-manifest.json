@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5f2f019c66daf28aa95af578a7e2e35ca8cf690e6cdf743ef149f1a80b4b02e8",
+  "sourceFingerprint": "20835857ba0f6603e56de335c4e8c7cd581848bc0c64a8610a0706c7e4959cef",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1052,
-    "textFiles": 1004,
-    "totalBytes": 15892574,
+    "files": 1059,
+    "textFiles": 1011,
+    "totalBytes": 15925834,
     "pages": 19,
-    "modules": 742
+    "modules": 746
   },
   "viewports": [
     {
@@ -31559,6 +31559,63 @@
       ]
     },
     {
+      "path": "scripts/mantenimiento-flujos-core.mjs",
+      "bytes": 5123,
+      "sha256": "3e6bf1b7ac018b4574218daef4c06e7e960e9c3a745183cbf2fa9e8f31e2b589",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./auditar-proteccion-flujos.mjs",
+          "target": "scripts/auditar-proteccion-flujos.mjs",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/mantenimiento-flujos-github.mjs",
+      "bytes": 8276,
+      "sha256": "6b92b260889813f739579740a14cfea7a0511169f3ed7b669b603b04ef6f2e69",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "./mantenimiento-flujos-core.mjs",
+          "target": "scripts/mantenimiento-flujos-core.mjs",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.github.com/repos/$%7Bconfig.repository%7D/$%7Bpath%7D",
+          "line": 15
+        },
+        {
+          "url": "https://github.com/$%7Bconfig.repository%7D/actions/runs/$%7BrunId%7D",
+          "line": 129
+        }
+      ]
+    },
+    {
       "path": "scripts/normalizar-rutas-publicas.js",
       "bytes": 4648,
       "sha256": "a333769f0cff5b8e9d7a4a3f368927451a184e31dd0dff8d646d68242f0e8ce2",
@@ -31578,6 +31635,42 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/preparar-mantenimiento-flujos.mjs",
+      "bytes": 2234,
+      "sha256": "36e43d2653b0205536b05bf9202df0c39baeaa203cff0eba2c338a14bc35a314",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "./auditar-proteccion-flujos.mjs",
+          "target": "scripts/auditar-proteccion-flujos.mjs",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "./mantenimiento-flujos-core.mjs",
+          "target": "scripts/mantenimiento-flujos-core.mjs",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
       "endpoints": []
     },
     {
@@ -34873,6 +34966,42 @@
           "target": null,
           "dynamic": true,
           "line": 376
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
+      "bytes": 6935,
+      "sha256": "3ec50779b33824112c5e1d47e0bebeab1a0cddd70b11f9e08d536379c0f993ad",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../scripts/auditar-proteccion-flujos.mjs",
+          "target": "scripts/auditar-proteccion-flujos.mjs",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../scripts/mantenimiento-flujos-core.mjs",
+          "target": "scripts/mantenimiento-flujos-core.mjs",
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -39791,6 +39920,12 @@
       "sha256": "33d14707339a3f310f3b3c0cbccaf6a9d7fe9ebff4c33fe5f8856fbebc33a2bf"
     },
     {
+      "path": ".github/workflows/mantenimiento-flujos.yml",
+      "extension": ".yml",
+      "bytes": 2892,
+      "sha256": "25bff8aa97cb8f1a971a4e4fb7e25a647af4c072137b8321e1bbb205a2e07ee6"
+    },
+    {
       "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
       "bytes": 5419,
@@ -40499,10 +40634,16 @@
       "sha256": "f004aac73086b005e6048ca0d76449718a7a701d05bc6bc34469f4afef0f163d"
     },
     {
+      "path": "config/mantenimiento-flujos.json",
+      "extension": ".json",
+      "bytes": 713,
+      "sha256": "f6bd70fd64fcc7d26e8f3455896cdcafc375e12de969dc2521363c47533bd5d5"
+    },
+    {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 104975,
-      "sha256": "ec91e17329a3622dd11bb8d8e7124ceed4001aab57a53d1b64e3d98484d7a0b4"
+      "bytes": 105674,
+      "sha256": "b7a5dfacec6e63570a04cef8c147033ef159ea1bfe193ff18d97c57d675427d8"
     },
     {
       "path": "config/public-site.json",
@@ -41023,14 +41164,20 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 292526,
-      "sha256": "c57bc4bd34bb44446ac3dd246608b8468b4a5154eb2968b6c269d1fba8d392d4"
+      "bytes": 294247,
+      "sha256": "615241211f8fa553b68dda3bbe3966fdb6c87140cec9deb86ae3703fa4608f15"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
       "extension": ".md",
       "bytes": 4870,
       "sha256": "f874ceb8f18ab7eae9c3968de99b04b7af0585d3668f921f2dbf83c6ceddf4e2"
+    },
+    {
+      "path": "docs/agent/MANTENIMIENTO_FLUJOS.md",
+      "extension": ".md",
+      "bytes": 4667,
+      "sha256": "68d3f1f17c368cba60f756e9abfe3e87f6695df8c3a70137cfaa508ab488f5e8"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -44621,6 +44768,18 @@
       "sha256": "ddfedc5e1b44e60026f97d1e94c90cd484b79bd3a2df6b6ef43f38251842cbdd"
     },
     {
+      "path": "scripts/mantenimiento-flujos-core.mjs",
+      "extension": ".mjs",
+      "bytes": 5123,
+      "sha256": "3e6bf1b7ac018b4574218daef4c06e7e960e9c3a745183cbf2fa9e8f31e2b589"
+    },
+    {
+      "path": "scripts/mantenimiento-flujos-github.mjs",
+      "extension": ".mjs",
+      "bytes": 8276,
+      "sha256": "6b92b260889813f739579740a14cfea7a0511169f3ed7b669b603b04ef6f2e69"
+    },
+    {
       "path": "scripts/normalizar-rutas-publicas.js",
       "extension": ".js",
       "bytes": 4648,
@@ -44631,6 +44790,12 @@
       "extension": ".js",
       "bytes": 2294,
       "sha256": "e7a77d052d8c77ea40aa782fdf1bedfd097829444fc732c0fb9ee41d8d3e65e9"
+    },
+    {
+      "path": "scripts/preparar-mantenimiento-flujos.mjs",
+      "extension": ".mjs",
+      "bytes": 2234,
+      "sha256": "36e43d2653b0205536b05bf9202df0c39baeaa203cff0eba2c338a14bc35a314"
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",
@@ -45231,6 +45396,12 @@
       "extension": ".mjs",
       "bytes": 20988,
       "sha256": "84bd551f523bb43dbcaf802ec451f9469bbf7c4dc203f29cf19e736d49ccea97"
+    },
+    {
+      "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
+      "extension": ".mjs",
+      "bytes": 6935,
+      "sha256": "3ec50779b33824112c5e1d47e0bebeab1a0cddd70b11f9e08d536379c0f993ad"
     },
     {
       "path": "tests/flow-connections/pedidos-authority.test.mjs",
