@@ -73,6 +73,8 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   expect(geometry.main.bottom).toBeLessThanOrEqual(geometry.thumbs.top);
   expect(geometry.thumbs.bottom).toBeLessThanOrEqual(geometry.colors.top);
   expect(geometry.overflow).toBe(false);
+  expect(geometry.main.left).toBeGreaterThanOrEqual(16);
+  expect(geometry.main.right).toBeLessThanOrEqual(width-16);
   expect(await page.locator('.tt-product-info-panel').evaluate(node=>getComputedStyle(node).boxShadow)).toBe('none');
   expect(await page.locator('.tt-product-info-panel').evaluate(node=>getComputedStyle(node).borderTopWidth)).toBe('0px');
   for (const button of geometry.actions) {
@@ -86,6 +88,7 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   await expect(page.getByRole('button',{name:'Plateado',exact:true})).toHaveAttribute('aria-pressed','true');
   await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/silver2.svg$/);
   await expect(page.locator('#gallery-thumbs button.active')).toHaveAttribute('data-src',/\/silver2.svg$/);
+  await expect(page.locator('#gallery-thumbs button.active')).toBeFocused();
   expect(await page.evaluate(()=>_pdGetSelectedVariant())).toBe('Plateado');
 });
 

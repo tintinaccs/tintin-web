@@ -721,6 +721,7 @@ body.tt-product-maintenance .tt-review-form, body.tt-product-maintenance .tt-rev
 
 /* Ficha minimalista: la foto y la compra comparten una sola superficie. */
 body.tt-product-maintenance .tt-product-page { background: #fff !important; }
+html body.tt-product-maintenance .tt-product-page > .container { box-sizing:border-box; padding-inline:clamp(16px,3vw,28px) !important; }
 html body.tt-product-maintenance #product-grid .tt-product-gallery,
 html body.tt-product-maintenance #product-grid .tt-product-info-panel,
 html body.tt-product-maintenance #product-grid .tt-product-actions-panel,

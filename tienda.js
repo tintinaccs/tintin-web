@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -371,7 +371,7 @@ function syncCartWithCatalog() {
         name: live.name,
         price: live.price,
         qty: Math.max(1, Math.min(max || 1, Number(item.qty) || 1)),
-        imageUrl: live.imageUrl || item.imageUrl
+        imageUrl: window.TintinCartRuntime?.productVariantImage?.(live, item.variant, item.imageUrl) ?? (item.variant ? item.imageUrl : live.imageUrl || item.imageUrl)
       };
     })
     .filter(Boolean);
@@ -996,7 +996,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1418,7 +1418,10 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
         }
         _pdGalleryIndex = Math.max(0, _pdGalleryImages.findIndex(url => window.TintinProductMedia.imageKey(url) === window.TintinProductMedia.imageKey(image)));
         const currentThumb = thumbsEl.querySelector(`[data-gallery-index="${_pdGalleryIndex}"]`);
-        if (currentThumb) _galleryThumbClick(currentThumb);
+        if (currentThumb) {
+          _galleryThumbClick(currentThumb);
+          currentThumb.focus({ preventScroll: true });
+        }
       });
     }
   }
@@ -1790,7 +1793,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1798,7 +1801,7 @@ async function _addToCartWithQty(product, qty, variantStr) {
     qty,
     stock: product.stock,
     cat: product.category || product.cat || '',
-    imageUrl: product.imageUrl || product.image || getProductImage(product.id) || '',
+    imageUrl: cartSync.productVariantImage(product, variantStr, getProductImage(product.id)),
     ...(variantStr ? { variant: variantStr } : {}),
   });
 }

@@ -15,6 +15,7 @@ import {
 } from '../js/core/store/modelo-inventario.mjs';
 import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantInventoryDeltas, variantInventoryDeltas } from '../js/core/store/inventario-variantes.mjs';
 import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
+import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 
 export const ORDER_ADMIN_STATUSES = Object.freeze([
   'pendiente', 'confirmado', 'preparando', 'listo_retiro',
@@ -286,7 +287,7 @@ async function resolveCanonicalCreationItems(env, rawItems, get) {
       price: Math.round(price),
       qty: line.qty,
       variant: line.variant,
-      imageUrl: clean(product.imageUrl || product.image || '', 900),
+      imageUrl: clean(productVariantImage(product, line.variant), 900),
     };
   });
 
