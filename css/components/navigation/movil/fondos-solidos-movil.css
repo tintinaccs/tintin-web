@@ -30,8 +30,8 @@
   html body #tt-tabbar #tabbar-search[aria-expanded="true"],
   html body #tt-tabbar #tabbar-cart[aria-expanded="true"],
   html body #tt-tabbar #tabbar-cuenta[aria-current="page"] {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+    background: transparent !important;
+    background-color: transparent !important;
     background-image: none !important;
     opacity: 1 !important;
     backdrop-filter: none !important;
@@ -57,8 +57,8 @@
   html body #tt-tabbar #tabbar-notifications:hover,
   html body #tt-tabbar #tabbar-notifications:focus-visible,
   html body #tt-tabbar #tabbar-notifications[aria-expanded="true"] {
-    background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
+    background: transparent !important;
+    background-color: transparent !important;
     background-image: none !important;
     opacity: 1 !important;
     backdrop-filter: none !important;

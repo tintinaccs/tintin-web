@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1';
+  const TT_CACHE_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -396,7 +396,7 @@
 
   const BRAND_LABEL = computeBrandLabel();
   const DEFAULT_LOGO_SRC = resolveAsset(
-    'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1', false
+    'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', false
   );
   const LOGO_SRC = DEFAULT_LOGO_SRC;
 
@@ -830,13 +830,13 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261007-public-consistency-1-master-20261007-1-stock-line-2');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261004-final-integration-2-master-20261007-1-repair-20261005-1');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-repair-20261005-1');
   }
 
   function bootHeaderMode() {
@@ -851,7 +851,7 @@
   // segundo sistema de menús.
   function bootHeaderAccountFix() {
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
@@ -859,7 +859,7 @@
     if (isVisualPreviewFrame) return;
     if (!window.TintinSiteActivityBooted) {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-loads-20261007-1');
+      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-loads-20261007-1');
     }
   }
 
@@ -886,9 +886,9 @@
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
       importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261004-admin-connections-3-master-20261007-1');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261004-admin-connections-3-encomienda-20261008-1-master-20261007-1');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
-      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261004-admin-connections-3-master-20261007-1');
+      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261004-admin-connections-3-encomienda-20261008-1-master-20261007-1');
     }
   }
 
@@ -906,18 +906,18 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261006-production-audit-1-loads-20261007-1-master-20261007-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261006-production-audit-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261007-public-consistency-1-master-20261007-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261007-email-app-check-1-master-20261007-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1');
   }
 
   function bootThemeColorSanitizerPublic() {

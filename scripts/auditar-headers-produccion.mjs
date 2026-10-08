@@ -5,7 +5,7 @@ const runtime = JSON.parse(fs.readFileSync(new URL('../config/csp-runtime.json',
 const targets = [
   ['html', '/', /no-cache,\s*must-revalidate/i],
   ['css', '/css/pages/login/login.css?v=tintin-20260906-login-mode-toggle-1-brand-20261004-1-owner-pink-20261004-1', /public,\s*max-age=31536000,\s*immutable/i],
-  ['js', '/js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-stock-line-2', /public,\s*max-age=31536000,\s*immutable/i],
+  ['js', '/js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4-photos-20261008-1', /public,\s*max-age=31536000,\s*immutable/i],
   ['font', '/assets-tintin/fonts/montserrat-latin-wght-normal.woff2', /public,\s*max-age=31536000,\s*immutable/i],
   ['storeGate', '/api/public-catalog?resource=storeGate', /(?:public,\s*)?max-age=(?:[1-9]\d*)/i],
 ];

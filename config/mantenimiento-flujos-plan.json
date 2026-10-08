@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b8ec93d45d9b155a618c174e09747b48a7351120",
-  "reason": "Seguridad de cuentas: los pedidos y el alta de perfil por coincidencia de correo exigen correo verificado, y el inicio con código por correo asegura cuentas previas (quita contraseña, verifica el correo y corta sesiones anteriores) para impedir el pre-secuestro de cuentas; se agregan pruebas de reglas que lo demuestran.",
+  "baseCommit": "3c33641e810e5c9ae820415b5ac8505339d781e0",
+  "reason": "Seguridad de cuentas: comprobar correo verificado para pedidos y perfiles; asegurar cuentas previas al confirmar el código, conservar Google e invalidar sesiones anteriores.",
   "files": [
     {
       "path": "cloudflare/firebase-admin-ligero.js",

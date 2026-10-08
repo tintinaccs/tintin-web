@@ -181,7 +181,7 @@ test('el Super Admin puede comprar con la tienda cerrada y sin turno', async () 
   assert.ok(created.orderId);
 });
 
-test('encomienda exige CI, modo válido y no acepta efectivo', async () => {
+test('encomienda exige CI, modo válido y únicamente transferencia', async () => {
   const base = {
     selectedCity: 'Encarnación',
     departamento: 'Itapúa',
@@ -202,7 +202,17 @@ test('encomienda exige CI, modo válido y no acepta efectivo', async () => {
   await rejectsWith(checkout(draft({ ...base, ci: '12' })), 'ci_invalid');
   await rejectsWith(checkout(draft({ ...base, encomiendaMode: '' })), 'shipping_invalid');
   await rejectsWith(checkout(draft({ ...base, paymentMethod: 'efectivo' })), 'payment_unavailable');
+  const paypalStore = fakeStore({ 'settings/general': { storeOpen: true, paymentMethods: { efectivo: true, transferencia: true }, paypal: { enabled: true } } });
+  await rejectsWith(checkout(draft({ ...base, paymentMethod: 'paypal' }), paypalStore), 'payment_unavailable');
   await rejectsWith(checkout(draft({ ...base, shippingMethod: 'delivery' })), 'shipping_invalid');
+});
+
+test('una tarifa legacy de Pedro Juan Caballero se cotiza bajo Amambay', async () => {
+  const base={selectedCity:'Pedro Juan Caballero',departamento:'Amambay',shippingMethod:'encomienda',encomiendaMode:'agencia',mapLocation:null,expectedShippingCost:0,expectedTotal:100000,ci:'1234567'};
+  const store=fakeStore({'settings/shippingRates':{encomiendaCities:[{name:'Pedro Juan Caballero',price:25000}]}});
+  const result=await checkout(draft(base),store);
+  assert.equal(orderWrite(result.store).shipping.departamento,'Amambay');
+  await rejectsWith(checkout(draft({...base,departamento:'Central'}),store),'shipping_invalid');
 });
 
 test('delivery exige ubicación nombrada y factura exige RUC válido', async () => {

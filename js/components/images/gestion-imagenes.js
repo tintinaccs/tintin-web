@@ -23,7 +23,7 @@ if (!window.TintinImagesPhase5Booted) {
   // index.html.
   const HERO_ART_QUERY = '?v=tintin-20261006-hero-rotulo-1-master-20261007-1';
   const STATIC = Object.freeze({
-    logo: 'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1',
+    logo: 'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
     edit_bolsos: {
       desktop: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp',

@@ -146,7 +146,9 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await expect(visibleButtons).toHaveCount(6);
   let columnCount = await nav.evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
   expect(columnCount).toBe(6);
-  await expect(nav.locator('#tabbar-notifications')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  // Los botones transparentes dejan visible el halo; la barra sigue siendo sólida.
+  await expect(nav).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expect(nav.locator('#tabbar-notifications')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
   await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
 
   // Respeta una configuración exclusiva de mobile: Inicio oculto. Con Alertas

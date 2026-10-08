@@ -159,6 +159,11 @@ function fmtDate(value) {
   });
 }
 
+function shippingCostLabel(order) {
+  if (order?.shipping?.method === 'encomienda' && (order.shippingPending || Number(order.shippingCost) === 0)) return 'Sólo el envío se paga a la transportadora al recibir. El producto se paga previamente por transferencia; no hay contra entrega.';
+  return order.shippingPending ? 'A confirmar' : fmtPrice(order.shippingCost);
+}
+
 function shippingLabel(order) {
   const method = clean(order?.shipping?.method, 40);
   const base = {
@@ -247,7 +252,7 @@ export function customerEmail(order, orderId, transfer = null) {
         <table style="width:100%;border-collapse:collapse;margin:0 0 18px">${rows}</table>
         <table style="width:100%;border-collapse:collapse;background:#fdf6f9;border-radius:14px">
           <tr><td style="padding:12px 14px;font-size:13px;color:#7b6f72">Subtotal</td><td style="padding:12px 14px;font-size:13px;text-align:right">${escapeHtml(fmtPrice(order.subtotal))}</td></tr>
-          <tr><td style="padding:0 14px 12px;font-size:13px;color:#7b6f72">Envío</td><td style="padding:0 14px 12px;font-size:13px;text-align:right">${order.shippingPending ? 'A confirmar' : escapeHtml(fmtPrice(order.shippingCost))}</td></tr>
+          <tr><td style="padding:0 14px 12px;font-size:13px;color:#7b6f72">Envío</td><td style="padding:0 14px 12px;font-size:13px;text-align:right">${escapeHtml(shippingCostLabel(order))}</td></tr>
           <tr><td style="padding:12px 14px;font-size:14.5px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total</td><td style="padding:12px 14px;font-size:14.5px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
         </table>
         <div style="margin-top:18px;padding:16px 18px;background:#fdf6f9;border-radius:14px;font-size:13px;line-height:1.7;color:#5e5357">
@@ -273,7 +278,7 @@ Tu pedido fue registrado correctamente. En breve nos comunicaremos contigo para 
 ${textItems}
 
 Subtotal: ${fmtPrice(order.subtotal)}
-Envío: ${order.shippingPending ? 'A confirmar' : fmtPrice(order.shippingCost)}
+Envío: ${shippingCostLabel(order)}
 Total: ${fmtPrice(order.total)}
 Entrega: ${shippingLabel(order)}
 Pago: ${paymentLabel(order)}${transferText}
@@ -328,7 +333,7 @@ function adminEmail(order, orderId) {
       <table style="width:100%;border-collapse:collapse;font-size:13.5px">${itemRows}</table>
       <table style="width:100%;border-collapse:collapse;margin-top:14px;background:#fdf6f9;border-radius:14px;font-size:13.5px">
         <tr><td style="padding:12px 14px;color:#7b6f72">Subtotal</td><td style="padding:12px 14px;text-align:right">${escapeHtml(fmtPrice(order.subtotal))}</td></tr>
-        <tr><td style="padding:0 14px 12px;color:#7b6f72">Envío</td><td style="padding:0 14px 12px;text-align:right">${order.shippingPending ? 'A confirmar' : escapeHtml(fmtPrice(order.shippingCost))}</td></tr>
+        <tr><td style="padding:0 14px 12px;color:#7b6f72">Envío</td><td style="padding:0 14px 12px;text-align:right">${escapeHtml(shippingCostLabel(order))}</td></tr>
         <tr><td style="padding:12px 14px;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">Total</td><td style="padding:12px 14px;text-align:right;font-weight:700;color:#ad3f67;border-top:1px solid #f1e4e7">${escapeHtml(fmtPrice(order.total))}</td></tr>
       </table>
       ${order.notes ? `<p style="margin:18px 0 0;padding:14px 16px;background:#fdf6f9;border-radius:12px;font-size:13px"><strong>Notas:</strong> ${escapeHtml(order.notes)}</p>` : ''}
@@ -359,7 +364,7 @@ Pago: ${paymentLabel(order)}
 ${textItems}
 
 Subtotal: ${fmtPrice(order.subtotal)}
-Envío: ${order.shippingPending ? 'A confirmar' : fmtPrice(order.shippingCost)}
+Envío: ${shippingCostLabel(order)}
 Total: ${fmtPrice(order.total)}
 ${order.notes ? `Notas: ${clean(order.notes, 1000)}` : ''}
 

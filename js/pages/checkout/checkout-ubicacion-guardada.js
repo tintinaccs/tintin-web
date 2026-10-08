@@ -47,39 +47,45 @@ export function confirmPrompt(saved) {
  * @param {object} saved                 Ubicación guardada del perfil.
  * @param {() => void} onConfirm         La acepta tal cual.
  * @param {() => void} onChange          Quiere marcar otra.
- * @returns {{ isConfirmed: () => boolean, reset: () => void }}
+ * @returns {{ isConfirmed: () => boolean, isPending: () => boolean, show: (saved: object) => void, reset: () => void }}
  */
 export function attachSavedLocationConfirm(elements, saved, { onConfirm, onChange } = {}) {
   const { card, titleEl, nameEl, detailEl, confirmButton, changeButton } = elements;
-  const prompt = confirmPrompt(saved);
+  let currentSaved = saved;
   let confirmed = false;
+  let pending = false;
 
-  const hide = () => { if (card) card.style.display = 'none'; };
+  const hide = () => { pending = false; if (card) card.style.display = 'none'; };
 
-  if (!prompt) {
-    hide();
-    return { isConfirmed: () => false, reset: hide };
-  }
-
-  if (titleEl) titleEl.textContent = prompt.title;
-  if (nameEl) nameEl.textContent = `📍 ${prompt.name}`;
-  if (detailEl) {
-    detailEl.textContent = prompt.detail;
-    detailEl.style.display = prompt.detail ? '' : 'none';
-  }
-  if (card) card.style.display = '';
+  const show = nextSaved => {
+    currentSaved = nextSaved;
+    confirmed = false;
+    const prompt = confirmPrompt(currentSaved);
+    if (!prompt) { hide(); return; }
+    pending = true;
+    if (titleEl) titleEl.textContent = prompt.title;
+    if (nameEl) nameEl.textContent = `📍 ${prompt.name}`;
+    if (detailEl) {
+      detailEl.textContent = prompt.detail;
+      detailEl.style.display = prompt.detail ? '' : 'none';
+    }
+    if (card) card.style.display = '';
+  };
+  show(saved);
 
   confirmButton?.addEventListener('click', () => {
+    if (!pending) return;
     confirmed = true;
     hide();
-    if (typeof onConfirm === 'function') onConfirm(saved);
+    if (typeof onConfirm === 'function') onConfirm(currentSaved);
   });
 
   changeButton?.addEventListener('click', () => {
+    if (!pending) return;
     confirmed = false;
     hide();
     if (typeof onChange === 'function') onChange();
   });
 
-  return { isConfirmed: () => confirmed, reset: hide };
+  return { isConfirmed: () => confirmed, isPending: () => pending, show, reset: hide };
 }

@@ -1,3 +1,4 @@
+import { shippingDepartment } from '../js/components/location/departamento-ciudad.mjs';
 import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../js/components/location/tarifas-delivery.mjs';
 import { decodeFirestoreFields, firestoreAdminGet } from './firebase-admin-ligero.js';
 import { SUPERADMIN_EMAIL } from './seguridad-cloudinary.js';
@@ -113,14 +114,14 @@ function normalizeCities(list, fallback) {
   return (Array.isArray(list) ? list : [])
     .map((item, sourceIndex) => {
       if (typeof item === 'string') {
-        return { name: cleanText(item, 120), price: parseMoney(fallback), departamento: 'Central', sourceIndex };
+        return { name: cleanText(item, 120), price: parseMoney(fallback), departamento: shippingDepartment(item), sourceIndex };
       }
       if (!item?.name) return null;
       const price = item.price === null ? null : parseMoney(item.price === undefined ? fallback : item.price);
       return {
         name: cleanText(item.name, 120),
         price: Number.isFinite(price) ? price : null,
-        departamento: cleanText(item.departamento, 80) || 'Central',
+        departamento: shippingDepartment(item.name, cleanText(item.departamento, 80)),
         sourceIndex,
       };
     })
@@ -300,7 +301,7 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
     requestedMethod,
   );
   if (requestedMethod !== shipping.method) throw checkoutError('shipping_changed', 409);
-  if (shipping.method === 'encomienda' && paymentMethod === 'efectivo') throw checkoutError('payment_unavailable', 409);
+  if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && shipping.method !== 'delivery')) throw checkoutError('payment_unavailable', 409);
 
   const encomiendaMode = cleanText(payload.encomiendaMode, 20);
   if (shipping.method !== 'encomienda' && encomiendaMode) throw checkoutError('shipping_invalid');
