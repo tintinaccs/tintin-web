@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261007-public-consistency-1-master-20261007-1';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
@@ -15,22 +15,22 @@ function load(file, version = 'tintin-20260927-visual-1-brand-20261004-1-owner-p
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261007-public-consistency-1-master-20261007-1');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4');
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261008-producto-superficies-1');
   if (/\/checkout(?:\.html)?$/.test(path)) {
-    const version = 'tintin-20261004-final-integration-2-master-20261007-1';
+    const version = 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
       load('pages/checkout/checkout-hardening.js', 'tintin-20261008-producto-superficies-1'),
       load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261008-producto-superficies-1'),
-      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2-master-20261007-1'),
+      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'),
       load('pages/checkout/checkout-control-cuota.js', version),
       load('pages/checkout/estado-navegacion-checkout.js', stateVersion)
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {
-    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261004-final-integration-2-master-20261007-1-loads-20261007-1');
+    return load('pages/login/mantenimiento-acceso.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-loads-20261007-1');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261008-producto-superficies-1');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');

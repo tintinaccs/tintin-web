@@ -570,7 +570,7 @@ function phase4CreateOrder_(payload, idToken) {
       phase4Rollback_(transactionId);
       return { ok: false, error: 'shipping_changed' };
     }
-    if (shipping.method === 'encomienda' && paymentMethod === 'efectivo') {
+    if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && shipping.method !== 'delivery')) {
       phase4Rollback_(transactionId);
       return { ok: false, error: 'payment_unavailable' };
     }

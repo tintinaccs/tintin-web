@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20261004-final-integration-2-master-20261007-1';
+var TT_CACHE_VERSION='tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
 function versioned(url,tag){var v=tag||TT_CACHE_VERSION;try{var u=new URL(url,import.meta.url);u.searchParams.set('v',v);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+v}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
 var HOME_LOADER_IMAGE='assets-tintin/images/general/logo.png';
@@ -21,7 +21,7 @@ function css(){
  });
 }
 function bootThemeSanitizer(){import(versioned('../components/color/normalizador-color-tema.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
-function bootMobileHeader(){import(versioned('../components/navigation/compartido/compatibilidad-cuenta-movil.js','tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
+function bootMobileHeader(){import(versioned('../components/navigation/compartido/compatibilidad-cuenta-movil.js','tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
 function bootPageAudit(){import(versioned('./correccion-auditoria-pagina.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Page Audit Fix:',e)})}
 function bootCollectionsPhase4(){import(versioned('../pages/collections/presentacion-colecciones.js','tintin-20261007-public-consistency-1-master-20261007-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Collections Phase 4:',e)})}
 function bootAdminCollectionsPhase4(){var path=(location.pathname||'').toLowerCase();if(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;import(versioned('../admin/collections/gestion-colecciones-admin.js','tintin-20261007-public-consistency-1-master-20261007-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Admin Collections Phase 4:',e)})}

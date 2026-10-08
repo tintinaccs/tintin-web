@@ -218,7 +218,7 @@ test('servidor rechaza variante inexistente y exige variante cuando corresponde'
 
 test('servidor no acepta efectivo para encomienda aunque el método general esté habilitado', () => {
   const source = fs.readFileSync(path.join(root, 'apps-script', 'CrearPedido.gs'), 'utf8');
-  assert.match(source, /shipping\.method === 'encomienda' && paymentMethod === 'efectivo'/);
+  assert.match(source, /shipping\.method === 'encomienda' && paymentMethod !== 'transferencia'/);
 });
 
 test('sanitización de correo conserva destino y datos documentales del pedido', () => {

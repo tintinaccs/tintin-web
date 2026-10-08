@@ -20,8 +20,8 @@ const checks = [
     server.includes("method: 'retiro', city: 'Retiro coordinado', departamento: 'Central', cost: 0")],
   ['Delivery conserva su tarifa dentro del total',
     client.includes('cost: delivery.price') && server.includes('cost: delivery.price')],
-  ['Encomienda se cobra al recibir y no entra al total web',
-    checkout.includes('Se abona a la transportadora al recibir') &&
+  ['Sólo el envío de encomienda se paga a la transportadora al recibir; el producto se paga previamente',
+    checkout.includes('Sólo el envío se abona a la transportadora al recibir; el producto se paga previamente por transferencia') &&
     client.includes("method: 'encomienda'") && client.includes('cost: 0') &&
     server.includes("method: 'encomienda', city: encomienda.name, departamento: encomienda.departamento, cost: 0")],
   ['Agencia no exige dirección; puerta exige dirección y mapa',

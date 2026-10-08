@@ -21,7 +21,7 @@ import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260925-cache-converge-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261004-admin-connections-3')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261004-admin-connections-3-encomienda-20261008-1')
   ]);
 }
 

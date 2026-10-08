@@ -16,7 +16,7 @@ import {
   normalizePaymentMethod,
   paymentCatalogMap,
   paymentMethodId,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261004-final-integration-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20261004-final-integration-1-encomienda-20261008-1';
 
 const ADMIN_PATH = /(^|\/)admin(?:\.html)?$/i;
 const SETTINGS_REF = doc(db, 'settings', 'general');
@@ -76,7 +76,7 @@ function rootHtml() {
           <div class="adm-field">
             <label class="adm-label" for="tt-payment-kind">Tipo seguro del pedido</label>
             <select class="adm-select" id="tt-payment-kind">
-              <option value="efectivo">Efectivo / contra entrega</option>
+              <option value="efectivo">Efectivo / contra entrega sólo delivery</option>
               <option value="transferencia">Transferencia / pago coordinado</option>
             </select>
           </div>

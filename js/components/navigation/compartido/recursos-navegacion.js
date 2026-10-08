@@ -1,12 +1,12 @@
-import { versionedSiteAsset } from './configuracion.js?v=tintin-20261004-final-integration-2-master-20261007-1';
+import { versionedSiteAsset } from './configuracion.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
 
 const HEADER_DESKTOP_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
-const HEADER_MOBILE_VERSION = 'tintin-20261004-header-consistency-2';
+const HEADER_MOBILE_VERSION = 'tintin-20261004-header-consistency-2-checkout-20261008-2-halo-20261008-4';
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1';
 const NAVIGATION_SHARED_VERSION = 'tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1';
 const NAVIGATION_PANEL_VERSION = 'tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1';
 const NAVIGATION_COHERENCE_VERSION = 'tintin-20261008-producto-superficies-1';
-const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3';
+const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3-checkout-20261008-2';
 const NOTIFICATIONS_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
 const NOTIFICATION_SURFACE_VERSION = 'tintin-20260918-header-system-solid-surfaces-1';
 

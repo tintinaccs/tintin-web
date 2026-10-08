@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1';
+export const SHELL_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,

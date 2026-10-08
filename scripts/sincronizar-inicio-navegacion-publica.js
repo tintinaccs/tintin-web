@@ -21,7 +21,7 @@ const SESSION_PROTECTION_VERSION = 'tintin-20261003-profile-route-1';
 const PROFILE_GATE_VERSION = 'tintin-20261003-profile-route-1';
 const NAV_HEADER_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
 const NAV_TABLET_VERSION = 'tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1';
-const NAV_MOBILE_VERSION = 'tintin-20261004-header-consistency-2';
+const NAV_MOBILE_VERSION = 'tintin-20261004-header-consistency-2-checkout-20261008-2-halo-20261008-4';
 const UNIFIED_THEME_VERSION = 'tintin-20261008-producto-superficies-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
@@ -120,7 +120,7 @@ function sharedFooter() {
     <div class="tt-footer-grid">
       <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
         <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
-          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Tu tienda de accesorios y relojes en Paraguay. Comprá online con atención cercana.</p>
         <p class="tt-footer-hours">Horario de atención: 09:00 a 23:00 hs.</p>
