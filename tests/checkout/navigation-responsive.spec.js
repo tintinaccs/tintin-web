@@ -31,3 +31,43 @@ for(const width of [390,768,1440]) test(`el avance y retorno siguen respondiendo
   await expect(page.locator('.ck-panel').nth(1)).toHaveClass(/active/);
   expect(await page.evaluate(()=>!!window.__observerLoop)).toBe(false);
 });
+
+const handler=source.slice(source.indexOf('function refreshPaymentOptions()'),source.indexOf('// Datos bancarios reales'));
+for(const width of [320,768,1440]) test(`encomienda sólo transferencia y limpia efectivo previo (${width}px)`,async({page})=>{
+ const fixture=source.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
+ window.setShipping=(method)=>{orderData.shippingMethod=method;refreshPaymentOptions()};
+ document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-3'));
+ document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');refreshPaymentOptions();</script></body>`);
+ await page.route('**/__encomienda-payment',route=>route.fulfill({contentType:'text/html',body:fixture}));
+ await page.setViewportSize({width,height:900});await page.goto('/__encomienda-payment');
+ await page.locator('label[for="pay-efectivo"]').click();await expect(page.locator('#pay-efectivo')).toBeChecked();
+ await page.evaluate(()=>window.setShipping('encomienda'));
+ await expect(page.locator('#pay-option-efectivo')).toBeHidden();await expect(page.locator('#pay-efectivo')).toBeDisabled();await expect(page.locator('#pay-efectivo')).not.toBeChecked();
+ await expect(page.locator('#pay-transferencia')).toBeEnabled();await page.locator('label[for="pay-transferencia"]').click();await expect(page.locator('#pay-transferencia')).toBeChecked();
+ await expect(page.locator('.ck-pay-note')).toContainText('sólo transferencia bancaria antes del despacho');
+ await page.evaluate(()=>window.setShipping('delivery'));await expect(page.locator('#pay-efectivo')).toBeEnabled();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+});
+const runtime=fs.readFileSync('js/pages/checkout/checkout-metodos-pago.js','utf8').replace(/import[\s\S]*?;/g,'');
+for(const width of [320,768,1440]) test(`opciones reales del panel excluyen efectivo y PayPal en encomienda (${width}px)`,async({page})=>{
+ const fixture=source.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
+ window.setShipping=method=>{orderData.shippingMethod=method;refreshPaymentOptions()};
+ document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-3'));document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');</script>
+ <script type="module">import {normalizePaymentCatalog,paymentMethodLabel} from '../../js/orders/nucleo-metodos-pago.js';
+ function onPublicSettings(callback){callback({paymentMethods:{efectivo:true,transferencia:true},paypal:{enabled:true}})}
+ ${runtime}</script></body>`);
+ await page.route('**/api/paypal-config',route=>route.fulfill({json:{enabled:true,clientId:'fixture-local'}}));
+ await page.route('**/__encomienda-runtime',route=>route.fulfill({contentType:'text/html',body:fixture}));
+ await page.setViewportSize({width,height:900});await page.goto('/__encomienda-runtime');
+ await expect(page.locator('#ck-payment-methods-runtime')).toBeVisible();
+ await page.evaluate(()=>window.setShipping('delivery'));
+ await page.locator('label[for="pay-runtime-efectivo"]').click();await expect(page.locator('#pay-runtime-efectivo')).toBeChecked();
+ await page.evaluate(()=>window.setShipping('encomienda'));
+ await expect(page.locator('[data-payment-method-id="efectivo"]')).toHaveCount(0);
+ await expect(page.locator('[data-payment-method-id="paypal"]')).toHaveCount(0);
+ await expect(page.locator('#ck-payment-methods-runtime input')).toHaveCount(1);
+ await expect(page.locator('input[name="ck-pay"]:checked')).toHaveCount(0);
+ await page.locator('label[for="pay-runtime-transferencia"]').click();await expect(page.locator('input[name="ck-pay"]:checked')).toHaveValue('transferencia');
+ await expect(page.locator('#ck-encomienda-payment-policy')).toContainText('Sólo el costo del envío se paga a la transportadora al recibir');
+ await page.screenshot({path:`../encomienda-runtime-${width}.png`,fullPage:true});
+});

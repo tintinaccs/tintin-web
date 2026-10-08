@@ -103,7 +103,7 @@ function boot() {
   let catalog = [];
   let shippingMethod = '';
   const selectedCity = document.getElementById('ck-city');
-  const readShippingMethod = () => selectedCity?.value === 'retiro' ? 'retiro' : selectedCity?.selectedOptions?.[0]?.parentElement?.id === 'ck-city-encomienda-group' ? 'encomienda' : selectedCity?.value ? 'delivery' : '';
+  const readShippingMethod = () => selectedCity?.value === '__retiro__' ? 'retiro' : selectedCity?.selectedOptions?.[0]?.parentElement?.id === 'ck-city-encomienda-group' ? 'encomienda' : selectedCity?.value ? 'delivery' : '';
   shippingMethod = readShippingMethod();
   let methods = [];
   let legacyRemoved = false;
@@ -123,6 +123,7 @@ function boot() {
       item.setAttribute('aria-selected', String(selected));
     });
     const selected = selectedMethod();
+    bridge.disabled = !selected;
     selectedMethodId = selected?.id || '';
     bridge.checked = Boolean(selected);
     bridge.value = selected?.kind || '';
