@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d2fccb4920454a004005dae12b60f2ed34d41e49b5c1ddfd58d50587954af1f3",
+  "sourceFingerprint": "1e41d0b5e63d86e8b122d8074e02f2cf2512cd880089869102f75a430c9b05a3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1067,
     "textFiles": 1019,
-    "totalBytes": 16089297,
+    "totalBytes": 16090015,
     "pages": 19,
     "modules": 753
   },
@@ -13824,8 +13824,8 @@
         "guest",
         "client"
       ],
-      "bytes": 2041,
-      "sha256": "832b9abd52a98dae34c28978f8f47abce59ce5b073013732a695016b5f67a55a",
+      "bytes": 1973,
+      "sha256": "97171b070d282a4482de8e1144b61ea01a8cd656887ef3fac7e9ebe4d5b65a59",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13834,7 +13834,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          26
+          1
         ]
       },
       "duplicateIds": [],
@@ -13844,34 +13844,34 @@
         {
           "raw": "js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4",
           "target": "js/cargador-pagina.js",
-          "line": 23
+          "line": 1
         }
       ],
       "styles": [
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
-          "line": 18
+          "line": 1
         },
         {
           "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
-          "line": 19
+          "line": 1
         },
         {
           "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
-          "line": 20
+          "line": 1
         },
         {
           "raw": "css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "css/quality/contraste.css",
-          "line": 21
+          "line": 1
         },
         {
           "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1",
           "target": "css/theme/sistema-superficies-tintin.css",
-          "line": 22
+          "line": 1
         }
       ],
       "images": [],
@@ -13884,50 +13884,50 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 27
+          "line": 1
         }
       ],
       "references": [
         {
           "raw": "js/cargador-pagina.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-stock-line-2-halo-20261008-4",
           "target": "js/cargador-pagina.js",
-          "line": 23,
+          "line": 1,
           "exists": true
         },
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
-          "line": 18,
+          "line": 1,
           "exists": true
         },
         {
           "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
-          "line": 19,
+          "line": 1,
           "exists": true
         },
         {
           "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
-          "line": 20,
+          "line": 1,
           "exists": true
         },
         {
           "raw": "css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "css/quality/contraste.css",
-          "line": 21,
+          "line": 1,
           "exists": true
         },
         {
           "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1",
           "target": "css/theme/sistema-superficies-tintin.css",
-          "line": 22,
+          "line": 1,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 27,
+          "line": 1,
           "exists": true
         }
       ],
@@ -40306,7 +40306,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 21676,
-      "sha256": "5faca7e3cff44473f93fd5c81d19e2ab4941560dfe3b71fbf6e787746cc9aa74"
+      "sha256": "6fc59c90c268423a3391dc741f378d7759486bdc9ce0925ebd1b753659a88fcb"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -40318,7 +40318,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155156,
-      "sha256": "d5e6fecddb464123fbe09fa6747e136b0a0d358c00a5be472a7201e05e36acd5"
+      "sha256": "067dabe20e86f375fdda2b3cd6e26f737fd6d0e590b2b04b41db7d15c16e360b"
     },
     {
       "path": "config/public-site.json",
@@ -40839,8 +40839,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 307173,
-      "sha256": "1f7d490fa1d7b85e1a5d1682f6056d501271f6f76e540649dddbc813e607b426"
+      "bytes": 307959,
+      "sha256": "7f13a3d444e431256a14da2df4a6bcdd1bba36c3bea19d883fc5a68e3d500a27"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -43473,8 +43473,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 2041,
-      "sha256": "832b9abd52a98dae34c28978f8f47abce59ce5b073013732a695016b5f67a55a"
+      "bytes": 1973,
+      "sha256": "97171b070d282a4482de8e1144b61ea01a8cd656887ef3fac7e9ebe4d5b65a59"
     },
     {
       "path": "package-lock.json",
