@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "20835857ba0f6603e56de335c4e8c7cd581848bc0c64a8610a0706c7e4959cef",
+  "sourceFingerprint": "27c1e3fecf97b0daa3153babb06372494f13a79d0179cf28c04c785bfe0e9336",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1059,
-    "textFiles": 1011,
-    "totalBytes": 15925834,
+    "files": 1058,
+    "textFiles": 1010,
+    "totalBytes": 15926913,
     "pages": 19,
     "modules": 746
   },
@@ -39874,8 +39874,8 @@
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
       "extension": ".yml",
-      "bytes": 1176,
-      "sha256": "20f19c9da1e5583003dcfece41dd45ffa0865bc933025176ff915108feb8a446"
+      "bytes": 4482,
+      "sha256": "2ebba61bac5cdd06e4027f0630cf0bade0041a70730245ee9aa0975efc2ae552"
     },
     {
       "path": ".github/workflows/auditoria-visual.yml",
@@ -39918,12 +39918,6 @@
       "extension": ".yml",
       "bytes": 2348,
       "sha256": "33d14707339a3f310f3b3c0cbccaf6a9d7fe9ebff4c33fe5f8856fbebc33a2bf"
-    },
-    {
-      "path": ".github/workflows/mantenimiento-flujos.yml",
-      "extension": ".yml",
-      "bytes": 2892,
-      "sha256": "25bff8aa97cb8f1a971a4e4fb7e25a647af4c072137b8321e1bbb205a2e07ee6"
     },
     {
       "path": ".github/workflows/monitor-produccion.yml",
@@ -40642,8 +40636,8 @@
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 105674,
-      "sha256": "b7a5dfacec6e63570a04cef8c147033ef159ea1bfe193ff18d97c57d675427d8"
+      "bytes": 105676,
+      "sha256": "15196c6811286ed0760a8ee01c4625770c772200e1408e1b730497495dd707a5"
     },
     {
       "path": "config/public-site.json",
@@ -41164,8 +41158,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 294247,
-      "sha256": "615241211f8fa553b68dda3bbe3966fdb6c87140cec9deb86ae3703fa4608f15"
+      "bytes": 294664,
+      "sha256": "43fe7d76762819ac1af802159b4cf5419411df3b0b3737fded0fc91f5d68a803"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -41176,8 +41170,8 @@
     {
       "path": "docs/agent/MANTENIMIENTO_FLUJOS.md",
       "extension": ".md",
-      "bytes": 4667,
-      "sha256": "68d3f1f17c368cba60f756e9abfe3e87f6695df8c3a70137cfaa508ab488f5e8"
+      "bytes": 4913,
+      "sha256": "9c42ce1626eb84aa5572e7f65588d539a51dcf56ddb08e765004737809a836e8"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
