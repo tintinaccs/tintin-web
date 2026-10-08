@@ -1,3 +1,7 @@
+# Corrección — encomienda sólo por transferencia, 2026-10-08
+
+Agente: Codex. Base 7c8372b94fa285855fa3d991e5ebaf27d66e8b88. Pedido expreso del propietario: encomienda nunca cobra el producto contra entrega; sólo el envío se paga a la transportadora al recibir. Producto por transferencia previa; efectivo contra entrega sólo delivery. Cambios en checkout, límites cliente/Cloudflare/Apps Script, resúmenes, perfil, correos, información de envíos/FAQ/términos y textos editables. No se modifican pedidos históricos ni se realizan pagos/pedidos/correos de prueba en producción. Apps Script cambia en fuente: su despliegue externo necesita actualizarse para aplicar el límite nuevo allí; Cloudflare se valida por separado. CI, aprobación de mantenimiento y publicación NOT_VERIFIED al redactar.
+
 # Actualización de mantenimiento — PR #1061
 
 La revisión humana del run 37763253834 quedó registrada, pero el veredicto rechazó correctamente la base obsoleta después de integrar #1064. Se incorpora main fbfacb6d7afcfcafc8593b5f28106bf3e4e1d2b0, preservando sus 78 alcances y metadatos. El nuevo candidato requiere CI y una nueva revisión humana; no hereda la autorización anterior.

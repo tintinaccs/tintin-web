@@ -22,7 +22,7 @@ let unsubscribeStats = null;
 let unsubscribeLikes = null;
 let deepLinkHandled = false;
 const PENDING_INTENT_KEY = 'tt_product_community_intent_v2';
-const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1';
+const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1';
 const PUBLIC_REVIEWS_LIMIT = 100;
 let publicReviewCursor = null;
 let publicReviewsHaveMore = false;

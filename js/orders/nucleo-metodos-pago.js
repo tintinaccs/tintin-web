@@ -3,7 +3,7 @@ const DEFAULT_METHODS = [
     id: 'efectivo',
     kind: 'efectivo',
     title: 'Efectivo',
-    description: 'Pagás al recibir el pedido (contra entrega)',
+    description: 'Efectivo contra entrega únicamente para delivery',
     icon: '💵',
     enabled: true,
     instructions: '',

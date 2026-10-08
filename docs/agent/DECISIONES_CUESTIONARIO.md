@@ -8,7 +8,7 @@ Leyenda: HECHO (hay código que lo cumple) · LIMITE (no se implementa sin una d
 |---|---|
 | Transferencia nunca se cancela sola; el admin marca "pagado" | HECHO (no hay cancelación automática; `updatePayStatus` en `js/admin/admin-app.js` → `/api/admin-order-mutation` `updatePayment`) |
 | Pago por transferencia a cuenta bancaria; datos en pantalla y por email | HECHO (pantalla: `applyBankAccounts` en `checkout.html`; correo: PR #997) |
-| Pago contra entrega ("Sí, en delivery propio") | HECHO (efectivo bloqueado en encomienda en cliente y servidor: `politica-checkout-publico.js`; se mantiene en delivery y en retiro, donde se paga al retirar) |
+| Pago contra entrega ("Sí, en delivery propio") | HECHO (efectivo bloqueado en encomienda en cliente y servidor: `politica-checkout-publico.js`; únicamente en delivery; encomienda admite sólo transferencia previa del producto y pago separado del envío a la transportadora al recibir) |
 | Encomienda: producto pagado antes, flete a destino | HECHO (`checkout-encomienda.js`) |
 | Ubicación: mapa y texto | HECHO |
 | Sin cambio de dirección tras ordenar | HECHO (`firestore.rules`: la clienta no puede modificar `orders`; sólo staff/servidor) |

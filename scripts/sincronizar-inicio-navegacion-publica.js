@@ -8,15 +8,15 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261007-email-app-check-1-master-20261007-1';
+const TIENDA_VERSION = 'tintin-20261007-email-app-check-1-master-20261007-1-encomienda-20261008-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1';
-const LOADER_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1-stock-line-2';
+const LOADER_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-stock-line-2';
 const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1';
-const NAV_ENTRY_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1';
+const NAV_ENTRY_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-encomienda-20261008-1-encomienda-20261008-1-encomienda-20261008-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261003-profile-route-1';
 const PROFILE_GATE_VERSION = 'tintin-20261003-profile-route-1';
 const NAV_HEADER_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
@@ -120,7 +120,7 @@ function sharedFooter() {
     <div class="tt-footer-grid">
       <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
         <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
-          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Tu tienda de accesorios y relojes en Paraguay. Comprá online con atención cercana.</p>
         <p class="tt-footer-hours">Horario de atención: 09:00 a 23:00 hs.</p>

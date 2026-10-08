@@ -6,8 +6,8 @@
 // otro necesita el punto exacto en el mapa igual que el delivery de la zona
 // central. Por eso se pregunta antes de pedir la dirección.
 //
-// El modo NO cambia el costo: el precio de la encomienda sigue siendo el que
-// esté configurado para esa ciudad en el panel (o "a consultar" si no hay).
+// El producto se paga previamente por transferencia. El costo del envío
+// se paga aparte a la transportadora al recibir, tanto en agencia como en puerta.
 //
 // Vive en su propio módulo, sin importar Firebase, para poder verificarlo
 // sin depender del resto del checkout.
@@ -15,7 +15,7 @@
 export const ENCOMIENDA_MODES = { AGENCIA: 'agencia', PUERTA: 'puerta' };
 
 const AGENCIA_NOTE =
-  'La agencia y la transportadora las coordinamos por WhatsApp después de confirmar el pedido, según tu zona.';
+  'La agencia y la transportadora las coordinamos por WhatsApp al confirmar el pedido, según tu zona. Por encomienda, el producto se paga previamente por transferencia bancaria. Sólo el costo del envío se paga a la transportadora al recibir. No hay pago contra entrega del producto.';
 
 /**
  * Qué mostrar y qué pedir para cada modo. Devolverlo como dato (en vez de

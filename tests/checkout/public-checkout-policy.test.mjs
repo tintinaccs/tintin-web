@@ -181,7 +181,7 @@ test('el Super Admin puede comprar con la tienda cerrada y sin turno', async () 
   assert.ok(created.orderId);
 });
 
-test('encomienda exige CI, modo válido y no acepta efectivo', async () => {
+test('encomienda exige CI, modo válido y únicamente transferencia', async () => {
   const base = {
     selectedCity: 'Encarnación',
     departamento: 'Itapúa',
@@ -202,6 +202,8 @@ test('encomienda exige CI, modo válido y no acepta efectivo', async () => {
   await rejectsWith(checkout(draft({ ...base, ci: '12' })), 'ci_invalid');
   await rejectsWith(checkout(draft({ ...base, encomiendaMode: '' })), 'shipping_invalid');
   await rejectsWith(checkout(draft({ ...base, paymentMethod: 'efectivo' })), 'payment_unavailable');
+  const paypalStore = fakeStore({ 'settings/general': { storeOpen: true, paymentMethods: { efectivo: true, transferencia: true }, paypal: { enabled: true } } });
+  await rejectsWith(checkout(draft({ ...base, paymentMethod: 'paypal' }), paypalStore), 'payment_unavailable');
   await rejectsWith(checkout(draft({ ...base, shippingMethod: 'delivery' })), 'shipping_invalid');
 });
 
