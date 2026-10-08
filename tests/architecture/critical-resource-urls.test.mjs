@@ -2,7 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 const root=new URL('../../',import.meta.url);
-const canonical='assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2';
+const shell=fs.readFileSync(new URL('js/components/navigation/compartido/configuracion.js',root),'utf8');
+const shellVersion=shell.match(/SHELL_VERSION = '([^']+)'/)[1];
+const canonical=`assets-tintin/images/general/logo.png?v=${shellVersion}`;
 
 test('todos los img estáticos del logo consumen el mismo recurso que el shell',()=>{
   let checked=0;

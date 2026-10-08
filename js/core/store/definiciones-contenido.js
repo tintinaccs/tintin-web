@@ -95,24 +95,6 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         allowVisibility: true,
         fields: [],
       },
-      editorial_bag: {
-        label: 'Editorial Bags',
-        root: '[data-tt-section="editorial_bag"]',
-        allowVisibility: true,
-        fields: [
-          field('eyebrow', 'Texto pequeño', '.tt-editorial-eyebrow', 'Colección Exclusiva', { maxLength: 120 }),
-          field('title', 'Título', '.tt-editorial-title', 'EL COMPLEMENTO\nQUE LO CAMBIA TODO', { type: 'multiline', rows: 3, maxLength: 220 }),
-          field('body', 'Descripción', '.tt-editorial-desc', 'Diseños únicos que elevan cualquier look con un detalle pensado para brillar sin esfuerzo.', { type: 'multiline', rows: 5, maxLength: 1200 }),
-          field('btnText', 'Texto del botón', 'a.tt-btn', 'LO QUIERO YA!', { maxLength: 80 }),
-          field('btnHref', 'Enlace del botón', 'a.tt-btn', '/catalogo?cat=bolsos', { type: 'href', maxLength: 500 }),
-        ],
-      },
-      look: {
-        label: 'Completá tu look',
-        root: '.tt-look-section',
-        allowVisibility: true,
-        fields: [],
-      },
       editorial_relojes: {
         label: 'Editorial Relojes',
         root: '[data-tt-section="editorial_relojes"]',
@@ -148,7 +130,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-footer',
         global: true,
         fields: [
-          field('tagline', 'Descripción de la marca', '.tt-footer-tagline', 'Accesorios femeninos elegantes con brillo propio. Somos tu boutique online de confianza en Paraguay.', { type: 'multiline', rows: 3, maxLength: 500 }),
+          field('tagline', 'Descripción de la marca', '.tt-footer-tagline', 'Tu tienda de accesorios y relojes en Paraguay. Comprá online con atención cercana.', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('waText', 'Texto del botón WhatsApp', '.tt-footer-wa-text', 'Escribirnos por WhatsApp', { maxLength: 100 }),
           field('copy', 'Copyright', '.tt-footer-bottom', '© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS', { maxLength: 180 }),
         ],

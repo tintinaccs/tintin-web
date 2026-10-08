@@ -1,14 +1,14 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20261004-final-integration-2';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20261004-final-integration-2';
-import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260916-final-production-stability-mobile-1';
-import { renderSearchPanel } from './compartido/panel-busqueda.js?v=tintin-20260916-final-production-stability-search-panel-1';
-import { renderCartDrawer } from './compartido/panel-carrito.js?v=tintin-20260916-final-production-stability-cart-panel-1';
-import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20260916-final-production-stability-account-panel-1';
-import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tintin-20260916-final-production-stability-collections-panel-1';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20261004-final-integration-2-master-20261007-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20261004-final-integration-2-master-20261007-1';
+import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260916-final-production-stability-mobile-1-master-20261007-1';
+import { renderSearchPanel } from './compartido/panel-busqueda.js?v=tintin-20260916-final-production-stability-search-panel-1-master-20261007-1';
+import { renderCartDrawer } from './compartido/panel-carrito.js?v=tintin-20260916-final-production-stability-cart-panel-1-master-20261007-1';
+import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20260916-final-production-stability-account-panel-1-master-20261007-1';
+import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tintin-20260916-final-production-stability-collections-panel-1-master-20261007-1';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js?v=tintin-20260916-final-production-stability-surface-layer-1';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261005-public-navigation-3';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261007-public-consistency-1';
+import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261005-public-navigation-3-master-20261007-1';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261007-public-consistency-1-master-20261007-1';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1';
 import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260815-global-studio-10-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1';
@@ -58,7 +58,7 @@ function bootGlobalUiUx() {
     document.head.appendChild(link);
   }
   if (!window.TintinUX?.booted) {
-    import('../../quality/experiencia-interfaz.js?v=tintin-20261004-final-integration-2')
+    import('../../quality/experiencia-interfaz.js?v=tintin-20261004-final-integration-2-master-20261007-1')
       .catch(error => console.warn('[PublicShell] No se pudo iniciar la capa UI global.', error));
   }
 }
@@ -190,7 +190,7 @@ async function loadFinalStability() {
     await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2');
     return 'tintin-20260831-product-stability-2';
   }
-  await import('../../quality/estabilidad-final-publica.js?v=tintin-20261004-header-consistency-2-profile-wholesale-20261005-1');
+  await import('../../quality/estabilidad-final-publica.js?v=tintin-20261004-header-consistency-2-profile-wholesale-20261005-1-master-20261007-1');
   return 'tintin-20260829-final-stability-1-brand-runtime-20261004-1';
 }
 

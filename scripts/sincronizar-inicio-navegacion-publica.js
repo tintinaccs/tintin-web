@@ -8,21 +8,21 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261007-email-app-check-1';
+const TIENDA_VERSION = 'tintin-20261007-email-app-check-1-master-20261007-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1';
-const LOADER_VERSION = 'tintin-20261007-public-consistency-1';
+const LOADER_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1';
 const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261007-public-consistency-1';
-const NAV_ENTRY_VERSION = 'tintin-20261007-public-consistency-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1';
+const NAV_ENTRY_VERSION = 'tintin-20261007-public-consistency-1-master-20261007-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1-complete-ui-20261002-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261003-profile-route-1';
 const PROFILE_GATE_VERSION = 'tintin-20261003-profile-route-1';
 const NAV_HEADER_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
 const NAV_TABLET_VERSION = 'tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1';
 const NAV_MOBILE_VERSION = 'tintin-20261004-header-consistency-2';
-const UNIFIED_THEME_VERSION = 'tintin-20261004-header-consistency-2-profile-wholesale-20261005-1';
+const UNIFIED_THEME_VERSION = 'tintin-20261004-header-consistency-2-profile-wholesale-20261005-1-master-20261007-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
@@ -120,12 +120,12 @@ function sharedFooter() {
     <div class="tt-footer-grid">
       <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
         <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
-          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
-        <p class="tt-footer-tagline">Accesorios que acompañan tu brillo. Comprá online con atención cercana desde Paraguay.</p>
-        <p class="tt-footer-hours">Horario de atención: Lunes a Sábado, 8:00 — 20:00 hs</p>
+        <p class="tt-footer-tagline">Tu tienda de accesorios y relojes en Paraguay. Comprá online con atención cercana.</p>
+        <p class="tt-footer-hours">Horario de atención: 09:00 a 23:00 hs.</p>
         <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
-          <span aria-hidden="true">↗</span><span class="tt-footer-wa-text">Escribirnos por WhatsApp</span>
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.65 15.02L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.08-1.12l-.36-.21-3 .79.8-2.92-.24-.38A8 8 0 1 1 12 20Zm4.38-5.97c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.2-1.44-1.35-1.68-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.8-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.19.86 2.33.98 2.49.12.16 1.7 2.6 4.13 3.65.58.25 1.03.4 1.38.51.58.18 1.11.16 1.52.1.46-.07 1.43-.59 1.63-1.15.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg><span class="tt-footer-wa-text">Escribinos por WhatsApp</span>
         </a>
       </div>
 
@@ -133,9 +133,7 @@ function sharedFooter() {
         <div class="tt-footer-col-title">Tienda</div>
         <ul>
           <li><a href="/catalogo">Catálogo</a></li>
-          <li><a href="/collections">Colecciones</a></li>
           <li><a href="/catalogo?cat=relojes">Relojes</a></li>
-          <li><a href="/catalogo?cat=bolsos">Bags</a></li>
         </ul>
       </nav>
 

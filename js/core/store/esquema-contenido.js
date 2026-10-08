@@ -12,7 +12,7 @@
    dónde está, en qué zona vive ni si puede moverse.
    ============================================================= */
 
-import * as ContentFields from './definiciones-contenido.js?v=tintin-20261002-content-schema-1';
+import * as ContentFields from './definiciones-contenido.js?v=tintin-20261002-content-schema-1-master-20261007-1';
 import {
   SITE_PUBLIC_PAGE_IDS,
   SITE_STRUCTURE_CONTRACT,

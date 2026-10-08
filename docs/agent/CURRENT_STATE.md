@@ -1,3 +1,16 @@
+# Estado vigente — 2026-10-07: propuesta del prompt maestro, sin publicar
+
+Agente: Codex. Base comprobada: 64426ba148444ac2d66d4f7a465b13f02beccbb4. Rama: codex/tintin-master-audit-20261007.
+
+- Correcciones candidatas: factura opcional con tipo de contribuyente y formato DNIT; referencia útil exigida por servidor para delivery; mapas que recuperan geometría al mostrarse y comunican fallos de tiles; tarifas compartidas San Lorenzo/Fernando de la Mora 25.000 sin reescribir pedidos históricos; fotos asociadas a opciones conservadas al normalizar catálogo; agotados seleccionables con compra bloqueada; selector bajo la imagen; instrucciones de muñeca; desglose histórico de pedidos y estadísticas desconocidas sin cero ficticio; Catálogo en navegación; retiro de superficies públicas Bags/look/descubrimiento/mayorista; footer y política de envíos simplificados.
+- PASS_LOCAL dirigido: 465 pruebas transversales sin skips antes de la última ampliación; 27 pruebas Chromium de factura, galería, mapas y navegación; smoke de 18 rutas. Se agregaron regresiones para formato, tipos, referencia, tarifas, media importada e importes históricos. Los contratos de secciones retiradas y los dobles de Leaflet se actualizaron para el comportamiento solicitado. El cierre completo del manifiesto/build y audit:final se informa por separado; no se heredan verdes históricos.
+- Auditoría de cargas: 42 navegaciones invitadas de la base y 42 del candidato, 14 páginas x 3 resoluciones, con guardia de sólo lectura. Routing desactiva la caché de navegador: los resultados no prueban bytes de red fría/caliente ni rendimiento de campo. Recursos CSS/JS cambian versión y se registran por el generador canónico, incluidas dependencias transitivas.
+- BLOCKED_MERGE: Protected flow integrity rechaza nueve archivos de flujos vigentes: _headers, catalogo.html, cloudflare/participacion-clientes.js, config/csp-runtime.js, js/admin/admin-app.js, js/components/location/ubicaciones-paraguay.js, js/pages/collections/estado-colecciones.js, login.html, js/core/auth/navegacion-autenticacion.js. No se modificó config/proteccion-flujos.json, su auditor, workflow, sellos, ni los cinco checks requeridos; strict/enforce_admins continúan activos. Requiere coordinación de mantenimiento; no se intenta mergear con ese rechazo.
+- PRODUCCIÓN_BASE: monitor HTTP de páginas, CSP, metadatos, sitemaps y backend responde OK para la versión desplegada de main; esto no verifica el candidato. PR/deploy del candidato pendientes al redactar esta entrada. PR #929 permanece intacto.
+- Límites: sin operaciones comerciales de prueba, credenciales, pagos, pedidos, correos ni escrituras a Firebase/Sheets. Sin Safari ni dispositivos físicos. Sin validar inscripción/dígito matemático del RUC. Precios diferentes por variante requieren evolución del contrato comercial; no se inventan ni sustituyen precios reales. Avatares históricos públicos requieren una solución compatible con la anonimización; las nuevas publicaciones ahora priorizan la foto personalizada canónica. OAuth y compras reales no se declaran verificados.
+
+## Historia previa (no constituye evidencia del candidato)
+
 # Estado vigente — 2026-10-07: Sheets recuperado y Likes verificado
 
 Agente: Codex. Base: `c5a7721a63a6f9370ba904121343144f2e4d28b3`.

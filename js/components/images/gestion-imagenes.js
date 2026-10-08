@@ -21,9 +21,9 @@ if (!window.TintinImagesPhase5Booted) {
   // /assets-tintin/images/* se sirve con caché inmutable (un año): cuando cambia
   // el arte del hero tiene que cambiar su URL. Mismo tag que los <source> de
   // index.html.
-  const HERO_ART_QUERY = '?v=tintin-20261006-hero-rotulo-1';
+  const HERO_ART_QUERY = '?v=tintin-20261006-hero-rotulo-1-master-20261007-1';
   const STATIC = Object.freeze({
-    logo: 'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2',
+    logo: 'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
     edit_bolsos: {
       desktop: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp',

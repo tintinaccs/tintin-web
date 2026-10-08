@@ -1,4 +1,4 @@
-import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from './iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
+import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from './iconos.js?v=tintin-20260916-final-production-stability-iconos-1-master-20261007-1';
 
 function renderSheetCategories() {
   return CATEGORIES.map(({ slug, label }) => `
@@ -10,10 +10,10 @@ function renderSheetCategories() {
 
 export function renderCollectionsSheet() {
   return `
-    <div class="tt-collections-sheet" id="collections-sheet" role="dialog" aria-modal="true" aria-label="Colecciones" aria-hidden="true">
+    <div class="tt-collections-sheet" id="collections-sheet" role="dialog" aria-modal="true" aria-label="Catálogo" aria-hidden="true">
       <div class="tt-sheet-handle" aria-hidden="true"></div>
       <div class="tt-sheet-header">
-        <span>Colecciones</span>
+        <span>Catálogo</span>
         <button type="button" id="btn-close-sheet" aria-label="Cerrar colecciones">${svgIcon(UI_ICONS.close, { size: 16 })}</button>
       </div>
       <div class="tt-sheet-grid" data-collections-nav="sheet">${renderSheetCategories()}</div>

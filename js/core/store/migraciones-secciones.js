@@ -29,9 +29,9 @@ export const VISUAL_SECTION_MIGRATIONS = Object.freeze({
       'El encabezado independiente de colecciones fue reemplazado por el carrusel canónico de colecciones.'
     ),
     products_header: migration(
-      'look',
+      'collections_carousel',
       { order: true, anchor: true, style: false, content: false },
-      'El encabezado independiente de productos fue reemplazado estructuralmente por la sección canónica Completá tu look.'
+      'La sección comercial retirada no transfiere contenido ni estilos al catálogo.'
     ),
   }),
 });

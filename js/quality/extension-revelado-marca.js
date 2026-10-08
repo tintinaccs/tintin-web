@@ -26,7 +26,7 @@ function injectStyles(){
  var style=document.createElement('style');
  style.id='tt-brand-reveal-extension-style';
  style.textContent=`
-  .tt-brand-reveal{opacity:0;transform:translate3d(0,16px,0) scale(.988);transition:opacity .54s cubic-bezier(.16,1,.3,1),transform .54s cubic-bezier(.16,1,.3,1);transition-delay:var(--tt-brand-reveal-delay,0ms);will-change:opacity,transform}
+  .tt-brand-reveal{opacity:1;transform:none!important;transition:opacity .54s cubic-bezier(.16,1,.3,1),transform .54s cubic-bezier(.16,1,.3,1);transition-delay:var(--tt-brand-reveal-delay,0ms);will-change:opacity,transform}
   .tt-brand-reveal.tt-brand-revealed{opacity:1!important;transform:none!important;visibility:visible!important;will-change:auto!important}
   .tt-account-drawer-header.tt-brand-reveal{transform:translate3d(18px,0,0) scale(.992)}
   @media(max-width:767px){.tt-brand-reveal{transform:translate3d(0,11px,0) scale(.995);transition-duration:.42s}}
