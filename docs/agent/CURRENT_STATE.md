@@ -1,3 +1,10 @@
+# Mantenimiento autorizado — 2026-10-08: espacios públicos, PR #1062
+
+El usuario autorizó expresamente el mantenimiento puntual de las huellas de catálogo/acceso y la integración/publicación cuando los controles lo permitan. Se renuevan sólo `catalogo.html` y `login.html` por referencias de recursos visuales; los otros 121 hashes, los 123 archivos y los 76 alcances permanecen exactamente intactos. Auditor, workflow y checks de protección sin cambios. Los metadatos de evidencia productiva anteriores no se renuevan ni se presentan como prueba de esta actualización.
+
+- Evidencia del candidato visual `a3dd8c414d7e32ba3d787a7e1e9417df4f60fd91`: auditoría local completa, 36 pruebas Chromium y 218 Node PASS; GitHub Repository audit, CodeQL y Cloudflare Pages PASS en este commit. El bloqueo protegido permanece FAIL por las dos huellas. Estos resultados no certifican CI del nuevo commit de mantenimiento ni producción.
+- La política renovada valida los bytes locales; la comparación contra la base confiable anterior debe rechazar su renovación por diseño. No se falsea ese resultado ni se elimina su check. Integración preparada para el mecanismo normal de GitHub, sin override de protecciones; publicación y comprobación productiva pendientes de que GitHub permita la operación autorizada.
+
 # Estado vigente — 2026-10-08: espacios públicos y ficha de producto
 
 Agente: Codex. Base: `64426ba148444ac2d66d4f7a465b13f02beccbb4`. Rama: `fix/public-spacing-product-layout`.
