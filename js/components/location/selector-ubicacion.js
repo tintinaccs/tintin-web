@@ -6,8 +6,11 @@
 
 import { apiUrl } from "../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
-const DEBOUNCE_MS = 600;
+const DEBOUNCE_MS = 300;
 const MIN_QUERY_LENGTH = 3;
+const SEARCH_TIMEOUT_MS = 8000;
+const SEARCH_CACHE_LIMIT = 40;
+const searchCache = new Map(); // Sólo memoria: no guarda direcciones en disco.
 
 function isUsableCoord(value) {
   if (value == null || value === '') return false;
@@ -75,39 +78,49 @@ function endpointCandidates(query) {
 
 /** Consulta el mismo buscador usado por checkout, con una ruta alternativa. */
 export async function searchPlaces(query, { signal } = {}) {
+  signal?.throwIfAborted();
   const parsed = parseLocationSearchInput(query);
   if (parsed?.lat != null) return [parsed];
   if (parsed?.shortGoogleUrl) return [];
   const q = String(parsed?.query || query || '').trim();
   if (q.length < MIN_QUERY_LENGTH) return [];
+  const key = q.normalize('NFKC').replace(/\s+/g, ' ').toLowerCase();
+  const cached = searchCache.get(key);
+  if (cached && cached.expires > Date.now()) return cached.places.map(place => ({ ...place }));
+  searchCache.delete(key);
 
   let lastError = null;
-  let sawSuccessfulResponse = false;
-  for (const url of endpointCandidates(q)) {
-    try {
+  const controller = new AbortController();
+  const cancel = () => controller.abort(signal.reason);
+  signal?.addEventListener('abort', cancel, { once: true });
+  const timer = setTimeout(() => controller.abort(new DOMException('La búsqueda tardó demasiado', 'TimeoutError')), SEARCH_TIMEOUT_MS);
+  try {
+    for (const url of endpointCandidates(q)) {
       const response = await fetch(url, {
         method: 'GET',
         headers: { Accept: 'application/json' },
         cache: 'no-store',
-        signal,
+        signal: controller.signal,
       });
-        if (!response.ok) {
-          lastError = new Error(`location-search ${response.status}`);
-          continue;
-        }
-        sawSuccessfulResponse = true;
-        const data = await response.json();
+      if (!response.ok) {
+        lastError = new Error(`location-search ${response.status}`);
+        // Sólo una ruta ausente merece probar el alias. Un 503/429 usa
+        // el mismo proveedor: repetirlo duplicaba la espera y el tráfico.
+        if (response.status === 404) continue;
+        throw lastError;
+      }
+      const data = await response.json();
       const places = normalizePlaces(data);
-      return places; // La ruta alternativa tiene el mismo backend: no repetir una lista vacía.
-    } catch (error) {
-      if (error?.name === 'AbortError' || signal?.aborted) throw error;
-      lastError = error;
+      if (controller.signal.aborted) throw controller.signal.reason;
+      if (searchCache.size >= SEARCH_CACHE_LIMIT) searchCache.delete(searchCache.keys().next().value);
+      searchCache.set(key, { places, expires: Date.now() + (places.length ? 600000 : 30000) });
+      return places.map(place => ({ ...place }));
     }
+    throw lastError || new Error('location_search_unavailable');
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener('abort', cancel);
   }
-
-  if (sawSuccessfulResponse) return [];
-  console.error('[location-picker] No se pudo buscar la dirección:', lastError);
-  throw lastError || new Error('location_search_unavailable');
 }
 
 /**

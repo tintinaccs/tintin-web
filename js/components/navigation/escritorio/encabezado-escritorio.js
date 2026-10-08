@@ -1,5 +1,5 @@
-import { CATEGORIES, UI_ICONS, categoryIcon, collectionImageUrl, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
-import { logoUrl } from '../compartido/configuracion.js?v=tintin-20261004-final-integration-2';
+import { CATEGORIES, UI_ICONS, categoryIcon, collectionImageUrl, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1-master-20261007-1';
+import { logoUrl } from '../compartido/configuracion.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
 
 function renderDesktopCategories() {
   return CATEGORIES.map(({ slug, label }) => `
@@ -21,7 +21,7 @@ export function renderDesktopHeader() {
           <span class="tt-desktop-active-pill" aria-hidden="true"></span>
           <a href="/" data-shell-route="home" data-desktop-nav-item>INICIO</a>
           <div class="tt-nav-dropdown" id="tienda-dropdown">
-            <button type="button" id="btn-tienda" data-shell-route="shop" data-desktop-nav-item aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">TIENDA <span aria-hidden="true">▾</span></button>
+            <button type="button" id="btn-tienda" data-shell-route="shop" data-desktop-nav-item aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">CATÁLOGO <span aria-hidden="true">▾</span></button>
             <div class="tt-dropdown" id="tt-tienda-dropdown-panel" role="dialog" aria-label="Categorías de la tienda" aria-hidden="true">
               <div class="tt-dropdown-grid" data-collections-nav="desktop">${renderDesktopCategories()}</div>
             </div>

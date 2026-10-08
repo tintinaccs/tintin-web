@@ -229,7 +229,7 @@ test('ubicación de Últimos datos tiene un solo dueño: un clic solicita geoloc
   const navigator = { geolocation: { getCurrentPosition() { locationCalls++; } } };
   const context = vm.createContext({
     requestCurrentLocation: () => requestCurrentLocation({ navigator, secure: true }),
-    window: { isSecureContext: true, L: { map: () => map, tileLayer: () => ({addTo() {}}) } },
+    window: { isSecureContext: true, L: { map: () => map, tileLayer: () => ({addTo() {return this;},on() {return this;}}) } },
     document: { createElement: fakeElement, getElementById: () => null, removeEventListener() {} },
     navigator,
     setTimeout() {}, clearTimeout() {}, requestAnimationFrame() {},

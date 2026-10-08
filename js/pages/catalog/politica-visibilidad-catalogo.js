@@ -4,10 +4,11 @@
    Mantiene una sola definición de producto comprable para portada,
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
-import { loadCollections, normalizeCollectionSlug } from '../collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1';
+import { loadCollections, normalizeCollectionSlug } from '../collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1';
 import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
 
 import { hasPublicProductFields } from '../../core/store/publicacion-producto.mjs?v=tintin-20261007-public-consistency-1';
 
@@ -58,7 +59,7 @@ export function normalizeVariantOptions(value) {
     value.slice(0, 100).forEach(item => {
       if (!item || typeof item !== 'object' || Array.isArray(item)) return;
       Object.entries(item).forEach(([key, itemValue]) => {
-        if (!['price', 'sku', 'imageUrl', 'stock', 'active'].includes(key)) add(key, itemValue);
+        if (!['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active'].includes(key)) add(key, itemValue);
       });
     });
   } else if (typeof value === 'object') {
@@ -90,6 +91,11 @@ export function normalizeProduct(product) {
     catalogActivityAt: timestampToMillis(p.catalogActivityAt),
     tags: unique(Array.isArray(p.tags) ? p.tags : String(p.tags || '').split(','), 30, 60),
     variants: normalizeVariantOptions(p.variants),
+    // Conserva la relación opción/foto cuando el store transforma las filas
+    // importadas en grupos. También sobrevive a normalizaciones posteriores.
+    variantMedia: (Array.isArray(p.variantMedia) ? p.variantMedia : Array.isArray(p.variants) ? p.variants : [])
+      .slice(0, 100).filter(row => row && typeof row === 'object' && !Array.isArray(row))
+      .map(row => ({ ...row })),
   };
 }
 
@@ -162,8 +168,8 @@ export function reconcileCatalogCart(products = window.PRODUCTS || []) {
       price: product.price,
       qty,
       stock: product.stock,
-      imageUrl: product.imageUrl || raw.imageUrl || '',
-      imgUrl: product.imageUrl || raw.imgUrl || raw.imageUrl || '',
+      imageUrl: productVariantImage(product, raw.variant, raw.imageUrl),
+      imgUrl: productVariantImage(product, raw.variant, raw.imgUrl || raw.imageUrl),
       variant: clean(raw.variant || '', 240),
     };
   }).filter(Boolean);

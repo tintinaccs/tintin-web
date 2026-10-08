@@ -175,7 +175,7 @@ body:has(.ck-body) .ck-post-confirm-back a { color:var(--ck-muted)!important; fo
   body:has(.ck-body) .ck-body,
   body:has(.ck-body) .ck-steps { width: calc(100% - 24px); }
   body:has(.ck-body) .ck-steps { overflow-x: auto; scrollbar-width: none; justify-content: flex-start; }
-  body:has(.ck-body) .ck-step { min-width: 70px; flex: 0 0 70px; }
+  body:has(.ck-body) .ck-step { min-width: 0; flex: 1 1 0; }
   body:has(.ck-body) .ck-panel-body { padding: 20px 16px; }
   body:has(.ck-body) .ck-item { grid-template-columns: 72px minmax(0,1fr); }
   body:has(.ck-body) .ck-item-controls { grid-column: 1 / -1; justify-content: flex-end; }
@@ -219,3 +219,18 @@ body:has(.ck-body) :is(.ck-input, .ck-select, .ck-textarea) {
   box-sizing: border-box;
   font-size: 16px;
 }
+
+/* Facturación progresiva y referencia de entrega. */
+body:has(.ck-body) #ck-wants-invoice-row { display:flex; align-items:center; gap:14px; min-height:64px; padding:16px; border:1px solid var(--border); border-radius:12px; cursor:pointer; }
+body:has(.ck-body) #ck-wants-invoice-row:has(input:checked) { border-color:var(--pink-dark); background:#fff; }
+body:has(.ck-body) #ck-wants-invoice { width:24px; height:24px; flex:0 0 24px; accent-color:var(--pink-dark); }
+body:has(.ck-body) #ck-wants-invoice-row small { display:block; margin-top:4px; line-height:1.5; }
+body:has(.ck-body) .ck-field-help { margin:4px 0 0; font-size:13px; line-height:1.5; }
+body:has(.ck-body) .ck-ship-reminder { border-left-width:2px; }
+body:has(.ck-body) .ck-body { margin-bottom:32px; }
+
+html body:has(.ck-body) :is(.ck-back-row,.ck-steps) { background:transparent !important; box-shadow:none !important; border:0 !important; }
+html body:has(.ck-body) .ck-back-row { padding-top:16px !important; padding-bottom:8px !important; }
+html body:has(.ck-body) .ck-steps { display:grid !important; grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.6fr); width:min(700px,calc(100% - 24px)) !important; box-sizing:border-box; padding:12px 0 !important; gap:0; overflow:visible; }
+html body:has(.ck-body) .ck-step { min-width:0; }
+html body:has(.ck-body) .ck-step-label { display:block; color:#fff !important; background:#9f395b !important; border-radius:6px; padding:4px 3px; margin:8px 2px 0; white-space:nowrap !important; word-break:normal !important; font-size:clamp(8px,1.1vw,10px) !important; letter-spacing:0 !important; line-height:1.4; }

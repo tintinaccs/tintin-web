@@ -18,7 +18,7 @@ import {
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange
-} from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1';
+} from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
 import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-final-1';
 import {
   heartbeatDecision,

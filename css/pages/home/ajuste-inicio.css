@@ -863,10 +863,12 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     --tt-hero-nav: calc(var(--tt-mobile-nav-clearance, 100px) + 52px);
     --u: min(calc(100vw / 380), calc((var(--tt-hero-h) - var(--tt-hero-nav)) / 646));
     grid-template-areas: "art" "content";
-    grid-template-rows: minmax(112px, 1fr) auto !important;
-    /* En pantallas altas sobra lugar: la mitad va abajo para que el conjunto
-       quede centrado sobre la barra de navegación. */
-    padding: calc(18 * var(--u)) 20px calc(var(--tt-hero-nav) + max(0px, (var(--tt-hero-h) - var(--tt-hero-nav) - 646 * var(--u)) / 2)) !important;
+    grid-template-rows: minmax(112px, calc(420 * var(--u))) auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    /* La composición termina después de sus acciones; la barra flotante
+       conserva su propia reserva global y no infla el banner. */
+    padding: calc(18 * var(--u)) 20px 24px !important;
   }
   html body.tt-home-premium .tt-hero::before {
     background: linear-gradient(180deg, #F389BE 0%, #F48DC3 10%, #F79ECD 25%, #FAB6DD 50%, #FCCFEB 75%, #FCDFF3 90%, #FDEAF9 100%);

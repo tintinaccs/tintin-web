@@ -105,7 +105,7 @@
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn.active .tt-tabbar-avatar,
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn[aria-expanded="true"] svg,
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar {
-    transform:translateY(-4px) scale(1.08);
+    transform:scale(1.08);
   }
 
   #tt-tabbar .tt-tabbar-btn.active,
@@ -113,7 +113,7 @@
   #tt-tabbar .tt-tabbar-btn.active svg,
   #tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] svg,
-  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:translateY(-8px) scale(1.12); }
+  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:scale(1.12); }
 
   /* Configuración combinada: si el editor oculta Inicio solo quedan cuatro
      tabs para invitado y cinco cuando Auth habilita Alertas. La regla de
@@ -136,7 +136,9 @@
     left:0;
     pointer-events:none;
     transform:translateX(var(--tt-mobile-x,0));
-    transition:transform 380ms cubic-bezier(.2,.85,.2,1),width 300ms cubic-bezier(.2,.85,.2,1),opacity .15s ease;
+    /* La geometría sigue al icono en cada frame: una segunda interpolación
+       dejaba el círculo atrás mientras la barra cambiaba de tamaño. */
+    transition:opacity .15s ease;
     opacity:0;
   }
 
@@ -182,12 +184,12 @@
   #tt-tabbar .tt-tabbar-btn.active svg,
   #tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] svg,
-  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:translateY(-3px) scale(1.06); }
-  .tt-mobile-nav-halo { z-index:1; top:1px; width:52px; height:52px; }
+  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:scale(1.06); }
+  .tt-mobile-nav-halo { z-index:1; top:var(--tt-mobile-y,1px); width:52px; height:52px; }
   .tt-mobile-nav-indicator { z-index:2; bottom:4px; width:52px; }
   #tt-tabbar .tt-tabbar-btn.active,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] { z-index:4; }
-  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo { top:0; width:46px; height:46px; }
+  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo { top:var(--tt-mobile-y,0px); width:46px; height:46px; }
   #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-indicator { bottom:3px; width:46px; }
 
   /* Menú legado y menú hamburguesa comparten la misma superficie limpia. */

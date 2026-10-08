@@ -56,15 +56,6 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
       zone: 'home-main', hideable: true, operational: true,
       reason: 'Las tarjetas se resuelven desde las colecciones activas; no se guardan copias manuales en la página.',
     }),
-    section('look', 'Completá tu look', '.tt-look-section', {
-      zone: 'home-main', hideable: true, operational: true,
-      reason: 'Los productos mostrados se resuelven desde el catálogo vigente.',
-    }),
-    section('editorial_bag', 'Editorial Bags', '[data-tt-section="editorial_bag"]', { zone: 'home-main', hideable: true }),
-    section('random_products', 'Productos para descubrir', '#home-random-products', {
-      zone: 'home-main', hideable: true, operational: true,
-      reason: 'La selección se resuelve aleatoriamente desde el catálogo vigente, sin duplicados y con el renderer canónico.',
-    }),
     section('editorial_relojes', 'Editorial Relojes', '[data-tt-section="editorial_relojes"]', { zone: 'home-main', hideable: true }),
     section('reviews', 'Reseñas', '.tt-reviews-section', {
       zone: 'home-main', hideable: true, operational: true,
@@ -107,7 +98,6 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
       zone: 'product-core', kind: 'operational', movable: false, hideable: false, visualEditable: false, blockAnchor: false, operational: true,
       reason: 'Precio, stock, variantes y acciones comerciales son datos/runtime críticos.',
     }),
-    section('benefits', 'Beneficios', '.tinben', { zone: 'product-between', hideable: true }),
     section('selection', 'Tu selección', '.tinsel', {
       zone: 'product-selection', kind: 'operational', movable: false, hideable: false, visualEditable: false, blockAnchor: false, operational: true,
       reason: 'Esta superficie depende del estado de compra y del carrito.',

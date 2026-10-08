@@ -103,7 +103,7 @@ const fail = message => errors.push(message);
 
 if (structure.SITE_STRUCTURE_VERSION < 2) fail('SITE_STRUCTURE_VERSION debe ser >= 2 para soportar zonas seguras.');
 if (!/from\s+['"]\.\/definiciones-contenido\.js(?:\?v=[\w.-]+)?['"]/.test(gateway)) fail('La fachada debe importar las definiciones de campos aisladas.');
-if (!gateway.includes("from './contrato-estructura-sitio.js'")) fail('La fachada debe importar el contrato estructural canónico.');
+if (!/from\s+['"]\.\/contrato-estructura-sitio\.js(?:\?v=[\w.-]+)?['"]/.test(gateway)) fail('La fachada debe importar el contrato estructural canónico.');
 if (!gateway.includes('structural.root')) fail('La fachada debe proyectar el root desde el contrato estructural.');
 if (!gateway.includes('SITE_STRUCTURE_MODES.protected')) fail('La fachada debe excluir las páginas protegidas del CMS libre.');
 if (!gateway.includes('zone: structural.zone')) fail('La fachada debe proyectar la zona estructural al Visual Builder.');
@@ -133,7 +133,7 @@ for (const pageId of declaredIds) {
   if (seenPaths.has(page.path)) fail(`${pageId}: path duplicado ${page.path}.`);
   seenPaths.add(page.path);
 
-  const html = read(page.path);
+  const html = read(page.path).replace(/<!--[\s\S]*?-->/g, '');
   const ids = new Set();
   const roots = new Set();
   const closedZones = new Set();
@@ -206,7 +206,8 @@ for (const protectedSectionId of ['product_detail', 'selection']) {
   const section = product?.sections?.find(item => item.id === protectedSectionId);
   if (!section || section.movable || section.visualEditable || section.blockAnchor) fail(`product/${protectedSectionId}: debe permanecer fijo, no visual y sin ancla libre.`);
 }
-for (const safeSectionId of ['benefits', 'related']) {
+if (product?.sections?.some(item => item.id === 'benefits')) fail('product/benefits: superficie retirada por el propietario; no debe volver al editor.');
+for (const safeSectionId of ['related']) {
   const section = product?.sections?.find(item => item.id === safeSectionId);
   if (!section?.visualEditable || !section.blockAnchor) fail(`product/${safeSectionId}: debe estar disponible como superficie visual segura.`);
 }

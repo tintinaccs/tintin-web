@@ -1,3 +1,4 @@
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261008-color-photos-1-minimal-product-20261008-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261004-admin-connections-3";
 import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261005-auth-loader-1';
@@ -21,19 +22,19 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20261004-admin-connections-3";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261005-mayoristas-1-profile-wholesale-20261005-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261007-protected-flows-1";
 import "./pages/paginas-admin.js?v=tintin-20261004-admin-connections-3";
-import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
+import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
@@ -5650,10 +5651,23 @@ function mountFormImageWidget(containerId, hiddenInputId, { value, label, hint }
     value: value || '',
     onOpenLibrary: openMediaLibraryPicker,
     onChange: url => {
-      if (hiddenInput) hiddenInput.value = url || '';
+      if (hiddenInput) { hiddenInput.value = url || ''; hiddenInput.dispatchEvent(new Event('change', { bubbles: true })); }
     },
   });
   _formImageWidgets.set(containerId, controller);
+}
+
+let productColorPhotos = null;
+function mountProductColorPhotos(product) {
+  productColorPhotos?.destroy();
+  let container = document.getElementById('prod-color-photos');
+  if (!container) {
+    container = document.createElement('div'); container.id = 'prod-color-photos'; container.style.gridColumn = '1 / -1';
+    document.getElementById('prod-variants-text').parentElement.after(container);
+  }
+  productColorPhotos = attachColorPhotos({ container, product,
+    variantsInput: document.getElementById('prod-variants-text'), imagesInput: document.getElementById('prod-images-extra'), mainInput: document.getElementById('prod-imageUrl'),
+    openLibrary: openMediaLibraryPicker, attachUpload: attachImageUploadWidget });
 }
 
 let productVariantStockBaseline = null;
@@ -5714,6 +5728,7 @@ function serializeProductForm() {
     internalNotes: document.getElementById('prod-internal-notes').value,
     tags: document.getElementById('prod-tags').value,
     variants: document.getElementById('prod-variants-text').value,
+    variantMedia: productColorPhotos?.serialize() || [],
     variantStock: [...document.querySelectorAll('#prod-variant-stock input')].map(input => input.value),
     badge: document.getElementById('prod-badge').value,
     collection: document.getElementById('prod-collection').value,
@@ -5758,6 +5773,7 @@ function _prodNuevoNow() {
   document.getElementById('prod-internal-notes').value = '';
   document.getElementById('prod-tags').value = '';
   document.getElementById('prod-variants-text').value = '';
+  mountProductColorPhotos({});
   document.getElementById('prod-badge').value = '';
   document.getElementById('prod-collection').value = '';
   document.getElementById('prod-active').checked = true;
@@ -5821,7 +5837,7 @@ function _prodEditarNow(docId) {
       // ese producto puntual — se filtra antes de leer sus entries.
       variantsText = p.variants
         .filter(v => v && typeof v === 'object')
-        .map(v => Object.entries(v).filter(([k]) => k !== 'price' && k !== 'sku' && k !== 'imageUrl').map(([k,val]) => `${k}: ${val}`).join(', '))
+        .flatMap(v => Object.entries(v).filter(([k]) => !['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active'].includes(k)).map(([k,val]) => `${k}: ${val}`))
         .join('\n');
     } else if (typeof p.variants === 'object') {
       variantsText = Object.entries(p.variants).flatMap(([k, vals]) => Array.isArray(vals) ? vals.map(v => `${k}: ${v}`) : [`${k}: ${vals}`]).join('\n');
@@ -5829,6 +5845,7 @@ function _prodEditarNow(docId) {
   }
   document.getElementById('prod-variants-text').value = variantsText;
   renderProductVariantStock(p);
+  mountProductColorPhotos(p);
   document.getElementById('prod-active').checked = p.active !== false;
   document.getElementById('prod-oferta').checked = !!p.oferta;
   document.getElementById('prod-destacado').checked = !!p.destacado;
@@ -5928,7 +5945,7 @@ async function prodGuardar() {
 
   const collection_ = document.getElementById('prod-collection').value.trim() || null;
   const imagesExtra = [...new Set(document.getElementById('prod-images-extra').value
-    .split(/\r?\n|,/).map(value => sanitizeImageUrl(value.trim())).filter(Boolean))].slice(0, 12);
+    .split(/\r?\n/).map(value => sanitizeImageUrl(value.trim())).filter(Boolean))].slice(0, 12);
   const optionalInteger = id => {
     const raw = document.getElementById(id).value.trim();
     return raw === '' ? null : Number(raw);
@@ -5969,6 +5986,7 @@ async function prodGuardar() {
     sizeFit: document.getElementById('prod-size-fit').value.trim().slice(0, 240),
     packageContents: document.getElementById('prod-package-contents').value.trim().slice(0, 500),
     imagesExtra,
+    variantMedia: productColorPhotos?.serialize() || [],
     tags,
     badge,
     active: document.getElementById('prod-active').checked,

@@ -1,4 +1,4 @@
-import { UI_ICONS, svgIcon } from './iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
+import { UI_ICONS, svgIcon } from './iconos.js?v=tintin-20260916-final-production-stability-iconos-1-master-20261007-1';
 
 export function renderSearchPanel() {
   return `

@@ -1,4 +1,4 @@
-import { UI_ICONS, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
+import { UI_ICONS, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1-master-20261007-1';
 
 export function renderMobileTabbar() {
   return `
@@ -11,8 +11,8 @@ export function renderMobileTabbar() {
       <button type="button" class="tt-tabbar-btn" id="tabbar-search" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel" data-shell-tab="search">
         ${svgIcon(UI_ICONS.search)}<span>Buscar</span>
       </button>
-      <button type="button" class="tt-tabbar-btn" id="tabbar-tienda" aria-label="Tienda" aria-expanded="false" aria-controls="collections-sheet" data-shell-tab="shop">
-        ${svgIcon(UI_ICONS.storefront)}<span>Tienda</span>
+      <button type="button" class="tt-tabbar-btn" id="tabbar-tienda" aria-label="Catálogo" aria-expanded="false" aria-controls="collections-sheet" data-shell-tab="shop">
+        ${svgIcon(UI_ICONS.storefront)}<span>Catálogo</span>
       </button>
       <button type="button" class="tt-tabbar-btn tt-notification-trigger" id="tabbar-notifications" data-nav-action="notifications" aria-label="Notificaciones" aria-expanded="false" aria-controls="notifications-drawer" data-shell-tab="notifications" hidden>
         ${svgIcon(UI_ICONS.bell, { size: 23 })}<span class="tt-notification-badge" data-notification-badge hidden>0</span><span>Alertas</span>

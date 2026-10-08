@@ -44,7 +44,7 @@ function draftFor(shipping) {
 test('buildDraft produce exactamente un payload aceptado por phase4CreateOrder_', () => {
   const server = phase4Context();
   const draft = draftFor({ method: 'delivery', city: 'Fernando de la Mora', cost: 20000, pending: false, mapLocation: { lat: -25.3, lng: -57.5, name: 'Casa', address: 'Calle' } });
-  assert.deepEqual(Object.keys(draft), [...CHECKOUT_DRAFT_KEYS]);
+  assert.deepEqual(Object.keys(draft), CHECKOUT_DRAFT_KEYS.filter(key => key !== 'taxpayerType'));
   assert.equal(server.phase4HasOnlyKeys_({ action: 'createOrder', idToken: 'token', ...draft }, server.PHASE4_ALLOWED_PAYLOAD_KEYS_), true);
   assert.equal(draft.shippingMethod, 'delivery');
   assert.equal(draft.encomiendaMode, '');
@@ -218,7 +218,7 @@ test('servidor rechaza variante inexistente y exige variante cuando corresponde'
 
 test('servidor no acepta efectivo para encomienda aunque el método general esté habilitado', () => {
   const source = fs.readFileSync(path.join(root, 'apps-script', 'CrearPedido.gs'), 'utf8');
-  assert.match(source, /shipping\.method === 'encomienda' && paymentMethod === 'efectivo'/);
+  assert.match(source, /shipping\.method === 'encomienda' && paymentMethod !== 'transferencia'/);
 });
 
 test('sanitización de correo conserva destino y datos documentales del pedido', () => {

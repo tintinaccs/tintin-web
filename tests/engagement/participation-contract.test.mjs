@@ -64,7 +64,7 @@ test('a social 401 never sends an authenticated customer back to login', async (
   assert.match(favorites, /for \(const forceRefresh of \[false, true\]\)/);
 });
 
-test('community closes product content and avoids blocking alerts', async () => {
+test('community lives immediately before the footer and avoids blocking alerts', async () => {
   const [product, markup] = await Promise.all([
     read('js/pages/product/resenas-producto.js'),
     read('product.html'),

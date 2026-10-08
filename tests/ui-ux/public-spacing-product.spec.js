@@ -88,9 +88,11 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       for (const selector of ['.tt-product-gallery', '.tt-product-info-panel', '.tinsel-box']) {
         const node = document.querySelector(selector), r = node.getBoundingClientRect(), s = getComputedStyle(node);
         if (r.left < 0 || r.right > innerWidth) issues.push(`${selector} fuera del viewport`);
-        if (parseFloat(s.paddingLeft) < 12 || parseFloat(s.paddingRight) < 12) issues.push(`${selector} sin inset`);
+        if (selector === '.tinsel-box' && (parseFloat(s.paddingLeft) < 12 || parseFloat(s.paddingRight) < 12)) issues.push(`${selector} sin inset`);
         if (node.scrollWidth > node.clientWidth + 1) issues.push(`${selector} desborda`);
       }
+      const containerStyle = getComputedStyle(document.querySelector('.tt-product-page > .container'));
+      if (parseFloat(containerStyle.paddingLeft) < 16 || parseFloat(containerStyle.paddingRight) < 16) issues.push('ficha sin margen exterior');
       const desc = document.querySelector('#product-desc'), selection = document.querySelector('.tt-product-selection');
       if (!(desc.compareDocumentPosition(selection) & Node.DOCUMENT_POSITION_FOLLOWING)) issues.push('selección antes de descripción');
       const reviews = document.querySelector('#product-reviews');
@@ -122,7 +124,7 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
     expect(top).toBeLessThan(height);
     await page.screenshot({ path: `test-results/product-spacing-${width}.png`, fullPage: true });
   });
-  for (const [route, card] of [['/index.html', '.tt-product-card'],
+  for (const [route, card] of [['/index.html', '.tt-review-card'],
     ['/catalogo.html', '.tt-card'], ['/collections.html', '.tt-coll-page-card']]) {
     test(`${route} muestra tarjetas pobladas sin recortes en ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height });
@@ -137,17 +139,22 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
         url: '/js/pages/collections/presentacion-colecciones.js?v=tintin-20261001-inventory-fix-1' });
       const first = page.locator(card).first();
       await expect(first).toBeVisible();
-      await expect(first.locator('a').first()).toHaveAttribute('href', /product|catalogo/);
-      await expect(first.locator('.tt-product-name,.tt-card-name,.tt-coll-page-name')).toHaveText(
-        route === '/collections.html' ? 'Relojes y accesorios con un nombre de colección largo'.toUpperCase() : product.name);
+      if (route === '/index.html') {
+        await expect(first.locator('.tt-review-product')).toHaveText('Reloj Alissia');
+        await expect(first.locator('.tt-review-text')).toContainText('Me enamoré del reloj Alissia');
+      } else {
+        await expect(first.locator('a').first()).toHaveAttribute('href', /product|catalogo/);
+        await expect(first.locator('.tt-card-name,.tt-coll-page-name')).toHaveText(
+          route === '/collections.html' ? 'Relojes y accesorios con un nombre de colección largo'.toUpperCase() : product.name);
+      }
       // Resolver el nodo y medirlo en la misma tarea del navegador: el catálogo
       // puede reemplazar tarjetas entre una consulta de locator y su evaluate.
       await expect(async () => {
         const issues = await page.evaluate(selector => {
           const node = document.querySelector(selector);
-          const body = node.querySelector('.tt-product-info,.tt-card-info,.tt-coll-page-body');
+          const body = node.querySelector('.tt-card-info,.tt-coll-page-body') || node;
           const style = getComputedStyle(body), rect = node.getBoundingClientRect();
-          const title = node.querySelector('.tt-product-name,.tt-card-name,.tt-coll-page-name');
+          const title = node.querySelector('.tt-card-name,.tt-coll-page-name,.tt-review-text');
           return {
             outside: rect.left < 0 || rect.right > innerWidth,
             overflow: body.scrollWidth > body.clientWidth + 1,

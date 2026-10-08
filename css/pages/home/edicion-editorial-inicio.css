@@ -229,3 +229,6 @@ body.tt-home-premium .tt-footer-tagline { max-width: 28ch; color: var(--tt-home-
   body.tt-home-premium .tt-trust-title { font-size: .56rem; letter-spacing: .035em; }
   body.tt-home-premium :is(.tt-editorial, .tt-watch-feature) { max-width: calc(100% - 20px); }
 }
+
+body.tt-home-premium .tt-collection-carousel { padding-block:clamp(28px,4vw,52px); }
+body.tt-home-premium .tt-footer .tt-footer-wa svg { color:#168541!important; }

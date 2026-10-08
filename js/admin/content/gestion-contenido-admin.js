@@ -30,7 +30,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20260925-cache-converge-1-complete-ui-20261002-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20261008-producto-superficies-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

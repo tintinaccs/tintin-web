@@ -37,11 +37,11 @@ for(const width of [390,768,1440]){
  await page.evaluate(()=>window.profileCallbacks.u1({exists:()=>true,data:()=>({firstName:'Ana',lastName:'Ruiz',avatarURL:'/photo-custom.png',username:'ana',wholesaleStatus:'solicitado'})}));
  await expect(page.locator('[data-auth-account-button] img')).toHaveAttribute('src','/photo-custom.png');
  await expect(page.locator('#account-panel')).toContainText('Ana Ruiz');
- await expect(page.locator('#account-panel a[href="/perfil#mayorista"]')).toHaveText('¿Querés ser mayorista?');
+ await expect(page.locator('#account-panel a[href="/perfil#mayorista"]')).toHaveCount(0);
  await page.evaluate(()=>window.profileCallbacks.u1({exists:()=>true,data:()=>({firstName:'Ana',lastName:'Nueva',avatarURL:'/photo-new.png',wholesaleStatus:'aprobado'})}));
  await expect(page.locator('#perfil-nombre-display')).toHaveText('Ana Nueva');
  await expect(page.locator('#perfil-avatar img')).toHaveAttribute('src','/photo-new.png');
- await expect(page.locator('#account-panel a[href="/perfil#mayorista"]')).toHaveText('Mayoristas');
+ await expect(page.locator('#account-panel a[href="/perfil#mayorista"]')).toHaveCount(0);
  const dimensions=await page.locator('[data-auth-account-button]').evaluate(button=>({button:button.getBoundingClientRect().width,image:button.querySelector('img').getBoundingClientRect().width}));
  expect(dimensions.image).toBeCloseTo(dimensions.button,0);
  await page.evaluate(()=>{window.fixtureAuth.currentUser={uid:'u2',email:'two@example.com'};window.sessionCallback({status:'authenticated',user:window.fixtureAuth.currentUser});window.profileCallbacks.u1({exists:()=>true,data:()=>({avatarURL:'/wrong-user.png'})});});
@@ -82,14 +82,14 @@ for(const width of [390,768,1440]){
  if(width===768){await page.locator('[data-wholesale-user-search]').fill('');await page.screenshot({path:path.resolve(root,'../../outputs/mayoristas-usuarios-768.png')});}
  });
 }
-test('pestaña mayorista incluida en perfil y actualiza estado sin recargar',async({page})=>{
- await fixture(page,768,'<div class="perfil-wrap"><a class="perfil-back" href="/">Volver</a><div class="perfil-card"><div class="perfil-header"><div id="perfil-avatar"></div><div><span id="perfil-nombre-display">Ana</span></div></div><input id="perfil-nombre"></div><div class="perfil-card" id="perfil-wholesale-card">Cotizar por mayor</div></div>');
+test('perfil público no introduce pestaña mayorista al actualizar la cuenta',async({page})=>{
+ const profile=fs.readFileSync(path.join(root,'perfil.html'),'utf8');
+ expect(profile).not.toContain('id="perfil-wholesale-card"');
+ await fixture(page,768,'<div class="perfil-wrap"><a class="perfil-back" href="/">Volver</a><div class="perfil-card"><div class="perfil-header"><div id="perfil-avatar"></div><div><span id="perfil-nombre-display">Ana</span></div></div><input id="perfil-nombre"></div></div>');
  const code=source('js/quality/estabilidad-final-publica.js');
  await page.addScriptTag({content:code.slice(0,code.indexOf('\nfunction start()'))+'\ninjectStyles();enhanceProfile();'});
- await expect(page.locator('[data-profile-tab="mayorista"]')).toHaveText('¿Querés ser mayorista?');
- await page.locator('[data-profile-tab="mayorista"]').click();
- await expect(page.locator('[data-profile-panel="mayorista"]')).toBeVisible();
- await expect(page.locator('[data-profile-panel="datos"]')).toBeHidden();
+ await expect(page.locator('[data-profile-tab="datos"]')).toBeVisible();
+ await expect(page.locator('[data-profile-tab="mayorista"]')).toHaveCount(0);
  await page.evaluate(()=>window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{detail:{wholesaleApproved:true}})));
- await expect(page.locator('[data-profile-tab="mayorista"]')).toHaveText('Mayoristas');
+ await expect(page.locator('[data-profile-tab="mayorista"]')).toHaveCount(0);
 });

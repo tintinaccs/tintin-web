@@ -28,7 +28,7 @@
     const style = document.createElement('style');
     style.id = 'tt-global-reveal-style';
     style.textContent = `
-      html.tt-reveal-ready .tt-auto-reveal{opacity:0;transform:translate3d(0,18px,0) scale(.992);transition:opacity var(--mo-reveal,520ms) var(--mo-enter,cubic-bezier(.16,1,.3,1)),transform var(--mo-reveal,520ms) var(--mo-enter,cubic-bezier(.16,1,.3,1));transition-delay:var(--tt-r-delay,0ms);will-change:opacity,transform;backface-visibility:hidden}
+      html.tt-reveal-ready .tt-auto-reveal{opacity:1;transform:none!important;transition:box-shadow var(--mo-reveal,520ms) var(--mo-enter,cubic-bezier(.16,1,.3,1));backface-visibility:hidden}
       html.tt-reveal-ready .tt-auto-reveal.tt-visible{opacity:1!important;transform:translate3d(0,0,0) scale(1)!important}
       .tt-auto-reveal.tt-reveal-settled{will-change:auto}
       .tt-reveal-left{transform:translate3d(-18px,10px,0) scale(.992)!important}
@@ -64,18 +64,17 @@
     return 'tt-reveal-soft';
   }
 
-  function revealNow(element) {
+  function revealNow(element, animate = false) {
     if (element.classList.contains('tt-visible')) return;
     element.classList.add('tt-visible');
+    if (animate && !reducedMotion && typeof element.animate === 'function') {
+      element.animate([{ opacity: .4, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], {
+        duration: 380, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'none'
+      });
+    }
     const settle = () => element.classList.add('tt-reveal-settled');
     element.addEventListener('transitionend', settle, { once: true });
     window.setTimeout(settle, 900);
-  }
-
-  function hideForRepeat(element) {
-    if (!element.classList.contains('tt-visible')) return;
-    if (element.closest('#hero')) return; // el hero se revela una sola vez y queda visible
-    element.classList.remove('tt-visible', 'tt-reveal-settled');
   }
 
   function observe(elements) {
@@ -87,8 +86,10 @@
     if (!observer) {
       observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) revealNow(entry.target);
-          else hideForRepeat(entry.target);
+          if (entry.isIntersecting) {
+            revealNow(entry.target, true);
+            observer.unobserve(entry.target);
+          }
         });
       }, { rootMargin: '0px 0px -24% 0px', threshold: .01 });
     }
@@ -125,9 +126,7 @@
       if (alreadyInViewport) {
         element.classList.add('tt-visible', 'tt-reveal-settled');
       }
-      // También observamos lo que ya estaba visible: así, cuando el usuario
-      // se aleja y vuelve a subir, el bloque puede repetir su entrada.
-      toObserve.push(element);
+      if (!alreadyInViewport) toObserve.push(element);
     });
     observe(toObserve);
   }

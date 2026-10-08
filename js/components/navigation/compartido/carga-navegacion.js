@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20261004-final-integration-2';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -13,9 +13,9 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261007-email-app-check-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261007-public-consistency-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261008-public-spacing-1';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261008-public-spacing-reconcile-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -118,7 +118,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261005-auth-loader-1-profile-wholesale-20261005-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261005-auth-loader-1-profile-wholesale-20261005-1-master-20261007-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -138,7 +138,7 @@ function loadCartRuntime() {
 
 function loadNotificationsRuntime() {
   if (!notificationsRuntimePromise) {
-    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261005-public-navigation-3')
+    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261008-producto-superficies-1')
       .then(module => {
         module.initClientNotifications?.();
         return module;
@@ -278,7 +278,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20261008-public-spacing-1'),
+      import('./control-busqueda.js?v=tintin-20261008-public-spacing-reconcile-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

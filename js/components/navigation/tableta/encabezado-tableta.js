@@ -1,5 +1,5 @@
-import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
-import { logoUrl } from '../compartido/configuracion.js?v=tintin-20261004-final-integration-2';
+import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1-master-20261007-1';
+import { logoUrl } from '../compartido/configuracion.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
 
 function renderTabletCategories() {
   return CATEGORIES.map(({ slug, label }) => `
@@ -47,7 +47,7 @@ export function renderTabletMenu() {
       <nav class="tt-tablet-nav" aria-label="Navegación tablet">
         <a href="/" data-shell-route="home">INICIO</a>
         <button type="button" id="btn-tablet-tienda" class="tt-tablet-tienda-btn" aria-expanded="false" aria-controls="tablet-cats">
-          <span>TIENDA</span>
+          <span>CATÁLOGO</span>
           ${svgIcon(UI_ICONS.chevronDown, { size: 16, className: 'tt-tablet-chevron' })}
         </button>
         <a href="/about" data-shell-route="about">NOSOTROS</a>
@@ -55,7 +55,7 @@ export function renderTabletMenu() {
       </nav>
       <div class="tt-tablet-cats" id="tablet-cats">
         <button type="button" class="tt-tablet-cats-back" id="btn-tablet-cats-back">← Volver</button>
-        <h2 class="tt-tablet-cats-title">Colecciones</h2>
+        <h2 class="tt-tablet-cats-title">Catálogo</h2>
         <div class="tt-tablet-cats-grid" data-collections-nav="tablet">${renderTabletCategories()}</div>
         <a href="/catalogo" class="tt-tablet-ver-todo">Ver todo el catálogo →</a>
       </div>

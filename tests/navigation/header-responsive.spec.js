@@ -48,7 +48,7 @@ for (const width of [320, 390, 767, 768, 1024, 1025, 1280, 1920]) {
         const image = [...document.querySelectorAll('.tt-tabbar-avatar,.tt-account-avatar-btn')].find(visible);
         const button = image.closest('button,a');
         const shell = image.closest('#tt-tabbar,#tt-header-tablet,#tt-header-desktop-tablet');
-        const icon = [...shell.querySelectorAll('svg')].find(e => visible(e) && e.closest('button,a')?.getAttribute('aria-label') !== 'Tienda');
+        const icon = [...shell.querySelectorAll('svg')].find(e => visible(e) && e.closest('button,a')?.getAttribute('aria-label') !== 'Catálogo');
         const rect = e => { const r = e.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
         return { image:rect(image), icon:rect(icon), button:rect(button), buttonInnerWidth:button.getBoundingClientRect().width-parseFloat(getComputedStyle(button).borderLeftWidth)-parseFloat(getComputedStyle(button).borderRightWidth), shell:rect(shell), radius:getComputedStyle(image).borderRadius, fit:getComputedStyle(image).objectFit, overflow:document.documentElement.scrollWidth > innerWidth };
       });
@@ -139,14 +139,16 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await expect(labels.first()).toBeVisible();
   await expect(visibleButtons.nth(0)).toHaveAttribute('aria-label', 'Inicio');
   await expect(visibleButtons.nth(1)).toHaveAttribute('aria-label', 'Buscar');
-  await expect(visibleButtons.nth(2)).toHaveAttribute('aria-label', 'Tienda');
+  await expect(visibleButtons.nth(2)).toHaveAttribute('aria-label', 'Catálogo');
 
   // Simula el estado autenticado más exigente: aparecen las seis acciones.
   await nav.locator('#tabbar-notifications').evaluate(node => { node.hidden = false; });
   await expect(visibleButtons).toHaveCount(6);
   let columnCount = await nav.evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
   expect(columnCount).toBe(6);
-  await expect(nav.locator('#tabbar-notifications')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  // Los botones transparentes dejan visible el halo; la barra sigue siendo sólida.
+  await expect(nav).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expect(nav.locator('#tabbar-notifications')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
   await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
 
   // Respeta una configuración exclusiva de mobile: Inicio oculto. Con Alertas
@@ -226,7 +228,7 @@ test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async 
   await expect(page.locator('#btn-tablet-close')).toBeFocused();
   await page.locator('#btn-tablet-tienda').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveClass(/tt-tablet-shop-view/);
-  await expect(page.locator('#tablet-cats .tt-tablet-cats-grid a')).toHaveCount(12);
+  await expect(page.locator('#tablet-cats .tt-tablet-cats-grid a')).toHaveCount(11);
   await expect(page.locator('#tablet-cats .tt-tablet-ver-todo')).toHaveCount(1);
   await page.keyboard.press('Escape');
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'true');
@@ -262,7 +264,7 @@ test('desktop conserva un solo indicador para Tienda y acciones sólidas', async
 
   const dropdown = page.locator('#tt-tienda-dropdown-panel');
   await expect(dropdown).toHaveAttribute('aria-hidden', 'false');
-  await expect(dropdown.locator('a[href^="/catalogo?cat="], a[href^="catalogo.html?cat="]')).toHaveCount(12);
+  await expect(dropdown.locator('a[href^="/catalogo?cat="], a[href^="catalogo.html?cat="]')).toHaveCount(11);
   const bounds = await dropdown.evaluate(node => {
     const rect = node.getBoundingClientRect();
     return { left: rect.left, right: rect.right, viewport: document.documentElement.clientWidth };
@@ -369,8 +371,8 @@ test('Alertas usa la superficie compartida sólida y conserva el foco', async ({
   await expect(drawer).toHaveAttribute('aria-hidden', 'true');
 });
 
-test('cuenta mantiene cabecera sólida y CTA legible con todas las capas de marca', async ({ page }) => {
-  for (const viewport of [{width:1440,height:900},{width:768,height:1024},{width:390,height:844},{width:320,height:568}]) {
+test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA legible', async ({ page }) => {
+  for (const viewport of [{width:1920,height:1080},{width:1440,height:900},{width:1280,height:720},{width:1024,height:768},{width:768,height:1024},{width:390,height:844},{width:320,height:568}]) {
     await openPublicPage(page, viewport, '/contact');
     await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes('pulido-marca-responsive-tintin.css') && link.sheet));
     const trigger = viewport.width < 768 ? '#tabbar-cuenta' : viewport.width <= 1024 ? '#btn-cuenta-tablet' : '#btn-cuenta';
@@ -380,11 +382,14 @@ test('cuenta mantiene cabecera sólida y CTA legible con todas las capas de marc
     const header=drawer.locator('.tt-account-drawer-header');
     await expect(header).toHaveCSS('background-image','none');
     await expect(header).toHaveCSS('background-color','rgb(248, 170, 202)');
-    await expect(header.locator('h2')).toHaveCSS('color','rgb(113, 60, 83)');
+    await expect(header.locator('h2')).toHaveCSS('color','rgb(255, 255, 255)');
     await expect(drawer.locator('.tt-account-primary')).toHaveCSS('color','rgb(113, 60, 83)');
-    const overlap=await header.evaluate(el => { const logo=getComputedStyle(el,'::before'); const title=el.querySelector('h2').getBoundingClientRect(); const close=el.querySelector('button').getBoundingClientRect(); return {logo:parseFloat(logo.width),titleRight:title.right,closeLeft:close.left}; });
-    expect(overlap.logo).toBe(44);
+    await expect(header.locator('.tt-account-drawer-logo')).toBeVisible();
+    await expect(header.locator('.tt-account-drawer-logo')).toHaveCSS('filter','brightness(0) invert(1)');
+    const overlap=await header.evaluate(el => { const logo=getComputedStyle(el,'::before'); const title=el.querySelector('h2').getBoundingClientRect(); const close=el.querySelector('button').getBoundingClientRect(); const box=el.getBoundingClientRect(); return {duplicateLogo:logo.content,titleRight:title.right,closeLeft:close.left,centerOffset:Math.abs(title.x+title.width/2-(box.x+box.width/2))}; });
+    expect(overlap.duplicateLogo).toBe('none');
     expect(overlap.titleRight).toBeLessThanOrEqual(overlap.closeLeft);
+    expect(overlap.centerOffset).toBeLessThanOrEqual(1);
     await page.keyboard.press('Escape');
   }
 });

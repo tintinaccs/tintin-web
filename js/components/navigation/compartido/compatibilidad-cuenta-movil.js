@@ -16,7 +16,7 @@ function ready(fn){
    que estas hojas terminen de cargar para mostrarse. */
 function loadResponsiveBrandStyles(){
  var files=[
-  ['tt-responsive-brand-surfaces-css','css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1'],
+  ['tt-responsive-brand-surfaces-css','css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'],
   ['tt-responsive-brand-polish-css','css/theme/pulido-marca-responsive-tintin.css?v=tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1'],
   ['tt-responsive-brand-safety-css','css/theme/seguridad-marca-responsive-tintin.css?v=tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1']
  ];
@@ -33,7 +33,7 @@ function loadResponsiveBrandStyles(){
 
 function bootBrandReveal(){
  if(window.TintinBrandRevealExtensionBooted)return;
- import(new URL('js/quality/extension-revelado-marca.js?v=tintin-20260803-brand-reveal-1',window.location.href).href)
+ import(new URL('js/quality/extension-revelado-marca.js?v=tintin-20260803-brand-reveal-1-master-20261007-1',window.location.href).href)
   .catch(function(error){console.warn('[TintinBrand] No se pudo cargar el reveal de marca:',error);});
 }
 

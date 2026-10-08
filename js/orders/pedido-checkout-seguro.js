@@ -1,3 +1,4 @@
+import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
@@ -27,16 +28,17 @@ import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
-} from '../components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1';
+} from '../components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1';
 import {
   isValidCi,
   normalizeCi,
   isValidRuc,
   normalizeRuc,
-  isValidRazonSocial
-} from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
+  isValidRazonSocial,
+  isValidTaxpayerType
+} from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1';
 import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2-cupones-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2-cupones-1-master-20261007-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -365,7 +367,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           return {
             name: text(item),
             price: parseMoney(fallback),
-            departamento: 'Central',
+            departamento: shippingDepartment(item),
             sourceIndex
           };
         }
@@ -376,7 +378,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         return {
           name: text(item.name),
           price: Number.isFinite(price) ? price : null,
-          departamento: text(item.departamento) || 'Central',
+          departamento: shippingDepartment(item.name, text(item.departamento)),
           sourceIndex
         };
       })
@@ -520,11 +522,18 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     );
     const name = text(document.getElementById('ck-name')?.value);
     const address = text(document.getElementById('ck-address')?.value);
+    const reference = text(document.getElementById('ck-referencia')?.value);
+    if (shipping.method === 'delivery' && reference.length < 5) {
+      throw appError('reference_required', 'Ingresá una referencia útil para encontrar tu entrega (al menos 5 caracteres).');
+    }
     const paymentMethod = text(document.querySelector('input[name="ck-pay"]:checked')?.value);
 
     if (name.length < 2) throw appError('name_required', 'Ingresá tu nombre completo.');
     if (!['efectivo', 'transferencia', 'paypal'].includes(paymentMethod)) {
       throw appError('payment_required', 'Seleccioná un método de pago disponible.');
+    }
+    if ((shipping.method === 'encomienda' && paymentMethod !== 'transferencia') || (paymentMethod === 'efectivo' && shipping.method !== 'delivery')) {
+      throw appError('payment_unavailable', 'El producto por encomienda se paga previamente por transferencia. Efectivo contra entrega sólo para delivery.');
     }
     if (shipping.method === 'delivery' && (!shipping.mapLocation || !shipping.mapLocation.name)) {
       throw appError('map_required', 'Marcá y nombrá tu ubicación en el mapa.');
@@ -543,6 +552,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError('ci_invalid', 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).');
     }
     const wantsInvoice = document.getElementById('ck-wants-invoice')?.checked === true;
+    const taxpayerType = text(document.getElementById('ck-taxpayer-type')?.value);
+    if (wantsInvoice && !isValidTaxpayerType(taxpayerType)) {
+      throw appError('taxpayer_type_required', 'Elegí el tipo de contribuyente para tu factura.');
+    }
     const razonSocial = text(document.getElementById('ck-razon-social')?.value);
     const rucRaw = text(document.getElementById('ck-ruc')?.value);
     if (wantsInvoice && !isValidRazonSocial(razonSocial)) {
@@ -569,6 +582,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       subtotal: localSubtotal,
       ci: shipping.method === 'encomienda' ? normalizeCi(ciRaw) : '',
       wantsInvoice,
+      taxpayerType,
       razonSocial: wantsInvoice ? razonSocial : '',
       ruc: wantsInvoice ? normalizeRuc(rucRaw) : '',
       couponCode: document.getElementById('ck-coupon')?.dataset.applied || ''
@@ -594,7 +608,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }));
   }
 
-  function renderQuote(quote) {
+  function renderQuote(quote, shippingMethod) {
     setCartLocal(authoritativeCartFromQuote(quote));
     const target = document.getElementById('ck-summary-quote') || document.getElementById('ck-confirm-summary');
     if (!target) return;
@@ -605,7 +619,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           <span style="font-weight:700">${escapeHtml(formatPrice(item.price * item.qty))}</span>
         </div>`).join('')}</div>
       <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.subtotal))}</span></div>
-      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
+      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${shippingMethod === 'encomienda' ? 'Sólo el envío: se paga a la transportadora al recibir' : quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
       <div class="ck-summary-total" style="font-size:18px"><span>${escapeHtml(`TOTAL${quote.shippingPending ? ' (+ envío)' : ''}`)}</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.total))}</span></div>`;
   }
 
@@ -690,7 +704,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const itemLines = (result.items || [])
       .map(item => `• ${item.qty}x ${item.name} — ${formatPrice(item.price * item.qty)}`)
       .join('\n');
-    const shippingText = result.shippingPending
+    const shippingText = draft?.shippingMethod === 'encomienda'
+      ? 'Sólo el costo del envío se paga a la transportadora al recibir; el producto se paga previamente por transferencia'
+      : result.shippingPending
       ? 'A confirmar'
       : formatPrice(result.shippingCost || 0);
 
@@ -775,6 +791,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       phone_invalid: 'Ingresá un teléfono o WhatsApp válido.',
       payment_required: 'Seleccioná un método de pago.',
       map_required: 'Marcá y nombrá tu ubicación en el mapa.',
+      reference_required: 'Ingresá una referencia útil para encontrar tu entrega (al menos 5 caracteres).',
+      taxpayer_type_required: 'Elegí el tipo de contribuyente para tu factura.',
       address_required: 'Ingresá la dirección para la encomienda.',
       ci_invalid: 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).',
       razon_social_required: 'Ingresá la razón social para la factura.',
@@ -831,8 +849,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     button.disabled = true;
     button.innerHTML = '<span class="ck-spinner"></span> Comprobando precios y stock…';
 
+    let draft;
     try {
-      const draft = await buildDraft();
+      draft = await buildDraft();
       try {
         await persistCheckoutDefaults(draft);
       } catch (profileError) {
@@ -862,7 +881,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       console.error('[spark-checkout]', error);
       const code = error?.details?.code || error?.code;
       if (code === 'quote_changed' && error.details?.quote) {
-        renderQuote(error.details.quote);
+        renderQuote(error.details.quote, draft?.shippingMethod);
         showError('Cambió un precio o el costo de envío. Revisá el resumen actualizado y confirmá nuevamente.');
         button.disabled = false;
         button.textContent = '✓ Confirmar pedido actualizado';

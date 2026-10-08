@@ -16,6 +16,8 @@
 
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
+export { productVariantImage };
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
@@ -473,13 +475,13 @@ function createRuntime() {
     if (!Array.isArray(pool)) return item;
     const product = pool.find(entry => String(entry.id) === String(item.id));
     if (!product) return item;
-    return mergeMetadata({
-      ...item,
-      name: product.name || item.name,
-      cat: product.cat || product.category || item.cat,
-      price: product.price,
-      imageUrl: product.imageUrl || product.image || item.imageUrl,
-    }, item);
+    const imageUrl = productVariantImage(product, item.variant, item.imageUrl);
+    return normalizeItem({
+      ...mergeMetadata({ ...item, name: product.name || item.name,
+        cat: product.cat || product.category || item.cat, price: product.price }, item),
+      imageUrl,
+      imgUrl: imageUrl,
+    });
   }
 
   function enrichRemote(remoteItems, localItems) {
@@ -1051,6 +1053,7 @@ function createRuntime() {
   }
 
   const api = {
+    productVariantImage,
     getCartLocal,
     setCartLocal,
     getCart,
@@ -1120,7 +1123,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261007-email-app-check-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261008-producto-superficies-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

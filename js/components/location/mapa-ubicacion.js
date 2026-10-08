@@ -4,7 +4,7 @@
 // Registro y checkout usan el mismo formato {lat,lng,name,address}, el mismo
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
-import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261004-final-integration-1";
+import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261008-location-search-1";
 import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1';
 
 const LEAFLET_JS = '/js/vendor/leaflet/leaflet.js?v=leaflet-1.9.4';
@@ -12,7 +12,7 @@ const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo
 const DEFAULT_CENTER = [-25.2867, -57.6467];
 const DEFAULT_ZOOM = 13;
 const PICKED_ZOOM = 17;
-const SEARCH_DEBOUNCE_MS = 600;
+const SEARCH_DEBOUNCE_MS = 300;
 const MIN_QUERY_LENGTH = 3;
 
 let leafletPromise = null;
@@ -65,7 +65,7 @@ export async function createLocationMap({
   const L = await loadLeaflet();
   const map = L.map(mapEl, { zoomControl: true, scrollWheelZoom: false }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
   mapEl.classList.add('tt-map-canvas');
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 19,
   }).addTo(map);
@@ -105,6 +105,12 @@ export async function createLocationMap({
   wazeLink.textContent = 'Ir con Waze';
   tools.append(googleLink, wazeLink);
   mapEl.after(tools);
+  tiles.on('tileerror', () => {
+    if (destroyed) return;
+    status.hidden = false;
+    status.textContent = 'No pudimos cargar el fondo del mapa. Tu ubicación se conserva. Podés buscar un lugar o abrir el punto en Google Maps o Waze.';
+    if (typeof onError === 'function') onError(status.textContent);
+  });
 
   const emit = () => { if (typeof onChange === 'function') onChange(location); };
 
@@ -360,9 +366,14 @@ export async function createLocationMap({
     document.addEventListener('click', onDocumentClick);
   }
 
-  const resizeTimers = [100, 350, 900].map(delay => setTimeout(() => { if (!destroyed) map.invalidateSize(); }, delay));
+  const refreshMapSize = () => {
+    if (destroyed || !mapEl.getClientRects().length) return;
+    map.invalidateSize({ pan: false });
+    if (location) map.setView([location.lat, location.lng], map.getZoom(), { animate: false });
+  };
+  const resizeTimers = [100, 350, 900].map(delay => setTimeout(refreshMapSize, delay));
   if ('ResizeObserver' in window) {
-    resizeObserver = new ResizeObserver(() => map.invalidateSize());
+    resizeObserver = new ResizeObserver(refreshMapSize);
     resizeObserver.observe(mapEl);
   }
 
@@ -411,6 +422,7 @@ const previewControllers = new WeakMap();
 export function renderSavedMapPreviews(root, addresses) {
   previewControllers.get(root)?.();
   const maps = [];
+  const resizeObservers = [];
   let disposed = false;
   const observer = new IntersectionObserver(entries => {
     entries.filter(entry => entry.isIntersecting).forEach(async ({ target }) => {
@@ -424,6 +436,18 @@ export function renderSavedMapPreviews(root, addresses) {
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>', maxZoom: 19 }).addTo(map);
         L.marker([place.lat, place.lng], { icon: pinIcon(L), interactive: false }).addTo(map);
         maps.push(map);
+        const resize = () => {
+          if (!disposed && target.isConnected && target.getClientRects().length) {
+            map.invalidateSize({ pan: false });
+            map.setView([place.lat, place.lng], 15, { animate: false });
+          }
+        };
+        requestAnimationFrame(resize);
+        if ('ResizeObserver' in window) {
+          const sizeObserver = new ResizeObserver(resize);
+          sizeObserver.observe(target);
+          resizeObservers.push(sizeObserver);
+        }
       } catch {
         if(disposed || !target.isConnected)return;
         target.replaceChildren();
@@ -436,5 +460,9 @@ export function renderSavedMapPreviews(root, addresses) {
     });
   });
   root.querySelectorAll('[data-saved-map]').forEach(target => observer.observe(target));
-  previewControllers.set(root, () => { disposed = true; observer.disconnect(); maps.forEach(map => map.remove()); });
+  previewControllers.set(root, () => {
+    disposed = true; observer.disconnect();
+    resizeObservers.forEach(observer => observer.disconnect());
+    maps.forEach(map => map.remove());
+  });
 }

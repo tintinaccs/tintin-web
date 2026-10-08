@@ -638,3 +638,23 @@ test('pedido anterior ya reservado conserva su reserva al editarlo sin pago', as
   assert.equal(result.inventoryState, 'reserved');
   assert.equal(stockWrites(store).length, 0);
 });
+
+test('el pedido canónico conserva dos colores y reconstruye sus fotos desde el catálogo', async () => {
+  const gold = 'https://cdn.example.test/gold.jpg';
+  const silver = 'https://cdn.example.test/silver.jpg';
+  const store = fakeStore({ 'products/prod_001': document('products/prod_001', {
+    name: 'Aro', price: 50000, stock: 5, active: true, imageUrl: gold,
+    variants: { Color: ['Dorado', 'Plateado'] },
+    variantMedia: [{ Color: 'Dorado', imageUrls: [gold] }, { Color: 'Plateado', imageUrls: [silver] }],
+    variantInventory: [{ variant: 'Dorado', stock: 3 }, { variant: 'Plateado', stock: 2 }],
+  }) }, { transactional: true });
+  const result = await createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', items: [
+    { id: 'prod_001', variant: 'Dorado', qty: 2, price: 1, imageUrl: silver },
+    { id: 'prod_001', variant: 'Plateado', qty: 1, price: 1, imageUrl: gold },
+  ] }, ACTOR, store);
+  assert.deepEqual(result.order.items.map(({ variant, qty, imageUrl, price }) => ({ variant, qty, imageUrl, price })), [
+    { variant: 'Dorado', qty: 2, imageUrl: gold, price: 50000 },
+    { variant: 'Plateado', qty: 1, imageUrl: silver, price: 50000 },
+  ]);
+  assert.equal(result.order.subtotal, 150000);
+});

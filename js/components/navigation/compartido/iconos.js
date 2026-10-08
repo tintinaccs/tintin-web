@@ -15,7 +15,6 @@ export const CATEGORY_ICONS = Object.freeze({
 });
 
 export const CATEGORIES = Object.freeze([
-  Object.freeze({ slug: 'bolsos', label: 'Bolsos', legacyLabel: 'Bags', background: 'linear-gradient(135deg,#e8c5d0,#c48a9e)' }),
   Object.freeze({ slug: 'collares', label: 'Collares', background: 'linear-gradient(135deg,#d4b0c0,#a87090)' }),
   Object.freeze({ slug: 'earcuff', label: 'Earcuff', background: 'linear-gradient(135deg,#f0d0e0,#d090a8)' }),
   Object.freeze({ slug: 'gafas', label: 'Gafas', background: 'linear-gradient(135deg,#e8c0d0,#c88098)' }),
