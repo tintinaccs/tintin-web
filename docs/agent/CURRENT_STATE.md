@@ -1,3 +1,16 @@
+# Estado vigente — 2026-10-09: pedidos históricos y clientes locales
+
+Base 261ccc7126b5bbee226bfbf2b27d32c20dfea035 (rebase desde cbeccc3; se conserva #1067 de seguridad de cuentas); rama codex/pedidos-clientes-locales-20261008. Agente Codex /root. Autorización: espejo bidireccional de Sheets, Panel y Firestore; sin pagos. Trabajo previo conservado abajo como evidencia fechada, no PASS heredado.
+
+- Reproducción: admin productivo muestra 18 pedidos web y omite ventas mensuales. Respaldo XLSX privado y extracción local del libro canónico: enero 44, febrero 39, marzo 36, abril 37, mayo 30, junio 24 = 210 pedidos reales, 33.891.000 Gs.; 211 líneas por continuación de combo, más un borrador sin fecha. Clientes de ventas contiene 185 contactos distintos. No se publica ningún dato privado en el repositorio.
+- PASS_LOCAL: parser Apps Script ejecutado sobre extracción real conserva 210 pedidos, 33.891.000 Gs., un borrador; valida 185 contactos con 185 IDs distintos. La importación aún no se ejecutó sobre Firestore.
+- PASS_LOCAL: 137 pruebas tests/sync/*.test.mjs, incluidas 9 nuevas para historia sin inventario/Auth/pagos/TINPED, idempotencia, conflictos, lote sin escritura parcial, combo, borrador, identidad local/web, archivo y rechazo de mutación por editor normal.
+- IN_PROGRESS: casillas Ventas locales / Clientes que compraron / Espejos de Sheets; contrato mensual ventas/gastos/compras, contactos, proyecciones y versionado. Falta verificación de navegador y CI del candidato.
+- NOT_VERIFIED: publicación protegida, instalación de ComercioLocal.gs y respaldo Drive, importación real, reconciliación en ambos sentidos y conteos productivos. No atribuir verde/PASS de conexiones a estos cambios.
+
+
+## Evidencia previa (histórica, conservada de main)
+
 # PR #1067 — reconciliación tras aprobación, 2026-10-08
 
 Agente: Codex. El propietario aprobó mantenimiento 37856633442 y el veredicto pasó. Main avanzó concurrentemente a cbeccc36c3f70dc6770ded7adf40b335956105ee (#1071), generando conflictos antes del merge automático. Se conserva ese cambio completo, se actualiza el plan de los tres archivos originales y se regenera el manifiesto. No se reutiliza la aprobación del SHA anterior. CI previo 37851260994 aprobado; CI y revisión del candidato nuevo pendientes. No hay merge ni despliegue de este PR todavía. El diagnóstico de HTTP 403 confirmó cupo de API agotado y el mantenimiento avanzó tras renovarse; no se cambiaron permisos ni se debilitaron protecciones.
