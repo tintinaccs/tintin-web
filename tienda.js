@@ -1646,14 +1646,14 @@ function _renderProductDetail(product) {
     const iconGift = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c-3-3-3-7 0-7s3 4 0 7z"/><path d="M12 12c3-3 3-7 0-7s-3 4 0 7z"/><path d="M12 12v9"/><path d="M8 21h8"/></svg>';
     const badges = [
       { icon: iconCheck, text: 'Productos originales garantizados' },
-      ...(isWatch ? [{ icon: iconWatch, text: 'Ajuste de malla incluido' }] : [{ icon: iconGift, text: 'Empaque especial de regalo' }]),
+      ...(!isWatch ? [{ icon: iconGift, text: 'Empaque especial de regalo' }] : []),
     ];
     trustEl.innerHTML = badges.map(b => `
       <div class="tt-trust-badge-item">
         <span class="tt-trust-badge-icon">${b.icon}</span>
         <span class="tt-trust-badge-text">${b.text}</span>
       </div>
-    `).join('') + (isWatch ? `<details class="tt-wrist-guide"><summary>¿Cómo medir tu muñeca?</summary><ol><li>Rodeá tu muñeca con una cinta métrica flexible.</li><li>Si no tenés cinta, usá un cordón, hilo o cable flexible, incluso el de un cargador.</li><li>Marcá el punto donde se encuentran ambos extremos.</li><li>Extendé el objeto sobre una regla.</li><li>Medí la longitud en centímetros.</li><li>Indicá esa medida al comprar cuando corresponda.</li></ol></details>` : '');
+    `).join('') + (isWatch ? `<details class="tt-wrist-guide"><summary class="tt-trust-badge-item"><span class="tt-trust-badge-icon" aria-hidden="true">${iconWatch}</span><span class="tt-trust-badge-text">¿Cómo medir tu muñeca?</span></summary><ol><li>Rodeá tu muñeca con una cinta métrica flexible.</li><li>Si no tenés cinta, usá un cordón, hilo o cable flexible, incluso el de un cargador.</li><li>Marcá el punto donde se encuentran ambos extremos.</li><li>Extendé el objeto sobre una regla.</li><li>Medí la longitud en centímetros.</li><li>Indicá esa medida al comprar cuando corresponda.</li></ol></details>` : '');
   }
 
   // WA button

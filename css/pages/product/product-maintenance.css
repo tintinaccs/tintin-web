@@ -711,9 +711,14 @@ body.tt-product-maintenance #product-variants .tt-variant-options { display:flex
 body.tt-product-maintenance #product-variants .tt-variant-option { min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center; gap:6px; padding:8px 12px; border:1px solid var(--border); border-radius:8px; white-space:normal; }
 body.tt-product-maintenance #product-variants .tt-variant-option.active { outline:2px solid var(--pink-dark); outline-offset:2px; }
 body.tt-product-maintenance .tt-color-swatch { display:block; width:28px; height:28px; border:2px solid #fff; outline:1px solid #737373; border-radius:50%; background:repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px); }
-body.tt-product-maintenance .tt-wrist-guide { width:100%; margin-block:12px; padding:12px 16px; border:1px solid var(--border); border-radius:12px; }
-body.tt-product-maintenance .tt-wrist-guide summary { cursor:pointer; min-height:28px; font-weight:600; }
-body.tt-product-maintenance .tt-wrist-guide li { margin:8px 0; line-height:1.5; }
+body.tt-product-maintenance .tt-wrist-guide { width:100%; min-width:0; margin:0; padding:0; border:0; }
+body.tt-product-maintenance .tt-wrist-guide summary { cursor:pointer; min-height:44px; list-style:none; }
+body.tt-product-maintenance .tt-wrist-guide summary::-webkit-details-marker { display:none; }
+body.tt-product-maintenance .tt-wrist-guide summary::after { content:'⌄'; margin-inline-start:auto; color:var(--text-sec); transition:transform .2s; }
+body.tt-product-maintenance .tt-wrist-guide[open] summary::after { transform:rotate(180deg); }
+body.tt-product-maintenance .tt-wrist-guide ol { box-sizing:border-box; margin:8px 12px 12px; padding:12px 20px 12px 40px; border:1px solid var(--border); border-radius:12px; list-style:decimal outside; }
+body.tt-product-maintenance .tt-wrist-guide li { margin:8px 0; padding-inline-start:2px; line-height:1.5; }
+
 body.tt-product-maintenance .tt-product-specifications>div { padding-inline:12px; }
 body.tt-product-maintenance .tt-product-share { margin-block:12px; }
 body.tt-product-maintenance .tt-product-social-bar { margin-top:16px; padding:12px; }
