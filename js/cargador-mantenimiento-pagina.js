@@ -23,7 +23,7 @@ export function loadPageMaintenance() {
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
       load('pages/checkout/checkout-hardening.js', 'tintin-20261008-producto-superficies-1-minimal-product-20261008-1'),
-      load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261008-producto-superficies-1'),
+      load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261008-checkout-step-labels-1'),
       load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'),
       load('pages/checkout/checkout-control-cuota.js', version),
       load('pages/checkout/estado-navegacion-checkout.js', stateVersion)

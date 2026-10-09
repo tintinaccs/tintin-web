@@ -34,8 +34,8 @@
     width:100%;
     min-width:0;
     min-height:54px;
-    padding:7px 2px;
-    gap:3px;
+    padding:4px 2px;
+    gap:8px;
     color:#713C53 !important;
     background:transparent !important;
     border:0 !important;
@@ -185,11 +185,11 @@
   #tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] svg,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:scale(1.06); }
-  .tt-mobile-nav-halo { z-index:1; top:var(--tt-mobile-y,1px); width:52px; height:52px; }
+  .tt-mobile-nav-halo { z-index:1; top:var(--tt-mobile-y,1px); width:36px; height:36px; }
   .tt-mobile-nav-indicator { z-index:2; bottom:4px; width:52px; }
   #tt-tabbar .tt-tabbar-btn.active,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] { z-index:4; }
-  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo { top:var(--tt-mobile-y,0px); width:46px; height:46px; }
+  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo { top:var(--tt-mobile-y,0px); width:36px; height:36px; }
   #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-indicator { bottom:3px; width:46px; }
 
   /* Menú legado y menú hamburguesa comparten la misma superficie limpia. */
