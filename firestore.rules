@@ -267,12 +267,16 @@ service cloud.firestore {
       // sobre null revienta la evaluación igual que get(...).data — por eso
       // se permite la lectura cuando el documento no existe todavía (no hay
       // datos ajenos que proteger) en vez de asumir que siempre existe.
+      // La coincidencia por correo exige email_verified: el proveedor de
+      // contraseña permite crear una cuenta con un correo ajeno sin
+      // verificarlo, y esa cuenta no debe leer pedidos de esa persona.
       return isSignedIn() && !isBlockedUser() && (
         resource == null ||
         resource.data.userId == request.auth.uid ||
         (
           resource.data.userEmail is string &&
           request.auth.token.email != null &&
+          request.auth.token.email_verified == true &&
           resource.data.userEmail.lower() == request.auth.token.email.lower()
         )
       );
@@ -463,9 +467,12 @@ service cloud.firestore {
 
     function userCreateValid(userId) {
       let data = request.resource.data;
+      // Google y el código por correo siempre entregan el correo verificado;
+      // un perfil nunca se registra con un correo que nadie demostró controlar.
       return isSignedIn() &&
         request.auth.uid == userId &&
         request.auth.token.email != null &&
+        request.auth.token.email_verified == true &&
         data.keys().hasOnly([
           'name', 'email', 'customerId', 'identityVersion', 'profileStatus',
           'phone', 'photoURL', 'role', 'provider', 'authMethods', 'lastAuthMethod',
