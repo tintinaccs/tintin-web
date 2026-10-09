@@ -5,7 +5,7 @@ import {
   BASE_ADMIN_SECTIONS,
   MAESTRO_MODULES,
   capabilityLabel
-} from './registro-maestro.js?v=tintin-20261005-wholesale-master-1';
+} from './registro-maestro.js?v=tintin-20261009-local-ledger-master-1';
 
 (function () {
   'use strict';
@@ -15,7 +15,7 @@ import {
   const isAdminRoute = /(^|\/)admin(?:\.html)?$/i.test(location.pathname.replace(/\/$/, ''));
   if (!isAdminRoute) return;
 
-  const VERSION = 'tintin-20260906-superadmin-maestro-3';
+  const VERSION = 'tintin-20261009-local-ledger-master-2';
   const CAP_COLUMNS = [
     ['create', 'C'], ['read', 'R'], ['update', 'U'], ['archive', 'Arch.'],
     ['delete', 'D'], ['search', 'Buscar'], ['export', 'Exportar'],

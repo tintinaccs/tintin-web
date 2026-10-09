@@ -630,6 +630,9 @@ const SECTION_LABELS = {
   estadisticas: 'Estadísticas',
   usuarios: 'Usuarios',
   pedidos: 'Pedidos',
+  'ventas-locales': 'Ventas locales',
+  'clientes-compraron': 'Clientes que compraron',
+  'espejos-sheets': 'Espejos de Sheets',
   mayoristas: 'Pedidos mayoristas',
   productos: 'Productos',
   resenas: 'Reseñas',
@@ -655,6 +658,9 @@ const SECTION_LABELS = {
 // que comparten el mismo data-section) como para bloquear el acceso directo
 // (consola, hash, o cualquier otro camino que no pase por el botón).
 const SECTION_PERMISSION = {
+  'ventas-locales': 'manageSettings',
+  'clientes-compraron': 'manageSettings',
+  'espejos-sheets': 'manageSettings',
   estadisticas:  'manageSettings',
   usuarios:      'manageUsers',
   resenas:       'manageSettings',

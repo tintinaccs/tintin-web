@@ -1,3 +1,16 @@
+# Estado vigente — 2026-10-09: pedidos históricos y clientes locales
+
+Base c6ac7c741e98840b6bffa08cc3ce81093ba24be7 (rebase desde cbeccc3; se conservan #1067 de seguridad de cuentas y #1073 de interfaz móvil); rama codex/pedidos-clientes-locales-20261008. Agente Codex /root. Autorización: espejo bidireccional de Sheets, Panel y Firestore; sin pagos. Trabajo previo conservado abajo como evidencia fechada, no PASS heredado.
+
+- Reproducción: admin productivo muestra 18 pedidos web y omite ventas mensuales. Respaldo XLSX privado y extracción local del libro canónico: enero 44, febrero 39, marzo 36, abril 37, mayo 30, junio 24 = 210 pedidos reales, 33.891.000 Gs.; 211 líneas por continuación de combo, más un borrador sin fecha. Clientes de ventas contiene 185 contactos distintos. No se publica ningún dato privado en el repositorio.
+- PASS_LOCAL: parser Apps Script ejecutado sobre extracción real conserva 210 pedidos, 33.891.000 Gs., un borrador; valida 185 contactos con 185 IDs distintos. La importación aún no se ejecutó sobre Firestore.
+- PASS_LOCAL: 200 pruebas de sincronización y cuentas, incluidas 16 nuevas para historia sin inventario/Auth/pagos/TINPED, idempotencia, conflictos, lote sin escritura parcial, combo, borrador, identidad local/web, archivo y rechazo de mutación por editor normal.
+- PASS_LOCAL: casillas Ventas locales / Clientes que compraron / Espejos de Sheets; edición comprobada en Chrome sobre datos aislados de localhost (no producción). Sin desborde de editor entre 320/390/768/1024/1280/1440/1920 px; audit:admin-responsive 10/10. Prueba de guardado conserva nota modificada en servidor local. Arquitectura, pedidos (32), sincronización (28) y build/cache/CSP/manifiesto PASS. R incorpora total calculado de pedido; AC:AF conserva fórmulas. Se reduce reconciliación sin cambios a revisión/firma y se agrupan propiedades para evitar reescrituras completas periódicas.
+- NOT_VERIFIED: publicación protegida, instalación de ComercioLocal.gs y respaldo privado mediante SpreadsheetApp.copy, importación real, reconciliación en ambos sentidos y conteos productivos. No atribuir verde/PASS de conexiones a estos cambios.
+
+
+## Evidencia previa (histórica, conservada de main)
+
 # PR #1067 — reconciliación tras aprobación, 2026-10-08
 
 Agente: Codex. El propietario aprobó mantenimiento 37856633442 y el veredicto pasó. Main avanzó concurrentemente a cbeccc36c3f70dc6770ded7adf40b335956105ee (#1071), generando conflictos antes del merge automático. Se conserva ese cambio completo, se actualiza el plan de los tres archivos originales y se regenera el manifiesto. No se reutiliza la aprobación del SHA anterior. CI previo 37851260994 aprobado; CI y revisión del candidato nuevo pendientes. No hay merge ni despliegue de este PR todavía. El diagnóstico de HTTP 403 confirmó cupo de API agotado y el mantenimiento avanzó tras renovarse; no se cambiaron permisos ni se debilitaron protecciones.

@@ -36,6 +36,7 @@ const MAX_BULK_SELECTION = 30;
 const ORDER_PAGE_SIZE = ADMIN_PAGE_SIZE;
 
 const ORDER_STATUS_LABELS = {
+  historico: 'Venta histórica',
   pendiente: 'Pendiente',
   confirmado: 'Confirmado',
   preparando: 'En preparación',
@@ -48,6 +49,8 @@ const ORDER_STATUS_LABELS = {
 };
 const ORDER_STATUS_VALUES = ['pendiente', 'confirmado', 'preparando', 'listo_retiro', 'en_camino', 'entregado', 'cancelado', 'rechazado'];
 const PAY_STATUS_LABELS = {
+  'señado': 'Señado',
+  sin_registrar: 'Pago no registrado',
   pendiente: 'Pago pendiente',
   pagado: 'Pagado',
   rechazado: 'Rechazado',
@@ -283,7 +286,7 @@ function productTabCounts() {
 }
 
 function orderTabCounts() {
-  return { all: state.orders.length, unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length, unfulfilled: state.orders.filter(o => !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length, delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length, canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length, refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length, deleted: state.trashOrders.length };
+  return { all: state.orders.length, unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length, unfulfilled: state.orders.filter(o => !o.localEntryId && !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length, delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length, canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length, refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length, deleted: state.trashOrders.length };
 }
 
 function collectionTabCounts() {
@@ -371,7 +374,7 @@ function orderMetrics() {
   const active = state.orders.filter(order => !['cancelado', 'rechazado'].includes(orderStatus(order)));
   const revenue = todayOrders.reduce((sum, order) => sum + (Number(order?.total) || 0), 0);
   const pending = active.filter(order => payStatus(order) !== 'pagado').length;
-  const unfulfilled = active.filter(order => !['entregado'].includes(orderStatus(order))).length;
+  const unfulfilled = active.filter(order => !order.localEntryId && !['entregado'].includes(orderStatus(order))).length;
   const delivered = state.orders.filter(order => orderStatus(order) === 'entregado').length;
   const items = todayOrders.reduce((sum, order) => sum + orderItems(order).reduce((qty, item) => qty + Number(item?.qty ?? item?.quantity ?? 1), 0), 0);
   return { today: todayOrders.length, revenue, pending, unfulfilled, delivered, items };
@@ -653,13 +656,13 @@ function renderOrders() {
     const date = formatDate(showingTrash ? (order.trashMeta?.trashedAt || order.updatedAt || order.createdAt) : order.createdAt);
     return `<tr ${showingTrash ? '' : 'data-open="order"'} data-id="${esc(order.id)}" class="${selected ? 'is-selected' : ''}">
       <td class="checkcol" data-label="Seleccionar" data-stop>${showingTrash ? '' : `<input type="checkbox" data-select-order="${esc(order.id)}" ${selected ? 'checked' : ''}>`}</td>
-      <td data-label="Pedido"><div class="tt-commerce-maintext">#${esc(orderDisplayId(order))}</div><div class="tt-commerce-subtext">${showingTrash ? 'Recuperable' : itemCount + ' artículo' + (itemCount === 1 ? '' : 's')}</div></td>
+      <td data-label="Pedido"><div class="tt-commerce-maintext">#${esc(orderDisplayId(order))}</div><div class="tt-commerce-subtext">${showingTrash ? 'Recuperable' : order.localEntryId && !itemCount ? 'Detalle no registrado' : itemCount + ' artículo' + (itemCount === 1 ? '' : 's')}</div></td>
       <td data-label="Fecha">${esc(date)}</td>
       <td data-label="Cliente"><div class="tt-commerce-maintext">${esc(customer.name)}</div><div class="tt-commerce-subtext">${esc(customer.email || customer.phone || 'Sin contacto')}</div></td>
       <td data-label="Canal">${esc(channel)}</td>
       <td data-label="Pago"><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span></td>
       <td data-label="Preparación"><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(ORDER_STATUS_LABELS[status] || status)}</span></td>
-      <td class="tt-commerce-number" data-label="Artículos">${itemCount}</td>
+      <td class="tt-commerce-number" data-label="Artículos">${order.localEntryId && !itemCount ? '—' : itemCount}</td>
       <td data-label="Entrega"><span class="tt-commerce-delivery">${esc(delivery)}</span></td>
       <td data-label="Total"><span class="tt-commerce-money">${formatMoney(order.total)}</span></td>
       <td data-label="Acciones" data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="${showingTrash ? 'trash-order' : 'order'}" data-id="${esc(order.id)}" aria-label="Acciones del pedido">⋯</button></td>
@@ -1082,6 +1085,10 @@ async function handleAction(action, element) {
     return renderOrders();
   }
   if (action === 'products-retry' || action === 'collections-retry' || action === 'orders-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
+  if (['order-edit-advanced','order-edit','drawer-order-edit','drawer-order-save','order-delete','drawer-order-delete','order-resend','drawer-order-resend'].includes(action)) {
+    const local = state.orders.find(order => order.id === id)?.localEntryId;
+    if (local) { closeDrawer(); window.dispatchEvent(new CustomEvent('tintin:edit-local-sale', { detail: local })); return; }
+  }
   if (action === 'order-edit-advanced') { closeDrawer(); return window.TintinOrderAdmin?.openAdvancedOrderEditor(id); }
   if (action === 'order-restore') return window.TintinOrderAdmin?.restoreOrder(id).then(() => toast('Pedido restaurado en estado Cancelado; podés reactivarlo desde CRUD completo.'));
   if (action === 'order-delete-permanent') return window.TintinOrderAdmin?.deleteTrashPermanently(id);
@@ -1347,6 +1354,7 @@ function subscribeData() {
     state.ordersError = '';
     state.orderSelected = new Set([...state.orderSelected].filter(id => state.orders.some(o => o.id === id)));
     if (state.role === 'superadmin') window.TintinOrderAdmin?.ensureMissingOrderNumbers(state.orders);
+    window.dispatchEvent(new Event('tintin:orders-updated'));
     renderOrders(); renderDrawer();
   }, error => {
     state.ordersReady = true;

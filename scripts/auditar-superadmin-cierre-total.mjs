@@ -121,6 +121,12 @@ const connectionContracts = {
     && /rolePermissions|users/.test(firestoreRules),
   pedidos: () => hasAll(fullAdminSource, ['/api/admin-order-mutation', 'TintinInventoryIntegrity', 'trashOrder', 'restoreOrder'])
     && hasAny(fullAdminSource + serverSources, ['syncOrder', 'Sheets', 'sheets']),
+  'ventas-locales': () => hasAll(safeRead('js/admin/comercio-local-admin.js'), ['/api/local-commerce', 'tintin:orders-updated', 'baseVersion'])
+    && hasAll(safeRead('cloudflare/comercio-local.js'), ['localCommerceEntries', 'orders', 'baseVersion'])
+    && hasAll(safeRead('apps-script/ComercioLocal.gs'), ['tintinReconciliarComercioLocal_', 'TINTIN_LOCAL_PATH']),
+  'clientes-compraron': () => hasAll(safeRead('js/admin/comercio-local-admin.js'), ['/api/local-commerce', 'snapshot.customers', 'snapshot.contacts'])
+    && hasAll(safeRead('cloudflare/comercio-local.js'), ['salesCustomers', 'purchasedCustomers'])
+    && hasAll(safeRead('apps-script/ComercioLocal.gs'), ['Clientes de ventas', 'tintinLocalContacts_']),
   mayoristas: () => hasAll(safeRead('js/admin/mayoristas/mayoristas-admin.js'), ['/api/admin-wholesale', 'wholesaleQuotes', 'onSnapshot'])
     && hasAll(safeRead('js/pages/profile/mayorista-perfil.js'), ['/api/wholesale-quote', 'wholesaleQuotes', 'onSnapshot'])
     && hasAll(safeRead('functions/api/admin-wholesale.js'), ['requireSuperAdmin', 'respondWholesaleQuote', 'afterWholesaleQuoteResponded'])

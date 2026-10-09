@@ -453,6 +453,7 @@ function tintinPrepararHojasParidad_() {
 function tintinDespacharEdicionParidad(e) {
   if (!e || !e.range) return;
   var sheetName = e.range.getSheet().getName();
+  if (typeof tintinHandleLocalCommerceEdit_ === 'function' && tintinLocalProperties_().getProperty('TINTIN_LOCAL_ENABLED') === '1' && tintinHandleLocalCommerceEdit_(e)) return;
   if (sheetName === TINTIN_PRODUCTS_SHEET) return tintinHandleProductEdit_(e);
   if (sheetName === TINTIN_USERS_SHEET) return tintinHandleUserParityEdit_(e);
   if (sheetName === TINTIN_ORDERS_SHEET) return tintinHandleOrderParityEdit_(e);
@@ -463,6 +464,7 @@ function tintinDespacharEdicionParidad(e) {
 
 function tintinReconciliarAdminParidad() {
   var summary = {};
+  if (typeof tintinReconciliarComercioLocal_ === 'function' && tintinLocalProperties_().getProperty('TINTIN_LOCAL_ENABLED') === '1') summary.local = tintinReconciliarComercioLocal_();
   summary.users = tintinPullUsersFromWeb_();
   summary.orders = tintinPullOrdersParity_();
   summary.audit = tintinPullAuditFromWeb_();
