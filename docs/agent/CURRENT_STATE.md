@@ -1497,3 +1497,7 @@ Impacto: renderer público de Producto y CSS específico; referencias transitiva
 PENDING: CI, revisión humana de mantenimiento y publicación. Las pruebas locales no verifican el cambio en producción.
 
 PASS_LOCAL final: build:pages completo, integridad CSS, auditoría de caché (313 archivos versionados, 73 cargas dinámicas) y 47/47 controles de protección/mantenimiento. Se regenera el manifiesto tras registrar la evidencia final. La comprobación visual corresponde al renderer y estilos reales en fixture aislado; no se realizaron acciones comerciales.
+
+## Reconciliación local sin errores por solapamiento — 2026-10-09
+Autor: Codex, agente principal. Base fe8fea0c78cdf9da0493d7b733dbbc93aaa91f74. Evidencia de producción: el activador de 13:48 falló porque el ciclo de 13:47 conservaba el bloqueo. La integración administrativa instalada estaba desactualizada y se reemplazó por la versión publicada exacta antes de verificar el activador.
+Cambio puntual: un ciclo que no adquiere el bloqueo devuelve busy:true sin tocar registros ni liberar el bloqueo ajeno. Las ediciones permanecen en Sheets y sus versiones se procesan en el siguiente ciclo. PASS_LOCAL: 17 pruebas del puente, incluyendo ciclo solapado sin lecturas/escrituras. PENDING: CI del código fuente y confirmación del ciclo automático con el ajuste. Importación histórica verificada: 210 ventas, 33.891.000 Gs. y 194 compradores locales/web; reconciliar de nuevo mantiene las cifras.

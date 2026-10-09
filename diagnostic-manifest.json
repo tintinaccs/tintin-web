@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f3f06619fb7d3f9832852182db869695d00f5f4a1a8fec95069303019aa48d17",
+  "sourceFingerprint": "1e52c809679438aa289ddad2ed0c53ca333989beda898a4791706883cdeab1d2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1093,
     "textFiles": 1045,
-    "totalBytes": 16274849,
+    "totalBytes": 16276180,
     "pages": 19,
     "modules": 776
   },
@@ -38750,8 +38750,8 @@
     },
     {
       "path": "tests/sync/comercio-local.test.mjs",
-      "bytes": 15376,
-      "sha256": "915c4716d9ed533be6a67d6f6a077f93d340ba4b073a22c20b104156979c9f94",
+      "bytes": 15848,
+      "sha256": "dc4e955daa88fb3b20714657db3c2f95d705a5adece199dbcc752dad5bbac886",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38821,11 +38821,11 @@
       "endpoints": [
         {
           "url": "https://tintin.example/api/local-commerce",
-          "line": 79
+          "line": 87
         },
         {
           "url": "https://tintin.example/api/local-commerce-webhook",
-          "line": 80
+          "line": 88
         }
       ]
     },
@@ -40772,8 +40772,8 @@
     {
       "path": "apps-script/ComercioLocal.gs",
       "extension": ".gs",
-      "bytes": 17004,
-      "sha256": "273d92c2419f52b8d03113812ca105d0378ba091f50d8b9ef0027c166bca7aab"
+      "bytes": 16955,
+      "sha256": "e9c72a1cf43af5d89b822959a4fd8b21f9579972dafc224d3a8a2a34152c4e5b"
     },
     {
       "path": "apps-script/ContratoCuentas.gs",
@@ -41942,8 +41942,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 333986,
-      "sha256": "599edfd31a32fb5bba3e2077ea2fdad42283e2400512a044f637a521d138f6f9"
+      "bytes": 334894,
+      "sha256": "193ac375c176370085f1c7a79f66991941fc627ac38de0ae4c04c8a5295b3c94"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -46880,8 +46880,8 @@
     {
       "path": "tests/sync/comercio-local.test.mjs",
       "extension": ".mjs",
-      "bytes": 15376,
-      "sha256": "915c4716d9ed533be6a67d6f6a077f93d340ba4b073a22c20b104156979c9f94"
+      "bytes": 15848,
+      "sha256": "dc4e955daa88fb3b20714657db3c2f95d705a5adece199dbcc752dad5bbac886"
     },
     {
       "path": "tests/sync/engagement-sheet-sync-queue.test.mjs",
