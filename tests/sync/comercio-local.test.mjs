@@ -66,6 +66,14 @@ test('sin edición local pendiente la reconciliación no reenvía datos viejos s
   h.store.set(key,h.context.tintinLocalFingerprint_(entry));let calls=0;h.context.tintinLocalCall_=()=>{calls++;throw new Error('No debe llamar');};
   h.context.tintinLocalPush_(h.sheet,[entry]);assert.equal(calls,0);
 });
+test('un activador solapado conserva las ediciones para el siguiente ciclo sin lecturas ni escrituras',()=>{
+  const h=gsHarness([]);let calls=0;
+  h.context.LockService={getDocumentLock:()=>({tryLock:()=>false,releaseLock:()=>{throw new Error('No adquirió este bloqueo');}})};
+  h.context.tintinLocalPushAll_=()=>{calls++;};
+  h.context.tintinLocalCall_=()=>{calls++;};
+  assert.equal(h.context.tintinReconciliarComercioLocal_().busy,true);
+  assert.equal(calls,0);
+});
 test('borradores no aparecen como compras ni se publican en pedidos',async()=>{
   const h=memory();await upsertLocalEntries({}, {action:'upsert',entries:[{...sale(),occurredOn:'',total:0,lines:[]}]}, {},h.deps);
   assert.equal(h.docs.has('orders/LOCAL_2026_01_1'),false);const snapshot=await localCommerceSnapshot({}, {},h.deps);assert.equal(snapshot.entries[0].draft,true);assert.equal(snapshot.customers.length,0);
