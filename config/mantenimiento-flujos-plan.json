@@ -1,87 +1,23 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "88cb15b47a22e75f68fa6f71e5598bfd738f300e",
-  "reason": "Espejo de ventas historicas y clientes locales con rutas y gobierno Maestro; pruebas de versiones, conflictos, seguridad y ausencia de efectos en stock/Auth/pagos.",
+  "baseCommit": "fe8fea0c78cdf9da0493d7b733dbbc93aaa91f74",
+  "reason": "Pestana de compradores locales y web dentro de Pedidos con el mismo espejo autenticado y actualizacion por compras nuevas, sin modificar stock ni pagos.",
   "files": [
     {
-      "path": "_routes.json",
-      "oldHash": "4a89d6676868546e82a90270c6ba4761125b7e4eb1729a9e5a1389e7996fb363",
-      "newHash": "a1a0063652627c5b5b84ace240dc6df4466847ecaa0434e07715f06c4ef073a7"
-    },
-    {
       "path": "admin.html",
-      "oldHash": "fa984eba04c594d49a72a8d70070855de4d2744cda9c0564b4ba7df2a6b619c2",
-      "newHash": "06e8077af79dc52c5e048dac6186ce179699a1b81e8e06a924b750a06e4d73b5"
-    },
-    {
-      "path": "apps-script/AdminParity.gs",
-      "oldHash": "16f496c94d8444fd5645c90d484ea1149c5402cc228ee634ff4c3cfc49e3e282",
-      "newHash": "1189a59a98d45e7609ce1ba383ae4f066cf56359a6072c7e592b9338f51176cb"
-    },
-    {
-      "path": "cloudflare/order-admin-domain.js",
-      "oldHash": "f394540d2b272a0c32eb4cb1ded19d7d5f2e6e037e1339177c4744dab631fad7",
-      "newHash": "7c21ea8a5717525f6fe36ad965cf94fa229f38070ef01ab3599d8e4b968587e7"
-    },
-    {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "d35488d335ff4da0220a49f35d2460118a9a7ac9a9068ee0899149ab6b6f0a05",
-      "newHash": "5e80ddd80b5175d2ca2e3fc1765662540d92506b0c4b7c5ab9cad8fa91fe5a95"
-    },
-    {
-      "path": "js/admin/maestro/panel-maestro.js",
-      "oldHash": "1078634797d937d7ddb343de9ab87a3c36ac7039d2716fb4d83fec443766861f",
-      "newHash": "342667b58d6bb92edc154dbcab9411a838778baaf6e159d47e8efdadaffad11b"
-    },
-    {
-      "path": "js/admin/maestro/registro-maestro.js",
-      "oldHash": "49317a2a32364046abc024885d8c3df1ae45d0f8f66829eedcc0e79158b6efe3",
-      "newHash": "5e4cfcc1bec597349f35cc04b502281e2ee5fdc7221eebf63db8d1f4b479ef52"
+      "oldHash": "06e8077af79dc52c5e048dac6186ce179699a1b81e8e06a924b750a06e4d73b5",
+      "newHash": "22afd90a2736e97a2305ad9c012681c3b3e2eec840d8bc3a9017114476d2e708"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "53343d9c22aecbe0792ce496bdb3328ffe10b90abc3a0c9f971838f94f99b621",
-      "newHash": "8781e7257a829e22c0d9a5a1bac76534a8b2a3d738efef080777844d0f826fe3"
+      "oldHash": "8781e7257a829e22c0d9a5a1bac76534a8b2a3d738efef080777844d0f826fe3",
+      "newHash": "b08dc47c45caca3d28d31285ad3da28d15344bfdb0de6f1e6bdda5608bc6521d"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "00eb3d6428049cfececad9bc9e185cd86540b7ea7480f06f6bc6712d57b8fde7",
-      "newHash": "56eb6271f61b907f507e03169592486ff9f9a3b150b9fba7ad8f3debb8611a57"
+      "oldHash": "56eb6271f61b907f507e03169592486ff9f9a3b150b9fba7ad8f3debb8611a57",
+      "newHash": "400cc8c685b332c22967cae5aafe9be7f4b7ce529e756f4b46fc0c9cfed60b30"
     }
   ],
-  "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas",
-    "apis-internas__apps-script__22",
-    "apis-internas__comentarios__39",
-    "apis-internas__correos__41",
-    "apis-internas__favoritos__37",
-    "apis-internas__firestore__21",
-    "apis-internas__likes__38",
-    "apis-internas__notificaciones__40",
-    "apis-internas__pedidos__32",
-    "apps-script",
-    "apps-script__google-sheets__24",
-    "apps-script__sheets-products-webhook__26",
-    "cf-functions__apis-internas__20",
-    "correos",
-    "firestore__apps-script__23",
-    "google-sheets__apps-script__25",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
-    "productos",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "sheets-products-webhook",
-    "sheets-products-webhook__firestore__27",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }
