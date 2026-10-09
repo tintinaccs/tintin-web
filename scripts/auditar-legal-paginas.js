@@ -2,6 +2,11 @@ const fs = require('fs');
 
 const pages = ['terminos.html', 'privacidad.html'];
 const runtimePath = 'js/pages/institutional/mantenimiento-legal.js';
+const stylesPath = 'css/pages/legal.css';
+const cacheBaseline = JSON.parse(fs.readFileSync('scripts/cache-version-baseline.json', 'utf8'));
+const runtimeVersion = cacheBaseline[runtimePath]?.version;
+const stylesVersion = cacheBaseline[stylesPath]?.version;
+const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const errors = [];
 
 for (const page of pages) {
@@ -13,6 +18,8 @@ for (const page of pages) {
   if (!/tt-page-hero-title/i.test(html)) errors.push(`${page}: falta H1 visible`);
   if ((html.match(/class="tt-info-block"/g) || []).length < 5) errors.push(`${page}: contenido informativo incompleto`);
   if (!/tt-footer-bottom/i.test(html)) errors.push(`${page}: falta footer`);
+  const head = html.slice(0, html.toLowerCase().indexOf('</head>'));
+  if (!stylesVersion || !head.includes(`href="${stylesPath}?v=${stylesVersion}"`)) errors.push(`${page}: falta CSS legal canónico desde el head`);
 }
 
 if (!fs.existsSync(runtimePath)) errors.push('falta js/pages/institutional/mantenimiento-legal.js');
@@ -23,23 +30,29 @@ else {
     "replace(/\\.html$/, '')",
     'tt-legal-nav',
     'aria-labelledby',
-    "settings', 'general",
-    'prefers-reduced-motion',
-    '@media(max-width:767px)',
-    '@media(max-width:390px)'
+    "settings', 'general"
   ].forEach(token => {
     if (!runtime.includes(token)) errors.push(`runtime legal: falta ${token}`);
   });
   if (!runtime.includes('new URL(`/${page}`, location.origin)')) errors.push('runtime legal: canonical debe usar ruta limpia');
 }
 
+if (!fs.existsSync(stylesPath)) errors.push(`falta ${stylesPath}`);
+else {
+  const styles = fs.readFileSync(stylesPath, 'utf8');
+  ['prefers-reduced-motion', '@media(max-width:767px)', '@media(max-width:390px)'].forEach(token => {
+    if (!styles.includes(token)) errors.push(`CSS legal: falta ${token}`);
+  });
+}
+
 const loader = fs.readFileSync('js/cargador-mantenimiento-pagina.js', 'utf8');
-if (!/terminos\|privacidad[\s\S]*load\('pages\/institutional\/mantenimiento-legal\.js'(?:,\s*\w+)?\)/.test(loader)) {
+const legalLoad = `load('pages/institutional/mantenimiento-legal.js', '${runtimeVersion}')`;
+if (!runtimeVersion || !new RegExp(`terminos\\|privacidad[\\s\\S]*${escapeRegExp(legalLoad)}`).test(loader)) {
   errors.push('page-maintenance-loader no importa legal-maintenance en páginas legales');
 }
 
 const pageFunction = fs.readFileSync('functions/[page].js', 'utf8');
-if (!pageFunction.includes('mantenimiento-legal.js?v=tintin-20260913-xss-hardening-1-auth-persistence-20260919-1')) errors.push('Pages Function no inyecta runtime legal versionado');
+if (!runtimeVersion || !pageFunction.includes(`mantenimiento-legal.js?v=${runtimeVersion}`)) errors.push('Pages Function no inyecta runtime legal versionado canónico');
 if (!pageFunction.includes("page === 'terminos' || page === 'privacidad'")) errors.push('Pages Function no limita runtime legal a rutas legales');
 
 const workflow = fs.readFileSync('.github/workflows/auditar-tintin.yml', 'utf8');
