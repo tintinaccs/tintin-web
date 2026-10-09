@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "8d7dbba416440254e6f2474e218594ca015e7d88e7cf1073671abb019dd8285e",
+  "sourceFingerprint": "f228d101d9de819d53d79e8e8ee3b31a2fec150b7a8f12a73c0c8008a3252e7e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1095,
     "textFiles": 1047,
-    "totalBytes": 16279010,
+    "totalBytes": 16279002,
     "pages": 19,
     "modules": 778
   },
@@ -31431,20 +31431,15 @@
       "endpoints": []
     },
     {
-      "path": "scripts/leer-aprobacion-publica.mjs",
-      "bytes": 922,
-      "sha256": "61db89d97f4311b2beb80b42de55612b915fdc7d9a7e893d4a919707fad3a164",
+      "path": "scripts/leer-blobs-mantenimiento.mjs",
+      "bytes": 506,
+      "sha256": "7e94106ef05ab0fe26df23bfa4c1e2d0b83ab9c3261f016e7ccc87a79997512b",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": [
-        {
-          "url": "https://api.github.com/repos/$%7Brepository%7D/actions/runs/$%7BrunId%7D/approvals",
-          "line": 7
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "scripts/lib/architecture-gates.mjs",
@@ -31522,8 +31517,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
-      "bytes": 8362,
-      "sha256": "fca98b517d2049eac10edf62c2a245a6910924e9ca6762e44cc81ef8839d51b7",
+      "bytes": 8575,
+      "sha256": "3dbfe01ff3af87b7d84f5bbc386ae839146844e887aca3e3829c015dac78744e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31536,8 +31531,8 @@
           "line": 1
         },
         {
-          "raw": "./leer-aprobacion-publica.mjs",
-          "target": "scripts/leer-aprobacion-publica.mjs",
+          "raw": "./leer-blobs-mantenimiento.mjs",
+          "target": "scripts/leer-blobs-mantenimiento.mjs",
           "dynamic": false,
           "line": 2
         },
@@ -31561,7 +31556,7 @@
         },
         {
           "url": "https://github.com/$%7Bconfig.repository%7D/actions/runs/$%7BrunId%7D",
-          "line": 130
+          "line": 133
         }
       ]
     },
@@ -35537,9 +35532,9 @@
       "endpoints": []
     },
     {
-      "path": "tests/flow-connections/lectura-aprobacion-publica.test.mjs",
-      "bytes": 1705,
-      "sha256": "606e2ff238d54ff6eb1664621131990b377f0306f8c75baa2cd11fb56b042931",
+      "path": "tests/flow-connections/lectura-blobs-mantenimiento.test.mjs",
+      "bytes": 1477,
+      "sha256": "1d2666cf0fddd3c37c988f401b7c761e2566930623b5431e8f60717106487d12",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35558,24 +35553,13 @@
           "line": 2
         },
         {
-          "raw": "../../scripts/leer-aprobacion-publica.mjs",
-          "target": "scripts/leer-aprobacion-publica.mjs",
+          "raw": "../../scripts/leer-blobs-mantenimiento.mjs",
+          "target": "scripts/leer-blobs-mantenimiento.mjs",
           "dynamic": false,
           "line": 3
-        },
-        {
-          "raw": "../../scripts/mantenimiento-flujos-core.mjs",
-          "target": "scripts/mantenimiento-flujos-core.mjs",
-          "dynamic": false,
-          "line": 4
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://api.github.com/repos/tintinaccs/tintin-web/actions/runs/456/approvals",
-          "line": 9
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
@@ -41477,8 +41461,8 @@
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 155401,
-      "sha256": "99706b68158dc8175666e9a67377b9d796fc1fbd3151ee5b6667c6ccd7612b4a"
+      "bytes": 155403,
+      "sha256": "903eed1134df5390f83184cf59288f65b39ed5c9a054147c683be8d0ee2fa731"
     },
     {
       "path": "config/public-site.json",
@@ -42005,8 +41989,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 335189,
-      "sha256": "e92f7351e9527a4a875c59e7b706788372e9df6343fefef6061d327911072ed7"
+      "bytes": 335610,
+      "sha256": "0cbba8a6335a3f011249086582121bd599c019f95c2c53af661fc02ef57a9a53"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -45645,10 +45629,10 @@
       "sha256": "55bfccb2112531728ffca9c138098fa4545f51c9feb5ef1e77ab630bb95487ed"
     },
     {
-      "path": "scripts/leer-aprobacion-publica.mjs",
+      "path": "scripts/leer-blobs-mantenimiento.mjs",
       "extension": ".mjs",
-      "bytes": 922,
-      "sha256": "61db89d97f4311b2beb80b42de55612b915fdc7d9a7e893d4a919707fad3a164"
+      "bytes": 506,
+      "sha256": "7e94106ef05ab0fe26df23bfa4c1e2d0b83ab9c3261f016e7ccc87a79997512b"
     },
     {
       "path": "scripts/lib/architecture-gates.mjs",
@@ -45683,8 +45667,8 @@
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
       "extension": ".mjs",
-      "bytes": 8362,
-      "sha256": "fca98b517d2049eac10edf62c2a245a6910924e9ca6762e44cc81ef8839d51b7"
+      "bytes": 8575,
+      "sha256": "3dbfe01ff3af87b7d84f5bbc386ae839146844e887aca3e3829c015dac78744e"
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
@@ -46395,10 +46379,10 @@
       "sha256": "84bd551f523bb43dbcaf802ec451f9469bbf7c4dc203f29cf19e736d49ccea97"
     },
     {
-      "path": "tests/flow-connections/lectura-aprobacion-publica.test.mjs",
+      "path": "tests/flow-connections/lectura-blobs-mantenimiento.test.mjs",
       "extension": ".mjs",
-      "bytes": 1705,
-      "sha256": "606e2ff238d54ff6eb1664621131990b377f0306f8c75baa2cd11fb56b042931"
+      "bytes": 1477,
+      "sha256": "1d2666cf0fddd3c37c988f401b7c761e2566930623b5431e8f60717106487d12"
     },
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
