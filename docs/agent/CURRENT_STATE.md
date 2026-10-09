@@ -4,9 +4,9 @@ Base 261ccc7126b5bbee226bfbf2b27d32c20dfea035 (rebase desde cbeccc3; se conserva
 
 - Reproducción: admin productivo muestra 18 pedidos web y omite ventas mensuales. Respaldo XLSX privado y extracción local del libro canónico: enero 44, febrero 39, marzo 36, abril 37, mayo 30, junio 24 = 210 pedidos reales, 33.891.000 Gs.; 211 líneas por continuación de combo, más un borrador sin fecha. Clientes de ventas contiene 185 contactos distintos. No se publica ningún dato privado en el repositorio.
 - PASS_LOCAL: parser Apps Script ejecutado sobre extracción real conserva 210 pedidos, 33.891.000 Gs., un borrador; valida 185 contactos con 185 IDs distintos. La importación aún no se ejecutó sobre Firestore.
-- PASS_LOCAL: 137 pruebas tests/sync/*.test.mjs, incluidas 9 nuevas para historia sin inventario/Auth/pagos/TINPED, idempotencia, conflictos, lote sin escritura parcial, combo, borrador, identidad local/web, archivo y rechazo de mutación por editor normal.
-- IN_PROGRESS: casillas Ventas locales / Clientes que compraron / Espejos de Sheets; contrato mensual ventas/gastos/compras, contactos, proyecciones y versionado. Falta verificación de navegador y CI del candidato.
-- NOT_VERIFIED: publicación protegida, instalación de ComercioLocal.gs y respaldo Drive, importación real, reconciliación en ambos sentidos y conteos productivos. No atribuir verde/PASS de conexiones a estos cambios.
+- PASS_LOCAL: 148 pruebas de sincronización y seguridad de cuentas, incluidas 13 nuevas para historia sin inventario/Auth/pagos/TINPED, idempotencia, conflictos, lote sin escritura parcial, combo, borrador, identidad local/web, archivo y rechazo de mutación por editor normal.
+- PASS_LOCAL: casillas Ventas locales / Clientes que compraron / Espejos de Sheets; edición comprobada en Chrome sobre datos aislados de localhost (no producción). Sin desborde de editor entre 320/390/768/1024/1280/1440/1920 px; audit:admin-responsive 10/10. Prueba de guardado conserva nota modificada en servidor local. Arquitectura, pedidos (32), sincronización (28) y build/cache/CSP/manifiesto PASS. R incorpora total calculado de pedido; AC:AF conserva fórmulas. Se reduce reconciliación sin cambios a revisión/firma y se agrupan propiedades para evitar reescrituras completas periódicas.
+- NOT_VERIFIED: publicación protegida, instalación de ComercioLocal.gs y respaldo privado mediante SpreadsheetApp.copy, importación real, reconciliación en ambos sentidos y conteos productivos. No atribuir verde/PASS de conexiones a estos cambios.
 
 
 ## Evidencia previa (histórica, conservada de main)

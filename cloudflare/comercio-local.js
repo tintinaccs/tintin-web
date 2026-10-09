@@ -57,15 +57,15 @@ export async function normalizeLocalEntry(input) {
   const sourceRows=Array.isArray(source.rows)?source.rows:[];
   if (sourceRows.length>100 || sourceRows.some(r=>!Number.isInteger(r)||r<10||r>100000)) fail('Filas de origen inválidas.');
   const record={...common,year,month,occurredOn,source:{bookId:LOCAL_BOOK_ID,sheet:text(source.sheet,40),rows:sourceRows},notes:text(input.notes,2000)};
-  if (kind !== 'sale') return {...record,detail:text(input.detail,500),category:text(input.category,120),supplier:text(input.supplier,160),amount:money(input.amount)};
+  if (kind !== 'sale') return {...record,detail:text(input.detail,500),category:text(input.category,120),supplier:text(input.supplier,160),amount:money(input.amount),draft:!occurredOn||!(kind==='expense'?text(input.detail):text(input.supplier))};
   const customerName=text(input.customerName,160);
   const customerId=input.customerId?stableId(input.customerId):await localCustomerId(customerName);
   const lines=Array.isArray(input.lines)?input.lines:[];
   if (lines.length>100) fail('Demasiadas líneas en una venta.');
-  const saleLines=lines.map(line=>({detail:text(line.detail,500),type:text(line.type,80),image:text(line.image,2000),quantity:numberOrNull(line.quantity),cost:numberOrNull(line.cost),amount:numberOrNull(line.amount),profit:signedOrNull(line.profit)}));
-  if(saleLines.length && saleLines.reduce((sum,line)=>sum+(line.amount||0),0)!==money(input.total)) fail('La venta total debe coincidir con los importes de las líneas.');
+  const saleLines=lines.map(line=>({detail:text(line.detail,500),type:text(line.type,80),image:text(line.image,2000),quantity:numberOrNull(line.quantity),cost:numberOrNull(line.cost),amount:numberOrNull(line.amount),profit:signedOrNull(line.profit),rowFields:line.rowFields?{occurredOn:date(line.rowFields.occurredOn),customerName:text(line.rowFields.customerName,160),paymentStatus:text(line.rowFields.paymentStatus,60),paymentMethod:text(line.rowFields.paymentMethod,100),notes:text(line.rowFields.notes,2000),city:text(line.rowFields.city,120),deliveryMethod:text(line.rowFields.deliveryMethod,100),shippingCost:numberOrNull(line.rowFields.shippingCost)}:null}));
+  if(saleLines.reduce((sum,line)=>sum+(line.amount||0),0)!==money(input.total)) fail('La venta total debe coincidir con los importes de las líneas.');
   const status=text(input.paymentStatus,60);
-  if (!['','pagado','pendiente','cancelado','rechazado','reembolsado'].includes(status)) fail('Estado de pago inválido.');
+  if (!['','pagado','señado','pendiente','cancelado','rechazado','reembolsado'].includes(status)) fail('Estado de pago inválido.');
   return {...record,customerName,customerId,orderCode:text(input.orderCode,80),lines:saleLines,total:money(input.total),paymentStatus:status,paymentMethod:text(input.paymentMethod,100),city:text(input.city,120),deliveryMethod:text(input.deliveryMethod,100),shippingCost:numberOrNull(input.shippingCost),draft:!occurredOn || !customerName};
 }
 export function historicalOrder(entry, contact = {}) {
@@ -73,7 +73,7 @@ export function historicalOrder(entry, contact = {}) {
   // Importar una venta ya ocurrida nunca vuelve a descontar stock, asignar TINPED,
   // crear Auth, cobrar ni enviar avisos comerciales.
   const items=entry.lines.filter(line=>line.detail && line.quantity>0).map(line=>({name:line.detail,qty:line.quantity,imageUrl:line.image,price:line.amount==null?null:line.amount/line.quantity,historical:true}));
-  return {orderNumber:`LOCAL-${entry.year}-${String(entry.month).padStart(2,'0')}-${entry.orderCode||entry.id}`,source:'google-sheets-local',channel:'Venta local · Sheets',localEntryId:entry.id,customerId:entry.customerId,userId:'',userName:entry.customerName,userEmail:'',contactEmail:contact.email||'',userPhone:contact.phone||'',items,subtotal:entry.total,shippingCost:entry.shippingCost||0,total:entry.total,createdAt:new Date(entry.occurredOn+'T12:00:00Z'),paymentStatus:entry.paymentStatus||'pendiente',paymentMethod:entry.paymentMethod,payment:{status:entry.paymentStatus||'pendiente',method:entry.paymentMethod},status:['cancelado','rechazado'].includes(entry.paymentStatus)?entry.paymentStatus:'historico',shipping:{method:entry.deliveryMethod,city:entry.city},notes:entry.notes,inventoryState:'historical_unmanaged',historical:true,localSale:entry};
+  return {orderNumber:`LOCAL-${entry.year}-${String(entry.month).padStart(2,'0')}-${entry.orderCode||entry.id}`,source:'google-sheets-local',channel:'Venta local · Sheets',localEntryId:entry.id,customerId:entry.customerId,userId:'',userName:entry.customerName,userEmail:'',contactEmail:contact.email||'',userPhone:contact.phone||'',items,subtotal:entry.total,shippingCost:entry.shippingCost||0,total:entry.total+(entry.shippingCost||0),createdAt:new Date(entry.occurredOn+'T12:00:00Z'),paymentStatus:entry.paymentStatus||'sin_registrar',paymentMethod:entry.paymentMethod,payment:{status:entry.paymentStatus||'sin_registrar',method:entry.paymentMethod},status:['cancelado','rechazado'].includes(entry.paymentStatus)?entry.paymentStatus:'historico',shipping:{method:entry.deliveryMethod,city:entry.city},notes:entry.notes,inventoryState:'historical_unmanaged',historical:true,localSale:entry};
 }
 export function purchasedCustomers(contacts, orders) {
   const customers=new Map(contacts.map(c=>[c.id,{...c,origin:'local',hasWebAccount:false,orderCount:0,paidOrderCount:0,totalPurchased:0,totalPaid:0,lastPurchase:'',orderIds:[]}]));
@@ -111,6 +111,7 @@ export async function upsertLocalEntries(env,input,actor,deps=realDependencies) 
     const path=`${entry.kind==='customer'?CONTACT_COLLECTION:ENTRY_COLLECTION}/${entry.id}`;
     const document=await deps.get(env,path),old=unpack(document);
     if(old && old.kind!==entry.kind) fail('El tipo del registro no puede cambiar.',409);
+    if(old && old.kind!=='customer' && (old.year!==entry.year||old.month!==entry.month)) fail('El mes y año identifican la hoja de origen y no se cambian al editar un registro existente.',409);
     if (old?.kind==='sale' && !old.draft && entry.draft) fail('Una venta confirmada debe conservar fecha y cliente. Usá Archivar para retirarla del informe.',409);
     const fingerprint=await digest(JSON.stringify(entry));
     if(old?.fingerprint===fingerprint){results.push({id:entry.id,version:old.version,unchanged:true});continue;}

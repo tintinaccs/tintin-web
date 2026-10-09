@@ -49,6 +49,8 @@ const ORDER_STATUS_LABELS = {
 };
 const ORDER_STATUS_VALUES = ['pendiente', 'confirmado', 'preparando', 'listo_retiro', 'en_camino', 'entregado', 'cancelado', 'rechazado'];
 const PAY_STATUS_LABELS = {
+  'señado': 'Señado',
+  sin_registrar: 'Pago no registrado',
   pendiente: 'Pago pendiente',
   pagado: 'Pagado',
   rechazado: 'Rechazado',
@@ -1352,6 +1354,7 @@ function subscribeData() {
     state.ordersError = '';
     state.orderSelected = new Set([...state.orderSelected].filter(id => state.orders.some(o => o.id === id)));
     if (state.role === 'superadmin') window.TintinOrderAdmin?.ensureMissingOrderNumbers(state.orders);
+    window.dispatchEvent(new Event('tintin:orders-updated'));
     renderOrders(); renderDrawer();
   }, error => {
     state.ordersReady = true;
