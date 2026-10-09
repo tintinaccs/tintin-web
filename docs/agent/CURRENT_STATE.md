@@ -1471,3 +1471,16 @@ PASS_LOCAL combinado: 301 pruebas Node de catálogo/carrito/checkout/pedidos y r
 - PENDING: CI, aprobación humana y publicación del candidato. No atribuir PASS de producción de la base a este ajuste.
 - Seguimiento PR #1073, 2026-10-09 UTC (2026-10-08 local): CI de `8a1b6edb` detectó 28 casos con separación de WhatsApp inferior a 16px. La mayor distancia icono/texto aumentaba la altura de la acción; se reduce su padding vertical de 7px a 4px conservando min-height 54px, gap 8px y halo 36px. Cuatro pruebas visuales y 47 controles de mantenimiento/protección repetidos pasan; la auditoría responsive global se repite antes de publicar. Caché transitiva renovada para no reutilizar las URLs de la vista previa anterior. La CI anterior se mantiene como FAIL histórico, sin trasladar sus resultados al candidato corregido.
 - Candidato `5e56d1c8`: PASS_LOCAL 187/187 casos responsive, 13 pruebas visuales y build Pages; PASS_CI run 37864161656. Vista previa real comprobada en 320/390/767px: halo 36px separado de las letras, todas las etiquetas completas y sin overflow. Main avanzó a `261ccc7126b5bbee226bfbf2b27d32c20dfea035` (#1067, acceso por código); la inspección 37865332153 rechazó correctamente la base anterior. Se incorpora ese main sin modificar su seguridad ni historial, se regenera el plan y el manifiesto. El candidato combinado requiere CI y revisión humana nuevas; no hereda aprobación del anterior.
+
+
+## Guía desplegable para medir la muñeca — 2026-10-09
+
+Autor: Codex, agente principal. Reparación puntual sobre origin/main c6ac7c74. En relojes, el beneficio «Ajuste de malla incluido» se reemplaza por el control «¿Cómo medir tu muñeca?», con la misma tipografía e icono y las seis instrucciones originales dentro de details/summary. El marco recibe 12px de margen horizontal y la lista espacio interior para su numeración.
+
+PASS_LOCAL: siete viewports Chromium (320, 390, 768, 1024, 1280, 1440 y 1920px), apertura/cierre por teclado y clic, seis pasos, tipografía del beneficio original, margen del marco y ausencia de overflow. Evidencia externa al repositorio: /tmp/verificar-muneca.cjs y /tmp/guia-muneca-movil.png. node --check tienda.js y git diff --check pasan.
+
+Impacto: renderer público de Producto y CSS específico; referencias transitivas de caché y generadores canónicos. Sin cambios de pedidos, pagos, stock, roles, Rules, credenciales, datos comerciales ni escrituras en producción. El auditor estático de Producto tiene una aserción desactualizada: exige load con un argumento, pero main ya utiliza el segundo argumento de versión. Se registra como fallo previo, sin debilitarlo ni atribuirlo al cambio visual.
+
+PENDING: CI, revisión humana de mantenimiento y publicación. Las pruebas locales no verifican el cambio en producción.
+
+PASS_LOCAL final: build:pages completo, integridad CSS, auditoría de caché (313 archivos versionados, 73 cargas dinámicas) y 47/47 controles de protección/mantenimiento. Se regenera el manifiesto tras registrar la evidencia final. La comprobación visual corresponde al renderer y estilos reales en fixture aislado; no se realizaron acciones comerciales.
