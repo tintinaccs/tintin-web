@@ -1497,3 +1497,9 @@ Impacto: renderer público de Producto y CSS específico; referencias transitiva
 PENDING: CI, revisión humana de mantenimiento y publicación. Las pruebas locales no verifican el cambio en producción.
 
 PASS_LOCAL final: build:pages completo, integridad CSS, auditoría de caché (313 archivos versionados, 73 cargas dinámicas) y 47/47 controles de protección/mantenimiento. Se regenera el manifiesto tras registrar la evidencia final. La comprobación visual corresponde al renderer y estilos reales en fixture aislado; no se realizaron acciones comerciales.
+
+## 2026-10-09 — Migración puntual de lectura de aprobación (Codex)
+
+El propietario aprobó el run 37961537893 para PR #1079 / SHA 7dc5a4e35b6862e80dcbe990ec7eb8cbb179dc03. Inspect y approval pasaron; verdict recibió HTTP 403 antes de publicar el resultado. El historial público de ese mismo run responde HTTP 200 sin credenciales y validateApproval verifica entorno 23741738560 y revisor 274170818. La lectura pública documentada de GitHub evita depender del permiso de integración para ese historial; se conservan SHA/base/CI/revisor/entorno obligatorios y rechazo ante cualquier fallo. Errores autenticados ahora indican la ruta para aislar cualquier otro 403.
+
+PASS_LOCAL: 44 pruebas de lectura/aprobación/mantenimiento; lectura pública real y validación de revisión del propietario. Migración separada del mecanismo de control: no admite el trámite ordinario de renovación y requiere revisión/merge del propietario. No modificar reglas de protección ni inventar checks. Después de integrar, actualizar PR #1079 a la nueva base, ejecutar CI y solicitar una aprobación del SHA nuevo. PR #1080 debe heredar también la base nueva. Producción de la pestaña todavía NO VERIFICADA.

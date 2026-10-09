@@ -2628,7 +2628,7 @@
     "scripts/generar-csp-cloudflare.js": "98c8fab7bcc9607f18dd44c357e61cf0a760e3a8e4d1054cf4b751bcebd70c48",
     "scripts/generar-flujo-decisiones-acceso.mjs": "55bfccb2112531728ffca9c138098fa4545f51c9feb5ef1e77ab630bb95487ed",
     "scripts/mantenimiento-flujos-core.mjs": "3e6bf1b7ac018b4574218daef4c06e7e960e9c3a745183cbf2fa9e8f31e2b589",
-    "scripts/mantenimiento-flujos-github.mjs": "6b92b260889813f739579740a14cfea7a0511169f3ed7b669b603b04ef6f2e69",
+    "scripts/mantenimiento-flujos-github.mjs": "fca98b517d2049eac10edf62c2a245a6910924e9ca6762e44cc81ef8839d51b7",
     "scripts/normalizar-rutas-publicas.js": "a333769f0cff5b8e9d7a4a3f368927451a184e31dd0dff8d646d68242f0e8ce2",
     "scripts/preparar-mantenimiento-flujos.mjs": "36e43d2653b0205536b05bf9202df0c39baeaa203cff0eba2c338a14bc35a314",
     "scripts/probar-firestore-critico.mjs": "0790f45ecbe60a5a3daec8edaa71bcb139b06636440068efc4dd99f701f4ca1d",
@@ -2648,6 +2648,8 @@
     "tests/orders/variant-inventory.test.mjs": "dbdcde92f5365af49f76fe0c2410a1a7fbb04ef7192b3431ba3e33d0d9fef515",
     "tests/sync/catalog-sheet-sync-queue.test.mjs": "c9ab6b911afcc6557a26071b0202c36a9cb7b7a9e2bafc5a95425ba18d954d02",
     "tests/sync/evidencia-sync-sheets.test.mjs": "e2f8f76074dd5fc9ce3b940e9e3a382d3761554e2c20ea0f49494e40560f0461",
-    "tienda.js": "7ea6d9af3d17e2b7be86635dcb4dec3cde9dedbff3becf6b8351ff3495834b54"
+    "tienda.js": "7ea6d9af3d17e2b7be86635dcb4dec3cde9dedbff3becf6b8351ff3495834b54",
+    "scripts/leer-aprobacion-publica.mjs": "61db89d97f4311b2beb80b42de55612b915fdc7d9a7e893d4a919707fad3a164",
+    "tests/flow-connections/lectura-aprobacion-publica.test.mjs": "606e2ff238d54ff6eb1664621131990b377f0306f8c75baa2cd11fb56b042931"
   }
 }

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { readPublicApprovals } from './leer-aprobacion-publica.mjs';
 import { execFileSync } from 'node:child_process';
 import { inspectMaintenance, validateApproval, validateChecks, validateEnvironment, validateSnapshot, policyPath, planPath } from './mantenimiento-flujos-core.mjs';
 
@@ -17,7 +18,7 @@ const api = async (path, body) => {
     headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${process.env.GH_TOKEN || ''}`, 'content-type': 'application/json', 'X-GitHub-Api-Version': '2026-03-10' },
     ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(30000),
   });
-  assert(response.ok, `Lectura/escritura de GitHub rechazada: HTTP ${response.status}`);
+  assert(response.ok, `Lectura/escritura de GitHub rechazada (${path}): HTTP ${response.status}`);
   return response.json();
 };
 const list = async (path, key) => {
@@ -109,7 +110,7 @@ try {
       assert(process.env.APPROVAL_RESULT === 'success', 'La aprobación del entorno no se completó.');
       assert(/^[1-9][0-9]*$/.test(runId || ''), 'Ejecución inválida.');
       // No se heredan revisiones al reejecutar un run antiguo.
-      validateApproval(await api(`actions/runs/${runId}/approvals`), environment, config);
+      validateApproval(await readPublicApprovals(config.repository, runId), environment, config);
     }
   }
   await snapshot();
