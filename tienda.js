@@ -1406,9 +1406,23 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     favoriteButton.dataset.favoriteCat = product.category || product.cat || '';
     window.TintinFavorites?.refresh?.();
   }
-  const allImages = window.TintinProductMedia.uniqueImages(window.TintinProductMedia.galleryImages({ ...product, imageUrl: mainImgUrl }, selected).map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean));
+  const media = window.TintinProductMedia;
+  const galleryProduct = { ...product, imageUrl: mainImgUrl };
+  const colorKey = media.colorKey(product);
+  const colorOrder = productVariantGroups(product).find(([key]) => key === colorKey)?.[1] || [];
+  const rows = [...media.mediaRows(product)].sort((a, b) => colorOrder.indexOf(a[colorKey]) - colorOrder.indexOf(b[colorKey]));
+  // Todas las fotos permanecen visibles; las asociaciones agrupan las de
+  // cada color. Seleccionar un círculo cambia la foto, no recorta la galería.
+  const allImages = media.uniqueImages([
+    ...rows.flatMap(media.rowImages),
+    ...media.galleryImages(galleryProduct),
+  ].map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean));
   _pdGalleryImages = allImages;
-  if (resetIndex) _pdGalleryIndex = 0;
+  if (resetIndex) {
+    const hasColor = Boolean(selected[media.colorKey(product)]);
+    const target = hasColor ? media.galleryImages(galleryProduct, selected)[0] : mainImgUrl || allImages[0];
+    _pdGalleryIndex = target ? allImages.findIndex(url => media.imageKey(url) === media.imageKey(sanitizeClassicImageUrl(target, 900))) : -1;
+  }
   if (_pdGalleryIndex >= allImages.length) _pdGalleryIndex = 0;
 
   const galleryMain = document.getElementById('gallery-main');
