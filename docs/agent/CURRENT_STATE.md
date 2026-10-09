@@ -1497,3 +1497,9 @@ Impacto: renderer público de Producto y CSS específico; referencias transitiva
 PENDING: CI, revisión humana de mantenimiento y publicación. Las pruebas locales no verifican el cambio en producción.
 
 PASS_LOCAL final: build:pages completo, integridad CSS, auditoría de caché (313 archivos versionados, 73 cargas dinámicas) y 47/47 controles de protección/mantenimiento. Se regenera el manifiesto tras registrar la evidencia final. La comprobación visual corresponde al renderer y estilos reales en fixture aislado; no se realizaron acciones comerciales.
+
+## Compradores dentro de Pedidos e importación histórica — 2026-10-09
+Autor: Codex, agente principal. Base fe8fea0c78cdf9da0493d7b733dbbc93aaa91f74.
+La sección Pedidos incorpora una pestaña Clientes que compraron, que reutiliza el espejo autenticado de contactos y pedidos locales/web. Conserva la sección independiente existente y permite volver a Todos los pedidos. No crea cuentas Auth ni cambia stock o pagos.
+PASS_LOCAL: prueba de actualización desde Pedidos tras un nuevo pedido, con compradores locales/web, escapes HTML y sólo lecturas de la API; 16 regresiones del puente Sheets/Firestore/pedidos pasan; sintaxis de ambos módulos y diff check pasan.
+PASS_PRODUCTION de la importación antecedente: Apps Script terminó la segunda ejecución sin error; el panel confirmó 210 ventas locales y 33.891.000 Gs. pagados, iguales al respaldo fuente, y 194 compradores locales/web. La primera ejecución alcanzó el límite de seis minutos y se retomó con las versiones guardadas. Esta evidencia no acredita la pestaña nueva: PENDING CI, mantenimiento protegido y publicación.
