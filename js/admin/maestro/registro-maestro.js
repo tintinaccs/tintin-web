@@ -1,7 +1,7 @@
 export const MAESTRO_SCHEMA_VERSION = 2;
 
 export const BASE_ADMIN_SECTIONS = Object.freeze([
-  'dashboard', 'estadisticas', 'usuarios', 'pedidos', 'mayoristas', 'productos', 'resenas',
+  'dashboard', 'estadisticas', 'usuarios', 'pedidos', 'ventas-locales', 'clientes-compraron', 'espejos-sheets', 'mayoristas', 'productos', 'resenas',
   'me-gusta', 'colecciones', 'paginas', 'importar', 'mensajes',
   'notificaciones-push', 'auditoria', 'diagnostico', 'flujo-conexiones', 'correos',
   'configuracion', 'permisos', 'apariencia'
@@ -65,6 +65,18 @@ export const MAESTRO_MODULES = Object.freeze([
     quickAction: { type: 'global', path: 'TintinOrderAdmin.openManualOrder', label: 'Nuevo pedido' },
     evidence: ['TintinOrderAdmin.openManualOrder', 'TintinOrderAdmin.openAdvancedOrderEditor', 'trashOrder', 'restoreOrder']
   }),
+
+  moduleDef('ventas-locales', 'Ventas locales', 'versioned-ledger', 'Ventas históricas, gastos y compras con casillas completas y versión. No reserva inventario ni crea cuentas o cobros.', {
+    create: GUARDED, update: GUARDED, archive: GUARDED, search: YES, sync: GUARDED
+  }, { evidence: ['section-ventas-locales', 'js/admin/comercio-local-admin.js', '/api/local-commerce'] }),
+
+  moduleDef('clientes-compraron', 'Clientes que compraron', 'local-customer-lifecycle', 'Compradores locales y cuentas web separados. Permite editar contacto local sin crear identidades Auth.', {
+    update: GUARDED, search: YES, sync: GUARDED
+  }, { evidence: ['section-clientes-compraron', 'cloudflare/comercio-local.js'] }),
+
+  moduleDef('espejos-sheets', 'Espejos de Sheets', 'read-only', 'Matriz de casillas y resumen de los registros compartidos con Sheets y Firestore.', {
+    search: YES
+  }, { evidence: ['section-espejos-sheets', 'apps-script/ComercioLocal.gs'] }),
 
   moduleDef('mayoristas', 'Mayoristas', 'lifecycle', 'Cotizaciones creadas por clientas. Solo Super Admin fija precios y responde mediante la API protegida; no se cobran ni se borran desde este módulo.', {
     read: YES, update: GUARDED, search: YES, sync: YES
