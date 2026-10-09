@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "6d7c644a913c25710c1d1604fb4ff07ec7f2d644",
-  "reason": "Estabilizar HTML y CSS inicial de páginas públicas y perfil; reutilizar datos por UID y lecturas, corregir estados y contraste, conectar regresiones a CI existente y renovar referencias immutable transitivas sin cambiar controles.",
+  "reason": "Estabilizar HTML y CSS inicial de páginas públicas y perfil; reutilizar datos por UID y lecturas, corregir estados y contraste, conectar regresiones a CI existente y renovar referencias immutable transitivas y marcador Maestro sin cambiar controles.",
   "files": [
     {
       "path": "_headers",
@@ -26,7 +26,7 @@
     {
       "path": "admin.html",
       "oldHash": "22afd90a2736e97a2305ad9c012681c3b3e2eec840d8bc3a9017114476d2e708",
-      "newHash": "6122a9b9d49d783ca7c1e78878841c57fe10214b4bd35a911400c5952f37faa6"
+      "newHash": "9c100600b32e0832151fcc74708517d9964bf649d98d5a58c070a5b51afeb2ca"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -176,7 +176,7 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "oldHash": "342667b58d6bb92edc154dbcab9411a838778baaf6e159d47e8efdadaffad11b",
-      "newHash": "1390713b4ccdd1846e64113216ff3a95a28279a93c9943476d81bfae31306bac"
+      "newHash": "13de2013a039c5dbae507e5de473b609779bfe6e82c08c0e53877e24ccd794c7"
     },
     {
       "path": "js/admin/mayoristas/mayoristas-admin.js",
@@ -601,7 +601,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "400cc8c685b332c22967cae5aafe9be7f4b7ce529e756f4b46fc0c9cfed60b30",
-      "newHash": "bfbd610030087204e2c9f9126249fca2bb8e9d5c848a836ed87b1c571107e463"
+      "newHash": "1a3be2ef938ff1a98c1ab95cc0d6b2196a9c27ae6deea914ba63c85b53fe9c21"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

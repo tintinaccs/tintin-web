@@ -9,6 +9,7 @@ const registrySource = read('js/admin/maestro/registro-maestro.js');
 const panelSource = read('js/admin/maestro/panel-maestro.js');
 const identitySource = read('js/core/auth/identidad-super-admin.js');
 const bootstrapSource = read('js/admin/ajuste-barra-lateral-movil-admin.js');
+const cacheBaseline = JSON.parse(read('scripts/cache-version-baseline.json'));
 const ordersSource = read('js/admin/orders/pedidos-superadmin-crud.js');
 const collectionsSource = read('js/admin/collections/gestion-colecciones-admin.js');
 const usersSource = read('js/admin/users/gestion-usuarios-admin.js') + '\n' + read('js/admin/users/ficha-usuario-admin.js') + '\n' + read('js/admin/users/perfil-usuario-superadmin.js');
@@ -87,7 +88,8 @@ check('El panel Maestro no escribe directamente en Firestore', !/\b(?:setDoc|upd
 check('El panel Maestro usa la navegación nativa para abrir módulos existentes', panelSource.includes('nativeTrigger') && panelSource.includes('trigger.click()'));
 check('El panel Maestro verifica cobertura, paridad, CRUD crítico y guard de cambios', ['runtimeChecks','nav-parity','products','collections','users','orders','AdminUnsaved'].every(token => panelSource.includes(token)));
 check('Maestro puede exportar su matriz sin mutar producción', panelSource.includes('exportMatrix') && panelSource.includes('application/json'));
-check('Admin carga Maestro directamente con versión explícita', adminHtml.includes('js/admin/maestro/panel-maestro.js?v=tintin-20261009-local-ledger-master-2'));
+const maestroVersion = cacheBaseline['js/admin/maestro/panel-maestro.js']?.version;
+check('Admin carga Maestro directamente con versión explícita', Boolean(maestroVersion) && adminHtml.includes(`js/admin/maestro/panel-maestro.js?v=${maestroVersion}`));
 check('El bootstrap responsive conserva su responsabilidad original y no carga Maestro', !bootstrapSource.includes('maestro/panel-maestro.js'));
 
 const failed = checks.filter(item => !item.ok);

@@ -50,7 +50,7 @@ for(const width of [390,768,1440]){
  await expect(page.locator('#account-panel')).toContainText('Iniciar sesión');
  expect(await page.evaluate(()=>window.stopped)).toEqual(['u1','u2']);
  });
- test('mayoristas distingue nuevas, vistas y decisiones; usuarios en pestaña '+width,async({page})=>{
+ test('mayoristas distingue nuevas, vistas y decisiones; usuarios en pestaña '+width,async({page},testInfo)=>{
  await fixture(page,width,'<main id="section-mayoristas"></main>');
  await page.addScriptTag({content:identity+`
  const auth={currentUser:{uid:'admin',email:'owner@example.com'}};const db={};const SUPER_ADMIN='owner@example.com';
@@ -72,14 +72,14 @@ for(const width of [390,768,1440]){
  await expect(page.locator('[data-wholesale-detail]')).toContainText('WhatsApp 595912345678');
  expect(await page.locator('[data-wholesale-detail]').evaluate(detail=>detail.closest('tr').previousElementSibling.querySelector('[data-open-quote]').dataset.openQuote)).toBe('new');
  await expect(page.locator('[data-wholesale-detail] .wholesale-avatar')).toHaveCount(1);
- if(width===768)await page.screenshot({path:path.resolve(root,'../../outputs/mayoristas-cotizaciones-768.png')});
+ if(width===768)await page.screenshot({path:testInfo.outputPath('mayoristas-cotizaciones-768.png')});
  await page.locator('[data-wholesale-tab="users"]').click();
  await expect(page.locator('[data-wholesale-user-panel]')).toBeVisible();
  await expect(page.locator('[data-wholesale-quotes-panel]')).toBeHidden();
  await expect(page.locator('.wholesale-user-card')).toContainText('Ana Ruiz');
  await page.locator('[data-wholesale-user-search]').fill('nadie');
  await expect(page.locator('.wholesale-user-card')).toHaveCount(0);
- if(width===768){await page.locator('[data-wholesale-user-search]').fill('');await page.screenshot({path:path.resolve(root,'../../outputs/mayoristas-usuarios-768.png')});}
+ if(width===768){await page.locator('[data-wholesale-user-search]').fill('');await page.screenshot({path:testInfo.outputPath('mayoristas-usuarios-768.png')});}
  });
 }
 test('perfil público no introduce pestaña mayorista al actualizar la cuenta',async({page})=>{

@@ -4,7 +4,7 @@ const path=require('node:path');
 const root=path.resolve(__dirname,'../..');
 const loader=fs.readFileSync(path.join(root,'js/cargador-pagina.js'),'utf8');
 for(const width of [390,768,1440]) for(const shell of ['admin','checkout','login']) {
-  test(`cargador rosa y blanco en ${shell} a ${width}px`,async({page})=>{
+  test(`cargador rosa y blanco en ${shell} a ${width}px`,async({page},testInfo)=>{
     await page.setViewportSize({width,height:800});
     const html=fs.readFileSync(path.join(root,`${shell}.html`),'utf8');
     await page.route('**/*.js*',route=>route.fulfill({contentType:'text/javascript',body:''}));
@@ -16,6 +16,6 @@ for(const width of [390,768,1440]) for(const shell of ['admin','checkout','login
     expect(actual.background).toBe('rgb(248, 170, 202)');
     expect(actual.colors.length).toBeGreaterThanOrEqual(4);
     expect(actual.colors.every(color=>color==='rgb(255, 255, 255)')).toBe(true);
-    if(shell==='admin'&&width===768) { await page.waitForTimeout(1000); await page.screenshot({path:path.resolve(root,'../../outputs/loader-blanco-corregido.png')}); }
+    if(shell==='admin'&&width===768) { await page.waitForTimeout(1000); await page.screenshot({path:testInfo.outputPath('loader-blanco-corregido.png')}); }
   });
 }
