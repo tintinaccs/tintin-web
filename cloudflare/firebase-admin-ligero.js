@@ -196,11 +196,38 @@ export async function lookupFirebaseUser(env, { uid = '', email = '' } = {}) {
   return { uid: user.localId, email: String(user.email || '').toLowerCase(), disabled: user.disabled === true };
 }
 
+/**
+ * Quien confirma el código demuestra que controla el correo. Una cuenta previa
+ * con ese correo sin verificar, o con contraseña, pudo crearla otra persona
+ * antes (pre-secuestro): se quita la contraseña, se marca el correo como
+ * verificado y se invalidan las sesiones anteriores. Sin cambios si ya está
+ * verificada y sin contraseña (Google o código).
+ */
+async function secureEmailOwnerAccount(accessToken, user) {
+  const hasPassword = Boolean(user.passwordHash) ||
+    (user.providerUserInfo || []).some(provider => provider?.providerId === 'password');
+  if (user.emailVerified === true && !hasPassword) return;
+  const body = { localId: user.localId, emailVerified: true, validSince: String(Math.floor(Date.now() / 1000)) };
+  if (hasPassword) body.deleteProvider = ['password'];
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error('No se pudo asegurar la cuenta de acceso: ' + (data?.error?.message || response.status));
+  }
+}
+
 /** Busca una cuenta de Firebase Auth por email; si no existe, la crea (ya verificada). */
 export async function findOrCreateUserByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
   const existing = await lookupUserByEmail(accessToken, email);
-  if (existing?.localId) return { uid: existing.localId, isNewUser: false };
+  if (existing?.localId) {
+    await secureEmailOwnerAccount(accessToken, existing);
+    return { uid: existing.localId, isNewUser: false };
+  }
 
   const createResp = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp', {
     method: 'POST',
@@ -212,7 +239,10 @@ export async function findOrCreateUserByEmail(env, email) {
 
   if (createData?.error?.message === 'EMAIL_EXISTS') {
     const raceExisting = await lookupUserByEmail(accessToken, email);
-    if (raceExisting?.localId) return { uid: raceExisting.localId, isNewUser: false };
+    if (raceExisting?.localId) {
+      await secureEmailOwnerAccount(accessToken, raceExisting);
+      return { uid: raceExisting.localId, isNewUser: false };
+    }
   }
   throw new Error('No se pudo crear la cuenta de acceso: ' + (createData?.error?.message || createResp.status));
 }

@@ -36,7 +36,12 @@ const claims = {
   super1: { email: 'tintinaccs@gmail.com', email_verified: true },
   superCase: { email: 'TintinAccs@Gmail.com', email_verified: true },
   superUnverified: { email: 'tintinaccs@gmail.com', email_verified: false },
-  blocked1: { email: 'bloqueada@example.com', email_verified: true }
+  blocked1: { email: 'bloqueada@example.com', email_verified: true },
+  // Cuenta con el correo de clienta1 sin verificarlo (p. ej. creada con
+  // contraseña por otra persona): no debe heredar nada de esa clienta.
+  client1Unverified: { email: 'clienta1@example.com', email_verified: false },
+  newVerified: { email: 'nueva@example.com', email_verified: true },
+  newUnverified: { email: 'sinverificar@example.com', email_verified: false }
 };
 
 async function seed() {
@@ -220,6 +225,33 @@ try {
   await fails(getDoc(doc(client1, 'users', 'client2')));
   await succeeds(getDoc(doc(client1, 'orders', 'client1_order1')));
   await fails(getDoc(doc(client1, 'orders', 'client2_order1')));
+  await succeeds(getDocs(query(collection(client1, 'orders'), where('userEmail', '==', claims.client1.email), limit(50))));
+  // Mismo correo sin verificar: ni el pedido ni la lista por correo.
+  const client1Unverified = ctx('client1Unverified');
+  await fails(getDoc(doc(client1Unverified, 'orders', 'client1_order1')));
+  await fails(getDocs(query(collection(client1Unverified, 'orders'), where('userEmail', '==', claims.client1.email), limit(50))));
+  // Alta de perfil: sólo con el correo verificado.
+  const newProfile = (uid, email) => ({
+    email,
+    name: '',
+    customerId: 'CUS_' + uid,
+    identityVersion: 1,
+    profileStatus: 'incomplete',
+    role: 'client',
+    provider: 'emailOtp',
+    authMethods: ['emailOtp'],
+    lastAuthMethod: 'emailOtp',
+    blocked: false,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    lastLogin: serverTimestamp()
+  });
+  await succeeds(setDoc(doc(ctx('newVerified'), 'users', 'newVerified'),
+    newProfile('newVerified', claims.newVerified.email)));
+  await fails(setDoc(doc(ctx('newUnverified'), 'users', 'newUnverified'),
+    newProfile('newUnverified', claims.newUnverified.email)));
+  await fails(setDoc(doc(client1Unverified, 'users', 'client1Unverified'),
+    newProfile('client1Unverified', claims.client1.email)));
   await succeeds(updateDoc(doc(client1, 'users', 'client1'), { name: 'Nombre válido' }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { role: 'admin' }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { blocked: true }));

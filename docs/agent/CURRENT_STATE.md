@@ -1,3 +1,33 @@
+# PR #1067 — reconciliación tras aprobación, 2026-10-08
+
+Agente: Codex. El propietario aprobó mantenimiento 37856633442 y el veredicto pasó. Main avanzó concurrentemente a cbeccc36c3f70dc6770ded7adf40b335956105ee (#1071), generando conflictos antes del merge automático. Se conserva ese cambio completo, se actualiza el plan de los tres archivos originales y se regenera el manifiesto. No se reutiliza la aprobación del SHA anterior. CI previo 37851260994 aprobado; CI y revisión del candidato nuevo pendientes. No hay merge ni despliegue de este PR todavía. El diagnóstico de HTTP 403 confirmó cupo de API agotado y el mantenimiento avanzó tras renovarse; no se cambiaron permisos ni se debilitaron protecciones.
+
+## Evidencia anterior
+
+# PR #1067 — actualización del candidato, 2026-10-08
+
+Agente: Codex. Solicitud explícita del propietario: arreglar y fusionar. Base vigente: a347b87be8296d14f3483fcfb03579e09b63dfc0 (#1069 integrado concurrentemente y preservado). Se integra main sin descartar los cambios concurrentes y se resuelven conflictos del plan, manifiesto y este registro; el manifiesto se regenera con build:pages. Plan renovado exclusivamente para los tres archivos protegidos de seguridad, conservando los demás sellos y alcances.
+
+PASS_LOCAL del árbol actualizado: build:pages; 114 pruebas de cuentas/autenticación; 47 pruebas de protección/mantenimiento; 127 controles de reglas críticas en emulador; smoke de páginas completo exit 0 tras habilitar www.gstatic.com. audit:final aprobado con PLAYWRIGHT_BROWSERS_PATH=/workspace/.cache/ms-playwright; reglas de teléfono/usuario aprobadas. CI del nuevo commit pendiente. No se hereda PASS_CI o PASS_PRODUCTION del texto anterior. No se modifica interfaz ni se debilitan protecciones. No se crean usuarios, pedidos o correos reales durante validación.
+
+Impacto: autenticación por código, perfiles y lectura de pedidos por coincidencia de correo; Google y cuentas verificadas sin contraseña conservan su comportamiento. Nuevas reglas deben publicarse después del código para permitir el saneamiento de cuentas previas. Merge solicitado; sujeto a comprobaciones y revisión protegida existente. Acceso Firebase administrativo no disponible; eliminación GitHub Pages rechazada por permisos de integración, HTTP 403. Netlify/Cloudflare y 2FA requieren acceso del titular. Evidencia externa: /workspace/tintin-evidencia y /workspace/estado-configuracion-tintin.md.
+
+## Registro anterior (evidencia histórica)
+
+# Estado vigente — 2026-10-08: endurecimiento de cuentas (correo verificado y pre-secuestro)
+
+Agente: Claude Code. Base: `b8ec93d45d9b155a618c174e09747b48a7351120`. Rama: `claude/zen-fermat-h5uzmh`. Push y PR #1067 autorizados expresamente por el propietario; sin merge ni deploy.
+
+- Hallazgo HIGH (sondeo productivo de sólo lectura): el proveedor Correo/contraseña de Firebase Auth está habilitado (`accounts:signInWithPassword` responde `INVALID_LOGIN_CREDENTIALS`, no `OPERATION_NOT_ALLOWED`) aunque la tienda sólo usa Google y código por correo. Permitía (a) leer pedidos ajenos con una cuenta de contraseña creada con el correo de otra persona sin verificarlo, por la coincidencia `userEmail` de `isOwnOrderByUidOrEmail()`, y (b) pre-secuestro: el inicio con código reutilizaba esa cuenta previa sin sanearla.
+- Corregido en código: `firestore.rules` exige `email_verified == true` en la coincidencia por correo de pedidos y en `userCreateValid`; `cloudflare/firebase-admin-ligero.js` (`secureEmailOwnerAccount`) quita la contraseña, verifica el correo y fija `validSince` en cuentas previas no verificadas o con contraseña antes de entregar el acceso por código; si falla, no entrega acceso. Cuentas de Google verificadas no se tocan; el Super Admin no usa este camino.
+- PASS_LOCAL: `test:rules-critical` 127 controles (nuevos: lectura/lista de pedidos y alta de perfil con correo sin verificar fallan; correo verificado sigue funcionando); control negativo con las reglas de la base: falla como se espera. `tests/accounts/email-owner-account-security.test.mjs` 7/7; con el código de la base 5/7 fallan. `test:accounts` 56, `tests/login` 140, 625 pruebas de analytics/auth/cart/checkout/engagement/flow-connections/operations/orders/payments/profile/sync, `test:rules-phone` 12, `test:rules-username` 13, notificaciones 25, `audit:security`, `audit:postphase`, `audit:phase6`, `audit:login-isolation` 58, `verify:diagnostics`, `audit:diagnostics`, protección de flujos 47 + auditor (541 archivos con el plan).
+- Fallas previas no relacionadas (idénticas en la base sin cambios): `scripts/auditar-fase-12-entrega.mjs` (workflow inexistente), `scripts/auditar-pago-metodos.js`, `scripts/auditar-tinped-pedidos.js`.
+- Mantenimiento protegido: plan para 3 archivos y 40 registros (`config/mantenimiento-flujos-plan.json`), huellas reales; manifiesto diagnóstico regenerado por su generador. BLOCKED hasta CI y aprobación del propietario en `protected-flow-maintenance`; el agente no aprueba.
+- NOT_VERIFIED en producción: reglas no publicadas en Firebase; `accounts:update` no ejercido contra Auth real (se evitó crear cuentas de prueba).
+- Pendientes de consola (sin costo, fuera del repositorio): deshabilitar Correo/contraseña en Firebase Auth (causa raíz); retirar `tintinaccesorios.netlify.app` (copia antigua viva conectada al mismo proyecto) y quitarlo, `tintinaccs.github.io` y `fix-admin-css-cls-phase1.tintinaccesorios.pages.dev` de dominios autorizados; verificación en dos pasos/passkey en la cuenta Super Admin y en GitHub; restringir APIs de la clave web (no por referer: funciones del servidor la usan sin referer). Copias vivas adicionales (sondeo HTTP de sólo lectura, 200): `tintinaccs.github.io/tintin-web/` (fallback manual de GitHub Pages, last-modified 2026-09-02) y la vista previa `fix-admin-css-cls-phase1.tintinaccesorios.pages.dev`.
+- NO recomendado por ahora: App Check exigido en Firestore rompería `js/core/firebase/respaldo-rest-firestore.js` (lectura REST sólo con clave, sin cabecera App Check). NOT APPLICABLE: Bot Fight Mode/WAF de Cloudflare; producción vive en `tintinaccesorios.pages.dev`, sin zona/dominio propio donde configurarlos.
+
+## Evidencia previa
 # Estado vigente — 2026-10-08: producto, avisos y superficies responsive
 
 Base: 89d268ee7a7cda2c48f1ab7263534429449ca2c5. Rama codex/producto-colores-recomendaciones-20261008. Candidato integrado con main #1066 y #1068; auditoría final y 618 pruebas PASS. Pendiente CI del SHA final y publicación protegida. La autorización del usuario incluye reparar y publicar, sin pagos. La revisión manual del entorno protected-flow-maintenance corresponde al propietario; no aprobar en su nombre.
