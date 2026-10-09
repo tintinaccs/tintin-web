@@ -9,6 +9,7 @@ import {
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { AUTH_STATES, createSessionStateMachine } from './estado-sesion.mjs?v=tintin-20260921-auth-session-never-unknown-4';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
+import { projectAccountPresentation } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261009-first-render-1';
 
 export { AUTH_STATES };
 export const SESSION_HANDOFF_KEY = 'tt_auth_handoff_v2';
@@ -190,6 +191,8 @@ export function markExplicitLogout() { machine.markExplicitLogout(); }
 export function createAuthHandoff(uid, visual = {}) {
   const cleanUid = String(uid || '').trim();
   if (!cleanUid) return false;
+  const previous = readAuthHandoff();
+  const presentation = visual.profile || (previous?.uid === cleanUid ? previous.profile : null);
   // Este handoff sólo sirve para conservar la apariencia del header durante
   // una navegación de documento. Nunca se usa para autorizar operaciones:
   // Firebase Auth sigue siendo la única fuente de identidad válida.
@@ -197,6 +200,7 @@ export function createAuthHandoff(uid, visual = {}) {
     uid: cleanUid,
     photoURL: String(visual.photoURL || '').slice(0, 1200),
     displayName: String(visual.displayName || '').slice(0, 160),
+    ...(presentation ? { profile: projectAccountPresentation(presentation) } : {}),
     createdAt: Date.now()
   });
   try {
@@ -217,6 +221,7 @@ export function readAuthHandoff() {
           uid: String(parsed.uid),
           photoURL: String(parsed.photoURL || ''),
           displayName: String(parsed.displayName || ''),
+          ...(parsed.profile ? { profile: projectAccountPresentation(parsed.profile) } : {}),
           createdAt: parsed.createdAt
         };
       }

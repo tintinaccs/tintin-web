@@ -9,6 +9,7 @@ const has = (source, pattern) => typeof pattern === 'string' ? source.includes(p
 
 const publicEntry = read('js/components/navigation/entrada-navegacion-publica.js');
 const stability = read('js/quality/estabilidad-final-publica.js');
+const profile = read('perfil.html');
 const productStability = read('js/quality/estabilidad-producto.js');
 const orderProfileState = read('js/pages/profile/estado-pedidos-perfil.js');
 const product = read('product.html');
@@ -30,7 +31,7 @@ const systemHealth = read('cloudflare/system-health.js');
 
 // 1. Producto: contenido visible y sin acordeón obligatorio, sin observer recursivo.
 ok(has(publicEntry, "estabilidad-producto.js?v=tintin-20260831-product-stability-2-halo-20261008-3"), 'Producto no carga su estabilización acotada y segura.');
-ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20261004-header-consistency-2-profile-wholesale-20261005-1-master-20261007-1-halo-20261008-3"), 'El shell público no conserva la estabilización final para las demás superficies.');
+ok(has(publicEntry, /estabilidad-final-publica\.js\?v=[A-Za-z0-9._-]+/), 'El shell público no conserva la estabilización final versionada para las demás superficies.');
 ok(has(productStability, "document.body.dataset.ttProductStable"), 'Producto no activa el contrato estable.');
 ok(has(productStability, "setDataIfChanged(specsBlock, 'collapsed', 'false')"), 'Características no se fuerzan abiertas de forma idempotente.');
 ok(has(productStability, "setDataIfChanged(related, 'collapsed', 'false')"), 'Otros productos no se fuerzan abiertos de forma idempotente.');
@@ -75,12 +76,13 @@ ok(has(adminFicha, "section(`Pedidos"), 'La ficha Super Admin no integra pedidos
 ok(has(adminFicha, "section('Auditoría reciente')"), 'La ficha Super Admin no integra auditoría.');
 
 // Perfil cliente completo y foto segura.
-ok(has(stability, "{ id: 'resumen', label: 'Resumen'"), 'Perfil no tiene pestaña Resumen.');
-ok(has(stability, "{ id: 'datos', label: 'Mis datos'"), 'Perfil no tiene pestaña Mis datos.');
-ok(has(stability, "{ id: 'pedidos', label: 'Pedidos'"), 'Perfil no tiene pestaña Pedidos.');
-ok(has(stability, "{ id: 'favoritos', label: 'Favoritos'"), 'Perfil no tiene pestaña Favoritos.');
-ok(has(stability, "{ id: 'cuenta', label: 'Cuenta y seguridad'"), 'Perfil no tiene pestaña Cuenta y seguridad.');
-ok(has(stability, "estado-pedidos-perfil.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1"), 'Perfil no carga el estado canónico de pedidos no vistos.');
+for (const [id, label] of [['resumen', 'Resumen'], ['datos', 'Mis datos'], ['pedidos', 'Pedidos'], ['favoritos', 'Favoritos'], ['cuenta', 'Cuenta y seguridad'], ['ayuda', 'Ayuda']]) {
+  ok(has(profile, new RegExp(`data-profile-tab="${id}"[^>]*>${label}`)), `Perfil no tiene pestaña ${label} en su HTML inicial.`);
+  ok(has(profile, `data-profile-panel="${id}"`), `Perfil no tiene panel inicial para ${label}.`);
+}
+ok(has(profile, /css\/pages\/perfil\.css\?v=[A-Za-z0-9._-]+/), 'Perfil no carga su diseño definitivo desde el HTML.');
+ok(has(stability, "querySelectorAll('[data-profile-tab]')"), 'Perfil no conecta sus pestañas iniciales al comportamiento de navegación.');
+ok(has(stability, /estado-pedidos-perfil\.js\?v=[A-Za-z0-9._-]+/), 'Perfil no carga el estado canónico versionado de pedidos no vistos.');
 ok(has(orderProfileState, 'tt_profile_orders_seen_v1_') && has(orderProfileState, 'numericCount() - seenCount()'), 'El badge de Pedidos no representa pedidos nuevos/no vistos.');
 ok(has(orderProfileState, '[data-profile-tab="pedidos"]') && has(orderProfileState, 'localStorage.setItem'), 'Abrir Pedidos no marca el contador como visto.');
 ok(has(stability, '/api/profile-avatar-upload'), 'Perfil no integra subida de foto.');

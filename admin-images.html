@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-<script src="js/cargador-pagina.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261009-first-render-3"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1-brand-runtime-20261004-1-owner-pink-20261004-1" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="robots" content="noindex, nofollow, noarchive">
@@ -15,8 +15,8 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
-  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-repair-20261005-1">
-  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1">
+  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20261009-first-render-1">
+  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20261009-first-render-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -402,10 +402,10 @@
 
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
-import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
+import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20261009-first-render-1";
+import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261009-first-render-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20261004-admin-connections-3";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20261009-first-render-1";
 import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1";
 import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1";
 
@@ -796,7 +796,7 @@ subscribeAuthState(async (user) => {
   renderSection(currentSection);
 });
 </script>
-<script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20261004-admin-connections-3"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1"></script>
+<script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20261009-first-render-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261009-first-render-1"></script>
 </body>
 </html>

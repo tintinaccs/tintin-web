@@ -1,9 +1,17 @@
+import { runSingleFlight } from './cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
+
 const ENDPOINT = '/api/public-catalog';
 const TIMEOUT_MS = 8000;
 
 export async function fetchPublicCatalogResource(resource) {
   const normalized = resource === 'collections' ? 'collections' : resource === 'products' ? 'products' : '';
   if (!normalized) throw new Error('Recurso público de catálogo inválido');
+  // Inicio, catálogo, recomendaciones y búsqueda consumen la misma lectura.
+  // Compartir el request evita respuestas duplicadas y repintados en carrera.
+  return runSingleFlight('public-catalog:' + normalized, () => fetchResource(normalized));
+}
+
+async function fetchResource(normalized) {
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {

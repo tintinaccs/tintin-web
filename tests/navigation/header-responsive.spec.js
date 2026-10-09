@@ -1,4 +1,41 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
+
+// Estas dos pruebas verifican superficies, no Firebase. Una resolución real
+// tardía podía ocultar la campana simulada o dejar el CTA en restauración.
+async function mockGuestNavigation(page) {
+  const source = file => fs.readFileSync(path.resolve(__dirname, '../..', file), 'utf8')
+    .replace(/^import\s[\s\S]*?;\s*$/gm, '').replace(/^export /gm, '');
+  await page.route('**/navegacion-autenticacion.js*', route => route.fulfill({
+    contentType: 'text/javascript',
+    body: source('js/pages/profile/estado-canonico-perfil.mjs') + `
+      const auth = { currentUser: null }, db = {};
+      const AUTH_STATES = { RESTORING: 'restoring', UNKNOWN: 'unknown' };
+      const subscribeSession = callback => callback({ status: 'unauthenticated', user: null });
+      const getSessionUser = () => null, readAuthHandoff = () => null;
+      const createAuthHandoff = () => {}, clearAuthHandoff = () => {};
+      const recordAuthDiagnostic = () => {}, logoutSession = async () => {};
+      const ROLES = { CLIENT: 'client' }, SUPER_ADMIN = 'owner@example.com';
+      const can = () => false, sanitizeImageUrl = value => value;
+      const doc = () => {}, onSnapshot = () => () => {};
+    ` + source('js/core/auth/navegacion-autenticacion.js'),
+  }));
+}
+
+async function mockNotificationData(page) {
+  const code = fs.readFileSync(path.resolve(__dirname, '../../js/components/notifications/notificaciones-clientes.js'), 'utf8');
+  await page.route('**/notificaciones-clientes.js*', route => route.fulfill({
+    contentType: 'text/javascript',
+    body: `
+      const auth = { currentUser: null }, db = {}, appCheckReady = Promise.resolve();
+      const subscribeAuthState = callback => { callback(null); return () => {}; };
+      const recordAuthDiagnostic = () => {}, isSuperAdmin = () => false;
+      const createLiveActivityNotices = () => ({ clear() {}, update() {} });
+      const collection = () => {}, limit = () => {}, onSnapshot = () => () => {}, orderBy = () => {}, query = () => {};
+    ` + code.replace(/^import\s[\s\S]*?;\s*$/gm, ''),
+  }));
+}
 
 test('el acordeón del footer se carga al pasar de desktop a móvil y conserva sus enlaces', async ({ page }) => {
   const footerRequests = [];
@@ -346,7 +383,10 @@ test('las imágenes de Tienda usan el mismo origen absoluto en desktop, tablet y
 });
 
 test('Alertas usa la superficie compartida sólida y conserva el foco', async ({ page }) => {
+  await mockGuestNavigation(page);
+  await mockNotificationData(page);
   await openPublicPage(page, { width: 1440, height: 900 }, '/contact');
+  await expect(page.locator('#account-panel .tt-account-primary')).toBeAttached();
 
   // El evento representa la resolución autenticada del coordinador sin
   // depender de una cuenta ni de datos remotos para probar la superficie.
@@ -372,6 +412,7 @@ test('Alertas usa la superficie compartida sólida y conserva el foco', async ({
 });
 
 test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA legible', async ({ page }) => {
+  await mockGuestNavigation(page);
   for (const viewport of [{width:1920,height:1080},{width:1440,height:900},{width:1280,height:720},{width:1024,height:768},{width:768,height:1024},{width:390,height:844},{width:320,height:568}]) {
     await openPublicPage(page, viewport, '/contact');
     await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes('pulido-marca-responsive-tintin.css') && link.sheet));

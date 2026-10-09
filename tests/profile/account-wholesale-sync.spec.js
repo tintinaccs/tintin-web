@@ -85,7 +85,9 @@ for(const width of [390,768,1440]){
 test('perfil público no introduce pestaña mayorista al actualizar la cuenta',async({page})=>{
  const profile=fs.readFileSync(path.join(root,'perfil.html'),'utf8');
  expect(profile).not.toContain('id="perfil-wholesale-card"');
- await fixture(page,768,'<div class="perfil-wrap"><a class="perfil-back" href="/">Volver</a><div class="perfil-card"><div class="perfil-header"><div id="perfil-avatar"></div><div><span id="perfil-nombre-display">Ana</span></div></div><input id="perfil-nombre"></div></div>');
+ const content=profile.slice(profile.indexOf('<div class="perfil-wrap">'),profile.indexOf('<div class="perfil-toast"'));
+ await fixture(page,768,content);
+ await page.addStyleTag({url:'/css/pages/perfil.css'});
  const code=source('js/quality/estabilidad-final-publica.js');
  await page.addScriptTag({content:code.slice(0,code.indexOf('\nfunction start()'))+'\ninjectStyles();enhanceProfile();'});
  await expect(page.locator('[data-profile-tab="datos"]')).toBeVisible();

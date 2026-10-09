@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261009-first-render-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1003,7 +1003,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261009-first-render-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1842,7 +1842,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261009-first-render-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

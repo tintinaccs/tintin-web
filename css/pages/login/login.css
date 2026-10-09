@@ -89,7 +89,7 @@ body.tt-public-shell-mounted .login-page {
   border-radius: 32px;
   background: #fff;
   box-shadow: var(--login-shadow), inset 0 1px 0 rgba(255, 255, 255, .9);
-  animation: login-shell-in .58s cubic-bezier(.22, 1, .36, 1) both;
+  animation: none;
 }
 
 .login-form-side {

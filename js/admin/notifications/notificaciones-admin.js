@@ -1,7 +1,7 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck, recoverAdminSecurity } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261009-first-render-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261009-first-render-1';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { createLiveActivityNotices } from '../../components/notifications/avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1';
 import {

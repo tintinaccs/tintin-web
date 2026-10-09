@@ -1,5 +1,5 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261009-first-render-1';
 import { onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { waitForAdminAppCheck, recoverAdminSecurity } from './app-check-admin.js?v=tintin-20261004-admin-connections-3';
 

@@ -1,13 +1,13 @@
 // cargador-pagina.js es el único responsable de iniciar los módulos globales de
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
 import { auth, db } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { logoutSession } from './salida-sesion.js?v=tintin-20261005-auth-loader-1';
+import { logoutSession } from './salida-sesion.js?v=tintin-20261009-first-render-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261009-first-render-1';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
-import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20261009-first-render-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1';
+import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261009-first-render-1';
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 // La vista previa embebida es sólo visual: no debe suscribirse a Auth ni leer
@@ -79,7 +79,7 @@ function roleFromProfile(user,profile={}){
 
 function watchNavigationProfile(user, generation){
  let firstPaint = false;
- const publish = profile => {
+ const publish = (profile, confirmed = true) => {
   if(generation!==authRenderGeneration || getSessionUser()?.uid!==user.uid)return;
   firstPaint = true;
   clearTimeout(timer);
@@ -92,17 +92,19 @@ function watchNavigationProfile(user, generation){
   renderAccountPanel(user,role,profile);
   renderProfileIdentity(user,profile);
   const visual=readAccountIdentity(profile,user);
-  createAuthHandoff(user.uid,{photoURL:visual.photoURL,displayName:visual.name});
+  createAuthHandoff(user.uid,{photoURL:visual.photoURL,displayName:visual.name,profile});
+  if(confirmed) window.dispatchEvent(new CustomEvent('tintin:profile-data', { detail: { uid: user.uid, profile } }));
   window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
    detail:{authenticated:true,role,wholesaleApproved:profile.wholesaleStatus==='aprobado'}
   }));
  };
  // Nunca pintar primero la foto del proveedor encima de una foto elegida.
  // El handoff es sólo visual; el listener confirma perfil y permisos.
- const timer=window.setTimeout(()=>{if(!firstPaint)publish({});},PROFILE_READ_TIMEOUT_MS);
+ const fallback=initialAuthHandoff?.uid===user.uid ? initialAuthHandoff.profile || {name:initialAuthHandoff.displayName,avatarURL:initialAuthHandoff.photoURL} : {};
+ const timer=window.setTimeout(()=>{if(!firstPaint)publish(fallback,false);},PROFILE_READ_TIMEOUT_MS);
  const unsubscribe=onSnapshot(doc(db,'users',user.uid),snap=>publish(snap.exists()?snap.data():{}),error=>{
   console.warn('[auth-nav] No se pudo leer el perfil de la cuenta:',error?.code||error);
-  if(!firstPaint)publish({});
+  if(!firstPaint)publish(fallback,false);
  });
  return ()=>{clearTimeout(timer);unsubscribe();};
 }

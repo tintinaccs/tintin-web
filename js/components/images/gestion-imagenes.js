@@ -6,7 +6,7 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261004-admin-connections-3';
+import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261009-first-render-1';
 import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinImagesPhase5Booted) {

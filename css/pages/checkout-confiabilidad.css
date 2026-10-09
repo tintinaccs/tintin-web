@@ -1,0 +1,39 @@
+/* Estilos de esta página disponibles desde el primer render. */
+html.tt-checkout-leaving,
+      html.tt-checkout-hard-reset,
+      html.tt-checkout-leaving body,
+      html.tt-checkout-hard-reset body {
+        background:#FFF6FA!important;
+        background-image:none!important;
+      }
+      html.tt-checkout-leaving body > *:not(#tt-loader),
+      html.tt-checkout-hard-reset body > *:not(#tt-loader) {
+        visibility:hidden!important;
+        pointer-events:none!important;
+      }
+      #tt-checkout-sync-state {
+        width:min(calc(100% - 32px),700px);
+        margin:8px auto 0;
+        min-height:22px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:7px;
+        color:#8B5B6B;
+        font:700 11px/1.35 Montserrat;
+        text-align:center;
+        transition:opacity .15s linear;
+      }
+      #tt-checkout-sync-state::before {
+        content:'';
+        width:7px;
+        height:7px;
+        flex:0 0 7px;
+        border-radius:50%;
+        background:#6FB58A;
+        box-shadow:0 0 0 3px rgba(111,181,138,.14);
+      }
+      #tt-checkout-sync-state[data-state="loading"]::before,
+      #tt-checkout-sync-state[data-state="saving"]::before { background:#D39A42;box-shadow:0 0 0 3px rgba(211,154,66,.14); }
+      #tt-checkout-sync-state[data-state="offline"]::before,
+      #tt-checkout-sync-state[data-state="error"]::before { background:#CC4B4B;box-shadow:0 0 0 3px rgba(204,75,75,.14); }

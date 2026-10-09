@@ -51,39 +51,6 @@ function injectStyles() {
       body[data-tt-product-stable="1"] .tt-product-social-bar{gap:6px!important}
     }
 
-    /* Perfil v2: una sola página, organizada por pestañas. */
-    body[data-tt-profile-v2="1"]{background:#fff7fa!important}
-    body[data-tt-profile-v2="1"] .perfil-wrap{max-width:1080px!important;padding-inline:clamp(16px,4vw,36px)!important}
-    .tt-profile-hero{background:#fff;border:1px solid var(--border);border-radius:22px;padding:22px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 12px 34px rgba(85,34,53,.06)}
-    .tt-profile-hero-main{display:flex;align-items:center;gap:16px;min-width:0}
-    .tt-profile-avatar-actions{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
-    .tt-profile-avatar-actions .perfil-avatar{inline-size:72px!important;block-size:72px!important;aspect-ratio:1!important;line-height:0!important;overflow:hidden!important;border-radius:50%!important;flex:0 0 72px!important}
-    .tt-profile-avatar-actions .perfil-avatar>img{inline-size:100%!important;block-size:100%!important;min-inline-size:100%!important;min-block-size:100%!important;max-inline-size:none!important;max-block-size:none!important;object-fit:cover!important;object-position:center!important;display:block!important}
-    .tt-profile-photo-btn{border:1px solid #eac7d4;background:#fff;color:#713C53;border-radius:999px;padding:7px 11px;font:700 10px/1 Montserrat;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
-    .tt-profile-photo-btn:disabled{opacity:.55;cursor:wait}
-    .tt-profile-meta{min-width:0}
-    .tt-profile-meta .perfil-name{text-transform:none!important;letter-spacing:-.02em!important;font-size:clamp(20px,3vw,30px)!important}
-    .tt-profile-meta-extra{margin-top:6px;font-size:12px;color:var(--text-muted);display:flex;gap:8px;flex-wrap:wrap}
-    .tt-profile-tabs{position:sticky;top:8px;z-index:30;display:flex;gap:6px;overflow-x:auto;padding:7px;background:rgba(255,255,255,.96);border:1px solid #ecd4dd;border-radius:16px;margin:0 0 18px;box-shadow:0 8px 24px rgba(83,33,52,.07);scrollbar-width:none}
-    .tt-profile-tabs::-webkit-scrollbar{display:none}
-    .tt-profile-tab{position:relative;flex:0 0 auto;border:0;background:transparent;color:#713C53;border-radius:11px;padding:11px 14px;font:700 11px/1 Montserrat;cursor:pointer;white-space:nowrap}
-    .tt-profile-tab[aria-selected="true"]{background:#fde8f0;color:#713C53}
-    .tt-profile-tab-badge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;margin-left:6px;border-radius:999px;background:#F8AACA;color:#713C53;font-size:9px;vertical-align:1px}
-    .tt-profile-panel[hidden]{display:none!important}
-    .tt-profile-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-    .tt-profile-summary-card{background:#fff;border:1px solid #ecd9e1;border-radius:16px;padding:18px;min-width:0}
-    .tt-profile-summary-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#9a7f89;font-weight:700;margin-bottom:6px}
-    .tt-profile-summary-card strong{font-size:15px;color:#713C53;overflow-wrap:anywhere}
-    body[data-tt-profile-v2="1"] .perfil-card{border-radius:18px!important;border:1px solid #ead7df!important;box-shadow:none!important;margin-bottom:14px!important}
-    body[data-tt-profile-v2="1"] .perfil-body{padding:clamp(18px,3vw,26px)!important}
-    body[data-tt-profile-v2="1"] .perfil-input{background:#fff!important;border-color:#e4d3da!important}
-    @media(max-width:720px){
-      .tt-profile-hero{align-items:flex-start;padding:16px}
-      .tt-profile-hero-main{align-items:flex-start}
-      .tt-profile-summary{grid-template-columns:1fr}
-      .tt-profile-tabs{top:6px;border-radius:13px}
-      .tt-profile-tab{padding:10px 12px}
-    }
   `;
   document.head.appendChild(style);
 }
@@ -129,55 +96,16 @@ function textOf(selector, fallback = '—') {
 }
 
 async function enhanceProfile() {
-  if (!document.querySelector('.perfil-wrap') || document.body.dataset.ttProfileV2 === '1') return;
-  document.body.dataset.ttProfileV2 = '1';
+  if (!document.querySelector('.perfil-wrap') || document.body.dataset.ttProfileBound === '1') return;
+  document.body.dataset.ttProfileBound = '1';
 
   const wrap = document.querySelector('.perfil-wrap');
-  const back = wrap?.querySelector('.perfil-back');
-  const identityCard = document.getElementById('perfil-nombre')?.closest('.perfil-card');
-  const locationCard = document.getElementById('perfil-location-content')?.closest('.perfil-card');
-  const accountCard = document.getElementById('perfil-metodo')?.closest('.perfil-card');
-  const ordersCard = document.getElementById('perfil-orders-card');
-  const favoritesCard = document.getElementById('perfil-favorites-card');
-  const roleCard = document.getElementById('perfil-role-card');
-  const helpCard = wrap?.querySelector('.perfil-wa-box')?.closest('.perfil-card');
-  const quickCard = [...(wrap?.querySelectorAll('.perfil-card') || [])].find(card => card.querySelector('a[href="/catalogo"]') && card.querySelector('a[href="/checkout"]'));
-  const accountActions = document.getElementById('btn-logout')?.closest('.perfil-card');
-  if (!wrap || !identityCard || !back) return;
-
-  const oldHeader = identityCard.querySelector('.perfil-header');
-  const hero = document.createElement('section');
-  hero.className = 'tt-profile-hero';
-  hero.setAttribute('aria-label', 'Resumen de mi cuenta');
-  const heroMain = document.createElement('div');
-  heroMain.className = 'tt-profile-hero-main';
-  if (oldHeader) {
-    const avatar = oldHeader.querySelector('#perfil-avatar');
-    const meta = oldHeader.querySelector('div:last-child');
-    const avatarActions = document.createElement('div');
-    avatarActions.className = 'tt-profile-avatar-actions';
-    if (avatar) avatarActions.appendChild(avatar);
-    const photoButton = document.createElement('button');
-    photoButton.type = 'button';
-    photoButton.className = 'tt-profile-photo-btn';
-    photoButton.textContent = 'Cambiar foto';
-    const photoInput = document.createElement('input');
-    photoInput.type = 'file';
-    photoInput.accept = 'image/jpeg,image/png,image/webp';
-    photoInput.hidden = true;
-    photoInput.id = 'perfil-photo-input';
-    avatarActions.append(photoButton, photoInput);
-    if (meta) {
-      meta.classList.add('tt-profile-meta');
-      const extra = document.createElement('div');
-      extra.className = 'tt-profile-meta-extra';
-      extra.innerHTML = '<span>Cuenta Tintin</span><span aria-hidden="true">•</span><span>Perfil privado</span>';
-      meta.appendChild(extra);
-    }
-    heroMain.append(avatarActions);
-    if (meta) heroMain.append(meta);
-    oldHeader.remove();
-
+  const hero = wrap.querySelector('.tt-profile-hero');
+  const tabs = wrap.querySelector('.tt-profile-tabs');
+  const photoButton = wrap.querySelector('.tt-profile-photo-btn');
+  const photoInput = document.getElementById('perfil-photo-input');
+  if (!hero || !tabs) return;
+  if (photoButton && photoInput) {
     photoButton.addEventListener('click', () => photoInput.click());
     photoInput.addEventListener('change', async () => {
       const file = photoInput.files?.[0];
@@ -194,7 +122,7 @@ async function enhanceProfile() {
           import('../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-          import('../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1'),
+          import('../core/auth/coordinador-sesion.js?v=tintin-20261009-first-render-1'),
         ]);
         const snapshot = await sessionApi.waitForSession();
         if (snapshot.status === sessionApi.AUTH_STATES.UNKNOWN) throw new Error('No pudimos verificar tu sesión. Volvé a intentar en unos segundos.');
@@ -247,71 +175,10 @@ async function enhanceProfile() {
       }
     });
   }
-  hero.appendChild(heroMain);
-  back.insertAdjacentElement('afterend', hero);
-
-  const tabs = document.createElement('nav');
-  tabs.className = 'tt-profile-tabs';
-  tabs.setAttribute('aria-label', 'Secciones de mi perfil');
-  tabs.setAttribute('role','tablist');
-  hero.insertAdjacentElement('afterend', tabs);
-
-  const host = document.createElement('div');
-  host.className = 'tt-profile-panels';
-  tabs.insertAdjacentElement('afterend', host);
-
-  const definitions = [
-    { id: 'resumen', label: 'Resumen', nodes: [] },
-    { id: 'datos', label: 'Mis datos', nodes: [identityCard, locationCard] },
-    { id: 'pedidos', label: 'Pedidos', nodes: [ordersCard] },
-    { id: 'favoritos', label: 'Favoritos', nodes: [favoritesCard] },
-    { id: 'cuenta', label: 'Cuenta y seguridad', nodes: [accountCard, roleCard, accountActions] },
-    { id: 'ayuda', label: 'Ayuda', nodes: [helpCard, quickCard] },
-  ];
-
-  const summary = document.createElement('section');
-  summary.className = 'tt-profile-summary';
-  summary.innerHTML = `
-    <div class="tt-profile-summary-card"><span>Pedidos</span><strong data-profile-summary-orders>0</strong></div>
-    <div class="tt-profile-summary-card"><span>Total comprado</span><strong data-profile-summary-spent>Gs. 0</strong></div>
-    <div class="tt-profile-summary-card"><span>Ubicación</span><strong data-profile-summary-location>Sin ubicación guardada</strong></div>`;
-
-  const panels = new Map();
+  const panels = new Map([...wrap.querySelectorAll('[data-profile-panel]')]
+    .map(panel => [panel.dataset.profilePanel, panel]));
   const requestedPanel = location.hash.replace('#', '');
-  const initialPanel = definitions.some(definition => definition.id === requestedPanel)
-    ? requestedPanel
-    : 'datos';
-  definitions.forEach((definition) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'tt-profile-tab';
-    button.dataset.profileTab = definition.id;
-    button.id='profile-tab-'+definition.id;
-    button.setAttribute('aria-controls','profile-panel-'+definition.id);
-    button.setAttribute('role', 'tab');
-    button.setAttribute('aria-selected', definition.id === initialPanel ? 'true' : 'false');
-    button.textContent = definition.label;
-    if (definition.id === 'pedidos') {
-      const badge = document.createElement('span');
-      badge.className = 'tt-profile-tab-badge';
-      badge.dataset.profileOrdersBadge = '1';
-      badge.hidden = true;
-      button.appendChild(badge);
-    }
-    tabs.appendChild(button);
-
-    const panel = document.createElement('section');
-    panel.className = 'tt-profile-panel';
-    panel.dataset.profilePanel = definition.id;
-    panel.id='profile-panel-'+definition.id;
-    panel.setAttribute('aria-labelledby','profile-tab-'+definition.id);
-    panel.setAttribute('role', 'tabpanel');
-    panel.hidden = definition.id !== initialPanel;
-    if (definition.id === 'resumen') panel.appendChild(summary);
-    definition.nodes.filter(Boolean).forEach(node => panel.appendChild(node));
-    host.appendChild(panel);
-    panels.set(definition.id, panel);
-  });
+  const initialPanel = panels.has(requestedPanel) ? requestedPanel : 'datos';
 
   function activate(id) {
     panels.forEach((panel, key) => { panel.hidden = key !== id; });
@@ -343,7 +210,8 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
-  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1');
+  void import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20261009-first-render-1')
+    .catch(error => console.warn('[Perfil] Pedidos pendientes:', error?.code || error?.message));
   activate(initialPanel);
 }
 
