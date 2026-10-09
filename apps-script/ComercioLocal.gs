@@ -66,8 +66,10 @@ function tintinLocalCall_(payload) {
 function tintinLocalPush_(sheet,entries) {
   var properties=tintinLocalProperties_(),baselines=properties.getProperties();
   entries=entries.filter(function(entry){return !entry.baseVersion||baselines['LOCAL_BASE_'+entry.id]!==tintinLocalFingerprint_(entry);});
-  for(var offset=0;offset<entries.length;offset+=20) {
-    var batch=entries.slice(offset,offset+20),response=tintinLocalCall_({action:'upsert',entries:batch});
+  // El Worker escribe varias subcolecciones por registro; una entrada por
+  // petición evita exceder su límite de subsolicitudes.
+  for(var offset=0;offset<entries.length;offset+=1) {
+    var batch=entries.slice(offset,offset+1),response=tintinLocalCall_({action:'upsert',entries:batch});
     var remembered={};response.results.forEach(function(result){
       var entry=batch.filter(function(e){return e.id===result.id;})[0];
       remembered['LOCAL_BASE_'+entry.id]=tintinLocalFingerprint_(entry);
