@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "6d7c644a913c25710c1d1604fb4ff07ec7f2d644",
-  "reason": "Estabilizar el HTML y CSS inicial de todas las páginas públicas y perfil; reutilizar lecturas y presentación visual confirmada por UID, corregir estados y contraste, conectar regresiones a CI existente y renovar referencias immutable transitivas sin cambiar controles.",
+  "reason": "Estabilizar HTML y CSS inicial de páginas públicas y perfil; reutilizar datos por UID y lecturas, corregir estados y contraste, conectar regresiones a CI existente y renovar referencias immutable transitivas sin cambiar controles.",
   "files": [
     {
       "path": "_headers",
@@ -571,7 +571,7 @@
     {
       "path": "nosotros.html",
       "oldHash": "c4d1672b1fc40e8f7dad3edd6b87c7bb38200305b08328d6ea7fe1169a6abddd",
-      "newHash": "4fd03eae03569d6018373c248b9dcd9a21713c60eabbc3e02d85e679c149d39b"
+      "newHash": "0202230a0be61695cd274ac3215a30ac8727068ca411900f26bdb2c72985500f"
     },
     {
       "path": "package.json",

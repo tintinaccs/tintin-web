@@ -5,7 +5,9 @@ El usuario autorizó explícitamente continuar y fusionar. Rama codex/public-ini
 - PASS_LOCAL: build:pages, protección local de los 541 archivos/78 registros, caché immutable, CSP y manifiesto; el candidato no cambia workflows ni controles de mantenimiento.
 - RESUELTO_LOCAL: el proxy rechazaba api.github.com con CONNECT 403; después de añadir el dominio al borrador de red, la API permite consultar repositorio/usuario. La autenticación GitHub funciona. No se modifica la protección de ramas ni de entornos.
 - PASS_LOCAL: audit:login-profile ejecuta 167 pruebas y auditor; las pruebas visuales de cuenta/alertas usan datos de sesión aislados, conservando módulos reales de render/superficies, sin depender de certificados o Firebase remoto.
-- NOT_VERIFIED: PR/CI del SHA candidato, revisión del entorno protected-flow-maintenance y merge. No se evade ningún gate ni se publica un veredicto de CI manual.
+- PR #1082 creado y adjuntado; fusión automática squash habilitada. El primer CI aprobó build reproducible y CodeQL/Cloudflare, pero detuvo el contrato estático por el loader del alias nosotros. Se restaura su entrada canónica y se mantiene el smoke esperando el documento de destino.
+- PASS_LOCAL: 37 pruebas conjuntas de navegación/primer render/perfil, un caso de preview omitido; smoke actualizado de 18 rutas. Contrato estático completado por tramos al corregir tres lectores de fuente: import versionado del puente inerte de usuarios, controles táctiles ahora en CSS del perfil (se comprueba su link inicial), y estado de lectura público del titular frente al antiguo indicador interno de sincronización. Se mantienen mínimos táctiles y controles de autoridad/roles.
+- NOT_VERIFIED: CI del candidato actualizado, revisión del entorno protected-flow-maintenance y merge. No se evade ningún gate ni se publica un veredicto de CI manual.
 
 ## Implementación y evidencia local
 

@@ -171,9 +171,13 @@ const touchAssertions = [
   ['admin-images.html', /\.adm-mobile-tab\s*\{[\s\S]*?min-height:\s*44px/],
   ['css/pages/checkout/checkout.css', /\.ck-header-back\s*\{[\s\S]*?min-height:\s*44px/],
   ['css/pages/login/login.css', /\.login-email-resend\s*\{[\s\S]*?min-height:\s*32px/],
-  ['perfil.html', /\.perfil-back\s*\{[\s\S]*?min-height:\s*32px/],
-  ['perfil.html', /\.perfil-btn\s*\{[\s\S]*?min-height:\s*44px/]
+  ['css/pages/perfil.css', /\.perfil-back\s*\{[\s\S]*?min-height:\s*32px/],
+  ['css/pages/perfil.css', /\.perfil-btn\s*\{[\s\S]*?min-height:\s*44px/]
 ];
+check(
+  'El perfil carga sus controles táctiles desde el head inicial',
+  /<head\b[^>]*>[\s\S]*?<link\b[^>]*rel="stylesheet"[^>]*href="css\/pages\/perfil\.css\?v=[^"]+"[\s\S]*?<\/head>/i.test(read('perfil.html'))
+);
 check(
   'Los controles táctiles independientes corregidos conservan su tamaño mínimo',
   touchAssertions.every(([file, pattern]) => pattern.test(read(file)))

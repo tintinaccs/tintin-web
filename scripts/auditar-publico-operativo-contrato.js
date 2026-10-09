@@ -29,12 +29,22 @@ const operationalSources = {
   'js/pages/catalog/mantenimiento-catalogo.js': "dataset.ttOperationalStatus = 'catalog'",
   'js/pages/collections/mantenimiento-colecciones.js': "dataset.ttOperationalStatus = 'collections'",
   'js/pages/product/mantenimiento-producto.js': "dataset.ttOperationalStatus = 'product'",
-  'js/pages/checkout/checkout-confiabilidad.js': "dataset.ttOperationalStatus = 'checkout'",
-  'js/pages/profile/mantenimiento-perfil.js': "dataset.ttOperationalStatus = 'profile'"
+  'js/pages/checkout/checkout-confiabilidad.js': "dataset.ttOperationalStatus = 'checkout'"
 };
 for (const [file, marker] of Object.entries(operationalSources)) {
   check(read(file).includes(marker), `${file} no declara su estado operativo`);
 }
+
+// El perfil comunica el resultado de la lectura al titular de cualquier
+// cuenta. No es un indicador interno de sincronización para el equipo.
+const profile = read('perfil.html');
+const profileNotice = profile.match(/<p\b[^>]*class="tt-profile-network-state"[^>]*>/)?.[0] || '';
+check(profileNotice.includes('role="status"') && profileNotice.includes('aria-live="polite"') &&
+  profileNotice.includes('data-state="loading"') && !profileNotice.includes('data-tt-operational-status'),
+  'El estado de lectura del perfil debe estar disponible para todas las cuentas');
+check(profile.includes("setProfileReadState('error'") && profile.includes("setProfileReadState('ready'") &&
+  !read('js/pages/profile/mantenimiento-perfil.js').includes('Perfil y pedidos sincronizados'),
+  'El perfil debe informar la lectura real sin declarar sincronización por estar online');
 
 check(shell.includes('./components/navigation/entrada-navegacion-publica.js'), 'El bootstrap no apunta al entry modular');
 check(routeState.includes("setCurrentState(root.getElementById('btn-tienda'), page === 'shop')"), 'Desktop no anuncia Tienda activa');

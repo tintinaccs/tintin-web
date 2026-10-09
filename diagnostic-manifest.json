@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fb1c1dad294f16c678c351a8cf9f7eae836d8d04d6e49ab7cc88c111275dd10d",
+  "sourceFingerprint": "9303d5d3c34fb1d3ede840ffc8f8fcefc679bc84f6c30867dd7fbf8a3c56f3c5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1103,
     "textFiles": 1055,
-    "totalBytes": 16341347,
+    "totalBytes": 16343233,
     "pages": 19,
     "modules": 782
   },
@@ -14625,8 +14625,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1728,
-      "sha256": "4fd03eae03569d6018373c248b9dcd9a21713c60eabbc3e02d85e679c149d39b",
+      "bytes": 1806,
+      "sha256": "0202230a0be61695cd274ac3215a30ac8727068ca411900f26bdb2c72985500f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14641,7 +14641,13 @@
       "duplicateIds": [],
       "inlineScripts": [],
       "ids": 0,
-      "scripts": [],
+      "scripts": [
+        {
+          "raw": "js/cargador-pagina.js?v=tintin-20261009-first-render-3",
+          "target": "js/cargador-pagina.js",
+          "line": 1
+        }
+      ],
       "styles": [
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
@@ -14683,6 +14689,12 @@
         }
       ],
       "references": [
+        {
+          "raw": "js/cargador-pagina.js?v=tintin-20261009-first-render-3",
+          "target": "js/cargador-pagina.js",
+          "line": 1,
+          "exists": true
+        },
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
@@ -30026,8 +30038,8 @@
     },
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
-      "bytes": 8954,
-      "sha256": "7420b8d6287a6ee89d387e8b190ffcb8f5385f04760a5af31bb2b3e267c234d2",
+      "bytes": 9190,
+      "sha256": "32fc781fbd58b76bd6e3f674900fd003c6d03aa244bc53ada3dac44ddd766f62",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31373,8 +31385,8 @@
     },
     {
       "path": "scripts/auditar-publico-operativo-contrato.js",
-      "bytes": 3380,
-      "sha256": "9a91cdc776d374ebbd5560d12430a81e6618631f42aef810ed3e5ab679d8592e",
+      "bytes": 4157,
+      "sha256": "f9527d0b92c1d7d67577edee4f2c23b76f2d4e551d247495d992934c62442f30",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31593,8 +31605,8 @@
     },
     {
       "path": "scripts/auditar-seguridad-fase-8.js",
-      "bytes": 5377,
-      "sha256": "d9e30d088128d3b5bad8ea429bba674d25529d292683ba281303c54c78fdb8fc",
+      "bytes": 5421,
+      "sha256": "2405d5498d49c276a633f9a7a40e11ecb342adb9a03c87abbf262b83c5820bf8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42656,8 +42668,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 30683,
-      "sha256": "d6fe194cc149f48659b4af5f92c0a93e18030015f0ef4f89fc768cd268ad9f9e"
+      "bytes": 30644,
+      "sha256": "06e1fa590e16d7cdcfab5c453b041cf2f7fc781e680d80670a27b863bd344cfd"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -42669,7 +42681,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155156,
-      "sha256": "af3e4479b2125b8303e46c807877c5d3acbcd13df3a18c1126913b2fe8fa1676"
+      "sha256": "1cea00d84bffd40160a8998ce7dfe402f590db2aaf304b8168d48041b3783b5b"
     },
     {
       "path": "config/public-site.json",
@@ -43220,8 +43232,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 342849,
-      "sha256": "9f1a24eddee568d38b6338c1738ed21d724546f6c8a1f6ae7d7b128c25194694"
+      "bytes": 343639,
+      "sha256": "3a25f2ff725cafcad3065340de0bded413a8e221a7c1d7974c26f144b4a2dfce"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -45902,8 +45914,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1728,
-      "sha256": "4fd03eae03569d6018373c248b9dcd9a21713c60eabbc3e02d85e679c149d39b"
+      "bytes": 1806,
+      "sha256": "0202230a0be61695cd274ac3215a30ac8727068ca411900f26bdb2c72985500f"
     },
     {
       "path": "package-lock.json",
@@ -46256,8 +46268,8 @@
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
       "extension": ".js",
-      "bytes": 8954,
-      "sha256": "7420b8d6287a6ee89d387e8b190ffcb8f5385f04760a5af31bb2b3e267c234d2"
+      "bytes": 9190,
+      "sha256": "32fc781fbd58b76bd6e3f674900fd003c6d03aa244bc53ada3dac44ddd766f62"
     },
     {
       "path": "scripts/auditar-diagnostico.js",
@@ -46592,8 +46604,8 @@
     {
       "path": "scripts/auditar-publico-operativo-contrato.js",
       "extension": ".js",
-      "bytes": 3380,
-      "sha256": "9a91cdc776d374ebbd5560d12430a81e6618631f42aef810ed3e5ab679d8592e"
+      "bytes": 4157,
+      "sha256": "f9527d0b92c1d7d67577edee4f2c23b76f2d4e551d247495d992934c62442f30"
     },
     {
       "path": "scripts/auditar-publico-operativo-visibilidad.mjs",
@@ -46640,8 +46652,8 @@
     {
       "path": "scripts/auditar-seguridad-fase-8.js",
       "extension": ".js",
-      "bytes": 5377,
-      "sha256": "d9e30d088128d3b5bad8ea429bba674d25529d292683ba281303c54c78fdb8fc"
+      "bytes": 5421,
+      "sha256": "2405d5498d49c276a633f9a7a40e11ecb342adb9a03c87abbf262b83c5820bf8"
     },
     {
       "path": "scripts/auditar-seguro-pedidos.js",
