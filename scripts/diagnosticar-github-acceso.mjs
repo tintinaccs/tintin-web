@@ -11,5 +11,9 @@ for (const path of ['pulls/1071', 'git/ref/heads/main', 'environments/protected-
     headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${process.env.GH_TOKEN || ''}`,
       'X-GitHub-Api-Version': '2026-03-10' }, signal: AbortSignal.timeout(30000),
   });
-  console.log(response.ok ? `GET ${path}: HTTP ${response.status}` : await context.format(response, path, 'GET'));
+  const quota = ['x-ratelimit-limit', 'x-ratelimit-remaining', 'x-ratelimit-reset'].map(name => {
+    const value = response.headers.get(name);
+    return /^\d{1,12}$/.test(value || '') ? `${name}=${value}` : `${name}=unavailable`;
+  }).join(' ');
+  console.log(response.ok ? `GET ${path}: HTTP ${response.status}; ${quota}` : await context.format(response, path, 'GET'));
 }
