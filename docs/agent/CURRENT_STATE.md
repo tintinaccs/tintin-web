@@ -1497,3 +1497,15 @@ Impacto: renderer público de Producto y CSS específico; referencias transitiva
 PENDING: CI, revisión humana de mantenimiento y publicación. Las pruebas locales no verifican el cambio en producción.
 
 PASS_LOCAL final: build:pages completo, integridad CSS, auditoría de caché (313 archivos versionados, 73 cargas dinámicas) y 47/47 controles de protección/mantenimiento. Se regenera el manifiesto tras registrar la evidencia final. La comprobación visual corresponde al renderer y estilos reales en fixture aislado; no se realizaron acciones comerciales.
+
+## Colores de tarjetas y primer render de Producto — 2026-10-09
+
+Autor: Codex, agente principal. Reparación puntual sobre origin/main 9bf32b96. ÉLISE tiene colorFinish «Color de lente: clara · Color de las varillas: dorado» y no tiene variantes. La tarjeta filtraba por swatch, cuyo respaldo gris siempre es verdadero: «clara» se convertía en una opción gris inexistente. El fallback de colorFinish ahora acepta únicamente colores reconocidos; las variantes administrativas explícitas conservan prioridad y sus nombres personalizados.
+
+La ficha inyectaba product-maintenance.css y la clase del body después de cargar un runtime con dependencias de Firebase. Ahora el HTML declara la hoja final en el head, tras las demás hojas, y la clase desde el parser. El runtime ya detecta el atributo data-tt-product-maintenance y evita duplicar la hoja. El diseño final se aplica antes del primer render sin esconder el contenido ni esperar autenticación.
+
+PASS_LOCAL inicial: nueve pruebas Node de colores, variantes y resiliencia de carga; ÉLISE muestra sólo dorado, no se inventan opciones con valores desconocidos, variantes explícitas y dos colores reales se conservan. Evidencia de datos públicos en /tmp/catalogo-colores.json. Sin escrituras sobre productos reales, cambios de stock, pagos, pedidos, Rules, roles, credenciales ni migraciones. Impacto operativo limitado al renderer de tarjetas y estilos iniciales de Producto; las demás páginas actualizan sólo la referencia de caché de tienda.js. Pendiente pruebas de navegador, build y CI del candidato; publicación no verificada.
+
+PASS_LOCAL navegador: 21/21 pruebas Chromium, incluyendo tres regresiones nuevas del primer render en 320/390/1280px con HTML y CSS reales sin módulos diferidos: panel sin marco/sombra desde el inicio, mismo diseño tras activar el runtime y sin overflow. Las 18 regresiones existentes cubren galería, colores, editor y controles hasta 1920px. Pendiente CI y publicación; no se atribuye validación de producción al fixture.
+
+PASS_LOCAL final: build:pages completo (incluyendo cache/CSP/manifiesto) y 47/47 controles de protección/mantenimiento. Diff revisado sin cambios comerciales. Se regenera el manifiesto después de registrar esta evidencia final. PENDING: CI del SHA exacto, revisión de mantenimiento y publicación del cambio.

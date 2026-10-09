@@ -1177,7 +1177,7 @@ function productMediaForOption(product, key, value) {
 function productCardColorOptions(product) {
   const group = productVariantGroups(product).find(([key]) => /colou?r/i.test(key));
   if (group) return group;
-  const colors = [...new Set(String(product?.colorFinish || '').split(/[,/;·]/).map(value => value.split(':').at(-1).trim()).filter(productColorSwatch))];
+  const colors = [...new Set(String(product?.colorFinish || '').split(/[,/;·]/).map(value => value.split(':').at(-1).trim()).filter(value => window.TintinProductColors.preset(value)))];
   return colors.length ? ['Color', colors] : null;
 }
 

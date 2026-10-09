@@ -27,3 +27,17 @@ test('sugerencias aproximadas ignoran el fondo blanco y requieren señal suficie
   assert.equal(colors.guessColor(pixels([255, 255, 255])), null);
   assert.equal(colors.guessColor(Uint8ClampedArray.from([220, 178, 48, 255])), null);
 });
+
+const storeSource = fs.readFileSync(new URL('../../tienda.js', import.meta.url), 'utf8');
+vm.runInContext(storeSource.slice(storeSource.indexOf('function productVariantGroups'), storeSource.indexOf('function productPhotoIdentity')), context);
+const cardColors = product => JSON.parse(JSON.stringify(context.productCardColorOptions(product)));
+test('la tarjeta de ÉLISE muestra sólo dorado; clara no inventa una opción gris', () => {
+  assert.deepEqual(cardColors({ colorFinish: 'Color de lente: clara · Color de las varillas: dorado' }), ['Color', ['dorado']]);
+  assert.equal(cardColors({ colorFinish: 'Color de lente: clara' }), null);
+  assert.equal(cardColors({ colorFinish: '' }), null);
+});
+test('colores declarados y variantes administrativas conservan sus opciones', () => {
+  assert.deepEqual(cardColors({ colorFinish: 'Dorado / Plateado' }), ['Color', ['Dorado', 'Plateado']]);
+  assert.deepEqual(cardColors({ variants: { Color: ['Dorado'] }, colorFinish: 'Dorado / Plateado' }), ['Color', ['Dorado']]);
+  assert.deepEqual(cardColors({ variants: { Color: ['Personalizado'] } }), ['Color', ['Personalizado']]);
+});
