@@ -1,3 +1,15 @@
+# Revision PR #1078 — productos y colores, 2026-10-09
+
+Base main 6d7c644a913c25710c1d1604fb4ff07ec7f2d644. Conflictos resueltos conservando compradores dentro de Pedidos, espejo local y mecanismos de proteccion.
+
+Se corrige fallback de colores (clara no inventa gris), fotos imageUrls en tarjetas, aspecto administrativo y carga de la paleta antes del renderer en todas las superficies publicas. CSS final de Producto disponible desde el head, sin depender del SDK diferido.
+
+PASS_LOCAL: 36 pruebas Chromium en 320/390/709/768/1024/1280/1440/1920; 85 pruebas Node de catalogo y mantenimiento antes de la ultima prueba de orden de scripts (7/7 colores final). Auditoria public shell PASS. Productos relacionados: ciclos sin duplicar colecciones/productos cubiertos por pruebas existentes. Build Pages final PASS (rutas, CSP, manifiesto y cache). CI remoto pendiente para el SHA candidato.
+
+Verificacion publica de main: CELINA cambia URL de foto al seleccionar plateado, seleccion plateado activa e imagen plateada cargada; WhatsApp verde rgb(22,133,65), comentarios antes del footer y tres recomendaciones de colecciones distintas. Esta observacion no acredita despliegue del candidato. Sin escrituras de catalogo, pedidos, pagos, inventario ni sesiones.
+
+## Evidencia historica conservada
+
 # Estado vigente — 2026-10-09: pedidos históricos y clientes locales
 
 Base c6ac7c741e98840b6bffa08cc3ce81093ba24be7 (rebase desde cbeccc3; se conservan #1067 de seguridad de cuentas y #1073 de interfaz móvil); rama codex/pedidos-clientes-locales-20261008. Agente Codex /root. Autorización: espejo bidireccional de Sheets, Panel y Firestore; sin pagos. Trabajo previo conservado abajo como evidencia fechada, no PASS heredado.
@@ -1498,14 +1510,14 @@ PENDING: CI, revisión humana de mantenimiento y publicación. Las pruebas local
 
 PASS_LOCAL final: build:pages completo, integridad CSS, auditoría de caché (313 archivos versionados, 73 cargas dinámicas) y 47/47 controles de protección/mantenimiento. Se regenera el manifiesto tras registrar la evidencia final. La comprobación visual corresponde al renderer y estilos reales en fixture aislado; no se realizaron acciones comerciales.
 
-## Colores de tarjetas y primer render de Producto — 2026-10-09
+## Reconciliación local sin errores por solapamiento — 2026-10-09
+Autor: Codex, agente principal. Base fe8fea0c78cdf9da0493d7b733dbbc93aaa91f74. Evidencia de producción: el activador de 13:48 falló porque el ciclo de 13:47 conservaba el bloqueo. La integración administrativa instalada estaba desactualizada y se reemplazó por la versión publicada exacta antes de verificar el activador.
+Cambio puntual: un ciclo que no adquiere el bloqueo devuelve busy:true sin tocar registros ni liberar el bloqueo ajeno. Las ediciones permanecen en Sheets y sus versiones se procesan en el siguiente ciclo. PASS_LOCAL: 17 pruebas del puente, incluyendo ciclo solapado sin lecturas/escrituras. PENDING: CI del código fuente y confirmación del ciclo automático con el ajuste. Importación histórica verificada: 210 ventas, 33.891.000 Gs. y 194 compradores locales/web; reconciliar de nuevo mantiene las cifras.
+## Compradores dentro de Pedidos e importación histórica — 2026-10-09
+Autor: Codex, agente principal. Base fe8fea0c78cdf9da0493d7b733dbbc93aaa91f74.
+La sección Pedidos incorpora una pestaña Clientes que compraron, que reutiliza el espejo autenticado de contactos y pedidos locales/web. Conserva la sección independiente existente y permite volver a Todos los pedidos. No crea cuentas Auth ni cambia stock o pagos.
+PASS_LOCAL: prueba de actualización desde Pedidos tras un nuevo pedido, con compradores locales/web, escapes HTML y sólo lecturas de la API; 16 regresiones del puente Sheets/Firestore/pedidos pasan; sintaxis de ambos módulos y diff check pasan.
+PASS_PRODUCTION de la importación antecedente: Apps Script terminó la segunda ejecución sin error; el panel confirmó 210 ventas locales y 33.891.000 Gs. pagados, iguales al respaldo fuente, y 194 compradores locales/web. La primera ejecución alcanzó el límite de seis minutos y se retomó con las versiones guardadas. Esta evidencia no acredita la pestaña nueva: PENDING CI, mantenimiento protegido y publicación.
 
-Autor: Codex, agente principal. Reparación puntual sobre origin/main 9bf32b96. ÉLISE tiene colorFinish «Color de lente: clara · Color de las varillas: dorado» y no tiene variantes. La tarjeta filtraba por swatch, cuyo respaldo gris siempre es verdadero: «clara» se convertía en una opción gris inexistente. El fallback de colorFinish ahora acepta únicamente colores reconocidos; las variantes administrativas explícitas conservan prioridad y sus nombres personalizados.
 
-La ficha inyectaba product-maintenance.css y la clase del body después de cargar un runtime con dependencias de Firebase. Ahora el HTML declara la hoja final en el head, tras las demás hojas, y la clase desde el parser. El runtime ya detecta el atributo data-tt-product-maintenance y evita duplicar la hoja. El diseño final se aplica antes del primer render sin esconder el contenido ni esperar autenticación.
-
-PASS_LOCAL inicial: nueve pruebas Node de colores, variantes y resiliencia de carga; ÉLISE muestra sólo dorado, no se inventan opciones con valores desconocidos, variantes explícitas y dos colores reales se conservan. Evidencia de datos públicos en /tmp/catalogo-colores.json. Sin escrituras sobre productos reales, cambios de stock, pagos, pedidos, Rules, roles, credenciales ni migraciones. Impacto operativo limitado al renderer de tarjetas y estilos iniciales de Producto; las demás páginas actualizan sólo la referencia de caché de tienda.js. Pendiente pruebas de navegador, build y CI del candidato; publicación no verificada.
-
-PASS_LOCAL navegador: 21/21 pruebas Chromium, incluyendo tres regresiones nuevas del primer render en 320/390/1280px con HTML y CSS reales sin módulos diferidos: panel sin marco/sombra desde el inicio, mismo diseño tras activar el runtime y sin overflow. Las 18 regresiones existentes cubren galería, colores, editor y controles hasta 1920px. Pendiente CI y publicación; no se atribuye validación de producción al fixture.
-
-PASS_LOCAL final: build:pages completo (incluyendo cache/CSP/manifiesto) y 47/47 controles de protección/mantenimiento. Diff revisado sin cambios comerciales. Se regenera el manifiesto después de registrar esta evidencia final. PENDING: CI del SHA exacto, revisión de mantenimiento y publicación del cambio.
+Seguimiento 2026-10-09 (Codex): mantenimiento de #1079 run 37966815736 SUCCESS; merge a main 25f8a866e47d23cfb13a60e79a648ba4c789c437. Nuevo candidato de #1080 integra esa base, conserva su política protegida y regenera el manifiesto; CI combinado pendiente. En Apps Script se observaron ciclos completos de 190.273s a las 13:56 y 119.955s a las 14:00, junto con ciclos omitidos por bloqueo completados sin error. Un ciclo a las 13:50 terminó por timeout. El 403 de GitHub fue confirmado por la sonda 37964773481: cuota efectiva 5000 y remaining=0, reinicio 14:15:38. La aprobación siguiente sufrió fetch failed; la última pasó sin modificar los controles.

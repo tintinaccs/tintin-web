@@ -41,3 +41,24 @@ test('colores declarados y variantes administrativas conservan sus opciones', ()
   assert.deepEqual(cardColors({ variants: { Color: ['Dorado'] }, colorFinish: 'Dorado / Plateado' }), ['Color', ['Dorado']]);
   assert.deepEqual(cardColors({ variants: { Color: ['Personalizado'] } }), ['Color', ['Personalizado']]);
 });
+
+test('tarjetas usan fotos múltiples por color y el aspecto administrativo', () => {
+  const product = { variants: { Color: ['Dorado', 'Plateado'] }, variantMedia: [
+    { Color: 'dorado', imageUrls: ['https://example.test/gold.webp'], colorHex: '#123ABC' },
+    { Color: 'Plateado', imageUrls: ['javascript:alert(1)', 'https://example.test/silver.webp'] },
+  ] };
+  assert.equal(context.productMediaForOption(product, 'Color', 'Dorado'), 'https://example.test/gold.webp');
+  assert.equal(context.productMediaForOption(product, 'Color', 'Plateado'), 'https://example.test/silver.webp');
+  assert.equal(context.productMediaForOption(product, 'Color', 'Rojo'), '');
+  assert.equal(context.productColorSwatch('Dorado', product), '#123ABC');
+});
+
+test('inicio, catálogo y colecciones cargan la paleta antes de dibujar tarjetas', () => {
+  for (const page of ['index.html', 'catalogo.html', 'collections.html', 'product.html']) {
+    const html = fs.readFileSync(new URL(`../../${page}`, import.meta.url), 'utf8');
+    const gallery = html.indexOf('<script src="js/components/images/galeria-producto.js');
+    const store = html.indexOf('<script src="tienda.js');
+    assert.ok(gallery >= 0 && gallery < store, `${page}: falta la paleta antes del renderer`);
+    assert.equal((html.match(/<script[^>]+src="js\/components\/images\/galeria-producto\.js/g) || []).length, 1);
+  }
+});

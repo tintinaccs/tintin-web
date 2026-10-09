@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 // HTML/CSS reales sin SDK: comprueba la ficha antes de cargar los módulos diferidos.
 const html = fs.readFileSync('product.html', 'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
-for (const width of [320, 390, 1280]) {
+for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
   test(`Producto usa el diseño final antes de ejecutar módulos en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.route('**/product-first-paint', route => route.fulfill({ contentType: 'text/html', body: html }));

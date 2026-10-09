@@ -829,11 +829,11 @@ function renderProductCardMarkup(p, options = {}) {
   const colorGroup = productCardColorOptions(p);
   const selectedColor = colorGroup?.[1].includes(cardColorSelections.get(String(p.id))) ? cardColorSelections.get(String(p.id)) : '';
   const imgUrl = sanitizeClassicImageUrl((selectedColor && productMediaForOption(p, colorGroup[0], selectedColor)) || p.imageUrl || p.image || getProductImage(p.id), 480);
-  const initialRow = productVariantMediaRows(p).find(row => productPhotoIdentity(row.imageUrl) === productPhotoIdentity(imgUrl));
+  const initialRow = productVariantMediaRows(p).find(row => window.TintinProductMedia.rowImages(row).some(src => productPhotoIdentity(src) === productPhotoIdentity(imgUrl)));
   const activeColor = selectedColor || (colorGroup && initialRow?.[colorGroup[0]]) || (colorGroup?.[1].length === 1 ? colorGroup[1][0] : '');
   const colorsHTML = colorGroup ? `<div class="tt-card-colors" role="group" aria-label="Colores de ${escapeAttribute(p.name)}">${colorGroup[1].map(color => {
     const media = productMediaForOption(p, colorGroup[0], color) || (productVariantGroups(p).some(([key]) => /colou?r/i.test(key)) ? '' : p.imageUrl || p.image || '');
-    return `<button type="button" class="tt-card-color" data-card-color="${escapeAttribute(color)}" data-card-image="${escapeAttribute(media)}" data-product-name="${escapeAttribute(p.name)}" aria-label="${escapeAttribute(color)}" title="${escapeAttribute(color)}" aria-pressed="${activeColor === color}"><span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(color) || 'repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px)'}"></span></button>`;
+    return `<button type="button" class="tt-card-color" data-card-color="${escapeAttribute(color)}" data-card-image="${escapeAttribute(media)}" data-product-name="${escapeAttribute(p.name)}" aria-label="${escapeAttribute(color)}" title="${escapeAttribute(color)}" aria-pressed="${activeColor === color}"><span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(color, p) || 'repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px)'}"></span></button>`;
   }).join('')}</div>` : '';
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
@@ -1154,7 +1154,7 @@ function productVariantGroups(product) {
 
 function productColorSwatch(value, product) {
   const key = window.TintinProductMedia.colorKey(product);
-  const row = window.TintinProductMedia.mediaRows(product).find(row => String(row?.[key] || '').trim() === String(value));
+  const row = window.TintinProductMedia.mediaRows(product).find(row => String(row?.[key] || '').trim().toLocaleLowerCase('es') === String(value).trim().toLocaleLowerCase('es'));
   return window.TintinProductColors.swatch(value, row);
 }
 
@@ -1171,7 +1171,8 @@ function productVariantMediaRows(product) {
 
 function productMediaForOption(product, key, value) {
   const normalized = text => String(text ?? '').trim().toLocaleLowerCase('es');
-  return productVariantMediaRows(product).find(row => normalized(row[key]) === normalized(value) && row.imageUrl)?.imageUrl || '';
+  const row = productVariantMediaRows(product).find(row => normalized(row[key]) === normalized(value) && window.TintinProductMedia.rowImages(row).length);
+  return window.TintinProductMedia.rowImages(row)[0] || '';
 }
 
 function productCardColorOptions(product) {
