@@ -12,7 +12,7 @@
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   const barrierUrl = new URL('./components/navigation/compartido/barrera-arranque-shell.js', scriptUrl);
-  entryUrl.searchParams.set('v', 'tintin-20261010-whatsapp-release-5');
+  entryUrl.searchParams.set('v', 'tintin-20261010-registration-name-2');
   barrierUrl.searchParams.set('v', BARRIER_VERSION);
 
   let waitHeld = false;

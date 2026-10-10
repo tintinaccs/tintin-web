@@ -876,3 +876,6 @@
   outline: 3px solid rgba(173, 63, 103, .45);
   outline-offset: 2px;
 }
+
+/* Los datos guardados de la cuenta no vuelven a solicitarse. */
+#ck-name-field[hidden], #ck-phone-field[hidden], #ck-saved-identity[hidden] { display:none !important; }

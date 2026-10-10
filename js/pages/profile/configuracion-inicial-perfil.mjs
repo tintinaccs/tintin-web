@@ -72,7 +72,13 @@ export function splitFullName(value) {
 /** Un nombre completo exige al menos nombre y apellido, también en checkout. */
 export function isValidCustomerName(value) {
   const { firstName, lastName } = splitFullName(value);
-  return isValidFullName(firstName, lastName);
+  return isValidFullName(firstName, lastName) && clean(value).split(' ').every(part => (part.match(/\p{L}/gu) || []).length >= 3);
+}
+
+function isValidProfileName(profile, firstName, lastName) {
+  return profile.profileStatus === 'incomplete'
+    ? isValidCustomerName(`${firstName} ${lastName}`)
+    : isValidFullName(firstName, lastName);
 }
 
 /** Lee nombre/apellido de un perfil, tolerando los que sólo tienen `name`. */
@@ -217,7 +223,7 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   }
 
   const stored = readProfileName(profile);
-  const storedNameIsValid = isValidFullName(stored.firstName, stored.lastName);
+  const storedNameIsValid = isValidProfileName(profile, stored.firstName, stored.lastName);
   const storedPhone = storedPhoneValue(profile);
   const addressOk = !requireAddress || hasUsableAddress(profile);
   const needsName = !storedNameIsValid;
@@ -266,7 +272,7 @@ export function buildMissingProfilePatch({
 } = {}) {
   const patch = {};
   const current = readProfileName(currentProfile);
-  const currentNameIsValid = isValidFullName(current.firstName, current.lastName);
+  const currentNameIsValid = isValidProfileName(currentProfile, current.firstName, current.lastName);
   const currentPhone = storedPhoneValue(currentProfile);
   const currentUsername = storedUsername(currentProfile);
 
@@ -275,7 +281,7 @@ export function buildMissingProfilePatch({
   const firstName = clean(submittedFirstName) || fallback.firstName;
   const lastName = clean(submittedLastName) || fallback.lastName;
 
-  if ((!currentNameIsValid || explicitNameChange) && isValidFullName(firstName, lastName)) {
+  if ((!currentNameIsValid || explicitNameChange) && isValidProfileName(currentProfile, firstName, lastName)) {
     if (firstName !== current.firstName || lastName !== current.lastName) {
       patch.firstName = firstName;
       patch.lastName = lastName;
@@ -319,7 +325,7 @@ export function buildMissingProfilePatch({
     const finalFirstName = patch.firstName || current.firstName;
     const finalLastName = patch.lastName || current.lastName;
     const finalPhone = patch.phone || currentPhone;
-    if (isValidFullName(finalFirstName, finalLastName) && finalPhone) {
+    if (isValidProfileName(currentProfile, finalFirstName, finalLastName) && finalPhone) {
       patch.profileStatus = 'active';
     }
   }

@@ -45,6 +45,18 @@ export function isAttentionState(state, estados) {
   return state !== estados.PROD;
 }
 
+// En el monitor actual un sello histórico nunca sustituye la evidencia viva.
+// Sin red o con evidencia vencida tampoco se conserva un verde anterior.
+export function resolveAutomaticState(record, live, estados, {
+  now = Date.now(), maxAgeMs = 90_000, available = true,
+} = {}) {
+  const checkedAt = Date.parse(live?.checkedAt || '');
+  if (!available || !Number.isFinite(checkedAt) || checkedAt > now || now - checkedAt >= maxAgeMs) {
+    return baselineState(record?.state, estados);
+  }
+  return resolveState(record, live, estados);
+}
+
 // El pulso de una lectura HTTP exitosa no significa que el flujo esté verde.
 // El marcador visible sigue el estado ya resuelto, que incorpora evidencia,
 // partial y promote en lugar de mirar únicamente live.ok.
@@ -70,3 +82,69 @@ export function shouldShowFlowEdge(edge, {
   return matchesEdge(edge) && (visibleNodeIds.has(edge.from) || visibleNodeIds.has(edge.to));
 }
 
+
+// Una sola comprobación activa; pausa fuera de la vista y descarta resultados
+// tardíos. El monitor sólo programa lecturas: no sella ni modifica datos.
+export const CHECK_INTERVAL_MS = 30_000;
+export const EVIDENCE_MAX_AGE_MS = 90_000;
+
+export function createAutomaticMonitor({
+  check, isActive, onError = () => {}, onStatus = () => {},
+  intervalMs = CHECK_INTERVAL_MS, timeoutMs = 45_000,
+  timers = globalThis,
+}) {
+  let timer = null;
+  let current = null;
+  let disposed = false;
+  const clearTimer = () => { timers.clearTimeout(timer); timer = null; };
+
+  function cancel() {
+    clearTimer();
+    current?.abort();
+    current = null;
+  }
+
+  async function run() {
+    clearTimer();
+    if (disposed || current) return;
+    if (!isActive()) { onStatus('paused'); return; }
+    const controller = new AbortController();
+    current = controller;
+    onStatus('checking');
+    let deadline;
+    let abort;
+    try {
+      const interrupted = new Promise((_, reject) => {
+        abort = () => reject(controller.signal.reason);
+        controller.signal.addEventListener('abort', abort, { once: true });
+        deadline = timers.setTimeout(() => {
+          controller.abort(new Error('La comprobación excedió su plazo; se reintentará automáticamente.'));
+        }, timeoutMs);
+      });
+      await Promise.race([check(controller.signal), interrupted]);
+    } catch (error) {
+      if (!disposed && current === controller && isActive()) onError(error);
+    } finally {
+      timers.clearTimeout(deadline);
+      controller.signal.removeEventListener('abort', abort);
+      if (current === controller) {
+        current = null;
+        if (!disposed && isActive()) {
+          onStatus('waiting');
+          timer = timers.setTimeout(run, intervalMs);
+        } else if (!disposed) onStatus('paused');
+      }
+    }
+  }
+
+  return {
+    refresh() {
+      if (disposed) return;
+      if (!isActive()) { cancel(); onStatus('paused'); }
+      else if (!current && timer === null) void run();
+    },
+    restart() { if (!disposed) { cancel(); void run(); } },
+    pause() { if (!disposed) { cancel(); onStatus('paused'); } },
+    dispose() { disposed = true; cancel(); },
+  };
+}

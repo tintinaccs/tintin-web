@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261010-whatsapp-release-5"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-5" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-registration-name-2" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,10 +23,10 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-whatsapp-release-5">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-registration-name-2">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
-  <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-navigation-front-1">
+  <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-auto-flow-responsive-1">
   <link rel="preconnect" href="https://www.google.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2">
-  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261005-flow-progress-2-encomienda-20261008-1-master-20261007-1-repair-20261005-1-master-20261007-1-checkout-20261008-2">
+  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20261010-social-mobile-styles-3">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -176,22 +176,22 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { ASSIGNABLE_ROLES } from './js/core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
-import { logoutSession } from './js/core/auth/salida-sesion.js?v=tintin-20261010-whatsapp-release-5';
+import { logoutSession } from './js/core/auth/salida-sesion.js?v=tintin-20261010-registration-name-2';
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email/correo-autenticacion.js?v=tintin-20261010-whatsapp-release-5";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
+} from "./js/email/correo-autenticacion.js?v=tintin-20261010-registration-name-2";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-2-active-session-1";
-import { clearProfileGateCache, consumeBlockedEmail } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261010-whatsapp-release-5";
+import { clearProfileGateCache, consumeBlockedEmail } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261010-registration-name-2";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { showBlockedModal, accountProblemHtml } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1";
-import { getProfileCompletionPlan, buildMissingProfilePatch, isValidCustomerName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-5";
-import { PROFILE_STATE, PROFILE_ACTION, detectAuthMethod, readProfileSnapshot, resolveProfileState, resolveProfileAction, withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261010-whatsapp-release-5";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidCustomerName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2";
+import { PROFILE_STATE, PROFILE_ACTION, detectAuthMethod, readProfileSnapshot, resolveProfileState, resolveProfileAction, withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261010-registration-name-2";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
@@ -287,7 +287,7 @@ function showError(html) {
   const el = document.getElementById("login-error");
   el.innerHTML = html; el.classList.add("show");
   el.setAttribute("role", "alert"); el.tabIndex = -1;
-  el.focus(); el.scrollIntoView({ block: "center", behavior: "smooth" });
+  el.focus({ preventScroll: true }); el.scrollIntoView({ block: "center", behavior: "auto" });
 }
 function showActiveSessionState(message) {
   document.body.classList.add('login-session-active');
@@ -303,7 +303,7 @@ function showSuccess(html) {
   const el = document.getElementById("login-success");
   el.innerHTML = html; el.classList.add("show");
   el.setAttribute("role", "alert"); el.tabIndex = -1;
-  el.focus(); el.scrollIntoView({ block: "center", behavior: "smooth" });
+  el.focus({ preventScroll: true }); el.scrollIntoView({ block: "center", behavior: "auto" });
 }
 function escapeHtml(s) {
   const div = document.createElement('div');
@@ -514,7 +514,7 @@ async function ensureProfileComplete(user, role, options = {}) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20261010-whatsapp-release-5 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20261010-registration-name-2 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -584,8 +584,8 @@ async function ensureProfileComplete(user, role, options = {}) {
     error.classList.add('show');
     input.setAttribute('aria-invalid', 'true');
     input.disabled = false;
-    input.focus();
-    input.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    input.focus({ preventScroll: true });
+    input.scrollIntoView({ block: 'center', behavior: 'auto' });
   };
   for (const [input, id] of [[firstNameInput, 'login-first-name-error'], [phoneInput, 'login-phone-error']]) {
     input.oninput = () => {
@@ -629,10 +629,10 @@ async function ensureProfileComplete(user, role, options = {}) {
       const phoneRaw = phoneInput.value.trim();
       const country = findCountryByCode(countrySelect.value);
       if (plan.needsName && !isValidCustomerName(name)) {
-        fieldError(firstNameInput, 'login-first-name-error', 'Ingresá tu nombre y apellido (al menos dos palabras).');
+        fieldError(firstNameInput, 'login-first-name-error', 'Ingresá tu nombre y apellido (al menos dos palabras, con tres letras cada una).');
         return;
       }
-      if (plan.needsPhone && (!isValidPhone(phoneRaw, country) || !isRealisticPhone(phoneRaw, country))) {
+      if (plan.needsPhone && !isNationalMobileInput(phoneRaw)) {
         fieldError(phoneInput, 'login-phone-error', 'Ingresá un celular paraguayo válido, por ejemplo 0912 345 678.');
         return;
       }
@@ -640,8 +640,10 @@ async function ensureProfileComplete(user, role, options = {}) {
       button.disabled = true;
       firstNameInput.disabled = true;
       phoneInput.disabled = true;
+      showOverlay();
+      let completed = false;
       try {
-        if (plan.needsPhone && await phoneAvailability(phoneRaw)) { showDuplicatePhone(); return; }
+        if (plan.needsPhone && await phoneAvailability(phoneRaw)) { hideLoginOverlay(); showDuplicatePhone(); return; }
         if (!navigator.onLine) throw Object.assign(new Error('profile/offline'), {code: 'profile/offline'});
         await withDeadline((async () => {
         if (registrationPending) await ensureUserProfile(db, user, detectAuthMethod(user));
@@ -664,9 +666,11 @@ async function ensureProfileComplete(user, role, options = {}) {
         clearProfileGateCache();
         profileBlock.style.display = 'none';
         document.body.classList.remove('login-setup-open');
+        completed = true;
         showOverlay();
         resolve();
       } catch (error) {
+        hideLoginOverlay();
         if (error?.code === 'phone_already_registered' ||
             (error?.code === 'permission-denied' && plan.needsPhone && await phoneAvailability(phoneRaw))) {
           showDuplicatePhone();
@@ -680,6 +684,7 @@ async function ensureProfileComplete(user, role, options = {}) {
             : 'No pudimos completar el registro. Tus datos siguen acá; volvé a intentar.');
         }
       } finally {
+        if (!completed) hideLoginOverlay();
         saving = false;
         button.disabled = false;
         firstNameInput.disabled = false;
@@ -1235,8 +1240,8 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2"></script>
-<script src="js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1" defer></script>
-<script src="tienda.js?v=tintin-20261010-whatsapp-release-5" defer></script>
+<script src="js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2" defer></script>
+<script src="tienda.js?v=tintin-20261010-registration-name-2" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 </body>
 </html>

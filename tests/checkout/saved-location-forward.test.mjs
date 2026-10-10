@@ -16,7 +16,7 @@ for(const method of ['delivery','encomienda']) test(`ubicación precargada bloqu
   const saved={lat:-25.3,lng:-57.6,name:'Casa guardada'};
   const controller=attachSavedLocationConfirm({card:elements.get('ck-saved-location-hint'),confirmButton:elements.get('ck-saved-location-confirm'),changeButton},saved);
   const steps=[],errors=[];let profileWrites=0;
-  const context={document:{getElementById:id=>elements.get(id)},orderData:{shippingMethod:method,encomiendaMode:'puerta',mapLocation:{...saved}},currentUser:null,RETIRO_VALUE:'__retiro__',ENCOMIENDA_MODES:{PUERTA:'puerta',AGENCIA:'agencia'},encomiendaValidationError:()=>null,hideErrors(){},showError:(_,message)=>errors.push(message),goToStep:step=>steps.push(step),saveLocationToProfileIfChecked(){profileWrites++;},_savedLocationConfirm:controller};
+  const context={document:{getElementById:id=>elements.get(id)},orderData:{shippingMethod:method,encomiendaMode:'puerta',mapLocation:{...saved}},currentUser:null,currentUserProfile:null,applySavedCheckoutIdentity(){},RETIRO_VALUE:'__retiro__',ENCOMIENDA_MODES:{PUERTA:'puerta',AGENCIA:'agencia'},encomiendaValidationError:()=>null,hideErrors(){},showError:(_,message)=>errors.push(message),goToStep:step=>steps.push(step),saveLocationToProfileIfChecked(){profileWrites++;},_savedLocationConfirm:controller};
   vm.runInNewContext(source.slice(start,end),context);
   const next=elements.get('btn-step2-next').onclick;
   next();assert.deepEqual(steps,[]);assert.equal(profileWrites,0);assert.match(errors[0],/Confirmá/);
