@@ -7,6 +7,7 @@ import {
 import {
   firestoreAdminGet,
   firestoreAdminReplace,
+  firestoreAdminCommit,
   decodeFirestoreFields,
   fsString,
   fsInteger,
@@ -20,6 +21,7 @@ const RESEND_COOLDOWN_MS = 45 * 1000;
 const MAX_CODES_PER_DAY = 8;
 const MAX_CODES_PER_IP_DAY = 30;
 const IP_COOLDOWN_MS = 10 * 1000;
+const RATE_RESERVE_TRIES = 5;
 const DELIVERY_PROBE_DELAY_MS = 450;
 const TERMINAL_DELIVERY_FAILURES = new Set(['bounced', 'failed', 'suppressed', 'canceled']);
 
@@ -29,10 +31,6 @@ function clean(value, maxLength = 254) {
 
 function emailIsValid(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value);
-}
-
-function todayKey() {
-  return new Date().toISOString().slice(0, 10);
 }
 
 function docPath(email) {
@@ -53,29 +51,53 @@ async function hashRateKey(value) {
   return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function enforceIpRateLimit(request, env, now) {
+export async function reserveOtpSendLimit(env, { path, now, cooldownMs, dailyMaximum, legacyDocument = null }, deps = { get: firestoreAdminGet, commit: firestoreAdminCommit }) {
+  const dateKey = new Date(now).toISOString().slice(0, 10);
+  const legacy = legacyDocument ? decodeFirestoreFields(legacyDocument.fields) : null;
+  for (let attempt = 0; attempt < RATE_RESERVE_TRIES; attempt += 1) {
+    const existingDoc = await deps.get(env, path);
+    const existing = existingDoc ? decodeFirestoreFields(existingDoc.fields) : null;
+    if (existingDoc && !existingDoc.updateTime) throw new Error('rate_version_missing');
+    const count = Math.max(
+      existing?.dateKey === dateKey ? Number(existing.sendCountToday || 0) : 0,
+      legacy?.dateKey === dateKey ? Number(legacy.sendCountToday || 0) : 0
+    );
+    const lastSentAt = Math.max(
+      existing?.lastSentAt ? new Date(existing.lastSentAt).getTime() : -Infinity,
+      legacy?.lastSentAt ? new Date(legacy.lastSentAt).getTime() : -Infinity
+    );
+    const elapsed = now - lastSentAt;
+    if (elapsed < cooldownMs || count >= dailyMaximum) {
+      throw Object.assign(new Error('otp_send_limit'), {
+        code: elapsed < cooldownMs ? 'cooldown_active' : 'daily_limit_exceeded',
+        retryAfterSeconds: elapsed < cooldownMs ? Math.ceil((cooldownMs - elapsed) / 1000) : 86400,
+      });
+    }
+    try {
+      await deps.commit(env, [{
+        path,
+        fields: { lastSentAt: fsTimestamp(new Date(now)), dateKey: fsString(dateKey), sendCountToday: fsInteger(count + 1) },
+        currentDocument: existingDoc ? { updateTime: existingDoc.updateTime } : { exists: false },
+      }]);
+      return { dateKey, sendCountToday: count + 1 };
+    } catch (error) {
+      if (error?.code !== 'version_conflict' && error?.status !== 409) throw error;
+    }
+  }
+  throw Object.assign(new Error('otp_send_limit'), { code: 'cooldown_active', retryAfterSeconds: Math.ceil(cooldownMs / 1000) });
+}
+
+export async function enforceIpRateLimit(request, env, now, deps) {
   const ip = clean(request.headers.get('CF-Connecting-IP'), 80);
   if (!ip) throw new Error('rate_identity_missing');
   const key = await hashRateKey(`${env.OTP_RATE_SALT || 'tintin-otp'}:${ip}`);
   const path = `emailOtpRateLimits/${key}`;
-  const existingDoc = await firestoreAdminGet(env, path);
-  const existing = existingDoc ? decodeFirestoreFields(existingDoc.fields) : null;
-  const dateKey = todayKey();
-  const sameDay = existing?.dateKey === dateKey;
-  const count = sameDay ? Number(existing?.sendCountToday || 0) : 0;
-  const elapsed = existing?.lastSentAt ? now - new Date(existing.lastSentAt).getTime() : Infinity;
-  if (elapsed < IP_COOLDOWN_MS || count >= MAX_CODES_PER_IP_DAY) {
-    const error = new Error('ip_rate_limit');
-    error.retryAfterSeconds = elapsed < IP_COOLDOWN_MS
-      ? Math.ceil((IP_COOLDOWN_MS - elapsed) / 1000)
-      : 86400;
-    throw error;
+  try {
+    await reserveOtpSendLimit(env, { path, now, cooldownMs: IP_COOLDOWN_MS, dailyMaximum: MAX_CODES_PER_IP_DAY }, deps);
+  } catch (error) {
+    if (error?.message !== 'otp_send_limit') throw error;
+    throw Object.assign(new Error('ip_rate_limit'), { retryAfterSeconds: error.retryAfterSeconds });
   }
-  await firestoreAdminReplace(env, path, {
-    lastSentAt: fsTimestamp(new Date(now)),
-    dateKey: fsString(dateKey),
-    sendCountToday: fsInteger(count + 1)
-  });
 }
 
 function generateCode() {
@@ -154,8 +176,9 @@ async function sendCodeEmail(apiKey, email, code, requestId) {
   return emailId;
 }
 
-export async function onRequest(context) {
+export async function handleEmailOtpSend(context, overrides = {}) {
   const { request, env } = context;
+  const deps = { get: firestoreAdminGet, replace: firestoreAdminReplace, commit: firestoreAdminCommit, send: sendCodeEmail, status: getResendEmailStatus, pause: sleep, ...overrides };
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
 
@@ -182,7 +205,7 @@ export async function onRequest(context) {
 
     const now = Date.now();
     try {
-      await enforceIpRateLimit(request, env, now);
+      await enforceIpRateLimit(request, env, now, deps);
     } catch (rateError) {
       if (rateError?.message === 'ip_rate_limit') {
         return jsonResponse({
@@ -207,24 +230,18 @@ export async function onRequest(context) {
     }
 
     const path = docPath(email);
-    const existingDoc = await firestoreAdminGet(env, path);
-    const existing = existingDoc ? decodeFirestoreFields(existingDoc.fields) : null;
-    if (existing?.lastSentAt) {
-      const elapsed = now - new Date(existing.lastSentAt).getTime();
-      if (elapsed < RESEND_COOLDOWN_MS) {
-        return jsonResponse({
-          success: false,
-          error: 'cooldown_active',
-          retryAfterSeconds: Math.ceil((RESEND_COOLDOWN_MS - elapsed) / 1000)
-        }, 429, origin, requestUrl);
-      }
-    }
-
-    const dateKey = todayKey();
-    const sameDay = existing?.dateKey === dateKey;
-    const sendCountToday = sameDay ? Number(existing?.sendCountToday || 0) : 0;
-    if (sendCountToday >= MAX_CODES_PER_DAY) {
-      return jsonResponse({ success: false, error: 'daily_limit_exceeded' }, 429, origin, requestUrl);
+    const existingDoc = await deps.get(env, path);
+    let sendLimit;
+    try {
+      // La cuota vive separada del código de un uso: verificar y consumir un
+      // OTP no reinicia el límite. La reserva ocurre antes de llamar a Resend.
+      sendLimit = await reserveOtpSendLimit(env, {
+        path: `emailOtpRateLimits/email_${await hashRateKey(`${env.OTP_RATE_SALT || 'tintin-otp'}:${email}`)}`,
+        now, cooldownMs: RESEND_COOLDOWN_MS, dailyMaximum: MAX_CODES_PER_DAY, legacyDocument: existingDoc,
+      }, deps);
+    } catch (error) {
+      if (error?.message !== 'otp_send_limit') throw error;
+      return jsonResponse({ success: false, error: error.code, retryAfterSeconds: error.retryAfterSeconds }, 429, origin, requestUrl);
     }
 
     const code = generateCode();
@@ -234,11 +251,11 @@ export async function onRequest(context) {
     let providerLastEvent = 'accepted';
 
     try {
-      providerEmailId = await sendCodeEmail(apiKey, email, code, requestId);
+      providerEmailId = await deps.send(apiKey, email, code, requestId);
 
-      await sleep(DELIVERY_PROBE_DELAY_MS);
+      await deps.pause(DELIVERY_PROBE_DELAY_MS);
       try {
-        providerLastEvent = await getResendEmailStatus(apiKey, providerEmailId) || providerLastEvent;
+        providerLastEvent = await deps.status(apiKey, providerEmailId) || providerLastEvent;
       } catch (statusError) {
         console.warn('[email-otp-send] Resend aceptó el correo pero no se pudo consultar su estado inicial:', statusError?.message || statusError);
       }
@@ -255,13 +272,13 @@ export async function onRequest(context) {
       return jsonResponse({ success: false, error: 'send_failed' }, 502, origin, requestUrl);
     }
 
-    await firestoreAdminReplace(env, path, {
+    await deps.replace(env, path, {
       codeHash: fsString(codeHash),
       expiresAt: fsTimestamp(new Date(now + CODE_TTL_MS)),
       attempts: fsInteger(0),
       lastSentAt: fsTimestamp(new Date(now)),
-      dateKey: fsString(dateKey),
-      sendCountToday: fsInteger(sendCountToday + 1),
+      dateKey: fsString(sendLimit.dateKey),
+      sendCountToday: fsInteger(sendLimit.sendCountToday),
       provider: fsString('resend'),
       providerEmailId: fsString(providerEmailId),
       providerLastEvent: fsString(providerLastEvent),
@@ -280,4 +297,8 @@ export async function onRequest(context) {
       requestUrl
     );
   }
+}
+
+export async function onRequest(context) {
+  return handleEmailOtpSend(context);
 }

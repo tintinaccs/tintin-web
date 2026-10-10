@@ -130,7 +130,7 @@
             <label class="login-email-label" for="login-profile-phone">WhatsApp</label>
             <div class="login-phone-row">
               <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="Prefijo de Paraguay" disabled><option value="PY">+595</option></select>
-              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0912345678" autocomplete="tel-national" inputmode="numeric" maxlength="10" enterkeyhint="next" />
+              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0912345678" autocomplete="tel-national" inputmode="numeric" maxlength="10" enterkeyhint="done" aria-describedby="login-phone-error" />
             </div>
             <p class="login-profile-field-error" id="login-phone-error" aria-live="polite"></p>
             <p class="login-phone-help" id="login-phone-help" style="display:none">
@@ -583,6 +583,7 @@ async function ensureProfileComplete(user, role, options = {}) {
   phoneInput.value = '';
   nameField.hidden = !plan.needsName;
   phoneField.hidden = !plan.needsPhone;
+  firstNameInput.enterKeyHint = plan.needsPhone ? 'next' : 'done';
   const button = document.getElementById('btn-save-profile');
   const fieldError = (input, id, message) => {
     const error = document.getElementById(id);
@@ -624,6 +625,20 @@ async function ensureProfileComplete(user, role, options = {}) {
   };
   let saving = false;
   await new Promise(resolve => {
+    const continueFromKeyboard = event => {
+      if (event.key !== 'Enter' || event.isComposing || event.repeat) return;
+      event.preventDefault();
+      if (saving) return;
+      if (event.currentTarget === firstNameInput && plan.needsPhone &&
+          isValidCustomerName(firstNameInput.value)) {
+        phoneInput.focus({ preventScroll: true });
+        phoneInput.scrollIntoView({ block: 'center', behavior: 'auto' });
+        return;
+      }
+      button.click();
+    };
+    firstNameInput.onkeydown = continueFromKeyboard;
+    phoneInput.onkeydown = continueFromKeyboard;
     button.onclick = async () => {
       if (saving) return;
       hideMessages();

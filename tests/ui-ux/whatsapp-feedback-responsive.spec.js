@@ -8,7 +8,7 @@ const showErrorFunction=login.slice(login.indexOf('function showError('),login.i
 const moduleRoot='/js/';
 const script=`
 import {getProfileCompletionPlan,buildMissingProfilePatch,isValidCustomerName} from '${moduleRoot}pages/profile/configuracion-inicial-perfil.mjs';
-import {findCountryByCode,normalizePhone,isValidPhone,isRealisticPhone} from '${moduleRoot}components/forms/utilidades-telefono.js';
+import {findCountryByCode,normalizePhone,isValidPhone,isRealisticPhone,isNationalMobileInput} from '${moduleRoot}components/forms/utilidades-telefono.js';
 import {withDeadline} from '${moduleRoot}core/auth/estado-perfil-sesion.mjs';
 const db={},SUPER_ADMIN='official@example.com',AUTH_NETWORK_DEADLINE_MS=1000;
 const PROFILE_STATE={MISSING:'MISSING',INCOMPLETE:'INCOMPLETE',COMPLETE:'COMPLETE',ERROR:'ERROR'};

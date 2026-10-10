@@ -98,3 +98,68 @@ test('corrige un nombre corto precargado por Google y completa el registro',asyn
   expect(await page.evaluate(()=>window.__saved.name)).toBe('Pedro González');
   expect(await page.evaluate(()=>window.__saved.profileStatus)).toBe('active');
 });
+
+const registrationViewports = [
+  [320,568],[360,640],[375,812],[390,844],[414,896],[430,932],
+  [844,390],[768,1024],[1024,768],[820,1180],[1180,820],
+  [1280,720],[1440,900],[1920,1080],
+];
+
+async function openRegistration(page, provider, width, height) {
+  await page.setViewportSize({width,height});
+  const providerFixture = fixture.replace("detectAuthMethod=()=> 'emailOtp'", `detectAuthMethod=()=> '${provider}'`);
+  await page.route('**/__registration-matrix', route => route.fulfill({contentType:'text/html',body:providerFixture}));
+  await page.goto('/__registration-matrix');
+  await page.evaluate(() => {
+    window.__allowReservation = true;
+    window.fetch = async (_url, options) => {
+      window.__calls.push(JSON.parse(options.body));
+      return {ok:true,json:async()=>({valid:true,available:true})};
+    };
+  });
+}
+
+test.describe('Continuar conserva el mismo contrato en Google y correo y en todas las orientaciones', () => {
+  test.use({hasTouch:true});
+  for (const provider of ['google','emailOtp']) for (const [width,height] of registrationViewports) {
+    test(`registro ${provider} con touch y validación en ${width}x${height}`, async ({page}) => {
+      const errors=[];
+      page.on('pageerror',error=>errors.push(error.message));
+      await openRegistration(page,provider,width,height);
+      const name=page.locator('#login-profile-first-name'),phone=page.locator('#login-profile-phone'),button=page.locator('#btn-save-profile');
+      await name.fill('Pedro');await phone.fill('0981123456');await button.tap();
+      await expect(name).toBeFocused();await expect(name).toHaveAttribute('aria-invalid','true');
+      const invalidPosition=await name.boundingBox();
+      expect(invalidPosition.y).toBeGreaterThanOrEqual(0);
+      expect(invalidPosition.y+invalidPosition.height).toBeLessThanOrEqual(height);
+      expect(await page.evaluate(()=>window.__writes)).toBe(0);
+      await name.fill('Pedro González');await phone.fill('98112345');await button.tap();
+      await expect(phone).toBeFocused();await expect(page.locator('#login-phone-error')).toContainText('válido');
+      await phone.fill(provider==='google'?'0981123456':'981123456');
+      await button.tap();await page.waitForFunction(()=>window.__complete);
+      const saved=await page.evaluate(()=>({profile:window.__saved,writes:window.__writes,calls:window.__calls}));
+      expect(saved.writes).toBe(1);expect(saved.calls).toHaveLength(1);
+      expect(saved.profile.name).toBe('Pedro González');expect(saved.profile.phone).toBe('+595981123456');
+      expect(saved.profile.profileStatus).toBe('active');
+      for (const field of ['dob','username','savedLocation']) expect(saved.profile).not.toHaveProperty(field);
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+      expect(errors).toEqual([]);
+    });
+  }
+});
+
+for (const provider of ['google','emailOtp']) for (const [width,height] of [[390,844],[1024,768],[1280,720]]) {
+  test(`registro ${provider} avanza con Enter y valida desde el teclado en ${width}x${height}`,async({page})=>{
+    await openRegistration(page,provider,width,height);
+    const name=page.locator('#login-profile-first-name'),phone=page.locator('#login-profile-phone');
+    await name.fill('Pedro');await name.press('Enter');
+    await expect(name).toBeFocused();await expect(page.locator('#login-first-name-error')).toContainText('dos palabras');
+    expect(await page.evaluate(()=>window.__writes)).toBe(0);
+    await name.fill('Pedro González');await name.press('Enter');
+    await expect(phone).toBeFocused();
+    await phone.fill('981123456');await phone.press('Enter');
+    await expect.poll(()=>page.evaluate(()=>window.__writes),{timeout:5000}).toBe(1);
+    await page.waitForFunction(()=>window.__complete);
+    expect(await page.evaluate(()=>window.__saved.profileStatus)).toBe('active');
+  });
+}
