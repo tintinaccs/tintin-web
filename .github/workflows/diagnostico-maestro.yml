@@ -1,15 +1,28 @@
-name: Diagnóstico de límite API para mantenimiento
+name: Diagnóstico de lectura API para mantenimiento
 on:
   workflow_dispatch:
 permissions:
+  actions: read
+  checks: read
   contents: read
+  pull-requests: read
 jobs:
   rate:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 4
     steps:
-      - name: Leer únicamente los límites de la API
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Identificar lectura rechazada sin publicar controles
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          node --input-type=module -e 'const r=await fetch("https://api.github.com/rate_limit",{headers:{authorization:"Bearer "+process.env.GH_TOKEN,accept:"application/vnd.github+json"}});const b=await r.json();console.log(JSON.stringify({status:r.status,core:b.resources?.core}));'
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const head='be6c818dbb4840708ff0d645f617aa2468c56fbb';
+          let calls=0;
+          const api=async path=>{const r=await fetch('https://api.github.com/repos/tintinaccs/tintin-web/'+path,{headers:{authorization:'Bearer '+process.env.GH_TOKEN,accept:'application/vnd.github+json','X-GitHub-Api-Version':'2026-03-10'}});const b=await r.json();calls++;if(!r.ok){console.log(JSON.stringify({path,status:r.status,message:b.message,remaining:r.headers.get('x-ratelimit-remaining'),reset:r.headers.get('x-ratelimit-reset'),calls}));throw Error('Lectura rechazada');}return b;};
+          try {await api('pulls/1085');await api('git/ref/heads/main');const tree=await api('git/trees/'+head+'?recursive=1');const files=new Map(tree.tree.filter(x=>x.type==='blob').map(x=>[x.path,x]));const policy=JSON.parse(fs.readFileSync('config/proteccion-flujos.json','utf8'));const paths=['config/proteccion-flujos.json',...Object.keys(policy.files)];for(let i=0;i<paths.length;i+=8)await Promise.all(paths.slice(i,i+8).map(async path=>{try{await api('git/blobs/'+files.get(path).sha);}catch(e){console.log('Archivo rechazado: '+path);throw e;}}));await api('commits/'+head+'/check-runs?filter=latest&per_page=100&page=1');await api('actions/runs/38043448721');await api('environments/protected-flow-maintenance');console.log(JSON.stringify({allReads:'success',calls}));}catch(e){console.log(e.message);process.exitCode=1;}
+          NODE
