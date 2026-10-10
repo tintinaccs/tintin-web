@@ -1,3 +1,9 @@
+# Selección móvil única — 2026-10-10
+
+Base bcd210832ae3582056823e03df0d511d2e951ad2; rama fix/mobile-single-selection. Codex /root. Causa: la cápsula de aria-current=page seguía visible al abrir otro panel; la exclusión solo cubría class active. Cambio mínimo: ocultar la cápsula de toda opción no expandida mientras existe un panel expandido. Al cerrar, se restaura la página actual sin alterar aria-current.
+
+Impacto limitado a CSS móvil y referencias de caché generadas. Sin datos, roles, autenticación, pedidos o pagos. Regresión específica: 5 páginas × 320/390/767px con aria-current en Catálogo, selección única en cinco paneles y restauración tras Escape; desktop conserva comportamiento. PASS_LOCAL: 16 pruebas Chromium aprobadas sobre main bcd2108 (mobile-selection-reconciled-tests.log). Conserva PR #1081 y #1088. Al abrir paneles, recupera la capa frontal móvil para evitar la regresión de z-index introducida por #1088. Build y CI pendientes; aprobación anterior invalidada por cambio de main.
+
 # Conexiones automáticas y pantallas de compra — 2026-10-10 (America/Buenos_Aires)
 
 Agente: Codex / GPT-6. Rama `codex/flujo-conexiones-automatico-20261010`, base `cf2ea79987e3c9ebe80798d423e396c0e7f3d1f4`. PR #1088; auto-merge suspendido al ampliarse la solicitud.

@@ -14,6 +14,7 @@ function fixture(pageName){
  import {renderAccountDrawer} from '../../js/components/navigation/compartido/panel-cuenta.js';
  document.body.insertAdjacentHTML('beforeend',renderMobileTabbar()+renderSearchPanel()+renderCartDrawer()+renderCollectionsSheet()+renderAccountDrawer());
  document.getElementById('tabbar-notifications').hidden=false;
+ document.getElementById('tabbar-tienda').setAttribute('aria-current','page');
  document.body.insertAdjacentHTML('beforeend','<div class="tt-shared-backdrop" id="backdrop" hidden></div><div class="tt-notifications-drawer" id="notifications-drawer" role="dialog" aria-modal="true" aria-hidden="true"><button id="btn-notifications-close">Cerrar alertas</button><div id="tt-notifications-list"></div></div>');
  await import('../../js/components/navigation/compartido/control-paneles.js');
  const controller=window.TintinSurfaceController;
@@ -33,6 +34,7 @@ for(const width of [320,390,767])for(const pageName of ['index.html','catalogo.h
   await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('open');
   expect(await page.locator('#background').evaluate(el=>el.inert)).toBe(true);
   expect(await page.locator('#tt-tabbar').evaluate(el=>!!el.closest('[inert]'))).toBe(false);
+  expect(await page.locator('#tt-tabbar .tt-tabbar-btn').evaluateAll(nodes=>nodes.filter(el=>getComputedStyle(el,'::before').opacity==='1').map(el=>el.id))).toEqual([trigger]);
   expect(await page.locator('#tt-tabbar .tt-tabbar-btn').evaluateAll(nodes=>nodes.filter(el=>el.offsetParent!==null).every(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.left+r.width/2,r.top+r.height/2)?.closest('.tt-tabbar-btn')===el;}))).toBe(true);
  }
  await page.locator('#tabbar-cuenta').focus();await page.keyboard.press('Tab');
@@ -40,6 +42,7 @@ for(const width of [320,390,767])for(const pageName of ['index.html','catalogo.h
  await page.keyboard.press('Shift+Tab');await expect(page.locator('#tabbar-cuenta')).toBeFocused();
  await page.keyboard.press('Escape');await expect(page.locator('#account-drawer')).toHaveAttribute('aria-hidden','true');
  expect(await page.locator('#background').evaluate(el=>el.inert)).toBe(false);
+ expect(await page.locator('#tt-tabbar .tt-tabbar-btn').evaluateAll(nodes=>nodes.filter(el=>getComputedStyle(el,'::before').opacity==='1').map(el=>el.id))).toEqual(['tabbar-tienda']);
 });
 test('desktop conserva aislamiento modal y foco',async({page})=>{
  await page.route('**/__navigation-front',r=>r.fulfill({contentType:'text/html',body:fixture('index.html')}));
