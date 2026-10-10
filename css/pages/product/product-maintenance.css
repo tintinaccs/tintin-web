@@ -790,3 +790,10 @@ body.tt-product-maintenance .tt-qty-btn:focus-visible { outline:2px solid var(--
   body.tt-product-maintenance .tt-product-detail-grid { gap:28px; padding:8px 0 24px; }
   body.tt-product-maintenance .tt-gallery-thumb { flex-basis:56px; width:56px !important; height:56px !important; }
 }
+
+/* La selección continúa el fondo de la ficha y de las recomendaciones. */
+html body.tt-product-maintenance .tinsel,
+html body.tt-product-maintenance .tinsel .tinsel-box {
+  background: transparent !important;
+  background-image: none !important;
+}

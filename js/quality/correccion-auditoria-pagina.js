@@ -49,7 +49,7 @@ function checkWhatsAppOverlap(){
   if(mobile){
    var wr=wa.getBoundingClientRect();
    if(wr.width>0&&wr.height>0){
-    collided=[].slice.call(document.querySelectorAll('a,button')).some(function(node){
+    collided=[].slice.call(document.querySelectorAll('.tt-cart-feedback.is-visible')).some(function(node){
      if(node===wa||node.closest(WA_EXCLUDE)||!visible(node,true))return false;
      return overlaps(wr,node.getBoundingClientRect(),2);
     });

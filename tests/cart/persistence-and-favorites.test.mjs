@@ -35,9 +35,8 @@ test('favoritos está conectado y persiste con la cuenta (no hay eliminación de
     read('firestore.rules'),
   ]);
   assert.match(favorites, /users', currentUser\.uid, 'favorites'/);
-  // La ficha usa el control social canónico de producto. No se permite
-  // reintroducir el antiguo btn-product-favorite como segunda capa paralela.
-  assert.match(product, /id="btn-product-like"/);
+  // La ficha pública oculta la barra social; los favoritos de la cuenta persisten.
+  assert.doesNotMatch(product, /id="btn-product-like"/);
   assert.doesNotMatch(product, /btn-product-favorite/);
   assert.doesNotMatch(cart, /tt-cart-favorites/);
   assert.match(await read('perfil.html'), /id="perfil-favorites-list"/);

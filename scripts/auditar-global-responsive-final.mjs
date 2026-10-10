@@ -162,9 +162,11 @@ async function inspectBase(page, width) {
 
       if (visible(whatsapp,true)) {
         const wa = rect(whatsapp);
-        const collided = [...document.querySelectorAll('a,button')].find(node =>
+        // Un flotante fijo puede pasar por delante del contenido durante scroll;
+        // las superficies superpuestas y la tabbar conservan su zona exclusiva.
+        const collided = [...document.querySelectorAll('.tt-privacy-consent:not([hidden]),.tt-cart-feedback.is-visible')].find(node =>
           visible(node,true) &&
-          !node.closest('.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header') &&
+          node !== whatsapp &&
           overlaps(wa,rect(node),2)
         );
         if (collided) {

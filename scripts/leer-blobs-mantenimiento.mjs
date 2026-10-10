@@ -7,3 +7,9 @@ export async function readTrustedOrRemote(entry, original, readTrusted, readRemo
   return entry.sha === original?.sha && entry.mode === original.mode
     ? readTrusted() : readRemote();
 }
+
+export function githubFailure(path, response) {
+  const headers = ['x-ratelimit-resource', 'x-ratelimit-limit', 'x-ratelimit-remaining', 'x-ratelimit-reset', 'retry-after'];
+  const limits = headers.map(name => `${name}=${response.headers.get(name) ?? 'desconocido'}`).join('; ');
+  return `Lectura/escritura de GitHub rechazada (${path}): HTTP ${response.status}; ${limits}`;
+}

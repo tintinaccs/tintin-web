@@ -41,6 +41,7 @@ for (const [name, mutate] of [
   ['campo inesperado', data => { data.plan.approved = true; }],
   ['workflow nuevo', data => { data.changedPaths.push('.github/workflows/override.yml'); }],
   ['auditor modificado', data => { data.changedPaths.push('scripts/mantenimiento-flujos-core.mjs'); }],
+  ['lector del control modificado', data => { data.changedPaths.push('scripts/leer-blobs-mantenimiento.mjs'); }],
   ['revisores modificados', data => { data.changedPaths.push('config/mantenimiento-flujos.json'); }],
 ]) test(`Rechaza ${name}`, () => { const data = fixture(); mutate(data); assert.throws(() => inspectMaintenance(data)); });
 

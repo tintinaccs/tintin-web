@@ -1,3 +1,39 @@
+## Reparación del control protegido — 2026-10-10
+
+Estado del candidato de reparación: PASS_LOCAL; CI y migración revisada pendientes. Evidencia generada por Codex / GPT-6. El propietario pidió explícitamente resolver el control tras los HTTP403 de PR1083. Se actualiza el PR separado1081 contra mainec63adce6551cb6210c20fdcea21c4f3447f2896, sin descartar cambios de otros PR ni mezclar las correcciones de pantallas.
+
+Defecto comprobado: inspect y publish descargaban cada archivo protegido, aunque su objeto Git y modo fueran idénticos a main. En PR1083 son541 archivos por fase,456 idénticos y85 diferentes:1082 solicitudes de blobs frente a170 necesarias para los protegidos cambiados, más metadatos/política/plan. La causa de cada403 real sigue sin confirmarse porque el código anterior no conserva endpoint ni cabeceras.
+
+Corrección: bytes del checkout confiable sólo para objeto Git+modo idénticos; blobs remotos para cambios/nuevos/modos distintos. Se conservan todas las verificaciones de hashes, base/head, plan, CI, entorno y revisión; un error nunca se acepta. El lector nuevo también requiere migración separada para cambios posteriores. Los errores informan endpoint y cabeceras de presupuesto/reintento, sin tokens ni cuerpo de respuesta.
+
+Validación:55 pruebas específicas de lectura, presupuesto, mantenimiento y protección PASS; suite completa de conexiones134 PASS. Prueba del programa completo, sin red ni credenciales, con541 archivos y un cambio: versión anterior inspect0/publish1,1008 peticiones yHTTP403 bajo presupuesto simulado1000; corrección inspect0/publish0,30 peticiones/seis blobs. La regresión integrada cubre ambas fases con aprobación simulada sólo en fixture; no representa aprobación ni evidencia remota. Además, inspect del programa corregido verificó PR1083 real/baseec63/HEAD7961cff mediante API nativa de solo lectura:98 consultas,87 blobs, cero escrituras; plan, CI y configuración de entorno válidos. No prueba el presupuesto ni el acceso del token de Actions. Build Pages localPASS (rutas/CSP/manifiesto/caché reproducibles). Inventario histórico78 alcances conservado; se agregan tres archivos protegidos reales, total544. No se modifican workflows, permisos, revisores, branch protection, Firestore ni interfaz pública.
+
+La integración de este propio control es una migración separada revisada, no una renovación ordinaria. El rechazo del control antiguo debe conservarse visible; no publicar checks ficticios ni suplantar revisión. Procedimiento y evidencia: MIGRACION_CONTROL_20261010.md. PR1083 conserva suCI PASS para7961cff y seguirá pendiente hasta integrar la reparación y renovarlo sobre elmain resultante. No hay merge ni publicación en producción atribuida a esta reparación.
+
+# Ficha y navegación públicas — 2026-10-09
+
+Base 268067dfad7ed6eb305ecd17dcd64c08a4b1e214; PR #1084, rama fix/ocultar-social-producto. Pedido del propietario: ocultar comentarios, Me gusta y Compartir de la ficha; fondo continuo de Tu selección; WhatsApp fijo sin parpadeo; Catálogo en todos los headers y cápsula móvil que cubra icono y texto con separación.
+
+Se retiran controles y carga del módulo público de reseñas. Se conservan datos, API, administración, favoritos de perfil y selección, reglas y permisos. Selección con fondo transparente. El flotante deja de respirar y alternar por contenido normal durante scroll; avisos superpuestos conservan su exclusión temporal. El header ignora la etiqueta antigua TIENDA guardada en apariencia. La cápsula se dibuja dentro de cada botón activo, sin raya independiente, con etiquetas visibles incluso al hacer scroll y ancho seguro con 5/6 acciones. Cadena de caché alineada.
+
+PASS_LOCAL: 37 pruebas Chromium específicas (26 de ficha/cápsula en 5 páginas, 7 de WhatsApp fijo en 320–1920px y 4 de controles/favoritos); 80 pruebas Node de interacción/carrito/regresiones. Auditoría de navegación pública PASS. La vista previa anterior acredita ocultación y fondo, no estos nuevos cambios de navegación. CI anterior falló por el test antiguo que exigía Me gusta; contrato actualizado conservando persistencia y permisos. NOT_VERIFIED: CI del nuevo SHA, aprobación y producción. Sin escrituras de datos productivos.
+
+## Evidencia histórica de main
+
+# Revision PR #1078 — productos y colores, 2026-10-09
+
+Base main 6d7c644a913c25710c1d1604fb4ff07ec7f2d644. Conflictos resueltos conservando compradores dentro de Pedidos, espejo local y mecanismos de proteccion.
+
+Pedido adicional del propietario: mantener TODAS las miniaturas visibles, agrupadas por color; circulo selecciona primera foto correspondiente y miniatura sincroniza circulo. Galeria ampliada conserva todas las fotos. 18/18 pruebas de galeria final PASS en 320–1920 px.
+
+Se corrige fallback de colores (clara no inventa gris), fotos imageUrls en tarjetas, aspecto administrativo y carga de la paleta antes del renderer en todas las superficies publicas. CSS final de Producto disponible desde el head, sin depender del SDK diferido.
+
+PASS_LOCAL: 40 pruebas Chromium en 320/390/709/768/1024/1280/1440/1920; 86 pruebas Node de catalogo y mantenimiento (7/7 colores final). Auditoria public shell PASS. Productos relacionados: ciclos sin duplicar colecciones/productos cubiertos por pruebas existentes. Build Pages final PASS (rutas, CSP, manifiesto y cache). CI remoto pendiente para el SHA candidato. NOT_VERIFIED: vista previa requiere Cloudflare Access; prueba adicional master-presentation local agoto espera de politica SDK, no computada como PASS. Se elimina filtrado regex de scripts en pruebas y generador para resolver avisos CodeQL.
+
+Verificacion publica de main: CELINA cambia URL de foto al seleccionar plateado, seleccion plateado activa e imagen plateada cargada; WhatsApp verde rgb(22,133,65), comentarios antes del footer y tres recomendaciones de colecciones distintas. Esta observacion no acredita despliegue del candidato. Sin escrituras de catalogo, pedidos, pagos, inventario ni sesiones.
+
+## Evidencia historica conservada
+
 # Estado vigente — 2026-10-09: pedidos históricos y clientes locales
 
 Base c6ac7c741e98840b6bffa08cc3ce81093ba24be7 (rebase desde cbeccc3; se conservan #1067 de seguridad de cuentas y #1073 de interfaz móvil); rama codex/pedidos-clientes-locales-20261008. Agente Codex /root. Autorización: espejo bidireccional de Sheets, Panel y Firestore; sin pagos. Trabajo previo conservado abajo como evidencia fechada, no PASS heredado.
@@ -1498,10 +1534,14 @@ PENDING: CI, revisión humana de mantenimiento y publicación. Las pruebas local
 
 PASS_LOCAL final: build:pages completo, integridad CSS, auditoría de caché (313 archivos versionados, 73 cargas dinámicas) y 47/47 controles de protección/mantenimiento. Se regenera el manifiesto tras registrar la evidencia final. La comprobación visual corresponde al renderer y estilos reales en fixture aislado; no se realizaron acciones comerciales.
 
-## 2026-10-09 — Reducir peticiones del control (Codex)
+## Reconciliación local sin errores por solapamiento — 2026-10-09
+Autor: Codex, agente principal. Base fe8fea0c78cdf9da0493d7b733dbbc93aaa91f74. Evidencia de producción: el activador de 13:48 falló porque el ciclo de 13:47 conservaba el bloqueo. La integración administrativa instalada estaba desactualizada y se reemplazó por la versión publicada exacta antes de verificar el activador.
+Cambio puntual: un ciclo que no adquiere el bloqueo devuelve busy:true sin tocar registros ni liberar el bloqueo ajeno. Las ediciones permanecen en Sheets y sus versiones se procesan en el siguiente ciclo. PASS_LOCAL: 17 pruebas del puente, incluyendo ciclo solapado sin lecturas/escrituras. PENDING: CI del código fuente y confirmación del ciclo automático con el ajuste. Importación histórica verificada: 210 ventas, 33.891.000 Gs. y 194 compradores locales/web; reconciliar de nuevo mantiene las cifras.
+## Compradores dentro de Pedidos e importación histórica — 2026-10-09
+Autor: Codex, agente principal. Base fe8fea0c78cdf9da0493d7b733dbbc93aaa91f74.
+La sección Pedidos incorpora una pestaña Clientes que compraron, que reutiliza el espejo autenticado de contactos y pedidos locales/web. Conserva la sección independiente existente y permite volver a Todos los pedidos. No crea cuentas Auth ni cambia stock o pagos.
+PASS_LOCAL: prueba de actualización desde Pedidos tras un nuevo pedido, con compradores locales/web, escapes HTML y sólo lecturas de la API; 16 regresiones del puente Sheets/Firestore/pedidos pasan; sintaxis de ambos módulos y diff check pasan.
+PASS_PRODUCTION de la importación antecedente: Apps Script terminó la segunda ejecución sin error; el panel confirmó 210 ventas locales y 33.891.000 Gs. pagados, iguales al respaldo fuente, y 194 compradores locales/web. La primera ejecución alcanzó el límite de seis minutos y se retomó con las versiones guardadas. Esta evidencia no acredita la pestaña nueva: PENDING CI, mantenimiento protegido y publicación.
 
-El propietario aprobó run 37961537893 para PR #1079, SHA 7dc5a4e35b6862e80dcbe990ec7eb8cbb179dc03. Inspect y approval pasaron; verdict terminó con HTTP 403. También falló verdict de PR #1080 sin requerir aprobación: el problema no se limita a leer revisiones. Cada inspección lee por API los 541 archivos protegidos, incluso los objetos Git sin cambios, y publish repite esa lectura. Un solo trámite supera 1000 peticiones por repositorio/hora del GITHUB_TOKEN (causa compatible con el 403; los logs antiguos no conservaron las cabeceras para confirmarla).
 
-La corrección usa bytes del checkout confiable solo cuando objeto Git Y modo coinciden exactamente con main. Los cambios siguen descargándose y verificándose por hash; no se ejecuta código candidato. Conserva validaciones SHA/base/CI/revisor/entorno y lectura autenticada de revisiones. Errores ahora indican ruta y límite restante. PASS_LOCAL: 44 pruebas, incluyendo 543 archivos sin consumir llamadas remotas, cambios de blob/modo, ausencias, symlinks y fallo HTTP. Protección local de 78 registros/543 archivos pasa.
-
-Migración separada del mecanismo de control: requiere revisión e integración del propietario; la renovación ordinaria bloquea cambios al propio control. No alterar reglas ni inventar checks. Después, actualizar base de #1079 y #1080, ejecutar CI y nueva revisión del SHA de #1079. Pestaña en producción NO VERIFICADA. Activadores reales de Apps Script confirmados Completada a las 13:56 (190.273s), 14:00 (119.955s) y 14:05; el ciclo de 13:50 terminó por timeout.
+Seguimiento 2026-10-09 (Codex): mantenimiento de #1079 run 37966815736 SUCCESS; merge a main 25f8a866e47d23cfb13a60e79a648ba4c789c437. Nuevo candidato de #1080 integra esa base, conserva su política protegida y regenera el manifiesto; CI combinado pendiente. En Apps Script se observaron ciclos completos de 190.273s a las 13:56 y 119.955s a las 14:00, junto con ciclos omitidos por bloqueo completados sin error. Un ciclo a las 13:50 terminó por timeout. El 403 de GitHub fue confirmado por la sonda 37964773481: cuota efectiva 5000 y remaining=0, reinicio 14:15:38. La aprobación siguiente sufrió fetch failed; la última pasó sin modificar los controles.

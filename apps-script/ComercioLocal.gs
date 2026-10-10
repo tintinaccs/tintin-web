@@ -141,7 +141,7 @@ function tintinLocalApplySnapshot_(snapshot) {
   }
 }
 function tintinReconciliarComercioLocal_() {
-  var lock=LockService.getDocumentLock()||LockService.getScriptLock(),message='';if(!lock.tryLock(1000))throw new Error('El espejo local está sincronizando. Reintentá.');
+  var lock=LockService.getDocumentLock()||LockService.getScriptLock(),message='';if(!lock.tryLock(1000))return {busy:true};
   try {
     // Primero envía cambios pendientes. Si hay conflicto, no borra la edición local.
     tintinLocalPushAll_();var properties=tintinLocalProperties_(),revision=tintinLocalCall_({action:'snapshot',revisionOnly:true}),webSignature=tintinLocalWebSignature_();

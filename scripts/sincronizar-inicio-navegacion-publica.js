@@ -5,23 +5,23 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260910-header-clearance-1';
+const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261009-wrist-guide-1';
+const TIENDA_VERSION = 'tintin-20261010-product-social-navigation-4';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1';
-const LOADER_VERSION = 'tintin-20261008-producto-superficies-1-minimal-product-20261008-1';
+const LOADER_VERSION = 'tintin-20261010-product-social-navigation-4';
 const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261009-wrist-guide-1';
-const NAV_ENTRY_VERSION = 'tintin-20261009-wrist-guide-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261010-product-social-navigation-4';
+const NAV_ENTRY_VERSION = 'tintin-20261010-product-social-navigation-4';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261008-producto-superficies-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261003-profile-route-1';
 const PROFILE_GATE_VERSION = 'tintin-20261003-profile-route-1';
 const NAV_HEADER_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
 const NAV_TABLET_VERSION = 'tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1';
-const NAV_MOBILE_VERSION = 'tintin-20261008-icon-circle-2';
+const NAV_MOBILE_VERSION = 'tintin-20261010-product-social-navigation-4';
 const UNIFIED_THEME_VERSION = 'tintin-20261008-producto-superficies-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
@@ -265,6 +265,11 @@ function centralizeRuntime(html) {
     out = out.replace('</body>', `<script src="tienda.js?v=${TIENDA_VERSION}" defer></script>\n</body>`);
   } else {
     out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
+  }
+  // Todas las tarjetas comparten la misma autoridad de fotos y paleta.
+  // Los scripts defer conservan este orden antes del renderer clásico.
+  if (!out.includes('src="js/components/images/galeria-producto.js?')) {
+    out = out.replace(/<script\b[^>]*src=["']tienda\.js[^"']*["'][^>]*><\/script>/i, tag => `<script src="js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1" defer></script>\n${tag}`);
   }
   return out;
 }
