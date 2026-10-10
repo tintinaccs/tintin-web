@@ -817,3 +817,12 @@ html body.tt-product-maintenance .tt-related-section > .container { width:min(10
 @media (min-width:600px) and (max-width:767px) {
   body.tt-product-maintenance .tt-related-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
+
+/* El control queda fuera del lateral ocupado por WhatsApp en móvil. */
+@media (max-width:767px) {
+  body.tt-product-maintenance .tt-related-header { flex-direction:row-reverse; gap:12px; margin-bottom:16px; }
+  body.tt-product-maintenance #related-trigger { display:block; text-align:left; }
+  body.tt-product-maintenance #related-trigger .tt-section-sub { font-size:.65rem; line-height:1.4; margin-bottom:4px; }
+  body.tt-product-maintenance #related-trigger .tt-section-title { font-size:clamp(1.1rem,5.4vw,1.45rem); line-height:1.25; margin:0; }
+}
+body.tt-product-maintenance .tt-related-refresh:focus-visible { outline:2px solid var(--pink-dark); outline-offset:3px; }

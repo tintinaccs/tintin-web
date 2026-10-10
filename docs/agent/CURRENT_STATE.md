@@ -1,3 +1,7 @@
+# Detalles de recomendaciones móviles — 2026-10-10
+
+Codex /root; base 36ea4f3495e765c12e39116ebf33c92e16299757; rama fix/product-related-mobile-details. Evidencia visual en producto publicado: título Otros productos partido y control de renovación en lateral ocupado por WhatsApp fijo al hacer scroll. Ajuste puntual: control a la izquierda y título fluido en una línea en móvil, subtítulo compacto, margen inferior reducido; foco visible de teclado. Sin cambios de imágenes, datos, compra, cuentas ni navegación. Impacto: CSS del producto y referencias transitivas de caché; desktop/tablet conservan distribución. PASS_LOCAL: 10 pruebas Chromium a 320/390/768/1024/1440 y orientación horizontal, título de una línea, control 44px fuera del lateral derecho, sin overflow y compra intacta. CI/publicación pendientes.
+
 # Selección móvil única — 2026-10-10
 
 Base bcd210832ae3582056823e03df0d511d2e951ad2; rama fix/mobile-single-selection. Codex /root. Causa: la cápsula de aria-current=page seguía visible al abrir otro panel; la exclusión solo cubría class active. Cambio mínimo: ocultar la cápsula de toda opción no expandida mientras existe un panel expandido. Al cerrar, se restaura la página actual sin alterar aria-current.

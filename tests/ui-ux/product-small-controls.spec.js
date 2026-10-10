@@ -38,5 +38,17 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
     expect(geometry.left).toBeGreaterThanOrEqual(16);expect(geometry.right).toBeGreaterThanOrEqual(16);
     expect(geometry.overflow).toBe(false);expect(Math.min(...geometry.cards)).toBeGreaterThanOrEqual(120);
     expect(geometry.background).toContain('142, 107, 35');
+    if(width<768){
+      const heading=await page.evaluate(()=>{
+        const title=document.querySelector('#related-trigger .tt-section-title');
+        const range=document.createRange();range.selectNodeContents(title);
+        const button=document.getElementById('related-refresh').getBoundingClientRect();
+        return{lines:range.getClientRects().length,right:button.right,width:button.width,height:button.height};
+      });
+      expect(heading.lines).toBe(1);
+      expect(heading.right).toBeLessThan(width/2);
+      expect(heading.width).toBeGreaterThanOrEqual(44);
+      expect(heading.height).toBeGreaterThanOrEqual(44);
+    }
   });
 }
