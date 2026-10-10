@@ -335,7 +335,7 @@ service cloud.firestore {
         data.authMethods.hasOnly(['google', 'emailOtp']);
     }
 
-    // El alta inicial guarda nombre, teléfono, username y fecha de nacimiento
+    // El alta inicial guarda nombre y teléfono; conserva campos opcionales históricos
     // en una sola escritura, y recién ahí el perfil puede pasar de
     // 'incomplete' a 'active' — nunca al revés, nunca desde otro estado, y
     // nunca junto con campos protegidos de pedidos/rol/bloqueo (esos siguen
@@ -1226,7 +1226,8 @@ service cloud.firestore {
         request.resource.data.uid == request.auth.uid &&
         request.resource.data.createdAt == request.time &&
         usernameKey.size() >= 3 && usernameKey.size() <= 20 &&
-        usernameKey.matches('^[a-z0-9_]{3,20}$');
+        usernameKey.matches('^[a-z0-9_]{3,20}$') &&
+        !(usernameKey in ['tintin', 'tintinaccs', 'tintinaccesorios']);
 
       allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
 

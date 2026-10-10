@@ -446,3 +446,33 @@ html body :is(#account-drawer,#cart-drawer,#notifications-drawer,#collections-sh
 html body :is(.tt-drawer-brand-heading,.tt-account-drawer-heading) h2 { margin:0 !important; align-self:center !important; max-width:100%; font-size:14px !important; text-align:center; text-shadow:none !important; letter-spacing:.09em; }
 html body :is(#btn-cart-close,#btn-account-close,#btn-notifications-close,#btn-close-sheet) { position:absolute !important; top:12px !important; right:12px !important; display:grid; place-items:center; width:36px !important; height:36px !important; border:1px solid #fff !important; border-radius:50% !important; margin:0 !important; padding:0 !important; background:transparent !important; }
 html body .tt-notifications-kicker { display:none !important; }
+
+.tt-sheet-header #btn-close-sheet,
+.tt-search-close {
+  display:inline-grid !important; place-items:center;
+  width:44px !important; height:44px !important; min-height:44px;
+  padding:0 !important; border:1px solid var(--tt-drawer-border) !important;
+  border-radius:50% !important; background:#fff !important;
+  color:var(--tt-drawer-text) !important;
+}
+.tt-collections-sheet .tt-sheet-grid { gap:12px !important; padding:16px !important; }
+.tt-sheet-grid .tt-sheet-item { border:1px solid var(--tt-drawer-border); border-radius:18px !important; padding:14px 8px !important; gap:10px; }
+.tt-sheet-grid .tt-sheet-item-img { width:clamp(68px,18vw,100px); height:clamp(68px,18vw,100px); }
+.tt-cart-drawer { border-radius:24px 0 0 24px; overflow:hidden; }
+@media (max-width:767px) {
+  .tt-collections-sheet .tt-sheet-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .tt-sheet-grid .tt-sheet-item { font-size:11px; line-height:1.4; }
+}
+
+.tt-sheet-info-links { display:flex; justify-content:center; gap:24px; margin:0 0 14px; }
+.tt-sheet-info-links a { display:inline-flex; align-items:center; min-height:44px; color:var(--tt-drawer-text); font-weight:600; text-decoration:none; }
+html body #btn-tablet-close,
+html body #collections-sheet #btn-close-sheet {
+  width:44px !important; height:44px !important; min-width:44px;
+  display:grid !important; place-items:center; padding:0 !important;
+  border:1px solid #fff !important; border-radius:50% !important;
+  background:transparent !important; color:#fff !important;
+}
+html body .tt-header-desktop .tt-dropdown-grid { gap:14px; }
+html body .tt-header-desktop .tt-dropdown-card { border-radius:18px !important; padding:16px 10px; }
+html body .tt-header-desktop .tt-dropdown-icon img { object-fit:contain; }

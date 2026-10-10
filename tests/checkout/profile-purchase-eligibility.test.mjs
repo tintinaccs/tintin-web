@@ -30,22 +30,22 @@ test('perfil legacy completo puede comprar sin exigir migración destructiva', (
 });
 
 test('perfil incompleto no puede llegar al commit comercial', () => {
-  for (const missing of ['firstName', 'lastName', 'phone', 'username', 'dob', 'savedLocation']) {
+  for (const missing of ['firstName', 'lastName', 'phone']) {
     const profile = { ...completeLegacyProfile };
     delete profile[missing];
     assert.equal(isPurchaseEligibleProfile(profile), false, `debe faltar ${missing}`);
   }
 });
 
-test('ubicación requiere nombre y coordenadas reales', () => {
+test('ubicación opcional no bloquea compra; se solicita en entrega', () => {
   assert.equal(isPurchaseEligibleProfile({
     ...completeLegacyProfile,
     savedLocation: { lat: 0, lng: 0, name: 'Mi casa' }
-  }), false);
+  }), true);
   assert.equal(isPurchaseEligibleProfile({
     ...completeLegacyProfile,
     savedLocation: { lat: -25.33, lng: -57.52, name: '' }
-  }), false);
+  }), true);
 });
 
 test('aliases históricos siguen la misma definición de perfil completo', () => {
@@ -81,12 +81,21 @@ test('checkout puede reutilizar coordenadas anidadas con nombre persistido a niv
   }), true);
 });
 
-test('coordenadas históricas sin nombre siguen sin habilitar compra', () => {
+test('dirección histórica incompleta se corrige en envío, no en registro', () => {
   assert.equal(isPurchaseEligibleProfile({
     ...completeLegacyProfile,
     savedLocation: {
       addressLat: -27.0739,
       addressLng: -55.6422
     }
-  }), false);
+  }), true);
+});
+
+test('nombre y WhatsApp bastan sin datos opcionales ni marca de alta', () => {
+  assert.equal(isPurchaseEligibleProfile({ name:'María González', phone:'+595981123456' }),true);
+  assert.equal(isPurchaseEligibleProfile({ name:'María', phone:'+595981123456' }),false);
+});
+
+test('un nombre separado válido prevalece sobre un alias completo inválido', () => {
+  assert.equal(isPurchaseEligibleProfile({firstName:'María', lastName:'González', name:'undefined', phone:'+595981123456'}), true);
 });

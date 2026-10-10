@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
+  const TT_CACHE_VERSION = 'tintin-20261009-whatsapp-responsive-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -396,7 +396,7 @@
 
   const BRAND_LABEL = computeBrandLabel();
   const DEFAULT_LOGO_SRC = resolveAsset(
-    'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', false
+    'assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1', false
   );
   const LOGO_SRC = DEFAULT_LOGO_SRC;
 
@@ -830,7 +830,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-mobile-navigation-front-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-5');
     }
   }
 
@@ -872,41 +872,41 @@
     if (isVisualPreviewFrame || framed) return;
     if (/\/checkout(?:\.html)?$/.test(currentPath())) return;
     if (!window.TintinVersionWatchBooted) {
-      importSibling('quality/vigilancia-version.js', 'Version Watch');
+      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootHeaderScrollHide() {
     if (!window.TintinHeaderScrollHideBooted) {
-      importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide');
+      importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootAdminAndProfileFixes() {
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
-      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix');
+      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
       importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261004-admin-connections-3-encomienda-20261008-1-master-20261007-1');
-      importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
+      importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
       importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261004-admin-connections-3-encomienda-20261008-1-master-20261007-1');
     }
   }
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal');
+      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootImagePerformance() {
     if (!window.TintinImagePerformanceBooted) {
-      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance');
+      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261006-production-audit-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261010-whatsapp-release-5');
     }
   }
 
@@ -917,12 +917,12 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-mobile-navigation-front-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-whatsapp-release-5');
   }
 
   function bootThemeColorSanitizerPublic() {
     if (!window.TintinThemeColorSanitizerBooted) {
-      importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer');
+      importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
@@ -937,11 +937,11 @@
       const link = document.createElement('link');
       link.id = 'tt-phase8-ui-ux-css';
       link.rel = 'stylesheet';
-      link.href = resolveAsset('css/quality/experiencia-interfaz.css');
+      link.href = new URL('/css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href;
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {
-      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX');
+      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 

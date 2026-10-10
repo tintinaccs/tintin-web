@@ -216,8 +216,8 @@ test('el límite de arranque no apaga el loader mientras login espera una intera
   }
 });
 
-test('ubicación de Últimos datos tiene un solo dueño: un clic solicita geolocalización una vez', async () => {
-  assert.match(login, /locateButton: document\.getElementById\('login-profile-locate'\)/);
+test('ubicación del checkout tiene un solo dueño: un clic solicita geolocalización una vez', async () => {
+  assert.doesNotMatch(login, /id="login-profile-locate"/);
   assert.doesNotMatch(login, /getElementById\('login-profile-locate'\)\.onclick/);
   const source = fs.readFileSync(new URL('../../js/components/location/mapa-ubicacion.js', import.meta.url), 'utf8')
     .replace(/^import[^\n]*\n/gm, '').replace(/export (async )?function/g, '$1function');

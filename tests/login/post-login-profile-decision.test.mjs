@@ -69,7 +69,7 @@ test('un perfil realmente incompleto sigue entrando a Últimos datos', () => {
     profile: {
       firstName: 'Juan',
       lastName: 'Pérez',
-      phone: '+595981123456',
+      phone: '',
       savedLocation: COMPLETE_BASE.savedLocation,
     },
     user: { email: 'nuevo@example.com' },
@@ -78,10 +78,10 @@ test('un perfil realmente incompleto sigue entrando a Últimos datos', () => {
   });
 
   assert.equal(plan.skip, false);
-  assert.equal(plan.needsUsername, true);
-  assert.equal(plan.needsDob, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
   assert.equal(plan.needsName, false);
-  assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsPhone, true);
   assert.equal(plan.needsAddress, false);
 });
 

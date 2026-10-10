@@ -14,7 +14,7 @@
 // perfil vuelve a validar el dueño de la reserva.
 
 import { doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { usernameKey } from "./utilidades-username.js?v=tintin-20260821-username-unique-1";
+import { usernameKey } from "./utilidades-username.js?v=tintin-20261010-whatsapp-release-5";
 
 export class UsernameAlreadyTakenError extends Error {
   constructor() {

@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20261010-whatsapp-release-5';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -13,9 +13,9 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-5';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261010-mobile-navigation-front-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261010-whatsapp-release-5';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -92,11 +92,11 @@ function loadHomeMaintenance() {
     const link = document.createElement('link');
     link.id = 'tt-home-maintenance-css';
     link.rel = 'stylesheet';
-    link.href = versionedSiteAsset('css/pages/home/mantenimiento-inicio.css');
+    link.href = new URL('/css/pages/home/mantenimiento-inicio.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href;
     document.head.appendChild(link);
   }
 
-  return import(versionedJsModule('pages/home/mantenimiento-inicio.js'));
+  return import(new URL('/js/pages/home/mantenimiento-inicio.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href);
 }
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
@@ -118,7 +118,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261005-auth-loader-1-profile-wholesale-20261005-1-master-20261007-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261010-whatsapp-release-5').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -138,7 +138,7 @@ function loadCartRuntime() {
 
 function loadNotificationsRuntime() {
   if (!notificationsRuntimePromise) {
-    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261008-producto-superficies-1')
+    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261010-whatsapp-release-5')
       .then(module => {
         module.initClientNotifications?.();
         return module;
@@ -229,14 +229,14 @@ const surfaceLoads = new Map();
 // errors.
 const navigationSurfaceImportFactories = Object.freeze({
   desktop: () => [
-    import(versionedJsModule('components/navigation/escritorio/indicador-navegacion-escritorio.js')),
+    import(new URL('/js/components/navigation/escritorio/indicador-navegacion-escritorio.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
   ],
   tablet: () => [
-    import(versionedJsModule('components/navigation/tableta/control-menu-tableta.js')),
+    import(new URL('/js/components/navigation/tableta/control-menu-tableta.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
   ],
   mobile: () => [
-    import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
-    import(versionedJsModule('components/navigation/movil/navegacion-compacta-movil.js')),
+    import(new URL('/js/components/navigation/movil/indicador-navegacion-movil.js?v=tintin-20261010-whatsapp-release-5', location.href).href),
+    import(new URL('/js/components/navigation/movil/navegacion-compacta-movil.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
   ],
 });
 
@@ -277,8 +277,8 @@ function loadNavigationBehaviors() {
     })
     .then(() => Promise.allSettled([
       initialSurfacePromise,
-      import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20261010-mobile-navigation-front-1'),
+      import(new URL('/js/components/navigation/compartido/enrutador.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
+      import('./control-busqueda.js?v=tintin-20261010-whatsapp-release-5'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);
