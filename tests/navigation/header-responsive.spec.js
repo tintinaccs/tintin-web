@@ -2,6 +2,16 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 
+test('los paneles comparten la URL canónica del logo del encabezado', async ({ page }) => {
+  await mockGuestNavigation(page);
+  await page.goto('/envios.html');
+  const logos = page.locator('.tt-header-desktop .tt-logo-img, #cart-drawer .tt-drawer-brand-logo, #collections-sheet .tt-drawer-brand-logo, #account-drawer .tt-account-drawer-logo');
+  await expect(logos).toHaveCount(4);
+  const sources = await logos.evaluateAll(images => images.map(image => image.src));
+  expect(new Set(sources).size).toBe(1);
+  expect(new URL(sources[0]).pathname).toBe('/assets-tintin/images/general/logo.png');
+});
+
 // Estas dos pruebas verifican superficies, no Firebase. Una resolución real
 // tardía podía ocultar la campana simulada o dejar el CTA en restauración.
 async function mockGuestNavigation(page) {

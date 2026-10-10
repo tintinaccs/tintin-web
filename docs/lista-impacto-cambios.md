@@ -2,6 +2,19 @@
 
 Esta lista se completa para cada cambio. Marcar una parte como “no aplica” requiere una razón concreta.
 
+## Registro del 2026-10-10: login, OTP y Envíos
+
+Base publicada `34aa0f3b`; evidencia detallada en `docs/agent/AUDITORIA_MULTIDISPOSITIVO_20261010.md` y CURRENT_STATE.
+
+- Páginas: login (teclado) y Envíos (lecturas y tarifas); las restantes reciben únicamente referencias transitivas de caché del shell.
+- Componentes: coordinación compartida de sesión en conexiones y logo canónico de cuenta/carrito/catálogo, sin cambiar imagen, CSS ni geometría. Se conservan la tipografía itálica y todas las precargas.
+- Firestore: reservas server-side en la colección privada existente `emailOtpRateLimits`; Rules sin cambios, lectura/escritura cliente rechazada. Contador por correo separado del código; conserva cuota legacy cuando existe el documento previo. No hay migración destructiva ni cambios de pedidos/precios/stock.
+- Auth: mismo UID, sesión, nombre/WhatsApp mínimos, proveedores y validación; MFA sólo propuesta revisable, sin activación ni excepciones nuevas. OTP conserva seis dígitos y cinco minutos.
+- Checkout/pagos/Sheets: contratos ejecutados y comportamiento conservado; ninguna escritura real de prueba. Reserva de cuota y contador de intentos aplican antes de contactar al proveedor.
+- Diagnósticos/caché/CSP: artefactos regenerados por helpers oficiales; sin renovar sellos de producción ni modificar controles/revisores/workflows.
+- Compatibilidad: 14 tamaños y ambas orientaciones para Google/correo; Chromium/Firefox/WebKit reales con emulación de pantalla y toque. Dispositivos físicos no ensayados.
+- Cierre: CI/revisión protegida/integración/publicación del SHA nuevo pendientes hasta su evidencia propia. MFA y restauración remota requieren los prerrequisitos externos documentados.
+
 ## Inventario inicial
 
 - [ ] Páginas HTML afectadas.

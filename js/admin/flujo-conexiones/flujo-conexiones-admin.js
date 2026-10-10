@@ -7,7 +7,7 @@ import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261010-auto-flow-1';
 import { resolveAutomaticState, isAttentionState, liveMarker, shouldShowFlowEdge, createAutomaticMonitor, CHECK_INTERVAL_MS, EVIDENCE_MAX_AGE_MS } from './estado-flujo.js?v=tintin-20261010-auto-flow-1';
 import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261010-auto-flow-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
 import { collection, doc, getDocFromServer as getDoc, getDocsFromServer as getDocs, limit, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -673,7 +673,7 @@ export function initConnectionsFlow({ role } = {}) {
   const pauseMonitor = () => monitor.pause();
   window.addEventListener('pagehide', pauseMonitor);
   let sessionUid = auth.currentUser?.uid || '';
-  const unsubscribeAuth = onAuthStateChanged(auth, user => {
+  const unsubscribeAuth = subscribeAuthState(user => {
     const nextUid = user?.uid || '';
     if (sessionUid === nextUid) return;
     sessionUid = nextUid;

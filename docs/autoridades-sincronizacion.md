@@ -2,6 +2,8 @@
 
 Este contrato evita que Firestore, Superadmin y Google Sheets compitan por el mismo dominio. Firestore y los dominios server-side conservan la autoridad de negocio; Superadmin y Sheets son superficies administrativas que invocan esos mismos contratos.
 
+Los códigos de acceso pertenecen exclusivamente al servidor en `emailOtpCodes`. Los límites de intentos de envío pertenecen a `emailOtpRateLimits`: clave histórica hash por IP y clave `email_` más hash por correo. Se reservan con precondición de versión antes de enviar, permanecen privados al SDK cliente y no se eliminan al consumir el OTP. Las cuotas cuentan también intentos cuyo proveedor falla; así un fallo no habilita reintentos ilimitados. Ningún espejo de Sheets participa de este dominio.
+
 | Dominio | Autoridad operativa | Sheets | Escritura desde Sheets |
 | --- | --- | --- | --- |
 | Productos | Firestore `products` + `productInventory` | `Productos` | Sí, campos permitidos mediante webhook autenticado |
