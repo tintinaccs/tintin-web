@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6e06a7904981ca861c090fbdce2080367d166ad7d68692dc1cacf9851f037766",
+  "sourceFingerprint": "776f910a35925e41deb3f8fdd8a3c1e6ad40f4c5a6235bc3f773a4cd6a4547b4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1107,
     "textFiles": 1059,
-    "totalBytes": 16374344,
+    "totalBytes": 16376017,
     "pages": 19,
     "modules": 788
   },
@@ -1544,8 +1544,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43975,
-      "sha256": "5f89eaa8b481959fa85ba50031effe126c86a7195995bf6a5f324705cc7f8c07",
+      "bytes": 44219,
+      "sha256": "36e127e9aeb97f8a957338f3d360795f69333a007ca6790c4059fb4d14cf9a43",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2113,8 +2113,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 200570,
-      "sha256": "3f68f1add986c5ab6085f1709c049882c5fe1bab98a8ccb38bbc0c738c1b2aca",
+      "bytes": 200564,
+      "sha256": "d0a3a66000a3a3bb2460f6df1bbe5e12ff0403a764a7df11fdfcf52d7b7e4e91",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2158,7 +2158,7 @@
           "line": 2056
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261010-registration-name-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261010-media-cache-1",
           "target": "js/admin/admin-app.js",
           "line": 2057
         },
@@ -2449,7 +2449,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261010-registration-name-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261010-media-cache-1",
           "target": "js/admin/admin-app.js",
           "line": 2057,
           "exists": true
@@ -18880,7 +18880,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 351063,
-      "sha256": "add467b13eac17c5b6bffe6ba18b0cabfaa80e4786f2459e2d6b4c1211368f7f",
+      "sha256": "348a4ae0c062eeef1b37aaf520eaa1b301951d056570842ad3a2e06083a1ced5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20933,8 +20933,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 473290,
-      "sha256": "fbc1e01721abf71307cbecdc6d07b2126c90d763ce3016c592aaee4d88bb7ab7",
+      "bytes": 473534,
+      "sha256": "707faedda2f9c6be3e9c4fbec2796f755e66512c35b478519a612c99f800c07c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21061,13 +21061,13 @@
           "line": 30
         },
         {
-          "raw": "../components/images/carga-imagenes.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 31
         },
         {
-          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3",
           "target": "js/admin/products/biblioteca-multimedia-admin.js",
           "dynamic": false,
           "line": 32
@@ -22439,15 +22439,15 @@
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
-      "bytes": 15411,
-      "sha256": "fe5d3f274a15dca853482065f5cc697c614a730a420278ea4c2b1270361cb28c",
+      "bytes": 15548,
+      "sha256": "06a192bfdc792905d5c94880bbea388086e1167ebe4628fc67eb27bc1f2de48b",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../components/images/biblioteca-multimedia.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "../../components/images/biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3",
           "target": "js/components/images/biblioteca-multimedia.js",
           "dynamic": false,
           "line": 13
@@ -23697,8 +23697,8 @@
     },
     {
       "path": "js/components/images/carga-imagenes.js",
-      "bytes": 13661,
-      "sha256": "4b429b91020e31d2f984e93969c4c20b4311436f5a1b05abece5841f9a18aa90",
+      "bytes": 13798,
+      "sha256": "18d820ff654b8f23988de8d55e98a68c8d4f5f68081a92150bcf1e8595b69bfc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23711,7 +23711,7 @@
           "line": 10
         },
         {
-          "raw": "./biblioteca-multimedia.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "./biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3",
           "target": "js/components/images/biblioteca-multimedia.js",
           "dynamic": false,
           "line": 15
@@ -41078,8 +41078,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 43975,
-      "sha256": "5f89eaa8b481959fa85ba50031effe126c86a7195995bf6a5f324705cc7f8c07"
+      "bytes": 44219,
+      "sha256": "36e127e9aeb97f8a957338f3d360795f69333a007ca6790c4059fb4d14cf9a43"
     },
     {
       "path": "admin-manifest.json",
@@ -41090,8 +41090,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 200570,
-      "sha256": "3f68f1add986c5ab6085f1709c049882c5fe1bab98a8ccb38bbc0c738c1b2aca"
+      "bytes": 200564,
+      "sha256": "d0a3a66000a3a3bb2460f6df1bbe5e12ff0403a764a7df11fdfcf52d7b7e4e91"
     },
     {
       "path": "apple-touch-icon.png",
@@ -41733,19 +41733,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 351063,
-      "sha256": "add467b13eac17c5b6bffe6ba18b0cabfaa80e4786f2459e2d6b4c1211368f7f"
+      "sha256": "348a4ae0c062eeef1b37aaf520eaa1b301951d056570842ad3a2e06083a1ced5"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 350978,
-      "sha256": "e9160b2b1f292104e33703df363e7a15b178ec91c05c583f4d26b51179b877fa"
+      "sha256": "98e4b32ae79f1ff5a84d1d6be9e0e16ec30f7b956f106d43eaf2a6074918949f"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 17150,
-      "sha256": "f7c6a1fe2ebf1e450b852c3b1b401db0355639546dca68295d4432085f763aa1"
+      "sha256": "b9457a71df693c9c6c30dfa4fa51854fe3a98147a6411f5ab6b32c53b04ce4d5"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -41757,7 +41757,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "f88c4f70f7e5ada7a74150048b47ce6e847ac5009aedb96ddf2e937f84c42983"
+      "sha256": "2e6f231ba032026ee5a9bf49a413e6705256d1f92793b2a0c8e6abd501e19731"
     },
     {
       "path": "config/public-site.json",
@@ -42284,8 +42284,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 363359,
-      "sha256": "5fadcd944d9866345344252ba76af01f9faeb8dc7840fec5c9ee323c83fcdeb7"
+      "bytes": 363901,
+      "sha256": "ad95ec975360e272e1ab4c7a9bfb7f605727060240e78e3b5d7747bce55ec557"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -43184,8 +43184,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 473290,
-      "sha256": "fbc1e01721abf71307cbecdc6d07b2126c90d763ce3016c592aaee4d88bb7ab7"
+      "bytes": 473534,
+      "sha256": "707faedda2f9c6be3e9c4fbec2796f755e66512c35b478519a612c99f800c07c"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -43412,8 +43412,8 @@
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
       "extension": ".js",
-      "bytes": 15411,
-      "sha256": "fe5d3f274a15dca853482065f5cc697c614a730a420278ea4c2b1270361cb28c"
+      "bytes": 15548,
+      "sha256": "06a192bfdc792905d5c94880bbea388086e1167ebe4628fc67eb27bc1f2de48b"
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
@@ -43682,8 +43682,8 @@
     {
       "path": "js/components/images/carga-imagenes.js",
       "extension": ".js",
-      "bytes": 13661,
-      "sha256": "4b429b91020e31d2f984e93969c4c20b4311436f5a1b05abece5841f9a18aa90"
+      "bytes": 13798,
+      "sha256": "18d820ff654b8f23988de8d55e98a68c8d4f5f68081a92150bcf1e8595b69bfc"
     },
     {
       "path": "js/components/images/foto-variante.mjs",
@@ -45866,8 +45866,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 66721,
-      "sha256": "7cf5da0c84bec8fcc90ab936b565495a93ae701c18b63dfa527f76b5f7a2b08e"
+      "bytes": 67096,
+      "sha256": "a3637c94519291415e8a644bc1bc11cb6124b567451970f8cc78c4468604f6bc"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
