@@ -34,8 +34,8 @@
     width:100%;
     min-width:0;
     min-height:54px;
-    padding:7px 2px;
-    gap:3px;
+    padding:4px 2px;
+    gap:8px;
     color:#713C53 !important;
     background:transparent !important;
     border:0 !important;
@@ -185,11 +185,11 @@
   #tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] svg,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:scale(1.06); }
-  .tt-mobile-nav-halo { z-index:1; top:var(--tt-mobile-y,1px); width:52px; height:52px; }
+  .tt-mobile-nav-halo { z-index:1; top:var(--tt-mobile-y,1px); width:36px; height:36px; }
   .tt-mobile-nav-indicator { z-index:2; bottom:4px; width:52px; }
   #tt-tabbar .tt-tabbar-btn.active,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] { z-index:4; }
-  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo { top:var(--tt-mobile-y,0px); width:46px; height:46px; }
+  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo { top:var(--tt-mobile-y,0px); width:36px; height:36px; }
   #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-indicator { bottom:3px; width:46px; }
 
   /* Menú legado y menú hamburguesa comparten la misma superficie limpia. */
@@ -222,4 +222,61 @@
   #tt-tabbar .tt-tabbar-avatar,
   #tt-tabbar .tt-tabbar-btn span:last-child,
   #tt-tabbar { transition:none !important; }
+}
+
+/* Selección completa: icono y etiqueta dentro de una cápsula del propio botón. */
+@media (max-width:767px) {
+  html body.tt-public-shell-mounted:not(:has(.adm-main)) { --tt-mobile-nav-clearance:108px !important; }
+  html body #tt-tabbar,
+  html body #tt-tabbar.tt-tabbar-compact,
+  html[data-tt-mobile-home="hidden"] body #tt-tabbar:has(#tabbar-notifications:not([hidden])),
+  html[data-tt-mobile-home="hidden"] body #tt-tabbar.tt-tabbar-compact:has(#tabbar-notifications:not([hidden])) {
+    width:min(420px,calc(100vw - 24px)) !important;
+    min-height:76px !important;
+    padding:8px !important;
+    gap:2px;
+    border-radius:999px !important;
+    transition:box-shadow .2s ease !important;
+  }
+  html body #tt-tabbar .tt-tabbar-btn,
+  html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn, html body #tt-tabbar .tt-tabbar-btn:is(#tabbar-cart,#tabbar-notifications) {
+    min-height:58px;
+    padding:6px 4px;
+    gap:5px;
+    border-radius:999px !important;
+  }
+  html body #tt-tabbar .tt-tabbar-btn::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    border-radius:inherit;
+    background:#fde6ef;
+    opacity:0;
+    pointer-events:none;
+  }
+  html body #tt-tabbar .tt-tabbar-btn.active::before,
+  html body #tt-tabbar .tt-tabbar-btn[aria-expanded="true"]::before,
+  html body #tt-tabbar .tt-tabbar-btn[aria-current="page"]::before { opacity:1; }
+  html body #tt-tabbar:has(.tt-tabbar-btn[aria-expanded="true"]) .tt-tabbar-btn:not([aria-expanded="true"])::before { opacity:0; }
+  html body #tt-tabbar .tt-mobile-nav-halo,
+  html body #tt-tabbar .tt-mobile-nav-indicator { display:none !important; }
+  html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn span:last-child {
+    max-height:16px;
+    opacity:1;
+    transform:none;
+  }
+  html body #tt-tabbar .tt-tabbar-btn > span:last-child {
+    font-size:clamp(.5rem,2.3vw,.64rem);
+    letter-spacing:0;
+    text-transform:none;
+  }
+  /* La navegación queda por debajo de los cargadores y modales. */
+  html body #tt-tabbar { z-index:1100 !important; }
+  html body #tt-tabbar:has(.tt-tabbar-btn[aria-expanded="true"]) { z-index:2147483647 !important; }
+  html body #collections-sheet,
+  html body #account-drawer #account-panel,
+  html body #notifications-drawer #tt-notifications-list {
+    padding-bottom:calc(var(--tt-mobile-nav-clearance,108px) + env(safe-area-inset-bottom)) !important;
+  }
 }

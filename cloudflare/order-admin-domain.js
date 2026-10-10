@@ -645,6 +645,12 @@ export async function applyOrderAdminMutation(
   const orderDocument = await get(env, `orders/${encodeURIComponent(orderId)}`);
   if (!orderDocument) throw new Error('El pedido ya no existe.');
   const beforeOrder = decodeFirestoreFields(orderDocument.fields || {});
+  if (beforeOrder.localEntryId) {
+    const error = new Error('Esta venta local se edita en Ventas locales. No vuelve a mover inventario ni generar pagos.');
+    error.status = 409;
+    error.code = 'local_order_separate_ledger';
+    throw error;
+  }
   const currentChangeId = clean(beforeOrder.lastChangeId, 120);
 
   if (requestedChangeId && currentChangeId === requestedChangeId) {

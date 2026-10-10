@@ -16,17 +16,14 @@
   background: var(--admin-color-error-background);
   color: var(--admin-color-error-text);
   border-radius: 8px;
-  padding: 10px 58px 10px 14px;
+  padding: 10px 14px;
   font-size: 13px;
   margin-bottom: 12px;
 }
 .tfc-live-error[hidden] { display: none; }
-#tfc-live-error-close {
-  position: absolute; right: 6px; top: 4px; width: 44px; height: 44px;
-  border: 0; border-radius: 10px; background: transparent; color: inherit;
-  font-family: "Montserrat"; font-size: 22px; cursor: pointer;
-}
-#tfc-live-error-close:focus-visible { outline: 2px solid currentColor; }
+#tfc-monitor-status { font-size: 13px; color: var(--admin-color-text-secondary); }
+.tfc-pill, .tfc-edge-row { text-decoration: none; color: inherit; }
+.tfc-pill:focus-visible, .tfc-edge-row:focus-visible { outline: 2px solid var(--admin-color-brand); outline-offset: 2px; }
 
 .tfc-toolbar {
   display: flex;
@@ -126,15 +123,6 @@
   background: var(--admin-color-background-page);
 }
 .tfc-detail-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.tfc-detail-close {
-  margin-left: auto;
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  color: var(--admin-color-text-secondary);
-  line-height: 1;
-}
 .tfc-detail-notes { font-size: 13px; color: var(--admin-color-text-secondary); margin: 6px 0; }
 .tfc-detail-live { font-size: 13px; margin: 6px 0; }
 .tfc-detail-live-none { color: var(--admin-color-text-tertiary); font-style: italic; }
@@ -175,7 +163,6 @@
 
 @media (max-width: 600px) {
   .tfc-head { gap: 10px; }
-  .tfc-head .adm-btn { width: 100%; }
   .tfc-meta { gap: 6px; flex-direction: column; font-size: 12px; }
   .tfc-toolbar { flex-direction: column; }
   .tfc-toolbar #tfc-search, .tfc-toolbar #tfc-filter-state { width: 100%; min-width: 0; }

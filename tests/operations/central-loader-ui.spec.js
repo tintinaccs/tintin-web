@@ -17,6 +17,7 @@ test('las operaciones CRUD muestran progreso centrado y un resultado real', asyn
   await expect.poll(() => page.evaluate(() => typeof window.TintinAdminOps)).toBe('object');
 
   await page.evaluate(() => {
+    const dialog=document.createElement('dialog');dialog.id='fixture-native-dialog';dialog.textContent='Detalle abierto';document.body.append(dialog);dialog.showModal();
     window.TintinAdminOps.setViewerRole('superadmin');
     window.__operationPromise = window.TintinAdminOps.runOperation({
       name: 'Crear producto',
@@ -28,7 +29,7 @@ test('las operaciones CRUD muestran progreso centrado y un resultado real', asyn
         window.__operationSeen = context.operation;
         context.start('write');
         window.__operationStarted = true;
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise(resolve => {window.__releaseOperation=resolve;});
         context.ok('write');
         return { id: 'fixture-product' };
       },
@@ -36,6 +37,8 @@ test('las operaciones CRUD muestran progreso centrado y un resultado real', asyn
   });
 
   await expect.poll(() => page.evaluate(() => window.__operationStarted)).toBe(true);
+  await expect.poll(()=>page.locator('#tt-ops-loader').evaluate(el=>{const r=el.getBoundingClientRect();return el.matches(':popover-open') && r.width>0 && r.height>0;})).toBe(true);
+  await page.evaluate(()=>document.getElementById('fixture-native-dialog').close());
   await expect.poll(() => page.evaluate(() => window.__operationSeen?.centerLoader)).toBe(true);
   const loader = page.locator('#tt-ops-loader');
   await expect(loader).toBeVisible();
@@ -54,7 +57,7 @@ test('las operaciones CRUD muestran progreso centrado y un resultado real', asyn
   expect(centered.x).toBeLessThanOrEqual(1);
   expect(centered.y).toBeLessThanOrEqual(1);
 
-  await page.evaluate(() => window.__operationPromise);
+  await page.evaluate(() => {window.__releaseOperation();return window.__operationPromise;});
   await expect(page.locator('#tt-ops-loader')).toBeHidden();
   await expect(page.locator('body')).not.toHaveClass(/tt-ops-centered-active/);
   const dialog = page.locator('#tt-ops-dialog');
@@ -86,14 +89,14 @@ test('si falla el CRUD, se oculta el cargador y el resultado central indica erro
       stages: [{ id: 'delete', label: 'Borrar producto' }],
       run: async context => {
         context.start('delete');
-        await new Promise(resolve => setTimeout(resolve, 150));
+        await new Promise(resolve => {window.__releaseFailedOperation=resolve;});
         throw Object.assign(new Error('Permiso insuficiente'), { code: 'permission-denied' });
       },
     });
   });
 
   await expect(page.locator('#tt-ops-loader')).toBeVisible();
-  await page.evaluate(() => window.__operationPromise);
+  await page.evaluate(() => {window.__releaseFailedOperation();return window.__operationPromise;});
   await expect(page.locator('#tt-ops-loader')).toBeHidden();
   await expect(page.locator('#tt-ops-dialog')).toBeVisible();
   await expect(page.locator('#tt-ops-dialog')).toContainText('Con errores');

@@ -8,7 +8,7 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
+const ASSET_VERSION = 'tintin-20261009-whatsapp-responsive-1';
 const API_RETRY_DELAYS_MS = [450, 1200];
 let initialized = false;
 let currentUser = null;
@@ -35,7 +35,7 @@ function ensureStyles() {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.dataset.ttSocialNotifications = '1';
-  link.href = `css/components/notifications/notificaciones-sociales.css?v=${ASSET_VERSION}`;
+  link.href = 'css/components/notifications/notificaciones-sociales.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
   document.head.appendChild(link);
 }
 

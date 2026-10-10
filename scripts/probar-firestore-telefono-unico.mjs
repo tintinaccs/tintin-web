@@ -5,7 +5,9 @@
 // sostienen igual, incluso saltándose el formulario.
 import fs from 'node:fs';
 import { initializeTestEnvironment, assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
-import { doc, setDoc, updateDoc, getDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, getDoc, deleteDoc, serverTimestamp, runTransaction } from 'firebase/firestore';
+
+import { buildMissingProfilePatch } from '../js/pages/profile/configuracion-inicial-perfil.mjs';
 
 const projectId = 'demo-tintin-phone';
 const rules = fs.readFileSync(new URL('../firestore.rules', import.meta.url), 'utf8');
@@ -76,6 +78,21 @@ try {
 
   await ok('Liberado, Bea ya lo puede tomar',
     setDoc(doc(bea, 'phoneReservations', TEL_ANA), { uid: 'bea', createdAt: serverTimestamp() }));
+
+  for (const [uid, provider, phone] of [['nuevoGoogle', 'google', '595981123457'], ['nuevoCorreo', 'emailOtp', '595981123458']]) {
+    const db = testEnv.authenticatedContext(uid, {email:`${uid}@example.com`,email_verified:true}).firestore();
+    await ok(`${provider}: crea perfil inicial sin username, nacimiento ni ubicación`, setDoc(doc(db,'users',uid), {
+      name:'',email:`${uid}@example.com`,phone:'',role:'client',blocked:false,profileStatus:'incomplete',provider,customerId:'CUS_'+uid,identityVersion:1,authMethods:[provider],lastAuthMethod:provider,
+    }));
+    await ok(`${provider}: reserva WhatsApp`, setDoc(doc(db,'phoneReservations',phone), {uid,createdAt:serverTimestamp()}));
+    await ok(`${provider}: transacción activa el perfil sólo con nombre y WhatsApp`, runTransaction(db,async transaction=>{
+      const ref=doc(db,'users',uid);const snap=await transaction.get(ref);
+      const patch=buildMissingProfilePatch({currentProfile:snap.data(),submittedName:'Pedro González',submittedPhone:'+'+phone});
+      transaction.set(ref,{...patch,updatedAt:serverTimestamp()},{merge:true});
+    }));
+    const saved=(await getDoc(doc(db,'users',uid))).data();
+    if(saved.profileStatus!=='active'||saved.name!=='Pedro González'||saved.phone!=='+'+phone)throw new Error(`${provider}: perfil no quedó completo`);
+  }
 
   console.log(`\nUn teléfono una cuenta: ${checks} controles verificados contra el emulador.`);
 } finally {

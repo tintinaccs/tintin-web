@@ -12,6 +12,7 @@ fs.mkdirSync(artifactDir, { recursive: true });
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const exists = file => fs.existsSync(path.join(root, file));
 const safeRead = file => exists(file) ? read(file) : '';
+const cacheVersions = JSON.parse(read('scripts/cache-version-baseline.json'));
 
 function walk(dir) {
   if (!fs.existsSync(dir)) return [];
@@ -121,6 +122,12 @@ const connectionContracts = {
     && /rolePermissions|users/.test(firestoreRules),
   pedidos: () => hasAll(fullAdminSource, ['/api/admin-order-mutation', 'TintinInventoryIntegrity', 'trashOrder', 'restoreOrder'])
     && hasAny(fullAdminSource + serverSources, ['syncOrder', 'Sheets', 'sheets']),
+  'ventas-locales': () => hasAll(safeRead('js/admin/comercio-local-admin.js'), ['/api/local-commerce', 'tintin:orders-updated', 'baseVersion'])
+    && hasAll(safeRead('cloudflare/comercio-local.js'), ['localCommerceEntries', 'orders', 'baseVersion'])
+    && hasAll(safeRead('apps-script/ComercioLocal.gs'), ['tintinReconciliarComercioLocal_', 'TINTIN_LOCAL_PATH']),
+  'clientes-compraron': () => hasAll(safeRead('js/admin/comercio-local-admin.js'), ['/api/local-commerce', 'snapshot.customers', 'snapshot.contacts'])
+    && hasAll(safeRead('cloudflare/comercio-local.js'), ['salesCustomers', 'purchasedCustomers'])
+    && hasAll(safeRead('apps-script/ComercioLocal.gs'), ['Clientes de ventas', 'tintinLocalContacts_']),
   mayoristas: () => hasAll(safeRead('js/admin/mayoristas/mayoristas-admin.js'), ['/api/admin-wholesale', 'wholesaleQuotes', 'onSnapshot'])
     && hasAll(safeRead('js/pages/profile/mayorista-perfil.js'), ['/api/wholesale-quote', 'wholesaleQuotes', 'onSnapshot'])
     && hasAll(safeRead('functions/api/admin-wholesale.js'), ['requireSuperAdmin', 'respondWholesaleQuote', 'afterWholesaleQuoteResponded'])
@@ -212,17 +219,12 @@ const scriptPaths = localScripts.map(item => item.path);
 check('admin-script-versioned', 'Todos los scripts locales del Admin tienen versión de caché', localScripts.every(item => item.version));
 check('admin-script-unique', 'Admin no carga dos versiones del mismo módulo', new Set(scriptPaths).size === scriptPaths.length);
 check('admin-script-exists', 'Todos los scripts locales referenciados existen', scriptPaths.every(file => exists(file)));
-// Cada marcador aceptado prueba que el tag de caché es posterior a una
-// corrección real de ese módulo (no una reversión silenciosa a una versión
-// vieja): auto-read/rich/global-session-restore fueron las primeras; el 1-oct
-// corrigió el bucle de reintento ante permission-denied/unauthenticated.
-// El 4-oct admin-connections agrega renovación compartida Auth + App Check.
-// El 5-oct public-navigation-3 conserva esa renovación y unifica los avisos.
-// El 7-oct loads alinea el fallback del avatar con la URL canónica del logo.
-// El 8-oct producto-superficies deduplica los avisos entre shell y Admin sin
-// retirar el contrato de autolectura ni la renovación compartida de sesión.
+// La autolectura y la renovación de sesión se verifican arriba. El tag
+// debe coincidir con la versión canónica del recurso, validada por el
+// auditor de caché, sin depender de nombres históricos de releases.
 check('admin-notifications-versioned', 'La autolectura Admin está servida con versión propia actual',
-  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /(?:notifications-(auto-read|rich)|global-session-restore|firebase-permissions|inventory-fix|admin-connections|^tintin-20261005-public-navigation-3-master-20261007-1(?:-loads-20261007-1)?$|^tintin-20261008-producto-superficies-1$)/.test(item.version)));
+  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js'
+    && item.version === cacheVersions[item.path]?.version));
 
 // 7. Mutaciones sensibles deben conservar gobierno y trazabilidad.
 check('superadmin-auth', 'El panel conserva guard de autenticación y Super Admin real',

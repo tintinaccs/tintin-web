@@ -193,7 +193,7 @@ body.tt-product-maintenance .tt-added-toast {
   align-items: center;
   gap: 6px;
   margin-left: auto;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--color-text-secondary, #7B6F72);
@@ -234,7 +234,7 @@ body.tt-product-maintenance .tt-footer {
   border-top: 1px solid var(--color-border-primary, #F1E4E7);
 }
 
-body.tt-product-maintenance .tt-footer a,
+body.tt-product-maintenance .tt-footer a:not(.tt-footer-wa),
 body.tt-product-maintenance .tt-footer-col-title,
 body.tt-product-maintenance .tt-footer-bottom,
 body.tt-product-maintenance .tt-footer-tagline {
@@ -287,12 +287,10 @@ body.tt-product-maintenance .tt-footer-tagline {
     align-items: stretch;
   }
 
-  /* 3 recomendaciones en una sola fila también en mobile — las tarjetas
-     quedan angostas, así que sus botones de acción pasan a apilarse en
-     vertical (ver regla de abajo) para no achicar el texto de más. */
+  /* Dos columnas dejan espacio para nombres y acciones en móviles. */
   body.tt-product-maintenance .tt-related-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   body.tt-product-maintenance .tt-related-grid .tt-product-info {
@@ -307,7 +305,7 @@ body.tt-product-maintenance .tt-footer-tagline {
   body.tt-product-maintenance .tt-related-grid .tt-product-actions .tt-btn {
     width: 100%;
     padding: 8px 6px;
-    font-size: 0.68rem;
+    font-size: 0.8rem;
     letter-spacing: 0.02em;
   }
 }
@@ -573,9 +571,14 @@ body.tt-product-maintenance #product-variants .tt-variant-options { display:flex
 body.tt-product-maintenance #product-variants .tt-variant-option { min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center; gap:6px; padding:8px 12px; border:1px solid var(--border); border-radius:8px; white-space:normal; }
 body.tt-product-maintenance #product-variants .tt-variant-option.active { outline:2px solid var(--pink-dark); outline-offset:2px; }
 body.tt-product-maintenance .tt-color-swatch { display:block; width:28px; height:28px; border:2px solid #fff; outline:1px solid #737373; border-radius:50%; background:repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px); }
-body.tt-product-maintenance .tt-wrist-guide { width:100%; margin-block:12px; padding:12px 16px; border:1px solid var(--border); border-radius:12px; }
-body.tt-product-maintenance .tt-wrist-guide summary { cursor:pointer; min-height:28px; font-weight:600; }
-body.tt-product-maintenance .tt-wrist-guide li { margin:8px 0; line-height:1.5; }
+body.tt-product-maintenance .tt-wrist-guide { width:100%; min-width:0; margin:0; padding:0; border:0; }
+body.tt-product-maintenance .tt-wrist-guide summary { cursor:pointer; min-height:44px; list-style:none; }
+body.tt-product-maintenance .tt-wrist-guide summary::-webkit-details-marker { display:none; }
+body.tt-product-maintenance .tt-wrist-guide summary::after { content:'⌄'; margin-inline-start:auto; color:var(--text-sec); transition:transform .2s; }
+body.tt-product-maintenance .tt-wrist-guide[open] summary::after { transform:rotate(180deg); }
+body.tt-product-maintenance .tt-wrist-guide ol { box-sizing:border-box; margin:8px 12px 12px; padding:12px 20px 12px 40px; border:1px solid var(--border); border-radius:12px; list-style:decimal outside; }
+body.tt-product-maintenance .tt-wrist-guide li { margin:8px 0; padding-inline-start:2px; line-height:1.5; }
+
 body.tt-product-maintenance .tt-product-specifications>div { padding-inline:12px; }
 body.tt-product-maintenance .tt-product-share { margin-block:12px; }
 body.tt-product-maintenance .tt-product-social-bar { margin-top:16px; padding:12px; }
@@ -647,3 +650,41 @@ body.tt-product-maintenance .tt-qty-btn:focus-visible { outline:2px solid var(--
   body.tt-product-maintenance .tt-product-detail-grid { gap:28px; padding:8px 0 24px; }
   body.tt-product-maintenance .tt-gallery-thumb { flex-basis:56px; width:56px !important; height:56px !important; }
 }
+
+/* Mismos controles y columnas de compra en tablet y escritorio. */
+@media (min-width:768px) {
+  html body.tt-product-maintenance #product-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:clamp(24px,4vw,56px); }
+}
+body.tt-product-maintenance #product-grid > * { min-width:0; }
+body.tt-product-maintenance #product-variants .tt-color-option { border-radius:50% !important; }
+/* Miniaturas redondas, con el mismo espacio de pulsación en todos los dispositivos. */
+html body.tt-product-maintenance .tt-gallery-thumb {
+  border-radius:50% !important;
+  aspect-ratio:1;
+  overflow:hidden;
+}
+body.tt-product-maintenance .tt-color-option .tt-color-swatch {
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12) !important;
+}
+
+/* La selección continúa el fondo de la ficha y de las recomendaciones. */
+html body.tt-product-maintenance .tinsel,
+html body.tt-product-maintenance .tinsel .tinsel-box {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Igual espacio lateral para ficha y recomendaciones en cada orientación. */
+html body.tt-product-maintenance .tt-related-section > .container { width:min(100%,1220px); box-sizing:border-box; padding-inline:clamp(16px,3vw,28px) !important; }
+@media (min-width:600px) and (max-width:767px) {
+  body.tt-product-maintenance .tt-related-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+
+/* El control queda fuera del lateral ocupado por WhatsApp en móvil. */
+@media (max-width:767px) {
+  body.tt-product-maintenance .tt-related-header { flex-direction:row-reverse; gap:12px; margin-bottom:16px; }
+  body.tt-product-maintenance #related-trigger { display:block; text-align:left; }
+  body.tt-product-maintenance #related-trigger .tt-section-sub { font-size:.65rem; line-height:1.4; margin-bottom:4px; }
+  body.tt-product-maintenance #related-trigger .tt-section-title { font-size:clamp(1.1rem,5.4vw,1.45rem); line-height:1.25; margin:0; }
+}
+body.tt-product-maintenance .tt-related-refresh:focus-visible { outline:2px solid var(--pink-dark); outline-offset:3px; }

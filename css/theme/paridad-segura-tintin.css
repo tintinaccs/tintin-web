@@ -53,36 +53,8 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   body.tt-home-premium.tt-public-shell-mounted .tt-hero-content{
     padding-bottom:calc(var(--tt-mobile-nav-clearance) + 64px)!important;
   }
-  /* Privacidad y los avisos del carrito ocupan temporalmente la misma zona
-     segura. El flotante se oculta durante esos estados para no quedar debajo. */
-  body.tt-public-shell-mounted:not(:has(.adm-main)):has(.tt-privacy-consent:not([hidden])) .tt-wa-float,
-  body.tt-public-shell-mounted:not(:has(.adm-main)):has(.tt-cart-feedback.is-visible) .tt-wa-float{
-    opacity:0!important;
-    visibility:hidden!important;
-    pointer-events:none!important;
-  }
-
-  /* El runtime responsive comprueba primero que el flotante no cubra ningún
-     control. Hasta que esa comprobación inicial termina, permanece oculto para
-     que nunca aparezca encima de contenido durante el primer render. */
-  html:not(.tt-wa-overlap-ready) body:not(:has(.adm-main)) .tt-wa-float{
-    opacity:0!important;
-    visibility:hidden!important;
-    pointer-events:none!important;
-    animation:none!important;
-    transition:none!important;
-  }
-
-  /* Términos y Privacidad ya incluyen un CTA de WhatsApp dentro del contenido
-     y otro en el footer. En mobile se omite únicamente el flotante para que el
-     índice legal siempre permanezca completamente pulsable. */
-  body.tt-legal-runtime-ready:not(:has(.adm-main)) .tt-wa-float{
-    opacity:0!important;
-    visibility:hidden!important;
-    pointer-events:none!important;
-    animation:none!important;
-    transition:none!important;
-  }
+  /* Los paneles modales conservan su propia capa; el flotante no cambia
+     de visibilidad al recorrer el contenido público. */
 }
 @media (max-width:480px){
   body.tt-public-shell-mounted:not(:has(.adm-main)){

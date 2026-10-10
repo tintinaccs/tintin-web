@@ -13,6 +13,7 @@ function check(name, condition, problem) {
 
 const runtime = read('js/quality/experiencia-interfaz.js');
 const styles = read('css/quality/experiencia-interfaz.css');
+const styleVersion = JSON.parse(read('scripts/cache-version-baseline.json'))['css/quality/experiencia-interfaz.css']?.version;
 const loader = read('js/cargador-pagina.js');
 const loaderVersion = read('scripts/sincronizar-inicio-navegacion-publica.js').match(/const LOADER_VERSION = '([^']+)'/)?.[1] || '';
 const packageJson = JSON.parse(read('package.json'));
@@ -30,8 +31,8 @@ check(
 check(
   'La hoja de estilos de UI/UX se inyecta de forma versionada',
   /tt-phase8-ui-ux-css/.test(loader) &&
-    /resolveAsset\('css\/quality\/experiencia-interfaz\.css'\)/.test(loader) &&
-    /const TT_CACHE_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'/.test(loader),
+    Boolean(styleVersion) &&
+    loader.includes(`css/quality/experiencia-interfaz.css?v=${styleVersion}`),
   'El navegador debe recibir la nueva capa aunque tenga caché inmutable.'
 );
 

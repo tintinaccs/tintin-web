@@ -1,3 +1,4 @@
+import { isValidCustomerName } from '../profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2';
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
@@ -17,7 +18,7 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
     instagram: 'tintinaccs',
     email: 'tintinaccs@gmail.com',
     address: 'Paraguay — Zona Central y todo el país',
-    schedule: 'Consultá nuestros horarios actuales por WhatsApp',
+    schedule: '09:00 a 22:00 hs.',
   };
 
   function injectCss() {
@@ -108,7 +109,7 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
       phone: clean(phone?.value, 80),
       message: clean(message?.value, 1200),
     };
-    fieldError(name, values.name.length < 2 ? 'Escribí tu nombre completo.' : '');
+    fieldError(name, !isValidCustomerName(values.name) ? 'Escribí tu nombre y apellido (al menos dos palabras).' : '');
     fieldError(message, values.message.length < 5 ? 'Contanos brevemente en qué podemos ayudarte.' : '');
     fieldError(email, values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email) ? 'Revisá el formato del correo.' : '');
     fieldError(phone, values.phone && digits(values.phone).length < 8 ? 'Revisá el número de teléfono.' : '');
@@ -123,7 +124,7 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
     const instagram = clean(next.instagram || config.instagram, 80).replace(/^@/,'') || config.instagram;
     const email = clean(next.email || next.contactEmail || config.email, 180) || config.email;
     const address = clean(next.address || next.location || config.address, 180) || config.address;
-    const schedule = clean(next.businessHours || next.schedule || config.schedule, 180) || config.schedule;
+    const schedule = '09:00 a 22:00 hs.';
     config = { whatsapp: wa, phoneLabel: phone, instagram, email, address, schedule };
 
     document.querySelectorAll('a[href*="wa.me/"]').forEach(link => {

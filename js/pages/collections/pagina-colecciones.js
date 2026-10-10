@@ -4,7 +4,7 @@ const featuredGrid = document.getElementById('collections-featured-grid');
 const collectionsStatus = document.getElementById('collections-grid-status');
 const featuredStatus = document.getElementById('collections-featured-status');
 // El carrito público usa el mismo coordinador de identidad que checkout y perfil.
-const cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+const cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2');
 let liveProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 let collectionsReady = false;
 let productsReady = false;

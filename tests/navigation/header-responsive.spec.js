@@ -169,8 +169,9 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await expect.poll(
     () => nav.evaluate(node => node.getBoundingClientRect().width),
     { timeout: 1500 },
-  ).toBeLessThan(expandedWidth);
-  await expect(visibleButtons.first()).toHaveCSS('min-height', '48px');
+  ).toBe(expandedWidth);
+  await expect(visibleButtons.first()).toHaveCSS('min-height', '58px');
+  await expect(labels.first()).toBeVisible();
   await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
 
   await page.evaluate(() => window.scrollTo(0, 0));
@@ -182,6 +183,8 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await page.locator('#tabbar-tienda').click();
   await expect(nav).not.toHaveClass(/tt-tabbar-compact/);
   await expect(page.locator('#collections-sheet')).toHaveAttribute('aria-hidden', 'false');
+  await expect(page.locator('#collections-sheet a[href="/contact"]')).toBeVisible();
+  await expect(page.locator('#btn-close-sheet')).toHaveCSS('width','44px');
   await expect(page.locator('#btn-close-sheet')).toBeFocused();
 });
 
@@ -226,6 +229,8 @@ test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async 
   await page.locator('#btn-menu-tablet').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'false');
   await expect(page.locator('#btn-tablet-close')).toBeFocused();
+  await expect(page.locator('#btn-tablet-close')).toHaveCSS('width','44px');
+  await expect(page.locator('#btn-tablet-close')).toHaveCSS('border-radius','50%');
   await page.locator('#btn-tablet-tienda').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveClass(/tt-tablet-shop-view/);
   await expect(page.locator('#tablet-cats .tt-tablet-cats-grid a')).toHaveCount(11);
@@ -345,7 +350,20 @@ test('las imágenes de Tienda usan el mismo origen absoluto en desktop, tablet y
   }
 });
 
+// Aislamos Firebase (sin red ni cuentas reales) y conservamos los renderers y
+// el controlador de superficies del sitio para probar geometría y foco.
+async function mockAccountAndNotifications(page) {
+  const fs=require('node:fs');
+  const account=fs.readFileSync('js/core/auth/navegacion-autenticacion.js','utf8');
+  const render=account.slice(account.indexOf('function renderAccountPanel('),account.indexOf('\nfunction ',account.indexOf('function renderAccountPanel(')+1));
+  await page.route('**/navegacion-autenticacion.js*',route=>route.fulfill({contentType:'text/javascript',body:`const ROLES={CLIENT:'client'};const loginHrefForCurrentLocation=()=>'/login';${render};renderAccountPanel(null);`}));
+  const notifications=fs.readFileSync('js/components/notifications/notificaciones-clientes.js','utf8');
+  const drawer=notifications.slice(notifications.indexOf('function ensureDrawer()'),notifications.indexOf('\nfunction triggers()'));
+  await page.route('**/notificaciones-clientes.js*',route=>route.fulfill({contentType:'text/javascript',body:`${drawer};export function initClientNotifications(){ensureDrawer();}`}));
+}
+
 test('Alertas usa la superficie compartida sólida y conserva el foco', async ({ page }) => {
+  await mockAccountAndNotifications(page);
   await openPublicPage(page, { width: 1440, height: 900 }, '/contact');
 
   // El evento representa la resolución autenticada del coordinador sin
@@ -372,6 +390,7 @@ test('Alertas usa la superficie compartida sólida y conserva el foco', async ({
 });
 
 test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA legible', async ({ page }) => {
+  await mockAccountAndNotifications(page);
   for (const viewport of [{width:1920,height:1080},{width:1440,height:900},{width:1280,height:720},{width:1024,height:768},{width:768,height:1024},{width:390,height:844},{width:320,height:568}]) {
     await openPublicPage(page, viewport, '/contact');
     await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes('pulido-marca-responsive-tintin.css') && link.sheet));

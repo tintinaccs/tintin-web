@@ -36,6 +36,7 @@ const MAX_BULK_SELECTION = 30;
 const ORDER_PAGE_SIZE = ADMIN_PAGE_SIZE;
 
 const ORDER_STATUS_LABELS = {
+  historico: 'Venta histórica',
   pendiente: 'Pendiente',
   confirmado: 'Confirmado',
   preparando: 'En preparación',
@@ -48,6 +49,8 @@ const ORDER_STATUS_LABELS = {
 };
 const ORDER_STATUS_VALUES = ['pendiente', 'confirmado', 'preparando', 'listo_retiro', 'en_camino', 'entregado', 'cancelado', 'rechazado'];
 const PAY_STATUS_LABELS = {
+  'señado': 'Señado',
+  sin_registrar: 'Pago no registrado',
   pendiente: 'Pago pendiente',
   pagado: 'Pagado',
   rechazado: 'Rechazado',
@@ -283,7 +286,7 @@ function productTabCounts() {
 }
 
 function orderTabCounts() {
-  return { all: state.orders.length, unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length, unfulfilled: state.orders.filter(o => !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length, delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length, canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length, refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length, deleted: state.trashOrders.length };
+  return { all: state.orders.length, unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length, unfulfilled: state.orders.filter(o => !o.localEntryId && !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length, delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length, canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length, refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length, deleted: state.trashOrders.length };
 }
 
 function collectionTabCounts() {
@@ -371,7 +374,7 @@ function orderMetrics() {
   const active = state.orders.filter(order => !['cancelado', 'rechazado'].includes(orderStatus(order)));
   const revenue = todayOrders.reduce((sum, order) => sum + (Number(order?.total) || 0), 0);
   const pending = active.filter(order => payStatus(order) !== 'pagado').length;
-  const unfulfilled = active.filter(order => !['entregado'].includes(orderStatus(order))).length;
+  const unfulfilled = active.filter(order => !order.localEntryId && !['entregado'].includes(orderStatus(order))).length;
   const delivered = state.orders.filter(order => orderStatus(order) === 'entregado').length;
   const items = todayOrders.reduce((sum, order) => sum + orderItems(order).reduce((qty, item) => qty + Number(item?.qty ?? item?.quantity ?? 1), 0), 0);
   return { today: todayOrders.length, revenue, pending, unfulfilled, delivered, items };
@@ -620,6 +623,11 @@ function payStatusBadge(status) {
 
 function renderOrders() {
   const root = document.getElementById('tt-commerce-orders'); if (!root) return;
+  if (state.orderTab === 'buyers') {
+    root.innerHTML = `<div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos · Clientes que compraron</h1><p>Compradores de Sheets y de la tienda, con sus pedidos e importes.</p></div></div><div class="tt-commerce-card"><div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos los pedidos', state.orders.length, state.orderTab)}${tabButton('orders', 'buyers', 'Clientes que compraron', '', state.orderTab)}</div><p data-local-status role="status">Consultando compradores…</p><button type="button" class="adm-btn adm-btn-outline" data-local-refresh>Actualizar</button><div id="local-order-buyers"></div></div>`;
+    window.dispatchEvent(new Event('tintin:show-order-buyers'));
+    return;
+  }
   const counts = orderTabCounts(), list = filteredOrders(), showingTrash = state.orderTab === 'deleted';
   const metrics = orderMetrics();
   const sourceTotal = showingTrash ? state.trashOrders.length : state.orders.length;
@@ -653,13 +661,13 @@ function renderOrders() {
     const date = formatDate(showingTrash ? (order.trashMeta?.trashedAt || order.updatedAt || order.createdAt) : order.createdAt);
     return `<tr ${showingTrash ? '' : 'data-open="order"'} data-id="${esc(order.id)}" class="${selected ? 'is-selected' : ''}">
       <td class="checkcol" data-label="Seleccionar" data-stop>${showingTrash ? '' : `<input type="checkbox" data-select-order="${esc(order.id)}" ${selected ? 'checked' : ''}>`}</td>
-      <td data-label="Pedido"><div class="tt-commerce-maintext">#${esc(orderDisplayId(order))}</div><div class="tt-commerce-subtext">${showingTrash ? 'Recuperable' : itemCount + ' artículo' + (itemCount === 1 ? '' : 's')}</div></td>
+      <td data-label="Pedido"><div class="tt-commerce-maintext">#${esc(orderDisplayId(order))}</div><div class="tt-commerce-subtext">${showingTrash ? 'Recuperable' : order.localEntryId && !itemCount ? 'Detalle no registrado' : itemCount + ' artículo' + (itemCount === 1 ? '' : 's')}</div></td>
       <td data-label="Fecha">${esc(date)}</td>
       <td data-label="Cliente"><div class="tt-commerce-maintext">${esc(customer.name)}</div><div class="tt-commerce-subtext">${esc(customer.email || customer.phone || 'Sin contacto')}</div></td>
       <td data-label="Canal">${esc(channel)}</td>
       <td data-label="Pago"><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span></td>
       <td data-label="Preparación"><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(ORDER_STATUS_LABELS[status] || status)}</span></td>
-      <td class="tt-commerce-number" data-label="Artículos">${itemCount}</td>
+      <td class="tt-commerce-number" data-label="Artículos">${order.localEntryId && !itemCount ? '—' : itemCount}</td>
       <td data-label="Entrega"><span class="tt-commerce-delivery">${esc(delivery)}</span></td>
       <td data-label="Total"><span class="tt-commerce-money">${formatMoney(order.total)}</span></td>
       <td data-label="Acciones" data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="${showingTrash ? 'trash-order' : 'order'}" data-id="${esc(order.id)}" aria-label="Acciones del pedido">⋯</button></td>
@@ -680,7 +688,7 @@ function renderOrders() {
   root.innerHTML = `
     <div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${!showingTrash && state.ordersError ? "—" : sourceTotal}</span></h1><div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div></div><div class="tt-commerce-actions">${isSuper ? button('Verificar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div></div>
     ${!showingTrash ? `<div class="tt-commerce-order-metrics" aria-label="Resumen del grupo cargado de pedidos"><div><strong>${metricValue(metrics.today)}</strong><span>Pedidos hoy</span></div><div><strong>${metricMoney(metrics.revenue)}</strong><span>Ventas de hoy</span></div><div><strong>${metricValue(metrics.pending)}</strong><span>Pagos pendientes</span></div><div><strong>${metricValue(metrics.unfulfilled)}</strong><span>Sin preparar</span></div><div><strong>${metricValue(metrics.delivered)}</strong><span>Entregados</span></div><div><strong>${metricValue(metrics.items)}</strong><span>Artículos hoy</span></div></div>` : ''}
-    <div class="tt-commerce-card">${ordersWarning}<div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>${rangeLabel(page, 'pedidos cargados', ordersUnavailable)}</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
+    <div class="tt-commerce-card">${ordersWarning}<div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'buyers', 'Clientes que compraron', '', state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>${rangeLabel(page, 'pedidos cargados', ordersUnavailable)}</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
 }
 
 function renderAll() {
@@ -1082,6 +1090,10 @@ async function handleAction(action, element) {
     return renderOrders();
   }
   if (action === 'products-retry' || action === 'collections-retry' || action === 'orders-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
+  if (['order-edit-advanced','order-edit','drawer-order-edit','drawer-order-save','order-delete','drawer-order-delete','order-resend','drawer-order-resend'].includes(action)) {
+    const local = state.orders.find(order => order.id === id)?.localEntryId;
+    if (local) { closeDrawer(); window.dispatchEvent(new CustomEvent('tintin:edit-local-sale', { detail: local })); return; }
+  }
   if (action === 'order-edit-advanced') { closeDrawer(); return window.TintinOrderAdmin?.openAdvancedOrderEditor(id); }
   if (action === 'order-restore') return window.TintinOrderAdmin?.restoreOrder(id).then(() => toast('Pedido restaurado en estado Cancelado; podés reactivarlo desde CRUD completo.'));
   if (action === 'order-delete-permanent') return window.TintinOrderAdmin?.deleteTrashPermanently(id);
@@ -1347,6 +1359,7 @@ function subscribeData() {
     state.ordersError = '';
     state.orderSelected = new Set([...state.orderSelected].filter(id => state.orders.some(o => o.id === id)));
     if (state.role === 'superadmin') window.TintinOrderAdmin?.ensureMissingOrderNumbers(state.orders);
+    window.dispatchEvent(new Event('tintin:orders-updated'));
     renderOrders(); renderDrawer();
   }, error => {
     state.ordersReady = true;

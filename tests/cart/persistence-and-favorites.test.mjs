@@ -27,7 +27,7 @@ test('el carrito agrega líneas sin reemplazar las existentes', async () => {
   assert.match(runtime, /GUEST_CART_TTL_MS/);
 });
 
-test('favoritos está conectado y persiste con la cuenta (no hay eliminación de cuentas)', async () => {
+test('favoritos persiste con la cuenta y Me gusta se oculta en la ficha', async () => {
   const [favorites, product, cart, rules] = await Promise.all([
     read('js/components/favorites/sincronizacion-favoritos.js'),
     read('product.html'),
@@ -35,9 +35,10 @@ test('favoritos está conectado y persiste con la cuenta (no hay eliminación de
     read('firestore.rules'),
   ]);
   assert.match(favorites, /users', currentUser\.uid, 'favorites'/);
-  // La ficha usa el control social canónico de producto. No se permite
-  // reintroducir el antiguo btn-product-favorite como segunda capa paralela.
-  assert.match(product, /id="btn-product-like"/);
+  // Los favoritos siguen en catálogo/perfil; la ficha oculta la comunidad
+  // según el pedido del propietario, sin introducir otra autoridad.
+  assert.doesNotMatch(product, /id="btn-product-like"/);
+  assert.match(cart, /data-favorite-id/);
   assert.doesNotMatch(product, /btn-product-favorite/);
   assert.doesNotMatch(cart, /tt-cart-favorites/);
   assert.match(await read('perfil.html'), /id="perfil-favorites-list"/);

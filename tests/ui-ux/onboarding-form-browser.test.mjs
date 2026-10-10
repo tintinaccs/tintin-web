@@ -18,13 +18,13 @@ test('Últimos datos mantiene una columna, foco continuo y errores junto al camp
   // Bloquea todos los scripts y la red: el fixture solo prueba el HTML/CSS real.
   html = html.replace('<head>', `<head><meta http-equiv="Content-Security-Policy" content="script-src 'none'; connect-src 'none'; style-src 'unsafe-inline'; img-src data:">`)
     .replace('</head>', `<style>${css.join('\n')}</style></head>`)
-    .replace('<body>', '<body class="login-setup-open">');
-  const browser = await chromium.launch({ headless: true });
+    .replace('<body>', '<body class="login-setup-open">').replace('id="login-profile-block" style="display:none"','id="login-profile-block"');
+  const browser = await chromium.launch({ headless: true, executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined, args:['--no-sandbox'] });
   try {
     const page = await browser.newPage({ reducedMotion: 'reduce' });
     await page.route('**/*', route => route.abort());
     await page.setContent(html);
-    const ids = ['login-profile-first-name','login-profile-last-name','login-profile-username','login-profile-phone','login-profile-dob'];
+    const ids = ['login-profile-first-name','login-profile-phone'];
     for (const [width,height] of sizes) {
       await page.setViewportSize({width,height});
       const geometry = await page.evaluate(ids => {
@@ -49,7 +49,7 @@ test('Últimos datos mantiene una columna, foco continuo y errores junto al camp
     });
     const errorOrder = await page.evaluate(() => {
       const r = id => document.getElementById(id).getBoundingClientRect();
-      return {first:r('login-profile-first-name').bottom,errorTop:r('login-first-name-error').top,errorBottom:r('login-first-name-error').bottom,last:r('login-profile-last-name').top};
+      return {first:r('login-profile-first-name').bottom,errorTop:r('login-first-name-error').top,errorBottom:r('login-first-name-error').bottom,last:r('login-profile-phone').top};
     });
     assert.ok(errorOrder.errorTop >= errorOrder.first && errorOrder.errorBottom <= errorOrder.last);
   } finally { await browser.close(); }
@@ -62,7 +62,7 @@ test('Tus datos del checkout conserva campos verticales y teléfono completo en 
   const css = await Promise.all(files.map(file => fs.readFile(path.join(root, file), 'utf8')));
   html = html.replace('<head>', `<head><meta http-equiv="Content-Security-Policy" content="script-src 'none'; connect-src 'none'; style-src 'unsafe-inline'; img-src data:">`)
     .replace('</head>', `<style>${css.join('\n')} #panel-2 { display:block !important; }</style></head>`);
-  const browser = await chromium.launch({ headless:true });
+  const browser = await chromium.launch({ headless:true, executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined, args:['--no-sandbox'] });
   try {
     const page = await browser.newPage();
     await page.route('**/*', route => route.abort());

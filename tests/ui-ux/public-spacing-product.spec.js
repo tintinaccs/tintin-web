@@ -66,7 +66,7 @@ async function mockPublicReads(page) {
 
 for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
   [1280,720], [1440,900], [1920,1080]]) {
-  test(`producto, carrito y comentarios conservan sus marcos en ${width}px`, async ({ page }) => {
+  test(`producto y selección conservan sus marcos en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await mockPublicReads(page);
@@ -78,50 +78,33 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       window._renderProductDetail(product);
     }, product);
     await expect(page.locator('#product-name')).toHaveText(product.name);
-    await expect(page.locator('#product-reviews')).toBeAttached();
+    await expect(page.locator('#product-reviews, #tinsel-root, [data-open-community], #btn-product-like')).toHaveCount(0);
     await page.waitForFunction(() => document.body.classList.contains('tt-product-maintenance'));
     await expect(page.locator('.tinben')).toHaveCount(0);
     await expect(page.locator('#product-selection-title')).toHaveText('Tu selección');
-    await expect(page.locator('.tinsel-title')).toContainText('Tu carrito');
     const geometry = await page.evaluate(() => {
       const issues = [];
-      for (const selector of ['.tt-product-gallery', '.tt-product-info-panel', '.tinsel-box']) {
+      for (const selector of ['.tt-product-gallery', '.tt-product-info-panel', '.tt-product-selection']) {
         const node = document.querySelector(selector), r = node.getBoundingClientRect(), s = getComputedStyle(node);
         if (r.left < 0 || r.right > innerWidth) issues.push(`${selector} fuera del viewport`);
-        if (selector === '.tinsel-box' && (parseFloat(s.paddingLeft) < 12 || parseFloat(s.paddingRight) < 12)) issues.push(`${selector} sin inset`);
+        if (selector === '.tt-product-selection' && (r.left < 16 || r.right > innerWidth - 16)) issues.push(`${selector} sin margen exterior`);
         if (node.scrollWidth > node.clientWidth + 1) issues.push(`${selector} desborda`);
       }
       const containerStyle = getComputedStyle(document.querySelector('.tt-product-page > .container'));
       if (parseFloat(containerStyle.paddingLeft) < 16 || parseFloat(containerStyle.paddingRight) < 16) issues.push('ficha sin margen exterior');
       const desc = document.querySelector('#product-desc'), selection = document.querySelector('.tt-product-selection');
       if (!(desc.compareDocumentPosition(selection) & Node.DOCUMENT_POSITION_FOLLOWING)) issues.push('selección antes de descripción');
-      const reviews = document.querySelector('#product-reviews');
-      if (reviews.nextElementSibling !== document.querySelector('.tt-footer')) issues.push('comentarios no cierran contenido');
       return issues;
     });
     expect(geometry).toEqual([]);
-    await page.locator('.tt-variant-option').filter({ hasText: 'Dorado' }).click();
+    await page.getByRole('button', { name: 'Dorado', exact: true }).click();
     await page.locator('#btn-qty-plus').click();
     await expect(page.locator('#qty-val')).toHaveText('2');
     await expect(page.locator('#btn-product-add-cart')).toBeEnabled();
-    // El contrato comercial tiene su propia suite. Aquí verificamos la
-    // presentación del carrito usando el evento público de actualización.
-    await page.evaluate(product => {
-      window.syncCartWithCatalog = () => [{ ...product, variant: 'Dorado', qty: 2 }];
-      window.dispatchEvent(new CustomEvent('tt_cart_updated'));
-    }, product);
-    await expect(page.locator('#tinsel-count')).toHaveText('2');
-    await expect(page.locator('#tinsel-items')).toContainText('Dorado');
-    await expect(page.locator('#tinsel-total-footer')).toContainText('140.000');
-    expect(await page.locator('.tinsel-item').evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
-    // Abrir comentarios también funciona para invitados y con lista vacía.
-    await page.locator('[data-open-community]').click();
-    await expect(page.locator('#product-reviews')).toBeFocused();
-    await expect(page.locator('#product-reviews-title')).toBeVisible();
-    expect(await page.locator('#tinsel-checkout-btn').evaluate(node => node.getBoundingClientRect().height)).toBeLessThan(90);
-    const top = await page.locator('#product-reviews').evaluate(node => node.getBoundingClientRect().top);
-    expect(top).toBeGreaterThanOrEqual(0);
-    expect(top).toBeLessThan(height);
+    const purchase = await page.locator('#btn-product-add-cart').boundingBox();
+    expect(purchase.height).toBeGreaterThanOrEqual(44);
+    expect(purchase.height).toBeLessThan(90);
+    await expect(page.locator('#product-reviews, #tinsel-root, [data-open-community]')).toHaveCount(0);
     await page.screenshot({ path: `test-results/product-spacing-${width}.png`, fullPage: true });
   });
   for (const [route, card] of [['/index.html', '.tt-review-card'],

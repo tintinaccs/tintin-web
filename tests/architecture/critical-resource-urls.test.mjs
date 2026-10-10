@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 const root=new URL('../../',import.meta.url);
 const shell=fs.readFileSync(new URL('js/components/navigation/compartido/configuracion.js',root),'utf8');
-const shellVersion=shell.match(/SHELL_VERSION = '([^']+)'/)[1];
-const canonical=`assets-tintin/images/general/logo.png?v=${shellVersion}`;
+const logoVersion=shell.match(/LOGO_VERSION = '([^']+)'/)[1];
+const canonical=`assets-tintin/images/general/logo.png?v=${logoVersion}`;
 
 test('todos los img estáticos del logo consumen el mismo recurso que el shell',()=>{
   let checked=0;

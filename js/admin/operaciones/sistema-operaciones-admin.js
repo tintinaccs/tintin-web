@@ -169,6 +169,7 @@ function createSystem() {
     if (state.loader?.root.isConnected) return state.loader;
     const root = el('div', 'tt-ops-loader');
     root.id = 'tt-ops-loader';
+    if (typeof root.showPopover === 'function') root.setAttribute('popover', 'manual');
     root.setAttribute('role', 'region');
     root.hidden = true;
     root.setAttribute('aria-label', 'Progreso de la operación');
@@ -211,10 +212,14 @@ function createSystem() {
     const centered = state.active.some(item => item.centerLoader);
     loader.root.classList.toggle('tt-ops-loader--centered', centered);
     document.body?.classList.toggle('tt-ops-centered-active', centered);
-    if (!operation) { loader.root.hidden = true; return; }
+    if (!operation) {
+      if (typeof loader.root.hidePopover === 'function' && loader.root.matches(':popover-open')) loader.root.hidePopover();
+      loader.root.hidden = true; return;
+    }
     const progress = computeProgress(operation);
     const { previous, current, next } = stageWindow(operation);
     loader.root.hidden = false;
+    if (typeof loader.root.showPopover === 'function' && !loader.root.matches(':popover-open')) loader.root.showPopover();
     loader.title.textContent = operation.title;
     loader.percent.textContent = `${progress}%`;
     loader.fill.style.width = `${progress}%`;
@@ -550,9 +555,7 @@ function createSystem() {
     state.active.push(operation);
     // El modo centrado es parte del feedback inmediato de la operación; no
     // debe esperar al siguiente frame de animación para bloquear el fondo.
-    const loader = ensureLoader();
-    loader.root.classList.toggle('tt-ops-loader--centered', state.active.some(item => item.centerLoader));
-    document.body?.classList.toggle('tt-ops-centered-active', state.active.some(item => item.centerLoader));
+    renderLoader();
     update();
     let value;
     let cancelled = null;
@@ -572,7 +575,7 @@ function createSystem() {
     const centered = state.active.some(item => item.centerLoader);
     ensureLoader().root.classList.toggle('tt-ops-loader--centered', centered);
     document.body?.classList.toggle('tt-ops-centered-active', centered);
-    queueRender();
+    renderLoader();
     record(operation);
     if (retryAllowed && typeof config.retry === 'function' && operation.status !== GLOBAL_STATUS.GREEN && !cancelled) {
       state.retries.set(operation.id, { retry: config.retry, checkBeforeRetry: config.checkBeforeRetry });

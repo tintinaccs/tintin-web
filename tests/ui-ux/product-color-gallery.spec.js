@@ -24,10 +24,14 @@ for(const width of [320,390,709,768,1024,1440,1920]) test(`galería y editor de 
   await page.route(/\/(gold|silver)\d\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><circle cx="60" cy="60" r="40" fill="${r.request().url().includes('gold')?'gold':'silver'}"/></svg>`}));
   await page.goto('/color-gallery-fixture');await page.waitForFunction(()=>window.fixtureReady&&window.editorReady);
   await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);
-  await page.getByRole('button',{name:'Dorado',exact:true}).click();await expect(page.locator('#gallery-thumbs button')).toHaveCount(3);
+  await page.getByRole('button',{name:'Dorado',exact:true}).click();await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);
   await page.getByRole('button',{name:'Ver imagen 3',exact:true}).click();await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/gold3.svg$/);
-  await page.getByRole('button',{name:'Plateado',exact:true}).click();await expect(page.locator('#gallery-thumbs button')).toHaveCount(3);await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/silver1.svg$/);
-  await page.getByRole('button',{name:'Ampliar',exact:true}).click();expect(await page.evaluate(()=>window.lightboxImages.length)).toBe(3);
+  await page.getByRole('button',{name:'Plateado',exact:true}).click();await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/silver1.svg$/);
+  await expect(page.locator('#gallery-thumbs button.active')).toHaveAttribute('data-src',/silver1.svg$/);
+  await page.getByRole('button',{name:'Ver imagen 2',exact:true}).click();await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/gold2.svg$/);
+  await expect(page.getByRole('button',{name:'Dorado',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);
+  await page.getByRole('button',{name:'Ampliar',exact:true}).click();expect(await page.evaluate(()=>window.lightboxImages.length)).toBe(6);
   const rows=await page.evaluate(()=>window.editor.serialize());expect(rows.map(r=>r.imageUrls.length)).toEqual([3,3]);
   expect(await page.evaluate(()=>window.editor.serialize().some(row=>Object.values(row).some(value=>value===undefined)))).toBe(false);
   await page.getByRole('checkbox',{name:'Asignar foto 3 a Dorado',exact:true}).uncheck();

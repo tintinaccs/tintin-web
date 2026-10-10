@@ -1,6 +1,7 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const path=require('node:path');
+const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture.js');
 const root=path.resolve(__dirname,'../..');
 const source=fs.readFileSync(path.join(root,'checkout.html'),'utf8');
 const leafletStylesheet=source.match(/<link[^>]*href="\/js\/vendor\/leaflet\/leaflet\.css[^>]*>/)[0];
@@ -9,6 +10,8 @@ const goToStep=source.slice(source.indexOf('function goToStep(n)'),source.indexO
 const forwardValidation=fs.readFileSync('js/pages/checkout/validacion-avance.js','utf8').replace(/export function/g,'function');
 const hardening=forwardValidation+fs.readFileSync(path.join(root,'js/pages/checkout/checkout-hardening.js'),'utf8').replace(/^import[\s\S]*?;\r?\n/gm,'');
 for(const width of [390,768,1440]) test(`el avance y retorno siguen respondiendo a ${width}px`,async({page})=>{
+  await page.clock.install({time:new Date('2026-10-10T12:00:00Z')});
+  await page.clock.pauseAt(new Date('2026-10-10T12:01:00Z'));
   await page.setViewportSize({width,height:800});
   await page.route('**/checkout-hardening.js',route=>route.fulfill({contentType:'text/javascript',body:`const AUTH_STATES={RESTORING:'restoring',UNKNOWN:'unknown'};const subscribeSession=fn=>fn({status:'authenticated',user:{uid:'fixture',emailVerified:true}});const waitForSession=async()=>{};const readCheckoutProfile=async()=>({blocked:false});const awaitCartReady=async()=>{};const getCartLocal=()=>[{id:'fixture-ring',lineId:'fixture-ring-gold',variant:'Dorado'}];const updateQty=async()=>{};const removeFromCart=async()=>{};${hardening}`}));
   await page.route('**/checkout',route=>route.fulfill({contentType:'text/html; charset=utf-8',body:`<!doctype html><html><head><meta charset="utf-8"></head><body>
@@ -25,18 +28,33 @@ for(const width of [390,768,1440]) test(`el avance y retorno siguen respondiendo
   await page.goto('/checkout');
   await page.locator('#btn-step1-next').click();
   await expect(page.locator('.ck-panel').nth(1)).toHaveClass(/active/);
-  await page.waitForTimeout(200);
+  await page.clock.runFor(200);
   expect(await page.evaluate(()=>!!window.__observerLoop)).toBe(false);
   await page.getByRole('button',{name:'Volver',exact:true}).click();
+  await expect(page.locator('.ck-panel').first()).toHaveClass(/active/);
+  await page.clock.runFor(2500);
   await expect(page.locator('.ck-panel').first()).toHaveClass(/active/);
   await page.getByRole('button',{name:'Ir al paso 2',exact:true}).click();
   await expect(page.locator('.ck-panel').nth(1)).toHaveClass(/active/);
   expect(await page.evaluate(()=>!!window.__observerLoop)).toBe(false);
+  // Un regreso a la página sigue recuperando el paso guardado mediante los
+  // validadores nativos; después, Volver debe prevalecer sobre sus reintentos.
+  await page.reload();
+  await page.clock.runFor(2500);
+  await expect(page.locator('.ck-panel').nth(1)).toHaveClass(/active/);
+  await page.getByRole('button',{name:'Volver',exact:true}).click();
+  await page.clock.runFor(2500);
+  await expect(page.locator('.ck-panel').first()).toHaveClass(/active/);
+  await page.getByRole('button',{name:'Ir al paso 2',exact:true}).press('Enter');
+  await expect(page.locator('.ck-panel').nth(1)).toHaveClass(/active/);
+  await page.getByRole('button',{name:'Ir al paso 1',exact:true}).press(' ');
+  await page.clock.runFor(2500);
+  await expect(page.locator('.ck-panel').first()).toHaveClass(/active/);
 });
 
 const handler=source.slice(source.indexOf('function refreshPaymentOptions()'),source.indexOf('// Datos bancarios reales'));
 for(const width of [320,768,1440]) test(`encomienda sólo transferencia y limpia efectivo previo (${width}px)`,async({page})=>{
- const fixture=source.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
+ const fixture=removeFixtureScripts(source).replace('</body>',`<script>let efectivoAdminOn=true,transferenciaAdminOn=true;const orderData={shippingMethod:'delivery',paymentMethod:''};${handler}
  window.setShipping=(method)=>{orderData.shippingMethod=method;refreshPaymentOptions()};
  document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-3'));
  document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');refreshPaymentOptions();</script></body>`);
@@ -93,9 +111,11 @@ for(const width of [320,390,767])for(const route of ['index.html','catalogo.html
  const nav=page.locator('#tt-tabbar');await expect(nav).toHaveClass(/tt-mobile-nav-ready/);
  for(const compact of [false,true]){
   await nav.evaluate((el,compact)=>el.classList.toggle('tt-tabbar-compact',compact),compact);
-  await expect(nav).toHaveCSS('min-height',compact?'58px':'70px');
-  await expect(nav).toHaveCSS('padding-top',compact?'5px':'8px');
-  await expect.poll(async()=>page.evaluate(()=>{const icon=document.querySelector('#tabbar-cart svg').getBoundingClientRect(),halo=document.querySelector('.tt-mobile-nav-halo').getBoundingClientRect();return Math.max(Math.abs((icon.left+icon.right-halo.left-halo.right)/2),Math.abs((icon.top+icon.bottom-halo.top-halo.bottom)/2));})).toBeLessThan(1);
+  await expect(nav).toHaveCSS('min-height','76px');
+  await expect(nav).toHaveCSS('padding-top','8px');
+  expect(await page.locator('#tabbar-cart').evaluate(el=>getComputedStyle(el,'::before').opacity)).toBe('1');
+  await expect(page.locator('.tt-mobile-nav-indicator')).toBeHidden();
+  await expect(page.locator('#tabbar-cart span:last-child')).toBeVisible();
   await expect(page.locator('#tabbar-cart')).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
   expect(await nav.evaluate(el=>{const box=el.getBoundingClientRect();return !!document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)?.closest('#tt-tabbar');})).toBe(true);
  }

@@ -22,7 +22,7 @@ let unsubscribeStats = null;
 let unsubscribeLikes = null;
 let deepLinkHandled = false;
 const PENDING_INTENT_KEY = 'tt_product_community_intent_v2';
-const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
+const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1';
 const PUBLIC_REVIEWS_LIMIT = 100;
 let publicReviewCursor = null;
 let publicReviewsHaveMore = false;
@@ -179,10 +179,6 @@ function ensureSection() {
       </div>
     </div>`;
 
-  section.setAttribute('aria-labelledby', 'product-reviews-title');
-  section.tabIndex = -1;
-  // La comunidad cierra el contenido del producto, después del carrito y
-  // las recomendaciones. Su ubicación no depende de cuándo lleguen los datos.
   const footer = document.querySelector('.tt-footer');
   if (footer?.parentNode) footer.parentNode.insertBefore(section, footer);
   else document.body.appendChild(section);
@@ -551,9 +547,8 @@ document.addEventListener('click', async event => {
   const openCommunity = event.target.closest('[data-open-community]');
   if (openCommunity) {
     event.preventDefault();
-    const section = ensureSection();
-    section.focus({ preventScroll: true });
-    section.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    ensureSection().scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    window.setTimeout(() => document.querySelector('#tt-review-editor textarea')?.focus(), 350);
     return;
   }
 
