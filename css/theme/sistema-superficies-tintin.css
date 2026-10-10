@@ -20,6 +20,9 @@
   --tt-ui-radius-xl: 28px;
   --tt-ui-radius-lg: 20px;
   --tt-ui-radius-md: 14px;
+  --tt-ui-gutter: clamp(16px, 3vw, 32px);
+  --tt-ui-inset: clamp(16px, 2.2vw, 28px);
+  --tt-ui-gap: clamp(12px, 2vw, 24px);
 }
 
 /* Public surfaces ------------------------------------------------------- */
@@ -41,8 +44,8 @@ html body:not(:has(.adm-main)) :is(
   .tt-collection-carousel, .tt-look-section, .tt-home-random-products,
   .tt-related-section, .tt-colls-page-section, .tt-reviews-product
 ) {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 520px;
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
 }
 
 html body:not(:has(.adm-main)) :is(
@@ -300,7 +303,89 @@ html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea):focus {
    puntos suspensivos antes del corazón en lugar de meterse debajo. */
 .tt-product-card .tt-product-badge {
   max-width: calc(100% - 76px);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Espaciado público compartido. Las tarjetas con imagen reciben el inset
+   en su cuerpo; las tarjetas de texto lo reciben en la superficie completa. */
+html body:not(:has(.adm-main)) :is(.tt-product-info, .tt-card-info,
+  .tt-coll-page-body, .tt-look-card-body, .tt-look-card-foot) {
+  padding: clamp(12px, 1.8vw, 20px);
+  min-width: 0;
+}
+html body:not(:has(.adm-main)) :is(.tt-info-block, .tt-contact-info-item,
+  .tt-trust-item, .tt-review-card, .tt-review-form, .tt-reviews-summary,
+  .tt-review-thread-message, .cat-top, .perfil-card) {
+  padding: var(--tt-ui-inset);
+  min-width: 0;
+}
+html body:not(:has(.adm-main)) :is(.tt-editorial-content, .tt-watch-feature-content,
+  .ck-panel-body) {
+  padding: var(--tt-ui-inset);
+}
+/* No truncar información para forzar tarjetas de igual altura. */
+html body:not(:has(.adm-main)) :is(.tt-product-name, .tt-card-name,
+  .tt-coll-page-name, .tt-coll-page-desc, .tt-look-card-name,
+  .tt-cart-item-name, .tt-review-comment) {
+  -webkit-line-clamp: unset;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  max-height: none;
+}
+html body:not(:has(.adm-main)) :is(.tt-product-name, .tt-card-name,
+  .tt-coll-page-name, .tt-coll-page-desc, .tt-look-card-name) {
+  display: block;
+  overflow: visible;
+}
+html body:not(:has(.adm-main)) :is(.tt-product-actions, .tt-card-actions, .tt-card-btns,
+  .tt-collections-actions, .tt-404-actions) {
+  gap: 10px;
+  flex-wrap: wrap;
+}
+html body:not(:has(.adm-main)) :is(.tt-product-actions, .tt-card-actions, .tt-card-btns) > :is(a, button) {
+  min-height: 44px;
+  white-space: normal;
+}
+/* El ancho mínimo del CTA editorial no corresponde a los botones de tarjeta
+   que comparten la misma sección de descubrimiento en la portada. */
+html body:not(:has(.adm-main)) .tt-home-random-products .tt-product-actions .tt-btn {
+  min-width: 0;
+  max-width: 100%;
+  padding-inline: 12px;
+  white-space: normal;
+}
+html body:not(:has(.adm-main)) :is(.tt-coll-page-body, .tt-product-info,
+  .tt-card-info) > :last-child { margin-bottom: 0; }
+html body:not(:has(.adm-main)) :is(.tt-info-block, .tt-review-card,
+  .tt-contact-info-item) > :first-child { margin-top: 0; }
+html body:not(:has(.adm-main)) :is(.tt-info-block, .tt-review-card,
+  .tt-contact-info-item) > :last-child { margin-bottom: 0; }
+
+/* Los botones y formularios conservan sus contornos de estado. El bloque
+   de características/acciones no necesita otro marco dentro de la ficha. */
+html body:not(:has(.adm-main)) :is(.tt-specs-block, .tt-product-actions-panel) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+html body:not(:has(.adm-main)) .tt-cart-item-info { min-width: 0; }
+html body:not(:has(.adm-main)) .tt-cart-item-img { flex-shrink: 0; }
+html body:not(:has(.adm-main)) :is(.tt-cart-header, .tt-cart-body, .tt-cart-footer) {
+  padding-inline: var(--tt-ui-gutter);
+}
+html body:not(:has(.adm-main)) :is(.tt-colls-page-grid, .tt-products-grid):not(:has(.tt-skeleton, .tt-coll-page-skeleton)) {
+  min-height: 0;
+}
+@media (max-width: 480px) {
+  html body:not(:has(.adm-main)) .tt-product-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body:not(:has(.adm-main)) .tt-product-actions > :is(a, button) {
+    width: 100%;
+    flex: none;
+  }
+  html body:not(:has(.adm-main)) .cat-top { gap: 12px; }
 }

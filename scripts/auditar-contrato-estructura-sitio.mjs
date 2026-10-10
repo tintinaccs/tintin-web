@@ -133,7 +133,7 @@ for (const pageId of declaredIds) {
   if (seenPaths.has(page.path)) fail(`${pageId}: path duplicado ${page.path}.`);
   seenPaths.add(page.path);
 
-  const html = read(page.path);
+  const html = read(page.path).replace(/<!--[\s\S]*?-->/g, '');
   const ids = new Set();
   const roots = new Set();
   const closedZones = new Set();

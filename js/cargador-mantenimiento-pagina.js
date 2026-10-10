@@ -17,7 +17,7 @@ export function loadPageMaintenance() {
   const path = pathName();
   if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261010-whatsapp-release-5');
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1');
-  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261010-product-related-details-1');
+  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20261009-whatsapp-responsive-1-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
