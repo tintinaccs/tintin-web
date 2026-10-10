@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
+const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const browserModule = modulePath => '/' + path.relative(process.cwd(), require.resolve(modulePath)).split(path.sep).join('/');
 const login = fs.readFileSync('login.html', 'utf8');
 const ensure = login.slice(login.indexOf('async function ensureProfileComplete'), login.indexOf('\nfunction isUnavailableAuthIdentity'));
@@ -34,7 +35,7 @@ document.documentElement.classList.remove('login-auth-pending','tt-color-scheme-
 const user={uid:'isolated',email:'isolated@example.com',getIdToken:async()=> 'isolated'};
 ensureProfileComplete(user,'client').then(()=>{window.__complete=true;window.__saved=stored;});
 `;
-const fixture=login.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</body>',`<script type="module">${script}</script></body>`);
+const fixture=removeFixtureScripts(login).replace('</body>',`<script type="module">${script}</script></body>`);
 
 for (const width of [390, 768, 1440]) {
   test(`WhatsApp cancela la comprobación tardía y permite reintentar sin perder datos a ${width}px`, async ({ page }) => {

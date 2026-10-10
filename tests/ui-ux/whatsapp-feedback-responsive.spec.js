@@ -1,5 +1,6 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
+const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const login=fs.readFileSync('login.html','utf8');
 const ensure=login.slice(login.indexOf('async function ensureProfileComplete'),login.indexOf('\nfunction isUnavailableAuthIdentity'));
 fs.mkdirSync('artifacts/whatsapp-feedback',{recursive:true});
@@ -29,7 +30,7 @@ document.documentElement.classList.remove('login-auth-pending','tt-color-scheme-
 const user={uid:'isolated',email:'isolated@example.com',getIdToken:async()=> 'isolated'};
 ensureProfileComplete(user,'client').then(()=>{window.registrationComplete=true;window.savedProfile=stored;});
 `;
-const html=login.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</body>',`<script type="module">${script}</script></body>`);
+const html=removeFixtureScripts(login).replace('</body>',`<script type="module">${script}</script></body>`);
 for(const width of [320,390,768,1024,1280,1440,1920]) test(`registro breve valida, explica duplicados y termina (${width}px)`,async({page})=>{
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.setViewportSize({width,height:900});
@@ -58,7 +59,7 @@ for(const width of [320,390,768,1024,1280,1440,1920]) test(`registro breve valid
 
 const product=fs.readFileSync('product.html','utf8');
 for(const width of [320,390,768,1024,1280,1440,1920]) test(`ficha sin comunidad ni selección duplicada y con dos columnas desde tablet (${width}px)`,async({page})=>{
- const fixture=product.replace(/<script\b[\s\S]*?<\/script>/gi,'').replace('</head>','<link rel="stylesheet" href="/css/core/tema-unificado-tintin.css"><link rel="stylesheet" href="/css/pages/product/product-maintenance.css"></head>');
+ const fixture=removeFixtureScripts(product).replace('</head>','<link rel="stylesheet" href="/css/core/tema-unificado-tintin.css"><link rel="stylesheet" href="/css/pages/product/product-maintenance.css"></head>');
  await page.route('**/__product-layout',r=>r.fulfill({contentType:'text/html',body:fixture}));
  await page.setViewportSize({width,height:900});await page.goto('/__product-layout');
  await page.evaluate(()=>{document.documentElement.classList.remove('tt-store-gate-pending','tt-color-scheme-pending');document.body.classList.add('tt-product-maintenance');document.getElementById('product-loading').style.display='none';document.getElementById('product-grid').style.display='';document.getElementById('product-name').textContent='Reloj Anabella';document.getElementById('product-price').textContent='Gs. 120.000';});

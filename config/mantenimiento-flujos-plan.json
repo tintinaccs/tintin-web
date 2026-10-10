@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "6d7c644a913c25710c1d1604fb4ff07ec7f2d644",
-  "reason": "Correcciones de capturas WhatsApp en componentes compartidos y alta mínima de nombre y WhatsApp, conservando autorización, stock, pagos e idempotencia.",
+  "reason": "Correcciones WhatsApp de pantallas y alta mínima, con filtros de fixtures HTML mediante parser y pruebas de seguridad, conservando autorización, stock, pagos e idempotencia.",
   "files": [
     {
       "path": "_headers",
@@ -387,6 +387,16 @@
       "path": "nosotros.html",
       "oldHash": "c4d1672b1fc40e8f7dad3edd6b87c7bb38200305b08328d6ea7fe1169a6abddd",
       "newHash": "eecab2d9db93d54e5d0c26fba606cb9f9b32dcc9a07c4ce0d3641b931f4582df"
+    },
+    {
+      "path": "package-lock.json",
+      "oldHash": "0f7adbdff749f5dc2806615413a0055402f1e70df2493f45d13a8a63bb8eea05",
+      "newHash": "6337a51dbbf33993c0acdcd899822722cfd6f7078548e501674ee83d6f23549b"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "2cd3c713e38fa5d453647ca5dc70fb92d72f90c6bd9446b68b79a3fee03ed28e",
+      "newHash": "cd2754bfd4674f65f6af72b43b6e249c93b67d55873dc7c6c573f5c530a863d7"
     },
     {
       "path": "perfil.html",

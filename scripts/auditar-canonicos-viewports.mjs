@@ -3,6 +3,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { removeFixtureScripts } from './lib/html-layout-fixture.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'diagnostic-manifest.json'), 'utf8'));
@@ -47,9 +48,7 @@ const expectsPublicShell = pageInfo => !authShellPages.has(pageInfo.path) && !pa
 const adminMarkup = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
 const adminSidebarScript = adminMarkup.match(/<script\b[^>]*src="js\/admin\/sidebar-expandible-admin\.js\?v=[^"]+"[^>]*><\/script>/)?.[0];
 if (!adminSidebarScript) throw new Error('La maqueta de Administración no declara su navegación lateral real.');
-const adminGeometryFixture = adminMarkup
-  .replace(/<script\b[\s\S]*?<\/script>/gi, '')
-  .replace(/<link\b[^>]*rel="modulepreload"[^>]*>/gi, '')
+const adminGeometryFixture = removeFixtureScripts(adminMarkup, { removeModulePreloads: true })
   .replace('<html lang="es">', '<html lang="es" class="adm-auth-ready">')
   .replace('</body>', `${adminSidebarScript}</body>`);
 

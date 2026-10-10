@@ -1,3 +1,13 @@
+# Publicación de WhatsApp — 2026-10-09 (America/Buenos_Aires)
+
+Agente: Codex /root. El propietario aprobó mantenimiento 38016532386 y el veredicto pasó para 7ed95409837728b968df8ccf0443fe85bb635b68. Repository audit completo, ambos Analyze y Pages PASS para ese candidato; matrices locales canónica 126/126 y pública 187/187 PASS. La integración sigue bloqueada por ocho conversaciones de CodeQL: cuatro filtros de scripts por regexp en fixtures de pruebas/auditoría. No se eluden conversaciones ni se usa bypass administrativo.
+
+Corrección: eliminación de nodos script con el parser HTML parse5 ya presente en el lock, declarado ahora como dependencia de desarrollo exacta. Un helper compartido procesa también contenido template y retira modulepreload solo en la maqueta aislada de Administración. Siete regresiones Node PASS incluyen cierre con espacios, mayúsculas, atributos con >, SVG/template y script sin cerrar. Las 23 pruebas afectadas de navegador PASS; la matriz canónica se repite. Las siete regresiones Node están en tests/operations y entran en el glob operativo existente de CI. CI y nueva revisión protegida para el SHA corregido pendientes. Cambian herramientas de prueba y su dependencia, sin cambios adicionales de negocio, permisos, interfaz o datos.
+
+La autorización específica para confiar la CA del proxy fue recibida. La CA ya estaba registrada; el fallo real era apertura del almacén NSS de solo lectura en sandbox. El navegador autorizado con acceso al NSS verificó SDK remoto HTTP 200 con TLS estricto y DOMContentLoaded de Administración en 1412 ms. App Check/reCAPTCHA sigue limitado por la red del entorno; www.google.com se guardó en el borrador, sin atribuir su activación. No se hicieron usuarios, pedidos, pagos ni emails de producción. Publicación de Pages y reglas aún pendientes.
+
+---
+
 # Revisión de WhatsApp y preparación de publicación — 2026-10-10
 
 El usuario autorizó corregir todas las pantallas/dispositivos y luego pidió publicar ("hacelo"). Candidato en codex/whatsapp-responsive-20261010 sobre main 6d7c644a913c25710c1d1604fb4ff07ec7f2d644. Detalle en [WHATSAPP_REVISION_20261010.md](WHATSAPP_REVISION_20261010.md). PR creado: https://github.com/tintinaccs/tintin-web/pull/1083. Código subido en commit de implementación 25440e354a60703c4739777b363e301f1b0ac9c9. No se hicieron merge/deploy productivos, ni pedidos, registros o envíos reales.
