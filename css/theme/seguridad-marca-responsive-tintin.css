@@ -33,7 +33,7 @@
 }
 
 /* Contenedores reales que existen en perfil y checkout. */
-:is(.perfil-wrap, .perfil-main, .perfil-page, .ck-wrap, .ck-main, .ck-body) {
+:is(.ck-wrap, .ck-main, .ck-body) {
   width: min(100%, 1560px) !important;
   max-width: 100% !important;
   margin-inline: auto !important;
@@ -41,7 +41,7 @@
 }
 
 /* Evita doble margen cuando un contenedor fit está anidado en otro. */
-:is(.perfil-wrap, .ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
+:is(.ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
   padding-inline: 0 !important;
 }
 
@@ -71,22 +71,22 @@
 }
 
 @media (min-width: 768px) and (max-width: 1099px) {
-  :is(.perfil-wrap, .perfil-main, .perfil-page, .ck-wrap, .ck-main, .ck-body) {
+  :is(.ck-wrap, .ck-main, .ck-body) {
     padding-inline: clamp(26px, 4.5vw, 54px) !important;
   }
 
-  :is(.perfil-wrap, .ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
+  :is(.ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
     padding-inline: 0 !important;
   }
 }
 
 @media (max-width: 767px) {
-  :is(.perfil-wrap, .perfil-main, .perfil-page, .ck-wrap, .ck-main, .ck-body) {
+  :is(.ck-wrap, .ck-main, .ck-body) {
     width: 100% !important;
     padding-inline: clamp(14px, 4vw, 22px) !important;
   }
 
-  :is(.perfil-wrap, .ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
+  :is(.ck-wrap) > :is(.perfil-main, .ck-main, .ck-body) {
     padding-inline: 0 !important;
   }
 

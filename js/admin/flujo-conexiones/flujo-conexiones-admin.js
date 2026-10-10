@@ -1,4 +1,4 @@
-import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3";
+import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1";
 // =============================================================
 // TINTIN ACCESORIOS — Flujo real de decisiones y conexiones (render)
 // =============================================================

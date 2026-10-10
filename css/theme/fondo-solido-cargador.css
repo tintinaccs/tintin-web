@@ -199,5 +199,6 @@ html body #tt-loader::before {
   display: none !important;
 }
 
-/* El loader ocupa también el espacio reservado para la barra de scroll. */
-html:has(body #tt-loader:not(.tt-out)) { scrollbar-gutter:auto !important; }
+/* Cubrir el viewport sin alterar el gutter de la página: cambiarlo mientras
+   carga desplazaba el contenido al retirar el loader. */
+html body #tt-loader { width: 100vw !important; width: 100dvw !important; }

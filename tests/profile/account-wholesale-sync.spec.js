@@ -50,7 +50,7 @@ for(const width of [390,768,1440]){
  await expect(page.locator('#account-panel')).toContainText('Iniciar sesión');
  expect(await page.evaluate(()=>window.stopped)).toEqual(['u1','u2']);
  });
- test('mayoristas distingue nuevas, vistas y decisiones; usuarios en pestaña '+width,async({page})=>{
+ test('mayoristas distingue nuevas, vistas y decisiones; usuarios en pestaña '+width,async({page},testInfo)=>{
  await fixture(page,width,'<main id="section-mayoristas"></main>');
  await page.addScriptTag({content:identity+`
  const auth={currentUser:{uid:'admin',email:'owner@example.com'}};const db={};const SUPER_ADMIN='owner@example.com';
@@ -72,20 +72,22 @@ for(const width of [390,768,1440]){
  await expect(page.locator('[data-wholesale-detail]')).toContainText('WhatsApp 595912345678');
  expect(await page.locator('[data-wholesale-detail]').evaluate(detail=>detail.closest('tr').previousElementSibling.querySelector('[data-open-quote]').dataset.openQuote)).toBe('new');
  await expect(page.locator('[data-wholesale-detail] .wholesale-avatar')).toHaveCount(1);
- if(width===768)await page.screenshot({path:path.resolve(root,'../../outputs/mayoristas-cotizaciones-768.png')});
+ if(width===768)await page.screenshot({path:testInfo.outputPath('mayoristas-cotizaciones-768.png')});
  await page.locator('[data-wholesale-tab="users"]').click();
  await expect(page.locator('[data-wholesale-user-panel]')).toBeVisible();
  await expect(page.locator('[data-wholesale-quotes-panel]')).toBeHidden();
  await expect(page.locator('.wholesale-user-card')).toContainText('Ana Ruiz');
  await page.locator('[data-wholesale-user-search]').fill('nadie');
  await expect(page.locator('.wholesale-user-card')).toHaveCount(0);
- if(width===768){await page.locator('[data-wholesale-user-search]').fill('');await page.screenshot({path:path.resolve(root,'../../outputs/mayoristas-usuarios-768.png')});}
+ if(width===768){await page.locator('[data-wholesale-user-search]').fill('');await page.screenshot({path:testInfo.outputPath('mayoristas-usuarios-768.png')});}
  });
 }
 test('perfil público no introduce pestaña mayorista al actualizar la cuenta',async({page})=>{
  const profile=fs.readFileSync(path.join(root,'perfil.html'),'utf8');
  expect(profile).not.toContain('id="perfil-wholesale-card"');
- await fixture(page,768,'<div class="perfil-wrap"><a class="perfil-back" href="/">Volver</a><div class="perfil-card"><div class="perfil-header"><div id="perfil-avatar"></div><div><span id="perfil-nombre-display">Ana</span></div></div><input id="perfil-nombre"></div></div>');
+ const content=profile.slice(profile.indexOf('<div class="perfil-wrap">'),profile.indexOf('<div class="perfil-toast"'));
+ await fixture(page,768,content);
+ await page.addStyleTag({url:'/css/pages/perfil.css'});
  const code=source('js/quality/estabilidad-final-publica.js');
  await page.addScriptTag({content:code.slice(0,code.indexOf('\nfunction start()'))+'\ninjectStyles();enhanceProfile();'});
  await expect(page.locator('[data-profile-tab="datos"]')).toBeVisible();

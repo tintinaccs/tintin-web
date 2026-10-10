@@ -264,6 +264,9 @@ try {
 
     try {
       await page.goto(`${baseURL}${route.url}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+      // La página de redirección no es la superficie final: esperar su destino
+      // antes de comprobar el loader evita observar dos documentos distintos.
+      if (route.redirectPath) await page.waitForURL(url => url.pathname === route.redirectPath);
       await page.waitForFunction(() => {
         const visible = node => {
           if (!node) return false;

@@ -178,11 +178,16 @@ export function can(role, permission) {
  * @param {string} uid
  * @returns {Promise<string>} role string
  */
-export async function getUserRole(uid, email) {
+export async function getUserRole(uid, email, confirmedProfile) {
   // La identidad elevada proviene exclusivamente de Firebase Authentication.
   // El campo email de users/{uid} es informativo y nunca concede permisos.
   const authenticatedEmail = String(email || auth.currentUser?.email || '').trim().toLowerCase();
   if (isSuperAdminEmail(authenticatedEmail)) return 'superadmin';
+  // El perfil acaba de leer users/{uid}; reutilizar esa lectura confirmada
+  // evita otra consulta antes de habilitar su interfaz. Nunca pasar el handoff.
+  if (confirmedProfile && uid === auth.currentUser?.uid) {
+    return ASSIGNABLE_ROLES.includes(confirmedProfile.role) ? confirmedProfile.role : 'client';
+  }
   try {
     const snap = await getDoc(doc(db, 'users', uid));
     if (!snap.exists()) return 'client';

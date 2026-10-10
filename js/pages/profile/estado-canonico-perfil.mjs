@@ -3,6 +3,19 @@
 const clean = value => String(value ?? '').trim().replace(/\s+/g, ' ');
 const firstPresent = (...values) => values.find(value => clean(value) !== '') ?? '';
 
+// Proyección visual de corta vida para navegar entre documentos. No conserva
+// roles, permisos, bloqueo, tokens, estadísticas ni el documento privado entero.
+export function projectAccountPresentation(profile = {}) {
+  const identity = readAccountIdentity(profile);
+  return {
+    name: identity.name.slice(0, 160),
+    phone: identity.phone.slice(0, 32),
+    address: identity.address.slice(0, 240),
+    username: identity.username.slice(0, 20),
+    avatarURL: identity.photoURL.slice(0, 1200),
+  };
+}
+
 function providerPhoto(user = {}) {
   const providers = Array.isArray(user?.providerData) ? user.providerData : [];
   const google = providers.find(provider => clean(provider?.providerId).toLowerCase() === 'google.com');

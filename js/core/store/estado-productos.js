@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -19,7 +19,7 @@ import {
   runSingleFlight,
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
-import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1';
+import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1';
 import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';
@@ -124,7 +124,6 @@ function compactProduct(product) {
     variants: product.variants,
     variantMedia: product.variantMedia,
     variantInventory: product.variantInventory,
-    variantMedia: product.variantMedia,
     stock: product.stock,
     active: product.active,
     oferta: product.oferta,
@@ -214,11 +213,11 @@ async function startPublicProductsRealtime() {
 export async function loadHomeProducts(options = {}) {
   const force = options.force === true;
   if (!force) {
-    const cached = readCached(HOME_CACHE_KEY, HOME_CACHE_TTL);
+    const cached = readCached(HOME_CACHE_KEY, HOME_CACHE_TTL) || readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
     if (Array.isArray(cached) && cached.length) return publish(cached, 'home-cache');
   }
 
-  const stale = readStaleCached(HOME_CACHE_KEY);
+  const stale = readStaleCached(HOME_CACHE_KEY) || readStaleCached(ALL_CACHE_KEY);
   if (!force && Array.isArray(stale) && stale.length) publish(stale, 'home-stale-cache');
   try {
     return await runSingleFlight('products:home', fetchHomeProducts);
@@ -232,10 +231,10 @@ export async function loadHomeProducts(options = {}) {
 export async function loadAllProducts(options = {}) {
   const force = options.force === true;
   if (!force) {
-    const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
+    const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL) || readCached(HOME_CACHE_KEY, HOME_CACHE_TTL);
     if (Array.isArray(cached) && cached.length) return publish(cached, 'cache');
   }
-  const stale = readStaleCached(ALL_CACHE_KEY);
+  const stale = readStaleCached(ALL_CACHE_KEY) || readStaleCached(HOME_CACHE_KEY);
   if (!force && Array.isArray(stale) && stale.length) publish(stale, 'stale-cache');
   try {
     return await runSingleFlight('products:all', fetchAllProducts);

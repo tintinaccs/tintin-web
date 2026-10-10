@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -21,7 +21,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
@@ -30,7 +30,7 @@
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/perfil.html" />
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2">
-  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1">
+  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20261010-social-mobile-styles-3" />
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -45,137 +45,16 @@
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1">
   <script>document.documentElement.classList.add('profile-auth-pending');</script>
-  <style>
-    /* Alias variables para que los estilos de perfil funcionen con styles.css */
-    :root {
-      --acc:       var(--pink-dark);
-      --acc-dark:  var(--rose);
-      --acc-light: var(--pink-mid);
-      --acc-pale:  var(--pink-pale);
-      --radius:    var(--radius-md);
-      --font: "Montserrat";
-    }
-
-    body { background: var(--pink-pale); }
-
-    /* Pintamos el armazón desde el primer frame. Auth hidrata los campos en
-       el mismo bloque y la protección de sesión redirige si no hay cuenta. */
-    html.profile-auth-pending .perfil-wrap { visibility: visible; }
-    html.profile-auth-pending .perfil-toast { visibility: hidden; }
-
-    /* Profile layout */
-    .perfil-wrap {
-      max-width: 700px; margin: 0 auto;
-      padding: 100px 24px 120px;
-    }
-
-    .perfil-back {
-      display: inline-flex; align-items: center; gap: 6px;
-      min-width: 24px; min-height: 32px; padding: 4px 0;
-      font-size: 12px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .08em; color: var(--acc);
-      text-decoration: none; margin-bottom: 24px;
-    }
-    .perfil-back:hover { opacity: .75; }
-
-    .perfil-card {
-      background: #fff; border-radius: var(--radius);
-      border: 1.5px solid var(--border); overflow: hidden; margin-bottom: 20px;
-    }
-
-    .perfil-header {
-      background: var(--pink-pale); padding: 28px 24px;
-      display: flex; align-items: center; gap: 20px;
-    }
-    .perfil-header > div:last-child { min-width: 0; }
-
-    .perfil-avatar {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: var(--acc); display: flex; align-items: center;
-      justify-content: center; font-size: 28px; font-weight: 900;
-      color: #fff !important; flex-shrink: 0; overflow: hidden;
-    }
-    .perfil-avatar img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; flex-shrink: 0; }
-
-    .perfil-name {
-      font-size: 20px; font-weight: 900; text-transform: uppercase;
-      letter-spacing: .04em; color: var(--text); overflow-wrap: break-word; margin: 0;
-    }
-    .perfil-email {
-      font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 2px;
-      overflow-wrap: break-word;
-    }
-
-    .perfil-body { padding: 24px; }
-
-    .perfil-section-title {
-      font-size: 11px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--acc); margin-bottom: 16px;
-      padding-bottom: 8px; border-bottom: 1.5px solid var(--border);
-    }
-
-    .perfil-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
-    .perfil-label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .08em; color: var(--text-muted);
-    }
-    .perfil-input {
-      padding: 11px 16px; border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm); font-size: 14px;
-      font-family:Montserrat; color: var(--text); background: #fafafa;
-      transition: border .2s, box-shadow .2s;
-    }
-    .perfil-input:focus {
-      outline: none; border-color: var(--acc); background: #fff;
-      box-shadow: 0 0 0 3px rgba(184,76,114,.08);
-    }
-
-    .perfil-btn {
-      padding: 11px 24px; border-radius: 50px; font-size: 12px;
-      min-width: 24px; min-height: 44px; justify-content: center;
-      font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
-      cursor: pointer; font-family:Montserrat; border: none; transition: all .2s;
-      text-decoration: none; display: inline-flex; align-items: center;
-    }
-    .perfil-btn-primary { background: var(--acc); color: #fff !important; }
-    .perfil-btn-primary:hover { background: var(--acc-dark); transform: translateY(-1px); }
-    .perfil-btn-outline { background: transparent; border: 1.5px solid var(--acc); color: var(--acc); }
-    .perfil-btn-outline:hover { background: var(--acc); color: #fff !important; }
-    .perfil-btn-danger { background: transparent; border: 1.5px solid #ef4444; color: #ef4444; }
-    .perfil-btn-danger:hover { background: #ef4444; color: #fff !important; }
-
-    .perfil-wa-box {
-      background: #e8f5e9; border-radius: var(--radius-sm); padding: 20px;
-      display: flex; align-items: center; gap: 16px; text-decoration: none;
-      color: var(--text); transition: background .2s; border: 1.5px solid #c8e6c9;
-    }
-    .perfil-wa-box:hover { background: #c8e6c9; }
-    .perfil-wa-icon { font-size: 32px; }
-    .perfil-wa-title { font-size: 14px; font-weight: 800; text-transform: uppercase; }
-    .perfil-wa-desc { font-size: 12px; color: #C86B86; margin-top: 2px; }
-
-    .perfil-order-row {
-      padding: 12px 0; border-bottom: 1px solid var(--border);
-    }
-    .perfil-order-row:last-child { border-bottom: none; }
-
-    .perfil-toast {
-      position: fixed; bottom: 90px; right: 20px;
-      background: var(--acc); color: #fff !important; padding: 12px 24px;
-      border-radius: 50px; font-size: 13px; font-weight: 700;
-      display: none; z-index: 999; box-shadow: 0 4px 16px rgba(0,0,0,.18);
-      font-family:Montserrat;
-    }
-    .perfil-toast.show { display: block; }
-
-    @media (max-width: 480px) {
-      .perfil-wrap { padding: 84px 16px 100px; }
-      .perfil-header { padding: 20px 16px; gap: 14px; }
-      .perfil-body { padding: 16px; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/pages/perfil.css?v=tintin-20261010-first-render-merge-1">
+  <script type="module" src="js/quality/estabilidad-final-publica.js?v=tintin-20261004-header-consistency-2-profile-wholesale-20261005-1-master-20261007-1-halo-20261008-3-first-render-merge-20261010-1"></script>
+  <!-- Estructura pública disponible desde el primer render -->
+  <link id="tt-responsive-brand-surfaces-css" rel="stylesheet" href="css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
+  <link id="tt-responsive-brand-polish-css" rel="stylesheet" href="css/theme/pulido-marca-responsive-tintin.css?v=tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-responsive-brand-safety-css" rel="stylesheet" href="css/theme/seguridad-marca-responsive-tintin.css?v=tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1">
+  <link id="tt-global-layout-css" rel="stylesheet" href="css/components/navigation/compartido/apariencia-global.css?v=tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-phase8-ui-ux-css" rel="stylesheet" href="css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
 </head>
-<body>
+<body data-tt-profile-v2="1">
 
 
 <!-- Mobile Menu -->
@@ -185,17 +64,42 @@
      PROFILE CONTENT
 ══════════════════════════════════════ -->
 <div class="perfil-wrap">
-  <a href="/" class="perfil-back">← Volver a la tienda</a>
-
-  <!-- Avatar + datos básicos -->
-  <div class="perfil-card">
-    <div class="perfil-header">
-      <div class="perfil-avatar" id="perfil-avatar"></div>
-      <div>
-        <h1 class="perfil-name" id="perfil-nombre-display"></h1>
-        <div class="perfil-email" id="perfil-email-display"></div>
-      </div>
+<a href="/" class="perfil-back">← Volver a la tienda</a>
+<p id="tt-profile-network" class="tt-profile-network-state" role="status" aria-live="polite" data-state="loading">Cargando tu cuenta…</p>
+<button type="button" class="perfil-btn perfil-btn-outline" id="btn-reintentar-perfil" hidden>Volver a intentar</button>
+<section class="tt-profile-hero" aria-label="Resumen de mi cuenta">
+  <div class="tt-profile-hero-main">
+    <div class="tt-profile-avatar-actions">
+      <div class="perfil-avatar" id="perfil-avatar" aria-label="Foto de perfil">?</div>
+      <button type="button" class="tt-profile-photo-btn">Cambiar foto</button>
+      <input type="file" id="perfil-photo-input" accept="image/jpeg,image/png,image/webp" hidden>
     </div>
+    <div class="tt-profile-meta">
+      <h1 class="perfil-name" id="perfil-nombre-display">Mi cuenta</h1>
+      <div class="perfil-email" id="perfil-email-display"></div>
+      <div class="tt-profile-meta-extra"><span>Cuenta Tintin</span><span aria-hidden="true">•</span><span>Perfil privado</span></div>
+    </div>
+  </div>
+</section>
+<nav class="tt-profile-tabs" role="tablist" aria-label="Secciones de mi perfil">
+  <button type="button" class="tt-profile-tab" id="profile-tab-resumen" data-profile-tab="resumen" role="tab" aria-controls="profile-panel-resumen" aria-selected="false">Resumen</button>
+  <button type="button" class="tt-profile-tab" id="profile-tab-datos" data-profile-tab="datos" role="tab" aria-controls="profile-panel-datos" aria-selected="true">Mis datos</button>
+  <button type="button" class="tt-profile-tab" id="profile-tab-pedidos" data-profile-tab="pedidos" role="tab" aria-controls="profile-panel-pedidos" aria-selected="false">Pedidos<span class="tt-profile-tab-badge" data-profile-orders-badge="1" hidden></span></button>
+  <button type="button" class="tt-profile-tab" id="profile-tab-favoritos" data-profile-tab="favoritos" role="tab" aria-controls="profile-panel-favoritos" aria-selected="false">Favoritos</button>
+  <button type="button" class="tt-profile-tab" id="profile-tab-cuenta" data-profile-tab="cuenta" role="tab" aria-controls="profile-panel-cuenta" aria-selected="false">Cuenta y seguridad</button>
+  <button type="button" class="tt-profile-tab" id="profile-tab-ayuda" data-profile-tab="ayuda" role="tab" aria-controls="profile-panel-ayuda" aria-selected="false">Ayuda</button>
+</nav>
+<div class="tt-profile-panels">
+<section class="tt-profile-panel" id="profile-panel-resumen" data-profile-panel="resumen" role="tabpanel" aria-labelledby="profile-tab-resumen" hidden>
+<section class="tt-profile-summary">
+<div class="tt-profile-summary-card"><span>Pedidos</span><strong data-profile-summary-orders>Cargando…</strong></div>
+<div class="tt-profile-summary-card"><span>Total comprado</span><strong data-profile-summary-spent>Cargando…</strong></div>
+<div class="tt-profile-summary-card"><span>Ubicación</span><strong data-profile-summary-location>Cargando…</strong></div>
+</section>
+</section>
+<section class="tt-profile-panel" id="profile-panel-datos" data-profile-panel="datos" role="tabpanel" aria-labelledby="profile-tab-datos">
+<div class="perfil-card">
+
     <div class="perfil-body">
       <div class="perfil-section-title">Mis datos</div>
       <div class="perfil-field">
@@ -217,9 +121,7 @@
       </div>
     </div>
   </div>
-
-  <!-- Ubicación guardada (se completa sola en el checkout) -->
-  <div class="perfil-card">
+<div class="perfil-card">
     <div class="perfil-body">
       <div class="perfil-section-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Mis direcciones guardadas (hasta 5)</div>
       <div id="perfil-location-content"></div>
@@ -247,23 +149,9 @@
       </div>
     </div>
   </div>
-
-  <!-- Datos de la cuenta -->
-  <div class="perfil-card">
-    <div class="perfil-body">
-      <div class="perfil-section-title">Datos de la cuenta</div>
-      <div style="font-size:13px;color:var(--text-muted);line-height:1.9">
-        Acceso de esta sesión: <strong id="perfil-metodo"></strong><br />
-        Métodos vinculados: <strong id="perfil-metodos"></strong><br />
-        Miembro desde: <strong id="perfil-alta"></strong><br />
-        Último ingreso: <strong id="perfil-ultimo-ingreso"></strong>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mis pedidos -->
-  <span id="mis-pedidos" aria-hidden="true"></span>
-  <div class="perfil-card" id="perfil-orders-card">
+</section>
+<section class="tt-profile-panel" id="profile-panel-pedidos" data-profile-panel="pedidos" role="tabpanel" aria-labelledby="profile-tab-pedidos" hidden>
+<div class="perfil-card" id="perfil-orders-card">
     <div class="perfil-body">
       <div class="perfil-section-title">Mis pedidos</div>
       <div id="perfil-orders-list">
@@ -275,16 +163,28 @@
       </div>
     </div>
   </div>
-
-  <div class="perfil-card" id="perfil-favorites-card">
+</section>
+<section class="tt-profile-panel" id="profile-panel-favoritos" data-profile-panel="favoritos" role="tabpanel" aria-labelledby="profile-tab-favoritos" hidden>
+<div class="perfil-card" id="perfil-favorites-card">
     <div class="perfil-body">
       <div class="perfil-section-title">Mis favoritos</div>
       <div id="perfil-favorites-list"><div style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Cargando favoritos...</div></div>
     </div>
   </div>
-
-  <!-- Rol (solo si no es cliente) -->
-  <div class="perfil-card" id="perfil-role-card" style="display:none">
+</section>
+<section class="tt-profile-panel" id="profile-panel-cuenta" data-profile-panel="cuenta" role="tabpanel" aria-labelledby="profile-tab-cuenta" hidden>
+<div class="perfil-card">
+    <div class="perfil-body">
+      <div class="perfil-section-title">Datos de la cuenta</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.9">
+        Acceso de esta sesión: <strong id="perfil-metodo"></strong><br />
+        Métodos vinculados: <strong id="perfil-metodos"></strong><br />
+        Miembro desde: <strong id="perfil-alta"></strong><br />
+        Último ingreso: <strong id="perfil-ultimo-ingreso"></strong>
+      </div>
+    </div>
+  </div>
+<div class="perfil-card" id="perfil-role-card" style="display:none">
     <div class="perfil-body">
       <div class="perfil-section-title">Mi rol</div>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
@@ -293,9 +193,15 @@
       </div>
     </div>
   </div>
-
-  <!-- WhatsApp ayuda -->
-  <div class="perfil-card">
+<div class="perfil-card">
+    <div class="perfil-body" style="display:flex;flex-direction:column;gap:12px">
+      <button type="button" class="perfil-btn perfil-btn-primary" id="btn-guardar-perfil" style="width:100%;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar cambios</button>
+      <button type="button" class="perfil-btn perfil-btn-danger" id="btn-logout" style="width:100%;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</button>
+    </div>
+  </div>
+</section>
+<section class="tt-profile-panel" id="profile-panel-ayuda" data-profile-panel="ayuda" role="tabpanel" aria-labelledby="profile-tab-ayuda" hidden>
+<div class="perfil-card">
     <div class="perfil-body">
       <div class="perfil-section-title">¿Necesitás ayuda?</div>
       <a href="https://wa.me/595981299331?text=Hola%21+Necesito+ayuda+con+mi+pedido+%F0%9F%8C%B8"
@@ -308,9 +214,7 @@
       </a>
     </div>
   </div>
-
-  <!-- Accesos rápidos -->
-  <div class="perfil-card">
+<div class="perfil-card">
     <div class="perfil-body">
       <div class="perfil-section-title">Accesos rápidos</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
@@ -320,15 +224,8 @@
       </div>
     </div>
   </div>
-
-  <!-- Acciones de cuenta: siempre al final de la página, no mezcladas
-       con los campos de "Mis datos" de arriba. -->
-  <div class="perfil-card">
-    <div class="perfil-body" style="display:flex;flex-direction:column;gap:12px">
-      <button type="button" class="perfil-btn perfil-btn-primary" id="btn-guardar-perfil" style="width:100%;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar cambios</button>
-      <button type="button" class="perfil-btn perfil-btn-danger" id="btn-logout" style="width:100%;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</button>
-    </div>
-  </div>
+</section>
+</div>
 </div>
 
 <div class="perfil-toast" id="perfil-toast"></div>
@@ -336,22 +233,22 @@
 
 <!-- Scripts -->
 <script src="js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2" defer></script>
-<script src="tienda.js?v=tintin-20261010-registration-name-2"></script>
+<script src="tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1"></script>
 
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
-import { logoutSession } from './js/core/auth/salida-sesion.js?v=tintin-20261010-registration-name-2';
-import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
+import { logoutSession } from './js/core/auth/salida-sesion.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1';
+import { subscribeAuthState, readAuthHandoff, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2";
+import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { createLocationMap, renderSavedMapPreviews } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261008-producto-superficies-1";
 import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2";
 import { MAX_SAVED_LOCATIONS, readAddressBook, addressBookPatch, addAddress, removeAddress, makePrimary } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
-import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1";
+import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1";
 import { accountAccessSummary } from "./js/core/auth/presentacion-acceso.mjs?v=tintin-20261004-location-consistency-1";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
@@ -439,78 +336,160 @@ function statusBadge(status) {
   return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${escapeHtmlPerfil(status)}</span>`;
 }
 
-// Un null transitorio puede llegar antes de que Firebase termine de restaurar
-// la sesión persistida (misma condición de carrera que en el panel admin): sin
-// esta espera, una recarga de esta pestaña rebota a login.html aunque la
-// cuenta siga logueada.
-async function waitForProfileUserAfterAuthRestore(user) {
-  if (user) return user;
-  const RETRY_DELAY_MS = 300;
-  // IndexedDB puede tardar varios segundos al volver desde otra ruta o tras
-  // reanudar el navegador. No redirigir ni pintar un perfil vacío durante esa
-  // ventana: esperar el mismo máximo robusto que usa el panel administrativo.
-  const MAX_ATTEMPTS = 30;
-  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
-    await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
-    if (auth.currentUser) return auth.currentUser;
-  }
-  return null;
+const dirtyProfileFields = new Set();
+const profileFieldIds = ['perfil-nombre', 'perfil-tel', 'perfil-dir', 'perfil-username'];
+profileFieldIds.forEach(id => document.getElementById(id).addEventListener('input', () => dirtyProfileFields.add(id)));
+let profileGeneration = 0;
+let activeProfileUid = null;
+let profileConfirmed = false;
+let stopProfileUpdates = null;
+let stopProfileEditor = null;
+
+function updateProfileRole(profile, user, generation) {
+  void getUserRole(user.uid, user.email, profile).then(role => {
+    if (generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
+    document.getElementById('perfil-role-card').style.display = role !== 'client' ? 'block' : 'none';
+    document.getElementById('link-admin-panel').style.display = role !== 'client' ? 'inline-flex' : 'none';
+    const badge = document.getElementById('perfil-role-badge');
+    badge.textContent = ROLE_LABELS[role] || 'Cliente';
+    badge.style.background = (ROLE_COLORS[role] || '#888') + '22';
+    badge.style.color = ROLE_COLORS[role] || '#888';
+    badge.style.border = `1.5px solid ${ROLE_COLORS[role] || '#888'}`;
+  }).catch(error => console.warn('[Perfil] Rol pendiente:', error?.code || error?.message));
 }
 
-async function startProfileAuthGuard() {
-  // El coordinador ya espera la restauración inicial de Auth. Mantener otra
-  // espera acá duplicaba la barrera y retrasaba la hidratación visual.
-  subscribeAuthState(async user => {
-    user = await waitForProfileUserAfterAuthRestore(user);
+function hydrateProfilePresentation(profile, user) {
+  const identity = readAccountIdentity(profile || {}, user);
+  const avatar = document.getElementById('perfil-avatar');
+  const avatarUrl = sanitizeImageUrl(identity.photoURL || '');
+  const initial = String(identity.name || identity.email || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?';
+  if (avatarUrl) {
+    if (avatar.querySelector('img')?.getAttribute('src') !== avatarUrl) {
+      const image = document.createElement('img');
+      image.src = avatarUrl;
+      image.alt = 'Foto de perfil';
+      image.width = 72;
+      image.height = 72;
+      image.addEventListener('error', () => { if (image.parentNode === avatar) avatar.textContent = initial; }, { once: true });
+      avatar.replaceChildren(image);
+    }
+  } else avatar.textContent = initial;
+  document.getElementById('perfil-nombre-display').textContent = identity.name || identity.email || 'Mi cuenta';
+  document.getElementById('perfil-email-display').textContent = identity.email;
+  const national = phoneKey(identity.phone || '', DEFAULT_COUNTRY);
+  const fields = {
+    'perfil-nombre': identity.name || '',
+    'perfil-tel': national.startsWith('595') ? national.slice(3) : identity.phone || '',
+    'perfil-dir': identity.address || '',
+    'perfil-username': identity.username || '',
+  };
+  for (const [id, value] of Object.entries(fields)) {
+    if (!dirtyProfileFields.has(id)) document.getElementById(id).value = value;
+  }
+  return identity;
+}
+
+function setProfileReadState(state, message) {
+  document.querySelector('.perfil-wrap').setAttribute('aria-busy', state === 'loading' ? 'true' : 'false');
+  const notice = document.querySelector('.tt-profile-network-state');
+  notice.dataset.state = state;
+  notice.textContent = message;
+  document.getElementById('btn-guardar-perfil').disabled = state !== 'ready';
+  document.getElementById('btn-reintentar-perfil').hidden = state !== 'error';
+}
+
+function startProfileAuthGuard() {
+  subscribeAuthState(user => { void loadProfile(user); });
+}
+
+document.getElementById('btn-reintentar-perfil').onclick = () => loadProfile(auth.currentUser);
+window.addEventListener('online', () => { if (!profileConfirmed && auth.currentUser) void loadProfile(auth.currentUser); });
+
+async function loadProfile(user, attempt = 0) {
+    const generation = ++profileGeneration;
+    stopProfileUpdates?.();
+    stopProfileUpdates = null;
+    stopProfileEditor?.();
+    stopProfileEditor = null;
+    if (activeProfileUid !== (user?.uid || null)) {
+      dirtyProfileFields.clear();
+      renderSavedLocation([]);
+      document.getElementById('perfil-role-card').style.display = 'none';
+      document.getElementById('link-admin-panel').style.display = 'none';
+      document.getElementById('perfil-username').disabled = false;
+    }
+    activeProfileUid = user?.uid || null;
+    profileConfirmed = false;
+    document.getElementById('btn-guardar-perfil').onclick = null;
+    document.getElementById('perfil-location-content').onclick = null;
+    document.getElementById('btn-cambiar-ubicacion').onclick = null;
+    document.getElementById('btn-guardar-ubicacion').onclick = null;
     if (!user) {
+      hydrateProfilePresentation({}, {});
+      setProfileReadState('loading', 'Comprobando tu sesión…');
       // Proteger la ruta no implica cerrar ninguna sesión.
       window.location.replace('login.html?from=%2Fperfil');
       return;
     }
-    // Cuenta bloqueada (Fase E): afuera de Mi Cuenta antes de pintar nada, con
-    // mensaje claro en login.html. Se aprovecha esta misma lectura más abajo
-    // para no duplicar el getDoc. Un fallo de Firestore (red, App Check aún
-    // no listo) no debe dejar a una cuenta legítima sin poder ver su perfil:
-    // se trata como "no bloqueada" y se sigue cargando la página.
+    // Una presentación local sólo se usa después de confirmar el mismo UID
+    // por Auth. Nunca decide bloqueo/rol ni habilita escrituras.
+    const handoff = readAuthHandoff();
+    const presentation = handoff?.uid === user.uid
+      ? handoff.profile || { name: handoff.displayName, avatarURL: handoff.photoURL }
+      : {};
+    hydrateProfilePresentation(presentation, user);
+    setProfileReadState('loading', 'Actualizando tu cuenta…');
+    hideLoading();
     const ref = doc(db, 'users', user.uid);
     let userData = null;
+    let readTimer;
     try {
-      const snap = await getDoc(ref);
+      const snap = await Promise.race([
+        getDoc(ref),
+        new Promise((_, reject) => { readTimer = window.setTimeout(() => reject(new Error('profile_read_timeout')), 5000); }),
+      ]);
+      if (generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
       userData = snap.exists() ? snap.data() : null;
+      if (!userData) throw new Error('profile_not_found');
     } catch (error) {
-      console.warn('[Perfil] No se pudo verificar el estado de bloqueo:', error);
-    }
-    if (userData?.blocked) {
+      if (generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
+      console.warn('[Perfil] Lectura de cuenta pendiente:', error?.code || error?.message);
+      setProfileReadState('error', 'No pudimos actualizar tu cuenta. Conservamos los datos disponibles; reintentaremos al recuperar conexión.');
+      hideLoading();
+      if (attempt < 2 && error?.code !== 'permission-denied' && error?.message !== 'profile_not_found') {
+        window.setTimeout(() => {
+          if (generation === profileGeneration && auth.currentUser?.uid === user.uid) void loadProfile(user, attempt + 1);
+        }, 750 * (attempt + 1));
+      }
+      return;
+    } finally { window.clearTimeout(readTimer); }
+    if (userData.blocked || userData.deleted || userData.profileStatus === 'deleted') {
+      setProfileReadState('blocked', 'Esta cuenta ya no está disponible.');
       window.dispatchEvent(new CustomEvent('tintin:account-blocked', { detail: { uid: user.uid } }));
       showBlockedModal({ email: user.email });
       return;
     }
 
-    hideLoading();
-
-  // Una cuenta puede tener el nombre y la foto únicamente en users/{uid}
-  // (perfiles históricos y cambios hechos desde Mi cuenta). Auth identifica
-  // la sesión, pero Firestore es la proyección de perfil que se muestra.
-  const identity = readAccountIdentity(userData || {}, user);
-
-  // Avatar
-  const avatarEl = document.getElementById('perfil-avatar');
-  const avatarInitial = String(identity.name || identity.email || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?';
-  const avatarUrl = sanitizeImageUrl(identity.photoURL || '');
-  if (avatarUrl) {
-    const avatarImg = document.createElement('img');
-    avatarImg.src = avatarUrl;
-    avatarImg.alt = 'Foto de perfil';
-    avatarImg.width = 72;
-    avatarImg.height = 72;
-    avatarImg.style.cssText = 'width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;display:block;flex-shrink:0';
-    avatarImg.addEventListener('error', () => { avatarEl.textContent = avatarInitial; }, { once: true });
-    avatarEl.replaceChildren(avatarImg);
-  } else {
-    avatarEl.textContent = avatarInitial;
-  }
-  document.getElementById('perfil-nombre-display').textContent = identity.name || identity.email || 'Cuenta Tintin';
-  document.getElementById('perfil-email-display').textContent  = identity.email;
+    profileConfirmed = true;
+    const receiveProfile = event => {
+      if (generation !== profileGeneration || event.detail?.uid !== user.uid || auth.currentUser?.uid !== user.uid) return;
+      const profile = event.detail.profile || {};
+      if (profile.blocked || profile.deleted || profile.profileStatus === 'deleted') {
+        profileConfirmed = false;
+        setProfileReadState('blocked', 'Esta cuenta ya no está disponible.');
+        showBlockedModal({ email: user.email });
+        return;
+      }
+      userData = profile;
+      hydrateProfilePresentation(profile, user);
+      updateProfileRole(profile, user, generation);
+      if (document.getElementById('perfil-location-editor').hidden) renderSavedLocation(readAddressBook(profile));
+      if (profile.usernameChangedAt) document.getElementById('perfil-username').disabled = true;
+    };
+    window.addEventListener('tintin:profile-data', receiveProfile);
+    stopProfileUpdates = () => window.removeEventListener('tintin:profile-data', receiveProfile);
+    const identity = hydrateProfilePresentation(userData, user);
+    createAuthHandoff(user.uid, { displayName: identity.name, photoURL: identity.photoURL, profile: userData });
 
   // La hidratación visual del perfil no depende de que Firestore o la
   // sincronización del carrito respondan en este instante. El carrito se
@@ -519,32 +498,10 @@ async function startProfileAuthGuard() {
     console.warn('[Perfil] La sincronización del carrito quedó pendiente:', error);
   });
 
-  // Role
-  const role = await getUserRole(user.uid, user.email);
-
-  if (role !== 'client') {
-    const roleCard = document.getElementById('perfil-role-card');
-    roleCard.style.display = 'block';
-    const badge = document.getElementById('perfil-role-badge');
-    badge.textContent = ROLE_LABELS[role] || 'Cliente';
-    badge.style.background = (ROLE_COLORS[role] || '#888') + '22';
-    badge.style.color      = ROLE_COLORS[role] || '#888';
-    badge.style.border     = `1.5px solid ${ROLE_COLORS[role] || '#888'}`;
-    document.getElementById('link-admin-panel').style.display = 'inline-flex';
-  }
-
-  // Load Firestore user data (ya la trajimos arriba para el chequeo de bloqueo).
-  // Auth es el fallback inmediato: si App Check/red demora o la lectura de
-  // users falla, la cuenta igual muestra sus datos básicos y no parece
-  // desconectada. Firestore completa los campos en cuanto está disponible.
-  document.getElementById('perfil-nombre').value = identity.name || '';
-  const nationalPhone = phoneKey(identity.phone || '', DEFAULT_COUNTRY);
-  document.getElementById('perfil-tel').value = nationalPhone.startsWith('595') ? nationalPhone.slice(3) : identity.phone || '';
-  document.getElementById('perfil-dir').value    = identity.address || '';
+  updateProfileRole(userData, user, generation);
 
   const usernameInput = document.getElementById('perfil-username');
   const usernameHint  = document.getElementById('perfil-username-hint');
-  usernameInput.value = identity.username || '';
   if (userData?.usernameChangedAt) {
     usernameInput.disabled = true;
     usernameHint.textContent = 'Ya usaste tu único cambio de nombre de usuario.';
@@ -552,11 +509,14 @@ async function startProfileAuthGuard() {
     usernameHint.textContent = 'Podés cambiarlo una sola vez. Solo minúsculas, números y guion bajo (3 a 20 caracteres).';
   }
 
-  let tokenClaims = {};
-  try { tokenClaims = (await user.getIdTokenResult()).claims; } catch {}
-  const access = accountAccessSummary(userData || {}, tokenClaims);
-  document.getElementById('perfil-metodo').textContent = access.current;
-  document.getElementById('perfil-metodos').textContent = access.methods;
+  const paintAccess = tokenClaims => {
+    if (generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
+    const access = accountAccessSummary(userData || {}, tokenClaims);
+    document.getElementById('perfil-metodo').textContent = access.current;
+    document.getElementById('perfil-metodos').textContent = access.methods;
+  };
+  paintAccess({});
+  void user.getIdTokenResult().then(result => paintAccess(result.claims)).catch(() => {});
   document.getElementById('perfil-alta').textContent = formatProfileDate(userData?.createdAt);
   document.getElementById('perfil-ultimo-ingreso').textContent = formatProfileDate(userData?.lastLogin);
 
@@ -585,6 +545,11 @@ async function startProfileAuthGuard() {
       onChange: setLocationSummary,
       onError: message => toast(`❌ ${message}`),
     });
+    if (generation !== profileGeneration || auth.currentUser?.uid !== user.uid) {
+      locationMap.destroy?.();
+      locationMap = null;
+      throw new Error('profile_session_changed');
+    }
     return locationMap;
   };
 
@@ -596,8 +561,10 @@ async function startProfileAuthGuard() {
     locationMap?.clearLocation();
     setLocationSummary(null);
   };
+  stopProfileEditor = () => { closeLocationEditor(); locationMap?.destroy?.(); };
 
   document.getElementById('btn-cambiar-ubicacion').onclick = async () => {
+    if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
     locationEditor.hidden = false;
     try {
       const map = await ensureLocationMap();
@@ -611,13 +578,16 @@ async function startProfileAuthGuard() {
   };
 
   const persistAddressBook = async (list) => {
+    if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
     await setDoc(ref, { ...addressBookPatch(list), updatedAt: serverTimestamp() }, { merge: true });
+    if (generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
     const patch = addressBookPatch(list);
     if (patch.address) document.getElementById('perfil-dir').value = patch.address;
     renderSavedLocation(list);
   };
 
-  document.getElementById('perfil-location-content').addEventListener('click', async (e) => {
+  document.getElementById('perfil-location-content').onclick = async (e) => {
+    if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
     const button = e.target.closest('[data-address-remove],[data-address-primary]');
     if (!button) return;
     const isRemove = button.hasAttribute('data-address-remove');
@@ -627,11 +597,12 @@ async function startProfileAuthGuard() {
       toast(isRemove ? '✅ Dirección eliminada' : '✅ Dirección principal actualizada');
     } catch (err) { toast(isRemove ? '❌ Error al eliminar' : '❌ Error al actualizar'); }
     finally { window.TintinReleaseProfileButton?.(button.id); }
-  });
+  };
 
   document.getElementById('btn-cancelar-ubicacion').onclick = closeLocationEditor;
 
   document.getElementById('btn-guardar-ubicacion').onclick = async () => {
+    if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
     const place = locationMap?.getLocation();
     const name = document.getElementById('perfil-location-name').value.trim();
     const address = document.getElementById('perfil-location-address').value.trim();
@@ -659,6 +630,7 @@ async function startProfileAuthGuard() {
 
   // Save
   document.getElementById('btn-guardar-perfil').onclick = async () => {
+    if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
     const release = () => window.TintinReleaseProfileButton?.('btn-guardar-perfil');
     const nuevoTelefono = document.getElementById('perfil-tel').value.trim();
     const country = DEFAULT_COUNTRY;
@@ -760,20 +732,21 @@ async function startProfileAuthGuard() {
 
   // La sesión ya fue confirmada y el contenido fue hidratado con sus datos.
   document.documentElement.classList.remove('profile-auth-pending');
+  setProfileReadState('ready', 'Tu cuenta está actualizada.');
   hideLoading();
 
-  });
 }
 
+window.addEventListener('pagehide', () => { stopProfileUpdates?.(); stopProfileEditor?.(); }, { once: true });
 startProfileAuthGuard();
 
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20261010-registration-name-2"></script>
-<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20261007-public-consistency-1"></script>
-<script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20261008-producto-superficies-1"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1"></script>
+<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20261007-public-consistency-1-first-render-merge-20261010-1"></script>
+<script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20261008-producto-superficies-1-first-render-merge-20261010-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261010-registration-name-2"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

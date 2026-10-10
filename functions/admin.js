@@ -1,7 +1,7 @@
 import { serveAdminWithCsp } from '../cloudflare/servir-admin-con-csp.js';
 import { injectMasterDiagnosticsRuntime } from '../cloudflare/inyectar-diagnostico-maestro-admin.js';
 
-const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1';
+const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1';
 
 // Auth del panel vive en js/admin/admin-app.js. Esta función solo compone el
 // HTML/CSP y los runtimes auxiliares; no reescribe ni duplica el auth guard.
