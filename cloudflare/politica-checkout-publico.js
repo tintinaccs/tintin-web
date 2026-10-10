@@ -1,3 +1,4 @@
+import { isValidCustomerName } from '../js/pages/profile/configuracion-inicial-perfil.mjs';
 import { shippingDepartment } from '../js/components/location/departamento-ciudad.mjs';
 import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../js/components/location/tarifas-delivery.mjs';
 import { decodeFirestoreFields, firestoreAdminGet } from './firebase-admin-ligero.js';
@@ -235,7 +236,7 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
 
   const cartLines = normalizeCartLines(payload.cartLines);
   const name = cleanText(payload.name, 120);
-  if (name.length < 2) throw checkoutError('name_required');
+  if (!isValidCustomerName(name)) throw checkoutError('name_required');
   const paymentMethod = String(payload.paymentMethod || '');
   if (!PAYMENT_METHODS.has(paymentMethod)) throw checkoutError('payment_required');
   const phone = cleanText(payload.phone, 40);
@@ -321,11 +322,11 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
   const ci = cleanText(payload.ci, 8);
   if (shipping.method === 'encomienda' && !CI_PATTERN.test(ci)) throw checkoutError('ci_invalid');
   const wantsInvoice = payload.wantsInvoice === true;
+  const taxpayerType = cleanText(payload.taxpayerType, 20);
   const razonSocial = cleanText(payload.razonSocial, 180);
   const ruc = cleanText(payload.ruc, 40).replace(/\s/g, '');
-  if (wantsInvoice && razonSocial.length < 3) throw checkoutError('razon_social_required');
+  if (wantsInvoice && (taxpayerType === 'fisica' ? !isValidCustomerName(razonSocial) : razonSocial.length < 3)) throw checkoutError('razon_social_required');
   if (wantsInvoice && !isValidRuc(ruc)) throw checkoutError('ruc_invalid');
-  const taxpayerType = cleanText(payload.taxpayerType, 20);
   if (wantsInvoice && !isValidTaxpayerType(taxpayerType)) throw checkoutError('taxpayer_type_required');
 
   const keepsAddress = shipping.method === 'delivery' || doorDelivery;

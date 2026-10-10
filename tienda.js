@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261009-whatsapp-responsive-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1003,7 +1003,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261009-whatsapp-responsive-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1418,7 +1418,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     galleryMain.style.removeProperty('justify-content');
     galleryMain.disabled = !selectedImage;
     if (selectedImage) {
-      const serverImage = galleryMain.querySelector('img[data-tt-server-image="1"]');
+      const serverImage = galleryMain.querySelector('img');
       const serverImageMatches = serverImage && (
         serverImage.getAttribute('src') === selectedImage || serverImage.currentSrc === selectedImage
       );
@@ -1428,7 +1428,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
         serverImage.fetchPriority = 'high';
         serverImage.decoding = 'async';
       } else {
-        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" srcset="${escapeAttribute(withCloudinaryWidth(selectedImage, 480))} 480w, ${escapeAttribute(withCloudinaryWidth(selectedImage, 900))} 900w" sizes="(max-width:767px) calc(100vw - 32px), (max-width:1024px) 45vw, 560px" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
       }
     } else {
       galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
@@ -1444,7 +1444,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     thumbsEl.style.display = allImages.length ? '' : 'none';
     thumbsEl.innerHTML = allImages.length ? allImages.map((url, i) => `
       <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}">
-        <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
+        <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" loading="lazy" decoding="async" fetchpriority="low" style="object-fit:contain;background:transparent;width:100%;height:100%;">
       </button>
     `).join('') : '';
     if (!thumbsEl.dataset.ttBound) {
@@ -1842,7 +1842,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261009-whatsapp-responsive-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -2044,110 +2044,9 @@ function initBackToTop() {
    WHATSAPP FLOAT — ocultar si tapa contenido real
 ────────────────────────────────────── */
 function initWaFloatVisibility() {
-  const wa = document.getElementById('wa-float');
-  if (!wa) return;
-  const EXCLUDE = '.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header';
-  const PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap,p,h1,h2,h3,li,dd,dt';
-  const CONTROL_TARGETS = 'a,button,input,textarea,select';
-  const collisionSelector = /(?:^|\/)product(?:\.html)?\/?$/i.test(location.pathname || '')
-    ? `${CONTROL_TARGETS},${PRODUCT_COLLISION_TARGETS}`
-    : CONTROL_TARGETS;
-  const overlapsRect = (a, b, t = 2) => a.left < b.right - t && a.right > b.left + t && a.top < b.bottom - t && a.bottom > b.top + t;
-  let ticking = false;
-  // El botón es position:fixed, así que cualquier control del contenido
-  // normal puede terminar exactamente detrás de él según el scroll y el alto
-  // del viewport. En producto también se vigilan descripción, variantes,
-  // especificaciones, cantidad y bloques de texto para no tapar contenido aunque no sea clickeable (tabla de contenidos de términos/privacidad, última fila de
-  // tarjetas de catálogo, footer en páginas cortas, etc.) — en vez de intentar
-  // reservar espacio para cada caso, se detecta el solape real y se oculta.
-  // Histéresis: ocultar es inmediato (el botón está tapando algo AHORA),
-  // pero volver a mostrarlo espera a que el estado "sin colisión" persista —
-  // un re-render de la grilla desmonta y remonta nodos en milisegundos, y sin
-  // esta espera el botón parpadea (y queda visible sobre contenido durante
-  // esos instantes intermedios).
-  const UNHIDE_AFTER_MS = 350;
-  let clearSince = 0;
-  // Introspección liviana para depurar en entornos donde no hay consola
-  // (auditorías CI, un teléfono real): expone cuántas veces corrió el chequeo
-  // y qué decidió, sin afectar el comportamiento.
-  const stats = { checks: 0, hides: 0, unhides: 0, zeroRect: 0 };
-  window.__ttWaFloatStats = stats;
-  const check = () => {
-    ticking = false;
-    stats.checks++;
-    const r = wa.getBoundingClientRect();
-    if (r.width <= 0 || r.height <= 0) { stats.zeroRect++; return; }
-    const collided = [...document.querySelectorAll(collisionSelector)].some(node => {
-      if (node === wa || node.closest(EXCLUDE)) return false;
-      // Geometría primero: descarta casi todo sin calcular estilos.
-      const nr = node.getBoundingClientRect();
-      if (nr.width <= 0 || nr.height <= 0 || nr.bottom <= 0 || nr.top >= innerHeight) return false;
-      if (!overlapsRect(r, nr)) return false;
-      const style = getComputedStyle(node);
-      return !(style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01);
-    });
-    const hidden = wa.classList.contains('tt-wa-float-hidden');
-    if (collided) {
-      clearSince = 0;
-      if (!hidden) {
-        stats.hides++;
-        wa.classList.add('tt-wa-float-hidden');
-        wa.setAttribute('tabindex', '-1');
-      }
-      return;
-    }
-    if (!hidden) return;
-    if (!clearSince) { clearSince = Date.now(); return; }
-    if (Date.now() - clearSince >= UNHIDE_AFTER_MS) {
-      clearSince = 0;
-      stats.unhides++;
-      wa.classList.remove('tt-wa-float-hidden');
-      wa.removeAttribute('tabindex');
-    }
-  };
-  // Scroll y resize disparan en ráfaga — ahí sí conviene coalescer con rAF.
-  const requestCheck = () => { if (!ticking) { ticking = true; requestAnimationFrame(check); } };
-  window.addEventListener('scroll', requestCheck, { passive: true });
-  window.addEventListener('resize', requestCheck);
-  // La tabla de contenidos de términos/privacidad y la grilla de productos
-  // se insertan después de este init (mantenimiento-legal.js, Firestore). El
-  // chequeo corre SINCRÓNICO dentro del propio callback del observer (que es
-  // un microtask pegado a la mutación): así el botón ya está oculto antes de
-  // que cualquier otra tarea pueda ver el estado intermedio con el solape.
-  if (typeof MutationObserver === 'function') {
-    new MutationObserver(() => check()).observe(document.body, { childList: true, subtree: true });
-  }
-  // Los shifts de layout que NO tocan el DOM (una imagen que termina de
-  // decodificar, una fuente que llega, content-visibility que materializa una
-  // tarjeta) no disparan el MutationObserver. ResizeObserver corre dentro del
-  // frame de render, después del layout y antes del paint — es el gancho más
-  // temprano posible para esos casos.
-  if (typeof ResizeObserver === 'function') {
-    const ro = new ResizeObserver(() => check());
-    ro.observe(document.documentElement);
-    ro.observe(document.body);
-    document.querySelectorAll('main,.section,.tt-products-grid,#products-grid,#cat-grid').forEach(node => ro.observe(node));
-  }
-  document.addEventListener('load', () => check(), true);
-  document.fonts?.ready?.then(() => check()).catch(() => {});
-  window.addEventListener('tintin:products-loaded', () => check());
-  window.addEventListener('tintin:products-error', () => check());
-  check();
-  // Un intervalo fijo puede perder la ventana justo antes de que algo mida la
-  // página (por ejemplo esta misma auditoría, que espera nada más 1-2 frames
-  // pintados): si el último tick del intervalo cayó un poco antes, queda un
-  // hueco sin cubrir. Un bucle de rAF corre en CADA frame pintado durante los
-  // primeros segundos —los de mayor actividad real: Firestore, imágenes,
-  // fuentes— así que cualquier cosa que mida "el frame ya pintado" encuentra
-  // el chequeo ya corrido para ese mismo frame. Después, un respaldo más
-  // espaciado alcanza para el resto de la sesión sin gastar batería de más.
-  let rafBudget = 240;
-  const rafLoop = () => {
-    check();
-    if (rafBudget-- > 0) requestAnimationFrame(rafLoop);
-  };
-  requestAnimationFrame(rafLoop);
-  setInterval(() => check(), 1000);
+  // El guardián compartido calcula una posición visible sin cubrir controles.
+  // Evita dos observadores que tomaban decisiones opuestas sobre el flotante.
+  window.TintinWaOverlapGuard?.refresh?.();
 }
 
 /* ──────────────────────────────────────

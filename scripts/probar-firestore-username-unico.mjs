@@ -47,6 +47,11 @@ try {
   await no('Nadie puede reservar un username a nombre de otra cuenta',
     setDoc(doc(bea, 'usernameReservations', 'bea_libre'), { uid: 'ana', createdAt: serverTimestamp() }));
 
+  for (const official of ['tintin', 'tintinaccs', 'tintinaccesorios']) {
+    await no(`La identidad oficial ${official} no se puede reservar`,
+      setDoc(doc(ana, 'usernameReservations', official), { uid:'ana', createdAt:serverTimestamp() }));
+  }
+
   await no('Una reserva no se puede leer para averiguar si un username tiene cuenta',
     getDoc(doc(bea, 'usernameReservations', USERNAME_ANA)));
 

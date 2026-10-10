@@ -95,7 +95,7 @@ for(const width of [320,390,767])for(const route of ['index.html','catalogo.html
   await nav.evaluate((el,compact)=>el.classList.toggle('tt-tabbar-compact',compact),compact);
   await expect(nav).toHaveCSS('min-height',compact?'58px':'70px');
   await expect(nav).toHaveCSS('padding-top',compact?'5px':'8px');
-  await expect.poll(async()=>page.evaluate(()=>{const icon=document.querySelector('#tabbar-cart svg').getBoundingClientRect(),halo=document.querySelector('.tt-mobile-nav-halo').getBoundingClientRect();return Math.max(Math.abs((icon.left+icon.right-halo.left-halo.right)/2),Math.abs((icon.top+icon.bottom-halo.top-halo.bottom)/2));})).toBeLessThan(1);
+  await expect.poll(async()=>page.evaluate(()=>{const icon=document.querySelector('#tabbar-cart').getBoundingClientRect(),halo=document.querySelector('.tt-mobile-nav-halo').getBoundingClientRect();return Math.max(Math.abs((icon.left+icon.right-halo.left-halo.right)/2),Math.abs((icon.top+icon.bottom-halo.top-halo.bottom)/2));})).toBeLessThan(1);
   await expect(page.locator('#tabbar-cart')).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
   expect(await nav.evaluate(el=>{const box=el.getBoundingClientRect();return !!document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)?.closest('#tt-tabbar');})).toBe(true);
  }

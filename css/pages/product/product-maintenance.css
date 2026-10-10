@@ -790,3 +790,21 @@ body.tt-product-maintenance .tt-qty-btn:focus-visible { outline:2px solid var(--
   body.tt-product-maintenance .tt-product-detail-grid { gap:28px; padding:8px 0 24px; }
   body.tt-product-maintenance .tt-gallery-thumb { flex-basis:56px; width:56px !important; height:56px !important; }
 }
+
+/* Mismos controles y columnas de compra en tablet y escritorio. */
+@media (min-width:768px) {
+  html body.tt-product-maintenance #product-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:clamp(24px,4vw,56px); }
+}
+body.tt-product-maintenance #product-grid > * { min-width:0; }
+body.tt-product-maintenance .tt-product-info-panel > .tt-social-share { margin:8px 0 12px; border:1px solid var(--border); border-radius:999px; }
+body.tt-product-maintenance #product-variants .tt-color-option { border-radius:50% !important; }
+/* Miniaturas redondas, con el mismo espacio de pulsación en todos los dispositivos. */
+html body.tt-product-maintenance .tt-gallery-thumb {
+  border-radius:50% !important;
+  aspect-ratio:1;
+  overflow:hidden;
+}
+body.tt-product-maintenance .tt-color-option .tt-color-swatch {
+  background-image:linear-gradient(135deg,rgba(255,255,255,.48),transparent 42%,rgba(0,0,0,.12)) !important;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12) !important;
+}

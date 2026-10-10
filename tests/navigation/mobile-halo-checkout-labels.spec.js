@@ -18,7 +18,7 @@ const badge=document.getElementById('cart-badge-mobile');badge.classList.remove(
 document.getElementById('tabbar-cart').classList.add('active');
 await import('${indicatorModule}');</script></body></html>`;
 
-for(const width of [320,390,480,767]) test(`círculo sólo del icono y pasos legibles en ${width}px`,async({page})=>{
+for(const width of [320,390,480,767]) test(`píldora del icono y la etiqueta y pasos legibles en ${width}px`,async({page})=>{
   await page.route('**/__mobile-step-visual',route=>route.fulfill({contentType:'text/html',body:fixture}));
   await page.setViewportSize({width,height:900});await page.goto('/__mobile-step-visual');
   await expect(page.locator('#tt-tabbar')).toHaveClass(/tt-mobile-nav-ready/);
@@ -30,7 +30,7 @@ for(const width of [320,390,480,767]) test(`círculo sólo del icono y pasos leg
     },{six,compact});
     await expect.poll(()=>page.evaluate(()=>{
       const nav=document.getElementById('tt-tabbar');const halo=nav.querySelector('.tt-mobile-nav-halo').getBoundingClientRect();
-      const icon=nav.querySelector('.active svg').getBoundingClientRect();
+      const icon=nav.querySelector('.active').getBoundingClientRect();
       return Math.max(Math.abs(halo.x+halo.width/2-icon.x-icon.width/2),Math.abs(halo.y+halo.height/2-icon.y-icon.height/2));
     })).toBeLessThan(1);
     const geometry=await page.evaluate(()=>{
@@ -38,8 +38,8 @@ for(const width of [320,390,480,767]) test(`círculo sólo del icono y pasos leg
       const label=nav.querySelector('.active > span:last-child').getBoundingClientRect();
       return {width:halo.width,height:halo.height,haloBottom:halo.bottom,labelTop:label.top};
     });
-    expect(geometry.width).toBe(geometry.height);expect(geometry.width).toBeLessThanOrEqual(36);
-    if(!compact) expect(geometry.haloBottom).toBeLessThanOrEqual(geometry.labelTop);
+    expect(geometry.width).toBeGreaterThanOrEqual(40);expect(geometry.height).toBeGreaterThanOrEqual(44);
+    if(!compact) expect(geometry.haloBottom).toBeGreaterThan(geometry.labelTop);
   }
   const labels=await page.locator('.ck-step-label').evaluateAll(nodes=>nodes.map(n=>{
     const s=getComputedStyle(n),r=n.getBoundingClientRect();return {background:s.backgroundColor,color:s.color,

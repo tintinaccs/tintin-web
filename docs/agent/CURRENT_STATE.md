@@ -1,3 +1,17 @@
+# Revisión de WhatsApp y preparación de publicación — 2026-10-10
+
+El usuario autorizó corregir todas las pantallas/dispositivos y luego pidió publicar ("hacelo"). Candidato en codex/whatsapp-responsive-20261010 sobre main 6d7c644a913c25710c1d1604fb4ff07ec7f2d644. Detalle en [WHATSAPP_REVISION_20261010.md](WHATSAPP_REVISION_20261010.md). No hay PR, merge, deploy, pedidos, registros ni envíos reales.
+
+PASS local: 453 pruebas Node de checkout/login/auth/accounts/protección/paleta/inventario; 26 de arquitectura/editor visual del candidato; 40 pruebas finales de navegador. Evidencia anterior de esta misma implementación: navegación/checkout 64, factura/galería/formularios 43, registro/producto 14, footer/WhatsApp/agotados 6; formulario probado en siete tamaños. Build final y los comandos de audit:final verificados por bloques; caché 313 recursos/65 cargas dinámicas. La selección duplicada se retira también del contrato del editor. Logo comparte la URL de su imagen conservando su versión histórica. Las auditorías usan las versiones canónicas por recurso y el contrato de alta mínimo sin retirar barreras comerciales.
+
+PASS nuevo Firestore: se descargó el emulador oficial con verificación activa. test:rules-username 16, test:rules-phone 12, test:rules-critical 127, todos salida 0. Maquetación de Administración con fixtures pasa; Firebase remoto sigue pendiente. Última geometría canónica: 119/126, siete timeouts de admin.html; no se atribuye PASS de Firebase a los fixtures.
+
+BLOCKED publicación: api.github.com y tintinaccesorios.pages.dev devuelven CONNECT 403 del proxy. Git nativo accede a main y el dry-run de push es válido. Borrador de entorno guardado con ambos dominios y arranque/instalación comprobados; guardar no aplica permisos ni publica. Administración: Chromium devuelve ERR_CERT_AUTHORITY_INVALID para Firebase en www.gstatic.com. La revisión automática rechazó registrar la CA del proxy por ampliar persistentemente la confianza TLS; no se omitió TLS ni se modificó el almacén. Requiere autorización específica.
+
+Plan protegido oficial: 85 archivos, 59 registros afectados, conservando 78 registros y 541 archivos. CI y revisión manual del propietario para el SHA final siguen pendientes. No se aprueba por el propietario ni se cambia el control protegido. Confirmación de pedido productivo pendiente; las pruebas locales preservan autorización, stock, precios e idempotencia con datos aislados.
+
+---
+
 # Estado vigente — 2026-10-09: pedidos históricos y clientes locales
 
 Base c6ac7c741e98840b6bffa08cc3ce81093ba24be7 (rebase desde cbeccc3; se conservan #1067 de seguridad de cuentas y #1073 de interfaz móvil); rama codex/pedidos-clientes-locales-20261008. Agente Codex /root. Autorización: espejo bidireccional de Sheets, Panel y Firestore; sin pagos. Trabajo previo conservado abajo como evidencia fechada, no PASS heredado.

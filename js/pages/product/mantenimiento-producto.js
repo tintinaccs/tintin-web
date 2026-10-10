@@ -61,7 +61,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     if (document.querySelector('link[data-tt-product-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20261009-wrist-guide-1', import.meta.url).href;
+    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20261009-whatsapp-responsive-2', import.meta.url).href;
     link.dataset.ttProductMaintenance = '1';
     document.head.appendChild(link);
   }

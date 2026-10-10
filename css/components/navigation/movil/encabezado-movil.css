@@ -223,3 +223,17 @@
   #tt-tabbar .tt-tabbar-btn span:last-child,
   #tt-tabbar { transition:none !important; }
 }
+
+@media (max-width:767px) {
+  #tt-tabbar { bottom:max(8px,env(safe-area-inset-bottom)); }
+  #tt-tabbar .tt-mobile-nav-halo,
+  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo {
+    top:var(--tt-mobile-y,0px);
+    width:var(--tt-mobile-w,54px);
+    height:var(--tt-mobile-h,54px);
+    border-radius:22px;
+    background:var(--color-brand-primary,#F8AACA);
+    border:1px solid rgba(113,60,83,.22);
+  }
+  #tt-tabbar .tt-mobile-nav-indicator { display:none; }
+}

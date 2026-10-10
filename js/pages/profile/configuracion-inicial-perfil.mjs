@@ -1,4 +1,4 @@
-import { isValidUsername, normalizeUsername } from '../../components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1';
+import { isValidUsername, normalizeUsername } from '../../components/forms/utilidades-username.js?v=tintin-20261009-whatsapp-responsive-1';
 import { isValidDob, parseDob } from '../../components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1';
 
 function clean(value) {
@@ -7,6 +7,7 @@ function clean(value) {
 
 export function isSuperAdminProfile({ email = '', role = '' } = {}, superAdminEmail = '') {
   return clean(role).toLowerCase() === 'superadmin' ||
+    Boolean(clean(email) && clean(superAdminEmail)) &&
     clean(email).toLowerCase() === clean(superAdminEmail).toLowerCase();
 }
 
@@ -66,6 +67,12 @@ export function splitFullName(value) {
   if (parts.length === 0) return { firstName: '', lastName: '' };
   if (parts.length === 1) return { firstName: parts[0], lastName: '' };
   return { firstName: parts[0], lastName: parts.slice(1).join(' ') };
+}
+
+/** Un nombre completo exige al menos nombre y apellido, también en checkout. */
+export function isValidCustomerName(value) {
+  const { firstName, lastName } = splitFullName(value);
+  return isValidFullName(firstName, lastName);
 }
 
 /** Lee nombre/apellido de un perfil, tolerando los que sólo tienen `name`. */
@@ -197,18 +204,9 @@ function locationsAreEqual(first, second) {
     clean(first.address) === clean(second.address);
 }
 
-/**
- * Qué le falta a este perfil para estar completo.
- *
- * Una cuenta client sólo queda completa cuando ya tiene TODOS los datos del
- * formulario de alta: username, nombre, apellido, teléfono, fecha de
- * nacimiento y ubicación reutilizable por checkout. El email no se vuelve a
- * pedir acá porque ya lo garantiza Firebase Auth en `user.email`.
- *
- * Si falta un único dato, sólo ese campo vuelve a mostrarse. Los datos que ya
- * están guardados no se solicitan otra vez.
- */
-export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', superAdminEmail = '', requireAddress = true } = {}) {
+/** La cuenta necesita nombre y apellido más WhatsApp. Dirección se pide en checkout;
+ * usuario y fecha históricos se conservan, sin volver a solicitarlos. */
+export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', superAdminEmail = '', requireAddress = false } = {}) {
   if (isSuperAdminProfile({ email: user.email, role }, superAdminEmail)) {
     exposeSavedLocationForOnboarding({});
     return {
@@ -218,21 +216,14 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     };
   }
 
-  // Regla del negocio: una cuenta client está completa sólo si TIENE los datos
-  // obligatorios, sin importar su antigüedad ni sus marcas (`profileStatus:
-  // active`, `onboardingCompleted`, `welcomeTutorialSeen`…). Esas marcas antes
-  // daban el alta por terminada aunque faltaran datos, y por eso una cuenta
-  // incompleta podía entrar directo a la tienda. Se decide siempre por los
-  // datos: lo mismo que valida el guardado de "Últimos datos", así que una
-  // vez completados no se vuelven a pedir.
   const stored = readProfileName(profile);
   const storedNameIsValid = isValidFullName(stored.firstName, stored.lastName);
   const storedPhone = storedPhoneValue(profile);
   const addressOk = !requireAddress || hasUsableAddress(profile);
   const needsName = !storedNameIsValid;
   const needsPhone = !storedPhone;
-  const needsUsername = !isValidUsername(storedUsername(profile));
-  const needsDob = !hasUsableDob(profile);
+  const needsUsername = false; // El usuario es opcional; el alta usa nombre y WhatsApp.
+  const needsDob = false; // No se solicita fecha de nacimiento.
   const addressMissing = !addressOk;
   const onboardingRequired = needsName || needsPhone || addressMissing || needsUsername || needsDob;
 
@@ -322,20 +313,13 @@ export function buildMissingProfilePatch({
     patch.dob = parseDob(submittedDob);
   }
 
-  // Un perfil `incomplete` pasa a `active` sólo cuando ya reúne todos los
-  // datos obligatorios del alta. La misma definición se usa arriba para no
+  // Un perfil `incomplete` pasa a `active` al reunir nombre y WhatsApp. La misma definición se usa arriba para no
   // crear estados contradictorios del tipo "active pero onboarding pendiente".
   if (currentProfile.profileStatus === 'incomplete') {
     const finalFirstName = patch.firstName || current.firstName;
     const finalLastName = patch.lastName || current.lastName;
     const finalPhone = patch.phone || currentPhone;
-    const finalUsername = patch.username || currentUsername;
-    const finalProfile = patch.savedLocation
-      ? { ...currentProfile, savedLocation: patch.savedLocation }
-      : currentProfile;
-    const finalDobProfile = patch.dob ? { ...finalProfile, dob: patch.dob } : finalProfile;
-    if (isValidFullName(finalFirstName, finalLastName) && finalPhone &&
-        isValidUsername(finalUsername) && hasUsableDob(finalDobProfile) && hasUsableAddress(finalProfile)) {
+    if (isValidFullName(finalFirstName, finalLastName) && finalPhone) {
       patch.profileStatus = 'active';
     }
   }

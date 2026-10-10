@@ -42,14 +42,8 @@ test('admin móvil mantiene cinco accesos principales con etiquetas cortas y Má
   assert.match(html, /id="adm-mobile-more-toggle"/);
 });
 
-test('WhatsApp flotante de producto vigila texto y controles no clickeables', async () => {
-  const source = await read('tienda.js');
-  assert.match(source, /PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap,p,h1,h2,h3,li,dd,dt'/);
-  assert.match(source, /CONTROL_TARGETS = 'a,button,input,textarea,select'/);
-  // La geometría se descarta antes de getComputedStyle para que la lista ampliada siga siendo barata.
-  assert.match(source, /if \(!overlapsRect\(r, nr\)\) return false;\s*const style = getComputedStyle\(node\);/);
-  assert.match(source, /querySelectorAll\(collisionSelector\)/);
-});
+// La colisión de WhatsApp ahora se verifica en navegador: debe apartarse de
+// controles y permanecer visible al desplazarse (whatsapp-feedback-responsive.spec.js).
 
 test('producto presenta slugs técnicos de material como etiquetas legibles', async () => {
   const source = await read('tienda.js');
@@ -81,6 +75,10 @@ test('home alinea fallback con el título publicado y sanea el typo de pago segu
   assert.match(definitions, /DETALLES QUE ELEVAN TU ESTILO/);
   assert.match(definitions, /PAGO SEGUROOXSD/);
   assert.match(definitions, /'Pago seguro'/);
+  const {normalizeContentValue}=await import('../../js/core/store/definiciones-contenido.js');
+  assert.equal(normalizeContentValue('index','trust','items.1.label','Acero inoxidable'),'Materiales de calidad');
+  assert.equal(normalizeContentValue('index','trust','items.1.desc','No se oxida ni decolora'),'Distintos materiales para cada estilo');
+  assert.equal(normalizeContentValue('index','trust','items.1.label','Plata 925'),'Plata 925');
 });
 
 test('Operaciones aclara que su estado pertenece al navegador actual', async () => {

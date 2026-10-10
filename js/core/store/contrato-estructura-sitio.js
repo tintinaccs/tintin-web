@@ -98,10 +98,6 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
       zone: 'product-core', kind: 'operational', movable: false, hideable: false, visualEditable: false, blockAnchor: false, operational: true,
       reason: 'Precio, stock, variantes y acciones comerciales son datos/runtime críticos.',
     }),
-    section('selection', 'Tu selección', '.tinsel', {
-      zone: 'product-selection', kind: 'operational', movable: false, hideable: false, visualEditable: false, blockAnchor: false, operational: true,
-      reason: 'Esta superficie depende del estado de compra y del carrito.',
-    }),
     section('related', 'Productos relacionados', '.tt-related-section', {
       zone: 'product-after', kind: 'operational', hideable: true, operational: true,
       reason: 'Los productos se calculan desde el catálogo; no se guardan copias manuales.',

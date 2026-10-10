@@ -12,7 +12,7 @@
    dónde está, en qué zona vive ni si puede moverse.
    ============================================================= */
 
-import * as ContentFields from './definiciones-contenido.js?v=tintin-20261002-content-schema-1-master-20261007-1-encomienda-20261008-1';
+import * as ContentFields from './definiciones-contenido.js?v=tintin-20261009-whatsapp-responsive-2';
 import {
   SITE_PUBLIC_PAGE_IDS,
   SITE_STRUCTURE_CONTRACT,
@@ -26,7 +26,7 @@ import {
   getVisualBlockAnchorIds,
   isTopVisualAnchorAllowed,
   sanitizeSiteSectionOrder,
-} from './contrato-estructura-sitio.js?v=tintin-20261008-producto-superficies-1';
+} from './contrato-estructura-sitio.js?v=tintin-20261010-whatsapp-release-1';
 
 export {
   SITE_PUBLIC_PAGE_IDS,
