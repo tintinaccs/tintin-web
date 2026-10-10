@@ -1,3 +1,17 @@
+# Revision PR #1078 — productos y colores, 2026-10-09
+
+Base main 6d7c644a913c25710c1d1604fb4ff07ec7f2d644. Conflictos resueltos conservando compradores dentro de Pedidos, espejo local y mecanismos de proteccion.
+
+Pedido adicional del propietario: mantener TODAS las miniaturas visibles, agrupadas por color; circulo selecciona primera foto correspondiente y miniatura sincroniza circulo. Galeria ampliada conserva todas las fotos. 18/18 pruebas de galeria final PASS en 320–1920 px.
+
+Se corrige fallback de colores (clara no inventa gris), fotos imageUrls en tarjetas, aspecto administrativo y carga de la paleta antes del renderer en todas las superficies publicas. CSS final de Producto disponible desde el head, sin depender del SDK diferido.
+
+PASS_LOCAL: 40 pruebas Chromium en 320/390/709/768/1024/1280/1440/1920; 86 pruebas Node de catalogo y mantenimiento (7/7 colores final). Auditoria public shell PASS. Productos relacionados: ciclos sin duplicar colecciones/productos cubiertos por pruebas existentes. Build Pages final PASS (rutas, CSP, manifiesto y cache). CI remoto pendiente para el SHA candidato. NOT_VERIFIED: vista previa requiere Cloudflare Access; prueba adicional master-presentation local agoto espera de politica SDK, no computada como PASS. Se elimina filtrado regex de scripts en pruebas y generador para resolver avisos CodeQL.
+
+Verificacion publica de main: CELINA cambia URL de foto al seleccionar plateado, seleccion plateado activa e imagen plateada cargada; WhatsApp verde rgb(22,133,65), comentarios antes del footer y tres recomendaciones de colecciones distintas. Esta observacion no acredita despliegue del candidato. Sin escrituras de catalogo, pedidos, pagos, inventario ni sesiones.
+
+## Evidencia historica conservada
+
 # Estado vigente — 2026-10-09: pedidos históricos y clientes locales
 
 Base c6ac7c741e98840b6bffa08cc3ce81093ba24be7 (rebase desde cbeccc3; se conservan #1067 de seguridad de cuentas y #1073 de interfaz móvil); rama codex/pedidos-clientes-locales-20261008. Agente Codex /root. Autorización: espejo bidireccional de Sheets, Panel y Firestore; sin pagos. Trabajo previo conservado abajo como evidencia fechada, no PASS heredado.
