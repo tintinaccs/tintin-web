@@ -2111,7 +2111,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.18s ease;
   text-decoration: none;
   cursor: pointer;
-  animation: ttn-wa-breathe 3.2s ease-in-out 2s infinite;
+  animation: none;
 }
 
 /* initWaFloatVisibility (tienda.js) aplica esta clase cuando el botón fijo
@@ -2136,7 +2136,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-wa-float:hover {
   animation-play-state: paused;
-  transform: translateY(-4px) scale(1.08);
+  transform: none;
   box-shadow: 0 10px 36px rgba(37,211,102,0.6);
 }
 

@@ -66,25 +66,26 @@ for(const width of [320,390,768,1024,1280,1440,1920]) test(`ficha sin comunidad 
  await page.evaluate(()=>{const img=document.createElement('img');img.src='/assets-tintin/images/collections/col-relojes.webp';img.alt='Reloj';img.style.cssText='width:100%;height:100%;object-fit:contain';document.getElementById('gallery-main').replaceChildren(img);const thumbs=document.getElementById('gallery-thumbs');thumbs.style.display='flex';thumbs.innerHTML='<button class="tt-gallery-thumb" aria-label="Ver imagen 1"><img class="tt-gallery-thumb-img" src="/assets-tintin/images/collections/col-relojes.webp" alt=""></button>';});
  await expect(page.locator('.tt-gallery-thumb')).toHaveCSS('border-radius','50%');
  if(width===768)await page.screenshot({path:'artifacts/whatsapp-feedback/producto-tablet.png',fullPage:true});
- await expect(page.locator('[data-share-product]')).toBeVisible();await expect(page.locator('#tinsel-root,#product-reviews,#btn-product-like,[data-open-community]')).toHaveCount(0);
+ await expect(page.locator('[data-share-product]')).toHaveCount(0);await expect(page.locator('#tinsel-root,#product-reviews,#btn-product-like,[data-open-community]')).toHaveCount(0);
  const boxes=await page.locator('#product-grid > *').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,right:r.right};}));
  expect(boxes).toHaveLength(2);expect(boxes[0].x).toBeGreaterThanOrEqual(16);expect(boxes[1].right).toBeLessThanOrEqual(width-15);
  if(width>=768){expect(Math.abs(boxes[0].y-boxes[1].y)).toBeLessThan(2);expect(boxes[1].x).toBeGreaterThan(boxes[0].x);}else{expect(boxes[1].y).toBeGreaterThan(boxes[0].y);}
  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
 });
 
-for(const width of [320,768,1440]) test(`agotados en gris con raya blanca y WhatsApp visible durante el scroll (${width}px)`,async({page})=>{
+for(const width of [320,768,1440]) test(`agotados en gris con raya blanca y WhatsApp fijo durante el scroll (${width}px)`,async({page})=>{
  await page.setViewportSize({width,height:900});
- const fixture=`<!doctype html><html><head><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/css/core/tema-unificado-tintin.css"><style>body{margin:0}.tt-product-img{width:160px;height:160px}.tt-product-img img{width:100%;height:100%;object-fit:contain}main{min-height:2200px;padding:20px}.tt-wa-float{position:fixed;bottom:100px;right:20px;width:48px;height:48px;display:grid;place-items:center}.conflict{position:fixed;bottom:100px;right:20px;width:52px;height:52px}</style></head><body><main><article class="tt-stock-unavailable"><div class="tt-product-img"><img class="tt-product-img-real" src="/assets-tintin/images/collections/col-relojes.webp" alt="Agotado"></div></article><button class="conflict">Acción</button></main><a class="tt-wa-float" href="https://wa.me/595981299331" aria-label="WhatsApp">WA</a><script src="/js/quality/correccion-auditoria-pagina.js"></script></body></html>`;
+ const fixture=`<!doctype html><html><head><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/css/core/tema-unificado-tintin.css"><style>body{margin:0}.tt-product-img{width:160px;height:160px}.tt-product-img img{width:100%;height:100%;object-fit:contain}main{min-height:2200px;padding:20px}.tt-wa-float{position:fixed;bottom:100px;right:20px;width:48px;height:48px;display:grid;place-items:center}.conflict{margin-top:580px;width:52px;height:52px}</style></head><body><main><article class="tt-stock-unavailable"><div class="tt-product-img"><img class="tt-product-img-real" src="/assets-tintin/images/collections/col-relojes.webp" alt="Agotado"></div></article><button class="conflict">Acción</button></main><a class="tt-wa-float" href="https://wa.me/595981299331" aria-label="WhatsApp">WA</a><script src="/js/quality/correccion-auditoria-pagina.js"></script></body></html>`;
  await page.route('**/__stock-whatsapp',r=>r.fulfill({contentType:'text/html',body:fixture}));await page.goto('/__stock-whatsapp');
  const image=page.locator('.tt-product-img-real');await expect(image).toHaveCSS('filter','grayscale(1)');
  const slash=await page.locator('.tt-product-img').evaluate(el=>{const s=getComputedStyle(el,'::after');return{background:s.backgroundColor,border:s.borderTopColor,width:s.borderTopWidth};});
  expect(slash).toEqual({background:'rgb(255, 255, 255)',border:'rgb(36, 36, 36)',width:'2px'});
  await page.waitForFunction(()=>Boolean(window.TintinWaOverlapGuard));
+ const initialWa=await page.locator('.tt-wa-float').boundingBox();
  for(const y of [0,450,1300,0]){
   await page.evaluate(y=>{scrollTo(0,y);window.TintinWaOverlapGuard.checkNow();},y);
   await expect(page.locator('.tt-wa-float')).toBeVisible();await expect(page.locator('.tt-wa-float')).toHaveCSS('opacity','1');
-  const overlap=await page.evaluate(()=>{const a=document.querySelector('.tt-wa-float').getBoundingClientRect(),b=document.querySelector('.conflict').getBoundingClientRect();return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;});expect(overlap).toBe(false);
+  const currentWa=await page.locator('.tt-wa-float').boundingBox();expect(Math.abs(currentWa.x-initialWa.x)).toBeLessThan(1);expect(Math.abs(currentWa.y-initialWa.y)).toBeLessThan(1);
  }
 });
 

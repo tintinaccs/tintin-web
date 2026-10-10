@@ -14,9 +14,9 @@ Solicitud: analizar las capturas y corregir el sitio en celular, tablet y escrit
 | Filtros de precio | Quitados de HTML y lógica del catálogo; parámetros de filtros antiguos se eliminan al normalizar la URL. |
 | Agotados | Fotos en gris y raya blanca con bordes oscuros en tarjetas, buscador, galería y opciones. Se mantiene la posibilidad de verlos. |
 | Producto en tablet y móvil | Dos columnas desde 768 px, márgenes y controles contenidos; miniaturas circulares y colores con volumen sutil. |
-| Comentarios/Me gusta/selección duplicada | Quitados de producto. Compartir permanece junto a las acciones de compra, con resultado real de copia. |
+| Comentarios/Me gusta/selección duplicada | Quitados de producto. La integración conserva el retiro de la barra social y de Compartir ya aprobado en main #1084; favoritos del catálogo/perfil y modelo histórico se mantienen. |
 | Carga de imágenes | Imagen principal reutilizada, tamaños adaptados con srcset, prioridad de la principal y miniaturas diferidas. |
-| WhatsApp que desaparece al desplazarse | Un solo controlador; mueve el acceso para apartarlo de controles sin ocultarlo. |
+| WhatsApp que desaparece al desplazarse | Acceso fijo y visible durante el scroll, sin animación ni ocultación por contenido ordinario; separación de la barra móvil y exclusión temporal de avisos superpuestos conservadas de main #1084. |
 | Registro mínimo | Nombre y apellido en un campo (al menos dos palabras) y WhatsApp. Sin username, nacimiento ni mapa en el alta. Se conservan datos históricos. |
 | Marca reservada | tintinaccs reservado en cliente y reglas de nuevas reservas; también se protegen tintin y tintinaccesorios en servidor. |
 | Registro que no avanza | Errores junto al campo, foco/desplazamiento, aviso específico de número duplicado, límite de espera de red y reintento sin borrar datos. Perfil activo después de verificar la persistencia. |
@@ -61,3 +61,7 @@ Segundo CI (1fdced09): compilación reproducible, contratos estáticos/operativo
 ## Entorno reutilizable
 
 Node >=22 y Java para las pruebas de reglas. Instalación probada: `npm ci --cache /workspace/.cache/npm --no-audit --no-fund` (687 paquetes). Arranque: `node scripts/servidor-local-pruebas.mjs 4173`. Playwright usa `PLAYWRIGHT_BASE_URL=http://127.0.0.1:4173` , `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium` y `PLAYWRIGHT_EXECUTABLE_PATH=/usr/bin/chromium`. El borrador de instalación/arranque se guardó para revisión del usuario.
+
+## Integración final con main #1084
+
+El candidato se actualiza contra ec63adce6551cb6210c20fdcea21c4f3447f2896, preservando los cambios aprobados de navegación móvil/producto/WhatsApp. Se corrige la recuperación diferida del checkout que deshacía Volver. Reproducción determinista previa390/768/1440 FAIL; después34 pruebas checkout/primer render PASS y tres casos ampliados de retorno, recuperación tras recarga y teclado PASS, sin reintentos. Pruebas Node finales455 PASS. Plan oficial84 archivos/59 registros, inventario78/541 conservado. Estos resultados son locales; CI y revisión protegida deben corresponder al SHA combinado final antes de publicar.

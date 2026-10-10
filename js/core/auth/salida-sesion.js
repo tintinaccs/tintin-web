@@ -1,7 +1,7 @@
 import { auth } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { markExplicitLogout, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
-import { withDeadline } from './estado-perfil-sesion.mjs?v=tintin-20261009-whatsapp-responsive-1';
+import { withDeadline } from './estado-perfil-sesion.mjs?v=tintin-20261010-whatsapp-release-4';
 
 let pendingLogout = null;
 // Un único cierre real para tienda, perfil y panel. Un timeout devuelve control

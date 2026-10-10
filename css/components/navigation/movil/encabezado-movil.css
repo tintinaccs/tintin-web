@@ -224,16 +224,51 @@
   #tt-tabbar { transition:none !important; }
 }
 
+/* Selección completa: icono y etiqueta dentro de una cápsula del propio botón. */
 @media (max-width:767px) {
-  #tt-tabbar { bottom:max(8px,env(safe-area-inset-bottom)); }
-  #tt-tabbar .tt-mobile-nav-halo,
-  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo {
-    top:var(--tt-mobile-y,0px);
-    width:var(--tt-mobile-w,54px);
-    height:var(--tt-mobile-h,54px);
-    border-radius:22px;
-    background:var(--color-brand-primary,#F8AACA);
-    border:1px solid rgba(113,60,83,.22);
+  html body.tt-public-shell-mounted:not(:has(.adm-main)) { --tt-mobile-nav-clearance:108px !important; }
+  html body #tt-tabbar,
+  html body #tt-tabbar.tt-tabbar-compact,
+  html[data-tt-mobile-home="hidden"] body #tt-tabbar:has(#tabbar-notifications:not([hidden])),
+  html[data-tt-mobile-home="hidden"] body #tt-tabbar.tt-tabbar-compact:has(#tabbar-notifications:not([hidden])) {
+    width:min(420px,calc(100vw - 24px)) !important;
+    min-height:76px !important;
+    padding:8px !important;
+    gap:2px;
+    border-radius:999px !important;
+    transition:box-shadow .2s ease !important;
   }
-  #tt-tabbar .tt-mobile-nav-indicator { display:none; }
+  html body #tt-tabbar .tt-tabbar-btn,
+  html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn, html body #tt-tabbar .tt-tabbar-btn:is(#tabbar-cart,#tabbar-notifications) {
+    min-height:58px;
+    padding:6px 4px;
+    gap:5px;
+    border-radius:999px !important;
+  }
+  html body #tt-tabbar .tt-tabbar-btn::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    border-radius:inherit;
+    background:#fde6ef;
+    opacity:0;
+    pointer-events:none;
+  }
+  html body #tt-tabbar .tt-tabbar-btn.active::before,
+  html body #tt-tabbar .tt-tabbar-btn[aria-expanded="true"]::before,
+  html body #tt-tabbar .tt-tabbar-btn[aria-current="page"]::before { opacity:1; }
+  html body #tt-tabbar:has(.tt-tabbar-btn[aria-expanded="true"]) .tt-tabbar-btn.active:not([aria-expanded="true"])::before { opacity:0; }
+  html body #tt-tabbar .tt-mobile-nav-halo,
+  html body #tt-tabbar .tt-mobile-nav-indicator { display:none !important; }
+  html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn span:last-child {
+    max-height:16px;
+    opacity:1;
+    transform:none;
+  }
+  html body #tt-tabbar .tt-tabbar-btn > span:last-child {
+    font-size:clamp(.5rem,2.3vw,.64rem);
+    letter-spacing:0;
+    text-transform:none;
+  }
 }

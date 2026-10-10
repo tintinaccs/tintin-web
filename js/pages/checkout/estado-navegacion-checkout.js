@@ -27,6 +27,16 @@ const DRAFT_FIELDS = Object.freeze([
 let maxNavigableStep = 0;
 let restoring = false;
 let mutationObserver = null;
+let manualNavigation = false;
+
+function rememberManualNavigation(event) {
+  if (!event.isTrusted) return;
+  if (event.type === 'keydown' && event.key !== 'Enter' && event.key !== ' ') return;
+  const control = event.target?.closest?.(
+    `${STEP_SELECTOR},#btn-step1-next,#btn-step2-next,#btn-step3-next,#btn-step4-next,#btn-step2-back,#btn-step3-back,#btn-step4-back`
+  );
+  if (control) manualNavigation = true;
+}
 
 function readJson(key, fallback) {
   try {
@@ -261,6 +271,9 @@ function bindDraftPersistence() {
 }
 
 function restoreResumeTarget() {
+  // Los reintentos de arranque no deben deshacer un avance o regreso elegido
+  // por la persona. Los clics programáticos de la recuperación siguen permitidos.
+  if (manualNavigation) return;
   const target = Math.max(
     Math.max(0, Math.min(3, Number(readJson(MAX_STEP_KEY, 0)) || 0)),
     readResumeBackup()
@@ -278,6 +291,8 @@ function scheduleResumeTarget() {
 
 function boot() {
   if (!CHECKOUT_PATH.test(location.pathname)) return;
+  document.addEventListener('click', rememberManualNavigation, true);
+  document.addEventListener('keydown', rememberManualNavigation, true);
   maxNavigableStep = Math.max(
     0,
     Math.min(3, Number(readJson(MAX_STEP_KEY, 0)) || 0),
@@ -306,7 +321,8 @@ function boot() {
   }
 
   window.addEventListener('pagehide', persistDraft);
-  window.addEventListener('pageshow', () => {
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) manualNavigation = false;
     scheduleRestore();
     scheduleResumeTarget();
   });

@@ -64,7 +64,7 @@ test('a social 401 never sends an authenticated customer back to login', async (
   assert.match(favorites, /for \(const forceRefresh of \[false, true\]\)/);
 });
 
-test('la comunidad histórica conserva avisos sin mostrarse en la ficha', async () => {
+test('community code is retained but absent from the public product page', async () => {
   const [product, markup] = await Promise.all([
     read('js/pages/product/resenas-producto.js'),
     read('product.html'),
@@ -72,7 +72,7 @@ test('la comunidad histórica conserva avisos sin mostrarse en la ficha', async 
   assert.match(product, /footer\.parentNode\.insertBefore\(section, footer\)/);
   assert.match(product, /showCommunityNotice\(/);
   assert.doesNotMatch(product, /window\.alert\(/);
-  assert.doesNotMatch(markup, /data-open-community|id="product-reviews"/);
+  assert.doesNotMatch(markup, /data-open-community|tt-product-social-bar|id="product-share"|resenas-producto\.js/);
 });
 
 test('product likes are permanent server-side interactions', async () => {
@@ -234,7 +234,7 @@ test('opening notifications marks current unread alerts as seen automatically', 
   assert.doesNotMatch(notifications, /id="tt-notifications-mark-all"/);
 });
 
-test('admin y perfil conservan participación mientras la ficha oculta comunidad', async () => {
+test('admin management and profile favorites remain wired with product community hidden', async () => {
   const [admin, product, profile, adminLoader, adminStyles] = await Promise.all([
     read('admin.html'), read('product.html'), read('perfil.html'),
     read('js/admin/participacion/gestion-participacion-admin.js'),

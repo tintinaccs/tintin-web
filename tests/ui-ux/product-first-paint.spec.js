@@ -10,6 +10,11 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
     await page.setViewportSize({ width, height: 900 });
     await page.route('**/product-first-paint', route => route.fulfill({ contentType: 'text/html', body: html }));
     await page.goto('/product-first-paint');
+    // La ficha pública no ofrece interacción social ni inicia el módulo de reseñas.
+    await expect(page.locator('.tt-product-social-bar, #product-share, #product-reviews')).toHaveCount(0);
+    await expect(page.locator('script[src*="resenas-producto.js"]')).toHaveCount(0);
+    await expect(page.locator('#tinsel-root, .tinsel, .tinsel-box')).toHaveCount(0);
+    await expect(page.locator('.tt-related-section')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     await page.evaluate(() => {
       document.getElementById('product-grid').style.display = 'grid';
       document.getElementById('product-loading').style.display = 'none';

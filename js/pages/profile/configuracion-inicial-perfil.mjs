@@ -1,4 +1,4 @@
-import { isValidUsername, normalizeUsername } from '../../components/forms/utilidades-username.js?v=tintin-20261009-whatsapp-responsive-1';
+import { isValidUsername, normalizeUsername } from '../../components/forms/utilidades-username.js?v=tintin-20261010-whatsapp-release-4';
 import { isValidDob, parseDob } from '../../components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1';
 
 function clean(value) {

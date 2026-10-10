@@ -1,5 +1,5 @@
-import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20261010-whatsapp-release-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261010-whatsapp-release-1';
+import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20261010-whatsapp-release-4';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261010-whatsapp-release-4';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 
