@@ -72,7 +72,7 @@ export function splitFullName(value) {
 /** Un nombre completo exige al menos nombre y apellido, también en checkout. */
 export function isValidCustomerName(value) {
   const { firstName, lastName } = splitFullName(value);
-  return isValidFullName(firstName, lastName);
+  return isValidFullName(firstName, lastName) && clean(value).split(' ').every(part => (part.match(/\p{L}/gu) || []).length >= 3);
 }
 
 /** Lee nombre/apellido de un perfil, tolerando los que sólo tienen `name`. */

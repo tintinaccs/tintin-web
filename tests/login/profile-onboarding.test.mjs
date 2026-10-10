@@ -367,8 +367,8 @@ test('guardar nombre y teléfono activa el perfil y no reabre el registro', () =
 });
 
 test('nombre de una palabra no activa el perfil; nombres compuestos válidos sí', () => {
-  for(const name of ['María','A Pérez','María 123','María <script>']) assert.equal(isValidCustomerName(name),false,name);
-  for(const name of ['María González','José de la Cruz',"Ana D’Angelo",'María José Pérez']) assert.equal(isValidCustomerName(name),true,name);
+  for(const name of ['María','A Pérez','Jo Pérez','María Pe','José de la Cruz','María 123','María <script>']) assert.equal(isValidCustomerName(name),false,name);
+  for(const name of ['María González',"Ana D’Angelo",'María José Pérez']) assert.equal(isValidCustomerName(name),true,name);
   const patch=buildMissingProfilePatch({currentProfile:{profileStatus:'incomplete'},submittedName:'María',submittedPhone:'+595981123456'});
   assert.equal('profileStatus' in patch,false);
 });

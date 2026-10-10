@@ -271,8 +271,8 @@
     letter-spacing:0;
     text-transform:none;
   }
-  /* La navegación permanece operable delante de las superficies públicas. */
-  html body #tt-tabbar { z-index:2147483647 !important; }
+  /* La navegación queda por debajo de los cargadores y modales. */
+  html body #tt-tabbar { z-index:1100 !important; }
   html body #collections-sheet,
   html body #account-drawer #account-panel,
   html body #notifications-drawer #tt-notifications-list {

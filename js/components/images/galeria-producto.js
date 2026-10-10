@@ -52,7 +52,7 @@
 (function () {
   'use strict';
   const definitions = [
-    ['dorado', '#FFD34E', 'gold'], ['plateado', '#CFD4DA', 'silver'],
+    ['dorado', '#D4AF37', 'gold'], ['plateado', '#CFD4DA', 'silver'],
     ['oro rosa', '#EAB6A2', 'rose gold'], ['fucsia', '#E6008D', 'fuchsia'],
     ['rosa', '#F2A5C6', 'pink'], ['azul', '#2463CF', 'blue'],
     ['celeste', '#76C8EE', 'light blue'], ['azul marino', '#1B2B50', 'navy'],
@@ -77,7 +77,7 @@
   function swatch(value, row = {}) {
     if (/^#[\da-f]{6}$/i.test(row?.colorHex || '')) return row.colorHex;
     const color = preset(row?.swatch) || preset(value);
-    if (color?.name === 'dorado') return 'linear-gradient(135deg,#FFF1AA 0%,#FFD34E 38%,#E8B62E 65%,#FFE890 100%)';
+    if (color?.name === 'dorado') return 'linear-gradient(135deg,#8E6B23 0%,#C7A343 24%,#F6E7AD 46%,#B78C2E 68%,#E4C66B 100%)';
     if (color?.name === 'plateado') return 'linear-gradient(135deg,#F8FAFC 0%,#CFD4DA 40%,#AAB3BE 65%,#EEF1F4 100%)';
     if (color?.name === 'multicolor') return 'conic-gradient(#E6008D,#FFE349,#35A461,#2463CF,#E6008D)';
     return color?.hex || '#CFD4DA';

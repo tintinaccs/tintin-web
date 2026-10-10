@@ -124,7 +124,7 @@
   position: fixed;
   top: 88px;
   right: 20px;
-  z-index: 10010;
+  z-index: 2147483647;
   width: min(360px, calc(100vw - 40px));
   padding: 13px 15px;
   border: 1px solid var(--tt-ops-border);
@@ -502,14 +502,14 @@ body.tt-ops-centered-active::before {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 10005;
+  z-index: 2147483646;
   background: rgba(20, 10, 14, .42);
 }
 .tt-ops-loader--centered {
   top: 50%;
   right: auto;
   left: 50%;
-  z-index: 10010;
+  z-index: 2147483647;
   width: min(520px, calc(100vw - 32px));
   transform: translate(-50%, -50%);
 }

@@ -198,3 +198,6 @@ html body #tt-loader::before {
   content: none !important;
   display: none !important;
 }
+
+/* El loader ocupa también el espacio reservado para la barra de scroll. */
+html:has(body #tt-loader:not(.tt-out)) { scrollbar-gutter:auto !important; }

@@ -1,7 +1,7 @@
 import { versionedSiteAsset } from './configuracion.js?v=tintin-20261010-whatsapp-release-5';
 
 const HEADER_DESKTOP_VERSION = 'tintin-20261010-whatsapp-release-5';
-const HEADER_MOBILE_VERSION = 'tintin-20261010-mobile-navigation-front-1';
+const HEADER_MOBILE_VERSION = 'tintin-20261010-auto-flow-responsive-1';
 const HEADER_RESPONSIVE_VERSION = 'tintin-20261010-whatsapp-release-5';
 const NAVIGATION_SHARED_VERSION = 'tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1';
 const NAVIGATION_PANEL_VERSION = 'tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1';

@@ -8,14 +8,14 @@ const ensure = login.slice(login.indexOf('async function ensureProfileComplete')
 const showError = login.slice(login.indexOf('function showError('), login.indexOf('function showActiveSessionState('));
 const script = `
 import {getProfileCompletionPlan,buildMissingProfilePatch,isValidCustomerName} from '${browserModule('../../js/pages/profile/configuracion-inicial-perfil.mjs')}';
-import {findCountryByCode,normalizePhone,isValidPhone,isRealisticPhone} from '${browserModule('../../js/components/forms/utilidades-telefono.js')}';
+import {findCountryByCode,normalizePhone,isValidPhone,isRealisticPhone,isNationalMobileInput} from '${browserModule('../../js/components/forms/utilidades-telefono.js')}';
 import {withDeadline} from '${browserModule('../../js/core/auth/estado-perfil-sesion.mjs')}';
 const db={},SUPER_ADMIN='official@example.com',AUTH_NETWORK_DEADLINE_MS=1000;
 const PROFILE_STATE={MISSING:'MISSING',INCOMPLETE:'INCOMPLETE',COMPLETE:'COMPLETE',ERROR:'ERROR'};
 const PROFILE_ACTION={CREATE_THEN_COMPLETE_PROFILE:'create'},resolveProfileAction=()=> 'complete';
 const doc=()=>({}),serverTimestamp=()=>new Date(),detectAuthMethod=()=> 'emailOtp';
 const ensureUserProfile=async()=>{},clearProfileGateCache=()=>{},recordAuthDiagnostic=()=>{};
-const logoutSession=async()=>{},hideLoginOverlay=()=>{},revealLoginSurface=()=>{},showOverlay=()=>{};
+const logoutSession=async()=>{},hideLoginOverlay=()=>{window.__loading=false;},revealLoginSurface=()=>{},showOverlay=()=>{window.__loading=true;};
 const hideMessages=()=>document.getElementById('login-error').classList.remove('show');
 const populateCountrySelect=()=>{};
 ${showError}
@@ -37,9 +37,9 @@ ensureProfileComplete(user,'client').then(()=>{window.__complete=true;window.__s
 `;
 const fixture=removeFixtureScripts(login).replace('</body>',`<script type="module">${script}</script></body>`);
 
-for (const width of [390, 768, 1440]) {
+for (const width of [320, 390, 768, 1024, 1440]) {
   test(`WhatsApp cancela la comprobación tardía y permite reintentar sin perder datos a ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 900 });
+    await page.setViewportSize({ width, height: width===1024?600:900 });
     await page.clock.install({ time: new Date('2026-10-09T12:00:00Z') });
     await page.clock.pauseAt(new Date('2026-10-09T12:01:00Z'));
     await page.route('**/__availability-recovery', route => route.fulfill({ contentType:'text/html', body:fixture }));
@@ -48,10 +48,12 @@ for (const width of [390, 768, 1440]) {
     await name.fill('María González');await phone.fill('0912345678');await button.click();
     await expect.poll(()=>page.evaluate(()=>window.__calls.length)).toBe(1);
     await expect(phone).toBeDisabled();await expect(button).toBeDisabled();
+    expect(await page.evaluate(()=>window.__loading)).toBe(true);
     await page.clock.fastForward(1000);
     await expect(button).toBeEnabled();await expect(phone).toBeEnabled();
     expect(await page.evaluate(()=>window.__aborted)).toBe(1);
     expect(await page.evaluate(()=>window.__writes)).toBe(0);
+    expect(await page.evaluate(()=>window.__loading)).toBe(false);
     expect(await phone.inputValue()).toBe('0912345678');expect(await name.inputValue()).toBe('María González');
     await expect(page.locator('#login-phone-error')).toBeEmpty();
     await phone.fill('0918765432');await page.evaluate(()=>{window.__resolveOld();window.__allowReservation=true;});
@@ -61,5 +63,27 @@ for (const width of [390, 768, 1440]) {
     expect(state.calls).toEqual([{phone:'0912345678',country:'PY'},{phone:'0918765432',country:'PY'}]);
     expect(state.writes).toBe(1);expect(state.saved.phone).toBe('+595918765432');
     expect(state.saved.profileStatus).toBe('active');
+  });
+}
+
+for (const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1440,900]]) {
+  test(`nombre y WhatsApp inválidos enfocan el error y permiten avanzar después en ${width}x${height}`,async({page})=>{
+    await page.setViewportSize({width,height});
+    await page.route('**/__availability-recovery',route=>route.fulfill({contentType:'text/html',body:fixture}));
+    await page.goto('/__availability-recovery');
+    const name=page.locator('#login-profile-first-name'),phone=page.locator('#login-profile-phone'),button=page.locator('#btn-save-profile');
+    for(const invalid of ['Pedro','Jo Pérez','Pedro Pe']) {
+      await name.fill(invalid);await phone.fill('0981123456');await button.click();
+      await expect(name).toBeFocused();await expect(page.locator('#login-first-name-error')).toContainText('tres letras');
+      expect(await page.evaluate(()=>window.__calls.length)).toBe(0);
+    }
+    await name.fill('Pedro González');await phone.fill('98112345');await button.click();
+    await expect(phone).toBeFocused();await expect(page.locator('#login-phone-error')).toContainText('válido');
+    await phone.fill('981123456');
+    await page.evaluate(()=>{window.__calls.push({fixture:true});window.__allowReservation=true;});
+    await button.click();await page.waitForFunction(()=>window.__complete);
+    expect(await page.evaluate(()=>window.__saved.name)).toBe('Pedro González');
+    expect(await page.evaluate(()=>window.__saved.phone)).toBe('+595981123456');
+    expect(await page.evaluate(()=>window.__loading)).toBe(true);
   });
 }
