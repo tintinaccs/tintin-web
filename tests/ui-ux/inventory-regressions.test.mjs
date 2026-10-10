@@ -42,10 +42,10 @@ test('admin móvil mantiene cinco accesos principales con etiquetas cortas y Má
   assert.match(html, /id="adm-mobile-more-toggle"/);
 });
 
-test('WhatsApp flotante de producto vigila texto y controles no clickeables', async () => {
+test('WhatsApp fijo no alterna su visibilidad por el contenido al hacer scroll', async () => {
   const source = await read('tienda.js');
-  assert.match(source, /PRODUCT_COLLISION_TARGETS = '#product-desc,#product-specifications,#product-variants,#qty-wrap,p,h1,h2,h3,li,dd,dt'/);
-  assert.match(source, /CONTROL_TARGETS = 'a,button,input,textarea,select'/);
+  assert.doesNotMatch(source, /PRODUCT_COLLISION_TARGETS|CONTROL_TARGETS/);
+  assert.match(source, /collisionSelector = '\.tt-cart-feedback\.is-visible'/);
   // La geometría se descarta antes de getComputedStyle para que la lista ampliada siga siendo barata.
   assert.match(source, /if \(!overlapsRect\(r, nr\)\) return false;\s*const style = getComputedStyle\(node\);/);
   assert.match(source, /querySelectorAll\(collisionSelector\)/);

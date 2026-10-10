@@ -114,7 +114,7 @@ function applyHeader(raw = {}) {
 
   const homeVisible = raw.showHome !== false;
   const homeLabel = safeText(raw.homeLabel, 'INICIO', 40);
-  const shopLabel = safeText(raw.shopLabel, 'TIENDA', 40);
+  const shopLabel = 'CATÁLOGO';
   const aboutLabel = safeText(raw.aboutLabel, 'NOSOTROS', 40);
   const contactLabel = safeText(raw.contactLabel, 'CONTACTO', 40);
   setOptionalRoute('home', homeLabel, homeVisible);

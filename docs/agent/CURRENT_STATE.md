@@ -1,3 +1,13 @@
+# Ficha y navegación públicas — 2026-10-09
+
+Base 268067dfad7ed6eb305ecd17dcd64c08a4b1e214; PR #1084, rama fix/ocultar-social-producto. Pedido del propietario: ocultar comentarios, Me gusta y Compartir de la ficha; fondo continuo de Tu selección; WhatsApp fijo sin parpadeo; Catálogo en todos los headers y cápsula móvil que cubra icono y texto con separación.
+
+Se retiran controles y carga del módulo público de reseñas. Se conservan datos, API, administración, favoritos de perfil y selección, reglas y permisos. Selección con fondo transparente. El flotante deja de respirar y alternar por contenido normal durante scroll; avisos superpuestos conservan su exclusión temporal. El header ignora la etiqueta antigua TIENDA guardada en apariencia. La cápsula se dibuja dentro de cada botón activo, sin raya independiente, con etiquetas visibles incluso al hacer scroll y ancho seguro con 5/6 acciones. Cadena de caché alineada.
+
+PASS_LOCAL: 37 pruebas Chromium específicas (26 de ficha/cápsula en 5 páginas, 7 de WhatsApp fijo en 320–1920px y 4 de controles/favoritos); 80 pruebas Node de interacción/carrito/regresiones. Auditoría de navegación pública PASS. La vista previa anterior acredita ocultación y fondo, no estos nuevos cambios de navegación. CI anterior falló por el test antiguo que exigía Me gusta; contrato actualizado conservando persistencia y permisos. NOT_VERIFIED: CI del nuevo SHA, aprobación y producción. Sin escrituras de datos productivos.
+
+## Evidencia histórica de main
+
 # Revision PR #1078 — productos y colores, 2026-10-09
 
 Base main 6d7c644a913c25710c1d1604fb4ff07ec7f2d644. Conflictos resueltos conservando compradores dentro de Pedidos, espejo local y mecanismos de proteccion.
