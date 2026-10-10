@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261010-mobile-single-selection-1"></script>
-  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-single-selection-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-mobile-single-selection-1" defer></script>
+<script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2"></script>
+  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-mobile-single-selection-2" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,10 +23,10 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-mobile-single-selection-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-mobile-single-selection-2">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
-  <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-1">
+  <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/checkout.html" />
@@ -35,10 +35,10 @@
   <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2">
-  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261005-flow-progress-2-encomienda-20261008-1-master-20261007-1-repair-20261005-1-master-20261007-1-checkout-20261008-2">
+  <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20261010-social-mobile-styles-3">
-  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260915-final-polish-1-brand-20261004-1-owner-pink-20261004-1-photos-20261008-1">
+  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20261010-auto-flow-responsive-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2">
@@ -239,11 +239,12 @@
       <div class="ck-panel-sub">Para confirmar y coordinar la entrega</div>
     </div>
     <div class="ck-panel-body">
-      <div class="ck-field">
+      <p id="ck-saved-identity" class="ck-label" hidden></p>
+      <div class="ck-field" id="ck-name-field">
         <label class="ck-label" for="ck-name">Nombre y apellido *</label>
         <input type="text" class="ck-input" id="ck-name" placeholder="Tu nombre y apellido" />
       </div>
-      <div class="ck-field">
+      <div class="ck-field" id="ck-phone-field">
         <label class="ck-label" for="ck-phone-number">Teléfono / WhatsApp *</label>
         <div style="display:flex;gap:8px">
           <select class="ck-select" id="ck-phone-country" aria-label="Prefijo de Paraguay" style="flex:0 0 88px" disabled><option value="PY">+595</option></select>
@@ -405,7 +406,7 @@
 </div><!-- /ck-body -->
 
 <script type="module">
-import { isValidCustomerName } from './js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-5';
+import { isValidCustomerName, readProfileName, isValidFullName } from './js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2';
 import { shippingDepartment } from './js/components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { productVariantImage } from './js/components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
 import { canonicalDeliveryCities } from './js/components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
@@ -420,7 +421,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-5";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isNationalMobileInput, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial, isValidTaxpayerType } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -439,7 +440,7 @@ import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profil
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1-photos-20261008-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
-import { withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261010-whatsapp-release-5";
+import { withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261010-registration-name-2";
 
 function sanitizeCheckoutProduct(id, raw = {}) {
   return {
@@ -869,7 +870,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-5');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1352,24 +1353,7 @@ document.getElementById('btn-step2-next').onclick = () => {
   orderData.departamento = departamento;
   goToStep(2);
 
-  // Pre-fill nombre/email/teléfono desde la cuenta — solo si el campo sigue
-  // vacío, para no pisar lo que el cliente ya haya escrito a mano.
-  if (currentUser && !currentUser.isAnonymous) {
-    const nameEl  = document.getElementById('ck-name');
-    const emailEl = document.getElementById('ck-email');
-    const phoneEl = document.getElementById('ck-phone-number');
-    if (!nameEl.value)  nameEl.value  = currentUserProfile?.name || currentUser.displayName || '';
-    if (!emailEl.value) emailEl.value = currentUser.email || '';
-    const storedPhone = currentUserProfile?.phone || currentUserProfile?.phoneNumber ||
-      currentUserProfile?.whatsapp || currentUserProfile?.whatsappNumber || '';
-    if (!phoneEl.value && storedPhone) {
-      const digits  = String(storedPhone).replace(/\D/g, '');
-      const country = detectCountryFromDigits(digits) || DEFAULT_COUNTRY;
-      phoneCountrySelect.value = country.code;
-      const normalized = normalizePhone(storedPhone, country).value;
-      phoneEl.value = normalized.startsWith('+595') ? normalized.slice(4) : '';
-    }
-  }
+  applySavedCheckoutIdentity(currentUserProfile, currentUser);
 };
 
 document.getElementById('btn-step2-back').onclick = () => goToStep(0);
@@ -1377,6 +1361,32 @@ document.getElementById('btn-step2-back').onclick = () => goToStep(0);
 // "Marcar otra" lo maneja attachSavedLocationConfirm (ver
 // maybeApplySavedLocation): tenerlo también acá dejaba dos handlers haciendo
 // lo mismo sobre el mismo botón.
+
+// Datos de la cuenta: se conservan en los inputs para construir el pedido,
+// pero no se vuelven a pedir al cliente. Un cambio de sesión limpia sólo lo
+// que esta hidratación escribió, sin descartar entradas manuales pendientes.
+function applySavedCheckoutIdentity(profile, user) {
+  const nameEl = document.getElementById('ck-name');
+  const phoneEl = document.getElementById('ck-phone-number');
+  const emailEl = document.getElementById('ck-email');
+  for (const input of [nameEl, phoneEl, emailEl]) {
+    if (input.dataset.savedIdentity) { input.value = ''; delete input.dataset.savedIdentity; }
+  }
+  const names = readProfileName(profile || {});
+  const savedName = user && !user.isAnonymous && profile && isValidFullName(names.firstName, names.lastName)
+    ? `${names.firstName} ${names.lastName}` : '';
+  const storedPhone = profile?.phone || profile?.phoneNumber || profile?.whatsapp || profile?.whatsappNumber || '';
+  const normalized = user && !user.isAnonymous ? normalizePhone(storedPhone, DEFAULT_COUNTRY).value : '';
+  const savedPhone = normalized.startsWith('+595') && isNationalMobileInput(normalized.slice(4)) ? normalized.slice(4) : '';
+  for (const [input, value] of [[nameEl, savedName], [phoneEl, savedPhone], [emailEl, user?.email || '']]) {
+    if (value) { input.value = value; input.dataset.savedIdentity = value; }
+  }
+  document.getElementById('ck-name-field').hidden = Boolean(savedName);
+  document.getElementById('ck-phone-field').hidden = Boolean(savedPhone);
+  const summary = document.getElementById('ck-saved-identity');
+  summary.hidden = !savedName && !savedPhone;
+  summary.textContent = [savedName, savedPhone ? `WhatsApp: +595 ${savedPhone}` : ''].filter(Boolean).join(' · ');
+}
 
 // ---- STEP 3: DATOS ----
 
@@ -1408,7 +1418,7 @@ document.getElementById('btn-step3-next').onclick = () => {
   const razonSocial = document.getElementById('ck-razon-social').value.trim();
   const ruc = document.getElementById('ck-ruc').value.trim();
   const ciRaw = document.getElementById('ck-ci').value.trim();
-  if (!isValidCustomerName(name)) { showError(2, 'Ingresá tu nombre y apellido (al menos dos palabras).'); return; }
+  if (!(isValidCustomerName(name) || (document.getElementById('ck-name-field').hidden && document.getElementById('ck-name').dataset.savedIdentity === name))) { showError(2, 'Ingresá tu nombre y apellido (dos palabras de al menos tres letras cada una).'); document.getElementById('ck-name').focus(); return; }
   if (!phoneRaw) { showError(2, 'Ingresá tu teléfono o WhatsApp.'); return; }
   if (!isNationalMobileInput(phoneRaw)) {
     showError(2, 'Ingresá un celular válido: 0912 345 678 o 912 345 678.');
@@ -1852,6 +1862,7 @@ subscribeSession(snapshot => {
     authReady = false;
     currentUser = null;
     currentUserProfile = null;
+    applySavedCheckoutIdentity(null, null);
     return;
   }
   // El coordinador entrega la identidad resuelta en el snapshot. Mantener una
@@ -1860,6 +1871,7 @@ subscribeSession(snapshot => {
   const user = snapshot.user;
   currentUser = user;
   currentUserProfile = null;
+  applySavedCheckoutIdentity(null, user);
   authReady = true;
   window.ttPageReady && window.ttPageReady(); // carrito ya renderizado + estado de sesión ya conocido
   // Fase F: sin cuenta real no hay compra, así que ya no se inicia sesión
@@ -1878,6 +1890,7 @@ subscribeSession(snapshot => {
     .then(profile => {
       if (profileGeneration !== checkoutProfileGeneration || currentUser?.uid !== user.uid) return;
       currentUserProfile = profile;
+      applySavedCheckoutIdentity(profile, user);
       // Fase E: cuenta bloqueada — no puede comprar, se tapa el checkout entero
       // apenas se sabe, sin esperar a que llegue a "Confirmar pedido".
       if (currentUserProfile?.blocked) showBlockedOverlay();
@@ -1895,10 +1908,10 @@ subscribeSession(snapshot => {
 });
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261010-whatsapp-release-5"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261010-registration-name-2"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
-<script src="js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1" defer></script>
-<script src="tienda.js?v=tintin-20261010-whatsapp-release-5" defer></script>
+<script src="js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2" defer></script>
+<script src="tienda.js?v=tintin-20261010-registration-name-2" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

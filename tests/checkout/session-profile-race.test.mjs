@@ -61,7 +61,7 @@ test('precarga nativa no prellena dirección ni bloquea con datos de otra sesió
     currentUser: null, currentUserProfile: null, authReady: false, sessionStatus: null,
     subscribeSession(fn) { context.observer = fn; }, doc: (_, __, uid) => uid,
     readCheckoutProfile(user) { const read = deferred(); reads.set(user.uid, read); return read.promise.then(snap => snap.exists() ? snap.data() : null); },
-    reevaluateStoreGate_() {}, enforceCheckoutGuard() {}, tryResumeCheckoutStep() {},
+    reevaluateStoreGate_() {}, enforceCheckoutGuard() {}, tryResumeCheckoutStep() {}, applySavedCheckoutIdentity() {},
     maybeApplySavedLocation() { applied.push(context.currentUserProfile); }, showBlockedOverlay() { applied.push('blocked'); },
   });
   vm.runInContext(source, context);

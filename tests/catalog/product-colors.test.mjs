@@ -10,7 +10,9 @@ test('paleta editable, alias y metalizados distintos del marrón', () => {
   assert.equal(colors.preset('GOLD').name, 'dorado');
   assert.equal(colors.preset('marron').name, 'marrón');
   assert.equal(colors.preset('Fuchsia').name, 'fucsia');
-  assert.match(colors.swatch('dorado'), /FFD34E/);
+  assert.match(colors.swatch('dorado'), /linear-gradient/);
+  assert.match(colors.swatch('dorado'), /D4AF37/);
+  assert.equal(colors.swatch('dorado', {colorHex:'#FFD34E'}), colors.swatch('dorado'));
   assert.match(colors.swatch('plateado'), /CFD4DA/);
   assert.notEqual(colors.swatch('dorado'), colors.swatch('marrón'));
 });

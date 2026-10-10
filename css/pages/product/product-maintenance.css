@@ -193,7 +193,7 @@ body.tt-product-maintenance .tt-added-toast {
   align-items: center;
   gap: 6px;
   margin-left: auto;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--color-text-secondary, #7B6F72);
@@ -287,12 +287,10 @@ body.tt-product-maintenance .tt-footer-tagline {
     align-items: stretch;
   }
 
-  /* 3 recomendaciones en una sola fila también en mobile — las tarjetas
-     quedan angostas, así que sus botones de acción pasan a apilarse en
-     vertical (ver regla de abajo) para no achicar el texto de más. */
+  /* Dos columnas dejan espacio para nombres y acciones en móviles. */
   body.tt-product-maintenance .tt-related-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   body.tt-product-maintenance .tt-related-grid .tt-product-info {
@@ -307,7 +305,7 @@ body.tt-product-maintenance .tt-footer-tagline {
   body.tt-product-maintenance .tt-related-grid .tt-product-actions .tt-btn {
     width: 100%;
     padding: 8px 6px;
-    font-size: 0.68rem;
+    font-size: 0.8rem;
     letter-spacing: 0.02em;
   }
 }
@@ -804,7 +802,6 @@ html body.tt-product-maintenance .tt-gallery-thumb {
   overflow:hidden;
 }
 body.tt-product-maintenance .tt-color-option .tt-color-swatch {
-  background-image:linear-gradient(135deg,rgba(255,255,255,.48),transparent 42%,rgba(0,0,0,.12)) !important;
   box-shadow:inset 0 0 0 1px rgba(0,0,0,.12) !important;
 }
 
@@ -813,4 +810,10 @@ html body.tt-product-maintenance .tinsel,
 html body.tt-product-maintenance .tinsel .tinsel-box {
   background: transparent !important;
   background-image: none !important;
+}
+
+/* Igual espacio lateral para ficha y recomendaciones en cada orientación. */
+html body.tt-product-maintenance .tt-related-section > .container { width:min(100%,1220px); box-sizing:border-box; padding-inline:clamp(16px,3vw,28px) !important; }
+@media (min-width:600px) and (max-width:767px) {
+  body.tt-product-maintenance .tt-related-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }

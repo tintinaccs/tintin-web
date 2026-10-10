@@ -1,4 +1,4 @@
-import '../../components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1';
+import '../../components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {

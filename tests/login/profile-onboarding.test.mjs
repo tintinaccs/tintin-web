@@ -367,8 +367,8 @@ test('guardar nombre y teléfono activa el perfil y no reabre el registro', () =
 });
 
 test('nombre de una palabra no activa el perfil; nombres compuestos válidos sí', () => {
-  for(const name of ['María','A Pérez','María 123','María <script>']) assert.equal(isValidCustomerName(name),false,name);
-  for(const name of ['María González','José de la Cruz',"Ana D’Angelo",'María José Pérez']) assert.equal(isValidCustomerName(name),true,name);
+  for(const name of ['María','A Pérez','Jo Pérez','María Pe','José de la Cruz','María 123','María <script>']) assert.equal(isValidCustomerName(name),false,name);
+  for(const name of ['María González',"Ana D’Angelo",'María José Pérez']) assert.equal(isValidCustomerName(name),true,name);
   const patch=buildMissingProfilePatch({currentProfile:{profileStatus:'incomplete'},submittedName:'María',submittedPhone:'+595981123456'});
   assert.equal('profileStatus' in patch,false);
 });
@@ -383,4 +383,15 @@ test('el formulario contiene sólo nombre completo y WhatsApp, sin enlace redund
 test('identidades vacías no obtienen la excepción de superadmin', () => {
   assert.equal(isSuperAdminProfile({},''),false);
   assert.equal(isSuperAdminProfile({email:'other@example.com'},'official@example.com'),false);
+});
+
+
+test('el nombre corto recibido de Google se corrige y activa sin atascar el alta; el histórico activo se conserva',()=>{
+  const before={profileStatus:'incomplete',name:'Jo Smith'};
+  assert.equal(getProfileCompletionPlan({profile:before}).needsName,true);
+  const patch=buildMissingProfilePatch({currentProfile:before,submittedName:'Pedro González',submittedPhone:'+595981123456'});
+  assert.equal(patch.name,'Pedro González');assert.equal(patch.profileStatus,'active');
+  assert.equal(getProfileCompletionPlan({profile:{...before,...patch}}).skip,true);
+  assert.equal(getProfileCompletionPlan({profile:{profileStatus:'active',name:'Jo Smith',phone:'+595981123456'}}).skip,true);
+  assert.equal(buildMissingProfilePatch({currentProfile:before,submittedName:'Jo Smith',submittedPhone:'+595981123456'}).profileStatus,undefined);
 });

@@ -21,10 +21,9 @@ export const ESTADOS = {
   DESCONOCIDO: 'DESCONOCIDO',
 };
 
-// Generado a mano a partir de inspección de código el 2026-09-06. El botón
-// "Revalidar" del panel actualiza `lastLiveCheck` de los nodos que sí tienen
-// una prueba en vivo real (ver flujo-conexiones-admin.js); todo lo demás
-// conserva esta fecha como "última revisión de código".
+// Inventario de evidencia de código. El monitor automático superpone pruebas
+// recientes de producción y CI sin sellos ni confirmaciones manuales. Los
+// registros sin prueba disponible conservan el estado sin confirmar.
 export const GENERATED_AT = '2026-10-06';
 
 const RAW_NODES = [
