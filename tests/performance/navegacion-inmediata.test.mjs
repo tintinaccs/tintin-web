@@ -91,7 +91,11 @@ test('todas las páginas públicas apuntan al bootstrap nuevo', () => {
 
 test('el adaptador y el preload comparten una sola identidad de navegación', () => {
   const adapter = fs.readFileSync('js/inicio-navegacion-publica.js', 'utf8');
-  assert.match(adapter, new RegExp(`const ENTRY_VERSION = '${version}'`));
+  const actualVersion = adapter.match(/entryUrl\.searchParams\.set\('v', '([^']+)'\)/)?.[1]
+    || adapter.match(/const ENTRY_VERSION = '([^']+)'/)?.[1];
+  assert.equal(actualVersion, version, 'La URL importada debe coincidir con el modulepreload.');
+  const baseline = JSON.parse(fs.readFileSync('scripts/cache-version-baseline.json', 'utf8'));
+  assert.equal(actualVersion, baseline['js/components/navigation/entrada-navegacion-publica.js'].version);
 });
 
 test('el carrito se inicia únicamente desde la navegación modular', () => {
