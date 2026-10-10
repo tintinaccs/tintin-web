@@ -1670,3 +1670,11 @@ PASS_PRODUCTION de la importación antecedente: Apps Script terminó la segunda 
 
 
 Seguimiento 2026-10-09 (Codex): mantenimiento de #1079 run 37966815736 SUCCESS; merge a main 25f8a866e47d23cfb13a60e79a648ba4c789c437. Nuevo candidato de #1080 integra esa base, conserva su política protegida y regenera el manifiesto; CI combinado pendiente. En Apps Script se observaron ciclos completos de 190.273s a las 13:56 y 119.955s a las 14:00, junto con ciclos omitidos por bloqueo completados sin error. Un ciclo a las 13:50 terminó por timeout. El 403 de GitHub fue confirmado por la sonda 37964773481: cuota efectiva 5000 y remaining=0, reinicio 14:15:38. La aprobación siguiente sufrió fetch failed; la última pasó sin modificar los controles.
+
+## Apps Script reconciliation reliability — 2026-10-10 (local candidate)
+
+- Evidence: a recent live `tintinReconciliarAdminParidad` execution failed in `tintinLocalProperties_()` with a Drive timeout while accessing DocumentProperties. The failure affects the scheduled reconciliation; no live deployment was changed.
+- Candidate: routine flags/fingerprints use ScriptProperties. The explicit installer migrates only missing `TINTIN_LOCAL_*`/`LOCAL_BASE_*` values, preserves current values and backup ID, and avoids copying unrelated properties.
+- PASS_LOCAL on clean branch `codex/fix-sheets-properties-timeout-20261010`, base `origin/main` `13ae3de5`: sync-related tests 48/48; `npm.cmd run build:pages` exit 0; `git diff --check` clean.
+- GitHub CI exposed the existing `Protected flow integrity` gate. Temporary Windows-only path fixes for two sealed tests and a generated maintenance plan were removed after the official workflow rejected modification of the legacy seal. The current PR leaves that seal and inventory unchanged; repository audit/CodeQL/Pages checks for the new SHA remain in progress.
+- NOT_VERIFIED: live Apps Script source/version, successful post-migration trigger runs, authenticated canary and complete Sheets/Firestore reconciliation. No merge, deployment, production writes, catalog/customer/account mutation, or DNS changes.

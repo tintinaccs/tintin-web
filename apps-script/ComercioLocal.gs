@@ -3,7 +3,22 @@
 var TINTIN_LOCAL_MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var TINTIN_LOCAL_PATH = '/api/local-commerce-webhook';
 var TINTIN_LOCAL_BOOK = '106Z1A8veL9fGMc4U7R10NVNMsJiEYt9wiGr4YFAav1U';
-function tintinLocalProperties_() { return PropertiesService.getDocumentProperties() || PropertiesService.getScriptProperties(); }
+// Minute-level triggers should not require a Drive-backed DocumentProperties
+// lookup. One bound project owns this workbook; prefix its private state in
+// ScriptProperties so a Drive timeout cannot abort every reconciliation.
+function tintinLocalProperties_() { return PropertiesService.getScriptProperties(); }
+function tintinMigrateLocalProperties_() {
+  var documentProperties = PropertiesService.getDocumentProperties();
+  var scriptProperties = PropertiesService.getScriptProperties();
+  var legacy = documentProperties ? documentProperties.getProperties() : {};
+  var current = scriptProperties.getProperties();
+  var migrated = {};
+  Object.keys(legacy || {}).forEach(function(key) {
+    if (/^(?:TINTIN_LOCAL_|LOCAL_BASE_)/.test(key) && current[key] == null) migrated[key] = legacy[key];
+  });
+  if (Object.keys(migrated).length) scriptProperties.setProperties(migrated, false);
+  return scriptProperties;
+}
 function tintinLocalText_(value) { return String(value == null ? '' : value).trim(); }
 // setValues interpreta '=' como fórmula: los textos externos siempre son literales.
 function tintinLocalLiteral_(value) { return typeof value==='string'&&/^\s*=/.test(value)?"'"+value:value; }
@@ -171,7 +186,7 @@ function tintinHandleLocalCommerceEdit_(e) {
 }
 // Ejecutar una vez tras publicar el backend. Conserva respaldo completo antes de importar.
 function tintinInstalarComercioLocal() {
-  var book=tintinProductsSpreadsheet_(),properties=tintinLocalProperties_();
+  var book=tintinProductsSpreadsheet_(),properties=tintinMigrateLocalProperties_();
   if(!properties.getProperty('TINTIN_LOCAL_BACKUP_ID')) {
     var copy=book.copy('Respaldo antes de espejo local · '+new Date().toISOString());
     properties.setProperty('TINTIN_LOCAL_BACKUP_ID',copy.getId());

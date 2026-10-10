@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "8d61414ad7b2f793c14897a372da37ba6f2646af79d1737da4607f09e196faca",
+  "sourceFingerprint": "bef81a4f1fe2b051920542e1e1e01dacaecb1cd07f05a271a126cce75e99dfb1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1123,
     "textFiles": 1075,
-    "totalBytes": 16490645,
+    "totalBytes": 16495179,
     "pages": 19,
     "modules": 797
   },
@@ -40333,8 +40333,8 @@
     },
     {
       "path": "tests/sync/comercio-local.test.mjs",
-      "bytes": 15848,
-      "sha256": "dc4e955daa88fb3b20714657db3c2f95d705a5adece199dbcc752dad5bbac886",
+      "bytes": 17768,
+      "sha256": "0877f311207bc7a3a0433a08d82a718c1b587147917937010807c50f80dbf3c0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40404,11 +40404,11 @@
       "endpoints": [
         {
           "url": "https://tintin.example/api/local-commerce",
-          "line": 87
+          "line": 106
         },
         {
           "url": "https://tintin.example/api/local-commerce-webhook",
-          "line": 88
+          "line": 107
         }
       ]
     },
@@ -42464,8 +42464,8 @@
     {
       "path": "apps-script/ComercioLocal.gs",
       "extension": ".gs",
-      "bytes": 16955,
-      "sha256": "e9c72a1cf43af5d89b822959a4fd8b21f9579972dafc224d3a8a2a34152c4e5b"
+      "bytes": 17750,
+      "sha256": "90fc67e4629132d6868bac362834394ba7ee7e3138be09baee9929906495763d"
     },
     {
       "path": "apps-script/ContratoCuentas.gs",
@@ -43664,8 +43664,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 374098,
-      "sha256": "2b01092aff558df91166b4df7ba7a6a60c019a1e1f9d9035ca0b679f7f347636"
+      "bytes": 375456,
+      "sha256": "c47c2adb2dee1704d4a94a8917c45a36debdcabe44a35bb6890bf6e62931f536"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -43766,8 +43766,8 @@
     {
       "path": "docs/autoridades-sincronizacion.md",
       "extension": ".md",
-      "bytes": 6811,
-      "sha256": "53c3b658b21aa411d09c8a6abed290012566b90a2d3a27bb6c0f75dd326b59e8"
+      "bytes": 7272,
+      "sha256": "ae182864fc5f1b935bdcce1320361006921c0e3db472788605805db741d9653d"
     },
     {
       "path": "docs/capas-css.md",
@@ -48722,8 +48722,8 @@
     {
       "path": "tests/sync/comercio-local.test.mjs",
       "extension": ".mjs",
-      "bytes": 15848,
-      "sha256": "dc4e955daa88fb3b20714657db3c2f95d705a5adece199dbcc752dad5bbac886"
+      "bytes": 17768,
+      "sha256": "0877f311207bc7a3a0433a08d82a718c1b587147917937010807c50f80dbf3c0"
     },
     {
       "path": "tests/sync/engagement-sheet-sync-queue.test.mjs",
