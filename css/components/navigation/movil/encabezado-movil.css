@@ -271,4 +271,11 @@
     letter-spacing:0;
     text-transform:none;
   }
+  /* La navegación permanece operable delante de las superficies públicas. */
+  html body #tt-tabbar { z-index:2147483647 !important; }
+  html body #collections-sheet,
+  html body #account-drawer #account-panel,
+  html body #notifications-drawer #tt-notifications-list {
+    padding-bottom:calc(var(--tt-mobile-nav-clearance,108px) + env(safe-area-inset-bottom)) !important;
+  }
 }

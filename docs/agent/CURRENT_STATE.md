@@ -1,10 +1,12 @@
-# Ficha y navegación públicas — 2026-10-09
+# Navegación móvil siempre al frente — 2026-10-10
 
-Base 268067dfad7ed6eb305ecd17dcd64c08a4b1e214; PR #1084, rama fix/ocultar-social-producto. Pedido del propietario: ocultar comentarios, Me gusta y Compartir de la ficha; fondo continuo de Tu selección; WhatsApp fijo sin parpadeo; Catálogo en todos los headers y cápsula móvil que cubra icono y texto con separación.
+Base ec63adce6551cb6210c20fdcea21c4f3447f2896; rama fix/mobile-nav-front. Pedido del propietario: mantener la barra móvil delante y operable en Inicio, Buscar, Catálogo, Notificaciones, Carrito y Cuenta, en cualquier página y al abrir paneles.
 
-Se retiran controles y carga del módulo público de reseñas. Se conservan datos, API, administración, favoritos de perfil y selección, reglas y permisos. Selección con fondo transparente. El flotante deja de respirar y alternar por contenido normal durante scroll; avisos superpuestos conservan su exclusión temporal. El header ignora la etiqueta antigua TIENDA guardada en apariencia. La cápsula se dibuja dentro de cada botón activo, sin raya independiente, con etiquetas visibles incluso al hacer scroll y ancho seguro con 5/6 acciones. Cadena de caché alineada.
+Causa verificada en producción: barra z-index 1400 debajo de superficies 1460; el controlador la marcaba inert. Corrección limitada a navegación: capa frontal de barra móvil, exclusión de navegación del bloqueo de fondo móvil, foco compartido entre panel y barra, aria-modal false en móvil con barra operable. Desktop/tablet conservan aislamiento modal. Se reserva espacio inferior en Catálogo, Cuenta y Alertas para que el contenido final no quede bajo la barra.
 
-PASS_LOCAL: 37 pruebas Chromium específicas (26 de ficha/cápsula en 5 páginas, 7 de WhatsApp fijo en 320–1920px y 4 de controles/favoritos); 80 pruebas Node de interacción/carrito/regresiones. Auditoría de navegación pública PASS. La vista previa anterior acredita ocultación y fondo, no estos nuevos cambios de navegación. CI anterior falló por el test antiguo que exigía Me gusta; contrato actualizado conservando persistencia y permisos. NOT_VERIFIED: CI del nuevo SHA, aprobación y producción. Sin escrituras de datos productivos.
+PASS_LOCAL: 16 pruebas Chromium específicas: 5 páginas × 3 anchos (320,390,767), cambios entre 5 paneles, hit testing de todas las opciones incluido Inicio, aislamiento del contenido, Escape y ciclo de teclado entre barra/panel; regresión desktop 1440. NOT_VERIFIED: CI, aprobación y publicación del nuevo SHA. Impacto: CSS móvil, controlador y bootstrap; referencias transitivas y artefactos canónicos. Sin cambios de datos, Firestore, autenticación, permisos, stock, pagos ni pedidos.
+
+La tarea anterior PR #1084 fue mergeada como ec63adce6551cb6210c20fdcea21c4f3447f2896; mantenimiento 38020704927 y monitor 38042669745 SUCCESS; Cloudflare SUCCESS. Producción verificada sin caché: barra social retirada, fondo de selección continuo, Catálogo, cápsulas con márgenes y WhatsApp verde fijo sin animación. Esa evidencia no acredita este nuevo cambio.
 
 ## Evidencia histórica de main
 
