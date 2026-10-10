@@ -168,11 +168,16 @@
       requestAnimationFrame(() => window.scrollTo(0, returnY));
     }
 
+    getMobileNavigation() {
+      return this.getBreakpoint() === 'mobile' ? document.getElementById('tt-tabbar') : null;
+    }
+
     setBackgroundInert(activeElement, inert) {
       if (inert) {
         this.inertState.clear();
+        const navigation = this.getMobileNavigation();
         [...document.body.children].forEach(node => {
-          if (!(node instanceof HTMLElement) || node === activeElement || node.contains(activeElement) || node === this.backdrop || node === this.morphLayer || node.tagName === 'SCRIPT') return;
+          if (!(node instanceof HTMLElement) || node === activeElement || node.contains(activeElement) || (navigation && node.contains(navigation)) || node === this.backdrop || node === this.morphLayer || node.tagName === 'SCRIPT') return;
           this.inertState.set(node, node.inert);
           node.inert = true;
         });
@@ -229,6 +234,9 @@
       this.setExpanded(config, true);
 
       if (config.modal) {
+        if (config.element.hasAttribute('aria-modal')) {
+          config.element.setAttribute('aria-modal', String(!this.getMobileNavigation()));
+        }
         this.setBackdrop(true, name);
         this.lockScroll();
         this.setBackgroundInert(config.element, true);
@@ -349,7 +357,10 @@
 
       const config = this.registry.get(this.surface);
       if (!config?.modal) return;
-      const nodes = [...config.element.querySelectorAll(FOCUSABLE)].filter(node => node.offsetParent !== null);
+      const roots = [config.element];
+      const navigation = this.getMobileNavigation();
+      if (navigation) roots.push(navigation);
+      const nodes = roots.flatMap(root => [...root.querySelectorAll(FOCUSABLE)]).filter(node => node.offsetParent !== null);
       if (!nodes.length) {
         event.preventDefault();
         config.element.focus();
