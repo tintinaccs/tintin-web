@@ -56,7 +56,7 @@ test('el aviso nunca borra datos del navegador ni recarga por su cuenta', () => 
 
 test('el cargador lo inicia en ambos runtimes, fuera del checkout y de iframes', () => {
   const loader = read('js/cargador-pagina.js');
-  assert.match(loader, /importSibling\('quality\/vigilancia-version\.js', 'Version Watch'\)/);
+  assert.match(loader, /importSibling\('quality\/vigilancia-version\.js', 'Version Watch'(?:,\s*undefined,\s*'[\w.-]+')?\)/);
   assert.equal(loader.match(/^\s*bootVersionWatch\(\);/gm)?.length, 2);
   assert.match(loader, /if \(isVisualPreviewFrame \|\| framed\) return;/);
   assert.match(loader, /checkout\(\?:\\\.html\)\?\$/);

@@ -10,6 +10,8 @@ RESUELTO acceso: tras CONNECT 403 inicial, GitHub API y la portada productiva re
 
 Plan protegido oficial: 85 archivos, 59 registros afectados, conservando 78 registros y 541 archivos. CI y revisión manual del propietario para el SHA final siguen pendientes. No se aprueba por el propietario ni se cambia el control protegido. Confirmación de pedido productivo pendiente; las pruebas locales preservan autorización, stock, precios e idempotencia con datos aislados.
 
+Validación adicional tras el primer CI: bloque operativo de Actions reproducido con 678 pruebas Node PASS (la última ejecución de code-studio registra cero pruebas y no se presenta como cobertura). Se conservan favoritos en catálogo/perfil y los datos sociales históricos; las pruebas de la ficha ahora exigen ocultar Me gusta/comentarios. Recuperación real del formulario de WhatsApp: 3 pruebas de navegador PASS, con aborto por plazo, datos conservados y respuesta tardía descartada. Los seis contratos Maestro/Admin de Actions pasan localmente. La salud productiva previa al despliegue pasa con peticiones GET y Node usando el proxy del entorno; no confirma un pedido ni el despliegue del candidato. CI debe volver a pasar para este nuevo commit.
+
 ---
 
 # Estado vigente — 2026-10-09: pedidos históricos y clientes locales
