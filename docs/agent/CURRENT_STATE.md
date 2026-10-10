@@ -1,3 +1,9 @@
+# Reconciliación de publicación — 2026-10-09 (America/Buenos_Aires)
+
+Codex /root: main avanzó a 268067dfad7ed6eb305ecd17dcd64c08a4b1e214 (#1078) durante la preparación. Se integra sin descartar sus cambios: todas las miniaturas por color, fotos en tarjetas, paleta compartida y CSS inicial de Producto. Se conserva el registro mínimo, márgenes, WhatsApp, agotados y retiro de comunidad solicitados en este PR. El renderer combinado recibe una URL nueva de caché; se regeneran baseline, plan y manifiesto desde las autoridades oficiales. Se repiten las pruebas de galería/colores/primer render y las del parser. La aprobación previa no cubre este candidato ni su base nueva; publicación pendiente de CI y nueva revisión protegida. La validación canónica del árbol b735fbd5 fue 126/126 PASS antes de esta integración, sin heredar ese PASS al árbol combinado. PASS_LOCAL del árbol combinado: 111 pruebas Node de catálogo/operaciones/URLs/caché; revisión public shell. La primera prueba combinada dio 52 aprobadas y tres fallas de contraste de WhatsApp en Producto, causadas por el CSS inicial recién incorporado. Se excluye el enlace de WhatsApp de la regla de color de links del footer, conservando el contrato blanco/verde compartido, y se repiten las pruebas de navegador: 54 PASS y una recuperación de WhatsApp PASS al reintentar; la causa es reloj de prueba no pausado, ya corregido y verificado en 390/768/1440 px sin reintentos. La comprobación visual de footer espera DOMContentLoaded y las propiedades CSS requeridas; el estado load podía quedar bloqueado por conexiones externas del entorno. CodeQL aprobó el cambio de parser en b735fbd5; se repetirá sobre el SHA combinado.
+
+---
+
 # Publicación de WhatsApp — 2026-10-09 (America/Buenos_Aires)
 
 Agente: Codex /root. El propietario aprobó mantenimiento 38016532386 y el veredicto pasó para 7ed95409837728b968df8ccf0443fe85bb635b68. Repository audit completo, ambos Analyze y Pages PASS para ese candidato; matrices locales canónica 126/126 y pública 187/187 PASS. La integración sigue bloqueada por ocho conversaciones de CodeQL: cuatro filtros de scripts por regexp en fixtures de pruebas/auditoría. No se eluden conversaciones ni se usa bypass administrativo.
@@ -25,6 +31,19 @@ Validación adicional tras el primer CI: bloque operativo de Actions reproducido
 Segundo CI (1fdced09): compilación reproducible, contratos estáticos/operativos, reglas Firestore y Maestro/Admin PASS en GitHub. El bloque de navegador llegó a la matriz canónica: 119/126, con siete plazos agotados de admin.html. La sonda con el SDK oficial 10.14.1 descargado por curl con TLS verificado alcanzó DOMContentLoaded en 1240 ms; no valida Auth/App Check remotos. La geometría de Administración ahora usa HTML/CSS y navegación lateral reales con scripts de negocio retirados y CSP connect-src/frame-src/form-action none, como sus fixtures existentes. Exige panel visible y registra geometryMode=isolated-admin-layout; conserva los plazos y controles de overflow. Primera ejecución local: 125/126, Administración 7/7 PASS; checkout 1440 agotó el plazo mientras corría otra auditoría. Se detuvo esa ejecución global y se repite la matriz sola; no se la presenta como PASS completo. El contrato de identidad de navegación verifica ahora la URL efectivamente importada contra preload y registro: 9 pruebas PASS. Se debe repetir CI para el nuevo candidato.
 
 ---
+# Revision PR #1078 — productos y colores, 2026-10-09
+
+Base main 6d7c644a913c25710c1d1604fb4ff07ec7f2d644. Conflictos resueltos conservando compradores dentro de Pedidos, espejo local y mecanismos de proteccion.
+
+Pedido adicional del propietario: mantener TODAS las miniaturas visibles, agrupadas por color; circulo selecciona primera foto correspondiente y miniatura sincroniza circulo. Galeria ampliada conserva todas las fotos. 18/18 pruebas de galeria final PASS en 320–1920 px.
+
+Se corrige fallback de colores (clara no inventa gris), fotos imageUrls en tarjetas, aspecto administrativo y carga de la paleta antes del renderer en todas las superficies publicas. CSS final de Producto disponible desde el head, sin depender del SDK diferido.
+
+PASS_LOCAL: 40 pruebas Chromium en 320/390/709/768/1024/1280/1440/1920; 86 pruebas Node de catalogo y mantenimiento (7/7 colores final). Auditoria public shell PASS. Productos relacionados: ciclos sin duplicar colecciones/productos cubiertos por pruebas existentes. Build Pages final PASS (rutas, CSP, manifiesto y cache). CI remoto pendiente para el SHA candidato. NOT_VERIFIED: vista previa requiere Cloudflare Access; prueba adicional master-presentation local agoto espera de politica SDK, no computada como PASS. Se elimina filtrado regex de scripts en pruebas y generador para resolver avisos CodeQL.
+
+Verificacion publica de main: CELINA cambia URL de foto al seleccionar plateado, seleccion plateado activa e imagen plateada cargada; WhatsApp verde rgb(22,133,65), comentarios antes del footer y tres recomendaciones de colecciones distintas. Esta observacion no acredita despliegue del candidato. Sin escrituras de catalogo, pedidos, pagos, inventario ni sesiones.
+
+## Evidencia historica conservada
 
 # Estado vigente — 2026-10-09: pedidos históricos y clientes locales
 

@@ -40,7 +40,8 @@ const fixture=removeFixtureScripts(login).replace('</body>',`<script type="modul
 for (const width of [390, 768, 1440]) {
   test(`WhatsApp cancela la comprobación tardía y permite reintentar sin perder datos a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.clock.install();
+    await page.clock.install({ time: new Date('2026-10-09T12:00:00Z') });
+    await page.clock.pauseAt(new Date('2026-10-09T12:01:00Z'));
     await page.route('**/__availability-recovery', route => route.fulfill({ contentType:'text/html', body:fixture }));
     await page.goto('/__availability-recovery');
     const name=page.locator('#login-profile-first-name'),phone=page.locator('#login-profile-phone'),button=page.locator('#btn-save-profile');

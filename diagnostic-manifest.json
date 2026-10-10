@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2f14f6884808dd3d55068d606f10967639e649710287593fcb9e00f085df352d",
+  "sourceFingerprint": "d3b1d9702c30aaa80c76882779765f48cb17bf379721d74c89ee5886963ab9fe",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1098,
-    "textFiles": 1050,
-    "totalBytes": 16294269,
+    "files": 1100,
+    "textFiles": 1052,
+    "totalBytes": 16309182,
     "pages": 19,
-    "modules": 780
+    "modules": 782
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 13034,
-      "sha256": "f16f2e7bd85553e5ab0fb95fab3dc92368d439e9dba2dc1811a48371508c6470",
+      "bytes": 13031,
+      "sha256": "8ec707b47f481ad4beae28951fffdd681238887982b41a8a1b4102fab894faba",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -119,7 +119,7 @@
           "line": 9
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -139,7 +139,7 @@
           "line": 176
         },
         {
-          "raw": "/tienda.js?v=tintin-20261009-whatsapp-responsive-1",
+          "raw": "/tienda.js?v=tintin-20261010-whatsapp-release-3",
           "target": "tienda.js",
           "line": 177
         },
@@ -534,7 +534,7 @@
           "exists": true
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -558,7 +558,7 @@
           "exists": true
         },
         {
-          "raw": "/tienda.js?v=tintin-20261009-whatsapp-responsive-1",
+          "raw": "/tienda.js?v=tintin-20261010-whatsapp-release-3",
           "target": "tienda.js",
           "line": 177,
           "exists": true
@@ -813,8 +813,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23125,
-      "sha256": "bec8f816381377d6f2c1ea40c9568117a2b487c87dbdbfd1cffb6264dc73fb7d",
+      "bytes": 23256,
+      "sha256": "0181ddda5b8438d8b4c7df8c644eba0c9bf3c0d8b497231b7756fe6b871b6cbc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -829,13 +829,13 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 268,
+          "line": 269,
           "module": true,
           "ok": true,
           "error": ""
         },
         {
-          "line": 272,
+          "line": 273,
           "module": true,
           "ok": true,
           "error": ""
@@ -864,44 +864,49 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 264
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 265
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 265
+          "line": 266
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 266
+          "line": 267
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 267
+          "line": 268
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 319
+          "line": 320
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 320
+          "line": 321
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 321
+          "line": 322
         }
       ],
       "styles": [
@@ -1252,51 +1257,57 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 264,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 265,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 265,
+          "line": 266,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 266,
+          "line": 267,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 267,
+          "line": 268,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 319,
+          "line": 320,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 320,
+          "line": 321,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 321,
+          "line": 322,
           "exists": true
         },
         {
@@ -8036,8 +8047,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14586,
-      "sha256": "6a8be98b6a11392c55178de9f63d2fa7969128786f8ba478a8975104746e2021",
+      "bytes": 14717,
+      "sha256": "7ae9f55c6d60915c52bb2168b9cbcbb79893609805c68ddd6dab22c18aadd10f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8052,7 +8063,7 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 177,
+          "line": 178,
           "module": true,
           "ok": true,
           "error": ""
@@ -8081,44 +8092,49 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 173
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 174
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 174
+          "line": 175
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 175
+          "line": 176
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 176
+          "line": 177
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 181
+          "line": 182
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 182
+          "line": 183
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 183
+          "line": 184
         }
       ],
       "styles": [
@@ -8411,51 +8427,57 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 173,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 174,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 174,
+          "line": 175,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 175,
+          "line": 176,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 176,
+          "line": 177,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 181,
+          "line": 182,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 182,
+          "line": 183,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 183,
+          "line": 184,
           "exists": true
         },
         {
@@ -8642,8 +8664,8 @@
         "guest",
         "client"
       ],
-      "bytes": 53514,
-      "sha256": "989868b2425e18a5c719b166454043e0e4b83c6b90d3c00638542246cd264f5d",
+      "bytes": 53645,
+      "sha256": "f46563cf2187becabae86d3e78142bfab5794f356fdd1cedfc6b11fe1fefdf55",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8664,13 +8686,13 @@
           "error": ""
         },
         {
-          "line": 491,
+          "line": 492,
           "module": true,
           "ok": true,
           "error": ""
         },
         {
-          "line": 496,
+          "line": 497,
           "module": true,
           "ok": true,
           "error": ""
@@ -8699,49 +8721,54 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 490
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 491
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 495
+          "line": 496
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 964
+          "line": 965
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 965
+          "line": 966
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 966
+          "line": 967
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 967
+          "line": 968
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 968
+          "line": 969
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 969
+          "line": 970
         }
       ],
       "styles": [
@@ -9019,57 +9046,63 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 490,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 491,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 495,
+          "line": 496,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 964,
+          "line": 965,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 965,
+          "line": 966,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 966,
+          "line": 967,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 967,
+          "line": 968,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 968,
+          "line": 969,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 969,
+          "line": 970,
           "exists": true
         },
         {
@@ -9344,8 +9377,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 118666,
-      "sha256": "ce27e84b648007d7116cec6b0043c2b4d739c152e4951ebfb682487d43230da0",
+      "bytes": 118797,
+      "sha256": "34ed089b3062113c2cdb6695a4ad48b0cd60987c8a5d17208566f53f855c7ca3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9395,7 +9428,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -9415,14 +9448,19 @@
           "line": 1899
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 1900
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 1901
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1901
+          "line": 1902
         }
       ],
       "styles": [
@@ -9529,7 +9567,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 1908
+          "line": 1909
         }
       ],
       "links": [
@@ -9571,7 +9609,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 1907
+          "line": 1908
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -9581,7 +9619,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1912
+          "line": 1913
         },
         {
           "raw": "/catalogo",
@@ -9591,7 +9629,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1920
+          "line": 1921
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -9601,7 +9639,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1921
+          "line": 1922
         },
         {
           "raw": "/about",
@@ -9611,7 +9649,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1928
+          "line": 1929
         },
         {
           "raw": "/envios",
@@ -9621,7 +9659,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1929
+          "line": 1930
         },
         {
           "raw": "/cambios-devoluciones",
@@ -9631,7 +9669,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1930
+          "line": 1931
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -9641,7 +9679,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1931
+          "line": 1932
         },
         {
           "raw": "/terminos",
@@ -9651,7 +9689,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1932
+          "line": 1933
         },
         {
           "raw": "/privacidad",
@@ -9661,7 +9699,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1933
+          "line": 1934
         },
         {
           "raw": "/sitemap.xml",
@@ -9671,7 +9709,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1934
+          "line": 1935
         },
         {
           "raw": "/contact",
@@ -9681,7 +9719,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1941
+          "line": 1942
         },
         {
           "raw": "tel:+595981299331",
@@ -9691,7 +9729,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1942
+          "line": 1943
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -9701,7 +9739,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1943
+          "line": 1944
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -9711,7 +9749,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1944
+          "line": 1945
         }
       ],
       "references": [
@@ -9740,7 +9778,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -9764,15 +9802,21 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 1900,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 1901,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1901,
+          "line": 1902,
           "exists": true
         },
         {
@@ -9892,67 +9936,67 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 1908,
+          "line": 1909,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 1920,
+          "line": 1921,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 1921,
+          "line": 1922,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 1928,
+          "line": 1929,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 1929,
+          "line": 1930,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 1930,
+          "line": 1931,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 1931,
+          "line": 1932,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 1932,
+          "line": 1933,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 1933,
+          "line": 1934,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 1934,
+          "line": 1935,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 1941,
+          "line": 1942,
           "exists": true
         }
       ],
@@ -10381,8 +10425,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16281,
-      "sha256": "23139806bb3f8d6712930b0fe1ffa85725aa7fea95fda9933848c742b9031292",
+      "bytes": 16412,
+      "sha256": "5d9afebe09ef3b7e7403a79ecf989bcae8f301dc72e652000c096590303cbcf9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10403,7 +10447,7 @@
           "error": ""
         },
         {
-          "line": 198,
+          "line": 199,
           "module": true,
           "ok": true,
           "error": ""
@@ -10432,49 +10476,54 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 193
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 194
         },
         {
           "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20261009-whatsapp-responsive-1",
           "target": "js/pages/collections/pagina-colecciones.js",
-          "line": 194
+          "line": 195
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 195
+          "line": 196
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 196
+          "line": 197
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 197
+          "line": 198
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 202
+          "line": 203
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 203
+          "line": 204
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 204
+          "line": 205
         }
       ],
       "styles": [
@@ -10777,57 +10826,63 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 193,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 194,
           "exists": true
         },
         {
           "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20261009-whatsapp-responsive-1",
           "target": "js/pages/collections/pagina-colecciones.js",
-          "line": 194,
+          "line": 195,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 195,
+          "line": 196,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 196,
+          "line": 197,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 197,
+          "line": 198,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 202,
+          "line": 203,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 203,
+          "line": 204,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 204,
+          "line": 205,
           "exists": true
         },
         {
@@ -11020,8 +11075,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21112,
-      "sha256": "7295e795122d158a891e23f06f5ee40085a727f4ebb6be0ff12c7c2ff93fa922",
+      "bytes": 21243,
+      "sha256": "2c973348e04a658ccef056ffc9894f20d1ccc927c7e80766b98fd28ce0d48b0a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11036,13 +11091,13 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 214,
+          "line": 215,
           "module": false,
           "ok": true,
           "error": ""
         },
         {
-          "line": 258,
+          "line": 259,
           "module": true,
           "ok": true,
           "error": ""
@@ -11071,44 +11126,49 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 214
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 215
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 255
+          "line": 256
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 256
+          "line": 257
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 257
+          "line": 258
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 262
+          "line": 263
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 263
+          "line": 264
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 264
+          "line": 265
         }
       ],
       "styles": [
@@ -11441,51 +11501,57 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 214,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 215,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 255,
+          "line": 256,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 256,
+          "line": 257,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 257,
+          "line": 258,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 262,
+          "line": 263,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 263,
+          "line": 264,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 264,
+          "line": 265,
           "exists": true
         },
         {
@@ -11732,8 +11798,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18208,
-      "sha256": "15c96c3362a2c424476666eed89b4b91bfd8c607eb238bbd1ca08d9b913e4c19",
+      "bytes": 18339,
+      "sha256": "2c7616a652b4244b96308aedcc55f732846fba2a18cd429ee56f7c56edec1209",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11748,13 +11814,13 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 176,
+          "line": 177,
           "module": true,
           "ok": true,
           "error": ""
         },
         {
-          "line": 183,
+          "line": 184,
           "module": true,
           "ok": true,
           "error": ""
@@ -11783,44 +11849,49 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 172
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 173
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 173
+          "line": 174
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 174
+          "line": 175
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 175
+          "line": 176
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 182
+          "line": 183
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 243
+          "line": 244
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 244
+          "line": 245
         }
       ],
       "styles": [
@@ -12113,51 +12184,57 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 172,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 173,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 173,
+          "line": 174,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 174,
+          "line": 175,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 175,
+          "line": 176,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 182,
+          "line": 183,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 243,
+          "line": 244,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 244,
+          "line": 245,
           "exists": true
         },
         {
@@ -12384,8 +12461,8 @@
         "guest",
         "client"
       ],
-      "bytes": 32371,
-      "sha256": "df6c311a33933090f48a437d02b671d1d4f019efbbc695cb39368d2beda03e96",
+      "bytes": 32502,
+      "sha256": "9e9a75c348e5c4c36dc6fda7f6194fc7968c47da94051971582f2d1043916580",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12418,7 +12495,7 @@
           "error": ""
         },
         {
-          "line": 425,
+          "line": 426,
           "module": true,
           "ok": true,
           "error": ""
@@ -12447,59 +12524,64 @@
           "line": 12
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 13
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 418
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 419
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 419
+          "line": 420
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 420
+          "line": 421
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 421
+          "line": 422
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 422
+          "line": 423
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 423
+          "line": 424
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261004-admin-connections-3",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 424
+          "line": 425
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 429
+          "line": 430
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 465
+          "line": 466
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 466
+          "line": 467
         }
       ],
       "styles": [
@@ -12923,69 +13005,75 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 13,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 418,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 419,
           "exists": true
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 419,
+          "line": 420,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 420,
+          "line": 421,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 421,
+          "line": 422,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 422,
+          "line": 423,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 423,
+          "line": 424,
           "exists": true
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261004-admin-connections-3",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 424,
+          "line": 425,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 429,
+          "line": 430,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 465,
+          "line": 466,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 466,
+          "line": 467,
           "exists": true
         },
         {
@@ -13313,8 +13401,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 66384,
-      "sha256": "b44dda9508188fa9e2bc72a4bbffc9a7290964364a39d8d9b2a255bc2646016f",
+      "bytes": 66515,
+      "sha256": "fbe755b74c1c08c179642e43864bf7ecece7ffc742b54355ed5ac756785ed7e0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13370,7 +13458,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -13380,14 +13468,19 @@
           "line": 1237
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 1238
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 1239
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1239
+          "line": 1240
         }
       ],
       "styles": [
@@ -13565,7 +13658,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -13577,15 +13670,21 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 1238,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 1239,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1239,
+          "line": 1240,
           "exists": true
         },
         {
@@ -14065,8 +14164,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48064,
-      "sha256": "477a133b03209cc6908c3cacba6af41f748333a5b354aa60a64fc687d48f42ea",
+      "bytes": 48195,
+      "sha256": "d8f17a1d71f276c5bb44f1cdbc43eab7f5e17ac7861a7e7989040b557ca04752",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14093,7 +14192,7 @@
           "error": ""
         },
         {
-          "line": 340,
+          "line": 341,
           "module": true,
           "ok": true,
           "error": ""
@@ -14122,49 +14221,54 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 338
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 339
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 770
+          "line": 771
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20261009-whatsapp-responsive-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 771
+          "line": 772
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20261007-public-consistency-1",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 772
+          "line": 773
         },
         {
           "raw": "js/pages/profile/pedidos-perfil.js?v=tintin-20261008-producto-superficies-1",
           "target": "js/pages/profile/pedidos-perfil.js",
-          "line": 773
+          "line": 774
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 774
+          "line": 775
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 775
+          "line": 776
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 776
+          "line": 777
         }
       ],
       "styles": [
@@ -14261,7 +14365,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 783
+          "line": 784
         }
       ],
       "links": [
@@ -14333,7 +14437,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 782
+          "line": 783
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -14343,7 +14447,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 787
+          "line": 788
         },
         {
           "raw": "/catalogo",
@@ -14353,7 +14457,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 795
+          "line": 796
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -14363,7 +14467,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 796
+          "line": 797
         },
         {
           "raw": "/about",
@@ -14373,7 +14477,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 803
+          "line": 804
         },
         {
           "raw": "/envios",
@@ -14383,7 +14487,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 804
+          "line": 805
         },
         {
           "raw": "/cambios-devoluciones",
@@ -14393,7 +14497,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 805
+          "line": 806
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -14403,7 +14507,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 806
+          "line": 807
         },
         {
           "raw": "/terminos",
@@ -14413,7 +14517,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 807
+          "line": 808
         },
         {
           "raw": "/privacidad",
@@ -14423,7 +14527,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 808
+          "line": 809
         },
         {
           "raw": "/sitemap.xml",
@@ -14433,7 +14537,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 809
+          "line": 810
         },
         {
           "raw": "/contact",
@@ -14443,7 +14547,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 816
+          "line": 817
         },
         {
           "raw": "tel:+595981299331",
@@ -14453,7 +14557,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 817
+          "line": 818
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -14463,7 +14567,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 818
+          "line": 819
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -14473,7 +14577,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 819
+          "line": 820
         }
       ],
       "references": [
@@ -14502,57 +14606,63 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 338,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 339,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 770,
+          "line": 771,
           "exists": true
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20261009-whatsapp-responsive-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 771,
+          "line": 772,
           "exists": true
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20261007-public-consistency-1",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 772,
+          "line": 773,
           "exists": true
         },
         {
           "raw": "js/pages/profile/pedidos-perfil.js?v=tintin-20261008-producto-superficies-1",
           "target": "js/pages/profile/pedidos-perfil.js",
-          "line": 773,
+          "line": 774,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 774,
+          "line": 775,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 775,
+          "line": 776,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 776,
+          "line": 777,
           "exists": true
         },
         {
@@ -14660,7 +14770,7 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 783,
+          "line": 784,
           "exists": true
         },
         {
@@ -14684,61 +14794,61 @@
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 795,
+          "line": 796,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 796,
+          "line": 797,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 803,
+          "line": 804,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 804,
+          "line": 805,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 805,
+          "line": 806,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 806,
+          "line": 807,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 807,
+          "line": 808,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 808,
+          "line": 809,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 809,
+          "line": 810,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 816,
+          "line": 817,
           "exists": true
         }
       ],
@@ -14916,8 +15026,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15943,
-      "sha256": "559df3ba4f60338a6532aa31141c1e183f729c13441afa336bb60c7117311fd8",
+      "bytes": 16074,
+      "sha256": "e90ed7aece7d9fe47a4617407d27da01b2c29500c8d913b64485746d646e7d61",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14932,7 +15042,7 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 202,
+          "line": 203,
           "module": true,
           "ok": true,
           "error": ""
@@ -14961,44 +15071,49 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 198
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 199
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 199
+          "line": 200
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 200
+          "line": 201
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 201
+          "line": 202
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 206
+          "line": 207
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 207
+          "line": 208
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 208
+          "line": 209
         }
       ],
       "styles": [
@@ -15291,51 +15406,57 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 198,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 199,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 199,
+          "line": 200,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 200,
+          "line": 201,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 201,
+          "line": 202,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261005-flow-progress-2",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 206,
+          "line": 207,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 207,
+          "line": 208,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 208,
+          "line": 209,
           "exists": true
         },
         {
@@ -15522,8 +15643,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18467,
-      "sha256": "085a34f4873793ae001ca5ecea170c04dc0e8b48fd8a9675a40a00dc3767c5a8",
+      "bytes": 18598,
+      "sha256": "187b14aef56c57ee573829aca4a4a76bce9a5d7e11cc3d170d5e3b6c4c66c7d3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15538,7 +15659,7 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 215,
+          "line": 216,
           "module": false,
           "ok": true,
           "error": ""
@@ -15567,39 +15688,44 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 211
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 212
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 212
+          "line": 213
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 213
+          "line": 214
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 214
+          "line": 215
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 224
+          "line": 225
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 225
+          "line": 226
         }
       ],
       "styles": [
@@ -15922,45 +16048,51 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 211,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 212,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 212,
+          "line": 213,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 213,
+          "line": 214,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 214,
+          "line": 215,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 224,
+          "line": 225,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 225,
+          "line": 226,
           "exists": true
         },
         {
@@ -16164,8 +16296,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19462,
-      "sha256": "2c1d8d46f5428502f1ec22d722bacce2d75ecd27480775c273b5df517de424d3",
+      "bytes": 19630,
+      "sha256": "17bf62942a0f38f90ab5622d7163be69787c929f89112d4833cb1e4c775e1a90",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16174,7 +16306,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          127
+          128
         ]
       },
       "duplicateIds": [],
@@ -16209,54 +16341,54 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 257
+          "line": 258
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
           "target": "tienda.js",
-          "line": 258
+          "line": 259
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261004-admin-connections-3",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 259
+          "line": 260
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 260
+          "line": 261
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 261
+          "line": 262
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 262
+          "line": 263
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20261008-producto-superficies-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 263
+          "line": 264
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 264
+          "line": 265
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 265
+          "line": 266
         }
       ],
       "styles": [
@@ -16364,6 +16496,11 @@
           "raw": "css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1",
           "target": "css/pages/secundarias-minimal.css",
           "line": 63
+        },
+        {
+          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261010-whatsapp-release-3",
+          "target": "css/pages/product/product-maintenance.css",
+          "line": 64
         }
       ],
       "images": [
@@ -16373,7 +16510,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 209
+          "line": 210
         }
       ],
       "links": [
@@ -16385,7 +16522,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 71
+          "line": 72
         },
         {
           "raw": "/collections",
@@ -16395,7 +16532,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 73
+          "line": 74
         },
         {
           "raw": "/catalogo",
@@ -16405,7 +16542,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 94
+          "line": 95
         },
         {
           "raw": "/",
@@ -16415,7 +16552,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 208
+          "line": 209
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -16425,7 +16562,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 213
+          "line": 214
         },
         {
           "raw": "/catalogo",
@@ -16435,7 +16572,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 221
+          "line": 222
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -16445,7 +16582,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 222
+          "line": 223
         },
         {
           "raw": "/about",
@@ -16455,7 +16592,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 229
+          "line": 230
         },
         {
           "raw": "/envios",
@@ -16465,7 +16602,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 230
+          "line": 231
         },
         {
           "raw": "/cambios-devoluciones",
@@ -16475,7 +16612,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 231
+          "line": 232
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -16485,7 +16622,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 232
+          "line": 233
         },
         {
           "raw": "/terminos",
@@ -16495,7 +16632,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 233
+          "line": 234
         },
         {
           "raw": "/privacidad",
@@ -16505,7 +16642,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 234
+          "line": 235
         },
         {
           "raw": "/sitemap.xml",
@@ -16515,7 +16652,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 235
+          "line": 236
         },
         {
           "raw": "/contact",
@@ -16525,7 +16662,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 242
+          "line": 243
         },
         {
           "raw": "tel:+595981299331",
@@ -16535,7 +16672,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 243
+          "line": 244
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -16545,7 +16682,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 244
+          "line": 245
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -16555,7 +16692,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 245
+          "line": 246
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -16565,7 +16702,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 254
+          "line": 255
         }
       ],
       "references": [
@@ -16594,7 +16731,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -16602,55 +16739,55 @@
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 257,
+          "line": 258,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
           "target": "tienda.js",
-          "line": 258,
+          "line": 259,
           "exists": true
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261004-admin-connections-3",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 259,
+          "line": 260,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 260,
+          "line": 261,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 261,
+          "line": 262,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 262,
+          "line": 263,
           "exists": true
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20261008-producto-superficies-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 263,
+          "line": 264,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 264,
+          "line": 265,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 265,
+          "line": 266,
           "exists": true
         },
         {
@@ -16780,81 +16917,87 @@
           "exists": true
         },
         {
+          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261010-whatsapp-release-3",
+          "target": "css/pages/product/product-maintenance.css",
+          "line": 64,
+          "exists": true
+        },
+        {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 209,
+          "line": 210,
           "exists": true
         },
         {
           "raw": "/collections",
           "target": "collections.html",
-          "line": 73,
+          "line": 74,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 94,
+          "line": 95,
           "exists": true
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo.html",
-          "line": 221,
-          "exists": true
-        },
-        {
-          "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
           "line": 222,
           "exists": true
         },
         {
+          "raw": "/catalogo?cat=relojes",
+          "target": "catalogo.html",
+          "line": 223,
+          "exists": true
+        },
+        {
           "raw": "/about",
           "target": "about.html",
-          "line": 229,
+          "line": 230,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 230,
+          "line": 231,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 231,
+          "line": 232,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 232,
+          "line": 233,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 233,
+          "line": 234,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 234,
+          "line": 235,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 235,
+          "line": 236,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 242,
+          "line": 243,
           "exists": true
         }
       ],
@@ -16876,7 +17019,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 101
+          "line": 102
         },
         {
           "id": "gallery-main",
@@ -16890,7 +17033,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 109
+          "line": 110
         },
         {
           "id": "specs-trigger",
@@ -16904,7 +17047,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 136
+          "line": 137
         },
         {
           "id": "btn-qty-minus",
@@ -16918,7 +17061,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 147
+          "line": 148
         },
         {
           "id": "btn-qty-plus",
@@ -16932,7 +17075,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 149
+          "line": 150
         },
         {
           "id": "",
@@ -16946,7 +17089,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 154
+          "line": 155
         },
         {
           "id": "btn-product-add-cart",
@@ -16962,7 +17105,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 158
+          "line": 159
         },
         {
           "id": "btn-product-buy-now",
@@ -16978,7 +17121,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 161
+          "line": 162
         },
         {
           "id": "btn-product-wa",
@@ -16992,7 +17135,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 165
+          "line": 166
         },
         {
           "id": "related-refresh",
@@ -17006,7 +17149,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 191
+          "line": 192
         }
       ],
       "controls": []
@@ -17024,8 +17167,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16364,
-      "sha256": "002d1d7028f627450f1a6d24aa1d0c43c197d92d5d4b99e687a2b50ac5e97060",
+      "bytes": 16495,
+      "sha256": "25451dcf0543f36892a88fd8bbfb33890ef0634afdef1c973fd65fa807ae5145",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17062,39 +17205,44 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 192
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 193
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 193
+          "line": 194
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 194
+          "line": 195
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 195
+          "line": 196
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 196
+          "line": 197
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 197
+          "line": 198
         }
       ],
       "styles": [
@@ -17427,45 +17575,51 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261009-whatsapp-responsive-1",
-          "target": "tienda.js",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1",
+          "target": "js/components/images/galeria-producto.js",
           "line": 192,
+          "exists": true
+        },
+        {
+          "raw": "tienda.js?v=tintin-20261010-whatsapp-release-3",
+          "target": "tienda.js",
+          "line": 193,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 193,
+          "line": 194,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261010-whatsapp-release-2",
           "target": "js/analytics/analitica.js",
-          "line": 194,
+          "line": 195,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261009-whatsapp-responsive-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 195,
+          "line": 196,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 196,
+          "line": 197,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20261010-whatsapp-release-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 197,
+          "line": 198,
           "exists": true
         },
         {
@@ -23061,8 +23215,8 @@
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
-      "bytes": 3116,
-      "sha256": "294e09095d0952e484df20d804eb49298e33fe2e383960d4aa05573f4d9a35c3",
+      "bytes": 3113,
+      "sha256": "caa236c5371a3bd522688579f80bb96e2786fae59967dd33da3abd9dd401cb4b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23968,8 +24122,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 14042,
-      "sha256": "b7a5e4ef9e71f320ec2cf593a04ec155c6310a18dd7fcfe58ddf0d0e5646a979",
+      "bytes": 14036,
+      "sha256": "d1d51570752e6eee53f57ae2425f1cbfe1ee6a8d892cdf859746d9f647653741",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24000,7 +24154,7 @@
           "line": 141
         },
         {
-          "raw": "./control-busqueda.js?v=tintin-20261009-whatsapp-responsive-2",
+          "raw": "./control-busqueda.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/components/navigation/compartido/control-busqueda.js",
           "dynamic": true,
           "line": 281
@@ -24038,8 +24192,8 @@
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
-      "bytes": 11083,
-      "sha256": "e5755a15dd411ccecd7621a59872b991fe94b62db5866a621909f758230fc95c",
+      "bytes": 11080,
+      "sha256": "dd4c2a9cbe48fe6b69a7c6536966821010258272a9f0be4499f0524a058f6eed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24308,7 +24462,7 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "bytes": 12180,
-      "sha256": "3b840c231bf21ee584d2150bd36cbc70e078b5921d3da5820f8bf13d3c3091f6",
+      "sha256": "face37d5d1996d8238595c4b7f3bee01e0abb0d57eec8bc92858991e1774cf4a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24375,7 +24529,7 @@
           "line": 10
         },
         {
-          "raw": "./compartido/carga-navegacion.js?v=tintin-20261010-whatsapp-release-2",
+          "raw": "./compartido/carga-navegacion.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/components/navigation/compartido/carga-navegacion.js",
           "dynamic": false,
           "line": 11
@@ -25535,8 +25689,8 @@
     },
     {
       "path": "js/core/store/estado-productos.js",
-      "bytes": 23882,
-      "sha256": "7f60e3e8f0e9a32e4e45098653f88e2574403c62c066b163fc01592bc8a4fa60",
+      "bytes": 23879,
+      "sha256": "0abcca4e31fa9e916d0d742601863036617c0dc40ed76c451a234ddf44cd56ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25585,7 +25739,7 @@
           "line": 23
         },
         {
-          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261009-whatsapp-responsive-2",
+          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261010-whatsapp-release-3",
           "target": "js/cargador-mantenimiento-pagina.js",
           "dynamic": false,
           "line": 1
@@ -26123,7 +26277,7 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "bytes": 1894,
-      "sha256": "9653436336b74d542d1c0a37cf068ca26c390925325b62285f6bed301d0933f0",
+      "sha256": "8e7a547876fb5c5c2a1e99312914beb6acef0f1e0ae6db4534631e346e241834",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26929,8 +27083,8 @@
     },
     {
       "path": "js/pages/product/mantenimiento-producto.js",
-      "bytes": 13366,
-      "sha256": "2376aaa3612a66e7a850d9ff4c1761b49fd97150f33a0619e3724d636a548f93",
+      "bytes": 13363,
+      "sha256": "c5962037d9d437ca7e5d823b33bb9db5ed3b13cc5e3a9bee137fd7974c309e4a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31712,8 +31866,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 16246,
-      "sha256": "b646b5bbbed930179a168eb810135d0f70e22b481517c4045e8e671252bfd73e",
+      "bytes": 16703,
+      "sha256": "1ed183d4aecc9ad6241197eadd246498a0ab8ac9691a2d24b46cfe027cda0494",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33696,8 +33850,8 @@
     },
     {
       "path": "tests/catalog/product-colors.test.mjs",
-      "bytes": 1888,
-      "sha256": "18699729c64b0a03dd5ed597579158c10dc80a56ebe1afacff9de6c0a90ea823",
+      "bytes": 4395,
+      "sha256": "ea8e745aa1ed5c6c6641630799543a5eb71220b6699dbed5284519cd30fda76b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33736,6 +33890,14 @@
         {
           "url": "https://evil.test/",
           "line": 20
+        },
+        {
+          "url": "https://example.test/gold.webp",
+          "line": 47
+        },
+        {
+          "url": "https://example.test/silver.webp",
+          "line": 48
         }
       ]
     },
@@ -36439,8 +36601,8 @@
     },
     {
       "path": "tests/login/profile-availability-recovery.spec.js",
-      "bytes": 5090,
-      "sha256": "398d46e2cccdb9174aebcac30ad5eff7147b7572354ea323ed48a30b792ea5a7",
+      "bytes": 5196,
+      "sha256": "d4818b4cef61273c55c1f714c5c340b6acfc0e8dda1c2a42ae406d2a83de1770",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39790,9 +39952,25 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/product-card-colors.spec.js",
+      "bytes": 3239,
+      "sha256": "2413ae849f238dd81782eeb3747f3bb0620e0e7ec0ed5cd732d63b02b16ae4da",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "http://www.w3.org/2000/svg",
+          "line": 21
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
-      "bytes": 14037,
-      "sha256": "d6fda5ba601a057101ed6cfe9fb7190aef6fb45abb728bc03bcf94c354bfd7ca",
+      "bytes": 14481,
+      "sha256": "1efa35e79e6e3941f374953c8b3c98d28bfeb41526fe8a37efc3faea8a85cc53",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39804,6 +39982,17 @@
           "line": 24
         }
       ]
+    },
+    {
+      "path": "tests/ui-ux/product-first-paint.spec.js",
+      "bytes": 1773,
+      "sha256": "00f662364695a5254dd8b3a008f04e57e01027a22cb6655dd976deef96a95190",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
     },
     {
       "path": "tests/ui-ux/product-review-rating-required.spec.js",
@@ -39829,8 +40018,8 @@
     },
     {
       "path": "tests/ui-ux/whatsapp-feedback-responsive.spec.js",
-      "bytes": 10980,
-      "sha256": "61e121fe04bf2ec69351f0c219417b51ab9891a849ea7c870d9806d937833d69",
+      "bytes": 11011,
+      "sha256": "cc308245a7f13481d896b9f00f407fba876d0fb7a4449452ed2a9071c0f52909",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40483,8 +40672,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 110987,
-      "sha256": "ccbf964ef8e7b2e8d4b50eafe926207bb1ec443cc45b02f7f02e4cfa08fb113f",
+      "bytes": 112016,
+      "sha256": "25e779b12b3fa40c9a8308405a8f8217079cc66abc56265e0ffd369faa27cbc8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40506,7 +40695,7 @@
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261009-whatsapp-responsive-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 1845
+          "line": 1860
         }
       ],
       "endpoints": [
@@ -40520,31 +40709,31 @@
         },
         {
           "url": "https://schema.org/",
-          "line": 1297
+          "line": 1298
         },
         {
           "url": "https://schema.org/InStock",
-          "line": 1310
-        },
-        {
-          "url": "https://schema.org/OutOfStock",
-          "line": 1310
-        },
-        {
-          "url": "https://schema.org/NewCondition",
           "line": 1311
         },
         {
+          "url": "https://schema.org/OutOfStock",
+          "line": 1311
+        },
+        {
+          "url": "https://schema.org/NewCondition",
+          "line": 1312
+        },
+        {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 1336
+          "line": 1337
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 1434
+          "line": 1449
         },
         {
           "url": "https://wa.me/",
-          "line": 1671
+          "line": 1686
         }
       ]
     }
@@ -40637,8 +40826,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 13034,
-      "sha256": "f16f2e7bd85553e5ab0fb95fab3dc92368d439e9dba2dc1811a48371508c6470"
+      "bytes": 13031,
+      "sha256": "8ec707b47f481ad4beae28951fffdd681238887982b41a8a1b4102fab894faba"
     },
     {
       "path": "AGENTS.md",
@@ -40673,8 +40862,8 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 23125,
-      "sha256": "bec8f816381377d6f2c1ea40c9568117a2b487c87dbdbfd1cffb6264dc73fb7d"
+      "bytes": 23256,
+      "sha256": "0181ddda5b8438d8b4c7df8c644eba0c9bf3c0d8b497231b7756fe6b871b6cbc"
     },
     {
       "path": "admin-images.html",
@@ -41069,20 +41258,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 14586,
-      "sha256": "6a8be98b6a11392c55178de9f63d2fa7969128786f8ba478a8975104746e2021"
+      "bytes": 14717,
+      "sha256": "7ae9f55c6d60915c52bb2168b9cbcbb79893609805c68ddd6dab22c18aadd10f"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 53514,
-      "sha256": "989868b2425e18a5c719b166454043e0e4b83c6b90d3c00638542246cd264f5d"
+      "bytes": 53645,
+      "sha256": "f46563cf2187becabae86d3e78142bfab5794f356fdd1cedfc6b11fe1fefdf55"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 118666,
-      "sha256": "ce27e84b648007d7116cec6b0043c2b4d739c152e4951ebfb682487d43230da0"
+      "bytes": 118797,
+      "sha256": "34ed089b3062113c2cdb6695a4ad48b0cd60987c8a5d17208566f53f855c7ca3"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -41321,8 +41510,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 16281,
-      "sha256": "23139806bb3f8d6712930b0fe1ffa85725aa7fea95fda9933848c742b9031292"
+      "bytes": 16412,
+      "sha256": "5d9afebe09ef3b7e7403a79ecf989bcae8f301dc72e652000c096590303cbcf9"
     },
     {
       "path": "config/account-contract.json",
@@ -41346,7 +41535,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 22340,
-      "sha256": "238fb50b5af80573550bdb19a6fc90d5ae772d6674570fa7582e95067aa76a9a"
+      "sha256": "424638fa031090a80d9c0678ed5b0881cae5b603f85cfe4d6bad3b58e0aec07c"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -41358,7 +41547,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155156,
-      "sha256": "e0f034bc8b73eba91b0bdd5ec774871ed0cbeeca88e53d4b8754e52e8af12882"
+      "sha256": "eab7ff4c9f2d0704e0c3fb812c7c5cd6e1bcc7c3842d561fa8cd3a7854ecb03f"
     },
     {
       "path": "config/public-site.json",
@@ -41375,8 +41564,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 21112,
-      "sha256": "7295e795122d158a891e23f06f5ee40085a727f4ebb6be0ff12c7c2ff93fa922"
+      "bytes": 21243,
+      "sha256": "2c973348e04a658ccef056ffc9894f20d1ccc927c7e80766b98fd28ce0d48b0a"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -41735,8 +41924,8 @@
     {
       "path": "css/pages/product/product-maintenance.css",
       "extension": ".css",
-      "bytes": 40102,
-      "sha256": "792e0e360c451ff4301800fcea6500dd076872e39a6ef5492bfae44a4ea54256"
+      "bytes": 40121,
+      "sha256": "c0bdab2f5d9328d0212214538104e6f7f82b4a5f6eef264ff318d4b837c11e61"
     },
     {
       "path": "css/pages/product/product-premium-overhaul.css",
@@ -41885,8 +42074,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 343121,
-      "sha256": "f259af49158472a2dd14a1f7302342c1a2b87b389b849af7e21e25610ea3eec8"
+      "bytes": 346597,
+      "sha256": "bd4f4e0b95e827078f2a66907564c225cbb8262f5481964f026ce3e248910b9e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -42257,8 +42446,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 18208,
-      "sha256": "15c96c3362a2c424476666eed89b4b91bfd8c607eb238bbd1ca08d9b913e4c19"
+      "bytes": 18339,
+      "sha256": "2c7616a652b4244b96308aedcc55f732846fba2a18cd429ee56f7c56edec1209"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -42773,8 +42962,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 32371,
-      "sha256": "df6c311a33933090f48a437d02b671d1d4f019efbbc695cb39368d2beda03e96"
+      "bytes": 32502,
+      "sha256": "9e9a75c348e5c4c36dc6fda7f6194fc7968c47da94051971582f2d1043916580"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -43145,8 +43334,8 @@
     {
       "path": "js/cargador-mantenimiento-pagina.js",
       "extension": ".js",
-      "bytes": 3116,
-      "sha256": "294e09095d0952e484df20d804eb49298e33fe2e383960d4aa05573f4d9a35c3"
+      "bytes": 3113,
+      "sha256": "caa236c5371a3bd522688579f80bb96e2786fae59967dd33da3abd9dd401cb4b"
     },
     {
       "path": "js/cargador-pagina.js",
@@ -43409,8 +43598,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 14042,
-      "sha256": "b7a5e4ef9e71f320ec2cf593a04ec155c6310a18dd7fcfe58ddf0d0e5646a979"
+      "bytes": 14036,
+      "sha256": "d1d51570752e6eee53f57ae2425f1cbfe1ee6a8d892cdf859746d9f647653741"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -43427,8 +43616,8 @@
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
       "extension": ".js",
-      "bytes": 11083,
-      "sha256": "e5755a15dd411ccecd7621a59872b991fe94b62db5866a621909f758230fc95c"
+      "bytes": 11080,
+      "sha256": "dd4c2a9cbe48fe6b69a7c6536966821010258272a9f0be4499f0524a058f6eed"
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
@@ -43542,7 +43731,7 @@
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
       "bytes": 12180,
-      "sha256": "3b840c231bf21ee584d2150bd36cbc70e078b5921d3da5820f8bf13d3c3091f6"
+      "sha256": "face37d5d1996d8238595c4b7f3bee01e0abb0d57eec8bc92858991e1774cf4a"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -43811,8 +44000,8 @@
     {
       "path": "js/core/store/estado-productos.js",
       "extension": ".js",
-      "bytes": 23882,
-      "sha256": "7f60e3e8f0e9a32e4e45098653f88e2574403c62c066b163fc01592bc8a4fa60"
+      "bytes": 23879,
+      "sha256": "0abcca4e31fa9e916d0d742601863036617c0dc40ed76c451a234ddf44cd56ed"
     },
     {
       "path": "js/core/store/inventario-variantes.mjs",
@@ -43962,7 +44151,7 @@
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
       "bytes": 1894,
-      "sha256": "9653436336b74d542d1c0a37cf068ca26c390925325b62285f6bed301d0933f0"
+      "sha256": "8e7a547876fb5c5c2a1e99312914beb6acef0f1e0ae6db4534631e346e241834"
     },
     {
       "path": "js/orders/nucleo-metodos-pago.js",
@@ -44171,8 +44360,8 @@
     {
       "path": "js/pages/product/mantenimiento-producto.js",
       "extension": ".js",
-      "bytes": 13366,
-      "sha256": "2376aaa3612a66e7a850d9ff4c1761b49fd97150f33a0619e3724d636a548f93"
+      "bytes": 13363,
+      "sha256": "c5962037d9d437ca7e5d823b33bb9db5ed3b13cc5e3a9bee137fd7974c309e4a"
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
@@ -44387,8 +44576,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 66384,
-      "sha256": "b44dda9508188fa9e2bc72a4bbffc9a7290964364a39d8d9b2a255bc2646016f"
+      "bytes": 66515,
+      "sha256": "fbe755b74c1c08c179642e43864bf7ecece7ffc742b54355ed5ac756785ed7e0"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -44591,8 +44780,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 48064,
-      "sha256": "477a133b03209cc6908c3cacba6af41f748333a5b354aa60a64fc687d48f42ea"
+      "bytes": 48195,
+      "sha256": "d8f17a1d71f276c5bb44f1cdbc43eab7f5e17ac7861a7e7989040b557ca04752"
     },
     {
       "path": "playwright.config.js",
@@ -44609,14 +44798,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 15943,
-      "sha256": "559df3ba4f60338a6532aa31141c1e183f729c13441afa336bb60c7117311fd8"
+      "bytes": 16074,
+      "sha256": "e90ed7aece7d9fe47a4617407d27da01b2c29500c8d913b64485746d646e7d61"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 18467,
-      "sha256": "085a34f4873793ae001ca5ecea170c04dc0e8b48fd8a9675a40a00dc3767c5a8"
+      "bytes": 18598,
+      "sha256": "187b14aef56c57ee573829aca4a4a76bce9a5d7e11cc3d170d5e3b6c4c66c7d3"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -44627,8 +44816,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 19462,
-      "sha256": "2c1d8d46f5428502f1ec22d722bacce2d75ecd27480775c273b5df517de424d3"
+      "bytes": 19630,
+      "sha256": "17bf62942a0f38f90ab5622d7163be69787c929f89112d4833cb1e4c775e1a90"
     },
     {
       "path": "robots.txt",
@@ -45461,8 +45650,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 67298,
-      "sha256": "689c15f5475d414039ae49de002df1e2812274de8726be95900f42601e499ae5"
+      "bytes": 67280,
+      "sha256": "6a64ac583976082f37025bc380a9644291b42d52863807aa869562b30f9a2f7e"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -45653,8 +45842,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 16246,
-      "sha256": "b646b5bbbed930179a168eb810135d0f70e22b481517c4045e8e671252bfd73e"
+      "bytes": 16703,
+      "sha256": "1ed183d4aecc9ad6241197eadd246498a0ab8ac9691a2d24b46cfe027cda0494"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -45731,8 +45920,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 16364,
-      "sha256": "002d1d7028f627450f1a6d24aa1d0c43c197d92d5d4b99e687a2b50ac5e97060"
+      "bytes": 16495,
+      "sha256": "25451dcf0543f36892a88fd8bbfb33890ef0634afdef1c973fd65fa807ae5145"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -46025,8 +46214,8 @@
     {
       "path": "tests/catalog/product-colors.test.mjs",
       "extension": ".mjs",
-      "bytes": 1888,
-      "sha256": "18699729c64b0a03dd5ed597579158c10dc80a56ebe1afacff9de6c0a90ea823"
+      "bytes": 4395,
+      "sha256": "ea8e745aa1ed5c6c6641630799543a5eb71220b6699dbed5284519cd30fda76b"
     },
     {
       "path": "tests/catalog/product-small-controls.test.mjs",
@@ -46451,8 +46640,8 @@
     {
       "path": "tests/login/profile-availability-recovery.spec.js",
       "extension": ".js",
-      "bytes": 5090,
-      "sha256": "398d46e2cccdb9174aebcac30ad5eff7147b7572354ea323ed48a30b792ea5a7"
+      "bytes": 5196,
+      "sha256": "d4818b4cef61273c55c1f714c5c340b6acfc0e8dda1c2a42ae406d2a83de1770"
     },
     {
       "path": "tests/login/profile-availability-recovery.test.mjs",
@@ -47013,10 +47202,22 @@
       "sha256": "f6ad3390001228d375bb019031a70cf026ce4e4bc1e14a822b76bc8f4f13363d"
     },
     {
+      "path": "tests/ui-ux/product-card-colors.spec.js",
+      "extension": ".js",
+      "bytes": 3239,
+      "sha256": "2413ae849f238dd81782eeb3747f3bb0620e0e7ec0ed5cd732d63b02b16ae4da"
+    },
+    {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
       "extension": ".js",
-      "bytes": 14037,
-      "sha256": "d6fda5ba601a057101ed6cfe9fb7190aef6fb45abb728bc03bcf94c354bfd7ca"
+      "bytes": 14481,
+      "sha256": "1efa35e79e6e3941f374953c8b3c98d28bfeb41526fe8a37efc3faea8a85cc53"
+    },
+    {
+      "path": "tests/ui-ux/product-first-paint.spec.js",
+      "extension": ".js",
+      "bytes": 1773,
+      "sha256": "00f662364695a5254dd8b3a008f04e57e01027a22cb6655dd976deef96a95190"
     },
     {
       "path": "tests/ui-ux/product-review-rating-required.spec.js",
@@ -47033,8 +47234,8 @@
     {
       "path": "tests/ui-ux/whatsapp-feedback-responsive.spec.js",
       "extension": ".js",
-      "bytes": 10980,
-      "sha256": "61e121fe04bf2ec69351f0c219417b51ab9891a849ea7c870d9806d937833d69"
+      "bytes": 11011,
+      "sha256": "cc308245a7f13481d896b9f00f407fba876d0fb7a4449452ed2a9071c0f52909"
     },
     {
       "path": "tests/visual-builder/admin-runtime-health.test.mjs",
@@ -47135,8 +47336,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 110987,
-      "sha256": "ccbf964ef8e7b2e8d4b50eafe926207bb1ec443cc45b02f7f02e4cfa08fb113f"
+      "bytes": 112016,
+      "sha256": "25e779b12b3fa40c9a8308405a8f8217079cc66abc56265e0ffd369faa27cbc8"
     }
   ],
   "sitemapRoutes": [],
@@ -47144,7 +47345,7 @@
   "routeReferences": [
     {
       "file": "catalogo.html",
-      "line": 695,
+      "line": 696,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -48733,14 +48934,14 @@
     },
     {
       "file": "perfil.html",
-      "line": 466,
+      "line": 467,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 754,
+      "line": 755,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -48787,7 +48988,7 @@
       "references": [
         {
           "file": "index.html",
-          "line": 443
+          "line": 444
         }
       ]
     },
@@ -48809,7 +49010,7 @@
         },
         {
           "file": "perfil.html",
-          "line": 466
+          "line": 467
         }
       ]
     },
@@ -48827,7 +49028,7 @@
       "references": [
         {
           "file": "catalogo.html",
-          "line": 695
+          "line": 696
         }
       ]
     }
@@ -49816,12 +50017,12 @@
           },
           {
             "file": "envios.html",
-            "line": 227,
+            "line": 228,
             "operation": "doc"
           },
           {
             "file": "envios.html",
-            "line": 234,
+            "line": 235,
             "operation": "doc"
           },
           {
@@ -50451,7 +50652,7 @@
           },
           {
             "file": "perfil.html",
-            "line": 474,
+            "line": 475,
             "operation": "doc"
           },
           {

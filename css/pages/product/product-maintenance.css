@@ -234,7 +234,7 @@ body.tt-product-maintenance .tt-footer {
   border-top: 1px solid var(--color-border-primary, #F1E4E7);
 }
 
-body.tt-product-maintenance .tt-footer a,
+body.tt-product-maintenance .tt-footer a:not(.tt-footer-wa),
 body.tt-product-maintenance .tt-footer-col-title,
 body.tt-product-maintenance .tt-footer-bottom,
 body.tt-product-maintenance .tt-footer-tagline {
