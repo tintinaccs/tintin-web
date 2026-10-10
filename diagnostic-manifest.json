@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fcb24cc474bbdbed5324fdfdb2d48e2726911479692bb4473e34540d4f93e480",
+  "sourceFingerprint": "bef81a4f1fe2b051920542e1e1e01dacaecb1cd07f05a271a126cce75e99dfb1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1123,
     "textFiles": 1075,
-    "totalBytes": 16487265,
+    "totalBytes": 16495179,
     "pages": 19,
     "modules": 797
   },
@@ -36830,8 +36830,8 @@
     },
     {
       "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",
-      "bytes": 7106,
-      "sha256": "d797b9f215b5205984e1d5d7a5998782978a1d5ab10aad02ffecf18106074a28",
+      "bytes": 7007,
+      "sha256": "2f47fc9d4c78f6b570075a344a8a6eeb3b8f351de5a985abea51a15433667723",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36977,8 +36977,8 @@
     },
     {
       "path": "tests/flow-connections/sellado-interactivo.test.mjs",
-      "bytes": 14099,
-      "sha256": "82e9fb914f4b8e3fa29dc0f249a1b3348474aea334e1f6a1f51d005616b2312d",
+      "bytes": 13907,
+      "sha256": "d6db7b4d422173c9642b51cec32a9afe23159893c3db145fbc9332608041e1ec",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37030,7 +37030,7 @@
       "endpoints": [
         {
           "url": "http://flow.test/fixture",
-          "line": 176
+          "line": 173
         }
       ]
     },
@@ -43094,8 +43094,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 514,
-      "sha256": "5fb5aeb2c15e2f06bb41805a0af594211bc8c8cb055ea1e93baa21b6dd813a7c"
+      "bytes": 9039,
+      "sha256": "cab90b9f68649dafaf04328fb3f72da4aabfd118637167718c275f7e0f2048c5"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -43107,7 +43107,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "7d14a35c1359aacf7b02ef4171ef391b4fc3671ce5e997ffce7a2f3d371d3760"
+      "sha256": "cf760230a18a8e777f1f920754fded34d035bc51e74f6ed4306861518591388c"
     },
     {
       "path": "config/public-site.json",
@@ -43664,8 +43664,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 375776,
-      "sha256": "6193fc8be9b0a2722df25ed6508e80f5a432cda75abdad46d43535df59886a8c"
+      "bytes": 375456,
+      "sha256": "c47c2adb2dee1704d4a94a8917c45a36debdcabe44a35bb6890bf6e62931f536"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -48128,8 +48128,8 @@
     {
       "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",
       "extension": ".mjs",
-      "bytes": 7106,
-      "sha256": "d797b9f215b5205984e1d5d7a5998782978a1d5ab10aad02ffecf18106074a28"
+      "bytes": 7007,
+      "sha256": "2f47fc9d4c78f6b570075a344a8a6eeb3b8f351de5a985abea51a15433667723"
     },
     {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",
@@ -48146,8 +48146,8 @@
     {
       "path": "tests/flow-connections/sellado-interactivo.test.mjs",
       "extension": ".mjs",
-      "bytes": 14099,
-      "sha256": "82e9fb914f4b8e3fa29dc0f249a1b3348474aea334e1f6a1f51d005616b2312d"
+      "bytes": 13907,
+      "sha256": "d6db7b4d422173c9642b51cec32a9afe23159893c3db145fbc9332608041e1ec"
     },
     {
       "path": "tests/flow-connections/sellos-flujo.test.mjs",
