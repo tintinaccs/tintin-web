@@ -239,7 +239,7 @@
     transition:box-shadow .2s ease !important;
   }
   html body #tt-tabbar .tt-tabbar-btn,
-  html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn {
+  html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn, html body #tt-tabbar .tt-tabbar-btn:is(#tabbar-cart,#tabbar-notifications) {
     min-height:58px;
     padding:6px 4px;
     gap:5px;

@@ -830,7 +830,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-product-social-navigation-3');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-product-social-navigation-4');
     }
   }
 
@@ -917,7 +917,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-product-social-navigation-3');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-product-social-navigation-4');
   }
 
   function bootThemeColorSanitizerPublic() {
@@ -928,7 +928,7 @@
 
   function bootPageAuditFixPublic() {
     if (!window.TintinPageAuditFixBooted) {
-      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261010-product-social-navigation-3');
+      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261010-product-social-navigation-4');
     }
   }
 

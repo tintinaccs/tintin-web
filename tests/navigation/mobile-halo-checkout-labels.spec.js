@@ -6,7 +6,7 @@ const resources = fs.readFileSync('js/components/navigation/compartido/recursos-
 const css = ['styles.css','css/core/tema-unificado-tintin.css',
   ...[...resources.matchAll(/'([^']+\.css)'/g)].map(m=>m[1]),
   'css/pages/checkout/checkout.css','css/pages/checkout/checkout-maintenance.css',
-  'css/theme/superficies-solidas-interfaz.css'];
+  'css/theme/superficies-solidas-interfaz.css','css/components/notifications/notificaciones-sociales.css'];
 const navModule = '/js/components/navigation/movil/encabezado-movil.js';
 const indicatorModule = '/js/components/navigation/movil/indicador-navegacion-movil.js';
 const fixture = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -37,6 +37,7 @@ for(const width of [320,390,480,767]) test(`cápsula completa de icono y texto y
       const content=[active.querySelector('svg'),active.querySelector('span:last-child')].map(el=>el.getBoundingClientRect());
       return {capsule:getComputedStyle(active,'::before').opacity,inside:content.every(r=>r.left>=box.left&&r.right<=box.right&&r.top>=box.top&&r.bottom<=box.bottom),inner:Math.min(...content.map(r=>Math.min(r.left-box.left,box.right-r.right,r.top-box.top,box.bottom-r.bottom))),space:Math.min(box.left-bar.left,bar.right-box.right,box.top-bar.top,bar.bottom-box.bottom)};
     });
+    expect(await page.locator('#tt-tabbar .tt-tabbar-btn').evaluateAll(els=>els.every(el=>getComputedStyle(el).borderRadius==='999px'))).toBe(true);
     expect(geometry.capsule).toBe('1');expect(geometry.inside).toBe(true);expect(geometry.inner).toBeGreaterThanOrEqual(3);expect(geometry.space).toBeGreaterThanOrEqual(6);
     await expect(page.locator('.tt-mobile-nav-indicator')).toBeHidden();
     await expect(page.locator('#tabbar-tienda span:last-child')).toBeVisible();
