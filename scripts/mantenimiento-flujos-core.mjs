@@ -5,7 +5,7 @@ export const planPath = 'config/mantenimiento-flujos-plan.json';
 export const controlPath = path => path.startsWith('.github/workflows/') ||
   path === 'config/mantenimiento-flujos.json' || path === 'scripts/auditar-proteccion-flujos.mjs' ||
   path === 'scripts/mantenimiento-flujos-core.mjs' || path === 'scripts/mantenimiento-flujos-github.mjs' ||
-  path === 'scripts/preparar-mantenimiento-flujos.mjs';
+  path === 'scripts/preparar-mantenimiento-flujos.mjs' || path === 'scripts/leer-blobs-mantenimiento.mjs';
 const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const fail = message => { throw new Error(message); };
 

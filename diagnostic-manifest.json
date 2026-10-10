@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5b8afc9920358c38e2bf1e2cd38a5a8cc9b10cc8b34cd72929580d10566c0c65",
+  "sourceFingerprint": "e8d5fad9157d4017bbb2caab9cd4b80f75dbebd8dabd310431562a736b904f5e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1102,
-    "textFiles": 1054,
-    "totalBytes": 16336329,
+    "files": 1106,
+    "textFiles": 1058,
+    "totalBytes": 16357324,
     "pages": 19,
-    "modules": 784
+    "modules": 787
   },
   "viewports": [
     {
@@ -31371,6 +31371,17 @@
       "endpoints": []
     },
     {
+      "path": "scripts/leer-blobs-mantenimiento.mjs",
+      "bytes": 886,
+      "sha256": "f9e5c4782d3fc06dd5a1c184bc4d698d23e0235312c62a54f2d8ec6e2aa4a453",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "scripts/lib/architecture-gates.mjs",
       "bytes": 7736,
       "sha256": "2d271e760c01df00c6fcff0008818524b455eb5927cb866a5b49fae2b39c5a47",
@@ -31439,8 +31450,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-core.mjs",
-      "bytes": 5123,
-      "sha256": "3e6bf1b7ac018b4574218daef4c06e7e960e9c3a745183cbf2fa9e8f31e2b589",
+      "bytes": 5174,
+      "sha256": "17cd26d089494788166274a93bd9df32837f0b277a2e9bbb672c48176a26f879",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31457,8 +31468,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
-      "bytes": 8276,
-      "sha256": "6b92b260889813f739579740a14cfea7a0511169f3ed7b669b603b04ef6f2e69",
+      "bytes": 8494,
+      "sha256": "7c73544061f9e435ad249e8f166f95531e983c70fae4c183f3ee300e56db2c30",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31471,26 +31482,32 @@
           "line": 1
         },
         {
+          "raw": "./leer-blobs-mantenimiento.mjs",
+          "target": "scripts/leer-blobs-mantenimiento.mjs",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "node:child_process",
           "target": null,
           "dynamic": false,
-          "line": 2
+          "line": 3
         },
         {
           "raw": "./mantenimiento-flujos-core.mjs",
           "target": "scripts/mantenimiento-flujos-core.mjs",
           "dynamic": false,
-          "line": 3
+          "line": 4
         }
       ],
       "endpoints": [
         {
           "url": "https://api.github.com/repos/$%7Bconfig.repository%7D/$%7Bpath%7D",
-          "line": 15
+          "line": 16
         },
         {
           "url": "https://github.com/$%7Bconfig.repository%7D/actions/runs/$%7BrunId%7D",
-          "line": 129
+          "line": 134
         }
       ]
     },
@@ -35474,9 +35491,39 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/lectura-blobs-mantenimiento.test.mjs",
+      "bytes": 2786,
+      "sha256": "9cb0d1f61657346b7a41f3a06c3851f2705d21cb9e5b4e0ef16201a1059ebfae",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../scripts/leer-blobs-mantenimiento.mjs",
+          "target": "scripts/leer-blobs-mantenimiento.mjs",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
-      "bytes": 6935,
-      "sha256": "3ec50779b33824112c5e1d47e0bebeab1a0cddd70b11f9e08d536379c0f993ad",
+      "bytes": 7049,
+      "sha256": "c4f8e424a6c2d2136f96979f83837d9e9eef5b859728367a92da2e7ad14923ae",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35550,6 +35597,81 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",
+      "bytes": 7007,
+      "sha256": "2f47fc9d4c78f6b570075a344a8a6eeb3b8f351de5a985abea51a15433667723",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 8
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 69
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://github.com/$%7Bconfig.repository%7D/actions/runs/$%7Bi+10%7D/job/$%7Bi+20%7D",
+          "line": 63
+        },
+        {
+          "url": "https://api.github.com/repos/tintinaccs/tintin-web/",
+          "line": 72
+        }
+      ]
     },
     {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",
@@ -41596,8 +41718,8 @@
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
-      "bytes": 155156,
-      "sha256": "3df74109afd6bd1198c669202fe7998271078abb7da366d034211e736e4978c0"
+      "bytes": 155536,
+      "sha256": "a8ef96bd3fea8e9e339e829aee876a1c9ae7cf7c7422287b6d54c96a3fed18cc"
     },
     {
       "path": "config/public-site.json",
@@ -42124,8 +42246,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 354013,
-      "sha256": "6834a571da903d16a5772d1c6c24a7f9f42c98a13185322c7e6339181d0d72cb"
+      "bytes": 359076,
+      "sha256": "6db8cdb369d0d494d6592a893e707eb16c6250ee523980e91a3ebe7fdbb5d405"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -42138,6 +42260,12 @@
       "extension": ".md",
       "bytes": 4913,
       "sha256": "9c42ce1626eb84aa5572e7f65588d539a51dcf56ddb08e765004737809a836e8"
+    },
+    {
+      "path": "docs/agent/MIGRACION_CONTROL_20261010.md",
+      "extension": ".md",
+      "bytes": 4490,
+      "sha256": "0fba3342027e3a0be74cd1c0ae9372e8681bb89a3e1266bd0cb277f9c159af96"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -45770,6 +45898,12 @@
       "sha256": "55bfccb2112531728ffca9c138098fa4545f51c9feb5ef1e77ab630bb95487ed"
     },
     {
+      "path": "scripts/leer-blobs-mantenimiento.mjs",
+      "extension": ".mjs",
+      "bytes": 886,
+      "sha256": "f9e5c4782d3fc06dd5a1c184bc4d698d23e0235312c62a54f2d8ec6e2aa4a453"
+    },
+    {
       "path": "scripts/lib/architecture-gates.mjs",
       "extension": ".mjs",
       "bytes": 7736,
@@ -45802,14 +45936,14 @@
     {
       "path": "scripts/mantenimiento-flujos-core.mjs",
       "extension": ".mjs",
-      "bytes": 5123,
-      "sha256": "3e6bf1b7ac018b4574218daef4c06e7e960e9c3a745183cbf2fa9e8f31e2b589"
+      "bytes": 5174,
+      "sha256": "17cd26d089494788166274a93bd9df32837f0b277a2e9bbb672c48176a26f879"
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
       "extension": ".mjs",
-      "bytes": 8276,
-      "sha256": "6b92b260889813f739579740a14cfea7a0511169f3ed7b669b603b04ef6f2e69"
+      "bytes": 8494,
+      "sha256": "7c73544061f9e435ad249e8f166f95531e983c70fae4c183f3ee300e56db2c30"
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
@@ -46520,16 +46654,28 @@
       "sha256": "84bd551f523bb43dbcaf802ec451f9469bbf7c4dc203f29cf19e736d49ccea97"
     },
     {
+      "path": "tests/flow-connections/lectura-blobs-mantenimiento.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2786,
+      "sha256": "9cb0d1f61657346b7a41f3a06c3851f2705d21cb9e5b4e0ef16201a1059ebfae"
+    },
+    {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
       "extension": ".mjs",
-      "bytes": 6935,
-      "sha256": "3ec50779b33824112c5e1d47e0bebeab1a0cddd70b11f9e08d536379c0f993ad"
+      "bytes": 7049,
+      "sha256": "c4f8e424a6c2d2136f96979f83837d9e9eef5b859728367a92da2e7ad14923ae"
     },
     {
       "path": "tests/flow-connections/pedidos-authority.test.mjs",
       "extension": ".mjs",
       "bytes": 1547,
       "sha256": "1f0cfbbdff39a9bc81bb0b9b66d1353141dce0cb8ca0fb02efd33caadaea55aa"
+    },
+    {
+      "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",
+      "extension": ".mjs",
+      "bytes": 7007,
+      "sha256": "2f47fc9d4c78f6b570075a344a8a6eeb3b8f351de5a985abea51a15433667723"
     },
     {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",
