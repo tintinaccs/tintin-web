@@ -1,3 +1,4 @@
+import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-5';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
@@ -117,6 +118,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       ? `<div>${escapeHtml(message)}</div><button type="button" id="tt-review-cart" style="margin-top:10px;border:0;border-radius:999px;background:#b84c72;color:#fff;padding:10px 18px;font-weight:700;cursor:pointer">Revisar carrito</button>`
       : escapeHtml(message);
     box.classList.add('show');
+    box.setAttribute('role', 'alert');
+    box.tabIndex = -1;
+    box.focus();
+    box.scrollIntoView({ block: 'center', behavior: 'smooth' });
     document.getElementById('tt-review-cart')?.addEventListener('click', () => window.location.reload());
   }
 
@@ -528,7 +533,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
     const paymentMethod = text(document.querySelector('input[name="ck-pay"]:checked')?.value);
 
-    if (name.length < 2) throw appError('name_required', 'Ingresá tu nombre completo.');
+    if (!isValidCustomerName(name)) throw appError('name_required', 'Ingresá tu nombre y apellido (al menos dos palabras).');
     if (!['efectivo', 'transferencia', 'paypal'].includes(paymentMethod)) {
       throw appError('payment_required', 'Seleccioná un método de pago disponible.');
     }
@@ -558,8 +563,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
     const razonSocial = text(document.getElementById('ck-razon-social')?.value);
     const rucRaw = text(document.getElementById('ck-ruc')?.value);
-    if (wantsInvoice && !isValidRazonSocial(razonSocial)) {
-      throw appError('razon_social_required', 'Ingresá la razón social para la factura.');
+    if (wantsInvoice && (taxpayerType === 'fisica' ? !isValidCustomerName(razonSocial) : !isValidRazonSocial(razonSocial))) {
+      throw appError('razon_social_required', 'Ingresá nombre y apellido para persona física, o la razón social de tu empresa.');
     }
     if (wantsInvoice && !isValidRuc(rucRaw)) {
       throw appError('ruc_invalid', 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).');
@@ -787,7 +792,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const code = error?.details?.code || error?.code || error?.message;
     const messages = {
       empty_cart: 'Tu carrito está vacío.',
-      name_required: 'Ingresá tu nombre completo.',
+      name_required: 'Ingresá tu nombre y apellido (al menos dos palabras).',
       phone_invalid: 'Ingresá un teléfono o WhatsApp válido.',
       payment_required: 'Seleccioná un método de pago.',
       map_required: 'Marcá y nombrá tu ubicación en el mapa.',
@@ -795,7 +800,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       taxpayer_type_required: 'Elegí el tipo de contribuyente para tu factura.',
       address_required: 'Ingresá la dirección para la encomienda.',
       ci_invalid: 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).',
-      razon_social_required: 'Ingresá la razón social para la factura.',
+      razon_social_required: 'Ingresá nombre y apellido para persona física, o la razón social de tu empresa.',
       ruc_invalid: 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).',
       shipping_invalid: 'La ciudad elegida ya no está disponible.',
       settings_missing: 'No pudimos comprobar la configuración de la tienda.',
@@ -826,6 +831,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       invalid_id_token: 'Tu sesión expiró. Volvé a ingresar e intentá de nuevo.',
       token_verify_failed: 'No pudimos verificar tu sesión. Volvé a intentar.',
       email_not_verified: 'Necesitás verificar tu correo antes de comprar.',
+      network_error: 'No pudimos conectar con la tienda. Tus productos siguen en el carrito; revisá tu conexión y reintentá.',
+      server_timeout: 'La confirmación está tardando. Reintentá: se conserva el mismo pedido para evitar duplicados.',
+      invalid_response: 'La tienda no devolvió una confirmación válida. Tus productos siguen en el carrito; reintentá.',
+      session_unknown: 'Todavía no pudimos verificar tu sesión. Esperá un momento y reintentá.',
+      profile_incomplete: 'Completá tu nombre y WhatsApp en tu cuenta antes de confirmar.',
       server_error: 'No pudimos confirmar el pedido. Intentá nuevamente.',
       transaction_begin_failed: 'No pudimos conectar con el servidor. Intentá nuevamente.',
       batch_get_failed: 'No pudimos conectar con el servidor. Intentá nuevamente.',

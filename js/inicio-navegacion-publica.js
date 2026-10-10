@@ -6,13 +6,13 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const ENTRY_VERSION = 'tintin-20261010-mobile-navigation-front-1';
+  const ENTRY_VERSION = 'tintin-20261009-whatsapp-responsive-1';
   const BARRIER_VERSION = 'tintin-20260915-session-shell-2';
   const scriptUrl = document.currentScript?.src
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   const barrierUrl = new URL('./components/navigation/compartido/barrera-arranque-shell.js', scriptUrl);
-  entryUrl.searchParams.set('v', ENTRY_VERSION);
+  entryUrl.searchParams.set('v', 'tintin-20261010-whatsapp-release-5');
   barrierUrl.searchParams.set('v', BARRIER_VERSION);
 
   let waitHeld = false;

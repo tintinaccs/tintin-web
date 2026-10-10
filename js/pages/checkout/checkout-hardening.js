@@ -4,7 +4,7 @@ import {
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-5';
 import { AUTH_STATES, subscribeSession, waitForSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261007-checkout-session-1';
 

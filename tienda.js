@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-5');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1003,7 +1003,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-5');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1433,7 +1433,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     galleryMain.style.removeProperty('justify-content');
     galleryMain.disabled = !selectedImage;
     if (selectedImage) {
-      const serverImage = galleryMain.querySelector('img[data-tt-server-image="1"]');
+      const serverImage = galleryMain.querySelector('img');
       const serverImageMatches = serverImage && (
         serverImage.getAttribute('src') === selectedImage || serverImage.currentSrc === selectedImage
       );
@@ -1443,7 +1443,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
         serverImage.fetchPriority = 'high';
         serverImage.decoding = 'async';
       } else {
-        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" srcset="${escapeAttribute(withCloudinaryWidth(selectedImage, 480))} 480w, ${escapeAttribute(withCloudinaryWidth(selectedImage, 900))} 900w" sizes="(max-width:767px) calc(100vw - 32px), (max-width:1024px) 45vw, 560px" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
       }
     } else {
       galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
@@ -1459,7 +1459,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     thumbsEl.style.display = allImages.length ? '' : 'none';
     thumbsEl.innerHTML = allImages.length ? allImages.map((url, i) => `
       <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}">
-        <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" style="object-fit:contain;background:transparent;width:100%;height:100%;">
+        <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" loading="lazy" decoding="async" fetchpriority="low" style="object-fit:contain;background:transparent;width:100%;height:100%;">
       </button>
     `).join('') : '';
     if (!thumbsEl.dataset.ttBound) {
@@ -1742,26 +1742,6 @@ function _renderProductDetail(product) {
     });
   }
 
-  const compactShare = document.querySelector('[data-share-product]');
-  if (compactShare && !compactShare.dataset.ttBound) {
-    compactShare.dataset.ttBound = '1';
-    compactShare.addEventListener('click', async () => {
-      if (!_pdProduct) return;
-      const url = window.location.href;
-      const text = `¡Mirá este accesorio de TINTIN! ${_pdProduct.name}`;
-      if (navigator.share) { await navigator.share({ title: _pdProduct.name, text, url }).catch(() => {}); return; }
-      const label = compactShare.querySelector('[data-share-product-label]');
-      try {
-        await _copyProductLink(url);
-        if (label) label.textContent = 'Enlace copiado';
-      } catch {
-        if (label) label.textContent = 'No se pudo copiar';
-      } finally {
-        window.setTimeout(() => { if (label?.isConnected) label.textContent = 'Compartir'; }, 1800);
-      }
-    });
-  }
-
   // Add to cart. Stock-driven enable/disable state is safe to re-run on every
   // render; the click listener itself is bound exactly once and reads
   // _pdProduct/_pdQty fresh at click time, so it always acts on the latest
@@ -1857,7 +1837,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-5');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

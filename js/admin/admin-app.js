@@ -1,7 +1,7 @@
 import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261008-color-photos-1-minimal-product-20261008-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261004-admin-connections-3";
-import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261005-auth-loader-1';
+import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261010-whatsapp-release-5';
 import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {

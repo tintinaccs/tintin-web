@@ -240,10 +240,10 @@ test('delivery exige referencia útil, pero retiro no conserva dirección ni ref
 });
 
 test('factura conserva tipo oficial; no obliga datos fiscales cuando no se solicita', async () => {
-  await rejectsWith(checkout(draft({ wantsInvoice: true, razonSocial: 'Nombre Fiscal', ruc: '1234567-8' })), 'taxpayer_type_required');
-  await rejectsWith(checkout(draft({ wantsInvoice: true, razonSocial: 'Nombre Fiscal', ruc: '1234567-8', taxpayerType: '<script>' })), 'taxpayer_type_required');
+  await rejectsWith(checkout(draft({ wantsInvoice: true, razonSocial: 'María González', ruc: '1234567-8' })), 'taxpayer_type_required');
+  await rejectsWith(checkout(draft({ wantsInvoice: true, razonSocial: 'María González', ruc: '1234567-8', taxpayerType: '<script>' })), 'taxpayer_type_required');
   for (const taxpayerType of ['fisica', 'juridica']) {
-    const { store } = await checkout(draft({ wantsInvoice: true, razonSocial: 'Nombre Fiscal', ruc: '1234567-8', taxpayerType }));
+    const { store } = await checkout(draft({ wantsInvoice: true, razonSocial: 'María González', ruc: '1234567-8', taxpayerType }));
     assert.equal(orderWrite(store).invoice.taxpayerType, taxpayerType);
   }
   const { store } = await checkout(draft({ wantsInvoice: false, taxpayerType: 'invalid', ruc: 'invalid' }));
@@ -289,4 +289,14 @@ test('cotización canónica aplica 25.000 a ambas ciudades aunque settings conse
   await checkout(draft({selectedCity,expectedShippingCost:25000,expectedTotal:125000}),store);
   assert.equal(orderWrite(store).shippingCost,25000);assert.equal(orderWrite(store).total,125000);
  }
+});
+
+// La misma regla se aplica en servidor aunque se evada el formulario.
+test('nombre de compra y factura física necesitan nombre y apellido', async () => {
+  await rejectsWith(checkout(draft({name: 'María'})), 'name_required');
+  const store = fakeStore();
+  await rejectsWith(checkout(draft({wantsInvoice: true, taxpayerType: 'fisica', razonSocial: 'María', ruc: '1234567-8'}), store), 'razon_social_required');
+  assert.equal(store.commits.length, 0);
+  const {store: valid} = await checkout(draft({name: 'María González', wantsInvoice: true, taxpayerType: 'fisica', razonSocial: 'María González', ruc: '1234567-8'}));
+  assert.equal(orderWrite(valid).invoice.razonSocial, 'María González');
 });

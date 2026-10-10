@@ -9,8 +9,6 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
   const count = document.getElementById('cat-count');
   const search = document.getElementById('cat-search');
   const sort = document.getElementById('cat-sort');
-  const minPrice = document.getElementById('precio-min');
-  const maxPrice = document.getElementById('precio-max');
   const stock = document.getElementById('filtro-stock');
   const sidebar = document.getElementById('cat-sidebar');
   const filterToggle = document.getElementById('filter-toggle');
@@ -114,14 +112,12 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     const params = url.searchParams;
     const query = search?.value.trim() || '';
     const sortValue = sort?.value || 'default';
-    const min = minPrice?.value.trim() || '';
-    const max = maxPrice?.value.trim() || '';
     const stockOnly = !!stock?.checked;
+    params.delete('min');
+    params.delete('max');
 
     if (query) params.set('q', query); else params.delete('q');
     if (sortValue && sortValue !== 'default') params.set('sort', sortValue); else params.delete('sort');
-    if (min) params.set('min', min); else params.delete('min');
-    if (max) params.set('max', max); else params.delete('max');
     if (stockOnly) params.set('stock', '1'); else params.delete('stock');
 
     history.replaceState({ tintinCatalog: true }, '', `${url.pathname}${params.size ? `?${params}` : ''}${url.hash}`);
@@ -131,8 +127,6 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     const params = new URLSearchParams(location.search);
     if (search && params.has('q')) search.value = params.get('q') || '';
     if (sort && params.has('sort')) sort.value = params.get('sort') || 'default';
-    if (minPrice && params.has('min')) minPrice.value = params.get('min') || '';
-    if (maxPrice && params.has('max')) maxPrice.value = params.get('max') || '';
     if (stock) stock.checked = params.get('stock') === '1';
   }
 
@@ -145,7 +139,6 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     dispatchControlChange(search, 'input');
     dispatchControlChange(sort, 'change');
     dispatchControlChange(stock, 'change');
-    document.getElementById('btn-aplicar-precio')?.click();
     guardCatalogSurface();
   }
 
@@ -157,7 +150,6 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     });
     sort?.addEventListener('change', normalizeUrlState);
     stock?.addEventListener('change', normalizeUrlState);
-    document.getElementById('btn-aplicar-precio')?.addEventListener('click', normalizeUrlState);
     document.getElementById('btn-limpiar-filtros')?.addEventListener('click', () => setTimeout(normalizeUrlState, 0));
 
     filterToggle?.addEventListener('click', () => {
@@ -172,7 +164,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
       if (innerWidth > 768 || !sidebar?.classList.contains('open')) return;
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest('.cat-filter-option, .tt-filtro-btn, #btn-aplicar-precio, #btn-limpiar-filtros')) {
+      if (target.closest('.cat-filter-option, .tt-filtro-btn, #btn-limpiar-filtros')) {
         sidebar.classList.remove('open');
         filterToggle?.setAttribute('aria-expanded', 'false');
         if (filterToggle) filterToggle.textContent = 'Filtrar por categoría';

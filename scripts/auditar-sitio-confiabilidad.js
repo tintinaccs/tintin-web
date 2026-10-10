@@ -6,6 +6,8 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
 const failures = [];
+const cacheVersions = JSON.parse(read('scripts/cache-version-baseline.json'));
+const consentVersion = cacheVersions['js/analytics/consentimiento-privacidad.js']?.version;
 
 function stripScriptBlocks(html) {
   let out = '';
@@ -123,9 +125,9 @@ check('La tarjeta de privacidad no bloquea ni cubre toda la página',
   /width\s*:\s*min\(400px,\s*calc\(100vw\s*-\s*36px\)\)/.test(styles) &&
   !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
 check('La actividad propia y Google Analytics esperan el permiso opcional',
-  activity.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'") &&
+  activity.includes(`from './consentimiento-privacidad.js?v=${consentVersion}'`) &&
   activity.includes('if (hasConsent() && analyticsWritable) startActivity()') &&
-  analytics.includes("from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'") &&
+  analytics.includes(`from './consentimiento-privacidad.js?v=${consentVersion}'`) &&
   analytics.includes('!isTrackablePage() || !hasStatisticsConsent()') &&
   analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
@@ -308,8 +310,10 @@ const staleVersions = [];
 for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
+const cacheAudit = require('node:child_process').spawnSync(process.execPath, ['scripts/auditar-versionado-cache.mjs'], { cwd: root, encoding: 'utf8' });
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'"));
+  staleVersions.length === 0 && cacheAudit.status === 0);
+if (cacheAudit.status !== 0) console.error(cacheAudit.stdout, cacheAudit.stderr);
 
 check(
   'El runtime público liviano carga imágenes, colecciones, colores y el fix de auditoría de página; el carrito queda en la navegación como única autoridad',

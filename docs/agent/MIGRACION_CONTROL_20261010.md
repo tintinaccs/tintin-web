@@ -1,7 +1,7 @@
 # Reparación revisada del control de publicación
 
 PR: https://github.com/tintinaccs/tintin-web/pull/1081
-Base de preparación actual:119aa2e50dd15dca4266bf7ce2f0d0774a61c35c (main avanzó con1085 durante la verificación; se incorpora sin perder su navegación móvil).
+Base de preparación actual:0ccf1b889459f890154382f2b731b78b2cb7d94b. PR1083 ya se integró por su auto-merge durante la ventana administrativa; se conservan todos sus cambios y se requiere CI nuevo para esta reparación. Los resultados anteriores55/134/126/187 pertenecen al candidato8fd contra119 y no se atribuyen automáticamente al nuevo SHA.
 
 ## Problema y resultado
 
@@ -13,7 +13,7 @@ El lector reutiliza los bytes de main únicamente cuando objeto Git y modo coinc
 
 `node --test tests/flow-connections/lectura-blobs-mantenimiento.test.mjs tests/flow-connections/mantenimiento-flujos.test.mjs tests/flow-connections/proteccion-flujos.test.mjs tests/flow-connections/presupuesto-mantenimiento.test.mjs`
 
-55 pruebas específicas PASS y suite completa de conexiones134 PASS. La integración ejecuta los programas reales inspect y publish en un repositorio temporal aislado, con541 archivos y API simulada que rechaza solicitudes después de1000. Ambas fases pasan con30 solicitudes/seis blobs remotos. Una reproducción local de la versión anterior pasó inspect y falló publish conHTTP403 al superar1000 (1008 solicitudes). Es una reproducción del defecto de consumo, no un diagnóstico confirmado del403 remoto ni una aprobación de GitHub.
+En la integración actual contra0ccf:55 pruebas específicas PASS y suite completa de conexiones127 PASS, build Pages/manifiesto/caché e inventario78/544 PASS. El resultado134 del candidato anterior no se hereda; el CI del nuevo SHA está pendiente. La integración ejecuta los programas reales inspect y publish en un repositorio temporal aislado, con541 archivos y API simulada que rechaza solicitudes después de1000. Ambas fases pasan con30 solicitudes/seis blobs remotos. Una reproducción local de la versión anterior pasó inspect y falló publish conHTTP403 al superar1000 (1008 solicitudes). Es una reproducción del defecto de consumo, no un diagnóstico confirmado del403 remoto ni una aprobación de GitHub.
 
 El candidato anterior9b7f282d también verificó el PR1083 real contra baseec63/HEAD7961cff mediante API nativa, en modo inspect de solo lectura:98 consultas,87 blobs y cero escrituras. Validó plan, CI y entorno; no verifica el token de Actions ni sustituye la revisión real. Build Pages del candidato anterior local PASS; la nueva base requiere build y CI propios.
 
@@ -25,8 +25,8 @@ El mecanismo ordinario rechaza cambios a su propio control. Según MANTENIMIENTO
 
 1. Verificar CI del SHA final y revisar la reparación del propio control en PR1081.
 2. Completar la migración administrativa revisada del mecanismo según las reglas del repositorio; un dispatch ordinario no puede autorizar este PR.
-3. Confirmar main resultante y actualizar PR1083 contra esa base. Recalcular su plan oficial, manifiesto y CI del nuevo SHA.
-4. Despachar mantenimiento de PR1083 desde main; comprobar inspect y aprobación real del propietario. Si hay otro403, leer endpoint y cabeceras antes de decidir la corrección o el intervalo.
+3. Confirmar el main resultante y que todos los requisitos, incluido Protected flow maintenance, estén restablecidos. PR1083 ya está en main y su artefacto se verificó; no inventar un dispatch o aprobación retroactivos.
+4. Verificar el mecanismo instalado mediante un próximo PR legítimo desde main, con inspect y aprobación real del propietario si necesita renovar archivos protegidos. Si hay otro403, leer endpoint y cabeceras antes de decidir la corrección o el intervalo. No fabricar un cambio de código o un check para demostrar un PASS.
 5. Confirmar merge y huella del artefacto Pages; publicar Firestore mediante su workflow oficial desde main y verificar el resultado.
 
 No crear usuarios, pedidos, pagos ni emails de prueba en producción. No heredar aprobaciones o resultados de SHA anteriores.

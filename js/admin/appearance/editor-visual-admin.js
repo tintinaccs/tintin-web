@@ -5,7 +5,7 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-po
 import {
   CONTENT_PAGE_IDS, getNested, getPageDefaults, getPageSchema,
   mergeContent, sanitizeContentHref, setNested,
-} from '../../core/store/esquema-contenido.js?v=tintin-20261008-producto-superficies-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20261010-whatsapp-release-5';
 import { chooseRandomPreviewProduct, productPreviewTarget } from './preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1';
 import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20260813-apariencia-splitters-1';
 
