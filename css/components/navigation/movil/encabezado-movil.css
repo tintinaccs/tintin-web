@@ -258,7 +258,7 @@
   html body #tt-tabbar .tt-tabbar-btn.active::before,
   html body #tt-tabbar .tt-tabbar-btn[aria-expanded="true"]::before,
   html body #tt-tabbar .tt-tabbar-btn[aria-current="page"]::before { opacity:1; }
-  html body #tt-tabbar:has(.tt-tabbar-btn[aria-expanded="true"]) .tt-tabbar-btn.active:not([aria-expanded="true"])::before { opacity:0; }
+  html body #tt-tabbar:has(.tt-tabbar-btn[aria-expanded="true"]) .tt-tabbar-btn:not([aria-expanded="true"])::before { opacity:0; }
   html body #tt-tabbar .tt-mobile-nav-halo,
   html body #tt-tabbar .tt-mobile-nav-indicator { display:none !important; }
   html body #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn span:last-child {

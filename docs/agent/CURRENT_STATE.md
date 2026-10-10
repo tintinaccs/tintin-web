@@ -1,3 +1,9 @@
+# Selección móvil única — 2026-10-10
+
+Base 0ccf1b889459f890154382f2b731b78b2cb7d94b; rama fix/mobile-single-selection. Codex /root. Causa: la cápsula de aria-current=page seguía visible al abrir otro panel; la exclusión solo cubría class active. Cambio mínimo: ocultar la cápsula de toda opción no expandida mientras existe un panel expandido. Al cerrar, se restaura la página actual sin alterar aria-current.
+
+Impacto limitado a CSS móvil y referencias de caché generadas. Sin datos, roles, autenticación, pedidos o pagos. Regresión específica: 5 páginas × 320/390/767px con aria-current en Catálogo, selección única en cinco paneles y restauración tras Escape; desktop conserva comportamiento. PASS_LOCAL: 16 pruebas Chromium aprobadas (mobile-selection-tests.log). Build:pages y diff --check aprobados; CI y publicación pendientes. Main recibió PR #1083 después de #1085; rama basada en main actualizado para conservar sus cambios.
+
 ## Publicación reconciliada con main #1085 — 2026-10-10
 
 Se conserva la reparación del alta, checkout y pantallas de7961cff; se integra main119aa2e50dd15dca4266bf7ce2f0d0774a61c35c, que mantiene la barra móvil al frente, operable durante paneles, con aislamiento modal en desktop. Las diferencias HTML de main eran únicamente URLs de caché; se preserva el contenido corregido y se alinean identidades por bytes del recurso real. El control38046493472 rechazó un avance de main un segundo antes del snapshot final, sinHTTP403. La reparación permanente del consumo de API/diagnóstico está en PR1081 separado, candidato8fd1a9d5, para migración revisada; no se mezcla aquí.
