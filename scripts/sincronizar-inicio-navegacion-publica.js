@@ -5,24 +5,24 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260910-header-clearance-1';
+const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261009-first-render-1';
-const COLOR_FIRST_PAINT_VERSION = 'tintin-20261009-first-render-1';
-const LOADER_VERSION = 'tintin-20261009-first-render-3';
-const STORE_GATE_VERSION = 'tintin-20261009-first-render-1';
-const PANEL_COMPAT_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261009-first-render-2';
-const NAV_ENTRY_VERSION = 'tintin-20261009-first-render-2';
+const TIENDA_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1';
+const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1';
+const LOADER_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1';
+const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1-first-render-merge-20261010-1';
+const PANEL_COMPAT_VERSION = 'tintin-20261010-mobile-navigation-front-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1';
+const NAV_ENTRY_VERSION = 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261008-producto-superficies-1';
-const SESSION_PROTECTION_VERSION = 'tintin-20261009-first-render-1';
-const PROFILE_GATE_VERSION = 'tintin-20261009-first-render-1';
-const NAV_HEADER_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
-const NAV_TABLET_VERSION = 'tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1';
-const NAV_MOBILE_VERSION = 'tintin-20261008-icon-circle-2';
-const UNIFIED_THEME_VERSION = 'tintin-20261009-first-render-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20261010-whatsapp-release-5';
+const SESSION_PROTECTION_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1';
+const PROFILE_GATE_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1';
+const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5';
+const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5';
+const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2';
+const UNIFIED_THEME_VERSION = 'tintin-20261010-whatsapp-release-5';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
@@ -33,7 +33,7 @@ const NAVIGATION_PRELOAD_STYLES = [
 const PUBLIC_STRUCTURAL_STYLES = [
   ['tt-responsive-brand-surfaces-css', 'css/theme/superficies-marca-responsive-tintin.css', 'tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'],
   ['tt-responsive-brand-polish-css', 'css/theme/pulido-marca-responsive-tintin.css', 'tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1'],
-  ['tt-responsive-brand-safety-css', 'css/theme/seguridad-marca-responsive-tintin.css', 'tintin-20261009-first-render-1'],
+  ['tt-responsive-brand-safety-css', 'css/theme/seguridad-marca-responsive-tintin.css', 'tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1'],
   ['tt-global-layout-css', 'css/components/navigation/compartido/apariencia-global.css', 'tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1'],
   ['tt-phase8-ui-ux-css', 'css/quality/experiencia-interfaz.css', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'],
 ];
@@ -54,7 +54,7 @@ function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   const links = PUBLIC_STRUCTURAL_STYLES.map(([id, href, version]) =>
     `  <link id="${id}" rel="stylesheet" href="${absolute ? '/' : ''}${href}?v=${version}">`
   ).concat((PUBLIC_PAGE_STYLES[page] || []).map(href =>
-    `  <link data-tt-page-structure="initial" rel="stylesheet" href="${href}?v=tintin-20261009-first-render-1">`
+    `  <link data-tt-page-structure="initial" rel="stylesheet" href="${href}?v=tintin-20261010-first-render-merge-1">`
   )).join('\n');
   return out.replace('</head>', `  <!-- Estructura pública disponible desde el primer render -->\n${links}\n</head>`);
 }
@@ -153,9 +153,9 @@ function sharedFooter() {
           <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Tu tienda de accesorios y relojes en Paraguay. Comprá online con atención cercana.</p>
-        <p class="tt-footer-hours">Horario de atención: 09:00 a 23:00 hs.</p>
+        <p class="tt-footer-hours">Horario de atención: 09:00 a 22:00 hs.</p>
         <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.65 15.02L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.08-1.12l-.36-.21-3 .79.8-2.92-.24-.38A8 8 0 1 1 12 20Zm4.38-5.97c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.2-1.44-1.35-1.68-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.8-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.19.86 2.33.98 2.49.12.16 1.7 2.6 4.13 3.65.58.25 1.03.4 1.38.51.58.18 1.11.16 1.52.1.46-.07 1.43-.59 1.63-1.15.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg><span class="tt-footer-wa-text">Escribinos por WhatsApp</span>
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.65 15.02L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.08-1.12l-.36-.21-3 .79.8-2.92-.24-.38A8 8 0 1 1 12 20Zm4.38-5.97c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.2-1.44-1.35-1.68-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.8-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.19.86 2.33.98 2.49.12.16 1.7 2.6 4.13 3.65.58.25 1.03.4 1.38.51.58.18 1.11.16 1.52.1.46-.07 1.43-.59 1.63-1.15.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg><span class="tt-footer-wa-text">Escribir por WhatsApp</span>
         </a>
       </div>
 
@@ -295,6 +295,11 @@ function centralizeRuntime(html) {
     out = out.replace('</body>', `<script src="tienda.js?v=${TIENDA_VERSION}" defer></script>\n</body>`);
   } else {
     out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
+  }
+  // Todas las tarjetas comparten la misma autoridad de fotos y paleta.
+  // Los scripts defer conservan este orden antes del renderer clásico.
+  if (!out.includes('src="js/components/images/galeria-producto.js?')) {
+    out = out.replace(/<script\b[^>]*src=["']tienda\.js[^"']*["'][^>]*><\/script>/i, tag => `<script src="js/components/images/galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1" defer></script>\n${tag}`);
   }
   return out;
 }

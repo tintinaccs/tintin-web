@@ -21,7 +21,7 @@ import { db } from "../firebase/firebase.js?v=tintin-20260924-auth-popup-resolve
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { PERMISSIONS } from "./roles.js?v=tintin-20261009-first-render-1";
+import { PERMISSIONS } from "./roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1";
 import { EDITABLE_PERMISSION_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 
 export const ROLE_PERM_DOC = { col: 'rolePermissions', id: 'main' };
@@ -146,7 +146,7 @@ export async function loadRolePermissions(forceReload = false) {
   if (_cache && !forceReload) return _cache;
   const defaults = buildDefaultRolePermissions();
   try {
-    const { readAdminFirestore } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261009-first-render-1');
+    const { readAdminFirestore } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1');
     const snap = await readAdminFirestore(() => getDoc(doc(db, ROLE_PERM_DOC.col, ROLE_PERM_DOC.id)));
     const saved = snap.exists() ? snap.data() : {};
     const merged = {};

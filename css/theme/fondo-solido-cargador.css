@@ -198,3 +198,7 @@ html body #tt-loader::before {
   content: none !important;
   display: none !important;
 }
+
+/* Cubrir el viewport sin alterar el gutter de la página: cambiarlo mientras
+   carga desplazaba el contenido al retirar el loader. */
+html body #tt-loader { width: 100vw !important; width: 100dvw !important; }

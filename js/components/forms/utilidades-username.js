@@ -11,7 +11,7 @@ const USERNAME_PATTERN = /^[a-z0-9_]{3,20}$/;
 // cuentas oficiales o rutas del sitio.
 const RESERVED_USERNAMES = [
   'admin', 'administrador', 'superadmin', 'root', 'soporte', 'support',
-  'tintin', 'tintinaccesorios', 'sistema', 'system', 'api', 'null', 'undefined',
+  'tintin', 'tintinaccs', 'tintinaccesorios', 'sistema', 'system', 'api', 'null', 'undefined',
   'cuenta', 'cuentas', 'usuario', 'usuarios', 'login', 'logout', 'guest',
 ];
 

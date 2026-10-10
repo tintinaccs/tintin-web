@@ -1,4 +1,4 @@
-import './galeria-producto.js?v=tintin-20261008-product-gallery-1-minimal-product-20261008-1';
+import './galeria-producto.js?v=tintin-20261010-metallic-gold-2';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 /* =============================================================
    TINTIN — Biblioteca multimedia de Super Admin

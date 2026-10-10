@@ -206,8 +206,9 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await expect.poll(
     () => nav.evaluate(node => node.getBoundingClientRect().width),
     { timeout: 1500 },
-  ).toBeLessThan(expandedWidth);
-  await expect(visibleButtons.first()).toHaveCSS('min-height', '48px');
+  ).toBe(expandedWidth);
+  await expect(visibleButtons.first()).toHaveCSS('min-height', '58px');
+  await expect(labels.first()).toBeVisible();
   await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
 
   await page.evaluate(() => window.scrollTo(0, 0));
@@ -219,6 +220,8 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   await page.locator('#tabbar-tienda').click();
   await expect(nav).not.toHaveClass(/tt-tabbar-compact/);
   await expect(page.locator('#collections-sheet')).toHaveAttribute('aria-hidden', 'false');
+  await expect(page.locator('#collections-sheet a[href="/contact"]')).toBeVisible();
+  await expect(page.locator('#btn-close-sheet')).toHaveCSS('width','44px');
   await expect(page.locator('#btn-close-sheet')).toBeFocused();
 });
 
@@ -263,6 +266,8 @@ test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async 
   await page.locator('#btn-menu-tablet').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'false');
   await expect(page.locator('#btn-tablet-close')).toBeFocused();
+  await expect(page.locator('#btn-tablet-close')).toHaveCSS('width','44px');
+  await expect(page.locator('#btn-tablet-close')).toHaveCSS('border-radius','50%');
   await page.locator('#btn-tablet-tienda').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveClass(/tt-tablet-shop-view/);
   await expect(page.locator('#tablet-cats .tt-tablet-cats-grid a')).toHaveCount(11);

@@ -1,1 +1,1 @@
-import './gestion-participacion-admin-v2.js?v=tintin-20261009-first-render-1';
+import './gestion-participacion-admin-v2.js?v=tintin-20261010-loader-front-2-first-render-merge-20261010-1';

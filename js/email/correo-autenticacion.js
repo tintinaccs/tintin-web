@@ -15,9 +15,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
-} from "../core/store/perfil-usuario.js?v=tintin-20261009-first-render-1";
+} from "../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-2-active-session-1-first-render-merge-20261010-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
-import { withDeadline } from '../core/auth/estado-perfil-sesion.mjs?v=tintin-20261001-fusion-main-1';
+import { withDeadline } from '../core/auth/estado-perfil-sesion.mjs?v=tintin-20261010-registration-name-2';
 
 const LOCAL_FUNCTIONS_ORIGIN = 'https://tintinaccesorios.pages.dev';
 

@@ -20,12 +20,12 @@ test('las operaciones canónicas de perfil tienen un plazo finito', () => {
   assert.match(profileStore, /withProfileDeadline\(\(\) => setDoc\(ref,/);
 });
 
-test('la restauración usa el plan canónico de username sin variables inexistentes', () => {
+test('la restauración usa el plan breve sin variables inexistentes', () => {
   const body = login.slice(login.indexOf('async function ensureProfileComplete'), login.indexOf('async function finishGoogleLogin'));
   assert.doesNotMatch(body, /\busernameMissing\b/);
   assert.doesNotMatch(body, /\bdata\.(?:username|userName)\b/);
-  assert.match(body, /usernameField\.style\.display = plan\.needsUsername \? '' : 'none'/);
-  assert.match(body, /if \(plan\.needsUsername\) \{[\s\S]*?usernameInput\.addEventListener/);
+  assert.match(body, /nameField\.hidden = !plan\.needsName/);
+  assert.match(body, /phoneField\.hidden = !plan\.needsPhone/);
 });
 
 test('una restauración de sesión lenta libera el loader y conserva la cuenta', () => {

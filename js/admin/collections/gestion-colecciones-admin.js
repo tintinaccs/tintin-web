@@ -8,8 +8,8 @@
    ============================================================= */
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261009-first-render-1';
-import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261009-first-render-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
+import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-first-render-merge-20261010-1';
 
 if (!window.TintinAdminCollectionsPhase4Booted) {
   window.TintinAdminCollectionsPhase4Booted = true;

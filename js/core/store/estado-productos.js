@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261009-first-render-2';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -19,7 +19,7 @@ import {
   runSingleFlight,
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
-import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20261009-first-render-1';
+import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1';
 import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';

@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
+  const TT_CACHE_VERSION = 'tintin-20261009-whatsapp-responsive-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -396,7 +396,7 @@
 
   const BRAND_LABEL = computeBrandLabel();
   const DEFAULT_LOGO_SRC = resolveAsset(
-    'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', false
+    'assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1', false
   );
   const LOGO_SRC = DEFAULT_LOGO_SRC;
 
@@ -407,7 +407,7 @@
     'html.tt-store-gate-pending body> *:not(#tt-loader):not(#tt-store-closed-overlay),html.tt-store-gate-blocked body> *:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important;pointer-events:none!important;user-select:none!important}',
     'html.tt-store-gate-pending body,html.tt-store-gate-blocked body{overflow:hidden!important;overscroll-behavior:none!important}',
     '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
-    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#F8AACA;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
+    '#tt-loader{position:fixed;inset:0;width:100vw;width:100dvw;height:100%;margin:0;border:0;max-width:none;max-height:none;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#F8AACA;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
     '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:brightness(0) invert(1);user-select:none;pointer-events:none}',
@@ -540,6 +540,7 @@
 
   const loader = document.createElement('div');
   loader.id = 'tt-loader';
+  if (typeof loader.showPopover === 'function') loader.setAttribute('popover', 'manual');
   loader.setAttribute('aria-hidden', 'true');
   loader.setAttribute('role', 'presentation');
   loader.dataset.state = 'show';
@@ -584,11 +585,16 @@
   });
   if (logo.complete && logo.naturalWidth > 0) markLogoReady();
 
+  function raiseLoader() {
+    if (loader.isConnected && typeof loader.showPopover === 'function' && !loader.matches(':popover-open')) loader.showPopover();
+  }
+
   function insertLoader() {
     if (inserted || !document.body) return;
     if (!document.getElementById('tt-loader')) {
       inserted = true;
       document.body.insertBefore(loader, document.body.firstChild);
+      raiseLoader();
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           const img = document.getElementById('tt-loader-logo');
@@ -618,6 +624,7 @@
     loader.style.touchAction = 'auto';
     loader.style.pointerEvents = 'none';
     loader.classList.add('tt-out');
+    if (typeof loader.hidePopover === 'function' && loader.matches(':popover-open')) loader.hidePopover();
 
     const generation = ++hideGen;
     function detach() {
@@ -669,6 +676,7 @@
     loader.style.touchAction = '';
     loader.style.pointerEvents = '';
     loader.classList.remove('tt-out');
+    raiseLoader();
 
     const wrap = document.getElementById('tt-loader-spin-wrap');
     if (wrap) {
@@ -830,13 +838,13 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261009-first-render-2');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-5-first-render-merge-20261010-1');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261009-first-render-1');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1');
   }
 
   function bootHeaderMode() {
@@ -851,7 +859,7 @@
   // segundo sistema de menús.
   function bootHeaderAccountFix() {
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20261009-first-render-1');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1');
     }
   }
 
@@ -872,63 +880,63 @@
     if (isVisualPreviewFrame || framed) return;
     if (/\/checkout(?:\.html)?$/.test(currentPath())) return;
     if (!window.TintinVersionWatchBooted) {
-      importSibling('quality/vigilancia-version.js', 'Version Watch');
+      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootHeaderScrollHide() {
     if (!window.TintinHeaderScrollHideBooted) {
-      importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide');
+      importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootAdminAndProfileFixes() {
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
-      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261009-first-render-1');
-      importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
-      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261009-first-render-1');
+      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261004-admin-connections-3-encomienda-20261008-1-master-20261007-1-first-render-merge-20261010-1');
+      importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
+      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261004-admin-connections-3-encomienda-20261008-1-master-20261007-1-first-render-merge-20261010-1');
     }
   }
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal');
+      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootImagePerformance() {
     if (!window.TintinImagePerformanceBooted) {
-      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance');
+      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261009-first-render-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261010-whatsapp-release-5-first-render-merge-20261010-1');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261009-first-render-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-first-render-merge-20261010-1');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261009-first-render-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-registration-name-2-first-render-merge-20261010-1');
   }
 
   function bootThemeColorSanitizerPublic() {
     if (!window.TintinThemeColorSanitizerBooted) {
-      importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer');
+      importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 
   function bootPageAuditFixPublic() {
     if (!window.TintinPageAuditFixBooted) {
-      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix');
+      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261010-mobile-navigation-front-1');
     }
   }
 
@@ -947,11 +955,11 @@
       const link = document.createElement('link');
       link.id = 'tt-phase8-ui-ux-css';
       link.rel = 'stylesheet';
-      link.href = resolveAsset('css/quality/experiencia-interfaz.css');
+      link.href = new URL('/css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href;
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {
-      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX');
+      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
     }
   }
 

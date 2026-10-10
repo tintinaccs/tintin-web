@@ -12,8 +12,10 @@ const checks = [
     !login.includes('firstLogin') &&
     !login.includes('if (!firstLogin) return;')],
   ['el guardado usa una transacción', login.includes('await runTransaction(db')],
-  ['el nombre del proveedor se confirma antes de editar', login.includes('login-profile-name-confirmation')],
-  ['el teléfono se puede solicitar independientemente', login.includes("phoneField.style.display = plan.needsPhone ? '' : 'none'")],
+  ['el alta valida nombre y apellido en un campo con al menos dos palabras',
+    login.includes('Nombre y apellido') && login.includes('!isValidCustomerName(name)') &&
+    moduleSource.includes('export function isValidCustomerName') && moduleSource.includes('isValidFullName')],
+  ['el teléfono se puede solicitar independientemente', login.includes('phoneField.hidden = !plan.needsPhone')],
   ['el superadmin se excluye por rol o correo', moduleSource.includes("role).toLowerCase() === 'superadmin'")],
   ['solo se completa un teléfono ausente', moduleSource.includes('if (!currentPhone && clean(submittedPhone))')],
   ['el nombre y el apellido se validan por separado', moduleSource.includes('export function isValidNamePart')],

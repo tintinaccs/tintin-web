@@ -10,12 +10,11 @@ import { sanitizeVisualConfig } from '../../cloudflare/visual-builder-core.js';
 test('Producto expone todas sus superficies pero conserva barreras comerciales', () => {
   const schema = getPageSchema('product');
   assert.deepEqual(Object.keys(schema.sections), [
-    'product_detail', 'selection', 'related',
+    'product_detail', 'related',
   ]);
   assert.equal(schema.sections.product_detail.visualEditable, false);
   assert.equal(schema.sections.product_detail.blockAnchor, false);
-  assert.equal(schema.sections.selection.visualEditable, false);
-  assert.equal(schema.sections.selection.blockAnchor, false);
+  assert.equal(schema.sections.selection, undefined);
   assert.equal(schema.sections.benefits, undefined);
   assert.equal(schema.sections.related.visualEditable, true);
 });
@@ -33,10 +32,11 @@ test('un payload manipulado no puede cruzar zonas protegidas de Producto', () =>
     ],
   });
 
-  assert.deepEqual(clean.sectionOrder, ['product_detail', 'selection', 'related']);
+  assert.deepEqual(clean.sectionOrder, ['product_detail', 'related']);
   assert.equal(clean.sections.product_detail.background, '');
   assert.equal(clean.sections.product_detail.textColor, '');
   assert.equal(clean.sections.benefits, undefined);
+  assert.equal(clean.sections.selection, undefined);
   assert.equal(clean.customBlocks[0].afterSection, 'related');
   assert.equal(clean.customBlocks[1].afterSection, 'related');
 });

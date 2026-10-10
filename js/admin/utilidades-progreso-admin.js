@@ -4,7 +4,7 @@
  * detalle por elemento en la ventana de diagnóstico. Sin esperas
  * artificiales ni renders completos durante el proceso.
  */
-import { runOperation } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261001-inventory-fix-1';
+import { runOperation } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 
 const MAX_LISTED_FAILURES = 20;
 

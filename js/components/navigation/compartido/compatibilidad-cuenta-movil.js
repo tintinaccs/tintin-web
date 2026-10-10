@@ -18,7 +18,7 @@ function loadResponsiveBrandStyles(){
  var files=[
   ['tt-responsive-brand-surfaces-css','css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'],
   ['tt-responsive-brand-polish-css','css/theme/pulido-marca-responsive-tintin.css?v=tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1'],
-  ['tt-responsive-brand-safety-css','css/theme/seguridad-marca-responsive-tintin.css?v=tintin-20261009-first-render-1']
+  ['tt-responsive-brand-safety-css','css/theme/seguridad-marca-responsive-tintin.css?v=tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1']
  ];
  files.forEach(function(entry){
   var id=entry[0],href=entry[1];

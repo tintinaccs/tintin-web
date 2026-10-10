@@ -133,7 +133,7 @@ for (const pageId of declaredIds) {
   if (seenPaths.has(page.path)) fail(`${pageId}: path duplicado ${page.path}.`);
   seenPaths.add(page.path);
 
-  const html = read(page.path);
+  const html = read(page.path).replace(/<!--[\s\S]*?-->/g, '');
   const ids = new Set();
   const roots = new Set();
   const closedZones = new Set();
@@ -202,11 +202,13 @@ for (const protectedId of ['checkout', 'login', 'perfil']) {
 }
 
 const product = structure.SITE_STRUCTURE_CONTRACT.product;
-for (const protectedSectionId of ['product_detail', 'selection']) {
+for (const protectedSectionId of ['product_detail']) {
   const section = product?.sections?.find(item => item.id === protectedSectionId);
   if (!section || section.movable || section.visualEditable || section.blockAnchor) fail(`product/${protectedSectionId}: debe permanecer fijo, no visual y sin ancla libre.`);
 }
-if (product?.sections?.some(item => item.id === 'benefits')) fail('product/benefits: superficie retirada por el propietario; no debe volver al editor.');
+for (const retiredId of ['benefits', 'selection']) {
+  if (product?.sections?.some(item => item.id === retiredId)) fail(`product/${retiredId}: superficie retirada por el propietario; no debe volver al editor.`);
+}
 for (const safeSectionId of ['related']) {
   const section = product?.sections?.find(item => item.id === safeSectionId);
   if (!section?.visualEditable || !section.blockAnchor) fail(`product/${safeSectionId}: debe estar disponible como superficie visual segura.`);

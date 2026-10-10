@@ -1,5 +1,5 @@
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { AUTH_STATES, getSessionUser, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261009-first-render-1';
+import { AUTH_STATES, getSessionUser, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
 import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 import { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating } from './validacion-puntuacion-resena.js?v=tintin-20260831-review-rating-required-1';
@@ -22,7 +22,7 @@ let unsubscribeStats = null;
 let unsubscribeLikes = null;
 let deepLinkHandled = false;
 const PENDING_INTENT_KEY = 'tt_product_community_intent_v2';
-const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2';
+const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1';
 const PUBLIC_REVIEWS_LIMIT = 100;
 let publicReviewCursor = null;
 let publicReviewsHaveMore = false;

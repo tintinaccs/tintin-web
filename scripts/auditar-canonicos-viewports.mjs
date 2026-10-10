@@ -3,6 +3,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { removeFixtureScripts } from './lib/html-layout-fixture.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'diagnostic-manifest.json'), 'utf8'));
@@ -39,6 +40,17 @@ const pages = (manifest.pages || [])
   .filter(page => page.path && fs.existsSync(path.join(root, page.path)));
 const authShellPages = new Set(['admin.html', 'admin-images.html', 'login.html', 'perfil.html']);
 const expectsPublicShell = pageInfo => !authShellPages.has(pageInfo.path) && !pageInfo.redirectsTo;
+
+// Geometría del panel real, aislada de autenticación y datos de negocio.
+// No ejecuta Firebase ni habilita operaciones; los contratos de autorización
+// y la integración remota tienen sus propios gates. El CDN no debe convertir
+// esta medición de maquetación en una prueba de disponibilidad de Firebase.
+const adminMarkup = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
+const adminSidebarScript = adminMarkup.match(/<script\b[^>]*src="js\/admin\/sidebar-expandible-admin\.js\?v=[^"]+"[^>]*><\/script>/)?.[0];
+if (!adminSidebarScript) throw new Error('La maqueta de Administración no declara su navegación lateral real.');
+const adminGeometryFixture = removeFixtureScripts(adminMarkup, { removeModulePreloads: true })
+  .replace('<html lang="es">', '<html lang="es" class="adm-auth-ready">')
+  .replace('</body>', `${adminSidebarScript}</body>`);
 
 const ciProducts = [
   { id:'ci-reloj', data:{ name:'Reloj CI', category:'relojes', price:100000, stock:5, active:true, destacado:true, imageUrl:'', desc:'Producto de auditoría.' } },
@@ -138,6 +150,7 @@ async function inspect(page, width, pageInfo) {
     if (!pageInfo.redirectsTo && rootWidth > width + 1) issues.push(`overflow horizontal raíz ${rootWidth}px`);
     const visibleBodyChildren = [...(document.body?.children || [])].filter(visible);
     if (!pageInfo.requiresAuth && !pageInfo.redirectsTo && !visibleBodyChildren.length) issues.push('la página quedó visualmente vacía');
+    if (pageInfo.geometryMode === 'isolated-admin-layout' && !visible(document.querySelector('.adm-main'))) issues.push('la maqueta real de Administración quedó oculta');
     if (shellExpected) {
       const desktop = document.getElementById('tt-header-desktop-tablet');
       const tablet = document.getElementById('tt-header-tablet');
@@ -162,6 +175,7 @@ async function inspect(page, width, pageInfo) {
 // Auth routes and aliases with a declared redirect may navigate after the
 // initial document is ready; wait for that transition before inspecting.
 async function settleRedirect(page, pageInfo, startUrl) {
+  if (pageInfo.geometryMode === 'isolated-admin-layout') return;
   if (!pageInfo.requiresAuth && !pageInfo.redirectsTo) return;
   try { await page.waitForURL(url => url.toString() !== startUrl, { timeout:2200 }); await page.waitForLoadState('domcontentloaded', { timeout:3000 }).catch(() => {}); } catch {}
 }
@@ -211,8 +225,16 @@ try {
     });
     for (const pageInfo of pages) {
       const page = await context.newPage();
+      if (pageInfo.path === 'admin.html') {
+        pageInfo.geometryMode = 'isolated-admin-layout';
+        await page.route(`${baseURL}/admin.html`, route => route.fulfill({
+          contentType:'text/html',
+          headers:{ 'content-security-policy':"default-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'none'; form-action 'none'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:" },
+          body:adminGeometryFixture
+        }));
+      }
       const label = `${pageInfo.path} ${viewport.width}×${viewport.height}`;
-      const entry = { page:pageInfo.path, viewport:viewport.id, width:viewport.width, height:viewport.height, issues:[] };
+      const entry = { page:pageInfo.path, viewport:viewport.id, width:viewport.width, height:viewport.height, geometryMode:pageInfo.geometryMode || 'runtime', issues:[] };
       console.log(`START — ${label}`);
       try {
         await withPageDeadline(page, label, async () => {

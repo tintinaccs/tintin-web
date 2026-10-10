@@ -10,7 +10,9 @@ export function initMobileNavigationIndicator() {
       return;
     }
     const navRect = nav.getBoundingClientRect();
-    const iconRect = icon.getBoundingClientRect();
+    const iconRect = item.getBoundingClientRect();
+    nav.style.setProperty('--tt-mobile-w', `${iconRect.width}px`);
+    nav.style.setProperty('--tt-mobile-h', `${iconRect.height}px`);
     nav.style.setProperty('--tt-mobile-x', `${iconRect.left + iconRect.width / 2 - navRect.left - nav.clientLeft - halo.offsetWidth / 2}px`);
     nav.style.setProperty('--tt-mobile-y', `${iconRect.top + iconRect.height / 2 - navRect.top - nav.clientTop - halo.offsetHeight / 2}px`);
     if (!nav.classList.contains('tt-mobile-nav-ready')) nav.classList.add('tt-mobile-nav-ready');

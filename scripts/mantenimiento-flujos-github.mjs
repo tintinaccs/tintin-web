@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { readTrustedOrRemote, githubFailure } from './leer-blobs-mantenimiento.mjs';
 import { execFileSync } from 'node:child_process';
 import { inspectMaintenance, validateApproval, validateChecks, validateEnvironment, validateSnapshot, policyPath, planPath } from './mantenimiento-flujos-core.mjs';
 
@@ -17,7 +18,7 @@ const api = async (path, body) => {
     headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${process.env.GH_TOKEN || ''}`, 'content-type': 'application/json', 'X-GitHub-Api-Version': '2026-03-10' },
     ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(30000),
   });
-  assert(response.ok, `Lectura/escritura de GitHub rechazada: HTTP ${response.status}`);
+  assert(response.ok, githubFailure(path, response));
   return response.json();
 };
 const list = async (path, key) => {
@@ -47,11 +48,15 @@ const readCandidate = async () => {
     blobs.get(path)?.sha !== original.get(path)?.sha || blobs.get(path)?.mode !== original.get(path)?.mode);
   const bytes = new Map();
   const read = async path => {
+    if (bytes.has(path)) return;
     const entry = blobs.get(path);
     assert(entry?.mode === '100644' || entry?.mode === '100755', `Archivo ausente o no regular: ${path}`);
-    const blob = await api(`git/blobs/${entry.sha}`);
-    assert(blob.encoding === 'base64' && blob.size <= 5 * 1024 * 1024, 'Blob inválido o demasiado grande.');
-    bytes.set(path, Buffer.from(blob.content, 'base64'));
+    bytes.set(path, await readTrustedOrRemote(entry, original.get(path),
+      () => fs.readFileSync(path), async () => {
+        const blob = await api(`git/blobs/${entry.sha}`);
+        assert(blob.encoding === 'base64' && blob.size <= 5 * 1024 * 1024, 'Blob inválido o demasiado grande.');
+        return Buffer.from(blob.content, 'base64');
+      }));
   };
   await read(policyPath);
   const candidate = JSON.parse(bytes.get(policyPath).toString('utf8'));

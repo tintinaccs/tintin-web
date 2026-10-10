@@ -1,21 +1,16 @@
-import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261009-first-render-1";
+import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1";
 // =============================================================
 // TINTIN ACCESORIOS — Flujo real de decisiones y conexiones (render)
 // =============================================================
-// Consume datos-flujo-conexiones.js (evidencia estática de código) y, al
-// pulsar "Revalidar", superpone una prueba EN VIVO real usando los mismos
-// endpoints de solo lectura que ya existen para diagnóstico operativo
-// (system-health, admin-runtime-health). No inventa infraestructura de
-// monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
-// datos. La única escritura es "Sellar verdes", que guarda sólo los sellos
-// del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
-import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261006-production-audit-1';
-import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261007-protected-flows-1';
-import { recordFiles, fingerprint, checkSeal, applySeal, prepareSealEntries, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261007-selective-seals-1';
+// Comprueba automáticamente la evidencia actual con las lecturas de producción
+// existentes. Los sellos históricos no deciden colores y no se escriben datos.
+import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261010-auto-flow-1';
+import { resolveAutomaticState, isAttentionState, liveMarker, shouldShowFlowEdge, createAutomaticMonitor, CHECK_INTERVAL_MS, EVIDENCE_MAX_AGE_MS } from './estado-flujo.js?v=tintin-20261010-auto-flow-1';
+import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261010-auto-flow-1';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
-import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { collection, doc, getDocFromServer as getDoc, getDocsFromServer as getDocs, limit, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {
   entrada: 'Entrada',
@@ -36,11 +31,6 @@ function slug(text) {
     .normalize('NFD').replace(/[̀-ͯ]/g, '')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
-
-const STALE_AFTER_MS = 24 * 60 * 60 * 1000;
-const NODES_BY_ID = Object.fromEntries(NODES.map(node => [node.id, node]));
-// Sellos en verde: settings/* es sólo del Super Admin en firestore.rules.
-const SEALS_DOC = ['settings', 'flowSeals'];
 
 function nodeById(id) {
   return NODES.find(node => node.id === id) || null;
@@ -69,8 +59,8 @@ function evidenceHtml(evidence) {
   }).join('');
 }
 
-async function probeRenderedCart() {
-  const routeProbe = fetch('/', { credentials: 'same-origin', cache: 'no-store' })
+async function probeRenderedCart(signal) {
+  const routeProbe = fetch('/', { credentials: 'same-origin', cache: 'no-store', signal })
     .then(async response => {
       await response.body?.cancel?.();
       return { path: '/', status: response.status, ok: response.ok };
@@ -85,9 +75,11 @@ async function probeRenderedCart() {
       settled = true;
       window.clearTimeout(timeoutId);
       observer?.disconnect();
+      signal?.removeEventListener('abort', onAbort);
       frame.remove();
       resolve(value);
     };
+    const onAbort = () => cleanup(false);
     let observer;
     const timeoutId = window.setTimeout(() => cleanup(false), 10_000);
     // El sitio evita inicializar algunos componentes cuando el documento queda
@@ -96,6 +88,8 @@ async function probeRenderedCart() {
     // Con 1×1 px la página reporta innerWidth 0, nunca sale de
     // tt-store-gate-pending y el carrito no llega a montarse: el probe daba
     // rojo aunque el carrito real funcionara. Se usa un viewport de teléfono.
+    if (signal?.aborted) { cleanup(false); return; }
+    signal?.addEventListener('abort', onAbort, { once: true });
     frame.style.cssText = 'position:fixed;left:-10000px;top:0;width:390px;height:844px;opacity:0;pointer-events:none;border:0';
     frame.tabIndex = -1;
     frame.setAttribute('aria-hidden', 'true');
@@ -301,7 +295,6 @@ export function initConnectionsFlow({ role } = {}) {
   root.dataset.tfcMounted = '1';
 
   const liveState = { checkedAt: null, byId: {}, byEdgeId: {}, error: '', endpointStatus: {} };
-  const sealState = { loaded: false, shaByPath: {}, entries: {}, error: '' };
 
   root.innerHTML = `
     <div class="adm-card tfc-card">
@@ -310,10 +303,7 @@ export function initConnectionsFlow({ role } = {}) {
           <div class="adm-card-title">Flujo real de decisiones y conexiones</div>
           <p>Muestra únicamente conexiones que existen hoy en el código, la configuración y los servicios — nunca un diseño ideal. Lo desconectado, incompleto o sin confirmar se marca así.</p>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button type="button" class="adm-btn adm-btn-primary" id="tfc-btn-revalidate">Revalidar en vivo</button>
-          <button type="button" class="adm-btn adm-btn-outline" id="tfc-btn-seal" title="Sella sólo elementos verificados sin sello. Conserva los sellos existentes; los cambiados se confirman individualmente.">🔒 Sellar verdes nuevos</button>
-        </div>
+        <span id="tfc-monitor-status" role="status" aria-live="polite">Comprobación automática activa</span>
       </div>
       <div class="adm-card-body">
         <div id="tfc-revalidation-progress" class="tfc-revalidation-progress" hidden>
@@ -321,27 +311,15 @@ export function initConnectionsFlow({ role } = {}) {
           <progress id="tfc-revalidation-bar" max="100" value="0" aria-label="Avance de la revalidación"></progress>
         </div>
         <div class="adm-diagnostic-safety" role="note">
-          <strong>Modo de solo lectura.</strong>
-          "Revalidar" solo ejecuta lecturas GET de producción (<code>/api/health</code>,
-          <code>/api/system-health</code>, <code>/api/admin-runtime-health</code>, los endpoints de lectura
-          de participación y los headers de <code>/admin.html</code>). También hace siete lecturas mínimas con
-          el SDK de Firestore para comprobar Rules ya desplegadas y carga temporalmente la portada aislada
-          para comprobar el panel de carrito ya renderizado. Ningún botón de este panel invoca una mutación de negocio ni
-          crea, actualiza ni elimina pedidos, productos ni datos reales. El único que guarda algo es
-          "Sellar verdes", y sólo guarda los sellos de este panel.
+          <strong>Monitoreo automático.</strong> Los colores se actualizan según las comprobaciones actuales,
+          sin confirmaciones manuales. Verde: verificado; amarillo: pendiente o sin evidencia suficiente;
+          rojo: fallo; naranja: parcialmente verificado. Sólo se realizan lecturas de producción.
         </div>
         <div class="tfc-meta">
           <span>Evidencia de código generada: <strong>${escapeHtml(GENERATED_AT)}</strong></span>
-          <span id="tfc-live-timestamp">Sin verificación en vivo todavía.</span>
-          <span id="tfc-seal-status">Cargando sellos…</span>
+          <span id="tfc-live-timestamp">Comprobando conexiones…</span>
         </div>
-        <div id="tfc-live-error" class="tfc-live-error" role="status" hidden><span id="tfc-live-error-text"></span><button type="button" id="tfc-live-error-close" aria-label="Cerrar aviso de conexión">×</button></div>
-        <div id="tfc-seal-confirmation" class="adm-diagnostic-safety" role="group" aria-label="Confirmar sellado" hidden>
-          <p id="tfc-seal-confirmation-text"></p>
-          <button type="button" class="adm-btn adm-btn-primary" id="tfc-seal-save">Confirmar sellado</button>
-          <button type="button" class="adm-btn adm-btn-outline" id="tfc-seal-cancel">Cancelar</button>
-        </div>
-        <p id="tfc-seal-feedback" role="status" aria-live="polite"></p>
+        <div id="tfc-live-error" class="tfc-live-error" role="status" hidden><span id="tfc-live-error-text"></span></div>
         <div id="tfc-summary" class="tfc-summary" aria-label="Resumen del flujo"></div>
         <div class="tfc-toolbar">
           <input type="search" id="tfc-search" class="adm-select" placeholder="Buscar nodo, conexión, servicio, archivo o estado…">
@@ -371,49 +349,21 @@ export function initConnectionsFlow({ role } = {}) {
   const liveTimestampEl = root.querySelector('#tfc-live-timestamp');
   const liveErrorEl = root.querySelector('#tfc-live-error');
   const summaryEl = root.querySelector('#tfc-summary');
-  const sealStatusEl = root.querySelector('#tfc-seal-status');
-  const sealBtn = root.querySelector('#tfc-btn-seal');
+  const monitorStatusEl = root.querySelector('#tfc-monitor-status');
 
   let selectedNodeId = null;
   let selectedEdgeId = null;
 
-  function sealCheckFor(record) {
-    if (!sealState.loaded) return null;
-    const seal = sealState.entries[record.id];
-    if (!seal) return null;
-    return checkSeal(seal, fingerprint(recordFiles(record, NODES_BY_ID), sealState.shaByPath));
-  }
-
-  // Estado sólo por evidencia en vivo/código, sin el candado (para sellar).
-  function liveOnlyState(record, isEdge = false) {
-    return resolveState(record, isEdge ? liveState.byEdgeId[record.id] : liveState.byId[record.id], ESTADOS);
-  }
-
   function effectiveState(node) {
-    const live = liveState.byId[node.id];
-    return applySeal(resolveState(node, live, ESTADOS), sealCheckFor(node), live, ESTADOS);
+    return resolveAutomaticState(node, liveState.byId[node.id], ESTADOS, {
+      maxAgeMs: EVIDENCE_MAX_AGE_MS, available: navigator.onLine !== false,
+    });
   }
 
   function effectiveEdgeState(edge) {
-    const live = liveState.byEdgeId[edge.id];
-    return applySeal(resolveState(edge, live, ESTADOS), sealCheckFor(edge), live, ESTADOS);
-  }
-
-  function sealHtml(record) {
-    const check = sealCheckFor(record);
-    if (!check) return '<p class="tfc-detail-live tfc-detail-live-none">Sin sello: el color depende de la revalidación en vivo.</p>';
-    const when = escapeHtml(check.sealedAt ? check.sealedAt.replace('T', ' ').slice(0, 16) : '');
-    if (check.intact) return `<p class="tfc-detail-live"><strong>🔒 Sellado en verde</strong> el ${when}${check.sealedBy ? ` por ${escapeHtml(check.sealedBy)}` : ''}. Su código no cambió desde entonces.</p>`;
-    return `<p class="tfc-detail-live"><strong>⚠ Cambió desde el sello</strong> (${when}). Archivos tocados: ${check.changed.map(file => `<code>${escapeHtml(file)}</code>`).join(', ')}. Revalidá y, si queda verde, volvé a sellar.</p>`;
-  }
-
-  function renderSealStatus() {
-    if (sealState.error) { sealStatusEl.textContent = `Sellos no disponibles: ${sealState.error}`; return; }
-    if (!sealState.loaded) { sealStatusEl.textContent = 'Cargando sellos…'; return; }
-    const records = [...NODES, ...EDGES];
-    const checks = records.map(sealCheckFor).filter(Boolean);
-    const broken = checks.filter(check => !check.intact).length;
-    sealStatusEl.textContent = `Sellados en verde: ${checks.length - broken}${broken ? ` · ${broken} cambiaron desde el sello (amarillo)` : ''}`;
+    return resolveAutomaticState(edge, liveState.byEdgeId[edge.id], ESTADOS, {
+      maxAgeMs: EVIDENCE_MAX_AGE_MS, available: navigator.onLine !== false,
+    });
   }
 
   function searchableEvidence(record) {
@@ -440,13 +390,13 @@ export function initConnectionsFlow({ role } = {}) {
     const edgeStates = EDGES.map(effectiveEdgeState);
     const green = [...nodeStates, ...edgeStates].filter(state => state === ESTADOS.PROD).length;
     const attention = nodeStates.length + edgeStates.length - green;
-    const checked = liveState.checkedAt ? `Última revalidación: ${escapeHtml(liveState.checkedAt)}${isStale(liveState.checkedAt) ? ' · STALE / requiere revalidación' : ''}` : 'Sin revalidación live en esta sesión.';
+    const checked = liveState.checkedAt ? `Última comprobación: ${escapeHtml(liveState.checkedAt)}${isStale(liveState.checkedAt) ? ' · Evidencia vencida; comprobación automática pendiente' : ''}` : 'Comprobación automática en curso.';
     summaryEl.innerHTML = `<div class="tfc-summary-item"><strong>${NODES.length}</strong><span>nodos</span></div><div class="tfc-summary-item"><strong>${EDGES.length}</strong><span>conexiones</span></div><div class="tfc-summary-item is-green"><strong>${green}</strong><span>verificados</span></div><div class="tfc-summary-item is-attention"><strong>${attention}</strong><span>requieren atención</span></div><div class="tfc-summary-freshness">${checked}</div>`;
   }
 
   function isStale(checkedAt) {
     const time = Date.parse(checkedAt || '');
-    return !Number.isFinite(time) || Date.now() - time > STALE_AFTER_MS;
+    return !Number.isFinite(time) || Date.now() - time >= EVIDENCE_MAX_AGE_MS;
   }
 
   function renderLanes() {
@@ -459,7 +409,7 @@ export function initConnectionsFlow({ role } = {}) {
         const marker = liveMarker(live, state, ESTADOS);
         const liveMark = marker ? `<span class="tfc-live-dot is-${marker.kind}" title="${escapeHtml(live.note)}" aria-label="Evidencia ${marker.label}">${marker.symbol}</span>` : '';
         const active = node.id === selectedNodeId ? ' tfc-pill-active' : '';
-        return `<button type="button" class="tfc-pill tfc-state-${slug(state)}${active}" data-node-id="${escapeHtml(node.id)}">${liveMark}${escapeHtml(node.label)}</button>`;
+        return `<a href="#tfc-detail" class="tfc-pill tfc-state-${slug(state)}${active}" data-node-id="${escapeHtml(node.id)}">${liveMark}${escapeHtml(node.label)}</a>`;
       }).join('');
       return `<div class="tfc-lane"><div class="tfc-lane-title">${escapeHtml(CATEGORY_LABELS[category])}</div><div class="tfc-lane-pills">${pills}</div></div>`;
     }).join('') || '<p class="tfc-empty">Ningún nodo coincide con el filtro actual.</p>';
@@ -481,14 +431,14 @@ export function initConnectionsFlow({ role } = {}) {
       const live = liveState.byEdgeId[edge.id];
       const marker = liveMarker(live, state, ESTADOS);
       const active = edge.id === selectedEdgeId ? ' is-selected' : '';
-      return `<button type="button" class="tfc-edge-row${active}" data-edge-id="${escapeHtml(edge.id)}">
+      return `<a href="#tfc-detail" class="tfc-edge-row${active}" data-edge-id="${escapeHtml(edge.id)}">
         <span class="tfc-edge-node">${escapeHtml(from?.label || edge.from)}</span>
         <span class="tfc-edge-arrow">→</span>
         <span class="tfc-edge-node">${escapeHtml(to?.label || edge.to)}</span>
         ${label}
         ${stateBadgeHtml(state)}
         ${marker ? `<span class="tfc-edge-live is-${marker.kind}" title="${escapeHtml(live.note)}">${marker.symbol} ${marker.label}</span>` : ''}
-      </button>`;
+      </a>`;
     });
     edgesEl.innerHTML = rows.join('') || '<p class="tfc-empty">Sin conexiones para este filtro.</p>';
   }
@@ -509,37 +459,33 @@ export function initConnectionsFlow({ role } = {}) {
       <div class="tfc-detail-head">
         <strong>${escapeHtml(isEdge ? `${from} → ${to}` : record.label)}</strong>
         ${stateBadgeHtml(state)}
-        <button type="button" class="tfc-detail-close" id="tfc-detail-close" aria-label="Cerrar">×</button>
       </div>
       ${record.label ? `<p class="tfc-detail-notes">${escapeHtml(record.label)}</p>` : ''}
       <p class="tfc-detail-meta"><strong>Identificador:</strong> <code>${escapeHtml(record.id)}</code> · <strong>Nivel:</strong> ${escapeHtml(live?.evidenceLevel || record.evidenceLevel || 'DOCUMENTATION_ONLY')}</p>
       ${liveHtml}
-      ${sealHtml(record)}
-      <button type="button" class="adm-btn adm-btn-outline" id="tfc-seal-selected" ${liveOnlyState(record, isEdge) !== ESTADOS.PROD || sealCheckFor(record)?.intact ? 'disabled' : ''}>🔒 Sellar sólo este ${isEdge ? 'enlace' : 'nodo'}</button>
       ${record.notes ? `<p class="tfc-detail-notes">${escapeHtml(record.notes)}</p>` : ''}
       <ul class="tfc-detail-evidence">${evidenceHtml(record.evidence)}</ul>
     `;
-    detailEl.querySelector('#tfc-detail-close').addEventListener('click', () => {
-      selectedNodeId = null;
-      selectedEdgeId = null;
-      renderAll();
-    });
-    detailEl.querySelector('#tfc-seal-selected').addEventListener('click', () => requestSeal(record.id));
+
   }
 
   function renderAll() {
+    const focused = document.activeElement?.closest('[data-node-id], [data-edge-id]');
+    const focusedKey = focused && root.contains(focused) ?
+      focused.dataset.nodeId ? ['node', focused.dataset.nodeId] : ['edge', focused.dataset.edgeId] : null;
     if (selectedNodeId && !nodeMatchesFilters(nodeById(selectedNodeId))) selectedNodeId = null;
     if (selectedEdgeId && !edgeMatchesFilters(edgeById(selectedEdgeId))) selectedEdgeId = null;
     renderSummary();
-    renderSealStatus();
     renderLanes();
     renderEdges();
     renderDetail();
+    if (focusedKey) root.querySelector(`[data-${focusedKey[0]}-id="${CSS.escape(focusedKey[1])}"]`)?.focus({ preventScroll: true });
   }
 
   lanesEl.addEventListener('click', event => {
     const btn = event.target.closest('[data-node-id]');
     if (!btn) return;
+    event.preventDefault();
     const id = btn.dataset.nodeId;
     selectedNodeId = selectedNodeId === id ? null : id;
     selectedEdgeId = null;
@@ -548,6 +494,7 @@ export function initConnectionsFlow({ role } = {}) {
   edgesEl.addEventListener('click', event => {
     const row = event.target.closest('[data-edge-id]');
     if (!row) return;
+    event.preventDefault();
     selectedEdgeId = selectedEdgeId === row.dataset.edgeId ? null : row.dataset.edgeId;
     selectedNodeId = null;
     renderAll();
@@ -556,21 +503,17 @@ export function initConnectionsFlow({ role } = {}) {
   stateFilterEl.addEventListener('change', renderAll);
 
   const liveErrorTextEl = root.querySelector("#tfc-live-error-text");
-  root.querySelector("#tfc-live-error-close").addEventListener("click", () => { liveErrorEl.hidden = true; });
-  const revalidateBtn = root.querySelector('#tfc-btn-revalidate');
   const progressPanel = root.querySelector('#tfc-revalidation-progress');
   const progressStatus = root.querySelector('#tfc-revalidation-status');
   const progressBar = root.querySelector('#tfc-revalidation-bar');
-  revalidateBtn.addEventListener('click', async () => {
-    if (revalidateBtn.disabled) return;
-    revalidateBtn.disabled = true;
-    revalidateBtn.textContent = 'Revalidando…';
+  async function revalidate(signal) {
+    if (signal.aborted) return;
     progressPanel.hidden = false;
     root.setAttribute('aria-busy', 'true');
     let percentage = 0;
     let progressActive = true;
     const showProgress = (value, label) => {
-      if (!progressActive) return;
+      if (!progressActive || signal.aborted) return;
       percentage = value;
       progressBar.value = value;
       progressStatus.textContent = `${label} · ${value}%`;
@@ -582,7 +525,7 @@ export function initConnectionsFlow({ role } = {}) {
       const errors = [];
       const readJson = async (url, options = {}) => {
         try {
-          const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(15000), ...options });
+          const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store', ...options, signal: AbortSignal.any([signal, options.signal || AbortSignal.timeout(15000)]) });
           const body = await response.json().catch(() => null);
           return { status: response.status, ok: response.ok, body };
         } catch (error) {
@@ -602,6 +545,7 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
+      if (signal.aborted) return;
       showProgress(10, 'Comprobando conexiones');
       const checks = [
         user ? readJson('/api/system-health', { headers: authHeaders, signal: AbortSignal.timeout(30000) }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
@@ -614,7 +558,7 @@ export function initConnectionsFlow({ role } = {}) {
         probeEngagementRecords(user),
         user ? probeSheetsWebhook() : Promise.resolve(null),
         probeCurrentSession(user, role),
-        fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(15000) }).then(response => ({
+        fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]) }).then(response => ({
           status: response.status,
           csp: Boolean(response.headers.get('content-security-policy')),
         })).catch(error => ({ status: 0, csp: false, error: error?.message || 'fallo de red' })),
@@ -626,7 +570,7 @@ export function initConnectionsFlow({ role } = {}) {
           ['checkout', '/checkout'],
         ].map(async ([key, path]) => {
           try {
-            const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(15000) });
+            const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]) });
             return [key, {
               path,
               status: response.status,
@@ -636,13 +580,14 @@ export function initConnectionsFlow({ role } = {}) {
             return [key, { path, status: 0, ok: false, error: error?.message || 'fallo de red' }];
           }
         }),
-        probeRenderedCart(),
+        probeRenderedCart(signal),
       ];
       let completed = 0;
       const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, engagementStats, engagementRecords, sheetsWebhook, sessionProbe, pageProbe, ...routeProbes] = await Promise.all(checks.map(check => Promise.resolve(check).finally(() => {
         completed += 1;
         showProgress(10 + Math.floor(85 * completed / checks.length), `Comprobaciones terminadas: ${completed} de ${checks.length}`);
       })));
+      if (signal.aborted) return;
       if (user && (!systemHealth.ok || systemHealth.body?.ok !== true)) errors.push(`/api/system-health respondió ${systemHealth.status || 'sin respuesta'}`);
       if (user && (!adminHealth.ok || adminHealth.body?.ok !== true)) errors.push(`/api/admin-runtime-health respondió ${adminHealth.status || 'sin respuesta'}`);
       const ciProblem = user ? ciEvidenceProblem(masterDiagnostics) : '';
@@ -671,107 +616,80 @@ export function initConnectionsFlow({ role } = {}) {
       }
       showProgress(100, errors.length ? 'Revalidación finalizada con avisos' : 'Revalidación finalizada');
     } catch (error) {
-      showProgress(percentage, 'Revalidación interrumpida');
+      if (signal.aborted) return;
+      liveState.checkedAt = null;
+      liveState.byId = {};
+      liveState.byEdgeId = {};
+      showProgress(percentage, 'Comprobación interrumpida; reintento automático');
       liveErrorEl.hidden = false;
-      liveErrorTextEl.textContent = `No se pudo revalidar: ${error?.message || error}`;
+      liveErrorTextEl.textContent = `No se pudo comprobar: ${error?.message || error}. Se reintentará automáticamente.`;
     } finally {
       progressActive = false;
+      if (!signal.aborted) {
+        root.setAttribute('aria-busy', 'false');
+        renderAll();
+      }
+    }
+  }
+
+
+  const monitor = createAutomaticMonitor({
+    check: revalidate,
+    isActive: () => root.isConnected && !root.hidden && root.getClientRects().length > 0 &&
+      document.visibilityState !== 'hidden' && navigator.onLine !== false && Boolean(auth.currentUser),
+    onError(error) {
+      liveState.checkedAt = null;
+      liveState.byId = {};
+      liveState.byEdgeId = {};
       root.setAttribute('aria-busy', 'false');
-      revalidateBtn.disabled = false;
-      revalidateBtn.textContent = 'Revalidar en vivo';
+      liveErrorEl.hidden = false;
+      liveErrorTextEl.textContent = error.message;
       renderAll();
-    }
-  });
-
-  const sealConfirmation = root.querySelector('#tfc-seal-confirmation');
-  const sealConfirmationText = root.querySelector('#tfc-seal-confirmation-text');
-  const sealSaveBtn = root.querySelector('#tfc-seal-save');
-  const sealCancelBtn = root.querySelector('#tfc-seal-cancel');
-  const sealFeedback = root.querySelector('#tfc-seal-feedback');
-  let sealSaving = false;
-  let sealTargetId = null;
-
-  function prepareSeals() {
-    if (!liveState.checkedAt) throw new Error('Primero revalidá en vivo: sólo se sella lo que hoy está verde.');
-    if (!sealState.loaded) throw new Error('Los sellos todavía no cargaron. Probá de nuevo en unos segundos.');
-    if (revalidateBtn.disabled) throw new Error('Esperá a que termine la revalidación antes de sellar.');
-    const sealedAt = new Date().toISOString();
-    const sealedBy = auth.currentUser?.email || '';
-    const entries = {};
-    Object.assign(entries, prepareSealEntries([...NODES, ...EDGES], {
-      targetId: sealTargetId, entries: sealState.entries, nodesById: NODES_BY_ID,
-      shaByPath: sealState.shaByPath, sealedAt, sealedBy,
-      isVerified: record => liveOnlyState(record, Boolean(record.from || record.to)) === ESTADOS.PROD,
-    }));
-    const count = Object.keys(entries).length;
-    if (!count) throw new Error('No hay sellos nuevos verificados para guardar. Los sellos cambiados se confirman seleccionando cada nodo o enlace.');
-    return { entries, count, sealedAt, sealedBy };
-  }
-
-  function requestSeal(targetId = null) {
-    if (sealSaving) return;
-    sealTargetId = targetId;
-    sealFeedback.textContent = '';
-    try {
-      const { count } = prepareSeals();
-      sealConfirmationText.textContent = `Se guardarán ${count} nodos/conexiones verificados${targetId ? ' de la selección' : ' sin sello'}. Los demás sellos se conservan. El sello detecta cambios de código; no bloquea ediciones ni oculta fallos en producción.`;
-      sealConfirmation.hidden = false;
-      sealSaveBtn.focus();
-    } catch (error) {
-      sealFeedback.textContent = error.message;
-    }
-  }
-  sealBtn.addEventListener('click', () => requestSeal());
-  sealCancelBtn.addEventListener('click', () => {
-    if (sealSaving) return;
-    sealConfirmation.hidden = true;
-    sealBtn.focus();
-  });
-  sealSaveBtn.addEventListener('click', async () => {
-    if (sealSaving || sealConfirmation.hidden) return;
-    const revalidationWasDisabled = revalidateBtn.disabled;
-    sealSaving = true;
-    sealBtn.disabled = sealSaveBtn.disabled = sealCancelBtn.disabled = true;
-    sealFeedback.textContent = 'Guardando sellos…';
-    try {
-      // Releer la evidencia al confirmar: no guardar una selección vieja si
-      // otra revalidación cambió el estado mientras se mostraba la pregunta.
-      const { entries, count, sealedAt, sealedBy } = prepareSeals();
-      revalidateBtn.disabled = true;
-      if (!await waitForAdminAppCheck(12000)) throw new Error('La verificación de seguridad está pendiente. Podés reintentar.');
-      await setDoc(doc(db, ...SEALS_DOC), { entries, updatedAt: sealedAt, updatedBy: sealedBy }, { merge: true });
-      sealState.entries = { ...sealState.entries, ...entries };
-      sealConfirmation.hidden = true;
-      sealFeedback.textContent = `Se guardaron ${count} sellos verificados.`;
+    },
+    onStatus(status) {
+      if (!root.isConnected) { dispose(); return; }
+      monitorStatusEl.textContent = navigator.onLine === false ? 'Sin conexión; reconexión automática' :
+        !auth.currentUser ? 'Sesión de Administración pendiente' :
+        status === 'checking' ? 'Comprobando conexiones automáticamente…' :
+        status === 'paused' ? 'Monitoreo pausado mientras la vista está oculta' :
+        `Monitoreo activo · nueva comprobación en ${CHECK_INTERVAL_MS / 1000} s`;
+      if (status !== 'checking') root.setAttribute('aria-busy', 'false');
       renderAll();
-    } catch (error) {
-      sealFeedback.textContent = `No se pudieron guardar los sellos: ${error?.message || error}`;
-    } finally {
-      sealSaving = false;
-      sealBtn.disabled = sealSaveBtn.disabled = sealCancelBtn.disabled = false;
-      revalidateBtn.disabled = revalidationWasDisabled;
-    }
+    },
   });
 
-  // Huella actual de cada archivo (se regenera en cada build) + sellos guardados.
-  Promise.all([
-    fetch('/diagnostic-manifest.json', { credentials: 'same-origin', cache: 'no-store' }).then(response => {
-      if (!response.ok) throw new Error(`manifiesto ${response.status}`);
-      return response.json();
-    }),
-    readAdminFirestore(() => getDoc(doc(db, ...SEALS_DOC))),
-  ]).then(([manifest, snapshot]) => {
-    sealState.shaByPath = shaMapFromManifest(manifest);
-    const data = snapshot.exists() ? snapshot.data() : {};
-    sealState.entries = data && typeof data.entries === 'object' && data.entries ? data.entries : {};
-    sealState.loaded = true;
-  }).catch(error => {
-    sealState.error = error?.message || String(error);
-  }).finally(renderAll);
-
-  renderAll();
-
-  // Abrir la sección debe mostrar el estado real de producción sin exigir un
-  // segundo clic. Sigue siendo un conjunto de GETs de solo lectura.
-  window.setTimeout(() => revalidateBtn.click(), 0);
+  function synchronizeMonitor() {
+    if (!root.isConnected) { dispose(); return; }
+    monitor.refresh();
+    renderAll();
+  }
+  const observer = new MutationObserver(synchronizeMonitor);
+  observer.observe(root, { attributes: true, attributeFilter: ['class', 'hidden', 'style'] });
+  if (root.parentElement) observer.observe(root.parentElement, { childList: true });
+  document.addEventListener('visibilitychange', synchronizeMonitor);
+  window.addEventListener('online', synchronizeMonitor);
+  window.addEventListener('offline', synchronizeMonitor);
+  window.addEventListener('pageshow', synchronizeMonitor);
+  const pauseMonitor = () => monitor.pause();
+  window.addEventListener('pagehide', pauseMonitor);
+  let sessionUid = auth.currentUser?.uid || '';
+  const unsubscribeAuth = onAuthStateChanged(auth, user => {
+    const nextUid = user?.uid || '';
+    if (sessionUid === nextUid) return;
+    sessionUid = nextUid;
+    liveState.checkedAt = null;
+    liveState.byId = {};
+    liveState.byEdgeId = {};
+    monitor.restart();
+  });
+  function dispose() {
+    monitor.dispose();
+    observer.disconnect();
+    unsubscribeAuth();
+    document.removeEventListener('visibilitychange', synchronizeMonitor);
+    for (const type of ['online', 'offline', 'pageshow']) window.removeEventListener(type, synchronizeMonitor);
+    window.removeEventListener('pagehide', pauseMonitor);
+    delete root.dataset.tfcMounted;
+  }
+  synchronizeMonitor();
 }

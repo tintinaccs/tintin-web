@@ -116,7 +116,7 @@
     "test:rules-phase6": "npm run test:rules-critical",
     "audit:phase7-catalog": "node scripts/auditar-fase-7-catalogo.js",
     "audit:phase8-ui": "node scripts/auditar-fase-8-ui-ux.js",
-    "test:phase8-ui": "playwright test tests/ui-ux/phase8-ui-ux.spec.js --project=chromium",
+    "test:phase8-ui": "playwright test tests/ui-ux/phase8-ui-ux.spec.js tests/ui-ux/public-spacing-product.spec.js --project=chromium",
     "test:phase9-import": "node --test tests/import/phase9-import-normalization.test.mjs",
     "test:phase2-import": "node --test tests/import/shopify-phase2-pipeline.test.mjs tests/import/shopify-phase2-media-api.test.mjs tests/import/shopify-import-core.test.mjs tests/import/admin-import-job-contract.test.mjs tests/import/shopify-import-identity.test.mjs tests/import/admin-import-concurrency.test.mjs",
     "audit:phase2-contract": "node scripts/auditar-shopify-phase2-contract.mjs",
@@ -140,6 +140,7 @@
     "firebase": "^12.19.0",
     "firebase-tools": "^15.32.1",
     "monaco-editor": "0.57.0",
+    "parse5": "5.1.1",
     "playwright": "^1.62.1"
   },
   "overrides": {

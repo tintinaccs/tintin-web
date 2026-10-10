@@ -18,6 +18,7 @@ export function renderCollectionsSheet() {
       </div>
       <div class="tt-sheet-grid" data-collections-nav="sheet">${renderSheetCategories()}</div>
       <div class="tt-sheet-footer">
+        <nav class="tt-sheet-info-links" aria-label="Información de Tintin"><a href="/about">Nosotros</a><a href="/contact">Contacto</a></nav>
         <a href="/catalogo" class="tt-btn" style="display:block;text-align:center;text-decoration:none">Ver todas las colecciones</a>
       </div>
     </div>`;

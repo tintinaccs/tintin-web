@@ -81,8 +81,8 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         fields: [
           field('items.0.label', 'Beneficio 1 — título', '.tt-trust-title', 'Envío mismo día', { index: 0, maxLength: 100 }),
           field('items.0.desc', 'Beneficio 1 — detalle', '.tt-trust-desc', 'Pedidos antes de las 11 hs, Zona Central', { index: 0, maxLength: 220 }),
-          field('items.1.label', 'Beneficio 2 — título', '.tt-trust-title', 'Acero inoxidable', { index: 1, maxLength: 100 }),
-          field('items.1.desc', 'Beneficio 2 — detalle', '.tt-trust-desc', 'No se oxida ni decolora', { index: 1, maxLength: 220 }),
+          field('items.1.label', 'Beneficio 2 — título', '.tt-trust-title', 'Materiales de calidad', { index: 1, maxLength: 100 }),
+          field('items.1.desc', 'Beneficio 2 — detalle', '.tt-trust-desc', 'Distintos materiales para cada estilo', { index: 1, maxLength: 220 }),
           field('items.2.label', 'Beneficio 3 — título', '.tt-trust-title', 'Pago seguro', { index: 2, maxLength: 100 }),
           field('items.2.desc', 'Beneficio 3 — detalle', '.tt-trust-desc', 'Transferencia; efectivo contra entrega sólo en delivery', { index: 2, maxLength: 220 }),
           field('items.3.label', 'Beneficio 4 — título', '.tt-trust-title', 'Atención personalizada', { index: 3, maxLength: 100 }),
@@ -430,6 +430,8 @@ export function normalizeContentValue(pageId, sectionId, key, value) {
   if (pageId === 'index' && sectionId === 'hero' && key === 'title') {
     return text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
   }
+  if (pageId === 'index' && sectionId === 'trust' && key === 'items.1.label' && /^\s*Acero inoxidable\s*$/i.test(text)) return 'Materiales de calidad';
+  if (pageId === 'index' && sectionId === 'trust' && key === 'items.1.desc' && /^\s*No se oxida ni decolora\s*$/i.test(text)) return 'Distintos materiales para cada estilo';
   if (pageId === 'index' && sectionId === 'trust' && key === 'items.2.label') {
     return /^\s*PAGO SEGUROOXSD\s*$/i.test(text) ? 'Pago seguro' : text;
   }

@@ -112,7 +112,7 @@ input::placeholder,textarea::placeholder{color:var(--tt-muted)!important;opacity
 input:focus,textarea:focus,select:focus,.perfil-input:focus,.ck-input:focus,.ck-select:focus,.login-email-input:focus{border-color:var(--tt-accent);box-shadow:0 0 0 3px var(--tt-focus);outline:none!important}
 body:has(.adm-main) .adm-input:focus,body:has(.adm-main) .adm-select:focus{border-color:var(--admin-color-field-border-focus);box-shadow:0 0 0 3px var(--admin-color-brand);outline:none!important}
 
-.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--tt-accent)!important;background-color:var(--tt-accent)!important;border-color:var(--tt-accent);color:#713C53!important}
+.tt-btn,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn{background:var(--tt-accent)!important;background-color:var(--tt-accent)!important;border-color:var(--tt-accent);color:#713C53!important}
 .tt-btn *,.tt-btn-primary-full *,.tt-cart-checkout-btn *,.tt-wa-float *,.tt-footer-wa *,.tt-contact-wa-link *,.ck-btn *,.login-google *,.login-email-btn *,.tt-welcome-primary *,.tt-welcome-test-btn *{color:#713C53!important}
 .tt-btn:hover,.tt-cart-checkout-btn:hover,.tt-wa-float:hover,.tt-footer-wa:hover,.tt-contact-wa-link:hover,.ck-btn:hover,.login-google:hover,.login-email-btn:hover{background:var(--tt-accent-hover)!important;background-color:var(--tt-accent-hover)!important;color:#713C53!important}
 body:has(.adm-main) .adm-btn-primary,body:has(.adm-main) .adm-btn-save{background:var(--admin-color-button-primary-background)!important;background-color:var(--admin-color-button-primary-background)!important;border-color:var(--admin-color-button-primary-background);color:var(--admin-color-button-primary-text)!important}
@@ -239,7 +239,7 @@ html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline):not(.tt-btn-outl
 /* Los hijos (span, small…) los alcanza el selector global de texto, que gana
    por especificidad a ".tt-btn *": heredan el color del botón que los contiene.
    .login-google queda fuera porque su superficie es blanca (login-maintenance). */
-html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline):not(.tt-btn-outline-full),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary) :is(span,small,strong,b,em,i){
+html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline):not(.tt-btn-outline-full),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.ck-btn,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary) :is(span,small,strong,b,em,i){
   color:inherit!important;
 }
 
@@ -452,7 +452,7 @@ html[data-tt-footer-accent-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-
 /* Disponibilidad accesible en todas las tarjetas y opciones. */
 .tt-stock-unavailable :is(.tt-product-img-real,.tt-search-result-image), #gallery-main.tt-stock-unavailable img { filter:grayscale(1); }
 .tt-stock-unavailable :is(.tt-product-img,.tt-color-swatch), #gallery-main.tt-stock-unavailable { position:relative; overflow:hidden; }
-.tt-stock-unavailable .tt-product-img::after, .tt-stock-unavailable .tt-color-swatch::after, #gallery-main.tt-stock-unavailable::after { content:''; box-sizing:content-box; position:absolute; width:145%; height:5px; background:#bf2437; border-block:3px solid #fff; left:50%; top:50%; transform:translate(-50%,-50%) rotate(45deg); pointer-events:none; }
+.tt-stock-unavailable .tt-product-img::after, .tt-stock-unavailable .tt-color-swatch::after, #gallery-main.tt-stock-unavailable::after { content:''; box-sizing:content-box; position:absolute; width:145%; height:5px; background:#fff; border-block:2px solid #242424; left:50%; top:50%; transform:translate(-50%,-50%) rotate(45deg); pointer-events:none; }
 .tt-search-result-item.tt-stock-unavailable { position:relative; }
 .tt-search-result-item.tt-stock-unavailable .tt-search-result-image { outline:2px solid #bf2437; }
 .tt-footer-wa svg, a[href*="wa.me"] svg, .tt-product-wa-link svg { color:#168541; }
@@ -462,7 +462,7 @@ html[data-tt-footer-accent-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-
 .tt-account-drawer-heading h2 { margin:0; }
 .tt-search-result-media { position:relative; overflow:hidden; display:block; border-radius:12px; }
 .tt-search-result-media .tt-search-result-image { border:0; border-radius:0; box-shadow:none; background:#fff; }
-.tt-stock-unavailable .tt-search-result-media::after { content:''; position:absolute; width:145%; height:4px; border-block:2px solid #fff; background:#bf2437; left:50%; top:50%; transform:translate(-50%,-50%) rotate(45deg); pointer-events:none; }
+.tt-stock-unavailable .tt-search-result-media::after { content:''; position:absolute; width:145%; height:4px; border-block:2px solid #242424; background:#fff; left:50%; top:50%; transform:translate(-50%,-50%) rotate(45deg); pointer-events:none; }
 .tt-search-result-item.tt-stock-unavailable .tt-search-result-image { outline:0; }
 .perfil-wrap, .perfil-card { box-sizing:border-box; min-width:0; }
 
@@ -482,3 +482,21 @@ html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-lin
 .tt-card-color[aria-pressed="true"] { border-color:var(--color-text-primary,#713C53); }
 .tt-card-color:focus-visible { outline:2px solid #713C53; outline-offset:2px; }
 .tt-card-color.tt-stock-unavailable .tt-color-swatch { position:relative; overflow:hidden; }
+
+/* WhatsApp: icono y texto blancos; una sola etiqueta en todos los footers. */
+html body:not(:has(.adm-main)) :is(.tt-footer-wa,.tt-contact-wa-link) svg {
+  color:#fff !important;
+  fill:currentColor;
+}
+.tt-hero-link { text-decoration:none !important; border-bottom:0 !important; }
+.tt-footer-hours { margin-bottom:14px; }
+
+.tt-wa-float {
+  transform:translateY(var(--tt-wa-shift-y,0px)) !important;
+  animation:none !important;
+  transition:background-color .2s, box-shadow .2s !important;
+}
+
+/* Los botones de WhatsApp conservan su contraste aunque cambie el texto primario. */
+html body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-wa .tt-footer-wa-text,
+html body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-wa svg { color:#fff !important; }

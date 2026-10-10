@@ -1,10 +1,10 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261009-first-render-1';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261009-first-render-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, limit,  query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { runAdminBulk } from '../utilidades-progreso-admin.js?v=tintin-20261001-inventory-fix-1';
+import { runAdminBulk } from '../utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 
 const DEFAULT_SETTINGS = {
   autoMarkSeenReviews: true,

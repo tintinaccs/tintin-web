@@ -2,7 +2,7 @@
 // TINTIN ACCESORIOS — Sin perfil completo no se usa la cuenta
 // =============================================================
 // Una cuenta con sesión iniciada y datos obligatorios faltantes (nombre,
-// teléfono, usuario, fecha de nacimiento o ubicación) no puede usar el sitio:
+// WhatsApp) no puede usar el sitio:
 // cualquier página autenticada la devuelve al login, donde sólo se muestra el
 // paso con lo que falta. Aplica igual a cuentas nuevas y a cuentas que el
 // equipo eliminó y volvieron a registrarse (nacen con perfil `incomplete`).
@@ -16,12 +16,12 @@
 // tienda como visitante, sin cuenta.
 
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
-import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20261009-first-render-1";
+import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1";
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261001-ultimos-datos-1";
-import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20261009-first-render-1";
+import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2";
+import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el
 // uid y no un simple `true`: si se cambia de cuenta en la misma pestaña, el

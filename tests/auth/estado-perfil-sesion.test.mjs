@@ -51,10 +51,10 @@ test('perfil legacy con marca de alta terminada pero sin datos => INCOMPLETE', (
 });
 
 test('perfil activo al que le falta un dato => INCOMPLETE (decide por datos, no por la marca)', () => {
-  const { dob, ...withoutDob } = COMPLETE_PROFILE;
-  const state = resolve({ snapshot: snap(withoutDob) });
+  const { phone, ...withoutPhone } = COMPLETE_PROFILE;
+  const state = resolve({ snapshot: snap(withoutPhone) });
   assert.equal(state.state, PROFILE_STATE.INCOMPLETE);
-  assert.equal(state.plan.needsDob, true);
+  assert.equal(state.plan.needsPhone, true);
   assert.equal(state.plan.needsUsername, false);
 });
 

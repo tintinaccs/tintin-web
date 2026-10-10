@@ -12,6 +12,7 @@ fs.mkdirSync(artifactDir, { recursive: true });
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const exists = file => fs.existsSync(path.join(root, file));
 const safeRead = file => exists(file) ? read(file) : '';
+const cacheVersions = JSON.parse(read('scripts/cache-version-baseline.json'));
 
 function walk(dir) {
   if (!fs.existsSync(dir)) return [];
@@ -218,13 +219,12 @@ const scriptPaths = localScripts.map(item => item.path);
 check('admin-script-versioned', 'Todos los scripts locales del Admin tienen versión de caché', localScripts.every(item => item.version));
 check('admin-script-unique', 'Admin no carga dos versiones del mismo módulo', new Set(scriptPaths).size === scriptPaths.length);
 check('admin-script-exists', 'Todos los scripts locales referenciados existen', scriptPaths.every(file => exists(file)));
-// La URL debe coincidir con el registro immutable actual, cuya auditoría
-// verifica los bytes. Los checks de comportamiento anteriores conservan
-// autolectura y recuperación Auth/App Check; una lista de tags históricos
-// rechazaría renovaciones legítimas de dependencias transitivas.
-const notificationsVersion = JSON.parse(read('scripts/cache-version-baseline.json'))['js/admin/notifications/notificaciones-admin.js']?.version;
+// La autolectura y la renovación de sesión se verifican arriba. El tag
+// debe coincidir con la versión canónica del recurso, validada por el
+// auditor de caché, sin depender de nombres históricos de releases.
 check('admin-notifications-versioned', 'La autolectura Admin está servida con versión propia actual',
-  Boolean(notificationsVersion) && localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && item.version === notificationsVersion));
+  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js'
+    && item.version === cacheVersions[item.path]?.version));
 
 // 7. Mutaciones sensibles deben conservar gobierno y trazabilidad.
 check('superadmin-auth', 'El panel conserva guard de autenticación y Super Admin real',

@@ -8,12 +8,12 @@
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
 import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20261009-first-render-1';
+import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
 import {
   doc,
   onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getUserRole } from '../auth/roles.js?v=tintin-20261009-first-render-1';
+import { getUserRole } from '../auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
 import {
   isAccessAllowed,
   renderStoreClosedOverlay,
@@ -22,7 +22,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './nucleo-control-tienda.js?v=tintin-20261009-first-render-1';
+} from './nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1-first-render-merge-20261010-1';
 
 export {
   isAccessAllowed,

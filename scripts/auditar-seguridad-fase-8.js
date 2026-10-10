@@ -111,7 +111,7 @@ check(
 check(
   'UI Quality conserva compatibilidad sin reactivar una segunda autoridad',
   quality.includes('bootAdminUsersPhase8') &&
-    /import\(versioned\(['"]\.\.\/admin\/users\/gestion-usuarios-admin\.js['"](?:,\s*['"][A-Za-z0-9._-]+['"])?\)\)/.test(quality) &&
+    /import\(versioned\('\.\.\/admin\/users\/gestion-usuarios-admin\.js'(?:,\s*'[\w.-]+')?\)\)/.test(quality) &&
     compat.includes('TintinAdminUsersPhase8Booted'),
   'La ruta antigua puede seguir cargándose, pero debe ser un puente inerte de CRUD'
 );
