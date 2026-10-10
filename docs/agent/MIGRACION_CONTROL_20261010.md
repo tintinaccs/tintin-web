@@ -1,7 +1,7 @@
 # Reparación revisada del control de publicación
 
 PR: https://github.com/tintinaccs/tintin-web/pull/1081
-Base de preparación: ec63adce6551cb6210c20fdcea21c4f3447f2896.
+Base de preparación actual:119aa2e50dd15dca4266bf7ce2f0d0774a61c35c (main avanzó con1085 durante la verificación; se incorpora sin perder su navegación móvil).
 
 ## Problema y resultado
 
@@ -15,7 +15,7 @@ El lector reutiliza los bytes de main únicamente cuando objeto Git y modo coinc
 
 55 pruebas específicas PASS y suite completa de conexiones134 PASS. La integración ejecuta los programas reales inspect y publish en un repositorio temporal aislado, con541 archivos y API simulada que rechaza solicitudes después de1000. Ambas fases pasan con30 solicitudes/seis blobs remotos. Una reproducción local de la versión anterior pasó inspect y falló publish conHTTP403 al superar1000 (1008 solicitudes). Es una reproducción del defecto de consumo, no un diagnóstico confirmado del403 remoto ni una aprobación de GitHub.
 
-El programa corregido también verificó el PR1083 real contra su base/HEAD mediante API nativa, en modo inspect de solo lectura:98 consultas,87 blobs y cero escrituras. Validó plan, CI y entorno; no verifica el token de Actions ni sustituye la revisión real. Build Pages local PASS.
+El candidato anterior9b7f282d también verificó el PR1083 real contra baseec63/HEAD7961cff mediante API nativa, en modo inspect de solo lectura:98 consultas,87 blobs y cero escrituras. Validó plan, CI y entorno; no verifica el token de Actions ni sustituye la revisión real. Build Pages del candidato anterior local PASS; la nueva base requiere build y CI propios.
 
 Se mantienen validaciones adversariales de hashes, rutas/symlinks, fallos de lectura/descarga, plan exacto, alcances/sellos, identidad de CI, base/head, entorno sin bypass y revisor humano autorizado. El inventario conserva sus78 registros y541 entradas anteriores; agrega tres archivos verificados, total544. Build reproducible y CI requieren evidencia del SHA final de este PR.
 
