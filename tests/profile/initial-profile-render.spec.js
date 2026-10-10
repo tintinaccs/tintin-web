@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
+const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const root = path.resolve(__dirname, '../..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const withoutImports = code => code.replace(/^import\s[\s\S]*?;\s*$/gm, '').replace(/^export /gm, '');
@@ -14,7 +15,7 @@ async function fixture(page, width) {
   await page.route('**/*.js*', route => route.fulfill({ contentType: 'text/javascript', body: '' }));
   await page.route('**/perfil.html', route => route.fulfill({
     contentType: 'text/html',
-    body: profile.replace(/<script\b[\s\S]*?<\/script>/gi, ''),
+    body: removeFixtureScripts(profile),
   }));
   await page.goto('/perfil.html');
   await page.addScriptTag({ content: identity + `
