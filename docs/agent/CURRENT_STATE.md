@@ -1,10 +1,10 @@
-# Ficha pública sin interacción social — 2026-10-09
+# Ficha y navegación públicas — 2026-10-09
 
-Base 268067dfad7ed6eb305ecd17dcd64c08a4b1e214; rama fix/ocultar-social-producto. Pedido del propietario: ocultar comentarios, Me gusta y Compartir para el usuario final; fondo de Tu selección igual al de las secciones contiguas.
+Base 268067dfad7ed6eb305ecd17dcd64c08a4b1e214; PR #1084, rama fix/ocultar-social-producto. Pedido del propietario: ocultar comentarios, Me gusta y Compartir de la ficha; fondo continuo de Tu selección; WhatsApp fijo sin parpadeo; Catálogo en todos los headers y cápsula móvil que cubra icono y texto con separación.
 
-Se retiran los controles del HTML y la carga pública del módulo de reseñas; no se borra ningún dato ni se cambian API, moderación, favoritos del perfil, reglas o permisos. La selección y su contenedor tienen fondo transparente sobre el fondo común. Se actualizan URLs de caché de la cadena de carga, sin cambiar su lógica.
+Se retiran controles y carga del módulo público de reseñas. Se conservan datos, API, administración, favoritos de perfil y selección, reglas y permisos. Selección con fondo transparente. El flotante deja de respirar y alternar por contenido normal durante scroll; avisos superpuestos conservan su exclusión temporal. El header ignora la etiqueta antigua TIENDA guardada en apariencia. La cápsula se dibuja dentro de cada botón activo, sin raya independiente, con etiquetas visibles incluso al hacer scroll y ancho seguro con 5/6 acciones. Cadena de caché alineada.
 
-PASS_LOCAL: 7 pruebas Chromium en 320/390/768/1024/1280/1440/1920px verifican ausencia de controles y módulo social, fondos continuos, carga inicial estable y ausencia de desborde. 59 pruebas de engagement PASS; gestión administrativa y persistencia siguen cubiertas. Auditoría de navegación pública PASS. NOT_VERIFIED: CI, aprobación protegida y despliegue del candidato; no se acredita publicación por un PASS anterior. Sin escrituras de datos productivos.
+PASS_LOCAL: 37 pruebas Chromium específicas (26 de ficha/cápsula en 5 páginas, 7 de WhatsApp fijo en 320–1920px y 4 de controles/favoritos); 80 pruebas Node de interacción/carrito/regresiones. Auditoría de navegación pública PASS. La vista previa anterior acredita ocultación y fondo, no estos nuevos cambios de navegación. CI anterior falló por el test antiguo que exigía Me gusta; contrato actualizado conservando persistencia y permisos. NOT_VERIFIED: CI del nuevo SHA, aprobación y producción. Sin escrituras de datos productivos.
 
 ## Evidencia histórica de main
 
