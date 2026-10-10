@@ -15,7 +15,7 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261009-wrist-guide-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261009-product-social-hidden-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -278,7 +278,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20261009-wrist-guide-1'),
+      import('./control-busqueda.js?v=tintin-20261009-product-social-hidden-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

@@ -1,3 +1,13 @@
+# Ficha pública sin interacción social — 2026-10-09
+
+Base 268067dfad7ed6eb305ecd17dcd64c08a4b1e214; rama fix/ocultar-social-producto. Pedido del propietario: ocultar comentarios, Me gusta y Compartir para el usuario final; fondo de Tu selección igual al de las secciones contiguas.
+
+Se retiran los controles del HTML y la carga pública del módulo de reseñas; no se borra ningún dato ni se cambian API, moderación, favoritos del perfil, reglas o permisos. La selección y su contenedor tienen fondo transparente sobre el fondo común. Se actualizan URLs de caché de la cadena de carga, sin cambiar su lógica.
+
+PASS_LOCAL: 7 pruebas Chromium en 320/390/768/1024/1280/1440/1920px verifican ausencia de controles y módulo social, fondos continuos, carga inicial estable y ausencia de desborde. 59 pruebas de engagement PASS; gestión administrativa y persistencia siguen cubiertas. Auditoría de navegación pública PASS. NOT_VERIFIED: CI, aprobación protegida y despliegue del candidato; no se acredita publicación por un PASS anterior. Sin escrituras de datos productivos.
+
+## Evidencia histórica de main
+
 # Revision PR #1078 — productos y colores, 2026-10-09
 
 Base main 6d7c644a913c25710c1d1604fb4ff07ec7f2d644. Conflictos resueltos conservando compradores dentro de Pedidos, espejo local y mecanismos de proteccion.

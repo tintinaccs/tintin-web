@@ -8,7 +8,7 @@
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20261008-producto-superficies-1-minimal-product-20261008-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1-brand-20261004-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261009-wrist-guide-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261009-product-social-hidden-1" defer></script>
   <title>Producto | TINTIN Accesorios & Relojes</title>
   <meta name="description" content="Detalle de producto — Tintin Accesorios &amp; Relojes, tu boutique femenina en Paraguay." id="meta-description">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -37,7 +37,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261009-wrist-guide-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261009-product-social-hidden-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261008-icon-circle-2">
@@ -61,7 +61,7 @@
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1">
 <link rel="stylesheet" href="css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1">
-  <link rel="stylesheet" data-tt-product-maintenance href="css/pages/product/product-maintenance.css?v=tintin-20261009-wrist-guide-1">
+  <link rel="stylesheet" data-tt-product-maintenance href="css/pages/product/product-maintenance.css?v=tintin-20261009-product-social-hidden-1">
 </head>
 <body class="tt-product-maintenance">
 
@@ -170,19 +170,11 @@
         <!-- Trust badges (JS fills based on category) -->
         <div class="tt-product-trust-badges" id="product-trust-badges"></div>
 
-        <!-- Share -->
-        <div class="tt-product-share" id="product-share"></div>
 
       </div>
     </div>
 
-    <div class="tt-product-social-bar" aria-label="Interacción con el producto">
-      <button type="button" id="btn-product-like" class="tt-social-action" aria-pressed="false" aria-label="Me gusta este producto">
-        <svg class="tt-social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.7-4.3-9.4-8.5C.8 9.7 1.5 6.1 4.5 4.5 7 3.2 9.8 4.1 12 6.5c2.2-2.4 5-3.3 7.5-2 3 1.6 3.7 5.2 1.9 8C18.7 16.7 12 21 12 21Z"/></svg><span data-product-like-label>Me gusta</span><strong data-product-like-count>0</strong>
-      </button>
-      <button type="button" class="tt-social-action" data-open-community aria-controls="product-reviews" aria-label="Ver comentarios del producto"><svg class="tt-social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.3 7.3 0 0 1-7.7 7.2 8.4 8.4 0 0 1-3.4-.7L4 20l1.4-4.1A7 7 0 0 1 4.6 12 7.3 7.3 0 0 1 12.3 4 7.3 7.3 0 0 1 20 11.5Z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/></svg><span>Comentarios</span><strong data-product-comment-count>0</strong></button>
-      <button type="button" class="tt-social-share" data-share-product aria-label="Compartir producto"><svg class="tt-social-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3m0 0L7 8m5-5 5 5M5 13v6h14v-6"/></svg><span data-share-product-label>Compartir</span></button>
-    </div>
+
   </div>
 </section>
 
@@ -318,7 +310,6 @@
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261003-profile-route-1"></script>
 <script type="module" src="js/pages/product/seleccion-producto.js?v=tintin-20261005-public-flows-1"></script>
 <script type="module" src="js/pages/product/productos-relacionados.js?v=tintin-20261008-producto-superficies-1"></script>
-<script type="module" src="js/pages/product/resenas-producto.js?v=tintin-20261008-producto-superficies-1"></script>
 <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 <script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20261008-producto-superficies-1"></script>
 </body>
