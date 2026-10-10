@@ -1,4 +1,4 @@
-import { isValidCustomerName } from '../profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-4';
+import { isValidCustomerName } from '../profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-5';
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 

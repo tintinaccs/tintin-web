@@ -30,7 +30,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20261010-whatsapp-release-4';
+} from '../../core/store/esquema-contenido.js?v=tintin-20261010-whatsapp-release-5';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

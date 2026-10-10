@@ -17,7 +17,7 @@ import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
 } from "../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-2-active-session-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
-import { withDeadline } from '../core/auth/estado-perfil-sesion.mjs?v=tintin-20261010-whatsapp-release-4';
+import { withDeadline } from '../core/auth/estado-perfil-sesion.mjs?v=tintin-20261010-whatsapp-release-5';
 
 const LOCAL_FUNCTIONS_ORIGIN = 'https://tintinaccesorios.pages.dev';
 

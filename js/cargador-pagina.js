@@ -830,7 +830,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-4');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-5');
     }
   }
 
@@ -906,7 +906,7 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261010-whatsapp-release-4');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261010-whatsapp-release-5');
     }
   }
 
@@ -917,7 +917,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-whatsapp-release-4');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-whatsapp-release-5');
   }
 
   function bootThemeColorSanitizerPublic() {
@@ -928,7 +928,7 @@
 
   function bootPageAuditFixPublic() {
     if (!window.TintinPageAuditFixBooted) {
-      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261010-product-social-navigation-4');
+      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261010-mobile-navigation-front-1');
     }
   }
 

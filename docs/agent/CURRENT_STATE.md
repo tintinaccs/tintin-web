@@ -1,3 +1,19 @@
+## Publicación reconciliada con main #1085 — 2026-10-10
+
+Se conserva la reparación del alta, checkout y pantallas de7961cff; se integra main119aa2e50dd15dca4266bf7ce2f0d0774a61c35c, que mantiene la barra móvil al frente, operable durante paneles, con aislamiento modal en desktop. Las diferencias HTML de main eran únicamente URLs de caché; se preserva el contenido corregido y se alinean identidades por bytes del recurso real. El control38046493472 rechazó un avance de main un segundo antes del snapshot final, sinHTTP403. La reparación permanente del consumo de API/diagnóstico está en PR1081 separado, candidato8fd1a9d5, para migración revisada; no se mezcla aquí.
+
+Validación local de esta integración:490 pruebas Node relacionadas PASS;57 Chromium de navegación frontal, checkout/retorno/recarga/teclado, primer render y WhatsApp fijo PASS, sin reintentos. Control-paneles y CSS móvil coinciden con main119. Plan oficial84 archivos/59 registros, inventario78/541 conservado; caché313 referencias/53 nuevas identidades/5 históricas preservadas. Las matrices126/126 y187/187 de7961cff/baseec63 son evidencia histórica de ese candidato; esta integración requiere build y CI nuevos. No se reutiliza aprobación ni se modifica el control. Sin usuarios, pedidos, pagos ni emails reales.
+
+# Navegación móvil siempre al frente — 2026-10-10
+
+Base ec63adce6551cb6210c20fdcea21c4f3447f2896; rama fix/mobile-nav-front. Pedido del propietario: mantener la barra móvil delante y operable en Inicio, Buscar, Catálogo, Notificaciones, Carrito y Cuenta, en cualquier página y al abrir paneles.
+
+Causa verificada en producción: barra z-index 1400 debajo de superficies 1460; el controlador la marcaba inert. Corrección limitada a navegación: capa frontal de barra móvil, exclusión de navegación del bloqueo de fondo móvil, foco compartido entre panel y barra, aria-modal false en móvil con barra operable. Desktop/tablet conservan aislamiento modal. Se reserva espacio inferior en Catálogo, Cuenta y Alertas para que el contenido final no quede bajo la barra.
+
+PASS_LOCAL: 16 pruebas Chromium específicas: 5 páginas × 3 anchos (320,390,767), cambios entre 5 paneles, hit testing de todas las opciones incluido Inicio, aislamiento del contenido, Escape y ciclo de teclado entre barra/panel; regresión desktop 1440. NOT_VERIFIED: CI, aprobación y publicación del nuevo SHA. Impacto: CSS móvil, controlador y bootstrap; referencias transitivas y artefactos canónicos. Sin cambios de datos, Firestore, autenticación, permisos, stock, pagos ni pedidos.
+
+La tarea anterior PR #1084 fue mergeada como ec63adce6551cb6210c20fdcea21c4f3447f2896; mantenimiento 38020704927 y monitor 38042669745 SUCCESS; Cloudflare SUCCESS. Producción verificada sin caché: barra social retirada, fondo de selección continuo, Catálogo, cápsulas con márgenes y WhatsApp verde fijo sin animación. Esa evidencia no acredita este nuevo cambio.
+
 # Publicación reconciliada con main #1084 — 2026-10-10 (America/Buenos_Aires)
 
 Agente: Codex /root. El propietario aprobó38042545791 y inspect/verdict terminaron SUCCESS para e9b1b7778082a77473f8ddc316e040093aabd3a0 sobre268067dfad7ed6eb305ecd17dcd64c08a4b1e214. El rechazo HTTP403 dejó de reproducirse; su causa precisa no figura en los logs. La captura confirma Read and write permissions. No se amplían permisos, se aprueba en nombre del propietario ni se modifica el guard.

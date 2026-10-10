@@ -15,7 +15,7 @@
 // ni en un cierre de sesión. MISSING sólo sale de una lectura exitosa que dice
 // que el documento no existe.
 
-import { getProfileCompletionPlan } from '../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-4';
+import { getProfileCompletionPlan } from '../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-5';
 
 export const PROFILE_STATE = Object.freeze({
   NOT_REQUESTED: 'NOT_REQUESTED',

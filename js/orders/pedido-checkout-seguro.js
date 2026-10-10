@@ -1,4 +1,4 @@
-import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-4';
+import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-5';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';

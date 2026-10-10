@@ -20,7 +20,7 @@ import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesio
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-4";
+import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261010-whatsapp-release-5";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el

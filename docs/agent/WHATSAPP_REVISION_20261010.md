@@ -65,3 +65,7 @@ Node >=22 y Java para las pruebas de reglas. Instalación probada: `npm ci --cac
 ## Integración final con main #1084
 
 El candidato se actualiza contra ec63adce6551cb6210c20fdcea21c4f3447f2896, preservando los cambios aprobados de navegación móvil/producto/WhatsApp. Se corrige la recuperación diferida del checkout que deshacía Volver. Reproducción determinista previa390/768/1440 FAIL; después34 pruebas checkout/primer render PASS y tres casos ampliados de retorno, recuperación tras recarga y teclado PASS, sin reintentos. Pruebas Node finales455 PASS. Plan oficial84 archivos/59 registros, inventario78/541 conservado. Estos resultados son locales; CI y revisión protegida deben corresponder al SHA combinado final antes de publicar.
+
+## Integración de navegación frontal de main #1085
+
+Base119aa2e50dd15dca4266bf7ce2f0d0774a61c35c. Se conserva la barra móvil al frente y operable mientras los paneles están abiertos; aislamiento modal en desktop. No se reemplazan los cambios de main por la rama de capturas. Regresiones actuales:490 Node y57 Chromium PASS (320–1920px), sin reintentos, incluyendo navegación frontal/teclado/Escape, retorno del checkout, primer render y WhatsApp fijo. Plan84 archivos/59 registros; inventario78/541. Versiones por bytes del recurso real con tagnuevo whatsapp-release-5 sólo para cambios. El CI del candidato anterior es histórico; falta el del nuevo SHA.

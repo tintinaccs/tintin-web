@@ -134,7 +134,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-4');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261010-whatsapp-release-5');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 

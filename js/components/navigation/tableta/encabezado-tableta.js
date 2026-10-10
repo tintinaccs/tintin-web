@@ -1,5 +1,5 @@
 import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1-master-20261007-1';
-import { logoUrl } from '../compartido/configuracion.js?v=tintin-20261010-whatsapp-release-4';
+import { logoUrl } from '../compartido/configuracion.js?v=tintin-20261010-whatsapp-release-5';
 
 function renderTabletCategories() {
   return CATEGORIES.map(({ slug, label }) => `
