@@ -149,7 +149,10 @@ test('panel real sin botones: verde, fallo, recuperación y pausa automática en
         `);
         if (url.pathname.startsWith('/js/')) {
           const file = path.resolve(repo, `.${url.pathname}`);
-          assert.ok(file.startsWith(`${repo}/js/`));
+          const relativeFile = path.relative(repo, file);
+          assert.equal(path.isAbsolute(relativeFile), false);
+          assert.equal(relativeFile.split(path.sep)[0], 'js');
+          assert.equal(relativeFile.startsWith('..'), false);
           return js(fs.readFileSync(file, 'utf8'));
         }
         if (url.pathname.startsWith('/api/')) {

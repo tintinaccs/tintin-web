@@ -1,7 +1,7 @@
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import os from 'node:os';
 import crypto from 'node:crypto';
 import cp from 'node:child_process';
@@ -81,10 +81,10 @@ globalThis.fetch=async (url,options)=>{
   const env = { ...process.env, GH_TOKEN: '', PR_NUMBER: '1083', CANDIDATE_SHA: headSha, GITHUB_REPOSITORY: config.repository,
     GITHUB_REF: 'refs/heads/main', GITHUB_RUN_ID: '123', GITHUB_RUN_ATTEMPT: '1', GITHUB_EVENT_NAME: 'workflow_dispatch',
     GITHUB_OUTPUT: path.join(dir, 'outputs.txt'), GITHUB_STEP_SUMMARY: path.join(dir, 'summary.txt'), APPROVAL_RESULT: 'success' };
-  const run = () => ['inspect', 'publish'].map(mode => cp.spawnSync(process.execPath, ['--import', mockPath, 'scripts/mantenimiento-flujos-github.mjs', mode], { cwd: dir, env, encoding: 'utf8' }));
+  const run = () => ['inspect', 'publish'].map(mode => cp.spawnSync(process.execPath, ['--import', pathToFileURL(mockPath).href, 'scripts/mantenimiento-flujos-github.mjs', mode], { cwd: dir, env, encoding: 'utf8' }));
   fs.writeFileSync(statePath, JSON.stringify({ total: 0, blobs: 0 }));
   const fixed = run(), fixedRequests = JSON.parse(fs.readFileSync(statePath));
-  assert.deepEqual(fixed.map(result => result.status), [0, 0]); assert.equal(fixedRequests.blobs, 6);
+  assert.deepEqual(fixed.map(result => result.status), [0, 0], fixed.map(result => result.stderr || result.stdout).join('\n')); assert.equal(fixedRequests.blobs, 6);
   assert.ok(fixedRequests.total < 50);
 } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 

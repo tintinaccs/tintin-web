@@ -51,7 +51,8 @@ test('el editor normal de pedidos rechaza ventas locales antes de leer productos
 function gsHarness(rows,name='Mayo') {
   const store=new Map(),writes=[];
   const sheet={getName:()=>name,getLastRow:()=>rows.length+9,getRange:(r,c,h=1,w=1)=>({getDisplayValue:()=>name+' 2026 · Tintin',getValues:()=>rows.slice(r-10,r-10+h).map(v=>v.slice(c-1,c-1+w)),setValue:v=>writes.push({r,c,v}),setValues:()=>{}})};
-  const context=vm.createContext({Date,console,Utilities:{DigestAlgorithm:{SHA_256:'sha256'},Charset:{UTF_8:'utf8'},computeDigest:(_,v)=>[...createHash('sha256').update(v).digest()],getUuid:randomUUID,formatDate:v=>v.toISOString().slice(0,10)},PropertiesService:{getDocumentProperties:()=>({getProperty:key=>store.get(key),getProperties:()=>Object.fromEntries(store),setProperty:(key,v)=>store.set(key,v),setProperties:values=>Object.entries(values).forEach(([key,value])=>store.set(key,value))})},TINTIN_WEBHOOK_SECRET_PROPERTIES:{},TINTIN_ADMIN_WEBHOOK_PATH:'/api/sheets-admin-webhook'});
+  const props={getProperty:key=>store.get(key),getProperties:()=>Object.fromEntries(store),setProperty:(key,v)=>store.set(key,v),setProperties:values=>Object.entries(values).forEach(([key,value])=>store.set(key,value))};
+  const context=vm.createContext({Date,console,Utilities:{DigestAlgorithm:{SHA_256:'sha256'},Charset:{UTF_8:'utf8'},computeDigest:(_,v)=>[...createHash('sha256').update(v).digest()],getUuid:randomUUID,formatDate:v=>v.toISOString().slice(0,10)},PropertiesService:{getDocumentProperties:()=>props,getScriptProperties:()=>props},TINTIN_WEBHOOK_SECRET_PROPERTIES:{},TINTIN_ADMIN_WEBHOOK_PATH:'/api/sheets-admin-webhook'});
   vm.runInContext(readFileSync(new URL('../../apps-script/ComercioLocal.gs',import.meta.url),'utf8'),context);return {context,sheet,store,writes};
 }
 test('línea continuación de combo es un solo pedido; fórmulas cero no crean gastos ni compras',()=>{
@@ -73,6 +74,24 @@ test('un activador solapado conserva las ediciones para el siguiente ciclo sin l
   h.context.tintinLocalCall_=()=>{calls++;};
   assert.equal(h.context.tintinReconciliarComercioLocal_().busy,true);
   assert.equal(calls,0);
+});
+test('routine reconciliation reads ScriptProperties when DocumentProperties is unavailable',()=>{
+  const h=gsHarness([]),values=new Map([['TINTIN_LOCAL_ENABLED','1']]);
+  const props={getProperty:key=>values.get(key),getProperties:()=>Object.fromEntries(values),setProperty:(key,value)=>values.set(key,value),setProperties:items=>Object.entries(items).forEach(([key,value])=>values.set(key,value))};
+  h.context.PropertiesService={getDocumentProperties:()=>{throw new Error('Drive timed out while accessing document');},getScriptProperties:()=>props};
+  assert.equal(h.context.tintinLocalProperties_(),props);
+  assert.equal(h.context.tintinLocalProperties_().getProperty('TINTIN_LOCAL_ENABLED'),'1');
+});
+test('installer migrates only missing local state and preserves backup ID and existing script values',()=>{
+  const h=gsHarness([]),legacy=new Map([['TINTIN_LOCAL_ENABLED','1'],['TINTIN_LOCAL_BACKUP_ID','backup-existing'],['LOCAL_BASE_order-a','fingerprint-a'],['UNRELATED_SECRET','do-not-copy']]),current=new Map([['TINTIN_LOCAL_ENABLED','0']]);
+  const makeProperties=store=>({getProperty:key=>store.get(key),getProperties:()=>Object.fromEntries(store),setProperty:(key,value)=>store.set(key,value),setProperties:(items,deleteOthers)=>{if(deleteOthers)store.clear();Object.entries(items).forEach(([key,value])=>store.set(key,value));}});
+  const script=makeProperties(current);
+  h.context.PropertiesService={getDocumentProperties:()=>makeProperties(legacy),getScriptProperties:()=>script};
+  assert.equal(h.context.tintinMigrateLocalProperties_(),script);
+  assert.equal(current.get('TINTIN_LOCAL_ENABLED'),'0');
+  assert.equal(current.get('TINTIN_LOCAL_BACKUP_ID'),'backup-existing');
+  assert.equal(current.get('LOCAL_BASE_order-a'),'fingerprint-a');
+  assert.equal(current.has('UNRELATED_SECRET'),false);
 });
 test('borradores no aparecen como compras ni se publican en pedidos',async()=>{
   const h=memory();await upsertLocalEntries({}, {action:'upsert',entries:[{...sale(),occurredOn:'',total:0,lines:[]}]}, {},h.deps);
@@ -104,7 +123,8 @@ function bridgeHarness() {
   contacts.cells[6][1]='CUS1';contacts.cells[6][3]='Clienta local';contacts.cells[6][4]=150000;
   const context=gsHarness([]).context;
   context.tintinProductsSpreadsheet_=()=>({getId:()=> '106Z1A8veL9fGMc4U7R10NVNMsJiEYt9wiGr4YFAav1U',getSheetByName:name=>name==='Enero'?month:name==='Clientes de ventas'?contacts:null});
-  context.PropertiesService={getDocumentProperties:()=>({getProperty:key=>properties.get(key),getProperties:()=>Object.fromEntries(properties),setProperty:(key,value)=>properties.set(key,value),setProperties:values=>Object.entries(values).forEach(([key,value])=>properties.set(key,value))})};
+  const props={getProperty:key=>properties.get(key),getProperties:()=>Object.fromEntries(properties),setProperty:(key,value)=>properties.set(key,value),setProperties:values=>Object.entries(values).forEach(([key,value])=>properties.set(key,value))};
+  context.PropertiesService={getDocumentProperties:()=>props,getScriptProperties:()=>props};
   context.LockService={getDocumentLock:()=>({tryLock:()=>true,releaseLock:()=>{}})};context.tintinRecordSyncSafely_=(...args)=>logs.push(args);
   context.tintinLocalCall_=input=>{
     if(input.action==='upsert'){const result=[];for(const entry of input.entries){const old=records.get(entry.id);if(old&&old.version!==entry.baseVersion)throw new Error('Conflicto 409: registro más reciente');const record={...JSON.parse(JSON.stringify(entry)),version:randomUUID()};delete record.baseVersion;records.set(record.id,record);result.push({id:record.id,version:record.version});}return {ok:true,results:result};}
