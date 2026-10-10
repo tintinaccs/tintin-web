@@ -12,7 +12,7 @@ import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
   uploadImageToLibrary
-} from './biblioteca-multimedia.js?v=tintin-20261010-auto-flow-responsive-1';
+} from './biblioteca-multimedia.js?v=tintin-20261010-metallic-gold-2';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',

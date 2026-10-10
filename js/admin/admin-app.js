@@ -1,7 +1,7 @@
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-auto-flow-responsive-1';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261004-admin-connections-3";
-import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261010-auto-flow-responsive-1';
+import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261010-registration-name-2';
 import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
@@ -28,8 +28,8 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261010-auto-flow-responsive-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261010-auto-flow-responsive-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261010-metallic-gold-2";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261010-metallic-gold-2";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261005-mayoristas-1-profile-wholesale-20261005-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261010-auto-flow-1";
@@ -45,8 +45,8 @@ import { attachColorPicker } from "../components/color/selector-color.js?v=tinti
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261001-inventory-fix-1';
 import './settings/cupones-admin.js?v=tintin-20261004-admin-connections-3';
 import './products/integridad-inventario-admin.js?v=tintin-20261003-variant-inventory-1';
-import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261001-inventory-fix-1';
-import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261001-inventory-fix-1';
+import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
+import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 
 // ---- GLOBALS ----
 let currentUser = null;

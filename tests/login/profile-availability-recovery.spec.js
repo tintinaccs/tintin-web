@@ -87,3 +87,14 @@ for (const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768
     expect(await page.evaluate(()=>window.__loading)).toBe(true);
   });
 }
+
+test('corrige un nombre corto precargado por Google y completa el registro',async({page})=>{
+  await page.route('**/__short-provider',route=>route.fulfill({contentType:'text/html',body:fixture.replace("let stored={profileStatus:'incomplete'};","let stored={profileStatus:'incomplete',name:'Jo Smith'};")}));
+  await page.goto('/__short-provider');
+  const name=page.locator('#login-profile-first-name');await expect(name).toBeVisible();await expect(name).toHaveValue('Jo Smith');
+  await name.fill('Pedro González');await page.locator('#login-profile-phone').fill('981123456');
+  await page.evaluate(()=>{window.__calls.push({fixture:true});window.__allowReservation=true;});
+  await page.locator('#btn-save-profile').click();await page.waitForFunction(()=>window.__complete);
+  expect(await page.evaluate(()=>window.__saved.name)).toBe('Pedro González');
+  expect(await page.evaluate(()=>window.__saved.profileStatus)).toBe('active');
+});

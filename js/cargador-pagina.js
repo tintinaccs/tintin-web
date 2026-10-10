@@ -407,7 +407,7 @@
     'html.tt-store-gate-pending body> *:not(#tt-loader):not(#tt-store-closed-overlay),html.tt-store-gate-blocked body> *:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important;pointer-events:none!important;user-select:none!important}',
     'html.tt-store-gate-pending body,html.tt-store-gate-blocked body{overflow:hidden!important;overscroll-behavior:none!important}',
     '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
-    '#tt-loader{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#F8AACA;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
+    '#tt-loader{position:fixed;inset:0;width:100%;height:100%;margin:0;border:0;max-width:none;max-height:none;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#F8AACA;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
     '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:brightness(0) invert(1);user-select:none;pointer-events:none}',
@@ -540,6 +540,7 @@
 
   const loader = document.createElement('div');
   loader.id = 'tt-loader';
+  if (typeof loader.showPopover === 'function') loader.setAttribute('popover', 'manual');
   loader.setAttribute('aria-hidden', 'true');
   loader.setAttribute('role', 'presentation');
   loader.dataset.state = 'show';
@@ -584,11 +585,16 @@
   });
   if (logo.complete && logo.naturalWidth > 0) markLogoReady();
 
+  function raiseLoader() {
+    if (loader.isConnected && typeof loader.showPopover === 'function' && !loader.matches(':popover-open')) loader.showPopover();
+  }
+
   function insertLoader() {
     if (inserted || !document.body) return;
     if (!document.getElementById('tt-loader')) {
       inserted = true;
       document.body.insertBefore(loader, document.body.firstChild);
+      raiseLoader();
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           const img = document.getElementById('tt-loader-logo');
@@ -618,6 +624,7 @@
     loader.style.touchAction = 'auto';
     loader.style.pointerEvents = 'none';
     loader.classList.add('tt-out');
+    if (typeof loader.hidePopover === 'function' && loader.matches(':popover-open')) loader.hidePopover();
 
     const generation = ++hideGen;
     function detach() {
@@ -669,6 +676,7 @@
     loader.style.touchAction = '';
     loader.style.pointerEvents = '';
     loader.classList.remove('tt-out');
+    raiseLoader();
 
     const wrap = document.getElementById('tt-loader-spin-wrap');
     if (wrap) {
@@ -917,7 +925,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-auto-flow-responsive-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-registration-name-2');
   }
 
   function bootThemeColorSanitizerPublic() {

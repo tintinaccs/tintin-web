@@ -384,3 +384,14 @@ test('identidades vacías no obtienen la excepción de superadmin', () => {
   assert.equal(isSuperAdminProfile({},''),false);
   assert.equal(isSuperAdminProfile({email:'other@example.com'},'official@example.com'),false);
 });
+
+
+test('el nombre corto recibido de Google se corrige y activa sin atascar el alta; el histórico activo se conserva',()=>{
+  const before={profileStatus:'incomplete',name:'Jo Smith'};
+  assert.equal(getProfileCompletionPlan({profile:before}).needsName,true);
+  const patch=buildMissingProfilePatch({currentProfile:before,submittedName:'Pedro González',submittedPhone:'+595981123456'});
+  assert.equal(patch.name,'Pedro González');assert.equal(patch.profileStatus,'active');
+  assert.equal(getProfileCompletionPlan({profile:{...before,...patch}}).skip,true);
+  assert.equal(getProfileCompletionPlan({profile:{profileStatus:'active',name:'Jo Smith',phone:'+595981123456'}}).skip,true);
+  assert.equal(buildMissingProfilePatch({currentProfile:before,submittedName:'Jo Smith',submittedPhone:'+595981123456'}).profileStatus,undefined);
+});
