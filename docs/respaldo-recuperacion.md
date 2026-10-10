@@ -38,10 +38,12 @@ No se considera respaldo un archivo que nunca fue revisado ni una copia guardada
 ## Firestore
 
 > **Antes de aplicar esta sección, leer `docs/recuperacion-firestore.md`, que es la
-> fuente canónica del estado real.** Firestore dispone de PITR por 7 días y respaldos
-> programados diario/semanal para `orders`, `users`, `auditLog` y `emailLogs`; catálogo
-> y configuración cuentan además con exportación operativa desde el panel. Falta aún
-> probar una restauración aislada y guardar una copia independiente de la cuenta Google.
+> fuente canónica del registro histórico.** El 2026-08-08 se verificaron PITR por
+> 7 días, respaldos diario/semanal y una restauración aislada de 960 documentos.
+> Eso no certifica la configuración ni la recuperación actuales. Catálogo y
+> configuración cuentan además con exportación operativa desde el panel. Deben
+> revalidarse retención, permisos, restauración y copia independiente de Google
+> antes de atribuirles un PASS de producción nuevo.
 
 ### Recuperación de cambios puntuales
 

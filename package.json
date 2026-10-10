@@ -94,6 +94,7 @@
     "test:performance": "playwright test tests/performance",
     "test:pages": "node scripts/smoke-todas-paginas.mjs",
     "audit:critical-healing": "node scripts/auditar-critico-recuperacion.js && node scripts/probar-modelo-inventario.mjs",
+    "test:otp-rate-emulator": "firebase emulators:exec --only firestore --project demo-tintin-otp-limits \"node --test scripts/probar-otp-limites-emulador.mjs\"",
     "test:rules-phone": "firebase emulators:exec --only firestore --project demo-tintin-phone \"node scripts/probar-firestore-telefono-unico.mjs\"",
     "test:rules-username": "firebase emulators:exec --only firestore --project demo-tintin-username \"node scripts/probar-firestore-username-unico.mjs\"",
     "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/probar-firestore-critico.mjs\"",

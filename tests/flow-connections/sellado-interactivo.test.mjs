@@ -134,11 +134,14 @@ test('panel real sin botones: verde, fallo, recuperación y pausa automática en
         if (url.pathname.endsWith('/core/firebase/firebase.js')) return js(`
           export const auth = { currentUser: { uid: 'fixture', email: 'fixture@example.invalid',
             getIdToken: async () => 'fixture', getIdTokenResult: async () => ({ claims: { email: 'fixture@example.invalid', aud: 'tintin-accesorios' } }) } };
+          window.__fixtureAuth = auth;
           export const db = {};
         `);
         if (url.pathname.endsWith('/auth/lecturas-admin.js')) return js('export const readAdminFirestore = read => read();');
         if (url.pathname.endsWith('/auth/app-check-admin.js')) return js('export const waitForAdminAppCheck = async () => true;');
-        if (url.pathname.endsWith('/firebase-auth.js')) return js('export function onAuthStateChanged(auth, callback) { queueMicrotask(() => callback(auth.currentUser)); return () => {}; }');
+        if (url.pathname.endsWith('/auth/coordinador-sesion.js')) return js(`
+          export function subscribeAuthState(callback) { queueMicrotask(() => callback(window.__fixtureAuth.currentUser)); return () => {}; }
+        `);
         if (url.pathname.endsWith('/firebase-firestore.js')) return js(`
           export const collection = (...args) => args, doc = (...args) => args, query = (...args) => args, limit = n => n, orderBy = (...args) => args;
           export const getDocFromServer = async () => ({ exists: () => true, data: () => ({ role: 'superadmin' }) });
