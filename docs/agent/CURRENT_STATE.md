@@ -1,3 +1,17 @@
+# Flujo de conexiones automático — 2026-10-10 (America/Buenos_Aires)
+
+Agente: Codex / GPT-6. Rama `codex/flujo-conexiones-automatico-20261010`, base `cf2ea79987e3c9ebe80798d423e396c0e7f3d1f4`.
+
+Solicitud explícita: estados automáticos, sin botones, confirmaciones ni recargas. El panel deja de usar sellos históricos como autoridad de color; conserva esos documentos y la política de publicación. Verde requiere evidencia actual LIVE_PRODUCTION o CI_VERIFIED promovible. Fallos actuales quedan rojos; evidencia insuficiente, vencida o sin conexión queda sin confirmar; evidencia parcial conserva naranja.
+
+Implementación: una comprobación al abrir y otra 30 segundos después de finalizar la anterior; plazo máximo de 45 segundos, cancelación y descarte de resultados tardíos; evidencia válida durante 90 segundos. Pausa al ocultar sección/pestaña o perder conexión, retoma al regresar; cambio de sesión cancela la consulta anterior. Sólo lecturas; no escribe sellos ni datos de negocio. Detalles accesibles por enlaces, sin botones en el panel; se conserva foco entre actualizaciones.
+
+Impacto: Admin HTML y módulos/CSS de Flujo, entradas de caché y manifiesto generado. No cambian Rules, permisos, backend, compra, pagos, inventario, emails, revisores ni workflows. No se ejecutan mutaciones reales de prueba. Casos de navegador usan respuestas controladas: validan el render y la programación, no equivalen a evidencia autenticada de producción.
+
+PASS_LOCAL: 141 pruebas del área y ocho regresiones administrativas; pruebas de estado, cancelación, timeout, repetición, recuperación, pausa y descarte; navegador del módulo real en 320, 390, 768 y 1440 px: verde → rojo → verde, offline → pendiente → recuperación, sin consultas ocultas, sin botones/escrituras/overflow/errores JS. Build Pages, diagnóstico y caché PASS. Plan exacto preparado sobre la base indicada: ocho archivos protegidos, 18 registros afectados, conservando 78 registros/544 archivos y todos los controles. CI del candidato y publicación pendientes. No se declara publicado este cambio todavía.
+
+---
+
 ## Continuación del control tras publicación de pantallas — 2026-10-10 (America/Buenos_Aires)
 
 Codex /root: se integra main0ccf1b889459f890154382f2b731b78b2cb7d94b, que contiene las correcciones de PR1083. Su auto-merge previamente activado lo integró a08:39:03 al retirarse temporalmente el requisito de mantenimiento; debió pausarse antes de la ventana administrativa. No se inventa una aprobación del guard. La conexión GitHub recuperó acceso tras el401 del nuevo entorno, pero Administration continúa denegada403. Se indicó al propietario restablecer inmediatamente Protected flow maintenance, fuente GitHub Actions, conservando los otros cuatro requisitos. Se debe observar la restauración; el cambio de main impide ejecutar la migración del candidato8fd con evidencia antigua.

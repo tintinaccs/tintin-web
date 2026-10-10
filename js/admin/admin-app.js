@@ -32,7 +32,7 @@ import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261005-mayoristas-1-profile-wholesale-20261005-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261007-protected-flows-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261010-auto-flow-1";
 import "./pages/paginas-admin.js?v=tintin-20261004-admin-connections-3";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {

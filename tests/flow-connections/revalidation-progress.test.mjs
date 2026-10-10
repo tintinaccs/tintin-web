@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import { ciEvidenceProblem } from '../../js/admin/flujo-conexiones/live-checks.js';
 
 const source = fs.readFileSync(new URL('../../js/admin/flujo-conexiones/flujo-conexiones-admin.js', import.meta.url), 'utf8');
-const handler = source.slice(source.indexOf('  const revalidateBtn ='), source.indexOf('  const sealConfirmation ='));
+const handler = source.slice(source.indexOf('  const progressPanel ='), source.indexOf('  const monitor ='));
 const deferred = () => { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; };
 const tick = () => new Promise(resolve => setImmediate(resolve));
 function fixture() {
@@ -28,18 +28,17 @@ function fixture() {
     liveState: {}, buildLiveChecks: () => ({ a: {} }), buildLiveEdges: () => ({ b: {} }), renderAll() {},
   };
   vm.runInNewContext(handler, env);
-  return { env, controls, cart, firestore, attributes, click: () => control('#tfc-btn-revalidate').click(), bar: control('#tfc-revalidation-bar'), status: control('#tfc-revalidation-status') };
+  return { env, controls, cart, firestore, attributes, click: () => env.revalidate(new AbortController().signal), bar: control('#tfc-revalidation-bar'), status: control('#tfc-revalidation-status') };
 }
-test('progress waits for actual checks, ignores double click and reaches 100 only after evidence', async () => {
+test('progress waits for actual checks, reaches 100 only after evidence', async () => {
   const f = fixture(); const run = f.click();
   assert.equal(f.bar.value, 0); assert.equal(f.attributes['aria-busy'], 'true');
   await tick(); const partial = f.bar.value;
   assert.ok(partial > 10 && partial < 95);
-  await f.click(); assert.equal(f.bar.value, partial);
   f.firestore.resolve({}); await tick(); assert.ok(f.bar.value > partial && f.bar.value < 100);
   f.cart.resolve(['cart', {}]); await run;
   assert.equal(f.bar.value, 100); assert.ok(f.env.liveState.checkedAt);
-  assert.equal(f.attributes['aria-busy'], 'false'); assert.equal(f.controls['#tfc-btn-revalidate'].disabled, false);
+  assert.equal(f.attributes['aria-busy'], 'false');
 });
 test('security failure preserves incomplete progress and permits retry', async () => {
   const f = fixture(); f.env.waitForAdminAppCheck = async () => false;
@@ -75,4 +74,17 @@ test('sin evidencia de CI la revalidación termina y avisa qué quedó sin confi
     assert.match(f.env.liveErrorTextEl.textContent, new RegExp(`/api/master-diagnostics respondió ${status} sin evidencia de CI`));
     assert.match(f.env.liveErrorTextEl.textContent, /Repository audit queda sin confirmar/);
   }
+});
+
+test('comprobación cancelada no publica datos ni cambia el progreso de otra sesión', async () => {
+  const f = fixture();
+  const controller = new AbortController();
+  const run = f.env.revalidate(controller.signal);
+  await tick(); controller.abort();
+  f.attributes['aria-busy'] = 'true';
+  f.status.textContent = 'Comprobación de otra sesión';
+  f.firestore.resolve({}); f.cart.resolve(['cart', {}]); await run;
+  assert.equal(f.env.liveState.checkedAt, undefined);
+  assert.equal(f.attributes['aria-busy'], 'true');
+  assert.equal(f.status.textContent, 'Comprobación de otra sesión');
 });
