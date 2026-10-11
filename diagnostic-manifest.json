@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "35abc38ef3d0f3ab8fbd283e843bb260b965aa025b439d779bf0dd155fe98dc6",
+  "sourceFingerprint": "1b6fdc5531ec4ba3530f80042a787c963161706ef81acb2c7fa74ecb3ec7329a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1135,
     "textFiles": 1087,
-    "totalBytes": 16592310,
+    "totalBytes": 16593984,
     "pages": 19,
     "modules": 806
   },
@@ -30319,14 +30319,27 @@
     },
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
-      "bytes": 4857,
-      "sha256": "0b98eece75f3f36ac80e98c4910561b680d5c0371d2ea82c2ae59722d7de1385",
+      "bytes": 5851,
+      "sha256": "d86a39bf102bcb7f14869043e0f928ee2f4973bf40f3c00fc0dc950d47ed434b",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "http://127.0.0.1:4173///",
+          "line": 87
+        },
+        {
+          "url": "http://127.0.0.1:4173/",
+          "line": 87
+        },
+        {
+          "url": "http://127.0.0.1:4174/",
+          "line": 92
+        }
+      ]
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
@@ -44014,8 +44027,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 382716,
-      "sha256": "6c397c4a1342a520c8d81db1247956dfa5db17c48253e84bf7eee2ad149c5b9a"
+      "bytes": 382915,
+      "sha256": "6588eb2f678d0895a05d91f41dbe2ea5a0bb546218698505ae203267b234ac0d"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44068,8 +44081,8 @@
     {
       "path": "docs/agent/REAL_INTERACTIONS_20261011.md",
       "extension": ".md",
-      "bytes": 17042,
-      "sha256": "c6ffa52ef27c39fab5416d5e38633e447069267c4e1b4ebdc6265c1a5a77c81f"
+      "bytes": 17523,
+      "sha256": "bebf89b39d6e3ea4e9b07367e4b6c94180d1b08ddeca6d4ff6d8d6deaef79fd3"
     },
     {
       "path": "docs/agent/REVISION_ESPACIOS_20261008.md",
@@ -47170,8 +47183,8 @@
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
       "extension": ".js",
-      "bytes": 4857,
-      "sha256": "0b98eece75f3f36ac80e98c4910561b680d5c0371d2ea82c2ae59722d7de1385"
+      "bytes": 5851,
+      "sha256": "d86a39bf102bcb7f14869043e0f928ee2f4973bf40f3c00fc0dc950d47ed434b"
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
