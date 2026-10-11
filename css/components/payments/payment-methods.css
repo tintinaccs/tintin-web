@@ -1,7 +1,7 @@
 body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
   border-color: var(--ck-accent, var(--acc)) !important;
   background: var(--ck-accent-soft, var(--acc-pale)) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ck-accent, var(--acc)) 16%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ck-accent, var(--acc)) 16%, transparent);
 }
 
 #ck-payment-methods-runtime {
@@ -40,8 +40,8 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 .ck-payment-runtime-item.is-selected .ck-pay-label {
   border-color: var(--ck-accent, var(--acc)) !important;
   background: var(--ck-accent-soft, var(--acc-pale)) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ck-accent, var(--acc)) 16%, transparent);
-  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ck-accent, var(--acc)) 16%, transparent);
+  transform: none;
 }
 
 .ck-payment-runtime-item .ck-pay-option:checked + .ck-pay-label::after,

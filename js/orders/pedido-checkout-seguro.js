@@ -646,7 +646,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           <span style="font-weight:700">${escapeHtml(formatPrice(item.price * item.qty))}</span>
         </div>`).join('')}</div>
       <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.subtotal))}</span></div>
-      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${shippingMethod === 'encomienda' ? 'Sólo el envío: se paga a la transportadora al recibir' : quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
+      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${shippingMethod === 'encomienda' ? 'Se paga al recibir' : quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
+      ${shippingMethod === 'encomienda' ? '<p class="ck-summary-shipping-note">El envío se paga a la transportadora al recibir y no está incluido en el total.</p>' : ''}
       <div class="ck-summary-total" style="font-size:18px"><span>${escapeHtml(`TOTAL${quote.shippingPending ? ' (+ envío)' : ''}`)}</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.total))}</span></div>`;
   }
 
@@ -778,9 +779,64 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return lines.join('\n');
   }
 
+  function receiptText(result) {
+    const lines = ['TINTIN ACCESORIOS', `Pedido: ${text(result.shortId)}`, 'Pedido registrado', ''];
+    document.querySelectorAll('#ck-confirm-summary .ck-summary-item, #ck-confirm-summary .ck-summary-total, #ck-confirm-summary .ck-summary-row').forEach(row => {
+      lines.push([...row.children].map(node => node.textContent.trim()).join(': '));
+    });
+    const note = document.querySelector('#ck-confirm-summary .ck-summary-shipping-note')?.textContent;
+    if (note) lines.push('', note.trim());
+    lines.push('', 'Este ticket confirma el registro del pedido. No acredita el pago ni reemplaza la factura.');
+    return lines.join('\n');
+  }
+
+  function bindReceiptActions(result) {
+    const status = document.getElementById('ck-receipt-status');
+    const notify = value => { if (status) status.textContent = value; };
+    const save = document.getElementById('ck-save-receipt');
+    if (save) save.onclick = () => {
+      const file = new Blob([receiptText(result)], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(file);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Tintin-pedido-${text(result.shortId).replace(/[^a-zA-Z0-9_-]/g, '') || 'confirmado'}.txt`;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+      notify('Tu ticket está listo para guardar.');
+    };
+    const share = document.getElementById('ck-share-receipt');
+    if (share) share.onclick = async () => {
+      const content = receiptText(result);
+      try {
+        if (typeof navigator.share === 'function') {
+          await navigator.share({ title: `Mi pedido Tintin ${text(result.shortId)}`, text: content });
+          notify('Ticket compartido.');
+        } else if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(content);
+          notify('Ticket copiado. Pegalo donde quieras compartirlo.');
+        } else {
+          notify('Guardá el ticket para compartir el archivo desde tu dispositivo.');
+        }
+      } catch (error) {
+        if (error?.name !== 'AbortError') notify('No pudimos compartirlo. Podés guardar el ticket y compartir el archivo.');
+      }
+    };
+    const print = document.getElementById('ck-print-receipt');
+    if (print) print.onclick = () => window.print();
+  }
+
   function success(result, draft) {
     window._lastOrderId = result.shortId;
     window.TintinCheckoutOrderCompleted = true;
+    document.getElementById('panel-4')?.classList.add('ck-receipt');
+    bindReceiptActions(result);
+    document.querySelectorAll('.ck-panel').forEach((panel, index) => panel.classList.toggle('active', index === 4));
+    document.querySelectorAll('.ck-step').forEach((step, index) => {
+      step.classList.toggle('active', index === 4);
+      step.classList.toggle('done', index < 4);
+    });
     try {
       window.history.pushState(
         { ...(window.history.state || {}), tintinOrderCompleted: true },
@@ -875,7 +931,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   async function submit(button) {
-    if (submitting) return;
+    if (submitting || orderCompleted) return;
     submitting = true;
     hideError();
     button.disabled = true;
@@ -903,6 +959,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         return;
       }
       orderCompleted = true;
+      success(result, draft);
       try {
         await clearCart();
       } catch (clearError) {
@@ -910,7 +967,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
       inMemoryRequestId = null;
-      success(result, draft);
     } catch (error) {
       console.error('[spark-checkout]', error);
       const code = error?.details?.code || error?.code;
@@ -961,11 +1017,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (event.detail?.orderId !== result.orderId) return;
     orderCompleted = true;
     pendingPaypal = null;
+    success(result, draft);
     try { await clearCart(); } catch (error) { console.warn('[secure-checkout-order] No se pudo limpiar el carrito tras PayPal:', error); }
     try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
     inMemoryRequestId = null;
     document.getElementById('tt-paypal-checkout')?.style.setProperty('display', 'none');
-    success(result, draft);
   });
 
   window.addEventListener('click', event => {
