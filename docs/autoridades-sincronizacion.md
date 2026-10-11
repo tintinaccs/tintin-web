@@ -7,7 +7,7 @@ Los códigos de acceso pertenecen exclusivamente al servidor en `emailOtpCodes`.
 | Dominio | Autoridad operativa | Sheets | Escritura desde Sheets |
 | --- | --- | --- | --- |
 | Productos | Firestore `products` + `productInventory` | `Productos` | Sí, campos permitidos mediante webhook autenticado |
-| Usuarios | Firebase Auth + Firestore `users` + lifecycle canónico | `Usuarios web` | Sí, rol/bloqueo/notas y lifecycle no destructivo |
+| Usuarios | Firebase Auth + Firestore `users` + contrato canónico de cuentas | `Usuarios web` | Sí, rol/bloqueo/notas mediante webhook autenticado |
 | Pedidos | Firestore `orders` + dominio canónico de pedidos | `Pedidos web` + `Nuevo pedido web` | Sí, operaciones administrativas permitidas mediante el mismo dominio usado por Superadmin |
 | Auditoría | Firestore `auditLog` | `Auditoría web` | No; espejo de solo lectura |
 | Ventas locales históricas y nuevas | Firestore `localCommerceEntries` + proyección `orders` | Enero–Diciembre, casillas B:Q | Sí, `/api/local-commerce-webhook`; versión optimista y commit atómico sin inventario ni cuentas Auth |
@@ -25,8 +25,8 @@ Los códigos de acceso pertenecen exclusivamente al servidor en `emailOtpCodes`.
 - `Índice`, `Buscar` y `Resumen anual` son vistas calculadas de los mismos datos, no autoridades separadas ni registros a importar. `Clientas` permanece como vista legado. `Historial sync` conserva errores/acuse de la reconciliación; la auditoría comercial queda en `auditLog`.
 - La reconciliación existente trabaja cada minuto; consulta la revisión local y la firma de `Pedidos web` antes de releer el historial completo. Metadatos sin cambios no se reescriben, y las huellas locales se guardan por lotes en ScriptProperties. El panel consulta una revisión cada 30 segundos mientras está visible, recibe el aviso del listener existente de pedidos y permite actualización manual. No se declara sincronización instantánea ni evidencia de producción antes de instalar y verificar el puente.
 
-- Una cuenta nunca se elimina físicamente desde Sheets. `ELIMINAR` crea el mismo tombstone histórico que Superadmin y deshabilita Firebase Auth; `REACTIVAR` usa el mismo lifecycle canónico.
-- `username`, email y `customerId` históricos permanecen reservados; el teléfono puede liberarse al hacer soft-delete.
+- La eliminación de cuentas está diferida por decisión del propietario (`docs/agent/DECISIONES_CUESTIONARIO.md`). El panel y Sheets administran cuentas activas o bloqueadas; no ofrecen eliminación ni reactivación de perfiles eliminados.
+- `functions/api/sheets-admin-webhook.js` rechaza `deleteUser`, `softDeleteUser` y `reactivateUser`; sólo permite `updateUser` con los campos autorizados. Bloquear conserva el perfil y su identidad, sin borrar datos ni liberar reservas mediante soft-delete. Los residuos históricos eliminados no autorizan reintroducir ese flujo.
 - Sheets no escribe inventario ni calcula autoridad comercial por su cuenta. Crear o editar pedidos invoca `createOrderAdmin` / `applyOrderAdminMutation`, igual que Superadmin.
 - Al crear un pedido, el servidor vuelve a leer producto/precio/stock desde Firestore, calcula subtotal + envío + total, asigna TINPED y confirma pedido + secuencia + stock + auditoría de forma atómica.
 - Las ediciones administrativas llevan `changeId`, `baseChangeId` y `syncOrigin`; una revisión vieja recibe conflicto 409 en vez de sobrescribir datos más nuevos.

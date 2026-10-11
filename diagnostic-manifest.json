@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "260c87f5801a42888db680880b4f3706abc3dfd66c8438d01500f3057d2169a5",
+  "sourceFingerprint": "1e9cb55a89f2189f51d7e0caaafd7ed855b2b22964ef8b5fa62c86b59636e071",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1141,
-    "textFiles": 1093,
-    "totalBytes": 16675376,
+    "files": 1144,
+    "textFiles": 1096,
+    "totalBytes": 16683940,
     "pages": 19,
-    "modules": 809
+    "modules": 811
   },
   "viewports": [
     {
@@ -29149,8 +29149,8 @@
     },
     {
       "path": "scripts/auditar-auth-navegador-produccion.mjs",
-      "bytes": 3866,
-      "sha256": "99d8e1cdc2fa6b4c703b70c7f6e9b5ed9f5a6d31bb527a58a66e05107279812e",
+      "bytes": 4506,
+      "sha256": "9479b0b3323fc8d4d94d5e5248af339898fa95ae5ee752868183ccf170237f44",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29173,6 +29173,12 @@
           "target": "scripts/playwright",
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "./lib/auth-browser-diagnostics.mjs",
+          "target": "scripts/lib/auth-browser-diagnostics.mjs",
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -32556,6 +32562,22 @@
       "endpoints": []
     },
     {
+      "path": "scripts/lib/auth-browser-diagnostics.mjs",
+      "bytes": 865,
+      "sha256": "5ddbdb83a22a0a21a67efae5937d29f35bb0c143fcfffe67e72ae89189c53538",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://www.google.com/",
+          "line": 3
+        }
+      ]
+    },
+    {
       "path": "scripts/lib/clasificar-cargas.mjs",
       "bytes": 1366,
       "sha256": "90313bfde0c96957cf3f77bb0eadf965cea8fb015f01e368712593118c19cefe",
@@ -34546,6 +34568,41 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "tests/auth/production-browser-diagnostics.test.mjs",
+      "bytes": 1752,
+      "sha256": "71f4930ce6a4034f76842779659958af040010c0182368bcb741e7be66fe2540",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../scripts/lib/auth-browser-diagnostics.mjs",
+          "target": "scripts/lib/auth-browser-diagnostics.mjs",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.google.com/",
+          "line": 5
+        }
+      ]
     },
     {
       "path": "tests/auth/salida-sesion.test.mjs",
@@ -44148,8 +44205,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 395318,
-      "sha256": "d289218e40f24d07658679fb77db0f94d051fc9531a7b015bd1e589f5acec57f"
+      "bytes": 397044,
+      "sha256": "995ce6894b8ba30fe4d363fcbf4a8d8971c741b8492b8145a6bef7311facfc35"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44168,6 +44225,12 @@
       "extension": ".md",
       "bytes": 4490,
       "sha256": "0fba3342027e3a0be74cd1c0ae9372e8681bb89a3e1266bd0cb277f9c159af96"
+    },
+    {
+      "path": "docs/agent/MONITOR_REPORT_ONLY_20261011.md",
+      "extension": ".md",
+      "bytes": 3309,
+      "sha256": "dfbc40032d16b9e14f3f48b0bf669391ec9e2776ef85f2792e3376b586e33a53"
     },
     {
       "path": "docs/agent/PREPARACION_ACTUAL_20261011.md",
@@ -44280,8 +44343,8 @@
     {
       "path": "docs/autoridades-sincronizacion.md",
       "extension": ".md",
-      "bytes": 7272,
-      "sha256": "ae182864fc5f1b935bdcce1320361006921c0e3db472788605805db741d9653d"
+      "bytes": 7544,
+      "sha256": "3b6d5b6d5df9f902902e6dd263217c53e1fa4111ede4536b98d8a2065d3a5c54"
     },
     {
       "path": "docs/capas-css.md",
@@ -47052,8 +47115,8 @@
     {
       "path": "scripts/auditar-auth-navegador-produccion.mjs",
       "extension": ".mjs",
-      "bytes": 3866,
-      "sha256": "99d8e1cdc2fa6b4c703b70c7f6e9b5ed9f5a6d31bb527a58a66e05107279812e"
+      "bytes": 4506,
+      "sha256": "9479b0b3323fc8d4d94d5e5248af339898fa95ae5ee752868183ccf170237f44"
     },
     {
       "path": "scripts/auditar-auxiliares-paginas.js",
@@ -47866,6 +47929,12 @@
       "sha256": "2fa35517ca9efb7bedd132a18854be823185bfb139ba240d930135c58c37ab6d"
     },
     {
+      "path": "scripts/lib/auth-browser-diagnostics.mjs",
+      "extension": ".mjs",
+      "bytes": 865,
+      "sha256": "5ddbdb83a22a0a21a67efae5937d29f35bb0c143fcfffe67e72ae89189c53538"
+    },
+    {
       "path": "scripts/lib/clasificar-cargas.mjs",
       "extension": ".mjs",
       "bytes": 1366,
@@ -48254,6 +48323,12 @@
       "extension": ".mjs",
       "bytes": 4803,
       "sha256": "900df88b57d0d03ada15e1bcfd8a0e12e9793c6730b8cfba8305c91ca34cb16f"
+    },
+    {
+      "path": "tests/auth/production-browser-diagnostics.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1752,
+      "sha256": "71f4930ce6a4034f76842779659958af040010c0182368bcb741e7be66fe2540"
     },
     {
       "path": "tests/auth/salida-sesion.test.mjs",
