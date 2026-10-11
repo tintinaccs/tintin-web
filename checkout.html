@@ -8,7 +8,7 @@
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
@@ -300,12 +300,13 @@
         </div>
         <div class="ck-field">
           <label class="ck-label" for="ck-razon-social">Razón social *</label>
-          <input type="text" class="ck-input" id="ck-razon-social" placeholder="Nombre o razón social para la factura" />
+          <input type="text" class="ck-input" id="ck-razon-social" disabled placeholder="Nombre o razón social para la factura" />
         </div>
         <div class="ck-field">
           <label class="ck-label" for="ck-ruc">RUC *</label>
-          <input type="text" class="ck-input" id="ck-ruc" placeholder="RUC con guion y dígito verificador" inputmode="numeric" maxlength="10" aria-describedby="ck-ruc-help" />
-          <p class="ck-field-help" id="ck-ruc-help">Copiá el RUC de tu constancia tributaria, con su dígito verificador. Sin letras ni puntos.</p>
+          <input type="text" class="ck-input" id="ck-ruc" disabled placeholder="RUC con guion y dígito verificador" inputmode="numeric" maxlength="10" aria-describedby="ck-ruc-help" />
+          <button type="button" class="ck-btn-back" id="ck-ruc-hyphen" disabled aria-label="Agregar guion al RUC">Agregar guion al RUC</button>
+          <p class="ck-field-help" id="ck-ruc-help">Elegí el tipo de contribuyente primero. Copiá el RUC de tu constancia: números, guion y un dígito verificador. Si el teclado no muestra el guion, usá «Agregar guion al RUC».</p>
         </div>
       </div>
 
@@ -1405,16 +1406,43 @@ phoneCountrySelect.innerHTML = '<option value="PY">+595</option>';
 phoneCountrySelect.value = DEFAULT_COUNTRY.code;
 
 const invoiceFieldsEl = document.getElementById('ck-invoice-fields');
-document.getElementById('ck-taxpayer-type').onchange = function() {
-  document.querySelector('label[for="ck-razon-social"]').textContent = this.value === 'fisica' ? 'Nombre y apellido para la factura *' : 'Razón social *';
-};
-document.getElementById('ck-wants-invoice').onchange = function() {
-  invoiceFieldsEl.style.display = this.checked ? '' : 'none';
-  this.setAttribute('aria-expanded', String(this.checked));
-  for (const id of ['ck-taxpayer-type', 'ck-razon-social', 'ck-ruc']) {
-    document.getElementById(id).required = this.checked;
+const invoiceToggleEl = document.getElementById('ck-wants-invoice');
+const invoiceTypeEl = document.getElementById('ck-taxpayer-type');
+const invoiceNameEl = document.getElementById('ck-razon-social');
+const invoiceRucEl = document.getElementById('ck-ruc');
+const invoiceHyphenEl = document.getElementById('ck-ruc-hyphen');
+function syncInvoiceFields() {
+  const wanted = invoiceToggleEl.checked;
+  const typeSelected = invoiceTypeEl.value === 'fisica' || invoiceTypeEl.value === 'juridica';
+  invoiceFieldsEl.style.display = wanted ? '' : 'none';
+  invoiceToggleEl.setAttribute('aria-expanded', String(wanted));
+  invoiceTypeEl.required = wanted;
+  invoiceTypeEl.disabled = !wanted;
+  for (const field of [invoiceNameEl, invoiceRucEl]) {
+    field.disabled = !wanted || !typeSelected;
+    field.required = wanted && typeSelected;
+  }
+  document.querySelector('label[for="ck-razon-social"]').textContent = invoiceTypeEl.value === 'fisica' ? 'Nombre y apellido para la factura *' : 'Razón social *';
+  invoiceHyphenEl.disabled = invoiceRucEl.disabled || !/^\d{3,8}$/.test(invoiceRucEl.value);
+}
+invoiceTypeEl.onchange = () => {
+  syncInvoiceFields();
+  const error = document.getElementById('error-2');
+  if (!invoiceRucEl.disabled && error.textContent === 'Elegí el tipo de contribuyente para tu factura.') {
+    error.textContent = '';
+    error.classList.remove('show');
   }
 };
+invoiceToggleEl.onchange = syncInvoiceFields;
+invoiceRucEl.addEventListener('input', syncInvoiceFields);
+invoiceHyphenEl.onclick = () => {
+  if (invoiceHyphenEl.disabled) return;
+  invoiceRucEl.value += '-';
+  invoiceRucEl.dispatchEvent(new Event('input', { bubbles: true }));
+  invoiceRucEl.focus();
+  invoiceRucEl.setSelectionRange(invoiceRucEl.value.length, invoiceRucEl.value.length);
+};
+syncInvoiceFields();
 
 document.getElementById('btn-step3-next').onclick = () => {
   hideErrors();

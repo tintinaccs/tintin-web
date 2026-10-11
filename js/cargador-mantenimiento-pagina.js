@@ -26,7 +26,7 @@ export function loadPageMaintenance() {
       load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261008-checkout-step-labels-1'),
       load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'),
       load('pages/checkout/checkout-control-cuota.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1'),
-      load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261010-whatsapp-release-5')
+      load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261011-invoice-input-1')
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {
