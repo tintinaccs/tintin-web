@@ -199,3 +199,8 @@ Badge distingue actividad de esta sesion del estado persistido: APLICANDO solo m
 ## Checkout: ticket confirmado y presentación — 2026-10-11
 
 Superficies: checkout.html, pedido-checkout-seguro, hardening/fiabilidad/estado del checkout, CSS de resumen y métodos de pago. El resultado confirmado debe permanecer visible mientras se limpia y sincroniza el carrito; las recuperaciones y pasos no deben convertir una compra terminada en un carrito vacío. El ticket se descarga/comparte/imprime sólo por acción del usuario. Probar fracaso sin confirmación, ausencia de duplicados y carrito vacío ordinario, además de layouts320/390/768/1024/1280/1440/1920 en Chromium/WebKit. Las URLs transitivas y artefactos CSP/diagnóstico/caché se regeneran; fuentes de datos, notificaciones, autorización y dominio conservados.
+
+
+### 2026-10-11 — Paneles y presentación de boutique, continuación del ticket
+
+Fuentes: galeria-producto.js, tienda.js, tema-unificado-tintin.css, product-maintenance.css, panel-colecciones.js, coherencia-visual.css. Impacto: tarjetas de inicio/catálogo/colecciones/recomendaciones; selección de fotos y color en ficha; cabeceras de catálogo/carrito/cuenta/notificaciones en todas las páginas públicas. Consumidores administrativos de la paleta reciben sólo actualización de referencia, sin cambiar datos ni permisos. Validar selección bidireccional y srcset, stock sin rayas, geometría compacta, scroll de recomendaciones, CTA de catálogo, cierre y espacio de navegación móvil. Regenerar caché transitiva, shell, CSP, diagnóstico y plan protegido exacto contra main. Pruebas runtime usan renderizadores reales con fixtures sin operaciones comerciales.

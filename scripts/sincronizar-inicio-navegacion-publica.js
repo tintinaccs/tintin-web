@@ -8,13 +8,13 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1';
+const TIENDA_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1';
-const LOADER_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1';
+const LOADER_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1';
 const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1-first-render-merge-20261010-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261010-mobile-navigation-front-1-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1';
-const NAV_ENTRY_VERSION = 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1';
+const NAV_ENTRY_VERSION = 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261010-whatsapp-release-5';
 const SESSION_PROTECTION_VERSION = 'tintin-20261010-registration-name-2-first-render-merge-20261010-1';
@@ -22,7 +22,7 @@ const PROFILE_GATE_VERSION = 'tintin-20261010-registration-name-2-first-render-m
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2';
-const UNIFIED_THEME_VERSION = 'tintin-20261010-whatsapp-release-5';
+const UNIFIED_THEME_VERSION = 'tintin-20261010-whatsapp-release-5-boutique-20261011-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],

@@ -12,7 +12,6 @@ function renderSheetCategories() {
 export function renderCollectionsSheet() {
   return `
     <div class="tt-collections-sheet" id="collections-sheet" role="dialog" aria-modal="true" aria-label="Catálogo" aria-hidden="true">
-      <div class="tt-sheet-handle" aria-hidden="true"></div>
       <div class="tt-sheet-header">
         <div class="tt-drawer-brand-heading"><img class="tt-drawer-brand-logo" src="${logoUrl()}" alt="Tintin" width="110" height="46"><h2>CATÁLOGO</h2></div>
         <button type="button" id="btn-close-sheet" aria-label="Cerrar colecciones">${svgIcon(UI_ICONS.close, { size: 16 })}</button>
@@ -20,7 +19,7 @@ export function renderCollectionsSheet() {
       <div class="tt-sheet-grid" data-collections-nav="sheet">${renderSheetCategories()}</div>
       <div class="tt-sheet-footer">
         <nav class="tt-sheet-info-links" aria-label="Información de Tintin"><a href="/about">Nosotros</a><a href="/contact">Contacto</a></nav>
-        <a href="/catalogo" class="tt-btn" style="display:block;text-align:center;text-decoration:none">Ver todas las colecciones</a>
+        <a href="/catalogo" class="tt-btn" style="display:block;text-align:center;text-decoration:none">Ver todo el catálogo</a>
       </div>
     </div>`;
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "697e7d0473a8b408da4b0c8f6caa26f4095c0b1ae02cfccf1521e651a0265da2",
+  "sourceFingerprint": "e62ee47fcddb1afd6843580247ed2543c0a01ea93ac1502321f0189e937343c6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1146,
-    "textFiles": 1098,
-    "totalBytes": 16725210,
+    "files": 1149,
+    "textFiles": 1101,
+    "totalBytes": 16752702,
     "pages": 19,
-    "modules": 813
+    "modules": 815
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14996,
-      "sha256": "aef02d5b202ab0a6c7c938e325a20c6007ef04f96a413a9a3707a54dbe6919bf",
+      "bytes": 15096,
+      "sha256": "6f4e1455f561668a6ad7a6b3c582e136950050ec0dc1b9bc7210c283cc818aef",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -109,7 +109,7 @@
           "line": 7
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -119,7 +119,7 @@
           "line": 9
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -139,7 +139,7 @@
           "line": 182
         },
         {
-          "raw": "/tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "/tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 183
         },
@@ -201,7 +201,7 @@
           "line": 42
         },
         {
-          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 43
         },
@@ -547,7 +547,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -559,7 +559,7 @@
           "exists": true
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -583,7 +583,7 @@
           "exists": true
         },
         {
-          "raw": "/tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "/tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 183,
           "exists": true
@@ -655,7 +655,7 @@
           "exists": true
         },
         {
-          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 43,
           "exists": true
@@ -868,8 +868,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25273,
-      "sha256": "34c55d3f4aa23da7495eb59589d98475d45dbdcf0ffdf02099a3b744aa0d160a",
+      "bytes": 25393,
+      "sha256": "318d8a5183d0e1e34847de9442566a0a880cec0fdf856888694351535e9f0edf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -909,7 +909,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -919,17 +919,17 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 270
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 271
         },
@@ -1011,7 +1011,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -1325,7 +1325,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -1337,19 +1337,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 270,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 271,
           "exists": true
@@ -1445,7 +1445,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -1654,8 +1654,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44684,
-      "sha256": "257469b980a0fb6b9f27258f9e3f196ffd1d8f87b7be30cda6f20f71877c2eb2",
+      "bytes": 44744,
+      "sha256": "0be73f6c59549e3bdec59e77dd73e1ad2cf50a18219c5cf075316f25fe328744",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1685,7 +1685,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1802,7 +1802,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2223,8 +2223,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 201327,
-      "sha256": "ec72ec93f2f7ee221c8424df6e835a06596615047af788642ee487c79f1be22c",
+      "bytes": 201387,
+      "sha256": "30e7f475aeab381adb6c43dcd6d3f0238667a10623a77f27391c236957c49e72",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2248,7 +2248,7 @@
       "ids": 567,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2268,7 +2268,7 @@
           "line": 2056
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261010-media-cache-1-first-render-merge-20261010-1-followup-20261010-1-receipt-20261011-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261010-media-cache-1-first-render-merge-20261010-1-followup-20261010-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/admin/admin-app.js",
           "line": 2057
         },
@@ -2435,7 +2435,7 @@
           "line": 43
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44
         },
@@ -2535,7 +2535,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2559,7 +2559,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261010-media-cache-1-first-render-merge-20261010-1-followup-20261010-1-receipt-20261011-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261010-media-cache-1-first-render-merge-20261010-1-followup-20261010-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/admin/admin-app.js",
           "line": 2057,
           "exists": true
@@ -2757,7 +2757,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44,
           "exists": true
@@ -8157,8 +8157,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16678,
-      "sha256": "95e8f3651becfbf6e69b71b6af0a898bddaf732ee0871dd18a44709abb92e273",
+      "bytes": 16798,
+      "sha256": "f84d989d38b6ede98afaf88f6668588264dd0d6d66265cd93bfab2ec3702a21f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8192,7 +8192,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8202,17 +8202,17 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 179
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 180
         },
@@ -8294,7 +8294,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -8550,7 +8550,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -8562,19 +8562,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 179,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 180,
           "exists": true
@@ -8670,7 +8670,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -8829,8 +8829,8 @@
         "guest",
         "client"
       ],
-      "bytes": 55728,
-      "sha256": "e578cb50b2fd286c2d1238a28ff4f5e324faa0aa526e60ab1c21ebfabbb58111",
+      "bytes": 55848,
+      "sha256": "6a96ef8ca46bee4760a63e496ee6c8c6b9fc622c87bb1e8402f4f9a4ce1a5b49",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8876,7 +8876,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -8886,17 +8886,17 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 496
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 497
         },
@@ -8983,7 +8983,7 @@
           "line": 51
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52
         },
@@ -9224,7 +9224,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -9236,19 +9236,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 496,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 497,
           "exists": true
@@ -9350,7 +9350,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52,
           "exists": true
@@ -9597,8 +9597,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 126949,
-      "sha256": "6b418da90cab3e3d38e5e6de534d2c8cf5e7c067c795a9d492b83f457c562894",
+      "bytes": 127069,
+      "sha256": "d1aa90b88f0aba88b7b08efaf8a466d786f3ed6f6b76e0963474ffc68646591f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9638,7 +9638,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -9648,7 +9648,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -9668,12 +9668,12 @@
           "line": 1999
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 2000
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 2001
         },
@@ -9750,7 +9750,7 @@
           "line": 44
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 45
         },
@@ -10016,7 +10016,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -10028,7 +10028,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -10052,13 +10052,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 2000,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 2001,
           "exists": true
@@ -10148,7 +10148,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 45,
           "exists": true
@@ -10767,8 +10767,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18446,
-      "sha256": "9640312b815540a316c76d59d27936014324de8efe9cbe8ee00c402ebf1b7922",
+      "bytes": 18566,
+      "sha256": "32ead656eea682e78d0448a464f5336621d0311223064d6c9b4aca1f7ca17ad5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10808,7 +10808,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -10818,17 +10818,17 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 199
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 200
         },
@@ -10915,7 +10915,7 @@
           "line": 51
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52
         },
@@ -11181,7 +11181,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -11193,19 +11193,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 199,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 200,
           "exists": true
@@ -11307,7 +11307,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52,
           "exists": true
@@ -11472,8 +11472,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23332,
-      "sha256": "8acfe3b6fd9bb1374adf296367a1fb53f92c6996eec7524680a80823c8bffb79",
+      "bytes": 23452,
+      "sha256": "4658e446ae159711ace406fc75e04bf2018bace17db029759225fab6aaddd495",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11513,7 +11513,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -11523,17 +11523,17 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 221
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 222
         },
@@ -11615,7 +11615,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -11916,7 +11916,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -11928,19 +11928,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 221,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 222,
           "exists": true
@@ -12036,7 +12036,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -12261,8 +12261,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20454,
-      "sha256": "9db00042fc8b82a0c1271520929b4ea94a2cb63d8007dd996a5d8feaa1ccd4b9",
+      "bytes": 20574,
+      "sha256": "ceadd424972c93c517cc7f48f440d6abc3674bf5986bc0939c2ae31d94c11de3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12302,7 +12302,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -12312,17 +12312,17 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 178
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 179
         },
@@ -12404,7 +12404,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -12660,7 +12660,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -12672,19 +12672,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 178,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 179,
           "exists": true
@@ -12780,7 +12780,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -12979,8 +12979,8 @@
         "guest",
         "client"
       ],
-      "bytes": 34313,
-      "sha256": "c14b7975ba680cbeaac1e37b2fef1e1a459d3cea7c538bdf77b74d8bd297d742",
+      "bytes": 34433,
+      "sha256": "c133ec3342f50bd91033b50b5b95fdb99f958966de1f802f2c83d8bbb2d5d46b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13026,7 +13026,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -13036,17 +13036,17 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 422
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 423
         },
@@ -13143,7 +13143,7 @@
           "line": 70
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 71
         },
@@ -13530,7 +13530,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -13542,19 +13542,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 422,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 423,
           "exists": true
@@ -13668,7 +13668,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 71,
           "exists": true
@@ -13968,8 +13968,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 69681,
-      "sha256": "d6ac3145bed59e7bcae7c1e95f04b84e5c197332191f78eeba9f8f8bfc19f602",
+      "bytes": 69801,
+      "sha256": "044c2c42f7a9f0925b0f9ea2b74af6d2b41d4f0d35f46b4de52c503f1a03d34d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14015,7 +14015,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -14025,7 +14025,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -14035,12 +14035,12 @@
           "line": 1263
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 1264
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 1265
         },
@@ -14102,7 +14102,7 @@
           "line": 43
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44
         },
@@ -14238,7 +14238,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -14250,7 +14250,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -14262,13 +14262,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 1264,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 1265,
           "exists": true
@@ -14340,7 +14340,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44,
           "exists": true
@@ -14655,8 +14655,8 @@
         "guest",
         "client"
       ],
-      "bytes": 2010,
-      "sha256": "3cd8a1882fe705ba0e3eb1af59a3ec5b6bbd2bdcf8cb4fdc4c1842d2e5fe82f7",
+      "bytes": 1984,
+      "sha256": "ed082404e4210186b519bf48a90304c9faa9a6a71f494d7e5c78ed40e6b85fde",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14673,7 +14673,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 1
         }
@@ -14710,7 +14710,7 @@
         {
           "raw": "/about",
           "target": "about.html",
-          "text": "Hacé clic aquí si no redirige automáticamente.",
+          "text": "Ir a Quiénes somos",
           "id": "",
           "ariaLabel": "",
           "title": "",
@@ -14720,7 +14720,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 1,
           "exists": true
@@ -14786,8 +14786,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 53155,
-      "sha256": "7551bd514466be113dddb3c679487ea17fa7d3e4f89974a6903617f15651f965",
+      "bytes": 53275,
+      "sha256": "6ac94d902f0b344539473e2819e585d610b6680c3b4b8d0e7b1c117307831b4d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14833,7 +14833,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -14843,7 +14843,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -14853,12 +14853,12 @@
           "line": 49
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 239
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 240
         },
@@ -14945,7 +14945,7 @@
           "line": 38
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 39
         },
@@ -15251,7 +15251,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -15263,7 +15263,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -15275,13 +15275,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 239,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 240,
           "exists": true
@@ -15383,7 +15383,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 39,
           "exists": true
@@ -15921,8 +15921,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18035,
-      "sha256": "5644abbb37bc38053989f8380b241e7a0a68caaa5046a29f490b1d8012ec5a1a",
+      "bytes": 18155,
+      "sha256": "ddfc1b0e8f1931258722c78976e958667531cd55d118c9fd02d20153cb8a1cdb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15956,7 +15956,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -15966,17 +15966,17 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 204
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 205
         },
@@ -16058,7 +16058,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -16314,7 +16314,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -16326,19 +16326,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 204,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 205,
           "exists": true
@@ -16434,7 +16434,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -16593,8 +16593,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20757,
-      "sha256": "39c856669c87d2ebed166db0dfc18fbedd026e94d351498adc86c5a663665697",
+      "bytes": 20877,
+      "sha256": "61be2bfade8d97fa1f3c6f609d198f8b5ca5d1c42ef0f97d95c5e35cebd4cc32",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16628,7 +16628,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -16638,17 +16638,17 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 218
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 219
         },
@@ -16725,7 +16725,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -17016,7 +17016,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -17028,19 +17028,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 218,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 219,
           "exists": true
@@ -17130,7 +17130,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -17312,8 +17312,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21515,
-      "sha256": "c6b308639c0a5076de7c1dff647b7a0abbea101392faf6ffd92a063f273ad149",
+      "bytes": 21655,
+      "sha256": "be55679566beed9142ca85da0a294d45b341521dfeee70ef84b29dedacd2c667",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17347,7 +17347,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -17357,17 +17357,17 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 266
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 267
         },
@@ -17454,7 +17454,7 @@
           "line": 51
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52
         },
@@ -17514,7 +17514,7 @@
           "line": 63
         },
         {
-          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1",
+          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-boutique-20261011-1",
           "target": "css/pages/product/product-maintenance.css",
           "line": 64
         },
@@ -17760,7 +17760,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -17772,19 +17772,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 266,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 267,
           "exists": true
@@ -17886,7 +17886,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52,
           "exists": true
@@ -17958,7 +17958,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1",
+          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-boutique-20261011-1",
           "target": "css/pages/product/product-maintenance.css",
           "line": 64,
           "exists": true
@@ -18224,8 +18224,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18551,
-      "sha256": "8b9b8ff87b93318046e688578c7f59370eda673e467124e6794d290f78b6a05c",
+      "bytes": 18671,
+      "sha256": "563571dc4edd08701a3d59deca115e20a3e95ceede72677f7398a81ab669cbc3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18252,7 +18252,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -18262,17 +18262,17 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 199
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 200
         },
@@ -18349,7 +18349,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -18650,7 +18650,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -18662,19 +18662,19 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "line": 199,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
+          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "tienda.js",
           "line": 200,
           "exists": true
@@ -18764,7 +18764,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -20017,7 +20017,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 350901,
-      "sha256": "7fa88ae3f52eb4358fec9769cd2de07042666bfa2f148fd5782456bbc5891217",
+      "sha256": "b6cb5a097e92da6848456ad41d0c4f8f53e9986e5ce6f2ecf9b137abf8ae679f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22070,15 +22070,15 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 473993,
-      "sha256": "fa34db0be6f8963536c1c98cfb4b9f8d65f3e7712fe37483bdb5d5afd6819344",
+      "bytes": 474053,
+      "sha256": "4a93c3c841ccf3cfdee7a9c9bda23d507f6237491e4a68de1a53a743e010bfa7",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "./products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/admin/products/fotos-por-color.js",
           "dynamic": false,
           "line": 1
@@ -22198,13 +22198,13 @@
           "line": 30
         },
         {
-          "raw": "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3",
+          "raw": "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3-boutique-20261011-1",
           "target": "js/components/images/carga-imagenes.js",
           "dynamic": false,
           "line": 31
         },
         {
-          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3",
+          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3-boutique-20261011-1",
           "target": "js/admin/products/biblioteca-multimedia-admin.js",
           "dynamic": false,
           "line": 32
@@ -23572,15 +23572,15 @@
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
-      "bytes": 15548,
-      "sha256": "06a192bfdc792905d5c94880bbea388086e1167ebe4628fc67eb27bc1f2de48b",
+      "bytes": 15568,
+      "sha256": "e1522e23f6c6d9f7a7afbdbbc62dd841ade57f1d63fcc49672a6dffe3c110c7c",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../components/images/biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3",
+          "raw": "../../components/images/biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3-boutique-20261011-1",
           "target": "js/components/images/biblioteca-multimedia.js",
           "dynamic": false,
           "line": 13
@@ -23632,8 +23632,8 @@
     },
     {
       "path": "js/admin/products/fotos-por-color.js",
-      "bytes": 10525,
-      "sha256": "07b58d04c5c30ad43b33d0c3cb9b9f80243dd2cbb2b3f8193b190d56a35eedc1",
+      "bytes": 10545,
+      "sha256": "5766d616c1317ef088c1d2336dbe263f02b48e4762ed562ad3ab14ee5534c090",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23646,7 +23646,7 @@
           "line": 2
         },
         {
-          "raw": "../../components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "../../components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "dynamic": false,
           "line": 1
@@ -24338,8 +24338,8 @@
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
-      "bytes": 3714,
-      "sha256": "e1ab7729a75c1098f2c601e8111f006c65f1e76c71082891713f2ad941141114",
+      "bytes": 3734,
+      "sha256": "5a221e5360311ed204b030118ff06128cc079dc27f680b0f359fc0278249276c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24362,8 +24362,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 49328,
-      "sha256": "d99e85330f28af0b761d70ddafb04511c469e0686a085fd2c8bc5f6fb455f74f",
+      "bytes": 49348,
+      "sha256": "c9fbdd1c38ae4283e3798494cc0b45ea253cfee214b0cbd31fd781cbb0d2ccd3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24777,8 +24777,8 @@
     },
     {
       "path": "js/components/images/biblioteca-multimedia.js",
-      "bytes": 14402,
-      "sha256": "7e22e481cfb23206a3f48f75ec22774f12fddbaa46b33c9c0f0e79e2293b12b5",
+      "bytes": 14422,
+      "sha256": "d8c0a0b3e118430b46b6a4f4228017bf6cb4c2813022ac36437717a710e99d4c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24815,7 +24815,7 @@
           "line": 29
         },
         {
-          "raw": "./galeria-producto.js?v=tintin-20261010-metallic-gold-2",
+          "raw": "./galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
           "dynamic": false,
           "line": 1
@@ -24830,8 +24830,8 @@
     },
     {
       "path": "js/components/images/carga-imagenes.js",
-      "bytes": 13798,
-      "sha256": "18d820ff654b8f23988de8d55e98a68c8d4f5f68081a92150bcf1e8595b69bfc",
+      "bytes": 13818,
+      "sha256": "a5c543c224eb8838289d1d591700bca7ec53c85657a68c00be57fdc72307bfdc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24844,7 +24844,7 @@
           "line": 10
         },
         {
-          "raw": "./biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3",
+          "raw": "./biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3-boutique-20261011-1",
           "target": "js/components/images/biblioteca-multimedia.js",
           "dynamic": false,
           "line": 15
@@ -24870,8 +24870,8 @@
     },
     {
       "path": "js/components/images/galeria-producto.js",
-      "bytes": 7537,
-      "sha256": "d385063dcafde67b451b203847bc6b69086a741dd5ff659fc18bfcdbee665053",
+      "bytes": 7311,
+      "sha256": "61e36e28abbf23b8e2734ca9a3fd7c312ad79ab27c762345f178300c70ad10d2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25245,8 +25245,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 14625,
-      "sha256": "c5f80602e47e215121c521bfd7105cab11b7f13ed511dac5588d77f77b8cd1c0",
+      "bytes": 14665,
+      "sha256": "b3068402f8683e66c9b7c0e7c5ec49f0f2dce0cafff59349dc60a94f96b5c5fa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25277,7 +25277,7 @@
           "line": 141
         },
         {
-          "raw": "./control-busqueda.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "./control-busqueda.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/components/navigation/compartido/control-busqueda.js",
           "dynamic": true,
           "line": 281
@@ -25315,8 +25315,8 @@
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
-      "bytes": 11236,
-      "sha256": "94091ef23e4e29857b75df1c443d516f49ebb2af4cf262e5f95b8c64c09a0a3c",
+      "bytes": 11256,
+      "sha256": "5289fa8f4167ff1705f7d6e313ebb6a43d58f2bcc7cab4dee28d1c6caec3b578",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25423,8 +25423,8 @@
     },
     {
       "path": "js/components/navigation/compartido/panel-colecciones.js",
-      "bytes": 1630,
-      "sha256": "f70a6019486beaadf4b491129ef4c088114a0c2a15fc72099ad4b7c08df7b0ed",
+      "bytes": 1565,
+      "sha256": "06751f3bf4e0f9d700c1f9aba4b723de34d8af7c4650c5037a66d36562dd9f7e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25471,8 +25471,8 @@
     },
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
-      "bytes": 5216,
-      "sha256": "9d7abba59faf429eb9590879922d1e953aa4ba0981185ab1fb2b13ba825bd4a4",
+      "bytes": 5236,
+      "sha256": "8912c426e0f1be29e382f39a05ce388b55fd834027577841b307932bfc39a00e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25602,15 +25602,15 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 12398,
-      "sha256": "a30e2dcc01d0c7867594f381f4774486f9385c3271ca4d38fca247ff25f0fc8a",
+      "bytes": 12478,
+      "sha256": "417e39b687fe465588826a8b3c8a388db8cefb0053aa0a08564a0f3c5ec6211b",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./escritorio/encabezado-escritorio.js?v=tintin-20261010-whatsapp-release-5",
+          "raw": "./escritorio/encabezado-escritorio.js?v=tintin-20261010-whatsapp-release-5-boutique-20261011-1",
           "target": "js/components/navigation/escritorio/encabezado-escritorio.js",
           "dynamic": false,
           "line": 1
@@ -25646,7 +25646,7 @@
           "line": 6
         },
         {
-          "raw": "./compartido/panel-colecciones.js?v=tintin-20261010-whatsapp-release-5-followup-20261010-1",
+          "raw": "./compartido/panel-colecciones.js?v=tintin-20261010-whatsapp-release-5-followup-20261010-1-boutique-20261011-1",
           "target": "js/components/navigation/compartido/panel-colecciones.js",
           "dynamic": false,
           "line": 7
@@ -25664,13 +25664,13 @@
           "line": 9
         },
         {
-          "raw": "./compartido/recursos-navegacion.js?v=tintin-20261010-mobile-single-selection-2",
+          "raw": "./compartido/recursos-navegacion.js?v=tintin-20261010-mobile-single-selection-2-boutique-20261011-1",
           "target": "js/components/navigation/compartido/recursos-navegacion.js",
           "dynamic": false,
           "line": 10
         },
         {
-          "raw": "./compartido/carga-navegacion.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "./compartido/carga-navegacion.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/components/navigation/compartido/carga-navegacion.js",
           "dynamic": false,
           "line": 11
@@ -25722,8 +25722,8 @@
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
-      "bytes": 3430,
-      "sha256": "bde658de844dac9d58b8004ac30d72450f77fb653bfc6d7202668da9657051ff",
+      "bytes": 3522,
+      "sha256": "85d31f983c935439282d47ade95bd2b9ae5bcfdf3b05526c9f2aa60df1fd5bc3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26843,8 +26843,8 @@
     },
     {
       "path": "js/core/store/estado-productos.js",
-      "bytes": 24184,
-      "sha256": "19cb81f146e0462a952b1c13629037e8c9372fb0e3bbf910f686de4d2eb0bb29",
+      "bytes": 24204,
+      "sha256": "0bc6b8a212a328ef420e0137d380c92d8fe3c5dfc8ab8a61c8bdd5a285622659",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26893,7 +26893,7 @@
           "line": 23
         },
         {
-          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1",
+          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
           "target": "js/cargador-mantenimiento-pagina.js",
           "dynamic": false,
           "line": 1
@@ -27430,8 +27430,8 @@
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "bytes": 2070,
-      "sha256": "8a744b9d5cfebcd79fd7eefba1de7263a92fae8f476fb02daf7869dd6907acce",
+      "bytes": 2090,
+      "sha256": "e08e8ebba819715a211cb4730c37ec145def8908f73d939843d86603c043aa04",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28237,8 +28237,8 @@
     },
     {
       "path": "js/pages/product/mantenimiento-producto.js",
-      "bytes": 13455,
-      "sha256": "788d171460e809b604c8aad32b7a965227f7ded02af0b8cc57150409660ff2ff",
+      "bytes": 13475,
+      "sha256": "b2d48bedb26574eb6b310858c81a0ecfdd3055bc91ceab495e98cbac388730d8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28630,8 +28630,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 11079,
-      "sha256": "27f7c2a34f611a5b1a3782539c46a3dff08e494dd3c03699bb3997af8b432f1b",
+      "bytes": 11099,
+      "sha256": "b565cb6470e86d8e37412d0ed3ef1c858bbde0bfe869a159edd7e82b64568604",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31369,8 +31369,8 @@
     },
     {
       "path": "scripts/auditar-producto-pagina.js",
-      "bytes": 5005,
-      "sha256": "f35a8ffd3d08c244b835efcc1cd34337f4adfb1aa27b20cb822e97911886dd3a",
+      "bytes": 5021,
+      "sha256": "ff4d1295636ba77a41ee17765a5ea66ee7d2d57551f830395dc3d2f64fa14908",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33276,8 +33276,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 19826,
-      "sha256": "22e149494c24d5e8cad5b7b90690dc60fffb9d3c8f8d31e2bfc584cc5d9b8de7",
+      "bytes": 19926,
+      "sha256": "8d873251afbc68371f7a37e5e8d279bda0b5d91827252478d1f391a3004035ef",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35256,8 +35256,8 @@
     },
     {
       "path": "tests/catalog/master-presentation.spec.js",
-      "bytes": 4807,
-      "sha256": "925bd7652e3cf6678323a96eedaf29841519d635b0201801eecba315e2703d5e",
+      "bytes": 4681,
+      "sha256": "f2b9aefed2f373f7a97b566df0cfa595820cb0169b9beb1799e5c03938f70eb9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35346,8 +35346,8 @@
     },
     {
       "path": "tests/catalog/product-colors.test.mjs",
-      "bytes": 4543,
-      "sha256": "f03843cc4615bb49fb937277d48dac1bb39cf5df1a3d4403cb7ae0a20c121826",
+      "bytes": 5053,
+      "sha256": "5cf76629a70b2aa6840def66a73c5715fe8e2f743f2db7073f4b05344359d929",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40312,6 +40312,17 @@
       ]
     },
     {
+      "path": "tests/runtime/boutique-surfaces.spec.js",
+      "bytes": 8603,
+      "sha256": "4ef909468f0f1b58307be6f1fc49a067fcfce8a9afe10e532e51b8ada04bf1e6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/runtime/checkout-receipt.spec.js",
       "bytes": 11954,
       "sha256": "728c9c0905d9fdec626ddb78f99270716dcb79cdf1f6c5b45980ca7483e74b82",
@@ -40379,6 +40390,17 @@
       "path": "tests/runtime/invoice-component.spec.js",
       "bytes": 223,
       "sha256": "45cacfe4bc90065afd1a461a9f29a692a30db91456f78f8c5ca718ee72897be1",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/runtime/product-boutique.spec.js",
+      "bytes": 100,
+      "sha256": "879969f8c7d00ce721a9c61a5d18ea39b3c19d7ae3cb1a8b359bd03fec8f13a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42131,8 +42153,8 @@
     },
     {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
-      "bytes": 14481,
-      "sha256": "1efa35e79e6e3941f374953c8b3c98d28bfeb41526fe8a37efc3faea8a85cc53",
+      "bytes": 16116,
+      "sha256": "832554dc770d703a78743703b267bfdd2b14739b8db170df46be604f41b66176",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42845,8 +42867,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 116863,
-      "sha256": "cb93548b822b24e7206a53414b19197deb0e1cd723dbc92f9785668b9c23c5b3",
+      "bytes": 117260,
+      "sha256": "e4e252e206736d6e6605a1061acc7c4b712b54a217c0ab3287a4d3ffb3c895e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42862,13 +42884,13 @@
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 1006
+          "line": 1004
         },
         {
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 1840
+          "line": 1842
         }
       ],
       "endpoints": [
@@ -42882,31 +42904,31 @@
         },
         {
           "url": "https://schema.org/",
-          "line": 1298
+          "line": 1296
         },
         {
           "url": "https://schema.org/InStock",
-          "line": 1311
+          "line": 1309
         },
         {
           "url": "https://schema.org/OutOfStock",
-          "line": 1311
+          "line": 1309
         },
         {
           "url": "https://schema.org/NewCondition",
-          "line": 1312
+          "line": 1310
         },
         {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 1337
+          "line": 1335
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 1449
+          "line": 1447
         },
         {
           "url": "https://wa.me/",
-          "line": 1686
+          "line": 1684
         }
       ]
     }
@@ -42999,8 +43021,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 14996,
-      "sha256": "aef02d5b202ab0a6c7c938e325a20c6007ef04f96a413a9a3707a54dbe6919bf"
+      "bytes": 15096,
+      "sha256": "6f4e1455f561668a6ad7a6b3c582e136950050ec0dc1b9bc7210c283cc818aef"
     },
     {
       "path": "AGENTS.md",
@@ -43035,14 +43057,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 25273,
-      "sha256": "34c55d3f4aa23da7495eb59589d98475d45dbdcf0ffdf02099a3b744aa0d160a"
+      "bytes": 25393,
+      "sha256": "318d8a5183d0e1e34847de9442566a0a880cec0fdf856888694351535e9f0edf"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 44684,
-      "sha256": "257469b980a0fb6b9f27258f9e3f196ffd1d8f87b7be30cda6f20f71877c2eb2"
+      "bytes": 44744,
+      "sha256": "0be73f6c59549e3bdec59e77dd73e1ad2cf50a18219c5cf075316f25fe328744"
     },
     {
       "path": "admin-manifest.json",
@@ -43053,8 +43075,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 201327,
-      "sha256": "ec72ec93f2f7ee221c8424df6e835a06596615047af788642ee487c79f1be22c"
+      "bytes": 201387,
+      "sha256": "30e7f475aeab381adb6c43dcd6d3f0238667a10623a77f27391c236957c49e72"
     },
     {
       "path": "apple-touch-icon.png",
@@ -43431,20 +43453,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 16678,
-      "sha256": "95e8f3651becfbf6e69b71b6af0a898bddaf732ee0871dd18a44709abb92e273"
+      "bytes": 16798,
+      "sha256": "f84d989d38b6ede98afaf88f6668588264dd0d6d66265cd93bfab2ec3702a21f"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 55728,
-      "sha256": "e578cb50b2fd286c2d1238a28ff4f5e324faa0aa526e60ab1c21ebfabbb58111"
+      "bytes": 55848,
+      "sha256": "6a96ef8ca46bee4760a63e496ee6c8c6b9fc622c87bb1e8402f4f9a4ce1a5b49"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 126949,
-      "sha256": "6b418da90cab3e3d38e5e6de534d2c8cf5e7c067c795a9d492b83f457c562894"
+      "bytes": 127069,
+      "sha256": "d1aa90b88f0aba88b7b08efaf8a466d786f3ed6f6b76e0963474ffc68646591f"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -43683,8 +43705,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 18446,
-      "sha256": "9640312b815540a316c76d59d27936014324de8efe9cbe8ee00c402ebf1b7922"
+      "bytes": 18566,
+      "sha256": "32ead656eea682e78d0448a464f5336621d0311223064d6c9b4aca1f7ca17ad5"
     },
     {
       "path": "config/account-contract.json",
@@ -43696,19 +43718,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 350901,
-      "sha256": "7fa88ae3f52eb4358fec9769cd2de07042666bfa2f148fd5782456bbc5891217"
+      "sha256": "b6cb5a097e92da6848456ad41d0c4f8f53e9986e5ce6f2ecf9b137abf8ae679f"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 350816,
-      "sha256": "f4ab32396e3afe2f73eacfde1d57ddda5ca4bf9a993549058d5f11326d18b1ee"
+      "sha256": "b957560a231b067a236b98c789c1cc885c6f2ce8384bc54ea77127f1e0eaac85"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 13573,
-      "sha256": "b920376153f6d4c313f8461850fab60f8e6c43537992c357771982b15ef90cc6"
+      "bytes": 16105,
+      "sha256": "1598224352c1e27f8f2358bd0fa50723a314fa056446063ba46a7b9c485f7fc0"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -43720,7 +43742,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "1054b337e041d93693f3185f5f748750d136a368e08fa33a07520aff065c1a0d"
+      "sha256": "7451f9c7080ac99eebbff87c2082e252716b974a69eb690fa4b3fc9261cef7d2"
     },
     {
       "path": "config/public-site.json",
@@ -43737,8 +43759,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 23332,
-      "sha256": "8acfe3b6fd9bb1374adf296367a1fb53f92c6996eec7524680a80823c8bffb79"
+      "bytes": 23452,
+      "sha256": "4658e446ae159711ace406fc75e04bf2018bace17db029759225fab6aaddd495"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -43863,8 +43885,8 @@
     {
       "path": "css/components/navigation/compartido/coherencia-visual.css",
       "extension": ".css",
-      "bytes": 17321,
-      "sha256": "6437b2e6791321f056410afdab7a2f52fa40909b54a44024935cdfa18acf3547"
+      "bytes": 20625,
+      "sha256": "0e94f2a967884d59a867dc5d5324310a8cc2689e2fca66b609c08ba21b698eb5"
     },
     {
       "path": "css/components/navigation/compartido/control-paneles.css",
@@ -43983,8 +44005,8 @@
     {
       "path": "css/core/tema-unificado-tintin.css",
       "extension": ".css",
-      "bytes": 47105,
-      "sha256": "1441efb299aa883019e4f735f44a62ee10b54a0ebea0cfa1c1053e5f9daf89a9"
+      "bytes": 47357,
+      "sha256": "59d637180385396bb0a22a0188fd130f9805514768f19734c2f02446350f8704"
     },
     {
       "path": "css/core/tokens-color.css",
@@ -44121,8 +44143,8 @@
     {
       "path": "css/pages/product/product-maintenance.css",
       "extension": ".css",
-      "bytes": 33690,
-      "sha256": "bafe4b5c9a31180641c27e21e800ab6704672b073ca9ab746e590023f2b4f270"
+      "bytes": 34299,
+      "sha256": "3dd8e3321ddb1e09244a8cb7d120738efee371ba792d100e8721a58e619e9af4"
     },
     {
       "path": "css/pages/product/product-premium-overhaul.css",
@@ -44283,8 +44305,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 402067,
-      "sha256": "ec45db6bbf5bf547aa4fd55285e919ea56e98d4e8dfd80b7634b5586b576a641"
+      "bytes": 405324,
+      "sha256": "e1c813dd0d814be67f2a7a541861e3293aa69f59c97444dfaa4f7664ac421424"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44533,6 +44555,12 @@
       "sha256": "22bbdbee77e5a51906bf0a5a608de1e36ff30f76168523cc9e4906e49550457a"
     },
     {
+      "path": "docs/estilo-visual-tintin.md",
+      "extension": ".md",
+      "bytes": 2876,
+      "sha256": "9e0d8bb740011c922604360062238ec0cb74b4f3e5d25cc56045d9813528e7e0"
+    },
+    {
       "path": "docs/excepciones-contractuales-nombres.md",
       "extension": ".md",
       "bytes": 1729,
@@ -44577,8 +44605,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 14084,
-      "sha256": "48caabbfa219ed94946ffd376fe10e700aae277afa0ce82ef0e175a31a7f21f7"
+      "bytes": 14956,
+      "sha256": "b0098e821864d4218c2cc697bba405e2dfcba51a1c225bdf438fcb3627a029da"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -44709,8 +44737,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 20454,
-      "sha256": "9db00042fc8b82a0c1271520929b4ea94a2cb63d8007dd996a5d8feaa1ccd4b9"
+      "bytes": 20574,
+      "sha256": "ceadd424972c93c517cc7f48f440d6abc3674bf5986bc0939c2ae31d94c11de3"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -45225,14 +45253,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 34313,
-      "sha256": "c14b7975ba680cbeaac1e37b2fef1e1a459d3cea7c538bdf77b74d8bd297d742"
+      "bytes": 34433,
+      "sha256": "c133ec3342f50bd91033b50b5b95fdb99f958966de1f802f2c83d8bbb2d5d46b"
     },
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 473993,
-      "sha256": "fa34db0be6f8963536c1c98cfb4b9f8d65f3e7712fe37483bdb5d5afd6819344"
+      "bytes": 474053,
+      "sha256": "4a93c3c841ccf3cfdee7a9c9bda23d507f6237491e4a68de1a53a743e010bfa7"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -45459,8 +45487,8 @@
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
       "extension": ".js",
-      "bytes": 15548,
-      "sha256": "06a192bfdc792905d5c94880bbea388086e1167ebe4628fc67eb27bc1f2de48b"
+      "bytes": 15568,
+      "sha256": "e1522e23f6c6d9f7a7afbdbbc62dd841ade57f1d63fcc49672a6dffe3c110c7c"
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
@@ -45471,8 +45499,8 @@
     {
       "path": "js/admin/products/fotos-por-color.js",
       "extension": ".js",
-      "bytes": 10525,
-      "sha256": "07b58d04c5c30ad43b33d0c3cb9b9f80243dd2cbb2b3f8193b190d56a35eedc1"
+      "bytes": 10545,
+      "sha256": "5766d616c1317ef088c1d2336dbe263f02b48e4762ed562ad3ab14ee5534c090"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -45597,14 +45625,14 @@
     {
       "path": "js/cargador-mantenimiento-pagina.js",
       "extension": ".js",
-      "bytes": 3714,
-      "sha256": "e1ab7729a75c1098f2c601e8111f006c65f1e76c71082891713f2ad941141114"
+      "bytes": 3734,
+      "sha256": "5a221e5360311ed204b030118ff06128cc079dc27f680b0f359fc0278249276c"
     },
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 49328,
-      "sha256": "d99e85330f28af0b761d70ddafb04511c469e0686a085fd2c8bc5f6fb455f74f"
+      "bytes": 49348,
+      "sha256": "c9fbdd1c38ae4283e3798494cc0b45ea253cfee214b0cbd31fd781cbb0d2ccd3"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -45723,14 +45751,14 @@
     {
       "path": "js/components/images/biblioteca-multimedia.js",
       "extension": ".js",
-      "bytes": 14402,
-      "sha256": "7e22e481cfb23206a3f48f75ec22774f12fddbaa46b33c9c0f0e79e2293b12b5"
+      "bytes": 14422,
+      "sha256": "d8c0a0b3e118430b46b6a4f4228017bf6cb4c2813022ac36437717a710e99d4c"
     },
     {
       "path": "js/components/images/carga-imagenes.js",
       "extension": ".js",
-      "bytes": 13798,
-      "sha256": "18d820ff654b8f23988de8d55e98a68c8d4f5f68081a92150bcf1e8595b69bfc"
+      "bytes": 13818,
+      "sha256": "a5c543c224eb8838289d1d591700bca7ec53c85657a68c00be57fdc72307bfdc"
     },
     {
       "path": "js/components/images/foto-variante.mjs",
@@ -45741,8 +45769,8 @@
     {
       "path": "js/components/images/galeria-producto.js",
       "extension": ".js",
-      "bytes": 7537,
-      "sha256": "d385063dcafde67b451b203847bc6b69086a741dd5ff659fc18bfcdbee665053"
+      "bytes": 7311,
+      "sha256": "61e36e28abbf23b8e2734ca9a3fd7c312ad79ab27c762345f178300c70ad10d2"
     },
     {
       "path": "js/components/images/gestion-imagenes.js",
@@ -45861,8 +45889,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 14625,
-      "sha256": "c5f80602e47e215121c521bfd7105cab11b7f13ed511dac5588d77f77b8cd1c0"
+      "bytes": 14665,
+      "sha256": "b3068402f8683e66c9b7c0e7c5ec49f0f2dce0cafff59349dc60a94f96b5c5fa"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -45879,8 +45907,8 @@
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
       "extension": ".js",
-      "bytes": 11236,
-      "sha256": "94091ef23e4e29857b75df1c443d516f49ebb2af4cf262e5f95b8c64c09a0a3c"
+      "bytes": 11256,
+      "sha256": "5289fa8f4167ff1705f7d6e313ebb6a43d58f2bcc7cab4dee28d1c6caec3b578"
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
@@ -45927,8 +45955,8 @@
     {
       "path": "js/components/navigation/compartido/panel-colecciones.js",
       "extension": ".js",
-      "bytes": 1630,
-      "sha256": "f70a6019486beaadf4b491129ef4c088114a0c2a15fc72099ad4b7c08df7b0ed"
+      "bytes": 1565,
+      "sha256": "06751f3bf4e0f9d700c1f9aba4b723de34d8af7c4650c5037a66d36562dd9f7e"
     },
     {
       "path": "js/components/navigation/compartido/panel-cuenta.js",
@@ -45939,8 +45967,8 @@
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
       "extension": ".js",
-      "bytes": 5216,
-      "sha256": "9d7abba59faf429eb9590879922d1e953aa4ba0981185ab1fb2b13ba825bd4a4"
+      "bytes": 5236,
+      "sha256": "8912c426e0f1be29e382f39a05ce388b55fd834027577841b307932bfc39a00e"
     },
     {
       "path": "js/components/navigation/compartido/registro-paneles.js",
@@ -45993,14 +46021,14 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 12398,
-      "sha256": "a30e2dcc01d0c7867594f381f4774486f9385c3271ca4d38fca247ff25f0fc8a"
+      "bytes": 12478,
+      "sha256": "417e39b687fe465588826a8b3c8a388db8cefb0053aa0a08564a0f3c5ec6211b"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "extension": ".js",
-      "bytes": 3430,
-      "sha256": "bde658de844dac9d58b8004ac30d72450f77fb653bfc6d7202668da9657051ff"
+      "bytes": 3522,
+      "sha256": "85d31f983c935439282d47ade95bd2b9ae5bcfdf3b05526c9f2aa60df1fd5bc3"
     },
     {
       "path": "js/components/navigation/escritorio/indicador-navegacion-escritorio.js",
@@ -46263,8 +46291,8 @@
     {
       "path": "js/core/store/estado-productos.js",
       "extension": ".js",
-      "bytes": 24184,
-      "sha256": "19cb81f146e0462a952b1c13629037e8c9372fb0e3bbf910f686de4d2eb0bb29"
+      "bytes": 24204,
+      "sha256": "0bc6b8a212a328ef420e0137d380c92d8fe3c5dfc8ab8a61c8bdd5a285622659"
     },
     {
       "path": "js/core/store/inventario-variantes.mjs",
@@ -46413,8 +46441,8 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 2070,
-      "sha256": "8a744b9d5cfebcd79fd7eefba1de7263a92fae8f476fb02daf7869dd6907acce"
+      "bytes": 2090,
+      "sha256": "e08e8ebba819715a211cb4730c37ec145def8908f73d939843d86603c043aa04"
     },
     {
       "path": "js/orders/nucleo-metodos-pago.js",
@@ -46623,8 +46651,8 @@
     {
       "path": "js/pages/product/mantenimiento-producto.js",
       "extension": ".js",
-      "bytes": 13455,
-      "sha256": "788d171460e809b604c8aad32b7a965227f7ded02af0b8cc57150409660ff2ff"
+      "bytes": 13475,
+      "sha256": "b2d48bedb26574eb6b310858c81a0ecfdd3055bc91ceab495e98cbac388730d8"
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
@@ -46713,8 +46741,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 11079,
-      "sha256": "27f7c2a34f611a5b1a3782539c46a3dff08e494dd3c03699bb3997af8b432f1b"
+      "bytes": 11099,
+      "sha256": "b565cb6470e86d8e37412d0ed3ef1c858bbde0bfe869a159edd7e82b64568604"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -46839,8 +46867,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 69681,
-      "sha256": "d6ac3145bed59e7bcae7c1e95f04b84e5c197332191f78eeba9f8f8bfc19f602"
+      "bytes": 69801,
+      "sha256": "044c2c42f7a9f0925b0f9ea2b74af6d2b41d4f0d35f46b4de52c503f1a03d34d"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -47025,8 +47053,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 2010,
-      "sha256": "3cd8a1882fe705ba0e3eb1af59a3ec5b6bbd2bdcf8cb4fdc4c1842d2e5fe82f7"
+      "bytes": 1984,
+      "sha256": "ed082404e4210186b519bf48a90304c9faa9a6a71f494d7e5c78ed40e6b85fde"
     },
     {
       "path": "package-lock.json",
@@ -47043,8 +47071,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 53155,
-      "sha256": "7551bd514466be113dddb3c679487ea17fa7d3e4f89974a6903617f15651f965"
+      "bytes": 53275,
+      "sha256": "6ac94d902f0b344539473e2819e585d610b6680c3b4b8d0e7b1c117307831b4d"
     },
     {
       "path": "playwright.config.js",
@@ -47067,14 +47095,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 18035,
-      "sha256": "5644abbb37bc38053989f8380b241e7a0a68caaa5046a29f490b1d8012ec5a1a"
+      "bytes": 18155,
+      "sha256": "ddfc1b0e8f1931258722c78976e958667531cd55d118c9fd02d20153cb8a1cdb"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 20757,
-      "sha256": "39c856669c87d2ebed166db0dfc18fbedd026e94d351498adc86c5a663665697"
+      "bytes": 20877,
+      "sha256": "61be2bfade8d97fa1f3c6f609d198f8b5ca5d1c42ef0f97d95c5e35cebd4cc32"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -47085,8 +47113,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 21515,
-      "sha256": "c6b308639c0a5076de7c1dff647b7a0abbea101392faf6ffd92a063f273ad149"
+      "bytes": 21655,
+      "sha256": "be55679566beed9142ca85da0a294d45b341521dfeee70ef84b29dedacd2c667"
     },
     {
       "path": "robots.txt",
@@ -47703,8 +47731,8 @@
     {
       "path": "scripts/auditar-producto-pagina.js",
       "extension": ".js",
-      "bytes": 5005,
-      "sha256": "f35a8ffd3d08c244b835efcc1cd34337f4adfb1aa27b20cb822e97911886dd3a"
+      "bytes": 5021,
+      "sha256": "ff4d1295636ba77a41ee17765a5ea66ee7d2d57551f830395dc3d2f64fa14908"
     },
     {
       "path": "scripts/auditar-profunda.js",
@@ -47919,8 +47947,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 72986,
-      "sha256": "68528dff423926a1117834ab8fdccc97756b61d8e033e85dde753af2ebc4ea36"
+      "bytes": 73426,
+      "sha256": "fddeddba0058275c0658509961d61cfab001177bb3308c75af08abee1da53de4"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -48141,8 +48169,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 19826,
-      "sha256": "22e149494c24d5e8cad5b7b90690dc60fffb9d3c8f8d31e2bfc584cc5d9b8de7"
+      "bytes": 19926,
+      "sha256": "8d873251afbc68371f7a37e5e8d279bda0b5d91827252478d1f391a3004035ef"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -48219,8 +48247,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 18551,
-      "sha256": "8b9b8ff87b93318046e688578c7f59370eda673e467124e6794d290f78b6a05c"
+      "bytes": 18671,
+      "sha256": "563571dc4edd08701a3d59deca115e20a3e95ceede72677f7398a81ab669cbc3"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -48507,8 +48535,8 @@
     {
       "path": "tests/catalog/master-presentation.spec.js",
       "extension": ".js",
-      "bytes": 4807,
-      "sha256": "925bd7652e3cf6678323a96eedaf29841519d635b0201801eecba315e2703d5e"
+      "bytes": 4681,
+      "sha256": "f2b9aefed2f373f7a97b566df0cfa595820cb0169b9beb1799e5c03938f70eb9"
     },
     {
       "path": "tests/catalog/photo-identity.test.mjs",
@@ -48525,8 +48553,8 @@
     {
       "path": "tests/catalog/product-colors.test.mjs",
       "extension": ".mjs",
-      "bytes": 4543,
-      "sha256": "f03843cc4615bb49fb937277d48dac1bb39cf5df1a3d4403cb7ae0a20c121826"
+      "bytes": 5053,
+      "sha256": "5cf76629a70b2aa6840def66a73c5715fe8e2f743f2db7073f4b05344359d929"
     },
     {
       "path": "tests/catalog/product-small-controls.test.mjs",
@@ -49363,6 +49391,12 @@
       "sha256": "a3955cf9492df4ad33fb45db9797eec5b97e30a2985f49f2d333972088aa6139"
     },
     {
+      "path": "tests/runtime/boutique-surfaces.spec.js",
+      "extension": ".js",
+      "bytes": 8603,
+      "sha256": "4ef909468f0f1b58307be6f1fc49a067fcfce8a9afe10e532e51b8ada04bf1e6"
+    },
+    {
       "path": "tests/runtime/checkout-receipt.spec.js",
       "extension": ".js",
       "bytes": 11954,
@@ -49385,6 +49419,12 @@
       "extension": ".js",
       "bytes": 223,
       "sha256": "45cacfe4bc90065afd1a461a9f29a692a30db91456f78f8c5ca718ee72897be1"
+    },
+    {
+      "path": "tests/runtime/product-boutique.spec.js",
+      "extension": ".js",
+      "bytes": 100,
+      "sha256": "879969f8c7d00ce721a9c61a5d18ea39b3c19d7ae3cb1a8b359bd03fec8f13a4"
     },
     {
       "path": "tests/runtime/runtime-error-monitor.js",
@@ -49653,8 +49693,8 @@
     {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
       "extension": ".js",
-      "bytes": 14481,
-      "sha256": "1efa35e79e6e3941f374953c8b3c98d28bfeb41526fe8a37efc3faea8a85cc53"
+      "bytes": 16116,
+      "sha256": "832554dc770d703a78743703b267bfdd2b14739b8db170df46be604f41b66176"
     },
     {
       "path": "tests/ui-ux/product-first-paint.spec.js",
@@ -49785,8 +49825,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 116863,
-      "sha256": "cb93548b822b24e7206a53414b19197deb0e1cd723dbc92f9785668b9c23c5b3"
+      "bytes": 117260,
+      "sha256": "e4e252e206736d6e6605a1061acc7c4b712b54a217c0ab3287a4d3ffb3c895e9"
     }
   ],
   "sitemapRoutes": [],
