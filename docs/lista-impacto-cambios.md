@@ -1,3 +1,7 @@
+## Reanudar importacion y sincronizar Sheets - 2026-10-10
+
+Se altera solo el coordinador create-only de importacion: IDs recuperados del mismo job van a Sheets sin reescritura; productos ajenos se omiten. Sheets no confirmado mantiene estado reintentable y libera busy aunque falle el push de recuperacion. Contadores incluyen registros omitidos por reconciliacion fresca. 7 regresiones incluidas en suite CI Phase2 (56 PASS). Versiones propagadas desde apply a importer, quality y loader con HTML y generador canonico. Sin cambios backend, Rules, stock, roles, App Check, Shopify, DNS ni datos reales.
+
 ## Auditoria Sheets - 2026-10-10
 
 Unico cambio funcional: preparar validaciones del espejo de Auditoria antes de escribir JSON. No altera filas de encabezado, validaciones editables de pedidos/productos, roles, Auth, stock, precios, endpoints, Shopify ni DNS. Snapshot fallido conserva contenido. Test VM reproduce rechazo K20 y verifica aislamiento. Actualizacion live Apps Script pendiente de integracion aprobada.
