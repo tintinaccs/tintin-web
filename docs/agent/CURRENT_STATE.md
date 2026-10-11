@@ -1,3 +1,15 @@
+## 2026-10-11 — Última revisión: disponibilidad por variante y CI del diseño
+
+Codex /root. Continúa #1104 sobre main cf362845. La señal de disponibilidad podía quedar verde con “Agotado”: el renderer actualizaba el texto sin actualizar el estado visual, y el inspector sólo reconocía “Sin stock”. El renderer ahora escribe el estado de la variante, el inspector reconoce ambos textos y el punto usa el token de disponibilidad/agotado. No cambia cantidades, límites ni autorización de compra.
+
+12/12 pruebas nuevas PASS_LOCAL en Chromium desktop/mobile y WebKit mobile, 390/768/1024/1440: seleccionar una variante agotada cambia texto/punto y mantiene ambos botones de compra bloqueados; volver a una disponible recupera estado y compra; “Sin stock” conserva estado agotado; no aparece la raya sobre la foto. Revisión completa local anterior terminó todos los componentes de audit:final en dos segmentos con el mismo árbol, incluidos219/219 casos runtime; no se hereda ese resultado como CI del siguiente SHA.
+
+CI e1cbf827 /38180187773 aprobó generación sin drift, contrato estático,219 runtime, contratos de identidad/admin y seguridad, pero falló seis aserciones UI que aún exigían el degradado dorado anterior. Se actualiza esa expectativa al color sólido pedido, conservando geometría/márgenes/touch y resto de controles. La CI del nuevo SHA sigue PENDING; no se despacha revisión nativa ni se declara merge/publicación antes de sus resultados.
+
+Versiones nuevas cortas y únicas para los assets que cambian en esta revisión; no se reutilizan URLs inmutables del preview anterior. CSP/diagnóstico/plan protegido regenerados desde las fuentes. Dominio/DNS y #929/#1101 siguen excluidos.
+
+---
+
 ## 2026-10-11 — Continuación visual del PR #1104
 
 Codex /root. Base cf362845fee5da63dd27bcf391900f0a6d01e427. Incluye la corrección del ticket descrita abajo y las imágenes/texto adicionales del propietario.

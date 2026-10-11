@@ -698,3 +698,7 @@ body.tt-product-maintenance .tt-related-refresh:focus-visible { outline:2px soli
   }
   body.tt-product-maintenance .tt-related-slot { scroll-snap-align:start; min-width:0; }
 }
+
+/* El punto refleja el mismo estado que el texto, también para stock por variante. */
+body.tt-product-maintenance .tt-product-status[data-stock-state="out"]::before { background:var(--color-state-soldout,#b8341f); }
+body.tt-product-maintenance .tt-product-status[data-stock-state="available"]::before { background:var(--color-state-available,#166534); }

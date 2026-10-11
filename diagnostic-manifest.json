@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e62ee47fcddb1afd6843580247ed2543c0a01ea93ac1502321f0189e937343c6",
+  "sourceFingerprint": "ef318bf2ab9f5df4fe53814380c3b77c28b82b3a307a718703cbed13b4fdfda7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1149,
-    "textFiles": 1101,
-    "totalBytes": 16752702,
+    "files": 1150,
+    "textFiles": 1102,
+    "totalBytes": 16747617,
     "pages": 19,
-    "modules": 815
+    "modules": 816
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15096,
-      "sha256": "6f4e1455f561668a6ad7a6b3c582e136950050ec0dc1b9bc7210c283cc818aef",
+      "bytes": 14584,
+      "sha256": "2b9cf398926c0a65bda32aba7b3a2c5356ec9c51515b0f3f9be7fada2046afc2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -119,7 +119,7 @@
           "line": 9
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -139,7 +139,7 @@
           "line": 182
         },
         {
-          "raw": "/tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "/tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 183
         },
@@ -559,7 +559,7 @@
           "exists": true
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -583,7 +583,7 @@
           "exists": true
         },
         {
-          "raw": "/tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "/tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 183,
           "exists": true
@@ -868,8 +868,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25393,
-      "sha256": "318d8a5183d0e1e34847de9442566a0a880cec0fdf856888694351535e9f0edf",
+      "bytes": 24881,
+      "sha256": "51ae94c4c16bb946f01e49d49fc7d744be3ec9ebf94883137a808359640e5e6a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -919,7 +919,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -929,7 +929,7 @@
           "line": 270
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 271
         },
@@ -1337,7 +1337,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -1349,7 +1349,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 271,
           "exists": true
@@ -8157,8 +8157,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16798,
-      "sha256": "f84d989d38b6ede98afaf88f6668588264dd0d6d66265cd93bfab2ec3702a21f",
+      "bytes": 16286,
+      "sha256": "d5b3e7f58ec55d52cd146194994eaf2a38f7fa33c257e80833fbd2be67acc3b8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8202,7 +8202,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -8212,7 +8212,7 @@
           "line": 179
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 180
         },
@@ -8562,7 +8562,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -8574,7 +8574,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 180,
           "exists": true
@@ -8829,8 +8829,8 @@
         "guest",
         "client"
       ],
-      "bytes": 55848,
-      "sha256": "6a96ef8ca46bee4760a63e496ee6c8c6b9fc622c87bb1e8402f4f9a4ce1a5b49",
+      "bytes": 55336,
+      "sha256": "1b72b9e2944196c658f049731ed80517e1fceeeff2575c5b44fe4b7549e3831f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8886,7 +8886,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -8896,7 +8896,7 @@
           "line": 496
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 497
         },
@@ -9236,7 +9236,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -9248,7 +9248,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 497,
           "exists": true
@@ -9597,8 +9597,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 127069,
-      "sha256": "d1aa90b88f0aba88b7b08efaf8a466d786f3ed6f6b76e0963474ffc68646591f",
+      "bytes": 126557,
+      "sha256": "641d5b38073ed79db25669b337c5e1151444fec989b534b5a31868cd49953ce5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9648,7 +9648,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -9673,7 +9673,7 @@
           "line": 2000
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 2001
         },
@@ -10028,7 +10028,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -10058,7 +10058,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 2001,
           "exists": true
@@ -10767,8 +10767,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18566,
-      "sha256": "32ead656eea682e78d0448a464f5336621d0311223064d6c9b4aca1f7ca17ad5",
+      "bytes": 18054,
+      "sha256": "5b3d90afc892b890212eaa6df6b6ad918e66f5ec7d9b7254307f8c1b0113b7ce",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10818,7 +10818,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -10828,7 +10828,7 @@
           "line": 199
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 200
         },
@@ -11193,7 +11193,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -11205,7 +11205,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 200,
           "exists": true
@@ -11472,8 +11472,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23452,
-      "sha256": "4658e446ae159711ace406fc75e04bf2018bace17db029759225fab6aaddd495",
+      "bytes": 22940,
+      "sha256": "50a807ea1252ec8b22d1abb9280bcf363e33c7ee8e4da6ccd9c46d2fffad5b60",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11523,7 +11523,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -11533,7 +11533,7 @@
           "line": 221
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 222
         },
@@ -11928,7 +11928,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -11940,7 +11940,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 222,
           "exists": true
@@ -12261,8 +12261,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20574,
-      "sha256": "ceadd424972c93c517cc7f48f440d6abc3674bf5986bc0939c2ae31d94c11de3",
+      "bytes": 20062,
+      "sha256": "efbd531ba5591430904e48e7c03d098708ad05d4f5a8bc7680553664308e013d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12312,7 +12312,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -12322,7 +12322,7 @@
           "line": 178
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 179
         },
@@ -12672,7 +12672,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -12684,7 +12684,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 179,
           "exists": true
@@ -12979,8 +12979,8 @@
         "guest",
         "client"
       ],
-      "bytes": 34433,
-      "sha256": "c133ec3342f50bd91033b50b5b95fdb99f958966de1f802f2c83d8bbb2d5d46b",
+      "bytes": 33921,
+      "sha256": "11878ae441534bc45034a11d4eb0346692d3d9c9beb9ea705c5a10f1ea9ae59a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13036,7 +13036,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -13046,7 +13046,7 @@
           "line": 422
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 423
         },
@@ -13542,7 +13542,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -13554,7 +13554,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 423,
           "exists": true
@@ -13968,8 +13968,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 69801,
-      "sha256": "044c2c42f7a9f0925b0f9ea2b74af6d2b41d4f0d35f46b4de52c503f1a03d34d",
+      "bytes": 69289,
+      "sha256": "f563be191ecdb572a44a3b4ab5f2527520cfe210c8029031340e809612f6ecf1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14025,7 +14025,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -14040,7 +14040,7 @@
           "line": 1264
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 1265
         },
@@ -14250,7 +14250,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -14268,7 +14268,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 1265,
           "exists": true
@@ -14786,8 +14786,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 53275,
-      "sha256": "6ac94d902f0b344539473e2819e585d610b6680c3b4b8d0e7b1c117307831b4d",
+      "bytes": 52763,
+      "sha256": "fec059e58b823100d1ed936442854dfb41e09868a56b8d4078df825a047b0574",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14843,7 +14843,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -14858,7 +14858,7 @@
           "line": 239
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 240
         },
@@ -15263,7 +15263,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -15281,7 +15281,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 240,
           "exists": true
@@ -15921,8 +15921,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18155,
-      "sha256": "ddfc1b0e8f1931258722c78976e958667531cd55d118c9fd02d20153cb8a1cdb",
+      "bytes": 17643,
+      "sha256": "a8846487c2fcb0284c21bb146fdca41c6844c4f594c0ea294a8dcf41d9a9a376",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15966,7 +15966,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -15976,7 +15976,7 @@
           "line": 204
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 205
         },
@@ -16326,7 +16326,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -16338,7 +16338,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 205,
           "exists": true
@@ -16593,8 +16593,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20877,
-      "sha256": "61be2bfade8d97fa1f3c6f609d198f8b5ca5d1c42ef0f97d95c5e35cebd4cc32",
+      "bytes": 20365,
+      "sha256": "a13750683452d2d753e37dc6f5e6ebeb2e9cc2a3aad0b20cd4604703b19729e4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16638,7 +16638,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -16648,7 +16648,7 @@
           "line": 218
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 219
         },
@@ -17028,7 +17028,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -17040,7 +17040,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 219,
           "exists": true
@@ -17312,8 +17312,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21655,
-      "sha256": "be55679566beed9142ca85da0a294d45b341521dfeee70ef84b29dedacd2c667",
+      "bytes": 21083,
+      "sha256": "447d3cc0b01c39f0c22d6cf3f745475178054cb9f66f5392168d3fe6ad16a8b3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17357,7 +17357,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -17367,7 +17367,7 @@
           "line": 266
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 267
         },
@@ -17514,7 +17514,7 @@
           "line": 63
         },
         {
-          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-boutique-20261011-1",
+          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261011-boutique-2",
           "target": "css/pages/product/product-maintenance.css",
           "line": 64
         },
@@ -17772,7 +17772,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -17784,7 +17784,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 267,
           "exists": true
@@ -17958,7 +17958,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-boutique-20261011-1",
+          "raw": "css/pages/product/product-maintenance.css?v=tintin-20261011-boutique-2",
           "target": "css/pages/product/product-maintenance.css",
           "line": 64,
           "exists": true
@@ -18224,8 +18224,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18671,
-      "sha256": "563571dc4edd08701a3d59deca115e20a3e95ceede72677f7398a81ab669cbc3",
+      "bytes": 18159,
+      "sha256": "83dc5aa5056c238c2546ec7b8e6e87cb99249ea97c889bab2f2b8b224fe82d26",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18262,7 +18262,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -18272,7 +18272,7 @@
           "line": 199
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 200
         },
@@ -18662,7 +18662,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261011-boutique-2",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -18674,7 +18674,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "tienda.js?v=tintin-20261011-boutique-2",
           "target": "tienda.js",
           "line": 200,
           "exists": true
@@ -24338,8 +24338,8 @@
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
-      "bytes": 3734,
-      "sha256": "5a221e5360311ed204b030118ff06128cc079dc27f680b0f359fc0278249276c",
+      "bytes": 3644,
+      "sha256": "99b9de18565d248f0991b8d91645d09f35f9300036d044200a63ec9e8f4aa3ad",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25245,8 +25245,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 14665,
-      "sha256": "b3068402f8683e66c9b7c0e7c5ec49f0f2dce0cafff59349dc60a94f96b5c5fa",
+      "bytes": 14297,
+      "sha256": "4715975c3cc82b768789de96243a6b28873ac0ef5949463ce1306b6d7702e3b3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25277,7 +25277,7 @@
           "line": 141
         },
         {
-          "raw": "./control-busqueda.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "./control-busqueda.js?v=tintin-20261011-boutique-2",
           "target": "js/components/navigation/compartido/control-busqueda.js",
           "dynamic": true,
           "line": 281
@@ -25315,8 +25315,8 @@
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
-      "bytes": 11256,
-      "sha256": "5289fa8f4167ff1705f7d6e313ebb6a43d58f2bcc7cab4dee28d1c6caec3b578",
+      "bytes": 11072,
+      "sha256": "d2d1283b52506f8ae7b92362c08363ea11d90f15348a08279c832845005e277b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25602,8 +25602,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 12478,
-      "sha256": "417e39b687fe465588826a8b3c8a388db8cefb0053aa0a08564a0f3c5ec6211b",
+      "bytes": 12294,
+      "sha256": "47e6b4a13a5c827e4f2fc54538ce50d9878a1be7030ba709f7ba6d0017765494",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25670,7 +25670,7 @@
           "line": 10
         },
         {
-          "raw": "./compartido/carga-navegacion.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "./compartido/carga-navegacion.js?v=tintin-20261011-boutique-2",
           "target": "js/components/navigation/compartido/carga-navegacion.js",
           "dynamic": false,
           "line": 11
@@ -26843,8 +26843,8 @@
     },
     {
       "path": "js/core/store/estado-productos.js",
-      "bytes": 24204,
-      "sha256": "0bc6b8a212a328ef420e0137d380c92d8fe3c5dfc8ab8a61c8bdd5a285622659",
+      "bytes": 24020,
+      "sha256": "ec7067bbde0217708b2659273fc17213d4d5b2bb3382f376f69a00037dfbfe97",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26893,7 +26893,7 @@
           "line": 23
         },
         {
-          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1-receipt-20261011-1-boutique-20261011-1",
+          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261011-boutique-2",
           "target": "js/cargador-mantenimiento-pagina.js",
           "dynamic": false,
           "line": 1
@@ -27430,8 +27430,8 @@
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "bytes": 2090,
-      "sha256": "e08e8ebba819715a211cb4730c37ec145def8908f73d939843d86603c043aa04",
+      "bytes": 1886,
+      "sha256": "dc0b8a1a4b26a43cd0774956f1b7f8e3e52638e7bded4dc4ae3a002e9c74e28b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28237,8 +28237,8 @@
     },
     {
       "path": "js/pages/product/mantenimiento-producto.js",
-      "bytes": 13475,
-      "sha256": "b2d48bedb26574eb6b310858c81a0ecfdd3055bc91ceab495e98cbac388730d8",
+      "bytes": 13423,
+      "sha256": "084c5700068654b325123641ba6dc9aa5e3b7d4eab803e1a628c64323e87f675",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33276,8 +33276,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 19926,
-      "sha256": "8d873251afbc68371f7a37e5e8d279bda0b5d91827252478d1f391a3004035ef",
+      "bytes": 19414,
+      "sha256": "8f379938479e82cef430564d55d1706cfb6696b72f84fc257c3715fcf9feffc7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40399,8 +40399,19 @@
     },
     {
       "path": "tests/runtime/product-boutique.spec.js",
-      "bytes": 100,
-      "sha256": "879969f8c7d00ce721a9c61a5d18ea39b3c19d7ae3cb1a8b359bd03fec8f13a4",
+      "bytes": 152,
+      "sha256": "89f0ce36ffa75215514baf2505ae99572c072d9b1791d4aee8a0c7457bea09e3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/runtime/product-stock-status.spec.js",
+      "bytes": 3494,
+      "sha256": "cf148bcc49af81f28ee0c218cbe30389f044a579ea381dbc92f1fae9ae475336",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42191,8 +42202,8 @@
     },
     {
       "path": "tests/ui-ux/product-small-controls.spec.js",
-      "bytes": 4174,
-      "sha256": "0d16a9d492eae5681f8db7fe87590f322282d4a0fcc5703f6107f00b20a499e9",
+      "bytes": 4291,
+      "sha256": "f06b8c2ca07d3cd092c7dcee1fd0e850263630bf41fef9b228ed2db1ab6240e4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42867,8 +42878,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 117260,
-      "sha256": "e4e252e206736d6e6605a1061acc7c4b712b54a217c0ab3287a4d3ffb3c895e9",
+      "bytes": 117337,
+      "sha256": "7c8c7e761a7e8bbd6164bfb33b62e0ec847006ad080a26f58d98d82228230723",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42890,7 +42901,7 @@
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 1842
+          "line": 1845
         }
       ],
       "endpoints": [
@@ -42904,31 +42915,31 @@
         },
         {
           "url": "https://schema.org/",
-          "line": 1296
+          "line": 1299
         },
         {
           "url": "https://schema.org/InStock",
-          "line": 1309
+          "line": 1312
         },
         {
           "url": "https://schema.org/OutOfStock",
-          "line": 1309
+          "line": 1312
         },
         {
           "url": "https://schema.org/NewCondition",
-          "line": 1310
+          "line": 1313
         },
         {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 1335
+          "line": 1338
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 1447
+          "line": 1450
         },
         {
           "url": "https://wa.me/",
-          "line": 1684
+          "line": 1687
         }
       ]
     }
@@ -43021,8 +43032,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 15096,
-      "sha256": "6f4e1455f561668a6ad7a6b3c582e136950050ec0dc1b9bc7210c283cc818aef"
+      "bytes": 14584,
+      "sha256": "2b9cf398926c0a65bda32aba7b3a2c5356ec9c51515b0f3f9be7fada2046afc2"
     },
     {
       "path": "AGENTS.md",
@@ -43057,8 +43068,8 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 25393,
-      "sha256": "318d8a5183d0e1e34847de9442566a0a880cec0fdf856888694351535e9f0edf"
+      "bytes": 24881,
+      "sha256": "51ae94c4c16bb946f01e49d49fc7d744be3ec9ebf94883137a808359640e5e6a"
     },
     {
       "path": "admin-images.html",
@@ -43453,20 +43464,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 16798,
-      "sha256": "f84d989d38b6ede98afaf88f6668588264dd0d6d66265cd93bfab2ec3702a21f"
+      "bytes": 16286,
+      "sha256": "d5b3e7f58ec55d52cd146194994eaf2a38f7fa33c257e80833fbd2be67acc3b8"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 55848,
-      "sha256": "6a96ef8ca46bee4760a63e496ee6c8c6b9fc622c87bb1e8402f4f9a4ce1a5b49"
+      "bytes": 55336,
+      "sha256": "1b72b9e2944196c658f049731ed80517e1fceeeff2575c5b44fe4b7549e3831f"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 127069,
-      "sha256": "d1aa90b88f0aba88b7b08efaf8a466d786f3ed6f6b76e0963474ffc68646591f"
+      "bytes": 126557,
+      "sha256": "641d5b38073ed79db25669b337c5e1151444fec989b534b5a31868cd49953ce5"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -43705,8 +43716,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 18566,
-      "sha256": "32ead656eea682e78d0448a464f5336621d0311223064d6c9b4aca1f7ca17ad5"
+      "bytes": 18054,
+      "sha256": "5b3d90afc892b890212eaa6df6b6ad918e66f5ec7d9b7254307f8c1b0113b7ce"
     },
     {
       "path": "config/account-contract.json",
@@ -43730,7 +43741,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 16105,
-      "sha256": "1598224352c1e27f8f2358bd0fa50723a314fa056446063ba46a7b9c485f7fc0"
+      "sha256": "c83a2b71e214428ed2322590017c4816f7360c272ab5d6efed3a553b67716c3c"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -43742,7 +43753,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "7451f9c7080ac99eebbff87c2082e252716b974a69eb690fa4b3fc9261cef7d2"
+      "sha256": "8237222e32f7b83487a54f8e8b3cb70fe860ed73b79642e0560c6296d115ed76"
     },
     {
       "path": "config/public-site.json",
@@ -43759,8 +43770,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 23452,
-      "sha256": "4658e446ae159711ace406fc75e04bf2018bace17db029759225fab6aaddd495"
+      "bytes": 22940,
+      "sha256": "50a807ea1252ec8b22d1abb9280bcf363e33c7ee8e4da6ccd9c46d2fffad5b60"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -44143,8 +44154,8 @@
     {
       "path": "css/pages/product/product-maintenance.css",
       "extension": ".css",
-      "bytes": 34299,
-      "sha256": "3dd8e3321ddb1e09244a8cb7d120738efee371ba792d100e8721a58e619e9af4"
+      "bytes": 34655,
+      "sha256": "768ec84d934a105faef1f98558986489077211333f55d282e2b9b3cf7a69a631"
     },
     {
       "path": "css/pages/product/product-premium-overhaul.css",
@@ -44305,8 +44316,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 405324,
-      "sha256": "e1c813dd0d814be67f2a7a541861e3293aa69f59c97444dfaa4f7664ac421424"
+      "bytes": 407059,
+      "sha256": "0db0b844dadd97098a8d867d35c4516edba19ed6d050a031a4f8177103c19b7c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44737,8 +44748,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 20574,
-      "sha256": "ceadd424972c93c517cc7f48f440d6abc3674bf5986bc0939c2ae31d94c11de3"
+      "bytes": 20062,
+      "sha256": "efbd531ba5591430904e48e7c03d098708ad05d4f5a8bc7680553664308e013d"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -45253,8 +45264,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 34433,
-      "sha256": "c133ec3342f50bd91033b50b5b95fdb99f958966de1f802f2c83d8bbb2d5d46b"
+      "bytes": 33921,
+      "sha256": "11878ae441534bc45034a11d4eb0346692d3d9c9beb9ea705c5a10f1ea9ae59a"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -45625,8 +45636,8 @@
     {
       "path": "js/cargador-mantenimiento-pagina.js",
       "extension": ".js",
-      "bytes": 3734,
-      "sha256": "5a221e5360311ed204b030118ff06128cc079dc27f680b0f359fc0278249276c"
+      "bytes": 3644,
+      "sha256": "99b9de18565d248f0991b8d91645d09f35f9300036d044200a63ec9e8f4aa3ad"
     },
     {
       "path": "js/cargador-pagina.js",
@@ -45889,8 +45900,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 14665,
-      "sha256": "b3068402f8683e66c9b7c0e7c5ec49f0f2dce0cafff59349dc60a94f96b5c5fa"
+      "bytes": 14297,
+      "sha256": "4715975c3cc82b768789de96243a6b28873ac0ef5949463ce1306b6d7702e3b3"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -45907,8 +45918,8 @@
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
       "extension": ".js",
-      "bytes": 11256,
-      "sha256": "5289fa8f4167ff1705f7d6e313ebb6a43d58f2bcc7cab4dee28d1c6caec3b578"
+      "bytes": 11072,
+      "sha256": "d2d1283b52506f8ae7b92362c08363ea11d90f15348a08279c832845005e277b"
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
@@ -46021,8 +46032,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 12478,
-      "sha256": "417e39b687fe465588826a8b3c8a388db8cefb0053aa0a08564a0f3c5ec6211b"
+      "bytes": 12294,
+      "sha256": "47e6b4a13a5c827e4f2fc54538ce50d9878a1be7030ba709f7ba6d0017765494"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -46291,8 +46302,8 @@
     {
       "path": "js/core/store/estado-productos.js",
       "extension": ".js",
-      "bytes": 24204,
-      "sha256": "0bc6b8a212a328ef420e0137d380c92d8fe3c5dfc8ab8a61c8bdd5a285622659"
+      "bytes": 24020,
+      "sha256": "ec7067bbde0217708b2659273fc17213d4d5b2bb3382f376f69a00037dfbfe97"
     },
     {
       "path": "js/core/store/inventario-variantes.mjs",
@@ -46441,8 +46452,8 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 2090,
-      "sha256": "e08e8ebba819715a211cb4730c37ec145def8908f73d939843d86603c043aa04"
+      "bytes": 1886,
+      "sha256": "dc0b8a1a4b26a43cd0774956f1b7f8e3e52638e7bded4dc4ae3a002e9c74e28b"
     },
     {
       "path": "js/orders/nucleo-metodos-pago.js",
@@ -46651,8 +46662,8 @@
     {
       "path": "js/pages/product/mantenimiento-producto.js",
       "extension": ".js",
-      "bytes": 13475,
-      "sha256": "b2d48bedb26574eb6b310858c81a0ecfdd3055bc91ceab495e98cbac388730d8"
+      "bytes": 13423,
+      "sha256": "084c5700068654b325123641ba6dc9aa5e3b7d4eab803e1a628c64323e87f675"
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
@@ -46867,8 +46878,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 69801,
-      "sha256": "044c2c42f7a9f0925b0f9ea2b74af6d2b41d4f0d35f46b4de52c503f1a03d34d"
+      "bytes": 69289,
+      "sha256": "f563be191ecdb572a44a3b4ab5f2527520cfe210c8029031340e809612f6ecf1"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -47071,8 +47082,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 53275,
-      "sha256": "6ac94d902f0b344539473e2819e585d610b6680c3b4b8d0e7b1c117307831b4d"
+      "bytes": 52763,
+      "sha256": "fec059e58b823100d1ed936442854dfb41e09868a56b8d4078df825a047b0574"
     },
     {
       "path": "playwright.config.js",
@@ -47095,14 +47106,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 18155,
-      "sha256": "ddfc1b0e8f1931258722c78976e958667531cd55d118c9fd02d20153cb8a1cdb"
+      "bytes": 17643,
+      "sha256": "a8846487c2fcb0284c21bb146fdca41c6844c4f594c0ea294a8dcf41d9a9a376"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 20877,
-      "sha256": "61be2bfade8d97fa1f3c6f609d198f8b5ca5d1c42ef0f97d95c5e35cebd4cc32"
+      "bytes": 20365,
+      "sha256": "a13750683452d2d753e37dc6f5e6ebeb2e9cc2a3aad0b20cd4604703b19729e4"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -47113,8 +47124,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 21655,
-      "sha256": "be55679566beed9142ca85da0a294d45b341521dfeee70ef84b29dedacd2c667"
+      "bytes": 21083,
+      "sha256": "447d3cc0b01c39f0c22d6cf3f745475178054cb9f66f5392168d3fe6ad16a8b3"
     },
     {
       "path": "robots.txt",
@@ -47947,8 +47958,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 73426,
-      "sha256": "fddeddba0058275c0658509961d61cfab001177bb3308c75af08abee1da53de4"
+      "bytes": 72028,
+      "sha256": "6aef4f82a24ffc57cfe0f21e20c6e6d81225b3971a0d9b607acce41f782f3a65"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -48169,8 +48180,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 19926,
-      "sha256": "8d873251afbc68371f7a37e5e8d279bda0b5d91827252478d1f391a3004035ef"
+      "bytes": 19414,
+      "sha256": "8f379938479e82cef430564d55d1706cfb6696b72f84fc257c3715fcf9feffc7"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -48247,8 +48258,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 18671,
-      "sha256": "563571dc4edd08701a3d59deca115e20a3e95ceede72677f7398a81ab669cbc3"
+      "bytes": 18159,
+      "sha256": "83dc5aa5056c238c2546ec7b8e6e87cb99249ea97c889bab2f2b8b224fe82d26"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -49423,8 +49434,14 @@
     {
       "path": "tests/runtime/product-boutique.spec.js",
       "extension": ".js",
-      "bytes": 100,
-      "sha256": "879969f8c7d00ce721a9c61a5d18ea39b3c19d7ae3cb1a8b359bd03fec8f13a4"
+      "bytes": 152,
+      "sha256": "89f0ce36ffa75215514baf2505ae99572c072d9b1791d4aee8a0c7457bea09e3"
+    },
+    {
+      "path": "tests/runtime/product-stock-status.spec.js",
+      "extension": ".js",
+      "bytes": 3494,
+      "sha256": "cf148bcc49af81f28ee0c218cbe30389f044a579ea381dbc92f1fae9ae475336"
     },
     {
       "path": "tests/runtime/runtime-error-monitor.js",
@@ -49711,8 +49728,8 @@
     {
       "path": "tests/ui-ux/product-small-controls.spec.js",
       "extension": ".js",
-      "bytes": 4174,
-      "sha256": "0d16a9d492eae5681f8db7fe87590f322282d4a0fcc5703f6107f00b20a499e9"
+      "bytes": 4291,
+      "sha256": "f06b8c2ca07d3cd092c7dcee1fd0e850263630bf41fef9b228ed2db1ab6240e4"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",
@@ -49825,8 +49842,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 117260,
-      "sha256": "e4e252e206736d6e6605a1061acc7c4b712b54a217c0ab3287a4d3ffb3c895e9"
+      "bytes": 117337,
+      "sha256": "7c8c7e761a7e8bbd6164bfb33b62e0ec847006ad080a26f58d98d82228230723"
     }
   ],
   "sitemapRoutes": [],

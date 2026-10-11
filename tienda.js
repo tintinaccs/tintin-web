@@ -1120,7 +1120,10 @@ function _pdUpdateQtyUI() {
   const unavailable = _pdMaxQty <= 0;
   document.getElementById('gallery-main')?.classList.toggle('tt-stock-unavailable', unavailable);
   const status = document.getElementById('product-status');
-  if (status) status.textContent = unavailable ? 'Agotado' : 'Disponible';
+  if (status) {
+    status.textContent = unavailable ? 'Agotado' : 'Disponible';
+    status.dataset.stockState = unavailable ? 'out' : 'available';
+  }
   for (const id of ['btn-product-add-cart', 'btn-product-buy-now']) {
     const button = document.getElementById(id);
     if (button && !button.dataset.busy) button.disabled = _pdMaxQty <= 0;
