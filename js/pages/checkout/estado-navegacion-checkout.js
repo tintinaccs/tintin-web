@@ -18,6 +18,7 @@ const DRAFT_FIELDS = Object.freeze([
   'ck-notes',
   'ck-ci',
   'ck-wants-invoice',
+  'ck-taxpayer-type',
   'ck-razon-social',
   'ck-ruc',
   'pay-efectivo',

@@ -24,7 +24,7 @@ test('el borrador persiste datos de envío, contacto, factura y pago en sessionS
   for (const id of [
     'ck-departamento', 'ck-city', 'ck-address', 'ck-location-name',
     'ck-name', 'ck-phone-number', 'ck-email', 'ck-ci',
-    'ck-wants-invoice', 'ck-razon-social', 'ck-ruc',
+    'ck-wants-invoice', 'ck-taxpayer-type', 'ck-razon-social', 'ck-ruc',
     'pay-efectivo', 'pay-transferencia'
   ]) {
     assert.ok(stateSource.includes(`'${id}'`), `falta persistir ${id}`);

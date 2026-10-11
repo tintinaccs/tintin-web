@@ -1,3 +1,7 @@
+## Factura: selección previa, guion móvil y recuperación — 2026-10-11
+
+Checkout deshabilita nombre/RUC hasta elegir contribuyente y agrega guion desde teclado numérico mediante un control explícito. El borrador conserva ck-taxpayer-type y valores fiscales al desmarcar/recargar; la selección válida limpia sólo su aviso anterior. Validador/RUC de 3–8 números y DV, backend/Firestore/Sheets/pagos/roles y datos reales conservados. Pruebas UI originales se reutilizan en el gate runtime existente mediante invoice-component.spec.js, sin modificar workflows. Caché transitiva de navegador versionada y CSP/diagnóstico regenerados. Runbook recoge NS Cloudflare ya observados; no cambia dominio/DNS/Shopify. Evidencia/limitaciones en CURRENT_STATE; revisión protegida propia pendiente.
+
 ## Inicio, bienvenida única y datos guardados — 2026-10-11
 
 Se elimina el ocultamiento de inicio por welcome=1. Bienvenida requiere alta canónica activa de cliente, transacción de primera aparición, plazo de lecturas/App Check y cierre inmediato sin red; layout centrado/dvh/safe area y limpieza al cambiar UID. Admin sólo preview explícito. Nombre/apellido/WhatsApp y Rules conservados.

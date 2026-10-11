@@ -1,3 +1,17 @@
+# Factura: selección previa y guion desde móvil — 2026-10-11
+
+Codex /root. Continuación expresamente solicitada: corregir factura para todos los clientes y métodos de envío, manteniendo la integración del monitor y la preparación sin cutover. El checkout habilitaba nombre/RUC antes de elegir contribuyente; el teclado numeric de iPhone no ofrece guion; el borrador omitía ck-taxpayer-type. Se bloquean nombre/RUC hasta elegir fisica o juridica, se agrega un control de guion después del cuerpo de 3–8 números (incluido el ejemplo de siete), sin adivinar el DV, y se conserva el tipo en sessionStorage. Seleccionar tipo válido limpia sólo su aviso ya corregido; desmarcar factura conserva los valores. Contratos/validación servidor y preferencias en Firestore conservados.
+
+PASS_LOCAL: 37/37 pruebas de checkout/política/contrato/preferencias; 6/6 casos de UI en Chromium y 6/6 en WebKit, tamaños320/390/768/1024/1440/1920. Casos cubren selección previa, ambos tipos, guion en cuerpos3/7/8, no duplicación, conservación y recarga. Fixtures ejecutan handlers originales y controlador real del borrador sin scripts comerciales; no acreditan compras ni sesión real. WebKit usa binario oficial con bibliotecas locales ya disponibles bajo /tmp/tintin-webkit-libs y omite sólo la detección de dependencias del sistema, que no reconoce esas bibliotecas; las aserciones/runtime no se omiten. Safari/iPhone físicos NOT_VERIFIED. Auditor de checkoutPASS en siete viewports; preparación de dominio17controlesPASS de código, no permisos remotos.
+
+Cache transitiva actualizada desde estado-navegacion-checkout hasta shell con taginvoice-input-20261011-1, sin cambiar geometría ni APIs de navegación. CSP y diagnóstico generados canónicamente. CI/revisión nativa/publicación del candidato pendientes hasta observarlas. Nuevos cambios protegidos necesitan revisión propia en GitHub, nunca aprobación heredada.
+
+DNS GET público actual: NSgemma/leoCloudflare, apex23.227.38.65 ywwwshops.myshopify.com. MXsendAmazonSES/DMARCp=none observados; no sustituyen export completo privado ni revisión de DKIM/SPF. Runbook actualiza el traslado NS ya realizado sin cambiar tráfico. Dominio/DNS/origen activo pages.dev y #929/#1101 excluidos. Importación QA/media real/paridad Sheets/Google/OTP/checkout/email/AppCheck reales, restore aislado y cuentas de infraestructura siguen BLOCKED/NOT_VERIFIED por dependencias documentadas; no anunciar listo el cutover.
+
+---
+
+Base vigente f1e54b11aaeb9f720810c65b3dfe50ba37c5b70c tras #1102: auditoría38171872392SUCCESS, CodeQL/Cloudflare/controlesSUCCESS; #1099 publicado con salud38171517745SUCCESS. CI/publicación de #1102 en main se verifica por separado.
+
 # Reconciliación final tras #1099 — 2026-10-11
 
 Codex /root. #1099 integrado con revisión nativa38159979073SUCCESS en main1323cd344e57917c0793517fbdcae6fa0c3576ae. El árbol del squash coincide con el candidato b12ac408 validado por CI38158661440SUCCESS. #1102 actualizado sobre ese main preservando informes de importador/monitor y contrato de cuentas. Se regenera manifiesto desde fuente canónica; inventario protegido heredado del nuevo main conservado. CI del nuevo candidato y publicación pendientes, sin heredar PASS del head anterior. Dominio/DNS/origen comercial y #929/#1101 excluidos. QA real, Cloudinary y Sheets/restore privados siguen sin acceso conectado ni verificación.
