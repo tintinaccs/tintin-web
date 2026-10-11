@@ -1,3 +1,11 @@
+## Snapshot Sheets HTTP - 2026-10-11
+
+Codex /root. Objetivo vigente: preparacion tecnica para importar catalogo y validar antes de cutover; dominio/DNS y PR #929 siguen pendientes del ultimo paso.
+
+Evidencia real: reconciliacion HEAD 08:52 fallo en Codigo:826 con "El endpoint no devolvio JSON"; el wrapper descartaba el codigo HTTP. No se conoce el status original ni se declara resuelta la latencia de otros ciclos. Se conserva HTTP como propiedad tipada y mensaje sin cuerpo de respuesta. Solo snapshots read-only reintentan 408/429/500/502/503/504 confirmados (maximo tres intentos, pausas 250/750 ms); rechazos de acceso, validacion y respuestas exitosas sin records validos se propagan y conservan espejo. Webhooks mutadores no reintentan.
+
+PASS_LOCAL: 16 regresiones del dominio, incluida reproduccion de nueve fallas antes del fix; suite products-sync 164/164. Harness de catalogo corregido para imports con CRLF de Windows (fallaba en VM antes de ejecutar logica; sin cambio funcional del catalogo). CI, integracion y aplicacion HEAD real pendientes. Importacion QA sigue pendiente de permiso Chrome para archivos; OAuth/checkout/email/App Check y recuperacion reales no heredan PASS de emuladores.
+
 ## Reconciliacion con main 3335db53 - 2026-10-11
 
 Se preservan cambios integrados de #1095 (login, perfil, navegacion y runtime). Se regeneran versiones, protecciones y manifiesto desde esa base; los checks de candidatos anteriores no acreditan esta combinacion. Dominio sin cambios.

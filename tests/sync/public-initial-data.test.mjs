@@ -38,7 +38,7 @@ for (const [target, key] of [['loadHomeProducts', 'products:cards'], ['loadAllPr
 
 test('consumidores simultáneos comparten request y una falla permite volver a solicitar', async () => {
   const cache = fs.readFileSync(new URL('../../js/core/firebase/cache-lecturas-firestore.js', import.meta.url), 'utf8').replace(/^export /gm, '');
-  const api = fs.readFileSync(new URL('../../js/core/firebase/catalogo-publico-api.js', import.meta.url), 'utf8').replace(/^import .*;\n/gm, '').replace(/^export /gm, '');
+  const api = fs.readFileSync(new URL('../../js/core/firebase/catalogo-publico-api.js', import.meta.url), 'utf8').replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
   let calls = 0, respond;
   const context = vm.createContext({ AbortController, window: { setTimeout, clearTimeout },
     fetch: () => { calls++; return new Promise(resolve => { respond = resolve; }); },

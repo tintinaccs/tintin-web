@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "71508fa6c100c16161732dabe75f8f50ddf0d0109d3f5d5773a813a15869bd4e",
+  "sourceFingerprint": "98424d300308170d56b14449acf8c80d5d0d21355d231f33176c3f6e23650cf1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1135,
     "textFiles": 1087,
-    "totalBytes": 16608856,
+    "totalBytes": 16609035,
     "pages": 19,
     "modules": 806
   },
@@ -40549,8 +40549,8 @@
     },
     {
       "path": "tests/sync/admin-mirrors.test.mjs",
-      "bytes": 5521,
-      "sha256": "1bd5caa7692b2ec6e92a57c0a412284a1f83636b039f363897ada62022d95441",
+      "bytes": 9157,
+      "sha256": "c14fe0b9f66468ba4ba25ec41c32dfa9ad0650520a20a05c5f4846143bffcd97",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40585,6 +40585,10 @@
         {
           "url": "https://example.test/api/sheets-sync-snapshot",
           "line": 77
+        },
+        {
+          "url": "https://example.test/",
+          "line": 128
         }
       ]
     },
@@ -41274,8 +41278,8 @@
     },
     {
       "path": "tests/sync/public-initial-data.test.mjs",
-      "bytes": 3293,
-      "sha256": "38c369283d55087e3ad1b4c79420c721de3f3ba01a6db14903895221803f6d80",
+      "bytes": 3296,
+      "sha256": "9fbd1caa2fee066d0c28db595f9d387090c2f402434e7a5be0fc0b87107f70cc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42877,8 +42881,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 52491,
-      "sha256": "b9ba06eb715a0c31d9e7fc7a47eb353d34b23179d8ac4e460b4256f4cda6b0f9"
+      "bytes": 52857,
+      "sha256": "758e3d7967c8c18e833c3fe6b4b060c02207d0b5c5e68e0e3d0c4064e8b81b4e"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -43471,8 +43475,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 6278,
-      "sha256": "38ebc50c0839ff7e6bf19e78017840a94f73fd43da95af5c8c6437963f4cd83b"
+      "bytes": 710,
+      "sha256": "4af534f3dff75c65258cc6f5e5e7b6e7d425e97a74f9531168ce53a21e162610"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -43484,7 +43488,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "a9dd3001f37c9ee0a280bce5e4d1626d06dbe7f3e0338222bb2f5b9eaf0992cc"
+      "sha256": "c7bca51e1c6201762fd3a9fb6026dee4b7da1ad4f28f24be269ca4c7b16aec41"
     },
     {
       "path": "config/public-site.json",
@@ -44041,8 +44045,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 385136,
-      "sha256": "e206eb6691b0c090561c867849d4d5415ea48ce912b1da7254eca40ee274040f"
+      "bytes": 386345,
+      "sha256": "77ad76d36acbcc96141c8208cf88060c82319e505bdd47aff8e01de61aea5c2e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44317,8 +44321,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 10062,
-      "sha256": "8f8d8658cd2390fb45038077069681dda025b95b65fe8afe0d490da60091f27f"
+      "bytes": 10595,
+      "sha256": "0ff743399735275fb109052c99f319d8a0ffa3a964c270ca22b6ea0ee90da085"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -49147,8 +49151,8 @@
     {
       "path": "tests/sync/admin-mirrors.test.mjs",
       "extension": ".mjs",
-      "bytes": 5521,
-      "sha256": "1bd5caa7692b2ec6e92a57c0a412284a1f83636b039f363897ada62022d95441"
+      "bytes": 9157,
+      "sha256": "c14fe0b9f66468ba4ba25ec41c32dfa9ad0650520a20a05c5f4846143bffcd97"
     },
     {
       "path": "tests/sync/apps-script-sync-endpoint.test.mjs",
@@ -49237,8 +49241,8 @@
     {
       "path": "tests/sync/public-initial-data.test.mjs",
       "extension": ".mjs",
-      "bytes": 3293,
-      "sha256": "38c369283d55087e3ad1b4c79420c721de3f3ba01a6db14903895221803f6d80"
+      "bytes": 3296,
+      "sha256": "9fbd1caa2fee066d0c28db595f9d387090c2f402434e7a5be0fc0b87107f70cc"
     },
     {
       "path": "tests/sync/public-product-policy.test.mjs",
