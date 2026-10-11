@@ -1,3 +1,9 @@
+## 2026-10-11 — Cierre del contrato visual de paneles móviles
+
+Codex /root. CI38182801753 del candidato7d1b9f34 pasó build sin drift,261 interacciones runtime, contratos de identidad/admin, navegador/accesibilidad/SEO, rendimiento de páginas y187/187 combinaciones de geometría. Falló el smoke final porque la nueva regla fullscreen quitaba el borde rosa fino del carrito/catálogo. Se retira el override que borraba el borde móvil canónico de1px, manteniendo el viewport completo, cabecera continua y ausencia de asa/franja blanca. No se modifica ni debilita el smoke. PASS_LOCAL: smoke completo de18 rutas y cabeceras móvil/tablet/escritorio, más45/45 casos de paneles/tarjetas/dropdowns en Chromium desktop/mobile y WebKit mobile; build/caché/diagnóstico y protección correctos. CI y revisión nativa del nuevo SHA PENDING hasta sus resultados. Versionado transitivo y plan protegido regenerados sin cambiar dominio/DNS ni #929/#1101.
+
+---
+
 ## 2026-10-11 — Revisión geométrica final de las muestras de color
 
 Codex /root. El navegador confirmó una muestra de24×30px en las recomendaciones: max-width global y flex comprimían el círculo dentro del botón. La regla específica conserva ambas dimensiones sin cambiar colores ni acciones. La regresión de tarjetas ahora comprueba el ancho y alto reales en cinco viewports y tres proyectos. PASS_LOCAL:45/45 casos de paneles, tarjetas y dropdowns en Chromium desktop/mobile y WebKit mobile, incluidos círculos sin compresión en cinco viewports; build,317 assets/64 cargas dinámicas/seis históricos, integridad CSS y544 archivos/78 registros protegidos correctos. CI y revisión nativa del siguiente SHA PENDING; no se hereda PASS del candidato anterior. Se renuevan sólo las tres URLs inmutables que cambian (tema, cargador e interfaz), conservando317 assets y seis entradas históricas. Dominio/DNS y #929/#1101 excluidos.
