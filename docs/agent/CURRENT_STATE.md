@@ -1,3 +1,9 @@
+# Interacciones reales y login móvil — 2026-10-11
+
+Codex /root, GPT-6. Base `ac7e394874d2668dd8e0ba505f1a9340cf6bc84c`; rama `codex/fix-real-interactions-20261011`. Usuario autoriza checks y merge después de validar; aprobación protegida del propietario sigue obligatoria.
+
+Se reprodujeron filtro global que cancela clic reemitido, banner que tapa Continuar en móvil y carrera de creación canónica. Correcciones mínimas conservan validaciones, reservas, permisos y consentimiento opcional desactivado. Suite de página completa con handlers originales, Auth/Firestore reales emulados y cero retries. 136 tests login PASS, 466 dominio PASS, 46 servidor/seguridad PASS, sidebar 11 PASS, producto hidratado 1 PASS. Build Pages, cache, arquitectura y hashes protegidos locales PASS. Suite multidispositivo final pendiente: salida de red del executor falla HTTP 503 al obtener SDK oficial y GitHub; conector GitHub sí funciona. Siete casos completos Chromium Desktop pasaron antes del fallo externo; no se atribuye PASS a cuenta/WebKit ni a una corrida fallida. Plan exacto 36 archivos/34 registros. Checks del candidato pendientes. Informe y límites: [REAL_INTERACTIONS_20261011.md](REAL_INTERACTIONS_20261011.md). No se afirma compra final, proveedor sandbox, CRUD admin ni dispositivo físico verificados. Producción al comenzar coincide con base; publicación del candidato pendiente.
+
 # Auditoria Sheets: validacion heredada - 2026-10-10
 
 Codex /root. Base b4bbdbd47e4b8818fd0e0e02f2369b49b9f53f2c (#1092 integrado/publicado). Evidencia autenticada: ecosistema PASS, importacion restaurada muestra 13 colecciones; salud publica 38098357568 SUCCESS. No equivale a CRUD real ni checkout/email/App Check final.

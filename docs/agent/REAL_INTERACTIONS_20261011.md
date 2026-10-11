@@ -1,0 +1,107 @@
+# Interacciones reales — 2026-10-11
+
+Codex /root, GPT-6. Base `ac7e394874d2668dd8e0ba505f1a9340cf6bc84c`. El usuario confirmó el fallo en correo normal y autorizó completar checks y merge tras validar. Este informe no renueva sellos históricos de producción.
+
+## Resultado por función
+
+| FUNCIÓN | FUNCIONABA REALMENTE | ERROR DETECTADO | CORRECCIÓN APLICADA | PRUEBA FINAL | ESTADO |
+| --- | --- | --- | --- | --- | --- |
+| Login, «Continuar» | No en la composición reproducida | HIGH: filtro global de 320 ms cancela el clic interno después del guard asíncrono; no llega al handler/API | Filtrar duplicados sólo en pulsaciones humanas (`isTrusted`); conservar bloqueo de dobles pulsaciones | Regresión falla antes; dos pruebas de eventos pasan después; suite completa verifica HTTP, perfil persistido y navegación | PASS_LOCAL del fallo; publicación pendiente |
+| Login móvil pequeño | No: banner intercepta pulsaciones | HIGH: privacidad automática fija tapa el botón en pantallas bajas | Diferir aviso automático durante `/login`; estadísticas siguen desactivadas y preferencias manuales disponibles | Traza previa muestra interceptación; suite toca el botón en 320 × 568 y comprueba persistencia | Validación multidispositivo en curso |
+| Alta canónica del perfil | No cuando dos módulos crean simultáneamente | HIGH: segundo `setDoc` rechaza sobrescribir el contrato de identidad y la reparación conserva un error aunque el perfil ya existe | Ante rechazo, releer documento persistido; sólo continuar si existe. Si sigue ausente, conservar el error | Prueba ejecutable falla antes y pasa después; error de permisos sin documento sigue rechazado | PASS_LOCAL; suite completa en curso |
+| Producto / fixture de CI | HTML SEO pasaba aunque hidratación fallaba | MEDIUM: lista sin envoltorio `{id,data}` y colección/categoría ausente | Fixture con contrato real y colección visible; test exige nombre/precio hidratados y compra deshabilitada sin stock | Playwright de producto final PASS | PASS_LOCAL, fixture; no es un defecto confirmado del catálogo publicado |
+| Selección de entorno de pruebas | Podía mezclar origen local y producción | MEDIUM: helper de rendimiento ignoraba `PLAYWRIGHT_BASE_URL`, mientras configuración y spec lo aceptaban | Respetar la misma variable cuando no existe `PERF_BASE_URL` | Prueba anterior esperaba header local pero navegaba a producción; final verifica header local e hidratación | PASS_LOCAL |
+| Código OTP inválido | Rechaza en servicio real emulado | Sin defecto nuevo | Conservar validación; comprobar recuperación y código correcto | Handler original HTTP 400 → error visible → HTTP 200 → Auth real emulado | Validación multidispositivo en curso |
+| Desconexión y reintento | Comprobado en Chromium antes de ampliar | Sin defecto nuevo | Conservar datos y guardas; probar offline/online y envío por Enter | Error visible, botón habilitado, reintento y perfil activo persistido | Validación multidispositivo en curso |
+| Teléfono ocupado / cuenta bloqueada | Servicios rechazan sin activar perfil | Sin defecto nuevo | Conservar permisos y reservas | API y reglas reales emuladas; error visible y documento sin activación | Validación multidispositivo en curso |
+| Producto → carrito → checkout | Avance afectado por el mismo filtro de clics | HIGH: guard de checkout también reemite clic | Corrección del filtro compartido | Producto desde HTTP, cantidad 1 en carrito, checkout muestra ítem y panel siguiente activo | Validación multidispositivo en curso |
+| Cuenta de cliente | Pendiente de prueba completa de edición | Sin defecto confirmado nuevo | Test de lectura, edición, persistencia y recarga | Suite completa de cuenta | En curso |
+| Acceso administrativo / roles | Permisos de datos comprobados | Sin defecto nuevo | Conservar reglas y App Check; no simular aprobación de seguridad | Escalación `role:admin` rechazada por Firestore; App Check no emulado mantiene panel privado cerrado y muestra estado recuperable | Validación multidispositivo en curso; CRUD admin autenticado NO VERIFICADO |
+| Sidebar administrativo | Interacción pasaba; captura fallaba | LOW: escritura absoluta en `/outputs` inexistente | Guardar capturas con `testInfo.outputPath` | 11/11 PASS | PASS_LOCAL de UI aislada |
+| Compra final, pagos, correos externos, historial comercial | No comprobados de extremo a extremo en esta sesión | No hay cuentas/credenciales sandbox de proveedores ni sesión admin autorizada disponibles en el entorno | Conservar implementación y pruebas de contratos; no fabricar compras ni entregas | 466 pruebas de dominio y 46 de servidor/seguridad pasan; no sustituyen una compra real sandbox | NO VERIFICADO de extremo a extremo |
+
+## Por qué los checks anteriores no detectaban el fallo
+
+Se inspeccionaron las 52 specs Playwright existentes, configuración compartida y workflows. Inventario individual en [evidencia](evidence/real-interactions-20261011/playwright-inventory.json). 20 specs extraen fragmentos del runtime, 37 usan `page.route`, nueve contienen esperas temporales y una tiene un skip condicionado al entorno preview. Estas cifras describen aislamiento, no convierten todos esos tests en incorrectos. 31 aparecen explícitamente en workflows; las otras 21 no se consideran ejecutadas por deducción: algunas pueden llegar mediante scripts npm, y deben cotejarse con logs concretos.
+
+`profile-availability-recovery.spec.js` extrae el formulario del login y reemplaza dependencias. `google-loader-recovery.spec.js` prueba un segmento de acceso. Verifican casos útiles, pero omiten el filtro global y la capa de privacidad que coexistían en la página completa. La ficha local de rendimiento volvía después de verificar HTML SEO, antes de comprobar hidratación. El CI base `38100080999` estaba verde con esa cobertura; verde no demuestra la composición ausente.
+
+Se conservan los tests útiles y se agrega `test:critical-runtime` a `audit:login-profile`, invocado por `audit:final` en Repository audit. Configuración independiente con un worker, cero retries y tres motores/proyectos. No usa `force`, esperas artificiales ni salta casos. Espera DOM y luego resultados visibles/HTTP/persistencia; la descarga de recursos auxiliares no determina que un flujo haya terminado.
+
+## Entornos y límites
+
+Producción pública y base de Git coinciden al comenzar: fingerprint `d3b6fb83b493ec592c94cf6d532d63b12707b3ee359e4428b28fa8579201a8f7`, Pages asociado al commit base y CI base success. Se consultaron manifiesto y pantalla de login sin enviar correo real. El candidato debe completar CI/preview y, tras merge, cotejar de nuevo el manifiesto publicado.
+
+El host de pruebas sirve HTML, CSS y módulos completos del repositorio, SDK Firebase oficial 10.14.1 (bytes sin modificar descargados una vez por el host de prueba y servidos al mismo URL de módulo), Auth Emulator y Firestore Emulator con las reglas originales. Envío/verificación OTP y disponibilidad de teléfono usan handlers de producción; sólo se inyectan adaptadores de servicios de prueba. La entrega de correo es un buzón local y el custom token sin firma es exclusivo del Auth Emulator. App Check no tiene emulador: su indisponibilidad real debe cerrar el admin; no se atribuye PASS a reCAPTCHA, Google OAuth ni CRUD privado. La API de catálogo local lee documentos reales del emulador con el contrato público; no valida despliegue edge. Historial comercial y notificaciones auxiliares no están implementados en ese host y responden 404, no éxitos ficticios.
+
+Toda conexión accidental a Firestore/Auth/APIs de producción se aborta y hace fallar la suite. Reset y seeds se limitan al proyecto `demo-tintin-interactions`. No se envían compras, pagos ni correos externos. Resend, Apps Script, PayPal, Cloudinary autenticado y dispositivos físicos requieren sus entornos y accesos correspondientes.
+
+Chrome Desktop (binario Chromium disponible), Chromium Mobile Pixel 7 y WebKit Mobile iPhone 13 son pruebas emuladas. Los dos proyectos móviles también prueban login en 320 × 568; los demás casos usan sus dimensiones nativas. No se presenta esto como prueba en todos los teléfonos físicos. WebKit local utiliza librerías del sistema extraídas en un directorio temporal porque el usuario del entorno no dispone de instalación root; corre el motor real. CI instala sólo el navegador faltante y sus librerías si es necesario, sin reinstalar node_modules ni Chromium.
+
+El reporte HTML se genera fuera del árbol fuente en un directorio temporal y se conserva como ZIP en artifacts para no mezclar CSS del visor de terceros con el código de la tienda en auditorías de tipografía. Se conserva el auditor sin excepciones nuevas.
+
+## Evidencia y reproducción
+
+- `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium node --test tests/login/*.test.mjs`: 136/136 PASS.
+- Dominio accounts/auth/login/checkout/payments/cart/orders: 466/466 PASS. Servidor/seguridad/mantenimiento: 46/46 PASS.
+- Regresiones browser anteriores: 81 casos de interacción PASS y cinco capturas fallaron por ruta absoluta; después de corregirla sidebar 11/11 PASS. No se atribuye PASS a la ejecución que falló.
+- Producto con origen local y proxy del entorno: 1/1 PASS con hidratación y stock final comprobados.
+- `npm run test:critical-runtime`: resultado final pendiente. Los primeros siete casos de Chromium Desktop pasaron en la página completa; corridas posteriores encontraron indisponibilidad de SDK/CDN por la salida de red del executor (HTTP 503 en Firebase y GitHub), no se presentan como PASS. Account y WebKit requieren el resultado del runner CI. Reporte HTML comprimido en `artifacts/real-interactions/runtime-report.zip`, JSON, screenshots y trazas en `artifacts/real-interactions/`; logs y regresiones antes/después conservados en esta carpeta de evidencia.
+- Build Pages, cache (316 archivos/64 cargas), arquitectura y protección local PASS. Plan exacto: 36 archivos protegidos, 34 registros. Checks GitHub del candidato: pendientes; el mantenimiento requiere revisión manual del propietario sobre el SHA exacto, según `MANTENIMIENTO_FLUJOS.md`.
+
+## Inventario por spec existente
+
+| Spec | CI explícito | Rutas simuladas | Runtime extraído | Esperas | Skip condicionado |
+| --- | --- | ---: | --- | ---: | --- |
+| tests/cart/color-choice-browser.spec.js | no | 2 | sí | 0 | no |
+| tests/cart/quantity-browser.spec.js | sí | 1 | sí | 0 | no |
+| tests/catalog/master-presentation.spec.js | no | 3 | no | 0 | no |
+| tests/checkout/coupon-recovery.spec.js | sí | 2 | sí | 0 | no |
+| tests/checkout/invoice-ui.spec.js | no | 1 | sí | 0 | no |
+| tests/checkout/login-required-browser.spec.js | sí | 1 | sí | 0 | no |
+| tests/checkout/navigation-responsive.spec.js | sí | 8 | sí | 0 | no |
+| tests/checkout/saved-identity.spec.js | no | 1 | sí | 0 | no |
+| tests/checkout/shipping-page-runtime.spec.js | no | 4 | no | 0 | no |
+| tests/login/google-loader-recovery.spec.js | sí | 2 | sí | 0 | no |
+| tests/login/location-map-browser.spec.js | no | 2 | sí | 0 | no |
+| tests/login/profile-availability-recovery.spec.js | sí | 4 | sí | 0 | no |
+| tests/login/saved-address-map-browser.spec.js | no | 2 | sí | 0 | no |
+| tests/navigation/collection-menu-parity.spec.js | sí | 2 | no | 0 | no |
+| tests/navigation/header-responsive.spec.js | sí | 2 | no | 0 | no |
+| tests/navigation/live-activity-notices.spec.js | sí | 0 | no | 0 | no |
+| tests/navigation/loader-shell-wait.spec.js | sí | 5 | no | 0 | sí |
+| tests/navigation/master-home.spec.js | no | 0 | no | 0 | no |
+| tests/navigation/mobile-halo-checkout-labels.spec.js | no | 1 | sí | 0 | no |
+| tests/navigation/mobile-navigation-front.spec.js | no | 2 | no | 0 | no |
+| tests/navigation/public-initial-layout.spec.js | sí | 2 | no | 1 | no |
+| tests/navigation/whatsapp-fixed.spec.js | no | 1 | sí | 0 | no |
+| tests/operations/central-loader-ui.spec.js | sí | 2 | no | 0 | no |
+| tests/operations/loader-palette.spec.js | sí | 2 | no | 1 | no |
+| tests/performance/admin.performance.spec.js | sí | 0 | no | 1 | no |
+| tests/performance/offline-recovery.spec.js | sí | 0 | no | 0 | no |
+| tests/performance/product.performance.spec.js | sí | 0 | no | 0 | no |
+| tests/performance/public-pages.performance.spec.js | sí | 0 | no | 0 | no |
+| tests/performance/realtime-sync.spec.js | sí | 0 | no | 1 | no |
+| tests/performance/responsive-performance.spec.js | sí | 0 | no | 0 | no |
+| tests/profile/account-wholesale-sync.spec.js | sí | 3 | sí | 0 | no |
+| tests/profile/initial-profile-render.spec.js | sí | 2 | no | 0 | no |
+| tests/profile/wholesale-session-recovery.spec.js | sí | 1 | sí | 0 | no |
+| tests/seo/phase11-seo.spec.js | sí | 0 | no | 0 | no |
+| tests/ui-ux/admin-commerce-shopify.spec.js | no | 12 | no | 0 | no |
+| tests/ui-ux/admin-sidebar-interaction.spec.js | sí | 2 | no | 0 | no |
+| tests/ui-ux/admin-white-icons.spec.js | sí | 4 | no | 0 | no |
+| tests/ui-ux/import-identity-review.spec.js | sí | 3 | no | 0 | no |
+| tests/ui-ux/inventory-reservation-review.spec.js | sí | 1 | sí | 0 | no |
+| tests/ui-ux/phase10-accessibility.spec.js | sí | 0 | no | 0 | no |
+| tests/ui-ux/phase8-ui-ux.spec.js | sí | 2 | no | 0 | no |
+| tests/ui-ux/product-card-colors.spec.js | no | 3 | sí | 0 | no |
+| tests/ui-ux/product-color-gallery.spec.js | no | 15 | sí | 0 | no |
+| tests/ui-ux/product-first-paint.spec.js | no | 1 | no | 0 | no |
+| tests/ui-ux/product-review-rating-required.spec.js | no | 0 | no | 0 | no |
+| tests/ui-ux/product-small-controls.spec.js | sí | 4 | no | 0 | no |
+| tests/ui-ux/public-spacing-product.spec.js | sí | 4 | no | 0 | no |
+| tests/ui-ux/whatsapp-feedback-responsive.spec.js | no | 4 | sí | 0 | no |
+| tests/visual-builder/apariencia-preview-abajo.spec.js | no | 0 | no | 0 | no |
+| tests/visual-builder/visual-builder-runtime.spec.js | no | 0 | no | 1 | no |
+| tests/visual-builder/visual-builder-ui.spec.js | no | 0 | sí | 2 | no |
+| tests/visual-builder/visual-studio-v2-runtime.spec.js | no | 0 | no | 2 | no |

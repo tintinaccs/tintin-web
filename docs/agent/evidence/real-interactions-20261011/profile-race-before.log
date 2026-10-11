@@ -1,0 +1,31 @@
+✔ login repara una sesión Auth cuyo users/{uid} no existe usando ensureUserProfile (0.84099ms)
+✔ guardar Últimos datos espera la reparación canónica y no hace signOut (0.31889ms)
+✔ la reparación es necesaria porque las reglas exigen el contrato completo al crear users (3.016518ms)
+✔ un login existente no degrada active o incomplete a legacy (0.280664ms)
+✔ el login de un perfil existente sólo sincroniza metadata salvo bootstrap realmente legacy (0.201607ms)
+✖ la reparación acepta el perfil creado simultáneamente por el login (0.601867ms)
+✔ una creación rechazada sin perfil persistido conserva el error de permisos (0.552465ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 81.774526
+
+✖ failing tests:
+
+test at tests/login/canonical-profile-recovery.test.mjs:54:1
+✖ la reparación acepta el perfil creado simultáneamente por el login (0.601867ms)
+  Error: concurrent create rejected
+      at runtimeRepair (file:///workspace/tintin-web/tests/login/canonical-profile-recovery.test.mjs:48:31)
+      at TestContext.<anonymous> (file:///workspace/tintin-web/tests/login/canonical-profile-recovery.test.mjs:55:15)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    code: 'permission-denied'
+  }

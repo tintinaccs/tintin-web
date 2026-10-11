@@ -1,20 +1,223 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b4bbdbd47e4b8818fd0e0e02f2369b49b9f53f2c",
-  "reason": "Corregir rechazo de auditoria por validacion heredada de estados de pedidos sin cambiar controles editables",
+  "baseCommit": "ac7e394874d2668dd8e0ba505f1a9340cf6bc84c",
+  "reason": "Reparar clics reemitidos, privacidad móvil y carrera de perfil; regresión de página completa con Auth/Firestore emulados, Chromium y WebKit, sin cambiar permisos ni sellos históricos.",
   "files": [
     {
-      "path": "apps-script/ProductosUnificados.gs",
-      "oldHash": "d2d21acc2a8c4021b85e04bae4a099ed1d6ad89ed168c4df0e5fba1d0dee8aad",
-      "newHash": "b9ba06eb715a0c31d9e7fc7a47eb353d34b23179d8ac4e460b4256f4cda6b0f9"
+      "path": "404.html",
+      "oldHash": "a1707d8d586e3154dbfefd2746dce80abd3234297fd6aca41f5e3e1418cdf6b1",
+      "newHash": "81b092be75dcc9970b5b262af3b8d5192d46b8ecb3cce98764c9766830e1da6a"
+    },
+    {
+      "path": "about.html",
+      "oldHash": "60add690b21e521b199f74588ebaff44a0b94a6375d187c793bf71490e3f3207",
+      "newHash": "d3d07f03d46139cdf9266b2064fe7f6a7ca8b430b87a3b1930719a608a0bc569"
+    },
+    {
+      "path": "admin-images.html",
+      "oldHash": "3103ab9eec6ad06901ddca67c2530a6ef904fff6b6fba4f0e60ceca17d1a3da7",
+      "newHash": "fa3bc251347f696e637ebb1dd19ba88ffdc28702fac1c707f12f140a354ecf69"
+    },
+    {
+      "path": "admin.html",
+      "oldHash": "9c3ad304c858b9c84663588e78fdd5a21434e36f56f2f96a20156201b8a52351",
+      "newHash": "d03afac5c03332b53ac8686b24b1613f9f53b2ef21a5b9ff4ef8651667059d20"
+    },
+    {
+      "path": "cambios-devoluciones.html",
+      "oldHash": "98732f877de45c77f24772cf7e091b5c6cbd6c1dc8c682571e257f270655128a",
+      "newHash": "40e8376dc6d27691a1c5031c38b408a94604bf5a9d88d7671eba7a253eeec55b"
+    },
+    {
+      "path": "catalogo.html",
+      "oldHash": "ddff16e7e401f357daa8c8e1d28d21060bed187b3cb3de13a8056798aa938435",
+      "newHash": "537e4a26151d99ad633b38868fb50733771bd7f0e4152ebd37f60bc2dc3bb445"
+    },
+    {
+      "path": "checkout.html",
+      "oldHash": "d432d4f05b0079aecde2c6ad11374eab50bb4722556ec4842a061a906053745c",
+      "newHash": "3a735df47327b43e89021753ad8595d732baf155ce8e8d8330fb39234a28ad0f"
+    },
+    {
+      "path": "collections.html",
+      "oldHash": "a22cbed6f9bbad4259eb62c4228d91624761c9acee6852b4dca272f744cecc68",
+      "newHash": "2c33473eb888dfc407ac1f5701493ab375b35dd566c281e6b2a8959d2af7ae55"
+    },
+    {
+      "path": "config/csp-runtime.js",
+      "oldHash": "beaf2344421c9e67e4df80f8357d0a5c10cb2881b0f1122e929fb5efdbe1cef4",
+      "newHash": "732c000015407ee40fa085e53447256584ba90964a60ea716062e500ff58bf2b"
+    },
+    {
+      "path": "config/csp-runtime.json",
+      "oldHash": "784749a9614581e7e205ca9e750349fa0f52524d27ca0b47e760611c384e19bd",
+      "newHash": "4a7057f936478c0dbe966e0a53f053074e28532ae59173f5b4e5a4cf2f060a17"
+    },
+    {
+      "path": "contact.html",
+      "oldHash": "25d39008ef83f3e8d8345a1642832d5f5faaaadc979ce6ca2dbfa081ba90fb28",
+      "newHash": "e3ae9e326dc5deb8d274d512be1419e3ead96bcd6e8065178420fa2c3115ca7c"
+    },
+    {
+      "path": "envios.html",
+      "oldHash": "1f75f6a806bb2121c0afbd0a75f3d29f57824f53e605ad80f9d17ba27663e675",
+      "newHash": "24e52011f8138f4e8a134301b2081b6aca9920b04b02f96d4bb2c38b7a5b6253"
+    },
+    {
+      "path": "functions/api/phone-availability.js",
+      "oldHash": "dd39845ce53a14c2ca5135e05ab0365d380c067743a4c19f3ba0107b7471ff58",
+      "newHash": "13fce7d7c80fe3c41f3405a77dacd583e7dfd5bccf73630417913535dad8fd87"
+    },
+    {
+      "path": "index.html",
+      "oldHash": "bf5899a241edf456f05d20e9c626a57c1eb4f44df4ba12f96f47b218b5cacdae",
+      "newHash": "98398965e9c6d236a6ed56f9a2112141946ca17076db211898c772c8d63b5e19"
+    },
+    {
+      "path": "js/analytics/actividad-sitio.js",
+      "oldHash": "68b1017475882748d43556a894743c0363613b80bff0f032a6bfc372667e9c9e",
+      "newHash": "e0d2943b60383d28d7b4dd004d7de33c80d42accf90b8665252c13b2eb4b1eed"
+    },
+    {
+      "path": "js/analytics/analitica.js",
+      "oldHash": "472b75ed8482f4c5a59aa35c78d545fd4c94b4918a714309aeb0e94bd2257fc4",
+      "newHash": "0e28612f7278335ef2e9def7fc77f3a804777e79020138c162038884c147ff30"
+    },
+    {
+      "path": "js/analytics/consentimiento-privacidad.js",
+      "oldHash": "1b8bb01748d8953c927081379e66fc29a43338efc0b9e608833e72ed361fe3c3",
+      "newHash": "853facc80dab6cbd6f5b2b11653011f42e7f184958b67ad93d959b0a8a2dba8e"
+    },
+    {
+      "path": "js/cargador-mantenimiento-pagina.js",
+      "oldHash": "d1fd5770c9f23b041aa52db42be08fbeeb044d282c351e98f765af4c9635f100",
+      "newHash": "20bc5aa117e849b0965bed99c8947f3c790ef2a565667e58c9db6aaf06e0a204"
+    },
+    {
+      "path": "js/cargador-pagina.js",
+      "oldHash": "a495a4209748c24270ebb38d608ce8da92a2b9394aa4249e29e132884714c9d3",
+      "newHash": "c1a088e31cc3aceff35af497f233a952d439a53fae962f1694025114d8671cf8"
+    },
+    {
+      "path": "js/components/navigation/compartido/carga-navegacion.js",
+      "oldHash": "5f1b0b279fc7230eb4bf6980946b96fee0849b5553fa26b8a16d659066b0e50d",
+      "newHash": "295eda0e92cbf9d5cdba3c83446de17dc42c4b26b6fdbcd6cec0487cb452781a"
+    },
+    {
+      "path": "js/components/navigation/compartido/control-busqueda.js",
+      "oldHash": "7f0b07428b63eb27a2b81682122598329c6319449bc0e0b307faf182fad9ea5f",
+      "newHash": "26b4c60bcddd4fbdb2f70d7014efc789023ad316a92bb2f9aa29900cac530305"
+    },
+    {
+      "path": "js/components/navigation/entrada-navegacion-publica.js",
+      "oldHash": "e8eb56ba0268e6dde2715a203787e6c5d4913085c112948cd1c8138f484edadb",
+      "newHash": "c9cfc252a60c96ffec190adf9874eadc7a3136daaa03095459a39a032dddce01"
+    },
+    {
+      "path": "js/core/store/estado-productos.js",
+      "oldHash": "ccc3658545606eb8b106f41d2af837753fae4f044b0a7612418c226341a37bb4",
+      "newHash": "82f4e99d4ce1702ff8364f207f717b8ad563cde3b3bee239b865ded32970a0b9"
+    },
+    {
+      "path": "js/inicio-navegacion-publica.js",
+      "oldHash": "44c54d1d5de5c7809db994214afbca8fc43ddb69da507f35649fac4c220b32d2",
+      "newHash": "2238e54d5b2a5cf502d647cfdefd5aacbef4f0566105fd19c845196844321899"
+    },
+    {
+      "path": "js/pages/login/mantenimiento-acceso.js",
+      "oldHash": "10a012498111fea17f46e2e8b56af22a15cf1cc7398cd5f50168e2669a6c442a",
+      "newHash": "b075dad68ad8fabccf82bade3c33ec56da82b9a681220a138a9e8e0e10f16e9f"
+    },
+    {
+      "path": "js/quality/calidad-interfaz.js",
+      "oldHash": "d67a81775b602262088e7c026379af987dc869ae0cab215fa84a2242a0a1a4d7",
+      "newHash": "a750cec91cf9a0fff9491bf50561f44235a5c18acdc8f8fa883ecdb974bb9af0"
+    },
+    {
+      "path": "login.html",
+      "oldHash": "517f6db417036fc30ff054658bdb56996fe999c895556e162950a251817eefd7",
+      "newHash": "2d6411780a51b8737da8a7e462f62cb812af246f16e8ff417b3afe242117e33e"
+    },
+    {
+      "path": "nosotros.html",
+      "oldHash": "d275a037010d79b27c3de0071e821d06dc049cad5d90c06d473ed67176fb44ca",
+      "newHash": "210033773400e2148f21c1d4744c995b64b4eabec257519cbe839bc66ca027f1"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "a1c0fd62845911ce9ebbea1d214775ca251068617e706bb1cef714a1ee751f10",
+      "newHash": "4152bad2c8db681b99f1e7b1d2c3c99b7f7573a04714ee49ff92097a6b3970ea"
+    },
+    {
+      "path": "perfil.html",
+      "oldHash": "abecadc1f885b56e174e5672965176beed1fd8625a6e6fbabfe8825227bc7708",
+      "newHash": "d282718187ffa078f9ae94c3edf03f6ad3c96d7e98900d31e626aa79f05f3163"
+    },
+    {
+      "path": "preguntas-frecuentes.html",
+      "oldHash": "d4696645b47b0a8ff81a11d741a8ef939c5a5188a855e06d64ef8bf104fa6448",
+      "newHash": "2b09269c4fefbf4996f655a5ac7391b04123b4e94fb7b0bd6fd1f56821d1a682"
+    },
+    {
+      "path": "privacidad.html",
+      "oldHash": "975f585c949afff44deaa54e589d555e9cad4a9082b89df30069599af77a0f26",
+      "newHash": "0a4e15e700ea550ff552f4201221602e16e4d93b9e189b54d99aeebf79e7500d"
+    },
+    {
+      "path": "product.html",
+      "oldHash": "418b9649095e526bdf1eb79c9a0211bd2e4f446486f854964c92e855ce641e9a",
+      "newHash": "1e73bb46f5c398806e64cdb55abf97297f393301f59b0f99dcf7962f31f8a318"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "12f182a8fc8ff60af84e53b749ce5e32f9c166735cb500e29ff6addd5a461dfb",
+      "newHash": "828af6c32fee27f2e5fde87e0d6ab79a06b89c8453aec1b7322ccf406ab2f0f9"
+    },
+    {
+      "path": "scripts/sincronizar-inicio-navegacion-publica.js",
+      "oldHash": "542f01fee6b1ba8b678430cb985b5eda4a96d59d20f74150db7427fa92cfeda8",
+      "newHash": "126bad6c28b6407a5fb0d9f373f574b1ce1bcf603eaf7ce63ff31cba9f193bea"
+    },
+    {
+      "path": "terminos.html",
+      "oldHash": "d6db727f68095e5c1601525ccec20ff57a86def4d105f8e1f650b7461274ad7e",
+      "newHash": "ede38a62713f23121662957eadc51987e2409fa2b70ed1cca563a6753b8efe73"
     }
   ],
   "affectedRecords": [
-    "apps-script__google-sheets__24",
-    "apps-script__sheets-products-webhook__26",
-    "firestore__apps-script__23",
-    "google-sheets__apps-script__25",
-    "sheets-products-webhook",
-    "sheets-products-webhook__firestore__27"
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
+    "csp",
+    "cuenta-bloqueada",
+    "entrada-login",
+    "entrada-login__google-btn__1",
+    "entrada-login__login-codigo__2",
+    "firebase-auth__redirect-result__5",
+    "firestore__users-uid__8",
+    "google-btn",
+    "google-btn__firebase-auth__3",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
+    "pagina-principal",
+    "perfil",
+    "perfil__ultimos-datos__11",
+    "productos",
+    "redirect-result",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-principal__17",
+    "roles__perfil__10",
+    "roles__super-panel__14",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34",
+    "ultimos-datos",
+    "ultimos-datos__perfil__13",
+    "users-uid",
+    "users-uid__cuenta-bloqueada__12",
+    "users-uid__roles__9"
   ]
 }
