@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1b6fdc5531ec4ba3530f80042a787c963161706ef81acb2c7fa74ecb3ec7329a",
+  "sourceFingerprint": "79ac23e7f270222432b7c1d857a532ee146d37e8b96f90b72f375e1683cb8634",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1135,
     "textFiles": 1087,
-    "totalBytes": 16593984,
+    "totalBytes": 16596176,
     "pages": 19,
     "modules": 806
   },
@@ -33024,8 +33024,8 @@
     },
     {
       "path": "scripts/servidor-flujos-runtime.mjs",
-      "bytes": 12691,
-      "sha256": "e833eef518c727df9370ca7da34afa09cc590951a7a13e5438ee26d691f24cf9",
+      "bytes": 13166,
+      "sha256": "7df08059425a1a9bfab06a3f3ceb6cf68954176eea2d6de53a78e06ff2584c4d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33116,10 +33116,6 @@
         {
           "url": "http://127.0.0.1:8080/emulator/v1/projects/$%7Bproject%7D/databases/(default",
           "line": 106
-        },
-        {
-          "url": "http://127.0.0.1:4175/",
-          "line": 155
         }
       ]
     },
@@ -38579,8 +38575,8 @@
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
-      "bytes": 25190,
-      "sha256": "930e9f4412695e2874af254a73f5ffea643bbbb2ca3b849000e8a32050b3b1a7",
+      "bytes": 25827,
+      "sha256": "65ed90c9b098176e49b2a5c43b28f99a76ae215af26fba15c848a1c4f2506d30",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44027,8 +44023,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 382915,
-      "sha256": "6588eb2f678d0895a05d91f41dbe2ea5a0bb546218698505ae203267b234ac0d"
+      "bytes": 383075,
+      "sha256": "9c7b56b3bcfa8a7f5671d9ffd6914e34425c62d14b5fad2739c881ddb739de9e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44081,8 +44077,8 @@
     {
       "path": "docs/agent/REAL_INTERACTIONS_20261011.md",
       "extension": ".md",
-      "bytes": 17523,
-      "sha256": "bebf89b39d6e3ea4e9b07367e4b6c94180d1b08ddeca6d4ff6d8d6deaef79fd3"
+      "bytes": 18443,
+      "sha256": "4e105d37e97fb7525c9e30d02813324775ae45fe06a77bb644acf5219032682b"
     },
     {
       "path": "docs/agent/REVISION_ESPACIOS_20261008.md",
@@ -47843,8 +47839,8 @@
     {
       "path": "scripts/servidor-flujos-runtime.mjs",
       "extension": ".mjs",
-      "bytes": 12691,
-      "sha256": "e833eef518c727df9370ca7da34afa09cc590951a7a13e5438ee26d691f24cf9"
+      "bytes": 13166,
+      "sha256": "7df08059425a1a9bfab06a3f3ceb6cf68954176eea2d6de53a78e06ff2584c4d"
     },
     {
       "path": "scripts/servidor-local-pruebas.mjs",
@@ -48767,8 +48763,8 @@
     {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
-      "bytes": 25190,
-      "sha256": "930e9f4412695e2874af254a73f5ffea643bbbb2ca3b849000e8a32050b3b1a7"
+      "bytes": 25827,
+      "sha256": "65ed90c9b098176e49b2a5c43b28f99a76ae215af26fba15c848a1c4f2506d30"
     },
     {
       "path": "tests/navigation/home-collection-links.test.mjs",

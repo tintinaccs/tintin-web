@@ -152,8 +152,17 @@ const server = http.createServer(async (incoming, outgoing) => {
       seen.push({ path:url.pathname,status:response.status });
       outgoing.writeHead(response.status,Object.fromEntries(response.headers));outgoing.end(await response.text());return;
     }
-    const response = await fetch('http://127.0.0.1:4175'+url.pathname+url.search);
-    outgoing.writeHead(response.status,Object.fromEntries(response.headers));outgoing.end(Buffer.from(await response.arrayBuffer()));
+    // Only the request path is variable. Pin the TCP destination and return
+    // redirects to the browser instead of following them on the server.
+    const response = await new Promise((resolve, reject) => {
+      http.get({ hostname: '127.0.0.1', port: 4175, path: url.pathname + url.search }, upstream => {
+        const chunks = [];
+        upstream.on('data', chunk => chunks.push(chunk));
+        upstream.on('error', reject);
+        upstream.on('end', () => resolve({ status: upstream.statusCode, headers: upstream.headers, body: Buffer.concat(chunks) }));
+      }).on('error', reject);
+    });
+    outgoing.writeHead(response.status,response.headers);outgoing.end(response.body);
   } catch(error) { console.error('[runtime-test-server]',error.message);outgoing.writeHead(500,{'content-type':'application/json'});outgoing.end(JSON.stringify({error:error.message})); }
 });
 server.listen(4174,'127.0.0.1',()=>console.log('Runtime test host: '+origin));
