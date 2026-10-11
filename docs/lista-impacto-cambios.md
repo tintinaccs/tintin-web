@@ -185,3 +185,9 @@ Revisar editor, vista previa, publicación, sanitización, fallback, SEO, caché
 - [ ] El despliegue terminó correctamente.
 - [ ] No quedaron archivos, imports, estilos o TODO obsoletos.
 - [ ] Documentación y registro de mantenimiento actualizados.
+
+
+## Aviso de importacion restaurada - 2026-10-11
+
+Badge distingue actividad de esta sesion del estado persistido: APLICANDO solo mientras apply esta activo; RUNNING restaurado es REANUDABLE; FAILED requiere reintento. Flag local no se persiste ni cambia autoridad del job. Versiones de cuatro recursos y HTML coherentes mediante generador cache; no modifica CRUD, stock, catalogo, permisos, DNS ni servicios. Verificacion publicada posterior a integracion; 56 regresiones PASS_LOCAL.
+
