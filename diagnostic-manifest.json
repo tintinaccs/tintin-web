@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "98424d300308170d56b14449acf8c80d5d0d21355d231f33176c3f6e23650cf1",
+  "sourceFingerprint": "c82da1c39207a11ae0b1afca3e124af66fcd6fd208e98b5915a2e5b10e874ece",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1135,
-    "textFiles": 1087,
-    "totalBytes": 16609035,
+    "files": 1136,
+    "textFiles": 1088,
+    "totalBytes": 16616983,
     "pages": 19,
     "modules": 806
   },
@@ -43476,7 +43476,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 710,
-      "sha256": "4af534f3dff75c65258cc6f5e5e7b6e7d425e97a74f9531168ce53a21e162610"
+      "sha256": "2d3fec3b88e6bea8a1538c879907c396a8971795ca928050a4931fb7d3382680"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -44045,8 +44045,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 386345,
-      "sha256": "77ad76d36acbcc96141c8208cf88060c82319e505bdd47aff8e01de61aea5c2e"
+      "bytes": 387276,
+      "sha256": "db5fbbaf0524d18d6e9ff2d21b86792b4394bfe7e9cdce91b971c5e832187c1b"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44065,6 +44065,12 @@
       "extension": ".md",
       "bytes": 4490,
       "sha256": "0fba3342027e3a0be74cd1c0ae9372e8681bb89a3e1266bd0cb277f9c159af96"
+    },
+    {
+      "path": "docs/agent/PREPARACION_ACTUAL_20261011.md",
+      "extension": ".md",
+      "bytes": 7017,
+      "sha256": "5caf3f329d893b79ecff861c0423c16167c2f2f7999b5de431027638865a1e19"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
