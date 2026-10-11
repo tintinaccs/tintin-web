@@ -1,3 +1,7 @@
+## Restaurar colecciones del preview - 2026-10-10
+
+Lectura fresca de colecciones Firestore antes de restaurar un preview local. No escribe catalogo ni aplica jobs. Mantiene exclusion por busy y Super Admin; fallo de lectura conserva el preview previo y muestra error. Versionado propagado a importador, calidad-interfaz y cargador-pagina con referencias HTML coherentes. Test de regresion de colecciones y suites existentes 21 PASS. Sin cambios DNS.
+
 ## Registro 2026-10-10: alertas operativas opcionales e historicas
 
 - Perfil movil: tabs en filas para que todas las opciones queden visibles. CSS perfil y referencia HTML versionadas; auditor global conservado sin excepciones nuevas. Sin cambio de datos ni logica de perfil.

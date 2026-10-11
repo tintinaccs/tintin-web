@@ -471,6 +471,9 @@ if (!window.TintinAdminShopifyImportBooted) {
       const source = saved.source || 'shopify-csv';
       let existingProducts = [];
       let records = saved.records;
+      // Read fresh collections before restoring mappings; local previews do not
+      // contain the current Firestore collection inventory.
+      const collections = await readCollection('collections', 5000);
       if (source === 'shopify-csv') {
         try {
           existingProducts = await readCollection('products');
@@ -481,6 +484,7 @@ if (!window.TintinAdminShopifyImportBooted) {
           return;
         }
       }
+      state.collections = collections;
       state.fileName = saved.fileName || ''; state.fileBytes = saved.fileBytes || 0; state.fileChecksum = saved.fileChecksum || '';
       state.source = source; state.existingProducts = existingProducts; state.records = records; state.invalidRows = saved.invalidRows || [];
       state.jobId = saved.jobId || ''; state.job = saved.job || null;
@@ -489,6 +493,9 @@ if (!window.TintinAdminShopifyImportBooted) {
         catch (error) { console.warn('[admin-import] local job status unavailable', error); }
       }
       renderPreview(); toast(`Preview restaurado: ${state.records.length} producto(s).`);
+    } catch (error) {
+      console.error('[admin-import] preview restore failed', error);
+      toast(`No se pudo restaurar el preview: ${error.message}`, true);
     } finally { state.busy = false; renderPreview(); }
   }
 

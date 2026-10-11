@@ -16,6 +16,10 @@ Agente: Codex /root. Base main `7da0afc46b98a9694c9c5ec71c44fe6363521556`; rama 
 2. Checkout mezclaba ventas locales historicas con compras web: contrato `google-sheets-local` + `historical:true` + `historical_unmanaged` + `localEntryId` no inicia correo de checkout. Se distingue ausencia de notificacion en ese espejo; fallos/pending explicitos, cualquier checkout web y problemas Sheets siguen alertando. UI mantiene el total revisado y muestra ventas historicas sin correo requerido. No se envian correos retrospectivos ni se modifican los 189 registros alertados.
 3. Pruebas backend, render con VM y conciliacion cubren habilitado/deshabilitado/roto, checkout real sin email, historicos, fallos explicitos y estados desconocidos. Cache inmutable versionada; controles y sellos existentes conservados.
 
+## Restauracion de importacion (PASS_LOCAL)
+
+Preview restaurado en Super Admin: 413 productos del archivo reconocidos frente a 414 actuales; no se inicia importacion ni se escribe catalogo. Se detecto aviso falso de colecciones vacias pese a 13 colecciones (12 visibles): restoreLocalJob no cargaba colecciones actuales. Se agrega lectura fresca antes de publicar el preview, preserva estado anterior ante fallo y libera el bloqueo. 21 tests de importacion/identidad/concurrencia PASS, incluida regresion de colecciones. Versiones cache del importador y sus cargadores actualizadas. Verificacion publicada pendiente.
+
 ## Pendiente del cierre
 
 CI/plan protegido/revision requerida e integracion del candidato; verificacion UI publicada de las alertas; localizar demora residual de Apps Script; verificaciones autenticadas finales de cuenta/checkout/email/App Check e importacion reanudable; alta/edicion/borrado reversible QA con feedback central. No se realizaron compras, pedidos nuevos, emails ni cambios de cuentas reales en esta pasada. No afirmar listo para importar/cutover hasta completar la evidencia aplicable.
