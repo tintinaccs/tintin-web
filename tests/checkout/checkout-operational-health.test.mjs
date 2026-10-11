@@ -60,3 +60,29 @@ test('pago aprobado con correo y Sheets saludables no genera alerta', async () =
   assert.equal(report.paidOrders, 1);
   assert.equal(report.alerts.length, 0);
 });
+
+
+test('historical local ledger sales do not require checkout email; explicit failures remain visible', async () => {
+  const order = { source: 'google-sheets-local', historical: true,
+    inventoryState: 'historical_unmanaged', localEntryId: 'sale-1', paymentStatus: 'pagado' };
+  const local = classifyCheckoutOperationalOrder(order);
+  assert.equal(local.emailIssue, false);
+  assert.equal(local.notificationStatus, 'not_applicable');
+  assert.equal(classifyCheckoutOperationalOrder({ ...order, notificationStatus: 'failed' }).emailIssue, true);
+  assert.equal(classifyCheckoutOperationalOrder({ ...order, notificationStatus: 'pending' }).emailIssue, true);
+  assert.equal(classifyCheckoutOperationalOrder({ ...order, source: 'public-checkout-v1' }).emailIssue, true);
+  assert.equal(classifyCheckoutOperationalOrder({ ...order, historical: false }).emailIssue, true);
+  assert.equal(classifyCheckoutOperationalOrder({ ...order, localEntryId: '' }).emailIssue, true);
+  assert.equal(classifyCheckoutOperationalOrder(order, { sheetsAvailable: false }).sheetsIssue, true);
+  const report = await inspectCheckoutOperationalHealth({}, {
+    listDocuments: async () => [{ name: 'orders/local-sale-1', fields: {
+      source: { stringValue: order.source }, historical: { booleanValue: true },
+      inventoryState: { stringValue: order.inventoryState }, localEntryId: { stringValue: order.localEntryId },
+      paymentStatus: { stringValue: 'pagado' },
+    } }],
+  });
+  assert.equal(report.ok, true);
+  assert.equal(report.paidOrders, 1);
+  assert.equal(report.paidWithoutEmail, 0);
+  assert.equal(report.historicalWithoutEmailRequired, 1);
+});

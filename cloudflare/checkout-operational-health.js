@@ -30,9 +30,15 @@ export function classifyCheckoutOperationalOrder(order = {}, {
 } = {}) {
   if (!isPaidOrder(order)) return null;
 
-  const notificationStatus = text(order.notificationStatus || 'pending');
+  // Local historical sales are a ledger mirror, not a checkout/email transaction.
+  // Explicit delivery failures remain alerts, even on a historical record.
+  const historicalLocal = order.source === 'google-sheets-local'
+    && order.historical === true && order.inventoryState === 'historical_unmanaged'
+    && Boolean(order.localEntryId);
+  const notificationStatus = text(order.notificationStatus)
+    || (historicalLocal ? 'not_applicable' : 'pending');
   const mirrorStatus = text(order.sheetsMirrorStatus || order.sheetsSyncStatus || '');
-  const emailIssue = !EMAIL_OK_STATES.has(notificationStatus);
+  const emailIssue = !EMAIL_OK_STATES.has(notificationStatus) && !(historicalLocal && notificationStatus === 'not_applicable');
   const sheetsIssue = SHEETS_BAD_STATES.has(mirrorStatus) || sheetsAvailable === false;
 
   return {
@@ -61,6 +67,7 @@ export async function inspectCheckoutOperationalHealth(env, {
   const documents = await listDocuments(env, 'orders', MAX_SAMPLE);
   const alerts = [];
   let paid = 0;
+  let historicalWithoutEmailRequired = 0;
 
   for (const document of documents) {
     const order = decodeFirestoreFields(document?.fields || {});
@@ -70,6 +77,7 @@ export async function inspectCheckoutOperationalHealth(env, {
       orderId: documentId(document),
       sheetsAvailable,
     });
+    if (classified?.notificationStatus === 'not_applicable' && classified.emailIssue === false) historicalWithoutEmailRequired += 1;
     if (classified?.emailIssue || classified?.sheetsIssue) alerts.push(classified);
   }
 
@@ -79,6 +87,7 @@ export async function inspectCheckoutOperationalHealth(env, {
     ok: paidWithoutEmail === 0 && paidAtRiskSheets === 0,
     sampledOrders: documents.length,
     paidOrders: paid,
+    historicalWithoutEmailRequired,
     paidWithoutEmail,
     paidAtRiskSheets,
     alerts: alerts.slice(0, 20),

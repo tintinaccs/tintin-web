@@ -9,9 +9,9 @@ const handlers=[handler('  async function processFile(', '\n  function summary('
 function fixture(){
  let release;const gate=new Promise(resolve=>{release=resolve});
  const state={busy:false,source:'shopify-csv',records:[{product:{name:'Original'}}],existingProducts:[],invalidRows:[],collections:[],jobId:'original-job',job:{status:'READY'},ui:{drop:{classList:{add(){},remove(){}}},summary:{},input:{value:'selected'}}};
- const context={state,MAX_FILE_BYTES:250*1024*1024,allowed:true,reads:[],messages:[],renders:0,fail:false,console:{error(){},warn(){}},
+ const context={state,MAX_FILE_BYTES:250*1024*1024,allowed:true,reads:[],messages:[],renders:0,fail:false,collectionInventory:[],console:{error(){},warn(){}},
   isSuperAdmin:()=>context.allowed,renderPreview:()=>context.renders++,toast:(message,error)=>context.messages.push({message,error}),
-  readCollection:async name=>{context.reads.push(name);await gate;if(context.fail)throw new Error('Read failed');return []},
+  readCollection:async name=>{context.reads.push(name);await gate;if(context.fail)throw new Error('Read failed');return name === 'collections' ? context.collectionInventory : []},
   csvObjectsFromFile:async file=>[{name:file.name}],groupShopifyRows:rows=>({products:rows.map(row=>({product:row,errors:[]})),invalidRows:[]}),
   reconcileShopifyImportIdentities:records=>records,parseLocalizedNumber(){},parseOptionalStock(){},fileSampleChecksum:async file=>file.name,
   clearLocalJob:async()=>{},apiJob:async()=>({status:'READY'})};
@@ -33,7 +33,7 @@ test('dos archivos y limpiar/restaurar no pueden competir con un análisis en cu
 test('restaurar conserva el bloqueo hasta completar la lectura y el estado del job',async()=>{
  const {context,state,release}=fixture();const restored=context.restoreLocalJob({fileName:'saved.csv',source:'shopify-csv',records:[{product:{name:'Saved'}}],jobId:'saved-job'});
  assert.equal(state.busy,true);context.clearPreview();await context.processFile({name:'other.csv',size:1});
- assert.deepEqual(context.reads,['products']);assert.equal(state.jobId,'original-job');
+ assert.deepEqual(context.reads,['collections']);assert.equal(state.jobId,'original-job');
  release();await restored;assert.equal(state.fileName,'saved.csv');assert.equal(state.jobId,'saved-job');assert.equal(state.busy,false);
 });
 
@@ -51,4 +51,17 @@ test('sin Super Admin no se analiza, restaura ni limpia ningún trabajo',async()
  const {context,state}=fixture();context.allowed=false;
  await context.processFile({name:'file.csv',size:1});await context.restoreLocalJob({records:[{product:{name:'Saved'}}]});context.clearPreview();
  assert.deepEqual(context.reads,[]);assert.equal(state.jobId,'original-job');assert.equal(state.busy,false);
+});
+
+
+test('restoring a preview reloads current collections before rendering mappings',async()=>{
+ const {context,state,release}=fixture();
+ const collections=[{id:'relojes',slug:'relojes',name:'Relojes'}];
+ context.collectionInventory=collections;
+ const restored=context.restoreLocalJob({fileName:'saved.csv',source:'shopify-csv',records:[{product:{name:'Saved'}}]});
+ assert.equal(state.collections.length,0);
+ release();await restored;
+ assert.deepEqual(context.reads,['collections','products']);
+ assert.equal(state.collections,collections);
+ assert.equal(state.busy,false);
 });

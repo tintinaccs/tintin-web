@@ -15,12 +15,14 @@ function escapeHtml(value) {
 }
 
 function state(value) {
+  if (value === 'NOT_APPLICABLE') return value;
   return value === true ? 'PASS' : value === false ? 'FAIL' : 'NOT_VERIFIED';
 }
 
 function label(value) {
   if (value === 'PASS') return 'PASS';
   if (value === 'FAIL') return 'FAIL';
+  if (value === 'NOT_APPLICABLE') return 'NO APLICA';
   return 'NO VERIFICADO';
 }
 
@@ -67,7 +69,7 @@ function item(labelText, value, detail = '') {
     <article class="adm-master-area adm-system-health-item">
       <div class="adm-master-area-head">
         <div class="adm-master-area-title">${escapeHtml(labelText)}</div>
-        <span class="adm-master-area-state" data-state="${itemState}">${label(itemState)}</span>
+        <span class="adm-master-area-state" data-state="${itemState === 'NOT_APPLICABLE' ? 'SKIPPED' : itemState}">${label(itemState)}</span>
       </div>
       ${detail ? `<div class="adm-master-area-detail">${escapeHtml(detail)}</div>` : ''}
     </article>`;
@@ -167,12 +169,16 @@ function render(payload) {
   const checkout = payload?.checkout || {};
   const checkoutState = checkout.available === true ? checkout.ok === true : null;
   const checkoutDetail = checkout.available === true
-    ? `${Number(checkout.paidOrders || 0)} pago(s) aprobado(s) revisado(s) · ${Number(checkout.paidWithoutEmail || 0)} sin correo confirmado · ${Number(checkout.paidAtRiskSheets || 0)} con riesgo de espejo Sheets`
+    ? `${Number(checkout.paidOrders || 0)} pago(s) aprobado(s) revisado(s) · ${Number(checkout.paidWithoutEmail || 0)} sin correo confirmado · ${Number(checkout.paidAtRiskSheets || 0)} con riesgo de espejo Sheets${Number(checkout.historicalWithoutEmailRequired || 0) ? ` · ${Number(checkout.historicalWithoutEmailRequired)} venta(s) local(es) histórica(s) sin correo requerido` : ''}`
     : 'Conciliación de pagos no verificada';
   const paypal = integrations?.paypal || {};
   const paypalProductionReady = paypal.productionReady === true;
+  const paypalOptionalDisabled = paypal.optionalDisabled === true;
+  const paypalState = paypalOptionalDisabled ? 'NOT_APPLICABLE' : paypalProductionReady;
   const paypalMissing = paypalMissingLabels(paypal.missing);
-  const paypalDetail = paypalProductionReady
+  const paypalDetail = paypalOptionalDisabled
+    ? 'Deshabilitado por configuración · no participa del checkout. No habilita pagos PayPal en producción.'
+    : paypalProductionReady
     ? `Activo · entorno Live · tasa ${paypal.rateSource || 'manual'}${paypal.rateSourceDate ? ` · ${paypal.rateSourceDate}` : ''}`
     : paypal.enabled === true
       ? `Sandbox habilitado · requiere entorno Live${paypal.rateSourceDate ? ` · tasa ${paypal.rateSource || 'manual'} ${paypal.rateSourceDate}` : ''}`
@@ -194,21 +200,21 @@ function render(payload) {
     ['Visual Builder', admin.visualBuilder, 'Páginas, borradores e historial'],
     ['Resend', integrations.resend, 'Configuración privada de correo presente'],
     ['Cloudinary', integrations.cloudinary, 'Configuración privada de multimedia presente'],
-    ['PayPal', paypalProductionReady, paypalDetail],
+    ['PayPal', paypalState, paypalDetail],
     ['Google Sheets', integrations.sheets, 'Secreto del puente + protocolo de Apps Script verificado'],
     ['Apps Script', appsScript.protocolOk, appsScript.protocolOk
       ? `Protocolo ${appsScript.revision || 'actual'} · ${Number(appsScript.ms || 0)} ms`
       : `Estado ${appsScript.code || 'no_verificado'} · HTTP ${appsScript.httpStatus || 0}`],
   ];
   areas.innerHTML = rows.map(([name, value, detail]) => item(name, value, detail)).join('');
-  const allGreen = payload?.ok === true && rows.every(([, value]) => value === true);
+  const allGreen = payload?.ok === true && rows.every(([, value]) => value === true || value === 'NOT_APPLICABLE');
   setOverall(allGreen ? 'PASS' : 'FAIL', payload?.checkedAt || '');
   renderMeta(payload);
   renderAuthorities(payload?.authorities || {});
 
   const notice = document.getElementById('system-health-notice');
   if (notice) {
-    const failures = rows.filter(([, value]) => value !== true).map(([name]) => name);
+    const failures = rows.filter(([, value]) => value !== true && value !== 'NOT_APPLICABLE').map(([name]) => name);
     const sync = appsScript.summary || {};
     const syncSuffix = sync.available === true && Number(sync.errors24h || 0) > 0
       ? ` Historial sync registra ${Number(sync.errors24h)} error(es) en las últimas 24 h.`

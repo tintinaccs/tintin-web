@@ -1,3 +1,29 @@
+# Auditoria autonoma de conexiones - 2026-10-10
+
+Agente: Codex /root. Base main `7da0afc46b98a9694c9c5ec71c44fe6363521556`; rama `codex/audit-autonomous-store-20261010`. El usuario autoriza correcciones e integracion; dominio/DNS quedan expresamente pendientes del paso final. Claude ya no participa. No se integra PR #929 (cutover).
+
+## Evidencia actual
+
+- PR #1091 integrado y Pages publicado: deployment `025c343b-3442-449f-b8d6-95cc3fd4b8f9`; main CI `38094080944` y health `38094080984` SUCCESS para esta base. Rules publicadas sin diferencia contra main.
+- Apps Script Tintin Sync - Motor: ComercioLocal.gs cotejado con el codigo revisado; guardado el cambio integrado. Migracion privada de propiedades completada, 411 claves, 409 baselines, bandera local activa y respaldo presente. No se sobrescribieron valores existentes. Wrapper temporal retirado y archivo guardado. Reconciliaciones 20:23/20:25/20:26 completadas en 10.070/10.281/7.187s; 20:22 tardo 108.696s y 20:24 seguia en proceso a 139s. La demora residual NO se declara resuelta. Web App version 23 no se redeployo.
+- Super Admin autenticado responde; Firestore, inventario, usuarios, colecciones, auditoria, configuracion, contenido, Cloudinary y bridge Sheets PASS en consulta real. Colas catalogo, participacion y correo sin pendientes/dead-letter.
+- 423 imagenes unicas verificadas HTTPS Cloudinary con content-type de imagen y respuesta satisfactoria; ninguna URL Shopify. No prueba titularidad ni correspondencia visual del producto.
+- Diagnostico Maestro main `38094857332`: siete suites PASS; Admin FAIL por 12 recortes de tabs perfil en seis anchos 280-480px. Se probo foco y algunos tabs quedaban parcialmente recortados; se conserva el auditor original sin excepciones nuevas. CSS perfil <=720px envuelve las seis opciones en filas. Reproduccion aislada de los seis tamanos PASS con controles originales. Auditor original completo PASS: 18 paginas x 15 tamanos/orientaciones, 270 combinaciones. Build Pages y verificaciones de rutas, CSP, manifiesto y cache PASS para este candidato. Gate final main anterior FAIL.
+
+## Correccion puntual de alertas (PASS_LOCAL)
+
+1. PayPal deshabilitado mediante `feature_disabled` se clasifica NO APLICA. No se activa PayPal, no se declara productionReady y no se eximen configuraciones rotas cuando fue solicitado. Sandbox activo sigue sin cumplir produccion.
+2. Checkout mezclaba ventas locales historicas con compras web: contrato `google-sheets-local` + `historical:true` + `historical_unmanaged` + `localEntryId` no inicia correo de checkout. Se distingue ausencia de notificacion en ese espejo; fallos/pending explicitos, cualquier checkout web y problemas Sheets siguen alertando. UI mantiene el total revisado y muestra ventas historicas sin correo requerido. No se envian correos retrospectivos ni se modifican los 189 registros alertados.
+3. Pruebas backend, render con VM y conciliacion cubren habilitado/deshabilitado/roto, checkout real sin email, historicos, fallos explicitos y estados desconocidos. Cache inmutable versionada; controles y sellos existentes conservados.
+
+## Restauracion de importacion (PASS_LOCAL)
+
+Preview restaurado en Super Admin: 413 productos del archivo reconocidos frente a 414 actuales; no se inicia importacion ni se escribe catalogo. Se detecto aviso falso de colecciones vacias pese a 13 colecciones (12 visibles): restoreLocalJob no cargaba colecciones actuales. Se agrega lectura fresca antes de publicar el preview, preserva estado anterior ante fallo y libera el bloqueo. 21 tests de importacion/identidad/concurrencia PASS, incluida regresion de colecciones. Versiones cache del importador y sus cargadores actualizadas. Verificacion publicada pendiente.
+
+## Pendiente del cierre
+
+CI/plan protegido/revision requerida e integracion del candidato; verificacion UI publicada de las alertas; localizar demora residual de Apps Script; verificaciones autenticadas finales de cuenta/checkout/email/App Check e importacion reanudable; alta/edicion/borrado reversible QA con feedback central. No se realizaron compras, pedidos nuevos, emails ni cambios de cuentas reales en esta pasada. No afirmar listo para importar/cutover hasta completar la evidencia aplicable.
+
 # Registro multidispositivo, OTP y Envíos — 2026-10-10 (America/Buenos_Aires)
 
 Codex /root, GPT-6. Base publicada `34aa0f3b6812bc98aba6ad91075335c81ec7e378`, #1082 integrado con CI 38077553526 y aprobación protegida 38078736757 SUCCESS. Árbol de main idéntico al candidato aprobado; producción tiene fingerprint `f6a6ace672b5df465bcca8c00d0f86cc3122ff3c5b5368fa6e7a04d83be367ba` y salud 38079284371 SUCCESS. CI posterior de main 38079284389 FAIL real por solicitudes de Envíos (121/125 frente al límite 120); su causa se corrige en este candidato, sin relajar el presupuesto.

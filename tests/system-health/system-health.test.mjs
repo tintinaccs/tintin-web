@@ -57,6 +57,7 @@ test('estado integral pasa solo con runtime y puente Sheets confirmados', async 
   assert.equal(report.admin.settings, true);
   assert.equal(report.integrations.sheets, true);
   assert.deepEqual(report.integrations.paypal, {
+    optionalDisabled: false,
     configured: true,
     enabled: true,
     environment: 'live',
@@ -163,4 +164,32 @@ test('probe Apps Script confirma el guard canónico sin token y sin escritura', 
   assert.equal(request.action, 'syncProducts');
   assert.equal('idToken' in request, false);
   assert.deepEqual(request.productIds, []);
+});
+
+
+test('PayPal explícitamente deshabilitado es opcional, no una falla del ecosistema', async () => {
+  const options = {
+    runtimeRunner: async () => runtimeReport(true),
+    sheetsProbe: async () => ({ protocolOk: true }),
+    catalogSheetQueueStatus: async () => null,
+    orderEmailQueueStatus: async () => null,
+    engagementSheetQueueStatus: async () => null,
+    sheetsEvidenceReader: async () => null,
+    checkoutInspector: async () => ({ ok: true }),
+    paypalConfigResolver: async () => ({ enabled: false, mode: 'sandbox', missing: ['feature_disabled', 'client_id'] }),
+  };
+  const disabled = await runSystemHealth(COMPLETE_ENV, options);
+  assert.equal(disabled.ok, true);
+  assert.equal(disabled.integrations.paypal.optionalDisabled, true);
+  assert.equal(disabled.integrations.paypal.productionReady, false);
+  const broken = await runSystemHealth(COMPLETE_ENV, {
+    ...options,
+    paypalConfigResolver: async () => ({ enabled: false, mode: 'live', missing: ['client_id'] }),
+  });
+  assert.equal(broken.ok, false);
+  assert.equal(broken.integrations.paypal.optionalDisabled, false);
+  const checkoutFailure = await runSystemHealth(COMPLETE_ENV, {
+    ...options, checkoutInspector: async () => ({ ok: false, paidWithoutEmail: 1 }),
+  });
+  assert.equal(checkoutFailure.ok, false);
 });

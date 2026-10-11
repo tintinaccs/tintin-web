@@ -185,6 +185,7 @@ export async function runSystemHealth(env, {
     // No ejecuta OAuth ni crea pedidos: solamente hace visible el contrato de
     // configuración que usa /api/paypal-config y el checkout.
     paypal: {
+      optionalDisabled: paypal.enabled !== true && Array.isArray(paypal.missing) && paypal.missing.includes('feature_disabled'),
       configured: paypal.enabled === true,
       enabled: paypal.enabled === true,
       environment: paypal.mode,
@@ -215,7 +216,7 @@ export async function runSystemHealth(env, {
 
   const checkoutHealthy = checkout.available !== true || checkout.ok === true;
   const ok = missingConfig.length === 0 && runtimeReport?.ok === true
-    && integrations.sheets === true && integrations.paypal.productionReady === true && checkoutHealthy;
+    && integrations.sheets === true && (integrations.paypal.optionalDisabled === true || integrations.paypal.productionReady === true) && checkoutHealthy;
 
   return {
     ok,
