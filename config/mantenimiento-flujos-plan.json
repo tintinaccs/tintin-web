@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "b6e5a56278bee67af5040c74112cc370272d89e9",
-  "reason": "Distinguir actividad local de importacion de un job persistido reanudable, preservando guards y operaciones.",
+  "reason": "Distinguir actividad de importacion local y job reanudable; alinear version canonica del generador con loaders publicados.",
   "files": [
     {
       "path": "404.html",
@@ -112,6 +112,11 @@
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "1d0efa55b60db1d407a6e96a8b5f653c3b4d3b509761cc1796e57ca89638aa11",
       "newHash": "a85ab71dff627c6e50000d8b05e886891205c372c31a980fef93f68fc028e5a6"
+    },
+    {
+      "path": "scripts/sincronizar-inicio-navegacion-publica.js",
+      "oldHash": "e8b585a236c1d8518ae42b5cded4ec015aebe7d1de94246500dccfa9e4dd2e01",
+      "newHash": "06b27b57f14191711b5d59a331fb1a27ac98ad9481a739500956461196af7f29"
     },
     {
       "path": "terminos.html",
