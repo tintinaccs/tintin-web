@@ -108,3 +108,48 @@ test('El rechazo de autenticación no se transforma en éxito ni accede a la hoj
   const response = context.doPost({ postData: { contents: JSON.stringify({ action: 'syncProductsPayload', items: [] }) } });
   assert.deepEqual(JSON.parse(response.text), { ok: false, error: 'No autorizado' });
 });
+
+
+test('Audit mirror removes inherited order validation before writing JSON without touching headers or order rules', () => {
+  const calls = [];
+  let staleAuditValidation = true;
+  const sheet = {
+    getMaxRows: () => 100,
+    getLastRow: () => 20,
+    getRange(row, column, height, width) {
+      assert.equal(row, 2);
+      assert.equal(column, 1);
+      assert.equal(width, 14);
+      return {
+        clearDataValidations() { assert.equal(height, 99); staleAuditValidation = false; calls.push('validation'); },
+        clearContent() { assert.equal(height, 19); calls.push('clear'); },
+        setValues(rows) {
+          assert.equal(staleAuditValidation, false, 'K20 rejects JSON while order validation remains');
+          assert.equal(height, 20);
+          assert.equal(rows[19][10], '{"status":"changed"}');
+          calls.push('write');
+        },
+      };
+    },
+  };
+  const context = vm.createContext({});
+  vm.runInContext(read('apps-script/ProductosUnificados.gs'), context);
+  context.tintinProductsSpreadsheet_ = () => ({ getSheetByName(name) { assert.equal(name, context.TINTIN_AUDIT_SHEET); return sheet; } });
+  context.tintinSnapshot_ = kind => { assert.equal(kind, 'audit'); return Array.from({ length: 20 }, (_, i) => ({ eventId: String(i), after: { status: 'changed' } })); };
+  assert.equal(context.tintinPullAuditFromWeb_(), 20);
+  assert.deepEqual(calls, ['validation', 'clear', 'write']);
+  // The shared replacement used by editable orders must preserve validations.
+  context.tintinProductsSpreadsheet_ = () => ({ getSheetByName: () => ({ getLastRow: () => 1, getRange: () => ({ setValues() {}, clearDataValidations() { assert.fail('Editable order validations must remain'); } }) }) });
+  assert.equal(context.tintinReplaceTabRows_(context.TINTIN_ORDERS_SHEET, 2, 29, [Array(29).fill('')]), 1);
+});
+
+test('Audit mirror tolerates a missing sheet and does not clear it when snapshot retrieval fails', () => {
+  const context = vm.createContext({});
+  vm.runInContext(read('apps-script/ProductosUnificados.gs'), context);
+  context.tintinSnapshot_ = () => [];
+  context.tintinProductsSpreadsheet_ = () => ({ getSheetByName: () => null });
+  assert.equal(context.tintinPullAuditFromWeb_(), 0);
+  context.tintinSnapshot_ = () => { throw new Error('snapshot unavailable'); };
+  context.tintinProductsSpreadsheet_ = () => { assert.fail('Failed snapshot must not modify existing mirror'); };
+  assert.throws(() => context.tintinPullAuditFromWeb_(), /snapshot unavailable/);
+});

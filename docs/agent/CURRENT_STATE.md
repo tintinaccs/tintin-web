@@ -1,3 +1,9 @@
+# Auditoria Sheets: validacion heredada - 2026-10-10
+
+Codex /root. Base b4bbdbd47e4b8818fd0e0e02f2369b49b9f53f2c (#1092 integrado/publicado). Evidencia autenticada: ecosistema PASS, importacion restaurada muestra 13 colecciones; salud publica 38098357568 SUCCESS. No equivale a CRUD real ni checkout/email/App Check final.
+
+Fallo real Apps Script 20:53: K20 rechaza JSON de Auditoria por validacion de estados de pedido. Se limpia exclusivamente la validacion del espejo read-only A2:N, despues de recibir snapshot y antes de reemplazar filas. Encabezados, validaciones de pedidos/productos, Firestore, permisos y datos comerciales conservados. PASS_LOCAL 37 pruebas Node, incluida reproduccion de K20, hoja ausente y snapshot fallido. CI, merge y aplicacion a Apps Script pendientes para este candidato. Demoras/timeouts residuales requieren verificar ciclos reales; dominio y #929 intactos.
+
 # Auditoria autonoma de conexiones - 2026-10-10
 
 Agente: Codex /root. Base main `7da0afc46b98a9694c9c5ec71c44fe6363521556`; rama `codex/audit-autonomous-store-20261010`. El usuario autoriza correcciones e integracion; dominio/DNS quedan expresamente pendientes del paso final. Claude ya no participa. No se integra PR #929 (cutover).

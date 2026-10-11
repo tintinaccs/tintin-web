@@ -994,6 +994,12 @@ function tintinPullAuditFromWeb_() {
       record.actorEmail || '', record.actorRole || '', record.action || '', record.entityType || '', record.entityId || '',
       JSON.stringify(record.before || {}), JSON.stringify(record.after || {}), record.origin || '', record.result || '', record.changeId || ''];
   });
+  var auditSheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_AUDIT_SHEET);
+  // Auditoria es un espejo de solo lectura. Las reglas heredadas de pedidos
+  // pueden rechazar el JSON de before/after; no aplican a estos datos.
+  if (auditSheet) {
+    auditSheet.getRange(2, 1, Math.max(1, auditSheet.getMaxRows() - 1), 14).clearDataValidations();
+  }
   return tintinReplaceTabRows_(TINTIN_AUDIT_SHEET, 2, 14, rows);
 }
 

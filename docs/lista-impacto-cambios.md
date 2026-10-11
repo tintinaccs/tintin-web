@@ -1,3 +1,7 @@
+## Auditoria Sheets - 2026-10-10
+
+Unico cambio funcional: preparar validaciones del espejo de Auditoria antes de escribir JSON. No altera filas de encabezado, validaciones editables de pedidos/productos, roles, Auth, stock, precios, endpoints, Shopify ni DNS. Snapshot fallido conserva contenido. Test VM reproduce rechazo K20 y verifica aislamiento. Actualizacion live Apps Script pendiente de integracion aprobada.
+
 ## Restaurar colecciones del preview - 2026-10-10
 
 Lectura fresca de colecciones Firestore antes de restaurar un preview local. No escribe catalogo ni aplica jobs. Mantiene exclusion por busy y Super Admin; fallo de lectura conserva el preview previo y muestra error. Versionado propagado a importador, calidad-interfaz y cargador-pagina con referencias HTML coherentes. Test de regresion de colecciones y suites existentes 21 PASS. Sin cambios DNS.
