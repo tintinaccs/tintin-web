@@ -231,6 +231,13 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       const defaults = profile[CHECKOUT_DEFAULTS_FIELD] || {};
       const invoice = defaults.invoice || {};
 
+      const taxpayerType = document.getElementById('ck-taxpayer-type');
+      if (taxpayerType && !text(taxpayerType.value) && isValidTaxpayerType(invoice.taxpayerType)) {
+        taxpayerType.value = invoice.taxpayerType;
+        taxpayerType.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      const savedNotice = document.getElementById('ck-saved-checkout-data');
+      if (savedNotice) savedNotice.hidden = !(isValidCi(defaults.ci) || isValidRuc(invoice.ruc));
       const ci = text(defaults.ci);
       const ciInput = document.getElementById('ck-ci');
       if (ciInput && !text(ciInput.value) && isValidCi(ci)) {
@@ -258,11 +265,16 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const user = getSessionUser();
     if (!user || user.isAnonymous || !user.uid) return;
     const userRef = doc(db, 'users', user.uid);
-    let previous = {};
-    try {
-      const snapshot = await getDoc(userRef);
-      previous = snapshot.exists() ? (snapshot.data()?.[CHECKOUT_DEFAULTS_FIELD] || {}) : {};
-    } catch {}
+    const withDeadline = operation => {
+      let timer;
+      return Promise.race([Promise.resolve().then(operation), new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error('checkout_profile_timeout')), 5000);
+      })]).finally(() => clearTimeout(timer));
+    };
+    // Una lectura fallida nunca autoriza a reemplazar datos anteriores vacíos.
+    const snapshot = await withDeadline(() => getDoc(userRef));
+    if (getSessionUser()?.uid !== user.uid) throw new Error('checkout_session_changed');
+    const previous = snapshot.exists() ? (snapshot.data()?.[CHECKOUT_DEFAULTS_FIELD] || {}) : {};
 
     const previousInvoice = previous.invoice || {};
     const draftCi = text(draft?.ci);
@@ -282,13 +294,15 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       ? normalizeRuc(draftRuc)
       : (isValidRuc(previousRuc) ? normalizeRuc(previousRuc) : '');
 
-    await setDoc(userRef, {
+    await withDeadline(() => setDoc(userRef, {
       [CHECKOUT_DEFAULTS_FIELD]: {
         ci,
-        invoice: { razonSocial, ruc },
+        shipping: { departamento: text(draft.departamento), selectedCity: text(draft.selectedCity), shippingMethod: text(draft.shippingMethod), encomiendaMode: text(draft.encomiendaMode), address: text(draft.address), referencia: text(draft.referencia) },
+        invoice: { razonSocial, ruc, wanted: draft?.wantsInvoice === true, taxpayerType: draft?.wantsInvoice && isValidTaxpayerType(draft.taxpayerType) ? draft.taxpayerType : (isValidTaxpayerType(previousInvoice.taxpayerType) ? previousInvoice.taxpayerType : '') },
         updatedAt: serverTimestamp()
-      }
-    }, { merge: true });
+      },
+      updatedAt: serverTimestamp()
+    }, { merge: true }));
   }
 
   // Antes de cualquier avance esperamos el scope real del carrito. Así el
@@ -334,6 +348,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   });
 
   subscribeAuthState(user => {
+    if (lastProfilePrefillUid && lastProfilePrefillUid !== user?.uid) {
+      for (const id of ['ck-ci', 'ck-taxpayer-type', 'ck-razon-social', 'ck-ruc']) {
+        const input = document.getElementById(id);
+        if (input) input.value = '';
+      }
+      const notice = document.getElementById('ck-saved-checkout-data');
+      if (notice) notice.hidden = true;
+    }
     lastProfilePrefillUid = '';
     if (user && !user.isAnonymous) prefillCheckoutDefaults(user);
   });
@@ -866,6 +888,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         await persistCheckoutDefaults(draft);
       } catch (profileError) {
         console.warn('[secure-checkout-order] El pedido continúa, pero no se pudieron guardar CI/facturación:', profileError);
+        const notice = document.getElementById('ck-saved-checkout-data');
+        if (notice) { notice.hidden = false; notice.textContent = 'No pudimos guardar estos datos para tu próxima compra. Este pedido puede continuar.'; }
       }
       await reserveCheckoutGuard(draft);
       const result = await createOrderOnServer(draft);

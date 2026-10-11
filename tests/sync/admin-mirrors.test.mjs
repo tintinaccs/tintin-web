@@ -114,6 +114,16 @@ test('Historial sync serializa inserciones y Nuevo pedido no se corta en fila 10
   assert.match(parity, /Productos!\$A\$7:\$F;6;FALSE/);
 });
 
+test('el espejo de Usuarios recupera factura canónica de checkout sin perder compatibilidad histórica', () => {
+  const source=read('functions/api/sheets-sync-snapshot.js');
+  const block=source.slice(source.indexOf('function userRecord('),source.indexOf('function orderRecord('));
+  const project=new Function('decodeFirestoreFields','documentId','asIso',block+'return userRecord;')(fields=>fields,document=>document.name,value=>value||'');
+  const record=project({name:'customer',fields:{checkoutDefaults:{ci:'4123456',shipping:{departamento:'Central'},invoice:{razonSocial:'María López',ruc:'4123456-7',taxpayerType:'fisica'}}}});
+  assert.equal(record.departamento,'Central');assert.equal(record.ci,'4123456');assert.equal(record.razonSocial,'María López');assert.equal(record.ruc,'4123456-7');
+  assert.equal(project({name:'legacy',fields:{invoice:{razonSocial:'Empresa anterior',ruc:'80012345-6'}}}).ruc,'80012345-6');
+  const updated=project({name:'updated',fields:{address:'Dirección anterior',departamento:'Departamento anterior',wantsInvoice:true,invoice:{razonSocial:'Empresa anterior',ruc:'80012345-6',wanted:true},checkoutDefaults:{shipping:{address:'Dirección nueva',departamento:'Central'},invoice:{razonSocial:'María López',ruc:'4123456-7',wanted:false}}}});
+  assert.equal(updated.razonSocial,'María López');assert.equal(updated.ruc,'4123456-7');assert.equal(updated.invoiceWanted,false);assert.equal(updated.address,'Dirección nueva');assert.equal(updated.departamento,'Central');
+});
 
 function snapshotHttpFixture(responses) {
   const source = read('apps-script/ProductosUnificados.gs');
