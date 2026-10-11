@@ -475,7 +475,7 @@ html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-lin
 }
 .tt-card-colors { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; margin:6px 0; }
 .tt-card-color { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border:1px solid transparent; border-radius:50%; padding:7px; background:transparent; cursor:pointer; }
-.tt-card-color .tt-color-swatch { display:block; width:24px; height:24px; border-radius:50%; border:2px solid #fff; outline:1px solid #777; }
+.tt-card-color .tt-color-swatch { display:block; flex:0 0 auto; width:24px; height:24px; max-width:none; border-radius:50%; border:2px solid #fff; outline:1px solid #777; }
 .tt-card-color[aria-pressed="true"] { border-color:var(--color-text-primary,#713C53); }
 .tt-card-color:focus-visible { outline:2px solid #713C53; outline-offset:2px; }
 .tt-card-color.tt-stock-unavailable .tt-color-swatch { position:relative; overflow:hidden; }

@@ -1,3 +1,9 @@
+## 2026-10-11 — Revisión geométrica final de las muestras de color
+
+Codex /root. El navegador confirmó una muestra de24×30px en las recomendaciones: max-width global y flex comprimían el círculo dentro del botón. La regla específica conserva ambas dimensiones sin cambiar colores ni acciones. La regresión de tarjetas ahora comprueba el ancho y alto reales en cinco viewports y tres proyectos. PASS_LOCAL:45/45 casos de paneles, tarjetas y dropdowns en Chromium desktop/mobile y WebKit mobile, incluidos círculos sin compresión en cinco viewports; build,317 assets/64 cargas dinámicas/seis históricos, integridad CSS y544 archivos/78 registros protegidos correctos. CI y revisión nativa del siguiente SHA PENDING; no se hereda PASS del candidato anterior. Se renuevan sólo las tres URLs inmutables que cambian (tema, cargador e interfaz), conservando317 assets y seis entradas históricas. Dominio/DNS y #929/#1101 excluidos.
+
+---
+
 ## 2026-10-11 — Última revisión: disponibilidad por variante y CI del diseño
 
 Codex /root. Continúa #1104 sobre main cf362845. La señal de disponibilidad podía quedar verde con “Agotado”: el renderer actualizaba el texto sin actualizar el estado visual, y el inspector sólo reconocía “Sin stock”. El renderer ahora escribe el estado de la variante, el inspector reconoce ambos textos y el punto usa el token de disponibilidad/agotado. No cambia cantidades, límites ni autorización de compra.
