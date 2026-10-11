@@ -1,3 +1,9 @@
+# Monitor report-only preparado — 2026-10-11
+
+Codex /root. Cambio separado de #1099; base main3488. Diagnóstico exacto Google report-only conservado visible; CSP efectiva y toda excepción JS permanecen bloqueantes. audit:login-isolation62/62PASS_LOCAL; monitor candidato sobre producción publicada: login/perfil200 y AppCheckStatus enabled observados sin sesión de cliente, no prueba OAuth/Firestore ni compra completos. BCP GET/parser oficial2026-10-09/5694.47; PayPal sandbox deshabilitado, tasa pública reciente. Evidencia y límites: [MONITOR_REPORT_ONLY_20261011.md](MONITOR_REPORT_ONLY_20261011.md). CI/merge nuevos pendientes; inventario protegido sin cambios; reconciliar main después de #1099 sin sobrescribir su documentación. No cutover ni escrituras comerciales.
+
+---
+
 # Preparación sin cutover y corrección de bienvenida — 2026-10-11
 
 Codex /root. Base inicial `f67f2c23a550308487d12b26093658a2ef9dcdbe`, que incluye #1094 (importación reanudable/Sheets), #1095 (Continuar/perfil) y #1096 (evidencia de preparación). Se conserva la autorización de integrar correcciones con CI y revisión protegida; la nueva instrucción excluye activar/migrar dominio. No se reutiliza la aprobación de #1095 para un SHA nuevo.
