@@ -1,3 +1,9 @@
+# Estado vigente observado - 2026-10-11
+
+Codex /root. #1092, #1093, #1095 y #1094 integrados. Main funcional `0f2e058c0ab53a596e5016b9db7cd3edd2b12060`; arbol identico al candidato con CI 38137903095 SUCCESS. Mantenimiento protegido 38138762900, Pages e25cc293 y salud real 38138834204 SUCCESS. Backup diario 38135334540 SUCCESS; restauracion real no acreditada. CI main 38138834156 seguia en curso al observar, sin reinicio. Dominio y #929 sin cambios.
+
+Informe actual y limites: [PREPARACION_ACTUAL_20261011.md](PREPARACION_ACTUAL_20261011.md). Alta/importacion QA real pendiente: Chrome rechazo setFiles por falta de Allow access to file URLs. No se declara listo para importar ni para cutover; no se confunde salud/contratos/emulacion con compra, OAuth, correo, App Check o CRUD completo reales. Los bloques siguientes son historial fechado y sus pendientes de integracion ya resueltos quedan supersedidos por esta evidencia.
+
 ## Reconciliacion con main 3335db53 - 2026-10-11
 
 Se preservan cambios integrados de #1095 (login, perfil, navegacion y runtime). Se regeneran versiones, protecciones y manifiesto desde esa base; los checks de candidatos anteriores no acreditan esta combinacion. Dominio sin cambios.
