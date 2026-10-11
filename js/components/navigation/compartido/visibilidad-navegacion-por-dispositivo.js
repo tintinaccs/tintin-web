@@ -86,7 +86,7 @@
       return;
     }
     try {
-      var fbMod = await import('../../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1');
+      var fbMod = await import('../../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2');
       var fs = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
       fs.onSnapshot(fs.doc(fbMod.db, 'settings', 'general'), function (snap) {
         var mode = normalize(snap.exists() ? snap.data() : {});

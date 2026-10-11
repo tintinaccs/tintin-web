@@ -1,3 +1,7 @@
+# Candidato de dominio sin activar — 2026-10-11
+
+Rama separada, NO MERGE/NO DNS. Ver [CUTOVER_BORRADOR_20261011.md](CUTOVER_BORRADOR_20261011.md). El origen tintinaccs.com de esta rama es únicamente un candidato: el main vigente permanece en pages.dev. Requiere autorización futura y revisión del SHA sobre main vigente.
+
 # Preparación sin cutover y corrección de bienvenida — 2026-10-11
 
 Codex /root. Base inicial `f67f2c23a550308487d12b26093658a2ef9dcdbe`, que incluye #1094 (importación reanudable/Sheets), #1095 (Continuar/perfil) y #1096 (evidencia de preparación). Se conserva la autorización de integrar correcciones con CI y revisión protegida; la nueva instrucción excluye activar/migrar dominio. No se reutiliza la aprobación de #1095 para un SHA nuevo.

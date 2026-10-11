@@ -1,3 +1,7 @@
+# Cutover separado, pendiente de autorización — 2026-10-11
+
+Prepara autoridad de dominio, consumidores, URLs públicas, shell/cache, SEO, CSP y diagnóstico. No cambia Rules ni permisos, no ejecuta DNS ni activa hosting, no redirige pages.dev. Impacto y límites: docs/agent/CUTOVER_BORRADOR_20261011.md.
+
 ## Inicio, bienvenida única y datos guardados — 2026-10-11
 
 Se elimina el ocultamiento de inicio por welcome=1. Bienvenida requiere alta canónica activa de cliente, transacción de primera aparición, plazo de lecturas/App Check y cierre inmediato sin red; layout centrado/dvh/safe area y limpieza al cambiar UID. Admin sólo preview explícito. Nombre/apellido/WhatsApp y Rules conservados.

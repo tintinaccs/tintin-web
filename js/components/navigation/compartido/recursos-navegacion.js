@@ -1,4 +1,4 @@
-import { versionedSiteAsset } from './configuracion.js?v=tintin-20261010-whatsapp-release-5';
+import { versionedSiteAsset } from './configuracion.js?v=tintin-20261010-whatsapp-release-5-domain-cutover-20261011-2';
 
 const HEADER_DESKTOP_VERSION = 'tintin-20261010-whatsapp-release-5';
 const HEADER_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2';

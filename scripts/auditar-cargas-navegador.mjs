@@ -7,7 +7,7 @@ import { isReadOnlyAuditRequest } from './lib/audit-read-only-policy.mjs';
 
 const root=path.resolve(import.meta.dirname,'..');
 const base=process.env.TINTIN_LOADING_BASE_URL || 'http://127.0.0.1:4173';
-const publicOrigin='https://tintinaccesorios.pages.dev';
+const publicOrigin='https://tintinaccs.com';
 const bridge=process.env.TINTIN_AUDIT_PROXY_BRIDGE==='1';
 const baseline=process.env.TINTIN_LOADING_BASELINE_SHA || '';
 const widths=(process.env.TINTIN_LOADING_WIDTHS || '320,360,375,390,414,430,768,820,1024,1366,1440').split(',').map(Number);

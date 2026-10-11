@@ -1,6 +1,6 @@
-import { db, auth, appCheck } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { db, auth, appCheck } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
 import { getToken as getAppCheckToken } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
-import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
+import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-cutover-20261011-2';
 import {
   collection,
   addDoc,

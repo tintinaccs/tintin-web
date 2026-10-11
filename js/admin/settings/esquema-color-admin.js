@@ -1,5 +1,5 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1-domain-cutover-20261011-2';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3-domain-cutover-20261011-2';
 /**
  * TINTIN — Motor de esquema de colores del SUPER ADMIN (Super Admin →
  * Apariencia → Esquema de Super Admin), en vivo.
@@ -9,7 +9,7 @@ import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-202610
  * admin.html y admin-images.html. Un esquema del panel nunca toca
  * --color-* (el esquema público), así que jamás se "filtra" hacia afuera.
  */
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
 import { doc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { ADMIN_TOKENS, buildDefaultTokenMap, normalizeLegacyBrandColor } from '../../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1';
 
@@ -77,5 +77,5 @@ async function subscribeToScheme(schemeId) {
 // admin-images.html comparte este motor de colores, pero no debe cargar ese
 // editor ni dejar observadores esperando una interfaz que allí no existe.
 if (document.getElementById('visual-editor')) {
-  import('../appearance/visual-studio-global-admin.js?v=tintin-20260930-semantic-main-cache-1-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1');
+  import('../appearance/visual-studio-global-admin.js?v=tintin-20260930-semantic-main-cache-1-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1-domain-cutover-20261011-2');
 }
