@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "30a3f4faee300ed0151446ceec97e499120c7acd4e2bd8218c9cf2820e846c88",
+  "sourceFingerprint": "0c192962005ac744ffda263a67e2fda33dbb1b5bf0b61d7fba992d12626192b4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1141,
     "textFiles": 1093,
-    "totalBytes": 16713612,
+    "totalBytes": 16714132,
     "pages": 19,
     "modules": 809
   },
@@ -33742,8 +33742,8 @@
     },
     {
       "path": "tests/accounts/incomplete-profile-flags.test.mjs",
-      "bytes": 1418,
-      "sha256": "6f0c9b30a326058646a62ebc9a5b7b102f01379ae00bd2dce31a4ed5adb386ac",
+      "bytes": 1930,
+      "sha256": "212cd5d225b80efd6451adca4dd26bf65145f9708802b1095d2ac135b95f7dbe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33768,10 +33768,16 @@
           "line": 3
         },
         {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
           "raw": "../../js/pages/profile/configuracion-inicial-perfil.mjs",
           "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
           "dynamic": false,
-          "line": 4
+          "line": 5
         }
       ],
       "endpoints": []
@@ -43567,7 +43573,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 38743,
-      "sha256": "5287d43e2d04ed0fad313c5949c9d753fd5851315ef4d1c06079db105936a636"
+      "sha256": "244a58f1ff59c7871ec12bf0ceeb0c21011563a4110e2292d671be405edbb5b6"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -44142,8 +44148,8 @@
     {
       "path": "docs/agent/CUTOVER_BORRADOR_20261011.md",
       "extension": ".md",
-      "bytes": 2522,
-      "sha256": "6bde19534e7e442fb8078f556d15001637479aee4d089a6ab758ecefffe0d6c7"
+      "bytes": 2530,
+      "sha256": "24dd1bdfbd327ac0381c74724656a4daad7a1bac59ba43f25d46f133888c0052"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -48120,8 +48126,8 @@
     {
       "path": "tests/accounts/incomplete-profile-flags.test.mjs",
       "extension": ".mjs",
-      "bytes": 1418,
-      "sha256": "6f0c9b30a326058646a62ebc9a5b7b102f01379ae00bd2dce31a4ed5adb386ac"
+      "bytes": 1930,
+      "sha256": "212cd5d225b80efd6451adca4dd26bf65145f9708802b1095d2ac135b95f7dbe"
     },
     {
       "path": "tests/accounts/profile-gate-all-pages.test.mjs",
