@@ -1,6 +1,6 @@
 # Cutover preparado: NO INTEGRAR NI ACTIVAR
 
-Este candidato separado se prepara por solicitud del propietario, quien excluye migrar todavía. No autoriza cambiar DNS, añadir Custom Domain, redireccionar pages.dev ni integrar este PR. Base de preparación d26f14a4bdb93ac6d87b6ff1b4f8e5ff129d732d (#1100); actualizar contra main y regenerar plan antes de una futura activación.
+Este candidato separado se prepara por solicitud del propietario, quien excluye migrar todavía. No autoriza cambiar DNS, añadir Custom Domain, redireccionar pages.dev ni integrar este PR. Base de preparación 3488ebfd4315eceb58a3ca43ae5daefc30390775 (main, #1100 integrado); actualizar contra main y regenerar plan antes de una futura activación.
 
 ## Cambios preparados
 
