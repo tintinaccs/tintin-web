@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "b6e5a56278bee67af5040c74112cc370272d89e9",
-  "reason": "Corregir inicio y bienvenida única confirmada; recuperar envío/facturación y completar espejo Sheets. Se preserva #1097; SDK y Rules reales en emuladores, regresiones UI y responsive; dominio sólo preparado.",
+  "reason": "Corregir bloqueo de bienvenida, primera aparición única y recuperación de envío y facturación guardados, incluidas prioridades del espejo Sheets; mantener origen pages.dev sin activar migración.",
   "files": [
     {
       "path": "_headers",
@@ -71,7 +71,7 @@
     {
       "path": "functions/api/sheets-sync-snapshot.js",
       "oldHash": "ca76d1aceb708768a6ad8b0decb7b9eeb7dbbbbeaed8634b6c7562c0a154d44e",
-      "newHash": "021ce359dbe363a43ce605621b711d148e773909eab2cca1cfb17f3fd83d38b8"
+      "newHash": "b1517cb617eb120ddfe66e0691ad69b1b26f3f6d86135c5b57c72531c3b518ea"
     },
     {
       "path": "index.html",
