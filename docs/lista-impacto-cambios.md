@@ -1,3 +1,7 @@
+## Aviso de importacion restaurada - 2026-10-11
+
+Badge distingue actividad de esta sesion del estado persistido: APLICANDO solo mientras apply esta activo; RUNNING restaurado es REANUDABLE; FAILED requiere reintento. Flag local no se persiste ni cambia autoridad del job. Versiones de cuatro recursos y HTML coherentes mediante generador cache; no modifica CRUD, stock, catalogo, permisos, DNS ni servicios. Verificacion publicada posterior a integracion; 56 regresiones PASS_LOCAL.
+
 ## Snapshot HTTP Sheets - 2026-10-11
 
 Wrapper interno conserva status HTTP y rechaza body nulo; snapshot exige array records y limita reintentos a lectura y fallos transitorios confirmados. Errores no incluyen HTML, secretos ni payloads. No altera permisos, stock, cuentas, endpoints, triggers, DNS o Shopify. Aplicacion Apps Script HEAD posterior a integracion; version Web App no se cambia. Regresiones VM usan funciones originales y verifican que mutaciones no reintenten. Harness publico admite CRLF sin cambiar sus aserciones.

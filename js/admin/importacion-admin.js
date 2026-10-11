@@ -33,7 +33,7 @@ import {
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1-loads-20261007-1';
 import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1-loads-20261007-1';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261005-import-one-click-1-loads-20261007-1-resume-sheets-1';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261005-import-one-click-1-loads-20261007-1-resume-sheets-1-import-progress-1';
 import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261003-inventory-review-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
@@ -417,7 +417,7 @@ if (!window.TintinAdminShopifyImportBooted) {
           : attention.length ? `${attention.length} producto(s) requieren atención; los otros ${state.records.length - attention.length} están listos.`
             : `Los ${state.records.length} productos están listos: colección, precio y stock reconocidos.`;
     state.ui.jobStatus.textContent = state.job ? `${state.job.status} · ${state.job.jobId || state.jobId}` : 'Sin import job persistido';
-    state.ui.badge.textContent = state.job?.status === 'COMPLETED' ? 'APLICADO' : state.job?.status === 'RUNNING' ? 'APLICANDO' : 'SIN ESCRIBIR';
+    state.ui.badge.textContent = state.applying ? 'APLICANDO' : state.job?.status === 'COMPLETED' ? 'APLICADO' : state.job?.status === 'RUNNING' ? 'REANUDABLE' : state.job?.status === 'FAILED' ? 'REQUIERE REINTENTO' : 'SIN ESCRIBIR';
     catalogApply.render(totals);
   }
 

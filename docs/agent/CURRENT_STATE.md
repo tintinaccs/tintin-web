@@ -1,3 +1,9 @@
+## Aviso de importacion: actividad local y job persistido - 2026-10-11
+
+Codex /root. Observacion real en Pages: restaurar preview imp_muw0m0tc_psiczxcm muestra 413 productos, catalogo 414, cero nuevos y todos los visibles SKIP; no se clico Importar. Badge mostraba APLICANDO solo porque job persistido era RUNNING, aunque la sesion local no ejecutaba apply.
+
+Cambio minimo: state.applying se activa solo tras confirmar apply y se libera en finally; badge APLICANDO requiere esa actividad local. RUNNING restaurado muestra REANUDABLE y FAILED muestra REQUIERE REINTENTO. No se cambian estados del servidor, jobs, productos, colecciones ni permisos. Versiones de apply/importador/calidad/loader propagadas a HTML; generador cache registra cuatro recursos nuevos y conserva seis historicos, 316 assets. 56 pruebas existentes de importacion PASS_LOCAL despues de versionar. audit:cache-versioning PASS_LOCAL: 316 recursos y 64 cargas dinamicas, sin reutilizar URL inmutable con bytes distintos; git diff --check sin errores. Integracion, protecciones sobre base definitiva, manifiesto y cotejo Pages pendientes; #1097 integrado en b6e5a56278bee67af5040c74112cc370272d89e9: CI 38141905977 y mantenimiento protegido 38143024859 SUCCESS para 3cb5cc756c40b82afff5040c78877a3e628e76b2. Rama del aviso basada en ese main, arbol identico al candidato validado; no se hereda PASS_CI para este ajuste. Dominio intacto.
+
 ## CI snapshot: diagnostico nativo WebKit - 2026-10-11
 
 Codex /root. CI 38140539333 del candidato 1c786a5d termina FAIL (26/27 runtime): Auth emulator accounts:lookup cancelado por WebKit. Traza descargada: beforeunload en 123373.864 ms, error nativo en 123384.991 ms (11.127 ms despues), nombre Fetch API cannot load http y stack fetch native. Guardado/perfil/recarga y persistencia del caso pasan; no hubo error JS init ni rechazo real capturado para ese evento. No se reejecuta CI como sustituto del diagnostico.
