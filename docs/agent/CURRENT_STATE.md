@@ -1,3 +1,9 @@
+# Importacion reanudable y Sheets - 2026-10-10
+
+Codex /root. Base ac7e394874d2668dd8e0ba505f1a9340cf6bc84c (#1093 mergeado, salud 38100080991 SUCCESS). #1092 maestro 38098359320 SUCCESS tras repeticion de pasos fallidos por espera CI. Apps Script HEAD recargado coincide con parche integrado; ciclos posteriores 7.394/10.178/6.752 segundos completos. Demoras intermitentes no declaradas resueltas. QA real: edicion de coleccion oculta sin productos y restauracion, ventanas centrales OP-20261010-000001/000002 Correcto; descripcion original verificada despues de recarga. Alta/borrado real no acreditados.
+
+Nuevo fallo reproducido: reanudacion pierde envio a Sheets de productos previamente guardados por el mismo job; reconciliacion fresca los marca MATCHED_EXISTING y los excluye de creacion. Se recuperan sus IDs confirmados del catalogo fresco, sin sobrescribir documentos; se sincronizan junto con nuevos IDs en exito y fallo parcial. Falta de coordinador, rechazo o falta de confirmacion Sheets conserva FAILED/reintentable, sin prometer COMPLETED ni minuto automatico. Se contabilizan omitidos y recuperados en el progreso. 7 regresiones del recorrido real de apply y 56 pruebas Phase2 y 2 pruebas Chromium de identidad/reanudacion PASS_LOCAL. Primera generacion detecto imports absolutos de la fixture; se usan URLs como en el test existente, sin relajar el verificador. CI/merge/publicacion pendientes para este candidato. Sin writes comerciales, cambios DNS, permisos, reglas o copia real de medios.
+
 # Auditoria Sheets: validacion heredada - 2026-10-10
 
 Codex /root. Base b4bbdbd47e4b8818fd0e0e02f2369b49b9f53f2c (#1092 integrado/publicado). Evidencia autenticada: ecosistema PASS, importacion restaurada muestra 13 colecciones; salud publica 38098357568 SUCCESS. No equivale a CRUD real ni checkout/email/App Check final.
