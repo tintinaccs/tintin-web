@@ -1,3 +1,7 @@
+## Snapshot HTTP Sheets - 2026-10-11
+
+Wrapper interno conserva status HTTP y rechaza body nulo; snapshot exige array records y limita reintentos a lectura y fallos transitorios confirmados. Errores no incluyen HTML, secretos ni payloads. No altera permisos, stock, cuentas, endpoints, triggers, DNS o Shopify. Aplicacion Apps Script HEAD posterior a integracion; version Web App no se cambia. Regresiones VM usan funciones originales y verifican que mutaciones no reintenten. Harness publico admite CRLF sin cambiar sus aserciones.
+
 ## Reanudar importacion y sincronizar Sheets - 2026-10-10
 
 Se altera solo el coordinador create-only de importacion: IDs recuperados del mismo job van a Sheets sin reescritura; productos ajenos se omiten. Sheets no confirmado mantiene estado reintentable y libera busy aunque falle el push de recuperacion. Contadores incluyen registros omitidos por reconciliacion fresca. 7 regresiones incluidas en suite CI Phase2 (56 PASS). Versiones propagadas desde apply a importer, quality y loader con HTML y generador canonico. Sin cambios backend, Rules, stock, roles, App Check, Shopify, DNS ni datos reales.
