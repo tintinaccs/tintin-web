@@ -822,8 +822,11 @@ function tintinCallInternalWebhook_(path, payload) {
     payload: JSON.stringify(payload)
   });
   var body = tintinParseJsonResponse_(response);
-  if (response.getResponseCode() < 200 || response.getResponseCode() >= 300 || body.ok !== true) {
-    throw new Error(body.error || 'La tienda rechazó la sincronización.');
+  var status = response.getResponseCode();
+  if (status < 200 || status >= 300 || !body || body.ok !== true) {
+    var failure = new Error('HTTP ' + status + ': ' + (body && body.error || 'La tienda rechazo la sincronizacion.'));
+    failure.httpStatus = status;
+    throw failure;
   }
   return body;
 }
@@ -878,14 +881,17 @@ function tintinSnapshot_(entity) {
   var attempt = 0;
   while (true) {
     try {
-      return tintinCallInternalWebhook_(TINTIN_SNAPSHOT_PATH, { action: 'snapshot', entity: entity }).records || [];
+      var snapshot = tintinCallInternalWebhook_(TINTIN_SNAPSHOT_PATH, { action: 'snapshot', entity: entity });
+      if (!Array.isArray(snapshot.records)) throw new Error('El snapshot no contiene records validos; se conserva el espejo.');
+      return snapshot.records;
     } catch (error) {
       var message = String(error && error.message || error);
-      // Apps Script sometimes fails before receiving an HTTP response when its
-      // outbound connection cannot resolve/reach Pages. Snapshot POSTs are
-      // strictly read-only, so retry only these transport failures; never
-      // retry an HTTP/API rejection or a mutating webhook here.
-      if (attempt >= 2 || !/address unavailable|dns lookup failed|name resolution/i.test(message)) throw error;
+      // Only this read-only snapshot retries confirmed transient HTTP statuses
+      // or the known transport failures. Access/validation rejections and
+      // malformed successful snapshots remain errors; mutations never retry.
+      var transientHttp = [408, 429, 500, 502, 503, 504].indexOf(error && error.httpStatus) !== -1;
+      var transientTransport = /address unavailable|dns lookup failed|name resolution/i.test(message);
+      if (attempt >= 2 || !(transientHttp || transientTransport)) throw error;
       Utilities.sleep(attempt === 0 ? 250 : 750);
       attempt += 1;
     }

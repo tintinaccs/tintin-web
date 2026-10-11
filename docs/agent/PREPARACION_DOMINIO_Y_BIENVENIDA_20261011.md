@@ -1,6 +1,6 @@
 # Preparación sin activar dominio y corrección de primer ingreso
 
-Agente: Codex /root. Base: f67f2c23a550308487d12b26093658a2ef9dcdbe (incluye #1094, #1095 y #1096). Autorización: preparar la migración sin ejecutarla; corregir arranque, bienvenida y reutilización de datos. La preparación histórica de #929 no se considera evidencia actual ni se integra sobre main vigente.
+Agente: Codex /root. Base: f67f2c23a550308487d12b26093658a2ef9dcdbe (incluye #1094, #1095 y #1096). Reconciliación posterior: b6e5a56278bee67af5040c74112cc370272d89e9 (#1097); se conservan recuperación Sheets, runner y calibración de Auth/WebKit. Autorización: preparar la migración sin ejecutarla; corregir arranque, bienvenida y reutilización de datos. La preparación histórica de #929 no se considera evidencia actual ni se integra sobre main vigente.
 
 ## Causas y comportamiento
 
@@ -34,7 +34,7 @@ Observaciones actuales guardadas en `artifacts/domain-preparation/` (no se versi
 
 ## Validación local observada
 
-- 320 controles Node de checkout/sync/login/perfil, sin fallos/skip.
+- 320 controles Node iniciales; tras reconciliar #1097, 329/329 checkout/sync/login/perfil, sin fallos/skip.
 - 45/45 navegador con cero retries: 27 casos con SDK/servicios aislados reales; 15 componente UI con dependencias controladas; tres calibraciones del monitor. Tras los últimos cambios: 18/18 focalizados en bienvenida/recuperación Firestore, sin reintentos automáticos.
 - 126/126 combinaciones de páginas y geometría estática en siete viewports; la guía dinámica se prueba separadamente en cuatro tamaños sobre cada motor/proyecto.
 - Build y cache/CSP/diagnóstico correctos; 317 assets y 64 mecanismos dinámicos; auditores focalizados de incorporación, entrega, confiabilidad, imágenes y Tintin correctos; 48 contratos de mantenimiento/blobs PASS.

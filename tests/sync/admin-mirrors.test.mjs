@@ -122,3 +122,79 @@ test('el espejo de Usuarios recupera factura canónica de checkout sin perder co
   assert.equal(record.departamento,'Central');assert.equal(record.ci,'4123456');assert.equal(record.razonSocial,'María López');assert.equal(record.ruc,'4123456-7');
   assert.equal(project({name:'legacy',fields:{invoice:{razonSocial:'Empresa anterior',ruc:'80012345-6'}}}).ruc,'80012345-6');
 });
+
+function snapshotHttpFixture(responses) {
+  const source = read('apps-script/ProductosUnificados.gs');
+  const names = ['tintinParseJsonResponse_', 'tintinCallInternalWebhook_', 'tintinSnapshot_'];
+  const code = names.map(name => {
+    const match = source.match(new RegExp('function ' + name + '\\([^)]*\\) \\{[\\s\\S]*?\\n\\}'));
+    assert.ok(match, name);
+    return match[0];
+  }).join('\n');
+  const calls = []; const waits = [];
+  const context = {
+    tintinStoreOrigin_: () => 'https://example.test',
+    tintinWebhookSecret_: () => 'fixture-secret-never-log',
+    TINTIN_SNAPSHOT_PATH: '/api/sheets-sync-snapshot',
+    Utilities: { sleep: ms => waits.push(ms) },
+    UrlFetchApp: { fetch: (url, options) => {
+      calls.push({ url, options });
+      const next = responses[Math.min(calls.length - 1, responses.length - 1)];
+      return { getResponseCode: () => next.status, getContentText: () => next.body };
+    } },
+  };
+  vm.runInNewContext(code, context);
+  return { context, calls, waits };
+}
+
+for (const status of [502, 503, 429]) {
+  test(`snapshot retries typed HTTP ${status} then returns confirmed records`, () => {
+    const fixture = snapshotHttpFixture([
+      { status, body: '<html>upstream failure fixture-secret-never-log</html>' },
+      { status: 200, body: JSON.stringify({ ok: true, records: [{ eventId: 'fixture' }] }) },
+    ]);
+    assert.equal(fixture.context.tintinSnapshot_('audit')[0].eventId, 'fixture');
+    assert.equal(fixture.calls.length, 2);
+    assert.deepEqual(fixture.waits, [250]);
+    assert.ok(fixture.calls.every(call => call.url.endsWith('/api/sheets-sync-snapshot')));
+  });
+}
+
+test('snapshot transient rejection remains an error after three attempts without exposing response body', () => {
+  const fixture = snapshotHttpFixture([{ status: 504, body: '<html>fixture-secret-never-log</html>' }]);
+  assert.throws(() => fixture.context.tintinSnapshot_('audit'), error => {
+    assert.equal(error.httpStatus, 504);
+    assert.match(error.message, /HTTP 504/);
+    assert.doesNotMatch(error.message, /fixture-secret|<html>/);
+    return true;
+  });
+  assert.equal(fixture.calls.length, 3);
+  assert.deepEqual(fixture.waits, [250, 750]);
+});
+
+for (const status of [400, 401, 403]) {
+  test(`snapshot preserves HTTP ${status} and never retries validation or access rejection`, () => {
+    const fixture = snapshotHttpFixture([{ status, body: '<html>denied</html>' }]);
+    assert.throws(() => fixture.context.tintinSnapshot_('audit'), error => error.httpStatus === status);
+    assert.equal(fixture.calls.length, 1);
+    assert.deepEqual(fixture.waits, []);
+  });
+}
+
+test('mutating webhook does not inherit snapshot retries', () => {
+  const fixture = snapshotHttpFixture([{ status: 503, body: '{"ok":false,"error":"temporarily unavailable"}' }]);
+  assert.throws(() => fixture.context.tintinCallInternalWebhook_('/api/sheets-admin-webhook', { action: 'updateUser' }), error => error.httpStatus === 503);
+  assert.equal(fixture.calls.length, 1);
+  assert.deepEqual(fixture.waits, []);
+});
+
+test('snapshot rejects missing/malformed records instead of replacing a mirror with an invented empty snapshot', () => {
+  for (const body of ['{"ok":true}', '{"ok":true,"records":{}}']) {
+    const fixture = snapshotHttpFixture([{ status: 200, body }]);
+    assert.throws(() => fixture.context.tintinSnapshot_('audit'), /snapshot.*records/i);
+    assert.equal(fixture.calls.length, 1);
+    assert.deepEqual(fixture.waits, []);
+  }
+  const empty = snapshotHttpFixture([{ status: 200, body: '{"ok":true,"records":[]}' }]);
+  assert.equal(empty.context.tintinSnapshot_('audit').length, 0);
+});

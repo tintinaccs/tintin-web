@@ -26,7 +26,7 @@ finally{
   if(fs.existsSync(htmlReport)){
     const artifact=path.join(root,'artifacts/real-interactions/runtime-report.zip');
     fs.mkdirSync(path.dirname(artifact),{recursive:true});
-    try{fs.rmSync(artifact,{force:true});execFileSync('zip',['-qr',artifact,'.'],{cwd:htmlReport});}
+    try{fs.rmSync(artifact,{force:true});if(process.platform==='win32')execFileSync('tar.exe',['-a','-c','-f',artifact,'.'],{cwd:htmlReport});else execFileSync('zip',['-qr',artifact,'.'],{cwd:htmlReport});}
     catch(error){console.error('Could not archive runtime HTML report:',error.message);process.exitCode=1;}
   }
   fs.rmSync(temporary,{recursive:true,force:true});

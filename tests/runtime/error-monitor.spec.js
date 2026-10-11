@@ -13,3 +13,40 @@ test('el monitor falla ante excepciones reales y promesas sin capturar',async({p
   await expect.poll(()=>errors.some(message=>message.includes('runtime-monitor-rejection-probe'))).toBe(true);
   expect(browserDiagnostics).toEqual([]);
 });
+
+
+test('native Auth emulator cancellation is diagnostic only inside the document-leaving window', async () => {
+  const fs = require('node:fs');
+  const vm = require('node:vm');
+  const { EventEmitter } = require('node:events');
+  const source = fs.readFileSync(require.resolve('./runtime-error-monitor.js'), 'utf8');
+  const nativeError = {
+    name: 'Fetch API cannot load http',
+    message: '/127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=demo-key due to access control checks.',
+    stack: 'Fetch API cannot load http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=demo-key due to access control checks.\n    at fetch ([native code]:0:0)',
+  };
+  for (const fixture of [
+    { name: 'confirmed native cancellation', leaving: true, delta: 11, diagnostic: true },
+    { name: 'normal document access failure', leaving: false, delta: 11 },
+    { name: 'expired leaving window', leaving: true, delta: 1000 },
+    { name: 'JavaScript exception', leaving: true, delta: 11, change: { name: 'Error' } },
+    { name: 'missing native stack', leaving: true, delta: 11, change: { stack: '' } },
+    { name: 'another emulator endpoint', leaving: true, delta: 11, change: { message: nativeError.message.replace('accounts:lookup', 'accounts:signInWithPassword') } },
+    { name: 'production service', leaving: true, delta: 11, change: { message: nativeError.message.replace('/127.0.0.1:9099/', '/identitytoolkit.googleapis.com/') } },
+  ]) {
+    let now = 100000;
+    const sandbox = { module: { exports: {} }, Date: { now: () => now } };
+    vm.runInNewContext(source, sandbox);
+    const page = new EventEmitter();
+    const context = { addInitScript: async () => {} };
+    const monitor = await sandbox.module.exports.installRuntimeErrorMonitor(page, context);
+    if (fixture.leaving) page.emit('console', { text: () => '[runtime-document-leaving]' });
+    now += fixture.delta;
+    page.emit('pageerror', { ...nativeError, ...fixture.change });
+    expect(monitor.browserDiagnostics.length, fixture.name).toBe(fixture.diagnostic ? 1 : 0);
+    expect(monitor.errors.length, fixture.name).toBe(fixture.diagnostic ? 0 : 1);
+    // The same text surfaced as an actual unhandled rejection still fails.
+    page.emit('console', { text: () => '[runtime-js-rejection] ' + nativeError.message });
+    expect(monitor.errors.length, fixture.name + ': JS rejection').toBe(fixture.diagnostic ? 1 : 2);
+  }
+});
