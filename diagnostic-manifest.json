@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4dc5e5aa09ec0cf1c24b6e4199608f02454289991d15cdfe77189a8ca2bb23f2",
+  "sourceFingerprint": "8ad2e2d11305f4045b6fa4a57d5959c36cd0f077ef5fcc57e6a94e4023201030",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1140,
     "textFiles": 1092,
-    "totalBytes": 16668574,
+    "totalBytes": 16669086,
     "pages": 19,
     "modules": 809
   },
@@ -33742,8 +33742,8 @@
     },
     {
       "path": "tests/accounts/incomplete-profile-flags.test.mjs",
-      "bytes": 1418,
-      "sha256": "6f0c9b30a326058646a62ebc9a5b7b102f01379ae00bd2dce31a4ed5adb386ac",
+      "bytes": 1930,
+      "sha256": "212cd5d225b80efd6451adca4dd26bf65145f9708802b1095d2ac135b95f7dbe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33768,10 +33768,16 @@
           "line": 3
         },
         {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
           "raw": "../../js/pages/profile/configuracion-inicial-perfil.mjs",
           "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
           "dynamic": false,
-          "line": 4
+          "line": 5
         }
       ],
       "endpoints": []
@@ -48114,8 +48120,8 @@
     {
       "path": "tests/accounts/incomplete-profile-flags.test.mjs",
       "extension": ".mjs",
-      "bytes": 1418,
-      "sha256": "6f0c9b30a326058646a62ebc9a5b7b102f01379ae00bd2dce31a4ed5adb386ac"
+      "bytes": 1930,
+      "sha256": "212cd5d225b80efd6451adca4dd26bf65145f9708802b1095d2ac135b95f7dbe"
     },
     {
       "path": "tests/accounts/profile-gate-all-pages.test.mjs",
