@@ -1,0 +1,16 @@
+(node:74782) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/js/components/forms/utilidades-username.js?v=tintin-20261010-whatsapp-release-5 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Mis datos permite guardar desde el mismo panel que contiene los campos editables (1.624886ms)
+✔ Guardar usa el contrato firstName/lastName del separador real (6.247754ms)
+✔ Guardar conserva el rechazo de nombre incompleto y libera el botón (0.639443ms)
+✔ Guardar conserva teléfono E164 compatible con su reserva al editar sólo el nombre (1.723492ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 304.206659

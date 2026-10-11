@@ -1,0 +1,22 @@
+✖ bootstrap observa su rechazo, notifica el fallo y conserva el rechazo para consumidores (3.309221ms)
+(node:83120) PromiseRejectionHandledWarning: Promise rejection was handled asynchronously (rejection id: 2)
+(Use `node --trace-warnings ...` to show where the warning was created)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56.277658
+
+✖ failing tests:
+
+test at tests/navigation/controller-bootstrap.test.mjs:6:1
+✖ bootstrap observa su rechazo, notifica el fallo y conserva el rechazo para consumidores (3.309221ms)
+  Error: controller module unavailable
+      at TestContext.<anonymous> (file:///workspace/tintin-web/tests/navigation/controller-bootstrap.test.mjs:8:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)

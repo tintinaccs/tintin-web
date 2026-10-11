@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const failures = [];
@@ -67,11 +68,29 @@ check(
 check('Montserrat italic conserva el preload contractual', italicPreloads.length === html.filter(([, source]) => source.includes('montserrat-latin-wght-normal.woff2\" as=\"font\"')).length, html.filter(([file, source]) => source.includes('montserrat-latin-wght-normal.woff2\" as=\"font\"') && !source.includes('montserrat-latin-wght-italic.woff2\" as=\"font\"')).map(([file]) => file).join(', '));
 
 const perfHelpers = read('tests/performance/_helpers.js');
+function measurementOrigin(overrides = {}) {
+  const environment = { ...process.env };
+  delete environment.PERF_BASE_URL;
+  delete environment.PLAYWRIGHT_BASE_URL;
+  return execFileSync(process.execPath, ['-e', "process.stdout.write(require('./tests/performance/_helpers.js').BASE_URL)"], {
+    cwd: root, env: { ...environment, ...overrides }, encoding: 'utf8',
+  });
+}
+const canonicalOrigin = require('../config/public-site.json').origin.replace(/\/+$/, '');
 check(
-  'La medición apunta al origen canónico de Cloudflare',
-  perfHelpers.includes("require('../../config/public-site.json')") &&
-    perfHelpers.includes('process.env.PERF_BASE_URL || PUBLIC_ORIGIN'),
-  'Las pruebas no deben medir la redirección antigua de GitHub Pages.'
+  'La medición usa el origen canónico sin overrides',
+  measurementOrigin() === canonicalOrigin,
+  'El valor por defecto debe coincidir con config/public-site.json, sin redirección a GitHub Pages.'
+);
+check(
+  'La medición respeta el mismo origen explícito que Playwright',
+  measurementOrigin({ PLAYWRIGHT_BASE_URL: 'http://127.0.0.1:4173///' }) === 'http://127.0.0.1:4173',
+  'Un test local no puede usar silenciosamente producción; normalizar barras finales.'
+);
+check(
+  'El override específico de rendimiento conserva prioridad',
+  measurementOrigin({ PERF_BASE_URL: 'http://127.0.0.1:4174/', PLAYWRIGHT_BASE_URL: 'http://127.0.0.1:4173/' }) === 'http://127.0.0.1:4174',
+  'PERF_BASE_URL debe tener prioridad sobre PLAYWRIGHT_BASE_URL.'
 );
 check(
   'Web Vitals incluye DCL, INP, transferencias, duplicados y lecturas',

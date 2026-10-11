@@ -1,0 +1,522 @@
+[
+  {
+    "file": "tests/cart/color-choice-browser.spec.js",
+    "explicitCI": false,
+    "routes": 2,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/cart/quantity-browser.spec.js",
+    "explicitCI": true,
+    "routes": 1,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/catalog/master-presentation.spec.js",
+    "explicitCI": false,
+    "routes": 3,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/checkout/coupon-recovery.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/checkout/invoice-ui.spec.js",
+    "explicitCI": false,
+    "routes": 1,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/checkout/login-required-browser.spec.js",
+    "explicitCI": true,
+    "routes": 1,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/checkout/navigation-responsive.spec.js",
+    "explicitCI": true,
+    "routes": 8,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/checkout/saved-identity.spec.js",
+    "explicitCI": false,
+    "routes": 1,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/checkout/shipping-page-runtime.spec.js",
+    "explicitCI": false,
+    "routes": 4,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/login/google-loader-recovery.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/login/location-map-browser.spec.js",
+    "explicitCI": false,
+    "routes": 2,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/login/profile-availability-recovery.spec.js",
+    "explicitCI": true,
+    "routes": 4,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/login/saved-address-map-browser.spec.js",
+    "explicitCI": false,
+    "routes": 2,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/collection-menu-parity.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/header-responsive.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/live-activity-notices.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/loader-shell-wait.spec.js",
+    "explicitCI": true,
+    "routes": 5,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": true,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/master-home.spec.js",
+    "explicitCI": false,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/mobile-halo-checkout-labels.spec.js",
+    "explicitCI": false,
+    "routes": 1,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/mobile-navigation-front.spec.js",
+    "explicitCI": false,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/public-initial-layout.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 1,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/navigation/whatsapp-fixed.spec.js",
+    "explicitCI": false,
+    "routes": 1,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/operations/central-loader-ui.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/operations/loader-palette.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 1,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/performance/admin.performance.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 1,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/performance/offline-recovery.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/performance/product.performance.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/performance/public-pages.performance.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/performance/realtime-sync.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 1,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/performance/responsive-performance.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/profile/account-wholesale-sync.spec.js",
+    "explicitCI": true,
+    "routes": 3,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/profile/initial-profile-render.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/profile/wholesale-session-recovery.spec.js",
+    "explicitCI": true,
+    "routes": 1,
+    "extractedRuntime": true,
+    "setContent": true,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/seo/phase11-seo.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/admin-commerce-shopify.spec.js",
+    "explicitCI": false,
+    "routes": 12,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/admin-sidebar-interaction.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/admin-white-icons.spec.js",
+    "explicitCI": true,
+    "routes": 4,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/import-identity-review.spec.js",
+    "explicitCI": true,
+    "routes": 3,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/inventory-reservation-review.spec.js",
+    "explicitCI": true,
+    "routes": 1,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/phase10-accessibility.spec.js",
+    "explicitCI": true,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/phase8-ui-ux.spec.js",
+    "explicitCI": true,
+    "routes": 2,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/product-card-colors.spec.js",
+    "explicitCI": false,
+    "routes": 3,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/product-color-gallery.spec.js",
+    "explicitCI": false,
+    "routes": 15,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/product-first-paint.spec.js",
+    "explicitCI": false,
+    "routes": 1,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/product-review-rating-required.spec.js",
+    "explicitCI": false,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": true,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/product-small-controls.spec.js",
+    "explicitCI": true,
+    "routes": 4,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/public-spacing-product.spec.js",
+    "explicitCI": true,
+    "routes": 4,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/ui-ux/whatsapp-feedback-responsive.spec.js",
+    "explicitCI": false,
+    "routes": 4,
+    "extractedRuntime": true,
+    "setContent": false,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/visual-builder/apariencia-preview-abajo.spec.js",
+    "explicitCI": false,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": true,
+    "artificialWaits": 0,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/visual-builder/visual-builder-runtime.spec.js",
+    "explicitCI": false,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 1,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/visual-builder/visual-builder-ui.spec.js",
+    "explicitCI": false,
+    "routes": 0,
+    "extractedRuntime": true,
+    "setContent": true,
+    "artificialWaits": 2,
+    "conditionalSkip": false,
+    "force": false
+  },
+  {
+    "file": "tests/visual-builder/visual-studio-v2-runtime.spec.js",
+    "explicitCI": false,
+    "routes": 0,
+    "extractedRuntime": false,
+    "setContent": false,
+    "artificialWaits": 2,
+    "conditionalSkip": false,
+    "force": false
+  }
+]

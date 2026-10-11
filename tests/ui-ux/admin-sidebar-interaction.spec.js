@@ -18,7 +18,7 @@ async function load(page,width) {
   await page.mouse.move(width-10,350);
 }
 for(const width of [541,600,768,900,1024,1440]) {
-  test(`rail, hover y fijar sin saltos ni etiquetas rotas a ${width}px`,async({page})=>{
+  test(`rail, hover y fijar sin saltos ni etiquetas rotas a ${width}px`,async({page},testInfo)=>{
     await load(page,width);
     const sidebar=page.locator('#adm-sidebar'), toggle=page.locator('#adm-sidebar-toggle');
     await expect.poll(async()=>Math.round((await sidebar.boundingBox()).width)).toBe(74);
@@ -39,11 +39,11 @@ for(const width of [541,600,768,900,1024,1440]) {
     expect(await page.locator('#adm-nav .adm-nav-icon svg').first().evaluate(e=>getComputedStyle(e).color)).toBe('rgb(113, 60, 83)');
     expect(await page.locator('#adm-nav .adm-nav-icon svg rect').first().evaluate(e=>getComputedStyle(e).stroke)).toBe('rgb(113, 60, 83)');
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-    if(width===768||width===1440) await page.screenshot({path:path.resolve(root,'../../outputs',`panel-lateral-${width}.png`)});
+    if(width===768||width===1440) await page.screenshot({path:testInfo.outputPath(`panel-lateral-${width}.png`)});
   });
 }
 for(const width of [320,390,540]) {
-  test(`menú táctil, foco y escape a ${width}px`,async({page})=>{
+  test(`menú táctil, foco y escape a ${width}px`,async({page},testInfo)=>{
     await load(page,width);
     const hamburger=page.locator('#adm-hamburger'),sidebar=page.locator('#adm-sidebar');
     await expect(sidebar).toBeHidden();
@@ -62,7 +62,7 @@ for(const width of [320,390,540]) {
     await expect(hamburger).toHaveAttribute('aria-expanded','false');
     await expect(sidebar).toBeHidden();
     await hamburger.click();
-    if(width===390)await page.screenshot({path:path.resolve(root,'../../outputs','panel-lateral-390.png')});
+    if(width===390)await page.screenshot({path:testInfo.outputPath('panel-lateral-390.png')});
     await page.keyboard.press('Escape');await expect(hamburger).toHaveAttribute('aria-expanded','false');await expect(hamburger).toBeFocused();
     expect(await page.locator('.adm-main').evaluate(e=>e.inert)).toBe(false);
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -70,7 +70,7 @@ for(const width of [320,390,540]) {
 }
 
 for (const width of [768,1440]) {
-  test(`cabecera sin superposición y centros iguales con menú largo a ${width}px`, async ({page}) => {
+  test(`cabecera sin superposición y centros iguales con menú largo a ${width}px`, async ({page},testInfo) => {
     await load(page,width); await page.setViewportSize({width,height:500});
     await page.evaluate(()=>{
       document.querySelector('.adm-user-name').textContent='TINTIN ACCESORIOS Y RELOJES';
@@ -89,6 +89,6 @@ for (const width of [768,1440]) {
     expect(expanded.user).toBeGreaterThanOrEqual(expanded.logo);
     const textTop=await page.locator('.adm-user-name').evaluate(e=>e.getBoundingClientRect().top);
     expect(textTop).toBeGreaterThanOrEqual(expanded.user);
-    await page.screenshot({path:path.resolve(root,'../../outputs',`sidebar-identidad-${width}.png`)});
+    await page.screenshot({path:testInfo.outputPath(`sidebar-identidad-${width}.png`)});
   });
 }

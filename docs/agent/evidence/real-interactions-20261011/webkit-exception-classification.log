@@ -1,0 +1,34 @@
+CI 38110771584: native WebKit channel-cancellation diagnostics during navigation.
+Local probe with window ErrorEvent/unhandledrejection observers: 7 pageerror diagnostics; 0 DOM JavaScript exceptions/rejections.
+Original direct emulator origin and official SDK restored; exact native-cancellation classification with lifecycle guard.
+i  emulators: Starting emulators: auth, firestore
+i  emulators: Detected demo project ID "demo-tintin-interactions", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node node_modules/playwright/cli.js test --config=playwright.runtime.config.js --project=webkit-mobile --grep=correo
+[WebServer] (node:80631) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:80631) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/functions/api/email-otp-send.js is not specified and it doesn't parse as CommonJS.
+[WebServer] Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+[WebServer] To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+[WebServer] (node:80639) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:80639) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/functions/product.js is not specified and it doesn't parse as CommonJS.
+[WebServer] Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+[WebServer] To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+
+Running 1 test using 1 worker
+
+(node:80647) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+  ✓  1 [webkit-mobile] › tests/runtime/critical-flows.spec.js:55:1 › correo → OTP real → Continuar → perfil persistido → sesión conservada (11.3s)
+
+  1 passed (12.4s)
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  auth: Stopping Authentication Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

@@ -1,0 +1,16 @@
+
+> audit:phase5
+> node scripts/auditar-fase-5-rendimiento.js
+
+OK   — La portada usa una consulta acotada sin listener masivo
+OK   — Páginas informativas no importan products-store al iniciar
+OK   — Checkout reliability se limita a Checkout
+OK   — El shell reconoce URLs limpias de Cloudflare
+OK   — Public shell usa la versión canónica en todos los HTML
+OK   — tienda.js usa la revisión canónica del generador público
+OK   — Montserrat italic conserva el preload contractual
+FAIL — La medición apunta al origen canónico de Cloudflare
+       Las pruebas no deben medir la redirección antigua de GitHub Pages.
+OK   — Web Vitals incluye DCL, INP, transferencias, duplicados y lecturas
+
+Fase 5: 1 fallo(s).

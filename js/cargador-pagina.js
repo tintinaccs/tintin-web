@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-5-first-render-merge-20261010-1-restore-collections-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-5-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1');
     }
   }
 
@@ -867,7 +867,7 @@
     if (isVisualPreviewFrame) return;
     if (!window.TintinSiteActivityBooted) {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-loads-20261007-1');
+      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-loads-20261007-1-login-unblocked-20261011-1');
     }
   }
 

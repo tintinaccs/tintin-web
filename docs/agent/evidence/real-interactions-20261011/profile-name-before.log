@@ -1,0 +1,43 @@
+(node:72366) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/tintin-web/js/components/forms/utilidades-username.js?v=tintin-20261010-whatsapp-release-5 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /workspace/tintin-web/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Mis datos permite guardar desde el mismo panel que contiene los campos editables (1.431702ms)
+✖ Guardar usa el contrato firstName/lastName del separador real (1.740917ms)
+✔ Guardar conserva el rechazo de nombre incompleto y libera el botón (0.312912ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 104.271364
+
+✖ failing tests:
+
+test at tests/profile/profile-save-panel.test.mjs:34:1
+✖ Guardar usa el contrato firstName/lastName del separador real (1.740917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   '❌ Escribí nombre y apellido reales'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///workspace/tintin-web/tests/profile/profile-save-panel.test.mjs:36:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+      at run (node:internal/test_runner/harness:398:12)
+      at test (node:internal/test_runner/harness:407:12)
+      at file:///workspace/tintin-web/tests/profile/profile-save-panel.test.mjs:34:1 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '❌ Escribí nombre y apellido reales' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

@@ -16,6 +16,10 @@ function clean(value, maxLength = 32) {
  * No devuelve UID, correo ni ningún dato de la cuenta propietaria.
  */
 export async function onRequest(context) {
+  return handlePhoneAvailability(context);
+}
+
+export async function handlePhoneAvailability(context, { requireUser = requireFirebaseUser, get = firestoreAdminGet } = {}) {
   const { request, env } = context;
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
@@ -26,7 +30,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ available: false, error: 'method_not_allowed' }, 405, origin, requestUrl);
 
   try {
-    const user = await requireFirebaseUser(request);
+    const user = await requireUser(request);
     const body = await request.json().catch(() => ({}));
     const country = findCountryByCode(clean(body?.country, 4));
     const rawPhone = clean(body?.phone);
@@ -34,7 +38,7 @@ export async function onRequest(context) {
       return jsonResponse({ available: false, valid: false }, 200, origin, requestUrl);
     }
     const key = phoneKey(rawPhone, country);
-    const reservation = await firestoreAdminGet(env, `phoneReservations/${encodeURIComponent(key)}`);
+    const reservation = await get(env, `phoneReservations/${encodeURIComponent(key)}`);
     const owner = reservation ? String(decodeFirestoreFields(reservation.fields)?.uid || '') : '';
     return jsonResponse({ available: !owner || owner === user.uid, valid: true }, 200, origin, requestUrl);
   } catch (error) {
