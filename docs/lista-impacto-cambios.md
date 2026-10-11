@@ -1,6 +1,10 @@
-## Aviso de importacion restaurada - 2026-10-11
+## Inicio, bienvenida única y datos guardados — 2026-10-11
 
-Badge distingue actividad de esta sesion del estado persistido: APLICANDO solo mientras apply esta activo; RUNNING restaurado es REANUDABLE; FAILED requiere reintento. Flag local no se persiste ni cambia autoridad del job. Versiones de cuatro recursos y HTML coherentes mediante generador cache; no modifica CRUD, stock, catalogo, permisos, DNS ni servicios. Verificacion publicada posterior a integracion; 56 regresiones PASS_LOCAL.
+Se elimina el ocultamiento de inicio por welcome=1. Bienvenida requiere alta canónica activa de cliente, transacción de primera aparición, plazo de lecturas/App Check y cierre inmediato sin red; layout centrado/dvh/safe area y limpieza al cambiar UID. Admin sólo preview explícito. Nombre/apellido/WhatsApp y Rules conservados.
+
+Checkout mantiene validación condicional y libreta existentes; completa tipo de contribuyente y preferencias de envío, conserva factura al comprar sin ella, rechaza guardado tras lectura fallida/cambio UID y muestra errores. Ubicación también se guarda en encomienda a puerta. Snapshot de Usuarios recupera factura desde checkoutDefaults para el espejo Sheets, sin segunda autoridad de datos. Cache transitiva, generador de shell y CSP/diagnóstico regenerados canónicamente. Pruebas: Auth/Firestore emulados con SDK/Rules reales, casos de UI controlados separados, recuperación/guardado y errores de lectura/identidad.
+
+Migración sólo preparada: DNS web todavía Shopify y origen main pages.dev. Lectura pública de Authentication confirma destinos autorizados; captura DNS y backup verificado. El futuro candidato de dominio queda borrador, sin merge/deploy de cutover. No se modifican DNS, correo, stock, pedidos reales, App Check, MFA, workflows, protecciones ni revisores. Evidencia y límites: docs/agent/PREPARACION_DOMINIO_Y_BIENVENIDA_20261011.md.
 
 ## Snapshot HTTP Sheets - 2026-10-11
 
@@ -181,3 +185,9 @@ Revisar editor, vista previa, publicación, sanitización, fallback, SEO, caché
 - [ ] El despliegue terminó correctamente.
 - [ ] No quedaron archivos, imports, estilos o TODO obsoletos.
 - [ ] Documentación y registro de mantenimiento actualizados.
+
+
+## Aviso de importacion restaurada - 2026-10-11
+
+Badge distingue actividad de esta sesion del estado persistido: APLICANDO solo mientras apply esta activo; RUNNING restaurado es REANUDABLE; FAILED requiere reintento. Flag local no se persiste ni cambia autoridad del job. Versiones de cuatro recursos y HTML coherentes mediante generador cache; no modifica CRUD, stock, catalogo, permisos, DNS ni servicios. Verificacion publicada posterior a integracion; 56 regresiones PASS_LOCAL.
+

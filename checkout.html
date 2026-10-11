@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-import-progress-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-import-progress-reconcile-20261011-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
@@ -288,6 +288,7 @@
           <span><strong>Quiero factura</strong><small>Completá tus datos tributarios para incluirlos en el pedido.</small></span>
         </label>
       </div>
+      <p id="ck-saved-checkout-data" role="status" hidden>Recuperamos los datos guardados en tu cuenta. Podés revisarlos y editarlos para este pedido.</p>
       <div id="ck-invoice-fields" style="display:none">
         <div class="ck-field">
           <label class="ck-label" for="ck-taxpayer-type">Tipo de contribuyente *</label>
@@ -428,7 +429,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isNationalMobileInput, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial, isValidTaxpayerType } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -707,6 +708,7 @@ function populateCities() {
   // cargada) — se resetea todo el paso en vez de dejarlo en un estado inválido.
   deptSelect.value = '';
   resetCitySelect();
+  applySavedCheckoutShipping();
 }
 
 function resetCitySelect() {
@@ -877,7 +879,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1325,7 +1327,6 @@ document.getElementById('btn-step2-next').onclick = () => {
       return;
     }
     document.getElementById('ck-referencia').removeAttribute('aria-invalid');
-    saveLocationToProfileIfChecked();
   } else if (orderData.shippingMethod === 'encomienda') {
     const encError = encomiendaValidationError(orderData.encomiendaMode, {
       mapLocation: orderData.mapLocation,
@@ -1358,6 +1359,7 @@ document.getElementById('btn-step2-next').onclick = () => {
 
   orderData.city = city === RETIRO_VALUE ? 'Retiro coordinado' : city;
   orderData.departamento = departamento;
+  if (needsLocation) saveLocationToProfileIfChecked();
   goToStep(2);
 
   applySavedCheckoutIdentity(currentUserProfile, currentUser);
@@ -1813,20 +1815,59 @@ function maybeApplySavedLocation() {
   });
 }
 
+function clearCheckoutShippingForSessionChange() {
+  for (const id of ['ck-address', 'ck-referencia', 'ck-location-name', 'ck-email']) {
+    document.getElementById(id).value = '';
+  }
+  document.getElementById('ck-departamento').value = '';
+  document.getElementById('ck-departamento').onchange();
+  orderData.mapLocation = null;
+  _mapInstance?.clearLocation();
+  _savedLocationConfirm?.reset();
+}
+
+// Recupera únicamente opciones que siguen existiendo en la configuración actual.
+function applySavedCheckoutShipping() {
+  const saved = currentUserProfile?.checkoutDefaults?.shipping;
+  if (!saved) return;
+  for (const [id, value] of [['ck-address', saved.address], ['ck-referencia', saved.referencia]]) {
+    const input = document.getElementById(id);
+    if (!input.value && value) input.value = value;
+  }
+  const department = document.getElementById('ck-departamento');
+  const city = document.getElementById('ck-city');
+  if (department.value || city.value || !saved.departamento) return;
+  if (!Array.from(department.options).some(option => option.value === saved.departamento)) return;
+  department.value = saved.departamento;
+  department.onchange();
+  const option = Array.from(city.options).find(option => option.value === saved.selectedCity &&
+    (saved.shippingMethod === 'retiro' || option.parentElement?.id === `ck-city-${saved.shippingMethod}-group`));
+  if (!option) return;
+  city.selectedIndex = option.index;
+  city.onchange();
+  if (saved.shippingMethod === 'encomienda') encomiendaModes.setMode(saved.encomiendaMode || '');
+}
+
 // "Guardar esta ubicación en mi perfil" — no bloquea el avance del checkout
 // si falla (es una comodidad, no un requisito de la compra).
 function saveLocationToProfileIfChecked() {
   const checkbox = document.getElementById('ck-save-location');
   if (!checkbox?.checked || !currentUser || currentUser.isAnonymous || !orderData.mapLocation) return;
-  const { lat, lng, name, address } = orderData.mapLocation;
+  const { lat, lng, name } = orderData.mapLocation;
+  const address = orderData.address || orderData.mapLocation.address || '';
   const location = { lat, lng, name, ...(address ? { address } : {}) };
   const userRef = doc(db, 'users', currentUser.uid);
   getDoc(userRef).then(snap => {
     const added = addAddress(readAddressBook(snap.exists() ? snap.data() : {}), location);
     // Libreta llena o dirección repetida: no se pisa nada (es solo una comodidad).
-    if (!added.ok) return;
-    return setDoc(userRef, { ...addressBookPatch(added.list), updatedAt: serverTimestamp() }, { merge: true });
-  }).catch(() => {});
+    if (!added.ok && added.reason !== 'duplicate') { showCkToast('Tu libreta está llena. Podés editarla en Mi cuenta.'); return; }
+    return setDoc(userRef, { ...addressBookPatch(added.list), updatedAt: serverTimestamp() }, { merge: true }).then(() => {
+      if (currentUser?.uid === userRef.id) showCkToast('Ubicación guardada en tu cuenta.');
+    });
+  }).catch(error => {
+    console.warn('[checkout] No se pudo guardar la ubicación:', error);
+    if (currentUser?.uid === userRef.id) showCkToast('No pudimos guardar la ubicación. Tu compra puede continuar; reintentá el guardado con conexión.');
+  });
 }
 
 // ---- INIT ----
@@ -1867,6 +1908,7 @@ subscribeSession(snapshot => {
   const profileGeneration = ++checkoutProfileGeneration;
   if (snapshot.status === AUTH_STATES.UNKNOWN) {
     authReady = false;
+    if (currentUser?.uid) clearCheckoutShippingForSessionChange();
     currentUser = null;
     currentUserProfile = null;
     applySavedCheckoutIdentity(null, null);
@@ -1876,6 +1918,7 @@ subscribeSession(snapshot => {
   // referencia local hace que las comprobaciones de invitado y la hidratación
   // de perfil usen la misma identidad, sin depender de una variable global.
   const user = snapshot.user;
+  if (currentUser?.uid && currentUser.uid !== user?.uid) clearCheckoutShippingForSessionChange();
   currentUser = user;
   currentUserProfile = null;
   applySavedCheckoutIdentity(null, user);
@@ -1898,6 +1941,7 @@ subscribeSession(snapshot => {
       if (profileGeneration !== checkoutProfileGeneration || currentUser?.uid !== user.uid) return;
       currentUserProfile = profile;
       applySavedCheckoutIdentity(profile, user);
+      applySavedCheckoutShipping();
       // Fase E: cuenta bloqueada — no puede comprar, se tapa el checkout entero
       // apenas se sabe, sin esperar a que llegue a "Confirmar pedido".
       if (currentUserProfile?.blocked) showBlockedOverlay();
@@ -1918,7 +1962,7 @@ subscribeSession(snapshot => {
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1"></script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2" defer></script>
-<script src="tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1" defer></script>
+<script src="tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

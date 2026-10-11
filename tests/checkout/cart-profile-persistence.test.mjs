@@ -30,7 +30,7 @@ test('CI and invoice defaults are persisted and prefilled from the user profile'
   assert.match(source, /CHECKOUT_DEFAULTS_FIELD = 'checkoutDefaults'/);
   assert.match(source, /async function prefillCheckoutDefaults\(user\)/);
   assert.match(source, /async function persistCheckoutDefaults\(draft\)/);
-  assert.match(source, /invoice: \{ razonSocial, ruc \}/);
+  assert.match(source, /invoice: \{ razonSocial, ruc, wanted:.*taxpayerType:/);
   assert.match(source, /await persistCheckoutDefaults\(draft\)/);
 });
 
