@@ -156,3 +156,31 @@ test('cuenta muestra el perfil persistido, guarda cambios y los conserva al reca
   await expect(page.locator('#perfil-nombre')).toHaveValue('María López');
   await page.screenshot({path:testInfo.outputPath('perfil-guardado.png'),fullPage:true});
 });
+
+test('contrato real de persistencia de checkout: Firestore confirma y recarga factura/envío sin borrarlos al comprar sin factura',async({page,request})=>{
+  const email='checkout-memory@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);
+  await expect(page).toHaveURL(/index\.html/);
+  const source=await (await request.get('/js/orders/pedido-checkout-seguro.js')).text();
+  const block=source.slice(source.indexOf('  async function prefillCheckoutDefaults('),source.indexOf('  // Antes de cualquier avance'));
+  const dependency=path=>source.split('\n').find(line=>line.includes(path)).split("'")[1];
+  const dependencies={firebase:dependency('core/firebase/firebase.js'),session:dependency('core/auth/coordinador-sesion.js'),validators:dependency('validacion-documentos-py.js')};
+  const draft={ci:'4123456',wantsInvoice:true,taxpayerType:'fisica',razonSocial:'María González',ruc:'4123456-7',departamento:'Central',selectedCity:'San Lorenzo',shippingMethod:'delivery',encomiendaMode:'',address:'Casa de María',referencia:'Portón blanco'};
+  async function execute(action,draft){
+    return page.evaluate(async({block,dependencies,action,draft})=>{
+      const base=new URL('/js/orders/pedido-checkout-seguro.js',location.origin);
+      const [{db},session,validators,sdk]=await Promise.all([import(new URL(dependencies.firebase,base).href),import(new URL(dependencies.session,base).href),import(new URL(dependencies.validators,base).href),import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')]);
+      await session.waitForSession();
+      if(action==='prefill')for(const id of ['ck-ci','ck-taxpayer-type','ck-razon-social','ck-ruc']){const input=document.createElement('input');input.id=id;document.body.append(input);}
+      const api=new Function('db','getSessionUser','doc','getDoc','setDoc','serverTimestamp','isValidCi','normalizeCi','isValidRuc','normalizeRuc','isValidRazonSocial','isValidTaxpayerType',"const text=value=>String(value||'').trim(); const CHECKOUT_DEFAULTS_FIELD='checkoutDefaults';let lastProfilePrefillUid='';"+block+'return {prefillCheckoutDefaults,persistCheckoutDefaults};')(db,session.getSessionUser,sdk.doc,sdk.getDoc,sdk.setDoc,sdk.serverTimestamp,validators.isValidCi,validators.normalizeCi,validators.isValidRuc,validators.normalizeRuc,validators.isValidRazonSocial,validators.isValidTaxpayerType);
+      if(action==='persist')await api.persistCheckoutDefaults(draft);
+      else {await api.prefillCheckoutDefaults(session.getSessionUser());return Object.fromEntries(['ck-ci','ck-taxpayer-type','ck-razon-social','ck-ruc'].map(id=>[id,document.getElementById(id).value]));}
+    },{block,dependencies,action,draft});
+  }
+  await execute('persist',draft);
+  const saved=await state(request,email);expect(saved.profile.checkoutDefaults.invoice).toMatchObject({taxpayerType:'fisica',razonSocial:draft.razonSocial,ruc:draft.ruc});
+  expect(saved.profile.checkoutDefaults.shipping).toMatchObject({selectedCity:'San Lorenzo',referencia:'Portón blanco'});
+  await page.reload();await expect(page.locator('header:visible,#tt-tabbar:visible').first()).toBeVisible();
+  expect(await execute('prefill')).toMatchObject({'ck-ci':'4123456','ck-taxpayer-type':'fisica','ck-razon-social':draft.razonSocial,'ck-ruc':draft.ruc});
+  await execute('persist',{...draft,wantsInvoice:false,ci:'',taxpayerType:'',razonSocial:'',ruc:''});
+  expect((await state(request,email)).profile.checkoutDefaults.invoice).toMatchObject({taxpayerType:'fisica',razonSocial:draft.razonSocial,ruc:draft.ruc});
+});

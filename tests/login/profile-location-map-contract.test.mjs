@@ -15,10 +15,12 @@ test('Perfil usa el mismo mapa interactivo y geolocalización que el alta', () =
   assert.doesNotMatch(profile, /attachLocationPicker/);
 });
 
-test('la bienvenida mantiene la tienda oculta hasta cerrar el mensaje', () => {
+test('la bienvenida mantiene el inicio visible y libera el scroll sin esperar la red', () => {
   const home = fs.readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
-  assert.match(home, /tt-welcome-pending/);
+  assert.doesNotMatch(home, /tt-welcome-pending/);
   assert.match(welcome, /releaseWelcomeGate/);
+  assert.doesNotMatch(welcome, /const finish = async/);
+  assert.match(welcome, /welcomeTutorialPending === true/);
   assert.match(welcome, /releaseWelcomeGate\(\);\r?\n        window\.dispatchEvent/);
 });
 

@@ -68,7 +68,7 @@ function userRecord(document) {
   const user = decodeFirestoreFields(document.fields || {});
   const checkoutDefaults = user.checkoutDefaults && typeof user.checkoutDefaults === 'object' ? user.checkoutDefaults : {};
   const savedLocation = user.savedLocation && typeof user.savedLocation === 'object' ? user.savedLocation : {};
-  const invoice = user.invoice && typeof user.invoice === 'object' ? user.invoice : {};
+  const invoice = { ...(checkoutDefaults.invoice || {}), ...(user.invoice && typeof user.invoice === 'object' ? user.invoice : {}) };
   return {
     uid: documentId(document), name: user.name || user.displayName || '', firstName: user.firstName || '', lastName: user.lastName || '', email: user.email || '',
     createdAt: asIso(user.createdAt || user.registeredAt), role: user.role || 'client', blocked: user.blocked === true,
@@ -77,7 +77,7 @@ function userRecord(document) {
     phone: user.phone || '', ci: user.ci || checkoutDefaults.ci || '', profileStatus: user.profileStatus || '',
     dob: asIso(user.dob || user.birthDate), address: user.address || savedLocation.address || '',
     locationName: savedLocation.name || '', addressLat: Number.isFinite(Number(savedLocation.lat)) ? Number(savedLocation.lat) : '',
-    addressLng: Number.isFinite(Number(savedLocation.lng)) ? Number(savedLocation.lng) : '', departamento: user.departamento || checkoutDefaults.departamento || '',
+    addressLng: Number.isFinite(Number(savedLocation.lng)) ? Number(savedLocation.lng) : '', departamento: user.departamento || checkoutDefaults.shipping?.departamento || checkoutDefaults.departamento || '',
     invoiceWanted: invoice.wanted === true || user.wantsInvoice === true, razonSocial: invoice.razonSocial || user.razonSocial || '',
     ruc: invoice.ruc || user.ruc || '',
     lastAccess: asIso(user.lastAccess || user.lastLoginAt), usernameChangeUsed: user.usernameChangeUsed === true,

@@ -208,7 +208,7 @@ export async function ensureUserProfile(db, user, method, options = {}) {
   await withProfileDeadline(() => setDoc(ref, identityPatch, { merge: true }), 'write');
 
   const role = data.role || 'client';
-  const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
+  const welcomePending = role === 'client' && data.welcomeTutorialPending === true && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
   return { role, blocked: !!data.blocked, isNew: false, welcomePending, method, authMethods };
 }
 

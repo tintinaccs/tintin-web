@@ -1,6 +1,6 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
-import { doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { doc, getDoc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { getUserRole, SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
 import {
   DEFAULT_WELCOME_STEPS,
@@ -34,32 +34,25 @@ import {
     } catch {}
   }
 
-  function toDate(v){
-    if (!v) return null;
-    if (v.toDate) return v.toDate();
-    const d = new Date(v);
-    return Number.isNaN(d.getTime()) ? null : d;
-  }
-
-  function recentlyCreated(user, data){
-    const now = Date.now();
-    const limit = 72 * 60 * 60 * 1000;
-    return [toDate(user?.metadata?.creationTime), toDate(data?.createdAt)].filter(Boolean).some(d => Math.abs(now - d.getTime()) <= limit);
-  }
-
   function seen(data){
-    return !!(data?.welcomeTutorialSeen || data?.welcomeTutorialCompletedAt || data?.onboardingCompleted === true);
+    return !!(data?.welcomeTutorialSeen || data?.welcomeTutorialCompletedAt || data?.welcomeTutorialFirstShownAt || data?.onboardingCompleted === true);
   }
 
   function shouldShow(user, data, preview){
     if (!user) return false;
     if (preview) return true;
-    // Sin datos obligatorios completos no hay bienvenida: el tutorial marca el
-    // alta como terminada y dejaría pasar a una cuenta incompleta.
-    if (String(data?.profileStatus || '').toLowerCase() === 'incomplete') return false;
-    if (seen(data)) return false;
-    const p = new URLSearchParams(location.search);
-    return p.get('welcome') === '1' || data?.welcomeTutorialPending === true || data?.onboardingCompleted === false || recentlyCreated(user, data);
+    // Sólo el alta canónica pendiente habilita la primera guía. La URL y la
+    // fecha de creación no convierten cuentas existentes en altas nuevas.
+    return data?.role === 'client' && data?.profileStatus === 'active' &&
+      data?.blocked !== true && data?.welcomeTutorialPending === true && !seen(data);
+  }
+
+  function bounded(operation){
+    let timer;
+    return Promise.race([
+      Promise.resolve().then(operation),
+      new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('welcome_timeout')), 5000); })
+    ]).finally(() => clearTimeout(timer));
   }
 
   function esc(v){
@@ -69,9 +62,9 @@ import {
   }
 
   async function readConfig(){
-    if (!await appCheckReady) return normalizeWelcomeConfig();
+    if (!await bounded(() => appCheckReady)) return normalizeWelcomeConfig();
     try {
-      const snap = await getDoc(doc(db, 'settings', 'welcomeTutorial'));
+      const snap = await bounded(() => getDoc(doc(db, 'settings', 'welcomeTutorial')));
       const data = snap.exists() ? snap.data() : {};
       return normalizeWelcomeConfig(data);
     } catch (e) {
@@ -81,9 +74,9 @@ import {
   }
 
   async function readUser(uid){
-    if (!await appCheckReady) return {};
+    if (!await bounded(() => appCheckReady)) return {};
     try {
-      const snap = await getDoc(doc(db, 'users', uid));
+      const snap = await bounded(() => getDoc(doc(db, 'users', uid)));
       return snap.exists() ? snap.data() : {};
     } catch (e) {
       console.warn('[welcome-runtime] usuario no leído:', e);
@@ -91,18 +84,27 @@ import {
     }
   }
 
-  async function markSeen(uid, reason){
-    if (!await appCheckReady) return;
-    await setDoc(doc(db, 'users', uid), {
-      welcomeTutorialSeen: true,
-      welcomeTutorialPending: false,
-      welcomeTutorialCompletedAt: serverTimestamp(),
-      welcomeTutorialClosedReason: reason,
-      welcomeTutorialVersion: WELCOME_VERSION,
-      onboardingCompleted: true,
-      onboardingCompletedAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    }, { merge:true });
+  async function claimWelcome(user, reason){
+    if (!await bounded(() => appCheckReady)) return false;
+    const ref = doc(db, 'users', user.uid);
+    // La transacción evita dos primeras guías simultáneas en otros dispositivos.
+    // No se muestra si el servidor no confirma el registro de la aparición.
+    return bounded(() => runTransaction(db, async transaction => {
+      const snapshot = await transaction.get(ref);
+      if (!snapshot.exists() || !shouldShow(user, snapshot.data(), false)) return false;
+      transaction.update(ref, {
+        welcomeTutorialSeen: true,
+        welcomeTutorialPending: false,
+        welcomeTutorialCompletedAt: serverTimestamp(),
+        welcomeTutorialClosedReason: reason,
+        ...(reason === 'shown' ? { welcomeTutorialFirstShownAt: serverTimestamp() } : {}),
+        welcomeTutorialVersion: WELCOME_VERSION,
+        onboardingCompleted: true,
+        onboardingCompletedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      return true;
+    }));
   }
 
   function cleanUrl(){
@@ -146,7 +148,7 @@ import {
     document.documentElement.classList.add('tt-welcome-scroll-locked');
     document.documentElement.style.overflow = 'hidden';
     if (document.body) {
-      document.body.style.position='fixed'; document.body.style.top='-'+y+'px'; document.body.style.left='0'; document.body.style.right='0'; document.body.style.width='100%'; document.body.style.overflow='hidden'; document.body.style.touchAction='none';
+      document.body.style.position='fixed'; document.body.style.top='-'+y+'px'; document.body.style.left='0'; document.body.style.right='0'; document.body.style.width='100%'; document.body.style.overflow='hidden'; document.body.style.touchAction='auto';
     }
   }
 
@@ -163,7 +165,7 @@ import {
     if (document.getElementById('tt-welcome-runtime-style')) return;
     const st = document.createElement('style');
     st.id = 'tt-welcome-runtime-style';
-    st.textContent = `html.tt-welcome-scroll-locked,html.tt-welcome-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}.tt-welcome-overlay{position:fixed;inset:0;z-index:2147482500;background:rgba(91,35,57,.42);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:22px;font-family:Montserrat;animation:ttWelcomeFade .24s ease both}.tt-welcome-card{width:min(520px,100%);max-height:min(82vh,720px);overflow:auto;background:#fff;border:1.5px solid rgba(255,182,200,.8);border-radius:28px;box-shadow:0 24px 80px rgba(139,38,66,.30);animation:ttWelcomeIn .32s cubic-bezier(.34,1.56,.64,1) both}.tt-welcome-top{background:linear-gradient(135deg,#F6B7C8,#FDECF2);padding:24px 24px 18px;text-align:center;position:relative}.tt-welcome-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;border-radius:999px;background:rgba(255,255,255,.76);color:#713C53;font-size:20px;cursor:pointer}.tt-welcome-icon{width:74px;height:74px;border-radius:50%;background:#fff;display:grid;place-items:center;margin:0 auto 12px;font-size:36px;box-shadow:0 10px 30px rgba(212,106,138,.18);overflow:hidden}.tt-welcome-icon.has-image{font-size:0}.tt-welcome-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%}.tt-welcome-title{font-family:Montserrat;font-size:clamp(26px,5vw,38px);line-height:1.03;margin:0;color:#713C53;font-weight:800}.tt-welcome-sub{margin:8px auto 0;color:#713C53;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.tt-welcome-body{padding:24px}.tt-welcome-step-title{font-size:18px;font-weight:900;color:#713C53;margin:0 0 8px;text-align:center}.tt-welcome-text{font-size:14px;line-height:1.7;color:#7B6F72;text-align:center;margin:0 auto;max-width:420px}.tt-welcome-dots{display:flex;justify-content:center;gap:8px;margin:22px 0 0}.tt-welcome-dot{width:8px;height:8px;border-radius:999px;background:#FAD6DF;transition:all .2s ease}.tt-welcome-dot.active{width:26px;background:#F8AACA}.tt-welcome-actions{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:24px}.tt-welcome-btn{min-height:44px;border:0;border-radius:999px;padding:12px 18px;font-family:Montserrat;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;background:#FDECF2;color:#713C53}.tt-welcome-btn-primary{background:#F8AACA;color:#713C53;box-shadow:0 10px 26px rgba(212,106,138,.25)}.tt-welcome-btn-ghost{background:transparent;color:#713C53}@keyframes ttWelcomeFade{from{opacity:0}to{opacity:1}}@keyframes ttWelcomeIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}@media(max-width:600px){.tt-welcome-overlay{align-items:flex-end;padding:12px}.tt-welcome-card{border-radius:24px 24px 18px 18px;max-height:86vh}.tt-welcome-top{padding:22px 18px 16px}.tt-welcome-body{padding:20px 18px 18px}.tt-welcome-actions{flex-direction:column-reverse;align-items:stretch}.tt-welcome-btn{width:100%}.tt-welcome-icon{width:64px;height:64px;font-size:32px}}@media(prefers-reduced-motion:reduce){.tt-welcome-overlay,.tt-welcome-card{animation:none}.tt-welcome-dot,.tt-welcome-overlay{transition:none!important}}`;
+    st.textContent = `html.tt-welcome-scroll-locked,html.tt-welcome-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important}.tt-welcome-overlay{position:fixed;inset:0;z-index:2147482500;background:rgba(91,35,57,.42);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:22px;font-family:Montserrat;animation:ttWelcomeFade .24s ease both}.tt-welcome-card{touch-action:pan-y;overscroll-behavior:contain;width:min(520px,100%);max-height:min(82vh,720px);max-height:min(82dvh,720px);overflow:auto;background:#fff;border:1.5px solid rgba(255,182,200,.8);border-radius:28px;box-shadow:0 24px 80px rgba(139,38,66,.30);animation:ttWelcomeIn .32s cubic-bezier(.34,1.56,.64,1) both}.tt-welcome-top{background:linear-gradient(135deg,#F6B7C8,#FDECF2);padding:24px 24px 18px;text-align:center;position:relative}.tt-welcome-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;border-radius:999px;background:rgba(255,255,255,.76);color:#713C53;font-size:20px;cursor:pointer}.tt-welcome-icon{width:74px;height:74px;border-radius:50%;background:#fff;display:grid;place-items:center;margin:0 auto 12px;font-size:36px;box-shadow:0 10px 30px rgba(212,106,138,.18);overflow:hidden}.tt-welcome-icon.has-image{font-size:0}.tt-welcome-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%}.tt-welcome-title{font-family:Montserrat;font-size:clamp(26px,5vw,38px);line-height:1.03;margin:0;color:#713C53;font-weight:800}.tt-welcome-sub{margin:8px auto 0;color:#713C53;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.tt-welcome-body{padding:24px}.tt-welcome-step-title{font-size:18px;font-weight:900;color:#713C53;margin:0 0 8px;text-align:center}.tt-welcome-text{font-size:14px;line-height:1.7;color:#7B6F72;text-align:center;margin:0 auto;max-width:420px}.tt-welcome-dots{display:flex;justify-content:center;gap:8px;margin:22px 0 0}.tt-welcome-dot{width:8px;height:8px;border-radius:999px;background:#FAD6DF;transition:all .2s ease}.tt-welcome-dot.active{width:26px;background:#F8AACA}.tt-welcome-actions{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:24px}.tt-welcome-btn{min-height:44px;border:0;border-radius:999px;padding:12px 18px;font-family:Montserrat;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;background:#FDECF2;color:#713C53}.tt-welcome-btn-primary{background:#F8AACA;color:#713C53;box-shadow:0 10px 26px rgba(212,106,138,.25)}.tt-welcome-btn-ghost{background:transparent;color:#713C53}@keyframes ttWelcomeFade{from{opacity:0}to{opacity:1}}@keyframes ttWelcomeIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}@media(max-width:600px){.tt-welcome-overlay{align-items:center;padding:12px;padding-bottom:max(12px,env(safe-area-inset-bottom))}.tt-welcome-card{border-radius:24px 24px 18px 18px;max-height:86vh;max-height:86dvh}.tt-welcome-top{padding:22px 18px 16px}.tt-welcome-body{padding:20px 18px 18px}.tt-welcome-actions{flex-direction:column-reverse;align-items:stretch}.tt-welcome-btn{width:100%}.tt-welcome-icon{width:64px;height:64px;font-size:32px}}@media(prefers-reduced-motion:reduce){.tt-welcome-overlay,.tt-welcome-card{animation:none}.tt-welcome-dot,.tt-welcome-overlay{transition:none!important}}`;
     document.head.appendChild(st);
   }
 
@@ -181,12 +183,11 @@ import {
     ov.setAttribute('aria-labelledby','tt-welcome-title');
     let finishing = false;
 
-    const finish = async reason => {
+    const finish = reason => {
       if (finishing) return;
       finishing = true;
       ov.style.opacity = '0'; ov.style.transition = 'opacity .22s ease';
       if (preview) clearPreviewMode();
-      else await markSeen(user.uid, reason).catch(e => console.warn('[welcome-runtime] no se pudo marcar visto', e));
       setTimeout(() => {
         ov.remove();
         unlock();
@@ -218,13 +219,14 @@ import {
       ov.querySelector('#tt-welcome-skip').onclick = () => finish('closed');
       ov.querySelector('#tt-welcome-prev')?.addEventListener('click', () => { i = Math.max(0, i - 1); render(); });
       ov.querySelector('#tt-welcome-next').onclick = () => { if (last) finish('completed'); else { i++; render(); } };
-      setTimeout(() => ov.querySelector('#tt-welcome-next')?.focus(), 40);
+      setTimeout(() => ov.querySelector('#tt-welcome-next')?.focus({ preventScroll: true }), 40);
     };
 
     ov.addEventListener('click', e => { if (e.target === ov) finish('closed_outside'); });
     document.addEventListener('keydown', function onKey(e){ if (!document.getElementById('tt-welcome-tutorial')) return document.removeEventListener('keydown', onKey); if (e.key === 'Escape') finish('closed_escape'); });
     render();
     document.body.appendChild(ov);
+    releaseWelcomeGate();
     lock();
     window.dispatchEvent(new CustomEvent('tintin:welcome:opened'));
   }
@@ -235,14 +237,21 @@ import {
   // segundo disparo mientras el mensaje ya estaba abierto volvía a llamar
   // show(), que borra el overlay actual para crear uno nuevo desde el
   // paso 1 — se veía como si "se cerrara solo" sin que nadie lo tocara.
-  let handled = false;
+  let handledUid = null;
+  let generation = 0;
   subscribeAuthState(async user => {
-    if (!user) { releaseWelcomeGate(); return; }
-    if (handled) return;
-    handled = true;
+    if (user?.uid === handledUid) { releaseWelcomeGate(); return; }
+    handledUid = user?.uid || null;
+    const currentGeneration = ++generation;
+    if (document.getElementById('tt-welcome-tutorial')) {
+      document.getElementById('tt-welcome-tutorial').remove();
+      unlock();
+    }
+    releaseWelcomeGate();
+    if (!user) return;
     try {
       const previewRequested = previewMode() && user.email === SUPER_ADMIN;
-      const role = await getUserRole(user.uid, user.email);
+      const role = await bounded(() => getUserRole(user.uid, user.email));
       if (!previewRequested && role !== 'client') { releaseWelcomeGate(); return; }
       const [data, config] = await Promise.all([readUser(user.uid), readConfig()]);
       const preview = previewRequested && config.previewEnabled;
@@ -254,13 +263,13 @@ import {
       }
       if (!preview && !config.enabled) {
         cleanUrl();
-        await markSeen(user.uid, 'disabled').catch(error => console.warn('[welcome-runtime] no se pudo cerrar bienvenida desactivada', error));
+        await claimWelcome(user, 'disabled').catch(error => console.warn('[welcome-runtime] no se pudo cerrar bienvenida desactivada', error));
         releaseWelcomeGate();
         return;
       }
       if (!config.steps.some(step => step && step.active !== false)) {
         if (previewRequested) clearPreviewMode();
-        else await markSeen(user.uid, 'no_active_steps').catch(error => console.warn('[welcome-runtime] no se pudo cerrar bienvenida vacía', error));
+        else await claimWelcome(user, 'no_active_steps').catch(error => console.warn('[welcome-runtime] no se pudo cerrar bienvenida vacía', error));
         cleanUrl();
         releaseWelcomeGate();
         return;
@@ -271,6 +280,9 @@ import {
         return;
       }
       await waitReady();
+      if (currentGeneration !== generation) return;
+      if (!preview && !await claimWelcome(user, 'shown')) return;
+      if (currentGeneration !== generation) return;
       show(user, config, preview);
     } catch (e) {
       console.warn('[welcome-runtime] Tutorial omitido:', e);
