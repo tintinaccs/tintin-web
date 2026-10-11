@@ -257,6 +257,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     const recordsToConfirm = applicableRecords();
     const confirmed = window.confirm(`Se van a crear hasta ${recordsToConfirm.length} producto(s) en el catálogo real de la tienda.\n\nAntes se descarga una copia de seguridad. Los productos que ya existan no se modifican ni se borran. ¿Continuar?`);
     if (!confirmed || blockReason() || state.busy) return;
+    state.applying = true;
     state.busy = true;
     ui.button.textContent = 'Importando…';
     renderPreview();
@@ -362,6 +363,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
       ui.reason.textContent = `Se detuvo en ${processed}/${total}: ${error.message}. Lo creado quedó guardado; reintentar no duplica.`;
       toast(`La aplicación se detuvo: ${error.message}. Podés reintentar sin duplicar productos.`, true);
     } finally {
+      state.applying = false;
       state.busy = false;
       ui.button.textContent = 'Importar al catálogo';
       const message = ui.reason.textContent;

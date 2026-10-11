@@ -1,8 +1,20 @@
+# Reconciliación final tras #1099 — 2026-10-11
+
+Codex /root. #1099 integrado con revisión nativa38159979073SUCCESS en main1323cd344e57917c0793517fbdcae6fa0c3576ae. El árbol del squash coincide con el candidato b12ac408 validado por CI38158661440SUCCESS. #1102 actualizado sobre ese main preservando informes de importador/monitor y contrato de cuentas. Se regenera manifiesto desde fuente canónica; inventario protegido heredado del nuevo main conservado. CI del nuevo candidato y publicación pendientes, sin heredar PASS del head anterior. Dominio/DNS/origen comercial y #929/#1101 excluidos. QA real, Cloudinary y Sheets/restore privados siguen sin acceso conectado ni verificación.
+
+---
+
 Actualización G/I: corregida descripción obsoleta de eliminación/reactivación en autoridades-sincronizacion.md contra decisión vigente y rechazo explícito del webhook; cuentas activas/bloqueadas, sin cambios a clientes o reservas.
 
 # Monitor report-only preparado — 2026-10-11
 
 Codex /root. Cambio separado de #1099; base main3488. Diagnóstico exacto Google report-only conservado visible; CSP efectiva y toda excepción JS permanecen bloqueantes. audit:login-isolation62/62PASS_LOCAL; monitor candidato sobre producción publicada: login/perfil200 y AppCheckStatus enabled observados sin sesión de cliente, no prueba OAuth/Firestore ni compra completos. BCP GET/parser oficial2026-10-09/5694.47; PayPal sandbox deshabilitado, tasa pública reciente. Evidencia y límites: [MONITOR_REPORT_ONLY_20261011.md](MONITOR_REPORT_ONLY_20261011.md). CI/merge nuevos pendientes; inventario protegido sin cambios; reconciliar main después de #1099 sin sobrescribir su documentación. No cutover ni escrituras comerciales.
+
+---
+
+# Continuación sin cutover — 2026-10-11
+
+Codex /root. Instrucción actual: completar preparación para importar/aceptar, sin migrar dominio/DNS/origen; #929 y #1101 excluidos. Main3488ebfd (#1100 publicado), PR1099 reconciliado conservando bienvenida y checkout. 609/609 Node PASS_LOCAL; build/caché PASS_LOCAL, 58 Phase2 incluidos, dos nuevas regresiones de actividad y estado restaurado. CI/revisión protegida/merge del nuevo candidato pendientes. Estado A–M y dependencias: [CONTINUACION_PREPARACION_20261011.md](CONTINUACION_PREPARACION_20261011.md). Salud publicada38152168143 SUCCESS observada, con App Check throttled en runner (desafío real NOT_VERIFIED). No hay sesiones conectadas de Chrome/Admin/Sheets/Google/Cloudflare para ejecutar QA privada ni restauración remota. No se anuncian importación lista ni cutover listo.
 
 ---
 
@@ -1772,3 +1784,10 @@ Seguimiento 2026-10-09 (Codex): mantenimiento de #1079 run 37966815736 SUCCESS; 
 - PASS_LOCAL on clean branch `codex/fix-sheets-properties-timeout-20261010`, base `origin/main` `13ae3de5`: sync-related tests 48/48; `npm.cmd run build:pages` exit 0; `git diff --check` clean.
 - GitHub CI exposed the existing `Protected flow integrity` gate. Temporary Windows-only path fixes for two sealed tests and a generated maintenance plan were removed after the official workflow rejected modification of the legacy seal. The current PR leaves that seal and inventory unchanged; repository audit/CodeQL/Pages checks for the new SHA remain in progress.
 - NOT_VERIFIED: live Apps Script source/version, successful post-migration trigger runs, authenticated canary and complete Sheets/Firestore reconciliation. No merge, deployment, production writes, catalog/customer/account mutation, or DNS changes.
+
+
+## Aviso de importacion: actividad local y job persistido - 2026-10-11
+
+Codex /root. Observacion real en Pages: restaurar preview imp_muw0m0tc_psiczxcm muestra 413 productos, catalogo 414, cero nuevos y todos los visibles SKIP; no se clico Importar. Badge mostraba APLICANDO solo porque job persistido era RUNNING, aunque la sesion local no ejecutaba apply.
+
+Cambio minimo: state.applying se activa solo tras confirmar apply y se libera en finally; badge APLICANDO requiere esa actividad local. RUNNING restaurado muestra REANUDABLE y FAILED muestra REQUIERE REINTENTO. No se cambian estados del servidor, jobs, productos, colecciones ni permisos. Versiones de apply/importador/calidad/loader propagadas a HTML; generador cache registra cuatro recursos nuevos y conserva seis historicos, 316 assets. 56 pruebas existentes de importacion PASS_LOCAL despues de versionar. audit:cache-versioning PASS_LOCAL: 316 recursos y 64 cargas dinamicas, sin reutilizar URL inmutable con bytes distintos; git diff --check sin errores. Integracion, protecciones sobre base definitiva, manifiesto y cotejo Pages pendientes; #1097 integrado en b6e5a56278bee67af5040c74112cc370272d89e9: CI 38141905977 y mantenimiento protegido 38143024859 SUCCESS para 3cb5cc756c40b82afff5040c78877a3e628e76b2. Rama del aviso basada en ese main, arbol identico al candidato validado; no se hereda PASS_CI para este ajuste. CI 38143267452 FAIL en build: sync:public-shell restauraba LOADER_VERSION anterior en HTML. Se corrige la constante canonica del generador; no se repite la corrida fallida. Build completo y nuevo SHA requieren verificacion propia. Dominio intacto.

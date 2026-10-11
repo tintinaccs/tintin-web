@@ -13,3 +13,5 @@ Fuente BCP oficial consultada por GET hoy y parser canónico aplicado: fecha2026
 CI/merge/publicación del nuevo SHA pendientes; el diff no modifica archivos del inventario protegido. Dominio/DNS/origen comercial y #929/#1101 excluidos por instrucción actual. Sin acceso Admin/Sheets/Google/Cloudflare conectado para QA privada/restore remoto. No anunciar importador ni cutover listos.
 
 Hallazgo concreto G/I: autoridades-sincronizacion.md todavía describía ELIMINAR/REACTIVAR y liberación de teléfono por soft-delete. Contradice DECISIONES_CUESTIONARIO (DIFERIDO) y updateUser del webhook que rechaza deleteUser/softDeleteUser/reactivateUser. Se corrige sólo el contrato documental para reflejar rol/bloqueo/notas; no se reintroducen endpoints ni mutaciones de clientes.
+
+Reconciliado tras #1099: main1323cd344e57917c0793517fbdcae6fa0c3576ae, revisión nativa38159979073SUCCESS; se preserva el informe CONTINUACION_PREPARACION_20261011.md y el importador. CI de73a3be7b fueSUCCESS38159287201, pero el nuevo head combinado requiere su propio resultado. Inventario protegido del main actualizado intacto; no se solicita una nueva renovación de código protegido para el monitor.

@@ -45,7 +45,7 @@ function fixture({ existing = [], failSecondBatch = false, sheetsResult = true, 
   } }));
   const ids = records.map(record => core.stableProductDocumentId(record.product.importFingerprint));
   const documents = new Map(existing.map(([index, importJobId]) => [ids[index], { importJobId }]));
-  const pushes = [], transitions = [], writes = [];
+  const pushes = [], transitions = [], writes = [], renderedActivity = [];
   let transactions = 0;
   const state = { source: 'shopify-csv', busy: false, backupAt: 'backup-fixture', jobId: 'imp_resume_fixture', job: { status: 'RUNNING' }, records, collections: [] };
   const context = vm.createContext({
@@ -67,7 +67,7 @@ function fixture({ existing = [], failSecondBatch = false, sheetsResult = true, 
   const apply = context.factory({ state, isSuperAdmin: () => true,
     apiJob: async body => { transitions.push(body); return { ...state.job, status: body.status }; },
     authenticatedFetch: () => { assert.fail('No Shopify images in this fixture'); }, saveLocalJob: async () => {},
-    renderPreview: () => {}, refreshCatalogIdentitySnapshot: refreshIdentity ? async () => {
+    renderPreview: () => renderedActivity.push(state.applying === true), refreshCatalogIdentitySnapshot: refreshIdentity ? async () => {
       state.existingProducts = [...documents].map(([id, product]) => ({ id, ...product }));
       state.records = reconcileShopifyImportIdentities(state.records, state.existingProducts);
       return { invalid: state.records.filter(record => record.errors?.length).length };
@@ -75,8 +75,44 @@ function fixture({ existing = [], failSecondBatch = false, sheetsResult = true, 
   const preview = node(); preview.insertBefore = child => preview.children.push(child);
   apply.mount(preview);
   const box = preview.children.at(-1), row = box.children.at(-1), button = row.children.at(-1);
-  return { run: button.handler, ids, pushes, transitions, writes, state, reason: row.children[0] };
+  return { run: button.handler, ids, pushes, transitions, writes, state, renderedActivity, reason: row.children[0] };
 }
+
+test('local activity ends after both a successful apply and a rejected Sheets confirmation', async () => {
+  for (const throwSheets of [false, true]) {
+    const f = fixture({ throwSheets });
+    assert.notEqual(f.state.applying, true);
+    await f.run();
+    assert.equal(f.renderedActivity[0], true);
+    assert.equal(f.renderedActivity.at(-1), false);
+    assert.equal(f.state.applying, false);
+    assert.equal(f.state.busy, false);
+  }
+});
+
+test('restored RUNNING is resumable until this browser applies; FAILED remains retryable', () => {
+  const start = importUiSource.indexOf('  function renderPreview() {');
+  const end = importUiSource.indexOf('\n  async function apiJob(', start);
+  assert.ok(start >= 0 && end > start);
+  const element = () => ({ replaceChildren() {} });
+  const state = { records: [], existingProducts: [], ui: Object.fromEntries(
+    ['summary', 'tableBody', 'preview', 'tableWrap', 'toggleAll', 'previewNote', 'jobStatus', 'badge'].map(key => [key, element()])) };
+  const context = { state, PREVIEW_ROWS: 50, summary: () => ({}), catalogApply: { render() {} }, needsAttention: () => false };
+  vm.runInNewContext(importUiSource.slice(start, end) + '\nthis.render = renderPreview;', context);
+  state.job = { status: 'RUNNING' };
+  context.render();
+  assert.equal(state.ui.badge.textContent, 'REANUDABLE');
+  state.applying = true;
+  context.render();
+  assert.equal(state.ui.badge.textContent, 'APLICANDO');
+  state.applying = false;
+  state.job.status = 'FAILED';
+  context.render();
+  assert.equal(state.ui.badge.textContent, 'REQUIERE REINTENTO');
+  state.job.status = 'COMPLETED';
+  context.render();
+  assert.equal(state.ui.badge.textContent, 'APLICADO');
+});
 
 test('Resume after Firestore commit before Sheets push syncs same-job products without overwriting unrelated existing products', async () => {
   const f = fixture({ existing: [[0, 'imp_resume_fixture'], [1, 'another-import']] });
