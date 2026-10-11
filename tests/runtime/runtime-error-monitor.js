@@ -8,12 +8,17 @@ async function installRuntimeErrorMonitor(page,context){
     if(text.startsWith('[runtime-js-error]') || text.startsWith('[runtime-js-rejection]'))errors.push(text);
   });
   page.on('pageerror',error=>{
-    const navigationCancellation=leavingAt && Date.now()-leavingAt<1000 &&
-      /^(?:Fetch API|XMLHttpRequest) cannot load http/.test(error.name) &&
-      /^\/127\.0\.0\.1:8080\/google\.firestore\.v1\.Firestore\/(?:Listen|Write)\/channel\?/.test(error.message) &&
+    const leavingDocument=leavingAt && Date.now()-leavingAt<1000;
+    const nativeAccessCancellation=/^(?:Fetch API|XMLHttpRequest) cannot load http/.test(error.name) &&
+      error.message.endsWith(' due to access control checks.');
+    const firestoreChannel=/^\/127\.0\.0\.1:8080\/google\.firestore\.v1\.Firestore\/(?:Listen|Write)\/channel\?/.test(error.message) &&
       error.message.includes('database=projects%2Fdemo-tintin-interactions%2Fdatabases%2F(default)') &&
-      error.message.endsWith(' due to access control checks.') &&
       error.stack?.includes('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
+    // CI trace 38140539333: WebKit cancels a pending Auth emulator lookup
+    // 11 ms after beforeunload. This is a native diagnostic, not a JS rejection.
+    const authLookup=error.message==='/127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=demo-key due to access control checks.' &&
+      error.stack?.endsWith('    at fetch ([native code]:0:0)');
+    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || authLookup);
     if(navigationCancellation)browserDiagnostics.push({kind:'native-emulator-channel-cancelled-on-navigation',message:error.message});
     else errors.push(error.message);
   });
