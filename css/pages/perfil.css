@@ -215,7 +215,7 @@
       .tt-profile-hero{align-items:flex-start;padding:16px}
       .tt-profile-hero-main{align-items:flex-start}
       .tt-profile-summary{grid-template-columns:1fr}
-      .tt-profile-tabs{top:6px;border-radius:13px}
+      .tt-profile-tabs{top:6px;border-radius:13px;flex-wrap:wrap;overflow-x:visible}
       .tt-profile-tab{padding:10px 12px}
     }
 

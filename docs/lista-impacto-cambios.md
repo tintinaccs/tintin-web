@@ -1,3 +1,13 @@
+## Registro 2026-10-10: alertas operativas opcionales e historicas
+
+- Perfil movil: tabs en filas para que todas las opciones queden visibles. CSS perfil y referencia HTML versionadas; auditor global conservado sin excepciones nuevas. Sin cambio de datos ni logica de perfil.
+- Backend system-health y conciliacion checkout; UI administrativa del diagnostico y su version de cache.
+- Sin cambios de precios, stock, pedidos, usuarios, Auth, Rules, DNS, origen publico o credenciales. Sin envios de correos ni activacion PayPal.
+- Ventas historicas identificadas por el contrato de comercio-local; compras web y fallos explicitos mantienen alerta. Se informa el numero de registros excluidos del requisito email.
+- PayPal deshabilitado se muestra neutral NO APLICA con estilos SKIPPED existentes; sandbox activo/configuracion rota siguen FAIL. Backend no declara PayPal productionReady.
+- Roles cliente/invitado sin cambio; endpoint mantiene requireSuperAdmin. Cache UI versionada por injector; manifiesto regenerado desde fuente.
+- Regresion: tests de system-health/backend/render y checkout operacional, sin debilitar controles. UI desplegada pendiente de integracion aprobada.
+
 # Lista obligatoria de impacto
 
 Esta lista se completa para cada cambio. Marcar una parte como “no aplica” requiere una razón concreta.

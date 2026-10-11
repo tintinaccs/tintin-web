@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bef81a4f1fe2b051920542e1e1e01dacaecb1cd07f05a271a126cce75e99dfb1",
+  "sourceFingerprint": "e4f23e27273a3afda43b3d4db3d2eafe6d58a328761a635378a0a6543e6ecbb6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1123,
     "textFiles": 1075,
-    "totalBytes": 16495179,
+    "totalBytes": 16499679,
     "pages": 19,
     "modules": 797
   },
@@ -14736,8 +14736,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 52419,
-      "sha256": "a93212e3a2213477015d2d6c542d5fbd7c49068cf0c8ad798547fe05e6b017bf",
+      "bytes": 52439,
+      "sha256": "143eed6b73dd8233ee8892d19fbbf16d02d7fb6e8ec046349c0dfaebd0c8e4c6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14935,7 +14935,7 @@
           "line": 46
         },
         {
-          "raw": "css/pages/perfil.css?v=tintin-20261010-first-render-merge-1",
+          "raw": "css/pages/perfil.css?v=tintin-20261010-first-render-merge-1-profile-tabs-wrap-1",
           "target": "css/pages/perfil.css",
           "line": 48
         },
@@ -15381,7 +15381,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/perfil.css?v=tintin-20261010-first-render-merge-1",
+          "raw": "css/pages/perfil.css?v=tintin-20261010-first-render-merge-1-profile-tabs-wrap-1",
           "target": "css/pages/perfil.css",
           "line": 48,
           "exists": true
@@ -18956,8 +18956,8 @@
     },
     {
       "path": "cloudflare/checkout-operational-health.js",
-      "bytes": 2939,
-      "sha256": "dc72013ae9c2d7784f7fdd6aab3cc61cee7e34a67819060b6622f8850a722c4f",
+      "bytes": 3602,
+      "sha256": "a2f155bcb460061884af94ec4b99e7cb6fc6e576c27b6e98cbff961ea8f01fcd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19181,8 +19181,8 @@
     },
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
-      "bytes": 2122,
-      "sha256": "a08c18a356c988fe6e70afdcb77e96850a92f58e7955485c32f700e3ab58964d",
+      "bytes": 2149,
+      "sha256": "24812e1c01097fcb34f38f655dac6caa52b85252e465f0ecebf5bbe7272cb4e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19846,8 +19846,8 @@
     },
     {
       "path": "cloudflare/system-health.js",
-      "bytes": 9001,
-      "sha256": "f21eeef22664a262c3bc968fd00bdb54252cdf5b73d80d9664f2693e73314604",
+      "bytes": 9181,
+      "sha256": "504b9baaf81ad1fcd21ccde505f642372a20919cf192bef593449ba4e270b248",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22807,8 +22807,8 @@
     },
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
-      "bytes": 16002,
-      "sha256": "c089a75643f792455ca26ce3367cba8c018123f6f0b165046ebc4a979fa96769",
+      "bytes": 16669,
+      "sha256": "62b4dd18137f2cb081e7ae4693258895edc91490a45dad9f8235432d784d12db",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35453,8 +35453,8 @@
     },
     {
       "path": "tests/checkout/checkout-operational-health.test.mjs",
-      "bytes": 2226,
-      "sha256": "df4fd5f63d473797df134579e493e1003c977b6adde0e834b1c69badd9db6fa8",
+      "bytes": 3869,
+      "sha256": "37b9829a974bb65968a82991aeda8abef487b8f8332fe7c134c1608f8c3309a7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -41022,8 +41022,8 @@
     },
     {
       "path": "tests/system-health/system-health-view.test.mjs",
-      "bytes": 997,
-      "sha256": "da27e81484611207051a33f4003ec6fe8667725fc0b8421224d17423627a2ec8",
+      "bytes": 3052,
+      "sha256": "f0aedf6308d5aee7ea908e2fdee1e49e487c6d3e8b37ee69dbac451906b12787",
       "syntax": {
         "ok": true,
         "error": ""
@@ -41046,14 +41046,20 @@
           "target": null,
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
     },
     {
       "path": "tests/system-health/system-health.test.mjs",
-      "bytes": 5331,
-      "sha256": "1f2278c85b689ac87faacd9e371559695f6ec99450e7562b91656de06ce10009",
+      "bytes": 6667,
+      "sha256": "bcb75c4e105d8476736f76aea6f5f51885604ef1db9e19af96391120c6b2798c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42860,8 +42866,8 @@
     {
       "path": "cloudflare/checkout-operational-health.js",
       "extension": ".js",
-      "bytes": 2939,
-      "sha256": "dc72013ae9c2d7784f7fdd6aab3cc61cee7e34a67819060b6622f8850a722c4f"
+      "bytes": 3602,
+      "sha256": "a2f155bcb460061884af94ec4b99e7cb6fc6e576c27b6e98cbff961ea8f01fcd"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -42920,8 +42926,8 @@
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
       "extension": ".js",
-      "bytes": 2122,
-      "sha256": "a08c18a356c988fe6e70afdcb77e96850a92f58e7955485c32f700e3ab58964d"
+      "bytes": 2149,
+      "sha256": "24812e1c01097fcb34f38f655dac6caa52b85252e465f0ecebf5bbe7272cb4e9"
     },
     {
       "path": "cloudflare/mayoristas-avisos.js",
@@ -43052,8 +43058,8 @@
     {
       "path": "cloudflare/system-health.js",
       "extension": ".js",
-      "bytes": 9001,
-      "sha256": "f21eeef22664a262c3bc968fd00bdb54252cdf5b73d80d9664f2693e73314604"
+      "bytes": 9181,
+      "sha256": "504b9baaf81ad1fcd21ccde505f642372a20919cf192bef593449ba4e270b248"
     },
     {
       "path": "cloudflare/visual-builder-core.js",
@@ -43094,8 +43100,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 9039,
-      "sha256": "cab90b9f68649dafaf04328fb3f72da4aabfd118637167718c275f7e0f2048c5"
+      "bytes": 2085,
+      "sha256": "4e55619857f55a76d5467452d9b6221654ff3ff894dd21055cb900341c72fbdb"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -43107,7 +43113,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "cf760230a18a8e777f1f920754fded34d035bc51e74f6ed4306861518591388c"
+      "sha256": "b6f73812adff4ffeb270dac26fe3ecea8db85246628afccaff59151ca891ecf6"
     },
     {
       "path": "config/public-site.json",
@@ -43496,8 +43502,8 @@
     {
       "path": "css/pages/perfil.css",
       "extension": ".css",
-      "bytes": 14881,
-      "sha256": "4a7b4056078b8102cbb9849e3cac80979c6a821ec5add936e616934d2d6b4024"
+      "bytes": 14915,
+      "sha256": "ddf0f5f30980ec42129b2de80bb162572363c342b1ef946bb6dc24cfbf339eb4"
     },
     {
       "path": "css/pages/product/product-extras.css",
@@ -43664,8 +43670,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 375456,
-      "sha256": "c47c2adb2dee1704d4a94a8917c45a36debdcabe44a35bb6890bf6e62931f536"
+      "bytes": 379059,
+      "sha256": "4a3b55e9d68201b7bc851ac8187c6e6dbe7e91be44142a6c7e253a91c0775735"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -43922,8 +43928,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 6316,
-      "sha256": "7ab55fcbd1dfdcdb237b36925c74208f9c5df437f226463db97ae69e86fefc93"
+      "bytes": 7495,
+      "sha256": "1982650e0270fc70c3a259d91160042c27d6a6bbbd81dec5c1c6009d7d1498a3"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -44672,8 +44678,8 @@
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
       "extension": ".js",
-      "bytes": 16002,
-      "sha256": "c089a75643f792455ca26ce3367cba8c018123f6f0b165046ebc4a979fa96769"
+      "bytes": 16669,
+      "sha256": "62b4dd18137f2cb081e7ae4693258895edc91490a45dad9f8235432d784d12db"
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
@@ -46388,8 +46394,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 52419,
-      "sha256": "a93212e3a2213477015d2d6c542d5fbd7c49068cf0c8ad798547fe05e6b017bf"
+      "bytes": 52439,
+      "sha256": "143eed6b73dd8233ee8892d19fbbf16d02d7fb6e8ec046349c0dfaebd0c8e4c6"
     },
     {
       "path": "playwright.config.js",
@@ -47258,8 +47264,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 70957,
-      "sha256": "c72e3bd6c2461d72db5de3a3c5620df819638b68a3d7ef07d3b238360b170a31"
+      "bytes": 71004,
+      "sha256": "42fcb2958dbd7173f45a3e011a5ce7bb5ec80cb266340a525a0b997da20ef1e4"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -47900,8 +47906,8 @@
     {
       "path": "tests/checkout/checkout-operational-health.test.mjs",
       "extension": ".mjs",
-      "bytes": 2226,
-      "sha256": "df4fd5f63d473797df134579e493e1003c977b6adde0e834b1c69badd9db6fa8"
+      "bytes": 3869,
+      "sha256": "37b9829a974bb65968a82991aeda8abef487b8f8332fe7c134c1608f8c3309a7"
     },
     {
       "path": "tests/checkout/checkout-state-navigation.test.mjs",
@@ -48806,14 +48812,14 @@
     {
       "path": "tests/system-health/system-health-view.test.mjs",
       "extension": ".mjs",
-      "bytes": 997,
-      "sha256": "da27e81484611207051a33f4003ec6fe8667725fc0b8421224d17423627a2ec8"
+      "bytes": 3052,
+      "sha256": "f0aedf6308d5aee7ea908e2fdee1e49e487c6d3e8b37ee69dbac451906b12787"
     },
     {
       "path": "tests/system-health/system-health.test.mjs",
       "extension": ".mjs",
-      "bytes": 5331,
-      "sha256": "1f2278c85b689ac87faacd9e371559695f6ec99450e7562b91656de06ce10009"
+      "bytes": 6667,
+      "sha256": "bcb75c4e105d8476736f76aea6f5f51885604ef1db9e19af96391120c6b2798c"
     },
     {
       "path": "tests/tooling/dependencias-seguras.test.mjs",
