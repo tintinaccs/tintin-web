@@ -1,10 +1,11 @@
 const {test,expect}=require('@playwright/test');
+const {installRuntimeErrorMonitor}=require('./runtime-error-monitor.js');
 
-let errors, productionRequests;
+let errors, productionRequests, browserDiagnostics;
 test.beforeEach(async({page,context,request})=>{
   await request.post('/__test/reset');
-  errors=[];productionRequests=[];
-  page.on('pageerror',error=>errors.push(error.message));
+  productionRequests=[];
+  ({errors,browserDiagnostics}=await installRuntimeErrorMonitor(page,context));
   // Cache the unchanged official SDK bytes through the test host's environment proxy.
   // This avoids CDN/proxy CORS failures; Auth/Firestore still use real services.
   await context.route('https://www.gstatic.com/firebasejs/10.14.1/**',async route=>{
@@ -16,8 +17,13 @@ test.beforeEach(async({page,context,request})=>{
   await context.route(/https:\/\/(?:identitytoolkit|firestore|securetoken)\.googleapis\.com\//,route=>{productionRequests.push(route.request().url().split('?')[0]);return route.abort('blockedbyclient');});
   await context.route('https://tintinaccesorios.pages.dev/api/**',route=>{productionRequests.push(route.request().url().split('?')[0]);return route.abort('blockedbyclient');});
 });
-test.afterEach(async({page},testInfo)=>{
-  await testInfo.attach('runtime-errors',{body:JSON.stringify({errors,productionRequests}),contentType:'application/json'});
+test.afterEach(async({page,context},testInfo)=>{
+  // Finish module transfers while the API fixture is still alive; never ignore route errors.
+  await page.waitForLoadState('domcontentloaded');
+  if (errors.length || productionRequests.length || testInfo.status!==testInfo.expectedStatus) await page.screenshot({path:testInfo.outputPath('runtime-failure.png'),fullPage:true});
+  await page.close();
+  await context.unrouteAll({behavior:'wait'});
+  await testInfo.attach('runtime-errors',{body:JSON.stringify({errors,productionRequests,browserDiagnostics}),contentType:'application/json'});
   expect(errors,'errores JavaScript de la página completa').toEqual([]);
   expect(productionRequests,'el entorno de prueba nunca debe escribir en producción').toEqual([]);
 });
@@ -135,7 +141,7 @@ test('cliente no puede elevar su rol ni abrir el panel administrativo',async({pa
 });
 
 
-test('cuenta muestra el perfil persistido, guarda cambios y los conserva al recargar',async({page,request})=>{
+test('cuenta muestra el perfil persistido, guarda cambios y los conserva al recargar',async({page,request},testInfo)=>{
   const email='account@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);await expect(page).toHaveURL(/index\.html/);
   await page.goto('/perfil',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#perfil-email-display')).toHaveText(email);
@@ -143,8 +149,10 @@ test('cuenta muestra el perfil persistido, guarda cambios y los conserva al reca
   await page.locator('#perfil-nombre').fill('María López');
   await expect(page.locator('#profile-panel-datos #btn-guardar-perfil')).toBeVisible();
   await page.locator('#btn-guardar-perfil').click();
+  await expect(page.locator('#perfil-toast')).toContainText('Perfil actualizado');
   await expect(page.locator('#perfil-nombre-display')).toHaveText('María López');
-  expect((await state(request,email)).profile.name).toBe('María López');
+  expect((await state(request,email)).profile).toMatchObject({name:'María López',phone:'+595981123456'});
   await page.reload({waitUntil:'domcontentloaded'});
   await expect(page.locator('#perfil-nombre')).toHaveValue('María López');
+  await page.screenshot({path:testInfo.outputPath('perfil-guardado.png'),fullPage:true});
 });

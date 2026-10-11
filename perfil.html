@@ -7,7 +7,7 @@
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1"></script>
-  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1" defer></script>
+  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1-bootstrap-rejection-20261011-1" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -254,7 +254,7 @@ import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/prof
 import { MAX_SAVED_LOCATIONS, readAddressBook, addressBookPatch, addAddress, removeAddress, makePrimary } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
 import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1";
 import { accountAccessSummary } from "./js/core/auth/presentacion-acceso.mjs?v=tintin-20261004-location-consistency-1";
-import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
+import { DEFAULT_COUNTRY, phoneKey, normalizePhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
 import { changeReservedUsername } from "./js/components/forms/reserva-username.js?v=tintin-20261010-whatsapp-release-5";
@@ -636,9 +636,10 @@ async function loadProfile(user, attempt = 0) {
   document.getElementById('btn-guardar-perfil').onclick = async () => {
     if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
     const release = () => window.TintinReleaseProfileButton?.('btn-guardar-perfil');
-    const nuevoTelefono = document.getElementById('perfil-tel').value.trim();
+    const telefonoIngresado = document.getElementById('perfil-tel').value.trim();
     const country = DEFAULT_COUNTRY;
-    if (!isNationalMobileInput(nuevoTelefono)) {
+    const nuevoTelefono = normalizePhone(telefonoIngresado, country).value;
+    if (!isNationalMobileInput(telefonoIngresado)) {
       toast('❌ Escribí un celular válido: 0912 345 678 o 912 345 678');
       document.getElementById('perfil-tel').focus();
       release();
@@ -675,7 +676,7 @@ async function loadProfile(user, attempt = 0) {
       }
 
       const submittedName = document.getElementById('perfil-nombre').value.trim();
-      const { first, last } = splitFullName(submittedName);
+      const { firstName: first, lastName: last } = splitFullName(submittedName);
       if (!isValidFullName(first, last)) {
         toast('❌ Escribí nombre y apellido reales');
         release();

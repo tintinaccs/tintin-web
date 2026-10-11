@@ -1,6 +1,7 @@
 // Test-only host: complete repository pages + real Auth/Firestore emulators.
 // OTP and phone handlers are production code; mail delivery is a local sink.
 import http from 'node:http';
+import {createHash} from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -23,6 +24,15 @@ const seen = [];
 const sdkFiles = new Map();
 async function sdkSource(name) {
   if (!/^firebase-(?:app|auth|firestore|app-check)\.js$/.test(name)) throw new Error('SDK file not allowed');
+  // Optional offline cache of recorded official bytes; mismatched/missing files fail.
+  if (process.env.TINTIN_RUNTIME_SDK_CACHE && !sdkFiles.has(name)) {
+    const cache=process.env.TINTIN_RUNTIME_SDK_CACHE;
+    const manifest=JSON.parse(fs.readFileSync(path.join(cache,'manifest.json'),'utf8'));
+    const bytes=fs.readFileSync(path.join(cache,name));
+    const entry=manifest.files?.[name];
+    if (manifest.version!=='10.14.1' || entry?.url!=='https://www.gstatic.com/firebasejs/10.14.1/'+name || createHash('sha256').update(bytes).digest('hex')!==entry?.sha256) throw new Error('Official SDK cache integrity failed');
+    sdkFiles.set(name,Promise.resolve(bytes.toString('utf8')));
+  }
   if (!sdkFiles.has(name)) sdkFiles.set(name, sdkTransport.get('https://www.gstatic.com/firebasejs/10.14.1/'+name).then(async response => {
     if (!response.ok() || !response.headers()['content-type']?.includes('javascript')) throw new Error('Firebase SDK download failed: HTTP '+response.status());
     return response.text();
