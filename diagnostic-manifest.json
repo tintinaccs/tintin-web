@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d797b8df620fb27fda9ae06715956d2b34f2741d570b7544fe7907675c2ba3ef",
+  "sourceFingerprint": "7be2ed8d4bace7112680cf6165d1397ee1fbdf903cad033d9346e5dfd33c9c4e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1141,
     "textFiles": 1093,
-    "totalBytes": 16715079,
+    "totalBytes": 16715177,
     "pages": 19,
     "modules": 809
   },
@@ -2223,8 +2223,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 201631,
-      "sha256": "df982fd5bf090325f674e3f0488879b4d7a7216ceb4383ec471289698bd2b7bb",
+      "bytes": 201655,
+      "sha256": "db627b1fce68215918a904a7d8c075e32affed8fb0ecbdfacfaa26499b8ca132",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2343,7 +2343,7 @@
           "line": 2280
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261009-local-ledger-master-2-first-render-merge-20261010-1-domain-cutover-20261011-2",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261009-local-ledger-master-2-first-render-merge-20261010-1-domain-cutover-20261011-2-master-align-20261011-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2281
         }
@@ -2649,7 +2649,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261009-local-ledger-master-2-first-render-merge-20261010-1-domain-cutover-20261011-2",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261009-local-ledger-master-2-first-render-merge-20261010-1-domain-cutover-20261011-2-master-align-20261011-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2281,
           "exists": true
@@ -23053,8 +23053,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 28487,
-      "sha256": "4961379aedef3e0d80d6b2f58680d16b21ae491df4af3e56375cf92bd2f8cedc",
+      "bytes": 28537,
+      "sha256": "c4b85734bc5cfdabe870db189e014ab6a7e5b5a884c538aaae038484a0bf27e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42918,8 +42918,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 201631,
-      "sha256": "df982fd5bf090325f674e3f0488879b4d7a7216ceb4383ec471289698bd2b7bb"
+      "bytes": 201655,
+      "sha256": "db627b1fce68215918a904a7d8c075e32affed8fb0ecbdfacfaa26499b8ca132"
     },
     {
       "path": "apple-touch-icon.png",
@@ -43573,7 +43573,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 38743,
-      "sha256": "5a33a6a4475e1f4fa698671c39eb64ee60e8e48dc702cd3ecf2c60bed4fd2194"
+      "sha256": "de4c3d8e90aef64b2ca9b48b1e3d7dab7a9b85b3260ab398be8298761c46641d"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -43585,7 +43585,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "fc29b20345a2aa094bc24b10677b3e5f1489a9926c976da9877c55afd26bf325"
+      "sha256": "9473229f5d0b7692d4a1ce400d2b8cd172ecc982e587410e769331912bfc98c5"
     },
     {
       "path": "config/public-site.json",
@@ -45234,8 +45234,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 28487,
-      "sha256": "4961379aedef3e0d80d6b2f58680d16b21ae491df4af3e56375cf92bd2f8cedc"
+      "bytes": 28537,
+      "sha256": "c4b85734bc5cfdabe870db189e014ab6a7e5b5a884c538aaae038484a0bf27e9"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -47778,8 +47778,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 75187,
-      "sha256": "22088eef8912a46d73a421a5b1c0ba13ead5f195e67a05a8f0eaae2fc5de0f2b"
+      "bytes": 75211,
+      "sha256": "4774c88d9cd8b2abd65aff72c74743e3c4d0835c4a43d9c6c7b378b5c3feba89"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",

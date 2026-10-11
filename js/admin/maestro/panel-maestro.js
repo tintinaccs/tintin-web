@@ -15,7 +15,7 @@ import {
   const isAdminRoute = /(^|\/)admin(?:\.html)?$/i.test(location.pathname.replace(/\/$/, ''));
   if (!isAdminRoute) return;
 
-  const VERSION = 'tintin-20261009-local-ledger-master-2-first-render-merge-20261010-1';
+  const VERSION = 'tintin-20261009-local-ledger-master-2-first-render-merge-20261010-1-domain-cutover-20261011-2-master-align-20261011-1';
   const CAP_COLUMNS = [
     ['create', 'C'], ['read', 'R'], ['update', 'U'], ['archive', 'Arch.'],
     ['delete', 'D'], ['search', 'Buscar'], ['export', 'Exportar'],

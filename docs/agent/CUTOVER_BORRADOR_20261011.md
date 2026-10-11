@@ -23,3 +23,5 @@ Seguir docs/cutover-tintinaccs-com.md y docs/agent/PREPARACION_DOMINIO_Y_BIENVEN
 Antes de cutover: exportar zona completa, preservar registros no web/correo y nameservers, actualizar candidato sobre main, cerrar aceptación comercial, obtener nueva autorización y revisión protegida del SHA. Sólo entonces ejecutar activación y pruebas reales controladas. El dominio sigue en Shopify y la web vigente sigue en pages.dev.
 
 Rollback: restaurar únicamente DNS web según exportación y origen del código; conservar perfiles, pedidos y correo. No activar redirección global de pages.dev antes de aceptación real.
+
+La primera auditoría completa del borrador detectó la versión interna de Maestro desalineada tras el bump de sus imports. Se alinea con un tag nuevo master-align-20261011-1 (no se reutiliza URL publicada). Auditorías locales Maestro 27/27, conexiones 25/25, cierre 83/83 y módulos 140/140 PASS; responsive 5 viewports PASS. CI del nuevo SHA se verifica por separado; no cambia el main publicado.
