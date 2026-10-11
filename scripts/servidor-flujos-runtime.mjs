@@ -114,7 +114,10 @@ const server = http.createServer(async (incoming, outgoing) => {
     }
     if (url.pathname === '/__test/seed') {
       const body = JSON.parse(await readBody(incoming));
-      await replace(env, body.path, encodeFirestoreFields(body.data)); outgoing.end('{}'); return;
+      const existing=await get(env,body.path);
+      if(existing)await merge(env,body.path,encodeFirestoreFields(body.data),{updateTime:existing.updateTime});
+      else await replace(env,body.path,encodeFirestoreFields(body.data));
+      outgoing.end('{}'); return;
     }
     if (url.pathname === '/js/core/firebase/firebase.js' || url.pathname === '/js/email/correo-autenticacion.js') {
       outgoing.setHeader('content-type','text/javascript'); outgoing.end(url.pathname.includes('/core/') ? firebaseSource : emailSource); return;

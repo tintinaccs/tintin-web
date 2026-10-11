@@ -94,11 +94,16 @@ test('teléfono reservado por otra cuenta se rechaza sin activar el perfil',asyn
 test('Firestore deniega permisos y la interfaz permite recuperar el guardado',async({page,request})=>{
   const email='denied@example.test';await otp(page,request,email);await fillProfile(page);
   const initial=await state(request,email);
-  await request.post('/__test/seed',{data:{path:'users/'+initial.uid,data:{...initial.profile,blocked:true}}});
+  await request.post('/__test/seed',{data:{path:'users/'+initial.uid,data:{blocked:true}}});
   await continueProfile(page);
   await expect(page.locator('#login-error')).toContainText('No pudimos guardar tus datos');
   await expect(page.locator('#btn-save-profile')).toBeEnabled();
   expect((await state(request,email)).profile.profileStatus).toBe('incomplete');
+  // Recover only the blocked flag: timestamps and identity contract stay real.
+  await request.post('/__test/seed',{data:{path:'users/'+initial.uid,data:{blocked:false}}});
+  await page.locator('#login-profile-phone').press('Enter');
+  await expect(page).toHaveURL(/index\.html/);
+  expect((await state(request,email)).profile.profileStatus).toBe('active');
 });
 
 test('producto carga desde HTTP, carrito cambia y checkout avanza tras validar sesión',async({page,request})=>{
