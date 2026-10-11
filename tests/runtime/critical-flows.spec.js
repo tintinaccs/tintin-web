@@ -138,11 +138,10 @@ test('cliente no puede elevar su rol ni abrir el panel administrativo',async({pa
 test('cuenta muestra el perfil persistido, guarda cambios y los conserva al recargar',async({page,request})=>{
   const email='account@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);await expect(page).toHaveURL(/index\.html/);
   await page.goto('/perfil',{waitUntil:'domcontentloaded'});
-  await expect(page.locator('[data-privacy-action="necessary"]')).toBeVisible();
-  await page.locator('[data-privacy-action="necessary"]').click();
   await expect(page.locator('#perfil-email-display')).toHaveText(email);
   await expect(page.locator('#perfil-nombre')).toHaveValue('María González');
   await page.locator('#perfil-nombre').fill('María López');
+  await expect(page.locator('#profile-panel-datos #btn-guardar-perfil')).toBeVisible();
   await page.locator('#btn-guardar-perfil').click();
   await expect(page.locator('#perfil-nombre-display')).toHaveText('María López');
   expect((await state(request,email)).profile.name).toBe('María López');

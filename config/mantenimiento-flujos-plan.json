@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "ac7e394874d2668dd8e0ba505f1a9340cf6bc84c",
-  "reason": "Reparar clics reemitidos, privacidad móvil y carrera de perfil; regresión de página completa con Auth/Firestore emulados, Chromium y WebKit, sin cambiar permisos ni sellos históricos.",
+  "reason": "Corregir clics asíncronos, privacidad móvil, carrera de perfil y guardado visible; verificar páginas completas con API y persistencia real emulada en tres motores.",
   "files": [
     {
       "path": "404.html",
@@ -151,7 +151,7 @@
     {
       "path": "perfil.html",
       "oldHash": "abecadc1f885b56e174e5672965176beed1fd8625a6e6fbabfe8825227bc7708",
-      "newHash": "d282718187ffa078f9ae94c3edf03f6ad3c96d7e98900d31e626aa79f05f3163"
+      "newHash": "5c3bfca909ead27d5a54221cfad9190852d6b6c49781b3cb9510884b225184fa"
     },
     {
       "path": "preguntas-frecuentes.html",

@@ -14,7 +14,7 @@ import { encodeFirestoreFields, decodeFirestoreFields } from '../cloudflare/fire
 
 const root = path.resolve(import.meta.dirname, '..');
 const project = 'demo-tintin-interactions';
-const origin = 'http://127.0.0.1:4190';
+const origin = 'http://127.0.0.1:4174';
 const authOrigin = 'http://127.0.0.1:9099';
 const documents = `http://127.0.0.1:8080/v1/projects/${project}/databases/(default)/documents`;
 const prefix = `projects/${project}/databases/(default)/documents/`;
@@ -29,7 +29,7 @@ async function sdkSource(name) {
   }));
   return sdkFiles.get(name);
 }
-const staticHost = spawn(process.execPath, ['scripts/servidor-local-pruebas.mjs', '4191'], { cwd: root, stdio: 'inherit' });
+const staticHost = spawn(process.execPath, ['scripts/servidor-local-pruebas.mjs', '4175'], { cwd: root, stdio: 'inherit' });
 async function rest(url, options = {}, allowMissing = false) {
   const response = await fetch(url, { ...options, headers: { authorization: 'Bearer owner', 'content-type': 'application/json', ...options.headers } });
   if (allowMissing && response.status === 404) return null;
@@ -142,10 +142,10 @@ const server = http.createServer(async (incoming, outgoing) => {
       seen.push({ path:url.pathname,status:response.status });
       outgoing.writeHead(response.status,Object.fromEntries(response.headers));outgoing.end(await response.text());return;
     }
-    const response = await fetch('http://127.0.0.1:4191'+url.pathname+url.search);
+    const response = await fetch('http://127.0.0.1:4175'+url.pathname+url.search);
     outgoing.writeHead(response.status,Object.fromEntries(response.headers));outgoing.end(Buffer.from(await response.arrayBuffer()));
   } catch(error) { console.error('[runtime-test-server]',error.message);outgoing.writeHead(500,{'content-type':'application/json'});outgoing.end(JSON.stringify({error:error.message})); }
 });
-server.listen(4190,'127.0.0.1',()=>console.log('Runtime test host: '+origin));
+server.listen(4174,'127.0.0.1',()=>console.log('Runtime test host: '+origin));
 const shutdown=()=>{staticHost.kill('SIGTERM');server.close(async()=>{await sdkTransport.dispose();process.exit(0);});};
 for(const signal of ['SIGTERM','SIGINT'])process.on(signal,shutdown);
