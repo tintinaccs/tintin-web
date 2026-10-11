@@ -1,3 +1,5 @@
+Actualización G/I: corregida descripción obsoleta de eliminación/reactivación en autoridades-sincronizacion.md contra decisión vigente y rechazo explícito del webhook; cuentas activas/bloqueadas, sin cambios a clientes o reservas.
+
 # Monitor report-only preparado — 2026-10-11
 
 Codex /root. Cambio separado de #1099; base main3488. Diagnóstico exacto Google report-only conservado visible; CSP efectiva y toda excepción JS permanecen bloqueantes. audit:login-isolation62/62PASS_LOCAL; monitor candidato sobre producción publicada: login/perfil200 y AppCheckStatus enabled observados sin sesión de cliente, no prueba OAuth/Firestore ni compra completos. BCP GET/parser oficial2026-10-09/5694.47; PayPal sandbox deshabilitado, tasa pública reciente. Evidencia y límites: [MONITOR_REPORT_ONLY_20261011.md](MONITOR_REPORT_ONLY_20261011.md). CI/merge nuevos pendientes; inventario protegido sin cambios; reconciliar main después de #1099 sin sobrescribir su documentación. No cutover ni escrituras comerciales.
