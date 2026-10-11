@@ -27,4 +27,8 @@
       }));
       throw error;
     });
+  // This bootstrap starts before consumers exist. The failure is already logged
+  // and dispatched above; keep the original rejected promise for consumers,
+  // while observing it here so leaving the document cannot leak a rejection.
+  window.TintinSurfaceControllerReady.catch(() => {});
 })();

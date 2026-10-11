@@ -21,6 +21,7 @@ const mime = {
 const SEO_PRODUCT_FIXTURE = Object.freeze({
   id: 'seo-prueba',
   name: 'Reloj SEO Prueba',
+  category: 'relojes',
   description: 'Producto determinista para validar el renderer SEO de Cloudflare.',
   price: 150000,
   stock: 0,
@@ -83,7 +84,7 @@ const server = http.createServer((request, response) => {
       return;
     }
     const requestedId = url.searchParams.get('id');
-    const items = resource === 'products' ? [SEO_PRODUCT_FIXTURE] : [];
+    const items = resource === 'products' ? [{ id: SEO_PRODUCT_FIXTURE.id, data: SEO_PRODUCT_FIXTURE }] : [{id:'relojes',data:{name:'Relojes',slug:'relojes',active:true}}];
     if (resource === 'products' && requestedId) {
       const item = requestedId === SEO_PRODUCT_FIXTURE.id
         ? { id: SEO_PRODUCT_FIXTURE.id, data: SEO_PRODUCT_FIXTURE }

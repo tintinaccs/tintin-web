@@ -1,0 +1,15 @@
+✔ login repara una sesión Auth cuyo users/{uid} no existe usando ensureUserProfile (0.780622ms)
+✔ guardar Últimos datos espera la reparación canónica y no hace signOut (0.23033ms)
+✔ la reparación es necesaria porque las reglas exigen el contrato completo al crear users (0.836484ms)
+✔ un login existente no degrada active o incomplete a legacy (0.173476ms)
+✔ el login de un perfil existente sólo sincroniza metadata salvo bootstrap realmente legacy (0.188418ms)
+✔ la reparación acepta el perfil creado simultáneamente por el login (1.118189ms)
+✔ una creación rechazada sin perfil persistido conserva el error de permisos (0.567237ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63.54061

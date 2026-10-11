@@ -102,7 +102,15 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
     // función canónica de creación; luego el formulario sólo completa los datos
     // comerciales que falten, como siempre.
     const method = authMethodForUser(user, profileModule.AUTH_METHOD);
-    await profileModule.ensureUserProfile(db, user, method);
+    try {
+      await profileModule.ensureUserProfile(db, user, method);
+    } catch (error) {
+      // El login puede crear el mismo perfil mientras esta reparación espera.
+      // Una segunda creación rechazada no invalida el documento ya persistido.
+      const current = await firestoreApi.getDoc(ref);
+      if (current.exists()) return { repaired: false, reason: 'created_concurrently' };
+      throw error;
+    }
     return { repaired: true, reason: 'missing_profile' };
   }
 

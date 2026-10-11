@@ -39,3 +39,24 @@ test('el login de un perfil existente sólo sincroniza metadata salvo bootstrap 
   assert.match(profileStore, /const identityPatch = \{[\s\S]*?updatedAt:[\s\S]*?lastLogin:[\s\S]*?lastAuthMethod:[\s\S]*?authMethods/);
   assert.match(profileStore, /await withProfileDeadline\(\(\) => setDoc\(ref, identityPatch, \{ merge: true \}\), 'write'\)/);
 });
+
+function runtimeRepair({existsAfterFailure}) {
+  const begin=source.indexOf('  async function repairCanonicalProfileIfNeeded()');
+  const end=source.indexOf('\n  function startCanonicalProfileRepair()',begin);
+  const fn=source.slice(begin,end).replace(/await Promise\.all\(\[[\s\S]*?\]\);/, 'dependencies;');
+  let reads=0;
+  const failure=Object.assign(new Error('concurrent create rejected'),{code:'permission-denied'});
+  const firestore={doc:()=>({}),getDoc:async()=>({exists:()=>++reads>1 && existsAfterFailure})};
+  const deps=[{db:{}},{AUTH_METHOD:{EMAIL:'emailOtp'},ensureUserProfile:async()=>{throw failure;}},firestore,{subscribeAuthState:callback=>{queueMicrotask(()=>callback({uid:'u',providerData:[]}));return ()=>{};}}];
+  return {run:new Function('dependencies','authMethodForUser','return '+fn)(deps,()=> 'emailOtp'),failure};
+}
+
+test('la reparación acepta el perfil creado simultáneamente por el login',async()=>{
+  const {run}=runtimeRepair({existsAfterFailure:true});
+  assert.deepEqual(await run(),{repaired:false,reason:'created_concurrently'});
+});
+
+test('una creación rechazada sin perfil persistido conserva el error de permisos',async()=>{
+  const {run,failure}=runtimeRepair({existsAfterFailure:false});
+  await assert.rejects(run(),error=>error===failure);
+});

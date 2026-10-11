@@ -166,6 +166,11 @@ export function onPrivacyConsentChange(listener) {
 }
 
 function showInitialChoice() {
+  // El banner fijo tapa Continuar en teléfonos con pantalla baja. La sesión
+  // usa sólo almacenamiento esencial; la elección opcional puede presentarse
+  // al volver a la tienda. No se concede consentimiento por omisión y la
+  // apertura explícita de preferencias sigue disponible en esta página.
+  if (/(?:^|\/)login(?:\.html)?\/?$/i.test(location.pathname || '')) return;
   if (!document.body || isAdminPage() || privacyPreferences().decided) {
     if (isAdminPage()) document.getElementById('tt-privacy-consent')?.remove();
     return;

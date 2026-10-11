@@ -23,13 +23,14 @@ test('[producto] ficha real: render principal e interacción de compra', async (
   });
   await waitLoaderGone(page, BUDGETS.loaderMaxMs);
 
-  // El servidor local de CI expone un fixture controlado para validar el
-  // renderer SEO, pero no emula Auth/App Check/Firestore. En ese entorno la
-  // prueba de producto cubre el documento HTML real y sus headers; la
-  // hidratación e interacción se ejecutan contra el producto publicado.
+  // CI must verify hydration and the final sold-out behavior as well as SEO.
+  // This is a seeded local API, not proof of production integrations.
   if (/127\.0\.0\.1|localhost/.test(process.env.PERF_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || '')) {
     expect(response?.headers()['x-tintin-product-meta']).toBe('server-test');
-    await expect(page.locator('#product-detail')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('#product-name')).toHaveText('Reloj SEO Prueba');
+    await expect(page.locator('#product-price')).not.toHaveText('');
+    await expect(page.locator('#btn-product-add-cart')).toBeDisabled();
+    await expect(page.locator('#btn-product-buy-now')).toBeDisabled();
     return;
   }
 
