@@ -46,6 +46,14 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     return state.records.filter(record => !record.errors?.length && !record.duplicate);
   }
 
+  async function syncCommittedProducts(ids) {
+    if (!ids.size) return true;
+    if (typeof window.tintinPushProductsToSheets !== 'function') {
+      throw new Error('La sincronización con Sheets no está disponible. Los productos quedaron guardados; recargá y reintentá sin duplicar.');
+    }
+    return window.tintinPushProductsToSheets([...ids]);
+  }
+
   function mediaCandidates(records) {
     const candidates = new Map();
     for (const record of records) {
@@ -255,7 +263,9 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     let batches = [];
     const seen = new Set();
     const createdIds = [];
+    const sheetsIds = new Set();
     let processed = 0;
+    let total = state.records.length;
     let skipped = 0;
     // Creados por este mismo job en un intento anterior (reintento tras FAILED).
     let resumed = 0;
@@ -280,6 +290,19 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
       if (state.job.status === 'FAILED') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'READY' });
       if (state.job.status === 'READY') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'RUNNING', processed: 0, lastCheckpoint: 0 });
       await saveLocalJob();
+      // Fresh identity reconciliation omits existing products from create-only
+      // batches. Recover this job's committed IDs before that omission loses
+      // the pending Sheets push after a closed/interrupted browser session.
+      const catalogById = new Map((state.existingProducts || []).map(product => [product.id, product]));
+      for (const record of state.records) {
+        if (record.errors?.length || record.identityStatus !== 'MATCHED_EXISTING') continue;
+        const existing = catalogById.get(record.existingProductId);
+        if (existing?.importJobId === state.jobId) sheetsIds.add(record.existingProductId);
+      }
+      resumed = sheetsIds.size;
+      total = state.records.filter(record => !record.errors?.length).length;
+      processed = total - records.length;
+      skipped = Math.max(0, processed - resumed);
       const independentRecords = await copyShopifyMedia(records);
       batches = chunkImportRecords(independentRecords, BATCH_SIZE);
       for (const batch of batches) {
@@ -290,30 +313,36 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
           seen.add(id);
           entries.push({ id, data: buildCatalogProductFromImport(record.product) });
         });
-        const { createdHere, resumedHere } = await runTransaction(db, async tx => {
+        const { createdHere, resumedHere, sheetsHere } = await runTransaction(db, async tx => {
           const refs = entries.map(entry => doc(db, 'products', entry.id));
           const snapshots = await Promise.all(refs.map(ref => tx.get(ref)));
-          const result = { createdHere: [], resumedHere: 0 };
+          const result = { createdHere: [], resumedHere: 0, sheetsHere: [] };
           snapshots.forEach((snapshot, index) => {
-            if (snapshot.exists() && snapshot.data()?.importJobId === state.jobId) result.resumedHere += 1;
+            if (snapshot.exists() && snapshot.data()?.importJobId === state.jobId) {
+              result.resumedHere += 1;
+              result.sheetsHere.push(entries[index].id);
+            }
             if (snapshot.exists()) return;
             tx.set(refs[index], { ...entries[index].data, importJobId: state.jobId, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
             result.createdHere.push(entries[index].id);
+            result.sheetsHere.push(entries[index].id);
           });
           return result;
         });
         createdIds.push(...createdHere);
+        sheetsHere.forEach(id => sheetsIds.add(id));
         resumed += resumedHere;
         skipped += entries.length - createdHere.length - resumedHere;
         processed += batch.length;
-        ui.reason.textContent = `Aplicando… ${processed}/${records.length} · ${createdIds.length + resumed} creado(s) · ${skipped} ya existían.`;
+        ui.reason.textContent = `Aplicando… ${processed}/${total} · ${createdIds.length + resumed} creado(s) · ${skipped} ya existían.`;
       }
       ui.reason.textContent = 'Sincronizando con Google Sheets…';
-      const sheetsSynced = createdIds.length ? await window.tintinPushProductsToSheets?.(createdIds) : true;
+      const sheetsSynced = await syncCommittedProducts(sheetsIds);
+      if (sheetsSynced !== true) throw new Error('Sheets no confirmó la sincronización. El catálogo quedó guardado; podés reintentar sin duplicar productos.');
       const created = createdIds.length + resumed;
       state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'COMPLETED', processed, lastCheckpoint: batches.length, created, skipped });
       await saveLocalJob();
-      const sheetsText = sheetsSynced ? 'Google Sheets sincronizado' : 'Google Sheets se completa solo con el reintento automático (≈1 min)';
+      const sheetsText = 'Google Sheets sincronizado';
       ui.reason.textContent = `Listo: ${created} producto(s) creado(s) · ${skipped} ya existían y no se tocaron. Ya están en la web y en el panel; ${sheetsText}.`;
       toast(`Catálogo actualizado: ${created} producto(s) creado(s), ${skipped} ya existían.`);
     } catch (error) {
@@ -326,8 +355,11 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
           console.error('[admin-import] could not mark job FAILED', transitionError);
         }
       }
-      if (createdIds.length) await window.tintinPushProductsToSheets?.(createdIds);
-      ui.reason.textContent = `Se detuvo en ${processed}/${records.length}: ${error.message}. Lo creado quedó guardado; reintentar no duplica.`;
+      if (sheetsIds.size) {
+        try { await syncCommittedProducts(sheetsIds); }
+        catch (syncError) { console.error('[admin-import] could not sync committed products to Sheets', syncError); }
+      }
+      ui.reason.textContent = `Se detuvo en ${processed}/${total}: ${error.message}. Lo creado quedó guardado; reintentar no duplica.`;
       toast(`La aplicación se detuvo: ${error.message}. Podés reintentar sin duplicar productos.`, true);
     } finally {
       state.busy = false;

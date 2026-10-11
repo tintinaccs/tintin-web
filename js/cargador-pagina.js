@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-5-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-5-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1');
     }
   }
 

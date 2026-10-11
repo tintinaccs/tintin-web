@@ -1,3 +1,7 @@
+## Reanudar importacion y sincronizar Sheets - 2026-10-10
+
+Se altera solo el coordinador create-only de importacion: IDs recuperados del mismo job van a Sheets sin reescritura; productos ajenos se omiten. Sheets no confirmado mantiene estado reintentable y libera busy aunque falle el push de recuperacion. Contadores incluyen registros omitidos por reconciliacion fresca. 7 regresiones incluidas en suite CI Phase2 (56 PASS). Versiones propagadas desde apply a importer, quality y loader con HTML y generador canonico. Sin cambios backend, Rules, stock, roles, App Check, Shopify, DNS ni datos reales.
+
 ## Interacciones reales — 2026-10-11
 
 Filtro global acepta continuación programática de guardas y mantiene antirrebote de pulsaciones humanas. Login difiere banner automático de privacidad y confirma documento ya creado ante carrera; errores de permisos sin documento siguen rechazados. Cache coherente propagada a módulos dependientes y HTML mediante generador canónico. Phone API sólo agrega inyección de adaptadores para emuladores con defaults de producción intactos. Sin cambios de Rules, roles, stock, precios, proveedores o workflows.

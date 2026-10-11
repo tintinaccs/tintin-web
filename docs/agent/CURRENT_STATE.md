@@ -1,3 +1,13 @@
+## Reconciliacion con main 3335db53 - 2026-10-11
+
+Se preservan cambios integrados de #1095 (login, perfil, navegacion y runtime). Se regeneran versiones, protecciones y manifiesto desde esa base; los checks de candidatos anteriores no acreditan esta combinacion. Dominio sin cambios.
+
+# Importacion reanudable y Sheets - 2026-10-10
+
+Codex /root. Base ac7e394874d2668dd8e0ba505f1a9340cf6bc84c (#1093 mergeado, salud 38100080991 SUCCESS). #1092 maestro 38098359320 SUCCESS tras repeticion de pasos fallidos por espera CI. Apps Script HEAD recargado coincide con parche integrado; ciclos posteriores 7.394/10.178/6.752 segundos completos. Demoras intermitentes no declaradas resueltas. QA real: edicion de coleccion oculta sin productos y restauracion, ventanas centrales OP-20261010-000001/000002 Correcto; descripcion original verificada despues de recarga. Alta/borrado real no acreditados.
+
+Nuevo fallo reproducido: reanudacion pierde envio a Sheets de productos previamente guardados por el mismo job; reconciliacion fresca los marca MATCHED_EXISTING y los excluye de creacion. Se recuperan sus IDs confirmados del catalogo fresco, sin sobrescribir documentos; se sincronizan junto con nuevos IDs en exito y fallo parcial. Falta de coordinador, rechazo o falta de confirmacion Sheets conserva FAILED/reintentable, sin prometer COMPLETED ni minuto automatico. Se contabilizan omitidos y recuperados en el progreso. 7 regresiones del recorrido real de apply y 56 pruebas Phase2 y 2 pruebas Chromium de identidad/reanudacion PASS_LOCAL. Primera generacion detecto imports absolutos de la fixture; se usan URLs como en el test existente, sin relajar el verificador. CI inicial 38101087989 rechazo una asercion historica del mensaje que esperaba records.length (solo nuevos) en vez del total completo; se conserva la comprobacion de scope y se exige total fuera del try. Las regresiones runtime comprueban avance 2/2 con recuperados. CI/merge/publicacion del SHA corregido pendientes. Sin writes comerciales, cambios DNS, permisos, reglas o copia real de medios.
+
 # Interacciones reales y login móvil — 2026-10-11
 
 Codex /root, GPT-6. Base `ac7e394874d2668dd8e0ba505f1a9340cf6bc84c`; rama `codex/fix-real-interactions-20261011`, PR [#1095](https://github.com/tintinaccs/tintin-web/pull/1095). Usuario autoriza checks y merge después de validar; aprobación protegida del propietario sigue obligatoria.

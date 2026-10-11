@@ -152,5 +152,6 @@ test('el catch de aplicar puede informar el error: records está declarado fuera
   const tryIndex = body.indexOf('    try {');
   assert.ok(body.indexOf('let records = [];') > -1 && body.indexOf('let records = [];') < tryIndex, 'records debe declararse antes del try');
   assert.doesNotMatch(body, /const records\s*=/, 'un const records dentro del try deja al catch con ReferenceError y oculta el error real');
-  assert.match(body.slice(body.indexOf('} catch (error) {')), /\$\{processed\}\/\$\{records\.length\}/);
+  assert.ok(body.indexOf('let total = state.records.length;') > -1 && body.indexOf('let total = state.records.length;') < tryIndex, 'total must remain accessible when apply fails');
+  assert.match(body.slice(body.indexOf('} catch (error) {')), /\$\{processed\}\/\$\{total\}/);
 });
