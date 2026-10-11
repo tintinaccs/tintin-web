@@ -44,3 +44,5 @@ Observaciones actuales guardadas en `artifacts/domain-preparation/` (no se versi
 ## Límites
 
 Las pruebas con SDK/Rules y emuladores acreditan persistencia aislada. Las pruebas del componente usan dependencias controladas para errores/timeout y no simulan aprobación real de App Check. No hay acceso autenticado a Sheets/Cloudflare/reCAPTCHA en esta sesión; paridad de datos privados y configuración externa faltante quedan NOT_VERIFIED. No se envían correos reales, pedidos, cobros, importaciones comerciales ni cambios DNS. Las resoluciones/toques de motores de navegador no acreditan hardware físico.
+
+Revisión final de proyección: checkoutDefaults actual tiene prioridad sobre invoice/dirección/departamento históricos; un wanted=false explícito no revive la factura por un wantsInvoice legacy. Compatibilidad de perfiles sin defaults conservada. Suite sync final: 165/165 PASS.
