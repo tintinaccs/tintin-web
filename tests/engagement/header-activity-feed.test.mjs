@@ -32,6 +32,7 @@ function subscriptionHarness() {
   const subscriptions = [], notices = [];
   const context = vm.createContext({
     subscriptionGeneration: 0, unsubscribe: null, subscribeRetryTimer: 0,
+    historyLimit: 100, hasOlderNotifications: false,
     listenerFailed: false, notifications: [], subscribeRetryAttempt: 0, subscribeAuthRecoveryAttempted: false,
     currentUser: null, db: {}, window: { clearTimeout() {} }, console,
     isSuperAdmin: user => user?.email === 'admin@example.invalid',
@@ -46,6 +47,24 @@ function subscriptionHarness() {
   return { context, subscriptions, notices };
 }
 const snapshot = items => ({ docs: items.map(item => ({ id: item.id, data: () => item })) });
+
+test('historial ampliado conserva bienvenida y actividad vista dentro de la cuenta propia', () => {
+  const {context,subscriptions}=subscriptionHarness();
+  context.currentUser={uid:'client',email:'client@example.invalid'};
+  context.subscribe(context.currentUser);
+  const recent=Array.from({length:100},(_,i)=>notification(`order-${i}`,{kind:'order_created',read:true}));
+  subscriptions[0].next(snapshot(recent));
+  assert.equal(context.hasOlderNotifications,true);
+  context.historyLimit=200;
+  context.subscribe(context.currentUser,{preserve:true});
+  assert.equal(subscriptions[1].query[0].join('/'),'users/client/notifications');
+  assert.equal(subscriptions[1].query[2],200);
+  subscriptions[1].next(snapshot([...recent,notification('welcome',{kind:'welcome',read:true})]));
+  assert.equal(context.notifications.length,101);
+  assert.equal(context.notifications.at(-1).id,'welcome');
+  assert.equal(context.notifications.at(-1).read,true);
+  assert.equal(context.hasOlderNotifications,false);
+});
 
 test('Super Admin usa la misma colección global del panel; el cliente sólo su UID', () => {
   const { context, subscriptions, notices } = subscriptionHarness();

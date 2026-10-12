@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0c96ec35e3b5c81f591c4c2f116b6732d0c5e05e09ad0dddb5cdb5f56645147e",
+  "sourceFingerprint": "e72dbe53476b4d51ce4a200fbc0565c03853c469ce69db344539a5a074b8c9f2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1170,
     "textFiles": 1122,
-    "totalBytes": 16992482,
+    "totalBytes": 16994581,
     "pages": 19,
     "modules": 832
   },
@@ -37214,8 +37214,8 @@
     },
     {
       "path": "tests/engagement/header-activity-feed.test.mjs",
-      "bytes": 5255,
-      "sha256": "73ee8371972e0335aa834dd1848ab9ce8d692ba60235a702702b8d8db0fcbb68",
+      "bytes": 6314,
+      "sha256": "499e813c42f5982fc08282e7bbb9d134665896d645f08c4b7765a9e6a58c55db",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37256,8 +37256,8 @@
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
-      "bytes": 10249,
-      "sha256": "83ce71c98a93451dd6fcc7dac15864f9940344a652a7dd24441d33ef2f9b1176",
+      "bytes": 10432,
+      "sha256": "129875070c548cd9e68ce77251a852b9ede43b5135a668bbf89269512e10ccff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44405,8 +44405,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 17645,
-      "sha256": "c8eed7f80db48f394fcb3803a64798935a4c44891e2c328cc1c76c057c434327"
+      "bytes": 17881,
+      "sha256": "2bce5c0eae703e2940063c4b0ba17e747bbad657516f5c73349b30af026d0458"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -44993,8 +44993,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 426464,
-      "sha256": "45e171ae052b706d859d266ad17970e2369e238b4129b4a46801be17c5f092c2"
+      "bytes": 427085,
+      "sha256": "19fba8c372f29dd581d543639dfe3fe35eb4635df6413baba651ed3560fbc599"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -49547,14 +49547,14 @@
     {
       "path": "tests/engagement/header-activity-feed.test.mjs",
       "extension": ".mjs",
-      "bytes": 5255,
-      "sha256": "73ee8371972e0335aa834dd1848ab9ce8d692ba60235a702702b8d8db0fcbb68"
+      "bytes": 6314,
+      "sha256": "499e813c42f5982fc08282e7bbb9d134665896d645f08c4b7765a9e6a58c55db"
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
       "extension": ".mjs",
-      "bytes": 10249,
-      "sha256": "83ce71c98a93451dd6fcc7dac15864f9940344a652a7dd24441d33ef2f9b1176"
+      "bytes": 10432,
+      "sha256": "129875070c548cd9e68ce77251a852b9ede43b5135a668bbf89269512e10ccff"
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
