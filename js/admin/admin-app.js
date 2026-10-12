@@ -162,7 +162,7 @@ async function pushProductsToSheets(productIds) {
         method: 'POST',
         cache: 'no-store',
         keepalive: true,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
         body: JSON.stringify({
           action: 'syncProducts',
         productIds: ids.slice(i, i + 20),
