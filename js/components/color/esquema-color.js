@@ -132,6 +132,10 @@ function subscribeToScheme(schemeId) {
       else applyScheme({});
     },
     error => {
+      if (error?.code === 'app-check-unavailable') {
+        markColorSchemeReady('offline-safe');
+        return;
+      }
       console.warn('[color-scheme] No se pudo cargar el esquema activo; se mantiene el último aplicado/cacheado:', error);
       markColorSchemeReady('scheme-read-error');
     }
@@ -149,6 +153,12 @@ appCheckReady.then(ready => {
       subscribeToScheme(config.activeGlobalSchemeId || DEFAULT_SCHEME_ID);
     },
     error => {
+      if (error?.code === 'app-check-unavailable') {
+        // El listener continúa esperando readiness tardío. El timeout no
+        // significa que appearance falte: conservar el esquema ya aplicado.
+        markColorSchemeReady('offline-safe');
+        return;
+      }
       console.warn('[color-scheme] settings/appearance no disponible; se usa el esquema por defecto:', error);
       subscribeToScheme(DEFAULT_SCHEME_ID);
     }
