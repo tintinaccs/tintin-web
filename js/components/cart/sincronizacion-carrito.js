@@ -1123,7 +1123,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

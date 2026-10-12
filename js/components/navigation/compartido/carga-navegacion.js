@@ -13,9 +13,9 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-first-render-merge-20261010-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-first-render-merge-20261010-1-receipt-20261011-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261011-boutique-2';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -278,7 +278,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(new URL('/js/components/navigation/compartido/enrutador.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
-      import('./control-busqueda.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1'),
+      import('./control-busqueda.js?v=tintin-20261011-boutique-2'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);
@@ -326,7 +326,7 @@ export function loadSharedRuntime() {
 
   const critical = [loadAuthRuntime(), loadCartRuntime()];
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
-  if (page === 'cart') critical.push(import('../../../pages/checkout/checkout-confiabilidad.js?v=tintin-20261004-final-integration-1-loads-20261007-1-first-render-merge-20261010-1'));
+  if (page === 'cart') critical.push(import('../../../pages/checkout/checkout-confiabilidad.js?v=tintin-20261004-final-integration-1-loads-20261007-1-first-render-merge-20261010-1-receipt-20261011-1'));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
 

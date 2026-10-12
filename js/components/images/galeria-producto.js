@@ -27,17 +27,20 @@
   function rowImages(row) {
     return uniqueImages([row?.imageUrl, ...(Array.isArray(row?.imageUrls) ? row.imageUrls : [])].filter(value => typeof value === 'string' && value.trim()));
   }
+  function isColorKey(value) {
+    return /(?:^|\b)colou?r(?:\b|$)/i.test(String(value || "").trim());
+  }
   function colorKey(product) {
     const groups = Array.isArray(product?.variants)
       ? Object.fromEntries(product.variants.flatMap(row => row && typeof row === 'object' ? Object.keys(row).map(key => [key, true]) : []))
       : product?.variants || {};
-    return Object.keys(groups).find(key => /^colou?r$/i.test(key.trim())) || null;
+    return Object.keys(groups).find(key => isColorKey(key)) || null;
   }
   function galleryImages(product, selected = {}) {
     const rows = mediaRows(product);
     const key = colorKey(product);
     const color = key && selected[key];
-    const assigned = color ? rows.filter(row => row && String(row[key] ?? '').trim() === color).flatMap(rowImages) : [];
+    const assigned = color ? rows.filter(row => row && String(row[key] ?? '').trim().toLocaleLowerCase('es') === String(color).trim().toLocaleLowerCase('es')).flatMap(rowImages) : [];
     if (assigned.length) return uniqueImages(assigned);
     // Sin fotos asignadas al color no mostramos fotos pertenecientes a otro.
     const assignedKeys = new Set(rows.flatMap(rowImages).map(imageKey));
@@ -45,7 +48,7 @@
     if (color) return general.filter(url => !assignedKeys.has(imageKey(url)));
     return uniqueImages([...general, ...rows.flatMap(rowImages)]);
   }
-  window.TintinProductMedia = Object.freeze({ imageKey, uniqueImages, mediaRows, rowImages, colorKey, galleryImages });
+  window.TintinProductMedia = Object.freeze({ imageKey, uniqueImages, mediaRows, rowImages, isColorKey, colorKey, galleryImages });
 })();
 
 /* Apariencia y sugerencias locales: las fotos nunca se envían a un analizador. */
@@ -76,12 +79,9 @@
   }
   function swatch(value, row = {}) {
     const color = preset(row?.swatch) || preset(value);
-    // El preset dorado anterior quedó guardado como hex en algunos productos.
-    // Conservamos colores personalizados y damos acabado metálico al preset.
+    // Colores sólidos del catálogo; los hex personalizados conservan prioridad.
     const customHex = /^#[\da-f]{6}$/i.test(row?.colorHex || '') ? row.colorHex : '';
-    if (customHex && !(color?.name === 'dorado' && customHex.toUpperCase() === '#FFD34E')) return customHex;
-    if (color?.name === 'dorado') return 'linear-gradient(135deg,#8E6B23 0%,#D4AF37 24%,#F6E7AD 46%,#B78C2E 68%,#E4C66B 100%)';
-    if (color?.name === 'plateado') return 'linear-gradient(135deg,#F8FAFC 0%,#CFD4DA 40%,#AAB3BE 65%,#EEF1F4 100%)';
+    if (customHex) return customHex;
     if (color?.name === 'multicolor') return 'conic-gradient(#E6008D,#FFE349,#35A461,#2463CF,#E6008D)';
     return color?.hex || '#CFD4DA';
   }

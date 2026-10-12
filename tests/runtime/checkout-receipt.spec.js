@@ -1,0 +1,167 @@
+const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const read = path => fs.readFileSync(path, 'utf8');
+const source = read('checkout.html');
+const confirmation = source.slice(source.indexOf('async function buildConfirmation()'), source.indexOf('// Un único mapa'));
+const normalizer = read('js/pages/checkout/checkout-resumen-confirmacion.js').replace(/^export /gm, '');
+const secure = read('js/orders/pedido-checkout-seguro.js');
+const hardening = read('js/pages/checkout/checkout-hardening.js').replace(/^import[\s\S]*?;\n/gm, '');
+const state = read('js/pages/checkout/estado-navegacion-checkout.js');
+const payment = read('js/pages/checkout/checkout-metodos-pago.js');
+const paymentHandlers = payment.slice(payment.indexOf('function paymentDetailsHtml'), payment.indexOf('function boot()'));
+const success = secure.slice(secure.indexOf('  function receiptText('), secure.indexOf("  window.addEventListener('popstate'"));
+const submit = secure.slice(secure.indexOf('  async function submit('), secure.indexOf("  window.addEventListener('tintin:paypal-payment-completed'"));
+const forceCart = hardening.slice(hardening.indexOf('function forceCart('), hardening.indexOf('\nfunction ', hardening.indexOf('function forceCart(') + 1));
+const cartListeners = hardening.slice(hardening.indexOf("  window.addEventListener('tt_cart_updated'"), hardening.indexOf('\n}', hardening.indexOf("  window.addEventListener('tt_cart_updated'")));
+const quote = secure.slice(secure.indexOf('  function renderQuote('), secure.indexOf('  async function reserveCheckoutGuard'));
+const css = ['css/pages/checkout/checkout.css', 'css/pages/checkout/checkout-maintenance.css', 'css/components/payments/payment-methods.css'].map(read).join('\n');
+
+// Execute the original success/submit/cart guards; only external services are
+// controlled. No production order, profile write, notification or email occurs.
+async function fixture(page) {
+  const html = await page.evaluate(({ source, css }) => {
+    const doc = new DOMParser().parseFromString(source, 'text/html');
+    doc.querySelectorAll('script,link:not([rel="stylesheet"]),meta[http-equiv]').forEach(node => node.remove());
+    const style = doc.createElement('style');
+    style.textContent = css;
+    doc.head.append(style);
+    doc.documentElement.className = '';
+    doc.body.classList.add('tt-checkout-maintenance');
+    return doc.documentElement.outerHTML;
+  }, { source, css });
+  await page.route('**/checkout?receipt-fixture=1', route => route.fulfill({ contentType: 'text/html', body: html }));
+  await page.goto('/checkout?receipt-fixture=1', { waitUntil: 'domcontentloaded' });
+  await page.addScriptTag({ content: state });
+  await page.addScriptTag({ content: `(() => {
+    const text = value => String(value ?? '');
+    const escapeHtml = value => { const el = document.createElement('div'); el.textContent = text(value); return el.innerHTML; };
+    const formatPrice = value => 'Gs. ' + Number(value).toLocaleString('es-PY');
+    const DEFAULT_STORE_WHATSAPP = '595981000000';
+    const buildWhatsAppMessage = result => 'Pedido ' + result.shortId;
+    const scheduleAnnotations = () => {};
+    const syncConfirmCartGuard = () => {};
+    const showError = (value, step = 4) => { const el = document.getElementById('error-' + step); el.textContent = value; el.classList.add('show'); };
+    const hideError = () => document.querySelectorAll('.ck-error').forEach(el => el.classList.remove('show'));
+    let cart = [{id:'qa-local', name:'Producto de prueba', qty:1, price:35000}];
+    const getCartLocal = () => cart;
+    const activeStep = () => [...document.querySelectorAll('.ck-panel')].findIndex(el => el.classList.contains('active'));
+    const waitForCheckoutCartReady = () => Promise.resolve();
+    let cartReady = true;
+    ${forceCart}
+    ${cartListeners}
+    let submitting = false, orderCompleted = false, inMemoryRequestId = 'local', pendingPaypal = null;
+    const REQUEST_KEY = 'tt-receipt-fixture-request';
+    const buildDraft = async () => ({paymentMethod:'transferencia', shippingMethod:'encomienda'});
+    const persistCheckoutDefaults = async () => {};
+    const reserveCheckoutGuard = async () => {};
+    const createOrderOnServer = async () => { window.fixtureRequests++; if(window.fixtureReject) throw new Error('offline'); return {shortId:'QA-LOCAL-001'}; };
+    const clearCart = async () => { cart = []; window.dispatchEvent(new CustomEvent('tt_cart_updated',{detail:{items:[]}})); await new Promise(resolve => window.fixtureFinishCleanup = resolve); };
+    const message = () => 'No pudimos confirmar el pedido.';
+    const forceBackToCart = forceCart;
+    const setCartLocal = items => cart = items;
+    const authoritativeCartFromQuote = quote => quote.items;
+    let cartItems = cart;
+    const cartTotal = items => items.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const orderData = {shippingMethod:'encomienda', shippingCost:0, paymentMethod:'transferencia', name:'Persona de Prueba', phone:'+595981000000', email:'persona.qa@example.invalid', city:'San José de los Arroyos', departamento:'Caaguazú', address:'Dirección extensa de prueba para verificar el resumen en todas las pantallas', notes:'Una referencia de prueba'};
+    const encomiendaModeLabel = () => 'Retiro en agencia';
+    ${confirmation}
+    ${quote}
+    ${success}
+    ${submit}
+    ${paymentHandlers}
+    const paymentMethodLabel = method => method.title;
+    window.fixtureRequests = 0;
+    window.fixtureSubmit = () => submit(document.getElementById('ck-confirm-btn'));
+    window.fixtureQuote = () => { buildConfirmation(); renderQuote({items:cart,subtotal:35000,total:35000,shippingCost:0},'encomienda'); };
+    window.fixturePayment = () => { document.getElementById('panel-3').querySelector('.ck-panel-body').innerHTML = '<div id="ck-payment-methods-runtime">' + methodHtml({id:'local-bank',kind:'transferencia',title:'Transferencia bancaria',icon:'🏦',description:'Envianos el comprobante por WhatsApp',instructions:'Datos de transferencia de prueba',details:[]}) + '</div>'; const item = document.querySelector('.ck-payment-runtime-item'); item.classList.add('is-selected'); item.querySelector('input').checked = true; };
+    window.fixtureEmptyCart = () => { cart = []; window.dispatchEvent(new CustomEvent('tt_cart_updated',{detail:{items:[]}})); };
+    window.fixtureReview = () => { document.querySelectorAll('.ck-panel').forEach((el,i)=>el.classList.toggle('active',i===4)); };
+  })();` });
+  await page.addScriptTag({ content: '(() => {' + normalizer + '})();' });
+}
+
+for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1280,720],[1440,900],[1920,1080]]) {
+  test(`ticket survives cart cleanup; payment and shipping fit ${width}x${height}`, async ({ page }) => {
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.setViewportSize({ width, height });
+    await fixture(page);
+    await page.evaluate(() => {
+      fixturePayment();
+      document.querySelectorAll('.ck-panel').forEach((el,i)=>el.classList.toggle('active',i===3));
+    });
+    const label = page.locator('.ck-payment-runtime-item .ck-pay-label');
+    await expect(label).toBeVisible();
+    expect(await label.evaluate(el => getComputedStyle(el).boxShadow)).toContain('inset');
+    expect(await label.evaluate(el => getComputedStyle(el).transform)).toBe('none');
+    await page.evaluate(() => { fixtureReview(); fixtureQuote(); });
+    await expect(page.locator('.ck-summary-shipping-note')).toHaveText('El envío se paga a la transportadora al recibir y no está incluido en el total.');
+    const separated = await page.locator('.ck-summary-total').evaluateAll(rows => rows.every(row => {
+      const [label,value] = [...row.children].map(el=>el.getBoundingClientRect());
+      return label.right <= value.left && value.right <= row.getBoundingClientRect().right + 1;
+    }));
+    expect(separated).toBe(true);
+    await page.evaluate(() => { void fixtureSubmit(); });
+    await expect(page.locator('#ck-success-head')).toBeVisible();
+    await expect(page.locator('#panel-4')).toHaveClass(/active/);
+    await expect(page.locator('#ck-order-num')).toHaveText('N° de pedido: QA-LOCAL-001');
+    // Cleanup is still pending: the confirmed ticket must already be visible.
+    await page.evaluate(() => fixtureFinishCleanup());
+    await page.evaluate(() => { fixtureEmptyCart(); TintinCheckoutState.persist(); });
+    await page.locator('.ck-step[data-step="0"]').dispatchEvent('click');
+    await expect(page.locator('#panel-4')).toHaveClass(/active/);
+    await expect(page.locator('#ck-confirm-btn')).toBeHidden();
+    await expect(page.locator('#ck-save-receipt')).toBeVisible();
+    await expect(page.locator('#ck-share-receipt')).toBeVisible();
+    await expect(page.locator('.ck-step[data-step="0"]')).toHaveAttribute('aria-disabled','true');
+    expect(await page.evaluate(() => sessionStorage.getItem('tt_checkout_draft_v1'))).toBeNull();
+    await page.evaluate(() => { void fixtureSubmit(); });
+    expect(await page.evaluate(() => fixtureRequests)).toBe(1);
+    expect(await page.locator('#panel-4').evaluate(el => el.scrollWidth > el.clientWidth || el.getBoundingClientRect().right > innerWidth + 1)).toBe(false);
+    expect(errors).toEqual([]);
+  });
+}
+
+test('failed order keeps review and cart; an ordinary empty cart still resets checkout', async ({ page }) => {
+  await fixture(page);
+  await page.evaluate(() => { fixtureReview(); window.fixtureReject = true; void fixtureSubmit(); });
+  await expect(page.locator('#error-4')).toHaveText('No pudimos confirmar el pedido.');
+  await expect(page.locator('#ck-success-head')).toBeHidden();
+  await expect(page.locator('#ck-confirm-btn')).toBeEnabled();
+  await expect(page.locator('#panel-4')).toHaveClass(/active/);
+  await page.evaluate(() => fixtureEmptyCart());
+  await expect(page.locator('#panel-0')).toHaveClass(/active/);
+});
+
+test('confirmed ticket downloads, shares and prints without another order request', async ({ page }, testInfo) => {
+  await fixture(page);
+  await page.evaluate(() => { fixtureReview(); fixtureQuote(); void fixtureSubmit(); });
+  await expect(page.locator('#ck-success-head')).toBeVisible();
+  const downloadPromise = page.waitForEvent('download');
+  await page.locator('#ck-save-receipt').click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('Tintin-pedido-QA-LOCAL-001.txt');
+  const receipt = fs.readFileSync(await download.path(), 'utf8');
+  expect(receipt).toContain('QA-LOCAL-001');
+  expect(receipt).toContain('Producto de prueba');
+  expect(receipt).toContain('Persona de Prueba');
+  expect(receipt).not.toContain('<svg');
+  expect(receipt).toContain('No acredita el pago');
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'share', { configurable: true, value: async data => { window.fixtureShared = data; } });
+    window.print = () => { window.fixturePrinted = true; };
+  });
+  await page.locator('#ck-share-receipt').click();
+  await expect(page.locator('#ck-receipt-status')).toHaveText('Ticket compartido.');
+  expect((await page.evaluate(() => fixtureShared)).text).toBe(receipt);
+  await page.locator('#ck-print-receipt').click();
+  expect(await page.evaluate(() => fixturePrinted)).toBe(true);
+  await page.evaluate(() => Object.defineProperty(navigator, 'share', { configurable: true, value: async () => { throw new DOMException('Cancelled','AbortError'); } }));
+  await page.locator('#ck-share-receipt').click();
+  await expect(page.locator('#panel-4')).toHaveClass(/active/);
+  expect(await page.evaluate(() => fixtureRequests)).toBe(1);
+  await page.locator('#panel-4').screenshot({ path: 'artifacts/receipt-' + testInfo.project.name + '.png' });
+  await page.emulateMedia({ media: 'print' });
+  await expect(page.locator('#ck-post-confirm')).toBeHidden();
+  await expect(page.locator('#ck-order-num')).toBeVisible();
+});

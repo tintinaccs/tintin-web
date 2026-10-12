@@ -1,4 +1,4 @@
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261004-admin-connections-3";
 import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1';
@@ -22,14 +22,14 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1-first-render-merge-20261010-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-first-render-merge-20261010-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-first-render-merge-20261010-1-receipt-20261011-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3-boutique-20261011-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1-owner-pink-20261004-1-photos-20261008-1-minimal-product-20261008-1-auto-flow-20261010-3-boutique-20261011-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-first-render-merge-20261010-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261005-mayoristas-1-profile-wholesale-20261005-1-first-render-merge-20261010-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261010-auto-flow-1-first-render-merge-20261010-1-followup-20261010-1";

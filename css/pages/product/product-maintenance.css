@@ -688,3 +688,17 @@ html body.tt-product-maintenance .tt-related-section > .container { width:min(10
   body.tt-product-maintenance #related-trigger .tt-section-title { font-size:clamp(1.1rem,5.4vw,1.45rem); line-height:1.25; margin:0; }
 }
 body.tt-product-maintenance .tt-related-refresh:focus-visible { outline:2px solid var(--pink-dark); outline-offset:3px; }
+
+/* Una fila desplazable en móvil conserva tarjetas compactas sin una celda vacía. */
+@media(max-width:599px) {
+  html body.tt-product-maintenance .tt-related-grid,
+  html body.tt-product-maintenance .tt-related-grid:has(> .tt-related-slot:only-child) {
+    display:grid; grid-template-columns:none !important; grid-auto-flow:column; grid-auto-columns:calc((100% - 12px) / 2);
+    justify-content:start; gap:12px; overflow-x:auto; padding:2px 0 12px; scroll-snap-type:x proximity; overscroll-behavior-x:contain;
+  }
+  body.tt-product-maintenance .tt-related-slot { scroll-snap-align:start; min-width:0; }
+}
+
+/* El punto refleja el mismo estado que el texto, también para stock por variante. */
+body.tt-product-maintenance .tt-product-status[data-stock-state="out"]::before { background:var(--color-state-soldout,#b8341f); }
+body.tt-product-maintenance .tt-product-status[data-stock-state="available"]::before { background:var(--color-state-available,#166534); }

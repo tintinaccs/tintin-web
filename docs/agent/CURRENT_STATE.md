@@ -1,3 +1,51 @@
+## 2026-10-11 — Cierre del contrato visual de paneles móviles
+
+Codex /root. CI38182801753 del candidato7d1b9f34 pasó build sin drift,261 interacciones runtime, contratos de identidad/admin, navegador/accesibilidad/SEO, rendimiento de páginas y187/187 combinaciones de geometría. Falló el smoke final porque la nueva regla fullscreen quitaba el borde rosa fino del carrito/catálogo. Se retira el override que borraba el borde móvil canónico de1px, manteniendo el viewport completo, cabecera continua y ausencia de asa/franja blanca. No se modifica ni debilita el smoke. PASS_LOCAL: smoke completo de18 rutas y cabeceras móvil/tablet/escritorio, más45/45 casos de paneles/tarjetas/dropdowns en Chromium desktop/mobile y WebKit mobile; build/caché/diagnóstico y protección correctos. CI y revisión nativa del nuevo SHA PENDING hasta sus resultados. Versionado transitivo y plan protegido regenerados sin cambiar dominio/DNS ni #929/#1101.
+
+---
+
+## 2026-10-11 — Revisión geométrica final de las muestras de color
+
+Codex /root. El navegador confirmó una muestra de24×30px en las recomendaciones: max-width global y flex comprimían el círculo dentro del botón. La regla específica conserva ambas dimensiones sin cambiar colores ni acciones. La regresión de tarjetas ahora comprueba el ancho y alto reales en cinco viewports y tres proyectos. PASS_LOCAL:45/45 casos de paneles, tarjetas y dropdowns en Chromium desktop/mobile y WebKit mobile, incluidos círculos sin compresión en cinco viewports; build,317 assets/64 cargas dinámicas/seis históricos, integridad CSS y544 archivos/78 registros protegidos correctos. CI y revisión nativa del siguiente SHA PENDING; no se hereda PASS del candidato anterior. Se renuevan sólo las tres URLs inmutables que cambian (tema, cargador e interfaz), conservando317 assets y seis entradas históricas. Dominio/DNS y #929/#1101 excluidos.
+
+---
+
+## 2026-10-11 — Última revisión: disponibilidad por variante y CI del diseño
+
+Codex /root. Continúa #1104 sobre main cf362845. La señal de disponibilidad podía quedar verde con “Agotado”: el renderer actualizaba el texto sin actualizar el estado visual, y el inspector sólo reconocía “Sin stock”. El renderer ahora escribe el estado de la variante, el inspector reconoce ambos textos y el punto usa el token de disponibilidad/agotado. No cambia cantidades, límites ni autorización de compra.
+
+12/12 pruebas nuevas PASS_LOCAL en Chromium desktop/mobile y WebKit mobile, 390/768/1024/1440: seleccionar una variante agotada cambia texto/punto y mantiene ambos botones de compra bloqueados; volver a una disponible recupera estado y compra; “Sin stock” conserva estado agotado; no aparece la raya sobre la foto. Revisión completa local anterior terminó todos los componentes de audit:final en dos segmentos con el mismo árbol, incluidos219/219 casos runtime; no se hereda ese resultado como CI del siguiente SHA.
+
+CI e1cbf827 /38180187773 aprobó generación sin drift, contrato estático,219 runtime, contratos de identidad/admin y seguridad, pero falló seis aserciones UI que aún exigían el degradado dorado anterior. Se actualiza esa expectativa al color sólido pedido, conservando geometría/márgenes/touch y resto de controles. La CI del nuevo SHA sigue PENDING; no se despacha revisión nativa ni se declara merge/publicación antes de sus resultados.
+
+Versiones nuevas cortas y únicas para los assets que cambian en esta revisión; no se reutilizan URLs inmutables del preview anterior. CSP/diagnóstico/plan protegido regenerados desde las fuentes. Dominio/DNS y #929/#1101 siguen excluidos.
+
+---
+
+## 2026-10-11 — Continuación visual del PR #1104
+
+Codex /root. Base cf362845fee5da63dd27bcf391900f0a6d01e427. Incluye la corrección del ticket descrita abajo y las imágenes/texto adicionales del propietario.
+
+- Paneles: retirado el asa del catálogo; cabeceras continuas sin límite de ancho que dejaba una franja blanca. Catálogo/carrito/cuenta/notificaciones ocupan el viewport móvil y reservan espacio para la barra inferior. Catálogo conserva su enlace real `/catalogo`, ahora “Ver todo el catálogo”. Explicación de notificaciones envuelve dentro del ancho disponible. Carrito vacío invita a explorar el catálogo, sin enviar a un checkout vacío. No se cambia cómo se marcan vistas ni cómo se entregan pedidos/notificaciones.
+- Tarjetas: fotografía cuadrada, espaciado compacto y controles alineados. Productos con variantes tienen una acción para elegir, en lugar de dos enlaces al mismo destino. Recomendaciones móviles en una fila desplazable con dos tarjetas visibles; no se inventan productos para rellenar el hueco. Sigue excluido el producto actual y se conserva el ciclo de colecciones/stock.
+- Color/galería: paleta sólida en hex, conservando hex administrativos seguros; reconoce “Color de la correa” como grupo de color y lo muestra como “Color”. Miniaturas exponen selección accesible. El cambio de foto actualiza también `srcset`, y asociaciones de color aceptan diferencias de mayúsculas. Se retira la raya sobre imágenes/colores agotados; stock, aviso y bloqueo de compra se conservan.
+- Inventario visual por página y dirección común documentados en [estilo-visual-tintin.md](../estilo-visual-tintin.md). Las páginas ya cargan el tema compartido; las capas activas no se eliminan por tener nombres/versiones históricos. Caché, CSP y manifiestos se regeneran con fuentes canónicas.
+- Evidencia: 46/46 contratos de catálogo, 168/168 checkout/pagos; auditor de producto, checkout y auxiliares PASS_LOCAL. 144/144 pruebas runtime de checkout, tarjetas y galería PASS_LOCAL;45/45 casos finales de paneles, dropdown y tarjetas, incluido carrito vacío y accesibilidad del CTA, PASS_LOCAL en Chromium desktop/mobile y WebKit mobile. Build/CSP/diagnóstico/caché, shell compartido, colores e integridad CSS PASS_LOCAL. Auditoría estática completa IN_PROGRESS: los intentos iniciales detectaron binarios locales de Chromium faltantes en scripts transversales; se completan los binarios y se reejecuta sin omitir aserciones. CI y publicación pendientes del SHA final. Fixtures no escriben pedidos, clientes, catálogo, pagos ni correo. Safari físico y sesión autenticada de producción NOT_VERIFIED.
+- CI previa de #1104 detectó primero un manifiesto desactualizado y luego el stub legacy `nosotros.html` mayor de 2000 bytes. Se regeneró el manifiesto y se acortó únicamente el texto de fallback del redirect, conservando `/about`; auditor auxiliar pasa sin elevar el límite. Nueva CI requiere nuevo SHA. La auditoría posterior de main #1103 falló presupuesto de requests en páginas informativas; no se hereda su PASS ni se cambia el presupuesto para silenciarla.
+- Dominio/origen/DNS y PR #929/#1101 siguen excluidos. No se anuncia listo el cutover por estos arreglos visuales.
+
+---
+
+## 2026-10-11 — Continuación: confirmación y ticket del checkout
+
+Codex /root. Base cf362845fee5da63dd27bcf391900f0a6d01e427. PASS_LOCAL de esta corrección, sin heredar checks anteriores.
+
+- Causa: `checkout-hardening` reaccionaba al carrito vacío después de crear el pedido y volvía al primer paso. La confirmación ahora se muestra antes de la limpieza y activa el estado de pedido completado; los controles de carrito/recuperación/navegación respetan ese estado. La confirmación no se vuelve a enviar después del éxito. Fallos de servidor siguen conservando el resumen y permitiendo reintentar, y vaciar un carrito no confirmado sigue volviendo al paso inicial.
+- Ticket: número de pedido destacado, importes separados, resumen adaptable, descargar texto, compartir con el dispositivo (o copiar), e impresión/PDF. Cancelar o fallar al compartir no modifica el pedido. El ticket aclara que registrar el pedido no acredita pago ni reemplaza factura.
+- Transferencia: selección rosa contenida dentro de la tarjeta, sin sombra exterior ni desplazamiento. Encomienda: valor breve y aclaración separada; misma corrección en resumen inicial y actualización de cotización.
+- Verificación propia: 168/168 contratos de checkout/pagos; 27/27 casos de navegador sobre handlers originales, servicios externos controlados, siete dimensiones 320–1920 incluidas tablet vertical/horizontal, Chromium desktop/mobile y WebKit mobile. Prueban ticket visible durante limpieza pendiente, eventos de carrito posteriores, navegación bloqueada, ausencia de reenvío, pedido fallido, descargar/compartir/cancelar/imprimir y geometría. No se hicieron pedidos, pagos, correos ni mutaciones de clientes reales. No acredita Safari físico ni extremo a extremo autenticado de producción.
+- Caché: renovar desde fuentes las URLs de módulos afectados y sus consumidores, manteniendo una única identidad de carrito. Build/CSP/diagnóstico/caché PASS_LOCAL; pedidos seguros y entrega PASS_LOCAL;55/55 controles de mantenimiento/protección. Plan regenerado62archivos/45registros contra cf362845, sin cambiar inventario, alcances ni sellos. Backend, Firestore/Sheets, notificaciones, permisos y dominio sin cambios. CI/publicación del nuevo SHA pendientes de evidencia propia y revisión nativa del propietario.
+
 # Factura: selección previa y guion desde móvil — 2026-10-11
 
 Codex /root. Continuación expresamente solicitada: corregir factura para todos los clientes y métodos de envío, manteniendo la integración del monitor y la preparación sin cutover. El checkout habilitaba nombre/RUC antes de elegir contribuyente; el teclado numeric de iPhone no ofrece guion; el borrador omitía ck-taxpayer-type. Se bloquean nombre/RUC hasta elegir fisica o juridica, se agrega un control de guion después del cuerpo de 3–8 números (incluido el ejemplo de siete), sin adivinar el DV, y se conserva el tipo en sessionStorage. Seleccionar tipo válido limpia sólo su aviso ya corregido; desmarcar factura conserva los valores. Contratos/validación servidor y preferencias en Firestore conservados.

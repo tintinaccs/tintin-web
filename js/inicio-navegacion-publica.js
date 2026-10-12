@@ -12,7 +12,7 @@
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   const barrierUrl = new URL('./components/navigation/compartido/barrera-arranque-shell.js', scriptUrl);
-  entryUrl.searchParams.set('v', 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-invoice-input-20261011-1');
+  entryUrl.searchParams.set('v', 'tintin-20261011-boutique-4');
   barrierUrl.searchParams.set('v', BARRIER_VERSION);
 
   let waitHeld = false;

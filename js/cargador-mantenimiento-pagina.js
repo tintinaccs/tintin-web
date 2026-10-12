@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1-first-render-merge-20261010-1';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-photos-20261008-1-minimal-product-20261008-1-first-render-merge-20261010-1-receipt-20261011-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
@@ -17,16 +17,16 @@ export function loadPageMaintenance() {
   const path = pathName();
   if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261010-whatsapp-release-5');
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1');
-  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1');
+  if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261011-boutique-2');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20261009-whatsapp-responsive-1-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-receipt-20261011-1'),
       load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261008-checkout-step-labels-1'),
-      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'),
+      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-receipt-20261011-1'),
       load('pages/checkout/checkout-control-cuota.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1'),
-      load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261011-invoice-input-1')
+      load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261011-invoice-input-1-receipt-20261011-1')
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {

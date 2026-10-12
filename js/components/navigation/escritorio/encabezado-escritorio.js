@@ -24,6 +24,7 @@ export function renderDesktopHeader() {
             <button type="button" id="btn-tienda" data-shell-route="shop" data-desktop-nav-item aria-expanded="false" aria-haspopup="true" aria-controls="tt-tienda-dropdown-panel">CATÁLOGO <span aria-hidden="true">▾</span></button>
             <div class="tt-dropdown" id="tt-tienda-dropdown-panel" role="dialog" aria-label="Categorías de la tienda" aria-hidden="true">
               <div class="tt-dropdown-grid" data-collections-nav="desktop">${renderDesktopCategories()}</div>
+              <a href="/catalogo" class="tt-catalog-all-link">Ver todo el catálogo →</a>
             </div>
           </div>
           <a href="/about" data-shell-route="about" data-desktop-nav-item>NOSOTROS</a>
