@@ -9,7 +9,7 @@
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
 import {
   doc,
   getDoc,

@@ -7,10 +7,10 @@
  * aplicar-importacion-admin.js: create-only, never overwrites or deletes.
  */
 
-import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4';
+import { db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5';
 import { collection } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4';
+import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-5';
 import { getDocsPaginated } from '../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 import {
   detectCsvDelimiter,
@@ -32,8 +32,8 @@ import {
 } from '../core/store/shopify-import-core.mjs?v=tintin-20261005-import-one-click-1-sheets-auth-images-20261011-1';
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1-loads-20261007-1-sheets-auth-images-20261011-1';
 import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1-loads-20261007-1-sheets-auth-images-20261011-1';
-import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261005-import-one-click-1-sheets-auth-images-20261011-1-loads-20261007-1-resume-sheets-1-import-progress-1-domain-prepared-20261011-4';
+import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-5';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261012-auth-privacy-1-aplicar-importacion-admin-js-domain-prepared-20261012-5';
 import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261003-inventory-review-1';
 
 if (!window.TintinAdminShopifyImportBooted) {

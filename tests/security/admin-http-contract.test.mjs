@@ -12,7 +12,6 @@ test('statusFromError conserva estados HTTP válidos y usa fallback para errores
   assert.equal(statusFromError({ status: 700 }, 400), 400);
   assert.equal(statusFromError(new Error('fallo')), 500);
 });
-
 test('endpoints sensibles no degradan autenticación/autorización a 400', async () => {
   const files = [
     'functions/api/admin-order-mutation.js',
@@ -21,6 +20,7 @@ test('endpoints sensibles no degradan autenticación/autorización a 400', async
     'functions/api/notifications.js',
     'functions/api/push-admin.js',
     'functions/api/push-test.js',
+    'functions/api/test-email.js',
   ];
   for (const file of files) assert.match(await read(file), /statusFromError/);
 });

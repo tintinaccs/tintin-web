@@ -6,7 +6,7 @@
    collections/{slug}.image; esos dos sistemas ya no se duplican acá.
    ============================================================ */
 
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
 import {
   doc,
   getDoc,
@@ -15,12 +15,12 @@ import {
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
+import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261012-auth-privacy-1-resolucion-imagenes-js-domain-prepared-20261012-5';
 
 // Se mantienen estas inicializaciones porque históricamente dependían de la
 // primera importación de imagenes.js. Ambas son idempotentes.
 import '../../pages/home/inicio-premium.js';
-import '../welcome/tutorial-bienvenida.js?v=tintin-20261011-welcome-memory-1-domain-prepared-20261011-4';
+import '../welcome/tutorial-bienvenida.js?v=tintin-20261012-auth-privacy-1-tutorial-bienvenida-js-domain-prepared-20261012-5';
 
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
@@ -422,7 +422,7 @@ export function onImagesUpdate(callback, onError) {
     appCheckReady.then(async ready => {
       if (!ready) { _listenerStarted = false; return; }
       const listen = /^\/admin(?:[-/.]|$)/.test(location.pathname)
-        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1-domain-prepared-20261011-4')).subscribeAdminSnapshot
+        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-5')).subscribeAdminSnapshot
         : onSnapshot;
       listen(
         doc(db, FIRESTORE_DOC),

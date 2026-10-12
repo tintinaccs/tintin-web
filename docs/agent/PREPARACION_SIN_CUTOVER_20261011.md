@@ -1,10 +1,10 @@
 # Preparación sin activar dominio — 11 octubre 2026
 
-Codex /root. Instrucción vigente: preparar y verificar, sin migrar URL/DNS. Base main `64cc48ce8e852d40abe0d176494a7d436d54c0ce` (#1105). El PR #1101 sigue borrador NO MERGE; #929 excluido.
+Codex /root. Instrucción vigente: preparar y verificar, sin migrar URL/DNS. Base main `72ea709a` (#1106/#1107). El PR #1101 sigue borrador NO MERGE; #929 excluido.
 
 ## Código preparado
 
-El borrador anterior se reconcilia mediante merge normal con main. Se usa el árbol de main como fuente para conservar importador/Sheets, monitor report-only, factura móvil, ticket confirmado, diseño responsive y disponibilidad por variante; luego se reaplica únicamente el destino desde config/public-site.json mediante los generadores canónicos. El origen definitivo existe sólo en este borrador, no en main ni en producción. Las referencias inmutables nuevas usan el prefijo vigente de main más -domain-prepared-20261011-4:317 assets,64 cargas dinámicas y seis entradas históricas conservadas;108 assets cambian por origen/cascada.
+El borrador anterior se reconcilia mediante merge normal con main. Se usa el árbol de main como fuente para conservar importador/Sheets, monitor report-only, factura móvil, ticket confirmado, diseño responsive y disponibilidad por variante; luego se reaplica únicamente el destino desde config/public-site.json mediante los generadores canónicos. El origen definitivo existe sólo en este borrador, no en main ni en producción. Las referencias inmutables nuevas usan el prefijo vigente de main más -domain-prepared-20261012-5:317 assets,64 cargas dinámicas y seis entradas históricas conservadas;108 assets cambian por origen/cascada.
 
 PASS_LOCAL observado: build/caché/CSP/diagnóstico;17 controles del auditor de preparación de dominio; autoridad/consumidores del dominio;3 contratos de redirects Shopify. También PASS_LOCAL:15 controles UI/UX, diagnóstico y27 controles Maestro; release version interna alineada a su URL inmutable nueva. CI nueva PENDING hasta verificar el SHA del merge de reconciliación. No se hereda la CI antigua del borrador.
 
@@ -42,3 +42,9 @@ Coordinación 12 octubre: main avanzó por #1105 (Sheets autenticado/conteo de i
 La CI38194156174 de 844b2a28 falló en audit:images porque el tag corto había perdido los prefijos de release exigidos. Se conservan las aserciones existentes y se usa el prefijo de main con un sufijo nuevo, sin reutilizar URLs publicadas. Caché, imágenes, recursos y build se vuelven a verificar en esta revisión. CI del próximo SHA: PENDING.
 
 Revisión local v4: build:pages PASS, audit:images PASS, critical-resource-urls 2/2 PASS, preparación de dominio 17/17 PASS. Plan protegido regenerado contra main #1105:146 archivos/59 registros. #1101 sigue DRAFT, sin auto-merge.
+
+## Reconciliación del 12 octubre — v5
+
+Se incorpora main 72ea709a con fórmulas de Sheets (#1106) y privacidad Auth/correo protegido (#1107), mediante merge normal. Árbol de main como fuente canónica; se reaplican sólo el origen futuro, las versiones nuevas y el contrato de URLs basado en el registro. No se toca otra rama ni se migra URL/DNS. CI38200244616 acredita exclusivamente la revisión anterior f00a8eff; esta revisión necesita verificaciones y CI propias (PENDING). TinyFish se vuelve a observar instalado/habilitado sin herramientas disponibles.
+
+PASS_LOCAL v5 observado: build:pages/cache/CSP/diagnóstico,9 pruebas focalizadas de recursos/Sheets/privacidad/correo,17 controles de dominio,27 de Maestro, imágenes y consumidores. Comparación de113 fuentes JS sólo muestra origen y versiones; ProductosUnificados.gs, test-email.js y los tests del trabajo paralelo son idénticos a main. Plan protegido146 archivos/59 registros contra72ea709a. CI del nuevo SHA sigue PENDING hasta observar resultado.

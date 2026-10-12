@@ -358,7 +358,7 @@
       helper.id = 'tt-checkout-name-auth-sync';
       helper.type = 'module';
       helper.src = new URL(
-        '../../pages/checkout/checkout-sincronizacion-nombre.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4',
+        '../../pages/checkout/checkout-sincronizacion-nombre.js?v=tintin-20261012-auth-privacy-1-checkout-sincronizacion-nombre-js-domain-prepared-20261012-5',
         scriptUrl || window.location.href
       ).href;
       document.head.appendChild(helper);

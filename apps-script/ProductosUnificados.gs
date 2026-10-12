@@ -501,14 +501,20 @@ function tintinSheetUserRole_(value) {
 
 function tintinPrepareNewProductRow_(sheet, rowNumber) {
   var templateRow = TINTIN_PRODUCTS_FIRST_ROW;
-  if (sheet.getLastRow() < templateRow || rowNumber <= sheet.getLastRow()) return;
+  if (sheet.getLastRow() < templateRow) return;
+  var isNewRow = rowNumber > sheet.getLastRow();
   var template = sheet.getRange(templateRow, 1, 1, 35);
   var target = sheet.getRange(rowNumber, 1, 1, 35);
-  template.copyTo(target, SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
-  template.copyTo(target, SpreadsheetApp.CopyPasteType.PASTE_DATA_VALIDATION, false);
+  if (isNewRow) {
+    template.copyTo(target, SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+    template.copyTo(target, SpreadsheetApp.CopyPasteType.PASTE_DATA_VALIDATION, false);
+  }
   [7, 8, 10, 11, 13].forEach(function(column) {
     var formula = sheet.getRange(templateRow, column).getFormulaR1C1();
-    if (formula) sheet.getRange(rowNumber, column).setFormulaR1C1(formula);
+    var cell = sheet.getRange(rowNumber, column);
+    if (formula && (isNewRow || (!cell.getFormula() && cell.getValue() === ''))) {
+      cell.setFormulaR1C1(formula);
+    }
   });
 }
 
@@ -593,6 +599,7 @@ function tintinSyncProductsFromFirestore_(body) {
     var product = productResult.data || {};
     var inventoryResult = phase3FetchDocument_('productInventory/' + encodeURIComponent(id), body.idToken);
     var inventory = inventoryResult.ok ? inventoryResult.data || {} : {};
+    tintinPrepareNewProductRow_(sheet, rowNumber);
     sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
     tintinWriteProductRow_(sheet, rowNumber, product, inventory);
   });
@@ -632,6 +639,7 @@ function tintinSyncProductsFromPayload_(body) {
       return;
     }
     var product = item.product || {};
+    tintinPrepareNewProductRow_(sheet, rowNumber);
     sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
     tintinWriteProductRow_(sheet, rowNumber, product, item.inventory || {});
     rowIndex[id] = rowNumber;

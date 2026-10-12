@@ -1,5 +1,5 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261011-boutique-2-domain-prepared-20261011-4';
-import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261012-auth-privacy-1-cargador-mantenimiento-pagina-js-domain-prepared-20261012-5';
+import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
 import {

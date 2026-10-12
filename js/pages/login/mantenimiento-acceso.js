@@ -74,10 +74,10 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
 
   async function repairCanonicalProfileIfNeeded() {
     const [{ db }, profileModule, firestoreApi, { subscribeAuthState }] = await Promise.all([
-      import('../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4'),
-      import('../../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-2-active-session-1-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-prepared-20261011-4'),
+      import('../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5'),
+      import('../../core/store/perfil-usuario.js?v=tintin-20261012-auth-privacy-1-perfil-usuario-js-domain-prepared-20261012-5'),
       import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-      import('../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4'),
+      import('../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5'),
     ]);
 
     // Reutiliza la única suscripción canónica de sesión (coordinador-sesion.js)

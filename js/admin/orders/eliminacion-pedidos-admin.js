@@ -7,7 +7,7 @@
 
 import {
   recalculateOrderOwnerStats
-} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-domain-prepared-20261011-4';
+} from '../../core/store/estadisticas-pedidos.js?v=tintin-20261012-auth-privacy-1-estadisticas-pedidos-js-domain-prepared-20261012-5';
 
 (function () {
   'use strict';

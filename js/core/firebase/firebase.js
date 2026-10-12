@@ -10,7 +10,7 @@ import {
   ReCaptchaEnterpriseProvider,
   getToken as getAppCheckToken
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js";
-import { recordAuthDiagnostic } from "../auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
+import { recordAuthDiagnostic } from "../auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 
 // El dominio de autenticación es el mismo dominio público de la tienda.
 // functions/__/auth/[[path]].js reexpone ahí los helpers oficiales de
