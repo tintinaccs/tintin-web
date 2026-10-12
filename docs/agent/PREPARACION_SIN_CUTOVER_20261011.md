@@ -34,3 +34,5 @@ El runtime de esta tarea reporta red enforced/unrestricted y observaciones actua
 Sin merge de #1101/#929, Custom Domain, redirect de host pages.dev, DNS writes, publicación de cutover, envío de sitemap, altas comerciales, pedidos/cobros/emails ni alteración de App Check/MFA. Antes del corte futuro se requerirán acceso/configuración verificados, aceptación comercial, CI del SHA definitivo y decisión del propietario. Rollback del runbook conserva datos y correo y restaura únicamente web/origen.
 
 Comprobación tras el aviso de autenticación del propietario: environment_status vuelve a reportar observaciones actuales y cero secretos/variables/identidades; document-control vuelve sin sesiones y no hay herramientas de Chrome/browser. El login local del propietario no acredita acceso autenticado desde esta tarea.
+
+CI38193911315 de f3aecdb7 aprobó build/drift/preflight y falló una aserción literal que exigía el tag antiguo de origen-funciones en los imports de notificaciones Admin. Se conserva el control de URL completa pero se consulta el registro canónico de versiones; las dos pruebas focalizadas pasan. La CI del siguiente SHA debe verificarse de nuevo.
