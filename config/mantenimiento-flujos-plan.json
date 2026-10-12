@@ -1,193 +1,20 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "ee04a1884462c0f3b53095a994fcf66741e94e56",
-  "reason": "Corregir401 de sincronizacion Sheets en importacion real y contador de imagenes sin cambiar permisos",
+  "baseCommit": "64cc48ce8e852d40abe0d176494a7d436d54c0ce",
+  "reason": "Restaurar formulas de stock margen y alerta en nuevas filas de Productos sin pisar valores manuales",
   "files": [
     {
-      "path": "404.html",
-      "oldHash": "514c5d0027b0f7fe7be2a49f3795297478a1bfeba2745a371817a646ede2dee0",
-      "newHash": "c58de0e464e52dbc17e07f39c629d3e97deab8bc939ac984353b52cf0139579a"
-    },
-    {
-      "path": "about.html",
-      "oldHash": "7230926eeb13e17a6ac8770724e60f6e986385e366ceaf8b48f2eb182d4bf944",
-      "newHash": "2eca92fa2e78f64a453b570c28d223d673bd80f284c2feba59ad44424123534b"
-    },
-    {
-      "path": "admin-images.html",
-      "oldHash": "1331fa0fbd84c3e0e7587f28829abfdf2d07de281b29d509279f74be9e8ad4da",
-      "newHash": "6c629ee853173e3d8e0929896531c79b916342b5fcfaa5d93f87201b79875b87"
-    },
-    {
-      "path": "admin.html",
-      "oldHash": "41c4dc3af500a572276b0be37b11927372145686446ee8f91121ec91c2ad2b52",
-      "newHash": "2f3367dd0a2bbf4a890f2087af651569619fa2d7955c100acca76fdf9db81c46"
-    },
-    {
-      "path": "cambios-devoluciones.html",
-      "oldHash": "e04e677201cb634bf708cfc89ed149635ca9a1af7ee054b8c5c9cd324a2908ec",
-      "newHash": "0aa350c09191b0c5a6bbfeb5b38910b9daf9ed21dddbe7aa679809ca84207e86"
-    },
-    {
-      "path": "catalogo.html",
-      "oldHash": "61222884e50c84c954ca3dc2faa98f26c6f5b85ee0a7d4ea6f219ee56ef47430",
-      "newHash": "df749315a3dc6731b193ab662c3e65b2037cbc16ceaa54f1dc60d79792199d59"
-    },
-    {
-      "path": "checkout.html",
-      "oldHash": "0a62482a7cf6915822913b481de6016797171a3cb9a5c5d6ab257005b685a0e4",
-      "newHash": "83b8d07107a3d80d12abcbff55bef108d775bdbae24bc15667abfd1a085c5c1e"
-    },
-    {
-      "path": "collections.html",
-      "oldHash": "54031a8cc4640406f0420ab0b966683d2e5697721e3565cc3c78fd6ef597a992",
-      "newHash": "a316c7f60a56114d715f11c5321e5aed1ba6f28bc66f7e9ea871fdf47940f07d"
-    },
-    {
-      "path": "contact.html",
-      "oldHash": "087cb97c6197d43428c0f0df7056805159525d03bff7a408d56824674ecc8cf6",
-      "newHash": "ea82ae5bd1c4b02e37c66af438f71ad6a948532b4f8f6fce6a8164159645011f"
-    },
-    {
-      "path": "envios.html",
-      "oldHash": "bb5b3b2d9138e033172f3bcfa3eee67c5ba68231bce75e5de86eb1b56256c62c",
-      "newHash": "55daaaf0d82ad949525ca3529d243699fbd7913d09ccae5ba7dff97ab687f9ee"
-    },
-    {
-      "path": "index.html",
-      "oldHash": "ad8cd777a675cf83bf20ce1a9387cbb835b1fb93619f0da94ce9c13cd2426ed9",
-      "newHash": "7eadabc2690489e1a572a027f13369cdfa733f0ab6eeeeed64e68d8cfb9acee6"
-    },
-    {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "4a93c3c841ccf3cfdee7a9c9bda23d507f6237491e4a68de1a53a743e010bfa7",
-      "newHash": "0e2cf8a73a132d1395b66bd39288fc82056b1efcff9d2759508493cb7a2f3f4d"
-    },
-    {
-      "path": "js/admin/aplicar-importacion-admin.js",
-      "oldHash": "62fdbb634cbf49f1a4f2ca27060323174c6152a7d931da627acf6e6795e780e3",
-      "newHash": "55944a1d103edf4b4981a87ad83affca9df691ccc60b84ff7e57f976d02f773a"
-    },
-    {
-      "path": "js/admin/importacion-admin.js",
-      "oldHash": "b619a51b9fdf75ff0b6435368030b2ca46960684d624f6dc7c7fffe2b138a4cc",
-      "newHash": "af5777b54ae69d3163381eccaedd3cd1413c2ee3527c381b1320e210070a236e"
-    },
-    {
-      "path": "js/cargador-pagina.js",
-      "oldHash": "69fb98e7601dcd72ff88306f077f85c15a22150c6382f79d878a84f6ba90a96d",
-      "newHash": "09ccb16e77248b475e8a933720d320ecfb8eab5137c07f1c46e05e25e9b25670"
-    },
-    {
-      "path": "js/core/store/shopify-import-core.mjs",
-      "oldHash": "8e6e13a2c43960de0c384732aebddd5f0ce453bac768226cca567205add58959",
-      "newHash": "29431a2c3ea189426e114557eb7eba2fab99f6b6607044d58693b27ec8f74c1d"
-    },
-    {
-      "path": "js/core/store/shopify-import-identity.mjs",
-      "oldHash": "4341ddfb4ea4579dd66fe33da6cb51e9adc5d806d8fe4fc183d4d198e6424f25",
-      "newHash": "e852ad4c5fa9efd688d70622d21a54dca54972db8939f0afc9578c52971d1c7b"
-    },
-    {
-      "path": "js/core/store/shopify-phase2-pipeline.mjs",
-      "oldHash": "47ac4dd8f87b8625e50e54845dc6c35b0d01658034debf90caec1d70daaaeef9",
-      "newHash": "8654fdab52e96168e925b9db46080fea91e4d600b109ea47eb26bd0a8d1047b7"
-    },
-    {
-      "path": "js/quality/calidad-interfaz.js",
-      "oldHash": "1516d14d90a5007360a67504f4ddd02e0a8149ef1068a3e862ba76e888b86090",
-      "newHash": "11400c7f5ec32e35c7fdff5e46797d60f178245fde2a283366afd16ddd126116"
-    },
-    {
-      "path": "login.html",
-      "oldHash": "887a82c1692e7e9237e4727c037fd5a4783ff336c62ef3d4a7a71df49e44d35f",
-      "newHash": "b15176cc1b9756b6f6125fad26f8d123e7dc66dd3de19b341e2d28bcb7d3c3b0"
-    },
-    {
-      "path": "nosotros.html",
-      "oldHash": "0ffac53e3a8e6788179c35bd9f2587a3fc33328c2a1a241b634e122c6301031f",
-      "newHash": "f4a8cf386abb27a20ad1e5fc4963d86da8672274e801fa319d630c1d40ab4a72"
-    },
-    {
-      "path": "package.json",
-      "oldHash": "ed825386119be608140f312c0baa0457d9ab2232362fc2edf5408d6f2c63a22d",
-      "newHash": "ca3d4f1792c8e682751ab1769e0190de78906f4d7785a03b789192a1f01c6960"
-    },
-    {
-      "path": "perfil.html",
-      "oldHash": "5c5e4824a735e031111ee61fea8877484c193d781d5f650fa8689c4b773e8d15",
-      "newHash": "dc4b92d0868f04d1fcd39fd4b014552c2cfff199c2f3fa9d2573e7ec46b6ca55"
-    },
-    {
-      "path": "preguntas-frecuentes.html",
-      "oldHash": "5b2722e62c781abaec6559cda034e825ebc4e7928c4943122e59bf10fda37208",
-      "newHash": "d2206157c09e5f5470563d20ac6f004722cf5444e514376192187c2f5812e01d"
-    },
-    {
-      "path": "privacidad.html",
-      "oldHash": "c8be77a8fb449b2e3ae8ef6ee02d3680484701f45b704f791f40d0bacbf7044b",
-      "newHash": "0c23c6f5632c921679798e62bd5f2f482f71705f0a55e44fc3b8086a08d5cfb1"
-    },
-    {
-      "path": "product.html",
-      "oldHash": "b71b59e20712524c0169fc039f1600dcaf0aa53e47927ab32f6030d4558f2958",
-      "newHash": "567f148e8b85a10a48097959c9ce640880008561c4496f63bba9053ffa6f6dd5"
-    },
-    {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "2c2e07dab0959e550fe48b5ced6ce470d83fb6ea1a5f06e7530524a61ab84d72",
-      "newHash": "9dfe3a63c6d98b25e1db83c7a3a1ca8c7bc1f191cf2f122776dda494fd8223be"
-    },
-    {
-      "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "oldHash": "d73bf56baf3c8208caf6704f30db6dc28b3af71ed06b8ba0340e084292c2b31f",
-      "newHash": "bbb9f9be44a91f901981daa598af2cfd15f7d4baec13249b492efff1662ec8be"
-    },
-    {
-      "path": "terminos.html",
-      "oldHash": "14df951751d5804752665b51544e79af4a9d8b6c2c3a591fc30ce0453866e70b",
-      "newHash": "806e9d8af90d86cc789d7025e61cce783f0debc065740f57e86aa26d4a4a8e37"
+      "path": "apps-script/ProductosUnificados.gs",
+      "oldHash": "758e3d7967c8c18e833c3fe6b4b060c02207d0b5c5e68e0e3d0c4064e8b81b4e",
+      "newHash": "5a4b9a8df00879903fd9d4ec16991ff2018eed0793232561489812ee711baf35"
     }
   ],
   "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas__correos__41",
-    "apis-internas__pedidos__32",
-    "correos",
-    "cuenta-bloqueada",
-    "entrada-login",
-    "entrada-login__google-btn__1",
-    "entrada-login__login-codigo__2",
-    "firebase-auth__redirect-result__5",
-    "firestore__users-uid__8",
-    "google-btn",
-    "google-btn__firebase-auth__3",
-    "login-codigo",
-    "login-codigo__firebase-auth__4",
-    "pagina-perfil",
-    "pagina-principal",
-    "pedidos",
-    "pedidos__inventario__33",
-    "perfil",
-    "perfil__ultimos-datos__11",
-    "productos",
-    "redirect-result",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__pagina-principal__17",
-    "roles__perfil__10",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34",
-    "ultimos-datos",
-    "ultimos-datos__perfil__13",
-    "users-uid",
-    "users-uid__cuenta-bloqueada__12",
-    "users-uid__roles__9"
+    "apps-script__google-sheets__24",
+    "apps-script__sheets-products-webhook__26",
+    "firestore__apps-script__23",
+    "google-sheets__apps-script__25",
+    "sheets-products-webhook",
+    "sheets-products-webhook__firestore__27"
   ]
 }
