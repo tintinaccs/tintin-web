@@ -6,13 +6,14 @@ test.beforeEach(async ({ page }) => {
   });
 });
 const fs = require('node:fs');
+const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const source = fs.readFileSync('checkout.html', 'utf8');
 const stateController = fs.readFileSync('js/pages/checkout/estado-navegacion-checkout.js', 'utf8');
 const handlers = source.slice(source.indexOf('const invoiceFieldsEl'), source.indexOf("document.getElementById('btn-step3-next').onclick"));
 for (const width of [320, 390, 768, 1024, 1440, 1920]) test(`factura: selección previa, guion móvil y datos conservados (${width}px)`, async ({ page }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
-  const html = source.replace(/<script\b[\s\S]*?<\/script>/gi, '').replace('</body>', `<script>window.TintinCheckoutIdentityUid="fixture";${handlers};document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-2'));document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');document.body.classList.add('tt-checkout-maintenance');</script><script>${stateController}</script></body>`);
+  const html = removeFixtureScripts(source).replace('</body>', `<script>window.TintinCheckoutIdentityUid="fixture";${handlers};document.querySelectorAll('.ck-panel').forEach(el=>el.classList.toggle('active',el.id==='panel-2'));document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');document.body.classList.add('tt-checkout-maintenance');</script><script>${stateController}</script></body>`);
   await page.route('**/checkout?invoice-fixture=1', route => route.fulfill({ contentType: 'text/html', body: html }));
   await page.setViewportSize({ width, height: 900 });
   await page.goto('/checkout?invoice-fixture=1');

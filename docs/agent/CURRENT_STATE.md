@@ -1,3 +1,7 @@
+## 2026-10-12 — Publicación del checkout autorizada por el titular
+
+El titular autorizó integrar y publicar PR1111 conservando la URL pages.dev. Candidato be071cd compiló en Pages preview, pero CI señaló dos alertas CodeQL en un fixture de factura que usaba filtrado HTML por regexp y tres fallos de reanudación en fixture sin UID. Se utiliza el parser HTML existente y la navegación declara la cuenta simulada antes de cargar estado; sin alterar validaciones ni seguridad de producción. Chromium local:22 casos previos y27 de navegación relacionados ejecutados; reanudación en390/768/1440 PASS_LOCAL. Mantenimiento protegido sigue requiriendo revisión manual del entorno por el titular: no autoriza al agente a aprobar en su nombre. No merge/deploy productivo ni pedidos/pagos/correos reales todavía.
+
 ## 2026-10-12 — Correcciones del checkout, sin migración de URL
 
 Codex /root. Base 8657b3646122a17777e5de9f78d366f507f85341; rama codex/checkout-completo-20261012. PASS_LOCAL: 325 pruebas Node (241 checkout/carrito/pedidos/pagos/cola/recibos +84 Auth/arquitectura); incluye siete regresiones ejecutando handlers originales con servicios simulados. PASS_LOCAL: 22 pruebas Chromium locales (320–1920px, identidad editable, factura/reanudación, ticket canónico/descarga/compartir/imprimir, fallos y teclado). Gates de pedidos, entrega, arquitectura, CSP, rutas, flujo, caché y manifiesto PASS_LOCAL. Fixtures de navegador bloquean solicitudes externas. Sin compras, pagos, usuarios, correos ni escrituras de datos de producción.

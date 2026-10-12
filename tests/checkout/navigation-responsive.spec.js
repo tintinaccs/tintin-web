@@ -19,7 +19,7 @@ for(const width of [390,768,1440]) test(`el avance y retorno siguen respondiendo
     ${Array.from({length:5},(_,i)=>`<section class="ck-panel ${i===0?'active':''}"></section>`).join('')}
     <div id="ck-items"><div class="ck-item" data-id="fixture-ring"><div class="ck-item-cat">Anillos</div></div></div>
     <button id="btn-step1-next">Elegir cómo lo recibo</button><button id="btn-step2-back">Volver</button></div>
-    <script>let currentStep=0;const orderData={};const sessionCanMakeCheckoutDecision=()=>true;const canEnterShippingStep=()=>true;const isCheckoutAuthorized=()=>true;
+    <script>window.TintinCheckoutIdentityUid="fixture";let currentStep=0;const orderData={};const sessionCanMakeCheckoutDecision=()=>true;const canEnterShippingStep=()=>true;const isCheckoutAuthorized=()=>true;
     ${goToStep}
     document.getElementById('btn-step1-next').onclick=()=>goToStep(1);document.getElementById('btn-step2-back').onclick=()=>goToStep(0);
     // Detecta un ciclo de microtareas sin permitir que congele el navegador del test.
