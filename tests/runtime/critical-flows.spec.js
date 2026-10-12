@@ -50,7 +50,7 @@ async function otp(page,request,email,{invalid=false}={}){
   await expect(page.locator('#btn-save-profile')).toBeEnabled();
 }
 async function fillProfile(page){await page.locator('#login-profile-first-name').fill('María González');await page.locator('#login-profile-phone').fill('0981123456');}
-async function continueProfile(page){const b=page.locator('#btn-save-profile');if(await page.evaluate(()=>navigator.maxTouchPoints>0))await b.tap();else await b.click();}
+async function continueProfile(page){const b=page.locator('#btn-save-profile');if(test.info().project.use.hasTouch)await b.tap();else await b.click();}
 
 test('correo → OTP real → Continuar → perfil persistido → sesión conservada',async({page,request},testInfo)=>{
   if(testInfo.project.name.includes('mobile'))await page.setViewportSize({width:320,height:568});
@@ -126,6 +126,19 @@ test('producto carga desde HTTP, carrito cambia y checkout avanza tras validar s
   // Stop before ordering/payment. No purchase is submitted.
 });
 
+test('favorito histórico muestra el precio actual del catálogo y lo conserva al recargar',async({page,request})=>{
+  const email='favorite-price@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);await expect(page).toHaveURL(/index\.html/);
+  const account=await state(request,email);
+  const seeded=await request.post('/__test/seed',{data:{path:'users/'+account.uid+'/favorites/runtime-watch',data:{productId:'runtime-watch',name:'Nombre histórico',price:0,imageUrl:'/assets-tintin/images/general/logo.png'}}});
+  expect(seeded.ok()).toBe(true);
+  await page.goto('/perfil#favoritos',{waitUntil:'domcontentloaded'});
+  await expect(page.locator('#perfil-favorites-list')).toContainText('Reloj Runtime');
+  await expect(page.locator('#perfil-favorites-list')).toContainText('150.000');
+  await expect(page.locator('#perfil-favorites-list')).not.toContainText('Gs. 0');
+  await page.reload();
+  await expect(page.locator('#perfil-favorites-list')).toContainText('150.000');
+});
+
 test('cliente no puede elevar su rol ni abrir el panel administrativo',async({page,request})=>{
   const email='client-role@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);await expect(page).toHaveURL(/index\.html/);
   await page.waitForFunction(()=>window.__runtimeAuth?.currentUser && window.__runtimeDb);
@@ -134,9 +147,11 @@ test('cliente no puede elevar su rol ni abrir el panel administrativo',async({pa
     try{await updateDoc(doc(window.__runtimeDb,'users',window.__runtimeAuth.currentUser.uid),{role:'admin'});return 'unexpected-success';}catch(e){return e.code;}
   });
   expect(code).toBe('permission-denied');expect((await state(request,email)).profile.role).toBe('client');
-  // App Check has no emulator: the real guard must keep private UI closed.
+  // Readiness del fixture permite probar el rechazo real del rol cliente,
+  // sin confundir un fallo de App Check con autorización administrativa.
   await page.goto('/admin',{waitUntil:'domcontentloaded'});
-  await expect(page.locator('#adm-appcheck-unavailable')).toBeVisible({timeout:20000});
+  await expect(page).toHaveURL(/perfil(?:\.html)?(?:[?#]|$)/);
+  await expect(page.locator('#adm-sidebar')).toHaveCount(0);
   await expect(page.locator('html')).not.toHaveClass(/adm-auth-ready/);
 });
 
@@ -146,6 +161,11 @@ test('cuenta muestra el perfil persistido, guarda cambios y los conserva al reca
   await page.goto('/perfil',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#perfil-email-display')).toHaveText(email);
   await expect(page.locator('#perfil-nombre')).toHaveValue('María González');
+  const consent=page.getByRole('region',{name:'Cookies y preferencias de privacidad'});
+  await expect(consent).toBeVisible();
+  await consent.getByRole('button',{name:'Solo necesarias',exact:true}).click();
+  await expect(consent).toBeHidden();
+  expect(await page.evaluate(()=>window.TintinActivityPrivacy.preferences.statistics)).toBe(false);
   await page.locator('#perfil-nombre').fill('María López');
   await expect(page.locator('#profile-panel-datos #btn-guardar-perfil')).toBeVisible();
   await page.locator('#btn-guardar-perfil').click();

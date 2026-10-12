@@ -43,8 +43,16 @@ async function registerProfileNotification(env, user) {
   const name = fullName || clean(profile.name || profile.displayName || String(user.email || '').split('@')[0] || 'Nueva clienta', 160);
   const createdAt = profile.createdAt ? new Date(profile.createdAt) : null;
   const createdAtMs = createdAt?.getTime?.();
+  const welcomeResult = await notifyUserIfAbsent(env, uid, {
+    kind: 'welcome', actorType: 'store', actorName: 'Tintin Accesorios',
+    title: '¡Bienvenida a Tintin!',
+    body: 'Tu cuenta está lista. Acá vas a recibir y conservar las novedades de tus pedidos.',
+    iconKey: 'sparkle', targetUrl: 'perfil.html#resumen',
+    sourceType: 'user', sourceId: uid,
+    createdAt: Number.isFinite(createdAtMs) ? createdAt : new Date(),
+  }, `welcome:${uid}`);
   if (!Number.isFinite(createdAtMs) || Date.now() - createdAtMs > PROFILE_RECOVERY_WINDOW_MS) {
-    return { created: false, skipped: true, reason: 'existing_profile' };
+    return { ...welcomeResult, adminSkipped: true, reason: 'existing_profile' };
   }
 
   const adminResult = await notifyAdminIfAbsent(env, {
@@ -137,11 +145,11 @@ async function registerOrderCreated(env, user, orderId) {
   return adminResult;
 }
 
-async function notifyOrderStatus(env, actor, orderId) {
+export async function notifyOrderStatus(env, actor, orderId, committedOrder = null) {
   const id = safeId(orderId, 'Pedido');
-  const document = await firestoreAdminGet(env, `orders/${id}`);
-  if (!document) throw new Error('No se encontró el pedido');
-  const order = decodeFirestoreFields(document.fields || {});
+  const document = committedOrder ? null : await firestoreAdminGet(env, `orders/${id}`);
+  if (!document && !committedOrder) throw new Error('No se encontró el pedido');
+  const order = committedOrder || decodeFirestoreFields(document.fields || {});
   const uid = clean(order.userId, 180);
   if (!uid) return { skipped: true, reason: 'order_without_account' };
   safeId(uid, 'Cuenta del pedido');

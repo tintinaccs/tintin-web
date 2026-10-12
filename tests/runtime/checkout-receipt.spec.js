@@ -102,6 +102,11 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1280,7
     await expect(label).toBeVisible();
     expect(await label.evaluate(el => getComputedStyle(el).boxShadow)).toContain('inset');
     expect(await label.evaluate(el => getComputedStyle(el).transform)).toBe('none');
+    expect(await label.evaluate(el => {
+      const card = el.closest('.ck-payment-runtime-item').getBoundingClientRect();
+      const selected = el.getBoundingClientRect();
+      return selected.left >= card.left - 1 && selected.right <= card.right + 1 && el.scrollWidth <= el.clientWidth;
+    })).toBe(true);
     await page.evaluate(() => { fixtureReview(); fixtureQuote(); });
     await expect(page.locator('.ck-summary-shipping-note')).toHaveText('El envío se paga a la transportadora al recibir y no está incluido en el total.');
     const separated = await page.locator('.ck-summary-total').evaluateAll(rows => rows.every(row => {

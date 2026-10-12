@@ -7,7 +7,7 @@
    renderer legado vuelva a dejar categorías antiguas después del snapshot.
    ============================================================= */
 
-import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261012-auth-privacy-1-estado-colecciones-js';
+import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js';
 
 if (!window.TintinCollectionsPhase4Booted) {
   window.TintinCollectionsPhase4Booted = true;

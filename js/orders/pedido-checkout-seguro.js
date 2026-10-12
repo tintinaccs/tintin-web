@@ -1,5 +1,6 @@
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
+import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
 import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js';
@@ -47,7 +48,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261012-checkout-ready-1-checkout-puente-correo-js').catch(error => {
+    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261012-checkout-ready-2-checkout-puente-correo-js').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }
@@ -117,7 +118,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
   }
 
-  function showError(message, reviewCart = false) {
+  function showError(message, reviewCart = false, reviewShipping = false) {
     const box = document.getElementById('error-4');
     if (!box) return;
     box.innerHTML = reviewCart
@@ -129,6 +130,17 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     box.focus();
     box.scrollIntoView({ block: 'center', behavior: 'smooth' });
     document.getElementById('tt-review-cart')?.addEventListener('click', () => window.location.reload());
+    if (reviewShipping) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'ck-btn-secondary';
+      button.textContent = 'Revisar ciudad y entrega';
+      button.addEventListener('click', async () => {
+        await window.TintinCheckoutState?.navigate?.(1);
+        document.getElementById('ck-city')?.focus();
+      });
+      box.appendChild(button);
+    }
   }
 
   function hideError() {
@@ -505,14 +517,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError('shipping_invalid', 'Volvé a elegir tu ciudad y método de entrega.');
     }
 
-    const wanted = text(selectedCity).toLocaleLowerCase('es');
+    const wanted = normalizeDeliveryCityName(selectedCity).toLocaleLowerCase('es');
     const wantedDepartment = text(selectedDepartment).toLocaleLowerCase('es');
     const matches = city =>
       city.name.toLocaleLowerCase('es') === wanted &&
       (!wantedDepartment || city.departamento.toLocaleLowerCase('es') === wantedDepartment);
 
     if (requested === 'delivery') {
-      const delivery = normalizeCities(settings.deliveryCities, settings.deliveryCost).find(matches);
+      const delivery = canonicalDeliveryCities(normalizeCities(settings.deliveryCities, settings.deliveryCost)).find(matches);
       if (!delivery) {
         throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible para delivery.');
       }
@@ -533,7 +545,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
     const mode = encomiendaMode();
     if (!mode) {
-      throw appError('shipping_invalid', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
+      throw appError('encomienda_mode_required', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
     }
     return {
       method: 'encomienda',
@@ -603,7 +615,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const name = text(document.getElementById('ck-name')?.value);
     const address = text(document.getElementById('ck-address')?.value);
     const reference = text(document.getElementById('ck-referencia')?.value);
-    if (shipping.method === 'delivery' && reference.length < 5) {
+    if ((shipping.method === 'delivery' || (shipping.method === 'encomienda' && shipping.encomiendaMode === 'puerta')) && reference.length < 5) {
       throw appError('reference_required', 'Ingresá una referencia útil para encontrar tu entrega (al menos 5 caracteres).');
     }
     const paymentMethod = text(document.querySelector('input[name="ck-pay"]:checked')?.value);
@@ -974,7 +986,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       ci_invalid: 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).',
       razon_social_required: 'Ingresá nombre y apellido para persona física, o la razón social de tu empresa.',
       ruc_invalid: 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).',
-      shipping_invalid: 'La ciudad elegida ya no está disponible.',
+      shipping_invalid: 'No pudimos validar la ciudad con las tarifas actuales. Volvé a elegir ciudad y entrega.',
+      shipping_changed: 'El método de entrega cambió. Volvé a elegir cómo recibir tu pedido.',
+      encomienda_mode_required: 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.',
       settings_missing: 'No pudimos comprobar la configuración de la tienda.',
       profile_missing: 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.',
       checkout_cooldown: error?.details?.remaining
@@ -1095,6 +1109,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         showError('Uno de los productos ya no está disponible.', true);
       } else if (code === 'empty_cart') {
         forceBackToCart();
+        button.textContent = '✓ Confirmar pedido';
+      } else if (['shipping_invalid', 'shipping_changed', 'encomienda_mode_required'].includes(code)) {
+        showError(message(error), false, true);
+        button.disabled = false;
         button.textContent = '✓ Confirmar pedido';
       } else {
         showError(message(error));

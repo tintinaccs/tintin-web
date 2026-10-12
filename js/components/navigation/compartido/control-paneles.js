@@ -177,7 +177,7 @@
         this.inertState.clear();
         const navigation = this.getMobileNavigation();
         [...document.body.children].forEach(node => {
-          if (!(node instanceof HTMLElement) || node === activeElement || node.contains(activeElement) || (navigation && node.contains(navigation)) || node === this.backdrop || node === this.morphLayer || node.tagName === 'SCRIPT') return;
+          if (!(node instanceof HTMLElement) || node === activeElement || node.contains(activeElement) || (navigation && node.contains(navigation)) || node === this.backdrop || node === this.morphLayer || node.id === 'tt-cart-feedback' || node.tagName === 'SCRIPT') return;
           this.inertState.set(node, node.inert);
           node.inert = true;
         });

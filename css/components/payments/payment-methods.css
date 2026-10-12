@@ -16,6 +16,9 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 .ck-payment-runtime-item .ck-pay-label {
   position: relative;
   width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  padding-right: 52px;
   min-height: 92px;
   margin: 0;
   background: var(--ck-surface, #fff) !important;
@@ -26,7 +29,8 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 .ck-payment-runtime-item .ck-pay-label::after {
   content: '';
   position: absolute;
-  top: 14px;
+  top: 50%;
+  transform: translateY(-50%);
   right: 14px;
   width: 22px;
   height: 22px;
@@ -63,7 +67,8 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 
 .ck-payment-runtime-copy {
   min-width: 0;
-  padding-right: 34px;
+  flex: 1;
+  overflow-wrap: anywhere;
 }
 
 .ck-payment-runtime-details {
@@ -272,7 +277,7 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 }
 
 @media (min-width: 321px) and (max-width: 390px) {
-  .ck-payment-runtime-item .ck-pay-label { padding: 14px; gap: 11px; min-height: 88px; }
+  .ck-payment-runtime-item .ck-pay-label { padding: 14px 48px 14px 14px; gap: 11px; min-height: 88px; }
   .ck-payment-runtime-detail { grid-template-columns: 1fr; gap: 3px; }
   .tt-payment-admin-grid,
   .tt-payment-admin-item,
@@ -283,8 +288,8 @@ body:has(.ck-body) .ck-pay-option:checked + .ck-pay-label {
 }
 
 @media (max-width: 320px) {
-  .ck-payment-runtime-item .ck-pay-label { padding: 12px; gap: 9px; min-height: 84px; }
-  .ck-payment-runtime-item .ck-pay-label::after { top: 10px; right: 10px; }
+  .ck-payment-runtime-item .ck-pay-label { padding: 12px 44px 12px 12px; gap: 9px; min-height: 84px; }
+  .ck-payment-runtime-item .ck-pay-label::after { top: 50%; right: 10px; }
   .ck-payment-runtime-copy { padding-right: 28px; }
   .ck-payment-runtime-detail,
   .tt-payment-admin-grid,

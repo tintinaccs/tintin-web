@@ -14,6 +14,7 @@
 // - Precio/nombre/imagen son solo datos visuales; checkout vuelve a validarlos.
 // =============================================================
 
+import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
@@ -25,10 +26,8 @@ import {
   collection,
   doc,
   getDocs,
-  onSnapshot,
   serverTimestamp,
-  writeBatch,
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+  writeBatch} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const existingRuntime = window.__TintinCartSyncV2 || null;
 
@@ -352,13 +351,15 @@ function createRuntime() {
       node.setAttribute('role', 'status');
       node.setAttribute('aria-live', 'polite');
       node.setAttribute('aria-atomic', 'true');
+      node.style.cssText = 'position:fixed;z-index:2147483646;bottom:100px;left:50%;transform:translateX(-50%);box-sizing:border-box;width:max-content;max-width:min(580px,calc(100vw - 24px));padding:14px 20px;border:1px solid #e8bfd0;border-radius:18px;background:#fff;color:#713c53;box-shadow:0 8px 28px #713c5333;font:600 14px/1.5 Montserrat,sans-serif;overflow-wrap:anywhere;pointer-events:none;text-align:center';
       document.body.appendChild(node);
     }
     node.textContent = message;
     node.dataset.state = state;
     node.classList.add('is-visible');
+    node.hidden = false;
     window.clearTimeout(feedbackTimer);
-    feedbackTimer = window.setTimeout(() => node.classList.remove('is-visible'), 4200);
+    feedbackTimer = window.setTimeout(() => { node.classList.remove('is-visible'); node.hidden = true; }, 4200);
   }
 
   function withCartMutation(operation) {
@@ -585,11 +586,15 @@ function createRuntime() {
       await replaceRemoteCart(uid, snapshotItems);
       if (!currentUser || currentUser.uid !== uid || generation !== authGeneration) return;
       lastRemoteProjection = snapshotProjection;
-      rawRemove(dirtyKey(uid));
       rawStringSet(migratedKey(uid), '1');
       if (desiredProjection === snapshotProjection) {
+        rawRemove(dirtyKey(uid));
         pendingRemoteWrite = false;
         setStatus('synced');
+      } else {
+        // El acuse pertenece a una versión anterior. Si la visitante navega
+        // ahora, la siguiente página debe conservar su edición pendiente.
+        rawStringSet(dirtyKey(uid), '1');
       }
       if (guestAtLogin.length) {
         rawSet(GUEST_CART_KEY, []);
@@ -636,8 +641,10 @@ function createRuntime() {
     const firstV2Migration = rawString(migratedKey(uid)) !== '1';
     const hasUnsyncedLocal = rawString(dirtyKey(uid)) === '1';
 
-    let base = (firstV2Migration || hasUnsyncedLocal)
-      ? mergeMax(remoteItems, localItems)
+    // Un carrito dirty expresa la elección local completa, incluidas bajas y
+    // cantidades reducidas. mergeMax resucitaría productos quitados al volver.
+    let base = hasUnsyncedLocal ? localItems
+      : firstV2Migration ? mergeMax(remoteItems, localItems)
       : enrichRemote(remoteItems, localItems);
     base = addGuestQuantities(base, guestAtLogin);
     base = normalizeCart(base);
@@ -668,6 +675,9 @@ function createRuntime() {
 
   function handleLaterRemote(snapshot, generation) {
     if (!currentUser || generation !== authGeneration) return;
+    // La caché y las escrituras optimistas no son un acuse del servidor.
+    // Confirmarlas aquí permitiría que una respuesta anterior borre el carrito.
+    if (snapshot.metadata?.fromCache || snapshot.metadata?.hasPendingWrites) return;
     const remoteItems = snapshot.docs.map(remoteItemFromSnapshot).filter(Boolean).map(({ _remoteDocId, ...item }) => item);
     const remoteProjection = projection(remoteItems);
     lastRemoteProjection = remoteProjection;
@@ -695,6 +705,12 @@ function createRuntime() {
       snapshot => {
         snapshotChain = snapshotChain.then(async () => {
           if (generation !== authGeneration) return;
+          if (snapshot.metadata?.fromCache || snapshot.metadata?.hasPendingWrites) {
+            // El carrito local sigue disponible sin conexión. La primera
+            // reconciliación remota espera datos confirmados por el servidor.
+            readyResolve?.();
+            return;
+          }
           if (firstSnapshot) {
             firstSnapshot = false;
             await handleInitialRemote(snapshot, generation);
@@ -781,7 +797,7 @@ function createRuntime() {
         readyResolve?.();
         return;
       }
-      subscribeToRemote(currentUser, generation);
+      if (!remoteUnsubscribe) subscribeToRemote(currentUser, generation);
     });
   }
 
@@ -903,6 +919,8 @@ function createRuntime() {
       const saved = normalized.find(entry => entry.lineId === incoming.lineId) || null;
       if (capped) {
         showFeedback(`Se agregó solamente la cantidad disponible (${accepted} de ${requested}).`, 'warning');
+      } else {
+        showFeedback(`✓ ${incoming.name || 'Producto'} agregado al carrito`, 'success');
       }
       return { item: saved, capped, changed: true, reason: capped ? 'partially_added' : 'added', limit, requested, accepted };
     });
@@ -1050,9 +1068,15 @@ function createRuntime() {
     // No activar el carrito como invitado mientras Firebase todavía restaura
     // la sesión persistida al cambiar de catálogo/producto.
     subscribeAuthState(activateIdentity);
+    window.addEventListener('tintin:app-check-ready', event => {
+      if (event.detail?.ready === true && currentUser && !remoteUnsubscribe) {
+        subscribeToRemote(currentUser, authGeneration);
+      }
+    });
   }
 
   const api = {
+    showFeedback,
     productVariantImage,
     getCartLocal,
     setCartLocal,
@@ -1123,7 +1147,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261012-checkout-ready-1-pedido-checkout-seguro-js').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261012-checkout-ready-3-pedido-checkout-seguro-js').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

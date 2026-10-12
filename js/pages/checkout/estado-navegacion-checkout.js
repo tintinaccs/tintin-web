@@ -372,6 +372,7 @@ function setCheckoutUser(uid) {
 }
 
 window.TintinCheckoutState = {
+  navigate: navigateTo,
   setUser: setCheckoutUser,
   clear: clearCheckoutState,
   persist: persistDraft,

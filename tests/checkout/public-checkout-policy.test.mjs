@@ -102,6 +102,17 @@ async function rejectsWith(promise, code) {
   });
 }
 
+test('Maciel en Caazapá sigue siendo válido y puerta exige una referencia', async () => {
+  const store = fakeStore({'settings/shippingRates': {
+    encomiendaCities: [{name:'Maciel',departamento:'Caazapá'}], deliveryCities: [],
+  }});
+  const input = draft({selectedCity:'Maciel',departamento:'Caazapá',shippingMethod:'encomienda',
+    encomiendaMode:'puerta',ci:'1234567',expectedShippingCost:0,expectedTotal:100000});
+  await checkout(input, store);
+  assert.equal(orderWrite(store).shipping.city, 'Maciel');
+  await rejectsWith(checkout({...input,referencia:''}, store), 'reference_required');
+});
+
 test('el navegador no puede fijar estado, pago, correo de cuenta ni costo de envío', async () => {
   const { created, store } = await checkout(draft({
     status: 'entregado',
@@ -200,7 +211,7 @@ test('encomienda exige CI, modo válido y únicamente transferencia', async () =
   assert.equal(order.ci, '1234567');
 
   await rejectsWith(checkout(draft({ ...base, ci: '12' })), 'ci_invalid');
-  await rejectsWith(checkout(draft({ ...base, encomiendaMode: '' })), 'shipping_invalid');
+  await rejectsWith(checkout(draft({ ...base, encomiendaMode: '' })), 'encomienda_mode_required');
   await rejectsWith(checkout(draft({ ...base, paymentMethod: 'efectivo' })), 'payment_unavailable');
   const paypalStore = fakeStore({ 'settings/general': { storeOpen: true, paymentMethods: { efectivo: true, transferencia: true }, paypal: { enabled: true } } });
   await rejectsWith(checkout(draft({ ...base, paymentMethod: 'paypal' }), paypalStore), 'payment_unavailable');

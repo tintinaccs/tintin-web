@@ -7,12 +7,11 @@
  *
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
+import { onAppCheckSnapshot as onSnapshot } from '../firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1';
 import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
 import {
-  doc,
-  onSnapshot
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+  doc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { getUserRole } from '../auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js';
 import {
   isAccessAllowed,
@@ -144,7 +143,7 @@ if (!window.TintinStoreGateRuntimeBooted) {
     );
   }
 
-  if (appCheckAvailable) {
+  if (appCheckAvailable || window.TintinAppCheckStatus === 'checking') {
     onSnapshot(
       storeGateRef,
       snapshot => {

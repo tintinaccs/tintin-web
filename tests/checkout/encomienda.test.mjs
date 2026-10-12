@@ -63,9 +63,17 @@ test('entrega en puerta exige la dirección escrita', () => {
 
 test('entrega en puerta con todo completo pasa', () => {
   assert.equal(
-    encomiendaValidationError(ENCOMIENDA_MODES.PUERTA, { mapLocation: { lat: 1, lng: 2 }, locationName: 'Casa', address: 'Av. España 1234' }),
+    encomiendaValidationError(ENCOMIENDA_MODES.PUERTA, { mapLocation: { lat: 1, lng: 2 }, locationName: 'Casa', address: 'Av. España 1234', referencia: 'Portón blanco' }),
     null
   );
+});
+
+test('entrega en puerta rechaza una referencia vacía o corta', () => {
+  for (const referencia of ['', '   ', 'abc']) {
+    assert.match(encomiendaValidationError(ENCOMIENDA_MODES.PUERTA, {
+      mapLocation: { lat: 1, lng: 2 }, locationName: 'Casa', address: 'Av. España 1234', referencia,
+    }), /referencia/i);
+  }
 });
 
 test('las etiquetas describen el modo para el resumen, el panel y los correos', () => {

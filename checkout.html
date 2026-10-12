@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261012-checkout-ready-1-cargador-pagina-js"></script>
-  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261012-checkout-ready-1-inicio-navegacion-publica-js" defer></script>
+<script src="js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js"></script>
+  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261012-checkout-ready-3-inicio-navegacion-publica-js" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261012-checkout-ready-1-entrada-navegacion-publica-js">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261012-checkout-ready-3-entrada-navegacion-publica-js">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20261010-social-mobile-styles-3">
-  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20261012-checkout-ready-1-checkout-css">
+  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20261012-checkout-ready-2-checkout-css">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2">
@@ -192,9 +192,9 @@
       </div>
 
       <div class="ck-field" id="ck-referencia-field" style="display:none">
-        <label class="ck-label" for="ck-referencia">Referencia para encontrar tu entrega *</label>
+        <label class="ck-label" for="ck-referencia">Referencia para encontrar tu ubicación *</label>
         <input type="text" class="ck-input" id="ck-referencia" placeholder="Ej: casa azul, frente al semáforo" maxlength="300" aria-describedby="ck-reference-help" />
-        <p class="ck-field-help" id="ck-reference-help">Para delivery, indicá una referencia útil además del punto en el mapa.</p>
+        <p class="ck-field-help" id="ck-reference-help">Para entrega en puerta, indicá una referencia útil además del punto en el mapa.</p>
       </div>
 
       <!-- MAP — solo para delivery. Marcar la ubicación acá es obligatorio
@@ -426,6 +426,7 @@
 </div><!-- /ck-body -->
 
 <script type="module">
+import { onAppCheckSnapshot as onSnapshot } from './js/core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1';
 import { isValidCustomerName, readProfileName, isValidFullName } from './js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2';
 import { shippingDepartment } from './js/components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { productVariantImage } from './js/components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
@@ -433,15 +434,14 @@ import { canonicalDeliveryCities } from './js/components/location/tarifas-delive
 
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js";
 import { AUTH_STATES, sessionReady, subscribeSession } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js";
-import { readCheckoutProfile } from "./js/pages/checkout/perfil-checkout.js?v=tintin-20261012-auth-privacy-1-perfil-checkout-js";
+import { readCheckoutProfile } from "./js/pages/checkout/perfil-checkout.js?v=tintin-20261012-client-recovery-1-perfil-checkout-js";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
-  updateDoc, increment, serverTimestamp, setDoc, onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+  updateDoc, increment, serverTimestamp, setDoc} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-1-sincronizacion-carrito-js";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isNationalMobileInput, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial, isValidTaxpayerType } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -454,7 +454,7 @@ import {
 } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20261008-location-search-1";
-import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1-encomienda-20261008-1";
+import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20261012-checkout-ready-3-checkout-encomienda-js";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261008-producto-superficies-1";
 import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1-photos-20261008-1";
@@ -891,7 +891,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-1-sincronizacion-carrito-js');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1344,6 +1344,7 @@ document.getElementById('btn-step2-next').onclick = () => {
       mapLocation: orderData.mapLocation,
       locationName: document.getElementById('ck-location-name').value,
       address: document.getElementById('ck-address').value,
+      referencia: document.getElementById('ck-referencia').value,
     });
     if (encError) {
       showError(1, encError);
@@ -2023,8 +2024,8 @@ subscribeSession(snapshot => {
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261012-auth-privacy-1-proteccion-sesion-js"></script>
 <script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20261012-auth-privacy-1-paypal-checkout-js"></script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1" defer></script>
-<script src="tienda.js?v=tintin-20261012-checkout-ready-1-tienda-js" defer></script>
-  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261012-auth-privacy-1-esquema-color-js"></script>
+<script src="tienda.js?v=tintin-20261012-checkout-ready-3-tienda-js" defer></script>
+  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261012-client-recovery-1-esquema-color-js"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
   <div class="container tt-footer-shell">

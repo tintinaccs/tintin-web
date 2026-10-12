@@ -8,6 +8,8 @@ import { createRequire } from 'node:module';
 const require=createRequire(import.meta.url);
 const {webkit}=require('playwright');
 const root=path.resolve(import.meta.dirname,'..');
+const testFile=process.env.TINTIN_RUNTIME_TEST_FILE || '';
+if(testFile && (!/^tests\/runtime\/[a-z0-9-]+\.spec\.js$/.test(testFile) || !fs.existsSync(path.join(root,testFile)))) throw new Error('Archivo de retest runtime inválido');
 const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'tintin-runtime-'));
 const htmlReport=path.join(temporary,'html-report');
 process.env.TINTIN_RUNTIME_HTML_DIR=htmlReport;
@@ -20,7 +22,7 @@ try{
   }
   const config=path.join(temporary,'firebase.json');
   fs.writeFileSync(config,JSON.stringify({firestore:{rules:path.join(root,'firestore.rules')},emulators:{auth:{host:'127.0.0.1',port:9099},firestore:{host:'127.0.0.1',port:8080},ui:{enabled:false},singleProjectMode:true}}));
-  await run(['node_modules/firebase-tools/lib/bin/firebase.js','emulators:exec','--only','auth,firestore','--project','demo-tintin-interactions','--config',config,'node node_modules/playwright/cli.js test --config=playwright.runtime.config.js']);
+  await run(['node_modules/firebase-tools/lib/bin/firebase.js','emulators:exec','--only','auth,firestore','--project','demo-tintin-interactions','--config',config,'node node_modules/playwright/cli.js test --config=playwright.runtime.config.js'+(testFile?' '+testFile:'')]);
 }catch(error){console.error(error.message);process.exitCode=1;}
 finally{
   if(fs.existsSync(htmlReport)){
