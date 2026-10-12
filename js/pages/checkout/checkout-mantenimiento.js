@@ -106,8 +106,7 @@ if (CHECKOUT_RE.test(location.pathname || '') && !window.TintinCheckoutMaintenan
       new MutationObserver(() => {
         const visible = error.classList.contains('show') || (error.textContent || '').trim().length > 0;
         error.closest('.ck-panel')?.querySelectorAll('input, select, textarea').forEach(control => {
-          if (visible && !control.value) control.setAttribute('aria-invalid', 'true');
-          else control.setAttribute('aria-invalid', 'false');
+          if (!visible) control.removeAttribute('aria-invalid');
         });
       }).observe(error, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'style'] });
     });

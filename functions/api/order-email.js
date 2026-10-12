@@ -8,6 +8,8 @@ import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-p
 import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
 import { normalizePaymentCatalog } from '../../js/orders/nucleo-metodos-pago.js';
 import { sendInitialOrderEmailOnce } from '../../cloudflare/recibo-correo-pedido.js';
+import { firestoreAdminGet, firestoreAdminMerge, encodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
+import { orderContactLinks } from '../../cloudflare/contactos-pedido.mjs';
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
@@ -292,7 +294,7 @@ Podés responder directamente a este correo para comunicarte con Tintin.`;
   };
 }
 
-function adminEmail(order, orderId) {
+export function adminEmail(order, orderId) {
   const shortId = clean(order.shortId, 30) || clean(orderId, 8).toUpperCase();
   const items = Array.isArray(order.items) ? order.items : [];
   const cityLabel = cityDepartmentLabel(order);
@@ -302,10 +304,7 @@ function adminEmail(order, orderId) {
       <td style="padding:9px 0;border-bottom:1px solid #f2e4e9;text-align:right">${escapeHtml(fmtPrice(Number(item.price || 0) * Number(item.qty || 0)))}</td>
     </tr>`).join('');
 
-  const mapLocation = order?.shipping?.mapLocation;
-  const mapLink = mapLocation && Number.isFinite(Number(mapLocation.lat)) && Number.isFinite(Number(mapLocation.lng))
-    ? `https://maps.google.com/?q=${encodeURIComponent(`${mapLocation.lat},${mapLocation.lng}`)}`
-    : '';
+  const contacts = orderContactLinks(order, orderId);
 
   const html = `<!doctype html>
 <html lang="es">
@@ -328,7 +327,11 @@ function adminEmail(order, orderId) {
         <tr><td style="padding:5px 0;color:#7b6f72">Entrega</td><td style="padding:5px 0">${escapeHtml(shippingLabel(order))}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Pago</td><td style="padding:5px 0">${escapeHtml(paymentLabel(order))}</td></tr>
       </table>
-      ${mapLink ? `<p style="margin:14px 0 0;font-size:13px"><a href="${mapLink}" style="color:#ad3f67">Ver ubicación en Google Maps</a></p>` : ''}
+      <div style="margin:16px 0;display:block;text-align:center">
+        ${contacts.map ? `<a href="${escapeHtml(contacts.map)}" style="display:inline-block;margin:4px;padding:12px 18px;border:1px solid #ad3f67;border-radius:20px;color:#713c53;text-decoration:none">Ver ubicación en Google Maps</a>` : ''}
+        ${contacts.customer ? `<a href="${escapeHtml(contacts.customer)}" style="display:inline-block;margin:4px;padding:12px 18px;background:#ad3f67;border-radius:20px;color:white;text-decoration:none">Contactar al cliente por WhatsApp</a>` : ''}
+        ${contacts.dispatch ? `<a href="${escapeHtml(contacts.dispatch)}" style="display:inline-block;margin:4px;padding:12px 18px;background:#ad3f67;border-radius:20px;color:white;text-decoration:none">Enviar a Fito</a>` : ''}
+      </div>
       <h2 style="margin:24px 0 8px;color:#2b2226;font-size:15px">Productos</h2>
       <table style="width:100%;border-collapse:collapse;font-size:13.5px">${itemRows}</table>
       <table style="width:100%;border-collapse:collapse;margin-top:14px;background:#fdf6f9;border-radius:14px;font-size:13.5px">
@@ -368,7 +371,10 @@ Envío: ${shippingCostLabel(order)}
 Total: ${fmtPrice(order.total)}
 ${order.notes ? `Notas: ${clean(order.notes, 1000)}` : ''}
 
-Super Admin: ${ADMIN_PANEL}`;
+Super Admin: ${ADMIN_PANEL}
+${contacts.map ? `Google Maps: ${contacts.map}` : ''}
+${contacts.customer ? `WhatsApp del cliente: ${contacts.customer}` : ''}
+${contacts.dispatch ? `Enviar a Fito: ${contacts.dispatch}` : ''}`;
 
   return {
     subject: `Nuevo pedido #${shortId} — ${STORE_NAME}`,
@@ -395,7 +401,34 @@ export async function sendResendEmail(apiKey, payload, idempotencyKey) {
   return data;
 }
 
+export async function recordOrderEmailDelivery(env, orderId, result, { get = firestoreAdminGet, merge = firestoreAdminMerge } = {}) {
+  const path = `orders/${encodeURIComponent(orderId)}`;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const previousDoc = await get(env, path);
+    if (!previousDoc) return;
+    const previous = decodeFirestoreFields(previousDoc.fields || {});
+    const receipts = await Promise.all(['admin', 'customer'].map(channel => get(env, `syncMeta/orderEmailReceipt_${orderId}_${channel}`)));
+    const adminSent = result.adminSent === true || previous.notificationAdminSent === true || decodeFirestoreFields(receipts[0]?.fields || {}).status === 'sent';
+    const customerSent = result.customerSent === true || previous.notificationCustomerSent === true || decodeFirestoreFields(receipts[1]?.fields || {}).status === 'sent';
+    try {
+      await merge(env, path, encodeFirestoreFields({
+        notificationAdminSent: adminSent, notificationCustomerSent: customerSent,
+        notificationStatus: adminSent && customerSent ? 'sent' : adminSent || customerSent ? 'partial' : 'failed',
+        notificationError: adminSent && customerSent ? '' : clean(result.error, 600),
+        notificationUpdatedAt: new Date(),
+      }), { updateTime: previousDoc.updateTime || '' });
+      return;
+    } catch (error) { if (error?.code !== 'version_conflict' || attempt === 2) throw error; }
+  }
+}
+
 export async function sendOrderEmails({ env, apiKey, orderId, order, isResend, sendAdmin, sendCustomer, transfer = null }) {
+  if (sendCustomer && !transfer && clean(order?.payment?.method, 40) === 'transferencia') {
+    try {
+      const settings = await firestoreAdminGet(env, 'settings/general');
+      transfer = transferInstructionsFromSettings(decodeFirestoreFields(settings?.fields || {}), order?.payment?.methodId || 'transferencia');
+    } catch (error) { console.warn('[order-email] No se pudieron cargar instrucciones de transferencia:', error?.message); }
+  }
   const suffix = isResend ? `resend-${Date.now()}` : 'new-v1';
   const deliveryKeys = {
     admin: `order-${orderId}-admin-${suffix}`,
@@ -451,6 +484,8 @@ export async function sendOrderEmails({ env, apiKey, orderId, order, isResend, s
     }
   }
 
+  try { await recordOrderEmailDelivery(env, orderId, { adminSent, customerSent, error: errors.join(' | ') }); }
+  catch (error) { console.error('[order-email] No se pudo guardar el estado de entrega:', error?.message); }
   const success = (adminSent !== false) && (customerSent !== false) && (adminSent === true || customerSent === true);
   return {
     success,

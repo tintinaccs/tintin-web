@@ -178,19 +178,20 @@ async function enhanceProfile() {
   const panels = new Map([...wrap.querySelectorAll('[data-profile-panel]')]
     .map(panel => [panel.dataset.profilePanel, panel]));
   const requestedPanel = location.hash.replace('#', '');
-  const initialPanel = panels.has(requestedPanel) ? requestedPanel : 'datos';
+  const initialPanel = /^pedido-[A-Za-z0-9_-]+$/.test(requestedPanel) ? 'pedidos' : panels.has(requestedPanel) ? requestedPanel : 'datos';
 
   function activate(id) {
     panels.forEach((panel, key) => { panel.hidden = key !== id; });
     tabs.querySelectorAll('[data-profile-tab]').forEach(button => button.setAttribute('aria-selected', button.dataset.profileTab === id ? 'true' : 'false'));
-    history.replaceState(null, '', id === 'resumen' ? '/perfil' : `/perfil#${id}`);
+    const orderHash = /^#pedido-[A-Za-z0-9_-]+$/.test(location.hash) && id === 'pedidos' ? location.hash : `#${id}`;
+    history.replaceState(null, '', id === 'resumen' ? '/perfil' : `/perfil${orderHash}`);
   }
   tabs.addEventListener('click', event => {
     const button = event.target.closest?.('[data-profile-tab]');
     if (button) activate(button.dataset.profileTab);
   });
 
-  window.addEventListener('hashchange',()=>{const id=location.hash.slice(1);if(panels.has(id))activate(id);});
+  window.addEventListener('hashchange',()=>{const id=location.hash.slice(1);if(/^pedido-[A-Za-z0-9_-]+$/.test(id))activate('pedidos');else if(panels.has(id))activate(id);});
 
   function updateSummary() {
     const countText = document.getElementById('perfil-purchase-count')?.textContent?.trim() || '—';

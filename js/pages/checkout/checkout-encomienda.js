@@ -33,13 +33,14 @@ export function encomiendaFieldPlan(mode) {
 }
 
 /** Qué falta para poder continuar. `null` = está todo. */
-export function encomiendaValidationError(mode, { mapLocation, locationName, address } = {}) {
+export function encomiendaValidationError(mode, { mapLocation, locationName, address, referencia } = {}) {
   if (!mode) return 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.';
   if (mode === ENCOMIENDA_MODES.AGENCIA) return null;
 
   if (!mapLocation) return 'Marcá en el mapa dónde te lo entregamos (buscándolo o tocando el mapa).';
   if (!String(locationName || '').trim()) return 'Ponele un nombre a tu ubicación (ej: Mi casa) para continuar.';
   if (!String(address || '').trim()) return 'Ingresá tu dirección de entrega.';
+  if (String(referencia || '').trim().length < 5) return 'Ingresá una referencia útil para encontrar tu ubicación (al menos 5 caracteres).';
   return null;
 }
 

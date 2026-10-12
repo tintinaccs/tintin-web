@@ -278,29 +278,21 @@ export async function onRequest(context) {
         { uid: authenticatedUser.uid, email: authenticatedUser.email, role: 'client', origin: 'public-checkout' },
         { inspect: checkout.inspect },
       );
-      let emailResult = { success: false, adminSent: null, customerSent: null, error: 'RESEND_API_KEY no está configurada' };
-      if (!created.duplicate && env.RESEND_API_KEY) {
-        emailResult = await sendOrderEmails({
-          env,
-          apiKey: env.RESEND_API_KEY,
-          orderId: created.orderId,
-          order: created.order,
-          isResend: false,
-          sendAdmin: true,
-          sendCustomer: true,
-        });
-      }
+      const emailStatus = created.order.notificationStatus || 'pending';
+      const emailResult = { success: emailStatus === 'sent', adminSent: created.order.notificationAdminSent ?? null, customerSent: created.order.notificationCustomerSent ?? null, error: '' };
       if (!created.duplicate) {
-        if (!emailResult.success) {
-          const pendingRetry = queuePendingOrderEmail(env, {
-            orderId: created.orderId,
-            retryAdmin: emailResult.adminSent !== true,
-            retryCustomer: emailResult.customerSent !== true,
-            lastError: emailResult.error,
-          }).catch(() => {});
-          if (context.waitUntil) context.waitUntil(pendingRetry);
-          else await pendingRetry;
-        }
+        try {
+          await queuePendingOrderEmail(env, { orderId: created.orderId, retryAdmin: true, retryCustomer: true, lastError: '' });
+        } catch (error) { console.error('[apps-script-bridge] No se pudo encolar el ticket:', error?.message); }
+        const deliver = async () => {
+          if (!env.RESEND_API_KEY) return;
+          try {
+            const result = await sendOrderEmails({ env, apiKey: env.RESEND_API_KEY, orderId: created.orderId, order: created.order, isResend: false, sendAdmin: true, sendCustomer: true });
+            if (!result.success) console.warn('[apps-script-bridge] Ticket pendiente:', result.error);
+          } catch (error) { console.error('[apps-script-bridge] Falló el envío del ticket:', error?.message); }
+        };
+        if (context.waitUntil) context.waitUntil(deliver());
+        else await deliver();
         context.waitUntil?.(syncOrderOwnerStats(env, created.order).catch(error => {
           console.error('[apps-script-bridge] order stats sync failed', error?.message || error);
         }));
@@ -322,7 +314,7 @@ export async function onRequest(context) {
         duplicate: created.duplicate === true,
         adminSent: emailResult.adminSent,
         customerSent: emailResult.customerSent,
-        notificationStatus: emailResult.success ? 'sent' : 'pending',
+        notificationStatus: emailStatus,
         emailError: emailResult.error || '',
         sheetsSync: { ok: true, deferred: true },
       }), { status: 200, headers: { ...corsHeaders(origin, requestUrl), 'content-type': 'application/json; charset=utf-8' } });

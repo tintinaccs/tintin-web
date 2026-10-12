@@ -1,4 +1,4 @@
-import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261012-auth-privacy-1-estado-colecciones-js';
+import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js';
 
 const IMAGE_BASE = '/assets-tintin/images/collections/';
 const PLACEHOLDER = `${IMAGE_BASE}col-placeholder.webp`;

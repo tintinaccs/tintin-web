@@ -838,13 +838,13 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-auth-privacy-1-calidad-interfaz-js');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-checkout-ready-3-calidad-interfaz-js');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261012-client-recovery-1-control-tienda-js');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261012-checkout-ready-2-control-tienda-js');
   }
 
   function bootHeaderMode() {
@@ -920,12 +920,12 @@
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261012-auth-privacy-1-presentacion-colecciones-js');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261012-checkout-ready-3-presentacion-colecciones-js');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-client-recovery-1-sincronizacion-favoritos-js');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-checkout-ready-3-sincronizacion-favoritos-js');
   }
 
   function bootThemeColorSanitizerPublic() {
@@ -936,7 +936,7 @@
 
   function bootPageAuditFixPublic() {
     if (!window.TintinPageAuditFixBooted) {
-      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261010-mobile-navigation-front-1');
+      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261012-checkout-ready-3-control-paneles-js');
     }
   }
 
