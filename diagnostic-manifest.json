@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9d3f1e6f39911fafb7366541b10b1a2adc977c52bff61396efc31bde453ef553",
+  "sourceFingerprint": "30c9302558332f830b304a84193f435b803a36f8dda8f41ae63ab15b98b1f5e5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1151,
-    "textFiles": 1103,
-    "totalBytes": 16743441,
+    "files": 1152,
+    "textFiles": 1104,
+    "totalBytes": 16742212,
     "pages": 19,
-    "modules": 817
+    "modules": 818
   },
   "viewports": [
     {
@@ -40902,6 +40902,42 @@
       ]
     },
     {
+      "path": "tests/sync/apps-script-product-row-formulas.test.mjs",
+      "bytes": 3519,
+      "sha256": "404f49e18652baf6f400c4d104800c857e4c9cb0c4b22faca4a5af31346a452a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/sync/apps-script-sync-endpoint.test.mjs",
       "bytes": 7571,
       "sha256": "3ce8809749f4f7f541fac01d431de309322f57f699c7931f95b4f119d04c4fd6",
@@ -43190,8 +43226,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 52857,
-      "sha256": "758e3d7967c8c18e833c3fe6b4b060c02207d0b5c5e68e0e3d0c4064e8b81b4e"
+      "bytes": 53098,
+      "sha256": "5a4b9a8df00879903fd9d4ec16991ff2018eed0793232561489812ee711baf35"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -43784,8 +43820,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 7749,
-      "sha256": "e5672fdc53562e300267ad56981bc5e5902641c2adcf2f61895683cb6b38bf21"
+      "bytes": 713,
+      "sha256": "297c3b91275c7f72472adf22b4d0b4507cd0240a33dc5cffbc30254fbd2f9109"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -43797,7 +43833,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "ae52b5cd809109eb6c890bc8e7a989d538c9fcce9cba0f2d76b85b0777ad8184"
+      "sha256": "91d58c5fba1d76cbf55538c710bbc2aa542fcb0f9f1e54a4b95d731e40ccbb39"
     },
     {
       "path": "config/public-site.json",
@@ -44360,8 +44396,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 410611,
-      "sha256": "450af9eaa8edace75d1704a63f80d43b5f6d7b2b42ab0096db347b342e97c508"
+      "bytes": 412032,
+      "sha256": "77957780b488b2a3b7e60390df0131e7f42cc523823c790f3472fbb32ba31037"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44660,8 +44696,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 15744,
-      "sha256": "8c1059d19f26ea89fddf66ff81b434812734cda82accf6bfb1ffcdf018320812"
+      "bytes": 16370,
+      "sha256": "7f00a38111d4c1753880f82144ecc90efc037ec19c0e0c8f924080f2a217084b"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -49558,6 +49594,12 @@
       "extension": ".mjs",
       "bytes": 10673,
       "sha256": "97a49947f870e952b60192528f042cfc18b0e87a7b9c2283d5073748b48150ff"
+    },
+    {
+      "path": "tests/sync/apps-script-product-row-formulas.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3519,
+      "sha256": "404f49e18652baf6f400c4d104800c857e4c9cb0c4b22faca4a5af31346a452a"
     },
     {
       "path": "tests/sync/apps-script-sync-endpoint.test.mjs",
