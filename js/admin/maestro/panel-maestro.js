@@ -1,5 +1,5 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import {
   BASE_ADMIN_SECTIONS,
@@ -15,7 +15,7 @@ import {
   const isAdminRoute = /(^|\/)admin(?:\.html)?$/i.test(location.pathname.replace(/\/$/, ''));
   if (!isAdminRoute) return;
 
-  const VERSION = 'tintin-20261009-local-ledger-master-2-first-render-merge-20261010-1';
+  const VERSION = 'tintin-20261012-auth-privacy-2-panel-maestro-js';
   const CAP_COLUMNS = [
     ['create', 'C'], ['read', 'R'], ['update', 'U'], ['archive', 'Arch.'],
     ['delete', 'D'], ['search', 'Buscar'], ['export', 'Exportar'],

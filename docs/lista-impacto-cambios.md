@@ -1,3 +1,7 @@
+## 2026-10-12 — Privacidad del diagnóstico Auth y contrato de correo de diagnóstico
+
+Fuente funcional: diagnostico-sesion omite query/console.info, rechaza datos anidados y campos sensibles/override; conserva80 eventos técnicos y errorCode. test-email autentica antes de consultar configuración y conserva HTTP401/403. Sin modificación de credenciales, roles, Rules, AppCheck, stock, pedidos, DNS ni remitentes; no enviar correo. Referencias de caché transitivas del grafo Firebase/Auth reciben versiones únicas; consumidores sólo cambian URLs. Generador shell, CSP, flujo y diagnóstico regenerados desde fuentes. Tests del módulo real con VM y endpoint original sin sesión; suites Auth/cuentas y CSP. Estado externo verificado de Sheets/AppsScript24 y lista20 en docs/agent/SEGURIDAD_20_PUNTOS_20261012.md. Mantenimiento nativo obligatorio del candidato final.
+
 ## 2026-10-12 — Fórmulas del espejo Productos tras alta y reintento
 
 AppsScript prepara formato/validación/fórmulas antes de escribir identidad en ambas rutas. Reparación selectiva de celdas calculadas vacías; no pisa fórmulas ni valores manuales existentes. Sin cambios a servidores/headers/HTML/caché/Auth/Rules/catálogo/DNS/secretos/triggers. CampoStockactual de QA debe evaluarse0 después de actualizar AppsScript y re-sincronizar; validar también hoja→Firestore. Test169/169 sync, cuatro nuevos. No heredar verificación runtime de WebApp23: actualización revisada del mismo deployment todavía pendiente.

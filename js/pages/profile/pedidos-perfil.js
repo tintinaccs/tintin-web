@@ -1,7 +1,7 @@
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
+import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
 import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20260925-cache-converge-1-launch-20260926-1';
+import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261012-auth-privacy-1-estadisticas-pedidos-js';
 import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1';
 
 const PAGE = /(?:^|\/)perfil(?:\.html)?\/?$/i;

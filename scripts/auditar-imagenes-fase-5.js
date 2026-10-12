@@ -523,9 +523,9 @@ check(
 );
 
 const PROCESSING_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
-const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20260901-media-orphan-log-3';
-const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1';
-const CARGA_IMAGENES_VERSION_QUERY = 'v=tintin-20261003-superadmin-white-icons-1-brand-runtime-20261004-1';
+const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-js';
+const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js';
+const CARGA_IMAGENES_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-carga-imagenes-js';
 check(
   'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
   files.uploadWidget.includes(`./procesamiento-imagenes.js?${PROCESSING_VERSION_QUERY}`) &&

@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import {
   collection,
   query,
@@ -11,7 +11,7 @@ import {
 import {
   sendOrderNotification,
   notificationStatusFromResult
-} from '../../email/notificacion-pedido-resend.js?v=tintin-20261007-email-app-check-1';
+} from '../../email/notificacion-pedido-resend.js?v=tintin-20261012-auth-privacy-1-notificacion-pedido-resend-js';
 
 if (!window.TintinCheckoutEmailBridgeBooted) {
   window.TintinCheckoutEmailBridgeBooted = true;
