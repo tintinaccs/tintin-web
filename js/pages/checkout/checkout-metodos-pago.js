@@ -1,4 +1,4 @@
-import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20260720-read-budget-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
+import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20261011-domain-prepared-2';
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
@@ -32,7 +32,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1-brand-20261004-1-owner-pink-20261004-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1-brand-20261004-1-owner-pink-20261004-1-receipt-20261011-1';
   document.head.appendChild(link);
 }
 

@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20261009-whatsapp-responsive-1-domain-cutover-20261011-2';
+  const TT_CACHE_VERSION = 'tintin-20261009-whatsapp-responsive-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -838,18 +838,18 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261010-whatsapp-release-5-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-domain-cutover-20261011-2');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261011-domain-prepared-2');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1-domain-cutover-20261011-2');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261011-domain-prepared-2');
   }
 
   function bootHeaderMode() {
     if (!window.TintinHeaderModeBooted) {
-      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261005-catalog-delete-ui-reconcile-1-domain-cutover-20261011-2');
+      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261011-domain-prepared-2');
     }
   }
 
@@ -867,7 +867,7 @@
     if (isVisualPreviewFrame) return;
     if (!window.TintinSiteActivityBooted) {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-loads-20261007-1-login-unblocked-20261011-1-domain-cutover-20261011-2');
+      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261011-domain-prepared-2');
     }
   }
 
@@ -893,10 +893,10 @@
   function bootAdminAndProfileFixes() {
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
-      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-domain-cutover-20261011-2');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261004-admin-connections-3-encomienda-20261008-1-master-20261007-1-first-render-merge-20261010-1-domain-cutover-20261011-2');
+      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261011-domain-prepared-2');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261011-domain-prepared-2');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
-      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261004-admin-connections-3-encomienda-20261008-1-master-20261007-1-first-render-merge-20261010-1-domain-cutover-20261011-2');
+      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261011-domain-prepared-2');
     }
   }
 
@@ -914,18 +914,18 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261010-whatsapp-release-5-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-cutover-20261011-2');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261011-domain-prepared-2');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-checkout-20261008-2-checkout-20261008-2-halo-20261008-3-halo-20261008-4-first-render-merge-20261010-1-domain-cutover-20261011-2');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261011-domain-prepared-2');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-cutover-20261011-2');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261011-domain-prepared-2');
   }
 
   function bootThemeColorSanitizerPublic() {

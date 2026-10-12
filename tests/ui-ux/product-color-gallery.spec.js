@@ -125,3 +125,21 @@ test('paleta administrativa y reemplazo manual se conservan al serializar',async
   await page.getByRole('checkbox',{name:'Asignar foto 1 a fucsia',exact:true}).check();
   expect((await page.evaluate(()=>window.editor.serialize())).find(row=>row.Color==='fucsia').imageUrls.some(url=>url.endsWith('/gold1.svg'))).toBe(true);
 });
+
+for (const width of [390,1440]) test(`color descriptivo sincroniza foto responsive y miniatura en ${width}px`, async({page})=>{
+  await page.setViewportSize({width,height:900});
+  await page.route('**/minimal-product-fixture',r=>r.fulfill({contentType:'text/html',body:minimalFixture}));
+  await page.route('**/gallery-fixture.js',r=>r.fulfill({contentType:'text/javascript',body:harness.replaceAll('Color:', "'Color de la correa':")}));
+  await page.route(/\/(gold|silver)\d\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"/>'}));
+  await page.goto('/minimal-product-fixture');await page.waitForFunction(()=>window.fixtureReady);
+  await expect(page.locator('#product-variants .tt-variant-label')).toHaveText('Color');
+  await page.getByRole('button',{name:'Plateado',exact:true}).click();
+  await expect(page.locator('#gallery-thumbs .active')).toHaveAttribute('data-src',/silver1.svg$/);
+  await expect(page.locator('#gallery-thumbs .active')).toHaveAttribute('aria-pressed','true');
+  await page.getByRole('button',{name:'Ver imagen 2',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Dorado',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#gallery-main img')).toHaveAttribute('srcset',/gold2.svg/);
+  await expect.poll(()=>page.locator('#gallery-main img').evaluate(img=>img.currentSrc)).toMatch(/gold2.svg$/);
+  const plateado=page.getByRole('button',{name:'Plateado',exact:true});
+  expect(await plateado.locator('.tt-color-swatch').evaluate(n=>getComputedStyle(n).backgroundImage)).toBe('none');
+});

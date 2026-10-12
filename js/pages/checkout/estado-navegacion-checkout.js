@@ -18,6 +18,7 @@ const DRAFT_FIELDS = Object.freeze([
   'ck-notes',
   'ck-ci',
   'ck-wants-invoice',
+  'ck-taxpayer-type',
   'ck-razon-social',
   'ck-ruc',
   'pay-efectivo',
@@ -75,7 +76,7 @@ function serializedField(element) {
 }
 
 function persistDraft() {
-  if (restoring) return;
+  if (restoring || window.TintinCheckoutOrderCompleted) return;
   const fields = {};
   DRAFT_FIELDS.forEach(id => {
     const state = serializedField(document.getElementById(id));
@@ -111,6 +112,7 @@ function restoreSimpleField(id, saved) {
 }
 
 function restoreDraft() {
+  if (window.TintinCheckoutOrderCompleted) return;
   const draft = readJson(DRAFT_KEY, null);
   if (!draft?.fields || typeof draft.fields !== 'object') return;
   restoring = true;
@@ -129,6 +131,7 @@ function scheduleRestore() {
 }
 
 function rememberValidatedStep() {
+  if (window.TintinCheckoutOrderCompleted) return;
   const step = activeStep();
   if (step <= maxNavigableStep) return;
   maxNavigableStep = step;
@@ -197,6 +200,7 @@ async function navigateForward(target) {
 async function navigateTo(target) {
   const current = activeStep();
   if (!Number.isInteger(target) || target < 0 || target > 4 || target === current) return;
+  if (window.TintinCheckoutOrderCompleted) return;
   if (target > maxNavigableStep) return;
   if (target < current) await navigateBackward(target);
   else await navigateForward(target);
@@ -221,7 +225,7 @@ function syncStepAccessibility() {
   const current = activeStep();
   document.querySelectorAll(STEP_SELECTOR).forEach(step => {
     const target = Number(step.dataset.step);
-    const allowed = target <= maxNavigableStep;
+    const allowed = !window.TintinCheckoutOrderCompleted && target <= maxNavigableStep;
     step.setAttribute('aria-current', target === current ? 'step' : 'false');
     step.setAttribute('aria-disabled', String(!allowed));
     step.classList.toggle('tt-step-navigable', allowed && target !== current);
@@ -241,7 +245,10 @@ function observeSuccess() {
   const postConfirm = document.getElementById('ck-post-confirm');
   if (!postConfirm) return;
   const maybeClear = () => {
-    if (postConfirm.style.display !== 'none' && !postConfirm.hidden) clearCheckoutState();
+    if (postConfirm.style.display !== 'none' && !postConfirm.hidden) {
+      clearCheckoutState();
+      syncStepAccessibility();
+    }
   };
   new MutationObserver(maybeClear).observe(postConfirm, {
     attributes: true,
@@ -273,7 +280,7 @@ function bindDraftPersistence() {
 function restoreResumeTarget() {
   // Los reintentos de arranque no deben deshacer un avance o regreso elegido
   // por la persona. Los clics programáticos de la recuperación siguen permitidos.
-  if (manualNavigation) return;
+  if (manualNavigation || window.TintinCheckoutOrderCompleted) return;
   const target = Math.max(
     Math.max(0, Math.min(3, Number(readJson(MAX_STEP_KEY, 0)) || 0)),
     readResumeBackup()

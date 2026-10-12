@@ -6,13 +6,13 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const ENTRY_VERSION = 'tintin-20261009-whatsapp-responsive-1-domain-cutover-20261011-2';
+  const ENTRY_VERSION = 'tintin-20261009-whatsapp-responsive-1';
   const BARRIER_VERSION = 'tintin-20260915-session-shell-2';
   const scriptUrl = document.currentScript?.src
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   const barrierUrl = new URL('./components/navigation/compartido/barrera-arranque-shell.js', scriptUrl);
-  entryUrl.searchParams.set('v', 'tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-domain-cutover-20261011-2');
+  entryUrl.searchParams.set('v', 'tintin-20261011-domain-prepared-2');
   barrierUrl.searchParams.set('v', BARRIER_VERSION);
 
   let waitHeld = false;

@@ -17,7 +17,7 @@ for (const width of [320, 390, 768, 1440]) test(`producto oculta comunidad y sel
 });
 
 for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1440,900]]) {
-  test(`ficha con márgenes, dorado metálico y recomendaciones legibles en ${width}x${height}`,async({page})=>{
+  test(`ficha con márgenes, dorado sólido y recomendaciones legibles en ${width}x${height}`,async({page})=>{
     await page.setViewportSize({width,height});
     await page.route('**/*.js*',route=>route.fulfill({contentType:'text/javascript',body:route.request().url().includes('galeria-producto.js') ? fs.readFileSync('js/components/images/galeria-producto.js','utf8') : route.request().url().endsWith('/product-controls-fixture.js') ? harness : ''}));
     await page.route('**/product-controls-fixture',route=>route.fulfill({contentType:'text/html',body:html.replace('</body>','<script src="/product-controls-fixture.js"></script></body>')}));
@@ -33,11 +33,11 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
     const geometry=await page.evaluate(()=>{
       const box=document.getElementById('product-grid').getBoundingClientRect();
       const cards=[...document.querySelectorAll('.tt-related-slot')].map(el=>el.getBoundingClientRect().width);
-      return{left:box.left,right:innerWidth-box.right,cards,overflow:document.documentElement.scrollWidth>innerWidth,background:getComputedStyle(document.querySelector('.tt-color-swatch')).backgroundImage};
+      return{left:box.left,right:innerWidth-box.right,cards,overflow:document.documentElement.scrollWidth>innerWidth,background:getComputedStyle(document.querySelector('.tt-color-swatch')).backgroundImage,color:getComputedStyle(document.querySelector('.tt-color-swatch')).backgroundColor};
     });
     expect(geometry.left).toBeGreaterThanOrEqual(16);expect(geometry.right).toBeGreaterThanOrEqual(16);
     expect(geometry.overflow).toBe(false);expect(Math.min(...geometry.cards)).toBeGreaterThanOrEqual(120);
-    expect(geometry.background).toContain('142, 107, 35');
+    expect(geometry.background).toBe('none');expect(geometry.color).toBe('rgb(212, 175, 55)');
     if(width<768){
       const heading=await page.evaluate(()=>{
         const title=document.querySelector('#related-trigger .tt-section-title');

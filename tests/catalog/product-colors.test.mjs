@@ -10,9 +10,9 @@ test('paleta editable, alias y metalizados distintos del marrón', () => {
   assert.equal(colors.preset('GOLD').name, 'dorado');
   assert.equal(colors.preset('marron').name, 'marrón');
   assert.equal(colors.preset('Fuchsia').name, 'fucsia');
-  assert.match(colors.swatch('dorado'), /linear-gradient/);
+  assert.equal(colors.swatch('dorado'), '#D4AF37');
   assert.match(colors.swatch('dorado'), /D4AF37/);
-  assert.equal(colors.swatch('dorado', {colorHex:'#FFD34E'}), colors.swatch('dorado'));
+  assert.equal(colors.swatch('dorado', {colorHex:'#FFD34E'}), '#FFD34E');
   assert.match(colors.swatch('plateado'), /CFD4DA/);
   assert.notEqual(colors.swatch('dorado'), colors.swatch('marrón'));
 });
@@ -63,4 +63,11 @@ test('inicio, catálogo y colecciones cargan la paleta antes de dibujar tarjetas
     assert.ok(gallery >= 0 && gallery < store, `${page}: falta la paleta antes del renderer`);
     assert.equal((html.match(/<script[^>]+src="js\/components\/images\/galeria-producto\.js/g) || []).length, 1);
   }
+});
+
+test('los nombres descriptivos de color se reconocen sin convertir metadatos en opciones', () => {
+  const product = {variants:{'Color de la correa':['Dorado','Plateado']}};
+  assert.equal(context.window.TintinProductMedia.colorKey(product), 'Color de la correa');
+  assert.deepEqual(cardColors(product), ['Color de la correa', ['Dorado','Plateado']]);
+  assert.deepEqual(JSON.parse(JSON.stringify(context.productVariantGroups({variants:[{Color:'Dorado',colorHex:'#D4AF37',swatch:'gold',stock:1}]}))), [['Color',['Dorado']]]);
 });

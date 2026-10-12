@@ -7,9 +7,9 @@
      reales de Firestore, incluidas las ocultas para gestión interna.
    ============================================================= */
 
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
-import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261007-public-consistency-1-master-20261007-1-encomienda-20261008-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261011-domain-prepared-2';
+import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261011-domain-prepared-2';
 
 if (!window.TintinAdminCollectionsPhase4Booted) {
   window.TintinAdminCollectionsPhase4Booted = true;

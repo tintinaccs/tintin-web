@@ -1,8 +1,8 @@
 
 /* TINTIN — Runtime integral de product.html */
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261011-domain-prepared-2';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261011-domain-prepared-2';
 
 const PRODUCT_PATH_RE = /(?:^|\/)product(?:\.html)?\/?$/i;
 
@@ -61,7 +61,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     if (document.querySelector('link[data-tt-product-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1', import.meta.url).href;
+    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20261011-boutique-2', import.meta.url).href;
     link.dataset.ttProductMaintenance = '1';
     document.head.appendChild(link);
   }
@@ -137,7 +137,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     }
 
     if (productStatus) {
-      const out = /sin stock/i.test(productStatus.textContent || '');
+      const out = /sin stock|agotado/i.test(productStatus.textContent || '');
       setDatasetIfChanged(productStatus, 'stockState', out ? 'out' : 'available');
       removeStylePropertyIfPresent(productStatus, 'background');
       removeStylePropertyIfPresent(productStatus, 'color');

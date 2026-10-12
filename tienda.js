@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-cutover-20261011-2');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261011-domain-prepared-2');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -407,7 +407,7 @@ function renderCart() {
           <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         </div>
         <div class="tt-cart-empty-text">Tu carrito está vacío.<br>¡Agregá algo hermoso!</div>
-        <a href="/checkout" class="tt-cart-goto-btn">IR A MI CARRITO →</a>
+        <a href="/catalogo" class="tt-cart-goto-btn">EXPLORAR CATÁLOGO →</a>
       </div>
     `;
     if (footer) footer.style.display = 'none';
@@ -832,7 +832,7 @@ function renderProductCardMarkup(p, options = {}) {
   const initialRow = productVariantMediaRows(p).find(row => window.TintinProductMedia.rowImages(row).some(src => productPhotoIdentity(src) === productPhotoIdentity(imgUrl)));
   const activeColor = selectedColor || (colorGroup && initialRow?.[colorGroup[0]]) || (colorGroup?.[1].length === 1 ? colorGroup[1][0] : '');
   const colorsHTML = colorGroup ? `<div class="tt-card-colors" role="group" aria-label="Colores de ${escapeAttribute(p.name)}">${colorGroup[1].map(color => {
-    const media = productMediaForOption(p, colorGroup[0], color) || (productVariantGroups(p).some(([key]) => /colou?r/i.test(key)) ? '' : p.imageUrl || p.image || '');
+    const media = productMediaForOption(p, colorGroup[0], color) || (productVariantGroups(p).some(([key]) => window.TintinProductMedia.isColorKey(key)) ? '' : p.imageUrl || p.image || '');
     return `<button type="button" class="tt-card-color" data-card-color="${escapeAttribute(color)}" data-card-image="${escapeAttribute(media)}" data-product-name="${escapeAttribute(p.name)}" aria-label="${escapeAttribute(color)}" title="${escapeAttribute(color)}" aria-pressed="${activeColor === color}"><span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(color, p) || 'repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px)'}"></span></button>`;
   }).join('')}</div>` : '';
   const safeId = escapeAttribute(p.id);
@@ -843,14 +843,12 @@ function renderProductCardMarkup(p, options = {}) {
     ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
     : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
   const hasVariants = productVariantGroups(p).length > 0;
-  // El bloque "También te puede gustar" muestra tarjetas más angostas (3 por
-  // fila en todas las pantallas) — con esos textos completos los botones se
-  // partían en 3-4 líneas ilegibles, así que ahí van etiquetas cortas.
-  const primaryLabel = options.related ? 'Ver' : 'Ver producto';
+  // Las variantes se eligen en la ficha: una sola acción evita dos enlaces iguales.
+  const primaryLabel = inStock && hasVariants ? (options.related ? 'Elegir' : 'Elegir opciones') : (options.related ? 'Ver' : 'Ver producto');
   const secondaryAction = !inStock
     ? `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline" disabled aria-disabled="true">Agotado</button>`
     : hasVariants
-      ? `<a href="${productHref}" class="tt-btn tt-btn-sm tt-btn-outline">${options.related ? 'Opciones' : 'Elegir opciones'}</a>`
+      ? ''
       : `<button type="button" class="tt-btn tt-btn-sm tt-btn-outline tt-add-to-cart" data-id="${safeId}" aria-label="Agregar ${escapeAttribute(p.name)} al carrito">${options.related ? 'Agregar' : '+ Carrito'}</button>`;
 
   return `
@@ -1003,7 +1001,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-cutover-20261011-2');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261011-domain-prepared-2');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1122,7 +1120,10 @@ function _pdUpdateQtyUI() {
   const unavailable = _pdMaxQty <= 0;
   document.getElementById('gallery-main')?.classList.toggle('tt-stock-unavailable', unavailable);
   const status = document.getElementById('product-status');
-  if (status) status.textContent = unavailable ? 'Agotado' : 'Disponible';
+  if (status) {
+    status.textContent = unavailable ? 'Agotado' : 'Disponible';
+    status.dataset.stockState = unavailable ? 'out' : 'available';
+  }
   for (const id of ['btn-product-add-cart', 'btn-product-buy-now']) {
     const button = document.getElementById(id);
     if (button && !button.dataset.busy) button.disabled = _pdMaxQty <= 0;
@@ -1141,7 +1142,7 @@ function productVariantGroups(product) {
     if (options.length) groups.set(key, options);
   };
   if (Array.isArray(product?.variants)) {
-    const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active']);
+    const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active', 'colorHex', 'swatch']);
     for (const row of product.variants) {
       if (!row || typeof row !== 'object') continue;
       for (const key of Object.keys(row)) if (!metadata.has(key)) add(key, row[key]);
@@ -1176,7 +1177,7 @@ function productMediaForOption(product, key, value) {
 }
 
 function productCardColorOptions(product) {
-  const group = productVariantGroups(product).find(([key]) => /colou?r/i.test(key));
+  const group = productVariantGroups(product).find(([key]) => window.TintinProductMedia.isColorKey(key));
   if (group) return group;
   const colors = [...new Set(String(product?.colorFinish || '').split(/[,/;·]/).map(value => value.split(':').at(-1).trim()).filter(value => window.TintinProductColors.preset(value)))];
   return colors.length ? ['Color', colors] : null;
@@ -1200,7 +1201,7 @@ function _pdSyncVariantToImage(src) {
     const value = String(row[group.dataset.variantKey] ?? '').trim();
     if (!value) return;
     group.querySelectorAll('.tt-variant-option').forEach(option => {
-      const selected = option.textContent.trim() === value;
+      const selected = String(option.dataset.variantValue || option.textContent).trim().toLocaleLowerCase('es') === value.toLocaleLowerCase('es');
       option.classList.toggle('active', selected);
       option.setAttribute('aria-pressed', String(selected));
     });
@@ -1458,7 +1459,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
   if (thumbsEl) {
     thumbsEl.style.display = allImages.length ? '' : 'none';
     thumbsEl.innerHTML = allImages.length ? allImages.map((url, i) => `
-      <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}">
+      <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}" aria-pressed="${i === _pdGalleryIndex}">
         <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" loading="lazy" decoding="async" fetchpriority="low" style="object-fit:contain;background:transparent;width:100%;height:100%;">
       </button>
     `).join('') : '';
@@ -1472,7 +1473,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
         const matchingColors = [...new Set(window.TintinProductMedia.mediaRows(_pdProduct).filter(row => window.TintinProductMedia.rowImages(row).some(url => window.TintinProductMedia.imageKey(url) === window.TintinProductMedia.imageKey(image))).map(row => row[colorKey]).filter(Boolean))];
         if (matchingColors.length === 1) {
           const group = [...document.querySelectorAll('#product-variants .tt-product-variants')].find(group => group.dataset.variantKey === colorKey);
-          const option = [...(group?.querySelectorAll('.tt-variant-option') || [])].find(option => option.dataset.variantValue === matchingColors[0]);
+          const option = [...(group?.querySelectorAll('.tt-variant-option') || [])].find(option => String(option.dataset.variantValue).trim().toLocaleLowerCase('es') === String(matchingColors[0]).trim().toLocaleLowerCase('es'));
           if (option && !option.classList.contains('active')) selectVariant(option);
         }
         _pdGalleryIndex = Math.max(0, _pdGalleryImages.findIndex(url => window.TintinProductMedia.imageKey(url) === window.TintinProductMedia.imageKey(image)));
@@ -1595,11 +1596,11 @@ function _renderProductDetail(product) {
     const variantGroups = productVariantGroups(product);
     if (variantGroups.length) {
       variantsContainer.innerHTML = variantGroups.map(([key, values], groupIndex) => `
-        <div class="tt-product-variants${/^colou?r$/i.test(key) ? ' tt-variant-color-group' : ''}" data-variant-key="${escapeAttribute(key)}">
-          <div class="tt-variant-label">${escapeHtml(key.charAt(0).toUpperCase() + key.slice(1))}</div>
+        <div class="tt-product-variants${window.TintinProductMedia.isColorKey(key) ? ' tt-variant-color-group' : ''}" data-variant-key="${escapeAttribute(key)}">
+          <div class="tt-variant-label">${escapeHtml(window.TintinProductMedia.isColorKey(key) ? 'Color' : key.charAt(0).toUpperCase() + key.slice(1))}</div>
           <div class="tt-variant-options">
             ${Array.isArray(values) ? values.map(v => `
-              <button type="button" data-variant-value="${escapeAttribute(v)}" class="tt-variant-option${/^colou?r$/i.test(key) ? ' tt-color-option' : ''}${selectedVariants.get(key) === String(v) ? ' active' : ''}${productOptionUnavailable(product, groupIndex, String(v)) ? ' tt-stock-unavailable' : ''}" aria-pressed="${selectedVariants.get(key) === String(v)}" aria-label="${escapeAttribute(v)}${productOptionUnavailable(product, groupIndex, String(v)) ? ' — Agotado, podés verlo' : ''}">${/^colou?r$/i.test(key) ? `<span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(v, product)}"></span>` : ''}<span class="tt-variant-name">${escapeHtml(v)}</span></button>
+              <button type="button" data-variant-value="${escapeAttribute(v)}" class="tt-variant-option${window.TintinProductMedia.isColorKey(key) ? ' tt-color-option' : ''}${selectedVariants.get(key) === String(v) ? ' active' : ''}${productOptionUnavailable(product, groupIndex, String(v)) ? ' tt-stock-unavailable' : ''}" aria-pressed="${selectedVariants.get(key) === String(v)}" aria-label="${escapeAttribute(v)}${productOptionUnavailable(product, groupIndex, String(v)) ? ' — Agotado, podés verlo' : ''}">${window.TintinProductMedia.isColorKey(key) ? `<span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(v, product)}"></span>` : ''}<span class="tt-variant-name">${escapeHtml(v)}</span></button>
             `).join('') : ''}
           </div>
         </div>
@@ -1813,15 +1814,19 @@ function _renderProductDetail(product) {
 function _galleryThumbClick(thumb) {
   const thumbsEl = document.getElementById('gallery-thumbs');
   const galleryMain = document.getElementById('gallery-main');
-  if (thumbsEl) thumbsEl.querySelectorAll('.tt-gallery-thumb').forEach(t => t.classList.remove('active'));
+  if (thumbsEl) thumbsEl.querySelectorAll('.tt-gallery-thumb').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-pressed', 'false'); });
   thumb.classList.add('active');
+  thumb.setAttribute('aria-pressed', 'true');
   const src = sanitizeClassicImageUrl(thumb.dataset.src);
   _pdGalleryIndex = Number(thumb.dataset.galleryIndex) || 0;
   _pdSyncVariantToImage(src);
   _pdUpdateQtyUI();
   if (galleryMain && src) {
     const img = galleryMain.querySelector('img');
-    if (img) img.src = src;
+    if (img) {
+      img.src = src;
+      img.srcset = `${withCloudinaryWidth(src, 480)} 480w, ${withCloudinaryWidth(src, 900)} 900w`;
+    }
     else {
       const created = document.createElement('img');
       created.src = src;
@@ -1837,7 +1842,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-cutover-20261011-2');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261011-domain-prepared-2');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

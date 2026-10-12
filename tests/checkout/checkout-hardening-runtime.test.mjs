@@ -70,7 +70,7 @@ test('los cinco pasos conservan validación y confirmación sin cerrar sesión',
   }
   const secure = readFileSync(new URL('../../js/orders/pedido-checkout-seguro.js', import.meta.url), 'utf8');
   assert.doesNotMatch(secure, /signOut\s*\(/);
-  assert.match(secure, /const result = await createOrderOnServer\(draft\);[\s\S]*await clearCart\(\);[\s\S]*success\(result, draft\);/);
+  assert.match(secure, /const result = await createOrderOnServer\(draft\);[\s\S]*success\(result, draft\);[\s\S]*await clearCart\(\);/);
 });
 
 test('shipping step accepts a verified session while profile hydration is pending', () => {

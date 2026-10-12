@@ -9,7 +9,7 @@
  * producto ya editado y nunca borra nada. No escribe el inventario privado.
  */
 
-import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
+import { db } from '../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
 import { doc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   assignGroupCollection,
@@ -257,6 +257,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
     const recordsToConfirm = applicableRecords();
     const confirmed = window.confirm(`Se van a crear hasta ${recordsToConfirm.length} producto(s) en el catálogo real de la tienda.\n\nAntes se descarga una copia de seguridad. Los productos que ya existan no se modifican ni se borran. ¿Continuar?`);
     if (!confirmed || blockReason() || state.busy) return;
+    state.applying = true;
     state.busy = true;
     ui.button.textContent = 'Importando…';
     renderPreview();
@@ -362,6 +363,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
       ui.reason.textContent = `Se detuvo en ${processed}/${total}: ${error.message}. Lo creado quedó guardado; reintentar no duplica.`;
       toast(`La aplicación se detuvo: ${error.message}. Podés reintentar sin duplicar productos.`, true);
     } finally {
+      state.applying = false;
       state.busy = false;
       ui.button.textContent = 'Importar al catálogo';
       const message = ui.reason.textContent;

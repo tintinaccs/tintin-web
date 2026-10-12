@@ -1,4 +1,4 @@
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3-domain-cutover-20261011-2';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261011-domain-prepared-2';
 /* =============================================================
    TINTIN — Fase 6: editor seguro de contenido
 
@@ -6,8 +6,8 @@ import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-202610
    incluidos en esquema-contenido.js. No acepta HTML ni selectores desde Firestore.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261011-domain-prepared-2';
 import {
   doc,
   onSnapshot,
@@ -15,8 +15,8 @@ import {
   serverTimestamp,
   increment,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
-import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1-domain-cutover-20261011-2';
+import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20261011-domain-prepared-2';
+import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20261011-domain-prepared-2';
 import {
   CONTENT_PAGE_IDS,
   SITE_CONTENT_SCHEMA,

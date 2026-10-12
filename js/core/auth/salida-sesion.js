@@ -1,6 +1,6 @@
-import { auth } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
+import { auth } from '../firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { markExplicitLogout, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
+import { markExplicitLogout, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261011-domain-prepared-2';
 import { withDeadline } from './estado-perfil-sesion.mjs?v=tintin-20261010-registration-name-2';
 
 let pendingLogout = null;

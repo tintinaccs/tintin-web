@@ -1,7 +1,7 @@
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3-domain-cutover-20261011-2';
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261011-domain-prepared-2';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20261011-domain-prepared-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261011-domain-prepared-2';
 import {
   doc,
   onSnapshot,
@@ -35,7 +35,7 @@ function ensureStyle() {
   const link = document.createElement('link');
   link.id = 'tt-payment-methods-style';
   link.rel = 'stylesheet';
-  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1-brand-20261004-1-owner-pink-20261004-1';
+  link.href = 'css/components/payments/payment-methods.css?v=tintin-20260720-payment-crud-1-brand-20261004-1-owner-pink-20261004-1-receipt-20261011-1';
   document.head.appendChild(link);
 }
 

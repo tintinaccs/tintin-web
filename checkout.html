@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-cupones-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1-domain-cutover-20261011-2"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261011-domain-prepared-2"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-restore-collections-1-click-replay-20261011-1-resume-sheets-1-welcome-memory-20261011-1-domain-cutover-20261011-2"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261011-domain-prepared-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261010-mobile-navigation-front-1-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-domain-cutover-20261011-2" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261011-domain-prepared-2" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -21,9 +21,9 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
-  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261010-product-related-details-1-merge-spacing-20261010-1-first-render-merge-20261010-1-followup-20261010-1-profile-race-20261011-1-welcome-memory-20261011-1-domain-cutover-20261011-2">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261011-domain-prepared-2">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
@@ -38,11 +38,11 @@
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20261010-social-mobile-styles-3">
-  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20261010-auto-flow-responsive-1">
+  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20261010-auto-flow-responsive-1-receipt-20261011-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261010-whatsapp-release-5">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261010-whatsapp-release-5">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -300,12 +300,13 @@
         </div>
         <div class="ck-field">
           <label class="ck-label" for="ck-razon-social">Razón social *</label>
-          <input type="text" class="ck-input" id="ck-razon-social" placeholder="Nombre o razón social para la factura" />
+          <input type="text" class="ck-input" id="ck-razon-social" disabled placeholder="Nombre o razón social para la factura" />
         </div>
         <div class="ck-field">
           <label class="ck-label" for="ck-ruc">RUC *</label>
-          <input type="text" class="ck-input" id="ck-ruc" placeholder="RUC con guion y dígito verificador" inputmode="numeric" maxlength="10" aria-describedby="ck-ruc-help" />
-          <p class="ck-field-help" id="ck-ruc-help">Copiá el RUC de tu constancia tributaria, con su dígito verificador. Sin letras ni puntos.</p>
+          <input type="text" class="ck-input" id="ck-ruc" disabled placeholder="RUC con guion y dígito verificador" inputmode="numeric" maxlength="10" aria-describedby="ck-ruc-help" />
+          <button type="button" class="ck-btn-back" id="ck-ruc-hyphen" disabled aria-label="Agregar guion al RUC">Agregar guion al RUC</button>
+          <p class="ck-field-help" id="ck-ruc-help">Elegí el tipo de contribuyente primero. Copiá el RUC de tu constancia: números, guion y un dígito verificador. Si el teclado no muestra el guion, usá «Agregar guion al RUC».</p>
         </div>
       </div>
 
@@ -379,8 +380,8 @@
       <div class="ck-confirm-sub">Tu pedido quedó registrado. Te confirmaremos disponibilidad, pago y entrega por WhatsApp dentro del próximo horario hábil.</div>
     </div>
     <div class="ck-panel-body">
+      <div id="ck-order-num" class="ck-order-number" style="display:none;"></div>
       <div id="ck-confirm-summary"></div>
-      <div id="ck-order-num" style="text-align:center;font-size:13px;color:var(--acc);margin:8px 0 12px;font-weight:700;letter-spacing:.06em;display:none;"></div>
 
       <!-- BOTÓN PRINCIPAL: Confirmar pedido -->
       <button type="button" id="ck-confirm-btn" class="ck-btn" style="margin-top:4px">
@@ -396,6 +397,13 @@
 
       <!-- Post-confirmación: soporte WA y volver al inicio (oculto hasta confirmar) -->
       <div id="ck-post-confirm" class="ck-post-confirm" style="display:none">
+        <div class="ck-receipt-actions" aria-label="Opciones de tu ticket">
+          <button type="button" id="ck-save-receipt" class="ck-receipt-action">↓ Guardar ticket</button>
+          <button type="button" id="ck-share-receipt" class="ck-receipt-action">↗ Compartir ticket</button>
+          <button type="button" id="ck-print-receipt" class="ck-receipt-action">Imprimir / PDF</button>
+        </div>
+        <p id="ck-receipt-status" class="ck-receipt-status" role="status" aria-live="polite"></p>
+        <p class="ck-receipt-disclaimer">Este ticket confirma el registro de tu pedido. No acredita el pago ni reemplaza la factura.</p>
         <div class="ck-post-confirm-card">
           <p>¿Necesitás ayuda con este pedido?</p>
           <a id="ck-wa-support" href="https://wa.me/595981299331" target="_blank" rel="noopener">
@@ -419,9 +427,9 @@ import { shippingDepartment } from './js/components/location/departamento-ciudad
 import { productVariantImage } from './js/components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
 import { canonicalDeliveryCities } from './js/components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
 
-import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-cutover-20261011-2";
-import { AUTH_STATES, sessionReady, subscribeSession } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2";
-import { readCheckoutProfile } from "./js/pages/checkout/perfil-checkout.js?v=tintin-20261007-checkout-session-1-first-render-merge-20261010-1-domain-cutover-20261011-2";
+import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2";
+import { AUTH_STATES, sessionReady, subscribeSession } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261011-domain-prepared-2";
+import { readCheckoutProfile } from "./js/pages/checkout/perfil-checkout.js?v=tintin-20261011-domain-prepared-2";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
   updateDoc, increment, serverTimestamp, setDoc, onSnapshot
@@ -429,7 +437,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-cutover-20261011-2";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261011-domain-prepared-2";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isNationalMobileInput, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial, isValidTaxpayerType } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -439,15 +447,15 @@ import {
   renderStoreClosedOverlay,
   renderStoreConfigUnavailableOverlay,
   removeStoreClosedOverlay
-} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-runtime-20261004-1-owner-pink-20261004-1-repair-20261005-1-first-render-merge-20261010-1-domain-cutover-20261011-2";
+} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20261011-domain-prepared-2";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20261008-location-search-1-domain-cutover-20261011-2";
+import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20261011-domain-prepared-2";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1-encomienda-20261008-1";
-import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261008-producto-superficies-1-domain-cutover-20261011-2";
+import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261011-domain-prepared-2";
 import { readAddressBook, addressBookPatch, addAddress } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261001-address-book-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1-photos-20261008-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
-import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-cutover-20261011-2";
+import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20261011-domain-prepared-2";
 import { withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261010-registration-name-2";
 
 function sanitizeCheckoutProduct(id, raw = {}) {
@@ -879,7 +887,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-cutover-20261011-2');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261011-domain-prepared-2');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1405,16 +1413,43 @@ phoneCountrySelect.innerHTML = '<option value="PY">+595</option>';
 phoneCountrySelect.value = DEFAULT_COUNTRY.code;
 
 const invoiceFieldsEl = document.getElementById('ck-invoice-fields');
-document.getElementById('ck-taxpayer-type').onchange = function() {
-  document.querySelector('label[for="ck-razon-social"]').textContent = this.value === 'fisica' ? 'Nombre y apellido para la factura *' : 'Razón social *';
-};
-document.getElementById('ck-wants-invoice').onchange = function() {
-  invoiceFieldsEl.style.display = this.checked ? '' : 'none';
-  this.setAttribute('aria-expanded', String(this.checked));
-  for (const id of ['ck-taxpayer-type', 'ck-razon-social', 'ck-ruc']) {
-    document.getElementById(id).required = this.checked;
+const invoiceToggleEl = document.getElementById('ck-wants-invoice');
+const invoiceTypeEl = document.getElementById('ck-taxpayer-type');
+const invoiceNameEl = document.getElementById('ck-razon-social');
+const invoiceRucEl = document.getElementById('ck-ruc');
+const invoiceHyphenEl = document.getElementById('ck-ruc-hyphen');
+function syncInvoiceFields() {
+  const wanted = invoiceToggleEl.checked;
+  const typeSelected = invoiceTypeEl.value === 'fisica' || invoiceTypeEl.value === 'juridica';
+  invoiceFieldsEl.style.display = wanted ? '' : 'none';
+  invoiceToggleEl.setAttribute('aria-expanded', String(wanted));
+  invoiceTypeEl.required = wanted;
+  invoiceTypeEl.disabled = !wanted;
+  for (const field of [invoiceNameEl, invoiceRucEl]) {
+    field.disabled = !wanted || !typeSelected;
+    field.required = wanted && typeSelected;
+  }
+  document.querySelector('label[for="ck-razon-social"]').textContent = invoiceTypeEl.value === 'fisica' ? 'Nombre y apellido para la factura *' : 'Razón social *';
+  invoiceHyphenEl.disabled = invoiceRucEl.disabled || !/^\d{3,8}$/.test(invoiceRucEl.value);
+}
+invoiceTypeEl.onchange = () => {
+  syncInvoiceFields();
+  const error = document.getElementById('error-2');
+  if (!invoiceRucEl.disabled && error.textContent === 'Elegí el tipo de contribuyente para tu factura.') {
+    error.textContent = '';
+    error.classList.remove('show');
   }
 };
+invoiceToggleEl.onchange = syncInvoiceFields;
+invoiceRucEl.addEventListener('input', syncInvoiceFields);
+invoiceHyphenEl.onclick = () => {
+  if (invoiceHyphenEl.disabled) return;
+  invoiceRucEl.value += '-';
+  invoiceRucEl.dispatchEvent(new Event('input', { bubbles: true }));
+  invoiceRucEl.focus();
+  invoiceRucEl.setSelectionRange(invoiceRucEl.value.length, invoiceRucEl.value.length);
+};
+syncInvoiceFields();
 
 document.getElementById('btn-step3-next').onclick = () => {
   hideErrors();
@@ -1624,8 +1659,9 @@ async function buildConfirmation() {
       </div>
       <div class="ck-summary-total">
         <span>Costo de envío</span>
-        <span class="ck-summary-total-val">${orderData.shippingMethod === 'encomienda' ? 'Sólo el envío: se paga a la transportadora al recibir' : couponApplies ? escapeHtml('Gratis (cupón ' + orderData.couponCode + ')') : shippingPending ? escapeHtml(ICO.phone + 'A confirmar') : escapeHtml(formatPrice(orderData.shippingCost))}</span>
+        <span class="ck-summary-total-val">${orderData.shippingMethod === 'encomienda' ? 'Se paga al recibir' : couponApplies ? escapeHtml('Gratis (cupón ' + orderData.couponCode + ')') : shippingPending ? escapeHtml(ICO.phone + 'A confirmar') : escapeHtml(formatPrice(orderData.shippingCost))}</span>
       </div>
+      ${orderData.shippingMethod === 'encomienda' ? '<p class="ck-summary-shipping-note">El envío se paga a la transportadora al recibir y no está incluido en el total.</p>' : ''}
       ${orderData.couponCode && !couponApplies ? '<div style="margin-top:6px;font-size:12.5px;color:var(--text-muted)">El cupón de envío gratis solo aplica a delivery con costo; no se usará en este pedido.</div>' : ''}
       <div class="ck-summary-total" style="font-size:18px">
         <span>TOTAL${shippingPending ? ' (+ envío)' : ''}</span>
@@ -1958,12 +1994,12 @@ subscribeSession(snapshot => {
     });
 });
 </script>
-<script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-login-unblocked-20261011-1-domain-cutover-20261011-2"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-domain-cutover-20261011-2"></script>
-<script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-cutover-20261011-2"></script>
-<script src="js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2" defer></script>
-<script src="tienda.js?v=tintin-20261010-registration-name-2-first-render-merge-20261010-1-welcome-memory-20261011-1-domain-cutover-20261011-2" defer></script>
-  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-brand-20261004-1-owner-pink-20261004-1-domain-cutover-20261011-2"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20261011-domain-prepared-2"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261011-domain-prepared-2"></script>
+<script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20261011-domain-prepared-2"></script>
+<script src="js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1" defer></script>
+<script src="tienda.js?v=tintin-20261011-domain-prepared-2" defer></script>
+  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261011-domain-prepared-2"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
   <div class="container tt-footer-shell">

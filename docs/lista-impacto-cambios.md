@@ -1,6 +1,10 @@
-# Cutover separado, pendiente de autorización — 2026-10-11
+## Borrador de dominio reconciliado — 2026-10-11
 
-Prepara autoridad de dominio, consumidores, URLs públicas, shell/cache, SEO, CSP y diagnóstico. No cambia Rules ni permisos, no ejecuta DNS ni activa hosting, no redirige pages.dev. Impacto y límites: docs/agent/CUTOVER_BORRADOR_20261011.md.
+#1101 incorpora main ee04a188 íntegro y reaplica sólo origen/authDomain/App Check previstos desde config/public-site.json por generadores canónicos. Consumidores: SEO, Firebase/Auth, proxy, Functions, monitor y referencias/versiones de frontend. Sin cambios funcionales a checkout, stock, importador, datos ni roles; main/producción/DNS siguen intactos. Plan protegido se regenera contra main actual; borrador no se aprueba ni integra. Evidencia externa y bloqueos: docs/agent/PREPARACION_SIN_CUTOVER_20261011.md.
+
+## Factura: selección previa, guion móvil y recuperación — 2026-10-11
+
+Checkout deshabilita nombre/RUC hasta elegir contribuyente y agrega guion desde teclado numérico mediante un control explícito. El borrador conserva ck-taxpayer-type y valores fiscales al desmarcar/recargar; la selección válida limpia sólo su aviso anterior. Validador/RUC de 3–8 números y DV, backend/Firestore/Sheets/pagos/roles y datos reales conservados. Pruebas UI originales se reutilizan en el gate runtime existente mediante invoice-component.spec.js, sin modificar workflows. Caché transitiva de navegador versionada y CSP/diagnóstico regenerados. Runbook recoge NS Cloudflare ya observados; no cambia dominio/DNS/Shopify. Evidencia/limitaciones en CURRENT_STATE; revisión protegida propia pendiente.
 
 ## Inicio, bienvenida única y datos guardados — 2026-10-11
 
@@ -189,3 +193,18 @@ Revisar editor, vista previa, publicación, sanitización, fallback, SEO, caché
 - [ ] El despliegue terminó correctamente.
 - [ ] No quedaron archivos, imports, estilos o TODO obsoletos.
 - [ ] Documentación y registro de mantenimiento actualizados.
+
+
+## Aviso de importacion restaurada - 2026-10-11
+
+Badge distingue actividad de esta sesion del estado persistido: APLICANDO solo mientras apply esta activo; RUNNING restaurado es REANUDABLE; FAILED requiere reintento. Flag local no se persiste ni cambia autoridad del job. Versiones de cuatro recursos y HTML coherentes mediante generador cache; no modifica CRUD, stock, catalogo, permisos, DNS ni servicios. Verificacion publicada posterior a integracion; 56 regresiones PASS_LOCAL.
+
+
+## Checkout: ticket confirmado y presentación — 2026-10-11
+
+Superficies: checkout.html, pedido-checkout-seguro, hardening/fiabilidad/estado del checkout, CSS de resumen y métodos de pago. El resultado confirmado debe permanecer visible mientras se limpia y sincroniza el carrito; las recuperaciones y pasos no deben convertir una compra terminada en un carrito vacío. El ticket se descarga/comparte/imprime sólo por acción del usuario. Probar fracaso sin confirmación, ausencia de duplicados y carrito vacío ordinario, además de layouts320/390/768/1024/1280/1440/1920 en Chromium/WebKit. Las URLs transitivas y artefactos CSP/diagnóstico/caché se regeneran; fuentes de datos, notificaciones, autorización y dominio conservados.
+
+
+### 2026-10-11 — Paneles y presentación de boutique, continuación del ticket
+
+Fuentes: galeria-producto.js, tienda.js, tema-unificado-tintin.css, product-maintenance.css, panel-colecciones.js, coherencia-visual.css. Impacto: tarjetas de inicio/catálogo/colecciones/recomendaciones; selección de fotos y color en ficha; cabeceras de catálogo/carrito/cuenta/notificaciones en todas las páginas públicas. Consumidores administrativos de la paleta reciben sólo actualización de referencia, sin cambiar datos ni permisos. Validar selección bidireccional y srcset, stock sin rayas, geometría compacta, scroll de recomendaciones, CTA de catálogo, cierre y espacio de navegación móvil. Regenerar caché transitiva, shell, CSP, diagnóstico y plan protegido exacto contra main. Pruebas runtime usan renderizadores reales con fixtures sin operaciones comerciales.

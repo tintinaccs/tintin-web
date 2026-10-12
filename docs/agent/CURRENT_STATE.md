@@ -1,6 +1,90 @@
-# Candidato de dominio sin activar — 2026-10-11
+## 2026-10-11 — Preparación de URL pausada sobre #1104
 
-Rama separada, NO MERGE/NO DNS. Ver [CUTOVER_BORRADOR_20261011.md](CUTOVER_BORRADOR_20261011.md). El origen tintinaccs.com de esta rama es únicamente un candidato: el main vigente permanece en pages.dev. Requiere autorización futura y revisión del SHA sobre main vigente.
+Codex /root. Borrador #1101 reconciliado con main ee04a188 mediante merge normal; origen futuro aislado en el borrador, producción sigue pages.dev y dominio comercial Shopify. Conserva todas las correcciones de main. Build/cache/17controles de dominio/consumidores/3redirects PASS_LOCAL; CI del nuevo SHA PENDING. DNS público y Firebase authorizedDomains releídos; acceso privado Cloudflare/GCP/Sheets ausente en el runtime. Autenticación de navegador solicitada, sin asumir acceso API. Evidencia y pendientes: [PREPARACION_SIN_CUTOVER_20261011.md](PREPARACION_SIN_CUTOVER_20261011.md). No merge/cutover ni escrituras de datos comerciales.
+
+---
+
+## 2026-10-11 — Cierre del contrato visual de paneles móviles
+
+Codex /root. CI38182801753 del candidato7d1b9f34 pasó build sin drift,261 interacciones runtime, contratos de identidad/admin, navegador/accesibilidad/SEO, rendimiento de páginas y187/187 combinaciones de geometría. Falló el smoke final porque la nueva regla fullscreen quitaba el borde rosa fino del carrito/catálogo. Se retira el override que borraba el borde móvil canónico de1px, manteniendo el viewport completo, cabecera continua y ausencia de asa/franja blanca. No se modifica ni debilita el smoke. PASS_LOCAL: smoke completo de18 rutas y cabeceras móvil/tablet/escritorio, más45/45 casos de paneles/tarjetas/dropdowns en Chromium desktop/mobile y WebKit mobile; build/caché/diagnóstico y protección correctos. CI y revisión nativa del nuevo SHA PENDING hasta sus resultados. Versionado transitivo y plan protegido regenerados sin cambiar dominio/DNS ni #929/#1101.
+
+---
+
+## 2026-10-11 — Revisión geométrica final de las muestras de color
+
+Codex /root. El navegador confirmó una muestra de24×30px en las recomendaciones: max-width global y flex comprimían el círculo dentro del botón. La regla específica conserva ambas dimensiones sin cambiar colores ni acciones. La regresión de tarjetas ahora comprueba el ancho y alto reales en cinco viewports y tres proyectos. PASS_LOCAL:45/45 casos de paneles, tarjetas y dropdowns en Chromium desktop/mobile y WebKit mobile, incluidos círculos sin compresión en cinco viewports; build,317 assets/64 cargas dinámicas/seis históricos, integridad CSS y544 archivos/78 registros protegidos correctos. CI y revisión nativa del siguiente SHA PENDING; no se hereda PASS del candidato anterior. Se renuevan sólo las tres URLs inmutables que cambian (tema, cargador e interfaz), conservando317 assets y seis entradas históricas. Dominio/DNS y #929/#1101 excluidos.
+
+---
+
+## 2026-10-11 — Última revisión: disponibilidad por variante y CI del diseño
+
+Codex /root. Continúa #1104 sobre main cf362845. La señal de disponibilidad podía quedar verde con “Agotado”: el renderer actualizaba el texto sin actualizar el estado visual, y el inspector sólo reconocía “Sin stock”. El renderer ahora escribe el estado de la variante, el inspector reconoce ambos textos y el punto usa el token de disponibilidad/agotado. No cambia cantidades, límites ni autorización de compra.
+
+12/12 pruebas nuevas PASS_LOCAL en Chromium desktop/mobile y WebKit mobile, 390/768/1024/1440: seleccionar una variante agotada cambia texto/punto y mantiene ambos botones de compra bloqueados; volver a una disponible recupera estado y compra; “Sin stock” conserva estado agotado; no aparece la raya sobre la foto. Revisión completa local anterior terminó todos los componentes de audit:final en dos segmentos con el mismo árbol, incluidos219/219 casos runtime; no se hereda ese resultado como CI del siguiente SHA.
+
+CI e1cbf827 /38180187773 aprobó generación sin drift, contrato estático,219 runtime, contratos de identidad/admin y seguridad, pero falló seis aserciones UI que aún exigían el degradado dorado anterior. Se actualiza esa expectativa al color sólido pedido, conservando geometría/márgenes/touch y resto de controles. La CI del nuevo SHA sigue PENDING; no se despacha revisión nativa ni se declara merge/publicación antes de sus resultados.
+
+Versiones nuevas cortas y únicas para los assets que cambian en esta revisión; no se reutilizan URLs inmutables del preview anterior. CSP/diagnóstico/plan protegido regenerados desde las fuentes. Dominio/DNS y #929/#1101 siguen excluidos.
+
+---
+
+## 2026-10-11 — Continuación visual del PR #1104
+
+Codex /root. Base cf362845fee5da63dd27bcf391900f0a6d01e427. Incluye la corrección del ticket descrita abajo y las imágenes/texto adicionales del propietario.
+
+- Paneles: retirado el asa del catálogo; cabeceras continuas sin límite de ancho que dejaba una franja blanca. Catálogo/carrito/cuenta/notificaciones ocupan el viewport móvil y reservan espacio para la barra inferior. Catálogo conserva su enlace real `/catalogo`, ahora “Ver todo el catálogo”. Explicación de notificaciones envuelve dentro del ancho disponible. Carrito vacío invita a explorar el catálogo, sin enviar a un checkout vacío. No se cambia cómo se marcan vistas ni cómo se entregan pedidos/notificaciones.
+- Tarjetas: fotografía cuadrada, espaciado compacto y controles alineados. Productos con variantes tienen una acción para elegir, en lugar de dos enlaces al mismo destino. Recomendaciones móviles en una fila desplazable con dos tarjetas visibles; no se inventan productos para rellenar el hueco. Sigue excluido el producto actual y se conserva el ciclo de colecciones/stock.
+- Color/galería: paleta sólida en hex, conservando hex administrativos seguros; reconoce “Color de la correa” como grupo de color y lo muestra como “Color”. Miniaturas exponen selección accesible. El cambio de foto actualiza también `srcset`, y asociaciones de color aceptan diferencias de mayúsculas. Se retira la raya sobre imágenes/colores agotados; stock, aviso y bloqueo de compra se conservan.
+- Inventario visual por página y dirección común documentados en [estilo-visual-tintin.md](../estilo-visual-tintin.md). Las páginas ya cargan el tema compartido; las capas activas no se eliminan por tener nombres/versiones históricos. Caché, CSP y manifiestos se regeneran con fuentes canónicas.
+- Evidencia: 46/46 contratos de catálogo, 168/168 checkout/pagos; auditor de producto, checkout y auxiliares PASS_LOCAL. 144/144 pruebas runtime de checkout, tarjetas y galería PASS_LOCAL;45/45 casos finales de paneles, dropdown y tarjetas, incluido carrito vacío y accesibilidad del CTA, PASS_LOCAL en Chromium desktop/mobile y WebKit mobile. Build/CSP/diagnóstico/caché, shell compartido, colores e integridad CSS PASS_LOCAL. Auditoría estática completa IN_PROGRESS: los intentos iniciales detectaron binarios locales de Chromium faltantes en scripts transversales; se completan los binarios y se reejecuta sin omitir aserciones. CI y publicación pendientes del SHA final. Fixtures no escriben pedidos, clientes, catálogo, pagos ni correo. Safari físico y sesión autenticada de producción NOT_VERIFIED.
+- CI previa de #1104 detectó primero un manifiesto desactualizado y luego el stub legacy `nosotros.html` mayor de 2000 bytes. Se regeneró el manifiesto y se acortó únicamente el texto de fallback del redirect, conservando `/about`; auditor auxiliar pasa sin elevar el límite. Nueva CI requiere nuevo SHA. La auditoría posterior de main #1103 falló presupuesto de requests en páginas informativas; no se hereda su PASS ni se cambia el presupuesto para silenciarla.
+- Dominio/origen/DNS y PR #929/#1101 siguen excluidos. No se anuncia listo el cutover por estos arreglos visuales.
+
+---
+
+## 2026-10-11 — Continuación: confirmación y ticket del checkout
+
+Codex /root. Base cf362845fee5da63dd27bcf391900f0a6d01e427. PASS_LOCAL de esta corrección, sin heredar checks anteriores.
+
+- Causa: `checkout-hardening` reaccionaba al carrito vacío después de crear el pedido y volvía al primer paso. La confirmación ahora se muestra antes de la limpieza y activa el estado de pedido completado; los controles de carrito/recuperación/navegación respetan ese estado. La confirmación no se vuelve a enviar después del éxito. Fallos de servidor siguen conservando el resumen y permitiendo reintentar, y vaciar un carrito no confirmado sigue volviendo al paso inicial.
+- Ticket: número de pedido destacado, importes separados, resumen adaptable, descargar texto, compartir con el dispositivo (o copiar), e impresión/PDF. Cancelar o fallar al compartir no modifica el pedido. El ticket aclara que registrar el pedido no acredita pago ni reemplaza factura.
+- Transferencia: selección rosa contenida dentro de la tarjeta, sin sombra exterior ni desplazamiento. Encomienda: valor breve y aclaración separada; misma corrección en resumen inicial y actualización de cotización.
+- Verificación propia: 168/168 contratos de checkout/pagos; 27/27 casos de navegador sobre handlers originales, servicios externos controlados, siete dimensiones 320–1920 incluidas tablet vertical/horizontal, Chromium desktop/mobile y WebKit mobile. Prueban ticket visible durante limpieza pendiente, eventos de carrito posteriores, navegación bloqueada, ausencia de reenvío, pedido fallido, descargar/compartir/cancelar/imprimir y geometría. No se hicieron pedidos, pagos, correos ni mutaciones de clientes reales. No acredita Safari físico ni extremo a extremo autenticado de producción.
+- Caché: renovar desde fuentes las URLs de módulos afectados y sus consumidores, manteniendo una única identidad de carrito. Build/CSP/diagnóstico/caché PASS_LOCAL; pedidos seguros y entrega PASS_LOCAL;55/55 controles de mantenimiento/protección. Plan regenerado62archivos/45registros contra cf362845, sin cambiar inventario, alcances ni sellos. Backend, Firestore/Sheets, notificaciones, permisos y dominio sin cambios. CI/publicación del nuevo SHA pendientes de evidencia propia y revisión nativa del propietario.
+
+# Factura: selección previa y guion desde móvil — 2026-10-11
+
+Codex /root. Continuación expresamente solicitada: corregir factura para todos los clientes y métodos de envío, manteniendo la integración del monitor y la preparación sin cutover. El checkout habilitaba nombre/RUC antes de elegir contribuyente; el teclado numeric de iPhone no ofrece guion; el borrador omitía ck-taxpayer-type. Se bloquean nombre/RUC hasta elegir fisica o juridica, se agrega un control de guion después del cuerpo de 3–8 números (incluido el ejemplo de siete), sin adivinar el DV, y se conserva el tipo en sessionStorage. Seleccionar tipo válido limpia sólo su aviso ya corregido; desmarcar factura conserva los valores. Contratos/validación servidor y preferencias en Firestore conservados.
+
+PASS_LOCAL: 37/37 pruebas de checkout/política/contrato/preferencias; 6/6 casos de UI en Chromium y 6/6 en WebKit, tamaños320/390/768/1024/1440/1920. Casos cubren selección previa, ambos tipos, guion en cuerpos3/7/8, no duplicación, conservación y recarga. Fixtures ejecutan handlers originales y controlador real del borrador sin scripts comerciales; no acreditan compras ni sesión real. WebKit usa binario oficial con bibliotecas locales ya disponibles bajo /tmp/tintin-webkit-libs y omite sólo la detección de dependencias del sistema, que no reconoce esas bibliotecas; las aserciones/runtime no se omiten. Safari/iPhone físicos NOT_VERIFIED. Auditor de checkoutPASS en siete viewports; preparación de dominio17controlesPASS de código, no permisos remotos.
+
+Cache transitiva actualizada desde estado-navegacion-checkout hasta shell con taginvoice-input-20261011-1, sin cambiar geometría ni APIs de navegación. CSP y diagnóstico generados canónicamente. CI/revisión nativa/publicación del candidato pendientes hasta observarlas. Nuevos cambios protegidos necesitan revisión propia en GitHub, nunca aprobación heredada.
+
+DNS GET público actual: NSgemma/leoCloudflare, apex23.227.38.65 ywwwshops.myshopify.com. MXsendAmazonSES/DMARCp=none observados; no sustituyen export completo privado ni revisión de DKIM/SPF. Runbook actualiza el traslado NS ya realizado sin cambiar tráfico. Dominio/DNS/origen activo pages.dev y #929/#1101 excluidos. Importación QA/media real/paridad Sheets/Google/OTP/checkout/email/AppCheck reales, restore aislado y cuentas de infraestructura siguen BLOCKED/NOT_VERIFIED por dependencias documentadas; no anunciar listo el cutover.
+
+---
+
+Base vigente f1e54b11aaeb9f720810c65b3dfe50ba37c5b70c tras #1102: auditoría38171872392SUCCESS, CodeQL/Cloudflare/controlesSUCCESS; #1099 publicado con salud38171517745SUCCESS. CI/publicación de #1102 en main se verifica por separado.
+
+# Reconciliación final tras #1099 — 2026-10-11
+
+Codex /root. #1099 integrado con revisión nativa38159979073SUCCESS en main1323cd344e57917c0793517fbdcae6fa0c3576ae. El árbol del squash coincide con el candidato b12ac408 validado por CI38158661440SUCCESS. #1102 actualizado sobre ese main preservando informes de importador/monitor y contrato de cuentas. Se regenera manifiesto desde fuente canónica; inventario protegido heredado del nuevo main conservado. CI del nuevo candidato y publicación pendientes, sin heredar PASS del head anterior. Dominio/DNS/origen comercial y #929/#1101 excluidos. QA real, Cloudinary y Sheets/restore privados siguen sin acceso conectado ni verificación.
+
+---
+
+Actualización G/I: corregida descripción obsoleta de eliminación/reactivación en autoridades-sincronizacion.md contra decisión vigente y rechazo explícito del webhook; cuentas activas/bloqueadas, sin cambios a clientes o reservas.
+
+# Monitor report-only preparado — 2026-10-11
+
+Codex /root. Cambio separado de #1099; base main3488. Diagnóstico exacto Google report-only conservado visible; CSP efectiva y toda excepción JS permanecen bloqueantes. audit:login-isolation62/62PASS_LOCAL; monitor candidato sobre producción publicada: login/perfil200 y AppCheckStatus enabled observados sin sesión de cliente, no prueba OAuth/Firestore ni compra completos. BCP GET/parser oficial2026-10-09/5694.47; PayPal sandbox deshabilitado, tasa pública reciente. Evidencia y límites: [MONITOR_REPORT_ONLY_20261011.md](MONITOR_REPORT_ONLY_20261011.md). CI/merge nuevos pendientes; inventario protegido sin cambios; reconciliar main después de #1099 sin sobrescribir su documentación. No cutover ni escrituras comerciales.
+
+---
+
+# Continuación sin cutover — 2026-10-11
+
+Codex /root. Instrucción actual: completar preparación para importar/aceptar, sin migrar dominio/DNS/origen; #929 y #1101 excluidos. Main3488ebfd (#1100 publicado), PR1099 reconciliado conservando bienvenida y checkout. 609/609 Node PASS_LOCAL; build/caché PASS_LOCAL, 58 Phase2 incluidos, dos nuevas regresiones de actividad y estado restaurado. CI/revisión protegida/merge del nuevo candidato pendientes. Estado A–M y dependencias: [CONTINUACION_PREPARACION_20261011.md](CONTINUACION_PREPARACION_20261011.md). Salud publicada38152168143 SUCCESS observada, con App Check throttled en runner (desafío real NOT_VERIFIED). No hay sesiones conectadas de Chrome/Admin/Sheets/Google/Cloudflare para ejecutar QA privada ni restauración remota. No se anuncian importación lista ni cutover listo.
+
+---
 
 # Preparación sin cutover y corrección de bienvenida — 2026-10-11
 
@@ -1768,3 +1852,10 @@ Seguimiento 2026-10-09 (Codex): mantenimiento de #1079 run 37966815736 SUCCESS; 
 - PASS_LOCAL on clean branch `codex/fix-sheets-properties-timeout-20261010`, base `origin/main` `13ae3de5`: sync-related tests 48/48; `npm.cmd run build:pages` exit 0; `git diff --check` clean.
 - GitHub CI exposed the existing `Protected flow integrity` gate. Temporary Windows-only path fixes for two sealed tests and a generated maintenance plan were removed after the official workflow rejected modification of the legacy seal. The current PR leaves that seal and inventory unchanged; repository audit/CodeQL/Pages checks for the new SHA remain in progress.
 - NOT_VERIFIED: live Apps Script source/version, successful post-migration trigger runs, authenticated canary and complete Sheets/Firestore reconciliation. No merge, deployment, production writes, catalog/customer/account mutation, or DNS changes.
+
+
+## Aviso de importacion: actividad local y job persistido - 2026-10-11
+
+Codex /root. Observacion real en Pages: restaurar preview imp_muw0m0tc_psiczxcm muestra 413 productos, catalogo 414, cero nuevos y todos los visibles SKIP; no se clico Importar. Badge mostraba APLICANDO solo porque job persistido era RUNNING, aunque la sesion local no ejecutaba apply.
+
+Cambio minimo: state.applying se activa solo tras confirmar apply y se libera en finally; badge APLICANDO requiere esa actividad local. RUNNING restaurado muestra REANUDABLE y FAILED muestra REQUIERE REINTENTO. No se cambian estados del servidor, jobs, productos, colecciones ni permisos. Versiones de apply/importador/calidad/loader propagadas a HTML; generador cache registra cuatro recursos nuevos y conserva seis historicos, 316 assets. 56 pruebas existentes de importacion PASS_LOCAL despues de versionar. audit:cache-versioning PASS_LOCAL: 316 recursos y 64 cargas dinamicas, sin reutilizar URL inmutable con bytes distintos; git diff --check sin errores. Integracion, protecciones sobre base definitiva, manifiesto y cotejo Pages pendientes; #1097 integrado en b6e5a56278bee67af5040c74112cc370272d89e9: CI 38141905977 y mantenimiento protegido 38143024859 SUCCESS para 3cb5cc756c40b82afff5040c78877a3e628e76b2. Rama del aviso basada en ese main, arbol identico al candidato validado; no se hereda PASS_CI para este ajuste. CI 38143267452 FAIL en build: sync:public-shell restauraba LOADER_VERSION anterior en HTML. Se corrige la constante canonica del generador; no se repite la corrida fallida. Build completo y nuevo SHA requieren verificacion propia. Dominio intacto.

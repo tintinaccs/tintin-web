@@ -19,6 +19,8 @@ Cloudflare Pages exige que el dominio apex sea una zona de la misma cuenta de Cl
 
 Estado verificado al 26/09/2026: nameservers `ns-cloud-d1.googledomains.com`, `ns-cloud-d2.googledomains.com`, `ns-cloud-d3.googledomains.com` y `ns-cloud-d4.googledomains.com`; registrador Tucows; estados `clientTransferProhibited` y `clientUpdateProhibited`; vencimiento `2027-02-24`. Esto es compatible con un dominio comprado en Shopify, pero debe confirmarse en la cuenta del dueño. Si Shopify no permite cambiar los nameservers, hay que transferir el dominio fuera de Shopify antes del traslado DNS.
 
+Actualización de sólo lectura al 11/10/2026: los NS públicos ya son `leo.ns.cloudflare.com` y `gemma.ns.cloudflare.com`; apex `23.227.38.65` y `www` → `shops.myshopify.com` conservan Shopify. El traslado previo de NS no debe repetirse. Falta comprobar en la cuenta que esta zona pertenece a la misma cuenta de Pages, exportar todos los registros y validar las autorizaciones y el certificado del futuro dominio. La lectura pública de NS no acredita esas comprobaciones privadas.
+
 Antes de cambiar los NS, guardar el export completo y replicar exactamente estos registros en la nueva zona de Cloudflare:
 
 | Tipo | Nombre | Valor | Proxy / prioridad |
@@ -35,7 +37,7 @@ El apex no tiene MX. Conservar también cualquier registro adicional del export;
 
 Orden operativo, a cargo del dueño:
 
-1. Crear la zona de Cloudflare, replicar los registros y cambiar los NS. Con los registros web de Shopify intactos y en DNS only, este paso es invisible para los clientes.
+1. Confirmar la zona existente y la cuenta de Cloudflare. Sólo si los NS aún no fueran Cloudflare, crear la zona, replicar los registros y cambiar los NS. Con los registros web de Shopify intactos y en DNS only, este paso es invisible para los clientes.
 2. Completar las autorizaciones de Firebase Authentication, OAuth, reCAPTCHA Enterprise/App Check y Search Console indicadas abajo.
 3. Preparar y aprobar el commit exclusivo de cutover de C.
 4. Con ese commit desplegado y verde, agregar `tintinaccs.com` como Custom Domain de Pages (D): **este es el cambio de tráfico**, no el traslado previo de NS.
