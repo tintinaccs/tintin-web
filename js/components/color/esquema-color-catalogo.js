@@ -56,18 +56,18 @@ export const GLOBAL_TOKENS = [
 
   // Tipografía
   { key: 'text-primary', cssVar: '--color-text-primary', label: 'Texto principal', category: 'tipografia', default: '#713C53', legacyDefault: '#2B2B2B' },
-  { key: 'text-secondary', cssVar: '--color-text-secondary', label: 'Texto secundario', category: 'tipografia', default: '#7B6F72' },
-  { key: 'text-tertiary', cssVar: '--color-text-tertiary', label: 'Texto terciario', category: 'tipografia', default: '#948890' },
-  { key: 'text-muted', cssVar: '--color-text-muted', label: 'Texto tenue', category: 'tipografia', default: '#7B6F72' },
+  { key: 'text-secondary', cssVar: '--color-text-secondary', label: 'Texto secundario', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
+  { key: 'text-tertiary', cssVar: '--color-text-tertiary', label: 'Texto terciario', category: 'tipografia', default: '#713C53', legacyDefault: '#948890' },
+  { key: 'text-muted', cssVar: '--color-text-muted', label: 'Texto tenue', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
   { key: 'text-disabled', cssVar: '--color-text-disabled', label: 'Texto deshabilitado', category: 'tipografia', default: '#6B6367' },
   { key: 'text-inverse', cssVar: '--color-text-inverse', label: 'Texto invertido (sobre fondos oscuros/de color)', category: 'tipografia', default: '#FFFFFF' },
   { key: 'text-title', cssVar: '--color-text-title', label: 'Títulos', category: 'tipografia', default: '#713C53', legacyDefault: '#2B2B2B' },
-  { key: 'text-subtitle', cssVar: '--color-text-subtitle', label: 'Subtítulos', category: 'tipografia', default: '#7B6F72' },
+  { key: 'text-subtitle', cssVar: '--color-text-subtitle', label: 'Subtítulos', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
   { key: 'text-label', cssVar: '--color-text-label', label: 'Etiquetas de campo', category: 'tipografia', default: '#713C53', legacyDefault: '#2B2B2B' },
-  { key: 'text-placeholder', cssVar: '--color-text-placeholder', label: 'Placeholders', category: 'tipografia', default: '#7B6F72' },
+  { key: 'text-placeholder', cssVar: '--color-text-placeholder', label: 'Placeholders', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
   { key: 'text-link', cssVar: '--color-text-link', label: 'Enlaces', category: 'tipografia', default: '#713C53', legacyDefault: '#C52F68' },
   { key: 'text-link-visited', cssVar: '--color-text-link-visited', label: 'Enlaces visitados', category: 'tipografia', default: '#713C53', legacyDefault: '#C52F68' },
-  { key: 'text-help', cssVar: '--color-text-help', label: 'Textos de ayuda', category: 'tipografia', default: '#7B6F72' },
+  { key: 'text-help', cssVar: '--color-text-help', label: 'Textos de ayuda', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
 
   // Botones
   { key: 'btn-primary-bg', cssVar: '--color-button-primary-background', label: 'Botón principal — fondo', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
@@ -102,7 +102,7 @@ export const GLOBAL_TOKENS = [
   { key: 'btn-whatsapp-bg', cssVar: '--color-button-whatsapp-background', label: 'Botón de WhatsApp — fondo', category: 'botones', default: '#F8AACA', legacyDefault: '#0d8043' },
   { key: 'btn-whatsapp-text', cssVar: '--color-button-whatsapp-text', label: 'Botón de WhatsApp — texto', category: 'botones', default: '#713C53', legacyDefault: '#FFFFFF' },
   { key: 'btn-whatsapp-hover', cssVar: '--color-button-whatsapp-hover', label: 'Botón de WhatsApp — hover', category: 'botones', default: '#F8AACA', legacyDefault: '#0a6835' },
-  { key: 'btn-icon-text', cssVar: '--color-button-icon-text', label: 'Botones de íconos — color', category: 'botones', default: '#7B6F72' },
+  { key: 'btn-icon-text', cssVar: '--color-button-icon-text', label: 'Botones de íconos — color', category: 'botones', default: '#713C53', legacyDefault: '#7B6F72' },
   { key: 'btn-icon-disabled', cssVar: '--color-button-icon-disabled-text', label: 'Botones de íconos — deshabilitado', category: 'botones', default: '#6B6367' },
   { key: 'btn-floating-bg', cssVar: '--color-button-floating-background', label: 'Botones flotantes — fondo', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'btn-floating-text', cssVar: '--color-button-floating-text', label: 'Botones flotantes — texto', category: 'botones', default: '#713C53', legacyDefault: '#FFFFFF' },
@@ -149,7 +149,7 @@ export const GLOBAL_TOKENS = [
   { key: 'field-text', cssVar: '--color-field-text', label: 'Campos — texto', category: 'formularios', default: '#713C53', legacyDefault: '#2B2B2B' },
   { key: 'field-border', cssVar: '--color-field-border', label: 'Campos — borde', category: 'formularios', default: '#F1E4E7' },
   { key: 'field-border-focus', cssVar: '--color-field-border-focus', label: 'Campos — borde de focus', category: 'formularios', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'field-placeholder', cssVar: '--color-field-placeholder', label: 'Campos — placeholder', category: 'formularios', default: '#7B6F72' },
+  { key: 'field-placeholder', cssVar: '--color-field-placeholder', label: 'Campos — placeholder', category: 'formularios', default: '#713C53', legacyDefault: '#7B6F72' },
 
   // Navegación
   { key: 'nav-active-bg', cssVar: '--color-nav-active-background', label: 'Navegación activa — fondo', category: 'navegacion', default: '#FDECF2' },
@@ -157,8 +157,8 @@ export const GLOBAL_TOKENS = [
   { key: 'nav-inactive-text', cssVar: '--color-nav-inactive-text', label: 'Navegación inactiva — texto', category: 'navegacion', default: '#713C53', legacyDefault: '#2B2B2B' },
   { key: 'tab-active-bg', cssVar: '--color-tab-active-background', label: 'Pestaña activa — fondo', category: 'navegacion', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'tab-active-text', cssVar: '--color-tab-active-text', label: 'Pestaña activa — texto', category: 'navegacion', default: '#713C53', legacyDefault: '#FFFFFF' },
-  { key: 'tab-inactive-text', cssVar: '--color-tab-inactive-text', label: 'Pestaña inactiva — texto', category: 'navegacion', default: '#7B6F72' },
-  { key: 'breadcrumb-text', cssVar: '--color-breadcrumb-text', label: 'Breadcrumbs', category: 'navegacion', default: '#7B6F72' },
+  { key: 'tab-inactive-text', cssVar: '--color-tab-inactive-text', label: 'Pestaña inactiva — texto', category: 'navegacion', default: '#713C53', legacyDefault: '#7B6F72' },
+  { key: 'breadcrumb-text', cssVar: '--color-breadcrumb-text', label: 'Breadcrumbs', category: 'navegacion', default: '#713C53', legacyDefault: '#7B6F72' },
   { key: 'breadcrumb-active', cssVar: '--color-breadcrumb-active-text', label: 'Breadcrumb activo', category: 'navegacion', default: '#713C53', legacyDefault: '#C52F68' },
   { key: 'accordion-header-bg', cssVar: '--color-accordion-header-background', label: 'Encabezado de acordeón', category: 'navegacion', default: '#FFF9FC' },
   { key: 'indicator', cssVar: '--color-indicator', label: 'Indicadores (puntos, pills)', category: 'navegacion', default: '#F8AACA', legacyDefault: '#C52F68' },
@@ -180,17 +180,17 @@ export const GLOBAL_TOKENS = [
   { key: 'modal-overlay', cssVar: '--color-modal-overlay', label: 'Fondo detrás del modal', category: 'modales', default: 'rgba(20,10,14,0.55)' },
   { key: 'tooltip-bg', cssVar: '--color-tooltip-background', label: 'Tooltips — fondo', category: 'modales', default: '#713C53', legacyDefault: '#2B2B2B' },
   { key: 'tooltip-text', cssVar: '--color-tooltip-text', label: 'Tooltips — texto', category: 'modales', default: '#FFFFFF' },
-  { key: 'empty-state-text', cssVar: '--color-empty-state-text', label: 'Estados vacíos — texto', category: 'modales', default: '#7B6F72' },
+  { key: 'empty-state-text', cssVar: '--color-empty-state-text', label: 'Estados vacíos — texto', category: 'modales', default: '#713C53', legacyDefault: '#7B6F72' },
 
   // Productos y carrito
   { key: 'price', cssVar: '--color-price', label: 'Precio', category: 'productos', default: '#713C53', legacyDefault: '#C52F68' },
-  { key: 'price-old', cssVar: '--color-price-old', label: 'Precio anterior (tachado)', category: 'productos', default: '#7B6F72' },
+  { key: 'price-old', cssVar: '--color-price-old', label: 'Precio anterior (tachado)', category: 'productos', default: '#713C53', legacyDefault: '#7B6F72' },
   { key: 'rating-star', cssVar: '--color-rating-star', label: 'Estrellas de reseña', category: 'productos', default: '#8a6d1f' },
   { key: 'cart-badge-bg', cssVar: '--color-cart-badge-background', label: 'Badge del carrito — fondo', category: 'productos', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'cart-badge-text', cssVar: '--color-cart-badge-text', label: 'Badge del carrito — texto', category: 'productos', default: '#FFFFFF' },
 
   // Avanzado
-  { key: 'icon-primary', cssVar: '--color-icon-primary', label: 'Íconos principales', category: 'avanzado', default: '#7B6F72' },
+  { key: 'icon-primary', cssVar: '--color-icon-primary', label: 'Íconos principales', category: 'avanzado', default: '#713C53', legacyDefault: '#7B6F72' },
   { key: 'icon-secondary', cssVar: '--color-icon-secondary', label: 'Íconos secundarios', category: 'avanzado', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'icon-disabled', cssVar: '--color-icon-disabled', label: 'Íconos deshabilitados', category: 'avanzado', default: '#6B6367' },
   { key: 'scrollbar-thumb', cssVar: '--color-scrollbar-thumb', label: 'Scrollbar — control', category: 'avanzado', default: '#EA7EA3' },

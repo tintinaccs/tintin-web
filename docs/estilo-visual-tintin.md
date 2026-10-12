@@ -1,6 +1,6 @@
 # Estilo visual de Tintin — 2026-10-11
 
-La dirección común es una boutique romántica de inspiración vintage: rosa Tintin (#F8AACA), texto ciruela (#713C53), fondos blancos y marfil rosado, tipografía Montserrat, contornos finos, formas suaves y fotografías protagonistas. Las superficies son sólidas, sin vidrio. La función de cada página cambia su distribución, no su identidad.
+La dirección común es una boutique minimalista: rosa Tintin (#F8AACA), una tinta ciruela (#713C53) para títulos, texto, subtítulos, ayudas e iconos, fondos blancos y marfil rosado, tipografía Montserrat y contornos finos. La jerarquía usa tamaño, peso y espacio en lugar de varios colores de letras. WhatsApp comparte estos tokens. Los colores de variantes y estados funcionales mantienen su significado; las personalizaciones explícitas de Apariencia se conservan. Las superficies son sólidas, sin vidrio. La función de cada página cambia su distribución, no su identidad.
 
 | Páginas | Presentación que existe | Capa común y ajuste de esta revisión |
 | --- | --- | --- |

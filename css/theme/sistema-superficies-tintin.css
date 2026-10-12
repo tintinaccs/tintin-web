@@ -10,8 +10,8 @@
   --tt-ui-canvas: #fff8fb;
   --tt-ui-surface: #ffffff;
   --tt-ui-surface-soft: #fff1f6;
-  --tt-ui-ink:#713C53;
-  --tt-ui-muted: #71636b;
+  --tt-ui-ink: var(--color-text-primary, #713C53);
+  --tt-ui-muted: var(--color-text-primary, #713C53);
   --tt-ui-pink: var(--color-brand-primary, #F8AACA);
   --tt-ui-pink-deep: var(--color-brand-primary, #F8AACA);
   --tt-ui-pink-soft: #fbe0ea;

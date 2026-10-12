@@ -1,3 +1,13 @@
+## 2026-10-12 — Conexión local y unificación visual solicitada por capturas
+
+Codex /root. Carpeta inicialmente vacía conectada al repositorio autenticado tintinaccs/tintin-web; base c8a8b20cbad723380ff4227fd41add0b879335dd, rama codex/unificar-visual-tintin. Solicitud incluye integración a main; no autoriza aprobar en nombre del propietario el entorno protegido de GitHub.
+
+Se unifican los 13 tokens públicos grises de texto/ayudas/iconos en #713C53, con migración de defaults guardados tanto en primera pintura como en el motor de Apariencia. La capa de superficies consume la misma tinta. WhatsApp usa rosa de marca/tinta común en vez de overrides verdes/blancos. Personalizaciones explícitas y colores funcionales/variantes se conservan. Loader de login: «Iniciando sesión»; RUC: «sin puntos». Transferencia muestra el teléfono configurado con enlace para comprobantes/consultas; el mensaje de contacto del admin usa orderNumber/shortId en lugar del ID interno cuando existen. URLs inmutables actualizadas transitivamente, sin alterar roles, datos comerciales ni infraestructura.
+
+PASS_LOCAL: 236 pruebas de paleta, checkout/pagos, arranque/rutas, contacto WhatsApp y protección/mantenimiento. 14 pruebas Chromium de factura, color de WhatsApp y ficha de producto, más 21 de tarjetas de inicio/catálogo/colecciones, en 320/390/768/1024/1280/1440/1920 según caso. Primer intento de tarjetas de colecciones falló por fixtures que no eliminaban imports con CRLF de Windows; las mismas 21 aserciones pasaron tras normalizar entrada, y el fixture ahora tolera ambas terminaciones. Montserrat única (31663 comprobaciones), catálogo de colores e integridad CSS aprobados. Captura local product-spacing-320.png revisada. Se reutilizan las correcciones vigentes de confirmación/ticket, ubicación y geometría; estos checks locales no certifican pedidos, pagos ni dispositivos físicos de producción.
+
+CI/revisión nativa/merge/publicación del candidato PENDING; no heredar aprobaciones de main ni de auditorías fechadas. Documentación de mantenimiento exige revisión manual del propietario en protected-flow-maintenance; preparar plan exacto y completar CI antes de solicitarla.
+
 ## 2026-10-12 — Recuperación integrada, prueba publicada y disponibilidad del esquema
 
 Codex /root. #1110 MERGED, candidato b884213660c2587f7abd96f93572f8610808e334, main2b53655b87aca8d92088c9046242253cd2f6442d. CI38293067498, CodeQL y Pages aprobados; mantenimiento nativo38304747415 SUCCESS y aprobación exacta con autorización previa del titular. Se incorporó por fast-forward la corrección concurrente de cancelación nativa WebKit:7/7 regresiones, no se ignoran rechazos reales ni otros hosts/proyectos. No force push ni bypass.

@@ -39,7 +39,7 @@ import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
-} from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1";
+} from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-1-esquema-color-catalogo-js";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261012-auth-privacy-1-pedidos-superadmin-crud-js';
