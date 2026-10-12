@@ -4,7 +4,7 @@
 // Usa el mismo backend del checkout y una ruta de respaldo idéntica. Ambos
 // devuelven {lat, lng, name, address, source}.
 
-import { apiUrl } from "../../core/firebase/origen-funciones.js?v=tintin-20261011-domain-prepared-2";
+import { apiUrl } from "../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-prepared-20261011-4";
 
 const DEBOUNCE_MS = 300;
 const MIN_QUERY_LENGTH = 3;

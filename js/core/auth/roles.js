@@ -2,7 +2,7 @@
 // TINTIN ACCESORIOS — Roles & Permissions
 // =============================================
 
-import { auth, db } from "../firebase/firebase.js?v=tintin-20261011-domain-prepared-2";
+import { auth, db } from "../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";

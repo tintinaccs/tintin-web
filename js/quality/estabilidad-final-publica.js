@@ -119,10 +119,10 @@ async function enhanceProfile() {
       photoButton.textContent = 'Subiendo…';
       try {
         const [{ db }, authApi, firestoreApi, sessionApi] = await Promise.all([
-          import('../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2'),
+          import('../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-          import('../core/auth/coordinador-sesion.js?v=tintin-20261011-domain-prepared-2'),
+          import('../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4'),
         ]);
         const snapshot = await sessionApi.waitForSession();
         if (snapshot.status === sessionApi.AUTH_STATES.UNKNOWN) throw new Error('No pudimos verificar tu sesión. Volvé a intentar en unos segundos.');
@@ -210,7 +210,7 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
-  void import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20261011-domain-prepared-2')
+  void import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4')
     .catch(error => console.warn('[Perfil] Pedidos pendientes:', error?.code || error?.message));
   activate(initialPanel);
 }

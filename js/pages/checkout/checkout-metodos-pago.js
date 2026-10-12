@@ -1,4 +1,4 @@
-import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20261011-domain-prepared-2';
+import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20260720-read-budget-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,

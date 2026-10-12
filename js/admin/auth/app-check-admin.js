@@ -7,7 +7,7 @@ import {
   authPersistenceReady,
   appCheck,
   appCheckReady
-} from '../../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
+} from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
 import { getToken as getAppCheckToken } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 
 function waitForReadyEvent(timeoutMs) {

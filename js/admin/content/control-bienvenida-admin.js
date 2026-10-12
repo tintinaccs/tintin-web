@@ -1,4 +1,4 @@
-import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261011-domain-prepared-2';
+import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261004-admin-connections-3-first-render-merge-20261010-1-domain-prepared-20261011-4';
 /* =============================================================
    TINTIN — Super Admin: Mensaje de bienvenida
    =============================================================
@@ -6,11 +6,11 @@ import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261011-
    Se inserta solo en admin.html y solo para la cuenta Super Admin real.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261011-domain-prepared-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261011-domain-prepared-2';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261004-admin-connections-3-domain-prepared-20261011-4';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4';
 import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261011-domain-prepared-2';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-first-render-merge-20261010-1-domain-prepared-20261011-4';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 import {
   defaultWelcomeSteps,

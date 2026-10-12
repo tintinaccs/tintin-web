@@ -667,7 +667,8 @@ export function summarizeImportRecords(records) {
     if (record.errors?.length) summary.invalid += 1;
     else if (record.duplicate) summary.duplicate += 1;
     else summary.ready += 1;
-    summary.images += 1 + (record.product?.imagesExtra?.length || 0);
+    const images = [record.product?.imageUrl, ...(record.product?.imagesExtra || [])];
+    summary.images += images.filter(image => typeof image === 'string' && image.trim()).length;
     summary.variants += record.product?.variants?.length || 0;
     return summary;
   }, { ready: 0, duplicate: 0, invalid: 0, images: 0, variants: 0 });

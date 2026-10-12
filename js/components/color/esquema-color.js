@@ -7,7 +7,7 @@
  * terminó la primera resolución del esquema para que el loader no revele una
  * página con un fondo cacheado y lo cambie un instante después.
  */
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261011-domain-prepared-2';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1-domain-prepared-20261011-4';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap, normalizeLegacyBrandColor } from './esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1';
 
