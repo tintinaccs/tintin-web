@@ -8,7 +8,7 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261012-auth-privacy-1-notificaciones-correo-js";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261012-checkout-ready-1-notificaciones-correo-js";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
 // automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
 // de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no

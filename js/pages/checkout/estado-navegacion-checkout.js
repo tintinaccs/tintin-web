@@ -25,6 +25,9 @@ const DRAFT_FIELDS = Object.freeze([
   'pay-transferencia',
 ]);
 
+let identityUid = window.TintinCheckoutIdentityUid;
+let editedDraft = false;
+const DRAFT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 let maxNavigableStep = 0;
 let restoring = false;
 let mutationObserver = null;
@@ -76,13 +79,13 @@ function serializedField(element) {
 }
 
 function persistDraft() {
-  if (restoring || window.TintinCheckoutOrderCompleted) return;
+  if (restoring || identityUid === undefined || window.TintinCheckoutOrderCompleted) return;
   const fields = {};
   DRAFT_FIELDS.forEach(id => {
     const state = serializedField(document.getElementById(id));
     if (state) fields[id] = state;
   });
-  writeJson(DRAFT_KEY, { version: 1, fields, savedAt: Date.now() });
+  writeJson(DRAFT_KEY, { version: 2, uid: identityUid, fields, savedAt: Date.now() });
 }
 
 function dispatchValueEvents(element) {
@@ -112,8 +115,9 @@ function restoreSimpleField(id, saved) {
 }
 
 function restoreDraft() {
-  if (window.TintinCheckoutOrderCompleted) return;
+  if (window.TintinCheckoutOrderCompleted || identityUid === undefined || editedDraft) return;
   const draft = readJson(DRAFT_KEY, null);
+  if (draft && (draft.version !== 2 || draft.uid !== identityUid || !Number.isFinite(draft.savedAt) || Date.now() - draft.savedAt > DRAFT_MAX_AGE_MS)) { clearCheckoutState(); return; }
   if (!draft?.fields || typeof draft.fields !== 'object') return;
   restoring = true;
   try {
@@ -259,6 +263,7 @@ function observeSuccess() {
 
 function bindDraftPersistence() {
   document.addEventListener('input', event => {
+    if (event.isTrusted) editedDraft = true;
     if (DRAFT_FIELDS.includes(event.target?.id)) persistDraft();
   }, true);
   document.addEventListener('change', event => {
@@ -280,7 +285,7 @@ function bindDraftPersistence() {
 function restoreResumeTarget() {
   // Los reintentos de arranque no deben deshacer un avance o regreso elegido
   // por la persona. Los clics programáticos de la recuperación siguen permitidos.
-  if (manualNavigation || window.TintinCheckoutOrderCompleted) return;
+  if (identityUid === undefined || manualNavigation || window.TintinCheckoutOrderCompleted) return;
   const target = Math.max(
     Math.max(0, Math.min(3, Number(readJson(MAX_STEP_KEY, 0)) || 0)),
     readResumeBackup()
@@ -344,7 +349,30 @@ function boot() {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
 else boot();
 
+function setCheckoutUser(uid) {
+  const previousDraft = readJson(DRAFT_KEY, null);
+  const changed = identityUid !== undefined && identityUid !== uid;
+  identityUid = uid;
+  if (changed || (previousDraft && (previousDraft.version !== 2 || previousDraft.uid !== uid))) {
+    clearCheckoutState();
+    DRAFT_FIELDS.forEach(id => {
+      const field = document.getElementById(id);
+      if (!field) return;
+      if (field.type === 'checkbox' || field.type === 'radio') field.checked = false;
+      else field.value = '';
+      delete field.dataset.savedIdentity;
+      delete field.dataset.checkoutEdited;
+    });
+    document.getElementById('ck-wants-invoice')?.dispatchEvent(new Event('change', { bubbles: true }));
+    document.getElementById('ck-taxpayer-type')?.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  editedDraft = false;
+  scheduleRestore();
+  scheduleResumeTarget();
+}
+
 window.TintinCheckoutState = {
+  setUser: setCheckoutUser,
   clear: clearCheckoutState,
   persist: persistDraft,
   restore: restoreDraft,

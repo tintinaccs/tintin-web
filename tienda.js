@@ -277,7 +277,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-auth-privacy-1-sincronizacion-carrito-js');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-1-sincronizacion-carrito-js');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1001,7 +1001,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-auth-privacy-1-sincronizacion-carrito-js');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-1-sincronizacion-carrito-js');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1842,7 +1842,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-auth-privacy-1-sincronizacion-carrito-js');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-1-sincronizacion-carrito-js');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

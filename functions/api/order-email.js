@@ -8,6 +8,7 @@ import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-p
 import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
 import { normalizePaymentCatalog } from '../../js/orders/nucleo-metodos-pago.js';
 import { sendInitialOrderEmailOnce } from '../../cloudflare/recibo-correo-pedido.js';
+import { firestoreAdminGet, firestoreAdminMerge, encodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
@@ -395,7 +396,34 @@ export async function sendResendEmail(apiKey, payload, idempotencyKey) {
   return data;
 }
 
+export async function recordOrderEmailDelivery(env, orderId, result, { get = firestoreAdminGet, merge = firestoreAdminMerge } = {}) {
+  const path = `orders/${encodeURIComponent(orderId)}`;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const previousDoc = await get(env, path);
+    if (!previousDoc) return;
+    const previous = decodeFirestoreFields(previousDoc.fields || {});
+    const receipts = await Promise.all(['admin', 'customer'].map(channel => get(env, `syncMeta/orderEmailReceipt_${orderId}_${channel}`)));
+    const adminSent = result.adminSent === true || previous.notificationAdminSent === true || decodeFirestoreFields(receipts[0]?.fields || {}).status === 'sent';
+    const customerSent = result.customerSent === true || previous.notificationCustomerSent === true || decodeFirestoreFields(receipts[1]?.fields || {}).status === 'sent';
+    try {
+      await merge(env, path, encodeFirestoreFields({
+        notificationAdminSent: adminSent, notificationCustomerSent: customerSent,
+        notificationStatus: adminSent && customerSent ? 'sent' : adminSent || customerSent ? 'partial' : 'failed',
+        notificationError: adminSent && customerSent ? '' : clean(result.error, 600),
+        notificationUpdatedAt: new Date(),
+      }), { updateTime: previousDoc.updateTime || '' });
+      return;
+    } catch (error) { if (error?.code !== 'version_conflict' || attempt === 2) throw error; }
+  }
+}
+
 export async function sendOrderEmails({ env, apiKey, orderId, order, isResend, sendAdmin, sendCustomer, transfer = null }) {
+  if (sendCustomer && !transfer && clean(order?.payment?.method, 40) === 'transferencia') {
+    try {
+      const settings = await firestoreAdminGet(env, 'settings/general');
+      transfer = transferInstructionsFromSettings(decodeFirestoreFields(settings?.fields || {}), order?.payment?.methodId || 'transferencia');
+    } catch (error) { console.warn('[order-email] No se pudieron cargar instrucciones de transferencia:', error?.message); }
+  }
   const suffix = isResend ? `resend-${Date.now()}` : 'new-v1';
   const deliveryKeys = {
     admin: `order-${orderId}-admin-${suffix}`,
@@ -451,6 +479,8 @@ export async function sendOrderEmails({ env, apiKey, orderId, order, isResend, s
     }
   }
 
+  try { await recordOrderEmailDelivery(env, orderId, { adminSent, customerSent, error: errors.join(' | ') }); }
+  catch (error) { console.error('[order-email] No se pudo guardar el estado de entrega:', error?.message); }
   const success = (adminSent !== false) && (customerSent !== false) && (adminSent === true || customerSent === true);
   return {
     success,

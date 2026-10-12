@@ -156,8 +156,8 @@
     "sha256": "be923a085f0638b2333c3223a514cf53ff1c69eba10ce998fcf7b63686783313"
   },
   "css/pages/checkout/checkout.css": {
-    "version": "tintin-20261010-auto-flow-responsive-1-receipt-20261011-1",
-    "sha256": "3a9ad28abf0d121a9145f3b5d9338ac3add8d4af6fdb8f21faa5434e7c5d954d"
+    "version": "tintin-20261012-checkout-ready-1-checkout-css",
+    "sha256": "d8b3952555b2e2f4ebfcdef3ef67d13a21329c484e63b880140ea6945dc7e658"
   },
   "css/pages/collections/collections-page.css": {
     "version": "tintin-20260818-collections-apple-1-brand-20261004-1-owner-pink-20261004-1",
@@ -300,8 +300,8 @@
     "sha256": "1b3d6833ae56731aa813a543aebb3934985694f0cb6fe38b5237d812a6906cca"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261012-auth-privacy-1-admin-app-js",
-    "sha256": "ba74d7ef7893e81ce0074eb5154e720d27630bf0d407ce214dc1da6ae63082a5"
+    "version": "tintin-20261012-checkout-ready-1-admin-app-js",
+    "sha256": "95b4f0f8989c8086ed2cfe4a48a871a97941ecc7b3392ccde7a4df50e57b761a"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -540,20 +540,20 @@
     "sha256": "88752a7c08d50d9c5f8bddff573a6b9070613fbd8d148cd6a07ef28e532ba962"
   },
   "js/cargador-mantenimiento-pagina.js": {
-    "version": "tintin-20261012-auth-privacy-1-cargador-mantenimiento-pagina-js",
-    "sha256": "38971e9e03423f1b69144fa52a0ff13761583ca9591bf6c846ba890f18dfb91c"
+    "version": "tintin-20261012-checkout-ready-1-cargador-mantenimiento-pagina-js",
+    "sha256": "65a4df273a9abac1162681f7edd71a6f119ae2cfc7eb0b82002a7113e0cae6bd"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20261012-auth-privacy-1-cargador-pagina-js",
-    "sha256": "f92d0adb542da58508f4b218e3d685c894796ade575b1c4a80330ea1404b7771"
+    "version": "tintin-20261012-checkout-ready-1-cargador-pagina-js",
+    "sha256": "872d10c15d17e481e46ce8921cb70d7f26bbeaf2a98c6301cce4ec1b7733842a"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
     "sha256": "21e0e15543f0d6f1eb367641152ec88cfa3428063db6add13b70244f30db6c44"
   },
   "js/components/cart/sincronizacion-carrito.js": {
-    "version": "tintin-20261012-auth-privacy-1-sincronizacion-carrito-js",
-    "sha256": "b2c18070fec39fc667621a9193f8f9e5022b201a7f62d620e7aa90c2bdd18aee"
+    "version": "tintin-20261012-checkout-ready-1-sincronizacion-carrito-js",
+    "sha256": "8e9ea652436921c2c2057104a4b95b3b87a3064f5f7026b2ffbe6b97f2bec5f4"
   },
   "js/components/color/esquema-color-catalogo.js": {
     "version": "tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
@@ -592,8 +592,8 @@
     "sha256": "d5eb84962ad0a0960de13b6f49e245569357486b5138ee218ba746d8d72f92f6"
   },
   "js/components/favorites/sincronizacion-favoritos.js": {
-    "version": "tintin-20261012-auth-privacy-1-sincronizacion-favoritos-js",
-    "sha256": "820096b7acde19ddeb98b003588462ff3a3f0c96c7ee48f17249899c16654c61"
+    "version": "tintin-20261012-checkout-ready-1-sincronizacion-favoritos-js",
+    "sha256": "0edc3b1c42418c0ba319b346ba4ebae9fce324e4b16d44ab7529ddd493ee3e65"
   },
   "js/components/forms/entrada-codigo-otp.js": {
     "version": "tintin-20260803-otp-input-1",
@@ -716,8 +716,8 @@
     "sha256": "9629ca8e240fddf239889269c29b7a1692a020ec328863413ca2354c21f34c1a"
   },
   "js/components/navigation/compartido/carga-navegacion.js": {
-    "version": "tintin-20261012-auth-privacy-1-carga-navegacion-js",
-    "sha256": "1ed7238666b3e35b9c72f7314bc42a3cd42d7890ac31cc221bad92db9d731722"
+    "version": "tintin-20261012-checkout-ready-1-carga-navegacion-js",
+    "sha256": "52aacd8f050a1c14c41f53af41a4fcd680472d0e155a1b72c26d255a7accaed6"
   },
   "js/components/navigation/compartido/compatibilidad-cuenta-movil.js": {
     "version": "tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1",
@@ -732,8 +732,8 @@
     "sha256": "a451f8ae70cc10eccd5cdb58d5b0282e22c43247cf4109446df80c1291cd29ce"
   },
   "js/components/navigation/compartido/control-busqueda.js": {
-    "version": "tintin-20261012-auth-privacy-1-control-busqueda-js",
-    "sha256": "a2c522cd3d4b66d5612177d428eccb4b71d6203eaaa328db30a9419bf2a761ef"
+    "version": "tintin-20261012-checkout-ready-1-control-busqueda-js",
+    "sha256": "4d9399aac846c2648db85394097082a53d3dcd45cf1b884f752ad599f73fb3db"
   },
   "js/components/navigation/compartido/control-paneles.js": {
     "version": "tintin-20261010-mobile-navigation-front-1",
@@ -788,8 +788,8 @@
     "sha256": "e8ec13a491b9e4e4a6c739e99a172751c6010f7c92de109ebbcd72adf2b70117"
   },
   "js/components/navigation/entrada-navegacion-publica.js": {
-    "version": "tintin-20261012-auth-privacy-1-entrada-navegacion-publica-js",
-    "sha256": "76ecac2db77568e5013588bc7f3f4086c6404d8023bce81e5148117bde704b98"
+    "version": "tintin-20261012-checkout-ready-1-entrada-navegacion-publica-js",
+    "sha256": "ecddfa887c8f7da267573fd76b501108e81bb5cfd464e02304ba74ce34297a2f"
   },
   "js/components/navigation/escritorio/encabezado-escritorio.js": {
     "version": "tintin-20261010-whatsapp-release-5-boutique-20261011-1",
@@ -968,8 +968,8 @@
     "sha256": "475b0e3ec3614aa438c6075a8035ecf02b8a56f7a0af739e9a1aab10839e7712"
   },
   "js/core/store/estado-productos.js": {
-    "version": "tintin-20261012-auth-privacy-1-estado-productos-js",
-    "sha256": "e778b3170850fa726938555b85d6378dcd231f6a942efcb76f847620bd30db9c"
+    "version": "tintin-20261012-checkout-ready-1-estado-productos-js",
+    "sha256": "fcc68fcf93d703a4b31e08494a336677af70aae91565b5c7b548e08d357ce22d"
   },
   "js/core/store/inventario-variantes.mjs": {
     "version": "tintin-20261003-variant-inventory-1",
@@ -1036,20 +1036,20 @@
     "sha256": "0975b5f70483b9ade33f970ba45f2dcdf630c577ad3384bb72976557bd71e43a"
   },
   "js/email/notificaciones-correo.js": {
-    "version": "tintin-20261012-auth-privacy-1-notificaciones-correo-js",
-    "sha256": "d2a55c93f848b6d84ecc44d7ecdb70dd2fcdb09d07160bcb992de0c3617aba64"
+    "version": "tintin-20261012-checkout-ready-1-notificaciones-correo-js",
+    "sha256": "7b0b387936c2349a794419a70c985c8ccbe631c38ed2f91f64d3748eddf4dde6"
   },
   "js/inicio-navegacion-publica.js": {
-    "version": "tintin-20261012-auth-privacy-1-inicio-navegacion-publica-js",
-    "sha256": "d9ed877864b1d0ca66cfa8be3a09587da0be2bb42d3b9277e1273c4d2dff1860"
+    "version": "tintin-20261012-checkout-ready-1-inicio-navegacion-publica-js",
+    "sha256": "10e935d94cf670975844ef5161168237ace4155cb8cceff3edfd862ca1ec9935"
   },
   "js/orders/nucleo-metodos-pago.js": {
     "version": "tintin-20261004-final-integration-1-encomienda-20261008-1",
     "sha256": "d07e450176271aa8b901d5c367c61ed881a88d473c8eb504cbab53594b3a4996"
   },
   "js/orders/pedido-checkout-seguro.js": {
-    "version": "tintin-20261012-auth-privacy-1-pedido-checkout-seguro-js",
-    "sha256": "c7b420ccb8969f25cb11551c87f83ea839344d57a898f85aa025cfecd195af06"
+    "version": "tintin-20261012-checkout-ready-1-pedido-checkout-seguro-js",
+    "sha256": "49b1f02ed3db800dac8649c9789c7e58e8c4123217c97c040dc683bf08296ce9"
   },
   "js/orders/politica-checkout.js": {
     "version": "tintin-20260822-checkout-hardening-2-cupones-1-master-20261007-1",
@@ -1072,8 +1072,8 @@
     "sha256": "5417469ac5198d445dadf6a025823f6b1ffbac4ccdc804975c401935c94d4a08"
   },
   "js/pages/checkout/checkout-confiabilidad.js": {
-    "version": "tintin-20261004-final-integration-1-loads-20261007-1-first-render-merge-20261010-1-receipt-20261011-1",
-    "sha256": "7a0b22748ae72a5c4711eca80a6dd345a0c2124d37601b27e75199e8112db839"
+    "version": "tintin-20261012-checkout-ready-1-checkout-confiabilidad-js",
+    "sha256": "e787c9578b7f4a601ff4f407fa3790574f060c848f5ef505fcde846428f659b0"
   },
   "js/pages/checkout/checkout-control-cuota.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1",
@@ -1084,20 +1084,20 @@
     "sha256": "d5f3e25fb32c0f05d9ec6f401ba3cb1655449adccf011c525ad379058bc61985"
   },
   "js/pages/checkout/checkout-hardening.js": {
-    "version": "tintin-20261012-auth-privacy-1-checkout-hardening-js",
-    "sha256": "006e96599823bb7f2d3e8f443c69ea74d59aa56893961adac035da4c29f8e043"
+    "version": "tintin-20261012-checkout-ready-1-checkout-hardening-js",
+    "sha256": "eaa9e2b00261d6bb2f0b00be8d87dee0273c3d2684910f51ac56c97e8363c626"
   },
   "js/pages/checkout/checkout-mantenimiento.js": {
-    "version": "tintin-20261008-checkout-step-labels-1",
-    "sha256": "cfa3a9207922042753c134d4986978982f9d4a07fd52a9ae9ad44782b5700deb"
+    "version": "tintin-20261012-checkout-ready-1-checkout-mantenimiento-js",
+    "sha256": "7e817d3d9f1f814c7cff2530dc9cda2e8dee57a542c6a71215df5183ec14a080"
   },
   "js/pages/checkout/checkout-metodos-pago.js": {
     "version": "tintin-20261012-auth-privacy-1-checkout-metodos-pago-js",
     "sha256": "007065f334151dc3044439d5db421602677da93504f5e4f60b30adc40fad9cff"
   },
   "js/pages/checkout/checkout-puente-correo.js": {
-    "version": "tintin-20261012-auth-privacy-1-checkout-puente-correo-js",
-    "sha256": "a231fe1e203829294f3b6fccdccaa0f7052b614575ab25b81b5f61d3bf7c2d79"
+    "version": "tintin-20261012-checkout-ready-1-checkout-puente-correo-js",
+    "sha256": "6bef07afe221b60ff874a86abd875259c33d749fe0d106c44db6ba8a8bae70c0"
   },
   "js/pages/checkout/checkout-resumen-confirmacion.js": {
     "version": "tintin-20260914-summary-svg-fix-1",
@@ -1112,8 +1112,8 @@
     "sha256": "1e42490220293357544ce6c03081c996622f0b24a739a208c0a1eb3b1c6c8086"
   },
   "js/pages/checkout/estado-navegacion-checkout.js": {
-    "version": "tintin-20261011-invoice-input-1-receipt-20261011-1",
-    "sha256": "1b3af250c57cb51f803cd6db6ecfa4496a6a5369c9ddfb785138e88f93c7a508"
+    "version": "tintin-20261012-checkout-ready-1-estado-navegacion-checkout-js",
+    "sha256": "d3b9144d11116237719ae880a44c43a33694692b05352b8d2acf409567682e41"
   },
   "js/pages/checkout/paypal-checkout.js": {
     "version": "tintin-20261012-auth-privacy-1-paypal-checkout-js",
@@ -1136,8 +1136,8 @@
     "sha256": "be83dd72d0faf7ac1e59e7c95b29035f632374b44e39695531ab3081aeea3b1f"
   },
   "js/pages/collections/pagina-colecciones.js": {
-    "version": "tintin-20261012-auth-privacy-1-pagina-colecciones-js",
-    "sha256": "8388f935732a87f20f17964f0bcd509a7184fe7830af030a4368861ec59588ab"
+    "version": "tintin-20261012-checkout-ready-1-pagina-colecciones-js",
+    "sha256": "05893695c63df01265c51bb6154d0928b13956bb7877b57e5f6b5fb122cb7dc4"
   },
   "js/pages/collections/presentacion-colecciones.js": {
     "version": "tintin-20261012-auth-privacy-1-presentacion-colecciones-js",
@@ -1288,7 +1288,7 @@
     "sha256": "cb4ab1be22ae05b9594f2e35012ef958ec1dcf3636d17feed9fbbdbcddd5f2ef"
   },
   "tienda.js": {
-    "version": "tintin-20261012-auth-privacy-1-tienda-js",
-    "sha256": "8c5167234cdc9d21c60697876f724caf8728d0cc4f8b82417ce8745d81a0d53a"
+    "version": "tintin-20261012-checkout-ready-1-tienda-js",
+    "sha256": "3b6157b225c4311cc33c5bb4549b3b21afe1fff80b509c2835d13446e1f47917"
   }
 }

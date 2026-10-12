@@ -1,3 +1,11 @@
+## 2026-10-12 — Correcciones del checkout, sin migración de URL
+
+Codex /root. Base 8657b3646122a17777e5de9f78d366f507f85341; rama codex/checkout-completo-20261012. PASS_LOCAL: 325 pruebas Node (241 checkout/carrito/pedidos/pagos/cola/recibos +84 Auth/arquitectura); incluye siete regresiones ejecutando handlers originales con servicios simulados. PASS_LOCAL: 22 pruebas Chromium locales (320–1920px, identidad editable, factura/reanudación, ticket canónico/descarga/compartir/imprimir, fallos y teclado). Gates de pedidos, entrega, arquitectura, CSP, rutas, flujo, caché y manifiesto PASS_LOCAL. Fixtures de navegador bloquean solicitudes externas. Sin compras, pagos, usuarios, correos ni escrituras de datos de producción.
+
+Se recupera el pedido existente antes del catálogo, conserva la variante en errores de stock y busca el ID public_ exacto para notificar. Alta responde tras encolado durable; correo corre en waitUntil con recibos idempotentes. Transferencias cargan instrucciones centrales y estado de canales se persiste con control de versión. Ticket toma snapshot canónico, mantiene variantes, informa su destinatario/estado, escucha actualización del pedido y recupera sólo la cuenta propietaria tras recargar sin carrito nuevo. Borrador versionado por UID, vence en24h y se limpia al cambiar cuenta. Identidad editable por pedido; controles de pago accesibles y campos opcionales no invalidan por errores ajenos.
+
+NOT_VERIFIED: CI del candidato, integración/publicación autorizadas y comprobación posterior en producción. Entrega efectiva en bandeja de entrada requiere autorización de prueba real; estado enviado refleja aceptación del proveedor, no recepción en inbox. Tarjeta continúa deshabilitada/próximamente: no habilitar cobros o contratar una pasarela por inferencia. Dominio/DNS/SSL/OAuth/AppCheck/Rules/remitente no se modifican. Mantener https://tintinaccesorios.pages.dev.
+
 ## 2026-10-12 — Capacidad física de Sheets y copia independiente de media
 
 Codex /root. Base81ec140a82b9bbb5d227cb0547814c14cf24f733, #1108 MERGED con candidato6bef675d y CI38267363015/38267364088, revisión38270406879 y Pages/salud main SUCCESS. La comprobación autenticada posterior de Auth aún requiere inventario fresco; no se hereda el PASS del smoke anterior.

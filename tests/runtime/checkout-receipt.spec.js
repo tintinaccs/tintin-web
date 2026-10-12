@@ -1,4 +1,10 @@
 const { test, expect } = require('@playwright/test');
+test.beforeEach(async ({ page }) => {
+  await page.route('**/*', route => {
+    const url = new URL(route.request().url());
+    return ['127.0.0.1', 'localhost'].includes(url.hostname) ? route.continue() : route.abort();
+  });
+});
 const fs = require('node:fs');
 const read = path => fs.readFileSync(path, 'utf8');
 const source = read('checkout.html');
@@ -9,7 +15,7 @@ const hardening = read('js/pages/checkout/checkout-hardening.js').replace(/^impo
 const state = read('js/pages/checkout/estado-navegacion-checkout.js');
 const payment = read('js/pages/checkout/checkout-metodos-pago.js');
 const paymentHandlers = payment.slice(payment.indexOf('function paymentDetailsHtml'), payment.indexOf('function boot()'));
-const success = secure.slice(secure.indexOf('  function receiptText('), secure.indexOf("  window.addEventListener('popstate'"));
+const success = secure.slice(secure.indexOf('  function renderConfirmedOrder('), secure.indexOf("  window.addEventListener('popstate'"));
 const submit = secure.slice(secure.indexOf('  async function submit('), secure.indexOf("  window.addEventListener('tintin:paypal-payment-completed'"));
 const forceCart = hardening.slice(hardening.indexOf('function forceCart('), hardening.indexOf('\nfunction ', hardening.indexOf('function forceCart(') + 1));
 const cartListeners = hardening.slice(hardening.indexOf("  window.addEventListener('tt_cart_updated'"), hardening.indexOf('\n}', hardening.indexOf("  window.addEventListener('tt_cart_updated'")));
@@ -37,6 +43,8 @@ async function fixture(page) {
     const escapeHtml = value => { const el = document.createElement('div'); el.textContent = text(value); return el.innerHTML; };
     const formatPrice = value => 'Gs. ' + Number(value).toLocaleString('es-PY');
     const DEFAULT_STORE_WHATSAPP = '595981000000';
+    const SHIPPING_LABELS = {encomienda:'Encomienda',delivery:'Delivery',retiro:'Retiro'};
+    const PAYMENT_LABELS = {transferencia:'Transferencia bancaria'};
     const buildWhatsAppMessage = result => 'Pedido ' + result.shortId;
     const scheduleAnnotations = () => {};
     const syncConfirmCartGuard = () => {};
@@ -54,7 +62,7 @@ async function fixture(page) {
     const buildDraft = async () => ({paymentMethod:'transferencia', shippingMethod:'encomienda'});
     const persistCheckoutDefaults = async () => {};
     const reserveCheckoutGuard = async () => {};
-    const createOrderOnServer = async () => { window.fixtureRequests++; if(window.fixtureReject) throw new Error('offline'); return {shortId:'QA-LOCAL-001'}; };
+    const createOrderOnServer = async () => { window.fixtureRequests++; if(window.fixtureReject) throw new Error('offline'); return {shortId:'QA-LOCAL-001',items:[{id:'qa-local',name:'Producto de prueba',variant:'Dorado / M',qty:1,price:35000}],subtotal:35000,total:35000,shippingCost:0,shippingMethod:'encomienda',shipping:{city:'San José de los Arroyos'},userName:'Persona de Prueba',userPhone:'+595981000000',userEmail:'persona.qa@example.invalid',paymentMethod:'transferencia'}; };
     const clearCart = async () => { cart = []; window.dispatchEvent(new CustomEvent('tt_cart_updated',{detail:{items:[]}})); await new Promise(resolve => window.fixtureFinishCleanup = resolve); };
     const message = () => 'No pudimos confirmar el pedido.';
     const forceBackToCart = forceCart;
@@ -118,6 +126,9 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1280,7
     await page.evaluate(() => { void fixtureSubmit(); });
     expect(await page.evaluate(() => fixtureRequests)).toBe(1);
     expect(await page.locator('#panel-4').evaluate(el => el.scrollWidth > el.clientWidth || el.getBoundingClientRect().right > innerWidth + 1)).toBe(false);
+    const statusBottom = await page.locator('#ck-email-status').evaluate(el=>el.getBoundingClientRect().bottom);
+    const ordersTop = await page.locator('#ck-view-orders').evaluate(el=>el.getBoundingClientRect().top);
+    expect(ordersTop).toBeGreaterThanOrEqual(statusBottom);
     expect(errors).toEqual([]);
   });
 }
@@ -144,6 +155,8 @@ test('confirmed ticket downloads, shares and prints without another order reques
   const receipt = fs.readFileSync(await download.path(), 'utf8');
   expect(receipt).toContain('QA-LOCAL-001');
   expect(receipt).toContain('Producto de prueba');
+  expect(receipt).toContain('Dorado / M');
+  await expect(page.locator('#ck-email-status')).toContainText('se está procesando');
   expect(receipt).toContain('Persona de Prueba');
   expect(receipt).not.toContain('<svg');
   expect(receipt).toContain('No acredita el pago');
@@ -164,4 +177,18 @@ test('confirmed ticket downloads, shares and prints without another order reques
   await page.emulateMedia({ media: 'print' });
   await expect(page.locator('#ck-post-confirm')).toBeHidden();
   await expect(page.locator('#ck-order-num')).toBeVisible();
+});
+
+
+test('payment is selectable by keyboard and optional fields do not receive unrelated errors', async ({ page }) => {
+  await fixture(page);
+  await page.evaluate(() => { fixturePayment(); document.querySelectorAll('.ck-panel').forEach((el,i)=>el.classList.toggle('active',i===3)); document.querySelector('input[name="tt-ck-pay"]').checked=false; });
+  const radio=page.locator('input[name="tt-ck-pay"]');
+  await radio.focus();await expect(radio).toBeFocused();await page.keyboard.press('Space');await expect(radio).toBeChecked();
+  const maintenance=read('js/pages/checkout/checkout-mantenimiento.js');
+  const watch=maintenance.slice(maintenance.indexOf('  function watchErrors('),maintenance.indexOf('  function ensureReady('));
+  await page.addScriptTag({content:'(()=>{'+watch+'watchErrors();})();'});
+  await page.evaluate(()=>{ const panel=document.getElementById('panel-2');panel.classList.add('active');const error=document.getElementById('error-2');error.textContent='Ingresá un teléfono válido.';error.classList.add('show'); });
+  await expect(page.locator('#ck-notes')).not.toHaveAttribute('aria-invalid','true');
+  await expect(page.locator('#ck-coupon')).not.toHaveAttribute('aria-invalid','true');
 });

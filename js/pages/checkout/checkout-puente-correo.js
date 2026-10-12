@@ -46,7 +46,7 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
 
   async function findCreatedOrder(user, shortId) {
     if (capturedRequestId) {
-      const exactId = `${user.uid}_${capturedRequestId}`;
+      const exactId = `public_${user.uid}_${capturedRequestId}`;
       const exactSnap = await getDoc(doc(db, 'orders', exactId));
       if (exactSnap.exists()) {
         const data = exactSnap.data() || {};
@@ -112,7 +112,8 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
       const order = found.data;
       dispatchSafePurchase(order, shortId);
 
-      if (order.notificationStatus && order.notificationStatus !== 'pending') {
+      if (order.notificationStatus === 'sent') {
+        window.dispatchEvent(new CustomEvent('tintin:order-email-result', { detail: { orderId: found.id, shortId, status: 'sent' } }));
         try { sessionStorage.setItem(`tt_order_email_attempted_${key}`, '1'); } catch {}
         return;
       }
@@ -128,7 +129,7 @@ if (!window.TintinCheckoutEmailBridgeBooted) {
       const result = await sendOrderNotification(found.id, compatibilityOrder, false);
       const status = notificationStatusFromResult(result);
 
-      try { sessionStorage.setItem(`tt_order_email_attempted_${key}`, '1'); } catch {}
+      if (status === 'sent') { try { sessionStorage.setItem(`tt_order_email_attempted_${key}`, '1'); } catch {} }
       window.dispatchEvent(new CustomEvent('tintin:order-email-result', {
         detail: { orderId: found.id, shortId, status, result }
       }));

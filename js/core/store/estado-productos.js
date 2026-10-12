@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261012-auth-privacy-1-cargador-mantenimiento-pagina-js';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261012-checkout-ready-1-cargador-mantenimiento-pagina-js';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';

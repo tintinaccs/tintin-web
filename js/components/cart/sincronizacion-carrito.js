@@ -1123,7 +1123,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261012-auth-privacy-1-pedido-checkout-seguro-js').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261012-checkout-ready-1-pedido-checkout-seguro-js').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

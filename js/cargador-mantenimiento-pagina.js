@@ -22,11 +22,11 @@ export function loadPageMaintenance() {
     const version = 'tintin-20261009-whatsapp-responsive-1-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261012-auth-privacy-1-checkout-hardening-js'),
-      load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261008-checkout-step-labels-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261012-checkout-ready-1-checkout-hardening-js'),
+      load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261012-checkout-ready-1-checkout-mantenimiento-js'),
       load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261012-auth-privacy-1-checkout-metodos-pago-js'),
       load('pages/checkout/checkout-control-cuota.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1'),
-      load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261011-invoice-input-1-receipt-20261011-1')
+      load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261012-checkout-ready-1-estado-navegacion-checkout-js')
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {

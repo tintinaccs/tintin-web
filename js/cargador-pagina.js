@@ -925,7 +925,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-auth-privacy-1-sincronizacion-favoritos-js');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-checkout-ready-1-sincronizacion-favoritos-js');
   }
 
   function bootThemeColorSanitizerPublic() {
