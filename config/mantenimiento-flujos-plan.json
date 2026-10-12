@@ -1,23 +1,20 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "72ea709ad9b7eafd18f60e52f8413af49d564117",
-  "reason": "Corregir duplicacion Auth por import web sin version y verificar cierre",
+  "baseCommit": "81ec140a82b9bbb5d227cb0547814c14cf24f733",
+  "reason": "Ampliar capacidad fisica antes de preparar filas de productos en Sheets",
   "files": [
     {
-      "path": "admin.html",
-      "oldHash": "f71ffb8ae2f585353f742851f1416458d149e005e25937712297e5528b242131",
-      "newHash": "55f4f42b6f3efeb7dc8cbb7842a655b213f9d74081e1576c1e19c7d68849da5f"
-    },
-    {
-      "path": "scripts/auditar-versionado-cache.mjs",
-      "oldHash": "c16ec8f8fa7aa5ca530b7f9901f9a43c23406bc0de10ef64c39dc5ab9f5f69b4",
-      "newHash": "dae1c0e79ec59a91ab6f940d7c2094b405ee14a123c0f0ce41d4c04d3ff32b82"
-    },
-    {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "145dc3244ef7bfae75f9d46fdbc8d89923a1d28e80760179ee006a91b0e77772",
-      "newHash": "4fd541e12975d3573248e76e74e5b902d74d8f052e92f22ac7b9990e4128cfb6"
+      "path": "apps-script/ProductosUnificados.gs",
+      "oldHash": "5a4b9a8df00879903fd9d4ec16991ff2018eed0793232561489812ee711baf35",
+      "newHash": "6133186ac63149fa10cdb06ccf9c0def82b6b860e345214126da240c38680e25"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "apps-script__google-sheets__24",
+    "apps-script__sheets-products-webhook__26",
+    "firestore__apps-script__23",
+    "google-sheets__apps-script__25",
+    "sheets-products-webhook",
+    "sheets-products-webhook__firestore__27"
+  ]
 }
