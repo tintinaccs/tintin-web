@@ -3,6 +3,7 @@ import {
   originIsAllowed,
   preflightResponse,
   requireSuperAdmin,
+  statusFromError,
   SUPERADMIN_EMAIL
 } from '../../cloudflare/seguridad-cloudinary.js';
 
@@ -101,13 +102,12 @@ export async function onRequest(context) {
     return jsonResponse({ success: false, error: 'Método no permitido' }, 405, origin, requestUrl);
   }
 
-  const apiKey = clean(env.RESEND_API_KEY, 500);
-  if (!apiKey) {
-    return jsonResponse({ success: false, error: 'RESEND_API_KEY no está configurada' }, 500, origin, requestUrl);
-  }
-
   try {
     await requireSuperAdmin(request);
+    const apiKey = clean(env.RESEND_API_KEY, 500);
+    if (!apiKey) {
+      return jsonResponse({ success: false, error: 'El servicio de correo no está configurado' }, 503, origin, requestUrl);
+    }
     const rawBody = await request.text();
     if (rawBody.length > 4000) throw new Error('Solicitud demasiado grande');
     const body = JSON.parse(rawBody || '{}');
@@ -121,6 +121,6 @@ export async function onRequest(context) {
       success: false,
       customerSent: false,
       error: clean(error?.message || error, 500)
-    }, 400, origin, requestUrl);
+    }, statusFromError(error, 400), origin, requestUrl);
   }
 }

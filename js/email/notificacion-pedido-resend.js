@@ -1,4 +1,4 @@
-import { db, auth, appCheck } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { db, auth, appCheck } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { getToken as getAppCheckToken } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import {
