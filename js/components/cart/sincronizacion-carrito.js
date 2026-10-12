@@ -351,13 +351,15 @@ function createRuntime() {
       node.setAttribute('role', 'status');
       node.setAttribute('aria-live', 'polite');
       node.setAttribute('aria-atomic', 'true');
+      node.style.cssText = 'position:fixed;z-index:2147483646;bottom:100px;left:50%;transform:translateX(-50%);box-sizing:border-box;width:max-content;max-width:min(580px,calc(100vw - 24px));padding:14px 20px;border:1px solid #e8bfd0;border-radius:18px;background:#fff;color:#713c53;box-shadow:0 8px 28px #713c5333;font:600 14px/1.5 Montserrat,sans-serif;overflow-wrap:anywhere;pointer-events:none;text-align:center';
       document.body.appendChild(node);
     }
     node.textContent = message;
     node.dataset.state = state;
     node.classList.add('is-visible');
+    node.hidden = false;
     window.clearTimeout(feedbackTimer);
-    feedbackTimer = window.setTimeout(() => node.classList.remove('is-visible'), 4200);
+    feedbackTimer = window.setTimeout(() => { node.classList.remove('is-visible'); node.hidden = true; }, 4200);
   }
 
   function withCartMutation(operation) {
@@ -917,6 +919,8 @@ function createRuntime() {
       const saved = normalized.find(entry => entry.lineId === incoming.lineId) || null;
       if (capped) {
         showFeedback(`Se agregó solamente la cantidad disponible (${accepted} de ${requested}).`, 'warning');
+      } else {
+        showFeedback(`✓ ${incoming.name || 'Producto'} agregado al carrito`, 'success');
       }
       return { item: saved, capped, changed: true, reason: capped ? 'partially_added' : 'added', limit, requested, accepted };
     });
@@ -1072,6 +1076,7 @@ function createRuntime() {
   }
 
   const api = {
+    showFeedback,
     productVariantImage,
     getCartLocal,
     setCartLocal,
@@ -1142,7 +1147,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261012-auth-privacy-1-pedido-checkout-seguro-js').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261012-checkout-ready-3-pedido-checkout-seguro-js').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

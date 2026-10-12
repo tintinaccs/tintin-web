@@ -1,6 +1,3 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261012-auth-privacy-1-politica-visibilidad-catalogo-js';
-import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
-
 function pathName() {
   return location.pathname.toLowerCase().replace(/\/+$/, '');
 }
@@ -13,6 +10,17 @@ function load(file, version = 'tintin-20261009-whatsapp-responsive-1') {
   return import(`./${file}?v=${version}`);
 }
 
+// Las páginas informativas no muestran productos al entrar. El store instala
+// estas mismas políticas antes de publicar productos si se abre búsqueda o
+// catálogo desde cualquier ruta; no se descargan colecciones sólo por leer
+// envíos, contacto o textos legales.
+if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)(?:\.html)?$/.test(pathName())) {
+  Promise.all([
+    load('pages/catalog/politica-visibilidad-catalogo.js', 'tintin-20261012-checkout-ready-3-politica-visibilidad-catalogo-js'),
+    load('pages/catalog/prioridad-stock-catalogo.js', 'tintin-20260731-stock-priority-1'),
+  ]).catch(error => console.warn('[PageMaintenance] No se pudo cargar la política de catálogo:', error));
+}
+
 export function loadPageMaintenance() {
   const path = pathName();
   if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261010-whatsapp-release-5');
@@ -22,11 +30,11 @@ export function loadPageMaintenance() {
     const version = 'tintin-20261009-whatsapp-responsive-1-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261012-client-recovery-1-checkout-hardening-js'),
-      load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261008-checkout-step-labels-1'),
-      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261012-auth-privacy-1-checkout-metodos-pago-js'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261012-checkout-ready-3-checkout-hardening-js'),
+      load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261012-checkout-ready-2-checkout-mantenimiento-js'),
+      load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261012-checkout-ready-3-checkout-metodos-pago-js'),
       load('pages/checkout/checkout-control-cuota.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1'),
-      load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261011-invoice-input-1-receipt-20261011-1')
+      load('pages/checkout/estado-navegacion-checkout.js', 'tintin-20261012-checkout-ready-3-estado-navegacion-checkout-js')
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) {

@@ -1,4 +1,10 @@
 const {test,expect}=require('@playwright/test');
+test.beforeEach(async ({ page }) => {
+  await page.route('**/*', route => {
+    const url = new URL(route.request().url());
+    return ['127.0.0.1', 'localhost'].includes(url.hostname) ? route.continue() : route.abort();
+  });
+});
 const fs=require('node:fs');
 const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture.js');
 const html=fs.readFileSync('checkout.html','utf8');
@@ -24,6 +30,13 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
     await expect(page.locator('#ck-saved-identity')).toContainText('Pedro González');
     expect(await page.locator('#ck-name').inputValue()).toBe('Pedro González');
     expect(await page.locator('#ck-phone-number').inputValue()).toBe('981123456');
+    await page.locator('#ck-edit-identity').click();
+    await expect(page.locator('#ck-name-field')).toBeVisible();
+    await expect(page.locator('#ck-phone-field')).toBeVisible();
+    await page.locator('#ck-name').fill('María López');
+    await page.evaluate(()=>window.applyIdentity({firstName:'Pedro',lastName:'González',phone:'+595981123456'},{uid:'saved',email:'saved@example.com'}));
+    expect(await page.locator('#ck-name').inputValue()).toBe('María López');
+    await expect(page.locator('#ck-name-field')).toBeVisible();
     await page.evaluate(()=>window.applyIdentity(null,null));
     await expect(page.locator('#ck-name-field')).toBeVisible();await expect(page.locator('#ck-phone-field')).toBeVisible();
     await expect(page.locator('#ck-saved-identity')).toBeHidden();

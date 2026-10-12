@@ -22,6 +22,8 @@ let subscribeRetryAttempt = 0;
 let subscribeAuthRecoveryAttempted = false;
 let listenerFailed = false;
 let subscriptionGeneration = 0;
+let historyLimit = 100;
+let hasOlderNotifications = false;
 const liveNotices = createLiveActivityNotices();
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -155,7 +157,7 @@ function notificationGroupKey(notification) {
 function isVisibleCustomerNotification(notification = {}) {
   const kind = String(notification.kind || '').trim().toLowerCase();
   const actorType = String(notification.actorType || '').trim().toLowerCase();
-  if (!kind || kind.endsWith('_self') || kind === 'welcome') return false;
+  if (!kind || kind.endsWith('_self')) return false;
   if (kind.includes('review_like') || kind.includes('reply_like') || kind.includes('review_reply')) {
     return actorType === 'store';
   }
@@ -216,6 +218,7 @@ function render() {
       </span>${trailing}
     </button>`;
   }).join('');
+  if (hasOlderNotifications) root.insertAdjacentHTML('beforeend', '<button type="button" class="tt-notification-card" data-notifications-older>Ver notificaciones anteriores</button>');
   updateBadge();
 }
 
@@ -322,9 +325,10 @@ function subscribe(user, { preserve = false } = {}) {
   const adminFeed = isSuperAdmin(user);
   // Rules y API mantienen la autorización: sólo Super Admin lee actividad
   // global. El resto de roles conserva su bandeja privada por UID.
-  const source = query(adminFeed ? collection(db, 'adminNotifications') : collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(100));
+  const source = query(adminFeed ? collection(db, 'adminNotifications') : collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(historyLimit));
   unsubscribe = onSnapshot(source, snapshot => {
     if (generation !== subscriptionGeneration || currentUser?.uid !== user.uid) return;
+    hasOlderNotifications = snapshot.docs.length === historyLimit;
     notifications = snapshot.docs
       .map(document => ({ id: document.id, ...document.data() }))
       .filter(item => adminFeed || isVisibleCustomerNotification(item));
@@ -383,6 +387,13 @@ function wireEvents() {
   });
 
   document.addEventListener('click', event => {
+    if (event.target.closest?.('[data-notifications-older]') && currentUser) {
+      event.preventDefault();
+      historyLimit += 100;
+      event.target.closest('[data-notifications-older]').disabled = true;
+      subscribe(currentUser, { preserve: true });
+      return;
+    }
     const card = event.target.closest?.('[data-notification-id]');
     if (card) {
       event.preventDefault();
@@ -405,7 +416,7 @@ export function initClientNotifications() {
   wireEvents();
   setTriggersVisible(false);
   authUnsubscribe = subscribeAuthState(user => {
-    if (currentUser?.uid !== user?.uid) { liveNotices.clear(); markingVisibleRead = false; }
+    if (currentUser?.uid !== user?.uid) { liveNotices.clear(); markingVisibleRead = false; historyLimit = 100; hasOlderNotifications = false; }
     currentUser = user || null;
     setTriggersVisible(Boolean(user));
     subscribe(currentUser);

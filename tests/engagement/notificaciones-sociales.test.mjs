@@ -127,12 +127,15 @@ test('la ficha de producto admite Me gusta, respuestas y reseñas públicas con 
   assert.match(productReviews, /raw\.includes\('\*\*\*'\)/);
 });
 
-test('clientas tienen bandeja de 100, saneado, autolectura canónica y reintentos', () => {
+test('clientas tienen bandeja inicial de 100 ampliable, saneado, autolectura canónica y reintentos', () => {
   assert.match(clientUi, /data-notification-badge/);
   assert.match(clientUi, /users'.*notifications|users.*,.*notifications/s);
   assert.match(clientUi, /notificationSeen/);
   assert.match(clientUi, /notificationsSeenAll/);
-  assert.match(clientUi, /limit\(100\)/);
+  assert.match(clientUi, /let historyLimit = 100/);
+  assert.match(clientUi, /limit\(historyLimit\)/);
+  assert.match(clientUi, /historyLimit \+= 100/);
+  assert.match(clientUi, /data-notifications-older/);
   assert.match(clientUi, /safeImageUrl/);
   assert.match(clientUi, /markVisibleNotificationsRead/);
   assert.match(clientUi, /notificationsSurfaceIsOpen/);

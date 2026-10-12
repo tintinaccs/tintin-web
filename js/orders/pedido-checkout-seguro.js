@@ -1,5 +1,6 @@
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
+import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
 import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js';
@@ -7,6 +8,7 @@ import { AUTH_STATES, getSessionUser, waitForSession, subscribeAuthState } from 
 import {
   doc,
   getDoc,
+  onSnapshot,
   runTransaction,
   serverTimestamp,
   setDoc
@@ -46,7 +48,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261012-auth-privacy-1-checkout-puente-correo-js').catch(error => {
+    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20261012-checkout-ready-2-checkout-puente-correo-js').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }
@@ -59,6 +61,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   const CHECKOUT_DEFAULTS_FIELD = 'checkoutDefaults';
   let submitting = false;
   let orderCompleted = false;
+  let recoveringReceipt = false;
+  let recoveredReceiptUid = '';
+  let checkoutReceiptUser = '';
+  let receiptUnsubscribe = null;
+  window.addEventListener('pagehide', () => receiptUnsubscribe?.());
   let cartGuardTimer = 0;
   let lastProfilePrefillUid = '';
   let pendingPaypal = null;
@@ -111,7 +118,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
   }
 
-  function showError(message, reviewCart = false) {
+  function showError(message, reviewCart = false, reviewShipping = false) {
     const box = document.getElementById('error-4');
     if (!box) return;
     box.innerHTML = reviewCart
@@ -123,6 +130,17 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     box.focus();
     box.scrollIntoView({ block: 'center', behavior: 'smooth' });
     document.getElementById('tt-review-cart')?.addEventListener('click', () => window.location.reload());
+    if (reviewShipping) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'ck-btn-secondary';
+      button.textContent = 'Revisar ciudad y entrega';
+      button.addEventListener('click', async () => {
+        await window.TintinCheckoutState?.navigate?.(1);
+        document.getElementById('ck-city')?.focus();
+      });
+      box.appendChild(button);
+    }
   }
 
   function hideError() {
@@ -191,7 +209,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   function forceBackToCart(message = 'Tu carrito está vacío. Agregá productos antes de continuar.') {
-    if (orderCompleted) return;
+    if (orderCompleted || recoveringReceipt) return;
     document.querySelectorAll('.ck-panel').forEach((panel, index) => {
       panel.classList.toggle('active', index === 0);
     });
@@ -347,7 +365,54 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }, 0);
   });
 
+  async function restoreConfirmedReceipt(user) {
+    let saved;
+    try { saved = JSON.parse(sessionStorage.getItem('tt_checkout_receipt_v1') || 'null'); } catch { return; }
+    if (!saved || !user || user.isAnonymous || !user.emailVerified) return;
+    if (saved.uid !== user.uid || !/^[A-Za-z0-9_-]{1,220}$/.test(saved.orderId || '') || Date.now() - saved.savedAt > 24 * 60 * 60 * 1000) {
+      try { sessionStorage.removeItem('tt_checkout_receipt_v1'); } catch {}
+      return;
+    }
+    if (recoveredReceiptUid === user.uid) return;
+    recoveredReceiptUid = user.uid;
+    recoveringReceipt = true;
+    window.TintinCheckoutReceiptRestoring = true;
+    try {
+      await awaitCartReady();
+      if (getCartLocal().length) { try { sessionStorage.removeItem('tt_checkout_receipt_v1'); } catch {} return; }
+      const snapshot = await getDoc(doc(db, 'orders', saved.orderId));
+      if (getSessionUser()?.uid !== user.uid || !snapshot.exists()) return;
+      const result = { ...snapshot.data(), orderId: snapshot.id };
+      if (result.userId !== user.uid) return;
+      orderCompleted = true;
+      success(result, { ...result.shipping, shippingMethod: result.shippingMethod, selectedCity: result.shippingCity, paymentMethod: result.paymentMethod, name: result.userName, phone: result.userPhone, ci: result.ci, wantsInvoice: result.invoice?.wanted, razonSocial: result.invoice?.razonSocial, ruc: result.invoice?.ruc });
+    } catch (error) { recoveredReceiptUid = ''; console.warn('[checkout] No se pudo recuperar el ticket:', error?.message); }
+    finally { recoveringReceipt = false; window.TintinCheckoutReceiptRestoring = false; }
+  }
+
+  window.addEventListener('tintin:order-email-result', event => {
+    if (event.detail?.shortId === window._lastOrderId) updateReceiptEmailStatus(event.detail.status, getSessionUser()?.email, event.detail.result?.customerSent);
+  });
+
   subscribeAuthState(user => {
+    if (checkoutReceiptUser && checkoutReceiptUser !== user?.uid) {
+      receiptUnsubscribe?.();
+      receiptUnsubscribe = null;
+      orderCompleted = false;
+      window.TintinCheckoutOrderCompleted = false;
+      window._lastOrderId = '';
+      recoveredReceiptUid = '';
+      try { sessionStorage.removeItem('tt_checkout_receipt_v1'); } catch {}
+      document.getElementById('ck-confirm-summary').innerHTML = '';
+      document.getElementById('ck-success-head').style.display = 'none';
+      document.getElementById('ck-post-confirm').style.display = 'none';
+      document.getElementById('ck-order-num').style.display = 'none';
+      document.getElementById('ck-review-head').style.display = '';
+      document.getElementById('ck-confirm-btn').style.display = '';
+      forceBackToCart();
+    }
+    checkoutReceiptUser = user?.uid || '';
+    void restoreConfirmedReceipt(user);
     if (lastProfilePrefillUid && lastProfilePrefillUid !== user?.uid) {
       for (const id of ['ck-ci', 'ck-taxpayer-type', 'ck-razon-social', 'ck-ruc']) {
         const input = document.getElementById(id);
@@ -452,14 +517,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError('shipping_invalid', 'Volvé a elegir tu ciudad y método de entrega.');
     }
 
-    const wanted = text(selectedCity).toLocaleLowerCase('es');
+    const wanted = normalizeDeliveryCityName(selectedCity).toLocaleLowerCase('es');
     const wantedDepartment = text(selectedDepartment).toLocaleLowerCase('es');
     const matches = city =>
       city.name.toLocaleLowerCase('es') === wanted &&
       (!wantedDepartment || city.departamento.toLocaleLowerCase('es') === wantedDepartment);
 
     if (requested === 'delivery') {
-      const delivery = normalizeCities(settings.deliveryCities, settings.deliveryCost).find(matches);
+      const delivery = canonicalDeliveryCities(normalizeCities(settings.deliveryCities, settings.deliveryCost)).find(matches);
       if (!delivery) {
         throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible para delivery.');
       }
@@ -480,7 +545,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
     const mode = encomiendaMode();
     if (!mode) {
-      throw appError('shipping_invalid', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
+      throw appError('encomienda_mode_required', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
     }
     return {
       method: 'encomienda',
@@ -550,7 +615,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const name = text(document.getElementById('ck-name')?.value);
     const address = text(document.getElementById('ck-address')?.value);
     const reference = text(document.getElementById('ck-referencia')?.value);
-    if (shipping.method === 'delivery' && reference.length < 5) {
+    if ((shipping.method === 'delivery' || (shipping.method === 'encomienda' && shipping.encomiendaMode === 'puerta')) && reference.length < 5) {
       throw appError('reference_required', 'Ingresá una referencia útil para encontrar tu entrega (al menos 5 caracteres).');
     }
     const paymentMethod = text(document.querySelector('input[name="ck-pay"]:checked')?.value);
@@ -642,7 +707,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     target.innerHTML = `
       <div class="ck-summary-items">${(quote.items || []).map(item => `
         <div class="ck-summary-item">
-          <span class="ck-summary-item-name">${escapeHtml(item.qty)}x ${escapeHtml(item.name)}</span>
+          <span class="ck-summary-item-name">${escapeHtml(item.qty)}x ${escapeHtml(item.name)}${item.variant ? ` — ${escapeHtml(item.variant)}` : ''}</span>
           <span style="font-weight:700">${escapeHtml(formatPrice(item.price * item.qty))}</span>
         </div>`).join('')}</div>
       <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.subtotal))}</span></div>
@@ -698,6 +763,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError(response.error || 'server_error', undefined, {
         quote: response.quote,
         productId: response.productId,
+        variant: response.variant,
         available: response.available,
         requested: response.requested
       });
@@ -730,7 +796,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   function buildWhatsAppMessage(result, draft) {
     const itemLines = (result.items || [])
-      .map(item => `• ${item.qty}x ${item.name} — ${formatPrice(item.price * item.qty)}`)
+      .map(item => `• ${item.qty}x ${item.name}${item.variant ? ` — ${item.variant}` : ''} — ${formatPrice(item.price * item.qty)}`)
       .join('\n');
     const shippingText = draft?.shippingMethod === 'encomienda'
       ? 'Sólo el costo del envío se paga a la transportadora al recibir; el producto se paga previamente por transferencia'
@@ -777,6 +843,32 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (phone) lines.push(`📱 ${phone}`);
 
     return lines.join('\n');
+  }
+
+  function renderConfirmedOrder(result) {
+    if (!Array.isArray(result.items)) return;
+    const target = document.getElementById('ck-confirm-summary');
+    if (!target) return;
+    const rows = [
+      ['Cliente', result.userName], ['Teléfono', result.userPhone], ['Correo del ticket', result.userEmail],
+      ['Ciudad', result.shipping?.city || result.shippingCity], ['Envío', SHIPPING_LABELS[result.shipping?.method || result.shippingMethod] || result.shippingMethod],
+      ['Dirección', result.shipping?.address || result.address], ['Referencia', result.shipping?.referencia],
+      ['Pago', PAYMENT_LABELS[result.payment?.method || result.paymentMethod] || result.paymentMethod],
+      ['CI', result.ci], ['Notas', result.notes],
+      ...(result.invoice?.wanted ? [['Razón social', result.invoice.razonSocial], ['RUC', result.invoice.ruc]] : []),
+    ];
+    target.innerHTML = `<div class="ck-summary-items">${result.items.map(item => `<div class="ck-summary-item"><span class="ck-summary-item-name">${escapeHtml(item.qty)}x ${escapeHtml(item.name)}${item.variant ? ` — ${escapeHtml(item.variant)}` : ''}</span><span>${escapeHtml(formatPrice(item.price * item.qty))}</span></div>`).join('')}</div>`
+      + [['Subtotal', formatPrice(result.subtotal)], ['Costo de envío', result.shippingMethod === 'encomienda' ? 'Se paga a la transportadora al recibir' : result.shippingPending ? 'A confirmar' : formatPrice(result.shippingCost || 0)], ['TOTAL', formatPrice(result.total) + (result.shippingPending ? ' + envío a confirmar' : '')]].map(([label, value]) => `<div class="ck-summary-total"><span>${escapeHtml(label)}</span><span class="ck-summary-total-val">${escapeHtml(value)}</span></div>`).join('')
+      + rows.filter(([, value]) => value).map(([label, value]) => `<div class="ck-summary-row"><span>${escapeHtml(label)}</span><span class="ck-summary-val">${escapeHtml(value)}</span></div>`).join('')
+      + (result.shippingMethod === 'retiro' ? '<p class="ck-summary-shipping-note">La ubicación exacta y el horario de retiro se coordinan por WhatsApp.</p>' : result.shippingMethod === 'encomienda' ? '<p class="ck-summary-shipping-note">El envío se paga a la transportadora al recibir y no está incluido en el total.</p>' : '');
+  }
+
+  function updateReceiptEmailStatus(status, recipient, customerSent = false) {
+    const target = document.getElementById('ck-email-status');
+    if (!target) return;
+    target.textContent = status === 'sent' || customerSent ? `Ticket enviado a ${recipient || 'tu correo de cuenta'}. Revisá también spam.`
+      : status === 'partial' || status === 'failed' ? 'El envío del ticket por correo está pendiente de reintento. Podés guardarlo aquí y consultar tus pedidos.'
+      : 'Pedido registrado. El ticket por correo se está procesando; podés guardarlo aquí.';
   }
 
   function receiptText(result) {
@@ -828,6 +920,20 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   function success(result, draft) {
+    renderConfirmedOrder(result);
+    updateReceiptEmailStatus(result.notificationStatus, result.userEmail, result.notificationCustomerSent);
+    const receiptUid = result.userId || (typeof getSessionUser === 'function' ? getSessionUser()?.uid : '');
+    if (receiptUid && result.orderId) {
+      if (typeof onSnapshot === 'function') {
+        receiptUnsubscribe?.();
+        receiptUnsubscribe = onSnapshot(doc(db, 'orders', result.orderId), snapshot => {
+          if (getSessionUser()?.uid !== receiptUid || !snapshot.exists()) return;
+          const order = snapshot.data();
+          updateReceiptEmailStatus(order.notificationStatus, order.userEmail, order.notificationCustomerSent);
+        }, error => console.warn('[checkout] No se pudo actualizar el estado del ticket:', error?.message));
+      }
+      try { sessionStorage.setItem('tt_checkout_receipt_v1', JSON.stringify({ uid: receiptUid, orderId: result.orderId, savedAt: Date.now() })); } catch {}
+    }
     window._lastOrderId = result.shortId;
     window.TintinCheckoutOrderCompleted = true;
     document.getElementById('panel-4')?.classList.add('ck-receipt');
@@ -880,7 +986,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       ci_invalid: 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).',
       razon_social_required: 'Ingresá nombre y apellido para persona física, o la razón social de tu empresa.',
       ruc_invalid: 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).',
-      shipping_invalid: 'La ciudad elegida ya no está disponible.',
+      shipping_invalid: 'No pudimos validar la ciudad con las tarifas actuales. Volvé a elegir ciudad y entrega.',
+      shipping_changed: 'El método de entrega cambió. Volvé a elegir cómo recibir tu pedido.',
+      encomienda_mode_required: 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.',
       settings_missing: 'No pudimos comprobar la configuración de la tienda.',
       profile_missing: 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.',
       checkout_cooldown: error?.details?.remaining
@@ -949,6 +1057,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       await reserveCheckoutGuard(draft);
       const result = await createOrderOnServer(draft);
+      if (result.userId && result.userId !== getSessionUser()?.uid) throw appError('session_changed', 'Tu sesión cambió. Consultá el pedido desde la cuenta que lo realizó.');
       if (draft.paymentMethod === 'paypal') {
         pendingPaypal = { result, draft };
         button.style.display = 'none';
@@ -1000,6 +1109,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         showError('Uno de los productos ya no está disponible.', true);
       } else if (code === 'empty_cart') {
         forceBackToCart();
+        button.textContent = '✓ Confirmar pedido';
+      } else if (['shipping_invalid', 'shipping_changed', 'encomienda_mode_required'].includes(code)) {
+        showError(message(error), false, true);
+        button.disabled = false;
         button.textContent = '✓ Confirmar pedido';
       } else {
         showError(message(error));

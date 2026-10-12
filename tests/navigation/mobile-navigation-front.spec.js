@@ -28,6 +28,10 @@ for(const width of [320,390,767])for(const pageName of ['index.html','catalogo.h
  await page.setViewportSize({width,height:800});await page.goto('/__navigation-front');
  await expect(page.locator('body')).toHaveAttribute('data-ready','true');
  for(const [name,trigger,id] of cases){
+  if (name !== 'cart' && await page.locator('#cart-drawer').getAttribute('aria-hidden') === 'true') {
+    await page.locator('#tabbar-cart').click();
+    await expect(page.locator('#cart-drawer')).toHaveAttribute('aria-hidden','false');
+  }
   await page.locator('#'+trigger).click();
   await expect(page.locator('#'+id)).toHaveAttribute('aria-hidden','false');
   await expect(page.locator('#'+id)).toHaveAttribute('aria-modal','false');

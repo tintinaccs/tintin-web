@@ -11,7 +11,7 @@ import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-202610
  */
 import { db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { doc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { ADMIN_TOKENS, buildDefaultTokenMap, normalizeLegacyBrandColor } from '../../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-1-esquema-color-catalogo-js';
+import { ADMIN_TOKENS, buildDefaultTokenMap, normalizeLegacyBrandColor } from '../../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js';
 
 const CACHE_KEY = 'tt_color_scheme_admin';
 const APPEARANCE_DOC = { col: 'settings', id: 'appearance' };

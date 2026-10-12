@@ -11,6 +11,14 @@ import { applyOrderAdminMutation, createOrderAdmin, recordOrderEmailResend, rese
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
 import { notifyCustomerOrderChange } from '../../cloudflare/correo-estado-pedido.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
+import { notifyOrderStatus } from './notifications.js';
+
+function deferCustomerNotification(context, env, actor, result) {
+  if (result.duplicate || !result.orderId || !result.order) return;
+  context.waitUntil?.(notifyOrderStatus(env, actor, result.orderId, result.order).catch(error => {
+    console.error('[admin-order-mutation] notification failed', error?.message || error);
+  }));
+}
 
 function safeText(value, max = 500) {
   return String(value == null ? '' : value).trim().slice(0, max);
@@ -45,6 +53,7 @@ export async function onRequest(context) {
       }, { uid: actor.uid, email: actor.email, role: actor.role, origin: 'admin-payment' });
       context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
       context.waitUntil?.(notifyCustomerOrderChange(env, result));
+      deferCustomerNotification(context, env, actor, result);
       return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
     }
     if (body.action === 'recordEmailResend') {
@@ -79,7 +88,10 @@ export async function onRequest(context) {
     // después y en best-effort: una caída de Google nunca convierte en fallido
     // un pedido que ya fue confirmado por el dominio canónico.
     context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
-    if (body.action !== 'createOrder') context.waitUntil?.(notifyCustomerOrderChange(env, result));
+    if (body.action !== 'createOrder') {
+      context.waitUntil?.(notifyCustomerOrderChange(env, result));
+      deferCustomerNotification(context, env, actor, result);
+    }
     return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
   } catch (error) {
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);

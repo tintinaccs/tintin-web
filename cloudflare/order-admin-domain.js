@@ -305,7 +305,6 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
   const contactEmail = clean(input.contactEmail || input.userEmail, 254).toLowerCase();
   if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) throw new Error('Correo de contacto inválido.');
 
-  const { items, byProduct, documents } = await resolveCanonicalCreationItems(env, input.items, get);
   const requestedOrderId = clean(input.orderId, 220);
   if (requestedOrderId && ORDER_ID_PATTERN.test(requestedOrderId)) {
     const existingDocument = await get(env, `orders/${encodeURIComponent(requestedOrderId)}`);
@@ -323,6 +322,8 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
       };
     }
   }
+
+  const { items, byProduct, documents } = await resolveCanonicalCreationItems(env, input.items, get);
 
   const orderId = requestedOrderId || `manual_${crypto.randomUUID().replaceAll('-', '')}`;
   const now = new Date();
