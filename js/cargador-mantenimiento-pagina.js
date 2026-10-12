@@ -1,6 +1,3 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261012-checkout-ready-3-politica-visibilidad-catalogo-js';
-import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
-
 function pathName() {
   return location.pathname.toLowerCase().replace(/\/+$/, '');
 }
@@ -11,6 +8,17 @@ const CONTACT_RUNTIME_VERSION = 'tintin-20261010-registration-name-2-first-rende
 
 function load(file, version = 'tintin-20261009-whatsapp-responsive-1') {
   return import(`./${file}?v=${version}`);
+}
+
+// Las páginas informativas no muestran productos al entrar. El store instala
+// estas mismas políticas antes de publicar productos si se abre búsqueda o
+// catálogo desde cualquier ruta; no se descargan colecciones sólo por leer
+// envíos, contacto o textos legales.
+if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)(?:\.html)?$/.test(pathName())) {
+  Promise.all([
+    load('pages/catalog/politica-visibilidad-catalogo.js', 'tintin-20261012-checkout-ready-3-politica-visibilidad-catalogo-js'),
+    load('pages/catalog/prioridad-stock-catalogo.js', 'tintin-20260731-stock-priority-1'),
+  ]).catch(error => console.warn('[PageMaintenance] No se pudo cargar la política de catálogo:', error));
 }
 
 export function loadPageMaintenance() {
