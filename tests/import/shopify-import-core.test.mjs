@@ -67,7 +67,22 @@ test('stable product identity and chunking are deterministic', () => {
   assert.deepEqual(summarizeImportRecords([
     { product: { imagesExtra: ['a'], variants: [{}] }, errors: [], duplicate: false },
     { product: { imagesExtra: [], variants: [] }, errors: ['bad'], duplicate: false },
-  ]), { ready: 1, duplicate: 0, invalid: 1, images: 3, variants: 1 });
+  ]), { ready: 1, duplicate: 0, invalid: 1, images: 1, variants: 1 });
+});
+
+test('preview counts actual images and preserves the inactive zero-stock QA product', () => {
+  const result = groupShopifyRows([{
+    handle: 'prueba-qa-no-publicar', title: 'PRUEBA QA SIN VENTA', type: 'Relojes',
+    published: 'FALSE', status: 'draft', 'variant price': '1000',
+    'variant inventory qty': '0', 'image src': '',
+  }], collections, { parseNumber: parseLocalizedNumber, parseStock: parseOptionalStock });
+  assert.equal(summarizeImportRecords(result.products).images, 0);
+  assert.equal(result.products[0].product.stock, 0);
+  assert.equal(result.products[0].product.active, false);
+  assert.equal(summarizeImportRecords([
+    { product: { imageUrl: 'https://cdn.example/main.webp', imagesExtra: ['', ' ', 'https://cdn.example/extra.webp'] } },
+    { product: {} },
+  ]).images, 2);
 });
 
 test('10k records se procesan por chunks reanudables sin cambiar identidad', () => {
