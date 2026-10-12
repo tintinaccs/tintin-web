@@ -225,3 +225,7 @@ Referencia web sin versión causaba dos identidades de Auth, una cacheada con di
 ## Capacidad física de Productos en Sheets — 2026-10-12
 
 Fuente: apps-script/ProductosUnificados.gs, helper compartido por ambas rutas de sincronización de producto. Antes de copiar plantilla o escribir identidad, ampliar sólo filas físicas faltantes; reutilizar capacidad libre sin mover filas existentes. Verificar hoja llena, capacidad sobrante, plantilla vacía, fórmulas relativas y conservación de valores manuales.172/172 tests sync PASS_LOCAL; aprobación/merge y publicación del deployment existente pendientes. El job QA real confirmó media Cloudinary y reanudación tras ampliar una fila manualmente; ese workaround no sustituye la publicación del código. No cambiar triggers, propiedades, URL, permisos ni dominio.
+
+## Diagnóstico nativo WebKit en CI — 2026-10-12
+
+Fuente: tests/runtime/runtime-error-monitor.js, compartido por las pruebas runtime. Reconocer cancelación nativa batchGet del proyecto demo únicamente al salir del documento y con stack SDK oficial; registrar como browserDiagnostic. Errores/rechazos JS y otros destinos/contextos siguen fallando. Verificar positivos y negativos con EventEmitter, luego runtime Linux/WebKit en Actions. No modifica producción, Firestore Rules, OAuth, App Check ni URL.

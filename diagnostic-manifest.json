@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "abe02844c137729f569966e0ebf51bc2fa07ed4dd21d4c5a731726938d8c6bba",
+  "sourceFingerprint": "13e90a59927f87decc27956f909784ac2e8b359d4b15db2ab161a9f897bfafce",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1163,
-    "textFiles": 1115,
-    "totalBytes": 16931104,
+    "files": 1164,
+    "textFiles": 1116,
+    "totalBytes": 16935474,
     "pages": 19,
-    "modules": 825
+    "modules": 826
   },
   "viewports": [
     {
@@ -37550,6 +37550,51 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/runtime-native-diagnostics.test.mjs",
+      "bytes": 2431,
+      "sha256": "b642e1a86d5a89f3b75919306047d563075affc3e838b610cd15f5e781cddad7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:events",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+          "line": 7
+        },
+        {
+          "url": "https://example.com/app.js",
+          "line": 32
+        }
+      ]
+    },
+    {
       "path": "tests/flow-connections/sellado-interactivo.test.mjs",
       "bytes": 13907,
       "sha256": "d6db7b4d422173c9642b51cec32a9afe23159893c3db145fbc9332608041e1ec",
@@ -40760,8 +40805,8 @@
     },
     {
       "path": "tests/runtime/runtime-error-monitor.js",
-      "bytes": 2258,
-      "sha256": "5fe8b5ee63e418681f325867474a31492e6157f3aefcf9486b3fc6d2f27f396b",
+      "bytes": 2701,
+      "sha256": "92f01b0d5c04041fbc6b298e73ee05d966ca888b8f1176de0e48088d592dc070",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44703,8 +44748,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 419305,
-      "sha256": "9fed101354b8a5d25ae6333ff030f2680d75467b48080aa0f6d622eb2b728536"
+      "bytes": 420293,
+      "sha256": "ac749e2d52089fd17851c75f6ea3a053b417ced1241b88b2a38ea8a0de5a36f0"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -45015,8 +45060,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 19642,
-      "sha256": "9e0b9d838af57bd071177ad02ff1c40976f4967ea78d8b144f71e4db4cf06ca5"
+      "bytes": 20150,
+      "sha256": "063acfb5fa99448a3a7c2621e22555d4ab7942c965d2eb84e1c295f5a1b20fd3"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -49309,6 +49354,12 @@
       "sha256": "d339b20309c8d892b63499372bbdd66781c0b07b6a96b0284ff736f0ad981bad"
     },
     {
+      "path": "tests/flow-connections/runtime-native-diagnostics.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2431,
+      "sha256": "b642e1a86d5a89f3b75919306047d563075affc3e838b610cd15f5e781cddad7"
+    },
+    {
       "path": "tests/flow-connections/sellado-interactivo.test.mjs",
       "extension": ".mjs",
       "bytes": 13907,
@@ -49893,8 +49944,8 @@
     {
       "path": "tests/runtime/runtime-error-monitor.js",
       "extension": ".js",
-      "bytes": 2258,
-      "sha256": "5fe8b5ee63e418681f325867474a31492e6157f3aefcf9486b3fc6d2f27f396b"
+      "bytes": 2701,
+      "sha256": "92f01b0d5c04041fbc6b298e73ee05d966ca888b8f1176de0e48088d592dc070"
     },
     {
       "path": "tests/runtime/welcome-component.spec.js",
