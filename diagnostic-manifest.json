@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9967152dcf20a5ef68f088283617234ae1e4eb792a4ae54e485ff6bd6f3ed6f2",
+  "sourceFingerprint": "6a6707f840f777c8076f2549111a6080290105ca346084f5d56d0bf2de0f55a0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1155,
     "textFiles": 1107,
-    "totalBytes": 16762913,
+    "totalBytes": 16764311,
     "pages": 19,
     "modules": 820
   },
@@ -2224,7 +2224,7 @@
         "viewer"
       ],
       "bytes": 200724,
-      "sha256": "97ac6dfeece1c868c7c33c081472ed690b251ba7e722e9773a8d0590cea34e1f",
+      "sha256": "f71ffb8ae2f585353f742851f1416458d149e005e25937712297e5528b242131",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2343,7 +2343,7 @@
           "line": 2280
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-1-panel-maestro-js",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2281
         }
@@ -2649,7 +2649,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-1-panel-maestro-js",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2281,
           "exists": true
@@ -23109,8 +23109,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 28366,
-      "sha256": "0d57544a93d7397edd282dca8a87a7e87a18244203dc57cf327517136b709e83",
+      "bytes": 28346,
+      "sha256": "7d1d2ab3601853058b03e810dbecad59ba8e86deef35f30cd5072941418cbd8f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43247,7 +43247,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 200724,
-      "sha256": "97ac6dfeece1c868c7c33c081472ed690b251ba7e722e9773a8d0590cea34e1f"
+      "sha256": "f71ffb8ae2f585353f742851f1416458d149e005e25937712297e5528b242131"
     },
     {
       "path": "apple-touch-icon.png",
@@ -44476,8 +44476,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 413402,
-      "sha256": "0cebef5870e4a29ebeebef24d01eee6d2fe500435cc2e31bb65149cdc88c5fbe"
+      "bytes": 414094,
+      "sha256": "49226574ad3cffa42193f9e79b3d2e4a74260f1156e5d5318276e0369ae494ee"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44566,8 +44566,8 @@
     {
       "path": "docs/agent/SEGURIDAD_20_PUNTOS_20261012.md",
       "extension": ".md",
-      "bytes": 7355,
-      "sha256": "bb25d40a591840346685b26ffb99a9900d44c365978a4dfcd76dd26e7b1fa860"
+      "bytes": 8081,
+      "sha256": "d9a299af79d391410abe0b473060eb49e6284939f8effdd54e326c420224eda0"
     },
     {
       "path": "docs/agent/WHATSAPP_REVISION_20261010.md",
@@ -45580,8 +45580,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 28366,
-      "sha256": "0d57544a93d7397edd282dca8a87a7e87a18244203dc57cf327517136b709e83"
+      "bytes": 28346,
+      "sha256": "7d1d2ab3601853058b03e810dbecad59ba8e86deef35f30cd5072941418cbd8f"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -48125,7 +48125,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 67398,
-      "sha256": "370e93390cba07704ab90cfbf80af87422abc45cc9d276803781f3e0611933a2"
+      "sha256": "145dc3244ef7bfae75f9d46fdbc8d89923a1d28e80760179ee006a91b0e77772"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
