@@ -39,7 +39,7 @@ html body .ck-steps .ck-step .ck-step-num {
   border-radius: 999px !important;
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
-  color: #7B6F72 !important;
+  color: var(--color-text-primary, #713C53) !important;
   box-shadow: 0 3px 10px rgba(173, 63, 103, 0.08) !important;
   overflow: hidden !important;
   flex: 0 0 34px !important;

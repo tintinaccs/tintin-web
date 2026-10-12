@@ -21,8 +21,9 @@ test('WhatsApp conserva texto legible en contacto y footer con el tema público'
   await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
   await page.goto('/contact.html');
   await expect(page.locator('body')).toHaveClass(/tt-public-shell-mounted/);
-  await expect(page.locator('.tt-contact-wa-link')).toHaveCSS('color', 'rgb(255, 255, 255)');
-  await expect(page.locator('.tt-footer-wa-text')).toHaveCSS('color', 'rgb(255, 255, 255)');
+  await expect(page.locator('.tt-contact-wa-link')).toHaveCSS('color', 'rgb(113, 60, 83)');
+  await expect(page.locator('.tt-contact-wa-link')).toHaveCSS('background-color', 'rgb(248, 170, 202)');
+  await expect(page.locator('.tt-footer-wa-text')).toHaveCSS('color', 'rgb(113, 60, 83)');
 });
 
 // Detener los módulos permite medir el documento con sus estilos definitivos

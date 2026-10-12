@@ -1032,7 +1032,7 @@ function openWhatsApp(order) {
   const digits = String(customer.phone || '').replace(/\D/g, '');
   if (!digits) { toast('Este pedido no tiene teléfono.'); return; }
   const normalized = digits.startsWith('595') ? digits : `595${digits.replace(/^0+/, '')}`;
-  const text = encodeURIComponent(`Hola ${customer.name || ''}! Te escribo por tu pedido #${order.id} de Tintin.`);
+  const text = encodeURIComponent(`Hola ${customer.name || ''}! Te escribo por tu pedido #${orderDisplayId(order)} de Tintin.`);
   window.open(`https://wa.me/${normalized}?text=${text}`, '_blank', 'noopener,noreferrer');
 }
 

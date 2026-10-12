@@ -39,6 +39,8 @@
             value = '#F8AACA';
           } else if (/^#(?:c52f68|ad3f67|8b2642|711f35|c64273|9e2451)$/i.test(value.trim())) {
             value = /text|price|breadcrumb/.test(key) ? '#713C53' : '#F8AACA';
+          } else if (/^--color-(?:text-(?:secondary|tertiary|muted|subtitle|placeholder|help)|button-icon-text|field-placeholder|tab-inactive-text|breadcrumb-text|empty-state-text|price-old|icon-primary)$/.test(key) && /^#(?:7b6f72|948890)$/i.test(value.trim())) {
+            value = '#713C53';
           } else if (/^#2b2b2b$/i.test(value.trim()) || (
             /^#ffffff$/i.test(value.trim()) && /(?:button-(?:primary|floating|sticky|whatsapp)|tab-active|selection)-text$/.test(key)
           )) value = '#713C53';

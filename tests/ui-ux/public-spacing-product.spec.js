@@ -13,7 +13,7 @@ const product = {
 async function mockPublicReads(page) {
   await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
   await page.route('**/js/pages/collections/presentacion-colecciones.js?*', async route => {
-    const source = fs.readFileSync('js/pages/collections/presentacion-colecciones.js', 'utf8')
+    const source = fs.readFileSync('js/pages/collections/presentacion-colecciones.js', 'utf8').replace(/\r\n/g, '\n')
       .replace(/^import .*;\n/gm, '');
     await route.fulfill({ contentType: 'text/javascript', body:
       `const onCollectionsUpdate = listener => listener([{ id:'relojes', slug:'relojes', name:'Relojes y accesorios con un nombre de colección largo', description:'Toda la descripción de esta colección debe permanecer disponible.' }]);\n` + source });
@@ -21,7 +21,7 @@ async function mockPublicReads(page) {
   // Ejecutar los módulos reales de interfaz con transporte/sesión aislados:
   // no dependemos de reCAPTCHA ni consultamos Firestore de producción.
   await page.route('**/js/pages/product/resenas-producto.js?*', async route => {
-    const source = fs.readFileSync('js/pages/product/resenas-producto.js', 'utf8')
+    const source = fs.readFileSync('js/pages/product/resenas-producto.js', 'utf8').replace(/\r\n/g, '\n')
       .replace(/^import .*firebase\.js.*;\n/m, '')
       .replace(/^import .*coordinador-sesion\.js.*;\n/m, '')
       .replace(/^import .*firebase-firestore\.js.*;\n/m, '');
@@ -37,7 +37,7 @@ async function mockPublicReads(page) {
     await route.fulfill({ contentType: 'text/javascript', body: transport + source });
   });
   await page.route('**/js/pages/product/mantenimiento-producto.js?*', async route => {
-    const source = fs.readFileSync('js/pages/product/mantenimiento-producto.js', 'utf8')
+    const source = fs.readFileSync('js/pages/product/mantenimiento-producto.js', 'utf8').replace(/\r\n/g, '\n')
       .replace(/^import .*;\n/gm, '');
     await route.fulfill({ contentType: 'text/javascript', body:
       "const auth = {}, SUPER_ADMIN = ''; const subscribeAuthState = listener => listener(null);\n" + source });
@@ -80,6 +80,9 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
     await expect(page.locator('#product-name')).toHaveText(product.name);
     await expect(page.locator('#product-reviews, #tinsel-root, [data-open-community], #btn-product-like')).toHaveCount(0);
     await page.waitForFunction(() => document.body.classList.contains('tt-product-maintenance'));
+    for (const selector of ['#product-name', '.tt-product-detail-desc', '.tt-product-detail-price', '#product-selection-title']) {
+      await expect(page.locator(selector)).toHaveCSS('color', 'rgb(113, 60, 83)');
+    }
     await expect(page.locator('.tinben')).toHaveCount(0);
     await expect(page.locator('#product-selection-title')).toHaveText('Tu selección');
     const geometry = await page.evaluate(() => {

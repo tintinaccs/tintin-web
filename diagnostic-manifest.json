@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4d9ffdf1912cfa284ef39d74b04a91dfc709f5043f0009495a8e968fcaea09dd",
+  "sourceFingerprint": "9f2d91221126c7a7f8e3d912cf29d48984e1daeaaa90766467c575b5b8e8a402",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1176,
-    "textFiles": 1128,
-    "totalBytes": 17962327,
+    "files": 1177,
+    "textFiles": 1129,
+    "totalBytes": 17962278,
     "pages": 19,
-    "modules": 836
+    "modules": 837
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14018,
-      "sha256": "3f93bf89903eaa2c77aebb1bb166445553f17168aab55de534a0595475c5e867",
+      "bytes": 13963,
+      "sha256": "08cabf0cd0f3f1a2c9a497d1dd3fec082349e9e82e1a528013fdb81fa55fa0f7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -99,7 +99,7 @@
       "ids": 5,
       "scripts": [
         {
-          "raw": "/js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "/js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -109,7 +109,7 @@
           "line": 7
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -144,7 +144,7 @@
           "line": 183
         },
         {
-          "raw": "/js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "/js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 184
         },
@@ -161,7 +161,7 @@
           "line": 33
         },
         {
-          "raw": "/css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "/css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 35
         },
@@ -176,7 +176,7 @@
           "line": 37
         },
         {
-          "raw": "/css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "/css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 38
         },
@@ -201,7 +201,7 @@
           "line": 42
         },
         {
-          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 43
         },
@@ -231,7 +231,7 @@
           "line": 137
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 138
         },
@@ -535,7 +535,7 @@
       ],
       "references": [
         {
-          "raw": "/js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "/js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -547,7 +547,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -589,7 +589,7 @@
           "exists": true
         },
         {
-          "raw": "/js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "/js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 184,
           "exists": true
@@ -607,7 +607,7 @@
           "exists": true
         },
         {
-          "raw": "/css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "/css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 35,
           "exists": true
@@ -625,7 +625,7 @@
           "exists": true
         },
         {
-          "raw": "/css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "/css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 38,
           "exists": true
@@ -655,7 +655,7 @@
           "exists": true
         },
         {
-          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 43,
           "exists": true
@@ -691,7 +691,7 @@
           "exists": true
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 138,
           "exists": true
@@ -868,8 +868,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24283,
-      "sha256": "1a01fe79e48d3777af22fb982a16e4604792155cedf18e5ff9b78e0ce1341890",
+      "bytes": 24228,
+      "sha256": "b58f401a1341146faa2850c63a400dabce51b68746e4c432a8f9e7b568b69dd7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -899,7 +899,7 @@
       "ids": 6,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -909,7 +909,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -954,7 +954,7 @@
           "line": 326
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 327
         },
@@ -971,7 +971,7 @@
           "line": 34
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34
         },
@@ -986,7 +986,7 @@
           "line": 36
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37
         },
@@ -1011,7 +1011,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -1041,7 +1041,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -1313,7 +1313,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -1325,7 +1325,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -1379,7 +1379,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 327,
           "exists": true
@@ -1397,7 +1397,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34,
           "exists": true
@@ -1415,7 +1415,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37,
           "exists": true
@@ -1445,7 +1445,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -1481,7 +1481,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -1654,8 +1654,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43917,
-      "sha256": "9ee4f25fa2a10bd9f25dd0b7379424739f06d45a4c11f551971e4a5cb35db79e",
+      "bytes": 43852,
+      "sha256": "43260f8a38a38fdf6dd897a65df0102d11b2bf13df447afabb67726bf737066b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1685,7 +1685,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1695,7 +1695,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-auth-privacy-1-esquema-color-admin-js",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 799
         },
@@ -1712,7 +1712,7 @@
           "line": 20
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 25
         },
@@ -1727,7 +1727,7 @@
           "line": 27
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 28
         },
@@ -1762,7 +1762,7 @@
           "line": 313
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 314
         }
@@ -1802,7 +1802,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1814,7 +1814,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-auth-privacy-1-esquema-color-admin-js",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 799,
           "exists": true
@@ -1832,7 +1832,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 25,
           "exists": true
@@ -1850,7 +1850,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 28,
           "exists": true
@@ -1892,7 +1892,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 314,
           "exists": true
@@ -2223,8 +2223,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 200732,
-      "sha256": "f3e63acb42e3d5b473df3a26788d07c921a33b5b441e94b3215c6278f7c5d3b6",
+      "bytes": 200678,
+      "sha256": "2a6c1474a309d00dd3a4537dff3811cfbf97e4f48c2550af6dbf2978e6a4db79",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2248,7 +2248,7 @@
       "ids": 567,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2268,7 +2268,7 @@
           "line": 2056
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261012-checkout-ready-3-admin-app-js",
+          "raw": "js/admin/admin-app.js?v=tintin-20261012-unified-2-admin-app-js",
           "target": "js/admin/admin-app.js",
           "line": 2057
         },
@@ -2293,7 +2293,7 @@
           "line": 2061
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261012-checkout-ready-3-shopify-commerce-admin-js",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261012-unified-2-shopify-commerce-admin-js",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2062
         },
@@ -2308,7 +2308,7 @@
           "line": 2273
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-auth-privacy-1-esquema-color-admin-js",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 2274
         },
@@ -2355,7 +2355,7 @@
           "line": 23
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 28
         },
@@ -2370,7 +2370,7 @@
           "line": 30
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 31
         },
@@ -2435,7 +2435,7 @@
           "line": 43
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44
         },
@@ -2460,7 +2460,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -2535,7 +2535,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2559,7 +2559,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261012-checkout-ready-3-admin-app-js",
+          "raw": "js/admin/admin-app.js?v=tintin-20261012-unified-2-admin-app-js",
           "target": "js/admin/admin-app.js",
           "line": 2057,
           "exists": true
@@ -2589,7 +2589,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261012-checkout-ready-3-shopify-commerce-admin-js",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261012-unified-2-shopify-commerce-admin-js",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2062,
           "exists": true
@@ -2607,7 +2607,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-auth-privacy-1-esquema-color-admin-js",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 2274,
           "exists": true
@@ -2661,7 +2661,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 28,
           "exists": true
@@ -2679,7 +2679,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 31,
           "exists": true
@@ -2757,7 +2757,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44,
           "exists": true
@@ -2787,7 +2787,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -8157,8 +8157,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15737,
-      "sha256": "fbb149fce75bd51ddbbf3d596a9f57451ac2b0599371465190ed77f5762fe18a",
+      "bytes": 15682,
+      "sha256": "b2484567314d34ba1fd974e05473344cf3fcb98574e4b418dbd2476bc8077f48",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8182,7 +8182,7 @@
       "ids": 6,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -8192,7 +8192,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8237,7 +8237,7 @@
           "line": 188
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 189
         },
@@ -8254,7 +8254,7 @@
           "line": 34
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34
         },
@@ -8269,7 +8269,7 @@
           "line": 36
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37
         },
@@ -8294,7 +8294,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -8324,7 +8324,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -8538,7 +8538,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -8550,7 +8550,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -8604,7 +8604,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 189,
           "exists": true
@@ -8622,7 +8622,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34,
           "exists": true
@@ -8640,7 +8640,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37,
           "exists": true
@@ -8670,7 +8670,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -8706,7 +8706,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -8829,8 +8829,8 @@
         "guest",
         "client"
       ],
-      "bytes": 54613,
-      "sha256": "1fa0a7a6db9b984de5386d08052ea2eed1d6119ad51208144a621d2733235b22",
+      "bytes": 54558,
+      "sha256": "68a9d885fbf0f9777b78cea075c08f3c1db183f0c06c057945a0f48e2b14ebfc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8866,7 +8866,7 @@
       "ids": 18,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -8876,7 +8876,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -8926,7 +8926,7 @@
           "line": 974
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 975
         },
@@ -8943,7 +8943,7 @@
           "line": 44
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 44
         },
@@ -8958,7 +8958,7 @@
           "line": 46
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 47
         },
@@ -8983,7 +8983,7 @@
           "line": 51
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52
         },
@@ -9008,7 +9008,7 @@
           "line": 56
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 57
         },
@@ -9212,7 +9212,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -9224,7 +9224,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -9284,7 +9284,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 975,
           "exists": true
@@ -9302,7 +9302,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 44,
           "exists": true
@@ -9320,7 +9320,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 47,
           "exists": true
@@ -9350,7 +9350,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52,
           "exists": true
@@ -9380,7 +9380,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 57,
           "exists": true
@@ -9597,8 +9597,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 127773,
-      "sha256": "5fb39739fc3268f8515b891b5979d326eddcac29ddd450a6994e87ffbe3e6209",
+      "bytes": 128084,
+      "sha256": "efe636ed107d5662eebe3d43edadb4402c21b349b40ac552d74652b8fbbe4bde",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9628,7 +9628,7 @@
       "ids": 109,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -9638,7 +9638,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -9655,32 +9655,32 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261012-auth-privacy-1-analitica-js",
           "target": "js/analytics/analitica.js",
-          "line": 2023
+          "line": 2030
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261012-auth-privacy-1-proteccion-sesion-js",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2024
+          "line": 2031
         },
         {
           "raw": "js/pages/checkout/paypal-checkout.js?v=tintin-20261012-auth-privacy-1-paypal-checkout-js",
           "target": "js/pages/checkout/paypal-checkout.js",
-          "line": 2025
+          "line": 2032
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 2026
+          "line": 2033
         },
         {
           "raw": "tienda.js?v=tintin-20261012-checkout-ready-3-tienda-js",
           "target": "tienda.js",
-          "line": 2027
+          "line": 2034
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
-          "line": 2028
+          "line": 2035
         }
       ],
       "styles": [
@@ -9705,7 +9705,7 @@
           "line": 35
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 36
         },
@@ -9720,7 +9720,7 @@
           "line": 38
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 39
         },
@@ -9750,7 +9750,7 @@
           "line": 44
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 45
         },
@@ -9775,7 +9775,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -9817,7 +9817,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 2035
+          "line": 2042
         }
       ],
       "links": [
@@ -9869,7 +9869,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 2034
+          "line": 2041
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -9879,7 +9879,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2039
+          "line": 2046
         },
         {
           "raw": "/catalogo",
@@ -9889,7 +9889,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2047
+          "line": 2054
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -9899,7 +9899,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2048
+          "line": 2055
         },
         {
           "raw": "/about",
@@ -9909,7 +9909,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2055
+          "line": 2062
         },
         {
           "raw": "/envios",
@@ -9919,7 +9919,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2056
+          "line": 2063
         },
         {
           "raw": "/cambios-devoluciones",
@@ -9929,7 +9929,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2057
+          "line": 2064
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -9939,7 +9939,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2058
+          "line": 2065
         },
         {
           "raw": "/terminos",
@@ -9949,7 +9949,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2059
+          "line": 2066
         },
         {
           "raw": "/privacidad",
@@ -9959,7 +9959,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2060
+          "line": 2067
         },
         {
           "raw": "/sitemap.xml",
@@ -9969,7 +9969,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2061
+          "line": 2068
         },
         {
           "raw": "/contact",
@@ -9979,7 +9979,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2068
+          "line": 2075
         },
         {
           "raw": "tel:+595981299331",
@@ -9989,7 +9989,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2069
+          "line": 2076
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -9999,7 +9999,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2070
+          "line": 2077
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -10009,12 +10009,12 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2071
+          "line": 2078
         }
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -10026,7 +10026,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -10046,37 +10046,37 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20261012-auth-privacy-1-analitica-js",
           "target": "js/analytics/analitica.js",
-          "line": 2023,
+          "line": 2030,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20261012-auth-privacy-1-proteccion-sesion-js",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2024,
+          "line": 2031,
           "exists": true
         },
         {
           "raw": "js/pages/checkout/paypal-checkout.js?v=tintin-20261012-auth-privacy-1-paypal-checkout-js",
           "target": "js/pages/checkout/paypal-checkout.js",
-          "line": 2025,
+          "line": 2032,
           "exists": true
         },
         {
           "raw": "js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1",
           "target": "js/components/images/galeria-producto.js",
-          "line": 2026,
+          "line": 2033,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20261012-checkout-ready-3-tienda-js",
           "target": "tienda.js",
-          "line": 2027,
+          "line": 2034,
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
-          "line": 2028,
+          "line": 2035,
           "exists": true
         },
         {
@@ -10104,7 +10104,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 36,
           "exists": true
@@ -10122,7 +10122,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 39,
           "exists": true
@@ -10158,7 +10158,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 45,
           "exists": true
@@ -10188,7 +10188,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -10232,7 +10232,7 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 2035,
+          "line": 2042,
           "exists": true
         },
         {
@@ -10244,61 +10244,61 @@
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 2047,
+          "line": 2054,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 2048,
+          "line": 2055,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 2055,
+          "line": 2062,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 2056,
+          "line": 2063,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 2057,
+          "line": 2064,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 2058,
+          "line": 2065,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 2059,
+          "line": 2066,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 2060,
+          "line": 2067,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 2061,
+          "line": 2068,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 2068,
+          "line": 2075,
           "exists": true
         }
       ],
@@ -10797,8 +10797,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17436,
-      "sha256": "e60781f6608a7aa7f7c70ede20da7066a5530c53500bfb7e7da585b90f8cf133",
+      "bytes": 17381,
+      "sha256": "d20e3b4f0da4e1933a99a083db505d3d19f28ffe39a331575c694d7bfda58531",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10828,7 +10828,7 @@
       "ids": 13,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -10838,7 +10838,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -10888,7 +10888,7 @@
           "line": 209
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 210
         },
@@ -10905,7 +10905,7 @@
           "line": 44
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 44
         },
@@ -10920,7 +10920,7 @@
           "line": 46
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 47
         },
@@ -10945,7 +10945,7 @@
           "line": 51
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52
         },
@@ -10975,7 +10975,7 @@
           "line": 57
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 58
         },
@@ -11199,7 +11199,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -11211,7 +11211,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -11271,7 +11271,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 210,
           "exists": true
@@ -11289,7 +11289,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 44,
           "exists": true
@@ -11307,7 +11307,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 47,
           "exists": true
@@ -11337,7 +11337,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52,
           "exists": true
@@ -11373,7 +11373,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 58,
           "exists": true
@@ -11502,8 +11502,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22391,
-      "sha256": "90c24960df7e1055e7797111952576b83cc6ccd41b734ee8dd940dd5dff381a8",
+      "bytes": 22336,
+      "sha256": "66d79c8fd6c385cf40d0b7dbb55e9c0ba00a91522d37d7c7bad2fa471217960f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11533,7 +11533,7 @@
       "ids": 13,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -11543,7 +11543,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -11588,7 +11588,7 @@
           "line": 270
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 271
         },
@@ -11605,7 +11605,7 @@
           "line": 34
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34
         },
@@ -11620,7 +11620,7 @@
           "line": 36
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37
         },
@@ -11645,7 +11645,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -11675,7 +11675,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -11934,7 +11934,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -11946,7 +11946,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -12000,7 +12000,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 271,
           "exists": true
@@ -12018,7 +12018,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34,
           "exists": true
@@ -12036,7 +12036,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37,
           "exists": true
@@ -12066,7 +12066,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -12102,7 +12102,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -12291,8 +12291,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19458,
-      "sha256": "36192144635c6d7bfcac3fd22fe36356b551f5784c61d4af8735fd6697ed0c71",
+      "bytes": 19403,
+      "sha256": "6a4646572b09a27af84e176375c5909b861988b3d7d1ea15eee3136eee25eb56",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12322,7 +12322,7 @@
       "ids": 7,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -12332,7 +12332,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -12377,7 +12377,7 @@
           "line": 187
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 254
         },
@@ -12394,7 +12394,7 @@
           "line": 34
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34
         },
@@ -12409,7 +12409,7 @@
           "line": 36
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37
         },
@@ -12434,7 +12434,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -12464,7 +12464,7 @@
           "line": 53
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54
         },
@@ -12678,7 +12678,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -12690,7 +12690,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -12744,7 +12744,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 254,
           "exists": true
@@ -12762,7 +12762,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34,
           "exists": true
@@ -12780,7 +12780,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37,
           "exists": true
@@ -12810,7 +12810,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -12846,7 +12846,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54,
           "exists": true
@@ -13009,8 +13009,8 @@
         "guest",
         "client"
       ],
-      "bytes": 33216,
-      "sha256": "b738075525338cae2153ea8adc80ccbc3378a3cddf41ebcfda2c65919a94c2c6",
+      "bytes": 33161,
+      "sha256": "097b2fec0a3a1efb1b4495159871ddabcf9b351667e1e9284a31f3208eeff507",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13046,7 +13046,7 @@
       "ids": 12,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -13056,7 +13056,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -13121,7 +13121,7 @@
           "line": 470
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 471
         }
@@ -13133,7 +13133,7 @@
           "line": 56
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 63
         },
@@ -13148,7 +13148,7 @@
           "line": 65
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 66
         },
@@ -13173,7 +13173,7 @@
           "line": 70
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 71
         },
@@ -13218,7 +13218,7 @@
           "line": 88
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 89
         },
@@ -13548,7 +13548,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -13560,7 +13560,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -13638,7 +13638,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 471,
           "exists": true
@@ -13650,7 +13650,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 63,
           "exists": true
@@ -13668,7 +13668,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 66,
           "exists": true
@@ -13698,7 +13698,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 71,
           "exists": true
@@ -13752,7 +13752,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 89,
           "exists": true
@@ -13998,8 +13998,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 68374,
-      "sha256": "d19324feeb0bdc58623a9a70daa4a35faac2c642dd71643da2277f4f46a33146",
+      "bytes": 68319,
+      "sha256": "40dc0a085cb9304c01de5763ad871b827a3ccd2fda71fc7ae4d90e9522480cb9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14035,7 +14035,7 @@
       "ids": 46,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -14045,7 +14045,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -14075,7 +14075,7 @@
           "line": 1265
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 1266
         }
@@ -14092,7 +14092,7 @@
           "line": 35
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 36
         },
@@ -14107,7 +14107,7 @@
           "line": 38
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 39
         },
@@ -14132,7 +14132,7 @@
           "line": 43
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44
         },
@@ -14187,7 +14187,7 @@
           "line": 54
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55
         },
@@ -14256,7 +14256,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -14268,7 +14268,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -14304,7 +14304,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 1266,
           "exists": true
@@ -14322,7 +14322,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 36,
           "exists": true
@@ -14340,7 +14340,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 39,
           "exists": true
@@ -14370,7 +14370,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44,
           "exists": true
@@ -14436,7 +14436,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55,
           "exists": true
@@ -14685,8 +14685,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1806,
-      "sha256": "8fd044b721c74aea9943757dfa04b6da29560ad056c28999b9dd3da38caa8ba3",
+      "bytes": 1796,
+      "sha256": "2e1efef01320a8ce116e4f75c85a70aacc19f8125223316fd9e339c96bff865a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14703,7 +14703,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 1
         }
@@ -14730,7 +14730,7 @@
           "line": 1
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 1
         }
@@ -14750,7 +14750,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 1,
           "exists": true
@@ -14780,7 +14780,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 1,
           "exists": true
@@ -14816,8 +14816,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 52329,
-      "sha256": "7262ac43dc2ddb9d3eb050955dc52cea285a172ab5e9085d05bedc98b9185f05",
+      "bytes": 52274,
+      "sha256": "174333f08738ee68bf4c5f2c887a0621a405a6227711224cc431511d1169caba",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14853,7 +14853,7 @@
       "ids": 56,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -14863,7 +14863,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -14923,7 +14923,7 @@
           "line": 760
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 761
         }
@@ -14935,7 +14935,7 @@
           "line": 28
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 31
         },
@@ -14950,7 +14950,7 @@
           "line": 33
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 34
         },
@@ -14975,7 +14975,7 @@
           "line": 38
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 39
         },
@@ -15010,7 +15010,7 @@
           "line": 45
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 46
         },
@@ -15269,7 +15269,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -15281,7 +15281,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -15353,7 +15353,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 761,
           "exists": true
@@ -15365,7 +15365,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 31,
           "exists": true
@@ -15383,7 +15383,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 34,
           "exists": true
@@ -15413,7 +15413,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 39,
           "exists": true
@@ -15455,7 +15455,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 46,
           "exists": true
@@ -15951,8 +15951,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17094,
-      "sha256": "3e9895a53c10b741fac1bb27cd92ffc44ff18d0f1fcb17535a4967b8b8d2b992",
+      "bytes": 17039,
+      "sha256": "988398dc74158fff4ba406289b14564b372d0e80b7f32f8227525a2ce6bfd6a0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15976,7 +15976,7 @@
       "ids": 6,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -15986,7 +15986,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -16031,7 +16031,7 @@
           "line": 213
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 214
         },
@@ -16048,7 +16048,7 @@
           "line": 34
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34
         },
@@ -16063,7 +16063,7 @@
           "line": 36
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37
         },
@@ -16088,7 +16088,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -16118,7 +16118,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -16332,7 +16332,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -16344,7 +16344,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -16398,7 +16398,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 214,
           "exists": true
@@ -16416,7 +16416,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34,
           "exists": true
@@ -16434,7 +16434,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37,
           "exists": true
@@ -16464,7 +16464,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -16500,7 +16500,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -16623,8 +16623,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19812,
-      "sha256": "31835e26cc51d1a08c8673d824b52977428f7dbe33544b3c9e1be9455518dee9",
+      "bytes": 19757,
+      "sha256": "85a5dc8f4714e82694f4819a9dca1d5e8bdec4ba8991c296c58cbd0e5d9c2f16",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16648,7 +16648,7 @@
       "ids": 7,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -16658,7 +16658,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -16698,7 +16698,7 @@
           "line": 222
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 232
         },
@@ -16715,7 +16715,7 @@
           "line": 34
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34
         },
@@ -16730,7 +16730,7 @@
           "line": 36
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37
         },
@@ -16755,7 +16755,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -16785,7 +16785,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -17034,7 +17034,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -17046,7 +17046,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -17094,7 +17094,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 232,
           "exists": true
@@ -17112,7 +17112,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34,
           "exists": true
@@ -17130,7 +17130,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37,
           "exists": true
@@ -17160,7 +17160,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -17196,7 +17196,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -17342,8 +17342,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20481,
-      "sha256": "9604eda52a1a801d8eca31fcc8905bac600ff324377d97b7b8312e450089b968",
+      "bytes": 20426,
+      "sha256": "c808ed989ead66f92ff2ccc9dc126ff6bbe2692320be6dafa7eb0546f7e171c0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17367,7 +17367,7 @@
       "ids": 47,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -17377,7 +17377,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -17427,7 +17427,7 @@
           "line": 272
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 273
         },
@@ -17444,7 +17444,7 @@
           "line": 44
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 44
         },
@@ -17459,7 +17459,7 @@
           "line": 46
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 47
         },
@@ -17484,7 +17484,7 @@
           "line": 51
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52
         },
@@ -17534,7 +17534,7 @@
           "line": 61
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 62
         },
@@ -17778,7 +17778,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -17790,7 +17790,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -17850,7 +17850,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 273,
           "exists": true
@@ -17868,7 +17868,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 44,
           "exists": true
@@ -17886,7 +17886,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 47,
           "exists": true
@@ -17916,7 +17916,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 52,
           "exists": true
@@ -17976,7 +17976,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 62,
           "exists": true
@@ -18254,8 +18254,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17606,
-      "sha256": "dd0d9165d89dd40e8a55de0eaa3e7af9fb2edc5c929e64c86907d09ab4123508",
+      "bytes": 17551,
+      "sha256": "451aa2bd89870c9dab4bbf3b74e797adce956643122ca588a4fc5b69abc41391",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18272,7 +18272,7 @@
       "ids": 6,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -18282,7 +18282,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -18322,7 +18322,7 @@
           "line": 203
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 204
         },
@@ -18339,7 +18339,7 @@
           "line": 34
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34
         },
@@ -18354,7 +18354,7 @@
           "line": 36
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37
         },
@@ -18379,7 +18379,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -18409,7 +18409,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -18668,7 +18668,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-auth-privacy-1-esquema-color-instantaneo-js",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -18680,7 +18680,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261012-checkout-ready-3-cargador-pagina-js",
+          "raw": "js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -18728,7 +18728,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-client-color-readiness-1-esquema-color-js",
+          "raw": "js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js",
           "target": "js/components/color/esquema-color.js",
           "line": 204,
           "exists": true
@@ -18746,7 +18746,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 34,
           "exists": true
@@ -18764,7 +18764,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css",
           "target": "css/core/tokens-color.css",
           "line": 37,
           "exists": true
@@ -18794,7 +18794,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261011-boutique-3",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -18830,7 +18830,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -20075,7 +20075,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 350901,
-      "sha256": "c1ecdbfe53c67fed4624d78e472eb93841ecfe059d764a27b12272cc132b54ce",
+      "sha256": "e7db7a4f5678d0bf168e46d9f6d0dd52167e1f52c09847d7b7e42f38e4999caa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22142,8 +22142,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 473317,
-      "sha256": "71f8cc02b2b9cf6ef0372f4b5c573f81724dce8c0069ea70ae4d0fd5a323402f",
+      "bytes": 473297,
+      "sha256": "781e8b1cba230f3d5d1ff362c16ec19ffd1e47625201b43c17410786d14e19d2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22306,7 +22306,7 @@
           "line": 37
         },
         {
-          "raw": "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js",
           "target": "js/components/color/esquema-color-catalogo.js",
           "dynamic": false,
           "line": 42
@@ -23932,8 +23932,8 @@
     },
     {
       "path": "js/admin/settings/esquema-color-admin.js",
-      "bytes": 3460,
-      "sha256": "9d18458128017c69a6f0ac74d7030355d5f5357cdb4a0fd3637b656f5bad4898",
+      "bytes": 3440,
+      "sha256": "0c36c4827268bbfab1b075eeb8f30ea3a24978cf4acbec8a85199741cd889211",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23964,7 +23964,7 @@
           "line": 13
         },
         {
-          "raw": "../../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "../../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js",
           "target": "js/components/color/esquema-color-catalogo.js",
           "dynamic": false,
           "line": 14
@@ -24097,8 +24097,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 87564,
-      "sha256": "83f127816a5f2d91c0ff51fae80e1cd5099fb72971f0d4fe9e36b31b36072016",
+      "bytes": 87577,
+      "sha256": "8f62b75dce54d13f2c956b34078dc0dbbd1aea9b27f311df4d264de925ef8175",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24421,8 +24421,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 48720,
-      "sha256": "5686e195b8e863b2147e57e35dad6c9eba203edbd8162dcd672ad1b29e9891d3",
+      "bytes": 48715,
+      "sha256": "5b61f5faad9f5992a05579f818ffcb81492bc59c0be076e324bbbd757df12d00",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24531,8 +24531,8 @@
     },
     {
       "path": "js/components/color/esquema-color-catalogo.js",
-      "bytes": 34554,
-      "sha256": "23e426c766444941ea11bd73f0e97e51bf45d13860aba0683c8031a60128636e",
+      "bytes": 34892,
+      "sha256": "08050413f3d04800ac1b7c2e5a77dcdd46f313fbcf9521002735441235a48053",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24542,8 +24542,8 @@
     },
     {
       "path": "js/components/color/esquema-color-instantaneo.js",
-      "bytes": 14818,
-      "sha256": "81040c3b12fff4d8edd3e653ac636e6f2fa9a8cc3a32ace1207d79de8e15763e",
+      "bytes": 15114,
+      "sha256": "7bc5095ff8eaa1d3e45759858d2f7ed371d911c762faa6389a21b14635d7b8a3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24553,8 +24553,8 @@
     },
     {
       "path": "js/components/color/esquema-color.js",
-      "bytes": 6161,
-      "sha256": "19e45234b8309321b813b2c60565ac3d5d65e4e7a02f00a6619425f1e4dc4b4d",
+      "bytes": 6141,
+      "sha256": "e769dca4e97ca98f73e0fc079aaf8a17497c694d3198f18d91afde347d390593",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24579,7 +24579,7 @@
           "line": 12
         },
         {
-          "raw": "./esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1",
+          "raw": "./esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js",
           "target": "js/components/color/esquema-color-catalogo.js",
           "dynamic": false,
           "line": 13
@@ -28784,8 +28784,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 10491,
-      "sha256": "274504eed9e68a1f0d678499f06b682e54096b2d022699f687a7f2deeb66a0ba",
+      "bytes": 10516,
+      "sha256": "b46b226bbe0b90505fd3f8a2930e2a98f034282796284a8298598be0c6ece3b8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30832,8 +30832,8 @@
     },
     {
       "path": "scripts/auditar-headers-produccion.mjs",
-      "bytes": 2926,
-      "sha256": "c22eae28b31b2ea22732ce156bd87da6fac4a0b9157333997eeb2e3769171778",
+      "bytes": 2728,
+      "sha256": "c044ba219322d647698e2692ec0083a223e9231fbdd4346df98df7dfb2533660",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33496,8 +33496,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 19005,
-      "sha256": "a83b8a49aa51a1e0ab7e7cc6682e51f973575524fc1a1b2d8e0114faa4101685",
+      "bytes": 19018,
+      "sha256": "dfd3061662d5fc952561cc01cc202fd2e73196d8d86a46d76916b4c2af39d59a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37005,6 +37005,51 @@
       "endpoints": []
     },
     {
+      "path": "tests/checkout/whatsapp-contact.test.mjs",
+      "bytes": 2480,
+      "sha256": "6dbff79e502a582623539bdd57c197f4e4bf0984bdb67ec705a5d426518d8e71",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://wa.me/595981299331",
+          "line": 20
+        },
+        {
+          "url": "https://wa.me/595981000001",
+          "line": 27
+        }
+      ]
+    },
+    {
       "path": "tests/diagnostics/manifest-exclusions.test.mjs",
       "bytes": 919,
       "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df",
@@ -39534,8 +39579,8 @@
     },
     {
       "path": "tests/navigation/public-initial-layout.spec.js",
-      "bytes": 4083,
-      "sha256": "f9cafa528c8dc0e4bde576a141196d9dba2622e7d0568c2b511e045ddc745043",
+      "bytes": 4184,
+      "sha256": "1750aa20f701ec8173719dbd9e3f67cc68daa1267d8bcfc5353a68655620f4e1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42642,8 +42687,8 @@
     },
     {
       "path": "tests/ui-ux/brand-palette.test.mjs",
-      "bytes": 3369,
-      "sha256": "96e6448e66f5e8d0553f2fc9f35878bf88790ebd42dbc8b03e874b80f56d6330",
+      "bytes": 5549,
+      "sha256": "8213edcbc8f54272c21a961bb028e28ecf865fb218ed20805dc11b41c4a07264",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42974,8 +43019,8 @@
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",
-      "bytes": 10066,
-      "sha256": "dac51d91648c53a40236265159c1d8eb667f6005fe4a3c9d1d5813fa899ae47b",
+      "bytes": 10355,
+      "sha256": "f45d153d4d16ef688701619a9425fb0ed0660823b4839c96c72c45ffc0f9eb28",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43793,8 +43838,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 14018,
-      "sha256": "3f93bf89903eaa2c77aebb1bb166445553f17168aab55de534a0595475c5e867"
+      "bytes": 13963,
+      "sha256": "08cabf0cd0f3f1a2c9a497d1dd3fec082349e9e82e1a528013fdb81fa55fa0f7"
     },
     {
       "path": "AGENTS.md",
@@ -43812,7 +43857,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 3973,
-      "sha256": "6cd776582f4eb00a39f0d4a9f6dda76d08fa0186c5a366081bbd67212c0e4a9f"
+      "sha256": "50d4f1c0b953c6ef3108b012663d8d1dedd88a74f7440ff6b7ae60a05a69ab9c"
     },
     {
       "path": "_redirects",
@@ -43829,14 +43874,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 24283,
-      "sha256": "1a01fe79e48d3777af22fb982a16e4604792155cedf18e5ff9b78e0ce1341890"
+      "bytes": 24228,
+      "sha256": "b58f401a1341146faa2850c63a400dabce51b68746e4c432a8f9e7b568b69dd7"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 43917,
-      "sha256": "9ee4f25fa2a10bd9f25dd0b7379424739f06d45a4c11f551971e4a5cb35db79e"
+      "bytes": 43852,
+      "sha256": "43260f8a38a38fdf6dd897a65df0102d11b2bf13df447afabb67726bf737066b"
     },
     {
       "path": "admin-manifest.json",
@@ -43847,8 +43892,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 200732,
-      "sha256": "f3e63acb42e3d5b473df3a26788d07c921a33b5b441e94b3215c6278f7c5d3b6"
+      "bytes": 200678,
+      "sha256": "2a6c1474a309d00dd3a4537dff3811cfbf97e4f48c2550af6dbf2978e6a4db79"
     },
     {
       "path": "apple-touch-icon.png",
@@ -44225,20 +44270,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 15737,
-      "sha256": "fbb149fce75bd51ddbbf3d596a9f57451ac2b0599371465190ed77f5762fe18a"
+      "bytes": 15682,
+      "sha256": "b2484567314d34ba1fd974e05473344cf3fcb98574e4b418dbd2476bc8077f48"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 54613,
-      "sha256": "1fa0a7a6db9b984de5386d08052ea2eed1d6119ad51208144a621d2733235b22"
+      "bytes": 54558,
+      "sha256": "68a9d885fbf0f9777b78cea075c08f3c1db183f0c06c057945a0f48e2b14ebfc"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 127773,
-      "sha256": "5fb39739fc3268f8515b891b5979d326eddcac29ddd450a6994e87ffbe3e6209"
+      "bytes": 128084,
+      "sha256": "efe636ed107d5662eebe3d43edadb4402c21b349b40ac552d74652b8fbbe4bde"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -44483,8 +44528,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 17436,
-      "sha256": "e60781f6608a7aa7f7c70ede20da7066a5530c53500bfb7e7da585b90f8cf133"
+      "bytes": 17381,
+      "sha256": "d20e3b4f0da4e1933a99a083db505d3d19f28ffe39a331575c694d7bfda58531"
     },
     {
       "path": "config/account-contract.json",
@@ -44496,19 +44541,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 350901,
-      "sha256": "c1ecdbfe53c67fed4624d78e472eb93841ecfe059d764a27b12272cc132b54ce"
+      "sha256": "e7db7a4f5678d0bf168e46d9f6d0dd52167e1f52c09847d7b7e42f38e4999caa"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 350816,
-      "sha256": "3ee1fb9bf57a06fa66eeb93955c15370c6fd3f3f7cdef27bb9e6259e420b4cf7"
+      "sha256": "3886d25982f6fef415d948b514ca672d4921e3f6d31c2876cb6891e9d5dac299"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 17645,
-      "sha256": "408a3e53c43d8b741ae1f77179a8ae207964948db9c3be313843b224fc650559"
+      "bytes": 9354,
+      "sha256": "1dc815ad779144825e13a28f9a42f2460f1feae2662b8037daaca7252d7ede95"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -44520,7 +44565,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "7a60737e8ec1b32f7a00c0c45c90eca32d4b4c4911e51b3576ec8bdf1916842e"
+      "sha256": "10874260b9335546e500e85ea2f25ac320887c1fe7651774da2dfd768ea2a383"
     },
     {
       "path": "config/public-site.json",
@@ -44537,8 +44582,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 22391,
-      "sha256": "90c24960df7e1055e7797111952576b83cc6ccd41b734ee8dd940dd5dff381a8"
+      "bytes": 22336,
+      "sha256": "66d79c8fd6c385cf40d0b7dbb55e9c0ba00a91522d37d7c7bad2fa471217960f"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -44783,14 +44828,14 @@
     {
       "path": "css/core/tema-unificado-tintin.css",
       "extension": ".css",
-      "bytes": 47388,
-      "sha256": "b004a2e76846a0238b1aa653c04d5fc72116bb563db6d09b42f84b7062a357a7"
+      "bytes": 47651,
+      "sha256": "fe14820cfb9b993433d2926f5afdb7f7c2d18bfb03a2a2f9e0387d0ddfeb9896"
     },
     {
       "path": "css/core/tokens-color.css",
       "extension": ".css",
       "bytes": 5980,
-      "sha256": "42647d8ce2dd2f34c22d8a59c675f348ed7d600aa2160967739156d85d30ded5"
+      "sha256": "2ced9339d59556a5b88883daf397f02dd159bcc645c8e0809e2f757ef3e36708"
     },
     {
       "path": "css/core/tokens-tintin.css",
@@ -45017,8 +45062,8 @@
     {
       "path": "css/theme/sistema-superficies-tintin.css",
       "extension": ".css",
-      "bytes": 13380,
-      "sha256": "069ac022d5ecce2f9f5831ffc47a9564048f698e644a2ccc5caf048379423033"
+      "bytes": 13435,
+      "sha256": "746d9b7cda6e2238491d101428c291a24aad26aa1c92435d5a094ae46970d07a"
     },
     {
       "path": "css/theme/superficies-marca-responsive-tintin.css",
@@ -45029,8 +45074,8 @@
     {
       "path": "css/theme/superficies-solidas-interfaz.css",
       "extension": ".css",
-      "bytes": 7850,
-      "sha256": "1b3d6833ae56731aa813a543aebb3934985694f0cb6fe38b5237d812a6906cca"
+      "bytes": 7877,
+      "sha256": "f6601685798e181c9933c89188bdedd239b427fc864e8be2ad4e3e817f34d366"
     },
     {
       "path": "data/flujo-decisiones-acceso.json",
@@ -45095,8 +45140,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 431187,
-      "sha256": "480b68bdcc34cabdd5561b9366ab640bb3ae5abb5545b52e3e0bfb60ce55b745"
+      "bytes": 434065,
+      "sha256": "6b01f4bce18994c958b06ee2118319f7aca80e732979a016c0758149232c5b01"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -45371,8 +45416,8 @@
     {
       "path": "docs/estilo-visual-tintin.md",
       "extension": ".md",
-      "bytes": 2876,
-      "sha256": "9e0d8bb740011c922604360062238ec0cb74b4f3e5d25cc56045d9813528e7e0"
+      "bytes": 3112,
+      "sha256": "6b955524e6544f99a77afd1a669d8df55509969b8d259897bb6a7a93fef5587c"
     },
     {
       "path": "docs/excepciones-contractuales-nombres.md",
@@ -45551,8 +45596,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 19458,
-      "sha256": "36192144635c6d7bfcac3fd22fe36356b551f5784c61d4af8735fd6697ed0c71"
+      "bytes": 19403,
+      "sha256": "6a4646572b09a27af84e176375c5909b861988b3d7d1ea15eee3136eee25eb56"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -46067,14 +46112,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 33216,
-      "sha256": "b738075525338cae2153ea8adc80ccbc3378a3cddf41ebcfda2c65919a94c2c6"
+      "bytes": 33161,
+      "sha256": "097b2fec0a3a1efb1b4495159871ddabcf9b351667e1e9284a31f3208eeff507"
     },
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 473317,
-      "sha256": "71f8cc02b2b9cf6ef0372f4b5c573f81724dce8c0069ea70ae4d0fd5a323402f"
+      "bytes": 473297,
+      "sha256": "781e8b1cba230f3d5d1ff362c16ec19ffd1e47625201b43c17410786d14e19d2"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -46361,8 +46406,8 @@
     {
       "path": "js/admin/settings/esquema-color-admin.js",
       "extension": ".js",
-      "bytes": 3460,
-      "sha256": "9d18458128017c69a6f0ac74d7030355d5f5357cdb4a0fd3637b656f5bad4898"
+      "bytes": 3440,
+      "sha256": "0c36c4827268bbfab1b075eeb8f30ea3a24978cf4acbec8a85199741cd889211"
     },
     {
       "path": "js/admin/settings/metodos-pago-admin.js",
@@ -46379,8 +46424,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 87564,
-      "sha256": "83f127816a5f2d91c0ff51fae80e1cd5099fb72971f0d4fe9e36b31b36072016"
+      "bytes": 87577,
+      "sha256": "8f62b75dce54d13f2c956b34078dc0dbbd1aea9b27f311df4d264de925ef8175"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -46445,8 +46490,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 48720,
-      "sha256": "5686e195b8e863b2147e57e35dad6c9eba203edbd8162dcd672ad1b29e9891d3"
+      "bytes": 48715,
+      "sha256": "5b61f5faad9f5992a05579f818ffcb81492bc59c0be076e324bbbd757df12d00"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -46463,20 +46508,20 @@
     {
       "path": "js/components/color/esquema-color-catalogo.js",
       "extension": ".js",
-      "bytes": 34554,
-      "sha256": "23e426c766444941ea11bd73f0e97e51bf45d13860aba0683c8031a60128636e"
+      "bytes": 34892,
+      "sha256": "08050413f3d04800ac1b7c2e5a77dcdd46f313fbcf9521002735441235a48053"
     },
     {
       "path": "js/components/color/esquema-color-instantaneo.js",
       "extension": ".js",
-      "bytes": 14818,
-      "sha256": "81040c3b12fff4d8edd3e653ac636e6f2fa9a8cc3a32ace1207d79de8e15763e"
+      "bytes": 15114,
+      "sha256": "7bc5095ff8eaa1d3e45759858d2f7ed371d911c762faa6389a21b14635d7b8a3"
     },
     {
       "path": "js/components/color/esquema-color.js",
       "extension": ".js",
-      "bytes": 6161,
-      "sha256": "19e45234b8309321b813b2c60565ac3d5d65e4e7a02f00a6619425f1e4dc4b4d"
+      "bytes": 6141,
+      "sha256": "e769dca4e97ca98f73e0fc079aaf8a17497c694d3198f18d91afde347d390593"
     },
     {
       "path": "js/components/color/logotipo-marca.js",
@@ -47561,8 +47606,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 10491,
-      "sha256": "274504eed9e68a1f0d678499f06b682e54096b2d022699f687a7f2deeb66a0ba"
+      "bytes": 10516,
+      "sha256": "b46b226bbe0b90505fd3f8a2930e2a98f034282796284a8298598be0c6ece3b8"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -47687,8 +47732,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 68374,
-      "sha256": "d19324feeb0bdc58623a9a70daa4a35faac2c642dd71643da2277f4f46a33146"
+      "bytes": 68319,
+      "sha256": "40dc0a085cb9304c01de5763ad871b827a3ccd2fda71fc7ae4d90e9522480cb9"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -47873,8 +47918,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1806,
-      "sha256": "8fd044b721c74aea9943757dfa04b6da29560ad056c28999b9dd3da38caa8ba3"
+      "bytes": 1796,
+      "sha256": "2e1efef01320a8ce116e4f75c85a70aacc19f8125223316fd9e339c96bff865a"
     },
     {
       "path": "package-lock.json",
@@ -47891,8 +47936,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 52329,
-      "sha256": "7262ac43dc2ddb9d3eb050955dc52cea285a172ab5e9085d05bedc98b9185f05"
+      "bytes": 52274,
+      "sha256": "174333f08738ee68bf4c5f2c887a0621a405a6227711224cc431511d1169caba"
     },
     {
       "path": "playwright.config.js",
@@ -47915,14 +47960,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 17094,
-      "sha256": "3e9895a53c10b741fac1bb27cd92ffc44ff18d0f1fcb17535a4967b8b8d2b992"
+      "bytes": 17039,
+      "sha256": "988398dc74158fff4ba406289b14564b372d0e80b7f32f8227525a2ce6bfd6a0"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 19812,
-      "sha256": "31835e26cc51d1a08c8673d824b52977428f7dbe33544b3c9e1be9455518dee9"
+      "bytes": 19757,
+      "sha256": "85a5dc8f4714e82694f4819a9dca1d5e8bdec4ba8991c296c58cbd0e5d9c2f16"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -47933,8 +47978,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 20481,
-      "sha256": "9604eda52a1a801d8eca31fcc8905bac600ff324377d97b7b8312e450089b968"
+      "bytes": 20426,
+      "sha256": "c808ed989ead66f92ff2ccc9dc126ff6bbe2692320be6dafa7eb0546f7e171c0"
     },
     {
       "path": "robots.txt",
@@ -48377,8 +48422,8 @@
     {
       "path": "scripts/auditar-headers-produccion.mjs",
       "extension": ".mjs",
-      "bytes": 2926,
-      "sha256": "c22eae28b31b2ea22732ce156bd87da6fac4a0b9157333997eeb2e3769171778"
+      "bytes": 2728,
+      "sha256": "c044ba219322d647698e2692ec0083a223e9231fbdd4346df98df7dfb2533660"
     },
     {
       "path": "scripts/auditar-hero-fondo-controles.js",
@@ -48767,8 +48812,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 67642,
-      "sha256": "6642371a422d83d5bbbed07a7d8582f8b3571f3d7306adbb1e5d96157ed9789a"
+      "bytes": 67541,
+      "sha256": "40c05027a44ce31da130d546921edc1270c584ebb10092818686db53c8f5b05d"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -49001,8 +49046,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 19005,
-      "sha256": "a83b8a49aa51a1e0ab7e7cc6682e51f973575524fc1a1b2d8e0114faa4101685"
+      "bytes": 19018,
+      "sha256": "dfd3061662d5fc952561cc01cc202fd2e73196d8d86a46d76916b4c2af39d59a"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -49079,8 +49124,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 17606,
-      "sha256": "dd0d9165d89dd40e8a55de0eaa3e7af9fb2edc5c929e64c86907d09ab4123508"
+      "bytes": 17551,
+      "sha256": "451aa2bd89870c9dab4bbf3b74e797adce956643122ca588a4fc5b69abc41391"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -49629,6 +49674,12 @@
       "sha256": "c8f029f1871e020f109053041b4b9d91dbe67a286582fc20e884210577211c5b"
     },
     {
+      "path": "tests/checkout/whatsapp-contact.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2480,
+      "sha256": "6dbff79e502a582623539bdd57c197f4e4bf0984bdb67ec705a5d426518d8e71"
+    },
+    {
       "path": "tests/diagnostics/manifest-exclusions.test.mjs",
       "extension": ".mjs",
       "bytes": 919,
@@ -50027,8 +50078,8 @@
     {
       "path": "tests/navigation/public-initial-layout.spec.js",
       "extension": ".js",
-      "bytes": 4083,
-      "sha256": "f9cafa528c8dc0e4bde576a141196d9dba2622e7d0568c2b511e045ddc745043"
+      "bytes": 4184,
+      "sha256": "1750aa20f701ec8173719dbd9e3f67cc68daa1267d8bcfc5353a68655620f4e1"
     },
     {
       "path": "tests/navigation/whatsapp-fixed.spec.js",
@@ -50567,8 +50618,8 @@
     {
       "path": "tests/ui-ux/brand-palette.test.mjs",
       "extension": ".mjs",
-      "bytes": 3369,
-      "sha256": "96e6448e66f5e8d0553f2fc9f35878bf88790ebd42dbc8b03e874b80f56d6330"
+      "bytes": 5549,
+      "sha256": "8213edcbc8f54272c21a961bb028e28ecf865fb218ed20805dc11b41c4a07264"
     },
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
@@ -50651,8 +50702,8 @@
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",
       "extension": ".js",
-      "bytes": 10066,
-      "sha256": "dac51d91648c53a40236265159c1d8eb667f6005fe4a3c9d1d5813fa899ae47b"
+      "bytes": 10355,
+      "sha256": "f45d153d4d16ef688701619a9425fb0ed0660823b4839c96c72c45ffc0f9eb28"
     },
     {
       "path": "tests/ui-ux/whatsapp-feedback-responsive.spec.js",
@@ -50775,7 +50826,7 @@
     },
     {
       "file": "checkout.html",
-      "line": 1025,
+      "line": 1032,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -51314,7 +51365,7 @@
     },
     {
       "file": "js/components/color/esquema-color-instantaneo.js",
-      "line": 223,
+      "line": 225,
       "raw": "/checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -53259,7 +53310,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 846,
+            "line": 853,
             "operation": "collection"
           },
           {
@@ -53864,7 +53915,7 @@
           },
           {
             "file": "checkout.html",
-            "line": 1917,
+            "line": 1924,
             "operation": "doc"
           },
           {

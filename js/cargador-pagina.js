@@ -345,7 +345,7 @@
     index: 'Página Principal',
     '': 'Página Principal',
     contact: 'Contacto',
-    login: 'Iniciar Sesión',
+    login: 'Iniciando sesión',
     about: 'Quiénes Somos',
     nosotros: 'Quiénes Somos',
     perfil: 'Mi Perfil',
@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-checkout-ready-3-calidad-interfaz-js');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js');
     }
   }
 
