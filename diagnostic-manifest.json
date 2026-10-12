@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e0bffec2c0d043f37c61b4d5884b62b25fe3b71a2b3e8e81fbb2da2555374657",
+  "sourceFingerprint": "a85b07c286cd348e71be754f954530449b2e286daa6b5db6f3ab7478b1cac6a9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1155,
-    "textFiles": 1107,
-    "totalBytes": 16764311,
+    "files": 1156,
+    "textFiles": 1108,
+    "totalBytes": 16736633,
     "pages": 19,
     "modules": 820
   },
@@ -2223,8 +2223,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 200724,
-      "sha256": "f71ffb8ae2f585353f742851f1416458d149e005e25937712297e5528b242131",
+      "bytes": 200726,
+      "sha256": "55f4f42b6f3efeb7dc8cbb7842a655b213f9d74081e1576c1e19c7d68849da5f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2288,7 +2288,7 @@
           "line": 2060
         },
         {
-          "raw": "js/admin/comercio-local-admin.js?v=tintin-20261009-order-buyers-1",
+          "raw": "js/admin/comercio-local-admin.js?v=tintin-20261012-auth-singleton-1",
           "target": "js/admin/comercio-local-admin.js",
           "line": 2061
         },
@@ -2583,7 +2583,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/comercio-local-admin.js?v=tintin-20261009-order-buyers-1",
+          "raw": "js/admin/comercio-local-admin.js?v=tintin-20261012-auth-singleton-1",
           "target": "js/admin/comercio-local-admin.js",
           "line": 2061,
           "exists": true
@@ -22620,15 +22620,15 @@
     },
     {
       "path": "js/admin/comercio-local-admin.js",
-      "bytes": 16499,
-      "sha256": "e62fa6cdd277b6587e9adfa3b48840c666193157599343e445969f1f6395ad6c",
+      "bytes": 16559,
+      "sha256": "dd4e4f290360e3d3bba5b97384a605679f9db1eff38c5df4c17983a027c1b9d2",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../core/auth/cliente-api-autenticado.js",
+          "raw": "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js",
           "target": "js/core/auth/cliente-api-autenticado.js",
           "dynamic": false,
           "line": 1
@@ -32204,8 +32204,8 @@
     },
     {
       "path": "scripts/auditar-versionado-cache.mjs",
-      "bytes": 22260,
-      "sha256": "c16ec8f8fa7aa5ca530b7f9901f9a43c23406bc0de10ef64c39dc5ab9f5f69b4",
+      "bytes": 23154,
+      "sha256": "dae1c0e79ec59a91ab6f940d7c2094b405ee14a123c0f0ce41d4c04d3ff32b82",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34916,8 +34916,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 8130,
-      "sha256": "12e327a40613465eff4797a1805473854905f85cd4f153b88266c1d67ef47819",
+      "bytes": 8200,
+      "sha256": "5d21151741b34a7524c58a1d7326186415b11ce7adbdb8395c9ae1afbf2bff22",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43246,8 +43246,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 200724,
-      "sha256": "f71ffb8ae2f585353f742851f1416458d149e005e25937712297e5528b242131"
+      "bytes": 200726,
+      "sha256": "55f4f42b6f3efeb7dc8cbb7842a655b213f9d74081e1576c1e19c7d68849da5f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -43900,8 +43900,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 33617,
-      "sha256": "dae2d2ba93b16d4518701ab052bf71b61587a257c6f492eadd6a0f7205865d5a"
+      "bytes": 895,
+      "sha256": "6500e1fc8ea5cf3977157fd06ae110ca526b42e9eadbfa5c05be857b47d69142"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -43913,7 +43913,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "0af9c73a4abe3a289113fbcc0056d6591caaff77aca948cffc8aa82601d27305"
+      "sha256": "5582d2eaabb789edbc6666e5c61544ddb734a272710b6c43a7accf71f0a8adfd"
     },
     {
       "path": "config/public-site.json",
@@ -44468,6 +44468,12 @@
       "sha256": "524f4f288c854d55bebe2aebb11d4321ab1d2f00804af763f345970f69d56eff"
     },
     {
+      "path": "docs/agent/COMPROBACIONES_CIERRE_20261012.md",
+      "extension": ".md",
+      "bytes": 2343,
+      "sha256": "fab5741a8fc13e9c628b3c5ffed2ab2db4a1c30c31b8c0f464108d7e9d69283f"
+    },
+    {
       "path": "docs/agent/CONTINUACION_PREPARACION_20261011.md",
       "extension": ".md",
       "bytes": 4979,
@@ -44476,8 +44482,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 414094,
-      "sha256": "49226574ad3cffa42193f9e79b3d2e4a74260f1156e5d5318276e0369ae494ee"
+      "bytes": 415260,
+      "sha256": "7e32e9962daa1b27dba68b610a1780e64870c1b6755debbc3cc7db1752ee2938"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -44782,8 +44788,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 17246,
-      "sha256": "b0fa14fbaa1df09a5c25a3089d98ed984c013e363ccd80c48dc4fe78f85b406c"
+      "bytes": 17753,
+      "sha256": "a67815b050047ec5f3549cd9665d340af3617b2352f1a92c57924979ef9014e5"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -45502,8 +45508,8 @@
     {
       "path": "js/admin/comercio-local-admin.js",
       "extension": ".js",
-      "bytes": 16499,
-      "sha256": "e62fa6cdd277b6587e9adfa3b48840c666193157599343e445969f1f6395ad6c"
+      "bytes": 16559,
+      "sha256": "dd4e4f290360e3d3bba5b97384a605679f9db1eff38c5df4c17983a027c1b9d2"
     },
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
@@ -48106,8 +48112,8 @@
     {
       "path": "scripts/auditar-versionado-cache.mjs",
       "extension": ".mjs",
-      "bytes": 22260,
-      "sha256": "c16ec8f8fa7aa5ca530b7f9901f9a43c23406bc0de10ef64c39dc5ab9f5f69b4"
+      "bytes": 23154,
+      "sha256": "dae1c0e79ec59a91ab6f940d7c2094b405ee14a123c0f0ce41d4c04d3ff32b82"
     },
     {
       "path": "scripts/backup-firestore.mjs",
@@ -48124,8 +48130,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 67398,
-      "sha256": "145dc3244ef7bfae75f9d46fdbc8d89923a1d28e80760179ee006a91b0e77772"
+      "bytes": 67400,
+      "sha256": "4fd541e12975d3573248e76e74e5b902d74d8f052e92f22ac7b9990e4128cfb6"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -48652,8 +48658,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 8130,
-      "sha256": "12e327a40613465eff4797a1805473854905f85cd4f153b88266c1d67ef47819"
+      "bytes": 8200,
+      "sha256": "5d21151741b34a7524c58a1d7326186415b11ce7adbdb8395c9ae1afbf2bff22"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",
