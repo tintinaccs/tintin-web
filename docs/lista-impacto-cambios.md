@@ -217,3 +217,7 @@ Fuentes: galeria-producto.js, tienda.js, tema-unificado-tintin.css, product-main
 # Auth y caché de comercio local — 2026-10-12
 
 Referencia web sin versión causaba dos identidades de Auth, una cacheada con diagnóstico antiguo. Comercio local usa el mismo cliente API versionado que el resto del Admin y renueva sólo su consumidor HTML. Gate canónico detecta imports web sin query de archivos ya versionados; módulos servidor conservan imports normales. Sin cambios a permisos, catálogo, pedidos, stock, secretos o dominio. Evidencia: docs/agent/COMPROBACIONES_CIERRE_20261012.md.
+
+## Capacidad física de Productos en Sheets — 2026-10-12
+
+Fuente: apps-script/ProductosUnificados.gs, helper compartido por ambas rutas de sincronización de producto. Antes de copiar plantilla o escribir identidad, ampliar sólo filas físicas faltantes; reutilizar capacidad libre sin mover filas existentes. Verificar hoja llena, capacidad sobrante, plantilla vacía, fórmulas relativas y conservación de valores manuales.172/172 tests sync PASS_LOCAL; aprobación/merge y publicación del deployment existente pendientes. El job QA real confirmó media Cloudinary y reanudación tras ampliar una fila manualmente; ese workaround no sustituye la publicación del código. No cambiar triggers, propiedades, URL, permisos ni dominio.

@@ -7,12 +7,21 @@ const source = fs.readFileSync(new URL('../../apps-script/ProductosUnificados.gs
 const formulas = new Map([[7, '=RC[-1]-RC[-2]'], [8, '=RC[-1]/RC[-2]'],
   [11, '=IF(RC[-9]="","",N(RC[-2])-N(RC[-1]))'], [13, '=IF(RC[-2]<=N(RC[-1]),"Reponer","")']]);
 
-function setup(lastRow, initial = new Map()) {
+function setup(lastRow, initial = new Map(), maxRows = lastRow) {
   const cells = new Map(initial);
   const copies = [];
+  const expansions = [];
   const sheet = {
     getLastRow: () => lastRow,
-    getRange(row, column) {
+    getMaxRows: () => maxRows,
+    insertRowsAfter(after, count) {
+      assert.equal(after, maxRows);
+      assert.ok(count > 0);
+      expansions.push(count);
+      maxRows += count;
+    },
+    getRange(row, column, height = 1) {
+      if (row + height - 1 > maxRows) throw new Error('Target range exceeds sheet dimensions');
       return {
         copyTo: (_target, type) => copies.push(type),
         getFormulaR1C1: () => row === 7 ? formulas.get(column) || '' : cells.get(column)?.formula || '',
@@ -24,8 +33,30 @@ function setup(lastRow, initial = new Map()) {
   };
   const context = vm.createContext({ SpreadsheetApp: { CopyPasteType: { PASTE_FORMAT: 'format', PASTE_DATA_VALIDATION: 'validation' } } });
   vm.runInContext(source, context);
-  return { context, sheet, cells, copies };
+  return { context, sheet, cells, copies, expansions };
 }
+
+test('a full physical sheet grows before preparing product formulas', () => {
+  const { context, sheet, expansions, cells } = setup(1048);
+  context.tintinPrepareNewProductRow_(sheet, 1049);
+  assert.deepEqual(expansions, [1]);
+  assert.equal(sheet.getMaxRows(), 1049);
+  assert.equal(cells.get(11).formula, formulas.get(11));
+});
+
+test('spare physical rows are reused without inserting or shifting rows', () => {
+  const { context, sheet, expansions } = setup(1048, new Map(), 1100);
+  context.tintinPrepareNewProductRow_(sheet, 1049);
+  assert.deepEqual(expansions, []);
+  assert.equal(sheet.getMaxRows(), 1100);
+});
+
+test('capacity is available even when a template row has no data yet', () => {
+  const { context, sheet, expansions, copies } = setup(6);
+  context.tintinPrepareNewProductRow_(sheet, 7);
+  assert.deepEqual(expansions, [1]);
+  assert.deepEqual(copies, []);
+});
 
 test('a newly appended product inherits relative stock, margin and alert formulas and validation', () => {
   const { context, sheet, cells, copies } = setup(1047);
