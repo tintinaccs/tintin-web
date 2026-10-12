@@ -310,6 +310,20 @@ for (const ref of references) {
   }
 }
 
+// Un import sin query también crea otra identidad ESM y puede conservar bytes
+// antiguos. Sólo se exige versión cuando el recurso ya tiene una URL canónica
+// versionada; los módulos exclusivos del servidor no necesitan una query web.
+for (const file of [...HTML_FILES, ...ROOT_JS_FILES, ...walkDir('js', ['.js', '.mjs'])]) {
+  const bareImport = /(?:\bfrom\s*|\bimport\s*\(\s*|\bimport\s*)["']([^"']+\.(?:js|mjs))["']/g;
+  for (const match of readText(file).matchAll(bareImport)) {
+    const ref = match[1];
+    if (!ref.startsWith('.') && !ref.startsWith('/')) continue;
+    const localPath = ref.startsWith('/') ? ref.slice(1)
+      : toPosix(path.relative(ROOT, path.resolve(ROOT, path.dirname(file), ref)));
+    if (byPath.has(localPath)) inconsistencies.push(`${file}: import sin versión de "${localPath}"; ya tiene una URL canónica con ?v=. Dos URLs = dos instancias.`);
+  }
+}
+
 if (inconsistencies.length || dynamicProblems.length) {
   if (inconsistencies.length) {
     console.error('Inconsistencias de versión de caché encontradas:\n' + inconsistencies.map(m => `  - ${m}`).join('\n'));
