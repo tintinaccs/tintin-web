@@ -209,7 +209,7 @@ check(
 );
 check(
   'El puente de checkout localiza el pedido por requestId y no por datos inventados',
-  emailBridge.includes('const exactId = `${user.uid}_${capturedRequestId}`') &&
+  emailBridge.includes('const exactId = `public_${user.uid}_${capturedRequestId}`') &&
     emailBridge.includes('data.requestId === capturedRequestId')
 );
 
