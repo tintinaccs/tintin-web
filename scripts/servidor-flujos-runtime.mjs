@@ -96,6 +96,9 @@ let firebaseSource = fs.readFileSync(path.join(root, 'js/core/firebase/firebase.
   .replace(/apiKey: "[^"]+"/, 'apiKey: "demo-key"')
   .replace('projectId: "tintin-accesorios"', `projectId: "${project}"`)
   .replace('if (FIREBASE_APP_CHECK_SITE_KEY) {', 'if (false) {')
+  // Auth/Firestore emulators no validan App Check: habilitar sólo el contrato
+  // de readiness del fixture local, sin cambiar bootstrap/enforcement real.
+  .replace('let appCheckReady = Promise.resolve(false);', 'let appCheckReady = Promise.resolve(true);')
   .replace('const db = getFirestore(app);', 'const db = getFirestore(app); if (!window.__runtimeDb) { connectFirestoreEmulator(db,"127.0.0.1",8080); window.__runtimeDb = db; }')
   .replace('// La sesión sobrevive', 'if (!window.__runtimeAuth) { connectAuthEmulator(auth,"http://127.0.0.1:9099",{disableWarnings:true}); window.__runtimeAuth = auth; }\n// La sesión sobrevive');
 const emailSource = fs.readFileSync(path.join(root, 'js/email/correo-autenticacion.js'), 'utf8')

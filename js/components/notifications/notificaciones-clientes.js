@@ -1,3 +1,4 @@
+import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1';
 import { appCheckReady, auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
@@ -5,8 +6,7 @@ import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-
 import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1';
 import '../../admin/notifications/notificaciones-push.js?v=tintin-20261012-auth-privacy-1-notificaciones-push-js';
 import {
-  collection, limit, onSnapshot, orderBy, query,
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+  collection, limit, orderBy, query} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ASSET_VERSION = 'tintin-20261009-whatsapp-responsive-1';
 const API_RETRY_DELAYS_MS = [450, 1200];

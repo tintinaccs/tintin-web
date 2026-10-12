@@ -9,7 +9,7 @@ const profile = read('perfil.html');
 const code = withoutImports(profile.match(/<script type="module">([\s\S]*?)<\/script>/)[1]);
 const identity = withoutImports(read('js/pages/profile/estado-canonico-perfil.mjs'));
 
-async function fixture(page, width) {
+async function fixture(page, width, securityReady = true) {
   const height = { 320: 568, 390: 844, 768: 1024, 1024: 768, 1280: 720, 1440: 900, 1920: 1080 }[width];
   await page.setViewportSize({ width, height });
   await page.route('**/*.js*', route => route.fulfill({ contentType: 'text/javascript', body: '' }));
@@ -20,6 +20,7 @@ async function fixture(page, width) {
   await page.goto('/perfil.html');
   await page.addScriptTag({ content: identity + `
     const auth = { currentUser: null }, db = {};
+    const appCheckReady = Promise.resolve(${JSON.stringify(securityReady)});
     const subscribeAuthState = callback => { window.changeUser = user => { auth.currentUser = user; callback(user); }; };
     const readAuthHandoff = () => window.handoff;
     const createAuthHandoff = () => {};
@@ -81,6 +82,9 @@ test('cambiar de cuenta descarta caché, lecturas tardías y permisos anteriores
   await page.evaluate(() => {
     window.handoff = { uid: 'old', profile: { name: 'Cuenta anterior', phone: '595911111111' } };
     window.changeUser(window.profileUser('old'));
+  });
+  await expect.poll(() => page.evaluate(() => Boolean(window.profileReads?.old))).toBe(true);
+  await page.evaluate(() => {
     window.changeUser(window.profileUser('new'));
     window.resolveProfile('old', { name: 'No debe aparecer', role: 'admin' });
   });
@@ -98,12 +102,35 @@ test('error conserva datos, impide guardar y permite reintentar', async ({ page 
   await page.evaluate(() => {
     window.handoff = { uid: 'client', profile: { name: 'Ana guardada' } };
     window.changeUser(window.profileUser('client'));
+  });
+  await expect.poll(() => page.evaluate(() => Boolean(window.profileReads?.client))).toBe(true);
+  await page.evaluate(() => {
     window.profileReads.client.reject({ code: 'permission-denied' });
   });
   await expect(page.locator('#perfil-nombre')).toHaveValue('Ana guardada');
   await expect(page.locator('#btn-guardar-perfil')).toBeDisabled();
   await expect(page.locator('#btn-reintentar-perfil')).toBeVisible();
   await page.locator('#btn-reintentar-perfil').click();
+  await page.evaluate(() => window.resolveProfile('client', { name: 'Ana recuperada' }));
+  await expect(page.locator('#perfil-nombre-display')).toHaveText('Ana recuperada');
+  await expect(page.locator('#btn-guardar-perfil')).toBeEnabled();
+});
+
+test('App Check tardío recupera el perfil sin recargar ni abrir escrituras antes de tiempo', async ({ page }) => {
+  await fixture(page, 390, false);
+  await page.evaluate(() => {
+    window.TintinAppCheckStatus = 'checking';
+    window.handoff = { uid: 'client', profile: { name: 'Ana guardada' } };
+    window.changeUser(window.profileUser('client'));
+  });
+  await expect(page.locator('#btn-reintentar-perfil')).toBeVisible();
+  await expect(page.locator('#btn-guardar-perfil')).toBeDisabled();
+  expect(await page.evaluate(() => Boolean(window.profileReads?.client))).toBe(false);
+  await page.evaluate(() => {
+    window.TintinAppCheckStatus = 'enabled';
+    window.dispatchEvent(new CustomEvent('tintin:app-check-ready', { detail: { ready: true } }));
+  });
+  await expect.poll(() => page.evaluate(() => Boolean(window.profileReads?.client))).toBe(true);
   await page.evaluate(() => window.resolveProfile('client', { name: 'Ana recuperada' }));
   await expect(page.locator('#perfil-nombre-display')).toHaveText('Ana recuperada');
   await expect(page.locator('#btn-guardar-perfil')).toBeEnabled();
