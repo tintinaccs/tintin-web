@@ -4,9 +4,9 @@ import {
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261012-auth-privacy-1-sincronizacion-carrito-js';
-import { AUTH_STATES, subscribeSession, waitForSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
-import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261012-auth-privacy-1-perfil-checkout-js';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261012-client-recovery-1-sincronizacion-carrito-js';
+import { AUTH_STATES, subscribeSession, waitForSession, getSessionUser } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
+import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261012-client-recovery-1-perfil-checkout-js';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?\/?$/i;
 const RESUME_KEY = 'tt_checkout_resume_step';
@@ -329,6 +329,13 @@ function boot() {
         eventuallyClearResumeBackup();
       }
     });
+  });
+  window.addEventListener('tintin:app-check-ready', event => {
+    if (event.detail?.ready !== true) return;
+    const user = getSessionUser();
+    if (!user || profileState.ok) return;
+    profilePromise = loadProfile(user);
+    profilePromise.then(state => { if (state.ok) { restoreResumeState(); eventuallyClearResumeBackup(); } });
   });
 
   document.addEventListener('click', event => {

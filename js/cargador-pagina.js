@@ -844,7 +844,7 @@
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261012-auth-privacy-1-control-tienda-js');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261012-client-recovery-1-control-tienda-js');
   }
 
   function bootHeaderMode() {
@@ -925,7 +925,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-auth-privacy-1-sincronizacion-favoritos-js');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-client-recovery-1-sincronizacion-favoritos-js');
   }
 
   function bootThemeColorSanitizerPublic() {

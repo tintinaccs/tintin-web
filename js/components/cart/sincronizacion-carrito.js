@@ -14,6 +14,7 @@
 // - Precio/nombre/imagen son solo datos visuales; checkout vuelve a validarlos.
 // =============================================================
 
+import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
@@ -25,10 +26,8 @@ import {
   collection,
   doc,
   getDocs,
-  onSnapshot,
   serverTimestamp,
-  writeBatch,
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+  writeBatch} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const existingRuntime = window.__TintinCartSyncV2 || null;
 
@@ -585,11 +584,15 @@ function createRuntime() {
       await replaceRemoteCart(uid, snapshotItems);
       if (!currentUser || currentUser.uid !== uid || generation !== authGeneration) return;
       lastRemoteProjection = snapshotProjection;
-      rawRemove(dirtyKey(uid));
       rawStringSet(migratedKey(uid), '1');
       if (desiredProjection === snapshotProjection) {
+        rawRemove(dirtyKey(uid));
         pendingRemoteWrite = false;
         setStatus('synced');
+      } else {
+        // El acuse pertenece a una versión anterior. Si la visitante navega
+        // ahora, la siguiente página debe conservar su edición pendiente.
+        rawStringSet(dirtyKey(uid), '1');
       }
       if (guestAtLogin.length) {
         rawSet(GUEST_CART_KEY, []);
@@ -636,8 +639,10 @@ function createRuntime() {
     const firstV2Migration = rawString(migratedKey(uid)) !== '1';
     const hasUnsyncedLocal = rawString(dirtyKey(uid)) === '1';
 
-    let base = (firstV2Migration || hasUnsyncedLocal)
-      ? mergeMax(remoteItems, localItems)
+    // Un carrito dirty expresa la elección local completa, incluidas bajas y
+    // cantidades reducidas. mergeMax resucitaría productos quitados al volver.
+    let base = hasUnsyncedLocal ? localItems
+      : firstV2Migration ? mergeMax(remoteItems, localItems)
       : enrichRemote(remoteItems, localItems);
     base = addGuestQuantities(base, guestAtLogin);
     base = normalizeCart(base);
@@ -668,6 +673,9 @@ function createRuntime() {
 
   function handleLaterRemote(snapshot, generation) {
     if (!currentUser || generation !== authGeneration) return;
+    // La caché y las escrituras optimistas no son un acuse del servidor.
+    // Confirmarlas aquí permitiría que una respuesta anterior borre el carrito.
+    if (snapshot.metadata?.fromCache || snapshot.metadata?.hasPendingWrites) return;
     const remoteItems = snapshot.docs.map(remoteItemFromSnapshot).filter(Boolean).map(({ _remoteDocId, ...item }) => item);
     const remoteProjection = projection(remoteItems);
     lastRemoteProjection = remoteProjection;
@@ -695,6 +703,12 @@ function createRuntime() {
       snapshot => {
         snapshotChain = snapshotChain.then(async () => {
           if (generation !== authGeneration) return;
+          if (snapshot.metadata?.fromCache || snapshot.metadata?.hasPendingWrites) {
+            // El carrito local sigue disponible sin conexión. La primera
+            // reconciliación remota espera datos confirmados por el servidor.
+            readyResolve?.();
+            return;
+          }
           if (firstSnapshot) {
             firstSnapshot = false;
             await handleInitialRemote(snapshot, generation);
@@ -781,7 +795,7 @@ function createRuntime() {
         readyResolve?.();
         return;
       }
-      subscribeToRemote(currentUser, generation);
+      if (!remoteUnsubscribe) subscribeToRemote(currentUser, generation);
     });
   }
 
@@ -1050,6 +1064,11 @@ function createRuntime() {
     // No activar el carrito como invitado mientras Firebase todavía restaura
     // la sesión persistida al cambiar de catálogo/producto.
     subscribeAuthState(activateIdentity);
+    window.addEventListener('tintin:app-check-ready', event => {
+      if (event.detail?.ready === true && currentUser && !remoteUnsubscribe) {
+        subscribeToRemote(currentUser, authGeneration);
+      }
+    });
   }
 
   const api = {
