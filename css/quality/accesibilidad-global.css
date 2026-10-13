@@ -39,6 +39,7 @@
 }
 
 .tt-connectivity-status {
+  pointer-events: none;
   position: fixed;
   z-index: 2147482987;
   right: max(14px, env(safe-area-inset-right));
@@ -59,6 +60,7 @@
 .tt-connectivity-status[hidden] { display: none !important; }
 .tt-connectivity-status-text { min-width: 0; flex: 1 1 auto; overflow-wrap: anywhere; }
 .tt-connectivity-retry {
+  pointer-events: auto;
   flex: 0 0 auto;
   min-width: 44px;
   min-height: 44px;
