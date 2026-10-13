@@ -1,4 +1,4 @@
-import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js';
+import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-precutover-20261013-2';
 /* =============================================================
    TINTIN — Super Admin: Mensaje de bienvenida
    =============================================================
@@ -6,11 +6,11 @@ import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261012-
    Se inserta solo en admin.html y solo para la cuenta Super Admin real.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-precutover-20261013-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-precutover-20261013-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-precutover-20261013-2';
 import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-precutover-20261013-2';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 import {
   defaultWelcomeSteps,

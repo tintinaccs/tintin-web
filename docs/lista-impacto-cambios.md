@@ -1,3 +1,7 @@
+## 2026-10-13 — Preparación antes de migrar autorizada por el titular
+
+Reconciliación de Pedidos con main f5ffc5a y conservación del origen activo pages.dev separado del destino cutover tintinaccs.com. Generadores actualizan consumidores del origen, canonical/SEO/correo/monitor, CSP y URLs inmutables transitivas; no rediseño, datos históricos ni cambios externos. Sin DNS/custom domain, merge/publicación o operaciones comerciales reales. Evidencia PRECUTOVER_PEDIDOS_20261013.md; CI exacto y mantenimiento humano pendientes.
+
 ## 2026-10-12 — Pedidos Super Admin y conexiones indispensables
 
 Interfaz existente de Pedidos, CSS acotado, fuente administrativa compartida, dominio de transiciones, guardado único estado/pago, inventario, auditLog, contactos autorizados y seguimiento/notificaciones/correo por modalidad. Sin rediseño de otros módulos ni cambio de infraestructura, URL o datos históricos. Archivo/restauración conserva el estado de pedidos finalizados. Pruebas y auditores reutilizan los contratos existentes; versiones transitivas y artefactos generados se actualizan sólo para distribuir las fuentes correctas. 435 pruebas Node y 48 de navegador PASS_LOCAL; límites y pendientes en el informe de renovación. Publicación requiere autorización final.
@@ -246,3 +250,9 @@ Fuente: tests/runtime/runtime-error-monitor.js, compartido por las pruebas runti
 Regresión CI de carga informativa: catálogo y prioridad se montan al usar productos, con dependencia estática obligatoria en el store. Conserva filtros, stock y menú bajo demanda. Contacto/Envíos pasan presupuesto intacto de 120 solicitudes con 115 medidas localmente y pruebas de búsqueda que rechazan productos inactivos. Se actualiza el auditor de catálogo para verificar el mismo orden obligatorio en el store; controles de seguridad/mantenimiento intactos. Configuración real corroborada en lectura con TinyFish y límites registrados en CURRENT_STATE.
 
 Aviso de carrito compartido, bienvenida persistente e historial anterior, enlaces a pedido con detalle desplegado, referencia obligatoria en entrega a puerta, tarjetas de pago centradas, recuperación de ciudad/entrega y notificaciones canónicas de cambios administrativos. Correo admin: Super Admin, Maps, contacto cliente y WhatsApp Fito exclusivo de delivery con formato confirmado por el usuario. No hay envíos automáticos nuevos ni compras reales de prueba. Versiones de caché propagadas a consumidores comunes para todas las pantallas correspondientes. Pruebas/evidencia y límites en CURRENT_STATE; producción pendiente del nuevo CI y revisión del mantenimiento protegido. Mismo origen público.
+
+## 2026-10-12 - Reconciliacion del borrador de dominio con main 71960405
+
+Superficies: origen publico/Firebase authDomain, consumidores de origen servidor, SEO, referencias transitivas de cache del shell, CSP y manifiesto. Fuente funcional conservada de main; 126 fuentes comparadas y limitadas a origen/versionado. No modifica datos, stock, precios, pagos, autorizacion, Rules ni configuracion externa. Plan protegido calculado despues de los generadores, sin cambiar alcance/sellos. Evidencia y limites locales en CURRENT_STATE.
+
+Maestro tras el cambio de origen: VERSION interna y URL de entrada alineadas con nueva identidad inmutable; codigo funcional y auditores preservados. Se valida el bloque de contratos Maestro antes de regenerar CSP/manifiesto y plan protegido.

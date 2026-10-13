@@ -7,8 +7,8 @@
  * terminó la primera resolución del esquema para que el loader no revele una
  * página con un fondo cacheado y lo cambie un instante después.
  */
-import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1';
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
+import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1-domain-prepared-20261012-6-precutover-20261013-2';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-precutover-20261013-1';
 import { doc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap, normalizeLegacyBrandColor } from './esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js';
 

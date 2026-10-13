@@ -74,10 +74,10 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
 
   async function repairCanonicalProfileIfNeeded() {
     const [{ db }, profileModule, firestoreApi, { subscribeAuthState }] = await Promise.all([
-      import('../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js'),
-      import('../../core/store/perfil-usuario.js?v=tintin-20261012-auth-privacy-1-perfil-usuario-js'),
+      import('../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-precutover-20261013-1'),
+      import('../../core/store/perfil-usuario.js?v=tintin-20261012-auth-privacy-1-perfil-usuario-js-domain-prepared-20261012-6-precutover-20261013-2'),
       import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-      import('../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js'),
+      import('../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-precutover-20261013-2'),
     ]);
 
     // Reutiliza la única suscripción canónica de sesión (coordinador-sesion.js)

@@ -1,6 +1,6 @@
-import { auth } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
-import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
-import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20261012-auth-privacy-1-roles-js';
+import { auth } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-precutover-20261013-1';
+import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-precutover-20261013-2';
+import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-precutover-20261013-2';
 
 
 const BADGE_Z = 1250;
@@ -112,7 +112,7 @@ function startDomObserver() {
 async function canEditContent(user) {
   if (user.email === SUPER_ADMIN) return true;
   // Los visitantes no descargan la matriz de permisos del editor.
-  const { EDITABLE_ROLES, loadRolePermissions, canDo } = await import('./permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js');
+  const { EDITABLE_ROLES, loadRolePermissions, canDo } = await import('./permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-precutover-20261013-2');
   const role = await getUserRole(user.uid, user.email);
   if (!EDITABLE_ROLES.includes(role)) return false;
   await loadRolePermissions();

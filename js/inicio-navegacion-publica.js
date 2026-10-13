@@ -12,7 +12,7 @@
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   const barrierUrl = new URL('./components/navigation/compartido/barrera-arranque-shell.js', scriptUrl);
-  entryUrl.searchParams.set('v', 'tintin-20261012-checkout-ready-4-entrada-navegacion-publica-js');
+  entryUrl.searchParams.set('v', 'tintin-20261012-checkout-ready-4-entrada-navegacion-publica-js-domain-prepared-20261012-6-precutover-20261013-3');
   barrierUrl.searchParams.set('v', BARRIER_VERSION);
 
   let waitHeld = false;
