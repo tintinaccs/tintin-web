@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261012-checkout-ready-3-tienda-js-domain-prepared-20261012-6';
+const TIENDA_VERSION = 'tintin-20261013-privacy-float-collision-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6';
 const LOADER_VERSION = 'tintin-20261013-connectivity-hit-target-1';
 const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6';
@@ -589,7 +589,10 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
   const file = path.join(ROOT, page);
   const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
   let html = versionUnifiedTheme(versionVisualBuilder(versionProfileGate(versionSessionProtection(before))));
-  if (page === '404.html') html = ensurePublicStructuralStyles(html, true);
+  if (page === '404.html') {
+    html = ensurePublicStructuralStyles(html, true);
+    html = html.replace(/(<script\b[^>]*src=["']\/tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
+  }
   html = ensureInitialRuntimeStyles(html, page);
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');
