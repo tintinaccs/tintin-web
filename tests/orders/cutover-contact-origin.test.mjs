@@ -18,9 +18,9 @@ test('el generador canónico cambia el seguimiento de WhatsApp en cutover y roll
       execFileSync(process.execPath,[join(root,'scripts/sincronizar-origen-publico.js')],{cwd:root,stdio:'pipe'});
       const module=await import(pathToFileURL(join(root,'cloudflare/contactos-pedido.mjs')).href+'?round='+index);
       const message=new URL(module.orderContactLinks(fixture,'fixture-id').customer).searchParams.get('text');
-      assert.ok(message.includes(origin+'/perfil#pedido-fixture-id'));
-      const other=origin.includes('pages.dev')?'https://tintinaccs.com':'https://tintinaccesorios.pages.dev';
-      assert.ok(!message.includes(other));
+      const urls=[...message.matchAll(/https:\/\/[^\s]+/g)].map(match=>new URL(match[0].replace(/\.$/,'')));
+      assert.equal(urls.length,1);
+      assert.equal(urls[0].href,origin+'/perfil#pedido-fixture-id');
       execFileSync(process.execPath,[join(root,'scripts/sincronizar-origen-publico.js'),'--check'],{cwd:root,stdio:'pipe'});
     }
   } finally {await rm(root,{recursive:true,force:true});}

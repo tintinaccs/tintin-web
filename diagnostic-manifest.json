@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "50326c4f072b0a91444d93e4d8be1f186f975fc9d2946367e2147d8ec5adfc50",
+  "sourceFingerprint": "b28450c488ee83c4164f27153e3604cce0530a6b076e37352829a9363f339767",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1188,
     "textFiles": 1140,
-    "totalBytes": 18123411,
+    "totalBytes": 18124121,
     "pages": 19,
     "modules": 844
   },
@@ -2223,8 +2223,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 201555,
-      "sha256": "df92fde5569607407d1f648d0f228e23712fb002a590cb1c7af63aecca6004e6",
+      "bytes": 201561,
+      "sha256": "06fc8085633ae1bafad1d8eccc4c6efe8338c26b81cd48ffb83156ee54e861eb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2343,7 +2343,7 @@
           "line": 2281
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6-maestro-version-1-precutover-20261013-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6-maestro-version-1-precutover-20261013-1-fix-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2282
         }
@@ -2654,7 +2654,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6-maestro-version-1-precutover-20261013-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6-maestro-version-1-precutover-20261013-1-fix-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2282,
           "exists": true
@@ -23234,8 +23234,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 28480,
-      "sha256": "2e443e4121872484824626321a4e9c96daaf16c034887d14a0f97d8b5112eb34",
+      "bytes": 28517,
+      "sha256": "66b0959e6218b91003617084e2e17494579502f3c2fb7d4a5685d4f2a13a2d39",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40364,8 +40364,8 @@
     },
     {
       "path": "tests/orders/cutover-contact-origin.test.mjs",
-      "bytes": 1933,
-      "sha256": "05735b99159b7cd1af3d3eb7510139dd2e1833a0796e70e20ec5adbebefed21e",
+      "bytes": 1922,
+      "sha256": "a1e3edf94187cee000b57fd2a80bcf72414d5c6b80d1074cc8446033908711a7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44180,8 +44180,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 201555,
-      "sha256": "df92fde5569607407d1f648d0f228e23712fb002a590cb1c7af63aecca6004e6"
+      "bytes": 201561,
+      "sha256": "06fc8085633ae1bafad1d8eccc4c6efe8338c26b81cd48ffb83156ee54e861eb"
     },
     {
       "path": "apple-touch-icon.png",
@@ -44841,7 +44841,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 38623,
-      "sha256": "374378ea7c5efbdf606e26941b409ea1592661949624b620a44ecf93bd9c26a5"
+      "sha256": "79632769cbe33b5f5919ba4865760e58e0888f9c496cd236a5d8af4c54ce8418"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -44853,7 +44853,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "44f62b83cad9f4a592433b5a7ddff9ef7d9e6995fcc7488bc187910e23ffd238"
+      "sha256": "cae80bccb39650f3ba36f46fbde857d32d45c601787f5c6be9e831c2fe26e36b"
     },
     {
       "path": "config/public-site.json",
@@ -45470,8 +45470,8 @@
     {
       "path": "docs/agent/PRECUTOVER_PEDIDOS_20261013.md",
       "extension": ".md",
-      "bytes": 6003,
-      "sha256": "083f56b67ff250c321fdb8953786def19a5e80325baca9f62cb94e2eeacf43c6"
+      "bytes": 6675,
+      "sha256": "3e6333b8f8af8af284462dab75ebdee36ee15911b774ed203fef26caef6dd8ee"
     },
     {
       "path": "docs/agent/PREPARACION_ACTUAL_20261011.md",
@@ -46574,8 +46574,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 28480,
-      "sha256": "2e443e4121872484824626321a4e9c96daaf16c034887d14a0f97d8b5112eb34"
+      "bytes": 28517,
+      "sha256": "66b0959e6218b91003617084e2e17494579502f3c2fb7d4a5685d4f2a13a2d39"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -49142,8 +49142,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 73519,
-      "sha256": "abbb2872fcbddedd9dc48ed3933c9e3a42ffdeba10d80308a63c2fca8eea5b00"
+      "bytes": 73525,
+      "sha256": "59c72cebb2cfe7d436e11330faac4398c7eddcb2dbce3c0b71614ac8db5e898a"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -50516,8 +50516,8 @@
     {
       "path": "tests/orders/cutover-contact-origin.test.mjs",
       "extension": ".mjs",
-      "bytes": 1933,
-      "sha256": "05735b99159b7cd1af3d3eb7510139dd2e1833a0796e70e20ec5adbebefed21e"
+      "bytes": 1922,
+      "sha256": "a1e3edf94187cee000b57fd2a80bcf72414d5c6b80d1074cc8446033908711a7"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
