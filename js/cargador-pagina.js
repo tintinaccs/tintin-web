@@ -959,7 +959,7 @@
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {
-      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261013-connectivity-hit-target-1-security-ready-20261013-1');
+      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261013-connectivity-hit-target-1');
     }
   }
 

@@ -1,6 +1,6 @@
 # Correcciones de seguridad y preparación del corte — 2026-10-13
 
-Responsable: Codex principal; revisiones y correcciones dirigidas por agentes de seguridad, perfil/pedidos y release. Base: main `f5ffc5a556cbb3c21863c34d7f38df3efd3ab0aa`. El titular autorizó corregir, publicar y mergear; el cambio de DNS no forma parte de esta publicación preparatoria.
+Responsable: Codex principal; revisiones y correcciones dirigidas por agentes de seguridad, perfil/pedidos y release. Base inicial: main `f5ffc5a556cbb3c21863c34d7f38df3efd3ab0aa`; reconciliada con `226088a96ca8ee55a2559d1645ed4c740aa3829c` (#1119, estilos finales desde el primer render), conservando su implementación y regenerando las referencias de caché. El titular autorizó corregir, publicar y mergear; el cambio de DNS no forma parte de esta publicación preparatoria.
 
 ## Cambios y evidencia local
 
@@ -14,6 +14,8 @@ Responsable: Codex principal; revisiones y correcciones dirigidas por agentes de
 Comprobaciones actuales: 227 pruebas dirigidas de cuentas, JWT, perfil, cuota, pedidos/pagos, origen/monitores y contratos aprobadas; 175 controles adversariales de Rules y prueba con Firestore real de 200 solicitudes concurrentes desde isolates diferentes aprobadas (cuota20 preservada, incluida instancia fría). La respuesta 503 puede consumir una reserva si el commit remoto confirmó antes de cancelarse; nunca concede cuota adicional. Ensayo de concurrencia anterior detectó un adaptador de prueba sin signal y cold-start saturado; se propagó la cancelación real y se probó junto con las reglas cargadas. No se aumenta el timeout ni la cuota para hacer pasar el ensayo.
 
 Las nuevas regresiones reprodujeron los fallos de cabeceras, rutas sin límite, archivo declarado falsamente y lectura individual de 60 productos antes de las correcciones. Hay pruebas de navegador de avatar con respuestas interceptadas; no se subieron archivos ni se modificaron perfiles reales. El cierre CI y la verificación del artefacto publicado corresponden al SHA final y no se heredan de este documento.
+
+Se corrigieron dos defectos preexistentes de los fixtures Windows sin retirar comprobaciones: `--import` recibe una file URL de Node y la guardia de ruta utiliza `path.relative` para conservar el límite del directorio js en ambos sistemas. Ambas regresiones pasan localmente, incluidas las comprobaciones de revisión, presupuesto de GitHub y rutas permitidas. La prueba real de cuota compartida entra en `test:rules-critical`, y las pruebas de navegador del avatar entran en el runner runtime existente; no se cambian workflows ni el mecanismo de autorización.
 
 ## Configuración externa corroborada
 
