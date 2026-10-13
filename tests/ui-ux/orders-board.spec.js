@@ -139,7 +139,7 @@ test('una respuesta vieja de contactos no reemplaza los datos de la revisión nu
 });
 for(const [width,height] of [[320,568],[768,1024],[1440,900]])test(`editor de pedido preserva listo y pago parcial en ${width}x${height}`,async({page})=>{
  await page.setViewportSize({width,height});await open(page);
- await page.evaluate(async()=>{await import('/js/admin/orders/pedidos-superadmin-crud.js');await window.TintinOrderAdmin.openAdvancedOrderEditor('order_fixture_2');});
+ await page.evaluate(async()=>{await import('https://tintin.test/js/admin/orders/pedidos-superadmin-crud.js');await window.TintinOrderAdmin.openAdvancedOrderEditor('order_fixture_2');});
  const modal=page.getByRole('dialog',{name:/CRUD completo/});await expect(modal).toBeVisible();await expect(page.locator('#tinped-status')).toHaveValue('listo');await expect(page.locator('#tinped-pay-status')).toHaveValue('parcial');
  expect(await modal.evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);expect(await page.locator('#tinped-crud-form').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
  await page.locator('#tinped-name').fill('Cliente QA editado localmente');await expect(page.locator('#tinped-pay-status')).toHaveValue('parcial');

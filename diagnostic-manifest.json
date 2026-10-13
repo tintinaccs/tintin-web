@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ae6fcb3c117618339e7f481aef3d1eb78a891b596b624101522920db58895124",
+  "sourceFingerprint": "526e46b1f97eb54b00a20171dd136891b08bd2cd53698620be0d34f3d9274755",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1185,
     "textFiles": 1137,
-    "totalBytes": 18034306,
+    "totalBytes": 18034325,
     "pages": 19,
     "modules": 843
   },
@@ -43110,16 +43110,16 @@
     },
     {
       "path": "tests/ui-ux/orders-board.spec.js",
-      "bytes": 18219,
-      "sha256": "7599218e540e1a7aab9cb8cb03aab3ba8ffc43495ac2752b70067095d7fe2b5e",
+      "bytes": 18238,
+      "sha256": "39859fed76129a422af1674c574583f1ff48a23a0e2b00bbe6e627fbc5b9d667",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "/js/admin/orders/pedidos-superadmin-crud.js",
-          "target": "tests/ui-ux/js/admin/orders/pedidos-superadmin-crud.js",
+          "raw": "https://tintin.test/js/admin/orders/pedidos-superadmin-crud.js",
+          "target": null,
           "dynamic": true,
           "line": 142
         }
@@ -43148,6 +43148,10 @@
         {
           "url": "https://wa.me/595981111111",
           "line": 137
+        },
+        {
+          "url": "https://tintin.test/js/admin/orders/pedidos-superadmin-crud.js",
+          "line": 142
         }
       ]
     },
@@ -50923,8 +50927,8 @@
     {
       "path": "tests/ui-ux/orders-board.spec.js",
       "extension": ".js",
-      "bytes": 18219,
-      "sha256": "7599218e540e1a7aab9cb8cb03aab3ba8ffc43495ac2752b70067095d7fe2b5e"
+      "bytes": 18238,
+      "sha256": "39859fed76129a422af1674c574583f1ff48a23a0e2b00bbe6e627fbc5b9d667"
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
@@ -51084,14 +51088,7 @@
     }
   ],
   "sitemapRoutes": [],
-  "missingReferences": [
-    {
-      "page": "tests/ui-ux/orders-board.spec.js",
-      "target": "tests/ui-ux/js/admin/orders/pedidos-superadmin-crud.js",
-      "raw": "/js/admin/orders/pedidos-superadmin-crud.js",
-      "line": 142
-    }
-  ],
+  "missingReferences": [],
   "routeReferences": [
     {
       "file": "catalogo.html",
