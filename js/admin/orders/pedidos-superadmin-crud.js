@@ -1,7 +1,7 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js';
 import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js';
-import { allowedOrderStatuses } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
+import { allowedOrderStatuses, ORDER_LIFECYCLE_STATUSES, orderStatusLabel } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import {
   collection,
   deleteDoc,
@@ -19,6 +19,7 @@ const TRASH_COLLECTION = 'orderTrash';
 const ACTIVE_COLLECTION = 'orders';
 let ensureQueue = Promise.resolve();
 let modalState = null;
+let modalReturnFocus = null;
 let catalogCache = [];
 
 function isSuperAdmin() {
@@ -220,6 +221,7 @@ function ensureModal_() {
   if (overlay) return overlay;
   overlay = document.createElement('div');
   overlay.id = 'tinped-crud-overlay';
+  overlay.setAttribute('role', 'dialog'); overlay.setAttribute('aria-modal', 'true'); overlay.setAttribute('aria-labelledby', 'tinped-modal-title');
   overlay.style.cssText = 'display:none;position:fixed;inset:0;z-index:5200;background:rgba(0,0,0,.5);overflow:auto;padding:18px';
   overlay.innerHTML = `
     <div style="background:#fff;border-radius:16px;max-width:980px;margin:auto;box-shadow:0 18px 60px rgba(0,0,0,.22);overflow:hidden">
@@ -257,6 +259,14 @@ function ensureModal_() {
   overlay.querySelector('#tinped-items').addEventListener('input', handleItemInput_);
   overlay.querySelector('#tinped-items').addEventListener('click', handleItemClick_);
   overlay.querySelector('#tinped-shipping-cost').addEventListener('input', renderItems_);
+  overlay.querySelector('#tinped-shipping-method').addEventListener('change', () => refreshModalStatuses_(modalState?.baseOrder, formEl_('tinped-status').value));
+  overlay.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { event.stopPropagation(); closeModal_(); }
+    if (event.key !== 'Tab') return;
+    const controls = [...overlay.querySelectorAll('button:not([disabled]),input,select,textarea')].filter(el => el.getClientRects().length);
+    if (event.shiftKey && document.activeElement === controls[0]) { event.preventDefault(); controls.at(-1)?.focus(); }
+    else if (!event.shiftKey && document.activeElement === controls.at(-1)) { event.preventDefault(); controls[0]?.focus(); }
+  });
   return overlay;
 }
 
@@ -314,18 +324,32 @@ function handleItemClick_(event) {
   renderItems_();
 }
 
+function refreshModalStatuses_(order, selected = order?.status || 'pendiente') {
+  const method = formEl_('tinped-shipping-method').value || 'delivery';
+  const context = { ...order, shippingMethod: method };
+  const statuses = order && !order.localEntryId ? allowedOrderStatuses(context) : ORDER_LIFECYCLE_STATUSES;
+  formEl_('tinped-status').innerHTML = '<option value="" disabled>Elegí un estado compatible</option>' + statuses.filter(value => ORDER_LIFECYCLE_STATUSES.includes(value) && (value !== 'listo_retiro' || method === 'retiro') && (value !== 'en_camino' || method !== 'retiro')).map(value => `<option value="${value}">${orderStatusLabel({ ...context, status: value })}</option>`).join('');
+  setValue_('tinped-status', selected === 'enviado' ? 'en_camino' : selected);
+}
 function fillModal_(order) {
+  if (!formEl_('tinped-pay-status').querySelector('option[value="parcial"]')) {
+    const option = document.createElement('option'); option.value = 'parcial'; option.textContent = 'Parcialmente pagado'; formEl_('tinped-pay-status').appendChild(option);
+  }
   setValue_('tinped-code', order?.orderNumber || order?.shortId || '');
-  setValue_('tinped-status', order?.status || 'pendiente');
   setValue_('tinped-name', order?.userName || '');
   setValue_('tinped-phone', order?.userPhone || '');
   setValue_('tinped-email', order?.contactEmail || order?.userEmail || '');
   setValue_('tinped-city', order?.shipping?.city || order?.city || '');
   setValue_('tinped-shipping-method', order?.shipping?.method || 'delivery');
+  refreshModalStatuses_(order);
   setValue_('tinped-shipping-cost', money(order?.shippingCost));
   setValue_('tinped-address', order?.shipping?.address || order?.address || '');
   setValue_('tinped-reference', order?.shipping?.referencia || order?.shipping?.reference || '');
   setValue_('tinped-pay-method', order?.payment?.method || order?.paymentMethod || 'efectivo');
+  const paymentValue = order?.paymentStatus || order?.payment?.status || 'pendiente';
+  const paymentSelect = formEl_('tinped-pay-status');
+  paymentSelect.querySelectorAll('option[data-legacy-payment]').forEach(option => option.remove());
+  if (![...paymentSelect.options].some(option => option.value === paymentValue)) { const legacy = document.createElement('option'); legacy.value = paymentValue; legacy.dataset.legacyPayment = 'true'; legacy.textContent = 'Estado de pago no reconocido'; paymentSelect.appendChild(legacy); }
   setValue_('tinped-pay-status', order?.paymentStatus || order?.payment?.status || 'pendiente');
   setValue_('tinped-notes', order?.notes || '');
 }
@@ -343,7 +367,8 @@ function collectPatch_() {
   if (!items.length) throw new Error('El pedido debe tener al menos un producto.');
   const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   const shippingCost = money(formEl_('tinped-shipping-cost')?.value);
-  const status = clean(formEl_('tinped-status')?.value, 40) || 'pendiente';
+  const status = clean(formEl_('tinped-status')?.value, 40);
+  if (!status) throw new Error('Elegí un estado compatible con la entrega.');
   const payStatus = clean(formEl_('tinped-pay-status')?.value, 40) || 'pendiente';
   const payMethod = clean(formEl_('tinped-pay-method')?.value, 40) || 'efectivo';
   const shippingMethod = clean(formEl_('tinped-shipping-method')?.value, 40) || 'delivery';
@@ -443,9 +468,11 @@ function closeModal_() {
   const overlay = document.getElementById('tinped-crud-overlay');
   if (overlay) overlay.style.display = 'none';
   modalState = null;
+  modalReturnFocus?.focus?.({ preventScroll: true }); modalReturnFocus = null;
 }
 
 async function openManualOrder() {
+  modalReturnFocus = document.activeElement;
   assertSuperAdmin();
   await loadCatalog_();
   modalState = { mode: 'create', orderId: '', baseOrder: null, items: [] };
@@ -461,9 +488,11 @@ async function openManualOrder() {
   renderPicker_();
   renderItems_();
   overlay.style.display = 'block';
+  formEl_('tinped-modal-close').focus();
 }
 
 async function openAdvancedOrderEditor(orderId) {
+  modalReturnFocus = document.activeElement;
   assertSuperAdmin();
   const safeId = clean(orderId, 220);
   const [orderSnap] = await Promise.all([getDoc(doc(db, ACTIVE_COLLECTION, safeId)), loadCatalog_()]);
@@ -480,6 +509,7 @@ async function openAdvancedOrderEditor(orderId) {
   renderPicker_();
   renderItems_();
   overlay.style.display = 'block';
+  formEl_('tinped-modal-close').focus();
 }
 
 function interceptNewOrderButton_() {

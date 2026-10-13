@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { applyOrderAdminMutation } from '../../cloudflare/order-admin-domain.js';
+import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
 import { encodeFirestoreFields, decodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
 import { allowedOrderStatuses, assertOrderTransition, orderStage, orderTimeline, customerOrderMessage } from '../../js/orders/ciclo-pedido.mjs';
 import { orderContactLinks } from '../../cloudflare/contactos-pedido.mjs';
@@ -81,4 +81,15 @@ test('archivar/restaurar entregados conserva entrega, pago e inventario históri
   new Function('deps',`const {${Object.keys(deps).join(',')}}=deps;${source}`)(deps);
   await deps.window.TintinOrderAdmin.trashOrder('order_fixture_1');assert.equal(records.has('orders/order_fixture_1'),false);assert.equal(records.get('orderTrash/order_fixture_1').status,'entregado');
   await deps.window.TintinOrderAdmin.restoreOrder('order_fixture_1');const restored=records.get('orders/order_fixture_1');assert.equal(restored.status,'entregado');assert.equal(restored.paymentStatus,'pagado');assert.equal(restored.inventoryState,'reserved');
+});
+test('crear retiro enviado se rechaza antes de consultar productos o guardar',async()=>{
+  let reads=0;
+  await assert.rejects(createOrderAdmin({}, {status:'en_camino',shippingMethod:'retiro',userName:'QA'},actor,{get:async()=>{reads++;return null;}}),e=>e.code==='invalid_order_transition');
+  assert.equal(reads,0);
+});
+test('cambiar modalidad no puede dejar listo para retirar como delivery ni envío como retiro',async()=>{
+  for(const [status,shippingMethod,requested] of [['listo_retiro','retiro','delivery'],['en_camino','delivery','retiro']]){
+    const s=store(order({status,shippingMethod}));
+    await assert.rejects(applyOrderAdminMutation({}, {orderId:'order_fixture_1',shippingMethod:requested,baseChangeId:'',changeId:'invalid_mode'},actor,s),e=>e.code==='invalid_order_transition');assert.equal(s.commits.length,0);
+  }
 });

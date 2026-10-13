@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "baseCommit": "71960405039cb1f1fc48395a6b958eb9d73e74f6",
-  "reason": "Renovación exclusiva de Pedidos Super Admin y conexiones indispensables: tablero, seguimiento, inventario, concurrencia, pago parcial y contactos; 424 pruebas Node y 45 Chromium aisladas, sin datos reales ni migración de URL.",
+  "reason": "Renovación exclusiva de Pedidos: tablero, seguimiento, paginación acotada, inventario, modalidades, pago parcial, editores y contactos. 435 pruebas Node y 48 Chromium aisladas; sin datos reales ni cambio de URL.",
   "files": [
     {
       "path": "admin.html",
       "oldHash": "2a6c1474a309d00dd3a4537dff3811cfbf97e4f48c2550af6dbf2978e6a4db79",
-      "newHash": "da09f8c6d8368133df7b5fe242b04afeef4f357be32c777d82678912eab67021"
+      "newHash": "13cd5001f8e9d8cc9b3257265c9a1779cf56ed0185a87d7ed37a8a594886f77e"
     },
     {
       "path": "cloudflare/correo-estado-pedido.js",
@@ -16,7 +16,7 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "oldHash": "1cc724c08eca79a1fa35a668b2211ec3095aa65a8ebd01958621eb9cff1f133f",
-      "newHash": "e350af63675937f09ac5c6ae4a44bc78d571cde8e0a0da3dd139787f471eff1a"
+      "newHash": "8bf7db7fe21f4d6c0c1c6f3ad7b58a5b86a9f918c8a22cf082475ba5144dded1"
     },
     {
       "path": "cloudflare/resiliencia-correo-pedido.js",
@@ -36,12 +36,12 @@
     {
       "path": "js/admin/admin-app.js",
       "oldHash": "781e8b1cba230f3d5d1ff362c16ec19ffd1e47625201b43c17410786d14e19d2",
-      "newHash": "b1d3f5c90ec189de144f869ddc4a9c4604c7a6519fb7b95a7d3b74509a5a5c9d"
+      "newHash": "0047833afdc9c418cd8f4afbf34e26ef316129bf8f673c2b0137db9e8be9eea9"
     },
     {
       "path": "js/admin/orders/pedidos-superadmin-crud.js",
       "oldHash": "866429e91f37327d7ea021a14f3de66c2dfd8220531cdd27c2589b5160b7ac27",
-      "newHash": "ef2b4859733027cb9adef0ee1a4a015422541fd61d34f663ab49b107c25abe87"
+      "newHash": "83fec947ba7066e6307ef5a647434ea2013638c22133b44cee36153e33f17758"
     },
     {
       "path": "js/admin/products/integridad-inventario-admin.js",
@@ -51,7 +51,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "8f62b75dce54d13f2c956b34078dc0dbbd1aea9b27f311df4d264de925ef8175",
-      "newHash": "0661a364dcc69f45855360cca6500152451ac80d630ce07dc3e4cd9f0b9ddab3"
+      "newHash": "dc06d1bc574de84bbac751f38bf7f7f64d54b80424096ce8eb4aa760f949cf96"
     },
     {
       "path": "js/pages/profile/pedidos-perfil.js",
@@ -61,7 +61,7 @@
     {
       "path": "package.json",
       "oldHash": "ca3d4f1792c8e682751ab1769e0190de78906f4d7785a03b789192a1f01c6960",
-      "newHash": "df569af8855bbef12026d0737c14678a86772f249e5572a1bf4a731c56931a78"
+      "newHash": "c06fbd347ea4004e9979324175604e0aacf7ae951b8e24c1ddd52ca318f31d8a"
     },
     {
       "path": "perfil.html",
@@ -71,7 +71,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "40c05027a44ce31da130d546921edc1270c584ebb10092818686db53c8f5b05d",
-      "newHash": "13179e43170aebd4b93c336951b4e651dbd4a48f0e30c10c67f9fefc98c12e52"
+      "newHash": "2e9c3903d39a265e981f9134920c04a62a4ab3762cc3339825e9d5e4c0639a86"
     }
   ],
   "affectedRecords": [

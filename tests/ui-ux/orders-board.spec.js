@@ -96,6 +96,7 @@ test('histórico, cancelado y devolución siguen disponibles sin reactivar inven
 test('mil pedidos: contadores completos y tarjetas limitadas por etapa',async({page})=>{
   const rows=Array.from({length:1000},(_,i)=>({...seed()[i%6],id:`order_large_${i}`,orderNumber:`TINPED${i}`}));await open(page,rows);
   await expect(page.locator('[data-orders-status]')).toContainText('1000 pedidos');expect(await page.locator('[data-order-card]').count()).toBeLessThanOrEqual(150);
+  await expect(page.locator('#orders-tbody tr')).toHaveCount(0);
   await page.locator('[data-order-lane="new"] [data-action="order-show-more"]').click();expect(await page.locator('[data-order-lane="new"] [data-order-card]').count()).toBe(60);
 });
 test('teclado, movimiento reducido y zoom conservan navegación y cierre',async({page})=>{
@@ -135,4 +136,15 @@ test('una respuesta vieja de contactos no reemplaza los datos de la revisión nu
  const link=page.getByRole('dialog').getByRole('link',{name:'WhatsApp del cliente',exact:true});await expect(link).toHaveAttribute('href',/595981999999/);
  await first.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,links:{customer:'https://wa.me/595981111111?text=Viejo'}})});
  await expect(link).toHaveAttribute('href',/595981999999/);
+});
+for(const [width,height] of [[320,568],[768,1024],[1440,900]])test(`editor de pedido preserva listo y pago parcial en ${width}x${height}`,async({page})=>{
+ await page.setViewportSize({width,height});await open(page);
+ await page.evaluate(async()=>{await import('/js/admin/orders/pedidos-superadmin-crud.js');await window.TintinOrderAdmin.openAdvancedOrderEditor('order_fixture_2');});
+ const modal=page.getByRole('dialog',{name:/CRUD completo/});await expect(modal).toBeVisible();await expect(page.locator('#tinped-status')).toHaveValue('listo');await expect(page.locator('#tinped-pay-status')).toHaveValue('parcial');
+ expect(await modal.evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);expect(await page.locator('#tinped-crud-form').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
+ await page.locator('#tinped-name').fill('Cliente QA editado localmente');await expect(page.locator('#tinped-pay-status')).toHaveValue('parcial');
+ await page.locator('#tinped-shipping-method').selectOption('retiro');expect(await page.locator('#tinped-status option[value="en_camino"]').count()).toBe(0);
+ await page.locator('#tinped-modal-close').click();await expect(modal).toBeHidden();expect(await page.evaluate(()=>window.__calls.filter(c=>c[0]==='updateOrderStatus').length)).toBe(0);
+ await page.evaluate(async()=>{window.__orders[2].paymentStatus='error';await window.TintinOrderAdmin.openAdvancedOrderEditor('order_fixture_2');});
+ await expect(page.locator('#tinped-pay-status')).toHaveValue('error');await page.keyboard.press('Escape');await expect(modal).toBeHidden();
 });

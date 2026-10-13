@@ -7,7 +7,7 @@ const ROOT = path.resolve(__dirname, '../../..');
 const commerceJs = fs.readFileSync(path.join(ROOT, 'js/admin/shopify-commerce-admin.js'), 'utf8');
 const commerceCss = fs.readFileSync(path.join(ROOT, 'css/admin/shopify-commerce-admin.css'), 'utf8');
 
-const firebaseStub = `export const auth = {}; export const db = {}; export const appCheckReady = Promise.resolve(true);`;
+const firebaseStub = `export const auth = {currentUser:{uid:'super-1',email:'tintinaccs@gmail.com'}}; export const db = {}; export const appCheckReady = Promise.resolve(true);`;
 const authStub = `
 export function onAuthStateChanged(_auth, callback) {
   queueMicrotask(() => callback({ uid: 'super-1', email: 'tintinaccs@gmail.com', isAnonymous: false }));
@@ -42,6 +42,11 @@ window.TintinAdminOrders={subscribe(fn){window.__orderConsumers.add(fn);queueMic
 window.dispatchEvent(new Event('tintin:admin-orders-source'));
 export const where = () => null;
 export const collection = (_db, name) => name;
+export const doc = (_db, name, id) => name+'/'+id;
+export const serverTimestamp = () => new Date();
+export const runTransaction = async () => {throw new Error('Escrituras no habilitadas en este fixture');};
+export const deleteDoc = async () => {throw new Error('Escrituras no habilitadas en este fixture');};
+export async function getDoc(ref) { const id=ref.split('/').at(-1),order=window.__orders.find(o=>o.id===id);return {exists:()=>!!order,data:()=>structuredClone(order)}; }
 export const query = (ref) => ref;
 export const orderBy = () => null;
 export const limit = () => null;
@@ -55,6 +60,7 @@ export async function getDocs(ref) {
   return { docs: (DATA[ref] || []).map(entry => ({ id: entry.id, data: () => structuredClone(entry.data) })) };
 }`;
 const rolesStub = `
+export const SUPER_ADMIN = 'tintinaccs@gmail.com';
 export function can() { return true; }
 export async function getUserRole() { return 'superadmin'; }
 `;
@@ -94,7 +100,7 @@ function fixtureHtml() {
       <div class="adm-card" id="coll-products-card" style="display:none"></div>
       <div class="adm-card" id="coll-picker-card" style="display:none"></div>
     </section>
-    <section class="adm-section active" id="section-pedidos"><div class="adm-card" id="orders-legacy">Listado legacy pedidos</div></section>
+    <section class="adm-section active" id="section-pedidos"><div class="adm-card" id="orders-legacy">Listado legacy pedidos<table><tbody id="orders-tbody"><tr><td>Fila anterior de prueba</td></tr></tbody></table></div></section>
     <script>
       window.__calls=[];
       const call=(name,...args)=>window.__calls.push([name,...args]);

@@ -298,6 +298,7 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
   const paymentStatus = normalizedPaymentStatus(input.paymentStatus || input.payment?.status || 'pendiente');
   const paymentMethod = normalizedPaymentMethod(input.paymentMethod || input.payment?.method || 'efectivo');
   const shippingMethod = normalizedShippingMethod(input.shippingMethod || input.shipping?.method || 'delivery');
+  assertOrderTransition({ status, shippingMethod }, status);
   const userName = clean(input.userName, 120);
   if (userName.length < 2) throw new Error('Ingresá el nombre del cliente.');
   const contactEmail = clean(input.contactEmail || input.userEmail, 254).toLowerCase();
@@ -665,6 +666,10 @@ export async function applyOrderAdminMutation(
   // reconcileInventory: el pago ya quedó registrado por otra vía (PayPal) y solo
   // falta descontar el stock con las mismas precondiciones atómicas.
   const patch = buildPatch(input, beforeOrder, { allowEmpty: input.reconcileInventory === true });
+  if (patch.status || patch.shippingMethod) {
+    const modeStatus = patch.status || lifecycleStatus(beforeOrder);
+    assertOrderTransition({ status: modeStatus, shippingMethod: patch.shippingMethod || beforeOrder.shippingMethod || beforeOrder.shipping?.method }, modeStatus);
+  }
   if (patch.status && patch.status !== lifecycleStatus(beforeOrder)) {
     assertOrderTransition({ ...beforeOrder, ...(patch.shipping ? { shipping: patch.shipping, shippingMethod: patch.shippingMethod } : {}) }, patch.status);
     if (patch.status === 'incidencia') patch.previousFulfillmentStatus = lifecycleStatus(beforeOrder);

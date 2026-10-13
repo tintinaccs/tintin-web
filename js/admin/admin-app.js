@@ -1,4 +1,6 @@
 import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1';
+import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
+import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js";
 import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js';
@@ -6,7 +8,7 @@ import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
-  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
+  query, orderBy, limit, startAfter, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261012-checkout-ready-2-notificaciones-correo-js";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
@@ -42,7 +44,7 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261012-orders-board-2-pedidos-superadmin-crud-js';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261013-orders-board-6-pedidos-superadmin-crud-js';
 import './settings/cupones-admin.js?v=tintin-20261012-auth-privacy-1-cupones-admin-js';
 import './products/integridad-inventario-admin.js?v=tintin-20261012-orders-board-2-integridad-inventario-admin-js';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
@@ -1799,26 +1801,37 @@ function startAdminRealtimeData() {
   adminOrdersOwnerUid=currentUser?.uid || '';
   publishAdminOrders();
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
-    // Super Admin necesita contadores del conjunto real; una sola suscripción
-    // sirve a dashboard, tablero y deep links. Otros roles siguen acotados.
-    const ordersQuery = currentRole === 'superadmin'
-      ? query(collection(db, 'orders'), orderBy('createdAt', 'desc'))
-      : query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT));
-    adminOrdersUnsubscribe = onSnapshot(ordersQuery, snapshot => {
-      allOrders = snapshot.docs
-        .map(item => ({ id: item.id, ...item.data() }))
-        .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
-      adminRealtimeReady.orders = true;
-      adminRealtimeErrors.orders = '';
-      refreshRealtimeConsumers();
-    }, error => {
-      adminRealtimeReady.orders = false;
-      adminRealtimeErrors.orders = 'No se pudieron actualizar los pedidos.';
-      console.error('Pedidos en tiempo real no disponibles:', error);
-      statisticsSetText('statistics-live-status', 'Pedidos no disponibles');
-      recoverAdminRealtimeAuth(error, 'orders');
-      refreshRealtimeConsumers();
+    const source = createAdminOrderSource({
+      complete: currentRole === 'superadmin',
+      subscribePage(cursor, next, error) {
+        const ordersQuery = cursor
+          ? query(collection(db, 'orders'), orderBy('createdAt', 'desc'), startAfter(cursor), limit(ADMIN_REALTIME_LIMIT))
+          : query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT));
+        return onSnapshot(ordersQuery, { includeMetadataChanges: true }, snapshot => {
+          const last = snapshot.docs.at(-1);
+          const created = last?.data()?.createdAt;
+          next({ orders: snapshot.docs.map(item => ({ id: item.id, ...item.data() })),
+            cursor: last, cursorKey: last ? last.id + ':' + activityTimestampMillis(created) : '',
+            hasMore: snapshot.docs.length === ADMIN_REALTIME_LIMIT, authoritative: snapshot.metadata?.fromCache !== true });
+        }, error);
+      },
+      onLoading() { adminRealtimeReady.orders = false; refreshRealtimeConsumers(); },
+      onData(orders) {
+        allOrders = reconcileAdminOrderSnapshot(orders, allOrders).sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
+        adminRealtimeReady.orders = true;
+        adminRealtimeErrors.orders = '';
+        refreshRealtimeConsumers();
+      },
+      onError(error) {
+        adminRealtimeReady.orders = false;
+        adminRealtimeErrors.orders = 'No se pudieron actualizar los pedidos.';
+        console.error('Pedidos en tiempo real no disponibles:', error);
+        statisticsSetText('statistics-live-status', 'Pedidos no disponibles');
+        recoverAdminRealtimeAuth(error, 'orders');
+        refreshRealtimeConsumers();
+      }
     });
+    adminOrdersUnsubscribe = source.stop;
   } else {
     adminRealtimeReady.orders = true;
   }
@@ -2642,6 +2655,7 @@ function loadOrders() {
 
 function renderOrdersTable(orders) {
   const tbody = document.getElementById('orders-tbody');
+  if (document.getElementById('section-pedidos')?.classList.contains('tt-commerce-mounted')) { tbody?.replaceChildren(); return; }
   const countEl = document.getElementById('orders-count-label');
   if (countEl) countEl.textContent = orders.length ? `${orders.length} pedido${orders.length !== 1 ? 's' : ''}` : '';
 
@@ -7900,8 +7914,19 @@ window.openOrderEdit = function(orderId) {
     oePayMethod.appendChild(retired);
   }
   oePayMethod.value = oePayMethodValue;
-  document.getElementById('oe-pay-status').value = o.payment?.status || o.paymentStatus || 'pendiente';
-  document.getElementById('oe-status').value = o.status || 'pendiente';
+  const oePayStatus = document.getElementById('oe-pay-status');
+  const oePaymentValue = o.paymentStatus || o.payment?.status || 'pendiente';
+  oePayStatus.innerHTML = payStatusOptions(oePaymentValue);
+  if (![...oePayStatus.options].some(option => option.value === oePaymentValue)) { const legacy = document.createElement('option'); legacy.value = oePaymentValue; legacy.textContent = PAY_STATUS_LABELS[oePaymentValue] || 'Estado de pago no reconocido'; oePayStatus.appendChild(legacy); }
+  oePayStatus.value = oePaymentValue;
+  const oeStatus = document.getElementById('oe-status');
+  const refreshOeStatus = selected => {
+    const context = { ...o, shippingMethod: document.getElementById('oe-ship-method').value || o.shippingMethod || o.shipping?.method };
+    oeStatus.innerHTML = o.localEntryId ? orderStatusOptions(selected) : '<option value="" disabled>Elegí un estado compatible</option>' + allowedOrderStatuses(context).filter(status => ORDER_STATUS_LABELS[status] && (status !== 'en_camino' || context.shippingMethod !== 'retiro') && (status !== 'listo_retiro' || context.shippingMethod === 'retiro')).map(status => `<option value="${status}">${orderStatusLabel({ ...context, status })}</option>`).join('');
+    oeStatus.value = selected === 'enviado' ? 'en_camino' : selected || 'pendiente';
+  };
+  refreshOeStatus(o.status);
+  document.getElementById('oe-ship-method').onchange = () => refreshOeStatus(oeStatus.value);
   document.getElementById('oe-notes').value = o.adminNotes || o.notes || '';
 
   renderOeItems();

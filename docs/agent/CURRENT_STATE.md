@@ -1,6 +1,6 @@
 ## 2026-10-12 — Renovación exclusiva de Pedidos Super Admin
 
-Rama codex/pedidos-superadmin-renovado-20261012, base 7196040. PASS_LOCAL: 424 pruebas Node y 45 Chromium; tablero en 24 tamaños 320–2880px, dos sesiones, conflicto de versión, inventario, historial, notificaciones, sonido opt-in, offline y pérdida de sesión. Se renueva el módulo existente y se reutiliza la fuente administrativa y el dominio transaccional. Seguimiento del cliente comparte el ciclo. Sin producción, datos reales, DNS ni migración. Evidencia y límites: PEDIDOS_SUPERADMIN_RENOVACION_20261012.md. CI/preview/mantenimiento/revisión y autorización final pendientes; no heredar aprobaciones anteriores.
+Rama codex/pedidos-superadmin-renovado-20261012, base 7196040. PASS_LOCAL: 435 pruebas Node y 48 Chromium; tablero en 24 tamaños 320–2880px, dos sesiones, conflicto de versión, inventario, historial, notificaciones, sonido opt-in, offline y pérdida de sesión. Se renueva el módulo existente y se reutiliza la fuente administrativa y el dominio transaccional. Seguimiento del cliente comparte el ciclo. Sin producción, datos reales, DNS ni migración. Evidencia y límites: PEDIDOS_SUPERADMIN_RENOVACION_20261012.md. CI/preview/mantenimiento/revisión y autorización final pendientes; no heredar aprobaciones anteriores.
 
 ## 2026-10-12 — Conexión local y unificación visual solicitada por capturas
 

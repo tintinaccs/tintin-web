@@ -71,3 +71,17 @@
   #tt-commerce-drawer[data-kind="order"] { width: 100vw; height: 100dvh; inset: 0; border: 0; }
 }
 @media (prefers-reduced-motion: reduce) { #tt-commerce-orders .tt-order-card, #tt-commerce-drawer[data-kind="order"] { animation: none; transition: none; scroll-behavior: auto; } }
+
+/* Editor existente de Pedidos: conservar su flujo y adaptar los controles. */
+#tinped-crud-overlay { padding-top: max(18px,env(safe-area-inset-top)) !important; padding-bottom: max(18px,env(safe-area-inset-bottom)) !important; color: var(--admin-color-text-primary); }
+#tinped-crud-overlay > div { background: var(--admin-color-background-surface) !important; box-shadow: none !important; }
+#tinped-crud-overlay label, #tinped-crud-overlay input, #tinped-crud-overlay select, #tinped-crud-overlay textarea { min-width: 0; max-width: 100%; }
+#tinped-crud-overlay input, #tinped-crud-overlay select, #tinped-crud-overlay textarea { width: 100%; font: inherit; font-size: 13px; min-height: 44px; color: var(--admin-color-text-primary); background: var(--admin-color-background-surface); border: 1px solid var(--admin-color-border); border-radius: 8px; padding: 9px; }
+#tinped-crud-overlay button { min-height: 44px; font: inherit; font-size: 13px; }
+#tinped-modal-subtitle { color: var(--admin-color-text-secondary) !important; overflow-wrap: anywhere; }
+@media (max-width: 740px), (max-height: 500px) and (max-width: 1000px) {
+  #tinped-crud-form { grid-template-columns: minmax(0,1fr) !important; }
+  #tinped-items [data-item-row] { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  #tinped-items [data-item-row] > label:first-child { grid-column: 1 / -1; }
+  #tinped-crud-form > * { min-width: 0; }
+}

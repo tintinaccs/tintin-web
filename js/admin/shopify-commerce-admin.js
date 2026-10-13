@@ -1293,6 +1293,7 @@ function mountShells() {
     const section = document.getElementById(`section-${sectionKey}`);
     if (!section || document.getElementById(rootId)) return;
     section.classList.add('tt-commerce-mounted');
+    if (sectionKey === 'pedidos') document.getElementById('orders-tbody')?.replaceChildren();
     const shell = document.createElement('div');
     shell.id = rootId;
     shell.className = 'tt-commerce-shell';
