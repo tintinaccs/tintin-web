@@ -10,6 +10,8 @@ Tema compartido: encabezados, contraste de visor/paneles, nombres de productos, 
 
 Contraste: auditor amplio detectó dos textos públicos (corregidos y comprobados en navegador) y dos logotipos blancos del cargador administrativo sobre rosa. La identidad del cargador se conserva; esa superficie administrativa se revisará en la etapa Superadmin.
 
+CI inicial del PR1122 (11ccc88): build, drift, preflight, CSS y arquitectura aprobados; contrato estático se detuvo en dos patrones antiguos de llamada directa a signInWithPopup. Se actualiza el auditor para exigir el guard de cierre junto con el SDK y fallback explícito, sin omitir el contrato. PASS_LOCAL: 21/21 del auditor y 87 regresiones de Auth/popup y 12 pruebas Chromium de Google, incluyendo cierre de una ventana real con SDK pendiente. La ayuda del login se comprobó a 13 px en navegador. Candidato actualizado pendiente de CI.
+
 PENDING: CI del candidato final, aprobación humana exacta del entorno protected-flow-maintenance, merge y verificación publicada. NOT_VERIFIED: errores intermitentes de permisos E01/E02 en esta nueva versión; main ya contiene coordinación de App Check y lectura compartida de perfil, por lo que no se relajan Rules ni se atribuye una causa distinta sin reproducción. Fotos reales por cada diseño dependen de asociaciones cargadas en catálogo. Pantallas posteriores a compra y operación real no se prueban con datos ficticios. No se certifica el Superadmin ni se heredan PASS históricos.
 
 ## 2026-10-13 — Preparación final autorizada antes de migrar

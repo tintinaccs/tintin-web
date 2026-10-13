@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-client-audit-1-client-audit-1-client-audit-1-client-audit-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-client-audit-1-client-audit-1-client-audit-1-client-audit-1-client-audit-1');
     }
   }
 
@@ -959,7 +959,7 @@
       document.head.appendChild(link);
     }
     if (!window.TintinUX?.booted) {
-      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-client-audit-1-client-audit-1-client-audit-1-client-audit-1');
+      importSibling('quality/experiencia-interfaz.js', 'Phase 8 UI/UX', undefined, 'tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-client-audit-1-client-audit-1-client-audit-1-client-audit-1-client-audit-1');
     }
   }
 

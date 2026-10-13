@@ -529,7 +529,7 @@ html body:not(:has(.adm-main)) .tt-about-mission-section .tt-about-img { display
 html body:not(:has(.adm-main)) .tt-about-mission-section .tt-about-grid { grid-template-columns:minmax(0,1fr)!important; max-width:780px; margin-inline:auto; }
 html body:not(:has(.adm-main)) .perfil-card:has(> #btn-guardar-perfil) { padding:0!important; background:transparent!important; border:0!important; }
 html body:not(:has(.adm-main)) :is(.tt-product-name,.cat-product-name) { font-size:14px!important; line-height:1.4; }
-html body:not(:has(.adm-main)) :is(.login-heading-sub,.login-box small,.login-methods-note) { font-size:13px!important; line-height:1.5; }
+html body:not(:has(.adm-main)) :is(.login-heading-sub,.login-box small,.login-methods-note,.login-hint) { font-size:13px!important; line-height:1.5; }
 html body:not(:has(.adm-main)) .tt-footer :is(p,.tt-footer-desc,.tt-footer-hours) { font-weight:400!important; }
 html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body { min-height:160px!important; padding:16px!important; gap:8px; }
 html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body > .tt-btn { margin-top:12px!important; }

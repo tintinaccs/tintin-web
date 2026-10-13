@@ -3,6 +3,7 @@ const fs = require('node:fs'), path = require('node:path');
 const root = path.resolve(__dirname, '../..');
 const html = fs.readFileSync(path.join(root, 'login.html'), 'utf8');
 const handler = html.slice(html.indexOf('let _googleLoginToken'), html.indexOf('// ======== TOGGLE'));
+const popupGuard = fs.readFileSync(path.join(root, 'js/core/auth/espera-popup-google.mjs'), 'utf8').replace('export async function', 'async function');
 const deadline = 'function withDeadline' + fs.readFileSync(path.join(root, 'js/core/auth/estado-perfil-sesion.mjs'), 'utf8').split('export function withDeadline')[1];
 const markers = html.slice(html.indexOf('const GOOGLE_REDIRECT_PENDING_KEY'), html.indexOf('// Este aviso no modifica Auth'));
 const redirectInit = html.slice(html.indexOf('const googleRedirectWasExpected'), html.indexOf('// El loader de marca'));
@@ -13,6 +14,7 @@ if(location.pathname==='/google-chooser-fixture'){
   document.getElementById('fixture-account').onclick=()=>{sessionStorage.setItem('fixture-selected','1');location.assign('/auth-return-fixture');};
 }else{
 ${deadline}
+${popupGuard}
 const auth={currentUser:null},provider={},authPersistenceReady=Promise.resolve();
 window.__fixtureAuth=auth;
 let loginPersistenceReady=true,loginSessionGeneration=0;
@@ -23,7 +25,7 @@ function getRedirectResult(){const selected=sessionStorage.getItem('fixture-sele
 ${redirectInit}
 const layer=document.createElement('div');layer.id='auth-test-overlay';layer.hidden=true;layer.textContent='Abriendo Google';layer.style.cssText='position:fixed;inset:0;background:#F8AACA;z-index:999999';document.body.appendChild(layer);
 window.TintinLoader={show(){layer.hidden=false;},hide(){layer.hidden=true;},beginWait(){},endWait(){},setText(){}};
-function signInWithPopup(){window.__calls.popup++;if(window.__popupMode==='success')return Promise.resolve({user:{uid:'isolated-popup'}});if(window.__popupMode==='pending')return new Promise(resolve=>{window.__resolvePopup=resolve;});return Promise.reject({code:window.__popupMode==='blocked'?'auth/popup-blocked':window.__popupMode});}
+function signInWithPopup(){window.__calls.popup++;if(window.__popupMode==='native-close'){window.open('/__/auth/handler','fixtureGoogle');return new Promise(()=>{});}if(window.__popupMode==='success')return Promise.resolve({user:{uid:'isolated-popup'}});if(window.__popupMode==='pending')return new Promise(resolve=>{window.__resolvePopup=resolve;});return Promise.reject({code:window.__popupMode==='blocked'?'auth/popup-blocked':window.__popupMode});}
 function signInWithRedirect(){window.__calls.redirect++;if(window.__redirectMode==='error')return Promise.reject({code:'auth/network-request-failed'});if(window.__redirectMode==='navigate')location.assign('/google-chooser-fixture');return new Promise(()=>{});}
 function finishGoogleLogin(){window.__calls.finish++;if(window.__profileFails)return Promise.reject({code:'profile/deadline'});window.TintinLoader.hide();const status=document.createElement('p');status.id='fixture-confirmed';status.textContent='Credencial de prueba confirmada';document.body.appendChild(status);return Promise.resolve();}
 function googleIdleLabel(){return 'Continuar con Google';}
@@ -117,6 +119,21 @@ test('elegir cuenta puede tardar sin disparar un redirect paralelo', async ({ pa
   await page.evaluate(() => window.__resolvePopup({ user: { uid: 'late-popup' } }));
   await expect(page.locator('#fixture-confirmed')).toBeVisible();
   expect(await page.evaluate(() => window.__calls.finish)).toBe(1);
+});
+
+test('cerrar una ventana real recupera el login aunque el SDK siga pendiente', async ({ page }) => {
+  await load(page, 390);
+  await page.evaluate(() => { window.__popupMode = 'native-close'; });
+  const opened = page.waitForEvent('popup');
+  await page.locator('#btn-google').click();
+  const popup = await opened;
+  await popup.close();
+  await page.clock.runFor(500);
+  await expect(page.locator('#btn-google')).toBeEnabled();
+  await expect(page.locator('#auth-test-overlay')).toBeHidden();
+  await expect(page.locator('#login-error')).toHaveText('auth/popup-closed-by-user');
+  expect(await page.evaluate(() => window.__calls.redirect)).toBe(0);
+  expect(await page.evaluate(() => window.__calls.finish)).toBe(0);
 });
 
 test('un plazo de perfil agotado conserva Auth y devuelve controles sin culpar al selector Google',async({page})=>{
