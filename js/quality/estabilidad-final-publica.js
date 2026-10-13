@@ -197,13 +197,13 @@ async function enhanceProfile() {
     const countText = document.getElementById('perfil-purchase-count')?.textContent?.trim() || '—';
     const count = /^\d+$/.test(countText) ? String(Number(countText)) : '—';
     const spent = textOf('#perfil-total-spent', '—');
-    const location = document.getElementById('perfil-location-content')?.textContent?.replace(/\s+/g, ' ').trim() || 'Sin ubicación guardada';
+    const location = document.querySelector('#perfil-location-content .tt-saved-address-heading strong')?.textContent?.trim() || 'Sin dirección guardada';
     const countNode = document.querySelector('[data-profile-summary-orders]');
     const spentNode = document.querySelector('[data-profile-summary-spent]');
     const locationNode = document.querySelector('[data-profile-summary-location]');
     if (countNode) countNode.textContent = String(count);
     if (spentNode) spentNode.textContent = spent;
-    if (locationNode) locationNode.textContent = location.slice(0, 90);
+    if (locationNode) locationNode.textContent = location;
   }
   const summaryObserver = new MutationObserver(updateSummary);
   [document.getElementById('perfil-purchase-count'), document.getElementById('perfil-total-spent'), document.getElementById('perfil-location-content'), document.getElementById('perfil-orders-list')]

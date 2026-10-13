@@ -8,7 +8,7 @@ import { loadCollections, normalizeCollectionSlug } from '../collections/estado-
 import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
-import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1-client-audit-1';
 
 import { hasPublicProductFields } from '../../core/store/publicacion-producto.mjs?v=tintin-20261007-public-consistency-1';
 

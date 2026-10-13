@@ -6,7 +6,7 @@ import {
   DEFAULT_WELCOME_STEPS,
   WELCOME_VERSION,
   normalizeWelcomeConfig
-} from './configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1';
+} from './configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1-client-audit-1';
 
 (function(){
   'use strict';

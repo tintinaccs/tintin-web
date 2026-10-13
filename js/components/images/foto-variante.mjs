@@ -22,6 +22,11 @@ export function productVariantImage(product, selection, fallback = '') {
   const color = index < 0 ? '' : String(selection || '').split('/').map(value => value.trim())[index] || '';
   const rows = Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(variants) ? variants : [];
   const images = row => [row?.imageUrl, ...(Array.isArray(row?.imageUrls) ? row.imageUrls : [])].map(safeImage).filter(Boolean);
+  const values = String(selection || '').split('/').map(value => value.trim());
+  const matched = values.some(Boolean) ? rows.filter(row => keys.every((key, i) =>
+    !values[i] || String(row?.[key] || '').trim().toLocaleLowerCase('es') === values[i].toLocaleLowerCase('es')
+  )).flatMap(images) : [];
+  if (matched.length) return matched[0];
   if (color) {
     const matching = rows.filter(row => String(row?.[keys[index]] || '').trim() === color).flatMap(images);
     if (matching.length) return matching[0];
