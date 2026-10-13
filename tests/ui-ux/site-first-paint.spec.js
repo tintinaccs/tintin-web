@@ -11,7 +11,11 @@ const pageStyles = {
 for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) for (const name of pages) {
   test(`${name}: estilos finales sin módulos diferidos en ${width}px`, async ({ page, baseURL }) => {
     await page.setViewportSize({ width, height: 900 });
-    const source = fs.readFileSync(`${name}.html`, 'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+    const source = await page.evaluate(html => {
+      const document = new DOMParser().parseFromString(html, 'text/html');
+      document.querySelectorAll('script').forEach(script => script.remove());
+      return '<!doctype html>' + document.documentElement.outerHTML;
+    }, fs.readFileSync(`${name}.html`, 'utf8'));
     await page.route(`**/${name}.html?initial-render-test=1`, r => r.fulfill({ contentType: 'text/html', body: source }));
     await page.route(url => url.origin !== new URL(baseURL).origin, r => r.abort());
     await page.goto(`/${name}.html?initial-render-test=1`);
