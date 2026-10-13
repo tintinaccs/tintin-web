@@ -246,3 +246,5 @@ Aviso de carrito compartido, bienvenida persistente e historial anterior, enlace
 ## 2026-10-12 - Reconciliacion del borrador de dominio con main 71960405
 
 Superficies: origen publico/Firebase authDomain, consumidores de origen servidor, SEO, referencias transitivas de cache del shell, CSP y manifiesto. Fuente funcional conservada de main; 126 fuentes comparadas y limitadas a origen/versionado. No modifica datos, stock, precios, pagos, autorizacion, Rules ni configuracion externa. Plan protegido calculado despues de los generadores, sin cambiar alcance/sellos. Evidencia y limites locales en CURRENT_STATE.
+
+Maestro tras el cambio de origen: VERSION interna y URL de entrada alineadas con nueva identidad inmutable; codigo funcional y auditores preservados. Se valida el bloque de contratos Maestro antes de regenerar CSP/manifiesto y plan protegido.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "642c06e5e4306815ed409271e33140ad65bbffe34922055fe3e8483db51bb30b",
+  "sourceFingerprint": "53482820a18daac3026be3e7292a76b80811fb161afc20369cf9637a993fed4f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1178,
     "textFiles": 1130,
-    "totalBytes": 18016053,
+    "totalBytes": 18018081,
     "pages": 19,
     "modules": 837
   },
@@ -2223,8 +2223,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 201137,
-      "sha256": "cd32b7fde978214891219b13daad83a010671cd49eccf80695ae78a3acbdb728",
+      "bytes": 201155,
+      "sha256": "a0052d6782b84d8254480992a555ddfa70883b6ecacb0df233df77ca0d77484d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2343,7 +2343,7 @@
           "line": 2280
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6-maestro-version-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2281
         }
@@ -2649,7 +2649,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6-maestro-version-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2281,
           "exists": true
@@ -23181,8 +23181,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 28400,
-      "sha256": "f49d2489e5d3318629273c58f5f0cf7098e107b38d7902591a3450a5098081da",
+      "bytes": 28445,
+      "sha256": "169082a94ff9a209ca06169ff60a7d7f3a5a1684d1517dce3a7e4660f647888a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43892,8 +43892,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 201137,
-      "sha256": "cd32b7fde978214891219b13daad83a010671cd49eccf80695ae78a3acbdb728"
+      "bytes": 201155,
+      "sha256": "a0052d6782b84d8254480992a555ddfa70883b6ecacb0df233df77ca0d77484d"
     },
     {
       "path": "apple-touch-icon.png",
@@ -45140,8 +45140,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 436709,
-      "sha256": "3dcdcd67033197095d4cf8ac1d011d683d57b6f540ed0392e5da9c864c40bf45"
+      "bytes": 438412,
+      "sha256": "df089a5a816e951f0d8289bbb9e8d40f2bd0e5ca3a4041d47a0cfa397c6386d6"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -45470,8 +45470,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 23601,
-      "sha256": "b3de9aac74fc9855b1ac17fad327e07768755bdd2a97a519c738792a09ea8878"
+      "bytes": 23845,
+      "sha256": "4abb13106432e470f5acfa6be01aa25f2d5a22ba2652bfe0b33ad9ea57e4471f"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -46268,8 +46268,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 28400,
-      "sha256": "f49d2489e5d3318629273c58f5f0cf7098e107b38d7902591a3450a5098081da"
+      "bytes": 28445,
+      "sha256": "169082a94ff9a209ca06169ff60a7d7f3a5a1684d1517dce3a7e4660f647888a"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -48818,8 +48818,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 70565,
-      "sha256": "a4e1a416854d1dc7f19d11ef8fd8f1ad5d92c87ec2828e35a235871970072300"
+      "bytes": 70583,
+      "sha256": "bfab1b89b04127e0ea693b004e7be1e6b65ba38249b1d5ce91d83d475889a882"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
