@@ -2,9 +2,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 import { classifyAuthBrowserDiagnostic } from './lib/auth-browser-diagnostics.mjs';
+import { readProductionOrigins } from './lib/origen-produccion.mjs';
+import { inspectFirebaseAuthHelpers } from './lib/auth-helper-health.mjs';
 
+const { origin } = readProductionOrigins();
 const publicSite = JSON.parse(fs.readFileSync(path.resolve('config/public-site.json'), 'utf8'));
-const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
+const expectedAuthDomain = new URL(origin).hostname === publicSite.technicalFirebaseAuthDomain
+  ? publicSite.technicalFirebaseAuthDomain : publicSite.firebaseAuthDomain;
 const pages = ['/login', '/perfil'];
 const timeoutMs = Number(process.env.TINTIN_AUTH_BROWSER_TIMEOUT_MS || 30000);
 const results = [];
@@ -16,6 +20,11 @@ try {
     const context = await browser.newContext();
     const page = await context.newPage();
     const problems = [];
+    let firebaseModuleUrl = '';
+    page.on('request', request => {
+      const url = new URL(request.url());
+      if (url.pathname === '/js/core/firebase/firebase.js' && url.origin === origin) firebaseModuleUrl = url.href;
+    });
     page.on('console', message => {
       const text = message.text();
       if (/content security policy|app.?check|recaptcha/i.test(text)) problems.push({ source: 'console', level: message.type(), text });
@@ -28,11 +37,13 @@ try {
     try {
       const response = await page.goto(origin + relative, { waitUntil: 'domcontentloaded', timeout: timeoutMs });
       await page.waitForTimeout(8000);
-      const snapshot = await page.evaluate(() => ({
+      if (!firebaseModuleUrl) throw new Error(`${relative} no cargó la configuración Firebase de este artefacto.`);
+      const snapshot = await page.evaluate(async moduleUrl => ({
         title: document.title,
         appCheck: window.TintinAppCheckStatus || 'missing',
-        bodyBytes: document.body?.innerText?.length || 0
-      }));
+        bodyBytes: document.body?.innerText?.length || 0,
+        authDomain: (await import(moduleUrl)).getFirebaseAuthDomain()
+      }), firebaseModuleUrl);
       // GitHub-hosted runners share egress IPs. After enough scheduled probes,
       // reCAPTCHA Enterprise can throttle that automation client for a day
       // (`appCheck/throttled`) even though the public page and its App Check
@@ -47,7 +58,8 @@ try {
       if (snapshot.bodyBytes < 20) throw new Error(`${relative} no pintó contenido visible.`);
       const blockingProblems = diagnostics.filter(problem => problem.classification === 'blocking');
       if (blockingProblems.length) throw new Error(`${relative} registró errores de JavaScript/CSP/App Check: ${blockingProblems.map(problem => problem.text).join(' | ')}`);
-      results.push({ relative, ok: true, ms: Date.now() - started, warnings, appCheckWarning: appCheckThrottled ? 'throttled-by-recaptcha-ci' : null, ...snapshot });
+      const authHelpers = await inspectFirebaseAuthHelpers({ authDomain: snapshot.authDomain, expectedAuthDomain, timeoutMs });
+      results.push({ relative, ok: true, ms: Date.now() - started, warnings, authHelpers, appCheckWarning: appCheckThrottled ? 'throttled-by-recaptcha-ci' : null, ...snapshot });
     } catch (error) {
       results.push({ relative, ok: false, ms: Date.now() - started, error: String(error?.message || error), problems });
     } finally {

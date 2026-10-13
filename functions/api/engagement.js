@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
@@ -141,7 +141,7 @@ export async function onRequest(context) {
       }
     }
 
-    const user = await requireFirebaseUser(request);
+    const user = await requireFirebaseUser(request, env);
     if (request.method === 'GET') {
       const url = new URL(request.url);
       const action = url.searchParams.get('action');
@@ -219,6 +219,8 @@ export async function onRequest(context) {
 
     return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, request.url);
+    if (limited) return limited;
     const status = Number(error?.status);
     const resolvedStatus = error?.code === 'version_conflict'
       ? 409

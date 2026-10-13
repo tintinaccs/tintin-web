@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -29,7 +29,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ valid: false, error: 'method_not_allowed' }, 405, origin, requestUrl);
 
   try {
-    const user = await requireFirebaseUser(request);
+    const user = await requireFirebaseUser(request, env);
     const body = await request.json().catch(() => ({}));
     const code = normalizeCouponCode(body?.code);
     if (!code) {
@@ -50,6 +50,8 @@ export async function onRequest(context) {
     }
     return jsonResponse({ valid: true, code, type: 'free_shipping' }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     const message = String(error?.message || 'No se pudo comprobar el cupón.').slice(0, 160);
     return jsonResponse({ valid: false, error: message }, /sesión/i.test(message) ? 401 : 500, origin, requestUrl);
   }

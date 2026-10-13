@@ -12,13 +12,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js";
 import { recordAuthDiagnostic } from "../auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 
-// El dominio de autenticación es el mismo dominio público de la tienda.
-// functions/__/auth/[[path]].js reexpone ahí los helpers oficiales de
-// Firebase Auth. Esto permite que signInWithRedirect vuelva por la misma
-// pestaña y el mismo origen, sin depender de ventanas emergentes ni del
-// almacenamiento entre tintinaccesorios.pages.dev y firebaseapp.com.
-// La URI https://tintinaccs.com/__/auth/handler debe permanecer
-// autorizada en el cliente OAuth web del proyecto tintin-accesorios.
+// El artefacto puede estar preparado para el dominio comercial mientras éste
+// todavía sirve Shopify. El host técnico autorizado conserva su propio proxy
+// /__/auth/*; los demás hosts usan el authDomain canónico declarado por build.
+// No se autoriza automáticamente un preview ni un dominio a partir de la URL.
+const TECHNICAL_FIREBASE_AUTH_DOMAIN = "tintinaccesorios.pages.dev";
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
   authDomain: "tintinaccs.com",
@@ -27,8 +25,17 @@ const firebaseConfig = {
   appId: "1:207918562502:web:c2ebe4f8d96dad3a50abc7",
   measurementId: "G-9RH4FCNCZ9"
 };
+if (String(window.location.hostname || '').toLowerCase() === TECHNICAL_FIREBASE_AUTH_DOMAIN) {
+  firebaseConfig.authDomain = TECHNICAL_FIREBASE_AUTH_DOMAIN;
+}
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+// Sólo expone el hostname público efectivo para verificar los helpers de Auth;
+// usa las opciones reales incluso cuando otro importador ya inicializó la app.
+export function getFirebaseAuthDomain() {
+  return String(app.options.authDomain || '');
+}
 
 // Clave pública de reCAPTCHA Enterprise registrada en Firebase App Check.
 // Al cargarla y activar Enforcement en Firestore, las llamadas que no provengan

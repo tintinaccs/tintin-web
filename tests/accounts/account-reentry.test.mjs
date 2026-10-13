@@ -8,7 +8,7 @@ test('un nuevo registro reclama solo el historial comercial por ID token y hash 
   const profile = read('js/core/store/perfil-usuario.js');
   const endpoint = read('functions/api/claim-commerce-history.js');
   assert.match(profile, /claimHistoricalCommerce\(user\)/);
-  assert.match(endpoint, /requireFirebaseUser\(request\)/);
+  assert.match(endpoint, /requireFirebaseUser\(request, env\)/);
   assert.match(endpoint, /deletedEmailHash/);
   assert.match(endpoint, /commerceHistoryClaimedByUid/);
   assert.match(endpoint, /customerId: source\.customerId/);

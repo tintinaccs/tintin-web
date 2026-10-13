@@ -2,8 +2,10 @@ import {
   jsonResponse,
   originIsAllowed,
   preflightResponse,
+  rateLimitErrorResponse,
   SUPERADMIN_EMAIL
 } from '../../cloudflare/seguridad-cloudinary.js';
+import { enforceAuthenticatedRateLimit } from '../../cloudflare/rate-limit-compartido.js';
 import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-push.js';
 import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
 import { normalizePaymentCatalog } from '../../js/orders/nucleo-metodos-pago.js';
@@ -519,6 +521,7 @@ export async function onRequest(context) {
     const idToken = getBearerToken(request);
     const appCheckToken = request.headers.get('X-Firebase-AppCheck') || '';
     const user = await verifyFirebaseUser(idToken);
+    await enforceAuthenticatedRateLimit(request, env, user);
     const rawBody = await request.text();
     if (rawBody.length > 12000) throw new Error('Solicitud demasiado grande.');
     const body = JSON.parse(rawBody || '{}');
@@ -590,6 +593,8 @@ export async function onRequest(context) {
       : result;
     return jsonResponse(responseBody, result.success ? 200 : 502, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     return jsonResponse({
       success: false,
       adminSent: false,

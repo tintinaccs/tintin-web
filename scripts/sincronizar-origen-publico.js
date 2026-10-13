@@ -11,12 +11,16 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || config.origin || '').replace(/\/$/, '');
 const hostname = new URL(origin).hostname;
 const authDomain = String(process.env.TINTIN_FIREBASE_AUTH_DOMAIN || config.firebaseAuthDomain || hostname).trim();
+const technicalAuthDomain = String(config.technicalFirebaseAuthDomain || '').trim();
 
 if (!/^https:\/\/[a-z0-9.-]+(?::\d+)?$/i.test(origin)) {
   throw new Error('config/public-site.json debe declarar un origin HTTPS sin path.');
 }
 if (!/^[a-z0-9.-]+(?::\d+)?$/i.test(authDomain)) {
   throw new Error('firebaseAuthDomain inválido en config/public-site.json.');
+}
+if (technicalAuthDomain !== 'tintinaccesorios.pages.dev' || !config.appCheckDomains?.includes(technicalAuthDomain)) {
+  throw new Error('technicalFirebaseAuthDomain debe conservar el host técnico autorizado de Tintin.');
 }
 
 const knownOrigins = [
@@ -71,6 +75,7 @@ function syncText(file, text) {
   const relative = path.relative(root, file).replace(/\\/g, '/');
   if (relative === 'js/core/firebase/firebase.js') {
     output = output.replace(/authDomain\s*:\s*(['"])[^'"]+\1/, `authDomain: "${authDomain}"`);
+    output = output.replace(/const TECHNICAL_FIREBASE_AUTH_DOMAIN\s*=\s*(['"])[^'"]+\1;/, `const TECHNICAL_FIREBASE_AUTH_DOMAIN = "${technicalAuthDomain}";`);
   }
   return output;
 }

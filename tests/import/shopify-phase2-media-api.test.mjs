@@ -6,7 +6,7 @@ import { mediaCopyBatchLimit, mediaCopyPreflight, readBoundedMediaBody, readBoun
 const source = fs.readFileSync(new URL('../../functions/api/admin-import-media.js', import.meta.url), 'utf8');
 
 test('media Phase 2 es server-side, Super Admin-only y sin copy por defecto', () => {
-  assert.match(source, /requireSuperAdmin\(request\)/);
+  assert.match(source, /requireSuperAdmin\(request, env\)/);
   assert.match(source, /fetch\(validated\.url/);
   assert.match(source, /image\/upload/);
   assert.match(source, /SHOPIFY_PHASE2_MEDIA_WRITE/);

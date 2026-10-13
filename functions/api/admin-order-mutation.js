@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   assertOrderStaffPermission,
   jsonResponse,
   originIsAllowed,
@@ -40,7 +40,7 @@ export async function onRequest(context) {
     const body = JSON.parse(raw);
     const actor = body.action === 'updatePayment' || body.action === 'recordEmailResend'
       ? await requireOrderStaff(request, env)
-      : await requireSuperAdmin(request);
+      : await requireSuperAdmin(request, env);
     if (body.action === 'updatePayment') {
       await assertOrderStaffPermission(env, actor, 'pedidos', 'cambiarPago');
       const result = await applyOrderAdminMutation(env, {
@@ -94,6 +94,8 @@ export async function onRequest(context) {
     }
     return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);
     const allowed = /^(Solicitud inválida|Pedido inválido|El pedido ya no existe|No hay cambios administrativos permitidos|Estado de pedido no permitido|Estado de pago no permitido|Método de pago no permitido|Método de entrega no permitido|Correo de contacto inválido|Costo de envío inválido|Subtotal inválido|Ingresá el nombre del cliente|El producto .* (ya no existe|no está activo)|Precio inválido|El pedido contiene|El pedido debe|El pedido tiene demasiados|Stock inválido|Stock insuficiente|No se puede reconciliar el stock|El pedido cambió después de la última sincronización|Conflicto de versión|Tu rol no tiene permiso|No se pudieron verificar los permisos)/i.test(message);

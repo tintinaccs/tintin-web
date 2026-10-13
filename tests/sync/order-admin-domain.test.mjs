@@ -10,6 +10,7 @@ function document(data, updateTime = '2026-08-27T18:00:00.000000Z') {
 
 function harness({ order, products = {} }) {
   const reads = [];
+  const batchReads = [];
   const commits = [];
   const get = async (_env, path) => {
     reads.push(path);
@@ -26,7 +27,15 @@ function harness({ order, products = {} }) {
     commits.push(writes);
     return { commitTime: '2026-08-27T18:01:00Z' };
   };
-  return { reads, commits, deps: { get, commit } };
+  const batchGet = async (_env, paths) => {
+    batchReads.push([...paths]);
+    return paths.flatMap(path => {
+      const id = decodeURIComponent(path.slice('products/'.length));
+      return Object.prototype.hasOwnProperty.call(products, id) ? [{ name: `projects/test/databases/(default)/documents/${path}`,
+        ...document(products[id], `2026-08-27T18:00:${String(Object.keys(products).indexOf(id)).padStart(2, '0')}.000000Z`) }] : [];
+    }).reverse();
+  };
+  return { reads, batchReads, commits, deps: { get, batchGet, commit } };
 }
 
 const actor = { uid: 'google-sheets', email: 'google-sheets@tintin.internal', role: 'sheets-sync', origin: 'google-sheets:Pedidos web' };

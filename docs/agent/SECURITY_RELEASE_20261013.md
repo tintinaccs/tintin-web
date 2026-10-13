@@ -1,0 +1,35 @@
+# Correcciones de seguridad y preparación del corte — 2026-10-13
+
+Responsable: Codex principal; revisiones y correcciones dirigidas por agentes de seguridad, perfil/pedidos y release. Base: main `f5ffc5a556cbb3c21863c34d7f38df3efd3ab0aa`. El titular autorizó corregir, publicar y mergear; el cambio de DNS no forma parte de esta publicación preparatoria.
+
+## Cambios y evidencia local
+
+- Rate limit: cuota compartida en Firestore mediante precondiciones CAS, por IP del borde y UID del token verificado. Colección `apiRateLimits` denegada al navegador por Rules; no se acepta UID enviado por el cliente. Reiniciar el isolate no renueva cuota. Memoria local acotada con reserva conservadora al saturarse y caché exclusivamente de denegaciones. Fallas del almacén bloquean con 503; exceso devuelve 429/Retry-After; timeout total de 5 s aborta OAuth/REST. Sigue siendo control de abuso, no techo financiero.
+- Avatar: backend recibe el archivo real, verifica bytes <= 5 MiB, MIME y cabecera del formato, y sube desde servidor con timeout. El navegador no obtiene firma reutilizable ni secreto de proveedor. PublicId sigue derivado del UID. El proveedor valida/decodifica la imagen completa; no se incorpora un decodificador ni dependencia nueva.
+- Pedidos: creación, cancelación y reconciliación consultan productos por batchGet conservando updateTime y precondiciones atómicas. Un carrito válido de 60 productos ya no necesita 60 subrequests; las ediciones con más de 100 documentos se dividen sin truncar. Se conserva dinero, stock, idempotencia y rechazo de productos faltantes.
+- Auth durante la preparación: sólo `tintinaccesorios.pages.dev` usa su proxy propio de Firebase; el dominio comercial conserva el authDomain preparado. No se autoautoriza un preview/host arbitrario. El monitor comprueba el authDomain realmente inicializado y los helpers Firebase, en lugar de inferir OAuth a partir de una pantalla visible.
+- Sondas: transporte de monitor hacia `operationalOrigin` técnico; canonical/sitemap siguen usando el dominio definitivo. No se modifica tráfico ni se convierte una respuesta de Shopify en PASS de la nueva tienda.
+- Caché, CSP y diagnóstico se regeneran desde sus fuentes; los importadores transitivos reciben URLs nuevas para no mezclar el cliente anterior con el nuevo contrato de avatar/Auth.
+
+Comprobaciones actuales: 227 pruebas dirigidas de cuentas, JWT, perfil, cuota, pedidos/pagos, origen/monitores y contratos aprobadas; 175 controles adversariales de Rules y prueba con Firestore real de 200 solicitudes concurrentes desde isolates diferentes aprobadas (cuota20 preservada, incluida instancia fría). La respuesta 503 puede consumir una reserva si el commit remoto confirmó antes de cancelarse; nunca concede cuota adicional. Ensayo de concurrencia anterior detectó un adaptador de prueba sin signal y cold-start saturado; se propagó la cancelación real y se probó junto con las reglas cargadas. No se aumenta el timeout ni la cuota para hacer pasar el ensayo.
+
+Las nuevas regresiones reprodujeron los fallos de cabeceras, rutas sin límite, archivo declarado falsamente y lectura individual de 60 productos antes de las correcciones. Hay pruebas de navegador de avatar con respuestas interceptadas; no se subieron archivos ni se modificaron perfiles reales. El cierre CI y la verificación del artefacto publicado corresponden al SHA final y no se heredan de este documento.
+
+## Configuración externa corroborada
+
+Lectura actual de Cloudflare autenticado: Workers Free, 100.000 solicitudes/día, 10 ms CPU y 50 subrequests por invocación; proyecto Pages vinculado a main, secretos Firebase/Cloudinary/Resend cifrados, sin dominio personalizado asociado todavía. No se cambia plan ni se contrata un servicio. La CPU del nuevo artefacto se debe observar después del despliegue, no inferir desde Node.
+
+Protección perimetral configurada y verificada en el panel: regla gratuita `Tintin API - abuso de solicitudes`, ID `f4cf06998f3c43fd857c4447cee3d2c9`, activa para host apex y rutas que empiezan `/api/`. Umbral 100 solicitudes/10 s/IP, bloqueo 10 s. Complementa las cuotas estrictas del backend. No modifica DNS; comenzará a proteger ese tráfico cuando el host use el proxy de Cloudflare durante el corte. No cubre pages.dev, que conserva los límites compartidos del backend. Evidencia visual en `artifacts/cloudflare-api-rate-active-20261013.jpg`. No se alteraron reglas anteriores, permisos, credenciales ni planes.
+
+Google Cloud, lectura autenticada TinyFish run `a52a73a3-7938-4d66-898b-31a48033afe6`: Browser key de Firebase restringida a APIs; Generative Language/Gemini no permitido; restricción de aplicación no configurada. No se expuso el valor de la clave. La clave pública identifica el proyecto y no autoriza datos; dominio/referrer no sustituye Rules/App Check. No se añade una restricción referrer ciegamente: los consumidores servidor de Auth usan esta misma clave y podrían romperse. Verificación de cuotas/alertas de Billing aún NOT_VERIFIED; no se afirma gasto ilimitado ni tope universal.
+
+Backup Firestore de hoy, run `38399073729`, SUCCESS sobre main f5ffc5a5. Los scripts de restore exigen proyecto y base explícitos y se prueban sin restaurar producción. Retención/PITR y ensayo actual de restore con datos reales en base aislada aún NOT_VERIFIED; no se hereda la prueba histórica del 08/08.
+
+## Pendientes exactos para la migración de tráfico
+
+1. Integrar y publicar el candidato mediante CI y mantenimiento protegido normales, sin retirar controles ni checks sintéticos. Comprobar el fingerprint entregado por Pages y los controles no destructivos aplicables.
+2. Asociar apex a Pages y activar la redirección www preservando path/query y registros de correo, según runbook. Esto es un cambio posterior de tráfico.
+3. Los workflows OIDC de drenaje y PayPal todavía consultan `config.origin` (apex). Hasta que el apex sirva Pages no alcanzan este backend; después del corte comprobar sus ejecuciones. Los workflows son archivos de control protegidos y no se modifican dentro de este mantenimiento de código.
+4. En el dominio definitivo comprobar OAuth/App Check, TLS y aceptación de compra/correo/stock. Las pruebas aisladas no acreditan un pago Live: PayPal observado deshabilitado en sandbox. No habilitar ni cobrar para convertirlo en PASS.
+
+No se promete ausencia absoluta de vulnerabilidades. Se distingue la evidencia local/CI, el artefacto publicado y la aceptación del dominio definitivo.

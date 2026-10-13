@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   cloudinarySignature,
   getCloudinaryConfig,
   jsonResponse,
@@ -184,7 +184,7 @@ export async function onRequest(context) {
   if (request.method === 'OPTIONS') return preflightResponse(origin, request.url, 'POST, OPTIONS');
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, request.url);
   try {
-    const actor = await requireSuperAdmin(request);
+    const actor = await requireSuperAdmin(request, env);
     const raw = await readBoundedRequestText(request);
     if (!raw) throw new Error('La solicitud está vacía.');
     const body = JSON.parse(raw);
@@ -232,6 +232,8 @@ export async function onRequest(context) {
     }
     return jsonResponse({ ok: copied.every(item => item.state === 'COPIED'), action: 'copy', actorUid: actor.uid, media: copied, migration: 'staging-only' }, 200, origin, request.url);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, request.url);
+    if (limited) return limited;
     return jsonResponse({ ok: false, error: clean(error?.message || 'Media migration failed.') }, Number(error?.status) || 400, origin, request.url);
   }
 }

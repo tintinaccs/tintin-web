@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -30,7 +30,7 @@ export async function handlePhoneAvailability(context, { requireUser = requireFi
   if (request.method !== 'POST') return jsonResponse({ available: false, error: 'method_not_allowed' }, 405, origin, requestUrl);
 
   try {
-    const user = await requireUser(request);
+    const user = await requireUser(request, env);
     const body = await request.json().catch(() => ({}));
     const country = findCountryByCode(clean(body?.country, 4));
     const rawPhone = clean(body?.phone);
@@ -42,6 +42,8 @@ export async function handlePhoneAvailability(context, { requireUser = requireFi
     const owner = reservation ? String(decodeFirestoreFields(reservation.fields)?.uid || '') : '';
     return jsonResponse({ available: !owner || owner === user.uid, valid: true }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     const message = clean(error?.message || 'No se pudo comprobar el teléfono.', 160);
     return jsonResponse({ available: false, error: message }, /sesión/i.test(message) ? 401 : 500, origin, requestUrl);
   }

@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -207,7 +207,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
 
   try {
-    const actor = await requireSuperAdmin(request);
+    const actor = await requireSuperAdmin(request, env);
     const raw = await request.text();
     if (raw && new TextEncoder().encode(raw).byteLength > 8 * 1024) throw new Error('Solicitud inválida.');
     const body = raw ? JSON.parse(raw) : {};
@@ -263,6 +263,8 @@ export async function onRequest(context) {
       summary: { ...summary, applied },
     }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     console.error('[admin-backfill-canonical-identity]', error?.code || '', error?.message || error);
     const status = statusFromError(error, 400);
     return jsonResponse({

@@ -1,6 +1,7 @@
 import fs from 'node:fs';
+import { readProductionOrigins } from './lib/origen-produccion.mjs';
 
-const site = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccs.com').replace(/\/$/, '');
+const { origin: site } = readProductionOrigins();
 const runtime = JSON.parse(fs.readFileSync(new URL('../config/csp-runtime.json', import.meta.url), 'utf8'));
 const targets = [
   ['html', '/', /no-cache,\s*must-revalidate/i],

@@ -9,7 +9,8 @@ Este procedimiento es el único orden aprobado para mover la tienda desde Shopif
 - Fuente de verdad del dominio en código: `config/public-site.json`.
 - Destino declarado en `config.public-site.cutover`: `https://tintinaccs.com`.
 - Redirect OAuth esperado: `https://tintinaccs.com/__/auth/handler`.
-- El monitor horario debe seguir apuntando a `pages.dev` hasta terminar el corte.
+- `config.public-site.operationalOrigin` conserva `https://tintinaccesorios.pages.dev` para las sondas del monitor horario hasta terminar el corte. `origin` declara la metadata canónica del artefacto preparado; cambiarla no cambia el destino de las sondas.
+- Limitación vigente: los workflows OIDC de correo, catálogo y tasa PayPal todavía leen `origin`, por lo que consultan el dominio comercial. Antes de servir Pages en ese dominio esas tareas no alcanzan el backend nuevo. Sus archivos pertenecen al control protegido de CI; corregirlos requiere el procedimiento separado de migración de controles, sin retirar protección ni falsificar verificaciones.
 
 ## A. Preflight obligatorio antes del cambio de tráfico
 
@@ -74,6 +75,7 @@ Regla: **no usar “reset DNS”, no borrar la zona completa y no recrear desde 
 - [ ] No eliminar `tintinaccesorios.pages.dev` durante la transición; sigue siendo el origen técnico y de rollback.
 
 El proxy `/__/auth/*` ya está versionado en `functions/__/auth/[[path]].js` y debe permanecer incluido en `_routes.json`.
+El artefacto preparado usa `technicalFirebaseAuthDomain` únicamente cuando el hostname es exactamente `tintinaccesorios.pages.dev`; allí conserva su proxy Auth operativo aunque el apex todavía sirva Shopify. El dominio definitivo usa `firebaseAuthDomain`. Previews y hosts locales conservan el dominio configurado, sin autorización automática. La sonda de Auth debe comprobar el dominio efectivo del SDK y sus helpers `iframe`/`handler`; que Login pinte y App Check arranque no acredita Google OAuth completo. Las sesiones de Firebase siguen siendo propias de cada origen y no se trasladan automáticamente al dominio nuevo.
 
 ### App Check / reCAPTCHA Enterprise
 
@@ -196,7 +198,7 @@ Después de que `tintinaccs.com` esté estable:
 - La navegación pública de `pages.dev` debe redirigirse al dominio oficial mediante una regla de host en Cloudflare, preservando path y query cuando exista equivalente.
 - No redirigir ni romper endpoints técnicos que se necesiten explícitamente para diagnóstico hasta haber validado la regla.
 - `pages.dev` no debe permanecer como segunda copia indexable de la tienda.
-- El monitor cambia a `tintinaccs.com` **solo cuando la matriz E esté verde**; esto ocurre al cambiar `config.public-site.origin` en el commit de cutover.
+- Las sondas del monitor cambian a `tintinaccs.com` **solo cuando la matriz E esté verde**: actualizar `config.public-site.operationalOrigin` a `https://tintinaccs.com` en un commit verificado. Mientras el destino operacional sea `pages.dev`, las sondas consultan ese host y siguen exigiendo canonical y sitemaps de `config.public-site.origin`. Verificar por separado las tareas OIDC, que todavía usan `origin`.
 
 La redirección por host se configura en Cloudflare después del corte, no antes, porque hoy `pages.dev` es justamente el entorno que se audita para aprobar la migración.
 
@@ -217,6 +219,7 @@ Procedimiento:
 1. **No borrar datos ni “arreglar” pedidos manualmente durante el rollback.** Registrar qué pedidos entraron durante la ventana.
 2. Con los NS ya en Cloudflare, restaurar **en el DNS de Cloudflare** solo los A/AAAA/CNAME web de Shopify de la captura previa (`A @ 23.227.38.65`, `AAAA @ 2620:127:f00f:5::`, `CNAME www shops.myshopify.com`, DNS only). No volver a cambiar los NS ni tocar MX/SPF/DKIM/DMARC.
 3. Revertir el commit de `config/public-site.json` a `https://tintinaccesorios.pages.dev` y desplegar nuevamente el origen técnico si fue necesario.
+   Restaurar también `operationalOrigin` a `https://tintinaccesorios.pages.dev` para que las sondas sigan el backend de rollback.
 4. Verificar Shopify/origen anterior antes de redirigir tráfico de vuelta.
 5. Mantener el nuevo deployment de Cloudflare accesible por su preview/pages.dev para diagnosticar sin afectar clientes.
 6. Revisar pedidos/stock creados durante la ventana y reconciliarlos antes de un segundo intento.

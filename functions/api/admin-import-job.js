@@ -4,7 +4,7 @@ import {
   firestoreAdminGet,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { firestoreAdminBatchCommit } from '../../cloudflare/firestore-admin-batch.js';
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -157,7 +157,7 @@ export async function onRequest(context) {
   if (request.method === 'OPTIONS') return preflightResponse(origin, requestUrl, 'POST, OPTIONS');
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
   try {
-    const actor = await requireSuperAdmin(request);
+    const actor = await requireSuperAdmin(request, env);
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw Object.assign(new Error('Solicitud de importación demasiado grande.'), { status: 413 });
     const body = JSON.parse(raw);
@@ -170,6 +170,8 @@ export async function onRequest(context) {
     }
     throw Object.assign(new Error('Acción de import job inválida.'), { status: 400 });
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     console.error('[admin-import-job]', error?.message || error);
     return jsonResponse({ ok: false, error: clean(error?.message || 'No se pudo gestionar el import job.', 400) }, statusFromError(error, 500), origin, requestUrl);
   }

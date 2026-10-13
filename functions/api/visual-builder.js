@@ -1,4 +1,4 @@
-import { jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin } from '../../cloudflare/seguridad-cloudinary.js';
+import { rateLimitErrorResponse, jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   decodeFirestoreFields,
   encodeFirestoreFields,
@@ -192,7 +192,7 @@ export async function onRequest(context) {
   if (request.method === 'OPTIONS') return preflightResponse(origin, requestUrl, 'GET, POST, OPTIONS');
 
   try {
-    const user = await requireSuperAdmin(request);
+    const user = await requireSuperAdmin(request, env);
     if (request.method === 'GET') {
       const pageId = requireVisualPageId(new URL(request.url).searchParams.get('page'));
       return jsonResponse({ ok: true, ...(await loadPage(env, pageId, { requestId: ref })), requestId: ref }, 200, origin, requestUrl);
@@ -287,6 +287,8 @@ export async function onRequest(context) {
 
     throw new Error('Acción no permitida.');
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     const classified = classifyVisualBuilderError(error);
     console.error(JSON.stringify({
       message: 'visual-builder request failed',

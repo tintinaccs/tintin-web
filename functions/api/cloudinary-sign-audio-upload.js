@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   cloudinarySignature,
   getCloudinaryConfig,
   jsonResponse,
@@ -17,7 +17,7 @@ export async function onRequest(context) {
   if (request.method === 'OPTIONS') return preflightResponse(origin, request.url);
   if (request.method !== 'POST') return jsonResponse({ error: 'Método no permitido' }, 405, origin, request.url);
   try {
-    await requireSuperAdmin(request);
+    await requireSuperAdmin(request, env);
     const body = await request.json().catch(() => ({}));
     const slot = String(body?.slot || 'global').trim().toLowerCase();
     if (!['global', 'order', 'review', 'like'].includes(slot)) throw new Error('Tono inválido.');
@@ -35,6 +35,8 @@ export async function onRequest(context) {
       uploadUrl: `https://api.cloudinary.com/v1_1/${encodeURIComponent(config.cloudName)}/raw/upload`
     }, 200, origin, request.url);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, request.url);
+    if (limited) return limited;
     const message = error?.message || 'No se pudo autorizar el tono';
     return jsonResponse({ error: message }, /Cloudinary todavía no está configurado/i.test(message) ? 503 : 400, origin, request.url);
   }

@@ -2,6 +2,7 @@ import {
   decodeFirestoreFields,
   encodeFirestoreFields,
   firestoreAdminGet,
+  firestoreAdminBatchGet,
   firestoreAdminFindFirstByFields,
   firestoreAdminMaxNumberField,
 } from './firebase-admin-ligero.js';
@@ -262,17 +263,35 @@ async function allocateOrderSequence(env, sequence, deps) {
   return reconcileOrderSequence(env, sequence, deps);
 }
 
-async function resolveCanonicalCreationItems(env, rawItems, get) {
+async function readProductDocuments(env, productIds, batchGet) {
+  const ids = [...new Set(productIds)];
+  const documents = new Map();
+  // El lector REST existente acepta hasta 100 documentos por subrequest. Una
+  // edición puede liberar productos anteriores y reservar otros en el mismo lote.
+  for (let offset = 0; offset < ids.length; offset += 100) {
+    const chunk = ids.slice(offset, offset + 100);
+    const paths = chunk.map(productId => `products/${encodeURIComponent(productId)}`);
+    const fetched = await batchGet(env, paths);
+    const byPath = new Map(fetched.map(document => [String(document?.name || '').split('/documents/')[1], document]));
+    for (const productId of chunk) {
+      const document = byPath.get(`products/${encodeURIComponent(productId)}`);
+      if (document) documents.set(productId, document);
+    }
+  }
+  return documents;
+}
+
+async function resolveCanonicalCreationItems(env, rawItems, batchGet) {
   const lines = sanitizeItems(rawItems, { canonicalPrices: true });
   const byProduct = new Map();
   for (const line of lines) byProduct.set(line.id, (byProduct.get(line.id) || 0) + line.qty);
   if (byProduct.size > MAX_ADMIN_DISTINCT_PRODUCTS) throw new Error('El pedido tiene demasiados productos distintos.');
 
-  const documents = new Map();
+  // Un GET por producto excede las 50 subrequests de Workers Free con carritos
+  // válidos de 60 líneas. batchGet conserva cada updateTime para el commit CAS.
+  const documents = await readProductDocuments(env, byProduct.keys(), batchGet);
   for (const productId of byProduct.keys()) {
-    const document = await get(env, `products/${encodeURIComponent(productId)}`);
-    if (!document) throw creationError(`El producto ${productId} ya no existe.`, 'product_not_found', { productId });
-    documents.set(productId, document);
+    if (!documents.has(productId)) throw creationError(`El producto ${productId} ya no existe.`, 'product_not_found', { productId });
   }
 
   const items = lines.map(line => {
@@ -294,7 +313,7 @@ async function resolveCanonicalCreationItems(env, rawItems, get) {
   return { items, byProduct, documents };
 }
 
-async function createOrderAttempt(env, input, actor, { get, commit, inspect, findFirst, maxNumber }) {
+async function createOrderAttempt(env, input, actor, { get, batchGet, commit, inspect, findFirst, maxNumber }) {
   const context = actorContext(input, actor);
   const status = normalizedStatus(input.status || 'pendiente');
   const paymentStatus = normalizedPaymentStatus(input.paymentStatus || input.payment?.status || 'pendiente');
@@ -323,7 +342,7 @@ async function createOrderAttempt(env, input, actor, { get, commit, inspect, fin
     }
   }
 
-  const { items, byProduct, documents } = await resolveCanonicalCreationItems(env, input.items, get);
+  const { items, byProduct, documents } = await resolveCanonicalCreationItems(env, input.items, batchGet);
 
   const orderId = requestedOrderId || `manual_${crypto.randomUUID().replaceAll('-', '')}`;
   const now = new Date();
@@ -550,6 +569,7 @@ export async function createOrderAdmin(
   actor = {},
   {
     get = firestoreAdminGet,
+    batchGet = firestoreAdminBatchGet,
     commit = firestoreAdminBatchCommit,
     inspect = null,
     findFirst = firestoreAdminFindFirstByFields,
@@ -559,7 +579,7 @@ export async function createOrderAdmin(
   let lastError = null;
   for (let attempt = 1; attempt <= MAX_CREATE_ATTEMPTS; attempt += 1) {
     try {
-      return await createOrderAttempt(env, input, actor, { get, commit, inspect, findFirst, maxNumber });
+      return await createOrderAttempt(env, input, actor, { get, batchGet, commit, inspect, findFirst, maxNumber });
     } catch (error) {
       lastError = error;
       if (Number(error?.status) !== 409 || attempt === MAX_CREATE_ATTEMPTS) throw error;
@@ -634,7 +654,7 @@ export async function applyOrderAdminMutation(
   env,
   input = {},
   actor = {},
-  { get = firestoreAdminGet, commit = firestoreAdminBatchCommit } = {},
+  { get = firestoreAdminGet, batchGet = firestoreAdminBatchGet, commit = firestoreAdminBatchCommit } = {},
 ) {
   const orderId = clean(input.orderId, 220);
   if (!ORDER_ID_PATTERN.test(orderId)) throw new Error('Pedido inválido.');
@@ -672,13 +692,12 @@ export async function applyOrderAdminMutation(
   const afterItems = normalizeVariantInventoryItems(patch.items || beforeOrder.items);
   const beforeItems = normalizeVariantInventoryItems(beforeOrder.items);
   const afterVariantItems = [];
-  const productDocuments = new Map();
   const productIds = new Set([...inventory.deltas.keys(), ...beforeVariantItems.map(item => item.id),
     ...(inventory.afterReserved && (!orderReservesInventory(beforeOrder) || patch.items) ? afterItems.map(item => item.id) : [])]);
+  const productDocuments = await readProductDocuments(env, productIds, batchGet);
   for (const productId of productIds) {
-    const document = await get(env, `products/${encodeURIComponent(productId)}`);
+    const document = productDocuments.get(productId);
     if (!document) throw new Error(`No se puede reconciliar el stock: el producto ${productId} ya no existe.`);
-    productDocuments.set(productId, document);
     const product = decodeFirestoreFields(document.fields || {});
     if (!inventory.afterReserved || variantInventoryEntries(product) === null) continue;
     const legacyReservation = orderReservesInventory(beforeOrder) && beforeItems.some(item => item.id === productId) && !beforeVariantItems.some(item => item.id === productId);
