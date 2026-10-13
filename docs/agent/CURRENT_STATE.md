@@ -1,6 +1,6 @@
 ## 2026-10-13 — Preparación final autorizada antes de migrar
 
-Se reconcilia Pedidos PR1115 con main f5ffc5a, conservando origen activo pages.dev y destino futuro tintinaccs.com en config/public-site.json. Sin merge a main, DNS ni tráfico. Repetidos 435 Node y 48 Chromium PASS_LOCAL; 17 controles de preparación de dominio, recursos críticos, confiabilidad y auditores de Pedidos/comercio aprobados. TinyFish confirma Google habilitado y apex/www autorizados en Firebase Auth, Firestore App Check aplicado; no acredita redirects OAuth ni dominios de la clave. CI del SHA reconciliado y mantenimiento humano pendientes. Evidencia y siguientes pasos: PRECUTOVER_PEDIDOS_20261013.md.
+Se reconcilia Pedidos PR1115 con main f5ffc5a, conservando origen activo pages.dev y destino futuro tintinaccs.com en config/public-site.json. Sin merge a main, DNS ni tráfico. 436 Node y 48 Chromium PASS_LOCAL; generador canónico incluye cloudflare .mjs y la nueva regresión prueba cutover/rollback del enlace WhatsApp. Build Pages completo, 17 controles de preparación de dominio, recursos críticos, confiabilidad y auditores de Pedidos/comercio aprobados. TinyFish confirma Google habilitado y apex/www autorizados en Firebase Auth, Firestore App Check aplicado; no acredita redirects OAuth ni dominios de la clave. Setup Cloudflare recuperado al reabrir el sitio tras espera de llave, pendiente login/guardar. CI del SHA final y mantenimiento humano pendientes. Evidencia y siguientes pasos: PRECUTOVER_PEDIDOS_20261013.md.
 
 ## 2026-10-12 — Renovación exclusiva de Pedidos Super Admin
 

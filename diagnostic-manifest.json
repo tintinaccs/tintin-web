@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e46cdb51cced30ec8bf7823a0ad9d97e3fe7603faaac9507c3f7c782f11ae9e7",
+  "sourceFingerprint": "50326c4f072b0a91444d93e4d8be1f186f975fc9d2946367e2147d8ec5adfc50",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1187,
-    "textFiles": 1139,
-    "totalBytes": 18120064,
+    "files": 1188,
+    "textFiles": 1140,
+    "totalBytes": 18123411,
     "pages": 19,
-    "modules": 843
+    "modules": 844
   },
   "viewports": [
     {
@@ -33663,8 +33663,8 @@
     },
     {
       "path": "scripts/sincronizar-origen-publico.js",
-      "bytes": 4171,
-      "sha256": "ce7847397b5081b58789a24ce130d0d6a6cc871687b2cdb3c913569b8e5c57bd",
+      "bytes": 4178,
+      "sha256": "765673d7453d9e9634419f92549bac168e0452eb345f7dbb9207d66cdca19467",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40363,6 +40363,69 @@
       "endpoints": []
     },
     {
+      "path": "tests/orders/cutover-contact-origin.test.mjs",
+      "bytes": 1933,
+      "sha256": "05735b99159b7cd1af3d3eb7510139dd2e1833a0796e70e20ec5adbebefed21e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 16
+        },
+        {
+          "url": "https://tintinaccs.com/",
+          "line": 16
+        }
+      ]
+    },
+    {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "bytes": 30146,
       "sha256": "31f385ca40c41b3c232991b91bba164aed2fec008f7df1cd1f25efd8632e2a2a",
@@ -44777,8 +44840,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 38386,
-      "sha256": "c63784e139a00fe0b5a23ad3362237851507c3cd9d4ff9d8507fce998a98f861"
+      "bytes": 38623,
+      "sha256": "374378ea7c5efbdf606e26941b409ea1592661949624b620a44ecf93bd9c26a5"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -44790,7 +44853,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "4e9cf5b685ceb5f5c4be2611e0ff3631a45712af5dd87c6def8976d79cc893c5"
+      "sha256": "44f62b83cad9f4a592433b5a7ddff9ef7d9e6995fcc7488bc187910e23ffd238"
     },
     {
       "path": "config/public-site.json",
@@ -45371,8 +45434,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 439794,
-      "sha256": "0d5ef03fa189daabc4cda1b81bd536351b8040c7722c46070ca10b9cf4abc443"
+      "bytes": 440005,
+      "sha256": "ef27aa8967ef7635cdfc67da4164b8927141a8542dac870ca22862e67452f8bb"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -45407,8 +45470,8 @@
     {
       "path": "docs/agent/PRECUTOVER_PEDIDOS_20261013.md",
       "extension": ".md",
-      "bytes": 5044,
-      "sha256": "884635d4baefaede88204578a3dc43b5e02d8f07bdf51dce9ddae6dad480e66a"
+      "bytes": 6003,
+      "sha256": "083f56b67ff250c321fdb8953786def19a5e80325baca9f62cb94e2eeacf43c6"
     },
     {
       "path": "docs/agent/PREPARACION_ACTUAL_20261011.md",
@@ -49325,8 +49388,8 @@
     {
       "path": "scripts/sincronizar-origen-publico.js",
       "extension": ".js",
-      "bytes": 4171,
-      "sha256": "ce7847397b5081b58789a24ce130d0d6a6cc871687b2cdb3c913569b8e5c57bd"
+      "bytes": 4178,
+      "sha256": "765673d7453d9e9634419f92549bac168e0452eb345f7dbb9207d66cdca19467"
     },
     {
       "path": "scripts/smoke-todas-paginas.mjs",
@@ -50449,6 +50512,12 @@
       "extension": ".mjs",
       "bytes": 2149,
       "sha256": "22b9f9408ba42891582dba957cf45fb9d5cab53a22312d1ccda86687f180c3ec"
+    },
+    {
+      "path": "tests/orders/cutover-contact-origin.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1933,
+      "sha256": "05735b99159b7cd1af3d3eb7510139dd2e1833a0796e70e20ec5adbebefed21e"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",

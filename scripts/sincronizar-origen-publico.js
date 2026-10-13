@@ -41,7 +41,7 @@ const runtimeFiles = [
   ...rootFiles,
   ...walk(path.join(root, 'js'), file => file.endsWith('.js')),
   ...walk(path.join(root, 'functions'), file => file.endsWith('.js')),
-  ...walk(path.join(root, 'cloudflare'), file => file.endsWith('.js')),
+  ...walk(path.join(root, 'cloudflare'), file => /\.(?:js|mjs)$/i.test(file)),
   ...walk(path.join(root, 'scripts'), file => /\.(?:js|mjs)$/i.test(file))
 ];
 const explicitFiles = ['_headers', 'robots.txt'].map(file => path.join(root, file)).filter(fs.existsSync);

@@ -12,7 +12,8 @@ config/public-site.json mantiene origin y firebaseAuthDomain en tintinaccesorios
 
 | Comprobación | Evidencia | Estado |
 |---|---|---|
-| Lógica, checkout, inventario, estados y seguimiento | node --test tests/orders/*.test.mjs tests/profile/order-history-display.test.mjs tests/payments/*.test.mjs tests/operations/order-staff-permission.test.mjs tests/sync/*.test.mjs tests/checkout/*.test.mjs: 435/435, backend simulado | PASS_LOCAL |
+| Lógica, checkout, inventario, estados y seguimiento | node --test tests/orders/*.test.mjs tests/profile/order-history-display.test.mjs tests/payments/*.test.mjs tests/operations/order-staff-permission.test.mjs tests/sync/*.test.mjs tests/checkout/*.test.mjs: 436/436, backend simulado | PASS_LOCAL |
+| Cutover y rollback de enlaces del pedido | Generador original ejecutado en copia aislada: WhatsApp pasa de pages.dev a tintinaccs.com y vuelve. Ahora incluye consumidores cloudflare .mjs | PASS_LOCAL |
 | Pedidos y editor, CSS y contenedor reales | 48/48 Chromium, 24 dimensiones 320–2880px, dos sesiones, offline, clics repetidos, teclado y errores; red externa bloqueada | PASS_LOCAL |
 | Preparación del dominio en código | auditar-preparacion-dominio.mjs: 17 controles, proxy Auth, ruta, configuración activa/futura, Enterprise, CSP, SEO y monitor | PASS_LOCAL |
 | Recursos críticos / confiabilidad / comercio / Pedidos | Scripts y tests originales ejecutados sin falla | PASS_LOCAL |
@@ -22,7 +23,9 @@ config/public-site.json mantiene origin y firebaseAuthDomain en tintinaccesorios
 | App Check enforcement | Mismo run: Firestore aplicado, Authentication supervisión. No implica desafío satisfactorio por host | Verificado en lectura |
 | DNS actual | Resolve-DnsName: apex A 23.227.38.65; www CNAME. No se cambió DNS | Verificado en lectura |
 
-Logs locales en C:/Users/USER/AppData/Local/Temp: tintin-precutover-node.log, tintin-precutover-browser.log, tintin-precutover-domain.log, tintin-precutover-resources.log, tintin-precutover-reliability.log y tintin-precutover-cache.log. Auditoría privada adicional Google Cloud c1d95a67-9f12-49e6-84d9-246a374fca14 en curso al escribir este registro.
+Logs locales en C:/Users/USER/AppData/Local/Temp: tintin-precutover-node.log, tintin-precutover-browser.log, tintin-precutover-domain.log, tintin-precutover-resources.log, tintin-precutover-reliability.log y tintin-precutover-cache.log. Google Cloud c1d95a67-9f12-49e6-84d9-246a374fca14 encontró el cliente web, pero devolvió valores example.com que pueden ser placeholders: redirect exacto NOT_VERIFIED. La API Browser Key no acredita reCAPTCHA. Lectura focalizada ceab1026-837b-49d4-adb4-ec49a12b699c encontró la clave Tintin App Chec en reCAPTCHA Enterprise, pero no obtuvo dominios permitidos por un modal: dominios NOT_VERIFIED. No convertir estos resultados en PASS ni confundir identificación de proveedor con autorización de dominio.
+
+Acceso Cloudflare: el titular autorizó abrir setup TinyFish. La captura quedó en Verify with a security key y no respondió al scroll; reabrir desde el control superior Open devolvió Sign in to Cloudflare. Sesión aún no guardada/acreditada. No se canceló el perfil ni se guardó como autenticado. Captura local tinyfish-cloudflare-login-recuperado.png.
 
 ## Gates antes de declarar sólo falta migrar
 
