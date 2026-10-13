@@ -1,15 +1,34 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
+const http = require('node:http');
 
 const source = fs.readFileSync(path.join(__dirname, '../../js/quality/estabilidad-final-publica.js'), 'utf8');
 const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jxioAAAAASUVORK5CYII=', 'base64');
 const photoURL = 'https://res.cloudinary.com/avatar-test/image/upload/v1/tintin_profile_test.png';
-const origin = 'http://127.0.0.1:4173';
+const servers = new Set();
+test.afterEach(async () => {
+  for (const server of servers) {
+    await new Promise(resolve => { server.close(resolve); server.closeAllConnections(); });
+    servers.delete(server);
+  }
+});
 
 async function fixture(page, { width = 390, status = 200 } = {}) {
   await page.setViewportSize({ width, height: 844 });
   const uploads = [];
+  // WebKit/Linux does not expose intercepted File bodies through postDataBuffer.
+  // Verify the exact bytes received over HTTP, retaining the browser's native body.
+  const server = http.createServer(async (request, response) => {
+    const chunks = [];
+    for await (const chunk of request) chunks.push(chunk);
+    uploads.push({ method: request.method, headers: request.headers, bytes: Buffer.concat(chunks) });
+    response.writeHead(status, { 'content-type': 'application/json' });
+    response.end(JSON.stringify(status === 200 ? { ok: true, secure_url: photoURL } : { error: 'La foto debe pesar como máximo 5 MB' }));
+  });
+  await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
+  servers.add(server);
+  const origin = 'http://127.0.0.1:' + server.address().port;
   const unexpected = [];
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -42,8 +61,7 @@ async function fixture(page, { width = 390, status = 200 } = {}) {
       export async function waitForSession() { return { status: 'authenticated', user: { uid: 'client-uid', getIdToken: async () => 'test-token' } }; }`);
     if (url.origin === origin && url.pathname === '/js/pages/profile/estado-pedidos-perfil.js') return javascript('');
     if (url.origin === origin && url.pathname === '/api/profile-avatar-upload') {
-      uploads.push({ method: req.method(), headers: req.headers(), bytes: req.postDataBuffer() });
-      return route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(status === 200 ? { ok: true, secure_url: photoURL } : { error: 'La foto debe pesar como máximo 5 MB' }) });
+      return route.continue();
     }
     if (req.url() === photoURL && req.method() === 'GET') return route.fulfill({ contentType: 'image/png', body: png });
     unexpected.push(`${req.method()} ${req.url()}`);

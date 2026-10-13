@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fcf2725628d806a86b99f6079a569dcb593fd1b45562a6c773caac548a9cec8d",
+  "sourceFingerprint": "447a646c64970fe0625a256c75fbaaa4cdc672a841bd3c04a476b135a6d0bc15",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1205,
     "textFiles": 1157,
-    "totalBytes": 18313436,
+    "totalBytes": 18314864,
     "pages": 19,
     "modules": 859
   },
@@ -44058,8 +44058,8 @@
     },
     {
       "path": "tests/runtime/avatar-upload.spec.js",
-      "bytes": 6777,
-      "sha256": "41e43dd1d8d672e145933c949542ab31cb6168479729d461222969c8a65a1077",
+      "bytes": 7558,
+      "sha256": "9641f2ec3ce274bc926b9d162b81209f72f0293b4b3a7ee56f34a5ded461b039",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44068,11 +44068,11 @@
       "endpoints": [
         {
           "url": "https://res.cloudinary.com/avatar-test/image/upload/v1/tintin_profile_test.png",
-          "line": 7
+          "line": 8
         },
         {
-          "url": "http://127.0.0.1:4173/",
-          "line": 8
+          "url": "http://127.0.0.1/",
+          "line": 31
         }
       ]
     },
@@ -48360,8 +48360,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 453121,
-      "sha256": "5e2423094337a57310ce22089da492b000a11d665dfdf1b419b144f7eb44a0ac"
+      "bytes": 453768,
+      "sha256": "b5cc2e659aac8f4a236ad9022be3d6b2c55f5afe17110e1d4cea664c9ca582bd"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -53688,8 +53688,8 @@
     {
       "path": "tests/runtime/avatar-upload.spec.js",
       "extension": ".js",
-      "bytes": 6777,
-      "sha256": "41e43dd1d8d672e145933c949542ab31cb6168479729d461222969c8a65a1077"
+      "bytes": 7558,
+      "sha256": "9641f2ec3ce274bc926b9d162b81209f72f0293b4b3a7ee56f34a5ded461b039"
     },
     {
       "path": "tests/runtime/boutique-surfaces.spec.js",
