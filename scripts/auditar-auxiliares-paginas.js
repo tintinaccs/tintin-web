@@ -97,7 +97,7 @@ check(
 );
 check(
   '[nosotros.html] canonicaliza a /about',
-  legacy.includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about">'),
+  legacy.includes('<link rel="canonical" href="https://tintinaccs.com/about">'),
   'El canonical debe apuntar a la URL limpia real.'
 );
 check(
@@ -112,7 +112,7 @@ check(
 );
 check(
   '[nosotros.html] destino About existe y canonicaliza a sí mismo',
-  exists('about.html') && read('about.html').includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about">'),
+  exists('about.html') && read('about.html').includes('<link rel="canonical" href="https://tintinaccs.com/about">'),
   'El destino debe existir y usar canonical limpio.'
 );
 

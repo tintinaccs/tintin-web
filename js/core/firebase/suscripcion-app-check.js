@@ -1,4 +1,4 @@
-import { appCheckReady } from './firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
+import { appCheckReady } from './firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
 import { onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // App Check puede resolver después del límite de espera de la interfaz.

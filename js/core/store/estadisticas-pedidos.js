@@ -6,7 +6,7 @@
    Nunca resta manualmente: vuelve a contar desde los pedidos existentes.
    ============================================================= */
 
-import { db } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
+import { db } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
 import {
   collection, doc, getDoc, getDocs, query, where, setDoc, writeBatch, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';

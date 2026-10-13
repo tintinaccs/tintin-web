@@ -1,6 +1,6 @@
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261012-checkout-ready-4-estado-productos-js';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261012-checkout-ready-4-estado-productos-js-domain-prepared-20261012-6';
 
 const MAX_RESULTS = 10;
 const INPUT_DELAY_MS = 120;

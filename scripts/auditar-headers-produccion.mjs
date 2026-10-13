@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-const site = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
+const site = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccs.com').replace(/\/$/, '');
 const runtime = JSON.parse(fs.readFileSync(new URL('../config/csp-runtime.json', import.meta.url), 'utf8'));
 const targets = [
   ['html', '/', /no-cache,\s*must-revalidate/i],
