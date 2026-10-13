@@ -2048,10 +2048,10 @@ function initBackToTop() {
 function initWaFloatVisibility() {
   const wa = document.getElementById('wa-float');
   if (!wa) return;
-  const EXCLUDE = '.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header';
+  const EXCLUDE = '.tt-wa-float,.tt-tabbar,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header';
   // El contenido que pasa debajo al hacer scroll no alterna el flotante.
   // Solo un aviso superpuesto puede ocupar temporalmente su zona fija.
-  const collisionSelector = '.tt-cart-feedback.is-visible';
+  const collisionSelector = '.tt-cart-feedback.is-visible,.tt-privacy-consent:not([hidden])';
   const overlapsRect = (a, b, t = 2) => a.left < b.right - t && a.right > b.left + t && a.top < b.bottom - t && a.bottom > b.top + t;
   let ticking = false;
   // El botón es position:fixed, así que cualquier control del contenido

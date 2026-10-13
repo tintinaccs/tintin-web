@@ -49,7 +49,6 @@ const adminMarkup = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
 const adminSidebarScript = adminMarkup.match(/<script\b[^>]*src="js\/admin\/sidebar-expandible-admin\.js\?v=[^"]+"[^>]*><\/script>/)?.[0];
 if (!adminSidebarScript) throw new Error('La maqueta de Administración no declara su navegación lateral real.');
 const adminGeometryFixture = removeFixtureScripts(adminMarkup, { removeModulePreloads: true })
-  .replace('<html lang="es">', '<html lang="es" class="adm-auth-ready">')
   .replace('</body>', `${adminSidebarScript}</body>`);
 
 const ciProducts = [
@@ -114,9 +113,12 @@ async function prepare(page, width, pageInfo) {
   if (expectsPublicShell(pageInfo)) {
     await page.waitForFunction(() => document.getElementById('tt-tabbar') || document.getElementById('tt-header-desktop-tablet'), null, { timeout:3500 }).catch(() => {});
   }
-  await page.evaluate(() => {
+  await page.evaluate(isolatedAdmin => {
     try { window.TintinLoader?.hide?.(); } catch {}
     const root = document.documentElement; const body = document.body;
+    // Only this script-free geometry fixture may reveal the admin layout.
+    // Preserve existing visual classes without depending on serialized markup.
+    if (isolatedAdmin) root.classList.add('adm-auth-ready');
     ['tt-initializing','tt-store-gate-pending','tt-store-gate-blocked','tt-scroll-locked','tt-color-scheme-pending'].forEach(name => root.classList.remove(name));
     ['overflow','overscroll-behavior','touch-action'].forEach(name => root.style.removeProperty(name));
     if (body) {
@@ -127,7 +129,7 @@ async function prepare(page, width, pageInfo) {
     const closed = document.getElementById('tt-store-closed-overlay');
     if (closed) { closed.hidden = true; closed.setAttribute('aria-hidden','true'); closed.style.display = 'none'; }
     window.scrollTo(0,0);
-  });
+  }, pageInfo.geometryMode === 'isolated-admin-layout');
   if (expectsPublicShell(pageInfo)) {
     const expected = width < 768 ? '#tt-tabbar' : width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
     await page.waitForFunction(selector => {
