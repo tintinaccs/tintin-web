@@ -45,7 +45,7 @@ test('admin móvil mantiene cinco accesos principales con etiquetas cortas y Má
 test('WhatsApp fijo no alterna su visibilidad por el contenido al hacer scroll', async () => {
   const source = await read('tienda.js');
   assert.doesNotMatch(source, /PRODUCT_COLLISION_TARGETS|CONTROL_TARGETS/);
-  assert.match(source, /collisionSelector = '\.tt-cart-feedback\.is-visible'/);
+  assert.match(source, /collisionSelector = '\.tt-cart-feedback\.is-visible,\.tt-privacy-consent:not\(\[hidden\]\)'/);
   // La geometría se descarta antes de getComputedStyle para que la lista ampliada siga siendo barata.
   assert.match(source, /if \(!overlapsRect\(r, nr\)\) return false;\s*const style = getComputedStyle\(node\);/);
   assert.match(source, /querySelectorAll\(collisionSelector\)/);

@@ -14,5 +14,5 @@
 
 window.TintinAdminUsersPhase8Booted = true;
 
-await import('./ficha-usuario-admin.js?v=tintin-20261012-auth-privacy-1-ficha-usuario-admin-js-domain-prepared-20261012-6-precutover-20261013-2');
+await import('./ficha-usuario-admin.js?v=tintin-20261012-auth-privacy-1-ficha-usuario-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2');
 await import('./perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1-brand-runtime-20261004-1-owner-pink-20261004-1');

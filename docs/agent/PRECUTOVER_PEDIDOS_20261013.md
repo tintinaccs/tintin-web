@@ -48,3 +48,8 @@ Usar docs/cutover-tintinaccs-com.md: export DNS completo, cambiar fuente canóni
 Rollback: mantener disponible pages.dev y Shopify; restaurar sólo origen/código web y registros web desde el export verificado. No borrar pedidos, stock, Firestore ni registros de correo. El certificado y el login reales del dominio nuevo deben verificarse tras el corte; no pueden certificarse desde fixtures locales.
 
 Limitaciones: hardware físico/Safari/Firefox e inbox real no probados. Crear una venta real no está autorizado. Si faltan accesos, el estado sigue pendiente y no se afirma «sólo falta migrar».
+# Compatibilidad con estilos publicados — 13/10/2026
+
+La aprobación solicitada en run 38423260315 quedó invalidada cuando main avanzó a 226088a (PR #1119). Se integra main mediante merge normal, conservando sus estilos iniciales, navegación, accesibilidad y separación del botón WhatsApp. Se conserva el tablero único de Pedidos y el origen activo pages.dev. Controles y workflows de mantenimiento intactos.
+
+Retest local tras combinar: 436/436 Node, 48/48 Chromium, Maestro 27/27. La publicación está autorizada por el titular; falta CI del nuevo SHA y una nueva aprobación personal de mantenimiento contra esta base. No se hereda la revisión anterior, no se cambió DNS y no se realizaron operaciones comerciales reales.

@@ -17,11 +17,11 @@
 // que ni siquiera Admin tiene hoy (no estaban en el "sugerido" para Admin del
 // pedido original). Se dejan protegidas y se explica en el reporte final.
 
-import { db } from "../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-precutover-20261013-1";
+import { db } from "../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { PERMISSIONS } from "./roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-precutover-20261013-2";
+import { PERMISSIONS } from "./roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
 import { EDITABLE_PERMISSION_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 
 export const ROLE_PERM_DOC = { col: 'rolePermissions', id: 'main' };
@@ -146,7 +146,7 @@ export async function loadRolePermissions(forceReload = false) {
   if (_cache && !forceReload) return _cache;
   const defaults = buildDefaultRolePermissions();
   try {
-    const { readAdminFirestore } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-precutover-20261013-2');
+    const { readAdminFirestore } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2');
     const snap = await readAdminFirestore(() => getDoc(doc(db, ROLE_PERM_DOC.col, ROLE_PERM_DOC.id)));
     const saved = snap.exists() ? snap.data() : {};
     const merged = {};
