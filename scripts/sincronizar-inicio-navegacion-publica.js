@@ -58,6 +58,165 @@ function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   )).join('\n');
   return out.replace('</head>', `  <!-- Estructura pública disponible desde el primer render -->\n${links}\n</head>`);
 }
+// Hojas que los runtimes agregaban después de mostrar el contenido.
+// Conservamos sus versiones y selectores para que reutilicen el link inicial.
+const INITIAL_SHARED_STYLES = [["id=\"tt-phase10-accessibility-css\"", "css/quality/accesibilidad-global.css", "tintin-20260731-phase10-a11y-1-brand-20261004-1-owner-pink-20261004-1"]];
+const INITIAL_PUBLIC_STYLES = [
+  [
+    "id=\"tt-global-studio-runtime-css\"",
+    "css/components/visual-studio-global-runtime.css",
+    "tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1"
+  ],
+  [
+    "id=\"tt-visual-builder-runtime-css\"",
+    "css/components/editor-visual-runtime.css",
+    "tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1"
+  ],
+  [
+    "id=\"tt-navigation-notifications-css\" data-tt-social-notifications=\"1\"",
+    "css/components/notifications/notificaciones-sociales.css",
+    "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1"
+  ],
+  [
+    "id=\"tt-navigation-desktop-css\" media=\"(min-width: 1025px)\"",
+    "css/components/navigation/escritorio/encabezado-escritorio.css",
+    "tintin-20261010-whatsapp-release-5"
+  ],
+  [
+    "id=\"tt-navigation-tablet-css\" media=\"(min-width: 768px) and (max-width: 1024px)\"",
+    "css/components/navigation/tableta/encabezado-tableta.css",
+    "tintin-20261010-whatsapp-release-5"
+  ],
+  [
+    "id=\"tt-navigation-mobile-css\" media=\"(max-width: 767px)\"",
+    "css/components/navigation/movil/encabezado-movil.css",
+    "tintin-20261010-mobile-single-selection-2"
+  ],
+  [
+    "id=\"tt-navigation-mobile-solid-css\" media=\"(max-width: 767px)\"",
+    "css/components/navigation/movil/fondos-solidos-movil.css",
+    "tintin-20260817-cls-desktop-stable-3-checkout-20261008-2"
+  ],
+  [
+    "id=\"tt-navigation-shared-css\"",
+    "css/components/navigation/compartido/transiciones-navegacion.css",
+    "tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1"
+  ],
+  [
+    "id=\"tt-surface-controller-css\"",
+    "css/components/navigation/compartido/paneles.css",
+    "tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1"
+  ],
+  [
+    "id=\"tt-navigation-notification-surface-css\"",
+    "css/components/navigation/compartido/superficie-notificaciones.css",
+    "tintin-20260918-header-system-solid-surfaces-1"
+  ],
+  [
+    "id=\"tt-navigation-search-css\"",
+    "css/components/navigation/compartido/busqueda.css",
+    "tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1"
+  ],
+  [
+    "id=\"tt-navigation-coherence-css\"",
+    "css/components/navigation/compartido/coherencia-visual.css",
+    "tintin-20261011-boutique-4"
+  ]
+];
+const INITIAL_PAGE_STYLES = {
+  "index.html": [
+    [
+      "id=\"tt-home-maintenance-css\"",
+      "css/pages/home/mantenimiento-inicio.css",
+      "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2"
+    ]
+  ],
+  "catalogo.html": [
+    [
+      "data-tt-catalog-maintenance=\"1\"",
+      "css/pages/catalog/catalog-maintenance.css",
+      "tintin-20260817-margin-consistency-2-brand-20261004-1-owner-pink-20261004-1"
+    ]
+  ],
+  "about.html": [
+    [
+      "data-tt-about-maintenance=\"1\"",
+      "css/pages/institutional/about-maintenance.css",
+      "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1"
+    ]
+  ],
+  "checkout.html": [
+    [
+      "data-tt-checkout-maintenance=\"1\"",
+      "css/pages/checkout/checkout-maintenance.css",
+      "tintin-20261008-checkout-step-labels-1"
+    ],
+    [
+      "id=\"tt-payment-methods-style\"",
+      "css/components/payments/payment-methods.css",
+      "tintin-20261012-checkout-ready-3-payment-methods-css"
+    ]
+  ],
+  "login.html": [
+    [
+      "data-tt-login-maintenance=\"1\"",
+      "css/pages/login/login-maintenance.css",
+      "tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1"
+    ],
+    [
+      "data-tt-login-fluid=\"1\"",
+      "css/pages/login/login-fluid-responsive.css",
+      "tintin-20260803-login-fluid-1-brand-20261004-1-owner-pink-20261004-1"
+    ],
+    [
+      "data-tt-login-onboarding-flow=\"1\"",
+      "css/pages/login/login-onboarding-flow.css",
+      "tintin-20261001-registration-white-cards-2-brand-20261004-1-owner-pink-20261004-1"
+    ]
+  ],
+  "admin.html": [
+    [
+      "data-adm-social-notifications=\"1\"",
+      "css/admin/notificaciones-admin.css",
+      "tintin-20260925-cache-converge-notifications-auto-read-1-brand-20261004-1-owner-pink-20261004-1"
+    ]
+  ]
+};
+
+function addInitialClass(html, tag, name) {
+  return html.replace(new RegExp(`<${tag}\\b[^>]*>`, 'i'), opener => {
+    const match = opener.match(/\bclass=["']([^"']*)["']/i);
+    if (match) {
+      if (match[1].split(/\s+/).includes(name)) return opener;
+      return opener.replace(match[0], `class="${match[1]} ${name}"`);
+    }
+    return opener.replace(/>$/, ` class="${name}">`);
+  });
+}
+
+function ensureInitialRuntimeStyles(html, page) {
+  // Los stubs sólo redirigen; no tienen una interfaz que preparar.
+  if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(html)) return html;
+  const isPublic = PUBLIC_PAGES.includes(page) || page === '404.html';
+  if (!isPublic && !['admin.html', 'admin-images.html'].includes(page)) return html;
+  let out = html;
+  const styles = [...INITIAL_SHARED_STYLES, ...(isPublic ? INITIAL_PUBLIC_STYLES : []), ...(INITIAL_PAGE_STYLES[page] || [])];
+  const links = [];
+  for (const [attribute, file, version] of styles) {
+    const pattern = new RegExp(`\\s*<link\\b[^>]*href=["']/?${escapeRegex(file)}(?:\\?[^"']*)?["'][^>]*>`, 'gi');
+    out = out.replace(pattern, '');
+    links.push(`  <link ${attribute} rel="stylesheet" href="/${file}?v=${version}">`);
+  }
+  out = out.replace('</head>', `${links.join('\n')}\n</head>`);
+  out = addInitialClass(out, 'html', 'tt-parity-safe');
+  if (page === 'catalogo.html') out = addInitialClass(out, 'body', 'tt-catalog-maintenance');
+  if (page === 'about.html') {
+    out = addInitialClass(out, 'html', 'tt-about-maintained');
+    out = addInitialClass(out, 'body', 'tt-about-maintained');
+  }
+  return out;
+}
+
 const PUBLIC_PAGES = [
   // 404.html se excluye a propósito: Cloudflare Pages la sirve verbatim en
   // cualquier profundidad de ruta no encontrada, así que sus assets usan
@@ -397,6 +556,7 @@ for (const page of PUBLIC_PAGES) {
   html = versionSecondaryLayout(html);
   html = versionQualityInterface(html);
   html = ensurePublicStructuralStyles(html, false, page);
+  html = ensureInitialRuntimeStyles(html, page);
   html = normalizeWhitespace(html);
 
   if (html !== before) {
@@ -411,6 +571,7 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
   const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
   let html = versionUnifiedTheme(versionVisualBuilder(versionProfileGate(versionSessionProtection(before))));
   if (page === '404.html') html = ensurePublicStructuralStyles(html, true);
+  html = ensureInitialRuntimeStyles(html, page);
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');
     changed += 1;

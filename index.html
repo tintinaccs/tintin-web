@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="tt-parity-safe">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,9 +49,6 @@
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261012-checkout-ready-4-entrada-navegacion-publica-js">
-  <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
-  <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
-  <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
   <!-- Cada variante del header solo se descarga en el viewport que la utiliza. -->
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <!-- Google Search Console (Fase 2): creá la propiedad en
@@ -61,7 +58,6 @@
        sitemap.xml — ya está publicado en la raíz del sitio. -->
   <!-- <meta name="google-site-verification" content="PEGAR_CODIGO_AQUI"> -->
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css">
-  <link rel="stylesheet" media="(max-width: 767px)" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20261010-social-mobile-styles-3">
@@ -94,6 +90,20 @@
   <link id="tt-responsive-brand-safety-css" rel="stylesheet" href="css/theme/seguridad-marca-responsive-tintin.css?v=tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1">
   <link id="tt-global-layout-css" rel="stylesheet" href="css/components/navigation/compartido/apariencia-global.css?v=tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1">
   <link id="tt-phase8-ui-ux-css" rel="stylesheet" href="css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
+  <link id="tt-phase10-accessibility-css" rel="stylesheet" href="/css/quality/accesibilidad-global.css?v=tintin-20260731-phase10-a11y-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-global-studio-runtime-css" rel="stylesheet" href="/css/components/visual-studio-global-runtime.css?v=tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-visual-builder-runtime-css" rel="stylesheet" href="/css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-navigation-notifications-css" data-tt-social-notifications="1" rel="stylesheet" href="/css/components/notifications/notificaciones-sociales.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-navigation-desktop-css" media="(min-width: 1025px)" rel="stylesheet" href="/css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
+  <link id="tt-navigation-tablet-css" media="(min-width: 768px) and (max-width: 1024px)" rel="stylesheet" href="/css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
+  <link id="tt-navigation-mobile-css" media="(max-width: 767px)" rel="stylesheet" href="/css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
+  <link id="tt-navigation-mobile-solid-css" media="(max-width: 767px)" rel="stylesheet" href="/css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2">
+  <link id="tt-navigation-shared-css" rel="stylesheet" href="/css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-surface-controller-css" rel="stylesheet" href="/css/components/navigation/compartido/paneles.css?v=tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-navigation-notification-surface-css" rel="stylesheet" href="/css/components/navigation/compartido/superficie-notificaciones.css?v=tintin-20260918-header-system-solid-surfaces-1">
+  <link id="tt-navigation-search-css" rel="stylesheet" href="/css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-navigation-coherence-css" rel="stylesheet" href="/css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4">
+  <link id="tt-home-maintenance-css" rel="stylesheet" href="/css/pages/home/mantenimiento-inicio.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
 </head>
 <body class="tt-home-premium">
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="tt-parity-safe">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +32,6 @@
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2"><link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css">
-<link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1">
 <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20261010-social-mobile-styles-3">
@@ -48,9 +47,6 @@
 <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261012-checkout-ready-4-entrada-navegacion-publica-js">
-  <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
-  <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
-  <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
   <!-- Estructura pública disponible desde el primer render -->
   <link id="tt-responsive-brand-surfaces-css" rel="stylesheet" href="css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
   <link id="tt-responsive-brand-polish-css" rel="stylesheet" href="css/theme/pulido-marca-responsive-tintin.css?v=tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1">
@@ -58,6 +54,19 @@
   <link id="tt-global-layout-css" rel="stylesheet" href="css/components/navigation/compartido/apariencia-global.css?v=tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1">
   <link id="tt-phase8-ui-ux-css" rel="stylesheet" href="css/quality/experiencia-interfaz.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2">
   <link data-tt-page-structure="initial" rel="stylesheet" href="css/pages/legal.css?v=tintin-20261010-first-render-merge-1">
+  <link id="tt-phase10-accessibility-css" rel="stylesheet" href="/css/quality/accesibilidad-global.css?v=tintin-20260731-phase10-a11y-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-global-studio-runtime-css" rel="stylesheet" href="/css/components/visual-studio-global-runtime.css?v=tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-visual-builder-runtime-css" rel="stylesheet" href="/css/components/editor-visual-runtime.css?v=tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-navigation-notifications-css" data-tt-social-notifications="1" rel="stylesheet" href="/css/components/notifications/notificaciones-sociales.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-navigation-desktop-css" media="(min-width: 1025px)" rel="stylesheet" href="/css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20261010-whatsapp-release-5">
+  <link id="tt-navigation-tablet-css" media="(min-width: 768px) and (max-width: 1024px)" rel="stylesheet" href="/css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20261010-whatsapp-release-5">
+  <link id="tt-navigation-mobile-css" media="(max-width: 767px)" rel="stylesheet" href="/css/components/navigation/movil/encabezado-movil.css?v=tintin-20261010-mobile-single-selection-2">
+  <link id="tt-navigation-mobile-solid-css" media="(max-width: 767px)" rel="stylesheet" href="/css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2">
+  <link id="tt-navigation-shared-css" rel="stylesheet" href="/css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-surface-controller-css" rel="stylesheet" href="/css/components/navigation/compartido/paneles.css?v=tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-navigation-notification-surface-css" rel="stylesheet" href="/css/components/navigation/compartido/superficie-notificaciones.css?v=tintin-20260918-header-system-solid-surfaces-1">
+  <link id="tt-navigation-search-css" rel="stylesheet" href="/css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1">
+  <link id="tt-navigation-coherence-css" rel="stylesheet" href="/css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4">
 </head>
 <body>
 
@@ -73,23 +82,25 @@
 
 <!-- CONTENT -->
 <section class="section">
-  <div class="container" style="max-width:780px;">
+  <div class="container tt-legal-content">
 
-    <p style="color:var(--text-muted);font-size:13px;margin-bottom:32px">Última actualización: julio de 2026.</p>
+    <p class="tt-legal-updated" style="color:var(--text-muted);font-size:13px;margin-bottom:32px">Última actualización: julio de 2026.</p>
+    <p id="tt-legal-note" class="tt-legal-note">Esta página describe las condiciones y prácticas publicadas por la tienda. Para una consulta específica sobre tu compra o tus datos, contactanos por los canales oficiales.</p>
+    <nav id="tt-legal-nav" class="tt-legal-nav" aria-label="Índice de esta página"><p class="tt-legal-nav-title">Contenido</p><ul class="tt-legal-nav-list"><li><a href="#seccion-1">1. Quiénes somos</a></li><li><a href="#seccion-2">2. Cuenta y acceso</a></li><li><a href="#seccion-3">3. Productos y precios</a></li><li><a href="#seccion-4">4. Pedidos y pago</a></li><li><a href="#seccion-5">5. Envíos y entregas</a></li><li><a href="#seccion-6">6. Cambios y devoluciones</a></li><li><a href="#seccion-7">7. Uso del sitio</a></li><li><a href="#seccion-8">8. Privacidad</a></li><li><a href="#seccion-9">9. Cambios a estos términos</a></li><li><a href="#seccion-10">10. Contacto</a></li></ul></nav>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">1. Quiénes somos</h2>
+    <div class="tt-info-block" id="seccion-1" aria-labelledby="seccion-1-title">
+      <h2 class="tt-info-title" id="seccion-1-title">1. Quiénes somos</h2>
       <p>Tintin Accesorios &amp; Relojes es una tienda online de accesorios femeninos que opera en Paraguay, con retiro en San Lorenzo, delivery en Zona Central y encomienda al interior del país. Al comprar o navegar en este sitio, aceptás estos términos.</p>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">2. Cuenta y acceso</h2>
+    <div class="tt-info-block" id="seccion-2" aria-labelledby="seccion-2-title">
+      <h2 class="tt-info-title" id="seccion-2-title">2. Cuenta y acceso</h2>
       <p>Para comprar, guardar favoritos o publicar una rese&ntilde;a necesit&aacute;s iniciar sesi&oacute;n. Pod&eacute;s acceder con Google o, con cualquier correo v&aacute;lido, mediante el c&oacute;digo de 6 d&iacute;gitos que enviamos a ese correo. Sos responsable de mantener el acceso a tu cuenta y de que tus datos de contacto y entrega sean correctos.</p>
       <p>Nos reservamos el derecho de bloquear una cuenta ante uso indebido, pedidos fraudulentos o incumplimiento de estos términos.</p>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">3. Productos y precios</h2>
+    <div class="tt-info-block" id="seccion-3" aria-labelledby="seccion-3-title">
+      <h2 class="tt-info-title" id="seccion-3-title">3. Productos y precios</h2>
       <ul>
         <li>Los precios están expresados en guaraníes (Gs.) e incluyen los impuestos aplicables.</li>
         <li>Las fotos son ilustrativas — los colores pueden variar levemente según la pantalla.</li>
@@ -98,43 +109,43 @@
       </ul>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">4. Pedidos y pago</h2>
+    <div class="tt-info-block" id="seccion-4" aria-labelledby="seccion-4-title">
+      <h2 class="tt-info-title" id="seccion-4-title">4. Pedidos y pago</h2>
       <p>Un pedido queda confirmado cuando lo enviás desde el checkout con tu cuenta verificada. El efectivo contra entrega está disponible únicamente para delivery. Por encomienda, el producto se paga previamente por transferencia bancaria. Sólo el costo del envío se paga a la transportadora al recibir. No hay pago contra entrega del producto. Los métodos habilitados se muestran en el checkout.</p>
       <p>Coordinamos el pago y la entrega por WhatsApp una vez recibido el pedido.</p>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">5. Envíos y entregas</h2>
+    <div class="tt-info-block" id="seccion-5" aria-labelledby="seccion-5-title">
+      <h2 class="tt-info-title" id="seccion-5-title">5. Envíos y entregas</h2>
       <p>Ver el detalle completo de zonas, costos y tiempos en nuestra <a href="/envios">Política de Envíos</a>. En resumen: delivery propio en Zona Central, encomienda por transportadora al interior, y retiro en San Lorenzo sin costo.</p>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">6. Cambios y devoluciones</h2>
+    <div class="tt-info-block" id="seccion-6" aria-labelledby="seccion-6-title">
+      <h2 class="tt-info-title" id="seccion-6-title">6. Cambios y devoluciones</h2>
       <p>Ver el detalle completo en nuestra <a href="/cambios-devoluciones">Política de Cambios y Devoluciones</a>.</p>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">7. Uso del sitio</h2>
+    <div class="tt-info-block" id="seccion-7" aria-labelledby="seccion-7-title">
+      <h2 class="tt-info-title" id="seccion-7-title">7. Uso del sitio</h2>
       <p>No está permitido usar este sitio para actividades ilegales, intentar vulnerar su seguridad, ni usar de mala fe los datos de otras clientas. El contenido (fotos, textos, logo) es propiedad de Tintin Accesorios &amp; Relojes.</p>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">8. Privacidad</h2>
+    <div class="tt-info-block" id="seccion-8" aria-labelledby="seccion-8-title">
+      <h2 class="tt-info-title" id="seccion-8-title">8. Privacidad</h2>
       <p>Cómo tratamos tus datos personales está detallado en nuestra <a href="/privacidad">Política de Privacidad</a>.</p>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">9. Cambios a estos términos</h2>
+    <div class="tt-info-block" id="seccion-9" aria-labelledby="seccion-9-title">
+      <h2 class="tt-info-title" id="seccion-9-title">9. Cambios a estos términos</h2>
       <p>Podemos actualizar estos términos cuando haga falta. La versión vigente es siempre la publicada en esta página.</p>
     </div>
 
-    <div class="tt-info-block">
-      <h2 class="tt-info-title">10. Contacto</h2>
+    <div class="tt-info-block" id="seccion-10" aria-labelledby="seccion-10-title">
+      <h2 class="tt-info-title" id="seccion-10-title">10. Contacto</h2>
       <p>¿Dudas sobre estos términos? Escribinos a <a href="mailto:tintinaccs@gmail.com">tintinaccs@gmail.com</a> o por WhatsApp.</p>
     </div>
 
-    <div style="text-align:center;margin-top:48px;">
+    <div class="tt-legal-actions">
       <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-btn tt-btn-lg">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Contactanos por WhatsApp
       </a>
