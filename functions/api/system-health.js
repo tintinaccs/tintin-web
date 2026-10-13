@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -21,10 +21,12 @@ export async function onRequest({ request, env }) {
   }
 
   try {
-    await requireSuperAdmin(request);
+    await requireSuperAdmin(request, env);
     const report = await runSystemHealth(env);
     return jsonResponse({ ok: true, report }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     console.error('[system-health]', error?.message || error);
     const authFailure = Number(error?.status) === 401
       || Number(error?.status) === 403

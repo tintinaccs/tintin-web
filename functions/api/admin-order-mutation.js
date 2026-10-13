@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   assertOrderStaffPermission,
   jsonResponse,
   originIsAllowed,
@@ -37,13 +37,13 @@ export async function onRequest(context) {
   if (request.method === 'OPTIONS') return preflightResponse(origin, requestUrl, 'GET, POST, OPTIONS');
   if (request.method === 'GET') {
     try {
-      await requireSuperAdmin(request);
+      await requireSuperAdmin(request, env);
       const id = new URL(request.url).searchParams.get('orderId') || '';
       if (!/^[A-Za-z0-9_-]{6,220}$/.test(id)) return jsonResponse({ok:false,error:'Pedido inválido.'},400,origin,requestUrl);
       const document = await firestoreAdminGet(env, `orders/${id}`);
       if (!document) return jsonResponse({ok:false,error:'El pedido ya no existe.'},404,origin,requestUrl);
       return jsonResponse({ok:true,links:orderContactLinks(decodeFirestoreFields(document.fields || {}),id)},200,origin,requestUrl);
-    } catch(error) { return jsonResponse({ok:false,error:'No se pudieron consultar los contactos del pedido.'},statusFromError(error,403),origin,requestUrl); }
+    } catch(error) { const limited = rateLimitErrorResponse(error, origin, requestUrl); if (limited) return limited; return jsonResponse({ok:false,error:'No se pudieron consultar los contactos del pedido.'},statusFromError(error,403),origin,requestUrl); }
   }
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
 
@@ -53,7 +53,7 @@ export async function onRequest(context) {
     const body = JSON.parse(raw);
     const actor = body.action === 'updatePayment' || body.action === 'recordEmailResend'
       ? await requireOrderStaff(request, env)
-      : await requireSuperAdmin(request);
+      : await requireSuperAdmin(request, env);
     if (!['createOrder', 'resetOrderSequence', 'recordEmailResend'].includes(body.action) && typeof body.baseChangeId !== 'string') {
       throw new Error('Solicitud inválida: falta la versión del pedido. Actualizá los datos antes de guardar.');
     }
@@ -110,6 +110,8 @@ export async function onRequest(context) {
     }
     return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);
     const allowed = /^(Solicitud inválida|Pedido inválido|El pedido ya no existe|No hay cambios administrativos permitidos|Estado de pedido no permitido|Estado de pago no permitido|Método de pago no permitido|Método de entrega no permitido|Correo de contacto inválido|Costo de envío inválido|Subtotal inválido|Ingresá el nombre del cliente|El producto .* (ya no existe|no está activo)|Precio inválido|El pedido contiene|El pedido debe|El pedido tiene demasiados|Stock inválido|Stock insuficiente|No se puede reconciliar el stock|El pedido cambió después de la última sincronización|Conflicto de versión|Tu rol no tiene permiso|No se pudieron verificar los permisos|Un pedido de retiro|Listo para retirar corresponde|El cambio de estado no corresponde)/i.test(message);

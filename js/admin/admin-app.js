@@ -1,41 +1,41 @@
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1-client-audit-1';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261013-client-integrated-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs';
-import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1";
-import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
-import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
-import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2";
+import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
+import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, startAfter, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261012-checkout-ready-2-notificaciones-correo-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261012-checkout-ready-2-notificaciones-correo-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
 // automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
 // de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
-import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20261012-auth-privacy-1-notificacion-pedido-resend-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
-import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20261012-auth-privacy-1-notificacion-pedido-resend-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
+import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+} from "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
-import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3";
+import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261012-auth-privacy-1-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-client-audit-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-client-audit-1";
-import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-sitio-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
-import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261012-auth-privacy-1-mayoristas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
-import "./pages/paginas-admin.js?v=tintin-20261012-auth-privacy-1-paginas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261013-client-integrated-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261013-client-integrated-1";
+import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-sitio-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
+import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261012-auth-privacy-1-mayoristas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
+import "./pages/paginas-admin.js?v=tintin-20261012-auth-privacy-1-paginas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -44,9 +44,9 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261013-orders-board-6-pedidos-superadmin-crud-js';
-import './settings/cupones-admin.js?v=tintin-20261012-auth-privacy-1-cupones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
-import './products/integridad-inventario-admin.js?v=tintin-20261012-orders-board-2-integridad-inventario-admin-js';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261013-orders-board-6-pedidos-superadmin-crud-js-security-ready-20261013-2';
+import './settings/cupones-admin.js?v=tintin-20261012-auth-privacy-1-cupones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import './products/integridad-inventario-admin.js?v=tintin-20261012-orders-board-2-integridad-inventario-admin-js-security-ready-20261013-2';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 
@@ -3798,7 +3798,7 @@ function startCorreosRealtimeListeners() {
       renderCorreosRealtimeViews();
     }, error => console.warn('Plantillas de correo no disponibles:', error)),
     onSnapshot(query(collection(db, 'emailLogs'), orderBy('sentAt', 'desc'), limit(300)), snapshot => {
-      allEmailLogs = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      allEmailLogs = snapshot.docs.map(item => ({ ...item.data(), id: item.id }));
       renderCorreosRealtimeViews();
     }, error => console.warn('Historial de correos no disponible:', error)),
     onSnapshot(query(collection(db, 'emailCampaigns'), orderBy('createdAt', 'desc'), limit(50)), snapshot => {
@@ -3838,7 +3838,7 @@ async function loadCorreos() {
     // las dudas de que falte el índice compuesto la primera vez — mismo
     // criterio defensivo que ya usa loadOrders() más abajo.
     const byDateDesc_ = (a, b) => (b.sentAt?.toDate?.() || new Date(0)) - (a.sentAt?.toDate?.() || new Date(0));
-    allEmailLogs = logsSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byDateDesc_);
+    allEmailLogs = logsSnap.docs.map(d => ({ ...d.data(), id: d.id })).sort(byDateDesc_);
     allEmailCampaigns = campSnap.docs.map(d => ({ id: d.id, ...d.data() }))
       .sort((a, b) => (b.createdAt?.toDate?.() || new Date(0)) - (a.createdAt?.toDate?.() || new Date(0)));
 
@@ -3880,7 +3880,7 @@ function renderCorreosDashboard() {
   const chip = (label, on) => `<div><strong>${label}:</strong> <span class="adm-badge ${on ? 'badge-entregado' : 'badge-cancelado'}">${on ? 'Activado' : 'Desactivado'}</span></div>`;
   const statusEl = document.getElementById('correos-system-status');
   if (statusEl) statusEl.innerHTML =
-    `<div><strong>Remitente actual:</strong> ${s.senderEmail || EMAIL_SENDER_ADDRESS}</div>` +
+    `<div><strong>Remitente actual:</strong> ${escapeHtmlAdmin(s.senderEmail || EMAIL_SENDER_ADDRESS)}</div>` +
     `<div><strong>Webhook configurado:</strong> <span class="adm-badge ${webhookConfigured ? 'badge-entregado' : 'badge-cancelado'}">${webhookConfigured ? 'Sí' : 'No'}</span></div>` +
     chip('Envío de pedidos', s.orderEmailsEnabled !== false) +
     chip('Envío de pruebas', s.testEmailsEnabled !== false) +
@@ -3892,7 +3892,7 @@ function renderCorreosDashboard() {
     tbody.innerHTML = recent.length ? recent.map(l => `
       <tr>
         <td data-label="Fecha" style="white-space:nowrap;font-size:12px">${formatDate(l.sentAt)}</td>
-        <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
+        <td data-label="Tipo" style="font-size:12px">${escapeHtmlAdmin(templateLabel_(l.type))}</td>
         <td data-label="Destinatario" style="font-size:12px">${escapeHtmlAdmin(l.recipient || '—')}</td>
         <td data-label="Estado">${logStatusBadge_(l.status)}</td>
       </tr>
@@ -4770,7 +4770,7 @@ function renderCorreosHistorialTab() {
   if (!typeSelect) return;
   const types = Array.from(new Set(allEmailLogs.map(l => l.type).filter(Boolean)));
   const currentVal = typeSelect.value;
-  typeSelect.innerHTML = '<option value="">Todos los tipos</option>' + types.map(t => `<option value="${t}">${templateLabel_(t)}</option>`).join('');
+  typeSelect.innerHTML = '<option value="">Todos los tipos</option>' + types.map(t => `<option value="${escapeHtmlAdmin(t)}">${escapeHtmlAdmin(templateLabel_(t))}</option>`).join('');
   typeSelect.value = types.includes(currentVal) ? currentVal : '';
 
   const q = (document.getElementById('hist-search').value || '').toLowerCase();
@@ -4797,18 +4797,18 @@ function renderCorreosHistorialTab() {
   [..._selectedLogs].forEach(id => { if (!visibleIds.has(id)) _selectedLogs.delete(id); });
   tbody.innerHTML = list.slice(0, 200).map(l => `
     <tr class="adm-log-row">
-      <td class="col-select" data-label="Sel."><input type="checkbox" class="hist-row-check" data-id="${l.id}" onclick="toggleLogSelect(this)" ${_selectedLogs.has(l.id) ? 'checked' : ''}></td>
+      <td class="col-select" data-label="Sel."><input type="checkbox" class="hist-row-check" data-id="${escapeHtmlAdmin(l.id)}" onclick="toggleLogSelect(this)" ${_selectedLogs.has(l.id) ? 'checked' : ''}></td>
       <td data-label="Fecha" style="font-size:12px;white-space:nowrap">${formatDate(l.sentAt)}</td>
       <td data-label="Origen real/prueba">${categoryBadge_(l.category || 'pedido')}</td>
-      <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
+      <td data-label="Tipo" style="font-size:12px">${escapeHtmlAdmin(templateLabel_(l.type))}</td>
       <td data-label="Destinatario" style="font-size:12px">${escapeHtmlAdmin(l.recipient || '—')}</td>
       <td data-label="Estado">${logStatusBadge_(l.status)}</td>
       <td data-label="Enviado por" style="font-size:12px">${escapeHtmlAdmin(l.sentBy || '—')}</td>
       <td data-label="Automático/Manual" style="font-size:12px">${l.isAutomatic ? 'Automático' : 'Manual'}</td>
       <td data-label="Acciones">
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.viewLogDetail('${l.id}')" type="button">Ver</button>
-          ${l.status === 'failed' ? `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.retryFailedLog('${l.id}')" type="button">Reintentar</button>` : ''}
+          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.viewLogDetail(${inlineArgumentAdmin(l.id)})" type="button">Ver</button>
+          ${l.status === 'failed' ? `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.retryFailedLog(${inlineArgumentAdmin(l.id)})" type="button">Reintentar</button>` : ''}
         </div>
       </td>
     </tr>
@@ -4907,7 +4907,7 @@ window.viewLogDetail = (id) => {
   const l = allEmailLogs.find(x => x.id === id);
   if (!l) return;
   alert(
-    `Origen: ${CATEGORY_LABELS_[l.category || 'pedido'] || 'Pedido real'}\nTipo: ${templateLabel_(l.type)}\nDestinatario: ${l.recipient || '—'}\nEstado: ${l.status}\n` +
+    `Origen: ${CATEGORY_LABELS_[l.category || 'pedido'] || 'Pedido real'}\nTipo: ${escapeHtmlAdmin(templateLabel_(l.type))}\nDestinatario: ${l.recipient || '—'}\nEstado: ${l.status}\n` +
     `Enviado por: ${l.sentBy || '—'}\nAutomático/Manual: ${l.isAutomatic ? 'Automático' : 'Manual'}\n` +
     `Pedido relacionado: ${l.orderId || '—'}\n` + (l.error ? `Error: ${l.error}` : 'Sin errores')
   );

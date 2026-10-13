@@ -1,12 +1,12 @@
 // cargador-pagina.js es el único responsable de iniciar los módulos globales de
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
-import { onAppCheckSnapshot as onSnapshot } from '../firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1-domain-prepared-20261012-6-pedidos-styles-20261013-2';
-import { auth, db } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1';
-import { logoutSession } from './salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
+import { onAppCheckSnapshot as onSnapshot } from '../firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { auth, db } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { logoutSession } from './salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { doc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
+import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
-import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
+import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1';
 

@@ -79,7 +79,7 @@ async function signJwt(header, payload, privateKeyPem) {
 const accessTokenCache = new Map();
 
 /** Access token OAuth2 de la cuenta de servicio, para llamar APIs de Google admin. */
-export async function getGoogleAccessToken(env, scopes) {
+export async function getGoogleAccessToken(env, scopes, { signal } = {}) {
   const now = Math.floor(Date.now() / 1000);
   const scopeKey = [...scopes].sort().join(' ');
   const cached = accessTokenCache.get(scopeKey);
@@ -100,6 +100,7 @@ export async function getGoogleAccessToken(env, scopes) {
 
   const response = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
+    ...(signal ? { signal } : {}),
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
@@ -110,6 +111,9 @@ export async function getGoogleAccessToken(env, scopes) {
   if (!response.ok || !data.access_token) {
     throw new Error('No se pudo autenticar la cuenta de servicio de Firebase: ' + (data.error_description || data.error || response.status));
   }
+  // La caché guarda sólo tokens completos; cancelar esta petición no afecta a
+  // otra solicitud OAuth en curso ni deja una promesa fallida en la caché.
+  if (signal?.aborted) throw new Error('Google access token request aborted');
   accessTokenCache.set(scopeKey, {
     token: data.access_token,
     expiry: now + Number(data.expires_in || 3600)
@@ -291,10 +295,11 @@ function firestoreDatabaseUrl(sa) {
   return `https://firestore.googleapis.com/v1/projects/${sa.project_id}/databases/(default)`;
 }
 
-export async function firestoreAdminGet(env, path) {
+export async function firestoreAdminGet(env, path, { signal } = {}) {
   const sa = parseServiceAccount(env);
-  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE], { signal });
   const response = await fetch(firestoreDocUrl(sa, path), {
+    ...(signal ? { signal } : {}),
     headers: { authorization: `Bearer ${accessToken}` }
   });
   if (response.status === 404) return null;
@@ -670,9 +675,9 @@ export function encodeFirestoreFields(object) {
 }
 
 /** Commit atómico de documentos completos. Cada write es {path, fields} o {path, delete:true}. */
-export async function firestoreAdminCommit(env, writes) {
+export async function firestoreAdminCommit(env, writes, { signal } = {}) {
   const sa = parseServiceAccount(env);
-  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE], { signal });
   const prefix = `projects/${sa.project_id}/databases/(default)/documents/`;
   const body = {
     writes: (Array.isArray(writes) ? writes : []).map(write => {
@@ -693,12 +698,13 @@ export async function firestoreAdminCommit(env, writes) {
   if (!body.writes.length || body.writes.length > 20) throw new Error('Cantidad de escrituras inválida');
   const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:commit`, {
     method: 'POST',
+    ...(signal ? { signal } : {}),
     headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
     body: JSON.stringify(body)
   });
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
-    const conflict = data?.error?.status === 'FAILED_PRECONDITION' || response.status === 409;
+    const conflict = ['FAILED_PRECONDITION', 'ABORTED', 'ALREADY_EXISTS'].includes(data?.error?.status) || response.status === 409;
     throw Object.assign(new Error(conflict ? 'Conflicto de versión en Firestore.' : `Firestore COMMIT falló (${response.status}).`), {
       status: conflict ? 409 : 502,
       code: conflict ? 'version_conflict' : 'firestore_commit_failed',

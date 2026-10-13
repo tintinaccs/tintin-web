@@ -38,9 +38,14 @@ function fakeStore(overrides = {}) {
       .map(([path, data]) => [path, document(path, data)]),
   );
   const commits = [];
+  const reads = [];
+  const batchReads = [];
   return {
     commits,
-    get: async (_env, path) => map.get(decodeURIComponent(path)) || null,
+    get: async (_env, path) => { reads.push(path); return map.get(decodeURIComponent(path)) || null; },
+    batchGet: async (_env, paths) => { batchReads.push([...paths]); return paths.map(path => map.get(decodeURIComponent(path))).filter(Boolean).reverse(); },
+    reads,
+    batchReads,
     commit: async (_env, writes) => {
       commits.push(writes);
       return { writeResults: writes.map(() => ({})) };
@@ -85,7 +90,7 @@ async function checkout(payload, store = fakeStore(), user = USER) {
     prepared.input,
     { uid: user.uid, email: user.email, role: 'client', origin: 'public-checkout' },
     // Sin historial TINPED en el fake: la secuencia sólo se concilia contra sí misma.
-    { get: store.get, commit: store.commit, inspect: prepared.inspect, findFirst: async () => null, maxNumber: async () => 0 },
+    { get: store.get, batchGet: store.batchGet, commit: store.commit, inspect: prepared.inspect, findFirst: async () => null, maxNumber: async () => 0 },
   );
   return { created, store };
 }
@@ -94,6 +99,23 @@ function orderWrite(store) {
   const write = store.commits.at(-1).find(item => item.path.startsWith('orders/'));
   return decodeFirestoreFields(write.fields);
 }
+
+test('checkout válido de 60 productos usa un batch sin lecturas duplicadas en preparación/inspect', async () => {
+  const cartLines = Array.from({ length: 60 }, (_, index) => ({ id: `product_${index}`, qty: 1 }));
+  const entries = Object.fromEntries(cartLines.map(({ id }) => [`products/${id}`, { name: id, price: 100, stock: 3, active: true }]));
+  entries['settings/orderSequence'] = { lastNumber: 40, highWaterMark: 40, historyReconciledAt: new Date() };
+  const store = fakeStore(entries);
+  const { created } = await checkout(draft({ cartLines, expectedSubtotal: 6000, expectedTotal: 26000 }), store);
+  assert.equal(created.order.items.length, 60);
+  assert.equal(created.order.total, 26000);
+  assert.equal(created.order.paymentStatus, 'pendiente');
+  assert.equal(created.order.inventoryState, 'unreserved');
+  assert.equal(store.commits.length, 1);
+  assert.equal(store.batchReads.length, 1);
+  assert.equal(store.batchReads[0].length, 60);
+  assert.equal(store.reads.filter(path => path.startsWith('products/')).length, 0);
+  assert.ok(store.reads.length + store.batchReads.length + store.commits.length < 12, 'la ruta normal conserva margen para cuotas y proveedores');
+});
 
 async function rejectsWith(promise, code) {
   await assert.rejects(promise, error => {

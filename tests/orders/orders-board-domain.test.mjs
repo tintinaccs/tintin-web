@@ -10,7 +10,7 @@ function store(order) {
   let revision=0;
   const records=new Map([['orders/order_fixture_1',{fields:encodeFirestoreFields(order),updateTime:'v0'}],['products/product_1',{fields:encodeFirestoreFields({stock:10}),updateTime:'v0'}]]);
   const commits=[];
-  return {records,commits,get:async(_env,path)=>structuredClone(records.get(decodeURIComponent(path)) || null),
+  return {records,commits,batchGet:async(_env,paths)=>paths.map(path=>{const document=records.get(decodeURIComponent(path));return document ? {name:'projects/demo/databases/(default)/documents/'+path,...structuredClone(document)}:null;}).filter(Boolean),get:async(_env,path)=>structuredClone(records.get(decodeURIComponent(path)) || null),
     commit:async(_env,writes)=>{
       for(const w of writes) { const previous=records.get(w.path);if(w.currentDocument?.updateTime && previous?.updateTime!==w.currentDocument.updateTime)throw Object.assign(new Error('Conflicto de versión'),{status:409,code:'version_conflict'}); }
       commits.push(writes);const version=`v${++revision}`;
@@ -60,7 +60,7 @@ test('incidencia conserva la etapa para recuperar el flujo sin entrega falsa',as
 test('consultar contactos exige Super Admin antes de leer y no ejecuta mutaciones',async()=>{
   const source=readFileSync(new URL('../../functions/api/admin-order-mutation.js',import.meta.url),'utf8').replace(/import\s+[\s\S]*?\s+from\s+['"][^'"]+['"];\s*/g,'').replaceAll('export async function','async function');
   let reads=0,auth=true;
-  const deps={requireSuperAdmin:async()=>{if(!auth)throw Object.assign(new Error('denied'),{status:403});},originIsAllowed:()=>true,jsonResponse:(data,status)=>new Response(JSON.stringify(data),{status}),statusFromError:(e,f)=>e.status || f,firestoreAdminGet:async()=>{reads++;return {fields:encodeFirestoreFields(order({userName:'QA',userPhone:'0981123456',shipping:{mapLocation:{lat:-25.3,lng:-57.5}}}))};},decodeFirestoreFields,orderContactLinks};
+  const deps={rateLimitErrorResponse:()=>null,requireSuperAdmin:async()=>{if(!auth)throw Object.assign(new Error('denied'),{status:403});},originIsAllowed:()=>true,jsonResponse:(data,status)=>new Response(JSON.stringify(data),{status}),statusFromError:(e,f)=>e.status || f,firestoreAdminGet:async()=>{reads++;return {fields:encodeFirestoreFields(order({userName:'QA',userPhone:'0981123456',shipping:{mapLocation:{lat:-25.3,lng:-57.5}}}))};},decodeFirestoreFields,orderContactLinks};
   const handler=new Function('deps',`const {${Object.keys(deps).join(',')}}=deps;${source};return onRequest;`)(deps);
   const request=new Request('https://tintinaccesorios.pages.dev/api/admin-order-mutation?orderId=order_fixture_1');
   auth=false;assert.equal((await handler({request,env:{}})).status,403);assert.equal(reads,0);

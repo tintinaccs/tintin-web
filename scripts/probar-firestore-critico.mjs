@@ -441,9 +441,9 @@ try {
     await succeeds(getDocs(query(collection(superDb, collectionId), orderBy('createdAt', 'desc'), limit(1))));
   }
 
-  // OTP y contadores de envío permanecen privados incluso para administradores.
+  // OTP y contadores de API/envío permanecen privados incluso para administradores.
   // La API usa credenciales de servidor; ningún SDK cliente puede leerlos o escribirlos.
-  for (const privateCollection of ['emailOtpCodes', 'emailOtpRateLimits']) {
+  for (const privateCollection of ['emailOtpCodes', 'emailOtpRateLimits', 'apiRateLimits']) {
     await testEnv.withSecurityRulesDisabled(async context => {
       await setDoc(doc(context.firestore(), privateCollection, 'otp_private_fixture'), { sendCountToday: 1 });
     });

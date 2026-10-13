@@ -1,5 +1,6 @@
 import cspRuntime from '../config/csp-runtime.js';
 import { jsonResponse, rateLimit } from './lib/operational-guard.js';
+import { limitByIp } from '../cloudflare/rate-limit-compartido.js';
 
 const GENERATED_BY = 'scripts/generar-csp-cloudflare.js';
 const SECURITY_HEADERS = Object.freeze({
@@ -12,6 +13,8 @@ const SECURITY_HEADERS = Object.freeze({
 });
 const MUTATION_LIMITS = Object.freeze([
   [/^\/api\/email-otp-(send|verify)$/, 10, 60_000, 'auth'],
+  [/^\/api\/(username|phone)-availability$/, 30, 60_000, 'identity-availability'],
+  [/^\/api\/telemetry$/, 40, 60_000, 'telemetry-edge'],
   [/^\/api\/engagement$/, 45, 60_000, 'engagement'],
   [/^\/api\/(order-email|apps-script-bridge|paypal-create-order|paypal-capture-order|wholesale-quote)$/, 12, 60_000, 'checkout'],
   [/^\/api\/paypal-rate-refresh$/, 4, 60_000, 'paypal-rate-refresh'],
@@ -24,6 +27,9 @@ const MUTATION_LIMITS = Object.freeze([
 // geolocalización o configuración de pago en consumo innecesario. Los límites
 // son deliberadamente amplios para no afectar la navegación normal.
 const READ_LIMITS = Object.freeze([
+  [/^\/(?:product(?:\.html)?|products\/[^/]+|pages\/[^/]+)\/?$/, 60, 60_000, 'public-render'],
+  [/^\/api\/health$/, 12, 60_000, 'health'],
+  [/^\/api\/(public-catalog|visual-builder-public|visual-studio-global-public)$/, 60, 10_000, 'public-content'],
   [/^\/api\/(geo-search|location-search)$/, 30, 60_000, 'geo-search'],
   [/^\/api\/visitor-geo$/, 60, 60_000, 'visitor-geo'],
   [/^\/api\/paypal-config$/, 60, 60_000, 'paypal-config']
@@ -55,30 +61,42 @@ function failClosed() {
   });
 }
 
-function enforceMutationLimit(request, pathname) {
+async function enforceMutationLimit(request, pathname, env, sharedLimit) {
   if (!['POST','PUT','PATCH','DELETE'].includes(request.method)) return null;
   const config = MUTATION_LIMITS.find(([pattern]) => pattern.test(pathname));
   if (!config) return null;
   const [, limit, windowMs, id] = config;
   const result = rateLimit(request, { id, limit, windowMs });
-  if (result.allowed) return null;
+  if (result.allowed) return enforceSharedLimit(request, env, { id, limit, windowMs }, sharedLimit);
   return jsonResponse({ ok: false, code: 'rate_limited' }, 429, {
     ...result.headers,
     'retry-after': String(result.retryAfter)
   });
 }
 
-function enforceReadLimit(request, pathname) {
-  if (request.method !== 'GET') return null;
+async function enforceReadLimit(request, pathname, env, sharedLimit) {
+  if (!['GET', 'HEAD'].includes(request.method)) return null;
   const config = READ_LIMITS.find(([pattern]) => pattern.test(pathname));
   if (!config) return null;
   const [, limit, windowMs, id] = config;
   const result = rateLimit(request, { id, limit, windowMs });
-  if (result.allowed) return null;
+  if (result.allowed) return enforceSharedLimit(request, env, { id, limit, windowMs }, sharedLimit);
   return jsonResponse({ ok: false, code: 'rate_limited' }, 429, {
     ...result.headers,
     'retry-after': String(result.retryAfter)
   });
+}
+
+async function enforceSharedLimit(request, env, policy, sharedLimit) {
+  try {
+    await sharedLimit(request, env, policy);
+    return null;
+  } catch (error) {
+    const limited = error?.code === 'rate_limited';
+    return jsonResponse({ ok: false, code: limited ? 'rate_limited' : 'rate_limit_unavailable' }, limited ? 429 : 503, {
+      'retry-after': String(limited ? error.retryAfter : 5)
+    });
+  }
 }
 
 function withRuntimeScripts(response) {
@@ -126,13 +144,13 @@ async function applyPagesDevIndexPolicy(request, pathname, response) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
-export async function onRequest(context) {
+export async function onRequest(context, { sharedLimit = limitByIp } = {}) {
   const pathname = new URL(context.request.url).pathname;
   if (pathname.startsWith('/__/auth/')) return context.next();
 
-  const blocked = enforceMutationLimit(context.request, pathname);
+  const blocked = await enforceMutationLimit(context.request, pathname, context.env, sharedLimit);
   if (blocked) return applyPagesDevIndexPolicy(context.request, pathname, blocked);
-  const readBlocked = enforceReadLimit(context.request, pathname);
+  const readBlocked = await enforceReadLimit(context.request, pathname, context.env, sharedLimit);
   if (readBlocked) return applyPagesDevIndexPolicy(context.request, pathname, readBlocked);
 
   const response = await context.next();

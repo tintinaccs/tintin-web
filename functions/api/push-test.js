@@ -4,7 +4,7 @@
 // El título y el cuerpo los define el servidor: el navegador no puede
 // mandar texto arbitrario a los dispositivos registrados.
 
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -43,8 +43,10 @@ export async function onRequest(context) {
 
   let user;
   try {
-    user = await requireSuperAdmin(request);
+    user = await requireSuperAdmin(request, env);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     return jsonResponse({ success: false, error: sanitizeError(error, 160) }, statusFromError(error, 401), origin, requestUrl);
   }
 

@@ -1,4 +1,4 @@
-import './galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1-client-audit-1';
+import './galeria-producto.js?v=tintin-20261013-client-integrated-1';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 /* =============================================================
    TINTIN — Biblioteca multimedia de Super Admin
@@ -8,7 +8,7 @@ import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=
    guarda únicamente la metadata y las URLs públicas de la biblioteca.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-prepared-20261012-6-pedidos-styles-20261013-1';
 import {
   addDoc,

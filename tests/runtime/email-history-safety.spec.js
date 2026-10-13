@@ -1,0 +1,30 @@
+const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
+const source = fs.readFileSync(path.join(__dirname, '../../js/admin/admin-app.js'), 'utf8');
+const names = ['escapeHtmlAdmin','inlineArgumentAdmin','templateLabel_','logStatusBadge_','categoryBadge_','renderCorreosHistorialTab','renderCorreosDashboard'];
+const functions = names.map(name => {
+  const match = source.match(new RegExp('function ' + name + '\\([^)]*\\) \\{[\\s\\S]*?\\n\\}'));
+  if (!match) throw new Error('Missing renderer: ' + name);
+  return match[0];
+}).join('\n');
+const hostile = '<img src="https://untrusted.invalid/tracker" onerror="window.pwned=1">';
+const id = 'log\"\');window.pwned=1;//';
+for (const width of [390, 1440]) test(`correos representa datos hostiles como texto y conserva acciones en ${width}px`, async ({page}) => {
+  await page.setViewportSize({width,height:844});
+  const unexpected=[];
+  await page.route('**/*', route => { unexpected.push(route.request().url()); return route.abort(); });
+  await page.setContent('<!doctype html><html><body><select id="hist-filter-type"></select><input id="hist-search"><select id="hist-filter-status"></select><select id="hist-filter-category"></select><input id="hist-filter-from"><input id="hist-filter-to"><table><tbody id="hist-tbody"></tbody></table><div id="correos-stats"></div><div id="correos-system-status"></div><table><tbody id="correos-dash-recent"></tbody></table></body></html>');
+  const data = JSON.stringify({id,type:hostile,status:'failed',category:'pedido'}).replace(/</g,'\\u003c');
+  await page.addScriptTag({content:`const allEmailLogs=[${data}];const allEmailTemplates=[];const allEmailCampaigns=[];const ORDER_TYPE_NAMES={};const emailSettingsCache={senderEmail:allEmailLogs[0].type};const EMAIL_WEBHOOK_URL='';const EMAIL_SENDER_ADDRESS='sender@example.test';const _selectedLogs=new Set();function formatDate(){return 'fecha';}function updateLogsBulkToolbar(){};window.calls=[];window.viewLogDetail=value=>window.calls.push(value);window.retryFailedLog=value=>window.calls.push(value);${functions};renderCorreosHistorialTab();renderCorreosDashboard();`});
+  await expect(page.locator('img,svg,script[src]')).toHaveCount(0);
+  await expect(page.locator('#hist-tbody')).toContainText(hostile);
+  await expect(page.locator('#correos-dash-recent')).toContainText(hostile);
+  expect(await page.locator('#hist-filter-type option').nth(1).getAttribute('value')).toBe(hostile);
+  expect(await page.locator('.hist-row-check').getAttribute('data-id')).toBe(id);
+  await page.getByRole('button',{name:'Ver',exact:true}).click();
+  await page.getByRole('button',{name:'Reintentar',exact:true}).click();
+  expect(await page.evaluate(()=>window.calls)).toEqual([id,id]);
+  expect(await page.evaluate(()=>window.pwned)).toBeUndefined();
+  expect(unexpected).toEqual([]);
+});

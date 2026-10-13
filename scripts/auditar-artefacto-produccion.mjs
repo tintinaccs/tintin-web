@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { readProductionOrigins } from './lib/origen-produccion.mjs';
 
-const publicSite = JSON.parse(fs.readFileSync(path.resolve('config/public-site.json'), 'utf8'));
-const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
+const { origin } = readProductionOrigins();
 const expected = JSON.parse(fs.readFileSync(path.resolve('diagnostic-manifest.json'), 'utf8'));
 const expectedFingerprint = String(expected.sourceFingerprint || '');
 const attempts = Number(process.env.TINTIN_PRODUCTION_ARTIFACT_ATTEMPTS || 30);

@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { adminDeleteLike, adminDeleteReviewPermanently, adminLikeAction, adminReviewAction } from '../../cloudflare/participacion-admin.js';
@@ -13,7 +13,7 @@ export async function onRequest(context) {
   if (!originIsAllowed(origin, request.url)) return jsonResponse({ ok: false, error: 'Origen no permitido' }, 403, origin, request.url);
   if (request.method === 'OPTIONS') return preflightResponse(origin, request.url, 'POST, OPTIONS');
   try {
-    const actor = await requireSuperAdmin(request);
+    const actor = await requireSuperAdmin(request, env);
     if (request.method === 'GET') {
       const url = new URL(request.url);
       if (url.searchParams.get('action') !== 'commentReports') throw new Error('Acción administrativa no permitida');
@@ -63,6 +63,8 @@ export async function onRequest(context) {
     }));
     return jsonResponse({ ok: true, record }, 200, origin, request.url);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, request.url);
+    if (limited) return limited;
     return jsonResponse(
       { ok: false, error: String(error?.message || 'No se pudo completar la acción').slice(0, 300) },
       statusFromError(error, error?.code === 'version_conflict' ? 409 : 400),

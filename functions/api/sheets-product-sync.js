@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -28,8 +28,10 @@ export async function onRequest(context) {
 
   let actor;
   try {
-    actor = await requireSuperAdmin(request);
+    actor = await requireSuperAdmin(request, env);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     return jsonResponse({ ok: false, error: error?.message || 'Solo el Super Admin puede realizar esta acción.' }, error?.status || 401, origin, requestUrl);
   }
 

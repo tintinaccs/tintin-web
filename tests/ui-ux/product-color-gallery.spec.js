@@ -73,11 +73,16 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   await page.goto('/minimal-product-fixture',{waitUntil:'domcontentloaded'});expect(pageErrors).toEqual([]);await page.waitForFunction(()=>window.fixtureReady,{},{timeout:5000});
   const geometry = await page.evaluate(() => {
     const rect = selector => { const r=document.querySelector(selector).getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height}; };
-    return {main:rect('#gallery-main'),thumbs:rect('#gallery-thumbs'),colors:rect('#product-variants'),panel:rect('.tt-product-info-panel'),actions:[rect('#btn-product-add-cart'),rect('#btn-product-buy-now')],overflow:document.documentElement.scrollWidth>innerWidth};
+    return {main:rect('#gallery-main'),thumbs:rect('#gallery-thumbs'),colors:rect('#product-variants'),panel:rect(getComputedStyle(document.querySelector('.tt-product-info-panel')).display === 'contents' ? '#product-grid' : '.tt-product-info-panel'),name:rect('#product-name'),price:rect('#product-price'),actions:[rect('#btn-product-add-cart'),rect('#btn-product-buy-now')],overflow:document.documentElement.scrollWidth>innerWidth};
   });
   expect(geometry.main.bottom).toBeLessThanOrEqual(geometry.thumbs.top);
   expect(geometry.thumbs.bottom).toBeLessThanOrEqual(geometry.colors.top);
   expect(geometry.overflow).toBe(false);
+  if (width < 768) {
+    expect(geometry.name.height).toBeGreaterThan(0);
+    expect(geometry.name.bottom).toBeLessThanOrEqual(geometry.main.top);
+    expect(geometry.price.bottom).toBeLessThanOrEqual(geometry.main.top);
+  }
   expect(geometry.main.left).toBeGreaterThanOrEqual(16);
   expect(geometry.main.right).toBeLessThanOrEqual(width-16);
   expect(await page.locator('.tt-product-info-panel').evaluate(node=>getComputedStyle(node).boxShadow)).toBe('none');

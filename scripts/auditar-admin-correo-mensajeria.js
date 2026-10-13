@@ -125,7 +125,7 @@ check(
     adminSync.includes('event.stopImmediatePropagation()'),
   'La prueba debe evitar dobles envíos.'
 );
-check('Endpoint de prueba exige Super Admin', testEmailFn.includes('await requireSuperAdmin(request)'), 'La prueba debe validarse en servidor.');
+check('Endpoint de prueba exige Super Admin', testEmailFn.includes('await requireSuperAdmin(request, env)'), 'La prueba debe validarse en servidor.');
 check(
   'Promociones no migradas siguen desactivadas',
   adminSync.includes('promoToggle.disabled = true') &&

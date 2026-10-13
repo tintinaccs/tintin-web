@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { readProductionOrigins } from './lib/origen-produccion.mjs';
 
-const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
+const { origin, canonicalOrigin } = readProductionOrigins();
 const publicOrigin = new URL(origin).origin;
 const timeoutMs = Number(process.env.TINTIN_PHASE12_TIMEOUT_MS || 20000);
 const attempts = 3;
@@ -48,7 +49,7 @@ try {
     assert(result.url === origin + page, page + ' no terminó en su URL canónica limpia.');
     assert((response.headers.get('content-type') || '').includes('text/html'), page + ' no devolvió HTML.');
     assert(/<title>[^<]{3,}<\/title>/i.test(body), page + ' no tiene título útil.');
-    assert(body.includes('<link rel="canonical" href="' + origin + page + '">'), page + ' tiene canonical incorrecto.');
+    assert(body.includes('<link rel="canonical" href="' + canonicalOrigin + page + '">'), page + ' tiene canonical incorrecto.');
     assert(!body.includes('tintinaccs.github.io/tintin-web'), page + ' expone el origen antiguo.');
     assertStrongCsp(result.headers['content-security-policy'], page);
     for (const header of ['strict-transport-security','x-content-type-options','x-frame-options','referrer-policy']) assert(Boolean(result.headers[header]), page + ' no entrega ' + header + '.');
@@ -58,7 +59,7 @@ try {
   const robots = await request('/robots.txt');
   assert(robots.response.ok && robots.result.type.includes('text/plain'), 'robots.txt no está disponible como texto.');
   const technicalHost = new URL(origin).hostname.toLowerCase().endsWith('.pages.dev');
-  const hasCurrentSitemap = robots.body.includes('Sitemap: ' + origin + '/sitemap.xml');
+  const hasCurrentSitemap = robots.body.includes('Sitemap: ' + canonicalOrigin + '/sitemap.xml');
   if (technicalHost) {
     assert(!/^\s*Sitemap\s*:/im.test(robots.body), 'pages.dev no debe anunciar su sitemap técnico.');
     assert(robots.result.headers['x-robots-tag'] === 'noindex', 'pages.dev debe entregar X-Robots-Tag: noindex.');
@@ -73,13 +74,13 @@ try {
     const childSitemaps = sitemapUrls;
     sitemapUrls = [];
     for (const childUrl of childSitemaps) {
-      assert(childUrl.startsWith(origin + '/'), 'El sitemap index referencia un origen ajeno: ' + childUrl);
-      const child = await request(childUrl.slice(origin.length));
+      assert(childUrl.startsWith(canonicalOrigin + '/'), 'El sitemap index referencia un origen ajeno: ' + childUrl);
+      const child = await request(childUrl.slice(canonicalOrigin.length));
       assert(child.response.ok && /xml/.test(child.result.type), childUrl + ' no está disponible como XML.');
       sitemapUrls.push(...[...child.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]));
     }
   }
-  for (const page of indexablePages) assert(sitemapUrls.includes(origin + page), 'El sitemap no incluye ' + page);
+  for (const page of indexablePages) assert(sitemapUrls.includes(canonicalOrigin + page), 'El sitemap no incluye ' + page);
   assert(!sitemapUrls.some(url => /\.html(?:$|[?#])/.test(url)), 'El sitemap publica URLs .html que Cloudflare redirige.');
   assert(!sitemapUrls.some(url => /\/(admin|login|checkout|perfil|404)(?:\.html)?$/.test(url)), 'El sitemap expone una superficie privada.');
   const manifestResponse = await request('/manifest.json');
@@ -94,7 +95,7 @@ try {
 } catch (error) { failure = error; }
 
 fs.mkdirSync(path.resolve('artifacts'), { recursive: true });
-fs.writeFileSync(path.resolve('artifacts/phase12-production-smoke.json'), JSON.stringify({ checkedAt: new Date().toISOString(), origin, ok: !failure, routes: results, error: failure ? String(failure.message || failure) : '' }, null, 2));
+fs.writeFileSync(path.resolve('artifacts/phase12-production-smoke.json'), JSON.stringify({ checkedAt: new Date().toISOString(), origin, canonicalOrigin, ok: !failure, routes: results, error: failure ? String(failure.message || failure) : '' }, null, 2));
 for (const item of results) console.log((item.ok ? 'OK' : 'ERROR') + ' — ' + item.relative + ' — ' + (item.status || item.error) + ' — ' + item.ms + ' ms');
 if (failure) { console.error('\nSmoke de producción fallido:', failure.message || failure); process.exit(1); }
 console.log('\nProducción verificada con URLs limpias y CSP fuerte: ' + results.length + ' respuestas correctas.');

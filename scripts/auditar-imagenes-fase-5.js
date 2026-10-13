@@ -313,7 +313,7 @@ check(
 check(
   'Cloudflare valida el ID token con Firebase Auth en el servidor',
   files.cloudinarySecurity.includes("import { verifyFirebaseIdToken } from './firebase-id-token.js'") &&
-    files.cloudinarySecurity.includes('return verifyFirebaseIdToken(token)') &&
+    /const user = await verifyFirebaseIdToken\(token\);\s+await enforceAuthenticatedRateLimit\(request, env, user\);\s+return user;/.test(files.cloudinarySecurity) &&
     files.cloudinarySecurity.includes('const user = await verifyFirebaseIdToken(token)') &&
     files.cloudinarySecurity.includes('user.email !== SUPERADMIN_EMAIL') &&
     files.firebaseIdToken.includes("crypto.subtle.verify(") &&
@@ -523,9 +523,10 @@ check(
 );
 
 const PROCESSING_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
-const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-js';
-const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js';
-const CARGA_IMAGENES_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-carga-imagenes-js';
+const imageCacheBaseline = JSON.parse(read('scripts/cache-version-baseline.json'));
+const MEDIA_LIBRARY_VERSION_QUERY = `v=${imageCacheBaseline['js/components/images/biblioteca-multimedia.js'].version}`;
+const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = `v=${imageCacheBaseline['js/admin/products/biblioteca-multimedia-admin.js'].version}`;
+const CARGA_IMAGENES_VERSION_QUERY = `v=${imageCacheBaseline['js/components/images/carga-imagenes.js'].version}`;
 check(
   'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
   files.uploadWidget.includes(`./procesamiento-imagenes.js?${PROCESSING_VERSION_QUERY}`) &&

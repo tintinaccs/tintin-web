@@ -25,6 +25,8 @@ function document(path, data, updateTime = UPDATED) {
 function fakeStore(entries = {}, { transactional = false } = {}) {
   const map = new Map(Object.entries(entries));
   const commits = [];
+  const reads = [];
+  const batchReads = [];
   const calls = { findFirst: 0, maxNumber: 0 };
   let version = 0;
   const valueAtPath = (data, fieldPath) => String(fieldPath || '')
@@ -33,7 +35,13 @@ function fakeStore(entries = {}, { transactional = false } = {}) {
     .reduce((value, key) => value && typeof value === 'object' ? value[key] : undefined, data);
   return {
     commits,
-    get: async (_env, path) => map.get(decodeURIComponent(path)) || null,
+    get: async (_env, path) => { reads.push(path); return map.get(decodeURIComponent(path)) || null; },
+    batchGet: async (_env, paths) => {
+      batchReads.push([...paths]);
+      return paths.map(path => map.get(decodeURIComponent(path))).filter(Boolean).reverse();
+    },
+    reads,
+    batchReads,
     calls,
     map,
     findFirst: async (_env, collectionId, fieldPaths, value) => {
@@ -657,4 +665,141 @@ test('el pedido canónico conserva dos colores y reconstruye sus fotos desde el 
     { variant: 'Plateado', qty: 1, imageUrl: silver, price: 50000 },
   ]);
   assert.equal(result.order.subtotal, 150000);
+  assert.deepEqual(store.batchReads, [['products/prod_001']], 'las dos variantes leen el mismo producto una sola vez');
+  assert.equal(store.reads.filter(path => path.startsWith('products/')).length, 0);
+});
+
+test('60 productos se leen en un batch y conservan stock/precondiciones al crear un pedido', async () => {
+  const items = Array.from({ length: 60 }, (_, index) => ({ id: `p_${index}`, qty: 1, price: 1 }));
+  const entries = Object.fromEntries(items.map(item => [`products/${item.id}`, document(`products/${item.id}`, {
+    name: item.id, price: 100, stock: 2, active: true,
+  })]));
+  entries['settings/orderSequence'] = document('settings/orderSequence', { lastNumber: 1, highWaterMark: 1, historyReconciledAt: new Date() });
+  const store = fakeStore(entries);
+  const result = await createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', paymentStatus: 'pagado', items }, ACTOR, store);
+  assert.equal(result.order.items.length, 60);
+  assert.equal(result.order.subtotal, 6000);
+  assert.equal(result.changedProducts, 60);
+  assert.equal(store.batchReads.length, 1);
+  assert.equal(store.batchReads[0].length, 60);
+  assert.equal(store.reads.filter(path => path.startsWith('products/')).length, 0);
+  const inventoryWrites = store.commits[0].filter(write => write.path.startsWith('products/'));
+  assert.equal(inventoryWrites.length, 60);
+  for (const write of inventoryWrites) {
+    assert.equal(decodeFirestoreFields(write.fields).stock, 1);
+    assert.deepEqual(write.currentDocument, { updateTime: UPDATED });
+  }
+});
+
+test('el batch incompleto rechaza el producto faltante sin escribir stock/pedido', async () => {
+  const store = fakeStore({ 'products/prod_001': stockedProduct() });
+  const batch = store.batchGet;
+  store.batchGet = async (env, paths) => (await batch(env, paths)).filter(doc => !doc.name.endsWith('/prod_001'));
+  await assert.rejects(createOrderAdmin({}, RETIRO, ACTOR, store), error => error.code === 'product_not_found' && error.productId === 'prod_001');
+  assert.equal(store.commits.length, 0);
+});
+
+test('el límite administrativo conserva 100 productos en un batch y rechaza 101 antes de leer', async () => {
+  const items = Array.from({ length: 101 }, (_, index) => ({ id: `p_${index}`, qty: 1 }));
+  const entries = Object.fromEntries(items.map(item => [`products/${item.id}`, document(`products/${item.id}`, { name: item.id, price: 100, stock: 2, active: true })]));
+  const accepted = fakeStore(entries);
+  const created = await createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', items: items.slice(0, 100) }, ACTOR, accepted);
+  assert.equal(created.order.items.length, 100);
+  assert.equal(accepted.batchReads.length, 1);
+  assert.equal(accepted.batchReads[0].length, 100);
+  const rejected = fakeStore(entries);
+  await assert.rejects(createOrderAdmin({}, { userName: 'Cliente', shippingMethod: 'retiro', items }, ACTOR, rejected), /demasiados productos distintos/);
+  assert.equal(rejected.batchReads.length, 0);
+  assert.equal(rejected.commits.length, 0);
+});
+
+test('fallo del batch bloquea el pedido sin fallback de 60 lecturas ni escrituras', async () => {
+  const store = fakeStore({ 'products/prod_001': stockedProduct() });
+  store.batchGet = async () => { throw new Error('Firestore batch unavailable'); };
+  await assert.rejects(createOrderAdmin({}, RETIRO, ACTOR, store), /Firestore batch unavailable/);
+  assert.equal(store.reads.filter(path => path.startsWith('products/')).length, 0);
+  assert.equal(store.commits.length, 0);
+});
+
+test('un conflicto vuelve a leer el batch y no reserva inventario con versiones antiguas', async () => {
+  const store = fakeStore({
+    'products/prod_001': stockedProduct(),
+    'settings/orderSequence': document('settings/orderSequence', { lastNumber: 1, historyReconciledAt: new Date() }),
+  });
+  const commit = store.commit;
+  let attempts = 0;
+  store.commit = async (env, writes) => {
+    attempts += 1;
+    if (attempts === 1) {
+      store.map.set('products/prod_001', document('products/prod_001', { name: 'Aro', price: 50000, stock: 3, active: true }, '2026-10-13T12:00:00.000Z'));
+      throw Object.assign(new Error('Version conflict'), { status: 409 });
+    }
+    return commit(env, writes);
+  };
+  await createOrderAdmin({}, { ...RETIRO, paymentStatus: 'pagado' }, ACTOR, store);
+  assert.equal(store.batchReads.length, 2);
+  const write = store.commits[0].find(write => write.path === 'products/prod_001');
+  assert.deepEqual(write.currentDocument, { updateTime: '2026-10-13T12:00:00.000Z' });
+  assert.equal(decodeFirestoreFields(write.fields).stock, 2);
+});
+
+for (const action of ['cancelar', 'confirmar', 'reconciliar pago PayPal']) {
+  test(`${action} un pedido de 60 productos usa un batch y conserva CAS/stock/idempotencia`, async () => {
+    const items = Array.from({ length: 60 }, (_, index) => ({ id: `p_${index}`, name: `P${index}`, qty: 1, price: 100 }));
+    const entries = Object.fromEntries(items.map(item => [`products/${item.id}`, document(`products/${item.id}`, { name: item.name, price: 100, stock: 3, active: true })]));
+    const cancelling = action === 'cancelar';
+    entries['orders/order_sixty_123'] = document('orders/order_sixty_123', {
+      items, userName: 'Cliente', status: 'pendiente', paymentStatus: action === 'reconciliar pago PayPal' ? 'pagado' : 'pendiente',
+      payment: { method: 'paypal', status: action === 'reconciliar pago PayPal' ? 'pagado' : 'pendiente' },
+      inventoryState: cancelling ? 'reserved' : 'unreserved', inventoryRevision: 1, lastChangeId: 'before-change', subtotal: 6000, total: 6000, shippingCost: 0,
+    });
+    const store = fakeStore(entries, { transactional: true });
+    const input = { orderId: 'order_sixty_123', changeId: 'mutation_sixty_123',
+      ...(cancelling ? { status: 'cancelado' } : action === 'confirmar' ? { status: 'confirmado' } : { reconcileInventory: true }) };
+    const result = await applyOrderAdminMutation({}, input, ACTOR, store);
+    assert.equal(result.changedProducts, 60);
+    assert.equal(result.inventoryState, cancelling ? 'released' : 'reserved');
+    assert.equal(store.batchReads.length, 1);
+    assert.equal(store.batchReads[0].length, 60);
+    assert.equal(store.reads.filter(path => path.startsWith('products/')).length, 0);
+    assert.equal(store.commits.length, 1);
+    const writes = store.commits[0].filter(write => write.path.startsWith('products/'));
+    assert.equal(writes.length, 60);
+    for (const write of writes) {
+      assert.equal(decodeFirestoreFields(write.fields).stock, cancelling ? 4 : 2);
+      assert.deepEqual(write.currentDocument, { updateTime: UPDATED });
+    }
+    const duplicate = await applyOrderAdminMutation({}, input, ACTOR, store);
+    assert.equal(duplicate.duplicate, true);
+    assert.equal(store.commits.length, 1);
+    assert.equal(store.batchReads.length, 1, 'el replay no vuelve a consultar stock');
+  });
+}
+
+test('mutación con batch fallido o producto faltante no modifica pedido ni inventario', async () => {
+  for (const mode of ['missing', 'unavailable']) {
+    const store = fakeStore({ 'orders/pedido_prueba_1': pedido({ inventoryState: 'reserved' }), 'products/prod_001': aro(5) });
+    store.batchGet = mode === 'missing' ? async () => [] : async () => { throw new Error('batch unavailable'); };
+    await assert.rejects(applyOrderAdminMutation({}, { orderId: 'pedido_prueba_1', status: 'cancelado' }, ACTOR, store), mode === 'missing' ? /No se puede reconciliar el stock.*prod_001/ : /batch unavailable/);
+    assert.equal(store.commits.length, 0);
+    assert.equal(store.reads.filter(path => path.startsWith('products/')).length, 0);
+  }
+});
+
+test('cambiar 55 productos reservados por otros 55 lee dos batches sin truncar la unión', async () => {
+  const items = prefix => Array.from({ length: 55 }, (_, index) => ({ id: `${prefix}_${index}`, name: `P${index}`, qty: 1, price: 100 }));
+  const before = items('old');
+  const after = items('new');
+  const entries = Object.fromEntries([...before, ...after].map(item => [`products/${item.id}`, document(`products/${item.id}`, { stock: 2, price: 100, active: true })]));
+  entries['orders/swap_order_123'] = document('orders/swap_order_123', { items: before, inventoryState: 'reserved', status: 'confirmado', subtotal: 5500, total: 5500 });
+  const store = fakeStore(entries);
+  const result = await applyOrderAdminMutation({}, { orderId: 'swap_order_123', items: after }, ACTOR, store);
+  assert.equal(result.changedProducts, 110);
+  assert.deepEqual(store.batchReads.map(paths => paths.length), [100, 10]);
+  assert.equal(store.reads.filter(path => path.startsWith('products/')).length, 0);
+  assert.equal(store.commits[0].length, 112, 'conserva el límite existente de 120 escrituras');
+  for (const write of store.commits[0].filter(write => write.path.startsWith('products/'))) {
+    assert.equal(decodeFirestoreFields(write.fields).stock, write.path.startsWith('products/old_') ? 3 : 1);
+    assert.deepEqual(write.currentDocument, { updateTime: UPDATED });
+  }
 });

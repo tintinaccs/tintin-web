@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { customerOrderMessage } from '../../js/orders/ciclo-pedido.mjs';
@@ -188,7 +188,7 @@ export async function onRequest(context) {
     // acceso server-side a la colección propia sin devolver ni cambiar una
     // notificación; se usa desde Flujo de conexiones.
     if (request.method === 'GET') {
-      const user = await requireFirebaseUser(request);
+      const user = await requireFirebaseUser(request, env);
       const action = new URL(request.url).searchParams.get('action');
       if (action !== 'health') throw Object.assign(new Error('Acción no permitida'), { status: 400 });
       // Los IDs Firestore con el formato __.*__ están reservados. Esta sonda
@@ -203,7 +203,7 @@ export async function onRequest(context) {
     const action = clean(input.action, 80);
 
     if (action.startsWith('admin')) {
-      const actor = await requireSuperAdmin(request);
+      const actor = await requireSuperAdmin(request, env);
       if (action === 'adminNotificationSeen') {
         const id = safeId(input.notificationId, 'Notificación');
         const document = await firestoreAdminGet(env, `adminNotifications/${id}`);
@@ -228,7 +228,7 @@ export async function onRequest(context) {
       throw new Error('Acción administrativa no permitida');
     }
 
-    const user = await requireFirebaseUser(request);
+    const user = await requireFirebaseUser(request, env);
     if (action === 'notificationSeen') {
       await markNotificationRead(env, { uid: user.uid, notificationId: input.notificationId });
       return jsonResponse({ ok: true }, 200, origin, request.url);
@@ -251,6 +251,8 @@ export async function onRequest(context) {
     }
     throw new Error('Acción no permitida');
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, request.url);
+    if (limited) return limited;
     const status = statusFromError(error, error?.code === 'version_conflict' ? 409 : 400);
     return jsonResponse({ ok: false, error: String(error?.message || 'No se pudo completar la acción').slice(0, 300) }, status, origin, request.url);
   }

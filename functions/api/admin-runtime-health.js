@@ -1,5 +1,5 @@
 import { compactAdminRuntimeChecks, runAdminRuntimeChecks } from '../../cloudflare/admin-runtime-health.js';
-import { jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin } from '../../cloudflare/seguridad-cloudinary.js';
+import { rateLimitErrorResponse, jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin } from '../../cloudflare/seguridad-cloudinary.js';
 
 function requestId() {
   return `admin-health-${crypto.randomUUID().slice(0, 10)}`;
@@ -30,7 +30,7 @@ export async function onRequest({ request, env }) {
   }
 
   try {
-    const user = await requireSuperAdmin(request);
+    const user = await requireSuperAdmin(request, env);
     const report = await runAdminRuntimeChecks(env);
     const payload = {
       ok: report.ok,
@@ -44,6 +44,8 @@ export async function onRequest({ request, env }) {
     };
     return jsonResponse(payload, report.ok ? 200 : 503, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     const classified = classifyAuthError(error);
     console.error(JSON.stringify({
       message: 'admin runtime health request failed',

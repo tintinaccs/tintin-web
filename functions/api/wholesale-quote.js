@@ -1,7 +1,7 @@
 // Cotizaciones mayoristas: la clienta autenticada envía productos y
 // cantidades. El servidor arma la cotización con datos del catálogo; el
 // navegador nunca fija precios ni el estado mayorista de la cuenta.
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -28,7 +28,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'method_not_allowed' }, 405, origin, requestUrl);
 
   try {
-    const user = await requireFirebaseUser(request);
+    const user = await requireFirebaseUser(request, env);
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > 32 * 1024) {
       return jsonResponse({ ok: false, error: 'invalid_request' }, 400, origin, requestUrl);
@@ -42,6 +42,8 @@ export async function onRequest(context) {
       duplicate: result.duplicate === true,
     }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     const code = String(error?.code || '');
     const status = statusFromError(error, Number(error?.status) || 400);
     if (status === 401 || (status === 403 && code.startsWith('auth/'))) {
