@@ -18,7 +18,11 @@ async function installRuntimeErrorMonitor(page,context){
     // 11 ms after beforeunload. This is a native diagnostic, not a JS rejection.
     const authLookup=error.message==='/127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=demo-key due to access control checks.' &&
       error.stack?.endsWith('    at fetch ([native code]:0:0)');
-    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || authLookup);
+    // Trace 38282508656: WebKit cancels batchGet 6 ms after beforeunload.
+    // Only this demo emulator endpoint and Firebase SDK stack are diagnostic.
+    const firestoreBatchGet=error.message==='/127.0.0.1:8080/v1/projects/demo-tintin-interactions/databases/(default)/documents:batchGet due to access control checks.' &&
+      error.stack?.includes('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
+    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup);
     if(navigationCancellation)browserDiagnostics.push({kind:'native-emulator-channel-cancelled-on-navigation',message:error.message});
     else errors.push(error.message);
   });

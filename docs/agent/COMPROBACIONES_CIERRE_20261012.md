@@ -1,0 +1,11 @@
+# Comprobaciones de cierre — 2026-10-12
+
+Codex /root. Base `72ea709ad9b7eafd18f60e52f8413af49d564117`.
+
+- PASS_PRODUCTION: monitor público, cabeceras y artefacto publicado de la base. Páginas, sitemaps y APIs públicas respondieron; API administrativa sin sesión rechazó con401. PayPal continúa deshabilitado en sandbox, no equivale a pago probado.
+- PASS_PRODUCTION parcial: smoke Chromium /login y /perfil, App Check enabled, sin errores bloqueantes. No demuestra OAuth/OTP/checkout autenticados completos.
+- FAIL reproducido en sesión Admin: consola PERSISTENCE_READY viene de diagnóstico con tag20260918, además del módulo20261012. Inventario de recursos muestra Firebase con dos versiones. Causa: comercio-local-admin importa cliente-api-autenticado sin query; una URL antigua cacheada mantiene la cadena de Auth previa. Corrección: import canónico y nueva versión del consumidor. El auditor de caché ahora rechaza imports web sin versión cuando el mismo recurso tiene una URL versionada. Imports de Functions/Cloudflare servidor quedan fuera de esa regla web.
+- Escaneo Gitleaks8.30.1, binario oficial y SHA256 verificado, `git --log-opts=--all --redact=100`, repositorio no shallow con6365 commits accesibles.46 coincidencias, reporte local íntegramente redactado. Incluye hashes de protección, configuración pública Firebase/reCAPTCHA y JWT ficticio de test. También identifica EMAIL_SECRET compartido en código/documentación históricos de email; no se imprime ni se reutiliza. Código actual usa ID token/Resend y no define EMAIL_SECRET. Revocación en el antiguo deployment Apps Script NOT_VERIFIED: no confundir ausencia del secreto actual con prueba de revocación histórica. No demuestra ausencia absoluta de secretos fuera de las reglas y refs escaneadas.
+- Chrome reconectado por el titular. PASS_PRODUCTION2FA Cloudflare: perfil/autenticación mostró clave de seguridad, TOTP móvil y correo activos; no se modificó configuración ni se leyeron códigos de respaldo. Evidencia local cloudflare-2fa-verificado-20261012.jpg. Cuenta cliente común, prueba de correo/checkout real, media independiente, alta/borrado central, recuperación App Check y restore aislado siguen pendientes hasta evidencia propia.
+
+No cambiar dominio/DNS; #929/#1101 excluidos. No marcar100% global por CI o pruebas emuladas.

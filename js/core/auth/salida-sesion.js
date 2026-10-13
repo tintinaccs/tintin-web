@@ -1,6 +1,6 @@
-import { auth } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
+import { auth } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { markExplicitLogout, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5';
+import { markExplicitLogout, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6';
 import { withDeadline } from './estado-perfil-sesion.mjs?v=tintin-20261010-registration-name-2';
 
 let pendingLogout = null;

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-<script src="js/cargador-pagina.js?v=tintin-20261012-auth-privacy-1-cargador-pagina-js-domain-prepared-20261012-5"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261012-unified-2-cargador-pagina-js-domain-prepared-20261012-6"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1-brand-runtime-20261004-1-owner-pink-20261004-1" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="robots" content="noindex, nofollow, noarchive">
@@ -14,18 +14,18 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
-  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5">
-  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20261012-auth-privacy-1-control-tienda-js-domain-prepared-20261012-5">
-  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-5">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6">
+  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20261012-checkout-ready-2-control-tienda-js-domain-prepared-20261012-6">
+  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260818-header-dropdowns-solid-2-brand-20261004-1-owner-pink-20261004-1">
+  <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1">
-  <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260915-footer-surface-1-brand-20261004-1-owner-pink-20261004-1">
+  <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1">
   <link rel="stylesheet" href="css/admin/admin-color-tokens.css?v=tintin-20260811-cls-desktop-stable-2-brand-20261004-1-owner-pink-20261004-1">
@@ -311,7 +311,7 @@
     .adm-mobile-tab .nav-icon { font-size: 1.2rem; }
   </style>
 <link rel="stylesheet" href="css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1">
-<link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261006-etiqueta-tarjeta-1-merge-spacing-20261010-1">
+<link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css">
 </head>
 <body>
 
@@ -401,13 +401,13 @@
 <div class="adm-toast" id="adm-toast"></div>
 
 <script type="module">
-import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5";
-import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-5";
-import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5";
+import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6";
+import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6";
+import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-5";
-import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20261012-auth-privacy-1-carga-imagenes-js-domain-prepared-20261012-5";
-import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js-domain-prepared-20261012-5";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6";
+import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20261012-auth-privacy-1-carga-imagenes-js-domain-prepared-20261012-6";
+import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js-domain-prepared-20261012-6";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
 // (js/core/auth/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá
@@ -796,7 +796,7 @@ subscribeAuthState(async (user) => {
   renderSection(currentSection);
 });
 </script>
-<script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20261012-auth-privacy-1-esquema-color-admin-js-domain-prepared-20261012-5"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261012-auth-privacy-1-proteccion-sesion-js-domain-prepared-20261012-5"></script>
+<script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261012-auth-privacy-1-proteccion-sesion-js-domain-prepared-20261012-6"></script>
 </body>
 </html>

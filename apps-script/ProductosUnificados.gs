@@ -500,6 +500,10 @@ function tintinSheetUserRole_(value) {
 }
 
 function tintinPrepareNewProductRow_(sheet, rowNumber) {
+  // getLastRow() mide datos, no capacidad: getRange fuera de getMaxRows()
+  // falla antes de copiar formato o escribir la identidad del producto.
+  var maxRows = sheet.getMaxRows();
+  if (rowNumber > maxRows) sheet.insertRowsAfter(maxRows, rowNumber - maxRows);
   var templateRow = TINTIN_PRODUCTS_FIRST_ROW;
   if (sheet.getLastRow() < templateRow) return;
   var isNewRow = rowNumber > sheet.getLastRow();

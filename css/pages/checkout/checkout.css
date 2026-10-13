@@ -440,7 +440,15 @@
 
     /* ---- PAYMENT RADIO CARDS ---- */
     .ck-pay-option {
-      display: none;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      clip-path: inset(50%);
+    }
+    .ck-pay-option:focus-visible + .ck-pay-label {
+      outline: 3px solid var(--accent, #b84c72);
+      outline-offset: 3px;
     }
     .ck-pay-label {
       display: flex;
@@ -918,3 +926,5 @@
   body:has(.ck-receipt) #panel-4 { position: absolute; inset: 0 auto auto 0; width: 100%; max-width: none; box-shadow: none; border: 0; }
   body:has(.ck-receipt) #ck-post-confirm { display: none !important; }
 }
+
+.ck-receipt #ck-view-orders { display: flex; justify-content: center; margin: 12px 0; text-decoration: none; }

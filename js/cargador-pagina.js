@@ -345,7 +345,7 @@
     index: 'Página Principal',
     '': 'Página Principal',
     contact: 'Contacto',
-    login: 'Iniciar Sesión',
+    login: 'Iniciando sesión',
     about: 'Quiénes Somos',
     nosotros: 'Quiénes Somos',
     perfil: 'Mi Perfil',
@@ -838,18 +838,18 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-auth-privacy-1-calidad-interfaz-js-domain-prepared-20261012-5');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261012-auth-privacy-1-control-tienda-js-domain-prepared-20261012-5');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261012-checkout-ready-2-control-tienda-js-domain-prepared-20261012-6');
   }
 
   function bootHeaderMode() {
     if (!window.TintinHeaderModeBooted) {
-      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261012-auth-privacy-1-visibilidad-navegacion-por-dispositivo-js-domain-prepared-20261012-5');
+      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261012-auth-privacy-1-visibilidad-navegacion-por-dispositivo-js-domain-prepared-20261012-6');
     }
   }
 
@@ -867,7 +867,7 @@
     if (isVisualPreviewFrame) return;
     if (!window.TintinSiteActivityBooted) {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261012-auth-privacy-1-actividad-sitio-js-domain-prepared-20261012-5');
+      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261012-auth-privacy-1-actividad-sitio-js-domain-prepared-20261012-6');
     }
   }
 
@@ -893,10 +893,10 @@
   function bootAdminAndProfileFixes() {
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
-      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261012-auth-privacy-1-eliminacion-pedidos-admin-js-domain-prepared-20261012-5');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261012-auth-privacy-1-control-bienvenida-admin-js-domain-prepared-20261012-5');
+      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261012-auth-privacy-1-eliminacion-pedidos-admin-js-domain-prepared-20261012-6');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261012-auth-privacy-1-control-bienvenida-admin-js-domain-prepared-20261012-6');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
-      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261012-auth-privacy-1-control-tienda-admin-js-domain-prepared-20261012-5');
+      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261012-auth-privacy-1-control-tienda-admin-js-domain-prepared-20261012-6');
     }
   }
 
@@ -914,18 +914,18 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261012-auth-privacy-1-gestion-imagenes-js-domain-prepared-20261012-5');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261012-auth-privacy-1-gestion-imagenes-js-domain-prepared-20261012-6');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261012-auth-privacy-1-presentacion-colecciones-js-domain-prepared-20261012-5');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261012-checkout-ready-3-presentacion-colecciones-js-domain-prepared-20261012-6');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-auth-privacy-1-sincronizacion-favoritos-js-domain-prepared-20261012-5');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-checkout-ready-3-sincronizacion-favoritos-js-domain-prepared-20261012-6');
   }
 
   function bootThemeColorSanitizerPublic() {
@@ -936,7 +936,7 @@
 
   function bootPageAuditFixPublic() {
     if (!window.TintinPageAuditFixBooted) {
-      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261010-mobile-navigation-front-1');
+      importSibling('quality/correccion-auditoria-pagina.js', 'Page Audit Fix', undefined, 'tintin-20261012-checkout-ready-3-control-paneles-js');
     }
   }
 

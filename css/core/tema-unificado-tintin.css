@@ -454,7 +454,7 @@ html[data-tt-footer-accent-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-
 .tt-stock-unavailable :is(.tt-product-img,.tt-color-swatch), #gallery-main.tt-stock-unavailable { position:relative; overflow:hidden; }
 .tt-search-result-item.tt-stock-unavailable { position:relative; }
 .tt-search-result-item.tt-stock-unavailable .tt-search-result-image { outline:2px solid #bf2437; }
-.tt-footer-wa svg, a[href*="wa.me"] svg, .tt-product-wa-link svg { color:#168541; }
+.tt-footer-wa svg, a[href*="wa.me"] svg, .tt-product-wa-link svg { color:var(--color-button-whatsapp-text, #713C53); }
 
 .tt-account-drawer-heading { flex:1; text-align:center; min-width:0; }
 .tt-account-drawer-logo { display:block; width:min(160px,60vw); height:80px; object-fit:contain; margin:0 auto 8px; }
@@ -465,13 +465,17 @@ html[data-tt-footer-accent-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-
 .perfil-wrap, .perfil-card { box-sizing:border-box; min-width:0; }
 
 
-/* WhatsApp keeps its recognizable service color across the public theme. */
-html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link),
+/* WhatsApp comparte la paleta de marca y los tokens de sus controles. */
+html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link) {
+  background:var(--color-button-whatsapp-background) !important;
+  color:var(--color-button-whatsapp-text) !important;
+  border-color:var(--color-button-whatsapp-background) !important;
+}
 html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link) * {
-  background-color: #168541 !important; color: #fff !important; border-color: #168541 !important;
+  color:var(--color-button-whatsapp-text) !important;
 }
 html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link):hover {
-  background: #116b34 !important;
+  background:var(--color-button-whatsapp-hover) !important;
 }
 .tt-card-colors { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; margin:6px 0; }
 .tt-card-color { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border:1px solid transparent; border-radius:50%; padding:7px; background:transparent; cursor:pointer; }
@@ -480,9 +484,9 @@ html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-lin
 .tt-card-color:focus-visible { outline:2px solid #713C53; outline-offset:2px; }
 .tt-card-color.tt-stock-unavailable .tt-color-swatch { position:relative; overflow:hidden; }
 
-/* WhatsApp: icono y texto blancos; una sola etiqueta en todos los footers. */
+/* WhatsApp: icono y texto comparten tinta; una sola etiqueta en los footers. */
 html body:not(:has(.adm-main)) :is(.tt-footer-wa,.tt-contact-wa-link) svg {
-  color:#fff !important;
+  color:var(--color-button-whatsapp-text) !important;
   fill:currentColor;
 }
 .tt-hero-link { text-decoration:none !important; border-bottom:0 !important; }
@@ -496,7 +500,7 @@ html body:not(:has(.adm-main)) :is(.tt-footer-wa,.tt-contact-wa-link) svg {
 
 /* Los botones de WhatsApp conservan su contraste aunque cambie el texto primario. */
 html body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-wa .tt-footer-wa-text,
-html body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-wa svg { color:#fff !important; }
+html body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-wa svg { color:var(--color-button-whatsapp-text) !important; }
 
 /* Tarjetas de boutique: fotografía cuadrada, contenido compacto y acciones alineadas. */
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-img { aspect-ratio:1; min-height:0; background:#fff; }

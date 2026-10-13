@@ -1,6 +1,6 @@
-import { db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5';
+import { AUTH_STATES, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6';
 
 const PROFILE_READ_TIMEOUT_MS = 5000;
 let sessionUid = null;
@@ -26,12 +26,17 @@ export function readCheckoutProfile(user) {
   }
   if (profileRead) return profileRead;
   let timer;
-  const request = Promise.race([
-    getDoc(doc(db, 'users', user.uid)).then(snap => snap.exists() ? snap.data() : null),
-    new Promise((_, reject) => {
-      timer = window.setTimeout(() => reject(new Error('profile_read_timeout')), PROFILE_READ_TIMEOUT_MS);
-    })
-  ]).finally(() => window.clearTimeout(timer));
+  const request = (async () => {
+    const secure = await appCheckReady;
+    if (sessionUid !== user.uid) return null;
+    if (!secure && window.TintinAppCheckStatus !== 'enabled') throw Object.assign(new Error('La conexión segura todavía no está disponible.'), { code: 'app-check-unavailable' });
+    return Promise.race([
+      getDoc(doc(db, 'users', user.uid)).then(snap => snap.exists() ? snap.data() : null),
+      new Promise((_, reject) => {
+        timer = window.setTimeout(() => reject(new Error('profile_read_timeout')), PROFILE_READ_TIMEOUT_MS);
+      })
+    ]);
+  })().finally(() => window.clearTimeout(timer));
   profileRead = request;
   // Permitir un reintento explícito tras error, sin borrar una sesión nueva.
   request.catch(() => { if (profileRead === request) profileRead = null; });

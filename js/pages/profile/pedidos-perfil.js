@@ -1,7 +1,7 @@
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
-import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
+import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6';
 import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261012-auth-privacy-1-estadisticas-pedidos-js-domain-prepared-20261012-5';
+import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261012-auth-privacy-1-estadisticas-pedidos-js-domain-prepared-20261012-6';
 import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1';
 
 const PAGE = /(?:^|\/)perfil(?:\.html)?\/?$/i;
@@ -39,7 +39,7 @@ function deliveryText(order) {
   return clean(order.shippingMethod || order.deliveryMethod || order.delivery?.method || 'A coordinar');
 }
 function addressText(order) {
-  return clean(order.address || order.deliveryAddress || order.delivery?.address || order.city || 'Sin dirección registrada');
+  return clean(order.shipping?.address || order.address || order.deliveryAddress || order.delivery?.address || order.shipping?.city || order.city || 'Sin dirección registrada');
 }
 function timeline(order) {
   const status = statusOf(order);
@@ -61,7 +61,7 @@ function orderMarkup(order) {
   const items = Array.isArray(order.items) ? order.items : [];
   const lines = items.map(item => {
     const qty = Math.max(1,Number(item.qty || item.quantity) || 1);
-    return `<div class="tt-profile-order-line"><span>${qty}x ${escapeHtml(item.name || 'Producto')}</span><strong>${money((Number(item.price)||0)*qty)}</strong></div>`;
+    return `<div class="tt-profile-order-line"><span>${qty}x ${escapeHtml(item.name || 'Producto')}${item.variant ? ` · ${escapeHtml(item.variant)}` : ''}</span><strong>${money((Number(item.price)||0)*qty)}</strong></div>`;
   }).join('');
   const summary = items.slice(0,3).map(item => `${Math.max(1,Number(item.qty || item.quantity)||1)}x ${escapeHtml(item.name || 'Producto')}`).join(', ');
   const extra = items.length > 3 ? ` +${items.length-3} más` : '';
@@ -156,6 +156,7 @@ export function startProfileOrders() {
   let authStop = null;
   let permissionRecoveryAttempted = false;
   let stopped = false;
+  let focusedOrderId = '';
   const render = (orders,options={}) => {
     lastOrders = orders;
     lastOptions = options;
@@ -164,12 +165,28 @@ export function startProfileOrders() {
     if (options.error && !options.stale) { list.innerHTML = '<div class="tt-profile-state" role="alert">No pudimos cargar tus pedidos. <button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-retry>Reintentar</button></div>'; list.setAttribute('aria-busy','false'); return; }
     if (options.empty) { list.innerHTML = '<div class="tt-profile-state">Todavía no tenés pedidos.<br><a href="/catalogo" class="perfil-btn perfil-btn-outline">Ver productos →</a></div>'; list.setAttribute('aria-busy','false'); return; }
     const openIds = new Set([...list.querySelectorAll('article[data-order-id] details[open]')].map(node=>node.closest('article').dataset.orderId));
+    const requested = String(location.hash||'').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
+    const requestedIndex = requested ? orders.findIndex(order => order.id === requested) : -1;
+    if (requestedIndex >= visible) visible = requestedIndex + 1;
     list.innerHTML = orders.slice(0,visible).map(orderMarkup).join('') + (orders.length > visible ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-more>Cargar más pedidos</button>' : '') + (options.partial ? '<button type="button" class="perfil-btn perfil-btn-outline" data-profile-orders-retry>Reintentar sincronización</button>' : '');
     for (const article of list.querySelectorAll('article[data-order-id]')) if (openIds.has(article.dataset.orderId)) article.querySelector('details')?.setAttribute('open','');
     list.setAttribute('aria-busy','false');
-    const requested = String(location.hash||'').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
-    if (requested) { const target=document.getElementById(`pedido-${requested}`); if (target){target.querySelector('details')?.setAttribute('open',''); if(!target.dataset.ttFocused){target.dataset.ttFocused='1';}} }
+    if (requested) {
+      const target=document.getElementById(`pedido-${requested}`);
+      if (target) {
+        target.querySelector('details')?.setAttribute('open','');
+        if (focusedOrderId !== requested) {
+          focusedOrderId = requested;
+          requestAnimationFrame(() => {
+            target.scrollIntoView({block:'start',behavior:'smooth'});
+            target.setAttribute('tabindex','-1');
+            target.focus({preventScroll:true});
+          });
+        }
+      }
+    }
   };
+  window.addEventListener('hashchange', () => render(lastOrders,lastOptions));
   const profileAppCheckReady = async () => {
     if (window.TintinAppCheckStatus === 'enabled') return true;
     const ready = await Promise.resolve(appCheckReady).catch(() => false);

@@ -1,4 +1,4 @@
-import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20261012-auth-privacy-1-configuracion-publica-js-domain-prepared-20261012-5';
+import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20261012-auth-privacy-1-configuracion-publica-js-domain-prepared-20261012-6';
 
 function safeUrl(value, handleBase = '') {
   let candidate = String(value || '').trim();

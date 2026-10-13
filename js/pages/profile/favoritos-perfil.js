@@ -1,9 +1,21 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5';
-import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1-domain-prepared-20261012-6';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6';
+import { collection} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1';
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const money = value => `Gs. ${Math.round(Number(value) || 0).toLocaleString('es-PY')}`;
+
+export function resolveFavoriteProducts(items, products) {
+  const current = new Map(products.map(product => [String(product.id), product.data]));
+  return items.map(item => {
+    const product = current.get(String(item.productId));
+    const price = product?.price;
+    return { ...item, name: product?.name || item.name, imageUrl: product?.imageUrl || item.imageUrl,
+      price: price != null && price !== '' && Number.isFinite(Number(price)) && Number(price) > 0 ? Number(price) : null };
+  });
+}
 
 function render(items) {
   const root = document.getElementById('perfil-favorites-list');
@@ -14,7 +26,7 @@ function render(items) {
   }
   root.innerHTML = items.map(item => `<article style="display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
     <img src="${escapeHtml(item.imageUrl || 'assets-tintin/images/placeholder-producto.webp')}" alt="" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:6px">
-    <div><a href="/product?id=${encodeURIComponent(item.productId)}" style="font-weight:800;color:var(--text);text-decoration:none">${escapeHtml(item.name || 'Producto')}</a><div style="font-size:12px;color:var(--color-text-primary,#713C53);margin-top:4px">${money(item.price)}</div></div>
+    <div><a href="/product?id=${encodeURIComponent(item.productId)}" style="font-weight:800;color:var(--text);text-decoration:none">${escapeHtml(item.name || 'Producto')}</a><div style="font-size:12px;color:var(--color-text-primary,#713C53);margin-top:4px">${item.price == null ? 'Consultá precio y disponibilidad' : money(item.price)}</div></div>
     <button type="button" class="perfil-btn perfil-btn-danger" data-remove-favorite="${escapeHtml(item.productId)}" aria-label="Quitar ${escapeHtml(item.name || 'producto')} de favoritos">Quitar</button>
   </article>`).join('');
 }
@@ -50,8 +62,14 @@ subscribeAuthState(async user => {
   if (!user) return;
   await appCheckReady;
   if (myGeneration !== generation) return;
-  unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'favorites'), snapshot => {
+  let revision = 0;
+  unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'favorites'), async snapshot => {
     if (myGeneration !== generation) return;
-    render(snapshot.docs.map(item => item.data()).sort((a,b) => String(a.name).localeCompare(String(b.name), 'es')));
+    const myRevision = ++revision;
+    const items = snapshot.docs.map(item => ({ productId: item.id, ...item.data() }));
+    let products = [];
+    try { if (items.length) products = await fetchPublicCatalogResource('products'); } catch { /* Nunca mostrar un precio histórico como vigente. */ }
+    if (myGeneration !== generation || myRevision !== revision) return;
+    render(resolveFavoriteProducts(items, products).sort((a,b) => String(a.name).localeCompare(String(b.name), 'es')));
   }, () => { if (myGeneration === generation) renderError(); });
 });

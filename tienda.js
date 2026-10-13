@@ -250,6 +250,7 @@ function saveCart(cart) {
 }
 
 function showCartToast(message) {
+  if (window.TintinCartSyncV2?.showFeedback) return window.TintinCartSyncV2.showFeedback(message, 'success');
   let toast = document.getElementById('tt-added-toast');
   if (!toast) {
     toast = document.createElement('div');
@@ -277,7 +278,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-auth-privacy-1-sincronizacion-carrito-js-domain-prepared-20261012-5');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1001,7 +1002,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-auth-privacy-1-sincronizacion-carrito-js-domain-prepared-20261012-5');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1842,7 +1843,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-auth-privacy-1-sincronizacion-carrito-js-domain-prepared-20261012-5');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1878,6 +1879,7 @@ function _showProductCartError(error) {
 }
 
 function _showProductToast(productName) {
+  if (window.TintinCartSyncV2?.showFeedback) return window.TintinCartSyncV2.showFeedback(`✓ ${productName} agregado al carrito`, 'success');
   const toast = document.getElementById('tt-added-toast');
   const toastText = document.getElementById('tt-added-toast-text');
   if (!toast) return;

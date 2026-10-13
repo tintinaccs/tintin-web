@@ -1,4 +1,4 @@
-import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js';
+import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6';
 
 const sections=['ventas-locales','clientes-compraron','espejos-sheets'];
 const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];

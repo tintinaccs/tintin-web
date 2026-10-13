@@ -11,9 +11,9 @@
    vistas, filtros, selección, panel lateral, búsqueda y navegación rápida.
    ======================================================================== */
 
-import { auth, db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-5';
-import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-5';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5';
+import { auth, db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
+import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6';
 import { recordAuthDiagnostic } from '../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import {
   collection,
@@ -24,9 +24,9 @@ import {
   query,
   startAfter
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-5';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-5';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261012-auth-privacy-1-estado-colecciones-js-domain-prepared-20261012-5';
+import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 const VERSION = 'tintin-20260924-products-description-1-brand-20261004-1-owner-pink-20261004-1';
@@ -1032,7 +1032,7 @@ function openWhatsApp(order) {
   const digits = String(customer.phone || '').replace(/\D/g, '');
   if (!digits) { toast('Este pedido no tiene teléfono.'); return; }
   const normalized = digits.startsWith('595') ? digits : `595${digits.replace(/^0+/, '')}`;
-  const text = encodeURIComponent(`Hola ${customer.name || ''}! Te escribo por tu pedido #${order.id} de Tintin.`);
+  const text = encodeURIComponent(`Hola ${customer.name || ''}! Te escribo por tu pedido #${orderDisplayId(order)} de Tintin.`);
   window.open(`https://wa.me/${normalized}?text=${text}`, '_blank', 'noopener,noreferrer');
 }
 

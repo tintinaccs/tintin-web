@@ -12,9 +12,9 @@ const LIGHTWEIGHT_PAGES = new Set([
 ]);
 
 const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.js';
-const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20261012-auth-privacy-1-mantenimiento-contacto-js-domain-prepared-20261012-5';
-const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20261012-auth-privacy-1-mantenimiento-legal-js-domain-prepared-20261012-5';
-const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-maestro-admin-js-domain-prepared-20261012-5';
+const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20261012-auth-privacy-1-mantenimiento-contacto-js-domain-prepared-20261012-6';
+const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20261012-auth-privacy-1-mantenimiento-legal-js-domain-prepared-20261012-6';
+const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-maestro-admin-js-domain-prepared-20261012-6';
 const VISUAL_LAYOUT_GUARD = '<style id="tt-vb-layout-guard">html.tt-vb-layout-pending body>section,html.tt-vb-layout-pending body>main{visibility:hidden;animation:tt-vb-layout-release 0s linear 3.5s forwards}@keyframes tt-vb-layout-release{to{visibility:visible}}</style>';
 
 function pageName(request) {

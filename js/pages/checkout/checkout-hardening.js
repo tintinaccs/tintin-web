@@ -4,9 +4,9 @@ import {
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261012-auth-privacy-1-sincronizacion-carrito-js-domain-prepared-20261012-5';
-import { AUTH_STATES, subscribeSession, waitForSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-5';
-import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261012-auth-privacy-1-perfil-checkout-js-domain-prepared-20261012-5';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6';
+import { AUTH_STATES, subscribeSession, waitForSession, getSessionUser } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6';
+import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261012-client-recovery-1-perfil-checkout-js-domain-prepared-20261012-6';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?\/?$/i;
 const RESUME_KEY = 'tt_checkout_resume_step';
@@ -45,7 +45,7 @@ function showError(message, step = 0) {
 }
 
 function forceCart(message = '') {
-  if (window.TintinCheckoutOrderCompleted) return;
+  if (window.TintinCheckoutOrderCompleted || window.TintinCheckoutReceiptRestoring) return;
   document.querySelectorAll('.ck-panel').forEach((panel, index) => {
     panel.classList.toggle('active', index === 0);
   });
@@ -329,6 +329,13 @@ function boot() {
         eventuallyClearResumeBackup();
       }
     });
+  });
+  window.addEventListener('tintin:app-check-ready', event => {
+    if (event.detail?.ready !== true) return;
+    const user = getSessionUser();
+    if (!user || profileState.ok) return;
+    profilePromise = loadProfile(user);
+    profilePromise.then(state => { if (state.ok) { restoreResumeState(); eventuallyClearResumeBackup(); } });
   });
 
   document.addEventListener('click', event => {

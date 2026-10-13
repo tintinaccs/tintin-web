@@ -28,7 +28,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
 
 
   function resetVisualStep() {
-    if (window.TintinCheckoutOrderCompleted) return;
+    if (window.TintinCheckoutOrderCompleted || window.TintinCheckoutReceiptRestoring) return;
     clearResumeState();
     document.querySelectorAll('.ck-panel').forEach((panel, index) => {
       panel.classList.toggle('active', index === 0);

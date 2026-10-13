@@ -12,7 +12,7 @@ import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
   uploadImageToLibrary
-} from './biblioteca-multimedia.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-js-domain-prepared-20261012-5';
+} from './biblioteca-multimedia.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-js-domain-prepared-20261012-6';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',

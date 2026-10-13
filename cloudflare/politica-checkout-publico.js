@@ -307,13 +307,13 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
   const encomiendaMode = cleanText(payload.encomiendaMode, 20);
   if (shipping.method !== 'encomienda' && encomiendaMode) throw checkoutError('shipping_invalid');
   if (shipping.method === 'encomienda' && encomiendaMode !== 'agencia' && encomiendaMode !== 'puerta') {
-    throw checkoutError('shipping_invalid');
+    throw checkoutError('encomienda_mode_required');
   }
   const address = cleanText(payload.address, 300);
   const referencia = cleanText(payload.referencia, 300);
   const doorDelivery = shipping.method === 'encomienda' && encomiendaMode === 'puerta';
   if (shipping.method === 'delivery' && !mapLocation?.name) throw checkoutError('map_required');
-  if (shipping.method === 'delivery' && referencia.length < 5) throw checkoutError('reference_required');
+  if ((shipping.method === 'delivery' || (shipping.method === 'encomienda' && encomiendaMode === 'puerta')) && referencia.length < 5) throw checkoutError('reference_required');
   if (doorDelivery) {
     if (address.length < 5) throw checkoutError('address_required');
     if (!mapLocation?.name) throw checkoutError('map_required');
