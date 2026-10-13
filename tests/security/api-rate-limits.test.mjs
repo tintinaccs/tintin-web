@@ -3,6 +3,9 @@ import assert from 'node:assert/strict';
 import { onRequest } from '../../functions/_middleware.js';
 
 for (const [testIndex, [path, method, limit]] of [
+  ['/product', 'GET', 60],
+  ['/products/fixture', 'GET', 60],
+  ['/pages/fixture/', 'HEAD', 60],
   ['/api/health', 'GET', 12],
   ['/api/health', 'HEAD', 12],
   ['/api/username-availability', 'POST', 30],

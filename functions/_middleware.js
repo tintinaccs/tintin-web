@@ -27,6 +27,7 @@ const MUTATION_LIMITS = Object.freeze([
 // geolocalización o configuración de pago en consumo innecesario. Los límites
 // son deliberadamente amplios para no afectar la navegación normal.
 const READ_LIMITS = Object.freeze([
+  [/^\/(?:product(?:\.html)?|products\/[^/]+|pages\/[^/]+)\/?$/, 60, 60_000, 'public-render'],
   [/^\/api\/health$/, 12, 60_000, 'health'],
   [/^\/api\/(public-catalog|visual-builder-public|visual-studio-global-public)$/, 60, 10_000, 'public-content'],
   [/^\/api\/(geo-search|location-search)$/, 30, 60_000, 'geo-search'],

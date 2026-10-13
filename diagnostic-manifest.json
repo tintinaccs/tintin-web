@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "447a646c64970fe0625a256c75fbaaa4cdc672a841bd3c04a476b135a6d0bc15",
+  "sourceFingerprint": "eb8b3af51027ac355883e46ba7eb478383d24d2cf69187a85411f27205ae13fb",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1205,
-    "textFiles": 1157,
-    "totalBytes": 18314864,
+    "files": 1209,
+    "textFiles": 1161,
+    "totalBytes": 18331990,
     "pages": 19,
-    "modules": 859
+    "modules": 862
   },
   "viewports": [
     {
@@ -2510,7 +2510,7 @@
         "viewer"
       ],
       "bytes": 202386,
-      "sha256": "e3db983750ee1a8bd1669e9af133b7da59887857aebddf6c891f2d79e00c6184",
+      "sha256": "4705572a2306586a189f33699ef7f23a6fc43607d243d99523ca1f70ddfb89ec",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2554,7 +2554,7 @@
           "line": 2059
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261013-orders-board-6-admin-app-js-security-ready-20261013-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261013-orders-board-6-admin-app-js-security-ready-20261013-3",
           "target": "js/admin/admin-app.js",
           "line": 2060
         },
@@ -2860,7 +2860,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261013-orders-board-6-admin-app-js-security-ready-20261013-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261013-orders-board-6-admin-app-js-security-ready-20261013-3",
           "target": "js/admin/admin-app.js",
           "line": 2060,
           "exists": true
@@ -21399,6 +21399,22 @@
       ]
     },
     {
+      "path": "cloudflare/contenido-pagina-seguro.js",
+      "bytes": 2789,
+      "sha256": "7577822638d834d4543facdc6cac26623c4df3879396dacf941788c84fdc78d8",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "http://www.w3.org/1999/xhtml",
+          "line": 3
+        }
+      ]
+    },
+    {
       "path": "cloudflare/contrato-cuentas-generado.js",
       "bytes": 769,
       "sha256": "5f8b3140a95a0c686faa43b343098f31b4c9726eab814196f213153b4a1e5d70",
@@ -22381,7 +22397,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 350901,
-      "sha256": "34b68ca9554e9944899a17d1720d97653f5eee5a75232bb01e6e39accf7c9baa",
+      "sha256": "ee5698b7ccd0e0eb5b333d98f2ee1b90b602d55d0d8628e84cfe929e2a97a8e8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22502,8 +22518,8 @@
     },
     {
       "path": "functions/_middleware.js",
-      "bytes": 8581,
-      "sha256": "e5c418b7e86df6e0c764d59a6d37b3b0a1c4477c9abe726a3f39ea1dc1ee0796",
+      "bytes": 8676,
+      "sha256": "bb74d69f4364920813a45c701c2be7b7ec2a0779347eee60be59c9703add74c2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23112,8 +23128,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 13213,
-      "sha256": "16494d0e7546d29e14e16dcd0b7cec53547adcc3de676f0ef43be2a64d1954c6",
+      "bytes": 13373,
+      "sha256": "081ab9fb8dcf0ea002a83c162042b6e88a3f2e2e5c3eacaf9e28d89c379ffb9d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23139,11 +23155,11 @@
         },
         {
           "url": "https://api.resend.com/emails/$%7BencodeURIComponent(safeId",
-          "line": 111
+          "line": 114
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 153
+          "line": 156
         }
       ]
     },
@@ -24336,18 +24352,24 @@
     },
     {
       "path": "functions/pages/[slug].js",
-      "bytes": 5693,
-      "sha256": "cb2179e1bf7af713ddcdf050b77bf9835eb5fe78a14df74ed26b66a45c26f86a",
+      "bytes": 5432,
+      "sha256": "f6a91093f59481b92f1dcbf6b6d152a12ff879f4713b7bc32dff2a2085c3d3b3",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../../cloudflare/contenido-pagina-seguro.js",
+          "target": "cloudflare/contenido-pagina-seguro.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         }
       ],
       "endpoints": []
@@ -24484,8 +24506,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 477660,
-      "sha256": "c9d75638464ac33709dfaf96648c7290a36eff711e623a82365b5790250a08c6",
+      "bytes": 477817,
+      "sha256": "d3d2cb7f244bc484ada6f342c245ce2619e7e95b99eaec9fbca29bb38c501f37",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42301,6 +42323,61 @@
       "endpoints": []
     },
     {
+      "path": "tests/operations/content-security-boundaries.test.mjs",
+      "bytes": 6051,
+      "sha256": "29c5205207e80f93612ceb6a51ec39ac3444ccb1b900508db533e8ebc7388a9f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../cloudflare/contenido-pagina-seguro.js",
+          "target": "cloudflare/contenido-pagina-seguro.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/pages/fixture",
+          "line": 8
+        },
+        {
+          "url": "https://example.test/",
+          "line": 20
+        },
+        {
+          "url": "https://res.cloudinary.com/demo/image/upload/a.png",
+          "line": 33
+        }
+      ]
+    },
+    {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
       "bytes": 4736,
       "sha256": "04e66e329fae79a9deea9f8d033aa6b2c2e7b0c1cf1949ff3c8e83a64e0c2337",
@@ -44156,6 +44233,22 @@
       ]
     },
     {
+      "path": "tests/runtime/email-history-safety.spec.js",
+      "bytes": 2885,
+      "sha256": "4bf8bf4d31b14cb08125b4932387dba7ca545402d1447bd1f2bafcb4eaba4ad6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://untrusted.invalid/tracker",
+          "line": 11
+        }
+      ]
+    },
+    {
       "path": "tests/runtime/error-monitor.spec.js",
       "bytes": 3436,
       "sha256": "390059489c3c9091cda5f5e8e04520bc12a4a85e066c72d58cd874530048bc90",
@@ -44323,8 +44416,8 @@
     },
     {
       "path": "tests/security/api-rate-limits.test.mjs",
-      "bytes": 2440,
-      "sha256": "6be7bf363f05140025d8cf70655f6fb263bf83fb0c648948a4fd98764c193044",
+      "bytes": 2538,
+      "sha256": "36814f69d93c089dcb5794cd1e022ef911a1715c8d5d809b3960f2cfec52b740",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44352,11 +44445,11 @@
       "endpoints": [
         {
           "url": "https://example.com${path}/",
-          "line": 21
+          "line": 24
         },
         {
           "url": "https://example.com/api/health",
-          "line": 40
+          "line": 43
         }
       ]
     },
@@ -44543,8 +44636,8 @@
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
-      "bytes": 3171,
-      "sha256": "0293af75520e9e132a8c553ff39e49c93187336597038ebc94bc687639b353a5",
+      "bytes": 3204,
+      "sha256": "7e55e15f64d5024730e69cc7f8822041f7497904998a88d8fa6065f8d14d4f46",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47101,7 +47194,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 202386,
-      "sha256": "e3db983750ee1a8bd1669e9af133b7da59887857aebddf6c891f2d79e00c6184"
+      "sha256": "4705572a2306586a189f33699ef7f23a6fc43607d243d99523ca1f70ddfb89ec"
     },
     {
       "path": "apple-touch-icon.png",
@@ -47542,6 +47635,12 @@
       "sha256": "fb2c7dcdfaeba0da1f17cb10fcd56bdc1189f7d28508fcd39113cde2bbfea7c4"
     },
     {
+      "path": "cloudflare/contenido-pagina-seguro.js",
+      "extension": ".js",
+      "bytes": 2789,
+      "sha256": "7577822638d834d4543facdc6cac26623c4df3879396dacf941788c84fdc78d8"
+    },
+    {
       "path": "cloudflare/contrato-cuentas-generado.js",
       "extension": ".js",
       "bytes": 769,
@@ -47755,19 +47854,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 350901,
-      "sha256": "34b68ca9554e9944899a17d1720d97653f5eee5a75232bb01e6e39accf7c9baa"
+      "sha256": "ee5698b7ccd0e0eb5b333d98f2ee1b90b602d55d0d8628e84cfe929e2a97a8e8"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 350816,
-      "sha256": "87ebbd1af8b5e858d611dcc48101b08e522d29e1ec2f335e01a797fabf82bcce"
+      "sha256": "3b90d48e7cf9e40b7f9c2e64698db7f7d35af8c26dfec8594aa4dd19507223db"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 44219,
-      "sha256": "f8145019f1543d24edc0025ae9d4260339faa08fa997c52abf2534d8be1699f8"
+      "bytes": 44675,
+      "sha256": "97c53002d928f5f87c2933391df7121d677a28013e5ecce9135dc39830779021"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -47779,7 +47878,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "d13d8241a990009b0289199b74a19b474d7013d924334ab3c6421dd938c8a209"
+      "sha256": "5980cac8d8462b0c804a636328646432ebf26c97a927cdcac7f9ea53ac23983d"
     },
     {
       "path": "config/public-site.json",
@@ -48346,6 +48445,12 @@
       "sha256": "524f4f288c854d55bebe2aebb11d4321ab1d2f00804af763f345970f69d56eff"
     },
     {
+      "path": "docs/agent/CODEQL_TRIAGE_20261013.md",
+      "extension": ".md",
+      "bytes": 4078,
+      "sha256": "f45f314e358ea13fd6ff5a09e71135e76e2e8e75fd167717bb2476efacc5d854"
+    },
+    {
       "path": "docs/agent/COMPROBACIONES_CIERRE_20261012.md",
       "extension": ".md",
       "bytes": 2343,
@@ -48360,8 +48465,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 453768,
-      "sha256": "b5cc2e659aac8f4a236ad9022be3d6b2c55f5afe17110e1d4cea664c9ca582bd"
+      "bytes": 454353,
+      "sha256": "b37266d474ee372ef50f22e03f41715e0a322752fe079755321a2c854bb96d3f"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -48918,8 +49023,8 @@
     {
       "path": "functions/_middleware.js",
       "extension": ".js",
-      "bytes": 8581,
-      "sha256": "e5c418b7e86df6e0c764d59a6d37b3b0a1c4477c9abe726a3f39ea1dc1ee0796"
+      "bytes": 8676,
+      "sha256": "bb74d69f4364920813a45c701c2be7b7ec2a0779347eee60be59c9703add74c2"
     },
     {
       "path": "functions/admin-images.js",
@@ -49026,8 +49131,8 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 13213,
-      "sha256": "16494d0e7546d29e14e16dcd0b7cec53547adcc3de676f0ef43be2a64d1954c6"
+      "bytes": 13373,
+      "sha256": "081ab9fb8dcf0ea002a83c162042b6e88a3f2e2e5c3eacaf9e28d89c379ffb9d"
     },
     {
       "path": "functions/api/email-otp-verify.js",
@@ -49320,8 +49425,8 @@
     {
       "path": "functions/pages/[slug].js",
       "extension": ".js",
-      "bytes": 5693,
-      "sha256": "cb2179e1bf7af713ddcdf050b77bf9835eb5fe78a14df74ed26b66a45c26f86a"
+      "bytes": 5432,
+      "sha256": "f6a91093f59481b92f1dcbf6b6d152a12ff879f4713b7bc32dff2a2085c3d3b3"
     },
     {
       "path": "functions/policies/[slug].js",
@@ -49368,8 +49473,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 477660,
-      "sha256": "c9d75638464ac33709dfaf96648c7290a36eff711e623a82365b5790250a08c6"
+      "bytes": 477817,
+      "sha256": "d3d2cb7f244bc484ada6f342c245ce2619e7e95b99eaec9fbca29bb38c501f37"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -52081,7 +52186,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 76402,
-      "sha256": "07e29a2fe9a400208b2460dbb5b8049b1c702ee863adef632e116efc9e628458"
+      "sha256": "6722e14177a84d5ddbec3f25f6ff02f46a361e11ee73488b39b91bba306848bb"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -53392,6 +53497,12 @@
       "sha256": "0a4dbba191f889455933595c139b0388d43406acb2726679ac9c577d195d0b67"
     },
     {
+      "path": "tests/operations/content-security-boundaries.test.mjs",
+      "extension": ".mjs",
+      "bytes": 6051,
+      "sha256": "29c5205207e80f93612ceb6a51ec39ac3444ccb1b900508db533e8ebc7388a9f"
+    },
+    {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
       "extension": ".mjs",
       "bytes": 4736,
@@ -53716,6 +53827,12 @@
       "sha256": "ec3008af0902e02f6bab8bbd4700419096322bc67026b3fdc162db56d345fba2"
     },
     {
+      "path": "tests/runtime/email-history-safety.spec.js",
+      "extension": ".js",
+      "bytes": 2885,
+      "sha256": "4bf8bf4d31b14cb08125b4932387dba7ca545402d1447bd1f2bafcb4eaba4ad6"
+    },
+    {
       "path": "tests/runtime/error-monitor.spec.js",
       "extension": ".js",
       "bytes": 3436,
@@ -53766,8 +53883,8 @@
     {
       "path": "tests/security/api-rate-limits.test.mjs",
       "extension": ".mjs",
-      "bytes": 2440,
-      "sha256": "6be7bf363f05140025d8cf70655f6fb263bf83fb0c648948a4fd98764c193044"
+      "bytes": 2538,
+      "sha256": "36814f69d93c089dcb5794cd1e022ef911a1715c8d5d809b3960f2cfec52b740"
     },
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
@@ -53790,8 +53907,8 @@
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
       "extension": ".mjs",
-      "bytes": 3171,
-      "sha256": "0293af75520e9e132a8c553ff39e49c93187336597038ebc94bc687639b353a5"
+      "bytes": 3204,
+      "sha256": "7e55e15f64d5024730e69cc7f8822041f7497904998a88d8fa6065f8d14d4f46"
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",

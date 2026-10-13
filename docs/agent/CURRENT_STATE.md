@@ -2027,3 +2027,6 @@ Codex principal integró main df86fc68 (#1115) sin descartar el ciclo nuevo de p
 
 ## Corrección de la prueba WebKit y cierre local
 CI38431317246 del candidato6d2113a5 completó331/333 casos de navegador y falló en dos aserciones nuevas porque postDataBuffer() es null para File en WebKit/Linux. La prueba conserva las exigencias de una única solicitud, autorización, MIME, bytes exactos, persistencia y rechazo: ahora recibe el cuerpo por HTTP en un servidor127.0.0.1 efímero, sin exportar ni enviar datos reales. El fixture corregido pasó12/12 casos Chromium escritorio/móvil y WebKit localmente; el backend y las cuotas no cambiaron. El siguiente CI debe aprobar el nuevo SHA; no se hereda PASS del candidato anterior.
+
+## Extensión de cierre por alertas actuales CodeQL — 2026-10-13
+CI38433952518 PASS completo para65251992, pero la revisión actual de alertas existentes de main confirmó HTML activo en páginas personalizadas y etiquetas/IDs de emailLogs sin escape en Super Admin. Se corrigen los trust boundaries, se uniforma OTP y se limita también el render público con consultas Firestore. Sin cambios a Rules, permisos, controles de CI, DNS ni datos reales. Evidencia CODEQL_TRIAGE_20261013.md;74 Node y18 navegador PASS_LOCAL. El nuevo CI debe aprobar su SHA; no se hereda PASS anterior.

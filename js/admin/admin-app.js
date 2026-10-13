@@ -3798,7 +3798,7 @@ function startCorreosRealtimeListeners() {
       renderCorreosRealtimeViews();
     }, error => console.warn('Plantillas de correo no disponibles:', error)),
     onSnapshot(query(collection(db, 'emailLogs'), orderBy('sentAt', 'desc'), limit(300)), snapshot => {
-      allEmailLogs = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      allEmailLogs = snapshot.docs.map(item => ({ ...item.data(), id: item.id }));
       renderCorreosRealtimeViews();
     }, error => console.warn('Historial de correos no disponible:', error)),
     onSnapshot(query(collection(db, 'emailCampaigns'), orderBy('createdAt', 'desc'), limit(50)), snapshot => {
@@ -3838,7 +3838,7 @@ async function loadCorreos() {
     // las dudas de que falte el índice compuesto la primera vez — mismo
     // criterio defensivo que ya usa loadOrders() más abajo.
     const byDateDesc_ = (a, b) => (b.sentAt?.toDate?.() || new Date(0)) - (a.sentAt?.toDate?.() || new Date(0));
-    allEmailLogs = logsSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byDateDesc_);
+    allEmailLogs = logsSnap.docs.map(d => ({ ...d.data(), id: d.id })).sort(byDateDesc_);
     allEmailCampaigns = campSnap.docs.map(d => ({ id: d.id, ...d.data() }))
       .sort((a, b) => (b.createdAt?.toDate?.() || new Date(0)) - (a.createdAt?.toDate?.() || new Date(0)));
 
@@ -3880,7 +3880,7 @@ function renderCorreosDashboard() {
   const chip = (label, on) => `<div><strong>${label}:</strong> <span class="adm-badge ${on ? 'badge-entregado' : 'badge-cancelado'}">${on ? 'Activado' : 'Desactivado'}</span></div>`;
   const statusEl = document.getElementById('correos-system-status');
   if (statusEl) statusEl.innerHTML =
-    `<div><strong>Remitente actual:</strong> ${s.senderEmail || EMAIL_SENDER_ADDRESS}</div>` +
+    `<div><strong>Remitente actual:</strong> ${escapeHtmlAdmin(s.senderEmail || EMAIL_SENDER_ADDRESS)}</div>` +
     `<div><strong>Webhook configurado:</strong> <span class="adm-badge ${webhookConfigured ? 'badge-entregado' : 'badge-cancelado'}">${webhookConfigured ? 'Sí' : 'No'}</span></div>` +
     chip('Envío de pedidos', s.orderEmailsEnabled !== false) +
     chip('Envío de pruebas', s.testEmailsEnabled !== false) +
@@ -3892,7 +3892,7 @@ function renderCorreosDashboard() {
     tbody.innerHTML = recent.length ? recent.map(l => `
       <tr>
         <td data-label="Fecha" style="white-space:nowrap;font-size:12px">${formatDate(l.sentAt)}</td>
-        <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
+        <td data-label="Tipo" style="font-size:12px">${escapeHtmlAdmin(templateLabel_(l.type))}</td>
         <td data-label="Destinatario" style="font-size:12px">${escapeHtmlAdmin(l.recipient || '—')}</td>
         <td data-label="Estado">${logStatusBadge_(l.status)}</td>
       </tr>
@@ -4770,7 +4770,7 @@ function renderCorreosHistorialTab() {
   if (!typeSelect) return;
   const types = Array.from(new Set(allEmailLogs.map(l => l.type).filter(Boolean)));
   const currentVal = typeSelect.value;
-  typeSelect.innerHTML = '<option value="">Todos los tipos</option>' + types.map(t => `<option value="${t}">${templateLabel_(t)}</option>`).join('');
+  typeSelect.innerHTML = '<option value="">Todos los tipos</option>' + types.map(t => `<option value="${escapeHtmlAdmin(t)}">${escapeHtmlAdmin(templateLabel_(t))}</option>`).join('');
   typeSelect.value = types.includes(currentVal) ? currentVal : '';
 
   const q = (document.getElementById('hist-search').value || '').toLowerCase();
@@ -4797,18 +4797,18 @@ function renderCorreosHistorialTab() {
   [..._selectedLogs].forEach(id => { if (!visibleIds.has(id)) _selectedLogs.delete(id); });
   tbody.innerHTML = list.slice(0, 200).map(l => `
     <tr class="adm-log-row">
-      <td class="col-select" data-label="Sel."><input type="checkbox" class="hist-row-check" data-id="${l.id}" onclick="toggleLogSelect(this)" ${_selectedLogs.has(l.id) ? 'checked' : ''}></td>
+      <td class="col-select" data-label="Sel."><input type="checkbox" class="hist-row-check" data-id="${escapeHtmlAdmin(l.id)}" onclick="toggleLogSelect(this)" ${_selectedLogs.has(l.id) ? 'checked' : ''}></td>
       <td data-label="Fecha" style="font-size:12px;white-space:nowrap">${formatDate(l.sentAt)}</td>
       <td data-label="Origen real/prueba">${categoryBadge_(l.category || 'pedido')}</td>
-      <td data-label="Tipo" style="font-size:12px">${templateLabel_(l.type)}</td>
+      <td data-label="Tipo" style="font-size:12px">${escapeHtmlAdmin(templateLabel_(l.type))}</td>
       <td data-label="Destinatario" style="font-size:12px">${escapeHtmlAdmin(l.recipient || '—')}</td>
       <td data-label="Estado">${logStatusBadge_(l.status)}</td>
       <td data-label="Enviado por" style="font-size:12px">${escapeHtmlAdmin(l.sentBy || '—')}</td>
       <td data-label="Automático/Manual" style="font-size:12px">${l.isAutomatic ? 'Automático' : 'Manual'}</td>
       <td data-label="Acciones">
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.viewLogDetail('${l.id}')" type="button">Ver</button>
-          ${l.status === 'failed' ? `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.retryFailedLog('${l.id}')" type="button">Reintentar</button>` : ''}
+          <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.viewLogDetail(${inlineArgumentAdmin(l.id)})" type="button">Ver</button>
+          ${l.status === 'failed' ? `<button class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.retryFailedLog(${inlineArgumentAdmin(l.id)})" type="button">Reintentar</button>` : ''}
         </div>
       </td>
     </tr>
@@ -4907,7 +4907,7 @@ window.viewLogDetail = (id) => {
   const l = allEmailLogs.find(x => x.id === id);
   if (!l) return;
   alert(
-    `Origen: ${CATEGORY_LABELS_[l.category || 'pedido'] || 'Pedido real'}\nTipo: ${templateLabel_(l.type)}\nDestinatario: ${l.recipient || '—'}\nEstado: ${l.status}\n` +
+    `Origen: ${CATEGORY_LABELS_[l.category || 'pedido'] || 'Pedido real'}\nTipo: ${escapeHtmlAdmin(templateLabel_(l.type))}\nDestinatario: ${l.recipient || '—'}\nEstado: ${l.status}\n` +
     `Enviado por: ${l.sentBy || '—'}\nAutomático/Manual: ${l.isAutomatic ? 'Automático' : 'Manual'}\n` +
     `Pedido relacionado: ${l.orderId || '—'}\n` + (l.error ? `Error: ${l.error}` : 'Sin errores')
   );
