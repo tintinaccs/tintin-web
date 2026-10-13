@@ -81,7 +81,7 @@ check(
 
 const sitemapIndex = read('sitemap.xml');
 const sitemapPages = read('sitemap-pages.xml');
-const publicOrigin = 'https://tintinaccesorios.pages.dev';
+const publicOrigin = 'https://tintinaccs.com';
 const publicRoutes = [
   '/', '/catalogo', '/collections', '/about', '/contact', '/envios',
   '/cambios-devoluciones', '/preguntas-frecuentes', '/terminos', '/privacidad'

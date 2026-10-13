@@ -5,6 +5,7 @@ const root=new URL('../../',import.meta.url);
 const shell=fs.readFileSync(new URL('js/components/navigation/compartido/configuracion.js',root),'utf8');
 const logoVersion=shell.match(/LOGO_VERSION = '([^']+)'/)[1];
 const canonical=`assets-tintin/images/general/logo.png?v=${logoVersion}`;
+const versions=JSON.parse(fs.readFileSync(new URL('scripts/cache-version-baseline.json',root),'utf8'));
 
 test('todos los img estáticos del logo consumen el mismo recurso que el shell',()=>{
   let checked=0;
@@ -31,6 +32,8 @@ test('imports del admin reutilizan URLs versionadas de sus dependencias comparti
     assert.doesNotMatch(source,/from ['"]\.\/shopify-import-core\.mjs['"]/);
   }
   for(const file of ['js/admin/notifications/notificaciones-push.js','js/admin/notifications/notificaciones-push-maestro.js']) {
-    assert.match(fs.readFileSync(new URL(file,root),'utf8'),/origen-funciones\.js\?v=tintin-20260716-cloudinary-fix-1/);
+    const source=fs.readFileSync(new URL(file,root),'utf8');
+    const dependency=`origen-funciones.js?v=${versions['js/core/firebase/origen-funciones.js'].version}`;
+    assert.ok(source.includes(`${dependency}'`) || source.includes(`${dependency}"`),`${file} debe reutilizar la URL canónica de origen-funciones`);
   }
 });

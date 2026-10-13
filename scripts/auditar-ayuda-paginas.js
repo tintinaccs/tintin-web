@@ -20,7 +20,7 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
+const PUBLIC_ORIGIN = 'https://tintinaccs.com';
 const PAGES = [
   { file: 'envios.html', id: 'envios', route: '/envios' },
   { file: 'cambios-devoluciones.html', id: 'cambios', route: '/cambios-devoluciones' },
@@ -70,7 +70,7 @@ async function run() {
         html.includes(`property="og:url" content="${PUBLIC_ORIGIN}${route}"`) &&
         /property="og:type"/.test(html) &&
         /name="twitter:card" content="summary_large_image"/.test(html) &&
-        html.includes('og:image" content="https://tintinaccesorios.pages.dev/assets/og-cover.jpg"') &&
+        html.includes('og:image" content="https://tintinaccs.com/assets/og-cover.jpg"') &&
         exists('assets/og-cover.jpg'),
       'Las tarjetas sociales deben estar completas y usar la URL final limpia.'
     );

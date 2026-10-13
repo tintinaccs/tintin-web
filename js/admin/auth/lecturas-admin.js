@@ -1,7 +1,7 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6';
 import { onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { waitForAdminAppCheck, recoverAdminSecurity } from './app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js';
+import { waitForAdminAppCheck, recoverAdminSecurity } from './app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6';
 
 const credentialError = error => /^(?:firestore\/)?(?:permission-denied|unauthenticated)$/.test(String(error?.code || ''));
 

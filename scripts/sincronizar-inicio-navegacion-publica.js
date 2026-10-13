@@ -8,17 +8,17 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20261012-checkout-ready-3-tienda-js';
-const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-instantaneo-js';
-const LOADER_VERSION = 'tintin-20261012-unified-2-cargador-pagina-js';
-const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js';
+const TIENDA_VERSION = 'tintin-20261012-checkout-ready-3-tienda-js-domain-prepared-20261012-6';
+const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6';
+const LOADER_VERSION = 'tintin-20261012-unified-2-cargador-pagina-js-domain-prepared-20261012-6';
+const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261012-checkout-ready-4-inicio-navegacion-publica-js';
-const NAV_ENTRY_VERSION = 'tintin-20261012-checkout-ready-4-entrada-navegacion-publica-js';
+const PUBLIC_SHELL_VERSION = 'tintin-20261012-checkout-ready-4-inicio-navegacion-publica-js-domain-prepared-20261012-6';
+const NAV_ENTRY_VERSION = 'tintin-20261012-checkout-ready-4-entrada-navegacion-publica-js-domain-prepared-20261012-6';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261010-whatsapp-release-5';
-const SESSION_PROTECTION_VERSION = 'tintin-20261012-auth-privacy-1-proteccion-sesion-js';
-const PROFILE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-control-acceso-perfil-js';
+const SESSION_PROTECTION_VERSION = 'tintin-20261012-auth-privacy-1-proteccion-sesion-js-domain-prepared-20261012-6';
+const PROFILE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-control-acceso-perfil-js-domain-prepared-20261012-6';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2';
@@ -60,7 +60,13 @@ function ensurePublicStructuralStyles(html, absolute = false, page = '') {
 }
 // Hojas que los runtimes agregaban después de mostrar el contenido.
 // Conservamos sus versiones y selectores para que reutilicen el link inicial.
-const INITIAL_SHARED_STYLES = [["id=\"tt-phase10-accessibility-css\"", "css/quality/accesibilidad-global.css", "tintin-20260731-phase10-a11y-1-brand-20261004-1-owner-pink-20261004-1"]];
+const INITIAL_SHARED_STYLES = [
+  [
+    "id=\"tt-phase10-accessibility-css\"",
+    "css/quality/accesibilidad-global.css",
+    "tintin-20260731-phase10-a11y-1-brand-20261004-1-owner-pink-20261004-1"
+  ]
+];
 const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-global-studio-runtime-css\"",
@@ -105,7 +111,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-surface-controller-css\"",
     "css/components/navigation/compartido/paneles.css",
-    "tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1"
+    "tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6"
   ],
   [
     "id=\"tt-navigation-notification-surface-css\"",
