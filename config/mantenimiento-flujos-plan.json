@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "71960405039cb1f1fc48395a6b958eb9d73e74f6",
-  "reason": "Renovación exclusiva de Pedidos Super Admin y conexiones indispensables: tablero y seguimiento, inventario transaccional, permisos y concurrencia; 423 pruebas Node y 45 de navegador aisladas. Sin datos reales ni migración de URL.",
+  "reason": "Renovación exclusiva de Pedidos Super Admin y conexiones indispensables: tablero, seguimiento, inventario, concurrencia, pago parcial y contactos; 424 pruebas Node y 45 Chromium aisladas, sin datos reales ni migración de URL.",
   "files": [
     {
       "path": "admin.html",

@@ -1,6 +1,6 @@
 ## 2026-10-12 — Pedidos Super Admin y conexiones indispensables
 
-Interfaz existente de Pedidos, CSS acotado, fuente administrativa compartida, dominio de transiciones, guardado único estado/pago, inventario, auditLog, contactos autorizados y seguimiento/notificaciones/correo por modalidad. Sin rediseño de otros módulos ni cambio de infraestructura, URL o datos históricos. Archivo/restauración conserva el estado de pedidos finalizados. Pruebas y auditores reutilizan los contratos existentes; versiones transitivas y artefactos generados se actualizan sólo para distribuir las fuentes correctas. 423 pruebas Node y 45 de navegador PASS_LOCAL; límites y pendientes en el informe de renovación. Publicación requiere autorización final.
+Interfaz existente de Pedidos, CSS acotado, fuente administrativa compartida, dominio de transiciones, guardado único estado/pago, inventario, auditLog, contactos autorizados y seguimiento/notificaciones/correo por modalidad. Sin rediseño de otros módulos ni cambio de infraestructura, URL o datos históricos. Archivo/restauración conserva el estado de pedidos finalizados. Pruebas y auditores reutilizan los contratos existentes; versiones transitivas y artefactos generados se actualizan sólo para distribuir las fuentes correctas. 424 pruebas Node y 45 de navegador PASS_LOCAL; límites y pendientes en el informe de renovación. Publicación requiere autorización final.
 
 ## 2026-10-12 — Checkout completo: stock, recuperación, ticket, privacidad y accesibilidad
 

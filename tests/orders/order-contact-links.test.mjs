@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { orderContactLinks } from '../../cloudflare/contactos-pedido.mjs';
+test('pago parcial no inventa el saldo ni cobra otra vez el total al enviar a delivery',()=>{
+  const links=orderContactLinks({userName:'QA',userPhone:'0981123456',shippingMethod:'delivery',paymentStatus:'parcial',paymentMethod:'efectivo',total:95000},'order_fixture_partial');
+  assert.match(links.dispatchMessage,/Monto a cobrar: A confirmar \(pago parcial\)/);
+  assert.doesNotMatch(links.dispatchMessage,/Monto a cobrar: 95/);
+  assert.match(links.dispatchMessage,/Confirmar saldo pendiente/);
+});
 import { adminEmail } from '../../functions/api/order-email.js';
 
 const order = {

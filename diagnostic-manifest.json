@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6e6a60de2cc3964a127bb4347d0b6faeeec27a374e88d8d4b01553bc12926a67",
+  "sourceFingerprint": "9b9fc0eacbfa0bf2c2cb75e78bb048d9ddd8cb4837a381324a4258fc2ce34bff",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1183,
     "textFiles": 1135,
-    "totalBytes": 18011950,
+    "totalBytes": 18014213,
     "pages": 19,
     "modules": 841
   },
@@ -19113,8 +19113,8 @@
     },
     {
       "path": "cloudflare/contactos-pedido.mjs",
-      "bytes": 2778,
-      "sha256": "cebc81ea205faeb8c25c688a6588ab52a01e9c8c94af65c5e839a4dc8d6a3879",
+      "bytes": 3072,
+      "sha256": "fb2c7dcdfaeba0da1f17cb10fcd56bdc1189f7d28508fcd39113cde2bbfea7c4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19135,7 +19135,7 @@
         },
         {
           "url": "https://wa.me/$%7BFITO_WHATSAPP%7D",
-          "line": 32
+          "line": 33
         }
       ]
     },
@@ -30142,8 +30142,8 @@
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
-      "bytes": 7417,
-      "sha256": "f89d1b4e78280d7625c6a3fe79ed10054f13fad9cee4e550c61d69ab4f8b240b",
+      "bytes": 7609,
+      "sha256": "bfd1869c2718047b2d013b065258ef3de4385ee5083887e349bce3b86cc5af27",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31435,8 +31435,8 @@
     },
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
-      "bytes": 10732,
-      "sha256": "e23601e7f1002eb6fdcc70261b897831d332823b617393864a28bdf8a313513d",
+      "bytes": 10987,
+      "sha256": "dc83400d1819b095b2f1d406d0c2e348f1fbd5874a95b76b5595978a4475d41e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40354,8 +40354,8 @@
     },
     {
       "path": "tests/orders/order-contact-links.test.mjs",
-      "bytes": 2753,
-      "sha256": "eb2b914cd6b69c39b9b3db7992d7151b1b430cda1bdfa5a6dcf68cfd952281a2",
+      "bytes": 3255,
+      "sha256": "60e6384c67bfcbea681cd7ac4ec7d2c09af833dba78b62550e6a6fd6d3313a1e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40383,7 +40383,7 @@
           "raw": "../../functions/api/order-email.js",
           "target": "functions/api/order-email.js",
           "dynamic": false,
-          "line": 4
+          "line": 10
         }
       ],
       "endpoints": []
@@ -43051,8 +43051,8 @@
     },
     {
       "path": "tests/ui-ux/orders-board.spec.js",
-      "bytes": 16566,
-      "sha256": "4fd1b5da68c1807c74157be3caf844f66391dec555939ba67e3c27af8a92a38b",
+      "bytes": 16570,
+      "sha256": "9db36c8dcc0e29d9ab440a2544d2ffe6e6a53ecbea8eb43d1c97f75fa8097454",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44485,8 +44485,8 @@
     {
       "path": "cloudflare/contactos-pedido.mjs",
       "extension": ".mjs",
-      "bytes": 2778,
-      "sha256": "cebc81ea205faeb8c25c688a6588ab52a01e9c8c94af65c5e839a4dc8d6a3879"
+      "bytes": 3072,
+      "sha256": "fb2c7dcdfaeba0da1f17cb10fcd56bdc1189f7d28508fcd39113cde2bbfea7c4"
     },
     {
       "path": "cloudflare/contrato-cuentas-generado.js",
@@ -44707,8 +44707,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 4662,
-      "sha256": "2902c7dddda90006b44b45e179c07789e75b31b36903a6b35d05370d4773db3e"
+      "bytes": 4658,
+      "sha256": "250937664c2a6a92c9aa393a3be8ac04cd282d50cb0054288621669ec3031004"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -45302,7 +45302,7 @@
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
       "bytes": 434759,
-      "sha256": "4d1c1d366dfde4f4194389443e9447c60c7638ee06993ef739cc87a331ba5681"
+      "sha256": "aa95d5cd2d63a1bcc4b35a1f9cc891c5c99a1601d19d4642daabd3077915baab"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -45331,8 +45331,8 @@
     {
       "path": "docs/agent/PEDIDOS_SUPERADMIN_RENOVACION_20261012.md",
       "extension": ".md",
-      "bytes": 8769,
-      "sha256": "dfb9fe207c0c0504c0a723a840c917c92609026fc54d6c1ebdb0c38be203aabb"
+      "bytes": 9789,
+      "sha256": "8bd87c709556cf353066d3b3cd6654a774b1f4b65bf8d1cf472937b27f2d2b2f"
     },
     {
       "path": "docs/agent/PREPARACION_ACTUAL_20261011.md",
@@ -45632,7 +45632,7 @@
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
       "bytes": 23819,
-      "sha256": "42f56b1125a49996c80763341a785667e0bc6d913b2cca5bbc5b0e7959f5ac2c"
+      "sha256": "8e44f31c06b9c0c94aba4bd83e753779d163bb5cc6f6b4d6da01f42d814f7338"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -48427,8 +48427,8 @@
     {
       "path": "scripts/auditar-critico-recuperacion.js",
       "extension": ".js",
-      "bytes": 7417,
-      "sha256": "f89d1b4e78280d7625c6a3fe79ed10054f13fad9cee4e550c61d69ab4f8b240b"
+      "bytes": 7609,
+      "sha256": "bfd1869c2718047b2d013b065258ef3de4385ee5083887e349bce3b86cc5af27"
     },
     {
       "path": "scripts/auditar-css-cascada.mjs",
@@ -48709,8 +48709,8 @@
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
       "extension": ".js",
-      "bytes": 10732,
-      "sha256": "e23601e7f1002eb6fdcc70261b897831d332823b617393864a28bdf8a313513d"
+      "bytes": 10987,
+      "sha256": "dc83400d1819b095b2f1d406d0c2e348f1fbd5874a95b76b5595978a4475d41e"
     },
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
@@ -50365,8 +50365,8 @@
     {
       "path": "tests/orders/order-contact-links.test.mjs",
       "extension": ".mjs",
-      "bytes": 2753,
-      "sha256": "eb2b914cd6b69c39b9b3db7992d7151b1b430cda1bdfa5a6dcf68cfd952281a2"
+      "bytes": 3255,
+      "sha256": "60e6384c67bfcbea681cd7ac4ec7d2c09af833dba78b62550e6a6fd6d3313a1e"
     },
     {
       "path": "tests/orders/orders-board-domain.test.mjs",
@@ -50845,8 +50845,8 @@
     {
       "path": "tests/ui-ux/orders-board.spec.js",
       "extension": ".js",
-      "bytes": 16566,
-      "sha256": "4fd1b5da68c1807c74157be3caf844f66391dec555939ba67e3c27af8a92a38b"
+      "bytes": 16570,
+      "sha256": "9db36c8dcc0e29d9ab440a2544d2ffe6e6a53ecbea8eb43d1c97f75fa8097454"
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
@@ -53401,7 +53401,7 @@
           },
           {
             "file": "scripts/auditar-nivel-2-comercio.js",
-            "line": 164,
+            "line": 166,
             "operation": "doc"
           },
           {

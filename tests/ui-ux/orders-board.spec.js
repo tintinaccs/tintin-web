@@ -39,9 +39,9 @@ for(const [width,height] of VIEWPORTS)test(`tablero y detalles utilizables en ${
   const box=await drawer.boundingBox();expect(box.width).toBeLessThanOrEqual(width+1);expect(box.height).toBeLessThanOrEqual(height+1);
   expect(box.x).toBeGreaterThanOrEqual(-1);expect(box.x+box.width).toBeLessThanOrEqual(width+1);
   expect(await drawer.evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
-  await expect(drawer.getByRole('link',{name:'WhatsApp del cliente',exact:true})).toHaveAttribute('href',/^https:\/\/wa.me\/595981123456/);
-  await expect(drawer.getByRole('link',{name:'Google Maps',exact:true})).toHaveAttribute('href',/^https:\/\/www.google.com\/maps\?/);
-  await expect(drawer.getByRole('link',{name:'Enviar a Fito',exact:true})).toHaveAttribute('href',/^https:\/\/wa.me\/595982518206/);
+  await expect(drawer.getByRole('link',{name:'WhatsApp del cliente',exact:true})).toHaveAttribute('href',/^https:\/\/wa\.me\/595981123456/);
+  await expect(drawer.getByRole('link',{name:'Google Maps',exact:true})).toHaveAttribute('href',/^https:\/\/www\.google\.com\/maps\?/);
+  await expect(drawer.getByRole('link',{name:'Enviar a Fito',exact:true})).toHaveAttribute('href',/^https:\/\/wa\.me\/595982518206/);
   if(process.env.TINTIN_REVIEW_DIR && [320,1440].includes(width))await page.screenshot({path:path.join(process.env.TINTIN_REVIEW_DIR,`detalle-${width}.png`),animations:'disabled'});
   await drawer.getByRole('button',{name:'Cerrar',exact:true}).click();await expect(drawer).toBeHidden();await expect(trigger).toBeFocused();expect(errors).toEqual([]);
 });

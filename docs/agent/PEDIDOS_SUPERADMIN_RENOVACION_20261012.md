@@ -40,7 +40,7 @@ Se revisaron admin.html, estilos compartidos y tokens, shopify-commerce-admin.js
 Datos de prueba aislados. Los fixtures de navegador bloquean solicitudes externas y usan los módulos originales. Las pruebas de dominio ejecutan la implementación original sobre Firestore simulado con precondiciones; no modifican pedidos reales.
 
 Comando Node: node --test tests/orders/*.test.mjs tests/profile/order-history-display.test.mjs tests/payments/*.test.mjs tests/operations/order-staff-permission.test.mjs tests/sync/*.test.mjs tests/checkout/*.test.mjs
-Resultado: 423/423 PASS_LOCAL, incluidos creación manual/checkout, estados por modalidad, conflictos, idempotencia, cancelaciones, inventario, notificaciones, historial, autenticación de contactos y archivo/restauración.
+Resultado: 424/424 PASS_LOCAL, incluidos creación manual/checkout, estados por modalidad, conflictos, idempotencia, cancelaciones, inventario, notificaciones, historial, autenticación de contactos y archivo/restauración.
 
 Comando navegador: node scripts/auditar-super-admin-responsive.mjs
 Resultado: 45/45 PASS_LOCAL (6 regresiones de comercio + 39 del tablero). Incluye dos páginas administrativas simultáneas, clics repetidos reales, fallo de operación, offline/online, mil pedidos y límites de tarjetas, filtros/recarga/identidad DOM/scroll, aviso y sonido, historial, pérdida de sesión, teclado, zoom y movimiento reducido. El gate ahora prueba la implementación real, reemplazando la tabla artificial anterior.
@@ -60,6 +60,9 @@ Capturas revisadas: C:/Users/USER/AppData/Local/Temp/tintin-orders-review-202610
 - El conjunto completo de pedidos de Super Admin consume lecturas proporcionales al historial; la interfaz limita tarjetas inicialmente a 30 por etapa. No se agregó un contador paralelo ni un servicio de agregación.
 - El cambio de estado requiere pasos válidos. No se permite cancelar un envío para reponer stock automáticamente; devolución/incident/revisión corresponden según la etapa. Una devolución no dispara reembolso por sí sola.
 - Maciel ausente de la configuración de envíos y la comprobación de llegada de correo de producción provienen de la inspección previa del checkout: fuera del alcance de esta renovación y sin modificar.
-- CI del candidato, preview, revisión de mantenimiento protegido y autorización final de publicación pendientes. No heredar aprobaciones de checkout anterior ni de main.
+- Primer candidato PR1115/1d0096d: Cloudflare Pages compiló correctamente. La preview devuelve redirección a Cloudflare Access: se requiere sesión del titular para revisar la UI autenticada, sin abrir sesiones que puedan ejecutar operaciones sobre datos reales.
+- CI inicial señaló dos auditores con la firma antigua de cancelación en papelera; ahora verifican transición autorizada, versión y preservación de entregados. CodeQL señaló puntos sin escapar en la comprobación de dominios de un test; se corrigieron las aserciones. Se debe verificar de nuevo el SHA final.
+- La pasada amplia local de audit:final llegó a test:flow-connections (149 PASS, 2 FAIL). Fallos ajenos al módulo y sin cambios respecto a main: presupuesto-mantenimiento.test.mjs pasa una ruta Windows C: como --import en lugar de una URL file:, y sellado-interactivo.test.mjs compara una ruta Windows con separadores /. No se modificaron esos tests ni los controles de mantenimiento. CI Linux verifica estos contratos independientemente.
+- CI del candidato final, revisión de mantenimiento protegido y autorización final de publicación pendientes. No heredar aprobaciones de checkout anterior ni de main.
 
 No se afirma ausencia total de errores. Se conserva este informe con la evidencia concreta y se actualiza ante resultados del candidato.

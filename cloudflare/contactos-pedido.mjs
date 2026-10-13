@@ -16,9 +16,10 @@ export function orderContactLinks(order, orderId) {
   const customer = /^\d{8,20}$/.test(phone) ? `https://wa.me/${phone}?text=${encodeURIComponent(customerMessage)}` : '';
   const method = clean(order.shippingMethod || shipping.method);
   const paid = ['pagado','paid','approved','completed'].includes(clean(order.paymentStatus || order.payment?.status).toLowerCase());
+  const partial = ['parcial','señado'].includes(clean(order.paymentStatus || order.payment?.status).toLowerCase());
   const cash = clean(order.paymentMethod || order.payment?.method) === 'efectivo';
   const amount = cash && !paid ? Math.max(0,Math.round(Number(order.total)||0)) : 0;
-  const observation = cash && !paid ? 'Paga al recibir, consultar si tiene para vuelto y ubicación para confirmar.' : paid ? 'Pedido pagado. Confirmar ubicación antes de entregar.' : 'Pago por transferencia: confirmar acreditación antes de despachar. Confirmar ubicación.';
+  const observation = partial ? 'Pago parcial registrado. Confirmar saldo pendiente y acreditación antes de despachar. Confirmar ubicación.' : cash && !paid ? 'Paga al recibir, consultar si tiene para vuelto y ubicación para confirmar.' : paid ? 'Pedido pagado. Confirmar ubicación antes de entregar.' : 'Pago por transferencia: confirmar acreditación antes de despachar. Confirmar ubicación.';
   const dispatchMessage = [
     `Cliente: ${clean(order.userName)}`,
     `Teléfono: +${phone}`,
@@ -26,7 +27,7 @@ export function orderContactLinks(order, orderId) {
     `Ciudad: ${clean(shipping.city || order.shippingCity)}`,
     `Dirección: ${clean(shipping.address || order.address)}`,
     'Descripción del producto: Empaque Verde de cartón',
-    `Monto a cobrar: ${amount.toLocaleString('es-PY')} Gs`,
+    `Monto a cobrar: ${cash && partial ? 'A confirmar (pago parcial)' : `${amount.toLocaleString('es-PY')} Gs`}`,
     `Observación: ${observation}${shipping.referencia ? ` Referencia: ${clean(shipping.referencia)}.` : ''}${order.notes ? ` ${clean(order.notes)}` : ''}`,
   ].join('\n');
   return {map,customer,dispatch: method === 'delivery' ? `https://wa.me/${FITO_WHATSAPP}?text=${encodeURIComponent(dispatchMessage)}` : '',dispatchMessage};
