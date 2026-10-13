@@ -40,6 +40,7 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
+const domain = read('cloudflare/order-admin-domain.js');
 const adminApp   = read('js/admin/admin-app.js');
 const perfil     = read('js/pages/profile/pedidos-perfil.js');
 const orderStats = read('js/core/store/estadisticas-pedidos.js');
@@ -143,14 +144,14 @@ check(
 check(
   'Cambiar estado de pedido: permiso + auditoría + recuperación',
   /window\.updateOrderStatus[\s\S]{0,240}roleCanDo\('pedidos', 'cambiarEstado'\)/.test(adminApp) &&
-    /logAudit\('cambiar_estado_pedido'/.test(adminApp) &&
+    domain.includes('auditLog/') && domain.includes('actorEmail: context.email') && domain.includes('before: auditSummary(beforeOrder)') &&
     /window\.updateOrderStatus[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('write'\)/.test(adminApp),
   'El cambio de estado debe validar permisos, registrar auditoría y mostrar progreso ante fallos.'
 );
 check(
   'Cambiar estado de pago: permiso + auditoría + recuperación',
   /window\.updatePayStatus[\s\S]{0,120}roleCanDo\('pedidos', 'cambiarPago'\)/.test(adminApp) &&
-    /logAudit\('cambiar_estado_pago'/.test(adminApp) &&
+    domain.includes('auditLog/') && domain.includes('after: auditSummary(nextOrder)') &&
     /window\.updatePayStatus[\s\S]*?runAdminCrudOperation\([\s\S]*?ctx\.start\('save'\)[\s\S]*?ctx\.start\('refresh'\)/.test(adminApp),
   'El cambio de estado de pago debe validar permiso, auditar y exponer progreso y error si falla.'
 );
@@ -161,7 +162,7 @@ check(
 );
 check(
   'Mover a Borrados libera inventario antes de retirar el pedido activo',
-  /TintinInventoryIntegrity\.transitionStatus\(safeId, 'cancelado'\)/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /inventoryState: 'released'/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /match \/orderTrash\/\{orderId\}/.test(rules),
+  /TintinInventoryIntegrity\.transitionStatus\(safeId, 'cancelado',/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /allowedOrderStatuses\(before\)\.includes\('cancelado'\)/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /match \/orderTrash\/\{orderId\}/.test(rules),
   'La papelera debe conservar recuperación sin dejar stock reservado.'
 );
 check(

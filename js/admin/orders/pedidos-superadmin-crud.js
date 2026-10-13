@@ -1,6 +1,7 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js';
 import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js';
+import { allowedOrderStatuses } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import {
   collection,
   deleteDoc,
@@ -135,22 +136,24 @@ async function trashOrder(orderId, reason = '') {
   if (!beforeSnap.exists()) return { moved: false, missing: true };
   const before = beforeSnap.data() || {};
 
-  if (window.TintinInventoryIntegrity?.transitionStatus) {
-    await window.TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado');
+  let expectedChangeId = before.lastChangeId || '';
+  if (allowedOrderStatuses(before).includes('cancelado') && before.status !== 'cancelado') {
+    if (!window.TintinInventoryIntegrity?.transitionStatus) throw new Error('El reconciliador de inventario no está disponible.');
+    const result = await window.TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado', { baseChangeId: expectedChangeId });
+    expectedChangeId = result.order?.lastChangeId || result.changeId || expectedChangeId;
   }
 
   return runTransaction(db, async transaction => {
     const liveSnap = await transaction.get(activeRef);
     if (!liveSnap.exists()) return { moved: false, missing: true };
     const live = liveSnap.data() || {};
+    if ((live.lastChangeId || '') !== expectedChangeId) throw new Error('El pedido cambió en otra sesión. Actualizá los datos antes de moverlo a Borrados.');
     const trashRef = doc(db, TRASH_COLLECTION, safeId);
     transaction.set(trashRef, {
       ...live,
       originalOrderId: safeId,
       orderNumber: live.orderNumber || before.orderNumber || '',
       shortId: live.orderNumber || before.orderNumber || live.shortId || before.shortId || '',
-      status: 'cancelado',
-      inventoryState: 'released',
       trashMeta: {
         originalStatus: before.status || 'pendiente',
         reason: clean(reason, 500),
@@ -178,8 +181,8 @@ async function restoreOrder(orderId) {
     const data = trashSnap.data() || {};
     const restored = { ...data };
     delete restored.trashMeta;
-    restored.status = 'cancelado';
-    restored.inventoryState = 'released';
+    // Conservar el estado de entrega y reserva de la copia: archivar un pedido
+    // entregado no equivale a cancelarlo ni a reponer mercadería.
     restored.restoredAt = serverTimestamp();
     restored.restoredBy = auth.currentUser?.email || SUPER_ADMIN;
     restored.updatedAt = serverTimestamp();
@@ -423,7 +426,7 @@ async function saveModal_() {
     } else {
       const orderId = modalState.orderId;
       if (!window.TintinInventoryIntegrity?.updateEditedOrder) throw new Error('El reconciliador de inventario no está disponible.');
-      await window.TintinInventoryIntegrity.updateEditedOrder(orderId, patch);
+      await window.TintinInventoryIntegrity.updateEditedOrder(orderId, { ...patch, baseChangeId: modalState.baseOrder?.lastChangeId || '' });
       toast(`Pedido ${patch.orderNumber || orderNumberOf(modalState.baseOrder)} actualizado.`);
     }
     closeModal_();

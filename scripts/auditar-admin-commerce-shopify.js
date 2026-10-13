@@ -23,12 +23,13 @@ for (const section of ['productos', 'colecciones', 'pedidos']) {
 
 for (const collectionName of ['products', 'collections', 'orders']) {
   const liveSync = collectionName === 'orders'
-    ? /const ordersPage = query\(collection\(db, ['"]orders['"]\), orderBy\(['"]createdAt['"], ['"]desc['"]\), limit\(ORDER_PAGE_SIZE\)\)[\s\S]*onSnapshot\(ordersPage/.test(js)
+    ? /TintinAdminOrders[\s\S]*?subscribe\(/.test(js) && /onSnapshot\(ordersQuery/.test(read('js/admin/admin-app.js'))
     : new RegExp(`onSnapshot\\((?:query\\()?collection\\(db, ['\"]${collectionName}['\"]\\)`).test(js);
   expect(liveSync, `${collectionName} se sincroniza en tiempo real.`);
 }
 
-expect(/startAfter\(state\.ordersCursor\)[\s\S]*limit\(ORDER_PAGE_SIZE\)/.test(js), 'pedidos consulta páginas posteriores con cursor real.');
+expect(read('js/admin/orders/tablero-pedidos-vista.mjs').includes('orders.slice(0,model.visible[key] || 30)'), 'pedidos limita las tarjetas por etapa sin perder contadores ni snapshots.');
+expect(!/onSnapshot\(ordersPage/.test(js), 'el tablero reutiliza la única fuente administrativa de pedidos.');
 
 for (const action of [
   'window.prodNuevo', 'window.prodEditar', 'window.prodToggleActive', 'window.prodEliminar',

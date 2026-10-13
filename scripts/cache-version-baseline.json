@@ -47,6 +47,10 @@
     "version": "tintin-20261005-readiness-2-repair-20261005-1",
     "sha256": "326d2f1930d1a2181fe20a940979c07841c389da7bc29ef7118949efc2d050e8"
   },
+  "css/admin/tablero-pedidos.css": {
+    "version": "tintin-20261013-orders-board-3-css",
+    "sha256": "5534c1433f403a9de21e40fc5244d90c690b73943ce92346337298f5c39861eb"
+  },
   "css/admin/visual-studio-global-admin.css": {
     "version": "tintin-20260810-global-studio-3-brand-20261004-1-owner-pink-20261004-1",
     "sha256": "db4fe80ca2c8f494b1255d243dacd5dd2946b0e891232083b0218385406ecc4d"
@@ -300,8 +304,8 @@
     "sha256": "f6601685798e181c9933c89188bdedd239b427fc864e8be2ad4e3e817f34d366"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261012-unified-2-admin-app-js",
-    "sha256": "781e8b1cba230f3d5d1ff362c16ec19ffd1e47625201b43c17410786d14e19d2"
+    "version": "tintin-20261012-orders-board-2-admin-app-js",
+    "sha256": "b1d3f5c90ec189de144f869ddc4a9c4604c7a6519fb7b95a7d3b74509a5a5c9d"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -432,8 +436,12 @@
     "sha256": "2353986db4f11164fc97a2c9233ffc1f312f92a3466832d76846b8f618ad1399"
   },
   "js/admin/orders/pedidos-superadmin-crud.js": {
-    "version": "tintin-20261012-auth-privacy-1-pedidos-superadmin-crud-js",
-    "sha256": "866429e91f37327d7ea021a14f3de66c2dfd8220531cdd27c2589b5160b7ac27"
+    "version": "tintin-20261012-orders-board-2-pedidos-superadmin-crud-js",
+    "sha256": "ef2b4859733027cb9adef0ee1a4a015422541fd61d34f663ab49b107c25abe87"
+  },
+  "js/admin/orders/tablero-pedidos-vista.mjs": {
+    "version": "tintin-20261012-orders-board-1",
+    "sha256": "b6e8609b31cba0263fe923b9dbc6277772ca44acd04b0dd9df54c47a5572669e"
   },
   "js/admin/pages/paginas-admin.js": {
     "version": "tintin-20261012-auth-privacy-1-paginas-admin-js",
@@ -464,8 +472,8 @@
     "sha256": "1b196d868adee284dd41601d0e1ba75f3af8b6a3b268ad6d814ba1f0943934b7"
   },
   "js/admin/products/integridad-inventario-admin.js": {
-    "version": "tintin-20261012-auth-privacy-1-integridad-inventario-admin-js",
-    "sha256": "28e71fb717f4449d4a26cce3707c64ef813fad7d7511ba34d9c6e66b3d9d3de2"
+    "version": "tintin-20261012-orders-board-2-integridad-inventario-admin-js",
+    "sha256": "fa00a00ff995a0e49c3af09352fac18d810dc31d64149380bae8d97ca1e4d9f2"
   },
   "js/admin/proteccion-cambios-pendientes-admin.js": {
     "version": "tintin-20260716-cloudinary-fix-1-brand-runtime-20261004-1-owner-pink-20261004-1",
@@ -500,8 +508,8 @@
     "sha256": "5968d88d316967b129129fd401cbb0f432f6fb54d32f01c7f5fc5c27232bc132"
   },
   "js/admin/shopify-commerce-admin.js": {
-    "version": "tintin-20261012-unified-2-shopify-commerce-admin-js",
-    "sha256": "8f62b75dce54d13f2c956b34078dc0dbbd1aea9b27f311df4d264de925ef8175"
+    "version": "tintin-20261013-orders-board-3-shopify-commerce-admin-js",
+    "sha256": "0661a364dcc69f45855360cca6500152451ac80d630ce07dc3e4cd9f0b9ddab3"
   },
   "js/admin/sidebar-expandible-admin.js": {
     "version": "tintin-20261004-admin-connections-3",
@@ -1047,6 +1055,10 @@
     "version": "tintin-20261012-checkout-ready-4-inicio-navegacion-publica-js",
     "sha256": "5c16c87ae602ab680020154eafee68e9f796dcab74e9243390978640f6b0b5bd"
   },
+  "js/orders/ciclo-pedido.mjs": {
+    "version": "tintin-20261012-orders-board-1",
+    "sha256": "4a1c8ca8d7c0bcc8c0c2fab95592336dadd8630088ff8b1ed99ce6e6f239e1d6"
+  },
   "js/orders/nucleo-metodos-pago.js": {
     "version": "tintin-20261004-final-integration-1-encomienda-20261008-1",
     "sha256": "d07e450176271aa8b901d5c367c61ed881a88d473c8eb504cbab53594b3a4996"
@@ -1228,8 +1240,8 @@
     "sha256": "b1d3c7d0b70c7d7ffb33a33d98eb2a0cc8bee2c386efec74598c279d3e5226bb"
   },
   "js/pages/profile/pedidos-perfil.js": {
-    "version": "tintin-20261012-checkout-ready-3-pedidos-perfil-js",
-    "sha256": "3f4caecc46796d020219e7c9e567b0a1d3b90036057df9681483ad651f80fcc4"
+    "version": "tintin-20261013-orders-board-3-pedidos-perfil-js",
+    "sha256": "b10032d725446ce36e5fc775c5c65d160cd7098b4e33be2a08ead4448438ed4f"
   },
   "js/quality/accesibilidad-global.js": {
     "version": "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1",

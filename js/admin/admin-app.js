@@ -42,9 +42,9 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261012-auth-privacy-1-pedidos-superadmin-crud-js';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261012-orders-board-2-pedidos-superadmin-crud-js';
 import './settings/cupones-admin.js?v=tintin-20261012-auth-privacy-1-cupones-admin-js';
-import './products/integridad-inventario-admin.js?v=tintin-20261012-auth-privacy-1-integridad-inventario-admin-js';
+import './products/integridad-inventario-admin.js?v=tintin-20261012-orders-board-2-integridad-inventario-admin-js';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 
@@ -241,7 +241,7 @@ function roleCanDo(moduleKey, actionKey) {
 const ORDER_STATUS_LABELS = {
   pendiente:    'Pendiente',
   confirmado:   'Confirmado',
-  preparando:   'En preparación',
+  preparando:   'En preparación', listo: 'Listo', devuelto: 'Devuelto', incidencia: 'Con incidencia',
   listo_retiro: 'Listo para retirar',
   en_camino:    'En camino',
   entregado:    'Entregado',
@@ -261,7 +261,7 @@ const ORDER_STATUS_BADGE = {
   enviado:      'badge-enviado', // legado
 };
 const PAY_STATUS_LABELS = {
-  pendiente:   'Pago pendiente',
+  pendiente:   'Pago pendiente', parcial: 'Parcialmente pagado',
   pagado:      'Pagado',
   rechazado:   'Rechazado',
   cancelado:   'Cancelado',
@@ -1096,6 +1096,7 @@ function teardownAdminRealtimeOnSessionLoss() {
   adminGuardInitializedUid = '';
   adminGuardInitializingUid = '';
   currentUser = null;
+  publishAdminOrders();
 }
 
 // El overlay "No pudimos restaurar tu sesión" también lo ve cualquier
@@ -1663,6 +1664,7 @@ function sectionIsActive(name) {
 }
 
 function refreshRealtimeConsumers() {
+  publishAdminOrders();
   renderDashboardData();
   renderGeneralStatistics();
   if (sectionIsActive('pedidos')) applyOrderFilters();
@@ -1675,10 +1677,20 @@ function refreshRealtimeConsumers() {
 // Punto de lectura mínimo para el enlace directo de las notificaciones push
 // (js/admin/notifications/push-order-deeplink.js): saber si los pedidos ya
 // están cargados y si un pedido existe, sin exponer ningún dato del pedido.
+const adminOrderConsumers = new Set();
+let adminOrdersOwnerUid = '';
+function publishAdminOrders() {
+  const snapshot = { uid: currentUser?.uid || '', ready: adminRealtimeReady.orders, error: adminRealtimeErrors.orders, orders: currentUser && adminOrdersOwnerUid===currentUser.uid ? allOrders : [] };
+  for (const consume of adminOrderConsumers) { try { consume(snapshot); } catch(error) { console.error('No se pudo actualizar la vista de pedidos.',error?.message); } }
+}
 window.TintinAdminOrders = {
   ready: () => adminRealtimeReady.orders === true,
-  has: orderId => allOrders.some(order => order.id === orderId)
+  has: orderId => allOrders.some(order => order.id === orderId),
+  get: orderId => currentUser && adminOrdersOwnerUid === currentUser.uid ? allOrders.find(order => order.id === orderId) : undefined,
+  subscribe(consume) { adminOrderConsumers.add(consume); publishAdminOrders(); return () => adminOrderConsumers.delete(consume); },
+  retry() { if (currentUser) startAdminRealtimeData(); }
 };
+window.dispatchEvent(new Event('tintin:admin-orders-source'));
 
 function stopAdminRealtimeData() {
   if (adminOrdersUnsubscribe) adminOrdersUnsubscribe();
@@ -1783,8 +1795,16 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { ...adminRealtimeReady, orders: false, users: currentRole !== 'superadmin' };
   adminRealtimeErrors = { orders: '', users: '' };
+  if(adminOrdersOwnerUid!==currentUser?.uid)allOrders=[];
+  adminOrdersOwnerUid=currentUser?.uid || '';
+  publishAdminOrders();
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
-    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
+    // Super Admin necesita contadores del conjunto real; una sola suscripción
+    // sirve a dashboard, tablero y deep links. Otros roles siguen acotados.
+    const ordersQuery = currentRole === 'superadmin'
+      ? query(collection(db, 'orders'), orderBy('createdAt', 'desc'))
+      : query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT));
+    adminOrdersUnsubscribe = onSnapshot(ordersQuery, snapshot => {
       allOrders = snapshot.docs
         .map(item => ({ id: item.id, ...item.data() }))
         .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
@@ -2761,37 +2781,24 @@ window.toggleOrderDetail = (id) => {
   row.style.display = isHidden ? 'table-row' : 'none';
 };
 
-window.updateOrderStatus = async (orderId, status) => {
+window.updateOrderStatus = async (orderId, status, context = {}) => {
   if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarEstado')) { toast('No tenés permiso para cambiar el estado de pedidos'); return false; }
+  if (context.paymentStatus && !roleCanDo('pedidos', 'cambiarPago')) { toast('No tenés permiso para cambiar el pago'); return false; }
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.status || 'pendiente';
-  const cancelling = currentRole === 'superadmin' && status === 'cancelado';
+  const cancelling = status === 'cancelado';
   const operation = await runAdminCrudOperation({
-    title: cancelling ? 'Mover pedido a Borrados' : 'Actualizar estado del pedido',
+    title: cancelling ? 'Cancelar pedido' : 'Actualizar estado del pedido',
     name: o?.orderNumber || o?.shortId || orderId, module: 'pedidos', dangerous: cancelling,
-    stages: cancelling
-      ? [{ id: 'trash', label: 'Mover pedido y liberar inventario' }, { id: 'refresh', label: 'Actualizar lista y auditoría' }]
-      : [{ id: 'write', label: 'Actualizar estado e inventario' }, { id: 'refresh', label: 'Actualizar lista y auditoría' }],
+    stages: [{ id: 'write', label: 'Actualizar estado e inventario' }, { id: 'refresh', label: 'Actualizar lista y auditoría' }],
     action: async ctx => {
-      if (cancelling) {
-        ctx.start('trash');
-        await window.TintinOrderAdmin.trashOrder(orderId, 'Cancelado por Super Admin');
-        ctx.ok('trash');
-        ctx.start('refresh');
-        allOrders = allOrders.filter(item => item.id !== orderId);
-        await logAudit('mover_pedido_borrados', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Cancelado y movido a Borrados desde ${ORDER_STATUS_LABELS[prevStatus] || prevStatus}`);
-        applyOrderFilters();
-        ctx.ok('refresh');
-        return true;
-      }
       ctx.start('write');
-      await window.TintinInventoryIntegrity.transitionStatus(orderId, status);
-      if (o) o.status = status;
+      const result = await window.TintinInventoryIntegrity.transitionStatus(orderId, status, { baseChangeId: o?.lastChangeId || '', ...context });
+      if (o && result.order) Object.assign(o, result.order);
       ctx.ok('write');
       ctx.start('refresh');
-      await logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
+      publishAdminOrders();
       applyOrderFilters();
-      if (o) maybeSendOrderStatusEmail_(o, 'status', status);
       ctx.ok('refresh');
       return true;
     },
@@ -2884,13 +2891,11 @@ window.updatePayStatus = async (orderId, status) => {
       });
       const body = await response.json().catch(() => ({}));
       if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo guardar el estado de pago.');
-      if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
+      if (o && body.result?.order) Object.assign(o, body.result.order);
       ctx.ok('save');
       ctx.start('refresh');
-      await logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId,
-        `Estado de pago: ${PAY_STATUS_LABELS[prevStatus] || prevStatus} → ${PAY_STATUS_LABELS[status] || status}`);
+      publishAdminOrders();
       applyOrderFilters();
-      if (o) maybeSendOrderStatusEmail_(o, 'payment', status);
       ctx.ok('refresh');
       return true;
     },
@@ -7851,6 +7856,7 @@ let _editingOrder = null;
 // administrador escribió el mismo pedido mientras este editor estaba abierto,
 // no se pisan sus cambios en silencio.
 let _orderEditBaselineMillis = null;
+let _orderEditBaseChangeId = '';
 
 window.openOrderEdit = function(orderId) {
   const o = allOrders.find(x => x.id === orderId);
@@ -7859,6 +7865,7 @@ window.openOrderEdit = function(orderId) {
   // Guarda el updatedAt real (Timestamp de Firestore) — no la copia JSON, que
   // pierde el tipo — para comparar contra el servidor al guardar.
   _orderEditBaselineMillis = toJsDate_(o.updatedAt)?.getTime() ?? null;
+  _orderEditBaseChangeId = o.lastChangeId || '';
 
   document.getElementById('oe-id').value = orderId;
   document.getElementById('oe-short-id').textContent = '#' + orderId.slice(-6).toUpperCase();
@@ -8048,7 +8055,7 @@ window.saveOrderEdit = async function() {
         } catch (_) { /* fail-open: no bloquear por un error de lectura */ }
         ctx.ok('concurrency');
         ctx.start('save');
-        await window.TintinInventoryIntegrity.updateEditedOrder(orderId, updateData);
+        await window.TintinInventoryIntegrity.updateEditedOrder(orderId, { ...updateData, baseChangeId: _orderEditBaseChangeId });
         ctx.ok('save');
         ctx.start('refresh');
         const idx = allOrders.findIndex(x => x.id === orderId);

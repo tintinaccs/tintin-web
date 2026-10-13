@@ -1,18 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { customerOrderMessage } from '../../js/orders/ciclo-pedido.mjs';
 const source = readFileSync(new URL('../../functions/api/notifications.js', import.meta.url), 'utf8');
 const body = source.slice(source.indexOf('export async function notifyOrderStatus('), source.indexOf('export async function onRequest('));
 function fixture() {
   const notices = new Map();
-  const load = new Function('safeId','clean','firestoreAdminGet','decodeFirestoreFields','notifyUserIfAbsent',
+  const load = new Function('safeId','clean','firestoreAdminGet','decodeFirestoreFields','notifyUserIfAbsent','customerOrderMessage',
     body.replace('export ', '') + '\nreturn notifyOrderStatus;');
   const notify = load(value => value, value => String(value || ''),
     () => { throw new Error('Must use committed canonical snapshot'); }, value => value,
     async (_env, uid, notice, key) => {
       if (notices.has(key)) return { duplicate: true };
       notices.set(key, {uid,notice}); return { created: true };
-    });
+    }, customerOrderMessage);
   return {notify,notices};
 }
 test('canonical order state produces one customer notice per revision, linked to that order', async () => {

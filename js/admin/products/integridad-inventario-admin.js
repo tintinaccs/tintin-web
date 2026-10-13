@@ -42,8 +42,9 @@ async function updateEditedOrder(orderId, patch) {
     },
     body: JSON.stringify({
       orderId: safeOrderId,
+      baseChangeId: window.TintinAdminOrders?.get?.(safeOrderId)?.lastChangeId || '',
       ...(patch && typeof patch === 'object' ? patch : {}),
-      changeId: `admin_${crypto.randomUUID().replaceAll('-', '')}`,
+      changeId: patch?.changeId || `admin_${crypto.randomUUID().replaceAll('-', '')}`,
       source: 'superadmin'
     })
   });
@@ -57,8 +58,8 @@ async function updateEditedOrder(orderId, patch) {
   return body.result || {};
 }
 
-async function transitionStatus(orderId, status) {
-  return updateEditedOrder(orderId, { status: String(status || '').trim() });
+async function transitionStatus(orderId, status, context = {}) {
+  return updateEditedOrder(orderId, { ...context, status: String(status || '').trim() });
 }
 
 async function deleteOrder(orderId) {

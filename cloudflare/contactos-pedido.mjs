@@ -4,8 +4,10 @@ export function orderContactLinks(order, orderId) {
   const shipping = order.shipping || {};
   const point = shipping.mapLocation;
   const lat = point?.lat, lng = point?.lng;
+  const address = clean(shipping.address || order.address), city = clean(shipping.city || order.shippingCity || order.city);
   const map = lat != null && lng != null && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng)) && Math.abs(Number(lat)) <= 90 && Math.abs(Number(lng)) <= 180
-    ? `https://www.google.com/maps?q=${encodeURIComponent(`${Number(lat)},${Number(lng)}`)}` : '';
+    ? `https://www.google.com/maps?q=${encodeURIComponent(`${Number(lat)},${Number(lng)}`)}`
+    : !point && address.length >= 3 && city ? `https://www.google.com/maps?q=${encodeURIComponent(`${address}, ${city}`)}` : '';
   let phone = clean(order.userPhone).replace(/\D/g, '');
   if (/^09\d{8}$/.test(phone)) phone = `595${phone.slice(1)}`;
   const shortId = clean(order.shortId || order.orderNumber || orderId);
