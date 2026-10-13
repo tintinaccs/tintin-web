@@ -8,7 +8,7 @@ async function invoke(url, body, { method = 'GET', contentType = 'text/html; cha
   const response = new Response(method === 'HEAD' ? null : body, {
     headers: { 'content-type': contentType },
   });
-  return onRequest({ request, next: async () => response });
+  return onRequest({ request, next: async () => response }, { sharedLimit: async () => {} });
 }
 
 test('Pages.dev storefront responses carry noindex while canonical domains remain indexable', async () => {

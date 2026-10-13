@@ -32,6 +32,7 @@ function store(extra = {}) {
   return {
     commits,
     get: async (_env, path) => map.get(decodeURIComponent(path)) || null,
+    batchGet: async (_env, paths) => paths.map(path => map.get(decodeURIComponent(path))).filter(Boolean),
     commit: async (_env, writes) => { commits.push(writes); return { writeResults: writes.map(() => ({})) }; },
   };
 }
@@ -52,7 +53,7 @@ function draft(over = {}) {
 
 async function run(payload, st) {
   const prepared = await preparePublicCheckoutOrder({}, payload, USER, { get: st.get });
-  const created = await createOrderAdmin({}, prepared.input, { uid: UID, email: USER.email, role: 'client', origin: 'public-checkout' }, { get: st.get, commit: st.commit, inspect: prepared.inspect, findFirst: async () => null, maxNumber: async () => 0 });
+  const created = await createOrderAdmin({}, prepared.input, { uid: UID, email: USER.email, role: 'client', origin: 'public-checkout' }, { get: st.get, batchGet: st.batchGet, commit: st.commit, inspect: prepared.inspect, findFirst: async () => null, maxNumber: async () => 0 });
   return { prepared, created };
 }
 

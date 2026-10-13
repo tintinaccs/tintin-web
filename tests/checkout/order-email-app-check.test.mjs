@@ -20,6 +20,10 @@ test('App Check no permite saltarse identidad, propiedad ni el permiso de reenv�
       if (token !== 'valid-user') throw new Error('Sesión inválida');
       return actor;
     },
+    // Esta prueba aísla propiedad/App Check; la reserva real se prueba en
+    // shared-api-rate-limits y en Firestore del emulador.
+    enforceAuthenticatedRateLimit: async () => {},
+    rateLimitErrorResponse: () => null,
     jsonResponse: (body, status) => ({ body, status }),
     fetch: async (_url, init) => ({
       ok: init.headers['X-Firebase-AppCheck'] === 'valid-app-check', status: 403,

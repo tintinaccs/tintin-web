@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   cleanPublicId,
   cloudinarySignature,
   getCloudinaryConfig,
@@ -60,7 +60,7 @@ export async function onRequest(context) {
   }
 
   try {
-    await requireSuperAdmin(request);
+    await requireSuperAdmin(request, env);
     const body = await request.json();
     const values = Array.isArray(body?.publicIds) ? body.publicIds : [body?.publicId];
     const publicIds = [...new Set(values.filter(Boolean).map(cleanPublicId))];
@@ -83,6 +83,8 @@ export async function onRequest(context) {
 
     return jsonResponse({ ok: true, results }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     const message = error?.message || 'No se pudo borrar la imagen';
     const status = /Cloudinary todavía no está configurado/i.test(message) ? 503 : 400;
     return jsonResponse({ error: message }, status, origin, requestUrl);

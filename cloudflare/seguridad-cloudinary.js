@@ -7,6 +7,7 @@
 import { SUPER_ADMIN_EMAIL } from './contrato-cuentas-generado.js';
 import { verifyFirebaseIdToken } from './firebase-id-token.js';
 import { decodeFirestoreFields, firestoreAdminGet } from './firebase-admin-ligero.js';
+import { enforceAuthenticatedRateLimit } from './rate-limit-compartido.js';
 
 export const SUPERADMIN_EMAIL = SUPER_ADMIN_EMAIL;
 
@@ -71,16 +72,18 @@ function getBearerToken(request) {
  * al flujo cliente de Firebase Auth y, con App Check Enforcement activo, puede
  * rechazar llamadas servidor-a-servidor aunque el ID token sea válido.
  */
-export async function requireFirebaseUser(request) {
+export async function requireFirebaseUser(request, env) {
   const token = getBearerToken(request);
-  return verifyFirebaseIdToken(token);
+  const user = await verifyFirebaseIdToken(token);
+  await enforceAuthenticatedRateLimit(request, env, user);
+  return user;
 }
 
 /**
  * Usa exactamente la misma validación criptográfica que las rutas de clientas
  * y, después, restringe la operación al único correo de Super Admin.
  */
-export async function requireSuperAdmin(request) {
+export async function requireSuperAdmin(request, env) {
   const token = getBearerToken(request);
   const user = await verifyFirebaseIdToken(token);
   if (user.email !== SUPERADMIN_EMAIL) {
@@ -89,11 +92,12 @@ export async function requireSuperAdmin(request) {
     error.code = 'auth/superadmin-required';
     throw error;
   }
+  await enforceAuthenticatedRateLimit(request, env, user);
   return user;
 }
 
 export async function requireOrderStaff(request, env) {
-  const user = await requireFirebaseUser(request);
+  const user = await requireFirebaseUser(request, env);
   if (user.email === SUPERADMIN_EMAIL) return { ...user, role: 'superadmin' };
   const document = await firestoreAdminGet(env, `users/${encodeURIComponent(user.uid)}`);
   const profile = decodeFirestoreFields(document?.fields || {});
@@ -148,6 +152,17 @@ export async function assertOrderStaffPermission(env, actor, moduleKey, actionKe
 export function statusFromError(error, fallback = 500) {
   const status = Number(error?.status);
   return Number.isInteger(status) && status >= 400 && status <= 599 ? status : fallback;
+}
+
+/** Respuesta uniforme de cuota, antes de los clasificadores de cada dominio. */
+export function rateLimitErrorResponse(error, origin, requestUrl = '') {
+  if (!['rate_limited', 'rate_limit_unavailable'].includes(error?.code)) return null;
+  const headers = corsHeaders(origin, requestUrl);
+  if (error.retryAfter) headers['retry-after'] = String(error.retryAfter);
+  return new Response(JSON.stringify({
+    ok: false, success: false, code: error.code, error: error.message,
+    ...(error.retryAfter ? { retryAfterSeconds: error.retryAfter } : {}),
+  }), { status: statusFromError(error, 503), headers });
 }
 
 export function getCloudinaryConfig(env = {}) {

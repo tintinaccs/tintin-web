@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   cleanMediaId,
   cleanVariant,
   cloudinarySignature,
@@ -25,7 +25,7 @@ export async function onRequest(context) {
   }
 
   try {
-    await requireSuperAdmin(request);
+    await requireSuperAdmin(request, env);
     const body = await request.json();
     const mediaId = cleanMediaId(body?.mediaId);
     const variant = cleanVariant(body?.variant);
@@ -52,6 +52,8 @@ export async function onRequest(context) {
       uploadUrl: `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/image/upload`
     }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     const message = error?.message || 'No se pudo autorizar la subida';
     const status = /Cloudinary todavía no está configurado/i.test(message) ? 503 : 401;
     return jsonResponse({ error: message }, status, origin, requestUrl);

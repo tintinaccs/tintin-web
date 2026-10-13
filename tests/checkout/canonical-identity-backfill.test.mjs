@@ -9,7 +9,7 @@ const root = path.resolve(here, '../..');
 const source = fs.readFileSync(path.join(root, 'functions/api/admin-backfill-canonical-identity.js'), 'utf8');
 
 test('el backfill está protegido por SuperAdmin y es dry-run por defecto', () => {
-  assert.match(source, /requireSuperAdmin\(request\)/);
+  assert.match(source, /requireSuperAdmin\(request, env\)/);
   assert.match(source, /const apply = body\?\.apply === true/);
   assert.match(source, /mode: apply \? 'apply' : 'dry-run'/);
 });

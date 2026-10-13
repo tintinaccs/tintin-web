@@ -4,7 +4,7 @@
 // El navegador sólo recibe metadatos: nunca devuelve tokens completos ni
 // credenciales. Las operaciones destructivas pasan por la cuenta de servicio.
 
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -44,7 +44,7 @@ export async function onRequest(context) {
   if (!['GET', 'POST'].includes(request.method)) return jsonResponse({ success: false, error: 'Método no permitido' }, 405, origin, requestUrl);
 
   try {
-    const user = await requireSuperAdmin(request);
+    const user = await requireSuperAdmin(request, env);
     if (request.method === 'GET') {
       return jsonResponse({ success: true, devices: await listAdminDevices(env), settings: await readPushSettings(env), events: await listRecentEvents(env) }, 200, origin, requestUrl);
     }
@@ -81,6 +81,8 @@ export async function onRequest(context) {
     });
     return jsonResponse({ success: true, settings }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     const status = statusFromError(error, /Super Admin|autenticación|sesión|verificado/i.test(String(error?.message || '')) ? 401 : 400);
     return jsonResponse({ success: false, error: sanitizeError(error, 220) }, status, origin, requestUrl);
   }

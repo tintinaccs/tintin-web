@@ -1,32 +1,41 @@
 const buckets = new Map();
+const MAX_BUCKETS = 5_000;
+let overflowBucket = null;
+let nextCleanupAt = 0;
 
 function now() {
   return Date.now();
 }
 
 function clientKey(request) {
-  const ip = String(request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '').split(',')[0].trim();
-  const ua = String(request.headers.get('user-agent') || '').slice(0, 80);
-  return `${ip || 'unknown'}|${ua}`;
+  // Cloudflare fija esta cabecera en el borde. User-Agent y X-Forwarded-For
+  // pueden variar por solicitud y no deben crear contadores nuevos.
+  // Sin identidad del borde, compartir el bucket conservador (p. ej. local).
+  return String(request.headers.get('cf-connecting-ip') || '').trim() || 'unknown';
 }
 
 export function rateLimit(request, { id = 'default', limit = 30, windowMs = 60_000 } = {}) {
   const key = `${id}:${clientKey(request)}`;
   const current = now();
-  const existing = buckets.get(key);
+  if (!buckets.has(key) && buckets.size >= MAX_BUCKETS && current >= nextCleanupAt) {
+    nextCleanupAt = current + 10_000;
+    for (const [bucketKey, bucket] of buckets) {
+      if (bucket.resetAt <= current) buckets.delete(bucketKey);
+    }
+  }
+  const overflow = !buckets.has(key) && buckets.size >= MAX_BUCKETS;
+  const existing = overflow ? overflowBucket : buckets.get(key);
   const state = !existing || existing.resetAt <= current
     ? { count: 0, resetAt: current + windowMs }
     : existing;
 
   state.count += 1;
-  buckets.set(key, state);
-
-  if (buckets.size > 5_000) {
-    for (const [bucketKey, bucket] of buckets) {
-      if (bucket.resetAt <= current) buckets.delete(bucketKey);
-      if (buckets.size <= 4_000) break;
-    }
-  }
+  if (overflow) {
+    // No expulsar identidades activas: permitiría reiniciar su cuota. Durante
+    // saturación las nuevas identidades comparten una reserva conservadora.
+    state.resetAt = Math.max(state.resetAt, current + windowMs);
+    overflowBucket = state;
+  } else buckets.set(key, state);
 
   const remaining = Math.max(0, limit - state.count);
   return {

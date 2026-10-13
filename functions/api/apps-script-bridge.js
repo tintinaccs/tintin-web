@@ -3,9 +3,11 @@ import {
   corsHeaders,
   jsonResponse,
   originIsAllowed,
-  preflightResponse
+  preflightResponse,
+  rateLimitErrorResponse,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { verifyFirebaseIdToken } from '../../cloudflare/firebase-id-token.js';
+import { enforceAuthenticatedRateLimit } from '../../cloudflare/rate-limit-compartido.js';
 import {
   decodeFirestoreFields,
   encodeFirestoreFields,
@@ -234,21 +236,21 @@ export async function onRequest(context) {
     // un perfil incompleto bloquea la compra, pero NUNCA cierra la sesión.
     const forwardedPayload = { ...payload };
     let authenticatedUser = null;
+    try {
+      authenticatedUser = await verifyFirebaseIdToken(idToken);
+      await enforceAuthenticatedRateLimit(request, env, authenticatedUser);
+    } catch (error) {
+      const limited = rateLimitErrorResponse(error, origin, requestUrl);
+      if (limited) return limited;
+      const failure = authFailure(error);
+      // Sólo se registra el código/estado, nunca el token ni datos personales.
+      console.error('[apps-script-bridge] verifyFirebaseIdToken failed', {
+        code: error?.code || 'unknown',
+        status: error?.status || null,
+      });
+      return jsonResponse({ ok: false, error: failure.error }, failure.status, origin, requestUrl);
+    }
     if (action === 'createOrder') {
-      try {
-        authenticatedUser = await verifyFirebaseIdToken(idToken);
-      } catch (error) {
-        const failure = authFailure(error);
-        // Sólo se registra el código/estado del error, nunca el idToken ni datos
-        // personales: es la única forma de distinguir en los logs de Cloudflare
-        // cuál de las validaciones (proyecto, firma, expiración, clave
-        // desconocida, etc.) rechazó un token dado.
-        console.error('[apps-script-bridge] verifyFirebaseIdToken failed', {
-          code: error?.code || 'unknown',
-          status: error?.status || null,
-        });
-        return jsonResponse({ ok: false, error: failure.error }, failure.status, origin, requestUrl);
-      }
       try {
         await assertPurchaseEligibleAccount(env, authenticatedUser);
       } catch (error) {

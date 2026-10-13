@@ -9,7 +9,8 @@ Este procedimiento es el único orden aprobado para mover la tienda desde Shopif
 - Fuente de verdad del dominio en código: `config/public-site.json`.
 - Destino declarado en `config.public-site.cutover`: `https://tintinaccs.com`.
 - Redirect OAuth esperado: `https://tintinaccs.com/__/auth/handler`.
-- El monitor horario debe seguir apuntando a `pages.dev` hasta terminar el corte.
+- `config.public-site.origin` conserva Pages para el sitio y sus sondas antes del corte. Un override explícito del transporte no cambia la metadata canónica esperada.
+- Las tareas OIDC de correo, catálogo y PayPal también leen `origin`; comprobar sus ejecuciones en Pages y repetirlas después del corte.
 
 ## A. Preflight obligatorio antes del cambio de tráfico
 
@@ -74,6 +75,7 @@ Regla: **no usar “reset DNS”, no borrar la zona completa y no recrear desde 
 - [ ] No eliminar `tintinaccesorios.pages.dev` durante la transición; sigue siendo el origen técnico y de rollback.
 
 El proxy `/__/auth/*` ya está versionado en `functions/__/auth/[[path]].js` y debe permanecer incluido en `_routes.json`.
+El artefacto preparado usa `technicalFirebaseAuthDomain` únicamente cuando el hostname es exactamente `tintinaccesorios.pages.dev`; allí conserva su proxy Auth operativo aunque el apex todavía sirva Shopify. El dominio definitivo usa `firebaseAuthDomain`. Previews y hosts locales conservan el dominio configurado, sin autorización automática. La sonda de Auth debe comprobar el dominio efectivo del SDK y sus helpers `iframe`/`handler`; que Login pinte y App Check arranque no acredita Google OAuth completo. Las sesiones de Firebase siguen siendo propias de cada origen y no se trasladan automáticamente al dominio nuevo.
 
 ### App Check / reCAPTCHA Enterprise
 
@@ -196,7 +198,7 @@ Después de que `tintinaccs.com` esté estable:
 - La navegación pública de `pages.dev` debe redirigirse al dominio oficial mediante una regla de host en Cloudflare, preservando path y query cuando exista equivalente.
 - No redirigir ni romper endpoints técnicos que se necesiten explícitamente para diagnóstico hasta haber validado la regla.
 - `pages.dev` no debe permanecer como segunda copia indexable de la tienda.
-- El monitor cambia a `tintinaccs.com` **solo cuando la matriz E esté verde**; esto ocurre al cambiar `config.public-site.origin` en el commit de cutover.
+- El monitor cambia a `tintinaccs.com` **solo cuando la matriz E esté verde**, al sincronizar `config.public-site.origin` en el commit de cutover; comprobar también las tareas OIDC.
 
 La redirección por host se configura en Cloudflare después del corte, no antes, porque hoy `pages.dev` es justamente el entorno que se audita para aprobar la migración.
 

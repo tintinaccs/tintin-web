@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { findShopifyHostedUrls } from './lib/referencias-shopify.mjs';
+import { readProductionOrigins } from './lib/origen-produccion.mjs';
 
-const publicSite = JSON.parse(fs.readFileSync(path.resolve('config/public-site.json'), 'utf8'));
-const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
+const { origin, canonicalOrigin } = readProductionOrigins();
 const timeoutMs = Number(process.env.TINTIN_HEALTH_TIMEOUT_MS || 15000);
 const attempts = 3;
 const results = [];
@@ -117,14 +117,14 @@ await check('home-security-headers', async () => {
 await check('home-canonical', async () => {
   const response = await fetchWithRetry(origin + '/');
   const body = await response.text();
-  if (!body.includes('<link rel="canonical" href="' + origin + '/">')) throw new Error('Canonical de inicio ausente o incorrecto.');
+  if (!body.includes('<link rel="canonical" href="' + canonicalOrigin + '/">')) throw new Error('Canonical de inicio ausente o incorrecto.');
   if (body.includes('tintinaccs.github.io/tintin-web')) throw new Error('Producción todavía expone una URL antigua de GitHub Pages.');
 });
 
 await check('robots', async () => {
   const robots = await inspect('/robots.txt', 'text/plain');
   const technicalHost = new URL(origin).hostname.toLowerCase().endsWith('.pages.dev');
-  const hasCurrentSitemap = robots.body.includes('Sitemap: ' + origin + '/sitemap.xml');
+  const hasCurrentSitemap = robots.body.includes('Sitemap: ' + canonicalOrigin + '/sitemap.xml');
   if (technicalHost) {
     if (hasCurrentSitemap || /^\s*Sitemap\s*:/im.test(robots.body)) throw new Error('El host técnico pages.dev no debe anunciar su sitemap.');
     if (robots.headers['x-robots-tag'].toLowerCase() !== 'noindex') throw new Error('El host técnico pages.dev debe entregar X-Robots-Tag: noindex.');
@@ -140,14 +140,14 @@ await check('robots', async () => {
 await check('sitemap-index', async () => {
   const sitemap = await inspect('/sitemap.xml', 'xml');
   const urls = xmlLocations(sitemap.body);
-  const expected = [origin + '/sitemap-pages.xml', origin + '/sitemap-products.xml', origin + '/sitemap-collections.xml'];
+  const expected = [canonicalOrigin + '/sitemap-pages.xml', canonicalOrigin + '/sitemap-products.xml', canonicalOrigin + '/sitemap-collections.xml'];
   if (JSON.stringify(urls) !== JSON.stringify(expected)) throw new Error('El índice de sitemaps no contiene páginas, productos y colecciones esperados.');
 });
 
 await check('sitemap-pages', async () => {
   const sitemap = await inspect('/sitemap-pages.xml', 'xml');
   const urls = xmlLocations(sitemap.body);
-  if (!urls.length || urls.some(url => !url.startsWith(origin + '/')) || urls.some(url => /\.html(?:$|[?#])/.test(url))) {
+  if (!urls.length || urls.some(url => !url.startsWith(canonicalOrigin + '/')) || urls.some(url => /\.html(?:$|[?#])/.test(url))) {
     throw new Error('Sitemap de páginas vacío, con otro origen o con URLs .html.');
   }
 });
@@ -155,7 +155,7 @@ await check('sitemap-pages', async () => {
 await check('sitemap-products', async () => {
   const sitemap = await inspect('/sitemap-products.xml', 'xml');
   const urls = xmlLocations(sitemap.body);
-  if (!urls.length || urls.some(url => !url.startsWith(origin + '/product?id='))) {
+  if (!urls.length || urls.some(url => !url.startsWith(canonicalOrigin + '/product?id='))) {
     throw new Error('Sitemap dinámico de productos vacío o con URLs inválidas.');
   }
 });
@@ -163,7 +163,7 @@ await check('sitemap-products', async () => {
 await check('sitemap-collections', async () => {
   const sitemap = await inspect('/sitemap-collections.xml', 'xml');
   const urls = xmlLocations(sitemap.body);
-  if (urls.some(url => !url.startsWith(origin + '/catalogo?cat='))) {
+  if (urls.some(url => !url.startsWith(canonicalOrigin + '/catalogo?cat='))) {
     throw new Error('Sitemap dinámico de colecciones contiene URLs inválidas.');
   }
 });
@@ -307,13 +307,14 @@ await check('product-server-metadata', async () => {
   if (product.headers['x-tintin-product-meta'] !== 'server') throw new Error('Producto no fue enriquecido por Pages Function.');
   if (!product.body.includes('<meta property="og:type" content="product">')) throw new Error('Producto no entrega Open Graph específico desde servidor.');
   if (!product.body.includes('id="tt-product-jsonld-server"')) throw new Error('Producto no entrega JSON-LD específico desde servidor.');
-  if (!product.body.includes('<link rel="canonical" href="' + origin + '/product?id=')) throw new Error('Producto no entrega canonical específico desde servidor.');
+  if (!product.body.includes('<link rel="canonical" href="' + canonicalOrigin + '/product?id=')) throw new Error('Producto no entrega canonical específico desde servidor.');
 });
 
 fs.mkdirSync(path.resolve('artifacts'), { recursive: true });
 fs.writeFileSync(path.resolve('artifacts/phase11-production-health.json'), JSON.stringify({
   checkedAt: new Date().toISOString(),
   origin,
+  canonicalOrigin,
   ok: failures.length === 0,
   results,
   failures

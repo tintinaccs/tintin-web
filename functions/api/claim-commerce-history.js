@@ -1,4 +1,4 @@
-import { jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, statusFromError } from '../../cloudflare/seguridad-cloudinary.js';
+import { rateLimitErrorResponse, jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, statusFromError } from '../../cloudflare/seguridad-cloudinary.js';
 import { decodeFirestoreFields, encodeFirestoreFields, firestoreAdminCommit, firestoreAdminFindFirstByFields, firestoreAdminGet } from '../../cloudflare/firebase-admin-ligero.js';
 
 function clean(value, max = 254) { return String(value == null ? '' : value).trim().slice(0, max); }
@@ -14,7 +14,7 @@ export async function onRequest(context) {
   if (request.method === 'OPTIONS') return preflightResponse(origin, request.url, 'POST, OPTIONS');
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, request.url);
   try {
-    const actor = await requireFirebaseUser(request);
+    const actor = await requireFirebaseUser(request, env);
     const email = clean(actor.email).toLowerCase();
     if (!email) throw Object.assign(new Error('Correo no verificable.'), { status: 400 });
     const profilePath = `users/${encodeURIComponent(actor.uid)}`;
@@ -40,6 +40,8 @@ export async function onRequest(context) {
     ]);
     return jsonResponse({ ok: true, claimed: true }, 200, origin, request.url);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, request.url);
+    if (limited) return limited;
     console.error('[claim-commerce-history]', error?.message || error);
     return jsonResponse({ ok: false, error: 'No se pudo recuperar el historial comercial.' }, statusFromError(error, 500), origin, request.url);
   }

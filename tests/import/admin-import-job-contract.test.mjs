@@ -9,7 +9,7 @@ test('admin import job conserva estados, ownership y dry-run server-side', () =>
   for (const state of ['PREVIEW', 'READY', 'RUNNING', 'PAUSED', 'FAILED', 'COMPLETED', 'CANCELLED']) {
     assert.match(source, new RegExp(`['"]${state}['"]`));
   }
-  assert.match(source, /requireSuperAdmin\(request\)/);
+  assert.match(source, /requireSuperAdmin\(request, env\)/);
   assert.match(source, /createdByUid !== actor\.uid/);
   assert.match(source, /currentDocument: \{ exists: false \}/);
   assert.match(source, /dryRun: true/);

@@ -19,7 +19,7 @@ const appsScript = read('apps-script/ProductosUnificados.gs');
 const engagement = read('apps-script/Participacion.gs');
 
 expect(/js\/admin\/products\/borrado-global-catalogo-admin\.js\?v=tintin-\d{8}/.test(admin), 'admin.html no carga el módulo versionado de borrado global.');
-expect(api.includes('requireSuperAdmin(request)'), 'La API destructiva no exige Super Admin.');
+expect(api.includes('requireSuperAdmin(request, env)'), 'La API destructiva no exige Super Admin.');
 expect(api.includes("CATALOG_DELETE_PASSWORD"), 'Falta la contraseña secreta server-side para borrar productos.');
 expect(api.includes("ALL_COLLECTIONS_CONFIRM = 'ELIMINAR TODAS LAS COLECCIONES'"), 'Falta confirmación exacta para borrar todas las colecciones.');
 expect(ui.includes("'btn-eliminar-todos-productos'"), 'Falta botón Eliminar TODOS en Productos.');

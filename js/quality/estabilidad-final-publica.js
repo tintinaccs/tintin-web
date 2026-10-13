@@ -119,34 +119,23 @@ async function enhanceProfile() {
       photoButton.textContent = 'Subiendo…';
       try {
         const [{ db }, authApi, firestoreApi, sessionApi] = await Promise.all([
-          import('../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1'),
+          import('../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-          import('../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2'),
+          import('../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2'),
         ]);
         const snapshot = await sessionApi.waitForSession();
         if (snapshot.status === sessionApi.AUTH_STATES.UNKNOWN) throw new Error('No pudimos verificar tu sesión. Volvé a intentar en unos segundos.');
         const user = snapshot.user;
         if (!user) throw new Error('Tu sesión ya no está disponible.');
         const token = await user.getIdToken(true);
-        const signedResponse = await fetch('/api/profile-avatar-upload', {
+        const upload = await fetch('/api/profile-avatar-upload', {
           method: 'POST',
-          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contentType: file.type, size: file.size }),
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': file.type },
+          body: file,
         });
-        const signed = await signedResponse.json().catch(() => ({}));
-        if (!signedResponse.ok || !signed.uploadUrl) throw new Error(signed.error || 'No se pudo preparar la subida.');
-        const form = new FormData();
-        form.append('file', file);
-        form.append('api_key', signed.apiKey);
-        form.append('timestamp', String(signed.timestamp));
-        form.append('signature', signed.signature);
-        form.append('public_id', signed.publicId);
-        form.append('allowed_formats', signed.allowedFormats);
-        form.append('overwrite', 'true');
-        const upload = await fetch(signed.uploadUrl, { method: 'POST', body: form });
         const uploaded = await upload.json().catch(() => ({}));
-        if (!upload.ok || !uploaded.secure_url) throw new Error(uploaded.error?.message || 'No se pudo subir la foto.');
+        if (!upload.ok || uploaded.ok !== true || !uploaded.secure_url) throw new Error(uploaded.error || 'No se pudo subir la foto.');
         const photoURL = String(uploaded.secure_url);
         await authApi.updateProfile(user, { photoURL });
         await firestoreApi.setDoc(firestoreApi.doc(db, 'users', user.uid), {
@@ -211,7 +200,7 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
-  void import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20261012-auth-privacy-1-estado-pedidos-perfil-js-domain-prepared-20261012-6-pedidos-styles-20261013-3')
+  void import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20261012-auth-privacy-1-estado-pedidos-perfil-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2')
     .catch(error => console.warn('[Perfil] Pedidos pendientes:', error?.code || error?.message));
   activate(initialPanel);
 }

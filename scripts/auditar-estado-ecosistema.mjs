@@ -33,7 +33,7 @@ check(
 check(
   'El estado integral está protegido por la sesión de Super Admin',
   protectedHealth.includes('requireSuperAdmin') &&
-    protectedHealth.includes('await requireSuperAdmin(request)') &&
+    protectedHealth.includes('await requireSuperAdmin(request, env)') &&
     protectedHealth.includes("runSystemHealth(env)")
 );
 check(

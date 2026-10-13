@@ -17,7 +17,7 @@ const checks = [
   ['staging no pisa active', /catalogState: 'STAGING'/.test(core)],
   ['activation exige staging listo', /READY_TO_ACTIVATE/.test(core)],
   ['rollback conserva catálogo anterior', /previousCatalogId/.test(core)],
-  ['media exige Super Admin', /requireSuperAdmin\(request\)/.test(media)],
+  ['media exige Super Admin', /requireSuperAdmin\(request, env\)/.test(media)],
   ['media copy exige guard explícito', /SHOPIFY_PHASE2_MEDIA_WRITE/.test(media)],
   ['media no usa cliente', !/window\.|document\./.test(media)],
   ['el importador copia imágenes antes de escribir productos', mediaCopyIndex >= 0 && catalogWriteIndex > mediaCopyIndex],

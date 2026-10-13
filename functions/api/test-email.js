@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -103,7 +103,7 @@ export async function onRequest(context) {
   }
 
   try {
-    await requireSuperAdmin(request);
+    await requireSuperAdmin(request, env);
     const apiKey = clean(env.RESEND_API_KEY, 500);
     if (!apiKey) {
       return jsonResponse({ success: false, error: 'El servicio de correo no está configurado' }, 503, origin, requestUrl);
@@ -117,6 +117,8 @@ export async function onRequest(context) {
     const result = await sendWithResend(apiKey, toEmail);
     return jsonResponse({ success: true, customerSent: true, id: result?.id || '' }, 200, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     return jsonResponse({
       success: false,
       customerSent: false,

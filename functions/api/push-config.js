@@ -7,7 +7,7 @@
 // variable de Cloudflare y nada más. La cuenta de servicio y el secreto
 // del webhook NO salen nunca por esta respuesta.
 
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -33,8 +33,10 @@ export async function onRequest(context) {
   }
 
   try {
-    await requireSuperAdmin(request);
+    await requireSuperAdmin(request, env);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     return jsonResponse({ success: false, error: sanitizeError(error, 160) }, 401, origin, requestUrl);
   }
 

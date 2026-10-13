@@ -10,7 +10,7 @@
      "Biblioteca" del panel de Imágenes.
    ============================================================= */
 
-import { onMediaLibraryUpdate, uploadImageToLibrary, deleteMediaItem, updateMediaMetadata, findOrphanedMedia } from '../../components/images/biblioteca-multimedia.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
+import { onMediaLibraryUpdate, uploadImageToLibrary, deleteMediaItem, updateMediaMetadata, findOrphanedMedia } from '../../components/images/biblioteca-multimedia.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 
 function ensureStyles() {
   if (document.getElementById('tt-media-library-style')) return;

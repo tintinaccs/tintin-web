@@ -1,4 +1,4 @@
-import { jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin } from '../../cloudflare/seguridad-cloudinary.js';
+import { rateLimitErrorResponse, jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   decodeFirestoreFields, encodeFirestoreFields, firestoreAdminCommit, firestoreAdminDelete,
   firestoreAdminGet, firestoreAdminList, firestoreAdminReplace, fsInteger, fsString, fsTimestamp,
@@ -77,7 +77,7 @@ export async function onRequest(context) {
   if (!originIsAllowed(origin, requestUrl)) return jsonResponse({ok:false,error:'Origen no permitido.'},403,origin,requestUrl);
   if (request.method === 'OPTIONS') return preflightResponse(origin, requestUrl, 'GET, POST, OPTIONS');
   try {
-    const user = await requireSuperAdmin(request);
+    const user = await requireSuperAdmin(request, env);
     if (request.method === 'GET') return jsonResponse({ok:true,...(await loadAll(env))},200,origin,requestUrl);
     if (request.method !== 'POST') return jsonResponse({ok:false,error:'Método no permitido.'},405,origin,requestUrl);
     const body=await parseBody(request); const action=String(body.action || 'save');
@@ -177,6 +177,8 @@ export async function onRequest(context) {
     }
     throw new Error('Acción no permitida.');
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     console.error(JSON.stringify({message:'visual-studio-global request failed',error:error?.message || String(error),path:new URL(request.url).pathname}));
     const status=Number(error?.status) || (/Super Admin|sesi[oó]n|autenticaci/i.test(String(error?.message)) ? 403 : 400);
     const allowed=/^(La versión|Solicitud|Acción)/.test(String(error?.message || ''));

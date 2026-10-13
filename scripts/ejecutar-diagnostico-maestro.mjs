@@ -4,11 +4,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { readProductionOrigins } from './lib/origen-produccion.mjs';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, match => match.slice(1))), '..');
 const requestedSuite = process.argv[2] || '';
 const artifactsRoot = path.resolve(root, process.env.MASTER_ARTIFACTS_DIR || 'artifacts/master');
-const productionOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
+const { origin: productionOrigin } = readProductionOrigins();
 
 const suites = {
   static: {

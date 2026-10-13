@@ -313,7 +313,7 @@ check(
 check(
   'Cloudflare valida el ID token con Firebase Auth en el servidor',
   files.cloudinarySecurity.includes("import { verifyFirebaseIdToken } from './firebase-id-token.js'") &&
-    files.cloudinarySecurity.includes('return verifyFirebaseIdToken(token)') &&
+    /const user = await verifyFirebaseIdToken\(token\);\s+await enforceAuthenticatedRateLimit\(request, env, user\);\s+return user;/.test(files.cloudinarySecurity) &&
     files.cloudinarySecurity.includes('const user = await verifyFirebaseIdToken(token)') &&
     files.cloudinarySecurity.includes('user.email !== SUPERADMIN_EMAIL') &&
     files.firebaseIdToken.includes("crypto.subtle.verify(") &&

@@ -101,8 +101,11 @@ export async function enforceIpRateLimit(request, env, now, deps) {
 }
 
 function generateCode() {
-  const value = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
-  return String(value).padStart(6, '0');
+  const random = new Uint32Array(1);
+  let value;
+  // Discard the incomplete tail: every six-digit code has exactly 4294 sources.
+  do { crypto.getRandomValues(random); value = random[0]; } while (value >= 4_294_000_000);
+  return String(value % 1_000_000).padStart(6, '0');
 }
 
 async function getResendEmailStatus(apiKey, emailId) {

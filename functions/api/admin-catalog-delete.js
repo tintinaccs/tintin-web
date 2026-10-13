@@ -1,4 +1,4 @@
-import {
+import { rateLimitErrorResponse,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -96,7 +96,7 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
 
   try {
-    const actor = await requireSuperAdmin(request);
+    const actor = await requireSuperAdmin(request, env);
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
@@ -155,6 +155,8 @@ export async function onRequest(context) {
     const status = result?.partial ? 207 : 200;
     return jsonResponse({ ok: result?.partial !== true, partial: result?.partial === true, result }, status, origin, requestUrl);
   } catch (error) {
+    const limited = rateLimitErrorResponse(error, origin, requestUrl);
+    if (limited) return limited;
     console.error('[admin-catalog-delete]', error?.message || error);
     return jsonResponse({ ok: false, error: safeMessage(error) }, statusFromError(error, 400), origin, requestUrl);
   }

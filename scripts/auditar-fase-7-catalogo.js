@@ -143,7 +143,7 @@ check(
     /slice\(0, 100\)/.test(sheets) &&
     /payload\.idToken/.test(sheets) &&
     /payload\.action !== 'syncProducts'/.test(sheets) &&
-    /requireSuperAdmin\(request\)/.test(sheets) &&
+    /requireSuperAdmin\(request, env\)/.test(sheets) &&
     /syncProductsPayloadWithRetry/.test(sheets) &&
     /appScriptChunkSize:\s*5/.test(sheets) &&
     /queueCatalogSheetSync/.test(sheets) &&
