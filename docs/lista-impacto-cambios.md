@@ -1,3 +1,11 @@
+## 2026-10-13 — Preparación antes de migrar autorizada por el titular
+
+Reconciliación de Pedidos con main f5ffc5a y conservación del origen activo pages.dev separado del destino cutover tintinaccs.com. Generadores actualizan consumidores del origen, canonical/SEO/correo/monitor, CSP y URLs inmutables transitivas; no rediseño, datos históricos ni cambios externos. Sin DNS/custom domain, merge/publicación o operaciones comerciales reales. Evidencia PRECUTOVER_PEDIDOS_20261013.md; CI exacto y mantenimiento humano pendientes.
+
+## 2026-10-12 — Pedidos Super Admin y conexiones indispensables
+
+Interfaz existente de Pedidos, CSS acotado, fuente administrativa compartida, dominio de transiciones, guardado único estado/pago, inventario, auditLog, contactos autorizados y seguimiento/notificaciones/correo por modalidad. Sin rediseño de otros módulos ni cambio de infraestructura, URL o datos históricos. Archivo/restauración conserva el estado de pedidos finalizados. Pruebas y auditores reutilizan los contratos existentes; versiones transitivas y artefactos generados se actualizan sólo para distribuir las fuentes correctas. 435 pruebas Node y 48 de navegador PASS_LOCAL; límites y pendientes en el informe de renovación. Publicación requiere autorización final.
+
 ## 2026-10-12 — Checkout completo: stock, recuperación, ticket, privacidad y accesibilidad
 
 Fuentes: checkout.html, pedido-checkout-seguro, estado-navegacion-checkout, puente-correo, mantenimiento/hardening/confiabilidad, dominio de pedidos, apps-script-bridge y order-email. Lecturas protegidas de orders para recuperar/actualizar recibo; escritura servidor de estado notification* en pedidos y cola existente. No cambia inventario, precios, pago, autorización o reglas. UI informa correo de cuenta y habilita edición local de identidad; ticket usa el snapshot persistido. Caché transitiva del shell/versiones, CSP, flujo y manifiesto regenerados desde fuentes. Evidencia y pendientes en CURRENT_STATE. Publicación requiere autorización explícita del titular conforme al protocolo; no generar ventas/correos de prueba.

@@ -1,6 +1,7 @@
 import { rateLimitErrorResponse,
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
+import { customerOrderMessage } from '../../js/orders/ciclo-pedido.mjs';
 import {
   decodeFirestoreFields, firestoreAdminGet, firestoreAdminMerge,
 } from '../../cloudflare/firebase-admin-ligero.js';
@@ -165,11 +166,11 @@ export async function notifyOrderStatus(env, actor, orderId, committedOrder = nu
     return { skipped: true, reason: 'initial_order_state' };
   }
 
-  const statusLabel = status.replace(/_/g, ' ');
+  const statusLabel = customerOrderMessage(order);
   return notifyUserIfAbsent(env, uid, {
     kind: 'order_status', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
     title: `Tu pedido ${orderNumber} fue actualizado`,
-    body: `Estado: ${statusLabel}${paymentStatus ? ` · Pago: ${paymentStatus.replace(/_/g, ' ')}` : ''}.`,
+    body: `${statusLabel}${paymentStatus ? ` Pago: ${paymentStatus.replace(/_/g, ' ')}.` : ''}`,
     iconKey: 'order', targetUrl: `perfil.html#pedido-${encodeURIComponent(id)}`,
     orderId: id, orderNumber, status, sourceType: 'order', sourceId: id,
   }, `order_status:${id}:${revision}:${status}:${paymentStatus}`);

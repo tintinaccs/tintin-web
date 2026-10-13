@@ -1,16 +1,16 @@
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-security-ready-20261013-1';
-import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-security-ready-20261013-1';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261012-auth-privacy-1-estadisticas-pedidos-js-domain-prepared-20261012-6-security-ready-20261013-1';
+import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261012-auth-privacy-1-estadisticas-pedidos-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1';
+import { ORDER_LIFECYCLE_LABELS, orderStatusLabel, orderTimeline, customerOrderMessage } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 
 const PAGE = /(?:^|\/)perfil(?:\.html)?\/?$/i;
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const money = value => `Gs. ${Math.round(Number(value) || 0).toLocaleString('es-PY')}`;
 const clean = value => String(value ?? '').trim();
-const statusLabels = { pendiente:'Pendiente', confirmado:'Confirmado', preparando:'Preparando', listo_retiro:'Listo para retirar', en_camino:'En camino', enviado:'Enviado', entregado:'Entregado', cancelado:'Cancelado', rechazado:'Rechazado', reembolsado:'Reembolsado' };
-const terminal = new Set(['cancelado','rechazado','reembolsado']);
-const stages = ['pendiente','confirmado','preparando','enviado','entregado'];
+const statusLabels = { ...ORDER_LIFECYCLE_LABELS, reembolsado:'Reembolsado' };
+const terminal = new Set(['cancelado','rechazado','reembolsado','devuelto','incidencia']);
 
 function dateOf(value) {
   if (value?.toDate) return value.toDate();
@@ -29,11 +29,14 @@ function statusOf(order) {
 }
 function statusBadge(order) {
   const status = statusOf(order);
-  return `<span class="tt-profile-status tt-profile-status--${status}" data-order-status="${status}">${escapeHtml(statusLabels[status])}</span>`;
+  return `<span class="tt-profile-status tt-profile-status--${status}" data-order-status="${status}">${escapeHtml(orderStatusLabel(order))}</span>`;
 }
 function paymentText(order) {
   const payment = order.payment;
-  return clean(order.paymentMethod || (typeof payment === 'object' ? payment?.method : payment) || 'A confirmar');
+  const method = clean(order.paymentMethod || (typeof payment === 'object' ? payment?.method : payment) || 'A confirmar');
+  const state = clean(order.paymentStatus || (typeof payment === 'object' ? payment?.status : ''));
+  const label = {pendiente:'Pago pendiente',parcial:'Parcialmente pagado',pagado:'Pagado',rechazado:'Pago rechazado',cancelado:'Pago cancelado',reembolsado:'Reembolsado'}[state];
+  return label ? `${method} · ${label}` : method;
 }
 function deliveryText(order) {
   return clean(order.shippingMethod || order.deliveryMethod || order.delivery?.method || 'A coordinar');
@@ -44,9 +47,7 @@ function addressText(order) {
 function timeline(order) {
   const status = statusOf(order);
   if (terminal.has(status)) return `<p class="tt-profile-status tt-profile-status--cancelado">${escapeHtml(statusLabels[status])}</p>`;
-  const normalized = status === 'listo_retiro' || status === 'en_camino' ? 'enviado' : status;
-  const index = stages.indexOf(normalized);
-  return `<div class="tt-profile-timeline" aria-label="Seguimiento del pedido">${stages.map((stage,i) => `<span class="tt-profile-step ${i <= index ? 'is-done' : ''}">${statusLabels[stage]}</span>`).join('')}</div>`;
+  return `<p>${escapeHtml(customerOrderMessage(order))}</p><div class="tt-profile-timeline" aria-label="Seguimiento del pedido">${orderTimeline(order).map(stage => `<span class="tt-profile-step ${stage.done ? 'is-done' : ''}">${escapeHtml(stage.label)}</span>`).join('')}</div>`;
 }
 function orderDisplayNumber(order) {
   return clean(order.orderNumber || order.shortId || order.id) || 'Sin número';

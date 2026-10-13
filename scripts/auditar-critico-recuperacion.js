@@ -91,7 +91,9 @@ check(
     orderCrud.includes('TintinInventoryIntegrity.updateEditedOrder') &&
     admin.includes('TintinInventoryIntegrity.transitionStatus') &&
     admin.includes('TintinOrderAdmin.trashOrder') &&
-    orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado')"),
+    orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado', { baseChangeId: expectedChangeId })") &&
+    orderCrud.includes("allowedOrderStatuses(before).includes('cancelado')") &&
+    orderCrud.includes("(live.lastChangeId || '') !== expectedChangeId"),
   'Edición y estados deben pasar por el dominio server-side atómico; la papelera conserva su liberación transaccional segura.'
 );
 check(

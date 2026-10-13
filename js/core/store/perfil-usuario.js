@@ -13,9 +13,9 @@
 // pedidos. Google Sheets en este proyecto sincroniza productos, no usuarios.
 
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-security-ready-20261013-1";
+import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { customerIdForUid, ACCOUNT_CONTRACT } from '../auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
-import { apiUrl } from '../firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-prepared-20261012-6';
+import { apiUrl } from '../firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-prepared-20261012-6-pedidos-styles-20261013-1';
 
 /** Métodos de acceso válidos, tal como quedan guardados en `users.provider`. */
 export const AUTH_METHOD = {

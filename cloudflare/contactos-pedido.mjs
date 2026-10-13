@@ -4,8 +4,10 @@ export function orderContactLinks(order, orderId) {
   const shipping = order.shipping || {};
   const point = shipping.mapLocation;
   const lat = point?.lat, lng = point?.lng;
+  const address = clean(shipping.address || order.address), city = clean(shipping.city || order.shippingCity || order.city);
   const map = lat != null && lng != null && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng)) && Math.abs(Number(lat)) <= 90 && Math.abs(Number(lng)) <= 180
-    ? `https://www.google.com/maps?q=${encodeURIComponent(`${Number(lat)},${Number(lng)}`)}` : '';
+    ? `https://www.google.com/maps?q=${encodeURIComponent(`${Number(lat)},${Number(lng)}`)}`
+    : !point && address.length >= 3 && city ? `https://www.google.com/maps?q=${encodeURIComponent(`${address}, ${city}`)}` : '';
   let phone = clean(order.userPhone).replace(/\D/g, '');
   if (/^09\d{8}$/.test(phone)) phone = `595${phone.slice(1)}`;
   const shortId = clean(order.shortId || order.orderNumber || orderId);
@@ -14,9 +16,10 @@ export function orderContactLinks(order, orderId) {
   const customer = /^\d{8,20}$/.test(phone) ? `https://wa.me/${phone}?text=${encodeURIComponent(customerMessage)}` : '';
   const method = clean(order.shippingMethod || shipping.method);
   const paid = ['pagado','paid','approved','completed'].includes(clean(order.paymentStatus || order.payment?.status).toLowerCase());
+  const partial = ['parcial','señado'].includes(clean(order.paymentStatus || order.payment?.status).toLowerCase());
   const cash = clean(order.paymentMethod || order.payment?.method) === 'efectivo';
   const amount = cash && !paid ? Math.max(0,Math.round(Number(order.total)||0)) : 0;
-  const observation = cash && !paid ? 'Paga al recibir, consultar si tiene para vuelto y ubicación para confirmar.' : paid ? 'Pedido pagado. Confirmar ubicación antes de entregar.' : 'Pago por transferencia: confirmar acreditación antes de despachar. Confirmar ubicación.';
+  const observation = partial ? 'Pago parcial registrado. Confirmar saldo pendiente y acreditación antes de despachar. Confirmar ubicación.' : cash && !paid ? 'Paga al recibir, consultar si tiene para vuelto y ubicación para confirmar.' : paid ? 'Pedido pagado. Confirmar ubicación antes de entregar.' : 'Pago por transferencia: confirmar acreditación antes de despachar. Confirmar ubicación.';
   const dispatchMessage = [
     `Cliente: ${clean(order.userName)}`,
     `Teléfono: +${phone}`,
@@ -24,7 +27,7 @@ export function orderContactLinks(order, orderId) {
     `Ciudad: ${clean(shipping.city || order.shippingCity)}`,
     `Dirección: ${clean(shipping.address || order.address)}`,
     'Descripción del producto: Empaque Verde de cartón',
-    `Monto a cobrar: ${amount.toLocaleString('es-PY')} Gs`,
+    `Monto a cobrar: ${cash && partial ? 'A confirmar (pago parcial)' : `${amount.toLocaleString('es-PY')} Gs`}`,
     `Observación: ${observation}${shipping.referencia ? ` Referencia: ${clean(shipping.referencia)}.` : ''}${order.notes ? ` ${clean(order.notes)}` : ''}`,
   ].join('\n');
   return {map,customer,dispatch: method === 'delivery' ? `https://wa.me/${FITO_WHATSAPP}?text=${encodeURIComponent(dispatchMessage)}` : '',dispatchMessage};

@@ -1,8 +1,6 @@
 {
-  "origin": "https://tintinaccs.com",
-  "operationalOrigin": "https://tintinaccesorios.pages.dev",
-  "firebaseAuthDomain": "tintinaccs.com",
-  "technicalFirebaseAuthDomain": "tintinaccesorios.pages.dev",
+  "origin": "https://tintinaccesorios.pages.dev",
+  "firebaseAuthDomain": "tintinaccesorios.pages.dev",
   "appCheckDomains": [
     "tintinaccs.com",
     "www.tintinaccs.com",
@@ -18,5 +16,6 @@
       "tintinaccs.com",
       "www.tintinaccs.com"
     ]
-  }
+  },
+  "technicalFirebaseAuthDomain": "tintinaccesorios.pages.dev"
 }

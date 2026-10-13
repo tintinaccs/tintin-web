@@ -4,7 +4,7 @@
 // Registro y checkout usan el mismo formato {lat,lng,name,address}, el mismo
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
-import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261008-location-search-1-domain-prepared-20261012-6";
+import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261008-location-search-1-domain-prepared-20261012-6-pedidos-styles-20261013-2";
 import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1';
 
 const LEAFLET_JS = '/js/vendor/leaflet/leaflet.js?v=leaflet-1.9.4';

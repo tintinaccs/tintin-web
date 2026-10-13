@@ -19,7 +19,7 @@ import { recordAuthDiagnostic } from "../auth/diagnostico-sesion.js?v=tintin-202
 const TECHNICAL_FIREBASE_AUTH_DOMAIN = "tintinaccesorios.pages.dev";
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
-  authDomain: "tintinaccs.com",
+  authDomain: "tintinaccesorios.pages.dev",
   projectId: "tintin-accesorios",
   messagingSenderId: "207918562502",
   appId: "1:207918562502:web:c2ebe4f8d96dad3a50abc7",

@@ -1,7 +1,7 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-security-ready-20261013-1';
-import { waitForAdminAppCheck, recoverAdminSecurity } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-security-ready-20261013-1';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-security-ready-20261013-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-security-ready-20261013-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { waitForAdminAppCheck, recoverAdminSecurity } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import { createLiveActivityNotices } from '../../components/notifications/avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1';
 import {

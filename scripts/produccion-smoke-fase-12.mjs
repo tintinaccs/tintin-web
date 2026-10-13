@@ -16,7 +16,7 @@ async function request(relative) {
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     const started = Date.now();
     try {
-      const response = await fetch(url, { redirect: 'follow', headers: { 'user-agent': 'TintinPhase12Smoke/2.0 (+https://tintinaccs.com/)' }, signal: AbortSignal.timeout(timeoutMs) });
+      const response = await fetch(url, { redirect: 'follow', headers: { 'user-agent': 'TintinPhase12Smoke/2.0 (+https://tintinaccesorios.pages.dev/)' }, signal: AbortSignal.timeout(timeoutMs) });
       const body = await response.text();
   const result = { relative, requestedUrl: url, url: response.url, redirected: response.redirected, status: response.status, ok: response.ok, ms: Date.now() - started, type: response.headers.get('content-type') || '', bytes: body.length, headers: Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control','x-robots-tag'].map(name => [name, response.headers.get(name) || ''])) };
       if (response.status >= 500) throw new Error('HTTP ' + response.status);

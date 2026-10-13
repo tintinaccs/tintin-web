@@ -11,7 +11,7 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || config.origin || '').replace(/\/$/, '');
 const hostname = new URL(origin).hostname;
 const authDomain = String(process.env.TINTIN_FIREBASE_AUTH_DOMAIN || config.firebaseAuthDomain || hostname).trim();
-const technicalAuthDomain = String(config.technicalFirebaseAuthDomain || '').trim();
+const technicalAuthDomain = String(config.technicalFirebaseAuthDomain || 'tintinaccesorios.pages.dev').trim();
 
 if (!/^https:\/\/[a-z0-9.-]+(?::\d+)?$/i.test(origin)) {
   throw new Error('config/public-site.json debe declarar un origin HTTPS sin path.');
@@ -45,7 +45,7 @@ const runtimeFiles = [
   ...rootFiles,
   ...walk(path.join(root, 'js'), file => file.endsWith('.js')),
   ...walk(path.join(root, 'functions'), file => file.endsWith('.js')),
-  ...walk(path.join(root, 'cloudflare'), file => file.endsWith('.js')),
+  ...walk(path.join(root, 'cloudflare'), file => /\.(?:js|mjs)$/i.test(file)),
   ...walk(path.join(root, 'scripts'), file => /\.(?:js|mjs)$/i.test(file))
 ];
 const explicitFiles = ['_headers', 'robots.txt'].map(file => path.join(root, file)).filter(fs.existsSync);

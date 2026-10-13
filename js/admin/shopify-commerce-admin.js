@@ -1,3 +1,6 @@
+import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261012-orders-board-1';
+import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
+import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2';
 /* ========================================================================
    TINTIN — Productos, Colecciones y Pedidos
    Capa de experiencia operativa inspirada en Shopify y adaptada al modelo
@@ -11,9 +14,9 @@
    vistas, filtros, selección, panel lateral, búsqueda y navegación rápida.
    ======================================================================== */
 
-import { auth, db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-security-ready-20261013-1';
-import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-security-ready-20261013-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-security-ready-20261013-1';
+import { auth, db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { recordAuthDiagnostic } from '../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import {
   collection,
@@ -22,11 +25,11 @@ import {
   onSnapshot,
   orderBy,
   query,
-  startAfter
+  startAfter, where
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-security-ready-20261013-1';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-security-ready-20261013-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-security-ready-20261013-1';
+import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 const VERSION = 'tintin-20260924-products-description-1-brand-20261004-1-owner-pink-20261004-1';
@@ -39,7 +42,7 @@ const ORDER_STATUS_LABELS = {
   historico: 'Venta histórica',
   pendiente: 'Pendiente',
   confirmado: 'Confirmado',
-  preparando: 'En preparación',
+  preparando: 'En preparación', listo: 'Listo', devuelto: 'Devuelto', incidencia: 'Con incidencia',
   listo_retiro: 'Listo para retirar',
   en_camino: 'En camino',
   entregado: 'Entregado',
@@ -49,7 +52,7 @@ const ORDER_STATUS_LABELS = {
 };
 const ORDER_STATUS_VALUES = ['pendiente', 'confirmado', 'preparando', 'listo_retiro', 'en_camino', 'entregado', 'cancelado', 'rechazado'];
 const PAY_STATUS_LABELS = {
-  'señado': 'Señado',
+  'señado': 'Parcialmente pagado', parcial: 'Parcialmente pagado',
   sin_registrar: 'Pago no registrado',
   pendiente: 'Pago pendiente',
   pagado: 'Pagado',
@@ -82,7 +85,7 @@ const state = {
   ordersError: '',
   productTab: 'all',
   collectionTab: 'all',
-  orderTab: 'all',
+  orderTab: 'all', orderStage: 'new', orderDelivery: '', orderVisible: {}, orderBusyIds: new Set(), orderSound: false, orderHistory: new Map(), orderContacts: new Map(),
   productSearch: '',
   collectionSearch: '',
   orderSearch: '',
@@ -355,6 +358,8 @@ function filteredOrders() {
   if (state.orderTab === 'delivered') list = list.filter(o => orderStatus(o) === 'entregado');
   if (state.orderTab === 'canceled') list = list.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o)));
   if (state.orderTab === 'refunded') list = list.filter(o => payStatus(o) === 'reembolsado');
+  if (state.orderDelivery) list = list.filter(o => shippingMethod(o) === state.orderDelivery);
+  if (state.orderTab === 'history') list = list.filter(o => Boolean(o.localEntryId));
   if (state.orderStatus) list = list.filter(o => orderStatus(o) === state.orderStatus);
   if (state.orderPay) list = list.filter(o => payStatus(o) === state.orderPay);
   const [, direction] = state.orderSort.split('-'); const factor = direction === 'asc' ? 1 : -1;
@@ -623,6 +628,20 @@ function payStatusBadge(status) {
 
 function renderOrders() {
   const root = document.getElementById('tt-commerce-orders'); if (!root) return;
+  if (['buyers','deleted'].includes(state.orderTab)) return renderOrderArchive();
+  if(state.user)try {sessionStorage.setItem(`tt-orders-ui:${state.user.uid}`,JSON.stringify({tab:state.orderTab,stage:state.orderStage,search:state.orderSearch,pay:state.orderPay,delivery:state.orderDelivery,sort:state.orderSort}));}catch{}
+  renderOrderBoard(root, { orders: filteredOrders(), allOrders: state.orders,
+    selected: state.orderSelected, canBulk: perm('pedidos','accionesMasivas','manageOrders'),
+    canUpdate: perm('pedidos','cambiarEstado','manageOrders'), isSuper: state.role === 'superadmin',
+    busyIds: state.orderBusyIds, ready: state.ordersReady, error: state.ordersError,
+    offline: navigator.onLine === false, payLabels: PAY_STATUS_LABELS,
+    tab: state.orderTab, stage: state.orderStage, visible: state.orderVisible,
+    search: state.orderSearch, pay: state.orderPay, delivery: state.orderDelivery,
+    sort: state.orderSort, sound: state.orderSound });
+}
+
+function renderOrderArchive() {
+  const root = document.getElementById('tt-commerce-orders'); if (!root) return;
   if (state.orderTab === 'buyers') {
     root.innerHTML = `<div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos · Clientes que compraron</h1><p>Compradores de Sheets y de la tienda, con sus pedidos e importes.</p></div></div><div class="tt-commerce-card"><div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos los pedidos', state.orders.length, state.orderTab)}${tabButton('orders', 'buyers', 'Clientes que compraron', '', state.orderTab)}</div><p data-local-status role="status">Consultando compradores…</p><button type="button" class="adm-btn adm-btn-outline" data-local-refresh>Actualizar</button><div id="local-order-buyers"></div></div>`;
     window.dispatchEvent(new Event('tintin:show-order-buyers'));
@@ -792,13 +811,16 @@ function ensureDrawerDom() {
 }
 
 function openDrawer(type, id) {
-  state.drawer = { type, id };
+  if(type==='order') { orderReturnFocus=document.activeElement;refreshOrderHistory(id);refreshOrderContacts(id); }
+  state.drawer = { type, id, baseChangeId: type==='order' ? state.orders.find(o=>o.id===id)?.lastChangeId || '' : '' };
   renderDrawer();
 }
 
 function closeDrawer() {
-  state.drawer = null;
-  renderDrawer();
+  const wasOrder=state.drawer?.type==='order';
+  const orderId=state.drawer?.id;
+  state.drawer = null;renderDrawer();
+  if(wasOrder) { const target=orderReturnFocus?.isConnected ? orderReturnFocus : [...document.querySelectorAll('[data-action="drawer-order"]')].find(e=>e.dataset.id===orderId);target?.focus?.({preventScroll:true}); }
 }
 
 function drawerOrderPending(orderId) {
@@ -807,7 +829,8 @@ function drawerOrderPending(orderId) {
 }
 
 function drawerOrderHasPending(orderId) {
-  return Object.keys(drawerOrderPending(orderId)).length > 0;
+  const pending=drawerOrderPending(orderId), order=state.orders.find(o=>o.id===orderId);
+  return Boolean(String(pending.statusNote || '').trim()) || (pending.status != null && pending.status !== orderStatus(order)) || (pending.payment != null && pending.payment !== payStatus(order));
 }
 
 function kvRow(label, value) {
@@ -854,6 +877,7 @@ function collectionDrawer(collectionItem) {
 }
 
 function orderDrawer(order) {
+  if(!order) return null;
   const customer = orderCustomer(order);
   const shipping = orderShipping(order);
   const items = orderItems(order);
@@ -865,24 +889,28 @@ function orderDrawer(order) {
   const canAddress = state.role === 'superadmin' || canDo(state.role, 'pedidos', 'verDireccion');
   const pending = drawerOrderPending(order.id);
   const selectedStatus = Object.prototype.hasOwnProperty.call(pending, 'status') ? pending.status : status;
+  const contact = state.orderContacts?.get(order.id)?.links || {};
+  const history = state.orderHistory.get(order.id);
   const selectedPay = Object.prototype.hasOwnProperty.call(pending, 'payment') ? pending.payment : pay;
   const hasPending = drawerOrderHasPending(order.id);
   return {
     title: `#${orderDisplayId(order)}`,
     kicker: formatDate(order.createdAt),
     body: `
-      <div class="tt-commerce-drawer-section"><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(ORDER_STATUS_LABELS[status] || status)}</span></div></div>
+      <div class="tt-commerce-drawer-section"><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(orderStatusLabel(order))}</span></div></div>
       <div class="tt-commerce-drawer-section"><h4>Cliente</h4><dl class="tt-commerce-kv">${kvRow('Nombre', customer.name)}${canSensitive ? kvRow('Email', customer.email) + kvRow('Teléfono', customer.phone) : ''}</dl></div>
-      <div class="tt-commerce-drawer-section"><h4>Productos</h4>${items.map(item => `<div class="tt-commerce-lineitem">${thumbHtml(itemImage(item), item?.name || item?.title || 'Producto')}<div style="min-width:0"><div class="tt-commerce-maintext">${esc(item?.name || item?.title || 'Producto')}</div><div class="tt-commerce-subtext">${Number(item?.qty || item?.quantity || 1)} × ${formatMoney(item?.price)}</div></div><span class="tt-commerce-lineitem-price">${formatMoney(Number(item?.qty || item?.quantity || 1) * Number(item?.price || 0))}</span></div>`).join('') || '<div class="tt-commerce-subtext">Sin productos registrados.</div>'}</div>
-      <div class="tt-commerce-drawer-section"><h4>Totales</h4><dl class="tt-commerce-kv">${kvRow('Subtotal', formatMoney(order.subtotal))}${kvRow('Envío', formatMoney(order.shippingCost ?? order.shipping?.cost ?? 0))}${kvRow('Total', formatMoney(order.total))}</dl></div>
-      <div class="tt-commerce-drawer-section"><h4>Entrega</h4><dl class="tt-commerce-kv">${kvRow('Método', shipping.method)}${kvRow('Ciudad', shipping.city)}${canAddress ? kvRow('Dirección', shipping.address) + kvRow('Referencia', shipping.reference || shipping.agency || shipping.mode) : ''}</dl></div>
-      ${(canEditStatus || canEditPay) ? `<div class="tt-commerce-drawer-section"><h4>Actualizar</h4><div style="display:grid;gap:8px">${canEditStatus ? `<select class="tt-commerce-select" data-drawer-order-status="${esc(order.id)}">${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${selectedStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select>` : ''}${canEditPay ? `<select class="tt-commerce-select" data-drawer-order-pay="${esc(order.id)}">${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${selectedPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select>` : ''}</div>${hasPending ? '<div class="tt-commerce-subtext" style="margin-top:8px;color:var(--tt-commerce-brand);font-weight:700">Cambios pendientes de guardar.</div>' : '<div class="tt-commerce-subtext" style="margin-top:8px">Elegí un estado y después presioná Guardar cambios.</div>'}</div>` : ''}
+      <div class="tt-commerce-drawer-section"><h4>Productos</h4>${items.map(item => `<div class="tt-commerce-lineitem">${thumbHtml(itemImage(item), item?.name || item?.title || 'Producto')}<div style="min-width:0"><div class="tt-commerce-maintext">${esc(item?.name || item?.title || 'Producto')}</div><div class="tt-commerce-subtext">${esc(item.variant || item.variantName || '')}<br>${Number(item?.qty || item?.quantity || 1)} × ${formatMoney(item?.price)}</div></div><span class="tt-commerce-lineitem-price">${formatMoney(Number(item?.qty || item?.quantity || 1) * Number(item?.price || 0))}</span></div>`).join('') || '<div class="tt-commerce-subtext">Sin productos registrados.</div>'}</div>
+      <div class="tt-commerce-drawer-section"><h4>Totales</h4><dl class="tt-commerce-kv">${kvRow('Subtotal', formatMoney(order.subtotal))}${kvRow('Envío', formatMoney(order.shippingCost ?? order.shipping?.cost ?? 0))}${order.discount || order.coupon?.discount || order.coupon?.shippingDiscount ? kvRow('Descuento registrado',formatMoney(order.discount || order.coupon.discount || order.coupon.shippingDiscount)) : ''}${kvRow('Total', formatMoney(order.total))}</dl></div>
+      <div class="tt-commerce-drawer-section"><h4>Entrega</h4><dl class="tt-commerce-kv">${kvRow('Método', deliveryLabel(order))}${kvRow('Fecha prevista',order.estimatedDeliveryAt ? formatDate(order.estimatedDeliveryAt) : 'No registrada')}${kvRow('Ciudad', shipping.city)}${canAddress ? kvRow('Dirección', shipping.address) + kvRow('Referencia', shipping.reference || shipping.agency || shipping.mode) : ''}</dl></div>
+      ${(canEditStatus || canEditPay) ? `<div class="tt-commerce-drawer-section"><h4>Actualizar</h4><div style="display:grid;gap:8px">${canEditStatus ? `<select class="tt-commerce-select" aria-label="Estado del pedido" data-drawer-order-status="${esc(order.id)}">${allowedOrderStatuses(order).map(v => `<option value="${v}" ${selectedStatus === v ? 'selected' : ''}>${esc(orderStatusLabel({...order,status:v}))}</option>`).join('')}</select>` : ''}${canEditPay ? `<select class="tt-commerce-select" aria-label="Estado del pago" data-drawer-order-pay="${esc(order.id)}">${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${selectedPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select>` : ''}</div><label class="tt-commerce-subtext">Observación del movimiento<textarea class="tt-commerce-input" data-drawer-order-note="${esc(order.id)}" maxlength="1000" rows="2">${esc(pending.statusNote || '')}</textarea></label>${hasPending ? '<div class="tt-commerce-subtext" style="margin-top:8px;color:var(--tt-commerce-brand);font-weight:700">Cambios pendientes de guardar.</div>' : '<div class="tt-commerce-subtext" style="margin-top:8px">Elegí un estado y después presioná Guardar cambios.</div>'}</div>` : ''}
+      ${state.role === 'superadmin' ? `<div class="tt-commerce-drawer-section"><h4>Historial</h4><p>Creado: ${esc(formatDate(order.createdAt))}</p>${history?.loading ? '<p>Consultando movimientos…</p>' : history?.error ? `<p role="alert">${esc(history.error)}</p><button type="button" class="tt-commerce-btn" data-action="order-history-retry" data-id="${esc(order.id)}">Reintentar</button>` : `<ol class="tt-order-history">${(history?.items || []).map(e=>`<li><strong>${esc(formatDate(e.createdAt || e.timestamp))}</strong><br>${esc(e.actorEmail || e.actorId || 'Responsable no registrado')}<br>${esc(e.before?.status || '')} → ${esc(e.after?.status || e.action || 'Movimiento registrado')}${e.notes ? `<br>${esc(e.notes)}` : ''}</li>`).join('')}</ol>${!history?.items?.length ? '<p>Sin movimientos históricos registrados.</p>' : ''}`}</div>` : ''}
       ${order.notes ? `<div class="tt-commerce-drawer-section"><h4>Notas</h4><div style="font-size:11px;line-height:1.6;color:var(--tt-commerce-muted)">${esc(order.notes)}</div></div>` : ''}
     `,
     actions: `
       ${(canEditStatus || canEditPay) ? button('Guardar cambios', 'drawer-order-save', { primary: true, disabled: !hasPending, extra: `data-id="${esc(order.id)}"` }) : ''}
       ${perm('pedidos', 'editarCompleto', 'manageOrdersFull') ? button('Editar pedido', 'drawer-order-edit', { primary: true, extra: `data-id="${esc(order.id)}"` }) : ''}
-      ${customer.phone ? button('WhatsApp', 'drawer-order-whatsapp', { extra: `data-id="${esc(order.id)}"` }) : ''}
+      ${canSensitive && contact.customer ? `<a class="tt-commerce-btn" href="${esc(contact.customer)}" target="_blank" rel="noopener noreferrer">WhatsApp del cliente</a>` : ''}${canAddress && contact.map ? `<a class="tt-commerce-btn" href="${esc(contact.map)}" target="_blank" rel="noopener noreferrer">Google Maps</a>` : ''}${canAddress && !contact.map ? '<span class="tt-commerce-subtext">Sin ubicación válida en el mapa.</span>' : ''}${state.role==='superadmin' && contact.dispatch ? `<a class="tt-commerce-btn" href="${esc(contact.dispatch)}" target="_blank" rel="noopener noreferrer">Enviar a Fito</a>` : ''}
+      ${state.orderContacts.get(order.id)?.loading ? '<span class="tt-commerce-subtext">Consultando contactos…</span>' : state.orderContacts.get(order.id)?.error ? `<button type="button" class="tt-commerce-btn" data-action="order-contacts-retry" data-id="${esc(order.id)}">Reintentar contactos</button>` : ''}
       ${perm('pedidos', 'reenviarCorreo', 'manageOrders') ? button('Reenviar correo', 'drawer-order-resend', { extra: `data-id="${esc(order.id)}"` }) : ''}
       ${perm('pedidos', 'eliminar', 'deleteOrders') ? button('Eliminar', 'drawer-order-delete', { danger: true, extra: `data-id="${esc(order.id)}"` }) : ''}
     `
@@ -890,6 +918,7 @@ function orderDrawer(order) {
 }
 
 async function saveDrawerOrder(id) {
+  if (navigator.onLine === false || state.ordersError || !state.ordersReady) return toast('Esperá a recuperar la sincronización antes de guardar.');
   const order = state.orders.find(item => item.id === id);
   const pending = drawerOrderPending(id);
   if (!order || !Object.keys(pending).length || state.busy) return;
@@ -897,27 +926,19 @@ async function saveDrawerOrder(id) {
   const pay = payStatus(order);
   const statusChanged = Object.prototype.hasOwnProperty.call(pending, 'status') && pending.status !== status;
   const payChanged = Object.prototype.hasOwnProperty.call(pending, 'payment') && pending.payment !== pay;
-  if (!statusChanged && !payChanged) {
+  if (!statusChanged && !payChanged && !pending.statusNote) {
     state.drawer.pending = {};
     return renderDrawer();
   }
 
   setBusy(true);
   try {
-    if (statusChanged) {
-      if (typeof window.updateOrderStatus !== 'function') throw new Error('La acción de estado todavía no está disponible.');
-      if (!await window.updateOrderStatus(id, pending.status)) throw new Error('No se pudo guardar el estado del pedido.');
-      order.status = pending.status;
-      delete pending.status;
-    }
-    if (payChanged) {
-      if (typeof window.updatePayStatus !== 'function') throw new Error('La acción de pago todavía no está disponible.');
-      if (!await window.updatePayStatus(id, pending.payment)) throw new Error('No se pudo guardar el estado de pago.');
-      order.paymentStatus = pending.payment;
-      if (order.payment) order.payment.status = pending.payment;
-      delete pending.payment;
-    }
-    state.drawer.pending = {};
+    const context={baseChangeId:state.drawer.baseChangeId || '',changeId:`board_${crypto.randomUUID().replaceAll('-','')}`};
+    if(payChanged)context.paymentStatus=pending.payment;
+    if(pending.statusNote)context.statusNote=pending.statusNote;
+    if (typeof window.updateOrderStatus !== 'function') throw new Error('La acción todavía está cargando.');
+    if (!await window.updateOrderStatus(id,statusChanged ? pending.status : status,context)) throw new Error('No se pudo confirmar el cambio. El pedido puede haber cambiado en otra sesión; revisá los datos sincronizados.');
+    if(state.drawer?.type==='order' && state.drawer.id===id) {state.drawer.pending={};state.drawer.baseChangeId=state.orders.find(o=>o.id===id)?.lastChangeId || '';}
     toast('Cambios del pedido guardados.');
     renderOrders();
     renderDrawer();
@@ -935,6 +956,7 @@ function renderDrawer() {
   const drawer = document.getElementById('tt-commerce-drawer');
   const backdrop = document.getElementById('tt-commerce-drawer-backdrop');
   if (!state.drawer) {
+    drawer.hidden=true;drawer.removeAttribute('aria-modal');drawer.removeAttribute('role');drawer.dataset.kind='';
     drawer.classList.remove('open');
     backdrop.classList.remove('open');
     drawer.innerHTML = '';
@@ -942,12 +964,21 @@ function renderDrawer() {
   }
 
   let content = null;
+  drawer.hidden=false;
   if (state.drawer.type === 'product') content = productDrawer(state.products.find(p => p._docId === state.drawer.id));
   if (state.drawer.type === 'collection') content = collectionDrawer(state.collections.find(c => c.slug === state.drawer.id));
   if (state.drawer.type === 'order') content = orderDrawer(state.orders.find(o => o.id === state.drawer.id));
   if (!content) { state.drawer = null; renderDrawer(); return; }
 
+  drawer.dataset.kind=state.drawer.type;
+  if(state.drawer.type==='order'){drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label',`Detalles del pedido ${content.title}`);}
+  else { drawer.removeAttribute('role');drawer.removeAttribute('aria-modal');drawer.setAttribute('aria-label','Detalles'); }
+  const focusBefore=document.activeElement;const focusKey=focusBefore?.dataset?.drawerOrderStatus ? '[data-drawer-order-status]' : focusBefore?.dataset?.drawerOrderPay ? '[data-drawer-order-pay]' : focusBefore?.dataset?.drawerOrderNote ? '[data-drawer-order-note]' : focusBefore?.dataset?.action==='drawer-close' ? '[data-action="drawer-close"]' : null;
+  const bodyScroll=drawer.querySelector('.tt-commerce-drawer-body')?.scrollTop || 0;
   drawer.innerHTML = `<div class="tt-commerce-drawer-head"><div class="tt-commerce-drawer-heading"><h3 class="tt-commerce-drawer-title">${esc(content.title)}</h3><div class="tt-commerce-drawer-kicker">${esc(content.kicker)}</div></div><button type="button" class="tt-commerce-iconbtn" data-action="drawer-close" aria-label="Cerrar">×</button></div><div class="tt-commerce-drawer-body">${content.body}</div><div class="tt-commerce-drawer-actions">${content.actions}</div>`;
+  if(focusKey)drawer.querySelector(focusKey)?.focus({preventScroll:true});
+  const orderBody=drawer.querySelector('.tt-commerce-drawer-body');if(orderBody)orderBody.scrollTop=bodyScroll;
+  if(state.drawer.type==='order' && !drawer.classList.contains('open'))drawer.querySelector('[data-action="drawer-close"]')?.focus();
   requestAnimationFrame(() => {
     drawer.classList.add('open');
     backdrop.classList.add('open');
@@ -1001,9 +1032,17 @@ async function bulkOrders(kind) {
   try {
     const fn = isPay ? window.updatePayStatus : window.updateOrderStatus;
     if (typeof fn !== 'function') throw new Error('La acción de pedidos todavía no está disponible.');
-    for (const id of ids) await fn(id, kind);
-    state.orderSelected.clear();
-    toast(`${ids.length} pedido${ids.length === 1 ? '' : 's'} actualizado${ids.length === 1 ? '' : 's'}.`);
+    if (navigator.onLine === false || state.ordersError || !state.ordersReady) throw new Error('Esperá a recuperar la sincronización.');
+    let updated = 0;
+    for (const id of ids) {
+      const order = state.orders.find(item => item.id === id);
+      if (!order || (!isPay && !allowedOrderStatuses(order).includes(kind))) continue;
+      try {
+        const result = await fn(id, kind, { baseChangeId: order.lastChangeId || '' });
+        if (result === true) { updated++; state.orderSelected.delete(id); }
+      } catch (error) { console.error('[orders] No se pudo actualizar un pedido seleccionado.', error?.message); }
+    }
+    toast(`${updated} de ${ids.length} pedidos actualizados.${state.orderSelected.size ? ' Los pendientes siguen seleccionados para revisión.' : ''}`);
   } catch (error) {
     console.error('[shopify-commerce] bulkOrders:', error);
     toast('No se pudieron actualizar todos los pedidos: ' + error.message, 5500);
@@ -1039,6 +1078,19 @@ function openWhatsApp(order) {
 async function handleAction(action, element) {
   const id = element?.dataset?.id || element?.dataset?.menuId || '';
   if (action === 'drawer-close') return closeDrawer();
+  if (action === 'order-advance') return advanceOrder(id);
+  if (action === 'order-contacts-retry') { state.orderContacts.delete(id); return refreshOrderContacts(id); }
+  if (action === 'order-stage') { state.orderStage=element.dataset.stage;renderOrders();return; }
+  if (action === 'order-show-more') { const key=element.dataset.stage;state.orderVisible[key]=(state.orderVisible[key] || 30)+30;return renderOrders(); }
+  if (action === 'orders-sound') {
+    state.orderSound=!state.orderSound;
+    try { localStorage.setItem(`tt-order-sound:${state.user.uid}`,state.orderSound?'1':'0');
+      if(state.orderSound) { const Audio=window.AudioContext || window.webkitAudioContext;if(!Audio)throw new Error('Sonido no disponible');orderAudio ||= new Audio();await orderAudio.resume();if(orderAudio.state !== 'running')throw new Error('Sonido bloqueado'); }
+    } catch { state.orderSound=false;try{localStorage.setItem(`tt-order-sound:${state.user.uid}`,'0');}catch{}toast('El navegador no habilitó el sonido.'); }
+    return renderOrders();
+  }
+  if (action === 'order-history-retry') { state.orderHistory.delete(id);return refreshOrderHistory(id); }
+
   if (action === 'product-new') { closeDrawer(); return window.prodNuevo?.(); }
   if (action === 'products-import') return clickSection('importar');
   if (action === 'products-export') return exportProducts(false);
@@ -1089,6 +1141,7 @@ async function handleAction(action, element) {
     state.orderPage += 1;
     return renderOrders();
   }
+  if (action === 'orders-retry') return window.TintinAdminOrders?.retry();
   if (action === 'products-retry' || action === 'collections-retry' || action === 'orders-retry') { commerceAuthRecoveryAttempted = false; return subscribeData(); }
   if (['order-edit-advanced','order-edit','drawer-order-edit','drawer-order-save','order-delete','drawer-order-delete','order-resend','drawer-order-resend'].includes(action)) {
     const local = state.orders.find(order => order.id === id)?.localEntryId;
@@ -1196,6 +1249,7 @@ function onChange(event) {
   if (filter === 'collection-visibility') { state.collectionVisibility = target.value; state.collectionPage = 0; return renderCollections(); }
   if (filter === 'collection-sort') { state.collectionSort = target.value; state.collectionPage = 0; return renderCollections(); }
   if (filter === 'order-status') { state.orderStatus = target.value; state.orderPage = 0; return renderOrders(); }
+  if (filter === 'order-delivery') { state.orderDelivery=target.value;return renderOrders(); }
   if (filter === 'order-pay') { state.orderPay = target.value; state.orderPage = 0; return renderOrders(); }
   if (filter === 'order-sort') { state.orderSort = target.value; state.orderPage = 0; return renderOrders(); }
 
@@ -1217,6 +1271,7 @@ function onChange(event) {
 
 let searchTimer = null;
 function onInput(event) {
+  if(event.target.matches('[data-drawer-order-note]') && state.drawer?.type==='order') { state.drawer.pending={...(state.drawer.pending || {}),statusNote:event.target.value};const save=document.querySelector('[data-action="drawer-order-save"]');if(save)save.disabled=!drawerOrderHasPending(state.drawer.id);return; }
   const filter = event.target.dataset.filter;
   if (!['product-search', 'collection-search', 'order-search'].includes(filter)) return;
   clearTimeout(searchTimer);
@@ -1238,6 +1293,7 @@ function mountShells() {
     const section = document.getElementById(`section-${sectionKey}`);
     if (!section || document.getElementById(rootId)) return;
     section.classList.add('tt-commerce-mounted');
+    if (sectionKey === 'pedidos') document.getElementById('orders-tbody')?.replaceChildren();
     const shell = document.createElement('div');
     shell.id = rootId;
     shell.className = 'tt-commerce-shell';
@@ -1348,59 +1404,87 @@ function subscribeData() {
     renderCollections();
   }));
 
-  const ordersPage = query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ORDER_PAGE_SIZE));
-  state.ordersCursor = null;
-  state.ordersHasMore = false;
-  state.unsubscribers.push(onSnapshot(ordersPage, snapshot => {
-    state.orders = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
-    state.ordersCursor = snapshot.docs.at(-1) || null;
-    state.ordersHasMore = snapshot.docs.length === ORDER_PAGE_SIZE;
-    state.ordersReady = true;
-    state.ordersError = '';
-    state.orderSelected = new Set([...state.orderSelected].filter(id => state.orders.some(o => o.id === id)));
-    if (state.role === 'superadmin') window.TintinOrderAdmin?.ensureMissingOrderNumbers(state.orders);
-    window.dispatchEvent(new Event('tintin:orders-updated'));
-    renderOrders(); renderDrawer();
-  }, error => {
-    state.ordersReady = true;
-    state.ordersError = 'No se pudieron cargar los pedidos.';
-    console.error('[shopify-commerce] orders:', error);
-    toast('No se pudieron actualizar los pedidos en tiempo real.', 5000);
-    recoverCommerceAuth(error, 'orders');
-    renderOrders();
-  }));
+  bindCanonicalOrders();
 
   state.trashOrders = [];
   state.trashReady = state.role !== 'superadmin';
   if (state.orderTab === 'deleted') ensureTrashSubscription();
 }
 
-async function loadMoreOrders() {
-  if (!state.ordersCursor || !state.ordersHasMore || state.ordersLoadingMore || state.ordersError) return;
-  state.ordersLoadingMore = true;
-  renderOrders();
+let orderSourceStop = null;
+let orderSourceUid = '';
+let orderSourcePrimed = false;
+let orderSeenIds = new Set();
+let orderAudio = null;
+let orderReturnFocus = null;
+function bindCanonicalOrders() {
+  if (!state.user || !window.TintinAdminOrders?.subscribe) return;
+  if (orderSourceStop && orderSourceUid === state.user.uid) return;
+  orderSourceStop?.(); orderSourceUid = state.user.uid;
+  orderSourcePrimed = false; orderSeenIds = new Set();
+  try { state.orderSound = localStorage.getItem(`tt-order-sound:${orderSourceUid}`) === '1'; } catch {}
+  const expectedUid=orderSourceUid;
+  orderSourceStop=window.TintinAdminOrders.subscribe(snapshot => {
+    if (state.user?.uid !== expectedUid || snapshot.uid !== expectedUid) return;
+    const fresh = orderSourcePrimed && snapshot.ready ? snapshot.orders.filter(o=>!orderSeenIds.has(o.id) && !o.localEntryId && (orderStage(o)==='new' || o.status==='confirmado')) : [];
+    if (snapshot.ready) {
+      for(const order of snapshot.orders) orderSeenIds.add(order.id);
+      orderSourcePrimed=true;
+    }
+    state.orders=snapshot.orders; state.ordersReady=snapshot.ready; state.ordersError=snapshot.error || '';
+    state.ordersHasMore=false;
+    state.orderSelected=new Set([...state.orderSelected].filter(id=>state.orders.some(o=>o.id===id)));
+    window.dispatchEvent(new Event('tintin:orders-updated'));
+    renderOrders(); if (state.drawer?.type==='order') { refreshOrderHistory(state.drawer.id); refreshOrderContacts(state.drawer.id); renderDrawer(); }
+    if (fresh.length && document.getElementById('section-pedidos')?.classList.contains('active')) {
+      const notice=document.querySelector('[data-order-notice]');
+      if (notice) { notice.hidden=false; const order=fresh[0];notice.replaceChildren();
+        const text=document.createElement('span');text.textContent=`${fresh.length} pedido(s) nuevo(s). `;notice.append(text);
+        const btn=document.createElement('button');btn.type='button';btn.className='tt-commerce-btn';btn.dataset.action='drawer-order';btn.dataset.id=order.id;btn.textContent='Abrir pedido';notice.append(btn); }
+      if (state.orderSound && orderAudio?.state === 'running') { const oscillator=orderAudio.createOscillator(), gain=orderAudio.createGain(); oscillator.frequency.value=660;gain.gain.value=.035;oscillator.connect(gain);gain.connect(orderAudio.destination);oscillator.start();oscillator.stop(orderAudio.currentTime+.12); }
+    }
+  });
+}
+async function loadMoreOrders() { state.orderVisible[state.orderStage]=(state.orderVisible[state.orderStage] || 30)+30; renderOrders(); }
+async function refreshOrderContacts(id) {
+  if(state.role !== 'superadmin') return;
+  const order=state.orders.find(o=>o.id===id), revision=order?.lastChangeId || String(order?.inventoryRevision || 0);
+  if(state.orderContacts.get(id)?.revision===revision) return;
+  const uid=state.user?.uid;state.orderContacts.set(id,{revision,loading:true});
   try {
-    const nextPage = await getDocs(query(
-      collection(db, 'orders'),
-      orderBy('createdAt', 'desc'),
-      startAfter(state.ordersCursor),
-      limit(ORDER_PAGE_SIZE)
-    ));
-    const existing = new Set(state.orders.map(order => order.id));
-    state.orders.push(...nextPage.docs
-      .map(snap => ({ id: snap.id, ...snap.data() }))
-      .filter(order => !existing.has(order.id)));
-    state.ordersCursor = nextPage.docs.at(-1) || state.ordersCursor;
-    state.ordersHasMore = nextPage.docs.length === ORDER_PAGE_SIZE;
-    state.ordersError = '';
-  } catch (error) {
-    state.ordersError = 'No se pudieron cargar más pedidos.';
-    console.error('[shopify-commerce] orders pagination:', error);
-    toast('No se pudieron cargar más pedidos.', 5000);
-  } finally {
-    state.ordersLoadingMore = false;
-    renderOrders();
-  }
+    const response=await authenticatedFetch(`/api/admin-order-mutation?orderId=${encodeURIComponent(id)}`);
+    const body=await response.json();
+    if(!response.ok || !body.ok)throw new Error('No se pudieron consultar los contactos.');
+    if(state.user?.uid===uid && state.orderContacts.get(id)?.revision===revision)state.orderContacts.set(id,{revision,links:body.links});
+  } catch { if(state.user?.uid===uid && state.orderContacts.get(id)?.revision===revision)state.orderContacts.set(id,{revision,error:true}); }
+  if(state.drawer?.type==='order' && state.drawer.id===id)renderDrawer();
+}
+async function advanceOrder(id, requested = '') {
+  const order=state.orders.find(o=>o.id===id);
+  if (!order || state.orderBusyIds.has(id) || navigator.onLine === false || state.ordersError || !state.ordersReady) return;
+  const next=requested || nextOrderStatus(order);
+  if (!next || !allowedOrderStatuses(order).includes(next)) return toast('Este cambio no corresponde a la etapa actual.');
+  state.orderBusyIds.add(id);renderOrders();
+  try {
+    const ok=await window.updateOrderStatus?.(id,next,{baseChangeId:order.lastChangeId || '',changeId:`board_${crypto.randomUUID().replaceAll('-','')}`});
+    if (ok !== true) throw new Error('No se pudo confirmar el cambio. Revisá el estado sincronizado antes de reintentar.');
+  } catch(error) { toast(error.message || 'No se pudo actualizar el pedido.',5200); }
+  finally { state.orderBusyIds.delete(id);renderOrders();if(state.drawer?.type==='order')renderDrawer(); }
+}
+async function refreshOrderHistory(id) {
+  if(state.role !== 'superadmin') return;
+  const order=state.orders.find(o=>o.id===id), revision=order?.lastChangeId || String(order?.inventoryRevision || 0);
+  const cached=state.orderHistory.get(id);
+  if(cached?.revision===revision) return;
+  const uid=state.user?.uid;
+  state.orderHistory.set(id,{revision,loading:true,items:cached?.items || []});
+  try {
+    const snap=await getDocs(query(collection(db,'auditLog'),where('entityId','==',id)));
+    if(state.user?.uid !== uid || state.orderHistory.get(id)?.revision!==revision) return;
+    const items=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>timestampMillis(a.createdAt || a.timestamp)-timestampMillis(b.createdAt || b.timestamp));
+    state.orderHistory.set(id,{revision,items,loading:false});
+  } catch(error) { if(state.user?.uid===uid && state.orderHistory.get(id)?.revision===revision)state.orderHistory.set(id,{revision,items:cached?.items || [],error:'No se pudo consultar el historial. Reintentá al recuperar la conexión.'}); }
+  if(state.drawer?.type==='order' && state.drawer.id===id)renderDrawer();
 }
 
 function ensureTrashSubscription() {
@@ -1425,7 +1509,14 @@ function ensureTrashSubscription() {
 
 async function bootForUser(user) {
   if (!user || user.isAnonymous) return;
+  if(state.user?.uid !== user.uid) { orderSourceStop?.();orderSourceStop=null;state.orders=[];state.ordersReady=false;state.orderContacts.clear();state.orderHistory.clear();if(state.drawer?.type==='order')closeDrawer(); }
   state.user = user;
+  try { const ui=JSON.parse(sessionStorage.getItem(`tt-orders-ui:${user.uid}`) || '{}');
+    if(['all','attention','history','buyers','deleted'].includes(ui.tab))state.orderTab=ui.tab;
+    if(['new','preparing','ready','sent','done'].includes(ui.stage))state.orderStage=ui.stage;
+    state.orderSearch=String(ui.search || '');state.orderPay=String(ui.pay || '');state.orderDelivery=String(ui.delivery || '');state.orderSort=ui.sort==='date-asc'?'date-asc':'date-desc';
+  } catch {}
+
   commerceAuthRecoveryAttempted = false;
   await loadRolePermissions();
   state.role = await getUserRole(user.uid, user.email);
@@ -1470,6 +1561,24 @@ function boot() {
     if (event.key === 'Escape') { closeMenu(); closeDrawer(); }
   });
 
+  document.addEventListener('keydown',event=>{
+    if(state.drawer?.type==='order' && event.key==='Tab') {
+      const drawer=document.getElementById('tt-commerce-drawer');
+      const controls=[...drawer.querySelectorAll('button:not([disabled]),a[href],input,select,textarea,[tabindex="0"]')].filter(e=>e.getClientRects().length);
+      const first=controls[0],last=controls.at(-1);
+      if(event.shiftKey && (document.activeElement===first || !drawer.contains(document.activeElement))){event.preventDefault();last?.focus();}
+      else if(!event.shiftKey && (document.activeElement===last || !drawer.contains(document.activeElement))){event.preventDefault();first?.focus();}
+    }
+    const tab=event.target.closest('[data-action="order-stage"]');
+    if(tab && ['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) {
+      event.preventDefault();const keys=['new','preparing','ready','sent','done'];const current=keys.indexOf(state.orderStage);
+      state.orderStage=keys[event.key==='Home'?0:event.key==='End'?4:(current+(event.key==='ArrowRight'?1:4))%5];renderOrders();document.querySelector(`[data-stage="${state.orderStage}"][data-action="order-stage"]`)?.focus();
+    }
+  });
+  window.addEventListener('tintin:admin-orders-source',bindCanonicalOrders);
+  window.addEventListener('online',()=>{ window.TintinAdminOrders?.retry();renderOrders(); });
+  window.addEventListener('offline',renderOrders);
+  setInterval(()=>{if(document.getElementById('section-pedidos')?.classList.contains('active'))renderOrders();},60000);
   subscribeAuthState(user => {
     if (user && !user.isAnonymous) {
       bootForUser(user).catch(error => {
@@ -1483,6 +1592,7 @@ function boot() {
     // por separado con "Missing or insufficient permissions" en Firestore.
     state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
     state.unsubscribers = [];
+    orderSourceStop?.();orderSourceStop=null;orderSourceUid='';state.orders=[];state.orderHistory.clear();state.orderContacts.clear();state.drawer=null;renderOrders();renderDrawer();
     state.user = null;
     commerceAuthRecoveryAttempted = false;
     if (state.trashUnsubscribe) { try { state.trashUnsubscribe(); } catch {} state.trashUnsubscribe = null; }

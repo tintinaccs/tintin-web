@@ -5,8 +5,8 @@ const { origin: site } = readProductionOrigins();
 const runtime = JSON.parse(fs.readFileSync(new URL('../config/csp-runtime.json', import.meta.url), 'utf8'));
 const targets = [
   ['html', '/', /no-cache,\s*must-revalidate/i],
-  ['css', '/css/pages/login/login.css?v=tintin-20260906-login-mode-toggle-1-brand-20261004-1-owner-pink-20261004-1', /public,\s*max-age=31536000,\s*immutable/i],
-  ['js', '/js/cargador-pagina.js?v=tintin-20261012-unified-1-cargador-pagina-js', /public,\s*max-age=31536000,\s*immutable/i],
+  ['css', '/css/pages/login/login.css?v=tintin-20260906-login-mode-toggle-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1', /public,\s*max-age=31536000,\s*immutable/i],
+  ['js', '/js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2', /public,\s*max-age=31536000,\s*immutable/i],
   ['font', '/assets-tintin/fonts/montserrat-latin-wght-normal.woff2', /public,\s*max-age=31536000,\s*immutable/i],
   ['storeGate', '/api/public-catalog?resource=storeGate', /(?:public,\s*)?max-age=(?:[1-9]\d*)/i],
 ];

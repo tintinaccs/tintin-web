@@ -17,13 +17,11 @@ import {
 import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantInventoryDeltas, variantInventoryDeltas } from '../js/core/store/inventario-variantes.mjs';
 import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
+import { ORDER_LIFECYCLE_STATUSES, assertOrderTransition, lifecycleStatus } from '../js/orders/ciclo-pedido.mjs';
 
-export const ORDER_ADMIN_STATUSES = Object.freeze([
-  'pendiente', 'confirmado', 'preparando', 'listo_retiro',
-  'en_camino', 'entregado', 'cancelado', 'rechazado',
-]);
+export const ORDER_ADMIN_STATUSES = ORDER_LIFECYCLE_STATUSES;
 export const ORDER_ADMIN_PAYMENT_STATUSES = Object.freeze([
-  'pendiente', 'pagado', 'rechazado', 'cancelado', 'reembolsado',
+  'pendiente', 'parcial', 'pagado', 'rechazado', 'cancelado', 'reembolsado',
 ]);
 export const ORDER_ADMIN_PAYMENT_METHODS = Object.freeze(['efectivo', 'transferencia', 'paypal']);
 export const ORDER_ADMIN_SHIPPING_METHODS = Object.freeze(['delivery', 'encomienda', 'retiro']);
@@ -319,6 +317,7 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
   const paymentStatus = normalizedPaymentStatus(input.paymentStatus || input.payment?.status || 'pendiente');
   const paymentMethod = normalizedPaymentMethod(input.paymentMethod || input.payment?.method || 'efectivo');
   const shippingMethod = normalizedShippingMethod(input.shippingMethod || input.shipping?.method || 'delivery');
+  assertOrderTransition({ status, shippingMethod }, status);
   const userName = clean(input.userName, 120);
   if (userName.length < 2) throw new Error('Ingresá el nombre del cliente.');
   const contactEmail = clean(input.contactEmail || input.userEmail, 254).toLowerCase();
@@ -677,7 +676,7 @@ export async function applyOrderAdminMutation(
   if (requestedChangeId && currentChangeId === requestedChangeId) {
     return { orderId, changeId: currentChangeId, duplicate: true, order: beforeOrder, ...auditSummary(beforeOrder) };
   }
-  if (baseChangeId && currentChangeId && baseChangeId !== currentChangeId) {
+  if (Object.prototype.hasOwnProperty.call(input, 'baseChangeId') && baseChangeId !== currentChangeId) {
     const error = new Error('El pedido cambió después de la última sincronización. Actualizá la hoja antes de volver a editar.');
     error.status = 409;
     error.code = 'stale_order';
@@ -687,6 +686,14 @@ export async function applyOrderAdminMutation(
   // reconcileInventory: el pago ya quedó registrado por otra vía (PayPal) y solo
   // falta descontar el stock con las mismas precondiciones atómicas.
   const patch = buildPatch(input, beforeOrder, { allowEmpty: input.reconcileInventory === true });
+  if (patch.status || patch.shippingMethod) {
+    const modeStatus = patch.status || lifecycleStatus(beforeOrder);
+    assertOrderTransition({ status: modeStatus, shippingMethod: patch.shippingMethod || beforeOrder.shippingMethod || beforeOrder.shipping?.method }, modeStatus);
+  }
+  if (patch.status && patch.status !== lifecycleStatus(beforeOrder)) {
+    assertOrderTransition({ ...beforeOrder, ...(patch.shipping ? { shipping: patch.shipping, shippingMethod: patch.shippingMethod } : {}) }, patch.status);
+    if (patch.status === 'incidencia') patch.previousFulfillmentStatus = lifecycleStatus(beforeOrder);
+  }
   const inventory = computeInventoryDeltas(beforeOrder, patch, MAX_ADMIN_DISTINCT_PRODUCTS);
   const beforeVariantItems = normalizeVariantInventoryItems(beforeOrder.variantInventoryItems || []);
   const afterItems = normalizeVariantInventoryItems(patch.items || beforeOrder.items);
@@ -792,6 +799,7 @@ export async function applyOrderAdminMutation(
       origin: context.origin,
       result: 'success',
       changeId: nextChangeId,
+      notes: clean(input.statusNote, 1000),
     }),
     currentDocument: { exists: false },
   });

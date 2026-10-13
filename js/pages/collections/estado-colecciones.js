@@ -1,4 +1,4 @@
-import { db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-security-ready-20261013-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import {
   collection,
   getDocs,
@@ -8,7 +8,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { cleanText, cleanMultilineText } from '../../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20261012-auth-privacy-1-resolucion-imagenes-js-domain-prepared-20261012-6-security-ready-20261013-1';
+import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20261012-auth-privacy-1-resolucion-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import {
   readCached,
   readStaleCached,
@@ -21,7 +21,7 @@ import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260925-cache-converge-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261012-checkout-ready-3-metodos-pago-admin-js-domain-prepared-20261012-6-security-ready-20261013-1')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20261012-checkout-ready-3-metodos-pago-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2')
   ]);
 }
 
@@ -141,7 +141,7 @@ export function onCollectionsUpdate(cb, onError) {
 
 async function startAdminListener() {
   if (adminUnsubscribe) return;
-  const { subscribeAdminSnapshot } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-security-ready-20261013-1');
+  const { subscribeAdminSnapshot } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2');
   if (adminUnsubscribe || !adminSubscribers.size) return;
   adminUnsubscribe = subscribeAdminSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
     recordFirestoreRead('collections:admin-live', snapshot.size);
