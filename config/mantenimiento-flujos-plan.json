@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "df86fc68b37991e5fbdc5e19e53572ac4591c877",
-  "reason": "Completar seguridad y preparación de migración: cuotas compartidas verificadas, avatar con bytes reales, pedidos por lotes, Auth técnico y sondas coherentes; conservar controles, permisos, estilos finales y tráfico actual.",
+  "reason": "Completar seguridad y preparación de migración: cuotas compartidas de API y render público, avatar binario, pedidos por lotes, HTML seguro de páginas/correos, OTP uniforme, Auth y sondas coherentes; conservar controles, permisos, estilos finales y tráfico actual.",
   "files": [
     {
       "path": "_headers",
@@ -286,7 +286,7 @@
     {
       "path": "functions/pages/[slug].js",
       "oldHash": "cb2179e1bf7af713ddcdf050b77bf9835eb5fe78a14df74ed26b66a45c26f86a",
-      "newHash": "b27a66e3aaca0bccddfc4108adc77a37ac5c3381359b37d598821cd1593ff3eb"
+      "newHash": "f6a91093f59481b92f1dcbf6b6d152a12ff879f4713b7bc32dff2a2085c3d3b3"
     },
     {
       "path": "index.html",
