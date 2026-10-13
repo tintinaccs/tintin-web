@@ -1426,7 +1426,7 @@ function bindCanonicalOrders() {
   const expectedUid=orderSourceUid;
   orderSourceStop=window.TintinAdminOrders.subscribe(snapshot => {
     if (state.user?.uid !== expectedUid || snapshot.uid !== expectedUid) return;
-    const fresh = orderSourcePrimed && snapshot.ready ? snapshot.orders.filter(o=>!orderSeenIds.has(o.id) && orderStage(o)==='new') : [];
+    const fresh = orderSourcePrimed && snapshot.ready ? snapshot.orders.filter(o=>!orderSeenIds.has(o.id) && !o.localEntryId && (orderStage(o)==='new' || o.status==='confirmado')) : [];
     if (snapshot.ready) {
       for(const order of snapshot.orders) orderSeenIds.add(order.id);
       orderSourcePrimed=true;

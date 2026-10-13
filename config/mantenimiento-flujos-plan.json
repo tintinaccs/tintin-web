@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "baseCommit": "71960405039cb1f1fc48395a6b958eb9d73e74f6",
-  "reason": "Renovación exclusiva de Pedidos: tablero, seguimiento, paginación acotada, inventario, modalidades, pago parcial, editores y contactos. 435 pruebas Node y 48 Chromium aisladas; sin datos reales ni cambio de URL.",
+  "reason": "Renovar exclusivamente Pedidos Super Admin y seguimiento compartido: 435 pruebas de dominio y 48 pruebas Chromium, incluidas 24 dimensiones, concurrencia y contenedor administrativo real.",
   "files": [
     {
       "path": "admin.html",
       "oldHash": "2a6c1474a309d00dd3a4537dff3811cfbf97e4f48c2550af6dbf2978e6a4db79",
-      "newHash": "13cd5001f8e9d8cc9b3257265c9a1779cf56ed0185a87d7ed37a8a594886f77e"
+      "newHash": "219885e1f386a8849d99e1ea4063f8b6983c1c88a40b286b7a040021227427dd"
     },
     {
       "path": "cloudflare/correo-estado-pedido.js",
@@ -51,7 +51,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "8f62b75dce54d13f2c956b34078dc0dbbd1aea9b27f311df4d264de925ef8175",
-      "newHash": "dc06d1bc574de84bbac751f38bf7f7f64d54b80424096ce8eb4aa760f949cf96"
+      "newHash": "d2d7f345039eaf93a18378a39acb026c04ba81ba9d225391a9aba6a7d0be61de"
     },
     {
       "path": "js/pages/profile/pedidos-perfil.js",
@@ -71,7 +71,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "40c05027a44ce31da130d546921edc1270c584ebb10092818686db53c8f5b05d",
-      "newHash": "2e9c3903d39a265e981f9134920c04a62a4ab3762cc3339825e9d5e4c0639a86"
+      "newHash": "626dbc0bb4b56e4b162a6564bfc7ca6405832e2e7d287e79d975847d7672658c"
     }
   ],
   "affectedRecords": [

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "526e46b1f97eb54b00a20171dd136891b08bd2cd53698620be0d34f3d9274755",
+  "sourceFingerprint": "1c7c35a57a7564787042e14aa7a0d668bcf87ba33d1796990cc555711441661e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1185,
     "textFiles": 1137,
-    "totalBytes": 18034325,
+    "totalBytes": 18035703,
     "pages": 19,
     "modules": 843
   },
@@ -2224,7 +2224,7 @@
         "viewer"
       ],
       "bytes": 200802,
-      "sha256": "13cd5001f8e9d8cc9b3257265c9a1779cf56ed0185a87d7ed37a8a594886f77e",
+      "sha256": "219885e1f386a8849d99e1ea4063f8b6983c1c88a40b286b7a040021227427dd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2293,7 +2293,7 @@
           "line": 2062
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261013-orders-board-5-shopify-commerce-admin-js",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261013-orders-board-7-shopify-commerce-admin-js",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2063
         },
@@ -2470,7 +2470,7 @@
           "line": 75
         },
         {
-          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261013-orders-board-6-tablero-pedidos-css",
+          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261013-orders-board-7-tablero-pedidos-css",
           "target": "css/admin/tablero-pedidos.css",
           "line": 76
         }
@@ -2594,7 +2594,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261013-orders-board-5-shopify-commerce-admin-js",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261013-orders-board-7-shopify-commerce-admin-js",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2063,
           "exists": true
@@ -2804,7 +2804,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261013-orders-board-6-tablero-pedidos-css",
+          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261013-orders-board-7-tablero-pedidos-css",
           "target": "css/admin/tablero-pedidos.css",
           "line": 76,
           "exists": true
@@ -24185,8 +24185,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 102249,
-      "sha256": "dc06d1bc574de84bbac751f38bf7f7f64d54b80424096ce8eb4aa760f949cf96",
+      "bytes": 102297,
+      "sha256": "d2d7f345039eaf93a18378a39acb026c04ba81ba9d225391a9aba6a7d0be61de",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43110,8 +43110,8 @@
     },
     {
       "path": "tests/ui-ux/orders-board.spec.js",
-      "bytes": 18238,
-      "sha256": "39859fed76129a422af1674c574583f1ff48a23a0e2b00bbe6e627fbc5b9d667",
+      "bytes": 18736,
+      "sha256": "beab19d0e7a0492320d23d72262176b97f03205ccd05b1642562bceef3f3b257",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43121,7 +43121,7 @@
           "raw": "https://tintin.test/js/admin/orders/pedidos-superadmin-crud.js",
           "target": null,
           "dynamic": true,
-          "line": 142
+          "line": 145
         }
       ],
       "endpoints": [
@@ -43135,23 +43135,23 @@
         },
         {
           "url": "https://tintin.test/api/admin-order-mutation*",
-          "line": 130
+          "line": 133
         },
         {
           "url": "https://wa.me/595981999999",
-          "line": 132
+          "line": 135
         },
         {
           "url": "https://www.google.com/maps",
-          "line": 132
+          "line": 135
         },
         {
           "url": "https://wa.me/595981111111",
-          "line": 137
+          "line": 140
         },
         {
           "url": "https://tintin.test/js/admin/orders/pedidos-superadmin-crud.js",
-          "line": 142
+          "line": 145
         }
       ]
     },
@@ -44118,7 +44118,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 200802,
-      "sha256": "13cd5001f8e9d8cc9b3257265c9a1779cf56ed0185a87d7ed37a8a594886f77e"
+      "sha256": "219885e1f386a8849d99e1ea4063f8b6983c1c88a40b286b7a040021227427dd"
     },
     {
       "path": "apple-touch-icon.png",
@@ -44777,8 +44777,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 4644,
-      "sha256": "76700980ed431bdd822107e27eaabca8cb2632f3b6bb48b273cc20cb89ce4601"
+      "bytes": 4618,
+      "sha256": "c21b81fa096404531289c2d0b1f1a608927e07f6026bdd4eee386bf46888b0e6"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -44790,7 +44790,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "d7f0059e1ad506008cc0ece2c39679740c1c5bc5f17cf1a84ddf0305fe934c01"
+      "sha256": "f6ea58c190b23704b60b63324d1bf6421203f4b9248dcf4e41c113258f0b388a"
     },
     {
       "path": "config/public-site.json",
@@ -44897,8 +44897,8 @@
     {
       "path": "css/admin/tablero-pedidos.css",
       "extension": ".css",
-      "bytes": 10243,
-      "sha256": "105b97a3c85b6cb313c51db136cda1e1fecf61fc87f005be8c5f178119b91b10"
+      "bytes": 10397,
+      "sha256": "f5c954a0e36fb3b4f054c9b274ced01a4ff0c58b928f9fbdb4d9b211ad5498dc"
     },
     {
       "path": "css/admin/visual-studio-global-admin.css",
@@ -45401,8 +45401,8 @@
     {
       "path": "docs/agent/PEDIDOS_SUPERADMIN_RENOVACION_20261012.md",
       "extension": ".md",
-      "bytes": 10943,
-      "sha256": "d65ff038657de2fc11ad5c52096d8adc2bd07bbe9e76d1f972080265ed65f480"
+      "bytes": 11647,
+      "sha256": "c3df4700e9dcefd65ea6c8dbafe9ad6a651a7a243d01bc32b994e14831932c7d"
     },
     {
       "path": "docs/agent/PREPARACION_ACTUAL_20261011.md",
@@ -46673,8 +46673,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 102249,
-      "sha256": "dc06d1bc574de84bbac751f38bf7f7f64d54b80424096ce8eb4aa760f949cf96"
+      "bytes": 102297,
+      "sha256": "d2d7f345039eaf93a18378a39acb026c04ba81ba9d225391a9aba6a7d0be61de"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -49068,7 +49068,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 68302,
-      "sha256": "2e9c3903d39a265e981f9134920c04a62a4ab3762cc3339825e9d5e4c0639a86"
+      "sha256": "626dbc0bb4b56e4b162a6564bfc7ca6405832e2e7d287e79d975847d7672658c"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -50927,8 +50927,8 @@
     {
       "path": "tests/ui-ux/orders-board.spec.js",
       "extension": ".js",
-      "bytes": 18238,
-      "sha256": "39859fed76129a422af1674c574583f1ff48a23a0e2b00bbe6e627fbc5b9d667"
+      "bytes": 18736,
+      "sha256": "beab19d0e7a0492320d23d72262176b97f03205ccd05b1642562bceef3f3b257"
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",

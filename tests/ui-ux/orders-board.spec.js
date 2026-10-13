@@ -16,7 +16,7 @@ const seed=()=>['pendiente','preparando','listo','listo_retiro','en_camino','ent
 async function open(page,orders=seed()) {
   await mockRuntime(page,{orders});
   await page.route('https://tintin.test/assets-tintin/fonts/*.woff2',route=>route.fulfill({status:200,contentType:'font/woff2',body:fs.readFileSync(path.join(ROOT,'assets-tintin/fonts/montserrat-latin-wght-normal.woff2'))}));
-  await page.route('https://tintin.test/admin-commerce-fixture',route=>route.fulfill({status:200,contentType:'text/html',body:fixtureHtml().replace('</head>','<link rel="stylesheet" href="/css/admin/admin-color-tokens.css"><style>@font-face{font-family:Montserrat;src:url("/assets-tintin/fonts/montserrat-latin-wght-normal.woff2");font-weight:100 900}body{padding:16px}#section-productos,#section-colecciones{display:none}</style></head>')}));
+  await page.route('https://tintin.test/admin-commerce-fixture',route=>route.fulfill({status:200,contentType:'text/html',body:fixtureHtml().replace('</head>','<link rel="stylesheet" href="/css/admin/admin-color-tokens.css"><style>@font-face{font-family:Montserrat;src:url("/assets-tintin/fonts/montserrat-latin-wght-normal.woff2");font-weight:100 900}body{padding:0}#section-productos,#section-colecciones{display:none}</style></head>')}));
   await page.goto('https://tintin.test/admin-commerce-fixture');
   await expect(page.locator('[data-orders-status]')).toContainText('sincronizados');
   await expect(page.locator('.tt-order-card').first()).toHaveCSS('opacity','1');
@@ -29,6 +29,7 @@ for(const [width,height] of VIEWPORTS)test(`tablero y detalles utilizables en ${
   await expect(page.locator('[data-stage-count="new"]')).toHaveText('1');
   await expect(page.locator('[data-stage-count="ready"]')).toHaveText('2');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+  if(width>=1920)expect(await page.locator('[data-orders-board]').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
   const mobile=width<=740 || (height<=500 && width<=1000);
   if(mobile){await expect(page.locator('.tt-order-stage-tabs')).toBeVisible();await expect(page.locator('[data-order-lane="preparing"]')).toBeHidden();await page.locator('[data-action="order-stage"][data-stage="ready"]').click();await expect(page.locator('[data-order-lane="ready"]')).toBeVisible();await page.locator('[data-action="order-stage"][data-stage="new"]').click();}
   else {await expect(page.locator('[data-order-lane="new"]')).toBeVisible();await expect(page.locator('[data-order-lane="done"]')).toBeVisible();}
@@ -86,6 +87,8 @@ test('offline pausa acciones y conserva el estado hasta la sincronización',asyn
 test('pedido nuevo ofrece apertura una sola vez; el historial inicial no dispara sonido',async({page})=>{
   await open(page);await expect(page.locator('[data-action="orders-sound"]')).toHaveAttribute('aria-pressed','false');await page.evaluate(()=>{window.__orders.push({...window.__orders[0],id:'order_new_fixture',orderNumber:'TINPED99'});window.__publishOrders();});
   await expect(page.locator('[data-order-notice]')).toContainText('1 pedido(s) nuevo(s)');await page.locator('[data-order-notice] button').click();await expect(page.getByRole('dialog')).toContainText('TINPED99');await page.getByRole('button',{name:'Cerrar',exact:true}).click();await page.evaluate(()=>window.__publishOrders());await expect(page.locator('[data-order-card="order_new_fixture"]')).toHaveCount(1);
+  await page.evaluate(()=>{window.__orders.push({...window.__orders[0],id:'order_new_paid',orderNumber:'TINPED100',status:'confirmado',paymentStatus:'pagado'});window.__publishOrders();});
+  await page.locator('[data-order-notice] button').click();await expect(page.getByRole('dialog')).toContainText('TINPED100');await expect(page.getByRole('dialog')).toContainText('Pagado');
 });
 test('retiro usa listo para retirar y nunca ofrece enviarlo',async({page})=>{
   await open(page);await page.locator('[data-action="drawer-order"][data-id="order_fixture_3"]').click();expect(await page.getByLabel('Estado del pedido',{exact:true}).locator('option[value="en_camino"]').count()).toBe(0);await expect(page.getByLabel('Estado del pedido',{exact:true})).toContainText('Retirado');

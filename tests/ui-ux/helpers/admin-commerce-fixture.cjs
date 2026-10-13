@@ -73,8 +73,8 @@ const imagesStub = `export function sanitizeImageUrl(value) { return /^https?:\\
 
 function fixtureHtml() {
   return `<!doctype html>
-  <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="/css/admin/tablero-pedidos.css"><style>
+  <html lang="es" class="adm-auth-ready"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/tablero-pedidos.css"><style>
     :root {
       --admin-color-brand:#AD3F67; --admin-color-brand-hover:#8B2642; --admin-color-background-page:#FFF6FA;
       --admin-color-background-surface:#fff; --admin-color-background-sidebar-active:#FDECF2; --admin-color-border:#F1E4E7;
@@ -90,6 +90,7 @@ function fixtureHtml() {
   </style></head><body>
     <div id="adm-toast"></div>
     <button data-section="importar" id="nav-importar">Importar</button>
+    <main class="adm-main"><div class="adm-content">
     <section class="adm-section" id="section-productos">
       <div class="adm-card" id="prod-list-card">Listado legacy productos</div>
       <div class="adm-card" id="prod-form-card" style="display:none"><div class="adm-card-head"><div class="adm-card-title">Editar producto</div></div><div class="adm-card-body"><input class="adm-input"><button>Guardar</button></div></div>
@@ -101,6 +102,7 @@ function fixtureHtml() {
       <div class="adm-card" id="coll-picker-card" style="display:none"></div>
     </section>
     <section class="adm-section active" id="section-pedidos"><div class="adm-card" id="orders-legacy">Listado legacy pedidos<table><tbody id="orders-tbody"><tr><td>Fila anterior de prueba</td></tr></tbody></table></div></section>
+    </div></main>
     <script>
       window.__calls=[];
       const call=(name,...args)=>window.__calls.push([name,...args]);

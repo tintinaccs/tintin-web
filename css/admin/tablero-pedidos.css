@@ -2,6 +2,7 @@
 #section-pedidos:not(.tt-commerce-mounted) { min-height: 420px; visibility: hidden; }
 .adm-main #section-pedidos:not(.tt-commerce-mounted) > * { visibility: hidden !important; }
 #tt-commerce-orders { min-width: 0; }
+body:has(.adm-main) .adm-content:has(> #section-pedidos.active.tt-commerce-mounted) { width: min(100%,1980px) !important; max-width: 1980px !important; }
 #tt-commerce-drawer[hidden] { display: none; }
 #tt-commerce-orders *, #tt-commerce-drawer[data-kind="order"] * { box-sizing: border-box; }
 #tt-commerce-orders [hidden] { display: none !important; }

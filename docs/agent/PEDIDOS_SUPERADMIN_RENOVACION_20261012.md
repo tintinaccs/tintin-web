@@ -31,7 +31,7 @@ Se revisaron admin.html, estilos compartidos y tokens, shopify-commerce-admin.js
 - Panel derecho con cliente, productos/fotos/variantes, totales y descuentos registrados, entrega, observaciones, estado/pago, historial y responsable. El guardado de estado+pago es una única mutación. Los editores completos existentes conservan listo/pago parcial y estados legados sin convertirlos en pendiente al editar otros datos; sus opciones se adaptan a la modalidad y el editor CRUD se comprueba en 320/768/1440px, con cierre y teclado.
 - WhatsApp del cliente, Google Maps y Enviar a Fito usan enlaces calculados por el servidor autorizado; no se envían mensajes. Fito sólo aparece para delivery conforme al contrato existente.
 - Los movimientos se confirman en servidor antes de reflejarlos. Clave de cambio y versión base evitan doble acción y borradores que pisan otra sesión. El endpoint administrativo exige versión para las actualizaciones.
-- Nueva notificación del tablero abre el pedido exacto, no vuelve a anunciar el snapshot inicial ni el mismo ID. Sonido sólo con habilitación expresa y permiso del navegador.
+- Nueva notificación del tablero abre el pedido exacto, incluidos los pedidos nuevos ya confirmados/pagados; no vuelve a anunciar el snapshot inicial ni el mismo ID. Sonido sólo con habilitación expresa y permiso del navegador.
 - Archivar/restaurar un pedido entregado conserva entrega, pago y reserva históricos; no lo transforma en una cancelación ni repone stock.
 - Claro/oscuro heredan los tokens administrativos existentes, Montserrat y la identidad de Tintin. Botones táctiles, foco/cierre/teclado, áreas seguras y movimiento reducido.
 
@@ -49,7 +49,9 @@ Tamaños comprobados (ancho × alto): 320×568, 360×640, 375×812, 390×844, 41
 
 Auditores: Pedidos (32 comprobaciones), comercio, contratos arquitectónicos, tipografía, esquema de color e integridad CSS: PASS_LOCAL.
 
-Logs locales: C:/Users/USER/AppData/Local/Temp/tintin-orders-node-critical.log, tintin-orders-browser-release.log, tintin-orders-audit-final.log, tintin-orders-commerce-final.log y tintin-orders-architecture.log.
+La pasada final incorpora el CSS y el contenedor reales del Super Admin, con autenticación simulada explícita. Se corrige el límite de ancho únicamente mientras Pedidos está activo; en 1920/2560/2880px las cinco columnas entran sin scroll horizontal interno. Las demás secciones conservan su ancho. Resultado repetido: 48/48 PASS_LOCAL.
+
+Logs locales: C:/Users/USER/AppData/Local/Temp/tintin-orders-node-critical.log, tintin-orders-browser-host-final.log, tintin-orders-audit-final.log, tintin-orders-commerce-final.log y tintin-orders-architecture.log.
 Capturas revisadas: C:/Users/USER/AppData/Local/Temp/tintin-orders-review-20261012/pedidos-{320,768,1440,1920}.png y detalle-{320,1440}.png. El comando de navegador genera esas capturas si TINTIN_REVIEW_DIR está definido.
 
 ## Límites y pendientes expresos
@@ -63,6 +65,6 @@ Capturas revisadas: C:/Users/USER/AppData/Local/Temp/tintin-orders-review-202610
 - Primer candidato PR1115/1d0096d: Cloudflare Pages compiló correctamente. La preview devuelve redirección a Cloudflare Access: se requiere sesión del titular para revisar la UI autenticada, sin abrir sesiones que puedan ejecutar operaciones sobre datos reales.
 - CI inicial señaló auditores con firmas antiguas de cancelación en papelera y de suscripciones de pedidos; ahora verifican transición autorizada, versión y preservación de entregados. CodeQL señaló puntos sin escapar en la comprobación de dominios de un test; se corrigieron las aserciones. El segundo candidato pasó CodeQL. Se reemplaza la consulta ilimitada por paginación acotada, con nueve regresiones de fuente/adaptador originales. Se debe verificar de nuevo el SHA final.
 - La pasada amplia local de audit:final llegó a test:flow-connections (149 PASS, 2 FAIL). Fallos ajenos al módulo y sin cambios respecto a main: presupuesto-mantenimiento.test.mjs pasa una ruta Windows C: como --import en lugar de una URL file:, y sellado-interactivo.test.mjs compara una ruta Windows con separadores /. No se modificaron esos tests ni los controles de mantenimiento. La continuación de gates llegó a login/profile/runtime y quedó limitada por firebase-tools ausente en las herramientas locales de prueba. Los contratos de rendimiento, autenticación y perfil anteriores a ese punto pasaron. CI Linux instala las dependencias oficiales y verifica esos contratos independientemente.
-- CI del candidato final, revisión de mantenimiento protegido y autorización final de publicación pendientes. No heredar aprobaciones de checkout anterior ni de main.
+- El candidato 1f1dae7 pasó Repository audit, Analyze (actions), Analyze (javascript-typescript), CodeQL y Cloudflare Pages. El último ajuste de ancho y aviso de pedidos pagados requiere repetir CI sobre su SHA. Mantenimiento protegido y autorización final de publicación pendientes. El navegador integrado está sin sesión GitHub (muestra Sign in), por lo que no se pudo preparar workflow_dispatch desde allí. No heredar aprobaciones de checkout anterior ni de main.
 
 No se afirma ausencia total de errores. Se conserva este informe con la evidencia concreta y se actualiza ante resultados del candidato.
