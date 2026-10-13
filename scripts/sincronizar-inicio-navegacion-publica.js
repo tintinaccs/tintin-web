@@ -178,6 +178,11 @@ const INITIAL_PAGE_STYLES = {
       "data-tt-login-onboarding-flow=\"1\"",
       "css/pages/login/login-onboarding-flow.css",
       "tintin-20261001-registration-white-cards-2-brand-20261004-1-owner-pink-20261004-1"
+    ],
+    [
+      "data-tt-login-onboarding-layout=\"1\"",
+      "css/pages/login/login-onboarding-form-layout.css",
+      "tintin-20261010-whatsapp-release-5"
     ]
   ],
   "admin.html": [
@@ -211,7 +216,7 @@ function ensureInitialRuntimeStyles(html, page) {
   for (const [attribute, file, version] of styles) {
     const pattern = new RegExp(`\\s*<link\\b[^>]*href=["']/?${escapeRegex(file)}(?:\\?[^"']*)?["'][^>]*>`, 'gi');
     out = out.replace(pattern, '');
-    const link = `  <link ${attribute} rel="stylesheet" href="/${file}?v=${version}">`;
+    const link = `  <link ${attribute} rel="stylesheet" href="${page === '404.html' ? '/' : ''}${file}?v=${version}">`;
     if (file === 'css/components/navigation/movil/fondos-solidos-movil.css') {
       const loaderStyle = /\s*<link\b[^>]*href=["']\/?css\/theme\/fondo-solido-cargador\.css[^"']*["'][^>]*>/i;
       if (loaderStyle.test(out)) {
