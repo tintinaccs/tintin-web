@@ -5,7 +5,7 @@
  * correos, autenticado con el idToken real de quien compra.
  */
 import { EMAIL_WEBHOOK_URL } from './email/configuracion-correo.js?v=tintin-20260925-cache-converge-1';
-import { currentAuthenticatedUser, authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6';
+import { currentAuthenticatedUser, authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;
 

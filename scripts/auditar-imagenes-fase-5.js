@@ -259,7 +259,7 @@ check(
 
 check(
   'La biblioteca usa Cloudinary mediante Cloudflare Pages Functions',
-  // El origen /api (relativo en Cloudflare, https://tintinaccs.com
+  // El origen /api (relativo en Cloudflare, https://tintinaccesorios.pages.dev
   // en GitHub Pages/Netlify) vive en js/core/firebase/origen-funciones.js, compartido con
   // actividad-sitio.js, notificacion-pedido-resend.js y sincronizacion-correo-admin.js para
   // que ningún llamador nuevo lo reinvente (y lo olvide) por separado.

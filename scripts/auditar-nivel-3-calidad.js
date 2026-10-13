@@ -37,7 +37,7 @@ const finalIntegration = read('scripts/auditar-final-integracion.js');
 const robots = read('robots.txt');
 const sitemapIndex = read('sitemap.xml');
 const sitemapPages = read('sitemap-pages.xml');
-const publicOrigin = 'https://tintinaccs.com';
+const publicOrigin = 'https://tintinaccesorios.pages.dev';
 
 const canonicalViewports = [
   ['desktop-large', 1920, 1080],

@@ -138,7 +138,7 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
 check('GitHub Pages usa el servicio geográfico de Cloudflare',
   activity.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
   activity.includes('function geoEndpoint() {\n    return apiUrl(') &&
-  functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccs.com'") &&
+  functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
   functionOrigin.includes("hostname.endsWith('github.io')") &&
   !activity.includes('/.netlify/functions/'));
 check('Los previews de Cloudflare no escriben estadísticas',
@@ -166,7 +166,9 @@ check('El centro estadístico general está reservado a Super Admin',
   admin.includes('id="statistics-revenue-trend"') &&
   admin.includes('id="statistics-visit-locations"'));
 check('Pedidos, usuarios, auditoría y correos se actualizan sin F5',
-  admin.includes("adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
+  admin.includes('adminOrdersUnsubscribe = source.stop') && admin.includes('return onSnapshot(ordersQuery,') &&
+    admin.includes("orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)") &&
+    admin.includes('startAfter(cursor), limit(ADMIN_REALTIME_LIMIT)') &&
   admin.includes("adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
   admin.includes('_auditUnsubscribe = onSnapshot(') &&
   admin.includes('function startCorreosRealtimeListeners()'));

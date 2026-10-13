@@ -49,7 +49,7 @@ check(
   // comparten la misma resolución de origen.
   resendNotify.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
     adminSync.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js") &&
-    functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccs.com'") &&
+    functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
     functionOrigin.includes("hostname.endsWith('github.io')"),
   'Toda ruta /api/* del cliente debe resolverse con js/core/firebase/origen-funciones.js, no con una constante relativa suelta.'
 );

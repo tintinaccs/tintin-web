@@ -1,39 +1,41 @@
 import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1';
-import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6";
-import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6";
-import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6';
-import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6";
+import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
+import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs';
+import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1";
+import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
+import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
-  query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
+  query, orderBy, limit, startAfter, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261012-checkout-ready-2-notificaciones-correo-js-domain-prepared-20261012-6";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20261012-checkout-ready-2-notificaciones-correo-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
 // automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
 // de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
-import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20261012-auth-privacy-1-notificacion-pedido-resend-js-domain-prepared-20261012-6";
-import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6";
+import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20261012-auth-privacy-1-notificacion-pedido-resend-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
 import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6";
+} from "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
-import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6";
+import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261012-auth-privacy-1-carga-imagenes-js-domain-prepared-20261012-6";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js-domain-prepared-20261012-6";
-import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-sitio-admin-js-domain-prepared-20261012-6";
-import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261012-auth-privacy-1-mayoristas-admin-js-domain-prepared-20261012-6";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6";
-import "./pages/paginas-admin.js?v=tintin-20261012-auth-privacy-1-paginas-admin-js-domain-prepared-20261012-6";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261012-auth-privacy-1-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-3";
+import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-sitio-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261012-auth-privacy-1-mayoristas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
+import "./pages/paginas-admin.js?v=tintin-20261012-auth-privacy-1-paginas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -42,9 +44,9 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261012-auth-privacy-1-pedidos-superadmin-crud-js-domain-prepared-20261012-6';
-import './settings/cupones-admin.js?v=tintin-20261012-auth-privacy-1-cupones-admin-js-domain-prepared-20261012-6';
-import './products/integridad-inventario-admin.js?v=tintin-20261012-auth-privacy-1-integridad-inventario-admin-js-domain-prepared-20261012-6';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261013-orders-board-6-pedidos-superadmin-crud-js';
+import './settings/cupones-admin.js?v=tintin-20261012-auth-privacy-1-cupones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
+import './products/integridad-inventario-admin.js?v=tintin-20261012-orders-board-2-integridad-inventario-admin-js';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 
@@ -241,7 +243,7 @@ function roleCanDo(moduleKey, actionKey) {
 const ORDER_STATUS_LABELS = {
   pendiente:    'Pendiente',
   confirmado:   'Confirmado',
-  preparando:   'En preparación',
+  preparando:   'En preparación', listo: 'Listo', devuelto: 'Devuelto', incidencia: 'Con incidencia',
   listo_retiro: 'Listo para retirar',
   en_camino:    'En camino',
   entregado:    'Entregado',
@@ -261,7 +263,7 @@ const ORDER_STATUS_BADGE = {
   enviado:      'badge-enviado', // legado
 };
 const PAY_STATUS_LABELS = {
-  pendiente:   'Pago pendiente',
+  pendiente:   'Pago pendiente', parcial: 'Parcialmente pagado',
   pagado:      'Pagado',
   rechazado:   'Rechazado',
   cancelado:   'Cancelado',
@@ -1096,6 +1098,7 @@ function teardownAdminRealtimeOnSessionLoss() {
   adminGuardInitializedUid = '';
   adminGuardInitializingUid = '';
   currentUser = null;
+  publishAdminOrders();
 }
 
 // El overlay "No pudimos restaurar tu sesión" también lo ve cualquier
@@ -1663,6 +1666,7 @@ function sectionIsActive(name) {
 }
 
 function refreshRealtimeConsumers() {
+  publishAdminOrders();
   renderDashboardData();
   renderGeneralStatistics();
   if (sectionIsActive('pedidos')) applyOrderFilters();
@@ -1675,10 +1679,20 @@ function refreshRealtimeConsumers() {
 // Punto de lectura mínimo para el enlace directo de las notificaciones push
 // (js/admin/notifications/push-order-deeplink.js): saber si los pedidos ya
 // están cargados y si un pedido existe, sin exponer ningún dato del pedido.
+const adminOrderConsumers = new Set();
+let adminOrdersOwnerUid = '';
+function publishAdminOrders() {
+  const snapshot = { uid: currentUser?.uid || '', ready: adminRealtimeReady.orders, error: adminRealtimeErrors.orders, orders: currentUser && adminOrdersOwnerUid===currentUser.uid ? allOrders : [] };
+  for (const consume of adminOrderConsumers) { try { consume(snapshot); } catch(error) { console.error('No se pudo actualizar la vista de pedidos.',error?.message); } }
+}
 window.TintinAdminOrders = {
   ready: () => adminRealtimeReady.orders === true,
-  has: orderId => allOrders.some(order => order.id === orderId)
+  has: orderId => allOrders.some(order => order.id === orderId),
+  get: orderId => currentUser && adminOrdersOwnerUid === currentUser.uid ? allOrders.find(order => order.id === orderId) : undefined,
+  subscribe(consume) { adminOrderConsumers.add(consume); publishAdminOrders(); return () => adminOrderConsumers.delete(consume); },
+  retry() { if (currentUser) startAdminRealtimeData(); }
 };
+window.dispatchEvent(new Event('tintin:admin-orders-source'));
 
 function stopAdminRealtimeData() {
   if (adminOrdersUnsubscribe) adminOrdersUnsubscribe();
@@ -1783,22 +1797,41 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { ...adminRealtimeReady, orders: false, users: currentRole !== 'superadmin' };
   adminRealtimeErrors = { orders: '', users: '' };
+  if(adminOrdersOwnerUid!==currentUser?.uid)allOrders=[];
+  adminOrdersOwnerUid=currentUser?.uid || '';
+  publishAdminOrders();
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
-    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
-      allOrders = snapshot.docs
-        .map(item => ({ id: item.id, ...item.data() }))
-        .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
-      adminRealtimeReady.orders = true;
-      adminRealtimeErrors.orders = '';
-      refreshRealtimeConsumers();
-    }, error => {
-      adminRealtimeReady.orders = false;
-      adminRealtimeErrors.orders = 'No se pudieron actualizar los pedidos.';
-      console.error('Pedidos en tiempo real no disponibles:', error);
-      statisticsSetText('statistics-live-status', 'Pedidos no disponibles');
-      recoverAdminRealtimeAuth(error, 'orders');
-      refreshRealtimeConsumers();
+    const source = createAdminOrderSource({
+      complete: currentRole === 'superadmin',
+      subscribePage(cursor, next, error) {
+        const ordersQuery = cursor
+          ? query(collection(db, 'orders'), orderBy('createdAt', 'desc'), startAfter(cursor), limit(ADMIN_REALTIME_LIMIT))
+          : query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT));
+        return onSnapshot(ordersQuery, { includeMetadataChanges: true }, snapshot => {
+          const last = snapshot.docs.at(-1);
+          const created = last?.data()?.createdAt;
+          next({ orders: snapshot.docs.map(item => ({ id: item.id, ...item.data() })),
+            cursor: last, cursorKey: last ? last.id + ':' + activityTimestampMillis(created) : '',
+            hasMore: snapshot.docs.length === ADMIN_REALTIME_LIMIT, authoritative: snapshot.metadata?.fromCache !== true });
+        }, error);
+      },
+      onLoading() { adminRealtimeReady.orders = false; refreshRealtimeConsumers(); },
+      onData(orders) {
+        allOrders = reconcileAdminOrderSnapshot(orders, allOrders).sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
+        adminRealtimeReady.orders = true;
+        adminRealtimeErrors.orders = '';
+        refreshRealtimeConsumers();
+      },
+      onError(error) {
+        adminRealtimeReady.orders = false;
+        adminRealtimeErrors.orders = 'No se pudieron actualizar los pedidos.';
+        console.error('Pedidos en tiempo real no disponibles:', error);
+        statisticsSetText('statistics-live-status', 'Pedidos no disponibles');
+        recoverAdminRealtimeAuth(error, 'orders');
+        refreshRealtimeConsumers();
+      }
     });
+    adminOrdersUnsubscribe = source.stop;
   } else {
     adminRealtimeReady.orders = true;
   }
@@ -2622,6 +2655,7 @@ function loadOrders() {
 
 function renderOrdersTable(orders) {
   const tbody = document.getElementById('orders-tbody');
+  if (document.getElementById('section-pedidos')?.classList.contains('tt-commerce-mounted')) { tbody?.replaceChildren(); return; }
   const countEl = document.getElementById('orders-count-label');
   if (countEl) countEl.textContent = orders.length ? `${orders.length} pedido${orders.length !== 1 ? 's' : ''}` : '';
 
@@ -2761,37 +2795,24 @@ window.toggleOrderDetail = (id) => {
   row.style.display = isHidden ? 'table-row' : 'none';
 };
 
-window.updateOrderStatus = async (orderId, status) => {
+window.updateOrderStatus = async (orderId, status, context = {}) => {
   if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarEstado')) { toast('No tenés permiso para cambiar el estado de pedidos'); return false; }
+  if (context.paymentStatus && !roleCanDo('pedidos', 'cambiarPago')) { toast('No tenés permiso para cambiar el pago'); return false; }
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.status || 'pendiente';
-  const cancelling = currentRole === 'superadmin' && status === 'cancelado';
+  const cancelling = status === 'cancelado';
   const operation = await runAdminCrudOperation({
-    title: cancelling ? 'Mover pedido a Borrados' : 'Actualizar estado del pedido',
+    title: cancelling ? 'Cancelar pedido' : 'Actualizar estado del pedido',
     name: o?.orderNumber || o?.shortId || orderId, module: 'pedidos', dangerous: cancelling,
-    stages: cancelling
-      ? [{ id: 'trash', label: 'Mover pedido y liberar inventario' }, { id: 'refresh', label: 'Actualizar lista y auditoría' }]
-      : [{ id: 'write', label: 'Actualizar estado e inventario' }, { id: 'refresh', label: 'Actualizar lista y auditoría' }],
+    stages: [{ id: 'write', label: 'Actualizar estado e inventario' }, { id: 'refresh', label: 'Actualizar lista y auditoría' }],
     action: async ctx => {
-      if (cancelling) {
-        ctx.start('trash');
-        await window.TintinOrderAdmin.trashOrder(orderId, 'Cancelado por Super Admin');
-        ctx.ok('trash');
-        ctx.start('refresh');
-        allOrders = allOrders.filter(item => item.id !== orderId);
-        await logAudit('mover_pedido_borrados', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Cancelado y movido a Borrados desde ${ORDER_STATUS_LABELS[prevStatus] || prevStatus}`);
-        applyOrderFilters();
-        ctx.ok('refresh');
-        return true;
-      }
       ctx.start('write');
-      await window.TintinInventoryIntegrity.transitionStatus(orderId, status);
-      if (o) o.status = status;
+      const result = await window.TintinInventoryIntegrity.transitionStatus(orderId, status, { baseChangeId: o?.lastChangeId || '', ...context });
+      if (o && result.order) Object.assign(o, result.order);
       ctx.ok('write');
       ctx.start('refresh');
-      await logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
+      publishAdminOrders();
       applyOrderFilters();
-      if (o) maybeSendOrderStatusEmail_(o, 'status', status);
       ctx.ok('refresh');
       return true;
     },
@@ -2884,13 +2905,11 @@ window.updatePayStatus = async (orderId, status) => {
       });
       const body = await response.json().catch(() => ({}));
       if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo guardar el estado de pago.');
-      if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
+      if (o && body.result?.order) Object.assign(o, body.result.order);
       ctx.ok('save');
       ctx.start('refresh');
-      await logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId,
-        `Estado de pago: ${PAY_STATUS_LABELS[prevStatus] || prevStatus} → ${PAY_STATUS_LABELS[status] || status}`);
+      publishAdminOrders();
       applyOrderFilters();
-      if (o) maybeSendOrderStatusEmail_(o, 'payment', status);
       ctx.ok('refresh');
       return true;
     },
@@ -3455,7 +3474,7 @@ const TEMPLATE_SEEDS = {
     greeting: 'Nuevo pedido de {{clienteNombre}}.',
     intro: 'Se recibió un nuevo pedido en la tienda.',
     closing: 'Revisalo en el panel de administración.', signature: 'Tintin Accesorios', promoText: '',
-    buttonText: 'Ver en el panel', buttonUrl: 'https://tintinaccs.com/admin.html',
+    buttonText: 'Ver en el panel', buttonUrl: 'https://tintinaccesorios.pages.dev/admin.html',
     brandPhrase: 'Tintin Accesorios', footer: '' },
   pedido_confirmado: { name: 'Pedido confirmado', category: 'pedido',
     subject: 'Tu pedido #{{pedidoNumero}} fue confirmado',
@@ -3505,7 +3524,7 @@ const TEMPLATE_SEEDS = {
     intro: 'Queremos contarte sobre nuestras últimas novedades en Tintin Accesorios.',
     promoText: 'Descubrí los nuevos productos en nuestra tienda.',
     closing: 'Gracias por ser parte de Tintin.', signature: 'Tintin Accesorios',
-    buttonText: 'Ver tienda', buttonUrl: 'https://tintinaccs.com/',
+    buttonText: 'Ver tienda', buttonUrl: 'https://tintinaccesorios.pages.dev/',
     brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
   novedades: { name: 'Novedades', category: 'promo',
     subject: 'Novedades en Tintin Accesorios',
@@ -3513,7 +3532,7 @@ const TEMPLATE_SEEDS = {
     intro: 'Llegaron productos nuevos a la tienda.',
     promoText: 'Vení a conocerlos.',
     closing: 'Te esperamos.', signature: 'Tintin Accesorios',
-    buttonText: 'Ver novedades', buttonUrl: 'https://tintinaccs.com/',
+    buttonText: 'Ver novedades', buttonUrl: 'https://tintinaccesorios.pages.dev/',
     brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
   promo_dia_amistad: { name: 'Promo Día de la Amistad', category: 'promo',
     subject: 'Feliz Día de la Amistad, {{clienteNombre}}',
@@ -3521,7 +3540,7 @@ const TEMPLATE_SEEDS = {
     intro: 'En el Día de la Amistad te dejamos una selección especial de regalos.',
     promoText: 'Encontrá el regalo ideal para esa amiga especial.',
     closing: 'Gracias por elegirnos.', signature: 'Tintin Accesorios',
-    buttonText: 'Ver regalos', buttonUrl: 'https://tintinaccs.com/',
+    buttonText: 'Ver regalos', buttonUrl: 'https://tintinaccesorios.pages.dev/',
     brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
   promo_relojes: { name: 'Promo de relojes', category: 'promo',
     subject: 'Nuevos relojes en Tintin Accesorios',
@@ -3529,7 +3548,7 @@ const TEMPLATE_SEEDS = {
     intro: 'Llegó una nueva colección de relojes.',
     promoText: 'Conocé los modelos disponibles.',
     closing: 'Te esperamos en la tienda.', signature: 'Tintin Accesorios',
-    buttonText: 'Ver relojes', buttonUrl: 'https://tintinaccs.com/',
+    buttonText: 'Ver relojes', buttonUrl: 'https://tintinaccesorios.pages.dev/',
     brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
   promo_bolsos: { name: 'Promo de bolsos', category: 'promo',
     subject: 'Nuevos bolsos en Tintin Accesorios',
@@ -3537,7 +3556,7 @@ const TEMPLATE_SEEDS = {
     intro: 'Llegó una nueva colección de bolsos.',
     promoText: 'Conocé los modelos disponibles.',
     closing: 'Te esperamos en la tienda.', signature: 'Tintin Accesorios',
-    buttonText: 'Ver bolsos', buttonUrl: 'https://tintinaccs.com/',
+    buttonText: 'Ver bolsos', buttonUrl: 'https://tintinaccesorios.pages.dev/',
     brandPhrase: 'Tintin Accesorios', footer: 'Si no querés recibir más promociones, respondé este correo y te sacamos de la lista.' },
   mensaje_libre: { name: 'Mensaje libre', category: 'libre',
     subject: 'Un mensaje de Tintin Accesorios',
@@ -7851,6 +7870,7 @@ let _editingOrder = null;
 // administrador escribió el mismo pedido mientras este editor estaba abierto,
 // no se pisan sus cambios en silencio.
 let _orderEditBaselineMillis = null;
+let _orderEditBaseChangeId = '';
 
 window.openOrderEdit = function(orderId) {
   const o = allOrders.find(x => x.id === orderId);
@@ -7859,6 +7879,7 @@ window.openOrderEdit = function(orderId) {
   // Guarda el updatedAt real (Timestamp de Firestore) — no la copia JSON, que
   // pierde el tipo — para comparar contra el servidor al guardar.
   _orderEditBaselineMillis = toJsDate_(o.updatedAt)?.getTime() ?? null;
+  _orderEditBaseChangeId = o.lastChangeId || '';
 
   document.getElementById('oe-id').value = orderId;
   document.getElementById('oe-short-id').textContent = '#' + orderId.slice(-6).toUpperCase();
@@ -7893,8 +7914,19 @@ window.openOrderEdit = function(orderId) {
     oePayMethod.appendChild(retired);
   }
   oePayMethod.value = oePayMethodValue;
-  document.getElementById('oe-pay-status').value = o.payment?.status || o.paymentStatus || 'pendiente';
-  document.getElementById('oe-status').value = o.status || 'pendiente';
+  const oePayStatus = document.getElementById('oe-pay-status');
+  const oePaymentValue = o.paymentStatus || o.payment?.status || 'pendiente';
+  oePayStatus.innerHTML = payStatusOptions(oePaymentValue);
+  if (![...oePayStatus.options].some(option => option.value === oePaymentValue)) { const legacy = document.createElement('option'); legacy.value = oePaymentValue; legacy.textContent = PAY_STATUS_LABELS[oePaymentValue] || 'Estado de pago no reconocido'; oePayStatus.appendChild(legacy); }
+  oePayStatus.value = oePaymentValue;
+  const oeStatus = document.getElementById('oe-status');
+  const refreshOeStatus = selected => {
+    const context = { ...o, shippingMethod: document.getElementById('oe-ship-method').value || o.shippingMethod || o.shipping?.method };
+    oeStatus.innerHTML = o.localEntryId ? orderStatusOptions(selected) : '<option value="" disabled>Elegí un estado compatible</option>' + allowedOrderStatuses(context).filter(status => ORDER_STATUS_LABELS[status] && (status !== 'en_camino' || context.shippingMethod !== 'retiro') && (status !== 'listo_retiro' || context.shippingMethod === 'retiro')).map(status => `<option value="${status}">${orderStatusLabel({ ...context, status })}</option>`).join('');
+    oeStatus.value = selected === 'enviado' ? 'en_camino' : selected || 'pendiente';
+  };
+  refreshOeStatus(o.status);
+  document.getElementById('oe-ship-method').onchange = () => refreshOeStatus(oeStatus.value);
   document.getElementById('oe-notes').value = o.adminNotes || o.notes || '';
 
   renderOeItems();
@@ -8048,7 +8080,7 @@ window.saveOrderEdit = async function() {
         } catch (_) { /* fail-open: no bloquear por un error de lectura */ }
         ctx.ok('concurrency');
         ctx.start('save');
-        await window.TintinInventoryIntegrity.updateEditedOrder(orderId, updateData);
+        await window.TintinInventoryIntegrity.updateEditedOrder(orderId, { ...updateData, baseChangeId: _orderEditBaseChangeId });
         ctx.ok('save');
         ctx.start('refresh');
         const idx = allOrders.findIndex(x => x.id === orderId);

@@ -144,8 +144,10 @@ check(
   admin.includes('movedOrders = []') && admin.includes('failed = []') &&
     admin.includes('failed.forEach(item => _selectedOrders.add(item.id))') &&
     admin.includes('TintinOrderAdmin.trashOrder') &&
-    orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado')"),
-  'Cada pedido debe liberar inventario antes de salir de la lista activa.'
+    orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado', { baseChangeId: expectedChangeId })") &&
+    orderCrud.includes("allowedOrderStatuses(before).includes('cancelado')") &&
+    orderCrud.includes("(live.lastChangeId || '') !== expectedChangeId"),
+  'La cancelación permitida debe reconciliar stock y versión antes de archivar; los entregados deben conservar su reserva e historial.'
 );
 
 // Administración

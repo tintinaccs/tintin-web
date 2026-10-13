@@ -1,6 +1,6 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3';
 import {
   collection,
   doc,
@@ -42,8 +42,9 @@ async function updateEditedOrder(orderId, patch) {
     },
     body: JSON.stringify({
       orderId: safeOrderId,
+      baseChangeId: window.TintinAdminOrders?.get?.(safeOrderId)?.lastChangeId || '',
       ...(patch && typeof patch === 'object' ? patch : {}),
-      changeId: `admin_${crypto.randomUUID().replaceAll('-', '')}`,
+      changeId: patch?.changeId || `admin_${crypto.randomUUID().replaceAll('-', '')}`,
       source: 'superadmin'
     })
   });
@@ -57,8 +58,8 @@ async function updateEditedOrder(orderId, patch) {
   return body.result || {};
 }
 
-async function transitionStatus(orderId, status) {
-  return updateEditedOrder(orderId, { status: String(status || '').trim() });
+async function transitionStatus(orderId, status, context = {}) {
+  return updateEditedOrder(orderId, { ...context, status: String(status || '').trim() });
 }
 
 async function deleteOrder(orderId) {

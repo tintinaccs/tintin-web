@@ -3,7 +3,7 @@ import {
   firestoreAdminListAll
 } from '../cloudflare/firebase-admin-ligero.js';
 
-const PUBLIC_ORIGIN = 'https://tintinaccs.com';
+const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 
 function xml(value) {
   return String(value ?? '')

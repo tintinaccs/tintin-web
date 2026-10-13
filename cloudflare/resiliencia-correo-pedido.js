@@ -152,6 +152,7 @@ async function retryStatusEmail(env, apiKey, item, deps) {
     paymentStatus: item.paymentStatus,
     previousStatus: item.previousStatus,
     previousPaymentStatus: item.previousPaymentStatus,
+    order,
   });
   if (!change) return 'obsolete';
   const result = await deps.sendOrderStatusEmailImpl(apiKey, { order, orderId: item.orderId, change, changeId: item.changeId });

@@ -33,7 +33,7 @@ const checks = [
     'GitHub Pages redirige al origen público antes de inicializar la aplicación',
     loader.indexOf("window.location.hostname === 'tintinaccs.github.io'") <
       loader.indexOf('if (window.TintinLoader) return') &&
-      loader.includes("'https://tintinaccs.com'") &&
+      loader.includes("'https://tintinaccesorios.pages.dev'") &&
       loader.includes('window.location.replace(')
   ],
   [

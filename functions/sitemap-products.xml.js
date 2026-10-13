@@ -5,7 +5,7 @@ import {
 
 import { hasPublicProductFields } from '../js/core/store/publicacion-producto.mjs';
 
-const PUBLIC_ORIGIN = 'https://tintinaccs.com';
+const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 
 function xml(value) {
   return String(value ?? '')

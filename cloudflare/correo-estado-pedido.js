@@ -4,6 +4,7 @@
 // orderEmailQueue y el drenaje programado (resiliencia-correo-pedido.js) lo
 // reintenta con la misma clave de idempotencia.
 import { encodeFirestoreFields, firestoreAdminCommit } from './firebase-admin-ligero.js';
+import { customerOrderMessage, orderStatusLabel } from '../js/orders/ciclo-pedido.mjs';
 import {
   EMAIL_MARK,
   FROM_EMAIL,
@@ -18,7 +19,7 @@ import {
 const STATUS_COPY = Object.freeze({
   confirmado: ['Confirmamos tu pedido', 'Tu pedido fue confirmado. Estamos preparando todo para vos.'],
   preparando: ['Estamos preparando tu pedido', 'Tu pedido está siendo preparado.'],
-  listo_retiro: ['Tu pedido está listo para retirar', 'Ya podés retirar tu pedido en San Lorenzo. Te esperamos.'],
+  listo_retiro: ['Tu pedido está listo para retirar', 'Coordiná el retiro con Tintin.'],
   en_camino: ['Tu pedido está en camino', 'Tu pedido salió hacia su destino.'],
   entregado: ['Entregamos tu pedido', 'Tu pedido figura como entregado. ¡Gracias por elegir Tintin!'],
   cancelado: ['Cancelamos tu pedido', 'Tu pedido fue cancelado. Si no lo esperabas, respondé a este correo.'],
@@ -26,18 +27,19 @@ const STATUS_COPY = Object.freeze({
 });
 
 const PAYMENT_COPY = Object.freeze({
+  parcial: ['Registramos un pago parcial', 'Registramos un pago parcial de tu pedido. El saldo sigue pendiente.'],
   pagado: ['Recibimos tu pago', 'Registramos el pago de tu pedido. ¡Gracias!'],
   rechazado: ['Tu pago fue rechazado', 'No pudimos validar el pago de tu pedido. Respondé a este correo para resolverlo.'],
   reembolsado: ['Reembolsamos tu pago', 'Registramos el reembolso de tu pedido.'],
 });
 
 /** Decide qué avisar. Devuelve null si no hay un cambio que notificar. */
-export function describeOrderChange({ status, paymentStatus, previousStatus, previousPaymentStatus }) {
-  const statusChanged = status && status !== previousStatus && STATUS_COPY[status];
+export function describeOrderChange({ status, paymentStatus, previousStatus, previousPaymentStatus, order = {} }) {
+  const statusChanged = status && status !== previousStatus && (STATUS_COPY[status] || ['listo','devuelto','incidencia'].includes(status));
   const paymentChanged = paymentStatus && paymentStatus !== previousPaymentStatus && PAYMENT_COPY[paymentStatus];
   if (!statusChanged && !paymentChanged) return null;
   const parts = [];
-  if (statusChanged) parts.push(STATUS_COPY[status]);
+  if (statusChanged) parts.push([`Pedido: ${orderStatusLabel({ ...order, status })}`, customerOrderMessage({ ...order, status })]);
   if (paymentChanged) parts.push(PAYMENT_COPY[paymentStatus]);
   return { title: parts[0][0], lines: parts.map(part => part[1]) };
 }
@@ -147,6 +149,7 @@ export async function notifyCustomerOrderChange(env, result, { send = sendResend
       paymentStatus: result.paymentStatus,
       previousStatus: result.previousStatus,
       previousPaymentStatus: result.previousPaymentStatus,
+      order: result.order,
     });
     if (!change) return { sent: false, reason: 'no_change' };
     return await sendOrderStatusEmail(apiKey, { order: result.order, orderId: result.orderId, change, changeId: result.changeId }, send);

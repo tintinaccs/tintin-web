@@ -8,7 +8,7 @@ import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tint
 import { renderSurfaceLayer } from './compartido/capas-paneles.js?v=tintin-20260916-final-production-stability-surface-layer-1';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261011-boutique-4-domain-prepared-20261012-6';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261012-checkout-ready-4-carga-navegacion-js-domain-prepared-20261012-6';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261012-checkout-ready-4-carga-navegacion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20261010-product-social-navigation-4';
 import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260815-global-studio-10-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1';
@@ -58,7 +58,7 @@ function bootGlobalUiUx() {
     document.head.appendChild(link);
   }
   if (!window.TintinUX?.booted) {
-    import('../../quality/experiencia-interfaz.js?v=tintin-20261013-connectivity-hit-target-1')
+    import('../../quality/experiencia-interfaz.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1')
       .catch(error => console.warn('[PublicShell] No se pudo iniciar la capa UI global.', error));
   }
 }
@@ -190,7 +190,7 @@ async function loadFinalStability() {
     await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2-halo-20261008-3');
     return 'tintin-20260831-product-stability-2-halo-20261008-3';
   }
-  await import('../../quality/estabilidad-final-publica.js?v=tintin-20261012-checkout-ready-3-estabilidad-final-publica-js-domain-prepared-20261012-6');
+  await import('../../quality/estabilidad-final-publica.js?v=tintin-20261012-checkout-ready-3-estabilidad-final-publica-js-domain-prepared-20261012-6-pedidos-styles-20261013-2');
   return 'tintin-20260829-final-stability-1-brand-runtime-20261004-1';
 }
 

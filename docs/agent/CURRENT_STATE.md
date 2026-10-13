@@ -1,3 +1,11 @@
+## 2026-10-13 — Preparación final autorizada antes de migrar
+
+Se reconcilia Pedidos PR1115 con main f5ffc5a, conservando origen activo pages.dev y destino futuro tintinaccs.com en config/public-site.json. Sin merge a main, DNS ni tráfico. 436 Node y 48 Chromium PASS_LOCAL; generador canónico incluye cloudflare .mjs y la nueva regresión prueba cutover/rollback del enlace WhatsApp. Build Pages completo, 17 controles de preparación de dominio, recursos críticos, confiabilidad y auditores de Pedidos/comercio aprobados. TinyFish confirma Google habilitado y apex/www autorizados en Firebase Auth, Firestore App Check aplicado; no acredita redirects OAuth ni dominios de la clave. Setup Cloudflare recuperado al reabrir el sitio tras espera de llave, pendiente login/guardar. CI del SHA final y mantenimiento humano pendientes. Evidencia y siguientes pasos: PRECUTOVER_PEDIDOS_20261013.md.
+
+## 2026-10-12 — Renovación exclusiva de Pedidos Super Admin
+
+Rama codex/pedidos-superadmin-renovado-20261012, base 7196040. PASS_LOCAL: 435 pruebas Node y 48 Chromium; tablero en 24 tamaños 320–2880px, dos sesiones, conflicto de versión, inventario, historial, notificaciones, sonido opt-in, offline y pérdida de sesión. Se renueva el módulo existente y se reutiliza la fuente administrativa y el dominio transaccional. Seguimiento del cliente comparte el ciclo. Sin producción, datos reales, DNS ni migración. Evidencia y límites: PEDIDOS_SUPERADMIN_RENOVACION_20261012.md. CI/preview/mantenimiento/revisión y autorización final pendientes; no heredar aprobaciones anteriores.
+
 ## 2026-10-12 — Conexión local y unificación visual solicitada por capturas
 
 Reconciliación del PR #1114 tras avance concurrente de main a 681be5210342dc6387f3a0bb7c7be826c17d571f (#1111): se conservan sus cambios funcionales de checkout, ticket, correo y notificaciones. Conflictos de URLs resueltos desde las fuentes; nuevo plan contra ese main y tags únicos unified-2 para no reutilizar URLs del preview anterior. 245 regresiones del árbol reconciliado PASS_LOCAL; 35 pruebas visuales responsive PASS_LOCAL. El preview anterior fa99ef76 desplegó correctamente pero Cloudflare Access impidió la comprobación anónima; no atribuir PASS de producción. Auto-merge habilitado, condicionado a todos los checks y aprobación humana del entorno.
