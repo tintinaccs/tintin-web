@@ -205,7 +205,15 @@ function ensureInitialRuntimeStyles(html, page) {
   for (const [attribute, file, version] of styles) {
     const pattern = new RegExp(`\\s*<link\\b[^>]*href=["']/?${escapeRegex(file)}(?:\\?[^"']*)?["'][^>]*>`, 'gi');
     out = out.replace(pattern, '');
-    links.push(`  <link ${attribute} rel="stylesheet" href="/${file}?v=${version}">`);
+    const link = `  <link ${attribute} rel="stylesheet" href="/${file}?v=${version}">`;
+    if (file === 'css/components/navigation/movil/fondos-solidos-movil.css') {
+      const loaderStyle = /\s*<link\b[^>]*href=["']\/?css\/theme\/fondo-solido-cargador\.css[^"']*["'][^>]*>/i;
+      if (loaderStyle.test(out)) {
+        out = out.replace(loaderStyle, tag => `\n${link}\n  ${tag.trim()}`);
+        continue;
+      }
+    }
+    links.push(link);
   }
   out = out.replace('</head>', `${links.join('\n')}\n</head>`);
   out = addInitialClass(out, 'html', 'tt-parity-safe');
