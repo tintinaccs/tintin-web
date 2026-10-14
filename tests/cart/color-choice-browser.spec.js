@@ -40,7 +40,7 @@ test('elegir no agrega; agregar cada color conserva líneas, fotos y cantidades 
   await page.evaluate(async ({ render, annotate }) => {
     const runtime = window.TintinCartRuntime;
     await runtime.updateQty(runtime.getCartLocal()[1].lineId, 1);
-    const { productVariantImage } = await import(new URL('/js/components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1', location.origin).href);
+    const { productVariantImage } = await import(new URL('/js/components/images/foto-variante.mjs?v=tintin-20261013-client-integrated-1', location.origin).href);
     const { composeCheckoutDraft } = await import(new URL('/js/orders/politica-checkout.js', location.origin).href);
     document.body.innerHTML = '<div id="ck-items"></div><div id="ck-subtotal-val"></div><button id="btn-step1-next"></button>';
     window.qaRender = new Function('getCartLocal', 'setCartLocal', 'productVariantImage', `let cartItems=[];const sessionCanMakeCheckoutDecision=()=>true;const escapeSearchHtml=s=>String(s);const sanitizeImageUrl=s=>s;const formatPrice=n=>String(n);const cartTotal=items=>items.reduce((sum,i)=>sum+i.qty*i.price,0);${render};${annotate};return async()=>{await renderCart();annotateCartRows();}`)(runtime.getCartLocal, () => {}, productVariantImage);

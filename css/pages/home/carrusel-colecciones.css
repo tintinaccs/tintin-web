@@ -22,7 +22,7 @@ body.tt-home-premium .tt-collection-carousel { background: #fff2f6 !important; }
 }
 
 body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__heading .tt-section-title {
-  color: #ed78a4 !important;
+  color: var(--color-text-title, #713C53) !important;
   font-size: clamp(1.8rem, 2.35vw, 2.7rem);
   font-weight: 750;
   letter-spacing: -0.045em;

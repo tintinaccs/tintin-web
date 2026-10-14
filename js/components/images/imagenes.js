@@ -20,7 +20,7 @@ import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261012-a
 // Se mantienen estas inicializaciones porque históricamente dependían de la
 // primera importación de imagenes.js. Ambas son idempotentes.
 import '../../pages/home/inicio-premium.js';
-import '../welcome/tutorial-bienvenida.js?v=tintin-20261012-auth-privacy-1-tutorial-bienvenida-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import '../welcome/tutorial-bienvenida.js?v=tintin-20261013-client-integrated-1';
 
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';

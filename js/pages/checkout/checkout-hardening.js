@@ -4,7 +4,7 @@ import {
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261013-client-integrated-1';
 import { AUTH_STATES, subscribeSession, waitForSession, getSessionUser } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261012-client-recovery-1-perfil-checkout-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 

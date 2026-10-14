@@ -269,16 +269,18 @@ function showAddedToCart(productName) {
 }
 
 // null/undefined stock means "not tracked" — treat as unlimited
-function getStockLimit(productId) {
+function getStockLimit(productId, variant) {
   const product = getProductById(productId);
-  if (!product || product.stock === null || product.stock === undefined) return Infinity;
-  return Math.max(Number(product.stock), 0);
+  if (!product) return Infinity;
+  const total = product.stock == null ? Infinity : Math.max(Number(product.stock), 0);
+  const option = window.TintinCatalogPolicy?.variantStockLimit?.(product, variant);
+  return Math.min(total, option ?? Infinity);
 }
 
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261013-client-integrated-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -319,7 +321,7 @@ function updateQty(productId, delta, variant) {
     && (!hasVariant || String(i.variant || '') === normalizedVariant)
   );
   if (!item) return;
-  if (delta > 0 && item.qty >= getStockLimit(productId)) {
+  if (delta > 0 && item.qty >= getStockLimit(productId, item.variant)) {
     showCartToast(`Ya tenés el máximo disponible de "${item.name}" en el carrito`);
     return;
   }
@@ -435,7 +437,7 @@ function renderCart() {
         <div class="tt-cart-qty">
           <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="-1" aria-label="Restar">−</button>
           <span class="tt-cart-qty-val">${item.qty}</span>
-          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="1" aria-label="Sumar">+</button>
+          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="1" aria-label="Sumar" ${item.qty >= getStockLimit(item.id, item.variant) ? 'disabled' : ''}>+</button>
         </div>
       </div>
       <div class="tt-cart-item-actions">
@@ -1002,7 +1004,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261013-client-integrated-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1421,8 +1423,8 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
   ].map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean));
   _pdGalleryImages = allImages;
   if (resetIndex) {
-    const hasColor = Boolean(selected[media.colorKey(product)]);
-    const target = hasColor ? media.galleryImages(galleryProduct, selected)[0] : mainImgUrl || allImages[0];
+    const hasSelection = Object.values(selected).some(Boolean);
+    const target = hasSelection ? media.galleryImages(galleryProduct, selected)[0] : mainImgUrl || allImages[0];
     _pdGalleryIndex = target ? allImages.findIndex(url => media.imageKey(url) === media.imageKey(sanitizeClassicImageUrl(target, 900))) : -1;
   }
   if (_pdGalleryIndex >= allImages.length) _pdGalleryIndex = 0;
@@ -1843,7 +1845,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261013-client-integrated-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

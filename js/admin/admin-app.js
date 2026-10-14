@@ -1,4 +1,4 @@
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261013-client-integrated-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2";
@@ -30,8 +30,8 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261012-auth-privacy-1-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261013-client-integrated-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261013-client-integrated-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-sitio-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261012-auth-privacy-1-mayoristas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";

@@ -21,6 +21,7 @@ function fixture({ popupBlocked = true } = {}) {
   };
   const context = vm.createContext({
     explicitLoginInProgress: false, loginPersistenceReady: true,
+    waitForGooglePopup: start => start(),
     loginSessionGeneration: 0, AUTH_NETWORK_DEADLINE_MS: 15000,
     withDeadline: (promise, ms) => withDeadline(promise, ms, {set(fn, delay){const timer={fn,ms:delay};calls.timers.push(timer);return timer;},clear(timer){timer.cleared=true;}}),
     googleRedirectHandledUserUid: null, googleRedirectWasExpected: false, authPersistenceReady: Promise.resolve(), auth: {}, provider: {}, otpEmail: 'fixture@example.invalid',

@@ -40,6 +40,11 @@
     const rows = mediaRows(product);
     const key = colorKey(product);
     const color = key && selected[key];
+    const chosen = Object.entries(selected).filter(([,value]) => String(value || '').trim());
+    const designImages = chosen.length ? rows.filter(row => chosen.every(([field,value]) =>
+      String(row?.[field] ?? '').trim().toLocaleLowerCase('es') === String(value).trim().toLocaleLowerCase('es')
+    )).flatMap(rowImages) : [];
+    if (designImages.length) return uniqueImages(designImages);
     const assigned = color ? rows.filter(row => row && String(row[key] ?? '').trim().toLocaleLowerCase('es') === String(color).trim().toLocaleLowerCase('es')).flatMap(rowImages) : [];
     if (assigned.length) return uniqueImages(assigned);
     // Sin fotos asignadas al color no mostramos fotos pertenecientes a otro.
