@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1');
     }
   }
 
@@ -914,7 +914,7 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261012-auth-privacy-1-gestion-imagenes-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261012-auth-privacy-1-gestion-imagenes-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-story-20261014-1');
     }
   }
 

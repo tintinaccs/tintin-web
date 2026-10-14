@@ -1,6 +1,6 @@
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261012-checkout-ready-4-estado-productos-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261012-checkout-ready-4-estado-productos-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1';
 
 const MAX_RESULTS = 10;
 import { hasProductStock, firstAvailableVariant } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';

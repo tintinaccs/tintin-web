@@ -59,6 +59,7 @@ export const IMAGE_SLOTS = Object.freeze([
   { id: 'edit_bolsos',     label: 'Editorial — Bolsos/Bags', section: 'editorial', emoji: '👜', desc: 'Imagen de la sección editorial Bags en la portada' },
   { id: 'edit_relojes',    label: 'Editorial — Relojes', section: 'editorial', emoji: '⌚', desc: 'Imagen de la sección editorial Relojes en la portada' },
   { id: 'about_foto',      label: 'Nosotros — Foto principal', section: 'nosotros', emoji: '🌸', desc: 'Foto principal de la página Nosotros' },
+  { id: 'about_mision', label: 'Nosotros — Foto de nuestra misión', section: 'nosotros', emoji: '🌸', desc: 'Foto independiente de la sección Nuestra misión' },
   { id: 'logo_main',       label: 'Logo principal', section: 'branding', emoji: null, desc: 'Logo utilizado en encabezados, pie y pantalla de carga' },
 ]);
 

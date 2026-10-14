@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261012-checkout-ready-4-cargador-mantenimiento-pagina-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261012-checkout-ready-4-cargador-mantenimiento-pagina-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1';
 import '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261012-checkout-ready-3-politica-visibilidad-catalogo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1-stock-flow-20261014-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
