@@ -8,9 +8,9 @@ body > #tt-loader:not(.tt-out) ~ .ck-body {
 html:has(#ck-steps),
 html:has(#ck-steps) body,
 html:has(#ck-steps) .ck-body {
-  background: #FFF6FA !important;
-  background-color: #FFF6FA !important;
-  background-image: none !important;
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: var(--tt-flow-canvas, none) !important;
   transition-property: none !important;
 }
 
@@ -35,12 +35,12 @@ html body .ck-steps .ck-step .ck-step-num {
   max-height: 34px !important;
   aspect-ratio: 1 / 1 !important;
   padding: 0 !important;
-  border: 2px solid #F1E4E7 !important;
+  border: 2px solid #FDECF2 !important;
   border-radius: 999px !important;
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
-  color: var(--color-text-primary, #713C53) !important;
-  box-shadow: 0 3px 10px rgba(173, 63, 103, 0.08) !important;
+  color: var(--color-text-primary, #222222) !important;
+  box-shadow: 0 3px 10px rgba(248,170,202, 0.08) !important;
   overflow: hidden !important;
   flex: 0 0 34px !important;
 }
@@ -50,8 +50,8 @@ html body .ck-steps .ck-step.done .ck-step-num {
   border-color: var(--tt-accent, var(--color-brand-primary, #F8AACA)) !important;
   background: var(--tt-accent, var(--color-brand-primary, #F8AACA)) !important;
   background-color: var(--tt-accent, var(--color-brand-primary, #F8AACA)) !important;
-  color:#713C53 !important;
-  box-shadow: 0 0 0 4px #FDECF2, 0 5px 14px rgba(173, 63, 103, 0.18) !important;
+  color:#222222 !important;
+  box-shadow: 0 0 0 4px #FDECF2, 0 5px 14px rgba(248,170,202, 0.18) !important;
 }
 
 html body .ck-steps .ck-step-label {
@@ -76,7 +76,7 @@ html body #tt-welcome-tutorial .tt-welcome-card {
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;
-  border: 1.5px solid #F1C8D5 !important;
+  border: 1.5px solid #FDECF2 !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -86,8 +86,8 @@ html body #tt-welcome-tutorial .tt-welcome-card {
 }
 
 html body #tt-welcome-tutorial .tt-welcome-top {
-  background: linear-gradient(135deg, #F6B7C8 0%, #FDECF2 100%) !important;
-  background-color: #F6B7C8 !important;
+  background: linear-gradient(135deg, #F8AACA 0%, #FDECF2 100%) !important;
+  background-color: #F8AACA !important;
   opacity: 1 !important;
 }
 
@@ -127,7 +127,7 @@ html body .tt-mobile-user {
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;
-  border-color: #F1C8D5 !important;
+  border-color: #FDECF2 !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -153,7 +153,7 @@ html body #cart-drawer {
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;
-  border: 1px solid #F1C8D5 !important;
+  border: 1px solid #FDECF2 !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -167,8 +167,8 @@ html body #cart-drawer {
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     background-image: none !important;
-    border-bottom: 1px solid #F1E4E7 !important;
-    box-shadow: 0 8px 24px rgba(173, 63, 103, 0.08) !important;
+    border-bottom: 1px solid #FDECF2 !important;
+    box-shadow: 0 8px 24px rgba(248,170,202, 0.08) !important;
     opacity: 1 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -195,7 +195,7 @@ html body #cart-drawer {
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     background-image: none !important;
-    border: 1px solid #F1C8D5 !important;
+    border: 1px solid #FDECF2 !important;
     opacity: 1 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -205,8 +205,8 @@ html body #cart-drawer {
 
 html:has(.login-page) #tt-loader,
 html.tt-auth-silent-transition #tt-loader {
-  background: #FFF6FA !important;
-  background-color: #FFF6FA !important;
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
   background-image: none !important;
 }
 

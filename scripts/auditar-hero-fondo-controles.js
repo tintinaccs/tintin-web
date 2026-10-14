@@ -7,9 +7,10 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const home = read('css/pages/home/ajuste-inicio.css');
 const cleanup = read('css/core/limpieza-tema-tintin.css');
+const heroSurface = home.match(/\.tt-home-premium \.tt-hero-media picture,[^{]*\{([^}]+)\}/)?.[1] || '';
 
 const checks = [
-  ['Hero con respaldo sólido', home.includes('.tt-home-premium .tt-hero-media picture') && home.includes('background-color:#FFF6FA!important')],
+  ['Hero con respaldo blanco sólido de la paleta unificada', /background-color:\s*#FFFFFF\s*!important/i.test(heroSurface)],
   ['Ajuste independiente en desktop', home.includes('object-fit:var(--tt-hero-fit-desktop,cover)!important') && home.includes('--tt-hero-pos-desktop')],
   ['Ajuste independiente en tablet', home.includes('object-fit:var(--tt-hero-fit-tablet,cover)!important') && home.includes('--tt-hero-scale-tablet')],
   ['Ajuste independiente en mobile', home.includes('object-fit:var(--tt-hero-fit-mobile,cover)!important') && home.includes('--tt-hero-scale-mobile')],

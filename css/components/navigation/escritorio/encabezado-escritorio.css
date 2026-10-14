@@ -9,7 +9,7 @@
     pointer-events: auto !important;
     height: 88px;
     background: #fff !important;
-    border-bottom: 1px solid rgba(139,38,66,.13) !important;
+    border-bottom: 1px solid rgba(248,170,202,.13) !important;
     box-shadow: 0 10px 32px rgba(126,30,65,.045) !important;
     backdrop-filter: none;
   }
@@ -29,7 +29,7 @@
     align-items:center;
     gap:12px;
     min-width:0;
-    color:var(--color-text-primary,#713C53);
+    color:var(--color-text-primary,#222222);
     text-decoration:none;
   }
   .tt-header-desktop .tt-logo-img { width:120px; height:64px; object-fit:cover; flex:0 0 auto; }
@@ -49,10 +49,10 @@
     left: 0;
     width: 0;
     height: 44px;
-    border: 1px solid rgba(179,36,87,.5);
+    border: 1px solid rgba(248,170,202,.5);
     border-radius: 999px;
     background: var(--color-brand-primary, #F8AACA);
-    box-shadow: 0 6px 18px rgba(139,38,66,.07);
+    box-shadow: 0 6px 18px rgba(248,170,202,.07);
     opacity: 0;
     transform: translateX(var(--tt-pill-x,0));
     transition: transform 420ms cubic-bezier(.2,.85,.2,1), width 340ms cubic-bezier(.2,.85,.2,1), opacity 160ms ease;
@@ -67,7 +67,7 @@
     padding: 12px 22px;
     font-weight: 600 !important;
     letter-spacing: .09em !important;
-    color:var(--color-text-primary,#713C53) !important;
+    color:var(--color-text-primary,#222222) !important;
     background: transparent !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
@@ -93,26 +93,26 @@
   .tt-header-desktop .tt-nav > a::after,
   .tt-header-desktop .tt-nav-dropdown > button::after { display: none; }
   .tt-header-desktop .tt-nav > a:hover,
-  .tt-header-desktop .tt-nav-dropdown > button:hover { color:var(--color-text-primary,#713C53) !important; }
+  .tt-header-desktop .tt-nav-dropdown > button:hover { color:var(--color-text-primary,#222222) !important; }
   .tt-header-desktop .tt-header-actions { justify-self: end; gap: 10px; }
   .tt-header-desktop .tt-header-actions > button,
   .tt-header-desktop .tt-header-actions > .tt-nav-dropdown > button {
     width: 46px;
     height: 46px;
-    color:#713C53 !important;
+    color:#222222 !important;
     background: #fff !important;
-    border: 1px solid rgba(139,38,66,.14) !important;
+    border: 1px solid rgba(248,170,202,.14) !important;
     box-shadow: none;
     transition: transform .22s cubic-bezier(.2,.85,.2,1), color .2s ease, background .2s ease, box-shadow .22s ease, border-color .2s ease;
   }
 
   .tt-header-desktop .tt-header-actions > button:hover,
   .tt-header-desktop .tt-header-actions > .tt-nav-dropdown > button:hover {
-    color:var(--color-text-primary,#713C53) !important;
+    color:var(--color-text-primary,#222222) !important;
     background: #fff4f8 !important;
-    border-color: rgba(139,38,66,.22) !important;
+    border-color: rgba(248,170,202,.22) !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 6px 16px rgba(139,38,66,.09) !important;
+    box-shadow: 0 6px 16px rgba(248,170,202,.09) !important;
   }
 
   .tt-header-desktop .tt-dropdown {

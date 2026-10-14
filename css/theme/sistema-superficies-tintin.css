@@ -7,15 +7,15 @@
  * la última autoridad visual sin depender de estilos inline de cada módulo.
  */
 :root {
-  --tt-ui-canvas: #fff8fb;
+  --tt-ui-canvas: #FDECF2;
   --tt-ui-surface: #ffffff;
-  --tt-ui-surface-soft: #fff1f6;
-  --tt-ui-ink: var(--color-text-primary, #713C53);
-  --tt-ui-muted: var(--color-text-primary, #713C53);
+  --tt-ui-surface-soft: var(--color-brand-accent, #FDECF2);
+  --tt-ui-ink: var(--color-text-primary, #222222);
+  --tt-ui-muted: var(--color-text-primary, #222222);
   --tt-ui-pink: var(--color-brand-primary, #F8AACA);
   --tt-ui-pink-deep: var(--color-brand-primary, #F8AACA);
-  --tt-ui-pink-soft: #fbe0ea;
-  --tt-ui-line: #efd6e1;
+  --tt-ui-pink-soft: var(--color-brand-accent, #FDECF2);
+  --tt-ui-line: #FDECF2;
   --tt-ui-shadow: 0 18px 48px rgba(125, 38, 77, .11);
   --tt-ui-radius-xl: 28px;
   --tt-ui-radius-lg: 20px;
@@ -79,7 +79,7 @@ html body:not(:has(.adm-main)) :is(
   .tt-section-title, .tt-page-hero-title, .tt-related-heading,
   .tt-editorial-title, .tt-watch-title
 ) {
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   letter-spacing: -.025em;
 }
 
@@ -104,7 +104,7 @@ html body:not(:has(.adm-main)) :is(
   .tt-review-store-like
 ) {
   background: var(--tt-ui-pink-soft) !important;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   border-color: var(--tt-ui-line) !important;
 }
 
@@ -140,18 +140,18 @@ html body:not(:has(.adm-main)) :is(
 ):not(.tt-btn-outline):not(.tt-btn-outline-full) {
   background: var(--tt-ui-pink) !important;
   border-color: var(--tt-ui-pink) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
 }
 
 /* Super Admin: panel hierarchy, menu and engagement modules ------------- */
 html body:has(.adm-main) {
-  background: #fff8fb !important;
-  color:#713C53 !important;
+  background: #FDECF2 !important;
+  color:#222222 !important;
 }
 
 html body:has(.adm-main) .adm-sidebar {
   background: #fff !important;
-  border-right: 1px solid #efd6e1 !important;
+  border-right: 1px solid #FDECF2 !important;
   box-shadow: 10px 0 28px rgba(125, 38, 77, .06) !important;
   z-index: 300 !important;
 }
@@ -160,7 +160,7 @@ html body:has(.adm-main) .adm-sidebar-logo {
   min-height: 104px;
   padding: 24px 24px 18px !important;
   border-bottom: 1px solid #f2dfe7 !important;
-  background: linear-gradient(180deg, #fff 0%, #fff8fb 100%) !important;
+  background: linear-gradient(180deg, #fff 0%, #FDECF2 100%) !important;
 }
 
 html body:has(.adm-main) .adm-sidebar-toggle {
@@ -170,13 +170,13 @@ html body:has(.adm-main) .adm-sidebar-toggle {
 
 html body:has(.adm-main) .adm-main {
   min-width: 0;
-  background: #fff8fb !important;
+  background: #FDECF2 !important;
 }
 
 html body:has(.adm-main) .adm-topbar {
   min-height: 76px;
   background: #fff !important;
-  border-bottom: 1px solid #efd6e1 !important;
+  border-bottom: 1px solid #FDECF2 !important;
   box-shadow: 0 5px 20px rgba(125, 38, 77, .05);
   z-index: 200;
 }
@@ -188,7 +188,7 @@ html body:has(.adm-main) .adm-content {
 }
 
 html body:has(.adm-main) :is(.adm-card, .adm-table-wrap, .adm-modal, .adm-img-card) {
-  border: 1px solid #efd6e1 !important;
+  border: 1px solid #FDECF2 !important;
   border-radius: var(--tt-ui-radius-lg) !important;
   box-shadow: 0 12px 36px rgba(125, 38, 77, .07) !important;
 }
@@ -211,7 +211,7 @@ html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-engagement-list,
 
 html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-bulk-toolbar) {
   background: #fff1f6 !important;
-  border: 1px solid #efd6e1 !important;
+  border: 1px solid #FDECF2 !important;
   padding: 12px !important;
 }
 
@@ -226,7 +226,7 @@ html body:has(.adm-main) :is(.adm-table, .adm-table th, .adm-table td) {
 
 html body:has(.adm-main) .adm-table thead th {
   background: #fbe0ea !important;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font-size: 11px;
   letter-spacing: .055em;
   text-transform: uppercase;
@@ -240,7 +240,7 @@ html body:has(.adm-main) .adm-nav-item {
 
 html body:has(.adm-main) .adm-nav-item.active {
   background: #fbe0ea !important;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   box-shadow: inset 3px 0 0 var(--color-brand-primary, #F8AACA);
 }
 
@@ -249,7 +249,7 @@ html body:has(.adm-main) :is(.adm-btn-primary, .adm-btn-save) {
   border-radius: 999px !important;
   background: var(--color-brand-primary, #F8AACA) !important;
   border-color: var(--color-brand-primary, #F8AACA) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
   font-weight: 800;
 }
 
@@ -388,4 +388,59 @@ html body:not(:has(.adm-main)) :is(.tt-colls-page-grid, .tt-products-grid):not(:
     flex: none;
   }
   html body:not(:has(.adm-main)) .cat-top { gap: 12px; }
+}
+
+/* Paleta y continuidad compartidas por todas las páginas, incluido el panel.
+   Sólo se difumina el fondo: texto, imágenes y controles conservan nitidez. */
+:root {
+  --tt-flow-light: var(--color-brand-accent, #FDECF2);
+  --tt-flow-pink: var(--color-brand-primary, #F8AACA);
+  --tt-flow-join: color-mix(in srgb, var(--tt-flow-light) 50%, var(--tt-flow-pink));
+  --tt-flow-fade: 70px;
+  --tt-flow-canvas: linear-gradient(180deg, var(--tt-flow-light), var(--tt-flow-light));
+}
+
+html:root body,
+html:root body :is(main, .cat-wrap, .login-page, .ck-body, .perfil-wrap, .tt-404-wrap, .adm-main, .adm-content, .adm-section) {
+  background: var(--tt-flow-canvas) var(--tt-flow-light) !important;
+  color: var(--color-text-primary, #222222) !important;
+}
+
+/* Cada bloque conserva su rosa pleno. Sólo 70 px de cada extremo se mezclan.
+   Los bloques ocultos por hidden o display:none no cuentan en la secuencia. */
+html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
+  --tt-section-background: var(--color-brand-accent, #FDECF2);
+  --tt-section-start: var(--tt-flow-join);
+  --tt-section-end: var(--tt-flow-join);
+  --tt-section-gradient: linear-gradient(180deg,
+    var(--tt-section-start) 0%,
+    var(--tt-section-background) min(var(--tt-flow-fade), 25%),
+    var(--tt-section-background) max(calc(100% - var(--tt-flow-fade)), 75%),
+    var(--tt-section-end) 100%);
+  background: var(--tt-section-gradient) var(--tt-section-background) !important;
+  color: var(--color-text-primary, #222222) !important;
+  border-block-color: transparent !important;
+  border-block-width: 0 !important;
+  box-shadow: 0 1px 0 var(--tt-section-end) !important;
+}
+
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(even of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+  --tt-section-background: var(--color-brand-primary, #F8AACA);
+}
+
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+  --tt-section-start: var(--tt-section-background);
+}
+
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-last-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+  --tt-section-end: var(--tt-section-background);
+}
+
+html:root body .tt-footer {
+  border-top-color: transparent !important;
+}
+
+html:root body :is(.tt-trust-item, .tt-look-card, .tt-review-card, .tt-editorial, .tt-watch-feature) {
+  background: var(--color-background-surface, #FFFFFF) !important;
+  color: var(--color-text-primary, #222222) !important;
 }

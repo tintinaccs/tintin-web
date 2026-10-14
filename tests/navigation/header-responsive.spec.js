@@ -450,7 +450,7 @@ test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA l
     await expect(header).toHaveCSS('background-image','none');
     await expect(header).toHaveCSS('background-color','rgb(248, 170, 202)');
     await expect(header.locator('h2')).toHaveCSS('color','rgb(255, 255, 255)');
-    await expect(drawer.locator('.tt-account-primary')).toHaveCSS('color','rgb(113, 60, 83)');
+    await expect(drawer.locator('.tt-account-primary')).toHaveCSS('color','rgb(34, 34, 34)');
     await expect(header.locator('.tt-account-drawer-logo')).toBeVisible();
     await expect(header.locator('.tt-account-drawer-logo')).toHaveCSS('filter','brightness(0) invert(1)');
     const overlap=await header.evaluate(el => { const logo=getComputedStyle(el,'::before'); const title=el.querySelector('h2').getBoundingClientRect(); const close=el.querySelector('button').getBoundingClientRect(); const box=el.getBoundingClientRect(); return {duplicateLogo:logo.content,titleRight:title.right,closeLeft:close.left,centerOffset:Math.abs(title.x+title.width/2-(box.x+box.width/2))}; });

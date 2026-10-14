@@ -101,11 +101,11 @@
 .tfc-state-implementado-pero-no-verificado { background: #fff8e1; color: #8d6e00; border-color: #ffe082; }
 .tfc-state-conectado-parcialmente { background: var(--admin-color-warning-background); color: var(--admin-color-warning-text); border-color: #ffd9a8; }
 .tfc-state-con-error { background: var(--admin-color-error-background); color: var(--admin-color-error-text); border-color: #f5b7ae; }
-.tfc-state-desconectado { background: #f3f3f3; color:#713C53; border-color: #dcdcdc; }
-.tfc-state-no-implementado { background: #ececec; color:#713C53; border-color: #d5d5d5; }
-.tfc-state-documentado-pero-no-confirmado { background: #ede7f6; color:var(--color-text-primary,#713C53); border-color: #d1c4e9; }
+.tfc-state-desconectado { background: #f3f3f3; color:#222222; border-color: #dcdcdc; }
+.tfc-state-no-implementado { background: #ececec; color:#222222; border-color: #d5d5d5; }
+.tfc-state-documentado-pero-no-confirmado { background: #ede7f6; color:var(--color-text-primary,#222222); border-color: #d1c4e9; }
 .tfc-state-duplicado-o-en-conflicto { background: #fde3e1; color: #b8341f; border-color: #f5b7ae; }
-.tfc-state-desconocido { background: #eeeeee; color:#713C53; border-color: #d5d5d5; }
+.tfc-state-desconocido { background: #eeeeee; color:#222222; border-color: #d5d5d5; }
 
 .tfc-pill-state {
   border-radius: 999px;
@@ -181,12 +181,12 @@
 }
 .tfc-revalidation-progress { margin-bottom: 16px; }
 .tfc-revalidation-progress[hidden] { display: none; }
-.tfc-revalidation-progress p { margin: 0 0 8px; color: var(--color-text-primary, #713C53); font-size: 13px; }
+.tfc-revalidation-progress p { margin: 0 0 8px; color: var(--color-text-primary, #222222); font-size: 13px; }
 .tfc-revalidation-progress progress {
   display: block; width: 100%; height: 10px; border: 0; border-radius: 999px;
   overflow: hidden; appearance: none; accent-color: var(--color-brand-primary, #F8AACA);
-  background: #FFF6FA;
+  background: #FFFFFF;
 }
-.tfc-revalidation-progress progress::-webkit-progress-bar { background: #FFF6FA; border-radius: 999px; }
+.tfc-revalidation-progress progress::-webkit-progress-bar { background: #FFFFFF; border-radius: 999px; }
 .tfc-revalidation-progress progress::-webkit-progress-value { background: var(--color-brand-primary, #F8AACA); border-radius: 999px; }
 .tfc-revalidation-progress progress::-moz-progress-bar { background: var(--color-brand-primary, #F8AACA); border-radius: 999px; }

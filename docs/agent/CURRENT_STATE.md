@@ -2030,3 +2030,21 @@ CI38431317246 del candidato6d2113a5 completó331/333 casos de navegador y falló
 
 ## Extensión de cierre por alertas actuales CodeQL — 2026-10-13
 CI38433952518 PASS completo para65251992, pero la revisión actual de alertas existentes de main confirmó HTML activo en páginas personalizadas y etiquetas/IDs de emailLogs sin escape en Super Admin. Se corrigen los trust boundaries, se uniforma OTP y se limita también el render público con consultas Firestore. Sin cambios a Rules, permisos, controles de CI, DNS ni datos reales. Evidencia CODEQL_TRIAGE_20261013.md;74 Node y18 navegador PASS_LOCAL. El nuevo CI debe aprobar su SHA; no se hereda PASS anterior.
+
+## 2026-10-14 — Integración de paleta y fondos sobre main 2011323a (Codex / GPT-6)
+
+- Solicitud: integrar todos los cambios de diseño acordados (cuatro colores base y secciones visibles con rosas alternados y unión difuminada). Se parte del main vigente para preservar las 61 integraciones posteriores al checkout original; cambios locales ajenos a este diseño permanecen en su checkout.
+- Catálogo público/admin y respaldos CSS unificados en #F8AACA / #FDECF2 / #222222 / #FFFFFF; se conservan estados funcionales. Se migran defaults históricos y caché de primera pintura. Cada bloque visible mantiene su rosa pleno; hidden/display:none no cuentan; footer continúa la secuencia. El canvas no contiene bandas rosas independientes.
+- La generación de shell usa los nuevos tags canónicos, evitando revertirlos en build. Se mantienen código y contratos de seguridad, pedidos, dominio e integraciones actuales.
+- PASS_LOCAL: 6 pruebas Node de paleta, 4 pruebas Chromium (390/1440) de continuidad, ocultación y canvas; auditorías de color, navegación, integridad CSS y caché. Revisión de diff sin errores. audit:final avanzó por los contratos estáticos y 201 pruebas Node, y se detuvo en test:critical-runtime por falta de Java en PATH (limitación local, no se declara PASS completo). GitHub CI configura Java 21 y debe ejecutar esa cobertura.
+- El merge y la publicación fueron autorizados por el usuario. Estado GitHub/CI pendiente al preparar este commit; no se ejecutaron escrituras comerciales ni pruebas con cuentas/datos reales.
+
+- GitHub CI 38559189323 / head 368d720e: generación exacta, contrato estático inicial y 339 casos de runtime en navegadores con emuladores PASS. Se detuvo después en auditar-hero-fondo-controles.js porque exigía literalmente #FFF6FA; la paleta aprobada usa #FFFFFF detrás de la imagen. El auditor ahora verifica el background-color blanco en la regla específica de picture, conservando la exigencia de opacidad. Los 13 auditores posteriores al fallo se ejecutaron localmente y pasaron. CI del nuevo head pendiente.
+
+- CI 38561171812 / head 6fa1e616 pasó el contrato completo, operaciones/sincronización, reglas de identidad y controles Super Admin. Se detuvo en la etapa de navegador por dos expectativas literales de ciruela en CTA de cuenta y WhatsApp; el color real era el negro suave aprobado. Se actualizan esas expectativas y las de iconos administrativos/ficha de producto que usan defaults nuevos; la prueba de tokens personalizados conserva explícitamente los valores históricos para seguir verificando ausencia de ciclos. PASS_LOCAL de 73 casos de navegación/iconos/producto y contrato de cuenta. Ningún cambio visual adicional en esta corrección de pruebas.
+
+Validación de paleta Tintín (2026-10-14): todas las comprobaciones locales restantes de navegador, accesibilidad, SEO, rendimiento y geometría pasaron. Smoke de 18 rutas y auditoría legal OK. Se actualizó la expectativa del borde al rosa claro #FDECF2 conservando las verificaciones de estilo y grosor visible.
+
+
+PR #1123: el candidato visual e6d01383 obtuvo Repository audit SUCCESS (run 38566673601, segunda ejecución), ambos Analyze SUCCESS y Cloudflare Pages SUCCESS. El merge fue rechazado por Protected flow maintenance: faltaban las huellas del diseño. Se prepara el plan canónico contra main 2011323ab94c9a6834ba41edc833c82873f1e73d para 132 archivos y 45 registros, sin renovar sellos, alcances, controles ni revisores. Las 48 pruebas del mecanismo y la auditoría de protección pasan localmente. Requiere CI del nuevo SHA y dispatch de mantenimiento, seguido de revisión manual del propietario en GitHub conforme a docs/agent/MANTENIMIENTO_FLUJOS.md.
+

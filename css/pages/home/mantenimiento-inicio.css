@@ -4,8 +4,8 @@
    ============================================================= */
 
 body.tt-home-premium {
-  background: var(--color-background-page, #FFF6FA) !important;
-  color: var(--color-text-primary, #713C53) !important;
+  background: var(--color-background-page, #FFFFFF) !important;
+  color: var(--color-text-primary, #222222) !important;
   overflow-x: clip;
 }
 
@@ -20,7 +20,7 @@ body.tt-home-premium:not(.tt-home-runtime-ready) *::after {
 
 body.tt-home-premium .tt-hero,
 body.tt-home-premium .tt-hero-media {
-  background-color: var(--color-brand-secondary, #F6B7C8);
+  background-color: var(--color-brand-secondary, #F8AACA);
 }
 
 body.tt-home-premium .tt-hero {
@@ -43,7 +43,7 @@ body.tt-home-premium .tt-hero-img {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  background: var(--color-brand-secondary, #F6B7C8);
+  background: var(--color-brand-secondary, #F8AACA);
 }
 
 /* home-fit aporta un color sólido detrás de imágenes transparentes, pero el
@@ -71,7 +71,7 @@ body.tt-home-premium .tt-collections-section,
 body.tt-home-premium .tt-look-section,
 body.tt-home-premium .tt-products-section,
 body.tt-home-premium .tt-reviews-section {
-  background-color: var(--color-background-page, #FFF6FA) !important;
+  background-color: var(--color-background-page, #FFFFFF) !important;
   background-image: none !important;
 }
 
@@ -82,8 +82,8 @@ body.tt-home-premium .tt-product-card,
 body.tt-home-premium .tt-look-card,
 body.tt-home-premium .tt-trust-item {
   background-color: var(--color-background-surface, #FFFFFF) !important;
-  border-color: var(--color-card-border, #F1E4E7) !important;
-  color: var(--color-text-primary, #713C53) !important;
+  border-color: var(--color-card-border, #FDECF2) !important;
+  color: var(--color-text-primary, #222222) !important;
 }
 
 body.tt-home-premium .tt-section-title,
@@ -92,7 +92,7 @@ body.tt-home-premium .tt-watch-title,
 body.tt-home-premium .tt-trust-title,
 body.tt-home-premium .tt-review-name,
 body.tt-home-premium .tt-product-name {
-  color: var(--color-text-title, #713C53) !important;
+  color: var(--color-text-title, #222222) !important;
 }
 
 body.tt-home-premium .tt-section-sub,
@@ -100,7 +100,7 @@ body.tt-home-premium .tt-editorial-eyebrow,
 body.tt-home-premium .tt-watch-eyebrow,
 body.tt-home-premium .tt-product-price,
 body.tt-home-premium .tt-review-stars {
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
 }
 
 body.tt-home-premium .tt-section-desc,
@@ -109,7 +109,7 @@ body.tt-home-premium .tt-watch-desc,
 body.tt-home-premium .tt-trust-desc,
 body.tt-home-premium .tt-review-text,
 body.tt-home-premium .tt-review-product {
-  color: var(--color-text-secondary, #7B6F72) !important;
+  color: var(--color-text-secondary, #222222) !important;
 }
 
 body.tt-home-premium .tt-btn {
@@ -127,7 +127,7 @@ body.tt-home-premium .tt-btn-outline {
 body.tt-home-premium .tt-btn:focus-visible,
 body.tt-home-premium a:focus-visible,
 body.tt-home-premium button:focus-visible {
-  outline: 3px solid var(--color-button-primary-focus-ring, rgba(173, 63, 103, .24));
+  outline: 3px solid var(--color-button-primary-focus-ring, rgba(248,170,202, .24));
   outline-offset: 3px;
 }
 
@@ -148,7 +148,7 @@ body.tt-home-premium .tt-img-placeholder,
 body.tt-home-premium .tt-coll-card-img,
 body.tt-home-premium .tt-product-img,
 body.tt-home-premium .tt-look-card-img {
-  background-color: var(--color-skeleton-base, #F1E4E7) !important;
+  background-color: var(--color-skeleton-base, #FDECF2) !important;
 }
 
 body.tt-home-premium .tt-img-placeholder img,
@@ -161,15 +161,15 @@ body.tt-home-premium .tt-look-card-img img {
 
 body.tt-home-premium .tt-footer {
   background: var(--color-background-footer, #FFFFFF) !important;
-  color: var(--color-text-primary, #713C53) !important;
-  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+  color: var(--color-text-primary, #222222) !important;
+  border-top: 1px solid var(--color-border-primary, #FDECF2);
 }
 
 body.tt-home-premium .tt-footer a,
 body.tt-home-premium .tt-footer-col-title,
 body.tt-home-premium .tt-footer-bottom,
 body.tt-home-premium .tt-footer-tagline {
-  color: var(--color-text-primary, #713C53) !important;
+  color: var(--color-text-primary, #222222) !important;
 }
 
 body.tt-home-premium .tt-footer-wa {

@@ -6,23 +6,23 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
-const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
-const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
+const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
+const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-20261012-checkout-ready-3-tienda-js-domain-prepared-20261012-6-precutover-20261013-1-security-ready-20261013-2';
-const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2';
-const LOADER_VERSION = 'tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2';
+const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1';
+const LOADER_VERSION = 'tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1';
 const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2';
-const NAV_ENTRY_VERSION = 'tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1';
+const NAV_ENTRY_VERSION = 'tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261010-whatsapp-release-5';
+const VISUAL_BUILDER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261012-auth-privacy-1-proteccion-sesion-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2';
 const PROFILE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-control-acceso-perfil-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2';
-const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5';
-const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5';
-const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2';
-const UNIFIED_THEME_VERSION = 'tintin-20261012-unified-2-tema-unificado-tintin-css';
+const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1';
+const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1';
+const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1';
+const UNIFIED_THEME_VERSION = 'tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
@@ -31,11 +31,11 @@ const NAVIGATION_PRELOAD_STYLES = [
 // Estas hojas definen geometría y superficies reales. Descubrirlas sólo desde
 // un import posterior al Store Gate provocaba una segunda cascada visible.
 const PUBLIC_STRUCTURAL_STYLES = [
-  ['tt-responsive-brand-surfaces-css', 'css/theme/superficies-marca-responsive-tintin.css', 'tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'],
-  ['tt-responsive-brand-polish-css', 'css/theme/pulido-marca-responsive-tintin.css', 'tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1'],
-  ['tt-responsive-brand-safety-css', 'css/theme/seguridad-marca-responsive-tintin.css', 'tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1'],
+  ['tt-responsive-brand-surfaces-css', 'css/theme/superficies-marca-responsive-tintin.css', 'tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1'],
+  ['tt-responsive-brand-polish-css', 'css/theme/pulido-marca-responsive-tintin.css', 'tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1'],
+  ['tt-responsive-brand-safety-css', 'css/theme/seguridad-marca-responsive-tintin.css', 'tintin-20260803-brand-safety-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1-palette-20261014-1'],
   ['tt-global-layout-css', 'css/components/navigation/compartido/apariencia-global.css', 'tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1'],
-  ['tt-phase8-ui-ux-css', 'css/quality/experiencia-interfaz.css', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2'],
+  ['tt-phase8-ui-ux-css', 'css/quality/experiencia-interfaz.css', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1'],
 ];
 
 const PUBLIC_PAGE_STYLES = {
@@ -54,7 +54,7 @@ function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   const links = PUBLIC_STRUCTURAL_STYLES.map(([id, href, version]) =>
     `  <link id="${id}" rel="stylesheet" href="${absolute ? '/' : ''}${href}?v=${version}">`
   ).concat((PUBLIC_PAGE_STYLES[page] || []).map(href =>
-    `  <link data-tt-page-structure="initial" rel="stylesheet" href="${href}?v=tintin-20261010-first-render-merge-1">`
+    `  <link data-tt-page-structure="initial" rel="stylesheet" href="${href}?v=tintin-20261010-first-render-merge-1-palette-20261014-1">`
   )).join('\n');
   return out.replace('</head>', `  <!-- Estructura pública disponible desde el primer render -->\n${links}\n</head>`);
 }
@@ -64,44 +64,44 @@ const INITIAL_SHARED_STYLES = [
   [
     "id=\"tt-phase10-accessibility-css\"",
     "css/quality/accesibilidad-global.css",
-    "tintin-20261013-connectivity-hit-target-1"
+    "tintin-20261013-connectivity-hit-target-1-palette-20261014-1"
   ]
 ];
 const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-global-studio-runtime-css\"",
     "css/components/visual-studio-global-runtime.css",
-    "tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1"
+    "tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
   ],
   [
     "id=\"tt-visual-builder-runtime-css\"",
     "css/components/editor-visual-runtime.css",
-    "tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1"
+    "tintin-20260810-visual-studio-v2-8-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
   ],
   [
     "id=\"tt-navigation-notifications-css\" data-tt-social-notifications=\"1\"",
     "css/components/notifications/notificaciones-sociales.css",
-    "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1"
+    "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
   ],
   [
     "id=\"tt-navigation-desktop-css\" media=\"(min-width: 1025px)\"",
     "css/components/navigation/escritorio/encabezado-escritorio.css",
-    "tintin-20261010-whatsapp-release-5"
+    "tintin-20261010-whatsapp-release-5-palette-20261014-1"
   ],
   [
     "id=\"tt-navigation-tablet-css\" media=\"(min-width: 768px) and (max-width: 1024px)\"",
     "css/components/navigation/tableta/encabezado-tableta.css",
-    "tintin-20261010-whatsapp-release-5"
+    "tintin-20261010-whatsapp-release-5-palette-20261014-1"
   ],
   [
     "id=\"tt-navigation-mobile-css\" media=\"(max-width: 767px)\"",
     "css/components/navigation/movil/encabezado-movil.css",
-    "tintin-20261010-mobile-single-selection-2"
+    "tintin-20261010-mobile-single-selection-2-palette-20261014-1"
   ],
   [
     "id=\"tt-navigation-mobile-solid-css\" media=\"(max-width: 767px)\"",
     "css/components/navigation/movil/fondos-solidos-movil.css",
-    "tintin-20260817-cls-desktop-stable-3-checkout-20261008-2"
+    "tintin-20260817-cls-desktop-stable-3-checkout-20261008-2-palette-20261014-1"
   ],
   [
     "id=\"tt-navigation-shared-css\"",
@@ -111,7 +111,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-surface-controller-css\"",
     "css/components/navigation/compartido/paneles.css",
-    "tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6"
+    "tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6-palette-20261014-1"
   ],
   [
     "id=\"tt-navigation-notification-surface-css\"",
@@ -121,12 +121,12 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-navigation-search-css\"",
     "css/components/navigation/compartido/busqueda.css",
-    "tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1"
+    "tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
   ],
   [
     "id=\"tt-navigation-coherence-css\"",
     "css/components/navigation/compartido/coherencia-visual.css",
-    "tintin-20261011-boutique-4"
+    "tintin-20261011-boutique-4-palette-20261014-1"
   ]
 ];
 const INITIAL_PAGE_STYLES = {
@@ -134,50 +134,50 @@ const INITIAL_PAGE_STYLES = {
     [
       "id=\"tt-home-maintenance-css\"",
       "css/pages/home/mantenimiento-inicio.css",
-      "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2"
+      "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1"
     ]
   ],
   "catalogo.html": [
     [
       "data-tt-catalog-maintenance=\"1\"",
       "css/pages/catalog/catalog-maintenance.css",
-      "tintin-20260817-margin-consistency-2-brand-20261004-1-owner-pink-20261004-1"
+      "tintin-20260817-margin-consistency-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
     ]
   ],
   "about.html": [
     [
       "data-tt-about-maintenance=\"1\"",
       "css/pages/institutional/about-maintenance.css",
-      "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1"
+      "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
     ]
   ],
   "checkout.html": [
     [
       "data-tt-checkout-maintenance=\"1\"",
       "css/pages/checkout/checkout-maintenance.css",
-      "tintin-20261008-checkout-step-labels-1"
+      "tintin-20261008-checkout-step-labels-1-palette-20261014-1"
     ],
     [
       "id=\"tt-payment-methods-style\"",
       "css/components/payments/payment-methods.css",
-      "tintin-20261012-checkout-ready-3-payment-methods-css"
+      "tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1"
     ]
   ],
   "login.html": [
     [
       "data-tt-login-maintenance=\"1\"",
       "css/pages/login/login-maintenance.css",
-      "tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1"
+      "tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1"
     ],
     [
       "data-tt-login-fluid=\"1\"",
       "css/pages/login/login-fluid-responsive.css",
-      "tintin-20260803-login-fluid-1-brand-20261004-1-owner-pink-20261004-1"
+      "tintin-20260803-login-fluid-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
     ],
     [
       "data-tt-login-onboarding-flow=\"1\"",
       "css/pages/login/login-onboarding-flow.css",
-      "tintin-20261001-registration-white-cards-2-brand-20261004-1-owner-pink-20261004-1"
+      "tintin-20261001-registration-white-cards-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
     ],
     [
       "data-tt-login-onboarding-layout=\"1\"",
@@ -189,7 +189,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-adm-social-notifications=\"1\"",
       "css/admin/notificaciones-admin.css",
-      "tintin-20260925-cache-converge-notifications-auto-read-1-brand-20261004-1-owner-pink-20261004-1"
+      "tintin-20260925-cache-converge-notifications-auto-read-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
     ]
   ]
 };

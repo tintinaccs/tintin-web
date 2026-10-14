@@ -16,7 +16,7 @@ import {
   normalizeContentValue,
   detectContentPageId,
 } from './esquema-contenido.js?v=tintin-20261010-whatsapp-release-5';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261010-whatsapp-release-5';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261010-whatsapp-release-5-palette-20261014-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

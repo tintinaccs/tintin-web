@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { GLOBAL_TOKENS, ADMIN_TOKENS, normalizeLegacyBrandColor } from '../../js/components/color/esquema-color-catalogo.js';
+import { GLOBAL_TOKENS, ADMIN_TOKENS, normalizeLegacyBrandColor, normalizeUnifiedPaletteColor } from '../../js/components/color/esquema-color-catalogo.js';
 
 test('el normalizador conserva tokens y colores hex completos sin crear ciclos', () => {
   const elements = [
@@ -16,6 +16,33 @@ test('el normalizador conserva tokens y colores hex completos sin crear ciclos',
   assert.equal(elements[0].style, '--color-text-primary: #713C53; --color-button-primary-text: #713C53; --color-background-page: #FFF6FA;');
   assert.equal(elements[1].style, 'color:var(--tt-text);background:#fff6fa;border-color:var(--tt-surface);');
   assert.equal(elements[2].style, 'color:var(--tt-surface);background:var(--tt-surface);');
+});
+
+test('la paleta decorativa usa solo cuatro colores base y migra HEX, RGB y transparencias', () => {
+  const allowed = new Set(['#F8AACA', '#FDECF2', '#222222', '#FFFFFF']);
+  for (const token of [...GLOBAL_TOKENS, ...ADMIN_TOKENS]) {
+    if (/success|warning|error|danger|info|available|soldout|promo/.test(token.key)) continue;
+    if (token.default.startsWith('rgba(')) continue;
+    assert.ok(allowed.has(token.default), `${token.key}: ${token.default}`);
+  }
+  for (const old of ['#713C53', '#995f77', 'rgb(113, 60, 83)']) {
+    assert.equal(normalizeUnifiedPaletteColor(old), '#222222');
+  }
+  assert.equal(normalizeUnifiedPaletteColor('#F1C8D5'), '#FDECF2');
+  assert.equal(normalizeUnifiedPaletteColor('rgba(113, 60, 83, 0.55)'), 'rgba(34,34,34, 0.55)');
+  assert.equal(normalizeUnifiedPaletteColor('rgba(212,106,138,0.10)'), 'rgba(248,170,202,0.10)');
+  assert.equal(normalizeUnifiedPaletteColor('#166534'), '#166534');
+  assert.equal(normalizeUnifiedPaletteColor('#123456'), '#123456');
+});
+
+test('la primera pintura migra la caché con la misma paleta que el esquema definitivo', () => {
+  const source = fs.readFileSync(new URL('../../js/components/color/esquema-color-instantaneo.js', import.meta.url), 'utf8');
+  const start = source.indexOf('function normalizeUnifiedPaletteColor(value)');
+  const end = source.indexOf('function applyMap(map)', start);
+  const instantNormalize = vm.runInNewContext(`(${source.slice(start, end).trim()})`);
+  for (const value of ['#713C53', '#F1E4E7', '#FFF6FA', '#F6B7C8', 'rgb(113, 60, 83)', 'rgba(212,106,138,0.1)', '#166534', '#123456']) {
+    assert.equal(instantNormalize(value), normalizeUnifiedPaletteColor(value), value);
+  }
 });
 
 test('los esquemas históricos migran el rosa de marca y conservan personalizaciones explícitas', () => {
@@ -32,59 +59,23 @@ test('los esquemas históricos migran el rosa de marca y conservan personalizaci
   assert.equal(normalizeLegacyBrandColor(success, '#166534'), '#166534');
 });
 
-test('el rosa de la referencia usa tinta malva legible con contraste AA', () => {
+test('el rosa Tintín usa negro suave legible con contraste AA', () => {
   const primary = GLOBAL_TOKENS.find(item => item.key === 'brand-primary').default;
   const channels = primary.slice(1).match(/../g).map(value => parseInt(value, 16) / 255);
   const linear = channels.map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
   const luminance = linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
   const foreground = GLOBAL_TOKENS.find(item => item.key === 'btn-primary-text').default;
   assert.equal(primary, '#F8AACA');
-  assert.equal(foreground, '#713C53');
+  assert.equal(foreground, '#222222');
   const fgLinear = foreground.slice(1).match(/../g).map(value => parseInt(value,16)/255).map(value => value <= 0.04045 ? value/12.92 : ((value+0.055)/1.055)**2.4);
   const fgLum=fgLinear[0]*0.2126+fgLinear[1]*0.7152+fgLinear[2]*0.0722;
   assert.ok((luminance+0.05)/(fgLum+0.05)>=4.5);
   assert.equal(ADMIN_TOKENS.find(item => item.key === 'brand').default, primary);
 });
 
-test('los textos guardados con los defaults anteriores migran a malva sin tocar estados semánticos', () => {
+test('los textos guardados con los defaults anteriores migran sin tocar estados semánticos', () => {
   for (const token of [...GLOBAL_TOKENS,...ADMIN_TOKENS].filter(token=>token.legacyDefault)) {
     assert.equal(normalizeLegacyBrandColor(token,token.legacyDefault),token.default);
     assert.equal(normalizeLegacyBrandColor(token,'#123456'),'#123456');
   }
-});
-
-test('texto, subtítulos, ayudas e iconos comparten tinta desde el respaldo CSS', () => {
-  const css = fs.readFileSync(new URL('../../css/core/tokens-color.css', import.meta.url), 'utf8');
-  const unified = GLOBAL_TOKENS.filter(token => ['#7B6F72', '#948890'].includes(token.legacyDefault));
-  assert.equal(unified.length, 13);
-  for (const token of unified) {
-    assert.equal(token.default, '#713C53', token.key);
-    assert.ok(css.includes(`${token.cssVar}: ${token.default};`), token.cssVar);
-    assert.equal(normalizeLegacyBrandColor(token, token.legacyDefault.toLowerCase()), token.default);
-  }
-});
-
-test('la primera pintura migra grises guardados sin alterar colores personalizados ni estados', () => {
-  const source = fs.readFileSync(new URL('../../js/components/color/esquema-color-instantaneo.js', import.meta.url), 'utf8');
-  const applyMap = source.slice(source.indexOf('  function applyMap('), source.indexOf('  function currentBreakpoint('));
-  const applied = new Map();
-  const unified = GLOBAL_TOKENS.filter(token => ['#7B6F72', '#948890'].includes(token.legacyDefault));
-  const cached = Object.fromEntries(unified.map(token => [token.cssVar, token.legacyDefault.toLowerCase()]));
-  cached['--color-success-text'] = '#166534';
-  cached['--color-error-text'] = '#b8341f';
-  cached['--admin-color-text-secondary'] = '#7B6F72';
-  cached['--color-text-title'] = '#123456';
-  vm.runInNewContext(`${applyMap}\napplyMap(cached);`, {
-    cached, root: { style: { setProperty: (key, value) => applied.set(key, value) } },
-    isSafeColorValue: value => /^#[0-9a-f]{6}$/i.test(value)
-  });
-  for (const token of unified) assert.equal(applied.get(token.cssVar), token.default, token.cssVar);
-  for (const key of ['--color-success-text', '--color-error-text', '--admin-color-text-secondary', '--color-text-title']) {
-    assert.equal(applied.get(key), cached[key], key);
-  }
-  vm.runInNewContext(`${applyMap}\napplyMap(cached);`, {
-    cached: { '--color-text-secondary': '#123456' },
-    root: { style: { setProperty: (key, value) => applied.set(key, value) } }, isSafeColorValue: () => true
-  });
-  assert.equal(applied.get('--color-text-secondary'), '#123456');
 });

@@ -1,13 +1,13 @@
 import { versionedSiteAsset } from './configuracion.js?v=tintin-20261010-whatsapp-release-5';
 
-const HEADER_DESKTOP_VERSION = 'tintin-20261010-whatsapp-release-5';
-const HEADER_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2';
-const HEADER_RESPONSIVE_VERSION = 'tintin-20261010-whatsapp-release-5';
-const NAVIGATION_SHARED_VERSION = 'tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1';
-const NAVIGATION_PANEL_VERSION = 'tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6';
-const NAVIGATION_COHERENCE_VERSION = 'tintin-20261011-boutique-4';
-const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3-checkout-20261008-2';
-const NOTIFICATIONS_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
+const HEADER_DESKTOP_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1';
+const HEADER_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1';
+const HEADER_RESPONSIVE_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1';
+const NAVIGATION_SHARED_VERSION = 'tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
+const NAVIGATION_PANEL_VERSION = 'tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6-palette-20261014-1';
+const NAVIGATION_COHERENCE_VERSION = 'tintin-20261011-boutique-4-palette-20261014-1';
+const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3-checkout-20261008-2-palette-20261014-1';
+const NOTIFICATIONS_VERSION = 'tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
 const NOTIFICATION_SURFACE_VERSION = 'tintin-20260918-header-system-solid-surfaces-1';
 
 const NAVIGATION_STYLES = Object.freeze([
@@ -16,7 +16,7 @@ const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-mobile-css', 'css/components/navigation/movil/encabezado-movil.css', HEADER_MOBILE_VERSION],
   ['tt-navigation-mobile-solid-css', 'css/components/navigation/movil/fondos-solidos-movil.css', MOBILE_SOLID_VERSION],
   ['tt-navigation-notifications-css', 'css/components/notifications/notificaciones-sociales.css', NOTIFICATIONS_VERSION],
-  ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css', NAVIGATION_SHARED_VERSION],
+  ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css', 'tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1'],
   ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css', NAVIGATION_PANEL_VERSION],
   ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css', NOTIFICATION_SURFACE_VERSION],
   ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css', NAVIGATION_SHARED_VERSION],

@@ -24,7 +24,7 @@
 .tt-tablet-actions :is(#btn-cart-tablet),
 #tt-tabbar :is(.tt-notification-trigger, #tabbar-cart) {
   background: #eef1f4 !important;
-  color:#713C53 !important;
+  color:#222222 !important;
   border-color: transparent !important;
   border-radius: 50% !important;
   box-shadow: none !important;
@@ -41,7 +41,7 @@
 #tt-tabbar :is(.tt-notification-trigger, #tabbar-cart):hover,
 #tt-tabbar :is(.tt-notification-trigger, #tabbar-cart):focus-visible {
   background: #e1e6eb !important;
-  color:#713C53 !important;
+  color:#222222 !important;
 }
 
 .tt-notification-trigger[hidden] {
@@ -63,7 +63,7 @@
   border: 2px solid #fff;
   border-radius: 999px;
   background: var(--color-brand-primary, #F8AACA);
-  color:#713C53;
+  color:#222222;
   font-size: 10px;
   font-weight: 800;
   line-height: 1;
@@ -100,7 +100,7 @@
   border: 2px solid #fff;
   border-radius: 999px;
   background: var(--color-brand-primary, #F8AACA);
-  color:#713C53;
+  color:#222222;
   font-size: 10px;
   font-weight: 800;
   line-height: 1;
@@ -264,7 +264,7 @@
 }
 
 .tt-notification-icon[data-icon="heart"] {
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   background: #fff1f6;
 }
 
@@ -276,7 +276,7 @@
 
 .tt-notification-icon[data-icon="comment"],
 .tt-notification-icon[data-icon="review"] {
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   background: #fff7fa;
 }
 
@@ -353,7 +353,7 @@
 }
 
 .tt-notifications-error {
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
 }
 
 .tt-review-card.tt-review-deeplink-highlight {

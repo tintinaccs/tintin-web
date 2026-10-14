@@ -1,9 +1,7 @@
 /**
  * TINTIN — Catálogo central de tokens de color (Super Admin → Apariencia)
  * Única fuente de verdad para: qué tokens existen, en qué categoría se
- * agrupan, qué variable CSS controlan y cuál es su valor por defecto (el
- * que ya está en vivo hoy, para que activar este módulo no cambie nada
- * hasta que Super Admin edite algo a propósito).
+ * agrupan, qué variable CSS controlan y cuál es su valor por defecto (la paleta unificada de rosa Tintín, rosa claro, negro suave y blanco).
  *
  * Lo usan tanto la UI del panel (para generar los campos, categorías y el
  * buscador sin escribir 150 bloques de HTML a mano) como los motores de
@@ -33,60 +31,60 @@ export const GLOBAL_CATEGORIES = [
 export const GLOBAL_TOKENS = [
   // Generales / marca
   { key: 'brand-primary', cssVar: '--color-brand-primary', label: 'Color principal de marca', category: 'generales', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'brand-secondary', cssVar: '--color-brand-secondary', label: 'Color secundario de marca', category: 'generales', default: '#F6B7C8' },
+  { key: 'brand-secondary', cssVar: '--color-brand-secondary', label: 'Color secundario de marca', category: 'generales', default: '#222222' },
   { key: 'brand-accent', cssVar: '--color-brand-accent', label: 'Color de acento suave', category: 'generales', default: '#FDECF2' },
   { key: 'brand-primary-hover', cssVar: '--color-brand-primary-hover', label: 'Color principal — hover', category: 'generales', default: '#F8AACA', legacyDefault: '#C52F68' },
 
   // Fondos
-  { key: 'bg-page', cssVar: '--color-background-page', label: 'Fondo de página', category: 'fondos', default: '#FFF6FA' },
+  { key: 'bg-page', cssVar: '--color-background-page', label: 'Fondo de página', category: 'fondos', default: '#FFFFFF' },
   { key: 'bg-surface', cssVar: '--color-background-surface', label: 'Fondo de tarjetas/superficie', category: 'fondos', default: '#FFFFFF' },
-  { key: 'bg-surface-soft', cssVar: '--color-background-surface-soft', label: 'Fondo de sección suave', category: 'fondos', default: '#FFF9FC' },
+  { key: 'bg-surface-soft', cssVar: '--color-background-surface-soft', label: 'Fondo de sección suave', category: 'fondos', default: '#FDECF2' },
   { key: 'bg-elevated', cssVar: '--color-background-elevated', label: 'Fondo elevado (modales, dropdowns)', category: 'fondos', default: '#FFFFFF' },
   { key: 'bg-header', cssVar: '--color-background-header', label: 'Fondo del header', category: 'fondos', default: '#FFFFFF' },
   { key: 'bg-footer', cssVar: '--color-background-footer', label: 'Fondo del footer', category: 'fondos', default: '#FFFFFF' },
   { key: 'bg-menu', cssVar: '--color-background-menu', label: 'Fondo de menús', category: 'fondos', default: '#FFFFFF' },
-  { key: 'bg-submenu', cssVar: '--color-background-submenu', label: 'Fondo de submenús', category: 'fondos', default: '#FFF9FC' },
+  { key: 'bg-submenu', cssVar: '--color-background-submenu', label: 'Fondo de submenús', category: 'fondos', default: '#FDECF2' },
   { key: 'bg-table', cssVar: '--color-background-table', label: 'Fondo de tablas', category: 'fondos', default: '#FFFFFF' },
-  { key: 'bg-table-row-hover', cssVar: '--color-background-table-row-hover', label: 'Fondo de fila (hover)', category: 'fondos', default: '#FFF9FC' },
+  { key: 'bg-table-row-hover', cssVar: '--color-background-table-row-hover', label: 'Fondo de fila (hover)', category: 'fondos', default: '#FDECF2' },
   { key: 'bg-field', cssVar: '--color-background-field', label: 'Fondo de campos de formulario', category: 'fondos', default: '#FFFFFF' },
   { key: 'bg-float', cssVar: '--color-background-float', label: 'Fondo de botones/componentes flotantes', category: 'fondos', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'bg-overlay', cssVar: '--color-background-overlay', label: 'Fondo de overlays (fondo oscurecido)', category: 'fondos', default: 'rgba(20,10,14,0.55)' },
+  { key: 'bg-overlay', cssVar: '--color-background-overlay', label: 'Fondo de overlays (fondo oscurecido)', category: 'fondos', default: 'rgba(34,34,34,0.55)' },
   { key: 'bg-selected', cssVar: '--color-background-selected', label: 'Fondo de elemento seleccionado', category: 'fondos', default: '#FDECF2' },
-  { key: 'bg-disabled', cssVar: '--color-background-disabled', label: 'Fondo de elemento deshabilitado', category: 'fondos', default: '#F1E4E7' },
+  { key: 'bg-disabled', cssVar: '--color-background-disabled', label: 'Fondo de elemento deshabilitado', category: 'fondos', default: '#FDECF2' },
 
   // Tipografía
-  { key: 'text-primary', cssVar: '--color-text-primary', label: 'Texto principal', category: 'tipografia', default: '#713C53', legacyDefault: '#2B2B2B' },
-  { key: 'text-secondary', cssVar: '--color-text-secondary', label: 'Texto secundario', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
-  { key: 'text-tertiary', cssVar: '--color-text-tertiary', label: 'Texto terciario', category: 'tipografia', default: '#713C53', legacyDefault: '#948890' },
-  { key: 'text-muted', cssVar: '--color-text-muted', label: 'Texto tenue', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
-  { key: 'text-disabled', cssVar: '--color-text-disabled', label: 'Texto deshabilitado', category: 'tipografia', default: '#6B6367' },
+  { key: 'text-primary', cssVar: '--color-text-primary', label: 'Texto principal', category: 'tipografia', default: '#222222', legacyDefault: '#2B2B2B' },
+  { key: 'text-secondary', cssVar: '--color-text-secondary', label: 'Texto secundario', category: 'tipografia', default: '#222222', legacyDefault: '#7B6F72' },
+  { key: 'text-tertiary', cssVar: '--color-text-tertiary', label: 'Texto terciario', category: 'tipografia', default: '#222222', legacyDefault: '#948890' },
+  { key: 'text-muted', cssVar: '--color-text-muted', label: 'Texto tenue', category: 'tipografia', default: '#222222', legacyDefault: '#7B6F72' },
+  { key: 'text-disabled', cssVar: '--color-text-disabled', label: 'Texto deshabilitado', category: 'tipografia', default: '#222222' },
   { key: 'text-inverse', cssVar: '--color-text-inverse', label: 'Texto invertido (sobre fondos oscuros/de color)', category: 'tipografia', default: '#FFFFFF' },
-  { key: 'text-title', cssVar: '--color-text-title', label: 'Títulos', category: 'tipografia', default: '#713C53', legacyDefault: '#2B2B2B' },
-  { key: 'text-subtitle', cssVar: '--color-text-subtitle', label: 'Subtítulos', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
-  { key: 'text-label', cssVar: '--color-text-label', label: 'Etiquetas de campo', category: 'tipografia', default: '#713C53', legacyDefault: '#2B2B2B' },
-  { key: 'text-placeholder', cssVar: '--color-text-placeholder', label: 'Placeholders', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
-  { key: 'text-link', cssVar: '--color-text-link', label: 'Enlaces', category: 'tipografia', default: '#713C53', legacyDefault: '#C52F68' },
-  { key: 'text-link-visited', cssVar: '--color-text-link-visited', label: 'Enlaces visitados', category: 'tipografia', default: '#713C53', legacyDefault: '#C52F68' },
-  { key: 'text-help', cssVar: '--color-text-help', label: 'Textos de ayuda', category: 'tipografia', default: '#713C53', legacyDefault: '#7B6F72' },
+  { key: 'text-title', cssVar: '--color-text-title', label: 'Títulos', category: 'tipografia', default: '#222222', legacyDefault: '#2B2B2B' },
+  { key: 'text-subtitle', cssVar: '--color-text-subtitle', label: 'Subtítulos', category: 'tipografia', default: '#222222', legacyDefault: '#7B6F72' },
+  { key: 'text-label', cssVar: '--color-text-label', label: 'Etiquetas de campo', category: 'tipografia', default: '#222222', legacyDefault: '#2B2B2B' },
+  { key: 'text-placeholder', cssVar: '--color-text-placeholder', label: 'Placeholders', category: 'tipografia', default: '#222222', legacyDefault: '#7B6F72' },
+  { key: 'text-link', cssVar: '--color-text-link', label: 'Enlaces', category: 'tipografia', default: '#222222', legacyDefault: '#C52F68' },
+  { key: 'text-link-visited', cssVar: '--color-text-link-visited', label: 'Enlaces visitados', category: 'tipografia', default: '#222222', legacyDefault: '#C52F68' },
+  { key: 'text-help', cssVar: '--color-text-help', label: 'Textos de ayuda', category: 'tipografia', default: '#222222', legacyDefault: '#7B6F72' },
 
   // Botones
   { key: 'btn-primary-bg', cssVar: '--color-button-primary-background', label: 'Botón principal — fondo', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'btn-primary-text', cssVar: '--color-button-primary-text', label: 'Botón principal — texto', category: 'botones', default: '#713C53', legacyDefault: '#FFFFFF' },
+  { key: 'btn-primary-text', cssVar: '--color-button-primary-text', label: 'Botón principal — texto', category: 'botones', default: '#222222', legacyDefault: '#FFFFFF' },
   { key: 'btn-primary-border', cssVar: '--color-button-primary-border', label: 'Botón principal — borde', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'btn-primary-hover', cssVar: '--color-button-primary-hover', label: 'Botón principal — hover', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'btn-primary-active', cssVar: '--color-button-primary-active', label: 'Botón principal — active', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'btn-primary-focus', cssVar: '--color-button-primary-focus-ring', label: 'Botón principal — anillo de focus', category: 'botones', default: 'rgba(173,63,103,0.24)' },
-  { key: 'btn-primary-disabled-bg', cssVar: '--color-button-primary-disabled-background', label: 'Botón principal — fondo disabled', category: 'botones', default: '#F1E4E7' },
-  { key: 'btn-primary-disabled-text', cssVar: '--color-button-primary-disabled-text', label: 'Botón principal — texto disabled', category: 'botones', default: '#6B6367' },
+  { key: 'btn-primary-focus', cssVar: '--color-button-primary-focus-ring', label: 'Botón principal — anillo de focus', category: 'botones', default: 'rgba(248,170,202,0.24)' },
+  { key: 'btn-primary-disabled-bg', cssVar: '--color-button-primary-disabled-background', label: 'Botón principal — fondo disabled', category: 'botones', default: '#FDECF2' },
+  { key: 'btn-primary-disabled-text', cssVar: '--color-button-primary-disabled-text', label: 'Botón principal — texto disabled', category: 'botones', default: '#222222' },
 
   { key: 'btn-secondary-bg', cssVar: '--color-button-secondary-background', label: 'Botón secundario — fondo', category: 'botones', default: '#FFFFFF' },
-  { key: 'btn-secondary-text', cssVar: '--color-button-secondary-text', label: 'Botón secundario — texto', category: 'botones', default: '#713C53', legacyDefault: '#C52F68' },
+  { key: 'btn-secondary-text', cssVar: '--color-button-secondary-text', label: 'Botón secundario — texto', category: 'botones', default: '#222222', legacyDefault: '#C52F68' },
   { key: 'btn-secondary-border', cssVar: '--color-button-secondary-border', label: 'Botón secundario — borde', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'btn-secondary-hover', cssVar: '--color-button-secondary-hover', label: 'Botón secundario — hover', category: 'botones', default: '#FFF9FC' },
+  { key: 'btn-secondary-hover', cssVar: '--color-button-secondary-hover', label: 'Botón secundario — hover', category: 'botones', default: '#FDECF2' },
   { key: 'btn-secondary-active', cssVar: '--color-button-secondary-active', label: 'Botón secundario — active', category: 'botones', default: '#FDECF2' },
-  { key: 'btn-secondary-focus', cssVar: '--color-button-secondary-focus-ring', label: 'Botón secundario — anillo de focus', category: 'botones', default: 'rgba(173,63,103,0.24)' },
-  { key: 'btn-secondary-disabled-bg', cssVar: '--color-button-secondary-disabled-background', label: 'Botón secundario — fondo disabled', category: 'botones', default: '#F1E4E7' },
-  { key: 'btn-secondary-disabled-text', cssVar: '--color-button-secondary-disabled-text', label: 'Botón secundario — texto disabled', category: 'botones', default: '#6B6367' },
+  { key: 'btn-secondary-focus', cssVar: '--color-button-secondary-focus-ring', label: 'Botón secundario — anillo de focus', category: 'botones', default: 'rgba(248,170,202,0.24)' },
+  { key: 'btn-secondary-disabled-bg', cssVar: '--color-button-secondary-disabled-background', label: 'Botón secundario — fondo disabled', category: 'botones', default: '#FDECF2' },
+  { key: 'btn-secondary-disabled-text', cssVar: '--color-button-secondary-disabled-text', label: 'Botón secundario — texto disabled', category: 'botones', default: '#222222' },
 
   { key: 'btn-success-bg', cssVar: '--color-button-success-background', label: 'Botón de éxito — fondo', category: 'botones', default: '#e0f5e6' },
   { key: 'btn-success-text', cssVar: '--color-button-success-text', label: 'Botón de éxito — texto', category: 'botones', default: '#166534' },
@@ -97,25 +95,25 @@ export const GLOBAL_TOKENS = [
   { key: 'btn-danger-hover', cssVar: '--color-button-danger-hover', label: 'Botón de peligro — hover', category: 'botones', default: '#b91c1c' },
   { key: 'btn-info-bg', cssVar: '--color-button-info-background', label: 'Botón informativo — fondo', category: 'botones', default: '#e3edf9' },
   { key: 'btn-info-text', cssVar: '--color-button-info-text', label: 'Botón informativo — texto', category: 'botones', default: '#1d4e89' },
-  { key: 'btn-neutral-bg', cssVar: '--color-button-neutral-background', label: 'Botón neutral — fondo', category: 'botones', default: '#F1E4E7' },
-  { key: 'btn-neutral-text', cssVar: '--color-button-neutral-text', label: 'Botón neutral — texto', category: 'botones', default: '#713C53', legacyDefault: '#2B2B2B' },
+  { key: 'btn-neutral-bg', cssVar: '--color-button-neutral-background', label: 'Botón neutral — fondo', category: 'botones', default: '#FDECF2' },
+  { key: 'btn-neutral-text', cssVar: '--color-button-neutral-text', label: 'Botón neutral — texto', category: 'botones', default: '#222222', legacyDefault: '#2B2B2B' },
   { key: 'btn-whatsapp-bg', cssVar: '--color-button-whatsapp-background', label: 'Botón de WhatsApp — fondo', category: 'botones', default: '#F8AACA', legacyDefault: '#0d8043' },
-  { key: 'btn-whatsapp-text', cssVar: '--color-button-whatsapp-text', label: 'Botón de WhatsApp — texto', category: 'botones', default: '#713C53', legacyDefault: '#FFFFFF' },
+  { key: 'btn-whatsapp-text', cssVar: '--color-button-whatsapp-text', label: 'Botón de WhatsApp — texto', category: 'botones', default: '#222222', legacyDefault: '#FFFFFF' },
   { key: 'btn-whatsapp-hover', cssVar: '--color-button-whatsapp-hover', label: 'Botón de WhatsApp — hover', category: 'botones', default: '#F8AACA', legacyDefault: '#0a6835' },
-  { key: 'btn-icon-text', cssVar: '--color-button-icon-text', label: 'Botones de íconos — color', category: 'botones', default: '#713C53', legacyDefault: '#7B6F72' },
-  { key: 'btn-icon-disabled', cssVar: '--color-button-icon-disabled-text', label: 'Botones de íconos — deshabilitado', category: 'botones', default: '#6B6367' },
+  { key: 'btn-icon-text', cssVar: '--color-button-icon-text', label: 'Botones de íconos — color', category: 'botones', default: '#222222', legacyDefault: '#7B6F72' },
+  { key: 'btn-icon-disabled', cssVar: '--color-button-icon-disabled-text', label: 'Botones de íconos — deshabilitado', category: 'botones', default: '#222222' },
   { key: 'btn-floating-bg', cssVar: '--color-button-floating-background', label: 'Botones flotantes — fondo', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'btn-floating-text', cssVar: '--color-button-floating-text', label: 'Botones flotantes — texto', category: 'botones', default: '#713C53', legacyDefault: '#FFFFFF' },
+  { key: 'btn-floating-text', cssVar: '--color-button-floating-text', label: 'Botones flotantes — texto', category: 'botones', default: '#222222', legacyDefault: '#FFFFFF' },
   { key: 'btn-sticky-bg', cssVar: '--color-button-sticky-background', label: 'Botones sticky — fondo', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'btn-sticky-text', cssVar: '--color-button-sticky-text', label: 'Botones sticky — texto', category: 'botones', default: '#713C53', legacyDefault: '#FFFFFF' },
+  { key: 'btn-sticky-text', cssVar: '--color-button-sticky-text', label: 'Botones sticky — texto', category: 'botones', default: '#222222', legacyDefault: '#FFFFFF' },
   { key: 'btn-outline-bg', cssVar: '--color-button-outline-background', label: 'Botones outline — fondo', category: 'botones', default: '#FFFFFF' },
-  { key: 'btn-outline-text', cssVar: '--color-button-outline-text', label: 'Botones outline — texto', category: 'botones', default: '#713C53', legacyDefault: '#C52F68' },
+  { key: 'btn-outline-text', cssVar: '--color-button-outline-text', label: 'Botones outline — texto', category: 'botones', default: '#222222', legacyDefault: '#C52F68' },
   { key: 'btn-outline-border', cssVar: '--color-button-outline-border', label: 'Botones outline — borde', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'btn-transparent-text', cssVar: '--color-button-transparent-text', label: 'Botones transparentes — texto', category: 'botones', default: '#713C53', legacyDefault: '#C52F68' },
+  { key: 'btn-transparent-text', cssVar: '--color-button-transparent-text', label: 'Botones transparentes — texto', category: 'botones', default: '#222222', legacyDefault: '#C52F68' },
 
   // Bordes y divisores
-  { key: 'border-primary', cssVar: '--color-border-primary', label: 'Borde principal', category: 'bordes', default: '#F1E4E7' },
-  { key: 'border-secondary', cssVar: '--color-border-secondary', label: 'Borde secundario / divisores', category: 'bordes', default: '#F7E9ED' },
+  { key: 'border-primary', cssVar: '--color-border-primary', label: 'Borde principal', category: 'bordes', default: '#FDECF2' },
+  { key: 'border-secondary', cssVar: '--color-border-secondary', label: 'Borde secundario / divisores', category: 'bordes', default: '#FDECF2' },
   { key: 'border-focus', cssVar: '--color-border-focus', label: 'Borde de focus', category: 'bordes', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'border-error', cssVar: '--color-border-error', label: 'Borde de error', category: 'bordes', default: '#b8341f' },
   { key: 'border-success', cssVar: '--color-border-success', label: 'Borde de éxito', category: 'bordes', default: '#166534' },
@@ -132,82 +130,82 @@ export const GLOBAL_TOKENS = [
   { key: 'state-error-text', cssVar: '--color-error-text', label: 'Error — texto', category: 'estados', default: '#b8341f' },
   { key: 'state-danger-bg', cssVar: '--color-danger-background', label: 'Peligro — fondo', category: 'estados', default: '#dc2626' },
   { key: 'state-danger-text', cssVar: '--color-danger-text', label: 'Peligro — texto', category: 'estados', default: '#FFFFFF' },
-  { key: 'state-neutral-bg', cssVar: '--color-neutral-background', label: 'Neutral — fondo', category: 'estados', default: '#F1E4E7' },
-  { key: 'state-neutral-text', cssVar: '--color-neutral-text', label: 'Neutral — texto', category: 'estados', default: '#713C53', legacyDefault: '#2B2B2B' },
+  { key: 'state-neutral-bg', cssVar: '--color-neutral-background', label: 'Neutral — fondo', category: 'estados', default: '#FDECF2' },
+  { key: 'state-neutral-text', cssVar: '--color-neutral-text', label: 'Neutral — texto', category: 'estados', default: '#222222', legacyDefault: '#2B2B2B' },
   { key: 'state-available', cssVar: '--color-state-available', label: 'Disponibilidad / stock', category: 'estados', default: '#166534' },
   { key: 'state-soldout', cssVar: '--color-state-soldout', label: 'Agotado', category: 'estados', default: '#b8341f' },
   { key: 'state-discount', cssVar: '--color-state-discount', label: 'Descuento', category: 'estados', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'state-promo', cssVar: '--color-state-promo', label: 'Promoción', category: 'estados', default: '#8a6d1f' },
   { key: 'state-selected', cssVar: '--color-state-selected', label: 'Seleccionado', category: 'estados', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'state-hover', cssVar: '--color-state-hover', label: 'Hover (genérico)', category: 'estados', default: '#FFF9FC' },
-  { key: 'state-focus', cssVar: '--color-state-focus', label: 'Focus (genérico)', category: 'estados', default: 'rgba(173,63,103,0.24)' },
+  { key: 'state-hover', cssVar: '--color-state-hover', label: 'Hover (genérico)', category: 'estados', default: '#FDECF2' },
+  { key: 'state-focus', cssVar: '--color-state-focus', label: 'Focus (genérico)', category: 'estados', default: 'rgba(248,170,202,0.24)' },
   { key: 'state-active', cssVar: '--color-state-active', label: 'Active (genérico)', category: 'estados', default: '#FDECF2' },
-  { key: 'state-disabled', cssVar: '--color-state-disabled', label: 'Disabled (genérico)', category: 'estados', default: '#6B6367' },
+  { key: 'state-disabled', cssVar: '--color-state-disabled', label: 'Disabled (genérico)', category: 'estados', default: '#222222' },
 
   // Formularios
   { key: 'field-bg', cssVar: '--color-field-background', label: 'Campos — fondo', category: 'formularios', default: '#FFFFFF' },
-  { key: 'field-text', cssVar: '--color-field-text', label: 'Campos — texto', category: 'formularios', default: '#713C53', legacyDefault: '#2B2B2B' },
-  { key: 'field-border', cssVar: '--color-field-border', label: 'Campos — borde', category: 'formularios', default: '#F1E4E7' },
+  { key: 'field-text', cssVar: '--color-field-text', label: 'Campos — texto', category: 'formularios', default: '#222222', legacyDefault: '#2B2B2B' },
+  { key: 'field-border', cssVar: '--color-field-border', label: 'Campos — borde', category: 'formularios', default: '#FDECF2' },
   { key: 'field-border-focus', cssVar: '--color-field-border-focus', label: 'Campos — borde de focus', category: 'formularios', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'field-placeholder', cssVar: '--color-field-placeholder', label: 'Campos — placeholder', category: 'formularios', default: '#713C53', legacyDefault: '#7B6F72' },
+  { key: 'field-placeholder', cssVar: '--color-field-placeholder', label: 'Campos — placeholder', category: 'formularios', default: '#222222', legacyDefault: '#7B6F72' },
 
   // Navegación
   { key: 'nav-active-bg', cssVar: '--color-nav-active-background', label: 'Navegación activa — fondo', category: 'navegacion', default: '#FDECF2' },
-  { key: 'nav-active-text', cssVar: '--color-nav-active-text', label: 'Navegación activa — texto', category: 'navegacion', default: '#713C53', legacyDefault: '#C52F68' },
-  { key: 'nav-inactive-text', cssVar: '--color-nav-inactive-text', label: 'Navegación inactiva — texto', category: 'navegacion', default: '#713C53', legacyDefault: '#2B2B2B' },
+  { key: 'nav-active-text', cssVar: '--color-nav-active-text', label: 'Navegación activa — texto', category: 'navegacion', default: '#222222', legacyDefault: '#C52F68' },
+  { key: 'nav-inactive-text', cssVar: '--color-nav-inactive-text', label: 'Navegación inactiva — texto', category: 'navegacion', default: '#222222', legacyDefault: '#2B2B2B' },
   { key: 'tab-active-bg', cssVar: '--color-tab-active-background', label: 'Pestaña activa — fondo', category: 'navegacion', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'tab-active-text', cssVar: '--color-tab-active-text', label: 'Pestaña activa — texto', category: 'navegacion', default: '#713C53', legacyDefault: '#FFFFFF' },
-  { key: 'tab-inactive-text', cssVar: '--color-tab-inactive-text', label: 'Pestaña inactiva — texto', category: 'navegacion', default: '#713C53', legacyDefault: '#7B6F72' },
-  { key: 'breadcrumb-text', cssVar: '--color-breadcrumb-text', label: 'Breadcrumbs', category: 'navegacion', default: '#713C53', legacyDefault: '#7B6F72' },
-  { key: 'breadcrumb-active', cssVar: '--color-breadcrumb-active-text', label: 'Breadcrumb activo', category: 'navegacion', default: '#713C53', legacyDefault: '#C52F68' },
-  { key: 'accordion-header-bg', cssVar: '--color-accordion-header-background', label: 'Encabezado de acordeón', category: 'navegacion', default: '#FFF9FC' },
+  { key: 'tab-active-text', cssVar: '--color-tab-active-text', label: 'Pestaña activa — texto', category: 'navegacion', default: '#222222', legacyDefault: '#FFFFFF' },
+  { key: 'tab-inactive-text', cssVar: '--color-tab-inactive-text', label: 'Pestaña inactiva — texto', category: 'navegacion', default: '#222222', legacyDefault: '#7B6F72' },
+  { key: 'breadcrumb-text', cssVar: '--color-breadcrumb-text', label: 'Breadcrumbs', category: 'navegacion', default: '#222222', legacyDefault: '#7B6F72' },
+  { key: 'breadcrumb-active', cssVar: '--color-breadcrumb-active-text', label: 'Breadcrumb activo', category: 'navegacion', default: '#222222', legacyDefault: '#C52F68' },
+  { key: 'accordion-header-bg', cssVar: '--color-accordion-header-background', label: 'Encabezado de acordeón', category: 'navegacion', default: '#FDECF2' },
   { key: 'indicator', cssVar: '--color-indicator', label: 'Indicadores (puntos, pills)', category: 'navegacion', default: '#F8AACA', legacyDefault: '#C52F68' },
 
   // Tarjetas y tablas
-  { key: 'card-border', cssVar: '--color-card-border', label: 'Borde de tarjetas', category: 'tarjetas', default: '#F1E4E7' },
-  { key: 'card-shadow', cssVar: '--color-card-shadow', label: 'Sombra de tarjetas', category: 'tarjetas', default: 'rgba(212,106,138,0.10)' },
-  { key: 'table-border', cssVar: '--color-table-border', label: 'Bordes de tabla', category: 'tarjetas', default: '#F1E4E7' },
+  { key: 'card-border', cssVar: '--color-card-border', label: 'Borde de tarjetas', category: 'tarjetas', default: '#FDECF2' },
+  { key: 'card-shadow', cssVar: '--color-card-shadow', label: 'Sombra de tarjetas', category: 'tarjetas', default: 'rgba(248,170,202,0.10)' },
+  { key: 'table-border', cssVar: '--color-table-border', label: 'Bordes de tabla', category: 'tarjetas', default: '#FDECF2' },
   { key: 'table-header-bg', cssVar: '--color-table-header-background', label: 'Encabezado de tabla — fondo', category: 'tarjetas', default: '#FDECF2' },
-  { key: 'table-header-text', cssVar: '--color-table-header-text', label: 'Encabezado de tabla — texto', category: 'tarjetas', default: '#713C53', legacyDefault: '#2B2B2B' },
+  { key: 'table-header-text', cssVar: '--color-table-header-text', label: 'Encabezado de tabla — texto', category: 'tarjetas', default: '#222222', legacyDefault: '#2B2B2B' },
   { key: 'badge-bg', cssVar: '--color-badge-background', label: 'Badges — fondo', category: 'tarjetas', default: '#FDECF2' },
-  { key: 'badge-text', cssVar: '--color-badge-text', label: 'Badges — texto', category: 'tarjetas', default: '#713C53', legacyDefault: '#C52F68' },
+  { key: 'badge-text', cssVar: '--color-badge-text', label: 'Badges — texto', category: 'tarjetas', default: '#222222', legacyDefault: '#C52F68' },
   { key: 'chip-bg', cssVar: '--color-chip-background', label: 'Chips — fondo', category: 'tarjetas', default: '#FDECF2' },
-  { key: 'chip-text', cssVar: '--color-chip-text', label: 'Chips — texto', category: 'tarjetas', default: '#713C53', legacyDefault: '#C52F68' },
+  { key: 'chip-text', cssVar: '--color-chip-text', label: 'Chips — texto', category: 'tarjetas', default: '#222222', legacyDefault: '#C52F68' },
 
   // Modales y overlays
   { key: 'modal-bg', cssVar: '--color-modal-background', label: 'Modales — fondo', category: 'modales', default: '#FFFFFF' },
-  { key: 'modal-border', cssVar: '--color-modal-border', label: 'Modales — borde', category: 'modales', default: '#F1E4E7' },
-  { key: 'modal-overlay', cssVar: '--color-modal-overlay', label: 'Fondo detrás del modal', category: 'modales', default: 'rgba(20,10,14,0.55)' },
-  { key: 'tooltip-bg', cssVar: '--color-tooltip-background', label: 'Tooltips — fondo', category: 'modales', default: '#713C53', legacyDefault: '#2B2B2B' },
+  { key: 'modal-border', cssVar: '--color-modal-border', label: 'Modales — borde', category: 'modales', default: '#FDECF2' },
+  { key: 'modal-overlay', cssVar: '--color-modal-overlay', label: 'Fondo detrás del modal', category: 'modales', default: 'rgba(34,34,34,0.55)' },
+  { key: 'tooltip-bg', cssVar: '--color-tooltip-background', label: 'Tooltips — fondo', category: 'modales', default: '#222222', legacyDefault: '#2B2B2B' },
   { key: 'tooltip-text', cssVar: '--color-tooltip-text', label: 'Tooltips — texto', category: 'modales', default: '#FFFFFF' },
-  { key: 'empty-state-text', cssVar: '--color-empty-state-text', label: 'Estados vacíos — texto', category: 'modales', default: '#713C53', legacyDefault: '#7B6F72' },
+  { key: 'empty-state-text', cssVar: '--color-empty-state-text', label: 'Estados vacíos — texto', category: 'modales', default: '#222222', legacyDefault: '#7B6F72' },
 
   // Productos y carrito
-  { key: 'price', cssVar: '--color-price', label: 'Precio', category: 'productos', default: '#713C53', legacyDefault: '#C52F68' },
-  { key: 'price-old', cssVar: '--color-price-old', label: 'Precio anterior (tachado)', category: 'productos', default: '#713C53', legacyDefault: '#7B6F72' },
-  { key: 'rating-star', cssVar: '--color-rating-star', label: 'Estrellas de reseña', category: 'productos', default: '#8a6d1f' },
+  { key: 'price', cssVar: '--color-price', label: 'Precio', category: 'productos', default: '#222222', legacyDefault: '#C52F68' },
+  { key: 'price-old', cssVar: '--color-price-old', label: 'Precio anterior (tachado)', category: 'productos', default: '#222222', legacyDefault: '#7B6F72' },
+  { key: 'rating-star', cssVar: '--color-rating-star', label: 'Estrellas de reseña', category: 'productos', default: '#222222' },
   { key: 'cart-badge-bg', cssVar: '--color-cart-badge-background', label: 'Badge del carrito — fondo', category: 'productos', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'cart-badge-text', cssVar: '--color-cart-badge-text', label: 'Badge del carrito — texto', category: 'productos', default: '#FFFFFF' },
+  { key: 'cart-badge-text', cssVar: '--color-cart-badge-text', label: 'Badge del carrito — texto', category: 'productos', default: '#222222' },
 
   // Avanzado
-  { key: 'icon-primary', cssVar: '--color-icon-primary', label: 'Íconos principales', category: 'avanzado', default: '#713C53', legacyDefault: '#7B6F72' },
+  { key: 'icon-primary', cssVar: '--color-icon-primary', label: 'Íconos principales', category: 'avanzado', default: '#222222', legacyDefault: '#7B6F72' },
   { key: 'icon-secondary', cssVar: '--color-icon-secondary', label: 'Íconos secundarios', category: 'avanzado', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'icon-disabled', cssVar: '--color-icon-disabled', label: 'Íconos deshabilitados', category: 'avanzado', default: '#6B6367' },
-  { key: 'scrollbar-thumb', cssVar: '--color-scrollbar-thumb', label: 'Scrollbar — control', category: 'avanzado', default: '#EA7EA3' },
-  { key: 'scrollbar-track', cssVar: '--color-scrollbar-track', label: 'Scrollbar — riel', category: 'avanzado', default: '#FDF0F5' },
+  { key: 'icon-disabled', cssVar: '--color-icon-disabled', label: 'Íconos deshabilitados', category: 'avanzado', default: '#222222' },
+  { key: 'scrollbar-thumb', cssVar: '--color-scrollbar-thumb', label: 'Scrollbar — control', category: 'avanzado', default: '#F8AACA' },
+  { key: 'scrollbar-track', cssVar: '--color-scrollbar-track', label: 'Scrollbar — riel', category: 'avanzado', default: '#FDECF2' },
   { key: 'switch-on-bg', cssVar: '--color-switch-on-background', label: 'Switch — encendido', category: 'avanzado', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'switch-off-bg', cssVar: '--color-switch-off-background', label: 'Switch — apagado', category: 'avanzado', default: '#E3D5D9' },
+  { key: 'switch-off-bg', cssVar: '--color-switch-off-background', label: 'Switch — apagado', category: 'avanzado', default: '#FDECF2' },
   { key: 'switch-thumb', cssVar: '--color-switch-thumb', label: 'Switch — perilla', category: 'avanzado', default: '#FFFFFF' },
   { key: 'checkbox-checked', cssVar: '--color-checkbox-checked-background', label: 'Checkbox marcado', category: 'avanzado', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'checkbox-border', cssVar: '--color-checkbox-border', label: 'Checkbox — borde', category: 'avanzado', default: '#F1E4E7' },
+  { key: 'checkbox-border', cssVar: '--color-checkbox-border', label: 'Checkbox — borde', category: 'avanzado', default: '#FDECF2' },
   { key: 'radio-checked', cssVar: '--color-radio-checked-background', label: 'Radio marcado', category: 'avanzado', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'radio-border', cssVar: '--color-radio-border', label: 'Radio — borde', category: 'avanzado', default: '#F1E4E7' },
-  { key: 'progress-track', cssVar: '--color-progress-track', label: 'Barra de progreso — riel', category: 'avanzado', default: '#F1E4E7' },
+  { key: 'radio-border', cssVar: '--color-radio-border', label: 'Radio — borde', category: 'avanzado', default: '#FDECF2' },
+  { key: 'progress-track', cssVar: '--color-progress-track', label: 'Barra de progreso — riel', category: 'avanzado', default: '#FDECF2' },
   { key: 'progress-fill', cssVar: '--color-progress-fill', label: 'Barra de progreso — relleno', category: 'avanzado', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'skeleton-base', cssVar: '--color-skeleton-base', label: 'Skeleton loader — base', category: 'avanzado', default: '#F1E4E7' },
+  { key: 'skeleton-base', cssVar: '--color-skeleton-base', label: 'Skeleton loader — base', category: 'avanzado', default: '#FDECF2' },
   { key: 'skeleton-shine', cssVar: '--color-skeleton-shine', label: 'Skeleton loader — brillo', category: 'avanzado', default: '#FDECF2' },
   { key: 'selection-bg', cssVar: '--color-selection-background', label: 'Selección de texto — fondo', category: 'avanzado', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'selection-text', cssVar: '--color-selection-text', label: 'Selección de texto — color', category: 'avanzado', default: '#713C53', legacyDefault: '#FFFFFF' },
+  { key: 'selection-text', cssVar: '--color-selection-text', label: 'Selección de texto — color', category: 'avanzado', default: '#222222', legacyDefault: '#FFFFFF' },
   { key: 'loading-spinner', cssVar: '--color-loading-spinner', label: 'Spinner de carga', category: 'avanzado', default: '#F8AACA', legacyDefault: '#C52F68' },
 ];
 
@@ -229,35 +227,35 @@ export const ADMIN_CATEGORIES = [
 export const ADMIN_TOKENS = [
   { key: 'brand', cssVar: '--admin-color-brand', label: 'Color de acento del panel', category: 'generales', default: '#F8AACA', legacyDefault: '#C52F68' },
   { key: 'brand-hover', cssVar: '--admin-color-brand-hover', label: 'Acento del panel — hover', category: 'generales', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'bg-page', cssVar: '--admin-color-background-page', label: 'Fondo general del panel', category: 'estructura', default: '#FFF6FA' },
+  { key: 'bg-page', cssVar: '--admin-color-background-page', label: 'Fondo general del panel', category: 'estructura', default: '#FFFFFF' },
   { key: 'bg-sidebar', cssVar: '--admin-color-background-sidebar', label: 'Sidebar — fondo', category: 'estructura', default: '#FFFFFF' },
-  { key: 'text-sidebar', cssVar: '--admin-color-text-sidebar', label: 'Sidebar — texto', category: 'estructura', default: '#713C53', legacyDefault: '#2B2B2B' },
+  { key: 'text-sidebar', cssVar: '--admin-color-text-sidebar', label: 'Sidebar — texto', category: 'estructura', default: '#222222', legacyDefault: '#2B2B2B' },
   { key: 'bg-sidebar-active', cssVar: '--admin-color-background-sidebar-active', label: 'Sidebar — ítem activo/hover', category: 'estructura', default: '#FDECF2' },
-  { key: 'text-sidebar-active', cssVar: '--admin-color-text-sidebar-active', label: 'Sidebar — texto ítem activo', category: 'estructura', default: '#713C53', legacyDefault: '#2B2B2B' },
+  { key: 'text-sidebar-active', cssVar: '--admin-color-text-sidebar-active', label: 'Sidebar — texto ítem activo', category: 'estructura', default: '#222222', legacyDefault: '#2B2B2B' },
   { key: 'bg-header', cssVar: '--admin-color-background-header', label: 'Header administrativo — fondo', category: 'estructura', default: '#FFFFFF' },
   { key: 'bg-surface', cssVar: '--admin-color-background-surface', label: 'Tarjetas / superficie', category: 'estructura', default: '#FFFFFF' },
-  { key: 'border', cssVar: '--admin-color-border', label: 'Bordes generales', category: 'estructura', default: '#F1E4E7' },
+  { key: 'border', cssVar: '--admin-color-border', label: 'Bordes generales', category: 'estructura', default: '#FDECF2' },
 
-  { key: 'text-primary', cssVar: '--admin-color-text-primary', label: 'Texto principal', category: 'tipografia', default: '#713C53', legacyDefault: '#2B2B2B' },
-  { key: 'text-secondary', cssVar: '--admin-color-text-secondary', label: 'Texto secundario', category: 'tipografia', default: '#7B6F72' },
-  { key: 'text-tertiary', cssVar: '--admin-color-text-tertiary', label: 'Texto terciario', category: 'tipografia', default: '#948890' },
-  { key: 'text-title', cssVar: '--admin-color-text-title', label: 'Títulos', category: 'tipografia', default: '#713C53', legacyDefault: '#2B2B2B' },
+  { key: 'text-primary', cssVar: '--admin-color-text-primary', label: 'Texto principal', category: 'tipografia', default: '#222222', legacyDefault: '#2B2B2B' },
+  { key: 'text-secondary', cssVar: '--admin-color-text-secondary', label: 'Texto secundario', category: 'tipografia', default: '#222222' },
+  { key: 'text-tertiary', cssVar: '--admin-color-text-tertiary', label: 'Texto terciario', category: 'tipografia', default: '#222222' },
+  { key: 'text-title', cssVar: '--admin-color-text-title', label: 'Títulos', category: 'tipografia', default: '#222222', legacyDefault: '#2B2B2B' },
 
   { key: 'btn-primary-bg', cssVar: '--admin-color-button-primary-background', label: 'Botón principal — fondo', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'btn-primary-text', cssVar: '--admin-color-button-primary-text', label: 'Botón principal — texto', category: 'botones', default: '#713C53', legacyDefault: '#FFFFFF' },
+  { key: 'btn-primary-text', cssVar: '--admin-color-button-primary-text', label: 'Botón principal — texto', category: 'botones', default: '#222222', legacyDefault: '#FFFFFF' },
   { key: 'btn-primary-hover', cssVar: '--admin-color-button-primary-hover', label: 'Botón principal — hover', category: 'botones', default: '#F8AACA', legacyDefault: '#C52F68' },
-  { key: 'btn-outline-text', cssVar: '--admin-color-button-outline-text', label: 'Botón outline — texto/borde', category: 'botones', default: '#713C53', legacyDefault: '#C52F68' },
+  { key: 'btn-outline-text', cssVar: '--admin-color-button-outline-text', label: 'Botón outline — texto/borde', category: 'botones', default: '#222222', legacyDefault: '#C52F68' },
   { key: 'btn-danger-bg', cssVar: '--admin-color-button-danger-background', label: 'Botón de peligro — fondo', category: 'botones', default: '#dc2626' },
   { key: 'btn-danger-text', cssVar: '--admin-color-button-danger-text', label: 'Botón de peligro — texto', category: 'botones', default: '#FFFFFF' },
   { key: 'btn-danger-hover', cssVar: '--admin-color-button-danger-hover', label: 'Botón de peligro — hover', category: 'botones', default: '#b91c1c' },
 
   { key: 'table-header-bg', cssVar: '--admin-color-table-header-background', label: 'Tabla — encabezado', category: 'tarjetas', default: '#FDECF2' },
-  { key: 'table-row-hover', cssVar: '--admin-color-table-row-hover', label: 'Tabla — fila hover', category: 'tarjetas', default: '#FFF9FC' },
+  { key: 'table-row-hover', cssVar: '--admin-color-table-row-hover', label: 'Tabla — fila hover', category: 'tarjetas', default: '#FDECF2' },
   { key: 'badge-bg', cssVar: '--admin-color-badge-background', label: 'Badges — fondo', category: 'tarjetas', default: '#FDECF2' },
-  { key: 'badge-text', cssVar: '--admin-color-badge-text', label: 'Badges — texto', category: 'tarjetas', default: '#713C53', legacyDefault: '#C52F68' },
+  { key: 'badge-text', cssVar: '--admin-color-badge-text', label: 'Badges — texto', category: 'tarjetas', default: '#222222', legacyDefault: '#C52F68' },
 
   { key: 'field-bg', cssVar: '--admin-color-field-background', label: 'Campos — fondo', category: 'formularios', default: '#FFFFFF' },
-  { key: 'field-border', cssVar: '--admin-color-field-border', label: 'Campos — borde', category: 'formularios', default: '#F1E4E7' },
+  { key: 'field-border', cssVar: '--admin-color-field-border', label: 'Campos — borde', category: 'formularios', default: '#FDECF2' },
   { key: 'field-border-focus', cssVar: '--admin-color-field-border-focus', label: 'Campos — borde de focus', category: 'formularios', default: '#F8AACA', legacyDefault: '#C52F68' },
 
   { key: 'state-success-bg', cssVar: '--admin-color-success-background', label: 'Éxito — fondo', category: 'estados', default: '#e0f5e6' },
@@ -268,7 +266,7 @@ export const ADMIN_TOKENS = [
   { key: 'state-error-text', cssVar: '--admin-color-error-text', label: 'Error — texto', category: 'estados', default: '#b8341f' },
 
   { key: 'modal-bg', cssVar: '--admin-color-modal-background', label: 'Modales — fondo', category: 'modales', default: '#FFFFFF' },
-  { key: 'modal-overlay', cssVar: '--admin-color-modal-overlay', label: 'Modales — fondo detrás', category: 'modales', default: 'rgba(20,10,14,0.55)' },
+  { key: 'modal-overlay', cssVar: '--admin-color-modal-overlay', label: 'Modales — fondo detrás', category: 'modales', default: 'rgba(34,34,34,0.55)' },
 ];
 
 // ---------------------------------------------------------------
@@ -324,7 +322,23 @@ export function buildDefaultTokenMap(tokens) {
 }
 
 // Migra tonos de marca históricos sin reemplazar colores personalizados nuevos.
+export function normalizeUnifiedPaletteColor(value) {
+  var replacements = {"#713c53":"#222222","#7b6f72":"#222222","#948890":"#222222","#6b6367":"#222222","#995f77":"#222222","#f6b7c8":"#F8AACA","#ea7ea3":"#F8AACA","#d46a8a":"#F8AACA","#b84c72":"#F8AACA","#f1e4e7":"#FDECF2","#f7e9ed":"#FDECF2","#fff9fc":"#FDECF2","#fdf0f5":"#FDECF2","#e3d5d9":"#FDECF2","#f1c8d5":"#FDECF2","#efd6e1":"#FDECF2","#fde6ef":"#FDECF2","#fff8fb":"#FDECF2","#fff6fa":"#FFFFFF","#fff6f9":"#FDECF2","#fce4ec":"#FDECF2"};
+  var normalized = String(value).trim().toLowerCase();
+  var rgb = normalized.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/);
+  if (rgb) normalized = '#' + rgb.slice(1).map(function (part) { return Number(part).toString(16).padStart(2, '0'); }).join('');
+  if (Object.prototype.hasOwnProperty.call(replacements, normalized)) return replacements[normalized];
+  var bases = {"113,60,83":"34,34,34","123,111,114":"34,34,34","148,136,144":"34,34,34","107,99,103":"34,34,34","153,95,119":"34,34,34","20,10,14":"34,34,34","212,106,138":"248,170,202","173,63,103":"248,170,202","139,38,66":"248,170,202","180,76,114":"248,170,202","179,36,87":"248,170,202","158,64,98":"248,170,202","241,200,213":"253,236,242","241,228,231":"253,236,242"};
+  return String(value).replace(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(\s*,\s*[.\d]+)?\s*\)/gi, function (all, r, g, b, alpha) {
+    var base = bases[r + ',' + g + ',' + b];
+    return base ? (alpha ? 'rgba' : 'rgb') + '(' + base + (alpha || '') + ')' : all;
+  });
+}
+
 export function normalizeLegacyBrandColor(token, value) {
+  value = normalizeUnifiedPaletteColor(value);
+  if (token.key === 'cart-badge-text' && /^#ffffff$/i.test(String(value).trim())) return token.default;
+  if (token.key === 'rating-star' && /^#8a6d1f$/i.test(String(value).trim())) return token.default;
   const normalized = String(value).trim().toLowerCase();
   if (token.legacyDefault && normalized === token.legacyDefault.toLowerCase()) return token.default;
   if ((token.default === '#F8AACA' || token.legacyDefault === '#C52F68') && /^#(?:c52f68|ad3f67|8b2642|711f35|c64273|9e2451)$/i.test(normalized)) return token.default;

@@ -1,7 +1,7 @@
 /* TINTIN — composición común para páginas secundarias */
 :where(body:not(:has(.login-page)):not(:has(.adm-main))) {
   --secondary-page-gutter: clamp(16px, 4vw, 40px);
-  background: var(--surface-soft, #fff6fa);
+  background: var(--surface-soft, #FFFFFF);
 }
 
 :where(body:not(:has(.login-page)):not(:has(.adm-main))) .tt-page-hero > .container,

@@ -8,9 +8,9 @@
   --tt-motion-normal: 240ms;
   --tt-motion-slow: 360ms;
   --tt-motion-ease: cubic-bezier(.22, .61, .36, 1);
-  --tt-state-bg: color-mix(in srgb, var(--tt-page-bg, #fff6fa) 84%, #fff);
+  --tt-state-bg: color-mix(in srgb, var(--tt-page-bg, #FFFFFF) 84%, #fff);
   --tt-state-border: color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #F8AACA)) 20%, transparent);
-  --tt-state-text: var(--tt-text, #713C53);
+  --tt-state-text: var(--tt-text, #222222);
   --tt-state-muted: var(--tt-text-muted, #666);
   --tt-danger: var(--color-brand-primary, #F8AACA);
   --tt-success: #287a55;
@@ -129,7 +129,7 @@
   height: 46px;
   border-radius: 50%;
   background: color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #F8AACA)) 12%, #fff);
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
 }
 
 .tt-state-icon::before {
@@ -213,7 +213,7 @@
   border: 1px solid var(--color-brand-primary, var(--color-brand-primary, #F8AACA));
   border-radius: 999px;
   background: var(--color-brand-primary, var(--color-brand-primary, #F8AACA));
-  color:#713C53 !important;
+  color:#222222 !important;
   font: inherit;
   font-size: .84rem;
   font-weight: 700;
@@ -252,7 +252,7 @@
   min-height: 72px;
   border: 1px dashed color-mix(in srgb, var(--color-brand-primary, var(--color-brand-primary, #F8AACA)) 28%, transparent);
   border-radius: 10px;
-  background: linear-gradient(135deg, #fff6fa, #f9e5ed);
+  background: linear-gradient(135deg, #FFFFFF, #f9e5ed);
   opacity: .58;
   filter: grayscale(.65);
 }

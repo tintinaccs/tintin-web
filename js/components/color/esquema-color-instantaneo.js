@@ -12,7 +12,7 @@
 
   var root = document.documentElement;
   var CACHE_KEY = 'tt_color_scheme_global';
-  var FALLBACK_PAGE_BG = '#FFF6FA';
+  var FALLBACK_PAGE_BG = '#FFFFFF';
   var RELEASE_TIMEOUT_MS = 180;
   var FAST_REVEAL_TIMEOUT_MS = 220;
   var released = false;
@@ -28,6 +28,19 @@
       /^hsla?\(\s*[0-9.\s,%/deg]+\)$/i.test(v);
   }
 
+  function normalizeUnifiedPaletteColor(value) {
+  var replacements = {"#713c53":"#222222","#7b6f72":"#222222","#948890":"#222222","#6b6367":"#222222","#995f77":"#222222","#f6b7c8":"#F8AACA","#ea7ea3":"#F8AACA","#d46a8a":"#F8AACA","#b84c72":"#F8AACA","#f1e4e7":"#FDECF2","#f7e9ed":"#FDECF2","#fff9fc":"#FDECF2","#fdf0f5":"#FDECF2","#e3d5d9":"#FDECF2","#f1c8d5":"#FDECF2","#efd6e1":"#FDECF2","#fde6ef":"#FDECF2","#fff8fb":"#FDECF2","#fff6fa":"#FFFFFF","#fff6f9":"#FDECF2","#fce4ec":"#FDECF2"};
+  var normalized = String(value).trim().toLowerCase();
+  var rgb = normalized.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/);
+  if (rgb) normalized = '#' + rgb.slice(1).map(function (part) { return Number(part).toString(16).padStart(2, '0'); }).join('');
+  if (Object.prototype.hasOwnProperty.call(replacements, normalized)) return replacements[normalized];
+  var bases = {"113,60,83":"34,34,34","123,111,114":"34,34,34","148,136,144":"34,34,34","107,99,103":"34,34,34","153,95,119":"34,34,34","20,10,14":"34,34,34","212,106,138":"248,170,202","173,63,103":"248,170,202","139,38,66":"248,170,202","180,76,114":"248,170,202","179,36,87":"248,170,202","158,64,98":"248,170,202","241,200,213":"253,236,242","241,228,231":"253,236,242"};
+  return String(value).replace(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(\s*,\s*[.\d]+)?\s*\)/gi, function (all, r, g, b, alpha) {
+    var base = bases[r + ',' + g + ',' + b];
+    return base ? (alpha ? 'rgba' : 'rgb') + '(' + base + (alpha || '') + ')' : all;
+  });
+}
+
   function applyMap(map) {
     if (!map || typeof map !== 'object') return;
     var key;
@@ -38,13 +51,17 @@
           if (/^--color-button-whatsapp-(?:background|hover)$/.test(key) && /^#(?:0d8043|0a6835)$/i.test(value.trim())) {
             value = '#F8AACA';
           } else if (/^#(?:c52f68|ad3f67|8b2642|711f35|c64273|9e2451)$/i.test(value.trim())) {
-            value = /text|price|breadcrumb/.test(key) ? '#713C53' : '#F8AACA';
+            value = /text|price|breadcrumb/.test(key) ? '#222222' : '#F8AACA';
           } else if (/^--color-(?:text-(?:secondary|tertiary|muted|subtitle|placeholder|help)|button-icon-text|field-placeholder|tab-inactive-text|breadcrumb-text|empty-state-text|price-old|icon-primary)$/.test(key) && /^#(?:7b6f72|948890)$/i.test(value.trim())) {
-            value = '#713C53';
+            value = '#222222';
           } else if (/^#2b2b2b$/i.test(value.trim()) || (
             /^#ffffff$/i.test(value.trim()) && /(?:button-(?:primary|floating|sticky|whatsapp)|tab-active|selection)-text$/.test(key)
-          )) value = '#713C53';
+          )) value = '#222222';
         }
+        value = normalizeUnifiedPaletteColor(value);
+        if (key === '--color-brand-secondary' && /^#f8aaca$/i.test(value)) value = '#222222';
+        if (key === '--color-cart-badge-text' && /^#ffffff$/i.test(value)) value = '#222222';
+        if (key === '--color-rating-star' && /^#8a6d1f$/i.test(value)) value = '#222222';
         root.style.setProperty(key, value);
       }
     }
@@ -398,11 +415,11 @@
     var style = document.createElement('style');
     style.id = 'tt-first-paint-style';
     style.textContent = [
-      'html.tt-first-paint-bg,html.tt-first-paint-bg body{background:var(--color-background-page,var(--tt-first-paint-bg,#FFF6FA))!important;background-color:var(--color-background-page,var(--tt-first-paint-bg,#FFF6FA))!important}',
+      'html.tt-first-paint-bg,html.tt-first-paint-bg body{background:var(--color-background-page,var(--tt-first-paint-bg,#FFFFFF))!important;background-color:var(--color-background-page,var(--tt-first-paint-bg,#FFFFFF))!important;background-image:var(--tt-flow-canvas,none)!important}',
       'html.tt-first-paint-bg,html.tt-first-paint-bg body{transition:none!important}',
       'html.tt-fast-navigation.tt-store-gate-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay){visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
       'html.tt-fast-navigation.tt-store-gate-pending body{overflow:auto!important;overscroll-behavior:auto!important}',
-      'html.tt-fast-navigation.tt-store-gate-pending{background:var(--color-background-page,var(--tt-first-paint-bg,#FFF6FA))!important}'
+      'html.tt-fast-navigation.tt-store-gate-pending{background:var(--color-background-page,var(--tt-first-paint-bg,#FFFFFF))!important}'
     ].join('');
     document.head.appendChild(style);
   }
