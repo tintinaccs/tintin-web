@@ -515,6 +515,10 @@ html body:not(:has(.adm-main)) .tt-product-card .tt-product-actions .tt-btn:only
 /* Auditoría del cliente: jerarquía compacta, tokens compartidos y lectura clara. */
 html body:not(:has(.adm-main)) :is(.tt-page-hero-title,.tt-section-title,.tt-cart-title,.tt-notifications-title) { color:var(--color-text-title)!important; }
 html body:not(:has(.adm-main)) .tt-page-hero { padding-block:32px 24px!important; }
+/* En escritorio el encabezado fijo ocupa --header-h; el aire visible sigue siendo 32px. */
+@media (min-width:1025px) {
+  html body:not(:has(.adm-main)) .tt-page-hero { padding-block-start:calc(var(--header-h,88px) + 32px)!important; }
+}
 html body:not(:has(.adm-main)) .tt-page-hero-title { font-size:clamp(28px,3.2vw,40px)!important; line-height:1.2; }
 html body:not(:has(.adm-main)) .tt-page-hero + .section { padding-top:24px!important; }
 html body:not(:has(.adm-main)) .tt-faq-q { min-height:56px; padding:16px 20px!important; font-size:16px!important; line-height:1.5; }

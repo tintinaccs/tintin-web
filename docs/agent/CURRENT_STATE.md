@@ -1,3 +1,11 @@
+## 2026-10-13 — Corrección de títulos cubiertos por el header en PR1122
+
+Codex /root. Alcance vigente: corregir conflictos y completar verificaciones (puntos 1–2), sin aprobación humana/merge/publicación. CI del candidato 527377d terminó: build/drift, contratos generales, suites runtime, Rules y pruebas de navegador llegaron al gate global responsive; falló sólo ese gate con 155/187 (32 superposiciones reproducibles de ocho páginas en cuatro anchos desktop). La regla compacta de .tt-page-hero había eliminado la reserva de --header-h. Se restituye esa reserva únicamente a partir de 1025px; separación visible 32px, fondos/colores y composición mobile/tablet conservados.
+
+PASS_LOCAL del cambio: matriz global original 187/187 en 11 rutas y 17 anchos, sin modificar auditor ni tolerancias; shell 15 pantallas, integridadCSS, colores 153 tokens/36 administrativos, caché 323 archivos/66 cargas. Inspección visual FAQ a 1440px: header bottom 88px, H1 top 156.31px (libre). Versiones transitivas sólo para tema/calidad/loader y sus consumidores. Plan regenerado contra main 2011323: 53 archivos; aprobaciones y revisores conservados. Evidencia visual y reporte entregable en outputs/auditoria-tintin fuera del repositorio. 5 regresiones Node de consumidores de loader/monitor aprobadas, conservando sus fixtures independientes. CI del nuevo candidato todavía pendiente.
+
+Evidencia adicional anterior: runtime local 331/339 y retest canónico de 8 fallidos aprobado 8/8; galería/ficha 60/60 en 3 proyectos. Son resultados del árbol anterior, no un PASS heredado para el nuevo CI.
+
 ## 2026-10-13 — Reconciliación PR1122 con main actualizado
 
 Codex /root. Alcance solicitado: resolver conflictos y repetir comprobaciones; detenerse antes de aprobación/merge/publicación. Base actual 2011323ab94c9a6834ba41edc833c82873f1e73d (PR1120). Se conservan cambios de seguridad/migración y correcciones de cliente. Conflictos de referencias inmutables resueltos, shell/CSP/caché y plan regenerados canónicamente. No se modifican controles de mantenimiento ni revisores.
