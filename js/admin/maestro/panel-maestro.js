@@ -15,7 +15,7 @@ import {
   const isAdminRoute = /(^|\/)admin(?:\.html)?$/i.test(location.pathname.replace(/\/$/, ''));
   if (!isAdminRoute) return;
 
-  const VERSION = 'tintin-20261012-auth-privacy-2-panel-maestro-js-domain-prepared-20261012-6-maestro-version-1-pedidos-styles-20261013-1-security-ready-20261013-2';
+  const VERSION = 'tintin-20261014-maestro-ui-reconciled-1';
   const CAP_COLUMNS = [
     ['create', 'C'], ['read', 'R'], ['update', 'U'], ['archive', 'Arch.'],
     ['delete', 'D'], ['search', 'Buscar'], ['export', 'Exportar'],

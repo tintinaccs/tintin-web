@@ -4,6 +4,11 @@
   "reason": "Corregir pestañas sobre transiciones, superficies de producto, logo y bienvenida legibles, y foto propia coherente en toda la cuenta",
   "files": [
     {
+      "path": "_headers",
+      "oldHash": "ec5028fb72d4d59f64421c3b744466d3167c3b08bb7300b14fb5d3a395a9f248",
+      "newHash": "8f5468f7508e1d97facc3c66e2c77fbd1d0698a548ba73187c33983e4458edfd"
+    },
+    {
       "path": "404.html",
       "oldHash": "f6dc3c6deb4989899b733ffdd40ff1bceead9b0f01073be24ed1ce4b6cf22d43",
       "newHash": "99bda05484b010097d945d25c414a755b756645fdc340c992af3e944f59ac95e"
@@ -21,7 +26,7 @@
     {
       "path": "admin.html",
       "oldHash": "299b72dc4eafa5e44dcbb003a58d9c32b0d0be1a41e9ee026b8fe7ded514db84",
-      "newHash": "316c9da9d56e0248586de8dc2ea0715a80b4b97f89a30b7e97c51637700dddea"
+      "newHash": "82b5fa388fc5e1d135c4e79bb61fd3bca4bb9bb4ba6eb5a444d876b64f5e4a34"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -47,6 +52,16 @@
       "path": "collections.html",
       "oldHash": "fe18e961cea589cfea95602728abb83179af56fbe10f2999cfd3f1ef1cb7b8f7",
       "newHash": "52a587a2eb082177777849da11a3620cfb49f220d14d09a3d147107d8d7b0ea3"
+    },
+    {
+      "path": "config/csp-runtime.js",
+      "oldHash": "6abc819c95f676a9e679450ee27305a52bcdfb2c8bbad99b4033c5c9f274041f",
+      "newHash": "3949caaf99ef5c600ddef03140a45881ff582087f6eb59ac9d93c6194619343d"
+    },
+    {
+      "path": "config/csp-runtime.json",
+      "oldHash": "2af38202511050a5ebd74d6f1987db05b651e27507e7f3d778567f448fc4f099",
+      "newHash": "9ac6d69542561aec1b3d59bb0bb21cfc2eaa83c9be4812167e1f1eb1971a442b"
     },
     {
       "path": "contact.html",
@@ -146,7 +161,7 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "oldHash": "f43d5b15eae2964234ef310ae64c529239dd4dc37bb9c6000dd2863e0873442b",
-      "newHash": "3e214ad56bd5864eff2f5c538ded964a89b4e01c1cf28149d6c11625a1bae4c1"
+      "newHash": "741718b08696b0dd187430e1c6b7dc27cd0ffefd9c9682cdb30fafebab9617bb"
     },
     {
       "path": "js/admin/mayoristas/mayoristas-admin.js",
@@ -521,7 +536,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "66adc6423eb750d5e8462c9b621d7b9fbceed9c73abd2cbb672a0f2a983bedf5",
-      "newHash": "6362903d69ba3c9519336efc65ba8e4abbb7af012918ea36988e022e4168fd27"
+      "newHash": "c469b92171715b6a1c814b804528fb80a2e4f1c391782d12625ca9d4e260bfcf"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
@@ -544,7 +559,13 @@
     "admin-guard__firestore-fuente-verdad__16",
     "apis-internas__correos__41",
     "apis-internas__pedidos__32",
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
     "correos",
+    "csp",
     "cuenta-bloqueada",
     "entrada-login",
     "entrada-login__google-btn__1",
