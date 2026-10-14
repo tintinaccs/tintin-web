@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1');
     }
   }
 
@@ -859,7 +859,7 @@
   // segundo sistema de menús.
   function bootHeaderAccountFix() {
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1-ui-fixes-20261014-1');
     }
   }
 

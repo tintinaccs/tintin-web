@@ -42,7 +42,7 @@ for(const width of [390,768,1440]){
  await expect(page.locator('#perfil-nombre-display')).toHaveText('Ana Nueva');
  await expect(page.locator('#perfil-avatar img')).toHaveAttribute('src','/photo-new.png');
  await expect(page.locator('#account-panel a[href="/perfil#mayorista"]')).toHaveCount(0);
- await page.evaluate(()=>document.dispatchEvent(new CustomEvent('tintin:profile-photo-updated',{detail:{uid:'u1',photoURL:'/photo-uploaded.png'}})));
+ await page.evaluate(()=>{window.oldAvatars=[document.querySelector('[data-auth-account-button] img'),document.querySelector('#tabbar-cuenta img')];document.dispatchEvent(new CustomEvent('tintin:profile-photo-updated',{detail:{uid:'u1',photoURL:'/photo-uploaded.png'}}));window.oldAvatars.forEach(img=>img.dispatchEvent(new Event('error')));});
  for(const selector of ['[data-auth-account-button]','#perfil-avatar','#tabbar-cuenta']) {
   await expect(page.locator(selector+' img')).toHaveCount(1);
   await expect(page.locator(selector+' img')).toHaveAttribute('src','/photo-uploaded.png');

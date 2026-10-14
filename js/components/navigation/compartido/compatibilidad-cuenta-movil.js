@@ -44,7 +44,7 @@ function cleanTabbarAvatar(){
  if(!img)return;
  img.removeAttribute('onerror');
  img.classList.add('tt-tabbar-avatar');
- img.onerror=function(){if(tab.dataset.ttDefaultHtml)tab.innerHTML=tab.dataset.ttDefaultHtml;};
+ img.onerror=function(){if(img.parentNode===tab&&tab.dataset.ttDefaultHtml)tab.innerHTML=tab.dataset.ttDefaultHtml;};
 }
 
 function bindAvatarRefreshEvents(){

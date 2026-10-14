@@ -240,7 +240,7 @@ function renderAccountButtonPhoto(user,profile={}){
    img.className='tt-account-avatar-btn';img.src=photoUrl;img.alt=name;img.referrerPolicy='no-referrer';img.width=48;img.height=48;
    img.style.cssText='width:100%;height:100%;max-width:none;max-height:none;flex-shrink:0;border-radius:inherit;object-fit:cover;display:block';
    btn.dataset.ttAccountAvatar='true';
-   img.onerror=()=>{delete btn.dataset.ttAccountAvatar;btn.innerHTML=accountBtnDefaults.get(btn);};
+   img.onerror=()=>{if(img.parentNode!==btn)return;delete btn.dataset.ttAccountAvatar;btn.innerHTML=accountBtnDefaults.get(btn);};
    btn.innerHTML='';btn.appendChild(img);
   }else { delete btn.dataset.ttAccountAvatar;btn.innerHTML=accountBtnDefaults.get(btn); }
  });
@@ -256,7 +256,7 @@ function renderMobileTabbarPhoto(user,profile={}){
   const name=escapeHtmlNav(identity.name||identity.username||user.displayName||user.email||'Mi cuenta');
   tab.innerHTML=`<img class="tt-tabbar-avatar" src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" width="24" height="24"><span>Cuenta</span>`;
   const img=tab.querySelector('img');
-  if(img)img.onerror=()=>{tab.innerHTML=tab.dataset.ttDefaultHtml;};
+  if(img)img.onerror=()=>{if(img.parentNode===tab)tab.innerHTML=tab.dataset.ttDefaultHtml;};
  }else tab.innerHTML=tab.dataset.ttDefaultHtml;
 }
 
