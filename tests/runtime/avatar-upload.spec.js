@@ -58,6 +58,7 @@ async function fixture(page, { width = 390, status = 200 } = {}) {
       export async function setDoc(ref, fields, options) { window.profileWrites.push({ ref, fields, options }); }`);
     if (url.origin === origin && url.pathname === '/js/core/auth/coordinador-sesion.js') return javascript(`
       export const AUTH_STATES = { UNKNOWN: 'unknown' };
+      export function getSessionUser() { return { uid: 'client-uid' }; }
       export async function waitForSession() { return { status: 'authenticated', user: { uid: 'client-uid', getIdToken: async () => 'test-token' } }; }`);
     if (url.origin === origin && url.pathname === '/js/pages/profile/estado-pedidos-perfil.js') return javascript('');
     if (url.origin === origin && url.pathname === '/api/profile-avatar-upload') {
