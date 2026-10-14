@@ -510,7 +510,7 @@
 import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20261012-auth-privacy-1-contenido-sitio-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1';
 initSiteContent('catalogo');
 </script>
-<script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1"></script>
+<script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1"></script>
 <script type="module">
 import { sanitizeImageUrl } from './js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { hasProductStock, firstAvailableVariant } from './js/core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
@@ -522,7 +522,7 @@ import { heartIconMarkup } from './js/components/favorites/icono-corazon.js?v=ti
 // incluido el polling/fallback de productos más abajo, que es justo lo que
 // tiene que seguir funcionando pase lo que pase con las colecciones.
 let onCollectionsUpdate = () => {};
-import('./js/pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-ui-fixes-20261014-1')
+import('./js/pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-ui-reconciled-20261014-1')
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
   .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
 

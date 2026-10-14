@@ -1,12 +1,12 @@
-import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1";
+import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1";
 // =============================================================
 // TINTIN ACCESORIOS — Flujo real de decisiones y conexiones (render)
 // =============================================================
 // Comprueba automáticamente la evidencia actual con las lecturas de producción
 // existentes. Los sellos históricos no deciden colores y no se escriben datos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261010-auto-flow-1';
-import { resolveAutomaticState, isAttentionState, liveMarker, shouldShowFlowEdge, createAutomaticMonitor, CHECK_INTERVAL_MS, EVIDENCE_MAX_AGE_MS } from './estado-flujo.js?v=tintin-20261010-auto-flow-1';
-import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261010-auto-flow-1';
+import { resolveAutomaticState, isAttentionState, liveMarker, shouldShowFlowEdge, createAutomaticMonitor, CHECK_INTERVAL_MS, EVIDENCE_MAX_AGE_MS } from './estado-flujo.js?v=tintin-20261010-auto-flow-1-connections-20261014-1';
+import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261010-auto-flow-1-connections-20261014-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
@@ -60,7 +60,7 @@ function evidenceHtml(evidence) {
 }
 
 async function probeRenderedCart(signal) {
-  const routeProbe = fetch('/', { credentials: 'same-origin', cache: 'no-store', signal })
+  const routeProbe = fetch('/', { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]) })
     .then(async response => {
       await response.body?.cancel?.();
       return { path: '/', status: response.status, ok: response.ok };
@@ -110,9 +110,22 @@ async function probeRenderedCart(signal) {
   return ['cart', { ...route, hasCartDrawer }];
 }
 
-async function probeClientFirestoreRead(label, read) {
+function withConnectionDeadline(read, signal) {
+  const deadline = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(15000)]);
+  return new Promise((resolve, reject) => {
+    const onAbort = () => reject(deadline.reason);
+    if (deadline.aborted) { onAbort(); return; }
+    deadline.addEventListener('abort', onAbort, { once: true });
+    Promise.resolve().then(() => {
+      if (deadline.aborted) throw deadline.reason;
+      return read(deadline);
+    }).then(resolve, reject).finally(() => deadline.removeEventListener('abort', onAbort));
+  });
+}
+
+async function probeClientFirestoreRead(label, read, signal) {
   try {
-    const snapshot = await read();
+    const snapshot = await withConnectionDeadline(deadline => readAdminFirestore(read, { signal: deadline }), signal);
     return { label, ok: true, status: 200, count: snapshot.size };
   } catch (error) {
     const code = String(error?.code || '');
@@ -121,7 +134,7 @@ async function probeClientFirestoreRead(label, read) {
   }
 }
 
-async function probeClientFirestoreRules(user) {
+async function probeClientFirestoreRules(user, signal) {
   if (!user || !await waitForAdminAppCheck(12000)) {
     const unavailable = { ok: false, status: 0, authRequired: true, error: 'App Check o sesión no disponible' };
     return {
@@ -141,30 +154,30 @@ async function probeClientFirestoreRules(user) {
   const [favorites, notifications, cart, products, orders] = await Promise.all([
     probeClientFirestoreRead('Favoritos', () => getDocs(query(
       collection(db, 'users', user.uid, 'favorites'), limit(1),
-    ))),
+    )), signal),
     probeClientFirestoreRead('Notificaciones', () => getDocs(query(
       collection(db, 'adminNotifications'), limit(1),
-    ))),
+    )), signal),
     probeClientFirestoreRead('Carrito', () => getDocs(query(
       collection(db, 'users', user.uid, 'cart'), limit(1),
-    ))),
+    )), signal),
     probeClientFirestoreRead('Productos', () => getDocs(query(
       collection(db, 'products'), limit(1),
-    ))),
+    )), signal),
     probeClientFirestoreRead('Pedidos', () => getDocs(query(
       collection(db, 'orders'), limit(1),
-    ))),
+    )), signal),
   ]);
   return { favorites, notifications, cart, products, orders };
 }
 
 // Comprueba únicamente la lectura de estadísticas públicas de engagement para
 // un producto existente. Son GETs sin mutación: no dejan likes/reseñas de prueba.
-async function probeEngagementStats(user) {
+async function probeEngagementStats(user, signal) {
   const unavailable = { ok: false, status: 0, error: 'sin sesión o App Check' };
   if (!user || !await waitForAdminAppCheck(12000)) return { likes: unavailable, reviews: unavailable };
   try {
-    const products = await getDocs(query(collection(db, 'products'), limit(1)));
+    const products = await withConnectionDeadline(deadline => readAdminFirestore(() => getDocs(query(collection(db, 'products'), limit(1))), { signal: deadline }), signal);
     const productId = products.docs[0]?.id;
     if (!productId) {
       const noProduct = { ok: false, status: 0, error: 'no hay producto para probar engagement' };
@@ -173,7 +186,7 @@ async function probeEngagementStats(user) {
     const readStats = async action => {
       try {
         const response = await fetch(`/api/engagement?action=${action}&productId=${encodeURIComponent(productId)}`, {
-          credentials: 'same-origin', cache: 'no-store',
+          credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]),
         });
         const payload = await response.json().catch(() => null);
         const shapeOk = action === 'productLikes'
@@ -197,12 +210,12 @@ async function probeEngagementStats(user) {
 // escribe, así que un documento ahí es una escritura real de la API en
 // producción. Es una lectura de una fila con la sesión del Super Admin; del
 // documento sólo se usa su fecha, nunca los datos de la clienta.
-async function probeEngagementRecords(user) {
+async function probeEngagementRecords(user, signal) {
   const unavailable = { ok: false, status: 0, authRequired: true, exists: false, lastAt: '', error: 'sin sesión o App Check' };
   if (!user || !await waitForAdminAppCheck(12000)) return { likes: unavailable, reviews: unavailable };
   const latest = async collectionId => {
     try {
-      const snapshot = await getDocs(query(collection(db, collectionId), orderBy('createdAt', 'desc'), limit(1)));
+      const snapshot = await withConnectionDeadline(deadline => readAdminFirestore(() => getDocs(query(collection(db, collectionId), orderBy('createdAt', 'desc'), limit(1))), { signal: deadline }), signal);
       const createdAt = snapshot.docs[0]?.data()?.createdAt;
       const date = typeof createdAt?.toDate === 'function' ? createdAt.toDate() : new Date(createdAt || '');
       const lastAt = snapshot.empty || Number.isNaN(date.getTime()) ? '' : date.toISOString();
@@ -219,9 +232,9 @@ async function probeEngagementRecords(user) {
 
 // GET diagnóstico: no envía secretos ni escribe productos. El estado del
 // guard se consulta sin provocar rechazos HTTP esperados en la consola.
-async function probeSheetsWebhook() {
+async function probeSheetsWebhook(signal) {
   try {
-    const response = await fetch('/api/sheets-products-webhook', { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.timeout(12000) });
+    const response = await fetch('/api/sheets-products-webhook', { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(12000)]) });
     const body = await response.json().catch(() => null);
     return { status: response.status, revision: body?.revision || '', authState: body?.authState || '' };
   } catch (error) {
@@ -234,14 +247,14 @@ async function probeSheetsWebhook() {
 // para distinguir una sesión/rol/perfil realmente disponibles de evidencia
 // estática que antes quedaba amarilla aunque el Super Admin estuviera usando
 // el panel con normalidad.
-async function probeCurrentSession(user, role) {
+async function probeCurrentSession(user, role, signal) {
   if (!user) {
     return { authenticated: false, token: false, role: false, profile: false, status: 401, authRequired: true };
   }
 
   let tokenResult;
   try {
-    tokenResult = await user.getIdTokenResult();
+    tokenResult = await withConnectionDeadline(() => user.getIdTokenResult(), signal);
   } catch (error) {
     const code = String(error?.code || '');
     return {
@@ -262,7 +275,7 @@ async function probeCurrentSession(user, role) {
     projectClaim === 'tintin-accesorios';
 
   try {
-    const profile = await getDoc(doc(db, 'users', user.uid));
+    const profile = await withConnectionDeadline(deadline => readAdminFirestore(() => getDoc(doc(db, 'users', user.uid)), { signal: deadline }), signal);
     return {
       authenticated: true,
       token: identityClaimsOk,
@@ -540,7 +553,7 @@ export function initConnectionsFlow({ role } = {}) {
       const user = auth.currentUser;
       if (user) {
         if (!await waitForAdminAppCheck(12000)) throw new Error('La verificación de seguridad está pendiente. Tu sesión sigue activa; podés reintentar.');
-        const idToken = await user.getIdToken();
+        const idToken = await withConnectionDeadline(() => user.getIdToken(), signal);
         authHeaders = { authorization: `Bearer ${idToken}` };
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
@@ -553,11 +566,11 @@ export function initConnectionsFlow({ role } = {}) {
         user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/engagement?action=ownFavorite&productId=__tfc_health_probe__', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/notifications?action=health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
-        probeClientFirestoreRules(user),
-        probeEngagementStats(user),
-        probeEngagementRecords(user),
-        user ? probeSheetsWebhook() : Promise.resolve(null),
-        probeCurrentSession(user, role),
+        probeClientFirestoreRules(user, signal),
+        probeEngagementStats(user, signal),
+        probeEngagementRecords(user, signal),
+        user ? probeSheetsWebhook(signal) : Promise.resolve(null),
+        probeCurrentSession(user, role, signal),
         fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]) }).then(response => ({
           status: response.status,
           csp: Boolean(response.headers.get('content-security-policy')),
@@ -592,6 +605,11 @@ export function initConnectionsFlow({ role } = {}) {
       if (user && (!adminHealth.ok || adminHealth.body?.ok !== true)) errors.push(`/api/admin-runtime-health respondió ${adminHealth.status || 'sin respuesta'}`);
       const ciProblem = user ? ciEvidenceProblem(masterDiagnostics) : '';
       if (ciProblem) errors.push(ciProblem);
+      for (const [group, probes] of [['Datos del panel', firestoreRules], ['Participación', engagementStats], ['Registros de participación', engagementRecords]]) {
+        for (const [name, probe] of Object.entries(probes || {})) {
+          if (probe?.ok === false) errors.push(`${group} (${probe.label || name}): ${probe.status ? 'lectura no disponible' : 'sin respuesta dentro del plazo'}`);
+        }
+      }
 
       const checkedAt = new Date().toISOString();
       const routeProbeMap = Object.fromEntries(routeProbes);

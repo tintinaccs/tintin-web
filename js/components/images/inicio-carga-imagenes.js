@@ -7,7 +7,7 @@
 // splash bespoke de index.html (#tt-intro), que ahora usa el mismo
 // js/cargador-pagina.js que el resto del sitio (con su propio scroll-lock ya
 // incluido).
-import { loadImages } from './imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { loadImages } from './imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1';
 
 loadImages().then(() => {
   // Con las imágenes ya resueltas sólo se refrescan las tarjetas: tienda.js

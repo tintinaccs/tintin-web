@@ -5,13 +5,27 @@ import { waitForAdminAppCheck, recoverAdminSecurity } from './app-check-admin.js
 
 const credentialError = error => /^(?:firestore\/)?(?:permission-denied|unauthenticated)$/.test(String(error?.code || ''));
 
-export async function readAdminFirestore(read) {
-  if (!await waitForAdminAppCheck(12000)) throw Object.assign(new Error('Verificación de seguridad pendiente. Podés reintentar.'), { code: 'admin/security-unavailable' });
+export async function readAdminFirestore(read, { signal } = {}) {
   const uid = auth.currentUser?.uid;
-  try { return await read(); }
+  const requireSameSession = () => {
+    if (signal?.aborted) throw signal.reason;
+    if (!uid || auth.currentUser?.uid !== uid) throw Object.assign(new Error('La sesión cambió. Volvé a abrir esta sección.'), { code: 'admin/session-changed' });
+  };
+  requireSameSession();
+  if (!await waitForAdminAppCheck(12000)) throw Object.assign(new Error('Verificación de seguridad pendiente. Podés reintentar.'), { code: 'admin/security-unavailable' });
+  requireSameSession();
+  try {
+    const result = await read();
+    requireSameSession();
+    return result;
+  }
   catch (error) {
+    requireSameSession();
     if (!credentialError(error) || !await recoverAdminSecurity(uid)) throw error;
-    return read();
+    requireSameSession();
+    const result = await read();
+    requireSameSession();
+    return result;
   }
 }
 

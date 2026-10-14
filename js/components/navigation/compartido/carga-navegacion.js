@@ -14,8 +14,8 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-stock-flow-20261014-1-ui-fixes-20261014-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261012-checkout-ready-3-carga-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1-ui-fixes-20261014-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261012-checkout-ready-4-estado-productos-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261012-checkout-ready-3-carga-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-ui-reconciled-20261014-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261012-checkout-ready-4-estado-productos-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-ui-reconciled-20261014-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -118,7 +118,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261012-client-recovery-1-navegacion-autenticacion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-ui-fixes-20261014-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20261012-client-recovery-1-navegacion-autenticacion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -138,7 +138,7 @@ function loadCartRuntime() {
 
 function loadNotificationsRuntime() {
   if (!notificationsRuntimePromise) {
-    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261012-checkout-ready-3-notificaciones-clientes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-ui-fixes-20261014-1')
+    notificationsRuntimePromise = import('../../../components/notifications/notificaciones-clientes.js?v=tintin-20261012-checkout-ready-3-notificaciones-clientes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-ui-reconciled-20261014-1')
       .then(module => {
         module.initClientNotifications?.();
         return module;
@@ -278,7 +278,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(new URL('/js/components/navigation/compartido/enrutador.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
-      import('./control-busqueda.js?v=tintin-20261012-checkout-ready-4-control-busqueda-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1'),
+      import('./control-busqueda.js?v=tintin-20261012-checkout-ready-4-control-busqueda-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-ui-reconciled-20261014-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

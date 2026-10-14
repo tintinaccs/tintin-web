@@ -1,3 +1,7 @@
+## Reconciliación con conexiones #1125 — 2026-10-14
+
+Base vigente5f34d8df. Se incorporan las correcciones del otro agente sin descartar funciones; todos los conflictos eran versiones o derivados salvo nuestros cambios de perfil y stub conservados. Se preservan ambas evidencias de CURRENT_STATE. Nuevo plan, caché y artefactos deben reconstruirse para el candidato reconciliado.
+
 ## 2026-10-14 — Correcciones solicitadas después del despliegue #1124
 
 Codex /root. Base54b4f3b. Alcance completo anotado: pestañas del perfil tapadas por la capa de transición; ficha de producto con márgenes/padding y radios en foto y descripción; tarjetas del catálogo y recomendaciones con fondo blanco continuo e inset; logo blanco del footer sobre soporte rosa para conservar visibilidad cuando alterna a claro; rótulo Bienvenida tintina legible en negro; identidad única del avatar propio en header/perfil/mobile y handoff, con respaldo Google. No nuevas ventas/correos ni cambios de permisos.
@@ -7,6 +11,17 @@ PASS_LOCAL:28 Chromium de galería y continuidad incluyendo hit testing de pesta
 Diagnóstico de X reportadas: propuestas Dependabot1116/1117/1118, no despliegue1124. Logs nativos: package.json/package-lock.json modificados sin renovar huellas protegidas; manifiesto diagnostic-manifest.json difiere del generado. Sin modificar/mergear estas propuestas ajenas ni debilitar controles.
 
 Conexiones amarillas reportadas: Continuar con Google, redirect getRedirectResult, Últimos datos, Deployments/pruebas; servicios externos/Sheets parcial. El monitor pide evidencia vigente del commit y sesión, sin promover una lectura como escritura. CI nativo del commit desplegado54b4f3b Repository audit y Producción real SUCCESS confirmado. La revalidación superpone esa evidencia para Google/redirect/perfil. La sesión del navegador integrado no se restauró, por lo que no se comprobó el detalle privado vivo de Sheets/externos; no promover pruebas de escritura inexistentes ni alterar permisos.
+
+
+## 2026-10-14 — Flujo de conexiones y revisión del Super Admin
+
+Codex /root. Base 54b4f3b7, rama codex/conexiones-superadmin-20261014. El titular solicita corregir el flujo, revisar el resto del Super Admin e integrar las correcciones a main. No autoriza aprobar el entorno protegido en su nombre ni activar cobros reales.
+
+Hallazgos reproducidos y corregidos: HIGH, lectura administrativa entregaba un resultado después de cambiar de identidad o iniciaba una lectura sin usuario; ahora valida la misma sesión antes/después de cada espera y recuperación. MEDIUM, consultas del flujo sin cancelación propia podían retener una ronda completa y renovar seguridad después de abandonar la vista; deadline por lectura, señal compartida en HTTP y cancelación antes de reintentar. MEDIUM, pruebas Firestore omitían la recuperación compartida y los fallos puntuales podían terminar sin aviso; se conecta readAdminFirestore y se muestran avisos conservando los resultados sanos. MEDIUM, entorno sandbox sin configuración suficiente parecía conectado y PayPal opcional apagado se trataba como fallo; clasificador único usa configuración efectiva y mensajes por proveedor. LOW, acuses pendientes figuraban como operaciones en curso y el detalle podía decir simultáneamente escritura confirmada y no probada; marcadores y detalle coherentes. Prueba estática de Pedidos corregida para observar su fuente compartida vigente, sin recrear un listener duplicado.
+
+PASS_LOCAL final: 485 pruebas de Admin, flujo, diagnóstico, salud, sincronización y operaciones; 170 regresiones relacionadas de Auth, cuentas, arquitectura y caché (655/655). Diez auditores de Super Admin aprobados (incluyen Maestro 27/27, interconexión 25/25, cierre 83/83 y módulos 140/140). Chromium: 48 casos reales de comercio/Pedidos; matriz Maestro de cinco tamaños y flujo de cuatro tamaños aprobadas. Build Pages y control de 323 recursos versionados aprobados. CI y aprobación del entorno del SHA final PENDING; no heredar estos resultados para un candidato distinto.
+
+Comprobación publicada de solo lectura (no es PASS_PRODUCTION de estas correcciones): sesión existente abre Maestro, estadísticas, usuarios, mayoristas, reseñas y me gusta sin avisos de carga; flujo responde con 70 de 80 registros verificados. Webhook informa revisión products-canonical-v3 y configuración presente; acuse real del 13 de octubre pertenece a otro despliegue y sigue pendiente por diseño. Resend/Cloudinary configurados, PayPal sandbox; no hay prueba de cobro Live ni entrega de un correo/subida de imagen nueva. No se generan pedidos, productos, cobros, reseñas, correos ni operaciones ficticias para obtener colores verdes. La lectura automatizada de otras pantallas se interrumpió por timeout del navegador; no atribuirles verificación publicada completa.
 
 ## 2026-10-13 — Preparación final autorizada antes de migrar
 

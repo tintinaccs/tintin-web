@@ -1,4 +1,4 @@
-import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1';
 /* =============================================================
    TINTIN — Super Admin: Mensaje de bienvenida
    =============================================================

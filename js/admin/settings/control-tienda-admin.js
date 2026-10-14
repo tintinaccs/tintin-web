@@ -1,4 +1,4 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 /* =============================================================
    TINTIN — Sincronización segura del estado global de la tienda
@@ -411,6 +411,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./sincronizacion-correo-admin.js?v=tintin-20261012-auth-privacy-1-sincronizacion-correo-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1').catch(error => {
+import('./sincronizacion-correo-admin.js?v=tintin-20261012-auth-privacy-1-sincronizacion-correo-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

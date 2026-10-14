@@ -29,7 +29,9 @@ test('commerce permission failures get one controlled auth recovery, not a liste
   assert.match(source, /recordAuthDiagnostic\('FIRESTORE_LISTENER_ERROR'/);
   assert.match(source, /recoverCommerceAuth\(error, 'products'\)/);
   assert.match(source, /recoverCommerceAuth\(error, 'collections'\)/);
-  assert.match(source, /recoverCommerceAuth\(error, 'orders'\)/);
+  // Pedidos utiliza la fuente compartida; su recuperación vive en admin-app.
+  assert.match(source, /window\.TintinAdminOrders\.subscribe\(snapshot/);
+  assert.match(await read('js/admin/admin-app.js'), /recoverAdminRealtimeAuth\(error, 'orders'\)/);
 });
 
 test('dashboard never renders order read failures as commercial zeroes', async () => {

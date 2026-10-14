@@ -15,7 +15,7 @@ test('GET declara configuración ausente sin exponer datos ni realizar escritura
   assert.equal(response.status,200);assert.equal((await response.json()).authState,'server-secret-missing');
 });
 test('PayPal sandbox es parcial: Resend y Cloudinary sanos no quedan como error ni cobros live',()=>{
-  const input={systemHealth:{status:200,body:{report:{integrations:{resend:true,cloudinary:true,paypal:{environment:'sandbox',productionReady:false}}}}}};
+  const input={systemHealth:{status:200,body:{report:{integrations:{resend:true,cloudinary:true,paypal:{environment:'sandbox',enabled:true,configured:true,productionReady:false}}}}}};
   const nodes=buildLiveChecks(input,'fixture');const edges=buildLiveEdges(input,'fixture');
   assert.equal(resolveState(NODES.find(n=>n.id==='servicios-externos'),nodes['servicios-externos'],ESTADOS),ESTADOS.PARCIAL);
   const edge=EDGES.find(e=>e.from==='apis-internas'&&e.to==='servicios-externos');
