@@ -38,6 +38,12 @@ export function resolveAccountAvatar(profile = {}, user = {}) {
   ));
   if (explicitAvatar) return explicitAvatar;
 
+  const legacyAvatar = clean(profile.photoURL);
+  // Las subidas anteriores se guardaban sólo en photoURL. Una copia de
+  // Google no debe tapar su foto actual, pero una foto propia sí prevalece.
+  const googlePhoto = value => { try { const host = new URL(value).hostname; return host === "googleusercontent.com" || host.endsWith(".googleusercontent.com"); } catch { return false; } };
+  if (legacyAvatar && !googlePhoto(legacyAvatar)) return legacyAvatar;
+
   const signedInProviderPhoto = providerPhoto(user);
   if (signedInProviderPhoto) return signedInProviderPhoto;
 

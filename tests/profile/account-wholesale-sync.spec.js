@@ -24,7 +24,7 @@ for(const width of [390,768,1440]){
  const db={};const AUTH_STATES={AUTHENTICATED:'authenticated',RESTORING:'restoring',UNKNOWN:'unknown'};
  const ROLES={CLIENT:'client',SUPERADMIN:'superadmin'};const SUPER_ADMIN='owner@example.com';
  const can=()=>false;const sanitizeImageUrl=value=>value;const recordAuthDiagnostic=()=>{};
- const readAuthHandoff=()=>null;const createAuthHandoff=()=>{};const clearAuthHandoff=()=>{};
+ const readAuthHandoff=()=>null;const createAuthHandoff=(uid,visual)=>{window.lastHandoff={uid,...visual};};const clearAuthHandoff=()=>{};
  const logoutSession=async()=>{};const getSessionUser=()=>auth.currentUser;
  const subscribeSession=callback=>{window.sessionCallback=callback;};
  const doc=(_db,_collection,id)=>id;
@@ -42,6 +42,14 @@ for(const width of [390,768,1440]){
  await expect(page.locator('#perfil-nombre-display')).toHaveText('Ana Nueva');
  await expect(page.locator('#perfil-avatar img')).toHaveAttribute('src','/photo-new.png');
  await expect(page.locator('#account-panel a[href="/perfil#mayorista"]')).toHaveCount(0);
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('tintin:profile-photo-updated',{detail:{uid:'u1',photoURL:'/photo-uploaded.png'}})));
+ for(const selector of ['[data-auth-account-button]','#perfil-avatar','#tabbar-cuenta']) {
+  await expect(page.locator(selector+' img')).toHaveCount(1);
+  await expect(page.locator(selector+' img')).toHaveAttribute('src','/photo-uploaded.png');
+ }
+ expect(await page.evaluate(()=>window.lastHandoff.profile.avatarURL)).toBe('/photo-uploaded.png');
+ await page.evaluate(()=>document.dispatchEvent(new CustomEvent('tintin:profile-photo-updated',{detail:{uid:'another-user',photoURL:'/wrong-photo.png'}})));
+ await expect(page.locator('#perfil-avatar img')).toHaveAttribute('src','/photo-uploaded.png');
  const dimensions=await page.locator('[data-auth-account-button]').evaluate(button=>({button:button.getBoundingClientRect().width,image:button.querySelector('img').getBoundingClientRect().width}));
  expect(dimensions.image).toBeCloseTo(dimensions.button,0);
  await page.evaluate(()=>{window.fixtureAuth.currentUser={uid:'u2',email:'two@example.com'};window.sessionCallback({status:'authenticated',user:window.fixtureAuth.currentUser});window.profileCallbacks.u1({exists:()=>true,data:()=>({avatarURL:'/wrong-user.png'})});});
