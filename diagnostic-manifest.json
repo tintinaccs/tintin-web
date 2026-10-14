@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "801239197f25dc9c0d9e6273dac770b73a98836e852532e459fbc37ef09f2992",
+  "sourceFingerprint": "cbf026e70e31d56808c40ce1d8cdd410231a5b1e121dc3a91fabe91e0435b8e4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1221,
     "textFiles": 1173,
-    "totalBytes": 18433622,
+    "totalBytes": 18433833,
     "pages": 19,
     "modules": 874
   },
@@ -16237,8 +16237,8 @@
         "guest",
         "client"
       ],
-      "bytes": 2019,
-      "sha256": "2af4c07fc73dfe3ce17bffff002b8672c475800acf93d539ac5477e57dbf3303",
+      "bytes": 1764,
+      "sha256": "ebbbf7d473aba6a834bd21989d91bc25eeb4f4b443129be25c755e825ea42b52",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16247,19 +16247,13 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          2
+          1
         ]
       },
       "duplicateIds": [],
       "inlineScripts": [],
       "ids": 0,
-      "scripts": [
-        {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1-profile-pulseras-20261014-1",
-          "target": "js/cargador-pagina.js",
-          "line": 1
-        }
-      ],
+      "scripts": [],
       "styles": [
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
@@ -16297,16 +16291,10 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 2
+          "line": 1
         }
       ],
       "references": [
-        {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1-profile-pulseras-20261014-1",
-          "target": "js/cargador-pagina.js",
-          "line": 1,
-          "exists": true
-        },
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
@@ -16340,7 +16328,7 @@
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 2,
+          "line": 1,
           "exists": true
         }
       ],
@@ -48501,8 +48489,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 17442,
-      "sha256": "c7e53043ee562691f5fb1f800645ac7874fd8111f50fc1eee954a417b3b54082"
+      "bytes": 17429,
+      "sha256": "179ba0a17c93dde976e8575293d5048bb78ad1c65a781f0a92fda9b641f975fd"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -48514,7 +48502,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "713ef6da28e4cf44984ced304b37642b758fcf9bf7537c072fc3c865188faa06"
+      "sha256": "f3f82ef7158e752a53d1c7bbd0b6d557dcf355b97bdcd723fdeba32cdce65ce3"
     },
     {
       "path": "config/public-site.json",
@@ -49101,8 +49089,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 476001,
-      "sha256": "d05191d5a052388255b7718b1a2c89cc8ade2d74acbe6a5bf242e4dbd008cf8d"
+      "bytes": 476480,
+      "sha256": "9982b1a8afec358eddfd044bb0c0975d83b8a1b71e42e8ac5ee4e5fd4d038285"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51939,8 +51927,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 2019,
-      "sha256": "2af4c07fc73dfe3ce17bffff002b8672c475800acf93d539ac5477e57dbf3303"
+      "bytes": 1764,
+      "sha256": "ebbbf7d473aba6a834bd21989d91bc25eeb4f4b443129be25c755e825ea42b52"
     },
     {
       "path": "package-lock.json",
