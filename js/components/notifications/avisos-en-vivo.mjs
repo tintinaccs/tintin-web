@@ -55,7 +55,7 @@ export function createLiveActivityNotices() {
       if (existing) return;
       link.id = 'tt-live-activity-css';
       link.rel = 'stylesheet';
-      link.href = '/css/components/notifications/avisos-en-vivo.css?v=tintin-20261005-notification-parity-1';
+      link.href = '/css/components/notifications/avisos-en-vivo.css?v=tintin-20261005-notification-parity-1-palette-20261014-1';
       document.head.appendChild(link);
     });
     return stylesReady;

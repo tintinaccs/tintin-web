@@ -18,17 +18,17 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
   function loadStyles() {
     ensureStyle(
       'link[data-tt-login-maintenance]',
-      '../../../css/pages/login/login-maintenance.css?v=tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1',
+      '../../../css/pages/login/login-maintenance.css?v=tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1',
       'ttLoginMaintenance'
     );
     ensureStyle(
       'link[data-tt-login-fluid]',
-      '../../../css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1-brand-20261004-1-owner-pink-20261004-1',
+      '../../../css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1',
       'ttLoginFluid'
     );
     ensureStyle(
       'link[data-tt-login-onboarding-flow]',
-      '../../../css/pages/login/login-onboarding-flow.css?v=tintin-20261001-registration-white-cards-2-brand-20261004-1-owner-pink-20261004-1',
+      '../../../css/pages/login/login-onboarding-flow.css?v=tintin-20261001-registration-white-cards-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1',
       'ttLoginOnboardingFlow'
     );
   }

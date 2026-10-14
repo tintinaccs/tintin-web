@@ -1,7 +1,7 @@
 .tt-reviews-product {
   --tt-review-pink: var(--color-brand-primary, var(--color-brand-primary, #F8AACA));
   --tt-review-pink-deep: var(--color-brand-primary-hover, var(--color-brand-primary, #F8AACA));
-  --tt-review-pink-soft: #FFF8FB;
+  --tt-review-pink-soft: #FDECF2;
   --tt-review-pink-pale: #FDECF2;
   --tt-review-pink-border: #EFC9D7;
   --tt-review-pink-border-strong: #E2AFC2;
@@ -37,8 +37,8 @@
   padding: clamp(20px, 3vw, 32px);
   border: 1px solid var(--tt-review-pink-border);
   border-radius: 28px;
-  background: linear-gradient(145deg, #FFFFFF 0%, #FFF8FB 100%);
-  box-shadow: 0 16px 46px rgba(173, 63, 103, .08);
+  background: linear-gradient(145deg, #FFFFFF 0%, #FDECF2 100%);
+  box-shadow: 0 16px 46px rgba(248,170,202, .08);
 }
 
 .tt-reviews-main,
@@ -163,7 +163,7 @@
   border: 1px solid var(--tt-review-pink-border);
   border-radius: 20px;
   background: rgba(255,255,255,.97);
-  box-shadow: 0 7px 24px rgba(173, 63, 103, .055);
+  box-shadow: 0 7px 24px rgba(248,170,202, .055);
 }
 
 .tt-review-form {
@@ -271,7 +271,7 @@
   transform: scale(1.06);
 }
 .tt-rating-input button:focus-visible {
-  outline: 3px solid rgba(173,63,103,.2);
+  outline: 3px solid rgba(248,170,202,.2);
   outline-offset: 2px;
 }
 
@@ -312,7 +312,7 @@
 .tt-review-reply-input:focus {
   outline: 0;
   border-color: var(--tt-review-pink);
-  box-shadow: 0 0 0 3px rgba(173,63,103,.11);
+  box-shadow: 0 0 0 3px rgba(248,170,202,.11);
 }
 
 .tt-review-form-actions,
@@ -544,13 +544,13 @@
 }
 
 @keyframes tt-review-highlight {
-  0%,100% { box-shadow: 0 7px 24px rgba(173,63,103,.055); }
-  35% { box-shadow: 0 0 0 5px rgba(173,63,103,.16), 0 14px 34px rgba(173,63,103,.11); }
+  0%,100% { box-shadow: 0 7px 24px rgba(248,170,202,.055); }
+  35% { box-shadow: 0 0 0 5px rgba(248,170,202,.16), 0 14px 34px rgba(248,170,202,.11); }
 }
 
 @media (hover:hover) and (pointer:fine) {
   .tt-review-card { transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
-  .tt-review-card:hover { transform: translateY(-1px); border-color: var(--tt-review-pink-border-strong); box-shadow: 0 11px 30px rgba(173,63,103,.08); }
+  .tt-review-card:hover { transform: translateY(-1px); border-color: var(--tt-review-pink-border-strong); box-shadow: 0 11px 30px rgba(248,170,202,.08); }
   .tt-rating-input button:hover { color: var(--tt-review-gold-soft); transform: scale(1.05); }
 }
 

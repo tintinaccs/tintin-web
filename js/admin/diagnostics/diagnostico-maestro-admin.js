@@ -3,7 +3,7 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-pri
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 
 const API_URL = '/api/master-diagnostics';
-const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-3-brand-20261004-1-owner-pink-20261004-1';
+const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-3-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
 const POLL_MS = 12000;
 const STATE_LABELS = {
   PASS: 'PASS',

@@ -73,7 +73,7 @@ body.tt-public-shell-mounted .login-page {
 .login-page::after {
   bottom: -24%;
   left: -8%;
-  background: rgba(173, 63, 103, .08);
+  background: rgba(248,170,202, .08);
 }
 
 /* Fase G: tarjeta unica centrada (sin panel lateral de marca) — el mismo
@@ -139,7 +139,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   text-align: center;
 }
 .login-mobile-logo-text {
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font-size: 26px;
   font-weight: 900;
   line-height: 1;
@@ -147,7 +147,7 @@ body.login-setup-open { --login-shell-width: 560px; }
 }
 .login-mobile-logo-sub {
   margin-top: 7px;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: .2em;
@@ -212,7 +212,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   padding: 10px 16px;
   border-radius: 14px;
   background: #ffffff;
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font-size: 12.5px;
   font-weight: 700;
   line-height: 1.4;
@@ -236,7 +236,7 @@ body.login-setup-open { --login-shell-width: 560px; }
 
 .login-eyebrow {
   margin-bottom: 12px;
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: .16em;
@@ -257,7 +257,7 @@ body.login-setup-open { --login-shell-width: 560px; }
 
 .login-heading-sub {
   margin: 12px 0 30px;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font-size: 14px;
   line-height: 1.55;
   text-align: center;
@@ -312,7 +312,7 @@ body.login-setup-open { --login-shell-width: 560px; }
 .login-google > span:last-child { color: var(--login-ink) !important; }
 
 .login-google:hover:not(:disabled) {
-  border-color: rgba(173,63,103,.28);
+  border-color: rgba(248,170,202,.28);
   box-shadow: 0 12px 28px rgba(80,31,49,.12), inset 0 1px 0 #fff;
   transform: translateY(-2px);
 }
@@ -362,9 +362,9 @@ body.login-setup-open { --login-shell-width: 560px; }
 
 .login-email-input::placeholder { color: #aa9ca1; }
 .login-email-input:focus {
-  border-color: rgba(173,63,103,.72);
+  border-color: rgba(248,170,202,.72);
   background: #fff !important;
-  box-shadow: 0 0 0 4px rgba(173,63,103,.11);
+  box-shadow: 0 0 0 4px rgba(248,170,202,.11);
 }
 
 .login-email-btn {
@@ -373,7 +373,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   padding: 12px 20px;
   border: 0;
   background: linear-gradient(135deg, var(--color-brand-primary, #F8AACA), var(--color-brand-primary, #F8AACA)) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
   box-shadow: 0 12px 28px rgba(142,39,77,.24), inset 0 1px 0 rgba(255,255,255,.18);
 }
 
@@ -395,11 +395,11 @@ body.login-setup-open { --login-shell-width: 560px; }
   margin-top: 8px;
   border: 0;
   background: transparent !important;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font: 700 12px/1.2 "Montserrat", sans-serif;
   cursor: pointer;
 }
-.login-email-resend:disabled { color:var(--color-text-primary,#713C53) !important; cursor: default; }
+.login-email-resend:disabled { color:var(--color-text-primary,#222222) !important; cursor: default; }
 
 .login-otp-input {
   text-align: center;
@@ -420,23 +420,23 @@ body.login-setup-open { --login-shell-width: 560px; }
 .login-otp-paste {
   min-height: 34px;
   padding: 7px 14px;
-  border: 1px solid rgba(173,63,103,.28);
+  border: 1px solid rgba(248,170,202,.28);
   border-radius: 999px;
   background: rgba(255,255,255,.52);
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font: 700 11px/1.2 "Montserrat", sans-serif;
   cursor: pointer;
   transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
 }
 
 .login-otp-paste:hover {
-  border-color: rgba(173,63,103,.55);
+  border-color: rgba(248,170,202,.55);
   background: #fff;
   transform: translateY(-1px);
 }
 
 .login-otp-clipboard-status {
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font-size: 11px;
   line-height: 1.3;
 }
@@ -463,7 +463,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   background: rgba(253,239,245,.72);
 }
 .login-profile-confirmation-label {
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font-size: 10px;
   font-weight: 750;
   letter-spacing: .08em;
@@ -484,13 +484,13 @@ body.login-setup-open { --login-shell-width: 560px; }
   padding: 0 10px;
   border: 0;
   background: transparent;
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font: 750 12px/1 "Montserrat", sans-serif;
   cursor: pointer;
 }
 .login-profile-change:hover { text-decoration: underline; }
 .login-profile-change:focus-visible {
-  outline: 3px solid rgba(173,63,103,.24);
+  outline: 3px solid rgba(248,170,202,.24);
   outline-offset: 2px;
   border-radius: 10px;
 }
@@ -498,7 +498,7 @@ body.login-setup-open { --login-shell-width: 560px; }
 .login-hint {
   max-width: 360px;
   margin: 17px auto 0;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font-size: 10.5px;
   line-height: 1.55;
   text-align: center;
@@ -513,12 +513,12 @@ body.login-setup-open { --login-shell-width: 560px; }
   font: inherit;
   font-size: 12.5px;
   font-weight: 650;
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.login-mode-toggle-btn:hover { color:var(--color-text-primary,#713C53); }
+.login-mode-toggle-btn:hover { color:var(--color-text-primary,#222222); }
 
 .login-back { margin-top: 20px; text-align: center; }
 .login-back a {
@@ -526,7 +526,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font-size: 12px;
   font-weight: 750;
   text-decoration: none;
@@ -548,7 +548,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   display: block;
   border-color: #efbec8;
   background: #fff0f3 !important;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
 }
 .login-success.show {
   display: block;
@@ -595,7 +595,7 @@ body.login-setup-open { --login-shell-width: 560px; }
 /* Ayuda corta debajo de un campo del alta (ej: formato del username). */
 .login-field-hint {
   margin: -6px 0 12px;
-  color:#713C53;
+  color:#222222;
   font-size: 12.5px;
   line-height: 1.45;
 }
@@ -603,13 +603,13 @@ body.login-setup-open { --login-shell-width: 560px; }
 /* Ayuda que aparece cuando el teléfono ya está en otra cuenta. */
 .login-phone-help {
   margin: -6px 0 12px;
-  color:#713C53;
+  color:#222222;
   font-size: 12.5px;
   line-height: 1.45;
 }
 
 .login-phone-help a {
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font-weight: 650;
 }
 
@@ -644,13 +644,13 @@ body.login-exit-open { overflow: hidden; }
 
 .login-exit-title {
   margin: 0 0 10px;
-  color: var(--login-ink, #713C53);
+  color: var(--login-ink, #222222);
   font: 800 22px/1.2 "Montserrat", sans-serif;
 }
 
 .login-exit-text {
   margin: 0 0 22px;
-  color:#713C53;
+  color:#222222;
   font-size: 14px;
   line-height: 1.55;
 }
@@ -668,7 +668,7 @@ body.login-exit-open { overflow: hidden; }
   margin-bottom: 10px;
   border: none;
   background: var(--color-brand-primary, var(--color-brand-primary, #F8AACA));
-  color:#713C53;
+  color:#222222;
 }
 
 .login-exit-primary:hover { background: var(--color-brand-primary-hover, var(--color-brand-primary, #F8AACA)); }
@@ -677,14 +677,14 @@ body.login-exit-open { overflow: hidden; }
   border: 1px solid rgba(125,23,58,.22);
   background: #fff;
   /* Contraste ≥ 4.5:1 sobre blanco. */
-  color:#713C53;
+  color:#222222;
 }
 
-.login-exit-secondary:hover { background: rgba(173,63,103,.06); }
+.login-exit-secondary:hover { background: rgba(248,170,202,.06); }
 
 .login-exit-primary:focus-visible,
 .login-exit-secondary:focus-visible {
-  outline: 3px solid rgba(173,63,103,.45);
+  outline: 3px solid rgba(248,170,202,.45);
   outline-offset: 2px;
 }
 

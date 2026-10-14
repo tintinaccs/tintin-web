@@ -1,8 +1,8 @@
 /* TINTIN — mantenimiento integral de about.html */
 .tt-about-maintained {
   --about-surface: var(--surface, #fff);
-  --about-soft: var(--pink-pale, #fff6fa);
-  --about-text: var(--text, #713C53);
+  --about-soft: var(--pink-pale, #FFFFFF);
+  --about-text: var(--text, #222222);
   --about-muted: var(--text-muted, #6f6267);
   --about-accent: var(--pink-dark, var(--color-brand-primary, #F8AACA));
   --about-border: var(--border, #f0d6df);
@@ -12,7 +12,7 @@
 .tt-about-maintained .tt-page-hero,
 .tt-about-maintained .tt-about-section,
 .tt-about-maintained .tt-trust-bar { background-color: var(--about-surface); }
-.tt-about-maintained .tt-footer { background-color: var(--color-background-page, #fff6fa) !important; }
+.tt-about-maintained .tt-footer { background-color: var(--color-background-page, #FFFFFF) !important; }
 .tt-about-maintained .tt-page-hero { background: var(--about-soft); }
 .tt-about-maintained .tt-about-grid { gap: clamp(28px, 5vw, 72px); }
 /* Las imágenes "blob" (.tt-blob-media) traen su propia forma, tamaño por

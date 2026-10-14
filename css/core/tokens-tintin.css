@@ -1,25 +1,25 @@
 :root {
-  --tt-page-bg: #FFF6FA;
-  --tt-title: #713C53;
-  --tt-text: #713C53;
-  --tt-muted: #7B6F72;
+  --tt-page-bg: #FFFFFF;
+  --tt-title: #222222;
+  --tt-text: #222222;
+  --tt-muted: #222222;
   --tt-card: #FFFFFF;
   /* Rosa de marca oscurecido lo justo para que texto, iconos y botones
      alcancen contraste AA sobre blanco y sobre el fondo rosa claro. */
   --tt-primary: var(--color-brand-primary, #F8AACA);
-  --tt-soft: #FFF9FC;
+  --tt-soft: #FDECF2;
   --tt-light: #FDECF2;
-  --tt-border: #F1E4E7;
-  --tt-line: #F7E9ED;
-  --tt-focus: rgba(173,63,103,0.24);
-  --tt-shadow: 0 14px 38px rgba(212,106,138,0.10);
+  --tt-border: #FDECF2;
+  --tt-line: #FDECF2;
+  --tt-focus: rgba(248,170,202,0.24);
+  --tt-shadow: 0 14px 38px rgba(248,170,202,0.10);
 
   --bg: var(--tt-page-bg);
   --bg-soft: var(--tt-soft);
   --card-bg: var(--tt-card);
   --pink-pale: var(--tt-light);
-  --pink: #F6B7C8;
-  --pink-mid: #F6B7C8;
+  --pink: #F8AACA;
+  --pink-mid: #F8AACA;
   --pink-dark: var(--tt-primary);
   --rose: var(--tt-primary);
   /* Antes apuntaba a --tt-card (blanco), lo que dejaba invisible cualquier
@@ -38,12 +38,12 @@
   --border: var(--tt-border);
   --white: var(--tt-card);
   --whatsapp: var(--tt-primary);
-  --whatsapp-h: #B84C72;
+  --whatsapp-h: #F8AACA;
   --error: var(--tt-primary);
   --success: var(--tt-primary);
-  --shadow-sm: 0 2px 8px rgba(212,106,138,0.08);
-  --shadow-md: 0 6px 22px rgba(212,106,138,0.13);
-  --shadow-lg: 0 10px 42px rgba(212,106,138,0.18);
+  --shadow-sm: 0 2px 8px rgba(248,170,202,0.08);
+  --shadow-md: 0 6px 22px rgba(248,170,202,0.13);
+  --shadow-lg: 0 10px 42px rgba(248,170,202,0.18);
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;

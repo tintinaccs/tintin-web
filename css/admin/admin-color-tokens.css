@@ -9,31 +9,31 @@
 :root {
   --admin-color-brand: #F8AACA;
   --admin-color-brand-hover: #F8AACA;
-  --admin-color-background-page: #FFF6FA;
+  --admin-color-background-page: #FFFFFF;
   --admin-color-background-sidebar: #FFFFFF;
-  --admin-color-text-sidebar: #713C53;
+  --admin-color-text-sidebar: #222222;
   --admin-color-background-sidebar-active: #FDECF2;
-  --admin-color-text-sidebar-active: #713C53;
+  --admin-color-text-sidebar-active: #222222;
   --admin-color-background-header: #FFFFFF;
   --admin-color-background-surface: #FFFFFF;
-  --admin-color-border: #F1E4E7;
-  --admin-color-text-primary: #713C53;
-  --admin-color-text-secondary: #7B6F72;
-  --admin-color-text-tertiary: #948890;
-  --admin-color-text-title: #713C53;
+  --admin-color-border: #FDECF2;
+  --admin-color-text-primary: #222222;
+  --admin-color-text-secondary: #222222;
+  --admin-color-text-tertiary: #222222;
+  --admin-color-text-title: #222222;
   --admin-color-button-primary-background: #F8AACA;
-  --admin-color-button-primary-text: #713C53;
+  --admin-color-button-primary-text: #222222;
   --admin-color-button-primary-hover: #F8AACA;
-  --admin-color-button-outline-text: #713C53;
+  --admin-color-button-outline-text: #222222;
   --admin-color-button-danger-background: #dc2626;
   --admin-color-button-danger-text: #FFFFFF;
   --admin-color-button-danger-hover: #b91c1c;
   --admin-color-table-header-background: #FDECF2;
-  --admin-color-table-row-hover: #FFF9FC;
+  --admin-color-table-row-hover: #FDECF2;
   --admin-color-badge-background: #FDECF2;
-  --admin-color-badge-text: #713C53;
+  --admin-color-badge-text: #222222;
   --admin-color-field-background: #FFFFFF;
-  --admin-color-field-border: #F1E4E7;
+  --admin-color-field-border: #FDECF2;
   --admin-color-field-border-focus: #F8AACA;
   --admin-color-success-background: #e0f5e6;
   --admin-color-success-text: #166534;
@@ -42,7 +42,7 @@
   --admin-color-error-background: #fde3e1;
   --admin-color-error-text: #b8341f;
   --admin-color-modal-background: #FFFFFF;
-  --admin-color-modal-overlay: rgba(20,10,14,0.55);
+  --admin-color-modal-overlay: rgba(34,34,34,0.55);
 }
 
 /*

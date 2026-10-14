@@ -10,7 +10,7 @@
 import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { doc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap, normalizeLegacyBrandColor } from './esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js';
+import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap, normalizeLegacyBrandColor } from './esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1';
 
 const CACHE_KEY = 'tt_color_scheme_global';
 const APPEARANCE_DOC = { col: 'settings', id: 'appearance' };

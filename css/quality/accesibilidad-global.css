@@ -10,7 +10,7 @@
   border: 2px solid var(--color-brand-primary, #F8AACA);
   border-radius: 999px;
   background: #fff;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font: 800 14px/1.2 Montserrat, sans-serif;
   text-decoration: none;
   box-shadow: 0 10px 34px rgba(58, 20, 35, .22);
@@ -25,7 +25,7 @@
 :where(a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 3px solid var(--color-brand-primary, #F8AACA) !important;
   outline-offset: 3px !important;
-  box-shadow: 0 0 0 5px rgba(173, 63, 103, .16) !important;
+  box-shadow: 0 0 0 5px rgba(248,170,202, .16) !important;
 }
 
 [data-tt-a11y-touch="1"],
@@ -49,10 +49,10 @@
   gap: 12px;
   width: min(470px, calc(100vw - 28px));
   padding: 12px 14px 12px 18px;
-  border: 1px solid rgba(139, 38, 66, .24);
+  border: 1px solid rgba(248,170,202, .24);
   border-radius: 18px;
   background: #fff;
-  color:#713C53;
+  color:#222222;
   box-shadow: 0 14px 42px rgba(58, 20, 35, .18);
   font: 600 12px/1.45 Montserrat, sans-serif;
 }
@@ -68,7 +68,7 @@
   border: 0;
   border-radius: 999px;
   background: var(--color-brand-primary, #F8AACA);
-  color:#713C53;
+  color:#222222;
   font: 800 12px/1 Montserrat, sans-serif;
   cursor: pointer;
 }

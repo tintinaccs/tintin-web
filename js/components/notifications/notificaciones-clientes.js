@@ -3,7 +3,7 @@ import { appCheckReady, auth, db } from '../../core/firebase/firebase.js?v=tinti
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
-import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1';
+import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1-palette-20261014-1';
 import '../../admin/notifications/notificaciones-push.js?v=tintin-20261012-auth-privacy-1-notificaciones-push-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import {
   collection, limit, orderBy, query} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -37,7 +37,7 @@ function ensureStyles() {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.dataset.ttSocialNotifications = '1';
-  link.href = 'css/components/notifications/notificaciones-sociales.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1';
+  link.href = 'css/components/notifications/notificaciones-sociales.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
   document.head.appendChild(link);
 }
 

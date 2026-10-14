@@ -8,8 +8,8 @@
   --tt-brand-pink: var(--color-brand-primary, #F8AACA);
   --tt-brand-pink-deep: var(--color-brand-primary, #F8AACA);
   --tt-brand-pink-soft: #fff0f7;
-  --tt-brand-copy: var(--color-text-primary, #713C53);
-  --tt-brand-muted: var(--color-text-primary, #713C53);
+  --tt-brand-copy: var(--color-text-primary, #222222);
+  --tt-brand-muted: var(--color-text-primary, #222222);
   --tt-brand-border: #efbdd2;
   --tt-brand-white: #ffffff;
   --tt-fit-gutter: clamp(16px, 4vw, 72px);
@@ -81,7 +81,7 @@
   align-self: end;
   width: max-content;
   margin: 0 0 1px clamp(112px, 13vw, 150px) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
   font-family: "Montserrat", sans-serif;
   font-size: clamp(.78rem, 1.5vw, .96rem) !important;
   font-weight: 800;
@@ -94,7 +94,7 @@
   content: "T\2665NT\2665N";
   display: block;
   margin-bottom: 8px;
-  color:#713C53;
+  color:#222222;
   font-size: clamp(1.04rem, 2.2vw, 1.34rem);
   font-weight: 900;
   letter-spacing: .08em;
@@ -115,7 +115,7 @@
   border: 1px solid rgba(255,255,255,.72) !important;
   border-radius: 999px !important;
   background: rgba(255,255,255,.14) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
   font-size: 1rem;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.26);
   transition: transform .2s ease, background-color .2s ease;
@@ -148,13 +148,13 @@
   border: 1px solid rgba(255,255,255,.65);
   border-radius: 20px;
   background: linear-gradient(135deg, var(--color-brand-primary, #F8AACA), var(--color-brand-primary, #F8AACA)) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
   box-shadow: 0 12px 28px rgba(151,0,79,.18);
 }
 
 .tt-account-drawer .tt-account-header span {
   min-width: 0;
-  color:#713C53 !important;
+  color:#222222 !important;
   font-weight: 750;
   overflow-wrap: anywhere;
 }
@@ -184,14 +184,14 @@
 .tt-account-drawer .tt-account-item:hover,
 .tt-account-drawer .tt-account-item:focus-visible {
   border-color: var(--color-brand-primary, #F8AACA) !important;
-  background: #fff8fb !important;
+  background: #FDECF2 !important;
   color: var(--tt-brand-pink-deep) !important;
   transform: translateY(-1px);
 }
 
 .tt-account-drawer .tt-account-logout {
   margin-top: auto;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
 }
 
 .tt-account-drawer .tt-account-divider {
@@ -218,24 +218,24 @@
 .tt-collections-sheet,
 .tt-search-panel {
   border-color: var(--tt-brand-border) !important;
-  background: #fff9fc !important;
+  background: #FDECF2 !important;
   box-shadow: var(--tt-fit-shadow) !important;
 }
 
 :is(.tt-cart-header, .tt-sheet-header) {
   border-color: transparent !important;
   background: linear-gradient(135deg, var(--color-brand-primary, #F8AACA), var(--color-brand-primary, #F8AACA)) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
 }
 
 :is(.tt-cart-header, .tt-sheet-header) :is(h2, h3, span) {
-  color:#713C53 !important;
+  color:#222222 !important;
 }
 
 :is(.tt-cart-header, .tt-sheet-header) button {
   border: 1px solid rgba(255,255,255,.7) !important;
   background: rgba(255,255,255,.16) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
 }
 
 .tt-search-panel {
@@ -264,7 +264,8 @@
    CHECKOUT Y FORMULARIOS — ancho útil real y textos de marca
    ============================================================= */
 html:has(.ck-body) body {
-  background: #fff6fa !important;
+  background: #FFFFFF !important;
+  background-image: var(--tt-flow-canvas, none) !important;
   color: var(--tt-brand-copy) !important;
 }
 
@@ -296,13 +297,13 @@ html:has(.ck-body) body {
 }
 
 :is(.ck-panel, .tt-map-block) :is(input, textarea)::placeholder {
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   opacity: 1;
 }
 
 :is(.ck-btn-primary, .tt-map-locate, #btn-save-profile) {
   background: linear-gradient(135deg, var(--color-brand-primary, #F8AACA), var(--color-brand-primary, #F8AACA)) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
   box-shadow: 0 12px 28px rgba(151,0,79,.22);
 }
 

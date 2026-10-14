@@ -5,7 +5,7 @@
   --tintin-surface: #fff;
   --tintin-text: var(--text, #171217);
   --tintin-muted: var(--text-muted, #746b70);
-  --tintin-border: rgba(173, 63, 103, .2);
+  --tintin-border: rgba(248,170,202, .2);
   --tintin-shadow: 0 24px 70px rgba(58, 13, 31, .18);
   --motion-fast: 160ms;
   --motion-normal: 280ms;
@@ -38,7 +38,7 @@
   display: none;
   transform-origin: 0 0;
   pointer-events: none;
-  background: linear-gradient(145deg, var(--tintin-primary-soft), rgba(173,63,103,.42));
+  background: linear-gradient(145deg, var(--tintin-primary-soft), rgba(248,170,202,.42));
   box-shadow: var(--tintin-shadow);
   will-change: transform, opacity, border-radius;
 }
@@ -207,7 +207,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   padding: 18px 22px;
   border-bottom: 1px solid rgba(255,255,255,.32);
   background: var(--color-brand-primary, #F8AACA) !important;
-  color:#713C53 !important;
+  color:#222222 !important;
   box-shadow: 0 10px 24px rgba(95,22,51,.16);
 }
 

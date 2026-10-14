@@ -10,21 +10,21 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   }
   body:not(:has(.adm-main)) :is(.tt-dropdown,.tt-account-panel){
     border:1px solid #f0d8e0!important;
-    box-shadow:0 16px 40px rgba(139,38,66,.16)!important;
+    box-shadow:0 16px 40px rgba(248,170,202,.16)!important;
   }
   body:not(:has(.adm-main)) .tt-search-panel{
     border:1px solid #f0d8e0!important;
     border-top:0!important;
-    box-shadow:0 14px 34px rgba(139,38,66,.14)!important;
+    box-shadow:0 14px 34px rgba(248,170,202,.14)!important;
   }
   body:not(:has(.adm-main)) .tt-search-results{
     border:1px solid #f0d8e0!important;
     border-top:0!important;
-    box-shadow:0 16px 36px rgba(139,38,66,.12)!important;
+    box-shadow:0 16px 36px rgba(248,170,202,.12)!important;
   }
   body:not(:has(.adm-main)) .tt-cart-drawer{
     border-left:1px solid #f0d8e0!important;
-    box-shadow:-12px 0 40px rgba(139,38,66,.16)!important;
+    box-shadow:-12px 0 40px rgba(248,170,202,.16)!important;
   }
 }
 
@@ -78,7 +78,7 @@ body:has(.adm-main) input[type="checkbox"].tt-mini-switch{
   border-radius:999px!important;
   background:#fff!important;
   background-color:#fff!important;
-  box-shadow:0 2px 7px rgba(139,38,66,.10)!important;
+  box-shadow:0 2px 7px rgba(248,170,202,.10)!important;
 }
 body:has(.adm-main) input[type="checkbox"].tt-mini-switch::before{
   top:1px!important;
@@ -86,7 +86,7 @@ body:has(.adm-main) input[type="checkbox"].tt-mini-switch::before{
   width:18px!important;
   height:18px!important;
   background:#fff!important;
-  border:1px solid rgba(173,63,103,.12)!important;
+  border:1px solid rgba(248,170,202,.12)!important;
   box-shadow:0 1px 4px rgba(57,26,38,.22)!important;
 }
 body:has(.adm-main) input[type="checkbox"].tt-mini-switch:checked{
@@ -102,11 +102,11 @@ body:has(.adm-main) .adm-toggle-slider{
   background:#fff!important;
   background-color:#fff!important;
   border:2px solid #e8b6c8!important;
-  box-shadow:0 2px 7px rgba(139,38,66,.10)!important;
+  box-shadow:0 2px 7px rgba(248,170,202,.10)!important;
 }
 body:has(.adm-main) .adm-toggle-slider::before{
   background:#fff!important;
-  border:1px solid rgba(173,63,103,.12)!important;
+  border:1px solid rgba(248,170,202,.12)!important;
   box-shadow:0 1px 4px rgba(57,26,38,.22)!important;
 }
 body:has(.adm-main) .adm-toggle input:checked + .adm-toggle-slider{

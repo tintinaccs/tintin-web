@@ -1,9 +1,9 @@
 /* La imagen aprobada vive en el HTML y se carga con prioridad alta. El loader
    puede seguir protegiendo el estado de la tienda, pero no se deja una capa
    rosa intermedia esperando una confirmación remota del hero. */
-html.tt-initializing body.tt-home-premium{background:#FFF6FA!important}
+html.tt-initializing body.tt-home-premium{background:#FFFFFF!important}
 
-.tt-home-premium{overflow-x:clip;background:#FFF6FA!important;min-height:100svh}
+.tt-home-premium{overflow-x:clip;background:#FFFFFF!important;min-height:100svh}
 .tt-home-premium .container{width:min(100%,1280px)}
 
 /* El header de desktop/tablet es fixed y, por eso, queda fuera del flujo:
@@ -46,8 +46,8 @@ html body.tt-home-premium #tt-header-desktop-tablet.tt-header.scrolled{
   mix-blend-mode:normal!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
-  border-bottom:1px solid #F1E4E7!important;
-  box-shadow:0 2px 18px rgba(173,63,103,.10)!important;
+  border-bottom:1px solid #FDECF2!important;
+  box-shadow:0 2px 18px rgba(248,170,202,.10)!important;
 }
 html body.tt-home-premium #tt-privacy-consent.tt-privacy-consent{
   background:#FFFFFF!important;
@@ -58,21 +58,21 @@ html body.tt-home-premium #tt-privacy-consent.tt-privacy-consent{
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
   isolation:isolate!important;
-  border:1px solid rgba(173,63,103,.12)!important;
+  border:1px solid rgba(248,170,202,.12)!important;
   box-shadow:0 24px 64px rgba(38,24,30,.14),0 2px 8px rgba(38,24,30,.05)!important;
 }
 html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-primary{
   background:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important;
   background-color:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important;
   border-color:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important;
-  color:#713C53!important;
+  color:#222222!important;
   opacity:1!important;
 }
 html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
   border-color:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important;
-  color:var(--color-text-primary,#713C53)!important;
+  color:var(--color-text-primary,#222222)!important;
   opacity:1!important;
 }
 
@@ -83,8 +83,8 @@ html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
 .tt-home-premium .tt-hero-media,
 .tt-home-premium .tt-hero-media picture,
 .tt-home-premium .tt-hero-img{
-  background:#FFF6FA!important;
-  background-color:#FFF6FA!important;
+  background:#FFFFFF!important;
+  background-color:#FFFFFF!important;
 }
 /* No usar una foto de muestra detrás del <img>: si la imagen publicada tarda
    un frame en decodificar, esa segunda foto es el origen del parpadeo. */
@@ -136,7 +136,7 @@ body.tt-home-premium .tt-hero-actions .tt-btn-outline{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
   border-color:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important;
-  color:var(--color-text-primary,#713C53)!important;
+  color:var(--color-text-primary,#222222)!important;
   box-shadow:0 8px 24px rgba(38,24,30,.12)!important;
   opacity:1!important;
 }
@@ -144,7 +144,7 @@ body.tt-home-premium .tt-hero-actions .tt-btn-outline:hover,
 body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
   background:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important;
   background-color:var(--tt-accent,var(--color-brand-primary, #F8AACA))!important;
-  color:#713C53!important;
+  color:#222222!important;
 }
 .tt-home-premium .tt-trust-bar,
 .tt-home-premium .section-sm,
@@ -170,13 +170,13 @@ body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
 .tt-home-motion.is-visible{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
 .tt-scroll-up .tt-home-motion:not(.is-visible){transform:translateY(-28px) scale(.985)}
 .tt-home-motion.tt-home-hero{opacity:1;filter:blur(0);transform:none}
-.tt-home-premium .tt-footer,.tt-home-premium .tt-footer *{color:#713C53!important;opacity:1!important;text-shadow:none!important}
-.tt-home-premium .tt-footer a{color:#713C53!important;text-decoration-color:var(--color-brand-primary, #F8AACA)!important}
-.tt-home-premium .tt-footer a:hover{color:var(--color-text-primary,#713C53)!important}
-.tt-home-premium .tt-footer a.tt-footer-wa,.tt-home-premium .tt-footer a.tt-footer-wa *{color:#713C53!important;text-decoration-color:transparent!important}
-.tt-home-premium .tt-footer a.tt-footer-wa:hover{color:#713C53!important}
-.tt-home-premium .tt-footer-col-title,.tt-home-premium .tt-footer-brand,.tt-home-premium .tt-footer-logo,.tt-home-premium .tt-footer h2,.tt-home-premium .tt-footer h3{color:#713C53!important;font-weight:800!important;opacity:1!important}
-.tt-home-premium .tt-footer-brand strong,.tt-home-premium .tt-footer-logo strong{font-weight:900!important;color:#713C53!important}
+.tt-home-premium .tt-footer,.tt-home-premium .tt-footer *{color:#222222!important;opacity:1!important;text-shadow:none!important}
+.tt-home-premium .tt-footer a{color:#222222!important;text-decoration-color:var(--color-brand-primary, #F8AACA)!important}
+.tt-home-premium .tt-footer a:hover{color:var(--color-text-primary,#222222)!important}
+.tt-home-premium .tt-footer a.tt-footer-wa,.tt-home-premium .tt-footer a.tt-footer-wa *{color:#222222!important;text-decoration-color:transparent!important}
+.tt-home-premium .tt-footer a.tt-footer-wa:hover{color:#222222!important}
+.tt-home-premium .tt-footer-col-title,.tt-home-premium .tt-footer-brand,.tt-home-premium .tt-footer-logo,.tt-home-premium .tt-footer h2,.tt-home-premium .tt-footer h3{color:#222222!important;font-weight:800!important;opacity:1!important}
+.tt-home-premium .tt-footer-brand strong,.tt-home-premium .tt-footer-logo strong{font-weight:900!important;color:#222222!important}
 @media(max-width:768px){.tt-home-premium .section{padding:56px 0}.tt-home-premium .section-sm{padding:42px 0}.tt-home-premium .tt-trust-grid,.tt-home-premium .tt-collections-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tt-home-motion{transform:translateY(22px) scale(.99)}}
 @media(max-width:380px){.tt-home-premium .section{padding:44px 0}.tt-home-premium .section-sm{padding:34px 0}}
 @media(max-height:520px) and (orientation:landscape){.tt-home-premium .tt-hero-content{padding-top:86px;padding-bottom:38px}}
@@ -201,13 +201,13 @@ body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state{
   justify-content:center;
   gap:14px;
   padding:clamp(24px,4vw,42px)!important;
-  border:1px solid var(--color-card-border,#F1E4E7);
+  border:1px solid var(--color-card-border,#FDECF2);
   border-radius:24px;
   background:
     linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,246,250,.96)),
     var(--color-background-surface,#FFFFFF);
-  box-shadow:0 12px 34px rgba(173,63,103,.08);
-  color:var(--color-text-secondary,#7B6F72)!important;
+  box-shadow:0 12px 34px rgba(248,170,202,.08);
+  color:var(--color-text-secondary,#222222)!important;
   font-size:.86rem!important;
   font-weight:600;
   line-height:1.6;
@@ -216,7 +216,7 @@ body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--info::
   content:"";
   width:34px;
   height:34px;
-  border:3px solid var(--color-progress-track,#F1E4E7);
+  border:3px solid var(--color-progress-track,#FDECF2);
   border-top-color:var(--color-progress-fill,var(--color-brand-primary, #F8AACA));
   border-radius:50%;
   animation:tt-home-collections-spin .8s linear infinite;
@@ -248,7 +248,7 @@ body.tt-home-premium .tt-trust-bar {
   position: relative;
   z-index: 1;
   padding: clamp(18px, 2.4vw, 30px) 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 72%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 72%, transparent);
 }
 
 body.tt-home-premium .tt-trust-grid {
@@ -261,7 +261,7 @@ body.tt-home-premium .tt-trust-item {
   min-height: 84px;
   padding: 14px clamp(10px, 1.8vw, 22px);
   border: 0;
-  border-right: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 80%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 80%, transparent);
   border-radius: 0;
   box-shadow: none;
 }
@@ -277,8 +277,8 @@ body.tt-home-premium .tt-collection-carousel {
 
 body.tt-home-premium #look-section {
   padding-block: clamp(54px, 7vw, 92px);
-  background: var(--color-background-surface, #FFFFFF) !important;
-  border-block: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 70%, transparent);
+  background: var(--tt-section-gradient, none) var(--tt-section-background, #FDECF2) !important;
+  border-block: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 70%, transparent);
 }
 
 body.tt-home-premium .tt-look-header,
@@ -291,7 +291,7 @@ body.tt-home-premium .tt-editorial,
 body.tt-home-premium .tt-watch-feature {
   max-width: 1180px;
   margin-inline: auto;
-  border: 1px solid var(--color-card-border, #F1E4E7);
+  border: 1px solid var(--color-card-border, #FDECF2);
   border-radius: clamp(18px, 2vw, 28px);
   overflow: hidden;
   box-shadow: 0 16px 42px rgba(92, 37, 57, .07);
@@ -299,7 +299,7 @@ body.tt-home-premium .tt-watch-feature {
 
 body.tt-home-premium .tt-home-random-products {
   background: linear-gradient(180deg, rgba(252,240,245,.72), rgba(255,255,255,.96));
-  border-block: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 70%, transparent);
+  border-block: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 70%, transparent);
 }
 
 body.tt-home-premium .tt-home-random-products-header { margin-bottom: clamp(22px, 3vw, 34px); }
@@ -348,7 +348,7 @@ body.tt-home-premium .tt-reviews-section {
 @media (max-width: 900px) {
   body.tt-home-premium .tt-trust-item {
     border-right: 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 80%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 80%, transparent);
   }
   body.tt-home-premium .tt-trust-item:nth-last-child(-n+2) { border-bottom: 0; }
 }
@@ -387,8 +387,8 @@ html body.tt-home-premium .tt-hero {
   height: auto !important;
   padding: clamp(32px, 5vw, 72px) clamp(24px, 7vw, 104px) !important;
   overflow: clip;
-  color: #713C53;
-  background: #FFF6FA !important;
+  color: #222222;
+  background: #FFFFFF !important;
 }
 
 html body.tt-home-premium .tt-hero .tt-hero-content {
@@ -404,7 +404,7 @@ html body.tt-home-premium .tt-hero .tt-hero-content {
   max-width: 590px;
   margin: 0;
   padding: 0 !important;
-  color: #713C53 !important;
+  color: #222222 !important;
   pointer-events: auto;
 }
 
@@ -414,7 +414,7 @@ html body.tt-home-premium .tt-hero-eyebrow {
   height: auto !important;
   overflow: visible !important;
   margin: 0 0 clamp(16px, 2vw, 24px);
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font-size: .76rem;
   font-weight: 700;
   letter-spacing: .16em;
@@ -428,7 +428,7 @@ html body.tt-home-premium .tt-hero-title {
   margin: 0 !important;
   padding: 0 !important;
   overflow: visible !important;
-  color: #713C53 !important;
+  color: #222222 !important;
   font-family: 'Montserrat', sans-serif;
   font-size: clamp(3rem, 6.3vw, 6.3rem);
   font-weight: 650;
@@ -445,7 +445,7 @@ html body.tt-home-premium .tt-hero-title {
 html body.tt-home-premium .tt-hero-title-line--accent {
   display: block;
   margin: .08em 0 0;
-  color:var(--color-text-primary,#713C53);
+  color:var(--color-text-primary,#222222);
   font: inherit;
   letter-spacing: inherit;
 }
@@ -458,7 +458,7 @@ html body.tt-home-premium .tt-hero-subtitle {
   padding: 0 !important;
   overflow: visible !important;
   margin: clamp(20px, 2.5vw, 30px) 0 0;
-  color: #7B6F72 !important;
+  color: #222222 !important;
   font-size: clamp(1.02rem, 1.35vw, 1.2rem);
   line-height: 1.7;
   clip: auto !important;
@@ -488,9 +488,9 @@ html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
   padding: 0 26px !important;
   border: 1px solid var(--color-brand-primary, #F8AACA) !important;
   border-radius: 999px;
-  color:#713C53 !important;
+  color:#222222 !important;
   background: var(--color-brand-primary, #F8AACA) !important;
-  box-shadow: 0 10px 24px rgba(173, 63, 103, .16) !important;
+  box-shadow: 0 10px 24px rgba(248,170,202, .16) !important;
   font-size: .98rem !important;
   font-weight: 650;
   line-height: 1.2;
@@ -503,9 +503,9 @@ html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
 
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta:hover,
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta:focus-visible {
-  color:#713C53 !important;
+  color:#222222 !important;
   background: var(--color-brand-primary, #F8AACA) !important;
-  box-shadow: 0 12px 28px rgba(173, 63, 103, .24) !important;
+  box-shadow: 0 12px 28px rgba(248,170,202, .24) !important;
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-hero-link {
@@ -515,7 +515,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
   justify-content: center;
   width: auto !important;
   min-height: 44px;
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
   font-size: .94rem;
   font-weight: 600;
   text-decoration: underline;
@@ -537,7 +537,7 @@ html body.tt-home-premium .tt-hero-media {
   height: auto !important;
   aspect-ratio: 2 / 1;
   overflow: hidden;
-  border: 1px solid rgba(173, 63, 103, .1);
+  border: 1px solid rgba(248,170,202, .1);
   border-radius: clamp(24px, 3vw, 40px);
   background: #FDECF2 !important;
   box-shadow: 0 24px 56px rgba(92, 37, 57, .12);
@@ -732,7 +732,7 @@ html body.tt-home-premium .tt-hero-title {
    banner usa el color principal de texto. */
 html body.tt-home-premium .tt-hero-subtitle {
   margin-top: calc(18 * var(--u)) !important;
-  color: var(--color-text-primary, #713C53) !important;
+  color: var(--color-text-primary, #222222) !important;
   font-size: max(14px, calc(22 * var(--u))) !important;
   text-align: left;
 }
@@ -752,7 +752,7 @@ html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
 }
 html body.tt-home-premium .tt-hero-actions .tt-hero-link {
   font-size: max(12.5px, calc(20 * var(--u))) !important;
-  text-decoration-color: rgba(113, 60, 83, .55);
+  text-decoration-color: rgba(34,34,34, .55);
 }
 
 /* Tablet horizontal — lienzo de referencia 1014 × 676. */

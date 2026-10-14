@@ -2030,3 +2030,11 @@ CI38431317246 del candidato6d2113a5 completó331/333 casos de navegador y falló
 
 ## Extensión de cierre por alertas actuales CodeQL — 2026-10-13
 CI38433952518 PASS completo para65251992, pero la revisión actual de alertas existentes de main confirmó HTML activo en páginas personalizadas y etiquetas/IDs de emailLogs sin escape en Super Admin. Se corrigen los trust boundaries, se uniforma OTP y se limita también el render público con consultas Firestore. Sin cambios a Rules, permisos, controles de CI, DNS ni datos reales. Evidencia CODEQL_TRIAGE_20261013.md;74 Node y18 navegador PASS_LOCAL. El nuevo CI debe aprobar su SHA; no se hereda PASS anterior.
+
+## 2026-10-14 — Integración de paleta y fondos sobre main 2011323a (Codex / GPT-6)
+
+- Solicitud: integrar todos los cambios de diseño acordados (cuatro colores base y secciones visibles con rosas alternados y unión difuminada). Se parte del main vigente para preservar las 61 integraciones posteriores al checkout original; cambios locales ajenos a este diseño permanecen en su checkout.
+- Catálogo público/admin y respaldos CSS unificados en #F8AACA / #FDECF2 / #222222 / #FFFFFF; se conservan estados funcionales. Se migran defaults históricos y caché de primera pintura. Cada bloque visible mantiene su rosa pleno; hidden/display:none no cuentan; footer continúa la secuencia. El canvas no contiene bandas rosas independientes.
+- La generación de shell usa los nuevos tags canónicos, evitando revertirlos en build. Se mantienen código y contratos de seguridad, pedidos, dominio e integraciones actuales.
+- PASS_LOCAL: 6 pruebas Node de paleta, 4 pruebas Chromium (390/1440) de continuidad, ocultación y canvas; auditorías de color, navegación, integridad CSS y caché. Revisión de diff sin errores. audit:final avanzó por los contratos estáticos y 201 pruebas Node, y se detuvo en test:critical-runtime por falta de Java en PATH (limitación local, no se declara PASS completo). GitHub CI configura Java 21 y debe ejecutar esa cobertura.
+- El merge y la publicación fueron autorizados por el usuario. Estado GitHub/CI pendiente al preparar este commit; no se ejecutaron escrituras comerciales ni pruebas con cuentas/datos reales.

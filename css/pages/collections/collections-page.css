@@ -1,7 +1,7 @@
 /* TINTIN — Página de Colecciones estable y configurable */
 .tt-collections-page {
-  background: var(--color-background-page, #FFF6FA) !important;
-  color: var(--color-text-primary, #713C53) !important;
+  background: var(--color-background-page, #FFFFFF) !important;
+  color: var(--color-text-primary, #222222) !important;
   overflow-x: clip;
 }
 
@@ -15,7 +15,7 @@
 .tt-collections-page .tt-page-hero,
 .tt-collections-page .tt-colls-page-section,
 .tt-collections-page .tt-products-section {
-  background: var(--color-background-page, #FFF6FA) !important;
+  background: var(--color-background-page, #FFFFFF) !important;
   background-image: none !important;
 }
 
@@ -36,18 +36,18 @@
 }
 
 .tt-collections-page .tt-page-hero {
-  border-bottom: 1px solid var(--color-border-primary, #F1E4E7);
+  border-bottom: 1px solid var(--color-border-primary, #FDECF2);
 }
 
 .tt-collections-page .tt-page-hero-title,
 .tt-collections-page .tt-section-title,
 .tt-collections-page .tt-coll-page-name,
 .tt-collections-page .tt-product-name {
-  color: var(--color-text-title, #713C53) !important;
+  color: var(--color-text-title, #222222) !important;
 }
 
 .tt-collections-page .tt-section-sub {
-  color:var(--color-text-primary,#713C53) !important;
+  color:var(--color-text-primary,#222222) !important;
 }
 
 .tt-collections-page .tt-page-hero-sub,
@@ -55,7 +55,7 @@
 .tt-collections-page .tt-products-intro,
 .tt-collections-page .tt-inline-support-link,
 .tt-collections-page .tt-collections-state {
-  color: var(--color-text-secondary, #7B6F72) !important;
+  color: var(--color-text-secondary, #222222) !important;
 }
 
 .tt-collections-page .tt-page-hero-sub {
@@ -83,9 +83,9 @@
 .tt-collections-page .tt-product-card {
   height: 100%;
   background: var(--color-background-surface, #FFFFFF) !important;
-  border-color: var(--color-card-border, #F1E4E7) !important;
-  color: var(--color-text-primary, #713C53) !important;
-  box-shadow: 0 8px 28px var(--color-card-shadow, rgba(212,106,138,.10));
+  border-color: var(--color-card-border, #FDECF2) !important;
+  color: var(--color-text-primary, #222222) !important;
+  box-shadow: 0 8px 28px var(--color-card-shadow, rgba(248,170,202,.10));
 }
 
 /* Los placeholders son efímeros: aislarlos con contain/translateZ hace que
@@ -100,7 +100,7 @@
 .tt-collections-page .tt-product-img,
 .tt-collections-page .tt-skeleton-img,
 .tt-collections-page .tt-skeleton-line {
-  background-color: var(--color-skeleton-base, #F1E4E7) !important;
+  background-color: var(--color-skeleton-base, #FDECF2) !important;
   background-image: none !important;
 }
 
@@ -116,7 +116,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  background: var(--color-background-surface-soft, #FFF9FC) !important;
+  background: var(--color-background-surface-soft, #FDECF2) !important;
   object-fit: contain;
 }
 
@@ -124,7 +124,7 @@
 .tt-collections-page .tt-product-img[data-product-href]:focus-visible,
 .tt-collections-page a:focus-visible,
 .tt-collections-page button:focus-visible {
-  outline: 3px solid var(--color-button-primary-focus-ring, rgba(173,63,103,.24));
+  outline: 3px solid var(--color-button-primary-focus-ring, rgba(248,170,202,.24));
   outline-offset: 3px;
 }
 
@@ -157,7 +157,7 @@
   align-items: center;
   margin-bottom: 4px;
   padding: 4px 10px;
-  border: 1px solid var(--color-card-border, #F1E4E7);
+  border: 1px solid var(--color-card-border, #FDECF2);
   border-radius: 999px;
   background: var(--color-badge-background, #FDECF2);
   color: var(--color-badge-text, var(--color-brand-primary, #F8AACA)) !important;
@@ -180,7 +180,7 @@
 }
 
 .tt-collections-page .tt-products-section {
-  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+  border-top: 1px solid var(--color-border-primary, #FDECF2);
 }
 
 .tt-collections-page .tt-products-header {
@@ -227,17 +227,17 @@
   display: grid;
   place-items: center;
   padding: 36px 20px;
-  border: 1.5px solid var(--color-card-border, #F1E4E7);
+  border: 1.5px solid var(--color-card-border, #FDECF2);
   border-radius: 18px;
   background: var(--color-background-surface, #FFFFFF) !important;
-  color: var(--color-text-secondary, #7B6F72) !important;
+  color: var(--color-text-secondary, #222222) !important;
   text-align: center;
 }
 
 .tt-collections-runtime-state strong {
   display: block;
   margin-bottom: 7px;
-  color: var(--color-text-title, #713C53);
+  color: var(--color-text-title, #222222);
   font-size: 16px;
 }
 
@@ -249,7 +249,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 7px;
-  color: var(--color-text-secondary, #7B6F72);
+  color: var(--color-text-secondary, #222222);
   font: 700 11px/1.35 Montserrat;
 }
 
@@ -272,15 +272,15 @@
 
 .tt-collections-page .tt-footer {
   background: var(--color-background-footer, #FFFFFF) !important;
-  color: var(--color-text-primary, #713C53) !important;
-  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+  color: var(--color-text-primary, #222222) !important;
+  border-top: 1px solid var(--color-border-primary, #FDECF2);
 }
 
 .tt-collections-page .tt-footer a:not(.tt-footer-wa),
 .tt-collections-page .tt-footer-col-title,
 .tt-collections-page .tt-footer-bottom,
 .tt-collections-page .tt-footer-tagline {
-  color: var(--color-text-primary, #713C53) !important;
+  color: var(--color-text-primary, #222222) !important;
 }
 
 @media (min-width: 1025px) {
