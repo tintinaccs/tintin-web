@@ -34,7 +34,7 @@ import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=ti
 import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1-loads-20261007-1-sheets-auth-images-20261011-1';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2';
 import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261012-auth-privacy-1-aplicar-importacion-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261003-inventory-review-1';
+import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261003-inventory-review-1-stock-flow-20261014-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;

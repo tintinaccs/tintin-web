@@ -5,7 +5,7 @@
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
 import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261008-location-search-1-domain-prepared-20261012-6-pedidos-styles-20261013-2";
-import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1';
+import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1-stock-flow-20261014-1';
 
 const LEAFLET_JS = '/js/vendor/leaflet/leaflet.js?v=leaflet-1.9.4';
 const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
@@ -84,6 +84,7 @@ export async function createLocationMap({
   let location = null;
   let debounce = null;
   let locating = false;
+  let locationRevision = 0;
   let searchGeneration = 0;
   let resizeObserver = null;
   let destroyed = false;
@@ -146,6 +147,7 @@ export async function createLocationMap({
 
   const setLocation = (lat, lng, place) => {
     if (!usablePlace({ lat, lng })) return;
+    locationRevision += 1;
     const hasPlace = Boolean(place);
     const hasName = hasPlace && Object.prototype.hasOwnProperty.call(place, 'name');
     const hasAddress = hasPlace && Object.prototype.hasOwnProperty.call(place, 'address');
@@ -216,9 +218,10 @@ export async function createLocationMap({
     setButtonLoading(true);
     status.hidden = false;
     status.textContent = 'Buscando tu ubicación…';
+    const revision = locationRevision;
     try {
       const position = await requestCurrentLocation();
-      if (destroyed) return false;
+      if (destroyed || revision !== locationRevision) return false;
       applyPlace({ ...position, name: 'Mi ubicación actual', address: '' }, { scroll: false });
       status.hidden = false;
       status.textContent = Number(position.accuracy) > 100
@@ -226,7 +229,7 @@ export async function createLocationMap({
         : 'Ubicación encontrada. Revisá el punto antes de guardar.';
       return true;
     } catch (error) {
-      if (!destroyed) { status.hidden = false; status.textContent = error.message; }
+      if (!destroyed && revision === locationRevision) { status.hidden = false; status.textContent = error.message; }
       return false;
     } finally { locating = false; if (!destroyed) setButtonLoading(false); }
   };
@@ -394,7 +397,7 @@ export async function createLocationMap({
   return {
     getLocation: () => location,
     setLocation: (place, options) => applyPlace(place, options),
-    clearLocation: () => { clearTimeout(debounce); searchGeneration += 1; inFlight?.abort(); location = null; if (marker) { marker.remove(); marker = null; } tools.hidden = true; status.hidden = true; closeResults(); emit(); },
+    clearLocation: () => { locationRevision += 1; clearTimeout(debounce); searchGeneration += 1; inFlight?.abort(); location = null; if (marker) { marker.remove(); marker = null; } tools.hidden = true; status.hidden = true; closeResults(); emit(); },
     locateCurrent,
     invalidateSize: () => map.invalidateSize(),
     destroy: () => {

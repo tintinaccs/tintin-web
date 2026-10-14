@@ -7,6 +7,8 @@ import {
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
 
 const DEVICES = ['desktop', 'tablet', 'mobile'];
+import { hasProductStock, firstAvailableVariant } from './inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1-stock-flow-20261014-1';
 const OPTIONS = Object.freeze(
   Object.fromEntries(Object.entries(VISUAL_STYLE_OPTIONS).map(([key, values]) => [key, new Set(values)]))
 );
@@ -309,7 +311,8 @@ function el(tag, className = '', text = '') {
 
 function renderProductCards(root, block) {
   const all = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
-  const products = all.filter(item => item?.active !== false && (!block.category || String(item.category || item.cat || '').toLowerCase() === block.category.toLowerCase())).slice(0, block.count);
+  const matching = all.filter(item => item?.active !== false && (!block.category || String(item.category || item.cat || '').toLowerCase() === block.category.toLowerCase()));
+  const products = [...matching.filter(hasProductStock), ...matching.filter(item => !hasProductStock(item))].slice(0, block.count);
   root.replaceChildren();
   if (!products.length) {
     const fallback = el('a', 'tt-visual-product-card tt-visual-product-fallback', 'Explorar productos');
@@ -317,7 +320,9 @@ function renderProductCards(root, block) {
   }
   products.forEach(product => {
     const link = el('a', 'tt-visual-product-card'); link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;
-    const src = safeImage(product.imageUrl);
+    const src = safeImage(productVariantImage(product, firstAvailableVariant(product), product.imageUrl));
+    link.style.position = 'relative';
+    if (!hasProductStock(product)) link.appendChild(el('span', 'tt-stock-label', 'AGOTADO'));
     if (src) { const image = el('img'); image.src = src; image.alt = plain(product.name || 'Producto TINTÍN', 180); image.loading = 'lazy'; image.decoding = 'async'; link.appendChild(image); }
     else link.appendChild(el('span', 'tt-visual-product-placeholder'));
     link.appendChild(el('strong', '', plain(product.name || 'Producto TINTÍN', 180)));

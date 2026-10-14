@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1');
     }
   }
 
@@ -925,7 +925,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-checkout-ready-3-sincronizacion-favoritos-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261012-checkout-ready-3-sincronizacion-favoritos-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-stock-flow-20261014-1');
   }
 
   function bootThemeColorSanitizerPublic() {

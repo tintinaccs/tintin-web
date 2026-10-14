@@ -26,6 +26,24 @@ test('rechazo de permiso no dispara una segunda solicitud', async () => {
   await assert.rejects(requestCurrentLocation({ navigator, secure: true }), /No se autorizó/);
   assert.equal(calls, 1);
 });
+
+test('un proveedor que nunca responde termina ambos intentos y permite reintentar', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  let calls = 0;
+  const navigator = { geolocation: { getCurrentPosition: () => { calls++; } } };
+  const pending = requestCurrentLocation({ navigator, secure: true });
+  const rejected = assert.rejects(pending, /tardó demasiado/);
+  t.mock.timers.tick(11000);
+  await Promise.resolve();
+  assert.equal(calls, 2);
+  t.mock.timers.tick(16000);
+  await rejected;
+});
+
+test('coordenadas inválidas no se guardan como ubicación encontrada', async () => {
+  const navigator = { geolocation: { getCurrentPosition: ok => ok({ coords: { latitude: NaN, longitude: -57 } }) } };
+  await assert.rejects(requestCurrentLocation({ navigator, secure: true }), /no pudo determinar/);
+});
 test('código por correo usado en una cuenta Google se muestra desde el token de sesión', () => {
   const data = accountAccessSummary({ provider: 'google', authMethods: ['google', 'emailOtp'] }, { firebase: { sign_in_provider: 'custom' } });
   assert.equal(data.current, 'Código por correo');

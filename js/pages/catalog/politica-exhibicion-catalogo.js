@@ -9,6 +9,8 @@
    5. Los desempates son estables: orden manual de colección, nombre e ID.
    ============================================================= */
 
+import { hasProductStock } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
+
 export const NEW_PRODUCT_WINDOW_MS = 5 * 24 * 60 * 60 * 1000;
 
 const nameSorter = new Intl.Collator('es', {
@@ -53,7 +55,7 @@ export function productActivityAtMillis(product) {
 }
 
 export function isProductInStock(product) {
-  return !(product?.stock != null && Number(product.stock) <= 0);
+  return hasProductStock(product);
 }
 
 export function isNewProduct(product, now = Date.now()) {

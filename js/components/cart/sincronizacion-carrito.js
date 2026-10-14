@@ -17,11 +17,11 @@
 import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
+import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261008-variant-image-1-stock-flow-20261014-1';
 export { productVariantImage };
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
-import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
+import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import {
   collection,
   doc,

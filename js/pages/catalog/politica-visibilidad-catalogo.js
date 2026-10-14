@@ -5,10 +5,10 @@
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
 import { loadCollections, normalizeCollectionSlug } from '../collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1';
-import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
+import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1-stock-flow-20261014-1';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
-import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1';
-import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1';
+import { variantStockLimit, hasProductStock } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1-stock-flow-20261014-1';
 
 import { hasPublicProductFields } from '../../core/store/publicacion-producto.mjs?v=tintin-20261007-public-consistency-1';
 
@@ -114,7 +114,7 @@ export function isCatalogVisible(product) {
 
 export function isPurchasable(product) {
   const p = normalizeProduct(product);
-  return isCatalogVisible(p) && (p.stock == null || p.stock > 0);
+  return isCatalogVisible(p) && hasProductStock(p);
 }
 
 export function hasVariants(product) {
@@ -275,6 +275,7 @@ window.addEventListener('pagehide', () => {
 
 window.TintinCatalogPolicy = {
   variantStockLimit,
+  isInStock: hasProductStock,
   normalizeProduct,
   normalizeVariantOptions,
   isCatalogVisible,

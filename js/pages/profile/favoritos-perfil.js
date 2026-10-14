@@ -3,6 +3,8 @@ import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tinti
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { collection} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1';
+import { hasProductStock, firstAvailableVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1-stock-flow-20261014-1';
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const money = value => `Gs. ${Math.round(Number(value) || 0).toLocaleString('es-PY')}`;
@@ -12,7 +14,8 @@ export function resolveFavoriteProducts(items, products) {
   return items.map(item => {
     const product = current.get(String(item.productId));
     const price = product?.price;
-    return { ...item, name: product?.name || item.name, imageUrl: product?.imageUrl || item.imageUrl,
+    return { ...item, name: product?.name || item.name, imageUrl: product ? productVariantImage(product, firstAvailableVariant(product), product.imageUrl || item.imageUrl) : item.imageUrl,
+      available: product ? hasProductStock(product) : null,
       price: price != null && price !== '' && Number.isFinite(Number(price)) && Number(price) > 0 ? Number(price) : null };
   });
 }
@@ -25,8 +28,8 @@ function render(items) {
     return;
   }
   root.innerHTML = items.map(item => `<article style="display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
-    <img src="${escapeHtml(item.imageUrl || 'assets-tintin/images/placeholder-producto.webp')}" alt="" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:6px">
-    <div><a href="/product?id=${encodeURIComponent(item.productId)}" style="font-weight:800;color:var(--text);text-decoration:none">${escapeHtml(item.name || 'Producto')}</a><div style="font-size:12px;color:var(--color-text-primary,#713C53);margin-top:4px">${item.price == null ? 'Consultá precio y disponibilidad' : money(item.price)}</div></div>
+    <span class="tt-favorite-media"><img src="${escapeHtml(item.imageUrl || 'assets-tintin/images/placeholder-producto.webp')}" alt="" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:6px">${item.available === false ? '<span class="tt-stock-label" aria-hidden="true">AGOTADO</span>' : ''}</span>
+    <div><a href="/product?id=${encodeURIComponent(item.productId)}" style="font-weight:800;color:var(--text);text-decoration:none">${escapeHtml(item.name || 'Producto')}</a><div style="font-size:12px;color:var(--color-text-primary,#222222);margin-top:4px">${item.price == null ? 'Consultá precio y disponibilidad' : money(item.price)}</div>${item.available === false ? '<small>Agotado</small>' : ''}</div>
     <button type="button" class="perfil-btn perfil-btn-danger" data-remove-favorite="${escapeHtml(item.productId)}" aria-label="Quitar ${escapeHtml(item.name || 'producto')} de favoritos">Quitar</button>
   </article>`).join('');
 }

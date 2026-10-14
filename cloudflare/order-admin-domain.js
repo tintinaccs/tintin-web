@@ -18,6 +18,8 @@ import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantIn
 import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 import { ORDER_LIFECYCLE_STATUSES, assertOrderTransition, lifecycleStatus } from '../js/orders/ciclo-pedido.mjs';
+import { orderCustomerNotice } from './notificaciones-pedido.mjs';
+import { buildUserNotificationWrite } from './notificaciones-sociales.js';
 
 export const ORDER_ADMIN_STATUSES = ORDER_LIFECYCLE_STATUSES;
 export const ORDER_ADMIN_PAYMENT_STATUSES = Object.freeze([
@@ -510,6 +512,11 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
     fields: encodeFirestoreFields(order),
     currentDocument: { exists: false },
   });
+  const receivedNotice = orderCustomerNotice(orderId, order, actor, { created: true });
+  if (receivedNotice) {
+    const built = await buildUserNotificationWrite(receivedNotice.uid, { ...receivedNotice.event, createdAt: now }, receivedNotice.key);
+    writes.push({ ...built.write, currentDocument: { exists: false } });
+  }
 
   const sequencePatch = {
     lastNumber: sequenceNumber,
@@ -804,6 +811,15 @@ export async function applyOrderAdminMutation(
     currentDocument: { exists: false },
   });
 
+  // El aviso y el avance se confirman juntos: cerrar el panel o perder la
+  // solicitud de recuperación nunca elimina una etapa del historial.
+  if (nextOrder.status !== beforeOrder.status || auditSummary(nextOrder).paymentStatus !== auditSummary(beforeOrder).paymentStatus) {
+    const notice = orderCustomerNotice(orderId, nextOrder, actor);
+    if (notice) {
+      const built = await buildUserNotificationWrite(notice.uid, { ...notice.event, createdAt: now }, notice.key);
+      writes.push({ ...built.write, currentDocument: { exists: false } });
+    }
+  }
   await commit(env, writes);
   return {
     orderId,
