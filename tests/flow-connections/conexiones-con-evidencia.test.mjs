@@ -337,7 +337,7 @@ test('el panel lee el último registro real de participación sin escribir nada'
   assert.match(body, /latest\('likeRecords'\), latest\('reviewRecords'\)/);
   assert.match(body, /exists: !snapshot\.empty/);
   assert.doesNotMatch(body, /setDoc|addDoc|updateDoc|deleteDoc|writeBatch|fetch\(/);
-  assert.match(source, /probeEngagementRecords\(user\),/);
+  assert.match(source, /probeEngagementRecords\(user, signal\),/);
   assert.equal((source.match(/engagementStats, engagementRecords, sheetsWebhook \}/g) || []).length, 2, 'nodos y conexiones reciben la misma evidencia');
 });
 

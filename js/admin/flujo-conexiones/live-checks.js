@@ -7,7 +7,7 @@
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
 import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20261010-auto-flow-1';
-import { EVIDENCIA } from './estado-flujo.js?v=tintin-20261010-auto-flow-1';
+import { EVIDENCIA } from './estado-flujo.js?v=tintin-20261010-auto-flow-1-connections-20261014-1';
 
 function edgeIdFor(from, to) {
   return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
@@ -47,7 +47,7 @@ export function classifySheetsWebhookProbe(probe) {
   const ok = revisionOk && guardOk;
   const note = `${probe.status === 401 ? 'POST sin secreto' : 'GET diagnóstico'} /api/sheets-products-webhook → HTTP ${probe.status || 'sin respuesta'}`
     + ` · revisión=${probe.revision || 'ausente'} · guard=${probe.authState || 'desconocido'}`
-    + (ok ? '; escritura Sheets → Firestore no probada' : '');
+    + (ok ? '; conexión protegida confirmada' : '');
   // El 401 esperado es el éxito de esta sonda; si falla, se informa con el
   // estado real (o 500 cuando el guard responde pero algo no coincide).
   const status = ok ? 200 : (probe.status === 401 || (probe.status >= 200 && probe.status < 300) ? 500 : Number(probe.status || 0));
@@ -128,6 +128,22 @@ function sheetsGuardOutcome(guardOk, guardStatus, results) {
   if (results.some(result => result.state === 'failed')) return { ok: false, status: 502, promote: false, partial: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION };
   if (results.every(result => result.state === 'confirmed')) return { ok: true, status: 200, promote: true, partial: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION };
   return { ok: true, status: 200, promote: false, partial: true, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY };
+}
+
+// La configuración efectiva distingue un proveedor opcional apagado de una
+// configuración incompleta. El nombre del entorno por sí solo no habilita cobros.
+function externalServicesOutcome(integrations) {
+  const paypal = integrations.paypal || {};
+  const paypalOk = paypal.productionReady === true && paypal.enabled !== false && paypal.configured !== false;
+  const optionalDisabled = paypal.optionalDisabled === true && paypal.enabled === false;
+  const sandbox = (paypal.environment || paypal.mode) === 'sandbox' && paypal.enabled === true && paypal.configured === true;
+  const ok = integrations.resend === true && integrations.cloudinary === true && (paypalOk || sandbox || optionalDisabled);
+  const paypalLabel = optionalDisabled ? 'apagado por configuración (opcional)' :
+    paypalOk ? 'listo para cobros reales' : sandbox ? 'modo de prueba; no confirma cobros reales' : 'no configurado para cobrar';
+  return {
+    ok, status: ok ? 200 : 503, promote: ok && paypalOk, partial: ok && !paypalOk,
+    note: `Correo (Resend): ${integrations.resend === true ? 'configurado' : 'no configurado'} · Imágenes (Cloudinary): ${integrations.cloudinary === true ? 'configurado' : 'no configurado'} · PayPal: ${paypalLabel}`,
+  };
 }
 
 // "Me gusta" y reseñas. Verde sólo con las tres evidencias a la vez:
@@ -303,12 +319,8 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
         partial: sheetsNode.partial,
         evidenceLevel: sheetsNode.evidenceLevel,
       });
-    const paypalOk = integrations.paypal?.productionReady === true;
-    const sandbox = integrations.paypal?.environment === 'sandbox';
-    const externalServicesOk = integrations.resend === true && integrations.cloudinary === true && (paypalOk || sandbox);
-    setFrom('servicios-externos', externalServicesOk,
-      `GET /api/system-health · Resend=${integrations.resend === true} · Cloudinary=${integrations.cloudinary === true} · PayPal=${integrations.paypal?.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'}`,
-      { status: systemHealth.status, promote: externalServicesOk && paypalOk, partial: externalServicesOk && sandbox && !paypalOk, evidenceLevel: LP });
+    const external = externalServicesOutcome(integrations);
+    setFrom('servicios-externos', external.ok, external.note, { ...external, evidenceLevel: LP });
     if (report.deployment?.commitSha) {
       setFrom('deployments', true, `GET /api/system-health · commit ${report.deployment.commitSha.slice(0, 10)} (${report.deployment.branch || 'branch desconocida'})`, { promote: true, evidenceLevel: LP });
     }
@@ -497,12 +509,8 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       report.integrations.appsScript.httpStatus ?? systemHealth.status);
   }
   if (report?.integrations?.paypal) {
-    const paypalOk = report.integrations.paypal.productionReady === true;
-    const sandbox = report.integrations.paypal.environment === 'sandbox';
-    const available = (paypalOk || sandbox) && report.integrations.resend === true && report.integrations.cloudinary === true;
-    set('apis-internas', 'servicios-externos', available,
-      `GET /api/system-health · PayPal ${report.integrations.paypal.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'} · externos listos=${paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true}`,
-      systemHealth.status, { promote: available && paypalOk, partial: available && sandbox && !paypalOk });
+    const external = externalServicesOutcome(report.integrations);
+    set('apis-internas', 'servicios-externos', external.ok, external.note, external.status, external);
   }
   // Sheets: el guard HTTP sólo prueba que el puente está desplegado. Cada
   // conexión queda verde únicamente con el acuse de una sincronización real

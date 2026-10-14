@@ -146,7 +146,7 @@ export async function loadRolePermissions(forceReload = false) {
   if (_cache && !forceReload) return _cache;
   const defaults = buildDefaultRolePermissions();
   try {
-    const { readAdminFirestore } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2');
+    const { readAdminFirestore } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1');
     const snap = await readAdminFirestore(() => getDoc(doc(db, ROLE_PERM_DOC.col, ROLE_PERM_DOC.id)));
     const saved = snap.exists() ? snap.data() : {};
     const merged = {};

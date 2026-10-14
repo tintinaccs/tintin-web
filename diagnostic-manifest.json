@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d7fa1736f8fbfc8adae90a2362b206202569a2c06cc385e1df5d3804641481a1",
+  "sourceFingerprint": "34aa0ca35012d667ca1848b789ddf8c38d27b15e2dcd8eb139d30f72de5e9316",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1217,
-    "textFiles": 1169,
-    "totalBytes": 18394697,
+    "files": 1219,
+    "textFiles": 1171,
+    "totalBytes": 18413255,
     "pages": 19,
-    "modules": 870
+    "modules": 872
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16983,
-      "sha256": "05b3c3af6053c166d0253b7adf8e0c65355aad47c4947783066104859075fdd9",
+      "bytes": 17042,
+      "sha256": "204640b9a47f943f926c6ac62b5505aacba8f8c2a444d871316c8f1f97939e18",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -109,7 +109,7 @@
           "line": 7
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -119,7 +119,7 @@
           "line": 9
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -612,7 +612,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -624,7 +624,7 @@
           "exists": true
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -1011,8 +1011,8 @@
         "guest",
         "client"
       ],
-      "bytes": 28037,
-      "sha256": "b77e61d2d61a07acd0b92c9e7deee3ba29478e7f0ed182c1e9e515f269f6d0eb",
+      "bytes": 28146,
+      "sha256": "41d15a8084278a7dcdf8d320c8ff3085d0ba5d450b506412dc6e090da2a75a45",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1052,7 +1052,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -1062,7 +1062,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -1097,7 +1097,7 @@
           "line": 277
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 329
         },
@@ -1538,7 +1538,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -1550,7 +1550,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -1592,7 +1592,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 329,
           "exists": true
@@ -1951,8 +1951,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 45394,
-      "sha256": "0c81153fa18279f1300460adbab0440e0ba74cc34c95bec124390b8eed861d66",
+      "bytes": 45449,
+      "sha256": "ddf8f3a9caeb164addba1168bff36a937972a485eecc5d1b1ec807509c86fe09",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1982,7 +1982,7 @@
       "ids": 18,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1997,7 +1997,7 @@
           "line": 315
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 801
         },
@@ -2109,7 +2109,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2127,7 +2127,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 801,
           "exists": true
@@ -2542,8 +2542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 203202,
-      "sha256": "84da097179a87755712084f1699def576a11d368ce82c8b1a15a44221b800e0b",
+      "bytes": 203326,
+      "sha256": "5febf16cbd234db64ffe7e4a581a4dc321b4b64d66062e0a779b69e8dd7fc6ea",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2567,7 +2567,7 @@
       "ids": 568,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2587,12 +2587,12 @@
           "line": 2059
         },
         {
-          "raw": "js/admin/content/control-bienvenida-admin.js?v=tintin-20261012-auth-privacy-1-control-bienvenida-admin-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2",
+          "raw": "js/admin/content/control-bienvenida-admin.js?v=tintin-20261012-auth-privacy-1-control-bienvenida-admin-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/content/control-bienvenida-admin.js",
           "line": 2060
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261013-orders-board-6-admin-app-js-security-ready-20261013-3-palette-20261014-1-stock-flow-20261014-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261013-orders-board-6-admin-app-js-security-ready-20261013-3-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1",
           "target": "js/admin/admin-app.js",
           "line": 2061
         },
@@ -2607,7 +2607,7 @@
           "line": 2063
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261012-auth-privacy-1-gestion-participacion-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261012-auth-privacy-1-gestion-participacion-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 2064
         },
@@ -2617,12 +2617,12 @@
           "line": 2065
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261013-orders-board-7-shopify-commerce-admin-js-security-ready-20261013-2-palette-20261014-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261013-orders-board-7-shopify-commerce-admin-js-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2066
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20261012-auth-privacy-1-editor-visual-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-story-20261014-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20261012-auth-privacy-1-editor-visual-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-main-sync-20261014-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 2067
         },
@@ -2632,7 +2632,7 @@
           "line": 2277
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 2278
         },
@@ -2874,7 +2874,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2898,13 +2898,13 @@
           "exists": true
         },
         {
-          "raw": "js/admin/content/control-bienvenida-admin.js?v=tintin-20261012-auth-privacy-1-control-bienvenida-admin-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2",
+          "raw": "js/admin/content/control-bienvenida-admin.js?v=tintin-20261012-auth-privacy-1-control-bienvenida-admin-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/content/control-bienvenida-admin.js",
           "line": 2060,
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261013-orders-board-6-admin-app-js-security-ready-20261013-3-palette-20261014-1-stock-flow-20261014-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261013-orders-board-6-admin-app-js-security-ready-20261013-3-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1",
           "target": "js/admin/admin-app.js",
           "line": 2061,
           "exists": true
@@ -2922,7 +2922,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261012-auth-privacy-1-gestion-participacion-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261012-auth-privacy-1-gestion-participacion-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 2064,
           "exists": true
@@ -2934,13 +2934,13 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261013-orders-board-7-shopify-commerce-admin-js-security-ready-20261013-2-palette-20261014-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261013-orders-board-7-shopify-commerce-admin-js-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2066,
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20261012-auth-privacy-1-editor-visual-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-story-20261014-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20261012-auth-privacy-1-editor-visual-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-main-sync-20261014-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 2067,
           "exists": true
@@ -2952,7 +2952,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 2278,
           "exists": true
@@ -8520,8 +8520,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19411,
-      "sha256": "5ef52b5c497d51231fb13d067c79a396b063540972f6148cdbbac9cb21bf5c28",
+      "bytes": 19493,
+      "sha256": "d6ab0a027d6f44b8799355df028c3dbd1d7c846f6af763879202cb564693f95c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8555,7 +8555,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8565,7 +8565,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -8600,7 +8600,7 @@
           "line": 193
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 198
         },
@@ -8978,7 +8978,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -8990,7 +8990,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -9032,7 +9032,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 198,
           "exists": true
@@ -9335,8 +9335,8 @@
         "guest",
         "client"
       ],
-      "bytes": 59221,
-      "sha256": "c8d1511405c6257696a035edb49177a73606560a8934c1133c4fdee3148f5818",
+      "bytes": 59326,
+      "sha256": "65b0677b4bebc88d7b59ccaee89ea0e878b619505dc5ea76957ea9fea422dd78",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9382,7 +9382,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -9392,7 +9392,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -9412,7 +9412,7 @@
           "line": 508
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 513
         },
@@ -9800,7 +9800,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -9812,7 +9812,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -9836,7 +9836,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 513,
           "exists": true
@@ -10257,8 +10257,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 132818,
-      "sha256": "ad777ca9cff0d0265761c63fb188e3c020b1e5726306a5d42ce45479f348b548",
+      "bytes": 132877,
+      "sha256": "5159778ec151c23e5770c2a22e33e84480db02dcf87c6f7435cfa2583b0ca94b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10298,7 +10298,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -10308,7 +10308,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -10761,7 +10761,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -10773,7 +10773,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -11622,8 +11622,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21288,
-      "sha256": "3956811dd99a973b2056a6b78c0fc62156c82101f742cce4b42a6e845dbe3518",
+      "bytes": 21370,
+      "sha256": "07e7e032fa1879b5d089ca0a9ecca0a4b64597f36c35bcc033f93b30b5d987b8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11663,7 +11663,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -11673,7 +11673,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -11713,7 +11713,7 @@
           "line": 214
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 219
         },
@@ -12101,7 +12101,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -12113,7 +12113,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -12161,7 +12161,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 219,
           "exists": true
@@ -12470,8 +12470,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26100,
-      "sha256": "b1a556b114f213c0d2b3e0e919c7296bb833c7719209cdef51a24374bc9752b5",
+      "bytes": 26182,
+      "sha256": "ff32e1868dd5aa835d8969d907e718dcd544ed8b692b9ba845aae6ec492d17d0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12511,7 +12511,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -12521,7 +12521,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -12556,7 +12556,7 @@
           "line": 275
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 280
         },
@@ -12979,7 +12979,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -12991,7 +12991,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -13033,7 +13033,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 280,
           "exists": true
@@ -13403,8 +13403,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23288,
-      "sha256": "9564ab91392a3a7b2b31edce0e8f48a24999e9dfdf3e31587d03f3a6b632245c",
+      "bytes": 23370,
+      "sha256": "6722c0913cd10ff0260cb691a12444a63fd6f7246df2b9b129910e4c391d58a7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13444,7 +13444,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -13454,7 +13454,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -13489,7 +13489,7 @@
           "line": 192
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 197
         },
@@ -13867,7 +13867,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -13879,7 +13879,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -13921,7 +13921,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 197,
           "exists": true
@@ -14264,8 +14264,8 @@
         "guest",
         "client"
       ],
-      "bytes": 37441,
-      "sha256": "15fe827ab7e764ba9019e8febf6d15a50676d3607e453254756b36fd61cfd043",
+      "bytes": 37573,
+      "sha256": "767ddea5499ba49c78194bfcba54da6fc1b3f98105ff8ce2fea1e1793b97303b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14311,7 +14311,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -14321,7 +14321,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -14341,7 +14341,7 @@
           "line": 434
         },
         {
-          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261012-checkout-ready-3-carrusel-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1",
+          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261012-checkout-ready-3-carrusel-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/home/carrusel-colecciones.js",
           "line": 435
         },
@@ -14366,12 +14366,12 @@
           "line": 439
         },
         {
-          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261012-auth-privacy-1-inicio-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-story-20261014-1",
+          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261012-auth-privacy-1-inicio-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
           "line": 440
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 445
         },
@@ -14885,7 +14885,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -14897,7 +14897,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -14921,7 +14921,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261012-checkout-ready-3-carrusel-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1",
+          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20261012-checkout-ready-3-carrusel-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/home/carrusel-colecciones.js",
           "line": 435,
           "exists": true
@@ -14951,13 +14951,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261012-auth-privacy-1-inicio-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-story-20261014-1",
+          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261012-auth-privacy-1-inicio-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
           "line": 440,
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 445,
           "exists": true
@@ -15407,8 +15407,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72505,
-      "sha256": "d1b45cdf1d5a29ca64e9d36444764b781225becea21e08a4c873702dd8b89e67",
+      "bytes": 72564,
+      "sha256": "e0299c045facede2ce58aaf407f605e721041bc4a0459f037a3530546406503e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15454,7 +15454,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -15464,7 +15464,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -15742,7 +15742,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -15754,7 +15754,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -16237,8 +16237,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1986,
-      "sha256": "7229deac3eb34b55aacc319098c1935bb363a11738d027bea65b3f8438878f0f",
+      "bytes": 1991,
+      "sha256": "364e3398cca553d1a91c4a5570b79a842ca7c17a63122756bed41f7509037095",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16255,7 +16255,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 1
         }
@@ -16302,7 +16302,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 1,
           "exists": true
@@ -16368,8 +16368,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 56638,
-      "sha256": "7f5e90ea73328fecd0c82f0d05203ea1a4a9823825040b093e158ae0f438a7a5",
+      "bytes": 56697,
+      "sha256": "12408c3d377fde805182f8abd9568627e86f527efc68dc3bce980c5c36393fed",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16415,7 +16415,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -16425,7 +16425,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -16898,7 +16898,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -16910,7 +16910,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -17646,8 +17646,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20766,
-      "sha256": "9b453a4c0fe3981ba94369b22decb9fd97e6f1813cc87cda98f273a344faa8f4",
+      "bytes": 20848,
+      "sha256": "104d0b9178e3dd5177ba310f9b650a2d134561b38cf5925651c5fa4371cde8f4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17681,7 +17681,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -17691,7 +17691,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -17726,7 +17726,7 @@
           "line": 218
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 223
         },
@@ -18104,7 +18104,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -18116,7 +18116,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -18158,7 +18158,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 223,
           "exists": true
@@ -18461,8 +18461,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24832,
-      "sha256": "c720565de02bcb60c5905cfa9879b2cf86885b3733fef1b17bd99920e96e84ba",
+      "bytes": 24891,
+      "sha256": "9e2b6d50d25a6a6c70b2a30b676436ae2c781591a22769802568dbce0484c86d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18496,7 +18496,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -18506,7 +18506,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -19039,7 +19039,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -19051,7 +19051,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -19413,8 +19413,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24279,
-      "sha256": "d003caa48eda678d0c80d78d2bf53c66570aea8a7676c2d28258d268fa5c4b60",
+      "bytes": 24365,
+      "sha256": "823a7a59780280410cd1e1431004a5bc60a2651ecbd6cc91a5fceba8b0ee6eae",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19448,7 +19448,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -19458,7 +19458,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -19478,7 +19478,7 @@
           "line": 277
         },
         {
-          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261012-auth-privacy-1-inicio-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-story-20261014-1",
+          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261012-auth-privacy-1-inicio-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
           "line": 278
         },
@@ -19926,7 +19926,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -19938,7 +19938,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -19962,7 +19962,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261012-auth-privacy-1-inicio-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-story-20261014-1",
+          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20261012-auth-privacy-1-inicio-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
           "line": 278,
           "exists": true
@@ -20468,8 +20468,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22710,
-      "sha256": "2467d5a8f2cc1b5566b4a48f10b5100472e90c8c5c9cda23c0e4c6419efea8c4",
+      "bytes": 22769,
+      "sha256": "f75d455eec97eec304d2bbef2eb05442e6f975d6c1090c06a51be9ce3b868e04",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20496,7 +20496,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -20506,7 +20506,7 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
@@ -21059,7 +21059,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-hero-cache-20261014-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -21071,7 +21071,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
@@ -22614,7 +22614,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 350901,
-      "sha256": "0b799ec8ec5a3165c28fd8ea04cf41b802fcab53c3ae184db8c4521ea59f6ee6",
+      "sha256": "50e654bfbe20ce13f608dac5300c077d05c8f05bbed76a01001ab594ede5b2bd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24735,8 +24735,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 477877,
-      "sha256": "fc1d58276097277c9798586871331a6415008451c5b1c4f9cf212078cb83f5e2",
+      "bytes": 477946,
+      "sha256": "7034770fa9d750459a25c3c47be0d5d92a135d4e81d10ef99790cf8e2cf7a77c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24821,7 +24821,7 @@
           "line": 20
         },
         {
-          "raw": "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/permisos-roles.js",
           "dynamic": false,
           "line": 24
@@ -24839,7 +24839,7 @@
           "line": 26
         },
         {
-          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 27
@@ -24899,7 +24899,7 @@
           "line": 36
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 37
@@ -25226,8 +25226,8 @@
     },
     {
       "path": "js/admin/auth/lecturas-admin.js",
-      "bytes": 2697,
-      "sha256": "e1c5040b9f931fe2e3fc546582be5b990726c287fa048e82a3f145300179b025",
+      "bytes": 3187,
+      "sha256": "3e8b805679ffdc78ac587bf9eed894cab91444e0cb78013928e87523bb54ccf9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25267,8 +25267,8 @@
     },
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
-      "bytes": 9176,
-      "sha256": "14956361969bdcc1fe03710ac16a88e06e7e6d1be2cfc75e8caefd376149fdea",
+      "bytes": 9199,
+      "sha256": "1137ccf01bb66fd88336748a0fc59a42ce2011e5e0b843859778e8c22b58535e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25287,7 +25287,7 @@
           "line": 11
         },
         {
-          "raw": "../../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "../../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 12
@@ -25315,15 +25315,15 @@
     },
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
-      "bytes": 31344,
-      "sha256": "8d2f130079ffa3e270eb93b9b578c11182ac98d05f46b48ca9094fa32fa7bd2c",
+      "bytes": 31367,
+      "sha256": "abf81d8c6dfc0aed9f99cac598a3607e53d9df19910a178169f8dce6bc7d378a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": false,
           "line": 1
@@ -25380,8 +25380,8 @@
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
-      "bytes": 22584,
-      "sha256": "4faa13c04070afa378be2a97d69994b8e74687ca94749eee9f558f9370c1c2f6",
+      "bytes": 22607,
+      "sha256": "aaa2d18a4699a0059d4a50a0764592d922f9a10e7325c98724e2e3aba486c4d1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25418,7 +25418,7 @@
           "line": 18
         },
         {
-          "raw": "../../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/permisos-roles.js",
           "dynamic": false,
           "line": 19
@@ -25575,8 +25575,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/estado-flujo.js",
-      "bytes": 6123,
-      "sha256": "8b953652a20f59cbeed349b9b998fb07f94d8a0f0f70a95366ee4c06d08f60fc",
+      "bytes": 6128,
+      "sha256": "5b664eebcf42df597e690d9449391e5604c6da9c50d5d94db6b5139af7aceabb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25586,15 +25586,15 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 35901,
-      "sha256": "ddb9aee258349e38598be299e0a3ed3b1f33449b5c3e73943c7315e0c98df262",
+      "bytes": 37658,
+      "sha256": "ad62a852352c9b033314d5cfc658962a6d467edb382799af43aaa80b639e3a87",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": false,
           "line": 1
@@ -25606,13 +25606,13 @@
           "line": 7
         },
         {
-          "raw": "./estado-flujo.js?v=tintin-20261010-auto-flow-1",
+          "raw": "./estado-flujo.js?v=tintin-20261010-auto-flow-1-connections-20261014-1",
           "target": "js/admin/flujo-conexiones/estado-flujo.js",
           "dynamic": false,
           "line": 8
         },
         {
-          "raw": "./live-checks.js?v=tintin-20261010-auto-flow-1",
+          "raw": "./live-checks.js?v=tintin-20261010-auto-flow-1-connections-20261014-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 9
@@ -25651,8 +25651,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 43607,
-      "sha256": "1c46d6f8684f393cf6109e52e0d6376fc72c42e057ef56e3ae43a0620edf428d",
+      "bytes": 43800,
+      "sha256": "040e6c4dc6c31e64e80fdc1206fe0c7a31e54905cda11f60a637f2acbea5feaf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25665,7 +25665,7 @@
           "line": 9
         },
         {
-          "raw": "./estado-flujo.js?v=tintin-20261010-auto-flow-1",
+          "raw": "./estado-flujo.js?v=tintin-20261010-auto-flow-1-connections-20261014-1",
           "target": "js/admin/flujo-conexiones/estado-flujo.js",
           "dynamic": false,
           "line": 10
@@ -26207,15 +26207,15 @@
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
-      "bytes": 88569,
-      "sha256": "a48f80fa9c7d68d53530f0e7fa919c74846d05fa6e341ed55e63a628846d052d",
+      "bytes": 88592,
+      "sha256": "8fe9b08a1fdaa13bfcc047809ae69d65a76ce48f4f179f450c61a1ee74499408",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": false,
           "line": 1
@@ -26266,15 +26266,15 @@
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
-      "bytes": 192,
-      "sha256": "1e4cde443b0f3d2ad39ca68dbeaa77f828d82cbcb233563feacfc5f3f2987abf",
+      "bytes": 215,
+      "sha256": "580f8a863d586e37c15834169c5b004c9933a5e975b6c095607646e5693be25a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./gestion-participacion-admin-v2.js?v=tintin-20261012-auth-privacy-1-gestion-participacion-admin-v2-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "./gestion-participacion-admin-v2.js?v=tintin-20261012-auth-privacy-1-gestion-participacion-admin-v2-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/participacion/gestion-participacion-admin-v2.js",
           "dynamic": false,
           "line": 1
@@ -26368,15 +26368,15 @@
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
-      "bytes": 2479,
-      "sha256": "70e2ac61db4ff0f0ab788c556ee3dd2c54c5ea1f66d10b2a2857d03953126005",
+      "bytes": 2506,
+      "sha256": "f0167dfd11b66c6b99cd6c0d29e8845d1596d075f748dc4313a03bf904783f94",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../components/images/imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-story-20261014-1",
+          "raw": "../../components/images/imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/images/imagenes.js",
           "dynamic": false,
           "line": 11
@@ -26466,15 +26466,15 @@
     },
     {
       "path": "js/admin/settings/control-tienda-admin.js",
-      "bytes": 12568,
-      "sha256": "6249cc38d45c5d8629435f7abc2115bc0d95043a7c3437d0833e5af68969b8c0",
+      "bytes": 12614,
+      "sha256": "4c554b4549d0f4e08a98336207cedcc4da6a29d6eb6ac7c930528f91a97346cb",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": false,
           "line": 1
@@ -26510,7 +26510,7 @@
           "line": 25
         },
         {
-          "raw": "./sincronizacion-correo-admin.js?v=tintin-20261012-auth-privacy-1-sincronizacion-correo-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "./sincronizacion-correo-admin.js?v=tintin-20261012-auth-privacy-1-sincronizacion-correo-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/settings/sincronizacion-correo-admin.js",
           "dynamic": true,
           "line": 414
@@ -26572,15 +26572,15 @@
     },
     {
       "path": "js/admin/settings/esquema-color-admin.js",
-      "bytes": 3794,
-      "sha256": "053316e34727a6f12800dfdaa46b36e76aa5c27f9371d54b1f6c25833653acf8",
+      "bytes": 3817,
+      "sha256": "7f1fc4aced1962b60c5f86375a701016caa1a0d98e96e139c13bb03050dc8ffb",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": false,
           "line": 1
@@ -26678,15 +26678,15 @@
     },
     {
       "path": "js/admin/settings/sincronizacion-correo-admin.js",
-      "bytes": 14001,
-      "sha256": "e1af4fdf82af2e4d0acc329951a44b3008f9ac5defac25bce5cd5de99da2f831",
+      "bytes": 14024,
+      "sha256": "7e6be55142b1b27007b2f3b23ebbe15c3816b97208dee8c74b27c50bf1a03716",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": false,
           "line": 1
@@ -26737,8 +26737,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 102888,
-      "sha256": "8b404d8defcdcd7cc78e2bd926858e5c5bc0602a25fb63f400055c7f5ba9eb8f",
+      "bytes": 102934,
+      "sha256": "1f604aa1cf35f628ad10804b850ed08237089123fbfa96ec933c11e0e2bdb00e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26799,13 +26799,13 @@
           "line": 30
         },
         {
-          "raw": "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/permisos-roles.js",
           "dynamic": false,
           "line": 31
         },
         {
-          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 32
@@ -27068,8 +27068,8 @@
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
-      "bytes": 4500,
-      "sha256": "39de09d67516c2c9a802749cda67c2eb05d46d8d0098298d977fe66417a74c36",
+      "bytes": 4523,
+      "sha256": "9b25395fb2a2ad3a72dd2774cf028cbac71830b0a6c6b20ed3fdb38ebc6202b9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27079,8 +27079,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 49699,
-      "sha256": "aa0db4b9675d1ffac3d48bc1471a5d8564c2fb82d932c7c122d85d8f66ecfd0d",
+      "bytes": 49778,
+      "sha256": "a02273eae8a34ce811dd1f0f00e6fed95eb01df3e432fc0229e05f802c64f523",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27616,15 +27616,15 @@
     },
     {
       "path": "js/components/images/gestion-imagenes.js",
-      "bytes": 22654,
-      "sha256": "8198a46814088a3e9adc52dde2e1de50603042e1b6d98de3dc544e441e1025e4",
+      "bytes": 22681,
+      "sha256": "4ba11e1cab17944ef97e52b6c2d24d45b09e03232686eecf714eaf4e645efb87",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-story-20261014-1",
+          "raw": "./imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/images/imagenes.js",
           "dynamic": false,
           "line": 9
@@ -27640,8 +27640,8 @@
     },
     {
       "path": "js/components/images/imagenes.js",
-      "bytes": 23877,
-      "sha256": "5e89f181f5d237e5e380ffccbc676a8c98b67dfd78201ce34d5e5590f9b23718",
+      "bytes": 23900,
+      "sha256": "f5241cc30652c765e1f90af9881238f0e5b8f09dee6dcad7aff1e8658bdbe7a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27684,7 +27684,7 @@
           "line": 23
         },
         {
-          "raw": "../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": true,
           "line": 426
@@ -27699,15 +27699,15 @@
     },
     {
       "path": "js/components/images/inicio-carga-imagenes.js",
-      "bytes": 1610,
-      "sha256": "b845182556a9430ff30afd5d2f292175976af64c45985ae75935903b4c92e9dc",
+      "bytes": 1637,
+      "sha256": "169175510a587180fcd32ffa3d6e0cabb7cc313712ad7e44a3db271264841716",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-story-20261014-1",
+          "raw": "./imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/images/imagenes.js",
           "dynamic": false,
           "line": 10
@@ -27962,15 +27962,15 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-colecciones.js",
-      "bytes": 11686,
-      "sha256": "b5823b84150141970ad48219c056c8ef5085706623dcd858d0bb9135c4430abf",
+      "bytes": 11709,
+      "sha256": "617b9572accd982e411866d7cbb0d249b1d7c9d2bf03bfb093c081743c924a29",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "../../../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": true,
           "line": 248
@@ -27980,8 +27980,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 14842,
-      "sha256": "3d4f6e7724dc4ce2b790d10b328df6ca040f5880d1a1844d70ddbe28e6b3c239",
+      "bytes": 14919,
+      "sha256": "db09f2bc8d312d0034e342458a6c0a041dfe46864a2bad40cfca47fbfa91e974",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28012,7 +28012,7 @@
           "line": 141
         },
         {
-          "raw": "./control-busqueda.js?v=tintin-20261012-checkout-ready-4-control-busqueda-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "./control-busqueda.js?v=tintin-20261012-checkout-ready-4-control-busqueda-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/navigation/compartido/control-busqueda.js",
           "dynamic": true,
           "line": 281
@@ -28050,8 +28050,8 @@
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
-      "bytes": 11671,
-      "sha256": "8ae1836e06b3d6e5a682e582e8bdd1e27815a04cf210ccad0505a3d38e6b58de",
+      "bytes": 11698,
+      "sha256": "2ae6f20fcae897147df844a9b50c95719898e925c12dd5abd0211ec1a13a4dfe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28277,15 +28277,15 @@
     },
     {
       "path": "js/components/navigation/compatibilidad/colecciones.js",
-      "bytes": 309,
-      "sha256": "b8c26646a3d988ae2965197fd2a7b53ddfa8302054c605b62db9f1b40d6d0252",
+      "bytes": 332,
+      "sha256": "ed1b4d2e79b2d6268f544e37e76e6b3f9a5cfb8a2acd4a7ac09a00c257374e34",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../compartido/carga-colecciones.js?v=tintin-20261012-checkout-ready-3-carga-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1",
+          "raw": "../compartido/carga-colecciones.js?v=tintin-20261012-checkout-ready-3-carga-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/components/navigation/compartido/carga-colecciones.js",
           "dynamic": false,
           "line": 2
@@ -28350,8 +28350,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 12515,
-      "sha256": "d9bfa27f458446ecf9043016cb5e2e5acdd030150491930b913175916443fcef",
+      "bytes": 12542,
+      "sha256": "7c5c90d6ba212b714661ed0b8ea947d074b9685db1178c826fb604fc5db89f2e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28418,7 +28418,7 @@
           "line": 10
         },
         {
-          "raw": "./compartido/carga-navegacion.js?v=tintin-20261012-checkout-ready-4-carga-navegacion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "./compartido/carga-navegacion.js?v=tintin-20261012-checkout-ready-4-carga-navegacion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/components/navigation/compartido/carga-navegacion.js",
           "dynamic": false,
           "line": 11
@@ -28884,8 +28884,8 @@
     },
     {
       "path": "js/core/auth/insignia-edicion.js",
-      "bytes": 5780,
-      "sha256": "8760d238d049258f8a36ad4fa7284854d25b85dcea4724f7988a8a59ce24a6c2",
+      "bytes": 5803,
+      "sha256": "f409992c5efe236342c215be810cfb8d33a6b30e1bf07bf8c7c9bfc36bd8b631",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28910,7 +28910,7 @@
           "line": 3
         },
         {
-          "raw": "./permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "./permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/core/auth/permisos-roles.js",
           "dynamic": true,
           "line": 115
@@ -28991,8 +28991,8 @@
     },
     {
       "path": "js/core/auth/permisos-roles.js",
-      "bytes": 12851,
-      "sha256": "fe6cf9456e95b104d3a028a3d713edd7e022832cb77227dbea9a0f4f127adaac",
+      "bytes": 12874,
+      "sha256": "c45b75ca90e7c934d9581e61e1a86c06d24bc924f2e9d1efa29e54a990650f71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29023,7 +29023,7 @@
           "line": 25
         },
         {
-          "raw": "../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": true,
           "line": 149
@@ -29646,8 +29646,8 @@
     },
     {
       "path": "js/core/store/estado-productos.js",
-      "bytes": 24646,
-      "sha256": "6bb852fb3e141ed5235de4d8fa1597ced178ca1550f5c503607fb4c4305ec98b",
+      "bytes": 24696,
+      "sha256": "07eebd4fd6b2acb117e527c501d075d1d418333b9ab23092d662a2244aba1692",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29696,13 +29696,13 @@
           "line": 25
         },
         {
-          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261012-checkout-ready-4-cargador-mantenimiento-pagina-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-story-20261014-1",
+          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261012-checkout-ready-4-cargador-mantenimiento-pagina-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1",
           "target": "js/cargador-mantenimiento-pagina.js",
           "dynamic": false,
           "line": 1
         },
         {
-          "raw": "../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261012-checkout-ready-3-politica-visibilidad-catalogo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1",
+          "raw": "../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261012-checkout-ready-3-politica-visibilidad-catalogo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1",
           "target": "js/pages/catalog/politica-visibilidad-catalogo.js",
           "dynamic": false,
           "line": 2
@@ -30245,8 +30245,8 @@
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "bytes": 1985,
-      "sha256": "0ff511b7f2d5552fea409ea8c593d262f61b45b2707818b2a10eba4841b6b517",
+      "bytes": 2012,
+      "sha256": "fae9de9a3b593eff31f30b033cbd794a52359481c2514f60eae9d7c2cd18e91f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30417,15 +30417,15 @@
     },
     {
       "path": "js/pages/catalog/politica-visibilidad-catalogo.js",
-      "bytes": 11441,
-      "sha256": "6d604ef6e506406b18148ea759ff19020a1bd9a23304715ca1f8618b8d9ff18f",
+      "bytes": 11464,
+      "sha256": "9b483e8986a0cd3d2f641f25c6153721b069e29bf595c4a57e7f9b8ae4810a9d",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "../collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 7
@@ -30754,8 +30754,8 @@
     },
     {
       "path": "js/pages/collections/estado-colecciones.js",
-      "bytes": 6780,
-      "sha256": "719ff3149d193d194a6a32876ccf4c9efa8b6dd522e14b3462608fd35c93ab0c",
+      "bytes": 6803,
+      "sha256": "16f4c7b0219b5990697a0754eded0107ecb3d572b68ec131b7c30ce615684c5a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30816,7 +30816,7 @@
           "line": 24
         },
         {
-          "raw": "../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2",
+          "raw": "../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": true,
           "line": 144
@@ -30860,15 +30860,15 @@
     },
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
-      "bytes": 18978,
-      "sha256": "9605e36fa0925958cc083ca27481189e48915d17ab29ca1fa17843366de52ddc",
+      "bytes": 19001,
+      "sha256": "2db4d762629afc703aba556df8de3a0ca69bcfdbb4007b5631db6a3888dd0df2",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "./estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 10
@@ -30878,15 +30878,15 @@
     },
     {
       "path": "js/pages/home/carrusel-colecciones.js",
-      "bytes": 16201,
-      "sha256": "aa75313f0b9464d0f20508b6f753528a5e5c6c80ec5f3d8fe0a7ff6953017ade",
+      "bytes": 16224,
+      "sha256": "0f2bb93176a30dadb13fbd1448d5d8afdd5e8999bf79784534c8f3cb068ced86",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1",
+          "raw": "../collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": false,
           "line": 1
@@ -31499,8 +31499,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 11368,
-      "sha256": "097679999bf21c1420b32ce9c7ed6d879feaf4cb080cd67a26db8368918b41c7",
+      "bytes": 11473,
+      "sha256": "3f7886de7bdac3236b1144bcd8eb9453654024575715aee93df995a007d7e75a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36341,8 +36341,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 28781,
-      "sha256": "ffb4b4d4de82f3cbb0c020cb6fdb38e88a8d3c6cbf9bd05054320faf7966ffef",
+      "bytes": 28840,
+      "sha256": "e8efe6e4024e02e3a1bd18a1f18a67248d4665602426466f241e839a9449e992",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37086,8 +37086,8 @@
     },
     {
       "path": "tests/admin/lecturas-admin.test.mjs",
-      "bytes": 4204,
-      "sha256": "595373a6791ab2e5205872f63f9bc0bf38a2b72f418e38de1abe53f49f2ad8ba",
+      "bytes": 5850,
+      "sha256": "2516aa34406e7379399ce4c115313fd4525090d5229f68c12f7228963a0ad00e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37158,8 +37158,8 @@
     },
     {
       "path": "tests/admin/realtime-error-contracts.test.mjs",
-      "bytes": 2571,
-      "sha256": "31322db95b7c1a7fe3e9f2ed4dc7c53e2ecdd0f13f222e5d1fdd1f093e80e1b2",
+      "bytes": 2758,
+      "sha256": "02baa02556d0a7d0a119b5ff56dbbe3c7d99744117d4cb62b05fc679289e1866",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37188,8 +37188,8 @@
     },
     {
       "path": "tests/admin/webhook-diagnostico.test.mjs",
-      "bytes": 2116,
-      "sha256": "565a1c58c052c7fc498bdf75c7b2c6d10191d4868c195b1aa835714c4c3d23e0",
+      "bytes": 2145,
+      "sha256": "a253fd0bfe3ab54df7e9866e0e91dae53c629ba90bb1946cb97d1007423a4078",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40417,8 +40417,8 @@
     },
     {
       "path": "tests/flow-connections/conexiones-con-evidencia.test.mjs",
-      "bytes": 33580,
-      "sha256": "afc50f7535a4c2f96225c89c6f7f76d1e32c17531965b9c29a434c8275aab307",
+      "bytes": 33588,
+      "sha256": "fbd4412f6077315748decd0325fd0ef94b639a2fb126822c5f501acb1f5a2c7f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40486,8 +40486,8 @@
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
-      "bytes": 20988,
-      "sha256": "84bd551f523bb43dbcaf802ec451f9469bbf7c4dc203f29cf19e736d49ccea97",
+      "bytes": 21007,
+      "sha256": "46fa97e16d4e3015b63c38482aa8151465d0caa407447c2afa8cd238769f42b1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40528,6 +40528,48 @@
           "target": null,
           "dynamic": true,
           "line": 376
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/flow-connections/external-services.test.mjs",
+      "bytes": 2316,
+      "sha256": "9d63a5e26aed8c98b81956771ea80fab58b2ff475a400347e9ae1c7714b6f213",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/live-checks.js",
+          "target": "js/admin/flujo-conexiones/live-checks.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+          "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../js/admin/flujo-conexiones/estado-flujo.js",
+          "target": "js/admin/flujo-conexiones/estado-flujo.js",
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": []
@@ -40716,6 +40758,42 @@
       ]
     },
     {
+      "path": "tests/flow-connections/probe-cancellation.test.mjs",
+      "bytes": 1820,
+      "sha256": "7b77844b1d4aaad113b82549adffd383b54bef2d92dcd8a7532e6b528ba9083e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",
       "bytes": 2953,
       "sha256": "3bd931b17a19a21595e170203e374733f3554e0f68b05c57a0126fad2b50cbba",
@@ -40747,8 +40825,8 @@
     },
     {
       "path": "tests/flow-connections/revalidation-progress.test.mjs",
-      "bytes": 6142,
-      "sha256": "d339b20309c8d892b63499372bbdd66781c0b07b6a96b0284ff736f0ad981bad",
+      "bytes": 6655,
+      "sha256": "d23e2953a91a2f9bccae3e7e12d29a47243a873a63b85c1fc5339ad8bb8f8280",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40935,8 +41013,8 @@
     },
     {
       "path": "tests/flow-connections/sheets-webhook-probe.test.mjs",
-      "bytes": 3237,
-      "sha256": "546358bf40c54aba265414aff5788a7adb84d9ee4a3ce454934bca656b753007",
+      "bytes": 3289,
+      "sha256": "8a46089853cf7b5e74079a12525d94eee3cb25d2455d6bf6af772153129a4239",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47601,8 +47679,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 16983,
-      "sha256": "05b3c3af6053c166d0253b7adf8e0c65355aad47c4947783066104859075fdd9"
+      "bytes": 17042,
+      "sha256": "204640b9a47f943f926c6ac62b5505aacba8f8c2a444d871316c8f1f97939e18"
     },
     {
       "path": "AGENTS.md",
@@ -47620,7 +47698,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 3973,
-      "sha256": "552c9c0cd9bc6f457784908da4dde592b795b3a2e3ec7f37abeec3a4b09e2492"
+      "sha256": "5ea6236979ed5cdeebef190780a740a076583f3b4894e515158fd74790703a2a"
     },
     {
       "path": "_redirects",
@@ -47637,14 +47715,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 28037,
-      "sha256": "b77e61d2d61a07acd0b92c9e7deee3ba29478e7f0ed182c1e9e515f269f6d0eb"
+      "bytes": 28146,
+      "sha256": "41d15a8084278a7dcdf8d320c8ff3085d0ba5d450b506412dc6e090da2a75a45"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 45394,
-      "sha256": "0c81153fa18279f1300460adbab0440e0ba74cc34c95bec124390b8eed861d66"
+      "bytes": 45449,
+      "sha256": "ddf8f3a9caeb164addba1168bff36a937972a485eecc5d1b1ec807509c86fe09"
     },
     {
       "path": "admin-manifest.json",
@@ -47655,8 +47733,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 203202,
-      "sha256": "84da097179a87755712084f1699def576a11d368ce82c8b1a15a44221b800e0b"
+      "bytes": 203326,
+      "sha256": "5febf16cbd234db64ffe7e4a581a4dc321b4b64d66062e0a779b69e8dd7fc6ea"
     },
     {
       "path": "apple-touch-icon.png",
@@ -48033,20 +48111,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 19411,
-      "sha256": "5ef52b5c497d51231fb13d067c79a396b063540972f6148cdbbac9cb21bf5c28"
+      "bytes": 19493,
+      "sha256": "d6ab0a027d6f44b8799355df028c3dbd1d7c846f6af763879202cb564693f95c"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 59221,
-      "sha256": "c8d1511405c6257696a035edb49177a73606560a8934c1133c4fdee3148f5818"
+      "bytes": 59326,
+      "sha256": "65b0677b4bebc88d7b59ccaee89ea0e878b619505dc5ea76957ea9fea422dd78"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 132818,
-      "sha256": "ad777ca9cff0d0265761c63fb188e3c020b1e5726306a5d42ce45479f348b548"
+      "bytes": 132877,
+      "sha256": "5159778ec151c23e5770c2a22e33e84480db02dcf87c6f7435cfa2583b0ca94b"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -48309,8 +48387,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 21288,
-      "sha256": "3956811dd99a973b2056a6b78c0fc62156c82101f742cce4b42a6e845dbe3518"
+      "bytes": 21370,
+      "sha256": "07e7e032fa1879b5d089ca0a9ecca0a4b64597f36c35bcc033f93b30b5d987b8"
     },
     {
       "path": "config/account-contract.json",
@@ -48322,19 +48400,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 350901,
-      "sha256": "0b799ec8ec5a3165c28fd8ea04cf41b802fcab53c3ae184db8c4521ea59f6ee6"
+      "sha256": "50e654bfbe20ce13f608dac5300c077d05c8f05bbed76a01001ab594ede5b2bd"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 350816,
-      "sha256": "7dcac60a8acdf641baf370ee5a5843c0af58fed3d5af97765b401237e561b757"
+      "sha256": "2fb1d848b72967413c89598d47a952e9b0a9d0e46dbbe0c59c4420860b51b612"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 11679,
-      "sha256": "57436137c83d822676090500716a1f8c68787739eec22f0b6112cf3caed7a1d4"
+      "bytes": 11466,
+      "sha256": "31f68c77f8f47fb55bbf402183531e736d1aec909f8c7268e804285acfb34938"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -48346,7 +48424,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "ad6f2d65ec2ba329914ae2958448715c183af4a9064e77de07127c4f4602011c"
+      "sha256": "eebf1c514f3b0e3ea9957f97c7040c3b0b2d248d882defaf64b7c1910a0cf46e"
     },
     {
       "path": "config/public-site.json",
@@ -48363,8 +48441,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 26100,
-      "sha256": "b1a556b114f213c0d2b3e0e919c7296bb833c7719209cdef51a24374bc9752b5"
+      "bytes": 26182,
+      "sha256": "ff32e1868dd5aa835d8969d907e718dcd544ed8b692b9ba845aae6ec492d17d0"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -48933,8 +49011,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 468018,
-      "sha256": "7b8a27ee4f94c2594fab72b6a0f691b2e7ab9ec05a9eff4e452ec2c666cd8abe"
+      "bytes": 473679,
+      "sha256": "57a1ef7cd4b24eef8a250c5436a1290a9d3adb19d756000684fc7fb090046319"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -49287,8 +49365,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 26277,
-      "sha256": "d62ef083d1733699648a8d72eab8d4c40bda2a963ee732827a2e7dc04ade65a9"
+      "bytes": 27139,
+      "sha256": "bb47ce239f83aa3293113cc7b9cf97d22f41f781aa46a6123e7908daf600e062"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -49419,8 +49497,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 23288,
-      "sha256": "9564ab91392a3a7b2b31edce0e8f48a24999e9dfdf3e31587d03f3a6b632245c"
+      "bytes": 23370,
+      "sha256": "6722c0913cd10ff0260cb691a12444a63fd6f7246df2b9b129910e4c391d58a7"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -49935,14 +50013,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 37441,
-      "sha256": "15fe827ab7e764ba9019e8febf6d15a50676d3607e453254756b36fd61cfd043"
+      "bytes": 37573,
+      "sha256": "767ddea5499ba49c78194bfcba54da6fc1b3f98105ff8ce2fea1e1793b97303b"
     },
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 477877,
-      "sha256": "fc1d58276097277c9798586871331a6415008451c5b1c4f9cf212078cb83f5e2"
+      "bytes": 477946,
+      "sha256": "7034770fa9d750459a25c3c47be0d5d92a135d4e81d10ef99790cf8e2cf7a77c"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -49995,14 +50073,14 @@
     {
       "path": "js/admin/auth/lecturas-admin.js",
       "extension": ".js",
-      "bytes": 2697,
-      "sha256": "e1c5040b9f931fe2e3fc546582be5b990726c287fa048e82a3f145300179b025"
+      "bytes": 3187,
+      "sha256": "3e8b805679ffdc78ac587bf9eed894cab91444e0cb78013928e87523bb54ccf9"
     },
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
       "extension": ".js",
-      "bytes": 9176,
-      "sha256": "14956361969bdcc1fe03710ac16a88e06e7e6d1be2cfc75e8caefd376149fdea"
+      "bytes": 9199,
+      "sha256": "1137ccf01bb66fd88336748a0fc59a42ce2011e5e0b843859778e8c22b58535e"
     },
     {
       "path": "js/admin/comercio-local-admin.js",
@@ -50013,14 +50091,14 @@
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
       "extension": ".js",
-      "bytes": 31344,
-      "sha256": "8d2f130079ffa3e270eb93b9b578c11182ac98d05f46b48ca9094fa32fa7bd2c"
+      "bytes": 31367,
+      "sha256": "abf81d8c6dfc0aed9f99cac598a3607e53d9df19910a178169f8dce6bc7d378a"
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
       "extension": ".js",
-      "bytes": 22584,
-      "sha256": "4faa13c04070afa378be2a97d69994b8e74687ca94749eee9f558f9370c1c2f6"
+      "bytes": 22607,
+      "sha256": "aaa2d18a4699a0059d4a50a0764592d922f9a10e7325c98724e2e3aba486c4d1"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
@@ -50049,20 +50127,20 @@
     {
       "path": "js/admin/flujo-conexiones/estado-flujo.js",
       "extension": ".js",
-      "bytes": 6123,
-      "sha256": "8b953652a20f59cbeed349b9b998fb07f94d8a0f0f70a95366ee4c06d08f60fc"
+      "bytes": 6128,
+      "sha256": "5b664eebcf42df597e690d9449391e5604c6da9c50d5d94db6b5139af7aceabb"
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 35901,
-      "sha256": "ddb9aee258349e38598be299e0a3ed3b1f33449b5c3e73943c7315e0c98df262"
+      "bytes": 37658,
+      "sha256": "ad62a852352c9b033314d5cfc658962a6d467edb382799af43aaa80b639e3a87"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 43607,
-      "sha256": "1c46d6f8684f393cf6109e52e0d6376fc72c42e057ef56e3ae43a0620edf428d"
+      "bytes": 43800,
+      "sha256": "040e6c4dc6c31e64e80fdc1206fe0c7a31e54905cda11f60a637f2acbea5feaf"
     },
     {
       "path": "js/admin/flujo-conexiones/sellos-flujo.js",
@@ -50169,14 +50247,14 @@
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
       "extension": ".js",
-      "bytes": 88569,
-      "sha256": "a48f80fa9c7d68d53530f0e7fa919c74846d05fa6e341ed55e63a628846d052d"
+      "bytes": 88592,
+      "sha256": "8fe9b08a1fdaa13bfcc047809ae69d65a76ce48f4f179f450c61a1ee74499408"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
       "extension": ".js",
-      "bytes": 192,
-      "sha256": "1e4cde443b0f3d2ad39ca68dbeaa77f828d82cbcb233563feacfc5f3f2987abf"
+      "bytes": 215,
+      "sha256": "580f8a863d586e37c15834169c5b004c9933a5e975b6c095607646e5693be25a"
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
@@ -50199,8 +50277,8 @@
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
       "extension": ".js",
-      "bytes": 2479,
-      "sha256": "70e2ac61db4ff0f0ab788c556ee3dd2c54c5ea1f66d10b2a2857d03953126005"
+      "bytes": 2506,
+      "sha256": "f0167dfd11b66c6b99cd6c0d29e8845d1596d075f748dc4313a03bf904783f94"
     },
     {
       "path": "js/admin/products/integridad-inventario-admin.js",
@@ -50229,8 +50307,8 @@
     {
       "path": "js/admin/settings/control-tienda-admin.js",
       "extension": ".js",
-      "bytes": 12568,
-      "sha256": "6249cc38d45c5d8629435f7abc2115bc0d95043a7c3437d0833e5af68969b8c0"
+      "bytes": 12614,
+      "sha256": "4c554b4549d0f4e08a98336207cedcc4da6a29d6eb6ac7c930528f91a97346cb"
     },
     {
       "path": "js/admin/settings/cupones-admin.js",
@@ -50241,8 +50319,8 @@
     {
       "path": "js/admin/settings/esquema-color-admin.js",
       "extension": ".js",
-      "bytes": 3794,
-      "sha256": "053316e34727a6f12800dfdaa46b36e76aa5c27f9371d54b1f6c25833653acf8"
+      "bytes": 3817,
+      "sha256": "7f1fc4aced1962b60c5f86375a701016caa1a0d98e96e139c13bb03050dc8ffb"
     },
     {
       "path": "js/admin/settings/metodos-pago-admin.js",
@@ -50253,14 +50331,14 @@
     {
       "path": "js/admin/settings/sincronizacion-correo-admin.js",
       "extension": ".js",
-      "bytes": 14001,
-      "sha256": "e1af4fdf82af2e4d0acc329951a44b3008f9ac5defac25bce5cd5de99da2f831"
+      "bytes": 14024,
+      "sha256": "7e6be55142b1b27007b2f3b23ebbe15c3816b97208dee8c74b27c50bf1a03716"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 102888,
-      "sha256": "8b404d8defcdcd7cc78e2bd926858e5c5bc0602a25fb63f400055c7f5ba9eb8f"
+      "bytes": 102934,
+      "sha256": "1f604aa1cf35f628ad10804b850ed08237089123fbfa96ec933c11e0e2bdb00e"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -50319,14 +50397,14 @@
     {
       "path": "js/cargador-mantenimiento-pagina.js",
       "extension": ".js",
-      "bytes": 4500,
-      "sha256": "39de09d67516c2c9a802749cda67c2eb05d46d8d0098298d977fe66417a74c36"
+      "bytes": 4523,
+      "sha256": "9b25395fb2a2ad3a72dd2774cf028cbac71830b0a6c6b20ed3fdb38ebc6202b9"
     },
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 49699,
-      "sha256": "aa0db4b9675d1ffac3d48bc1471a5d8564c2fb82d932c7c122d85d8f66ecfd0d"
+      "bytes": 49778,
+      "sha256": "a02273eae8a34ce811dd1f0f00e6fed95eb01df3e432fc0229e05f802c64f523"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -50469,20 +50547,20 @@
     {
       "path": "js/components/images/gestion-imagenes.js",
       "extension": ".js",
-      "bytes": 22654,
-      "sha256": "8198a46814088a3e9adc52dde2e1de50603042e1b6d98de3dc544e441e1025e4"
+      "bytes": 22681,
+      "sha256": "4ba11e1cab17944ef97e52b6c2d24d45b09e03232686eecf714eaf4e645efb87"
     },
     {
       "path": "js/components/images/imagenes.js",
       "extension": ".js",
-      "bytes": 23877,
-      "sha256": "5e89f181f5d237e5e380ffccbc676a8c98b67dfd78201ce34d5e5590f9b23718"
+      "bytes": 23900,
+      "sha256": "f5241cc30652c765e1f90af9881238f0e5b8f09dee6dcad7aff1e8658bdbe7a4"
     },
     {
       "path": "js/components/images/inicio-carga-imagenes.js",
       "extension": ".js",
-      "bytes": 1610,
-      "sha256": "b845182556a9430ff30afd5d2f292175976af64c45985ae75935903b4c92e9dc"
+      "bytes": 1637,
+      "sha256": "169175510a587180fcd32ffa3d6e0cabb7cc313712ad7e44a3db271264841716"
     },
     {
       "path": "js/components/images/procesamiento-imagenes.js",
@@ -50577,14 +50655,14 @@
     {
       "path": "js/components/navigation/compartido/carga-colecciones.js",
       "extension": ".js",
-      "bytes": 11686,
-      "sha256": "b5823b84150141970ad48219c056c8ef5085706623dcd858d0bb9135c4430abf"
+      "bytes": 11709,
+      "sha256": "617b9572accd982e411866d7cbb0d249b1d7c9d2bf03bfb093c081743c924a29"
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 14842,
-      "sha256": "3d4f6e7724dc4ce2b790d10b328df6ca040f5880d1a1844d70ddbe28e6b3c239"
+      "bytes": 14919,
+      "sha256": "db09f2bc8d312d0034e342458a6c0a041dfe46864a2bad40cfca47fbfa91e974"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -50601,8 +50679,8 @@
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
       "extension": ".js",
-      "bytes": 11671,
-      "sha256": "8ae1836e06b3d6e5a682e582e8bdd1e27815a04cf210ccad0505a3d38e6b58de"
+      "bytes": 11698,
+      "sha256": "2ae6f20fcae897147df844a9b50c95719898e925c12dd5abd0211ec1a13a4dfe"
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
@@ -50679,8 +50757,8 @@
     {
       "path": "js/components/navigation/compatibilidad/colecciones.js",
       "extension": ".js",
-      "bytes": 309,
-      "sha256": "b8c26646a3d988ae2965197fd2a7b53ddfa8302054c605b62db9f1b40d6d0252"
+      "bytes": 332,
+      "sha256": "ed1b4d2e79b2d6268f544e37e76e6b3f9a5cfb8a2acd4a7ac09a00c257374e34"
     },
     {
       "path": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
@@ -50715,8 +50793,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 12515,
-      "sha256": "d9bfa27f458446ecf9043016cb5e2e5acdd030150491930b913175916443fcef"
+      "bytes": 12542,
+      "sha256": "7c5c90d6ba212b714661ed0b8ea947d074b9685db1178c826fb604fc5db89f2e"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -50835,8 +50913,8 @@
     {
       "path": "js/core/auth/insignia-edicion.js",
       "extension": ".js",
-      "bytes": 5780,
-      "sha256": "8760d238d049258f8a36ad4fa7284854d25b85dcea4724f7988a8a59ce24a6c2"
+      "bytes": 5803,
+      "sha256": "f409992c5efe236342c215be810cfb8d33a6b30e1bf07bf8c7c9bfc36bd8b631"
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
@@ -50847,8 +50925,8 @@
     {
       "path": "js/core/auth/permisos-roles.js",
       "extension": ".js",
-      "bytes": 12851,
-      "sha256": "fe6cf9456e95b104d3a028a3d713edd7e022832cb77227dbea9a0f4f127adaac"
+      "bytes": 12874,
+      "sha256": "c45b75ca90e7c934d9581e61e1a86c06d24bc924f2e9d1efa29e54a990650f71"
     },
     {
       "path": "js/core/auth/presentacion-acceso.mjs",
@@ -50991,8 +51069,8 @@
     {
       "path": "js/core/store/estado-productos.js",
       "extension": ".js",
-      "bytes": 24646,
-      "sha256": "6bb852fb3e141ed5235de4d8fa1597ced178ca1550f5c503607fb4c4305ec98b"
+      "bytes": 24696,
+      "sha256": "07eebd4fd6b2acb117e527c501d075d1d418333b9ab23092d662a2244aba1692"
     },
     {
       "path": "js/core/store/inventario-variantes.mjs",
@@ -51141,8 +51219,8 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 1985,
-      "sha256": "0ff511b7f2d5552fea409ea8c593d262f61b45b2707818b2a10eba4841b6b517"
+      "bytes": 2012,
+      "sha256": "fae9de9a3b593eff31f30b033cbd794a52359481c2514f60eae9d7c2cd18e91f"
     },
     {
       "path": "js/orders/ciclo-pedido.mjs",
@@ -51183,8 +51261,8 @@
     {
       "path": "js/pages/catalog/politica-visibilidad-catalogo.js",
       "extension": ".js",
-      "bytes": 11441,
-      "sha256": "6d604ef6e506406b18148ea759ff19020a1bd9a23304715ca1f8618b8d9ff18f"
+      "bytes": 11464,
+      "sha256": "9b483e8986a0cd3d2f641f25c6153721b069e29bf595c4a57e7f9b8ae4810a9d"
     },
     {
       "path": "js/pages/catalog/prioridad-stock-catalogo.js",
@@ -51279,8 +51357,8 @@
     {
       "path": "js/pages/collections/estado-colecciones.js",
       "extension": ".js",
-      "bytes": 6780,
-      "sha256": "719ff3149d193d194a6a32876ccf4c9efa8b6dd522e14b3462608fd35c93ab0c"
+      "bytes": 6803,
+      "sha256": "16f4c7b0219b5990697a0754eded0107ecb3d572b68ec131b7c30ce615684c5a"
     },
     {
       "path": "js/pages/collections/mantenimiento-colecciones.js",
@@ -51297,14 +51375,14 @@
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
       "extension": ".js",
-      "bytes": 18978,
-      "sha256": "9605e36fa0925958cc083ca27481189e48915d17ab29ca1fa17843366de52ddc"
+      "bytes": 19001,
+      "sha256": "2db4d762629afc703aba556df8de3a0ca69bcfdbb4007b5631db6a3888dd0df2"
     },
     {
       "path": "js/pages/home/carrusel-colecciones.js",
       "extension": ".js",
-      "bytes": 16201,
-      "sha256": "aa75313f0b9464d0f20508b6f753528a5e5c6c80ec5f3d8fe0a7ff6953017ade"
+      "bytes": 16224,
+      "sha256": "0f2bb93176a30dadb13fbd1448d5d8afdd5e8999bf79784534c8f3cb068ced86"
     },
     {
       "path": "js/pages/home/inicio-premium.js",
@@ -51447,8 +51525,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 11368,
-      "sha256": "097679999bf21c1420b32ce9c7ed6d879feaf4cb080cd67a26db8368918b41c7"
+      "bytes": 11473,
+      "sha256": "3f7886de7bdac3236b1144bcd8eb9453654024575715aee93df995a007d7e75a"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -51579,8 +51657,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72505,
-      "sha256": "d1b45cdf1d5a29ca64e9d36444764b781225becea21e08a4c873702dd8b89e67"
+      "bytes": 72564,
+      "sha256": "e0299c045facede2ce58aaf407f605e721041bc4a0459f037a3530546406503e"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -51765,8 +51843,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1986,
-      "sha256": "7229deac3eb34b55aacc319098c1935bb363a11738d027bea65b3f8438878f0f"
+      "bytes": 1991,
+      "sha256": "364e3398cca553d1a91c4a5570b79a842ca7c17a63122756bed41f7509037095"
     },
     {
       "path": "package-lock.json",
@@ -51783,8 +51861,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 56638,
-      "sha256": "7f5e90ea73328fecd0c82f0d05203ea1a4a9823825040b093e158ae0f438a7a5"
+      "bytes": 56697,
+      "sha256": "12408c3d377fde805182f8abd9568627e86f527efc68dc3bce980c5c36393fed"
     },
     {
       "path": "playwright.config.js",
@@ -51807,14 +51885,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 20766,
-      "sha256": "9b453a4c0fe3981ba94369b22decb9fd97e6f1813cc87cda98f273a344faa8f4"
+      "bytes": 20848,
+      "sha256": "104d0b9178e3dd5177ba310f9b650a2d134561b38cf5925651c5fa4371cde8f4"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 24832,
-      "sha256": "c720565de02bcb60c5905cfa9879b2cf86885b3733fef1b17bd99920e96e84ba"
+      "bytes": 24891,
+      "sha256": "9e2b6d50d25a6a6c70b2a30b676436ae2c781591a22769802568dbce0484c86d"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -51825,8 +51903,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24279,
-      "sha256": "d003caa48eda678d0c80d78d2bf53c66570aea8a7676c2d28258d268fa5c4b60"
+      "bytes": 24365,
+      "sha256": "823a7a59780280410cd1e1431004a5bc60a2651ecbd6cc91a5fceba8b0ee6eae"
     },
     {
       "path": "robots.txt",
@@ -52659,8 +52737,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 79761,
-      "sha256": "bac2957b09d5727d9db4b7b59f0964792ec9f741a93cf7cbca860dd42867ab83"
+      "bytes": 80510,
+      "sha256": "3062e493177f67a8e8e9d8e794b5a4a19b87ce94560a08b42a30f2ba5d69623b"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -52911,8 +52989,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 28781,
-      "sha256": "ffb4b4d4de82f3cbb0c020cb6fdb38e88a8d3c6cbf9bd05054320faf7966ffef"
+      "bytes": 28840,
+      "sha256": "e8efe6e4024e02e3a1bd18a1f18a67248d4665602426466f241e839a9449e992"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -52989,8 +53067,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 22710,
-      "sha256": "2467d5a8f2cc1b5566b4a48f10b5100472e90c8c5c9cda23c0e4c6419efea8c4"
+      "bytes": 22769,
+      "sha256": "f75d455eec97eec304d2bbef2eb05442e6f975d6c1090c06a51be9ce3b868e04"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -53079,8 +53157,8 @@
     {
       "path": "tests/admin/lecturas-admin.test.mjs",
       "extension": ".mjs",
-      "bytes": 4204,
-      "sha256": "595373a6791ab2e5205872f63f9bc0bf38a2b72f418e38de1abe53f49f2ad8ba"
+      "bytes": 5850,
+      "sha256": "2516aa34406e7379399ce4c115313fd4525090d5229f68c12f7228963a0ad00e"
     },
     {
       "path": "tests/admin/product-history-audit.test.mjs",
@@ -53091,14 +53169,14 @@
     {
       "path": "tests/admin/realtime-error-contracts.test.mjs",
       "extension": ".mjs",
-      "bytes": 2571,
-      "sha256": "31322db95b7c1a7fe3e9f2ed4dc7c53e2ecdd0f13f222e5d1fdd1f093e80e1b2"
+      "bytes": 2758,
+      "sha256": "02baa02556d0a7d0a119b5ff56dbbe3c7d99744117d4cb62b05fc679289e1866"
     },
     {
       "path": "tests/admin/webhook-diagnostico.test.mjs",
       "extension": ".mjs",
-      "bytes": 2116,
-      "sha256": "565a1c58c052c7fc498bdf75c7b2c6d10191d4868c195b1aa835714c4c3d23e0"
+      "bytes": 2145,
+      "sha256": "a253fd0bfe3ab54df7e9866e0e91dae53c629ba90bb1946cb97d1007423a4078"
     },
     {
       "path": "tests/analytics/site-activity-contract.test.mjs",
@@ -53619,14 +53697,20 @@
     {
       "path": "tests/flow-connections/conexiones-con-evidencia.test.mjs",
       "extension": ".mjs",
-      "bytes": 33580,
-      "sha256": "afc50f7535a4c2f96225c89c6f7f76d1e32c17531965b9c29a434c8275aab307"
+      "bytes": 33588,
+      "sha256": "fbd4412f6077315748decd0325fd0ef94b639a2fb126822c5f501acb1f5a2c7f"
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
       "extension": ".mjs",
-      "bytes": 20988,
-      "sha256": "84bd551f523bb43dbcaf802ec451f9469bbf7c4dc203f29cf19e736d49ccea97"
+      "bytes": 21007,
+      "sha256": "46fa97e16d4e3015b63c38482aa8151465d0caa407447c2afa8cd238769f42b1"
+    },
+    {
+      "path": "tests/flow-connections/external-services.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2316,
+      "sha256": "9d63a5e26aed8c98b81956771ea80fab58b2ff475a400347e9ae1c7714b6f213"
     },
     {
       "path": "tests/flow-connections/lectura-blobs-mantenimiento.test.mjs",
@@ -53653,6 +53737,12 @@
       "sha256": "52983b3d89fb08c9ed18d01d9d9e22e7db65ee62db6ba3ba7713d387ae0b11c6"
     },
     {
+      "path": "tests/flow-connections/probe-cancellation.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1820,
+      "sha256": "7b77844b1d4aaad113b82549adffd383b54bef2d92dcd8a7532e6b528ba9083e"
+    },
+    {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",
       "extension": ".mjs",
       "bytes": 2953,
@@ -53661,8 +53751,8 @@
     {
       "path": "tests/flow-connections/revalidation-progress.test.mjs",
       "extension": ".mjs",
-      "bytes": 6142,
-      "sha256": "d339b20309c8d892b63499372bbdd66781c0b07b6a96b0284ff736f0ad981bad"
+      "bytes": 6655,
+      "sha256": "d23e2953a91a2f9bccae3e7e12d29a47243a873a63b85c1fc5339ad8bb8f8280"
     },
     {
       "path": "tests/flow-connections/runtime-native-diagnostics.test.mjs",
@@ -53685,8 +53775,8 @@
     {
       "path": "tests/flow-connections/sheets-webhook-probe.test.mjs",
       "extension": ".mjs",
-      "bytes": 3237,
-      "sha256": "546358bf40c54aba265414aff5788a7adb84d9ee4a3ce454934bca656b753007"
+      "bytes": 3289,
+      "sha256": "8a46089853cf7b5e74079a12525d94eee3cb25d2455d6bf6af772153129a4239"
     },
     {
       "path": "tests/functions/master-diagnostics-auth.test.mjs",
@@ -55151,7 +55241,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 561,
+      "line": 574,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -56537,13 +56627,13 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 224,
+      "line": 237,
       "target": "/api/sheets-products-webhook",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 561,
+      "line": 574,
       "target": "/admin.html",
       "method": "GET"
     },
@@ -56653,7 +56743,7 @@
         "references": [
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 146,
+            "line": 159,
             "operation": "collection"
           },
           {
@@ -57123,7 +57213,7 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 155,
+            "line": 168,
             "operation": "collection"
           },
           {
@@ -57398,12 +57488,12 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 152,
+            "line": 165,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 167,
+            "line": 180,
             "operation": "collection"
           },
           {
@@ -57968,17 +58058,17 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 143,
+            "line": 156,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 149,
+            "line": 162,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 265,
+            "line": 278,
             "operation": "doc"
           },
           {

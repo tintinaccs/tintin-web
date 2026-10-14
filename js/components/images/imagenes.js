@@ -423,7 +423,7 @@ export function onImagesUpdate(callback, onError) {
     appCheckReady.then(async ready => {
       if (!ready) { _listenerStarted = false; return; }
       const listen = /^\/admin(?:[-/.]|$)/.test(location.pathname)
-        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2')).subscribeAdminSnapshot
+        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1')).subscribeAdminSnapshot
         : onSnapshot;
       listen(
         doc(db, FIRESTORE_DOC),

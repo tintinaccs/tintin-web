@@ -62,7 +62,7 @@ export function resolveAutomaticState(record, live, estados, {
 // partial y promote en lugar de mirar únicamente live.ok.
 export function liveMarker(live, state, estados) {
   if (!live) return null;
-  if (live.pending) return { symbol: '◌', label: 'en curso', kind: 'pending' };
+  if (live.pending) return { symbol: '◌', label: 'sin confirmar', kind: 'pending' };
   if (state === estados.PARCIAL) return { symbol: '◐', label: 'parcial', kind: 'partial' };
   if (state === estados.PROD) return { symbol: '●', label: 'live', kind: 'live' };
   if (live.ok) return { symbol: '◌', label: 'lectura', kind: 'unconfirmed' };
