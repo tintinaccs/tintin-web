@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a5537d07105d994ac1a4f736f4b2ed9443d5263567cb70a23136d2f641d5dea2",
+  "sourceFingerprint": "d52dcbd7b4ec46b89793a5318c6e280e41ba71b0d3039d5f6fda5037567a2e91",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1217,
     "textFiles": 1169,
-    "totalBytes": 18417729,
+    "totalBytes": 18418026,
     "pages": 19,
     "modules": 870
   },
@@ -16237,8 +16237,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1594,
-      "sha256": "d210c085e8d22ab4cbc50d36b9929a4dd4cecd458602c67bf6a417cb5e3a26b7",
+      "bytes": 1816,
+      "sha256": "c001b3ecbc60c7dbb8a2aa43d6f83b21dc9d16d417a5c75dd5080d0a97e0e247",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16253,7 +16253,13 @@
       "duplicateIds": [],
       "inlineScripts": [],
       "ids": 0,
-      "scripts": [],
+      "scripts": [
+        {
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1",
+          "target": "js/cargador-pagina.js",
+          "line": 2
+        }
+      ],
       "styles": [
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
@@ -16290,6 +16296,12 @@
         }
       ],
       "references": [
+        {
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1",
+          "target": "js/cargador-pagina.js",
+          "line": 2,
+          "exists": true
+        },
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
@@ -48319,7 +48331,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 27468,
-      "sha256": "aa55cc87546e74d00f1cc5645e199dfaf0eba9f2dca317243e4f174348125200"
+      "sha256": "19b118d58582d2aef4f842617221574753095032e9f1ccbbbd8b3632ec19cf16"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -48331,7 +48343,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "17069601b600b8815f2778d8d6aadfc56921fa79bbab9edb8fce2fb011ab83c0"
+      "sha256": "29bde0122e519d840481cd38eabf1ba7a6bf1ae9219abedc17097721f12dfaf3"
     },
     {
       "path": "config/public-site.json",
@@ -48918,8 +48930,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 466663,
-      "sha256": "1f8ccfe361b1c864054642c6f7a7bfd6479f44dbbb7525e05bbc00e3791e2db1"
+      "bytes": 466738,
+      "sha256": "5717fa57cb97d36284003dae0cca86bf5bb3a8cf3bf06e8db0f72b78fe2585c5"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51750,8 +51762,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1594,
-      "sha256": "d210c085e8d22ab4cbc50d36b9929a4dd4cecd458602c67bf6a417cb5e3a26b7"
+      "bytes": 1816,
+      "sha256": "c001b3ecbc60c7dbb8a2aa43d6f83b21dc9d16d417a5c75dd5080d0a97e0e247"
     },
     {
       "path": "package-lock.json",
