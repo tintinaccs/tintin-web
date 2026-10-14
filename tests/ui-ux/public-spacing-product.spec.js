@@ -81,7 +81,7 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
     await expect(page.locator('#product-reviews, #tinsel-root, [data-open-community], #btn-product-like')).toHaveCount(0);
     await page.waitForFunction(() => document.body.classList.contains('tt-product-maintenance'));
     for (const selector of ['#product-name', '.tt-product-detail-desc', '.tt-product-detail-price', '#product-selection-title']) {
-      await expect(page.locator(selector)).toHaveCSS('color', 'rgb(113, 60, 83)');
+      await expect(page.locator(selector)).toHaveCSS('color', 'rgb(34, 34, 34)');
     }
     await expect(page.locator('.tinben')).toHaveCount(0);
     await expect(page.locator('#product-selection-title')).toHaveText('Tu selección');

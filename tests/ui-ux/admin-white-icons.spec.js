@@ -28,7 +28,7 @@ for (const width of [390,768,1440]) {
 }
 
 for (const width of [390, 768, 1440]) {
-  test(`iconos malva legibles sobre el rosa aprobado a ${width}px`, async ({ page }) => {
+  test(`iconos negros legibles sobre el rosa aprobado a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });
     await page.route('**/admin-white-fixture.html', route => route.fulfill({ contentType: 'text/html', headers: { 'Content-Security-Policy': fixtureCsp }, body: shell }));
     await page.goto('/admin-white-fixture.html', { waitUntil: 'load' });
@@ -45,7 +45,7 @@ for (const width of [390, 768, 1440]) {
     });
     for (const key of ['nav', 'stats', 'mobile', 'logo']) {
       expect(colors[key].length, key).toBeGreaterThan(0);
-      expect(colors[key].every(value => value === 'rgb(113, 60, 83)'), key).toBe(true);
+      expect(colors[key].every(value => value === 'rgb(34, 34, 34)'), key).toBe(true);
     }
     for (const surface of colors.backgrounds) {
       const expected = surface.className === 'adm-mobile-tab active' ? 'rgb(253, 236, 242)' : 'rgb(248, 170, 202)';
