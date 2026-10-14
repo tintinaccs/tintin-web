@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const source = fs.readFileSync('tienda.js','utf8');
 const functions = source.slice(source.indexOf('function formatPrice'), source.indexOf('function normalizeClassicCart')) +
+  source.slice(source.indexOf('function isInStock('), source.indexOf('function hasValidName(')) +
   source.slice(source.indexOf('function productVariantGroups'),source.indexOf('function _showProductNotFound')) +
   source.slice(source.indexOf('function productSpecDisplayValue'),source.indexOf('async function _copyProductLink')) +
   source.slice(source.indexOf('function _pdSelectedValues'),source.indexOf('function _galleryThumbClick')) +
