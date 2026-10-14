@@ -7,6 +7,7 @@ import {
   groupShopifyRows,
   importVariantOptions,
   pendingCollectionGroups,
+  resolveShopifyCollection,
   sanitizeShopifyBodyHtml,
   shopifyBodyToPlainText,
   stableProductDocumentId,
@@ -310,3 +311,9 @@ test('reconoce alias de la tienda y la categoría estándar de Shopify sin pisar
   assert.equal(missing.product.category, '', 'un alias nunca asigna una colección que no existe');
 });
 
+
+test('la taxonomía de Shopify resuelve Brazaletes y Bracelets dentro de Pulseras', () => {
+  for (const leaf of ['Brazaletes', 'Bracelets', 'Bangles']) {
+    assert.equal(resolveShopifyCollection({ shopifyCategory: `Accesorios > Joyas > ${leaf}`, title: 'Modelo Alina' }, [{slug:'brazaletes',name:'Brazaletes'}]).slug, 'pulseras');
+  }
+});

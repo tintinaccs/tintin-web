@@ -17,12 +17,12 @@ import {
   chunkImportRecords,
   pendingCollectionGroups,
   stableProductDocumentId,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20261005-import-one-click-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20261005-import-one-click-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
 import {
   isShopifyMediaUrl,
   rewriteImportedShopifyMedia,
-} from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1-loads-20261007-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1';
-import { confirmDistinctShopifyImport } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1-loads-20261007-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1';
+} from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1-loads-20261007-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
+import { confirmDistinctShopifyImport } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1-loads-20261007-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
 
 const BATCH_SIZE = 50;
 const MEDIA_COPY_BATCH_SIZE = 5;

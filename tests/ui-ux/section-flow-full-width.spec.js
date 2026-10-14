@@ -26,6 +26,7 @@ for (const width of [320, 390, 768, 1024, 1440, 1920]) {
     await page.route('**/__profile-surfaces', route => route.fulfill({ contentType: 'text/html', body: html }));
     await page.goto('/__profile-surfaces');
     await page.locator('#perfil-nombre-display').evaluate(el => { el.textContent = 'TINTIN ACCESORIOS Y RELOJES'; });
+    await page.locator('.perfil-card').first().evaluate(el => el.classList.add('tt-visual-block'));
     await page.addScriptTag({ content: flow });
     await expect(page.locator('.tt-profile-hero')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
     await expect(page.locator('.perfil-card').first()).toHaveCSS('background-color', 'rgb(255, 255, 255)');

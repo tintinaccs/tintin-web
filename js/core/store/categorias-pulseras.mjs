@@ -12,6 +12,7 @@ export function unifyWristCollections(collections, canonicalSlug = true) {
     ...preferred,
     slug: canonicalSlug ? 'pulseras' : preferred.slug,
     name: 'Pulseras',
+    sourceSlugs: wrist.map(item => item.slug),
     image: preferred.image || wrist.find(item => item.image)?.image || '',
   });
 }

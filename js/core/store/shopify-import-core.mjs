@@ -1,4 +1,4 @@
-import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-1';
+import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 const ALLOWED_BODY_TAGS = new Set(['p', 'br', 'strong', 'em', 'ul', 'ol', 'li']);
 const BLOCKED_BODY_TAGS = new Set(['script', 'iframe', 'object', 'embed', 'style', 'link', 'svg', 'math', 'template', 'form']);
 const SHOPIFY_STATUS = new Set(['active', 'draft', 'archived']);
@@ -236,7 +236,7 @@ function titleWordSlug(title, candidates) {
 
 /** Recorre «A > B > C» de la hoja a la raíz y devuelve la primera colección existente. */
 function shopifyCategorySlug(category, candidates) {
-  const segments = asText(category).split('>').map(normalizeImportKey).filter(Boolean).reverse();
+  const segments = asText(category).split('>').map(value => normalizeImportKey(wristCategory(value))).filter(Boolean).reverse();
   for (const segment of segments) {
     const direct = candidates.find(item => item.slug === segment || normalizeImportKey(item.name) === segment);
     if (direct) return direct.slug;

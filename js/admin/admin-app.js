@@ -1,4 +1,4 @@
-import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-1';
+import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs';
@@ -25,7 +25,7 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-profile-pulseras-20261014-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
@@ -6185,6 +6185,16 @@ document.querySelectorAll('[data-section="productos"]').forEach(btn => {
 let _allCollections = [];
 let _collectionsUnsub = null;
 
+function collectionDocumentSlugs(slug) {
+  return _allCollections.find(item => item.slug === slug)?.sourceSlugs || [slug];
+}
+
+async function deleteCollectionDocuments(slug) {
+  const batch = writeBatch(db);
+  collectionDocumentSlugs(slug).forEach(id => batch.delete(doc(db, 'collections', id)));
+  await batch.commit();
+}
+
 function collSlugify(s) {
   return (wristCategory(s) || '')
     .toString().trim().toLowerCase()
@@ -6355,7 +6365,7 @@ window.bulkDeleteCollections = async function() {
     const CHUNK = 450;
     for (let i = 0; i < empty.length; i += CHUNK) {
       const batch = writeBatch(db);
-      empty.slice(i, i + CHUNK).forEach(slug => batch.delete(doc(db, 'collections', slug)));
+      empty.slice(i, i + CHUNK).forEach(slug => collectionDocumentSlugs(slug).forEach(id => batch.delete(doc(db, 'collections', id))));
       await batch.commit();
     }
     const emptySet = new Set(empty);
@@ -6830,7 +6840,7 @@ window.collGuardar = async function() {
         // so a slug rename never silently fails on a collection with 500+ products.
         await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: slug, updatedAt: serverTimestamp() }));
       }
-      await deleteDoc(doc(db, 'collections', originalSlug));
+      await deleteCollectionDocuments(originalSlug);
       // El CRUD de colección individual ahora deja rastro en Auditoría igual que
       // el de productos y las acciones masivas de colecciones (antes solo se
       // registraban las masivas, dejando huecos en el historial).
@@ -6900,7 +6910,7 @@ window.collEliminar = async function(slug, count) {
         await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: targetSlug, updatedAt: serverTimestamp() }));
         ctx.ok('move', { message: `${affected.length} producto(s)` });
         ctx.start('delete');
-        await deleteDoc(doc(db, 'collections', slug));
+        await deleteCollectionDocuments(slug);
         ctx.ok('delete');
         ctx.start('audit');
         await logAudit('eliminar_coleccion', 'coleccion', slug, label, `${affected.length} producto(s) reasignados a "${targetSlug || '(sin colección)'}"`);
@@ -6917,7 +6927,7 @@ window.collEliminar = async function(slug, count) {
     stages: [{ id: 'delete', label: 'Eliminar colección y registrar el cambio' }],
     action: async ctx => {
       ctx.start('delete');
-      await deleteDoc(doc(db, 'collections', slug));
+      await deleteCollectionDocuments(slug);
       await logAudit('eliminar_coleccion', 'coleccion', slug, label, 'Colección vacía eliminada');
       ctx.ok('delete');
       return 'Colección eliminada.';

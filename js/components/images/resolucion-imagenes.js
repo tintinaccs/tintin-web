@@ -1,4 +1,4 @@
-import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-1';
+import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 /* =============================================================
    TINTIN — Resolución centralizada de imágenes
 

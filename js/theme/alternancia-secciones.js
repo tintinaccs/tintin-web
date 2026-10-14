@@ -10,6 +10,7 @@
   };
   function blocks() {
     const visible = node => {
+      if (node.closest('.perfil-wrap') && !node.matches('.perfil-wrap')) return false;
       if (node.closest('[role="dialog"], [aria-modal="true"], .tt-privacy-consent, .tt-drawer, .adm-sidebar')) return false;
       if (node.hidden || node.closest('[hidden]')) return false;
       const style = getComputedStyle(node);
