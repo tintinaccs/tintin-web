@@ -377,7 +377,7 @@ test('probeClientFirestoreRules espera las lecturas antes de devolver', async ()
   const body = src.slice(src.indexOf('async function probeClientFirestoreRules'), src.indexOf('export function initConnectionsFlow'));
   assert.match(body, /await Promise\.all\(\[/, 'debe esperar ambas lecturas con Promise.all');
   assert.match(body, /collection\(db, 'users', user\.uid, 'cart'\)/, 'debe consultar solo el carrito propio');
-  assert.match(body, /async function probeEngagementStats\(user\)/, 'debe incluir la comprobación de lectura pública de engagement');
+  assert.match(body, /async function probeEngagementStats\(user, signal\)/, 'debe incluir la comprobación cancelable de lectura pública de engagement');
   assert.doesNotMatch(body, /return \{\s*favorites: probeClientFirestoreRead/, 'no debe devolver promesas sin resolver');
 });
 

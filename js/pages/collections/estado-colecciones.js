@@ -141,7 +141,7 @@ export function onCollectionsUpdate(cb, onError) {
 
 async function startAdminListener() {
   if (adminUnsubscribe) return;
-  const { subscribeAdminSnapshot } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2');
+  const { subscribeAdminSnapshot } = await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1');
   if (adminUnsubscribe || !adminSubscribers.size) return;
   adminUnsubscribe = subscribeAdminSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
     recordFirestoreRead('collections:admin-live', snapshot.size);

@@ -16,7 +16,7 @@ function load(file, version = 'tintin-20261009-whatsapp-responsive-1') {
 // envíos, contacto o textos legales.
 if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)(?:\.html)?$/.test(pathName())) {
   Promise.all([
-    load('pages/catalog/politica-visibilidad-catalogo.js', 'tintin-20261012-checkout-ready-3-politica-visibilidad-catalogo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1'),
+    load('pages/catalog/politica-visibilidad-catalogo.js', 'tintin-20261012-checkout-ready-3-politica-visibilidad-catalogo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1'),
     load('pages/catalog/prioridad-stock-catalogo.js', 'tintin-20260731-stock-priority-1-stock-flow-20261014-1'),
   ]).catch(error => console.warn('[PageMaintenance] No se pudo cargar la política de catálogo:', error));
 }
