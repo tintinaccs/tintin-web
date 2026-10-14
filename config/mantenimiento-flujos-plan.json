@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "54b4f3b79412a02335482780b3579bc5e98c7bda",
-  "reason": "Integra textos institucionales, misión única, fotos independientes, rosa #FFD2E7 y versión única de las nueve piezas del hero. Validación de contenido, imágenes, mantenimiento y geometría multiviewport. CI final requerido.",
+  "reason": "Textos institucionales, misión única, fotos independientes, rosa #FFD2E7 y caché del hero. Corrige medición de rendimiento informativo a first-party, como Inicio/Nosotros, manteniendo120/121, peso/CLS/tiempos y duplicados; comparación contra main sin recursos propios nuevos. Diez pruebas de rendimiento PASS_LOCAL.",
   "files": [
     {
       "path": "_headers",
