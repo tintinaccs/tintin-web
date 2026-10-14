@@ -359,7 +359,7 @@ try {
         if (style.backgroundColor !== expectedBackground) failures.push(`Header mobile ${width}px: #${id} no conserva el fondo esperado (${style.backgroundColor}).`);
         if (style.backgroundImage !== 'none') failures.push(`Header mobile ${width}px: #${id} conserva imagen o degradado de fondo.`);
         if (style.opacity !== '1') failures.push(`Header mobile ${width}px: #${id} conserva opacidad ${style.opacity}.`);
-        if (borderedPanels.has(id) && (style.borderColor !== 'rgb(241, 200, 213)' || style.borderStyle === 'none' || style.borderWidth === '0px')) {
+        if (borderedPanels.has(id) && (style.borderColor !== 'rgb(253, 236, 242)' || style.borderStyle === 'none' || style.borderWidth === '0px')) {
           failures.push(`Header mobile ${width}px: #${id} no conserva el borde rosado sólido.`);
         }
       }
@@ -439,7 +439,7 @@ try {
         }
         if (style.backgroundImage !== 'none') failures.push(`Header desktop/tablet ${width}px: #${id} conserva imagen o degradado de fondo.`);
         if (style.opacity !== '1') failures.push(`Header desktop/tablet ${width}px: #${id} conserva opacidad ${style.opacity}.`);
-        if (borderedSurfaces.has(id) && (style.borderColor !== 'rgb(241, 200, 213)' || style.borderStyle === 'none' || style.borderWidth === '0px')) {
+        if (borderedSurfaces.has(id) && (style.borderColor !== 'rgb(253, 236, 242)' || style.borderStyle === 'none' || style.borderWidth === '0px')) {
           failures.push(`Header desktop/tablet ${width}px: #${id} no conserva el borde rosado sólido.`);
         }
       }
