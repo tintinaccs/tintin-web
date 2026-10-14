@@ -2045,3 +2045,6 @@ CI38433952518 PASS completo para65251992, pero la revisión actual de alertas ex
 
 Validación de paleta Tintín (2026-10-14): todas las comprobaciones locales restantes de navegador, accesibilidad, SEO, rendimiento y geometría pasaron. Smoke de 18 rutas y auditoría legal OK. Se actualizó la expectativa del borde al rosa claro #FDECF2 conservando las verificaciones de estilo y grosor visible.
 
+
+PR #1123: el candidato visual e6d01383 obtuvo Repository audit SUCCESS (run 38566673601, segunda ejecución), ambos Analyze SUCCESS y Cloudflare Pages SUCCESS. El merge fue rechazado por Protected flow maintenance: faltaban las huellas del diseño. Se prepara el plan canónico contra main 2011323ab94c9a6834ba41edc833c82873f1e73d para 132 archivos y 45 registros, sin renovar sellos, alcances, controles ni revisores. Las 48 pruebas del mecanismo y la auditoría de protección pasan localmente. Requiere CI del nuevo SHA y dispatch de mantenimiento, seguido de revisión manual del propietario en GitHub conforme a docs/agent/MANTENIMIENTO_FLUJOS.md.
+
