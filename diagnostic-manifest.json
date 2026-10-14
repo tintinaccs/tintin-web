@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "8716e3f75f70887d59e3fdf556b918d60110fa63cfc4ac008ee0a53b2407d067",
+  "sourceFingerprint": "37ab40cde9762ed2c333465c451b67cc5425260e7822e144f44530f6489e9e97",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1216,
-    "textFiles": 1168,
-    "totalBytes": 18383830,
+    "files": 1217,
+    "textFiles": 1169,
+    "totalBytes": 18386898,
     "pages": 19,
-    "modules": 869
+    "modules": 870
   },
   "viewports": [
     {
@@ -36341,8 +36341,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 27930,
-      "sha256": "cfc2c282ad9f03a5a755a4ec255134ebe4dcd3c28034de45edaea10540bd49d7",
+      "bytes": 28674,
+      "sha256": "2bc5ad0cb9be5bf017bfaf86eca4086b088aa36c1923d87e95f056a7ed0f6be3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36351,11 +36351,11 @@
       "endpoints": [
         {
           "url": "https://wa.me/595981299331",
-          "line": 340
+          "line": 358
         },
         {
           "url": "https://instagram.com/tintinaccs",
-          "line": 372
+          "line": 390
         }
       ]
     },
@@ -42576,6 +42576,48 @@
       "endpoints": []
     },
     {
+      "path": "tests/navigation/section-flow-generator.test.mjs",
+      "bytes": 1646,
+      "sha256": "af3fa5bbcd80ccd3ac75304d4b51b6d3801e21aa6190ac517c976d9f3f365b89",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/navigation/whatsapp-fixed.spec.js",
       "bytes": 2269,
       "sha256": "015731dbf0fa23dae1db701307ac38f31efcec17b0dd78a2c7fa0229e3804ade",
@@ -48292,7 +48334,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 15086,
-      "sha256": "07174ecdfaeca1cbaf68fd335cd7731ae3411fa4808d03b78b0be404a829473f"
+      "sha256": "4da473a4a98968c73d40a97b436d25cb31ba1e1ca2bc0cd77a9bfa0fb702df4b"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -48304,7 +48346,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "adc232330ef45621e5f20d4fde73e4af113997c3488b618d4988a5ccb2a44b47"
+      "sha256": "0139f9cb26d6f4819093c865136edaf8bf6c9ffae96eae470c171229d1d54aff"
     },
     {
       "path": "config/public-site.json",
@@ -48891,8 +48933,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 462383,
-      "sha256": "db05adb31d123ab3a386562d9b16e36a3120ab1c51f989858df163e16bae45ff"
+      "bytes": 462997,
+      "sha256": "d5f3294d7b389e1a8c5729b85485f06202c82cce1ae83160cb3e1b121be5998e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51735,8 +51777,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 15147,
-      "sha256": "94fb3717ab4a37d1ddba32d3743f89db9a713d826f8b2ff1cc0ff991433ae71c"
+      "bytes": 15211,
+      "sha256": "9a431e6a1e7f4a9a33472388b0c773a03ad5c4fa5cc3180cd417bc1ebdf2ab00"
     },
     {
       "path": "perfil.html",
@@ -52869,8 +52911,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 27930,
-      "sha256": "cfc2c282ad9f03a5a755a4ec255134ebe4dcd3c28034de45edaea10540bd49d7"
+      "bytes": 28674,
+      "sha256": "2bc5ad0cb9be5bf017bfaf86eca4086b088aa36c1923d87e95f056a7ed0f6be3"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -53915,6 +53957,12 @@
       "extension": ".js",
       "bytes": 4939,
       "sha256": "67ac9f5a871163c02b343da5d0cc0fc34edcd40ef13f96de0a305f1547eff5c8"
+    },
+    {
+      "path": "tests/navigation/section-flow-generator.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1646,
+      "sha256": "af3fa5bbcd80ccd3ac75304d4b51b6d3801e21aa6190ac517c976d9f3f365b89"
     },
     {
       "path": "tests/navigation/whatsapp-fixed.spec.js",

@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { parse } = require('parse5');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
@@ -46,9 +47,26 @@ const PUBLIC_PAGE_STYLES = {
 };
 
 function ensureSectionFlow(html, absolute = false) {
-  const out = html.replace(/\s*<script\b[^>]*id=["']tt-section-flow-runtime["'][^>]*>\s*<\/script>/gi, '');
+  const ranges = [];
+  function visit(node) {
+    if (node.tagName === 'script' && node.attrs.some(attr => attr.name === 'id' && attr.value === 'tt-section-flow-runtime')) {
+      const location = node.sourceCodeLocation;
+      if (location) {
+        let start = location.startOffset;
+        while (start > 0 && /\s/.test(html[start - 1])) start -= 1;
+        ranges.push([start, location.endOffset]);
+      }
+    }
+    node.childNodes?.forEach(visit);
+    if (node.content) visit(node.content);
+  }
+  visit(parse(html, { sourceCodeLocationInfo: true }));
+  let out = html;
+  ranges.sort((a, b) => b[0] - a[0]).forEach(([start, end]) => { out = out.slice(0, start) + out.slice(end); });
   if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(out)) return out;
-  return out.replace('</head>', `  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261014-complete-section-flow-1" defer></script>\n</head>`);
+  const beforeHeadEnd = out.slice(0, out.indexOf('</head>'));
+  const join = beforeHeadEnd.endsWith('\n') ? '' : '\n';
+  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261014-complete-section-flow-1" defer></script>\n</head>`);
 }
 function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   let out = ensureSectionFlow(html, absolute).replace(/\s*<!-- Estructura pública disponible desde el primer render -->/g, '');
