@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "54b4f3b79412a02335482780b3579bc5e98c7bda",
-  "reason": "Integra textos institucionales de Barbi, misión única, slots independientes y rosa #FFD2E7. Auditorías de contenido e imágenes, 124 pruebas de editor, arquitectura y mantenimiento; comprobación responsive local.",
+  "reason": "Integra textos institucionales, misión única, fotos independientes, rosa #FFD2E7 y versión única de las nueve piezas del hero. Validación de contenido, imágenes, mantenimiento y geometría multiviewport. CI final requerido.",
   "files": [
     {
       "path": "_headers",
@@ -11,42 +11,42 @@
     {
       "path": "404.html",
       "oldHash": "cea12c2c7a4d88c9b9c6cc4d11567261f2b924416cc2b724783c294c1b7d0dea",
-      "newHash": "50ace084d64ee70efc175c9db58f53cdf8cb848c04553feb01da76ccb95d8a31"
+      "newHash": "05b3c3af6053c166d0253b7adf8e0c65355aad47c4947783066104859075fdd9"
     },
     {
       "path": "about.html",
       "oldHash": "20ff003a5d67c923b26738480f6dfe9f32cfbb6dcb004b6106b9063183301209",
-      "newHash": "94b9112a5fdb95b26bd980b76fad794768e6b0e64d5924eebba908909654cbcb"
+      "newHash": "b77e61d2d61a07acd0b92c9e7deee3ba29478e7f0ed182c1e9e515f269f6d0eb"
     },
     {
       "path": "admin-images.html",
       "oldHash": "64d08b18b45d4e183d0056fd195d095885cb98e429376c0d6136eb2ccea1f87d",
-      "newHash": "cfcc8776a6bf786992bc0d9c86430257256d09ce2cf56ce45083616a24f03dd7"
+      "newHash": "0c81153fa18279f1300460adbab0440e0ba74cc34c95bec124390b8eed861d66"
     },
     {
       "path": "admin.html",
       "oldHash": "8fa9d335b22a791bef12ac4c2bede0aa073b2a95dcc88485fbe2ac2cfee67ca7",
-      "newHash": "190d53bbf165f3b14bca0759460c796abdc5fcb52afe7af0d7462503771aab0d"
+      "newHash": "84da097179a87755712084f1699def576a11d368ce82c8b1a15a44221b800e0b"
     },
     {
       "path": "cambios-devoluciones.html",
       "oldHash": "393e1e7d71a2a9bf2c584091393e125a4ecef2e2a9e69efe6dc19ac65a3e5abe",
-      "newHash": "8eb69fc0f40da51361dd3a1d0580bca19997022bf66da3304d59d7ba8244fb14"
+      "newHash": "5ef52b5c497d51231fb13d067c79a396b063540972f6148cdbbac9cb21bf5c28"
     },
     {
       "path": "catalogo.html",
       "oldHash": "9c56bbe8604a53010eac1f7b400fb13497cb13918526d6479a75bfa9aa57a99b",
-      "newHash": "835e701c18edc6b989fa814495d7f9ee8b23c5eb9fca0b208c3a73c64938c2db"
+      "newHash": "c8d1511405c6257696a035edb49177a73606560a8934c1133c4fdee3148f5818"
     },
     {
       "path": "checkout.html",
       "oldHash": "11782423e8a06eaf33b9f036b837d5834c2153c132109508d403a24d1f607545",
-      "newHash": "2eb114122f659f76f59a889bf3d05a2cbb8a56cfcf7b23b80748a3687fc34c49"
+      "newHash": "ad777ca9cff0d0265761c63fb188e3c020b1e5726306a5d42ce45479f348b548"
     },
     {
       "path": "collections.html",
       "oldHash": "6ce1ff576306726713153e44ffcffb7bcabe8eed6bfe883799926eca722d9456",
-      "newHash": "a9440bd9aeac31c58cb7ae11717f65171cc07a66c771b36f0c0bced723f22f48"
+      "newHash": "3956811dd99a973b2056a6b78c0fc62156c82101f742cce4b42a6e845dbe3518"
     },
     {
       "path": "config/csp-runtime.js",
@@ -61,7 +61,7 @@
     {
       "path": "contact.html",
       "oldHash": "2ebbfcdf20673de8746aed6b67838e6606446bdfd86050b58d2f69502604c900",
-      "newHash": "758b3161bf77e0be4f27945d91a5c0b412aaac9acabdf17ad44dc256f379b6dd"
+      "newHash": "b1a556b114f213c0d2b3e0e919c7296bb833c7719209cdef51a24374bc9752b5"
     },
     {
       "path": "css/pages/home/ajuste-inicio.css",
@@ -76,12 +76,12 @@
     {
       "path": "envios.html",
       "oldHash": "2fea413f2f976fbeb5354104a3d40bb3566f7a4cbe40e31994a3ff7469f7e2aa",
-      "newHash": "7c68bb6a2f2a8825b0af866409bedfa48095ed0a2abfd0a932cf3ae0f3b727fe"
+      "newHash": "9564ab91392a3a7b2b31edce0e8f48a24999e9dfdf3e31587d03f3a6b632245c"
     },
     {
       "path": "index.html",
       "oldHash": "dd79f08c7571f4d45249aac4669cc8484447a20e6536f7eb13235cd64812f90b",
-      "newHash": "6f8a36aad53962a5bfe4ef97551687f0850f25aa2923031ce0872ab765f086b1"
+      "newHash": "15fe827ab7e764ba9019e8febf6d15a50676d3607e453254756b36fd61cfd043"
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
@@ -106,12 +106,12 @@
     {
       "path": "js/cargador-pagina.js",
       "oldHash": "bc5a7033ba4f0a5bb508e70e6d1c57897562542ebb18c8649fd88fe529b4c74c",
-      "newHash": "05fad220353322b0f1590384110c429f25583319512dbf73c950f01f69729d96"
+      "newHash": "aa0db4b9675d1ffac3d48bc1471a5d8564c2fb82d932c7c122d85d8f66ecfd0d"
     },
     {
       "path": "js/components/images/gestion-imagenes.js",
       "oldHash": "c927c39f144815076b484c4c9b92fc5384e16019f586cdf9a3bfd38a6c46c1e3",
-      "newHash": "62b31d3a0994ada623895123e02e0042ee29ebdfe348d8cfd8aabd9ec0753117"
+      "newHash": "8198a46814088a3e9adc52dde2e1de50603042e1b6d98de3dc544e441e1025e4"
     },
     {
       "path": "js/components/images/imagenes.js",
@@ -176,7 +176,7 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "oldHash": "11e6373172f90a3eba2ab62220a1937912e725d208575ac64233a6bd43716a96",
-      "newHash": "9fbc71de1bca32cf0ba330c05f95c11c89d1eea00570f7a8469c99e704f9e20d"
+      "newHash": "097679999bf21c1420b32ce9c7ed6d879feaf4cb080cd67a26db8368918b41c7"
     },
     {
       "path": "js/visual-builder-bootstrap.js",
@@ -186,47 +186,47 @@
     {
       "path": "login.html",
       "oldHash": "03871e581eb7c00189a30b29dcbec04a67be697ffa146f7c70771b0e3611b1ef",
-      "newHash": "6fc0fdc37ff1198dc192f2b186da9519d65017e9a652b63ebadec15bf7e86ab0"
+      "newHash": "d1b45cdf1d5a29ca64e9d36444764b781225becea21e08a4c873702dd8b89e67"
     },
     {
       "path": "nosotros.html",
       "oldHash": "dea80b12e674e8a8eb6d6e01440d90239804fe235244e2f109914a4c2a04960e",
-      "newHash": "d94ba30fab54d02e07bdba7846e4f03ac4e5b9e715585754b55bbbfc6a05655c"
+      "newHash": "7229deac3eb34b55aacc319098c1935bb363a11738d027bea65b3f8438878f0f"
     },
     {
       "path": "perfil.html",
       "oldHash": "82dfa82bfc225e5c4876f1e35a4a6ef7526a023c1a61a1f53fb725c29866ab9f",
-      "newHash": "4717af029eb1802f8cd5058d60aaf188ed83bce9e25d5eb9ad5d3cc6ab184f43"
+      "newHash": "7f5e90ea73328fecd0c82f0d05203ea1a4a9823825040b093e158ae0f438a7a5"
     },
     {
       "path": "preguntas-frecuentes.html",
       "oldHash": "750661c4a20e0d994a92be4340db39faba3f2f5811f10607476cec6a1e1966f4",
-      "newHash": "9cf1492baa9ca0e0dcd4ce510c79ff2e102d7c980f72336109349933564c5f86"
+      "newHash": "9b453a4c0fe3981ba94369b22decb9fd97e6f1813cc87cda98f273a344faa8f4"
     },
     {
       "path": "privacidad.html",
       "oldHash": "6be3edf211250efedbbf99568e22a6f28341e5519d8a58694421e811ad367981",
-      "newHash": "d8aa607627c7317729c3b029ac4a3cd8900b3eabd1a43f81680019dbae20a6a2"
+      "newHash": "c720565de02bcb60c5905cfa9879b2cf86885b3733fef1b17bd99920e96e84ba"
     },
     {
       "path": "product.html",
       "oldHash": "75d24ecc621aa68cd0690920668c61b27fe3c37b2564fba2108e3cd9fc2588c7",
-      "newHash": "54344564e8c645f9273eaef6ea6382300428a8241d683f0a6875b5654a1d3ab1"
+      "newHash": "d003caa48eda678d0c80d78d2bf53c66570aea8a7676c2d28258d268fa5c4b60"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "901fb32313dad4dce721f15b8ffae55aa2801de79514cfae2f4d75a23acaec22",
-      "newHash": "a4d58473f7d5c91bffe81b72a2fd68b62c6a57a14c17dff9667f8bcf33480df3"
+      "newHash": "bac2957b09d5727d9db4b7b59f0964792ec9f741a93cf7cbca860dd42867ab83"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "oldHash": "2bc5ad0cb9be5bf017bfaf86eca4086b088aa36c1923d87e95f056a7ed0f6be3",
-      "newHash": "d0609bb675e0e20e0fbb3e1c39cf71f16c257b4b384b74bd5fda391a5a6f0fd3"
+      "newHash": "ffb4b4d4de82f3cbb0c020cb6fdb38e88a8d3c6cbf9bd05054320faf7966ffef"
     },
     {
       "path": "terminos.html",
       "oldHash": "6480220f077e8b38a1637aed0c6c14640498d11ce7ecb26d026ea237b092238d",
-      "newHash": "ca154e1a624fd22d5592310ec345a102efcd380ab31ff250a910907249e22b17"
+      "newHash": "2467d5a8f2cc1b5566b4a48f10b5100472e90c8c5c9cda23c0e4c6419efea8c4"
     }
   ],
   "affectedRecords": [
