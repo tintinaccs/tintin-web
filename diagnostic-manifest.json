@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "cbf026e70e31d56808c40ce1d8cdd410231a5b1e121dc3a91fabe91e0435b8e4",
+  "sourceFingerprint": "264f90abd4e8ee5d698d3c765452b12c51aa68a6aee5f03e12df1e46199316b5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1221,
     "textFiles": 1173,
-    "totalBytes": 18433833,
+    "totalBytes": 18434472,
     "pages": 19,
     "modules": 874
   },
@@ -16230,15 +16230,15 @@
       "sourceFile": "nosotros.html",
       "label": "Nosotros alternativo",
       "title": "Quiénes Somos — Tintin Accesorios",
-      "description": "Conocé la historia de Tintin Accesorios y nuestra boutique online en Paraguay.",
+      "description": "Conocé Tintin Accesorios.",
       "visibility": "hidden",
       "requiresAuth": false,
       "roles": [
         "guest",
         "client"
       ],
-      "bytes": 1764,
-      "sha256": "ebbbf7d473aba6a834bd21989d91bc25eeb4f4b443129be25c755e825ea42b52",
+      "bytes": 1966,
+      "sha256": "28544879d20d4da25e801eef9194fade635a4e61c64817b71063308dd471d8fa",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16247,13 +16247,19 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          1
+          2
         ]
       },
       "duplicateIds": [],
       "inlineScripts": [],
       "ids": 0,
-      "scripts": [],
+      "scripts": [
+        {
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1-profile-pulseras-20261014-1",
+          "target": "js/cargador-pagina.js",
+          "line": 1
+        }
+      ],
       "styles": [
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
@@ -16291,10 +16297,16 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1
+          "line": 2
         }
       ],
       "references": [
+        {
+          "raw": "js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1-profile-pulseras-20261014-1",
+          "target": "js/cargador-pagina.js",
+          "line": 1,
+          "exists": true
+        },
         {
           "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
@@ -16328,7 +16340,7 @@
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 1,
+          "line": 2,
           "exists": true
         }
       ],
@@ -48489,8 +48501,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 17429,
-      "sha256": "179ba0a17c93dde976e8575293d5048bb78ad1c65a781f0a92fda9b641f975fd"
+      "bytes": 17432,
+      "sha256": "ce29c50cba23c8b1b5b91c37ea3dac142f849dfb1c5100cd4c2e66ea0158515d"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -48502,7 +48514,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "f3f82ef7158e752a53d1c7bbd0b6d557dcf355b97bdcd723fdeba32cdce65ce3"
+      "sha256": "6729cb51df5460ad3c75d94f420f2785af284c9065b0a1b7638efcb10a9bd260"
     },
     {
       "path": "config/public-site.json",
@@ -49089,8 +49101,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 476480,
-      "sha256": "9982b1a8afec358eddfd044bb0c0975d83b8a1b71e42e8ac5ee4e5fd4d038285"
+      "bytes": 476914,
+      "sha256": "c884274f42316386dcd134b2f898a234b7c80a647f4223e3863e787af88e0ccb"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51927,8 +51939,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1764,
-      "sha256": "ebbbf7d473aba6a834bd21989d91bc25eeb4f4b443129be25c755e825ea42b52"
+      "bytes": 1966,
+      "sha256": "28544879d20d4da25e801eef9194fade635a4e61c64817b71063308dd471d8fa"
     },
     {
       "path": "package-lock.json",
