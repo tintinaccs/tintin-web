@@ -135,6 +135,32 @@ function writeFor(writes, prefix) {
   return writes.find(write => String(write.path || '').startsWith(prefix));
 }
 
+for (const shippingMethod of ['delivery', 'retiro']) test(`cada etapa y su aviso al dueño se confirman juntos: ${shippingMethod}`, async () => {
+  const store = fakeStore({ 'products/prod_001': stockedProduct() }, { transactional: true });
+  const actor = { uid: 'superadmin-fixture', email: 'admin@example.test', role: 'superadmin' };
+  let result = await createOrderAdmin({}, { ...RETIRO, shippingMethod, userId: 'customer-fixture', userEmail: 'customer@example.test' }, actor, store);
+  const id = result.orderId;
+  const stages = shippingMethod === 'retiro' ? ['preparando', 'listo_retiro', 'entregado'] : ['preparando', 'listo', 'en_camino', 'entregado'];
+  for (const status of stages) {
+    const input = { orderId: id, status, baseChangeId: result.order.lastChangeId, changeId: `fixture_${status}` };
+    result = await applyOrderAdminMutation({}, input, actor, store);
+    const writes = store.commits.at(-1);
+    const notice = writeFor(writes, 'users/customer-fixture/notifications/');
+    assert.ok(notice, 'cada avance incluye el aviso en el mismo lote que orders');
+    assert.equal(decodeFirestoreFields(notice.fields).status, status);
+    assert.equal(decodeFirestoreFields(notice.fields).targetUrl, `perfil.html#pedido-${id}`);
+    const count = store.commits.length;
+    const replay = await applyOrderAdminMutation({}, input, actor, store);
+    assert.equal(replay.duplicate, true);
+    assert.equal(store.commits.length, count, 'reintentar el avance no duplica avisos');
+  }
+  const notices = [...store.map.entries()].filter(([path]) => path.startsWith('users/customer-fixture/notifications/')).map(([, doc]) => decodeFirestoreFields(doc.fields));
+  assert.equal(notices.length, stages.length + 1);
+  assert.match(notices[0].title, /Recibimos tu pedido/);
+  assert.match(notices.at(-1).title, shippingMethod === 'retiro' ? /retirado/ : /entregado/);
+  assert.ok(notices.every(notice => notice.recipientUid === 'customer-fixture'));
+});
+
 test('crear pedido manual usa precio canónico, calcula total, descuenta stock (pago confirmado) y asigna TINPED', async () => {
   const store = fakeStore({
     'products/prod_001': document('products/prod_001', {

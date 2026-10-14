@@ -2,10 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { hasProductStock, firstAvailableVariant } from '../../js/core/store/inventario-variantes.mjs';
+import { productVariantImage } from '../../js/components/images/foto-variante.mjs';
 
 const source = fs.readFileSync(new URL('../../js/pages/profile/favoritos-perfil.js', import.meta.url), 'utf8')
   .replace(/^import .*;\r?\n/gm, '').replace('export function', 'function');
-const context = vm.createContext({ document: { getElementById: () => null }, subscribeAuthState: () => {} });
+const context = vm.createContext({ document: { getElementById: () => null }, subscribeAuthState: () => {}, hasProductStock, firstAvailableVariant, productVariantImage });
 vm.runInContext(source, context);
 const resolve = (favorites, products) => JSON.parse(JSON.stringify(context.resolveFavoriteProducts(favorites, products)));
 test('favorite uses current public product price and media, never stored zero price', () => {

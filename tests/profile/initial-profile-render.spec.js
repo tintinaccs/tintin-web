@@ -74,6 +74,15 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
     const geometry = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth, top: document.querySelector('.perfil-back').getBoundingClientRect().top }));
     expect(geometry.overflow).toBe(false);
     expect(geometry.top).toBeGreaterThanOrEqual(width >= 768 ? 112 : 32);
+    // La navegación pertenece al inicio del perfil, no flota sobre sus formularios.
+    const tabsTop = await page.locator('.tt-profile-tabs').evaluate(el => el.getBoundingClientRect().top);
+    await page.evaluate(() => {
+      const spacer = document.createElement('div');
+      spacer.style.height = '1500px';
+      document.querySelector('.perfil-wrap').append(spacer);
+      window.scrollTo(0, 700);
+    });
+    await expect.poll(() => page.locator('.tt-profile-tabs').evaluate(el => el.getBoundingClientRect().top)).toBeLessThan(tabsTop - 500);
   });
 }
 

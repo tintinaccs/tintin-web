@@ -64,6 +64,17 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
         expect(Math.abs(final.width - initial.width), url).toBeLessThanOrEqual(1);
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
         expect(overflow, url).toBe(false);
+        const surfaces = await page.evaluate(() => [...document.querySelectorAll('[data-tt-flow-block]')].map(node => {
+          const layer = node.querySelector(':scope > [data-tt-flow-background]');
+          const rect = layer?.getBoundingClientRect();
+          return { tone: node.dataset.ttFlowBlock, left: rect?.left, width: rect?.width, viewport: document.documentElement.clientWidth };
+        }));
+        expect(surfaces.length, url).toBeGreaterThan(0);
+        surfaces.forEach((surface, index) => {
+          expect(surface.tone, url).toBe(index % 2 ? 'pink' : 'light');
+          expect(Math.abs(surface.left), url).toBeLessThanOrEqual(1);
+          expect(Math.abs(surface.width - surface.viewport), url).toBeLessThanOrEqual(1);
+        });
         const duplicateIds = await page.evaluate(() => {
           const ids = [...document.querySelectorAll('[id]')].map(node => node.id);
           return ids.filter((id, index) => ids.indexOf(id) !== index);

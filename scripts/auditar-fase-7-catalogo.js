@@ -13,6 +13,7 @@ function check(name, condition, problem) {
 
 const publication = read('js/core/store/publicacion-producto.mjs');
 const policy = read('js/pages/catalog/politica-visibilidad-catalogo.js');
+const inventory = read('js/core/store/inventario-variantes.mjs');
 const merchandising = read('js/pages/catalog/politica-exhibicion-catalogo.js');
 const products = read('js/core/store/estado-productos.js');
 const storefront = read('tienda.js');
@@ -36,7 +37,10 @@ check(
 check(
   'Los agotados permanecen visibles, pero no se pueden comprar',
   /export function isCatalogVisible/.test(policy) &&
-    /return isCatalogVisible\(p\) && \(p\.stock == null \|\| p\.stock > 0\)/.test(policy) &&
+    /return isCatalogVisible\(p\) && hasProductStock\(p\)/.test(policy) &&
+    /export function hasProductStock/.test(inventory) &&
+    /entries\.some\(entry => entry\.stock > 0\)/.test(inventory) &&
+    /Number\(product\.stock\) <= 0/.test(inventory) &&
     /\.filter\(isCatalogVisible\)/.test(policy) &&
     /TintinCatalogPolicy\?\.isCatalogVisible/.test(products) &&
     /catalogPolicy\?\.isCatalogVisible/.test(storefront),

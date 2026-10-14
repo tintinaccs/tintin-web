@@ -4,6 +4,8 @@ import {
 } from '../cloudflare/firebase-admin-ligero.js';
 
 import { hasPublicProductFields } from '../js/core/store/publicacion-producto.mjs';
+import { firstAvailableVariant, hasProductStock } from '../js/core/store/inventario-variantes.mjs';
+import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 
 const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const CLOUDINARY_HOST = 'res.cloudinary.com';
@@ -138,7 +140,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   const name = stripHtml(firstValue(data, ['name', 'title', 'Title'])) || 'Producto Tintin';
   const rawDescription = firstValue(data, ['description', 'desc', 'Body (HTML)']);
   const description = (stripHtml(rawDescription) || `${name} disponible en Tintin Accesorios & Relojes.`).slice(0, 220);
-  const image = absoluteUrl(firstImage(data));
+  const image = absoluteUrl(productVariantImage(data, firstAvailableVariant(data), firstImage(data)));
   const mainImage = productImageUrl(image, 900);
   const canonical = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(safeId)}`;
   const price = firstValue(data, ['price', 'Variant Price']);
@@ -166,7 +168,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
     canonical,
     price,
     active: data?.active,
-    stock: data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null,
+    stock: hasProductStock(data) ? (data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null) : 0,
     sku: firstValue(data, ['handle', 'Handle'])
   });
   const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" fetchpriority="high" id="tt-product-image-preload">`;
@@ -177,7 +179,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   );
   html = html.replace(
     /(<button\s+type="button"[^>]*id="gallery-main"[^>]*>)[\s\S]*?(<\/button>)/i,
-    `$1${serverPreviewImage}$2`
+    `$1${serverPreviewImage}${hasProductStock(data) ? '' : '<span class="tt-stock-label" aria-hidden="true">AGOTADO</span>'}$2`
   );
   html = html.replace(/<body(\s[^>]*)?>/i, match => {
     if (/data-tt-product-server-preview=/i.test(match)) return match;

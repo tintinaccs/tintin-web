@@ -511,3 +511,46 @@ html body:not(:has(.adm-main)) .tt-product-card .tt-product-name { overflow-wrap
 html body:not(:has(.adm-main)) .tt-product-card .tt-card-colors { gap:2px; margin:2px 0; }
 
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-actions .tt-btn:only-child { grid-column:1 / -1; }
+
+/* El aviso de stock conserva la fotografía y el color real del accesorio. */
+html body .tt-stock-unavailable :is(.tt-product-img-real,.tt-search-result-image),
+html body #gallery-main.tt-stock-unavailable img { filter: none !important; }
+html body .tt-stock-label {
+  position: absolute;
+  z-index: 2;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-12deg);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 12px 8px;
+  border: 1px solid var(--color-brand-primary,#F8AACA);
+  border-radius: 6px;
+  background: #FFFFFF;
+  color: #222222;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .16em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+html body .tt-stock-label[hidden] { display: none !important; }
+html body :is(.tt-gallery-thumb,.tt-search-result-media) { position: relative; }
+html body :is(.tt-gallery-thumb,.tt-search-result-media) .tt-stock-label {
+  left: 3px; padding: 4px 2px; font-size: 7px; letter-spacing: .04em;
+}
+html body .tt-variant-option.tt-stock-unavailable::after {
+  content: 'Agotado'; position: absolute; top: calc(100% + 2px); left: 50%;
+  transform: translateX(-50%); font-size: 8px; line-height: 1; color: #222222;
+}
+html body .tt-variant-option.tt-stock-unavailable { position: relative; margin-bottom: 12px; }
+html body .tt-stock-unavailable img { filter: none !important; }
+html body .tt-card-color.tt-stock-unavailable::after {
+  content: 'Agotado'; position: absolute; top: calc(100% + 1px); left: 50%;
+  transform: translateX(-50%); color: #222222; font-size: 8px; line-height: 1;
+}
+html body .tt-card-color.tt-stock-unavailable { position: relative; margin-bottom: 10px; }
+html body :is(.tt-card-img-wrap,.tt-product-img) { background: #FFFFFF !important; }
+html body .tt-favorite-media { position: relative; display: block; width: 64px; height: 64px; }
+html body .tt-favorite-media .tt-stock-label { left: 3px; padding: 4px 2px; font-size: 7px; letter-spacing: .04em; }

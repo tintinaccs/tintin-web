@@ -1,8 +1,10 @@
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261012-checkout-ready-4-estado-productos-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261012-checkout-ready-4-estado-productos-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1';
 
 const MAX_RESULTS = 10;
+import { hasProductStock, firstAvailableVariant } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
+import { productVariantImage } from '../../images/foto-variante.mjs?v=tintin-20261008-variant-image-1-stock-flow-20261014-1';
 const INPUT_DELAY_MS = 120;
 
 let index = [];
@@ -104,7 +106,7 @@ function stateNode(message, { error = false, retry = false } = {}) {
 function createResult(product, position) {
   const link = document.createElement('a');
   link.className = 'tt-search-result-item';
-  const inStock = window.TintinCatalogPolicy?.isInStock?.(product) ?? (product.stock == null || Number(product.stock) > 0);
+  const inStock = hasProductStock(product);
   link.classList.toggle('tt-stock-unavailable', !inStock);
   link.id = `tt-search-result-${position}`;
   link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;
@@ -115,7 +117,7 @@ function createResult(product, position) {
   const media = document.createElement('span');
   media.className = 'tt-search-result-media';
   link.appendChild(media);
-  const imageUrl = safeImageUrl(product.imageUrl || product.imgUrl || product.image);
+  const imageUrl = safeImageUrl(productVariantImage(product, firstAvailableVariant(product), product.imageUrl || product.imgUrl || product.image));
   if (imageUrl) {
     const image = document.createElement('img');
     image.className = 'tt-search-result-image';
@@ -131,6 +133,9 @@ function createResult(product, position) {
     media.appendChild(placeholder);
   }
 
+  if (!inStock) {
+    const label = document.createElement('span'); label.className = 'tt-stock-label'; label.textContent = 'AGOTADO'; media.appendChild(label);
+  }
   const body = document.createElement('span');
   body.className = 'tt-search-result-copy';
   const name = document.createElement('strong');

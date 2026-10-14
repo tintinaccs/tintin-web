@@ -28,6 +28,20 @@ export function variantStockLimit(product, selection) {
   } catch { return 0; }
 }
 
+export function hasProductStock(product) {
+  if (product?.stock != null && product.stock !== '' && Number(product.stock) <= 0) return false;
+  try {
+    const entries = variantInventoryEntries(product);
+    return entries === null || entries.some(entry => entry.stock > 0);
+  } catch { return false; }
+}
+
+export function firstAvailableVariant(product) {
+  if (!hasProductStock(product)) return '';
+  try { return variantInventoryEntries(product)?.find(entry => entry.stock > 0)?.variant || ''; }
+  catch { return ''; }
+}
+
 export function normalizeVariantInventoryItems(items) {
   const grouped = new Map();
   for (const item of items || []) {

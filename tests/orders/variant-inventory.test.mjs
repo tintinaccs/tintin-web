@@ -1,7 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { variantStockLimit, applyVariantInventoryDeltas, variantInventoryDeltas } from '../../js/core/store/inventario-variantes.mjs';
+import { variantStockLimit, applyVariantInventoryDeltas, variantInventoryDeltas, hasProductStock, firstAvailableVariant } from '../../js/core/store/inventario-variantes.mjs';
 import { buildCatalogProductFromImport } from '../../js/core/store/shopify-import-core.mjs';
+
+test('disponibilidad pública usa las opciones reales y respeta el tope agregado', () => {
+  const product = { stock: 10, variantInventory: [{ variant: 'Dorado', stock: 0 }, { variant: 'Plateado', stock: 1 }] };
+  assert.equal(hasProductStock(product), true); assert.equal(firstAvailableVariant(product), 'Plateado');
+  assert.equal(hasProductStock({ ...product, variantInventory: [{ variant: 'Dorado', stock: 0 }] }), false);
+  assert.equal(hasProductStock({ ...product, stock: 0 }), false);
+  assert.equal(hasProductStock({ stock: 10, variantInventory: [] }), false);
+  assert.equal(firstAvailableVariant({ stock: 10, variantInventory: [] }), '');
+  assert.equal(hasProductStock({ stock: 3 }), true);
+});
 
 test('optional matrix fails closed, excludes missing combinations and preserves aggregate products', () => {
   assert.equal(variantStockLimit({}, '6'), null);

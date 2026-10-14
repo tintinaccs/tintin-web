@@ -444,3 +444,34 @@ html:root body :is(.tt-trust-item, .tt-look-card, .tt-review-card, .tt-editorial
   background: var(--color-background-surface, #FFFFFF) !important;
   color: var(--color-text-primary, #222222) !important;
 }
+
+/* Una capa continua llena el viewport aunque el bloque esté en un container. */
+html:root body [data-tt-flow-block] {
+  isolation: isolate;
+  overflow: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+html:root body [data-tt-flow-block] > [data-tt-flow-background] {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  left: var(--tt-flow-left, 0px);
+  width: var(--tt-flow-width, 100%);
+  top: calc(-1 * var(--tt-flow-before, 0px));
+  bottom: calc(-1 * var(--tt-flow-after, 0px));
+  border-radius: 0;
+  background: linear-gradient(180deg,
+    var(--tt-section-start) 0%,
+    var(--tt-section-background) min(var(--tt-flow-fade), 25%),
+    var(--tt-section-background) max(calc(100% - var(--tt-flow-fade)), 75%),
+    var(--tt-section-end) 100%) !important;
+}
+html:root body #hero .tt-hero-media { background: transparent !important; }
+html:root body { overflow-x: clip; }
+html:root body :is(main,.cat-wrap):has([data-tt-flow-block]) {
+  background: none !important; transform: none !important; opacity: 1 !important;
+}
+html:root body :is(.perfil-wrap,.login-page,.ck-body,[data-tt-visual-zone]):has([data-tt-flow-block]) {
+  background: none !important; overflow: visible !important; transform: none !important;
+}
