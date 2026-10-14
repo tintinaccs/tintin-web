@@ -18,7 +18,7 @@ function fixture() {
     root: { querySelector: control, setAttribute: (key, value) => { attributes[key] = value; } },
     liveErrorEl: control('error'), liveErrorTextEl: control('errorText'), liveTimestampEl: control('time'),
     auth: { currentUser: { getIdToken: async () => 'test' } }, role: 'superadmin',
-    waitForAdminAppCheck: async () => true, AbortSignal,
+    waitForAdminAppCheck: async () => true, AbortSignal, withConnectionDeadline: read => read(),
     fetch: async url => ({ status: 200, ok: true, headers: { get: () => 'csp' }, json: async () => (
       String(url).includes('/api/master-diagnostics') ? { ok: true, currentEvidence: { commit: 'abc123', checks: {} } } : { ok: true }
     ) }),
@@ -64,6 +64,15 @@ test('failed HTTP checks complete without claiming their health', async () => {
 test('una revalidación sana no muestra avisos', async () => {
   const f = fixture(); f.firestore.resolve({}); f.cart.resolve(['cart', {}]); await f.click();
   assert.equal(f.bar.value, 100); assert.equal(f.env.liveErrorEl.hidden, true); assert.doesNotMatch(f.status.textContent, /con avisos/);
+});
+
+test('una lectura de datos no confirmada termina con aviso sin descartar las conexiones sanas', async () => {
+  const f = fixture();
+  f.firestore.resolve({ products: { label: 'Productos', ok: false, status: 0 } });
+  f.cart.resolve(['cart', {}]); await f.click();
+  assert.equal(f.bar.value, 100); assert.match(f.status.textContent, /con avisos/);
+  assert.match(f.env.liveErrorTextEl.textContent, /Productos.*sin respuesta/);
+  assert.ok(f.env.liveState.checkedAt);
 });
 test('sin evidencia de CI la revalidación termina y avisa qué quedó sin confirmar', async () => {
   for (const [status, body] of [[502, { ok: false, error: 'GitHub alcanzó temporalmente el límite de consultas.' }], [200, { ok: true, currentEvidence: null }]]) {

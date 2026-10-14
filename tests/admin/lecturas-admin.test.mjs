@@ -61,3 +61,31 @@ test('lectura puntual se reintenta sin duplicar escrituras y propaga rechazos pe
   assert.equal(calls,2);assert.equal(f.refreshes(),1);
   await assert.rejects(f.context.read(async()=>{throw Object.assign(new Error('denied'),{code:'permission-denied'});}));
 });
+
+test('una lectura pendiente no entrega datos de una sesión anterior', async () => {
+  const f = fixture(); let finish;
+  const result = f.context.read(() => new Promise(resolve => { finish = resolve; }));
+  await flush(); f.auth.currentUser = { uid: 'b' }; finish('datos de a');
+  await assert.rejects(result, error => error.code === 'admin/session-changed');
+});
+
+test('sin sesión no se inicia una lectura administrativa', async () => {
+  const f = fixture(); f.auth.currentUser = null; let calls = 0;
+  await assert.rejects(f.context.read(async () => { calls++; return 'privado'; }), error => error.code === 'admin/session-changed');
+  assert.equal(calls, 0);
+});
+
+test('una recuperación no reintenta la lectura con otra identidad', async () => {
+  const f = fixture(); let calls = 0;
+  f.context.recoverAdminSecurity = async () => { f.auth.currentUser = { uid: 'b' }; return true; };
+  await assert.rejects(f.context.read(async () => { calls++; throw { code: 'permission-denied' }; }), error => error.code === 'admin/session-changed');
+  assert.equal(calls, 1);
+});
+
+test('cancelar durante la recuperación impide iniciar otra lectura', async () => {
+  const f = fixture(); const controller = new AbortController(); let finish; let calls = 0;
+  f.context.recoverAdminSecurity = () => new Promise(resolve => { finish = resolve; });
+  const run = f.context.read(async () => { calls++; throw { code: 'permission-denied' }; }, { signal: controller.signal });
+  await flush(); const error = new Error('sección cerrada'); controller.abort(error); finish(true);
+  await assert.rejects(run, value => value === error); assert.equal(calls, 1);
+});

@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1" defer></script>
   <title>Catálogo de Accesorios | TINTIN Accesorios & Relojes</title>
   <meta name="description" content="Explorá el catálogo de Tintin: relojes, aros, collares, pulseras, anillos y accesorios femeninos con envíos a todo Paraguay.">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -37,7 +37,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261013-connectivity-hit-target-1-pedidos-styles-20261013-1-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2"><link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20261012-unified-2-superficies-solidas-interfaz-css-palette-20261014-1">
   <link id="tt-navigation-mobile-solid-css" media="(max-width: 767px)" rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3-checkout-20261008-2-palette-20261014-1">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1-palette-20261014-1">
@@ -510,7 +510,7 @@
 import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20261012-auth-privacy-1-contenido-sitio-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1';
 initSiteContent('catalogo');
 </script>
-<script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2"></script>
+<script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1"></script>
 <script type="module">
 import { sanitizeImageUrl } from './js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { hasProductStock, firstAvailableVariant } from './js/core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
@@ -522,7 +522,7 @@ import { heartIconMarkup } from './js/components/favorites/icono-corazon.js?v=ti
 // incluido el polling/fallback de productos más abajo, que es justo lo que
 // tiene que seguir funcionando pase lo que pase con las colecciones.
 let onCollectionsUpdate = () => {};
-import('./js/pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1')
+import('./js/pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1')
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
   .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
 

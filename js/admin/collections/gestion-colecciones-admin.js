@@ -9,7 +9,7 @@
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1';
+import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1';
 
 if (!window.TintinAdminCollectionsPhase4Booted) {
   window.TintinAdminCollectionsPhase4Booted = true;

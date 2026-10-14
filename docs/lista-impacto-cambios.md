@@ -1,3 +1,7 @@
+## 2026-10-14 — Diagnóstico de conexiones y lecturas de Administración
+
+Fuentes funcionales: lecturas-admin.js, flujo-conexiones-admin.js, estado-flujo.js y live-checks.js. Impacto: lecturas administrativas compartidas, recuperación de seguridad, monitor automático y etiquetas de evidencia de Sheets y servicios externos. No cambia configuración de proveedores, roles, Rules, dominios, stock, pedidos ni datos reales. Los consumidores transitivos sólo reciben URLs nuevas; shell, CSP, diagnóstico y plan de mantenimiento se regeneran desde sus fuentes. Validar cambio de cuenta durante lectura/recuperación, cancelación con solicitudes pendientes, rechazo persistente observable, fallos parciales sin perder resultados sanos, sandbox habilitado/incompleto y proveedor opcional apagado. Los acuses de otra versión conservan el estado sin confirmar.
+
 ## 2026-10-13 — Preparación antes de migrar autorizada por el titular
 
 Reconciliación de Pedidos con main f5ffc5a y conservación del origen activo pages.dev separado del destino cutover tintinaccs.com. Generadores actualizan consumidores del origen, canonical/SEO/correo/monitor, CSP y URLs inmutables transitivas; no rediseño, datos históricos ni cambios externos. Sin DNS/custom domain, merge/publicación o operaciones comerciales reales. Evidencia PRECUTOVER_PEDIDOS_20261013.md; CI exacto y mantenimiento humano pendientes.

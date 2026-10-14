@@ -29,7 +29,8 @@ test('401 por falta de secreto con la revisión esperada es parcial: guard vivo,
   assert.equal(resolveState(node, live, ESTADOS), ESTADOS.PARCIAL);
   assert.equal(liveEdge.promote, false);
   assert.equal(resolveState(edge, liveEdge, ESTADOS), ESTADOS.PARCIAL);
-  assert.match(live.note, /escritura Sheets → Firestore no probada/);
+  assert.match(live.note, /conexión protegida confirmada/);
+  assert.match(live.note, /acuse de escritura no consultado/);
 });
 
 test('sin secreto configurado en el servidor es error, aunque responda 401', () => {
