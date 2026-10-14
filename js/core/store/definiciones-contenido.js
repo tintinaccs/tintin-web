@@ -122,7 +122,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
           field('items.1.product', 'Reseña 2 — producto', '.tt-review-product', 'Colección Collares', { index: 1, maxLength: 120 }),
           field('items.2.text', 'Reseña 3', '.tt-review-text', 'Los precios son súper accesibles para la calidad. Todo llegó perfecto y bien presentado.', { index: 2, type: 'multiline', rows: 4, maxLength: 900 }),
           field('items.2.name', 'Reseña 3 — nombre', '.tt-review-name', 'Lucía P.', { index: 2, maxLength: 100 }),
-          field('items.2.product', 'Reseña 3 — producto', '.tt-review-product', 'Brazaletes & Pulseras', { index: 2, maxLength: 120 }),
+          field('items.2.product', 'Reseña 3 — producto', '.tt-review-product', 'Pulseras', { index: 2, maxLength: 120 }),
         ],
       },
       footer: {

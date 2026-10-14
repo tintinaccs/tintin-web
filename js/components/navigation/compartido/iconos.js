@@ -18,7 +18,6 @@ export const CATEGORIES = Object.freeze([
   Object.freeze({ slug: 'collares', label: 'Collares', background: 'linear-gradient(135deg,#d4b0c0,#a87090)' }),
   Object.freeze({ slug: 'earcuff', label: 'Earcuff', background: 'linear-gradient(135deg,#f0d0e0,#d090a8)' }),
   Object.freeze({ slug: 'gafas', label: 'Gafas', background: 'linear-gradient(135deg,#e8c0d0,#c88098)' }),
-  Object.freeze({ slug: 'brazaletes', label: 'Brazaletes', background: 'linear-gradient(135deg,#c8a0b8,#a06080)' }),
   Object.freeze({ slug: 'aros', label: 'Aros', background: 'linear-gradient(135deg,#f0c8d8,#d48098)' }),
   Object.freeze({ slug: 'armcuff', label: 'Armcuff', background: 'linear-gradient(135deg,#c8b0cc,#9870a0)' }),
   Object.freeze({ slug: 'anillos', label: 'Anillos', background: 'linear-gradient(135deg,#dca8c0,#b06880)' }),

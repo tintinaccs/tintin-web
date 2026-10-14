@@ -71,7 +71,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
     const final = await page.locator('.perfil-wrap').boundingBox();
     expect(final.x).toBeCloseTo(initial.x, 0);
     expect(final.width).toBeCloseTo(initial.width, 0);
-    const geometry = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth, top: document.querySelector('.perfil-back').getBoundingClientRect().top }));
+    const geometry = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth, top: document.querySelector('.perfil-back').getBoundingClientRect().top + window.scrollY }));
     expect(geometry.overflow).toBe(false);
     expect(geometry.top).toBeGreaterThanOrEqual(width >= 768 ? 112 : 32);
     // La navegación pertenece al inicio del perfil, no flota sobre sus formularios.

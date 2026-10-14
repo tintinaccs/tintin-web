@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// Geometry and image-origin assertions need the complete eleven-category menu.
+// Geometry and image-origin assertions need the complete unified category menu.
 // This is a UI fixture, independent of the product-hydration server fixture.
 test.beforeEach(async ({ page }) => {
   const categories = ['relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
@@ -291,7 +291,7 @@ test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async 
   await expect(page.locator('#btn-tablet-close')).toHaveCSS('border-radius','50%');
   await page.locator('#btn-tablet-tienda').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveClass(/tt-tablet-shop-view/);
-  await expect(page.locator('#tablet-cats .tt-tablet-cats-grid a')).toHaveCount(11);
+  await expect(page.locator('#tablet-cats .tt-tablet-cats-grid a')).toHaveCount(10);
   await expect(page.locator('#tablet-cats .tt-tablet-ver-todo')).toHaveCount(1);
   await page.keyboard.press('Escape');
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'true');
@@ -327,7 +327,7 @@ test('desktop conserva un solo indicador para Tienda y acciones sólidas', async
 
   const dropdown = page.locator('#tt-tienda-dropdown-panel');
   await expect(dropdown).toHaveAttribute('aria-hidden', 'false');
-  await expect(dropdown.locator('a[href^="/catalogo?cat="], a[href^="catalogo.html?cat="]')).toHaveCount(11);
+  await expect(dropdown.locator('a[href^="/catalogo?cat="], a[href^="catalogo.html?cat="]')).toHaveCount(10);
   const bounds = await dropdown.evaluate(node => {
     const rect = node.getBoundingClientRect();
     return { left: rect.left, right: rect.right, viewport: document.documentElement.clientWidth };

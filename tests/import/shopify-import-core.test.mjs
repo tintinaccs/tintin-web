@@ -303,7 +303,7 @@ test('reconoce alias de la tienda y la categoría estándar de Shopify sin pisar
   ].map(([handle, title, category]) => newFormatRow({ 'url handle': handle, title, price: '100', 'product category': category }));
   const collections = [...catalogCollections, { slug: 'brazaletes', name: 'Brazaletes' }, { slug: 'joyeros', name: 'Joyeros' }];
   const { products } = groupShopifyRows(rows, collections, parsers);
-  assert.deepEqual(products.map(item => item.product.category), ['collares', 'aros', 'brazaletes', 'relojes', 'collares', 'joyeros', '']);
+  assert.deepEqual(products.map(item => item.product.category), ['collares', 'aros', 'pulseras', 'relojes', 'collares', 'joyeros', '']);
   assert.deepEqual(pendingCollectionGroups(products).map(item => [item.group, item.count]), [['set', 1]]);
 
   const missing = groupShopifyRows([rows[2]], catalogCollections, parsers).products[0];

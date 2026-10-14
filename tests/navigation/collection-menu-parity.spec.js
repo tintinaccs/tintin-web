@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const visibleCategories = ['relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
+const visibleCategories = ['relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
 const categories = ['relojes', 'bolsos', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
 
 for (const width of [390, 768, 1440]) {

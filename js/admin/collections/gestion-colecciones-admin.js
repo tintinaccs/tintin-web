@@ -1,3 +1,4 @@
+import { wristCategory, unifyWristCollections } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-1';
 /* =============================================================
    TINTIN — Fase 4: protecciones del administrador de colecciones
 
@@ -9,7 +10,7 @@
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1';
+import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-profile-pulseras-20261014-1';
 
 if (!window.TintinAdminCollectionsPhase4Booted) {
   window.TintinAdminCollectionsPhase4Booted = true;
@@ -122,7 +123,8 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
       const handler = select.getAttribute('onchange') || '';
       if (!handler.includes('csvProductos')) return;
 
-      const previous = clean(select.value);
+      const originalCategory = clean(select.value);
+      const previous = wristCategory(originalCategory);
       const known = collections.some(collection => collection.slug === previous);
       select.replaceChildren();
 
@@ -134,7 +136,7 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
 
       select.value = known ? previous : '';
       select.dataset.phase4CollectionsSelect = '1';
-      if (!known && previous) {
+      if ((!known && previous) || originalCategory !== previous) {
         // Actualiza también csvProductos[index].category mediante el onchange
         // que ya contiene admin.html; no alcanza con cambiar solo lo visual.
         select.dispatchEvent(new Event('change', { bubbles: true }));
@@ -180,7 +182,7 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
         console.error('[admin-collections-phase4] No se pudieron leer las colecciones:', error);
         return;
       }
-      collections = nextCollections;
+      collections = unifyWristCollections(nextCollections);
       syncCsvCategorySelects();
     });
   }

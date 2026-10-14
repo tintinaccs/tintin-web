@@ -1,3 +1,4 @@
+import { wristCategory, unifyWristCollections } from '../../js/core/store/categorias-pulseras.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -13,7 +14,7 @@ const deferred = () => { let resolve; const promise = new Promise(r => resolve=r
 function productsHarness(){
  const edge=deferred(),related=[],pub=[];let next;
  const win={location:{pathname:'/product',search:'?id=main'},setTimeout,clearTimeout,addEventListener(){},dispatchEvent(e){pub.push({source:e.detail.source,products:e.detail.products})}};
- const c={window:win,location:win.location,document:{getElementById(){return null}},URLSearchParams,AbortController,CustomEvent:class{constructor(type,x){this.type=type;this.detail=x.detail}},console,appCheckReady:Promise.resolve(true),db:{},doc(...x){return x},collection(...x){return x},query(...x){return x},where(...x){return x},limit(x){return x},onSnapshot(d,cb){next=cb;return()=>{}},fetchPublicCatalogResource(){const d=deferred();related.push(d);return d.promise},getDocs(){throw Error('Unexpected full SDK read')},fetch:()=>edge.promise,runSingleFlight:(k,fn)=>fn(),readCached:()=>null,readStaleCached:()=>null,writeCached(){},recordFirestoreRead(){},cleanText:x=>String(x??''),cleanMultilineText:x=>String(x??''),sanitizeImageUrl:x=>x||'',uniqueSafeImageUrls:x=>x,sanitizeVariantData:x=>x,timestampToMillis:x=>Number(x)||0,sortCatalogProducts:x=>x};
+ const c={wristCategory,window:win,location:win.location,document:{getElementById(){return null}},URLSearchParams,AbortController,CustomEvent:class{constructor(type,x){this.type=type;this.detail=x.detail}},console,appCheckReady:Promise.resolve(true),db:{},doc(...x){return x},collection(...x){return x},query(...x){return x},where(...x){return x},limit(x){return x},onSnapshot(d,cb){next=cb;return()=>{}},fetchPublicCatalogResource(){const d=deferred();related.push(d);return d.promise},getDocs(){throw Error('Unexpected full SDK read')},fetch:()=>edge.promise,runSingleFlight:(k,fn)=>fn(),readCached:()=>null,readStaleCached:()=>null,writeCached(){},recordFirestoreRead(){},cleanText:x=>String(x??''),cleanMultilineText:x=>String(x??''),sanitizeImageUrl:x=>x||'',uniqueSafeImageUrls:x=>x,sanitizeVariantData:x=>x,timestampToMillis:x=>Number(x)||0,sortCatalogProducts:x=>x};
  vm.createContext(c);const src=read('js/core/store/estado-productos.js');vm.runInContext(src.slice(src.indexOf('const ALL_CACHE_KEY'),src.indexOf('function attachSearchDemand')).replace(/\bexport\s+/g,''),c);
  return{c,win,edge,related,pub,next:(data)=>next({id:'main',exists:()=>data!==null,data:()=>data}),start:()=>vm.runInContext("startProductRealtime('main')",c),respondEdge:data=>edge.resolve({ok:true,json:async()=>({ok:true,resource:'products',item:{id:'main',data}})})};
 }
@@ -26,7 +27,7 @@ test('favorites clear immediately on logout and account transition',async()=>{co
 test('partial order history is explicit and recovers on a successful snapshot',async()=>{const src=read('js/pages/profile/pedidos-perfil.js'),callbacks=[],states=[];const c={clean:v=>String(v??'').trim(),reconcileAccountOrders:slices=>slices.flat(),timestamp:()=>0,calculateOrderStats:()=>({}),render(){},subscribe:(f,v,next,fail)=>{callbacks.push({next,fail});return()=>{}},onStatus:(...x)=>states.push(x),onStats(){}};vm.createContext(c);vm.runInContext(block(src,'export function createProfileOrdersController','export function startProfileOrders').replace('export ',''),c);vm.runInContext('controller=createProfileOrdersController({subscribe,render,onStatus,onStats});controller.start({uid:"A",email:"a@example.org"})',c);callbacks[0].next([{id:'o'}]);callbacks[1].fail({code:'permission-denied'});assert.equal(states.at(-1)[0],'partial');callbacks[1].next([]);assert.equal(states.at(-1)[0],'ready');return{status:states.at(-1),uiMessage:'Sincronización incompleta'}});
 
 test('public collections deduplicate canonical URLs while preserving empty published collections', () => {
- const c={console};vm.createContext(c);
+ const c={console,wristCategory,unifyWristCollections};vm.createContext(c);
  const src=read('js/pages/collections/estado-colecciones.js');
  vm.runInContext(block(src,'export function normalizeCollectionSlug','function withResolvedImages').replace(/\bexport\s+/g,''),c);
  c.rows=[{slug:'bags',name:'Removed',order:2},{slug:'bolsos',name:'Removed too',order:1},{slug:'ear-cuff',name:'Empty',order:3},{slug:'earcuff',name:'Duplicate',order:4},{slug:'hidden',name:'Hidden',order:0,visible:false}];
