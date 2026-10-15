@@ -4,6 +4,7 @@
   const selector = 'body > section:not([role="dialog"]), main > section:not([role="dialog"]), [role="main"] > section:not([role="dialog"]), .cat-wrap > section, .cat-layout, .tt-footer, .tt-visual-block, .login-page, .ck-body, .perfil-wrap, .tt-404-wrap, .adm-content > .adm-section';
   let queued = false;
   const measured = new WeakSet();
+  const appliedStyles = new WeakMap();
   const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(schedule) : null;
   const set = (node, property, value, priority = '') => {
     if (node.style.getPropertyValue(property) !== value || node.style.getPropertyPriority(property) !== priority) node.style.setProperty(property, value, priority);
@@ -25,7 +26,9 @@
   function refresh() {
     queued = false;
     const list = blocks();
+    // Completar las lecturas antes de escribir estilos: evita un layout por sección.
     const rects = list.map(node => node.getBoundingClientRect());
+    const positions = list.map(node => getComputedStyle(node).position);
     const width = document.documentElement.clientWidth;
     list.forEach((node, index) => {
       node.dataset.ttFlowBlock = index % 2 ? 'pink' : 'light';
@@ -43,7 +46,7 @@
       set(node, 'border-radius', '0px', 'important');
       set(node, 'box-shadow', 'none', 'important');
       set(node, 'border', '0px none', 'important');
-      if (getComputedStyle(node).position === 'static') set(node, 'position', 'relative');
+      if (positions[index] === 'static') set(node, 'position', 'relative');
       let layer = [...node.children].find(child => child.hasAttribute('data-tt-flow-background'));
       if (!layer) {
         layer = document.createElement('div');
@@ -51,6 +54,7 @@
         layer.setAttribute('aria-hidden', 'true');
         node.prepend(layer);
       }
+      appliedStyles.set(node, node.getAttribute('style'));
       if (!measured.has(node)) { measured.add(node); resize?.observe(node); }
     });
     document.querySelectorAll('[data-tt-flow-block]').forEach(node => {
@@ -68,8 +72,13 @@
     refresh();
     const observer = new MutationObserver(records => {
       if (records.some(record => record.type === 'childList'
-        ? [...record.addedNodes, ...record.removedNodes].some(node => node.nodeType === 1 && !node.hasAttribute('data-tt-flow-background'))
-        : record.target.matches(`${selector}, body, main, .cat-wrap`))) schedule();
+        ? record.target.matches('body, main, [role="main"], .cat-wrap')
+          || [...record.addedNodes, ...record.removedNodes].some(node => node.nodeType === 1
+            && !node.hasAttribute('data-tt-flow-background')
+            && (node.matches(selector) || node.hasAttribute('data-tt-flow-block')
+              || node.querySelector(`${selector}, [data-tt-flow-block]`)))
+        : !(record.attributeName === 'style' && appliedStyles.get(record.target) === record.target.getAttribute('style'))
+          && record.target.matches(`${selector}, body, main, .cat-wrap`))) schedule();
     });
     observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden', 'style', 'class'] });
     window.addEventListener('resize', schedule, { passive: true });

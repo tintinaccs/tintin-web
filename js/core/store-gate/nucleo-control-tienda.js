@@ -649,7 +649,7 @@ export function renderStoreConfigUnavailableOverlay(cfg = lastConfig) {
   bodyReady(() => {
     let notice = document.getElementById(DEGRADED_NOTICE_ID);
     if (!notice) {
-      notice = document.createElement('aside');
+      notice = document.createElement('div');
       notice.id = DEGRADED_NOTICE_ID;
       notice.setAttribute('role', 'status');
       notice.setAttribute('aria-live', 'polite');
