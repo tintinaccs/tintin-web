@@ -59,7 +59,7 @@ html.tt-about-maintained .tt-about-portrait {
   justify-self: center;
 }
 .tt-about-maintained .tt-about-portrait-frame {
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 9 / 10;
   border-radius: clamp(20px, 3vw, 36px);
   overflow: hidden;
   border: 1px solid var(--about-border);
@@ -73,7 +73,9 @@ html.tt-about-maintained .tt-about-portrait .tt-img-placeholder {
   background: var(--about-soft) !important;
 }
 .tt-about-maintained .tt-img-placeholder :is(picture, img) { display: block; width: 100%; height: 100%; }
-.tt-about-maintained .tt-img-placeholder img { object-fit: cover; object-position: 50% 100%; }
+.tt-about-maintained .tt-img-placeholder img { object-fit: cover; object-position: 50% 47%; }
+.tt-about-maintained .tt-about-mission-section .tt-about-portrait-frame { aspect-ratio: 1 / 1; }
+.tt-about-maintained .tt-about-mission-section .tt-img-placeholder img { object-position: 50% 46%; }
 .tt-about-maintained .tt-img-placeholder.is-error { display: grid; place-items: center; }
 .tt-about-maintained .tt-img-placeholder.is-error::after {
   content: 'No pudimos mostrar esta imagen. El texto de Tintin sigue disponible.';

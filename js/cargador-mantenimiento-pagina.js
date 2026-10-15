@@ -16,7 +16,7 @@ function load(file, version = 'tintin-20261009-whatsapp-responsive-1') {
 // envíos, contacto o textos legales.
 if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)(?:\.html)?$/.test(pathName())) {
   Promise.all([
-    load('pages/catalog/politica-visibilidad-catalogo.js', 'tintin-20261015-integrated-politica-visibilidad-catalogo-1'),
+    load('pages/catalog/politica-visibilidad-catalogo.js', 'tintin-20261015-images-1'),
     load('pages/catalog/prioridad-stock-catalogo.js', 'tintin-20260731-stock-priority-1-stock-flow-20261014-1'),
   ]).catch(error => console.warn('[PageMaintenance] No se pudo cargar la política de catálogo:', error));
 }
@@ -41,7 +41,7 @@ export function loadPageMaintenance() {
     return load('pages/login/mantenimiento-acceso.js', 'tintin-20261012-auth-privacy-1-mantenimiento-acceso-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-palette-20261014-1-ui-reconciled-20261014-1-ui-reconciled-20261014-1');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261008-producto-superficies-1-first-render-merge-20261010-1');
-  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-palette-20261014-1-story-20261014-1-story-20261014-1-photos-20261015-1-photos-20261015-1-photos-20261015-1-photos-20261015-1-about-gap-crop-20261015-1');
+  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20261015-images-1');
   if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-20261015-health-1');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
     return load('pages/institutional/mantenimiento-legal.js', 'tintin-20261012-auth-privacy-1-mantenimiento-legal-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2');

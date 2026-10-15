@@ -1,3 +1,11 @@
+## 2026-10-15 — Integración de salud e imágenes antes de aprobación
+
+Se integra main 9055392fa2b0000577cdda8643d9529c11c6f4c8, conservando las mejoras publicadas de tarjetas, agotados, portada, carga y accesibilidad. El mantenimiento 38798216820 se detuvo correctamente al detectar que cambió main; no pedir aprobación de esa ejecución. PR #1135 se renueva con el candidato completo; aprobación personal y CI del nuevo SHA pendientes.
+
+Imágenes: nuevas subidas hasta 3840px con calidad 0.94, reducción de alta calidad sin ampliar originales pequeños, limpieza de metadatos mediante canvas y miniaturas livianas independientes. Entrega Cloudinary automática prioriza q_auto:best conservando tamaños responsivos y asociación por color; no se alteran URLs firmadas. About elige resolución según ancho y densidad, y ambos retratos tienen marco compacto y encuadre propio con poco aire sobre la cabeza y pequeño margen bajo la cintura. No se inventa detalle perdido ni se afirma haber recuperado originales que ya no están disponibles. Revisión visual local a 390, 768, 1024 y 1440px con densidad 2; 47 pruebas de rendimiento y carga, dos pruebas nuevas de fidelidad/snapshot, 12 pruebas de estructura pública y 198 de seguridad/cuentas/operaciones aprobadas. El snapshot real de imágenes conserva la selección por densidad de About; las fotos personalizadas por dispositivo mantienen su prioridad. Se conserva el historial de auditoría y sus pendientes externos de IAM, claves, App Check Auth y restauración, además del bloqueo de migración de workflows #1134.
+
+La regresión local de compra intermitente se rastreó hasta el panel de privacidad tardío que cubría el botón. El fixture ahora elige Solo necesarias antes de comprar; nueve repeticiones en tres motores aprobadas, sin habilitar seguimiento opcional. La CI de 302540 aprobó, pero esos resultados no certifican por sí solos el nuevo árbol integrado.
+
 ## 2026-10-15 — Correcciones autorizadas de salud y seguridad (Codex /root)
 
 El titular autorizó «hacelo todo» y conserva personalmente la aprobación final. Rama codex/auditoria-salud-20261015; base 968a2ecf98959f469b29cb9683415235eb11af13. Esta entrada actualiza el estado de la auditoría de sólo lectura que sigue abajo. No hay aprobación de entornos por el agente, merge ni publicación de estas correcciones todavía.

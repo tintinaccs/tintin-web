@@ -13,8 +13,8 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261015-health-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261012-checkout-ready-3-carga-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1-bags-20261014-1-merge-20261015-1';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261015-images-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261015-images-1';
 const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261015-health-1';
 
 function reportRuntimeFailures(results) {

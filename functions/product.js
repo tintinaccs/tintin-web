@@ -11,7 +11,7 @@ const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const CLOUDINARY_HOST = 'res.cloudinary.com';
 const CLOUDINARY_UPLOAD = '/upload/';
 const PRODUCT_METADATA_CEILING_MS = 1400;
-const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;
+const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto(?::best)?,c_limit,w_\d+,dpr_auto\//;
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -67,12 +67,13 @@ function productImageUrl(value, width = 900) {
   try {
     const url = new URL(href);
     if (url.hostname !== CLOUDINARY_HOST) return href;
+    if (/\/s--[^/]+--\//.test(url.pathname)) return href;
     const index = url.pathname.indexOf(CLOUDINARY_UPLOAD);
     if (index === -1) return href;
     const insertAt = index + CLOUDINARY_UPLOAD.length;
     const before = url.pathname.slice(0, insertAt);
     const after = url.pathname.slice(insertAt).replace(CLOUDINARY_TINTIN_TRANSFORM, '');
-    url.pathname = `${before}f_auto,q_auto,c_limit,w_${width},dpr_auto/${after}`;
+    url.pathname = `${before}f_auto,q_auto:best,c_limit,w_${width},dpr_auto/${after}`;
     return url.href;
   } catch {
     return href;
@@ -142,6 +143,8 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   const description = (stripHtml(rawDescription) || `${name} disponible en Tintin Accesorios & Relojes.`).slice(0, 220);
   const image = absoluteUrl(productVariantImage(data, firstAvailableVariant(data), firstImage(data)));
   const mainImage = productImageUrl(image, 900);
+  const imageSrcset = [480, 900, 1440].map(width => `${productImageUrl(image, width)} ${width}w`).join(', ');
+  const imageSizes = '(max-width:767px) calc(100vw - 32px), (max-width:1024px) 45vw, 560px';
   const canonical = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(safeId)}`;
   const price = firstValue(data, ['price', 'Variant Price']);
   const title = `${name} | Tintin Accesorios & Relojes`;
@@ -171,8 +174,8 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
     stock: hasProductStock(data) ? (data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null) : 0,
     sku: firstValue(data, ['handle', 'Handle'])
   });
-  const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" fetchpriority="high" id="tt-product-image-preload">`;
-  const serverPreviewImage = `<img data-tt-server-image="1" src="${escapeHtml(mainImage)}" alt="${escapeHtml(name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+  const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" imagesrcset="${escapeHtml(imageSrcset)}" imagesizes="${escapeHtml(imageSizes)}" fetchpriority="high" id="tt-product-image-preload">`;
+  const serverPreviewImage = `<img data-tt-server-image="1" src="${escapeHtml(mainImage)}" srcset="${escapeHtml(imageSrcset)}" sizes="${escapeHtml(imageSizes)}" alt="${escapeHtml(name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
   html = html.replace(
     'id="product-grid" style="display:none;">',
     'id="product-grid" data-tt-server-preview="1">'

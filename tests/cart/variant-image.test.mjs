@@ -24,4 +24,6 @@ test('no se admiten protocolos ejecutables en las fotos del color', () => {
   const original = 'https://res.cloudinary.com/demo/image/upload/v1/gold.jpg';
   const optimized = 'https://res.cloudinary.com/demo/image/upload/f_auto,q_auto,c_limit,w_200,dpr_auto/v1/gold.jpg';
   assert.equal(productVariantImage({ imageUrl: optimized, variants: { Color: ['Dorado', 'Azul'] }, variantMedia: [{ Color: 'Dorado', imageUrl: original }] }, 'Azul', optimized), '');
+  const best = optimized.replace('q_auto,', 'q_auto:best,');
+  assert.equal(productVariantImage({ imageUrl: best, variants: { Color: ['Dorado', 'Azul'] }, variantMedia: [{ Color: 'Dorado', imageUrl: original }] }, 'Azul', best), '');
 });

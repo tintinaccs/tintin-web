@@ -9,7 +9,7 @@ function safeImage(value) {
 function imageKey(value) {
   const url = new URL(value, 'https://media.invalid/');
   if (url.hostname === 'res.cloudinary.com') {
-    url.pathname = url.pathname.replace(/(\/upload\/)(?:(?:f_auto,q_auto(?:,c_limit,w_\d+,dpr_auto)?)\/)+/, '$1');
+    url.pathname = url.pathname.replace(/(\/upload\/)(?:(?:f_auto,q_auto(?::best)?(?:,c_limit,w_\d+,dpr_auto)?)\/)+/, '$1');
   }
   return url.href;
 }
