@@ -838,13 +838,13 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261015-photos-footer-calidad-interfaz-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261015-photos-footer-calidad-interfaz-1-tarjetas-stock-20261015-1');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261012-checkout-ready-2-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261012-checkout-ready-2-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1-psi-20261015-1');
   }
 
   function bootHeaderMode() {

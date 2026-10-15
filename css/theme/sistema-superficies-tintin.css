@@ -410,6 +410,7 @@ html:root body :is(main, .cat-wrap, .login-page, .ck-body, .perfil-wrap, .tt-404
    Los bloques ocultos por hidden o display:none no cuentan en la secuencia. */
 html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
   --tt-section-background: var(--color-brand-accent, #FDECF2);
+  --tt-footer-logo-filter: url("#tt-brand-logo-tint");
   --tt-section-start: var(--tt-flow-join);
   --tt-section-end: var(--tt-flow-join);
   --tt-section-gradient: linear-gradient(180deg,
@@ -426,6 +427,7 @@ html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dia
 
 html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(even of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-background: var(--color-brand-primary, #F8AACA);
+  --tt-footer-logo-filter: url("#tt-brand-logo-tint-light");
 }
 
 html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
@@ -483,9 +485,27 @@ html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-c
 
 /* Marca contrastada sobre ambos rosas, siempre sin tarjeta de fondo. */
 html:root body .tt-footer .tt-logo-link { display:inline-flex; align-items:center; justify-content:center; background:transparent; border:0; border-radius:0; box-shadow:none; padding:0; margin-bottom:16px; }
-html:root body .tt-footer .tt-logo-img { display:block; width:104px !important; height:56px !important; max-width:104px !important; max-height:56px !important; object-fit:cover !important; filter:brightness(0) !important; opacity:1 !important; }
+html:root body .tt-footer .tt-logo-img { display:block; width:104px !important; height:56px !important; max-width:104px !important; max-height:56px !important; object-fit:cover !important; filter:var(--tt-footer-logo-filter,url("#tt-brand-logo-tint")) !important; opacity:1 !important; }
 
 html:root body:not(:has(.adm-main)) .tt-product-card .tt-product-img-real { padding:clamp(10px,1.4vw,18px); box-sizing:border-box; }
 html:root body.tt-product-maintenance #gallery-main, html:root body.tt-product-maintenance #gallery-main img { background:#FFFFFF !important; }
 
 html:root body :is(.tt-card-color,.tt-variant-option).tt-stock-unavailable::after { white-space:nowrap; width:max-content; }
+
+/* El tono asignado por el flujo decide sólo el tinte del logo. */
+html:root body .tt-footer[data-tt-flow-block="light"] { --tt-footer-logo-filter:url("#tt-brand-logo-tint") !important; }
+html:root body .tt-footer[data-tt-flow-block="pink"] { --tt-footer-logo-filter:url("#tt-brand-logo-tint-light") !important; }
+
+/* Tarjetas: imagen transparente y separación visible del cuerpo descriptivo. */
+html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card) :is(.tt-product-img,.tt-card-img-wrap,.tt-product-img-real,.tt-card-img)[class],
+html:root body:not(:has(.adm-main)) .tt-card .tt-card-img-wrap > img,
+html:root body:not(:has(.adm-main)) .tt-visual-product-card > img { background:transparent !important; }
+html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card) > :is(.tt-product-info,.tt-card-info) { border-top:1px solid #D1D5DB !important; }
+html:root body:not(:has(.adm-main)) .tt-visual-product-card > strong { display:block; border-top:1px solid #D1D5DB; margin-top:12px; padding-top:12px; }
+/* El estado se distingue también en una captura, sin depender del botón. */
+html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card).tt-stock-unavailable,
+html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) { background:#F3F4F6 !important; }
+html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card).tt-stock-unavailable :is(.tt-product-img-real,.tt-card-img-wrap img),
+html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) > img { opacity:.55 !important; }
+
+html:root body .tt-stock-label { color:#4B5563 !important; background:#E5E7EB !important; border-color:#9CA3AF !important; }

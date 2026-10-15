@@ -13,9 +13,20 @@ for (const width of [320, 390, 768, 1440]) {
       <button id="ordinary" style="position:fixed;right:20px;bottom:100px;width:50px;height:50px">Contenido</button>
       <a id="wa-float" class="tt-wa-float" href="#" style="right:20px;bottom:100px;width:50px;height:50px">WhatsApp</a>
       <aside class="tt-privacy-consent" hidden style="position:fixed;right:10px;bottom:90px;width:200px;height:100px">Privacidad</aside>`);
+    await page.evaluate(() => {
+      const wa = document.getElementById('wa-float');
+      const measure = wa.getBoundingClientRect.bind(wa);
+      window.waGeometryReads = 0;
+      wa.getBoundingClientRect = () => { window.waGeometryReads++; return measure(); };
+    });
     await page.addScriptTag({ content:`${behavior}\ninitWaFloatVisibility();` });
     const whatsapp = page.locator('#wa-float');
     await expect(whatsapp).toBeVisible();
+    await page.evaluate(() => new Promise(resolve => {
+      document.body.appendChild(document.createElement('div'));
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
+    }));
+    expect(await page.evaluate(() => window.waGeometryReads)).toBe(0);
     await page.evaluate(() => { document.querySelector('.tt-privacy-consent').hidden = false; });
     await expect(whatsapp).toBeHidden();
     await expect(whatsapp).toHaveAttribute('tabindex', '-1');
@@ -29,3 +40,31 @@ for (const width of [320, 390, 768, 1440]) {
     await expect(whatsapp).toBeVisible();
   });
 }
+
+test('WhatsApp no mide en bucle ni al actualizar tarjetas ajenas; sigue reaccionando a avisos nuevos', async ({ page }) => {
+  await page.setContent(`<style>${css}</style><main id="cards"></main><a id="wa-float" class="tt-wa-float" style="position:fixed;right:20px;bottom:100px;width:50px;height:50px">WhatsApp</a>`);
+  await page.addScriptTag({ content: `${behavior}\ninitWaFloatVisibility();` });
+  await page.waitForTimeout(250);
+  const before = await page.evaluate(() => window.__ttWaFloatStats.checks);
+  await page.evaluate(async () => {
+    for (let i = 0; i < 25; i++) {
+      const card = document.createElement('article');
+      card.textContent = `Producto ${i}`;
+      document.getElementById('cards').append(card);
+      await new Promise(requestAnimationFrame);
+    }
+  });
+  await page.waitForTimeout(1000);
+  expect(await page.evaluate(() => window.__ttWaFloatStats.checks) - before).toBeLessThanOrEqual(2);
+  await page.evaluate(() => {
+    const notice = document.createElement('aside');
+    notice.className = 'tt-cart-feedback';
+    notice.style.cssText = 'position:fixed;left:auto;right:10px;bottom:90px;width:200px;height:100px;transform:none';
+    document.body.append(notice);
+  });
+  await expect(page.locator('#wa-float')).toBeVisible();
+  await page.locator('.tt-cart-feedback').evaluate(node => node.classList.add('is-visible'));
+  await expect(page.locator('#wa-float')).toBeHidden();
+  await page.locator('.tt-cart-feedback').evaluate(node => node.remove());
+  await expect(page.locator('#wa-float')).toBeVisible();
+});

@@ -11,7 +11,11 @@ for(const width of [320,390,768,1440]) test(`footer de perfil conserva logo cont
   await page.addScriptTag({url:'/js/components/color/logotipo-marca.js'});
   const logo=page.locator('.tt-footer .tt-logo-img');
   await logo.scrollIntoViewIfNeeded();
-  await expect(logo).toHaveCSS('filter','brightness(0)');
+  await expect(logo).toHaveCSS('filter', /tt-brand-logo-tint/);
+  for (const tone of ['light', 'pink']) {
+    await page.locator('.tt-footer').evaluate((footer,tone)=>footer.dataset.ttFlowBlock=tone,tone);
+    await expect(logo).toHaveCSS('filter', new RegExp(tone === 'pink' ? 'tt-brand-logo-tint-light' : 'tt-brand-logo-tint["\\)]'));
+  }
   await expect(page.locator('.tt-footer .tt-logo-link')).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
   await expect.poll(()=>logo.evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
   for(const action of await page.locator('a[href*="wa.me"][class]').all()) {
@@ -136,7 +140,8 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
           }
           const footerLogo = page.locator('.tt-footer .tt-logo-img');
           await footerLogo.scrollIntoViewIfNeeded();
-          await expect(footerLogo, url).toHaveCSS('filter', 'brightness(0)');
+          const tone = await page.locator('.tt-footer').getAttribute('data-tt-flow-block');
+          await expect(footerLogo, url).toHaveCSS('filter', new RegExp(tone === 'pink' ? 'tt-brand-logo-tint-light' : 'tt-brand-logo-tint["\\)]'));
           await expect(page.locator('.tt-footer .tt-logo-link'), url).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
           await expect.poll(()=>footerLogo.evaluate(image=>image.complete && image.naturalWidth>0), {message:url}).toBe(true);
           await expect(page.locator('.tt-footer-wa-text'), url).toHaveCSS('color', 'rgb(255, 255, 255)');

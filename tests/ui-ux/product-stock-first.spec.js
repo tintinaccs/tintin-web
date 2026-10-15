@@ -25,7 +25,7 @@ for (const width of [390, 1440]) {
     await expect.poll(() => page.locator('#gallery-main img').evaluate(img => img.currentSrc)).toMatch(/gold.svg/);
     await expect(page.locator('#gallery-main img')).toHaveCSS('filter', 'none');
     await expect(page.locator('#gallery-main .tt-stock-label')).toBeVisible();
-    await expect(page.locator('#gallery-main .tt-stock-label')).toHaveCSS('writing-mode', 'vertical-rl');
+    await expect(page.locator('#gallery-main .tt-stock-label')).toHaveCSS('writing-mode', 'horizontal-tb');
     await expect(page.locator('#btn-product-add-cart')).toBeDisabled();
     await expect(page.locator('#btn-product-buy-now')).toBeDisabled();
     await page.locator('[data-variant-value="Plateado"]').click();

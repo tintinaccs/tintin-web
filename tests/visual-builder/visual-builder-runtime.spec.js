@@ -63,7 +63,9 @@ test('preview aplica contenido y bloque seguro sobre la página real', async ({ 
   await expect(frame.locator('[data-tt-visual-block="unsafe-link"] a')).toHaveAttribute('href', '/catalogo');
   await expect(frame.locator('#hero + [data-tt-visual-block]')).toHaveAttribute('data-tt-visual-block', 'safe-test');
   await expect(frame.locator('[data-tt-visual-block="safe-test"] + [data-tt-visual-block]')).toHaveAttribute('data-tt-visual-block', 'safe-second');
-  await expect(frame.locator('#hero')).toHaveCSS('background-color', 'rgb(251, 228, 236)');
+  // La capa pública de superficies controla el fondo final. El preview debe
+  // conservar su configuración sin sustituir esa autoridad visual compartida.
+  await expect(frame.locator('#hero')).toHaveCSS('--tt-visual-bg', '#fbe4ec');
 });
 
 test('preview rechaza mensajes enviados con otro pageId', async ({ page }) => {
@@ -114,7 +116,7 @@ test('los bloques nuevos (testimonio, video, FAQ, columnas, separador) se render
   await expect(frame.locator('[data-tt-visual-block="faq-1"] summary')).toContainText('¿Envían a todo el país?');
   await expect(frame.locator('[data-tt-visual-block="columns-1"] .tt-visual-columns-right')).toHaveCount(1);
   await expect(frame.locator('[data-tt-visual-block="divider-1"] hr.tt-visual-divider-rule')).toHaveCount(1);
-  const order = await frame.locator('body > *').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-tt-visual-block') || node.id));
+  const order = await frame.locator('main > *').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-tt-visual-block') || node.id));
   const topIndex = order.indexOf('top-block');
   const heroIndex = order.indexOf('hero');
   expect(topIndex).toBeGreaterThanOrEqual(0);
@@ -139,7 +141,7 @@ test('las secciones fijas de la página real se reordenan según sectionOrder, y
   await expect(frame.locator('html')).toHaveAttribute('data-tt-visual-builder', /ready|fallback/, { timeout: 30000 });
   const labelsOf = nodes => nodes.map(node => `${node.id} ${node.getAttribute('data-tt-section') || ''} ${node.className}`.toLowerCase());
   const findIndex = (labels, needle) => labels.findIndex(item => item.includes(needle));
-  const orderBefore = await frame.locator('body > *').evaluateAll(labelsOf);
+  const orderBefore = await frame.locator('main > *, body > .tt-footer').evaluateAll(labelsOf);
   expect(findIndex(orderBefore, 'hero')).toBeLessThan(findIndex(orderBefore, 'reviews'));
 
   await page.evaluate(() => {
@@ -151,7 +153,7 @@ test('las secciones fijas de la página real se reordenan según sectionOrder, y
     }, location.origin);
   });
   await page.waitForTimeout(300);
-  const orderAfter = await frame.locator('body > *').evaluateAll(labelsOf);
+  const orderAfter = await frame.locator('main > *, body > .tt-footer').evaluateAll(labelsOf);
   expect(findIndex(orderAfter, 'hero')).toBeLessThan(findIndex(orderAfter, 'reviews'));
   expect(findIndex(orderAfter, 'reviews')).toBeLessThan(findIndex(orderAfter, 'trust'));
   expect(findIndex(orderAfter, 'tt-footer')).toBeGreaterThan(findIndex(orderAfter, 'trust'));
