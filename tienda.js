@@ -2130,9 +2130,14 @@ function initWaFloatVisibility() {
   const check = () => {
     ticking = false;
     stats.checks++;
+    const candidates = [...document.querySelectorAll(collisionSelector)];
+    const hidden = wa.classList.contains('tt-wa-float-hidden');
+    // Sin avisos y con el botón visible no hay nada que pueda colisionar.
+    // Evitar medir aquí impide forzar layout tras cada mutación del arranque.
+    if (!candidates.length && !hidden) return;
     const r = wa.getBoundingClientRect();
     if (r.width <= 0 || r.height <= 0) { stats.zeroRect++; return; }
-    const collided = [...document.querySelectorAll(collisionSelector)].some(node => {
+    const collided = candidates.some(node => {
       if (node === wa || node.closest(EXCLUDE)) return false;
       // Geometría primero: descarta casi todo sin calcular estilos.
       const nr = node.getBoundingClientRect();
@@ -2141,7 +2146,6 @@ function initWaFloatVisibility() {
       const style = getComputedStyle(node);
       return !(style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01);
     });
-    const hidden = wa.classList.contains('tt-wa-float-hidden');
     if (collided) {
       clearSince = 0;
       if (!hidden) {
