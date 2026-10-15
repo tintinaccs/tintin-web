@@ -482,8 +482,8 @@ html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-c
 html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-card:has(.tt-card-img-wrap)) :is(.tt-product-img-real,.tt-card-img) { object-fit:contain; mix-blend-mode:normal; background:#FFFFFF !important; }
 
 /* El logo blanco mantiene contraste incluso cuando el footer alterna a claro. */
-html:root body .tt-footer .tt-logo-link { display:inline-flex; align-items:center; justify-content:center; background:#F8AACA; border-radius:18px; padding:12px 18px; margin-bottom:16px; }
-html:root body .tt-footer .tt-logo-img { display:block; width:120px !important; height:72px !important; max-width:120px !important; max-height:72px !important; object-fit:cover !important; filter:brightness(0) invert(1) !important; opacity:1 !important; }
+html:root body .tt-footer .tt-logo-link { display:inline-flex; align-items:center; justify-content:center; background:#222222; border-radius:18px; padding:10px 14px; margin-bottom:16px; }
+html:root body .tt-footer .tt-logo-img { display:block; width:104px !important; height:56px !important; max-width:104px !important; max-height:56px !important; object-fit:cover !important; filter:brightness(0) invert(1) !important; opacity:1 !important; }
 
 html:root body:not(:has(.adm-main)) .tt-product-card .tt-product-img-real { padding:clamp(10px,1.4vw,18px); box-sizing:border-box; }
 html:root body.tt-product-maintenance #gallery-main, html:root body.tt-product-maintenance #gallery-main img { background:#FFFFFF !important; }

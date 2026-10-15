@@ -21,7 +21,7 @@ test('el normalizador conserva tokens y colores hex completos sin crear ciclos',
 test('la paleta decorativa usa solo cuatro colores base y migra HEX, RGB y transparencias', () => {
   const allowed = new Set(['#F8AACA', '#FDECF2', '#222222', '#FFFFFF']);
   for (const token of [...GLOBAL_TOKENS, ...ADMIN_TOKENS]) {
-    if (/success|warning|error|danger|info|available|soldout|promo/.test(token.key)) continue;
+    if (/success|warning|error|danger|info|available|soldout|promo|whatsapp/.test(token.key)) continue;
     if (token.default.startsWith('rgba(')) continue;
     assert.ok(allowed.has(token.default), `${token.key}: ${token.default}`);
   }
@@ -78,4 +78,26 @@ test('los textos guardados con los defaults anteriores migran sin tocar estados 
     assert.equal(normalizeLegacyBrandColor(token,token.legacyDefault),token.default);
     assert.equal(normalizeLegacyBrandColor(token,'#123456'),'#123456');
   }
+});
+
+test('WhatsApp migra el rosa a verde y blanco también en la primera pintura', () => {
+  const expected = { 'btn-whatsapp-bg':'#0d8043', 'btn-whatsapp-text':'#FFFFFF', 'btn-whatsapp-hover':'#0a6835' };
+  const map = {};
+  for (const [key,color] of Object.entries(expected)) {
+    const token = GLOBAL_TOKENS.find(item=>item.key===key);
+    assert.equal(token.default,color);
+    assert.equal(normalizeLegacyBrandColor(token,token.legacyDefault),color);
+    assert.equal(normalizeLegacyBrandColor(token,color),color);
+    map[token.cssVar]=token.legacyDefault;
+  }
+  const source=fs.readFileSync(new URL('../../js/components/color/esquema-color-instantaneo.js',import.meta.url),'utf8');
+  const start=source.indexOf('function normalizeUnifiedPaletteColor(value)');
+  const end=source.indexOf('function currentBreakpoint()',start);
+  const result={};
+  const context=vm.createContext({root:{style:{setProperty:(key,value)=>result[key]=value}},isSafeColorValue:()=>true});
+  vm.runInContext(source.slice(start,end),context);
+  context.applyMap(map);
+  for(const [key,color] of Object.entries(expected))assert.equal(result[GLOBAL_TOKENS.find(item=>item.key===key).cssVar],color);
+  context.applyMap(result);
+  assert.equal(result['--color-button-whatsapp-text'],'#FFFFFF');
 });
