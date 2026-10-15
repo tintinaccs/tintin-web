@@ -82,6 +82,25 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
         const final = await page.locator(selector).boundingBox();
         expect(Math.abs(final.x - initial.x), url).toBeLessThanOrEqual(1);
         expect(Math.abs(final.width - initial.width), url).toBeLessThanOrEqual(1);
+        if (url === '/about.html') {
+          const gap = await page.locator('.tt-page-hero .tt-section-sub').evaluate(label => {
+            const header = [...document.querySelectorAll('.tt-header-desktop, #tt-header-tablet')]
+              .find(node => node.getBoundingClientRect().height > 0);
+            return label.getBoundingClientRect().top - (header?.getBoundingClientRect().bottom || 0);
+          });
+          expect(gap, 'Conocenos debe quedar separado del header o borde superior').toBeGreaterThanOrEqual(32);
+          expect(gap, 'no duplicar la reserva de espacio del header').toBeLessThanOrEqual(72);
+          const portraits = await page.locator('.tt-about-portrait img').evaluateAll(images => images.map(image => ({
+            imageBottom: image.getBoundingClientRect().bottom,
+            frameBottom: image.closest('.tt-about-portrait').getBoundingClientRect().bottom,
+            position: getComputedStyle(image).objectPosition,
+          })));
+          expect(portraits).toHaveLength(2);
+          for (const portrait of portraits) {
+            expect(portrait.imageBottom, 'el contenedor exterior no debe cortar la parte inferior de la foto').toBeLessThanOrEqual(portrait.frameBottom + 1);
+            expect(portrait.position).toBe('50% 100%');
+          }
+        }
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
         expect(overflow, url).toBe(false);
         const surfaces = await page.evaluate(() => [...document.querySelectorAll('[data-tt-flow-block]')].map(node => {
