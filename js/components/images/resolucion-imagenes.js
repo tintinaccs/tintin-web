@@ -18,7 +18,7 @@ import {
   serverTimestamp,
   setDoc,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261015-images-1';
 
 const DEFAULTS_DOC_PATH = ['settings', 'imageDefaults'];
 export const DEFAULT_IMAGE_TYPES = Object.freeze(['collection', 'category', 'product', 'banner', 'general']);

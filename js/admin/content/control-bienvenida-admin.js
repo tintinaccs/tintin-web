@@ -16,7 +16,7 @@ import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
   normalizeWelcomeStep
-} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1';
+} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20261015-images-1';
 
 const REF = doc(db, 'settings', 'welcomeTutorial');
 
@@ -37,9 +37,9 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
   };
 
   function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.textContent = String(value ?? '');
-    return div.innerHTML;
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[char]);
   }
 
   function uid() {

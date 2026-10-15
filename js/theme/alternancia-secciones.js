@@ -35,14 +35,17 @@
       const rect = rects[index];
       const before = index ? Math.max(0, Math.min(256, rect.top - rects[index - 1].bottom)) / 2 : 0;
       const after = index < list.length - 1 ? Math.max(0, Math.min(256, rects[index + 1].top - rect.bottom)) / 2 : 0;
-      set(node, '--tt-section-background', index % 2 ? 'var(--tt-flow-pink)' : 'var(--tt-flow-light)');
+      const customFooter = node.matches('.tt-footer') && document.documentElement.hasAttribute('data-tt-footer-bg-custom');
+      const customVisual = node.style.getPropertyValue('--tt-visual-bg');
+      const customBackground = customFooter ? 'var(--tt-global-footer-bg)' : customVisual ? 'var(--tt-visual-bg)' : '';
+      set(node, '--tt-section-background', customBackground || (index % 2 ? 'var(--tt-flow-pink)' : 'var(--tt-flow-light)'));
       set(node, '--tt-section-start', index ? 'var(--tt-flow-join)' : 'var(--tt-section-background)');
       set(node, '--tt-section-end', index < list.length - 1 ? 'var(--tt-flow-join)' : 'var(--tt-section-background)');
       set(node, '--tt-flow-before', `${before}px`);
       set(node, '--tt-flow-after', `${after}px`);
       set(node, '--tt-flow-left', `${-rect.left}px`);
       set(node, '--tt-flow-width', `${width}px`);
-      set(node, 'background', 'none', 'important');
+      set(node, 'background', customBackground || 'none', 'important');
       set(node, 'border-radius', '0px', 'important');
       set(node, 'box-shadow', 'none', 'important');
       set(node, 'border', '0px none', 'important');
@@ -82,6 +85,7 @@
     });
     observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden', 'style', 'class'] });
     window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('tintin:global-layout-ready', schedule);
     window.TintinSectionFlow = Object.freeze({ refresh: schedule });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });

@@ -59,7 +59,7 @@ const escapeAttribute = escapeHtml;
 
 const CLOUDINARY_IMG_HOST = 'res.cloudinary.com';
 const CLOUDINARY_UPLOAD_MARKER = '/upload/';
-const CLOUDINARY_TT_TRANSFORM_RE = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;
+const CLOUDINARY_TT_TRANSFORM_RE = /^f_auto,q_auto(?::best)?,c_limit,w_\d+,dpr_auto\//;
 
 /**
  * Pide a Cloudinary una copia redimensionada/comprimida de la imagen en vez
@@ -75,12 +75,13 @@ function withCloudinaryWidth(href, width) {
   try {
     const url = new URL(href);
     if (url.hostname !== CLOUDINARY_IMG_HOST) return href;
+    if (/\/s--[^/]+--\//.test(url.pathname)) return href;
     const idx = url.pathname.indexOf(CLOUDINARY_UPLOAD_MARKER);
     if (idx === -1) return href;
     const insertAt = idx + CLOUDINARY_UPLOAD_MARKER.length;
     const before = url.pathname.slice(0, insertAt);
-    const after = url.pathname.slice(insertAt).replace(/^(?:(?:f_auto,q_auto(?:,c_limit,w_\d+,dpr_auto)?)\/)+/, '');
-    url.pathname = `${before}f_auto,q_auto,c_limit,w_${width},dpr_auto/${after}`;
+    const after = url.pathname.slice(insertAt).replace(/^(?:(?:f_auto,q_auto(?::best)?(?:,c_limit,w_\d+,dpr_auto)?)\/)+/, '');
+    url.pathname = `${before}f_auto,q_auto:best,c_limit,w_${width},dpr_auto/${after}`;
     return url.href;
   } catch {
     return href;
@@ -278,7 +279,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-stock-flow-20261014-1-ui-fixes-20261014-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-images-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1024,7 +1025,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-stock-flow-20261014-1-ui-fixes-20261014-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-images-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1501,7 +1502,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
         serverImage.fetchPriority = 'high';
         serverImage.decoding = 'async';
       } else {
-        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" srcset="${escapeAttribute(withCloudinaryWidth(selectedImage, 480))} 480w, ${escapeAttribute(withCloudinaryWidth(selectedImage, 900))} 900w" sizes="(max-width:767px) calc(100vw - 32px), (max-width:1024px) 45vw, 560px" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+        galleryMain.innerHTML = `<img src="${escapeAttribute(selectedImage)}" alt="${escapeAttribute(product.name)}" srcset="${escapeAttribute(withCloudinaryWidth(selectedImage, 480))} 480w, ${escapeAttribute(withCloudinaryWidth(selectedImage, 900))} 900w, ${escapeAttribute(withCloudinaryWidth(selectedImage, 1440))} 1440w" sizes="(max-width:767px) calc(100vw - 32px), (max-width:1024px) 45vw, 560px" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
       }
     } else {
       galleryMain.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8a0b8" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
@@ -1880,7 +1881,7 @@ function _galleryThumbClick(thumb) {
     const img = galleryMain.querySelector('img');
     if (img) {
       img.src = src;
-      img.srcset = `${withCloudinaryWidth(src, 480)} 480w, ${withCloudinaryWidth(src, 900)} 900w`;
+      img.srcset = `${withCloudinaryWidth(src, 480)} 480w, ${withCloudinaryWidth(src, 900)} 900w, ${withCloudinaryWidth(src, 1440)} 1440w`;
     }
     else {
       const created = document.createElement('img');
@@ -1898,7 +1899,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-stock-flow-20261014-1-ui-fixes-20261014-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-images-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

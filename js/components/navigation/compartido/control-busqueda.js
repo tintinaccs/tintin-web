@@ -1,10 +1,10 @@
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261015-photos-logos-estado-productos-1-about-light-20261015-1-about-gap-crop-20261015-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261015-health-1';
 
 const MAX_RESULTS = 10;
 import { hasProductStock, firstAvailableVariant } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
-import { productVariantImage } from '../../images/foto-variante.mjs?v=tintin-20261008-variant-image-1-stock-flow-20261014-1';
+import { productVariantImage } from '../../images/foto-variante.mjs?v=tintin-20261015-images-1';
 const INPUT_DELAY_MS = 120;
 
 let index = [];

@@ -21,9 +21,13 @@ test('SiteActivity queda aislada de Auth y de redirects', () => {
   assert.doesNotMatch(source, /(?:signOut|onAuthStateChanged|location\.(?:replace|assign)|sessionStorage\.removeItem\([^)]*(?:auth|identity|uid))/i);
 });
 
-test('la causa de throttling de sitePresence queda documentada en Rules', () => {
+test('las estadísticas no pueden saltar las cuotas de servidor con el SDK', () => {
   const rules = fs.readFileSync('firestore.rules', 'utf8');
-  assert.match(rules, /presenceUpdateNotTooFrequent\(\)/);
-  assert.match(rules, /request\.time\s*>\s*resource\.data\.lastSeen\s*\+\s*duration\.value\(20,\s*'s'\)/);
-  assert.match(rules, /match \/sitePresence\/\{visitorId\}/);
+  for (const name of ['sitePresence', 'siteTraffic', 'siteAggregate']) {
+    const block = rules.slice(rules.indexOf(`match /${name}/`)).split('\n    }')[0];
+    assert.match(block, /allow create, update: if false;/);
+  }
+  const source = fs.readFileSync('js/analytics/actividad-sitio.js', 'utf8');
+  assert.match(source, /apiUrl\('site-activity'\)/);
+  assert.doesNotMatch(source, /\bsetDoc\(/);
 });

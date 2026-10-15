@@ -41,6 +41,7 @@ function check(name, condition, problem) {
 
 const admin    = read('js/admin/admin-app.js');
 const activity = read('js/analytics/actividad-sitio.js');
+const activityApi = read('functions/api/site-activity.js');
 const geoFn    = read('functions/api/visitor-geo.js');
 const orderStats = read('js/core/store/estadisticas-pedidos.js');
 const rules    = read('firestore.rules');
@@ -158,16 +159,17 @@ check(
   'El endpoint de geo solo debe devolver datos aproximados de ubicación.'
 );
 check(
-  'Las reglas fijan los campos permitidos de presencia (sin IP/GPS/postal)',
-  /function presenceIsValid\(visitorId\)/.test(rules) &&
-    /data\.keys\(\)\.hasOnly\(\[\s*'visitorId', 'sessionId', 'userId', 'page', 'lastSeen',\s*'city', 'region', 'country', 'countryCode', 'geoSource'/.test(rules),
-  'hasOnly debe bloquear cualquier campo extra (ip, lat, lng, postal) del lado del servidor.'
+  'El servidor impone cuotas de actividad y las reglas impiden escrituras directas',
+  activityApi.includes('site-activity-budget') && activityApi.includes('ipLimit(request, env') &&
+    /match \/sitePresence[^]*?allow create, update: if false;/.test(rules) &&
+    /match \/siteTraffic[^]*?allow create, update: if false;/.test(rules),
+  'Las estadísticas deben pasar por cuotas compartidas, sin escritura libre desde el SDK.'
 );
 check(
-  'Las reglas fijan los campos permitidos de las sesiones de tráfico',
-  /function trafficSessionIsValid\(dateKey, sessionId\)/.test(rules) &&
-    /data\.keys\(\)\.hasOnly\(\[\s*'dayKey', 'sessionId', 'visitorId', 'userId', 'landingPage', 'startedAt',\s*'city', 'region', 'country', 'countryCode', 'geoSource'/.test(rules),
-  'Las sesiones no deben poder guardar IP ni coordenadas.'
+  'La API conserva una proyección explícita sin IP, GPS ni identidad de cuenta',
+  activityApi.includes("userId: ''") && activityApi.includes('clean(cf.city, 80)') &&
+    !/input\.(?:ip|lat|lng|email|uid|userAgent)/.test(activityApi),
+  'El cuerpo del visitante no debe decidir los datos personales guardados.'
 );
 check(
   'La analítica es consentida y con identificadores que rotan por día',
@@ -243,7 +245,7 @@ check(
   'Solo el Super Admin lee la presencia y el tráfico',
   /match \/sitePresence\/\{visitorId\}[\s\S]{0,80}allow read, delete: if isSuperAdmin\(\)/.test(rules) &&
     /match \/siteTraffic\/\{dateKey\}\/sessions\/\{sessionId\}[\s\S]{0,120}allow read, delete: if isSuperAdmin\(\)/.test(rules) &&
-    /match \/siteTraffic[\s\S]{0,320}allow update: if false;/.test(rules),
+    /match \/siteTraffic[\s\S]{0,320}allow create, update: if false;/.test(rules),
   'Los datos de visitantes no deben ser legibles por otros roles y las sesiones no deben editarse.'
 );
 check(

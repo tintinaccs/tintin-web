@@ -71,7 +71,7 @@ check(
 
 check(
   'Hero, Editorial y Nosotros admiten subidas de hasta 4K con mayor calidad',
-  files.adminHtml.includes('FULL_BLEED_UPLOAD_LIMITS = { maxWidth: 3840, maxHeight: 3840, quality: 0.92 }') &&
+  files.adminHtml.includes('FULL_BLEED_UPLOAD_LIMITS = { maxWidth: 3840, maxHeight: 3840, quality: 0.94 }') &&
     files.adminHtml.includes('...FULL_BLEED_UPLOAD_LIMITS') &&
     files.adminHtml.includes("slot.id === 'logo_main' ? {} : FULL_BLEED_UPLOAD_LIMITS"),
   'las fotos a pantalla completa no deben quedar limitadas al tope genérico de 2000px pensado para tarjetas chicas'
@@ -250,7 +250,7 @@ check(
 
 check(
   'El navegador conserva procesamiento, WebP y vista previa',
-  files.uploadWidget.includes("import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  files.uploadWidget.includes("import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20261015-images-1'") &&
     files.uploadWidget.includes('pendingPreviewUrl = URL.createObjectURL(file)') &&
     files.uploadWidget.includes('uploadImageToLibrary(file') &&
     files.processing.includes('canvas.toBlob'),
@@ -313,7 +313,8 @@ check(
 check(
   'Cloudflare valida el ID token con Firebase Auth en el servidor',
   files.cloudinarySecurity.includes("import { verifyFirebaseIdToken } from './firebase-id-token.js'") &&
-    /const user = await verifyFirebaseIdToken\(token\);\s+await enforceAuthenticatedRateLimit\(request, env, user\);\s+return user;/.test(files.cloudinarySecurity) &&
+    files.cloudinarySecurity.includes('verify = verifyFirebaseIdToken, limit = enforceAuthenticatedRateLimit') &&
+    /const user = await verify\(token\);\s+await limit\(request, env, user\);/.test(files.cloudinarySecurity) &&
     files.cloudinarySecurity.includes('const user = await verifyFirebaseIdToken(token)') &&
     files.cloudinarySecurity.includes('user.email !== SUPERADMIN_EMAIL') &&
     files.firebaseIdToken.includes("crypto.subtle.verify(") &&
@@ -419,7 +420,7 @@ check(
 
 check(
   'Las imágenes de productos se sanean al leer Firestore',
-  files.products.includes("from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  files.products.includes("from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1'") &&
     files.products.includes('sanitizeImageUrl') &&
     files.products.includes('return sanitizeImageUrl(img);'),
   'ningún renderer público debe recibir una URL cruda'
@@ -522,10 +523,11 @@ check(
   'sin el origen del rechazo en el mensaje no se puede saber si hay que revisar la función de Cloudflare o la cuenta de Cloudinary'
 );
 
-const PROCESSING_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
-const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-js';
-const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js';
-const CARGA_IMAGENES_VERSION_QUERY = 'v=tintin-20261012-auth-privacy-1-carga-imagenes-js';
+const imageCacheVersions = JSON.parse(read('scripts/cache-version-baseline.json'));
+const PROCESSING_VERSION_QUERY = `v=${imageCacheVersions['js/components/images/procesamiento-imagenes.js']?.version}`;
+const MEDIA_LIBRARY_VERSION_QUERY = `v=${imageCacheVersions['js/components/images/biblioteca-multimedia.js']?.version}`;
+const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = `v=${imageCacheVersions['js/admin/products/biblioteca-multimedia-admin.js']?.version}`;
+const CARGA_IMAGENES_VERSION_QUERY = `v=${imageCacheVersions['js/components/images/carga-imagenes.js']?.version}`;
 check(
   'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
   files.uploadWidget.includes(`./procesamiento-imagenes.js?${PROCESSING_VERSION_QUERY}`) &&

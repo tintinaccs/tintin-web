@@ -8,7 +8,7 @@
       const url = new URL(String(value || '').trim(), window.location.href);
       if (!['http:', 'https:'].includes(url.protocol)) return '';
       if (url.hostname === 'res.cloudinary.com') {
-        url.pathname = url.pathname.replace(/(\/upload\/)(?:(?:f_auto,q_auto(?:,c_limit,w_\d+,dpr_auto)?)\/)+/, '$1');
+        url.pathname = url.pathname.replace(/(\/upload\/)(?:(?:f_auto,q_auto(?::best)?(?:,c_limit,w_\d+,dpr_auto)?)\/)+/, '$1');
       }
       return url.href;
     } catch { return ''; }

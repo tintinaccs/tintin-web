@@ -82,6 +82,7 @@ const suites = {
     title: 'Seguridad, CSP, App Check, aislamiento y dependencias',
     checks: [
       ['security-main', 'Auditoría de seguridad general', 'npm run audit:security'],
+      ['security-account-activity', 'Bloqueo de cuentas y cuotas privadas de estadísticas', 'node --test tests/accounts/account-state.test.mjs tests/operations/site-activity-api.test.mjs'],
       ['security-phase6', 'Invariantes de seguridad Fase 6', 'npm run audit:phase6'],
       ['csp-regressions', 'Regresiones CSP, Cloudinary y Firebase Auth', 'node --test tests/security/csp-cloudinary-upload.test.mjs'],
       ['verify-csp', 'CSP generada y reproducible', 'npm run verify:csp'],
