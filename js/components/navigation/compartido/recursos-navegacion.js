@@ -31,7 +31,7 @@ function versionedStyleHref(path, version) {
 
 function stylesheetForPath(path) {
   const expectedPath = new URL(versionedSiteAsset(path)).pathname;
-  return [...document.querySelectorAll('link[rel~="stylesheet"][href]')].find(link => {
+  return [...document.querySelectorAll('link[rel~="stylesheet"][href],link[data-tt-style-bundle][href]')].find(link => {
     try {
       return new URL(link.href, window.location.href).pathname === expectedPath;
     } catch {
@@ -65,6 +65,22 @@ function awaitStylesheetEvent(link, ceilingMs = 2200) {
 }
 
 function waitForStylesheet(link, ceilingMs = 2200) {
+  if (link.disabled && link.dataset.ttStyleBundle) {
+    const bundle = document.getElementById(link.dataset.ttStyleBundle);
+    if (bundle?.sheet) return Promise.resolve(link);
+    if (bundle && !bundle.dataset.ttBundleError) {
+      return awaitStylesheetEvent(bundle, ceilingMs).then(() => {
+        if (bundle.sheet) return link;
+        link.disabled = false;
+        link.rel = 'stylesheet';
+        delete link.dataset.ttStyleBundle;
+        return waitForStylesheet(link, ceilingMs);
+      });
+    }
+    link.disabled = false;
+    link.rel = 'stylesheet';
+    delete link.dataset.ttStyleBundle;
+  }
   if (link.sheet) return Promise.resolve(link);
   return awaitStylesheetEvent(link, ceilingMs);
 }
@@ -72,6 +88,9 @@ function waitForStylesheet(link, ceilingMs = 2200) {
 function reloadStylesheet(link, href) {
   const ready = awaitStylesheetEvent(link);
   link.href = href;
+  link.disabled = false;
+  link.rel = 'stylesheet';
+  delete link.dataset.ttStyleBundle;
   return ready;
 }
 
