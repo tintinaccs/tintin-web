@@ -9,6 +9,15 @@
   color: var(--about-text);
 }
 .tt-about-maintained .tt-footer { background-color: var(--color-background-page, #FFFFFF) !important; }
+.tt-about-maintained .tt-page-hero {
+  padding: clamp(36px, 4vw, 56px) 0 clamp(42px, 4vw, 64px);
+}
+/* Desktop superpone su header fijo; tablet ya reserva ese espacio en body. */
+@media (min-width: 1025px) {
+  .tt-about-maintained .tt-page-hero {
+    padding-top: calc(var(--header-h, 88px) + clamp(36px, 4vw, 56px));
+  }
+}
 html.tt-about-maintained .tt-about-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
@@ -46,10 +55,11 @@ html.tt-about-maintained .tt-about-portrait {
   max-width: 440px;
   min-height: 0;
   height: auto;
+  aspect-ratio: auto;
   justify-self: center;
 }
 .tt-about-maintained .tt-about-portrait-frame {
-  aspect-ratio: 913 / 1600;
+  aspect-ratio: 2 / 3;
   border-radius: clamp(20px, 3vw, 36px);
   overflow: hidden;
   border: 1px solid var(--about-border);
@@ -63,7 +73,7 @@ html.tt-about-maintained .tt-about-portrait .tt-img-placeholder {
   background: var(--about-soft) !important;
 }
 .tt-about-maintained .tt-img-placeholder :is(picture, img) { display: block; width: 100%; height: 100%; }
-.tt-about-maintained .tt-img-placeholder img { object-fit: cover; object-position: 50% 35%; }
+.tt-about-maintained .tt-img-placeholder img { object-fit: cover; object-position: 50% 100%; }
 .tt-about-maintained .tt-img-placeholder.is-error { display: grid; place-items: center; }
 .tt-about-maintained .tt-img-placeholder.is-error::after {
   content: 'No pudimos mostrar esta imagen. El texto de Tintin sigue disponible.';
