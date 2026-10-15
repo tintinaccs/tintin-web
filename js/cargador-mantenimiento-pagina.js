@@ -30,7 +30,7 @@ export function loadPageMaintenance() {
     const version = 'tintin-20261009-whatsapp-responsive-1-photos-20261008-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1-repair-20261005-1';
     return Promise.allSettled([
-      load('pages/checkout/checkout-hardening.js', 'tintin-20261015-health-1'),
+      load('pages/checkout/checkout-hardening.js', 'tintin-20261015-health-main-repair-2'),
       load('pages/checkout/checkout-mantenimiento.js', 'tintin-20261012-checkout-ready-2-checkout-mantenimiento-js-palette-20261014-1'),
       load('pages/checkout/checkout-metodos-pago.js', 'tintin-20261012-checkout-ready-3-checkout-metodos-pago-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1'),
       load('pages/checkout/checkout-control-cuota.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-photos-20261008-1'),
@@ -42,7 +42,7 @@ export function loadPageMaintenance() {
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261008-producto-superficies-1-first-render-merge-20261010-1');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-palette-20261014-1-story-20261014-1-story-20261014-1-photos-20261015-1-photos-20261015-1-photos-20261015-1-photos-20261015-1-about-gap-crop-20261015-1');
-  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-20261015-health-1');
+  if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-20261015-health-main-repair-2');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
     return load('pages/institutional/mantenimiento-legal.js', 'tintin-20261012-auth-privacy-1-mantenimiento-legal-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2');
   }

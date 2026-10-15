@@ -1147,7 +1147,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261015-health-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261015-health-main-repair-2').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

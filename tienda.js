@@ -278,7 +278,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-health-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-health-main-repair-2');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1024,7 +1024,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-health-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-health-main-repair-2');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1898,7 +1898,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-health-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-health-main-repair-2');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -2109,19 +2109,11 @@ function initWaFloatVisibility() {
   const collisionSelector = '.tt-cart-feedback.is-visible,.tt-privacy-consent:not([hidden])';
   const overlapsRect = (a, b, t = 2) => a.left < b.right - t && a.right > b.left + t && a.top < b.bottom - t && a.bottom > b.top + t;
   let ticking = false;
-  // El botón es position:fixed, así que cualquier control del contenido
-  // normal puede terminar exactamente detrás de él según el scroll y el alto
-  // del viewport. En producto también se vigilan descripción, variantes,
-  // especificaciones, cantidad y bloques de texto para no tapar contenido aunque no sea clickeable (tabla de contenidos de términos/privacidad, última fila de
-  // tarjetas de catálogo, footer en páginas cortas, etc.) — en vez de intentar
-  // reservar espacio para cada caso, se detecta el solape real y se oculta.
-  // Histéresis: ocultar es inmediato (el botón está tapando algo AHORA),
-  // pero volver a mostrarlo espera a que el estado "sin colisión" persista —
-  // un re-render de la grilla desmonta y remonta nodos en milisegundos, y sin
-  // esta espera el botón parpadea (y queda visible sobre contenido durante
-  // esos instantes intermedios).
+  // Sólo los avisos superpuestos pueden ocultarlo; el catálogo que cambia
+  // debajo no requiere medir de nuevo un control fijo.
   const UNHIDE_AFTER_MS = 350;
   let clearSince = 0;
+  let unhideTimer = null;
   // Introspección liviana para depurar en entornos donde no hay consola
   // (auditorías CI, un teléfono real): expone cuántas veces corrió el chequeo
   // y qué decidió, sin afectar el comportamiento.
@@ -2130,20 +2122,25 @@ function initWaFloatVisibility() {
   const check = () => {
     ticking = false;
     stats.checks++;
+    const candidates = [...document.querySelectorAll(collisionSelector)];
+    const hidden = wa.classList.contains('tt-wa-float-hidden');
+    if (!candidates.length && !hidden) return;
     const r = wa.getBoundingClientRect();
     if (r.width <= 0 || r.height <= 0) { stats.zeroRect++; return; }
-    const collided = [...document.querySelectorAll(collisionSelector)].some(node => {
+    const collided = candidates.some(node => {
       if (node === wa || node.closest(EXCLUDE)) return false;
       // Geometría primero: descarta casi todo sin calcular estilos.
       const nr = node.getBoundingClientRect();
       if (nr.width <= 0 || nr.height <= 0 || nr.bottom <= 0 || nr.top >= innerHeight) return false;
       if (!overlapsRect(r, nr)) return false;
       const style = getComputedStyle(node);
-      return !(style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || 1) <= .01);
+      // Un aviso activo reserva su espacio también durante el fade de entrada.
+      return !(style.display === 'none' || style.visibility === 'hidden');
     });
-    const hidden = wa.classList.contains('tt-wa-float-hidden');
     if (collided) {
       clearSince = 0;
+      clearTimeout(unhideTimer);
+      unhideTimer = null;
       if (!hidden) {
         stats.hides++;
         wa.classList.add('tt-wa-float-hidden');
@@ -2152,57 +2149,63 @@ function initWaFloatVisibility() {
       return;
     }
     if (!hidden) return;
-    if (!clearSince) { clearSince = Date.now(); return; }
-    if (Date.now() - clearSince >= UNHIDE_AFTER_MS) {
-      clearSince = 0;
-      stats.unhides++;
-      wa.classList.remove('tt-wa-float-hidden');
-      wa.removeAttribute('tabindex');
+    if (!clearSince) clearSince = performance.now();
+    const remaining = UNHIDE_AFTER_MS - (performance.now() - clearSince);
+    clearTimeout(unhideTimer);
+    if (remaining > 0) {
+      unhideTimer = setTimeout(requestCheck, Math.ceil(remaining) + 1);
+      return;
     }
+    clearSince = 0;
+    unhideTimer = null;
+    stats.unhides++;
+    wa.classList.remove('tt-wa-float-hidden');
+    wa.removeAttribute('tabindex');
   };
   // Scroll y resize disparan en ráfaga — ahí sí conviene coalescer con rAF.
   const requestCheck = () => { if (!ticking) { ticking = true; requestAnimationFrame(check); } };
   window.addEventListener('scroll', requestCheck, { passive: true });
   window.addEventListener('resize', requestCheck);
-  // La tabla de contenidos de términos/privacidad y la grilla de productos
-  // se insertan después de este init (mantenimiento-legal.js, Firestore). El
-  // chequeo corre SINCRÓNICO dentro del propio callback del observer (que es
-  // un microtask pegado a la mutación): así el botón ya está oculto antes de
-  // que cualquier otra tarea pueda ver el estado intermedio con el solape.
-  if (typeof MutationObserver === 'function') {
-    new MutationObserver(() => check()).observe(document.body, { childList: true, subtree: true });
-  }
-  // Los shifts de layout que NO tocan el DOM (una imagen que termina de
-  // decodificar, una fuente que llega, content-visibility que materializa una
-  // tarjeta) no disparan el MutationObserver. ResizeObserver corre dentro del
-  // frame de render, después del layout y antes del paint — es el gancho más
-  // temprano posible para esos casos.
-  if (typeof ResizeObserver === 'function') {
-    const ro = new ResizeObserver(() => check());
-    ro.observe(document.documentElement);
-    ro.observe(document.body);
-    document.querySelectorAll('main,.section,.tt-products-grid,#products-grid,#cat-grid').forEach(node => ro.observe(node));
-  }
-  document.addEventListener('load', () => check(), true);
-  document.fonts?.ready?.then(() => check()).catch(() => {});
-  window.addEventListener('tintin:products-loaded', () => check());
-  window.addEventListener('tintin:products-error', () => check());
-  check();
-  // Un intervalo fijo puede perder la ventana justo antes de que algo mida la
-  // página (por ejemplo esta misma auditoría, que espera nada más 1-2 frames
-  // pintados): si el último tick del intervalo cayó un poco antes, queda un
-  // hueco sin cubrir. Un bucle de rAF corre en CADA frame pintado durante los
-  // primeros segundos —los de mayor actividad real: Firestore, imágenes,
-  // fuentes— así que cualquier cosa que mida "el frame ya pintado" encuentra
-  // el chequeo ya corrido para ese mismo frame. Después, un respaldo más
-  // espaciado alcanza para el resto de la sesión sin gastar batería de más.
-  let rafBudget = 240;
-  const rafLoop = () => {
-    check();
-    if (rafBudget-- > 0) requestAnimationFrame(rafLoop);
+  const overlaySelector = '.tt-cart-feedback,.tt-privacy-consent';
+  const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(requestCheck) : null;
+  const watched = new WeakSet();
+  const watch = node => {
+    if (!watched.has(node)) { watched.add(node); resize?.observe(node); }
   };
-  requestAnimationFrame(rafLoop);
-  setInterval(() => check(), 1000);
+  const overlaysIn = node => node.nodeType === 1
+    ? [...(node.matches(overlaySelector) ? [node] : []), ...node.querySelectorAll(overlaySelector)]
+    : [];
+  watch(wa);
+  document.querySelectorAll(overlaySelector).forEach(watch);
+  if (typeof MutationObserver === 'function') {
+    new MutationObserver(records => {
+      let changed = false;
+      for (const record of records) {
+        if (record.target.nodeType === 1 && record.target.closest(overlaySelector)) changed = true;
+        if (record.type === 'childList') {
+          for (const node of [...record.addedNodes, ...record.removedNodes]) {
+            const overlays = overlaysIn(node);
+            if (overlays.length) changed = true;
+            overlays.forEach(node => {
+              if (node.isConnected) watch(node);
+              else { resize?.unobserve(node); watched.delete(node); }
+            });
+          }
+        } else if (record.target !== wa && record.target.querySelector(overlaySelector)) {
+          changed = true;
+        }
+      }
+      if (changed) requestCheck();
+    }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class', 'style'] });
+  }
+  for (const name of ['transitionend', 'animationend']) {
+    document.addEventListener(name, event => {
+      if (event.target.closest?.(overlaySelector)) requestCheck();
+    });
+  }
+  document.fonts?.ready?.then(requestCheck).catch(() => {});
+  check();
+
 }
 
 /* ──────────────────────────────────────

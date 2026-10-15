@@ -530,17 +530,19 @@ html body #gallery-main.tt-stock-unavailable img { filter: none !important; }
 html body .tt-stock-label {
   position: absolute;
   z-index: 2;
-  left: 12px;
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%) rotate(-12deg);
-  writing-mode: vertical-rl;
+  transform: translate(-50%, -50%);
+  writing-mode: horizontal-tb;
   text-orientation: mixed;
-  padding: 12px 8px;
-  border: 1px solid var(--color-brand-primary,#F8AACA);
-  border-radius: 6px;
-  background: #FFFFFF;
-  color: #222222;
-  font-size: 10px;
+  padding: 12px 18px;
+  max-width: calc(100% - 16px);
+  box-sizing: border-box;
+  border: 1px solid #9CA3AF;
+  border-radius: 8px;
+  background: #E5E7EB;
+  color: #4B5563;
+  font-size: clamp(14px, 2vw, 20px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: .16em;
@@ -550,7 +552,7 @@ html body .tt-stock-label {
 html body .tt-stock-label[hidden] { display: none !important; }
 html body :is(.tt-gallery-thumb,.tt-search-result-media) { position: relative; }
 html body :is(.tt-gallery-thumb,.tt-search-result-media) .tt-stock-label {
-  left: 3px; padding: 4px 2px; font-size: 7px; letter-spacing: .04em;
+  padding: 4px 3px; font-size: 7px; letter-spacing: .04em;
 }
 html body .tt-variant-option.tt-stock-unavailable::after {
   content: 'Agotado'; position: absolute; top: calc(100% + 2px); left: 50%;
@@ -565,4 +567,4 @@ html body .tt-card-color.tt-stock-unavailable::after {
 html body .tt-card-color.tt-stock-unavailable { position: relative; margin-bottom: 10px; }
 html body :is(.tt-card-img-wrap,.tt-product-img) { background: #FFFFFF !important; }
 html body .tt-favorite-media { position: relative; display: block; width: 64px; height: 64px; }
-html body .tt-favorite-media .tt-stock-label { left: 3px; padding: 4px 2px; font-size: 7px; letter-spacing: .04em; }
+html body .tt-favorite-media .tt-stock-label { padding: 4px 3px; font-size: 7px; letter-spacing: .04em; }

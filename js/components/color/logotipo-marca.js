@@ -8,13 +8,13 @@
   svg.setAttribute('width', '0');
   svg.setAttribute('height', '0');
   svg.style.cssText = 'position:absolute;pointer-events:none;overflow:hidden';
-  svg.innerHTML = '<defs><filter id="tt-brand-logo-tint" color-interpolation-filters="sRGB"><feFlood flood-color="#F8AACA" style="flood-color:var(--color-brand-primary,#F8AACA)"/><feComposite in2="SourceAlpha" operator="in"/></filter></defs>';
+  svg.innerHTML = '<defs><filter id="tt-brand-logo-tint" color-interpolation-filters="sRGB"><feFlood flood-color="#F8AACA" style="flood-color:var(--color-brand-primary,#F8AACA)"/><feComposite in2="SourceAlpha" operator="in"/></filter><filter id="tt-brand-logo-tint-light" color-interpolation-filters="sRGB"><feFlood flood-color="#FDECF2" style="flood-color:var(--color-brand-accent,#FDECF2)"/><feComposite in2="SourceAlpha" operator="in"/></filter></defs>';
   if (document.body) document.body.appendChild(svg);
   else document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(svg);
   }, { once: true });
   var style = document.createElement('style');
   style.id = 'tt-brand-logo-tint-style';
-  style.textContent = 'html body img[src*="/images/general/logo.png"]:not(#tt-loader-logo){filter:url("#tt-brand-logo-tint")!important}html body .tt-footer img[src*="/images/general/logo.png"]:not(#tt-loader-logo){filter:brightness(0)!important}html body :is(#account-drawer,#cart-drawer,#notifications-drawer,#collections-sheet) img[src*="/images/general/logo.png"]{filter:brightness(0) invert(1)!important}';
+  style.textContent = 'html body img[src*="/images/general/logo.png"]:not(#tt-loader-logo){filter:url("#tt-brand-logo-tint")!important}html body .tt-footer img[src*="/images/general/logo.png"]:not(#tt-loader-logo){filter:var(--tt-footer-logo-filter,url("#tt-brand-logo-tint"))!important}html body :is(#account-drawer,#cart-drawer,#notifications-drawer,#collections-sheet) img[src*="/images/general/logo.png"]{filter:brightness(0) invert(1)!important}';
   document.head.appendChild(style);
 })();
