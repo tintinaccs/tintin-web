@@ -4,7 +4,7 @@ const { test, expect } = require('@playwright/test');
 
 async function openAccessiblePage(page) {
   await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
-  await page.goto('/about.html', { waitUntil: 'load' });
+  await page.goto('/about.html', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.TintinAccessibility?.booted === true);
   await page.waitForFunction(() => document.documentElement.classList.contains('tt-phase10-a11y-ready'));
 

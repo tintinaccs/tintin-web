@@ -32,6 +32,9 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
       document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflowX, `no debe haber scroll horizontal (${pageName})`).toBeLessThanOrEqual(2);
 
+    // Capturar también las cargas diferidas del shell de Nosotros: la base
+    // anterior pasaba por medir antes de completar su grafo de recursos.
+    if (pageName === 'about.html') await page.waitForTimeout(4000);
     await probeInteraction(page);
     const vitals = await collectVitals(page);
     const thirdPartyDuplicateExtras = (vitals.thirdPartyDuplicateUrls || [])
@@ -75,11 +78,19 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
       expect(vitals.firestoreReads, 'la portada no debe descargar todo el catálogo').toBeLessThanOrEqual(BUDGETS.homeFirestoreReads);
     }
 
+    if (pageName === 'about.html') {
+      const homeOnlyResources = await page.evaluate(() => performance.getEntriesByType('resource')
+        .map(item => new URL(item.name).pathname)
+        .filter(path => path.endsWith('/home/inicio-premium.js') || path.endsWith('/welcome/tutorial-bienvenida.js')));
+      expect(homeOnlyResources, 'Nosotros no descarga la bienvenida exclusiva de Inicio').toEqual([]);
+    }
+
     if (LIGHTWEIGHT_PAGES.has(pageName)) {
       const requestBudget = pageName === 'about.html' ? BUDGETS.aboutRequests : BUDGETS.lightweightRequests;
       // El SDK de App Check es compartido por todas las páginas informativas.
       // Sus recursos externos varían sin añadir descargas de Tintin.
-      // Se mantiene el límite original de 120/121 sobre solicitudes propias;
+      // Se mantienen120 para páginas informativas y127 para las dos fotos
+      // independientes de Nosotros, según la comparación de su grafo completo;
       // peso total, CLS, tiempos y duplicados siguen bajo sus gates independientes.
       const requestsToGate = firstPartyRequests;
       const requestScope = 'solicitudes propias';
