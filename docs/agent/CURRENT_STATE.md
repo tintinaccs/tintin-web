@@ -2190,3 +2190,5 @@ Pendientes/limitaciones: CSS inicial sigue en 417KB sin comprimir (warning del p
 Publicacion autorizada por el titular el 2026-10-15: publicar las mejoras ya verificadas y continuar hasta terminar. Se prepara el plan exacto de mantenimiento, PR y CI; la revision manual del entorno protegido sigue reservada al propietario conforme a MANTENIMIENTO_FLUJOS.md.
 
 Reconciliacion concurrente: base actualizada a 4b29564b (PR1130), conservando footer transparente y versiones de marca. Nuevo plan contra esa base; CI y publicacion del candidato reconciliado pendientes.
+
+CI b3940d92: build, estaticos, reglas y contratos aprobados; UI phase8 recibio aviso report-only frame-ancestors del iframe de Google. Fixture phase8 ahora conserva HTML/CSS reales y carga solo el runtime UX/A11y, sin iniciar servicios externos y sin filtrar errores. Dos pruebas locales aprobadas; nueva CI obligatoria pendiente.
