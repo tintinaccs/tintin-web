@@ -11,7 +11,7 @@ const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-sec
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-20261012-checkout-ready-3-tienda-js-domain-prepared-20261012-6-precutover-20261013-1-security-ready-20261013-2-stock-flow-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1';
-const LOADER_VERSION = 'tintin-20261015-photos-footer-cargador-pagina-1';
+const LOADER_VERSION = 'tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1';
 const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
 const PUBLIC_SHELL_VERSION = 'tintin-20261015-photos-logos-entrada-navegacion-publica-1-about-light-20261015-1-about-gap-crop-20261015-1';
@@ -23,7 +23,7 @@ const PROFILE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-control-acceso-perf
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1';
-const UNIFIED_THEME_VERSION = 'tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1';
+const UNIFIED_THEME_VERSION = 'tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],

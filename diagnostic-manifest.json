@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "970831d641a464c1da749cebf18404a9b621cb33f3ae9431ad484d2a6bb40acb",
+  "sourceFingerprint": "f4c456d06965d08fb831040d313dc8f7d0ea3384e6899ab185cf2363db345d09",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1227,
     "textFiles": 1173,
-    "totalBytes": 18599804,
+    "totalBytes": 18612175,
     "pages": 19,
     "modules": 874
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17263,
-      "sha256": "6ab0d370c3e3d374f833e9b6ee08d18b28d2832be2743ece46b586a17994b139",
+      "bytes": 17393,
+      "sha256": "d22d7b8721c04885e1be04a7988b1cd07712d004c601fde28d0a7771abfbb548",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -104,12 +104,12 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -206,7 +206,7 @@
           "line": 36
         },
         {
-          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 37
         },
@@ -236,7 +236,7 @@
           "line": 131
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 132
         },
@@ -606,13 +606,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -726,7 +726,7 @@
           "exists": true
         },
         {
-          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 37,
           "exists": true
@@ -762,7 +762,7 @@
           "exists": true
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 132,
           "exists": true
@@ -1011,8 +1011,8 @@
         "guest",
         "client"
       ],
-      "bytes": 28365,
-      "sha256": "f767ff0429083f28698830194b6448b0832cb15cb534c385268c890939f78e64",
+      "bytes": 28494,
+      "sha256": "3bc55ed5c10d758451e7aa46fbb32ec63b847e400fe5ebe94b0449589f446c57",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1047,12 +1047,12 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -1159,7 +1159,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -1189,7 +1189,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -1532,13 +1532,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -1664,7 +1664,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -1700,7 +1700,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -1951,8 +1951,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 45542,
-      "sha256": "025a0b4896479b99206bf1be708c6834699d1efd5b9a42c25ac61e10345b4d8b",
+      "bytes": 45620,
+      "sha256": "180ed23c7c001a73ef36314f8cefab86daebcc6c29e1e04dd5f8763cf0f6fdcf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1982,7 +1982,7 @@
       "ids": 18,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2064,7 +2064,7 @@
           "line": 313
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 314
         },
@@ -2109,7 +2109,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2205,7 +2205,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 314,
           "exists": true
@@ -2542,8 +2542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 203241,
-      "sha256": "354dc469bd40429b7341a750f79b93f5eeca22d020ae7de3c8a792c9360d197d",
+      "bytes": 203345,
+      "sha256": "591df056b3fb5598a619057d30b310637ee3f7383f3d124dd0e1f897ae18ba9d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2567,7 +2567,7 @@
       "ids": 568,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2759,7 +2759,7 @@
           "line": 43
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44
         },
@@ -2784,7 +2784,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -2874,7 +2874,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -3102,7 +3102,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44,
           "exists": true
@@ -3132,7 +3132,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -8520,8 +8520,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19767,
-      "sha256": "0ca2c644a3ad1ad2e1114e405dcfe7715d4a55eabe2f108561987f7d16f8e2ff",
+      "bytes": 19897,
+      "sha256": "3920c44b7df9047303629ed87782c732d6da93f4eb2b8485044c1e19d61318ed",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8550,12 +8550,12 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8662,7 +8662,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -8692,7 +8692,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -8972,13 +8972,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -9104,7 +9104,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -9140,7 +9140,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -9335,8 +9335,8 @@
         "guest",
         "client"
       ],
-      "bytes": 59578,
-      "sha256": "73e57e75db6a76194a344814bb0a726f2d757c6a5f543511b54a1b0fdac5b765",
+      "bytes": 59708,
+      "sha256": "d12db2ad8020c62ebac0e737ad1b4c1bd8bd9cb603bcf3879a8a1d3ca71ef70b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9377,12 +9377,12 @@
           "line": 7
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -9494,7 +9494,7 @@
           "line": 48
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49
         },
@@ -9519,7 +9519,7 @@
           "line": 53
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54
         },
@@ -9794,13 +9794,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -9932,7 +9932,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49,
           "exists": true
@@ -9962,7 +9962,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54,
           "exists": true
@@ -10257,8 +10257,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 133175,
-      "sha256": "1d9c4416f117f32a7148d64c694b80286779b425e76f930ca5929b50dbefc011",
+      "bytes": 133305,
+      "sha256": "615517ad6cf9a60f52b71dec5da16c1579b8e1fcc4fec8b4978925a2a8c797a2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10293,12 +10293,12 @@
           "line": 7
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -10415,7 +10415,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -10440,7 +10440,7 @@
           "line": 46
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 47
         },
@@ -10755,13 +10755,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -10899,7 +10899,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -10929,7 +10929,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 47,
           "exists": true
@@ -11622,8 +11622,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21669,
-      "sha256": "a999ab4a9e689b8703c414a78576b5bf9ac16901cade337c292ff6307f702d40",
+      "bytes": 21799,
+      "sha256": "cb0d6a21fba81b7a456fbdcb828fcbd6c84c876085a223c38a95457c7d8388ce",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11658,12 +11658,12 @@
           "line": 7
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -11775,7 +11775,7 @@
           "line": 48
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49
         },
@@ -11805,7 +11805,7 @@
           "line": 54
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55
         },
@@ -12095,13 +12095,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -12233,7 +12233,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49,
           "exists": true
@@ -12269,7 +12269,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55,
           "exists": true
@@ -12470,8 +12470,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26456,
-      "sha256": "227efd6db5faaf8c1236f4b18ad94f8a5ddccf07e0107f66da7480a9607d62df",
+      "bytes": 26586,
+      "sha256": "58159ca5962c8365579abfb53d7c68efa90ec676c595aaccaa46c3e3debb4d18",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12506,12 +12506,12 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -12618,7 +12618,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -12648,7 +12648,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -12973,13 +12973,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -13105,7 +13105,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -13141,7 +13141,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -13403,8 +13403,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23644,
-      "sha256": "5891e65e92fae22c12a5e2f93eeabdbb8796a7917b2c57a3c50254e95dc6ccbb",
+      "bytes": 23774,
+      "sha256": "45d2cc60202d925c8821e451e15f8a8ab032be7ad2ea1a802c1fd5248f11fd35",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13439,12 +13439,12 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -13551,7 +13551,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -13581,7 +13581,7 @@
           "line": 53
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54
         },
@@ -13861,13 +13861,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -13993,7 +13993,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -14029,7 +14029,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54,
           "exists": true
@@ -14264,8 +14264,8 @@
         "guest",
         "client"
       ],
-      "bytes": 37732,
-      "sha256": "78e369b31fe7675e096072389d1e2244ba155aaf3749f87a18a4f020a7dbb129",
+      "bytes": 37862,
+      "sha256": "fff4a27cbe878bf7f614097ed9b938aede08c92dd1b9b87505a2ffab81bb1387",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14306,12 +14306,12 @@
           "line": 7
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -14433,7 +14433,7 @@
           "line": 67
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 68
         },
@@ -14478,7 +14478,7 @@
           "line": 85
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 86
         },
@@ -14879,13 +14879,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -15029,7 +15029,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 68,
           "exists": true
@@ -15083,7 +15083,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 86,
           "exists": true
@@ -15407,8 +15407,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72817,
-      "sha256": "93a7c8714dc93f2ac1029c04fd89750a7f821b18e986bbeb8daa3933cb9f69e6",
+      "bytes": 72947,
+      "sha256": "5683676e5f7d2606e90a71b1f8afbe145e5cd1e1b48934731abd6849eeb20717",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15449,12 +15449,12 @@
           "line": 7
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -15546,7 +15546,7 @@
           "line": 40
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 41
         },
@@ -15586,7 +15586,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -15736,13 +15736,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -15850,7 +15850,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 41,
           "exists": true
@@ -15898,7 +15898,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -16237,8 +16237,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1903,
-      "sha256": "b40784b1f2d8ae1bd817b34ff43f9ae69c58e2bea4c1f9c00f9d83a2939f6490",
+      "bytes": 1981,
+      "sha256": "28bd917f382640f20ac569eedc81ea6f87aa48957752bf08286c15fc10771034",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16255,7 +16255,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 1
         }
@@ -16282,7 +16282,7 @@
           "line": 1
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 1
         }
@@ -16302,7 +16302,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 1,
           "exists": true
@@ -16332,7 +16332,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 1,
           "exists": true
@@ -16368,8 +16368,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 57014,
-      "sha256": "5b2cca5088f4793afb8682e2d6d90e88609a07216a9e93425aebe529ef5738cc",
+      "bytes": 57144,
+      "sha256": "5bc4703fa75b76516c009540c36ebccc8d214b9a0e4c90c2bde685c33caec938",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16410,12 +16410,12 @@
           "line": 7
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -16532,7 +16532,7 @@
           "line": 35
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 36
         },
@@ -16567,7 +16567,7 @@
           "line": 42
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 43
         },
@@ -16892,13 +16892,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -17036,7 +17036,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 36,
           "exists": true
@@ -17078,7 +17078,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 43,
           "exists": true
@@ -17646,8 +17646,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21122,
-      "sha256": "2ffec295b34e09ae647eef4690187610393f3ecafb798f5cfdc91f0a1ad5542f",
+      "bytes": 21252,
+      "sha256": "8dde2bb900a37b62a8dca9974699cfe95e350a80cb99edcbfaae799e4a5a0690",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17676,12 +17676,12 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -17788,7 +17788,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -17818,7 +17818,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -18098,13 +18098,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -18230,7 +18230,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -18266,7 +18266,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -18461,8 +18461,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25112,
-      "sha256": "c4c22b86a4e088f30e9868a5389635889c68dc04d957502356e17fbea456bd82",
+      "bytes": 25242,
+      "sha256": "ad1697d0d65a26fedc340bfbaa4027410f95fc5ddccc1754ee16a2acd2e2e591",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18491,12 +18491,12 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -18598,7 +18598,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -18628,7 +18628,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -19033,13 +19033,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -19159,7 +19159,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -19195,7 +19195,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -19413,8 +19413,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24519,
-      "sha256": "70e1b776ab8048fa8c01346e6342bfbeb9d63ad57ca5942c868dd0467735549e",
+      "bytes": 24675,
+      "sha256": "39c20fe499b17835517340b43ec54086c721c5258fb5f3f38f8bb086fb2bf497",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19443,12 +19443,12 @@
           "line": 7
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -19498,7 +19498,7 @@
           "line": 281
         },
         {
-          "raw": "js/pages/product/productos-relacionados.js?v=tintin-20261008-producto-superficies-1-domain-prepared-20261012-6-pedidos-styles-20261013-1",
+          "raw": "js/pages/product/productos-relacionados.js?v=tintin-20261008-producto-superficies-1-domain-prepared-20261012-6-pedidos-styles-20261013-1-tarjetas-stock-20261015-1",
           "target": "js/pages/product/productos-relacionados.js",
           "line": 282
         },
@@ -19560,7 +19560,7 @@
           "line": 48
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49
         },
@@ -19610,7 +19610,7 @@
           "line": 58
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 59
         },
@@ -19920,13 +19920,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 8,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -19986,7 +19986,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/product/productos-relacionados.js?v=tintin-20261008-producto-superficies-1-domain-prepared-20261012-6-pedidos-styles-20261013-1",
+          "raw": "js/pages/product/productos-relacionados.js?v=tintin-20261008-producto-superficies-1-domain-prepared-20261012-6-pedidos-styles-20261013-1-tarjetas-stock-20261015-1",
           "target": "js/pages/product/productos-relacionados.js",
           "line": 282,
           "exists": true
@@ -20058,7 +20058,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49,
           "exists": true
@@ -20118,7 +20118,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 59,
           "exists": true
@@ -20468,8 +20468,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22990,
-      "sha256": "3ec03452e001aeb79a5b68fb702a880c6db1f7f7ceb67c6ec2a86d19c727b487",
+      "bytes": 23120,
+      "sha256": "c9f0863fcfffaebba2006dd14b68a2b1bc8d3e70ec4e490a4ad2648d8c673553",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20491,12 +20491,12 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -20598,7 +20598,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -20628,7 +20628,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -21053,13 +21053,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -21179,7 +21179,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -21215,7 +21215,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -27097,8 +27097,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 49699,
-      "sha256": "4f0dee2604257241a1eb593613154590042e8af5f43639c288f63cfa43130000",
+      "bytes": 49725,
+      "sha256": "32047eeaf88a9b7f23126a491b63819885d6d871c483a6c640a14a1b2c19a791",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27270,8 +27270,8 @@
     },
     {
       "path": "js/components/color/logotipo-marca.js",
-      "bytes": 1441,
-      "sha256": "62be6b4d2567047bc0fa6a8fb2e78546437130c3db5d56b2ad98376e651e8fa4",
+      "bytes": 1697,
+      "sha256": "a3cdfc14be392f10d67c9c6f3b7687bac2ed7f6feaa65aa8384637cee99c0c14",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31166,8 +31166,8 @@
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
-      "bytes": 13425,
-      "sha256": "a1a96d06fcf2c57ce4adf15c440d04a6f49bcf736cb42192ce7d44ecf235790b",
+      "bytes": 13656,
+      "sha256": "c0132a83d911ffe93deee1a14d6f12859f3ea417b808e03fed8b1e54d018e3e8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31559,8 +31559,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 11058,
-      "sha256": "da1543fda8ddc49bf9a13a422d11fc2e53bc2bb6df6c34e7112135960e3f4111",
+      "bytes": 11084,
+      "sha256": "83ab295504524a8519524d93a5e281aca96be6463d13e50c51fdabc31a508f11",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36401,8 +36401,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 28955,
-      "sha256": "92db39d2397f607a22f395675e7d5672402138365b23507d1c355903d0b0a806",
+      "bytes": 29007,
+      "sha256": "cb14a50c1f347ec55f244fdcb2c09a9e55e1b525caf3f7669a189b2d619ab572",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38862,8 +38862,8 @@
     },
     {
       "path": "tests/catalog/related-cycles.test.mjs",
-      "bytes": 2891,
-      "sha256": "69dde7a7904a9b9179ae10402d705431868bfd92c2e73196687f2a3ff3c6bd99",
+      "bytes": 3472,
+      "sha256": "d167ba7feed31e8f1a814a1169ce8705c31759e15124931a3a6b03b8f127140d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42716,8 +42716,8 @@
     },
     {
       "path": "tests/navigation/public-initial-layout.spec.js",
-      "bytes": 9353,
-      "sha256": "3097d5bb16e307cf6490291a54799d2d3ac36fb858dbf5aa669eb0d2fa05bea3",
+      "bytes": 9798,
+      "sha256": "caf56dd78e50d9c10c7ef432fc46a853267522692ee1fb9416717a78de7683af",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46862,8 +46862,8 @@
     },
     {
       "path": "tests/ui-ux/product-card-colors.spec.js",
-      "bytes": 3239,
-      "sha256": "2413ae849f238dd81782eeb3747f3bb0620e0e7ec0ed5cd732d63b02b16ae4da",
+      "bytes": 5254,
+      "sha256": "8fbe408c3a8786ff74f125f83d55f0c195e539a6669810948b03df413b35aece",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46927,8 +46927,8 @@
     },
     {
       "path": "tests/ui-ux/product-stock-first.spec.js",
-      "bytes": 4652,
-      "sha256": "03d44b1b66ebb94add8ffab86b5ac45781f673c10e5a135a502562d9ee41be9c",
+      "bytes": 4654,
+      "sha256": "ba68696688c320e9604f974498c9ae74df86d68678a18039a240dd73ea7392e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47807,8 +47807,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 17263,
-      "sha256": "6ab0d370c3e3d374f833e9b6ee08d18b28d2832be2743ece46b586a17994b139"
+      "bytes": 17393,
+      "sha256": "d22d7b8721c04885e1be04a7988b1cd07712d004c601fde28d0a7771abfbb548"
     },
     {
       "path": "AGENTS.md",
@@ -47843,14 +47843,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 28365,
-      "sha256": "f767ff0429083f28698830194b6448b0832cb15cb534c385268c890939f78e64"
+      "bytes": 28494,
+      "sha256": "3bc55ed5c10d758451e7aa46fbb32ec63b847e400fe5ebe94b0449589f446c57"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 45542,
-      "sha256": "025a0b4896479b99206bf1be708c6834699d1efd5b9a42c25ac61e10345b4d8b"
+      "bytes": 45620,
+      "sha256": "180ed23c7c001a73ef36314f8cefab86daebcc6c29e1e04dd5f8763cf0f6fdcf"
     },
     {
       "path": "admin-manifest.json",
@@ -47861,8 +47861,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 203241,
-      "sha256": "354dc469bd40429b7341a750f79b93f5eeca22d020ae7de3c8a792c9360d197d"
+      "bytes": 203345,
+      "sha256": "591df056b3fb5598a619057d30b310637ee3f7383f3d124dd0e1f897ae18ba9d"
     },
     {
       "path": "apple-touch-icon.png",
@@ -48275,20 +48275,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 19767,
-      "sha256": "0ca2c644a3ad1ad2e1114e405dcfe7715d4a55eabe2f108561987f7d16f8e2ff"
+      "bytes": 19897,
+      "sha256": "3920c44b7df9047303629ed87782c732d6da93f4eb2b8485044c1e19d61318ed"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 59578,
-      "sha256": "73e57e75db6a76194a344814bb0a726f2d757c6a5f543511b54a1b0fdac5b765"
+      "bytes": 59708,
+      "sha256": "d12db2ad8020c62ebac0e737ad1b4c1bd8bd9cb603bcf3879a8a1d3ca71ef70b"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 133175,
-      "sha256": "1d9c4416f117f32a7148d64c694b80286779b425e76f930ca5929b50dbefc011"
+      "bytes": 133305,
+      "sha256": "615517ad6cf9a60f52b71dec5da16c1579b8e1fcc4fec8b4978925a2a8c797a2"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -48551,8 +48551,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 21669,
-      "sha256": "a999ab4a9e689b8703c414a78576b5bf9ac16901cade337c292ff6307f702d40"
+      "bytes": 21799,
+      "sha256": "cb0d6a21fba81b7a456fbdcb828fcbd6c84c876085a223c38a95457c7d8388ce"
     },
     {
       "path": "config/account-contract.json",
@@ -48575,8 +48575,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 6747,
-      "sha256": "c66a2786537627b4a9474b1616ac22cfb4f1b6a9ebbd936d5f2a03c8172ca2d2"
+      "bytes": 6799,
+      "sha256": "cae4b9071408728271e18e3e8002c0e91746522ac30f35e18b70e8234aac328f"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -48588,7 +48588,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "d31460045ebf32331cf262971b20d1aaf16b90c4c402458092e1777b0370e411"
+      "sha256": "f80fdbe305cf5158d52bd044874929ec74677fbf803cbcbb1e66f5ef8f7ee344"
     },
     {
       "path": "config/public-site.json",
@@ -48605,8 +48605,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 26456,
-      "sha256": "227efd6db5faaf8c1236f4b18ad94f8a5ddccf07e0107f66da7480a9607d62df"
+      "bytes": 26586,
+      "sha256": "58159ca5962c8365579abfb53d7c68efa90ec676c595aaccaa46c3e3debb4d18"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -48857,8 +48857,8 @@
     {
       "path": "css/core/tema-unificado-tintin.css",
       "extension": ".css",
-      "bytes": 50729,
-      "sha256": "7a22703b0c1666f3abf381c8bb67e1d2a1ae5adb5e764f22ada9d5eeaa4a119c"
+      "bytes": 50748,
+      "sha256": "6e9f764e1f74c40fd3a517199d21ac47dc21e514668377d8b0605627268ccd7d"
     },
     {
       "path": "css/core/tokens-color.css",
@@ -49091,8 +49091,8 @@
     {
       "path": "css/theme/sistema-superficies-tintin.css",
       "extension": ".css",
-      "bytes": 19271,
-      "sha256": "19cd75a756ee47ead483f52863814889e9265faeb004f0690125d6f4a790b3f7"
+      "bytes": 21188,
+      "sha256": "f56ef08bee8eb0197b33765fad014b3ee1130aa43c016c5aa5b9ccca9b218afe"
     },
     {
       "path": "css/theme/superficies-marca-responsive-tintin.css",
@@ -49175,8 +49175,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 495733,
-      "sha256": "a7f1c60db7194c53c739c0f638bea9cd045557c2797e21bebd6f6b99fececbf7"
+      "bytes": 498809,
+      "sha256": "ca76798c1711f00c0dde77f652be970f1847190ed5244c929aa9fa859d917082"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -49529,8 +49529,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 29227,
-      "sha256": "6535c3e29c7bce15d8fbafb15aa2068a11ff6f94048cb96dcc0096086cd14673"
+      "bytes": 30483,
+      "sha256": "77f2cd29b134b53fc876fecd43a36f945c774d4f8c2751ace74863a3e4022c60"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -49661,8 +49661,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 23644,
-      "sha256": "5891e65e92fae22c12a5e2f93eeabdbb8796a7917b2c57a3c50254e95dc6ccbb"
+      "bytes": 23774,
+      "sha256": "45d2cc60202d925c8821e451e15f8a8ab032be7ad2ea1a802c1fd5248f11fd35"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -50177,8 +50177,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 37732,
-      "sha256": "78e369b31fe7675e096072389d1e2244ba155aaf3749f87a18a4f020a7dbb129"
+      "bytes": 37862,
+      "sha256": "fff4a27cbe878bf7f614097ed9b938aede08c92dd1b9b87505a2ffab81bb1387"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -50567,8 +50567,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 49699,
-      "sha256": "4f0dee2604257241a1eb593613154590042e8af5f43639c288f63cfa43130000"
+      "bytes": 49725,
+      "sha256": "32047eeaf88a9b7f23126a491b63819885d6d871c483a6c640a14a1b2c19a791"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -50603,8 +50603,8 @@
     {
       "path": "js/components/color/logotipo-marca.js",
       "extension": ".js",
-      "bytes": 1441,
-      "sha256": "62be6b4d2567047bc0fa6a8fb2e78546437130c3db5d56b2ad98376e651e8fa4"
+      "bytes": 1697,
+      "sha256": "a3cdfc14be392f10d67c9c6f3b7687bac2ed7f6feaa65aa8384637cee99c0c14"
     },
     {
       "path": "js/components/color/normalizador-color-tema.js",
@@ -51611,8 +51611,8 @@
     {
       "path": "js/pages/product/productos-relacionados.js",
       "extension": ".js",
-      "bytes": 13425,
-      "sha256": "a1a96d06fcf2c57ce4adf15c440d04a6f49bcf736cb42192ce7d44ecf235790b"
+      "bytes": 13656,
+      "sha256": "c0132a83d911ffe93deee1a14d6f12859f3ea417b808e03fed8b1e54d018e3e8"
     },
     {
       "path": "js/pages/product/resenas-producto.js",
@@ -51695,8 +51695,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 11058,
-      "sha256": "da1543fda8ddc49bf9a13a422d11fc2e53bc2bb6df6c34e7112135960e3f4111"
+      "bytes": 11084,
+      "sha256": "83ab295504524a8519524d93a5e281aca96be6463d13e50c51fdabc31a508f11"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -51827,8 +51827,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72817,
-      "sha256": "93a7c8714dc93f2ac1029c04fd89750a7f821b18e986bbeb8daa3933cb9f69e6"
+      "bytes": 72947,
+      "sha256": "5683676e5f7d2606e90a71b1f8afbe145e5cd1e1b48934731abd6849eeb20717"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -52013,8 +52013,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1903,
-      "sha256": "b40784b1f2d8ae1bd817b34ff43f9ae69c58e2bea4c1f9c00f9d83a2939f6490"
+      "bytes": 1981,
+      "sha256": "28bd917f382640f20ac569eedc81ea6f87aa48957752bf08286c15fc10771034"
     },
     {
       "path": "package-lock.json",
@@ -52031,8 +52031,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 57014,
-      "sha256": "5b2cca5088f4793afb8682e2d6d90e88609a07216a9e93425aebe529ef5738cc"
+      "bytes": 57144,
+      "sha256": "5bc4703fa75b76516c009540c36ebccc8d214b9a0e4c90c2bde685c33caec938"
     },
     {
       "path": "playwright.config.js",
@@ -52055,14 +52055,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 21122,
-      "sha256": "2ffec295b34e09ae647eef4690187610393f3ecafb798f5cfdc91f0a1ad5542f"
+      "bytes": 21252,
+      "sha256": "8dde2bb900a37b62a8dca9974699cfe95e350a80cb99edcbfaae799e4a5a0690"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 25112,
-      "sha256": "c4c22b86a4e088f30e9868a5389635889c68dc04d957502356e17fbea456bd82"
+      "bytes": 25242,
+      "sha256": "ad1697d0d65a26fedc340bfbaa4027410f95fc5ddccc1754ee16a2acd2e2e591"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -52073,8 +52073,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24519,
-      "sha256": "70e1b776ab8048fa8c01346e6342bfbeb9d63ad57ca5942c868dd0467735549e"
+      "bytes": 24675,
+      "sha256": "39c20fe499b17835517340b43ec54086c721c5258fb5f3f38f8bb086fb2bf497"
     },
     {
       "path": "robots.txt",
@@ -52907,8 +52907,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 81587,
-      "sha256": "053f7370a00ea4c7805798e83388add2d941a61f35a31380a11336968f7ea397"
+      "bytes": 81769,
+      "sha256": "acda293b2e08110e032cbfe770fe78b2ae72eabb65f443a26a93bb0f74f309e9"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -53159,8 +53159,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 28955,
-      "sha256": "92db39d2397f607a22f395675e7d5672402138365b23507d1c355903d0b0a806"
+      "bytes": 29007,
+      "sha256": "cb14a50c1f347ec55f244fdcb2c09a9e55e1b525caf3f7669a189b2d619ab572"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -53237,8 +53237,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 22990,
-      "sha256": "3ec03452e001aeb79a5b68fb702a880c6db1f7f7ceb67c6ec2a86d19c727b487"
+      "bytes": 23120,
+      "sha256": "c9f0863fcfffaebba2006dd14b68a2b1bc8d3e70ec4e490a4ad2648d8c673553"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -53597,8 +53597,8 @@
     {
       "path": "tests/catalog/related-cycles.test.mjs",
       "extension": ".mjs",
-      "bytes": 2891,
-      "sha256": "69dde7a7904a9b9179ae10402d705431868bfd92c2e73196687f2a3ff3c6bd99"
+      "bytes": 3472,
+      "sha256": "d167ba7feed31e8f1a814a1169ce8705c31759e15124931a3a6b03b8f127140d"
     },
     {
       "path": "tests/catalog/variant-presentation.test.mjs",
@@ -54215,8 +54215,8 @@
     {
       "path": "tests/navigation/public-initial-layout.spec.js",
       "extension": ".js",
-      "bytes": 9353,
-      "sha256": "3097d5bb16e307cf6490291a54799d2d3ac36fb858dbf5aa669eb0d2fa05bea3"
+      "bytes": 9798,
+      "sha256": "caf56dd78e50d9c10c7ef432fc46a853267522692ee1fb9416717a78de7683af"
     },
     {
       "path": "tests/navigation/section-flow-generator.test.mjs",
@@ -54917,8 +54917,8 @@
     {
       "path": "tests/ui-ux/product-card-colors.spec.js",
       "extension": ".js",
-      "bytes": 3239,
-      "sha256": "2413ae849f238dd81782eeb3747f3bb0620e0e7ec0ed5cd732d63b02b16ae4da"
+      "bytes": 5254,
+      "sha256": "8fbe408c3a8786ff74f125f83d55f0c195e539a6669810948b03df413b35aece"
     },
     {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
@@ -54947,8 +54947,8 @@
     {
       "path": "tests/ui-ux/product-stock-first.spec.js",
       "extension": ".js",
-      "bytes": 4652,
-      "sha256": "03d44b1b66ebb94add8ffab86b5ac45781f673c10e5a135a502562d9ee41be9c"
+      "bytes": 4654,
+      "sha256": "ba68696688c320e9604f974498c9ae74df86d68678a18039a240dd73ea7392e9"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",
