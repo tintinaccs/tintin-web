@@ -85,3 +85,25 @@ test('insertar tarjetas sin cambiar el tamaño no vuelve a medir todas las secci
   });
   await expect(page.locator('[data-tt-flow-block]')).toHaveCount(3);
 });
+
+for (const width of [390, 1440]) test(`logo del footer sigue el fondo personalizado y restaura la alternancia en ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 });
+  await page.route('**/footer-contrast-fixture', route => route.fulfill({ contentType: 'text/html', body: `<style id="tt-global-layout-css">${styles}body{margin:0}section{height:160px}.tt-footer{height:140px}</style><section></section><footer class="tt-footer"><img class="tt-logo-img" src="/assets-tintin/images/general/logo.png"></footer>` }));
+  await page.goto('/footer-contrast-fixture');
+  await page.addScriptTag({ content: fs.readFileSync('js/components/color/logotipo-marca.js', 'utf8') });
+  await page.addScriptTag({ content: runtime });
+  const footer = page.locator('.tt-footer');
+  await expect(footer).toHaveAttribute('data-tt-flow-block', 'pink');
+  for (const [background, rgb, filter] of [['#fdecf2', 'rgb(253, 236, 242)', 'tt-brand-logo-tint'], ['#f8aaca', 'rgb(248, 170, 202)', 'tt-brand-logo-tint-light']]) {
+    await page.evaluate(async background => (await import(new URL('js/components/navigation/compartido/apariencia-global.js', `${location.origin}/`).href)).applyGlobalLayout({ footer: { background } }), background);
+    await expect(footer).toHaveCSS('background-color', rgb);
+    await expect(footer.locator('img')).toHaveCSS('filter', new RegExp('#' + filter + '"?\\)$'));
+    await page.locator('section').evaluate(node => { node.hidden = !node.hidden; });
+    await expect(footer).toHaveCSS('background-color', rgb);
+    await expect(footer.locator('img')).toHaveCSS('filter', new RegExp('#' + filter + '"?\\)$'));
+  }
+  await page.evaluate(async () => (await import(new URL('js/components/navigation/compartido/apariencia-global.js', `${location.origin}/`).href)).applyGlobalLayout({ footer: {} }));
+  await expect.poll(() => footer.evaluate(node => node.style.getPropertyValue('--tt-footer-logo-filter'))).toBe('');
+  await expect(footer).toHaveAttribute('data-tt-flow-block', 'pink');
+  await expect(footer.locator('img')).toHaveCSS('filter', /#tt-brand-logo-tint-light"?\)$/);
+});

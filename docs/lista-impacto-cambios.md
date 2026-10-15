@@ -1,3 +1,7 @@
+## 2026-10-15 — Contraste del logo al conservar el footer personalizado
+
+La reconciliación de1135 conserva el fondo elegido por Super Admin. Se protege también la norma anterior del titular: apariencia-global asigna únicamente el filtro del logo según la luminosidad del fondo elegido y los dos tokens de marca; al retirar la personalización libera ese filtro para volver a la alternancia existente. No modifica el fondo por el logo. Dos Chromium390/1440 verifican rosa claro→logo rosa oscuro, rosa oscuro→logo rosa claro, fondo intacto al ocultar/mostrar otra sección y recuperación de la alternancia al limpiar la configuración. PASS_LOCAL. Versiones y plan se regeneran después del shell final.
+
 ## 2026-10-15 — Candidato integrado: Producto y X de Actions
 
 Codex /root. Base9055392f. Se reconcilian la ficha rápida, las correcciones funcionales del PR1135 y las dependencias de los PR1116/1117/1118 en un único candidato, conservando PR1131/1133. Normalización y transporte públicos mantienen su única autoridad; los SDK de realtime se cargan después de poder pintar la ficha. Se comprueban caché, borrados/categorías tardíos, visibilidad y stock en vivo. Las versiones inmutables de ambos candidatos se alinean antes de regenerar CSP, plan y diagnóstico. Las correcciones de workflows quedan exclusivamente en PR1134, actualizado a229696f2 con build reproducible; el contrato requiere migración revisada del mecanismo, sin modificar sus hashes ni eludir controles.
