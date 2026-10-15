@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   const categories = ['bolsos', 'relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
   await page.route('**/api/public-catalog?resource=collections*', route => route.fulfill({
     json: { ok: true, resource: 'collections', items: categories.map(id => ({
-      id, data: { name: id, visible: true, image: `/assets-tintin/images/collections/col-${id}.webp` }
+      id, data: { name: id, visible: true, image: `/assets-tintin/images/collections/col-${id === 'bolsos' ? 'bags' : id}.webp` }
     })) }
   }));
 });
