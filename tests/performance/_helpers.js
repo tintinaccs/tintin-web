@@ -183,12 +183,14 @@ const BUDGETS = {
   // se mantiene el tripwire muy por debajo de un crecimiento de bloat real.
   homeRequests: 177,
   // Nosotros conserva una composición editorial propia con más recursos de
-  // imagen. Su presupuesto de 121 se aplica a requests first-party para que
+  // imagen. La base 4b29564b completa 129 recursos propios; las dos fotos
+  // suman uno y la bienvenida exclusiva de Inicio elimina tres: límite127.
+  // Se aplica a requests first-party para que
   // reCAPTCHA/otros terceros variables no conviertan el gate en flaky; las
   // demás páginas informativas mantienen el límite first-party de 120; el
   // peso total sigue contando también los recursos externos.
   lightweightRequests: 120,
-  aboutRequests: 121,
+  aboutRequests: 127,
   // Las páginas informativas comparten el shell público (CSS, navegación,
   // fuentes y runtime de tienda) y también leen 'site_content' vía onSnapshot
   // en contenido-sitio.js, gateado por appCheckReady. Desde #725, firebase.js

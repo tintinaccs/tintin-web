@@ -17,10 +17,15 @@ import {
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261012-auth-privacy-1-resolucion-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
 
-// Se mantienen estas inicializaciones porque históricamente dependían de la
-// primera importación de imagenes.js. Ambas son idempotentes.
-import '../../pages/home/inicio-premium.js';
-import '../welcome/tutorial-bienvenida.js?v=tintin-20261012-auth-privacy-1-tutorial-bienvenida-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1';
+// La bienvenida sólo tiene destino en Inicio. Cargarla desde las fotos
+// institucionales también arrastraba sus módulos de sesión y configuración.
+const imagePage = (window.location.pathname || '').toLowerCase();
+if (imagePage === '/' || imagePage.endsWith('/index.html') || imagePage === '') {
+  Promise.all([
+    import('../../pages/home/inicio-premium.js'),
+    import('../welcome/tutorial-bienvenida.js?v=tintin-20261012-auth-privacy-1-tutorial-bienvenida-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1'),
+  ]).catch(error => console.warn('[images] No se pudo iniciar la bienvenida:', error));
+}
 
 const CACHE_KEY = 'tt_images';
 const FIRESTORE_DOC = 'settings/images';
