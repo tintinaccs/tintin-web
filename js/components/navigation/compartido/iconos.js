@@ -25,6 +25,7 @@ export const CATEGORIES = Object.freeze([
   Object.freeze({ slug: 'pulseras', label: 'Pulseras', background: 'linear-gradient(135deg,#e0b8c8,#c07888)' }),
   Object.freeze({ slug: 'relojes', label: 'Relojes', background: 'linear-gradient(135deg,#b8849a,#8b5070)' }),
   Object.freeze({ slug: 'tobilleras', label: 'Tobilleras', background: 'linear-gradient(135deg,#d8a8c0,#b06888)' }),
+  Object.freeze({ slug: 'bolsos', label: 'Bags', background: 'linear-gradient(135deg,#e0b8c8,#c07888)' }),
 ]);
 
 // Fuente canónica del respaldo visual del menú. Las tres superficies del

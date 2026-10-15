@@ -23,13 +23,14 @@ test('el API público agrupa antes de filtrar visibilidad y normaliza productos 
   const context = vm.createContext({ wristCategory, unifyWristCollections, decodeFirestoreFields: value => value, firestoreAdminListAll: async () => context.docs });
   const source = fs.readFileSync('functions/api/public-catalog.js', 'utf8').replace(/^import[\s\S]*?;\s*$/gm, '').replace(/\bexport\s+/g, '');
   vm.runInContext(source, context);
-  context.docs = [{ name: 'collections/brazaletes', fields: { name: 'Brazaletes', visible: true } }, { name: 'collections/pulseras', fields: { name: 'Pulseras', visible: false } }, { name: 'collections/aros', fields: { name: 'Aros', visible: true } }];
+  context.docs = [{ name: 'collections/brazaletes', fields: { name: 'Brazaletes', visible: true, image: '/legacy.webp' } }, { name: 'collections/pulseras', fields: { name: 'Pulseras', visible: false, imageUrl: '/preferred.webp' } }, { name: 'collections/aros', fields: { name: 'Aros', visible: true } }];
   let payload = await vm.runInContext("buildPayload({}, 'collections')", context);
   assert.deepEqual(Array.from(payload.items, item => item.id), ['aros']);
   context.docs[1].fields.visible = true;
   payload = await vm.runInContext("buildPayload({}, 'collections')", context);
   assert.equal(payload.items.length, 2);
   assert.equal(payload.items.filter(item => item.id === 'pulseras').length, 1);
+  assert.equal(payload.items.find(item => item.id === 'pulseras').data.image, '/preferred.webp');
   context.docs = [{ name: 'products/legacy', fields: { name: 'Pulsera rígida', category: 'brazaletes', active: true, price: 10000, privateNote: 'no publicar' } }];
   payload = await vm.runInContext("buildPayload({}, 'products')", context);
   assert.equal(payload.items[0].data.category, 'pulseras');

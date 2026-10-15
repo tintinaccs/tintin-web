@@ -32,7 +32,7 @@ test('public collections deduplicate canonical URLs while preserving empty publi
  vm.runInContext(block(src,'export function normalizeCollectionSlug','function withResolvedImages').replace(/\bexport\s+/g,''),c);
  c.rows=[{slug:'bags',name:'Removed',order:2},{slug:'bolsos',name:'Removed too',order:1},{slug:'ear-cuff',name:'Empty',order:3},{slug:'earcuff',name:'Duplicate',order:4},{slug:'hidden',name:'Hidden',order:0,visible:false}];
  const rows=vm.runInContext('canonicalPublicCollections(rows)',c);
- assert.deepEqual(Array.from(rows,x=>x.slug),['earcuff']);assert.equal(rows[0].name,'Empty');
+ assert.deepEqual(Array.from(rows,x=>x.slug),['bolsos','earcuff']);assert.equal(rows.find(item => item.slug === 'earcuff').name,'Empty');
 });
 
 test('catalog load error stays an error through the maintenance guard', () => {

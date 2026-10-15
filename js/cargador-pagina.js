@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-main-sync-20261014-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1-bags-20261014-1');
     }
   }
 
@@ -920,7 +920,7 @@
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261012-checkout-ready-3-presentacion-colecciones-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261012-checkout-ready-3-presentacion-colecciones-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1-bags-20261014-1');
     }
   }
 

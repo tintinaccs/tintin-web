@@ -17,7 +17,7 @@ import {
   runSingleFlight,
   writeCached
 } from '../../core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
-import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1';
+import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1-bags-20261014-1';
 
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
@@ -26,7 +26,7 @@ if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   ]);
 }
 
-const CACHE_KEY = 'collections:public';
+const CACHE_KEY = 'collections:public:unified-v2';
 const CACHE_TTL = 30 * 60 * 1000;
 
 export function normalizeCollectionDoc(id, data) {
@@ -53,7 +53,7 @@ export function canonicalPublicCollections(collections) {
   const seen = new Set();
   return sortCols(unifyWristCollections(collections).filter(item => item.visible !== false)).flatMap(item => {
     const slug = normalizeCollectionSlug(item.slug);
-    if (!slug || slug === 'bolsos') return [];
+    if (!slug) return [];
     if (seen.has(slug)) {
       console.warn('[collections-store] slug público duplicado:', slug);
       return [];

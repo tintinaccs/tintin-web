@@ -91,7 +91,7 @@ async function buildPayload(env, resource, productId = '') {
   })).filter(item => item.id);
   // Agrupar antes de filtrar: Pulseras oculta también su documento anterior.
   if (resource === 'collections') {
-    items = unifyWristCollections(items.map(item => ({ slug: item.id, ...item.data })))
+    items = unifyWristCollections(items.map(item => ({ slug: item.id, ...item.data, image: item.data.image || item.data.imageUrl || '' })))
       .map(item => ({ id: item.slug, data: pickKnownFields(item, COLLECTION_FIELDS) }));
   } else {
     items = items.map(item => {
@@ -144,6 +144,7 @@ export async function onRequest({ request, env, waitUntil }) {
 
   const cacheUrl = new URL(request.url);
   cacheUrl.search = '?resource=' + resource + (productId ? '&id=' + encodeURIComponent(productId) : '');
+  if (resource === 'collections') cacheUrl.searchParams.set('schema', 'unified-v2');
   const cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
   const cache = caches.default;
   const cached = await cache.match(cacheKey);
