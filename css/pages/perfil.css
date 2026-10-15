@@ -198,7 +198,7 @@
     .tt-profile-meta{min-width:0;overflow-wrap:anywhere}
     .tt-profile-meta .perfil-name{text-transform:none!important;letter-spacing:-.02em!important;font-size:clamp(20px,3vw,30px)!important;line-height:1.25!important;overflow-wrap:anywhere}
     .tt-profile-meta-extra{margin-top:6px;font-size:12px;color:var(--text-muted);display:flex;gap:8px;flex-wrap:wrap}
-    .tt-profile-tabs{position:relative;display:flex;flex-wrap:wrap;gap:6px;overflow:visible;padding:7px;background:rgba(255,255,255,.96);border:1px solid #ecd4dd;border-radius:16px;margin:0 0 18px;box-shadow:0 8px 24px rgba(83,33,52,.07);scrollbar-width:none}
+    .tt-profile-tabs{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:6px;overflow:visible;padding:7px;background:rgba(255,255,255,.96);border:1px solid #ecd4dd;border-radius:16px;margin:0 0 18px;box-shadow:0 8px 24px rgba(83,33,52,.07);scrollbar-width:none}
     .tt-profile-tabs::-webkit-scrollbar{display:none}
     .tt-profile-tab{position:relative;flex:0 0 auto;border:0;background:transparent;color:#222222;border-radius:11px;padding:11px 14px;font:700 11px/1 Montserrat;cursor:pointer;white-space:nowrap}
     .tt-profile-tab[aria-selected="true"]{background:#fde8f0;color:#222222}

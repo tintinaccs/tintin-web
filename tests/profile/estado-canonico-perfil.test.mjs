@@ -9,12 +9,12 @@ test('Firestore prevalece sobre el nombre, pero un avatar vacío no tapa la foto
   assert.equal(identity.email, 'cliente@example.com');
 });
 
-test('la foto de Google prevalece sobre el valor histórico del perfil', () => {
+test('una foto propia histórica prevalece sobre Google', () => {
   const photoURL = resolveAccountAvatar(
     { photoURL: 'https://cdn.example.com/legacy-profile.png' },
     { photoURL: 'https://cdn.example.com/current-auth.png', providerData: [{ providerId: 'google.com', photoURL: 'https://lh3.googleusercontent.com/a/google-photo' }] },
   );
-  assert.equal(photoURL, 'https://lh3.googleusercontent.com/a/google-photo');
+  assert.equal(photoURL, 'https://cdn.example.com/legacy-profile.png');
 });
 
 test('una foto elegida explícitamente conserva prioridad sobre Google', () => {
@@ -48,4 +48,8 @@ test('los errores no se convierten en un perfil vacío', () => {
 test('pedidos se deduplican y una consulta incompleta falla explícitamente', () => {
   assert.deepEqual(reconcileAccountOrders([[{ id: 'a', total: 10 }], [{ id: 'a', total: 20 }, { id: 'b', total: 30 }]]), [{ id: 'a', total: 20 }, { id: 'b', total: 30 }]);
   assert.throws(() => reconcileAccountOrders([[{ id: 'a' }], null]), /orders-incomplete/);
+});
+
+test('una copia antigua de Google usa la foto actual de Google como respaldo',()=>{
+ assert.equal(resolveAccountAvatar({photoURL:'https://lh3.googleusercontent.com/old'},{providerData:[{providerId:'google.com',photoURL:'https://lh3.googleusercontent.com/current'}]}),'https://lh3.googleusercontent.com/current');
 });

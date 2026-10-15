@@ -43,3 +43,17 @@ for (const width of [320, 390, 768, 1024, 1440, 1920]) {
     expect(title.x + title.width).toBeLessThanOrEqual(width);
   });
 }
+
+const profileHtml=removeFixtureScripts(fs.readFileSync('perfil.html','utf8'));
+for(const width of [320,390,768,1024,1440,1920]) test(`perfil muestra pestañas completas sobre las transiciones en ${width}px`,async({page})=>{
+ await page.setViewportSize({width,height:900});
+ await page.route('**/__profile-flow',r=>r.fulfill({contentType:'text/html',body:profileHtml}));
+ await page.goto('/__profile-flow');await page.addScriptTag({content:runtime});
+ await expect(page.locator('.tt-profile-tabs')).toHaveCSS('position','relative');
+ const tabs=page.locator('[data-profile-tab]');
+ for(let i=0;i<await tabs.count();i++){
+  await tabs.nth(i).scrollIntoViewIfNeeded();
+  expect(await tabs.nth(i).evaluate(n=>{const r=n.getBoundingClientRect();return [0.2,0.8].every(y=>n.contains(document.elementFromPoint(r.left+r.width/2,r.top+r.height*y)));})).toBe(true);
+ }
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+});

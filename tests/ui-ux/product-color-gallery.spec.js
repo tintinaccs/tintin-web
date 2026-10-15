@@ -81,8 +81,11 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   expect(geometry.overflow).toBe(false);
   expect(geometry.main.left).toBeGreaterThanOrEqual(16);
   expect(geometry.main.right).toBeLessThanOrEqual(width-16);
-  expect(await page.locator('.tt-product-info-panel').evaluate(node=>getComputedStyle(node).boxShadow)).toBe('none');
-  expect(await page.locator('.tt-product-info-panel').evaluate(node=>getComputedStyle(node).borderTopWidth)).toBe('0px');
+  expect(await page.locator('.tt-product-info-panel').evaluate(node=>parseFloat(getComputedStyle(node).paddingLeft))).toBeGreaterThanOrEqual(16);
+  for (const selector of ['.tt-product-info-panel','.tt-product-gallery']) {
+    expect(await page.locator(selector).evaluate(node=>parseFloat(getComputedStyle(node).borderTopLeftRadius))).toBeGreaterThanOrEqual(20);
+  }
+  expect(geometry.actions[0].left-geometry.panel.left).toBeGreaterThanOrEqual(16);
   for (const button of geometry.actions) {
     expect(button.left).toBeGreaterThanOrEqual(geometry.panel.left-1);expect(button.right).toBeLessThanOrEqual(geometry.panel.right+1);expect(button.height).toBeGreaterThanOrEqual(52);
   }
