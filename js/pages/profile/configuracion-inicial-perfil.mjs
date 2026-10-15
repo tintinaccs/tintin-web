@@ -188,9 +188,11 @@ export function toSavedLocation(place = {}) {
   const normalized = normalizeStoredLocation(place);
   const lat = Number(normalized.lat);
   const lng = Number(normalized.lng);
-  const name = clean(normalized.name);
-  const address = clean(normalized.address);
-  if (!name || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  const name = clean(normalized.name).slice(0, 120);
+  const address = clean(normalized.address).slice(0, 1000);
+  if (!name || normalized.lat == null || normalized.lng == null || normalized.lat === '' || normalized.lng === '' ||
+      typeof normalized.lat === 'boolean' || typeof normalized.lng === 'boolean' ||
+      !Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
   return { lat, lng, name, ...(address ? { address } : {}) };
 }
 

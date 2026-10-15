@@ -191,7 +191,7 @@ try {
   await fails(getDoc(doc(anon, 'users', 'client1')));
   await fails(getDoc(doc(anon, 'orders', 'client1_order1')));
   await fails(setDoc(doc(anon, 'orders', 'anon_order'), directOrderPayload));
-  await succeeds(setDoc(doc(anon, 'sitePresence', 'visitor_123456'), {
+  await fails(setDoc(doc(anon, 'sitePresence', 'visitor_123456'), {
     visitorId: 'visitor_123456',
     sessionId: 'session_123456',
     userId: '',
@@ -253,6 +253,21 @@ try {
   await fails(setDoc(doc(client1Unverified, 'users', 'client1Unverified'),
     newProfile('client1Unverified', claims.client1.email)));
   await succeeds(updateDoc(doc(client1, 'users', 'client1'), { name: 'Nombre válido' }));
+  const savedLocation = { lat: -25.3, lng: -57.6, name: 'Casa', address: 'Calle 1' };
+  await succeeds(updateDoc(doc(client1, 'users', 'client1'), { savedLocation, savedLocations: [savedLocation] }));
+  await succeeds(updateDoc(doc(client1, 'users', 'client1'), { savedLocations: Array(5).fill(savedLocation) }));
+  for (const bad of [{ ...savedLocation, lat: 91 }, { ...savedLocation, lng: -181 }, { ...savedLocation, lat: null },
+    { ...savedLocation, name: 'x'.repeat(121) }, { ...savedLocation, address: 'x'.repeat(1001) }, { ...savedLocation, secret: 'extra' }]) {
+    await fails(updateDoc(doc(client1, 'users', 'client1'), { savedLocation: bad }));
+    await fails(updateDoc(doc(client1, 'users', 'client1'), { savedLocations: [savedLocation, bad] }));
+  }
+  await fails(updateDoc(doc(client1, 'users', 'client1'), { savedLocations: Array(6).fill(savedLocation) }));
+  await fails(updateDoc(doc(client1, 'users', 'client2'), { savedLocations: [savedLocation] }));
+  await testEnv.withSecurityRulesDisabled(async context => {
+    await updateDoc(doc(context.firestore(), 'users', 'client1'), { savedLocation: { historical: true } });
+  });
+  await succeeds(updateDoc(doc(client1, 'users', 'client1'), { name: 'Conserva compatibilidad histórica' }));
+  await succeeds(updateDoc(doc(client1, 'users', 'client1'), { savedLocation: null, savedLocations: [] }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { role: 'admin' }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { blocked: true }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { customerId: 'CUS_otro' }));
@@ -357,11 +372,11 @@ try {
     userAgent: 'test-agent',
     createdAt: serverTimestamp()
   };
-  await succeeds(addDoc(collection(anon, 'authDiagnosticFailures'), authFailure));
-  await succeeds(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, reason: 'auth-restore-fallback' }));
-  await succeeds(addDoc(collection(client1, 'authDiagnosticFailures'), { ...authFailure, reason: 'handoff-restore-error' }));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), authFailure));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, reason: 'auth-restore-fallback' }));
+  await fails(addDoc(collection(client1, 'authDiagnosticFailures'), { ...authFailure, reason: 'handoff-restore-error' }));
   const { userAgent: _omitUserAgent, ...authFailureNoAgent } = authFailure;
-  await succeeds(addDoc(collection(anon, 'authDiagnosticFailures'), authFailureNoAgent));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), authFailureNoAgent));
   await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, reason: 'auth-state-unknown' }));
   await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, reason: 'cualquier-texto' }));
   await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, code: 'OTRO_CODIGO' }));
@@ -371,7 +386,9 @@ try {
   await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, userAgent: 'x'.repeat(201) }));
   await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, createdAt: new Date() }));
   await fails(addDoc(collection(ctx('blocked1'), 'authDiagnosticFailures'), authFailure));
-  await succeeds(setDoc(doc(anon, 'authDiagnosticFailures', 'fixed_event'), authFailure));
+  await testEnv.withSecurityRulesDisabled(async context => {
+    await setDoc(doc(context.firestore(), 'authDiagnosticFailures', 'fixed_event'), authFailure);
+  });
   await fails(getDoc(doc(anon, 'authDiagnosticFailures', 'fixed_event')));
   await fails(getDoc(doc(client1, 'authDiagnosticFailures', 'fixed_event')));
   await fails(getDoc(doc(admin, 'authDiagnosticFailures', 'fixed_event')));

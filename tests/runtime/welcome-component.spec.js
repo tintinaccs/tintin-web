@@ -25,6 +25,20 @@ async function mount(page,profile,{ready=true,failWrite=false,preview=false}={})
   await page.addScriptTag({content:source});
 }
 const fresh={role:'client',profileStatus:'active',welcomeTutorialPending:true,onboardingCompleted:false};
+
+test('el formulario administrativo conserva comillas como texto sin crear atributos', async ({page}) => {
+  const admin = fs.readFileSync('js/admin/content/control-bienvenida-admin.js', 'utf8');
+  const helper = admin.match(/  function escapeHtml\(value\) \{[\s\S]*?\n  \}/)[0];
+  const payload = 'Título" data-injected="yes\'><img src=x onerror=alert(1)>';
+  await page.setContent('<main></main>');
+  await page.evaluate(({helper, payload}) => {
+    const escapeHtml = new Function(helper + ';return escapeHtml;')();
+    document.querySelector('main').innerHTML = `<input value="${escapeHtml(payload)}"><textarea>${escapeHtml(payload)}</textarea>`;
+  }, {helper, payload});
+  await expect(page.locator('input')).toHaveValue(payload);
+  await expect(page.locator('textarea')).toHaveValue(payload);
+  await expect(page.locator('[data-injected],img')).toHaveCount(0);
+});
 test('primera guía confirmada: visible, centrada y cierre independiente de red en cuatro tamaños',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   for(const size of [{width:320,height:568},{width:390,height:844},{width:768,height:1024},{width:1440,height:900}]){

@@ -6,7 +6,7 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '../..');
 const types = {
-  '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
+  '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2',
 };
 let server;
@@ -98,6 +98,10 @@ test('layout global vacío hereda el diseño existente y los overrides explícit
   await page.goto(`${baseUrl}/index.html`);
   await expect(page.locator('#tt-tabbar')).toBeVisible({ timeout: 30000 });
   await expect(page.locator('.tt-footer')).toBeAttached();
+  // Esperar las autoridades de layout antes de capturar la geometría heredada.
+  await expect(page.locator('html')).toHaveAttribute('data-tt-global-layout', /ready|fallback/);
+  await expect(page.locator('.tt-footer')).toHaveAttribute('data-tt-flow-block', /pink|light/);
+  await expect(page.locator('.tt-footer')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
 
   const before = await page.evaluate(() => ({
     tabbarBackground: getComputedStyle(document.getElementById('tt-tabbar')).backgroundColor,

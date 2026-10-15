@@ -4,7 +4,7 @@ import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.m
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
-import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261015-health-1';
 import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import {
@@ -1123,13 +1123,10 @@ function classifyAdminSessionFailure(authReason, handoffPending) {
 // cualquier falla de red o de permisos se descarta en silencio.
 async function persistAuthDiagnosticFailure(reason) {
   try {
-    await addDoc(collection(db, 'authDiagnosticFailures'), {
-      code: 'REDIRECT_LOOP_BROKEN',
-      reason,
-      source: 'admin-guard',
-      route: `${window.location.pathname || '/'}${window.location.search || ''}`.slice(0, 220),
-      userAgent: (navigator.userAgent || '').slice(0, 200),
-      createdAt: serverTimestamp()
+    await fetch('/api/site-activity', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: 'authFailure', reason, route: window.location.pathname || '/' }),
+      signal: AbortSignal.timeout(5000),
     });
   } catch {}
 }

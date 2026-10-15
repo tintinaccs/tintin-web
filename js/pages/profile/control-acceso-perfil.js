@@ -20,7 +20,7 @@ import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesio
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261010-registration-name-2";
+import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261015-health-1";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el

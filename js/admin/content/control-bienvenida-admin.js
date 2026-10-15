@@ -37,9 +37,9 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
   };
 
   function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.textContent = String(value ?? '');
-    return div.innerHTML;
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[char]);
   }
 
   function uid() {

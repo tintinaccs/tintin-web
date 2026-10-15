@@ -72,10 +72,30 @@ function getBearerToken(request) {
  * al flujo cliente de Firebase Auth y, con App Check Enforcement activo, puede
  * rechazar llamadas servidor-a-servidor aunque el ID token sea válido.
  */
-export async function requireFirebaseUser(request, env) {
+export async function requireFirebaseUser(request, env, {
+  verify = verifyFirebaseIdToken, limit = enforceAuthenticatedRateLimit, get = firestoreAdminGet,
+} = {}) {
   const token = getBearerToken(request);
-  const user = await verifyFirebaseIdToken(token);
-  await enforceAuthenticatedRateLimit(request, env, user);
+  const user = await verify(token);
+  await limit(request, env, user);
+  // El ID token puede seguir vigente después de bloquear o eliminar la cuenta.
+  // El perfil es la autoridad de estado; uno ausente permite completar el alta.
+  // Super Admin conserva la misma excepción explícita que Firestore Rules.
+  if (user.email !== SUPERADMIN_EMAIL) {
+    let document;
+    try { document = await get(env, `users/${encodeURIComponent(user.uid)}`); }
+    catch {
+      throw Object.assign(new Error('No se pudo comprobar la cuenta. Reintentá.'), {
+        status: 503, code: 'auth/account-state-unavailable',
+      });
+    }
+    const profile = decodeFirestoreFields(document?.fields || {});
+    if (profile.blocked === true || profile.deleted === true || profile.profileStatus === 'deleted') {
+      throw Object.assign(new Error('La cuenta no está habilitada para esta operación.'), {
+        status: 403, code: 'auth/account-disabled',
+      });
+    }
+  }
   return user;
 }
 

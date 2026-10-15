@@ -7,14 +7,8 @@
  *   código postal, navegador, nombre, correo ni referidor.
  * - El identificador aleatorio rota cada día y no se vincula con la cuenta.
  */
-import { db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { appCheckReady } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-prepared-20261012-6-pedidos-styles-20261013-1';
-import {
-  doc,
-  increment,
-  serverTimestamp,
-  setDoc
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange
@@ -62,7 +56,6 @@ if (
   let identityDay = '';
   let visitorId = '';
   let sessionId = '';
-  let geoPromise = null;
   let permanentWriteErrorCode = '';
   let heartbeatInFlight = false;
   let lastHeartbeatWriteAt = 0;
@@ -183,82 +176,12 @@ if (
     // navegación completa "olvide" el throttle de 20s que la regla de Firestore sí
     // recuerda, lo que antes producía permission-denied al cambiar de página.
     lastHeartbeatWriteAt = readLastHeartbeatWriteAt(dayKey, visitorId);
-    geoPromise = null;
     return dayKey;
   }
 
   function safePage() {
     const page = (window.location.pathname || '/').replace(/[^a-z0-9/_\-.]/gi, '').slice(0, 160);
     return page || '/';
-  }
-
-  function cleanGeoText(value, maxLength = 80) {
-    return String(value || '')
-      .normalize('NFKC')
-      .replace(/[^\p{L}\p{M}\p{N} .,'’()\-]/gu, '')
-      .trim()
-      .slice(0, maxLength);
-  }
-
-  function normalizeGeo(value) {
-    const countryCode = /^[A-Z]{2}$/i.test(value?.countryCode || '')
-      ? String(value.countryCode).toUpperCase()
-      : '';
-
-    // Firestore conserva el valor histórico "netlify" para no exigir una
-    // migración de reglas únicamente por el cambio de proveedor de edge.
-    const provider = value?.source === 'cloudflare' || value?.source === 'netlify'
-      ? 'netlify'
-      : 'unavailable';
-
-    return {
-      city: cleanGeoText(value?.city),
-      region: cleanGeoText(value?.region),
-      country: cleanGeoText(value?.country),
-      countryCode,
-      geoSource: provider === 'netlify' && (countryCode || value?.city)
-        ? 'netlify'
-        : 'unavailable'
-    };
-  }
-
-  function geoEndpoint() {
-    return apiUrl('visitor-geo');
-  }
-
-  async function fetchApproximateGeo() {
-    const dayKey = refreshIdentity();
-    try {
-      const cached = JSON.parse(storageGet(window.sessionStorage, GEO_KEY) || '{}');
-      if (cached.day === dayKey && cached.value) return normalizeGeo(cached.value);
-    } catch {}
-
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 4000);
-    try {
-      const response = await fetch(geoEndpoint(), {
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'omit',
-        cache: 'no-store',
-        headers: { Accept: 'application/json' },
-        referrerPolicy: 'strict-origin-when-cross-origin',
-        signal: controller.signal
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const value = normalizeGeo(await response.json());
-      storageSet(window.sessionStorage, GEO_KEY, JSON.stringify({ day: dayKey, value }));
-      return value;
-    } catch {
-      return normalizeGeo(null);
-    } finally {
-      window.clearTimeout(timeout);
-    }
-  }
-
-  function getGeo() {
-    if (!geoPromise) geoPromise = fetchApproximateGeo();
-    return geoPromise;
   }
 
   function hasConsent() {
@@ -272,17 +195,8 @@ if (
     if (storageGet(window.sessionStorage, recordedKey) === sessionId) return;
 
     try {
-      const geo = await getGeo();
       if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
-      await setDoc(doc(db, 'siteTraffic', dayKey, 'sessions', sessionId), {
-        dayKey,
-        sessionId,
-        visitorId,
-        userId: '',
-        landingPage: safePage(),
-        ...geo,
-        startedAt: serverTimestamp()
-      });
+      await postActivity('session', { sessionId, visitorId, route: safePage(), consent: true });
       storageSet(window.sessionStorage, recordedKey, sessionId);
     } catch (error) {
       if (!stopAfterPermanentWriteError(error, 'registrar la sesión')) {
@@ -313,18 +227,10 @@ if (
       visibility: document.visibilityState
     });
     try {
-      const geo = await getGeo();
       if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
       lastHeartbeatWriteAt = Date.now();
       writeLastHeartbeatWriteAt(identityDay, visitorId, lastHeartbeatWriteAt);
-      await setDoc(doc(db, 'sitePresence', visitorId), {
-        visitorId,
-        sessionId,
-        userId: '',
-        page: safePage(),
-        ...geo,
-        lastSeen: serverTimestamp()
-      }, { merge: true });
+      await postActivity('presence', { visitorId, sessionId, route: safePage(), consent: true });
       recordActivityDiagnostic('HEARTBEAT_WRITE_SUCCESS', {
         ruleMinimumIntervalMs: MIN_HEARTBEAT_INTERVAL_MS,
         visibility: document.visibilityState
@@ -387,17 +293,21 @@ if (
     const recordedKey = AGGREGATE_RECORDED_PREFIX + dayKey;
     if (storageGet(window.sessionStorage, recordedKey) === '1') return;
     try {
-      await setDoc(doc(db, 'siteAggregate', dayKey), {
-        dayKey,
-        totalVisits: increment(1),
-        updatedAt: serverTimestamp()
-      }, { merge: true });
+      await postActivity('aggregate');
       storageSet(window.sessionStorage, recordedKey, '1');
     } catch (error) {
       if (!stopAfterPermanentWriteError(error, 'registrar la visita agregada')) {
         console.warn('[SiteActivity] No se pudo registrar la visita agregada:', error?.code || error);
       }
     }
+  }
+
+  async function postActivity(kind, fields = {}) {
+    const response = await fetch(apiUrl('site-activity'), {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ kind, ...fields }), signal: AbortSignal.timeout(5000),
+    });
+    if (!response.ok) throw Object.assign(new Error('Activity unavailable'), { code: response.status === 403 ? 'permission-denied' : 'activity-unavailable' });
   }
 
   function clearLocalAnalyticsIds() {
@@ -409,7 +319,6 @@ if (
     identityDay = '';
     visitorId = '';
     sessionId = '';
-    geoPromise = null;
   }
 
   const hostname = String(window.location.hostname || '').toLowerCase();

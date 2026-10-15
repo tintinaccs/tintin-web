@@ -135,7 +135,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-stock-flow-20261014-1-ui-fixes-20261014-1');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261015-health-1');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 

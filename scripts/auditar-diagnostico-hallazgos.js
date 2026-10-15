@@ -74,7 +74,8 @@ check(
     manifest.firestore.unboundedReads.length === 0
 );
 
-check('admin.html pesa menos de 200 KB', Buffer.byteLength(adminHtml, 'utf8') < 200 * 1024);
+// Git publica LF en el runner: medir el mismo artefacto canónico en Windows.
+check('admin.html canónico pesa menos de 200 KB', Buffer.byteLength(adminHtml.replace(/\r\n?/g, '\n'), 'utf8') < 200 * 1024);
 check(
   'La aplicación administrativa fue extraída a un módulo cargado de forma diferida',
   exists('js/admin/admin-app.js') &&

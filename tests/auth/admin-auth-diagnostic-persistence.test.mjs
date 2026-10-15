@@ -6,6 +6,7 @@ const read = relative => fs.readFileSync(new URL('../../' + relative, import.met
 
 const admin = read('js/admin/admin-app.js');
 const rules = read('firestore.rules');
+const activityApi = read('functions/api/site-activity.js');
 
 const classifySource = admin.match(/function classifyAdminSessionFailure\(authReason, handoffPending\) \{[\s\S]*?\n\}/)?.[0];
 const classifyAdminSessionFailure = classifySource
@@ -42,14 +43,14 @@ test('El guard lee el handoff antes de esperar y guarda solo con motivo clasific
   assert.equal(admin.match(/persistAuthDiagnosticFailure\(/g)?.length, 2, 'una definición y una sola llamada');
 });
 
-test('firestore.rules acepta exactamente los motivos y la fuente que produce el cliente', () => {
-  const enumMatch = rules.match(/data\.reason in \[([^\]]*)\]/);
+test('la API valida exactamente los motivos y las reglas impiden el acceso directo', () => {
+  const enumMatch = activityApi.match(/FAILURE_REASONS = new Set\(\[([^\]]*)\]/);
   assert.ok(enumMatch, 'la regla debe limitar reason a una lista fija');
   const allowed = [...enumMatch[1].matchAll(/'([^']+)'/g)].map(match => match[1]).sort();
   // Los motivos del cliente son los literales en minúsculas de la función.
   const produced = [...classifySource.matchAll(/'([a-z0-9-]+)'/g)].map(match => match[1]);
   assert.deepEqual(allowed, [...new Set(produced)].sort());
-  assert.match(rules, /data\.source == 'admin-guard'/);
-  assert.match(admin, /source: 'admin-guard',\s*route:/);
-  assert.match(rules, /match \/authDiagnosticFailures\/\{eventId\} \{\s*allow read: if isSuperAdmin\(\);\s*allow create: if !isBlockedUser\(\) && authDiagnosticFailureIsValid\(\);\s*allow update, delete: if false;/);
+  assert.match(activityApi, /source: 'admin-guard'/);
+  assert.match(admin, /kind: 'authFailure', reason, route:/);
+  assert.match(rules, /match \/authDiagnosticFailures\/\{eventId\} \{\s*allow read: if isSuperAdmin\(\);\s*allow create: if false;\s*allow update, delete: if false;/);
 });

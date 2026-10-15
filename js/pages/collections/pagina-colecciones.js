@@ -4,7 +4,7 @@ const featuredGrid = document.getElementById('collections-featured-grid');
 const collectionsStatus = document.getElementById('collections-grid-status');
 const featuredStatus = document.getElementById('collections-featured-status');
 // El carrito público usa el mismo coordinador de identidad que checkout y perfil.
-const cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20261012-checkout-ready-3-sincronizacion-carrito-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-stock-flow-20261014-1-ui-fixes-20261014-1');
+const cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20261015-health-1');
 let liveProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 let collectionsReady = false;
 let productsReady = false;
