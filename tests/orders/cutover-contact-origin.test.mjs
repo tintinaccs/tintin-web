@@ -13,15 +13,19 @@ test('el generador canónico cambia el seguimiento de WhatsApp en cutover y roll
     await copyFile(resolve('scripts/sincronizar-origen-publico.js'),join(root,'scripts/sincronizar-origen-publico.js'));
     await copyFile(resolve('cloudflare/contactos-pedido.mjs'),join(root,'cloudflare/contactos-pedido.mjs'));
     const fixture={userName:'QA',userPhone:'0981123456',shippingMethod:'retiro'};
+    // El fixture simula su propia configuración; el origen del monitor no manda aquí.
+    const env={...process.env};
+    delete env.TINTIN_PUBLIC_ORIGIN;
+    delete env.TINTIN_FIREBASE_AUTH_DOMAIN;
     for(const [index,origin]of ['https://tintinaccesorios.pages.dev','https://tintinaccs.com','https://tintinaccesorios.pages.dev'].entries()){
       await writeFile(join(root,'config/public-site.json'),JSON.stringify({origin,firebaseAuthDomain:new URL(origin).hostname,technicalFirebaseAuthDomain:'tintinaccesorios.pages.dev',appCheckDomains:['tintinaccesorios.pages.dev','tintinaccs.com']}));
-      execFileSync(process.execPath,[join(root,'scripts/sincronizar-origen-publico.js')],{cwd:root,stdio:'pipe'});
+      execFileSync(process.execPath,[join(root,'scripts/sincronizar-origen-publico.js')],{cwd:root,stdio:'pipe',env});
       const module=await import(pathToFileURL(join(root,'cloudflare/contactos-pedido.mjs')).href+'?round='+index);
       const message=new URL(module.orderContactLinks(fixture,'fixture-id').customer).searchParams.get('text');
       const urls=[...message.matchAll(/https:\/\/[^\s]+/g)].map(match=>new URL(match[0].replace(/\.$/,'')));
       assert.equal(urls.length,1);
       assert.equal(urls[0].href,origin+'/perfil#pedido-fixture-id');
-      execFileSync(process.execPath,[join(root,'scripts/sincronizar-origen-publico.js'),'--check'],{cwd:root,stdio:'pipe'});
+      execFileSync(process.execPath,[join(root,'scripts/sincronizar-origen-publico.js'),'--check'],{cwd:root,stdio:'pipe',env});
     }
   } finally {await rm(root,{recursive:true,force:true});}
 });

@@ -34,6 +34,7 @@ const solidSurfaces = read('css/theme/superficies-solidas-interfaz.css');
 const parity = read('css/theme/paridad-segura-tintin.css');
 const accountFix = read('js/components/navigation/compartido/compatibilidad-cuenta-movil.js');
 const activity = read('js/analytics/actividad-sitio.js');
+const activityApi = read('functions/api/site-activity.js');
 const functionOrigin = read('js/core/firebase/origen-funciones.js');
 const privacyConsent = read('js/analytics/consentimiento-privacidad.js');
 const analytics = read('js/analytics/analitica.js');
@@ -137,7 +138,8 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
 check('GitHub Pages usa el servicio geográfico de Cloudflare',
   activity.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
-  activity.includes('function geoEndpoint() {\n    return apiUrl(') &&
+  activity.includes("apiUrl('site-activity')") &&
+  activityApi.includes('const cf = request.cf || {}') &&
   functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
   functionOrigin.includes("hostname.endsWith('github.io')") &&
   !activity.includes('/.netlify/functions/'));
@@ -146,9 +148,9 @@ check('Los previews de Cloudflare no escriben estadísticas',
   !activity.includes("hostname === 'tintinaccesorios.pages.dev'") &&
   activity.includes('!netlifyPreview && !cloudflarePreview'));
 check('Las reglas limitan la escritura de sesiones y presencia',
-  rules.includes('presenceIsValid(visitorId)') &&
-  rules.includes('trafficSessionIsValid(dateKey, sessionId)') &&
-  rules.includes('allow update: if false;'));
+  /match \/sitePresence[^]*?allow create, update: if false;/.test(rules) &&
+  /match \/siteTraffic[^]*?allow create, update: if false;/.test(rules) &&
+  activityApi.includes('site-activity-budget') && activityApi.includes('ipLimit(request, env'));
 check('Solamente Super Admin puede leer las métricas',
   /match \/sitePresence\/\{visitorId\}[\s\S]*?allow read, delete: if isSuperAdmin\(\)/.test(rules) &&
   /match \/siteTraffic\/\{dateKey\}\/sessions\/\{sessionId\}[\s\S]*?allow read, delete: if isSuperAdmin\(\)/.test(rules));
@@ -195,9 +197,10 @@ check('Super Admin puede probar y reactivar la bienvenida en lotes seguros',
   welcomeAdmin.includes('resetWelcomeForClients()') &&
   welcomeAdmin.includes('offset += 450') &&
   welcomeAdmin.includes("String(user.email || '').toLowerCase() !== SUPER_ADMIN"));
-check('Las reglas aceptan solo geografía aproximada y campos conocidos',
-  rules.includes('activityGeoIsValid(data)') &&
-  rules.includes("'city', 'region', 'country', 'countryCode', 'geoSource'"));
+check('El servidor proyecta solo geografía aproximada y campos conocidos',
+  activityApi.includes('city: clean(cf.city, 80), region: clean(cf.region, 80)') &&
+  !/\b(?:ip|latitude|longitude|postalCode|asn)\s*:/.test(activityApi) &&
+  !activityApi.includes('...input'));
 
 check('El rosa principal cumple contraste AA sobre blanco',
   theme.includes('--tt-accent:var(--color-brand-primary)') &&

@@ -23,6 +23,10 @@ test('rechaza duplicadas y datos inválidos', () => {
   assert.equal(addAddress(list, loc(1)).reason, 'duplicate');
   assert.equal(addAddress(list, { name: 'x', lat: 'a', lng: 1 }).reason, 'invalid');
   assert.equal(addAddress(list, null).reason, 'invalid');
+  for (const lat of [91, -91, null, '', true, Infinity]) assert.equal(addAddress([], { ...loc(1), lat }).reason, 'invalid');
+  for (const lng of [181, -181, null, '', false, NaN]) assert.equal(addAddress([], { ...loc(1), lng }).reason, 'invalid');
+  const bounded = addAddress([], { ...loc(1), name: 'x'.repeat(200), address: 'y'.repeat(2000), extra: 'ignored' }).list[0];
+  assert.equal(bounded.name.length, 120); assert.equal(bounded.address.length, 1000); assert.equal('extra' in bounded, false);
 });
 
 test('una cuenta con solo savedLocation (anterior) ve esa dirección como principal', () => {

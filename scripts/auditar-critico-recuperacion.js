@@ -10,6 +10,7 @@ const checkout = read('js/orders/pedido-checkout-seguro.js');
 const admin = read('js/admin/admin-app.js');
 const orderCrud = read('js/admin/orders/pedidos-superadmin-crud.js');
 const activity = read('js/analytics/actividad-sitio.js');
+const activityApi = read('functions/api/site-activity.js');
 const loader = read('js/cargador-pagina.js');
 const products = read('js/core/store/estado-productos.js');
 const publicCatalogApi = read('functions/api/public-catalog.js');
@@ -27,10 +28,12 @@ function check(name, condition, detail) {
 
 check(
   'La analítica pública reactivada exige freno de frecuencia, no escritura libre',
-  rules.includes('function presenceUpdateNotTooFrequent()') &&
-    rules.includes('presenceUpdateNotTooFrequent()') &&
-    rules.includes("allow create: if isStoreOpenOrAllowed() && trafficSessionIsValid(dateKey, sessionId);\n      allow update: if false;"),
-  'sitePresence debe limitar la frecuencia de escritura; siteTraffic no debe permitir update.'
+  /match \/sitePresence[^]*?allow create, update: if false;/.test(rules) &&
+    /match \/siteTraffic[^]*?allow create, update: if false;/.test(rules) &&
+    activityApi.includes('site-activity-budget') &&
+    activityApi.includes("kind === 'session' || date.getTime() - Date.parse") &&
+    activityApi.includes('< 20_000'),
+  'El SDK no escribe métricas; el servidor exige cuota compartida, deduplicación y frecuencia mínima.'
 );
 check(
   'La actividad pública arranca sola en cada página (ya no depende de un interruptor apagado)',

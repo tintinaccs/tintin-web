@@ -1,6 +1,5 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { decodeFirestoreFields } from '../../cloudflare/firebase-admin-ligero.js';
 import {
@@ -9,7 +8,7 @@ import {
   limitByIp,
   reserveSharedRateLimit,
 } from '../../cloudflare/rate-limit-compartido.js';
-import { rateLimitErrorResponse } from '../../cloudflare/seguridad-cloudinary.js';
+import { rateLimitErrorResponse, requireFirebaseUser } from '../../cloudflare/seguridad-cloudinary.js';
 import { handlePhoneAvailability } from '../../functions/api/phone-availability.js';
 
 function sharedStore() {
@@ -169,11 +168,23 @@ test('cuotas mantienen status y Retry-After aun en endpoints con clasificador an
   assert.equal(rateLimitErrorResponse(new Error('normal'), '', ''), null);
 });
 
-test('políticas agrupan rutas sensibles sin depender de IDs enviados por el navegador', () => {
+test('políticas agrupan rutas sensibles sin depender de IDs enviados por el navegador', async () => {
   assert.deepEqual(authenticatedRatePolicy(new Request('https://example.com/api/paypal-create-order')), {
     id: 'user-checkout', limit: 12, windowMs: 60_000,
   });
   assert.equal(authenticatedRatePolicy(new Request('https://example.com/api/test-email')).limit, 4);
-  const security = readFileSync(new URL('../../cloudflare/seguridad-cloudinary.js', import.meta.url), 'utf8');
-  assert.match(security, /const user = await verifyFirebaseIdToken\(token\);\s+await enforceAuthenticatedRateLimit\(request, env, user\)/);
+  const verified = { uid: 'verified-customer', email: 'customer@example.test' };
+  const request = new Request('https://example.com/api/profile-avatar-upload?uid=attacker', {
+    headers: { authorization: 'Bearer fixture', 'x-user-id': 'attacker' },
+  });
+  const calls = [];
+  await assert.rejects(requireFirebaseUser(request, {}, {
+    verify: async token => { assert.equal(token, 'fixture'); calls.push('verify'); return verified; },
+    limit: async (received, _env, actor) => {
+      calls.push('limit'); assert.equal(received, request); assert.equal(actor, verified);
+      throw Object.assign(new Error('quota'), { status: 429 });
+    },
+    get: async () => { calls.push('profile'); },
+  }), { status: 429 });
+  assert.deepEqual(calls, ['verify', 'limit'], 'se comprueba el token y la cuota antes de leer el perfil');
 });

@@ -9,11 +9,13 @@ function clean(value) {
 
 function validLocation(raw) {
   if (!raw || typeof raw !== 'object') return null;
+  if (raw.lat == null || raw.lng == null || raw.lat === '' || raw.lng === '' ||
+      typeof raw.lat === 'boolean' || typeof raw.lng === 'boolean') return null;
   const lat = Number(raw.lat);
   const lng = Number(raw.lng);
-  const name = clean(raw.name);
-  const address = clean(raw.address);
-  if (!name || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  const name = clean(raw.name).slice(0, 120);
+  const address = clean(raw.address).slice(0, 1000);
+  if (!name || !Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
   return { lat, lng, name, ...(address ? { address } : {}) };
 }
 
@@ -39,7 +41,7 @@ export function readAddressBook(profile = {}) {
 
 /** Campos a guardar: la lista y la principal (primer elemento) en espejo. */
 export function addressBookPatch(list) {
-  const book = list.slice(0, MAX_SAVED_LOCATIONS);
+  const book = readAddressBook({ savedLocations: list });
   const primary = book[0] || null;
   return {
     savedLocations: book,

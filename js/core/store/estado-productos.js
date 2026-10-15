@@ -1,7 +1,7 @@
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261015-photos-logos-cargador-mantenimiento-pagina-1-about-light-20261015-1-about-gap-crop-20261015-1-producto-rapido-20261015-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261015-integrated-politica-visibilidad-catalogo-1-producto-rapido-20261015-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261015-rendimiento-actions-1';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261015-rendimiento-actions-1';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1-stock-flow-20261014-1';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261015-product-realtime-lazy-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
