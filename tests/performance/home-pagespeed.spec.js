@@ -40,8 +40,13 @@ for (const [width, height] of [[320,568],[390,844],[640,900],[641,900],[768,1024
     await expect(page.locator('main #hero')).toHaveCount(1);
     await expect(page.locator('main .tt-footer')).toHaveCount(0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
-    // La animación no carga ni trabaja mientras está debajo de la portada.
-    expect(await page.evaluate(() => window.TintinHomeCollectionCarousel.gsap)).toBeNull();
+    // El hero administrado puede dejar parte del carrusel visible en tablet.
+    // Sólo exigir carga diferida cuando su viewport está fuera de pantalla.
+    const initiallyVisible = await page.locator('[data-collection-carousel]').evaluate(element => {
+      const rect = element.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < innerHeight;
+    });
+    if (!initiallyVisible) expect(await page.evaluate(() => window.TintinHomeCollectionCarousel.gsap)).toBeNull();
     await page.locator('[data-collection-carousel]').scrollIntoViewIfNeeded();
     await expect.poll(() => page.evaluate(() => Boolean(window.TintinHomeCollectionCarousel.gsap))).toBe(true);
     const image = page.locator('.tt-collection-card[aria-hidden="true"] img').first();
@@ -55,7 +60,7 @@ for (const [width, height] of [[320,568],[390,844],[640,900],[641,900],[768,1024
     expect(geometry.count).toBe(15);
     expect(geometry.width).toBe(geometry.actual);
     await page.locator('[data-collection-carousel-next]').click();
-    await page.locator('#hero').scrollIntoViewIfNeeded();
+    await page.locator('body > .tt-footer').scrollIntoViewIfNeeded();
     await expect.poll(() => page.evaluate(() => window.TintinHomeCollectionCarousel.inView)).toBe(false);
     expect(await page.evaluate(() => {
       const c = window.TintinHomeCollectionCarousel;

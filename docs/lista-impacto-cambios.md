@@ -1,3 +1,6 @@
+## 2026-10-15 — Conocenos y encuadre inferior de fotos
+
+Fuente funcional única: css/pages/institutional/about-maintenance.css. Reserva específica para header fijo desktop, sin duplicar reserva tablet ni agregar header móvil. Exterior de retratos sin proporción4/5 que recortaba marco; interior2/3 y object-position inferior para ambas fotos. Fotos y contenido de Barbi permanecen originales de #1129. Regresión existente public-initial-layout añade medición del gap y del límite inferior; revisión de primer frame y9anchos. Nuevas URLs se propagan por cargador de mantenimiento/navegación/store sin cambiar lógica; regenerar caché, CSP, flujos/diagnóstico y plan protegido desde fuentes. No cambios de datos ni permisos.
 ## 2026-10-15 — Logo de footer sin tarjeta
 
 Retirar el soporte negro del footer solicitado por el propietario: fondo transparente, sin borde/sombra/padding y marca negra sobre rosa claro/oscuro. Fuentes: sistema-superficies-tintin.css y logotipo-marca.js (excepción de footer con prioridad sobre tinte rosa). Regresión existente de pie de perfil y páginas públicas actualiza resultado esperado; conservar carga real tardía, logo cargado, WhatsApp y navegación. Versiones y artefactos canónicos sólo distribuyen este ajuste. Sin cambios de header/mobile, Auth, datos comerciales ni proveedores.
