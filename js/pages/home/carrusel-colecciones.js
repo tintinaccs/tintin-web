@@ -42,6 +42,14 @@ function collectionHref(slug) {
 
 const IMAGE_WIDTHS = [240, 480, 720, 960];
 const IMAGE_SIZES = '(max-width: 640px) 34vw, (max-width: 1023px) 280px, 20vw';
+const DELIVERY_KEYS = new Set(['c', 'w', 'h', 'f', 'q', 'g', 'e', 'dpr', 'ar', 'z', 'x', 'y', 'r', 'b', 'bo', 'fl', 't', 'l', 'u', 'o', 'a']);
+
+function isDeliveryComponent(segment) {
+  return segment.split(',').every(part => {
+    const separator = part.indexOf('_');
+    return separator > 0 && separator < part.length - 1 && DELIVERY_KEYS.has(part.slice(0, separator));
+  });
+}
 
 function optimizedImage(url, width = null) {
   if (!url) return '';
@@ -57,7 +65,7 @@ function optimizedImage(url, width = null) {
         const [prefix, delivery] = parsed.pathname.split('/image/upload/');
         const segments = delivery.split('/');
         let boundary = 0;
-        while (boundary < segments.length - 1 && /^(?:(?:c|w|h|f|q|g|e|dpr|ar|z|x|y|r|b|bo|fl|t|l|u|o|a)_[^/]+)(?:,[^/]+)*$/.test(segments[boundary])) boundary += 1;
+        while (boundary < segments.length - 1 && isDeliveryComponent(segments[boundary])) boundary += 1;
         segments.splice(boundary, 0, `c_limit,w_${width},f_auto,q_auto`);
         parsed.pathname = `${prefix}/image/upload/${segments.join('/')}`;
       }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "4b29564b33346e11d669e49dec940ae3a4e4a6f1",
-  "reason": "Optimizar carrusel responsive y accesibilidad preservando el footer transparente integrado en PR1130, con pruebas Chromium y WebKit.",
+  "reason": "Optimizar carrusel y accesibilidad conservando footer transparente; parsing lineal de transformaciones tras revision CodeQL, con regresiones multidispositivo.",
   "files": [
     {
       "path": "_headers",
@@ -71,7 +71,7 @@
     {
       "path": "index.html",
       "oldHash": "f2cd17ecbc7fed466f20ebdcdfa84f5590b3478093e912c7e38eca4bc17090f2",
-      "newHash": "a491c25d20cf9caa0f1a1dd3e25d27b2a6c93f4d29cbb96a8398450b523ccf3c"
+      "newHash": "367a44599cbbde9e40925fbdda4531f4ebe1f75cb1242152f5a44cbb941b1d38"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -96,7 +96,7 @@
     {
       "path": "js/pages/home/carrusel-colecciones.js",
       "oldHash": "65305d01030c55fda66fb62803c0f3368dcf4c5f891b76be241ef91f8c215876",
-      "newHash": "1d1222cdccf6e47b7c64ba3ac62daa3494f82a473741cbd59b5e4b35167922bc"
+      "newHash": "a73e75d6c2bafc608ed010d83dfe1edca36dad4cfbe60ebc3c423f7886e05f55"
     },
     {
       "path": "login.html",
@@ -131,7 +131,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "73d9c3423ed88cb04e12e3448471e04cf882c6d5f8f6d86a6588b66ad779635c",
-      "newHash": "960b099b0388a4153e39fcc1264711add5a239e28192b0075f35a4f2a2b74d06"
+      "newHash": "1efe550287fb88c7c8b162392a198fc32b54f5268ffe8ca7867ae7a645760d30"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
