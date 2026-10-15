@@ -1,3 +1,8 @@
+## 2026-10-15 — Footer siempre transparente
+
+Codex /root. Base ce5e8c1c. Corrección expresa del propietario: retirar tarjeta negra del logo en todos los footers, mantener fondo transparente. Fuente canónica sistema-superficies-tintin.css: enlace sin fondo, borde, sombra ni padding de tarjeta; logo negro contrastado sobre ambos fondos rosas. logotipo-marca.js conserva el filtro negro tras cargar el tinte de marca; logos blancos de los paneles permanecen iguales. La imagen oficial conserva su alfa y tamaño104×56. Sin cambios de navegación móvil, datos, permisos ni servicios. URLs/caché, CSP/diagnóstico y plan protegidos se regeneran desde sus fuentes.
+
+PASS_LOCAL:29 Chromium de navegación/footers aprobados en2.2min; todos los footers públicos con runtime completo en siete anchos320–1920 y perfil con filtro de marca tardío en cuatro anchos. Revisión visual/runtime adicional en390 y1440 confirma filtro brightness(0), fondo rgba(0,0,0,0), WhatsApp verde y cero overflow. Publicación/CI del nuevo candidato PENDING; no heredar aprobación de #1128.
 ## Reconciliación con conexiones #1125 — 2026-10-14
 
 Base vigente5f34d8df. Se incorporan las correcciones del otro agente sin descartar funciones; todos los conflictos eran versiones o derivados salvo nuestros cambios de perfil y stub conservados. Se preservan ambas evidencias de CURRENT_STATE. Nuevo plan, caché y artefactos deben reconstruirse para el candidato reconciliado.
@@ -2183,3 +2188,5 @@ Pendientes/limitaciones: CSS inicial sigue en 417KB sin comprimir (warning del p
 
 
 Publicacion autorizada por el titular el 2026-10-15: publicar las mejoras ya verificadas y continuar hasta terminar. Se prepara el plan exacto de mantenimiento, PR y CI; la revision manual del entorno protegido sigue reservada al propietario conforme a MANTENIMIENTO_FLUJOS.md.
+
+Reconciliacion concurrente: base actualizada a 4b29564b (PR1130), conservando footer transparente y versiones de marca. Nuevo plan contra esa base; CI y publicacion del candidato reconciliado pendientes.
