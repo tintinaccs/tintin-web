@@ -1,3 +1,7 @@
+## 2026-10-15 — Diamante y contraste inverso del logo del footer
+
+Codex /root. About: facetas internas del diamante convergen en la punta y dejan de cruzarse como X. Footer compartido: conserva la secuencia y fondos existentes; el tinte alfa del logo usa primary sobre light y accent sobre pink, sin tarjeta. Dos filtros SVG usan los tokens de marca; la regla data-tt-flow-block prevalece sobre el fallback CSS por posición. Referencias y caché actualizadas desde fuentes. Evidencia y límites en docs/agent/CURRENT_STATE.md.
+
 ## 2026-10-15 — Conocenos y encuadre inferior de fotos
 
 Fuente funcional única: css/pages/institutional/about-maintenance.css. Reserva específica para header fijo desktop, sin duplicar reserva tablet ni agregar header móvil. Exterior de retratos sin proporción4/5 que recortaba marco; interior2/3 y object-position inferior para ambas fotos. Fotos y contenido de Barbi permanecen originales de #1129. Regresión existente public-initial-layout añade medición del gap y del límite inferior; revisión de primer frame y9anchos. Nuevas URLs se propagan por cargador de mantenimiento/navegación/store sin cambiar lógica; regenerar caché, CSP, flujos/diagnóstico y plan protegido desde fuentes. No cambios de datos ni permisos.
