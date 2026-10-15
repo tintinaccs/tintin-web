@@ -41,3 +41,14 @@ test('stock ocultado o eliminado se retira y datos actualizados permanecen canó
   win.TintinRelatedProducts.sync();
   assert.deepEqual(Array.from(win.TintinRelatedProducts.getVisible(),p=>p.id),['b']);
 });
+
+test('Otros productos respeta inventario canónico aunque el agregado y el helper antiguo indiquen disponibilidad',()=>{
+  const win=harness([product('main','aros'),product('a','collares'),product('b','pulseras')]);
+  win.isFeaturable=()=>true;
+  win.TintinCatalogPolicy={isPurchasable:p=>p.id==='b'};
+  win.TintinRelatedProducts.sync();
+  assert.deepEqual(Array.from(win.TintinRelatedProducts.getVisible(),p=>p.id),['b']);
+  win.TintinCatalogPolicy.isPurchasable=()=>false;
+  win.TintinRelatedProducts.sync();
+  assert.equal(win.TintinRelatedProducts.getVisible().length,0);
+});
