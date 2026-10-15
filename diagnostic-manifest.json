@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a4de428feb8fcd34da991159e7d3faaae9422dd97899941bfe38f29549f6c46f",
+  "sourceFingerprint": "8b80ca6edbe270a6100d3d86eddeba6c3281128e4996718bf5a4ca9c4896395b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1229,
-    "textFiles": 1175,
-    "totalBytes": 18642589,
+    "files": 1230,
+    "textFiles": 1176,
+    "totalBytes": 18644749,
     "pages": 19,
     "modules": 876
   },
@@ -47830,14 +47830,14 @@
     {
       "path": ".github/workflows/desplegar-reglas-firestore.yml",
       "extension": ".yml",
-      "bytes": 2780,
-      "sha256": "747d33f21c38f3ae00b14281107272152fd998d45e8e75e58230d0198a38cc09"
+      "bytes": 3567,
+      "sha256": "4faf5fd74f5d5140c933e7826cf01555e17a38a863d1c471e38441402b3e189b"
     },
     {
       "path": ".github/workflows/diagnostico-maestro.yml",
       "extension": ".yml",
-      "bytes": 15431,
-      "sha256": "c63bc73113415d9a8e529d2fc89db280ece783e9c5a1420d743d0056d397867b"
+      "bytes": 15552,
+      "sha256": "1fcab11b042d818031b968f2b2269a3927b4dbea69db8d4ef3560221bba3bd6a"
     },
     {
       "path": ".github/workflows/drenar-cola-correo-pedidos.yml",
@@ -49212,6 +49212,12 @@
       "extension": ".md",
       "bytes": 4711,
       "sha256": "524f4f288c854d55bebe2aebb11d4321ab1d2f00804af763f345970f69d56eff"
+    },
+    {
+      "path": "docs/agent/CI_MIGRATION_20261015.md",
+      "extension": ".md",
+      "bytes": 1252,
+      "sha256": "c71e553879503132eeb0b207ff5d47d5af25048c285ccbbdb04c6f75d2099bee"
     },
     {
       "path": "docs/agent/CODEQL_TRIAGE_20261013.md",
