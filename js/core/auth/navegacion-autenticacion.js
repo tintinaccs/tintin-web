@@ -2,13 +2,13 @@
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
 import { onAppCheckSnapshot as onSnapshot } from '../firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { auth, db } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
-import { logoutSession } from './salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { logoutSession } from './salida-sesion.js?v=tintin-20261012-auth-privacy-1-salida-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
 import { doc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1';
+import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1-ui-fixes-20261014-1';
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 // La vista previa embebida es sólo visual: no debe suscribirse a Auth ni leer
@@ -140,7 +140,8 @@ function captureNavigationHandoff(anchor){
  const currentAvatar=currentButton?.querySelector('img');
  createAuthHandoff(user.uid,{
   photoURL:currentAvatar?.currentSrc||currentAvatar?.src||user.photoURL||'',
-  displayName:currentAvatar?.alt||user.displayName||''
+  displayName:currentAvatar?.alt||user.displayName||'',
+  profile:navigationProfile
  });
 }
 
@@ -239,7 +240,7 @@ function renderAccountButtonPhoto(user,profile={}){
    img.className='tt-account-avatar-btn';img.src=photoUrl;img.alt=name;img.referrerPolicy='no-referrer';img.width=48;img.height=48;
    img.style.cssText='width:100%;height:100%;max-width:none;max-height:none;flex-shrink:0;border-radius:inherit;object-fit:cover;display:block';
    btn.dataset.ttAccountAvatar='true';
-   img.onerror=()=>{delete btn.dataset.ttAccountAvatar;btn.innerHTML=accountBtnDefaults.get(btn);};
+   img.onerror=()=>{if(img.parentNode!==btn)return;delete btn.dataset.ttAccountAvatar;btn.innerHTML=accountBtnDefaults.get(btn);};
    btn.innerHTML='';btn.appendChild(img);
   }else { delete btn.dataset.ttAccountAvatar;btn.innerHTML=accountBtnDefaults.get(btn); }
  });
@@ -255,7 +256,7 @@ function renderMobileTabbarPhoto(user,profile={}){
   const name=escapeHtmlNav(identity.name||identity.username||user.displayName||user.email||'Mi cuenta');
   tab.innerHTML=`<img class="tt-tabbar-avatar" src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" width="24" height="24"><span>Cuenta</span>`;
   const img=tab.querySelector('img');
-  if(img)img.onerror=()=>{tab.innerHTML=tab.dataset.ttDefaultHtml;};
+  if(img)img.onerror=()=>{if(img.parentNode===tab)tab.innerHTML=tab.dataset.ttDefaultHtml;};
  }else tab.innerHTML=tab.dataset.ttDefaultHtml;
 }
 
@@ -299,12 +300,13 @@ function renderProfileIdentity(user,profile){
 // La subida propia ya fue guardada: actualiza el menú en este mismo documento.
 document.addEventListener('tintin:profile-photo-updated',event=>{
  const user=getSessionUser();
- if(!user || navigationUid!==user.uid || !event.detail?.photoURL)return;
+ if(!user || navigationUid!==user.uid || event.detail?.uid!==user.uid || !event.detail?.photoURL)return;
  navigationProfile={...navigationProfile,avatarURL:event.detail.photoURL};
  renderAccountButtonPhoto(user,navigationProfile);
  renderMobileTabbarPhoto(user,navigationProfile);
  renderAccountPanel(user,roleFromProfile(user,navigationProfile),navigationProfile);
  renderProfileIdentity(user,navigationProfile);
  const visual=readAccountIdentity(navigationProfile,user);
- createAuthHandoff(user.uid,{photoURL:visual.photoURL,displayName:visual.name});
+ createAuthHandoff(user.uid,{photoURL:visual.photoURL,displayName:visual.name,profile:navigationProfile});
+ window.dispatchEvent(new CustomEvent("tintin:profile-data",{detail:{uid:user.uid,profile:navigationProfile}}));
 });
