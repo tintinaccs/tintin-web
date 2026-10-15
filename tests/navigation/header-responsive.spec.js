@@ -2,10 +2,10 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// Geometry and image-origin assertions need the complete eleven-category menu.
+// Geometry and image-origin assertions need the complete unified category menu.
 // This is a UI fixture, independent of the product-hydration server fixture.
 test.beforeEach(async ({ page }) => {
-  const categories = ['relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
+  const categories = ['bolsos', 'relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
   await page.route('**/api/public-catalog?resource=collections*', route => route.fulfill({
     json: { ok: true, resource: 'collections', items: categories.map(id => ({
       id, data: { name: id, visible: true, image: `/assets-tintin/images/collections/col-${id}.webp` }
@@ -100,20 +100,20 @@ for (const width of [320, 390, 767, 768, 1024, 1025, 1280, 1920]) {
         if (previous) previous.replaceWith(image);
       }
     }, '/js/quality/estabilidad-final-publica.js');
-    async function assertGeometry(selector = '.tt-tabbar-avatar,.tt-account-avatar-btn') {
-      const result = await page.evaluate(selector => {
+    async function assertGeometry() {
+      const result = await page.evaluate(() => {
         const visible = e => e.getBoundingClientRect().width > 0 && getComputedStyle(e).visibility !== 'hidden';
-        const image = [...document.querySelectorAll(selector)].find(visible);
+        const image = [...document.querySelectorAll('.tt-tabbar-avatar,.tt-account-avatar-btn')].find(visible);
         const button = image.closest('button,a');
         const shell = image.closest('#tt-tabbar,#tt-header-tablet,#tt-header-desktop-tablet');
         const icon = [...shell.querySelectorAll('svg')].find(e => visible(e) && e.closest('button,a')?.getAttribute('aria-label') !== 'Catálogo');
         const rect = e => { const r = e.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
-        return { tabbar:shell.id==='tt-tabbar', image:rect(image), icon:rect(icon), button:rect(button), buttonInnerWidth:button.getBoundingClientRect().width-parseFloat(getComputedStyle(button).borderLeftWidth)-parseFloat(getComputedStyle(button).borderRightWidth), shell:rect(shell), radius:getComputedStyle(image).borderRadius, fit:getComputedStyle(image).objectFit, overflow:document.documentElement.scrollWidth > innerWidth };
-      }, selector);
-      if(result.tabbar)expect(result.image.width).toBeLessThanOrEqual(26);
+        return { image:rect(image), icon:rect(icon), button:rect(button), buttonInnerWidth:button.getBoundingClientRect().width-parseFloat(getComputedStyle(button).borderLeftWidth)-parseFloat(getComputedStyle(button).borderRightWidth), shell:rect(shell), radius:getComputedStyle(image).borderRadius, fit:getComputedStyle(image).objectFit, overflow:document.documentElement.scrollWidth > innerWidth };
+      });
+      if(width<768)expect(result.image.width).toBeLessThanOrEqual(26);
       else expect(result.image.width).toBeCloseTo(result.buttonInnerWidth,0);
       expect(result.image.width).toBeCloseTo(result.image.height, 1);
-      if(result.tabbar)expect(Math.abs(result.image.width - result.icon.width)).toBeLessThan(2);
+      if(width<768)expect(Math.abs(result.image.width - result.icon.width)).toBeLessThan(2);
       expect(result.radius).toBe('50%');
       expect(result.fit).toBe('cover');
       expect(result.button.width).toBeGreaterThanOrEqual(44);
@@ -128,10 +128,9 @@ for (const width of [320, 390, 767, 768, 1024, 1025, 1280, 1920]) {
     }
     await assertGeometry();
     if (width < 768) {
-      await assertGeometry('#tt-tabbar .tt-tabbar-avatar');
       await page.evaluate(() => document.querySelector('#tt-tabbar').classList.add('tt-tabbar-compact'));
       await expect(page.locator('#tt-tabbar .tt-tabbar-avatar')).toHaveCSS('inline-size', '24px');
-      await assertGeometry('#tt-tabbar .tt-tabbar-avatar');
+      await assertGeometry();
     }
   });
 }
@@ -172,33 +171,6 @@ async function expectNoHorizontalOverlap(locator) {
       expect(Math.min(a.right, b.right) - Math.max(a.left, b.left)).toBeLessThanOrEqual(2);
     }
   }
-}
-
-for (const width of [320,390,600,767]) {
-  test(`cabecera móvil blanca conserva logo, cinco accesos y menú en ${width}px`, async ({ page }) => {
-    await mockGuestNavigation(page);
-    await openPublicPage(page,{width,height:844},'/envios.html');
-    const header=page.locator('#tt-header-tablet');
-    await expect(header).toBeVisible();
-    await expect(header).toHaveCSS('background-color','rgb(255, 255, 255)');
-    await expect(header.locator('.tt-tablet-logo-img')).toBeVisible();
-    await header.locator('#btn-notifications-tablet').evaluate(button=>button.hidden=false);
-    const controls=header.locator('button:not([hidden]),a');
-    await expectNoHorizontalOverlap(controls);
-    const bounds=await controls.evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,right:b.right,width:b.width,height:b.height};}));
-    for(const b of bounds){expect(b.x).toBeGreaterThanOrEqual(0);expect(b.right).toBeLessThanOrEqual(width);expect(b.width).toBeGreaterThanOrEqual(44);expect(b.height).toBeGreaterThanOrEqual(44);}
-    await header.locator('#btn-menu-tablet').click();
-    await expect(page.locator('#tt-tablet-menu')).toBeVisible();
-    await expect(page.locator('#tt-tablet-menu [data-shell-route="about"]')).toHaveAttribute('href','/about');
-    await page.locator('#btn-tablet-tienda').click();
-    await expect(page.locator('#tablet-cats')).toBeVisible();
-    await expect(page.locator('#tablet-cats .tt-tablet-cat-card')).toHaveCount(11);
-    await page.locator('#btn-tablet-cats-back').click();
-    await expect(page.locator('#tt-tablet-menu [data-shell-route="about"]')).toBeVisible();
-    await page.locator('#btn-tablet-close').click();
-    await expect(page.locator('#tt-tablet-menu')).toBeHidden();
-    await expect(page.locator('#tt-tabbar')).toBeVisible();
-  });
 }
 
 async function expectHeaderBrandHealthy(page) {

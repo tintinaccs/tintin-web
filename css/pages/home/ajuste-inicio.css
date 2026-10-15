@@ -677,7 +677,7 @@ html body.tt-home-premium .tt-hero::before {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(98deg, #F89ACC 0%, #FAA9D5 26%, #FBBAE0 52%, #FCCDEA 78%, #FDE0F5 100%);
+  background: linear-gradient(98deg, #FFD2E7 0%, #FFD2E7 26%, #FBBAE0 52%, #FCCDEA 78%, #FDE0F5 100%);
 }
 html body.tt-home-premium .tt-hero-welcome {
   grid-area: welcome;
@@ -767,7 +767,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     padding: calc(16 * var(--u)) max(calc(42 * var(--u)), calc((100% - var(--tt-hero-comp)) / 2)) calc(16 * var(--u)) max(calc(51 * var(--u)), calc((100% - var(--tt-hero-comp)) / 2)) !important;
   }
   html body.tt-home-premium .tt-hero::before {
-    background: linear-gradient(180deg, #F389BE 0%, #F48DC2 10%, #F7A0CE 25%, #FCBFE2 50%, #FDD5EF 75%, #FDE6F8 90%, #FDEDFB 100%);
+    background: linear-gradient(180deg, #FFD2E7 0%, #FFD2E7 10%, #F7A0CE 25%, #FCBFE2 50%, #FDD5EF 75%, #FDE6F8 90%, #FDEDFB 100%);
   }
   html body.tt-home-premium .tt-hero-welcome { width: calc(428 * var(--u)); margin-left: calc(-5 * var(--u)); }
   html body.tt-home-premium .tt-hero-media {
@@ -823,7 +823,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     padding: calc(40 * var(--u)) calc(32 * var(--u)) calc(36 * var(--u)) !important;
   }
   html body.tt-home-premium .tt-hero::before {
-    background: linear-gradient(180deg, #F789C2 0%, #F792C8 10%, #F9A2D2 25%, #FBB8E0 50%, #FDD2EF 75%, #FDE4F7 90%, #FEEFFD 100%);
+    background: linear-gradient(180deg, #FFD2E7 0%, #FFD2E7 10%, #F9A2D2 25%, #FBB8E0 50%, #FDD2EF 75%, #FDE4F7 90%, #FEEFFD 100%);
   }
   html body.tt-home-premium .tt-hero-welcome { width: calc(560 * var(--u)); margin: 0 0 calc(-18 * var(--u)); }
   html body.tt-home-premium .tt-hero-media {
@@ -871,7 +871,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     padding: calc(18 * var(--u)) 20px 24px !important;
   }
   html body.tt-home-premium .tt-hero::before {
-    background: linear-gradient(180deg, #F389BE 0%, #F48DC3 10%, #F79ECD 25%, #FAB6DD 50%, #FCCFEB 75%, #FCDFF3 90%, #FDEAF9 100%);
+    background: linear-gradient(180deg, #FFD2E7 0%, #FFD2E7 10%, #F79ECD 25%, #FAB6DD 50%, #FCCFEB 75%, #FCDFF3 90%, #FDEAF9 100%);
   }
   html body.tt-home-premium .tt-hero-welcome {
     grid-area: art;
@@ -928,4 +928,14 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
 /* Entre 768 y 1024 px el encabezado fijo de tablet mide 84 px. */
 @media (min-width: 768px) and (max-width: 1024px) {
   html body.tt-home-premium .tt-hero { --tt-hero-top: 84px; }
+}
+
+/* Rosa solicitado para la bienvenida y el titular. El contorno oscuro
+   mantiene las letras legibles sobre el fondo claro. */
+html body.tt-home-premium .tt-hero-title,
+html body.tt-home-premium .tt-hero-title .tt-hero-title-line {
+  color: #FFD2E7 !important;
+  -webkit-text-stroke: 1px #222222;
+  paint-order: stroke fill;
+  text-shadow: 0 1px 1px rgba(34, 34, 34, .35);
 }

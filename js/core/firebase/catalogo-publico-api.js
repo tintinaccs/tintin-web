@@ -18,7 +18,7 @@ async function fetchResource(normalized) {
     const response = await fetch(ENDPOINT + '?resource=' + encodeURIComponent(normalized), {
       method: 'GET',
       credentials: 'omit',
-      cache: 'default',
+      cache: 'no-store',
       signal: controller.signal
     });
     if (!response.ok) throw new Error('API pública de catálogo respondió ' + response.status);

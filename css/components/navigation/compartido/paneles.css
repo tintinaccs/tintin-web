@@ -287,9 +287,6 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
 
   .tt-search-panel.open { transform: translateY(0) scale(1) !important; }
   .tt-search-results { max-height: none !important; height: 100%; }
-}
-
-@media (max-width:1024px) {
   .tt-tablet-menu { overflow: hidden !important; }
   .tt-tablet-menu:not(.open) { display: none !important; }
   .tt-tablet-menu.open { display: flex !important; }

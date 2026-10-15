@@ -15,7 +15,7 @@ import {
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261012-auth-privacy-1-resolucion-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261012-auth-privacy-1-resolucion-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
 
 // Se mantienen estas inicializaciones porque históricamente dependían de la
 // primera importación de imagenes.js. Ambas son idempotentes.
@@ -59,6 +59,7 @@ export const IMAGE_SLOTS = Object.freeze([
   { id: 'edit_bolsos',     label: 'Editorial — Bolsos/Bags', section: 'editorial', emoji: '👜', desc: 'Imagen de la sección editorial Bags en la portada' },
   { id: 'edit_relojes',    label: 'Editorial — Relojes', section: 'editorial', emoji: '⌚', desc: 'Imagen de la sección editorial Relojes en la portada' },
   { id: 'about_foto',      label: 'Nosotros — Foto principal', section: 'nosotros', emoji: '🌸', desc: 'Foto principal de la página Nosotros' },
+  { id: 'about_mision', label: 'Nosotros — Foto de nuestra misión', section: 'nosotros', emoji: '🌸', desc: 'Foto independiente de la sección Nuestra misión' },
   { id: 'logo_main',       label: 'Logo principal', section: 'branding', emoji: null, desc: 'Logo utilizado en encabezados, pie y pantalla de carga' },
 ]);
 

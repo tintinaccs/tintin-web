@@ -1,7 +1,7 @@
 /* Superficies de página completas: una sola secuencia incluso entre wrappers. */
 (() => {
   'use strict';
-  const selector = 'body > section:not([role="dialog"]), main > section:not([role="dialog"]), [role="main"] > section:not([role="dialog"]), .cat-wrap > section, .cat-layout, .tt-footer, .tt-visual-block, .tt-profile-hero, .tt-profile-panel, .login-page, .ck-body, .perfil-wrap, .tt-404-wrap, .adm-content > .adm-section';
+  const selector = 'body > section:not([role="dialog"]), main > section:not([role="dialog"]), [role="main"] > section:not([role="dialog"]), .cat-wrap > section, .cat-layout, .tt-footer, .tt-visual-block, .login-page, .ck-body, .perfil-wrap, .tt-404-wrap, .adm-content > .adm-section';
   let queued = false;
   const measured = new WeakSet();
   const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(schedule) : null;
@@ -10,6 +10,7 @@
   };
   function blocks() {
     const visible = node => {
+      if (node.closest('.perfil-wrap') && !node.matches('.perfil-wrap')) return false;
       if (node.closest('[role="dialog"], [aria-modal="true"], .tt-privacy-consent, .tt-drawer, .adm-sidebar')) return false;
       if (node.hidden || node.closest('[hidden]')) return false;
       const style = getComputedStyle(node);

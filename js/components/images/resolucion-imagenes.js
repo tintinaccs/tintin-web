@@ -1,3 +1,4 @@
+import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 /* =============================================================
    TINTIN — Resolución centralizada de imágenes
 
@@ -122,7 +123,7 @@ export function resolveDeviceImage(images = {}, device = 'desktop') {
 export function firstEligibleProductImage(slug, products) {
   if (!slug || !Array.isArray(products)) return '';
   const eligible = products
-    .filter(p => p && p.category === slug && p.active !== false && p.name && sanitizeImageUrl(p.imageUrl))
+    .filter(p => p && wristCategory(p.category) === wristCategory(slug) && p.active !== false && p.name && sanitizeImageUrl(p.imageUrl))
     .sort((a, b) =>
       (Number.isFinite(Number(a.collectionOrder)) ? Number(a.collectionOrder) : 9999) -
         (Number.isFinite(Number(b.collectionOrder)) ? Number(b.collectionOrder) : 9999) ||

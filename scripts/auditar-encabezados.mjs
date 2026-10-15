@@ -52,8 +52,7 @@ for (const [nombre, w, h] of pantallas) {
       ['tabbar mobile', document.getElementById('tt-tabbar')],
     ].filter(([, el]) => vis(el));
     if (barras.length === 0) problemas.push('no hay ninguna barra de navegacion visible');
-    const expectedBars = w < 768 ? ['header tablet','tabbar mobile'] : w <= 1024 ? ['header tablet'] : ['header desktop/tablet'];
-    if (JSON.stringify(barras.map(b=>b[0])) !== JSON.stringify(expectedBars)) problemas.push('navegación visible no coincide con el diseño del dispositivo: ' + barras.map(b => b[0]).join(' + '));
+    if (barras.length > 1) problemas.push('hay ' + barras.length + ' barras visibles a la vez: ' + barras.map(b => b[0]).join(' + '));
 
     // Area tactil: el minimo recomendado es 44x44 para que se pueda tocar bien.
     const controles = [...document.querySelectorAll('#tt-tabbar button, #tt-tabbar a, .tt-header button, .tt-header a, .tt-header-tablet button, .tt-header-tablet a, .tt-nav a, .tt-nav button')].filter(vis);

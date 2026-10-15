@@ -1,3 +1,4 @@
+import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs';
@@ -24,7 +25,7 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261012-checkout-ready-3-estado-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-ui-reconciled-20261014-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261015-integrated-estado-colecciones-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
@@ -5508,7 +5509,7 @@ function loadProductos() {
       // abrir justo ese producto.
       _allProducts = snap.docs.map(d => {
         const data = d.data();
-        return { _docId: d.id, ...data, variants: sanitizeVariantData(data.variants || null) };
+        return { _docId: d.id, ...data, category: wristCategory(data.category || ''), variants: sanitizeVariantData(data.variants || null) };
       });
       adminRealtimeReady.products = true;
       syncSpecDatalists(_allProducts);
@@ -5609,7 +5610,7 @@ function renderProductosGrouped(list) {
   document.getElementById('prod-empty').style.display = 'none';
 
   const labelFor = (slug) => {
-    const c = _allCollections.find(x => x.slug === slug);
+    const c = _allCollections.find(x => wristCategory(x.slug) === wristCategory(slug));
     return c ? (c.name || slug) : (slug || 'Sin categoría');
   };
   const groups = new Map();
@@ -5619,8 +5620,8 @@ function renderProductosGrouped(list) {
     groups.get(key).push(p);
   });
   const orderedKeys = [...groups.keys()].sort((a, b) => {
-    const oa = _allCollections.find(c => c.slug === a)?.order ?? 999;
-    const ob = _allCollections.find(c => c.slug === b)?.order ?? 999;
+    const oa = _allCollections.find(c => wristCategory(c.slug) === wristCategory(a))?.order ?? 999;
+    const ob = _allCollections.find(c => wristCategory(c.slug) === wristCategory(b))?.order ?? 999;
     return oa - ob || labelFor(a).localeCompare(labelFor(b), 'es');
   });
 
@@ -5647,7 +5648,7 @@ function applyProductFilters() {
       (p.tags||[]).join(' ').toLowerCase().includes(q)
     );
   }
-  if (cat) result = result.filter(p => (p.category||'') === cat);
+  if (cat) result = result.filter(p => wristCategory(p.category || '') === wristCategory(cat));
   if (!q && !cat) renderProductosGrouped(result);
   else renderProductosTable(result);
 
@@ -5909,7 +5910,7 @@ async function prodGuardar() {
   const stockValue = stockRaw === '' ? null : Number(stockRaw);
   const priceBeforeRaw = document.getElementById('prod-price-before').value.trim();
   const priceBeforeValue = priceBeforeRaw === '' ? null : Number(priceBeforeRaw);
-  const categoryExists = _allCollections.some(collection => collection.slug === category);
+  const categoryExists = _allCollections.some(collection => wristCategory(collection.slug) === wristCategory(category));
 
   if (!name || !category || !categoryExists || !Number.isInteger(price) || price <= 0 || price > 1000000000) {
     errEl.textContent = !categoryExists && category
@@ -6184,8 +6185,18 @@ document.querySelectorAll('[data-section="productos"]').forEach(btn => {
 let _allCollections = [];
 let _collectionsUnsub = null;
 
+function collectionDocumentSlugs(slug) {
+  return _allCollections.find(item => item.slug === slug)?.sourceSlugs || [slug];
+}
+
+async function deleteCollectionDocuments(slug) {
+  const batch = writeBatch(db);
+  collectionDocumentSlugs(slug).forEach(id => batch.delete(doc(db, 'collections', id)));
+  await batch.commit();
+}
+
 function collSlugify(s) {
-  return (s || '')
+  return (wristCategory(s) || '')
     .toString().trim().toLowerCase()
     .normalize('NFD').replace(/[̀-ͯ]/g, '') // strip accents
     .replace(/[^a-z0-9]+/g, '-')
@@ -6220,8 +6231,8 @@ function loadColecciones() {
     snap => {
       clearTimeout(_collectionsSlowTimer);
       _collectionsReady = true;
-      _allCollections = snap.docs
-        .map(d => normalizeCollectionDoc(d.id, d.data()))
+      _allCollections = unifyWristCollections(snap.docs
+        .map(d => normalizeCollectionDoc(d.id, d.data())), false)
         .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
       renderColeccionesGrid(applyCollFilter(_allCollections));
       syncCategorySelects();
@@ -6255,7 +6266,7 @@ function syncCategorySelects() {
   ['prod-category', 'prod-filter-cat', 'bulk-category-input'].forEach(id => {
     const sel = document.getElementById(id);
     if (!sel) return;
-    const current = sel.value;
+    const current = wristCategory(sel.value);
     // Keep only the placeholder option (always the first, never dynamic)
     [...sel.options].slice(1).forEach(o => o.remove());
     _allCollections
@@ -6263,7 +6274,7 @@ function syncCategorySelects() {
       .sort((a, b) => a.order - b.order)
       .forEach(c => {
         const opt = document.createElement('option');
-        opt.value = c.slug;
+        opt.value = wristCategory(c.slug);
         opt.textContent = c.name + (c.visible === false ? ' (oculta)' : '');
         sel.appendChild(opt);
       });
@@ -6339,7 +6350,7 @@ window.bulkDeleteCollections = async function() {
   const slugs = [..._selectedCollections];
   const empty = [], withProducts = [];
   slugs.forEach(slug => {
-    const count = _allProducts.filter(p => (p.category || '') === slug).length;
+    const count = _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(slug)).length;
     (count > 0 ? withProducts : empty).push(slug);
   });
   if (!empty.length) {
@@ -6354,7 +6365,7 @@ window.bulkDeleteCollections = async function() {
     const CHUNK = 450;
     for (let i = 0; i < empty.length; i += CHUNK) {
       const batch = writeBatch(db);
-      empty.slice(i, i + CHUNK).forEach(slug => batch.delete(doc(db, 'collections', slug)));
+      empty.slice(i, i + CHUNK).forEach(slug => collectionDocumentSlugs(slug).forEach(id => batch.delete(doc(db, 'collections', id))));
       await batch.commit();
     }
     const emptySet = new Set(empty);
@@ -6371,7 +6382,7 @@ function collRowsToCsv_(cols) {
   const rows = cols.map(c => [
     c.name || '', c.slug || '', c.description || '', c.order ?? 0,
     c.visible === false ? 'No' : 'Sí',
-    _allProducts.filter(p => (p.category || '') === c.slug).length
+    _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(c.slug)).length
   ]);
   return [header, ...rows];
 }
@@ -6415,7 +6426,7 @@ function renderColeccionesGrid(list) {
   const visibleSlugs = new Set(list.map(c => c.slug));
   [..._selectedCollections].forEach(slug => { if (!visibleSlugs.has(slug)) _selectedCollections.delete(slug); });
   grid.innerHTML = list.map(c => {
-    const count = _allProducts.filter(p => (p.category || '') === c.slug).length;
+    const count = _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(c.slug)).length;
     const safeSlug = escapeHtmlAdmin(c.slug);
     const slugArg = inlineArgumentAdmin(c.slug);
     const imageUrl = sanitizeImageUrl(c.image || '');
@@ -6577,7 +6588,7 @@ function _collInStock(p) { return !(p.stock != null && Number(p.stock) <= 0); }
 
 function renderCollCurrentList() {
   if (!_collProductsSlug) return;
-  const items = _allProducts.filter(p => (p.category || '') === _collProductsSlug);
+  const items = _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(_collProductsSlug));
   document.getElementById('coll-products-count').textContent = items.length;
   document.getElementById('coll-current-empty').style.display = items.length ? 'none' : '';
 
@@ -6614,7 +6625,7 @@ function renderCollCurrentList() {
 
 window.collMoveProduct = async function(docId, direction) {
   if (!can(currentRole, 'manageContent') || !roleCanDo('colecciones', 'editar')) { toast('No tenés permiso para editar el orden de la colección'); return; }
-  const items = _allProducts.filter(p => (p.category || '') === _collProductsSlug && _collInStock(p));
+  const items = _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(_collProductsSlug) && _collInStock(p));
   const sorted = items.sort((a, b) => (a.collectionOrder ?? 9999) - (b.collectionOrder ?? 9999) || (a.name||'').localeCompare(b.name||'', 'es'));
   const idx = sorted.findIndex(p => p._docId === docId);
   const swapIdx = idx + direction;
@@ -6707,7 +6718,7 @@ function renderCollPicker() {
 
   document.getElementById('coll-picker-list').innerHTML = filtered.map(p => {
     const checked = _collPickerSelected.has(p._docId);
-    const currentColl = p.category ? (_allCollections.find(c => c.slug === p.category)?.name || p.category) : '—';
+    const currentColl = p.category ? (_allCollections.find(c => wristCategory(c.slug) === wristCategory(p.category))?.name || p.category) : '—';
     return `
     <div style="display:flex;align-items:center;gap:12px;padding:8px 16px;border-top:1px solid var(--adm-border)">
       <input type="checkbox" data-picker-id="${p._docId}" ${checked ? 'checked' : ''} onclick="collPickerToggleOne(this)" style="width:16px;height:16px;cursor:pointer;flex-shrink:0">
@@ -6767,7 +6778,7 @@ window.collPickerAddSelected = async function() {
     stages: [{ id: 'assign', label: 'Asignar productos por lotes' }, { id: 'sync', label: 'Sincronizar catálogo y cerrar selección' }],
     action: async ctx => {
       ctx.start('assign');
-      await batchUpdateChunked(ids, () => ({ category: _collProductsSlug, updatedAt: serverTimestamp() }));
+      await batchUpdateChunked(ids, () => ({ category: wristCategory(_collProductsSlug), updatedAt: serverTimestamp() }));
       ctx.ok('assign', { affected: ids.length });
       ctx.start('sync');
       collClosePicker();
@@ -6791,7 +6802,7 @@ window.collGuardar = async function() {
     return false;
   }
   const name = document.getElementById('coll-name').value.trim();
-  const slug = collSlugify(document.getElementById('coll-slug').value);
+  const slug = originalSlug || collSlugify(document.getElementById('coll-slug').value);
   const description = document.getElementById('coll-description').value.trim();
   const image = document.getElementById('coll-image').value.trim();
   const order = parseInt(document.getElementById('coll-order').value) || 0;
@@ -6802,7 +6813,7 @@ window.collGuardar = async function() {
     errEl.style.display = '';
     return false;
   }
-  const dup = _allCollections.find(c => c.slug === slug && c.slug !== originalSlug);
+  const dup = _allCollections.find(c => wristCategory(c.slug) === wristCategory(slug) && c.slug !== originalSlug);
   if (dup) {
     errEl.textContent = `Ya existe una colección con el slug "${slug}". Elegí otro.`;
     errEl.style.display = '';
@@ -6823,7 +6834,7 @@ window.collGuardar = async function() {
       // Slug changed: create new doc, move products over, delete old doc
       data.createdAt = serverTimestamp();
       await setDoc(doc(db, 'collections', slug), data);
-      const affected = _allProducts.filter(p => (p.category || '') === originalSlug);
+      const affected = _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(originalSlug));
       if (affected.length) {
         // Chunked (max 450/batch, Firestore hard-caps a batch at 500 writes)
         // so a slug rename never silently fails on a collection with 500+ products.
@@ -6878,7 +6889,7 @@ window.collEliminar = async function(slug, count) {
     );
     if (target === null) return; // cancelled
     const targetSlug = collSlugify(target);
-    if (targetSlug && !_allCollections.some(x => x.slug === targetSlug)) {
+    if (targetSlug && !_allCollections.some(x => wristCategory(x.slug) === wristCategory(targetSlug))) {
       toast(`"${targetSlug}" no es una colección existente. Cancelado — no se movió ningún producto.`);
       return;
     }
@@ -6892,14 +6903,14 @@ window.collEliminar = async function(slug, count) {
         { id: 'audit', label: 'Registrar y actualizar el resultado' },
       ],
       action: async ctx => {
-        const affected = _allProducts.filter(p => (p.category || '') === slug);
+        const affected = _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(slug));
         // Chunked (max 450/batch) so reassigning 500+ products never silently
         // fails on Firestore's 500-write batch cap.
         ctx.start('move');
         await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: targetSlug, updatedAt: serverTimestamp() }));
         ctx.ok('move', { message: `${affected.length} producto(s)` });
         ctx.start('delete');
-        await deleteDoc(doc(db, 'collections', slug));
+        await deleteCollectionDocuments(slug);
         ctx.ok('delete');
         ctx.start('audit');
         await logAudit('eliminar_coleccion', 'coleccion', slug, label, `${affected.length} producto(s) reasignados a "${targetSlug || '(sin colección)'}"`);
@@ -6916,7 +6927,7 @@ window.collEliminar = async function(slug, count) {
     stages: [{ id: 'delete', label: 'Eliminar colección y registrar el cambio' }],
     action: async ctx => {
       ctx.start('delete');
-      await deleteDoc(doc(db, 'collections', slug));
+      await deleteCollectionDocuments(slug);
       await logAudit('eliminar_coleccion', 'coleccion', slug, label, 'Colección vacía eliminada');
       ctx.ok('delete');
       return 'Colección eliminada.';
@@ -6925,11 +6936,11 @@ window.collEliminar = async function(slug, count) {
 };
 
 window.collImportarDefaults = async function() {
-  if (!confirm('Esto crea las 12 colecciones actuales en la base de datos para que puedas administrarlas (renombrar, ocultar, reordenar, agregar imagen). ¿Continuar?')) return;
+  if (!confirm('Esto crea las 11 colecciones actuales en la base de datos para que puedas administrarlas (renombrar, ocultar, reordenar, agregar imagen). ¿Continuar?')) return;
   const DEFAULTS = [
     ['relojes','Relojes'], ['bolsos','Bags'], ['aros','Aros'], ['collares','Collares'],
     ['pulseras','Pulseras'], ['anillos','Anillos'], ['tobilleras','Tobilleras'],
-    ['brazaletes','Brazaletes'], ['earcuff','Earcuff'], ['armcuff','Armcuff'],
+    ['earcuff','Earcuff'], ['armcuff','Armcuff'],
     ['gafas','Gafas'], ['joyeros','Joyeros'],
   ];
   await runAdminCrudOperation({
@@ -7113,7 +7124,7 @@ function loadImportar() {
     'pulseras':'pulseras','pulsera':'pulseras','bracelet':'pulseras',
     'anillos':'anillos','anillo':'anillos','ring':'anillos',
     'tobilleras':'tobilleras','tobillera':'tobilleras','ankle':'tobilleras',
-    'brazaletes':'brazaletes','brazalete':'brazaletes',
+    'brazaletes':'pulseras','brazalete':'pulseras',
     'earcuff':'earcuff','ear cuff':'earcuff',
     'armcuff':'armcuff','arm cuff':'armcuff',
     'gafas':'gafas','lentes':'gafas','sunglasses':'gafas',
@@ -7305,7 +7316,7 @@ function loadImportar() {
         <td>
           <select class="adm-select" style="padding:4px 8px;font-size:12px;border-radius:20px;width:auto"
                   onchange="window.setCsvRowCategory(${i}, this.value)">
-            ${['relojes','bolsos','aros','collares','pulseras','anillos','tobilleras','brazaletes','earcuff','armcuff','gafas','joyeros','otros'].map(c =>
+            ${['relojes','bolsos','aros','collares','pulseras','anillos','tobilleras','earcuff','armcuff','gafas','joyeros','otros'].map(c =>
               `<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`
             ).join('')}
           </select>

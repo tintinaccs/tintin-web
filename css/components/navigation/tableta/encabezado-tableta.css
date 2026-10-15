@@ -1,8 +1,8 @@
-/* TINTIN compact header and menu — source of truth for <=1024px. */
+/* TINTIN tablet header and menu — source of truth for 768–1024px. */
 .tt-header-tablet,
 .tt-tablet-menu { display: none !important; }
 
-@media (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   .tt-header-tablet {
     display: block !important;
     position: fixed;
@@ -167,21 +167,6 @@
     text-align:left;
     cursor:pointer;
   }
-}
-
-/* En teléfonos se conserva la misma cabecera, con controles táctiles de 44px. */
-@media (max-width:767px) {
-  html body:not(:has(.login-page)) #tt-header-tablet { display:block !important; visibility:visible !important; pointer-events:auto !important; height:64px; }
-  .tt-tablet-header-inner { height:64px; grid-template-columns:64px minmax(0,1fr) 44px; padding:0 8px; column-gap:4px; }
-  .tt-tablet-logo-link { grid-column:1; grid-row:1; justify-self:start; max-width:64px; }
-  .tt-tablet-logo-img { width:64px; height:44px; }
-  .tt-tablet-actions { grid-column:2; grid-row:1; gap:0; }
-  .tt-tablet-menu-toggle { grid-column:3; grid-row:1; }
-  .tt-tablet-actions :is(button,a), .tt-tablet-menu-toggle { width:44px !important; height:44px !important; min-width:44px; flex:0 0 44px; }
-  .tt-tablet-menu { padding:16px 16px calc(108px + env(safe-area-inset-bottom)); }
-  .tt-tablet-cats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  html:not(.tt-mobile-navigation-off) body:not(:has(.adm-main,.login-page)) { padding-top:64px !important; }
-  html.tt-mobile-navigation-off body #tt-header-tablet { display:none !important; visibility:hidden !important; pointer-events:none !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

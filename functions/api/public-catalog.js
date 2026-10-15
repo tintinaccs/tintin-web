@@ -1,3 +1,4 @@
+import { wristCategory, unifyWristCollections } from '../../js/core/store/categorias-pulseras.mjs';
 import {
   decodeFirestoreFields,
   firestoreAdminGet,
@@ -84,11 +85,21 @@ async function buildPayload(env, resource, productId = '') {
 
   const docs = await firestoreAdminListAll(env, resource, resource === 'products' ? 1000 : 300);
   const allowed = resource === 'products' ? PRODUCT_FIELDS : COLLECTION_FIELDS;
-  const items = docs.map(document => ({
+  let items = docs.map(document => ({
     id: documentId(document),
     data: pickKnownFields(decodeFirestoreFields(document?.fields || {}), allowed)
-  })).filter(item => {
-    if (!item.id) return false;
+  })).filter(item => item.id);
+  // Agrupar antes de filtrar: Pulseras oculta también su documento anterior.
+  if (resource === 'collections') {
+    items = unifyWristCollections(items.map(item => ({ slug: item.id, ...item.data, image: item.data.image || item.data.imageUrl || '' })))
+      .map(item => ({ id: item.slug, data: pickKnownFields(item, COLLECTION_FIELDS) }));
+  } else {
+    items = items.map(item => {
+      const category = wristCategory(item.data.category || item.data.cat || item.data.collectionSlug || item.data.collection || item.data.type || '');
+      return category === 'pulseras' ? { ...item, data: { ...item.data, category } } : item;
+    });
+  }
+  items = items.filter(item => {
     if (resource === 'products') return item.data.active !== false;
     return item.data.visible !== false;
   });
@@ -133,6 +144,7 @@ export async function onRequest({ request, env, waitUntil }) {
 
   const cacheUrl = new URL(request.url);
   cacheUrl.search = '?resource=' + resource + (productId ? '&id=' + encodeURIComponent(productId) : '');
+  if (resource === 'collections') cacheUrl.searchParams.set('schema', 'unified-v2');
   const cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
   const cache = caches.default;
   const cached = await cache.match(cacheKey);

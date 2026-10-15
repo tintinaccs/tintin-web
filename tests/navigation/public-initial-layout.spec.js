@@ -101,14 +101,20 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
         });
         expect(duplicateIds, url).toEqual([]);
         if (url !== '/login.html') {
-          const header = page.locator(width >= 1025 ? '#tt-header-desktop-tablet' : '#tt-header-tablet');
-          await expect(header, url).toBeVisible();
-          const logo = header.locator('.tt-logo-img,.tt-tablet-logo-img');
-          const bounds = await logo.boundingBox();
-          expect(bounds.width, url).toBeGreaterThanOrEqual(60);
-          expect(bounds.width, url).toBeLessThanOrEqual(110);
-          expect(bounds.height, url).toBeGreaterThanOrEqual(44);
-          expect(bounds.height, url).toBeLessThanOrEqual(58);
+          if(width<768) {
+            await expect(page.locator('#tt-tabbar'),url).toBeVisible();
+            await expect(page.locator('#tt-header-tablet'),url).toBeHidden();
+            await expect(page.locator('#tt-header-desktop-tablet'),url).toBeHidden();
+          } else {
+            const header = page.locator(width >= 1025 ? '#tt-header-desktop-tablet' : '#tt-header-tablet');
+            await expect(header, url).toBeVisible();
+            const logo = header.locator('.tt-logo-img,.tt-tablet-logo-img');
+            const bounds = await logo.boundingBox();
+            expect(bounds.width, url).toBeGreaterThanOrEqual(60);
+            expect(bounds.width, url).toBeLessThanOrEqual(110);
+            expect(bounds.height, url).toBeGreaterThanOrEqual(44);
+            expect(bounds.height, url).toBeLessThanOrEqual(58);
+          }
           const footerLogo = page.locator('.tt-footer .tt-logo-img');
           await footerLogo.scrollIntoViewIfNeeded();
           await expect(footerLogo, url).toHaveCSS('filter', 'brightness(0) invert(1)');
