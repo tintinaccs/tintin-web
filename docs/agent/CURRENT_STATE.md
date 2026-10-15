@@ -1,3 +1,7 @@
+## 2026-10-15 — Corrección del fixture de galería detectada por CI
+
+CI38805533328 del SHA9586a6df:291 pruebas runtime aprobadas y51 fallas de product-color-gallery (17casos×3proyectos) por ReferenceError de _pdRenderedSignature en el simulador que extrae el renderer real. Se inicializa ese estado en el harness, como los otros estados privados de la galería. Se conservan todas las aserciones de fotos, miniaturas, inventario, editor, tamaños y controles; no se cambian timeouts ni código de compra para pasar CI.20 Chromium de galería aprobados tras el ajuste; matriz escritorio/móvil y WebKit del nuevo SHA pendiente de CI. WebKit local se descargó pero faltan bibliotecas del host; no atribuir PASS local a ese motor. El diagnóstico se regenera después del fixture final y se revalidan las70huellas protegidas.
+
 ## 2026-10-15 — Contraste del logo al conservar el footer personalizado
 
 La reconciliación de1135 conserva el fondo elegido por Super Admin. Se protege también la norma anterior del titular: apariencia-global asigna únicamente el filtro del logo según la luminosidad del fondo elegido y los dos tokens de marca; al retirar la personalización libera ese filtro para volver a la alternancia existente. No modifica el fondo por el logo. Dos Chromium390/1440 verifican rosa claro→logo rosa oscuro, rosa oscuro→logo rosa claro, fondo intacto al ocultar/mostrar otra sección y recuperación de la alternancia al limpiar la configuración. PASS_LOCAL. Versiones y plan se regeneran después del shell final.
