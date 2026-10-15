@@ -72,7 +72,11 @@
     refresh();
     const observer = new MutationObserver(records => {
       if (records.some(record => record.type === 'childList'
-        ? [...record.addedNodes, ...record.removedNodes].some(node => node.nodeType === 1 && !node.hasAttribute('data-tt-flow-background'))
+        ? record.target.matches('body, main, [role="main"], .cat-wrap')
+          || [...record.addedNodes, ...record.removedNodes].some(node => node.nodeType === 1
+            && !node.hasAttribute('data-tt-flow-background')
+            && (node.matches(selector) || node.hasAttribute('data-tt-flow-block')
+              || node.querySelector(`${selector}, [data-tt-flow-block]`)))
         : !(record.attributeName === 'style' && appliedStyles.get(record.target) === record.target.getAttribute('style'))
           && record.target.matches(`${selector}, body, main, .cat-wrap`))) schedule();
     });
