@@ -9,9 +9,12 @@ const loader = fs.readFileSync('js/cargador-mantenimiento-pagina.js', 'utf8');
 
 const checks = [
   ['about page exists', html.includes('<section class="section tt-about-section"')],
+  ['single mission section exists', (html.match(/class="section tt-about-mission-section"/g) || []).length === 1 && !html.includes('tt-about-text tt-about-mission')],
+  ['photos use separate slots', html.includes('data-img-slot="about_foto"') && html.includes('data-img-slot="about_mision"')],
+  ['owner story and mission are present', html.includes('Conocé un poquito de Tintin ♡') && html.includes('Pequeños detalles que te hacen sentir especial.') && html.includes('Barbi, la chica detrás de Tintin.')],
   ['single h1 exists', (html.match(/<h1\b/g) || []).length === 1],
   ['about image has useful alt', /alt="Tintin Accesorios y Relojes"/.test(html)],
-  ['about runtime is loaded by page', /about[\s\S]*load\('pages\/institutional\/mantenimiento-nosotros\.js'\)/.test(loader)],
+  ['about runtime is loaded by page', /about[\s\S]*load\('pages\/institutional\/mantenimiento-nosotros\.js'\s*[,)]/.test(loader)],
   ['runtime recognizes clean and legacy about route', js.includes('about(?:\\.html)?')],
   ['clean canonical guard is injected by Pages Function', pageFunction.includes('about-canonical-clean-v1.js') && pageFunction.includes("page === 'about'")],
   ['clean canonical guard pins canonical and OG to /about', canonicalGuard.includes("new URL('/about', window.location.origin)") && canonicalGuard.includes('link[rel="canonical"]') && canonicalGuard.includes('meta[property="og:url"]')],

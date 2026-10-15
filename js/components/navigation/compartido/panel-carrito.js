@@ -1,5 +1,5 @@
 import { logoUrl } from './configuracion.js?v=tintin-20261010-whatsapp-release-5';
-import { UI_ICONS, svgIcon } from './iconos.js?v=tintin-20260916-final-production-stability-iconos-1-master-20261007-1';
+import { UI_ICONS, svgIcon } from './iconos.js?v=tintin-20260916-final-production-stability-iconos-1-master-20261007-1-profile-pulseras-20261014-1-bags-20261014-1';
 
 export function renderCartDrawer() {
   return `

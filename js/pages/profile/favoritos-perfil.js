@@ -2,7 +2,7 @@ import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcio
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
 import { collection} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1';
+import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1-bags-20261014-1';
 import { hasProductStock, firstAvailableVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261008-variant-image-1-stock-flow-20261014-1';
 

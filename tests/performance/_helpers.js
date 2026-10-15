@@ -185,7 +185,8 @@ const BUDGETS = {
   // Nosotros conserva una composición editorial propia con más recursos de
   // imagen. Su presupuesto de 121 se aplica a requests first-party para que
   // reCAPTCHA/otros terceros variables no conviertan el gate en flaky; las
-  // demás páginas informativas mantienen el límite total efectivo de 120.
+  // demás páginas informativas mantienen el límite first-party de 120; el
+  // peso total sigue contando también los recursos externos.
   lightweightRequests: 120,
   aboutRequests: 121,
   // Las páginas informativas comparten el shell público (CSS, navegación,

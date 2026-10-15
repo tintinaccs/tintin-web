@@ -40,7 +40,7 @@ test('fallo de catálogo termina en error recuperable sin convertirlo en vacío'
 
 test('colecciones públicas conservan vacío, visibilidad y productos comprables', () => {
   assert.match(productStore, /product\.active !== false[\s\S]{0,180}Number\(product\.price\) > 0/);
-  assert.match(collectionsState, /collections\.filter\(item => item\.visible !== false\)/);
+  assert.match(collectionsState, /unifyWristCollections\(collections\)\.filter\(item => item\.visible !== false\)/);
   assert.match(collectionsPresentation, /No hay colecciones disponibles todavía/);
   assert.match(collectionsPresentation, /encodeURIComponent\(clean\(slug\)\)/);
 });

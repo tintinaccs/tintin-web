@@ -1,3 +1,4 @@
+import { wristCategory } from '../../js/core/store/categorias-pulseras.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -18,6 +19,6 @@ test('una opción agotada no hace desaparecer las demás ni confunde stock agreg
 });
 
 test('normalizar el catálogo conserva fotos por opción después de una segunda publicación',()=>{
- const policy=fs.readFileSync(new URL('../../js/pages/catalog/politica-visibilidad-catalogo.js',import.meta.url),'utf8');const c=vm.createContext({timestampToMillis:()=>0});vm.runInContext(policy.slice(policy.indexOf('function clean('),policy.indexOf('function categoryIsVisible')).replace(/export /g,''),c);
+ const policy=fs.readFileSync(new URL('../../js/pages/catalog/politica-visibilidad-catalogo.js',import.meta.url),'utf8');const c=vm.createContext({wristCategory,timestampToMillis:()=>0});vm.runInContext(policy.slice(policy.indexOf('function clean('),policy.indexOf('function categoryIsVisible')).replace(/export /g,''),c);
  c.input={id:'p',price:100,variants:[{Color:'Negro',imageUrl:'https://example.com/black.webp'}]};const result=vm.runInContext('normalizeProduct(normalizeProduct(input))',c);assert.equal(result.variantMedia[0].imageUrl,'https://example.com/black.webp');assert.deepEqual(Array.from(result.variants.Color),['Negro']);
 });

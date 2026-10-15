@@ -6,7 +6,7 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261012-auth-privacy-1-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1';
+import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261015-integrated-imagenes-1';
 import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinImagesPhase5Booted) {
@@ -21,7 +21,7 @@ if (!window.TintinImagesPhase5Booted) {
   // /assets-tintin/images/* se sirve con caché inmutable (un año): cuando cambia
   // el arte del hero tiene que cambiar su URL. Mismo tag que los <source> de
   // index.html.
-  const HERO_ART_QUERY = '?v=tintin-20261014-welcome-contrast-1';
+  const HERO_ART_QUERY = '?v=tintin-20261014-welcome-pink-1';
   const STATIC = Object.freeze({
     logo: 'assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
@@ -42,6 +42,12 @@ if (!window.TintinImagesPhase5Booted) {
       tablet: 'assets-tintin/images/nosotros/foto-principal/foto-principal-tablet.webp',
       mobile: 'assets-tintin/images/nosotros/foto-principal/foto-principal-mobile.webp',
       alt: 'Tintin Accesorios y Relojes',
+    },
+    about_mision: {
+      desktop: 'assets-tintin/images/nosotros/foto-principal/foto-principal-desktop.webp',
+      tablet: 'assets-tintin/images/nosotros/foto-principal/foto-principal-tablet.webp',
+      mobile: 'assets-tintin/images/nosotros/foto-principal/foto-principal-mobile.webp',
+      alt: 'Nuestra misión en Tintin Accesorios y Relojes',
     },
     hero_bg_desktop: HERO_IMAGE_FALLBACKS.desktop + HERO_ART_QUERY,
     hero_bg_tablet_landscape: HERO_IMAGE_FALLBACKS.tabletLandscape + HERO_ART_QUERY,

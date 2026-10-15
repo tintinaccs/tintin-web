@@ -1,3 +1,4 @@
+import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 const ALLOWED_BODY_TAGS = new Set(['p', 'br', 'strong', 'em', 'ul', 'ol', 'li']);
 const BLOCKED_BODY_TAGS = new Set(['script', 'iframe', 'object', 'embed', 'style', 'link', 'svg', 'math', 'template', 'form']);
 const SHOPIFY_STATUS = new Set(['active', 'draft', 'archived']);
@@ -184,7 +185,7 @@ export function firstShopifyValue(row, names) {
 function collectionCandidates(collections) {
   return (Array.isArray(collections) ? collections : [])
     .map(item => ({
-      slug: normalizeImportKey(item?.slug || item?.id || item),
+      slug: normalizeImportKey(wristCategory(item?.slug || item?.id || item)),
       name: cleanImportText(item?.name || item, 160),
     }))
     .filter(item => item.slug);
@@ -195,7 +196,7 @@ function collectionCandidates(collections) {
 const TITLE_COLLECTION_ALIASES = Object.freeze({
   arete: 'aros', argolla: 'aros', hoop: 'aros', hoops: 'aros', pendiente: 'aros', earring: 'aros',
   cadena: 'collares', necklace: 'collares',
-  esclava: 'brazaletes',
+  esclava: 'pulseras', brazalete: 'pulseras', bangle: 'pulseras', bracelet: 'pulseras',
   bag: 'bolsos', bolso: 'bolsos', cartera: 'bolsos',
   joyerito: 'joyeros',
   lente: 'gafas', lentes: 'gafas', sunglasses: 'gafas',
@@ -235,7 +236,7 @@ function titleWordSlug(title, candidates) {
 
 /** Recorre «A > B > C» de la hoja a la raíz y devuelve la primera colección existente. */
 function shopifyCategorySlug(category, candidates) {
-  const segments = asText(category).split('>').map(normalizeImportKey).filter(Boolean).reverse();
+  const segments = asText(category).split('>').map(value => normalizeImportKey(wristCategory(value))).filter(Boolean).reverse();
   for (const segment of segments) {
     const direct = candidates.find(item => item.slug === segment || normalizeImportKey(item.name) === segment);
     if (direct) return direct.slug;
@@ -247,7 +248,7 @@ function shopifyCategorySlug(category, candidates) {
 
 export function resolveShopifyCollection({ explicit, type, tags, title, shopifyCategory }, collections) {
   const candidates = collectionCandidates(collections);
-  const signals = [explicit, type, tags, title].map(normalizeImportKey).filter(Boolean);
+  const signals = [explicit, type, tags, title].map(value => normalizeImportKey(wristCategory(value))).filter(Boolean);
   const directMatches = [...new Map(candidates
     .filter(item => signals.includes(item.slug) || signals.includes(normalizeImportKey(item.name)))
     .map(item => [item.slug, item])).values()];

@@ -2,10 +2,10 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// Geometry and image-origin assertions need the complete eleven-category menu.
+// Geometry and image-origin assertions need the complete unified category menu.
 // This is a UI fixture, independent of the product-hydration server fixture.
 test.beforeEach(async ({ page }) => {
-  const categories = ['relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
+  const categories = ['bolsos', 'relojes', 'aros', 'collares', 'pulseras', 'anillos', 'tobilleras', 'brazaletes', 'earcuff', 'armcuff', 'gafas', 'joyeros'];
   await page.route('**/api/public-catalog?resource=collections*', route => route.fulfill({
     json: { ok: true, resource: 'collections', items: categories.map(id => ({
       id, data: { name: id, visible: true, image: `/assets-tintin/images/collections/col-${id}.webp` }

@@ -17,6 +17,33 @@ for (const width of [390, 1440]) test(`bloques entre wrappers llenan el ancho y 
 });
 
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
+const html = removeFixtureScripts(fs.readFileSync('perfil.html', 'utf8'));
+const flow = runtime;
+for (const width of [320, 390, 768, 1024, 1440, 1920]) {
+  test(`perfil conserva tarjetas blancas y controles descubiertos · ${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.route('**/*.js*', route => route.fulfill({ contentType: 'text/javascript', body: '' }));
+    await page.route('**/__profile-surfaces', route => route.fulfill({ contentType: 'text/html', body: html }));
+    await page.goto('/__profile-surfaces');
+    await page.locator('#perfil-nombre-display').evaluate(el => { el.textContent = 'TINTIN ACCESORIOS Y RELOJES'; });
+    await page.locator('.perfil-card').first().evaluate(el => el.classList.add('tt-visual-block'));
+    await page.addScriptTag({ content: flow });
+    await expect(page.locator('.tt-profile-hero')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(page.locator('.perfil-card').first()).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    for (const button of await page.locator('[data-profile-tab]').all()) {
+      await button.scrollIntoViewIfNeeded();
+      expect(await button.evaluate(el => {
+        const b = el.getBoundingClientRect();
+        return el.contains(document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2));
+      })).toBe(true);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+    const title = await page.locator('#perfil-nombre-display').boundingBox();
+    expect(title.x).toBeGreaterThanOrEqual(0);
+    expect(title.x + title.width).toBeLessThanOrEqual(width);
+  });
+}
+
 const profileHtml=removeFixtureScripts(fs.readFileSync('perfil.html','utf8'));
 for(const width of [320,390,768,1024,1440,1920]) test(`perfil muestra pestañas completas sobre las transiciones en ${width}px`,async({page})=>{
  await page.setViewportSize({width,height:900});

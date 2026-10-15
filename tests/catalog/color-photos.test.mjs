@@ -1,3 +1,4 @@
+import { wristCategory } from '../../js/core/store/categorias-pulseras.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -30,7 +31,7 @@ test('conserva asociaciones importadas de una sola foto y enlaces seguros comple
 test('mapProduct y las normalizaciones posteriores conservan fotos largas por color', () => {
   const source=fs.readFileSync(new URL('../../js/core/store/estado-productos.js',import.meta.url),'utf8');
   const policy=fs.readFileSync(new URL('../../js/pages/catalog/politica-visibilidad-catalogo.js',import.meta.url),'utf8');
-  const c=vm.createContext({cleanText:String,cleanMultilineText:String,sanitizeVariantData:v=>v,normalizeImageUrl:d=>d.imageUrl||'',sanitizeProductImage:String,uniqueSafeImageUrls:list=>list,timestampToMillis:()=>0});
+  const c=vm.createContext({wristCategory,cleanText:String,cleanMultilineText:String,sanitizeVariantData:v=>v,normalizeImageUrl:d=>d.imageUrl||'',sanitizeProductImage:String,uniqueSafeImageUrls:list=>list,timestampToMillis:()=>0});
   vm.runInContext(source.slice(source.indexOf('export function mapProduct'),source.indexOf('function compactProduct')).replace('export ',''),c);
   vm.runInContext(policy.slice(policy.indexOf('function clean('),policy.indexOf('function categoryIsVisible')).replace(/export /g,''),c);
   const long='https://example.test/'+ 'a'.repeat(260)+'.webp';

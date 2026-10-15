@@ -195,10 +195,10 @@
     .tt-profile-avatar-actions .perfil-avatar>img{inline-size:100%!important;block-size:100%!important;min-inline-size:100%!important;min-block-size:100%!important;max-inline-size:none!important;max-block-size:none!important;object-fit:cover!important;object-position:center!important;display:block!important}
     .tt-profile-photo-btn{border:1px solid #eac7d4;background:#fff;color:#222222;border-radius:999px;padding:7px 11px;font:700 10px/1 Montserrat;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
     .tt-profile-photo-btn:disabled{opacity:.55;cursor:wait}
-    .tt-profile-meta{min-width:0}
-    .tt-profile-meta .perfil-name{text-transform:none!important;letter-spacing:-.02em!important;font-size:clamp(20px,3vw,30px)!important}
+    .tt-profile-meta{min-width:0;overflow-wrap:anywhere}
+    .tt-profile-meta .perfil-name{text-transform:none!important;letter-spacing:-.02em!important;font-size:clamp(20px,3vw,30px)!important;line-height:1.25!important;overflow-wrap:anywhere}
     .tt-profile-meta-extra{margin-top:6px;font-size:12px;color:var(--text-muted);display:flex;gap:8px;flex-wrap:wrap}
-    .tt-profile-tabs{position:relative;z-index:1;display:flex;gap:6px;overflow-x:auto;padding:7px;background:rgba(255,255,255,.96);border:1px solid #ecd4dd;border-radius:16px;margin:0 0 18px;box-shadow:0 8px 24px rgba(83,33,52,.07);scrollbar-width:none}
+    .tt-profile-tabs{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:6px;overflow:visible;padding:7px;background:rgba(255,255,255,.96);border:1px solid #ecd4dd;border-radius:16px;margin:0 0 18px;box-shadow:0 8px 24px rgba(83,33,52,.07);scrollbar-width:none}
     .tt-profile-tabs::-webkit-scrollbar{display:none}
     .tt-profile-tab{position:relative;flex:0 0 auto;border:0;background:transparent;color:#222222;border-radius:11px;padding:11px 14px;font:700 11px/1 Montserrat;cursor:pointer;white-space:nowrap}
     .tt-profile-tab[aria-selected="true"]{background:#fde8f0;color:#222222}
@@ -220,3 +220,11 @@
     }
 
 .tt-profile-network-state{margin:0 0 16px;min-height:24px}
+
+/* El fondo continuo pertenece al contenedor: las tarjetas y las pestañas
+   conservan su superficie blanca y nunca quedan bajo otra sección. */
+body[data-tt-profile-v2="1"] .tt-profile-hero,
+body[data-tt-profile-v2="1"] .perfil-card,
+body[data-tt-profile-v2="1"] .tt-profile-summary-card,
+body[data-tt-profile-v2="1"] .tt-profile-tabs{background:#fff!important}
+@media(max-width:480px){.tt-profile-hero-main{flex-wrap:wrap;width:100%}.tt-profile-meta{flex:1 1 180px}.tt-profile-tab{min-height:44px}}

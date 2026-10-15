@@ -8,7 +8,7 @@
     if (document.querySelector('link[data-tt-about-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'css/pages/institutional/about-maintenance.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
+    link.href = 'css/pages/institutional/about-maintenance.css?v=tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-story-20261014-1';
     link.dataset.ttAboutMaintenance = '1';
     document.head.appendChild(link);
   };
@@ -50,10 +50,6 @@
     const actions = document.querySelector('.tt-about-content > div[style*="margin-top"]');
     actions?.classList.add('tt-about-actions');
 
-    const mission = [...document.querySelectorAll('.tt-about-text')]
-      .find(node => /nuestra misión/i.test(node.textContent || ''));
-    mission?.classList.add('tt-about-mission');
-
     const deliveryCopy = [...document.querySelectorAll('.tt-about-text')]
       .find(node => /envío el mismo día|pedidos antes de las/i.test(node.textContent || ''));
     if (deliveryCopy) {
@@ -62,7 +58,7 @@
   }
 
   function improveImage() {
-    document.querySelectorAll('[data-img-slot="about_foto"]').forEach(wrapper => {
+    document.querySelectorAll('[data-img-slot="about_foto"], [data-img-slot="about_mision"]').forEach(wrapper => {
       const image = wrapper.querySelector('img');
       if (!image) return;
       wrapper.setAttribute('role', 'img');
