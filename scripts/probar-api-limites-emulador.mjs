@@ -38,6 +38,15 @@ const deps = {
 };
 
 test('Firestore real: 200 peticiones desde isolates distintos nunca superan 20 reservas', async () => {
+  // Preparar el proyecto emulado antes de medir las 200 reservas concurrentes.
+  // Su primera conexión no forma parte del plazo de respuesta de la API.
+  const warmup = await fetch(`${root}/apiRateLimits/warmup`, { headers, signal: AbortSignal.timeout(30_000) });
+  assert.ok([200, 404].includes(warmup.status));
+  const writeWarmup = await fetch(`${root}:commit`, {
+    method: 'POST', headers, signal: AbortSignal.timeout(30_000),
+    body: JSON.stringify({ writes: [{ update: { name: prefix + 'apiRateLimits/warmup', fields: { count: { integerValue: '0' } } } }] }),
+  });
+  assert.equal(writeWarmup.status, 200, await writeWarmup.text());
   const isolates = await Promise.all([1, 2].map(value => import(`../cloudflare/rate-limit-compartido.js?isolate=${value}-${randomUUID()}`)));
   const policy = { id: 'api-concurrency', identity: randomUUID(), limit: 20, windowMs: 60_000 };
   const results = await Promise.allSettled(Array.from({ length: 200 }, (_value, index) =>

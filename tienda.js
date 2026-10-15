@@ -862,7 +862,7 @@ function renderProductCardMarkup(p, options = {}) {
   const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
   const productHref = `/product?id=${encodeURIComponent(String(p.id))}${selectedColor ? `&color=${encodeURIComponent(selectedColor)}` : ''}`;
   const imgContent = imgUrl
-    ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
+    ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="${options.related ? 'eager' : 'lazy'}" decoding="async" onerror="_onProductImgError(this)">`
     : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
   const hasVariants = productVariantGroups(p).length > 0;
   // Las variantes se eligen en la ficha: una sola acción evita dos enlaces iguales.
@@ -1119,6 +1119,7 @@ function initProductPage() {
 // snapshots refresh the displayed data without ever stacking up duplicate
 // click handlers (which was the root cause of one click adding N units).
 let _pdProduct = null;
+let _pdRenderedSignature = '';
 let _pdQty = 1;
 let _pdMaxQty = 99;
 let _pdGalleryIndex = 0;
@@ -1558,6 +1559,8 @@ function _renderProductDetail(product) {
     _showProductNotFound();
     return;
   }
+  const signature = JSON.stringify(product);
+  if (_pdProduct && _pdRenderedSignature === signature && document.getElementById('product-grid')?.style.display !== 'none') return;
   const isSameProduct = _pdProduct && String(_pdProduct.id) === String(product.id);
   const colorKey = window.TintinProductMedia.colorKey(product);
   const requestedColor = new URLSearchParams(window.location.search).get('color');
@@ -1863,6 +1866,7 @@ function _renderProductDetail(product) {
     }
   }
   _pdUpdateQtyUI();
+  _pdRenderedSignature = signature;
   window.dispatchEvent(new CustomEvent('tintin:product-rendered', { detail: { product } }));
 }
 
@@ -2478,3 +2482,6 @@ window.addEventListener('tintin:favorites-updated', renderCart);
 // El reveal-al-scrollear de esta página ahora lo maneja js/quality/revelado-desplazamiento-global.js
 // (cargado global vía js/cargador-pagina.js) — tenerlo acá duplicado hacía que
 // estos mismos elementos se animaran dos veces al entrar en pantalla.
+
+// La ficha pública no espera DOMContentLoaded ni los SDK de scripts secundarios.
+if (document.getElementById('product-detail')) initProductPage();

@@ -5,7 +5,7 @@ import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin
    Mantiene una sola definición de producto comprable para portada,
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
-import { loadCollections, normalizeCollectionSlug } from '../collections/estado-colecciones.js?v=tintin-20261015-integrated-estado-colecciones-1';
+import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261015-public-collection-data-1';
 import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1-stock-flow-20261014-1';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { variantStockLimit, hasProductStock } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
@@ -262,7 +262,7 @@ function keepDetailGuardInstalled() {
   }, 50);
 }
 
-loadCollections().then(collections => {
+export const catalogVisibilityReady = loadCollections().then(collections => {
   visibleCollectionSlugs = new Set(collections.map(collection => collection.slug));
   if (Array.isArray(window.PRODUCTS)) publishFiltered(window.PRODUCTS, 'phase7-collections');
 }).catch(error => {

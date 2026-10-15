@@ -137,12 +137,12 @@
     "test:critical-runtime": "node scripts/probar-flujos-runtime.mjs"
   },
   "devDependencies": {
-    "@firebase/rules-unit-testing": "5.0.2",
-    "@playwright/test": "^1.63.0",
-    "firebase": "^12.19.0",
-    "firebase-tools": "^15.32.1",
+    "@firebase/rules-unit-testing": "6.0.0",
+    "@playwright/test": "^1.64.0",
+    "firebase": "^13.0.0",
+    "firebase-tools": "^15.33.0",
     "monaco-editor": "0.57.0",
-    "parse5": "5.1.1",
+    "parse5": "8.0.1",
     "playwright": "^1.62.1"
   },
   "overrides": {

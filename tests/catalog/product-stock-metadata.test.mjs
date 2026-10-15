@@ -14,3 +14,12 @@ test('metadata y foto del agotado coinciden aunque el agregado conserve stock vi
   const rendered = renderProductMetadataHtml(source, 'stock-fixture', { ...product, variantInventory: product.variantInventory.map(row => ({ ...row, stock: 0 })) });
   assert.match(rendered.html, /OutOfStock/); assert.match(rendered.html, /tt-stock-label/);
 });
+test('el HTML inicial muestra información real escapada y deja las compras pendientes de hidratación', async () => {
+  const fs = await import('node:fs');
+  const page = fs.readFileSync(new URL('../../product.html', import.meta.url), 'utf8');
+  const rendered = renderProductMetadataHtml(page, 'fast', { ...product, name: 'Aros <b>Sol</b> & Luna', price: 25000 });
+  assert.match(rendered.html, /id="product-name">Aros Sol &amp; Luna<\/h1>/);
+  assert.match(rendered.html, /id="product-price">Gs\. 25\.000<\/div>/);
+  assert.match(rendered.html, /id="btn-product-add-cart" disabled/);
+  assert.match(rendered.html, /id="btn-product-buy-now" disabled/);
+});

@@ -21,7 +21,7 @@ function check(name, condition, problem) {
 
 const montserrat = read('css/core/montserrat.css');
 const products = read('js/core/store/estado-productos.js');
-const collections = read('js/pages/collections/estado-colecciones.js');
+const collections = (read('js/pages/collections/estado-colecciones.js') + '\n' + read('js/pages/collections/datos-publicos-colecciones.js'));
 const instantColor = read('js/components/color/esquema-color-instantaneo.js');
 const liveColor = read('js/components/color/esquema-color.js');
 const fastReleaseMs = Number(instantColor.match(/RELEASE_TIMEOUT_MS\s*=\s*(\d+)/)?.[1] || Infinity);
@@ -94,7 +94,8 @@ check(
 check('La ficha mantiene su lectura individual y comparte relacionados por API edge',
   /getDoc\(doc\(db, 'products', id\)\)/.test(products) &&
   /onSnapshot\(\s*doc\(db, 'products', normalizedId\)/.test(products) &&
-  products.includes("void runSingleFlight('products:related:all'") &&
+  products.includes("void fetchRelatedProducts(product).then(related =>") &&
+  products.includes("scheduleRelated(product)") &&
   products.includes("runSingleFlight('products:catalog:related-fetch'") &&
   products.includes('readCached(ALL_CACHE_KEY, ALL_CACHE_TTL)') &&
   products.includes("fetchPublicCatalogResource('products')") &&

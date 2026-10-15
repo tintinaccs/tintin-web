@@ -1,20 +1,12 @@
+import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261015-photos-logos-cargador-mantenimiento-pagina-1-about-light-20261015-1-about-gap-crop-20261015-1';
-import '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261015-integrated-politica-visibilidad-catalogo-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261015-photos-logos-cargador-mantenimiento-pagina-1-about-light-20261015-1-about-gap-crop-20261015-1-producto-rapido-20261015-1';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261015-integrated-politica-visibilidad-catalogo-1-producto-rapido-20261015-1';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1-stock-flow-20261014-1';
-import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261015-product-realtime-lazy-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  onSnapshot,
-  query,
-  where
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
 import {
   readCached,
   readStaleCached,
@@ -45,6 +37,16 @@ let publicProductRelated = [];
 let publicProductCategory = '';
 let publicProductCurrent = null;
 let publicProductRequestVersion = 0;
+
+let realtimeDependencies;
+let db, doc, getDoc, onSnapshot;
+function getRealtimeDependencies() {
+  if (!realtimeDependencies) realtimeDependencies = loadProductRealtimeDependencies().then(deps => {
+    ({ db, doc, getDoc, onSnapshot } = deps);
+    return deps;
+  }).catch(() => null);
+  return realtimeDependencies;
+}
 
 function sanitizeProductImage(img) {
   return sanitizeImageUrl(img);
@@ -249,7 +251,8 @@ export async function loadAllProducts(options = {}) {
 }
 
 async function fetchSingleProduct(id) {
-  if (!await appCheckReady) return null;
+  const deps = await getRealtimeDependencies();
+  if (!deps || !await deps.appCheckReady) return null;
   const snapshot = await getDoc(doc(db, 'products', id));
   recordFirestoreRead('products:single', 1);
   if (!snapshot.exists()) return null;
@@ -264,7 +267,8 @@ async function fetchSingleProductFromEdge(id) {
   const timer = window.setTimeout(() => controller.abort(), PUBLIC_PRODUCT_TIMEOUT_MS);
   try {
     const params = new URLSearchParams({ resource: 'products', id: String(id) });
-    const response = await fetch(`${PUBLIC_CATALOG_ENDPOINT}?${params.toString()}`, {
+    const prefetched = await getProductPagePrefetch(id)?.response;
+    const response = prefetched ? prefetched.clone() : await fetch(`${PUBLIC_CATALOG_ENDPOINT}?${params.toString()}`, {
       method: 'GET',
       credentials: 'omit',
       cache: 'default',
@@ -279,6 +283,7 @@ async function fetchSingleProductFromEdge(id) {
     if (!payload.item.id || !payload.item.data || typeof payload.item.data !== 'object') {
       throw new Error('Producto público inválido');
     }
+    await catalogVisibilityReady;
     const product = mapProduct(payload.item.id, payload.item.data);
     if (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product)) return null;
     writeCached(`product:${id}`, product);
@@ -294,7 +299,8 @@ async function fetchRelatedProducts(product) {
     try {
       const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
       if (Array.isArray(cached) && cached.length) return cached;
-      const items = await fetchPublicCatalogResource('products');
+      const prefetched = await getProductPagePrefetch(product.id)?.catalog;
+      const items = prefetched || await fetchPublicCatalogResource('products');
       const products = normalizeList(items.map(item => mapProduct(item.id, item.data)));
       if (products.length) writeCached(ALL_CACHE_KEY, products.map(compactProduct));
       return products.map(compactProduct);
@@ -322,7 +328,10 @@ function isCurrentProductRequest(id, requestVersion) {
   return publicProductId === id && publicProductRequestVersion === requestVersion;
 }
 
-function waitForProductAppCheck() {
+async function waitForProductAppCheck() {
+  const deps = await getRealtimeDependencies();
+  if (!deps) return false;
+  const appCheckReady = deps.appCheckReady;
   let timer = 0;
   const timeout = new Promise(resolve => {
     timer = window.setTimeout(() => resolve(false), PRODUCT_APP_CHECK_TIMEOUT_MS);
@@ -343,9 +352,30 @@ async function startProductRealtime(id) {
   const requestVersion = publicProductRequestVersion;
   let realtimeConfirmed = false;
   let relatedRequestVersion = 0;
+  let relatedPendingCategory = '';
+
+  function scheduleRelated(product) {
+    if (!product || (publicProductCategory === product.category && (publicProductRelated.length || relatedPendingCategory === product.category))) return;
+    publicProductCategory = product.category;
+    const relatedVersion = ++relatedRequestVersion;
+    relatedPendingCategory = product.category;
+    void fetchRelatedProducts(product).then(related => {
+      if (!isCurrentProductRequest(normalizedId, requestVersion) || relatedVersion !== relatedRequestVersion) return;
+      if (publicProductCategory !== product.category || !publicProductCurrent) return;
+      publicProductRelated = related;
+      publish([publicProductCurrent, ...related.filter(item => item.id !== normalizedId)], 'product-related-catalog');
+    }).catch(() => {}).finally(() => {
+      if (relatedVersion === relatedRequestVersion) relatedPendingCategory = '';
+    });
+  }
 
   const cachedProduct = readCached(`product:${normalizedId}`, PRODUCT_CACHE_TTL);
-  if (cachedProduct) publish([cachedProduct], 'cache');
+  if (cachedProduct) void Promise.resolve(catalogVisibilityReady).then(() => {
+    if (!isCurrentProductRequest(normalizedId, requestVersion) || realtimeConfirmed) return;
+    publicProductCurrent = cachedProduct;
+    publish([cachedProduct], 'cache');
+    scheduleRelated(cachedProduct);
+  });
 
   // La ficha no debe esperar a App Check ni descargar los ~1000 productos del
   // catálogo para resolver uno solo. La API pública canónica consulta el mismo
@@ -359,8 +389,13 @@ async function startProductRealtime(id) {
     if (!isCurrentProductRequest(normalizedId, requestVersion) || realtimeConfirmed) return { ok: true, product, published: null };
     if (product) {
       publicProductCurrent = product;
-      return { ok: true, product, published: publish([product], 'edge-product') };
+      const published = publish([product, ...publicProductRelated.filter(item => item.id !== product.id)], 'edge-product');
+      scheduleRelated(product);
+      return { ok: true, product, published };
     }
+    publicProductCurrent = null;
+    publicProductRelated = [];
+    relatedRequestVersion += 1;
     return { ok: true, product: null, published: publish([], 'edge-product-missing') };
   }).catch(error => ({ ok: false, error, product: null, published: null }));
 
@@ -422,25 +457,7 @@ async function startProductRealtime(id) {
         );
         settle(current);
 
-        if (publicProductCategory === product.category && publicProductRelated.length) return;
-        publicProductCategory = product.category;
-        const relatedVersion = ++relatedRequestVersion;
-        runSingleFlight(
-          `products:related:${product.category}`,
-          () => fetchRelatedProducts(product)
-        ).then(related => {
-          if (!isCurrentProductRequest(normalizedId, requestVersion)) return;
-          if (relatedVersion !== relatedRequestVersion || publicProductCategory !== product.category) return;
-          publicProductRelated = related;
-          const latestProduct = publicProductCurrent;
-          if (!latestProduct) return;
-          publish(
-            [latestProduct, ...related.filter(item => item.id !== latestProduct.id)],
-            'realtime-product-related'
-          );
-        }).catch(() => {
-          // La ficha principal ya está actualizada. Los relacionados son opcionales.
-        });
+        scheduleRelated(product);
       },
       async error => {
         if (!isCurrentProductRequest(normalizedId, requestVersion)) {
@@ -506,19 +523,7 @@ export async function loadProductPage(options = {}) {
     return [];
   }
   if (options.force === true) stopProductRealtime();
-  const products = await startProductRealtime(id);
-  const version = publicProductRequestVersion;
-  const product = products.find(item => String(item.id) === id);
-  if (product) {
-    // Resolve the detail immediately. Recommendations use the shared edge
-    // catalog in parallel, including when App Check/realtime is unavailable.
-    void runSingleFlight('products:related:all', () => fetchRelatedProducts(product)).then(related => {
-      if (!isCurrentProductRequest(id, version) || !publicProductCurrent) return;
-      publicProductRelated = related;
-      publish([publicProductCurrent, ...related.filter(item => item.id !== id)], 'product-related-catalog');
-    });
-  }
-  return products;
+  return startProductRealtime(id);
 }
 
 export async function ensureProductsForSearch() {

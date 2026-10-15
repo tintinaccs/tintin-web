@@ -20,7 +20,7 @@ html body .tt-product-social-bar{justify-content:flex-start!important;text-align
 #btn-product-like[aria-pressed="true"] .tt-social-icon{fill:currentColor}
 .tt-product-name-row{display:block}
 @media(max-width:767px){.tt-product-social-bar{justify-content:center!important;flex-wrap:wrap;overflow:visible}.tt-social-action,.tt-social-share{min-height:44px;padding-inline:12px}}
-body[data-tt-product-server-preview="1"] #product-loading{display:none!important}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"]{display:grid!important}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"] .tt-product-info-panel{visibility:hidden;pointer-events:none}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"] .tt-gallery-main{cursor:default}
+body[data-tt-product-server-preview="1"] #product-loading{display:none!important}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"]{display:grid!important}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"] .tt-product-selection{visibility:hidden;pointer-events:none}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"] .tt-gallery-main{cursor:default}
 /* La regla de arriba apaga .tt-product-badge para el panel de detalle, pero también apagaba la etiqueta
    Nuevo/Agotado de las tarjetas de "También te puede gustar". En tarjetas va arriba a la izquierda y el
    corazón arriba a la derecha; en móvil la etiqueta va abajo en la foto y conserva el corazón táctil de 44 px. */

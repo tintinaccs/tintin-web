@@ -319,7 +319,7 @@ if (grid && !window.TintinRelatedProducts) {
     else {
       const latest = new Map(validProducts().map(product => [String(product.id), product]));
       const refreshed = state.visible.map(product => latest.get(String(product.id)));
-      const changed = refreshed.some((product, index) => cardMarkup(product) !== cardMarkup(state.visible[index]));
+      const changed = (grid.querySelector?.('.tt-product-card-fallback') && typeof window.renderProductCardMarkup === 'function') || refreshed.some((product, index) => cardMarkup(product) !== cardMarkup(state.visible[index]));
       if (changed) renderAll(refreshed);
       else state.visible = refreshed;
     }

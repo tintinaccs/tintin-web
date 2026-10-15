@@ -104,7 +104,7 @@ check(
 );
 check(
   'Las lecturas públicas restantes también están limitadas',
-  read('js/pages/collections/estado-colecciones.js').includes("fetchPublicCatalogResource('collections')") &&
+  (read('js/pages/collections/estado-colecciones.js') + '\n' + read('js/pages/collections/datos-publicos-colecciones.js')).includes("fetchPublicCatalogResource('collections')") &&
     read('js/core/store/estado-productos.js').includes("fetchPublicCatalogResource('products')") &&
     !/onSnapshot\(\s*query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)/.test(read('js/core/store/estado-productos.js'))
 );
