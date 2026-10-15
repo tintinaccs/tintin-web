@@ -138,7 +138,15 @@ async function inspectBase(page, width) {
 
     if (mobile) {
       if (visible(header)) issues.push('header desktop visible en mobile');
-      if (visible(tabletHeader)) issues.push('header tablet visible en mobile');
+      if (!visible(tabletHeader)) issues.push('cabecera compacta ausente en mobile');
+      else {
+        const controls=[...tabletHeader.querySelectorAll('a,button')].filter(node=>visible(node)).map(rect);
+        controls.forEach((control,index)=>{
+          if(control.left < -1 || control.right > width+1) issues.push(`cabecera mobile: control ${index+1} fuera`);
+          if(control.width<44 || control.height<44) issues.push(`cabecera mobile: control ${index+1} menor a44px`);
+          controls.slice(index+1).forEach(other=>{if(overlaps(control,other))issues.push('controles de cabecera mobile se pisan');});
+        });
+      }
       if (!visible(tabbar)) {
         issues.push('tabbar mobile ausente');
       } else {

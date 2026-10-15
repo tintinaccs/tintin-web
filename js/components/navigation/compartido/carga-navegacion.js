@@ -235,6 +235,7 @@ const navigationSurfaceImportFactories = Object.freeze({
     import(new URL('/js/components/navigation/tableta/control-menu-tableta.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
   ],
   mobile: () => [
+    import(new URL('/js/components/navigation/tableta/control-menu-tableta.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
     import(new URL('/js/components/navigation/movil/indicador-navegacion-movil.js?v=tintin-20261010-whatsapp-release-5', location.href).href),
     import(new URL('/js/components/navigation/movil/navegacion-compacta-movil.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
   ],

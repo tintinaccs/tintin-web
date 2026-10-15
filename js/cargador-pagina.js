@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-ui-reconciled-20261014-1-ui-reconciled-20261014-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261012-unified-2-calidad-interfaz-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-stock-flow-20261014-1-connections-20261014-1-ui-reconciled-20261014-1-ui-reconciled-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1');
     }
   }
 
@@ -849,7 +849,7 @@
 
   function bootHeaderMode() {
     if (!window.TintinHeaderModeBooted) {
-      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261012-auth-privacy-1-visibilidad-navegacion-por-dispositivo-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2');
+      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261012-auth-privacy-1-visibilidad-navegacion-por-dispositivo-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-logos-wa-20261015-1');
     }
   }
 

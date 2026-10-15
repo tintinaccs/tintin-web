@@ -48,17 +48,21 @@
       if (Object.prototype.hasOwnProperty.call(map, key) && isSafeColorValue(map[key])) {
         var value = map[key];
         if (/^--(?:admin-)?color-/.test(key)) {
-          if (/^--color-button-whatsapp-(?:background|hover)$/.test(key) && /^#(?:0d8043|0a6835)$/i.test(value.trim())) {
-            value = '#F8AACA';
+          if (/^--color-button-whatsapp-(?:background|hover)$/.test(key) && /^#f8aaca$/i.test(value.trim())) {
+            value = /hover$/.test(key) ? '#0a6835' : '#0d8043';
+          } else if (key === '--color-button-whatsapp-text' && /^#222222$/i.test(value.trim())) {
+            value = '#FFFFFF';
           } else if (/^#(?:c52f68|ad3f67|8b2642|711f35|c64273|9e2451)$/i.test(value.trim())) {
             value = /text|price|breadcrumb/.test(key) ? '#222222' : '#F8AACA';
           } else if (/^--color-(?:text-(?:secondary|tertiary|muted|subtitle|placeholder|help)|button-icon-text|field-placeholder|tab-inactive-text|breadcrumb-text|empty-state-text|price-old|icon-primary)$/.test(key) && /^#(?:7b6f72|948890)$/i.test(value.trim())) {
             value = '#222222';
           } else if (/^#2b2b2b$/i.test(value.trim()) || (
-            /^#ffffff$/i.test(value.trim()) && /(?:button-(?:primary|floating|sticky|whatsapp)|tab-active|selection)-text$/.test(key)
+            /^#ffffff$/i.test(value.trim()) && /(?:button-(?:primary|floating|sticky)|tab-active|selection)-text$/.test(key)
           )) value = '#222222';
         }
         value = normalizeUnifiedPaletteColor(value);
+        if (/^--color-button-whatsapp-(?:background|hover)$/.test(key) && /^#f8aaca$/i.test(value)) value = /hover$/.test(key) ? '#0a6835' : '#0d8043';
+        if (key === '--color-button-whatsapp-text' && /^#222222$/i.test(value)) value = '#FFFFFF';
         if (key === '--color-brand-secondary' && /^#f8aaca$/i.test(value)) value = '#222222';
         if (key === '--color-cart-badge-text' && /^#ffffff$/i.test(value)) value = '#222222';
         if (key === '--color-rating-star' && /^#8a6d1f$/i.test(value)) value = '#222222';

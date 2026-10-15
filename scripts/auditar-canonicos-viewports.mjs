@@ -157,7 +157,7 @@ async function inspect(page, width, pageInfo) {
       const desktop = document.getElementById('tt-header-desktop-tablet');
       const tablet = document.getElementById('tt-header-tablet');
       const mobile = document.getElementById('tt-tabbar');
-      if (width < 768) { if (visible(desktop)) issues.push('header desktop visible en mobile'); if (visible(tablet)) issues.push('header tablet visible en mobile'); if (!visible(mobile)) issues.push('tabbar mobile oculta'); }
+      if (width < 768) { if (visible(desktop)) issues.push('header desktop visible en mobile'); if (!visible(tablet)) issues.push('cabecera compacta mobile oculta'); if (!visible(mobile)) issues.push('tabbar mobile oculta'); }
       else if (width <= 1024) { if (visible(desktop) || visible(mobile)) issues.push('navegación ajena visible en tablet'); if (!visible(tablet)) issues.push('header tablet oculto'); }
       else { if (visible(tablet) || visible(mobile)) issues.push('navegación ajena visible en desktop'); if (!visible(desktop)) issues.push('header desktop oculto'); }
     }

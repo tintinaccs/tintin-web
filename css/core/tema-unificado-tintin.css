@@ -465,16 +465,16 @@ html[data-tt-footer-accent-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-
 .perfil-wrap, .perfil-card { box-sizing:border-box; min-width:0; }
 
 
-/* WhatsApp comparte la paleta de marca y los tokens de sus controles. */
-html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link) {
+/* WhatsApp conserva verde y blanco mediante sus tokens semánticos. */
+html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,a[href*="wa.me"][class],#ck-wa-support) {
   background:var(--color-button-whatsapp-background) !important;
   color:var(--color-button-whatsapp-text) !important;
   border-color:var(--color-button-whatsapp-background) !important;
 }
-html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link) * {
+html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,a[href*="wa.me"][class],#ck-wa-support) * {
   color:var(--color-button-whatsapp-text) !important;
 }
-html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link):hover {
+html body:not(:has(.adm-main)) :is(.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,a[href*="wa.me"][class],#ck-wa-support):hover {
   background:var(--color-button-whatsapp-hover) !important;
 }
 .tt-card-colors { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; margin:6px 0; }
@@ -501,6 +501,18 @@ html body:not(:has(.adm-main)) :is(.tt-footer-wa,.tt-contact-wa-link) svg {
 /* Los botones de WhatsApp conservan su contraste aunque cambie el texto primario. */
 html body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-wa .tt-footer-wa-text,
 html body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-wa svg { color:var(--color-button-whatsapp-text) !important; }
+
+/* También los CTA de ayuda de producto, checkout y páginas informativas. */
+html:root body:not(:has(.adm-main)) :is(a[href*="wa.me"][class]:not(.tt-wa-float):not(.tt-footer-wa):not(.tt-contact-wa-link),#ck-wa-support) {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  min-height:44px; padding:10px 16px; border-radius:999px;
+  background:var(--color-button-whatsapp-background) !important;
+  color:var(--color-button-whatsapp-text) !important;
+  border-color:var(--color-button-whatsapp-background) !important;
+  text-decoration:none !important;
+}
+html:root body:not(:has(.adm-main)) :is(a[href*="wa.me"][class]:not(.tt-wa-float):not(.tt-footer-wa):not(.tt-contact-wa-link),#ck-wa-support) * { color:var(--color-button-whatsapp-text) !important; }
+html:root body:not(:has(.adm-main)) :is(a[href*="wa.me"][class]:not(.tt-wa-float):not(.tt-footer-wa):not(.tt-contact-wa-link),#ck-wa-support):hover { background:var(--color-button-whatsapp-hover) !important; }
 
 /* Tarjetas de boutique: fotografía cuadrada, contenido compacto y acciones alineadas. */
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-img { aspect-ratio:1; min-height:0; background:#fff; }

@@ -124,7 +124,8 @@ const tabletStyles = read('css/components/navigation/tableta/encabezado-tableta.
 const mobileStyles = read('css/components/navigation/movil/encabezado-movil.css');
 const surfaceStyles = read('css/components/navigation/compartido/paneles.css');
 check(/@media \(min-width: 1025px\)/.test(desktopStyles), 'escritorio: falta el corte exacto >=1025px');
-check(/@media \(min-width: 768px\) and \(max-width: 1024px\)/.test(tabletStyles), 'tableta: falta el rango exacto 768-1024px');
+check(/@media \(max-width: 1024px\)/.test(tabletStyles), 'cabecera compacta: falta el rango compartido <=1024px');
+check(/@media \(max-width:767px\)/.test(tabletStyles) && tabletStyles.includes('grid-template-columns:64px minmax(0,1fr) 44px'), 'cabecera móvil: falta el diseño compacto propio con controles de44px');
 check(/@media \(max-width: 767px\)/.test(mobileStyles), 'móvil: falta el rango exacto <=767px');
 check(desktopStyles.includes('.tt-nav-dropdown:not(.open) .tt-dropdown'), 'escritorio: falta el cierre visual definitivo de Tienda');
 check(desktopStyles.includes('width: 84px !important'), 'escritorio: las imágenes de colecciones no fueron ampliadas');

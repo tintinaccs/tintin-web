@@ -35,7 +35,7 @@ export function renderTabletHeader() {
 
 export function renderTabletMenu() {
   return `
-    <div class="tt-tablet-menu" id="tt-tablet-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación tablet" aria-hidden="true">
+    <div class="tt-tablet-menu" id="tt-tablet-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación" aria-hidden="true">
       <div class="tt-tablet-menu-header">
         <a href="/" class="tt-tablet-menu-logo" aria-label="Tintin, ir al inicio">
           ${logoImage('tt-tablet-menu-logo-img', 'TINTIN')}
@@ -44,7 +44,7 @@ export function renderTabletMenu() {
           ${svgIcon(UI_ICONS.close)}
         </button>
       </div>
-      <nav class="tt-tablet-nav" aria-label="Navegación tablet">
+      <nav class="tt-tablet-nav" aria-label="Navegación principal">
         <a href="/" data-shell-route="home">INICIO</a>
         <button type="button" id="btn-tablet-tienda" class="tt-tablet-tienda-btn" aria-expanded="false" aria-controls="tablet-cats">
           <span>CATÁLOGO</span>

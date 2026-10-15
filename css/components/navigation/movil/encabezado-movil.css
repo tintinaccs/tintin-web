@@ -4,8 +4,7 @@
 }
 
 @media (max-width: 767px) {
-  #tt-header-desktop-tablet,
-  #tt-header-tablet { display:none !important; visibility:hidden !important; pointer-events:none !important; }
+  #tt-header-desktop-tablet { display:none !important; visibility:hidden !important; pointer-events:none !important; }
 
   #tt-tabbar {
     --tt-mobile-step: 0px;

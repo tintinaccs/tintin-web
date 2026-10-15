@@ -1,4 +1,24 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
+const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture');
+
+for(const width of [320,390,768,1440]) test(`footer de perfil conserva logo blanco tras cargar el filtro de marca en ${width}px`,async({page})=>{
+  await page.setViewportSize({width,height:900});
+  const html=removeFixtureScripts(fs.readFileSync(path.join(__dirname,'../../perfil.html'),'utf8'),{removeModulePreloads:true});
+  await page.route('**/__profile-footer',route=>route.fulfill({contentType:'text/html',body:html}));
+  await page.goto('/__profile-footer');
+  await page.addScriptTag({url:'/js/components/color/logotipo-marca.js'});
+  const logo=page.locator('.tt-footer .tt-logo-img');
+  await logo.scrollIntoViewIfNeeded();
+  await expect(logo).toHaveCSS('filter','brightness(0) invert(1)');
+  await expect(page.locator('.tt-footer .tt-logo-link')).toHaveCSS('background-color','rgb(34, 34, 34)');
+  await expect.poll(()=>logo.evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
+  for(const action of await page.locator('a[href*="wa.me"][class]').all()) {
+    await expect(action).toHaveCSS('background-color','rgb(13, 128, 67)');
+    await expect(action).toHaveCSS('color','rgb(255, 255, 255)');
+  }
+});
 
 const pages = [
   ['/index.html', '#hero'],
@@ -21,9 +41,9 @@ test('WhatsApp conserva texto legible en contacto y footer con el tema público'
   await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
   await page.goto('/contact.html');
   await expect(page.locator('body')).toHaveClass(/tt-public-shell-mounted/);
-  await expect(page.locator('.tt-contact-wa-link')).toHaveCSS('color', 'rgb(34, 34, 34)');
-  await expect(page.locator('.tt-contact-wa-link')).toHaveCSS('background-color', 'rgb(248, 170, 202)');
-  await expect(page.locator('.tt-footer-wa-text')).toHaveCSS('color', 'rgb(34, 34, 34)');
+  await expect(page.locator('.tt-contact-wa-link')).toHaveCSS('color', 'rgb(255, 255, 255)');
+  await expect(page.locator('.tt-contact-wa-link')).toHaveCSS('background-color', 'rgb(13, 128, 67)');
+  await expect(page.locator('.tt-footer-wa-text')).toHaveCSS('color', 'rgb(255, 255, 255)');
 });
 
 // Detener los módulos permite medir el documento con sus estilos definitivos
@@ -80,6 +100,27 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
           return ids.filter((id, index) => ids.indexOf(id) !== index);
         });
         expect(duplicateIds, url).toEqual([]);
+        if (url !== '/login.html') {
+          const header = page.locator(width >= 1025 ? '#tt-header-desktop-tablet' : '#tt-header-tablet');
+          await expect(header, url).toBeVisible();
+          const logo = header.locator('.tt-logo-img,.tt-tablet-logo-img');
+          const bounds = await logo.boundingBox();
+          expect(bounds.width, url).toBeGreaterThanOrEqual(60);
+          expect(bounds.width, url).toBeLessThanOrEqual(110);
+          expect(bounds.height, url).toBeGreaterThanOrEqual(44);
+          expect(bounds.height, url).toBeLessThanOrEqual(58);
+          const footerLogo = page.locator('.tt-footer .tt-logo-img');
+          await footerLogo.scrollIntoViewIfNeeded();
+          await expect(footerLogo, url).toHaveCSS('filter', 'brightness(0) invert(1)');
+          await expect(page.locator('.tt-footer .tt-logo-link'), url).toHaveCSS('background-color', 'rgb(34, 34, 34)');
+          await expect.poll(()=>footerLogo.evaluate(image=>image.complete && image.naturalWidth>0), {message:url}).toBe(true);
+          await expect(page.locator('.tt-footer-wa-text'), url).toHaveCSS('color', 'rgb(255, 255, 255)');
+          await expect(page.locator('.tt-footer-wa'), url).toHaveCSS('background-color', 'rgb(13, 128, 67)');
+          for(const action of await page.locator('a[href*="wa.me"][class]').all()) {
+            await expect(action,url).toHaveCSS('background-color','rgb(13, 128, 67)');
+            await expect(action,url).toHaveCSS('color','rgb(255, 255, 255)');
+          }
+        }
       } finally {
         release();
         await page.unroute(/\.(?:m?js)(?:\?|$)/, defer);

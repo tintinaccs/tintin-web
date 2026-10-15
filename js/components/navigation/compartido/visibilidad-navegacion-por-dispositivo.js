@@ -9,15 +9,11 @@
      headerDesktopTabletEnabled (default true) — controla los headers
        superiores físicamente separados de desktop y tablet, en >=768px.
      headerMobileEnabled (default true) — controla .tt-tabbar, la barra de
-       navegación inferior de mobile, en <=767px. El nombre del campo en
-       Firestore se mantiene igual por compatibilidad con datos ya
-       guardados, pero ya NO controla ningún header superior de mobile —
-       ese elemento no existe en el sitio.
+       navegación inferior y la cabecera compacta de mobile, en <=767px.
+       Se conserva el nombre del campo por compatibilidad con datos guardados.
 
-   Esto sólo prende/apaga cada uno dentro de su rango. Nunca puede haber
-   dos navegaciones persistentes visibles al mismo tiempo: en <=768px sólo
-   la tabbar puede estar visible (nunca el header superior), y en >=769px
-   sólo el header superior puede estar visible (nunca la tabbar).
+   En mobile conviven la cabecera blanca y la tabbar inferior por pedido del
+   propietario. En tablet y desktop se muestra únicamente la cabecera superior.
 
    onSnapshot (no getDoc de una sola vez) para que un cambio guardado desde
    el panel se refleje en cualquier pestaña de la tienda ya abierta, sin
@@ -57,7 +53,7 @@
     // puede ni ocupar espacio ni recibir clics.
     st.textContent =
       '@media (min-width:768px){html.tt-desktop-tablet-header-off #tt-header-desktop-tablet,html.tt-desktop-tablet-header-off #tt-header-tablet{display:none!important;visibility:hidden!important;pointer-events:none!important}}' +
-      '@media (max-width:767px){html.tt-mobile-navigation-off .tt-tabbar{display:none!important;visibility:hidden!important;pointer-events:none!important}}';
+      '@media (max-width:767px){html.tt-mobile-navigation-off .tt-tabbar,html.tt-mobile-navigation-off #tt-header-tablet{display:none!important;visibility:hidden!important;pointer-events:none!important}}';
     document.head.appendChild(st);
   }
   injectStyle();
