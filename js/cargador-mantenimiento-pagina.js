@@ -41,7 +41,7 @@ export function loadPageMaintenance() {
     return load('pages/login/mantenimiento-acceso.js', 'tintin-20261012-auth-privacy-1-mantenimiento-acceso-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-palette-20261014-1-ui-reconciled-20261014-1-ui-reconciled-20261014-1');
   }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20261008-producto-superficies-1-first-render-merge-20261010-1');
-  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-palette-20261014-1-story-20261014-1-story-20261014-1');
+  if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1-palette-20261014-1-story-20261014-1-story-20261014-1-photos-20261015-1');
   if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js', 'tintin-20261012-auth-privacy-1-mantenimiento-contacto-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
     return load('pages/institutional/mantenimiento-legal.js', 'tintin-20261012-auth-privacy-1-mantenimiento-legal-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2');

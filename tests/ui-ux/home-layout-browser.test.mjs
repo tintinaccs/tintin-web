@@ -31,7 +31,7 @@ test('el arte del hero usa un único tag de caché en el HTML y en el runtime de
   }
 });
 
-test('el hero entra exacto en la primera pantalla: rótulo, foto y texto adentro en todos los dispositivos', { timeout: 60000 }, async () => {
+test('los banners originales se muestran completos por dispositivo y conservan enlaces accesibles', { timeout: 60000 }, async () => {
   const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
   const hero = home.match(/<section class="tt-hero"[\s\S]*?<\/section>/)?.[0];
   assert.ok(hero);
@@ -73,42 +73,25 @@ test('el hero entra exacto en la primera pantalla: rótulo, foto y texto adentro
       });
       const detail = `${width}x${height}: ${JSON.stringify(g)}`;
       const inside = (inner, outer, slack = 1) => inner.left >= outer.left - slack && inner.right <= outer.right + slack && inner.top >= outer.top - slack && inner.bottom <= outer.bottom + slack;
-      // Primera pantalla: el hero termina justo en el borde inferior visible y la sección siguiente arranca ahí.
-      if (phone) {
-        assert.ok(g.hero.bottom - g.content.bottom >= 23 && g.hero.bottom - g.content.bottom <= 32, `Relleno inferior móvil excesivo a ${detail}`);
-        assert.ok(Math.abs(g.next.top - g.hero.bottom) <= 1, `Hueco después del hero a ${detail}`);
-      } else if (exact) {
-        assert.ok(Math.abs(g.hero.bottom - g.viewport) <= 1, `El hero no ocupa exactamente la primera pantalla a ${detail}`);
-        assert.ok(g.next.top >= g.viewport - 1, `La sección siguiente asoma en la primera pantalla a ${detail}`);
-        // En celular los botones quedan por encima de la barra de navegación flotante (88 px desde abajo)
-        // y del botón de WhatsApp que flota 16 px más arriba (34 px de alto): 141 px desde el borde inferior.
-        assert.ok(g.actions.bottom <= g.viewport - (phone ? 141 : 0), `Los botones no entran en la primera pantalla a ${detail}`);
-      } else {
-        assert.ok(g.hero.bottom >= g.viewport - 1, `El hero deja un hueco en la primera pantalla a ${detail}`);
+      const ratio = phone ? 959 / 1280 : width <= 1120 ? 1280 / 853 : 1280 / 600;
+      assert.ok(Math.abs(g.media.width / g.media.height - ratio) <= .002, `Banner original deformado o recortado a ${detail}`);
+      assert.ok(g.scrollWidth <= width + 1, `Overflow horizontal a ${detail}`);
+      assert.ok(Math.abs(g.next.top - g.hero.bottom) <= 1, `Hueco después del banner a ${detail}`);
+      assert.ok(g.targets.every(size => size >= 44), `Enlace menor de 44 px a ${detail}`);
+      if (phone) assert.ok(g.content.top >= g.media.bottom - 1, `Acciones móviles tapan la foto a ${detail}`);
+      assert.equal(await page.locator('.tt-hero-welcome').isVisible(), false, 'El banner ya incluye su bienvenida');
+      for (const [selector, href] of [['.tt-hero-cta', '/catalogo'], ['.tt-hero-link', '/about']]) {
+        const link = page.locator(selector);
+        assert.equal(await link.getAttribute('href'), href);
+        await link.scrollIntoViewIfNeeded();
+        assert.ok(await link.evaluate(el => {
+          const r = el.getBoundingClientRect();
+          return el.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2));
+        }), `Enlace tapado a ${detail}`);
+        await link.focus();
+        assert.equal(await link.evaluate(el => document.activeElement === el), true);
       }
-      for (const name of ['welcome', 'media', 'content', 'actions']) assert.ok(inside(g[name], g.hero), `${name} se sale del hero a ${detail}`);
-      assert.ok(g.scrollWidth <= width + 2, `Overflow horizontal a ${width}`);
-      assert.ok(g.title.left >= g.hero.left + 19 && g.title.right <= width - 19, `Sin margen de lectura a ${detail}`);
-      assert.ok(Math.abs(g.hero.width - width) <= 12, `El hero no ocupa el ancho a ${detail}`);
-      assert.ok(/gradient/.test(g.background), `Falta el fondo del hero a ${width}: ${g.background}`);
-      assert.ok(g.targets.every(size => size >= 44), `Botón por debajo de 44 px a ${width}: ${g.targets}`);
-      // La tarjeta conserva la proporción de la foto de cada dispositivo (no se deforma ni se corta distinto).
-      const ratio = { 'hero-nuevo-desktop': 718 / 744, 'hero-nuevo-tablet-horizontal': 677 / 923, 'hero-nuevo-tablet-vertical': 755 / 842, 'hero-nuevo-mobile': 787 / 798 }[art];
-      assert.ok(Math.abs(g.media.width / g.media.height - ratio) <= .02, `Tarjeta de la foto deformada a ${detail}`);
-      if (sideBySide) {
-        // Desktop/laptop y tablet horizontal: rótulo y contenido a la izquierda, foto a la derecha.
-        assert.ok(g.welcome.right <= g.media.left && g.content.right <= g.media.left, `El texto invade la foto a ${detail}`);
-        assert.ok(g.content.top >= g.welcome.bottom - 1, `El contenido pisa el rótulo a ${detail}`);
-        assert.equal(g.titleAlign, 'left', `Título sin alinear a la izquierda a ${width}`);
-        for (const name of ['eyebrow', 'title', 'actions']) assert.ok(Math.abs(g[name].left - g.content.left) <= 1, `${name} fuera del eje izquierdo a ${detail}`);
-        assert.ok(Math.abs(g.content.left - g.welcome.left) <= g.hero.width * .012, `Contenido y rótulo sin eje izquierdo común a ${detail}`);
-      } else {
-        // Tablet vertical y celular: rótulo, foto y contenido apilados; el contenido va debajo del borde inferior de la tarjeta.
-        assert.ok(g.welcome.top < g.media.top && g.welcome.bottom <= g.media.top + g.welcome.height * .2, `El rótulo tapa la foto a ${detail}`);
-        assert.ok(g.content.top >= g.media.bottom - 1, `El contenido pisa la tarjeta de la foto a ${detail}`);
-        assert.equal(g.titleAlign, 'center', `Título sin centrar a ${width}`);
-        for (const name of ['welcome', 'media', 'content']) assert.ok(Math.abs((g[name].left + g[name].right) - (g.hero.left + g.hero.right)) <= 3, `${name} descentrado a ${detail}`);
-      }
+
     }
   } finally { await browser.close(); }
 });

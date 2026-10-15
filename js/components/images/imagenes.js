@@ -48,7 +48,7 @@ export const HERO_IMAGE_FALLBACKS = Object.freeze({
   tabletLandscape: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png',
   mobile: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png',
 });
-export const HERO_IMAGE_CONFIG_VERSION = 2;
+export const HERO_IMAGE_CONFIG_VERSION = 3;
 
 // Solo aparecen slots que tienen un destino visual real. Las fotos de producto
 // se editan en Productos y las portadas de colección en Colecciones.

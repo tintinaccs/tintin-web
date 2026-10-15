@@ -11,11 +11,11 @@ const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-sec
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-20261012-checkout-ready-3-tienda-js-domain-prepared-20261012-6-precutover-20261013-1-security-ready-20261013-2-stock-flow-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-ui-fixes-20261014-1';
-const LOADER_VERSION = 'tintin-20261015-integrated-cargador-pagina-1';
+const LOADER_VERSION = 'tintin-20261015-integrated-cargador-pagina-1-photos-20261015-1';
 const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261015-integrated-entrada-navegacion-publica-1';
-const NAV_ENTRY_VERSION = 'tintin-20261015-integrated-entrada-navegacion-publica-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261015-integrated-entrada-navegacion-publica-1-photos-20261015-1';
+const NAV_ENTRY_VERSION = 'tintin-20261015-integrated-entrada-navegacion-publica-1-photos-20261015-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-profile-pulseras-20261014-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261012-auth-privacy-1-proteccion-sesion-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1';
@@ -171,7 +171,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-about-maintenance=\"1\"",
       "css/pages/institutional/about-maintenance.css",
-      "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-story-20261014-1"
+      "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-story-20261014-1-photos-20261015-1"
     ]
   ],
   "checkout.html": [

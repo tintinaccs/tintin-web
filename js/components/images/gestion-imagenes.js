@@ -6,7 +6,7 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261015-integrated-imagenes-1';
+import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261015-integrated-imagenes-1-photos-20261015-1';
 import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 if (!window.TintinImagesPhase5Booted) {
@@ -21,7 +21,7 @@ if (!window.TintinImagesPhase5Booted) {
   // /assets-tintin/images/* se sirve con caché inmutable (un año): cuando cambia
   // el arte del hero tiene que cambiar su URL. Mismo tag que los <source> de
   // index.html.
-  const HERO_ART_QUERY = '?v=tintin-20261014-welcome-pink-1';
+  const HERO_ART_QUERY = '?v=tintin-20261015-original-banner-1';
   const STATIC = Object.freeze({
     logo: 'assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
@@ -38,15 +38,15 @@ if (!window.TintinImagesPhase5Booted) {
       alt: 'Nueva colección de relojes Tintin',
     },
     about_foto: {
-      desktop: 'assets-tintin/images/nosotros/foto-principal/foto-principal-desktop.webp',
-      tablet: 'assets-tintin/images/nosotros/foto-principal/foto-principal-tablet.webp',
-      mobile: 'assets-tintin/images/nosotros/foto-principal/foto-principal-mobile.webp',
+      desktop: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-desktop.webp',
+      tablet: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-tablet.webp',
+      mobile: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-mobile.webp',
       alt: 'Tintin Accesorios y Relojes',
     },
     about_mision: {
-      desktop: 'assets-tintin/images/nosotros/foto-principal/foto-principal-desktop.webp',
-      tablet: 'assets-tintin/images/nosotros/foto-principal/foto-principal-tablet.webp',
-      mobile: 'assets-tintin/images/nosotros/foto-principal/foto-principal-mobile.webp',
+      desktop: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-desktop.webp',
+      tablet: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-tablet.webp',
+      mobile: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-mobile.webp',
       alt: 'Nuestra misión en Tintin Accesorios y Relojes',
     },
     hero_bg_desktop: HERO_IMAGE_FALLBACKS.desktop + HERO_ART_QUERY,
