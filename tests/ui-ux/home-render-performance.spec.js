@@ -16,4 +16,3 @@ for (const [width, height, device] of [[390,844,'mobile'],[820,1180,'tablet-vert
     expect(requests).toEqual([`/assets-tintin/images/home/hero-nuevo/hero-nuevo-${device}.webp`]);
   });
 }
-
