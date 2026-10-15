@@ -110,6 +110,8 @@ if (grid && !window.TintinRelatedProducts) {
       if (!product || String(product.id) === currentId) return false;
       if (product.active === false || !String(product.name || '').trim()) return false;
       if (!productCategory(product)) return false;
+      if (typeof window.TintinCatalogPolicy?.isPurchasable === 'function') return window.TintinCatalogPolicy.isPurchasable(product);
+      if (window.TintinCatalogMerchandising?.isProductInStock?.(product) === false) return false;
       return typeof window.isFeaturable === 'function'
         ? window.isFeaturable(product)
         : !(product.stock != null && Number(product.stock) <= 0);

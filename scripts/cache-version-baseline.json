@@ -136,8 +136,8 @@
     "sha256": "30037af6ce97934caa62d71c6ed8b1f2136d922364be486c5571362e08609058"
   },
   "css/core/tema-unificado-tintin.css": {
-    "version": "tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1",
-    "sha256": "7a22703b0c1666f3abf381c8bb67e1d2a1ae5adb5e764f22ada9d5eeaa4a119c"
+    "version": "tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1",
+    "sha256": "6e9f764e1f74c40fd3a517199d21ac47dc21e514668377d8b0605627268ccd7d"
   },
   "css/core/tokens-color.css": {
     "version": "tintin-20261012-unified-2-tokens-color-css-palette-20261014-1-logos-bottom-20261015-1",
@@ -292,8 +292,8 @@
     "sha256": "639e5d65dff461dc4b5fd94125abdbc558a4756b7423e87d788113d329b18c28"
   },
   "css/theme/sistema-superficies-tintin.css": {
-    "version": "tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
-    "sha256": "19cd75a756ee47ead483f52863814889e9265faeb004f0690125d6f4a790b3f7"
+    "version": "tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+    "sha256": "f56ef08bee8eb0197b33765fad014b3ee1130aa43c016c5aa5b9ccca9b218afe"
   },
   "css/theme/superficies-marca-responsive-tintin.css": {
     "version": "tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1",
@@ -304,8 +304,8 @@
     "sha256": "de5f789d28a5d132bcaeda507df5371112be6ff20c8e8f6e367ef17e327c2fdc"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261015-integrated-admin-app-1-logos-bottom-20261015-1",
-    "sha256": "bad446c5541018b52bfe7ac88da0e0ff515b7d5c6bce8841a4a509e63e1a8e93"
+    "version": "tintin-20261015-integrated-admin-app-1-logos-bottom-20261015-1-psi-20261015-1",
+    "sha256": "fd80dfe15b22e2f44501c62bff24583ce2b19844a5bc5299a5028afb2538f915"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -556,8 +556,8 @@
     "sha256": "4543b6278b9e68268a21e42c76dfa2910c2d86ab5843d25b4e2acb8e66365012"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20261015-photos-footer-cargador-pagina-1",
-    "sha256": "4f0dee2604257241a1eb593613154590042e8af5f43639c288f63cfa43130000"
+    "version": "tintin-20261015-photos-footer-cargador-pagina-1-tarjetas-stock-20261015-1-psi-20261015-4",
+    "sha256": "6938a5c599b76c5dbea2c31e1aef9667de883485101a330005d006eb3b8faafe"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -580,8 +580,8 @@
     "sha256": "85d0b6b225d099ab71037c8d0973e1d2cbb92f6f6bf70086231b994bce9d98ca"
   },
   "js/components/color/logotipo-marca.js": {
-    "version": "tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1",
-    "sha256": "62be6b4d2567047bc0fa6a8fb2e78546437130c3db5d56b2ad98376e651e8fa4"
+    "version": "tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
+    "sha256": "a3cdfc14be392f10d67c9c6f3b7687bac2ed7f6feaa65aa8384637cee99c0c14"
   },
   "js/components/color/normalizador-color-tema.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -940,12 +940,12 @@
     "sha256": "326883e12ed0917ff5f111a32fd32ff496a9afb2ee5f5d72fa016e4cb376e607"
   },
   "js/core/store-gate/control-tienda.js": {
-    "version": "tintin-20261012-checkout-ready-2-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1",
-    "sha256": "1fa389d597ca7c1584de84ae4ccc0fb704469cec7a72311f64533e4bbd4aff0c"
+    "version": "tintin-20261012-checkout-ready-2-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1-psi-20261015-1",
+    "sha256": "399bd5781c2a8eb47acf2083efd9e851af64e2df2f1dcb8ec1ce24316ac68f34"
   },
   "js/core/store-gate/nucleo-control-tienda.js": {
-    "version": "tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2",
-    "sha256": "4bb542ee46c7ee7a74a18c462398d851d74b204c94b03d207afb649cdb1ae637"
+    "version": "tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-psi-20261015-1",
+    "sha256": "cfa4fca81575dbcb26d3d10a03043a2171e400ba73e9ec4b6756b3eb10411a46"
   },
   "js/core/store/categorias-pulseras.mjs": {
     "version": "tintin-20261014-pulseras-2",
@@ -1168,8 +1168,8 @@
     "sha256": "b6a4fb555562cad01739e4334ce6c3c8ea719575655b10caed449885ff5791f7"
   },
   "js/pages/home/carrusel-colecciones.js": {
-    "version": "tintin-20261012-checkout-ready-3-carrusel-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1-bags-20261014-1-merge-20261015-1",
-    "sha256": "65305d01030c55fda66fb62803c0f3368dcf4c5f891b76be241ef91f8c215876"
+    "version": "tintin-20261012-checkout-ready-3-carrusel-colecciones-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1-bags-20261014-1-merge-20261015-1-psi-20261015-2",
+    "sha256": "a73e75d6c2bafc608ed010d83dfe1edca36dad4cfbe60ebc3c423f7886e05f55"
   },
   "js/pages/home/mantenimiento-inicio.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -1200,8 +1200,8 @@
     "sha256": "c599323192f89316e15d082d475936ae2910a43dc02dc309424f32efe5cbdc01"
   },
   "js/pages/product/productos-relacionados.js": {
-    "version": "tintin-20261008-producto-superficies-1-domain-prepared-20261012-6-pedidos-styles-20261013-1",
-    "sha256": "a1a96d06fcf2c57ce4adf15c440d04a6f49bcf736cb42192ce7d44ecf235790b"
+    "version": "tintin-20261008-producto-superficies-1-domain-prepared-20261012-6-pedidos-styles-20261013-1-tarjetas-stock-20261015-1",
+    "sha256": "c0132a83d911ffe93deee1a14d6f12859f3ea417b808e03fed8b1e54d018e3e8"
   },
   "js/pages/product/resenas-producto.js": {
     "version": "tintin-20261008-producto-superficies-1",
@@ -1256,8 +1256,8 @@
     "sha256": "dbe03617213adb9883f42cb85199b88e47e3122d681f446b3248e0613de0a9ff"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20261015-photos-footer-calidad-interfaz-1",
-    "sha256": "da1543fda8ddc49bf9a13a422d11fc2e53bc2bb6df6c34e7112135960e3f4111"
+    "version": "tintin-20261015-photos-footer-calidad-interfaz-1-tarjetas-stock-20261015-1",
+    "sha256": "83ab295504524a8519524d93a5e281aca96be6463d13e50c51fdabc31a508f11"
   },
   "js/quality/correccion-auditoria-pagina.js": {
     "version": "tintin-20261012-checkout-ready-3-control-paneles-js-palette-20261014-1",
@@ -1292,8 +1292,8 @@
     "sha256": "4b4f45dad56954849da2896aff612258f253370d65e38f84ce2e62e191f6268d"
   },
   "js/theme/alternancia-secciones.js": {
-    "version": "tintin-20261014-complete-section-flow-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1",
-    "sha256": "b525e1ce1c9692d1c4c5f56b5ceb54f781e1ea56135f66ccd28f351e4f5c2dad"
+    "version": "tintin-20261014-complete-section-flow-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1-render-perf-20261015-2-flow-filter-20261015-1",
+    "sha256": "0e4925ad59465714effea31dd93089be94e4b3a546286823e793b4f8f0bb9e41"
   },
   "js/vendor/gsap.min.js": {
     "version": "3.13.0",
@@ -1316,7 +1316,7 @@
     "sha256": "cb4ab1be22ae05b9594f2e35012ef958ec1dcf3636d17feed9fbbdbcddd5f2ef"
   },
   "tienda.js": {
-    "version": "tintin-20261012-checkout-ready-3-tienda-js-domain-prepared-20261012-6-precutover-20261013-1-security-ready-20261013-2-stock-flow-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1",
-    "sha256": "ee561ecdf556e09220d83f21d0eb8802eed1e523b4312d227410674888f20824"
+    "version": "tintin-20261012-checkout-ready-3-tienda-js-domain-prepared-20261012-6-precutover-20261013-1-security-ready-20261013-2-stock-flow-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-psi-20261015-3-render-perf-20261015-2",
+    "sha256": "a823d34f700d8745e84f50c6ae86b0409d4dc95184941e2c8074b8c0708fabaa"
   }
 }

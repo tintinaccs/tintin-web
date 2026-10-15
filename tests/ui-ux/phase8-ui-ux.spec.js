@@ -1,39 +1,16 @@
 'use strict';
 
 const { test, expect } = require('@playwright/test');
-
-function isExpectedExternalBrowserWarning(text) {
-  const value = String(text || '').trim();
-  return /^requestStorageAccess:\s*Permission denied\.?$/i.test(value) ||
-    /@firebase\/app-check: FirebaseError: AppCheck: ReCAPTCHA error\. \(appCheck\/recaptcha-error\)/i.test(value);
-}
+const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture');
 
 test.describe('Fase 8 — UI/UX global', () => {
   test.beforeEach(async ({ page }) => {
-    // La Fase 12 sirve el árbol de la PR con un servidor HTTP estático. La API
-    // global existe en Cloudflare/producción, por lo que acá la simulamos con
-    // una configuración publicada vacía para que la prueba mida UI/UX y no la
-    // ausencia esperada de Functions en python -m http.server.
-    await page.route('**/api/visual-studio-global-public', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json; charset=utf-8',
-        body: JSON.stringify({ config: { campaigns: [], popups: [] } }),
-      });
-    });
-    // El shell puede resolver las colecciones al recibir foco real en Tienda.
-    // El servidor estático del test no expone Pages Functions, por lo que se
-    // responde el contrato vacío de esa API sin convertirlo en un 404 ajeno a
-    // la capa UI que esta prueba verifica.
-    await page.route(/\/api\/public-catalog\?resource=collections$/, async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json; charset=utf-8',
-        body: JSON.stringify({ ok: true, resource: 'collections', items: [] })
-      });
-    });
-    await page.addInitScript(() => {
-      window.TT_DISABLE_STORE_GATE = true;
+    // Probar la capa UI real sobre el HTML/CSS real, sin arrancar servicios
+    // remotos ajenos a estados, botones y movimiento. Los errores locales se
+    // siguen comprobando estrictamente, sin filtrar mensajes del navegador.
+    await page.route(/\/(?:about|contact)\.html$/, async route => {
+      const response = await route.fetch();
+      await route.fulfill({ response, body: removeFixtureScripts(await response.text(), { removeModulePreloads: true }) });
     });
   });
 
@@ -41,11 +18,12 @@ test.describe('Fase 8 — UI/UX global', () => {
     const errors = [];
     page.on('console', message => {
       const text = message.text();
-      if (message.type() === 'error' && !isExpectedExternalBrowserWarning(text)) errors.push(text);
+      if (message.type() === 'error') errors.push(text);
     });
     page.on('pageerror', error => errors.push(error.message));
 
     await page.goto('/about.html', { waitUntil: 'domcontentloaded' });
+    await page.addScriptTag({ type: 'module', url: '/js/quality/experiencia-interfaz.js' });
     await page.waitForFunction(() => window.TintinUX?.booted === true);
 
     await expect(page.locator('html')).toHaveClass(/tt-phase8-ux-ready/);
@@ -108,6 +86,7 @@ test.describe('Fase 8 — UI/UX global', () => {
   test('respeta movimiento reducido sin perder estados', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/contact.html', { waitUntil: 'domcontentloaded' });
+    await page.addScriptTag({ type: 'module', url: '/js/quality/experiencia-interfaz.js' });
     await page.waitForFunction(() => window.TintinUX?.booted === true);
 
     const values = await page.evaluate(() => {

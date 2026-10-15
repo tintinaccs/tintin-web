@@ -40,13 +40,35 @@ function collectionHref(slug) {
   return `/catalogo?cat=${encodeURIComponent(normalized)}`;
 }
 
-function optimizedImage(url) {
+const IMAGE_WIDTHS = [240, 480, 720, 960];
+const IMAGE_SIZES = '(max-width: 640px) 34vw, (max-width: 1023px) 280px, 20vw';
+const DELIVERY_KEYS = new Set(['c', 'w', 'h', 'f', 'q', 'g', 'e', 'dpr', 'ar', 'z', 'x', 'y', 'r', 'b', 'bo', 'fl', 't', 'l', 'u', 'o', 'a']);
+
+function isDeliveryComponent(segment) {
+  return segment.split(',').every(part => {
+    const separator = part.indexOf('_');
+    return separator > 0 && separator < part.length - 1 && DELIVERY_KEYS.has(part.slice(0, separator));
+  });
+}
+
+function optimizedImage(url, width = null) {
   if (!url) return '';
   try {
     const parsed = new URL(url, window.location.href);
     if (!['http:', 'https:'].includes(parsed.protocol)) return '';
-    if (/(^|\.)cdn\.shopify\.com$/.test(parsed.hostname) && !parsed.searchParams.has('width')) {
-      parsed.searchParams.set('width', '900');
+    if (width && /(^|\.)cdn\.shopify\.com$/.test(parsed.hostname)) {
+      parsed.searchParams.set('width', String(width));
+    } else if (width && parsed.hostname === 'res.cloudinary.com' && parsed.pathname.includes('/image/upload/')) {
+      // Encadenar conserva los recortes y transformaciones administrados.
+      // No transformar URLs firmadas: cambiaría la firma de entrega.
+      if (!/\/s--[^/]+--\//.test(parsed.pathname)) {
+        const [prefix, delivery] = parsed.pathname.split('/image/upload/');
+        const segments = delivery.split('/');
+        let boundary = 0;
+        while (boundary < segments.length - 1 && isDeliveryComponent(segments[boundary])) boundary += 1;
+        segments.splice(boundary, 0, `c_limit,w_${width},f_auto,q_auto`);
+        parsed.pathname = `${prefix}/image/upload/${segments.join('/')}`;
+      }
     }
     return parsed.href;
   } catch {
@@ -79,7 +101,17 @@ function createImage(collection) {
 
   const useNextCandidate = () => {
     const next = candidates[candidateIndex++];
-    if (next) image.src = next;
+    image.removeAttribute('srcset');
+    image.removeAttribute('sizes');
+    if (next) {
+      const responsive = IMAGE_WIDTHS.map(width => optimizedImage(next, width));
+      // Los respaldos locales y las URLs firmadas conservan su fuente original.
+      if (new Set(responsive).size > 1) {
+        image.sizes = IMAGE_SIZES;
+        image.srcset = responsive.map((src, index) => `${src} ${IMAGE_WIDTHS[index]}w`).join(', ');
+      }
+      image.src = optimizedImage(next, 480);
+    }
     else image.remove();
   };
 
@@ -125,6 +157,9 @@ class InfiniteCollectionCarousel {
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     this.collections = [];
     this.cards = [];
+    this.cardGeometry = [];
+    this.inView = !('IntersectionObserver' in window);
+    this.motionGeneration = 0;
     this.gsap = null;
     this.offset = 0;
     this.targetOffset = 0;
@@ -144,6 +179,13 @@ class InfiniteCollectionCarousel {
     this.activeCollectionIndex = -1;
     this.tick = this.tick.bind(this);
     this.bindStaticEvents();
+    if ('IntersectionObserver' in window) {
+      this.visibilityObserver = new IntersectionObserver(entries => {
+        this.inView = entries.some(entry => entry.isIntersecting);
+        if (this.inView && !this.gsap) this.enhanceMotion();
+      });
+      this.visibilityObserver.observe(viewport);
+    }
   }
 
   bindStaticEvents() {
@@ -191,13 +233,14 @@ class InfiniteCollectionCarousel {
   }
 
   async enhanceMotion() {
-    if (this.reducedMotion.matches || this.collections.length <= 1) return;
+    if (!this.inView || this.gsap || this.reducedMotion.matches || this.collections.length <= 1) return;
+    const generation = ++this.motionGeneration;
     const gsap = await loadGsap();
-    if (!gsap || !this.collections.length || this.reducedMotion.matches) return;
+    if (generation !== this.motionGeneration || !this.inView || !gsap || !this.collections.length || this.reducedMotion.matches) return;
     this.gsap = gsap;
     this.viewport.classList.remove('tt-collection-carousel__viewport--native');
     requestAnimationFrame(() => {
-      if (!this.gsap || this.reducedMotion.matches || !this.cards.length) return;
+      if (generation !== this.motionGeneration || !this.gsap || this.reducedMotion.matches || !this.cards.length) return;
       this.measure(false);
       this.gsap.ticker.add(this.tick);
     });
@@ -252,9 +295,11 @@ class InfiniteCollectionCarousel {
   }
 
   destroyMotion() {
+    this.motionGeneration += 1;
     if (this.gsap) this.gsap.ticker.remove(this.tick);
     this.gsap = null;
     this.cards = [];
+    this.cardGeometry = [];
     this.baseWidth = 0;
     this.track.style.transform = '';
     this.viewport.classList.remove('is-dragging');
@@ -294,6 +339,13 @@ class InfiniteCollectionCarousel {
 
     this.offset = preserveProgress && previousWidth ? progress * this.baseWidth : -2 * this.baseWidth;
     this.targetOffset = this.offset;
+    // Medir antes de escribir transforms evita recalcular layout por tarjeta
+    // en cada frame; volver a medir al cambiar viewport o colecciones.
+    this.viewportWidth = this.viewport.clientWidth;
+    this.cardGeometry = this.cards.map(card => ({
+      card, left: card.offsetLeft, width: card.offsetWidth,
+      image: card.querySelector('.tt-collection-card__image'),
+    }));
     this.applyTransforms();
   }
 
@@ -308,7 +360,7 @@ class InfiniteCollectionCarousel {
   }
 
   tick(_time, deltaMs) {
-    if (!this.baseWidth || this.reducedMotion.matches) return;
+    if (!this.inView || document.hidden || !this.baseWidth || this.reducedMotion.matches) return;
     const seconds = Math.min(deltaMs, 40) / 1000;
 
     if (!this.dragging) {
@@ -333,19 +385,19 @@ class InfiniteCollectionCarousel {
 
   applyTransforms() {
     this.gsap?.set(this.track, { x: this.offset, force3D: true });
-    const viewportWidth = this.viewport.clientWidth;
+    const viewportWidth = this.viewportWidth;
+    if (!viewportWidth) return;
     const viewportCenter = viewportWidth / 2;
 
-    this.cards.forEach(card => {
-      const cardCenter = card.offsetLeft + this.offset + (card.offsetWidth / 2);
-      if (cardCenter < -card.offsetWidth || cardCenter > viewportWidth + card.offsetWidth) return;
+    this.cardGeometry.forEach(({ left, width, image }) => {
+      const cardCenter = left + this.offset + (width / 2);
+      if (cardCenter < -width || cardCenter > viewportWidth + width) return;
       const distance = Math.max(-1, Math.min(1, (cardCenter - viewportCenter) / viewportWidth));
-      const image = card.querySelector('.tt-collection-card__image');
       if (image) this.gsap?.set(image, { xPercent: distance * -3.5, scale: 1.04, force3D: true });
     });
 
-    const centeredCard = this.cards.reduce((closest, card) => {
-      const center = card.offsetLeft + this.offset + (card.offsetWidth / 2);
+    const centeredCard = this.cardGeometry.reduce((closest, { card, left, width }) => {
+      const center = left + this.offset + (width / 2);
       const distance = Math.abs(center - viewportCenter);
       return !closest || distance < closest.distance ? { card, distance } : closest;
     }, null);

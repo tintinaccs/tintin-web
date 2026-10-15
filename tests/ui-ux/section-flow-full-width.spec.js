@@ -57,3 +57,31 @@ for(const width of [320,390,768,1024,1440,1920]) test(`perfil muestra pestañas 
  }
  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
 });
+
+test('insertar tarjetas sin cambiar el tamaño no vuelve a medir todas las secciones', async ({ page }) => {
+  await page.setContent('<main><section id="products" style="height:200px;overflow:hidden"></section><section style="height:200px">Otra sección</section></main>');
+  await page.addScriptTag({ content: runtime });
+  await expect(page.locator('[data-tt-flow-block]')).toHaveCount(2);
+  await page.waitForTimeout(150);
+  const reads = await page.evaluate(async () => {
+    window.__flowGeometryReads = 0;
+    document.querySelectorAll('section').forEach(node => {
+      const measure = node.getBoundingClientRect.bind(node);
+      node.getBoundingClientRect = () => { window.__flowGeometryReads++; return measure(); };
+    });
+    for (let i = 0; i < 25; i++) {
+      document.getElementById('products').append(document.createElement('article'));
+      await new Promise(requestAnimationFrame);
+    }
+    return window.__flowGeometryReads;
+  });
+  expect(reads).toBe(0);
+  await page.locator('#products').evaluate(node => { node.style.height = '300px'; });
+  await expect.poll(() => page.evaluate(() => window.__flowGeometryReads)).toBeGreaterThan(0);
+  await page.evaluate(() => {
+    const section = document.createElement('section');
+    section.textContent = 'Nueva sección'; section.style.height = '100px';
+    document.querySelector('main').append(section);
+  });
+  await expect(page.locator('[data-tt-flow-block]')).toHaveCount(3);
+});
