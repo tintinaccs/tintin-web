@@ -17,7 +17,7 @@ const checks = [
   // Keep this contract aligned with the current cache-busted module shipped
   // by product.html. The old 20260905 token made a healthy product page fail
   // the audit even though it was already on the current auth/session build.
-  ['Producto usa versión nueva', product.includes('resenas-producto.js?v=tintin-20260917-comments-reports-2')],
+  ['Producto usa versión nueva', product.includes('resenas-producto.js?v=tintin-20261016-story-796b1ba61f')],
 ];
 
 const failed = checks.filter(([, ok]) => !ok);

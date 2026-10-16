@@ -27,7 +27,7 @@ async function fixture(page, width, securityReady = true) {
     const logoutSession = async () => {};
     const doc = (_db, _collection, uid) => uid;
     const getDoc = uid => new Promise((resolve, reject) => { (window.profileReads ||= {})[uid] = {resolve, reject}; });
-    const getUserRole = () => new Promise(() => {});
+    const getUserRole = (_uid, _email, profile) => Promise.resolve(profile?.testRole || 'client');
     const ROLE_LABELS = {}, SUPER_ADMIN = 'owner@example.com';
     const syncCartToFirestore = async () => {};
     const sanitizeImageUrl = value => value;
@@ -42,6 +42,21 @@ async function fixture(page, width, securityReady = true) {
     window.resolveProfile = (uid, data) => window.profileReads[uid].resolve({ exists: () => true, data: () => data });
   ` + code });
 }
+
+test('username sólo se muestra al superadmin confirmado y se oculta al cambiar de cuenta', async ({ page }) => {
+  await fixture(page, 390);
+  const field = page.locator('#perfil-username-field');
+  await expect(field).toBeHidden();
+  await page.evaluate(() => window.changeUser(window.profileUser('owner')));
+  await expect.poll(() => page.evaluate(() => Boolean(window.profileReads?.owner))).toBe(true);
+  await page.evaluate(() => window.resolveProfile('owner', { name: 'Barbi Tintin', testRole: 'superadmin' }));
+  await expect(field).toBeVisible();
+  await page.evaluate(() => window.changeUser(window.profileUser('client')));
+  await expect(field).toBeHidden();
+  await expect.poll(() => page.evaluate(() => Boolean(window.profileReads?.client))).toBe(true);
+  await page.evaluate(() => window.resolveProfile('client', { name: 'Ana Ruiz', username: 'ana' }));
+  await expect(field).toBeHidden();
+});
 
 for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
   test(`perfil conserva geometría y datos disponibles mientras actualiza · ${width}`, async ({ page }) => {

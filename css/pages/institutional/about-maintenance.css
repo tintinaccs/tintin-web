@@ -62,7 +62,7 @@ html.tt-about-maintained .tt-about-portrait {
   aspect-ratio: 9 / 10;
   border-radius: clamp(20px, 3vw, 36px);
   overflow: hidden;
-  border: 1px solid var(--about-border);
+  border: 0;
 }
 html.tt-about-maintained .tt-about-portrait .tt-img-placeholder {
   width: 100%;
@@ -86,6 +86,33 @@ html.tt-about-maintained .tt-about-portrait .tt-img-placeholder {
 }
 .tt-about-maintained .tt-about-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
 .tt-about-maintained .tt-about-actions .tt-btn { min-height: 44px; }
+/* La presentación empieza por Barbi y continúa con el texto, en todos los tamaños. */
+html.tt-about-maintained .tt-about-section .tt-about-grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 880px;
+  margin-inline: auto;
+}
+html.tt-about-maintained .tt-about-section .tt-about-portrait { grid-row: 1; }
+.tt-about-maintained .tt-about-childhood { margin: 0; align-self: start; }
+.tt-about-maintained .tt-about-childhood img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: clamp(18px, 3vw, 30px);
+}
+.tt-about-maintained .tt-about-handwritten-signature {
+  display: block;
+  width: clamp(180px, 40vw, 280px);
+  max-width: 100%;
+  height: auto;
+  margin: 12px auto 0;
+  filter: url(#tt-signature-dark);
+  background: transparent;
+  border: 0;
+}
+.tt-about-maintained [data-tt-flow-block="pink"] .tt-about-handwritten-signature { filter: url(#tt-signature-light); }
+.tt-signature-filters { position: absolute; overflow: hidden; }
 .tt-about-maintained .tt-values-heading { margin-bottom: 40px; text-align: center; }
 .tt-about-maintained .tt-trust-grid { align-items: stretch; }
 .tt-about-maintained .tt-trust-item { height: 100%; border: 1px solid var(--about-border); border-radius: 20px; }
@@ -98,7 +125,7 @@ html.tt-about-maintained .tt-about-portrait .tt-img-placeholder {
   .tt-about-maintained .tt-page-hero { padding: 36px 0 42px; }
   html.tt-about-maintained .tt-about-grid,
   html.tt-about-maintained .tt-about-mission-section .tt-about-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .tt-about-maintained .tt-about-mission-section .tt-about-content { grid-row: 1; }
+  .tt-about-maintained .tt-about-mission-section .tt-about-childhood { width: min(100%, 440px); justify-self: center; }
   .tt-about-maintained .tt-about-actions { flex-direction: column; }
   .tt-about-maintained .tt-about-actions .tt-btn { width: 100%; justify-content: center; white-space: normal; text-align: center; }
   .tt-about-maintained .tt-trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }

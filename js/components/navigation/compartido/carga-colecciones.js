@@ -6,7 +6,6 @@ const COLL_PLACEHOLDER = `${COLL_IMG_BASE}col-placeholder.webp`;
 const SLUG_FILE_MAP = { bolsos: 'bags' };
 const MOBILE_GRADIENT = 'linear-gradient(135deg,#e8c5d0,#c48a9e)';
 let started = false;
-let unsubscribe = null;
 let lastCollections = null;
 let products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 
@@ -199,6 +198,11 @@ function renderInto(container, collections, buildNode) {
     return;
   }
 
+  const signature = JSON.stringify(collections.map(collection => [
+    collection.slug, collection.name, imageCandidates(collection),
+  ]));
+  if (container.dataset.collectionsSignature === signature && hasUsableFallback(container)) return;
+  container.dataset.collectionsSignature = signature;
   container.replaceChildren();
   container.dataset.phase4CollectionsState = 'ready';
   collections.forEach(collection => container.appendChild(buildNode(collection)));
@@ -245,16 +249,15 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20261015-fast-f7771d9f0-1')
-    .then(({ onCollectionsUpdate, loadCollections }) => {
-      unsubscribe?.();
-      unsubscribe = onCollectionsUpdate(collections => {
+  // Metadata pública canónica: el menú no espera Firebase/Auth para responder.
+  return import('../../../pages/collections/datos-publicos-colecciones.js?v=tintin-20261015-public-collection-data-1')
+    .then(({ loadCollections }) => loadCollections({
+      force,
+      onData(collections) {
         lastCollections = collections;
         renderAll(collections);
-      }, renderError);
-      if (force) return loadCollections({ force: true });
-      return null;
-    })
+      },
+    }))
     .catch(error => {
       started = false;
       console.error('[nav-collections] No se pudo iniciar la carga:', error);

@@ -51,6 +51,11 @@ for (const width of [390, 768, 1440]) {
         expect(geometry.labelRight).toBeLessThanOrEqual(geometry.right);
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
+      await grid.evaluate(container => {
+        window.__collectionFirstCard = container.firstElementChild;
+        window.dispatchEvent(new CustomEvent('tintin:products-loaded', { detail: { products: window.PRODUCTS } }));
+      });
+      expect(await grid.evaluate(container => container.firstElementChild === window.__collectionFirstCard)).toBe(true);
       expect(productRequests).toBe(1);
     });
   }
