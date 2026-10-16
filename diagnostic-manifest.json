@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "40f73b3791eef01558e3fb9db8cc0793ccadbddb818e2ee8d57d80a67813cfde",
+  "sourceFingerprint": "dc434a2c330a843bce9c1109f2306323281bed1c08ed98d3e4ceab5de23ce2bd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1243,
     "textFiles": 1189,
-    "totalBytes": 19160389,
+    "totalBytes": 19160511,
     "pages": 19,
     "modules": 889
   },
@@ -37711,8 +37711,8 @@
     },
     {
       "path": "tests/architecture/product-fast-path.test.mjs",
-      "bytes": 7625,
-      "sha256": "066040ebfec2db029257ec3ec3045018330837eba3a9fa0315f5ce1d46fbdc29",
+      "bytes": 7747,
+      "sha256": "429e4cfa48196ed5ae3ef438ee39f92c069976845749bfc7cff873928b5181e6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37737,10 +37737,16 @@
           "line": 3
         },
         {
-          "raw": "node:vm",
+          "raw": "node:path",
           "target": null,
           "dynamic": false,
           "line": 4
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": []
@@ -53873,8 +53879,8 @@
     {
       "path": "tests/architecture/product-fast-path.test.mjs",
       "extension": ".mjs",
-      "bytes": 7625,
-      "sha256": "066040ebfec2db029257ec3ec3045018330837eba3a9fa0315f5ce1d46fbdc29"
+      "bytes": 7747,
+      "sha256": "429e4cfa48196ed5ae3ef438ee39f92c069976845749bfc7cff873928b5181e6"
     },
     {
       "path": "tests/architecture/product-loading-resilience.test.mjs",
