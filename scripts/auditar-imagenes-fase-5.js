@@ -250,7 +250,7 @@ check(
 
 check(
   'El navegador conserva procesamiento, WebP y vista previa',
-  files.uploadWidget.includes("import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20261015-images-1'") &&
+  files.uploadWidget.includes("import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20261016-images-fidelity-1'") &&
     files.uploadWidget.includes('pendingPreviewUrl = URL.createObjectURL(file)') &&
     files.uploadWidget.includes('uploadImageToLibrary(file') &&
     files.processing.includes('canvas.toBlob'),

@@ -361,11 +361,11 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"]{
   --tt-footer-surface:#fff;
   --tt-footer-ink:var(--color-text-primary);
   --tt-footer-muted:var(--color-text-secondary);
-  --tt-footer-line:rgba(180,75,121,.18);
-  background:var(--tt-footer-surface)!important;
+  --tt-footer-line:transparent;
+  background:linear-gradient(180deg,rgba(255,255,255,0) 0%,var(--tt-footer-surface) 34%)!important;
   color:var(--tt-footer-ink)!important;
   border:0!important;
-  border-top:1px solid var(--tt-footer-line)!important;
+  border-top:0!important;
   box-shadow:none!important;
   padding:clamp(24px,3.25vw,44px) 0 0!important;
 }

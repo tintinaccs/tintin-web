@@ -1667,11 +1667,11 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"]{
   --tt-footer-surface:#fff;
   --tt-footer-ink:var(--color-text-primary);
   --tt-footer-muted:var(--color-text-secondary);
-  --tt-footer-line:rgba(180,75,121,.18);
-  background:var(--tt-footer-surface)!important;
+  --tt-footer-line:transparent;
+  background:linear-gradient(180deg,rgba(255,255,255,0) 0%,var(--tt-footer-surface) 34%)!important;
   color:var(--tt-footer-ink)!important;
   border:0!important;
-  border-top:1px solid var(--tt-footer-line)!important;
+  border-top:0!important;
   box-shadow:none!important;
   padding:clamp(24px,3.25vw,44px) 0 0!important;
 }
@@ -4681,15 +4681,14 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-bottom
   color: #222222 !important;
 }
 
-/* Superficies blancas: el pie y las tarjetas públicas usaban el rosa de
-   página (#FFFFFF) o fondos transparentes sobre rosa. Blanco con un borde
-   suave las separa del fondo sin cambiar tipografía ni colores de texto
-   (tinta 9.69:1, secundario 5.64:1 y pie 4.93:1 sobre blanco). */
+/* El pie se integra con la sección anterior por un degradado suave. No se
+   usa una línea horizontal: mantiene el contraste del contenido sin cortar
+   visualmente la página. */
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"],
 html[data-tt-footer-bg-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] {
   --tt-footer-surface: #fff;
-  background: #fff !important;
-  border-top: 1px solid rgba(248,170,202, 0.14) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 34%) !important;
+  border-top: 0 !important;
 }
 
 /* El contenedor .tt-editorial queda transparente por sistema-superficies;
@@ -5903,7 +5902,7 @@ html[data-tt-footer-density="compact"] .tt-footer{padding-top:28px!important}
 html[data-tt-footer-density="compact"] .tt-footer-grid{gap:20px!important}
 html[data-tt-footer-density="roomy"] .tt-footer{padding-top:72px!important;padding-bottom:30px!important}
 html[data-tt-footer-density="roomy"] .tt-footer-grid{gap:52px!important}
-html[data-tt-footer-style="minimal"] .tt-footer{box-shadow:none!important;border-top:1px solid color-mix(in srgb,currentColor 15%,transparent)!important}
+html[data-tt-footer-style="minimal"] .tt-footer{box-shadow:none!important;border-top:0!important}
 html[data-tt-footer-style="boxed"] .tt-footer .container{max-width:min(1180px,calc(100% - 32px));border-radius:22px;padding:28px}
 html[data-tt-footer-style="boxed"][data-tt-footer-bg-custom] .tt-footer .container{background:color-mix(in srgb,var(--tt-global-footer-bg) 92%,var(--tt-global-footer-accent,var(--color-brand-primary, #F8AACA)) 8%)}
 

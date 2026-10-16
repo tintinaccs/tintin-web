@@ -25,16 +25,17 @@ test('las nuevas fotos conservan detalle hasta 4K sin ampliar originales pequeñ
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = '#F8AACA'; ctx.fillRect(0, 0, width, height);
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-      const result = await processImage(new File([blob], 'foto.png', { type: 'image/png' }));
+      const file = new File([blob], 'foto.png', { type: 'image/png' });
+      const result = await processImage(file);
       const full = await createImageBitmap(result.fullBlob);
       const thumb = await createImageBitmap(result.thumbBlob);
-      output.push({ width: full.width, height: full.height, thumbWidth: thumb.width, thumbHeight: thumb.height });
+      output.push({ width: full.width, height: full.height, thumbWidth: thumb.width, thumbHeight: thumb.height, sourcePreserved: result.fullBlob === file });
       full.close(); thumb.close();
     }
     return output;
   });
   expect(results).toEqual([
-    { width: 3840, height: 2304, thumbWidth: 320, thumbHeight: 192 },
-    { width: 640, height: 480, thumbWidth: 320, thumbHeight: 240 },
+    { width: 3840, height: 2304, thumbWidth: 320, thumbHeight: 192, sourcePreserved: false },
+    { width: 640, height: 480, thumbWidth: 320, thumbHeight: 240, sourcePreserved: true },
   ]);
 });

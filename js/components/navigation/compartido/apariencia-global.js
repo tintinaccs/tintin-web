@@ -1,4 +1,4 @@
-const LAYOUT_CSS_VERSION = 'tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1';
+const LAYOUT_CSS_VERSION = 'tintin-20260817-footer-contrast-1-brand-20261004-1-owner-pink-20261004-1-footer-gradient-20261016-1';
 let loaded = false;
 let globalConfigPromise = null;
 
