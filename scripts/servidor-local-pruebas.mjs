@@ -103,7 +103,11 @@ const server = http.createServer((request, response) => {
     return;
   }
   if (url.pathname === '/api/visual-studio-global-public') {
-    response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
+    // WebKit puede cargar el documento de la prueba por 127.0.0.1 aunque el
+    // servidor de apoyo quede en localhost. El endpoint es público y de solo
+    // lectura, por lo que el fixture debe permitir ambos orígenes como hace
+    // la respuesta real de Pages.
+    response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8', 'access-control-allow-origin': '*' });
     response.end('{"ok":true,"version":0,"config":{"popups":[],"campaigns":[]}}');
     return;
   }
