@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "06e80adcda2339d2b7f39db450ba25fa8f2f110d",
-  "reason": "Aviso de actualizaciones recuperado en dispositivos suspendidos y reloj editorial sin franjas. Pruebas responsive Chromium de aviso y encuadre antes y despues del snapshot.",
+  "reason": "Avisos multidispositivo con recuperación inmediata y espera App Check tardía sin reiniciar su listener; reloj editorial sin franjas. Pruebas responsive de aviso y encuadre, recuperación y errores reales conservados.",
   "files": [
     {
       "path": "404.html",
@@ -111,7 +111,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "76daa765ab7c857518ebe1d84ea2b43882c070f41f477bf448a3b1225f8fd67b",
-      "newHash": "a0e2db275d345cf19344a316a27bd69a27e08c6285c73cbe1d8b75402b848b0f"
+      "newHash": "131784eed89b490f0123836ab415a03f585137dba5db25094637f7ed16126078"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

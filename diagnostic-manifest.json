@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "8be02307ee502eac8bb1c829128cc53378eb108959d169ba47dec0624f42152c",
+  "sourceFingerprint": "b91d5269ef198a52a5556913d66826cf391a40f3d5e472bf3f1372eeea321ad3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1298,
-    "textFiles": 1212,
-    "totalBytes": 24542453,
+    "files": 1301,
+    "textFiles": 1215,
+    "totalBytes": 24547175,
     "pages": 19,
-    "modules": 908
+    "modules": 909
   },
   "viewports": [
     {
@@ -32214,8 +32214,8 @@
     },
     {
       "path": "js/quality/cambios-tienda.js",
-      "bytes": 2371,
-      "sha256": "304dff5dc76baa18f7655df4e0d2fb53313347afcc8d993a4cbf663ff2f45d49",
+      "bytes": 2586,
+      "sha256": "7b16415869045e515a4534bff0b244c5d4027a264ae69ea8ffe63478238c7948",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38182,8 +38182,8 @@
     },
     {
       "path": "tests/admin/revision-reconexion.test.mjs",
-      "bytes": 2192,
-      "sha256": "3c82a0eb07434fb169ba3b450a4637d18aebdf0b7a65717337e849e4ee557fde",
+      "bytes": 2561,
+      "sha256": "b3954ae3e5b50d39c34387db6ab01ecc97f8bc745be4cc2d4e3b8f3330521726",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49109,6 +49109,30 @@
           "line": 1746
         }
       ]
+    },
+    {
+      "path": "work/check-hashes.mjs",
+      "bytes": 417,
+      "sha256": "a6c2ec4b1dd8af14744ddbb9e0b0f853601fe2b807c4c7883f2242d1f6010c0e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../scripts/auditar-proteccion-flujos.mjs",
+          "target": "scripts/auditar-proteccion-flujos.mjs",
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": []
     }
   ],
   "files": [
@@ -50171,8 +50195,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 6370,
-      "sha256": "90fc4e79a13a8f94639f4d1c2a4d2122ffc2444a42a8b0421365ffbfd34e568e"
+      "bytes": 6416,
+      "sha256": "d03c677401ebece1cc67bc802721b5627e049d05a421a73e51b218dd408557d5"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50184,7 +50208,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "ec96f15c0f88ca2ec1cac2b257f896594291cefc84eae000b9b29422cc799ede"
+      "sha256": "2999c4786bcaa33fe3e942567a4c6eb649c2535af849a8f9111d2016681eb21f"
     },
     {
       "path": "config/public-site.json",
@@ -50795,8 +50819,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 557547,
-      "sha256": "e38fd35a32956e71b36deed519cd4b172040b868654c9b23a84e79ff26e084a7"
+      "bytes": 558223,
+      "sha256": "183d14b986ea17bc041a21359cabbd0b19f94da8f305fdedb032a07ea6abad8c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51149,8 +51173,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 46243,
-      "sha256": "a6065379961a805333b7c4f9b65d861a85b33313fcf77efb4215632aee116cd9"
+      "bytes": 46400,
+      "sha256": "b3f06c56489455012d048209f533226e4eaf4d07dfbae1a72cd318d61ce8a003"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -53375,8 +53399,8 @@
     {
       "path": "js/quality/cambios-tienda.js",
       "extension": ".js",
-      "bytes": 2371,
-      "sha256": "304dff5dc76baa18f7655df4e0d2fb53313347afcc8d993a4cbf663ff2f45d49"
+      "bytes": 2586,
+      "sha256": "7b16415869045e515a4534bff0b244c5d4027a264ae69ea8ffe63478238c7948"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -54588,7 +54612,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80160,
-      "sha256": "a0e2db275d345cf19344a316a27bd69a27e08c6285c73cbe1d8b75402b848b0f"
+      "sha256": "131784eed89b490f0123836ab415a03f585137dba5db25094637f7ed16126078"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -55067,8 +55091,8 @@
     {
       "path": "tests/admin/revision-reconexion.test.mjs",
       "extension": ".mjs",
-      "bytes": 2192,
-      "sha256": "3c82a0eb07434fb169ba3b450a4637d18aebdf0b7a65717337e849e4ee557fde"
+      "bytes": 2561,
+      "sha256": "b3954ae3e5b50d39c34387db6ab01ecc97f8bc745be4cc2d4e3b8f3330521726"
     },
     {
       "path": "tests/admin/usuarios-paginados.test.mjs",
@@ -56899,6 +56923,24 @@
       "extension": ".js",
       "bytes": 122046,
       "sha256": "74d42ffc39ba2ed3a2213bc013608813c41d737d5b22b7b42e907123e39af9fb"
+    },
+    {
+      "path": "work/check-hashes.mjs",
+      "extension": ".mjs",
+      "bytes": 417,
+      "sha256": "a6c2ec4b1dd8af14744ddbb9e0b0f853601fe2b807c4c7883f2242d1f6010c0e"
+    },
+    {
+      "path": "work/pr-body.md",
+      "extension": ".md",
+      "bytes": 1667,
+      "sha256": "b65d4962c32746220cc89c0f7bebc13ddeafc351840320706d40b9c184e5b36c"
+    },
+    {
+      "path": "work/webkit-libs/root/usr/share/doc/libmanette-0.2-0/README.md",
+      "extension": ".md",
+      "bytes": 1175,
+      "sha256": "af09d7779e7b7a36dbe84ac47e5974e132492a7637ec2a213ce281cf8c230796"
     }
   ],
   "sitemapRoutes": [],

@@ -25,6 +25,9 @@ if (!window.TintinSiteChangesBooted) {
       if (!snapshot.metadata?.hasPendingWrites) receive(snapshot.exists() ? snapshot.data() : null);
     }, error => {
       if (disposed || token !== generation) return;
+      // El adaptador sigue esperando tintin:app-check-ready y se recupera
+      // por sí mismo. No reemplazarlo ni gastar reintentos durante esa espera.
+      if (error?.code === 'app-check-unavailable') return;
       console.warn('[site-change] No se pudo escuchar la revisión:', error?.code || 'unavailable');
       if (attempt < delays.length && !retryTimer) retryTimer = setTimeout(start, delays[attempt++]);
     });
