@@ -5280,7 +5280,7 @@ body.tt-home-premium .tt-review-screens {
   background: rgb(255 241 247 / 96%); backdrop-filter: blur(8px);
 }
 .tt-reviews-dialog__header h2 { margin: 0; font-size: clamp(1rem, 2.5vw, 1.5rem); }
-.tt-reviews-close { flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #30232a; font: 28px/1 sans-serif; cursor: pointer; }
+.tt-reviews-close { flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #30232a; font-family: 'Montserrat'; font-size: 28px; line-height: 1; cursor: pointer; }
 .tt-reviews-close:focus-visible { outline: 3px solid #713c53; outline-offset: 2px; }
 .tt-reviews-dialog__content { padding: 0 22px 22px; }
 body.tt-home-premium .tt-reviews-dialog .tt-review-screens { grid-template-columns: repeat(3, minmax(0, 1fr)); }

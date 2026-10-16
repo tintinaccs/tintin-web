@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0f6c7bb091839d222b70c761d6ed2ecf03791c2df26cac68baa733e9d7549745",
+  "sourceFingerprint": "c4faf656aab7804a5c4d656979c6be770613707321586c79a985c2996da2716f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1280,
     "textFiles": 1196,
-    "totalBytes": 23941025,
+    "totalBytes": 23941994,
     "pages": 19,
     "modules": 893
   },
@@ -14209,7 +14209,7 @@
         "client"
       ],
       "bytes": 45318,
-      "sha256": "bd3880cf8524dbfa82189fc8b2d6d31b64da86322b346572df380a8d4eb2733d",
+      "sha256": "31ede2be074ed0721ed6e86dd7dacec1f9a104ac517c1d6ed6e7b16b17e0a771",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14342,7 +14342,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-6ef1e0a5477af13c",
+          "raw": "css/generated/inicio.css?v=tintin-home-6bead32cfc6c2e6b",
           "target": "css/generated/inicio.css",
           "line": 57
         },
@@ -15134,7 +15134,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-6ef1e0a5477af13c",
+          "raw": "css/generated/inicio.css?v=tintin-home-6bead32cfc6c2e6b",
           "target": "css/generated/inicio.css",
           "line": 57,
           "exists": true
@@ -16587,23 +16587,25 @@
       "sourceFile": "nosotros.html",
       "label": "Nosotros alternativo",
       "title": "Tintin — Quiénes somos",
-      "description": "",
+      "description": "Tintin Accesorios.",
       "visibility": "hidden",
       "requiresAuth": false,
       "roles": [
         "guest",
         "client"
       ],
-      "bytes": 563,
-      "sha256": "c7ffa017e6d7b73390b5ab827d1410d4a471a9b2433fd2e34498b3c4fdeb9062",
+      "bytes": 1965,
+      "sha256": "c1a4cf4a7e111d36c4242133511a54e6318e637154d828097219293ec6af5136",
       "metadata": {
         "hasViewport": true,
-        "hasDescription": false,
+        "hasDescription": true,
         "noindex": true,
         "redirectsTo": "/about",
         "htmlLang": "es",
-        "h1Count": 0,
-        "h1Lines": []
+        "h1Count": 1,
+        "h1Lines": [
+          2
+        ]
       },
       "duplicateIds": [],
       "inlineScripts": [],
@@ -16612,34 +16614,90 @@
         {
           "raw": "js/cargador-pagina.js?v=tintin-20261016-best-sellers-1",
           "target": "js/cargador-pagina.js",
-          "line": 11
+          "line": 1
         }
       ],
-      "styles": [],
+      "styles": [
+        {
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
+          "target": "css/core/montserrat.css",
+          "line": 1
+        },
+        {
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
+          "target": "css/quality/ajuste-global.css",
+          "line": 1
+        },
+        {
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
+          "target": "css/quality/movimiento.css",
+          "line": 1
+        },
+        {
+          "raw": "css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-footer-gradient-20261016-1",
+          "target": "css/quality/contraste.css",
+          "line": 1
+        },
+        {
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "target": "css/theme/sistema-superficies-tintin.css",
+          "line": 1
+        }
+      ],
       "images": [],
       "links": [
         {
           "raw": "/about",
           "target": "about.html",
-          "text": "Nosotros",
+          "text": "Ir a Quiénes somos",
           "id": "",
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 14
+          "line": 2
         }
       ],
       "references": [
         {
           "raw": "js/cargador-pagina.js?v=tintin-20261016-best-sellers-1",
           "target": "js/cargador-pagina.js",
-          "line": 11,
+          "line": 1,
+          "exists": true
+        },
+        {
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
+          "target": "css/core/montserrat.css",
+          "line": 1,
+          "exists": true
+        },
+        {
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
+          "target": "css/quality/ajuste-global.css",
+          "line": 1,
+          "exists": true
+        },
+        {
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
+          "target": "css/quality/movimiento.css",
+          "line": 1,
+          "exists": true
+        },
+        {
+          "raw": "css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-footer-gradient-20261016-1",
+          "target": "css/quality/contraste.css",
+          "line": 1,
+          "exists": true
+        },
+        {
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "target": "css/theme/sistema-superficies-tintin.css",
+          "line": 1,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 14,
+          "line": 2,
           "exists": true
         }
       ],
@@ -29877,8 +29935,8 @@
     },
     {
       "path": "js/core/store/contrato-estructura-sitio.js",
-      "bytes": 12392,
-      "sha256": "8a853109a9df38be1fdd2a2a93927ebd3503339efd9e5a8f26c5352b9ca95ba2",
+      "bytes": 12396,
+      "sha256": "aa3435bf9912d08acc65f417d931210e7c4e7c5589186bf172adfcde67f9ed72",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29910,8 +29968,8 @@
     },
     {
       "path": "js/core/store/definiciones-contenido.js",
-      "bytes": 29831,
-      "sha256": "f2f6eefb09b6f930acb08d2f1cd2a5796a3c3a4805c4c28a0caebfb13c04d920",
+      "bytes": 28447,
+      "sha256": "936f9aba359083f3c8acc2020f352d3ba800c89f587296d873f8ada55e54a2b6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29920,7 +29978,7 @@
       "endpoints": [
         {
           "url": "https://tintin.local/",
-          "line": 466
+          "line": 457
         }
       ]
     },
@@ -29962,15 +30020,15 @@
     },
     {
       "path": "js/core/store/esquema-contenido.js",
-      "bytes": 7966,
-      "sha256": "80f465dac4aac9fbe7c881a04a9b55766268489fe8d0972591091ca06c351c5e",
+      "bytes": 7917,
+      "sha256": "4f3f152132229ab452e0f69f6c823bef7b2ff5ae1b3f67b9983ffd9b3181e577",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./definiciones-contenido.js?v=tintin-20261010-whatsapp-release-5-story-20261014-1-profile-pulseras-20261014-1",
+          "raw": "./definiciones-contenido.js?v=tintin-20261016-real-reviews-1",
           "target": "js/core/store/definiciones-contenido.js",
           "dynamic": false,
           "line": 15
@@ -49571,8 +49629,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 11837,
-      "sha256": "354b4b916eb2913f9c385d7a259b286246d7717a4f331a94e6ec80c04aca29fc"
+      "bytes": 12097,
+      "sha256": "530b1f0781dba94e0c9fe087ebbcec8759d9bf2349e943e89f3cee9eb5bfb3d6"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -49584,7 +49642,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "8637f19b9c3df0874301053d2ac47746aa048e77b085d6a68315192bdc220ea9"
+      "sha256": "c459df1f50a46c5af235792b4f1e9206a33c5a0c1c4a790a419348926dd48b2f"
     },
     {
       "path": "config/public-site.json",
@@ -49871,8 +49929,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 455575,
-      "sha256": "6ef1e0a5477af13c4226586ae0497978fde96454dd2512cd7ebaad436b2a64aa"
+      "bytes": 455610,
+      "sha256": "6bead32cfc6c2e6bcddb158f1c3243a954c41ea3a2c864360542e519a33d2141"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -49949,8 +50007,8 @@
     {
       "path": "css/pages/home/resenas-clientas.css",
       "extension": ".css",
-      "bytes": 2178,
-      "sha256": "7fdce0218d9adbf4a7ba75567b5fee8c1a636ba54dc3ba0902bb24396821038f"
+      "bytes": 2213,
+      "sha256": "a645bbf1080c173a24385a6e6fcfd242526418e761e09447caab06b372acfa74"
     },
     {
       "path": "css/pages/institutional/about-maintenance.css",
@@ -50189,8 +50247,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 540715,
-      "sha256": "29530ffb911019dbde5ac24f6e054eb5c83ea313d61593b6615349e1123385d6"
+      "bytes": 541430,
+      "sha256": "a3aac3848d228d20f955131df0890a75655ca1d76bcf471ddbf0b160a260acea"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51198,7 +51256,7 @@
       "path": "index.html",
       "extension": ".html",
       "bytes": 45318,
-      "sha256": "bd3880cf8524dbfa82189fc8b2d6d31b64da86322b346572df380a8d4eb2733d"
+      "sha256": "31ede2be074ed0721ed6e86dd7dacec1f9a104ac517c1d6ed6e7b16b17e0a771"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -52217,8 +52275,8 @@
     {
       "path": "js/core/store/contrato-estructura-sitio.js",
       "extension": ".js",
-      "bytes": 12392,
-      "sha256": "8a853109a9df38be1fdd2a2a93927ebd3503339efd9e5a8f26c5352b9ca95ba2"
+      "bytes": 12396,
+      "sha256": "aa3435bf9912d08acc65f417d931210e7c4e7c5589186bf172adfcde67f9ed72"
     },
     {
       "path": "js/core/store/contratos-visual-builder.js",
@@ -52235,8 +52293,8 @@
     {
       "path": "js/core/store/definiciones-contenido.js",
       "extension": ".js",
-      "bytes": 29831,
-      "sha256": "f2f6eefb09b6f930acb08d2f1cd2a5796a3c3a4805c4c28a0caebfb13c04d920"
+      "bytes": 28447,
+      "sha256": "936f9aba359083f3c8acc2020f352d3ba800c89f587296d873f8ada55e54a2b6"
     },
     {
       "path": "js/core/store/editor-visual-runtime.js",
@@ -52247,8 +52305,8 @@
     {
       "path": "js/core/store/esquema-contenido.js",
       "extension": ".js",
-      "bytes": 7966,
-      "sha256": "80f465dac4aac9fbe7c881a04a9b55766268489fe8d0972591091ca06c351c5e"
+      "bytes": 7917,
+      "sha256": "4f3f152132229ab452e0f69f6c823bef7b2ff5ae1b3f67b9983ffd9b3181e577"
     },
     {
       "path": "js/core/store/estadisticas-pedidos.js",
@@ -53063,8 +53121,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 563,
-      "sha256": "c7ffa017e6d7b73390b5ab827d1410d4a471a9b2433fd2e34498b3c4fdeb9062"
+      "bytes": 1965,
+      "sha256": "c1a4cf4a7e111d36c4242133511a54e6318e637154d828097219293ec6af5136"
     },
     {
       "path": "package-lock.json",
@@ -53957,8 +54015,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 77754,
-      "sha256": "42a0274f70dffd883421043a86ebe3d3930a99f1db5158789869d0926852d056"
+      "bytes": 77705,
+      "sha256": "ada06804a9a83af4b0d97f56e9002e6b5782ae62e1530a9ef8c8baf18be884bb"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -57098,77 +57156,77 @@
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 143,
+      "line": 134,
       "raw": "about.html",
       "target": "about.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 189,
+      "line": 180,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 205,
+      "line": 196,
       "raw": "collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 217,
+      "line": 208,
       "raw": "contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 242,
+      "line": 233,
       "raw": "envios.html",
       "target": "envios.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 271,
+      "line": 262,
       "raw": "preguntas-frecuentes.html",
       "target": "preguntas-frecuentes.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 318,
+      "line": 309,
       "raw": "cambios-devoluciones.html",
       "target": "cambios-devoluciones.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 344,
+      "line": 335,
       "raw": "terminos.html",
       "target": "terminos.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 356,
+      "line": 347,
       "raw": "privacidad.html",
       "target": "privacidad.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 368,
+      "line": 359,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "js/core/store/definiciones-contenido.js",
-      "line": 369,
+      "line": 360,
       "raw": "404.html",
       "target": "404.html",
       "exists": true

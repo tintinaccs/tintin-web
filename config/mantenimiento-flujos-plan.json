@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "88cfd9f6c035b919909101a6685b612e69c3f5a6",
-  "reason": "Publicar portada minimalista con 27 reseñas reales, originales Drive y Barbi, seleccion explicita de mas vendidos; verificar galeria 320–1920, imagenes, variantes, shell y regresiones CI.",
+  "reason": "Completar portada minimalista con originales y 27 reseñas reales, galeria 320–1920 y mas vendidos elegidos; corregir fuentes en redireccion y X, retirar testimonios de ejemplo del CMS y verificar regresiones.",
   "files": [
     {
       "path": "_headers",
@@ -91,7 +91,7 @@
     {
       "path": "index.html",
       "oldHash": "ddf4b5864be4520fc28f4c5cc0f8ffbd80a955caf1295300263852ed04abc4b0",
-      "newHash": "bd3880cf8524dbfa82189fc8b2d6d31b64da86322b346572df380a8d4eb2733d"
+      "newHash": "31ede2be074ed0721ed6e86dd7dacec1f9a104ac517c1d6ed6e7b16b17e0a771"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -156,7 +156,12 @@
     {
       "path": "js/core/store/contrato-estructura-sitio.js",
       "oldHash": "404fb41a19abc51e58881d8baef5211f2bf51e0bea347e85d2c6f1732520dd68",
-      "newHash": "8a853109a9df38be1fdd2a2a93927ebd3503339efd9e5a8f26c5352b9ca95ba2"
+      "newHash": "aa3435bf9912d08acc65f417d931210e7c4e7c5589186bf172adfcde67f9ed72"
+    },
+    {
+      "path": "js/core/store/definiciones-contenido.js",
+      "oldHash": "f2f6eefb09b6f930acb08d2f1cd2a5796a3c3a4805c4c28a0caebfb13c04d920",
+      "newHash": "936f9aba359083f3c8acc2020f352d3ba800c89f587296d873f8ada55e54a2b6"
     },
     {
       "path": "js/core/store/editor-visual-runtime.js",
@@ -166,7 +171,7 @@
     {
       "path": "js/core/store/esquema-contenido.js",
       "oldHash": "544d4ee0b80b6ec526c8a2dc07e774e3399a26fd4295464ac3eeb97486b86e47",
-      "newHash": "80f465dac4aac9fbe7c881a04a9b55766268489fe8d0972591091ca06c351c5e"
+      "newHash": "4f3f152132229ab452e0f69f6c823bef7b2ff5ae1b3f67b9983ffd9b3181e577"
     },
     {
       "path": "js/inicio-navegacion-publica.js",
@@ -191,7 +196,7 @@
     {
       "path": "nosotros.html",
       "oldHash": "0fac462cdf5bf6b49a82712897507ce4789ffa2367e906f0033aacd1435ddb78",
-      "newHash": "c7ffa017e6d7b73390b5ab827d1410d4a471a9b2433fd2e34498b3c4fdeb9062"
+      "newHash": "c1a4cf4a7e111d36c4242133511a54e6318e637154d828097219293ec6af5136"
     },
     {
       "path": "perfil.html",
@@ -216,7 +221,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "97efb103a793ff613eabb60ce88cfbeac1d0ecb86f37eec842958802558afd9c",
-      "newHash": "42a0274f70dffd883421043a86ebe3d3930a99f1db5158789869d0926852d056"
+      "newHash": "ada06804a9a83af4b0d97f56e9002e6b5782ae62e1530a9ef8c8baf18be884bb"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
