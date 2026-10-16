@@ -23,7 +23,7 @@ test('el arte del hero usa un único tag de caché en el HTML y en el runtime de
   const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
   const runtime = await fs.readFile(path.join(root, 'js/components/images/gestion-imagenes.js'), 'utf8');
   const references = [...home.matchAll(/hero-nuevo\/[a-z-]+\.(?:webp|png|svg)\?v=([A-Za-z0-9._-]+)/g)].map(match => match[1]);
-  assert.equal(references.length, 13, 'Se esperaban 8 variantes, el rótulo y 4 precargas exclusivas por dispositivo, todas versionadas');
+  assert.equal(references.length, 9, 'Se esperan 4 fuentes PNG originales, el rótulo y 4 precargas exclusivas por dispositivo, todas versionadas');
   assert.equal(new Set(references).size, 1, `El arte del hero mezcla tags: ${[...new Set(references)].join(', ')}`);
   assert.ok(runtime.includes(`const HERO_ART_QUERY = '?v=${references[0]}';`), 'El runtime debe pedir el arte por defecto con el mismo tag que index.html');
   for (const key of ['hero_bg_desktop', 'hero_bg_tablet_landscape', 'hero_bg_tablet', 'hero_bg_mobile']) {
@@ -73,7 +73,7 @@ test('los banners originales se muestran completos por dispositivo y conservan e
       });
       const detail = `${width}x${height}: ${JSON.stringify(g)}`;
       const inside = (inner, outer, slack = 1) => inner.left >= outer.left - slack && inner.right <= outer.right + slack && inner.top >= outer.top - slack && inner.bottom <= outer.bottom + slack;
-      const ratio = phone ? 959 / 1280 : width <= 1120 ? 1280 / 853 : 1280 / 600;
+      const ratio = phone ? 1024 / 1366 : width <= 1120 ? 1536 / 1024 : 1920 / 900;
       assert.ok(Math.abs(g.media.width / g.media.height - ratio) <= .002, `Banner original deformado o recortado a ${detail}`);
       assert.ok(g.scrollWidth <= width + 1, `Overflow horizontal a ${detail}`);
       assert.ok(Math.abs(g.next.top - g.hero.bottom) <= 1, `Hueco después del banner a ${detail}`);

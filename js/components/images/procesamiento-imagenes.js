@@ -142,16 +142,16 @@ function canvasToBlob(canvas, mime, quality) {
 
 /**
  * Procesa un archivo ya validado sin sacrificar la fuente que subió la
- * persona: si ya entra en el límite 4K, el archivo completo se conserva tal
- * cual. Solo las fotos mayores se reducen proporcionalmente a 4K; nunca se
- * agrandan. La miniatura sí se genera aparte para las vistas pequeñas.
+ * persona: por defecto el archivo completo se conserva tal cual, también
+ * en 4K. Solo se reduce si el consumidor pide límites explícitos; nunca se
+ * agranda. La miniatura se genera aparte para las vistas pequeñas.
  *
  * La entrega pública sigue usando las transformaciones de Cloudinary, que
  * escogen el formato y tamaño adecuados para cada pantalla. Así se conserva
  * la fuente de máxima fidelidad sin obligar a un móvil con datos lentos a
  * descargar el original entero antes de mostrar la imagen.
  */
-export async function processImage(file, { maxWidth = 3840, maxHeight = 3840, quality = 0.94, thumbSize = 320 } = {}) {
+export async function processImage(file, { maxWidth = Infinity, maxHeight = Infinity, quality = 0.94, thumbSize = 320 } = {}) {
   const bitmap = await createImageBitmap(file);
   const canUseWebp = await supportsWebpEncoding();
   const sourceMime = ALLOWED_MIME.has(file.type) ? file.type : 'image/jpeg';
@@ -161,8 +161,8 @@ export async function processImage(file, { maxWidth = 3840, maxHeight = 3840, qu
     ? (targetMime === 'image/webp' ? 'webp' : targetMime === 'image/png' ? 'png' : 'jpg')
     : (sourceMime === 'image/jpeg' ? 'jpg' : sourceMime.split('/')[1]);
 
-  const full = drawScaled(bitmap, maxWidth, maxHeight);
-  // Mantiene los bytes de una foto hasta 4K: evita una segunda compresión,
+  const full = needsResize ? drawScaled(bitmap, maxWidth, maxHeight) : { width: bitmap.width, height: bitmap.height };
+  // Mantiene los bytes originales: evita una segunda compresión,
   // conserva su detalle y deja que el CDN adapte solamente la entrega.
   const fullBlob = needsResize
     ? await canvasToBlob(full.canvas, targetMime, quality)

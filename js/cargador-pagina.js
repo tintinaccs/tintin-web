@@ -914,7 +914,7 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261015-images-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261016-drive-images-2');
     }
   }
 

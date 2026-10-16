@@ -70,8 +70,8 @@ check(
 );
 
 check(
-  'Hero, Editorial y Nosotros admiten subidas de hasta 4K con mayor calidad',
-  files.adminHtml.includes('FULL_BLEED_UPLOAD_LIMITS = { maxWidth: 3840, maxHeight: 3840, quality: 0.94 }') &&
+  'Hero, Editorial y Nosotros conservan la resolución original al subir',
+  files.adminHtml.includes('FULL_BLEED_UPLOAD_LIMITS = { quality: 0.94 }') &&
     files.adminHtml.includes('...FULL_BLEED_UPLOAD_LIMITS') &&
     files.adminHtml.includes("slot.id === 'logo_main' ? {} : FULL_BLEED_UPLOAD_LIMITS"),
   'las fotos a pantalla completa no deben quedar limitadas al tope genérico de 2000px pensado para tarjetas chicas'

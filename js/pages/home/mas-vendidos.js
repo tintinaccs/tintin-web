@@ -5,21 +5,17 @@ const status = document.getElementById('tt-best-sellers-status');
 const LIMIT = 4;
 
 function available(product) {
-  return product?.active !== false && !(product.stock != null && Number(product.stock) <= 0);
+  return Boolean(window.TintinCatalogPolicy?.isPurchasable?.(product));
 }
 
 function selected(products) {
-  const visible = products.filter(available);
-  const picked = visible.filter(product => product.destacado === true);
-  // Mientras todavía no se elija ninguno, la portada conserva una selección
-  // útil; apenas haya productos marcados, solo se muestran esos.
-  return (picked.length ? picked : visible).slice(0, LIMIT);
+  return products.filter(product => product.destacado === true && available(product)).slice(0, LIMIT);
 }
 
 function render(products) {
-  if (!grid || !Array.isArray(products)) return;
+  if (!grid || !Array.isArray(products) || typeof window.renderProductsGrid !== 'function') return;
   const productsToShow = selected(products);
-  if (typeof window.renderProductsGrid === 'function') window.renderProductsGrid(grid.id, productsToShow);
+  window.renderProductsGrid(grid.id, productsToShow);
   grid.setAttribute('aria-busy', 'false');
   if (status) status.textContent = productsToShow.length
     ? `${productsToShow.length} producto${productsToShow.length === 1 ? '' : 's'} seleccionado${productsToShow.length === 1 ? '' : 's'} para vos.`
@@ -27,4 +23,10 @@ function render(products) {
 }
 
 window.addEventListener('tintin:products-loaded', event => render(event.detail?.products));
+window.addEventListener('tintin:products-error', () => {
+  if (grid?.getAttribute('aria-busy') !== 'true') return;
+  grid.setAttribute('aria-busy', 'false');
+  if (status) status.textContent = 'No pudimos cargar la selección. Podés volver a intentar desde el catálogo.';
+});
+document.addEventListener('DOMContentLoaded', () => render(window.PRODUCTS), { once: true });
 if (Array.isArray(window.PRODUCTS)) render(window.PRODUCTS);

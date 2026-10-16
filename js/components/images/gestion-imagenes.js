@@ -21,7 +21,7 @@ if (!window.TintinImagesPhase5Booted) {
   // /assets-tintin/images/* se sirve con caché inmutable (un año): cuando cambia
   // el arte del hero tiene que cambiar su URL. Mismo tag que los <source> de
   // index.html.
-  const HERO_ART_QUERY = '?v=tintin-20261015-original-banner-1';
+  const HERO_ART_QUERY = '?v=tintin-20261016-drive-originals-2';
   const STATIC = Object.freeze({
     logo: 'assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1',
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
@@ -32,23 +32,21 @@ if (!window.TintinImagesPhase5Booted) {
       alt: 'Colección Bags Tintin',
     },
     edit_relojes: {
-      desktop: 'assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp',
-      tablet: 'assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp',
-      mobile: 'assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp',
+      desktop: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
+      tablet: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
+      mobile: 'assets-tintin/images/home/editorial-relojes/relojes-original.jpg',
       alt: 'Nueva colección de relojes Tintin',
     },
     about_foto: {
-      widths: { mobile: 480, tablet: 720, desktop: 912 },
-      desktop: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-desktop.webp',
-      tablet: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-tablet.webp',
-      mobile: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-mobile.webp',
+      desktop: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-original.jpeg',
+      tablet: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-original.jpeg',
+      mobile: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-original.jpeg',
       alt: 'Tintin Accesorios y Relojes',
     },
     about_mision: {
-      widths: { mobile: 480, tablet: 720, desktop: 914 },
-      desktop: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-desktop.webp',
-      tablet: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-tablet.webp',
-      mobile: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-mobile.webp',
+      desktop: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-original.jpeg',
+      tablet: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-original.jpeg',
+      mobile: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-original.jpeg',
       alt: 'Nuestra misión en Tintin Accesorios y Relojes',
     },
     hero_bg_desktop: HERO_IMAGE_FALLBACKS.desktop + HERO_ART_QUERY,
@@ -142,7 +140,7 @@ if (!window.TintinImagesPhase5Booted) {
       src: urls.desktop,
       fallbackUrls: [absolute(fallback.desktop), STATIC.placeholder],
       alt: fallback.alt,
-      fit: 'cover',
+      fit: slotId === 'edit_relojes' ? 'contain' : 'cover',
       marker: 'ttImagePhase5',
     });
 

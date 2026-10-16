@@ -568,3 +568,9 @@ html body .tt-card-color.tt-stock-unavailable { position: relative; margin-botto
 html body :is(.tt-card-img-wrap,.tt-product-img) { background: #FFFFFF !important; }
 html body .tt-favorite-media { position: relative; display: block; width: 64px; height: 64px; }
 html body .tt-favorite-media .tt-stock-label { padding: 4px 3px; font-size: 7px; letter-spacing: .04em; }
+
+/* La separación entre bloques públicos la da el degradado, sin rayas. */
+html:root body:not(:has(.adm-main)) :is(main > section, .tt-trust-bar, .tt-page-hero, .tt-footer[data-tt-footer="unified"], .tt-footer-bottom) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}

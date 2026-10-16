@@ -84,8 +84,8 @@ export function attachImageUploadWidget(container, options = {}) {
   const {
     label = 'Imagen',
     hint = '',
-    maxWidth = 3840,
-    maxHeight = 3840,
+    maxWidth,
+    maxHeight,
     quality,
     thumbSize,
     section = 'biblioteca',
