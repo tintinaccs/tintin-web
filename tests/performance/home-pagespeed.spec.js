@@ -85,7 +85,7 @@ test('respaldo de imagen, resize y actualización', async ({ page }) => {
     return c.viewportWidth === c.viewport.clientWidth;
   })).toBe(true);
   await page.evaluate(() => window.updateCollections([]));
-  await expect(page.getByRole('status')).toContainText('No hay colecciones');
+  await expect(page.locator('[data-collection-carousel]').getByRole('status')).toContainText('No hay colecciones');
 });
 
 test('movimiento reducido usa tarjetas nativas sin descargar GSAP', async ({ page }) => {
