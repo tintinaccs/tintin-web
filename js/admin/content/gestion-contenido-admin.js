@@ -30,7 +30,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20261010-whatsapp-release-5-story-20261014-1-profile-pulseras-20261014-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20261016-best-sellers-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

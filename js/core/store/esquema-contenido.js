@@ -26,7 +26,7 @@ import {
   getVisualBlockAnchorIds,
   isTopVisualAnchorAllowed,
   sanitizeSiteSectionOrder,
-} from './contrato-estructura-sitio.js?v=tintin-20261010-whatsapp-release-5';
+} from './contrato-estructura-sitio.js?v=tintin-20261016-best-sellers-1';
 
 export {
   SITE_PUBLIC_PAGE_IDS,
