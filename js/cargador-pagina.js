@@ -879,7 +879,7 @@
     try { framed = window.top !== window; } catch { framed = true; }
     if (isVisualPreviewFrame || framed) return;
     if (!window.TintinSiteChangesBooted) {
-      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261016-admin-live-1');
+      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261016-story-f9c6bbe342');
     }
     if (/\/checkout(?:\.html)?$/.test(currentPath())) return;
     if (!window.TintinVersionWatchBooted) {
