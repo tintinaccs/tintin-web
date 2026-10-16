@@ -5,7 +5,7 @@ const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.
 const html = removeFixtureScripts(fs.readFileSync(path.join(__dirname, '../../about.html'), 'utf8'));
 
 for (const width of [390, 768, 1024, 1440]) {
-  test(`historia personal, foto primero y firma sin recuadro en ${width}px`, async ({ page }) => {
+  test(`fotos alternadas, historia y firma centrada sin recuadro en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });
     await page.route('**/__about-story', route => route.fulfill({ contentType: 'text/html', body: html }));
     await page.goto('/__about-story');
@@ -14,7 +14,14 @@ for (const width of [390, 768, 1024, 1440]) {
     const intro = page.locator('#historia .tt-about-content');
     const photoBox = await photo.boundingBox();
     const introBox = await intro.boundingBox();
-    expect(introBox.y).toBeGreaterThan(photoBox.y + photoBox.height);
+    if (width >= 768) {
+      expect(introBox.x + introBox.width).toBeLessThanOrEqual(photoBox.x);
+      const childhood = await page.locator('.tt-about-childhood').boundingBox();
+      const originText = await page.locator('#origen .tt-about-content').boundingBox();
+      expect(childhood.x + childhood.width).toBeLessThanOrEqual(originText.x);
+    } else {
+      expect(introBox.y).toBeGreaterThan(photoBox.y + photoBox.height);
+    }
     await expect(page.locator('#origen h2')).toHaveText('¿Por qué Tintin se llama Tintin? 🎀');
     await expect(page.locator('#origen .tt-about-mission-text')).toHaveCount(7);
     await expect(page.locator('.tt-about-actions, .tt-about-signature')).toHaveCount(0);
