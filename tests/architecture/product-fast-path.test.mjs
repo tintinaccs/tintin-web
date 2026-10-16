@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import path from 'node:path';
 import vm from 'node:vm';
 const source = fs.readFileSync('js/core/store/estado-productos.js','utf8');
 const code = source.slice(0,source.indexOf('window.TintinProductsStore =')).replace(/^import[\s\S]*?;\s*$/gm,'').replace(/\bexport\s+/g,'');
@@ -57,17 +58,19 @@ test('precarga reutilizable vence y no vuelve a descargar un catálogo local fre
 });
 test('el grafo estático de datos públicos no descarga ni espera el SDK Firebase',()=>{
   const visited=new Set();
+  const root=process.cwd();
   function visit(file){
-    if(visited.has(file))return;visited.add(file);
-    const text=fs.readFileSync(file,'utf8');
+    const absolute=path.resolve(file);
+    if(visited.has(absolute))return;visited.add(absolute);
+    const text=fs.readFileSync(absolute,'utf8');
     for(const match of text.matchAll(/^import\s+(?:(?:[^;]+?)\s+from\s+)?['"]([^'"]+)['"]/gm)){
       const spec=match[1].split('?')[0];
       if(spec.startsWith('http')){assert(!/firebase/.test(spec),spec);continue;}
-      if(spec.startsWith('.'))visit(new URL(spec,new URL(file,'file://'+process.cwd()+'/')).pathname);
+      if(spec.startsWith('.'))visit(path.resolve(path.dirname(absolute),spec));
     }
   }
-  visit('js/core/store/estado-productos.js');
-  assert(!Array.from(visited).some(file=>file.endsWith('/firebase/firebase.js')));
+  visit(path.join(root,'js/core/store/estado-productos.js'));
+  assert(!Array.from(visited).some(file=>file.endsWith(`${path.sep}firebase${path.sep}firebase.js`)));
 });
 
 test('el SDK diferido toma el relevo con stock vivo después de pintar datos públicos',async()=>{
