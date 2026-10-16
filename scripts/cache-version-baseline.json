@@ -195,6 +195,10 @@
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1",
     "sha256": "0bae8cfd95ae6c8821c670a848d33324d2a454f9eb1613fea57130fd64644711"
   },
+  "css/pages/home/mas-vendidos.css": {
+    "version": "tintin-20261016-bestsellers-1",
+    "sha256": "beb82908266d8b359f6cae3c5a2cc7cb3018860f784c40e2f93ef63398882cde"
+  },
   "css/pages/institutional/about-maintenance.css": {
     "version": "tintin-20261015-images-1",
     "sha256": "3f7af0d2254efade9a36da62c408c1b73c36854c9f593ea31d443c8cdbb2f8a3"
@@ -308,8 +312,8 @@
     "sha256": "de5f789d28a5d132bcaeda507df5371112be6ff20c8e8f6e367ef17e327c2fdc"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261016-images-fidelity-admin-1",
-    "sha256": "3d19913e9b9922231764e7889905933295cae52d8a785776221d24faf4d574d9"
+    "version": "tintin-20261016-bestsellers-admin-1",
+    "sha256": "caa5638c00e86cbacbcf4eac764f710f35582f6f454be7fa4242b28cccc45667"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -1186,6 +1190,10 @@
   "js/pages/home/mantenimiento-inicio.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
     "sha256": "062e5c9efee48ac76bcebb6f2fe761fdc54e08d3d9c252ec6d12c134f3e871b0"
+  },
+  "js/pages/home/mas-vendidos.js": {
+    "version": "tintin-20261016-bestsellers-1",
+    "sha256": "23c0942bbb4c17e38d1d95bf51a418233749d7dbc2b91d60602a0846dd5e1d3b"
   },
   "js/pages/institutional/mantenimiento-contacto.js": {
     "version": "tintin-20261015-health-1",
