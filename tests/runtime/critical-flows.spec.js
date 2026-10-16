@@ -21,6 +21,10 @@ test.afterEach(async({page,context},testInfo)=>{
   // Finish module transfers while the API fixture is still alive; never ignore route errors.
   await page.waitForLoadState('domcontentloaded');
   if (errors.length || productionRequests.length || testInfo.status!==testInfo.expectedStatus) await page.screenshot({path:testInfo.outputPath('runtime-failure.png'),fullPage:true});
+  // WebKit puede cancelar una lectura del emulador exactamente al cerrar esta
+  // página. Marcamos el cierre real antes de `page.close`; el monitor sigue
+  // rechazando cualquier error que ocurra durante la interacción.
+  await page.evaluate(()=>console.debug('[runtime-document-leaving]')).catch(()=>{});
   await page.close();
   await context.unrouteAll({behavior:'wait'});
   await testInfo.attach('runtime-errors',{body:JSON.stringify({errors,productionRequests,browserDiagnostics}),contentType:'application/json'});
