@@ -1,6 +1,6 @@
 # Super Admin: revisión funcional y sincronización — 2026-10-16
 
-Base reconciliada: c2efe331d79ebe1cba8e478eb5f1f76db179b87f. Alcance solicitado: módulos, operaciones locales, campanas, nuevo pedido, aviso de actualización y dispositivos. No se certifican escrituras comerciales reales ni todos los dispositivos físicos. El registro Maestro contiene **26 superficies**, no 27 módulos: Operaciones es una herramienta adicional de la cabecera. Sus 27 comprobaciones son contratos, no un conteo de módulos.
+Base reconciliada: 280dc3710233825732339203a84a24486ebf47f5. Alcance solicitado: módulos, operaciones locales, campanas, nuevo pedido, aviso de actualización y dispositivos. No se certifican escrituras comerciales reales ni todos los dispositivos físicos. El registro Maestro contiene **26 superficies**, no 27 módulos: Operaciones es una herramienta adicional de la cabecera. Sus 27 comprobaciones son contratos, no un conteo de módulos.
 
 ## Problemas confirmados y correcciones
 

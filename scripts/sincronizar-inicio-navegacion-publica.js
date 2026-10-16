@@ -345,14 +345,14 @@ function removeLegacyComments(html) {
   });
 }
 
-function sharedFooter() {
+function sharedFooter(absoluteAssets = false) {
   return `<!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
   <div class="container tt-footer-shell">
     <div class="tt-footer-grid">
       <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
         <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
-          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+          <img loading="lazy" decoding="async" src="${absoluteAssets ? '/' : ''}assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
         </a>
         <p class="tt-footer-tagline">Tu tienda de accesorios y relojes en Paraguay. Comprá online con atención cercana.</p>
         <p class="tt-footer-hours">Horario de atención: 09:00 a 22:00 hs.</p>
@@ -398,11 +398,11 @@ function sharedFooter() {
 </footer>`;
 }
 
-function replaceSharedFooter(html) {
+function replaceSharedFooter(html, absoluteAssets = false) {
   const opener = /<footer\b[^>]*\bclass=["'][^"']*\btt-footer\b[^"']*["'][^>]*>/i;
   const match = opener.exec(html);
   const footerMarker = /(?:\s*<!-- Footer público único: sincronizado por scripts\/sincronizar-inicio-navegacion-publica\.js -->)+\s*$/;
-  if (!match) return html.replace('</body>', `${sharedFooter()}\n</body>`);
+  if (!match) return html.replace('</body>', `${sharedFooter(absoluteAssets)}\n</body>`);
 
   const token = /<\/?footer\b[^>]*>/gi;
   token.lastIndex = match.index;
@@ -413,7 +413,7 @@ function replaceSharedFooter(html) {
     else depth += 1;
     if (depth === 0) {
       const beforeFooter = html.slice(0, match.index).replace(footerMarker, '\n');
-      return beforeFooter + sharedFooter() + html.slice(token.lastIndex);
+      return beforeFooter + sharedFooter(absoluteAssets) + html.slice(token.lastIndex);
     }
   }
   throw new Error('No se encontró el cierre del footer .tt-footer.');
@@ -618,6 +618,8 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
   let html = versionUnifiedTheme(versionVisualBuilder(versionProfileGate(versionSessionProtection(before))));
   html = ensureSectionFlow(html, page === '404.html');
   if (page === '404.html') {
+    html = replaceSharedFooter(html, true);
+    html = html.replace(/(\b(?:src|href)=["'])(?=(?:js|css|assets-tintin)\/)/g, '$1/');
     html = ensurePublicStructuralStyles(html, true);
     html = html.replace(/(<script\b[^>]*src=["']\/tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
   }

@@ -30,9 +30,19 @@ const failures = [];
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const exists = file => fs.existsSync(path.join(ROOT, file));
 const check = (condition, message) => { if (!condition) failures.push(message); };
+const footerOf = html => (html.match(/<footer\b[^>]*\btt-footer\b[^>]*>[\s\S]*?<\/footer>/gi) || [])
+  .map(footer => footer.replace(/src="\/?assets-tintin\//g, 'src="/assets-tintin/').replace(/\r\n/g, '\n'));
+const canonicalFooter = footerOf(read('index.html'))[0];
 
 for (const page of PUBLIC_PAGES) {
   const html = read(page);
+  const redirect = /<meta\b[^>]*http-equiv=["']refresh["']/i.test(html);
+  if (page === '404.html') check(!/\b(?:src|href)=["'](?:js|css|assets-tintin)\//.test(html), '404.html: los recursos compartidos deben funcionar en rutas anidadas');
+  if (!redirect && page !== 'login.html') {
+    const footers = footerOf(html);
+    check(footers.length === 1, `${page}: debe existir exactamente un footer público`);
+    check(footers[0] === canonicalFooter, `${page}: el footer difiere de la fuente pública compartida`);
+  }
   // 404.html es servida verbatim por Cloudflare Pages en cualquier profundidad
   // de ruta no encontrada, así que sus assets usan rutas absolutas (/js/...,
   // /tienda.js, /styles.min.css) en vez de las relativas del resto de páginas

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5d76cf6c3a9b10fa8083dc11d09a2893b9aa7a435529e9fd3b02c278e108ea11",
+  "sourceFingerprint": "03be8d5c36ef65a51050310f8d984d22cae7d114e805a5435034822ee3cc551e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1298,
     "textFiles": 1212,
-    "totalBytes": 24548782,
+    "totalBytes": 24556052,
     "pages": 19,
     "modules": 908
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16991,
-      "sha256": "7bb6c81dc93ed1352c2feb18ed847131a6fb31478150f715d5cb87b23b6276e4",
+      "bytes": 17637,
+      "sha256": "c59bf06a7c835120ff397cf4264050e8ea354f091e6b9551398961c1cf3d4656",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -104,7 +104,7 @@
           "line": 6
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
+          "raw": "/js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7
         },
@@ -440,27 +440,17 @@
         {
           "raw": "https://wa.me/595981299331",
           "target": null,
-          "text": "↗ Escribirnos por WhatsApp",
+          "text": "Escribir por WhatsApp",
           "id": "",
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 202
+          "line": 203
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
           "text": "Catálogo",
-          "id": "",
-          "ariaLabel": "",
-          "title": "",
-          "imageAlt": "",
-          "line": 210
-        },
-        {
-          "raw": "/collections",
-          "target": "collections.html",
-          "text": "Colecciones",
           "id": "",
           "ariaLabel": "",
           "title": "",
@@ -478,16 +468,6 @@
           "line": 212
         },
         {
-          "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo.html",
-          "text": "Bags",
-          "id": "",
-          "ariaLabel": "",
-          "title": "",
-          "imageAlt": "",
-          "line": 213
-        },
-        {
           "raw": "/about",
           "target": "about.html",
           "text": "Quiénes somos",
@@ -495,7 +475,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 220
+          "line": 219
         },
         {
           "raw": "/envios",
@@ -505,7 +485,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 221
+          "line": 220
         },
         {
           "raw": "/cambios-devoluciones",
@@ -515,7 +495,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 222
+          "line": 221
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -525,7 +505,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 223
+          "line": 222
         },
         {
           "raw": "/terminos",
@@ -535,7 +515,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 224
+          "line": 223
         },
         {
           "raw": "/privacidad",
@@ -545,7 +525,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 225
+          "line": 224
         },
         {
           "raw": "/sitemap.xml",
@@ -555,7 +535,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 226
+          "line": 225
         },
         {
           "raw": "/contact",
@@ -565,7 +545,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 233
+          "line": 232
         },
         {
           "raw": "tel:+595981299331",
@@ -575,7 +555,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 234
+          "line": 233
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -585,7 +565,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 235
+          "line": 234
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -595,7 +575,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 236
+          "line": 235
         }
       ],
       "references": [
@@ -606,7 +586,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
+          "raw": "/js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1",
           "target": "js/components/color/logotipo-marca.js",
           "line": 7,
           "exists": true
@@ -920,12 +900,6 @@
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 210,
-          "exists": true
-        },
-        {
-          "raw": "/collections",
-          "target": "collections.html",
           "line": 211,
           "exists": true
         },
@@ -936,57 +910,51 @@
           "exists": true
         },
         {
-          "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo.html",
-          "line": 213,
-          "exists": true
-        },
-        {
           "raw": "/about",
           "target": "about.html",
-          "line": 220,
+          "line": 219,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 221,
+          "line": 220,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 222,
+          "line": 221,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 223,
+          "line": 222,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 224,
+          "line": 223,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 225,
+          "line": 224,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 226,
+          "line": 225,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 233,
+          "line": 232,
           "exists": true
         }
       ],
@@ -28140,8 +28108,8 @@
     },
     {
       "path": "js/components/images/gestion-imagenes.js",
-      "bytes": 23438,
-      "sha256": "17171e8d088243d98f4f3688712f2fdc84c23496bb992185222c27ec447b359f",
+      "bytes": 23439,
+      "sha256": "de954dd1704b641ba89631eb21400e05024a3130b66dc8c63c9e0c687303b030",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28522,8 +28490,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 14301,
-      "sha256": "c0f94710c991ba337d6cb9df957577ae8f91d05181f9a240aff5dbf5fd55afa6",
+      "bytes": 14355,
+      "sha256": "4cf0917202627a52863848f0f9d56729cb9b850cb2512e8e7a758d63fe5ec78e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34438,8 +34406,8 @@
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
-      "bytes": 10512,
-      "sha256": "5040a1876ece38d47e699a80fb123503708d91bb429863e0556fa4e0295b4522",
+      "bytes": 11298,
+      "sha256": "6759ec27a0bd9993ab3c8276d9963c573b92a98b87fea142fdf21fbb4cc816b3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34449,7 +34417,7 @@
           "raw": "./control-busqueda.js?v=",
           "target": "scripts/control-busqueda.js",
           "dynamic": true,
-          "line": 99
+          "line": 109
         }
       ],
       "endpoints": []
@@ -37137,8 +37105,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 28557,
-      "sha256": "838473d8dd57f6df629dae3f0a4faa1a6123932a6e4349d3afef1b476a2e856e",
+      "bytes": 28791,
+      "sha256": "078c5d46f9e470b37381bae4a2322f1d4987089ffe783898382763800a3e986f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43622,8 +43590,8 @@
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
-      "bytes": 26006,
-      "sha256": "a8752585e13b54fa1303613c99405c2a323faf5cad5e507435921af495a12eb7",
+      "bytes": 27241,
+      "sha256": "b1e206f501eb158463156d335c7cd06092e624682801caec6890d7b0386e9291",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43899,8 +43867,8 @@
     },
     {
       "path": "tests/navigation/public-initial-layout.spec.js",
-      "bytes": 10042,
-      "sha256": "658605fb6fbfa1a06c80b3db96560e5584bc9354b77f2aeec7a1b05f31789959",
+      "bytes": 11635,
+      "sha256": "cc0f3f555fdfa624ad7b4c5925bb97ef31c5228820c2fcbfe99ea2d0987e7dce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49227,8 +49195,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 16991,
-      "sha256": "7bb6c81dc93ed1352c2feb18ed847131a6fb31478150f715d5cb87b23b6276e4"
+      "bytes": 17637,
+      "sha256": "c59bf06a7c835120ff397cf4264050e8ea354f091e6b9551398961c1cf3d4656"
     },
     {
       "path": "AGENTS.md",
@@ -50199,8 +50167,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 29699,
-      "sha256": "0134cc84a79667c0fe6f5c30e91972326b4a214180f6cfa053b1ce14abe7ade0"
+      "bytes": 29708,
+      "sha256": "35b1385a5ae8f7f57fec8b60c326912c8337c6e91f31b7184e79c0f626f39da3"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50212,7 +50180,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "b2917eaf7041f7f4d0ff0c03a7fa7eecc0d31be730b01c9e9f28687c909ff93e"
+      "sha256": "f34fffe86f5e4fd31e5bee396c23a2d68ecc646a989693cb085b7daa32c8469d"
     },
     {
       "path": "config/public-site.json",
@@ -50794,7 +50762,7 @@
       "path": "docs/agent/AUDITORIA_SUPERADMIN_20261016.md",
       "extension": ".md",
       "bytes": 9820,
-      "sha256": "b5e6f5770b4437189f034866114f1e0eb3597d8fe7de073fa60a518640db92ac"
+      "sha256": "8ebe3f2f0993ff393b3faa9d27f6522134e06e12bce3bf81afadb1f30f21120d"
     },
     {
       "path": "docs/agent/AUTONOMOUS_REPAIR.md",
@@ -50823,8 +50791,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 553753,
-      "sha256": "c121ef62100fe1d004a8943c339af5e38aeb1c20a01f6d2a1027a2e0aff5fc45"
+      "bytes": 556465,
+      "sha256": "eb37b4810ac7fb4c71d70fcdf7b8273f2a0f29159a4f265f412f8af3daf02c7c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -52371,8 +52339,8 @@
     {
       "path": "js/components/images/gestion-imagenes.js",
       "extension": ".js",
-      "bytes": 23438,
-      "sha256": "17171e8d088243d98f4f3688712f2fdc84c23496bb992185222c27ec447b359f"
+      "bytes": 23439,
+      "sha256": "de954dd1704b641ba89631eb21400e05024a3130b66dc8c63c9e0c687303b030"
     },
     {
       "path": "js/components/images/imagenes.js",
@@ -52485,8 +52453,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 14301,
-      "sha256": "c0f94710c991ba337d6cb9df957577ae8f91d05181f9a240aff5dbf5fd55afa6"
+      "bytes": 14355,
+      "sha256": "4cf0917202627a52863848f0f9d56729cb9b850cb2512e8e7a758d63fe5ec78e"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -54243,8 +54211,8 @@
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 10512,
-      "sha256": "5040a1876ece38d47e699a80fb123503708d91bb429863e0556fa4e0295b4522"
+      "bytes": 11298,
+      "sha256": "6759ec27a0bd9993ab3c8276d9963c573b92a98b87fea142fdf21fbb4cc816b3"
     },
     {
       "path": "scripts/auditar-inicio-pagina.js",
@@ -54616,7 +54584,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80109,
-      "sha256": "0ab6c36a1b59eee27f26b90c1258f55732683e976bfcf1608053c6f24090f3a1"
+      "sha256": "76daa765ab7c857518ebe1d84ea2b43882c070f41f477bf448a3b1225f8fd67b"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -54873,8 +54841,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 28557,
-      "sha256": "838473d8dd57f6df629dae3f0a4faa1a6123932a6e4349d3afef1b476a2e856e"
+      "bytes": 28791,
+      "sha256": "078c5d46f9e470b37381bae4a2322f1d4987089ffe783898382763800a3e986f"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -55941,8 +55909,8 @@
     {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
-      "bytes": 26006,
-      "sha256": "a8752585e13b54fa1303613c99405c2a323faf5cad5e507435921af495a12eb7"
+      "bytes": 27241,
+      "sha256": "b1e206f501eb158463156d335c7cd06092e624682801caec6890d7b0386e9291"
     },
     {
       "path": "tests/navigation/home-collection-links.test.mjs",
@@ -56001,8 +55969,8 @@
     {
       "path": "tests/navigation/public-initial-layout.spec.js",
       "extension": ".js",
-      "bytes": 10042,
-      "sha256": "658605fb6fbfa1a06c80b3db96560e5584bc9354b77f2aeec7a1b05f31789959"
+      "bytes": 11635,
+      "sha256": "cc0f3f555fdfa624ad7b4c5925bb97ef31c5228820c2fcbfe99ea2d0987e7dce"
     },
     {
       "path": "tests/navigation/section-flow-generator.test.mjs",
