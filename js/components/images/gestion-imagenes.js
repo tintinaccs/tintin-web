@@ -140,7 +140,7 @@ if (!window.TintinImagesPhase5Booted) {
       src: urls.desktop,
       fallbackUrls: [absolute(fallback.desktop), STATIC.placeholder],
       alt: fallback.alt,
-      fit: slotId === 'edit_relojes' ? 'contain' : 'cover',
+      fit: 'cover',
       marker: 'ttImagePhase5',
     });
 
