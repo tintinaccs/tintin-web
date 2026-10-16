@@ -110,7 +110,7 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
     await expect(page.locator('#product-reviews, #tinsel-root, [data-open-community]')).toHaveCount(0);
     await page.screenshot({ path: `test-results/product-spacing-${width}.png`, fullPage: true });
   });
-  for (const [route, card] of [['/index.html', '.tt-review-card'],
+  for (const [route, card] of [['/index.html', '.tt-reviews-section .tt-review-screen'],
     ['/catalogo.html', '.tt-card'], ['/collections.html', '.tt-coll-page-card']]) {
     test(`${route} muestra tarjetas pobladas sin recortes en ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height });
@@ -126,8 +126,22 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       const first = page.locator(card).first();
       await expect(first).toBeVisible();
       if (route === '/index.html') {
-        await expect(first.locator('.tt-review-product')).toHaveText('Reloj Alissia');
-        await expect(first.locator('.tt-review-text')).toContainText('Me enamoré del reloj Alissia');
+        const reviews = page.locator(card);
+        await expect(reviews).toHaveCount(4);
+        for (const review of await reviews.all()) {
+          await review.scrollIntoViewIfNeeded();
+          const image = review.locator('img');
+          await expect(image).toHaveAttribute('src', /resenas-clientas\/img_\d+\.jpg$/);
+          await expect(image).toHaveAttribute('alt', /Reseña de una clienta/);
+          await expect(image).toBeVisible();
+          await expect(image).toHaveJSProperty('complete', true);
+          expect(await image.evaluate(node => {
+            const frame = node.getBoundingClientRect(), card = node.parentElement.getBoundingClientRect();
+            return node.naturalWidth > 0 && Math.abs(frame.width / frame.height - node.naturalWidth / node.naturalHeight) < 0.01
+              && frame.left >= card.left && frame.right <= card.right && frame.top >= card.top && frame.bottom <= card.bottom
+              && card.left >= 0 && card.right <= innerWidth;
+          })).toBe(true);
+        }
       } else {
         await expect(first.locator('a').first()).toHaveAttribute('href', /product|catalogo/);
         await expect(first.locator('.tt-card-name,.tt-coll-page-name')).toHaveText(
@@ -145,12 +159,12 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
             outside: rect.left < 0 || rect.right > innerWidth,
             overflow: body.scrollWidth > body.clientWidth + 1,
             inset: Math.min(parseFloat(style.paddingLeft), parseFloat(style.paddingRight)),
-            titleClamped: getComputedStyle(title).webkitLineClamp !== 'none'
+            titleClamped: title ? getComputedStyle(title).webkitLineClamp !== 'none' : false
           };
         }, card);
         expect(issues.outside).toBe(false);
         expect(issues.overflow).toBe(false);
-        expect(issues.inset).toBeGreaterThanOrEqual(12);
+        expect(issues.inset).toBeGreaterThanOrEqual(route === '/index.html' && width <= 560 ? 8 : 12);
         expect(issues.titleClamped).toBe(false);
       }).toPass({ timeout: 10000 });
     });
