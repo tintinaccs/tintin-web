@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "c2efe331d79ebe1cba8e478eb5f1f76db179b87f",
-  "reason": "Sincronización Super Admin, pedidos y avisos; seguridad y responsive. Carga pública liviana sin herramientas de escritura de imágenes ni ampliar presupuestos.",
+  "reason": "Sincronización completa de Super Admin, avisos y selector de colecciones CSV; pruebas de permisos, paginación, responsive y carga pública sin ampliar presupuestos.",
   "files": [
     {
       "path": "_headers",
@@ -441,7 +441,7 @@
     {
       "path": "js/pages/collections/estado-colecciones.js",
       "oldHash": "2de445ff16038f503f20da486e87c3a821f6527fb7a82c8def2938a85f9d98ef",
-      "newHash": "6f513e12a93373a9dd30c2438e1b0591da4503fb3f5211c355cadf42efed81a7"
+      "newHash": "0ffc8b2c94cec0dd23beecb79fa4685fae30061e5a66361e0b627eb1bf15e591"
     },
     {
       "path": "js/pages/collections/pagina-colecciones.js",
@@ -561,7 +561,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "37e070cb2097cd0ea18f2d27c838d6a2d69ed093c998b68d3c2bfd42dc97fe38",
-      "newHash": "5cff93c9445c5f14f1ac7a0bc2fad3d2870f48141e15c058c97640c01101369e"
+      "newHash": "0ab6c36a1b59eee27f26b90c1258f55732683e976bfcf1608053c6f24090f3a1"
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4ea3d3d5de2075fc2780b5dc8ea45b6d0400b1b5c3aedc544363b134c56949ae",
+  "sourceFingerprint": "5d76cf6c3a9b10fa8083dc11d09a2893b9aa7a435529e9fd3b02c278e108ea11",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1297,
-    "textFiles": 1211,
-    "totalBytes": 24543835,
+    "files": 1298,
+    "textFiles": 1212,
+    "totalBytes": 24548782,
     "pages": 19,
-    "modules": 907
+    "modules": 908
   },
   "viewports": [
     {
@@ -31444,8 +31444,8 @@
     },
     {
       "path": "js/pages/collections/estado-colecciones.js",
-      "bytes": 4440,
-      "sha256": "6f513e12a93373a9dd30c2438e1b0591da4503fb3f5211c355cadf42efed81a7",
+      "bytes": 5322,
+      "sha256": "0ffc8b2c94cec0dd23beecb79fa4685fae30061e5a66361e0b627eb1bf15e591",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31467,43 +31467,55 @@
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 10
+          "line": 12
         },
         {
           "raw": "../../components/images/resolucion-imagenes.js?v=tintin-20261015-images-1-admin-live-20261016-1",
           "target": "js/components/images/resolucion-imagenes.js",
           "dynamic": false,
-          "line": 11
+          "line": 13
         },
         {
           "raw": "../../core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1",
           "target": "js/core/firebase/cache-lecturas-firestore.js",
           "dynamic": false,
-          "line": 15
+          "line": 17
         },
         {
           "raw": "../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260925-cache-converge-1",
           "target": "js/admin/settings/compatibilidad-pagos-anteriores-admin.js",
           "dynamic": true,
-          "line": 19
+          "line": 21
         },
         {
           "raw": "../../admin/settings/metodos-pago-admin.js?v=tintin-20261012-checkout-ready-3-metodos-pago-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1",
           "target": "js/admin/settings/metodos-pago-admin.js",
           "dynamic": true,
-          "line": 20
+          "line": 22
         },
         {
           "raw": "../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1",
           "target": "js/admin/auth/lecturas-admin.js",
           "dynamic": true,
-          "line": 79
+          "line": 83
+        },
+        {
+          "raw": "../../admin/datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1",
+          "target": "js/admin/datos/fuente-paginada-admin.mjs",
+          "dynamic": true,
+          "line": 84
+        },
+        {
+          "raw": "../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2",
+          "target": "js/core/auth/identidad-super-admin.js",
+          "dynamic": true,
+          "line": 85
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 10
+          "line": 12
         }
       ]
     },
@@ -37940,6 +37952,42 @@
       "path": "tests/admin/catalogo-paginado.test.mjs",
       "bytes": 1944,
       "sha256": "1a5a2a6107951abbd447f17ad26d735d45a0c2ea1de4e93f332f3538f34f6f6d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../js/admin/datos/fuente-paginada-admin.mjs",
+          "target": "js/admin/datos/fuente-paginada-admin.mjs",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/admin/colecciones-importacion-paginadas.test.mjs",
+      "bytes": 2373,
+      "sha256": "594c4fff5496a787cc89c0c29feba0416b288a36b96b6c2306382597af3b9308",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48066,8 +48114,8 @@
     },
     {
       "path": "tests/ui-ux/import-identity-review.spec.js",
-      "bytes": 8567,
-      "sha256": "fc68c010c73aff0df8301633d0031ab2a27f0fe78cb08e654d926b1bfb3e2421",
+      "bytes": 8990,
+      "sha256": "c72f7eb510549f108d0025129d9321dbaee1ed69b3b23c7bf89edce03357fbbc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48076,7 +48124,7 @@
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 6
+          "line": 14
         }
       ]
     },
@@ -50151,8 +50199,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 29694,
-      "sha256": "a81f3235e40ad18ca02ce732eeff84403ea837cf49fd84f6e277cefee3445b56"
+      "bytes": 29699,
+      "sha256": "0134cc84a79667c0fe6f5c30e91972326b4a214180f6cfa053b1ce14abe7ade0"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50164,7 +50212,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "99ca307081815be0cb5a7bc4a81c9940d18a2577d8d2b4edf94a2f81213ef057"
+      "sha256": "b2917eaf7041f7f4d0ff0c03a7fa7eecc0d31be730b01c9e9f28687c909ff93e"
     },
     {
       "path": "config/public-site.json",
@@ -50745,8 +50793,8 @@
     {
       "path": "docs/agent/AUDITORIA_SUPERADMIN_20261016.md",
       "extension": ".md",
-      "bytes": 9661,
-      "sha256": "0bd87961fab2a958226de006c0c2e0d8004877de74be5f41f4c27c98a16b3ac9"
+      "bytes": 9820,
+      "sha256": "b5e6f5770b4437189f034866114f1e0eb3597d8fe7de073fa60a518640db92ac"
     },
     {
       "path": "docs/agent/AUTONOMOUS_REPAIR.md",
@@ -50775,8 +50823,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 552648,
-      "sha256": "87a84694a60b33a621151c7bc13bf19a3830b8f085629fbdb9539d5b636e3df0"
+      "bytes": 553753,
+      "sha256": "c121ef62100fe1d004a8943c339af5e38aeb1c20a01f6d2a1027a2e0aff5fc45"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -53163,8 +53211,8 @@
     {
       "path": "js/pages/collections/estado-colecciones.js",
       "extension": ".js",
-      "bytes": 4440,
-      "sha256": "6f513e12a93373a9dd30c2438e1b0591da4503fb3f5211c355cadf42efed81a7"
+      "bytes": 5322,
+      "sha256": "0ffc8b2c94cec0dd23beecb79fa4685fae30061e5a66361e0b627eb1bf15e591"
     },
     {
       "path": "js/pages/collections/mantenimiento-colecciones.js",
@@ -54568,7 +54616,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80109,
-      "sha256": "5cff93c9445c5f14f1ac7a0bc2fad3d2870f48141e15c058c97640c01101369e"
+      "sha256": "0ab6c36a1b59eee27f26b90c1258f55732683e976bfcf1608053c6f24090f3a1"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -55001,6 +55049,12 @@
       "extension": ".mjs",
       "bytes": 1944,
       "sha256": "1a5a2a6107951abbd447f17ad26d735d45a0c2ea1de4e93f332f3538f34f6f6d"
+    },
+    {
+      "path": "tests/admin/colecciones-importacion-paginadas.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2373,
+      "sha256": "594c4fff5496a787cc89c0c29feba0416b288a36b96b6c2306382597af3b9308"
     },
     {
       "path": "tests/admin/firebase-permission-recovery.test.mjs",
@@ -56667,8 +56721,8 @@
     {
       "path": "tests/ui-ux/import-identity-review.spec.js",
       "extension": ".js",
-      "bytes": 8567,
-      "sha256": "fc68c010c73aff0df8301633d0031ab2a27f0fe78cb08e654d926b1bfb3e2421"
+      "bytes": 8990,
+      "sha256": "c72f7eb510549f108d0025129d9321dbaee1ed69b3b23c7bf89edce03357fbbc"
     },
     {
       "path": "tests/ui-ux/inventory-regressions.test.mjs",
@@ -58845,7 +58899,7 @@
           },
           {
             "file": "js/pages/collections/estado-colecciones.js",
-            "line": 81,
+            "line": 91,
             "operation": "collection"
           },
           {

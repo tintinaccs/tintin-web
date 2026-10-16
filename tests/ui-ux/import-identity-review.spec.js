@@ -1,7 +1,15 @@
 'use strict';
 const { test, expect } = require('@playwright/test');
 
+async function stubRevisionPublisher(page) {
+  // Este fixture prueba importación con Firestore simulado y no publica avisos reales.
+  await page.route('**/js/core/store/publicar-cambio-administrativo.js?*', route => route.fulfill({
+    contentType: 'application/javascript', body: 'export const withAdminSiteChange = write => write();',
+  }));
+}
+
 test('el importador exige confirmación y revisión fresca sin escribir el catálogo', async ({ page }) => {
+  await stubRevisionPublisher(page);
   await page.route('**/js/core/firebase/firebase.js?*', route => route.fulfill({ contentType:'application/javascript', body:'export const db = {};' }));
   await page.route('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js', route => route.fulfill({ contentType:'application/javascript', body:'export const doc=()=>{throw new Error("Unexpected write")}; export const runTransaction=doc; export const serverTimestamp=doc;' }));
   const html = `<!doctype html><html><head><meta charset="utf-8"></head><body><section id="preview"><div id="before"></div></section><script type="module">
@@ -49,6 +57,7 @@ test('el importador exige confirmación y revisión fresca sin escribir el catá
 
 
 test('resume reconciles existing identities and syncs committed same-job products with newly created IDs', async ({ page }) => {
+  await stubRevisionPublisher(page);
   await page.route('**/js/core/firebase/firebase.js?*', route => route.fulfill({ contentType: 'application/javascript', body: 'export const db = {};' }));
   await page.route('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js', route => route.fulfill({ contentType: 'application/javascript', body: `
     export const doc = (_db, _collection, id) => id;
