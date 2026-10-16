@@ -114,15 +114,6 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         fields: [
           field('eyebrow', 'Texto pequeño', '.tt-reviews-header .tt-section-sub', 'Ellas ya eligieron brillar', { maxLength: 120 }),
           field('title', 'Título', '.tt-reviews-header .tt-section-title', 'TINTINAS QUE YA NOS ELIGIERON', { maxLength: 180 }),
-          field('items.0.text', 'Reseña 1', '.tt-review-text', 'Me enamoré desde el primer momento. La calidad es increíble y todo llegó precioso.', { index: 0, type: 'multiline', rows: 4, maxLength: 900 }),
-          field('items.0.name', 'Reseña 1 — nombre', '.tt-review-name', 'Valentina M.', { index: 0, maxLength: 100 }),
-          field('items.0.product', 'Reseña 1 — producto', '.tt-review-product', 'Reloj Alissia', { index: 0, maxLength: 120 }),
-          field('items.1.text', 'Reseña 2', '.tt-review-text', 'La atención fue excepcional. Me ayudaron a elegir y llegó el mismo día.', { index: 1, type: 'multiline', rows: 4, maxLength: 900 }),
-          field('items.1.name', 'Reseña 2 — nombre', '.tt-review-name', 'Camila R.', { index: 1, maxLength: 100 }),
-          field('items.1.product', 'Reseña 2 — producto', '.tt-review-product', 'Colección Collares', { index: 1, maxLength: 120 }),
-          field('items.2.text', 'Reseña 3', '.tt-review-text', 'Los precios son súper accesibles para la calidad. Todo llegó perfecto y bien presentado.', { index: 2, type: 'multiline', rows: 4, maxLength: 900 }),
-          field('items.2.name', 'Reseña 3 — nombre', '.tt-review-name', 'Lucía P.', { index: 2, maxLength: 100 }),
-          field('items.2.product', 'Reseña 3 — producto', '.tt-review-product', 'Pulseras', { index: 2, maxLength: 120 }),
         ],
       },
       footer: {

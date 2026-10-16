@@ -7,12 +7,12 @@
    real se realiza con firmas temporales de Cloudinary emitidas por Cloudflare.
    ============================================================= */
 
-import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20261015-images-1';
+import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20261016-images-fidelity-1';
 import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
   uploadImageToLibrary
-} from './biblioteca-multimedia.js?v=tintin-20261015-images-1';
+} from './biblioteca-multimedia.js?v=tintin-20261016-images-fidelity-1';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',
@@ -84,8 +84,8 @@ export function attachImageUploadWidget(container, options = {}) {
   const {
     label = 'Imagen',
     hint = '',
-    maxWidth = 3840,
-    maxHeight = 3840,
+    maxWidth,
+    maxHeight,
     quality,
     thumbSize,
     section = 'biblioteca',

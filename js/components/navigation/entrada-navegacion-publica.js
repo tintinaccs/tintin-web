@@ -10,7 +10,7 @@ import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tin
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20261011-boutique-4-domain-prepared-20261012-6-palette-20261014-1-logos-bottom-20261015-1-css-20261015-1';
 import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20261015-fast-163e560de-1';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
-import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20261015-fast-17b79f985-1';
+import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20261016-footer-gradient-layout-1';
 import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260815-global-studio-10-brand-20261004-1-brand-runtime-20261004-1-owner-pink-20261004-1-palette-20261014-1';
 
 const LEGACY_SHELL_IDS = Object.freeze([

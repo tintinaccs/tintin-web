@@ -12,7 +12,7 @@
    dónde está, en qué zona vive ni si puede moverse.
    ============================================================= */
 
-import * as ContentFields from './definiciones-contenido.js?v=tintin-20261010-whatsapp-release-5-story-20261014-1-profile-pulseras-20261014-1';
+import * as ContentFields from './definiciones-contenido.js?v=tintin-20261016-real-reviews-1';
 import {
   SITE_PUBLIC_PAGE_IDS,
   SITE_STRUCTURE_CONTRACT,
@@ -26,7 +26,7 @@ import {
   getVisualBlockAnchorIds,
   isTopVisualAnchorAllowed,
   sanitizeSiteSectionOrder,
-} from './contrato-estructura-sitio.js?v=tintin-20261010-whatsapp-release-5';
+} from './contrato-estructura-sitio.js?v=tintin-20261016-best-sellers-1';
 
 export {
   SITE_PUBLIC_PAGE_IDS,

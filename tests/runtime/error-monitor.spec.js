@@ -27,7 +27,12 @@ test('native Auth emulator cancellation is diagnostic only inside the document-l
   };
   for (const fixture of [
     { name: 'confirmed native cancellation', leaving: true, delta: 11, diagnostic: true },
+    { name: 'confirmed Auth SDK cancellation', leaving: true, delta: 5, diagnostic: true, change: { stack: 'Fetch API cannot load http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=demo-key due to access control checks.\n    at unknown (https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:1:34862)' } },
+    { name: 'active-page Auth SDK failure', leaving: false, delta: 5, change: { stack: '    at unknown (https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:1:34862)' } },
     { name: 'visual studio public cancellation', leaving: true, delta: 11, diagnostic: true, change: { message: '/127.0.0.1:4174/api/visual-studio-global-public due to access control checks.' } },
+    { name: 'confirmed public reader cancellation', leaving: true, delta: 4, diagnostic: true, change: { message: '/127.0.0.1:4174/api/visual-studio-global-public due to access control checks.', stack: 'Fetch API cannot load http://127.0.0.1:4174/api/visual-studio-global-public due to access control checks.\n    at fetchGlobalVisualStudioConfig (http://127.0.0.1:4174/js/components/navigation/compartido/apariencia-global.js?v=tintin-20261016-footer-gradient-layout-1:173:30)' } },
+    { name: 'active public reader failure', leaving: false, delta: 4, change: { message: '/127.0.0.1:4174/api/visual-studio-global-public due to access control checks.', stack: '    at fetchGlobalVisualStudioConfig (http://127.0.0.1:4174/js/components/navigation/compartido/apariencia-global.js?v=tintin-20261016-footer-gradient-layout-1:173:30)' } },
+    { name: 'unrelated public reader stack', leaving: true, delta: 4, change: { message: '/127.0.0.1:4174/api/visual-studio-global-public due to access control checks.', stack: '    at otherReader (http://127.0.0.1:4174/js/other-reader.js:1:1)' } },
     { name: 'normal document access failure', leaving: false, delta: 11 },
     { name: 'expired leaving window', leaving: true, delta: 1000 },
     { name: 'JavaScript exception', leaving: true, delta: 11, change: { name: 'Error' } },

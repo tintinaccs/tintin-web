@@ -361,11 +361,11 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"]{
   --tt-footer-surface:#fff;
   --tt-footer-ink:var(--color-text-primary);
   --tt-footer-muted:var(--color-text-secondary);
-  --tt-footer-line:rgba(180,75,121,.18);
-  background:var(--tt-footer-surface)!important;
+  --tt-footer-line:transparent;
+  background:linear-gradient(180deg,rgba(255,255,255,0) 0%,var(--tt-footer-surface) 34%)!important;
   color:var(--tt-footer-ink)!important;
   border:0!important;
-  border-top:1px solid var(--tt-footer-line)!important;
+  border-top:0!important;
   box-shadow:none!important;
   padding:clamp(24px,3.25vw,44px) 0 0!important;
 }
@@ -568,3 +568,9 @@ html body .tt-card-color.tt-stock-unavailable { position: relative; margin-botto
 html body :is(.tt-card-img-wrap,.tt-product-img) { background: #FFFFFF !important; }
 html body .tt-favorite-media { position: relative; display: block; width: 64px; height: 64px; }
 html body .tt-favorite-media .tt-stock-label { padding: 4px 3px; font-size: 7px; letter-spacing: .04em; }
+
+/* La separación entre bloques públicos la da el degradado, sin rayas. */
+html:root body:not(:has(.adm-main)) :is(main > section, .tt-trust-bar, .tt-page-hero, .tt-footer[data-tt-footer="unified"], .tt-footer-bottom) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}

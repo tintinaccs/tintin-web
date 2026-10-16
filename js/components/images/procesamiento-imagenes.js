@@ -141,20 +141,32 @@ function canvasToBlob(canvas, mime, quality) {
 }
 
 /**
- * Procesa un archivo ya validado: lo redimensiona (sin deformar — mantiene
- * proporción, nunca hace upscale) a maxWidth/maxHeight, lo re-codifica a
- * WebP cuando el navegador puede (esto de paso elimina metadatos EXIF, ya
- * que el canvas nunca los conserva), y genera una miniatura cuadrada para
- * la biblioteca. Devuelve blobs listos para subir a Storage.
+ * Procesa un archivo ya validado sin sacrificar la fuente que subió la
+ * persona: por defecto el archivo completo se conserva tal cual, también
+ * en 4K. Solo se reduce si el consumidor pide límites explícitos; nunca se
+ * agranda. La miniatura se genera aparte para las vistas pequeñas.
+ *
+ * La entrega pública sigue usando las transformaciones de Cloudinary, que
+ * escogen el formato y tamaño adecuados para cada pantalla. Así se conserva
+ * la fuente de máxima fidelidad sin obligar a un móvil con datos lentos a
+ * descargar el original entero antes de mostrar la imagen.
  */
-export async function processImage(file, { maxWidth = 3840, maxHeight = 3840, quality = 0.94, thumbSize = 320 } = {}) {
+export async function processImage(file, { maxWidth = Infinity, maxHeight = Infinity, quality = 0.94, thumbSize = 320 } = {}) {
   const bitmap = await createImageBitmap(file);
   const canUseWebp = await supportsWebpEncoding();
-  const targetMime = canUseWebp ? 'image/webp' : (ALLOWED_MIME.has(file.type) ? file.type : 'image/jpeg');
-  const extension = targetMime === 'image/webp' ? 'webp' : targetMime === 'image/png' ? 'png' : 'jpg';
+  const sourceMime = ALLOWED_MIME.has(file.type) ? file.type : 'image/jpeg';
+  const needsResize = bitmap.width > maxWidth || bitmap.height > maxHeight;
+  const targetMime = canUseWebp ? 'image/webp' : sourceMime;
+  const extension = needsResize
+    ? (targetMime === 'image/webp' ? 'webp' : targetMime === 'image/png' ? 'png' : 'jpg')
+    : (sourceMime === 'image/jpeg' ? 'jpg' : sourceMime.split('/')[1]);
 
-  const full = drawScaled(bitmap, maxWidth, maxHeight);
-  const fullBlob = await canvasToBlob(full.canvas, targetMime, quality);
+  const full = needsResize ? drawScaled(bitmap, maxWidth, maxHeight) : { width: bitmap.width, height: bitmap.height };
+  // Mantiene los bytes originales: evita una segunda compresión,
+  // conserva su detalle y deja que el CDN adapte solamente la entrega.
+  const fullBlob = needsResize
+    ? await canvasToBlob(full.canvas, targetMime, quality)
+    : file;
 
   const thumb = drawScaled(bitmap, thumbSize, thumbSize);
   const thumbBlob = await canvasToBlob(thumb.canvas, canUseWebp ? 'image/webp' : targetMime, 0.75);

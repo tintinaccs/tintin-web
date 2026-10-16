@@ -1667,11 +1667,11 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"]{
   --tt-footer-surface:#fff;
   --tt-footer-ink:var(--color-text-primary);
   --tt-footer-muted:var(--color-text-secondary);
-  --tt-footer-line:rgba(180,75,121,.18);
-  background:var(--tt-footer-surface)!important;
+  --tt-footer-line:transparent;
+  background:linear-gradient(180deg,rgba(255,255,255,0) 0%,var(--tt-footer-surface) 34%)!important;
   color:var(--tt-footer-ink)!important;
   border:0!important;
-  border-top:1px solid var(--tt-footer-line)!important;
+  border-top:0!important;
   box-shadow:none!important;
   padding:clamp(24px,3.25vw,44px) 0 0!important;
 }
@@ -1874,6 +1874,12 @@ html body .tt-card-color.tt-stock-unavailable { position: relative; margin-botto
 html body :is(.tt-card-img-wrap,.tt-product-img) { background: #FFFFFF !important; }
 html body .tt-favorite-media { position: relative; display: block; width: 64px; height: 64px; }
 html body .tt-favorite-media .tt-stock-label { padding: 4px 3px; font-size: 7px; letter-spacing: .04em; }
+
+/* La separación entre bloques públicos la da el degradado, sin rayas. */
+html:root body:not(:has(.adm-main)) :is(main > section, .tt-trust-bar, .tt-page-hero, .tt-footer[data-tt-footer="unified"], .tt-footer-bottom) {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
 
 
 /* css/core/limpieza-tema-tintin.css */
@@ -3815,13 +3821,13 @@ html body.tt-home-premium #hero[data-tt-banner] .tt-hero-cta { left:13%!importan
 html body.tt-home-premium #hero[data-tt-banner] .tt-hero-link { left:17%!important; top:76%!important; width:21%!important; height:10%!important; }
 html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions a:focus-visible { outline:3px solid #222!important; outline-offset:2px; }
 @media(min-width:768px) and (max-width:1120px) {
-  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-media { aspect-ratio:1280/853!important; }
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-media { aspect-ratio:1536/1024!important; }
   html body.tt-home-premium #hero[data-tt-banner] #tt-hero-img { object-fit:var(--tt-hero-fit-tablet,contain)!important; transform:scale(var(--tt-hero-scale-tablet,1))!important; }
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-cta { left:9%!important; top:55%!important; width:35%!important; height:8%!important; }
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-link { left:14%!important; top:74%!important; width:24%!important; height:9%!important; }
 }
 @media(max-width:767px) {
-  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-media { aspect-ratio:959/1280!important; }
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-media { aspect-ratio:1024/1366!important; }
   html body.tt-home-premium #hero[data-tt-banner] #tt-hero-img { object-fit:var(--tt-hero-fit-mobile,contain)!important; transform:scale(var(--tt-hero-scale-mobile,1))!important; }
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-content { position:relative!important; inset:auto!important; height:auto!important; padding:16px!important; }
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions { display:flex!important; flex-wrap:wrap; justify-content:center; gap:12px; }
@@ -4681,15 +4687,14 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-bottom
   color: #222222 !important;
 }
 
-/* Superficies blancas: el pie y las tarjetas públicas usaban el rosa de
-   página (#FFFFFF) o fondos transparentes sobre rosa. Blanco con un borde
-   suave las separa del fondo sin cambiar tipografía ni colores de texto
-   (tinta 9.69:1, secundario 5.64:1 y pie 4.93:1 sobre blanco). */
+/* El pie se integra con la sección anterior por un degradado suave. No se
+   usa una línea horizontal: mantiene el contraste del contenido sin cortar
+   visualmente la página. */
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"],
 html[data-tt-footer-bg-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] {
   --tt-footer-surface: #fff;
-  background: #fff !important;
-  border-top: 1px solid rgba(248,170,202, 0.14) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 34%) !important;
+  border-top: 0 !important;
 }
 
 /* El contenedor .tt-editorial queda transparente por sistema-superficies;
@@ -5232,6 +5237,60 @@ html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-c
 html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) > img { opacity:.55 !important; }
 
 html:root body .tt-stock-label { color:#4B5563 !important; background:#E5E7EB !important; border-color:#9CA3AF !important; }
+
+
+/* css/pages/home/mas-vendidos.css */
+/* Selección administrada desde Superadmin > Productos > Más vendido.
+   El bloque usa la misma tarjeta canónica del catálogo para que stock,
+   variantes, favoritos y carrito se comporten igual en toda la tienda. */
+.tt-best-sellers-section { padding: clamp(52px, 7vw, 96px) 0; background: linear-gradient(180deg, #fdf0f5 0%, #f8aaca 100%); }
+.tt-best-sellers-heading { display: grid; gap: 10px; max-width: 680px; margin: 0 auto clamp(28px, 4vw, 48px); text-align: center; }
+.tt-best-sellers-kicker { margin: 0; color: #713c53; font-size: .73rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.tt-best-sellers-heading .tt-section-title { margin: 0; }
+.tt-best-sellers-heading p:last-child { margin: 0; color: #713c53; }
+.tt-best-sellers-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 26px); }
+.tt-best-sellers-grid .tt-product-card { min-width: 0; }
+.tt-best-sellers-status { min-height: 1.4em; margin: 18px 0 0; text-align: center; color: #713c53; font-size: .86rem; }
+.tt-best-sellers-action { display: flex; justify-content: center; margin-top: clamp(24px, 3vw, 34px); }
+@media (max-width: 1024px) { .tt-best-sellers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .tt-best-sellers-section { padding: 44px 0; } .tt-best-sellers-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding: 2px 4px 14px; } .tt-best-sellers-grid .tt-product-card { flex: 0 0 min(78vw, 300px); scroll-snap-align: start; } }
+
+
+/* css/pages/home/resenas-clientas.css */
+/* Capturas reales completas, sin cortar conversaciones ni deformar fotos. */
+body.tt-home-premium .tt-review-screens {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 24px);
+  align-items: start;
+}
+.tt-review-screen { margin: 0; min-width: 0; padding: 12px; border-radius: 16px; background: #fff; box-shadow: 0 8px 24px rgb(113 60 83 / 8%); }
+.tt-review-screen img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.tt-reviews-action { display: flex; justify-content: center; margin-top: 28px; }
+.tt-reviews-dialog {
+  width: min(1120px, calc(100vw - 28px)); max-width: none;
+  max-height: calc(100dvh - 28px); margin: auto; padding: 0;
+  border: 0; border-radius: 22px; color: #30232a;
+  background: #fff1f7; box-shadow: 0 24px 90px rgb(48 35 42 / 25%);
+}
+.tt-reviews-dialog::backdrop { background: rgb(48 35 42 / 48%); backdrop-filter: blur(8px); }
+.tt-reviews-dialog__header {
+  position: sticky; top: 0; z-index: 1; display: flex; gap: 16px;
+  align-items: center; justify-content: space-between; padding: 18px 22px;
+  background: rgb(255 241 247 / 96%); backdrop-filter: blur(8px);
+}
+.tt-reviews-dialog__header h2 { margin: 0; font-size: clamp(1rem, 2.5vw, 1.5rem); }
+.tt-reviews-close { flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #30232a; font-family: 'Montserrat'; font-size: 28px; line-height: 1; cursor: pointer; }
+.tt-reviews-close:focus-visible { outline: 3px solid #713c53; outline-offset: 2px; }
+.tt-reviews-dialog__content { padding: 0 22px 22px; }
+body.tt-home-premium .tt-reviews-dialog .tt-review-screens { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1024px) { body.tt-home-premium .tt-review-screens, body.tt-home-premium .tt-reviews-dialog .tt-review-screens { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  .tt-review-screen { padding: 8px; border-radius: 12px; }
+  .tt-reviews-dialog__header { padding: 12px; }
+  .tt-reviews-dialog__content { padding: 0 12px 16px; }
+  body.tt-home-premium .tt-reviews-dialog .tt-review-screens { grid-template-columns: minmax(0, 1fr); }
+}
 
 
 /* css/theme/superficies-marca-responsive-tintin.css */
@@ -5903,7 +5962,7 @@ html[data-tt-footer-density="compact"] .tt-footer{padding-top:28px!important}
 html[data-tt-footer-density="compact"] .tt-footer-grid{gap:20px!important}
 html[data-tt-footer-density="roomy"] .tt-footer{padding-top:72px!important;padding-bottom:30px!important}
 html[data-tt-footer-density="roomy"] .tt-footer-grid{gap:52px!important}
-html[data-tt-footer-style="minimal"] .tt-footer{box-shadow:none!important;border-top:1px solid color-mix(in srgb,currentColor 15%,transparent)!important}
+html[data-tt-footer-style="minimal"] .tt-footer{box-shadow:none!important;border-top:0!important}
 html[data-tt-footer-style="boxed"] .tt-footer .container{max-width:min(1180px,calc(100% - 32px));border-radius:22px;padding:28px}
 html[data-tt-footer-style="boxed"][data-tt-footer-bg-custom] .tt-footer .container{background:color-mix(in srgb,var(--tt-global-footer-bg) 92%,var(--tt-global-footer-accent,var(--color-brand-primary, #F8AACA)) 8%)}
 

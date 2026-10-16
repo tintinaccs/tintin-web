@@ -1,0 +1,14 @@
+/* Selección administrada desde Superadmin > Productos > Más vendido.
+   El bloque usa la misma tarjeta canónica del catálogo para que stock,
+   variantes, favoritos y carrito se comporten igual en toda la tienda. */
+.tt-best-sellers-section { padding: clamp(52px, 7vw, 96px) 0; background: linear-gradient(180deg, #fdf0f5 0%, #f8aaca 100%); }
+.tt-best-sellers-heading { display: grid; gap: 10px; max-width: 680px; margin: 0 auto clamp(28px, 4vw, 48px); text-align: center; }
+.tt-best-sellers-kicker { margin: 0; color: #713c53; font-size: .73rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.tt-best-sellers-heading .tt-section-title { margin: 0; }
+.tt-best-sellers-heading p:last-child { margin: 0; color: #713c53; }
+.tt-best-sellers-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 2vw, 26px); }
+.tt-best-sellers-grid .tt-product-card { min-width: 0; }
+.tt-best-sellers-status { min-height: 1.4em; margin: 18px 0 0; text-align: center; color: #713c53; font-size: .86rem; }
+.tt-best-sellers-action { display: flex; justify-content: center; margin-top: clamp(24px, 3vw, 34px); }
+@media (max-width: 1024px) { .tt-best-sellers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .tt-best-sellers-section { padding: 44px 0; } .tt-best-sellers-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding: 2px 4px 14px; } .tt-best-sellers-grid .tt-product-card { flex: 0 0 min(78vw, 300px); scroll-snap-align: start; } }

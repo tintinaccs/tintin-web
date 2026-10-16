@@ -56,10 +56,14 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
       zone: 'home-main', hideable: true, operational: true,
       reason: 'Las tarjetas se resuelven desde las colecciones activas; no se guardan copias manuales en la página.',
     }),
+    section('best_sellers', 'Más vendidos', '.tt-best-sellers-section', {
+      zone: 'home-main', kind: 'operational', hideable: true, operational: true,
+      reason: 'Los productos se eligen desde el catálogo por Superadmin y se muestran solo si tienen stock disponible.',
+    }),
     section('editorial_relojes', 'Editorial Relojes', '[data-tt-section="editorial_relojes"]', { zone: 'home-main', hideable: true }),
     section('reviews', 'Reseñas', '.tt-reviews-section', {
       zone: 'home-main', hideable: true, operational: true,
-      reason: 'La participación/reseñas tiene datos dinámicos y permisos propios aunque la superficie visual sea administrable.',
+      reason: 'Capturas reales de clientas: cuatro iniciales y una galería diferida; sólo el encabezado es texto editorial editable.',
     }),
   ]),
 

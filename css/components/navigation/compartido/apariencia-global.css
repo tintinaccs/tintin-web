@@ -51,7 +51,7 @@ html[data-tt-footer-density="compact"] .tt-footer{padding-top:28px!important}
 html[data-tt-footer-density="compact"] .tt-footer-grid{gap:20px!important}
 html[data-tt-footer-density="roomy"] .tt-footer{padding-top:72px!important;padding-bottom:30px!important}
 html[data-tt-footer-density="roomy"] .tt-footer-grid{gap:52px!important}
-html[data-tt-footer-style="minimal"] .tt-footer{box-shadow:none!important;border-top:1px solid color-mix(in srgb,currentColor 15%,transparent)!important}
+html[data-tt-footer-style="minimal"] .tt-footer{box-shadow:none!important;border-top:0!important}
 html[data-tt-footer-style="boxed"] .tt-footer .container{max-width:min(1180px,calc(100% - 32px));border-radius:22px;padding:28px}
 html[data-tt-footer-style="boxed"][data-tt-footer-bg-custom] .tt-footer .container{background:color-mix(in srgb,var(--tt-global-footer-bg) 92%,var(--tt-global-footer-accent,var(--color-brand-primary, #F8AACA)) 8%)}
 

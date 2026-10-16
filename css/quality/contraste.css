@@ -52,15 +52,14 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-bottom
   color: #222222 !important;
 }
 
-/* Superficies blancas: el pie y las tarjetas públicas usaban el rosa de
-   página (#FFFFFF) o fondos transparentes sobre rosa. Blanco con un borde
-   suave las separa del fondo sin cambiar tipografía ni colores de texto
-   (tinta 9.69:1, secundario 5.64:1 y pie 4.93:1 sobre blanco). */
+/* El pie se integra con la sección anterior por un degradado suave. No se
+   usa una línea horizontal: mantiene el contraste del contenido sin cortar
+   visualmente la página. */
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"],
 html[data-tt-footer-bg-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] {
   --tt-footer-surface: #fff;
-  background: #fff !important;
-  border-top: 1px solid rgba(248,170,202, 0.14) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 34%) !important;
+  border-top: 0 !important;
 }
 
 /* El contenedor .tt-editorial queda transparente por sistema-superficies;

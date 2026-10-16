@@ -31,8 +31,8 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261015-images-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261015-images-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261016-images-fidelity-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261016-images-fidelity-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-sitio-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261015-images-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1";
@@ -7857,13 +7857,13 @@ window.bulkSetDestacado = async function(destacado) {
   if (!_selectedProducts.size) return;
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
   const n = _selectedProducts.size;
-  if (!confirm(`¿${destacado ? 'Marcar' : 'Quitar'} destacado en ${n} producto(s)?`)) return;
+  if (!confirm(`¿${destacado ? 'Marcar como más vendido' : 'Quitar de más vendidos'} ${n} producto(s)?`)) return;
   try {
     const ids = [..._selectedProducts];
     await batchUpdateChunked(ids, () => ({ destacado, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.destacado = destacado; });
-    logAudit('editar_producto', 'producto', '', '', destacado ? 'Marcado destacado' : 'Quitado destacado', { bulk: true, count: n });
-    toast(`Destacado ${destacado ? 'marcado' : 'quitado'} en ${n} producto(s)`);
+    logAudit('editar_producto', 'producto', '', '', destacado ? 'Marcado como más vendido' : 'Quitado de más vendidos', { bulk: true, count: n });
+    toast(`Más vendido ${destacado ? 'marcado' : 'quitado'} en ${n} producto(s)`);
     clearSelection();
     applyProductFilters();
   } catch (e) { toast('Error: ' + e.message); }
