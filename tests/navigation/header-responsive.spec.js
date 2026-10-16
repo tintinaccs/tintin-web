@@ -441,7 +441,9 @@ test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA l
   await mockGuestNavigation(page);
   for (const viewport of [{width:1920,height:1080},{width:1440,height:900},{width:1280,height:720},{width:1024,height:768},{width:768,height:1024},{width:390,height:844},{width:320,height:568}]) {
     await openPublicPage(page, viewport, '/contact');
-    await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].some(link => link.href.includes('pulido-marca-responsive-tintin.css') && link.sheet));
+    await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"],link[data-tt-style-bundle]')].some(link =>
+      link.href.includes('pulido-marca-responsive-tintin.css') &&
+      (link.disabled && link.dataset.ttStyleBundle ? document.getElementById(link.dataset.ttStyleBundle) : link)?.sheet));
     const trigger = viewport.width < 768 ? '#tabbar-cuenta' : viewport.width <= 1024 ? '#btn-cuenta-tablet' : '#btn-cuenta';
     await page.locator(trigger).click();
     const drawer=page.locator('#account-drawer');

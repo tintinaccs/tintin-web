@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const { parse } = require('parse5');
+const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
@@ -14,8 +15,8 @@ const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-insta
 const LOADER_VERSION = 'tintin-20261015-images-1';
 const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-psi-20261015-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261015-images-1';
-const NAV_ENTRY_VERSION = 'tintin-20261015-images-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261015-images-1-css-20261015-1';
+const NAV_ENTRY_VERSION = 'tintin-20261015-images-1-css-20261015-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261015-images-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261015-images-1';
@@ -580,6 +581,8 @@ for (const page of PUBLIC_PAGES) {
   let html = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
   const before = html;
 
+  if (page === 'index.html') html = restoreStyleSources(html);
+
   for (const id of SHELL_IDS) html = removeElementById(html, id);
   html = removeLegacyComments(html);
   // Login es una pantalla de acceso aislada: no comparte el pie público.
@@ -600,6 +603,7 @@ for (const page of PUBLIC_PAGES) {
   html = ensurePublicStructuralStyles(html, false, page);
   html = ensureInitialRuntimeStyles(html, page);
   html = normalizeWhitespace(html);
+  if (page === 'index.html') html = writeHomeStyles(html, ROOT);
 
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');

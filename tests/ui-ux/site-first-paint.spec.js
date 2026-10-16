@@ -25,7 +25,10 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) for (const name of 
     for (const selector of selectors) {
       const link = page.locator(`head link${selector}`);
       await expect(link).toHaveCount(1);
-      expect(await link.evaluate(el => el.rel === 'stylesheet' && el.sheet !== null)).toBe(true);
+      expect(await link.evaluate(el => {
+        const owner = el.disabled && el.dataset.ttStyleBundle ? document.getElementById(el.dataset.ttStyleBundle) : el;
+        return (el.rel === 'stylesheet' || (el.rel === 'tt-bundled-stylesheet' && el.disabled && owner !== el)) && Boolean(owner?.sheet);
+      })).toBe(true);
     }
     // Activar los calificadores de estilo de los runtimes no debe cambiar la geometría ya visible.
     const geometry = () => page.locator('body > section, body > main, .tt-footer').evaluateAll(nodes => nodes.map(el => {
