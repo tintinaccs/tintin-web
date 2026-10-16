@@ -1,5 +1,7 @@
 ## 2026-10-15 — Reconciliación final de Producto y Actions
 
+La CI38836038807 confirmó 342 pruebas de navegador en Chromium/WebKit y los controles de build, artefactos y seguridad. La X restante no era funcional: el auditor de catálogo exigía la sintaxis vieja de importación lateral. Reconoce ahora la importación nombrada actual, manteniendo el requisito de que la política preceda al store; 15/15 controles PASS_LOCAL.
+
 Base e858d20d: se preservan las mejoras ya publicadas de imágenes y retratos de PR1135. Producto toma la precarga una sola vez al iniciar y shell/ficha comparten esa operación; si una CPU tarda más de 30 s, la respuesta ya tomada sigue alimentando ficha y relacionados sin descargar de nuevo. Las solicitudes posteriores mantienen el vencimiento normal de 30 s. Regresión Node simula el vencimiento durante la respuesta; 9 Chromium 320–1920 con CPU ×4 y Firebase bloqueado confirman una lectura individual, una de catálogo y tres relacionadas.
 
 La lista de Actions queda: dependencias de PR1116/1117/1118 integradas y verificadas; PR1135 MERGED; PR1122 independiente; PR1134 con CI38802283841 SUCCESS pero bloqueado sólo por la migración administrativa revisada de workflows. No cambia Rules ni se eluden controles. Pendientes del candidato: generadores, CI exacta, mantenimiento humano y Pages.

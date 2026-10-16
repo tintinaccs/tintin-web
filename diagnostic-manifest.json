@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b1fc22b058ecd59063cdfdf58ff48fe985142892e235eb381626c47e83731da4",
+  "sourceFingerprint": "40f73b3791eef01558e3fb9db8cc0793ccadbddb818e2ee8d57d80a67813cfde",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1243,
     "textFiles": 1189,
-    "totalBytes": 19159543,
+    "totalBytes": 19160389,
     "pages": 19,
     "modules": 889
   },
@@ -33483,20 +33483,13 @@
     },
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
-      "bytes": 7864,
-      "sha256": "c02e5bcc0f9c149efbb4e2a10cf11a06630fbc9f70dbedfcfcf39646c66a8e01",
+      "bytes": 7865,
+      "sha256": "1648c3cb7b1aa86889dcab7db6d6c7595f7c523adb1511d17954d6bbfd039c15",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [
-        {
-          "raw": "\\.\\.\\/\\.\\.\\/pages\\/catalog\\/politica-visibilidad-catalogo\\.js[^",
-          "target": "scripts/\\.\\.\\/\\.\\.\\/pages\\/catalog\\/politica-visibilidad-catalogo\\.js[^",
-          "dynamic": false,
-          "line": 160
-        }
-      ],
+      "imports": [],
       "endpoints": []
     },
     {
@@ -49632,8 +49625,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 535687,
-      "sha256": "e3b91a7aaf089a135bc6e7dc60e791524998a6fc1e2430e604f4b5d0b8e30300"
+      "bytes": 536164,
+      "sha256": "f4211ac84d3345f74719145d6d3e59eb16e6783442052d47464a2a7d4ea143a5"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -49986,8 +49979,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 41615,
-      "sha256": "f7008a68b10574a5ca4a51aab5e10df56fb6e6210e61ccd517be4d4c583ddcbe"
+      "bytes": 41983,
+      "sha256": "9b3340d32e9206e13a4a0897d2aa42cccf04777d731ae87b046d4144c44e256d"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -52938,8 +52931,8 @@
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
       "extension": ".js",
-      "bytes": 7864,
-      "sha256": "c02e5bcc0f9c149efbb4e2a10cf11a06630fbc9f70dbedfcfcf39646c66a8e01"
+      "bytes": 7865,
+      "sha256": "1648c3cb7b1aa86889dcab7db6d6c7595f7c523adb1511d17954d6bbfd039c15"
     },
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",

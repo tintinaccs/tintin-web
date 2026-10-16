@@ -1,5 +1,7 @@
 ## 2026-10-15 — Reconciliación final: ficha rápida y lista de Actions
 
+CI38836038807 aprobó compilación, artefactos, CSP, rutas, seguridad y 342 pruebas Chromium/WebKit. Su única X posterior fue un auditor estático que buscaba la importación lateral antigua de política de catálogo, aunque el store ya usa la importación nombrada vigente. El auditor conserva la exigencia de cargar la política antes del store y ahora reconoce la forma actual; sus 15 controles vuelven a pasar. Se regeneran diagnóstico y huellas antes de reintentar CI.
+
 Base actualizada a main e858d20d (PR1135 ya integrado): se conservan su entrega de imágenes q_auto:best, URLs firmadas, srcset responsivo y retratos de Nosotros. Este candidato sólo mantiene la aceleración de Producto, dependencias, contraste del footer y el fixture de galería. Rules y las correcciones de seguridad ya están en main, por lo que no se vuelven a desplegar desde este PR.
 
 La ficha captura al arrancar el transporte de precarga y tanto el shell como la ficha comparten una sola operación por ID. Así una CPU lenta no vuelve a pedir el catálogo cuando vence el plazo de nuevas tomas mientras procesa la primera respuesta. La precarga sigue expirando a los 30 s para solicitudes nuevas. Regresión controlada simula ese vencimiento durante la respuesta y exige una sola toma y cero lecturas de respaldo.
