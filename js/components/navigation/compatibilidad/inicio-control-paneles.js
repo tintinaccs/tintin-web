@@ -15,7 +15,7 @@
   const MODULE_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js';
   const scriptUrl = document.currentScript?.src || new URL('js/components/navigation/compatibilidad/inicio-control-paneles.js', window.location.href).href;
   const controllerUrl = new URL('../compartido/control-paneles.js', scriptUrl);
-  controllerUrl.searchParams.set('v', 'tintin-20261012-checkout-ready-3-control-paneles-js');
+  controllerUrl.searchParams.set('v', MODULE_VERSION);
 
   window.TintinSurfaceControllerReady = import(controllerUrl.href)
     .then(() => window.TintinSurfaceController)
