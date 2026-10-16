@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "c2efe331d79ebe1cba8e478eb5f1f76db179b87f",
-  "reason": "Reparar la sincronización confirmada, pedidos y avisos del Super Admin con paginación completa y pruebas de seguridad y responsive.",
+  "reason": "Sincronización Super Admin y avisos confirmados: contratos, reglas y responsive; alinear versión interna y recurso Maestro tras CI.",
   "files": [
     {
       "path": "_headers",
@@ -26,7 +26,7 @@
     {
       "path": "admin.html",
       "oldHash": "024aa36ecde0fba559c46e3099211467a9f63b61b1477c7a0112b6485467a1c4",
-      "newHash": "2b74f3195df4675e39fb7771cf9c37dec64fd1ab7497e634bd0fa4894be931f3"
+      "newHash": "2c1f516195b9762df425ab7fb93fd9de678069444c13b0292afcf8bede410710"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -171,7 +171,7 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "oldHash": "741718b08696b0dd187430e1c6b7dc27cd0ffefd9c9682cdb30fafebab9617bb",
-      "newHash": "d8c8daca85c21fe02d5b028f1b93198a20e2738159d2f97482d78d07c23375cd"
+      "newHash": "487494a6c673a2afdb507fb28ceaba1e2a042872f344df10f93c87abed73a8e1"
     },
     {
       "path": "js/admin/mayoristas/mayoristas-admin.js",
@@ -561,7 +561,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "37e070cb2097cd0ea18f2d27c838d6a2d69ed093c998b68d3c2bfd42dc97fe38",
-      "newHash": "a827029d4701eb3ee968c488a0d3cf6ec5547a9cbfab0ec509a9bd25902ea63c"
+      "newHash": "04216409a32809c39138347c00e233977ef8300d44e797bdfa37a20a49dbeadf"
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",

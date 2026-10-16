@@ -2406,3 +2406,7 @@ Navegación: menú importa metadata pública canónica sin arrastrar Firebase/Au
 ## 2026-10-16 — Corrección de posición de retratos (Codex /root)
 
 Base `450ee016` publicada. El titular aclara que la presentación debe conservar texto izquierdo y retrato derecho en escritorio/tablet, seguida de foto infantil izquierda e historia derecha. Se retira la regla que centraba/apilaba el primer bloque a todos los tamaños, se neutraliza la inversión heredada en tablet de 768px y se reserva el apilado para celular hasta 767px. Firma centrada y foto infantil sin leyenda se conservan. PASS_LOCAL: siete Chromium a 390/768/1024/1440, con comprobaciones de posiciones relativas, firma, ausencia de leyenda y editorial. Generadores, CI y aprobación del nuevo SHA pendientes.
+
+## 2026-10-16 — Continuación PR1143 (Codex /root)
+
+Candidato recibido 57872799. CI38948319841 aprobó build reproducible, contrato completo, contratos operativos y reglas, pero falló `maestro-version-lock`: el import de sesión había actualizado la URL del módulo Maestro y su versión interna seguía anterior. Se alinean HTML y constante con una URL nueva terminada en admin-live-20261016-2; baseline regenerado por el auditor canónico. PASS_LOCAL: conexiones Maestro25/25, responsive5/5; cierre84/84 y módulos140/140 reproducidos en esta continuación. No se atribuye PASS_CI ni PASS_PRODUCTION a este candidato. Revisión protegida y despliegue de reglas siguen pendientes.
