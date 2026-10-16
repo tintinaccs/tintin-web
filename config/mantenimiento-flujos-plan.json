@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "88cfd9f6c035b919909101a6685b612e69c3f5a6",
-  "reason": "Portada minimalista con originales y 27 resenas reales; validar galeria, mas vendidos y su orden canonico, imagenes, fuentes, CMS y regresiones. Contrato estatico completo aprobado en CI38898924429; CI del SHA final obligatorio.",
+  "reason": "Completar portada minimalista y originales, resenas y mas vendidos; verificar orden y estado propios. Calibrar el monitor ante cancelacion Auth demo confirmada en traza38902851773 a5ms de beforeunload, conservando rechazo de errores activos y JS.",
   "files": [
     {
       "path": "_headers",

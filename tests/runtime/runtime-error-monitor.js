@@ -14,10 +14,12 @@ async function installRuntimeErrorMonitor(page,context){
     const firestoreChannel=/^\/127\.0\.0\.1:8080\/google\.firestore\.v1\.Firestore\/(?:Listen|Write)\/channel\?/.test(error.message) &&
       error.message.includes('database=projects%2Fdemo-tintin-interactions%2Fdatabases%2F(default)') &&
       error.stack?.includes('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
-    // CI trace 38140539333: WebKit cancels a pending Auth emulator lookup
-    // 11 ms after beforeunload. This is a native diagnostic, not a JS rejection.
+    // CI traces 38140539333/38902851773: WebKit cancels the same demo Auth
+    // lookup 5–11 ms after beforeunload. Its frame can be native fetch or
+    // the pinned Auth SDK caller; an active-page error/JS rejection still fails.
     const authLookup=error.message==='/127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=demo-key due to access control checks.' &&
-      error.stack?.endsWith('    at fetch ([native code]:0:0)');
+      (error.stack?.endsWith('    at fetch ([native code]:0:0)') ||
+        error.stack?.includes('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:'));
     // Trace 38282508656: WebKit cancels batchGet 6 ms after beforeunload.
     // Only this demo emulator endpoint and Firebase SDK stack are diagnostic.
     const firestoreBatchGet=error.message==='/127.0.0.1:8080/v1/projects/demo-tintin-interactions/databases/(default)/documents:batchGet due to access control checks.' &&

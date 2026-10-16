@@ -27,6 +27,8 @@ test('native Auth emulator cancellation is diagnostic only inside the document-l
   };
   for (const fixture of [
     { name: 'confirmed native cancellation', leaving: true, delta: 11, diagnostic: true },
+    { name: 'confirmed Auth SDK cancellation', leaving: true, delta: 5, diagnostic: true, change: { stack: 'Fetch API cannot load http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=demo-key due to access control checks.\n    at unknown (https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:1:34862)' } },
+    { name: 'active-page Auth SDK failure', leaving: false, delta: 5, change: { stack: '    at unknown (https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:1:34862)' } },
     { name: 'visual studio public cancellation', leaving: true, delta: 11, diagnostic: true, change: { message: '/127.0.0.1:4174/api/visual-studio-global-public due to access control checks.' } },
     { name: 'normal document access failure', leaving: false, delta: 11 },
     { name: 'expired leaving window', leaving: true, delta: 1000 },

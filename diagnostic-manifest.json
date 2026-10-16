@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2c32e571393996bc3d23cdf67405a6b2fcc9a25c3ae959607d9db2844e8dd316",
+  "sourceFingerprint": "2b56d28a6144bcb55cecb68024a205274a7e069731fca626ffbb568e33407efc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1280,
     "textFiles": 1196,
-    "totalBytes": 23943509,
+    "totalBytes": 23945030,
     "pages": 19,
     "modules": 893
   },
@@ -45641,8 +45641,8 @@
     },
     {
       "path": "tests/runtime/error-monitor.spec.js",
-      "bytes": 3633,
-      "sha256": "40a95974abe9f4a18190c074fca2de825b533bafc87ba3be9c6d15c64d9d033d",
+      "bytes": 4149,
+      "sha256": "9951923a5b6fa66c04e6ec5927be01e85e5337bf762ea87e38f6dbef3e0ae212",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45652,6 +45652,10 @@
         {
           "url": "http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup",
           "line": 26
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:1:34862",
+          "line": 30
         }
       ]
     },
@@ -45690,8 +45694,8 @@
     },
     {
       "path": "tests/runtime/runtime-error-monitor.js",
-      "bytes": 3077,
-      "sha256": "fa7fd8d4c8f07200eeac1ef7258113670577c6ac84566b7ba30f49c5c9d964b4",
+      "bytes": 3254,
+      "sha256": "849e33762cdc594eb278d526c2914b48cfc1575eca8c413104a392929ff67677",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45701,6 +45705,10 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 16
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:",
+          "line": 22
         }
       ]
     },
@@ -49629,8 +49637,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 12114,
-      "sha256": "004e1653c553a74fb57e6e84490a4afa45ce0b37087827e788cf8647756f607f"
+      "bytes": 12132,
+      "sha256": "270815b9d60f05a62a76fcc5f588dd64a1ca10067ec4f271b4926bcc8995fd4e"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50247,8 +50255,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 542874,
-      "sha256": "e48dae19a6e071dc059061ebcc92d6aa4a2fe665728a4187748b78ebe1aa5651"
+      "bytes": 543684,
+      "sha256": "6acd030dbc90a77a992968d9d9e17dba722638fb8932ea2e8d51d421b5c9f747"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -55761,8 +55769,8 @@
     {
       "path": "tests/runtime/error-monitor.spec.js",
       "extension": ".js",
-      "bytes": 3633,
-      "sha256": "40a95974abe9f4a18190c074fca2de825b533bafc87ba3be9c6d15c64d9d033d"
+      "bytes": 4149,
+      "sha256": "9951923a5b6fa66c04e6ec5927be01e85e5337bf762ea87e38f6dbef3e0ae212"
     },
     {
       "path": "tests/runtime/invoice-component.spec.js",
@@ -55785,8 +55793,8 @@
     {
       "path": "tests/runtime/runtime-error-monitor.js",
       "extension": ".js",
-      "bytes": 3077,
-      "sha256": "fa7fd8d4c8f07200eeac1ef7258113670577c6ac84566b7ba30f49c5c9d964b4"
+      "bytes": 3254,
+      "sha256": "849e33762cdc594eb278d526c2914b48cfc1575eca8c413104a392929ff67677"
     },
     {
       "path": "tests/runtime/welcome-component.spec.js",
