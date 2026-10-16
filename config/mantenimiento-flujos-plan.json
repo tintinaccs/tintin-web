@@ -1,132 +1,137 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "450ee016e8e54365eb80b8ed837e3062260794d1",
-  "reason": "Restaurar distribución lateral de retratos en Nosotros para escritorio y tablet",
+  "baseCommit": "c2efe331d79ebe1cba8e478eb5f1f76db179b87f",
+  "reason": "Unificar el footer 404 y alinear el comportamiento de cada encabezado con los anchos canónicos",
   "files": [
     {
       "path": "404.html",
-      "oldHash": "e585ba30bb2dca0d745092cbecd8661e39cfd23fea858e3be6cdc9e027c292c2",
-      "newHash": "1ff3c790e0b6d36f42941ff77ebc49162f476898026ccd94aad7de860929548d"
+      "oldHash": "1ff3c790e0b6d36f42941ff77ebc49162f476898026ccd94aad7de860929548d",
+      "newHash": "995419ad2fbb7148fa63919a70e048cfde7e91dc04bd6b44299de332a0a84afd"
     },
     {
       "path": "about.html",
-      "oldHash": "5a5f1d5bddc299806c4d8546d5b875191c4c04ab28d3f8d3c9712984dcd7f39f",
-      "newHash": "16d0065a8df165df4425b5385c0f9b913e815148ff49ddddea139e0ebf5a12af"
+      "oldHash": "16d0065a8df165df4425b5385c0f9b913e815148ff49ddddea139e0ebf5a12af",
+      "newHash": "0d21905645837c62f8c1c2d26b307f78fced13f74f4c4c3ad154a24f632f74c5"
+    },
+    {
+      "path": "admin-images.html",
+      "oldHash": "0f8d516daf862843a53fb44d9af177ef65a0bf4fa12ed7457d04fad131a68bcc",
+      "newHash": "7da3d4ac61521b6b4da3255ddb1e8024f56d7f151a5eba7fd92ee348c3bc254a"
+    },
+    {
+      "path": "admin.html",
+      "oldHash": "024aa36ecde0fba559c46e3099211467a9f63b61b1477c7a0112b6485467a1c4",
+      "newHash": "9595791a9f168ace27b6f39272e9352e14e0e4311a1eae59331de85572976dc8"
     },
     {
       "path": "cambios-devoluciones.html",
-      "oldHash": "ba680d4893c485bb71fec6ad1b3525031965617d01158df8aeb6a993f0484166",
-      "newHash": "510eddc2515e0d19c8fdb3de97d7fc5c0b652e2e09a5aa8edc6b8862d610d5ae"
+      "oldHash": "510eddc2515e0d19c8fdb3de97d7fc5c0b652e2e09a5aa8edc6b8862d610d5ae",
+      "newHash": "aff678974b78687937d3d0e7ff1fb7edb5d05126cc7c5e64f1b6d0bafd59f47a"
     },
     {
       "path": "catalogo.html",
-      "oldHash": "da859ee4434f0738e09b21dc4b7fcd081204ee69e9525546634f90ff55b17823",
-      "newHash": "e71f97ba102a51d7ef66086f693651222b1eb1c05b9d03481a3f19de2472a1af"
+      "oldHash": "e71f97ba102a51d7ef66086f693651222b1eb1c05b9d03481a3f19de2472a1af",
+      "newHash": "0256b489833fc1f083ce2d02362f119521305cb266ad36f7f758b04edc698a68"
     },
     {
       "path": "checkout.html",
-      "oldHash": "144067964031926099069888a8bccab0983bddfd58695e1ecf58ae0536a33635",
-      "newHash": "5452ef6748b8d4bf454fb739fdcc381611ef912ba759fffb80f93bd95c5546c9"
+      "oldHash": "5452ef6748b8d4bf454fb739fdcc381611ef912ba759fffb80f93bd95c5546c9",
+      "newHash": "b5fa8ba8189305fba70f77a1590717bae3adde2c67aaa8ebb4200bc5d934a8fc"
     },
     {
       "path": "collections.html",
-      "oldHash": "138f37561fc6ab1f29d6008c453c92f0f5d38ed85fa2fd828e6944f9d15c4dfc",
-      "newHash": "21e0f48e1c2ec60b0f171c5765251511957dbbb989075ba7f003a359cc546e70"
+      "oldHash": "21e0f48e1c2ec60b0f171c5765251511957dbbb989075ba7f003a359cc546e70",
+      "newHash": "a747b076560cae415339a30e5543de4f694a377de93b9e4671ddb3a326f7adfe"
     },
     {
       "path": "contact.html",
-      "oldHash": "cb54ea6085abc4ff72ba345b7a47c293221232f4d7ccd039963d582ee57bd989",
-      "newHash": "b971926da00227056ae81a42091ea7440b355a022aa7af28df8bfc30d402f2cc"
-    },
-    {
-      "path": "css/pages/institutional/about-maintenance.css",
-      "oldHash": "8307ded27052e3a453b64989a8135bd8aa08a0dc6ac41b648c36d763b82deba2",
-      "newHash": "d0a8aa127735734d165b7d2326d1bc06d203928cad9fd4bfde30f79a0d80a7e3"
+      "oldHash": "b971926da00227056ae81a42091ea7440b355a022aa7af28df8bfc30d402f2cc",
+      "newHash": "0a9faff58fd4ca7a9e59947910a47e08ff5d2400e095eb1bc0e605ebef2db4c9"
     },
     {
       "path": "envios.html",
-      "oldHash": "8584750bf144be700cdd302cff1a24ab6ecba391d52c6fa7eb32caa257c0d1ef",
-      "newHash": "c3ae12bbf65e1d95db50ddc1e0d982b35f35bc2231f481794a3337f94065b4ee"
+      "oldHash": "c3ae12bbf65e1d95db50ddc1e0d982b35f35bc2231f481794a3337f94065b4ee",
+      "newHash": "70141045eb4dc7be57ce4ad8dcda08dbcfb0afc7d76d54a0598595ffa9783ac8"
     },
     {
       "path": "index.html",
-      "oldHash": "308fd23a068465c42a2dbf52348709eb11266b96f14c4a1cda0f3f177de84d3e",
-      "newHash": "732027cab39def0fbdedc25d98e660a873ece477aa8a0b7093c046857fff8558"
+      "oldHash": "732027cab39def0fbdedc25d98e660a873ece477aa8a0b7093c046857fff8558",
+      "newHash": "984f7fa9b36c219ea3ba54883f00405b403b285a92cbcb9a25fb23001a0cb984"
     },
     {
-      "path": "js/cargador-mantenimiento-pagina.js",
-      "oldHash": "8819d052d5dcc54aaa92359be2707d6af052cd608c8022839737104929f1d9e0",
-      "newHash": "360a0a3874fde3e43ca1da70fbbbe397a2cd115b2e25c4d957f56310826787a8"
+      "path": "js/cargador-pagina.js",
+      "oldHash": "ecce9909b6cd7a05724d99171b53446f94ea016979920162d9a3d207f63a7589",
+      "newHash": "af3ec9157008e2e605589e7548c4256dc6d785bc63ee06906331f8f9c77272ff"
+    },
+    {
+      "path": "js/components/images/gestion-imagenes.js",
+      "oldHash": "16ee61fa8e0945c983d0c3532ec59fa5ffb96cb230811dec527c3bee6ba8c15b",
+      "newHash": "637978ec011e3489c203573cc4883864b5f2c4a42648402cd2e0668be077e49e"
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "oldHash": "09068886da09008de495fe17f281f653334f16bde1971c20ed0a1910b8df961a",
-      "newHash": "f1219a177aca2c91a2aa46577473a3b6099330e63ec865056a697c09d5bb7f58"
-    },
-    {
-      "path": "js/components/navigation/compartido/control-busqueda.js",
-      "oldHash": "72fc8fcea28e6461ce6098b3fb4c77371de3f9c0ad343a0669f35441660576c1",
-      "newHash": "2e4b47010eb4ee6833f35cf6f688ecf907b3cb79d3355730536a97d944d3b23f"
+      "oldHash": "f1219a177aca2c91a2aa46577473a3b6099330e63ec865056a697c09d5bb7f58",
+      "newHash": "e76fdef5ab3816148b86a19a41178af432f2b08d3e430222b503ebffc2d08def"
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "oldHash": "bf38229d579fa870df3ec31eebe0571e5aa59ebd5a72f811c59a75bb029e78de",
-      "newHash": "79d2d359b02b05d1c95874ccc1a64a54cc84330ed2e3b84a89d9375dbfbb4805"
-    },
-    {
-      "path": "js/core/store/estado-productos.js",
-      "oldHash": "0b5f03704599293cab64c298f5104a045b1c61ae54f986a066b909dedbd72c6f",
-      "newHash": "f3b04c6db3b97d2c96c3b4f27f9b8f7fe5dee87d2be3da6410e071ee8771f66e"
+      "oldHash": "79d2d359b02b05d1c95874ccc1a64a54cc84330ed2e3b84a89d9375dbfbb4805",
+      "newHash": "8054c4105e4a43411fb7f7bc8e97f41669b5725d9f9f65160242ca56fad924af"
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "oldHash": "b07637786ab8773c29c79d64c6bc786250ac7b48217db4f896c056621ec71a80",
-      "newHash": "b7589a7562758066787617a63ba91b3aae0f9136a1dc72a706bc788efe60b831"
+      "oldHash": "b7589a7562758066787617a63ba91b3aae0f9136a1dc72a706bc788efe60b831",
+      "newHash": "b2b9f3bba43cf8ecc03e743a63f7d49da03057de067a8e9f9ed6efa905d95c95"
     },
     {
-      "path": "js/pages/institutional/mantenimiento-nosotros.js",
-      "oldHash": "f7c258519bd0385f978a01a761ec8a9624884e3db23b5c75467acf88e36b238c",
-      "newHash": "2bbd3669113f6dc6f567a02eadcea7df95ebe7e310a2e5eadf8679254653d0a4"
+      "path": "js/quality/calidad-interfaz.js",
+      "oldHash": "1007ce66678912dd6dc67403a5ce60fa718c460b8c59a96c4de2f999bddaa0f6",
+      "newHash": "58229cbf6f46a7dcca0f063c06b27f53576bfc0c108178e3b3bc6c065b0b572e"
     },
     {
       "path": "login.html",
-      "oldHash": "26e12446fa7f69924abd766da6db8da9a0fecc65196db477f768da979da629db",
-      "newHash": "34045afecbb90559d8be1e6daa2773a267e171cd09ddc78cbdc0a4d7a0ece946"
+      "oldHash": "34045afecbb90559d8be1e6daa2773a267e171cd09ddc78cbdc0a4d7a0ece946",
+      "newHash": "53be3360da44db2e5779976a19fc3fc57f9a92b5df2b6ee28a1bf81d04f1a03a"
+    },
+    {
+      "path": "nosotros.html",
+      "oldHash": "3a8adefdc8fb1f962002d3e46a6931601712b828bd62ef87cdd4ad4922c93fc5",
+      "newHash": "9c82e35f3e5b78b4ff36f923d86b5f6d20fde25f8b8de298c0f6b16bb64c48f9"
     },
     {
       "path": "perfil.html",
-      "oldHash": "9375e5521d2be87d64a54855336debe121d228eebc47287c18e170f3609fa82d",
-      "newHash": "97f8125d4403abc4fc2a8f7127386168ff0408afc681d188195c1d4a3b2b2bd8"
+      "oldHash": "97f8125d4403abc4fc2a8f7127386168ff0408afc681d188195c1d4a3b2b2bd8",
+      "newHash": "af7a64409ccd182d5ea474fb28c80ef2e59223ac553966a3d6833aed025db434"
     },
     {
       "path": "preguntas-frecuentes.html",
-      "oldHash": "f847eeba17ffd704c1dd30b58d76c6741281fafb663e7b314432bc4c7c066058",
-      "newHash": "78f6ef82aabfb53386cd40feae5ac9a8261cc46a5b5cffc6fd00c05372cd68ef"
+      "oldHash": "78f6ef82aabfb53386cd40feae5ac9a8261cc46a5b5cffc6fd00c05372cd68ef",
+      "newHash": "83c9f390f2c1fb5b0b8620e73a479b15e6a43345c6cb6615ae971f4a4c9f01da"
     },
     {
       "path": "privacidad.html",
-      "oldHash": "777b35e2e64ac4285378df4cfe61455c7f126a5d1312d2a7b16f44e9514b070a",
-      "newHash": "1fbfaacd6a91b0ba86039542cd558f7220829c57cee378852d5c857b42070ddb"
+      "oldHash": "1fbfaacd6a91b0ba86039542cd558f7220829c57cee378852d5c857b42070ddb",
+      "newHash": "c99ad24f66fdcdcba35b09b24dc854855a01be8b0a261f5d008c8e8712eecee5"
     },
     {
       "path": "product.html",
-      "oldHash": "ff04595082a3d2f7f3f2dffa68174f4e1c1c16543b76a4c8a5a55fabd33e4409",
-      "newHash": "fb696166b547a47360dc4ddd62921889d9190e8930fe743e1ef7bd8819865c3a"
+      "oldHash": "fb696166b547a47360dc4ddd62921889d9190e8930fe743e1ef7bd8819865c3a",
+      "newHash": "21fa0857bc27c2d9337c398cefdeb8d31b9bdbd39fe5018466caf8c09a86e02e"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "7320b2dc9873859cd439c7779b7a2e8a6c1121bff297bbe795d82a1342f74b25",
-      "newHash": "37e070cb2097cd0ea18f2d27c838d6a2d69ed093c998b68d3c2bfd42dc97fe38"
+      "oldHash": "37e070cb2097cd0ea18f2d27c838d6a2d69ed093c998b68d3c2bfd42dc97fe38",
+      "newHash": "90041cc90f191dc7598e01d5ee606e7ca4f868ad58b4285f85cee0b02b745c27"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "oldHash": "619ad9e80b1b467214beb47845ac8bb154d1b7b7e83e493ea3a5a94426908aeb",
-      "newHash": "7ab473e2b81834172893bd27d9f2d00ce2746c24630476a99badcf58c016fa03"
+      "oldHash": "7ab473e2b81834172893bd27d9f2d00ce2746c24630476a99badcf58c016fa03",
+      "newHash": "990d50c87239302c9150cf2cb7172f6e40856b5f1da2123f4aca799408a7074b"
     },
     {
       "path": "terminos.html",
-      "oldHash": "f94c965e02a5aefbd204d64a1532fce95f3e2836297934e9e94be2ee2e36166e",
-      "newHash": "29ad3b9308ad8fbb033e5a2b62fe25ea242ba7b73c35551f559efc29f2f2a7ff"
+      "oldHash": "29ad3b9308ad8fbb033e5a2b62fe25ea242ba7b73c35551f559efc29f2f2a7ff",
+      "newHash": "b132ebadfdb7055a39587ff5f4ccb8115282c00a0e2553676ed07f0e89f96caa"
     }
   ],
   "affectedRecords": [

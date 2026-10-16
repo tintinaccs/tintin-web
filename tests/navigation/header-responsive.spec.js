@@ -2,6 +2,24 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 
+test('cada ancho carga el comportamiento del encabezado visible una sola vez', async ({ page }) => {
+  const requests = [];
+  page.on('request', request => {
+    const name = new URL(request.url()).pathname.split('/').pop();
+    if (['indicador-navegacion-escritorio.js', 'control-menu-tableta.js', 'indicador-navegacion-movil.js'].includes(name)) requests.push(name);
+  });
+  await openPublicPage(page, { width: 1025, height: 900 }, '/about');
+  await expect.poll(() => requests).toEqual(['indicador-navegacion-escritorio.js']);
+  await page.setViewportSize({ width: 768, height: 900 });
+  await expect.poll(() => requests).toEqual(['indicador-navegacion-escritorio.js', 'control-menu-tableta.js']);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(() => requests).toEqual(['indicador-navegacion-escritorio.js', 'control-menu-tableta.js', 'indicador-navegacion-movil.js']);
+  await page.setViewportSize({ width: 1120, height: 900 });
+  await expect(page.locator('#tt-header-desktop-tablet')).toBeVisible();
+  await expect(page.locator('#tt-header-tablet')).toBeHidden();
+  expect(requests).toEqual(['indicador-navegacion-escritorio.js', 'control-menu-tableta.js', 'indicador-navegacion-movil.js']);
+});
+
 // Geometry and image-origin assertions need the complete unified category menu.
 // This is a UI fixture, independent of the product-hydration server fixture.
 test.beforeEach(async ({ page }) => {

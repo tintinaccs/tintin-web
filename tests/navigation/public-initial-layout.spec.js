@@ -3,6 +3,27 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture');
 
+test('404 anidada conserva un footer compartido y un encabezado visible al cambiar de pantalla', async ({ page }) => {
+  const html = fs.readFileSync(path.join(__dirname, '../../404.html'), 'utf8');
+  await page.route('**/__shell-audit/deep/missing', route => route.fulfill({ status: 404, contentType: 'text/html', body: html }));
+  await page.goto('/__shell-audit/deep/missing', { waitUntil: 'load' });
+  await expect(page.locator('body')).toHaveClass(/tt-public-shell-mounted/);
+  const logo = page.locator('.tt-footer .tt-logo-img');
+  await expect(logo).toHaveAttribute('data-tt-image-phase5', '1');
+  for (const width of [320, 390, 767, 768, 1024, 1025, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(page.locator('.tt-footer')).toHaveCount(1);
+    await expect.poll(() => page.locator('#tt-header-desktop-tablet,#tt-header-tablet,#tt-tabbar').evaluateAll(nodes => nodes.filter(node => {
+      const rect = node.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 && getComputedStyle(node).visibility !== 'hidden';
+    }).map(node => node.id))).toEqual([width < 768 ? 'tt-tabbar' : width < 1025 ? 'tt-header-tablet' : 'tt-header-desktop-tablet']);
+    await logo.scrollIntoViewIfNeeded();
+    await expect.poll(() => logo.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+    expect(new URL(await logo.getAttribute('src'), page.url()).pathname).toBe('/assets-tintin/images/general/logo.png');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  }
+});
+
 for(const width of [320,390,768,1440]) test(`footer de perfil conserva logo contrastado sin recuadro tras cargar el filtro de marca en ${width}px`,async({page})=>{
   await page.setViewportSize({width,height:900});
   const html=removeFixtureScripts(fs.readFileSync(path.join(__dirname,'../../perfil.html'),'utf8'),{removeModulePreloads:true});
