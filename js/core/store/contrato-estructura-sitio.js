@@ -70,7 +70,7 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
   nosotros: page('Nosotros', 'about.html', SITE_STRUCTURE_MODES.editable, [
     section('hero', 'Encabezado', '.tt-page-hero', { zone: 'about-main' }),
     section('historia', 'Nuestra historia', '.tt-about-section', { zone: 'about-main', hideable: true }),
-    section('mision', 'Nuestra misión', '.tt-about-mission-section', { zone: 'about-main', hideable: true }),
+    section('origen', 'Por qué Tintin se llama Tintin', '.tt-about-mission-section', { zone: 'about-main', hideable: true }),
     section('valores', 'Nuestros valores', '.tt-trust-bar', { zone: 'about-main', hideable: true }),
   ], { legacyPaths: ['nosotros.html'] }),
 

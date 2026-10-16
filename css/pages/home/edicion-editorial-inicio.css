@@ -110,7 +110,7 @@ body.tt-home-premium .tt-product-card:hover { box-shadow: 0 18px 38px rgba(78, 4
 body.tt-home-premium :is(.tt-editorial, .tt-watch-feature) {
   max-width: min(1180px, calc(100% - 40px));
   margin-block: clamp(16px, 3vw, 32px);
-  border: 1px solid var(--tt-home-line) !important;
+  border: 0 !important;
   border-radius: clamp(20px, 2.4vw, 32px);
   box-shadow: 0 20px 56px rgba(77, 37, 50, .075) !important;
 }
@@ -203,7 +203,7 @@ body.tt-home-premium .tt-review-text { color: var(--tt-home-ink) !important; fon
 body.tt-home-premium .tt-review-avatar { background: var(--tt-home-rose) !important; }
 
 /* El pie sigue siendo completo, pero se lee como cierre de marca. */
-body.tt-home-premium .tt-footer { border-top: 1px solid var(--tt-home-line) !important; }
+body.tt-home-premium .tt-footer { border: 0 !important; }
 body.tt-home-premium .tt-footer-tagline { max-width: 28ch; color: var(--tt-home-muted) !important; line-height: 1.7; }
 
 @media (max-width: 768px) {
@@ -232,3 +232,14 @@ body.tt-home-premium .tt-footer-tagline { max-width: 28ch; color: var(--tt-home-
 
 body.tt-home-premium .tt-collection-carousel { padding-block:clamp(28px,4vw,52px); }
 body.tt-home-premium .tt-footer .tt-footer-wa svg { color:#168541!important; }
+/* El arte editorial ocupa el alto de su columna sin bandas alrededor. */
+body.tt-home-premium .tt-watch-feature { border: 0 !important; }
+body.tt-home-premium .tt-watch-feature-img { align-self: stretch; min-height: 0; border: 0; }
+body.tt-home-premium .tt-watch-feature-img :is(.tt-img-placeholder, picture, img) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+body.tt-home-premium .tt-watch-feature-img img { object-fit: cover; }
