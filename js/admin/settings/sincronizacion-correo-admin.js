@@ -1,9 +1,10 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1';
+import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-prepared-20261012-6-pedidos-styles-20261013-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import {
   addDoc,
   collection,
@@ -160,11 +161,11 @@ if (!window.TintinAdminEmailGateSyncBooted) {
     if (data.promoEnabled !== false) patch.promoEnabled = false;
     if (!Object.keys(patch).length) return;
     try {
-      await setDoc(PRIVATE_REF, {
+      await withAdminSiteChange(async () => setDoc(PRIVATE_REF, {
         ...patch,
         updatedAt: serverTimestamp(),
         updatedBy: SUPER_ADMIN_EMAIL
-      }, { merge: true });
+      }, { merge: true }));
     } catch (error) {
       console.error('[admin-email-gate-sync] No se pudo actualizar la configuración de Resend:', error);
     }
@@ -179,10 +180,10 @@ if (!window.TintinAdminEmailGateSyncBooted) {
     syncing = true;
     queued = false;
     try {
-      await setDoc(PUBLIC_REF, {
+      await withAdminSiteChange(async () => setDoc(PUBLIC_REF, {
         emailAccess: desired(),
         emailUpdatedAt: serverTimestamp()
-      }, { merge: true });
+      }, { merge: true }));
       window.dispatchEvent(new CustomEvent('tintin:email-gate-synced'));
     } catch (error) {
       console.error('[admin-email-gate-sync] No se pudo sincronizar storeGate.emailAccess:', error);
@@ -206,7 +207,7 @@ if (!window.TintinAdminEmailGateSyncBooted) {
 
   async function logTest(email, success, error = '') {
     try {
-      await addDoc(collection(db, 'emailLogs'), {
+      await withAdminSiteChange(async () => addDoc(collection(db, 'emailLogs'), {
         category: 'prueba',
         type: 'pedido_recibido_clienta',
         recipient: email,
@@ -216,7 +217,7 @@ if (!window.TintinAdminEmailGateSyncBooted) {
         sentBy: currentUser?.email || '',
         error: String(error || '').slice(0, 500),
         sentAt: serverTimestamp()
-      });
+      }));
     } catch (logError) {
       console.error('[admin-email-gate-sync] No se pudo registrar la prueba:', logError);
     }

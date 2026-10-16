@@ -19,7 +19,7 @@ import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tinti
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261015-images-1';
 export { productVariantImage };
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import {
@@ -1147,7 +1147,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261015-health-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261015-health-1-admin-live-20261016-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

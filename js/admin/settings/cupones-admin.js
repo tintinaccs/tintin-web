@@ -1,3 +1,4 @@
+import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
 /* =============================================================
    TINTIN — Cupones de envío gratis (solo Super Admin)
    Colección: coupons/{CODIGO}. Las reglas de Firestore exigen super admin y
@@ -7,7 +8,7 @@
 
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, onSnapshot, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
@@ -127,8 +128,8 @@ async function save(isNew) {
     updatedBy: actor,
   };
   try {
-    if (isNew) await setDoc(doc(db, 'coupons', code), { ...data, usedCount: 0, createdAt: serverTimestamp(), createdBy: actor });
-    else await updateDoc(doc(db, 'coupons', code), data);
+    if (isNew) await withAdminSiteChange(async () => setDoc(doc(db, 'coupons', code), { ...data, usedCount: 0, createdAt: serverTimestamp(), createdBy: actor }));
+    else await withAdminSiteChange(async () => updateDoc(doc(db, 'coupons', code), data));
     editing = null;
     render();
     setMessage(`Cupón ${code} guardado.`);
@@ -141,7 +142,7 @@ async function toggle(code) {
   const coupon = coupons.find(c => c.code === code);
   if (!coupon) return;
   try {
-    await updateDoc(doc(db, 'coupons', code), { active: !coupon.active, updatedAt: serverTimestamp(), updatedBy: String(auth.currentUser?.email || '').toLowerCase() });
+    await withAdminSiteChange(async () => updateDoc(doc(db, 'coupons', code), { active: !coupon.active, updatedAt: serverTimestamp(), updatedBy: String(auth.currentUser?.email || '').toLowerCase() }));
   } catch {
     setMessage('No se pudo cambiar el estado del cupón.', true);
   }
@@ -150,7 +151,7 @@ async function toggle(code) {
 async function remove(code) {
   if (!window.confirm(`¿Eliminar el cupón ${code}? Los pedidos que ya lo usaron conservan su descuento.`)) return;
   try {
-    await deleteDoc(doc(db, 'coupons', code));
+    await withAdminSiteChange(async () => deleteDoc(doc(db, 'coupons', code)));
   } catch {
     setMessage('No se pudo eliminar el cupón.', true);
   }

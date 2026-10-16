@@ -6,7 +6,7 @@ const base = require('./playwright.config.js');
 module.exports = defineConfig({
   ...base,
   testDir: './tests/operations',
-  testMatch: 'central-loader-ui.spec.js',
+  testMatch: ['central-loader-ui.spec.js', 'cambios-tienda.spec.js', 'ventas-locales-vivo.spec.js'],
   use: {
     ...base.use,
     baseURL: 'http://127.0.0.1:4173',

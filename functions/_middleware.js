@@ -1,6 +1,7 @@
 import cspRuntime from '../config/csp-runtime.js';
 import { jsonResponse, rateLimit } from './lib/operational-guard.js';
 import { limitByIp } from '../cloudflare/rate-limit-compartido.js';
+import { isAdminRevisionRequest, publishConfirmedSiteRevision } from '../cloudflare/revision-tienda.js';
 
 const GENERATED_BY = 'scripts/generar-csp-cloudflare.js';
 const SECURITY_HEADERS = Object.freeze({
@@ -154,7 +155,14 @@ export async function onRequest(context, { sharedLimit = limitByIp } = {}) {
   const readBlocked = await enforceReadLimit(context.request, pathname, context.env, sharedLimit);
   if (readBlocked) return applyPagesDevIndexPolicy(context.request, pathname, readBlocked);
 
+  const revisionRequest = isAdminRevisionRequest(context.request) ? context.request.clone() : null;
   const response = await context.next();
+  if (revisionRequest && response.ok) {
+    const publish = publishConfirmedSiteRevision(context.env, revisionRequest, response)
+      .catch(error => console.warn('[site-revision] Cambio confirmado; aviso pendiente:', error?.code || 'unavailable'));
+    if (context.waitUntil) context.waitUntil(publish);
+    else await publish;
+  }
   const contentType = response.headers.get('content-type') || '';
   // Un 304 no trae Content-Type, pero el navegador adopta sus cabeceras sobre
   // la página cacheada: sin esto, una revalidación de /perfil dejaba la CSP

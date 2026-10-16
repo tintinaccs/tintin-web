@@ -13,6 +13,7 @@ import {
   getDocs,
   limit,
   orderBy,
+  onSnapshot,
   query,
   serverTimestamp,
   setDoc,
@@ -339,6 +340,34 @@ try {
   await fails(updateDoc(doc(superUnverified, 'users', 'client1'), { role: 'admin' }));
 
   const superDb = ctx('super1');
+  // El pulso público no puede convertirse en una filtración de datos privados
+  // ni permitir que una clienta fabrique avisos de actualización.
+  await succeeds(setDoc(doc(superDb, 'settings', 'siteRevision'), { revision: 'fixture-revision', updatedAt: serverTimestamp() }));
+  await succeeds(getDoc(doc(anon, 'settings', 'siteRevision')));
+  await fails(setDoc(doc(client1, 'settings', 'siteRevision'), { revision: 'forged', updatedAt: serverTimestamp() }));
+  await fails(setDoc(doc(admin, 'settings', 'siteRevision'), { revision: 'forged', updatedAt: serverTimestamp() }));
+  await fails(setDoc(doc(superDb, 'settings', 'siteRevision'), { revision: 'private', updatedAt: serverTimestamp(), customerEmail: 'private@example.test' }));
+  await fails(setDoc(doc(superDb, 'settings', 'siteRevision'), { revision: 'old', updatedAt: new Date(0) }));
+  await fails(getDocs(collection(anon, 'settings')));
+  // Dos clientes SDK distintos: el anónimo debe recibir la confirmación del
+  // titular sin getDoc adicional ni recarga de página.
+  let stopRevision = () => {};
+  let revisionTimer;
+  try {
+    await succeeds(new Promise((resolve, reject) => {
+      revisionTimer = setTimeout(() => reject(new Error('El listener público no recibió la revisión confirmada.')), 15000);
+      let initial = true;
+      stopRevision = onSnapshot(doc(anon, 'settings', 'siteRevision'), { includeMetadataChanges: true }, snapshot => {
+        if (snapshot.metadata.fromCache || snapshot.metadata.hasPendingWrites) return;
+        const revision = snapshot.data()?.revision;
+        if (initial) {
+          initial = false;
+          if (revision !== 'fixture-revision') return reject(new Error('Base de revisión inesperada.'));
+          setDoc(doc(superDb, 'settings', 'siteRevision'), { revision: 'confirmed-live', updatedAt: serverTimestamp() }).catch(reject);
+        } else if (revision === 'confirmed-live') resolve();
+      }, reject);
+    }));
+  } finally { clearTimeout(revisionTimer); stopRevision(); }
   await succeeds(getDoc(doc(superDb, 'wholesaleQuotes', 'WQ_client2_req_abcdef123456')));
   await fails(updateDoc(doc(superDb, 'wholesaleQuotes', 'WQ_client2_req_abcdef123456'), { status: 'aprobada' }));
   await succeeds(getDoc(doc(superDb, 'settings', 'privateSecrets')));

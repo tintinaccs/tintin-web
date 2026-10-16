@@ -1,11 +1,11 @@
-import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1';
+import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 
 const sections=['ventas-locales','clientes-compraron','espejos-sheets'];
 const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const labels={sale:'Venta local',expense:'Gasto',purchase:'Compra a proveedor',customer:'Cliente local'};
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=value=>Number(value||0).toLocaleString('es-PY')+' Gs.';
-let snapshot=null,busy=false,lastLoaded=0,editor=null,search='',month='',kind='',archiveView='active',pendingLocalId='';
+let snapshot=null,busy=false,lastLoaded=0,editor=null,search='',month='',kind='',archiveView='active',pendingLocalId='',pendingRefresh=false;
 const active=()=>document.getElementById('section-pedidos')?.classList.contains('active')&&document.getElementById('local-order-buyers')?'pedidos':sections.find(name=>document.getElementById('section-'+name)?.classList.contains('active'));
 async function api(method='GET',body,view=''){
   const response=await authenticatedFetch('/api/local-commerce'+(view?'?view='+encodeURIComponent(view):''),{method,headers:body?{'content-type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});
@@ -13,10 +13,11 @@ async function api(method='GET',body,view=''){
 }
 function status(message,error=false){document.querySelectorAll('[data-local-status]').forEach(node=>{node.textContent=message;node.setAttribute('role',error?'alert':'status');});}
 async function load(force=false){
-  if(busy||!active()||(!force&&Date.now()-lastLoaded<10000)||editor)return;
+  if(busy||!active()||(!force&&!pendingRefresh&&Date.now()-lastLoaded<10000)||editor)return;
+  pendingRefresh=false;
   busy=true;status('Consultando datos confirmados…');
   try {snapshot=await api();lastLoaded=Date.now();render();status('Datos confirmados de Firestore · '+new Date(snapshot.checkedAt).toLocaleTimeString('es-PY'));if(pendingLocalId){const record=snapshot.entries.find(e=>e.id===pendingLocalId);pendingLocalId='';if(record)openEditor(record);}}
-  catch(error){status(error.message,true);}finally{busy=false;}
+  catch(error){status(error.message,true);pendingRefresh=false;}finally{busy=false;if(pendingRefresh&&!editor&&active())queueMicrotask(()=>load(true));}
 }
 const button=(text,attributes='')=>`<button type="button" class="adm-btn adm-btn-outline adm-btn-sm" ${attributes}>${text}</button>`;
 function render(){
@@ -41,7 +42,7 @@ function openEditor(record){
   if(record.kind==='expense')fields+=field('detail','Detalle',record.detail)+field('category','Categoría',record.category)+field('amount','Monto (Gs.)',record.amount,'number',true);
   if(record.kind==='purchase')fields+=field('supplier','Proveedor',record.supplier)+field('amount','Monto (Gs.)',record.amount,'number',true);
   const dialog=document.createElement('dialog');dialog.className='local-dialog';dialog.setAttribute('aria-labelledby','local-editor-title');dialog.innerHTML=`<form><h2 id="local-editor-title">${esc(labels[record.kind])}</h2><p>${esc(record.id)} · ${record.version?'Edición de registro existente':'Nuevo registro'}</p><div class="local-form">${fields}<label class="local-wide">Observaciones<textarea name="notes" rows="3">${esc(record.notes||'')}</textarea></label></div><p data-form-status role="status"></p><div class="local-toolbar">${button('Cerrar','data-local-close')}<button class="adm-btn adm-btn-primary" type="submit">${record.archived?'Restaurar y sincronizar':'Guardar y sincronizar'}</button>${!customer&&record.version&&!record.archived?button('Archivar','data-local-archive'):''}</div></form>`;document.body.appendChild(dialog);dialog.showModal();
-  dialog.querySelector('[data-local-close]').onclick=()=>dialog.close();dialog.addEventListener('close',()=>{editor=null;dialog.remove();});
+  dialog.querySelector('[data-local-close]').onclick=()=>dialog.close();dialog.addEventListener('close',()=>{editor=null;dialog.remove();if(pendingRefresh&&active())queueMicrotask(()=>load(true));});
   const save=async archived=>{const form=dialog.querySelector('form'),notice=dialog.querySelector('[data-form-status]');if(!form.reportValidity())return;const values=Object.fromEntries(new FormData(form));try{if(record.kind==='sale'){values.lines=[...form.querySelectorAll('[data-line-index]')].map((node,index)=>{const line=Object.fromEntries(lineKeys.map(([key])=>{const value=values['line_'+index+'_'+key];delete values['line_'+index+'_'+key];return [key,['quantity','cost','amount','profit'].includes(key)?value===''?null:Number(value):value];}));line.rowFields=index?Object.fromEntries(rowKeys.map(([key])=>{const value=values['row_'+index+'_'+key];delete values['row_'+index+'_'+key];return [key,key==='shippingCost'?value===''?null:Number(value):value];})):null;return line;});}for(const key of ['year','month','total','amount'])if(key in values)values[key]=Number(values[key]);if('shippingCost'in values)values.shippingCost=values.shippingCost===''?null:Number(values.shippingCost);const payload={...record,...values,baseVersion:record.version,archived:archived===true};form.querySelectorAll('button').forEach(b=>b.disabled=true);notice.textContent='Guardando…';await api('POST',{action:'upsert',entries:[payload]});dialog.close();await load(true);}catch(error){notice.textContent=error.message;notice.setAttribute('role','alert');form.querySelectorAll('button').forEach(b=>b.disabled=false);}};
   dialog.querySelector('[data-local-add-line]')?.addEventListener('click',()=>{const root=dialog.querySelector('[data-local-lines]'),index=root.children.length;root.insertAdjacentHTML('beforeend',lineFields([{}],index));});
   dialog.querySelector('form').onsubmit=e=>{e.preventDefault();save(false);};dialog.querySelector('[data-local-archive]')?.addEventListener('click',()=>save(true));
@@ -61,6 +62,7 @@ window.addEventListener('tintin:edit-local-sale',event=>{pendingLocalId=event.de
 let checkingRevision=false;
 setInterval(async()=>{if(!active()||document.hidden||editor||busy||checkingRevision)return;checkingRevision=true;try{const result=await api('GET',undefined,'revision');if(result.revision!==snapshot?.revision)await load(true);}catch(error){status(error.message,true);}finally{checkingRevision=false;}},30000);
 window.addEventListener('tintin:orders-updated',()=>{if(active()&&!editor)load(true);});
+window.addEventListener('tintin:site-content-updated',()=>{pendingRefresh=true;if(active()&&!editor&&!busy)load(true);});
 new MutationObserver(()=>{if(active())load();}).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
 load();
 
