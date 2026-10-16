@@ -125,6 +125,8 @@ function drawScaled(bitmap, maxWidth, maxHeight) {
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(bitmap, 0, 0, width, height);
   return { canvas, width, height };
 }
@@ -145,7 +147,7 @@ function canvasToBlob(canvas, mime, quality) {
  * que el canvas nunca los conserva), y genera una miniatura cuadrada para
  * la biblioteca. Devuelve blobs listos para subir a Storage.
  */
-export async function processImage(file, { maxWidth = 2000, maxHeight = 2000, quality = 0.82, thumbSize = 320 } = {}) {
+export async function processImage(file, { maxWidth = 3840, maxHeight = 3840, quality = 0.94, thumbSize = 320 } = {}) {
   const bitmap = await createImageBitmap(file);
   const canUseWebp = await supportsWebpEncoding();
   const targetMime = canUseWebp ? 'image/webp' : (ALLOWED_MIME.has(file.type) ? file.type : 'image/jpeg');

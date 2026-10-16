@@ -9,17 +9,17 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261015-rendimiento-actions-1';
+const TIENDA_VERSION = 'tintin-20261015-fast-b39121d67-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1';
-const LOADER_VERSION = 'tintin-20261015-rendimiento-actions-1';
+const LOADER_VERSION = 'tintin-20261015-fast-045c790ea-1';
 const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-psi-20261015-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261015-rendimiento-actions-1';
-const NAV_ENTRY_VERSION = 'tintin-20261015-rendimiento-actions-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261015-fast-51f35846b-1';
+const NAV_ENTRY_VERSION = 'tintin-20261015-fast-1a04e5813-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-stock-flow-20261014-1-story-20261014-1-profile-pulseras-20261014-1';
-const SESSION_PROTECTION_VERSION = 'tintin-20261015-rendimiento-actions-1';
-const PROFILE_GATE_VERSION = 'tintin-20261015-rendimiento-actions-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20261015-images-1';
+const SESSION_PROTECTION_VERSION = 'tintin-20261015-images-1';
+const PROFILE_GATE_VERSION = 'tintin-20261015-images-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1';
@@ -66,7 +66,7 @@ function ensureSectionFlow(html, absolute = false) {
   if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(out)) return out;
   const beforeHeadEnd = out.slice(0, out.indexOf('</head>'));
   const join = beforeHeadEnd.endsWith('\n') ? '' : '\n';
-  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261015-rendimiento-actions-1" defer></script>\n</head>`);
+  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261015-images-1" defer></script>\n</head>`);
 }
 function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   let out = ensureSectionFlow(html, absolute).replace(/\s*<!-- Estructura pública disponible desde el primer render -->/g, '');
@@ -171,7 +171,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-about-maintenance=\"1\"",
       "css/pages/institutional/about-maintenance.css",
-      "tintin-20260925-cache-converge-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-story-20261014-1-photos-20261015-1-about-gap-crop-20261015-1"
+      "tintin-20261015-images-1"
     ]
   ],
   "checkout.html": [
@@ -500,7 +500,7 @@ function centralizeRuntime(html) {
   // Todas las tarjetas comparten la misma autoridad de fotos y paleta.
   // Los scripts defer conservan este orden antes del renderer clásico.
   if (!out.includes('src="js/components/images/galeria-producto.js?')) {
-    out = out.replace(/<script\b[^>]*src=["']tienda\.js[^"']*["'][^>]*><\/script>/i, tag => `<script src="js/components/images/galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1" defer></script>\n${tag}`);
+    out = out.replace(/<script\b[^>]*src=["']tienda\.js[^"']*["'][^>]*><\/script>/i, tag => `<script src="js/components/images/galeria-producto.js?v=tintin-20261015-images-1" defer></script>\n${tag}`);
   }
   return out;
 }

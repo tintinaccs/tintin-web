@@ -1,4 +1,4 @@
-import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
 export const WELCOME_VERSION = 'home-welcome-v5-media';
 

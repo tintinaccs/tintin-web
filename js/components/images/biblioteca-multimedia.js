@@ -1,4 +1,4 @@
-import './galeria-producto.js?v=tintin-20261010-metallic-gold-2-boutique-20261011-1';
+import './galeria-producto.js?v=tintin-20261015-images-1';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 /* =============================================================
    TINTIN — Biblioteca multimedia de Super Admin
@@ -26,7 +26,7 @@ import {
   updateDoc,
   where,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { validateImageFile, processImage } from './procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { validateImageFile, processImage } from './procesamiento-imagenes.js?v=tintin-20261015-images-1';
 
 const MEDIA_COLLECTION = 'media';
 const TOKEN_TIMEOUT_MS = 10000;

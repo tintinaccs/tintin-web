@@ -94,7 +94,7 @@ check(
 check('La ficha mantiene su lectura individual y comparte relacionados por API edge',
   /getDoc\(doc\(db, 'products', id\)\)/.test(products) &&
   /onSnapshot\(\s*doc\(db, 'products', normalizedId\)/.test(products) &&
-  products.includes("void fetchRelatedProducts(product).then(related =>") &&
+  products.includes("void fetchRelatedProducts(product, pagePrefetch).then(related =>") &&
   products.includes("scheduleRelated(product)") &&
   products.includes("runSingleFlight('products:catalog:related-fetch'") &&
   products.includes('readCached(ALL_CACHE_KEY, ALL_CACHE_TTL)') &&

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-<script src="js/cargador-pagina.js?v=tintin-20261015-rendimiento-actions-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261015-fast-045c790ea-1"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1-brand-runtime-20261004-1-owner-pink-20261004-1" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="robots" content="noindex, nofollow, noarchive">
@@ -312,7 +312,7 @@
   </style>
 <link rel="stylesheet" href="css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1">
 <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1">
-  <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-20261015-rendimiento-actions-1" defer></script>
+  <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-20261015-images-1" defer></script>
   <link id="tt-phase10-accessibility-css" rel="stylesheet" href="css/quality/accesibilidad-global.css?v=tintin-20261013-connectivity-hit-target-1-palette-20261014-1">
 </head>
 <body>
@@ -407,9 +407,9 @@ import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20261012-auth-
 import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20261015-integrated-imagenes-1-photos-20261015-1-about-light-20261015-1";
-import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20261012-auth-privacy-1-carga-imagenes-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2";
-import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20261012-auth-privacy-1-biblioteca-multimedia-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2";
+import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20261015-images-1";
+import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20261015-images-1";
+import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20261015-images-1";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
 // (js/core/auth/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá
@@ -510,7 +510,7 @@ async function saveHeroField(patch, successMessage) {
 // Hero/Editorial/Nosotros son fotos grandes a pantalla completa: admiten
 // hasta 4K real (3840px) a mayor calidad. El logo y el resto usan el
 // respaldo de 2000px/0.82 de procesamiento-imagenes.js, de sobra para su tamaño.
-const FULL_BLEED_UPLOAD_LIMITS = { maxWidth: 3840, maxHeight: 3840, quality: 0.92 };
+const FULL_BLEED_UPLOAD_LIMITS = { maxWidth: 3840, maxHeight: 3840, quality: 0.94 };
 
 function mountDeviceWidget(container, { slotKey, label, hint, currentUrl, maxWidth, maxHeight, quality }) {
   return attachImageUploadWidget(container, {
@@ -799,6 +799,6 @@ subscribeAuthState(async (user) => {
 });
 </script>
 <script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20261012-unified-2-esquema-color-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-connections-20261014-1-ui-reconciled-20261014-1-logos-bottom-20261015-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261015-rendimiento-actions-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261015-images-1"></script>
 </body>
 </html>

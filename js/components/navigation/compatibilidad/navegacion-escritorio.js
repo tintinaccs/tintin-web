@@ -2,6 +2,6 @@
 (() => {
   const scriptUrl = document.currentScript?.src || new URL('js/components/navigation/compatibilidad/navegacion-escritorio.js', location.href).href;
   const url = new URL('../escritorio/indicador-navegacion-escritorio.js', scriptUrl);
-  url.searchParams.set('v', 'tintin-20260804-modular-shell-1');
+  url.searchParams.set('v', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
   import(url.href).catch(error => console.error('[NavigationDesktop] No se pudo cargar el módulo.', error));
 })();

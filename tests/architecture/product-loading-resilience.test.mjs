@@ -19,7 +19,7 @@ function functionBlock(source, startMarker, endMarker) {
 test('Producto tiene fallback público individual y acotado', () => {
   const edgeFetch = functionBlock(
     store,
-    'async function fetchSingleProductFromEdge(id)',
+    'async function fetchSingleProductFromEdge(id, pagePrefetch',
     'async function fetchRelatedProducts'
   );
 
@@ -40,7 +40,7 @@ test('La ficha no descarga el catálogo completo ni permite que App Check la blo
     'export async function loadProductPage'
   );
 
-  assert.match(productFlow, /fetchSingleProductFromEdge\(normalizedId\)/);
+  assert.match(productFlow, /fetchSingleProductFromEdge\(normalizedId, pagePrefetch\)/);
   assert.match(productFlow, /edgeResultPromise/);
   assert.match(store, /PRODUCT_APP_CHECK_TIMEOUT_MS\s*=\s*1200/);
   assert.match(store, /function waitForProductAppCheck\(\)/);

@@ -1,4 +1,4 @@
-import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261015-rendimiento-actions-1';
+import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261015-fast-f7771d9f0-1';
 
 const IMAGE_BASE = '/assets-tintin/images/collections/';
 const PLACEHOLDER = `${IMAGE_BASE}col-placeholder.webp`;
@@ -66,7 +66,7 @@ function optimizedImage(url, width = null) {
         const segments = delivery.split('/');
         let boundary = 0;
         while (boundary < segments.length - 1 && isDeliveryComponent(segments[boundary])) boundary += 1;
-        segments.splice(boundary, 0, `c_limit,w_${width},f_auto,q_auto`);
+        segments.splice(boundary, 0, `c_limit,w_${width},f_auto,q_auto:best`);
         parsed.pathname = `${prefix}/image/upload/${segments.join('/')}`;
       }
     }

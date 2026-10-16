@@ -187,8 +187,8 @@ check('La primera sesión de una clienta llega a inicio con bienvenida pendiente
   welcomeRuntime.includes('data?.welcomeTutorialPending === true'));
 check('Bienvenida pública y Super Admin usan una sola configuración',
   welcomeConfig.includes("export const WELCOME_VERSION = 'home-welcome-v5-media'") &&
-  welcomeRuntime.includes("from './configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1'") &&
-  welcomeAdmin.includes("from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1'") &&
+  welcomeRuntime.includes("from './configuracion-bienvenida.js?v=tintin-20261015-images-1'") &&
+  welcomeAdmin.includes("from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20261015-images-1'") &&
   !fs.existsSync(path.join(root, 'js', 'onboarding.js')) &&
   !fs.existsSync(path.join(root, 'js', 'welcome-tutorial-init.js')) &&
   !profile.includes('./js/onboarding.js'));

@@ -14,7 +14,7 @@ function harness(prefetch, cached = new Map(), realtime = new Promise(()=>{}), v
   window._showProductNotFound=()=>{};
   let reads=0;
   const context=vm.createContext({window,location:{pathname:'/product',search:'?id=main'},document:{getElementById:id=>id==='product-detail'?{}:null},CustomEvent,URLSearchParams,AbortController,Response,Promise,console,
-    catalogVisibilityReady:visibility,loadProductRealtimeDependencies:()=>realtime,getProductPagePrefetch:()=>prefetch,readCached:key=>cached.get(key),writeCached:(key,value)=>cached.set(key,value),readStaleCached:()=>null,recordFirestoreRead:()=>{},runSingleFlight:(_,fn)=>fn(),
+    catalogVisibilityReady:visibility,loadProductRealtimeDependencies:()=>realtime,getProductPagePrefetch:()=>typeof prefetch==='function'?prefetch():prefetch,readCached:key=>cached.get(key),writeCached:(key,value)=>cached.set(key,value),readStaleCached:()=>null,recordFirestoreRead:()=>{},runSingleFlight:(_,fn)=>fn(),
     fetchPublicCatalogResource:async()=>{reads++;return [item('fallback','collares')];},fetch:async()=>{throw Error('petición duplicada');},appCheckReady:new Promise(()=>{}),db:{},
     wristCategory:x=>x,cleanText:x=>String(x??''),cleanMultilineText:x=>String(x??''),sanitizeVariantData:x=>x,sanitizeImageUrl:x=>x,uniqueSafeImageUrls:x=>x,sortCatalogProducts:x=>x,timestampToMillis:()=>0});
   vm.runInContext(code,context);
@@ -96,4 +96,17 @@ test('la caché pendiente de visibilidad no sobrescribe stock confirmado en vivo
   release();
   for(let i=0;i<8;i++)await tick();
   assert.equal(h.window.PRODUCTS.find(p=>p.id==='main').stock,0);
+});
+
+test('una ficha iniciada a tiempo conserva la precarga aunque venza antes de pintar relacionados',async()=>{
+  let expired=false, takes=0, release;
+  const transport={response:new Promise(resolve=>release=resolve),catalog:Promise.resolve([item('main'),item('other','collares')])};
+  const h=harness(()=>{takes++;return expired?null:transport;});
+  vm.runInContext("startProductRealtime('main')",h.context);
+  expired=true;
+  release(Response.json({ok:true,resource:'products',item:item('main')}));
+  for(let i=0;i<8;i++)await tick();
+  assert.deepEqual(Array.from(h.window.PRODUCTS,p=>p.id),['main','other']);
+  assert.equal(takes,1);
+  assert.equal(h.reads(),0);
 });

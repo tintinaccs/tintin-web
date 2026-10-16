@@ -6,8 +6,8 @@
    de colecciones en collections/{slug}.image.
    ============================================================= */
 
-import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261015-integrated-imagenes-1-photos-20261015-1-about-light-20261015-1';
-import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { HERO_IMAGE_CONFIG_VERSION, HERO_IMAGE_FALLBACKS, onImagesUpdate, resolveSlotImage } from './imagenes.js?v=tintin-20261015-images-1';
+import { createSafeImage, sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261015-images-1';
 
 if (!window.TintinImagesPhase5Booted) {
   window.TintinImagesPhase5Booted = true;
@@ -38,12 +38,14 @@ if (!window.TintinImagesPhase5Booted) {
       alt: 'Nueva colección de relojes Tintin',
     },
     about_foto: {
+      widths: { mobile: 480, tablet: 720, desktop: 912 },
       desktop: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-desktop.webp',
       tablet: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-tablet.webp',
       mobile: 'assets-tintin/images/nosotros/barbi-historia/barbi-historia-mobile.webp',
       alt: 'Tintin Accesorios y Relojes',
     },
     about_mision: {
+      widths: { mobile: 480, tablet: 720, desktop: 914 },
       desktop: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-desktop.webp',
       tablet: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-tablet.webp',
       mobile: 'assets-tintin/images/nosotros/barbi-mision/barbi-mision-mobile.webp',
@@ -143,6 +145,22 @@ if (!window.TintinImagesPhase5Booted) {
       fit: 'cover',
       marker: 'ttImagePhase5',
     });
+
+    // Estos tres archivos son tamaños de la misma foto, no encuadres por
+    // dispositivo. Dejar que el navegador elija también según su densidad.
+    // Las personalizaciones conservan la cascada de dirección de arte.
+    if (fallback.widths && ['mobile', 'tablet', 'desktop'].every(device => urls[device] === absolute(fallback[device]))) {
+      image.srcset = ['mobile', 'tablet', 'desktop'].map(device => `${urls[device]} ${fallback.widths[device]}w`).join(', ');
+      image.sizes = '(max-width: 480px) calc(100vw - 32px), (max-width: 768px) 440px, (max-width: 1100px) 42vw, 440px';
+      image.style.width = '100%';
+      image.style.height = '100%';
+      image.style.display = 'block';
+      picture.style.width = '100%';
+      picture.style.height = '100%';
+      picture.style.display = 'block';
+      picture.append(image);
+      return picture;
+    }
 
     // Sin `type`: el formato real depende de lo que el navegador de quien
     // subió la imagen pudo codificar (WebP o el original), no siempre WebP.

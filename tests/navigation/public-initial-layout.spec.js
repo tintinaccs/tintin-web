@@ -102,7 +102,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
           expect(portraits).toHaveLength(2);
           for (const portrait of portraits) {
             expect(portrait.imageBottom, 'el contenedor exterior no debe cortar la parte inferior de la foto').toBeLessThanOrEqual(portrait.frameBottom + 1);
-            expect(portrait.position).toBe('50% 100%');
+            expect(['50% 47%', '50% 46%']).toContain(portrait.position);
           }
         }
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);

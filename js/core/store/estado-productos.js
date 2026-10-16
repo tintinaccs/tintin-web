@@ -1,10 +1,10 @@
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261015-rendimiento-actions-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261015-rendimiento-actions-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261015-fast-c827cbddd-1';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261015-fast-8824493a4-1';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1-stock-flow-20261014-1';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261015-product-realtime-lazy-1';
-import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
 
 import {
@@ -262,12 +262,12 @@ async function fetchSingleProduct(id) {
   return product;
 }
 
-async function fetchSingleProductFromEdge(id) {
+async function fetchSingleProductFromEdge(id, pagePrefetch = getProductPagePrefetch(id)) {
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), PUBLIC_PRODUCT_TIMEOUT_MS);
   try {
     const params = new URLSearchParams({ resource: 'products', id: String(id) });
-    const prefetched = await getProductPagePrefetch(id)?.response;
+    const prefetched = await pagePrefetch?.response;
     const response = prefetched ? prefetched.clone() : await fetch(`${PUBLIC_CATALOG_ENDPOINT}?${params.toString()}`, {
       method: 'GET',
       credentials: 'omit',
@@ -293,13 +293,13 @@ async function fetchSingleProductFromEdge(id) {
   }
 }
 
-async function fetchRelatedProducts(product) {
+async function fetchRelatedProducts(product, pagePrefetch = getProductPagePrefetch(product?.id)) {
   if (!product?.category) return [];
   return runSingleFlight('products:catalog:related-fetch', async () => {
     try {
       const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
       if (Array.isArray(cached) && cached.length) return cached;
-      const prefetched = await getProductPagePrefetch(product.id)?.catalog;
+      const prefetched = await pagePrefetch?.catalog;
       const items = prefetched || await fetchPublicCatalogResource('products');
       const products = normalizeList(items.map(item => mapProduct(item.id, item.data)));
       if (products.length) writeCached(ALL_CACHE_KEY, products.map(compactProduct));
@@ -350,6 +350,9 @@ async function startProductRealtime(id) {
   stopProductRealtime();
   publicProductId = normalizedId;
   const requestVersion = publicProductRequestVersion;
+  // Conservar el transporte tomado al iniciar: una CPU lenta no inicia otra
+  // descarga si el plazo para nuevas tomas vence mientras procesa el producto.
+  const pagePrefetch = getProductPagePrefetch(normalizedId);
   let realtimeConfirmed = false;
   let relatedRequestVersion = 0;
   let relatedPendingCategory = '';
@@ -359,7 +362,7 @@ async function startProductRealtime(id) {
     publicProductCategory = product.category;
     const relatedVersion = ++relatedRequestVersion;
     relatedPendingCategory = product.category;
-    void fetchRelatedProducts(product).then(related => {
+    void fetchRelatedProducts(product, pagePrefetch).then(related => {
       if (!isCurrentProductRequest(normalizedId, requestVersion) || relatedVersion !== relatedRequestVersion) return;
       if (publicProductCategory !== product.category || !publicProductCurrent) return;
       publicProductRelated = related;
@@ -384,7 +387,7 @@ async function startProductRealtime(id) {
   // disponible, el listener SDK toma luego el control y mantiene precio/stock vivo.
   const edgeResultPromise = runSingleFlight(
     `product:edge:${normalizedId}`,
-    () => fetchSingleProductFromEdge(normalizedId)
+    () => fetchSingleProductFromEdge(normalizedId, pagePrefetch)
   ).then(product => {
     if (!isCurrentProductRequest(normalizedId, requestVersion) || realtimeConfirmed) return { ok: true, product, published: null };
     if (product) {
@@ -523,7 +526,9 @@ export async function loadProductPage(options = {}) {
     return [];
   }
   if (options.force === true) stopProductRealtime();
-  return startProductRealtime(id);
+  // El shell y la ficha pueden pedir esta misma carga durante el arranque.
+  // Compartirla evita que una CPU lenta repita las dos lecturas públicas.
+  return runSingleFlight(`product:page:${id}`, () => startProductRealtime(id));
 }
 
 export async function ensureProductsForSearch() {

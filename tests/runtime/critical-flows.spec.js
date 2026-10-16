@@ -116,6 +116,10 @@ test('producto carga desde HTTP, carrito cambia y checkout avanza tras validar s
   const email='checkout@example.test';await otp(page,request,email);await fillProfile(page);await continueProfile(page);await expect(page).toHaveURL(/index\.html/);
   await page.goto('/product?id=runtime-watch',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#product-name')).toHaveText('Reloj Runtime');
+  // El aviso aparece con retraso y puede interponerse durante el clic móvil.
+  // Esta prueba de compra resuelve antes la elección real, sin habilitar métricas.
+  await page.getByRole('button',{name:'Solo necesarias',exact:true}).click();
+  await expect.poll(()=>page.evaluate(()=>window.TintinActivityPrivacy?.choice)).toBe('denied');
   await page.locator('#btn-product-add-cart').click();
   await expect.poll(()=>page.evaluate(()=>window.TintinCartRuntime?.getCartLocal().reduce((n,i)=>n+i.qty,0))).toBe(1);
   await page.goto('/checkout',{waitUntil:'domcontentloaded'});

@@ -1,3 +1,9 @@
+## 2026-10-15 — Reconciliación final de Producto y Actions
+
+Base e858d20d: se preservan las mejoras ya publicadas de imágenes y retratos de PR1135. Producto toma la precarga una sola vez al iniciar y shell/ficha comparten esa operación; si una CPU tarda más de 30 s, la respuesta ya tomada sigue alimentando ficha y relacionados sin descargar de nuevo. Las solicitudes posteriores mantienen el vencimiento normal de 30 s. Regresión Node simula el vencimiento durante la respuesta; 9 Chromium 320–1920 con CPU ×4 y Firebase bloqueado confirman una lectura individual, una de catálogo y tres relacionadas.
+
+La lista de Actions queda: dependencias de PR1116/1117/1118 integradas y verificadas; PR1135 MERGED; PR1122 independiente; PR1134 con CI38802283841 SUCCESS pero bloqueado sólo por la migración administrativa revisada de workflows. No cambia Rules ni se eluden controles. Pendientes del candidato: generadores, CI exacta, mantenimiento humano y Pages.
+
 ## 2026-10-15 — Corrección del fixture de galería detectada por CI
 
 CI38805533328 del SHA9586a6df:291 pruebas runtime aprobadas y51 fallas de product-color-gallery (17casos×3proyectos) por ReferenceError de _pdRenderedSignature en el simulador que extrae el renderer real. Se inicializa ese estado en el harness, como los otros estados privados de la galería. Se conservan todas las aserciones de fotos, miniaturas, inventario, editor, tamaños y controles; no se cambian timeouts ni código de compra para pasar CI.20 Chromium de galería aprobados tras el ajuste; matriz escritorio/móvil y WebKit del nuevo SHA pendiente de CI. WebKit local se descargó pero faltan bibliotecas del host; no atribuir PASS local a ese motor. El diagnóstico se regenera después del fixture final y se revalidan las70huellas protegidas.
