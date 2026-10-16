@@ -15,8 +15,8 @@ const COLOR_FIRST_PAINT_VERSION = 'tintin-20261012-unified-2-esquema-color-insta
 const LOADER_VERSION = 'tintin-20261016-story-ecce9909b6';
 const STORE_GATE_VERSION = 'tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-psi-20261015-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261016-story-b07637786a';
-const NAV_ENTRY_VERSION = 'tintin-20261016-story-bf38229d57';
+const PUBLIC_SHELL_VERSION = 'tintin-20261016-story-b7589a7562';
+const NAV_ENTRY_VERSION = 'tintin-20261016-story-79d2d359b0';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261016-story-d168192765';
 const SESSION_PROTECTION_VERSION = 'tintin-20261015-images-1';
@@ -172,7 +172,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-about-maintenance=\"1\"",
       "css/pages/institutional/about-maintenance.css",
-      "tintin-20261016-story-8307ded270"
+      "tintin-20261016-story-d0a8aa1277"
     ]
   ],
   "checkout.html": [
