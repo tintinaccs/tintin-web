@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261012-unified-2-esquema-color-instantaneo-js-domain-prepared-20261012-6-precutover-20261013-3-security-ready-20261013-2-palette-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261016-best-sellers-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261016-story-ecce9909b6"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261016-footer-gradient-public-shell-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261016-story-b07637786a" defer></script>
   <title>Quiénes Somos | TINTIN Accesorios & Relojes</title>
   <meta name="description" content="Conocé la historia y la esencia de Tintin Accesorios &amp; Relojes, una tienda paraguaya dedicada a accesorios femeninos.">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -47,7 +47,7 @@
 <link rel="stylesheet" href="css/pages/secundarias-minimal.css?v=tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1">
 <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261016-footer-gradient-navigation-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261016-story-bf38229d57">
   <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-20261015-flow-startup-2" defer></script>
   <!-- Estructura pública disponible desde el primer render -->
   <link id="tt-responsive-brand-surfaces-css" rel="stylesheet" href="css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1">
@@ -67,7 +67,7 @@
   <link id="tt-navigation-notification-surface-css" rel="stylesheet" href="css/components/navigation/compartido/superficie-notificaciones.css?v=tintin-20260918-header-system-solid-surfaces-1">
   <link id="tt-navigation-search-css" rel="stylesheet" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1">
   <link id="tt-navigation-coherence-css" rel="stylesheet" href="css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1">
-  <link data-tt-about-maintenance="1" rel="stylesheet" href="css/pages/institutional/about-maintenance.css?v=tintin-20261015-images-1">
+  <link data-tt-about-maintenance="1" rel="stylesheet" href="css/pages/institutional/about-maintenance.css?v=tintin-20261016-story-8307ded270">
 </head>
 <body class="tt-about-maintained">
 
@@ -136,7 +136,6 @@
     <div class="tt-about-grid">
       <figure class="tt-about-childhood">
         <img src="assets-tintin/images/nosotros/barbi-pequenita.png" alt="Barbi pequeñita, con su vestido y su muñeca" width="941" height="1176" loading="lazy" decoding="async">
-        <figcaption>Barbi pequeñita ♡</figcaption>
       </figure>
       <div class="tt-about-content">
         <h2 class="tt-about-mission-title" id="tt-about-mission-title">¿Por qué Tintin se llama Tintin? 🎀</h2>
@@ -151,9 +150,11 @@
           <defs>
             <filter id="tt-signature-dark" color-interpolation-filters="sRGB">
               <feColorMatrix type="matrix" values="0 0 0 0 .65  0 0 0 0 .16  0 0 0 0 .34  0 -4 0 0 4"/>
+              <feComposite in2="SourceAlpha" operator="in"/>
             </filter>
             <filter id="tt-signature-light" color-interpolation-filters="sRGB">
               <feColorMatrix type="matrix" values="0 0 0 0 .99  0 0 0 0 .94  0 0 0 0 .96  0 -4 0 0 4"/>
+              <feComposite in2="SourceAlpha" operator="in"/>
             </filter>
           </defs>
         </svg>
@@ -260,7 +261,7 @@
 <script type="module" src="js/analytics/analitica.js?v=tintin-20261012-auth-privacy-1-analitica-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261015-images-1"></script>
 <script type="module">
-import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20261016-best-sellers-1';
+import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20261016-story-9e7e80e1a1';
 initSiteContent('nosotros');
 </script>
 <script type="module">
@@ -312,6 +313,6 @@ onImagesUpdate((images) => {
 </script>
 <script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20261012-auth-privacy-1-insignia-edicion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261012-unified-2-esquema-color-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-logos-bottom-20261015-1"></script>
-<script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20261016-best-sellers-1"></script>
+<script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20261016-story-d168192765"></script>
 </body>
 </html>

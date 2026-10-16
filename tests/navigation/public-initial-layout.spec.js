@@ -101,7 +101,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
             frameBottom: image.closest('.tt-about-portrait').getBoundingClientRect().bottom,
             position: getComputedStyle(image).objectPosition,
           })));
-          expect(portraits).toHaveLength(2);
+          expect(portraits).toHaveLength(1);
           for (const portrait of portraits) {
             expect(portrait.imageBottom, 'el contenedor exterior no debe cortar la parte inferior de la foto').toBeLessThanOrEqual(portrait.frameBottom + 1);
             expect(['50% 47%', '50% 46%']).toContain(portrait.position);

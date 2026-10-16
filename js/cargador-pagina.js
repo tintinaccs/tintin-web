@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261016-best-sellers-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261016-story-1007ce6667');
     }
   }
 

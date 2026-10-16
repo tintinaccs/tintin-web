@@ -233,7 +233,7 @@ body.tt-home-premium .tt-footer-tagline { max-width: 28ch; color: var(--tt-home-
 body.tt-home-premium .tt-collection-carousel { padding-block:clamp(28px,4vw,52px); }
 body.tt-home-premium .tt-footer .tt-footer-wa svg { color:#168541!important; }
 /* El arte editorial ocupa el alto de su columna sin bandas alrededor. */
-body.tt-home-premium .tt-watch-feature { border: 0 !important; }
+html:root body.tt-home-premium .tt-watch-feature { border: 0 !important; }
 body.tt-home-premium .tt-watch-feature-img { align-self: stretch; min-height: 0; border: 0; }
 body.tt-home-premium .tt-watch-feature-img :is(.tt-img-placeholder, picture, img) {
   display: block;

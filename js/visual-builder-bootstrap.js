@@ -1,5 +1,5 @@
-import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20261016-best-sellers-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261016-best-sellers-1';
+import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20261016-story-1715905a45';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261016-story-2943605fd2';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 
