@@ -45,6 +45,7 @@ export const collection = (_db, name) => name;
 export const doc = (_db, name, id) => name+'/'+id;
 export const serverTimestamp = () => new Date();
 export const runTransaction = async () => {throw new Error('Escrituras no habilitadas en este fixture');};
+export const setDoc = async () => {throw new Error('Escrituras no habilitadas en este fixture');};
 export const deleteDoc = async () => {throw new Error('Escrituras no habilitadas en este fixture');};
 export async function getDoc(ref) { const id=ref.split('/').at(-1),order=window.__orders.find(o=>o.id===id);return {exists:()=>!!order,data:()=>structuredClone(order)}; }
 export const query = (ref) => ref;

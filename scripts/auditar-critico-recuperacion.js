@@ -109,7 +109,7 @@ check(
   'Eliminar un pedido activo libera stock antes de hacerlo desaparecer',
   inventory.includes("lastInventoryAction: 'release'") &&
     !inventory.includes("lastInventoryAction: 'delete-release'") &&
-    inventory.includes('const releaseResult = await runTransaction') &&
+    inventory.includes('const releaseResult = await withAdminSiteChange(async () => runTransaction(db, async transaction => {') &&
     inventory.includes("inventoryState: 'released'") &&
     inventory.includes('if (orderReservesInventory(orderSnapshot.data() || {}))') &&
     !rules.includes('(isSuperAdmin() && !orderExistsAfter)'),

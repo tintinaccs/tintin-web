@@ -1,3 +1,4 @@
+import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
 /*
  * Tintin Admin — aplicar al catálogo real un CSV de Shopify ya revisado.
  *
@@ -314,7 +315,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
           seen.add(id);
           entries.push({ id, data: buildCatalogProductFromImport(record.product) });
         });
-        const { createdHere, resumedHere, sheetsHere } = await runTransaction(db, async tx => {
+        const { createdHere, resumedHere, sheetsHere } = await withAdminSiteChange(async () => runTransaction(db, async tx => {
           const refs = entries.map(entry => doc(db, 'products', entry.id));
           const snapshots = await Promise.all(refs.map(ref => tx.get(ref)));
           const result = { createdHere: [], resumedHere: 0, sheetsHere: [] };
@@ -329,7 +330,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
             result.sheetsHere.push(entries[index].id);
           });
           return result;
-        });
+        }));
         createdIds.push(...createdHere);
         sheetsHere.forEach(id => sheetsIds.add(id));
         resumed += resumedHere;

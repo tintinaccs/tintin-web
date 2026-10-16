@@ -1,11 +1,13 @@
+import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
+import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261015-images-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
-import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs';
+import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2";
 import { waitForAdminAppCheck, recoverAdminSecurity } from "./auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
-import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261015-images-1';
-import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1";
+import { logoutSession } from '../core/auth/salida-sesion.js?v=tintin-20261015-images-1-admin-live-20261016-1';
+import { AUTH_STATES, subscribeSession, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
@@ -22,21 +24,21 @@ import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=ti
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20261012-auth-privacy-1-nucleo-control-tienda-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2-psi-20261015-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261015-fast-f7771d9f0-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261015-fast-f7771d9f0-1-admin-live-20261016-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
-import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1";
+import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261016-images-fidelity-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261016-images-fidelity-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261016-images-fidelity-1-admin-live-20261016-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261016-images-fidelity-1-admin-live-20261016-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261012-auth-privacy-1-diagnostico-sitio-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
-import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261015-images-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1";
-import "./pages/paginas-admin.js?v=tintin-20261012-auth-privacy-1-paginas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1";
+import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261015-images-1-admin-live-20261016-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261012-auth-privacy-1-flujo-conexiones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1";
+import "./pages/paginas-admin.js?v=tintin-20261012-auth-privacy-1-paginas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1-admin-live-20261016-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -45,9 +47,9 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261013-orders-board-6-pedidos-superadmin-crud-js-security-ready-20261013-2-ui-reconciled-20261014-1';
-import './settings/cupones-admin.js?v=tintin-20261012-auth-privacy-1-cupones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1';
-import './products/integridad-inventario-admin.js?v=tintin-20261012-orders-board-2-integridad-inventario-admin-js-security-ready-20261013-2-ui-reconciled-20261014-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261013-orders-board-6-pedidos-superadmin-crud-js-security-ready-20261013-2-ui-reconciled-20261014-1-admin-live-20261016-1';
+import './settings/cupones-admin.js?v=tintin-20261012-auth-privacy-1-cupones-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-reconciled-20261014-1-admin-live-20261016-1';
+import './products/integridad-inventario-admin.js?v=tintin-20261012-orders-board-2-integridad-inventario-admin-js-security-ready-20261013-2-ui-reconciled-20261014-1-admin-live-20261016-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 
@@ -388,6 +390,10 @@ async function logAudit(action, targetType, targetId, targetLabel, details, meta
     console.error('No se pudo registrar en auditLog:', e);
   }
 }
+
+// Los módulos independientes (por ejemplo Páginas) usan este mismo registro;
+// el actor siempre se obtiene de la sesión del panel, nunca del llamador.
+window.logAudit = logAudit;
 
 const AUDIT_ACTION_LABELS = {
   editar_pedido:          '📋 Editó pedido',
@@ -1740,17 +1746,17 @@ function startAdminSettingsRealtime() {
       const legacySnap = await getDoc(doc(db, 'settings', 'general'));
       const legacy = legacySnap.exists() ? legacySnap.data() : {};
       if (!Array.isArray(legacy.deliveryCities) && !Array.isArray(legacy.encomiendaCities)) return;
-      await setDoc(doc(db, 'settings', 'shippingRates'), {
+      await withAdminSiteChange(async () => setDoc(doc(db, 'settings', 'shippingRates'), {
         deliveryCities: legacy.deliveryCities || [],
         encomiendaCities: legacy.encomiendaCities || [],
         deliveryCost: legacy.deliveryCost || 0,
         encomiendaCost: legacy.encomiendaCost || 0,
         updatedAt: serverTimestamp()
-      }, { merge: true });
-      await setDoc(doc(db, 'settings', 'general'), {
+      }, { merge: true }));
+      await withAdminSiteChange(async () => setDoc(doc(db, 'settings', 'general'), {
         deliveryCities: deleteField(),
         encomiendaCities: deleteField()
-      }, { merge: true });
+      }, { merge: true }));
       console.log('[envios] Ciudades migradas de settings/general a settings/shippingRates.');
     } catch (error) {
       console.warn('[envios] No se pudo migrar la configuración de envíos:', error?.code || error);
@@ -1789,6 +1795,24 @@ function recoverAdminRealtimeAuth(error, source) {
   void adminRealtimeAuthRecoveryPromise.then(ok => {
     if (ok && currentUser?.uid === targetUser.uid) startAdminRealtimeData();
   });
+}
+
+function subscribeAdminCollectionPages(name, pageSize, onData, onError, onLoading) {
+  return createAdminPagedSource({
+    complete: currentRole === 'superadmin', onData, onError, onLoading,
+    subscribePage(cursor, next, fail) {
+      const base = collection(db, name);
+      const source = cursor
+        ? query(base, orderBy('__name__'), startAfter(cursor), limit(pageSize))
+        : query(base, orderBy('__name__'), limit(pageSize));
+      return onSnapshot(source, { includeMetadataChanges: true }, snapshot => {
+        const last = snapshot.docs.at(-1);
+        next({ records: snapshot.docs.map(item => ({ id: item.id, record: item.data() })),
+          cursor: last, cursorKey: last?.id || '', hasMore: snapshot.docs.length === pageSize,
+          authoritative: snapshot.metadata?.fromCache !== true });
+      }, fail);
+    },
+  }).stop;
 }
 
 function startAdminRealtimeData() {
@@ -1838,20 +1862,39 @@ function startAdminRealtimeData() {
       allUsers = [...adminUsersLive]
         .sort((a, b) => activityTimestampMillis(b.createdAt || b.updatedAt || b.lastAccess) - activityTimestampMillis(a.createdAt || a.updatedAt || a.lastAccess) || String(a.uid || '').localeCompare(String(b.uid || '')));
     };
-    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
-      adminUsersLive = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
-      mergeAdminUsers();
-      adminRealtimeReady.users = true;
-      adminRealtimeErrors.users = '';
-      refreshRealtimeConsumers();
-    }, error => {
-      adminRealtimeReady.users = false;
-      adminRealtimeErrors.users = 'No se pudieron actualizar los usuarios.';
-      console.error('Usuarios en tiempo real no disponibles:', error);
-      statisticsSetText('statistics-live-status', 'Usuarios no disponibles');
-      recoverAdminRealtimeAuth(error, 'users');
-      refreshRealtimeConsumers();
+    const usersSource = createAdminPagedSource({
+      complete: true,
+      subscribePage(cursor, next, fail) {
+        // El ID existe también en cuentas históricas sin createdAt. Los
+        // cambios de nombre/rol no mueven las fronteras de estas páginas.
+        const usersQuery = cursor
+          ? query(collection(db, 'users'), orderBy('__name__'), startAfter(cursor), limit(ADMIN_REALTIME_LIMIT))
+          : query(collection(db, 'users'), orderBy('__name__'), limit(ADMIN_REALTIME_LIMIT));
+        return onSnapshot(usersQuery, { includeMetadataChanges: true }, snapshot => {
+          const last = snapshot.docs.at(-1);
+          next({ records: snapshot.docs.map(item => ({ id: item.id, uid: item.id, ...item.data() })),
+            cursor: last, cursorKey: last?.id || '', hasMore: snapshot.docs.length === ADMIN_REALTIME_LIMIT,
+            authoritative: snapshot.metadata?.fromCache !== true });
+        }, fail);
+      },
+      onLoading() { adminRealtimeReady.users = false; refreshRealtimeConsumers(); },
+      onData(users) {
+        adminUsersLive = users;
+        mergeAdminUsers();
+        adminRealtimeReady.users = true;
+        adminRealtimeErrors.users = '';
+        refreshRealtimeConsumers();
+      },
+      onError(error) {
+        adminRealtimeReady.users = false;
+        adminRealtimeErrors.users = 'No se pudieron actualizar los usuarios.';
+        console.error('Usuarios en tiempo real no disponibles:', error);
+        statisticsSetText('statistics-live-status', 'Usuarios no disponibles');
+        recoverAdminRealtimeAuth(error, 'users');
+        refreshRealtimeConsumers();
+      },
     });
+    adminUsersUnsubscribe = usersSource.stop;
     listenStatisticsTraffic();
   }
 }
@@ -2358,7 +2401,7 @@ window.updateUserRole = async (uid, role, email) => {
     stages: [{ id: 'write', label: 'Actualizar rol y permisos' }, { id: 'refresh', label: 'Actualizar lista de clientes' }],
     action: async ctx => {
       ctx.start('write');
-      await setDoc(doc(db, 'users', uid), { role, updatedAt: serverTimestamp() }, { merge: true });
+      await withAdminSiteChange(async () => setDoc(doc(db, 'users', uid), { role, updatedAt: serverTimestamp() }, { merge: true }));
       if (u) u.role = role;
       await logAudit('cambiar_rol', 'usuario', uid, email, `Rol: ${ROLE_LABELS[prevRole] || prevRole} → ${ROLE_LABELS[role]}`);
       ctx.ok('write');
@@ -2387,7 +2430,7 @@ window.blockUser = async (uid, email) => {
     stages: [{ id: 'write', label: 'Actualizar estado de la cuenta' }],
     action: async ctx => {
       ctx.start('write');
-      await updateDoc(doc(db, 'users', uid), {
+      await withAdminSiteChange(async () => updateDoc(doc(db, 'users', uid), {
         blocked: true,
         blockedAt: serverTimestamp(),
         blockedBy: currentUser?.email || '',
@@ -2395,7 +2438,7 @@ window.blockUser = async (uid, email) => {
         roleBeforeBlock: prevRole,
         role: 'client',
         updatedAt: serverTimestamp()
-      });
+      }));
       Object.assign(u, { blocked: true, blockedBy: currentUser?.email || '', blockReason: reason, roleBeforeBlock: prevRole, role: 'client' });
     await logAudit('bloquear_usuario', 'usuario', uid, u.name || email, reason ? `Motivo: ${reason}` : 'Sin motivo especificado');
       applyUserFilters();
@@ -2422,7 +2465,7 @@ window.restoreUser = async (uid) => {
     stages: [{ id: 'write', label: 'Restaurar estado y permisos' }],
     action: async ctx => {
       ctx.start('write');
-      await updateDoc(doc(db, 'users', uid), {
+      await withAdminSiteChange(async () => updateDoc(doc(db, 'users', uid), {
         blocked: false,
         role: targetRole,
         blockedAt: deleteField(),
@@ -2430,7 +2473,7 @@ window.restoreUser = async (uid) => {
         blockReason: deleteField(),
         roleBeforeBlock: deleteField(),
         updatedAt: serverTimestamp()
-      });
+      }));
       Object.assign(u, { blocked: false, role: targetRole });
       delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock;
       await logAudit('restaurar_usuario', 'usuario', uid, u.name || u.email, `Restaurado como ${ROLE_LABELS[targetRole]}`);
@@ -2559,7 +2602,7 @@ window.bulkBlockUsers = async function() {
           blockReason: reason, roleBeforeBlock: u?.role || 'client', role: 'client', updatedAt: serverTimestamp()
         });
       });
-      await batch.commit();
+      await withAdminSiteChange(async () => batch.commit());
     }
     ids.forEach(uid => {
       const u = allUsers.find(x => x.uid === uid);
@@ -2599,7 +2642,7 @@ window.bulkRestoreUsers = async function() {
           blockReason: deleteField(), roleBeforeBlock: deleteField(), updatedAt: serverTimestamp()
         });
       });
-      await batch.commit();
+      await withAdminSiteChange(async () => batch.commit());
     }
     ids.forEach(uid => {
       const u = allUsers.find(x => x.uid === uid);
@@ -3389,7 +3432,7 @@ document.getElementById('btn-save-config').onclick = async () => {
       updatedBy: currentUser?.email || SUPER_ADMIN
     }, { merge: true });
 
-    await settingsBatch.commit();
+    await withAdminSiteChange(async () => settingsBatch.commit());
     if (_lastKnownStoreOpen !== willBeOpen) {
       const antes = _lastKnownStoreOpen ? 'Abierta' : 'Cerrada';
       const despues = willBeOpen ? 'Abierta' : 'Cerrada';
@@ -3694,7 +3737,7 @@ async function getEmailSettingsFresh_() {
 
 async function saveEmailSettingsMerge_(patch) {
   try {
-    await setDoc(doc(db, 'emailSettings', 'main'), { ...patch, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' }, { merge: true });
+    await withAdminSiteChange(async () => setDoc(doc(db, 'emailSettings', 'main'), { ...patch, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' }, { merge: true }));
     return true;
   } catch (e) {
     toast('Error al guardar: ' + e.message);
@@ -3711,11 +3754,11 @@ async function ensureTemplatesSeeded_(existing) {
       signature: seed.signature, promoText: seed.promoText, buttonText: seed.buttonText, buttonUrl: seed.buttonUrl || '',
       brandPhrase: seed.brandPhrase, footer: seed.footer };
     try {
-      await setDoc(doc(db, 'emailTemplates', key), {
+      await withAdminSiteChange(async () => setDoc(doc(db, 'emailTemplates', key), {
         key, name: seed.name, category: seed.category, ...content,
         active: true, archived: false, original: content,
         createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
-      });
+      }));
       existing.push({ id: key, key, name: seed.name, category: seed.category, ...content, active: true, archived: false, original: content });
     } catch (e) {
       console.error('No se pudo crear la plantilla inicial ' + key + ':', e);
@@ -3746,11 +3789,11 @@ async function logEmailSend_(entry) {
   renderCorreosDashboard();
   renderCorreosHistorialTab();
   try {
-    await addDoc(collection(db, 'emailLogs'), {
+    await withAdminSiteChange(async () => addDoc(collection(db, 'emailLogs'), {
       category: local.category, type: local.type, recipient: local.recipient, status: local.status, templateKey: local.templateKey,
       isAutomatic: local.isAutomatic, sentBy: local.sentBy, error: local.error, orderId: local.orderId,
       campaignId: local.campaignId, variables: local.variables, sentAt: serverTimestamp()
-    });
+    }));
   } catch (e) {
     console.error('No se pudo registrar en emailLogs:', e);
   }
@@ -4308,7 +4351,7 @@ window.bulkDeleteTemplates = async function() {
     for (let i = 0; i < ids.length; i += CHUNK) {
       const batch = writeBatch(db);
       ids.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'emailTemplates', id)));
-      await batch.commit();
+      await withAdminSiteChange(async () => batch.commit());
     }
     const idSet = new Set(ids);
     allEmailTemplates = allEmailTemplates.filter(t => !idSet.has(t.id));
@@ -4381,7 +4424,7 @@ async function saveTplEdit_() {
   };
   if (!t.key) patch.name = document.getElementById('tpl-edit-name-input').value.trim() || t.name;
   try {
-    await updateDoc(doc(db, 'emailTemplates', id), patch);
+    await withAdminSiteChange(async () => updateDoc(doc(db, 'emailTemplates', id), patch));
     Object.assign(t, patch, { updatedAt: new Date() });
     toast('Plantilla guardada');
     window.AdminUnsaved?.markClean('email-template-editor');
@@ -4405,7 +4448,7 @@ document.getElementById('tpl-edit-restore-btn').onclick = async () => {
   if (!confirm('¿Restaurar esta plantilla a su versión original? Se pierden los cambios actuales.')) return;
   try {
     const patch = { ...t.original, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' };
-    await updateDoc(doc(db, 'emailTemplates', id), patch);
+    await withAdminSiteChange(async () => updateDoc(doc(db, 'emailTemplates', id), patch));
     Object.assign(t, patch, { updatedAt: new Date() });
     toast('Plantilla restaurada a su versión original');
     window.openTplEdit(id);
@@ -4419,11 +4462,11 @@ document.getElementById('btn-tpl-nueva').onclick = async () => {
     signature: seed.signature, promoText: seed.promoText, buttonText: seed.buttonText, buttonUrl: seed.buttonUrl || '',
     brandPhrase: seed.brandPhrase, footer: seed.footer };
   try {
-    const ref = await addDoc(collection(db, 'emailTemplates'), {
+    const ref = await withAdminSiteChange(async () => addDoc(collection(db, 'emailTemplates'), {
       key: null, name: 'Mensaje libre (nuevo)', category: 'libre', ...content,
       active: true, archived: false, original: content,
       createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
-    });
+    }));
     allEmailTemplates.push({ id: ref.id, key: null, name: 'Mensaje libre (nuevo)', category: 'libre', ...content, active: true, archived: false, original: content, updatedAt: new Date() });
     toast('Plantilla creada');
     renderCorreosPlantillasTab();
@@ -4436,11 +4479,11 @@ window.duplicateTemplate = async (id) => {
   if (!t) return;
   const content = templateContentPayload_(t);
   try {
-    const ref = await addDoc(collection(db, 'emailTemplates'), {
+    const ref = await withAdminSiteChange(async () => addDoc(collection(db, 'emailTemplates'), {
       key: null, name: t.name + ' (copia)', category: t.category, ...content,
       active: true, archived: false, original: content,
       createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || ''
-    });
+    }));
     allEmailTemplates.push({ id: ref.id, key: null, name: t.name + ' (copia)', category: t.category, ...content, active: true, archived: false, original: content, updatedAt: new Date() });
     logAudit('plantilla_creada', 'plantilla', ref.id, t.name + ' (copia)', `Duplicada de "${t.name}"`);
     toast('Plantilla duplicada');
@@ -4453,7 +4496,7 @@ window.toggleArchiveTemplate = async (id) => {
   if (!t) return;
   const archived = !t.archived;
   try {
-    await updateDoc(doc(db, 'emailTemplates', id), { archived, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' });
+    await withAdminSiteChange(async () => updateDoc(doc(db, 'emailTemplates', id), { archived, updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '' }));
     t.archived = archived;
     logAudit('plantilla_archivada', 'plantilla', id, t.name, archived ? 'Archivada' : 'Reactivada');
     toast(archived ? 'Plantilla archivada' : 'Plantilla reactivada');
@@ -4470,7 +4513,7 @@ window.deleteTemplate = async (id) => {
   if (t.key) { toast('Esta plantilla no se puede eliminar — solo archivar.'); return; }
   if (!confirm(`¿Eliminar definitivamente la plantilla "${t.name}"? Esta acción no se puede deshacer.`)) return;
   try {
-    await deleteDoc(doc(db, 'emailTemplates', id));
+    await withAdminSiteChange(async () => deleteDoc(doc(db, 'emailTemplates', id)));
     allEmailTemplates = allEmailTemplates.filter(x => x.id !== id);
     logAudit('plantilla_eliminada', 'plantilla', id, t.name);
     toast('Plantilla eliminada');
@@ -4695,12 +4738,12 @@ async function runPromoCampaign_(tpl, recipients) {
 
   let campaignId = null;
   try {
-    const ref = await addDoc(collection(db, 'emailCampaigns'), {
+    const ref = await withAdminSiteChange(async () => addDoc(collection(db, 'emailCampaigns'), {
       templateKey: tpl.id, templateName: tpl.name,
       recipients: recipients.map(r => r.email),
       status: 'sending', createdBy: currentUser?.email || '', createdAt: serverTimestamp(),
       sentCount: 0, failedCount: 0, results: []
-    });
+    }));
     campaignId = ref.id;
   } catch (e) {
     console.error('No se pudo crear el registro de campaña:', e);
@@ -4733,13 +4776,13 @@ async function runPromoCampaign_(tpl, recipients) {
     }
     progressBar.style.width = `${Math.round((Math.min(i + batch.length, recipients.length) / recipients.length) * 100)}%`;
     if (campaignId) {
-      try { await updateDoc(doc(db, 'emailCampaigns', campaignId), { sentCount: sent, failedCount: failed, results: allResults }); }
+      try { await withAdminSiteChange(async () => updateDoc(doc(db, 'emailCampaigns', campaignId), { sentCount: sent, failedCount: failed, results: allResults })); }
       catch (e) { console.error('No se pudo actualizar la campaña:', e); }
     }
   }
 
   if (campaignId) {
-    try { await updateDoc(doc(db, 'emailCampaigns', campaignId), { status: 'completed' }); }
+    try { await withAdminSiteChange(async () => updateDoc(doc(db, 'emailCampaigns', campaignId), { status: 'completed' })); }
     catch (e) { console.error('No se pudo marcar la campaña como completada:', e); }
   }
 
@@ -5128,11 +5171,11 @@ async function saveShipCities() {
   // Vive en settings/shippingRates, no en settings/general — ver
   // sparkShippingRatesPath() en firestore.rules y la migración automática
   // más abajo (onSnapshot de settings/shippingRates).
-  await setDoc(doc(db, 'settings', 'shippingRates'), {
+  await withAdminSiteChange(async () => setDoc(doc(db, 'settings', 'shippingRates'), {
     deliveryCities:   shipCities.delivery,
     encomiendaCities: shipCities.encomienda,
     updatedAt: serverTimestamp()
-  }, { merge: true });
+  }, { merge: true }));
 }
 
 function resetShipForm(type) {
@@ -5374,7 +5417,7 @@ window.fixLegacyProductNumbers = async function() {
   });
 
   try {
-    await batch.commit();
+    await withAdminSiteChange(async () => batch.commit());
     await pushProductsToSheets(fixedIds);
     const fixed = broken.length - skipped;
     logAudit('editar_producto', 'producto', '', '', `Corrección masiva de precio/stock guardados como texto: ${fixed} producto(s)${skipped ? `, ${skipped} sin precio válido para corregir` : ''}`, { bulk: true, fixed, skipped });
@@ -5494,9 +5537,8 @@ function loadProductos() {
       'La carga de productos está tardando más de lo esperado. Verificá tu conexión. ' +
       '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaProductos()">Reintentar</button>';
   }, 12000);
-  _productosUnsub = onSnapshot(
-    query(collection(db, 'products'), orderBy('name'), limit(1000)),
-    snap => {
+  _productosUnsub = subscribeAdminCollectionPages('products', 1000,
+    records => {
       clearTimeout(_productosSlowTimer);
       // A diferencia de la tienda pública (estado-productos.js), esto no
       // pasaba por sanitizeVariantData — un variants malformado (por
@@ -5504,10 +5546,9 @@ function loadProductos() {
       // del propio admin puede producir pero que un editor externo directo
       // sobre Firestore sí podría dejar) rompía el formulario entero al
       // abrir justo ese producto.
-      _allProducts = snap.docs.map(d => {
-        const data = d.data();
-        return { _docId: d.id, ...data, category: wristCategory(data.category || ''), variants: sanitizeVariantData(data.variants || null) };
-      });
+      _allProducts = records.map(({ id, record: data }) => ({ _docId: id, ...data,
+        category: wristCategory(data.category || ''), variants: sanitizeVariantData(data.variants || null) }))
+        .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
       adminRealtimeReady.products = true;
       syncSpecDatalists(_allProducts);
       applyProductFilters();
@@ -5522,7 +5563,8 @@ function loadProductos() {
       // Los indicadores de productos activos/stock bajo muestran "—" (no "0").
       renderGeneralStatistics();
       console.error(e);
-    }
+    },
+    () => { adminRealtimeReady.products = false; }
   );
 }
 window.reintentarCargaProductos = function() {
@@ -6037,7 +6079,7 @@ async function prodGuardar() {
         data.stock = entries.reduce((sum, entry) => sum + entry.stock, 0);
         if (data.stock > 1000000) throw new Error('El stock total supera 1.000.000.');
         data.variants = original.variants;
-        await runTransaction(db, async transaction => {
+        await withAdminSiteChange(async () => runTransaction(db, async transaction => {
           const ref = doc(db, 'products', docId);
           const snapshot = await transaction.get(ref);
           const current = snapshot.data();
@@ -6045,12 +6087,12 @@ async function prodGuardar() {
             throw new Error('El stock o las opciones cambiaron mientras editabas. Volvé a abrir el producto antes de guardar.');
           }
           transaction.update(ref, data);
-        });
+        }));
       } else {
-        await updateDoc(doc(db, 'products', docId), data);
+        await withAdminSiteChange(async () => updateDoc(doc(db, 'products', docId), data));
       }
       if (currentRole === 'superadmin') {
-        await setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true });
+        await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true }));
       }
       await pushProductsToSheets([docId]);
       const changes = [];
@@ -6082,12 +6124,12 @@ async function prodGuardar() {
     } else {
       data.createdAt = serverTimestamp();
       const newRef = doc(collection(db, 'products'));
-      await setDoc(newRef, data);
+      await withAdminSiteChange(async () => setDoc(newRef, data));
       // Si falla una etapa posterior (inventario o Sheets), el formulario
       // conserva el ID ya creado y reintenta como edición, sin duplicar.
       document.getElementById('prod-id').value = newRef.id;
       if (currentRole === 'superadmin') {
-        await setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true });
+        await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true }));
       }
       await pushProductsToSheets([newRef.id]);
       await logAudit('crear_producto', 'producto', newRef.id, name, `Precio: ${data.price} · Stock: ${data.stock}`);
@@ -6122,7 +6164,7 @@ window.prodToggleActive = async (docId, currentlyActive) => {
     stages: [{ id: 'write', label: 'Actualizar estado del producto' }, { id: 'sync', label: 'Sincronizar catálogo y actualizar lista' }],
     action: async ctx => {
       ctx.start('write');
-      await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
+      await withAdminSiteChange(async () => updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() }));
       if (p) p.active = !currentlyActive;
       await logAudit('editar_producto', 'producto', docId, p?.name || docId, `Activo: ${currentlyActive} → ${!currentlyActive}`);
       ctx.ok('write');
@@ -6147,8 +6189,8 @@ async function prodEliminar(docId, name) {
     ],
     action: async ctx => {
       ctx.start('delete');
-      await deleteDoc(doc(db, 'products', docId));
-      await deleteDoc(doc(db, 'productInventory', docId));
+      await withAdminSiteChange(async () => deleteDoc(doc(db, 'products', docId)));
+      await withAdminSiteChange(async () => deleteDoc(doc(db, 'productInventory', docId)));
       ctx.ok('delete');
       ctx.start('sync');
       await pushProductsToSheets([docId]);
@@ -6189,7 +6231,7 @@ function collectionDocumentSlugs(slug) {
 async function deleteCollectionDocuments(slug) {
   const batch = writeBatch(db);
   collectionDocumentSlugs(slug).forEach(id => batch.delete(doc(db, 'collections', id)));
-  await batch.commit();
+  await withAdminSiteChange(async () => batch.commit());
 }
 
 function collSlugify(s) {
@@ -6220,16 +6262,13 @@ function loadColecciones() {
       'La carga de colecciones está tardando más de lo esperado. Verificá tu conexión. ' +
       '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaColecciones()">Reintentar</button>';
   }, 12000);
-  _collectionsUnsub = onSnapshot(
-    // Firestore rules require an explicit bounded list for admin/agent roles.
-    // Superadmin remains allowed, while this avoids an unbounded listener
-    // being rejected as "Missing or insufficient permissions".
-    query(collection(db, 'collections'), limit(200)),
-    snap => {
+  // Páginas limitadas también para Super Admin; el conjunto se publica completo.
+  _collectionsUnsub = subscribeAdminCollectionPages('collections', 200,
+    records => {
       clearTimeout(_collectionsSlowTimer);
       _collectionsReady = true;
-      _allCollections = unifyWristCollections(snap.docs
-        .map(d => normalizeCollectionDoc(d.id, d.data())), false)
+      _allCollections = unifyWristCollections(records
+        .map(({ id, record }) => normalizeCollectionDoc(id, record)), false)
         .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
       renderColeccionesGrid(applyCollFilter(_allCollections));
       syncCategorySelects();
@@ -6243,7 +6282,8 @@ function loadColecciones() {
         '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaColecciones()">Reintentar</button>';
       console.error('[colecciones] listener failed:', e);
       toast('No se pudieron cargar las colecciones: ' + e.message);
-    }
+    },
+    () => { _collectionsReady = false; }
   );
 }
 window.reintentarCargaColecciones = function() {
@@ -6363,7 +6403,7 @@ window.bulkDeleteCollections = async function() {
     for (let i = 0; i < empty.length; i += CHUNK) {
       const batch = writeBatch(db);
       empty.slice(i, i + CHUNK).forEach(slug => collectionDocumentSlugs(slug).forEach(id => batch.delete(doc(db, 'collections', id))));
-      await batch.commit();
+      await withAdminSiteChange(async () => batch.commit());
     }
     const emptySet = new Set(empty);
     _allCollections = _allCollections.filter(c => !emptySet.has(c.slug));
@@ -6641,7 +6681,7 @@ window.collMoveProduct = async function(docId, direction) {
       ctx.start('write');
       const batch = writeBatch(db);
       sorted.forEach(p => batch.update(doc(db, 'products', p._docId), { collectionOrder: orderById.get(p._docId) }));
-      await batch.commit();
+      await withAdminSiteChange(async () => batch.commit());
       sorted.forEach(p => { p.collectionOrder = orderById.get(p._docId); });
       ctx.ok('write');
       ctx.start('refresh');
@@ -6661,7 +6701,7 @@ window.collRemoveFromCollection = async function(docId) {
     stages: [{ id: 'write', label: 'Quitar vínculo de colección' }, { id: 'sync', label: 'Sincronizar catálogo' }],
     action: async ctx => {
       ctx.start('write');
-      await updateDoc(doc(db, 'products', docId), { category: '', updatedAt: serverTimestamp() });
+      await withAdminSiteChange(async () => updateDoc(doc(db, 'products', docId), { category: '', updatedAt: serverTimestamp() }));
       ctx.ok('write');
       ctx.start('sync');
       await pushProductsToSheets([docId]);
@@ -6679,7 +6719,7 @@ window.collToggleActive = async function(docId, currentlyActive) {
     stages: [{ id: 'write', label: 'Actualizar estado del producto' }, { id: 'sync', label: 'Sincronizar catálogo y lista' }],
     action: async ctx => {
       ctx.start('write');
-      await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
+      await withAdminSiteChange(async () => updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() }));
       if (p) p.active = !currentlyActive;
       await logAudit('editar_producto', 'producto', docId, p?.name || docId, `Activo: ${currentlyActive} → ${!currentlyActive}`);
       ctx.ok('write');
@@ -6762,7 +6802,7 @@ async function batchUpdateChunked(ids, dataFn, collectionName = 'products') {
   for (let i = 0; i < ids.length; i += CHUNK) {
     const batch = writeBatch(db);
     ids.slice(i, i + CHUNK).forEach(id => batch.update(doc(db, collectionName, id), dataFn(id)));
-    await batch.commit();
+    await withAdminSiteChange(async () => batch.commit());
   }
   if (collectionName === 'products') await pushProductsToSheets(ids);
 }
@@ -6830,24 +6870,24 @@ window.collGuardar = async function() {
     if (originalSlug && originalSlug !== slug) {
       // Slug changed: create new doc, move products over, delete old doc
       data.createdAt = serverTimestamp();
-      await setDoc(doc(db, 'collections', slug), data);
+      await withAdminSiteChange(async () => setDoc(doc(db, 'collections', slug), data));
       const affected = _allProducts.filter(p => wristCategory(p.category || '') === wristCategory(originalSlug));
       if (affected.length) {
         // Chunked (max 450/batch, Firestore hard-caps a batch at 500 writes)
         // so a slug rename never silently fails on a collection with 500+ products.
         await batchUpdateChunked(affected.map(p => p._docId), () => ({ category: slug, updatedAt: serverTimestamp() }));
       }
-      await deleteDoc(doc(db, 'collections', originalSlug));
+      await withAdminSiteChange(async () => deleteDoc(doc(db, 'collections', originalSlug)));
       // El CRUD de colección individual ahora deja rastro en Auditoría igual que
       // el de productos y las acciones masivas de colecciones (antes solo se
       // registraban las masivas, dejando huecos en el historial).
       await logAudit('editar_coleccion', 'coleccion', slug, name, `Renombrada "${originalSlug}" → "${slug}" · ${affected.length} producto(s) movidos`);
     } else if (originalSlug) {
-      await updateDoc(doc(db, 'collections', originalSlug), data);
+      await withAdminSiteChange(async () => updateDoc(doc(db, 'collections', originalSlug), data));
       await logAudit('editar_coleccion', 'coleccion', originalSlug, name, 'Datos actualizados');
     } else {
       data.createdAt = serverTimestamp();
-      await setDoc(doc(db, 'collections', slug), data);
+      await withAdminSiteChange(async () => setDoc(doc(db, 'collections', slug), data));
       await logAudit('crear_coleccion', 'coleccion', slug, name, `Orden: ${order} · ${visible ? 'visible' : 'oculta'}`);
     }
     UnsavedGuard.clear();
@@ -6951,7 +6991,7 @@ window.collImportarDefaults = async function() {
           name, description: '', image: '', order: i, visible: true, createdAt: serverTimestamp(), updatedAt: serverTimestamp()
         });
       });
-      await batch.commit();
+      await withAdminSiteChange(async () => batch.commit());
       ctx.ok('create', { affected: DEFAULTS.length });
       return `${DEFAULTS.length} colecciones creadas.`;
     },
@@ -7080,7 +7120,7 @@ function loadImportar() {
         if (!item.category || typeof item.category !== 'string') { skipped.push(`${label}: falta "category"`); continue; }
         if (item.price == null || Number.isNaN(priceNum) || priceNum < 0) { skipped.push(`${label}: "price" inválido`); continue; }
         try {
-          const importedRef = await addDoc(collection(db, 'products'), {
+          const importedRef = await withAdminSiteChange(async () => addDoc(collection(db, 'products'), {
             name:        String(item.name).trim().slice(0, 180),
             category:    item.category,
             price:       Math.max(0, Math.round(priceNum)),
@@ -7093,7 +7133,7 @@ function loadImportar() {
             description: item.description || '',
             createdAt:   serverTimestamp(),
             createdBy:   currentUser?.email || 'import',
-          });
+          }));
           importedIds.push(importedRef.id);
           ok++;
         } catch (writeError) {
@@ -7352,7 +7392,7 @@ function loadImportar() {
       progressBar.style.width=pct+'%';
       progressLbl.textContent=`Importando ${i+1} de ${list.length}: ${p.name}`;
       try {
-        const importedRef = await addDoc(collection(db,'products'), {
+        const importedRef = await withAdminSiteChange(async () => addDoc(collection(db,'products'), {
           name:        String(p.name || '').trim().slice(0, 180),
           category:    p.category,
           price:       Math.max(0, Math.round(Number(p.price) || 0)),
@@ -7368,7 +7408,7 @@ function loadImportar() {
           createdAt:   serverTimestamp(),
           createdBy:   currentUser?.email||'import',
           source:      'catalog-csv',
-        });
+        }));
         importedIds.push(importedRef.id);
         ok++;
       } catch(e) { errores++; console.error('Error importando:', p.name, e); }
@@ -7734,7 +7774,7 @@ window.bulkDelete = async function(explicitIds) {
     for (let i = 0; i < ids0.length; i += CHUNK) {
       const batch = writeBatch(db);
       ids0.slice(i, i + CHUNK).forEach(id => batch.delete(doc(db, 'products', id)));
-      await batch.commit();
+      await withAdminSiteChange(async () => batch.commit());
     }
     await pushProductsToSheets(ids0);
     const ids = new Set(ids1);
@@ -7794,7 +7834,7 @@ window.bulkSetStock = async function() {
       const product = _allProducts.find(item => item._docId === id);
       return { productId: id, priceBefore: product?.price ?? null, priceAfter: product?.price ?? null, stockBefore: product?.stock ?? null, stockAfter: stock };
     });
-    await runTransaction(db, async transaction => {
+    await withAdminSiteChange(async () => runTransaction(db, async transaction => {
       const refs = ids.map(id => doc(db, 'products', id));
       const snapshots = [];
       for (const ref of refs) snapshots.push(await transaction.get(ref));
@@ -7802,7 +7842,7 @@ window.bulkSetStock = async function() {
         throw new Error('Un producto cambió o controla stock por opción. Actualizá la lista y editá sus cantidades individuales.');
       }
       for (const ref of refs) transaction.update(ref, { stock, updatedAt: serverTimestamp() });
-    });
+    }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.stock = stock; });
     await logAudit('editar_producto', 'producto', '', '', `Stock → ${stock}`, { bulk: true, count: n, productHistory });
     toast(`Stock actualizado en ${n} producto(s)`);
@@ -8353,16 +8393,16 @@ async function aparEnsureBootstrap() {
       const schemeSnap = await getDoc(doc(db, 'colorSchemes', id));
       if (!schemeSnap.exists()) {
         const defaults = buildDefaultTokenMap(APAR_CATALOG[scope].tokens);
-        await setDoc(doc(db, 'colorSchemes', id), {
+        await withAdminSiteChange(async () => setDoc(doc(db, 'colorSchemes', id), {
           scope, name: 'Predeterminado', isDefault: true, active: true,
           tokens: defaults, draftTokens: defaults,
           deviceOverrideEnabled: false, draftDeviceOverrideEnabled: false,
           deviceOverrides: {}, draftDeviceOverrides: {},
           createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '',
-        });
+        }));
       }
     }
-    if (changed) await setDoc(doc(db, 'settings', 'appearance'), cfg, { merge: true });
+    if (changed) await withAdminSiteChange(async () => setDoc(doc(db, 'settings', 'appearance'), cfg, { merge: true }));
   } catch (e) { console.error('[apariencia] bootstrap error:', e); }
 }
 
@@ -8751,10 +8791,10 @@ async function aparRenderHistory() {
 
 async function aparLogHistory(schemeId, action, before, after) {
   try {
-    await addDoc(collection(db, 'colorSchemes', schemeId, 'history'), {
+    await withAdminSiteChange(async () => addDoc(collection(db, 'colorSchemes', schemeId, 'history'), {
       at: serverTimestamp(), byUid: currentUser?.uid || '', byEmail: currentUser?.email || '',
       action, before: before || {}, after: after || {},
-    });
+    }));
   } catch (e) { console.error('[apariencia] no se pudo registrar historial:', e); }
 }
 
@@ -8795,7 +8835,7 @@ async function aparSaveDraft() {
     patch.draftDeviceOverrides = aparDeviceOverrides.global;
   }
   try {
-    await setDoc(doc(db, 'colorSchemes', schemeId), patch, { merge: true });
+    await withAdminSiteChange(async () => setDoc(doc(db, 'colorSchemes', schemeId), patch, { merge: true }));
     await aparLogHistory(schemeId, 'save-draft', {}, aparDraft[aparScope]);
     aparMarkClean();
     toast('Borrador guardado');
@@ -8855,7 +8895,7 @@ ${failing.slice(0, 12).join('\n')}${failing.length > 12 ? `\n… y ${failing.len
       patch.draftDeviceOverrideEnabled = aparDeviceOverrideEnabled.global;
       patch.draftDeviceOverrides = aparDeviceOverrides.global;
     }
-    await setDoc(doc(db, 'colorSchemes', schemeId), patch, { merge: true });
+    await withAdminSiteChange(async () => setDoc(doc(db, 'colorSchemes', schemeId), patch, { merge: true }));
     await aparLogHistory(schemeId, 'publish', before, aparDraft[aparScope]);
     aparPublished[aparScope] = { ...aparDraft[aparScope] };
     if (aparScope === 'global') {
@@ -8926,7 +8966,7 @@ async function aparActivateScheme() {
   const field = aparScope === 'global' ? 'activeGlobalSchemeId' : 'activeAdminSchemeId';
   if (aparHasPending() && !confirm('Este esquema tiene cambios sin publicar. Al activarlo se usará la última versión publicada, no el borrador actual. ¿Continuar?')) return;
   try {
-    await setDoc(doc(db, 'settings', 'appearance'), { [field]: schemeId }, { merge: true });
+    await withAdminSiteChange(async () => setDoc(doc(db, 'settings', 'appearance'), { [field]: schemeId }, { merge: true }));
     await aparLogHistory(schemeId, 'activate', {}, {});
     aparActiveSchemeId[aparScope] = schemeId;
     toast('Esquema activado');
@@ -8939,12 +8979,12 @@ async function aparCreateScheme() {
   if (!name || !name.trim()) return;
   const defaults = aparDefaultMap();
   try {
-    const ref = await addDoc(collection(db, 'colorSchemes'), {
+    const ref = await withAdminSiteChange(async () => addDoc(collection(db, 'colorSchemes'), {
       scope: aparScope, name: name.trim(), isDefault: false, active: false,
       tokens: defaults, draftTokens: defaults,
       deviceOverrideEnabled: false, draftDeviceOverrideEnabled: false, deviceOverrides: {}, draftDeviceOverrides: {},
       createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '',
-    });
+    }));
     await aparLoadSchemesList(aparScope);
     aparEditingSchemeId[aparScope] = ref.id;
     await aparLoadSchemeIntoDraft(aparScope, ref.id);
@@ -8959,7 +8999,7 @@ async function aparDuplicateScheme() {
   const name = prompt('Nombre para la copia:', (src?.name || 'Esquema') + ' (copia)');
   if (!name || !name.trim()) return;
   try {
-    const ref = await addDoc(collection(db, 'colorSchemes'), {
+    const ref = await withAdminSiteChange(async () => addDoc(collection(db, 'colorSchemes'), {
       scope: aparScope, name: name.trim(), isDefault: false, active: false,
       tokens: { ...aparDraft[aparScope] }, draftTokens: { ...aparDraft[aparScope] },
       deviceOverrideEnabled: aparScope === 'global' ? aparDeviceOverrideEnabled.global : false,
@@ -8967,7 +9007,7 @@ async function aparDuplicateScheme() {
       deviceOverrides: aparScope === 'global' ? aparDeviceOverrides.global : {},
       draftDeviceOverrides: aparScope === 'global' ? aparDeviceOverrides.global : {},
       createdAt: serverTimestamp(), updatedAt: serverTimestamp(), updatedBy: currentUser?.email || '',
-    });
+    }));
     await aparLoadSchemesList(aparScope);
     aparEditingSchemeId[aparScope] = ref.id;
     await aparLoadSchemeIntoDraft(aparScope, ref.id);
@@ -8983,7 +9023,7 @@ async function aparRenameScheme() {
   const name = prompt('Nuevo nombre:', current?.name || '');
   if (!name || !name.trim()) return;
   try {
-    await setDoc(doc(db, 'colorSchemes', schemeId), { name: name.trim() }, { merge: true });
+    await withAdminSiteChange(async () => setDoc(doc(db, 'colorSchemes', schemeId), { name: name.trim() }, { merge: true }));
     await aparLoadSchemesList(aparScope);
     aparRenderSchemeBar();
     toast('Esquema renombrado');
@@ -8997,7 +9037,7 @@ async function aparDeleteScheme() {
   if (schemeId === aparActiveSchemeId[aparScope]) { toast('No se puede eliminar el esquema activo — activá otro primero'); return; }
   if (!confirm(`¿Eliminar el esquema "${current?.name}"? Esta acción no se puede deshacer.`)) return;
   try {
-    await deleteDoc(doc(db, 'colorSchemes', schemeId));
+    await withAdminSiteChange(async () => deleteDoc(doc(db, 'colorSchemes', schemeId)));
     aparEditingSchemeId[aparScope] = APAR_CATALOG[aparScope].defaultSchemeId;
     await aparLoadSchemesList(aparScope);
     await aparLoadSchemeIntoDraft(aparScope, aparEditingSchemeId[aparScope]);

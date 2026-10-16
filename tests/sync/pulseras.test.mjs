@@ -39,7 +39,7 @@ test('el API público agrupa antes de filtrar visibilidad y normaliza productos 
 
 test('eliminar la colección agrupada elimina sus documentos en un solo lote', async () => {
   const deleted = []; let committed = 0;
-  const context = vm.createContext({ _allCollections: unifyWristCollections([{slug:'brazaletes'}, {slug:'pulseras'}], false), db:{}, doc:(_db,_collection,id) => id, writeBatch:() => ({ delete:id => deleted.push(id), commit:async() => { committed++; } }) });
+  const context = vm.createContext({ withAdminSiteChange: write => write(), _allCollections: unifyWristCollections([{slug:'brazaletes'}, {slug:'pulseras'}], false), db:{}, doc:(_db,_collection,id) => id, writeBatch:() => ({ delete:id => deleted.push(id), commit:async() => { committed++; } }) });
   const source = fs.readFileSync('js/admin/admin-app.js', 'utf8');
   vm.runInContext(source.slice(source.indexOf('function collectionDocumentSlugs'), source.indexOf('function collSlugify')), context);
   await vm.runInContext("deleteCollectionDocuments('pulseras')", context);

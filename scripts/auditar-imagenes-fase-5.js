@@ -278,8 +278,8 @@ check(
   'Borrar una imagen usa la función protegida de Cloudinary',
   files.mediaLibrary.includes("callSecureFunction('cloudinary-delete'") &&
     files.mediaLibrary.includes('deleteCloudinaryAssets') &&
-    files.mediaLibrary.includes('await deleteDoc(mediaRef)') &&
-    files.mediaLibrary.indexOf('await deleteCloudinaryAssets') < files.mediaLibrary.indexOf('await deleteDoc(mediaRef)'),
+    files.mediaLibrary.includes('await withAdminSiteChange(async () => deleteDoc(mediaRef))') &&
+    files.mediaLibrary.indexOf('await deleteCloudinaryAssets') < files.mediaLibrary.indexOf('await withAdminSiteChange(async () => deleteDoc(mediaRef))'),
   'los assets deben borrarse antes de eliminar su metadata'
 );
 

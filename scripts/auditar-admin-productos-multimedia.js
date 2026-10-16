@@ -114,12 +114,12 @@ check(
 );
 check(
   'El guardado parcial de un producto nuevo se puede reintentar sin duplicarlo',
-  /await setDoc\(newRef, data\);[\s\S]{0,180}getElementById\('prod-id'\)\.value = newRef\.id[\s\S]{0,220}pushProductsToSheets/.test(adminApp),
+  /await withAdminSiteChange\(async \(\) => setDoc\(newRef, data\)\);[\s\S]{0,180}getElementById\('prod-id'\)\.value = newRef\.id[\s\S]{0,220}pushProductsToSheets/.test(adminApp),
   'Tras crear el documento, conservar su ID antes de intentar sincronizaciones que pueden fallar.'
 );
 check(
   'El listado de productos usa un listener en tiempo real con guardia anti-duplicado',
-  /_productosUnsub = onSnapshot\(/.test(adminApp) &&
+  /_productosUnsub = subscribeAdminCollectionPages\('products', 1000,/.test(adminApp) && /return onSnapshot\(source, \{ includeMetadataChanges: true \}/.test(adminApp) && /limit\(pageSize\)/.test(adminApp) &&
     /if \(_productosUnsub\) return;/.test(adminApp),
   'loadProductos debe suscribirse una sola vez para no acumular listeners.'
 );

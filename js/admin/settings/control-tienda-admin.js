@@ -1,4 +1,5 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1';
+import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 /* =============================================================
    TINTIN — Sincronización segura del estado global de la tienda
@@ -16,7 +17,7 @@ import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-202610
 
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import {
   doc,
 
@@ -202,11 +203,11 @@ async function syncStoreGate() {
       'Sincronizando el cierre global con Firebase…'
     );
 
-    await setDoc(STORE_GATE_REF, {
+    await withAdminSiteChange(async () => setDoc(STORE_GATE_REF, {
       ...desired,
       updatedAt: serverTimestamp(),
       updatedBy: currentEmail
-    }, { merge: true });
+    }, { merge: true }));
   } catch (error) {
     console.error('[admin-store-control] No se pudo sincronizar storeGate:', error);
     setPanel(
@@ -411,6 +412,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./sincronizacion-correo-admin.js?v=tintin-20261012-auth-privacy-1-sincronizacion-correo-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1').catch(error => {
+import('./sincronizacion-correo-admin.js?v=tintin-20261012-auth-privacy-1-sincronizacion-correo-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

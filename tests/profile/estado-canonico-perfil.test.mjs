@@ -2,6 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readAccountIdentity, resolveAccountAvatar, buildAccountNamePatch, accountReadState, reconcileAccountOrders } from '../../js/pages/profile/estado-canonico-perfil.mjs';
 
+test('un listener rezagado por correo no revierte el pedido confirmado por UID', () => {
+  const old = { id: 'order', status: 'pendiente', total: 50000, inventoryRevision: 1 };
+  const fresh = { ...old, status: 'preparando', total: 80000, inventoryRevision: 2 };
+  assert.deepEqual(reconcileAccountOrders([[fresh], [old]]), [fresh]);
+  assert.deepEqual(reconcileAccountOrders([[old], [fresh]]), [fresh]);
+  const newer = { ...fresh, total: 90000, updatedAt: { seconds: 20 } };
+  assert.deepEqual(reconcileAccountOrders([[newer], [{ ...fresh, updatedAt: { seconds: 10 } }]]), [newer]);
+});
+
 test('Firestore prevalece sobre el nombre, pero un avatar vacío no tapa la foto de Auth', () => {
   const identity = readAccountIdentity({ firstName: 'María', lastName: 'Pérez', name: 'María Pérez', photoURL: '' }, { displayName: 'Nombre viejo', photoURL: 'https://example.com/old.jpg', email: 'cliente@example.com' });
   assert.equal(identity.name, 'María Pérez');

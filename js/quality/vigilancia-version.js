@@ -10,6 +10,19 @@
    las preferencias se conservan. Nunca recarga por su cuenta.
    ============================================================= */
 
+// El primer snapshot establece la referencia de esta pestaña. Una aparición
+// posterior a un documento inicialmente ausente también es una actualización.
+export function createSiteRevisionObserver(onChange) {
+  let initialized = false, revision = '';
+  return data => {
+    const next = typeof data?.revision === 'string' ? data.revision : '';
+    if (!initialized) { initialized = true; revision = next; return; }
+    if (!next || next === revision) return;
+    revision = next;
+    onChange();
+  };
+}
+
 const CHECK_INTERVAL_MS = 10 * 60 * 1000;
 const MIN_GAP_MS = 2 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 8000;
@@ -17,7 +30,7 @@ const NOTICE_ID = 'tt-version-notice';
 const STYLE_ID = 'tt-version-notice-css';
 // Avisos que ya ocupan la esquina inferior derecha: conexión inestable de la
 // tienda (z-index altísimo), banner de cookies y avisos del panel admin.
-const CORNER_NEIGHBOURS = ['tt-store-gate-network-notice', 'tt-privacy-consent', 'tt-ops-toasts'];
+const CORNER_NEIGHBOURS = ['tt-store-gate-network-notice', 'tt-privacy-consent', 'tt-ops-toasts', 'adm-mobile-tabs'];
 
 // Referencias same-origin con ?v= declaradas en el HTML (script[src] y
 // link[href]); lo que está dentro de <noscript> o <template> no se ejecuta.
@@ -81,7 +94,7 @@ function ensureStyle() {
 #${NOTICE_ID}[hidden]{display:none}
 #${NOTICE_ID} p{flex:1 1 180px;margin:0}
 #${NOTICE_ID} .tt-vn-actions{display:flex;gap:8px;margin-left:auto}
-#${NOTICE_ID} button{min-height:40px;padding:0 14px;border-radius:8px;border:1px solid #F8AACA;font:inherit;font-weight:600;line-height:1;cursor:pointer}
+#${NOTICE_ID} button{min-height:44px;padding:0 14px;border-radius:8px;border:1px solid #F8AACA;font:inherit;font-weight:600;line-height:1;cursor:pointer}
 #${NOTICE_ID} .tt-vn-update{background:#F8AACA;color:#713C53}
 #${NOTICE_ID} .tt-vn-later{background:#fff;color:#713C53}
 #${NOTICE_ID} button:focus-visible{outline:3px solid #713C53;outline-offset:2px}
@@ -91,7 +104,7 @@ function ensureStyle() {
   document.head.appendChild(style);
 }
 
-function showNotice() {
+function showNotice(message = 'Hay una versión nueva del sitio.') {
   if (document.getElementById(NOTICE_ID)) return;
   ensureStyle();
   const box = document.createElement('div');
@@ -99,7 +112,7 @@ function showNotice() {
   box.setAttribute('role', 'status');
   box.setAttribute('aria-live', 'polite');
   const text = document.createElement('p');
-  text.textContent = 'Hay una versión nueva del sitio.';
+  text.textContent = message;
   const actions = document.createElement('div');
   actions.className = 'tt-vn-actions';
   const later = document.createElement('button');
@@ -202,4 +215,8 @@ function boot() {
   window.TintinVersionWatch = Object.freeze({ checkNow: () => check(true) });
 }
 
-if (typeof window !== 'undefined' && typeof document !== 'undefined') boot();
+export function notifySiteContentChange() {
+  showNotice('Hay cambios nuevos en la tienda. Actualizá la página para verlos.');
+}
+
+if (typeof window !== 'undefined' && typeof document !== 'undefined' && !/(?:^|\/)checkout(?:\.html)?\/?$/i.test(location.pathname)) boot();

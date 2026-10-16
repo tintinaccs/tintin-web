@@ -1,6 +1,7 @@
+import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import { allowedOrderStatuses, ORDER_LIFECYCLE_STATUSES, orderStatusLabel } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import {
   collection,
@@ -199,7 +200,7 @@ async function deleteTrashPermanently(orderId) {
   if (!safeId || safeId.includes('/')) throw new Error('Pedido inválido.');
   const typed = window.prompt(`Eliminar definitivamente ${safeId} de Borrados. Esta copia ya no se podrá recuperar. Escribí ELIMINAR para continuar:`);
   if (typed !== 'ELIMINAR') return { deleted: false, cancelled: true };
-  await deleteDoc(doc(db, TRASH_COLLECTION, safeId));
+  await withAdminSiteChange(async () => deleteDoc(doc(db, TRASH_COLLECTION, safeId)));
   toast('Pedido eliminado definitivamente de Borrados.');
   return { deleted: true };
 }

@@ -1,6 +1,6 @@
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261012-orders-board-1';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
-import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1';
+import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 /* ========================================================================
    TINTIN — Productos, Colecciones y Pedidos
    Capa de experiencia operativa inspirada en Shopify y adaptada al modelo
@@ -16,7 +16,7 @@ import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=ti
 
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import { recordAuthDiagnostic } from '../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import {
   collection,
@@ -28,8 +28,8 @@ import {
   startAfter, where
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261015-fast-f7771d9f0-1';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261012-auth-privacy-1-permisos-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261015-fast-f7771d9f0-1-admin-live-20261016-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
 const VERSION = 'tintin-20260924-products-description-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
@@ -973,10 +973,17 @@ function renderDrawer() {
   drawer.dataset.kind=state.drawer.type;
   if(state.drawer.type==='order'){drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label',`Detalles del pedido ${content.title}`);}
   else { drawer.removeAttribute('role');drawer.removeAttribute('aria-modal');drawer.setAttribute('aria-label','Detalles'); }
-  const focusBefore=document.activeElement;const focusKey=focusBefore?.dataset?.drawerOrderStatus ? '[data-drawer-order-status]' : focusBefore?.dataset?.drawerOrderPay ? '[data-drawer-order-pay]' : focusBefore?.dataset?.drawerOrderNote ? '[data-drawer-order-note]' : focusBefore?.dataset?.action==='drawer-close' ? '[data-action="drawer-close"]' : null;
+  const focusBefore=document.activeElement;
+  const focusAttribute=drawer.contains(focusBefore) ? ['data-drawer-order-status','data-drawer-order-pay','data-drawer-order-note','data-action','href','id','name'].find(attribute=>focusBefore.hasAttribute(attribute)) : null;
+  const focusKey=focusAttribute ? `[${focusAttribute}="${CSS.escape(focusBefore.getAttribute(focusAttribute))}"]` : null;
+  const selection=focusKey && typeof focusBefore.selectionStart==='number' ? [focusBefore.selectionStart,focusBefore.selectionEnd,focusBefore.selectionDirection] : null;
   const bodyScroll=drawer.querySelector('.tt-commerce-drawer-body')?.scrollTop || 0;
   drawer.innerHTML = `<div class="tt-commerce-drawer-head"><div class="tt-commerce-drawer-heading"><h3 class="tt-commerce-drawer-title">${esc(content.title)}</h3><div class="tt-commerce-drawer-kicker">${esc(content.kicker)}</div></div><button type="button" class="tt-commerce-iconbtn" data-action="drawer-close" aria-label="Cerrar">×</button></div><div class="tt-commerce-drawer-body">${content.body}</div><div class="tt-commerce-drawer-actions">${content.actions}</div>`;
-  if(focusKey)drawer.querySelector(focusKey)?.focus({preventScroll:true});
+  if(focusKey) {
+    const control=drawer.querySelector(focusKey) || drawer.querySelector('[data-action="drawer-close"]');
+    control?.focus({preventScroll:true});
+    if(selection && control?.setSelectionRange)control.setSelectionRange(...selection);
+  }
   const orderBody=drawer.querySelector('.tt-commerce-drawer-body');if(orderBody)orderBody.scrollTop=bodyScroll;
   if(state.drawer.type==='order' && !drawer.classList.contains('open'))drawer.querySelector('[data-action="drawer-close"]')?.focus();
   requestAnimationFrame(() => {

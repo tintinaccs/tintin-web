@@ -1,7 +1,7 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { waitForAdminAppCheck, recoverAdminSecurity } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import { createLiveActivityNotices } from '../../components/notifications/avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1-palette-20261014-1';
 import {
@@ -32,6 +32,7 @@ let markingVisibleRead = false;
 const orderNotificationInFlight = new Set();
 const liveNotices = createLiveActivityNotices();
 let notificationGeneration = 0;
+let ordersGeneration = 0;
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -422,14 +423,18 @@ async function recoverRecentOrderStatuses(orderIds) {
 }
 
 async function subscribeOrderStatusChanges() {
+  const generation = ++ordersGeneration;
+  const targetUser = user;
   unsubscribeOrders?.();
   orderState = new Map();
   ordersPrimed = false;
   if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
   ordersRetryTimer = 0;
-  if (!await waitForAdminAppCheck(12000)) return;
+  if (!targetUser || !await waitForAdminAppCheck(12000)) return;
+  if (generation !== ordersGeneration || user?.uid !== targetUser.uid) return;
   const source = query(collection(db, 'orders'), orderBy('updatedAt', 'desc'), limit(150));
   unsubscribeOrders = onSnapshot(source, snapshot => {
+    if (generation !== ordersGeneration || user?.uid !== targetUser.uid) return;
     ordersRetryAttempt = 0;
     ordersAuthRecoveryAttempted = false;
     const next = new Map();
@@ -450,6 +455,7 @@ async function subscribeOrderStatusChanges() {
     }
     changed.forEach(orderId => { void notifyOrderStatusWithRetry(orderId); });
   }, error => {
+    if (generation !== ordersGeneration || user?.uid !== targetUser.uid) return;
     console.warn('[admin-notifications] No se pudieron observar estados de pedidos:', error);
     scheduleAdminListenerRecovery('orders', error, () => subscribeOrderStatusChanges());
   });
@@ -504,6 +510,7 @@ ensureStyles();
 wireEvents();
 subscribeAuthState(current => {
   notificationGeneration += 1;
+  ordersGeneration += 1;
   if (user?.uid !== current?.uid) liveNotices.clear();
   if (String(current?.email || '').trim().toLowerCase() !== String(SUPER_ADMIN || '').trim().toLowerCase()) {
     user = null;

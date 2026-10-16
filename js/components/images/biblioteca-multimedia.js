@@ -1,3 +1,5 @@
+// La lectura pública no descarga las herramientas de guardado administrativo.
+const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1')).withAdminSiteChange(action);
 import './galeria-producto.js?v=tintin-20261015-images-1';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 /* =============================================================
@@ -190,7 +192,7 @@ export async function uploadImageToLibrary(file, options = {}) {
       updatedAt: serverTimestamp(),
     };
     await withTimeout(
-      () => setDoc(doc(db, MEDIA_COLLECTION, mediaId), record),
+      () => withAdminSiteChange(() => setDoc(doc(db, MEDIA_COLLECTION, mediaId), record)),
       TOKEN_TIMEOUT_MS,
       'No se pudo guardar la URL en Firestore (tardó demasiado en responder).'
     ).catch(error => {
@@ -315,7 +317,7 @@ export async function deleteMediaItem(mediaId, { force = false, reason = 'manual
   }
 
   await deleteCloudinaryAssets([data.publicId, data.thumbPublicId]);
-  await deleteDoc(mediaRef);
+  await withAdminSiteChange(async () => deleteDoc(mediaRef));
   await logMediaDeletion(mediaId, data, reason);
   return true;
 }
@@ -325,7 +327,7 @@ export async function updateMediaMetadata(mediaId, { originalName, alt } = {}) {
   const patch = { updatedAt: serverTimestamp() };
   if (originalName !== undefined) patch.originalName = String(originalName || '').trim().slice(0, 200);
   if (alt !== undefined) patch.alt = String(alt || '').trim().slice(0, 240);
-  await updateDoc(doc(db, MEDIA_COLLECTION, mediaId), patch);
+  await withAdminSiteChange(async () => updateDoc(doc(db, MEDIA_COLLECTION, mediaId), patch));
   return true;
 }
 

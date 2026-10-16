@@ -1,8 +1,9 @@
+import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
-import { collection, doc, onSnapshot, setDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { collection, doc, onSnapshot, setDoc, deleteDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ROOT_ID = 'tt-pages-admin-root';
 let pages = [];
@@ -98,8 +99,14 @@ async function savePage() {
   if (button) { button.disabled = true; button.textContent = 'Guardando…'; }
   try {
     const payload = { pageType:'custom', title, slug, contentHtml:cleanHtml(document.getElementById('tt-page-content')?.value), template:document.getElementById('tt-page-template')?.value || 'standard', published:document.getElementById('tt-page-published')?.checked === true, metaTitle:String(document.getElementById('tt-page-meta-title')?.value || '').trim().slice(0,160), metaDescription:String(document.getElementById('tt-page-meta-description')?.value || '').trim().slice(0,320), updatedAt:serverTimestamp(), updatedBy:auth.currentUser.email.toLowerCase() };
-    if (editing.original?.slug && editing.original.slug !== slug) await deleteDoc(doc(db, 'site_content', editing.original.slug));
-    await setDoc(doc(db, 'site_content', slug), payload, { merge:true });
+    if (editing.original?.slug && editing.original.slug !== slug) {
+      const batch = writeBatch(db);
+      batch.set(doc(db, 'site_content', slug), payload, { merge:true });
+      batch.delete(doc(db, 'site_content', editing.original.slug));
+      await withAdminSiteChange(() => batch.commit());
+    } else {
+      await withAdminSiteChange(() => setDoc(doc(db, 'site_content', slug), payload, { merge:true }));
+    }
     window.logAudit?.(editing.original ? 'editar_pagina' : 'crear_pagina', 'pagina', slug, title, `Página ${editing.original ? 'editada':'creada'}`, { published:payload.published });
     editing = null; window.toast?.('Página guardada correctamente');
   } catch (error) { showError(error?.message || 'No se pudo guardar la página.'); if (button) { button.disabled = false; button.textContent = 'Guardar página'; } }
@@ -107,7 +114,7 @@ async function savePage() {
 
 async function removePage(slug) {
   if (!canUse() || !confirm(`¿Eliminar definitivamente la página “${slug}”?`)) return;
-  try { await deleteDoc(doc(db, 'site_content', slug)); window.logAudit?.('eliminar_pagina', 'pagina', slug, slug, 'Página eliminada'); window.toast?.('Página eliminada'); } catch (error) { window.toast?.(`No se pudo eliminar: ${error?.message || error}`); }
+  try { await withAdminSiteChange(async () => deleteDoc(doc(db, 'site_content', slug))); window.logAudit?.('eliminar_pagina', 'pagina', slug, slug, 'Página eliminada'); window.toast?.('Página eliminada'); } catch (error) { window.toast?.(`No se pudo eliminar: ${error?.message || error}`); }
 }
 
 async function subscribe() {

@@ -8,7 +8,7 @@
  */
 
 import { db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import { collection } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { getDocsPaginated } from '../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
@@ -32,8 +32,8 @@ import {
 } from '../core/store/shopify-import-core.mjs?v=tintin-20261005-import-one-click-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1-loads-20261007-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
 import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1-loads-20261007-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
-import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261012-auth-privacy-1-aplicar-importacion-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
+import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261012-auth-privacy-1-aplicar-importacion-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1-admin-live-20261016-1';
 import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261003-inventory-review-1-stock-flow-20261014-1';
 
 if (!window.TintinAdminShopifyImportBooted) {

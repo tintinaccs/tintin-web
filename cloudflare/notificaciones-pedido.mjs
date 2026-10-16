@@ -1,8 +1,23 @@
 import { customerOrderMessage, lifecycleStatus, shippingMethod } from '../js/orders/ciclo-pedido.mjs';
 
+// Sólo campos que ve la clienta: notas internas, auditoría y reenvíos de
+// correo no son cambios del pedido que deban provocar otra alerta.
+export function customerOrderChanges(before = {}, after = {}) {
+  const stable = value => JSON.stringify(value, (_, item) => item && typeof item === 'object' && !Array.isArray(item)
+    ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
+  const groups = {
+    productos: ['items'],
+    importes: ['subtotal', 'shippingCost', 'total', 'coupon'],
+    entrega: ['shipping', 'shippingMethod', 'shippingCity', 'departamento', 'address', 'reference', 'shippingPending'],
+    contacto: ['userName', 'userPhone', 'contactEmail'],
+    pago: ['paymentMethod'],
+  };
+  return Object.entries(groups).filter(([, fields]) => fields.some(field => stable(before[field]) !== stable(after[field]))).map(([label]) => label);
+}
+
 // La campana conserva cada transición confirmada, con la misma clave en el
 // guardado atómico y en cualquier recuperación posterior del aviso.
-export function orderCustomerNotice(orderId, order, actor = {}, { created = false } = {}) {
+export function orderCustomerNotice(orderId, order, actor = {}, { created = false, detailChanges = [] } = {}) {
   const uid = String(order?.userId || '').trim();
   if (!uid || order?.localEntryId) return null;
   const id = String(orderId);
@@ -30,9 +45,9 @@ export function orderCustomerNotice(orderId, order, actor = {}, { created = fals
     uid,
     key: created ? `order_created:${id}` : `order_status:${id}:${revision}:${status}:${payment}`,
     event: {
-      kind: created ? 'order_created' : 'order_status', actorType: 'store', actorUid: actor.uid || '', actorName: 'Tintin Accesorios',
-      title: created ? `Recibimos tu pedido ${number}` : titles[stage] || `Tu pedido ${number} fue actualizado`,
-      body: created ? 'Tu pedido ya está registrado. Acá vas a recibir cada avance hasta la entrega.' : `${customerOrderMessage(order)}${payment ? ` Pago: ${payment.replace(/_/g, ' ')}.` : ''}`,
+      kind: created ? 'order_created' : detailChanges.length ? 'order_updated' : 'order_status', actorType: 'store', actorUid: actor.uid || '', actorName: 'Tintin Accesorios',
+      title: created ? `Recibimos tu pedido ${number}` : detailChanges.length ? `Actualizamos los detalles de tu pedido ${number}` : titles[stage] || `Tu pedido ${number} fue actualizado`,
+      body: created ? 'Tu pedido ya está registrado. Acá vas a recibir cada avance hasta la entrega.' : detailChanges.length ? `Revisá los cambios de ${detailChanges.join(', ')} en el detalle de tu pedido.` : `${customerOrderMessage(order)}${payment ? ` Pago: ${payment.replace(/_/g, ' ')}.` : ''}`,
       iconKey: 'order', targetUrl: `perfil.html#pedido-${encodeURIComponent(id)}`,
       orderId: id, orderNumber: number, status, sourceType: 'order', sourceId: id,
     },

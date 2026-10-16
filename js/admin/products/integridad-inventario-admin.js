@@ -1,6 +1,7 @@
+import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
 import {
   collection,
   doc,
@@ -77,7 +78,7 @@ async function deleteOrder(orderId) {
   // libera stock y marca el pedido como released; después elimina el documento.
   // Las ediciones normales y transiciones de estado usan el dominio server-side
   // compartido con Google Sheets.
-  const releaseResult = await runTransaction(db, async transaction => {
+  const releaseResult = await withAdminSiteChange(async () => runTransaction(db, async transaction => {
     const orderRef = doc(db, 'orders', safeOrderId);
     const orderSnapshot = await transaction.get(orderRef);
     if (!orderSnapshot.exists()) {
@@ -129,13 +130,13 @@ async function deleteOrder(orderId) {
       restored: shouldRestore,
       missingProducts
     };
-  }, { maxAttempts: 2 });
+  }, { maxAttempts: 2 }));
 
   if (!releaseResult.existed) {
     return { orderId: safeOrderId, deleted: false, restored: false, missingProducts: [] };
   }
 
-  await runTransaction(db, async transaction => {
+  await withAdminSiteChange(async () => runTransaction(db, async transaction => {
     const orderRef = doc(db, 'orders', safeOrderId);
     const orderSnapshot = await transaction.get(orderRef);
     if (!orderSnapshot.exists()) return;
@@ -143,7 +144,7 @@ async function deleteOrder(orderId) {
       throw new Error('El pedido cambió mientras se eliminaba. Volvé a intentarlo.');
     }
     transaction.delete(orderRef);
-  }, { maxAttempts: 2 });
+  }, { maxAttempts: 2 }));
 
   return {
     orderId: safeOrderId,
@@ -168,13 +169,13 @@ async function cleanupStalePendingOrders(hoursOld = 2) {
     if (!createdAtMs || createdAtMs > cutoffMs) { skipped += 1; continue; }
 
     try {
-      await runTransaction(db, async transaction => {
+      await withAdminSiteChange(async () => runTransaction(db, async transaction => {
         const fresh = await transaction.get(orderSnap.ref);
         if (!fresh.exists()) return;
         const freshData = fresh.data() || {};
         if (freshData.inventoryState !== 'pending') return;
         transaction.delete(orderSnap.ref);
-      }, { maxAttempts: 2 });
+      }, { maxAttempts: 2 }));
       removed += 1;
     } catch (error) {
       console.warn('[admin-inventory-integrity] No se pudo limpiar', orderSnap.id, error);

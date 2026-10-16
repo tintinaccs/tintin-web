@@ -49,6 +49,7 @@ function fixture({ existing = [], failSecondBatch = false, sheetsResult = true, 
   let transactions = 0;
   const state = { source: 'shopify-csv', busy: false, backupAt: 'backup-fixture', jobId: 'imp_resume_fixture', job: { status: 'RUNNING' }, records, collections: [] };
   const context = vm.createContext({
+    withAdminSiteChange: write => write(),
     ...core, db: {}, console: { error() {} },
     window: { confirm: () => true, tintinPushProductsToSheets: async values => { pushes.push([...values]); if (throwSheets) throw new Error("Sheets unavailable"); return sheetsResult; } },
     doc: (_db, _collection, id) => id, serverTimestamp: () => 'fixture-time',

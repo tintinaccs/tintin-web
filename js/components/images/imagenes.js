@@ -1,3 +1,5 @@
+// La lectura pública no descarga las herramientas de guardado administrativo.
+const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1')).withAdminSiteChange(action);
 /* ============================================================
    TINTIN ACCESORIOS — Image Management Module (Fase 5)
 
@@ -15,7 +17,7 @@ import {
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261015-images-1';
+import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20261015-images-1-admin-live-20261016-1';
 
 // La bienvenida sólo tiene destino en Inicio. Cargarla desde las fotos
 // institucionales también arrastraba sus módulos de sesión y configuración.
@@ -23,7 +25,7 @@ const imagePage = (window.location.pathname || '').toLowerCase();
 if (imagePage === '/' || imagePage.endsWith('/index.html') || imagePage === '') {
   Promise.all([
     import('../../pages/home/inicio-premium.js'),
-    import('../welcome/tutorial-bienvenida.js?v=tintin-20261015-images-1'),
+    import('../welcome/tutorial-bienvenida.js?v=tintin-20261015-images-1-admin-live-20261016-1'),
   ]).catch(error => console.warn('[images] No se pudo iniciar la bienvenida:', error));
 }
 
@@ -360,11 +362,11 @@ export async function saveImages(data) {
   const patch = normalizeImagePatch(data);
   if (!Object.keys(patch).length) return { ...(_cache || {}) };
 
-  await setDoc(
+  await withAdminSiteChange(async () => setDoc(
     doc(db, FIRESTORE_DOC),
     { ...patch, updatedAt: serverTimestamp() },
     { merge: true }
-  );
+  ));
 
   const next = { ...(_cache || fromLocalStorage()) };
   Object.entries(patch).forEach(([key, value]) => {
@@ -428,7 +430,7 @@ export function onImagesUpdate(callback, onError) {
     appCheckReady.then(async ready => {
       if (!ready) { _listenerStarted = false; return; }
       const listen = /^\/admin(?:[-/.]|$)/.test(location.pathname)
-        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1')).subscribeAdminSnapshot
+        ? (await import('../../admin/auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1')).subscribeAdminSnapshot
         : onSnapshot;
       listen(
         doc(db, FIRESTORE_DOC),

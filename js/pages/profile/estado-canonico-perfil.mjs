@@ -91,7 +91,19 @@ export function reconcileAccountOrders(queries) {
   const orders = new Map();
   for (const query of queries) {
     for (const order of query) {
-      if (order?.id) orders.set(order.id, order);
+      if (!order?.id) continue;
+      const previous = orders.get(order.id);
+      // UID y correo son listeners independientes. El snapshot viejo del
+      // correo no debe deshacer el cambio que ya confirmó el de UID.
+      const version = record => {
+        const value = record.updatedAt || record.inventoryUpdatedAt || record.createdAt;
+        const date = value?.toDate ? value.toDate() : value?.seconds != null
+          ? new Date(value.seconds * 1000 + (value.nanoseconds || 0) / 1e6)
+          : new Date(typeof value === 'number' && value < 1e11 ? value * 1000 : value || 0);
+        return [Math.max(0, Number(record.inventoryRevision) || 0), Number.isFinite(date.getTime()) ? date.getTime() : 0];
+      };
+      const incoming = version(order), existing = previous ? version(previous) : [-1, -1];
+      if (incoming[0] > existing[0] || (incoming[0] === existing[0] && incoming[1] >= existing[1])) orders.set(order.id, order);
     }
   }
   return [...orders.values()];

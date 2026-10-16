@@ -88,7 +88,7 @@ check(
     adminApp.includes("query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
     adminApp.includes("startAfter(cursor), limit(ADMIN_REALTIME_LIMIT)") &&
     adminApp.includes('createAdminOrderSource({') &&
-    adminApp.includes("onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
+    adminApp.includes('const usersSource = createAdminPagedSource({') && adminApp.includes('return onSnapshot(usersQuery, { includeMetadataChanges: true }') && adminApp.includes("query(collection(db, 'users'), orderBy('__name__'), limit(ADMIN_REALTIME_LIMIT))") && adminApp.includes('adminUsersUnsubscribe = usersSource.stop') &&
     adminApp.includes("onSnapshot(query(collection(db, 'emailTemplates'), limit(500))")
 );
 check(

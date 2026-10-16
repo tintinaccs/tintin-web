@@ -76,8 +76,9 @@ check(
 
 // 3. Una sola autoridad de Usuarios
 check(
-  'admin-app.js mantiene el único listener de users',
-  (adminApp.match(/onSnapshot\(query\(collection\(db, ['"]users['"],?\)?/g) || []).length === 1 &&
+  'admin-app.js mantiene una única fuente paginada de users',
+  (adminApp.match(/const usersSource = createAdminPagedSource\(/g) || []).length === 1 &&
+    /onSnapshot\(usersQuery, \{ includeMetadataChanges: true \}/.test(adminApp) &&
     !compat.includes('onSnapshot(') && !ficha.includes('onSnapshot('),
   'La colección users no debe escucharse desde dos módulos del mismo panel.'
 );

@@ -135,6 +135,25 @@ function writeFor(writes, prefix) {
   return writes.find(write => String(write.path || '').startsWith(prefix));
 }
 
+test('editar importes, entrega, artículos o contacto confirma el aviso junto al pedido sin repetir etapa', async () => {
+  const store = fakeStore({ 'products/prod_001': stockedProduct() }, { transactional: true });
+  const actor = { uid: 'superadmin-fixture', email: 'admin@example.test', role: 'superadmin' };
+  let result = await createOrderAdmin({}, { ...RETIRO, userId: 'customer-fixture', userEmail: 'customer@example.test' }, actor, store);
+  for (const [index, patch] of [{ shippingCost: 15000 }, { address: 'Nueva dirección' }, { items: [{ id: 'prod_001', name: 'Aro', price: 50000, qty: 2 }] }, { userPhone: '+595981111111' }].entries()) {
+    const input = { orderId: result.orderId, baseChangeId: result.order.lastChangeId, changeId: `detail_change_${index}`, ...patch };
+    result = await applyOrderAdminMutation({}, input, actor, store);
+    const write = writeFor(store.commits.at(-1), 'users/customer-fixture/notifications/');
+    assert.ok(write, 'pedido y aviso deben confirmarse en el mismo commit');
+    const notice = decodeFirestoreFields(write.fields);
+    assert.equal(notice.kind, 'order_updated');
+    assert.match(notice.title, /Actualizamos los detalles/);
+    assert.equal(notice.targetUrl, `perfil.html#pedido-${result.orderId}`);
+    const count = store.commits.length;
+    assert.equal((await applyOrderAdminMutation({}, input, actor, store)).duplicate, true);
+    assert.equal(store.commits.length, count);
+  }
+});
+
 for (const shippingMethod of ['delivery', 'retiro']) test(`cada etapa y su aviso al dueño se confirman juntos: ${shippingMethod}`, async () => {
   const store = fakeStore({ 'products/prod_001': stockedProduct() }, { transactional: true });
   const actor = { uid: 'superadmin-fixture', email: 'admin@example.test', role: 'superadmin' };
