@@ -110,6 +110,7 @@
   <link id="tt-navigation-search-css" rel="tt-bundled-stylesheet" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1" disabled data-tt-style-bundle="tt-home-css-bundle">
   <link id="tt-navigation-coherence-css" rel="tt-bundled-stylesheet" href="css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1" disabled data-tt-style-bundle="tt-home-css-bundle">
   <link id="tt-home-maintenance-css" rel="tt-bundled-stylesheet" href="css/pages/home/mantenimiento-inicio.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1" disabled data-tt-style-bundle="tt-home-css-bundle">
+  <link rel="stylesheet" href="css/pages/home/mas-vendidos.css?v=tintin-20261016-bestsellers-1">
 </head>
 <body class="tt-home-premium">
 <main id="main-content">
@@ -225,6 +226,22 @@
     </div>
   </div>
   <div class="tt-collection-carousel__pagination" data-collection-carousel-pagination aria-hidden="true"></div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MÁS VENDIDOS — ELEGIDOS EN SUPERADMIN
+══════════════════════════════════════ -->
+<section class="tt-best-sellers-section" aria-labelledby="tt-best-sellers-title">
+  <div class="container">
+    <div class="tt-best-sellers-heading">
+      <p class="tt-best-sellers-kicker">Elegidos por ustedes</p>
+      <h2 class="tt-section-title" id="tt-best-sellers-title">MÁS VENDIDOS</h2>
+      <p>Los favoritos que no pueden faltar en tu colección.</p>
+    </div>
+    <div id="tt-best-sellers-grid" class="tt-best-sellers-grid" aria-live="polite" aria-busy="true"></div>
+    <p id="tt-best-sellers-status" class="tt-best-sellers-status" role="status">Cargando selección…</p>
+    <div class="tt-best-sellers-action"><a href="/catalogo" class="tt-btn tt-btn-outline">Ver todo el catálogo</a></div>
+  </div>
 </section>
 
 <!-- ══════════════════════════════════════
@@ -431,6 +448,7 @@
 </script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261015-images-1" defer></script>
 <script src="tienda.js?v=tintin-20261015-fast-b39121d67-1" defer></script>
+<script src="js/pages/home/mas-vendidos.js?v=tintin-20261016-bestsellers-1" defer></script>
 <script type="module" src="js/pages/home/carrusel-colecciones.js?v=tintin-20261015-fast-a42a6e3a1-1"></script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20261012-auth-privacy-1-whatsapp-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2"></script>
 <script type="module" src="js/components/reviews/valoraciones-catalogo.js?v=tintin-20261012-auth-privacy-1-valoraciones-catalogo-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2"></script>

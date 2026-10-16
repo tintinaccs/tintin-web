@@ -7857,13 +7857,13 @@ window.bulkSetDestacado = async function(destacado) {
   if (!_selectedProducts.size) return;
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'accionesMasivas')) { toast('No tenés permiso para acciones masivas de productos'); return; }
   const n = _selectedProducts.size;
-  if (!confirm(`¿${destacado ? 'Marcar' : 'Quitar'} destacado en ${n} producto(s)?`)) return;
+  if (!confirm(`¿${destacado ? 'Marcar como más vendido' : 'Quitar de más vendidos'} ${n} producto(s)?`)) return;
   try {
     const ids = [..._selectedProducts];
     await batchUpdateChunked(ids, () => ({ destacado, updatedAt: serverTimestamp() }));
     _allProducts.forEach(p => { if (_selectedProducts.has(p._docId)) p.destacado = destacado; });
-    logAudit('editar_producto', 'producto', '', '', destacado ? 'Marcado destacado' : 'Quitado destacado', { bulk: true, count: n });
-    toast(`Destacado ${destacado ? 'marcado' : 'quitado'} en ${n} producto(s)`);
+    logAudit('editar_producto', 'producto', '', '', destacado ? 'Marcado como más vendido' : 'Quitado de más vendidos', { bulk: true, count: n });
+    toast(`Más vendido ${destacado ? 'marcado' : 'quitado'} en ${n} producto(s)`);
     clearSelection();
     applyProductFilters();
   } catch (e) { toast('Error: ' + e.message); }
