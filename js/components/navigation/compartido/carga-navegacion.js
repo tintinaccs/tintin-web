@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20261010-whatsapp-release-5';
+import { BREAKPOINTS, versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20261010-whatsapp-release-5';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -241,8 +241,8 @@ const navigationSurfaceImportFactories = Object.freeze({
 });
 
 function currentSurface() {
-  if (window.matchMedia('(max-width: 767px)').matches) return 'mobile';
-  if (window.matchMedia('(max-width: 1120px)').matches) return 'tablet';
+  if (window.matchMedia(`(max-width: ${BREAKPOINTS.mobileMax}px)`).matches) return 'mobile';
+  if (window.matchMedia(`(max-width: ${BREAKPOINTS.tabletMax}px)`).matches) return 'tablet';
   return 'desktop';
 }
 

@@ -12,7 +12,7 @@
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   const barrierUrl = new URL('./components/navigation/compartido/barrera-arranque-shell.js', scriptUrl);
-  entryUrl.searchParams.set('v', 'tintin-20261016-story-79d2d359b0');
+  entryUrl.searchParams.set('v', 'tintin-20261016-story-8054c4105e');
   barrierUrl.searchParams.set('v', 'tintin-20260915-session-shell-2');
 
   let waitHeld = false;
