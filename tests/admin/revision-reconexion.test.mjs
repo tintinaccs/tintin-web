@@ -8,9 +8,9 @@ test('la revisión recupera permisos/conexión con reintentos acotados y descart
   const window = new EventTarget(), document = new EventTarget();
   document.hidden = false;
   const subscriptions = [], timers = new Map(), revisions = [];
-  let nextTimer = 0, stopped = 0;
+  let nextTimer = 0, stopped = 0, warnings = 0;
   vm.runInNewContext(source, {
-    window, document, db: {}, doc: (...parts) => parts, console: { warn() {} },
+    window, document, db: {}, doc: (...parts) => parts, console: { warn() { warnings++; } },
     createSiteRevisionObserver: () => value => revisions.push(value?.revision),
     onAppCheckSnapshot: (_ref, options, data, error) => {
       assert.equal(options.includeMetadataChanges, true);
@@ -19,6 +19,12 @@ test('la revisión recupera permisos/conexión con reintentos acotados y descart
     setTimeout: (fn, delay) => { const id = ++nextTimer; timers.set(id, { fn, delay }); return id; },
     clearTimeout: id => timers.delete(id),
   });
+  // El adaptador conserva la escucha de App Check tardío: no reemplazarla
+  // ni tratar la espera inicial como un fallo del listener de Firestore.
+  subscriptions[0].error({ code: 'app-check-unavailable' });
+  assert.equal(timers.size, 0);
+  assert.equal(subscriptions.length, 1);
+  assert.equal(warnings, 0);
   for (const delay of [1400, 4000, 12000, 30000]) {
     subscriptions.at(-1).error({ code: 'permission-denied' });
     assert.equal(timers.size, 1);
@@ -28,6 +34,7 @@ test('la revisión recupera permisos/conexión con reintentos acotados y descart
   subscriptions.at(-1).error({ code: 'unavailable' });
   assert.equal(timers.size, 0);
   assert.equal(subscriptions.length, 5);
+  assert.equal(warnings, 5);
   window.dispatchEvent(new Event('online'));
   assert.equal(subscriptions.length, 6);
   const snapshot = revision => ({ exists: () => true, data: () => ({ revision }), metadata: {} });

@@ -23,14 +23,14 @@ export function createSiteRevisionObserver(onChange) {
   };
 }
 
-const CHECK_INTERVAL_MS = 10 * 60 * 1000;
-const MIN_GAP_MS = 2 * 60 * 1000;
+const CHECK_INTERVAL_MS = 60 * 1000;
+const MIN_GAP_MS = 15 * 1000;
 const FETCH_TIMEOUT_MS = 8000;
 const NOTICE_ID = 'tt-version-notice';
 const STYLE_ID = 'tt-version-notice-css';
 // Avisos que ya ocupan la esquina inferior derecha: conexión inestable de la
 // tienda (z-index altísimo), banner de cookies y avisos del panel admin.
-const CORNER_NEIGHBOURS = ['tt-store-gate-network-notice', 'tt-privacy-consent', 'tt-ops-toasts', 'adm-mobile-tabs'];
+const CORNER_NEIGHBOURS = ['tt-store-gate-network-notice', 'tt-privacy-consent', 'tt-ops-toasts', 'adm-mobile-tabs', 'tt-tabbar'];
 
 // Referencias same-origin con ?v= declaradas en el HTML (script[src] y
 // link[href]); lo que está dentro de <noscript> o <template> no se ejecuta.
@@ -98,7 +98,6 @@ function ensureStyle() {
 #${NOTICE_ID} .tt-vn-update{background:#F8AACA;color:#713C53}
 #${NOTICE_ID} .tt-vn-later{background:#fff;color:#713C53}
 #${NOTICE_ID} button:focus-visible{outline:3px solid #713C53;outline-offset:2px}
-@media (max-width:767px){body:has(#tt-tabbar) #${NOTICE_ID}{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 84px)}}
 @media (max-width:420px){#${NOTICE_ID}{left:max(16px,env(safe-area-inset-left));max-width:none}}
 `;
   document.head.appendChild(style);
@@ -206,10 +205,15 @@ function boot() {
     }
   }
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') check();
-  });
-  window.addEventListener('online', () => check());
+  // Los navegadores móviles suspenden temporizadores al dejar la pestaña.
+  // Al retomarla comprobamos de inmediato, incluso dentro del intervalo mínimo.
+  const resume = () => {
+    if (document.visibilityState === 'visible' && navigator.onLine !== false) check(true);
+  };
+  document.addEventListener('visibilitychange', resume);
+  window.addEventListener('pageshow', event => { if (event.persisted) resume(); });
+  window.addEventListener('online', resume);
+  window.addEventListener('focus', () => check());
   setInterval(() => check(), CHECK_INTERVAL_MS);
 
   window.TintinVersionWatch = Object.freeze({ checkNow: () => check(true) });
