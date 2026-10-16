@@ -126,7 +126,7 @@ check(
 );
 check(
   'La eliminación libera inventario antes de borrar',
-  inventory.includes('const releaseResult = await runTransaction') &&
+  inventory.includes('const releaseResult = await withAdminSiteChange(async () => runTransaction(db, async transaction => {') &&
     inventory.includes("inventoryState: 'released'") &&
     inventory.indexOf("inventoryState: 'released'") < inventory.indexOf('transaction.delete(orderRef)')
 );

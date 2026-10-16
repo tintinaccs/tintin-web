@@ -142,7 +142,7 @@ check(
 check(
   'Los listeners de pedidos y usuarios del panel tienen límite',
   (read('js/admin/admin-app.js').includes('return onSnapshot(ordersQuery,') && read('js/admin/admin-app.js').includes("orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)") && read('js/admin/admin-app.js').includes('startAfter(cursor), limit(ADMIN_REALTIME_LIMIT)')) &&
-    /onSnapshot\(query\(collection\(db, 'users'\),[\s\S]*?limit\(/.test(read('js/admin/admin-app.js')),
+    (read('js/admin/admin-app.js').includes("query(collection(db, 'users'), orderBy('__name__'), limit(ADMIN_REALTIME_LIMIT))") && read('js/admin/admin-app.js').includes('return onSnapshot(usersQuery, { includeMetadataChanges: true }') && read('js/admin/admin-app.js').includes('adminUsersUnsubscribe = usersSource.stop')),
   'Los listados administrativos deben estar acotados.'
 );
 

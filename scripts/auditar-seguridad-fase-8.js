@@ -38,7 +38,7 @@ check(
 
 check(
   'admin-app.js es la única autoridad en tiempo real de users',
-  (admin.match(/onSnapshot\(query\(collection\(db, ['"]users['"],?\)?/g) || []).length === 1 &&
+  (admin.match(/const usersSource = createAdminPagedSource\(/g) || []).length === 1 && admin.includes('return onSnapshot(usersQuery, { includeMetadataChanges: true }') &&
     !compat.includes("onSnapshot(") &&
     !ficha.includes("onSnapshot("),
   'No debe existir un segundo listener de la colección users en el módulo Fase 8 o en la ficha'
