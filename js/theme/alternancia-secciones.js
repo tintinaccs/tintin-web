@@ -4,6 +4,7 @@
   const selector = 'body > section:not([role="dialog"]), main > section:not([role="dialog"]), [role="main"] > section:not([role="dialog"]), .cat-wrap > section, .cat-layout, .tt-footer, .tt-visual-block, .login-page, .ck-body, .perfil-wrap, .tt-404-wrap, .adm-content > .adm-section';
   let queued = false;
   const measured = new WeakSet();
+  const excluded = '[role="dialog"], [aria-modal="true"], .tt-privacy-consent, .tt-drawer, .adm-sidebar';
   const appliedStyles = new WeakMap();
   const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(schedule) : null;
   const set = (node, property, value, priority = '') => {
@@ -12,7 +13,7 @@
   function blocks() {
     const visible = node => {
       if (node.closest('.perfil-wrap') && !node.matches('.perfil-wrap')) return false;
-      if (node.closest('[role="dialog"], [aria-modal="true"], .tt-privacy-consent, .tt-drawer, .adm-sidebar')) return false;
+      if (node.closest(excluded)) return false;
       if (node.hidden || node.closest('[hidden]')) return false;
       const style = getComputedStyle(node);
       return !['fixed', 'sticky'].includes(style.position) && style.display !== 'none' && style.visibility !== 'hidden' && node.getBoundingClientRect().height > 0;
@@ -31,7 +32,8 @@
     const positions = list.map(node => getComputedStyle(node).position);
     const width = document.documentElement.clientWidth;
     list.forEach((node, index) => {
-      node.dataset.ttFlowBlock = index % 2 ? 'pink' : 'light';
+      const tone = index % 2 ? 'pink' : 'light';
+      if (node.dataset.ttFlowBlock !== tone) node.dataset.ttFlowBlock = tone;
       const rect = rects[index];
       const before = index ? Math.max(0, Math.min(256, rect.top - rects[index - 1].bottom)) / 2 : 0;
       const after = index < list.length - 1 ? Math.max(0, Math.min(256, rects[index + 1].top - rect.bottom)) / 2 : 0;
@@ -73,17 +75,26 @@
   }
   function start() {
     refresh();
+    const affectsFlow = node => {
+      if (node.nodeType === 3) return Boolean(node.textContent.trim());
+      return node.nodeType === 1 && !node.matches(`script, template, noscript, meta, [data-tt-flow-background], ${excluded}`);
+    };
     const observer = new MutationObserver(records => {
-      if (records.some(record => record.type === 'childList'
-        ? record.target.matches('body, main, [role="main"], .cat-wrap')
-          || [...record.addedNodes, ...record.removedNodes].some(node => node.nodeType === 1
-            && !node.hasAttribute('data-tt-flow-background')
+      if (records.some(record => {
+        if (record.type === 'childList') {
+          const changed = [...record.addedNodes, ...record.removedNodes].filter(affectsFlow);
+          if (!changed.length) return false;
+          if (record.target.matches('body, main, [role="main"], .cat-wrap')) return true;
+          return changed.some(node => node.nodeType === 1
             && (node.matches(selector) || node.hasAttribute('data-tt-flow-block')
-              || node.querySelector(`${selector}, [data-tt-flow-block]`)))
-        : !(record.attributeName === 'style' && appliedStyles.get(record.target) === record.target.getAttribute('style'))
-          && record.target.matches(`${selector}, body, main, .cat-wrap`))) schedule();
+              || node.querySelector(`${selector}, [data-tt-flow-block]`)));
+        }
+        if (record.oldValue === record.target.getAttribute(record.attributeName)) return false;
+        if (record.attributeName === 'style' && appliedStyles.get(record.target) === record.target.getAttribute('style')) return false;
+        return record.target.matches(`${selector}, body, main, .cat-wrap`);
+      })) schedule();
     });
-    observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden', 'style', 'class'] });
+    observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeOldValue: true, attributeFilter: ['hidden', 'style', 'class'] });
     window.addEventListener('resize', schedule, { passive: true });
     window.addEventListener('tintin:global-layout-ready', schedule);
     window.TintinSectionFlow = Object.freeze({ refresh: schedule });

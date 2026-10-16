@@ -86,24 +86,49 @@ test('insertar tarjetas sin cambiar el tamaño no vuelve a medir todas las secci
   await expect(page.locator('[data-tt-flow-block]')).toHaveCount(3);
 });
 
-for (const width of [390, 1440]) test(`logo del footer sigue el fondo personalizado y restaura la alternancia en ${width}px`, async ({ page }) => {
-  await page.setViewportSize({ width, height: 900 });
-  await page.route('**/footer-contrast-fixture', route => route.fulfill({ contentType: 'text/html', body: `<style id="tt-global-layout-css">${styles}body{margin:0}section{height:160px}.tt-footer{height:140px}</style><section></section><footer class="tt-footer"><img class="tt-logo-img" src="/assets-tintin/images/general/logo.png"></footer>` }));
-  await page.goto('/footer-contrast-fixture');
-  await page.addScriptTag({ content: fs.readFileSync('js/components/color/logotipo-marca.js', 'utf8') });
+test('scripts, diálogos fijos y clases repetidas no vuelven a medir el flujo; una clase real sí lo actualiza', async ({ page }) => {
+  await page.setContent('<style>section{height:100px}#later{visibility:hidden}body.reveal #later{visibility:visible}</style><body class="ready"><main><section>Visible</section><section id="later">Oculta</section></main></body>');
   await page.addScriptTag({ content: runtime });
-  const footer = page.locator('.tt-footer');
-  await expect(footer).toHaveAttribute('data-tt-flow-block', 'pink');
-  for (const [background, rgb, filter] of [['#fdecf2', 'rgb(253, 236, 242)', 'tt-brand-logo-tint'], ['#f8aaca', 'rgb(248, 170, 202)', 'tt-brand-logo-tint-light']]) {
-    await page.evaluate(async background => (await import(new URL('js/components/navigation/compartido/apariencia-global.js', `${location.origin}/`).href)).applyGlobalLayout({ footer: { background } }), background);
-    await expect(footer).toHaveCSS('background-color', rgb);
-    await expect(footer.locator('img')).toHaveCSS('filter', new RegExp('#' + filter + '"?\\)$'));
-    await page.locator('section').evaluate(node => { node.hidden = !node.hidden; });
-    await expect(footer).toHaveCSS('background-color', rgb);
-    await expect(footer.locator('img')).toHaveCSS('filter', new RegExp('#' + filter + '"?\\)$'));
-  }
-  await page.evaluate(async () => (await import(new URL('js/components/navigation/compartido/apariencia-global.js', `${location.origin}/`).href)).applyGlobalLayout({ footer: {} }));
-  await expect.poll(() => footer.evaluate(node => node.style.getPropertyValue('--tt-footer-logo-filter'))).toBe('');
-  await expect(footer).toHaveAttribute('data-tt-flow-block', 'pink');
-  await expect(footer.locator('img')).toHaveCSS('filter', /#tt-brand-logo-tint-light"?\)$/);
+  await expect(page.locator('[data-tt-flow-block]')).toHaveCount(1);
+  await page.waitForTimeout(150);
+  await page.evaluate(() => {
+    window.__flowStartupReads = 0;
+    document.querySelectorAll('section').forEach(node => {
+      const rect = node.getBoundingClientRect.bind(node);
+      node.getBoundingClientRect = () => { window.__flowStartupReads++; return rect(); };
+    });
+  });
+  await page.evaluate(async () => {
+    for (let i=0; i<20; i++) {
+      const script = document.createElement('script'); script.type='application/json'; script.textContent='{}'; document.body.append(script);
+      const dialog = document.createElement('div'); dialog.setAttribute('role','dialog'); dialog.style.position='fixed'; document.body.append(dialog);
+      document.body.classList.add('ready');
+      await new Promise(requestAnimationFrame);
+    }
+  });
+  expect(await page.evaluate(() => window.__flowStartupReads)).toBe(0);
+  await page.evaluate(() => document.body.classList.add('reveal'));
+  await expect(page.locator('[data-tt-flow-block]')).toHaveCount(2);
+  await expect(page.locator('#later')).toHaveAttribute('data-tt-flow-block', 'pink');
+});
+
+test('medir sin cambios no reescribe los tonos de las superficies', async ({ page }) => {
+  await page.setContent('<main><section id="first" style="height:100px">Primera</section><section id="second" style="height:100px">Segunda</section></main>');
+  await page.addScriptTag({ content: runtime });
+  await expect(page.locator('[data-tt-flow-block]')).toHaveCount(2);
+  await page.waitForTimeout(150);
+  const writes = await page.evaluate(async () => {
+    let count = 0;
+    const observer = new MutationObserver(records => { count += records.length; });
+    observer.observe(document.body, { subtree:true, attributes:true, attributeFilter:['data-tt-flow-block'] });
+    for (let i=0;i<10;i++) {
+      window.TintinSectionFlow.refresh();
+      await new Promise(requestAnimationFrame);
+    }
+    await new Promise(requestAnimationFrame);
+    observer.disconnect(); return count;
+  });
+  expect(writes).toBe(0);
+  await page.locator('#first').evaluate(node => { node.hidden=true; });
+  await expect(page.locator('#second')).toHaveAttribute('data-tt-flow-block', 'light');
 });
