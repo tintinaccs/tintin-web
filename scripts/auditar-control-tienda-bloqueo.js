@@ -15,7 +15,7 @@ const checks = [
   ['storeGate sigue siendo la fuente pública mínima', /match \/settings\/storeGate \{[\s\S]*?allow read: if true;/.test(rules)],
   ['settings/general no queda expuesto públicamente', /match \/settings\/general \{[\s\S]*?allow read: if isStoreOpenOrAllowed\(\);/.test(rules)],
   ['El runtime consulta settings/storeGate', gateCore.includes("doc(db, 'settings', 'storeGate')")],
-  ['El panel guarda general y storeGate atómicamente', admin.includes('settingsBatch.set(generalRef') && admin.includes('settingsBatch.set(storeGateRef') && admin.includes('await settingsBatch.commit();')],
+  ['El panel guarda general y storeGate atómicamente', admin.includes('settingsBatch.set(generalRef') && admin.includes('settingsBatch.set(storeGateRef') && admin.includes('await withAdminSiteChange(async () => settingsBatch.commit());')],
   ['No se restaura el fallback legado inseguro', !storeRule.includes('settings/general')]
 ];
 

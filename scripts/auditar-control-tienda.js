@@ -227,7 +227,7 @@ check(
   'Guardado atómico del estado de tienda',
   adminApp.includes('settingsBatch.set(generalRef') &&
     adminApp.includes('settingsBatch.set(storeGateRef') &&
-    adminApp.includes('await settingsBatch.commit();'),
+    adminApp.includes('await withAdminSiteChange(async () => settingsBatch.commit());'),
   'settings/general y settings/storeGate deben cambiar juntos para no bloquear productos por una sincronización incompleta'
 );
 check(
