@@ -174,6 +174,23 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
     stock: hasProductStock(data) ? (data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null) : 0,
     sku: firstValue(data, ['handle', 'Handle'])
   });
+  // El servidor ya validó la publicación: el texto no debe esperar al SDK.
+  const previewText = {
+    'product-name': name,
+    'product-price': 'Gs. ' + Number(price || 0).toLocaleString('es-PY'),
+    'product-cat': firstValue(data, ['category', 'cat', 'collectionSlug', 'collection']),
+    'product-desc': stripHtml(rawDescription).slice(0, 4000),
+    'product-status': hasProductStock(data) ? 'Disponible' : 'Agotado',
+  };
+  for (const [id, text] of Object.entries(previewText)) {
+    const pattern = new RegExp('(<[a-z][^>]*\\bid="' + id + '"[^>]*>)[\\s\\S]*?(</[a-z][^>]*>)', 'i');
+    html = html.replace(pattern, (_, open, close) => {
+      const tag = id === 'product-status' ? open.replace(/>$/, ' data-stock-state="' + (hasProductStock(data) ? 'available' : 'out') + '">') : open;
+      return tag + escapeHtml(text) + close;
+    });
+  }
+  html = html.replace(/(<button\b[^>]*\bid="btn-product-(?:add-cart|buy-now)"[^>]*)(>)/gi,
+    (_, open, close) => open + ' disabled' + close);
   const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" imagesrcset="${escapeHtml(imageSrcset)}" imagesizes="${escapeHtml(imageSizes)}" fetchpriority="high" id="tt-product-image-preload">`;
   const serverPreviewImage = `<img data-tt-server-image="1" src="${escapeHtml(mainImage)}" srcset="${escapeHtml(imageSrcset)}" sizes="${escapeHtml(imageSizes)}" alt="${escapeHtml(name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
   html = html.replace(

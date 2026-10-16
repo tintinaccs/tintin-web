@@ -14,8 +14,8 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261015-images-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261015-images-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261015-health-1';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261015-fast-549917c35-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261015-fast-7dc48f205-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -163,7 +163,7 @@ function loadCollectionsRuntime() {
         // Inicio y las páginas de catálogo ya inician su propia lectura.
         // Reutilizarla evita otra petición desde la búsqueda del menú.
         const path = window.location.pathname.toLowerCase();
-        const pageLoadsCatalog = path.endsWith('/') || /(?:^|\/)(?:index|catalogo|collections)(?:\.html)?$/.test(path);
+        const pageLoadsCatalog = path.endsWith('/') || /(?:^|\/)(?:index|catalogo|collections|product)(?:\.html)?$/.test(path);
         return Promise.allSettled([
           module.initNavCollections?.(),
           loadProductsRuntime({ forSearch: !pageLoadsCatalog }),
@@ -278,7 +278,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(new URL('/js/components/navigation/compartido/enrutador.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
-      import('./control-busqueda.js?v=tintin-20261015-health-1'),
+      import('./control-busqueda.js?v=tintin-20261015-fast-70898e88f-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

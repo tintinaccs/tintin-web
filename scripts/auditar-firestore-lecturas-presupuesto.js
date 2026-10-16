@@ -8,7 +8,7 @@ const checks = [];
 const check = (name, condition, problem) => checks.push({ name, ok: Boolean(condition), problem });
 
 const products = read('js/core/store/estado-productos.js');
-const collections = read('js/pages/collections/estado-colecciones.js');
+const collections = (read('js/pages/collections/estado-colecciones.js') + '\n' + read('js/pages/collections/datos-publicos-colecciones.js'));
 const navCollectionsAdapter = read('js/components/navigation/compatibilidad/colecciones.js');
 const navCollectionsRuntime = read('js/components/navigation/compartido/carga-colecciones.js');
 const pageLoader = read('js/cargador-mantenimiento-pagina.js');
@@ -24,14 +24,13 @@ const publicCatalogClient = read('js/core/firebase/catalogo-publico-api.js');
 const routesConfig = read('_routes.json');
 
 // El guard de cuota debe vivir únicamente dentro de la rama de Checkout del
-// cargador por página. El runtime usa un segundo argumento `version` para que
-// todos los módulos del checkout compartan una URL de caché inmutable.
+// cargador por página, con una versión de caché inmutable explícita.
 const checkoutRouteStart = pageLoader.indexOf("if (/\\/checkout(?:\\.html)?$/.test(path)) {");
 const nextRouteStart = pageLoader.indexOf("if (/\\/login(?:\\.html)?$/.test(path))", checkoutRouteStart + 1);
 const checkoutRouteBlock = checkoutRouteStart >= 0 && nextRouteStart > checkoutRouteStart
   ? pageLoader.slice(checkoutRouteStart, nextRouteStart)
   : '';
-const quotaLoadPattern = /load\('pages\/checkout\/checkout-control-cuota\.js',\s*version\)/g;
+const quotaLoadPattern = /load\('pages\/checkout\/checkout-control-cuota\.js',\s*(?:version|'[^']+')\)/g;
 const quotaLoadCount = (pageLoader.match(quotaLoadPattern) || []).length;
 
 check(
@@ -63,7 +62,7 @@ check(
 );
 check('Catálogo usa caché TTL compacta', products.includes("ALL_CACHE_KEY = 'products:cards'") && products.includes('compactProduct') && products.includes('readCached(ALL_CACHE_KEY') && products.includes('writeCached(ALL_CACHE_KEY'), 'La caché debe guardar solo datos de tarjetas.');
 check('Solicitudes simultáneas se deduplican', products.includes("runSingleFlight('products:all'") && readCache.includes('const flights = new Map()'), 'Dos módulos no deben repetir la misma consulta.');
-check('Producto consulta su documento y limita relacionados', /getDoc\(doc\(db, 'products', id\)\)/.test(products) && /limit\(12\)/.test(products), 'La ficha no debe descargar el catálogo completo.');
+check('Producto consulta su documento y limita relacionados', /getDoc\(doc\(db, 'products', id\)\)/.test(products) && products.includes("runSingleFlight('products:catalog:related-fetch'") && products.includes("fetchPublicCatalogResource('products')") && !/getDocs\(collection\(db, ['\"]products['\"]\)\)/.test(products), 'La ficha consulta su documento y comparte recomendaciones por la API edge acotada, sin enumerar Firestore.');
 check(
   'Producto no usa la caché compacta como ficha completa',
   !/fullCache/.test(products) &&

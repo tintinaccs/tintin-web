@@ -48,7 +48,7 @@ const publicPages = [
 ];
 
 const productsStore = read('js/core/store/estado-productos.js');
-const collectionsStore = read('js/pages/collections/estado-colecciones.js');
+const collectionsStore = (read('js/pages/collections/estado-colecciones.js') + '\n' + read('js/pages/collections/datos-publicos-colecciones.js'));
 const readCache = read('js/core/firebase/cache-lecturas-firestore.js');
 const instantColor = read('js/components/color/esquema-color-instantaneo.js');
 
@@ -111,7 +111,8 @@ check(
   'Producto escucha su documento y carga recomendaciones por edge en segundo plano',
   /getDoc\(doc\(db, 'products', id\)\)/.test(productsStore) &&
     /onSnapshot\(\s*doc\(db, 'products', normalizedId\)/.test(productsStore) &&
-    productsStore.includes("void runSingleFlight('products:related:all'") &&
+    productsStore.includes("void fetchRelatedProducts(product, pagePrefetch).then(related =>") &&
+    productsStore.includes("scheduleRelated(product)") &&
     productsStore.includes("runSingleFlight('products:catalog:related-fetch'") &&
     productsStore.includes('readCached(ALL_CACHE_KEY, ALL_CACHE_TTL)') &&
     productsStore.includes("fetchPublicCatalogResource('products')") &&

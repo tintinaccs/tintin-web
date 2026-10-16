@@ -157,7 +157,7 @@ check(
 
 check(
   'La política se carga antes de products-store',
-  /^import '\.\.\/\.\.\/pages\/catalog\/politica-visibilidad-catalogo\.js[^']*';$/m.test(products) &&
+  /from ['"]\.\.\/\.\.\/pages\/catalog\/politica-visibilidad-catalogo\.js[^'"]*['"]/.test(products) &&
     /load\('pages\/catalog\/politica-visibilidad-catalogo\.js'/.test(loader),
   'El filtro debe estar instalado antes del primer evento de productos.'
 );

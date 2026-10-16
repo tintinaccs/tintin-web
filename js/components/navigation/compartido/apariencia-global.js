@@ -135,6 +135,18 @@ function applyFooter(raw = {}) {
   root.dataset.ttFooterDensity = ['compact', 'normal', 'roomy'].includes(raw.density) ? raw.density : 'normal';
   root.dataset.ttFooterStyle = ['default', 'minimal', 'boxed'].includes(raw.style) ? raw.style : 'default';
   const background = safeColor(raw.background);
+  const footerFilter = background ? (() => {
+    const tokens = getComputedStyle(root);
+    const pink = safeColor(tokens.getPropertyValue('--color-brand-primary')) || '#f8aaca';
+    const light = safeColor(tokens.getPropertyValue('--color-brand-accent')) || '#fdecf2';
+    const midpoint = (relativeLuminance(pink) + relativeLuminance(light)) / 2;
+    return relativeLuminance(background) < midpoint ? 'url("#tt-brand-logo-tint-light")' : 'url("#tt-brand-logo-tint")';
+  })() : '';
+  // Sólo el logo responde al fondo elegido; nunca se modifica el fondo por el logo.
+  document.querySelectorAll('.tt-footer').forEach(footer => {
+    if (footerFilter) footer.style.setProperty('--tt-footer-logo-filter', footerFilter, 'important');
+    else footer.style.removeProperty('--tt-footer-logo-filter');
+  });
   // Si se personaliza el fondo sin fijar también un color de texto, el texto
   // del footer queda hardcodeado en blanco (ver styles.css .tt-footer) y se
   // vuelve ilegible sobre fondos claros. Derivamos un color legible por

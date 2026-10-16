@@ -6,6 +6,7 @@ const product = { id: 'qa-stock-colors', name: 'Aros por color', category: 'aros
 async function catalog(page, items) {
   await page.route('**/api/public-catalog?**', route => {
     const url = new URL(route.request().url()), resource = url.searchParams.get('resource');
+    if (!['products', 'collections'].includes(resource)) return route.continue();
     if (resource === 'collections') return route.fulfill({ json: { ok: true, resource, items: [{ id: 'aros', data: { name: 'Aros', slug: 'aros', active: true } }] } });
     return route.fulfill({ json: url.searchParams.has('id') ? { ok: true, resource, item: { id: product.id, data: product } } : { ok: true, resource, items: items.map(item => ({ id: item.id, data: item })) } });
   });

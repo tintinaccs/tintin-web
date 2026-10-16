@@ -4,7 +4,7 @@ import fs from 'node:fs';
 
 const api = fs.readFileSync('functions/api/public-catalog.js', 'utf8');
 const products = fs.readFileSync('js/core/store/estado-productos.js', 'utf8');
-const collections = fs.readFileSync('js/pages/collections/estado-colecciones.js', 'utf8');
+const collections = (fs.readFileSync('js/pages/collections/estado-colecciones.js', 'utf8') + '\n' + fs.readFileSync('js/pages/collections/datos-publicos-colecciones.js', 'utf8'));
 const routes = fs.readFileSync('_routes.json', 'utf8');
 
 test('catálogo público pasa por caché edge y usa lista blanca', () => {

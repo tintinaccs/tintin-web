@@ -23,7 +23,7 @@ const analytics = read('js/analytics/analitica.js');
 const images = read('js/components/images/imagenes.js');
 const publicSettings = read('js/core/store/configuracion-publica.js');
 const products = read('js/core/store/estado-productos.js');
-const collections = read('js/pages/collections/estado-colecciones.js');
+const collections = (read('js/pages/collections/estado-colecciones.js') + '\n' + read('js/pages/collections/datos-publicos-colecciones.js'));
 const siteContent = read('js/core/store/contenido-sitio.js');
 const index = read('index.html');
 const allRuntime = [...htmlFiles, ...moduleFiles].map(read).join('\n');
@@ -103,7 +103,7 @@ const checks = [
     analytics.includes('if (!await appCheckReady)') &&
       images.includes('if (!await appCheckReady)') &&
       publicSettings.includes('appCheckReady.then(ready =>') &&
-      products.includes('if (!await appCheckReady)') &&
+      products.includes('if (!deps || !await deps.appCheckReady)') && products.includes('loadProductRealtimeDependencies') &&
       // Colecciones públicas llegan por la API edge cacheada y no abren
       // Firestore desde el navegador; por eso no necesitan encadenar App Check.
       collections.includes("fetchPublicCatalogResource('collections')") &&

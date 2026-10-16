@@ -22,7 +22,11 @@ async function installRuntimeErrorMonitor(page,context){
     // Only this demo emulator endpoint and Firebase SDK stack are diagnostic.
     const firestoreBatchGet=error.message==='/127.0.0.1:8080/v1/projects/demo-tintin-interactions/databases/(default)/documents:batchGet due to access control checks.' &&
       error.stack?.includes('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
-    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup);
+    // WebKit puede cancelar esta lectura pública local al recargar Favoritos.
+    // Aceptar sólo el endpoint del fixture, durante salida y con stack nativo.
+    const visualStudioPublic=error.message==='/127.0.0.1:4174/api/visual-studio-global-public due to access control checks.' &&
+      error.stack?.endsWith('    at fetch ([native code]:0:0)');
+    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || visualStudioPublic);
     if(navigationCancellation)browserDiagnostics.push({kind:'native-emulator-channel-cancelled-on-navigation',message:error.message});
     else errors.push(error.message);
   });

@@ -10,7 +10,7 @@ const files = {
   publicPhase4: read('js/pages/collections/presentacion-colecciones.js'),
   adminPhase4: read('js/admin/collections/gestion-colecciones-admin.js'),
   uiQuality: read('js/quality/calidad-interfaz.js'),
-  store: read('js/pages/collections/estado-colecciones.js'),
+  store: (read('js/pages/collections/estado-colecciones.js') + '\n' + read('js/pages/collections/datos-publicos-colecciones.js')),
   collectionsPage: read('collections.html'),
   catalogPage: read('catalogo.html'),
   collectionsPageRuntime: read('js/pages/collections/pagina-colecciones.js'),

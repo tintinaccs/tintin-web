@@ -27,6 +27,7 @@ test('native Auth emulator cancellation is diagnostic only inside the document-l
   };
   for (const fixture of [
     { name: 'confirmed native cancellation', leaving: true, delta: 11, diagnostic: true },
+    { name: 'visual studio public cancellation', leaving: true, delta: 11, diagnostic: true, change: { message: '/127.0.0.1:4174/api/visual-studio-global-public due to access control checks.' } },
     { name: 'normal document access failure', leaving: false, delta: 11 },
     { name: 'expired leaving window', leaving: true, delta: 1000 },
     { name: 'JavaScript exception', leaving: true, delta: 11, change: { name: 'Error' } },
