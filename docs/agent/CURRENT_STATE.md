@@ -8,6 +8,8 @@ Verificación posterior del mismo código: se descargan bibliotecas Debian únic
 
 CI38979899323 aprobó build pero rechazó drift: el generador había incluido archivos temporales no versionados de work/. Se mueve todo el trabajo temporal fuera del repositorio y se regenera el manifiesto desde el árbol limpio, conservando el control de reproducibilidad. No cambia código de la tienda ni se modifica el generador para ocultar la diferencia. El nuevo SHA requiere su CI propia.
 
+CI38980234218 confirmó build reproducible, seguridad, integraciones y contratos hasta páginas auxiliares. El tag acumulado del cargador hacía que nosotros.html superase por8bytes el límite de2000 del stub; se usa una versión nueva compacta y única en todas las referencias. Se conserva el límite y no se modifica el auditor. Auditoría auxiliar específica vuelve a ejecutarse; CI del nuevo SHA pendiente.
+
 ## 2026-10-16 — Super Admin: auditoría y cambios confirmados
 
 Codex /root. Base c2efe331d79ebe1cba8e478eb5f1f76db179b87f, reconciliando las mejoras de Nosotros/menú publicadas mientras se trabajaba. Informe y cobertura de las 26 superficies más herramientas de cabecera: [AUDITORIA_SUPERADMIN_20261016.md](AUDITORIA_SUPERADMIN_20261016.md). Diez problemas confirmados: señal de actualización ausente en cambios administrativos, snapshots UID/email desordenados, falta de aviso por detalles del pedido, listas truncadas, escucha tardía tras logout, espera del sondeo de ventas locales, logAudit de Páginas desconectado y aviso superpuesto a navegación móvil y renombrado no atómico de Páginas y foco perdido al actualizar detalles del pedido. Se conservan identidad exclusiva del titular, stock/transacciones, borradores y controles de despliegue.
