@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "dc434a2c330a843bce9c1109f2306323281bed1c08ed98d3e4ceab5de23ce2bd",
+  "sourceFingerprint": "110f826da955f992ff2048bfbdc53b6169c7ce9495d31bed13bec31e4833a245",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1243,
     "textFiles": 1189,
-    "totalBytes": 19160511,
+    "totalBytes": 19161084,
     "pages": 19,
     "modules": 889
   },
@@ -45223,8 +45223,8 @@
     },
     {
       "path": "tests/runtime/error-monitor.spec.js",
-      "bytes": 3436,
-      "sha256": "390059489c3c9091cda5f5e8e04520bc12a4a85e066c72d58cd874530048bc90",
+      "bytes": 3633,
+      "sha256": "40a95974abe9f4a18190c074fca2de825b533bafc87ba3be9c6d15c64d9d033d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45272,8 +45272,8 @@
     },
     {
       "path": "tests/runtime/runtime-error-monitor.js",
-      "bytes": 2701,
-      "sha256": "92f01b0d5c04041fbc6b298e73ee05d966ca888b8f1176de0e48088d592dc070",
+      "bytes": 3077,
+      "sha256": "fa7fd8d4c8f07200eeac1ef7258113670577c6ac84566b7ba30f49c5c9d964b4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55121,8 +55121,8 @@
     {
       "path": "tests/runtime/error-monitor.spec.js",
       "extension": ".js",
-      "bytes": 3436,
-      "sha256": "390059489c3c9091cda5f5e8e04520bc12a4a85e066c72d58cd874530048bc90"
+      "bytes": 3633,
+      "sha256": "40a95974abe9f4a18190c074fca2de825b533bafc87ba3be9c6d15c64d9d033d"
     },
     {
       "path": "tests/runtime/invoice-component.spec.js",
@@ -55145,8 +55145,8 @@
     {
       "path": "tests/runtime/runtime-error-monitor.js",
       "extension": ".js",
-      "bytes": 2701,
-      "sha256": "92f01b0d5c04041fbc6b298e73ee05d966ca888b8f1176de0e48088d592dc070"
+      "bytes": 3077,
+      "sha256": "fa7fd8d4c8f07200eeac1ef7258113670577c6ac84566b7ba30f49c5c9d964b4"
     },
     {
       "path": "tests/runtime/welcome-component.spec.js",
