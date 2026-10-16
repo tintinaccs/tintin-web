@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "c2efe331d79ebe1cba8e478eb5f1f76db179b87f",
-  "reason": "Sincronización Super Admin y avisos confirmados: contratos, reglas y responsive; alinear versión interna y recurso Maestro tras CI.",
+  "reason": "Sincronización Super Admin, pedidos y avisos; seguridad y responsive. Carga pública liviana sin herramientas de escritura de imágenes ni ampliar presupuestos.",
   "files": [
     {
       "path": "_headers",
@@ -301,7 +301,7 @@
     {
       "path": "js/components/images/biblioteca-multimedia.js",
       "oldHash": "bb999587992261f8cece9dea6e82bb66c540609df5244d66d21a1824fa4c51d3",
-      "newHash": "44721a7c8c3adb2fe5126d7cc14ee0ad9267146422537e6964110aed1911aa80"
+      "newHash": "abed94f9b4a2cce64828c6c75a2befadfc5f7a710f7a20b981959ddf2978485b"
     },
     {
       "path": "js/components/images/carga-imagenes.js",
@@ -316,7 +316,7 @@
     {
       "path": "js/components/images/imagenes.js",
       "oldHash": "9085f52081ba37e2c484825465286340548d1f94cf5d000b8e4c63c813e91c87",
-      "newHash": "566b5c28561b3a72bdc675c2b10f1f22d6d9e1a177f99ca3462a63743b9b945b"
+      "newHash": "06cc13d2d8f3567468e3833f4bff69dcea985f2150a677a53543b8be34921179"
     },
     {
       "path": "js/components/images/inicio-carga-imagenes.js",
@@ -326,7 +326,7 @@
     {
       "path": "js/components/images/resolucion-imagenes.js",
       "oldHash": "0785e4531f1acdbfae0ec815aa00da50fbf68b9c161d2118fd7634a96bff1710",
-      "newHash": "d0ac0a703b15ec39046671c36c5044b2d29adef7428a7aabea1d2653047557ab"
+      "newHash": "3db33a5c494e3ccdd0a6109156e50b70d841d2ad071d48ef3b66cfc4b56bb37b"
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
@@ -516,7 +516,7 @@
     {
       "path": "js/quality/vigilancia-version.js",
       "oldHash": "4b4f45dad56954849da2896aff612258f253370d65e38f84ce2e62e191f6268d",
-      "newHash": "705a34babf736bf444d1a74f6f74faf0f782c39f88c1b567e5964c61d5fbb3e0"
+      "newHash": "617f4407db2a2c2a5f97d6c4b8eb81f517cdaf61479cd2489ceb4adb898e7c91"
     },
     {
       "path": "login.html",
@@ -561,7 +561,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "37e070cb2097cd0ea18f2d27c838d6a2d69ed093c998b68d3c2bfd42dc97fe38",
-      "newHash": "04216409a32809c39138347c00e233977ef8300d44e797bdfa37a20a49dbeadf"
+      "newHash": "5cff93c9445c5f14f1ac7a0bc2fad3d2870f48141e15c058c97640c01101369e"
     },
     {
       "path": "scripts/probar-firestore-critico.mjs",

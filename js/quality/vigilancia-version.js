@@ -10,6 +10,19 @@
    las preferencias se conservan. Nunca recarga por su cuenta.
    ============================================================= */
 
+// El primer snapshot establece la referencia de esta pestaña. Una aparición
+// posterior a un documento inicialmente ausente también es una actualización.
+export function createSiteRevisionObserver(onChange) {
+  let initialized = false, revision = '';
+  return data => {
+    const next = typeof data?.revision === 'string' ? data.revision : '';
+    if (!initialized) { initialized = true; revision = next; return; }
+    if (!next || next === revision) return;
+    revision = next;
+    onChange();
+  };
+}
+
 const CHECK_INTERVAL_MS = 10 * 60 * 1000;
 const MIN_GAP_MS = 2 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 8000;

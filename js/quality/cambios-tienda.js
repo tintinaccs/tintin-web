@@ -1,7 +1,7 @@
 import { db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
 import { onAppCheckSnapshot } from '../core/firebase/suscripcion-app-check.js?v=tintin-20261012-client-recovery-1-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
 import { doc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { createSiteRevisionObserver } from './revision-tienda.mjs?v=tintin-20261016-admin-live-1';
+import { createSiteRevisionObserver } from './vigilancia-version.js?v=tintin-20261016-admin-live-1';
 
 if (!window.TintinSiteChangesBooted) {
   window.TintinSiteChangesBooted = true;

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createConfirmedChangeWriter } from '../../js/core/store/cambio-confirmado.mjs';
-import { createSiteRevisionObserver } from '../../js/quality/revision-tienda.mjs';
+import { createSiteRevisionObserver } from '../../js/quality/vigilancia-version.js';
 import { publishConfirmedSiteRevision } from '../../cloudflare/revision-tienda.js';
 
 test('un guardado fallido no avisa; el confirmado conserva resultado aunque falle el aviso', async () => {

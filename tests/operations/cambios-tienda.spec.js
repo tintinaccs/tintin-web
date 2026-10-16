@@ -8,7 +8,7 @@ for (const width of [320, 390, 768, 1024, 1366, 1920]) {
     await page.getByRole('textbox').fill('Conservar mi edición');
     await page.evaluate(() => localStorage.setItem('tintin-test-cart', '[{"id":"fixture","qty":2}]'));
     await page.addScriptTag({ type: 'module', content: `
-      import { createSiteRevisionObserver } from '../../js/quality/revision-tienda.mjs?v=tintin-20261016-admin-live-1';
+      import { createSiteRevisionObserver } from '../../js/quality/vigilancia-version.js?v=tintin-20261016-admin-live-1';
       import { notifySiteContentChange } from '../../js/quality/vigilancia-version.js?v=tintin-20261016-admin-live-1';
       window.receiveRevision = createSiteRevisionObserver(notifySiteContentChange);` });
     await page.waitForFunction(() => typeof window.receiveRevision === 'function');

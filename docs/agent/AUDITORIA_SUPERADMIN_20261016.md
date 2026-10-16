@@ -19,6 +19,8 @@ Base reconciliada: c2efe331d79ebe1cba8e478eb5f1f76db179b87f. Alcance solicitado:
 
 | Media | La carga de contactos/historial y los snapshots de pedidos reconstruían el drawer: el foco de botones/enlaces se perdía fuera del diálogo. CI38946997090 lo detectó; tres regresiones provocadas fallaron antes de corregir. | Se restaura el control por atributo estable y la selección del texto pendiente; si desaparece, el foco vuelve a Cerrar. Doce casos (tres repeticiones, móvil/tablet/escritorio y teclado original) PASS_LOCAL. tests/ui-ux/orders-board. |
 
+| Media | El aviso añadió herramientas administrativas a la lectura pública de imágenes: Nosotros llegó a130 solicitudes propias, sobre el presupuesto127; comparación main126. | Escritor de imágenes bajo demanda y observador reutilizado desde vigilancia-version. Se mantiene el presupuesto127; regresiones de revisión/reconexión y rendimiento Contacto/Nosotros pasan. |
+
 ## Cobertura de superficies
 
 La tabla identifica el contrato inspeccionado. Las auditorías estáticas prueban conexión; los tests de dominio/emulador comprueban comportamiento y autorización; los fixtures de navegador prueban interacción sin datos reales. Ninguna de esas evidencias equivale a haber ejecutado todas las operaciones de producción con la cuenta del titular.

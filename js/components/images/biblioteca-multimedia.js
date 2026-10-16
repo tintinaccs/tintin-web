@@ -1,4 +1,5 @@
-import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
+// La lectura pública no descarga las herramientas de guardado administrativo.
+const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1')).withAdminSiteChange(action);
 import './galeria-producto.js?v=tintin-20261015-images-1';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 /* =============================================================
