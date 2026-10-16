@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c4361f9d54ed6018d5ca5c48fd53f48dc5d35fb95fbbffade49bfc6c9c5c7ce6",
+  "sourceFingerprint": "f1c1f726248125edd40d3319146809aa57880b33c827a08f7232360a636f5090",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1280,
     "textFiles": 1196,
-    "totalBytes": 23946751,
+    "totalBytes": 23948968,
     "pages": 19,
     "modules": 893
   },
@@ -45641,8 +45641,8 @@
     },
     {
       "path": "tests/runtime/error-monitor.spec.js",
-      "bytes": 4149,
-      "sha256": "9951923a5b6fa66c04e6ec5927be01e85e5337bf762ea87e38f6dbef3e0ae212",
+      "bytes": 5235,
+      "sha256": "bd221ca6947b7434710604bcbc72a76c88cc251a84759155d08d8a84e5e1d68b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45656,6 +45656,18 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:1:34862",
           "line": 30
+        },
+        {
+          "url": "http://127.0.0.1:4174/api/visual-studio-global-public",
+          "line": 33
+        },
+        {
+          "url": "http://127.0.0.1:4174/js/components/navigation/compartido/apariencia-global.js",
+          "line": 33
+        },
+        {
+          "url": "http://127.0.0.1:4174/js/other-reader.js:1:1",
+          "line": 35
         }
       ]
     },
@@ -45694,8 +45706,8 @@
     },
     {
       "path": "tests/runtime/runtime-error-monitor.js",
-      "bytes": 3254,
-      "sha256": "849e33762cdc594eb278d526c2914b48cfc1575eca8c413104a392929ff67677",
+      "bytes": 3485,
+      "sha256": "1f5a02b1a87cc160470cd09cbcad92c4f92d1136dd714ecd958bd94913197352",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45709,6 +45721,10 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:",
           "line": 22
+        },
+        {
+          "url": "http://127.0.0.1:4174/js/components/navigation/compartido/apariencia-global.js",
+          "line": 32
         }
       ]
     },
@@ -50255,8 +50271,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 544486,
-      "sha256": "61a5adae3b265a82cafed115f27c24f7848cefd288b97e9811fefc7a10865f19"
+      "bytes": 545386,
+      "sha256": "001aa32dba6247311916b38c1e704e7d595636a7888156e00c5ffc10ae910181"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -55769,8 +55785,8 @@
     {
       "path": "tests/runtime/error-monitor.spec.js",
       "extension": ".js",
-      "bytes": 4149,
-      "sha256": "9951923a5b6fa66c04e6ec5927be01e85e5337bf762ea87e38f6dbef3e0ae212"
+      "bytes": 5235,
+      "sha256": "bd221ca6947b7434710604bcbc72a76c88cc251a84759155d08d8a84e5e1d68b"
     },
     {
       "path": "tests/runtime/invoice-component.spec.js",
@@ -55793,8 +55809,8 @@
     {
       "path": "tests/runtime/runtime-error-monitor.js",
       "extension": ".js",
-      "bytes": 3254,
-      "sha256": "849e33762cdc594eb278d526c2914b48cfc1575eca8c413104a392929ff67677"
+      "bytes": 3485,
+      "sha256": "1f5a02b1a87cc160470cd09cbcad92c4f92d1136dd714ecd958bd94913197352"
     },
     {
       "path": "tests/runtime/welcome-component.spec.js",
