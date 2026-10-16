@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "48317390e700a9c4a78f4e0c05ee55a68f62856b24babce7b1c802807247300f",
+  "sourceFingerprint": "4a2b1ffb1c9d25aa6b56eb7202c914c3c5308661d2bb198962174eae5a7b6430",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1303,
-    "textFiles": 1217,
-    "totalBytes": 24563200,
+    "files": 1298,
+    "textFiles": 1212,
+    "totalBytes": 24544976,
     "pages": 19,
-    "modules": 910
+    "modules": 908
   },
   "viewports": [
     {
@@ -49109,87 +49109,6 @@
           "line": 1746
         }
       ]
-    },
-    {
-      "path": "work/check-hashes.mjs",
-      "bytes": 417,
-      "sha256": "a6c2ec4b1dd8af14744ddbb9e0b0f853601fe2b807c4c7883f2242d1f6010c0e",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "../scripts/auditar-proteccion-flujos.mjs",
-          "target": "scripts/auditar-proteccion-flujos.mjs",
-          "dynamic": false,
-          "line": 2
-        }
-      ],
-      "endpoints": []
-    },
-    {
-      "path": "work/home-watch-webkit.test.mjs",
-      "bytes": 12526,
-      "sha256": "088d14c74e85325a7e9f6e76df4452359cbb426cda3cc4527754a95f5e34543f",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:test",
-          "target": null,
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "node:assert/strict",
-          "target": null,
-          "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "node:fs/promises",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "node:path",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "node:url",
-          "target": null,
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "../js/core/store/esquema-contenido.js",
-          "target": "js/core/store/esquema-contenido.js",
-          "dynamic": false,
-          "line": 10
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://tintin.test/",
-          "line": 52
-        },
-        {
-          "url": "https://tintin.test/index.html",
-          "line": 121
-        }
-      ]
     }
   ],
   "files": [
@@ -50876,8 +50795,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 558884,
-      "sha256": "22c88e0747d2f7ff9ba2288d6ad439d14ebb967df59a0b80c5e6284bf9c04f9b"
+      "bytes": 559283,
+      "sha256": "f97a8eb5196e7628436024c4bdd1fc020127ae8b63a04f8b7847e4f25ef50df5"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56980,36 +56899,6 @@
       "extension": ".js",
       "bytes": 122046,
       "sha256": "74d42ffc39ba2ed3a2213bc013608813c41d737d5b22b7b42e907123e39af9fb"
-    },
-    {
-      "path": "work/check-hashes.mjs",
-      "extension": ".mjs",
-      "bytes": 417,
-      "sha256": "a6c2ec4b1dd8af14744ddbb9e0b0f853601fe2b807c4c7883f2242d1f6010c0e"
-    },
-    {
-      "path": "work/home-watch-webkit.test.mjs",
-      "extension": ".mjs",
-      "bytes": 12526,
-      "sha256": "088d14c74e85325a7e9f6e76df4452359cbb426cda3cc4527754a95f5e34543f"
-    },
-    {
-      "path": "work/pr-body.md",
-      "extension": ".md",
-      "bytes": 2234,
-      "sha256": "a4539104c0bbd8806caca579e44f2ed46a915c3784aca6b08e594eee92ce4e7d"
-    },
-    {
-      "path": "work/pr-update.json",
-      "extension": ".json",
-      "bytes": 2271,
-      "sha256": "fcf9019cf5833271fce8ba9b65d5a076c8b412ad33c833555f19315c1af05d55"
-    },
-    {
-      "path": "work/webkit-libs/root/usr/share/doc/libmanette-0.2-0/README.md",
-      "extension": ".md",
-      "bytes": 1175,
-      "sha256": "af09d7779e7b7a36dbe84ac47e5974e132492a7637ec2a213ce281cf8c230796"
     }
   ],
   "sitemapRoutes": [],
