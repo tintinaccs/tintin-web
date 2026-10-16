@@ -973,10 +973,17 @@ function renderDrawer() {
   drawer.dataset.kind=state.drawer.type;
   if(state.drawer.type==='order'){drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label',`Detalles del pedido ${content.title}`);}
   else { drawer.removeAttribute('role');drawer.removeAttribute('aria-modal');drawer.setAttribute('aria-label','Detalles'); }
-  const focusBefore=document.activeElement;const focusKey=focusBefore?.dataset?.drawerOrderStatus ? '[data-drawer-order-status]' : focusBefore?.dataset?.drawerOrderPay ? '[data-drawer-order-pay]' : focusBefore?.dataset?.drawerOrderNote ? '[data-drawer-order-note]' : focusBefore?.dataset?.action==='drawer-close' ? '[data-action="drawer-close"]' : null;
+  const focusBefore=document.activeElement;
+  const focusAttribute=drawer.contains(focusBefore) ? ['data-drawer-order-status','data-drawer-order-pay','data-drawer-order-note','data-action','href','id','name'].find(attribute=>focusBefore.hasAttribute(attribute)) : null;
+  const focusKey=focusAttribute ? `[${focusAttribute}="${CSS.escape(focusBefore.getAttribute(focusAttribute))}"]` : null;
+  const selection=focusKey && typeof focusBefore.selectionStart==='number' ? [focusBefore.selectionStart,focusBefore.selectionEnd,focusBefore.selectionDirection] : null;
   const bodyScroll=drawer.querySelector('.tt-commerce-drawer-body')?.scrollTop || 0;
   drawer.innerHTML = `<div class="tt-commerce-drawer-head"><div class="tt-commerce-drawer-heading"><h3 class="tt-commerce-drawer-title">${esc(content.title)}</h3><div class="tt-commerce-drawer-kicker">${esc(content.kicker)}</div></div><button type="button" class="tt-commerce-iconbtn" data-action="drawer-close" aria-label="Cerrar">×</button></div><div class="tt-commerce-drawer-body">${content.body}</div><div class="tt-commerce-drawer-actions">${content.actions}</div>`;
-  if(focusKey)drawer.querySelector(focusKey)?.focus({preventScroll:true});
+  if(focusKey) {
+    const control=drawer.querySelector(focusKey) || drawer.querySelector('[data-action="drawer-close"]');
+    control?.focus({preventScroll:true});
+    if(selection && control?.setSelectionRange)control.setSelectionRange(...selection);
+  }
   const orderBody=drawer.querySelector('.tt-commerce-drawer-body');if(orderBody)orderBody.scrollTop=bodyScroll;
   if(state.drawer.type==='order' && !drawer.classList.contains('open'))drawer.querySelector('[data-action="drawer-close"]')?.focus();
   requestAnimationFrame(() => {

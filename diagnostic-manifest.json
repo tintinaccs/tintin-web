@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e6468f261549ff0ede87b2c84edb8e86efc66fb259fd3437fe4c10602895eebf",
+  "sourceFingerprint": "f565bc1d677681a844976c8c0cd339a40ea9791d001e58d9c2336fae0ac40628",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1298,
     "textFiles": 1212,
-    "totalBytes": 24538823,
+    "totalBytes": 24541654,
     "pages": 19,
     "modules": 908
   },
@@ -2469,7 +2469,7 @@
         "viewer"
       ],
       "bytes": 203322,
-      "sha256": "851500645814d066faf273a3e8be4989006302e2a5af2be893ea7910ab99da8a",
+      "sha256": "2b74f3195df4675e39fb7771cf9c37dec64fd1ab7497e634bd0fa4894be931f3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2543,7 +2543,7 @@
           "line": 2065
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261015-fast-d4adab1d5-1-admin-live-20261016-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261015-fast-d4adab1d5-1-admin-live-20261016-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2066
         },
@@ -2860,7 +2860,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261015-fast-d4adab1d5-1-admin-live-20261016-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261015-fast-d4adab1d5-1-admin-live-20261016-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2066,
           "exists": true
@@ -27266,8 +27266,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 102936,
-      "sha256": "159e9302f18c9a8a4a542596ce5fedcdd63015fd02e5c0a9a7c334974f8ef2d9",
+      "bytes": 103326,
+      "sha256": "db16271ff71f66ca2ab9f662dc81116b5f50e087680256f17f7555f2488c40f1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27353,7 +27353,7 @@
         },
         {
           "url": "https://wa.me/$%7Bnormalized%7D",
-          "line": 1075
+          "line": 1082
         }
       ]
     },
@@ -48176,8 +48176,8 @@
     },
     {
       "path": "tests/ui-ux/orders-board.spec.js",
-      "bytes": 18736,
-      "sha256": "beab19d0e7a0492320d23d72262176b97f03205ccd05b1642562bceef3f3b257",
+      "bytes": 20052,
+      "sha256": "a7c4bce7c089e89f8219be2785e59f46b0a6ad3a0fba5d68541336ee4b62733b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49245,7 +49245,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 203322,
-      "sha256": "851500645814d066faf273a3e8be4989006302e2a5af2be893ea7910ab99da8a"
+      "sha256": "2b74f3195df4675e39fb7771cf9c37dec64fd1ab7497e634bd0fa4894be931f3"
     },
     {
       "path": "apple-touch-icon.png",
@@ -50163,7 +50163,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 29666,
-      "sha256": "8ff4b6a7d03dc0a0ee8369013b5b306f0b2e1300b32d1344206f6e2a70d0bf02"
+      "sha256": "ae3c9a569603eb9462eb3508940e409aa9fd1dadbc664e4caebf7d13fc653f07"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50175,7 +50175,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "81d3e9206e958e7452175f23a50195406b716c10cc4ee4998daf6c9da7d34cdb"
+      "sha256": "6071724a3a1ec2a0032163143e960872cc7a1bf0748b52b72122224a455550b3"
     },
     {
       "path": "config/public-site.json",
@@ -50756,8 +50756,8 @@
     {
       "path": "docs/agent/AUDITORIA_SUPERADMIN_20261016.md",
       "extension": ".md",
-      "bytes": 8806,
-      "sha256": "36ab7c8a3dec03c0e708ab4c94c2301ca492bdd1f2c31fcbd1ffc7adc3b6ff3f"
+      "bytes": 9281,
+      "sha256": "c0ae114c268bd08f70c775616f00352143913839d5657f7deeda9dce25e79488"
     },
     {
       "path": "docs/agent/AUTONOMOUS_REPAIR.md",
@@ -50786,8 +50786,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 550479,
-      "sha256": "60de84163e5019a60bc0e80a429a2f9e8786ac1906e7cc1e7f20df1078a162ed"
+      "bytes": 551129,
+      "sha256": "aed69eae7007c41883a5c7eaa63eddd1c55a52fd74f07c1e5ea2a0bf97d105d4"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -52124,8 +52124,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 102936,
-      "sha256": "159e9302f18c9a8a4a542596ce5fedcdd63015fd02e5c0a9a7c334974f8ef2d9"
+      "bytes": 103326,
+      "sha256": "db16271ff71f66ca2ab9f662dc81116b5f50e087680256f17f7555f2488c40f1"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -54585,7 +54585,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 80280,
-      "sha256": "f2221263a3de03f2964964d8d84765b6bf757c8fa99473be5736ea35b9b7e75b"
+      "sha256": "a827029d4701eb3ee968c488a0d3cf6ec5547a9cbfab0ec509a9bd25902ea63c"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -56708,8 +56708,8 @@
     {
       "path": "tests/ui-ux/orders-board.spec.js",
       "extension": ".js",
-      "bytes": 18736,
-      "sha256": "beab19d0e7a0492320d23d72262176b97f03205ccd05b1642562bceef3f3b257"
+      "bytes": 20052,
+      "sha256": "a7c4bce7c089e89f8219be2785e59f46b0a6ad3a0fba5d68541336ee4b62733b"
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
@@ -58777,7 +58777,7 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1482,
+            "line": 1489,
             "operation": "collection"
           },
           {
@@ -58852,7 +58852,7 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1392,
+            "line": 1399,
             "operation": "collection"
           },
           {
@@ -59302,7 +59302,7 @@
         "references": [
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1493,
+            "line": 1500,
             "operation": "collection"
           },
           {
@@ -59487,7 +59487,7 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1376,
+            "line": 1383,
             "operation": "collection"
           },
           {

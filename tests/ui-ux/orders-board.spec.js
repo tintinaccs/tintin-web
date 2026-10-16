@@ -151,3 +151,23 @@ for(const [width,height] of [[320,568],[768,1024],[1440,900]])test(`editor de pe
  await page.evaluate(async()=>{window.__orders[2].paymentStatus='error';await window.TintinOrderAdmin.openAdvancedOrderEditor('order_fixture_2');});
  await expect(page.locator('#tinped-pay-status')).toHaveValue('error');await page.keyboard.press('Escape');await expect(modal).toBeHidden();
 });
+
+for (const width of [390,768,1366]) test(`actualización en vivo conserva el foco de acciones y enlaces del pedido en ${width}px`, async ({page})=>{
+ await page.setViewportSize({width,height:900});await open(page);
+ await page.locator('[data-action="drawer-order"][data-id="order_fixture_0"]').click();
+ const drawer=page.getByRole('dialog');
+ await expect(drawer.getByRole('link',{name:'Google Maps',exact:true})).toBeVisible();
+ for (const control of [drawer.locator('[data-action="drawer-order-delete"]'),drawer.getByRole('link',{name:'Google Maps',exact:true})]) {
+  await control.focus();await expect(control).toBeFocused();
+  await page.evaluate(()=>window.__publishOrders());
+  await expect(control).toBeFocused();
+ }
+ const note=drawer.locator('[data-drawer-order-note]');
+ await note.fill('Conservar este borrador');
+ await note.evaluate(element=>element.setSelectionRange(3,9));
+ await page.evaluate(()=>window.__publishOrders());
+ await expect(note).toBeFocused();await expect(note).toHaveValue('Conservar este borrador');
+ expect(await note.evaluate(element=>[element.selectionStart,element.selectionEnd])).toEqual([3,9]);
+ await page.keyboard.press('Escape');await expect(drawer).toHaveCount(0);
+ await expect(page.locator('[data-action="drawer-order"][data-id="order_fixture_0"]')).toBeFocused();
+});
