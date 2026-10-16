@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const { parse } = require('parse5');
+const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
@@ -580,6 +581,8 @@ for (const page of PUBLIC_PAGES) {
   let html = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
   const before = html;
 
+  if (page === 'index.html') html = restoreStyleSources(html);
+
   for (const id of SHELL_IDS) html = removeElementById(html, id);
   html = removeLegacyComments(html);
   // Login es una pantalla de acceso aislada: no comparte el pie público.
@@ -600,6 +603,7 @@ for (const page of PUBLIC_PAGES) {
   html = ensurePublicStructuralStyles(html, false, page);
   html = ensureInitialRuntimeStyles(html, page);
   html = normalizeWhitespace(html);
+  if (page === 'index.html') html = writeHomeStyles(html, ROOT);
 
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');

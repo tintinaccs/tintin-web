@@ -70,11 +70,13 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
       try {
         await page.goto(url, { waitUntil: 'commit' });
         await page.waitForSelector(selector, { state: 'attached' });
-        await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].every(link => link.sheet));
+        await page.waitForFunction(() => [...document.querySelectorAll('link[rel="stylesheet"]')].every(link =>
+          (link.disabled && link.dataset.ttStyleBundle ? document.getElementById(link.dataset.ttStyleBundle) : link)?.sheet));
         await page.evaluate(() => document.fonts.ready);
         const initial = await page.locator(selector).boundingBox();
         expect(initial, url).not.toBeNull();
-        const structural = await page.locator('head #tt-responsive-brand-safety-css').evaluate(link => Boolean(link.sheet));
+        const structural = await page.locator('head #tt-responsive-brand-safety-css').evaluate(link => Boolean(
+          (link.disabled && link.dataset.ttStyleBundle ? document.getElementById(link.dataset.ttStyleBundle) : link)?.sheet));
         expect(structural, url).toBe(true);
         release();
         await page.waitForLoadState('load');

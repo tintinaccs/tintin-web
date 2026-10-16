@@ -228,8 +228,11 @@ check(
 // A stylesheet can appear once as a preload and once as the real stylesheet.
 // Browsers reuse that same response, so count each identical URL only once.
 const homeCssLinks = [...read('index.html').matchAll(/<link\b([^>]*?)href="([^"]+\.css(?:\?[^"]*)?)"[^>]*>/g)]
-  .map(match => ({ attrs: match[1], url: match[2] }))
-  .filter(({ url }) => !/^https?:/.test(url));
+  .map(match => ({ attrs: match[0], url: match[2] }))
+  // `disabled` must be an HTML attribute. The recovery handler for the
+  // combined stylesheet also contains `link.disabled = false`, which is
+  // executable text rather than an instruction to keep that stylesheet idle.
+  .filter(({ url, attrs }) => !/^https?:/.test(url) && !/(?:^|\s)disabled(?:\s|=|>)/i.test(attrs));
 const cssMediaMatches = (media, width) => {
   if (!media) return true;
   const min = media.match(/min-width\s*:\s*(\d+)px/i)?.[1];
