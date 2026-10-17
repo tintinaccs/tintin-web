@@ -206,7 +206,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-login-onboarding-layout=\"1\"",
       "css/pages/login/login-onboarding-form-layout.css",
-      "tintin-20261010-whatsapp-release-5"
+      "tintin-20261016-outlined-fields-2"
     ]
   ],
   "admin.html": [

@@ -71,7 +71,7 @@
   <link data-tt-login-maintenance="1" rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1">
   <link data-tt-login-fluid="1" rel="stylesheet" href="css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1">
   <link data-tt-login-onboarding-flow="1" rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20261001-registration-white-cards-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1">
-  <link data-tt-login-onboarding-layout="1" rel="stylesheet" href="css/pages/login/login-onboarding-form-layout.css?v=tintin-20261010-whatsapp-release-5">
+  <link data-tt-login-onboarding-layout="1" rel="stylesheet" href="css/pages/login/login-onboarding-form-layout.css?v=tintin-20261016-outlined-fields-2">
 </head>
 <body>
 
@@ -132,15 +132,19 @@
 
         <div class="login-email-block" id="login-profile-block" style="display:none">
           <div id="login-profile-name-field">
-            <label class="login-email-label" for="login-profile-first-name">Nombre y apellido</label>
-            <input type="text" class="login-email-input" id="login-profile-first-name" placeholder="Ej: María González" autocomplete="name" maxlength="120" enterkeyhint="next" aria-describedby="login-first-name-error" />
+            <div class="login-outlined-field">
+              <label class="login-email-label" for="login-profile-first-name">Nombre y apellido</label>
+              <input type="text" class="login-email-input" id="login-profile-first-name" placeholder="Ej: María González" autocomplete="name" maxlength="120" enterkeyhint="next" aria-describedby="login-first-name-error" />
+            </div>
             <p class="login-profile-field-error" id="login-first-name-error" role="alert"></p>
           </div>
           <div id="login-profile-phone-field">
-            <label class="login-email-label" for="login-profile-phone">WhatsApp</label>
-            <div class="login-phone-row">
-              <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="Prefijo de Paraguay" disabled><option value="PY">+595</option></select>
-              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0912345678" autocomplete="tel-national" inputmode="numeric" maxlength="10" enterkeyhint="done" aria-describedby="login-phone-error" />
+            <input type="hidden" id="login-profile-country" value="PY" />
+            <div class="login-outlined-field login-phone-row">
+              <label class="login-email-label" for="login-profile-phone">Número de teléfono</label>
+              <span class="login-phone-prefix" aria-hidden="true">+595</span>
+              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="0981 336401" autocomplete="tel-national" inputmode="numeric" maxlength="10" enterkeyhint="done" aria-describedby="login-phone-prefix-description login-phone-error" />
+              <span id="login-phone-prefix-description" class="tt-sr-only">Prefijo de Paraguay: +595</span>
             </div>
             <p class="login-profile-field-error" id="login-phone-error" aria-live="polite"></p>
             <p class="login-phone-help" id="login-phone-help" style="display:none">
@@ -171,7 +175,7 @@
   <div class="login-exit-card">
     <h2 class="login-exit-title" id="login-exit-title">Te falta poco</h2>
     <p class="login-exit-text" id="login-exit-text">
-      Para comprar necesitamos tu nombre, tu teléfono y dónde entregarte.
+      Para comprar necesitamos tu nombre y apellido y tu teléfono.
       Si preferís, podés seguir mirando la tienda sin cuenta.
     </p>
     <button type="button" class="login-exit-primary" id="btn-exit-continue">Completar mis datos</button>
@@ -197,7 +201,7 @@ import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
 } from "./js/email/correo-autenticacion.js?v=tintin-20261015-images-1";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
+import { findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261012-auth-privacy-1-perfil-usuario-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
@@ -448,11 +452,6 @@ async function guardarUsuario(user, options = {}) {
   return ensureUserProfile(db, user, AUTH_METHOD.GOOGLE, options);
 }
 
-function populateCountrySelect(selectEl) {
-  selectEl.innerHTML = '<option value="PY">+595</option>';
-  selectEl.value = DEFAULT_COUNTRY.code;
-}
-
 // Lee users/{uid} y lo traduce al estado canónico (estado-perfil-sesion.mjs).
 // Un error de lectura queda como ERROR: nunca se interpreta como "no existe"
 // ni cierra la sesión. El plazo es sólo una salida de seguridad para que el
@@ -588,7 +587,6 @@ async function ensureProfileComplete(user, role, options = {}) {
   const phoneInput = document.getElementById('login-profile-phone');
   const phoneField = document.getElementById('login-profile-phone-field');
   const countrySelect = document.getElementById('login-profile-country');
-  populateCountrySelect(countrySelect);
   firstNameInput.value = plan.suggestedName;
   phoneInput.value = '';
   nameField.hidden = !plan.needsName;
