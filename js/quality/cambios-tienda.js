@@ -25,6 +25,11 @@ if (!window.TintinSiteChangesBooted) {
       if (!snapshot.metadata?.hasPendingWrites) receive(snapshot.exists() ? snapshot.data() : null);
     }, error => {
       if (disposed || token !== generation) return;
+      // El wrapper conserva la espera del token y se activa cuando llega.
+      // Reiniciarlo aquí sólo repite la misma promesa vencida, consume los
+      // reintentos y convierte una espera recuperable en errores de consola.
+      // Los rechazos reales de Firestore siguen el camino de error inferior.
+      if (error?.code === 'app-check-unavailable') return;
       console.warn('[site-change] No se pudo escuchar la revisión:', error?.code || 'unavailable');
       if (attempt < delays.length && !retryTimer) retryTimer = setTimeout(start, delays[attempt++]);
     });
