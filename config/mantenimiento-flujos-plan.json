@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "64a17c4a89e7b4df53ca84d3efc7b534f83870e0",
-  "reason": "Publicacion autorizada conjunta PR1150: responsive y versiones, reinicios por indicador y devolucion elegida;103 Node pedidos,237 cuentas/checkout,51 Chromium y auditorias. Registrar ruta exacta omitida del endpoint en Cloudflare; auditor de integraciones PASS. Registrar hashes de tipografia de modulos nuevos no publicados, build completo aprobado.",
+  "reason": "Publicacion autorizada conjunta PR1150: responsive y versiones, reinicios por indicador y devolucion elegida;103 Node pedidos,237 cuentas/checkout,51 Chromium y auditorias. Registrar ruta exacta omitida del endpoint en Cloudflare; auditor de integraciones PASS. Registrar hashes de tipografia de modulos nuevos no publicados, build completo aprobado. Compactar ambas rutas404 para limite100 de Pages conservando APIs y middleware; auditorias canonicas aprobadas.",
   "files": [
     {
       "path": "_headers",
@@ -11,7 +11,7 @@
     {
       "path": "_routes.json",
       "oldHash": "fad690b01e7855665323d2e8a5945286008700d824f6f2beee973e845d30a697",
-      "newHash": "24cd268f18297bbb4ecf3ffc281a5622f7d46684c3b8e49bf6f1e597dd0e8348"
+      "newHash": "769ec3d0011efc1da82faaea94b21980efecc46f9b2feb027bd95192ee69c1a4"
     },
     {
       "path": "404.html",

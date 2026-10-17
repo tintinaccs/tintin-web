@@ -128,7 +128,9 @@ const dynamicFunctionRoutes = [
   '/products/*', '/collections/*', '/pages/*', '/policies/*',
   '/robots.txt', '/sitemap-products.xml', '/sitemap-collections.xml'
 ];
-const expectedRoutes = [...new Set([...apiFunctions, '/__/auth/*', ...htmlFunctionRoutes, ...dynamicFunctionRoutes])].sort();
+// Both error-document forms share one narrow rule to respect Pages' 100-rule limit.
+const compactHtmlRoutes = htmlFunctionRoutes.map(route => route === '/404' || route === '/404.html' ? '/404*' : route);
+const expectedRoutes = [...new Set([...apiFunctions, '/__/auth/*', ...compactHtmlRoutes, ...dynamicFunctionRoutes])].sort();
 const routeConfig = JSON.parse(read('_routes.json'));
 const routes = [...new Set(routeConfig.include || [])].sort();
 check(

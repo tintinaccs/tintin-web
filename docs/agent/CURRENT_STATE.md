@@ -1,3 +1,7 @@
+## 2026-10-17 — Respetar límite de reglas de Pages
+
+Codex /root. CI39078871599 aprobó auditoría completa del candidato0ae6. Mantenimiento39080498941 rechazó Cloudflare Pages fallido; logs nativos del deployment9908efb7 confirman Error8000057:101reglas superan máximo100. Se compactan únicamente /404 y /404.html a /404*, conservando las101rutas previas cubiertas y todas lasAPIs explícitas. Se agrega límite100 al auditor de integraciones y su auditor final exige la configuración exacta con ese patrón acotado; sin ampliar /api/* ni retirar middleware/CSP/SEO. PASS_LOCAL: integración canónica100reglas y auditor final22/22. Plan/diagnóstico regenerados. CI/Pages y nuevo dispatch del SHA final pendientes; no heredar éxito anterior ni aprobar revisión del propietario desde esta conversación.
+
 ## 2026-10-17 — Maestro verifica el controlador real de estados
 
 Codex /root. CI39077810559 aprobó build, contrato estático completo, operaciones/cuenta/sync y reglas Firestore; falló Maestro al exigir transitionStatus en pedidos-superadmin-crud, donde su única llamada antigua era cancelar automáticamente al archivar. La edición sigue en TintinInventoryIntegrity.updateEditedOrder y los cambios de estado en admin-app siguen en TintinInventoryIntegrity.transitionStatus. Se exigen ambas llamadas exactas en sus controladores reales; no se cambia runtime ni se retira cobertura de inventario. PASS_LOCAL: bloque completo de seis auditores Maestro/catálogo, conexiones25/25 y responsive5 tamaños320/390/768/1366/1440 sin overflow. Nueva CI y publicación pendientes.
