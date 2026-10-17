@@ -16,7 +16,7 @@ async function mount(page, { cookies = false } = {}) {
   await page.getByRole('textbox').fill('Conservar edición');
   await page.evaluate(() => localStorage.setItem('cart', 'conservar'));
   expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
-  return () => { revision = 'b'.repeat(64); };
+  return (value = 'b') => { revision = value.repeat(64); };
 }
 
 for (const [width, height] of [[320,568],[390,844],[430,932],[568,320],[844,390],[768,1024],[1024,768],[1280,720],[1366,768],[1920,1080]]) {
@@ -72,4 +72,33 @@ test('una revisión no disponible no inventa cambios y conserva el fallback HTML
   await page.route('https://version.test/', route => route.fulfill({ contentType: 'text/html', body: '<script src="/watch.js?v=new"></script>' }));
   expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('outdated');
   await expect(page.locator('#tt-version-notice')).toBeVisible();
+});
+
+test('Más tarde pospone esa versión y una publicación posterior vuelve a avisar', async ({ page }) => {
+  const publish = await mount(page);
+  publish();
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('outdated');
+  const notice = page.locator('#tt-version-notice');
+  await notice.getByRole('button', { name:'Más tarde', exact:true }).click();
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(notice).toHaveCount(0);
+  publish('c');
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(notice).toBeVisible();
+  await expect(notice).toHaveCount(1);
+});
+
+test('el fallback tampoco insiste con referencias ya pospuestas', async ({ page }) => {
+  await mount(page);
+  await page.route('**/site-version.json', route => route.fulfill({ status:503, body:'unavailable' }));
+  let version = 'new';
+  await page.route('https://version.test/', route => route.fulfill({ contentType:'text/html', body:`<script src="/watch.js?v=${version}"></script>` }));
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('outdated');
+  const notice = page.locator('#tt-version-notice');
+  await notice.getByRole('button', { name:'Más tarde', exact:true }).click();
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(notice).toHaveCount(0);
+  version = 'next';
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(notice).toBeVisible();
 });

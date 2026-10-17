@@ -197,12 +197,12 @@ function boot() {
   const initialKnown = collectKnown(new Set());
   let lastCheck = Date.now();
   let running = false;
-  let stopped = false;
+  const notifiedRefs = new Set();
   let revision = '';
   const initialVersion = fetchSiteVersion().then(value => { revision = value; });
 
   async function check(force = false) {
-    if (stopped || running) return 'skipped';
+    if (running) return 'skipped';
     if (!force) {
       if (document.visibilityState !== 'visible' || navigator.onLine === false) return 'skipped';
       if (Date.now() - lastCheck < MIN_GAP_MS) return 'skipped';
@@ -213,7 +213,7 @@ function boot() {
       await initialVersion;
       const nextRevision = await fetchSiteVersion();
       if (revision && nextRevision && revision !== nextRevision) {
-        stopped = true;
+        revision = nextRevision;
         showNotice();
         return 'outdated';
       }
@@ -228,9 +228,10 @@ function boot() {
       // Una respuesta sin referencias versionadas (página de error, mantenimiento,
       // respuesta cortada) no prueba nada: no se avisa.
       if (!fresh.length) return 'inconclusive';
-      const missing = unknownRefs(fresh, collectKnown(new Set(initialKnown)));
+      const missing = unknownRefs(fresh, collectKnown(new Set(initialKnown)))
+        .filter(ref => !notifiedRefs.has(ref.href));
       if (!missing.length) return 'current';
-      stopped = true;
+      missing.forEach(ref => notifiedRefs.add(ref.href));
       showNotice();
       return 'outdated';
     } finally {
