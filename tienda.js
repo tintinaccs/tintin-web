@@ -279,7 +279,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-images-1-admin-live-20261016-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261017-domain-cutover-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -565,7 +565,7 @@ function goToCheckout() {
 
 function directWAProduct(product, variant = '') {
   if (!product) return;
-  const productUrl = new URL('/product', 'https://tintinaccesorios.pages.dev');
+  const productUrl = new URL('/product', 'https://tintinaccs.com');
   productUrl.search = '';
   productUrl.searchParams.set('id', String(product.id));
   const variantLine = variant ? `\n  Variante: ${variant}` : '';
@@ -1025,7 +1025,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-images-1-admin-live-20261016-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261017-domain-cutover-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1351,7 +1351,7 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
     ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
     : undefined;
   const available = !(stock !== null && stock <= 0);
-  const canonicalProductUrl = new URL('/product', 'https://tintinaccesorios.pages.dev');
+  const canonicalProductUrl = new URL('/product', 'https://tintinaccs.com');
   canonicalProductUrl.searchParams.set('id', String(product.id));
   const data = {
     '@context': 'https://schema.org/',
@@ -1393,7 +1393,7 @@ function _updateProductMeta(product, mainImgUrl) {
   productUrl.search = '';
   productUrl.searchParams.set('id', String(product.id));
   const url = productUrl.href;
-  const image = mainImgUrl || 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg';
+  const image = mainImgUrl || 'https://tintinaccs.com/assets/og-cover.jpg';
 
   document.title = title;
   setMeta('meta-description', 'content', description);
@@ -1903,7 +1903,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261015-images-1-admin-live-20261016-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261017-domain-cutover-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

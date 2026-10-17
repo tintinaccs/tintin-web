@@ -12,7 +12,7 @@ import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
   uploadImageToLibrary
-} from './biblioteca-multimedia.js?v=tintin-20261016-images-fidelity-1-admin-live-20261016-1';
+} from './biblioteca-multimedia.js?v=tintin-20261017-domain-cutover-1';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',

@@ -1,5 +1,5 @@
 // La lectura pública no descarga las herramientas de guardado administrativo.
-const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1')).withAdminSiteChange(action);
+const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1')).withAdminSiteChange(action);
 import './galeria-producto.js?v=tintin-20261015-images-1';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 /* =============================================================
@@ -10,8 +10,8 @@ import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=
    guarda únicamente la metadata y las URLs públicas de la biblioteca.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
-import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1-domain-prepared-20261012-6-pedidos-styles-20261013-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
+import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1';
 import {
   addDoc,
   collection,

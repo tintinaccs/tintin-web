@@ -121,3 +121,102 @@ body:has(.login-page).login-setup-open #login-profile-block [hidden] { display:n
 body:has(.login-page).login-setup-open #login-profile-name-field { grid-template-areas:none !important; }
 body:has(.login-page).login-setup-open .login-shell { margin-block:0 !important; }
 body:has(.login-page).login-setup-open .login-form-side { padding-block:20px !important; }
+
+/* Casillas con etiqueta sobre el contorno y prefijo integrado. */
+body:has(.login-page).login-setup-open :is(#login-profile-name-field, #login-profile-phone-field) {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  gap: 6px !important;
+}
+body:has(.login-page).login-setup-open #login-profile-block {
+  width: min(100%, 520px) !important;
+  gap: 24px !important;
+  padding-top: 10px;
+}
+body:has(.login-page).login-setup-open #login-profile-block .login-outlined-field {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  gap: 10px !important;
+  width: 100%;
+  min-width: 0;
+  min-height: 60px;
+  padding: 0 22px;
+  border: 1px solid var(--login-border, #F1BDD4);
+  border-radius: 999px;
+  background: #fff;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+body:has(.login-page).login-setup-open #login-profile-block .login-outlined-field > .login-email-label {
+  position: absolute;
+  top: 0;
+  left: 16px;
+  transform: translateY(-50%);
+  margin: 0 !important;
+  padding: 0 6px;
+  max-width: calc(100% - 44px);
+  background: #fff;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.3;
+  color: #595959;
+}
+body:has(.login-page).login-setup-open #login-profile-block .login-outlined-field > .login-email-input {
+  flex: 1;
+  width: 100% !important;
+  min-width: 0;
+  min-height: 58px !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  padding: 12px 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: #222;
+}
+body:has(.login-page).login-setup-open #login-profile-block .login-phone-prefix {
+  flex: none;
+  font-size: 16px;
+  color: #595959;
+}
+body:has(.login-page).login-setup-open #login-profile-block .login-outlined-field:focus-within {
+  border-color: var(--color-brand-primary, #F8AACA);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-brand-primary, #F8AACA) 35%, transparent);
+}
+body:has(.login-page).login-setup-open #login-profile-block .login-outlined-field:focus-within > label { color: #8a3155; }
+body:has(.login-page).login-setup-open #login-profile-block .login-outlined-field:has([aria-invalid="true"]) {
+  border-color: #b42318;
+  box-shadow: 0 0 0 1px #b42318;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body:has(.login-page).login-setup-open #login-profile-block .login-outlined-field {
+    animation: login-field-reveal .24s ease-out both;
+  }
+  body:has(.login-page).login-setup-open #login-profile-phone-field .login-outlined-field {
+    animation-delay: .06s;
+  }
+  @keyframes login-field-reveal {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(.login-page).login-setup-open #login-profile-block .login-outlined-field { transition: none; }
+}
+
+body:has(.login-page).login-setup-open #login-profile-block .login-profile-field-error:empty {
+  display: none !important;
+}
+body:has(.login-page).login-setup-open #login-profile-block #btn-save-profile {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(216, 79, 134, .14) !important;
+}

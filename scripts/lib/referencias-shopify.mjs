@@ -8,7 +8,7 @@ function shopifyHost(hostname) {
 }
 
 /** Find any remaining Shopify-hosted URL in public catalog records. */
-export function findShopifyHostedUrls(records, { baseUrl = 'https://tintinaccesorios.pages.dev' } = {}) {
+export function findShopifyHostedUrls(records, { baseUrl = 'https://tintinaccs.com' } = {}) {
   const references = [];
   const visit = (value, path) => {
     if (typeof value === 'string') {

@@ -163,3 +163,56 @@ for (const provider of ['google','emailOtp']) for (const [width,height] of [[390
     expect(await page.evaluate(()=>window.__saved.profileStatus)).toBe('active');
   });
 }
+
+for (const [width, height] of [
+  [320,568], [360,640], [375,812], [390,844], [414,896], [430,932], [844,390],
+  [768,1024], [820,1180], [1024,768], [1180,820],
+  [1280,720], [1366,768], [1440,900], [1920,1080], [2560,1440]
+]) {
+  test(`casillas Tintin integradas, accesibles y sin desborde en ${width}x${height}`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await page.route('**/__outlined-fields', route => route.fulfill({ contentType: 'text/html', body: fixture }));
+    await page.goto('/__outlined-fields');
+    const name = page.getByRole('textbox', { name: 'Nombre y apellido', exact: true });
+    const phone = page.getByRole('textbox', { name: 'Número de teléfono', exact: true });
+    await expect(name).toBeVisible();
+    await expect(phone).toBeVisible();
+    await expect(page.locator('#login-profile-block select')).toHaveCount(0);
+    await expect(page.locator('.login-phone-prefix')).toHaveText('+595');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const geometry = await page.locator('#login-profile-block').evaluate(el => {
+      const fields = [...el.querySelectorAll('.login-outlined-field')].map(x => x.getBoundingClientRect());
+      const button = el.querySelector('#btn-save-profile').getBoundingClientRect();
+      return {
+        aligned: fields.every(r => Math.abs(r.left - button.left) < 1 && Math.abs(r.width - button.width) < 1),
+        gap: fields[1].top - fields[0].bottom,
+        buttonGap: button.top - fields[1].bottom,
+        padding: getComputedStyle(el.querySelector('#login-profile-first-name')).paddingLeft,
+        fontSize: getComputedStyle(el.querySelector('#login-profile-phone')).fontSize
+      };
+    });
+    expect(geometry.aligned).toBe(true);
+    expect(geometry.gap).toBe(24);
+    expect(geometry.buttonGap).toBe(24);
+    expect(geometry.padding).toBe('0px');
+    expect(geometry.fontSize).toBe('16px');
+    for (const input of [name, phone]) {
+      await input.focus();
+      const field = input.locator('..');
+      await expect(field).toHaveCSS('border-radius', '999px');
+      const fits = await field.evaluate(el => {
+        const box = el.getBoundingClientRect();
+        const label = el.querySelector('label').getBoundingClientRect();
+        return box.left >= 0 && box.right <= innerWidth && label.left >= box.left && label.right <= box.right;
+      });
+      expect(fits).toBe(true);
+    }
+    await name.fill('María González');
+    await name.press('Enter');
+    await expect(phone).toBeFocused();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect(phone.locator('..')).toHaveCSS('animation-name', 'none');
+    await expect(phone.locator('..')).toHaveCSS('transition-duration', '0s');
+  });
+}

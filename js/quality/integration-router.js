@@ -29,7 +29,7 @@
     if (configured) return configured;
     const hostname = String(window.location.hostname || '').toLowerCase();
     if (isLegacyEdgeHost(hostname)) {
-      return 'https://tintinaccesorios.pages.dev';
+      return 'https://tintinaccs.com';
     }
     return '';
   }

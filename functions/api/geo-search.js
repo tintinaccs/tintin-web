@@ -6,7 +6,7 @@ import {
 
 // Photon permite búsqueda incremental; Nominatim público prohíbe autocomplete.
 // Caché edge, país acotado y timeout evitan tráfico duplicado o esperas infinitas.
-const APP_USER_AGENT = 'TintinAccesoriosCheckout/1.0 (+https://tintinaccesorios.pages.dev/)';
+const APP_USER_AGENT = 'TintinAccesoriosCheckout/1.0 (+https://tintinaccs.com/)';
 const CACHE_TTL_SECONDS = 21600; // 6 horas: direcciones no cambian de un rato a otro.
 const MAX_QUERY_LENGTH = 120;
 const DEFAULT_MAP_CENTER = { lat: -25.3007, lng: -57.6359 }; // Asunción, Paraguay.

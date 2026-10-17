@@ -1,4 +1,4 @@
-import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261012-auth-privacy-1-cliente-api-autenticado-js-domain-prepared-20261012-6-pedidos-styles-20261013-3-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1';
+import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
 
 const sections=['ventas-locales','clientes-compraron','espejos-sheets'];
 const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];

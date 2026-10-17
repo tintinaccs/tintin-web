@@ -1,5 +1,5 @@
 // La lectura pública no descarga las herramientas de guardado administrativo.
-const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1')).withAdminSiteChange(action);
+const withAdminSiteChange = async action => (await import('../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1')).withAdminSiteChange(action);
 import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 /* =============================================================
    TINTIN — Resolución centralizada de imágenes
@@ -12,7 +12,7 @@ import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import {
   doc,
   getDoc,
