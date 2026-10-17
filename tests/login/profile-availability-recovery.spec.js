@@ -188,14 +188,14 @@ for (const [width, height] of [
         gap: fields[1].top - fields[0].bottom,
         buttonGap: button.top - fields[1].bottom,
         padding: getComputedStyle(el.querySelector('#login-profile-first-name')).paddingLeft,
-        font: getComputedStyle(el.querySelector('#login-profile-phone')).fontSize
+        fontSize: getComputedStyle(el.querySelector('#login-profile-phone')).fontSize
       };
     });
     expect(geometry.aligned).toBe(true);
     expect(geometry.gap).toBe(24);
     expect(geometry.buttonGap).toBe(24);
     expect(geometry.padding).toBe('0px');
-    expect(geometry.font).toBe('16px');
+    expect(geometry.fontSize).toBe('16px');
     for (const input of [name, phone]) {
       await input.focus();
       const field = input.locator('..');

@@ -1,5 +1,5 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261012-auth-privacy-1-lecturas-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-connections-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261012-auth-privacy-1-app-check-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261017-domain-cutover-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 /**
  * TINTIN — Motor de esquema de colores del SUPER ADMIN (Super Admin →
  * Apariencia → Esquema de Super Admin), en vivo.
@@ -9,7 +9,7 @@ import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-202610
  * admin.html y admin-images.html. Un esquema del panel nunca toca
  * --color-* (el esquema público), así que jamás se "filtra" hacia afuera.
  */
-import { db } from '../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { doc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { ADMIN_TOKENS, buildDefaultTokenMap, normalizeLegacyBrandColor } from '../../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1';
 
@@ -77,5 +77,5 @@ async function subscribeToScheme(schemeId) {
 // admin-images.html comparte este motor de colores, pero no debe cargar ese
 // editor ni dejar observadores esperando una interfaz que allí no existe.
 if (document.getElementById('visual-editor')) {
-  import('../appearance/visual-studio-global-admin.js?v=tintin-20261012-auth-privacy-1-visual-studio-global-admin-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-palette-20261014-1-ui-reconciled-20261014-1-admin-live-20261016-1');
+  import('../appearance/visual-studio-global-admin.js?v=tintin-20261017-domain-cutover-1');
 }

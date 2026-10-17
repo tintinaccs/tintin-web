@@ -1,4 +1,4 @@
-import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261016-admin-live-1';
+import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 /*
  * Tintin Admin — aplicar al catálogo real un CSV de Shopify ya revisado.
  *
@@ -10,7 +10,7 @@ import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativ
  * producto ya editado y nunca borra nada. No escribe el inventario privado.
  */
 
-import { db } from '../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2';
+import { db } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { doc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   assignGroupCollection,

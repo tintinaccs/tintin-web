@@ -15,13 +15,13 @@
 // Salida: el modal del alta permite cerrar la sesión; la persona vuelve a la
 // tienda como visitante, sin cuenta.
 
-import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20261012-auth-privacy-1-firebase-js-domain-prepared-20261012-6-pedidos-styles-20261013-1-security-ready-20261013-2";
-import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2-ui-fixes-20261014-1-admin-live-20261016-1";
+import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
+import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1";
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1";
-import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20261012-auth-privacy-1-roles-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
+import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el
 // uid y no un simple `true`: si se cambia de cuenta en la misma pestaña, el

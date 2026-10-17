@@ -7,7 +7,7 @@
 
 import {
   recalculateOrderOwnerStats
-} from '../../core/store/estadisticas-pedidos.js?v=tintin-20261012-auth-privacy-1-estadisticas-pedidos-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2';
+} from '../../core/store/estadisticas-pedidos.js?v=tintin-20261017-domain-cutover-1';
 
 (function () {
   'use strict';

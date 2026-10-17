@@ -11,7 +11,7 @@ export function orderContactLinks(order, orderId) {
   let phone = clean(order.userPhone).replace(/\D/g, '');
   if (/^09\d{8}$/.test(phone)) phone = `595${phone.slice(1)}`;
   const shortId = clean(order.shortId || order.orderNumber || orderId);
-  const orderUrl = `https://tintinaccesorios.pages.dev/perfil#pedido-${encodeURIComponent(orderId)}`;
+  const orderUrl = `https://tintinaccs.com/perfil#pedido-${encodeURIComponent(orderId)}`;
   const customerMessage = `Hola, recibimos tu pedido #${shortId}. Podés ver tu ticket y el seguimiento acá: ${orderUrl}. Vamos a coordinar la entrega con vos.`;
   const customer = /^\d{8,20}$/.test(phone) ? `https://wa.me/${phone}?text=${encodeURIComponent(customerMessage)}` : '';
   const method = clean(order.shippingMethod || shipping.method);

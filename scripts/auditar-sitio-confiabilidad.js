@@ -140,7 +140,7 @@ check('GitHub Pages usa el servicio geográfico de Cloudflare',
   activity.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
   activity.includes("apiUrl('site-activity')") &&
   activityApi.includes('const cf = request.cf || {}') &&
-  functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
+  functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccs.com'") &&
   functionOrigin.includes("hostname.endsWith('github.io')") &&
   !activity.includes('/.netlify/functions/'));
 check('Los previews de Cloudflare no escriben estadísticas',
