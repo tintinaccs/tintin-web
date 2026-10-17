@@ -37,7 +37,7 @@ test('la señal de datos no pide recarga en ninguna página, incluido el panel d
     await page.goto(path);
     await page.getByRole('textbox').fill('Sin perder mi trabajo');
     await page.addScriptTag({ type: 'module', content: `
-      import { notifySiteContentChange } from '/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1';
+      import { notifySiteContentChange } from '../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1';
       let received = 0;
       window.addEventListener('tintin:site-content-updated', () => received++);
       notifySiteContentChange();

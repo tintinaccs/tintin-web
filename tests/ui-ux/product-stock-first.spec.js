@@ -88,13 +88,13 @@ for (const width of [390, 1440]) test(`catálogo actualiza stock y foto sin pedi
   await expect(card.locator('img')).toHaveAttribute('src', /silver.svg/);
   items[0] = { ...product, variantInventory: [{ variant: 'Dorado', stock: 2 }, { variant: 'Plateado', stock: 0 }] };
   await page.evaluate(async () => {
-    const module = await import('/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1');
+    const module = await import('../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1');
     module.notifySiteContentChange();
   });
   await expect(card.locator('img')).toHaveAttribute('src', /gold.svg/);
   await expect(page.locator('#tt-version-notice')).toHaveCount(0);
   items[0] = { ...items[0], variantInventory: items[0].variantInventory.map(row => ({ ...row, stock: 0 })) };
-  await page.evaluate(async () => (await import('/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1')).notifySiteContentChange());
+  await page.evaluate(async () => (await import('../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1')).notifySiteContentChange());
   await expect(card.locator('.tt-stock-label')).toBeVisible();
   await expect(page.locator('#tt-version-notice')).toHaveCount(0);
 });

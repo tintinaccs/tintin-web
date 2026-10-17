@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b1217d20e932841a483e0abab9ccdbc4cfbfc892efe1e8a3b067a496a7254243",
+  "sourceFingerprint": "9f1ac4e95e38452ef3afc21f9c4a5391058b298affb134aee381a971c47d44cc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1298,
     "textFiles": 1212,
-    "totalBytes": 24507175,
+    "totalBytes": 24507190,
     "pages": 19,
     "modules": 908
   },
@@ -43973,8 +43973,8 @@
     },
     {
       "path": "tests/operations/cambios-tienda.spec.js",
-      "bytes": 3808,
-      "sha256": "ea8d71fb1196e0552f861a24ecb4d01d031c1ea58382cfc89f6241dc13385ec6",
+      "bytes": 3813,
+      "sha256": "43358cf4aefb6d368535d73520721fa98ff4cd3cbf58f6f9b9acafb96238a9f7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43993,8 +43993,8 @@
           "line": 12
         },
         {
-          "raw": "/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
-          "target": "tests/operations/js/quality/vigilancia-version.js",
+          "raw": "../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
+          "target": "js/quality/vigilancia-version.js",
           "dynamic": false,
           "line": 40
         }
@@ -48315,22 +48315,22 @@
     },
     {
       "path": "tests/ui-ux/product-stock-first.spec.js",
-      "bytes": 7942,
-      "sha256": "107e61b4af052df5a27844821e8ccf37d733daa00d66db49498d14f428c0bd47",
+      "bytes": 7952,
+      "sha256": "7467de69d365c511ef83702c14ecc4b0546c3ff8c65e64074c98a213d8db9046",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
-          "target": "tests/ui-ux/js/quality/vigilancia-version.js",
+          "raw": "../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
+          "target": "js/quality/vigilancia-version.js",
           "dynamic": true,
           "line": 91
         },
         {
-          "raw": "/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
-          "target": "tests/ui-ux/js/quality/vigilancia-version.js",
+          "raw": "../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
+          "target": "js/quality/vigilancia-version.js",
           "dynamic": true,
           "line": 97
         }
@@ -56006,8 +56006,8 @@
     {
       "path": "tests/operations/cambios-tienda.spec.js",
       "extension": ".js",
-      "bytes": 3808,
-      "sha256": "ea8d71fb1196e0552f861a24ecb4d01d031c1ea58382cfc89f6241dc13385ec6"
+      "bytes": 3813,
+      "sha256": "43358cf4aefb6d368535d73520721fa98ff4cd3cbf58f6f9b9acafb96238a9f7"
     },
     {
       "path": "tests/operations/central-loader-ui.spec.js",
@@ -56774,8 +56774,8 @@
     {
       "path": "tests/ui-ux/product-stock-first.spec.js",
       "extension": ".js",
-      "bytes": 7942,
-      "sha256": "107e61b4af052df5a27844821e8ccf37d733daa00d66db49498d14f428c0bd47"
+      "bytes": 7952,
+      "sha256": "7467de69d365c511ef83702c14ecc4b0546c3ff8c65e64074c98a213d8db9046"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",
@@ -56911,26 +56911,7 @@
     }
   ],
   "sitemapRoutes": [],
-  "missingReferences": [
-    {
-      "page": "tests/operations/cambios-tienda.spec.js",
-      "target": "tests/operations/js/quality/vigilancia-version.js",
-      "raw": "/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
-      "line": 40
-    },
-    {
-      "page": "tests/ui-ux/product-stock-first.spec.js",
-      "target": "tests/ui-ux/js/quality/vigilancia-version.js",
-      "raw": "/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
-      "line": 91
-    },
-    {
-      "page": "tests/ui-ux/product-stock-first.spec.js",
-      "target": "tests/ui-ux/js/quality/vigilancia-version.js",
-      "raw": "/js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1",
-      "line": 97
-    }
-  ],
+  "missingReferences": [],
   "routeReferences": [
     {
       "file": "catalogo.html",
