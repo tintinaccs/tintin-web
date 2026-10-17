@@ -28,6 +28,7 @@ const inventory = read('js/admin/products/integridad-inventario-admin.js');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
 const admin = read('js/admin/admin-app.js');
 const orderCrud = read('js/admin/orders/pedidos-superadmin-crud.js');
+const trashControl = read('cloudflare/order-trash-controls.js');
 const emailClient = read('js/email/notificacion-pedido-resend.js');
 const emailBridge = read('js/pages/checkout/checkout-puente-correo.js');
 const emailServer = read('functions/api/order-email.js');
@@ -144,10 +145,20 @@ check(
   admin.includes('movedOrders = []') && admin.includes('failed = []') &&
     admin.includes('failed.forEach(item => _selectedOrders.add(item.id))') &&
     admin.includes('TintinOrderAdmin.trashOrder') &&
-    orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado', { baseChangeId: expectedChangeId })") &&
-    orderCrud.includes("allowedOrderStatuses(before).includes('cancelado')") &&
-    orderCrud.includes("(live.lastChangeId || '') !== expectedChangeId"),
-  'La cancelación permitida debe reconciliar stock y versión antes de archivar; los entregados deben conservar su reserva e historial.'
+    orderCrud.includes("(before.lastChangeId || '') !== options.baseChangeId") &&
+    orderCrud.includes('returnItems: options.returnItems, baseChangeId: options.baseChangeId') &&
+    trashControl.includes("actor?.role !== 'superadmin'") &&
+    trashControl.includes('version !== baseChangeId') &&
+    trashControl.includes('selectedReturns(order, input.returnItems)') &&
+    trashControl.includes('row.qty > bought') &&
+    trashControl.includes('!orderReservesInventory(order)') &&
+    trashControl.includes('order.trashMeta?.returnedItems || []') &&
+    trashControl.includes('restore ? -quantity : quantity') &&
+    trashControl.includes('currentDocument: condition(source)') &&
+    trashControl.includes('await commit(env, writes)') &&
+    trashControl.includes('originalStatus: order.status') &&
+    !trashControl.includes("after.status = 'cancelado'"),
+  'Archivar exige Super Admin, versión vigente y cantidades elegidas del snapshot; stock y papelera se escriben juntos, restaurar invierte la decisión y conserva estado e historial.'
 );
 
 // Administración

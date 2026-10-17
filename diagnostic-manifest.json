@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ef383e40c5db04439048135d1b790554526bd5b23f2be891203b703eda0d8ce4",
+  "sourceFingerprint": "04303f9178a62867a3c5ae81300d8de8be5c21c34ead580fab22b64a0940d23c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1308,
     "textFiles": 1222,
-    "totalBytes": 24588836,
+    "totalBytes": 24591019,
     "pages": 19,
     "modules": 918
   },
@@ -33756,8 +33756,8 @@
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
-      "bytes": 7874,
-      "sha256": "95a7be41b590229fa83d3d672d0f59ca71910f939c88ea804012586fb13c3ab6",
+      "bytes": 8570,
+      "sha256": "636555a296aa595792042429700f95a035448f6c86deedf798ba160cc856143c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35043,8 +35043,8 @@
     },
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
-      "bytes": 11046,
-      "sha256": "c9da087792672e53cb59c3d26abcaf11a36b12ccd8a45258c6c25d6e24521609",
+      "bytes": 11736,
+      "sha256": "3d116018081267d35f89c1d0e3045b063567f34e58ecaaaa0766c2ab7217107e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -51215,8 +51215,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 581966,
-      "sha256": "4451d9c4b02eaa51e01feba6c09ec1c3b2e65379d451833eb725d3487e551874"
+      "bytes": 582763,
+      "sha256": "75f39eeb48e7b7a573e2c74b9cb503b7a2df299340f571b5671d948ea69aa320"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -54467,8 +54467,8 @@
     {
       "path": "scripts/auditar-critico-recuperacion.js",
       "extension": ".js",
-      "bytes": 7874,
-      "sha256": "95a7be41b590229fa83d3d672d0f59ca71910f939c88ea804012586fb13c3ab6"
+      "bytes": 8570,
+      "sha256": "636555a296aa595792042429700f95a035448f6c86deedf798ba160cc856143c"
     },
     {
       "path": "scripts/auditar-css-cascada.mjs",
@@ -54749,8 +54749,8 @@
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
       "extension": ".js",
-      "bytes": 11046,
-      "sha256": "c9da087792672e53cb59c3d26abcaf11a36b12ccd8a45258c6c25d6e24521609"
+      "bytes": 11736,
+      "sha256": "3d116018081267d35f89c1d0e3045b063567f34e58ecaaaa0766c2ab7217107e"
     },
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
@@ -59770,7 +59770,7 @@
           },
           {
             "file": "scripts/auditar-nivel-2-comercio.js",
-            "line": 166,
+            "line": 177,
             "operation": "doc"
           },
           {

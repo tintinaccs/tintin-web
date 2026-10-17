@@ -1,3 +1,7 @@
+## 2026-10-17 — Alinear contratos de archivo con devolución seleccionada
+
+Codex /root. CI39077099575 superó rutas y falló en Nivel2 por exigir llamadas retiradas a cancelación automática al archivar. Se actualizan esa aserción y su duplicada crítica para comprobar el dominio de servidor vigente: Super Admin, comparación de versión, cantidades del snapshot hasta lo comprado y sólo con reserva, precondición de origen, lote atómico, restauración de unidades registradas y conservación del estado histórico. No cambian runtime, privilegios ni umbrales. PASS_LOCAL: auditor comercial32 comprobaciones; crítico13;18 pruebas conductuales existentes de devolución0/parcial/total, variantes, concurrencia, idempotencia, reinicios y denegaciones. CI exacta y producción pendientes.
+
 ## 2026-10-17 — Registrar endpoint administrativo integrado
 
 Codex /root. CI39076860446 falló en integraciones canónicas porque el commit concurrente77cbd añadió functions/api/admin-commerce-controls.js sin su inclusión en _routes.json. Se agrega únicamente /api/admin-commerce-controls a la configuración explícita, sin ampliar comodines ni permisos. Auditor canónico reproducido FAIL en CI y PASS_LOCAL tras registrar la ruta (101rutas). Se conserva íntegro el código responsive, aviso y Tu selección. Plan de mantenimiento y diagnóstico regenerados; CI exacta y publicación pendientes.
