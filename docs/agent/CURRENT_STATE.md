@@ -1,3 +1,7 @@
+## 2026-10-17 — Maestro verifica el controlador real de estados
+
+Codex /root. CI39077810559 aprobó build, contrato estático completo, operaciones/cuenta/sync y reglas Firestore; falló Maestro al exigir transitionStatus en pedidos-superadmin-crud, donde su única llamada antigua era cancelar automáticamente al archivar. La edición sigue en TintinInventoryIntegrity.updateEditedOrder y los cambios de estado en admin-app siguen en TintinInventoryIntegrity.transitionStatus. Se exigen ambas llamadas exactas en sus controladores reales; no se cambia runtime ni se retira cobertura de inventario. PASS_LOCAL: bloque completo de seis auditores Maestro/catálogo, conexiones25/25 y responsive5 tamaños320/390/768/1366/1440 sin overflow. Nueva CI y publicación pendientes.
+
 ## 2026-10-17 — Registro de caché de módulos nuevos
 
 Codex /root. CI39077531037 detectó que la tipografía actualizada conservaba hashes anteriores en el registro candidato. Confirmado main64a sin ambos módulos nuevos: se aplica el procedimiento indicado por el auditor (baseline/approvals desde main y cache-versioning:write) para registrar sus bytes todavía no publicados. No se reutilizan URLs ya publicadas. PASS_LOCAL: build:pages completo, rutas/CSP/diagnóstico reproducibles y auditor340 archivos/66cargas dinámicas, cinco históricos conservados. No cambian runtime ni referencias respecto al commit tipográfico verificado. CI exacta/merge/publicación pendientes.
