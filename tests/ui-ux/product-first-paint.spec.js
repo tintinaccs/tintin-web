@@ -15,8 +15,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
     await expect(page.locator('script[src*="resenas-producto.js"]')).toHaveCount(0);
     await expect(page.locator('#tinsel-root')).toHaveCount(1);
     await expect(page.locator('#tinsel-root .tinsel-box')).toHaveCount(1);
-    // Al restaurar Tu selección, relacionados ocupa la tercera sección alternada.
-    await expect(page.locator('.tt-related-section')).toHaveCSS('background-color', 'rgb(253, 236, 242)');
+    await expect(page.locator('.tt-related-section')).toHaveCSS('background-color', 'rgb(248, 170, 202)');
     await page.evaluate(() => {
       document.getElementById('product-grid').style.display = 'grid';
       document.getElementById('product-loading').style.display = 'none';
