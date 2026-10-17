@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "430e48760b7974aa30310f5a2ac5ef807d1166afbfcd6e7090ccb88721687227",
+  "sourceFingerprint": "5f821a20169c2400705cff5c8daae7eff8141310cf7d399b22c6721fb4baa90c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1300,
     "textFiles": 1214,
-    "totalBytes": 24522909,
+    "totalBytes": 24525294,
     "pages": 19,
     "modules": 910
   },
@@ -46178,8 +46178,8 @@
     },
     {
       "path": "tests/runtime/error-monitor.spec.js",
-      "bytes": 5235,
-      "sha256": "bd221ca6947b7434710604bcbc72a76c88cc251a84759155d08d8a84e5e1d68b",
+      "bytes": 6374,
+      "sha256": "c0e121f649689b3a4dcaf6d6ee001ed02ad945fe04c23f2c131240c24d64725d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46205,6 +46205,14 @@
         {
           "url": "http://127.0.0.1:4174/js/other-reader.js:1:1",
           "line": 35
+        },
+        {
+          "url": "http://127.0.0.1:4174/site-version.json",
+          "line": 46
+        },
+        {
+          "url": "http://127.0.0.1:4174/js/quality/vigilancia-version.js",
+          "line": 46
         }
       ]
     },
@@ -46243,8 +46251,8 @@
     },
     {
       "path": "tests/runtime/runtime-error-monitor.js",
-      "bytes": 3485,
-      "sha256": "1f5a02b1a87cc160470cd09cbcad92c4f92d1136dd714ecd958bd94913197352",
+      "bytes": 3968,
+      "sha256": "ac945e401edd4c2f4a306753b1cde72a397dfd276549d45149f8d4f6f35f76a0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46262,6 +46270,10 @@
         {
           "url": "http://127.0.0.1:4174/js/components/navigation/compartido/apariencia-global.js",
           "line": 32
+        },
+        {
+          "url": "http://127.0.0.1:4174/js/quality/vigilancia-version.js",
+          "line": 37
         }
       ]
     },
@@ -50868,8 +50880,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 572782,
-      "sha256": "600cb5bd4465cfe5c068e5ae15c5f9809e0b77cbeb2fded966cdc622b91aaf08"
+      "bytes": 573545,
+      "sha256": "8f1f61d077a0a88f504cc844bd24653b712ea27911ba6a7fb1be6d28f485da9c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56466,8 +56478,8 @@
     {
       "path": "tests/runtime/error-monitor.spec.js",
       "extension": ".js",
-      "bytes": 5235,
-      "sha256": "bd221ca6947b7434710604bcbc72a76c88cc251a84759155d08d8a84e5e1d68b"
+      "bytes": 6374,
+      "sha256": "c0e121f649689b3a4dcaf6d6ee001ed02ad945fe04c23f2c131240c24d64725d"
     },
     {
       "path": "tests/runtime/invoice-component.spec.js",
@@ -56490,8 +56502,8 @@
     {
       "path": "tests/runtime/runtime-error-monitor.js",
       "extension": ".js",
-      "bytes": 3485,
-      "sha256": "1f5a02b1a87cc160470cd09cbcad92c4f92d1136dd714ecd958bd94913197352"
+      "bytes": 3968,
+      "sha256": "ac945e401edd4c2f4a306753b1cde72a397dfd276549d45149f8d4f6f35f76a0"
     },
     {
       "path": "tests/runtime/welcome-component.spec.js",
