@@ -16,6 +16,7 @@ test('App Check tardío mantiene la escucha pendiente sin reintentos y recupera 
       subscriptions.push({ data, error });
       return () => stopped++;
     },
+    notifySiteContentChange() {},
     createSiteRevisionObserver: () => value => revisions.push(value?.revision),
     setTimeout: (fn, delay) => { timers.push({ fn, delay }); return timers.length; },
     clearTimeout() {},
@@ -54,6 +55,7 @@ test('la revisión recupera permisos/conexión con reintentos acotados y descart
   let nextTimer = 0, stopped = 0;
   vm.runInNewContext(source, {
     window, document, db: {}, doc: (...parts) => parts, console: { warn() {} },
+    notifySiteContentChange() {},
     createSiteRevisionObserver: () => value => revisions.push(value?.revision),
     onAppCheckSnapshot: (_ref, options, data, error) => {
       assert.equal(options.includeMetadataChanges, true);
