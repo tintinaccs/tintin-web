@@ -164,7 +164,7 @@ check(
 
 check(
   'La Fase 7 forma parte de audit:final',
-  pkg.scripts['audit:phase7-catalog'] === 'node scripts/auditar-fase-7-catalogo.js' &&
+  pkg.scripts['audit:phase7-catalog'] === 'node scripts/auditar-fase-7-catalogo.js && node --test tests/catalog/available-color-card.test.mjs' &&
     pkg.scripts['audit:final'].includes('audit:phase7-catalog'),
   'La auditoría de catálogo debe ejecutarse en cada cierre integral.'
 );

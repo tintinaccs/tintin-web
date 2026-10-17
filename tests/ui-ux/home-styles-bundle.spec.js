@@ -33,12 +33,32 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1440,9
       await page.locator('#tt-hero-img').evaluate(img => img.decode());
       return page.screenshot({ animations: 'disabled' });
     }
+    async function captureFooter() {
+      const footer = page.locator('footer');
+      const logo = page.locator('footer .tt-logo-img');
+      await logo.scrollIntoViewIfNeeded();
+      await expect.poll(() => logo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+      await logo.evaluate(img => img.decode());
+      await page.evaluate(() => document.fonts.ready);
+      const viewport = page.viewportSize();
+      const { height } = await footer.boundingBox();
+      // Un pie más alto que el viewport puede colocar el WhatsApp fijo en
+      // distintas posiciones de la captura al recargar. Capturar el pie
+      // completo en un viewport suficiente conserva también ese control.
+      if (height > viewport.height) await page.setViewportSize({ width:viewport.width, height:Math.ceil(height)+1 });
+      try { return await footer.screenshot({ animations: 'disabled' }); }
+      finally { await page.setViewportSize(viewport); }
+    }
     const baseline = await capture();
-    const baselineFooter = await page.locator('footer').screenshot({ animations: 'disabled' });
+    const baselineFooter = await captureFooter();
     async function expectSameScreen(actual, label, expected = baseline) {
       if (!actual.equals(expected)) {
-        await testInfo.attach('original', { body: expected, contentType: 'image/png' });
-        await testInfo.attach(label, { body: actual, contentType: 'image/png' });
+        const originalPath = testInfo.outputPath('original.png');
+        const actualPath = testInfo.outputPath(`${label}.png`);
+        fs.writeFileSync(originalPath, expected);
+        fs.writeFileSync(actualPath, actual);
+        await testInfo.attach('original', { path: originalPath, contentType: 'image/png' });
+        await testInfo.attach(label, { path: actualPath, contentType: 'image/png' });
       }
       expect(actual.equals(expected), label).toBe(true);
     }
@@ -46,13 +66,13 @@ for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1440,9
     requests.length = 0;
     html = bundled;
     await expectSameScreen(await capture(), 'bundle');
-    await expectSameScreen(await page.locator('footer').screenshot({ animations: 'disabled' }), 'pie-bundle', baselineFooter);
+    await expectSameScreen(await captureFooter(), 'pie-bundle', baselineFooter);
     expect(requests).toEqual(['/css/generated/inicio.css']);
     expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
     requests.length = 0;
     failBundle = true;
     await expectSameScreen(await capture(), 'respaldo');
-    await expectSameScreen(await page.locator('footer').screenshot({ animations: 'disabled' }), 'pie-respaldo', baselineFooter);
+    await expectSameScreen(await captureFooter(), 'pie-respaldo', baselineFooter);
     expect(requests.length).toBeGreaterThan(20);
     await expect(page.locator('link[data-tt-style-bundle]')).toHaveCount(0);
   });
