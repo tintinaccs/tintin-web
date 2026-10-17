@@ -190,7 +190,9 @@ const BUDGETS = {
   // demás páginas informativas mantienen el límite first-party de 120; el
   // peso total sigue contando también los recursos externos.
   lightweightRequests: 120,
-  aboutRequests: 127,
+  // Incluye el único marcador JSON de versión al abrir una pestaña. Sustituye
+  // la descarga periódica del HTML completo; los demás límites se conservan.
+  aboutRequests: 128,
   // Las páginas informativas comparten el shell público (CSS, navegación,
   // fuentes y runtime de tienda) y también leen 'site_content' vía onSnapshot
   // en contenido-sitio.js, gateado por appCheckReady. Desde #725, firebase.js

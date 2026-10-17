@@ -1,16 +1,11 @@
 import { db } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { onAppCheckSnapshot } from '../core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { doc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { createSiteRevisionObserver } from './vigilancia-version.js?v=tintin-20261017-update-notice-2';
+import { createSiteRevisionObserver, notifySiteContentChange } from './vigilancia-version.js?v=tintin-20261017-updates-merged-1';
 
 if (!window.TintinSiteChangesBooted) {
   window.TintinSiteChangesBooted = true;
-  const receive = createSiteRevisionObserver(() => {
-    window.dispatchEvent(new CustomEvent('tintin:site-content-updated'));
-    import('./vigilancia-version.js?v=tintin-20261017-update-notice-2')
-      .then(module => module.notifySiteContentChange())
-      .catch(error => console.warn('[site-change] No se pudo mostrar el aviso:', error?.message));
-  });
+  const receive = createSiteRevisionObserver(notifySiteContentChange);
   let stop = null, retryTimer = 0, attempt = 0, generation = 0, disposed = false;
   const delays = [1400, 4000, 12000, 30000];
   function start() {

@@ -19,6 +19,20 @@ async function mount(page, { cookies = false } = {}) {
   return (value = 'b') => { revision = value.repeat(64); };
 }
 
+test('marcador válido evita descargar de nuevo el documento HTML', async ({ page }) => {
+  const documents = [], markers = [];
+  page.on('request', request => {
+    if (request.resourceType() === 'document') documents.push(request.url());
+    if (new URL(request.url()).pathname === '/site-version.json') markers.push(request.url());
+  });
+  await mount(page); // Una referencia inicial y una comprobación explícita.
+  expect(markers).toHaveLength(2);
+  expect(documents).toHaveLength(1);
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+  expect(markers).toHaveLength(3);
+  expect(documents).toHaveLength(1);
+});
+
 for (const [width, height] of [[320,568],[390,844],[430,932],[568,320],[844,390],[768,1024],[1024,768],[1280,720],[1366,768],[1920,1080]]) {
   test(`publicación sin cambios de CSS/JS avisa y permite actualizar · ${width}x${height}`, async ({ page }) => {
     await page.setViewportSize({ width, height });

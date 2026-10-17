@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { unknownRefs, versionedRefs } from '../../js/quality/vigilancia-version.js';
+import { unknownRefs, versionedRefs, notifySiteContentChange } from '../../js/quality/vigilancia-version.js';
 
 const read = file => fs.readFileSync(new URL(`../../${file}`, import.meta.url), 'utf8');
 
@@ -60,4 +60,18 @@ test('el cargador lo inicia en ambos runtimes, fuera del checkout y de iframes',
   assert.equal(loader.match(/^\s*bootVersionWatch\(\);/gm)?.length, 2);
   assert.match(loader, /if \(isVisualPreviewFrame \|\| framed\) return;/);
   assert.match(loader, /checkout\(\?:\\\.html\)\?\$/);
+});
+
+// La publicación de datos no representa una versión nueva de la aplicación.
+test('los cambios de datos emiten la señal de sincronización sin acceder al DOM ni recargar', () => {
+  const previous = globalThis.window;
+  const events = [];
+  globalThis.window = { dispatchEvent: event => events.push(event.type) };
+  try {
+    notifySiteContentChange();
+    assert.deepEqual(events, ['tintin:site-content-updated']);
+  } finally {
+    if (previous === undefined) delete globalThis.window;
+    else globalThis.window = previous;
+  }
 });

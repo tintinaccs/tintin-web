@@ -251,7 +251,10 @@ function boot() {
 }
 
 export function notifySiteContentChange() {
-  showNotice('Hay cambios nuevos en la tienda. Actualizá la página para verlos.');
+  // Los datos se actualizan mediante sus suscripciones; esta señal permite
+  // refrescar vistas administrativas sin interrumpir formularios en edición.
+  // El aviso con recarga queda reservado a una nueva versión de JS/CSS.
+  window.dispatchEvent(new CustomEvent('tintin:site-content-updated'));
 }
 
 if (typeof window !== 'undefined' && typeof document !== 'undefined' && !/(?:^|\/)checkout(?:\.html)?\/?$/i.test(location.pathname)) boot();
