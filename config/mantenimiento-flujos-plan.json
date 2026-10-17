@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "036097b55b7b33c695e5b10071580f0d5d6664ad",
-  "reason": "Footer y botones responsive; aviso continuo de publicaciones en todos los tamaños, con posposición por versión; Tu selección dentro de la ficha, carrito canónico y pruebas específicas.",
+  "reason": "Footer y botones responsive; aviso continuo por versión; Tu selección dentro de la ficha y regresiones nuevas incorporadas al comando habitual de UI, con pruebas específicas.",
   "files": [
     {
       "path": "_headers",
@@ -102,6 +102,11 @@
       "path": "nosotros.html",
       "oldHash": "41aa480db66a8d08f922251708f9f89f7832266596a0b29edadb06780996bd3b",
       "newHash": "c1aa55c542511bd45607b4d91260c1d8c147e68f385627131ef11a4f762d8efa"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "ea62e550d821ba598a8f14a65a418c71951d7f11c967ceec2072b1124a8a21a9",
+      "newHash": "c4b8410b1f4f1666dbb4395bd54a9133b1bafc004e8fdb59868cbc6fefafcf3c"
     },
     {
       "path": "perfil.html",
