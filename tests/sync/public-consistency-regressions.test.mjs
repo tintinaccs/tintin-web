@@ -42,3 +42,20 @@ test('catalog load error stays an error through the maintenance guard', () => {
  vm.createContext(c);vm.runInContext(block(read('js/pages/catalog/mantenimiento-catalogo.js'),'  function setReady()','  function normalizeUrlState()'),c);vm.runInContext('guardCatalogSurface()',c);
  assert.equal(node.dataset.state,'error');assert(!node.textContent.includes('Catálogo actualizado'));
 });
+
+test('una revisión de datos renueva el catálogo sin TTL y conserva la suscripción de la ficha', async () => {
+ const callbacks = {}, calls = [];
+ const location = { pathname: '/catalogo' };
+ const src = read('js/core/store/estado-productos.js');
+ const listener = block(src, "window.addEventListener('tintin:site-content-updated'", 'attachSearchDemand();');
+ vm.runInNewContext(listener, { location, window: { addEventListener: (name, fn) => callbacks[name] = fn },
+   ensureProductsForCurrentPage: options => { calls.push(options.force); return Promise.resolve([]); } });
+ callbacks['tintin:site-content-updated']();
+ assert.deepEqual(calls, [true]);
+ location.pathname = '/product.html';
+ callbacks['tintin:site-content-updated']();
+ assert.deepEqual(calls, [true]);
+ location.pathname = '/';
+ callbacks['tintin:site-content-updated']();
+ assert.deepEqual(calls, [true, true]);
+});

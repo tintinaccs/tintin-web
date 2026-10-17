@@ -572,6 +572,13 @@ window.TintinProductsStore = {
   getReadBudget: () => window.TintinReadBudget || null
 };
 
+// La revisión confirmada invalida el TTL de la vista actual sin recargar.
+// La ficha conserva su suscripción de stock y sus selecciones en curso.
+window.addEventListener('tintin:site-content-updated', () => {
+  if (/(^|\/)product(?:\.html)?$/.test(location.pathname.toLowerCase())) return;
+  ensureProductsForCurrentPage({ force: true }).catch(() => {});
+});
+
 attachSearchDemand();
 ensureProductsForCurrentPage().catch(error => {
   window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
