@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "64a17c4a89e7b4df53ca84d3efc7b534f83870e0",
-  "reason": "Publicacion autorizada conjunta PR1150: responsive y versiones, reinicios por indicador y devolucion elegida;103 Node pedidos,237 cuentas/checkout,51 Chromium y auditorias. Registrar ruta exacta omitida del endpoint en Cloudflare; auditor de integraciones PASS.",
+  "reason": "Publicacion autorizada conjunta PR1150: responsive y versiones, reinicios por indicador y devolucion elegida;103 Node pedidos,237 cuentas/checkout,51 Chromium y auditorias. Registrar ruta exacta omitida del endpoint en Cloudflare; auditor de integraciones PASS. Registrar hashes de tipografia de modulos nuevos no publicados, build completo aprobado.",
   "files": [
     {
       "path": "_headers",
@@ -151,7 +151,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "bd7f04fd11fc59dc8f95491beffabea5e702c9686163bd03550665efb5b1574d",
-      "newHash": "322528c4478fa462b8d70d6bf8a4c343921d8b4ad0386b4e6d17c2dab67d3f49"
+      "newHash": "df580bb143d80d5f9fdf70858850eda9fad6e17fc1371f647c263fb1292af680"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",

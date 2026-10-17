@@ -1,3 +1,7 @@
+## 2026-10-17 — Registro de caché de módulos nuevos
+
+Codex /root. CI39077531037 detectó que la tipografía actualizada conservaba hashes anteriores en el registro candidato. Confirmado main64a sin ambos módulos nuevos: se aplica el procedimiento indicado por el auditor (baseline/approvals desde main y cache-versioning:write) para registrar sus bytes todavía no publicados. No se reutilizan URLs ya publicadas. PASS_LOCAL: build:pages completo, rutas/CSP/diagnóstico reproducibles y auditor340 archivos/66cargas dinámicas, cinco históricos conservados. No cambian runtime ni referencias respecto al commit tipográfico verificado. CI exacta/merge/publicación pendientes.
+
 ## 2026-10-17 — Tipografía de diálogos administrativos integrados
 
 Codex /root. CI39077317678 pasó Nivel2 y detectó cuatro declaraciones font:inherit no conformes en los nuevos diálogos de devolución/estadísticas. Se declara Montserrat como el resto del panel, con tamaño y alto de línea heredados; no cambia comportamiento ni permisos. PASS_LOCAL: auditor tipográfico34920 comprobaciones;6 Chromium a320/768/1440 de ambos diálogos, persistencia de reinicio simulado, devolución elegida, límites, cancelar y validación. Los módulos aún no publicados en main conservan sus referencias candidatas. Diagnóstico regenerado; CI exacta y publicación pendientes.

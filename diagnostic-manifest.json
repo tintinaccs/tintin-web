@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "84d2c1e9424bab8021f36be8bc68788a1414755bb38d8f1a7dd54f9f563d9029",
+  "sourceFingerprint": "56ae924f8eb00bfcda2cef6a940843e4aeba47fd9cfdfe679fc30a50e53b3eb2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1308,
     "textFiles": 1222,
-    "totalBytes": 24591892,
+    "totalBytes": 24592665,
     "pages": 19,
     "modules": 918
   },
@@ -50591,8 +50591,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 9371,
-      "sha256": "f33c2a0b520f90a6ef18480c886f989bd1d9c3ddba53139dbae4bf031cd56abc"
+      "bytes": 9460,
+      "sha256": "84c30af8bcd3771251b3b5d82bb26101e358428027b9aadcb54559674d73f45b"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50604,7 +50604,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "bb1ba02e300d0af98d0af1f6c0ceac748c50ae82520b3910a840c001ebdea20b"
+      "sha256": "bf9abd7aebc0a8ed6a291102e342e27ea5cd72f421f6af0cac473c2e9fc6b11d"
     },
     {
       "path": "config/public-site.json",
@@ -51215,8 +51215,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 583440,
-      "sha256": "3fc2326368da542b84788b31f72536723019a685d719c0968fe47bcf3df7d660"
+      "bytes": 584124,
+      "sha256": "9f88ab70f827beb1d5914f6f2131a7ad54fb7e72a14fa682a7023b1f185c2679"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -55032,7 +55032,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 71186,
-      "sha256": "322528c4478fa462b8d70d6bf8a4c343921d8b4ad0386b4e6d17c2dab67d3f49"
+      "sha256": "df580bb143d80d5f9fdf70858850eda9fad6e17fc1371f647c263fb1292af680"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
