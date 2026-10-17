@@ -6,7 +6,7 @@ PASS_LOCAL: 26 regresiones Chromium (18 tamaños de 320 a 2560 px, ambas orienta
 
 Build de Pages y repetición sin drift PASS_LOCAL: 19 páginas del manifiesto, CSP para 38 rutas y caché de 336 recursos/66 cargas dinámicas. Versiones nuevas registradas sin reutilizar URLs inmutables. Plan nativo contra la base indicada: 24 archivos y 28 registros afectados; auditor de protección correcto (78 registros/544 archivos). Sin cambios de datos, Auth, reglas, DNS ni publicación de esta corrección visual.
 
-PENDING: CI del candidato, revisión humana de mantenimiento protegido y publicación. GitHub dejó de aceptar la autenticación de esta sesión (Git y API/gh: `401 Bad credentials`), por lo que aún no se creó PR; se pidió reconectar la cuenta, sin solicitar tokens. No heredar PASS_CI del corte de dominio ni atribuir validación física de Safari/iPhone a Chromium local.
+PR de revisión: https://github.com/tintinaccs/tintin-web/pull/1150 (borrador), rama subida. PENDING: CI del candidato, revisión humana de mantenimiento protegido y publicación. No heredar PASS_CI del corte de dominio ni atribuir validación física de Safari/iPhone a Chromium local.
 
 ## 2026-10-17 — Continuación del cutover y PR1148 (en curso)
 
