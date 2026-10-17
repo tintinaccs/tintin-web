@@ -13,8 +13,10 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
     // La ficha pública no ofrece interacción social ni inicia el módulo de reseñas.
     await expect(page.locator('.tt-product-social-bar, #product-share, #product-reviews')).toHaveCount(0);
     await expect(page.locator('script[src*="resenas-producto.js"]')).toHaveCount(0);
-    await expect(page.locator('#tinsel-root, .tinsel, .tinsel-box')).toHaveCount(0);
-    await expect(page.locator('.tt-related-section')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(page.locator('#tinsel-root')).toHaveCount(1);
+    await expect(page.locator('#tinsel-root .tinsel-box')).toHaveCount(1);
+    // Al restaurar Tu selección, relacionados ocupa la tercera sección alternada.
+    await expect(page.locator('.tt-related-section')).toHaveCSS('background-color', 'rgb(253, 236, 242)');
     await page.evaluate(() => {
       document.getElementById('product-grid').style.display = 'grid';
       document.getElementById('product-loading').style.display = 'none';
@@ -26,9 +28,9 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
       return { border: css.borderTopWidth, radius: css.borderTopLeftRadius, shadow: css.boxShadow, padding: css.padding };
     });
     const initial = await styles();
-    expect(initial.border).toBe('0px');
-    expect(initial.radius).toBe('0px');
-    expect(initial.shadow).toBe('none');
+    expect(initial.border).toBe('1px');
+    expect(initial.radius).toBe('20px');
+    expect(initial.shadow).not.toBe('none');
     await page.evaluate(() => document.body.classList.add('tt-product-maintenance', 'tt-product-runtime-ready'));
     expect(await styles()).toEqual(initial);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

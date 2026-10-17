@@ -1,3 +1,13 @@
+## 2026-10-17 — Aviso de actualización y Tu selección en la ficha (PR1150)
+
+Codex /root, misma rama y base `036097b55b7b33c695e5b10071580f0d5d6664ad`. El titular confirmó «ficha del producto» y autorizó terminar y mergear el conjunto. Se conservan los ajustes de footer, botones y espaciado descritos abajo.
+
+PASS_LOCAL: el aviso no se oculta por falta de espacio sobre cookies; evita navegación inferior, WhatsApp y avisos vecinos cuando hay lugar, y se mantiene descartable en pantallas bajas. Comprueba cada minuto un marcador liviano `site-version.json` derivado del fingerprint del build, sin caché; también comprueba al volver a la pestaña/conexión. HTML versionado sigue como fallback cuando el marcador no está disponible. Los cambios administrativos mantienen el observador canónico de siteRevision. Nunca recarga automáticamente ni borra sesión/carrito; se conserva la exclusión existente de checkout/iframes. Una pestaña que aún ejecute el módulo anterior necesita una primera recarga para recibir esta mejora.
+
+PASS_LOCAL: 19 Chromium de aviso/cambios administrativos (10 viewports, cookies grandes en horizontal, recuperación de foco, fallo de marcador y fallback) y 14 contratos Node de aviso/carrito/favoritos. «Tu selección Tintin» se restaura en la ficha, reutilizando su renderer y el carrito canónico. Siete Chromium 320/390/768/1024/1280/1440/1920 verifican el bloque vacío y poblado, variante/cantidad, total, incremento y eliminación; controles de al menos 44 px y contenido sin salir del viewport. El fixture conserva el carrito real de invitada y aísla únicamente Auth/Firestore; sin escrituras de producción. Captura 320 revisada visualmente. Logs: `/workspace/tintin-version-final.log`, `/workspace/tintin-selection-final.log`.
+
+Build de Pages y caché PASS_LOCAL; manifiesto regenerado para este conjunto. Regresiones de la ficha actualizadas: las aserciones antiguas de ausencia de la selección se sustituyen por presencia, y el fixture de primera pintura conserva las tarjetas vigentes, ya presentes en la base, en vez de exigir paneles planos. Plan nativo: 28 archivos protegidos, 30 registros afectados, misma base. PR1150 ya está listo para revisión. La ejecución CI anterior del SHA82f57de pasó; la disparada al quitar el borrador se canceló al ampliarse el alcance. PENDING: CI del nuevo SHA, revisión manual del entorno protected-flow-maintenance, merge y comprobación del despliegue. No atribuir validación física Safari/iPhone a Chromium ni heredar CI de otro SHA.
+
 ## 2026-10-17 — Footer y acciones de Inicio en todas las anchuras
 
 Codex /root. Base `036097b55b7b33c695e5b10071580f0d5d6664ad`, rama `codex/responsive-footer-home-spacing`, checkout existente sin worktrees. Las capturas del titular mostraban el logo del footer a la izquierda en móvil, la marca limitada a media fila en tablet, tarjetas de confianza contiguas y la CTA móvil transparente. El tema compartido centra logo, descripción, horario y WhatsApp en una fila completa hasta 1024 px; conserva la alineación izquierda de escritorio. Inicio usa 16–24 px entre tarjetas y botones móviles con área mínima de 48 px y el mismo ancho al apilarse. Se conservan los banners originales completos y sus enlaces en tablet y escritorio.
@@ -6,7 +16,7 @@ PASS_LOCAL: 26 regresiones Chromium (18 tamaños de 320 a 2560 px, ambas orienta
 
 Build de Pages y repetición sin drift PASS_LOCAL: 19 páginas del manifiesto, CSP para 38 rutas y caché de 336 recursos/66 cargas dinámicas. Versiones nuevas registradas sin reutilizar URLs inmutables. Plan nativo contra la base indicada: 24 archivos y 28 registros afectados; auditor de protección correcto (78 registros/544 archivos). Sin cambios de datos, Auth, reglas, DNS ni publicación de esta corrección visual.
 
-PR de revisión: https://github.com/tintinaccs/tintin-web/pull/1150 (borrador), rama subida. PENDING: CI del candidato, revisión humana de mantenimiento protegido y publicación. No heredar PASS_CI del corte de dominio ni atribuir validación física de Safari/iPhone a Chromium local.
+PR de revisión: https://github.com/tintinaccs/tintin-web/pull/1150 (listo para revisión), rama subida. PENDING: CI del candidato, revisión humana de mantenimiento protegido y publicación. No heredar PASS_CI del corte de dominio ni atribuir validación física de Safari/iPhone a Chromium local.
 
 ## 2026-10-17 — Continuación del cutover y PR1148 (en curso)
 

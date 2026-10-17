@@ -1,52 +1,57 @@
 {
   "schemaVersion": 1,
   "baseCommit": "036097b55b7b33c695e5b10071580f0d5d6664ad",
-  "reason": "Corregir footer centrado en móvil/tablet, botones accesibles de Inicio y separación de tarjetas; 18 viewports y regresiones de CSS/shell aprobados.",
+  "reason": "Footer y botones responsive; aviso de publicaciones visible en todos los tamaños; restaurar Tu selección en ficha con carrito canónico y pruebas específicas.",
   "files": [
+    {
+      "path": "_headers",
+      "oldHash": "3c4400d09d0e4ed350c853281dbf562dabf7b7848dad8f26ed9cacc6e6833799",
+      "newHash": "97a3b77f78dedabb4a3d89cde1ff88bf324749d6f48e3e4b25f8ca8caf91a27e"
+    },
     {
       "path": "404.html",
       "oldHash": "17c404ec5dfc08ecbf75f4d58aa6f683708f98ff716cd8bdc7c7ff39bd4a08a2",
-      "newHash": "cc9764f23e76972442b0b883b826920d5e5e720b68c4b549a782367666aba4e0"
+      "newHash": "a8d7da59963d2293823073b300cb24fc13a2c2640eb8fc074a24ab5f6f8aa8fc"
     },
     {
       "path": "about.html",
       "oldHash": "0a864fe4b9193b23089194096dea2bb8fd44a8bd5e43c031319496c439cc4591",
-      "newHash": "e11cf7dc08e0a5f276cd28d0fbe290f4638feb0da172cb94c04cba524b289b01"
+      "newHash": "f3fefd8d69653afe9050b20ffb91897782b57fd428647cf127e038790e4ca9fb"
     },
     {
       "path": "admin-images.html",
       "oldHash": "4e02977e0d89e77f56ca55ee50dda7e91768d3f374b122accf4a360e2372be6f",
-      "newHash": "e1b562c553accd7f79d2157ddabe6f1c2092cfe8a9eddb5710b62dd36721ac2d"
+      "newHash": "7499810d75d0e660e413bc3225ff2af188767565fe11b73c7246061ab5970170"
     },
     {
       "path": "admin.html",
       "oldHash": "5b894c0aa3025a21f8d14b3bb9276e9ebe6d2cbe71674ab2822629233c397943",
-      "newHash": "2420329d40371b916c0c43c336440d8f16aa6b276e75b80aad06560a51f97c02"
+      "newHash": "27e7d00ad6072af82eb72bc259ca244507f0e15634fc62339d97edf99635e9e7"
     },
     {
       "path": "cambios-devoluciones.html",
       "oldHash": "e808aa5e5f097a65dea0892e7bcea3b57386a498e22cd974ca7459f8140054a9",
-      "newHash": "930023581c0d062015a44c179e4de7965d023afd2bc521d41ea54a38b6c057fc"
+      "newHash": "83001a995cb72ac17c60af42c16ceb4f86accbbe863ef20ef35dad41fd4acd01"
     },
     {
       "path": "catalogo.html",
       "oldHash": "969e684c2a1997fd8a4e758804c58687999931d387c4c0d2edac74aa14bd5ba4",
-      "newHash": "dc3750cf0d5bfd7a583d7ec65244a0ebe98a9a8015d63d4ed99441752477a89f"
+      "newHash": "a62db0342f1d1d7f6714e3e6dec7e4970cee6afb1ad6e3d6e51f3cf533ca22a8"
     },
     {
       "path": "checkout.html",
       "oldHash": "85c56655252bc745f8c7834976f21c93c3817a4e5f8d465b6ae9d65274376c08",
-      "newHash": "7d9118df7787ddbddaca95801a01b4a1d1e14da86ab34a025cd1952560bbad07"
+      "newHash": "6a1189537809a9e49a0c29b52cdd5d99823e7bbe94c2b62fbe8755b0077f6d57"
     },
     {
       "path": "collections.html",
       "oldHash": "1109c9ddad774ebabebf9afc8b38ba7fa36e48791ad8a2802558e6fd0c4c5f6c",
-      "newHash": "642a4e3e660d82564acea68900c3473e789c645b1ba46e4e4a42bb64c6c03521"
+      "newHash": "bf1d7932730ccb23894b835633943ea0b632504e5a1a2ea1f2079b5966b75519"
     },
     {
       "path": "contact.html",
       "oldHash": "7144bcade8b6651712c8d4be1c9976ce86ceaa56fba2d3acd95eaafa38945ab4",
-      "newHash": "74dffa3cef90304d420a64365224edeca63565ee7e215329512fd47ae7644b0d"
+      "newHash": "7c37949142758bae2049a679cb10d760f1af391d7c0feef0cfc1e366ff88722a"
     },
     {
       "path": "css/core/tema-unificado-tintin.css",
@@ -59,19 +64,24 @@
       "newHash": "4394e0706ad0f5f571183daf0857f7dc7d7f3d12d84f783d07c6e7a6b13a94c8"
     },
     {
+      "path": "css/pages/product/product-extras.css",
+      "oldHash": "6e61cf4675ba7a581c3a17af8bd2812fff356373f0bded8a9910ff78bb89962b",
+      "newHash": "973efc3e2bee70559f4bd8208ebd17e8226db51d82868686c90511ee3b3966dd"
+    },
+    {
       "path": "envios.html",
       "oldHash": "37103cb698f7367b903157f4cf4935b3433afe01e4e1ac53e111944bf4171cf5",
-      "newHash": "e07d763ea4d9885d39c23c1ae92a685419270f1a590b1257212a7ae2fbf6018b"
+      "newHash": "33e1670fa1d077678db9416bd6671a5d32490158e643f099b9b34109a85e60a6"
     },
     {
       "path": "index.html",
       "oldHash": "6037f633d7198f2b37f42611a567848fd46b5e636ec28a74e51541b4bcacc955",
-      "newHash": "b99365d8ed7b10aabaa5dfb08be05822c62b155dcf22486b94c4dcd89f0a2735"
+      "newHash": "2bd2c4beb05c79a79ed3127e729d353b501ace3c18ab04778ddcaacb70bd6e5f"
     },
     {
       "path": "js/cargador-pagina.js",
       "oldHash": "e5fd1838b54401bfe4d8babdd6713fb35d256e4506139a4d808333a51ff00c68",
-      "newHash": "d9bf242a36697f82a2042e632ca20c5290f759183e3ebd2d87c2835870227632"
+      "newHash": "e19578b04b3168dc122a1096dc82859407b0ec15f484b071a9306c61013312dd"
     },
     {
       "path": "js/quality/calidad-interfaz.js",
@@ -79,52 +89,64 @@
       "newHash": "34fd63a5e00946e2fdd4d479eccd1bb8550a87a9f6b9fdc908d1770c27492b46"
     },
     {
+      "path": "js/quality/vigilancia-version.js",
+      "oldHash": "617f4407db2a2c2a5f97d6c4b8eb81f517cdaf61479cd2489ceb4adb898e7c91",
+      "newHash": "08463fb3a95e35f63e0a8da58aeec43f0114e9bd1a5346c7c3b6afa1aeb712ff"
+    },
+    {
       "path": "login.html",
       "oldHash": "f77f44867c866a222b34586b7be9b4f0538de0e944f2c83cd9ec725ac8cb3611",
-      "newHash": "73f53837716fe341cb39eb1180bc3fe98868c22b8d2ef5b3fb1eda48b99fd765"
+      "newHash": "258058e7dd121bf1dcc35397f517eee0164145081c593dfd01b618b9858050cb"
     },
     {
       "path": "nosotros.html",
       "oldHash": "41aa480db66a8d08f922251708f9f89f7832266596a0b29edadb06780996bd3b",
-      "newHash": "29385018ec0a6db96180542dddf3ba8f9a2a3db117e4ba3896b8a58ac6df6c57"
+      "newHash": "2e96de3d622e1ae4b7a6fab4def96d6cd2750683c0e0f4e9a412db9c777bcadc"
     },
     {
       "path": "perfil.html",
       "oldHash": "1936e82163323e7d1751d45191039f6d391ed97251507721d016c2456ed4b432",
-      "newHash": "8e88ae68350ad1b113f94b59efed2215d343dab7a318b8d9e5280a5e671374cf"
+      "newHash": "15a605c788102ec23264cdf2562ddb64c388703ed0d2f4ca700a2348544f69c6"
     },
     {
       "path": "preguntas-frecuentes.html",
       "oldHash": "87caffe685c73faa0974d1ed25fee749304b8c81e9489dc3349f1e7de2a8c1f2",
-      "newHash": "fbc9b1f29f2f7152c7108f4f311e9da62f539107414865ef3d0e937222e3edc8"
+      "newHash": "bd2282a60ea49ffd4bbb322ceba291365c3f7625efc6c29a7fa0de316e1e7a39"
     },
     {
       "path": "privacidad.html",
       "oldHash": "ec0b46958715e499baab9bf48df405ec0ecb3b378688f885e2bacee7cc398b22",
-      "newHash": "1740dcde669e66dbeaa866e3b685032739df0fe9359b5dd27143ab25304a3b31"
+      "newHash": "6d4b54d15fa4b9a7d811a653c89543968c21a8cbd56fba1750ec3d167024d085"
     },
     {
       "path": "product.html",
       "oldHash": "990a7bc82aa5f174920d91564e260e34c010fda77ea1ad00ef2d483e0ad0c3d8",
-      "newHash": "04c03b1a9b619694918cd353b6ab00e1412f12f3d0c9125ab845e9fa208c8a67"
+      "newHash": "6922412624ccd46f7ec41d18e272ba0df04cd8cbea1b9c78f39ddbb25d2c19bc"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "8dc2e82e7ef960ad2e5cd4f67a9084e05d4aeacc8e9339f1f1272b736895163d",
-      "newHash": "bb6f04471af85dc9ba3b44a0b7bd81889346baee9f08569786e346f974119362"
+      "newHash": "5704ef046e084c4f4db193fd8b5a7bae9818c8e253da87d19b97b46fb5bb7b59"
+    },
+    {
+      "path": "scripts/construir-manifiesto-diagnostico.js",
+      "oldHash": "ebb9962b5e714c114878ce378f0d980117672ff7aa4822010e817bfd3434ad31",
+      "newHash": "7c90f104c7b3856291cf709d8f6abcf2340f07591a177d3b57dd1d171334bbd3"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "oldHash": "7c115c8eb73d26eb4608524eddd5857acf776b38b47d6106a92444a6fbb2e882",
-      "newHash": "c0fb493e21c4b9c7702235db8756f5137aab02e4b048e5610e46cecef7c1d8f2"
+      "newHash": "357c405aed3b89ad5caba6b4369891fcbd3a888151b2d3c362f9a7505899cbd0"
     },
     {
       "path": "terminos.html",
       "oldHash": "bd0d361114769699ad76a0d387b4532633733263c649eb4ddd39fa988831b241",
-      "newHash": "220c4ac9bd070ff51134d98cd98c45d00210f722ac93b7d2a15eb11f5d14298f"
+      "newHash": "97dc583583867c3978387e1c7c01d402280822ad2fcd0aedbf2a976ec85f5897"
     }
   ],
   "affectedRecords": [
+    "cf-functions__csp__29",
+    "csp",
     "cuenta-bloqueada",
     "entrada-login",
     "entrada-login__google-btn__1",

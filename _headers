@@ -104,3 +104,6 @@
 
 /*.ico
   Cache-Control: public, max-age=31536000, immutable
+
+/site-version.json
+  Cache-Control: no-store
