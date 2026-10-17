@@ -28,7 +28,7 @@ function store(extra = {}) {
       }
     }, data: path => decode(map.get(path)?.fields || {}) };
 }
-const input = (qty = 0) => ({ action: 'trashOrder', orderId: 'order_test', changeId: 'trash_test', baseChangeId: 'before', returnItems: [{ index: 0, qty }] });
+const input = (qty = 0) => ({ action: 'trashOrder', orderId: 'order_test', changeId: 'trash_test', baseChangeId: 'before', reason: 'Motivo QA', returnItems: [{ index: 0, qty }] });
 for (const qty of [0, 1, 2]) test(`borrar devuelve exactamente ${qty}; restaurar invierte sólo esa decisión`, async () => {
   const deps = store();
   await moveOrderTrash({}, input(qty), actor, deps);
@@ -36,6 +36,7 @@ for (const qty of [0, 1, 2]) test(`borrar devuelve exactamente ${qty}; restaurar
   assert.equal(deps.data('products/product_one').stock, 8 + qty);
   assert.equal(deps.data('products/product_one').price, 100);
   assert.equal(deps.data('orderTrash/order_test').total, 200);
+  assert.equal(deps.data('auditLog/trash_test').notes, 'Motivo QA');
   const duplicate = await moveOrderTrash({}, input(qty), actor, deps);
   assert.equal(duplicate.duplicate, true); assert.equal(deps.writes.length, 1);
   await moveOrderTrash({}, { action: 'restoreOrder', orderId: 'order_test', changeId: 'restore_test', baseChangeId: 'trash_test' }, actor, deps);

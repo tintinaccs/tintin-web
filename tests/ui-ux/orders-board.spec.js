@@ -192,7 +192,7 @@ for (const width of [320, 768, 1440]) test('reinicio independiente confirmado y 
     return route.fulfill({ contentType: 'text/html', body: `<meta name="viewport" content="width=device-width,initial-scale=1"><div class="adm-statistics-toolbar"></div><div id="statistics-data-status"></div><script type="module">
       import {ensureStatisticsControls,filterStatisticsRows} from 'https://statistics-controls.test/js/admin/statistics/controles-estadisticas.js';
       const rows=[{at:Date.now()-100000,total:100}];
-      function render(){if(!ensureStatisticsControls(render,async options=>options.action()))return;window.amount=filterStatisticsRows('revenue',rows,row=>row.at).reduce((sum,row)=>sum+row.total,0);window.orders=filterStatisticsRows('orders',rows,row=>row.at).length;}
+      function render(){if(!ensureStatisticsControls(render,async options=>options.action({start(){},ok(){}})))return;window.amount=filterStatisticsRows('revenue',rows,row=>row.at).reduce((sum,row)=>sum+row.total,0);window.orders=filterStatisticsRows('orders',rows,row=>row.at).length;}
       render();</script>` });
   });
   await page.goto('https://statistics-controls.test/');

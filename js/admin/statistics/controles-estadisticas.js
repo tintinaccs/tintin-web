@@ -63,10 +63,11 @@ export function ensureStatisticsControls(render, runOperation) {
       const { metrics, mode } = selection;
       const changeId = `stats_${crypto.randomUUID().replaceAll('-', '')}`;
       await runOperation({ title: mode === 'history' ? 'Restaurar cálculo histórico seleccionado' : 'Reiniciar estadísticas seleccionadas', name: metrics.map(key => RESETTABLE_STATISTICS[key]).join(', '), module: 'estadisticas', dangerous: true,
-        action: async () => {
+        action: async ctx => {
+          ctx.start('crud');
           const result = await request({ action: 'resetStatistics', metrics, mode, changeId, baseChangeId: state.lastChangeId || '' });
           if (owner !== auth.currentUser?.uid) throw new Error('La sesión cambió. Volvé a ingresar.');
-          state = result; render(); return { reset: true, metrics };
+          state = result; render(); ctx.ok('crud'); return { reset: mode !== 'history', restoredHistory: mode === 'history', metrics };
         } });
     };
     toolbar.append(button);

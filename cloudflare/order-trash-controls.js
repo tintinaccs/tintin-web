@@ -98,7 +98,7 @@ export async function moveOrderTrash(env, input, actor, { get = firestoreAdminGe
     { path: from, delete: true, currentDocument: condition(source) },
     { path: `auditLog/${changeId}`, fields: encodeFirestoreFields({ action: restore ? 'restaurar_pedido' : 'mover_pedido_borrados',
       entityType: 'pedido', entityId: orderId, actorId: actor.uid, actorEmail: actor.email, actorRole: 'superadmin',
-      createdAt: now, timestamp: now, returnedItems: returned, result: 'success' }), currentDocument: { exists: false } },
+      createdAt: now, timestamp: now, returnedItems: returned, notes: restore ? 'Restauración de pedido archivado' : String(input.reason || '').slice(0, 500), result: 'success' }), currentDocument: { exists: false } },
     { path: 'settings/siteRevision', fields: encodeFirestoreFields({ revision: changeId, updatedAt: now }), mergeFields: ['revision', 'updatedAt'] },
   );
   await commit(env, writes);
