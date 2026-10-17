@@ -1,3 +1,7 @@
+## 2026-10-17 — Registrar endpoint administrativo integrado
+
+Codex /root. CI39076860446 falló en integraciones canónicas porque el commit concurrente77cbd añadió functions/api/admin-commerce-controls.js sin su inclusión en _routes.json. Se agrega únicamente /api/admin-commerce-controls a la configuración explícita, sin ampliar comodines ni permisos. Auditor canónico reproducido FAIL en CI y PASS_LOCAL tras registrar la ruta (101rutas). Se conserva íntegro el código responsive, aviso y Tu selección. Plan de mantenimiento y diagnóstico regenerados; CI exacta y publicación pendientes.
+
 ## 2026-10-17 — Reinicios independientes y eliminación con devolución elegida
 
 Codex /root, rama codex/order-stat-controls-20261017, base64a17c4a. Solicitud explícita del titular: reiniciar indicadores por selección, borrar pedidos eligiendo stock y publicar. Se amplía el flujo canónico, sin borrar datos reales durante pruebas. Endpoint exclusivo de Super Admin con token verificado, origen permitido, cuota compartida, versiones optimistas y commit atómico. Mover a Borrados conserva snapshot y auditoría; devuelve cero, parte o todas las unidades elegidas por línea/variante, sólo si hubo descuento; restaurar invierte exactamente esa decisión y falla completo si falta stock. Reintentar no duplica unidades. Pedidos en Borrados no se recrean desde un reintento viejo de checkout; ventas locales mantienen su libro separado. Precios del catálogo y reembolsos reales no se modifican.

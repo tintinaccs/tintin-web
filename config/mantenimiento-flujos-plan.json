@@ -1,12 +1,17 @@
 {
   "schemaVersion": 1,
   "baseCommit": "64a17c4a89e7b4df53ca84d3efc7b534f83870e0",
-  "reason": "Publicacion autorizada conjunta PR1150: responsive y versiones, reinicios por indicador y devolucion elegida;103 Node pedidos,237 cuentas/checkout,51 Chromium y auditorias.",
+  "reason": "Publicacion autorizada conjunta PR1150: responsive y versiones, reinicios por indicador y devolucion elegida;103 Node pedidos,237 cuentas/checkout,51 Chromium y auditorias. Registrar ruta exacta omitida del endpoint en Cloudflare; auditor de integraciones PASS.",
   "files": [
     {
       "path": "_headers",
       "oldHash": "3c4400d09d0e4ed350c853281dbf562dabf7b7848dad8f26ed9cacc6e6833799",
       "newHash": "97a3b77f78dedabb4a3d89cde1ff88bf324749d6f48e3e4b25f8ca8caf91a27e"
+    },
+    {
+      "path": "_routes.json",
+      "oldHash": "fad690b01e7855665323d2e8a5945286008700d824f6f2beee973e845d30a697",
+      "newHash": "24cd268f18297bbb4ecf3ffc281a5622f7d46684c3b8e49bf6f1e597dd0e8348"
     },
     {
       "path": "404.html",
