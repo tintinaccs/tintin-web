@@ -1,3 +1,9 @@
+## 2026-10-17 — Conservar integración concurrente y corregir fixture de ruta
+
+Codex /root. Se incorporan por fast-forward los commits concurrentes `9872711b4` y `3240fc272` de la misma rama: registro de suites nuevas en navegación, main `64a17c4a`/PR1151, datos en vivo sin recarga y aviso sólo para versiones. Se descarta la alternativa local de ampliar la lista de comandos de los auditores; ambos quedan intactos. La implementación funcional de vigilancia coincide con la integración concurrente. Los conflictos de caché quedan resueltos por esa integración, con tag `tintin-20261017-updates-merged-1` y plan contra main64a17c4a.
+
+Se reproduce un fallo concreto heredado de PR1151 en `tests/functions/page-loader-route.test.mjs`: el input se cambió a data-refresh-1 pero la aserción seguía esperando route-fixture-1. Se restaura únicamente el tag sintético del fixture; conserva la aserción de URL absoluta y parámetro tt-lightweight. PASS_LOCAL 1/1 antes FAIL, después PASS; sin cambios de producción, permisos ni auditor. Evidencia `/workspace/tintin-route-fixture-before.log`. La integración funcional combinada aprobó 21 Chromium y 16 contratos de versión/reconexión/sync antes del fast-forward (mismo código de vigilancia); la CI del nuevo SHA sigue siendo obligatoria. No se reclama un PASS de CI por el resultado de otro candidato. Manifiesto y marcador regenerados para esta corrección.
+
 ## 2026-10-17 — Aviso de actualización y Tu selección en la ficha (PR1150)
 
 Codex /root, misma rama y base `036097b55b7b33c695e5b10071580f0d5d6664ad`. El titular confirmó «ficha del producto» y autorizó terminar y mergear el conjunto. Se conservan los ajustes de footer, botones y espaciado descritos abajo.
