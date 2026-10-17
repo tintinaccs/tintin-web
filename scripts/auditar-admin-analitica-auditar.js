@@ -62,7 +62,7 @@ check(
 );
 check(
   'La conversión exige pedidos Y tráfico disponibles y un denominador real',
-  admin.includes('adminRealtimeReady.orders && adminRealtimeReady.traffic && uniqueVisitors ?'),
+  admin.includes('adminRealtimeReady.orders && adminRealtimeReady.traffic && conversionVisitors ?') && admin.includes('conversionOrders / conversionVisitors'),
   'La conversión no debe calcularse (ni mostrarse "0%") sobre datos que no cargaron.'
 );
 check(
@@ -131,7 +131,8 @@ check(
 );
 check(
   'El ticket promedio divide entre pedidos válidos con guardia de cero',
-  admin.includes('adminRealtimeReady.orders && validOrders.length ? formatPrice(revenue / validOrders.length) : ') ,
+  admin.includes("statisticsSetText('statistics-average-ticket', adminRealtimeReady.orders ?") &&
+    admin.includes('averageOrders.length ? averageOrders.reduce(') && admin.includes('/ averageOrders.length : 0'),
   'El ticket promedio no debe dividir por cero ni calcularse sobre datos no cargados.'
 );
 check(

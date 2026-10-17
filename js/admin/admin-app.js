@@ -1,3 +1,5 @@
+import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261017-stat-controls-1';
+import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
@@ -47,7 +49,7 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261017-domain-cutover-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261017-stat-controls-1';
 import './settings/cupones-admin.js?v=tintin-20261017-domain-cutover-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261017-domain-cutover-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
@@ -401,6 +403,9 @@ const AUDIT_ACTION_LABELS = {
   cambiar_estado_pago:    '💳 Cambió estado de pago',
   reenviar_correo_pedido: '✉️ Reenvió correo de pedido',
   eliminar_pedido:        '🗑️ Eliminó pedido',
+  mover_pedido_borrados:  '🗑️ Movió pedido a Borrados',
+  restaurar_pedido:       '↩️ Restauró pedido',
+  reiniciar_estadisticas: '📊 Ajustó el inicio de estadísticas',
   crear_producto:         '➕ Creó producto',
   editar_producto:        '✏️ Editó producto',
   eliminar_producto:      '🗑️ Eliminó producto',
@@ -1508,9 +1513,9 @@ function renderStatisticsTrend() {
     const key = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'America/Asuncion', year: 'numeric', month: '2-digit', day: '2-digit'
     }).format(date);
-    const dayOrders = allOrders.filter(order => statisticsDayKey(order.createdAt) === key && statisticsOrderIsValid(order));
+    const dayOrders = filterStatisticsRows('trend', allOrders, row => activityTimestampMillis(row.createdAt)).filter(order => statisticsDayKey(order.createdAt) === key && statisticsOrderIsValid(order));
     const revenue = dayOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
-    const visits = statisticsTrafficSessions.filter(session => statisticsDayKey(session.startedAt) === key).length;
+    const visits = filterStatisticsRows('trend', statisticsTrafficSessions, row => activityTimestampMillis(row.startedAt)).filter(session => statisticsDayKey(session.startedAt) === key).length;
     days.push({ date, key, orders: dayOrders.length, revenue, visits });
   }
   const maxRevenue = Math.max(...days.map(day => day.revenue), 1);
@@ -1537,32 +1542,46 @@ function renderStatisticsTrend() {
 
 function renderGeneralStatistics() {
   if (currentRole !== 'superadmin') return;
+  if (!ensureStatisticsControls(renderGeneralStatistics, runAdminCrudOperation)) return;
   const now = Date.now();
   const rangeStart = statisticsStartDate().getTime();
   const rangeOrders = allOrders.filter(order => activityTimestampMillis(order.createdAt) >= rangeStart);
-  const validOrders = rangeOrders.filter(statisticsOrderIsValid);
-  const revenue = validOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
-  const paid = rangeOrders
+  const ordersFor = metric => filterStatisticsRows(metric, rangeOrders, row => activityTimestampMillis(row.createdAt));
+  const sessionsFor = metric => filterStatisticsRows(metric, statisticsTrafficSessions, row => activityTimestampMillis(row.startedAt));
+  const averageOrders = ordersFor('average').filter(statisticsOrderIsValid);
+  const orderGroups = new Map(), sessionGroups = new Map();
+  const orderIncluded = (metric, order) => {
+    if (!orderGroups.has(metric)) orderGroups.set(metric, new Set(ordersFor(metric)));
+    return orderGroups.get(metric).has(order);
+  };
+  const sessionIncluded = (metric, session) => {
+    if (!sessionGroups.has(metric)) sessionGroups.set(metric, new Set(sessionsFor(metric)));
+    return sessionGroups.get(metric).has(session);
+  };
+  const revenue = ordersFor('revenue').filter(statisticsOrderIsValid).reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const paid = ordersFor('paid')
     .filter(order => statisticsPaymentStatus(order) === 'pagado')
     .reduce((sum, order) => sum + Number(order.total || 0), 0);
-  const rangeUsers = allUsers.filter(user => activityTimestampMillis(user.createdAt) >= rangeStart);
+  const rangeUsers = filterStatisticsRows('users', allUsers.filter(user => activityTimestampMillis(user.createdAt) >= rangeStart), row => activityTimestampMillis(row.createdAt));
   const activeUsers = allUsers.filter(user => !user.blocked).length;
   const blockedUsers = allUsers.filter(user => user.blocked).length;
-  const uniqueVisitors = new Set(statisticsTrafficSessions.map(session => session.visitorId).filter(Boolean)).size;
+  const uniqueVisitors = new Set(sessionsFor('visitors').map(session => session.visitorId).filter(Boolean)).size;
+  const conversionVisitors = new Set(sessionsFor('conversion').map(session => session.visitorId).filter(Boolean)).size;
+  const conversionOrders = ordersFor('conversion').filter(statisticsOrderIsValid).length;
   const activePresence = statisticsActivePresence(now);
   const activeProducts = _allProducts.filter(product => product.active !== false);
   const lowStockProducts = activeProducts.filter(product => Number(product.stock || 0) <= 5).length;
 
   statisticsSetText('statistics-revenue', adminRealtimeReady.orders ? formatPrice(revenue) : '—');
   statisticsSetText('statistics-paid', adminRealtimeReady.orders ? formatPrice(paid) : '—');
-  statisticsSetText('statistics-orders', adminRealtimeReady.orders ? String(rangeOrders.length) : '—');
-  statisticsSetText('statistics-average-ticket', adminRealtimeReady.orders && validOrders.length ? formatPrice(revenue / validOrders.length) : '—');
+  statisticsSetText('statistics-orders', adminRealtimeReady.orders ? String(ordersFor('orders').length) : '—');
+  statisticsSetText('statistics-average-ticket', adminRealtimeReady.orders ? formatPrice(averageOrders.length ? averageOrders.reduce((sum, row) => sum + Number(row.total || 0), 0) / averageOrders.length : 0) : '—');
   statisticsSetText('statistics-new-users', adminRealtimeReady.users ? String(rangeUsers.length) : '—');
   statisticsSetText('statistics-active-users', adminRealtimeReady.users ? String(activeUsers) : '—');
   statisticsSetText('statistics-blocked-users', adminRealtimeReady.users ? `${blockedUsers} bloqueado${blockedUsers === 1 ? '' : 's'}` : '—');
   statisticsSetText('statistics-visitors', adminRealtimeReady.traffic ? String(uniqueVisitors) : '—');
-  statisticsSetText('statistics-sessions', adminRealtimeReady.traffic ? `${statisticsTrafficSessions.length} ${statisticsTrafficSessions.length === 1 ? 'sesión' : 'sesiones'}` : '—');
-  statisticsSetText('statistics-conversion', adminRealtimeReady.orders && adminRealtimeReady.traffic && uniqueVisitors ? `${(validOrders.length / uniqueVisitors * 100).toFixed(1)}%` : '—');
+  statisticsSetText('statistics-sessions', adminRealtimeReady.traffic ? `${sessionsFor('visitors').length} ${sessionsFor('visitors').length === 1 ? 'sesión' : 'sesiones'}` : '—');
+  statisticsSetText('statistics-conversion', adminRealtimeReady.orders && adminRealtimeReady.traffic && conversionVisitors ? ((conversionOrders / conversionVisitors) * 100).toFixed(1) + '%' : '—');
   statisticsSetText('statistics-online', adminRealtimeReady.presence ? String(activePresence.length) : '—');
   statisticsSetText('statistics-active-products', adminRealtimeReady.products ? String(activeProducts.length) : '—');
   statisticsSetText('statistics-low-stock', adminRealtimeReady.products ? `${lowStockProducts} con stock bajo` : '—');
@@ -1573,12 +1592,12 @@ function renderGeneralStatistics() {
   const orderLocations = new Map();
   rangeOrders.forEach(order => {
     const orderStatus = order.status || 'pendiente';
-    orderStatuses.set(orderStatus, (orderStatuses.get(orderStatus) || 0) + 1);
+    if (orderIncluded('orderStatus', order)) orderStatuses.set(orderStatus, (orderStatuses.get(orderStatus) || 0) + 1);
     const paymentStatus = statisticsPaymentStatus(order);
-    paymentStatuses.set(paymentStatus, (paymentStatuses.get(paymentStatus) || 0) + 1);
+    if (orderIncluded('paymentStatus', order)) paymentStatuses.set(paymentStatus, (paymentStatuses.get(paymentStatus) || 0) + 1);
     const location = String(order.shipping?.city || order.city || order.shipping?.zone || order.shipping?.department || 'Sin ubicación').trim();
-    orderLocations.set(location, (orderLocations.get(location) || 0) + 1);
-    (order.items || []).forEach(item => {
+    if (orderIncluded('orderLocations', order)) orderLocations.set(location, (orderLocations.get(location) || 0) + 1);
+    (orderIncluded('products', order) ? (order.items || []) : []).forEach(item => {
       const name = String(item.name || 'Producto sin nombre').trim();
       const quantity = Math.max(1, Number(item.qty || item.quantity || 1));
       const previous = products.get(name) || { quantity: 0, revenue: 0 };
@@ -1592,9 +1611,9 @@ function renderGeneralStatistics() {
   const entryPages = new Map();
   statisticsTrafficSessions.forEach(session => {
     const location = activityLocationLabel(session);
-    visitLocations.set(location, (visitLocations.get(location) || 0) + 1);
+    if (sessionIncluded('visitLocations', session)) visitLocations.set(location, (visitLocations.get(location) || 0) + 1);
     const page = activityPageLabel(session.landingPage);
-    entryPages.set(page, (entryPages.get(page) || 0) + 1);
+    if (sessionIncluded('entryPages', session)) entryPages.set(page, (entryPages.get(page) || 0) + 1);
   });
   const livePages = new Map();
   activePresence.forEach(visitor => {
@@ -2973,15 +2992,14 @@ function orderDeleteErrorMessage_(error) {
 window.deleteOrder = async (orderId) => {
   if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'eliminar')) { toast('No tenés permiso para eliminar pedidos'); return { moved: false }; }
   if (currentRole !== 'superadmin') { toast('Solo Super Admin puede mover pedidos a Borrados'); return { moved: false }; }
-  if (!confirm('¿Mover este pedido a Borrados? Podrás restaurarlo después.')) return { moved: false, cancelled: true };
   const orderBefore = allOrders.find(x => x.id === orderId) || null;
-  const reason = window.prompt('Motivo (opcional):', '') ?? '';
+  const reason = ''; // El diálogo de devolución solicita el motivo y las cantidades.
   const operation = await runAdminCrudOperation({
     title: 'Mover pedido a Borrados',
     name: orderBefore?.orderNumber || orderBefore?.shortId || orderId,
     module: 'pedidos', dangerous: true,
     stages: [
-      { id: 'trash', label: 'Mover pedido y liberar inventario' },
+      { id: 'trash', label: 'Mover pedido y aplicar la devolución elegida' },
       { id: 'refresh', label: 'Actualizar lista y registrar auditoría' },
     ],
     action: async ctx => {
@@ -2989,13 +3007,14 @@ window.deleteOrder = async (orderId) => {
       const result = await window.TintinOrderAdmin.trashOrder(orderId, reason);
       ctx.ok('trash');
       ctx.start('refresh');
-      allOrders = allOrders.filter(o => o.id !== orderId);
+      if (result.moved) allOrders = allOrders.filter(o => o.id !== orderId);
       if (result.moved) {
         await logAudit('mover_pedido_borrados', 'pedido', orderId, orderBefore?.orderNumber || orderBefore?.shortId || orderId, `Cliente: ${orderBefore?.userName || orderBefore?.userEmail || '—'}${reason ? ` · ${reason}` : ''}`);
       }
       applyOrderFilters();
       result.deleted = Boolean(result.moved);
-      ctx.ok('refresh', { message: result.moved ? 'Pedido movido a Borrados.' : 'El pedido ya no estaba en la lista activa.' });
+      renderGeneralStatistics();
+      ctx.ok('refresh', { message: result.moved ? 'Pedido movido a Borrados; stock actualizado según tu elección.' : result.cancelled ? 'Operación cancelada, sin cambios.' : 'El pedido ya no estaba en la lista activa.' });
       return { ...result, orderBefore };
     },
   });
@@ -3197,11 +3216,12 @@ window.bulkDeleteOrders = async function() {
   if (rejectOversizedAdminBulkSelection(_selectedOrders, 'pedidos')) return { movedOrders: [], failed: [] };
   if (currentRole !== 'superadmin') { toast('Solo Super Admin puede mover pedidos a Borrados en lote'); return { movedOrders: [], failed: [] }; }
   const n = _selectedOrders.size;
-  if (!confirm(`¿Mover ${n} pedido(s) a Borrados? Se podrán restaurar después.`)) return { movedOrders: [], failed: [], cancelled: true };
+  const selection = await chooseOrderTrash(allOrders.filter(order => _selectedOrders.has(order.id)));
+  if (!selection) return { movedOrders: [], failed: [], cancelled: true };
   const ids = [..._selectedOrders];
   const ordersById = new Map(allOrders.map(order => [order.id, order]));
   const movedOrders = [], removedIds = new Set(), failed = [];
-  const results = await runAdminBulk(ids, id => window.TintinOrderAdmin.trashOrder(id, 'Eliminación masiva por Super Admin'), {
+  const results = await runAdminBulk(ids, id => window.TintinOrderAdmin.trashOrder(id, selection.reason, selection.selections[id]), {
     title: 'Moviendo pedidos a Borrados', name: 'MoverPedidosABorrados', module: 'Pedidos', concurrency: 3,
     isSkipped: value => value?.moved === false, skippedText: 'ya no existían',
   });
