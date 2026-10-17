@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261017-domain-cutover-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261017-responsive-layout-1');
     }
   }
 
@@ -879,11 +879,11 @@
     try { framed = window.top !== window; } catch { framed = true; }
     if (isVisualPreviewFrame || framed) return;
     if (!window.TintinSiteChangesBooted) {
-      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261017-domain-cutover-1');
+      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261017-update-notice-1');
     }
     if (/\/checkout(?:\.html)?$/.test(currentPath())) return;
     if (!window.TintinVersionWatchBooted) {
-      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261016-admin-live-1');
+      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261017-update-notice-1');
     }
   }
 

@@ -2,9 +2,9 @@
    TINTIN — Aviso de versión nueva del sitio.
    El HTML se sirve sin caché y los JS/CSS con ?v= inmutables: una pestaña
    que quedó abierta mientras se publicaba sigue ejecutando la versión
-   anterior hasta que el usuario navega. Este módulo pide el HTML actual de
-   la misma página (sin caché) y, si referencia archivos versionados que esta
-   pestaña nunca cargó, ofrece "Actualizar".
+   anterior hasta que el usuario navega. Este módulo compara el marcador
+   liviano del artefacto publicado sin caché; conserva el HTML actual como
+   fallback para detectar referencias versionadas que la pestaña nunca cargó.
    Actualizar es una recarga normal: no toca localStorage, sessionStorage,
    cookies, IndexedDB ni cachés, así que la sesión, el carrito, el perfil y
    las preferencias se conservan. Nunca recarga por su cuenta.
@@ -23,14 +23,26 @@ export function createSiteRevisionObserver(onChange) {
   };
 }
 
-const CHECK_INTERVAL_MS = 10 * 60 * 1000;
-const MIN_GAP_MS = 2 * 60 * 1000;
+const CHECK_INTERVAL_MS = 60 * 1000;
+const MIN_GAP_MS = 15 * 1000;
 const FETCH_TIMEOUT_MS = 8000;
 const NOTICE_ID = 'tt-version-notice';
 const STYLE_ID = 'tt-version-notice-css';
 // Avisos que ya ocupan la esquina inferior derecha: conexión inestable de la
 // tienda (z-index altísimo), banner de cookies y avisos del panel admin.
-const CORNER_NEIGHBOURS = ['tt-store-gate-network-notice', 'tt-privacy-consent', 'tt-ops-toasts', 'adm-mobile-tabs'];
+const CORNER_NEIGHBOURS = ['#tt-store-gate-network-notice', '#tt-privacy-consent', '#tt-ops-toasts', '#adm-mobile-tabs', '#tt-tabbar', '.tt-wa-float'];
+
+async function fetchSiteVersion() {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const response = await fetch('/site-version.json', { cache: 'no-store', credentials: 'same-origin', signal: controller.signal });
+    if (!response.ok || response.redirected || !/application\/json/i.test(response.headers.get('content-type') || '')) return '';
+    const data = await response.json();
+    return /^[a-f0-9]{64}$/.test(data?.revision) ? data.revision : '';
+  } catch { return ''; }
+  finally { clearTimeout(timer); }
+}
 
 // Referencias same-origin con ?v= declaradas en el HTML (script[src] y
 // link[href]); lo que está dentro de <noscript> o <template> no se ejecuta.
@@ -90,7 +102,7 @@ function ensureStyle() {
   const style = document.createElement('style');
   style.id = STYLE_ID;
   style.textContent = `
-#${NOTICE_ID}{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:10020;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;box-sizing:border-box;max-width:min(360px,calc(100vw - 32px));padding:12px 14px;border:1px solid #d9d2d5;border-radius:12px;background:#fff;color:#713C53;box-shadow:0 8px 24px rgba(0,0,0,.14);font:500 14px/1.4 Montserrat,sans-serif}
+#${NOTICE_ID}{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:2147483647;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;box-sizing:border-box;max-width:min(360px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:12px 14px;border:1px solid #d9d2d5;border-radius:12px;background:#fff;color:#713C53;box-shadow:0 8px 24px rgba(0,0,0,.14);font:500 14px/1.4 Montserrat,sans-serif}
 #${NOTICE_ID}[hidden]{display:none}
 #${NOTICE_ID} p{flex:1 1 180px;margin:0}
 #${NOTICE_ID} .tt-vn-actions{display:flex;gap:8px;margin-left:auto}
@@ -135,10 +147,14 @@ function showNotice(message = 'Hay una versión nueva del sitio.') {
   const place = () => placeAboveNeighbours(box);
   const timer = setInterval(place, 500);
   window.addEventListener('resize', place);
+  window.visualViewport?.addEventListener('resize', place);
+  window.visualViewport?.addEventListener('scroll', place);
   place();
   later.addEventListener('click', () => {
     clearInterval(timer);
     window.removeEventListener('resize', place);
+    window.visualViewport?.removeEventListener('resize', place);
+    window.visualViewport?.removeEventListener('scroll', place);
     box.remove();
   });
 }
@@ -147,15 +163,19 @@ function placeAboveNeighbours(box) {
   if (!box.isConnected) return;
   box.style.removeProperty('bottom');
   box.hidden = false;
-  const mine = box.getBoundingClientRect();
   const viewport = document.documentElement.clientHeight;
-  const neighbours = CORNER_NEIGHBOURS
-    .map(id => document.getElementById(id))
-    .filter(other => other && !other.hidden)
+  const visual = window.visualViewport;
+  const viewportTop = visual?.offsetTop || 0;
+  const viewportBottom = visual ? visual.offsetTop + visual.height : viewport;
+  const baseBottom = Math.max(parseFloat(getComputedStyle(box).bottom) || 20, viewport - viewportBottom + 16);
+  box.style.bottom = `${baseBottom}px`;
+  const mine = box.getBoundingClientRect();
+  const neighbours = [...document.querySelectorAll(CORNER_NEIGHBOURS.join(','))]
+    .filter(other => !other.hidden && getComputedStyle(other).visibility !== 'hidden')
     .map(other => other.getBoundingClientRect())
     .filter(rect => rect.height && rect.left < mine.right && rect.right > mine.left);
   // Al subir puede chocar con otro vecino más arriba: se repite hasta quedar libre.
-  let bottom = 0;
+  let bottom = baseBottom;
   for (let round = 0; round <= neighbours.length; round += 1) {
     const top = bottom ? viewport - bottom - mine.height : mine.top;
     const next = neighbours.reduce(
@@ -165,11 +185,9 @@ function placeAboveNeighbours(box) {
     if (next === bottom) break;
     bottom = next;
   }
-  if (!bottom) return;
-  // Sin lugar arriba (por ejemplo, el banner de cookies ocupa casi toda la
-  // pantalla del móvil): se espera a que ese aviso se cierre.
-  if (bottom + mine.height + 8 > viewport) box.hidden = true;
-  else box.style.bottom = `${bottom}px`;
+  // En horizontal o con el teclado abierto puede no caber sobre cookies.
+  // Se conserva visible y descartable en la esquina, nunca se pierde el aviso.
+  box.style.bottom = `${bottom + mine.height + 8 > viewport - viewportTop ? baseBottom : bottom}px`;
 }
 
 function boot() {
@@ -180,6 +198,8 @@ function boot() {
   let lastCheck = Date.now();
   let running = false;
   let stopped = false;
+  let revision = '';
+  const initialVersion = fetchSiteVersion().then(value => { revision = value; });
 
   async function check(force = false) {
     if (stopped || running) return 'skipped';
@@ -190,6 +210,18 @@ function boot() {
     running = true;
     lastCheck = Date.now();
     try {
+      await initialVersion;
+      const nextRevision = await fetchSiteVersion();
+      if (revision && nextRevision && revision !== nextRevision) {
+        stopped = true;
+        showNotice();
+        return 'outdated';
+      }
+      if (nextRevision) {
+        revision = nextRevision;
+        // Con marcador válido no hace falta descargar la página completa.
+        return 'current';
+      }
       const html = await fetchCurrentHtml();
       if (!html) return 'inconclusive';
       const fresh = versionedRefs(new DOMParser().parseFromString(html, 'text/html'), location.href);
@@ -210,6 +242,8 @@ function boot() {
     if (document.visibilityState === 'visible') check();
   });
   window.addEventListener('online', () => check());
+  window.addEventListener('focus', () => check());
+  window.addEventListener('pageshow', () => check());
   setInterval(() => check(), CHECK_INTERVAL_MS);
 
   window.TintinVersionWatch = Object.freeze({ checkNow: () => check(true) });

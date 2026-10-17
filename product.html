@@ -6,7 +6,7 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261017-domain-cutover-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261017-responsive-updates-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20261017-domain-cutover-1" defer></script>
   <title>Producto | TINTIN Accesorios & Relojes</title>
@@ -46,10 +46,10 @@
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2-palette-20261014-1">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261010-whatsapp-release-5-palette-20261014-1">
-  <link rel="stylesheet" href="css/pages/product/product-extras.css?v=tintin-20260829-favorite-alignment-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1">
+  <link rel="stylesheet" href="css/pages/product/product-extras.css?v=tintin-20261017-selection-1">
   <link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20261001-inventory-fix-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1">
   <link rel="stylesheet" href="css/pages/product/product-premium-overhaul.css?v=tintin-20261015-fast-d2a8c25e9-1">
   <link rel="stylesheet" href="css/pages/product/reviews-cards-refined.css?v=tintin-20260902-product-review-cards-1-palette-20261014-1">
@@ -200,6 +200,42 @@
 
 
   </div>
+<div class="tinsel" id="tinsel-root" role="region" aria-label="Tu selección">
+  <div class="tinsel-wrap">
+    <div class="tinsel-box">
+
+      <div class="tinsel-head">
+        <div class="tinsel-head-left">
+          <h2 class="tinsel-title">Tu selección Tintin<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pink-dark)" stroke="none" style="vertical-align:-3px;margin-left:6px"><path d="M12 21s-6.716-4.35-9.428-8.485C.79 9.702 1.5 6.06 4.5 4.5 7.03 3.18 9.79 4.06 12 6.5c2.21-2.44 4.97-3.32 7.5-2C22.5 6.06 23.21 9.702 21.428 12.515 18.716 16.65 12 21 12 21z"/></svg></h2>
+          <span class="tinsel-badge" id="tinsel-count">0</span>
+        </div>
+        <div class="tinsel-total-row">
+          <span class="tinsel-total-label">Total:</span>
+          <span class="tinsel-total" id="tinsel-total-head">Gs. 0</span>
+        </div>
+      </div>
+
+      <div class="tinsel-skeleton" id="tinsel-skeleton">
+        <div class="tinsel-skel-item"></div>
+        <div class="tinsel-skel-item"></div>
+      </div>
+
+      <div class="tinsel-items" id="tinsel-items" style="display:none"></div>
+
+      <div class="tinsel-footer" id="tinsel-footer" style="display:none">
+        <div class="tinsel-footer-total">
+          <span class="tinsel-footer-label">Total de tu selección</span>
+          <span class="tinsel-footer-amount" id="tinsel-total-footer">Gs. 0</span>
+        </div>
+        <div class="tinsel-footer-btns">
+          <button type="button" class="tinsel-btn tinsel-btn-secondary" id="tinsel-cart-btn">Ver mi carrito</button>
+          <button type="button" class="tinsel-btn tinsel-btn-primary" id="tinsel-checkout-btn">Finalizar pedido<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px;margin-left:5px"><path d="M12 21s-6.716-4.35-9.428-8.485C.79 9.702 1.5 6.06 4.5 4.5 7.03 3.18 9.79 4.06 12 6.5c2.21-2.44 4.97-3.32 7.5-2C22.5 6.06 23.21 9.702 21.428 12.515 18.716 16.65 12 21 12 21z"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tinsel-toast" id="tinsel-toast"></div>
+</div>
 </section>
 
 <section class="tt-related-section" data-collapsed="false">
@@ -277,6 +313,7 @@
 </a>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261015-images-1" defer></script>
 <script src="tienda.js?v=tintin-20261017-domain-cutover-1" defer></script>
+<script type="module" src="js/pages/product/seleccion-producto.js?v=tintin-20261005-public-flows-1"></script>
 <script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20261017-domain-cutover-1"></script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20261017-domain-cutover-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20261017-domain-cutover-1"></script>

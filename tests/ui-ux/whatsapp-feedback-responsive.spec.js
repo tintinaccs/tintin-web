@@ -58,7 +58,7 @@ for(const width of [320,390,768,1024,1280,1440,1920]) test(`registro breve valid
 });
 
 const product=fs.readFileSync('product.html','utf8');
-for(const width of [320,390,768,1024,1280,1440,1920]) test(`ficha sin comunidad ni selección duplicada y con dos columnas desde tablet (${width}px)`,async({page})=>{
+for(const width of [320,390,768,1024,1280,1440,1920]) test(`ficha con Tu selección, sin comunidad y con dos columnas desde tablet (${width}px)`,async({page})=>{
  const fixture=removeFixtureScripts(product).replace('</head>','<link rel="stylesheet" href="/css/core/tema-unificado-tintin.css"><link rel="stylesheet" href="/css/pages/product/product-maintenance.css"></head>');
  await page.route('**/__product-layout',r=>r.fulfill({contentType:'text/html',body:fixture}));
  await page.setViewportSize({width,height:900});await page.goto('/__product-layout');
@@ -66,7 +66,8 @@ for(const width of [320,390,768,1024,1280,1440,1920]) test(`ficha sin comunidad 
  await page.evaluate(()=>{const img=document.createElement('img');img.src='/assets-tintin/images/collections/col-relojes.webp';img.alt='Reloj';img.style.cssText='width:100%;height:100%;object-fit:contain';document.getElementById('gallery-main').replaceChildren(img);const thumbs=document.getElementById('gallery-thumbs');thumbs.style.display='flex';thumbs.innerHTML='<button class="tt-gallery-thumb" aria-label="Ver imagen 1"><img class="tt-gallery-thumb-img" src="/assets-tintin/images/collections/col-relojes.webp" alt=""></button>';});
  await expect(page.locator('.tt-gallery-thumb')).toHaveCSS('border-radius','50%');
  if(width===768)await page.screenshot({path:'artifacts/whatsapp-feedback/producto-tablet.png',fullPage:true});
- await expect(page.locator('[data-share-product]')).toHaveCount(0);await expect(page.locator('#tinsel-root,#product-reviews,#btn-product-like,[data-open-community]')).toHaveCount(0);
+ await expect(page.locator('[data-share-product]')).toHaveCount(0);await expect(page.locator('#product-reviews,#btn-product-like,[data-open-community]')).toHaveCount(0);
+ await expect(page.locator('#tinsel-root')).toBeVisible();
  const boxes=await page.locator('#product-grid > *').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,right:r.right};}));
  expect(boxes).toHaveLength(2);expect(boxes[0].x).toBeGreaterThanOrEqual(16);expect(boxes[1].right).toBeLessThanOrEqual(width-15);
  if(width>=768){expect(Math.abs(boxes[0].y-boxes[1].y)).toBeLessThan(2);expect(boxes[1].x).toBeGreaterThan(boxes[0].x);}else{expect(boxes[1].y).toBeGreaterThan(boxes[0].y);}
