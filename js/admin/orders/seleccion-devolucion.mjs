@@ -3,7 +3,7 @@ export function chooseOrderTrash(orders) {
     const previous = document.activeElement;
     const dialog = document.createElement('dialog');
     dialog.setAttribute('aria-label', 'Eliminar pedidos y elegir devolución de stock');
-    dialog.style.cssText = 'box-sizing:border-box;width:min(720px,calc(100% - 32px));max-width:calc(100% - 32px);max-height:85dvh;overflow:auto;padding:24px;border:1px solid #F8AACA;border-radius:16px;color:#713C53;background:white;font:inherit';
+    dialog.style.cssText = 'box-sizing:border-box;width:min(720px,calc(100% - 32px));max-width:calc(100% - 32px);max-height:85dvh;overflow:auto;padding:24px;border:1px solid #F8AACA;border-radius:16px;color:#713C53;background:white;font-family:Montserrat;font-size:inherit;line-height:inherit;';
     const title = document.createElement('h2'); title.textContent = 'Mover a Borrados'; title.tabIndex = -1;
     const text = document.createElement('p');
     text.textContent = 'Elegí qué unidades devolver al stock. Los pedidos saldrán de las estadísticas y del historial activo. Los precios del catálogo no cambian y no se envían reembolsos de dinero. Podrás restaurar el pedido; se descontarán únicamente las unidades que ahora devuelvas.';
@@ -41,7 +41,7 @@ export function chooseOrderTrash(orders) {
         returnItems: rows.filter(row => row.order === order).map(row => ({ index: row.index, qty: Number(row.quantity.value) })) }]));
       finish({ reason: reason.value, selections });
     };
-    for (const button of [all, none, cancel, accept]) button.style.cssText = 'min-height:44px;max-width:100%;white-space:normal;padding:10px 14px;margin:4px 4px 4px 0;font:inherit';
+    for (const button of [all, none, cancel, accept]) button.style.cssText = 'min-height:44px;max-width:100%;white-space:normal;padding:10px 14px;margin:4px 4px 4px 0;font-family:Montserrat;font-size:inherit;line-height:inherit;';
     dialog.append(all, none, reasonLabel, summary, cancel, accept); document.body.append(dialog); refresh(); dialog.showModal(); title.focus({ preventScroll: true }); dialog.scrollTop = 0;
   });
 }

@@ -29,7 +29,7 @@ function selectMetrics() {
   return new Promise(resolve => {
     const previous = document.activeElement, dialog = document.createElement('dialog');
     dialog.setAttribute('aria-label', 'Reiniciar estadísticas');
-    dialog.style.cssText = 'box-sizing:border-box;width:min(600px,calc(100% - 32px));max-width:calc(100% - 32px);max-height:85dvh;overflow:auto;padding:24px;border:1px solid #F8AACA;border-radius:16px;color:#713C53;background:white;font:inherit';
+    dialog.style.cssText = 'box-sizing:border-box;width:min(600px,calc(100% - 32px));max-width:calc(100% - 32px);max-height:85dvh;overflow:auto;padding:24px;border:1px solid #F8AACA;border-radius:16px;color:#713C53;background:white;font-family:Montserrat;font-size:inherit;line-height:inherit;';
     const heading = document.createElement('h2'); heading.textContent = 'Reiniciar contadores'; heading.tabIndex = -1;
     const explanation = document.createElement('p'); explanation.textContent = 'Sólo los indicadores elegidos empezarán desde cero a partir de ahora. Se conservan pedidos, importes originales, clientes e inventario. Usuarios activos, catálogo y presencia muestran su estado real y no se borran desde estadísticas.';
     dialog.append(heading, explanation);
@@ -46,7 +46,7 @@ function selectMetrics() {
     cancel.onclick = () => finish(null); dialog.addEventListener('cancel', e => { e.preventDefault(); finish(null); });
     const choose = mode => { const metrics = boxes.filter(box => box.checked).map(box => box.value); if (metrics.length) finish({ metrics, mode }); else boxes[0].focus(); };
     accept.onclick = () => choose('reset'); history.onclick = () => choose('history');
-    for (const button of [all, cancel, history, accept]) button.style.cssText = 'min-height:44px;max-width:100%;white-space:normal;padding:10px 14px;margin:4px 4px 4px 0;font:inherit';
+    for (const button of [all, cancel, history, accept]) button.style.cssText = 'min-height:44px;max-width:100%;white-space:normal;padding:10px 14px;margin:4px 4px 4px 0;font-family:Montserrat;font-size:inherit;line-height:inherit;';
     dialog.append(all, cancel, history, accept); document.body.append(dialog); dialog.showModal(); heading.focus({ preventScroll: true }); dialog.scrollTop = 0;
   });
 }

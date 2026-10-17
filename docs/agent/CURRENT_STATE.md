@@ -1,3 +1,7 @@
+## 2026-10-17 — Tipografía de diálogos administrativos integrados
+
+Codex /root. CI39077317678 pasó Nivel2 y detectó cuatro declaraciones font:inherit no conformes en los nuevos diálogos de devolución/estadísticas. Se declara Montserrat como el resto del panel, con tamaño y alto de línea heredados; no cambia comportamiento ni permisos. PASS_LOCAL: auditor tipográfico34920 comprobaciones;6 Chromium a320/768/1440 de ambos diálogos, persistencia de reinicio simulado, devolución elegida, límites, cancelar y validación. Los módulos aún no publicados en main conservan sus referencias candidatas. Diagnóstico regenerado; CI exacta y publicación pendientes.
+
 ## 2026-10-17 — Alinear contratos de archivo con devolución seleccionada
 
 Codex /root. CI39077099575 superó rutas y falló en Nivel2 por exigir llamadas retiradas a cancelación automática al archivar. Se actualizan esa aserción y su duplicada crítica para comprobar el dominio de servidor vigente: Super Admin, comparación de versión, cantidades del snapshot hasta lo comprado y sólo con reserva, precondición de origen, lote atómico, restauración de unidades registradas y conservación del estado histórico. No cambian runtime, privilegios ni umbrales. PASS_LOCAL: auditor comercial32 comprobaciones; crítico13;18 pruebas conductuales existentes de devolución0/parcial/total, variantes, concurrencia, idempotencia, reinicios y denegaciones. CI exacta y producción pendientes.
