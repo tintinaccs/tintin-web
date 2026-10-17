@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f4782e0b3b4af8f47bd3279e9c54d5587ddfab2d549f8d4a86041def2a180d12",
+  "sourceFingerprint": "a2f166678326ef0ba42fc1241b8a0a318b24553f87501753067e4efe45160b20",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1298,
-    "textFiles": 1212,
-    "totalBytes": 24526721,
+    "files": 1299,
+    "textFiles": 1213,
+    "totalBytes": 24506972,
     "pages": 19,
-    "modules": 908
+    "modules": 909
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16941,
-      "sha256": "17c404ec5dfc08ecbf75f4d58aa6f683708f98ff716cd8bdc7c7ff39bd4a08a2",
+      "bytes": 16774,
+      "sha256": "cc9764f23e76972442b0b883b826920d5e5e720b68c4b549a782367666aba4e0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -109,7 +109,7 @@
           "line": 7
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -206,7 +206,7 @@
           "line": 36
         },
         {
-          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 37
         },
@@ -592,7 +592,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "/js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -706,7 +706,7 @@
           "exists": true
         },
         {
-          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "/css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 37,
           "exists": true
@@ -979,8 +979,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26825,
-      "sha256": "0a864fe4b9193b23089194096dea2bb8fd44a8bd5e43c031319496c439cc4591",
+      "bytes": 26658,
+      "sha256": "e11cf7dc08e0a5f276cd28d0fbe290f4638feb0da172cb94c04cba524b289b01",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1020,7 +1020,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -1127,7 +1127,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -1462,7 +1462,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -1588,7 +1588,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -1845,8 +1845,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44358,
-      "sha256": "4e02977e0d89e77f56ca55ee50dda7e91768d3f374b122accf4a360e2372be6f",
+      "bytes": 44361,
+      "sha256": "e1b562c553accd7f79d2157ddabe6f1c2092cfe8a9eddb5710b62dd36721ac2d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1876,7 +1876,7 @@
       "ids": 18,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2003,7 +2003,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2436,8 +2436,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 201751,
-      "sha256": "5b894c0aa3025a21f8d14b3bb9276e9ebe6d2cbe71674ab2822629233c397943",
+      "bytes": 201584,
+      "sha256": "2420329d40371b916c0c43c336440d8f16aa6b276e75b80aad06560a51f97c02",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2461,7 +2461,7 @@
       "ids": 568,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2653,7 +2653,7 @@
           "line": 43
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44
         },
@@ -2768,7 +2768,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -2996,7 +2996,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44,
           "exists": true
@@ -8414,8 +8414,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18498,
-      "sha256": "e808aa5e5f097a65dea0892e7bcea3b57386a498e22cd974ca7459f8140054a9",
+      "bytes": 18331,
+      "sha256": "930023581c0d062015a44c179e4de7965d023afd2bc521d41ea54a38b6c057fc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8449,7 +8449,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8556,7 +8556,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -8872,7 +8872,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -8998,7 +8998,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -9229,8 +9229,8 @@
         "guest",
         "client"
       ],
-      "bytes": 57919,
-      "sha256": "969e684c2a1997fd8a4e758804c58687999931d387c4c0d2edac74aa14bd5ba4",
+      "bytes": 57752,
+      "sha256": "dc3750cf0d5bfd7a583d7ec65244a0ebe98a9a8015d63d4ed99441752477a89f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9276,7 +9276,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -9388,7 +9388,7 @@
           "line": 48
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49
         },
@@ -9694,7 +9694,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -9826,7 +9826,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49,
           "exists": true
@@ -10151,8 +10151,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 131184,
-      "sha256": "85c56655252bc745f8c7834976f21c93c3817a4e5f8d465b6ae9d65274376c08",
+      "bytes": 131017,
+      "sha256": "7d9118df7787ddbddaca95801a01b4a1d1e14da86ab34a025cd1952560bbad07",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10192,7 +10192,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -10309,7 +10309,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -10655,7 +10655,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -10793,7 +10793,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -11516,8 +11516,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20163,
-      "sha256": "1109c9ddad774ebabebf9afc8b38ba7fa36e48791ad8a2802558e6fd0c4c5f6c",
+      "bytes": 19996,
+      "sha256": "642a4e3e660d82564acea68900c3473e789c645b1ba46e4e4a42bb64c6c03521",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11557,7 +11557,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -11669,7 +11669,7 @@
           "line": 48
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49
         },
@@ -11995,7 +11995,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -12127,7 +12127,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49,
           "exists": true
@@ -12364,8 +12364,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25187,
-      "sha256": "7144bcade8b6651712c8d4be1c9976ce86ceaa56fba2d3acd95eaafa38945ab4",
+      "bytes": 25020,
+      "sha256": "74dffa3cef90304d420a64365224edeca63565ee7e215329512fd47ae7644b0d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12405,7 +12405,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -12512,7 +12512,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -12873,7 +12873,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -12999,7 +12999,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -13297,8 +13297,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22184,
-      "sha256": "37103cb698f7367b903157f4cf4935b3433afe01e4e1ac53e111944bf4171cf5",
+      "bytes": 22017,
+      "sha256": "e07d763ea4d9885d39c23c1ae92a685419270f1a590b1257212a7ae2fbf6018b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13338,7 +13338,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -13445,7 +13445,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -13761,7 +13761,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -13887,7 +13887,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -14158,8 +14158,8 @@
         "guest",
         "client"
       ],
-      "bytes": 44263,
-      "sha256": "6037f633d7198f2b37f42611a567848fd46b5e636ec28a74e51541b4bcacc955",
+      "bytes": 44096,
+      "sha256": "b99365d8ed7b10aabaa5dfb08be05822c62b155dcf22486b94c4dcd89f0a2735",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14205,7 +14205,7 @@
           "line": 12
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 13
         },
@@ -14292,7 +14292,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-9770a74745e92264",
+          "raw": "css/generated/inicio.css?v=tintin-home-f28f773d94f20b12",
           "target": "css/generated/inicio.css",
           "line": 57
         },
@@ -14342,7 +14342,7 @@
           "line": 72
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 73
         },
@@ -14362,7 +14362,7 @@
           "line": 85
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261016-original-hero-layout-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261017-home-actions-spacing-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 86
         },
@@ -14982,7 +14982,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 13,
           "exists": true
@@ -15084,7 +15084,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-9770a74745e92264",
+          "raw": "css/generated/inicio.css?v=tintin-home-f28f773d94f20b12",
           "target": "css/generated/inicio.css",
           "line": 57,
           "exists": true
@@ -15144,7 +15144,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 73,
           "exists": true
@@ -15168,7 +15168,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261016-original-hero-layout-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261017-home-actions-spacing-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 86,
           "exists": true
@@ -15714,8 +15714,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 71144,
-      "sha256": "f77f44867c866a222b34586b7be9b4f0538de0e944f2c83cd9ec725ac8cb3611",
+      "bytes": 70977,
+      "sha256": "73f53837716fe341cb39eb1180bc3fe98868c22b8d2ef5b3fb1eda48b99fd765",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15761,7 +15761,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -15853,7 +15853,7 @@
           "line": 40
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 41
         },
@@ -16049,7 +16049,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -16157,7 +16157,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 41,
           "exists": true
@@ -16544,8 +16544,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1955,
-      "sha256": "41aa480db66a8d08f922251708f9f89f7832266596a0b29edadb06780996bd3b",
+      "bytes": 1958,
+      "sha256": "29385018ec0a6db96180542dddf3ba8f9a2a3db117e4ba3896b8a58ac6df6c57",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16562,7 +16562,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 1
         }
@@ -16609,7 +16609,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 1,
           "exists": true
@@ -16675,8 +16675,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 55448,
-      "sha256": "1936e82163323e7d1751d45191039f6d391ed97251507721d016c2456ed4b432",
+      "bytes": 55281,
+      "sha256": "8e88ae68350ad1b113f94b59efed2215d343dab7a318b8d9e5280a5e671374cf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16722,7 +16722,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -16839,7 +16839,7 @@
           "line": 35
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 36
         },
@@ -17205,7 +17205,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -17343,7 +17343,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 36,
           "exists": true
@@ -17953,8 +17953,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19853,
-      "sha256": "87caffe685c73faa0974d1ed25fee749304b8c81e9489dc3349f1e7de2a8c1f2",
+      "bytes": 19686,
+      "sha256": "fbc9b1f29f2f7152c7108f4f311e9da62f539107414865ef3d0e937222e3edc8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17988,7 +17988,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -18095,7 +18095,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -18411,7 +18411,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -18537,7 +18537,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -18768,8 +18768,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24170,
-      "sha256": "ec0b46958715e499baab9bf48df405ec0ecb3b378688f885e2bacee7cc398b22",
+      "bytes": 24003,
+      "sha256": "1740dcde669e66dbeaa866e3b685032739df0fe9359b5dd27143ab25304a3b31",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18803,7 +18803,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -18905,7 +18905,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -19346,7 +19346,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -19466,7 +19466,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -19720,8 +19720,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23550,
-      "sha256": "990a7bc82aa5f174920d91564e260e34c010fda77ea1ad00ef2d483e0ad0c3d8",
+      "bytes": 23383,
+      "sha256": "04c03b1a9b619694918cd353b6ab00e1412f12f3d0c9125ab845e9fa208c8a67",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19755,7 +19755,7 @@
           "line": 8
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9
         },
@@ -19877,7 +19877,7 @@
           "line": 48
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49
         },
@@ -20243,7 +20243,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 9,
           "exists": true
@@ -20387,7 +20387,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 49,
           "exists": true
@@ -20797,8 +20797,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22048,
-      "sha256": "bd0d361114769699ad76a0d387b4532633733263c649eb4ddd39fa988831b241",
+      "bytes": 21881,
+      "sha256": "220c4ac9bd070ff51134d98cd98c45d00210f722ac93b7d2a15eb11f5d14298f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20825,7 +20825,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -20927,7 +20927,7 @@
           "line": 41
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42
         },
@@ -21388,7 +21388,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20261017-responsive-layout-1",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -21508,7 +21508,7 @@
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20261017-responsive-footer-1",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 42,
           "exists": true
@@ -27565,8 +27565,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 48769,
-      "sha256": "e5fd1838b54401bfe4d8babdd6713fb35d256e4506139a4d808333a51ff00c68",
+      "bytes": 48772,
+      "sha256": "d9bf242a36697f82a2042e632ca20c5290f759183e3ebd2d87c2835870227632",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32203,8 +32203,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 10657,
-      "sha256": "0fa8bbadcaeab7126e8ff79d2304013f6d3fdf1e74dd0851a30bf7a9b81df3c5",
+      "bytes": 10487,
+      "sha256": "34fd63a5e00946e2fdd4d479eccd1bb8550a87a9f6b9fdc908d1770c27492b46",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37105,8 +37105,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 28379,
-      "sha256": "7c115c8eb73d26eb4608524eddd5857acf776b38b47d6106a92444a6fbb2e882",
+      "bytes": 28212,
+      "sha256": "c0fb493e21c4b9c7702235db8756f5137aab02e4b048e5610e46cecef7c1d8f2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47996,6 +47996,22 @@
       ]
     },
     {
+      "path": "tests/ui-ux/home-footer-spacing.spec.js",
+      "bytes": 7913,
+      "sha256": "dca7ec81390631379b588f1ae4292d5ab65970e8f69418798c1fa6050c7a2886",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://layout.test/",
+          "line": 21
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
       "bytes": 8169,
       "sha256": "7b3f2334d20102578dcba6faf731011b1a007ef39e23ce26c6d7cd990d90f02b",
@@ -48066,8 +48082,8 @@
     },
     {
       "path": "tests/ui-ux/home-styles-bundle.spec.js",
-      "bytes": 3455,
-      "sha256": "6710133bb06701ee710e6a3acb3523d1de9fe1bf378f0e04ed0007b339842064",
+      "bytes": 4512,
+      "sha256": "d7330bb5c3e0e1c781617ae7b73382b25b07ca4fc01da0cdf7e9980d9946bb75",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49195,8 +49211,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 16941,
-      "sha256": "17c404ec5dfc08ecbf75f4d58aa6f683708f98ff716cd8bdc7c7ff39bd4a08a2"
+      "bytes": 16774,
+      "sha256": "cc9764f23e76972442b0b883b826920d5e5e720b68c4b549a782367666aba4e0"
     },
     {
       "path": "AGENTS.md",
@@ -49231,14 +49247,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 26825,
-      "sha256": "0a864fe4b9193b23089194096dea2bb8fd44a8bd5e43c031319496c439cc4591"
+      "bytes": 26658,
+      "sha256": "e11cf7dc08e0a5f276cd28d0fbe290f4638feb0da172cb94c04cba524b289b01"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 44358,
-      "sha256": "4e02977e0d89e77f56ca55ee50dda7e91768d3f374b122accf4a360e2372be6f"
+      "bytes": 44361,
+      "sha256": "e1b562c553accd7f79d2157ddabe6f1c2092cfe8a9eddb5710b62dd36721ac2d"
     },
     {
       "path": "admin-manifest.json",
@@ -49249,8 +49265,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 201751,
-      "sha256": "5b894c0aa3025a21f8d14b3bb9276e9ebe6d2cbe71674ab2822629233c397943"
+      "bytes": 201584,
+      "sha256": "2420329d40371b916c0c43c336440d8f16aa6b276e75b80aad06560a51f97c02"
     },
     {
       "path": "apple-touch-icon.png",
@@ -49861,20 +49877,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 18498,
-      "sha256": "e808aa5e5f097a65dea0892e7bcea3b57386a498e22cd974ca7459f8140054a9"
+      "bytes": 18331,
+      "sha256": "930023581c0d062015a44c179e4de7965d023afd2bc521d41ea54a38b6c057fc"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 57919,
-      "sha256": "969e684c2a1997fd8a4e758804c58687999931d387c4c0d2edac74aa14bd5ba4"
+      "bytes": 57752,
+      "sha256": "dc3750cf0d5bfd7a583d7ec65244a0ebe98a9a8015d63d4ed99441752477a89f"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 131184,
-      "sha256": "85c56655252bc745f8c7834976f21c93c3817a4e5f8d465b6ae9d65274376c08"
+      "bytes": 131017,
+      "sha256": "7d9118df7787ddbddaca95801a01b4a1d1e14da86ab34a025cd1952560bbad07"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -50143,8 +50159,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 20163,
-      "sha256": "1109c9ddad774ebabebf9afc8b38ba7fa36e48791ad8a2802558e6fd0c4c5f6c"
+      "bytes": 19996,
+      "sha256": "642a4e3e660d82564acea68900c3473e789c645b1ba46e4e4a42bb64c6c03521"
     },
     {
       "path": "config/account-contract.json",
@@ -50167,8 +50183,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 36525,
-      "sha256": "474b68bb1a433534226f07ea343e0c29c8b361f4d4a0d6912263f24a64e4d9d7"
+      "bytes": 6341,
+      "sha256": "f30d87fb33827e682c3c5efbef5c711fd0c2d63ea79ff390b4e3203e8ddf96e0"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50180,7 +50196,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "9f4604a33a74a5eec17f04ca36b742f4e03ba04c7dc3f9b17a32dbb2d662c549"
+      "sha256": "a612714781379cd6d1c5df7b6f650e21f402db97909c464387dfa2fc1c0610ac"
     },
     {
       "path": "config/public-site.json",
@@ -50197,8 +50213,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 25187,
-      "sha256": "7144bcade8b6651712c8d4be1c9976ce86ceaa56fba2d3acd95eaafa38945ab4"
+      "bytes": 25020,
+      "sha256": "74dffa3cef90304d420a64365224edeca63565ee7e215329512fd47ae7644b0d"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -50449,8 +50465,8 @@
     {
       "path": "css/core/tema-unificado-tintin.css",
       "extension": ".css",
-      "bytes": 51043,
-      "sha256": "ee871497d30eefb1b55afce6e22cb563d43595130a428ac94120af77f6b84653"
+      "bytes": 51850,
+      "sha256": "95bd3d93ade3a18667d8018e90306563851ae03c0707ca455ead83ea55079475"
     },
     {
       "path": "css/core/tokens-color.css",
@@ -50467,8 +50483,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 456028,
-      "sha256": "9770a74745e922641f1ac56830c6966148f6772606d7ccfdda4970649247a2ec"
+      "bytes": 457198,
+      "sha256": "f28f773d94f20b1249ca8ac22cfbb87eac84c3b103d0b9fbe766db2d58b8b8be"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -50509,8 +50525,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 44319,
-      "sha256": "ecffe5b05a9b7c75f8f7bf5697107ec1007872fe4f5e46c6b8f35840070049e5"
+      "bytes": 44682,
+      "sha256": "4394e0706ad0f5f571183daf0857f7dc7d7f3d12d84f783d07c6e7a6b13a94c8"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -50791,8 +50807,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 567696,
-      "sha256": "7f52b8e0c9e5ef2a5a99015a22b42c3f1c33aaed222033a3645550ba34e5a5c4"
+      "bytes": 569985,
+      "sha256": "064d25305b6e1b397ba2c7b3e88400ff2d4f014c6aa0285b2dbe87fa641becc1"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51277,8 +51293,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 22184,
-      "sha256": "37103cb698f7367b903157f4cf4935b3433afe01e4e1ac53e111944bf4171cf5"
+      "bytes": 22017,
+      "sha256": "e07d763ea4d9885d39c23c1ae92a685419270f1a590b1257212a7ae2fbf6018b"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -51799,8 +51815,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 44263,
-      "sha256": "6037f633d7198f2b37f42611a567848fd46b5e636ec28a74e51541b4bcacc955"
+      "bytes": 44096,
+      "sha256": "b99365d8ed7b10aabaa5dfb08be05822c62b155dcf22486b94c4dcd89f0a2735"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -52195,8 +52211,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 48769,
-      "sha256": "e5fd1838b54401bfe4d8babdd6713fb35d256e4506139a4d808333a51ff00c68"
+      "bytes": 48772,
+      "sha256": "d9bf242a36697f82a2042e632ca20c5290f759183e3ebd2d87c2835870227632"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -53365,8 +53381,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 10657,
-      "sha256": "0fa8bbadcaeab7126e8ff79d2304013f6d3fdf1e74dd0851a30bf7a9b81df3c5"
+      "bytes": 10487,
+      "sha256": "34fd63a5e00946e2fdd4d479eccd1bb8550a87a9f6b9fdc908d1770c27492b46"
     },
     {
       "path": "js/quality/cambios-tienda.js",
@@ -53503,8 +53519,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 71144,
-      "sha256": "f77f44867c866a222b34586b7be9b4f0538de0e944f2c83cd9ec725ac8cb3611"
+      "bytes": 70977,
+      "sha256": "73f53837716fe341cb39eb1180bc3fe98868c22b8d2ef5b3fb1eda48b99fd765"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -53689,8 +53705,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1955,
-      "sha256": "41aa480db66a8d08f922251708f9f89f7832266596a0b29edadb06780996bd3b"
+      "bytes": 1958,
+      "sha256": "29385018ec0a6db96180542dddf3ba8f9a2a3db117e4ba3896b8a58ac6df6c57"
     },
     {
       "path": "package-lock.json",
@@ -53707,8 +53723,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 55448,
-      "sha256": "1936e82163323e7d1751d45191039f6d391ed97251507721d016c2456ed4b432"
+      "bytes": 55281,
+      "sha256": "8e88ae68350ad1b113f94b59efed2215d343dab7a318b8d9e5280a5e671374cf"
     },
     {
       "path": "playwright.config.js",
@@ -53731,14 +53747,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 19853,
-      "sha256": "87caffe685c73faa0974d1ed25fee749304b8c81e9489dc3349f1e7de2a8c1f2"
+      "bytes": 19686,
+      "sha256": "fbc9b1f29f2f7152c7108f4f311e9da62f539107414865ef3d0e937222e3edc8"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 24170,
-      "sha256": "ec0b46958715e499baab9bf48df405ec0ecb3b378688f885e2bacee7cc398b22"
+      "bytes": 24003,
+      "sha256": "1740dcde669e66dbeaa866e3b685032739df0fe9359b5dd27143ab25304a3b31"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -53749,8 +53765,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 23550,
-      "sha256": "990a7bc82aa5f174920d91564e260e34c010fda77ea1ad00ef2d483e0ad0c3d8"
+      "bytes": 23383,
+      "sha256": "04c03b1a9b619694918cd353b6ab00e1412f12f3d0c9125ab845e9fa208c8a67"
     },
     {
       "path": "robots.txt",
@@ -54583,8 +54599,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 70871,
-      "sha256": "8dc2e82e7ef960ad2e5cd4f67a9084e05d4aeacc8e9339f1f1272b736895163d"
+      "bytes": 70707,
+      "sha256": "bb6f04471af85dc9ba3b44a0b7bd81889346baee9f08569786e346f974119362"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -54841,8 +54857,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 28379,
-      "sha256": "7c115c8eb73d26eb4608524eddd5857acf776b38b47d6106a92444a6fbb2e882"
+      "bytes": 28212,
+      "sha256": "c0fb493e21c4b9c7702235db8756f5137aab02e4b048e5610e46cecef7c1d8f2"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -54919,8 +54935,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 22048,
-      "sha256": "bd0d361114769699ad76a0d387b4532633733263c649eb4ddd39fa988831b241"
+      "bytes": 21881,
+      "sha256": "220c4ac9bd070ff51134d98cd98c45d00210f722ac93b7d2a15eb11f5d14298f"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -56669,6 +56685,12 @@
       "sha256": "20c21cdfde5c0df4b6d41e7e1c6e775a68e88c5b8ececba91b85b79a736553ec"
     },
     {
+      "path": "tests/ui-ux/home-footer-spacing.spec.js",
+      "extension": ".js",
+      "bytes": 7913,
+      "sha256": "dca7ec81390631379b588f1ae4292d5ab65970e8f69418798c1fa6050c7a2886"
+    },
+    {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
       "extension": ".mjs",
       "bytes": 8169,
@@ -56683,8 +56705,8 @@
     {
       "path": "tests/ui-ux/home-styles-bundle.spec.js",
       "extension": ".js",
-      "bytes": 3455,
-      "sha256": "6710133bb06701ee710e6a3acb3523d1de9fe1bf378f0e04ed0007b339842064"
+      "bytes": 4512,
+      "sha256": "d7330bb5c3e0e1c781617ae7b73382b25b07ca4fc01da0cdf7e9980d9946bb75"
     },
     {
       "path": "tests/ui-ux/import-identity-review.spec.js",
