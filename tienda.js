@@ -811,6 +811,7 @@ const cardColorSelections = new Map();
 document.addEventListener('click', event => {
   const button = event.target.closest?.('[data-card-color]');
   if (!button) return;
+  if (button.disabled || button.dataset.cardAvailable === 'false') return;
   const card = button.closest('.tt-product-card');
   if (!card) return;
   event.preventDefault();
@@ -856,7 +857,7 @@ function renderProductCardMarkup(p, options = {}) {
     const targetColor = available ? color : selectedColor;
     const target = `/product?id=${encodeURIComponent(String(p.id))}${targetColor ? `&color=${encodeURIComponent(targetColor)}` : ''}`;
     const label = `${color}${available ? '' : ' — Agotado'}`;
-    return `<button type="button" class="tt-card-color${available ? '' : ' tt-stock-unavailable'}" data-card-color="${escapeAttribute(color)}" data-card-image="${escapeAttribute(media)}" data-card-available="${available}" data-card-target="${escapeAttribute(target)}" data-product-name="${escapeAttribute(p.name)}" aria-label="${escapeAttribute(label)}" title="${escapeAttribute(label)}" aria-pressed="${activeColor === color}"><span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(color, p) || 'repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px)'}"></span></button>`;
+    return `<button type="button" ${available ? '' : 'disabled aria-disabled="true"'} class="tt-card-color${available ? '' : ' tt-stock-unavailable'}" data-card-color="${escapeAttribute(color)}" data-card-image="${escapeAttribute(media)}" data-card-available="${available}" data-card-target="${escapeAttribute(target)}" data-product-name="${escapeAttribute(p.name)}" aria-label="${escapeAttribute(label)}" title="${escapeAttribute(label)}" aria-pressed="${activeColor === color}"><span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(color, p) || 'repeating-linear-gradient(45deg,#eee 0 4px,#999 4px 8px)'}"></span></button>`;
   }).join('')}</div>` : '';
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
