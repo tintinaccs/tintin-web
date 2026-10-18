@@ -1,3 +1,4 @@
+import { productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261018-products-master-1';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261017-stat-controls-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
@@ -49,7 +50,7 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261017-stat-controls-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261018-products-master-1';
 import './settings/cupones-admin.js?v=tintin-20261017-domain-cutover-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261017-domain-cutover-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
@@ -5496,6 +5497,8 @@ let _allProducts = [];
 let _productosUnsub = null;
 let _productInventoryUnsub = null;
 const _productInventoryById = new Map();
+let productEditBaseline=null;
+let productMasterBusy=false;
 
 // Combina las opciones curadas de cada <datalist> de ficha técnica con los
 // valores que ya se usaron en productos reales, para que las sugerencias
@@ -5792,6 +5795,7 @@ function renderProductVariantStock(product) {
 function serializeProductForm() {
   return {
     name: document.getElementById('prod-name').value,
+    sku: document.getElementById('prod-sku').value,
     category: document.getElementById('prod-category').value,
     price: document.getElementById('prod-price').value,
     priceBefore: document.getElementById('prod-price-before').value,
@@ -5828,11 +5832,13 @@ window.prodNuevo = function() {
 };
 
 function _prodNuevoNow() {
+  productEditBaseline=null;
   renderProductVariantStock(null);
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = '';
   document.getElementById('prod-form-title').textContent = 'Nuevo producto';
   document.getElementById('prod-name').value = '';
+  document.getElementById('prod-sku').value = '';
   document.getElementById('prod-category').value = '';
   document.getElementById('prod-price').value = '';
   document.getElementById('prod-price-before').value = '';
@@ -5874,25 +5880,28 @@ window.prodEditar = function(docId) {
   UnsavedGuard.confirmLeave(() => _prodEditarNow(docId));
 };
 
-function _prodEditarNow(docId) {
-  const p = _allProducts.find(x => x._docId === docId);
-  if (!p) return;
-  const inventory = _productInventoryById.get(docId) || {};
+function _prodEditarNow(docId, duplicate=false) {
+  const source = _allProducts.find(x => x._docId === docId);
+  if (!source) return;
+  const p=duplicate ? productDuplicateData(source) : source;
+  productEditBaseline=duplicate ? null : productFingerprint(source);
+  const inventory = duplicate ? {} : _productInventoryById.get(docId) || {};
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
-  document.getElementById('prod-id').value = docId;
-  document.getElementById('prod-form-title').textContent = 'Editar producto';
+  document.getElementById('prod-id').value = duplicate ? '' : docId;
+  document.getElementById('prod-form-title').textContent = duplicate ? 'Duplicar producto · copia inactiva y sin stock' : 'Editar producto';
   document.getElementById('prod-name').value = p.name || '';
+  document.getElementById('prod-sku').value = p.sku || '';
   document.getElementById('prod-category').value = p.category || '';
   document.getElementById('prod-price').value = p.price || '';
   document.getElementById('prod-price-before').value = p.priceBefore || '';
   document.getElementById('prod-stock').value = p.stock ?? '';
-  document.getElementById('prod-imageUrl').value = p.imageUrl || '';
+  document.getElementById('prod-imageUrl').value = sanitizeImageUrl(p.imageUrl || p.image || '');
   mountFormImageWidget('prod-image-widget', 'prod-imageUrl', {
     // Si imageUrl no es texto (dato corrupto/legado), el widget asume que
     // sí lo es y llama src.replace(...) sobre el valor crudo — eso rompía
     // el formulario entero al abrir justo ese producto. sanitizeImageUrl
     // siempre devuelve un string (vacío si no es una URL válida).
-    value: sanitizeImageUrl(p.imageUrl || ''),
+    value: sanitizeImageUrl(p.imageUrl || p.image || ''),
     label: 'Imagen principal',
     hint: 'Se muestra en la grilla y la ficha del producto',
   });
@@ -6052,6 +6061,7 @@ async function prodGuardar() {
 
   const data = {
     name,
+    sku: document.getElementById('prod-sku').value.trim().slice(0,80),
     category,
     collection: collection_,
     price,
@@ -6082,6 +6092,15 @@ async function prodGuardar() {
   };
 
   try {
+  if (productVariantStockBaseline) {
+        const original = productVariantStockBaseline;
+        const inputs = [...document.querySelectorAll('#prod-variant-stock input')];
+        const entries = original.entries.map((entry, index) => ({ variant: entry.variant, stock: inputs[index]?.value === '' ? NaN : Number(inputs[index]?.value) }));
+        data.variantInventory = variantInventoryEntries({ variantInventory: entries });
+        data.stock = entries.reduce((sum, entry) => sum + entry.stock, 0);
+        if (data.stock > 1000000) throw new Error('El stock total supera 1.000.000.');
+        data.variants = original.variants;
+  }
     const operation = await runAdminCrudOperation({
       title: _isEdit ? 'Actualizar producto' : 'Crear producto',
       name, module: 'productos',
@@ -6092,25 +6111,26 @@ async function prodGuardar() {
     if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
       if (productVariantStockBaseline) {
-        const original = productVariantStockBaseline;
-        const inputs = [...document.querySelectorAll('#prod-variant-stock input')];
-        const entries = original.entries.map((entry, index) => ({ variant: entry.variant, stock: inputs[index]?.value === '' ? NaN : Number(inputs[index]?.value) }));
-        data.variantInventory = variantInventoryEntries({ variantInventory: entries });
-        data.stock = entries.reduce((sum, entry) => sum + entry.stock, 0);
-        if (data.stock > 1000000) throw new Error('El stock total supera 1.000.000.');
-        data.variants = original.variants;
+        const original=productVariantStockBaseline;
         await withAdminSiteChange(async () => runTransaction(db, async transaction => {
           const ref = doc(db, 'products', docId);
           const snapshot = await transaction.get(ref);
           const current = snapshot.data();
+          if(productEditBaseline && productFingerprint(current)!==productEditBaseline) throw new Error('El producto cambió en otra sesión. Volvé a abrirlo antes de guardar.');
           if (!snapshot.exists() || current.stock !== original.stock || JSON.stringify(variantInventoryEntries(current)) !== JSON.stringify(original.entries) || JSON.stringify(current.variants) !== JSON.stringify(original.variants)) {
             throw new Error('El stock o las opciones cambiaron mientras editabas. Volvé a abrir el producto antes de guardar.');
           }
           transaction.update(ref, data);
         }));
       } else {
-        await withAdminSiteChange(async () => updateDoc(doc(db, 'products', docId), data));
+        await withAdminSiteChange(async () => runTransaction(db,async transaction=>{
+          const ref=doc(db,'products',docId),snapshot=await transaction.get(ref);
+          if(!snapshot.exists() || (productEditBaseline && productFingerprint(snapshot.data())!==productEditBaseline)) throw new Error('El producto cambió o fue eliminado. Volvé a abrirlo antes de guardar.');
+          transaction.update(ref,data);
+        }));
       }
+      productEditBaseline=productFingerprint({...oldProd,...data,variants:productVariantStockBaseline?.variants || variantsParsed || undefined});
+      if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,entries:variantInventoryEntries(data),variants:data.variants};
       if (currentRole === 'superadmin') {
         await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true }));
       }
@@ -6148,6 +6168,8 @@ async function prodGuardar() {
       // Si falla una etapa posterior (inventario o Sheets), el formulario
       // conserva el ID ya creado y reintenta como edición, sin duplicar.
       document.getElementById('prod-id').value = newRef.id;
+      productEditBaseline=productFingerprint(data);
+      if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,entries:variantInventoryEntries(data),variants:data.variants};
       if (currentRole === 'superadmin') {
         await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true }));
       }
@@ -6228,6 +6250,40 @@ async function prodEliminar(docId, name) {
 // en window, así que sin esto, "Guardar producto" y "Eliminar" tiraban
 // "ReferenceError: ... is not defined" y no hacían nada (bug preexistente,
 // encontrado al conectar el registro de auditoría de productos de esta fase).
+window.prodDuplicar = function(docId) {
+  if(!can(currentRole,'addProducts') || !roleCanDo('productos','crear')) {toast('No tenés permiso para crear productos.');return;}
+  UnsavedGuard.confirmLeave(()=>_prodEditarNow(docId,true));
+};
+
+window.TintinProductAdmin = Object.freeze({
+  async applyBulkChanges(request) {
+    if(!auth.currentUser || !currentUser || navigator.onLine===false)throw new Error('La sesión o la conexión no están disponibles.');
+    if(productMasterBusy) throw new Error('Ya hay una operación de productos en curso.');
+    if(!can(currentRole,'editProducts') || !roleCanDo('productos','accionesMasivas') || !roleCanDo('productos',request.field==='active'?'activarDesactivar':'editar')) throw new Error('No tenés permiso para esta edición masiva.');
+    const ids=productBulkIds(request.ids);
+    productMasterBusy=true;
+    try {
+      const changes=await withAdminSiteChange(()=>runTransaction(db,async transaction=>{
+        let collections=_allCollections;
+        if(request.field==='category'){
+          const categorySnapshot=await transaction.get(doc(db,'collections',String(request.value)));
+          if(!categorySnapshot.exists())throw new Error('La colección ya no existe. Actualizá antes de asignarla.');
+          collections=[{slug:String(request.value)}];
+        }
+        return applyProductBulkTransaction(transaction,request,collections,id=>doc(db,'products',id),serverTimestamp);
+      }));
+      for(const change of changes){const product=_allProducts.find(p=>p._docId===change.id);if(product)Object.assign(product,change.patch);}
+      let auditPending=false;
+      try {await logAudit('editar_producto','producto','','',`Edición masiva: ${request.field}`,{bulk:true,count:ids.length,productHistory:changes.map(({id,before,patch})=>({productId:id,priceBefore:before.price ?? null,priceAfter:patch.price ?? before.price ?? null,stockBefore:before.stock ?? null,stockAfter:Object.hasOwn(patch,'stock')?patch.stock:before.stock ?? null}))});}catch(error){auditPending=true;console.warn('[products] Auditoría pendiente:',error?.message);}
+      // La confirmación de Firestore no se revierte si Sheets está temporalmente fuera de servicio.
+      let syncPending=false;
+      try {await pushProductsToSheets(ids);}catch(error){syncPending=true;console.warn('[products] Sincronización externa pendiente:',error?.message);}
+      applyProductFilters();
+      return {confirmed:true,ids,syncPending,auditPending};
+    } finally {productMasterBusy=false;}
+  }
+});
+
 window.prodGuardar = prodGuardar;
 window.prodEliminar = prodEliminar;
 

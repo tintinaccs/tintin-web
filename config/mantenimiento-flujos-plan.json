@@ -1,47 +1,47 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b982cb77cbca744a3f39b75b23731efebdacc31b",
-  "reason": "Corregir solapamientos de Tu selección y mosaico responsive de Productos; conservar CRUD y permisos, confirmar lotes y paginar lecturas del titular. Evidencia local:34 Chromium,16 Node sync,28 controles sync,42 multimedia; sin escrituras reales ni evidencia de producción renovada.",
+  "baseCommit": "729de9011c169269144f06badf2be2018113bd15",
+  "reason": "Maestro Productos completo: CRUD nativo, lotes atómicos y pedidos existentes; Node/UI/inventario concurrente aprobados. Reparados fixture de sesión antiguo y frame de galería con regresiones dirigidas; mecanismo y verificación de producción heredados de main1161.",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "7d91e367701881b77669722fc11c063400b58a4d1bb02160986eb28a9df96f33",
-      "newHash": "a4aafd49c66b583fc9cc25ca8d851ae4c696635da6525d2cf09924e6b67201ed"
+      "oldHash": "a4aafd49c66b583fc9cc25ca8d851ae4c696635da6525d2cf09924e6b67201ed",
+      "newHash": "80a8895d94b4ee4e2e667e921b6ce252bde468771e0d0e94ad53733c22ec36f5"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "448c6d61f9ce19aa37e741cca2131fc7b9410dd3219dddfba62c15fc986c58a3",
-      "newHash": "01e916fd223dc8927d37f7b1906e27cc6c661d3e957f2391e7656f5c574932ae"
-    },
-    {
-      "path": "css/pages/product/product-extras.css",
-      "oldHash": "5dd63952ee6123dfba869a3a098b738ea3087d9091ee72be6960460c3951170d",
-      "newHash": "99d311d251b2b4972b78c636fda00b0dc45640b5a8a666c12600ad31cee15246"
+      "oldHash": "01e916fd223dc8927d37f7b1906e27cc6c661d3e957f2391e7656f5c574932ae",
+      "newHash": "7744538c4d2d5a7e6cd61bda4cc1c7c0bdc16a699a27cd87ea95f419e394f581"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "931595d47bce74f9296d64209136e3101c9311f60cb6af0d3452faf858284b64",
-      "newHash": "6203970630e33a6beb49bce2874676a971139fd1fca2916190d089fd8059299f"
+      "oldHash": "6203970630e33a6beb49bce2874676a971139fd1fca2916190d089fd8059299f",
+      "newHash": "95381b7472662227999876d1a0180cd5ad9dbf0624d5d5c30a3a925821bf1b45"
+    },
+    {
+      "path": "js/admin/orders/pedidos-superadmin-crud.js",
+      "oldHash": "1451847aba9f02002176f4627a89c2fa815400629a8fa231ebd15ccb99b8e9a3",
+      "newHash": "dbb0e711433fe490192571d86cd41b6bbb0b6e69531db15a84bc9a2cdaba1899"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "dd7fa0f2dfe174ac7baa9c2a429b20da361d814edf5df2593deed8c4df109227",
-      "newHash": "adcd4e6cbb498670e6455e866db06b0fe054d4a493eb0f0c2ca1ddd17a6aa1c7"
+      "oldHash": "adcd4e6cbb498670e6455e866db06b0fe054d4a493eb0f0c2ca1ddd17a6aa1c7",
+      "newHash": "ee4315d286e78bab6dc0e2ce370499d7beb0d762e40ee04a5c185575e8e042db"
     },
     {
       "path": "package.json",
-      "oldHash": "9794a62939fdec3260625f3f73a839bd4490185f6e124114fac4fd4813d219e4",
-      "newHash": "4dc83caeddda99a2b133e1fa6afb7329d8679e95aff6569a28b06e9ee5eb1828"
-    },
-    {
-      "path": "product.html",
-      "oldHash": "170ce74281670dc1ede2af7b024c2e5669118ff44b63476bd922d406b9d3c760",
-      "newHash": "65ccd1f44ec86317feabe6e30e9d90f4215c4eed24258275a84963d423ec9d5d"
+      "oldHash": "4dc83caeddda99a2b133e1fa6afb7329d8679e95aff6569a28b06e9ee5eb1828",
+      "newHash": "a9d7ce7681a214afad987aece6832f3fef220759ba27f8fc0294b124fc8328cb"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "8d5e763a4df6924ed051617f6b124e1e756b2f1386fcd96ac1b6666f8a0473f3",
-      "newHash": "972beb4c0c2916fcb4692699e9cb01aba810b94d035e48f301f914d747f21dbb"
+      "oldHash": "972beb4c0c2916fcb4692699e9cb01aba810b94d035e48f301f914d747f21dbb",
+      "newHash": "ad9e245cfac277c5d6719e6754745fb36fd1844482a55e1833d323589107d3ff"
+    },
+    {
+      "path": "tests/orders/order-admin-domain.test.mjs",
+      "oldHash": "9d93764a04959d95733ebe4fb031f224fb292647ca44428ce4f4395686092f84",
+      "newHash": "bd612900360f04e43121b9ae4e8a37b6cc054d7991e1ff8aa51c27110431e802"
     }
   ],
   "affectedRecords": [

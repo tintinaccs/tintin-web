@@ -143,11 +143,11 @@ test('una respuesta vieja de contactos no reemplaza los datos de la revisión nu
 for(const [width,height] of [[320,568],[768,1024],[1440,900]])test(`editor de pedido preserva listo y pago parcial en ${width}x${height}`,async({page})=>{
  await page.setViewportSize({width,height});await open(page);
  await page.evaluate(async()=>{await import('https://tintin.test/js/admin/orders/pedidos-superadmin-crud.js');await window.TintinOrderAdmin.openAdvancedOrderEditor('order_fixture_2');});
- const modal=page.getByRole('dialog',{name:/CRUD completo/});await expect(modal).toBeVisible();await expect(page.locator('#tinped-status')).toHaveValue('listo');await expect(page.locator('#tinped-pay-status')).toHaveValue('parcial');
+ const modal=page.getByRole('dialog',{name:/Editar pedido/});await expect(modal).toBeVisible();await expect(page.locator('#tinped-status')).toHaveValue('listo');await expect(page.locator('#tinped-pay-status')).toHaveValue('parcial');
  expect(await modal.evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);expect(await page.locator('#tinped-crud-form').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
  await page.locator('#tinped-name').fill('Cliente QA editado localmente');await expect(page.locator('#tinped-pay-status')).toHaveValue('parcial');
  await page.locator('#tinped-shipping-method').selectOption('retiro');expect(await page.locator('#tinped-status option[value="en_camino"]').count()).toBe(0);
- await page.locator('#tinped-modal-close').click();await expect(modal).toBeHidden();expect(await page.evaluate(()=>window.__calls.filter(c=>c[0]==='updateOrderStatus').length)).toBe(0);
+ page.once('dialog',dialog=>dialog.accept());await page.locator('#tinped-modal-close').click();await expect(modal).toBeHidden();expect(await page.evaluate(()=>window.__calls.filter(c=>c[0]==='updateOrderStatus').length)).toBe(0);
  await page.evaluate(async()=>{window.__orders[2].paymentStatus='error';await window.TintinOrderAdmin.openAdvancedOrderEditor('order_fixture_2');});
  await expect(page.locator('#tinped-pay-status')).toHaveValue('error');await page.keyboard.press('Escape');await expect(modal).toBeHidden();
 });

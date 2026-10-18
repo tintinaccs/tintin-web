@@ -114,7 +114,15 @@ check(
 );
 check(
   'El guardado parcial de un producto nuevo se puede reintentar sin duplicarlo',
-  /await withAdminSiteChange\(async \(\) => setDoc\(newRef, data\)\);[\s\S]{0,180}getElementById\('prod-id'\)\.value = newRef\.id[\s\S]{0,220}pushProductsToSheets/.test(adminApp),
+  (() => {
+    const start=adminApp.indexOf("const newRef = doc(collection(db, 'products'));");
+    const creation=adminApp.slice(start,adminApp.indexOf('UnsavedGuard.clear();',start));
+    const write=creation.indexOf('await withAdminSiteChange(async () => setDoc(newRef, data));');
+    const keepId=creation.indexOf("getElementById('prod-id').value = newRef.id");
+    const privateInventory=creation.indexOf("setDoc(doc(db, 'productInventory', newRef.id)");
+    const sheets=creation.indexOf('pushProductsToSheets');
+    return start>=0 && write>=0 && keepId>write && privateInventory>keepId && sheets>privateInventory;
+  })(),
   'Tras crear el documento, conservar su ID antes de intentar sincronizaciones que pueden fallar.'
 );
 check(
