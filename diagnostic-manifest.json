@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e5dea6d4485d9182dd37b15761f0b3c249131eb998a6975b20fa3c46fc392db6",
+  "sourceFingerprint": "011da00b60f92b84bcb8e3b812a75443f31b9927427c4f01aafc2c351cee6085",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1311,
     "textFiles": 1225,
-    "totalBytes": 24618898,
+    "totalBytes": 24620152,
     "pages": 19,
     "modules": 921
   },
@@ -48807,8 +48807,8 @@
     },
     {
       "path": "tests/ui-ux/products-mosaic.spec.js",
-      "bytes": 11278,
-      "sha256": "bfca1310d15ba14b2c660019934d618c05adce9dbde5ae53698f728933fbe916",
+      "bytes": 11981,
+      "sha256": "463c4b44bb858220e8ea045c2ebc215342314bc6a4261acb0df6da99543a41fc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48830,6 +48830,14 @@
         {
           "url": "https://img.test/principal.webp",
           "line": 102
+        },
+        {
+          "url": "https://tintin.test/",
+          "line": 117
+        },
+        {
+          "url": "https://tintin.test/product-editor-fixture.html",
+          "line": 124
         }
       ]
     },
@@ -51315,8 +51323,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 589193,
-      "sha256": "370236dbba26dc6b0e445332f6e6082bdea8ba5167f7f02fd7e5ffd4f0838481"
+      "bytes": 589744,
+      "sha256": "250add4d6bda7554e0cd19d064bbc9d1d2a489b80065fcc527b0e229ec8310bc"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57345,8 +57353,8 @@
     {
       "path": "tests/ui-ux/products-mosaic.spec.js",
       "extension": ".js",
-      "bytes": 11278,
-      "sha256": "bfca1310d15ba14b2c660019934d618c05adce9dbde5ae53698f728933fbe916"
+      "bytes": 11981,
+      "sha256": "463c4b44bb858220e8ea045c2ebc215342314bc6a4261acb0df6da99543a41fc"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",

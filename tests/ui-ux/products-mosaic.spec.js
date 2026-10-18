@@ -111,10 +111,17 @@ for(const width of [390,768,1440])test(`editor de foto principal grande y sin re
 
 // Formulario completo real; CSP impide Auth, SDK y cualquier escritura remota.
 for(const width of [320,390,768,1440])test(`todos los campos del editor caben en ${width}`,async({page})=>{
- const fs=require('node:fs');const shell=fs.readFileSync('admin.html','utf8');
+ const fs=require('node:fs'),path=require('node:path');const root=path.resolve(__dirname,'../..');const shell=fs.readFileSync(path.join(root,'admin.html'),'utf8');
+ await page.route('**/*',route=>{
+  const url=new URL(route.request().url()),file=path.resolve(root,'.'+decodeURIComponent(url.pathname));
+  if(url.origin!=='https://tintin.test'||!file.startsWith(root+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile())return route.abort();
+  const types={'.css':'text/css','.woff2':'font/woff2','.woff':'font/woff','.png':'image/png','.svg':'image/svg+xml','.ico':'image/x-icon','.json':'application/json'};
+  const type=types[path.extname(file)];if(!type)return route.abort();
+  return route.fulfill({contentType:type,body:fs.readFileSync(file)});
+ });
  await page.setViewportSize({width,height:1000});
  await page.route('**/product-editor-fixture.html',route=>route.fulfill({contentType:'text/html',headers:{'Content-Security-Policy':"default-src 'self'; script-src 'none'; connect-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; object-src 'none'"},body:shell}));
- await page.goto('/product-editor-fixture.html',{waitUntil:'load'});
+ await page.goto('https://tintin.test/product-editor-fixture.html',{waitUntil:'load'});
  await page.addStyleTag({path:'css/admin/shopify-commerce-admin.css'});
  await page.evaluate(()=>{
   document.documentElement.classList.add('adm-auth-ready');
