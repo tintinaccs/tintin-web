@@ -24,7 +24,7 @@ test('profile removal passes a product object to the canonical favorites API', a
   });
   vm.runInContext(source, sandbox);
   await click({ target: { closest: () => button } });
-  assert.deepEqual(JSON.parse(JSON.stringify(received)), { id: 'product1' });
+  assert.deepEqual(JSON.parse(JSON.stringify(received)), { id: 'product1', selected: false });
   assert.deepEqual(alerts, []);
 });
 
@@ -41,6 +41,33 @@ test('an unsuccessful removal unlocks the button for retry and reports the error
   await click({ target: { closest: () => button } });
   assert.equal(button.disabled, false);
   assert.equal(alerts.length, 1);
+});
+
+test('the real favorites client sends explicit removal and re-add choices to the server', async () => {
+  const client = fs.readFileSync(new URL('../../js/components/favorites/sincronizacion-favoritos.js', import.meta.url), 'utf8').replace(/^import .*;\r?\n/gm, '');
+  const requests = [];
+  let sessionChanged;
+  let favoritesChanged;
+  const user = { uid: 'qa', getIdToken: async () => 'test-only' };
+  const sandbox = vm.createContext({
+    document: { addEventListener() {}, querySelectorAll: () => [] },
+    window: { addEventListener() {}, dispatchEvent() {} }, CustomEvent: class {},
+    AUTH_STATES: { AUTHENTICATED: 'authenticated', UNKNOWN: 'unknown', RESTORING: 'restoring' },
+    waitForSession: async () => ({ status: 'authenticated', user }),
+    subscribeSession: callback => { sessionChanged = callback; }, appCheckReady: Promise.resolve(true),
+    db: {}, collection: () => ({}), onSnapshot: (reference, callback) => { favoritesChanged = callback; return () => {}; },
+    fetch: async (url, options) => { const body = JSON.parse(options.body); requests.push(body); return { ok: true, json: async () => ({ ok: true, selected: body.selected }) }; },
+  });
+  vm.runInContext(client, sandbox);
+  sessionChanged({ status: 'authenticated', user });
+  await Promise.resolve();
+  favoritesChanged({ docs: [{ id: 'product1', data: () => ({ name: 'QA' }) }] });
+  assert.equal((await sandbox.window.TintinFavorites.toggle({ id: 'product1', selected: false })).selected, false);
+  assert.equal((await sandbox.window.TintinFavorites.toggle({ id: 'product1' })).selected, false);
+  favoritesChanged({ docs: [] });
+  assert.equal((await sandbox.window.TintinFavorites.toggle({ id: 'product1' })).selected, true);
+  assert.deepEqual(requests.map(request => request.selected), [false, false, true]);
+  assert.ok(requests.every(request => request.productId === 'product1'));
 });
 test('favorite uses current public product price and media, never stored zero price', () => {
   const favorite = { productId: 'product1', name: 'Old', price: 0, imageUrl: 'old-image' };

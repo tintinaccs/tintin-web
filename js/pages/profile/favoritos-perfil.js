@@ -46,7 +46,7 @@ document.getElementById('perfil-favorites-list')?.addEventListener('click', asyn
   if (!button) return;
   button.disabled = true;
   try {
-    const result = await window.TintinFavorites?.toggle({ id: button.dataset.removeFavorite });
+    const result = await window.TintinFavorites?.toggle({ id: button.dataset.removeFavorite, selected: false });
     if (result?.changed !== true) throw new Error('No se pudo actualizar');
   } catch (error) {
     button.disabled = false;

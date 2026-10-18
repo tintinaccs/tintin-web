@@ -928,7 +928,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261017-domain-cutover-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261018-profile-favorites-2');
   }
 
   function bootThemeColorSanitizerPublic() {
