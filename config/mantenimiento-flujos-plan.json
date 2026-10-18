@@ -1,67 +1,33 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b982cb77cbca744a3f39b75b23731efebdacc31b",
-  "reason": "Corregir solapamientos de Tu selección y mosaico responsive de Productos; conservar CRUD y permisos, confirmar lotes y paginar lecturas del titular. Evidencia local:34 Chromium,16 Node sync,28 controles sync,42 multimedia; sin escrituras reales ni evidencia de producción renovada.",
+  "baseCommit": "46c10ef533ca6e31dad7625e927e57ae6926fa0e",
+  "reason": "Productos fase 1: mosaico adaptable, imágenes completas, selección persistente y editor por secciones; 93 pruebas Chromium y regresiones Node/contratos de Admin aprobadas.",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "7d91e367701881b77669722fc11c063400b58a4d1bb02160986eb28a9df96f33",
-      "newHash": "a4aafd49c66b583fc9cc25ca8d851ae4c696635da6525d2cf09924e6b67201ed"
+      "oldHash": "a4aafd49c66b583fc9cc25ca8d851ae4c696635da6525d2cf09924e6b67201ed",
+      "newHash": "f658e74b0c91ac4779ab44f1301f33db3ae515eaa9eef8db70201835a4a36f14"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "448c6d61f9ce19aa37e741cca2131fc7b9410dd3219dddfba62c15fc986c58a3",
-      "newHash": "01e916fd223dc8927d37f7b1906e27cc6c661d3e957f2391e7656f5c574932ae"
-    },
-    {
-      "path": "css/pages/product/product-extras.css",
-      "oldHash": "5dd63952ee6123dfba869a3a098b738ea3087d9091ee72be6960460c3951170d",
-      "newHash": "99d311d251b2b4972b78c636fda00b0dc45640b5a8a666c12600ad31cee15246"
-    },
-    {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "931595d47bce74f9296d64209136e3101c9311f60cb6af0d3452faf858284b64",
-      "newHash": "6203970630e33a6beb49bce2874676a971139fd1fca2916190d089fd8059299f"
+      "oldHash": "01e916fd223dc8927d37f7b1906e27cc6c661d3e957f2391e7656f5c574932ae",
+      "newHash": "edf439b94cb7a14aef779623842573d39d7cae69445f7c338b95a131baa119b7"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "dd7fa0f2dfe174ac7baa9c2a429b20da361d814edf5df2593deed8c4df109227",
-      "newHash": "adcd4e6cbb498670e6455e866db06b0fe054d4a493eb0f0c2ca1ddd17a6aa1c7"
+      "oldHash": "adcd4e6cbb498670e6455e866db06b0fe054d4a493eb0f0c2ca1ddd17a6aa1c7",
+      "newHash": "86232fbed36b1653ed69568d1a70218540bf39d2acd27fa23ce06257d2d60732"
     },
     {
       "path": "package.json",
-      "oldHash": "9794a62939fdec3260625f3f73a839bd4490185f6e124114fac4fd4813d219e4",
-      "newHash": "4dc83caeddda99a2b133e1fa6afb7329d8679e95aff6569a28b06e9ee5eb1828"
-    },
-    {
-      "path": "product.html",
-      "oldHash": "170ce74281670dc1ede2af7b024c2e5669118ff44b63476bd922d406b9d3c760",
-      "newHash": "65ccd1f44ec86317feabe6e30e9d90f4215c4eed24258275a84963d423ec9d5d"
+      "oldHash": "4dc83caeddda99a2b133e1fa6afb7329d8679e95aff6569a28b06e9ee5eb1828",
+      "newHash": "14a64fda2c3a0043e46b0295987c99735d8d6a55963d51a0c1c8481072cdd06c"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "8d5e763a4df6924ed051617f6b124e1e756b2f1386fcd96ac1b6666f8a0473f3",
-      "newHash": "972beb4c0c2916fcb4692699e9cb01aba810b94d035e48f301f914d747f21dbb"
+      "oldHash": "972beb4c0c2916fcb4692699e9cb01aba810b94d035e48f301f914d747f21dbb",
+      "newHash": "b948dd39c246bbbb410fbd860158602442da3aae278e91e2c4914d354ae7c1d9"
     }
   ],
-  "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas__correos__41",
-    "apis-internas__pedidos__32",
-    "correos",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
-    "productos",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }

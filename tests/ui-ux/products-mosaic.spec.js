@@ -2,7 +2,7 @@
 const {test,expect}=require('@playwright/test');
 const {mockRuntime}=require('./helpers/admin-commerce-fixture.cjs');
 
-for(const [width,height,columns,touch] of [[320,700,2,true],[390,844,2,true],[844,390,2,true],[768,1024,3,true],[820,1180,3,true],[1024,768,3,true],[1280,800,3,false],[1440,900,3,false]]){
+for(const [width,height,columns,touch] of [[320,700,2,true],[390,844,2,true],[844,390,2,true],[768,1024,2,true],[820,1180,2,true],[1024,768,2,true],[1366,1024,2,true],[1280,800,3,false],[1440,900,3,false]]){
  test(`mosaico Productos y foto grande sin desborde ${width}x${height}`,async({browser})=>{
   const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'});
   try{

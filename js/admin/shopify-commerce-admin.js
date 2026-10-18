@@ -1,3 +1,4 @@
+import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261018-products-phase1-1';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261012-orders-board-1';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
@@ -33,7 +34,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261018-products-mosaic-1';
+const VERSION = 'tintin-20261018-products-phase1-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -87,6 +88,9 @@ const state = {
   productTab: 'all',
   collectionTab: 'all',
   orderTab: 'all', orderStage: 'new', orderDelivery: '', orderVisible: {}, orderBusyIds: new Set(), orderSound: false, orderHistory: new Map(), orderContacts: new Map(),
+  productView: 'grid',
+  productFiltersOpen: false,
+  productBulkOpen: false,
   productSearch: '',
   collectionSearch: '',
   orderSearch: '',
@@ -440,6 +444,11 @@ function selectPageOnly(set, ids, checked) {
 function renderProducts() {
   const root = document.getElementById('tt-commerce-products');
   if (!root) return;
+  const activeControl=document.activeElement;
+  const focusAttribute=root.contains(activeControl) ? ['data-filter','data-select-product','data-check-all','data-action','data-tab'].find(attribute=>activeControl.hasAttribute(attribute)) : null;
+  const focusSelector=focusAttribute ? `[${focusAttribute}="${CSS.escape(activeControl.getAttribute(focusAttribute))}"]` : null;
+  const caret=focusAttribute && typeof activeControl.selectionStart==='number' ? [activeControl.selectionStart,activeControl.selectionEnd] : null;
+  root.dataset.view=state.productView;root.dataset.filtersOpen=String(state.productFiltersOpen);root.dataset.bulkOpen=String(state.productBulkOpen);
   const counts = productTabCounts();
   const list = filteredProducts();
   const page = pageSlice(list, state.productPage);
@@ -452,6 +461,8 @@ function renderProducts() {
   const canDelete = perm('productos', 'eliminar', 'deleteProducts');
   const canBulk = perm('productos', 'accionesMasivas', 'editProducts');
   const canExport = perm('productos', 'exportar', 'editProducts') || state.role === 'viewer';
+  const filterCount=Number(Boolean(state.productCategory))+Number(Boolean(state.productStock))+Number(state.productTab!=='all');
+  const hiddenSelected=state.productSelected.size-list.filter(product=>state.productSelected.has(product._docId)).length;
   const productsUnavailable = Boolean(state.productsError && !state.products.length);
   const productsWarning = state.productsError
     ? `<div class="tt-commerce-error" role="alert">${esc(state.productsError)}${state.products.length ? ' Se muestran los últimos datos confirmados.' : ''} <button type="button" class="tt-commerce-btn" data-action="products-retry">Reintentar</button></div>`
@@ -463,7 +474,7 @@ function renderProducts() {
         <h1 class="tt-commerce-title">Productos <span class="tt-commerce-count">${state.productsError ? "—" : state.products.length}</span></h1>
         <div class="tt-commerce-subtitle">Catálogo conectado en tiempo real con la tienda.</div>
       </div>
-      <div class="tt-commerce-actions">
+      <div class="tt-commerce-actions tt-product-page-actions">
         ${canExport ? button('Exportar', 'products-export') : ''}
         ${state.role === 'superadmin' ? button('Importar', 'products-import') : ''}
         ${canCreate ? button('Agregar producto', 'product-new', { primary: true }) : ''}
@@ -478,35 +489,35 @@ function renderProducts() {
         ${tabButton('products', 'sale', 'En oferta', counts.sale, state.productTab)}
         ${tabButton('products', 'featured', 'Destacados', counts.featured, state.productTab)}
       </div>
-      <div class="tt-commerce-toolbar">
-        <label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="product-search" type="search" value="${esc(state.productSearch)}" placeholder="Buscar productos"></label>
+      <div class="tt-product-search-row">
+        <label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="product-search" type="search" value="${esc(state.productSearch)}" placeholder="Buscar productos" aria-label="Buscar productos por nombre, colección o etiqueta"></label>
+        <button type="button" class="tt-commerce-btn tt-product-filters-toggle" data-action="products-filters" aria-expanded="${state.productFiltersOpen}" aria-controls="tt-product-filter-panel">Filtros${filterCount ? ` (${filterCount})` : ''}</button>
+        <div class="tt-product-views" role="group" aria-label="Vista de productos">${['grid','list'].map(view=>`<button type="button" class="tt-commerce-btn" data-action="products-view-${view}" aria-pressed="${state.productView===view}">${view==='grid'?'Mosaico':'Lista'}</button>`).join('')}</div>
+      </div>
+      <div class="tt-commerce-toolbar tt-product-filter-panel" id="tt-product-filter-panel">
+        <label class="tt-product-status-filter">Estado<select class="tt-commerce-select" data-filter="product-status" aria-label="Filtrar por estado">${[['all','Todos'],['active','Activos'],['inactive','Inactivos'],['soldout','Agotados'],['sale','En oferta'],['featured','Destacados']].map(([value,label])=>`<option value="${value}" ${state.productTab===value?'selected':''}>${label} (${counts[value]})</option>`).join('')}</select></label>
+        <label>Colección
         <select class="tt-commerce-select" data-filter="product-category" aria-label="Filtrar por colección">
           <option value="">Todas las colecciones</option>
           ${state.collections.map(c => `<option value="${esc(c.slug)}" ${state.productCategory === c.slug ? 'selected' : ''}>${esc(c.name || c.slug)}</option>`).join('')}
-        </select>
-        <select class="tt-commerce-select" data-filter="product-stock" aria-label="Filtrar por inventario">
+        </select></label>
+        <label>Inventario<select class="tt-commerce-select" data-filter="product-stock" aria-label="Filtrar por inventario">
           <option value="">Todo el inventario</option>
           <option value="in" ${state.productStock === 'in' ? 'selected' : ''}>Con stock</option>
           <option value="out" ${state.productStock === 'out' ? 'selected' : ''}>Agotados</option>
           <option value="unlimited" ${state.productStock === 'unlimited' ? 'selected' : ''}>Sin control de stock</option>
-        </select>
-        <select class="tt-commerce-select" data-filter="product-sort" aria-label="Ordenar productos">
+        </select></label>
+        <label>Ordenar<select class="tt-commerce-select" data-filter="product-sort" aria-label="Ordenar productos">
           <option value="name-asc" ${state.productSort === 'name-asc' ? 'selected' : ''}>Nombre A–Z</option>
           <option value="name-desc" ${state.productSort === 'name-desc' ? 'selected' : ''}>Nombre Z–A</option>
           <option value="price-desc" ${state.productSort === 'price-desc' ? 'selected' : ''}>Precio mayor</option>
           <option value="price-asc" ${state.productSort === 'price-asc' ? 'selected' : ''}>Precio menor</option>
           <option value="stock-desc" ${state.productSort === 'stock-desc' ? 'selected' : ''}>Más stock</option>
           <option value="stock-asc" ${state.productSort === 'stock-asc' ? 'selected' : ''}>Menos stock</option>
-        </select>
+        </select></label>
+        <button type="button" class="tt-commerce-btn" data-action="products-reset-filters">Limpiar filtros</button>
       </div>
-      <div class="tt-commerce-bulkbar" ${state.productSelected.size && canBulk ? '' : 'hidden'}>
-        <span class="tt-commerce-bulkcount">${state.productSelected.size} seleccionado${state.productSelected.size === 1 ? '' : 's'}</span>
-        ${canToggle ? button('Activar', 'products-bulk-activate') : ''}
-        ${canToggle ? button('Desactivar', 'products-bulk-deactivate') : ''}
-        ${canDelete && canBulk ? button('Eliminar seleccionados', 'products-bulk-delete', { danger: true }) : ''}
-        ${canExport ? button('Exportar selección', 'products-export-selected') : ''}
-        ${button('Limpiar', 'products-clear-selection')}
-      </div>
+      <p class="tt-product-selection-hint">Marcá las casillas para seleccionar varios. Abrí la foto o el nombre para ver el producto.</p>
       ${productsWarning}
       ${!state.productsReady ? '<div class="tt-commerce-loading">Cargando productos…</div>' : productsUnavailable ? '' : page.items.length ? `
       <div class="tt-commerce-tablewrap tt-commerce-product-grid-wrap">
@@ -535,7 +546,24 @@ function renderProducts() {
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay productos que coincidan con esta vista.</div>'}
       <div class="tt-commerce-footer"><span>${rangeLabel(page, 'productos', productsUnavailable)}</span><span>Los cambios se sincronizan automáticamente.</span>${pageControls('products-page', page.page, page.pages)}</div>
+      <div class="tt-commerce-bulkbar tt-product-selection" ${state.productSelected.size && (canBulk || canExport) ? '' : 'hidden'}>
+        <span class="tt-commerce-bulkcount" role="status">${state.productSelected.size} seleccionado${state.productSelected.size === 1 ? '' : 's'}${hiddenSelected ? ` · ${hiddenSelected} fuera del filtro` : ''}</span>
+        <button type="button" class="tt-commerce-btn tt-product-bulk-toggle" data-action="products-bulk-panel" aria-expanded="${state.productBulkOpen}" aria-controls="tt-product-bulk-options">Acciones</button>
+        ${button('Limpiar', 'products-clear-selection')}
+        <div class="tt-product-bulk-options" id="tt-product-bulk-options">
+          ${canBulk && canToggle ? button('Activar', 'products-bulk-activate') : ''}
+          ${canBulk && canToggle ? button('Inactivar', 'products-bulk-deactivate') : ''}
+          ${canDelete && canBulk ? button('Eliminar seleccionados', 'products-bulk-delete', { danger: true }) : ''}
+          ${canExport ? button('Exportar selección', 'products-export-selected') : ''}
+        </div>
+      </div>
     </div>`;
+  syncProductSurfaces();
+  if (state.busy) root.querySelectorAll('button,input,select').forEach(control=>{control.disabled=true;});
+  if (focusSelector) {
+    const control=root.querySelector(focusSelector);control?.focus({preventScroll:true});
+    if (caret && control?.setSelectionRange) control.setSelectionRange(...caret);
+  }
 }
 
 function renderCollections() {
@@ -812,16 +840,23 @@ function ensureDrawerDom() {
   }
 }
 
+let productReturnFocus=null;
 function openDrawer(type, id) {
+  if(type==='product') productReturnFocus={element:document.activeElement,id};
   if(type==='order') { orderReturnFocus=document.activeElement;refreshOrderHistory(id);refreshOrderContacts(id); }
   state.drawer = { type, id, baseChangeId: type==='order' ? state.orders.find(o=>o.id===id)?.lastChangeId || '' : '' };
   renderDrawer();
 }
 
 function closeDrawer() {
+  const wasProduct=state.drawer?.type==='product';
   const wasOrder=state.drawer?.type==='order';
   const orderId=state.drawer?.id;
   state.drawer = null;renderDrawer();
+  syncProductSurfaces();
+  if(wasProduct && productReturnFocus) {
+    const target=productReturnFocus.element?.isConnected ? productReturnFocus.element : [...document.querySelectorAll('.tt-commerce-product-open')].find(node=>node.dataset.id===productReturnFocus.id);target?.focus({preventScroll:true});
+  }
   if(wasOrder) { const target=orderReturnFocus?.isConnected ? orderReturnFocus : [...document.querySelectorAll('[data-action="drawer-order"]')].find(e=>e.dataset.id===orderId);target?.focus?.({preventScroll:true}); }
 }
 
@@ -972,6 +1007,7 @@ function renderDrawer() {
     drawer.classList.remove('open');
     backdrop.classList.remove('open');
     drawer.innerHTML = '';
+    syncProductSurfaces();
     return;
   }
 
@@ -983,7 +1019,7 @@ function renderDrawer() {
   if (!content) { state.drawer = null; renderDrawer(); return; }
 
   drawer.dataset.kind=state.drawer.type;
-  if(state.drawer.type==='order'){drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label',`Detalles del pedido ${content.title}`);}
+  if(state.drawer.type==='order' || state.drawer.type==='product'){drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label',`${state.drawer.type==='product'?'Producto':'Detalles del pedido'} ${content.title}`);}
   else { drawer.removeAttribute('role');drawer.removeAttribute('aria-modal');drawer.setAttribute('aria-label','Detalles'); }
   const focusBefore=document.activeElement;
   const focusAttribute=drawer.contains(focusBefore) ? ['data-drawer-order-status','data-drawer-order-pay','data-drawer-order-note','data-action','href','id','name'].find(attribute=>focusBefore.hasAttribute(attribute)) : null;
@@ -997,10 +1033,11 @@ function renderDrawer() {
     if(selection && control?.setSelectionRange)control.setSelectionRange(...selection);
   }
   const orderBody=drawer.querySelector('.tt-commerce-drawer-body');if(orderBody)orderBody.scrollTop=bodyScroll;
-  if(state.drawer.type==='order' && !drawer.classList.contains('open'))drawer.querySelector('[data-action="drawer-close"]')?.focus();
+  if((state.drawer.type==='order' || state.drawer.type==='product') && !drawer.classList.contains('open'))drawer.querySelector('[data-action="drawer-close"]')?.focus();
   requestAnimationFrame(() => {
     drawer.classList.add('open');
     backdrop.classList.add('open');
+    syncProductSurfaces();
   });
 }
 
@@ -1120,13 +1157,17 @@ async function handleAction(action, element) {
   }
   if (action === 'order-history-retry') { state.orderHistory.delete(id);return refreshOrderHistory(id); }
 
+  if (action === 'products-filters') {state.productFiltersOpen=!state.productFiltersOpen;return renderProducts();}
+  if (action === 'products-bulk-panel') {state.productBulkOpen=!state.productBulkOpen;return renderProducts();}
+  if (action === 'products-view-grid' || action === 'products-view-list') {state.productView=action==='products-view-list'?'list':'grid';return renderProducts();}
+  if (action === 'products-reset-filters') {state.productSearch='';state.productTab='all';state.productCategory='';state.productStock='';state.productSort='name-asc';state.productPage=0;return renderProducts();}
   if (action === 'product-new') { closeDrawer(); return window.prodNuevo?.(); }
   if (action === 'products-import') return clickSection('importar');
   if (action === 'products-export') return exportProducts(false);
   if (action === 'products-export-selected') return exportProducts(true);
-  if (action === 'products-clear-selection') { state.productSelected.clear(); return renderProducts(); }
-  if (action === 'products-page-prev') { state.productPage = Math.max(0, state.productPage - 1); state.productSelected.clear(); return renderProducts(); }
-  if (action === 'products-page-next') { state.productPage += 1; state.productSelected.clear(); return renderProducts(); }
+  if (action === 'products-clear-selection') { state.productSelected.clear();state.productBulkOpen=false;return renderProducts(); }
+  if (action === 'products-page-prev') { state.productPage = Math.max(0, state.productPage - 1); return renderProducts(); }
+  if (action === 'products-page-next') { state.productPage += 1; return renderProducts(); }
   if (action === 'products-bulk-activate') return bulkProducts(true);
   if (action === 'products-bulk-deactivate') return bulkProducts(false);
   if (action === 'products-bulk-delete') {
@@ -1220,7 +1261,7 @@ function onClick(event) {
   const tab = event.target.closest('[data-tab-module]');
   if (tab) {
     const module = tab.dataset.tabModule;
-    if (module === 'products') { state.productTab = tab.dataset.tab; state.productSelected.clear(); renderProducts(); }
+    if (module === 'products') { state.productTab = tab.dataset.tab; renderProducts(); }
     if (module === 'collections') { state.collectionTab = tab.dataset.tab; state.collectionSelected.clear(); renderCollections(); }
     if (module === 'orders') {
       state.orderTab = tab.dataset.tab;
@@ -1272,9 +1313,10 @@ function onChange(event) {
   }
 
   const filter = target.dataset.filter;
-  if (filter === 'product-category') { state.productCategory = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
-  if (filter === 'product-stock') { state.productStock = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
-  if (filter === 'product-sort') { state.productSort = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
+  if (filter === 'product-status') {state.productTab=target.value;state.productPage=0;return renderProducts();}
+  if (filter === 'product-category') { state.productCategory = target.value; state.productPage = 0; return renderProducts(); }
+  if (filter === 'product-stock') { state.productStock = target.value; state.productPage = 0; return renderProducts(); }
+  if (filter === 'product-sort') { state.productSort = target.value; state.productPage = 0; return renderProducts(); }
   if (filter === 'collection-visibility') { state.collectionVisibility = target.value; state.collectionPage = 0; return renderCollections(); }
   if (filter === 'collection-sort') { state.collectionSort = target.value; state.collectionPage = 0; return renderCollections(); }
   if (filter === 'order-status') { state.orderStatus = target.value; state.orderPage = 0; return renderOrders(); }
@@ -1306,7 +1348,7 @@ function onInput(event) {
   clearTimeout(searchTimer);
   const value = event.target.value;
   searchTimer = setTimeout(() => {
-    if (filter === 'product-search') { state.productSearch = value; state.productPage = 0; state.productSelected.clear(); renderProducts(); }
+    if (filter === 'product-search') { state.productSearch = value; state.productPage = 0; renderProducts(); }
     if (filter === 'collection-search') { state.collectionSearch = value; state.collectionPage = 0; renderCollections(); }
     if (filter === 'order-search') { state.orderSearch = value; state.orderPage = 0; renderOrders(); }
   }, 120);
@@ -1328,6 +1370,7 @@ function mountShells() {
     shell.className = 'tt-commerce-shell';
     section.prepend(shell);
   });
+  installProductInterface();
   syncLegacyFormVisibility();
   renderAll();
 }
@@ -1338,6 +1381,7 @@ function visible(el) {
 }
 
 function syncLegacyFormVisibility() {
+  syncProductSurfaces();
   const productShell = document.getElementById('tt-commerce-products');
   if (productShell) productShell.hidden = visible(document.getElementById('prod-form-card'));
 
@@ -1607,13 +1651,21 @@ function boot() {
     renderDrawer();
   }, { passive: true });
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') { closeMenu(); closeDrawer(); }
+    if (event.key === 'Escape') {
+      if (document.querySelector('#unsaved-modal[aria-hidden="false"]')) return;
+      const picker=document.querySelector('.tt-mlib-overlay');
+      if(visibleProductEditor() && picker){event.preventDefault();picker.querySelector('.tt-mlib-close')?.click();return;}
+      const editor=visibleProductEditor();
+      if(editor && compactProductUI()){event.preventDefault();window.prodCancelForm?.();return;}
+      closeMenu();closeDrawer();
+    }
   });
 
   document.addEventListener('keydown',event=>{
-    if(state.drawer?.type==='order' && event.key==='Tab') {
-      const drawer=document.getElementById('tt-commerce-drawer');
-      const controls=[...drawer.querySelectorAll('button:not([disabled]),a[href],input,select,textarea,[tabindex="0"]')].filter(e=>e.getClientRects().length);
+    if((state.drawer?.type==='order' || state.drawer?.type==='product' || (visibleProductEditor() && compactProductUI())) && event.key==='Tab') {
+      if (document.querySelector('#unsaved-modal[aria-hidden="false"]')) return;
+      const drawer=(visibleProductEditor() && document.querySelector('.tt-mlib-overlay')) || visibleProductEditor() || document.getElementById('tt-commerce-drawer');
+      const controls=[...drawer.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]')].filter(e=>e.getClientRects().length);
       const first=controls[0],last=controls.at(-1);
       if(event.shiftKey && (document.activeElement===first || !drawer.contains(document.activeElement))){event.preventDefault();last?.focus();}
       else if(!event.shiftKey && (document.activeElement===last || !drawer.contains(document.activeElement))){event.preventDefault();first?.focus();}
