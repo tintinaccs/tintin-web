@@ -151,3 +151,12 @@ test('foto principal completa en editor real y rotación conserva borrador y pie
  await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');await expect(page.locator('#prod-save-btn')).toBeInViewport();
  await page.screenshot({path:'test-results/product-editor-photo-landscape.png'});
 });
+
+test('salir de Productos libera el scroll y regresar conserva el editor visible',async({page})=>{
+ await openEditor(page,390,844);await page.locator('#prod-name').fill('Borrador');
+ await page.evaluate(()=>document.getElementById('section-productos').style.display='none');
+ await expect(page.locator('html')).not.toHaveClass(/tt-product-editor-open/);
+ await expect(page.locator('html')).not.toHaveCSS('overflow','hidden');
+ await page.evaluate(()=>document.getElementById('section-productos').style.display='');
+ await expect(page.locator('html')).toHaveClass(/tt-product-editor-open/);await expect(page.locator('#prod-name')).toHaveValue('Borrador');
+});

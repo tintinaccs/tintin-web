@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "baseCommit": "46c10ef533ca6e31dad7625e927e57ae6926fa0e",
-  "reason": "Productos fase 1: mosaico adaptable, imágenes completas, selección persistente y editor por secciones; 93 pruebas Chromium y regresiones Node/contratos de Admin aprobadas.",
+  "reason": "Productos fase 1: imágenes completas, selección persistente, editor adaptable y salida de sección sin bloqueo de scroll; 94 Chromium por suites y regresiones específicas de cierre, Node/contratos aprobados.",
   "files": [
     {
       "path": "admin.html",
       "oldHash": "a4aafd49c66b583fc9cc25ca8d851ae4c696635da6525d2cf09924e6b67201ed",
-      "newHash": "f658e74b0c91ac4779ab44f1301f33db3ae515eaa9eef8db70201835a4a36f14"
+      "newHash": "63a00fb5b8ee3011a5863a473653ea0476bd1999ae071a73a58b8461b063f5bd"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -16,7 +16,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "adcd4e6cbb498670e6455e866db06b0fe054d4a493eb0f0c2ca1ddd17a6aa1c7",
-      "newHash": "86232fbed36b1653ed69568d1a70218540bf39d2acd27fa23ce06257d2d60732"
+      "newHash": "baf999f49b09a70080a898a18138899dc2a4ad53244033fe4bf0fe1daa78b9be"
     },
     {
       "path": "package.json",
@@ -26,7 +26,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "972beb4c0c2916fcb4692699e9cb01aba810b94d035e48f301f914d747f21dbb",
-      "newHash": "b948dd39c246bbbb410fbd860158602442da3aae278e91e2c4914d354ae7c1d9"
+      "newHash": "1dcc6ef6e960df4778c01c37eb17415e05322042b6c88f1843b9f462f9459752"
     }
   ],
   "affectedRecords": []

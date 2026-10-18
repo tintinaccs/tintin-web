@@ -126,6 +126,9 @@ export function installProductInterface() {
     if (queued) return;
     queued=true;queueMicrotask(()=>{queued=false;enhanceProductEditor();syncProductSurfaces();});
   }).observe(card,{childList:true,subtree:true,attributes:true,attributeFilter:['style','hidden']});
+  // La navegación nativa oculta la sección sin modificar el formulario.
+  const section=card?.closest('.adm-section');
+  if(section) new MutationObserver(syncProductSurfaces).observe(section,{attributes:true,attributeFilter:['class','style','hidden']});
   // La biblioteca se abre encima del editor; conserva el foco y sus controles.
   let pickerOpener=null;
   let previousPicker=null;
