@@ -1,5 +1,7 @@
 ## 2026-10-18 — Resumen de dirección principal
 
+Favoritos en Perfil: se respeta el contrato existente de TintinFavorites.toggle enviando objeto con id, no string. Un resultado sin cambio vuelve al control de error/reintento en lugar de dejar deshabilitado el botón. No cambia el endpoint, cuotas, permisos ni la semántica del favorito. Dos regresiones FAIL/PASS y conjunto de ocho tests de Perfil/carrito. Reparación operativa de fórmulas vacías y publicación del bloque canónico de capacidad de Apps Script documentadas con backup en CURRENT_STATE; sin nueva lógica ni permisos en el motor.
+
 Fuente: enhanceProfile en estabilidad-final-publica, sobre el listado canónico de direcciones ya renderizado. El resumen usa sólo el encabezado principal, con respaldo del campo legado y estado vacío. Sin cambios de direcciones, checkout, autenticación ni Rules. Impacta únicamente el texto resumido y las referencias transitivas de caché del shell que importa el módulo. Regresión sobre el módulo real cubre dirección principal/secundaria, controles, actualización observada, respaldo y vacío; suite de Perfil 12/12. Evidencia y límites del recorrido productivo en CURRENT_STATE.
 
 ## 2026-10-17 — Estadísticas y devolución manual al borrar pedidos

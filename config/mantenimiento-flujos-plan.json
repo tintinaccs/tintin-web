@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "b982cb77cbca744a3f39b75b23731efebdacc31b",
-  "reason": "Corregir resumen de direccion principal sin controles ni direcciones secundarias; regresion Chromium antes FAIL y despues 12/12 PASS, sin modificar datos ni permisos.",
+  "reason": "Corregir resumen de direccion y contrato de quitar favoritos en Perfil. Regresiones antes FAIL y despues 12 Chromium y 8 Node PASS; sin cambiar datos ni permisos.",
   "files": [
     {
       "path": "404.html",
@@ -59,6 +59,11 @@
       "newHash": "e9f1ee1bd0a79458ebbb7658f055330e8cc2db4a16cf5076ef987ba2651f7bfa"
     },
     {
+      "path": "js/pages/profile/favoritos-perfil.js",
+      "oldHash": "154972d1114a8f3797451f980132f7fba437df9c54bb7067a15ce5ee492d43c5",
+      "newHash": "b08dd53eca34e97bfe733874c4f33c0e149fcebd02c9a85ec8e7b91879125f3e"
+    },
+    {
       "path": "js/quality/estabilidad-final-publica.js",
       "oldHash": "14efeb134e6ed9c4186c705775d59061df3f67276a5e87e225f21d57cff6cc1b",
       "newHash": "fe19846e8d85254e471f72f419e4409683af319c8a583cf470e74ea6d28a8ae3"
@@ -71,7 +76,7 @@
     {
       "path": "perfil.html",
       "oldHash": "bf0ba82b0e767be0ca46862fbef3c40b2db254cbfccea87a213a3a6d8f0d7e70",
-      "newHash": "d705d43c81349f0e959cea586e2318d117de238c1653df0602baf345a49d641f"
+      "newHash": "68be4dec1b484eadc031354492f156c0bed7c9703fb5f6daac4d6deab97d6d66"
     },
     {
       "path": "preguntas-frecuentes.html",
@@ -91,7 +96,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "8d5e763a4df6924ed051617f6b124e1e756b2f1386fcd96ac1b6666f8a0473f3",
-      "newHash": "b955d2edcfa4b0e48d98bd88f6c2331fdcaebe76e3e23b3b945841e961897ccb"
+      "newHash": "7130aa7d6ee1c1a96c291584cf98ff042b8d2fa47145166e8729c6c8af17aa3c"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

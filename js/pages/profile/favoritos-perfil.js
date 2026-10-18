@@ -46,8 +46,8 @@ document.getElementById('perfil-favorites-list')?.addEventListener('click', asyn
   if (!button) return;
   button.disabled = true;
   try {
-    const result = await window.TintinFavorites?.toggle(button.dataset.removeFavorite);
-    if (result == null) throw new Error('No se pudo actualizar');
+    const result = await window.TintinFavorites?.toggle({ id: button.dataset.removeFavorite });
+    if (result?.changed !== true) throw new Error('No se pudo actualizar');
   } catch (error) {
     button.disabled = false;
     alert(error.message || 'No se pudo quitar el favorito');

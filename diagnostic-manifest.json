@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c75d4cfeec09576b838977b972597f134b9452f882996b4c5f1748fc6499ee57",
+  "sourceFingerprint": "6ad36a1d6d407b5850ad6c4879fb201097efa5dcb7ec0b458eb9bc99fa45d3ca",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1308,
     "textFiles": 1222,
-    "totalBytes": 24595650,
+    "totalBytes": 24600416,
     "pages": 19,
     "modules": 918
   },
@@ -16675,8 +16675,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 55281,
-      "sha256": "d705d43c81349f0e959cea586e2318d117de238c1653df0602baf345a49d641f",
+      "bytes": 55284,
+      "sha256": "68be4dec1b484eadc031354492f156c0bed7c9703fb5f6daac4d6deab97d6d66",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16767,7 +16767,7 @@
           "line": 772
         },
         {
-          "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20261018-profile-favorites-1",
           "target": "js/pages/profile/favoritos-perfil.js",
           "line": 773
         },
@@ -17259,7 +17259,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20261017-domain-cutover-1",
+          "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20261018-profile-favorites-1",
           "target": "js/pages/profile/favoritos-perfil.js",
           "line": 773,
           "exists": true
@@ -32230,8 +32230,8 @@
     },
     {
       "path": "js/pages/profile/favoritos-perfil.js",
-      "bytes": 5409,
-      "sha256": "154972d1114a8f3797451f980132f7fba437df9c54bb7067a15ce5ee492d43c5",
+      "bytes": 5427,
+      "sha256": "b08dd53eca34e97bfe733874c4f33c0e149fcebd02c9a85ec8e7b91879125f3e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45909,8 +45909,8 @@
     },
     {
       "path": "tests/profile/favorite-current-product.test.mjs",
-      "bytes": 1646,
-      "sha256": "aa4e57d23a24acb4b772953c92b010255676abed47aa80043048b4b6b7a20db3",
+      "bytes": 3182,
+      "sha256": "ad2172ff27829d139bc53ad68de18b082e4e23a5605ea3259b8bfd2e83a5b741",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50591,8 +50591,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 5525,
-      "sha256": "dc789412de8d2e4d85bc240c9995f60b708a7366c2c358ef11e3159d5e166465"
+      "bytes": 5757,
+      "sha256": "92dd30b0aea3722842765e819ad18a14aa11cb252606ee8024fe82cb521f1d43"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50604,7 +50604,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "4fb7bb075857cde59cc643009945df0342aa792a3cef91df8840a6de080740bc"
+      "sha256": "7a8f2706d8ea1daf6e80b941f864d34906605cb62668c006477361b1ee79c775"
     },
     {
       "path": "config/public-site.json",
@@ -51215,8 +51215,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 588183,
-      "sha256": "ebf31967c7b8977560c72052754bd031bb0cf5dd957afce34c05c6904e4f7f38"
+      "bytes": 590604,
+      "sha256": "c3d662a06f63de78aece7299717d65d18e6d17c833ee9f17c5d292ba4728d34c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51569,8 +51569,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 48019,
-      "sha256": "f1d76fe7784ec79399e3e23dc63f33c6634c72f92db0d71a251ebf5154ad04f4"
+      "bytes": 48572,
+      "sha256": "dee5e291586bd19de06e9653cb784161e1d19a67fa78e048aca2407ab2e4a1be"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -53777,8 +53777,8 @@
     {
       "path": "js/pages/profile/favoritos-perfil.js",
       "extension": ".js",
-      "bytes": 5409,
-      "sha256": "154972d1114a8f3797451f980132f7fba437df9c54bb7067a15ce5ee492d43c5"
+      "bytes": 5427,
+      "sha256": "b08dd53eca34e97bfe733874c4f33c0e149fcebd02c9a85ec8e7b91879125f3e"
     },
     {
       "path": "js/pages/profile/libreta-direcciones.mjs",
@@ -54155,8 +54155,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 55281,
-      "sha256": "d705d43c81349f0e959cea586e2318d117de238c1653df0602baf345a49d641f"
+      "bytes": 55284,
+      "sha256": "68be4dec1b484eadc031354492f156c0bed7c9703fb5f6daac4d6deab97d6d66"
     },
     {
       "path": "playwright.config.js",
@@ -55031,8 +55031,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 71199,
-      "sha256": "b955d2edcfa4b0e48d98bd88f6c2331fdcaebe76e3e23b3b945841e961897ccb"
+      "bytes": 71202,
+      "sha256": "7130aa7d6ee1c1a96c291584cf98ff042b8d2fa47145166e8729c6c8af17aa3c"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -56741,8 +56741,8 @@
     {
       "path": "tests/profile/favorite-current-product.test.mjs",
       "extension": ".mjs",
-      "bytes": 1646,
-      "sha256": "aa4e57d23a24acb4b772953c92b010255676abed47aa80043048b4b6b7a20db3"
+      "bytes": 3182,
+      "sha256": "ad2172ff27829d139bc53ad68de18b082e4e23a5605ea3259b8bfd2e83a5b741"
     },
     {
       "path": "tests/profile/initial-profile-render.spec.js",
