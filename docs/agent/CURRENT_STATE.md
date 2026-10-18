@@ -1,3 +1,9 @@
+## 2026-10-18 — Aviso de spam debajo del código de acceso
+
+Codex /root. Cambio puntual en login.html, compartido por registro e inicio de sesión: texto solicitado debajo del campo OTP, reutilizando login-field-hint y asociado por aria-describedby. No se modifica JavaScript, CSS, envío, verificación, reenvío ni backend. Impacto revisado en docs/lista-impacto-cambios.md: acceso/perfil, responsive, accesibilidad y artefactos de diagnóstico/protección.
+
+PASS_LOCAL: 241 pruebas de login/auth/OTP/caché (239 iniciales y dos de click-replay repetidas con PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium tras faltar el binario predeterminado). CSP reproducible y caché 340 archivos/66 cargas dinámicas aprobadas. 11 regresiones Chromium del acceso Google. Fixture temporal con HTML/CSS y showOtpStep/showEmailStep reales en 320/390/768/1440: aviso oculto al inicio, texto exacto, visible debajo del campo tras mostrar OTP, sin overflow, asociación accesible, entrada de seis dígitos y ocultación al volver al correo; captura móvil revisada. Auditores de aislamiento 21/21 y alta/perfil 9/9. No se enviaron correos ni se crearon cuentas reales; entrega y autenticación en producción NOT_VERIFIED. CI y aprobación humana del PR pendientes.
+
 ## 2026-10-18 — Fondo blanco sólo en tarjeta Tu selección
 
 Codex /root. Pedido del titular: fondo blanco exclusivamente para tarjeta Tu selección, exterior y resto iguales. Reproducción Chromium previa390/768/1440: rgba(0,0,0,0) por reset de mantenimiento. Se agrega excepción precisa #tinsel-root .tinsel-box en su CSS de componente; ningún cambio de lógica ni del contenedor. PASS_LOCAL: tarjeta rgb(255,255,255) en los tres anchos y comparación exacta de fondos, borde, radio, sombra, padding y geometría del resto de componentes con la captura anterior; auditor específico de Producto aprobado. Referencia nueva de CSS y baseline regenerados. CI y publicación pendientes.
