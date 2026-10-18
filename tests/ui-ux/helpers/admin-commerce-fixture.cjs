@@ -37,6 +37,9 @@ const DATA = {
   ]
 };
 window.__orders=DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));
+window.__productRows=DATA.products;
+window.__productConsumers=new Set();
+window.__publishProducts=()=>{for(const fn of window.__productConsumers)fn({docs:window.__productRows.map(entry=>({id:entry.id,data:()=>structuredClone(entry.data)})),metadata:{fromCache:false}});};
 window.__orderConsumers=new Set();window.__publishOrders=(error='')=>{for(const fn of window.__orderConsumers)fn({uid:'super-1',orders:window.__orders,ready:true,error});};
 window.TintinAdminOrders={subscribe(fn){window.__orderConsumers.add(fn);queueMicrotask(()=>window.__publishOrders());return()=>window.__orderConsumers.delete(fn);},retry(){window.__publishOrders();}};
 window.dispatchEvent(new Event('tintin:admin-orders-source'));
@@ -52,7 +55,12 @@ export const query = (ref) => ref;
 export const orderBy = () => null;
 export const limit = () => null;
 export const startAfter = () => null;
-export function onSnapshot(ref, success) {
+export function onSnapshot(ref, options, next) {
+  const success=typeof options==='function'?options:next;
+  if(ref==='products'){
+    window.__productConsumers.add(success);queueMicrotask(()=>window.__publishProducts());
+    return()=>window.__productConsumers.delete(success);
+  }
   queueMicrotask(() => success({ docs: (DATA[ref] || []).map(entry => ({ id: entry.id, data: () => structuredClone(entry.data) })) }));
   return () => {};
 }
@@ -108,7 +116,15 @@ function fixtureHtml() {
       window.__calls=[];
       const call=(name,...args)=>window.__calls.push([name,...args]);
       window.prodNuevo=()=>{call('prodNuevo');document.getElementById('prod-form-card').style.display='block'};
-      window.prodEditar=id=>call('prodEditar',id); window.prodToggleActive=(id,a)=>call('prodToggleActive',id,a); window.prodEliminar=id=>call('prodEliminar',id);
+      window.prodEditar=id=>call('prodEditar',id);
+      window.prodToggleActive=async(id,a)=>{
+        call('prodToggleActive',id,a);
+        if(window.__failProductId===id)return {status:'red'};
+        const product=window.__productRows.find(p=>p.id===id);if(product)product.data.active=!a;
+        window.__publishProducts();return {status:'green'};
+      };
+      window.prodEliminar=id=>call('prodEliminar',id);
+      window.bulkDelete=async ids=>{call('bulkDelete',ids);window.__productRows=window.__productRows.filter(p=>!ids.includes(p.id));window.__publishProducts();};
       window.collNueva=()=>call('collNueva'); window.collEditar=id=>call('collEditar',id); window.collVerProductos=id=>call('collVerProductos',id); window.collEliminar=(id,count)=>call('collEliminar',id,count);
       window.openOrderEdit=id=>call('openOrderEdit',id); window.updateOrderStatus=async(id,s,context={})=>{
         call('updateOrderStatus',id,s,context);
@@ -126,7 +142,7 @@ function fixtureHtml() {
   </body></html>`;
 }
 
-async function mockRuntime(page, {orders} = {}) {
+async function mockRuntime(page, {orders,role='superadmin',forbiddenActions=[]} = {}) {
   await page.route('**/*', async route=>{
     const url=new URL(route.request().url());
     if(url.hostname!=='tintin.test')return route.abort();
@@ -145,14 +161,14 @@ async function mockRuntime(page, {orders} = {}) {
   await page.route('https://tintin.test/css/admin/shopify-commerce-admin.css*', route => route.fulfill({ status: 200, contentType: 'text/css', body: commerceCss }));
   await page.route('https://tintin.test/js/core/firebase/firebase.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: firebaseStub }));
   await page.route('https://tintin.test/js/core/auth/coordinador-sesion.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: sessionCoordinatorStub }));
-  await page.route('https://tintin.test/js/core/auth/roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: rolesStub }));
-  await page.route('https://tintin.test/js/core/auth/permisos-roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: permsStub }));
+  await page.route('https://tintin.test/js/core/auth/roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: rolesStub.replace("return 'superadmin';",`return ${JSON.stringify(role)};`).replace('export function can() { return true; }',`export function can(_role,permission) {return ${JSON.stringify(role)}!=='viewer'||String(permission).startsWith('view');}`) }));
+  await page.route('https://tintin.test/js/core/auth/permisos-roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: permsStub.replace('export function canDo() { return true; }',`export function canDo(_role,_module,action) {return (${JSON.stringify(role)}!=='viewer'||['ver','exportar'].includes(action))&&!${JSON.stringify(forbiddenActions)}.includes(action);}`) }));
   await page.route('https://tintin.test/js/pages/collections/estado-colecciones.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: collectionsStub }));
   await page.route('https://tintin.test/js/components/images/utilidades-imagenes.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: imagesStub }));
   await page.route('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: authStub }));
   const firestoreSource=orders ? firestoreStub.replace("window.__orders=DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));",`window.__orders=${JSON.stringify(orders)};`) : firestoreStub;
   await page.route('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: firestoreSource }));
-  await page.route('https://img.test/**', route => route.fulfill({ status: 204, body: '' }));
+  await page.route('https://img.test/**', route => route.fulfill({ status: 200, contentType:'image/svg+xml', body:'<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><rect x="80" y="40" width="80" height="160" rx="20" fill="#AD3F67"/></svg>' }));
 }
 
 
