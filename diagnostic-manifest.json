@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "99d6f30f5aa9956687f5442ce4087dd34b34850f6bb2119b29a1310b1f875ae8",
+  "sourceFingerprint": "1dc77e25dd975a1e50230f0c52d4825ee3daa890dd50e6ab693e0e1555a9a07a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1311,
-    "textFiles": 1225,
-    "totalBytes": 24626899,
+    "files": 1312,
+    "textFiles": 1226,
+    "totalBytes": 24629862,
     "pages": 19,
-    "modules": 921
+    "modules": 922
   },
   "viewports": [
     {
@@ -36656,8 +36656,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
-      "bytes": 10094,
-      "sha256": "503011a5010461be8915ebf6994da552016f7b8a0f98813ce9f2fc6623d63b89",
+      "bytes": 10202,
+      "sha256": "fe7aabe28540e8f05f933025763e139cb422c947f77de238ee6fd063c96fd557",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42140,8 +42140,8 @@
     },
     {
       "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",
-      "bytes": 10399,
-      "sha256": "88a1cf80d6d1214de01193e02c36abf3526cc33e578c0a8455422493b0b0e081",
+      "bytes": 10699,
+      "sha256": "5d6dbfa47cb4be216f3618f48183e2776f48bef6b311ebfc225a514765effe90",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42230,6 +42230,42 @@
         },
         {
           "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/flow-connections/produccion-verificacion.test.mjs",
+      "bytes": 1162,
+      "sha256": "a97221ebb264daffd046f7ae4b135165666d1aa9a24b656215bc1f2e5d4f1108",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
           "target": null,
           "dynamic": false,
           "line": 2
@@ -49703,8 +49739,8 @@
     {
       "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
-      "bytes": 5419,
-      "sha256": "ebff82232537e6bb518aa1e502ff0791d7ecae742c39d7dcf1168bf4787d35b0"
+      "bytes": 5633,
+      "sha256": "7a8b43f11656229161488d36a685cdad8ebb26d7165863a9b52dd84a39a531ab"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
@@ -50712,7 +50748,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "a159c38451ba9012dc5f2cc4445a17dbf08892dbe35e4d478e5e56e8c061b2bf"
+      "sha256": "578be71139287bd9601f15b4cb02abd8091b0d5138a0f8d1cb7bd53950fda931"
     },
     {
       "path": "config/public-site.json",
@@ -51323,8 +51359,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 594886,
-      "sha256": "f3717b285de3648f8d4a0a66847ee549058f7df3a20418f446af4e83d278961d"
+      "bytes": 596065,
+      "sha256": "93e3aaf362cbdefe6d69e8f48a1c67c48302e690143103f9bb1930fe60e652b8"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -55283,8 +55319,8 @@
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
       "extension": ".mjs",
-      "bytes": 10094,
-      "sha256": "503011a5010461be8915ebf6994da552016f7b8a0f98813ce9f2fc6623d63b89"
+      "bytes": 10202,
+      "sha256": "fe7aabe28540e8f05f933025763e139cb422c947f77de238ee6fd063c96fd557"
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
@@ -56213,14 +56249,20 @@
     {
       "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",
       "extension": ".mjs",
-      "bytes": 10399,
-      "sha256": "88a1cf80d6d1214de01193e02c36abf3526cc33e578c0a8455422493b0b0e081"
+      "bytes": 10699,
+      "sha256": "5d6dbfa47cb4be216f3618f48183e2776f48bef6b311ebfc225a514765effe90"
     },
     {
       "path": "tests/flow-connections/probe-cancellation.test.mjs",
       "extension": ".mjs",
       "bytes": 1820,
       "sha256": "7b77844b1d4aaad113b82549adffd383b54bef2d92dcd8a7532e6b528ba9083e"
+    },
+    {
+      "path": "tests/flow-connections/produccion-verificacion.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1162,
+      "sha256": "a97221ebb264daffd046f7ae4b135165666d1aa9a24b656215bc1f2e5d4f1108"
     },
     {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",

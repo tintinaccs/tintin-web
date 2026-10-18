@@ -1,3 +1,9 @@
+## 2026-10-18 — Ciclo automático confirmado y monitor sin efecto secundario
+
+Codex /root. PR1160 pasó Repository audit39164826559, CodeQL y Pages; mantenimiento39166716757 validó y fusionó automáticamente en30a9b316acc29f0038b5f73c82fb4b02acf1db1a, sin dispatch ni aprobación manual. Los dos checks protegidos terminaron SUCCESS. Se confirmaron dispatch nativos de auditoría39166738445 y monitor39166739505, además de publicación Pages7daa52c8 SUCCESS.
+
+La comprobación real detectó que el monitor existente, al recibir workflow_dispatch, ejecutaba también el refresco autenticado de tasa PayPal. Se agrega verification_only para que la invocación automática ejecute sólo verificaciones; el dispatch manual sin esa opción y el cron de tasas conservan su comportamiento. El fixture de API exige expresamente ese input en el dispatch de producción y su ausencia en el de auditoría. Es una reparación del mecanismo de publicación autorizado, sin modificar cálculos, pagos, usuarios ni datos comerciales. Validación local y CI del ajuste se documentan en su PR; no se presenta la ejecución anterior de tasa como parte de una verificación de sólo lectura.
+
 ## 2026-10-18 — Activación inicial y comprobación del ciclo automático
 
 Codex /root. PR1159 integrado por squash en e9d338018d16558d8cb18cc5dfd7c9f44355380f tras Repository audit39158661590 y ambos Analyze/Cloudflare aprobados para a4ff6a3f. El titular retiró temporalmente sólo Protected flow maintenance; los otros cuatro requisitos siguen vigentes. Se solicita restablecer ese check tras la integración; no se modifica el entorno anterior porque el workflow instalado no lo utiliza.

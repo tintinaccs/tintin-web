@@ -158,7 +158,10 @@ try {
   // Los pushes con GITHUB_TOKEN no disparan Actions. Los dispatch explícitos
   // sí lo hacen: mantener auditoría de main y comprobación del deploy real.
   for (const workflow of ['auditar-tintin.yml', 'monitor-produccion.yml']) {
-    await api(`actions/workflows/${workflow}/dispatches`, { ref: config.branch });
+    await api(`actions/workflows/${workflow}/dispatches`, {
+      ref: config.branch,
+      ...(workflow === 'monitor-produccion.yml' ? { inputs: { verification_only: true } } : {}),
+    });
   }
   if (process.env.GITHUB_STEP_SUMMARY) {
     fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,
