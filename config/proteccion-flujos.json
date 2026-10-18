@@ -2114,8 +2114,8 @@
     ".firebaserc": "273b8fe2f105e9d56c8b6b073b9fc2d2e24b8a68e777c67a181ad0e4a95bb74d",
     ".gitattributes": "99f38111a54eef00a138cc1b1ad65ad2ad2e2b41ab76f669335dcbef7df0768c",
     ".github/workflows/auditar-limpiar-ramas.yml": "e5033c1c29b3b963c144c6f184da0211d6e886155f0640759048a3aa5bd7b602",
-    ".github/workflows/auditar-tintin.yml": "0c55273b78ab0ab16b1c6c512ebdcf90223147c1f4c3f84e6cbe91963880f69c",
-    ".github/workflows/auditoria-dependencias.yml": "2ebba61bac5cdd06e4027f0630cf0bade0041a70730245ee9aa0975efc2ae552",
+    ".github/workflows/auditar-tintin.yml": "8208b7b65d0178f4b97eb0679c2b20ef2da8807eac14c522a09a77d5dc9385f5",
+    ".github/workflows/auditoria-dependencias.yml": "d3e925b0fdec9d4987fe5d5f47040bc3de2339d6b8922c37d4d349072fd90eac",
     ".github/workflows/auditoria-visual.yml": "e5a45955a8913e74f9aec6ef8091735eebc7d686afe5f24a6565fd8bcd4f8cf7",
     ".github/workflows/backup-firestore.yml": "e7a0a548dc43a74976a7f0ed0eb404dd19f247ca4163e31ec86adcd8637116fd",
     ".github/workflows/desplegar-pages.yml": "f21e9ca7086f4ef8b943e9dd511e8740ed5f975a14ed35e7ba636222a1c0b4ce",
@@ -2185,7 +2185,7 @@
     "config/account-contract.json": "463713cd3b697b38649f9564f37f4533b2a48bada32e1a8ff036150f7f03f24e",
     "config/csp-runtime.js": "6d99f8878508005d6d625268af507b1a853cbfc13e080f6a12da3010880f98f7",
     "config/csp-runtime.json": "c69860f6ae31cedc63e78bec9c3778b63c83f952260b504f79e2357a4abb8728",
-    "config/mantenimiento-flujos.json": "f6bd70fd64fcc7d26e8f3455896cdcafc375e12de969dc2521363c47533bd5d5",
+    "config/mantenimiento-flujos.json": "fb427e1897fa305c8124b941508f82c3f8039567117d5bc5c7ca2af96701dc69",
     "config/public-site.json": "c4099816e7ae82148c2bc458f7dd4e7eca993809efb39cb8e3a85549009ef69d",
     "contact.html": "147a53e71629df866cc674743a2c04ee27d54d5f84e55522d9b348f822db1772",
     "css/admin/admin-color-tokens.css": "3ff28890034bd6c7491e8fb10ac229c5c69ea3b72ba325149df32fef6d340858",
@@ -2627,8 +2627,8 @@
     "scripts/construir-manifiesto-diagnostico.js": "7c90f104c7b3856291cf709d8f6abcf2340f07591a177d3b57dd1d171334bbd3",
     "scripts/generar-csp-cloudflare.js": "98c8fab7bcc9607f18dd44c357e61cf0a760e3a8e4d1054cf4b751bcebd70c48",
     "scripts/generar-flujo-decisiones-acceso.mjs": "55bfccb2112531728ffca9c138098fa4545f51c9feb5ef1e77ab630bb95487ed",
-    "scripts/mantenimiento-flujos-core.mjs": "17cd26d089494788166274a93bd9df32837f0b277a2e9bbb672c48176a26f879",
-    "scripts/mantenimiento-flujos-github.mjs": "7c73544061f9e435ad249e8f166f95531e983c70fae4c183f3ee300e56db2c30",
+    "scripts/mantenimiento-flujos-core.mjs": "425756e1df288d6dd32860403c61ee92718a1340c7a0b152def2b2a00cf878ab",
+    "scripts/mantenimiento-flujos-github.mjs": "503011a5010461be8915ebf6994da552016f7b8a0f98813ce9f2fc6623d63b89",
     "scripts/normalizar-rutas-publicas.js": "a333769f0cff5b8e9d7a4a3f368927451a184e31dd0dff8d646d68242f0e8ce2",
     "scripts/preparar-mantenimiento-flujos.mjs": "36e43d2653b0205536b05bf9202df0c39baeaa203cff0eba2c338a14bc35a314",
     "scripts/probar-firestore-critico.mjs": "14147c22dd78318d81133aa295ec8f13a0d1e9faac3c56024eef27ee9cf10fa1",
@@ -2642,7 +2642,7 @@
     "tests/accounts/blocked-account-listener.test.mjs": "9f5fbca1aacca3cc5ff186719875aef6809ab8f0acb2d68280e77ad56e15b445",
     "tests/auth/admin-guard-role-destination.test.mjs": "f3a5b7514c5af20ae9864fb48283cc3ce4f9891d663291f821638720b963da53",
     "tests/engagement/escritura-participacion.test.mjs": "01f585487ede8bad9362f22f71db325b11f3c092a59b95bfa986161da3b90130",
-    "tests/flow-connections/mantenimiento-flujos.test.mjs": "c4f8e424a6c2d2136f96979f83837d9e9eef5b859728367a92da2e7ad14923ae",
+    "tests/flow-connections/mantenimiento-flujos.test.mjs": "e4fa97f16da4075880bdf2086300c7c4d482ebfb079b9c19bd0a217d9f9771ec",
     "tests/login/redirect-by-role.test.mjs": "57c791cfbca3098c8ed4327e50c6efb258724810a5e08bba663a12a3fecc4ba2",
     "tests/orders/order-admin-domain.test.mjs": "9d93764a04959d95733ebe4fb031f224fb292647ca44428ce4f4395686092f84",
     "tests/orders/variant-inventory.test.mjs": "5be67553d323dab8485f63c184eb6f3577d5529d80eaaf56b8de14dc8d46050d",
@@ -2651,6 +2651,6 @@
     "tienda.js": "cf4d08f05ebbd5a38da370d45d6296a7db660b77d0db07cffa94858e5040d833",
     "scripts/leer-blobs-mantenimiento.mjs": "f9e5c4782d3fc06dd5a1c184bc4d698d23e0235312c62a54f2d8ec6e2aa4a453",
     "tests/flow-connections/lectura-blobs-mantenimiento.test.mjs": "9cb0d1f61657346b7a41f3a06c3851f2705d21cb9e5b4e0ef16201a1059ebfae",
-    "tests/flow-connections/presupuesto-mantenimiento.test.mjs": "52983b3d89fb08c9ed18d01d9d9e22e7db65ee62db6ba3ba7713d387ae0b11c6"
+    "tests/flow-connections/presupuesto-mantenimiento.test.mjs": "88a1cf80d6d1214de01193e02c36abf3526cc33e578c0a8455422493b0b0e081"
   }
 }

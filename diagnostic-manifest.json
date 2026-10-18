@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e756d3b671f29700e19010bfd7790f37e15958820a2de34b9efebdc6fbf192d7",
+  "sourceFingerprint": "cd5835cfdade09f9f4c85f7c72f2007720d981ed5d4804d6a38b9b3beecb8b07",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1311,
     "textFiles": 1225,
-    "totalBytes": 24621930,
+    "totalBytes": 24625210,
     "pages": 19,
     "modules": 921
   },
@@ -36638,8 +36638,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-core.mjs",
-      "bytes": 5174,
-      "sha256": "17cd26d089494788166274a93bd9df32837f0b277a2e9bbb672c48176a26f879",
+      "bytes": 4240,
+      "sha256": "425756e1df288d6dd32860403c61ee92718a1340c7a0b152def2b2a00cf878ab",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36656,8 +36656,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
-      "bytes": 8494,
-      "sha256": "7c73544061f9e435ad249e8f166f95531e983c70fae4c183f3ee300e56db2c30",
+      "bytes": 10094,
+      "sha256": "503011a5010461be8915ebf6994da552016f7b8a0f98813ce9f2fc6623d63b89",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36695,7 +36695,7 @@
         },
         {
           "url": "https://github.com/$%7Bconfig.repository%7D/actions/runs/$%7BrunId%7D",
-          "line": 134
+          "line": 121
         }
       ]
     },
@@ -42062,8 +42062,8 @@
     },
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
-      "bytes": 7049,
-      "sha256": "c4f8e424a6c2d2136f96979f83837d9e9eef5b859728367a92da2e7ad14923ae",
+      "bytes": 6233,
+      "sha256": "e4fa97f16da4075880bdf2086300c7c4d482ebfb079b9c19bd0a217d9f9771ec",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42140,8 +42140,8 @@
     },
     {
       "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",
-      "bytes": 7105,
-      "sha256": "52983b3d89fb08c9ed18d01d9d9e22e7db65ee62db6ba3ba7713d387ae0b11c6",
+      "bytes": 10399,
+      "sha256": "88a1cf80d6d1214de01193e02c36abf3526cc33e578c0a8455422493b0b0e081",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42199,17 +42199,17 @@
           "raw": "node:fs",
           "target": null,
           "dynamic": false,
-          "line": 69
+          "line": 66
         }
       ],
       "endpoints": [
         {
           "url": "https://github.com/$%7Bconfig.repository%7D/actions/runs/$%7Bi+10%7D/job/$%7Bi+20%7D",
-          "line": 63
+          "line": 60
         },
         {
           "url": "https://api.github.com/repos/tintinaccs/tintin-web/",
-          "line": 72
+          "line": 70
         }
       ]
     },
@@ -49649,14 +49649,14 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 8274,
-      "sha256": "0c55273b78ab0ab16b1c6c512ebdcf90223147c1f4c3f84e6cbe91963880f69c"
+      "bytes": 6903,
+      "sha256": "8208b7b65d0178f4b97eb0679c2b20ef2da8807eac14c522a09a77d5dc9385f5"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
       "extension": ".yml",
-      "bytes": 4482,
-      "sha256": "2ebba61bac5cdd06e4027f0630cf0bade0041a70730245ee9aa0975efc2ae552"
+      "bytes": 3357,
+      "sha256": "d3e925b0fdec9d4987fe5d5f47040bc3de2339d6b8922c37d4d349072fd90eac"
     },
     {
       "path": ".github/workflows/auditoria-visual.yml",
@@ -50705,14 +50705,14 @@
     {
       "path": "config/mantenimiento-flujos.json",
       "extension": ".json",
-      "bytes": 713,
-      "sha256": "f6bd70fd64fcc7d26e8f3455896cdcafc375e12de969dc2521363c47533bd5d5"
+      "bytes": 834,
+      "sha256": "fb427e1897fa305c8124b941508f82c3f8039567117d5bc5c7ca2af96701dc69"
     },
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "ff9a3d27d667fe8044c780f83a30fc1fa4edf0abedf159204ee5f743e80d38ae"
+      "sha256": "10ff830a6407fba16bee73a080e698d2597a1d16f36ab7f94e7210d4aa524323"
     },
     {
       "path": "config/public-site.json",
@@ -51323,8 +51323,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 591522,
-      "sha256": "a8ef2457d58cebeb923218d1c50aeea869498c3d07ca50921d3e5f17aef1c134"
+      "bytes": 593491,
+      "sha256": "c8dfcd09372da90b42019c496b8d5bc696b15626654d8d726bec6dad6c4d589d"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51335,8 +51335,8 @@
     {
       "path": "docs/agent/MANTENIMIENTO_FLUJOS.md",
       "extension": ".md",
-      "bytes": 4913,
-      "sha256": "9c42ce1626eb84aa5572e7f65588d539a51dcf56ddb08e765004737809a836e8"
+      "bytes": 4594,
+      "sha256": "c39ecd140fca152d602730a2607b623806a0ee34dbaac6f1d4b7dccf672c716b"
     },
     {
       "path": "docs/agent/MIGRACION_CONTROL_20261010.md",
@@ -51677,8 +51677,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 48286,
-      "sha256": "84aa13ea7848c7957e936511e2afe169ce42f9716c3e644c11581c9e929542d5"
+      "bytes": 49147,
+      "sha256": "7a102f4520479e17fa08f0af7feec7a9c5db9d26f15c1e9216f406636a008346"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -55277,14 +55277,14 @@
     {
       "path": "scripts/mantenimiento-flujos-core.mjs",
       "extension": ".mjs",
-      "bytes": 5174,
-      "sha256": "17cd26d089494788166274a93bd9df32837f0b277a2e9bbb672c48176a26f879"
+      "bytes": 4240,
+      "sha256": "425756e1df288d6dd32860403c61ee92718a1340c7a0b152def2b2a00cf878ab"
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
       "extension": ".mjs",
-      "bytes": 8494,
-      "sha256": "7c73544061f9e435ad249e8f166f95531e983c70fae4c183f3ee300e56db2c30"
+      "bytes": 10094,
+      "sha256": "503011a5010461be8915ebf6994da552016f7b8a0f98813ce9f2fc6623d63b89"
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
@@ -56201,8 +56201,8 @@
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
       "extension": ".mjs",
-      "bytes": 7049,
-      "sha256": "c4f8e424a6c2d2136f96979f83837d9e9eef5b859728367a92da2e7ad14923ae"
+      "bytes": 6233,
+      "sha256": "e4fa97f16da4075880bdf2086300c7c4d482ebfb079b9c19bd0a217d9f9771ec"
     },
     {
       "path": "tests/flow-connections/pedidos-authority.test.mjs",
@@ -56213,8 +56213,8 @@
     {
       "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",
       "extension": ".mjs",
-      "bytes": 7105,
-      "sha256": "52983b3d89fb08c9ed18d01d9d9e22e7db65ee62db6ba3ba7713d387ae0b11c6"
+      "bytes": 10399,
+      "sha256": "88a1cf80d6d1214de01193e02c36abf3526cc33e578c0a8455422493b0b0e081"
     },
     {
       "path": "tests/flow-connections/probe-cancellation.test.mjs",
