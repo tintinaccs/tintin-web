@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "e9d338018d16558d8cb18cc5dfd7c9f44355380f",
-  "reason": "Maestro de Productos completo: CRUD nativo, duplicación segura, lote atómico revisable y vinculación sólo a pedido existente; 43 Node, 23 Chromium del maestro, 43 regresiones UI, controles de inventario/concurrencia y contratos aprobados.",
+  "baseCommit": "30a9b316acc29f0038b5f73c82fb4b02acf1db1a",
+  "reason": "Maestro de Productos: CRUD nativo, duplicación segura, lote atómico y pedido existente; 43 Node, 23 Chromium maestro, 43 UI y 51 tablero por barridos dirigidos; arquitectura y stock concurrente verificados. Main1160 sólo documentación/derivados.",
   "files": [
     {
       "path": "admin.html",
