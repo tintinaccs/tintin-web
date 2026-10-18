@@ -1,3 +1,11 @@
+## 2026-10-18 — Activación inicial y comprobación del ciclo automático
+
+Codex /root. PR1159 integrado por squash en e9d338018d16558d8cb18cc5dfd7c9f44355380f tras Repository audit39158661590 y ambos Analyze/Cloudflare aprobados para a4ff6a3f. El titular retiró temporalmente sólo Protected flow maintenance; los otros cuatro requisitos siguen vigentes. Se solicita restablecer ese check tras la integración; no se modifica el entorno anterior porque el workflow instalado no lo utiliza.
+
+Publicación del cambio inicial confirmada por lectura HTTPS no destructiva de https://tintinaccs.com/site-version.json y /login: revisión e39756b3ae1c0805ad85f345da9cd9177a6d3df68676b3fae9dafc8fe20df2ad idéntica al artefacto del candidato, aviso exacto de spam presente y aria-describedby correcto. La comprobación nativa de artefacto productivo39164636538 también pasó; el resto del monitor estaba en curso al redactar. No se enviaron correos ni se crearon usuarios reales.
+
+Este cambio documental prepara una comprobación real del mecanismo instalado: CI de PR → validación de plan/alcances y commit → integración automática → dispatch de auditoría/monitor. Su integración y verificación productiva quedan PENDING hasta la evidencia nativa de ese ciclo; no se atribuye PASS al automatismo sólo por haber instalado el código.
+
 ## 2026-10-18 — Migración a publicación automática autorizada
 
 Codex /root. El titular autoriza explícitamente corregir, probar, fusionar y verificar deploy sin confirmaciones repetidas, y pide retirar el paso manual habitual. La migración reúne también el aviso exacto del PR1157, que queda sustituido por este candidato: CI completo conserva su autoridad; workflow_run de Repository audit ejecuta sólo código de main, valida el plan y el commit y publica los dos checks técnicos antes de integrar por squash con SHA esperado. Autor limitado al titular y repositorio propio; borradores/forks, cambios al mecanismo, plan incorrecto, CI fallido/falso, API denegada y base/head modificados bloquean. Los dispatch explícitos conservan auditoría de main y monitor productivo tras merge de GITHUB_TOKEN. El entorno antiguo no se referencia.
