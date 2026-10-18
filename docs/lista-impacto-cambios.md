@@ -1,6 +1,14 @@
+## 2026-10-18 — Aviso limitado a la página abierta al reconciliar PR1150
+
+Se conserva la solución de datos sin recarga de PR1151 y las mejoras de PR1150. site-version.json agrega un mapa de hashes HTML generado desde el manifiesto canónico; vigilancia-version compara sólo la ruta abierta y mantiene fallback para publicaciones anteriores/rutas dinámicas. El verificador valida el mapa exacto. Una publicación de Producto no avisa en Inicio cuando su página no cambia. La selección de fotos disponibles y agotados al final siguen en el renderer compartido. No cambia Firestore, Rules, roles, permisos ni el mecanismo de revisión humana. Se propagan las URLs inmutables y se regenera el plan contra mainc81257c0. Evidencia en CURRENT_STATE.
+
 ## 2026-10-17 — Tarjetas con stock y validación global de avisos
 
 PR1152 conserva la foto de una variante disponible y deshabilita colores agotados en las tarjetas compartidas. Se reconcilia con PR1151/main64a17c4a, conservando su única separación de sincronización de datos y avisos de versión. Se amplían regresiones a19rutas, ambas orientaciones y stock/foto actualizados sin TTL ni aviso. No se crean nuevas revisiones, permisos, Rules ni lógica por rol/dispositivo. Referencias inmutables y protección nativa se regeneran desde las fuentes; evidencia y límites en CURRENT_STATE.
+
+## 2026-10-17 — Estadísticas y devolución manual al borrar pedidos
+
+Fuentes canónicas: Pedidos Super Admin y renderer estadístico existentes. Nuevo controlador autenticado admin-commerce-controls delega selección/reposición/restauración en order-trash-controls y los reinicios en statistics-controls. Mismo commit para pedido, stock, variantes, auditoría y revisión pública; versiones y precondiciones obligatorias, propietario exclusivo, sin reembolso externo. Estadísticas usa anclas por indicador, sin alterar operaciones originales; deshacer el reinicio vuelve al historial. Papelera conserva recuperación y borrado definitivo existente. Un reintento de creación no resucita un pedido archivado. Ventas locales se gestionan en su libro propio. Perfiles se recalculan desde orders con el sincronizador existente. Impacta Admin, inventario público, historial del cliente, resumen de cuenta, caché/CSP/diagnóstico; no modifica Rules, dominio ni datos en pruebas. Regresiones de cantidades/variantes/concurrencia/idempotencia, permiso/origen/sesión y seis Chromium en320/768/1440. Evidencia y límites en CURRENT_STATE.
 
 ## 2026-10-17 — Separar revisiones de datos y versiones de aplicación
 

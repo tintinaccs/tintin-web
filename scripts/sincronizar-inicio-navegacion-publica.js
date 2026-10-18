@@ -12,7 +12,7 @@ const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-sec
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-20261017-stock-card-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261017-domain-cutover-1';
-const LOADER_VERSION = 'tintin-20261017-data-refresh-1';
+const LOADER_VERSION = 'tintin-20261018-page-updates-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
 const PUBLIC_SHELL_VERSION = 'tintin-20261017-data-refresh-1';
@@ -24,7 +24,7 @@ const PROFILE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1';
-const UNIFIED_THEME_VERSION = 'tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1';
+const UNIFIED_THEME_VERSION = 'tintin-20261017-responsive-footer-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],

@@ -38,6 +38,8 @@ if (appsScriptMatch) {
 }
 
 const include = new Set(routes.include || []);
+assert((routes.include || []).length + (routes.exclude || []).length <= 100,
+  'Cloudflare: _routes.json supera el límite de 100 reglas de Pages.');
 const apiDir = path.join(root, 'functions/api');
 for (const entry of fs.readdirSync(apiDir, { withFileTypes: true })) {
   if (!entry.isFile() || !entry.name.endsWith('.js')) continue;

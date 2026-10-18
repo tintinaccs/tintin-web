@@ -136,8 +136,8 @@
     "sha256": "30037af6ce97934caa62d71c6ed8b1f2136d922364be486c5571362e08609058"
   },
   "css/core/tema-unificado-tintin.css": {
-    "version": "tintin-20261012-unified-2-tema-unificado-tintin-css-palette-20261014-1-stock-flow-20261014-1-logos-wa-20261015-1-logos-wa-20261015-1-logos-wa-20261015-1-tarjetas-stock-20261015-1-footer-gradient-20261016-1",
-    "sha256": "ee871497d30eefb1b55afce6e22cb563d43595130a428ac94120af77f6b84653"
+    "version": "tintin-20261017-responsive-footer-1",
+    "sha256": "95bd3d93ade3a18667d8018e90306563851ae03c0707ca455ead83ea55079475"
   },
   "css/core/tokens-color.css": {
     "version": "tintin-20261012-unified-2-tokens-color-css-palette-20261014-1-logos-bottom-20261015-1",
@@ -148,8 +148,8 @@
     "sha256": "715aa9eb030929cb7aa712e3d5ae79ca14777441bd3f0c222ddd7568cec90e60"
   },
   "css/generated/inicio.css": {
-    "version": "tintin-home-9770a74745e92264",
-    "sha256": "9770a74745e922641f1ac56830c6966148f6772606d7ccfdda4970649247a2ec"
+    "version": "tintin-home-f28f773d94f20b12",
+    "sha256": "f28f773d94f20b1249ca8ac22cfbb87eac84c3b103d0b9fbe766db2d58b8b8be"
   },
   "css/pages/catalog/catalog-maintenance.css": {
     "version": "tintin-20260817-margin-consistency-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
@@ -176,8 +176,8 @@
     "sha256": "50c47639f428093ef78f5504514bd4483495e3c0e98fac659fcdf9309add4137"
   },
   "css/pages/home/ajuste-inicio.css": {
-    "version": "tintin-20261016-original-hero-layout-1",
-    "sha256": "ecffe5b05a9b7c75f8f7bf5697107ec1007872fe4f5e46c6b8f35840070049e5"
+    "version": "tintin-20261017-home-actions-spacing-1",
+    "sha256": "4394e0706ad0f5f571183daf0857f7dc7d7f3d12d84f783d07c6e7a6b13a94c8"
   },
   "css/pages/home/carrusel-colecciones.css": {
     "version": "tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
@@ -236,8 +236,8 @@
     "sha256": "b349c08426876b2b05fb4606759a08a537b7e6db3a2071047e5a44bf55a67c8c"
   },
   "css/pages/product/product-extras.css": {
-    "version": "tintin-20260829-favorite-alignment-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
-    "sha256": "6e61cf4675ba7a581c3a17af8bd2812fff356373f0bded8a9910ff78bb89962b"
+    "version": "tintin-20261017-selection-1",
+    "sha256": "973efc3e2bee70559f4bd8208ebd17e8226db51d82868686c90511ee3b3966dd"
   },
   "css/pages/product/product-maintenance.css": {
     "version": "tintin-20261011-boutique-2-palette-20261014-1-ui-fixes-20261014-1",
@@ -316,8 +316,8 @@
     "sha256": "de5f789d28a5d132bcaeda507df5371112be6ff20c8e8f6e367ef17e327c2fdc"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "67069b45549e46011015de3c544f42310fdbe2376591015ce948bd84df8169ce"
+    "version": "tintin-20261017-stat-controls-1",
+    "sha256": "931595d47bce74f9296d64209136e3101c9311f60cb6af0d3452faf858284b64"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -456,8 +456,12 @@
     "sha256": "11250496d061c8fa796fde03cb7bc6786def8112c907382aa200406f0e1381f4"
   },
   "js/admin/orders/pedidos-superadmin-crud.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "348056e4eff6180182472fd27134aa57dac8dfad2791abace17f75aacbaf4aed"
+    "version": "tintin-20261017-stat-controls-1",
+    "sha256": "1451847aba9f02002176f4627a89c2fa815400629a8fa231ebd15ccb99b8e9a3"
+  },
+  "js/admin/orders/seleccion-devolucion.mjs": {
+    "version": "tintin-20261017-stat-controls-1",
+    "sha256": "1ba00322c331e40451d64cafc82c3adda66dea89a4d23c86f1856111cf013aca"
   },
   "js/admin/orders/tablero-pedidos-vista.mjs": {
     "version": "tintin-20261012-orders-board-1",
@@ -535,6 +539,14 @@
     "version": "tintin-20261004-admin-connections-3",
     "sha256": "c86769f26d1b0810fcf129e26c0ac8b4f401e0287a9e5c857a7a7753863ee5a3"
   },
+  "js/admin/statistics/controles-estadisticas.js": {
+    "version": "tintin-20261017-stat-controls-1",
+    "sha256": "ef5501eea13fb5bb30df9906b11d4073cd98008c7435cc84dd876499f64f9aef"
+  },
+  "js/admin/statistics/modelo-reinicios.mjs": {
+    "version": "tintin-20261017-stat-controls-1",
+    "sha256": "12f3936285c8fc1ffd4801d75eda2c59d086e6068909b858c03076cde41059a5"
+  },
   "js/admin/users/ficha-usuario-admin.js": {
     "version": "tintin-20261017-domain-cutover-1",
     "sha256": "82cd93bab28d406059abb7e006b0e32e70115480bc72b022b8abf4b15a3c15ee"
@@ -572,8 +584,8 @@
     "sha256": "8aaeb990381002025863616b3a3be9c8a89bd64dbec31a5604e052118d94d188"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20261017-data-refresh-1",
-    "sha256": "325206643a3baa5ec4d94d094b1d94eea92de91ce5c0c409ecec4a148581e7cf"
+    "version": "tintin-20261018-page-updates-1",
+    "sha256": "fe66cf8655214ad9fece3b26699cc8161e0f95b1dbf3c96f4c8ff8a9c1d4b1a0"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -1300,12 +1312,12 @@
     "sha256": "dbe03617213adb9883f42cb85199b88e47e3122d681f446b3248e0613de0a9ff"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "0fa8bbadcaeab7126e8ff79d2304013f6d3fdf1e74dd0851a30bf7a9b81df3c5"
+    "version": "tintin-20261017-responsive-layout-1",
+    "sha256": "34fd63a5e00946e2fdd4d479eccd1bb8550a87a9f6b9fdc908d1770c27492b46"
   },
   "js/quality/cambios-tienda.js": {
-    "version": "tintin-20261017-data-refresh-1",
-    "sha256": "e20ea4d9f839566b37a6786b32b1b16e9c317a55c5bfb77a603cece456458061"
+    "version": "tintin-20261018-page-updates-1",
+    "sha256": "a8a69dee2088147dd307f00c7561e61f75fe9cf63da83f87733ec8649c0be2a0"
   },
   "js/quality/correccion-auditoria-pagina.js": {
     "version": "tintin-20261012-checkout-ready-3-control-paneles-js-palette-20261014-1",
@@ -1336,8 +1348,8 @@
     "sha256": "894a7494ebc1c168befd41f93b92f4bb511e735407d483fd47272d0029eb54b1"
   },
   "js/quality/vigilancia-version.js": {
-    "version": "tintin-20261017-data-refresh-1",
-    "sha256": "2c013b19910e2c314aeff93fcfc207fe895ae6a4e2826ffecf5f4332a649b85e"
+    "version": "tintin-20261018-page-updates-1",
+    "sha256": "1b12cc0d29059eefe6c5b019c469cbb24ead0baa9e875978af7829a48e6ec19a"
   },
   "js/theme/alternancia-secciones.js": {
     "version": "tintin-20261015-flow-startup-2",

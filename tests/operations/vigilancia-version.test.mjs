@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { unknownRefs, versionedRefs, notifySiteContentChange } from '../../js/quality/vigilancia-version.js';
+import { unknownRefs, versionedRefs, notifySiteContentChange, pageRevision } from '../../js/quality/vigilancia-version.js';
 
 const read = file => fs.readFileSync(new URL(`../../${file}`, import.meta.url), 'utf8');
 
@@ -14,6 +14,17 @@ function el(tagName, attrs, { inside = null } = {}) {
 }
 
 const doc = elements => ({ querySelectorAll: () => elements });
+
+test('el marcador selecciona únicamente la página abierta y conserva fallback para publicaciones anteriores', () => {
+  const a = 'a'.repeat(64), b = 'b'.repeat(64);
+  const data = { revision: b, pages: { 'index.html': a, 'admin.html': b, 'product.html': b } };
+  for (const route of ['/', '/index', '/index.html', '/index/']) assert.equal(pageRevision(data, route), a);
+  assert.equal(pageRevision(data, '/admin'), b);
+  assert.equal(pageRevision(data, '/product.html'), b);
+  assert.equal(pageRevision(data, '/pages/propia'), '');
+  assert.equal(pageRevision({ revision: b }, '/'), '');
+  assert.equal(pageRevision({ pages: { 'index.html': 'invalid' } }, '/'), '');
+});
 
 test('solo cuenta referencias same-origin con ?v= que se ejecutan', () => {
   const refs = versionedRefs(doc([

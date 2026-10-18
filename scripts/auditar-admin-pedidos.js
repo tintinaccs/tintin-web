@@ -157,13 +157,13 @@ check(
 );
 check(
   'Eliminar pedido: permiso + confirmación + papelera auditable',
-  /roleCanDo\('pedidos', 'eliminar'\)/.test(adminApp) && /¿Mover este pedido a Borrados\?/.test(adminApp) && /TintinOrderAdmin\.trashOrder/.test(adminApp) && /logAudit\('mover_pedido_borrados'/.test(adminApp),
+  /roleCanDo\('pedidos', 'eliminar'\)/.test(adminApp) && /chooseOrderTrash/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /Confirmar y mover a Borrados/.test(read('js/admin/orders/seleccion-devolucion.mjs')) && /TintinOrderAdmin\.trashOrder/.test(adminApp) && /logAudit\('mover_pedido_borrados'/.test(adminApp),
   'Eliminar desde la lista activa debe mover a Borrados y dejar auditoría.'
 );
 check(
-  'Mover a Borrados libera inventario antes de retirar el pedido activo',
-  /TintinInventoryIntegrity\.transitionStatus\(safeId, 'cancelado',/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /allowedOrderStatuses\(before\)\.includes\('cancelado'\)/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /match \/orderTrash\/\{orderId\}/.test(rules),
-  'La papelera debe conservar recuperación sin dejar stock reservado.'
+  'Mover a Borrados aplica sólo la devolución elegida en el mismo commit',
+  /selectedReturns\(order, input.returnItems\)/.test(read('cloudflare/order-trash-controls.js')) && /await commit\(env, writes\)/.test(read('cloudflare/order-trash-controls.js')) && /currentDocument: condition\(source\)/.test(read('cloudflare/order-trash-controls.js')) && /match \/orderTrash\/\{orderId\}/.test(rules),
+  'La papelera debe conservar recuperación y devolver sólo las unidades elegidas, sin doble reposición ni commits parciales.'
 );
 check(
   'La eliminación individual expone el resultado recuperable',

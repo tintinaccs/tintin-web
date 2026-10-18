@@ -343,6 +343,9 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
     }
   }
 
+  if (requestedOrderId && ORDER_ID_PATTERN.test(requestedOrderId) && await get(env, `orderTrash/${requestedOrderId}`)) {
+    throw creationError('Este pedido está en Borrados. Restauralo desde Pedidos; no se puede crear otra vez con el mismo identificador.', 'order_archived');
+  }
   const { items, byProduct, documents } = await resolveCanonicalCreationItems(env, input.items, batchGet);
 
   const orderId = requestedOrderId || `manual_${crypto.randomUUID().replaceAll('-', '')}`;

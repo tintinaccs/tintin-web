@@ -1,3 +1,4 @@
+import { chooseOrderTrash } from './seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
@@ -129,69 +130,44 @@ async function resetOrderSequence() {
   return body.result || { reset: false, protected: true };
 }
 
-async function trashOrder(orderId, reason = '') {
+async function commerceControl(body) {
+  const response = await authenticatedFetch('/api/admin-commerce-controls', {
+    method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body),
+  });
+  const data = await response.json();
+  if (!response.ok || data.ok !== true) throw new Error(data.error || 'No se pudo actualizar el pedido.');
+  return data.result;
+}
+
+async function trashOrder(orderId, reason = '', options = null) {
   assertSuperAdmin();
   const safeId = clean(orderId, 220);
   if (!safeId || safeId.includes('/')) throw new Error('Pedido inválido.');
-  const activeRef = doc(db, ACTIVE_COLLECTION, safeId);
-  const beforeSnap = await getDoc(activeRef);
-  if (!beforeSnap.exists()) return { moved: false, missing: true };
-  const before = beforeSnap.data() || {};
-
-  let expectedChangeId = before.lastChangeId || '';
-  if (allowedOrderStatuses(before).includes('cancelado') && before.status !== 'cancelado') {
-    if (!window.TintinInventoryIntegrity?.transitionStatus) throw new Error('El reconciliador de inventario no está disponible.');
-    const result = await window.TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado', { baseChangeId: expectedChangeId });
-    expectedChangeId = result.order?.lastChangeId || result.changeId || expectedChangeId;
+  const snapshot = await getDoc(doc(db, ACTIVE_COLLECTION, safeId));
+  if (!snapshot.exists()) return { moved: false, missing: true };
+  const before = { ...snapshot.data(), id: safeId };
+  if (!options) {
+    const selection = await chooseOrderTrash([before]);
+    if (!selection) return { moved: false, cancelled: true };
+    options = selection.selections[safeId]; reason = selection.reason;
   }
-
-  return runTransaction(db, async transaction => {
-    const liveSnap = await transaction.get(activeRef);
-    if (!liveSnap.exists()) return { moved: false, missing: true };
-    const live = liveSnap.data() || {};
-    if ((live.lastChangeId || '') !== expectedChangeId) throw new Error('El pedido cambió en otra sesión. Actualizá los datos antes de moverlo a Borrados.');
-    const trashRef = doc(db, TRASH_COLLECTION, safeId);
-    transaction.set(trashRef, {
-      ...live,
-      originalOrderId: safeId,
-      orderNumber: live.orderNumber || before.orderNumber || '',
-      shortId: live.orderNumber || before.orderNumber || live.shortId || before.shortId || '',
-      trashMeta: {
-        originalStatus: before.status || 'pendiente',
-        reason: clean(reason, 500),
-        trashedAt: serverTimestamp(),
-        trashedBy: auth.currentUser?.email || SUPER_ADMIN
-      },
-      updatedAt: serverTimestamp()
-    });
-    transaction.delete(activeRef);
-    return { moved: true, orderNumber: live.orderNumber || before.orderNumber || '' };
-  });
+  if ((before.lastChangeId || '') !== options.baseChangeId) throw new Error('El pedido cambió en otra sesión. Actualizá antes de elegir la devolución.');
+  return commerceControl({ action: 'trashOrder', orderId: safeId, reason,
+    returnItems: options.returnItems, baseChangeId: options.baseChangeId,
+    changeId: 'trash_' + crypto.randomUUID().replaceAll('-', '') });
 }
 
 async function restoreOrder(orderId) {
   assertSuperAdmin();
   const safeId = clean(orderId, 220);
   if (!safeId || safeId.includes('/')) throw new Error('Pedido inválido.');
-  return runTransaction(db, async transaction => {
-    const trashRef = doc(db, TRASH_COLLECTION, safeId);
-    const activeRef = doc(db, ACTIVE_COLLECTION, safeId);
-    const trashSnap = await transaction.get(trashRef);
-    const activeSnap = await transaction.get(activeRef);
-    if (!trashSnap.exists()) return { restored: false, missing: true };
-    if (activeSnap.exists()) throw new Error('Ya existe un pedido activo con este ID interno.');
-    const data = trashSnap.data() || {};
-    const restored = { ...data };
-    delete restored.trashMeta;
-    // Conservar el estado de entrega y reserva de la copia: archivar un pedido
-    // entregado no equivale a cancelarlo ni a reponer mercadería.
-    restored.restoredAt = serverTimestamp();
-    restored.restoredBy = auth.currentUser?.email || SUPER_ADMIN;
-    restored.updatedAt = serverTimestamp();
-    transaction.set(activeRef, restored);
-    transaction.delete(trashRef);
-    return { restored: true, orderNumber: data.orderNumber || data.shortId || safeId };
-  });
+  const snapshot = await getDoc(doc(db, TRASH_COLLECTION, safeId));
+  if (!snapshot.exists()) return { restored: false, missing: true };
+  const before = snapshot.data();
+  if (!window.confirm('¿Restaurar el pedido? Se descontarán sólo las unidades devueltas al borrarlo. Si no hay stock suficiente, no se hará ningún cambio.')) return { restored: false, cancelled: true };
+  return commerceControl({ action: 'restoreOrder', orderId: safeId,
+    baseChangeId: before.trashMeta?.changeId || before.lastChangeId || '',
+    changeId: 'restore_' + crypto.randomUUID().replaceAll('-', '') });
 }
 
 async function deleteTrashPermanently(orderId) {

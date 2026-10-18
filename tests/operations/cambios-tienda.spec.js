@@ -8,8 +8,8 @@ for (const [width, height] of [[320, 900], [390, 844], [844, 390], [768, 1024], 
     await page.getByRole('textbox').fill('Conservar mi edición');
     await page.evaluate(() => localStorage.setItem('tintin-test-cart', '[{"id":"fixture","qty":2}]'));
     await page.addScriptTag({ type: 'module', content: `
-      import { createSiteRevisionObserver } from '../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1';
-      import { notifySiteContentChange } from '../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1';
+      import { createSiteRevisionObserver } from '../../js/quality/vigilancia-version.js?v=tintin-20261018-page-updates-1';
+      import { notifySiteContentChange } from '../../js/quality/vigilancia-version.js?v=tintin-20261018-page-updates-1';
       window.dataUpdates = 0;
       window.addEventListener('tintin:site-content-updated', () => window.dataUpdates++);
       window.receiveRevision = createSiteRevisionObserver(notifySiteContentChange);` });
@@ -37,7 +37,7 @@ test('la señal de datos no pide recarga en ninguna página, incluido el panel d
     await page.goto(path);
     await page.getByRole('textbox').fill('Sin perder mi trabajo');
     await page.addScriptTag({ type: 'module', content: `
-      import { notifySiteContentChange } from '../../js/quality/vigilancia-version.js?v=tintin-20261017-data-refresh-1';
+      import { notifySiteContentChange } from '../../js/quality/vigilancia-version.js?v=tintin-20261018-page-updates-1';
       let received = 0;
       window.addEventListener('tintin:site-content-updated', () => received++);
       notifySiteContentChange();

@@ -255,13 +255,13 @@ body.tt-home-premium .tt-trust-grid {
   max-width: 1120px;
   margin-inline: auto;
   align-items: stretch;
+  gap: clamp(16px, 2vw, 24px);
 }
 
 body.tt-home-premium .tt-trust-item {
   min-height: 84px;
   padding: 14px clamp(10px, 1.8vw, 22px);
   border: 0;
-  border-right: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 80%, transparent);
   border-radius: 0;
   box-shadow: none;
 }
@@ -345,21 +345,13 @@ body.tt-home-premium .tt-reviews-section {
   padding-block: clamp(54px, 7vw, 90px);
 }
 
-@media (max-width: 900px) {
-  body.tt-home-premium .tt-trust-item {
-    border-right: 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-card-border, #FDECF2) 80%, transparent);
-  }
-  body.tt-home-premium .tt-trust-item:nth-last-child(-n+2) { border-bottom: 0; }
-}
-
 @media (min-width: 769px) and (max-width: 960px) {
   body.tt-home-premium .tt-home-random-products-grid { grid-auto-columns: minmax(230px, 42vw); }
 }
 
 @media (max-width: 768px) {
   body.tt-home-premium .tt-trust-bar { padding-block: 10px; }
-  body.tt-home-premium .tt-trust-grid { gap: 0; }
+  body.tt-home-premium .tt-trust-grid { gap: 16px; }
   body.tt-home-premium .tt-trust-item { min-height: 72px; padding: 12px 8px; }
   body.tt-home-premium .tt-trust-title { font-size: .7rem; }
   body.tt-home-premium .tt-trust-desc { font-size: .66rem; }
@@ -982,10 +974,15 @@ html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions a:focus-visible
 @media(max-width:767px) {
   html body.tt-home-premium #hero[data-tt-banner] .tt-hero-media { aspect-ratio:1024/1366!important; }
   html body.tt-home-premium #hero[data-tt-banner] #tt-hero-img { object-fit:var(--tt-hero-fit-mobile,contain)!important; transform:scale(var(--tt-hero-scale-mobile,1))!important; }
-  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-content { position:relative!important; inset:auto!important; height:auto!important; padding:16px!important; }
-  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions { display:flex!important; flex-wrap:wrap; justify-content:center; gap:12px; }
-  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions a { position:static!important; display:flex!important; align-items:center; justify-content:center; width:auto!important; height:auto!important; min-height:44px!important; padding:12px 16px!important; font-size:14px!important; color:#222!important; }
-  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-cta { background:#F8AACA!important; border-radius:24px!important; }
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-content { position:relative!important; inset:auto!important; height:auto!important; padding:20px clamp(16px,4vw,28px) 28px!important; }
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions { display:grid!important; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; width:min(100%,640px)!important; margin-inline:auto!important; }
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions a { position:static!important; display:flex!important; align-items:center; justify-content:center; width:100%!important; max-width:none!important; height:auto!important; min-height:48px!important; padding:12px 20px!important; font-size:14px!important; line-height:1.4!important; color:#222!important; border-radius:999px!important; text-align:center; text-decoration:none; }
+  /* Más específico que el hotspot transparente del banner de escritorio. */
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions .tt-hero-cta { background:var(--color-brand-primary,#F8AACA)!important; border:1px solid var(--color-brand-primary,#F8AACA)!important; }
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions .tt-hero-link { background:#fff!important; border:1px solid var(--color-brand-primary,#F8AACA)!important; }
+}
+@media(max-width:479px) {
+  html body.tt-home-premium #hero[data-tt-banner] .tt-hero-actions { grid-template-columns:minmax(0,1fr); max-width:360px; }
 }
 /* El rosa claro del archivo continúa hasta el comienzo del bloque rosa intenso. */
 html body.tt-home-premium #hero[data-tt-banner]::after {
