@@ -9,8 +9,8 @@ export const controlPath = path => path.startsWith('.github/workflows/') ||
 const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const fail = message => { throw new Error(message); };
 
-export function inspectMaintenance({ baseline, candidate, readFile, baseSha, plan, changedPaths }) {
-  if (changedPaths.some(controlPath)) fail('Cambios al mecanismo de control requieren una migración separada.');
+export function inspectMaintenance({ baseline, candidate, readFile, baseSha, plan, changedPaths, allowControlUpdates = false }) {
+  if (!allowControlUpdates && changedPaths.some(controlPath)) fail('Cambios al mecanismo de control requieren autorización en la configuración confiable de main.');
   const legacyErrors = checkProtectedFlows(baseline, candidate, readFile);
   if (!legacyErrors.length) return { maintenance: false, files: [], affectedRecords: [] };
   if (!/^[a-f0-9]{40}$/.test(baseSha)) fail('Base de mantenimiento inválida.');

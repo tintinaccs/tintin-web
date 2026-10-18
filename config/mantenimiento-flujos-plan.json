@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "30a9b316acc29f0038b5f73c82fb4b02acf1db1a",
-  "reason": "Maestro Productos: CRUD nativo, lotes atómicos y pedidos existentes; pruebas Node/UI e inventario concurrente aprobadas. CI detectó fixture antiguo y carrera de frame de galería, corregidos con regresiones dirigidas aprobadas sin reducir contratos.",
+  "baseCommit": "729de9011c169269144f06badf2be2018113bd15",
+  "reason": "Maestro Productos completo: CRUD nativo, lotes atómicos y pedidos existentes; Node/UI/inventario concurrente aprobados. Reparados fixture de sesión antiguo y frame de galería con regresiones dirigidas; mecanismo y verificación de producción heredados de main1161.",
   "files": [
     {
       "path": "admin.html",
