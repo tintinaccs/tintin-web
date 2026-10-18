@@ -1,5 +1,6 @@
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261017-stat-controls-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
+import { captureProductInventoryRevision, productInventoryRevisionMatches } from './products/revision-inventario-producto.mjs?v=tintin-20261018-product-actions-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
@@ -5566,7 +5567,7 @@ function loadProductos() {
       // del propio admin puede producir pero que un editor externo directo
       // sobre Firestore sí podría dejar) rompía el formulario entero al
       // abrir justo ese producto.
-      _allProducts = records.map(({ id, record: data }) => ({ _docId: id, ...data,
+      _allProducts = records.map(({ id, record: data }) => ({ ...data, _docId: id, _inventorySource: data,
         category: wristCategory(data.category || ''), variants: sanitizeVariantData(data.variants || null) }))
         .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
       adminRealtimeReady.products = true;
@@ -5770,7 +5771,7 @@ function renderProductVariantStock(product) {
   stockInput.readOnly = false;
   optionsInput.readOnly = false;
   if (product?.variantInventory == null) return;
-  productVariantStockBaseline = { stock: product.stock, entries: variantInventoryEntries(product), variants: product.variants };
+  productVariantStockBaseline = captureProductInventoryRevision(product._inventorySource || product);
   stockInput.readOnly = true;
   optionsInput.readOnly = true;
   const hint = document.createElement('p');
@@ -6098,12 +6099,13 @@ async function prodGuardar() {
         data.variantInventory = variantInventoryEntries({ variantInventory: entries });
         data.stock = entries.reduce((sum, entry) => sum + entry.stock, 0);
         if (data.stock > 1000000) throw new Error('El stock total supera 1.000.000.');
-        data.variants = original.variants;
+        if (original.variants === undefined) delete data.variants;
+        else data.variants = original.variants;
         await withAdminSiteChange(async () => runTransaction(db, async transaction => {
           const ref = doc(db, 'products', docId);
           const snapshot = await transaction.get(ref);
           const current = snapshot.data();
-          if (!snapshot.exists() || current.stock !== original.stock || JSON.stringify(variantInventoryEntries(current)) !== JSON.stringify(original.entries) || JSON.stringify(current.variants) !== JSON.stringify(original.variants)) {
+          if (!snapshot.exists() || !productInventoryRevisionMatches(current, original)) {
             throw new Error('El stock o las opciones cambiaron mientras editabas. Volvé a abrir el producto antes de guardar.');
           }
           transaction.update(ref, data);
