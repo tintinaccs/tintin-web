@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b982cb77cbca744a3f39b75b23731efebdacc31b",
-  "reason": "Conservar catálogo con stock y sincronización sin recarga; integrar PR1153 y validar regresiones Chromium, protección y build canónico.",
+  "baseCommit": "46c10ef533ca6e31dad7625e927e57ae6926fa0e",
+  "reason": "Conservar catálogo con stock y sincronización sin recarga; integrar mosaico y selección de PR1155 con regresiones Chromium, protección y build.",
   "files": [
     {
       "path": "404.html",
@@ -20,8 +20,8 @@
     },
     {
       "path": "admin.html",
-      "oldHash": "7d91e367701881b77669722fc11c063400b58a4d1bb02160986eb28a9df96f33",
-      "newHash": "a1314b0a4766ad1bbf0cddeb2773e270d37cc43f964c01be5ad3062264b2e9e8"
+      "oldHash": "a4aafd49c66b583fc9cc25ca8d851ae4c696635da6525d2cf09924e6b67201ed",
+      "newHash": "15c20e561f57ba097eb2243673beecb8d06131b1dc08d48a5eed1e7bbb728214"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -95,13 +95,13 @@
     },
     {
       "path": "product.html",
-      "oldHash": "170ce74281670dc1ede2af7b024c2e5669118ff44b63476bd922d406b9d3c760",
-      "newHash": "c6002d52d84723d1c47419a901298ec96a209a8028a800598fa3389cadabfc74"
+      "oldHash": "65ccd1f44ec86317feabe6e30e9d90f4215c4eed24258275a84963d423ec9d5d",
+      "newHash": "a20344d8178d4745b0bca4c5d5127c1f63369eda8ef5572b32a7bf9321b85fb9"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "8d5e763a4df6924ed051617f6b124e1e756b2f1386fcd96ac1b6666f8a0473f3",
-      "newHash": "b26432f043df166e8a103c168eba44de584ca79e9f11478ec0b4840bcb42f239"
+      "oldHash": "972beb4c0c2916fcb4692699e9cb01aba810b94d035e48f301f914d747f21dbb",
+      "newHash": "6bcbb3d427ebc5aa6a9d448a801655bad78a7b92062013eab8d1ade5b5aed9e5"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",

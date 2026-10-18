@@ -1,6 +1,7 @@
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261012-orders-board-1';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 /* ========================================================================
    TINTIN — Productos, Colecciones y Pedidos
    Capa de experiencia operativa inspirada en Shopify y adaptada al modelo
@@ -32,7 +33,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20260924-products-description-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1';
+const VERSION = 'tintin-20261018-products-mosaic-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -157,8 +158,8 @@ function safeImage(value) {
 
 function productImage(product) {
   const candidates = [
-    product?.image,
     product?.imageUrl,
+    product?.image,
     product?.thumbnail,
     Array.isArray(product?.images) ? product.images[0] : '',
     Array.isArray(product?.media) ? product.media[0]?.url : ''
@@ -508,10 +509,11 @@ function renderProducts() {
       </div>
       ${productsWarning}
       ${!state.productsReady ? '<div class="tt-commerce-loading">Cargando productos…</div>' : productsUnavailable ? '' : page.items.length ? `
-      <div class="tt-commerce-tablewrap">
-        <table class="tt-commerce-table">
+      <div class="tt-commerce-tablewrap tt-commerce-product-grid-wrap">
+        <label class="tt-commerce-product-select-all"><input type="checkbox" data-check-all="products" ${allVisibleSelected ? 'checked' : ''} aria-label="Seleccionar todos los productos visibles"> Seleccionar esta página <span>Hasta ${MAX_BULK_SELECTION} productos por acción</span></label>
+        <table class="tt-commerce-table tt-commerce-product-grid" role="table" aria-label="Productos">
           <thead><tr>
-            <th class="checkcol"><input type="checkbox" data-check-all="products" ${allVisibleSelected ? 'checked' : ''} aria-label="Seleccionar todos los productos visibles"></th>
+            <th class="checkcol">Selección</th>
             <th>Producto</th><th>Estado</th><th>Inventario</th><th>Precio</th><th>Colección</th><th></th>
           </tr></thead>
           <tbody>${page.items.map(product => {
@@ -520,14 +522,14 @@ function renderProducts() {
             const stockCls = product.stock == null ? 'ok' : Number(product.stock) <= 0 ? 'out' : Number(product.stock) <= 5 ? 'low' : 'ok';
             const variants = productVariantsCount(product);
             const selected = state.productSelected.has(product._docId);
-            return `<tr data-open="product" data-id="${esc(product._docId)}" class="${selected ? 'is-selected' : ''}">
-              <td class="checkcol" data-stop><input type="checkbox" data-select-product="${esc(product._docId)}" ${selected ? 'checked' : ''} aria-label="Seleccionar ${esc(product.name || 'producto')}"></td>
-              <td><div class="tt-commerce-productcell">${thumbHtml(productImage(product), product.name || 'Producto')}<div style="min-width:0"><div class="tt-commerce-maintext">${esc(product.name || 'Sin nombre')}</div><div class="tt-commerce-subtext">${variants ? `${variants} variante${variants === 1 ? '' : 's'} · ` : ''}${esc(product._docId)}</div></div></div></td>
-              <td><span class="tt-commerce-badge ${status.cls}">${status.label}</span></td>
-              <td><span class="tt-commerce-stock ${stockCls}">${stock}</span></td>
-              <td><span class="tt-commerce-money">${formatMoney(product.price)}</span>${Number(product.priceBefore) > Number(product.price) ? `<div class="tt-commerce-subtext"><s>${formatMoney(product.priceBefore)}</s></div>` : ''}</td>
-              <td>${esc(state.collections.find(c => c.slug === product.category)?.name || product.category || 'Sin colección')}</td>
-              <td data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="product" data-id="${esc(product._docId)}" aria-label="Acciones">⋯</button></td>
+            return `<tr data-open="product" data-id="${esc(product._docId)}" data-product-active="${product.active !== false}" class="${selected ? 'is-selected' : ''}">
+              <td class="checkcol" data-stop><label class="tt-commerce-product-check"><input type="checkbox" data-select-product="${esc(product._docId)}" ${selected ? 'checked' : ''} aria-label="Seleccionar ${esc(product.name || 'producto')}"></label></td>
+              <td class="tt-commerce-product-main"><div class="tt-commerce-productcell">${thumbHtml(productImage(product), product.name || 'Producto')}<div><button type="button" class="tt-commerce-product-open" data-action="drawer-product" data-id="${esc(product._docId)}">${esc(product.name || 'Sin nombre')}</button><div class="tt-commerce-subtext">${variants ? `${variants} variante${variants === 1 ? '' : 's'} · ` : ''}${esc(product._docId)}</div></div></div></td>
+              <td class="tt-commerce-product-status"><span class="tt-commerce-badge ${status.cls}">${status.label}</span>${product.destacado ? '<span class="tt-commerce-badge">Destacado</span>' : ''}${product.oferta || Number(product.priceBefore) > Number(product.price) ? '<span class="tt-commerce-badge">Oferta</span>' : ''}</td>
+              <td class="tt-commerce-product-inventory"><span class="tt-commerce-product-label">Inventario</span><span class="tt-commerce-stock ${stockCls}">${stock}</span></td>
+              <td class="tt-commerce-product-price"><span class="tt-commerce-product-label">Precio</span><span class="tt-commerce-money">${formatMoney(product.price)}</span>${Number(product.priceBefore) > Number(product.price) ? `<div class="tt-commerce-subtext"><s>${formatMoney(product.priceBefore)}</s></div>` : ''}</td>
+              <td class="tt-commerce-product-collection"><span class="tt-commerce-product-label">Colección</span>${esc(state.collections.find(c => c.slug === product.category)?.name || product.category || 'Sin colección')}</td>
+              <td class="tt-commerce-product-menu" data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="product" data-id="${esc(product._docId)}" aria-label="Acciones de ${esc(product.name || 'producto')}">⋯</button></td>
             </tr>`;
           }).join('')}</tbody>
         </table>
@@ -838,16 +840,26 @@ function kvRow(label, value) {
 }
 
 function productDrawer(product) {
+  if (!product) return null;
   const status = productStatus(product);
   const collectionItem = state.collections.find(c => c.slug === product.category);
   const variants = productVariantsCount(product);
+  const specs = [['Material','material'],['Medidas','measurements'],['Color / acabado','colorFinish'],['Cuidados','care'],['Resistencia al agua','waterResistance'],['Garantía','warranty'],['Talle / ajuste','sizeFit'],['Contenido del paquete','packageContents']]
+    .filter(([,field]) => product[field]).map(([label,field]) => kvRow(label,product[field])).join('');
+  const options = product.variants && !Array.isArray(product.variants)
+    ? Object.entries(product.variants).filter(([,values]) => Array.isArray(values)).map(([label,values]) => kvRow(label,values.join(', '))).join('') : '';
+  const inventory = Array.isArray(product.variantInventory)
+    ? product.variantInventory.filter(item => item && typeof item === 'object').map(item => kvRow(String(item.variant || 'Variante'),String(item.stock ?? 'Sin control'))).join('') : '';
   return {
     title: product.name || 'Producto sin nombre',
     kicker: `Producto · ${product._docId}`,
     body: `
-      <div class="tt-commerce-drawer-section" style="display:flex;gap:12px;align-items:center">${thumbHtml(productImage(product), product.name || 'Producto')}<div><span class="tt-commerce-badge ${status.cls}">${status.label}</span><div style="margin-top:7px;font-size:16px;font-weight:780">${formatMoney(product.price)}</div></div></div>
-      <div class="tt-commerce-drawer-section"><h4>Información</h4><dl class="tt-commerce-kv">${kvRow('Colección', collectionItem?.name || product.category || 'Sin colección')}${kvRow('Stock', product.stock == null ? 'Sin control' : String(product.stock))}${kvRow('Variantes', variants ? String(variants) : 'Sin variantes')}${kvRow('Oferta', product.oferta ? 'Sí' : 'No')}${kvRow('Destacado', product.destacado ? 'Sí' : 'No')}</dl></div>
-      <div class="tt-commerce-drawer-section"><h4>Descripción</h4><div class="tt-commerce-description">${product.description ? esc(product.description) : '<span class="tt-commerce-subtext">Este producto todavía no tiene descripción.</span>'}</div></div>
+      <div class="tt-commerce-drawer-section tt-commerce-product-preview">${thumbHtml(productImage(product), product.name || 'Producto')}<div><span class="tt-commerce-badge ${status.cls}">${status.label}</span><div style="margin-top:7px;font-size:16px;font-weight:780">${formatMoney(product.price)}</div></div></div>
+      <div class="tt-commerce-drawer-section"><h4>Información</h4><dl class="tt-commerce-kv">${kvRow('Colección', collectionItem?.name || product.category || 'Sin colección')}${kvRow('Etiqueta interna',product.collection)}${kvRow('Precio anterior',Number(product.priceBefore)>0?formatMoney(product.priceBefore):'')}${kvRow('Stock', product.stock == null ? 'Sin control' : String(product.stock))}${kvRow('Variantes', variants ? String(variants) : 'Sin variantes')}${kvRow('Oferta', product.oferta ? 'Sí' : 'No')}${kvRow('Destacado', product.destacado ? 'Sí' : 'No')}${kvRow('Tags',Array.isArray(product.tags)?product.tags.join(', '):product.tags)}</dl></div>
+      <div class="tt-commerce-drawer-section"><h4>Descripción</h4><div class="tt-commerce-description">${product.description || product.desc ? esc(product.description || product.desc) : '<span class="tt-commerce-subtext">Este producto todavía no tiene descripción.</span>'}</div></div>
+      ${specs ? `<div class="tt-commerce-drawer-section"><h4>Ficha técnica</h4><dl class="tt-commerce-kv">${specs}</dl></div>` : ''}
+      ${options ? `<div class="tt-commerce-drawer-section"><h4>Opciones</h4><dl class="tt-commerce-kv">${options}</dl></div>` : ''}
+      ${inventory ? `<div class="tt-commerce-drawer-section"><h4>Stock por variante</h4><dl class="tt-commerce-kv">${inventory}</dl></div>` : ''}
     `,
     actions: `
       ${perm('productos', 'editar', 'editProducts') ? button('Editar', 'drawer-product-edit', { primary: true, extra: `data-id="${esc(product._docId)}"` }) : ''}
@@ -996,12 +1008,17 @@ function setBusy(value) {
   state.busy = value;
   document.querySelectorAll('.tt-commerce-btn').forEach(btn => {
     if (value) btn.setAttribute('aria-busy', 'true');
+    else btn.removeAttribute('aria-busy');
   });
 }
 
 async function bulkProducts(active) {
   const ids = [...state.productSelected];
   if (!ids.length || state.busy) return;
+  if (!perm('productos', 'accionesMasivas', 'editProducts') || !perm('productos', 'activarDesactivar', 'editProducts')) {
+    toast('No tenés permiso para cambiar varios productos.');
+    return;
+  }
   if (ids.length > MAX_BULK_SELECTION) {
     toast(`Solo se pueden procesar ${MAX_BULK_SELECTION} productos por vez.`);
     return;
@@ -1011,9 +1028,14 @@ async function bulkProducts(active) {
     let changed = 0;
     for (const id of ids) {
       const product = state.products.find(p => p._docId === id);
-      if (!product || (product.active !== false) === active) continue;
+      if (!product || (product.active !== false) === active) {
+        state.productSelected.delete(id);
+        continue;
+      }
       if (typeof window.prodToggleActive !== 'function') throw new Error('La acción de producto todavía no está disponible.');
-      await window.prodToggleActive(id, product.active !== false);
+      const result = await window.prodToggleActive(id, product.active !== false);
+      if (result?.status !== 'green') throw new Error(`No se confirmó el cambio de ${product.name || id}.`);
+      state.productSelected.delete(id);
       changed += 1;
     }
     state.productSelected.clear();
@@ -1367,6 +1389,24 @@ function recoverCommerceAuth(error, source) {
   });
 }
 
+function subscribeProductCatalog(onData, onError, onLoading) {
+  return createAdminPagedSource({
+    complete: state.role === 'superadmin', onData, onError, onLoading,
+    subscribePage(cursor, next, fail) {
+      const base = collection(db, 'products');
+      const source = cursor
+        ? query(base, orderBy('__name__'), startAfter(cursor), limit(1000))
+        : query(base, orderBy('__name__'), limit(1000));
+      return onSnapshot(source, { includeMetadataChanges: true }, snapshot => {
+        const last = snapshot.docs.at(-1);
+        next({ records: snapshot.docs.map(item => ({ id: item.id, record: item.data() })),
+          cursor: last, cursorKey: last?.id || '', hasMore: snapshot.docs.length === 1000,
+          authoritative: snapshot.metadata?.fromCache !== true });
+      }, fail);
+    },
+  }).stop;
+}
+
 function subscribeData() {
   state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
   state.unsubscribers = [];
@@ -1380,8 +1420,10 @@ function subscribeData() {
   state.productsReady = false;
   state.collectionsReady = false;
   state.ordersReady = false;
-  state.unsubscribers.push(onSnapshot(query(collection(db, 'products'), limit(1000)), snapshot => {
-    state.products = snapshot.docs.map(snap => ({ _docId: snap.id, ...snap.data() }));
+  const productOwnerUid = state.user?.uid;
+  state.unsubscribers.push(subscribeProductCatalog(records => {
+    if (state.user?.uid !== productOwnerUid) return;
+    state.products = records.map(item => ({ _docId: item.id, ...item.record }));
     state.productsReady = true;
     state.productsError = '';
     state.productSelected = new Set([...state.productSelected].filter(id => state.products.some(p => p._docId === id)));
@@ -1393,7 +1435,7 @@ function subscribeData() {
     toast('No se pudieron actualizar los productos en tiempo real.', 5000);
     recoverCommerceAuth(error, 'products');
     renderProducts();
-  }));
+  }, () => { state.productsReady = false; }));
 
   // Firestore rules require a bounded list for non-superadmin roles.
   state.unsubscribers.push(onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {

@@ -201,3 +201,30 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
     });
   }
 }
+
+for(const [width,height] of [[320,700],[390,844],[600,900],[640,900],[768,1024],[1024,768],[1440,900]]){
+ test(`cinco productos en Tu selección no superponen foto ni controles en ${width}`,async({page})=>{
+  await page.setViewportSize({width,height});await page.emulateMedia({reducedMotion:'reduce'});await mockPublicReads(page);
+  await page.goto('/product?id=qa-spacing',{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>window.TintinProductSelectionBooted===true);
+  await page.evaluate(async moduleUrl=>{
+   const {addToCart}=await import(moduleUrl);
+   const names=['ANILLO AMORE','AROS AMELIE','Cadena de acero con nombre largo para probar los saltos de línea','Aro','AccesorioSuperLargoSinEspaciosParaComprobarQueNoDesborda'];
+   for(let i=0;i<5;i++)await addToCart({id:'selection-layout-'+i,name:names[i],variant:i===0?'piedra-del-zodiaco':i===2?'Dorado / talla ajustable':'',price:30000+i*5000,qty:1,stock:8,imageUrl:'/assets-tintin/images/general/logo.png'});
+  },'/js/components/cart/sincronizacion-carrito.js?v=tintin-20261017-domain-cutover-1');
+  const items=page.locator('#tinsel-items .tinsel-item');await expect(items).toHaveCount(5);
+  const issues=await items.evaluateAll(nodes=>nodes.flatMap((item,index)=>{
+   const r=item.getBoundingClientRect();const errors=[];
+   const parts=[...item.querySelectorAll(':scope > .tinsel-item-img,:scope > .tinsel-item-info,:scope > .tinsel-qty,:scope > .tinsel-item-actions')].map(el=>({name:el.className,r:el.getBoundingClientRect()}));
+   for(let i=0;i<parts.length;i++){
+    const a=parts[i];if(a.r.left<r.left-1||a.r.right>r.right+1)errors.push(`${index}: ${a.name} sale de tarjeta`);
+    for(const b of parts.slice(i+1))if(Math.min(a.r.right,b.r.right)-Math.max(a.r.left,b.r.left)>1&&Math.min(a.r.bottom,b.r.bottom)-Math.max(a.r.top,b.r.top)>1)errors.push(`${index}: ${a.name} superpone ${b.name}`);
+   }
+   return errors;
+  }));expect(issues).toEqual([]);
+  await expect(page.locator('#tinsel-count')).toHaveText('5');
+  await page.locator('#tinsel-root').screenshot({path:`test-results/selection-five-${width}.png`});
+  await items.nth(1).locator('[data-cart-delta="1"]').click();await expect(page.locator('#tinsel-count')).toHaveText('6');
+  await page.locator('#tinsel-items .tinsel-item').nth(4).locator('[data-tinsel-remove]').click();await expect(page.locator('#tinsel-items .tinsel-item')).toHaveCount(4);
+ });
+}
