@@ -63,7 +63,7 @@ test('selección persiste al filtrar; barra móvil, lista y foco de búsqueda op
  await page.locator('[data-action="products-reset-filters"]').click();await expect(page.locator('[data-select-product="p-reloj"]')).toBeChecked();
  await page.locator('[data-action="products-view-list"]').click();await expect(page.locator('[data-action="products-view-list"]')).toHaveAttribute('aria-pressed','true');
  const rows=await page.locator('#tt-commerce-products tbody tr').evaluateAll(nodes=>nodes.map(el=>el.getBoundingClientRect().y));expect(rows[1]).toBeGreaterThan(rows[0]+50);
- const search=page.getByRole('searchbox',{name:'Buscar productos por nombre, colección o etiqueta'});await search.pressSequentially('Reloj',{delay:220});await expect(search).toBeFocused();await expect(search).toHaveValue('Reloj');
+ const search=page.getByRole('searchbox',{name:'Buscar productos por nombre, SKU, colección o etiqueta'});await search.pressSequentially('Reloj',{delay:220});await expect(search).toBeFocused();await expect(search).toHaveValue('Reloj');
  await page.locator('[data-action="products-bulk-panel"]').click();await page.locator('[data-action="products-bulk-deactivate"]').click();
  expect(await page.evaluate(()=>window.__calls.filter(c=>c[0]==='prodToggleActive'))).toEqual([['prodToggleActive','p-reloj',true]]);
 });

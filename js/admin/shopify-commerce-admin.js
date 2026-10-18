@@ -1,4 +1,5 @@
-import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261018-products-phase1-2';
+import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261018-products-master-1';
+import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261018-products-master-1';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261012-orders-board-1';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
@@ -34,7 +35,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261018-products-phase1-2';
+const VERSION = 'tintin-20261018-products-master-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -285,11 +286,14 @@ function collectionProductCount(slug) {
 function productTabCounts() {
   return {
     all: state.products.length,
-    active: state.products.filter(p => productStatus(p).key === 'active').length,
+    active: state.products.filter(p => p?.active !== false).length,
     inactive: state.products.filter(p => p?.active === false).length,
     soldout: state.products.filter(p => p?.active !== false && p?.stock != null && Number(p.stock) <= 0).length,
     sale: state.products.filter(p => p?.oferta === true || (Number(p?.priceBefore) > Number(p?.price) && Number(p?.price) >= 0)).length,
-    featured: state.products.filter(p => p?.destacado === true).length
+    featured: state.products.filter(p => p?.destacado === true).length,
+    low:state.products.filter(p=>p.stock!=null && Number(p.stock)>0 && Number(p.stock)<=5).length,
+    missingphoto:state.products.filter(p=>!productImage(p)).length,
+    unclassified:state.products.filter(p=>!state.collections.some(c=>c.slug===p.category)).length
   };
 }
 
@@ -309,12 +313,15 @@ function filteredProducts() {
   let list = [...state.products];
   const q = normalizeText(state.productSearch);
   if (q) {
-    list = list.filter(p => [p?.name, p?.category, p?._docId, p?.sku].some(v => normalizeText(v).includes(q)));
+    list = list.filter(p => [p?.name, p?.category, p?._docId, p?.sku,p?.collection,...(Array.isArray(p?.tags)?p.tags:[])].some(v => normalizeText(v).includes(q)));
   }
-  if (state.productTab === 'active') list = list.filter(p => productStatus(p).key === 'active');
+  if (state.productTab === 'active') list = list.filter(p => p?.active !== false);
   if (state.productTab === 'inactive') list = list.filter(p => p?.active === false);
   if (state.productTab === 'soldout') list = list.filter(p => p?.active !== false && p?.stock != null && Number(p.stock) <= 0);
   if (state.productTab === 'sale') list = list.filter(p => p?.oferta === true || Number(p?.priceBefore) > Number(p?.price));
+  if(state.productTab==='low')list=list.filter(p=>p.stock!=null && Number(p.stock)>0 && Number(p.stock)<=5);
+  if(state.productTab==='missingphoto')list=list.filter(p=>!productImage(p));
+  if(state.productTab==='unclassified')list=list.filter(p=>!state.collections.some(c=>c.slug===p.category));
   if (state.productTab === 'featured') list = list.filter(p => p?.destacado === true);
   if (state.productCategory) list = list.filter(p => String(p?.category || '') === state.productCategory);
   if (state.productStock === 'in') list = list.filter(p => p?.stock == null || Number(p.stock) > 0);
@@ -445,7 +452,7 @@ function renderProducts() {
   const root = document.getElementById('tt-commerce-products');
   if (!root) return;
   const activeControl=document.activeElement;
-  const focusAttribute=root.contains(activeControl) ? ['data-filter','data-select-product','data-check-all','data-action','data-tab'].find(attribute=>activeControl.hasAttribute(attribute)) : null;
+  const focusAttribute=root.contains(activeControl) ? ['data-product-metric','data-filter','data-select-product','data-check-all','data-action','data-tab'].find(attribute=>activeControl.hasAttribute(attribute)) : null;
   const focusSelector=focusAttribute ? `[${focusAttribute}="${CSS.escape(activeControl.getAttribute(focusAttribute))}"]` : null;
   const caret=focusAttribute && typeof activeControl.selectionStart==='number' ? [activeControl.selectionStart,activeControl.selectionEnd] : null;
   root.dataset.view=state.productView;root.dataset.filtersOpen=String(state.productFiltersOpen);root.dataset.bulkOpen=String(state.productBulkOpen);
@@ -458,7 +465,7 @@ function renderProducts() {
   const canCreate = perm('productos', 'crear', 'addProducts');
   const canEdit = perm('productos', 'editar', 'editProducts');
   const canToggle = perm('productos', 'activarDesactivar', 'editProducts');
-  const canDelete = perm('productos', 'eliminar', 'deleteProducts');
+  const canDelete = state.role==='superadmin' && perm('productos', 'eliminar', 'deleteProducts');
   const canBulk = perm('productos', 'accionesMasivas', 'editProducts');
   const canExport = perm('productos', 'exportar', 'editProducts') || state.role === 'viewer';
   const filterCount=Number(Boolean(state.productCategory))+Number(Boolean(state.productStock))+Number(state.productTab!=='all');
@@ -480,6 +487,7 @@ function renderProducts() {
         ${canCreate ? button('Agregar producto', 'product-new', { primary: true }) : ''}
       </div>
     </div>
+    <div class="tt-product-metrics" aria-label="Indicadores de catálogo">${[['all','Total'],['active','Activos'],['inactive','Inactivos'],['soldout','Agotados'],['low','Stock bajo (1–5)'],['missingphoto','Sin foto'],['unclassified','Sin colección válida']].map(([key,label])=>`<button type="button" data-action="products-metric" data-product-metric="${key}" aria-pressed="${state.productTab===key}"><strong>${state.productsReady && !state.productsError?counts[key]:'—'}</strong><span>${label}</span></button>`).join('')}</div>
     <div class="tt-commerce-card">
       <div class="tt-commerce-tabs">
         ${tabButton('products', 'all', 'Todos', counts.all, state.productTab)}
@@ -490,12 +498,12 @@ function renderProducts() {
         ${tabButton('products', 'featured', 'Destacados', counts.featured, state.productTab)}
       </div>
       <div class="tt-product-search-row">
-        <label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="product-search" type="search" value="${esc(state.productSearch)}" placeholder="Buscar productos" aria-label="Buscar productos por nombre, colección o etiqueta"></label>
+        <label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="product-search" type="search" value="${esc(state.productSearch)}" placeholder="Nombre, SKU o etiquetas" aria-label="Buscar productos por nombre, SKU, colección o etiqueta"></label>
         <button type="button" class="tt-commerce-btn tt-product-filters-toggle" data-action="products-filters" aria-expanded="${state.productFiltersOpen}" aria-controls="tt-product-filter-panel">Filtros${filterCount ? ` (${filterCount})` : ''}</button>
         <div class="tt-product-views" role="group" aria-label="Vista de productos">${['grid','list'].map(view=>`<button type="button" class="tt-commerce-btn" data-action="products-view-${view}" aria-pressed="${state.productView===view}">${view==='grid'?'Mosaico':'Lista'}</button>`).join('')}</div>
       </div>
       <div class="tt-commerce-toolbar tt-product-filter-panel" id="tt-product-filter-panel">
-        <label class="tt-product-status-filter">Estado<select class="tt-commerce-select" data-filter="product-status" aria-label="Filtrar por estado">${[['all','Todos'],['active','Activos'],['inactive','Inactivos'],['soldout','Agotados'],['sale','En oferta'],['featured','Destacados']].map(([value,label])=>`<option value="${value}" ${state.productTab===value?'selected':''}>${label} (${counts[value]})</option>`).join('')}</select></label>
+        <label class="tt-product-status-filter">Estado<select class="tt-commerce-select" data-filter="product-status" aria-label="Filtrar por estado">${[['all','Todos'],['active','Activos'],['inactive','Inactivos'],['soldout','Agotados'],['sale','En oferta'],['featured','Destacados'],['low','Stock bajo (1–5)'],['missingphoto','Sin foto'],['unclassified','Sin colección válida']].map(([value,label])=>`<option value="${value}" ${state.productTab===value?'selected':''}>${label} (${counts[value]})</option>`).join('')}</select></label>
         <label>Colección
         <select class="tt-commerce-select" data-filter="product-category" aria-label="Filtrar por colección">
           <option value="">Todas las colecciones</option>
@@ -535,7 +543,7 @@ function renderProducts() {
             const selected = state.productSelected.has(product._docId);
             return `<tr data-open="product" data-id="${esc(product._docId)}" data-product-active="${product.active !== false}" class="${selected ? 'is-selected' : ''}">
               <td class="checkcol" data-stop><label class="tt-commerce-product-check"><input type="checkbox" data-select-product="${esc(product._docId)}" ${selected ? 'checked' : ''} aria-label="Seleccionar ${esc(product.name || 'producto')}"></label></td>
-              <td class="tt-commerce-product-main"><div class="tt-commerce-productcell">${thumbHtml(productImage(product), product.name || 'Producto')}<div><button type="button" class="tt-commerce-product-open" data-action="drawer-product" data-id="${esc(product._docId)}">${esc(product.name || 'Sin nombre')}</button><div class="tt-commerce-subtext">${variants ? `${variants} variante${variants === 1 ? '' : 's'} · ` : ''}${esc(product._docId)}</div></div></div></td>
+              <td class="tt-commerce-product-main"><div class="tt-commerce-productcell">${thumbHtml(productImage(product), product.name || 'Producto')}<div><button type="button" class="tt-commerce-product-open" data-action="drawer-product" data-id="${esc(product._docId)}">${esc(product.name || 'Sin nombre')}</button><div class="tt-commerce-subtext">${variants ? `${variants} variante${variants === 1 ? '' : 's'} · ` : ''}${product.sku?`SKU: ${esc(product.sku)} · `:''}${esc(product._docId)}</div></div></div></td>
               <td class="tt-commerce-product-status"><span class="tt-commerce-badge ${status.cls}">${status.label}</span>${product.destacado ? '<span class="tt-commerce-badge">Destacado</span>' : ''}${product.oferta || Number(product.priceBefore) > Number(product.price) ? '<span class="tt-commerce-badge">Oferta</span>' : ''}</td>
               <td class="tt-commerce-product-inventory"><span class="tt-commerce-product-label">Inventario</span><span class="tt-commerce-stock ${stockCls}">${stock}</span></td>
               <td class="tt-commerce-product-price"><span class="tt-commerce-product-label">Precio</span><span class="tt-commerce-money">${formatMoney(product.price)}</span>${Number(product.priceBefore) > Number(product.price) ? `<div class="tt-commerce-subtext"><s>${formatMoney(product.priceBefore)}</s></div>` : ''}</td>
@@ -546,11 +554,13 @@ function renderProducts() {
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay productos que coincidan con esta vista.</div>'}
       <div class="tt-commerce-footer"><span>${rangeLabel(page, 'productos', productsUnavailable)}</span><span>Los cambios se sincronizan automáticamente.</span>${pageControls('products-page', page.page, page.pages)}</div>
-      <div class="tt-commerce-bulkbar tt-product-selection" ${state.productSelected.size && (canBulk || canExport) ? '' : 'hidden'}>
+      <div class="tt-commerce-bulkbar tt-product-selection" ${state.productSelected.size && (canBulk || canExport || state.role==='superadmin') ? '' : 'hidden'}>
         <span class="tt-commerce-bulkcount" role="status">${state.productSelected.size} seleccionado${state.productSelected.size === 1 ? '' : 's'}${hiddenSelected ? ` · ${hiddenSelected} fuera del filtro` : ''}</span>
         <button type="button" class="tt-commerce-btn tt-product-bulk-toggle" data-action="products-bulk-panel" aria-expanded="${state.productBulkOpen}" aria-controls="tt-product-bulk-options">Acciones</button>
         ${button('Limpiar', 'products-clear-selection')}
         <div class="tt-product-bulk-options" id="tt-product-bulk-options">
+          ${canBulk && canEdit ? button('Editar selección','products-bulk-edit') : ''}
+          ${state.role==='superadmin' && perm('pedidos','editar','editOrders') ? button('Agregar a una compra','products-link-order') : ''}
           ${canBulk && canToggle ? button('Activar', 'products-bulk-activate') : ''}
           ${canBulk && canToggle ? button('Inactivar', 'products-bulk-deactivate') : ''}
           ${canDelete && canBulk ? button('Eliminar seleccionados', 'products-bulk-delete', { danger: true }) : ''}
@@ -772,8 +782,8 @@ function downloadCsv(filename, rows) {
 function exportProducts(selectedOnly = false) {
   const source = selectedOnly ? state.products.filter(p => state.productSelected.has(p._docId)) : filteredProducts();
   downloadCsv('tintin-productos.csv', [
-    ['ID', 'Nombre', 'Colección', 'Precio', 'Precio anterior', 'Stock', 'Estado', 'Oferta', 'Destacado'],
-    ...source.map(p => [p._docId, p.name || '', p.category || '', p.price ?? '', p.priceBefore ?? '', p.stock ?? '', p.active === false ? 'Inactivo' : 'Activo', p.oferta ? 'Sí' : 'No', p.destacado ? 'Sí' : 'No'])
+    ['ID', 'SKU', 'Nombre', 'Colección', 'Precio', 'Precio anterior', 'Stock', 'Estado', 'Oferta', 'Destacado', 'Etiqueta', 'Tags', 'Imagen principal', 'Descripción', 'Variantes'],
+    ...source.map(p => [p._docId, p.sku || '', p.name || '', p.category || '', p.price ?? '', p.priceBefore ?? '', p.stock ?? '', p.active === false ? 'Inactivo' : 'Activo', p.oferta ? 'Sí' : 'No', p.destacado ? 'Sí' : 'No',p.badge || '',Array.isArray(p.tags)?p.tags.join(', '):p.tags || '',productImage(p),p.description || p.desc || '',JSON.stringify(p.variants || {})])
   ]);
 }
 
@@ -796,7 +806,7 @@ function closeMenu() {
 }
 
 function menuItems(type, id) {
-  if (type === 'product') { const product=state.products.find(p=>p._docId===id); if(!product)return[]; const out=[{label:'Ver detalles',action:'drawer-product'}]; if(perm('productos','editar','editProducts'))out.push({label:'Editar producto',action:'product-edit'}); if(perm('productos','activarDesactivar','editProducts'))out.push({label:product.active===false?'Activar producto':'Desactivar producto',action:'product-toggle'}); if(perm('productos','eliminar','deleteProducts'))out.push({sep:true},{label:'Eliminar producto',action:'product-delete',danger:true}); return out; }
+  if (type === 'product') { const product=state.products.find(p=>p._docId===id); if(!product)return[]; const out=[{label:'Ver detalles',action:'drawer-product'}]; if(perm('productos','crear','addProducts'))out.push({label:'Duplicar como borrador',action:'product-duplicate'}); if(state.role==='superadmin' && perm('pedidos','editar','editOrders'))out.push({label:'Agregar a una compra',action:'product-link-order'}); if(perm('productos','editar','editProducts'))out.push({label:'Editar producto',action:'product-edit'}); if(perm('productos','activarDesactivar','editProducts'))out.push({label:product.active===false?'Activar producto':'Desactivar producto',action:'product-toggle'}); if(state.role==='superadmin' && perm('productos','eliminar','deleteProducts'))out.push({sep:true},{label:'Eliminar producto',action:'product-delete',danger:true}); return out; }
   if (type === 'collection') { const c=state.collections.find(x=>x.slug===id); if(!c)return[]; const out=[{label:'Ver detalles',action:'drawer-collection'},{label:'Ver sus productos',action:'collection-products'}]; if(perm('colecciones','editar','manageContent'))out.push({label:'Editar colección',action:'collection-edit'}); if(perm('colecciones','eliminar','deleteCollections'))out.push({sep:true},{label:'Eliminar colección',action:'collection-delete',danger:true}); return out; }
   if (type === 'trash-order') return state.role==='superadmin' ? [{label:'Restaurar a Pedidos',action:'order-restore'},{sep:true},{label:'Eliminar definitivamente',action:'order-delete-permanent',danger:true}] : [];
   if (type === 'order') { const out=[{label:'Ver detalles',action:'drawer-order'}]; if(state.role==='superadmin')out.push({label:'CRUD completo',action:'order-edit-advanced'}); else if(perm('pedidos','editarCompleto','manageOrdersFull'))out.push({label:'Editar pedido completo',action:'order-edit'}); if(perm('pedidos','reenviarCorreo','manageOrders'))out.push({label:'Reenviar correo',action:'order-resend'}); if(perm('pedidos','eliminar','deleteOrders'))out.push({sep:true},{label:'Mover a Borrados',action:'order-delete',danger:true}); return out; }
@@ -879,6 +889,8 @@ function productDrawer(product) {
   const status = productStatus(product);
   const collectionItem = state.collections.find(c => c.slug === product.category);
   const variants = productVariantsCount(product);
+  const gallery=[...new Set([productImage(product),...(Array.isArray(product.imagesExtra)?product.imagesExtra:[]),...(Array.isArray(product.variantMedia)?product.variantMedia.flatMap(row=>[row.imageUrl,...(Array.isArray(row.imageUrls)?row.imageUrls:[])]):[])].map(sanitizeImageUrl).filter(Boolean))];
+  const imageIndex=Math.min(Number(state.drawer?.imageIndex)||0,Math.max(0,gallery.length-1));
   const specs = [['Material','material'],['Medidas','measurements'],['Color / acabado','colorFinish'],['Cuidados','care'],['Resistencia al agua','waterResistance'],['Garantía','warranty'],['Talle / ajuste','sizeFit'],['Contenido del paquete','packageContents']]
     .filter(([,field]) => product[field]).map(([label,field]) => kvRow(label,product[field])).join('');
   const options = product.variants && !Array.isArray(product.variants)
@@ -889,8 +901,8 @@ function productDrawer(product) {
     title: product.name || 'Producto sin nombre',
     kicker: `Producto · ${product._docId}`,
     body: `
-      <div class="tt-commerce-drawer-section tt-commerce-product-preview">${thumbHtml(productImage(product), product.name || 'Producto')}<div><span class="tt-commerce-badge ${status.cls}">${status.label}</span><div style="margin-top:7px;font-size:16px;font-weight:780">${formatMoney(product.price)}</div></div></div>
-      <div class="tt-commerce-drawer-section"><h4>Información</h4><dl class="tt-commerce-kv">${kvRow('Colección', collectionItem?.name || product.category || 'Sin colección')}${kvRow('Etiqueta interna',product.collection)}${kvRow('Precio anterior',Number(product.priceBefore)>0?formatMoney(product.priceBefore):'')}${kvRow('Stock', product.stock == null ? 'Sin control' : String(product.stock))}${kvRow('Variantes', variants ? String(variants) : 'Sin variantes')}${kvRow('Oferta', product.oferta ? 'Sí' : 'No')}${kvRow('Destacado', product.destacado ? 'Sí' : 'No')}${kvRow('Tags',Array.isArray(product.tags)?product.tags.join(', '):product.tags)}</dl></div>
+      <div class="tt-commerce-drawer-section tt-commerce-product-preview">${thumbHtml(gallery[imageIndex] || '', product.name || 'Producto')}${gallery.length>1?`<div class="tt-product-gallery" role="group" aria-label="Fotos del producto">${gallery.map((image,index)=>`<button type="button" data-action="product-photo" data-photo-index="${index}" aria-label="Ver foto ${index+1}" aria-pressed="${index===imageIndex}"><img src="${esc(image)}" alt="" loading="lazy"></button>`).join('')}</div>`:''}<div><span class="tt-commerce-badge ${status.cls}">${status.label}</span><div style="margin-top:7px;font-size:16px;font-weight:780">${formatMoney(product.price)}</div></div></div>
+      <div class="tt-commerce-drawer-section"><h4>Información</h4><dl class="tt-commerce-kv">${kvRow('SKU',product.sku)}${kvRow('Creado',timestampMillis(product.createdAt)?formatDate(product.createdAt):'')}${kvRow('Actualizado',timestampMillis(product.updatedAt)?formatDate(product.updatedAt):'')}${kvRow('Colección', collectionItem?.name || product.category || 'Sin colección')}${kvRow('Etiqueta interna',product.collection)}${kvRow('Precio anterior',Number(product.priceBefore)>0?formatMoney(product.priceBefore):'')}${kvRow('Stock', product.stock == null ? 'Sin control' : String(product.stock))}${kvRow('Variantes', variants ? String(variants) : 'Sin variantes')}${kvRow('Oferta', product.oferta ? 'Sí' : 'No')}${kvRow('Destacado', product.destacado ? 'Sí' : 'No')}${kvRow('Tags',Array.isArray(product.tags)?product.tags.join(', '):product.tags)}</dl></div>
       <div class="tt-commerce-drawer-section"><h4>Descripción</h4><div class="tt-commerce-description">${product.description || product.desc ? esc(product.description || product.desc) : '<span class="tt-commerce-subtext">Este producto todavía no tiene descripción.</span>'}</div></div>
       ${specs ? `<div class="tt-commerce-drawer-section"><h4>Ficha técnica</h4><dl class="tt-commerce-kv">${specs}</dl></div>` : ''}
       ${options ? `<div class="tt-commerce-drawer-section"><h4>Opciones</h4><dl class="tt-commerce-kv">${options}</dl></div>` : ''}
@@ -898,8 +910,10 @@ function productDrawer(product) {
     `,
     actions: `
       ${perm('productos', 'editar', 'editProducts') ? button('Editar', 'drawer-product-edit', { primary: true, extra: `data-id="${esc(product._docId)}"` }) : ''}
+      ${perm('productos','crear','addProducts') ? button('Duplicar','product-duplicate',{extra:`data-id="${esc(product._docId)}"`}) : ''}
+      ${state.role==='superadmin' && perm('pedidos','editar','editOrders') ? button('Agregar a una compra','product-link-order',{extra:`data-id="${esc(product._docId)}"`}) : ''}
       ${perm('productos', 'activarDesactivar', 'editProducts') ? button(product.active === false ? 'Activar' : 'Desactivar', 'drawer-product-toggle', { extra: `data-id="${esc(product._docId)}"` }) : ''}
-      ${perm('productos', 'eliminar', 'deleteProducts') ? button('Eliminar', 'drawer-product-delete', { danger: true, extra: `data-id="${esc(product._docId)}"` }) : ''}
+      ${state.role==='superadmin' && perm('productos', 'eliminar', 'deleteProducts') ? button('Eliminar', 'drawer-product-delete', { danger: true, extra: `data-id="${esc(product._docId)}"` }) : ''}
     `
   };
 }
@@ -1022,7 +1036,7 @@ function renderDrawer() {
   if(state.drawer.type==='order' || state.drawer.type==='product'){drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label',`${state.drawer.type==='product'?'Producto':'Detalles del pedido'} ${content.title}`);}
   else { drawer.removeAttribute('role');drawer.removeAttribute('aria-modal');drawer.setAttribute('aria-label','Detalles'); }
   const focusBefore=document.activeElement;
-  const focusAttribute=drawer.contains(focusBefore) ? ['data-drawer-order-status','data-drawer-order-pay','data-drawer-order-note','data-action','href','id','name'].find(attribute=>focusBefore.hasAttribute(attribute)) : null;
+  const focusAttribute=drawer.contains(focusBefore) ? ['data-photo-index','data-drawer-order-status','data-drawer-order-pay','data-drawer-order-note','data-action','href','id','name'].find(attribute=>focusBefore.hasAttribute(attribute)) : null;
   const focusKey=focusAttribute ? `[${focusAttribute}="${CSS.escape(focusBefore.getAttribute(focusAttribute))}"]` : null;
   const selection=focusKey && typeof focusBefore.selectionStart==='number' ? [focusBefore.selectionStart,focusBefore.selectionEnd,focusBefore.selectionDirection] : null;
   const bodyScroll=drawer.querySelector('.tt-commerce-drawer-body')?.scrollTop || 0;
@@ -1049,6 +1063,22 @@ function setBusy(value) {
   });
 }
 
+function editProductSelection(products,options={}) {
+  const uid=state.user?.uid;
+  if(!uid || !state.productsReady || state.productsError || navigator.onLine===false)return toast('Esperá a recuperar la sincronización del catálogo.');
+  return openProductBulkEditor({products,collections:state.collections,...options,
+    apply:request=>{
+      if(state.user?.uid!==uid)throw Error('La sesión cambió. Volvé a abrir la selección.');
+      if(typeof window.TintinProductAdmin?.applyBulkChanges!=='function')throw Error('El controlador de productos todavía está cargando.');
+      return window.TintinProductAdmin.applyBulkChanges(request);
+    },
+    onConfirmed:result=>{
+      if(state.user?.uid!==uid)return;
+      result.ids.forEach(id=>state.productSelected.delete(id));
+      toast(`${result.ids.length} productos guardados.${result.syncPending?' Sincronización externa pendiente.':''}${result.auditPending?' Registro de auditoría pendiente.':''}`);renderProducts();
+    }});
+}
+
 async function bulkProducts(active) {
   const ids = [...state.productSelected];
   if (!ids.length || state.busy) return;
@@ -1060,6 +1090,7 @@ async function bulkProducts(active) {
     toast(`Solo se pueden procesar ${MAX_BULK_SELECTION} productos por vez.`);
     return;
   }
+  if(typeof window.TintinProductAdmin?.applyBulkChanges==='function')return editProductSelection(state.products.filter(p=>state.productSelected.has(p._docId)),{fields:['active'],initialField:'active',initialValue:active});
   setBusy(true);
   try {
     let changed = 0;
@@ -1157,6 +1188,24 @@ async function handleAction(action, element) {
   }
   if (action === 'order-history-retry') { state.orderHistory.delete(id);return refreshOrderHistory(id); }
 
+  if(action==='product-photo'){if(state.drawer?.type==='product'){state.drawer.imageIndex=Number(element.dataset.photoIndex)||0;renderDrawer();}return;}
+  if(action==='products-metric'){state.productTab=element.dataset.productMetric;state.productPage=0;return renderProducts();}
+  if(action==='product-duplicate'){
+    if(!perm('productos','crear','addProducts'))return toast('No tenés permiso para duplicar productos.');
+    closeDrawer();return callLegacyAction('prodDuplicar',id);
+  }
+  if(action==='products-bulk-edit'){
+    if(!perm('productos','accionesMasivas','editProducts') || !perm('productos','editar','editProducts'))return toast('No tenés permiso para editar esta selección.');
+    if(!state.productsReady || state.productsError || !state.user || navigator.onLine===false)return toast('Esperá a recuperar la sincronización del catálogo.');
+    const products=state.products.filter(p=>state.productSelected.has(p._docId));if(!products.length)return;
+    return editProductSelection(products,{fields:['price','pricePercent','priceBefore','stock','stockDelta','category','oferta','destacado','badge','tags',...(perm('productos','activarDesactivar','editProducts')?['active']:[])]});
+  }
+  if(action==='products-link-order' || action==='product-link-order'){
+    if(state.role!=='superadmin' || !perm('pedidos','editar','editOrders'))return toast('No tenés permiso para editar compras de clientes.');
+    if(!state.user || state.productsError || navigator.onLine===false)return toast('Esperá a recuperar la sincronización.');
+    const products=state.products.filter(p=>action==='product-link-order'?p._docId===id:state.productSelected.has(p._docId));if(!products.length)return;
+    closeDrawer();return openProductOrderLink({products,orders:state.orders.filter(order=>!order.localEntryId),onEdit:(orderId,options)=>{if(typeof window.TintinOrderAdmin?.openAdvancedOrderEditor!=='function')throw Error('El editor de pedidos todavía está cargando.');return window.TintinOrderAdmin.openAdvancedOrderEditor(orderId,options);}});
+  }
   if (action === 'products-filters') {state.productFiltersOpen=!state.productFiltersOpen;return renderProducts();}
   if (action === 'products-bulk-panel') {state.productBulkOpen=!state.productBulkOpen;return renderProducts();}
   if (action === 'products-view-grid' || action === 'products-view-list') {state.productView=action==='products-view-list'?'list':'grid';return renderProducts();}
@@ -1602,7 +1651,7 @@ function ensureTrashSubscription() {
 
 async function bootForUser(user) {
   if (!user || user.isAnonymous) return;
-  if(state.user?.uid !== user.uid) { orderSourceStop?.();orderSourceStop=null;state.orders=[];state.ordersReady=false;state.orderContacts.clear();state.orderHistory.clear();if(state.drawer?.type==='order')closeDrawer(); }
+  if(state.user?.uid !== user.uid) {closeProductMasterDialogs(); orderSourceStop?.();orderSourceStop=null;state.orders=[];state.ordersReady=false;state.orderContacts.clear();state.orderHistory.clear();if(state.drawer?.type==='order')closeDrawer(); }
   state.user = user;
   try { const ui=JSON.parse(sessionStorage.getItem(`tt-orders-ui:${user.uid}`) || '{}');
     if(['all','attention','history','buyers','deleted'].includes(ui.tab))state.orderTab=ui.tab;
@@ -1694,6 +1743,7 @@ function boot() {
     state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
     state.unsubscribers = [];
     orderSourceStop?.();orderSourceStop=null;orderSourceUid='';state.orders=[];state.orderHistory.clear();state.orderContacts.clear();state.drawer=null;renderOrders();renderDrawer();
+    closeProductMasterDialogs();
     state.user = null;
     commerceAuthRecoveryAttempted = false;
     if (state.trashUnsubscribe) { try { state.trashUnsubscribe(); } catch {} state.trashUnsubscribe = null; }

@@ -1,37 +1,44 @@
-# Mantenimiento revisado de archivos protegidos
+# Validación y publicación automáticas
 
-El bloqueo histórico `Protected flow integrity` congela los archivos verdes, incluyendo su propio auditor y workflow. Esta instalación es aditiva: conserva sus bytes y hashes, los 76 alcances y la evidencia histórica. Agrega `Protected flow maintenance`, que permite renovar hashes de código mediante un plan exacto, CI completo y revisión del propietario en un entorno protegido. No declara que los flujos modificados tienen nueva evidencia de producción.
+Desde la migración autorizada por el titular el 2026-10-18, los PR propios de tintinaccs se validan y publican automáticamente al completar CI. No se solicita aprobación del entorno protected-flow-maintenance ni dispatch manual por cada cambio. El entorno anterior puede conservarse sin cambios: el workflow nuevo no lo utiliza.
 
-## Instalación y activación
+## Flujo habitual
 
-1. Integrar el PR de instalación sólo después del CI obligatorio. El auditor histórico debe pasar porque no cambia ninguno de sus archivos protegidos.
-2. Crear el entorno `protected-flow-maintenance`: revisor requerido `tintinaccs` (ID 274170818), ramas protegidas únicamente y **desactivar bypass de administradores**. No guardar secretos. La auto-revisión de GitHub debe permitirse porque el propietario es también quien dispara el workflow; el agente no debe aprobar en su nombre.
-3. Verificar una ejecución real del nuevo workflow sobre un PR que conserve los archivos protegidos. Añadir `Protected flow maintenance` (GitHub Actions) a los checks obligatorios, conservando todos los anteriores.
-4. Revisar las pruebas y el mecanismo. Sustituir el requisito histórico `Protected flow integrity` por el nuevo requisito sólo cuando el nuevo ya esté obligatorio y verificado. Conservar Repository audit, ambos Analyze, Cloudflare Pages, strict, enforce_admins y las reglas de main. El workflow antiguo permanece y sigue mostrando su resultado real; no se sobrescribe su check.
-
-Esta migración de protección es un paso administrativo explícito. Antes de completarlo, un PR de mantenimiento seguirá bloqueado por el requisito histórico. No eliminarlo para solucionar incidentalmente otro PR. Cambiar los auditores, revisores o workflows requiere otra migración revisada; el mantenimiento ordinario rechaza esos cambios.
-
-## Preparar una renovación legítima
-
-Actualizar la rama contra el main vigente. Hacer las correcciones y sus pruebas específicas. Desde el repositorio:
+1. Preparar un PR y las pruebas. Para modificar archivos protegidos, actualizar contra main y generar el plan exacto con el helper canónico:
 
 ```text
-node scripts/preparar-mantenimiento-flujos.mjs SHA_COMPLETO_DE_MAIN "Motivo concreto del cambio y pruebas relevantes" ruta/protegida1.js ruta/protegida2.js
+node scripts/preparar-mantenimiento-flujos.mjs SHA_COMPLETO_DE_MAIN "Motivo concreto y pruebas relevantes" ruta/protegida1.js ruta/protegida2.js
 ```
 
-El helper calcula los hashes reales y genera `config/mantenimiento-flujos-plan.json`. Conserva metadatos y alcances; no renueva sellos, aprueba ni publica. Rechaza rutas sin cambios y cambios protegidos omitidos. Revisar el diff y regenerar el manifiesto diagnóstico con el generador del repositorio. Commit/push y esperar Repository audit, ambos Analyze y Cloudflare Pages en success. El workflow automático bloqueará una renovación y explicará que requiere dispatch.
+2. Regenerar los artefactos relacionados y publicar el commit. Repository audit sigue ejecutando la suite completa; CodeQL y Cloudflare Pages siguen siendo obligatorios.
+3. Al terminar Repository audit, workflow_run ejecuta únicamente código confiable de main. El PR candidato se lee como datos: no se ejecutan scripts, dependencias ni comandos del PR con permisos de escritura.
+4. Se comprueban autor autorizado, repositorio propio, PR abierto sin borrador, main/base/head vigentes, plan, hashes reales, alcances y todos los checks obligatorios con su aplicación/workflow/evento correctos. Las evidencias históricas no se renuevan.
+5. Los checks Protected flow maintenance y Protected flow integrity pasan únicamente después de esa validación técnica. GitHub integra por squash con el SHA esperado y sus reglas de rama vigentes. Un rechazo del merge no se elude.
+6. Cloudflare publica main mediante su integración existente. Como un push de GITHUB_TOKEN no dispara Actions, se inician explícitamente la auditoría de main y el monitor de producción. El monitor verifica el artefacto publicado y los flujos reales; iniciar el monitor no equivale a PASS_PRODUCTION.
 
-En Actions, ejecutar **Mantenimiento — dependencias y flujos protegidos** desde **main**, marcando `maintenance`, con número de PR y SHA completo de su último commit. Se conserva el workflow de dependencias, su cron y su dispatch habitual cuando `maintenance` es false; no se agrega un decimotercer workflow. El job npm no corre en pull_request_target ni en mantenimiento de flujos. El guard sólo lee blobs candidatos; nunca ejecuta código del PR con permisos privilegiados. Valida la base vigente, plan exacto, hashes reales, alcances, origen/app de CI y controles del entorno antes de solicitar aprobación. Revisar en el resumen base, candidato, motivo, archivos y registros afectados; el nombre del job incluye el SHA. El propietario aprueba manualmente el entorno en GitHub.
+Un CI pendiente se espera hasta el plazo configurado; un fallo, API denegada, archivo fuera del plan o avance de main/head bloquea la integración. Corregir y subir otro commit inicia un nuevo ciclo. Reintentar Repository audit también dispara la validación mediante workflow_run. Eventos antiguos sin PR abierto vigente se ignoran.
 
-Tras la aprobación, se vuelven a verificar plan, CI, estado abierto del PR, main/head y la revisión del entorno de esa ejecución. Un nuevo commit, avance de main, check fallido/pendiente, cancelación, rechazo o reintento de un run anterior impide success. Para reintentar, iniciar un **nuevo dispatch** y revisión; no reutilizar una aprobación anterior. Concurrency cancela solicitudes anteriores del mismo PR. Un fallo de API no autoriza cambios.
+## Activación inicial, una sola vez
 
-El check certifica autorización de una renovación de código, no funcionamiento en producción. Las evidencias de los flujos afectados deben volver a comprobarse de forma real y no destructiva antes de atribuirles un PASS actualizado. No fabricar pedidos, pagos, emails, sellos ni resultados verdes.
+Esta migración cambia el propio mecanismo de control y no puede autorizarse a sí misma con el workflow anterior. El titular ya autorizó este cambio expresamente en la conversación. El acceso de esta sesión no permite editar la protección de rama.
 
-## Verificación local
+Después de verificar Repository audit, ambos Analyze y Cloudflare Pages del PR de migración:
+
+1. En Settings → Branches → regla de main, retirar temporalmente sólo el requisito Protected flow maintenance. Conservar los otros cuatro checks obligatorios y las demás protecciones.
+2. Integrar el PR de migración desde GitHub. Volver a añadir inmediatamente Protected flow maintenance, de GitHub Actions, como obligatorio. No retirar Repository audit, ambos Analyze ni Cloudflare Pages. Si la rama exige revisiones humanas por PR, desactivar únicamente ese requisito para el flujo rutinario automático solicitado por el titular; conservar los checks y la restricción a main actualizado.
+3. Actualizar los PR anteriores contra el nuevo main y regenerar sus planes. Confirmar una ejecución real de validación, merge y monitor de producción antes de declarar el mecanismo activado.
+
+No hace falta desactivar Required reviewers en el entorno antiguo: ya no participa. No se agregan credenciales ni servicios externos. No se ocultan ni borran ejecuciones fallidas históricas.
+
+## Cambios al mecanismo
+
+Editar workflows, configuración de autorización o scripts de control sigue requiriendo una migración administrativa independiente. El flujo rutinario rechaza esos cambios incluso si no se modificó otro archivo protegido. Esta separación evita que un PR se autorice a sí mismo alterando sus validadores.
+
+## Verificación
 
 ```text
-node --test tests/flow-connections/proteccion-flujos.test.mjs tests/flow-connections/mantenimiento-flujos.test.mjs
+node --test tests/flow-connections/proteccion-flujos.test.mjs tests/flow-connections/mantenimiento-flujos.test.mjs tests/flow-connections/presupuesto-mantenimiento.test.mjs tests/flow-connections/lectura-blobs-mantenimiento.test.mjs
 node scripts/auditar-proteccion-flujos.mjs
 ```
 
-Las pruebas incluyen rechazo de hashes inventados, cambios fuera del plan, retiro de protección, alteración de alcance/sellos/control, aprobación ausente o ajena, bots, bypass, checks falsos/pendientes/fallidos y cambios de main/head. La aprobación real y el dispatch deben verificarse después de instalar el workflow; las pruebas locales no se presentan como una aprobación de GitHub.
+Las pruebas locales incluyen plan exacto, retiro de protección/alcances/sellos, autores/forks no autorizados, CI falso/pendiente/fallido, cambios de main/head, API denegada, espera y éxito posterior, merge con SHA exacto y dispatch explícito de las comprobaciones posteriores. Los fixtures interceptan toda la API y no fusionan ni despliegan repositorios reales.

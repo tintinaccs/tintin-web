@@ -1,6 +1,6 @@
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
-  ['general', 'Datos generales', ['prod-name','prod-category','prod-collection','prod-description','prod-tags']],
+  ['general', 'Datos generales', ['prod-name','prod-sku','prod-category','prod-collection','prod-description','prod-tags']],
   ['photos', 'Fotos y galería', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
   ['prices', 'Precios', ['prod-price','prod-price-before']],
   ['inventory', 'Inventario y variantes', ['prod-stock','prod-inventory-fields','prod-variants-text']],

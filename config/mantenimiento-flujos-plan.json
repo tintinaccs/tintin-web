@@ -1,33 +1,67 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "46c10ef533ca6e31dad7625e927e57ae6926fa0e",
-  "reason": "Productos fase 1: imágenes completas, selección persistente, editor adaptable y salida de sección sin bloqueo de scroll; 94 Chromium por suites y regresiones específicas de cierre, Node/contratos aprobados.",
+  "baseCommit": "e9d338018d16558d8cb18cc5dfd7c9f44355380f",
+  "reason": "Maestro de Productos completo: CRUD nativo, duplicación segura, lote atómico revisable y vinculación sólo a pedido existente; 43 Node, 23 Chromium del maestro, 43 regresiones UI, controles de inventario/concurrencia y contratos aprobados.",
   "files": [
     {
       "path": "admin.html",
       "oldHash": "a4aafd49c66b583fc9cc25ca8d851ae4c696635da6525d2cf09924e6b67201ed",
-      "newHash": "63a00fb5b8ee3011a5863a473653ea0476bd1999ae071a73a58b8461b063f5bd"
+      "newHash": "2d0e5748da51d1d6f44c8833b23dc56f367a9907eac61ed13699b5c15ef515d6"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "oldHash": "01e916fd223dc8927d37f7b1906e27cc6c661d3e957f2391e7656f5c574932ae",
-      "newHash": "edf439b94cb7a14aef779623842573d39d7cae69445f7c338b95a131baa119b7"
+      "newHash": "7744538c4d2d5a7e6cd61bda4cc1c7c0bdc16a699a27cd87ea95f419e394f581"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "6203970630e33a6beb49bce2874676a971139fd1fca2916190d089fd8059299f",
+      "newHash": "95381b7472662227999876d1a0180cd5ad9dbf0624d5d5c30a3a925821bf1b45"
+    },
+    {
+      "path": "js/admin/orders/pedidos-superadmin-crud.js",
+      "oldHash": "1451847aba9f02002176f4627a89c2fa815400629a8fa231ebd15ccb99b8e9a3",
+      "newHash": "dbb0e711433fe490192571d86cd41b6bbb0b6e69531db15a84bc9a2cdaba1899"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "adcd4e6cbb498670e6455e866db06b0fe054d4a493eb0f0c2ca1ddd17a6aa1c7",
-      "newHash": "baf999f49b09a70080a898a18138899dc2a4ad53244033fe4bf0fe1daa78b9be"
+      "newHash": "0cbc0cf19828c65f0a23043de827b222fdc7d8b4ae2d5418bca1c4a5fbef3607"
     },
     {
       "path": "package.json",
       "oldHash": "4dc83caeddda99a2b133e1fa6afb7329d8679e95aff6569a28b06e9ee5eb1828",
-      "newHash": "14a64fda2c3a0043e46b0295987c99735d8d6a55963d51a0c1c8481072cdd06c"
+      "newHash": "a9d7ce7681a214afad987aece6832f3fef220759ba27f8fc0294b124fc8328cb"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "972beb4c0c2916fcb4692699e9cb01aba810b94d035e48f301f914d747f21dbb",
-      "newHash": "1dcc6ef6e960df4778c01c37eb17415e05322042b6c88f1843b9f462f9459752"
+      "newHash": "d7681134da5a1ff96f7631d6ecf6bf3862f3a25d244d2fd7d8e4346ca2205d12"
+    },
+    {
+      "path": "tests/orders/order-admin-domain.test.mjs",
+      "oldHash": "9d93764a04959d95733ebe4fb031f224fb292647ca44428ce4f4395686092f84",
+      "newHash": "bd612900360f04e43121b9ae4e8a37b6cc054d7991e1ff8aa51c27110431e802"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

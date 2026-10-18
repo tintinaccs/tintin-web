@@ -1,3 +1,4 @@
+import {mergeSelectedOrderProducts} from '../../js/admin/orders/seleccion-productos-pedido.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
@@ -847,4 +848,31 @@ test('cambiar 55 productos reservados por otros 55 lee dos batches sin truncar l
     assert.equal(decodeFirestoreFields(write.fields).stock, write.path.startsWith('products/old_') ? 3 : 1);
     assert.deepEqual(write.currentDocument, { updateTime: UPDATED });
   }
+});
+
+
+test('maestro: añadir selección conserva compra y cuenta, recalcula total y confirma sólo el delta de inventario',async()=>{
+ const store=fakeStore({'products/prod_001':stockedProduct(),'products/prod_002':document('products/prod_002',{name:'Collar',category:'collares',price:30000,stock:5,active:true})},{transactional:true});
+ const actor={uid:'superadmin-fixture',email:'admin@example.test',role:'superadmin'};
+ const created=await createOrderAdmin({}, {...RETIRO,status:'confirmado',userId:'client-master',accountEmail:'client@example.test'},actor,store);
+ const orderCount=[...store.map.keys()].filter(path=>path.startsWith('orders/')).length;
+ const beforeA=decodeFirestoreFields(store.map.get('products/prod_001').fields).stock;
+ const beforeB=decodeFirestoreFields(store.map.get('products/prod_002').fields).stock;
+ const items=mergeSelectedOrderProducts(created.order.items,[{id:'prod_001',name:'Aro',price:50000,stock:50,active:true},{id:'prod_002',name:'Collar',price:30000,stock:5,active:true}]);
+ const input={orderId:created.orderId,baseChangeId:created.order.lastChangeId,changeId:'master_existing_selection',items};
+ const result=await applyOrderAdminMutation({},input,actor,store);
+ assert.equal(result.order.userId,'client-master');assert.equal(result.order.userEmail,'client@example.test');assert.equal(result.order.orderNumber,created.order.orderNumber);assert.equal(result.order.total,130000);
+ assert.equal([...store.map.keys()].filter(path=>path.startsWith('orders/')).length,orderCount);
+ assert.equal(decodeFirestoreFields(store.map.get('products/prod_001').fields).stock,beforeA-1);assert.equal(decodeFirestoreFields(store.map.get('products/prod_002').fields).stock,beforeB-1);
+ const writes=store.commits.length;assert.equal((await applyOrderAdminMutation({},input,actor,store)).duplicate,true);assert.equal(store.commits.length,writes);
+ await assert.rejects(applyOrderAdminMutation({}, {...input,changeId:'master_stale_selection'},actor,store),/cambió/);assert.equal(store.commits.length,writes);
+});
+test('maestro: selección sin stock rechaza el pedido entero y conserva cuenta y artículos anteriores',async()=>{
+ const store=fakeStore({'products/prod_001':stockedProduct(),'products/prod_002':document('products/prod_002',{name:'Collar',category:'collares',price:30000,stock:0,active:true})},{transactional:true});
+ const actor={uid:'superadmin-fixture',email:'admin@example.test',role:'superadmin'};
+ const created=await createOrderAdmin({}, {...RETIRO,status:'confirmado',userId:'client-master'},actor,store);
+ const count=store.commits.length,baseline=structuredClone(store.map.get('orders/'+created.orderId));
+ const items=mergeSelectedOrderProducts(created.order.items,[{id:'prod_002',name:'Collar',price:30000,active:true}]);
+ await assert.rejects(applyOrderAdminMutation({}, {orderId:created.orderId,baseChangeId:created.order.lastChangeId,changeId:'master_no_stock',items},actor,store),/stock/i);
+ assert.equal(store.commits.length,count);assert.deepEqual(store.map.get('orders/'+created.orderId),baseline);
 });
