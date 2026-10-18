@@ -111,3 +111,18 @@ test('inactivar varios usa un solo lote con revisión y confirmación explícita
  await start(page,1440,900);await bulkBridge(page);await page.locator('[data-select-product="p-reloj"]').check();await page.locator('[data-select-product="p-pulsera"]').check();await page.locator('[data-action="products-bulk-deactivate"]').click();
  await expect(page.getByLabel('Nuevo valor',{exact:true})).toHaveValue('false');expect(await page.evaluate(()=>window.__bulkCalls.length)).toBe(0);await page.getByRole('button',{name:'Confirmar y aplicar (2)',exact:true}).click();expect(await page.evaluate(()=>window.__bulkCalls.length)).toBe(1);expect(await page.evaluate(()=>window.__productRows.filter(p=>p.id==='p-reloj'||p.id==='p-pulsera').every(p=>p.data.active===false))).toBe(true);
 });
+
+test('cerrar una ficha antes del frame de apertura no deja el fondo bloqueado',async({page})=>{
+ await start(page,1440,900);
+ await page.evaluate(()=>{
+  window.__originalRAF=window.requestAnimationFrame;window.__pendingFrames=[];
+  window.requestAnimationFrame=callback=>{window.__pendingFrames.push(callback);return window.__pendingFrames.length;};
+  document.querySelector('tr[data-id="p-reloj"] .tt-commerce-product-open').click();
+  document.querySelector('#tt-commerce-drawer [data-action="drawer-close"]').click();
+  window.requestAnimationFrame=window.__originalRAF;
+  for(const callback of window.__pendingFrames)callback(performance.now());
+ });
+ await expect(page.locator('#tt-commerce-drawer')).toBeHidden();
+ await expect(page.locator('#tt-commerce-drawer-backdrop')).not.toHaveClass(/open/);
+ await page.locator('[data-action="products-reset-filters"]').click();
+});

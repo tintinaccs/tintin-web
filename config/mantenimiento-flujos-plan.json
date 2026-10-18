@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "baseCommit": "30a9b316acc29f0038b5f73c82fb4b02acf1db1a",
-  "reason": "Maestro de Productos: CRUD nativo, duplicación segura, lote atómico y pedido existente; 43 Node, 23 Chromium maestro, 43 UI y 51 tablero por barridos dirigidos; arquitectura y stock concurrente verificados. Main1160 sólo documentación/derivados.",
+  "reason": "Maestro Productos: CRUD nativo, lotes atómicos y pedidos existentes; pruebas Node/UI e inventario concurrente aprobadas. CI detectó fixture antiguo y carrera de frame de galería, corregidos con regresiones dirigidas aprobadas sin reducir contratos.",
   "files": [
     {
       "path": "admin.html",
       "oldHash": "a4aafd49c66b583fc9cc25ca8d851ae4c696635da6525d2cf09924e6b67201ed",
-      "newHash": "2d0e5748da51d1d6f44c8833b23dc56f367a9907eac61ed13699b5c15ef515d6"
+      "newHash": "80a8895d94b4ee4e2e667e921b6ce252bde468771e0d0e94ad53733c22ec36f5"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -26,7 +26,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "adcd4e6cbb498670e6455e866db06b0fe054d4a493eb0f0c2ca1ddd17a6aa1c7",
-      "newHash": "0cbc0cf19828c65f0a23043de827b222fdc7d8b4ae2d5418bca1c4a5fbef3607"
+      "newHash": "ee4315d286e78bab6dc0e2ce370499d7beb0d762e40ee04a5c185575e8e042db"
     },
     {
       "path": "package.json",
@@ -36,7 +36,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "972beb4c0c2916fcb4692699e9cb01aba810b94d035e48f301f914d747f21dbb",
-      "newHash": "d7681134da5a1ff96f7631d6ecf6bf3862f3a25d244d2fd7d8e4346ca2205d12"
+      "newHash": "ad9e245cfac277c5d6719e6754745fb36fd1844482a55e1833d323589107d3ff"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",

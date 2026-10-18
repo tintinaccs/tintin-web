@@ -35,7 +35,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261018-products-master-1';
+const VERSION = 'tintin-20261018-products-master-2';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -1048,7 +1048,10 @@ function renderDrawer() {
   }
   const orderBody=drawer.querySelector('.tt-commerce-drawer-body');if(orderBody)orderBody.scrollTop=bodyScroll;
   if((state.drawer.type==='order' || state.drawer.type==='product') && !drawer.classList.contains('open'))drawer.querySelector('[data-action="drawer-close"]')?.focus();
+  const renderedDrawer=state.drawer;
   requestAnimationFrame(() => {
+    // Un cierre o cambio de ficha invalida la apertura pendiente del frame anterior.
+    if(state.drawer!==renderedDrawer || drawer.hidden)return;
     drawer.classList.add('open');
     backdrop.classList.add('open');
     syncProductSurfaces();
