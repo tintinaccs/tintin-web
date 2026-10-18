@@ -32,7 +32,7 @@ No hace falta desactivar Required reviewers en el entorno antiguo: ya no partici
 
 ## Cambios al mecanismo
 
-Editar workflows, configuración de autorización o scripts de control sigue requiriendo una migración administrativa independiente. El flujo rutinario rechaza esos cambios incluso si no se modificó otro archivo protegido. Esta separación evita que un PR se autorice a sí mismo alterando sus validadores.
+La configuración confiable de main habilita automaticControlMaintenance para los PR del titular. También los workflows y scripts de control requieren plan exacto, hashes reales, todos los checks y SHA vigente; no requieren una aprobación manual adicional. El helper consulta esa autorización desde el commit base, nunca desde el candidato. Una rama candidata no puede habilitarse a sí misma cambiando el flag: hasta que esa política esté instalada en main, el cambio inicial sigue siendo una migración administrativa. Las modificaciones de protección en la configuración de GitHub siguen requiriendo acceso administrativo; el token del workflow no recibe ese permiso.
 
 ## Verificación
 

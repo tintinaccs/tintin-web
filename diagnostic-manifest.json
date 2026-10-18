@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1dc77e25dd975a1e50230f0c52d4825ee3daa890dd50e6ab693e0e1555a9a07a",
+  "sourceFingerprint": "88da71ad3456981560ba0d6fbe98e597c423d5610c8fd3487051fb126b4a1af0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1312,
-    "textFiles": 1226,
-    "totalBytes": 24629862,
+    "files": 1313,
+    "textFiles": 1227,
+    "totalBytes": 24635387,
     "pages": 19,
-    "modules": 922
+    "modules": 923
   },
   "viewports": [
     {
@@ -36638,8 +36638,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-core.mjs",
-      "bytes": 4240,
-      "sha256": "425756e1df288d6dd32860403c61ee92718a1340c7a0b152def2b2a00cf878ab",
+      "bytes": 4322,
+      "sha256": "805397b557af972d1ec49e966228ddec7a40184cb8fadba90a2d1639ed31b719",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36656,8 +36656,8 @@
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
-      "bytes": 10202,
-      "sha256": "fe7aabe28540e8f05f933025763e139cb422c947f77de238ee6fd063c96fd557",
+      "bytes": 10268,
+      "sha256": "dc694bd22149a470e16964cbbd7fa0388ddc09de8e59b27b8b826e32e805bddd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36723,8 +36723,8 @@
     },
     {
       "path": "scripts/preparar-mantenimiento-flujos.mjs",
-      "bytes": 2234,
-      "sha256": "36e43d2653b0205536b05bf9202df0c39baeaa203cff0eba2c338a14bc35a314",
+      "bytes": 2511,
+      "sha256": "96de0d0cc0e72c489c3df055af79e71870da5fec09eae074e2c6bc3914978901",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42062,8 +42062,8 @@
     },
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
-      "bytes": 6233,
-      "sha256": "e4fa97f16da4075880bdf2086300c7c4d482ebfb079b9c19bd0a217d9f9771ec",
+      "bytes": 7344,
+      "sha256": "c12daa454723fce9938b01642e5a0c8df54aee754fc835a8836f1f036777dc84",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42134,6 +42134,60 @@
           "target": null,
           "dynamic": false,
           "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/flow-connections/preparar-mantenimiento-automatico.test.mjs",
+      "bytes": 2501,
+      "sha256": "cdbafdb428ac392545b82d6d9d15377230fcac910c38f9a9db8bf53a97407789",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../scripts/auditar-proteccion-flujos.mjs",
+          "target": "scripts/auditar-proteccion-flujos.mjs",
+          "dynamic": false,
+          "line": 7
         }
       ],
       "endpoints": []
@@ -50741,14 +50795,14 @@
     {
       "path": "config/mantenimiento-flujos.json",
       "extension": ".json",
-      "bytes": 834,
-      "sha256": "fb427e1897fa305c8124b941508f82c3f8039567117d5bc5c7ca2af96701dc69"
+      "bytes": 873,
+      "sha256": "67b9d30c59418b2829e2d53fc006788b3535e55035aa771ddc4cebe801df2605"
     },
     {
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "578be71139287bd9601f15b4cb02abd8091b0d5138a0f8d1cb7bd53950fda931"
+      "sha256": "7fd9b9b9164622886248452378575c906b49ae0360347524cb171fb94e157358"
     },
     {
       "path": "config/public-site.json",
@@ -51359,8 +51413,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 596065,
-      "sha256": "93e3aaf362cbdefe6d69e8f48a1c67c48302e690143103f9bb1930fe60e652b8"
+      "bytes": 596347,
+      "sha256": "8c0cd45997cd20b03067e58f37820554ebb427bb8bed7935cf967686ebd2c8b8"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51371,8 +51425,8 @@
     {
       "path": "docs/agent/MANTENIMIENTO_FLUJOS.md",
       "extension": ".md",
-      "bytes": 4594,
-      "sha256": "c39ecd140fca152d602730a2607b623806a0ee34dbaac6f1d4b7dccf672c716b"
+      "bytes": 4963,
+      "sha256": "506855de8161d049e985d9ddd48ec2e7896a9d2610a85f41cfdb8a3f3c54b070"
     },
     {
       "path": "docs/agent/MIGRACION_CONTROL_20261010.md",
@@ -51713,8 +51767,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 49236,
-      "sha256": "77c3bc217dd9f1b69ba222eb2e27dfc71f1ec516cd30c53a9b46f982f7a5279b"
+      "bytes": 50034,
+      "sha256": "6b69baa6fe3037841e72db5cbbf6b2328e529f41ee4d265fa8d9de7bfedf7f04"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -55313,14 +55367,14 @@
     {
       "path": "scripts/mantenimiento-flujos-core.mjs",
       "extension": ".mjs",
-      "bytes": 4240,
-      "sha256": "425756e1df288d6dd32860403c61ee92718a1340c7a0b152def2b2a00cf878ab"
+      "bytes": 4322,
+      "sha256": "805397b557af972d1ec49e966228ddec7a40184cb8fadba90a2d1639ed31b719"
     },
     {
       "path": "scripts/mantenimiento-flujos-github.mjs",
       "extension": ".mjs",
-      "bytes": 10202,
-      "sha256": "fe7aabe28540e8f05f933025763e139cb422c947f77de238ee6fd063c96fd557"
+      "bytes": 10268,
+      "sha256": "dc694bd22149a470e16964cbbd7fa0388ddc09de8e59b27b8b826e32e805bddd"
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
@@ -55337,8 +55391,8 @@
     {
       "path": "scripts/preparar-mantenimiento-flujos.mjs",
       "extension": ".mjs",
-      "bytes": 2234,
-      "sha256": "36e43d2653b0205536b05bf9202df0c39baeaa203cff0eba2c338a14bc35a314"
+      "bytes": 2511,
+      "sha256": "96de0d0cc0e72c489c3df055af79e71870da5fec09eae074e2c6bc3914978901"
     },
     {
       "path": "scripts/probar-api-limites-emulador.mjs",
@@ -56237,14 +56291,20 @@
     {
       "path": "tests/flow-connections/mantenimiento-flujos.test.mjs",
       "extension": ".mjs",
-      "bytes": 6233,
-      "sha256": "e4fa97f16da4075880bdf2086300c7c4d482ebfb079b9c19bd0a217d9f9771ec"
+      "bytes": 7344,
+      "sha256": "c12daa454723fce9938b01642e5a0c8df54aee754fc835a8836f1f036777dc84"
     },
     {
       "path": "tests/flow-connections/pedidos-authority.test.mjs",
       "extension": ".mjs",
       "bytes": 1547,
       "sha256": "1f0cfbbdff39a9bc81bb0b9b66d1353141dce0cb8ca0fb02efd33caadaea55aa"
+    },
+    {
+      "path": "tests/flow-connections/preparar-mantenimiento-automatico.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2501,
+      "sha256": "cdbafdb428ac392545b82d6d9d15377230fcac910c38f9a9db8bf53a97407789"
     },
     {
       "path": "tests/flow-connections/presupuesto-mantenimiento.test.mjs",

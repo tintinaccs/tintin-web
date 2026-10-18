@@ -71,7 +71,7 @@ const readCandidate = async () => {
     assert(bytes.get(planPath).length <= 65536, 'Plan demasiado grande.');
     plan = JSON.parse(bytes.get(planPath).toString('utf8'));
   }
-  return inspectMaintenance({ baseline, candidate, baseSha, changedPaths, plan, readFile: path => {
+  return inspectMaintenance({ baseline, candidate, baseSha, changedPaths, plan, allowControlUpdates: config.automaticControlMaintenance === true, readFile: path => {
     assert(bytes.has(path), `Archivo no leído: ${path}`); return bytes.get(path);
   } });
 };
