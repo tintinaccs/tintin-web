@@ -36,7 +36,7 @@ const DATA = {
     { id: '1023', data: { createdAt: { seconds: 1786300000 }, userName: 'Lucía Fernández', userEmail: 'lucia@example.com', userPhone: '0981765432', status: 'entregado', paymentStatus: 'pagado', total: 35000, shipping: { method: 'encomienda', city: 'Caacupé' }, items: [{ productId: 'p-aro', name: 'Aro Argolla Dorado', qty: 1, price: 35000 }] } }
   ]
 };
-window.__orders=DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));
+window.__orders=window.__commerceFixtureConfig?.orders ? structuredClone(window.__commerceFixtureConfig.orders) : DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));
 window.__productRows=DATA.products;
 window.__productConsumers=new Set();
 window.__publishProducts=()=>{for(const fn of window.__productConsumers)fn({docs:window.__productRows.map(entry=>({id:entry.id,data:()=>structuredClone(entry.data)})),metadata:{fromCache:false}});};
@@ -70,11 +70,14 @@ export async function getDocs(ref) {
 }`;
 const rolesStub = `
 export const SUPER_ADMIN = 'tintinaccs@gmail.com';
-export function can() { return true; }
-export async function getUserRole() { return 'superadmin'; }
+export function can(_role, permission) { return window.__commerceFixtureConfig.role !== 'viewer' || String(permission).startsWith('view'); }
+export async function getUserRole() { return window.__commerceFixtureConfig.role; }
 `;
 const permsStub = `
-export function canDo() { return true; }
+export function canDo(_role, _module, action) {
+  const config = window.__commerceFixtureConfig;
+  return (config.role !== 'viewer' || ['ver','exportar'].includes(action)) && !config.forbiddenActions.includes(action);
+}
 export async function loadRolePermissions() { return {}; }
 `;
 const collectionsStub = `export function normalizeCollectionDoc(id, data) { return { slug: id, ...data }; }`;
@@ -143,6 +146,8 @@ function fixtureHtml() {
 }
 
 async function mockRuntime(page, {orders,role='superadmin',forbiddenActions=[]} = {}) {
+  // Datos estructurados, nunca interpolados dentro del código del SDK simulado.
+  await page.addInitScript(config => { window.__commerceFixtureConfig = config; }, {role,forbiddenActions,orders:orders || null});
   await page.route('**/*', async route=>{
     const url=new URL(route.request().url());
     if(url.hostname!=='tintin.test')return route.abort();
@@ -161,13 +166,13 @@ async function mockRuntime(page, {orders,role='superadmin',forbiddenActions=[]} 
   await page.route('https://tintin.test/css/admin/shopify-commerce-admin.css*', route => route.fulfill({ status: 200, contentType: 'text/css', body: commerceCss }));
   await page.route('https://tintin.test/js/core/firebase/firebase.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: firebaseStub }));
   await page.route('https://tintin.test/js/core/auth/coordinador-sesion.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: sessionCoordinatorStub }));
-  await page.route('https://tintin.test/js/core/auth/roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: rolesStub.replace("return 'superadmin';",()=>`return ${JSON.stringify(role)};`).replace('export function can() { return true; }',()=>`export function can(_role,permission) {return ${JSON.stringify(role)}!=='viewer'||String(permission).startsWith('view');}`) }));
-  await page.route('https://tintin.test/js/core/auth/permisos-roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: permsStub.replace('export function canDo() { return true; }',()=>`export function canDo(_role,_module,action) {return (${JSON.stringify(role)}!=='viewer'||['ver','exportar'].includes(action))&&!${JSON.stringify(forbiddenActions)}.includes(action);}`) }));
+  await page.route('https://tintin.test/js/core/auth/roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: rolesStub }));
+  await page.route('https://tintin.test/js/core/auth/permisos-roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: permsStub }));
   await page.route('https://tintin.test/js/pages/collections/estado-colecciones.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: collectionsStub }));
   await page.route('https://tintin.test/js/components/images/utilidades-imagenes.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: imagesStub }));
   await page.route('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: authStub }));
-  const firestoreSource=orders ? firestoreStub.replace("window.__orders=DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));",`window.__orders=${JSON.stringify(orders)};`) : firestoreStub;
-  await page.route('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: firestoreSource }));
+
+  await page.route('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: firestoreStub }));
   await page.route('https://img.test/**', route => route.fulfill({ status: 200, contentType:'image/svg+xml', body:'<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><rect x="80" y="40" width="80" height="160" rx="20" fill="#AD3F67"/></svg>' }));
 }
 
