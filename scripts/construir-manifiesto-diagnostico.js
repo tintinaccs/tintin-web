@@ -554,7 +554,7 @@ function extractRuleCollections() {
   return names.sort();
 }
 
-const allFiles = walk(ROOT).filter(file => file !== 'diagnostic-manifest.json');
+const allFiles = walk(ROOT).filter(file => !['diagnostic-manifest.json', 'site-version.json'].includes(file));
 const allPaths = new Set(allFiles);
 const textFiles = allFiles.filter(file => TEXT_EXTENSIONS.has(path.extname(file).toLowerCase()));
 const jsFiles = allFiles.filter(file => /\.(?:js|mjs)$/i.test(file));
@@ -714,5 +714,7 @@ const manifest = {
   }
 };
 
+// Marcador derivado excluido del inventario para evitar autorreferencia.
+fs.writeFileSync(path.join(ROOT, 'site-version.json'), `${JSON.stringify({ revision: manifest.sourceFingerprint })}\n`, 'utf8');
 fs.writeFileSync(OUTPUT, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 console.log(`Diagnostic manifest: ${pages.length} pages, ${modules.length} modules, ${files.length} files.`);

@@ -12,6 +12,20 @@ const product = {
 
 async function mockPublicReads(page) {
   await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
+  // Mantener el carrito real de invitada; aislar únicamente Auth/Firestore.
+  await page.route('**/js/components/cart/sincronizacion-carrito.js?*', async route => {
+    const source = fs.readFileSync('js/components/cart/sincronizacion-carrito.js', 'utf8').replace(/\r\n/g, '\n')
+      .replace(/^import .*suscripcion-app-check.*;\n/m, '')
+      .replace(/^import .*firebase\.js.*;\n/m, '')
+      .replace(/^import .*coordinador-sesion.*;\n/m, '')
+      .replace(/^import \{\n[\s\S]*?firebase-firestore\.js';\n/m, '');
+    await route.fulfill({ contentType: 'text/javascript', body: `
+      const auth = {currentUser:null}, db = {}, appCheckReady = Promise.resolve(false);
+      const subscribeAuthState = listener => listener(null), onSnapshot = () => () => {};
+      const collection = () => ({}), doc = () => ({}), getDocs = async () => ({docs:[]});
+      const serverTimestamp = () => null, writeBatch = () => { throw new Error('Sin escrituras remotas en el fixture'); };
+    ` + source });
+  });
   await page.route('**/js/pages/collections/presentacion-colecciones.js?*', async route => {
     const source = fs.readFileSync('js/pages/collections/presentacion-colecciones.js', 'utf8').replace(/\r\n/g, '\n')
       .replace(/^import .*;\n/gm, '');
@@ -78,16 +92,18 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
       window._renderProductDetail(product);
     }, product);
     await expect(page.locator('#product-name')).toHaveText(product.name);
-    await expect(page.locator('#product-reviews, #tinsel-root, [data-open-community], #btn-product-like')).toHaveCount(0);
+    await expect(page.locator('#product-reviews, [data-open-community], #btn-product-like')).toHaveCount(0);
     await page.waitForFunction(() => document.body.classList.contains('tt-product-maintenance'));
     for (const selector of ['#product-name', '.tt-product-detail-desc', '.tt-product-detail-price', '#product-selection-title']) {
       await expect(page.locator(selector)).toHaveCSS('color', 'rgb(34, 34, 34)');
     }
     await expect(page.locator('.tinben')).toHaveCount(0);
     await expect(page.locator('#product-selection-title')).toHaveText('Tu selección');
+    await expect(page.locator('#tinsel-root')).toBeVisible();
+    await expect(page.locator('#tinsel-items')).toContainText('Todavía no agregaste accesorios');
     const geometry = await page.evaluate(() => {
       const issues = [];
-      for (const selector of ['.tt-product-gallery', '.tt-product-info-panel', '.tt-product-selection']) {
+      for (const selector of ['.tt-product-gallery', '.tt-product-info-panel', '.tt-product-selection', '.tinsel-box']) {
         const node = document.querySelector(selector), r = node.getBoundingClientRect(), s = getComputedStyle(node);
         if (r.left < 0 || r.right > innerWidth) issues.push(`${selector} fuera del viewport`);
         if (selector === '.tt-product-selection' && (r.left < 16 || r.right > innerWidth - 16)) issues.push(`${selector} sin margen exterior`);
@@ -107,7 +123,22 @@ for (const [width, height] of [[320,568], [390,844], [768,1024], [1024,768],
     const purchase = await page.locator('#btn-product-add-cart').boundingBox();
     expect(purchase.height).toBeGreaterThanOrEqual(44);
     expect(purchase.height).toBeLessThan(90);
-    await expect(page.locator('#product-reviews, #tinsel-root, [data-open-community]')).toHaveCount(0);
+    await expect(page.locator('#product-reviews, [data-open-community]')).toHaveCount(0);
+    await page.locator('#btn-product-add-cart').click();
+    await expect(page.locator('#tinsel-items .tinsel-item')).toHaveCount(1);
+    await expect(page.locator('#tinsel-count')).toHaveText('2');
+    await expect(page.locator('#tinsel-total-footer')).toContainText('140.000');
+    expect(await page.locator('#tinsel-root').evaluate(node => [...node.querySelectorAll('*')].filter(el => {
+      const r = el.getBoundingClientRect(); return r.width && (r.left < 0 || r.right > innerWidth + 1);
+    }).map(el => ({ tag:el.tagName, class:el.className, width:el.getBoundingClientRect().width, left:el.getBoundingClientRect().left })))).toEqual([]);
+    for (const button of await page.locator('#tinsel-items button').all()) {
+      expect((await button.boundingBox()).height).toBeGreaterThanOrEqual(44);
+    }
+    await page.locator('#tinsel-root').screenshot({ path: `test-results/product-selection-${width}.png` });
+    await page.locator('#tinsel-items [data-cart-delta="1"]').click();
+    await expect(page.locator('#tinsel-count')).toHaveText('3');
+    await page.locator('#tinsel-items [data-tinsel-remove]').click();
+    await expect(page.locator('#tinsel-items')).toContainText('Todavía no agregaste accesorios');
     await page.screenshot({ path: `test-results/product-spacing-${width}.png`, fullPage: true });
   });
   for (const [route, card] of [['/index.html', '.tt-reviews-section .tt-review-screen'],

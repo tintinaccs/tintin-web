@@ -60,7 +60,7 @@ check('maestro-version-lock', 'Panel y entrada HTML usan la misma versión propi
   has(files.admin, `js/admin/maestro/panel-maestro.js?v=${maestroVersion}`));
 
 check('orders-canonical-api', 'Crear pedidos desde Super Admin usa el endpoint canónico', has(files.orders, '/api/admin-order-mutation') && has(files.orderApi, 'createOrder'));
-check('orders-inventory', 'Editar pedidos está interconectado con integridad de inventario', hasAll(files.orders, ['TintinInventoryIntegrity', 'updateEditedOrder', 'transitionStatus']));
+check('orders-inventory', 'Editar pedidos está interconectado con integridad de inventario', has(files.orders, 'TintinInventoryIntegrity.updateEditedOrder') && has(files.adminApp, 'TintinInventoryIntegrity.transitionStatus'));
 check('orders-trash', 'Pedidos tienen ciclo papelera → restauración → borrado protegido', hasAll(files.orders, ['orderTrash', 'trashOrder', 'restoreOrder', 'deleteTrashPermanently']));
 
 check('products-catalog', 'Productos del Admin siguen conectados al catálogo público', hasAll(files.admin, ['prodGuardar()', 'prod-active', 'prod-stock', 'prod-price']) && has(files.publicCatalog, 'products'));

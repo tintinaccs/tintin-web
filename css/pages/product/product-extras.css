@@ -242,7 +242,7 @@
   background:none; border:none;
   color:var(--color-text-primary,#222222); font-size:18px; font-weight:700;
   cursor:pointer; padding:0 2px; line-height:1;
-  min-width:32px; min-height:32px;
+  min-width:44px; min-height:44px;
   transition:transform .15s;
 }
 .tinsel-qbtn:hover{ transform:scale(1.3); }
@@ -252,7 +252,7 @@
 }
 .tinsel-del{
   background:none; border:none; padding:8px;
-  min-width:36px; min-height:36px;
+  min-width:44px; min-height:44px;
   color:rgba(45,45,45,.6); cursor:pointer;
   border-radius:50%;
   transition:color .18s, background .18s;
@@ -261,7 +261,7 @@
 .tinsel-del:hover{ color:#e53e3e; background:rgba(229,62,62,.08); }
 .tinsel-item-actions{ display:flex; flex-direction:column; align-items:center; gap:2px; }
 .tinsel-favorite{
-  width:36px; height:36px; padding:0;
+  width:44px; height:44px; padding:0;
   border:0; border-radius:50%;
   background:rgba(212,120,154,.08); color:var(--color-text-primary,#222222);
   font-size:20px; cursor:pointer;
@@ -358,6 +358,14 @@
   }
   .tinsel-item-name{ font-size:11.5px; }
   .tinsel-qbtn{ font-size:16px; }
+}
+@media(max-width:600px){
+  .tinsel-head{flex-wrap:wrap;gap:12px}
+  .tinsel-item{grid-template-columns:48px minmax(0,1fr) 44px;gap:8px}
+  .tinsel-item-img{grid-column:1;grid-row:1 / span 2;align-self:start}
+  .tinsel-item-info{grid-column:2;grid-row:1}
+  .tinsel-qty{grid-column:1 / span 2;grid-row:2;justify-self:start}
+  .tinsel-item-actions{grid-column:3;grid-row:1 / span 2}
 }
 .tt-product-specifications{margin:18px 0 0;border-top:1px solid var(--border,#eadde2)}
 .tt-product-specifications[hidden]{display:none}

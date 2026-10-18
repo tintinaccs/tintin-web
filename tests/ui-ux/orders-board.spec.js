@@ -171,3 +171,61 @@ for (const width of [390,768,1366]) test(`actualización en vivo conserva el foc
  await page.keyboard.press('Escape');await expect(drawer).toHaveCount(0);
  await expect(page.locator('[data-action="drawer-order"][data-id="order_fixture_0"]')).toBeFocused();
 });
+
+for (const width of [320, 768, 1440]) test('reinicio independiente confirmado y persistido en ' + width, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 });
+  let saved = { resets: {}, lastChangeId: '' }, writes = [];
+  await page.route('https://statistics-controls.test/**', async route => {
+    const url = new URL(route.request().url());
+    if (url.pathname === '/api/admin-commerce-controls') {
+      if (route.request().method() === 'POST') {
+        const input = route.request().postDataJSON(); writes.push(input);
+        saved = { resets: Object.fromEntries(input.metrics.map(key => [key, new Date().toISOString()])), lastChangeId: input.changeId };
+      }
+      return route.fulfill({ json: { ok: true, result: saved } });
+    }
+    if (url.pathname.endsWith('/firebase.js')) return route.fulfill({ contentType: 'text/javascript', body: 'export const auth={currentUser:{uid:"owner_fixture"}};' });
+    if (url.pathname.endsWith('/cliente-api-autenticado.js')) return route.fulfill({ contentType: 'text/javascript', body: 'export const authenticatedFetch=(url, options)=>fetch(url,options);' });
+    if (url.pathname.endsWith('/controles-estadisticas.js') || url.pathname.endsWith('/modelo-reinicios.mjs')) {
+      return route.fulfill({ contentType: 'text/javascript', body: fs.readFileSync(path.join(ROOT, url.pathname.replace(/^\//, '')), 'utf8') });
+    }
+    return route.fulfill({ contentType: 'text/html', body: `<meta name="viewport" content="width=device-width,initial-scale=1"><div class="adm-statistics-toolbar"></div><div id="statistics-data-status"></div><script type="module">
+      import {ensureStatisticsControls,filterStatisticsRows} from 'https://statistics-controls.test/js/admin/statistics/controles-estadisticas.js';
+      const rows=[{at:Date.now()-100000,total:100}];
+      function render(){if(!ensureStatisticsControls(render,async options=>options.action({start(){},ok(){}})))return;window.amount=filterStatisticsRows('revenue',rows,row=>row.at).reduce((sum,row)=>sum+row.total,0);window.orders=filterStatisticsRows('orders',rows,row=>row.at).length;}
+      render();</script>` });
+  });
+  await page.goto('https://statistics-controls.test/');
+  await page.waitForFunction(() => window.amount === 100);
+  await page.getByRole('button', { name: 'Reiniciar contadores' }).click();
+  await page.getByRole('checkbox', { name: 'Facturación', exact: true }).check();
+  await page.getByRole('button', { name: 'Reiniciar seleccionados' }).click();
+  await page.waitForFunction(() => window.amount === 0);
+  expect(await page.evaluate(() => window.orders)).toBe(1);
+  expect(writes).toHaveLength(1); expect(writes[0].metrics).toEqual(['revenue']);
+  await page.reload(); await page.waitForFunction(() => window.amount === 0);
+  await page.getByRole('button', { name: 'Reiniciar contadores' }).click();
+  await page.getByRole('button', { name: 'Cancelar', exact: true }).click();
+  expect(writes).toHaveLength(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(2);
+});
+
+for (const width of [320, 768, 1440]) test('devolución por línea, cancelación y validación en ' + width, async ({ page }, testInfo) => {
+  await page.setViewportSize({width, height:900});
+  await page.route('https://commerce-controls.test/**', route => {
+    if (new URL(route.request().url()).pathname === '/selection.mjs') return route.fulfill({contentType:'text/javascript', body:fs.readFileSync(path.join(ROOT,'js/admin/orders/seleccion-devolucion.mjs'),'utf8')});
+    return route.fulfill({contentType:'text/html',body:'<meta name="viewport" content="width=device-width,initial-scale=1"><button id="open">Borrar</button><script type="module">import {chooseOrderTrash} from "https://commerce-controls.test/selection.mjs";window.pick=chooseOrderTrash;</script>'});
+  });
+  await page.goto('https://commerce-controls.test/');
+  await page.waitForFunction(()=>Boolean(window.pick));
+  const fixture=[{id:'order_test',orderNumber:'TINPEDQA',lastChangeId:'v1',inventoryState:'reserved',items:[{id:'product_one',name:'Pulsera QA',qty:2,price:100},{id:'product_two',name:'Reloj QA',qty:1,price:200}]}];
+  await page.evaluate(orders=>{window.result=window.pick(orders);},fixture);
+  const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();expect(await dialog.evaluate(el=>el.scrollTop)).toBe(0);const box=await dialog.boundingBox();expect(box.x).toBeGreaterThanOrEqual(0);expect(box.x+box.width).toBeLessThanOrEqual(width);await page.screenshot({path:testInfo.outputPath('stock-choice.png')});
+  const quantity=page.getByRole('spinbutton',{name:'Unidades a devolver de Pulsera QA'});
+  await expect(quantity).toHaveValue('0');await quantity.fill('3');
+  await page.getByRole('button',{name:'Confirmar y mover a Borrados'}).click();await expect(dialog).toBeVisible();
+  await quantity.fill('1');await page.getByRole('button',{name:'Confirmar y mover a Borrados'}).click();
+  const result=await page.evaluate(()=>window.result);expect(result.selections.order_test.returnItems).toEqual([{index:0,qty:1},{index:1,qty:0}]);expect(result.selections.order_test.baseChangeId).toBe('v1');
+  await page.evaluate(orders=>{window.result=window.pick(orders);},fixture);await page.keyboard.press('Escape');expect(await page.evaluate(()=>window.result)).toBeNull();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)).toBeLessThanOrEqual(2);
+});

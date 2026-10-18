@@ -9,6 +9,7 @@ const rules = read('firestore.rules');
 const checkout = read('js/orders/pedido-checkout-seguro.js');
 const admin = read('js/admin/admin-app.js');
 const orderCrud = read('js/admin/orders/pedidos-superadmin-crud.js');
+const trashControl = read('cloudflare/order-trash-controls.js');
 const activity = read('js/analytics/actividad-sitio.js');
 const activityApi = read('functions/api/site-activity.js');
 const loader = read('js/cargador-pagina.js');
@@ -94,10 +95,20 @@ check(
     orderCrud.includes('TintinInventoryIntegrity.updateEditedOrder') &&
     admin.includes('TintinInventoryIntegrity.transitionStatus') &&
     admin.includes('TintinOrderAdmin.trashOrder') &&
-    orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado', { baseChangeId: expectedChangeId })") &&
-    orderCrud.includes("allowedOrderStatuses(before).includes('cancelado')") &&
-    orderCrud.includes("(live.lastChangeId || '') !== expectedChangeId"),
-  'Edición y estados deben pasar por el dominio server-side atómico; la papelera conserva su liberación transaccional segura.'
+    orderCrud.includes("(before.lastChangeId || '') !== options.baseChangeId") &&
+    orderCrud.includes('returnItems: options.returnItems, baseChangeId: options.baseChangeId') &&
+    trashControl.includes("actor?.role !== 'superadmin'") &&
+    trashControl.includes('version !== baseChangeId') &&
+    trashControl.includes('selectedReturns(order, input.returnItems)') &&
+    trashControl.includes('row.qty > bought') &&
+    trashControl.includes('!orderReservesInventory(order)') &&
+    trashControl.includes('order.trashMeta?.returnedItems || []') &&
+    trashControl.includes('restore ? -quantity : quantity') &&
+    trashControl.includes('currentDocument: condition(source)') &&
+    trashControl.includes('await commit(env, writes)') &&
+    trashControl.includes('originalStatus: order.status') &&
+    !trashControl.includes("after.status = 'cancelado'"),
+  'Edición y estados deben pasar por el dominio server-side atómico; la papelera valida versión y devolución elegida, restaura la decisión exacta y conserva estado e historial.'
 );
 check(
   'Cancelar dos veces no devuelve stock dos veces',

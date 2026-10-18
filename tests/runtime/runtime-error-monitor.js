@@ -30,7 +30,12 @@ async function installRuntimeErrorMonitor(page,context){
     const visualStudioPublic=error.message==='/127.0.0.1:4174/api/visual-studio-global-public due to access control checks.' &&
       (error.stack?.endsWith('    at fetch ([native code]:0:0)') ||
         error.stack?.includes('    at fetchGlobalVisualStudioConfig (http://127.0.0.1:4174/js/components/navigation/compartido/apariencia-global.js?'));
-    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || visualStudioPublic);
+    // Trace CI39054514954: WebKit cancels this same-origin read 38.979ms
+    // after beforeunload during the client-role redirect. The promise is caught;
+    // require the exact fixture endpoint, canonical caller and leaving window.
+    const siteVersionPublic=error.message==='/127.0.0.1:4174/site-version.json due to access control checks.' &&
+      error.stack?.includes('    at fetchSiteVersion (http://127.0.0.1:4174/js/quality/vigilancia-version.js?');
+    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || visualStudioPublic || siteVersionPublic);
     if(navigationCancellation)browserDiagnostics.push({kind:'native-emulator-channel-cancelled-on-navigation',message:error.message});
     else errors.push(error.message);
   });
