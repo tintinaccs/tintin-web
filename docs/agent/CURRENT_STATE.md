@@ -1,3 +1,7 @@
+## 2026-10-18 — Fondo blanco sólo en tarjeta Tu selección
+
+Codex /root. Pedido del titular: fondo blanco exclusivamente para tarjeta Tu selección, exterior y resto iguales. Reproducción Chromium previa390/768/1440: rgba(0,0,0,0) por reset de mantenimiento. Se agrega excepción precisa #tinsel-root .tinsel-box en su CSS de componente; ningún cambio de lógica ni del contenedor. PASS_LOCAL: tarjeta rgb(255,255,255) en los tres anchos y comparación exacta de fondos, borde, radio, sombra, padding y geometría del resto de componentes con la captura anterior; auditor específico de Producto aprobado. Referencia nueva de CSS y baseline regenerados. CI y publicación pendientes.
+
 ## 2026-10-17 — Respetar límite de reglas de Pages
 
 Codex /root. CI39078871599 aprobó auditoría completa del candidato0ae6. Mantenimiento39080498941 rechazó Cloudflare Pages fallido; logs nativos del deployment9908efb7 confirman Error8000057:101reglas superan máximo100. Se compactan únicamente /404 y /404.html a /404*, conservando las101rutas previas cubiertas y todas lasAPIs explícitas. Se agrega límite100 al auditor de integraciones y su auditor final exige la configuración exacta con ese patrón acotado; sin ampliar /api/* ni retirar middleware/CSP/SEO. PASS_LOCAL: integración canónica100reglas y auditor final22/22. Plan/diagnóstico regenerados. CI/Pages y nuevo dispatch del SHA final pendientes; no heredar éxito anterior ni aprobar revisión del propietario desde esta conversación.
