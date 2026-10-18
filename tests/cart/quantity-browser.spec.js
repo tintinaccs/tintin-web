@@ -12,7 +12,10 @@ test('admin stock editor labels each option, sums quantities and resets for a ne
     const inventoryUrl = new URL('/js/core/store/inventario-variantes.mjs', location.origin);
     inventoryUrl.searchParams.set('v', 'tintin-20261003-variant-inventory-1-brand-20261004-1-brand-runtime-20261004-1');
     const { variantInventoryEntries } = await import(inventoryUrl.href);
-    window.qaRenderStock = new Function('variantInventoryEntries', editor + '\nreturn renderProductVariantStock;')(variantInventoryEntries);
+    const revisionUrl = new URL('/js/admin/products/revision-inventario-producto.mjs', location.origin);
+    revisionUrl.searchParams.set('v', 'tintin-20261018-product-actions-1');
+    const { captureProductInventoryRevision } = await import(revisionUrl.href);
+    window.qaRenderStock = new Function('variantInventoryEntries', 'captureProductInventoryRevision', editor + '\nreturn renderProductVariantStock;')(variantInventoryEntries, captureProductInventoryRevision);
     window.qaRenderStock({ stock: 3, variants: { Talla: ['6', '7'] }, variantInventory: [{ variant: '6', stock: 1 }, { variant: '7', stock: 2 }] });
   }, editor);
   await expect(page.getByLabel('6', { exact: true })).toHaveValue('1');

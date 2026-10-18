@@ -1,3 +1,7 @@
+## 2026-10-18 — Fixture aislado del editor de stock
+
+CI39156702100 del candidato c85d367e pasó build reproducible, contrato estático completo, operaciones/cuenta/sync, reglas Firestore, Maestro y navegación91 casos. Falló el editor aislado en tests/cart/quantity-browser.spec.js:su new Function no recibía captureProductInventoryRevision, ahora importado por el módulo real de admin. Se importa el helper real en ese fixture y se inyecta como las demás dependencias; no se simula ni se elimina ninguna aserción, y no cambia runtime. PASS_LOCAL del editor aislado que falló:conserva etiquetas por opción, suma y reset. Los otros tres casos de carrito pasaron en CI39156702100; la ejecución local completa y el nuevo CI comprobarán el conjunto después de esta inyección. Nuevos CI y mantenimiento deben comprobar el SHA posterior.
+
 ## 2026-10-18 — Productos: conflicto de stock y fotos disponibles
 
 Codex /root. Base inicial c81257c0; reconciliado contra46c10ef533ca6e31dad7625e927e57ae6926fa0e (1153/1155 conservados): PR1150 ya mergeado con controles de estadísticas/pedidos y presentación/versiones. Se conservan íntegros sus cambios. Continúa únicamente el pedido de Productos que aún faltaba en main.
