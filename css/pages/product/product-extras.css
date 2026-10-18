@@ -146,6 +146,10 @@
   position:relative;
   overflow:hidden;
 }
+/* Sólo esta tarjeta conserva blanco frente al reset transparente de Producto. */
+html body.tt-product-maintenance #tinsel-root .tinsel-box{
+  background:#FFFFFF!important;
+}
 .tinsel-box::before{
   content:'';
   position:absolute; top:0; left:0; right:0; height:3px;

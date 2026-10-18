@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "c81257c0af3d9840c2a2088c46f22b9e66f90bdd",
-  "reason": "Conservar stock disponible y sincronizacion sin recarga; reconciliar PR1150 y limitar el marcador a la pagina abierta, con regresiones Node y Chromium.",
+  "baseCommit": "b982cb77cbca744a3f39b75b23731efebdacc31b",
+  "reason": "Conservar catálogo con stock y sincronización sin recarga; integrar PR1153 y validar regresiones Chromium, protección y build canónico.",
   "files": [
     {
       "path": "404.html",
@@ -95,13 +95,13 @@
     },
     {
       "path": "product.html",
-      "oldHash": "688b648ec20be714cf69f78ada20d095a7264318b973ec68c131c0e18a16bdd0",
-      "newHash": "4573bc33be5bf46fef86ce9163372ff2396dc6239444179c3217e5ecd6df9673"
+      "oldHash": "170ce74281670dc1ede2af7b024c2e5669118ff44b63476bd922d406b9d3c760",
+      "newHash": "c6002d52d84723d1c47419a901298ec96a209a8028a800598fa3389cadabfc74"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "df580bb143d80d5f9fdf70858850eda9fad6e17fc1371f647c263fb1292af680",
-      "newHash": "a941a136c94e7115df857e8b9da9d43f74891dbe1d59395dcaacb2a1ddedd253"
+      "oldHash": "8d5e763a4df6924ed051617f6b124e1e756b2f1386fcd96ac1b6666f8a0473f3",
+      "newHash": "b26432f043df166e8a103c168eba44de584ca79e9f11478ec0b4840bcb42f239"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",

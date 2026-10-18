@@ -1,3 +1,7 @@
+## 2026-10-18 — Reconciliar PR1153 en PR1152
+
+Se conserva el CSS y referencia de Tu selección de main b982cb77; no cambia la lógica de stock ni los avisos por página. Se regeneran plan nativo y diagnóstico contra main vigente.
+
 ## 2026-10-18 — Aviso limitado a la página abierta al reconciliar PR1150
 
 Se conserva la solución de datos sin recarga de PR1151 y las mejoras de PR1150. site-version.json agrega un mapa de hashes HTML generado desde el manifiesto canónico; vigilancia-version compara sólo la ruta abierta y mantiene fallback para publicaciones anteriores/rutas dinámicas. El verificador valida el mapa exacto. Una publicación de Producto no avisa en Inicio cuando su página no cambia. La selección de fotos disponibles y agotados al final siguen en el renderer compartido. No cambia Firestore, Rules, roles, permisos ni el mecanismo de revisión humana. Se propagan las URLs inmutables y se regenera el plan contra mainc81257c0. Evidencia en CURRENT_STATE.

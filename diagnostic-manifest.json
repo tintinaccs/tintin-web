@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6c4de42a202e93e85fd5ed0e54ed90707e1ca2cf7d9f874d992efa786b4e77da",
+  "sourceFingerprint": "22d54e94147145e35b0e3f484ef01fd9d60b7c82cd7b0f705b5e0ada8650104e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1308,
     "textFiles": 1222,
-    "totalBytes": 24604980,
+    "totalBytes": 24606981,
     "pages": 19,
     "modules": 918
   },
@@ -19720,8 +19720,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25508,
-      "sha256": "4573bc33be5bf46fef86ce9163372ff2396dc6239444179c3217e5ecd6df9673",
+      "bytes": 25514,
+      "sha256": "c6002d52d84723d1c47419a901298ec96a209a8028a800598fa3389cadabfc74",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -19897,7 +19897,7 @@
           "line": 51
         },
         {
-          "raw": "css/pages/product/product-extras.css?v=tintin-20261017-selection-1",
+          "raw": "css/pages/product/product-extras.css?v=tintin-20261018-selection-white-1",
           "target": "css/pages/product/product-extras.css",
           "line": 52
         },
@@ -20416,7 +20416,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/product/product-extras.css?v=tintin-20261017-selection-1",
+          "raw": "css/pages/product/product-extras.css?v=tintin-20261018-selection-white-1",
           "target": "css/pages/product/product-extras.css",
           "line": 52,
           "exists": true
@@ -50610,8 +50610,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 6331,
-      "sha256": "22df2d971bb5886307ca4e2a352eb5fd0620200c5c1f48227bfce29dec365a58"
+      "bytes": 6319,
+      "sha256": "5d043be49ec45b595dbab6f639a29710d654f8afce948bc92683adfd8bd0e38a"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -50623,7 +50623,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "976dfa112d7aca54f321c414525a8c439d2b8d41e2ca1547ad4d33abe6c0bd60"
+      "sha256": "f2c8202562bde404caeb3c8885ffcd82d2bed8fe356b79188e50f12f5f85fe92"
     },
     {
       "path": "config/public-site.json",
@@ -51042,8 +51042,8 @@
     {
       "path": "css/pages/product/product-extras.css",
       "extension": ".css",
-      "bytes": 11564,
-      "sha256": "973efc3e2bee70559f4bd8208ebd17e8226db51d82868686c90511ee3b3966dd"
+      "bytes": 11740,
+      "sha256": "5dd63952ee6123dfba869a3a098b738ea3087d9091ee72be6960460c3951170d"
     },
     {
       "path": "css/pages/product/product-maintenance.css",
@@ -51234,8 +51234,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 591022,
-      "sha256": "c9cd8d18adedd07f9a38e33246cc6057534c6ffdbe1fa4c41ebc916b893910da"
+      "bytes": 592613,
+      "sha256": "9f0ce2eed189af8fc278351ef9d4fc2eb885f4cbfed532ec0c38c5ff1b8d6517"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -51588,8 +51588,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 48721,
-      "sha256": "1c7b398249a146d905d18cc89c74728000e419a60d6eaee6ad1e48807052017e"
+      "bytes": 48955,
+      "sha256": "12e180ba49860f9e2f7c8a49d7c4403899645815d0feec4c4b10d8fca8871ba1"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -54216,8 +54216,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 25508,
-      "sha256": "4573bc33be5bf46fef86ce9163372ff2396dc6239444179c3217e5ecd6df9673"
+      "bytes": 25514,
+      "sha256": "c6002d52d84723d1c47419a901298ec96a209a8028a800598fa3389cadabfc74"
     },
     {
       "path": "robots.txt",
@@ -55050,8 +55050,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 71176,
-      "sha256": "a941a136c94e7115df857e8b9da9d43f74891dbe1d59395dcaacb2a1ddedd253"
+      "bytes": 71182,
+      "sha256": "b26432f043df166e8a103c168eba44de584ca79e9f11478ec0b4840bcb42f239"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
