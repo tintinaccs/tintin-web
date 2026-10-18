@@ -6179,7 +6179,7 @@ async function prodGuardar() {
 window.prodToggleActive = async (docId, currentlyActive) => {
   if (!can(currentRole, 'editProducts') || !roleCanDo('productos', 'activarDesactivar')) { toast('No tenés permiso para activar/desactivar productos'); return; }
   const p = _allProducts.find(x => x._docId === docId);
-  await runAdminCrudOperation({
+  return runAdminCrudOperation({
     title: currentlyActive ? 'Desactivar producto' : 'Activar producto', name: p?.name || docId, module: 'productos',
     stages: [{ id: 'write', label: 'Actualizar estado del producto' }, { id: 'sync', label: 'Sincronizar catálogo y actualizar lista' }],
     action: async ctx => {
