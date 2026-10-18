@@ -102,7 +102,10 @@ globalThis.fetch=async (url,options)=>{
   assert.deepEqual(fixed.map(result => result.status), [0], fixed.map(result => result.stderr + result.stdout).join('\n')); assert.equal(fixedRequests.blobs, 6);
   assert.ok(fixedRequests.total < 50);
   assert.deepEqual(fixedRequests.calls.filter(call => call.method === 'PUT').map(call => call.body), [{ sha: headSha, merge_method: 'squash' }]);
-  assert.equal(fixedRequests.calls.filter(call => call.endpoint.endsWith('/dispatches')).length, 2);
+  const dispatches = fixedRequests.calls.filter(call => call.endpoint.endsWith('/dispatches'));
+  assert.equal(dispatches.length, 2);
+  assert.deepEqual(dispatches.find(call => call.endpoint.includes('monitor-produccion.yml')).body, { ref: 'main', inputs: { verification_only: true } });
+  assert.deepEqual(dispatches.find(call => call.endpoint.includes('auditar-tintin.yml')).body, { ref: 'main' });
   assert.equal(fixedRequests.calls.filter(call => call.method === 'PATCH' && call.body.conclusion === 'success').length, 2);
   for (const scenario of ['failed', 'pending', 'fork', 'author', 'head-changed', 'head-changed-after-wait', 'api-denied', 'pending-then-pass']) {
     write('responses.json', JSON.stringify({ responses, remoteBlobs, scenario }));

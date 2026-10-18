@@ -71,7 +71,7 @@ const readCandidate = async () => {
     assert(bytes.get(planPath).length <= 65536, 'Plan demasiado grande.');
     plan = JSON.parse(bytes.get(planPath).toString('utf8'));
   }
-  return inspectMaintenance({ baseline, candidate, baseSha, changedPaths, plan, readFile: path => {
+  return inspectMaintenance({ baseline, candidate, baseSha, changedPaths, plan, allowControlUpdates: config.automaticControlMaintenance === true, readFile: path => {
     assert(bytes.has(path), `Archivo no leído: ${path}`); return bytes.get(path);
   } });
 };
@@ -158,7 +158,10 @@ try {
   // Los pushes con GITHUB_TOKEN no disparan Actions. Los dispatch explícitos
   // sí lo hacen: mantener auditoría de main y comprobación del deploy real.
   for (const workflow of ['auditar-tintin.yml', 'monitor-produccion.yml']) {
-    await api(`actions/workflows/${workflow}/dispatches`, { ref: config.branch });
+    await api(`actions/workflows/${workflow}/dispatches`, {
+      ref: config.branch,
+      ...(workflow === 'monitor-produccion.yml' ? { inputs: { verification_only: true } } : {}),
+    });
   }
   if (process.env.GITHUB_STEP_SUMMARY) {
     fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,

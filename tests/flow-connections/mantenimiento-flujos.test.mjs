@@ -55,7 +55,7 @@ test('Cambiar controles también se rechaza si ningún archivo protegido cambió
   const data = fixture(); data.candidate = structuredClone(data.baseline);
   data.readFile = path => path === 'js/a.js' ? 'old' : 'stable';
   data.changedPaths = ['.github/workflows/nuevo.yml'];
-  assert.throws(() => inspectMaintenance(data), /migración separada/);
+  assert.throws(() => inspectMaintenance(data), /configuración confiable/);
 });
 
 test('CI acepta todos los checks correctos del commit exacto', () => validateChecks(checks(), config, headSha));
@@ -74,3 +74,22 @@ test('Snapshot acepta PR abierto y base/head exactos', () => validateSnapshot(pr
 test('Avance de main invalida la aprobación anterior', () => assert.throws(() => validateSnapshot(pr(), 'c'.repeat(40), baseSha, headSha, config)));
 test('Nuevo commit del PR invalida la aprobación anterior', () => { const item = pr(); item.head.sha = 'c'.repeat(40); assert.throws(() => validateSnapshot(item, baseSha, baseSha, headSha, config)); });
 test('PR cerrado no puede producir éxito', () => { const item = pr(); item.state = 'closed'; assert.throws(() => validateSnapshot(item, baseSha, baseSha, headSha, config)); });
+
+test('main puede autorizar mantenimiento de controles sin omitir hashes ni plan', () => {
+  const data = fixture(); data.allowControlUpdates = true;
+  const control = '.github/workflows/audit.yml';
+  for (const policy of [data.baseline, data.candidate]) {
+    policy.files[control] = policy.files['js/a.js']; delete policy.files['js/a.js'];
+    for (const record of Object.values(policy.records)) record.splice(0, record.length, ...record.map(path => path === 'js/a.js' ? control : path));
+  }
+  data.plan.files[0].path = control; data.changedPaths = [control, 'config/proteccion-flujos.json'];
+  data.readFile = path => path === control ? 'new' : 'stable';
+  assert.equal(inspectMaintenance(data).maintenance, true);
+  data.plan.files = [];
+  assert.throws(() => inspectMaintenance(data), /Plan/);
+});
+test('un campo candidato no habilita la autorización de controles', () => {
+  const data = fixture(); data.changedPaths.push('scripts/mantenimiento-flujos-core.mjs');
+  data.candidate.automaticControlMaintenance = true;
+  assert.throws(() => inspectMaintenance(data), /configuración confiable/);
+});
