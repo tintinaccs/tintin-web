@@ -1,23 +1,137 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "c81257c0af3d9840c2a2088c46f22b9e66f90bdd",
-  "reason": "Fondo blanco sólo en tarjeta Tu selección solicitado por titular; comparación Chromium390/768/1440 mantiene exterior y demás estilos/geometría idénticos, auditor Producto PASS.",
+  "baseCommit": "b982cb77cbca744a3f39b75b23731efebdacc31b",
+  "reason": "Corregir resumen de direccion principal sin controles ni direcciones secundarias; regresion Chromium antes FAIL y despues 12/12 PASS, sin modificar datos ni permisos.",
   "files": [
     {
-      "path": "css/pages/product/product-extras.css",
-      "oldHash": "973efc3e2bee70559f4bd8208ebd17e8226db51d82868686c90511ee3b3966dd",
-      "newHash": "5dd63952ee6123dfba869a3a098b738ea3087d9091ee72be6960460c3951170d"
+      "path": "404.html",
+      "oldHash": "7cdc330881038ae7c56a925a0276668f80e0078d581eac587ab2423685826df0",
+      "newHash": "d1906e14996e026b1363c5f8c674908f4d3283ade9b2fe335467b5e017d95540"
+    },
+    {
+      "path": "about.html",
+      "oldHash": "a67ceb15f8f774eb2ab4bf38ee22dcb91e0a94c011c24d10a18483fbf89f3249",
+      "newHash": "4a94fd9145d334cbf6344efadf73b18dcf078dd3ad79fbdad1c141c69bdedf5f"
+    },
+    {
+      "path": "cambios-devoluciones.html",
+      "oldHash": "602cda12ddc03bf3347f8eaa913ea9d60edaaced76ff4df2876c1543d8e66f06",
+      "newHash": "104702593e04cc0ef2fe3b824718a77774f4f8f037fec243b06958cc6ef1b97e"
+    },
+    {
+      "path": "catalogo.html",
+      "oldHash": "06b340d66091cd37f1767246d1e63c532798c731c2392a3c3e11976ba5a7aab7",
+      "newHash": "15bb5a648a11ebe3d0fb55674d467c17d18a0cbc9b5fe2eea4424685332acb2d"
+    },
+    {
+      "path": "checkout.html",
+      "oldHash": "7619b47e47d479186eafff6375f9d40871223cdd77980b7df3c8cd63c77983ce",
+      "newHash": "5767fb27a33ec201e9b31a61894d394ceca2b86af10adc88ff140c1ce961e557"
+    },
+    {
+      "path": "collections.html",
+      "oldHash": "db48c7eac913d8dbeb5b540fd532dd785072d554f88fbc9062745848daad07d0",
+      "newHash": "667ad749a400581636f6b0ce5a71266fde267c0723d38080ce38e824316c0b72"
+    },
+    {
+      "path": "contact.html",
+      "oldHash": "147a53e71629df866cc674743a2c04ee27d54d5f84e55522d9b348f822db1772",
+      "newHash": "66b4a68470d9781e088d0d2d271df6381d3e44e94230214b673ceb690ba68995"
+    },
+    {
+      "path": "envios.html",
+      "oldHash": "a998241de5d2b9376c01eb9fba8dc10d83fad9a68d1f31accdc180ecde3f0034",
+      "newHash": "fc41b5e2832ef7fea3401a67dab588985ecf033070ac99d92ebbd4ac668dffa6"
+    },
+    {
+      "path": "index.html",
+      "oldHash": "f83dbfc783a9ab7e9a5fd39a945daaed59eafb5fab95be4e01f0f448677d3d78",
+      "newHash": "4d2a793e3bcc01e4d9b02e884fa4363d2fe2a070f7f29937cf03045e912837f8"
+    },
+    {
+      "path": "js/components/navigation/entrada-navegacion-publica.js",
+      "oldHash": "d3e2a1f28db0c362d32e901f9909d57f37da20acc4396e7fef63db29f7f99c9a",
+      "newHash": "e6e5a92df08dcc32145d26d85e0ce2541c9a8ed5f4d80e4791c5be4f6a93f19b"
+    },
+    {
+      "path": "js/inicio-navegacion-publica.js",
+      "oldHash": "f7e8154b851f4416fae7065f770aa48f8d6a09c569c636b5bb42d8691c6c205c",
+      "newHash": "e9f1ee1bd0a79458ebbb7658f055330e8cc2db4a16cf5076ef987ba2651f7bfa"
+    },
+    {
+      "path": "js/quality/estabilidad-final-publica.js",
+      "oldHash": "14efeb134e6ed9c4186c705775d59061df3f67276a5e87e225f21d57cff6cc1b",
+      "newHash": "fe19846e8d85254e471f72f419e4409683af319c8a583cf470e74ea6d28a8ae3"
+    },
+    {
+      "path": "login.html",
+      "oldHash": "fe3060a52fa512b02a2ed2a540c7e461f46d83ee1426c6366b6a554ddf489d13",
+      "newHash": "4679288a193985b6b7b9e689a4847a2374c1e06169c584988d78a88de15f62a1"
+    },
+    {
+      "path": "perfil.html",
+      "oldHash": "bf0ba82b0e767be0ca46862fbef3c40b2db254cbfccea87a213a3a6d8f0d7e70",
+      "newHash": "d705d43c81349f0e959cea586e2318d117de238c1653df0602baf345a49d641f"
+    },
+    {
+      "path": "preguntas-frecuentes.html",
+      "oldHash": "318a733d0a0fc96a372f811c90b09e33f867757c82a9fc057f3cd8ffe24757db",
+      "newHash": "42aa4da86ef2e27c85b9b26833b9b10ca83e507d738a13959f0b34b365becbce"
+    },
+    {
+      "path": "privacidad.html",
+      "oldHash": "82fbec1cdb25676b57d65738ae43776cd8e251d75e97f4677be93bc3d9003607",
+      "newHash": "b9469677661d0373821bb9a59d90b681a069d548555dc2f17735ce733158ba97"
     },
     {
       "path": "product.html",
-      "oldHash": "688b648ec20be714cf69f78ada20d095a7264318b973ec68c131c0e18a16bdd0",
-      "newHash": "170ce74281670dc1ede2af7b024c2e5669118ff44b63476bd922d406b9d3c760"
+      "oldHash": "170ce74281670dc1ede2af7b024c2e5669118ff44b63476bd922d406b9d3c760",
+      "newHash": "f6d6c7d9968c64e5f35bfffa6c282d5ff3bb53a2607bf06b97f673b06b6562e1"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "df580bb143d80d5f9fdf70858850eda9fad6e17fc1371f647c263fb1292af680",
-      "newHash": "8d5e763a4df6924ed051617f6b124e1e756b2f1386fcd96ac1b6666f8a0473f3"
+      "oldHash": "8d5e763a4df6924ed051617f6b124e1e756b2f1386fcd96ac1b6666f8a0473f3",
+      "newHash": "b955d2edcfa4b0e48d98bd88f6c2331fdcaebe76e3e23b3b945841e961897ccb"
+    },
+    {
+      "path": "scripts/sincronizar-inicio-navegacion-publica.js",
+      "oldHash": "80da728f821c8c27599e7b8de9ce2e7878c6fd866ee0166b0f2b1588ed159045",
+      "newHash": "0da8b1235a51b5aa2057b43b62c93831611cc4b381484d190d723ebf7f24bbec"
+    },
+    {
+      "path": "terminos.html",
+      "oldHash": "d1a703996d986be8a55f3e0a391650a9a2d1cad40012d5e00d8e41933929ec6b",
+      "newHash": "a5a3cba8f05b0410048dbbd9bea8fb1770215b75b81578004f30e247fbdaa6da"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "cuenta-bloqueada",
+    "entrada-login",
+    "entrada-login__google-btn__1",
+    "entrada-login__login-codigo__2",
+    "firebase-auth__redirect-result__5",
+    "firestore__users-uid__8",
+    "google-btn",
+    "google-btn__firebase-auth__3",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
+    "pagina-principal",
+    "perfil",
+    "perfil__ultimos-datos__11",
+    "productos",
+    "redirect-result",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-principal__17",
+    "roles__perfil__10",
+    "roles__super-panel__14",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34",
+    "ultimos-datos",
+    "ultimos-datos__perfil__13",
+    "users-uid",
+    "users-uid__cuenta-bloqueada__12",
+    "users-uid__roles__9"
+  ]
 }
