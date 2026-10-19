@@ -66,7 +66,7 @@ function enhanceFields(root) {
 
 function refresh(root, state) {
   if (!visible(root)) return;
-  state.title.hidden = Boolean(root.querySelector('.tt-commerce-pagehead,.adm-statistics-hero'));
+  state.title.hidden = Boolean(root.querySelector('.tt-commerce-pagehead,.adm-statistics-hero,.tt-dashboard-hero'));
   enhanceFields(root);
   const candidates = [...root.querySelectorAll('.adm-card-title,.adm-section-head h2,.adm-card > h2,.adm-card-label,.tt-welcome-admin-title,.tt-maestro-panel h2')];
   const targets = candidates.filter(target => !target.closest('[role="dialog"],dialog') && visible(target) && text(target));
@@ -79,7 +79,7 @@ function refresh(root, state) {
     state.select.replaceChildren(placeholder, ...targets.map((target, index) => new Option(text(target), String(index))));
     state.select.value = '';
   }
-  state.label.hidden = targets.length < 2;
+  state.label.hidden = targets.length < 2 || Boolean(root.querySelector('.tt-dashboard-hero'));
   state.searchTarget = [...root.querySelectorAll('input[type="search"],input[id*="search"],input[data-filter$="-search"]')].find(target => visible(target) && !target.disabled && !target.closest('dialog,[role="dialog"]'));
   state.search.hidden = !state.searchTarget;
   state.bar.hidden = state.title.hidden && state.label.hidden && state.search.hidden;

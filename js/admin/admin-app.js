@@ -2200,8 +2200,8 @@ function renderDashboardData() {
     // Recent orders (last 5)
     const recent = [...orders]
       .sort((a,b) => {
-        const da = a.createdAt?.toDate?.() || new Date(0);
-        const db_ = b.createdAt?.toDate?.() || new Date(0);
+        const da = activityTimestampMillis(a.createdAt);
+        const db_ = activityTimestampMillis(b.createdAt);
         return db_ - da;
       })
       .slice(0, 5);

@@ -75,11 +75,12 @@
   <link rel="stylesheet" href="css/admin/comercio-local-admin.css?v=tintin-20261009-local-commerce-2">
 <link rel="stylesheet" href="css/admin/tablero-pedidos.css?v=tintin-20261013-orders-board-7-tablero-pedidos-css">
   <link rel="stylesheet" href="css/admin/espacio-modulos-admin.css?v=tintin-20261019-admin-workspaces-1">
+  <link rel="stylesheet" href="css/admin/dashboard-control.css?v=tintin-20261019-admin-control-1">
   <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-20261015-flow-startup-2" defer></script>
   <link id="tt-phase10-accessibility-css" rel="stylesheet" href="css/quality/accesibilidad-global.css?v=tintin-20261013-connectivity-hit-target-1-palette-20261014-1">
   <link data-adm-social-notifications="1" rel="stylesheet" href="css/admin/notificaciones-admin.css?v=tintin-20260925-cache-converge-notifications-auto-read-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1">
 </head>
-<body>
+<body class="tt-admin-control">
 
 <!-- SIDEBAR OVERLAY -->
 <div class="adm-overlay" id="adm-overlay"></div>
@@ -229,6 +230,7 @@
     <button type="button" class="adm-hamburger" id="adm-hamburger" aria-label="Abrir menú de módulos" aria-controls="adm-sidebar" aria-expanded="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
     <div class="adm-topbar-title" id="adm-topbar-title">Dashboard</div>
     <div class="adm-topbar-actions">
+      <button type="button" class="tt-control-search" data-admin-launcher aria-haspopup="dialog" aria-label="Buscar módulos (Control o Comando K)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span>Buscar módulos</span><kbd>Ctrl K</kbd></button>
       <a href="/checkout" class="adm-topbar-btn">+ Nuevo pedido</a>
     </div>
   </header>
@@ -237,6 +239,20 @@
 
     <!-- ===================== DASHBOARD ===================== -->
     <div class="adm-section active" id="section-dashboard">
+      <section class="tt-dashboard-hero" aria-labelledby="tt-dashboard-heading">
+        <div class="tt-dashboard-intro">
+          <p class="tt-control-eyebrow">TINTIN · PANEL DE CONTROL</p>
+          <h1 id="tt-dashboard-heading">Tu tienda,<br><span>en foco.</span></h1>
+          <p class="tt-dashboard-description">Personas, pedidos y catálogo. Una vista clara para organizar tu día.</p>
+          <button type="button" class="adm-btn adm-btn-outline" data-admin-launcher>Explorar módulos <span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></button>
+        </div>
+        <div class="tt-dashboard-shortcuts" aria-label="Accesos rápidos">
+          <button type="button" class="tt-dashboard-link" data-admin-open="pedidos" hidden><span class="tt-control-eyebrow">01 / OPERACIÓN</span><strong>Pedidos</strong><span>Gestionar pedidos <b aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></b></span></button>
+          <button type="button" class="tt-dashboard-link" data-admin-open="productos" hidden><span class="tt-control-eyebrow">02 / CATÁLOGO</span><strong>Productos</strong><span>Precios y existencias <b aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></b></span></button>
+          <button type="button" class="tt-dashboard-link" data-admin-open="usuarios" hidden><span class="tt-control-eyebrow">03 / PERSONAS</span><strong>Usuarios</strong><span>Administrar cuentas <b aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></b></span></button>
+          <button type="button" class="tt-dashboard-link" data-admin-open="configuracion" hidden><span class="tt-control-eyebrow">04 / TU TIENDA</span><strong>Configuración</strong><span>Preferencias y envíos <b aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></b></span></button>
+        </div>
+      </section>
       <div class="adm-stats" id="dash-stats">
         <div class="adm-stat">
           <div class="adm-stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
@@ -304,9 +320,10 @@
         <div class="adm-visitor-note">La ubicación se estima por la red de conexión. Una VPN, red móvil o bloqueo de privacidad puede cambiarla o dejarla como no disponible.</div>
       </div>
 
-      <div class="adm-card">
+      <div class="adm-card tt-dashboard-orders">
         <div class="adm-card-head">
           <div class="adm-card-title">Últimos pedidos</div>
+          <button type="button" class="tt-control-text-link" data-admin-open="pedidos" hidden>Ver todos <span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></button>
         </div>
         <div class="adm-card-body" style="padding:0">
           <div class="adm-table-wrap">
@@ -325,7 +342,6 @@
               </tbody>
             </table>
           </div>
-          <div id="users-pagination" class="adm-pagination" aria-label="Paginación de usuarios"></div>
         </div>
       </div>
     </div>
@@ -467,6 +483,7 @@
               </tbody>
             </table>
           </div>
+          <div id="users-pagination" class="adm-pagination" aria-label="Paginación de usuarios"></div>
         </div>
       </div>
     </div>
@@ -2063,7 +2080,7 @@
 
 <script type="module" src="js/admin/operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2"></script>
 <script type="module" src="js/admin/content/control-bienvenida-admin.js?v=tintin-20261017-domain-cutover-1"></script>
-<script type="module" src="js/admin/admin-app.js?v=tintin-20261018-products-master-1"></script>
+<script type="module" src="js/admin/admin-app.js?v=tintin-20261019-admin-control-1"></script>
 <script type="module" src="js/admin/sidebar-expandible-admin.js?v=tintin-20261004-admin-connections-3"></script>
 <script type="module" src="js/admin/importacion-admin.js?v=tintin-20261017-domain-cutover-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20261017-domain-cutover-1"></script>
@@ -2288,6 +2305,7 @@
 <script type="module" src="js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2"></script>
 <script type="module" src="js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20261017-domain-cutover-1"></script>
 <script type="module" src="js/admin/maestro/panel-maestro.js?v=tintin-20261017-domain-cutover-maestro-2"></script>
-<script type="module" src="js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261019-admin-workspaces-1"></script>
+<script type="module" src="js/admin/maestro/espacio-modulos-admin.js?v=tintin-20261019-admin-control-1"></script>
+<script type="module" src="js/admin/maestro/buscador-modulos-admin.js?v=tintin-20261019-admin-control-1"></script>
 </body>
 </html>
