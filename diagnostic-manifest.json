@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "abc7468241fa1cf4436e676798d4a4cf73afa452ce87de88671de29c6355b811",
+  "sourceFingerprint": "b03a43abf0e9fb01d5069d74a9b8c9d4ac8d2fb27666aa1c3bedc6ffdc1d1b70",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1330,
-    "textFiles": 1244,
-    "totalBytes": 24852637,
+    "files": 1331,
+    "textFiles": 1245,
+    "totalBytes": 24865520,
     "pages": 19,
-    "modules": 937
+    "modules": 938
   },
   "viewports": [
     {
@@ -1845,8 +1845,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44731,
-      "sha256": "88d30e87907dbb0fbc7983ff8fb1da9d092c34393f10a89f75a954906ec57a12",
+      "bytes": 44735,
+      "sha256": "5f99f39bb628fd889091fa4a9643eaa0783a53f5c4fd963f058e872052f105b9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1973,7 +1973,7 @@
           "line": 315
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-mobile-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-1",
           "target": "css/admin/dashboard-control.css",
           "line": 316
         },
@@ -2132,7 +2132,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-mobile-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-1",
           "target": "css/admin/dashboard-control.css",
           "line": 316,
           "exists": true
@@ -2469,8 +2469,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 203117,
-      "sha256": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2",
+      "bytes": 203121,
+      "sha256": "a5b856a1f73478ce11b553aa161de2296066e9cdb71c096bf12fc102c18ee5ff",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2741,7 +2741,7 @@
           "line": 77
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-mobile-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-1",
           "target": "css/admin/dashboard-control.css",
           "line": 78
         },
@@ -3115,7 +3115,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-mobile-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-1",
           "target": "css/admin/dashboard-control.css",
           "line": 78,
           "exists": true
@@ -48759,6 +48759,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/admin-all-devices.spec.js",
+      "bytes": 6025,
+      "sha256": "2261776003e67ad4fc322ae6aed2a842dc53f3918040a349a6c31f450c600a29",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",
       "bytes": 4513,
       "sha256": "1a5bd2aa0aaa030ef6b90b9af0e403d65f06dcfc0a7c9da7fcfb6779aeb9079d",
@@ -50367,8 +50378,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 44731,
-      "sha256": "88d30e87907dbb0fbc7983ff8fb1da9d092c34393f10a89f75a954906ec57a12"
+      "bytes": 44735,
+      "sha256": "5f99f39bb628fd889091fa4a9643eaa0783a53f5c4fd963f058e872052f105b9"
     },
     {
       "path": "admin-manifest.json",
@@ -50379,8 +50390,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 203117,
-      "sha256": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2"
+      "bytes": 203121,
+      "sha256": "a5b856a1f73478ce11b553aa161de2296066e9cdb71c096bf12fc102c18ee5ff"
     },
     {
       "path": "apple-touch-icon.png",
@@ -51309,8 +51320,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1896,
-      "sha256": "c8c7c96c8aeaff913bba5a5f6bb719a5916b6ce1822f210650c8fa393069622b"
+      "bytes": 1158,
+      "sha256": "2a8be4ba3a3705919e5bb2141098379adc52f35e6061b7a5ea673c5ffe1f65d3"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -51322,7 +51333,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "73d18edbe5b373ab0928417ffe98f30df6de2eb0a53459cafc45e6e9888e87fd"
+      "sha256": "34197109403ba412f7af149026504264ccf09768258eb8f6a1a5e8121311e38b"
     },
     {
       "path": "config/public-site.json",
@@ -51363,8 +51374,8 @@
     {
       "path": "css/admin/dashboard-control.css",
       "extension": ".css",
-      "bytes": 16602,
-      "sha256": "e6b6e68eff893314a27e77aa4028bc2b2fab340b2eca8c51f3e17d3a2a197b91"
+      "bytes": 21499,
+      "sha256": "53c9b83c85f2d583b17288ee11b425cc2b704d3361388206fdf73786a77c638c"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -51945,8 +51956,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 617748,
-      "sha256": "30b275de130b0810398093f9b216eb2d4fb3d8431ac779996e5a95042157a51e"
+      "bytes": 619654,
+      "sha256": "80a42bd1a0dc798693b66846576afaf0464e300b0293a829f76ec697f73884e1"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -52305,8 +52316,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 57349,
-      "sha256": "0fb13c199116ec069c3b4f84232c99cba281f3481d33fd744672831a054919dc"
+      "bytes": 58092,
+      "sha256": "a5b9f092dcf285c6b3abc430a29e96ed505cdd50a69967836fb836588479ac11"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -54927,8 +54938,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 16156,
-      "sha256": "d7e2cd450be3c8240df7f82561e6666d1e0f0c80b4582e894d81df34d2159898"
+      "bytes": 16194,
+      "sha256": "f0360ec9d08a26e601d981ee0362861838159e6d3c116b251ae75b02c77d60e8"
     },
     {
       "path": "perfil.html",
@@ -55809,8 +55820,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 72798,
-      "sha256": "1d27f253e56d542b441a11e192433b9444290d8c3a94e5e62c80a7b349c60ec2"
+      "bytes": 72802,
+      "sha256": "ee495fc836afbf8cfeba63a25dd9a9cb0133068bde1b23d6134f4b2428f733fa"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -57905,6 +57916,12 @@
       "extension": ".mjs",
       "bytes": 1701,
       "sha256": "5cae62734640fc502b92ceefdb985b749c83f64c115d2d3b53901d91e3de6ecd"
+    },
+    {
+      "path": "tests/ui-ux/admin-all-devices.spec.js",
+      "extension": ".js",
+      "bytes": 6025,
+      "sha256": "2261776003e67ad4fc322ae6aed2a842dc53f3918040a349a6c31f450c600a29"
     },
     {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",

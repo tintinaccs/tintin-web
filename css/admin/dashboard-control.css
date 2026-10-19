@@ -48,23 +48,23 @@ html:root body.tt-admin-control :is(.adm-modal-box,.tt-commerce-drawer,.tt-produ
 .tt-control-search kbd { padding: 3px 5px; border: 1px solid var(--tt-control-line); border-radius: 4px; font: inherit; font-size: 9px; }
 .tt-control-eyebrow { font-size: 10px; font-weight: 700; line-height: 1.5; letter-spacing: .13em; }
 .tt-dashboard-hero {
-  display: grid; grid-template-columns: minmax(0,1fr) minmax(320px,.9fr); align-items: center; gap: 32px;
-  padding: clamp(20px,3vw,40px); border: 1px solid var(--tt-control-line); border-top: 3px solid var(--admin-color-brand);
-  border-radius: 18px; background: var(--admin-color-background-surface); margin-bottom: 24px;
+  display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,340px),1fr)); align-items: center; gap: 24px;
+  padding: clamp(18px,2.2vw,28px); border: 1px solid var(--tt-control-line); border-top: 3px solid var(--admin-color-brand);
+  border-radius: 18px; background: var(--admin-color-background-surface); margin-bottom: 20px;
 }
 html:root body.tt-admin-control :is(.tt-dashboard-hero,.tt-dashboard-link) { background: var(--admin-color-background-surface) !important; color: var(--admin-color-text-primary) !important; }
 html:root body.tt-admin-control .tt-dashboard-hero h2 { color: var(--admin-color-text-primary) !important; }
-.tt-dashboard-intro h2 { font-size: clamp(34px,4.3vw,60px); font-weight: 800; line-height: 1.04; letter-spacing: -.055em; margin: 14px 0; }
+.tt-dashboard-intro h2 { font-size: clamp(30px,3.3vw,46px); font-weight: 800; line-height: 1.04; letter-spacing: -.055em; margin: 12px 0; }
 .tt-dashboard-intro h2 span { text-decoration: underline; text-decoration-color: var(--admin-color-brand); text-decoration-thickness: 5px; text-underline-offset: 8px; }
-.tt-dashboard-description { max-width: 390px; font-size: 13px; line-height: 1.7; margin: 20px 0; }
+.tt-dashboard-description { max-width: 390px; font-size: 13px; line-height: 1.7; margin: 14px 0 18px; }
 .tt-dashboard-intro > button { display: inline-flex; gap: 24px; align-items: center; min-height: 44px; }
 .tt-dashboard-shortcuts { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
 .tt-dashboard-link {
-  display: grid; gap: 14px; min-width: 0; min-height: 132px; padding: 18px; text-align: left;
+  display: grid; gap: 14px; min-width: 0; min-height: 110px; padding: 16px; text-align: left;
   border: 1px solid var(--tt-control-line); border-radius: 12px; color: var(--admin-color-text-primary);
   background: var(--admin-color-background-surface); font: inherit; cursor: pointer;
 }
-.tt-dashboard-link strong { font-size: 17px; letter-spacing: -.035em; overflow-wrap: anywhere; }
+.tt-dashboard-link strong { font-size: 16px; letter-spacing: -.025em; overflow-wrap: normal; }
 .tt-dashboard-link > span:last-child { font-size: 10px; line-height: 1.5; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .tt-dashboard-link:hover { background: var(--admin-color-background-sidebar-active); border-color: var(--admin-color-brand); }
 .tt-control-text-link { background: none; border: 0; color: var(--admin-color-text-primary); font: inherit; font-size: 11px; font-weight: 700; min-height: 44px; padding: 8px; cursor: pointer; }
@@ -104,10 +104,9 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
   #section-dashboard:has(> #dashboard-visitor-geo[hidden]) .tt-dashboard-orders { grid-column: 1/-1; }
 }
 @media (max-width:1000px) {
-  .tt-dashboard-hero { grid-template-columns: minmax(0,1fr); gap: 24px; }
-  .tt-dashboard-shortcuts { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .tt-dashboard-hero { gap: 20px; }
   .tt-dashboard-link { padding: 14px; gap: 10px; }
-  .tt-dashboard-link .tt-control-eyebrow { font-size: 8px; letter-spacing: .04em; }
+  .tt-dashboard-link .tt-control-eyebrow { display: none; }
   .tt-control-search kbd { display: none; }
 }
 @media (max-width:760px) {
@@ -116,8 +115,8 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
   .tt-control-search { width: 44px; min-width: 44px; min-height: 44px; padding: 8px; }
   .tt-control-search > span { display: none; }
   .tt-dashboard-shortcuts { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .tt-dashboard-hero { padding: 22px; margin-bottom: 16px; border-radius: 14px; }
-  .tt-dashboard-intro h2 { font-size: 42px; }
+  .tt-dashboard-hero { padding: 18px; margin-bottom: 16px; border-radius: 14px; }
+  .tt-dashboard-intro h2 { font-size: 34px; }
   html:root body.tt-admin-control #dash-stats { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-bottom: 16px; }
   html:root body.tt-admin-control #dash-stats .adm-stat { display: flex; flex-direction: column; align-items: flex-start; padding: 14px; gap: 10px; }
   html:root body.tt-admin-control #dash-stats .adm-stat-icon { width: 32px; height: 32px; }
@@ -126,9 +125,9 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
   html:root body.tt-admin-control #dash-stats .adm-stat-label { order: -1; }
   .tt-control-dialog { padding: 16px; }
 }
-@media (max-width:420px) {
+@media (max-width:360px) {
   .tt-dashboard-shortcuts { grid-template-columns: minmax(0,1fr); }
-  .tt-dashboard-link { min-height: 88px; gap: 7px; padding: 14px; }
+  .tt-dashboard-link { min-height: 68px; gap: 5px; padding: 12px; }
   .tt-dashboard-link strong { overflow-wrap: normal; }
 }
 @media (prefers-reduced-motion:no-preference) {
@@ -188,3 +187,73 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
   html:root body.tt-admin-control #adm-mobile-more-grid > .adm-mobile-tab { background: var(--admin-color-background-surface) !important; text-transform: none; font-size: 11px; font-weight: 600; }
   html:root body.tt-admin-control #adm-mobile-more-grid > .adm-mobile-tab:is(.active,:hover) { background: var(--admin-color-background-sidebar-active) !important; }
 }
+
+/* Composición fluida para escritorio, laptop y ambas orientaciones de tablet. */
+html:root body.tt-admin-control { --tt-control-gutter: clamp(16px,2vw,32px); }
+html:root body.tt-admin-control .adm-content {
+  width: 100% !important; max-width: 1680px !important; min-width: 0;
+  margin-inline: auto !important; padding: var(--tt-control-gutter) var(--tt-control-gutter) 48px !important;
+}
+html:root body.tt-admin-control .adm-topbar {
+  min-height: 68px; padding-block: 12px;
+  padding-inline: max(var(--tt-control-gutter),calc((100% - 1680px)/2 + var(--tt-control-gutter))) !important;
+}
+html:root body.tt-admin-control .adm-topbar-title { text-align: left !important; min-width: 0; }
+html:root body.tt-admin-control .adm-topbar-actions { flex-shrink: 0; }
+html:root body.tt-admin-control :is(.adm-card-head,.adm-card-body) { padding: clamp(16px,1.6vw,24px) !important; }
+html:root body.tt-admin-control .adm-card-head { align-items: center; }
+html:root body.tt-admin-control :is(.adm-input,.adm-select,.adm-textarea) { min-width: 0; max-width: 100%; }
+html:root body.tt-admin-control .tt-admin-workspace-bar {
+  display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center;
+  padding: 0; margin-bottom: 20px; gap: 16px;
+}
+html:root body.tt-admin-control .tt-admin-workspace-title { line-height: 1.2; font-size: clamp(24px,2.1vw,32px); }
+html:root body.tt-admin-control .tt-admin-workspace-jump { max-width: 360px; }
+html:root body.tt-admin-control .tt-admin-workspace-jump select { min-height: 44px; }
+html:root body.tt-admin-control #dash-stats .adm-stat { padding: 16px; gap: 8px 12px; min-height: 112px; }
+html:root body.tt-admin-control #dash-stats .adm-stat-icon { grid-row: 1; width: 34px; height: 34px; }
+html:root body.tt-admin-control #dash-stats .adm-stat-label { align-self: center; }
+html:root body.tt-admin-control #dash-stats .adm-stat-val { grid-column: 1/-1; font-size: clamp(22px,2vw,30px); }
+html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp(17px,1.6vw,22px); }
+@media (min-width:1680px) {
+  html:root body.tt-admin-control #dash-stats { grid-template-columns: repeat(6,minmax(0,1fr)); }
+}
+@media (min-width:761px) and (max-width:1100px) {
+  html:root body.tt-admin-control .tt-admin-field-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  html:root body.tt-admin-control .tt-admin-field-grid > * { grid-column: auto !important; }
+  html:root body.tt-admin-control .tt-admin-workspace-bar { grid-template-columns: minmax(0,1fr) auto; }
+  html:root body.tt-admin-control .tt-admin-workspace-title { grid-column: 1/-1; }
+  html:root body.tt-admin-control .tt-admin-workspace-bar:has(> button[hidden]) .tt-admin-workspace-jump { grid-column: 1/-1; }
+}
+@media (max-width:760px) {
+  html:root body.tt-admin-control .tt-admin-workspace-bar { grid-template-columns: minmax(0,1fr); gap: 12px; }
+  html:root body.tt-admin-control .tt-admin-workspace-jump { max-width: none; width: 100%; }
+  html:root body.tt-admin-control .tt-admin-workspace-jump select { flex: 1; }
+  html:root body.tt-admin-control #dash-stats .adm-stat { display: grid; padding: 14px; min-height: 108px; }
+  html:root body.tt-admin-control #dash-stats .adm-stat-icon { width: 28px; height: 28px; }
+  html:root body.tt-admin-control #dash-stats .adm-stat-val { grid-row: 2; }
+  html:root body.tt-admin-control #dash-stats #stat-sales-month { font-size: clamp(13px,4vw,18px); }
+  .tt-dashboard-link { min-height: 92px; gap: 8px; }
+}
+@media (max-width:540px) {
+  html:root body.tt-admin-control { --tt-control-gutter: 14px; }
+  html:root body.tt-admin-control .adm-topbar { min-height: 60px; padding-block: 8px; }
+  html:root body.tt-admin-control .adm-topbar-title { font-size: 14px; }
+  html:root body.tt-admin-control :is(.adm-card-head,.adm-card-body) { padding: 14px !important; }
+}
+@media (max-width:360px) {
+  html:root body.tt-admin-control { --tt-control-gutter: 12px; }
+  .tt-dashboard-link { min-height: 68px; }
+}
+@media (max-height:500px) and (min-width:541px) {
+  html:root body.tt-admin-control .adm-topbar { min-height: 56px; padding-block: 6px; }
+  .tt-dashboard-hero { padding: 18px; gap: 18px; }
+  .tt-dashboard-intro h2 { font-size: 32px; }
+  .tt-dashboard-link { min-height: 92px; gap: 8px; }
+}
+html:root body.tt-admin-control #dash-stats .adm-stat-icon { display: grid; place-items: center; }
+html:root body.tt-admin-control #dash-stats .adm-stat-icon svg { width: 22px; height: 22px; }
+html:root body.tt-admin-control [data-admin-workspace="imagenes"] { max-width: 1680px; min-width: 0; padding: var(--tt-control-gutter); }
+html:root body.tt-admin-control [data-admin-workspace="imagenes"] .adm-cards-grid { grid-template-columns: repeat(auto-fit,minmax(min(100%,260px),1fr)); gap: 16px; }
+html:root body.tt-admin-control .adm-header { padding-inline: var(--tt-control-gutter); }
+html:root body.tt-admin-control .adm-modal-box { max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
