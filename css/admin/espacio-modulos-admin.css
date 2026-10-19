@@ -1,0 +1,40 @@
+/* Mismas superficies, colores y tipografía que el panel actual. */
+.tt-admin-workspace { min-width: 0; }
+.tt-admin-workspace-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 0;
+  margin-bottom: 8px;
+  color: var(--adm-text, var(--text));
+}
+.tt-admin-workspace-title { margin: 0 auto 0 0; font-size: 20px; line-height: 1.3; overflow-wrap: anywhere; }
+.tt-admin-workspace-jump { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; font-weight: 600; min-width: 0; }
+.tt-admin-workspace-jump select {
+  max-width: 320px; min-width: 0; width: 100%; min-height: 40px;
+  padding: 8px 12px; border: 1px solid var(--adm-border, var(--border)); border-radius: 8px;
+  font: inherit; color: inherit; background: var(--adm-card, white);
+}
+.tt-admin-workspace [hidden] { display: none !important; }
+.tt-admin-workspace .adm-card-head { gap: 12px; flex-wrap: wrap; }
+.tt-admin-workspace .adm-card-title { white-space: normal; overflow-wrap: anywhere; max-width: 100%; }
+.tt-admin-workspace :is(.adm-card-title,h2,h3) { scroll-margin-top: 90px; }
+.tt-admin-workspace .adm-table-wrap { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
+.tt-admin-workspace :is(.adm-table-wrap,.adm-card-title,h2,h3):focus-visible { outline: 2px solid var(--adm-accent, var(--rose)); outline-offset: -2px; }
+.tt-admin-table-hint { margin: 0; padding: 10px 16px; font-size: 12px; line-height: 1.5; color: var(--adm-muted, var(--muted)); }
+.tt-admin-field-grid > * { min-width: 0; }
+@media (max-width: 760px) {
+  .tt-admin-workspace-bar { align-items: stretch; gap: 10px; }
+  .tt-admin-workspace-title { flex-basis: 100%; font-size: 18px; }
+  .tt-admin-workspace-jump { flex: 1 1 100%; }
+  .tt-admin-workspace-jump select { max-width: none; min-height: 44px; }
+  .tt-admin-workspace-bar button { min-height: 44px; }
+  .tt-admin-workspace .tt-admin-field-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .tt-admin-workspace .tt-admin-field-grid > * { grid-column: auto !important; }
+  .tt-admin-workspace :is(.adm-filter-row,.local-toolbar) { flex-wrap: wrap; gap: 10px; }
+  .tt-admin-workspace .adm-filter-row > :is(input,select,.adm-search-wrap) { min-width: 0; max-width: 100%; }
+  .tt-admin-workspace :is(.adm-input,.adm-select,.adm-textarea) { max-width: 100%; }
+  .tt-admin-workspace .tt-admin-info-actions { display: grid !important; grid-template-columns: minmax(0, 1fr); }
+  .tt-admin-workspace .tt-admin-info-actions > * { min-width: 0 !important; max-width: 100%; white-space: normal !important; }
+}

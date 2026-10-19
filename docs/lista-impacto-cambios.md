@@ -1,3 +1,7 @@
+## 2026-10-18 — Espacio de trabajo coherente en todo el panel
+
+Fuentes: registro-maestro existente; nuevo espacio-modulos-admin.js/css y carga desde admin/admin-images. Presentación compartida para los 25 módulos funcionales y Maestro: navegación entre áreas visibles, acceso al filtro nativo, formularios adaptables, etiquetas y tablas con teclado. Observa montajes tardíos/reconstrucciones sin interceptar eventos comerciales. Conserva editor de Productos, lienzo visual, permisos, guardia de borradores y autoridades de datos. Impacta presentación de todas las secciones; no cambia persistencia, Auth, Rules, pedidos, inventario ni envíos. Nueve regresiones nuevas en el gate responsive y 96 de comercio; evidencias y límites en CURRENT_STATE. Caché, diagnóstico y plan se regeneran con herramientas canónicas.
+
 ## 2026-10-19 — Reconciliar PR1152 con main c3085d9a
 
 Se conservan maestro de Productos, selección para pedidos y aviso de verificación de main, junto a su migración de publicación automática. No se alteran controles/workflows respecto de esa base. Stock/fotos y aviso por página continúan en sus autoridades existentes; plan y derivados se regeneran.
