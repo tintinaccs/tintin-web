@@ -149,6 +149,27 @@ test('un pedido nuevo con dos líneas ocupa dos filas y conserva el total comple
 test('el importe del pedido incluye envío sin cambiar la venta histórica de artículos',async()=>{
   const h=memory(),entry={...sale(),shippingCost:25000};await upsertLocalEntries({}, {action:'upsert',entries:[entry]}, {},h.deps);const order=decodeFirestoreFields(h.docs.get('orders/'+entry.id).fields);assert.equal(order.subtotal,150000);assert.equal(order.total,175000);assert.equal(order.shippingCost,25000);
 });
+test('Borrados retira todas las líneas web del mes sin tocar ventas manuales, gastos ni fórmulas',()=>{
+  const h=bridgeHarness();
+  const web={id:'test-web',orderNumber:'TINPED01',createdAt:'2026-01-04T12:00:00Z',updatedAt:'v1',subtotal:100000,total:125000,shippingCost:25000,items:[{name:'A',price:50000,qty:1},{name:'B',price:50000,qty:1}]};
+  h.context.tintinLocalApplySnapshot_({entries:[],customers:[],webOrders:[web]});
+  const rows=h.month.cells.map((v,i)=>v[32]==='WEB_test-web'?i:-1).filter(i=>i>=0);
+  assert.equal(rows.length,2);
+  h.month.cells[rows[0]][28]='FORMULA_WEB_INTACTA';
+  h.month.cells[rows[0]][21]=9000;
+  h.month.cells[rows[0]][34]='EXPENSE_INTACT';
+  // Una respuesta parcial no autoriza retirar filas del espejo.
+  h.context.tintinLocalApplySnapshot_({entries:[],customers:[]});
+  assert.equal(h.month.cells[rows[0]][32],'WEB_test-web');
+  h.context.tintinLocalApplySnapshot_({entries:[],customers:[],webOrders:[]});
+  h.context.tintinLocalApplySnapshot_({entries:[],customers:[],webOrders:[]});
+  for(const row of rows){assert.ok(h.month.cells[row].slice(1,18).every(v=>v===''));assert.deepEqual(h.month.cells[row].slice(32,34),['','']);}
+  assert.equal(h.month.cells[9][9],150000);
+  assert.equal(h.month.cells[9][28],'FORMULA_AC_INTACTA');
+  assert.equal(h.month.cells[rows[0]][28],'FORMULA_WEB_INTACTA');
+  assert.equal(h.month.cells[rows[0]][21],9000);
+  assert.equal(h.month.cells[rows[0]][34],'EXPENSE_INTACT');
+});
 test('textos externos de ventas y contactos se escriben como literales, sin ejecutar fórmulas',()=>{
   const h=bridgeHarness();h.context.tintinLocalApplySnapshot_({entries:[{...sale(),version:'literal-v1',notes:'=SUM(1,2)',lines:[{amount:150000,detail:'=1+1'}]}],customers:[{id:'CUS_LOCAL_literal',name:'=1+1',notes:'=SUM(1,2)',orderCount:1,totalPurchased:150000}],webOrders:[]});
   assert.equal(h.month.cells[10][5],"'=1+1");assert.equal(h.month.cells[10][13],"'=SUM(1,2)");
