@@ -61,7 +61,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     if (document.querySelector('link[data-tt-product-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20261011-boutique-2-palette-20261014-1-ui-fixes-20261014-1', import.meta.url).href;
+    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20261019-product-boutique-1', import.meta.url).href;
     link.dataset.ttProductMaintenance = '1';
     document.head.appendChild(link);
   }

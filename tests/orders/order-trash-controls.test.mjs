@@ -96,6 +96,20 @@ test('reinicio rechaza claves arbitrarias, solicitudes vacías, permisos y datos
   await assert.rejects(resetStatistics({}, { metrics: ['revenue'], changeId: 'reset_test', baseChangeId: 'stale' }, actor, deps));
   assert.equal(deps.writes.length, 0);
 });
+
+test('contar desde hoy incluye medianoche de Paraguay y conserva pedidos y usuarios', async () => {
+  const deps = store({ 'users/customer_fixture': { name: 'Cliente' } });
+  const now = new Date('2026-10-19T16:40:00Z');
+  const result = await resetStatistics({}, { metrics: ['revenue'], mode: 'today', changeId: 'today_test', baseChangeId: '' }, actor, { ...deps, now: () => now });
+  const rows = [{ at: Date.parse('2026-10-19T02:59:59.999Z') }, { at: Date.parse('2026-10-19T03:00:00Z') }, { at: now.getTime() }];
+  assert.deepEqual(statisticsSince(rows, 'revenue', result.resets, row => row.at), rows.slice(1));
+  assert.deepEqual(statisticsSince(rows, 'orders', result.resets, row => row.at), rows);
+  assert.equal(deps.data('orders/order_test').total, 200);
+  assert.equal(deps.data('users/customer_fixture').name, 'Cliente');
+  assert.equal(deps.data('auditLog/today_test').mode, 'today');
+  const previousDay = await resetStatistics({}, { metrics: ['revenue'], mode: 'today', changeId: 'early_today', baseChangeId: '' }, actor, { ...store(), now: () => new Date('2026-10-19T01:00:00Z') });
+  assert.equal(new Date(previousDay.resets.revenue).getTime(), Date.parse('2026-10-18T03:00:00Z') - 1);
+});
 test('el reinicio por fecha admite nuevos pedidos aunque después se borren históricos', () => {
   const old = { at: 100, total: 1000 }, fresh = { at: 300, total: 50 };
   const resets = { revenue: new Date(200) };

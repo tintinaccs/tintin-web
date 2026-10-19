@@ -115,7 +115,7 @@ function renderConsent(customize = false, focusDetails = false) {
         <h2>Tu elección, sin interrumpirte</h2>
       </div>
     </div>
-    <p class="tt-privacy-summary">Usamos una cookie para recordar tu elección y almacenamiento esencial para la sesión y el carrito. Con tu permiso también medimos visitas y ciudad o país aproximados, sin guardar IP, GPS ni ubicación exacta.</p>
+    <p class="tt-privacy-summary">Usamos cookies y almacenamiento esencial para tu sesión y carrito. Si aceptás, también medimos visitas para mejorar la tienda.</p>
     <div class="tt-privacy-actions">
       <button type="button" class="tt-privacy-btn tt-privacy-btn-primary" data-privacy-action="accept">Aceptar opcionales</button>
       <button type="button" class="tt-privacy-btn tt-privacy-btn-secondary" data-privacy-action="necessary">Solo necesarias</button>

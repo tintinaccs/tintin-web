@@ -185,3 +185,21 @@ test('drop-up y guardia conservan el borrador sin bloquear el panel', async ({ p
   await expect(page).toHaveURL('https://tintin.test/fixture');
   await expect(page.locator('#adm-mobile-more-toggle')).toBeFocused();
 });
+
+// Regresiones de enlaces push junto a la navegación real del panel.
+require('./admin-push-navigation.spec.js');
+
+
+for(const width of [320,390]) {
+  test(`buscar módulos desde el cajón libera el fondo a ${width}px`,async({page})=>{
+    await load(page,width,'admin.html',{mobile:true,sidebar:true});
+    await page.locator('#adm-hamburger').click();
+    await page.locator('.tt-admin-module-launcher').click();
+    await expect(page.getByRole('dialog',{name:'Buscar módulos'})).toBeVisible();
+    await expect(page.getByLabel('Nombre del módulo')).toBeFocused();
+    await expect(page.locator('#adm-sidebar')).toBeHidden();
+    expect(await page.locator('.adm-main').evaluate(node=>node.inert)).toBe(false);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#adm-hamburger')).toBeFocused();
+  });
+}

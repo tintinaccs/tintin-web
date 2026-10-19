@@ -1,12 +1,12 @@
 import { firestoreAdminGet, decodeFirestoreFields, encodeFirestoreFields } from './firebase-admin-ligero.js';
 import { firestoreAdminBatchCommit } from './firestore-admin-batch.js';
-import { RESETTABLE_STATISTICS } from '../js/admin/statistics/modelo-reinicios.mjs';
+import { RESETTABLE_STATISTICS, statisticsTodayStart } from '../js/admin/statistics/modelo-reinicios.mjs';
 
 export async function resetStatistics(env, input, actor, { get = firestoreAdminGet, commit = firestoreAdminBatchCommit, now = () => new Date() } = {}) {
   if (actor?.role !== 'superadmin') throw Object.assign(new Error('Acción exclusiva de Super Admin.'), { status: 403 });
   if (!Array.isArray(input.metrics) || !input.metrics.length || input.metrics.length > Object.keys(RESETTABLE_STATISTICS).length ||
       new Set(input.metrics).size !== input.metrics.length || input.metrics.some(key => !Object.hasOwn(RESETTABLE_STATISTICS, key)) ||
-      !/^[A-Za-z0-9_-]{6,120}$/.test(input.changeId || '') || !['reset', 'history'].includes(input.mode || 'reset')) throw new Error('Selección de estadísticas inválida.');
+      !/^[A-Za-z0-9_-]{6,120}$/.test(input.changeId || '') || !['reset', 'today', 'history'].includes(input.mode || 'reset')) throw new Error('Selección de estadísticas inválida.');
   const path = 'settings/statisticsResets';
   const document = await get(env, path);
   const previous = document ? decodeFirestoreFields(document.fields || {}) : {};
@@ -15,10 +15,12 @@ export async function resetStatistics(env, input, actor, { get = firestoreAdminG
     throw Object.assign(new Error('Las estadísticas cambiaron en otra sesión. Actualizá antes de reiniciar.'), { status: 409 });
   }
   const timestamp = now();
+  // statisticsSince uses an exclusive cutoff: include an order at exactly midnight.
+  const cutoff = input.mode === 'today' ? new Date(statisticsTodayStart(timestamp).getTime() - 1) : timestamp;
   const resets = { ...(previous.resets || {}) };
   for (const metric of input.metrics) {
     if (input.mode === 'history') delete resets[metric];
-    else resets[metric] = timestamp;
+    else resets[metric] = cutoff;
   }
   const result = { resets, updatedAt: timestamp, updatedBy: actor.email, lastChangeId: input.changeId };
   await commit(env, [

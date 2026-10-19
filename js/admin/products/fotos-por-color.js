@@ -1,9 +1,11 @@
-import '../../components/images/galeria-producto.js?v=tintin-20261015-images-1';
+import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
+import { createVariantPhotoEditor } from './fotos-por-variante.js?v=tintin-20261019-variant-links-1';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
   const media = window.TintinProductMedia;
   const initialRows = media.mediaRows(product);
+  const variantPhotos = createVariantPhotoEditor({ variantsInput, media, initialRows, sanitizeImageUrl, openLibrary, attachUpload });
   const assignments = new Map();
   const appearances = new Map();
   const manuallyAssigned = new Set();
@@ -16,6 +18,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   let activeKey = media.colorKey(product);
   for (const row of initialRows) {
     if (!activeKey || !row?.[activeKey]) continue;
+    if (Object.keys(row).some(key => !['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key))) continue;
     const color = String(row[activeKey]).trim();
     const appearance = {};
     const preset = window.TintinProductColors.preset(row.swatch);
@@ -54,6 +57,8 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   }
   async function analyzePhotos() {
     if (analyzing || destroyed) return;
+    // Una forma, tamaño o sabor no debe convertirse en una variante Color.
+    if (!colors().length && variantsInput.value.trim()) return;
     analyzing = true;
     try {
       for (const url of pool) {
@@ -145,18 +150,19 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
       }
       container.append(field);
     }
+    variantPhotos.render(container, pool, render);
     void analyzePhotos();
   }
   function serialize() {
     const options = colors();
     // Las asociaciones de otros atributos se conservan; se reemplazan sólo
     // las filas de colores gestionadas en este editor.
-    const otherRows = initialRows.filter(row => !row || !Object.keys(row).some(key => /^colou?r$/i.test(key)));
-    return [...otherRows, ...options.map(color => ({ [activeKey]: color, imageUrls: assignments.get(color) || [], ...(appearances.get(color) || {}) }))];
+    const otherRows = initialRows.filter(row => !row || !Object.keys(row).some(key => /^colou?r$/i.test(key)) || Object.keys(row).some(key => !['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key)));
+    return variantPhotos.serialize([...otherRows, ...options.map(color => ({ [activeKey]: color, imageUrls: assignments.get(color) || [], ...(appearances.get(color) || {}) }))]);
   }
   variantsInput.addEventListener('input', render);
   imagesInput.addEventListener('input', render);
   mainInput.addEventListener('change', render);
   render();
-  return { serialize, refresh: render, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
+  return { serialize, refresh: render, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
 }

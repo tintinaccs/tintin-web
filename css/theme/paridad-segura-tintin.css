@@ -36,9 +36,7 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   body.tt-public-shell-mounted:not(:has(.adm-main)){
     --tt-mobile-nav-clearance:104px;
   }
-  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-footer-bottom{
-    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 16px + env(safe-area-inset-bottom,0px))!important;
-  }
+  /* El body ya reserva espacio para la tabbar; no se duplica bajo el copyright. */
   body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-privacy-consent,
   body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-wa-float,
   body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-cart-feedback{
@@ -59,6 +57,13 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
 @media (max-width:480px){
   body.tt-public-shell-mounted:not(:has(.adm-main)){
     --tt-mobile-nav-clearance:92px;
+  }
+}
+
+/* Desde tablet no hay tabbar: ninguna página pública necesita reserva al final. */
+@media (min-width:768px){
+  html:root body:not(:has(.adm-main)):has(.tt-footer[data-tt-footer="unified"]){
+    padding-bottom:0!important;
   }
 }
 

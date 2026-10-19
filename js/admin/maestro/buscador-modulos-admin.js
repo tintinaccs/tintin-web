@@ -137,7 +137,12 @@ function open() {
 }
 
 document.addEventListener('click', event => {
-  if (event.target.closest('[data-admin-launcher]')) open();
+  if (event.target.closest('[data-admin-launcher]')) {
+    // El cajón móvil bloquea el fondo. Cerrarlo con su control nativo antes
+    // de abrir el buscador libera inert y conserva la devolución de foco.
+    if (event.target.closest('#adm-sidebar.open')) document.getElementById('adm-sidebar-toggle')?.click();
+    open();
+  }
   const shortcut = event.target.closest('[data-admin-open]');
   if (shortcut && !shortcut.hidden) navigate(shortcut.dataset.adminOpen);
 });

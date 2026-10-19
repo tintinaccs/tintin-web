@@ -18,8 +18,8 @@ body:has(.adm-main) .adm-content:has(> #section-pedidos.active.tt-commerce-mount
 #tt-commerce-orders .tt-order-views { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
 #tt-commerce-orders [aria-pressed="true"], #tt-commerce-orders [role="tab"][aria-selected="true"] { background: var(--tt-commerce-soft); border-color: var(--tt-commerce-brand); color: var(--tt-commerce-text); }
 #tt-commerce-orders .tt-commerce-btn { min-height: 44px; font-size: 12px; white-space: normal; overflow-wrap: anywhere; }
-#tt-commerce-orders .tt-order-stage-tabs { display: none; }
-#tt-commerce-orders .tt-order-board { display: grid; grid-template-columns: repeat(5,minmax(250px,1fr)); align-items: start; gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; padding: 4px 1px 16px; scroll-padding-inline: 12px; max-width: 100%; }
+#tt-commerce-orders .tt-order-stage-tabs { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 8px; margin: 16px 0; }
+#tt-commerce-orders .tt-order-board { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); align-items: start; gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; padding: 4px 1px 16px; scroll-padding-inline: 12px; max-width: 100%; }
 #tt-commerce-orders .tt-order-lane { min-width: 0; border-radius: 12px; background: var(--tt-commerce-soft); padding: 12px; }
 #tt-commerce-orders .tt-order-lane h2 { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; margin: 0 0 14px; line-height: 1.5; }
 #tt-commerce-orders .tt-order-lane h2 span { font-size: 12px; font-weight: 500; }
@@ -54,13 +54,13 @@ body:has(.adm-main) .adm-content:has(> #section-pedidos.active.tt-commerce-mount
 #tt-commerce-orders :focus-visible, #tt-commerce-drawer[data-kind="order"] :focus-visible { outline: 2px solid var(--tt-commerce-text); outline-offset: 3px; }
 @keyframes tintin-order-arrive { from { opacity: .65; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 @media (max-width: 1180px) { #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(3,minmax(0,1fr)); } #tt-commerce-orders .tt-order-toolbar { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-@media (max-width: 740px), (max-height: 500px) and (max-width: 1000px) {
+@media (max-width: 1180px) {
   #tt-commerce-orders .tt-commerce-pagehead { flex-direction: column; gap: 12px; }
   #tt-commerce-orders .tt-order-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
   #tt-commerce-orders .tt-order-metrics > div { padding: 10px; }
   #tt-commerce-orders .tt-order-toolbar { grid-template-columns: minmax(0,1fr); }
-  #tt-commerce-orders .tt-order-stage-tabs { display: flex; gap: 8px; overflow-x: auto; max-width: 100%; padding: 5px 1px 12px; overscroll-behavior: contain; }
-  #tt-commerce-orders .tt-order-stage-tabs button { flex: 0 0 auto; min-height: 44px; padding: 10px 12px; color: var(--tt-commerce-text); border: 1px solid var(--tt-commerce-border); border-radius: 10px; background: var(--tt-commerce-surface); font: inherit; font-size: 12px; }
+  #tt-commerce-orders .tt-order-stage-tabs { grid-template-columns: repeat(5,minmax(0,1fr)); max-width: 100%; padding: 5px 0 12px; }
+  #tt-commerce-orders .tt-order-lane-cards { grid-template-columns: repeat(auto-fit,minmax(min(100%,250px),1fr)); }
   #tt-commerce-orders .tt-order-board { display: block; overflow-x: hidden; }
   #tt-commerce-orders .tt-order-lane { display: none; }
   #tt-commerce-orders .tt-order-board[data-selected-stage="new"] [data-order-lane="new"],
@@ -69,7 +69,10 @@ body:has(.adm-main) .adm-content:has(> #section-pedidos.active.tt-commerce-mount
   #tt-commerce-orders .tt-order-board[data-selected-stage="sent"] [data-order-lane="sent"],
   #tt-commerce-orders .tt-order-board[data-selected-stage="done"] [data-order-lane="done"],
   #tt-commerce-orders .tt-order-board [data-order-lane="attention"]:not([hidden]), #tt-commerce-orders .tt-order-board [data-order-lane="history"]:not([hidden]) { display: block; }
+}
+@media (max-width: 740px), (max-height: 500px) and (max-width: 1000px) {
   #tt-commerce-drawer[data-kind="order"] { width: 100vw; height: 100dvh; inset: 0; border: 0; }
+  #tt-commerce-orders .tt-order-stage-tabs { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 @media (prefers-reduced-motion: reduce) { #tt-commerce-orders .tt-order-card, #tt-commerce-drawer[data-kind="order"] { animation: none; transition: none; scroll-behavior: auto; } }
 
@@ -85,4 +88,30 @@ body:has(.adm-main) .adm-content:has(> #section-pedidos.active.tt-commerce-mount
   #tinped-items [data-item-row] { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
   #tinped-items [data-item-row] > label:first-child { grid-column: 1 / -1; }
   #tinped-crud-form > * { min-width: 0; }
+}
+
+/* Las etapas comparten color en resumen, pasos, columnas y tarjetas. */
+#tt-commerce-orders [data-order-stage="new"], #tt-commerce-orders [data-stage="new"], #tt-commerce-orders [data-order-lane="new"] { --order-stage-bg: #E7F5EE; --order-stage-ink: #216345; --order-stage-border: #A7D5BC; }
+#tt-commerce-orders [data-order-stage="preparing"], #tt-commerce-orders [data-stage="preparing"], #tt-commerce-orders [data-order-lane="preparing"] { --order-stage-bg: #FCE8F0; --order-stage-ink: #8D3B61; --order-stage-border: #E9B0C9; }
+#tt-commerce-orders [data-order-stage="ready"], #tt-commerce-orders [data-stage="ready"], #tt-commerce-orders [data-order-lane="ready"] { --order-stage-bg: #FFF4D5; --order-stage-ink: #795A16; --order-stage-border: #E4CD8D; }
+#tt-commerce-orders [data-order-stage="sent"], #tt-commerce-orders [data-stage="sent"], #tt-commerce-orders [data-order-lane="sent"] { --order-stage-bg: #EAF0FF; --order-stage-ink: #4659A0; --order-stage-border: #B9C7EB; }
+#tt-commerce-orders [data-order-stage="done"], #tt-commerce-orders [data-stage="done"], #tt-commerce-orders [data-order-lane="done"] { --order-stage-bg: #F1EAF8; --order-stage-ink: #6D4B87; --order-stage-border: #CFB8E2; }
+#tt-commerce-orders [data-order-stage="attention"], #tt-commerce-orders [data-order-lane="attention"] { --order-stage-bg: #FFF0E7; --order-stage-ink: #925132; --order-stage-border: #E8C0A9; }
+#tt-commerce-orders [data-order-stage="history"], #tt-commerce-orders [data-order-lane="history"] { --order-stage-bg: #F0EDF1; --order-stage-ink: #625866; --order-stage-border: #CEC5D2; }
+#tt-commerce-orders .tt-order-stage-tabs button { display: flex; align-items: center; gap: 7px; min-width: 0; min-height: 58px; padding: 10px; border: 1px solid var(--order-stage-border); border-radius: 12px; color: var(--order-stage-ink); background: var(--order-stage-bg); font: inherit; font-size: 12px; text-align: start; cursor: pointer; overflow-wrap: anywhere; }
+#tt-commerce-orders .tt-order-stage-tabs button[aria-selected="true"] { border-color: var(--order-stage-ink); box-shadow: inset 0 -3px 0 var(--order-stage-ink); color: var(--order-stage-ink); background: var(--order-stage-bg); }
+#tt-commerce-orders .tt-order-step-index { display: inline-grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%; background: var(--order-stage-ink); color: #FFFFFF; font-size: 11px; font-weight: 700; }
+#tt-commerce-orders .tt-order-step-label { flex: 1; min-width: 0; }
+#tt-commerce-orders .tt-order-metrics > div { background: var(--order-stage-bg); border: 1px solid var(--order-stage-border); color: var(--order-stage-ink); }
+#tt-commerce-orders .tt-order-metrics strong { color: inherit; }
+#tt-commerce-orders .tt-order-lane { background: var(--order-stage-bg); border: 1px solid var(--order-stage-border); padding: 10px; }
+#tt-commerce-orders .tt-order-lane h2 { color: var(--order-stage-ink); gap: 6px; flex-wrap: wrap; }
+#tt-commerce-orders .tt-order-lane h2 .tt-order-step-label { flex-basis: 60px; }
+#tt-commerce-orders .tt-order-card { border-top: 3px solid var(--order-stage-ink) !important; padding: 12px; }
+#tt-commerce-orders .tt-order-stage-badge { display: inline-block; border: 1px solid var(--order-stage-border); background: var(--order-stage-bg); color: var(--order-stage-ink); border-radius: 8px; padding: 3px 7px; font-weight: 600; }
+#tt-commerce-orders .tt-order-stage-tabs button > [data-lane-tab-count] { font-weight: 700; }
+@media (min-width: 1181px) and (max-width: 1500px) {
+  #tt-commerce-orders .tt-order-stage-tabs button { flex-wrap: wrap; }
+  #tt-commerce-orders .tt-order-stage-tabs button .tt-order-step-label { flex-basis: calc(100% - 40px); }
+  #tt-commerce-orders .tt-order-card-actions .tt-commerce-btn { padding-inline: 7px; }
 }

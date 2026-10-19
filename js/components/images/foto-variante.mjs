@@ -18,13 +18,27 @@ export function productVariantImage(product, selection, fallback = '') {
   const keys = Array.isArray(variants)
     ? [...new Set(variants.flatMap(row => row && typeof row === 'object' ? Object.keys(row).filter(key => !metadata.has(key)) : []))]
     : Object.keys(variants).filter(key => !metadata.has(key));
-  const index = keys.findIndex(key => /(?:^|\b)colou?r(?:\b|$)/i.test(key.trim()));
-  const color = index < 0 ? '' : String(selection || '').split('/').map(value => value.trim())[index] || '';
-  const rows = Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(variants) ? variants : [];
+  let rows = Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(variants) ? variants : [];
+  if (!rows.length && keys.length === 1) {
+    const options = Array.isArray(variants[keys[0]]) ? variants[keys[0]].map(value => String(value).trim()).filter(Boolean) : [];
+    const seen = new Set();
+    const photos = [product?.imageUrl || product?.image, ...(Array.isArray(product?.imagesExtra) ? product.imagesExtra : [])].map(safeImage).filter(url => {
+      if (!url || seen.has(imageKey(url))) return false;
+      seen.add(imageKey(url)); return true;
+    });
+    if (options.length > 1 && photos.length === options.length) rows = options.map((value, index) => ({[keys[0]]:value,imageUrl:photos[index]}));
+  }
   const images = row => [row?.imageUrl, ...(Array.isArray(row?.imageUrls) ? row.imageUrls : [])].map(safeImage).filter(Boolean);
-  if (color) {
-    const matching = rows.filter(row => String(row?.[keys[index]] || '').trim().toLocaleLowerCase('es') === color.toLocaleLowerCase('es')).flatMap(images);
-    if (matching.length) return matching[0];
+  // Formas, talles y combinaciones usan su asociación explícita. La fila
+  // más específica prevalece sobre una foto genérica del mismo color.
+  const selected = Object.fromEntries(keys.map((key, index) => [key, String(selection || '').split('/')[index]?.trim() || '']));
+  const normalize = value => String(value ?? '').trim().toLocaleLowerCase('es');
+  const assigned = rows.filter(row => {
+    const attributes = keys.filter(key => row?.[key] != null && String(row[key]).trim());
+    return attributes.length && attributes.every(key => normalize(row[key]) === normalize(selected[key])) && images(row).length;
+  }).sort((a, b) => keys.filter(key => b[key] != null).length - keys.filter(key => a[key] != null).length);
+  if (assigned.length) return images(assigned[0])[0];
+  if (keys.some(key => selected[key])) {
     const assigned = new Set(rows.flatMap(images).map(imageKey));
     const general = [product?.imageUrl || product?.image, ...(Array.isArray(product?.imagesExtra) ? product.imagesExtra : []), fallback].map(safeImage).filter(url => url && !assigned.has(imageKey(url)));
     return general[0] || '';

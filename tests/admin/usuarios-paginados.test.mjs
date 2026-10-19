@@ -1,4 +1,5 @@
 import test from 'node:test';
+import vm from 'node:vm';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createAdminPagedSource } from '../../js/admin/datos/fuente-paginada-admin.mjs';
@@ -11,7 +12,7 @@ test('Usuarios conserva 600 cuentas, incluidas históricas sin fecha, y escucha 
   assert.ok(start > 0 && end > start);
   const watches = [], ready = { users: false };
   const deps = {
-    createAdminPagedSource, adminRealtimeReady: ready, adminRealtimeErrors: {}, ADMIN_REALTIME_LIMIT: 250, db: {},
+    compareUsersByRecentCustomerActivity: context.compare, createAdminPagedSource, adminRealtimeReady: ready, adminRealtimeErrors: {}, ADMIN_REALTIME_LIMIT: 250, db: {},
     collection: (_db, name) => name, orderBy: name => ({ order: name }), limit: n => ({ limit: n }),
     startAfter: cursor => ({ cursor }), query: (...parts) => parts,
     activityTimestampMillis: value => value?.seconds || 0,
@@ -40,4 +41,40 @@ test('Usuarios conserva 600 cuentas, incluidas históricas sin fecha, y escucha 
   assert.equal(runtime.read().length, 600);
   runtime.stop();
   assert.ok(watches.every(watch => watch.stopped));
+});
+
+const source = readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+const extract = (name, next) => source.slice(source.indexOf(`function ${name}(`), source.indexOf(next, source.indexOf(`function ${name}(`)));
+const context = vm.createContext({ SUPER_ADMIN: 'owner@example.test' });
+vm.runInContext(extract('activityTimestampMillis', '\nfunction activityLocationLabel') + '\n' + extract('compareUsersByRecentCustomerActivity', '\nlet _lastFilteredUsers') + '\nthis.compare = compareUsersByRecentCustomerActivity;', context);
+const sort = users => [...users].sort(context.compare).map(user => user.uid);
+const registered = { uid: 'new', role: 'client', createdAt: '2026-10-19T14:00:00Z' };
+const returning = { uid: 'returning', role: 'client', createdAt: '2026-03-01', lastLogin: { toMillis: () => Date.parse('2026-10-19T15:00:00Z') } };
+
+test('el último login real de una clienta supera registros anteriores y una edición administrativa no la adelanta', () => {
+  const edited = { uid: 'edited', role: 'client', createdAt: '2026-03-01', updatedAt: '2026-10-20' };
+  assert.deepEqual(sort([registered, edited, returning]), ['returning', 'new', 'edited']);
+  assert.deepEqual(sort([returning, { ...registered, createdAt: '2026-10-19T16:00:00Z' }]), ['new', 'returning']);
+});
+
+test('ninguna cuenta del equipo sube por iniciar sesión, incluso el titular con rol histórico de cliente', () => {
+  const team = ['superadmin', 'admin', 'agent', 'modder', 'viewer'].map((role, i) => ({ uid: `team-${i}`, role, createdAt: '2026-03-01', lastLogin: '2026-10-20' }));
+  team.push({ uid: 'owner', email: 'OWNER@example.test', role: 'client', createdAt: '2026-03-01', lastLogin: '2026-10-20' });
+  team.push({ uid: 'blocked-team', role: 'client', roleBeforeBlock: 'agent', blocked: true, createdAt: '2026-03-01', lastLogin: '2026-10-20' });
+  const before = sort([registered, returning, ...team]);
+  const after = sort([registered, returning, ...team.map(user => ({ ...user, lastLogin: '2026-11-01' }))]);
+  assert.deepEqual(before.slice(0, 2), ['returning', 'new']);
+  assert.deepEqual(after, before);
+});
+
+test('una actualización de login reordena sin cambiar los usuarios ni los roles', () => {
+  const users = [registered, returning];
+  assert.deepEqual(sort(users), ['returning', 'new']);
+  assert.deepEqual(sort([{ ...registered, lastLogin: '2026-10-19T17:00:00Z' }, returning]), ['new', 'returning']);
+  assert.equal(users.length, 2);
+  assert.equal(users[0].role, 'client');
+});
+
+test('cuentas históricas y fechas ausentes conservan un orden determinista', () => {
+  assert.deepEqual(sort([{ uid: 'z', lastLoginAt: '2026-10-19' }, { uid: 'b' }, { uid: 'a', createdAt: 'fecha inválida' }]), ['z', 'a', 'b']);
 });

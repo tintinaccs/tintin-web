@@ -27,3 +27,35 @@ test('no se admiten protocolos ejecutables en las fotos del color', () => {
   const best = optimized.replace('q_auto,', 'q_auto:best,');
   assert.equal(productVariantImage({ imageUrl: best, variants: { Color: ['Dorado', 'Azul'] }, variantMedia: [{ Color: 'Dorado', imageUrl: original }] }, 'Azul', best), '');
 });
+
+test('forma y combinación exacta conservan la foto elegida al agregar al carrito', () => {
+  const item = { imageUrl: gold, variants: { Color: ['Dorado'], Forma: ['ovalado','redondo'] },
+    variantMedia: [{Color:'Dorado',imageUrl:gold},{Color:'Dorado',Forma:'redondo',imageUrl:silver}] };
+  assert.equal(productVariantImage(item, 'Dorado / redondo'), silver);
+  assert.equal(productVariantImage(item, 'Dorado / ovalado'), gold);
+  assert.equal(productVariantImage({imageUrl:gold,variants:{Forma:['ovalado','redondo']},variantMedia:[{Forma:'redondo',imageUrl:silver}]}, 'redondo'), silver);
+});
+
+test('sin asociación de una forma no reutiliza la foto de otra forma del mismo color', () => {
+  const item={imageUrl:gold,variants:{Color:['Dorado'],Forma:['ovalado','redondo']},variantMedia:[{Color:'Dorado',Forma:'ovalado',imageUrl:gold}]};
+  assert.equal(productVariantImage(item,'Dorado / redondo'), '');
+  assert.equal(productVariantImage({...item,imagesExtra:[silver]},'Dorado / redondo'), silver);
+});
+test('ANILLO CRISTAL importado resuelve cada forma por el orden publicado de sus tres fotos',()=>{
+ const photos=[gold,silver,'https://cdn.example.test/round.jpg'];
+ const item={imageUrl:photos[0],imagesExtra:photos.slice(1),variants:{'Forma de la piedra':['lagrima','ovalado','redondo']}};
+ for(const [i,shape] of item.variants['Forma de la piedra'].entries())assert.equal(productVariantImage(item,shape),photos[i]);
+ assert.equal(productVariantImage({...item,imagesExtra:[silver]},'redondo'),gold);
+ assert.equal(productVariantImage({...item,variantMedia:[{'Forma de la piedra':'ovalado',imageUrl:photos[2]}]},'ovalado'),photos[2]);
+});
+
+for (const key of ['Color', 'Tamaño', 'Sabor', 'Acabado', 'Modo']) test(`una foto por opción enlaza ${key} en el orden publicado`, () => {
+  const photos = [gold, silver, 'https://cdn.example.test/third.jpg'];
+  const item = { imageUrl: photos[0], imagesExtra: photos.slice(1), variants: { [key]: ['Primero', 'Segundo', 'Tercero'] } };
+  for (const [index, value] of item.variants[key].entries()) assert.equal(productVariantImage(item, value), photos[index]);
+  assert.equal(productVariantImage({ ...item, variantMedia: [{ [key]: 'Segundo', imageUrl: photos[2] }] }, 'Segundo'), photos[2]);
+});
+test('no infiere asociaciones posicionales para una matriz de atributos', () => {
+  const item = { imageUrl: gold, imagesExtra: [silver], variants: { Color: ['Dorado'], Sabor: ['A', 'B'] } };
+  assert.equal(productVariantImage(item, 'Dorado / B'), gold);
+});

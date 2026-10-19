@@ -10,7 +10,7 @@ function render(resets = {}) {
   const now = Date.now();
   const allOrders = [{ createdAt: now - 10000, status: 'entregado', paymentStatus: 'pagado', total: 200, items: [], shipping: { city: 'A' } },
     { createdAt: now - 1000, status: 'pendiente', paymentStatus: 'pendiente', total: 100, items: [], shipping: { city: 'B' } }];
-  const dependencies = { currentRole: 'superadmin', ensureStatisticsControls: () => true, runAdminCrudOperation() {},
+  const dependencies = { currentRole: 'superadmin', ensureStatisticsControls: () => true, refreshStatisticsViews() {}, runAdminCrudOperation() {},
     statisticsStartDate: () => new Date(now - 100000), allOrders, allUsers: [{ createdAt: now - 10000 }],
     activityTimestampMillis: value => Number(value), statisticsOrderIsValid: () => true,
     statisticsPaymentStatus: order => order.paymentStatus, statisticsTrafficSessions: [{ startedAt: now - 10000, visitorId: 'old' }, { startedAt: now - 1000, visitorId: 'new' }],

@@ -1,11 +1,11 @@
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
 import { productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261018-products-master-1';
-import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261017-stat-controls-1';
+import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261019-revenue-start-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261015-images-1';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261019-variant-links-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -37,8 +37,8 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261017-domain-cutover-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261017-domain-cutover-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261019-variant-links-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261017-domain-cutover-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261017-domain-cutover-1";
@@ -790,7 +790,7 @@ function sectionFromUrl() {
   const fromQuery = params.get('section');
   if (fromQuery === 'contenido') return 'apariencia';
   if (isKnownSection(fromQuery)) return fromQuery;
-  const fromHash = (location.hash || '').replace(/^#/, '');
+  const fromHash = (location.hash || '').replace(/^#(?:section-)?/, '');
   if (fromHash === 'contenido') return 'apariencia';
   if (isKnownSection(fromHash)) return fromHash;
   return null;
@@ -1494,7 +1494,7 @@ function renderStatisticsTrend() {
 
 function renderGeneralStatistics() {
   if (currentRole !== 'superadmin') return;
-  if (!ensureStatisticsControls(renderGeneralStatistics, runAdminCrudOperation)) return;
+  if (!ensureStatisticsControls(refreshStatisticsViews, runAdminCrudOperation)) return;
   const now = Date.now();
   const rangeStart = statisticsStartDate().getTime();
   const rangeOrders = allOrders.filter(order => activityTimestampMillis(order.createdAt) >= rangeStart);
@@ -1831,7 +1831,7 @@ function startAdminRealtimeData() {
   if (currentRole === 'superadmin') {
     const mergeAdminUsers = () => {
       allUsers = [...adminUsersLive]
-        .sort((a, b) => activityTimestampMillis(b.createdAt || b.updatedAt || b.lastAccess) - activityTimestampMillis(a.createdAt || a.updatedAt || a.lastAccess) || String(a.uid || '').localeCompare(String(b.uid || '')));
+        .sort(compareUsersByRecentCustomerActivity);
     };
     const usersSource = createAdminPagedSource({
       complete: true,
@@ -2075,7 +2075,13 @@ function startDashboardActivityMetrics() {
 
 window.addEventListener('pagehide', stopDashboardActivityMetrics);
 
+function refreshStatisticsViews() {
+  renderDashboardData();
+  renderGeneralStatistics();
+}
+
 function renderDashboardData() {
+    const statisticsReady = currentRole !== 'superadmin' || ensureStatisticsControls(refreshStatisticsViews, runAdminCrudOperation);
     // Users count — el Modder no tiene permiso para leer la colección users
     // (ni debería: expondría emails/teléfonos de todas las clientas), así que
     // ni se intenta la lectura para no generar un error de permisos silencioso.
@@ -2118,10 +2124,10 @@ function renderDashboardData() {
       statOrdersTodayEl.textContent = '—';
     }
 
-    if (canVentas && ordersReady) {
+    if (canVentas && ordersReady && statisticsReady) {
       const today2 = new Date();
       const monthStart = new Date(today2.getFullYear(), today2.getMonth(), 1);
-      const monthSales = orders
+      const monthSales = filterStatisticsRows('revenue', orders, row => activityTimestampMillis(row.createdAt))
         .filter(o => {
           if (!o.createdAt) return false;
           const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
@@ -2201,6 +2207,17 @@ function loadUsers() {
 // Única fuente de verdad para lo que se ve en la tabla: combina el texto de
 // búsqueda con la pestaña activa (Usuarios = solo activos, Bloqueados = solo
 // bloqueados) — usada por ambos inputs.
+function compareUsersByRecentCustomerActivity(a, b) {
+  const isCustomer = user => String(user.email || '').trim().toLowerCase() !== SUPER_ADMIN.toLowerCase()
+    && (user.role || 'client') === 'client'
+    && (!user.roleBeforeBlock || user.roleBeforeBlock === 'client');
+  const customerA = isCustomer(a), customerB = isCustomer(b);
+  if (customerA !== customerB) return customerA ? -1 : 1;
+  const activity = user => Math.max(activityTimestampMillis(user.createdAt), activityTimestampMillis(user.lastLogin), activityTimestampMillis(user.lastLoginAt));
+  const at = user => isCustomer(user) ? activity(user) : activityTimestampMillis(user.createdAt);
+  return at(b) - at(a) || String(a.uid || '').localeCompare(String(b.uid || ''));
+}
+
 let _lastFilteredUsers = [];
 function applyUserFilters() {
   const q = document.getElementById('user-search').value.toLowerCase();
@@ -2217,7 +2234,7 @@ function applyUserFilters() {
       ? [...filtered].sort((a, b) => (b.purchaseCount || 0) - (a.purchaseCount || 0))
       : userSortMode === 'name'
         ? [...filtered].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'))
-        : [...filtered].sort((a, b) => activityTimestampMillis(b.createdAt || b.updatedAt || b.lastAccess) - activityTimestampMillis(a.createdAt || a.updatedAt || a.lastAccess) || String(a.uid || '').localeCompare(String(b.uid || '')));
+        : [...filtered].sort(compareUsersByRecentCustomerActivity);
   _lastFilteredUsers = filtered;
   usersPage = Math.min(usersPage, Math.max(0, Math.ceil(filtered.length / ADMIN_PAGE_SIZE) - 1));
   const visibleIds = new Set(filtered.map(u => u.uid));

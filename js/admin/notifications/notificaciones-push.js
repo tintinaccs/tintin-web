@@ -226,8 +226,8 @@ async function ensureMessaging() {
         const url = target.startsWith('/') && !target.startsWith('//') ? target : '/admin?section=notificaciones-push';
         void swRegistration.showNotification(title, {
           body,
-          icon: '/favicon-192x192.png',
-          badge: '/favicon-192x192.png',
+          icon: '/assets-tintin/images/admin/push-icon-192.png',
+          badge: '/assets-tintin/images/admin/push-badge-96.png',
           tag: String(data.tag || data.eventId || 'tintin-push'),
           silent: false,
           data: { url }

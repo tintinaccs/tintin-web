@@ -239,3 +239,14 @@ Además, en todos los casos:
   PayPal (monto, moneda, order ID, capture ID y firma), nunca desde
   `onApprove` en el navegador, y su `eventId` deberá incluir el capture ID.
 - Auditoría: `npm run audit:web-push`. Pruebas: `npm run test:web-push`.
+
+
+## Actualización del Super Admin — 2026-10-19
+
+El módulo **Notificaciones push** concentra activación, dispositivos, pruebas y estado. Los avisos privados de inicio de sesión muestran el nombre del perfil leído en el servidor; no incluyen correo, teléfono ni dirección. Conservan la deduplicación por cuenta y momento de autenticación. Los avisos de pedidos conservan número, importe y entrega.
+
+Los enlaces de avisos antiguos `admin.html#section-usuarios` y los nuevos enlaces con `?section=` abren el módulo correspondiente. Un pedido espera la suscripción autenticada; si la conexión se demora, conserva el destino y ofrece reintentar. El clic reutiliza un panel abierto, sin reemplazar una pestaña de compra.
+
+El logo original se entrega blanco sobre rosa claro mediante `scripts/generar-iconos-admin.mjs`; el PNG original no se modifica. Los iconos de una app ya instalada pueden permanecer en la caché del sistema: si no se actualizan, puede ser necesario volver a instalar el acceso de Tintin en la pantalla de inicio y activar ese dispositivo.
+
+Pedidos, usuarios, catálogo y otros módulos con Firestore conservan sus suscripciones. La telemetría del centro push y la revisión del espejo local se consultan cada cinco segundos sólo cuando corresponde mostrarlos; las lecturas tienen un plazo de doce segundos. Volver a la pestaña o recuperar conexión adelanta la actualización. Esto no elimina los tiempos del servidor, la red ni la entrega de FCM/iOS. Las preferencias en edición no se reemplazan durante la actualización de telemetría.

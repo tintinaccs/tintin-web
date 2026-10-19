@@ -69,3 +69,9 @@ html body:has(.adm-main) #adm-sidebar .adm-user-name { overflow-wrap: anywhere; 
 @media (prefers-reduced-motion: reduce) {
   body:has(.adm-main) .adm-sidebar, body:has(.adm-main) .adm-main, body:has(.adm-main) .adm-sidebar-toggle svg { transition: none; }
 }
+
+/* Marca original sobre soporte rosa; el texto mantiene contraste oscuro. */
+html body:has(.adm-main) #adm-sidebar .adm-sidebar-logo-text { display: flex !important; align-items: center; gap: 10px; }
+html body:has(.adm-main) #adm-sidebar .adm-sidebar-logo { background: var(--admin-color-brand) !important; }
+html body:has(.adm-main) #adm-sidebar .adm-nav { scroll-padding-block: 12px; }
+html body:has(.adm-main) #adm-sidebar .adm-nav-item { min-height: 48px; }

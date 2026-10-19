@@ -29,8 +29,12 @@ for(const [width,height] of VIEWPORTS)test(`tablero y detalles utilizables en ${
   await expect(page.locator('[data-stage-count="new"]')).toHaveText('1');
   await expect(page.locator('[data-stage-count="ready"]')).toHaveText('2');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
-  if(width>=1920)expect(await page.locator('[data-orders-board]').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
-  const mobile=width<=740 || (height<=500 && width<=1000);
+  expect(await page.locator('[data-orders-board]').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
+  await expect(page.locator('.tt-order-stage-tabs')).toBeVisible();
+  const stepColors=await page.locator('[data-action="order-stage"]').evaluateAll(elements=>elements.map(e=>getComputedStyle(e).backgroundColor));
+  expect(new Set(stepColors).size).toBe(5);
+  expect(await page.locator('.tt-order-stage-tabs').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
+  const mobile=width<=1180;
   if(mobile){await expect(page.locator('.tt-order-stage-tabs')).toBeVisible();await expect(page.locator('[data-order-lane="preparing"]')).toBeHidden();await page.locator('[data-action="order-stage"][data-stage="ready"]').click();await expect(page.locator('[data-order-lane="ready"]')).toBeVisible();await page.locator('[data-action="order-stage"][data-stage="new"]').click();}
   else {await expect(page.locator('[data-order-lane="new"]')).toBeVisible();await expect(page.locator('[data-order-lane="done"]')).toBeVisible();}
   if(process.env.TINTIN_REVIEW_DIR && [320,768,1440,1920].includes(width)){fs.mkdirSync(process.env.TINTIN_REVIEW_DIR,{recursive:true});await page.screenshot({path:path.join(process.env.TINTIN_REVIEW_DIR,`pedidos-${width}.png`),fullPage:true,animations:'disabled'});}
@@ -48,15 +52,15 @@ for(const [width,height] of VIEWPORTS)test(`tablero y detalles utilizables en ${
 });
 test('tarjetas se mueven sin recarga ni duplicación y actualizan contadores',async({page})=>{
   await open(page);await page.locator('[data-order-card="order_fixture_0"] [data-action="order-advance"]').click();
-  await expect(page.locator('[data-order-lane="preparing"] [data-order-card="order_fixture_0"]')).toBeVisible();await expect(page.locator('[data-stage-count="new"]')).toHaveText('0');await expect(page.locator('[data-stage-count="preparing"]')).toHaveText('2');
+  await expect(page.locator('[data-order-lane="preparing"] [data-order-card="order_fixture_0"]')).toBeVisible();await expect(page.locator('[data-stage-count="new"]')).toHaveText('0');await expect(page.locator('[data-stage-count="preparing"]')).toHaveText('2');await expect(page.locator('[data-order-card="order_fixture_0"]')).toHaveAttribute('data-order-stage','preparing');
   expect(await page.locator('[data-order-card="order_fixture_0"]').count()).toBe(1);
   expect(await page.evaluate(()=>window.__calls.filter(c=>c[0]==='updateOrderStatus').length)).toBe(1);
 });
 test('una actualización individual conserva las otras tarjetas, filtros y posición del tablero',async({page})=>{
   await page.setViewportSize({width:1280,height:800});await open(page);
-  await page.evaluate(()=>{window.__untouched=document.querySelector('[data-order-card="order_fixture_1"]');document.querySelector('[data-orders-board]').scrollLeft=150;window.__orders[0].paymentStatus='pagado';window.__publishOrders();});
+  await page.evaluate(()=>{window.__untouched=document.querySelector('[data-order-card="order_fixture_1"]');document.querySelector('[data-orders-board]').scrollLeft=0;window.__orders[0].paymentStatus='pagado';window.__publishOrders();});
   expect(await page.evaluate(()=>window.__untouched===document.querySelector('[data-order-card="order_fixture_1"]'))).toBe(true);
-  expect(await page.locator('[data-orders-board]').evaluate(e=>e.scrollLeft)).toBeGreaterThan(0);
+  expect(await page.locator('[data-orders-board]').evaluate(e=>e.scrollLeft)).toBe(0);
   await page.locator('[data-filter="order-search"]').fill('TINPED01');await expect(page.locator('[data-order-card]')).toHaveCount(1);
   await page.reload();await expect(page.locator('[data-filter="order-search"]')).toHaveValue('TINPED01');
 });
@@ -172,15 +176,17 @@ for (const width of [390,768,1366]) test(`actualización en vivo conserva el foc
  await expect(page.locator('[data-action="drawer-order"][data-id="order_fixture_0"]')).toBeFocused();
 });
 
-for (const width of [320, 768, 1440]) test('reinicio independiente confirmado y persistido en ' + width, async ({ page }) => {
+for (const mode of ['reset', 'today']) for (const width of [320, 768, 1440]) test('reinicio independiente ' + mode + ' confirmado y persistido en ' + width, async ({ page }) => {
   await page.setViewportSize({ width, height: 900 });
+  const { statisticsTodayStart } = await import('../../js/admin/statistics/modelo-reinicios.mjs');
+  const dayStart = statisticsTodayStart().getTime();
   let saved = { resets: {}, lastChangeId: '' }, writes = [];
   await page.route('https://statistics-controls.test/**', async route => {
     const url = new URL(route.request().url());
     if (url.pathname === '/api/admin-commerce-controls') {
       if (route.request().method() === 'POST') {
         const input = route.request().postDataJSON(); writes.push(input);
-        saved = { resets: Object.fromEntries(input.metrics.map(key => [key, new Date().toISOString()])), lastChangeId: input.changeId };
+        saved = { resets: Object.fromEntries(input.metrics.map(key => [key, (input.mode === 'today' ? new Date(dayStart - 1).toISOString() : new Date().toISOString())])), lastChangeId: input.changeId };
       }
       return route.fulfill({ json: { ok: true, result: saved } });
     }
@@ -191,19 +197,19 @@ for (const width of [320, 768, 1440]) test('reinicio independiente confirmado y 
     }
     return route.fulfill({ contentType: 'text/html', body: `<meta name="viewport" content="width=device-width,initial-scale=1"><div class="adm-statistics-toolbar"></div><div id="statistics-data-status"></div><script type="module">
       import {ensureStatisticsControls,filterStatisticsRows} from 'https://statistics-controls.test/js/admin/statistics/controles-estadisticas.js';
-      const rows=[{at:Date.now()-100000,total:100}];
+      const rows=[{at:${dayStart - 1},total:200},{at:${dayStart + 1},total:100}];
       function render(){if(!ensureStatisticsControls(render,async options=>options.action({start(){},ok(){}})))return;window.amount=filterStatisticsRows('revenue',rows,row=>row.at).reduce((sum,row)=>sum+row.total,0);window.orders=filterStatisticsRows('orders',rows,row=>row.at).length;}
       render();</script>` });
   });
   await page.goto('https://statistics-controls.test/');
-  await page.waitForFunction(() => window.amount === 100);
+  await page.waitForFunction(() => window.amount === 300);
   await page.getByRole('button', { name: 'Reiniciar contadores' }).click();
   await page.getByRole('checkbox', { name: 'Facturación', exact: true }).check();
-  await page.getByRole('button', { name: 'Reiniciar seleccionados' }).click();
-  await page.waitForFunction(() => window.amount === 0);
-  expect(await page.evaluate(() => window.orders)).toBe(1);
-  expect(writes).toHaveLength(1); expect(writes[0].metrics).toEqual(['revenue']);
-  await page.reload(); await page.waitForFunction(() => window.amount === 0);
+  await page.getByRole('button', { name: mode === 'today' ? 'Contar desde el inicio de hoy (Paraguay)' : 'Reiniciar seleccionados', exact: true }).click();
+  await page.waitForFunction(expected => window.amount === expected, mode === 'today' ? 100 : 0);
+  expect(await page.evaluate(() => window.orders)).toBe(2);
+  expect(writes).toHaveLength(1); expect(writes[0].metrics).toEqual(['revenue']); expect(writes[0].mode).toBe(mode);
+  await page.reload(); await page.waitForFunction(expected => window.amount === expected, mode === 'today' ? 100 : 0);
   await page.getByRole('button', { name: 'Reiniciar contadores' }).click();
   await page.getByRole('button', { name: 'Cancelar', exact: true }).click();
   expect(writes).toHaveLength(1);

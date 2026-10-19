@@ -15,7 +15,7 @@ const PENDING_KEY = 'tt_push_pending_order';
 const PENDING_MAX_AGE_MS = 10 * 60 * 1000;
 const ORDER_ID_PATTERN = /^[A-Za-z0-9_-]{12,220}$/;
 const POLL_INTERVAL_MS = 400;
-const MAX_POLLS = 60; // 24 s como máximo: después se deja de esperar.
+const MAX_POLLS = 60; // 24 s de sondeo: la suscripción sigue esperando datos tardíos.
 
 function readPending() {
   try {
@@ -43,33 +43,84 @@ function requestedOrderId() {
   return readPending();
 }
 
-function notify(message) {
-  const detail = document.getElementById('push-status-detail');
-  if (detail) detail.textContent = message;
-  else console.info('[Tintin] %s', message);
+function notify(message, retry) {
+  let detail = document.getElementById('push-order-status');
+  if (!detail) {
+    detail = document.createElement('div');
+    detail.id = 'push-order-status';
+    detail.className = 'tt-push-order-status';
+    detail.setAttribute('role', 'status');
+    const root = document.getElementById('section-pedidos');
+    if (!root) return;
+    root.prepend(detail);
+  }
+  detail.replaceChildren(document.createTextNode(message));
+  if (retry) {
+    const button = document.createElement('button');
+    button.type = 'button'; button.className = 'adm-btn adm-btn-outline';
+    button.textContent = 'Reintentar abrir pedido';
+    button.addEventListener('click', retry, { once: true });
+    detail.append(button);
+  }
 }
 
 function openWhenReady(orderId) {
+  let unsubscribe, settled = false, source;
+  const cleanup = () => {
+    unsubscribe?.();
+    unsubscribe = null;
+    window.clearInterval(timer);
+    window.removeEventListener('tintin:admin-orders-source', attach);
+    window.removeEventListener('pagehide', cleanup);
+  };
+  const retry = () => {
+    cleanup();
+    window.TintinAdminOrders?.retry?.();
+    openWhenReady(orderId);
+  };
+  const consume = snapshot => {
+    if (settled) return;
+    if (snapshot?.error) {
+      notify('No pudimos cargar el pedido. Tu enlace sigue guardado.', retry);
+      return;
+    }
+    const orders = window.TintinAdminOrders;
+    if (!snapshot?.uid || !snapshot.ready || typeof window.openOrderEdit !== 'function') return;
+    settled = true;
+    cleanup();
+    if (!orders?.get(orderId)) {
+      clearPending();
+      notify('Este pedido no está disponible para tu cuenta. Revisá la lista de Pedidos.');
+      return;
+    }
+    clearPending();
+    // Consumir la URL evita volver a abrir el editor después de cerrarlo y recargar.
+    const url = new URL(location.href);
+    url.searchParams.delete('order');
+    history.replaceState(history.state, '', url);
+    document.getElementById('push-order-status')?.remove();
+    window.openOrderEdit(orderId);
+  };
+  function attach() {
+    if (settled || !window.TintinAdminOrders?.subscribe || source === window.TintinAdminOrders) return;
+    unsubscribe?.();
+    source = window.TintinAdminOrders;
+    const stop = source.subscribe(consume);
+    // subscribe publica el snapshot inicial de forma síncrona.
+    if (settled) stop(); else unsubscribe = stop;
+  }
   let polls = 0;
   const timer = window.setInterval(() => {
-    polls += 1;
-    const orders = window.TintinAdminOrders;
-    if (polls > MAX_POLLS) {
+    attach();
+    if (++polls >= MAX_POLLS) {
       window.clearInterval(timer);
-      clearPending();
-      notify('No se pudo abrir el pedido de la notificación: probá desde la lista de Pedidos.');
-      return;
+      if (!settled) notify('El pedido todavía está cargando. Se abrirá cuando la conexión esté lista.', retry);
+      // La suscripción sigue viva: una sesión o snapshot tardío no pierde el destino.
     }
-    if (!orders || typeof window.openOrderEdit !== 'function' || !orders.ready()) return;
-
-    window.clearInterval(timer);
-    clearPending();
-    if (!orders.has(orderId)) {
-      notify('El pedido de la notificación ya no existe o fue eliminado.');
-      return;
-    }
-    window.openOrderEdit(orderId);
   }, POLL_INTERVAL_MS);
+  window.addEventListener('tintin:admin-orders-source', attach);
+  window.addEventListener('pagehide', cleanup, { once: true });
+  attach();
 }
 
 function boot() {

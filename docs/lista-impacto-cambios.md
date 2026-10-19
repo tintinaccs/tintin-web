@@ -1,3 +1,18 @@
+## 2026-10-19 — Fotos por cualquier atributo o combinación
+
+Fuentes: galeria-producto.js, foto-variante.mjs, editor fotos-por-color.js y nuevo fotos-por-variante.js. Impacto: ficha, miniaturas/selección inversa, carrito/checkout/favoritos, vistas compartidas y edición administrativa de asociaciones. Posición sólo para un atributo y cardinalidad exacta; combinaciones requieren asociación explícita. Se conservan filas específicas al editar color y se evita crear Color desde una forma. Tarjeta y ficha de pedido muestran origen registrado para distinguir manuales antes de la limpieza autorizada; no clasifican orígenes ausentes. Sin cambios comerciales reales, precios, stock o permisos. Se añaden matrices reales de variante/miniatura/editor al CI existente sin omitir controles. Caché transitiva, shell, CSP, diagnóstico y plan se regeneran canónicamente. Evidencia y límites en CURRENT_STATE.
+
+## 2026-10-19 — Etapas de pedidos pastel y prioridad de clientes recientes
+
+Presentación de Pedidos: pasos numerados, colores semánticos compartidos entre resumen/pasos/columnas/badges y tablero ajustado al ancho, con selección de etapa hasta1180px. El ciclo de negocio, transiciones, entregas y pagos conservan su autoridad. Usuarios ordena clientes por registro/login usando la suscripción actual y relega al equipo sin alterar cuentas ni roles. Mantiene filtros y orden manual. Se conserva el trabajo de Super Admin/Push del PR1169 y la medición móvil corregida de PR1167. Caché/CSP/diagnóstico y plan protegido se regeneran; evidencia y limitaciones en CURRENT_STATE.
+
+# Ficha de producto y fotos por forma — 2026-10-19
+
+Fuentes funcionales: tienda.js, foto-variante.mjs y product-maintenance.css. Selección de cualquier atributo/combinación, asociación bidireccional con fotos y miniaturas, autoridad de selección disponible inicial, identidad de fotografía al reordenar por stock, estados de agotado y cantidad. Foto del carrito respeta forma y combinación exacta; sin asociación sólo se admite foto general. Superficies relacionadas: ficha en desktop/laptop/tablet ambas orientaciones/mobile, representación de variantes en carrito/checkout/favoritos/catálogo/editor; los consumidores y cargadores reciben únicamente URLs coherentes de caché. No modifica inventario, precios, permisos, transacciones ni datos remotos. Pruebas de selección/galería, primer render, stock, carrito invitado, márgenes, teclado y formatos de variantes; detalle y límites en CURRENT_STATE. Shell, caché, CSP y manifiestos se regeneran por sus herramientas. Se conservan los arreglos anteriores y se difieren merge/publicación.
+## 2026-10-19 — Inicio de ventas por día en Paraguay
+
+Dashboard aplica el filtro canónico de Facturación y actualiza ambas vistas al cambiar el corte. Modo `today` en el endpoint/control ya existente, con medianoche determinada por el servidor en America/Asuncion e inclusión del límite exacto. No cambia métricas de usuarios o pedidos si no se seleccionan, ni historial, inventario, Rules o permisos. Nuevas regresiones de límites, preservación y dashboard; matriz visual extendida a ambos modos. Caché, diagnóstico y plan protegido se regeneran desde autoridades existentes. Evidencia y limitaciones en CURRENT_STATE.
+
 ## 2026-10-19 — Alineación de Imágenes y entrega del CSS responsive
 
 Se alinea la grilla/encabezado interno de Imágenes con su barra compartida y se agrega comprobación de ambos bordes en cuatro tamaños. Ambas páginas usan responsive-2 para evitar el CSS anterior retenido en caché bajo la primera URL, observado en lectura pública. Baseline, plan y diagnóstico se regeneran; sin cambios de negocio ni controles. PR1165 ya integrado y aprobado por CI y salud de producción; se verifica la entrega de bytes del nuevo candidato.
@@ -411,3 +426,18 @@ Tu selección: sólo distribución móvil de sus filas; tarjeta blanca preservad
 ## 2026-10-18 — Maestro de Productos y pedidos existentes
 
 Admin Productos: editor nativo/duplicación segura, SKU/galería/indicadores, selección persistente y edición masiva atómica con vista previa. Agregar selección sólo abre un pedido existente para revisión; guardado usa el backend canónico de pedidos/inventario y conserva su identidad. Impacta admin.html, admin-app, comercio/CSS, helper responsive y editor de pedidos; nuevos módulos puros e interfaz sin dependencias. No cambia Rules, Auth, backend de pagos, borrado global ni datos comerciales existentes. Registro de suites en gates Admin, actualización de referencias de caché, baseline/plan y artefactos canónicos. Véase CURRENT_STATE para evidencia y límites.
+
+
+## 2026-10-19 — Texto breve de cookies
+
+Resumen del componente compartido de consentimiento simplificado para todas las páginas y dispositivos. Cambia texto visible; mantiene elección y comportamiento de estadísticas. Importadores/versiones, CSP y diagnóstico se regeneran para entregar los nuevos bytes. Evidencia en CURRENT_STATE.
+
+
+## 2026-10-19 — Super Admin adaptable y notificaciones identificadas
+
+Navegación agrupada y búsqueda desde lateral/cajón mediante controles existentes; superficies rosadas suaves, logo original blanco, campos táctiles de 44px y tipografía móvil sin zoom. Aplica al shell y las 26 superficies del registro Maestro, incluida Imágenes. Push corrige destinos históricos y ventanas que fallan al navegar; el pedido consume la suscripción autenticada, conserva destino tardío/reintento y elimina el parámetro al abrir. Login identifica el perfil del servidor, conserva auth_time y deduplicación; no publica correos ni datos de envío. Iconos derivados originales sólo en app/admin/push. Telemetría y espejo local refrescan visibles sin pisar borradores; API autenticada canónica renueva 401. Auditor push alinea sus comprobaciones con el guard central vigente y el aviso explícito de pantalla bloqueada. Sin operaciones reales, cambios de roles, Rules, infraestructura ni dominio. Evidencia por módulo y límites en SUPERADMIN_REVIEW_20261019 y CURRENT_STATE.
+
+
+## 2026-10-19 — Rendimiento del candidato consolidado
+
+El loader comparte la preferencia canónica y difiere el runtime de estadísticas hasta el permiso afirmativo. Reduce tres módulos innecesarios para visitas sin consentimiento, conserva consentimiento guardado y posterior, y mantiene presupuestos de rendimiento. Referencias de caché del loader y derivados se regeneran. La ficha/variantes y el stock no cambian por esta optimización; la devolución de pedidos de prueba queda explícitamente autorizada pero pendiente de acceso autenticado y verificación de origen.

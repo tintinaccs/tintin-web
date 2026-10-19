@@ -2019,9 +2019,7 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   body.tt-public-shell-mounted:not(:has(.adm-main)){
     --tt-mobile-nav-clearance:104px;
   }
-  body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-footer-bottom{
-    padding-bottom:calc(var(--tt-mobile-nav-clearance) + 16px + env(safe-area-inset-bottom,0px))!important;
-  }
+  /* El body ya reserva espacio para la tabbar; no se duplica bajo el copyright. */
   body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-privacy-consent,
   body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-wa-float,
   body.tt-public-shell-mounted:not(:has(.adm-main)) .tt-cart-feedback{
@@ -2042,6 +2040,13 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
 @media (max-width:480px){
   body.tt-public-shell-mounted:not(:has(.adm-main)){
     --tt-mobile-nav-clearance:92px;
+  }
+}
+
+/* Desde tablet no hay tabbar: ninguna página pública necesita reserva al final. */
+@media (min-width:768px){
+  html:root body:not(:has(.adm-main)):has(.tt-footer[data-tt-footer="unified"]){
+    padding-bottom:0!important;
   }
 }
 
@@ -4450,16 +4455,19 @@ body.tt-home-premium .tt-footer-tagline { max-width: 28ch; color: var(--tt-home-
 body.tt-home-premium .tt-collection-carousel { padding-block:clamp(28px,4vw,52px); }
 body.tt-home-premium .tt-footer .tt-footer-wa svg { color:#168541!important; }
 /* El arte editorial ocupa el alto de su columna sin bandas alrededor. */
-html:root body.tt-home-premium .tt-watch-feature { border: 0 !important; }
+html:root body.tt-home-premium .tt-watch-feature { border: 0 !important; box-shadow: none !important; }
 body.tt-home-premium .tt-watch-feature-img { align-self: stretch; min-height: 0; border: 0; }
 body.tt-home-premium .tt-watch-feature-img :is(.tt-img-placeholder, picture, img) {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 0;
-  border: 0;
+  min-height: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
-body.tt-home-premium .tt-watch-feature-img img { object-fit: cover; }
+body.tt-home-premium .tt-watch-feature-img .tt-img-placeholder { background: transparent !important; }
+/* El runtime inserta object-fit inline; esta geometría pertenece a la sección. */
+body.tt-home-premium .tt-watch-feature-img img { object-fit: cover !important; }
 
 
 /* css/quality/movimiento.css */
@@ -6645,6 +6653,70 @@ html.tt-phase8-ux-ready .perfil-card {
 @media (prefers-reduced-motion: reduce) {
   .tt-skip-link { transition: none !important; }
   :where([role="dialog"], dialog, .tt-connectivity-status) { scroll-behavior: auto !important; }
+}
+
+
+/* css/components/navigation/movil/marca-movil.css */
+/* Marca móvil en el flujo: logo original, sin superponer contenido al desplazarse. */
+html body #tt-mobile-brand { display: none !important; }
+@media (max-width: 767px) {
+  html body #tt-mobile-brand {
+    --tt-mobile-brand-bg: #B84C72;
+    --tt-mobile-brand-ink: #FDECF2;
+    --tt-mobile-brand-next: #FDECF2;
+    display: flex !important;
+    position: relative;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: calc(76px + env(safe-area-inset-top, 0px));
+    margin: 0;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 16px max(20px, env(safe-area-inset-left, 0px));
+    border: 0;
+    box-shadow: none;
+    background: linear-gradient(180deg, var(--tt-mobile-brand-bg) 0%, var(--tt-mobile-brand-bg) calc(100% - 18px), var(--tt-mobile-brand-next) 100%);
+  }
+  html body #tt-mobile-brand[data-brand-surface="light"] {
+    --tt-mobile-brand-bg: #FDECF2;
+    --tt-mobile-brand-ink: #B84C72;
+  }
+  #tt-mobile-brand .tt-mobile-brand-link {
+    display: grid;
+    place-items: center;
+    width: 128px;
+    height: 52px;
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    text-decoration: none;
+  }
+  #tt-mobile-brand .tt-mobile-brand-art {
+    position: relative;
+    display: block;
+    width: 96px;
+    height: 52px;
+    overflow: hidden;
+  }
+  /* El PNG original tiene margen transparente. Se centra sin estirar su dibujo. */
+  html:root body #tt-mobile-brand img.tt-mobile-brand-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 96px !important;
+    height: 120px !important;
+    max-width: none !important;
+    max-height: none !important;
+    display: block;
+    object-fit: contain !important;
+    transform: translate(-50%, -50%);
+    filter: url("#tt-mobile-brand-tint") !important;
+    border: 0;
+  }
+  #tt-mobile-brand .tt-mobile-brand-ink { flood-color: var(--tt-mobile-brand-ink); }
+  #tt-mobile-brand .tt-mobile-brand-filters { position: absolute; overflow: hidden; pointer-events: none; }
+  #tt-mobile-brand .tt-mobile-brand-link:focus-visible { outline: 2px solid var(--tt-mobile-brand-ink); outline-offset: 2px; }
 }
 
 
@@ -9116,10 +9188,6 @@ body.tt-home-premium .tt-wa-float * {
 
 /* Mobile */
 @media (max-width: 768px) {
-  body.tt-home-premium {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom));
-  }
-
   body.tt-home-premium .tt-look-actions {
     width: 100%;
   }

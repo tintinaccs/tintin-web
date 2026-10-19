@@ -838,7 +838,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261017-responsive-layout-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261019-variant-links-1');
     }
   }
 
@@ -865,10 +865,22 @@
 
   function bootSiteActivity() {
     if (isVisualPreviewFrame) return;
-    if (!window.TintinSiteActivityBooted) {
-      window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261017-domain-cutover-1');
-    }
+    if (window.TintinSiteActivityScheduled) return;
+    window.TintinSiteActivityScheduled = true;
+    // El aviso ya necesita este módulo. Reutilizarlo evita cargar actividad,
+    // latidos y endpoint antes de que la persona acepte estadísticas.
+    importSibling('analytics/consentimiento-privacidad.js', 'Privacy Consent', undefined, 'tintin-20261019-privacy-copy-1').then(privacy => {
+      if (!privacy) { window.TintinSiteActivityScheduled = false; return; }
+      const start = () => {
+        if (!privacy.hasStatisticsConsent()) return;
+        if (!window.TintinSiteActivityBooted) {
+          window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
+          importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261019-privacy-copy-1');
+        }
+      };
+      privacy.onPrivacyConsentChange(start);
+      start();
+    });
   }
 
   // Avisa (sin recargar ni borrar datos) si se publicó una versión nueva mientras
@@ -917,7 +929,7 @@
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261017-domain-cutover-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261019-hero-centered-1');
     }
   }
 
@@ -928,7 +940,7 @@
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261017-domain-cutover-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261019-variant-links-1');
   }
 
   function bootThemeColorSanitizerPublic() {

@@ -1,0 +1,11 @@
+/* Firma junto al retrato en dos columnas y al cierre de la presentación móvil. */
+.tt-about-maintained .tt-about-visual {
+  width: 100%;
+  max-width: 440px;
+  justify-self: center;
+}
+@media (max-width: 767px) {
+  .tt-about-maintained .tt-about-visual { display: contents; }
+  .tt-about-maintained .tt-about-section .tt-about-content { grid-row: 2; }
+  .tt-about-maintained .tt-about-section .tt-about-handwritten-signature { grid-row: 3; margin-top: 0; }
+}

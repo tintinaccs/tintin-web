@@ -10,7 +10,7 @@ test('compradores dentro de Pedidos usan el mismo espejo y se actualizan al lleg
   let customers = [{ id: 'CUS_LOCAL_fixture', name: 'Cliente <local>', orderCount: 2, totalPurchased: 150000, totalPaid: 150000, lastPurchase: '2026-01-03', hasWebAccount: false }];
   const requests = [];
   const context = vm.createContext({
-    Date, console, queueMicrotask, setInterval: () => {},
+    Date, console, queueMicrotask, AbortSignal, setInterval: () => {},
     MutationObserver: class { observe() {} },
     window: { addEventListener: (name, fn) => listeners.set(name, fn) },
     document: {
