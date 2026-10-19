@@ -127,7 +127,7 @@ jobs:
           npm run test:navigation-header
           npm run test:cart-quantity-browser
           npm run test:phase8-ui
-          npx playwright test tests/ui-ux/product-shape-selection.spec.js tests/ui-ux/product-color-gallery.spec.js --project=chromium --retries=0
+          npx playwright test tests/ui-ux/product-shape-selection.spec.js --project=chromium --retries=0
           npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium
           npx playwright test tests/ui-ux/admin-sidebar-interaction.spec.js --project=chromium
           npx playwright test tests/navigation/header-responsive.spec.js --grep footer --project=chromium

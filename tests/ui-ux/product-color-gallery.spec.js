@@ -79,9 +79,10 @@ for (const [width,height] of [[320,568],[667,375],[768,1024],[1024,768],[1440,90
   await form.selectOption('Redondo');
   await page.getByRole('checkbox',{name:'Asignar foto 3 a variante Dorado / Redondo',exact:true}).check();
   let rows=await page.evaluate(()=>window.editor.serialize());
-  expect(rows.find(row=>row.Color==='Dorado'&&row.Forma==='Ovalado').imageUrls).toEqual(['/gold2.svg']);
-  expect(rows.find(row=>row.Color==='Dorado'&&row.Forma==='Redondo').imageUrls).toEqual(['/gold3.svg']);
-  expect(rows.find(row=>row.Color==='Dorado'&&!row.Forma).imageUrls).toEqual(['/gold1.svg','/gold2.svg','/gold3.svg']);
+  const absolutePhotos = photos => photos.map(url=>new URL(url,page.url()).href);
+  expect(absolutePhotos(rows.find(row=>row.Color==='Dorado'&&row.Forma==='Ovalado').imageUrls)).toEqual(absolutePhotos(['/gold2.svg']));
+  expect(absolutePhotos(rows.find(row=>row.Color==='Dorado'&&row.Forma==='Redondo').imageUrls)).toEqual(absolutePhotos(['/gold3.svg']));
+  expect(absolutePhotos(rows.find(row=>row.Color==='Dorado'&&!row.Forma).imageUrls)).toEqual(absolutePhotos(['/gold1.svg','/gold2.svg','/gold3.svg']));
   await page.evaluate(()=>window.editor.refresh());
   await expect(page.getByRole('checkbox',{name:'Asignar foto 3 a variante Dorado / Redondo',exact:true})).toBeChecked();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

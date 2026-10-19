@@ -1,3 +1,9 @@
+## 2026-10-19 — Identidad absoluta de fotos en la prueba del editor (Codex)
+
+CI39314372423 de d7c60f62 aprobó build/derivados, contratos previos y342 casos de interacción, pero15 instancias del nuevo test de combinación (5tamaños por3motores) comparaban una URL relativa de fixture con la URL absoluta que produce sanitizeImageUrl. La foto recibida era el mismo gold3.svg del mismo origen. Se corrige la aserción para normalizar ambos lados con URL antes de comparar, conservando archivo, origen, orden, número de fotos, combinaciones y selección tras refresh. No se cambia el editor ni se relaja el contrato de seguridad. product-color-gallery ya entra en el barrido runtime de los tres motores mediante product-boutique.spec.js; la línea dedicada de navegador queda sólo para formas y otros atributos, evitando duplicar esa suite. Nueva CI requerida para el nuevo SHA, sin heredar PASS completo.
+
+El titular corrigió la decisión operativa: al retirar pruebas deben devolverse TODAS las unidades reservadas, preservando los manuales y TINPED26. Esa limpieza y el corte de facturación siguen sin ejecutar; no hubo escrituras comerciales reales.
+
 ## 2026-10-19 — Fotos enlazadas a cualquier variante (Codex)
 
 Captura del titular: Ovalado seleccionado con portada Lágrima en producción. El arreglo previo de formas del PR1167 aún no se publicó; está consolidado en1169. Ampliación solicitada: asociación posicional para cualquier atributo único cuando hay exactamente una foto por opción; prioridad inalterada de asociaciones explícitas y ninguna inferencia de matrices. Galería compartida filtra por todos los atributos seleccionados y prioriza combinaciones específicas; foto-variante mantiene la misma regla para carrito/checkout/favoritos. El editor incorpora selección de cualquier combinación y asignación explícita de fotos sin destruir filas específicas existentes del mismo color. No agrega automáticamente Color a productos de forma/tamaño/sabor.
