@@ -120,7 +120,8 @@
 
         <div class="login-email-block" id="login-otp-block" style="display:none">
           <label class="login-email-label" for="login-otp-input">Código de 6 dígitos</label>
-          <input type="text" class="login-email-input login-otp-input" id="login-otp-input" placeholder="000000" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" />
+          <input type="text" class="login-email-input login-otp-input" id="login-otp-input" placeholder="000000" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" aria-describedby="login-otp-help" />
+          <p class="login-field-hint" id="login-otp-help">¿No encuentras el código en tu bandeja de entrada? Revisa también la carpeta de correo no deseado o spam.</p>
           <div class="login-otp-actions">
             <button type="button" class="login-otp-paste" id="btn-paste-otp">Pegar código</button>
             <span class="login-otp-clipboard-status" id="login-otp-clipboard-status" role="status" aria-live="polite"></span>

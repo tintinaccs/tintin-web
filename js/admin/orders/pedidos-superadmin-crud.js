@@ -1,3 +1,6 @@
+import { mergeSelectedOrderProducts } from './seleccion-productos-pedido.mjs?v=tintin-20261018-products-master-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { chooseOrderTrash } from './seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
@@ -13,7 +16,8 @@ import {
   limit,
   query,
   runTransaction,
-  serverTimestamp
+  serverTimestamp,
+  where
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const SEQUENCE_REF = doc(db, 'settings', 'orderSequence');
@@ -221,11 +225,12 @@ function ensureModal_() {
         <label class="adm-field">Estado de pago<select id="tinped-pay-status" class="adm-input"><option value="pendiente">Pago pendiente</option><option value="pagado">Pagado</option><option value="rechazado">Rechazado</option><option value="cancelado">Cancelado</option><option value="reembolsado">Reembolsado</option></select></label>
         <label class="adm-field" style="grid-column:1/-1">Nota interna<input id="tinped-notes" class="adm-input"></label>
         <div style="grid-column:1/-1;border-top:1px solid #eadde2;padding-top:14px">
-          <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-bottom:12px"><label class="adm-field" style="flex:1;min-width:220px">Agregar producto<select id="tinped-product-picker" class="adm-input"></select></label><button type="button" id="tinped-add-product" class="adm-btn">+ Agregar</button></div>
+          <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-bottom:12px"><label class="adm-field tinped-picker-field" style="flex:1;min-width:220px">Agregar producto<select id="tinped-product-picker" class="adm-input"></select></label><button type="button" id="tinped-add-product" class="adm-btn">+ Agregar</button></div>
           <div id="tinped-items"></div>
           <div id="tinped-total" style="text-align:right;font-weight:800;padding:12px 0">Total: 0 Gs</div>
         </div>
       </div>
+      <div id="tinped-error" role="alert" tabindex="-1" style="display:none;margin:0 20px 16px;color:var(--admin-color-error-text)"></div>
       <div style="padding:16px 22px;border-top:1px solid #eadde2;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap"><button type="button" id="tinped-save" class="adm-btn adm-btn-primary">Guardar pedido</button></div>
     </div>`;
   document.body.appendChild(overlay);
@@ -235,12 +240,12 @@ function ensureModal_() {
   overlay.querySelector('#tinped-save').addEventListener('click', saveModal_);
   overlay.querySelector('#tinped-items').addEventListener('input', handleItemInput_);
   overlay.querySelector('#tinped-items').addEventListener('click', handleItemClick_);
-  overlay.querySelector('#tinped-shipping-cost').addEventListener('input', renderItems_);
+  overlay.querySelector('#tinped-shipping-cost').addEventListener('input', updateTotal_);
   overlay.querySelector('#tinped-shipping-method').addEventListener('change', () => refreshModalStatuses_(modalState?.baseOrder, formEl_('tinped-status').value));
   overlay.addEventListener('keydown', event => {
-    if (event.key === 'Escape') { event.stopPropagation(); closeModal_(); }
+    if (event.key === 'Escape') { event.stopPropagation();event.preventDefault();closeModal_(); }
     if (event.key !== 'Tab') return;
-    const controls = [...overlay.querySelectorAll('button:not([disabled]),input,select,textarea')].filter(el => el.getClientRects().length);
+    const controls = [...overlay.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled])')].filter(el => el.getClientRects().length);
     if (event.shiftKey && document.activeElement === controls[0]) { event.preventDefault(); controls.at(-1)?.focus(); }
     else if (!event.shiftKey && document.activeElement === controls.at(-1)) { event.preventDefault(); controls[0]?.focus(); }
   });
@@ -259,14 +264,23 @@ function renderPicker_() {
 function renderItems_() {
   const root = formEl_('tinped-items');
   if (!root || !modalState) return;
-  root.innerHTML = modalState.items.map((item, index) => `
-    <div data-item-row="${index}" style="display:grid;grid-template-columns:minmax(150px,1.5fr) minmax(90px,.7fr) 80px 120px 38px;gap:8px;align-items:end;padding:9px 0;border-bottom:1px solid #f2e8ec">
+  root.innerHTML = modalState.items.map((item, index) => {
+    const product=catalogCache.find(product=>product.id===(item.id || item.productId)),variants=Array.isArray(product?.variantInventory)?product.variantInventory:[];
+    const variant=variants.length?`<select class="adm-input" data-item-field="variant" data-index="${index}"><option value="">Elegí una variante…</option>${variants.map(entry=>`<option value="${escapeHtml(entry.variant)}" ${item.variant===entry.variant?'selected':''}>${escapeHtml(entry.variant)} · stock ${Number(entry.stock)}</option>`).join('')}${item.variant && !variants.some(entry=>entry.variant===item.variant)?`<option value="${escapeHtml(item.variant)}" selected>${escapeHtml(item.variant)} (revisar disponibilidad)</option>`:''}</select>`:`<input class="adm-input" data-item-field="variant" data-index="${index}" value="${escapeHtml(item.variant || '')}">`;
+    return `
+    <div data-item-row="${index}" style="display:grid;grid-template-columns:92px minmax(0,1.5fr) minmax(0,.7fr) 80px 120px 44px;gap:8px;align-items:end;padding:9px 0;border-bottom:1px solid #f2e8ec">
+      <img class="tinped-item-image" src="${escapeHtml(sanitizeImageUrl(item.imageUrl || item.image || product?.imageUrl || product?.image || ''))}" alt="${escapeHtml(item.name || 'Producto')}">
       <label class="adm-field">Producto<input class="adm-input" data-item-field="name" data-index="${index}" value="${escapeHtml(item.name || '')}"></label>
-      <label class="adm-field">Variante<input class="adm-input" data-item-field="variant" data-index="${index}" value="${escapeHtml(item.variant || '')}"></label>
-      <label class="adm-field">Cant.<input class="adm-input" type="number" min="1" data-item-field="qty" data-index="${index}" value="${Math.max(1, Number(item.qty) || 1)}"></label>
+      <label class="adm-field">Variante${variant}</label>
+      <label class="adm-field">Cant.<input class="adm-input" type="number" min="1" max="99" step="1" data-item-field="qty" data-index="${index}" value="${Math.max(1, Number(item.qty) || 1)}"></label>
       <label class="adm-field">Precio<input class="adm-input" type="number" min="0" data-item-field="price" data-index="${index}" value="${money(item.price)}"></label>
-      <button type="button" class="adm-btn adm-btn-danger" data-remove-item="${index}" title="Quitar">×</button>
-    </div>`).join('') || '<div style="padding:14px;color:#766a70;text-align:center">Agregá al menos un producto.</div>';
+      <button type="button" class="adm-btn adm-btn-danger" data-remove-item="${index}" aria-label="Quitar ${escapeHtml(item.name || 'producto')}">×</button>
+    </div>`;}).join('') || '<div style="padding:14px;color:#766a70;text-align:center">Agregá al menos un producto.</div>';
+  updateTotal_();
+}
+
+function updateTotal_(){
+  if(!modalState)return;
   const subtotal = modalState.items.reduce((sum, item) => sum + money(item.price) * Math.max(1, Number(item.qty) || 1), 0);
   const total = subtotal + money(formEl_('tinped-shipping-cost')?.value);
   formEl_('tinped-total').textContent = `Total: ${total.toLocaleString('es-PY')} Gs`;
@@ -288,10 +302,10 @@ function handleItemInput_(event) {
   const item = modalState.items[index];
   if (!item) return;
   const field = input.dataset.itemField;
-  if (field === 'qty') item.qty = Math.max(1, Math.floor(Number(input.value) || 1));
-  else if (field === 'price') item.price = money(input.value);
+  if (field === 'qty') item.qty = input.value==='' ? NaN : Number(input.value);
+  else if (field === 'price') item.price = input.value==='' ? NaN : Number(input.value);
   else item[field] = clean(input.value, field === 'name' ? 180 : 120);
-  renderItems_();
+  updateTotal_();
 }
 
 function handleItemClick_(event) {
@@ -309,6 +323,7 @@ function refreshModalStatuses_(order, selected = order?.status || 'pendiente') {
   setValue_('tinped-status', selected === 'enviado' ? 'en_camino' : selected);
 }
 function fillModal_(order) {
+  const error=formEl_('tinped-error');if(error){error.textContent='';error.style.display='none';}
   if (!formEl_('tinped-pay-status').querySelector('option[value="parcial"]')) {
     const option = document.createElement('option'); option.value = 'parcial'; option.textContent = 'Parcialmente pagado'; formEl_('tinped-pay-status').appendChild(option);
   }
@@ -332,12 +347,17 @@ function fillModal_(order) {
 }
 
 function collectPatch_() {
+  for(const item of modalState?.items || []){
+    if(!Number.isInteger(item.qty ?? item.quantity) || (item.qty ?? item.quantity)<1 || (item.qty ?? item.quantity)>99 || !Number.isInteger(Number(item.price)) || Number(item.price)<0)throw Error('Cada línea debe tener de 1 a 99 unidades y un precio entero válido.');
+    const product=catalogCache.find(product=>product.id===(item.id || item.productId));
+    if(Array.isArray(product?.variantInventory) && !product.variantInventory.some(entry=>entry.variant===item.variant))throw Error('Elegí una variante válida para cada producto con stock por opción.');
+  }
   const items = (modalState?.items || []).map(item => ({
-    id: clean(item.id, 180),
+    id: clean(item.id || item.productId, 180),
     name: clean(item.name, 180) || 'Producto',
     cat: clean(item.cat, 120),
     price: money(item.price),
-    qty: Math.max(1, Math.floor(Number(item.qty) || 1)),
+    qty: Number(item.qty ?? item.quantity),
     variant: clean(item.variant, 120),
     imageUrl: clean(item.imageUrl, 900)
   }));
@@ -413,8 +433,13 @@ async function createManualOrder_(patch) {
 }
 
 async function saveModal_() {
-  if (!modalState) return;
+  if (!modalState || modalState.saving) return false;
   assertSuperAdmin();
+  const savingState=modalState;savingState.saving=true;
+  const overlay=document.getElementById('tinped-crud-overlay');
+  const controls=[...overlay.querySelectorAll('button,input,select')].map(control=>[control,control.disabled]);
+  controls.forEach(([control])=>control.disabled=true);
+  const errorElement=formEl_('tinped-error');errorElement.textContent='';errorElement.style.display='none';
   const button = formEl_('tinped-save');
   const old = button.textContent;
   button.disabled = true;
@@ -431,27 +456,47 @@ async function saveModal_() {
       await window.TintinInventoryIntegrity.updateEditedOrder(orderId, { ...patch, baseChangeId: modalState.baseOrder?.lastChangeId || '' });
       toast(`Pedido ${patch.orderNumber || orderNumberOf(modalState.baseOrder)} actualizado.`);
     }
-    closeModal_();
+    closeModal_({force:true});
+    return true;
   } catch (error) {
     console.error('[TINPED] guardar:', error);
-    toast(error?.message || 'No se pudo guardar el pedido.', 6500);
+    errorElement.textContent=error?.message || 'No se pudo guardar el pedido.';errorElement.style.display='';errorElement.focus();
+    toast(errorElement.textContent, 6500);
+    return false;
   } finally {
-    button.disabled = false;
+    savingState.saving=false;controls.forEach(([control,disabled])=>control.disabled=disabled);
     button.textContent = old;
   }
 }
 
-function closeModal_() {
-  const overlay = document.getElementById('tinped-crud-overlay');
-  if (overlay) overlay.style.display = 'none';
-  modalState = null;
-  modalReturnFocus?.focus?.({ preventScroll: true }); modalReturnFocus = null;
+function closeModal_({force=false,remove=false}={}) {
+  if(modalState?.saving && !force)return;
+  const close=()=>{
+    window.AdminUnsaved?.unregister('order-items-editor');
+    const overlay=document.getElementById('tinped-crud-overlay');
+    if(overlay){overlay.style.display='none';if(remove)overlay.remove();}
+    document.documentElement.classList.remove('tt-product-order-open');
+    modalState=null;modalReturnFocus?.focus?.({preventScroll:true});modalReturnFocus=null;
+  };
+  if(force)return close();
+  if(window.AdminUnsaved)return window.AdminUnsaved.requestNavigation(close,{scopeIds:'order-items-editor'});
+  if(!modalState || !modalState.openSnapshot || modalState.openSnapshot===serializeModal_() || window.confirm('¿Descartar los cambios sin guardar del pedido?'))close();
+}
+function serializeModal_(){
+ const root=document.getElementById('tinped-crud-overlay');
+ return JSON.stringify({items:modalState?.items || [],fields:[...(root?.querySelectorAll('input,select') || [])].map(el=>[el.id,el.dataset.itemField,el.value])});
+}
+function trackModal_(){
+ modalState.openSnapshot=serializeModal_();
+ window.AdminUnsaved?.register('order-items-editor',{root:'#tinped-crud-overlay',serialize:serializeModal_,save:saveModal_,label:'el pedido abierto'});
+ document.documentElement.classList.add('tt-product-order-open');
 }
 
 async function openManualOrder() {
   modalReturnFocus = document.activeElement;
   assertSuperAdmin();
   await loadCatalog_();
+  assertSuperAdmin();
   modalState = { mode: 'create', orderId: '', baseOrder: null, items: [] };
   const overlay = ensureModal_();
   formEl_('tinped-modal-title').textContent = 'Nuevo pedido manual';
@@ -465,27 +510,43 @@ async function openManualOrder() {
   renderPicker_();
   renderItems_();
   overlay.style.display = 'block';
+  trackModal_();
   formEl_('tinped-modal-close').focus();
 }
 
-async function openAdvancedOrderEditor(orderId) {
-  modalReturnFocus = document.activeElement;
+async function openAdvancedOrderEditor(orderId,{productIds=[],returnFocus=null}={}) {
   assertSuperAdmin();
-  const safeId = clean(orderId, 220);
-  const [orderSnap] = await Promise.all([getDoc(doc(db, ACTIVE_COLLECTION, safeId)), loadCatalog_()]);
-  if (!orderSnap.exists()) throw new Error('El pedido ya no existe.');
-  const order = { id: safeId, ...orderSnap.data() };
-  modalState = { mode: 'edit', orderId: safeId, baseOrder: order, items: Array.isArray(order.items) ? order.items.map(item => ({ ...item })) : [] };
-  const overlay = ensureModal_();
-  formEl_('tinped-modal-title').textContent = `CRUD completo · ${orderNumberOf(order)}`;
-  formEl_('tinped-modal-subtitle').textContent = `ID técnico: ${safeId}`;
-  const codeInput = formEl_('tinped-code');
-  codeInput.readOnly = false;
-  codeInput.removeAttribute('aria-readonly');
-  fillModal_(order);
-  renderPicker_();
-  renderItems_();
-  overlay.style.display = 'block';
+  if(!Array.isArray(productIds) || productIds.length>30 || new Set(productIds).size!==productIds.length || productIds.some(id=>typeof id!=='string' || !id || id.length>180 || id.includes('/')))throw Error('Selección de productos inválida.');
+  const safeId=clean(orderId,180);
+  if(!safeId || safeId.includes('/'))throw Error('Código o ID de pedido inválido.');
+  modalReturnFocus=returnFocus || document.activeElement;
+  await loadCatalog_();
+  let snapshot=await getDoc(doc(db,ACTIVE_COLLECTION,safeId));
+  let resolvedId=safeId;
+  if(!snapshot.exists()){
+    const matches=await getDocs(query(collection(db,ACTIVE_COLLECTION),where('orderNumber','==',safeId.toUpperCase()),limit(2)));
+    if(matches.docs.length!==1)throw Error(matches.docs.length?'El código coincide con más de un pedido. Usá su ID exacto.':'El pedido ya no existe o su código no es válido.');
+    snapshot=matches.docs[0];resolvedId=snapshot.id;
+  }
+  const order={...snapshot.data(),id:resolvedId};
+  if(order.localEntryId)throw Error('Esta venta se edita en Ventas locales. No se modifica desde Productos.');
+  const selected=[];
+  for(const id of productIds){
+    const productSnapshot=await getDoc(doc(db,'products',id));
+    if(!productSnapshot.exists())throw Error('Un producto seleccionado ya no existe.');
+    const product={...productSnapshot.data(),id};selected.push(product);
+    const index=catalogCache.findIndex(item=>item.id===id);if(index<0)catalogCache.push(product);else catalogCache[index]=product;
+  }
+  const originalItems=(Array.isArray(order.items)?order.items:[]).map(item=>({...item,id:item.id || item.productId || '',qty:Number(item.qty ?? item.quantity ?? 1)}));
+  const nextItems=mergeSelectedOrderProducts(originalItems,selected);
+  assertSuperAdmin();
+  modalState={mode:'edit',orderId:resolvedId,baseOrder:order,items:originalItems};
+  const overlay=ensureModal_();
+  formEl_('tinped-modal-title').textContent=`Editar pedido · ${orderNumberOf(order)}`;
+  formEl_('tinped-modal-subtitle').textContent=productIds.length?`${order.userName || 'Cliente sin nombre'} · ${productIds.length} producto${productIds.length===1?'':'s'} agregado${productIds.length===1?'':'s'} al borrador. Revisá cantidades y variantes.`:`ID técnico: ${resolvedId}`;
+  const codeInput=formEl_('tinped-code');codeInput.readOnly=false;codeInput.removeAttribute('aria-readonly');
+  fillModal_(order);renderPicker_();renderItems_();overlay.style.display='block';trackModal_();
+  if(productIds.length){modalState.items=nextItems;renderItems_();window.AdminUnsaved?.markDirty('order-items-editor');requestAnimationFrame(()=>formEl_('tinped-items')?.scrollIntoView({block:'start'}));}
   formEl_('tinped-modal-close').focus();
 }
 
@@ -513,3 +574,5 @@ window.TintinOrderAdmin = Object.freeze({
   openManualOrder,
   openAdvancedOrderEditor
 });
+
+subscribeAuthState(user=>{if(!user || user.isAnonymous || String(user.email || '').trim().toLowerCase()!==String(SUPER_ADMIN).trim().toLowerCase()){closeModal_({force:true,remove:true});catalogCache=[];}});

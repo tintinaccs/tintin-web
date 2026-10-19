@@ -1,25 +1,25 @@
 import fs from 'node:fs';
 import { readTrustedOrRemote, githubFailure } from './leer-blobs-mantenimiento.mjs';
 import { execFileSync } from 'node:child_process';
-import { inspectMaintenance, validateApproval, validateChecks, validateEnvironment, validateSnapshot, policyPath, planPath } from './mantenimiento-flujos-core.mjs';
+import { inspectMaintenance, validateAutomaticPullRequest, validateChecks, validateSnapshot, policyPath, planPath } from './mantenimiento-flujos-core.mjs';
 
 // Este programa sólo se ejecuta desde el checkout confiable de main.
 // El árbol candidato se lee como JSON y blobs; nunca se ejecuta su código.
 const config = JSON.parse(fs.readFileSync('config/mantenimiento-flujos.json', 'utf8'));
 const mode = process.argv[2];
-const headSha = process.env.CANDIDATE_SHA || '';
-const prNumber = process.env.PR_NUMBER || '';
+let headSha = process.env.CANDIDATE_SHA || '';
+let prNumber = process.env.PR_NUMBER || '';
 const baseSha = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 const runId = process.env.GITHUB_RUN_ID;
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
-const api = async (path, body) => {
+const api = async (path, body, method = body ? 'POST' : 'GET') => {
   const response = await fetch(`https://api.github.com/repos/${config.repository}/${path}`, {
-    method: body ? 'POST' : 'GET',
+    method,
     headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${process.env.GH_TOKEN || ''}`, 'content-type': 'application/json', 'X-GitHub-Api-Version': '2026-03-10' },
     ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(30000),
   });
   assert(response.ok, githubFailure(path, response));
-  return response.json();
+  return response.status === 204 ? null : response.json();
 };
 const list = async (path, key) => {
   const items = [];
@@ -36,6 +36,8 @@ const snapshot = async () => {
   const pr = await api(`pulls/${prNumber}`);
   const main = await api(`git/ref/heads/${config.branch}`);
   validateSnapshot(pr, main.object.sha, baseSha, headSha, config);
+  validateAutomaticPullRequest(pr, config);
+  return pr;
 };
 const readCandidate = async () => {
   await snapshot();
@@ -69,7 +71,7 @@ const readCandidate = async () => {
     assert(bytes.get(planPath).length <= 65536, 'Plan demasiado grande.');
     plan = JSON.parse(bytes.get(planPath).toString('utf8'));
   }
-  return inspectMaintenance({ baseline, candidate, baseSha, changedPaths, plan, readFile: path => {
+  return inspectMaintenance({ baseline, candidate, baseSha, changedPaths, plan, allowControlUpdates: config.automaticControlMaintenance === true, readFile: path => {
     assert(bytes.has(path), `Archivo no leído: ${path}`); return bytes.get(path);
   } });
 };
@@ -92,47 +94,80 @@ const checkCI = async () => {
     }
   }
   verified.push(...checks.filter(check => config.requiredChecks.some(item => !item.workflowPath && item.name === check.name && item.appId === check.app?.id)));
-  validateChecks(verified, config, headSha);
+  return verified;
 };
 
-assert(['inspect', 'publish'].includes(mode), 'Modo inválido.');
-assert(/^[a-f0-9]{40}$/.test(headSha) && /^[1-9][0-9]*$/.test(prNumber), 'PR y SHA completo obligatorios.');
+assert(mode === 'automatic', 'Modo inválido.');
 assert(process.env.GITHUB_REPOSITORY === config.repository && process.env.GITHUB_REF === `refs/heads/${config.branch}`, 'Workflow fuera de main confiable.');
-let conclusion = 'failure';
-let message;
+assert(['workflow_run', 'workflow_dispatch'].includes(process.env.GITHUB_EVENT_NAME), 'Evento no autorizado.');
+
+// Un workflow_run puede repetir la validación tras reintentar CI. Ignorar
+// candidatos antiguos/cerrados; nunca publicar éxito para otra cabeza del PR.
+if (process.env.GITHUB_EVENT_NAME === 'workflow_run') {
+  const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+  const run = event.workflow_run;
+  assert(run?.path === '.github/workflows/auditar-tintin.yml' && run.event === 'pull_request' &&
+    run.head_repository?.full_name === config.repository, 'Evento CI ajeno al repositorio o workflow esperado.');
+  const candidates = await list(`commits/${run.head_sha}/pulls`);
+  const pr = candidates.find(item => item.state === 'open' && item.base?.ref === config.branch && item.head?.sha === run.head_sha);
+  if (!pr) { console.log('La ejecución ya no corresponde a un PR abierto vigente.'); process.exit(0); }
+  prNumber = String(pr.number); headSha = pr.head.sha;
+}
+assert(/^[a-f0-9]{40}$/.test(headSha) && /^[1-9][0-9]*$/.test(prNumber), 'PR y SHA completo obligatorios.');
+assert(Number.isSafeInteger(config.waitMinutes) && config.waitMinutes > 0 && config.waitMinutes <= 80, 'Plazo de CI inválido.');
+assert(config.mergeMethod === 'squash', 'Método de integración no autorizado.');
+const checks = [];
+const checkNames = [config.checkName, 'Protected flow integrity'];
+const details = `https://github.com/${config.repository}/actions/runs/${runId}`;
+const report = async (conclusion, message) => {
+  for (const check of checks) await api(`check-runs/${check.id}`, {
+    status: 'completed', conclusion, output: { title: conclusion === 'success' ? 'Validación automática aprobada' : 'Publicación bloqueada', summary: message },
+  }, 'PATCH');
+};
 try {
-  const result = await readCandidate();
-  if (result.maintenance) {
-    // La ejecución automática falla con instrucciones; sólo dispatch desde
-    // main puede abrir una solicitud de revisión, después de pasar el CI.
-    assert(process.env.GITHUB_EVENT_NAME === 'workflow_dispatch', 'Cambios protegidos: ejecutar mantenimiento desde main con este PR y SHA, después del CI.');
-    assert(process.env.GITHUB_RUN_ATTEMPT === '1', 'Reintento inválido: lanzar un nuevo dispatch para obtener nueva aprobación.');
-    await checkCI();
-    const environment = await api(`environments/${config.environment}`);
-    validateEnvironment(environment, config);
-    if (mode === 'publish') {
-      assert(process.env.APPROVAL_RESULT === 'success', 'La aprobación del entorno no se completó.');
-      assert(/^[1-9][0-9]*$/.test(runId || ''), 'Ejecución inválida.');
-      // No se heredan revisiones al reejecutar un run antiguo.
-      validateApproval(await api(`actions/runs/${runId}/approvals`), environment, config);
+  await snapshot();
+  await readCandidate();
+  for (const name of checkNames) checks.push(await api('check-runs', {
+    name, head_sha: headSha, status: 'in_progress', details_url: details,
+    output: { title: 'Esperando pruebas obligatorias', summary: 'Se verifican plan, archivos, base y CI del commit exacto antes de integrar.' },
+  }));
+  const deadline = Date.now() + config.waitMinutes * 60_000;
+  while (true) {
+    await snapshot();
+    const verified = await checkCI();
+    try { validateChecks(verified, config, headSha); break; }
+    catch (error) {
+      const failed = config.requiredChecks.some(requirement => {
+        const latest = verified.filter(check => check.name === requirement.name && check.app?.id === requirement.appId)
+          .sort((a, b) => b.id - a.id)[0];
+        return latest?.status === 'completed' && latest.conclusion !== 'success';
+      });
+      assert(!failed, error.message);
+      assert(Date.now() < deadline, `Se agotó la espera: ${error.message}`);
+      await new Promise(resolve => setTimeout(resolve, 20_000));
     }
   }
+  // Releer todos los datos después de la espera: ningún snapshot previo autoriza el merge.
+  await readCandidate();
+  validateChecks(await checkCI(), config, headSha);
   await snapshot();
-  if (mode === 'inspect') {
-    fs.appendFileSync(process.env.GITHUB_OUTPUT, `maintenance=${result.maintenance}\nbase_sha=${baseSha}\nhead_sha=${headSha}\n`);
-    // Escapar contenido candidato para que el resumen no permita HTML ni
-    // instrucciones disfrazadas como UI de aprobación.
-    const escape = text => text.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-    fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `<h2>Revisión de mantenimiento — PR ${prNumber}</h2><p>Base: <code>${baseSha}</code><br>Candidato: <code>${headSha}</code></p><pre>${escape(JSON.stringify(result, null, 2))}</pre>\n`);
+  await report('success', 'Plan exacto, hashes reales, alcances y CI del commit verificados automáticamente.');
+  const merged = await api(`pulls/${prNumber}/merge`, { sha: headSha, merge_method: config.mergeMethod }, 'PUT');
+  assert(merged.merged === true && /^[a-f0-9]{40}$/.test(merged.sha || ''), 'GitHub no confirmó la integración.');
+  console.log(`PR ${prNumber} integrado: ${merged.sha}`);
+  // Los pushes con GITHUB_TOKEN no disparan Actions. Los dispatch explícitos
+  // sí lo hacen: mantener auditoría de main y comprobación del deploy real.
+  for (const workflow of ['auditar-tintin.yml', 'monitor-produccion.yml']) {
+    await api(`actions/workflows/${workflow}/dispatches`, {
+      ref: config.branch,
+      ...(workflow === 'monitor-produccion.yml' ? { inputs: { verification_only: true } } : {}),
+    });
   }
-  conclusion = 'success';
-  message = result.maintenance ? (mode === 'publish' ? 'Plan exacto, CI y aprobación del entorno verificados para este commit.' : 'Plan y CI verificados; falta revisión del entorno antes del veredicto.') : 'Todos los archivos y alcances protegidos permanecen intactos.';
-} catch (error) { message = error.message; process.exitCode = 1; }
-if (mode === 'publish') {
-  await api('check-runs', {
-    name: config.checkName, head_sha: headSha, status: 'completed', conclusion,
-    details_url: `https://github.com/${config.repository}/actions/runs/${runId}`,
-    output: { title: conclusion === 'success' ? 'Protección verificada' : 'Protección bloqueada', summary: message },
-  });
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,
+      `PR #${prNumber}: ${headSha} → ${merged.sha}. CI y plan verificados; auditoría de main y verificación de producción iniciadas.\n`);
+  }
+} catch (error) {
+  if (checks.length) await report('failure', error.message);
+  console.error(error.message); process.exitCode = 1;
 }
-console.log(message);

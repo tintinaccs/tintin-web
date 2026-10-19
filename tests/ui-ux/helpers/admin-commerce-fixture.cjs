@@ -14,8 +14,9 @@ export function onAuthStateChanged(_auth, callback) {
   return () => {};
 }`;
 const sessionCoordinatorStub = `
+const callbacks=new Set();
 export function subscribeAuthState(callback) {
-  window.__authCallback=callback;
+  callbacks.add(callback);window.__authCallback=user=>{for(const fn of callbacks)fn(user);};
   queueMicrotask(() => callback({ uid: 'super-1', email: 'tintinaccs@gmail.com', isAnonymous: false }));
   return () => {};
 }`;
@@ -43,15 +44,15 @@ window.__publishProducts=()=>{for(const fn of window.__productConsumers)fn({docs
 window.__orderConsumers=new Set();window.__publishOrders=(error='')=>{for(const fn of window.__orderConsumers)fn({uid:'super-1',orders:window.__orders,ready:true,error});};
 window.TintinAdminOrders={subscribe(fn){window.__orderConsumers.add(fn);queueMicrotask(()=>window.__publishOrders());return()=>window.__orderConsumers.delete(fn);},retry(){window.__publishOrders();}};
 window.dispatchEvent(new Event('tintin:admin-orders-source'));
-export const where = () => null;
+export const where = (field,operator,value) => ({__where:true,field,operator,value});
 export const collection = (_db, name) => name;
 export const doc = (_db, name, id) => name+'/'+id;
 export const serverTimestamp = () => new Date();
 export const runTransaction = async () => {throw new Error('Escrituras no habilitadas en este fixture');};
 export const setDoc = async () => {throw new Error('Escrituras no habilitadas en este fixture');};
 export const deleteDoc = async () => {throw new Error('Escrituras no habilitadas en este fixture');};
-export async function getDoc(ref) { const id=ref.split('/').at(-1),order=window.__orders.find(o=>o.id===id);return {exists:()=>!!order,data:()=>structuredClone(order)}; }
-export const query = (ref) => ref;
+export async function getDoc(ref) { const [name,id]=ref.split('/');const record=name==='orders'?window.__orders.find(o=>o.id===id):name==='products'?window.__productRows.find(p=>p.id===id)?.data:null;return {id,exists:()=>!!record,data:()=>structuredClone(record)}; }
+export const query = (ref,...constraints) => constraints.some(item=>item?.__where)?{collection:ref,where:constraints.filter(item=>item?.__where)}:ref;
 export const orderBy = () => null;
 export const limit = () => null;
 export const startAfter = () => null;
@@ -65,8 +66,9 @@ export function onSnapshot(ref, options, next) {
   return () => {};
 }
 export async function getDocs(ref) {
+  if(ref?.where){const rows=ref.collection==='orders'?window.__orders:ref.collection==='auditLog'?(window.__auditRows || []):[];return {docs:rows.filter(row=>ref.collection==='auditLog' || ref.where.every(condition=>row[condition.field]===condition.value)).map(row=>({id:row.id,data:()=>structuredClone(row)}))};}
   if(ref==='auditLog')return {docs:(window.__auditRows || []).map(entry=>({id:entry.id,data:()=>structuredClone(entry)}))};
-  return { docs: (DATA[ref] || []).map(entry => ({ id: entry.id, data: () => structuredClone(entry.data) })) };
+  return { docs: (ref==='products'?window.__productRows:DATA[ref] || []).map(entry => ({ id: entry.id, data: () => structuredClone(entry.data) })) };
 }`;
 const rolesStub = `
 export const SUPER_ADMIN = 'tintinaccs@gmail.com';
@@ -154,7 +156,7 @@ async function mockRuntime(page, {orders,role='superadmin',forbiddenActions=[]} 
     const relative=decodeURIComponent(url.pathname).replace(/^\//,'');
     const local=path.resolve(ROOT,relative);
     if(!local.startsWith(ROOT+path.sep))return route.abort();
-    if(/\.(?:mjs|js|css)$/.test(local) && fs.existsSync(local))return route.fulfill({status:200,contentType:local.endsWith('.css')?'text/css':'text/javascript',body:fs.readFileSync(local,'utf8')});
+    if(/\.(?:mjs|js|css|woff2)$/.test(local) && fs.existsSync(local))return route.fulfill({status:200,contentType:local.endsWith('.css')?'text/css':local.endsWith('.woff2')?'font/woff2':'text/javascript',body:fs.readFileSync(local)});
     return route.abort();
   });
   await page.route('https://tintin.test/js/admin/auth/app-check-admin.js*',route=>route.fulfill({status:200,contentType:'text/javascript',body:'export async function waitForAdminAppCheck(){return true;}'}));

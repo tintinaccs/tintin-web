@@ -24,6 +24,7 @@ for (const section of ['productos', 'colecciones', 'pedidos']) {
 for (const collectionName of ['products', 'collections', 'orders']) {
   const liveSync = collectionName === 'orders'
     ? /TintinAdminOrders[\s\S]*?subscribe\(/.test(js) && /onSnapshot\(ordersQuery/.test(read('js/admin/admin-app.js'))
+    : collectionName === 'products' ? /createAdminPagedSource\(/.test(js) && /subscribeProductCatalog\(records/.test(js) && /subscribePage/.test(js) && /onSnapshot\(source,\s*\{\s*includeMetadataChanges:\s*true/.test(js)
     : new RegExp(`onSnapshot\\((?:query\\()?collection\\(db, ['\"]${collectionName}['\"]\\)`).test(js);
   expect(liveSync, `${collectionName} se sincroniza en tiempo real.`);
 }
@@ -46,7 +47,7 @@ for (const forbiddenWrite of ['updateDoc', 'setDoc', 'addDoc', 'deleteDoc', 'wri
   expect(!new RegExp(`\\b${forbiddenWrite}\\b`).test(js), `la capa visual no escribe Firestore directamente con ${forbiddenWrite}.`);
 }
 
-expect(!/duplicar producto/i.test(js), 'no inventa Duplicar producto, que Tintin todavía no implementa.');
+expect(/product-duplicate/.test(js) && /callLegacyAction\('prodDuplicar',\s*id\)/.test(js) && /window\.prodDuplicar/.test(read('js/admin/admin-app.js')), 'Duplicar abre el formulario canónico sin crear documentos antes de guardar.');
 expect(!/crear pedido manual/i.test(js), 'no inventa creación manual de pedidos.');
 expect(!/colecci[oó]n automatizada|smart collection/i.test(js), 'no simula colecciones inteligentes sin modelo de datos compatible.');
 

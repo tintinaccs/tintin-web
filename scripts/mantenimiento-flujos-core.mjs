@@ -9,7 +9,8 @@ export const controlPath = path => path.startsWith('.github/workflows/') ||
 const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const fail = message => { throw new Error(message); };
 
-export function inspectMaintenance({ baseline, candidate, readFile, baseSha, plan, changedPaths }) {
+export function inspectMaintenance({ baseline, candidate, readFile, baseSha, plan, changedPaths, allowControlUpdates = false }) {
+  if (!allowControlUpdates && changedPaths.some(controlPath)) fail('Cambios al mecanismo de control requieren autorización en la configuración confiable de main.');
   const legacyErrors = checkProtectedFlows(baseline, candidate, readFile);
   if (!legacyErrors.length) return { maintenance: false, files: [], affectedRecords: [] };
   if (!/^[a-f0-9]{40}$/.test(baseSha)) fail('Base de mantenimiento inválida.');
@@ -17,7 +18,6 @@ export function inspectMaintenance({ baseline, candidate, readFile, baseSha, pla
   const withoutFiles = policy => Object.fromEntries(Object.entries(policy).filter(([key]) => key !== 'files'));
   if (!equal(withoutFiles(baseline), withoutFiles(candidate))) fail('El mantenimiento no puede modificar registros, metadatos ni sellos.');
   if (!equal(Object.keys(baseline.files).sort(), Object.keys(candidate.files || {}).sort())) fail('El mantenimiento debe conservar todas las entradas protegidas.');
-  if (changedPaths.some(controlPath)) fail('Cambios al mecanismo de control requieren una migración separada.');
   const files = [];
   for (const [path, oldHash] of Object.entries(baseline.files)) {
     const newHash = flowFileHash(readFile(path));
@@ -38,24 +38,12 @@ export function inspectMaintenance({ baseline, candidate, readFile, baseSha, pla
   return { maintenance: true, files, affectedRecords, reason: plan.reason };
 }
 
-export function validateEnvironment(environment, config) {
-  const rules = environment.protection_rules?.filter(rule => rule.type === 'required_reviewers') || [];
-  const ids = rules.flatMap(rule => rule.reviewers || []).map(item =>
-    item.type === 'User' && item.reviewer?.type === 'User' ? item.reviewer.id : null).sort();
-  if (environment.name !== config.environment || !Number.isSafeInteger(environment.id) ||
-      environment.can_admins_bypass !== false || rules.length !== 1 ||
-      !equal(ids, [...config.reviewerIds].sort()) ||
-      environment.deployment_branch_policy?.protected_branches !== true ||
-      environment.deployment_branch_policy?.custom_branch_policies !== false) {
-    fail('El entorno de aprobación no tiene los controles y revisores requeridos.');
+export function validateAutomaticPullRequest(pr, config) {
+  if (pr.draft || pr.user?.type !== 'User' ||
+      !config.automaticMergeAuthorIds.includes(pr.user.id) ||
+      pr.head?.repo?.full_name !== config.repository) {
+    fail('Publicación automática limitada a PR propios del titular, sin borradores ni forks.');
   }
-}
-
-export function validateApproval(approvals, environment, config) {
-  const reviews = approvals.filter(review => review.environments?.some(item => item.id === environment.id));
-  if (!reviews.length || reviews.some(review => review.state === 'rejected') ||
-      !reviews.some(review => review.state === 'approved' && review.user?.type === 'User' &&
-        config.reviewerIds.includes(review.user.id))) fail('Falta aprobación del revisor autorizado para esta ejecución.');
 }
 
 export function validateChecks(checks, config, headSha) {
@@ -74,5 +62,5 @@ export function validateChecks(checks, config, headSha) {
 export function validateSnapshot(pr, mainSha, baseSha, headSha, config) {
   if (pr.state !== 'open' || pr.base?.repo?.full_name !== config.repository ||
       pr.base?.ref !== config.branch || pr.base?.sha !== baseSha || mainSha !== baseSha ||
-      pr.head?.sha !== headSha) fail('El PR o main cambiaron: se requiere una nueva ejecución y aprobación.');
+      pr.head?.sha !== headSha) fail('El PR o main cambiaron: se requiere actualizar la rama y volver a verificar.');
 }

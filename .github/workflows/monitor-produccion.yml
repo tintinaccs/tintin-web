@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      verification_only:
+        description: Comprobar la publicación sin actualizar la tasa PayPal
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: '17 * * * *'
     - cron: '0 17 * * 1-5'
@@ -22,7 +28,7 @@ concurrency:
 jobs:
   paypal_fx:
     name: Actualizar tasa PayPal desde BCP
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && github.event.schedule == '0 17 * * 1-5')
+    if: (github.event_name == 'workflow_dispatch' && !inputs.verification_only) || (github.event_name == 'schedule' && github.event.schedule == '0 17 * * 1-5')
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
