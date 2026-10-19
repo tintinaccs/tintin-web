@@ -1,28 +1,52 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b567594f24c14639ed3204f97e61567694dc4220",
-  "reason": "Unificar presentación adaptable de módulos admin, corregir ayuda de envíos móvil; pruebas Chromium y auditorías del dominio.",
+  "baseCommit": "9ac62e637a46df8e57ff096e61d0992eb9b3faf2",
+  "reason": "Renovar el panel con UI diferida bajo 200 KB, H1 y tipografía canónicos; corregir paginación y fechas y validar regresiones.",
   "files": [
     {
       "path": "admin-images.html",
-      "oldHash": "624008054d50daa357448c318eefecb83f2c0204f0cec0de5c06c75570cfdd59",
-      "newHash": "403c7211c7549fcb2d34fbfc4c3a23a27d23f9945f53101567e0052b17c9555a"
+      "oldHash": "403c7211c7549fcb2d34fbfc4c3a23a27d23f9945f53101567e0052b17c9555a",
+      "newHash": "0358e889a9fd4962cd52812d1788643f5513b4d79cee77d97a7f08cb4aa079ae"
     },
     {
       "path": "admin.html",
-      "oldHash": "a71d2b416c5f77d241f3d058109ac51eb53874d056b2af78c87dd05b439f2cda",
-      "newHash": "878b9e080d14899debaee7436db57392171377dbe0a3649b78c8da9997a401f5"
+      "oldHash": "878b9e080d14899debaee7436db57392171377dbe0a3649b78c8da9997a401f5",
+      "newHash": "e895201adfe3959111878a6d1aad699de3a38bab00e2a01396188a56d4e072b0"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "95381b7472662227999876d1a0180cd5ad9dbf0624d5d5c30a3a925821bf1b45",
+      "newHash": "3ce17f02d60b51fc705a0c5ae12817fe4fd0bde851ef14bf4765d61449ea43e6"
     },
     {
       "path": "package.json",
-      "oldHash": "a9d7ce7681a214afad987aece6832f3fef220759ba27f8fc0294b124fc8328cb",
-      "newHash": "773dc9981ba3efe3c711674e59a27a2c33aaf3357a558fd6e15d63e485341fbd"
+      "oldHash": "773dc9981ba3efe3c711674e59a27a2c33aaf3357a558fd6e15d63e485341fbd",
+      "newHash": "d7e2cd450be3c8240df7f82561e6666d1e0f0c80b4582e894d81df34d2159898"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "6cfa23bc06217ed7ddc0a5dff44acf59bdd73b2af3f3104974f1a21c493e4437",
-      "newHash": "574927fdf6d817a4255ac6a030bd91037a3eec9fe51b76cddb8336ff565d3e85"
+      "oldHash": "574927fdf6d817a4255ac6a030bd91037a3eec9fe51b76cddb8336ff565d3e85",
+      "newHash": "936cfba30a55e163c3fb2e5150639424b3698675054eec3c85a58881bb2208cb"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

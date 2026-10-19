@@ -88,7 +88,7 @@ const imagesStub = `export function sanitizeImageUrl(value) { return /^https?:\\
 function fixtureHtml() {
   return `<!doctype html>
   <html lang="es" class="adm-auth-ready"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/tablero-pedidos.css"><style>
+  <link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/tablero-pedidos.css"><link rel="stylesheet" href="/css/admin/dashboard-control.css"><style>
     :root {
       --admin-color-brand:#AD3F67; --admin-color-brand-hover:#8B2642; --admin-color-background-page:#FFF6FA;
       --admin-color-background-surface:#fff; --admin-color-background-sidebar-active:#FDECF2; --admin-color-border:#F1E4E7;
@@ -101,7 +101,7 @@ function fixtureHtml() {
     }
     *{box-sizing:border-box} body{margin:0;padding:24px;background:var(--admin-color-background-page);font-family:Montserrat}
     .adm-section{display:block}.adm-card{background:#fff}.adm-card-body{padding:12px}
-  </style></head><body>
+  </style></head><body class="tt-admin-control">
     <div id="adm-toast"></div>
     <button data-section="importar" id="nav-importar">Importar</button>
     <main class="adm-main"><div class="adm-content">
