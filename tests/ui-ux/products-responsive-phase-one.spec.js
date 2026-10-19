@@ -131,7 +131,7 @@ test('selección entre páginas y barra sobre navegación sin tapar el último p
  await page.setViewportSize({width:390,height:844});await mockRuntime(page);await page.goto('https://tintin.test/admin-commerce-fixture');
  await page.evaluate(()=>{
   window.__productRows=Array.from({length:32},(_,i)=>({id:`p-${String(i).padStart(2,'0')}`,data:{name:`Producto ${String(i).padStart(2,'0')}`,price:25000,stock:i,active:true}}));window.__publishProducts();
-  const tabs=document.createElement('nav');tabs.id='adm-mobile-tabs';tabs.textContent='Navegación';tabs.style.cssText='position:fixed;bottom:0;left:0;width:100%;height:64px;background:white;z-index:430';document.body.append(tabs);
+  const tabs=document.createElement('nav');tabs.id='adm-mobile-tabs';tabs.textContent='Navegación';tabs.style.cssText='position:fixed;bottom:12px;left:12px;width:calc(100% - 24px);height:76px;background:white;z-index:430';document.body.append(tabs);
   window.dispatchEvent(new Event('resize'));
  });
  await expect(page.locator('#tt-commerce-products tbody tr')).toHaveCount(30);

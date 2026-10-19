@@ -103,3 +103,74 @@ test('el dashboard distribuye pedidos y visitantes sin superponerlos', async ({ 
   expect(visitor.x).toBeGreaterThanOrEqual(orders.x + orders.width);
   expect(Math.abs(visitor.y - orders.y)).toBeLessThan(2);
 });
+
+for (const width of [320, 390, 540]) {
+  test(`barra flotante y drop-up accesible a ${width}px`, async ({ page }, testInfo) => {
+    await load(page, width, 'admin.html', { mobile: true });
+    const nav = page.locator('#adm-mobile-tabs'), more = page.locator('#adm-mobile-more-toggle');
+    const box = await nav.boundingBox();
+    await expect(nav.locator('.adm-mobile-tab:visible')).toHaveCount(5);
+    expect(Math.abs(box.x - (width - box.width) / 2)).toBeLessThanOrEqual(1);
+    expect(box.x).toBeGreaterThan(0); expect(box.x + box.width).toBeLessThan(width);
+    expect(box.y + box.height).toBeLessThan(800);
+    await more.click();
+    const sheet = page.locator('#adm-mobile-more-sheet');
+    await expect(sheet).toBeVisible(); await expect(sheet).toHaveCSS('background-color', 'rgb(255, 255, 255)'); await expect(more).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('#adm-mobile-more-close')).toBeFocused();
+    expect(await page.locator('.adm-main').evaluate(node => node.inert)).toBe(true);
+    // Medir el diseño final después de la animación real, sin esperas fijas.
+    await sheet.evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
+    const bounds = await sheet.boundingBox();
+    expect(bounds.y).toBeGreaterThanOrEqual(0); expect(bounds.y + bounds.height).toBeLessThan(box.y);
+    expect(await sheet.evaluate(node => node.scrollHeight > node.clientHeight)).toBe(true);
+    await page.keyboard.press('Shift+Tab');
+    const last = sheet.locator('.adm-mobile-tab:visible').last(); await expect(last).toBeFocused();
+    await page.keyboard.press('Tab'); await expect(page.locator('#adm-mobile-more-close')).toBeFocused();
+    await page.screenshot({ path: testInfo.outputPath(`mobile-modules-${width}.png`), fullPage: true });
+    await page.setViewportSize({ width, height: 360 });
+    const compact = await sheet.boundingBox(); expect(compact.y).toBeGreaterThanOrEqual(0); expect(compact.y + compact.height).toBeLessThan(360 - 76);
+    await page.keyboard.press('Escape'); await expect(sheet).toBeHidden(); await expect(more).toBeFocused();
+    await page.setViewportSize({ width, height: 800 });
+    expect(await page.locator('.adm-main').evaluate(node => node.inert)).toBe(false);
+    await more.click(); await page.locator('#adm-mobile-more-backdrop').click({ position: { x: 2, y: 2 } });
+    await expect(sheet).toBeHidden(); await expect(more).toBeFocused();
+    await more.click(); await page.setViewportSize({ width: 844, height: 390 });
+    await expect(sheet).toBeHidden(); expect(await page.locator('.adm-main').evaluate(node => node.inert)).toBe(false);
+    await expect(page.locator('body')).not.toHaveClass(/adm-mobile-more-open/);
+  });
+}
+
+test('drop-up conserva permisos, módulos tardíos y navegación nativa', async ({ page }) => {
+  await load(page, 390, 'admin.html', { mobile: true });
+  await page.evaluate(() => {
+    document.querySelector('#adm-mobile-more-grid [data-section="configuracion"]').style.display = 'none';
+    const button = document.createElement('button'); button.className = 'adm-mobile-tab'; button.dataset.section = 'welcome'; button.textContent = 'Mensaje de bienvenida';
+    button.addEventListener('click', () => document.body.dataset.nativeNavigation = 'welcome');
+    document.getElementById('adm-mobile-tabs').append(button);
+  });
+  await page.locator('#adm-mobile-more-toggle').click();
+  await expect(page.locator('#adm-mobile-more-grid [data-section="configuracion"]')).toBeHidden();
+  const native = page.locator('#adm-mobile-more-grid [data-section="welcome"]'); await expect(native).toBeVisible(); await native.click();
+  await expect(page.locator('body')).toHaveAttribute('data-native-navigation', 'welcome');
+  await expect(page.locator('#adm-mobile-more-sheet')).toBeHidden();
+  expect(await page.locator('.adm-main').evaluate(node => node.inert)).toBe(false);
+});
+
+test('drop-up y guardia conservan el borrador sin bloquear el panel', async ({ page }) => {
+  await load(page, 390, 'admin.html', { mobile: true, guard: true });
+  await page.evaluate(() => {
+    const root = document.getElementById('section-configuracion');
+    document.querySelector('.adm-section.active').classList.remove('active'); root.classList.add('active');
+    window.AdminUnsaved.register('mobile-settings', { root, label: 'Configuración' });
+    document.querySelector('#adm-mobile-more-grid [data-section="colecciones"]').addEventListener('click', () => window.AdminUnsaved.requestNavigation(() => { window.__navigated = true; }));
+  });
+  const field = page.locator('#section-configuracion input[type="text"]').first(); await field.fill('Borrador móvil');
+  await page.evaluate(() => window.AdminUnsaved.markDirty('mobile-settings'));
+  await page.locator('#adm-mobile-more-toggle').click();
+  await page.locator('#adm-mobile-more-grid [data-section="colecciones"]').click();
+  await expect(page.locator('#adm-mobile-more-sheet')).toBeHidden();
+  const guard = page.locator('#unsaved-modal'); await expect(guard).toBeVisible();
+  await guard.getByRole('button', { name: /seguir editando/i }).click();
+  await expect(field).toHaveValue('Borrador móvil'); expect(await page.locator('.adm-main').evaluate(node => node.inert)).toBe(false);
+  expect(await page.evaluate(() => window.__navigated)).toBeUndefined();
+});

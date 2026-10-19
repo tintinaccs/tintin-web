@@ -134,3 +134,57 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
 @media (prefers-reduced-motion:no-preference) {
   .tt-dashboard-link,.tt-control-result-button { transition: background-color .15s, border-color .15s; }
 }
+
+/* Cápsula móvil sólida, con la misma separación que la navegación pública. */
+@media (max-width:540px) {
+  html:root body.tt-admin-control {
+    --tt-admin-nav-bottom: max(12px,env(safe-area-inset-bottom,0px));
+    --tt-admin-nav-clearance: calc(76px + var(--tt-admin-nav-bottom));
+  }
+  html:root body.tt-admin-control #adm-mobile-tabs {
+    left: 50vw; right: auto; bottom: var(--tt-admin-nav-bottom);
+    width: min(420px,calc(100vw - 24px)); margin-inline: 0; transform: translateX(-50%); height: 76px; padding: 6px; gap: 2px;
+    border: 1px solid var(--tt-control-line); border-radius: 28px;
+    box-shadow: none; backdrop-filter: none; overflow: hidden;
+  }
+  html:root body.tt-admin-control #adm-mobile-tabs > .adm-mobile-tab {
+    min-width: 0; min-height: 62px; flex: 1 1 0; padding: 6px 1px;
+    border-radius: 20px; font-size: 9px; letter-spacing: 0; gap: 5px;
+    background: var(--admin-color-background-surface) !important;
+  }
+  html:root body.tt-admin-control #adm-mobile-tabs > .adm-mobile-tab.active,
+  html:root body.tt-admin-control #adm-mobile-more-toggle[aria-expanded="true"] { background: var(--admin-color-background-sidebar-active) !important; }
+  html:root body.tt-admin-control .adm-main { padding-bottom: calc(var(--tt-admin-nav-clearance) + 24px); }
+  html:root body.tt-admin-control .adm-mobile-more-sheet:not([hidden]) {
+    left: 50vw; right: auto; width: min(480px,calc(100vw - 24px)); margin-inline: 0; transform: translateX(-50%); bottom: calc(var(--tt-admin-nav-clearance) + 10px);
+    max-height: min(620px,calc(100dvh - var(--tt-admin-nav-clearance) - max(24px,env(safe-area-inset-top,0px)) - 10px));
+    padding: 0 12px 12px; border: 1px solid var(--tt-control-line); border-radius: 22px;
+    background: var(--admin-color-background-surface) !important; box-shadow: none !important; backdrop-filter: none !important;
+    scroll-padding-block: 90px 12px; overscroll-behavior: contain;
+  }
+  html:root body.tt-admin-control .adm-mobile-more-handle { margin: 10px auto 0; }
+  html:root body.tt-admin-control .adm-mobile-more-head {
+    position: sticky; top: 0; z-index: 1; margin: 0; padding: 12px 0;
+    background: var(--admin-color-background-surface) !important; border-bottom: 1px solid var(--tt-control-line);
+  }
+  html:root body.tt-admin-control .adm-mobile-more-grid { gap: 8px; padding-top: 12px; }
+  html:root body.tt-admin-control .adm-mobile-more-grid .adm-mobile-tab {
+    min-height: 64px; padding: 10px; border-color: var(--tt-control-line); border-radius: 12px;
+    font-size: 10px; line-height: 1.5; overflow-wrap: anywhere;
+  }
+  html:root body.tt-admin-control .adm-mobile-more-grid .adm-nav-icon { flex-shrink: 0; }
+  html:root body.tt-admin-control :is(.adm-mobile-tab,.adm-mobile-more-close):focus-visible { outline: 2px solid var(--admin-color-text-primary); outline-offset: -3px; }
+}
+@media (max-width:360px) {
+  html:root body.tt-admin-control #adm-mobile-tabs { width: calc(100vw - 16px); padding-inline: 4px; }
+  html:root body.tt-admin-control #adm-mobile-tabs > .adm-mobile-tab { font-size: 8.5px; }
+}
+@media (prefers-reduced-motion:no-preference) {
+  .tt-admin-control .adm-mobile-more-sheet:not([hidden]) { animation: tt-admin-drop-up .18s ease-out; }
+  @keyframes tt-admin-drop-up { from { opacity: 0; transform: translate(-50%,12px); } to { opacity: 1; transform: translate(-50%,0); } }
+}
+
+@media (max-width:540px) {
+  html:root body.tt-admin-control #adm-mobile-more-grid > .adm-mobile-tab { background: var(--admin-color-background-surface) !important; text-transform: none; font-size: 11px; font-weight: 600; }
+  html:root body.tt-admin-control #adm-mobile-more-grid > .adm-mobile-tab:is(.active,:hover) { background: var(--admin-color-background-sidebar-active) !important; }
+}

@@ -48,7 +48,9 @@ for (const width of [390, 768, 1440]) {
       expect(colors[key].every(value => value === 'rgb(34, 34, 34)'), key).toBe(true);
     }
     for (const surface of colors.backgrounds) {
-      const expected = surface.className === 'adm-mobile-tab active' ? 'rgb(253, 236, 242)' : 'rgb(248, 170, 202)';
+      // El nuevo panel móvil reserva el rosa para iconos y selección;
+      // los botones inactivos usan la superficie sólida de la cápsula.
+      const expected = surface.className === 'adm-mobile-tab active' ? 'rgb(253, 236, 242)' : width <= 540 && surface.className === 'adm-mobile-tab' ? 'rgb(255, 255, 255)' : 'rgb(248, 170, 202)';
       expect(surface.color, surface.className).toBe(expected);
     }
   });

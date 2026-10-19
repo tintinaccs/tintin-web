@@ -7,7 +7,7 @@ const runtimePath = '/js/admin/maestro/espacio-modulos-admin.js';
 async function load(page, width, file = 'admin.html', options = {}) {
   await page.setViewportSize({ width, height: 800 });
   // Markup y estilos reales; ningún controlador de negocio, sesión o red real.
-  const scripts = [runtimePath, '/js/admin/maestro/buscador-modulos-admin.js', ...(options.sidebar ? ['/js/admin/sidebar-expandible-admin.js'] : []), ...(options.guard ? ['/js/admin/proteccion-cambios-pendientes-admin.js'] : [])];
+  const scripts = [runtimePath, ...(options.mobile ? ['/js/admin/maestro/navegacion-movil-admin.js'] : []), '/js/admin/maestro/buscador-modulos-admin.js', ...(options.sidebar ? ['/js/admin/sidebar-expandible-admin.js'] : []), ...(options.guard ? ['/js/admin/proteccion-cambios-pendientes-admin.js'] : [])];
   const shell = fs.readFileSync(path.join(root, file), 'utf8')
     .replace('</body>', scripts.map(src => `<script nonce="dGludGluLWZpeHR1cmU=" type="module" src="${src}"></script>`).join('') + '</body>' );
   await page.route('**/*', route => {

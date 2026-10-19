@@ -54,7 +54,7 @@ export function syncProductSurfaces() {
     products.style.setProperty('--tt-product-selection-space',`${bar ? bar.getBoundingClientRect().height+24 : 12}px`);
   }
   const navigation=document.getElementById('adm-mobile-tabs');
-  document.documentElement.style.setProperty('--tt-product-navigation-height', `${navigation?.getClientRects().length ? navigation.getBoundingClientRect().height : 0}px`);
+  document.documentElement.style.setProperty('--tt-product-navigation-height', `${navigation?.getClientRects().length ? Math.max(0, innerHeight-navigation.getBoundingClientRect().top) : 0}px`);
   const viewport = window.visualViewport;
   document.documentElement.style.setProperty('--tt-product-viewport-height', `${viewport?.height || innerHeight}px`);
   document.documentElement.style.setProperty('--tt-product-viewport-top', `${viewport?.offsetTop || 0}px`);
