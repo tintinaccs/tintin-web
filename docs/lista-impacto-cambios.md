@@ -1,6 +1,13 @@
 # Ficha de producto y fotos por forma — 2026-10-19
 
 Fuentes funcionales: tienda.js, foto-variante.mjs y product-maintenance.css. Selección de cualquier atributo/combinación, asociación bidireccional con fotos y miniaturas, autoridad de selección disponible inicial, identidad de fotografía al reordenar por stock, estados de agotado y cantidad. Foto del carrito respeta forma y combinación exacta; sin asociación sólo se admite foto general. Superficies relacionadas: ficha en desktop/laptop/tablet ambas orientaciones/mobile, representación de variantes en carrito/checkout/favoritos/catálogo/editor; los consumidores y cargadores reciben únicamente URLs coherentes de caché. No modifica inventario, precios, permisos, transacciones ni datos remotos. Pruebas de selección/galería, primer render, stock, carrito invitado, márgenes, teclado y formatos de variantes; detalle y límites en CURRENT_STATE. Shell, caché, CSP y manifiestos se regeneran por sus herramientas. Se conservan los arreglos anteriores y se difieren merge/publicación.
+## 2026-10-19 — Alineación de Imágenes y entrega del CSS responsive
+
+Se alinea la grilla/encabezado interno de Imágenes con su barra compartida y se agrega comprobación de ambos bordes en cuatro tamaños. Ambas páginas usan responsive-2 para evitar el CSS anterior retenido en caché bajo la primera URL, observado en lectura pública. Baseline, plan y diagnóstico se regeneran; sin cambios de negocio ni controles. PR1165 ya integrado y aprobado por CI y salud de producción; se verifica la entrega de bytes del nuevo candidato.
+
+## 2026-10-19 — Diseño administrativo fluido para todos los dispositivos
+
+CSS compartido del panel e Imágenes: márgenes y contenedor centrados, hero compacto según espacio disponible, accesos sin palabras cortadas, métricas de escritorio y encabezados/formularios adaptables. Cubre móviles, laptop, escritorio y tablets verticales/horizontales, manteniendo cápsula móvil, lateral, roles, borradores y controladores existentes. Sin cambios de JavaScript de producción ni lógica comercial. Se agrega matriz Chromium de12 tamaños/23 secciones,13 fronteras de distribución, giro táctil e Imágenes al gate responsive existente; evidencia y límites en CURRENT_STATE. Caché y plan protegido se generan con herramientas canónicas.
 
 ## 2026-10-19 — Navegación móvil flotante del panel
 
