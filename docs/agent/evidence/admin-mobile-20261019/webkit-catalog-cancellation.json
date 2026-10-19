@@ -1,0 +1,16 @@
+{
+  "workflowRun": 39238913443,
+  "artifact": 12180344503,
+  "commit": "037f55e8a3790b7cfe413da390382df66004cc73",
+  "test": "acciones de navegación sin sesión: /login 1024px",
+  "project": "webkit-mobile",
+  "action": "Volver a la tienda",
+  "beforeUnloadTime": 394351.491,
+  "nativePageErrorTime": 394356.644,
+  "deltaMilliseconds": 5.153,
+  "name": "Fetch API cannot load http",
+  "message": "/127.0.0.1:4174/api/public-catalog?resource=products due to access control checks.",
+  "caller": "fetchResource (http://127.0.0.1:4174/js/core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1-bags-20261014-1:18:33)",
+  "caughtWarning": "[PublicShell] Algunos datos en vivo no pudieron cargarse. [TypeError: Load failed]",
+  "actualUnhandledJavascriptErrorOrRejection": false
+}

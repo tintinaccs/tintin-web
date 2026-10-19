@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "53df7bb91e784b35bc3f5e75604daf86c38328ed335dc40e25c40e91644a406b",
+  "sourceFingerprint": "d4a5c6a7538fe78ec6ba79aa5ea69ebae6f6fd40a8f65121cb8f22019cada5e3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1329,
-    "textFiles": 1243,
-    "totalBytes": 24847508,
+    "files": 1330,
+    "textFiles": 1244,
+    "totalBytes": 24850910,
     "pages": 19,
     "modules": 937
   },
@@ -47034,8 +47034,8 @@
     },
     {
       "path": "tests/runtime/error-monitor.spec.js",
-      "bytes": 6374,
-      "sha256": "c0e121f649689b3a4dcaf6d6ee001ed02ad945fe04c23f2c131240c24d64725d",
+      "bytes": 7866,
+      "sha256": "778faff09bf0488aec51408275d7531e90b235b5122b69899f09d9a1bafbebe1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47069,6 +47069,14 @@
         {
           "url": "http://127.0.0.1:4174/js/quality/vigilancia-version.js",
           "line": 46
+        },
+        {
+          "url": "http://127.0.0.1:4174/api/public-catalog",
+          "line": 60
+        },
+        {
+          "url": "http://127.0.0.1:4174/js/core/firebase/catalogo-publico-api.js",
+          "line": 60
         }
       ]
     },
@@ -47107,8 +47115,8 @@
     },
     {
       "path": "tests/runtime/runtime-error-monitor.js",
-      "bytes": 3968,
-      "sha256": "ac945e401edd4c2f4a306753b1cde72a397dfd276549d45149f8d4f6f35f76a0",
+      "bytes": 4463,
+      "sha256": "d25d7cff4874c0d63ee789be45426d0abfc18c3bda296a2dc6873d13b404136f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47130,6 +47138,10 @@
         {
           "url": "http://127.0.0.1:4174/js/quality/vigilancia-version.js",
           "line": 37
+        },
+        {
+          "url": "http://127.0.0.1:4174/js/core/firebase/catalogo-publico-api.js",
+          "line": 42
         }
       ]
     },
@@ -51928,8 +51940,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 617142,
-      "sha256": "32862b3442f3320336a7e24539d5f6bbf1a5db246d023e6b5cd0db66d3a3bffd"
+      "bytes": 617528,
+      "sha256": "4b3aaab64baf4fad4ebcae2c6ec54acd5763c9e19c1e125114dd90ca4e2e5b87"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -52056,6 +52068,12 @@
       "extension": ".md",
       "bytes": 12759,
       "sha256": "4d20562af54de2d27b299f3e33e366eba4775776375f8b3f9b269faf47725962"
+    },
+    {
+      "path": "docs/agent/evidence/admin-mobile-20261019/webkit-catalog-cancellation.json",
+      "extension": ".json",
+      "bytes": 822,
+      "sha256": "c44dcf860d3a16a4347b3adf9bebf3219a4b5d6a3140263e134e2edf89db933e"
     },
     {
       "path": "docs/agent/evidence/client-actions-20261012/inventory.json",
@@ -52282,8 +52300,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 56899,
-      "sha256": "ffe740101a12d322426b94a78d3ea9c20a7bcd37e1193a4feb5d4fddd11f023f"
+      "bytes": 57106,
+      "sha256": "80565119c268c2e027c073850f9f5dae03552e1dafe3a5f62485ba146c819883"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -57646,8 +57664,8 @@
     {
       "path": "tests/runtime/error-monitor.spec.js",
       "extension": ".js",
-      "bytes": 6374,
-      "sha256": "c0e121f649689b3a4dcaf6d6ee001ed02ad945fe04c23f2c131240c24d64725d"
+      "bytes": 7866,
+      "sha256": "778faff09bf0488aec51408275d7531e90b235b5122b69899f09d9a1bafbebe1"
     },
     {
       "path": "tests/runtime/invoice-component.spec.js",
@@ -57670,8 +57688,8 @@
     {
       "path": "tests/runtime/runtime-error-monitor.js",
       "extension": ".js",
-      "bytes": 3968,
-      "sha256": "ac945e401edd4c2f4a306753b1cde72a397dfd276549d45149f8d4f6f35f76a0"
+      "bytes": 4463,
+      "sha256": "d25d7cff4874c0d63ee789be45426d0abfc18c3bda296a2dc6873d13b404136f"
     },
     {
       "path": "tests/runtime/welcome-component.spec.js",
