@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9ac62e637a46df8e57ff096e61d0992eb9b3faf2",
-  "reason": "Renovar el panel con UI diferida bajo 200 KB, H1 y tipografía canónicos; corregir paginación y fechas y validar regresiones.",
+  "baseCommit": "037f55e8a3790b7cfe413da390382df66004cc73",
+  "reason": "Mejorar navegación móvil minimalista con foco modal, sidebar responsive y guardia de enlaces y borradores verificados.",
   "files": [
     {
       "path": "admin-images.html",
-      "oldHash": "403c7211c7549fcb2d34fbfc4c3a23a27d23f9945f53101567e0052b17c9555a",
-      "newHash": "0358e889a9fd4962cd52812d1788643f5513b4d79cee77d97a7f08cb4aa079ae"
+      "oldHash": "0358e889a9fd4962cd52812d1788643f5513b4d79cee77d97a7f08cb4aa079ae",
+      "newHash": "88d30e87907dbb0fbc7983ff8fb1da9d092c34393f10a89f75a954906ec57a12"
     },
     {
       "path": "admin.html",
-      "oldHash": "878b9e080d14899debaee7436db57392171377dbe0a3649b78c8da9997a401f5",
-      "newHash": "e895201adfe3959111878a6d1aad699de3a38bab00e2a01396188a56d4e072b0"
+      "oldHash": "e895201adfe3959111878a6d1aad699de3a38bab00e2a01396188a56d4e072b0",
+      "newHash": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "95381b7472662227999876d1a0180cd5ad9dbf0624d5d5c30a3a925821bf1b45",
-      "newHash": "3ce17f02d60b51fc705a0c5ae12817fe4fd0bde851ef14bf4765d61449ea43e6"
+      "oldHash": "3ce17f02d60b51fc705a0c5ae12817fe4fd0bde851ef14bf4765d61449ea43e6",
+      "newHash": "ff3e8d79a551a188603ded153de3290a9d0446f34ed61bb82e38e892012adc1e"
     },
     {
-      "path": "package.json",
-      "oldHash": "773dc9981ba3efe3c711674e59a27a2c33aaf3357a558fd6e15d63e485341fbd",
-      "newHash": "d7e2cd450be3c8240df7f82561e6666d1e0f0c80b4582e894d81df34d2159898"
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "ee4315d286e78bab6dc0e2ce370499d7beb0d762e40ee04a5c185575e8e042db",
+      "newHash": "c4b0cf84aa9f7bc40105dfeafa059649b8d5eb9b8bf10b548a8fb8fa71695b51"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "574927fdf6d817a4255ac6a030bd91037a3eec9fe51b76cddb8336ff565d3e85",
-      "newHash": "936cfba30a55e163c3fb2e5150639424b3698675054eec3c85a58881bb2208cb"
+      "oldHash": "936cfba30a55e163c3fb2e5150639424b3698675054eec3c85a58881bb2208cb",
+      "newHash": "1d27f253e56d542b441a11e192433b9444290d8c3a94e5e62c80a7b349c60ec2"
     }
   ],
   "affectedRecords": [

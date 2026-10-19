@@ -35,7 +35,12 @@ async function installRuntimeErrorMonitor(page,context){
     // require the exact fixture endpoint, canonical caller and leaving window.
     const siteVersionPublic=error.message==='/127.0.0.1:4174/site-version.json due to access control checks.' &&
       error.stack?.includes('    at fetchSiteVersion (http://127.0.0.1:4174/js/quality/vigilancia-version.js?');
-    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || visualStudioPublic || siteVersionPublic);
+    // CI39238913443 trace: products read cancelled 5.153ms after
+    // beforeunload when returning from login. Restrict to the local fixture,
+    // native access diagnostic and the canonical fetchResource caller.
+    const publicCatalogProducts=error.message==='/127.0.0.1:4174/api/public-catalog?resource=products due to access control checks.' &&
+      error.stack?.includes('    at fetchResource (http://127.0.0.1:4174/js/core/firebase/catalogo-publico-api.js?');
+    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || visualStudioPublic || siteVersionPublic || publicCatalogProducts);
     if(navigationCancellation)browserDiagnostics.push({kind:'native-emulator-channel-cancelled-on-navigation',message:error.message});
     else errors.push(error.message);
   });
