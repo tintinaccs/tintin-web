@@ -258,3 +258,61 @@ html:root body.tt-admin-control [data-admin-workspace="imagenes"] .adm-cards-gri
 html:root body.tt-admin-control [data-admin-workspace="imagenes"] > :is(.adm-section-header,.adm-cards-grid,.adm-bulk-toolbar) { width: 100% !important; margin-inline: 0 !important; }
 html:root body.tt-admin-control .adm-header { padding-inline: var(--tt-control-gutter); }
 html:root body.tt-admin-control .adm-modal-box { max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
+
+
+/* Super Admin: superficies rosadas suaves y controles consistentes en todos los módulos. */
+html:root body.tt-admin-control {
+  --tt-control-canvas: color-mix(in srgb, var(--admin-color-brand) 12%, var(--admin-color-background-page));
+  --tt-control-line: color-mix(in srgb, var(--admin-color-text-primary) 16%, var(--admin-color-background-surface));
+}
+html:root body.tt-admin-control .adm-topbar {
+  background: var(--admin-color-background-header); position: sticky; top: 0; z-index: 200;
+}
+html:root body.tt-admin-control .adm-sidebar {
+  background: color-mix(in srgb, var(--admin-color-brand) 10%, var(--admin-color-background-sidebar));
+}
+html:root body.tt-admin-control :is(.adm-card,.adm-stat,.tt-maestro-card,.adm-img-card) {
+  border-radius: 20px !important;
+}
+html:root body.tt-admin-control :is(.adm-btn,.adm-topbar-btn,.tt-commerce-btn,.tt-control-search) {
+  min-height: 44px; touch-action: manipulation; transition: border-color 120ms ease, background-color 120ms ease;
+}
+html:root body.tt-admin-control :is(.adm-input,.adm-select) { min-height: 44px; }
+html:root body.tt-admin-control .adm-table tbody tr:hover { background: var(--admin-color-table-row-hover); }
+html:root body.tt-admin-control .adm-card-head { align-items: center; }
+html:root body.tt-admin-control .adm-card-head > :is(h2,h3,.adm-card-title) { flex: 1 1 180px; }
+html:root body.tt-admin-control :is(.adm-topbar-btn,.adm-btn):disabled { cursor: wait; }
+html:root body.tt-admin-control .tt-admin-workspace-bar { padding-bottom: 16px; border-bottom: 1px solid var(--tt-control-line); }
+.tt-admin-module-launcher {
+  display: flex; align-items: center; gap: 10px; min-height: 44px; flex: 0 0 auto;
+  margin: 10px 12px 4px; padding: 10px 12px; border: 1px solid var(--tt-control-line);
+  border-radius: 12px; font: inherit; font-size: 12px; color: var(--adm-text);
+  background: var(--admin-color-background-surface); cursor: pointer; text-align: left;
+}
+.tt-admin-module-launcher svg { flex: 0 0 20px; }
+.tt-admin-module-launcher kbd { margin-left: auto; font: inherit; font-size: 8px; white-space: nowrap; }
+.tt-admin-module-launcher:focus-visible { outline: 2px solid var(--adm-text); outline-offset: 2px; }
+.tt-admin-brand-symbol { object-fit: contain; filter: brightness(0) invert(1); flex: 0 0 36px; }
+.tt-push-order-status {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 16px; padding: 14px 16px;
+  border: 1px solid var(--tt-control-line); border-radius: 14px; background: var(--admin-color-background-surface);
+  color: var(--adm-text); font-size: 13px; line-height: 1.6;
+}
+@media (min-width:541px) {
+  html.adm-sidebar-is-collapsed .tt-admin-module-launcher { justify-content: center; padding: 10px; margin-inline: 10px; }
+  html.adm-sidebar-is-collapsed .tt-admin-module-launcher :is(span,kbd) { display: none; }
+  html.adm-sidebar-is-collapsed .tt-admin-brand-symbol { display: none; }
+}
+@media (max-width:760px) {
+  html:root body.tt-admin-control :is(.adm-input,.adm-select,.adm-textarea) { font-size: 16px; }
+  html:root body.tt-admin-control .adm-topbar { flex-wrap: wrap; gap: 8px; }
+  html:root body.tt-admin-control .adm-topbar-actions { max-width: 100%; flex-wrap: wrap; }
+  html:root body.tt-admin-control .adm-table td { padding-block: 14px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  html:root body.tt-admin-control :is(.adm-btn,.adm-topbar-btn,.tt-commerce-btn,.tt-control-search) { transition: none; }
+}
+
+.tt-admin-nav-group { padding: 18px 12px 6px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--adm-muted); }
+.tt-push-lockscreen-note { margin: 0 0 18px; padding: 12px 14px; border: 1px solid var(--tt-control-line); border-radius: 12px; font-size: 12px; line-height: 1.7; }
+@media (min-width:541px) { html.adm-sidebar-is-collapsed .tt-admin-nav-group { display: none; } }

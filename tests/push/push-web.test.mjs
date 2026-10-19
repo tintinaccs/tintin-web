@@ -416,3 +416,92 @@ test('el registro de dispositivos guarda sólo los campos previstos', () => {
   assert.ok(service.includes('deviceDocumentId'), 'el id del documento es un hash');
   assert.ok(!service.includes('${token}`'), 'el token no se usa como id de documento');
 });
+
+// Ejecuta el service worker real: destinos sociales, ventana existente y fallos de navegación.
+const { default: vm } = await import('node:vm');
+function workerFixture(clients = []) {
+  const handlers = {}, opened = [], shown = [];
+  let clickRegisteredBeforeSdk = false;
+  const self = {
+    location: { origin: 'https://tintin.example' },
+    addEventListener(type, handle) { handlers[type] = handle; },
+    skipWaiting() {},
+    clients: { claim() {}, async matchAll() { return clients; }, async openWindow(url) { opened.push(url); } },
+    registration: { async showNotification(title, options) { shown.push({ title, ...options }); } },
+  };
+  vm.runInNewContext(read('firebase-messaging-sw.js'), {
+    self, URL, console,
+    importScripts() { clickRegisteredBeforeSdk = Boolean(handlers.notificationclick); },
+    firebase: { initializeApp() {}, messaging() { return { onBackgroundMessage(handle) { handlers.message = handle; } }; } },
+  });
+  return { handlers, opened, shown, clickRegisteredBeforeSdk,
+    async click(url) { let work; handlers.notificationclick({ notification: { close() {}, data: { url } }, waitUntil(promise) { work = promise; } }); await work; },
+  };
+}
+test('push resuelve enlaces sociales históricos y conserva el módulo correcto', async () => {
+  const w = workerFixture();
+  for (const [url, expected] of [
+    ['admin.html#section-usuarios', '/admin.html?section=usuarios'],
+    ['/admin?section=notificaciones-push', '/admin.html?section=notificaciones-push'],
+    ['/admin.html?section=pedidos&order=valid_order_12345', '/admin.html?section=pedidos&order=valid_order_12345'],
+    ['https://otro.example/admin.html', '/admin.html?section=pedidos'],
+    ['//otro.example/admin.html', '/admin.html?section=pedidos'],
+    ['/admin/../checkout', '/admin.html?section=pedidos'],
+  ]) {
+    await w.handlers.message({ data: { title: 'Aviso', url } });
+    assert.equal(w.shown.at(-1).data.url, expected);
+  }
+  assert.equal(w.clickRegisteredBeforeSdk, true);
+  assert.equal(w.shown[0].icon, '/assets-tintin/images/admin/push-icon-192.png');
+});
+test('el clic push no reemplaza la tienda y abre una ventana si navigate falla', async () => {
+  let focused = 0, navigated = 0;
+  const w = workerFixture([
+    { url: 'https://tintin.example/checkout', async navigate() { throw Error('No debe tocar checkout'); } },
+    { url: 'https://tintin.example/admin.html', async navigate() { navigated++; throw Error('Ventana cerrada'); }, async focus() { focused++; } },
+  ]);
+  await w.click('/admin.html?section=usuarios');
+  assert.equal(navigated, 1); assert.equal(focused, 0);
+  assert.deepEqual(w.opened, ['https://tintin.example/admin.html?section=usuarios']);
+});
+test('el clic reutiliza el panel cuando la navegación tiene éxito', async () => {
+  let focused = 0, target;
+  const w = workerFixture([{ url: 'https://tintin.example/admin', async navigate(url) { target = url; return this; }, async focus() { focused++; } }]);
+  await w.click('/admin.html?section=pedidos&order=order_example_1234');
+  assert.equal(target, 'https://tintin.example/admin.html?section=pedidos&order=order_example_1234');
+  assert.equal(focused, 1); assert.equal(w.opened.length, 0);
+});
+
+const apiSource = read('functions/api/notifications.js');
+const loginFunction = apiSource.slice(apiSource.indexOf('async function registerLoginNotification'), apiSource.indexOf('\nasync function registerOrderCreated'));
+function loginFixture(profile) {
+  const events = [], reads = [];
+  const run = new Function('safeId', 'clean', 'firestoreAdminGet', 'decodeFirestoreFields', 'notifyAdminIfAbsent', 'LOGIN_ALERT_MAX_AGE_MS', `${loginFunction};return registerLoginNotification;`)(
+    value => value, value => String(value || '').trim().slice(0, 160),
+    async (_, path) => { reads.push(path); return profile ? { fields: profile } : null; }, value => value,
+    async (_, event, key) => { events.push({ event, key }); return { created: true }; }, 86400000,
+  );
+  return { run, events, reads };
+}
+test('login push identifica la cuenta usando el perfil del servidor y conserva la deduplicación', async () => {
+  const f = loginFixture({ firstName: 'Iván', lastName: 'López' });
+  const auth_time = Math.floor(Date.now() / 1000);
+  await f.run({}, { uid: 'customer_123', claims: { auth_time, name: 'Nombre anterior' } });
+  assert.deepEqual(f.reads, ['users/customer_123']);
+  assert.equal(f.events[0].event.title, 'Iván López inició sesión');
+  assert.equal(f.events[0].event.actorName, 'Iván López');
+  assert.equal(f.events[0].key, `user_login:customer_123:${auth_time}`);
+});
+test('login sin perfil usa el nombre verificado y no expone el correo', async () => {
+  const f = loginFixture(null);
+  await f.run({}, { uid: 'customer_123', email: 'privado@example.test', claims: { auth_time: Math.floor(Date.now() / 1000), name: 'Iván López' } });
+  assert.equal(f.events[0].event.actorName, 'Iván López');
+  assert.ok(!JSON.stringify(f.events).includes('privado@example.test'));
+});
+test('un auth_time ausente, vencido o futuro no lee el perfil ni emite login push', async () => {
+  const f = loginFixture({ name: 'Iván' });
+  for (const auth_time of [0, Math.floor(Date.now()/1000)-86401, Math.floor(Date.now()/1000)+120]) {
+    assert.equal((await f.run({}, { uid: 'customer_123', claims: { auth_time } })).skipped, true);
+  }
+  assert.equal(f.events.length, 0); assert.equal(f.reads.length, 0);
+});

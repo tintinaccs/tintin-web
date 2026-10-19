@@ -21,7 +21,35 @@
 // Cambiar esta versión fuerza a los navegadores a tratar el archivo como
 // nuevo. Junto con la regla no-cache de _headers y skipWaiting/clients.claim
 // de abajo, ningún dispositivo queda atrapado en una versión vieja.
-const TINTIN_SW_VERSION = '2026-09-23-push-broadcast-all-1';
+const TINTIN_SW_VERSION = '2026-10-19-push-navigation-2';
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const link = safeInternalLink(event.notification?.data?.url);
+  const targetUrl = new URL(link, self.location.origin + '/').href;
+
+  event.waitUntil((async () => {
+    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    // Reutiliza una ventana de Tintin ya abierta: le pide navegar al destino
+    // y la trae al frente, en vez de dejar dos copias del panel abiertas.
+    for (const client of windows) {
+      let sameOrigin = false;
+      try { sameOrigin = new URL(client.url).origin === self.location.origin; } catch {}
+      if (!sameOrigin || !/^\/admin(?:\.html)?$/.test(new URL(client.url).pathname)) continue;
+      if ('navigate' in client) {
+        try {
+          const navigated = await client.navigate(targetUrl);
+          if (!navigated) continue;
+        } catch { continue; }
+      } else {
+        try { client.postMessage({ type: 'tintin-push-navigate', url: link }); } catch {}
+      }
+      try { await client.focus(); } catch {}
+      return;
+    }
+    if (self.clients.openWindow) await self.clients.openWindow(targetUrl);
+  })());
+});
 
 importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
@@ -37,8 +65,8 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 const DEFAULT_LINK = '/admin.html?section=pedidos';
-const NOTIFICATION_ICON = '/favicon-192x192.png';
-const NOTIFICATION_BADGE = '/favicon-192x192.png';
+const NOTIFICATION_ICON = '/assets-tintin/images/admin/push-icon-192.png';
+const NOTIFICATION_BADGE = '/assets-tintin/images/admin/push-badge-96.png';
 
 self.addEventListener('install', () => {
   // Sin esto, una pestaña abierta del panel puede dejar activa la versión
@@ -53,12 +81,16 @@ self.addEventListener('activate', event => {
 /** Sólo se acepta un destino interno del propio sitio: nada de orígenes externos. */
 function safeInternalLink(rawLink) {
   const link = String(rawLink || '').trim();
-  if (!link.startsWith('/') || link.startsWith('//')) return DEFAULT_LINK;
+  if (!/^(?:\/)?admin(?:\.html)?(?:[?#]|$)/.test(link)) return DEFAULT_LINK;
   try {
-    const url = new URL(link, self.location.origin);
+    const url = new URL(link, self.location.origin + '/');
     if (url.origin !== self.location.origin) return DEFAULT_LINK;
-    if (!/^\/admin\.html$/.test(url.pathname)) return DEFAULT_LINK;
-    return `${url.pathname}${url.search}`;
+    if (!/^\/admin(?:\.html)?$/.test(url.pathname)) return DEFAULT_LINK;
+    if (!url.searchParams.has('section') && url.hash) {
+      const section = url.hash.slice(1).replace(/^section-/, '');
+      if (/^[a-z][a-z-]{0,60}$/.test(section)) url.searchParams.set('section', section);
+    }
+    return `/admin.html${url.search}`;
   } catch {
     return DEFAULT_LINK;
   }
@@ -95,29 +127,4 @@ messaging.onBackgroundMessage(payload => {
       swVersion: TINTIN_SW_VERSION
     }
   });
-});
-
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
-  const link = safeInternalLink(event.notification?.data?.url);
-  const targetUrl = new URL(link, self.location.origin).href;
-
-  event.waitUntil((async () => {
-    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-    // Reutiliza una ventana de Tintin ya abierta: le pide navegar al destino
-    // y la trae al frente, en vez de dejar dos copias del panel abiertas.
-    for (const client of windows) {
-      let sameOrigin = false;
-      try { sameOrigin = new URL(client.url).origin === self.location.origin; } catch {}
-      if (!sameOrigin) continue;
-      if ('navigate' in client) {
-        try { await client.navigate(targetUrl); } catch {}
-      } else {
-        try { client.postMessage({ type: 'tintin-push-navigate', url: link }); } catch {}
-      }
-      try { await client.focus(); } catch {}
-      return;
-    }
-    if (self.clients.openWindow) await self.clients.openWindow(targetUrl);
-  })());
 });

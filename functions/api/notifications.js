@@ -69,8 +69,8 @@ async function registerProfileNotification(env, user) {
 }
 
 /**
- * Registra un inicio de sesión sin enviar identidad ni datos personales en el
- * push. El `auth_time` sólo viene del ID token verificado en el servidor: el
+ * Identifica la cuenta para el canal privado del Super Admin usando el perfil
+ * del servidor. El `auth_time` sólo viene del ID token verificado: el
  * navegador no puede inventarlo y también funciona como deduplicación entre
  * reintentos, redirects de Google y recargas de la página de acceso.
  */
@@ -85,15 +85,17 @@ async function registerLoginNotification(env, user) {
   }
 
   const uid = safeId(user.uid, 'Cuenta');
+  const document = await firestoreAdminGet(env, `users/${uid}`);
+  const profile = document ? decodeFirestoreFields(document.fields || {}) : {};
+  const fullName = clean([profile.firstName, profile.lastName].filter(Boolean).join(' '), 160);
+  const name = fullName || clean(profile.name || profile.displayName || user.claims?.name, 160) || 'Una cuenta registrada';
   return notifyAdminIfAbsent(env, {
     kind: 'user_login',
     actorType: 'customer',
     actorUid: uid,
-    // La campana interna puede conservar la cuenta de origen para auditoría,
-    // pero el texto visible y el push quedan deliberadamente genéricos.
-    actorName: 'Una cuenta',
-    title: 'Inicio de sesión',
-    body: 'Una cuenta ingresó a Tintin Accesorios.',
+    actorName: name,
+    title: `${name} inició sesión`,
+    body: 'Ingresó a Tintin Accesorios con su cuenta registrada.',
     iconKey: 'user',
     targetUrl: 'admin.html#section-usuarios',
     sourceType: 'auth',

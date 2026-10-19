@@ -419,3 +419,8 @@ Admin Productos: editor nativo/duplicación segura, SKU/galería/indicadores, se
 ## 2026-10-19 — Texto breve de cookies
 
 Resumen del componente compartido de consentimiento simplificado para todas las páginas y dispositivos. Cambia texto visible; mantiene elección y comportamiento de estadísticas. Importadores/versiones, CSP y diagnóstico se regeneran para entregar los nuevos bytes. Evidencia en CURRENT_STATE.
+
+
+## 2026-10-19 — Super Admin adaptable y notificaciones identificadas
+
+Navegación agrupada y búsqueda desde lateral/cajón mediante controles existentes; superficies rosadas suaves, logo original blanco, campos táctiles de 44px y tipografía móvil sin zoom. Aplica al shell y las 26 superficies del registro Maestro, incluida Imágenes. Push corrige destinos históricos y ventanas que fallan al navegar; el pedido consume la suscripción autenticada, conserva destino tardío/reintento y elimina el parámetro al abrir. Login identifica el perfil del servidor, conserva auth_time y deduplicación; no publica correos ni datos de envío. Iconos derivados originales sólo en app/admin/push. Telemetría y espejo local refrescan visibles sin pisar borradores; API autenticada canónica renueva 401. Auditor push alinea sus comprobaciones con el guard central vigente y el aviso explícito de pantalla bloqueada. Sin operaciones reales, cambios de roles, Rules, infraestructura ni dominio. Evidencia por módulo y límites en SUPERADMIN_REVIEW_20261019 y CURRENT_STATE.

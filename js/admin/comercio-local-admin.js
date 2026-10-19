@@ -8,7 +8,7 @@ const money=value=>Number(value||0).toLocaleString('es-PY')+' Gs.';
 let snapshot=null,busy=false,lastLoaded=0,editor=null,search='',month='',kind='',archiveView='active',pendingLocalId='',pendingRefresh=false;
 const active=()=>document.getElementById('section-pedidos')?.classList.contains('active')&&document.getElementById('local-order-buyers')?'pedidos':sections.find(name=>document.getElementById('section-'+name)?.classList.contains('active'));
 async function api(method='GET',body,view=''){
-  const response=await authenticatedFetch('/api/local-commerce'+(view?'?view='+encodeURIComponent(view):''),{method,headers:body?{'content-type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});
+  const response=await authenticatedFetch('/api/local-commerce'+(view?'?view='+encodeURIComponent(view):''),{method,...(method==='GET'?{signal:AbortSignal.timeout(12000)}:{}),headers:body?{'content-type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});
   const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.error||'No se pudo sincronizar el espejo.');return data;
 }
 function status(message,error=false){document.querySelectorAll('[data-local-status]').forEach(node=>{node.textContent=message;node.setAttribute('role',error?'alert':'status');});}
@@ -60,10 +60,16 @@ window.addEventListener('hashchange',()=>queueMicrotask(()=>load()));
 window.addEventListener('tintin:edit-local-sale',event=>{pendingLocalId=event.detail;location.hash='ventas-locales';queueMicrotask(()=>load(true));});
 // Refresca sólo al ver las casillas: incluye compradores de nuevos pedidos web.
 let checkingRevision=false;
-setInterval(async()=>{if(!active()||document.hidden||editor||busy||checkingRevision)return;checkingRevision=true;try{const result=await api('GET',undefined,'revision');if(result.revision!==snapshot?.revision)await load(true);}catch(error){status(error.message,true);}finally{checkingRevision=false;}},30000);
-window.addEventListener('tintin:orders-updated',()=>{if(active()&&!editor)load(true);});
+setInterval(async()=>{if(!active()||document.hidden||editor||busy||checkingRevision)return;checkingRevision=true;try{const result=await api('GET',undefined,'revision');if(result.revision!==snapshot?.revision)await load(true);}catch(error){status(error.message,true);}finally{checkingRevision=false;}},5000);
+window.addEventListener('tintin:orders-updated',()=>{pendingRefresh=true;if(active()&&!editor&&!busy)load(true);});
 window.addEventListener('tintin:site-content-updated',()=>{pendingRefresh=true;if(active()&&!editor&&!busy)load(true);});
 new MutationObserver(()=>{if(active())load();}).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
 load();
 
 window.addEventListener('tintin:show-order-buyers',()=>{if(snapshot){render();status('Datos confirmados de Firestore · '+new Date(snapshot.checkedAt).toLocaleTimeString('es-PY'));}load(true);});
+
+// Volver a la pestaña o recuperar red no debe esperar al próximo intervalo.
+function resumeLocalData(){if(!document.hidden&&active()){pendingRefresh=true;if(!editor&&!busy)load(true);}}
+window.addEventListener('online',resumeLocalData);
+window.addEventListener('focus',resumeLocalData);
+document.addEventListener('visibilitychange',resumeLocalData);

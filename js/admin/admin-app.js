@@ -790,7 +790,7 @@ function sectionFromUrl() {
   const fromQuery = params.get('section');
   if (fromQuery === 'contenido') return 'apariencia';
   if (isKnownSection(fromQuery)) return fromQuery;
-  const fromHash = (location.hash || '').replace(/^#/, '');
+  const fromHash = (location.hash || '').replace(/^#(?:section-)?/, '');
   if (fromHash === 'contenido') return 'apariencia';
   if (isKnownSection(fromHash)) return fromHash;
   return null;

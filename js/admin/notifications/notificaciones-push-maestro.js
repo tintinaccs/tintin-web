@@ -2,6 +2,7 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1';
 
 const SOUND_KEY = 'tt_push_foreground_sound';
@@ -20,8 +21,7 @@ function movePushModulesToOwnSection() {
 async function call(action, init = {}) {
   const user = auth.currentUser;
   if (!user) throw new Error('Necesitás iniciar sesión de nuevo.');
-  const token = await user.getIdToken();
-  const response = await fetch(apiUrl('push-admin'), { ...init, headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json', ...(init.headers || {}) } });
+  const response = await authenticatedFetch(apiUrl('push-admin'), { ...init, ...(init.method === 'GET' ? { signal: AbortSignal.timeout(12000) } : {}), headers: { 'content-type': 'application/json', ...(init.headers || {}) } });
   const data = await response.json().catch(() => ({}));
   if (!response.ok || data.success === false) throw new Error(data.error || 'No se pudo actualizar el centro push.');
   return data;
@@ -30,8 +30,7 @@ async function call(action, init = {}) {
 async function callApi(name, init = {}) {
   const user = auth.currentUser;
   if (!user) throw new Error('Necesitás iniciar sesión de nuevo.');
-  const token = await user.getIdToken();
-  const response = await fetch(apiUrl(name), { ...init, headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json', ...(init.headers || {}) } });
+  const response = await authenticatedFetch(apiUrl(name), { ...init, ...(init.method === 'GET' ? { signal: AbortSignal.timeout(12000) } : {}), headers: { 'content-type': 'application/json', ...(init.headers || {}) } });
   const data = await response.json().catch(() => ({}));
   return { ok: response.ok, data };
 }
@@ -139,13 +138,16 @@ async function uploadTone(slot = 'global') {
   } finally { button.disabled = false; }
 }
 
-async function refresh() {
+async function refresh({ preserveDraft = false } = {}) {
+  const owner = auth.currentUser?.uid;
   const data = await call('list', { method: 'GET' });
-  applySettings(data.settings);
+  if (!owner || auth.currentUser?.uid !== owner) return;
+  if (!preserveDraft) applySettings(data.settings);
+  else $('push-master-status').textContent = data.settings?.enabled === false ? 'Pausado' : 'Activo';
   renderDevices(data.devices);
   renderEvents(data.events);
   const config = await callApi('push-config', { method: 'GET' }).catch(error => ({ ok: false, data: { error: error.message } }));
-  renderDiagnostics(data.devices, data.settings, config);
+  if (auth.currentUser?.uid === owner) renderDiagnostics(data.devices, data.settings, config);
 }
 
 async function sendGlobalTest() {
@@ -179,6 +181,7 @@ async function sendGlobalMessage() {
 }
 
 async function save() {
+  const owner = auth.currentUser?.uid;
   const sound = $('push-master-sound').value;
   const url = $('push-master-sound-url').value.trim();
   if (sound === 'custom' && !/^https:\/\//i.test(url)) throw new Error('El sonido personalizado debe ser una URL HTTPS.');
@@ -192,6 +195,7 @@ async function save() {
       if (payload[key] === 'custom' && !/^https:\/\//i.test(payload[`${key}Url`])) throw new Error(`El tono de ${slot} debe ser una URL HTTPS.`);
     }
     const data = await call('save-settings', { method: 'POST', body: JSON.stringify(payload) });
+    if (!owner || auth.currentUser?.uid !== owner) return;
     applySettings(data.settings); notice('Preferencias push guardadas.');
   } finally { button.disabled = false; }
 }
@@ -244,3 +248,29 @@ function boot() {
 window.TintinPushMasterRefresh = () => refresh().catch(error => notice(error.message, true));
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
+
+
+// Telemetría actualizada sin reescribir preferencias que se estén editando.
+let telemetryBusy = false;
+async function refreshVisibleTelemetry() {
+  const section = $('section-notificaciones-push');
+  if (telemetryBusy || document.hidden || navigator.onLine === false ||
+      auth.currentUser?.email !== SUPER_ADMIN || !section?.classList.contains('active') ||
+      section.querySelector('#btn-push-master-save:disabled,#btn-push-master-message:disabled,#btn-push-master-revoke-all:disabled,[data-push-revoke]:disabled') ||
+      section.contains(document.activeElement) && document.activeElement?.closest('tbody')) return;
+  telemetryBusy = true;
+  try { await refresh({ preserveDraft: true }); }
+  catch (error) { notice('No se pudo actualizar el estado de push. Se reintentará automáticamente.', true); }
+  finally { telemetryBusy = false; }
+}
+const telemetryTimer = window.setInterval(refreshVisibleTelemetry, 5000);
+for (const type of ['focus','online']) window.addEventListener(type, refreshVisibleTelemetry);
+document.addEventListener('visibilitychange', refreshVisibleTelemetry);
+const pushSection = $('section-notificaciones-push');
+const telemetryObserver = new MutationObserver(refreshVisibleTelemetry);
+if (pushSection) telemetryObserver.observe(pushSection, { attributes: true, attributeFilter: ['class'] });
+window.addEventListener('pagehide', () => {
+  clearInterval(telemetryTimer); telemetryObserver.disconnect();
+  for (const type of ['focus','online']) window.removeEventListener(type, refreshVisibleTelemetry);
+  document.removeEventListener('visibilitychange', refreshVisibleTelemetry);
+}, { once: true });

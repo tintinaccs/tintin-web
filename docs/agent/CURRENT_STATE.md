@@ -2719,3 +2719,21 @@ La validación de CodeQL del intento ec6c525a mantuvo las observaciones: no bast
 ## 2026-10-19 — Aviso de cookies breve (Codex)
 
 Pedido del titular: quitar menciones técnicas a IP/GPS del aviso compartido. Resumen reducido a cookies/almacenamiento de sesión y carrito, y estadísticas de visitas opcionales. Preferencias, consentimiento y política detallada conservados. PASS_LOCAL: Chromium en 320/768/1440px comprueba texto, ancho y tres acciones; 4 pruebas de actividad y auditoría de confiabilidad aprobadas. Referencias inmutables y derivados regenerados. Se incorpora al PR 1167; publicación pendiente de los controles remotos existentes.
+
+
+## 2026-10-19 — Super Admin responsive, push y actualización (Codex)
+
+Rama independiente `codex/superadmin-responsive-push-20261019` sobre cc294521 para preservar el PR 1167 y su CI en curso. Inventario de las 26 superficies canónicas en `docs/agent/SUPERADMIN_REVIEW_20261019.md`. Se conservan roles, controles nativos, borradores, fuentes transaccionales y reglas.
+
+Implementación: canvas rosado suave configurable, controles táctiles y campos móviles legibles; grupos de navegación y buscador desde lateral/cajón. Logo original con filtro blanco en header; iconos admin/push exportados desde el canal alfa original, sin imagen inventada. `scripts/generar-iconos-admin.mjs` reproduce esos cuatro assets. PWA/admin separados de los favicons públicos.
+
+Login identifica perfil leído en servidor (firstName/lastName, name/displayName o nombre del token verificado), con auth_time y deduplicación intactos. SW registra clic antes del SDK, normaliza enlaces históricos internos y preserva destino al fallar navigate; no sustituye checkout. Ficha de pedido push consume la fuente autenticada por suscripción, mantiene reintento/snapshot tardío y limpia destino al abrir. En el centro push, telemetría visible cada 5s sin pisar tonos editados, con cliente autenticado canónico, límite de lectura y protección contra respuesta de otra sesión. Espejo local baja revisión de 30s a 5s visible, retoma al recuperar red/foco y conserva avisos mientras carga.
+
+PASS_LOCAL ya ejecutado: 55 Chromium de shell/módulos/tamaños + 11 de lateral; 6 casos de enlaces push tardíos/error/sesión; 2 de telemetría/guardado y 2 de buscador desde cajón. 74 WebKit de shell y nuevas rutas/telemetría. 280 pruebas Node admin/conexiones/salud con ejecutable Chromium explícito, 99 Node push/social; Maestro 27/27, conexiones 25/25, fundamentos, integraciones, auditor push y Maestro responsive en 5 tamaños aprobados. Barrido final de Chromium/WebKit y generadores en curso al registrar esta entrada.
+
+Incidencias de validación resueltas: primera prueba de lateral omitió BASE_URL y usó CSS remoto; se repitió contra servidor local. Dos gates directos omitieron ruta del Chromium instalado; repetidos con ejecutable correcto. Fixture de telemetría necesitaba nonce CSP y reveló una condición demasiado amplia sobre botones deshabilitados; se acotó al guardado/revocación real. Se corrigió antes de cierre un reemplazo demasiado amplio dentro de save() y se agregó una regresión de guardado. Auditor push tenía tres comprobaciones anteriores al canal de actividad/guard central: ahora verifica el guard canónico y la explicación real de pantalla bloqueada, sin retirar controles de acceso.
+
+No hay prueba física de recepción iOS bloqueado ni verificación de todas las APIs externas con sesión de producción. El polling de servicios sin stream no se presenta como instantáneo. No se enviaron push, correos ni pedidos reales. El PR 1167 sigue separado: su CI pasó instalación/build/derivados y está ejecutando contrato estático; aún no se acredita merge ni despliegue principal.
+
+
+Cierre local Super Admin: 76/76 Chromium finales + 74/74 WebKit y 2/2 WebKit del nuevo acceso desde cajón. Build:pages, caché (352/66/5), rutas, CSP y manifiesto final aprobados; protección mantiene 78 registros/544 archivos. Se revisaron capturas reales del shell de 390/1440 y el icono blanco exportado. Los límites de producción/entrega física indicados arriba permanecen. La interfaz de login push muestra nombre sólo al canal Super Admin; no se cambian notificaciones históricas ya recibidas ni se borra información de cuentas.
