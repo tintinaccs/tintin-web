@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0646be8b993074cc98cdcaaa01ac74418dffc7587decde70d83487f73a5be9d3",
+  "sourceFingerprint": "abc7468241fa1cf4436e676798d4a4cf73afa452ce87de88671de29c6355b811",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1330,
     "textFiles": 1244,
-    "totalBytes": 24852045,
+    "totalBytes": 24852637,
     "pages": 19,
     "modules": 937
   },
@@ -2470,7 +2470,7 @@
         "viewer"
       ],
       "bytes": 203117,
-      "sha256": "acb5cc4351b80a1cf93031c51001cd4a132edf5e8000bb6f9df4bbe65478c371",
+      "sha256": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2519,7 +2519,7 @@
           "line": 2068
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261019-admin-mobile-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261019-admin-mobile-3",
           "target": "js/admin/admin-app.js",
           "line": 2069
         },
@@ -2851,7 +2851,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261019-admin-mobile-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20261019-admin-mobile-3",
           "target": "js/admin/admin-app.js",
           "line": 2069,
           "exists": true
@@ -25390,14 +25390,14 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 485590,
-      "sha256": "439d86dd63e4278a01091b3becde5989844a3449b017dd3c9d867704327dc8a4",
+      "sha256": "ff3e8d79a551a188603ded153de3290a9d0446f34ed61bb82e38e892012adc1e",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-2",
+          "raw": "./maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3",
           "target": "js/admin/maestro/navegacion-movil-admin.js",
           "dynamic": false,
           "line": 1
@@ -26558,8 +26558,8 @@
     },
     {
       "path": "js/admin/maestro/navegacion-movil-admin.js",
-      "bytes": 4018,
-      "sha256": "4943ce15b0f59e7283d0579ff406d69f85f0c78b6d4aca7718eb8c4c000d1a7e",
+      "bytes": 4187,
+      "sha256": "47217e5242aed2244c5f1fcb3a8d7f756252e00f9f541de776b4dfb9e6dea37c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48776,8 +48776,8 @@
     },
     {
       "path": "tests/ui-ux/admin-control-dashboard.spec.js",
-      "bytes": 13237,
-      "sha256": "4b2f171f5b78003482d1acfb1ad42346c6807f6604bff152beffe59c9f5277be",
+      "bytes": 13371,
+      "sha256": "0ea2b1c25bf546165e9151da38b80f67107afe96eae8f323c2e1e41b42900bc9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48786,7 +48786,7 @@
       "endpoints": [
         {
           "url": "https://tintin.test/fixture",
-          "line": 184
+          "line": 185
         }
       ]
     },
@@ -50380,7 +50380,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 203117,
-      "sha256": "acb5cc4351b80a1cf93031c51001cd4a132edf5e8000bb6f9df4bbe65478c371"
+      "sha256": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2"
     },
     {
       "path": "apple-touch-icon.png",
@@ -51309,8 +51309,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1898,
-      "sha256": "0927d954566a2e77af16afe90a6cc446998633a3fb15651a5cc16dd9fd2a04ab"
+      "bytes": 1896,
+      "sha256": "c8c7c96c8aeaff913bba5a5f6bb719a5916b6ce1822f210650c8fa393069622b"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -51322,7 +51322,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "d6bc56cca6384707d96fc6112ff13b7d42a28d58aa3216c50c4b7cdebad6b728"
+      "sha256": "73d18edbe5b373ab0928417ffe98f30df6de2eb0a53459cafc45e6e9888e87fd"
     },
     {
       "path": "config/public-site.json",
@@ -51945,8 +51945,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 617592,
-      "sha256": "4d593c18603c6f1bfd0e10640e7e575e6054558db0f8364883c989be86d346e4"
+      "bytes": 617748,
+      "sha256": "30b275de130b0810398093f9b216eb2d4fb3d8431ac779996e5a95042157a51e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -52305,8 +52305,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 57214,
-      "sha256": "edee54ca0e85130566ac014eb59c35bb6093d061a8da7f1a111ef3d484cd3154"
+      "bytes": 57349,
+      "sha256": "0fb13c199116ec069c3b4f84232c99cba281f3481d33fd744672831a054919dc"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -52972,7 +52972,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 485590,
-      "sha256": "439d86dd63e4278a01091b3becde5989844a3449b017dd3c9d867704327dc8a4"
+      "sha256": "ff3e8d79a551a188603ded153de3290a9d0446f34ed61bb82e38e892012adc1e"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -53133,8 +53133,8 @@
     {
       "path": "js/admin/maestro/navegacion-movil-admin.js",
       "extension": ".js",
-      "bytes": 4018,
-      "sha256": "4943ce15b0f59e7283d0579ff406d69f85f0c78b6d4aca7718eb8c4c000d1a7e"
+      "bytes": 4187,
+      "sha256": "47217e5242aed2244c5f1fcb3a8d7f756252e00f9f541de776b4dfb9e6dea37c"
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
@@ -55810,7 +55810,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 72798,
-      "sha256": "e5faab5a1684ad7d0f57867d87f1267aa2cbd0da82278ab0dc6c8458ef5e7ad0"
+      "sha256": "1d27f253e56d542b441a11e192433b9444290d8c3a94e5e62c80a7b349c60ec2"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -57915,8 +57915,8 @@
     {
       "path": "tests/ui-ux/admin-control-dashboard.spec.js",
       "extension": ".js",
-      "bytes": 13237,
-      "sha256": "4b2f171f5b78003482d1acfb1ad42346c6807f6604bff152beffe59c9f5277be"
+      "bytes": 13371,
+      "sha256": "0ea2b1c25bf546165e9151da38b80f67107afe96eae8f323c2e1e41b42900bc9"
     },
     {
       "path": "tests/ui-ux/admin-sidebar-interaction.spec.js",

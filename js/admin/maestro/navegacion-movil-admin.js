@@ -49,9 +49,10 @@ window.addEventListener('click', event => {
   if (event.target instanceof Element && event.target.closest('#adm-mobile-more-grid .adm-mobile-tab')) closeMobileMore(true);
 }, true);
 const inertState = new Map();
+// El sidebar conserva su propia autoridad inert según el breakpoint.
 function lockBackground() {
   if (inertState.size) return;
-  for (const node of document.querySelectorAll('.adm-main,#adm-sidebar,#adm-mobile-tabs')) {
+  for (const node of document.querySelectorAll('.adm-main,#adm-mobile-tabs')) {
     inertState.set(node, node.inert);
     node.inert = true;
   }
@@ -61,7 +62,8 @@ function unlockBackground() {
   inertState.clear();
 }
 
-document.addEventListener('keydown', event => {
+// Captura antes del sidebar: Escape pertenece al diálogo que está abierto.
+window.addEventListener('keydown', event => {
   if (mobileMoreSheet?.hidden !== false) return;
   if (event.key === 'Tab') {
     const items = [...mobileMoreSheet.querySelectorAll('button,a[href],input,select,textarea,[tabindex]')].filter(node => !node.disabled && node.tabIndex >= 0 && node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden');
@@ -71,9 +73,10 @@ document.addEventListener('keydown', event => {
   }
   if (event.key === 'Escape' && mobileMoreToggle?.getAttribute('aria-expanded') === 'true') {
     event.preventDefault();
+    event.stopPropagation();
     closeMobileMore(true);
   }
-});
+}, true);
 
 
 // La rotación no debe dejar el escritorio bloqueado por un menú móvil oculto.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "037f55e8a3790b7cfe413da390382df66004cc73",
-  "reason": "Mejorar navegación móvil minimalista con drop-up sólido, foco, rotación y guardia de enlaces y borradores verificados.",
+  "reason": "Mejorar navegación móvil minimalista con foco modal, sidebar responsive y guardia de enlaces y borradores verificados.",
   "files": [
     {
       "path": "admin-images.html",
@@ -11,12 +11,12 @@
     {
       "path": "admin.html",
       "oldHash": "e895201adfe3959111878a6d1aad699de3a38bab00e2a01396188a56d4e072b0",
-      "newHash": "acb5cc4351b80a1cf93031c51001cd4a132edf5e8000bb6f9df4bbe65478c371"
+      "newHash": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2"
     },
     {
       "path": "js/admin/admin-app.js",
       "oldHash": "3ce17f02d60b51fc705a0c5ae12817fe4fd0bde851ef14bf4765d61449ea43e6",
-      "newHash": "439d86dd63e4278a01091b3becde5989844a3449b017dd3c9d867704327dc8a4"
+      "newHash": "ff3e8d79a551a188603ded153de3290a9d0446f34ed61bb82e38e892012adc1e"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
@@ -26,7 +26,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "936cfba30a55e163c3fb2e5150639424b3698675054eec3c85a58881bb2208cb",
-      "newHash": "e5faab5a1684ad7d0f57867d87f1267aa2cbd0da82278ab0dc6c8458ef5e7ad0"
+      "newHash": "1d27f253e56d542b441a11e192433b9444290d8c3a94e5e62c80a7b349c60ec2"
     }
   ],
   "affectedRecords": [

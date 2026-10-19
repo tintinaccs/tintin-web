@@ -106,7 +106,7 @@ test('el dashboard distribuye pedidos y visitantes sin superponerlos', async ({ 
 
 for (const width of [320, 390, 540]) {
   test(`barra flotante y drop-up accesible a ${width}px`, async ({ page }, testInfo) => {
-    await load(page, width, 'admin.html', { mobile: true });
+    await load(page, width, 'admin.html', { mobile: true, sidebar: true });
     const nav = page.locator('#adm-mobile-tabs'), more = page.locator('#adm-mobile-more-toggle');
     const box = await nav.boundingBox();
     await expect(nav.locator('.adm-mobile-tab:visible')).toHaveCount(5);
@@ -137,11 +137,12 @@ for (const width of [320, 390, 540]) {
     await more.click(); await page.setViewportSize({ width: 844, height: 390 });
     await expect(sheet).toBeHidden(); expect(await page.locator('.adm-main').evaluate(node => node.inert)).toBe(false);
     await expect(page.locator('body')).not.toHaveClass(/adm-mobile-more-open/);
+    expect(await page.locator('#adm-sidebar').evaluate(node => node.inert)).toBe(false);
   });
 }
 
 test('drop-up conserva permisos, módulos tardíos y navegación nativa', async ({ page }) => {
-  await load(page, 390, 'admin.html', { mobile: true });
+  await load(page, 390, 'admin.html', { mobile: true, sidebar: true });
   await page.evaluate(() => {
     document.querySelector('#adm-mobile-more-grid [data-section="configuracion"]').style.display = 'none';
     const button = document.createElement('button'); button.className = 'adm-mobile-tab'; button.dataset.section = 'welcome'; button.textContent = 'Mensaje de bienvenida';
@@ -157,7 +158,7 @@ test('drop-up conserva permisos, módulos tardíos y navegación nativa', async 
 });
 
 test('drop-up y guardia conservan el borrador sin bloquear el panel', async ({ page }) => {
-  await load(page, 390, 'admin.html', { mobile: true, guard: true });
+  await load(page, 390, 'admin.html', { mobile: true, sidebar: true, guard: true });
   await page.evaluate(() => {
     const root = document.getElementById('section-configuracion');
     document.querySelector('.adm-section.active').classList.remove('active'); root.classList.add('active');
