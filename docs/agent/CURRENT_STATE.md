@@ -1,3 +1,7 @@
+## 2026-10-19 — Simulación de AbortSignal en la prueba de compradores
+
+CI de b942ddc detectó que tests/sync/clientes-pedidos.test.mjs ejecutaba el módulo de comercio local sin proporcionar AbortSignal al VM. El runtime usa AbortSignal.timeout para acotar la lectura; la ausencia simulada se capturaba como error de carga y dejaba vacía la vista del fixture. Se inyecta la API real de Node en la simulación, conservando las aserciones de render/saneado/actualización y sin cambiar el código productivo ni relajar controles. PASS_LOCAL fresco:177 pruebas de sincronización, incluida la regresión afectada. La fixture no es archivo protegido; los hashes/plan del código productivo se conservan. Se regenera diagnóstico/versión antes de repetir CI.
+
 ## 2026-10-19 — URL canónica del logo administrativo
 
 CI del candidato conjunto 0bdf0e9 detectó un img nuevo del lateral administrativo con la URL del logo sin versión. Se corrige su consumidor para reutilizar exactamente LOGO_VERSION del shell; el dibujo original y su tinte blanco sobre rosa se conservan. No se cambia la prueba ni se agrega excepción. La regresión específica y arquitectura se ejecutan de nuevo; plan y diagnóstico se regeneran desde las autoridades existentes. No hubo publicación de producción de ese candidato fallido.
