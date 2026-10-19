@@ -43,8 +43,10 @@ mobileMoreToggle?.addEventListener('click', () => {
 });
 mobileMoreClose?.addEventListener('click', () => closeMobileMore(true));
 mobileMoreBackdrop?.addEventListener('click', () => closeMobileMore(true));
-mobileMoreGrid?.addEventListener('click', event => {
-  if (event.target.closest('.adm-mobile-tab')) closeMobileMore();
+// Antes de la guardia de enlaces (captura en document): cerrar y liberar
+// el fondo incluso si la guardia detiene la navegación a Imágenes.
+window.addEventListener('click', event => {
+  if (event.target instanceof Element && event.target.closest('#adm-mobile-more-grid .adm-mobile-tab')) closeMobileMore(true);
 }, true);
 const inertState = new Map();
 function lockBackground() {

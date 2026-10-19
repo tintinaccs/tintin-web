@@ -173,4 +173,14 @@ test('drop-up y guardia conservan el borrador sin bloquear el panel', async ({ p
   await guard.getByRole('button', { name: /seguir editando/i }).click();
   await expect(field).toHaveValue('Borrador móvil'); expect(await page.locator('.adm-main').evaluate(node => node.inert)).toBe(false);
   expect(await page.evaluate(() => window.__navigated)).toBeUndefined();
+  // Imágenes usa un enlace externo al documento. La guardia real lo
+  // intercepta en captura y debe recibir el panel ya liberado del drop-up.
+  await page.locator('#adm-mobile-more-toggle').click();
+  await page.locator('#adm-mobile-more-grid a[href*="admin-images"]').click();
+  await expect(page.locator('#adm-mobile-more-sheet')).toBeHidden(); await expect(guard).toBeVisible();
+  expect(await page.locator('.adm-main').evaluate(node => node.inert)).toBe(false);
+  await guard.getByRole('button', { name: /seguir editando/i }).click();
+  await expect(field).toHaveValue('Borrador móvil'); await expect(field).toBeEditable();
+  await expect(page).toHaveURL('https://tintin.test/fixture');
+  await expect(page.locator('#adm-mobile-more-toggle')).toBeFocused();
 });
