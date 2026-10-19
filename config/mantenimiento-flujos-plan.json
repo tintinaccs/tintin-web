@@ -1,52 +1,28 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "037f55e8a3790b7cfe413da390382df66004cc73",
-  "reason": "Mejorar navegación móvil minimalista con foco modal, sidebar responsive y guardia de enlaces y borradores verificados.",
+  "baseCommit": "776669b7541a8e66f619db72c361dcd7c6ad2014",
+  "reason": "Mejorar distribución visual de todo el panel administrativo en escritorio, laptop, tablet y móvil conservando los controladores existentes.",
   "files": [
     {
       "path": "admin-images.html",
-      "oldHash": "0358e889a9fd4962cd52812d1788643f5513b4d79cee77d97a7f08cb4aa079ae",
-      "newHash": "88d30e87907dbb0fbc7983ff8fb1da9d092c34393f10a89f75a954906ec57a12"
+      "oldHash": "88d30e87907dbb0fbc7983ff8fb1da9d092c34393f10a89f75a954906ec57a12",
+      "newHash": "5f99f39bb628fd889091fa4a9643eaa0783a53f5c4fd963f058e872052f105b9"
     },
     {
       "path": "admin.html",
-      "oldHash": "e895201adfe3959111878a6d1aad699de3a38bab00e2a01396188a56d4e072b0",
-      "newHash": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2"
+      "oldHash": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2",
+      "newHash": "a5b856a1f73478ce11b553aa161de2296066e9cdb71c096bf12fc102c18ee5ff"
     },
     {
-      "path": "js/admin/admin-app.js",
-      "oldHash": "3ce17f02d60b51fc705a0c5ae12817fe4fd0bde851ef14bf4765d61449ea43e6",
-      "newHash": "ff3e8d79a551a188603ded153de3290a9d0446f34ed61bb82e38e892012adc1e"
-    },
-    {
-      "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "ee4315d286e78bab6dc0e2ce370499d7beb0d762e40ee04a5c185575e8e042db",
-      "newHash": "c4b0cf84aa9f7bc40105dfeafa059649b8d5eb9b8bf10b548a8fb8fa71695b51"
+      "path": "package.json",
+      "oldHash": "d7e2cd450be3c8240df7f82561e6666d1e0f0c80b4582e894d81df34d2159898",
+      "newHash": "f0360ec9d08a26e601d981ee0362861838159e6d3c116b251ae75b02c77d60e8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "936cfba30a55e163c3fb2e5150639424b3698675054eec3c85a58881bb2208cb",
-      "newHash": "1d27f253e56d542b441a11e192433b9444290d8c3a94e5e62c80a7b349c60ec2"
+      "oldHash": "1d27f253e56d542b441a11e192433b9444290d8c3a94e5e62c80a7b349c60ec2",
+      "newHash": "ee495fc836afbf8cfeba63a25dd9a9cb0133068bde1b23d6134f4b2428f733fa"
     }
   ],
-  "affectedRecords": [
-    "admin-guard",
-    "admin-guard__firestore-fuente-verdad__16",
-    "apis-internas__correos__41",
-    "apis-internas__pedidos__32",
-    "correos",
-    "pagina-perfil",
-    "pedidos",
-    "pedidos__inventario__33",
-    "productos",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-perfil__18",
-    "roles__super-panel__14",
-    "sesion-estado",
-    "sesion-estado__firestore__7",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34"
-  ]
+  "affectedRecords": []
 }
