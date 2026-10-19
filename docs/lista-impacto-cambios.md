@@ -1,3 +1,22 @@
+## 2026-10-19 — Reconciliar PR1152 con main c3085d9a
+
+Se conservan maestro de Productos, selección para pedidos y aviso de verificación de main, junto a su migración de publicación automática. No se alteran controles/workflows respecto de esa base. Stock/fotos y aviso por página continúan en sus autoridades existentes; plan y derivados se regeneran.
+
+## 2026-10-18 — Integrar PR1155 en PR1152
+
+Se preservan mosaico/paginación de Productos, acciones admin y distribución móvil de Tu selección de main46c10ef5. Catálogo con stock y avisos por página siguen compartiendo sus autoridades existentes. Se regeneran plan nativo y diagnóstico contra la nueva base.
+
+## 2026-10-18 — Reconciliar PR1153 en PR1152
+
+Se conserva el CSS y referencia de Tu selección de main b982cb77; no cambia la lógica de stock ni los avisos por página. Se regeneran plan nativo y diagnóstico contra main vigente.
+
+## 2026-10-18 — Aviso limitado a la página abierta al reconciliar PR1150
+
+Se conserva la solución de datos sin recarga de PR1151 y las mejoras de PR1150. site-version.json agrega un mapa de hashes HTML generado desde el manifiesto canónico; vigilancia-version compara sólo la ruta abierta y mantiene fallback para publicaciones anteriores/rutas dinámicas. El verificador valida el mapa exacto. Una publicación de Producto no avisa en Inicio cuando su página no cambia. La selección de fotos disponibles y agotados al final siguen en el renderer compartido. No cambia Firestore, Rules, roles, permisos ni el mecanismo de revisión humana. Se propagan las URLs inmutables y se regenera el plan contra mainc81257c0. Evidencia en CURRENT_STATE.
+
+## 2026-10-17 — Tarjetas con stock y validación global de avisos
+
+PR1152 conserva la foto de una variante disponible y deshabilita colores agotados en las tarjetas compartidas. Se reconcilia con PR1151/main64a17c4a, conservando su única separación de sincronización de datos y avisos de versión. Se amplían regresiones a19rutas, ambas orientaciones y stock/foto actualizados sin TTL ni aviso. No se crean nuevas revisiones, permisos, Rules ni lógica por rol/dispositivo. Referencias inmutables y protección nativa se regeneran desde las fuentes; evidencia y límites en CURRENT_STATE.
 ## 2026-10-18 — Productos: interfaz adaptable, fase 1
 
 Fuentes: shopify-commerce-admin.js/css y nuevo helper de presentación products/interfaz-productos-adaptable.js. Tabla canónica se presenta como mosaico3 desktop/2 compacto, con alternativa Lista; foto contain y selección separada. Selección sobrevive filtros/páginas con indicación visible; acciones existentes y autorización se conservan. Formulario admin.html mantiene campos y handlers, reorganizados por secciones en el DOM; editor compacto ocupa visualViewport con acciones visibles. Biblioteca y guard nativo prevalecen sobre el editor; Tab/Escape y retorno de foco abarcan ficha/editor; ocultar la sección desde navegación nativa libera el scroll y conserva el borrador. Impacta presentación de Productos y manejo de teclado compartido del drawer; Pedidos tiene51 regresiones aprobadas, Colecciones conserva sus6 pruebas de integración compartidas. No altera dominio de datos, serializer, Firebase Rules, controladores CRUD, inventario, públicos, compras ni integraciones. Assets con URLs nuevas; caché/CSP/diagnóstico y mantenimiento protegidos se generan por herramientas canónicas. Nuevas15 pruebas agregadas al comando existente audit:admin-responsive; no se modifican comandos sellados de fase8 ni mecanismos de control. Evidencia y límites en CURRENT_STATE.

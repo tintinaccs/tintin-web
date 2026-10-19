@@ -3,7 +3,7 @@
    El HTML se sirve sin caché y los JS/CSS con ?v= inmutables: una pestaña
    que quedó abierta mientras se publicaba sigue ejecutando la versión
    anterior hasta que el usuario navega. Este módulo compara el marcador
-   liviano del artefacto publicado sin caché; conserva el HTML actual como
+   de la página abierta sin caché; conserva el HTML actual como
    fallback para detectar referencias versionadas que la pestaña nunca cargó.
    Actualizar es una recarga normal: no toca localStorage, sessionStorage,
    cookies, IndexedDB ni cachés, así que la sesión, el carrito, el perfil y
@@ -32,6 +32,13 @@ const STYLE_ID = 'tt-version-notice-css';
 // tienda (z-index altísimo), banner de cookies y avisos del panel admin.
 const CORNER_NEIGHBOURS = ['#tt-store-gate-network-notice', '#tt-privacy-consent', '#tt-ops-toasts', '#adm-mobile-tabs', '#tt-tabbar', '.tt-wa-float'];
 
+export function pageRevision(data, pathname) {
+  const path = String(pathname || '/').replace(/^\/+|\/+$/g, '');
+  const file = path ? `${path.replace(/\.html$/i, '')}.html` : 'index.html';
+  const revision = data?.pages?.[file];
+  return typeof revision === 'string' && /^[a-f0-9]{64}$/.test(revision) ? revision : '';
+}
+
 async function fetchSiteVersion() {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
@@ -39,7 +46,7 @@ async function fetchSiteVersion() {
     const response = await fetch('/site-version.json', { cache: 'no-store', credentials: 'same-origin', signal: controller.signal });
     if (!response.ok || response.redirected || !/application\/json/i.test(response.headers.get('content-type') || '')) return '';
     const data = await response.json();
-    return /^[a-f0-9]{64}$/.test(data?.revision) ? data.revision : '';
+    return pageRevision(data, location.pathname);
   } catch { return ''; }
   finally { clearTimeout(timer); }
 }

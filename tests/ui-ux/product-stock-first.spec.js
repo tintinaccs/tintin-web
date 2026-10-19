@@ -40,10 +40,10 @@ for (const width of [390, 1440]) {
     await expect(page.locator('[data-variant-value="Plateado"]')).toHaveAttribute('aria-pressed', 'true');
     await expect.poll(() => page.locator('#gallery-main img').evaluate(img => img.currentSrc)).toMatch(/silver.svg/);
   });
-  test(`catálogo envía abajo los agotados incluso con stock agregado desactualizado en ${width}px`, async ({ page }) => {
+  for (const catalogPath of ['/catalogo', '/catalogo?cat=aros']) test(`${catalogPath} envía abajo los agotados incluso con stock agregado desactualizado en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     const exhausted = { ...product, id: 'qa-exhausted', name: 'Agotado barato', price: 1, variantInventory: product.variantInventory.map(row => ({ ...row, stock: 0 })) };
-    await catalog(page, [exhausted, product]); await page.goto('/catalogo');
+    await catalog(page, [exhausted, product]); await page.goto(catalogPath);
     await expect(page.locator('#cat-grid [data-product-id]')).toHaveCount(2);
     await page.locator('#cat-sort').selectOption('precio-asc');
     await expect(page.locator('#cat-grid [data-product-id]').first()).toHaveAttribute('data-product-id', product.id);
@@ -51,3 +51,50 @@ for (const width of [390, 1440]) {
     await expect(page.locator('#cat-grid [data-product-id]').first().locator('img')).toHaveAttribute('src', /silver.svg/);
   });
 }
+
+for (const width of [390, 1440]) test(`tarjeta conserva una foto disponible al tocar un agotado y actualizar stock en ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 }); await catalog(page, [product]);
+  await page.goto('/catalogo?cat=aros');
+  await page.waitForFunction(() => typeof window.renderProductCardMarkup === 'function');
+  await page.evaluate(product => {
+    const root = document.createElement('div'); root.id = 'stock-card-fixture'; document.body.prepend(root);
+    window.paintStockCard = item => { root.innerHTML = window.renderProductCardMarkup(item); };
+    window.paintStockCard(product);
+  }, product);
+  const card = page.locator('#stock-card-fixture');
+  const image = card.locator('img');
+  const gold = card.locator('[data-card-color="Dorado"]');
+  const silver = card.locator('[data-card-color="Plateado"]');
+  await expect(image).toHaveAttribute('src', /silver.svg/);
+  await expect(gold).toBeDisabled(); await expect(silver).toBeEnabled();
+  await gold.dispatchEvent('click');
+  await expect(image).toHaveAttribute('src', /silver.svg/);
+  await expect(card.locator('.tt-stock-label')).toBeHidden();
+  await silver.click();
+  await page.evaluate(product => window.paintStockCard({ ...product, variantInventory: [{ variant: 'Dorado', stock: 2 }, { variant: 'Plateado', stock: 0 }] }), product);
+  await expect(image).toHaveAttribute('src', /gold.svg/);
+  await expect(silver).toBeDisabled(); await expect(gold).toBeEnabled();
+  await expect(card.locator('.tt-stock-label')).toBeHidden();
+  await page.evaluate(product => window.paintStockCard({ ...product, variantInventory: product.variantInventory.map(row => ({ ...row, stock: 0 })) }), product);
+  await expect(card.locator('.tt-stock-label')).toBeVisible();
+  await expect(gold).toBeDisabled(); await expect(silver).toBeDisabled();
+});
+
+for (const width of [390, 1440]) test(`catálogo actualiza stock y foto sin pedir recarga ni esperar el TTL en ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 });
+  const items = [{ ...product }]; await catalog(page, items);
+  await page.goto('/catalogo?cat=aros');
+  const card = page.locator(`#cat-grid [data-product-id="${product.id}"]`);
+  await expect(card.locator('img')).toHaveAttribute('src', /silver.svg/);
+  items[0] = { ...product, variantInventory: [{ variant: 'Dorado', stock: 2 }, { variant: 'Plateado', stock: 0 }] };
+  await page.evaluate(async () => {
+    const module = await import('../../js/quality/vigilancia-version.js?v=tintin-20261018-page-updates-1');
+    module.notifySiteContentChange();
+  });
+  await expect(card.locator('img')).toHaveAttribute('src', /gold.svg/);
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+  items[0] = { ...items[0], variantInventory: items[0].variantInventory.map(row => ({ ...row, stock: 0 })) };
+  await page.evaluate(async () => (await import('../../js/quality/vigilancia-version.js?v=tintin-20261018-page-updates-1')).notifySiteContentChange());
+  await expect(card.locator('.tt-stock-label')).toBeVisible();
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+});

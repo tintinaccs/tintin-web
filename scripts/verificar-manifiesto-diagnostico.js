@@ -51,6 +51,7 @@ if (manifest.schemaVersion !== 2 || !Array.isArray(manifest.pages)) {
 try {
   const version = JSON.parse(fs.readFileSync(path.join(ROOT, 'site-version.json'), 'utf8'));
   if (version.revision !== manifest.sourceFingerprint) fail('site-version.json no corresponde al artefacto diagnóstico actual.');
+  if (!version.pages || Object.keys(version.pages).length !== manifest.pages.length || manifest.pages.some(page => version.pages[page.path] !== page.sha256)) fail('site-version.json no corresponde a las páginas inventariadas.');
 } catch {
   fail('Falta el marcador de publicación site-version.json o no es JSON válido.');
 }

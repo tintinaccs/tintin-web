@@ -715,6 +715,6 @@ const manifest = {
 };
 
 // Marcador derivado excluido del inventario para evitar autorreferencia.
-fs.writeFileSync(path.join(ROOT, 'site-version.json'), `${JSON.stringify({ revision: manifest.sourceFingerprint })}\n`, 'utf8');
+fs.writeFileSync(path.join(ROOT, 'site-version.json'), `${JSON.stringify({ revision: manifest.sourceFingerprint, pages: Object.fromEntries(pages.map(page => [page.path, page.sha256])) })}\n`, 'utf8');
 fs.writeFileSync(OUTPUT, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 console.log(`Diagnostic manifest: ${pages.length} pages, ${modules.length} modules, ${files.length} files.`);

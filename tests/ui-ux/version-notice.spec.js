@@ -5,9 +5,10 @@ const source = fs.readFileSync(path.resolve(__dirname, '../../js/quality/vigilan
 
 async function mount(page, { cookies = false } = {}) {
   let revision = 'a'.repeat(64);
+  let otherPageRevision = 'a'.repeat(64);
   await page.route('https://version.test/**', route => {
     const url = new URL(route.request().url());
-    if (url.pathname === '/site-version.json') return route.fulfill({ json: { revision } });
+    if (url.pathname === '/site-version.json') return route.fulfill({ json: { revision: otherPageRevision, pages: { 'index.html': revision, 'product.html': otherPageRevision } } });
     if (url.pathname === '/watch.js') return route.fulfill({ contentType: 'text/javascript', body: source });
     return route.fulfill({ contentType: 'text/html', body: `<meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0}#tt-tabbar{position:fixed;bottom:16px;right:16px;left:16px;height:72px;background:#eee;z-index:1100}@media(min-width:1100px){#tt-tabbar{display:none}}#tt-privacy-consent{position:fixed;bottom:0;right:0;width:100%;height:85vh;background:#ccc;z-index:2147483600}</style><input aria-label="Borrador"><div id="tt-tabbar">Navegación</div>${cookies ? '<div id="tt-privacy-consent">Cookies</div>' : ''}<script type="module" src="/watch.js?v=initial"></script>` });
   });
@@ -16,13 +17,24 @@ async function mount(page, { cookies = false } = {}) {
   await page.getByRole('textbox').fill('Conservar edición');
   await page.evaluate(() => localStorage.setItem('cart', 'conservar'));
   expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
-  return (value = 'b') => { revision = value.repeat(64); };
+  return (value = 'b', otherPageOnly = false) => { if (otherPageOnly) otherPageRevision = value.repeat(64); else revision = value.repeat(64); };
 }
+
+test('una publicación de otra página no pide recargar la página abierta', async ({ page }) => {
+  const publish = await mount(page);
+  publish('b', true);
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+  await expect(page.getByRole('textbox')).toHaveValue('Conservar edición');
+  publish('c');
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(page.locator('#tt-version-notice')).toBeVisible();
+});
 
 test('marcador válido evita descargar de nuevo el documento HTML', async ({ page }) => {
   const documents = [], markers = [];
   page.on('request', request => {
-    if (request.resourceType() === 'document') documents.push(request.url());
+    if (new URL(request.url()).pathname === '/') documents.push(request.url());
     if (new URL(request.url()).pathname === '/site-version.json') markers.push(request.url());
   });
   await mount(page); // Una referencia inicial y una comprobación explícita.
