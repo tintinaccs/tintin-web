@@ -106,3 +106,6 @@ test.describe('Fase 8 — UI/UX global', () => {
     expect(values.transform).toBe('none');
   });
 });
+
+// Variantes visuales: la selección y la foto deben coincidir en todos los dispositivos.
+require('./product-shape-selection.spec.js');
