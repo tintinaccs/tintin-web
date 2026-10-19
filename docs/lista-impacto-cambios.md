@@ -414,3 +414,8 @@ Tu selección: sólo distribución móvil de sus filas; tarjeta blanca preservad
 ## 2026-10-18 — Maestro de Productos y pedidos existentes
 
 Admin Productos: editor nativo/duplicación segura, SKU/galería/indicadores, selección persistente y edición masiva atómica con vista previa. Agregar selección sólo abre un pedido existente para revisión; guardado usa el backend canónico de pedidos/inventario y conserva su identidad. Impacta admin.html, admin-app, comercio/CSS, helper responsive y editor de pedidos; nuevos módulos puros e interfaz sin dependencias. No cambia Rules, Auth, backend de pagos, borrado global ni datos comerciales existentes. Registro de suites en gates Admin, actualización de referencias de caché, baseline/plan y artefactos canónicos. Véase CURRENT_STATE para evidencia y límites.
+
+
+## 2026-10-19 — Texto breve de cookies
+
+Resumen del componente compartido de consentimiento simplificado para todas las páginas y dispositivos. Cambia texto visible; mantiene elección y comportamiento de estadísticas. Importadores/versiones, CSP y diagnóstico se regeneran para entregar los nuevos bytes. Evidencia en CURRENT_STATE.

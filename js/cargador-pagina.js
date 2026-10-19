@@ -867,7 +867,7 @@
     if (isVisualPreviewFrame) return;
     if (!window.TintinSiteActivityBooted) {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
-      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261019-product-boutique-1');
+      importSibling('analytics/actividad-sitio.js', 'Site Activity', undefined, 'tintin-20261019-privacy-copy-1');
     }
   }
 
