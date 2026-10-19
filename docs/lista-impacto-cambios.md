@@ -1,3 +1,7 @@
+## 2026-10-19 — Alineación de Imágenes y entrega del CSS responsive
+
+Se alinea la grilla/encabezado interno de Imágenes con su barra compartida y se agrega comprobación de ambos bordes en cuatro tamaños. Ambas páginas usan responsive-2 para evitar el CSS anterior retenido en caché bajo la primera URL, observado en lectura pública. Baseline, plan y diagnóstico se regeneran; sin cambios de negocio ni controles. PR1165 ya integrado y aprobado por CI y salud de producción; se verifica la entrega de bytes del nuevo candidato.
+
 ## 2026-10-19 — Diseño administrativo fluido para todos los dispositivos
 
 CSS compartido del panel e Imágenes: márgenes y contenedor centrados, hero compacto según espacio disponible, accesos sin palabras cortadas, métricas de escritorio y encabezados/formularios adaptables. Cubre móviles, laptop, escritorio y tablets verticales/horizontales, manteniendo cápsula móvil, lateral, roles, borradores y controladores existentes. Sin cambios de JavaScript de producción ni lógica comercial. Se agrega matriz Chromium de12 tamaños/23 secciones,13 fronteras de distribución, giro táctil e Imágenes al gate responsive existente; evidencia y límites en CURRENT_STATE. Caché y plan protegido se generan con herramientas canónicas.

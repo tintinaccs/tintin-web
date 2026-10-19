@@ -71,6 +71,10 @@ for(const [width,height] of [[390,844],[768,1024],[1024,768],[1920,1080]]) {
       const grid=document.getElementById('adm-cards-grid');
       for(let i=0;i<6;i++){const card=document.createElement('div');card.className='adm-img-card';card.innerHTML='<div class="adm-card-label">Imagen de prueba</div><button class="adm-btn">Seleccionar</button>';grid.append(card);}
     });await settle(page);await contained(page.locator('.adm-img-card,.tt-admin-workspace-bar'),width);
+    const heading=await page.locator('.tt-admin-workspace-bar').boundingBox();
+    const grid=await page.locator('.adm-cards-grid').boundingBox();
+    expect(Math.abs(heading.x-grid.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(heading.width-grid.width)).toBeLessThanOrEqual(1);
     await page.screenshot({path:info.outputPath(`imagenes-${width}.png`)});
   });
 }
