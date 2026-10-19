@@ -1,3 +1,7 @@
+## 2026-10-19 — URL canónica del logo administrativo
+
+CI del candidato conjunto 0bdf0e9 detectó un img nuevo del lateral administrativo con la URL del logo sin versión. Se corrige su consumidor para reutilizar exactamente LOGO_VERSION del shell; el dibujo original y su tinte blanco sobre rosa se conservan. No se cambia la prueba ni se agrega excepción. La regresión específica y arquitectura se ejecutan de nuevo; plan y diagnóstico se regeneran desde las autoridades existentes. No hubo publicación de producción de ese candidato fallido.
+
 ## 2026-10-19 — Pedidos por pasos pastel y clientes por último acceso
 
 Codex /root. Se retoma PR1169 y se incorpora la corrección de medición móvil del último PR1167, conservando ambas evidencias. Pedidos mantiene su ciclo canónico de cinco etapas, transiciones autorizadas, inventario y suscripciones: agrega numeración y colores semánticos pastel (nuevo menta, preparación rosa, listo crema, envío azul, finalizado lavanda) en pasos, resumen, columnas y badges. Tablero de cinco columnas sin desplazamiento horizontal en laptop/escritorio; hasta1180px presenta pasos visibles y una etapa seleccionada, con tarjetas adaptables. Los estados y la selección se siguen identificando mediante texto/ARIA, además del color. No se modifican pedidos reales.
