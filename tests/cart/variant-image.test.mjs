@@ -41,3 +41,10 @@ test('sin asociación de una forma no reutiliza la foto de otra forma del mismo 
   assert.equal(productVariantImage(item,'Dorado / redondo'), '');
   assert.equal(productVariantImage({...item,imagesExtra:[silver]},'Dorado / redondo'), silver);
 });
+test('ANILLO CRISTAL importado resuelve cada forma por el orden publicado de sus tres fotos',()=>{
+ const photos=[gold,silver,'https://cdn.example.test/round.jpg'];
+ const item={imageUrl:photos[0],imagesExtra:photos.slice(1),variants:{'Forma de la piedra':['lagrima','ovalado','redondo']}};
+ for(const [i,shape] of item.variants['Forma de la piedra'].entries())assert.equal(productVariantImage(item,shape),photos[i]);
+ assert.equal(productVariantImage({...item,imagesExtra:[silver]},'redondo'),gold);
+ assert.equal(productVariantImage({...item,variantMedia:[{'Forma de la piedra':'ovalado',imageUrl:photos[2]}]},'ovalado'),photos[2]);
+});

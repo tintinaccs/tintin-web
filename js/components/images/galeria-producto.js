@@ -22,7 +22,17 @@
     });
   }
   function mediaRows(product) {
-    return Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(product?.variants) ? product.variants : [];
+    const rows = Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(product?.variants) ? product.variants : [];
+    if (rows.length) return rows;
+    // Catálogo importado: un único atributo visual con una foto por opción
+    // conserva el orden publicado. Nunca inferir colores, talles o matrices.
+    const groups = Object.entries(product?.variants || {});
+    if (groups.length !== 1 || !/(forma|diseño|modelo)/i.test(groups[0][0])) return rows;
+    const [key, values] = groups[0];
+    const options = Array.isArray(values) ? values.map(value => String(value).trim()).filter(Boolean) : [];
+    const photos = uniqueImages([product?.imageUrl || product?.image, ...(Array.isArray(product?.imagesExtra) ? product.imagesExtra : [])].filter(Boolean));
+    return options.length > 1 && photos.length === options.length
+      ? options.map((value, index) => ({ [key]: value, imageUrl: photos[index] })) : rows;
   }
   function rowImages(row) {
     return uniqueImages([row?.imageUrl, ...(Array.isArray(row?.imageUrls) ? row.imageUrls : [])].filter(value => typeof value === 'string' && value.trim()));

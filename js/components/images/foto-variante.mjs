@@ -18,7 +18,16 @@ export function productVariantImage(product, selection, fallback = '') {
   const keys = Array.isArray(variants)
     ? [...new Set(variants.flatMap(row => row && typeof row === 'object' ? Object.keys(row).filter(key => !metadata.has(key)) : []))]
     : Object.keys(variants).filter(key => !metadata.has(key));
-  const rows = Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(variants) ? variants : [];
+  let rows = Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(variants) ? variants : [];
+  if (!rows.length && keys.length === 1 && /(forma|diseño|modelo)/i.test(keys[0])) {
+    const options = Array.isArray(variants[keys[0]]) ? variants[keys[0]].map(value => String(value).trim()).filter(Boolean) : [];
+    const seen = new Set();
+    const photos = [product?.imageUrl || product?.image, ...(Array.isArray(product?.imagesExtra) ? product.imagesExtra : [])].map(safeImage).filter(url => {
+      if (!url || seen.has(imageKey(url))) return false;
+      seen.add(imageKey(url)); return true;
+    });
+    if (options.length > 1 && photos.length === options.length) rows = options.map((value, index) => ({[keys[0]]:value,imageUrl:photos[index]}));
+  }
   const images = row => [row?.imageUrl, ...(Array.isArray(row?.imageUrls) ? row.imageUrls : [])].map(safeImage).filter(Boolean);
   // Formas, talles y combinaciones usan su asociación explícita. La fila
   // más específica prevalece sobre una foto genérica del mismo color.

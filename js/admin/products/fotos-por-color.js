@@ -1,4 +1,4 @@
-import '../../components/images/galeria-producto.js?v=tintin-20261015-images-1';
+import '../../components/images/galeria-producto.js?v=tintin-20261019-product-boutique-3';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {

@@ -134,3 +134,19 @@ test('cantidad respeta el stock de la forma y no duplica eventos al actualizar',
   await plus.click();await expect(page.locator('#qty-val')).toHaveText('2');
   await minus.click();await expect(page.locator('#qty-val')).toHaveText('1');
 });
+for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]]) test(`ANILLO CRISTAL importado: forma y foto en orden sin metadata en ${width}x${height}`,async({page})=>{
+  await page.setViewportSize({width,height});
+  const item={...product,name:'ANILLO CRISTAL',stock:1,variantMedia:undefined,variants:{'Forma de la piedra':['lagrima','ovalado','redondo']},variantInventory:[{variant:'lagrima',stock:0},{variant:'ovalado',stock:1},{variant:'redondo',stock:0}]};
+  await openFixture(page,item);
+  await expect(page.locator('[data-variant-value="ovalado"]')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/shape-1.svg$/);
+  for(const [index,value] of ['lagrima','ovalado','redondo'].entries()){
+    await page.locator(`[data-variant-value="${value}"]`).click();
+    await expect(page.locator('#gallery-main img')).toHaveAttribute('src',new RegExp(`shape-${index}.svg$`));
+    await expect(page.locator('#gallery-thumbs .active')).toHaveAttribute('data-src',new RegExp(`shape-${index}.svg$`));
+    await expect(page.locator('#btn-product-add-cart')).toBeEnabled({enabled:index===1});
+  }
+  await page.locator('#gallery-thumbs [data-gallery-index="1"]').click();
+  await expect(page.locator('[data-variant-value="ovalado"]')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#btn-product-add-cart')).toBeEnabled();
+});

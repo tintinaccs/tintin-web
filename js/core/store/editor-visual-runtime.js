@@ -8,7 +8,7 @@ import {
 
 const DEVICES = ['desktop', 'tablet', 'mobile'];
 import { hasProductStock, firstAvailableVariant } from './inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
-import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261019-product-boutique-2';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261019-product-boutique-3';
 const OPTIONS = Object.freeze(
   Object.fromEntries(Object.entries(VISUAL_STYLE_OPTIONS).map(([key, values]) => [key, new Set(values)]))
 );
