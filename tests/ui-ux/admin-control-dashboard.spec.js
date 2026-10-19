@@ -10,6 +10,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
       for (const [id, value] of Object.entries(values)) document.getElementById(id).textContent = value;
     });
     await expect(page.getByRole('heading', { name: 'Tu tienda, en foco.' })).toBeVisible();
+    await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('.tt-dashboard-shortcuts button:visible')).toHaveCount(4);
     const surfaces = await page.locator('.tt-dashboard-hero,#dash-stats .adm-stat,.tt-dashboard-link').evaluateAll(nodes => nodes.map(node => {
       const box = node.getBoundingClientRect(), style = getComputedStyle(node);
@@ -48,7 +49,7 @@ test('el rediseño sigue los colores elegidos en Apariencia', async ({ page }) =
     document.documentElement.style.setProperty('--admin-color-text-primary', '#eff3f8');
   });
   await expect(page.locator('.tt-dashboard-hero')).toHaveCSS('background-color', 'rgb(23, 33, 51)');
-  await expect(page.locator('.tt-dashboard-hero h1')).toHaveCSS('color', 'rgb(239, 243, 248)');
+  await expect(page.locator('.tt-dashboard-hero h2')).toHaveCSS('color', 'rgb(239, 243, 248)');
   await expect(page.locator('#stat-users')).toHaveCSS('color', 'rgb(239, 243, 248)');
 });
 
