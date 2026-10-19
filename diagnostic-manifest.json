@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b03a43abf0e9fb01d5069d74a9b8c9d4ac8d2fb27666aa1c3bedc6ffdc1d1b70",
+  "sourceFingerprint": "b1df086ff5add2fca605a8ebfc3048d569e5b0485c05264a1ca5bd76f9821709",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1331,
     "textFiles": 1245,
-    "totalBytes": 24865520,
+    "totalBytes": 24867297,
     "pages": 19,
     "modules": 938
   },
@@ -1846,7 +1846,7 @@
         "viewer"
       ],
       "bytes": 44735,
-      "sha256": "5f99f39bb628fd889091fa4a9643eaa0783a53f5c4fd963f058e872052f105b9",
+      "sha256": "a0b2ff8faa68f4b2e84a6062ac69416ea487759ae4db149917dfd40fde9b74b7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1973,7 +1973,7 @@
           "line": 315
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-2",
           "target": "css/admin/dashboard-control.css",
           "line": 316
         },
@@ -2132,7 +2132,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-2",
           "target": "css/admin/dashboard-control.css",
           "line": 316,
           "exists": true
@@ -2470,7 +2470,7 @@
         "viewer"
       ],
       "bytes": 203121,
-      "sha256": "a5b856a1f73478ce11b553aa161de2296066e9cdb71c096bf12fc102c18ee5ff",
+      "sha256": "2e334699049525b7dfbc54471e93dae5917ea71924729ac0452e259c9cdb8ff8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2741,7 +2741,7 @@
           "line": 77
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-2",
           "target": "css/admin/dashboard-control.css",
           "line": 78
         },
@@ -3115,7 +3115,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-1",
+          "raw": "css/admin/dashboard-control.css?v=tintin-20261019-admin-responsive-2",
           "target": "css/admin/dashboard-control.css",
           "line": 78,
           "exists": true
@@ -48760,8 +48760,8 @@
     },
     {
       "path": "tests/ui-ux/admin-all-devices.spec.js",
-      "bytes": 6025,
-      "sha256": "2261776003e67ad4fc322ae6aed2a842dc53f3918040a349a6c31f450c600a29",
+      "bytes": 6306,
+      "sha256": "6ae9741de8ba6ffbdb5baf54ac3d1a97e52a201e1b7760a75bd3d23478ec839a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50379,7 +50379,7 @@
       "path": "admin-images.html",
       "extension": ".html",
       "bytes": 44735,
-      "sha256": "5f99f39bb628fd889091fa4a9643eaa0783a53f5c4fd963f058e872052f105b9"
+      "sha256": "a0b2ff8faa68f4b2e84a6062ac69416ea487759ae4db149917dfd40fde9b74b7"
     },
     {
       "path": "admin-manifest.json",
@@ -50391,7 +50391,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 203121,
-      "sha256": "a5b856a1f73478ce11b553aa161de2296066e9cdb71c096bf12fc102c18ee5ff"
+      "sha256": "2e334699049525b7dfbc54471e93dae5917ea71924729ac0452e259c9cdb8ff8"
     },
     {
       "path": "apple-touch-icon.png",
@@ -51320,8 +51320,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1158,
-      "sha256": "2a8be4ba3a3705919e5bb2141098379adc52f35e6061b7a5ea673c5ffe1f65d3"
+      "bytes": 946,
+      "sha256": "98dd900d2372ca30a76bea910b6a1e7935bb79b8155557a3b74aa36deba17dc6"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -51333,7 +51333,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "34197109403ba412f7af149026504264ccf09768258eb8f6a1a5e8121311e38b"
+      "sha256": "fe374069230eb421511997f9f04833554733f47dd179430277aab8ca0fe98b4d"
     },
     {
       "path": "config/public-site.json",
@@ -51374,8 +51374,8 @@
     {
       "path": "css/admin/dashboard-control.css",
       "extension": ".css",
-      "bytes": 21499,
-      "sha256": "53c9b83c85f2d583b17288ee11b425cc2b704d3361388206fdf73786a77c638c"
+      "bytes": 21683,
+      "sha256": "95322e74b8910c3cbf446f4e3f39b2c594b28b3ddaad587f889d05215b8d77f6"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -51956,8 +51956,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 619654,
-      "sha256": "80a42bd1a0dc798693b66846576afaf0464e300b0293a829f76ec697f73884e1"
+      "bytes": 620638,
+      "sha256": "e1e17f629a33cdada700bf873d0684ec193e397037aec1fef11c7403a0da43bf"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -52316,8 +52316,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 58092,
-      "sha256": "a5b9f092dcf285c6b3abc430a29e96ed505cdd50a69967836fb836588479ac11"
+      "bytes": 58632,
+      "sha256": "da18bbc83866cf6d0e75c1d8bd8b3132fbb3994e3a40492ca8b641b5849cce96"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -55821,7 +55821,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 72802,
-      "sha256": "ee495fc836afbf8cfeba63a25dd9a9cb0133068bde1b23d6134f4b2428f733fa"
+      "sha256": "9e705bf709605c642cbf1f95f9841d7a231661a0592a0391926bd4be0965625a"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -57920,8 +57920,8 @@
     {
       "path": "tests/ui-ux/admin-all-devices.spec.js",
       "extension": ".js",
-      "bytes": 6025,
-      "sha256": "2261776003e67ad4fc322ae6aed2a842dc53f3918040a349a6c31f450c600a29"
+      "bytes": 6306,
+      "sha256": "6ae9741de8ba6ffbdb5baf54ac3d1a97e52a201e1b7760a75bd3d23478ec839a"
     },
     {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",

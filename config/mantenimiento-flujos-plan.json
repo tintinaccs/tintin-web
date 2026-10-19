@@ -1,27 +1,22 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "776669b7541a8e66f619db72c361dcd7c6ad2014",
-  "reason": "Mejorar distribución visual de todo el panel administrativo en escritorio, laptop, tablet y móvil conservando los controladores existentes.",
+  "baseCommit": "6dcd9f8b10b9902515c0653f64120f27ea1f8e9e",
+  "reason": "Alinear los bordes internos de Imágenes y publicar la mejora responsive con una URL CSS nueva tras comprobar caché anterior en producción.",
   "files": [
     {
       "path": "admin-images.html",
-      "oldHash": "88d30e87907dbb0fbc7983ff8fb1da9d092c34393f10a89f75a954906ec57a12",
-      "newHash": "5f99f39bb628fd889091fa4a9643eaa0783a53f5c4fd963f058e872052f105b9"
+      "oldHash": "5f99f39bb628fd889091fa4a9643eaa0783a53f5c4fd963f058e872052f105b9",
+      "newHash": "a0b2ff8faa68f4b2e84a6062ac69416ea487759ae4db149917dfd40fde9b74b7"
     },
     {
       "path": "admin.html",
-      "oldHash": "c98c84238abd5f5a3424c5198926e3423dd4bbd563b33397446ff788e52122e2",
-      "newHash": "a5b856a1f73478ce11b553aa161de2296066e9cdb71c096bf12fc102c18ee5ff"
-    },
-    {
-      "path": "package.json",
-      "oldHash": "d7e2cd450be3c8240df7f82561e6666d1e0f0c80b4582e894d81df34d2159898",
-      "newHash": "f0360ec9d08a26e601d981ee0362861838159e6d3c116b251ae75b02c77d60e8"
+      "oldHash": "a5b856a1f73478ce11b553aa161de2296066e9cdb71c096bf12fc102c18ee5ff",
+      "newHash": "2e334699049525b7dfbc54471e93dae5917ea71924729ac0452e259c9cdb8ff8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "1d27f253e56d542b441a11e192433b9444290d8c3a94e5e62c80a7b349c60ec2",
-      "newHash": "ee495fc836afbf8cfeba63a25dd9a9cb0133068bde1b23d6134f4b2428f733fa"
+      "oldHash": "ee495fc836afbf8cfeba63a25dd9a9cb0133068bde1b23d6134f4b2428f733fa",
+      "newHash": "9e705bf709605c642cbf1f95f9841d7a231661a0592a0391926bd4be0965625a"
     }
   ],
   "affectedRecords": []

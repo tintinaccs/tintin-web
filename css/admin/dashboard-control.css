@@ -255,5 +255,6 @@ html:root body.tt-admin-control #dash-stats .adm-stat-icon { display: grid; plac
 html:root body.tt-admin-control #dash-stats .adm-stat-icon svg { width: 22px; height: 22px; }
 html:root body.tt-admin-control [data-admin-workspace="imagenes"] { max-width: 1680px; min-width: 0; padding: var(--tt-control-gutter); }
 html:root body.tt-admin-control [data-admin-workspace="imagenes"] .adm-cards-grid { grid-template-columns: repeat(auto-fit,minmax(min(100%,260px),1fr)); gap: 16px; }
+html:root body.tt-admin-control [data-admin-workspace="imagenes"] > :is(.adm-section-header,.adm-cards-grid,.adm-bulk-toolbar) { width: 100% !important; margin-inline: 0 !important; }
 html:root body.tt-admin-control .adm-header { padding-inline: var(--tt-control-gutter); }
 html:root body.tt-admin-control .adm-modal-box { max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
