@@ -19,7 +19,7 @@ export function productVariantImage(product, selection, fallback = '') {
     ? [...new Set(variants.flatMap(row => row && typeof row === 'object' ? Object.keys(row).filter(key => !metadata.has(key)) : []))]
     : Object.keys(variants).filter(key => !metadata.has(key));
   let rows = Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(variants) ? variants : [];
-  if (!rows.length && keys.length === 1 && /(forma|diseño|modelo)/i.test(keys[0])) {
+  if (!rows.length && keys.length === 1) {
     const options = Array.isArray(variants[keys[0]]) ? variants[keys[0]].map(value => String(value).trim()).filter(Boolean) : [];
     const seen = new Set();
     const photos = [product?.imageUrl || product?.image, ...(Array.isArray(product?.imagesExtra) ? product.imagesExtra : [])].map(safeImage).filter(url => {

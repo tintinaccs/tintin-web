@@ -1,3 +1,7 @@
+## 2026-10-19 — Fotos por cualquier atributo o combinación
+
+Fuentes: galeria-producto.js, foto-variante.mjs, editor fotos-por-color.js y nuevo fotos-por-variante.js. Impacto: ficha, miniaturas/selección inversa, carrito/checkout/favoritos, vistas compartidas y edición administrativa de asociaciones. Posición sólo para un atributo y cardinalidad exacta; combinaciones requieren asociación explícita. Se conservan filas específicas al editar color y se evita crear Color desde una forma. Tarjeta y ficha de pedido muestran origen registrado para distinguir manuales antes de la limpieza autorizada; no clasifican orígenes ausentes. Sin cambios comerciales reales, precios, stock o permisos. Se añaden matrices reales de variante/miniatura/editor al CI existente sin omitir controles. Caché transitiva, shell, CSP, diagnóstico y plan se regeneran canónicamente. Evidencia y límites en CURRENT_STATE.
+
 ## 2026-10-19 — Etapas de pedidos pastel y prioridad de clientes recientes
 
 Presentación de Pedidos: pasos numerados, colores semánticos compartidos entre resumen/pasos/columnas/badges y tablero ajustado al ancho, con selección de etapa hasta1180px. El ciclo de negocio, transiciones, entregas y pagos conservan su autoridad. Usuarios ordena clientes por registro/login usando la suscripción actual y relega al equipo sin alterar cuentas ni roles. Mantiene filtros y orden manual. Se conserva el trabajo de Super Admin/Push del PR1169 y la medición móvil corregida de PR1167. Caché/CSP/diagnóstico y plan protegido se regeneran; evidencia y limitaciones en CURRENT_STATE.

@@ -22,6 +22,7 @@ export function orderCardHtml(order, model) {
     <div class="tt-order-card-top"><strong>#${display}</strong>${model.canBulk ? `<input type="checkbox" data-select-order="${id}" aria-label="Seleccionar pedido ${display}" ${model.selected.has(order.id) ? 'checked' : ''}>` : ''}</div>
     <time datetime="${time(order.createdAt) ? new Date(time(order.createdAt)).toISOString() : ''}">${esc(date(order.createdAt))}</time><span class="tt-order-elapsed">${esc(elapsedOrderTime(order.createdAt))}</span>
     <h3>${esc(order.userName || order.customer?.name || 'Cliente sin nombre')}</h3>
+    <small>Origen: ${esc(order.localEntryId ? 'Venta local (manual)' : order.source || order.channel || (String(order.id).startsWith('manual_') ? 'Manual' : 'Sin origen registrado'))}</small>
     <p class="tt-order-items">${esc(items.slice(0,2).map(i=>`${i.qty ?? i.quantity ?? 1} × ${i.name || i.title || 'Producto'}`).join(' · ') || 'Detalle no registrado')}${items.length > 2 ? ` · +${items.length-2} productos` : ''}</p>
     <div class="tt-order-card-total"><strong>${money(order.total)}</strong><span>${esc(model.payLabels[payment] || payment)}</span></div>
     <div class="tt-order-card-meta"><span>${esc(deliveryLabel(order))}</span><span class="tt-order-stage-badge">${esc(orderStatusLabel(order))}</span></div>

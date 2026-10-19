@@ -1,6 +1,6 @@
 import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261018-products-master-1';
 import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261019-admin-mobile-1';
-import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261019-orders-pastel-1';
+import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261019-variant-links-1';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
@@ -958,6 +958,7 @@ function orderDrawer(order) {
     title: `#${orderDisplayId(order)}`,
     kicker: formatDate(order.createdAt),
     body: `
+      <div class="tt-commerce-drawer-section"><h4>Origen del pedido</h4><dl class="tt-commerce-kv">${kvRow('Origen',order.localEntryId ? 'Venta local (manual)' : order.source || order.channel || (String(order.id).startsWith('manual_') ? 'Manual' : 'Sin origen registrado'))}${kvRow('Identificador',order.id)}</dl></div>
       <div class="tt-commerce-drawer-section"><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(orderStatusLabel(order))}</span></div></div>
       <div class="tt-commerce-drawer-section"><h4>Cliente</h4><dl class="tt-commerce-kv">${kvRow('Nombre', customer.name)}${canSensitive ? kvRow('Email', customer.email) + kvRow('Teléfono', customer.phone) : ''}</dl></div>
       <div class="tt-commerce-drawer-section"><h4>Productos</h4>${items.map(item => `<div class="tt-commerce-lineitem">${thumbHtml(itemImage(item), item?.name || item?.title || 'Producto')}<div style="min-width:0"><div class="tt-commerce-maintext">${esc(item?.name || item?.title || 'Producto')}</div><div class="tt-commerce-subtext">${esc(item.variant || item.variantName || '')}<br>${Number(item?.qty || item?.quantity || 1)} × ${formatMoney(item?.price)}</div></div><span class="tt-commerce-lineitem-price">${formatMoney(Number(item?.qty || item?.quantity || 1) * Number(item?.price || 0))}</span></div>`).join('') || '<div class="tt-commerce-subtext">Sin productos registrados.</div>'}</div>

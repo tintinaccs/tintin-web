@@ -24,10 +24,10 @@
   function mediaRows(product) {
     const rows = Array.isArray(product?.variantMedia) ? product.variantMedia : Array.isArray(product?.variants) ? product.variants : [];
     if (rows.length) return rows;
-    // Catálogo importado: un único atributo visual con una foto por opción
-    // conserva el orden publicado. Nunca inferir colores, talles o matrices.
+    // Un único atributo con exactamente una foto por opción conserva el
+    // orden publicado. Las matrices requieren asociaciones explícitas.
     const groups = Object.entries(product?.variants || {});
-    if (groups.length !== 1 || !/(forma|diseño|modelo)/i.test(groups[0][0])) return rows;
+    if (groups.length !== 1) return rows;
     const [key, values] = groups[0];
     const options = Array.isArray(values) ? values.map(value => String(value).trim()).filter(Boolean) : [];
     const photos = uniqueImages([product?.imageUrl || product?.image, ...(Array.isArray(product?.imagesExtra) ? product.imagesExtra : [])].filter(Boolean));
@@ -48,14 +48,19 @@
   }
   function galleryImages(product, selected = {}) {
     const rows = mediaRows(product);
-    const key = colorKey(product);
-    const color = key && selected[key];
-    const assigned = color ? rows.filter(row => row && String(row[key] ?? '').trim().toLocaleLowerCase('es') === String(color).trim().toLocaleLowerCase('es')).flatMap(rowImages) : [];
+    const normalize = value => String(value ?? '').trim().toLocaleLowerCase('es');
+    const keys = Object.keys(selected).filter(key => normalize(selected[key]));
+    const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active', 'colorHex', 'swatch']);
+    const attributes = row => Object.keys(row || {}).filter(key => !metadata.has(key) && normalize(row[key]));
+    const assigned = keys.length ? rows.filter(row => {
+      const assignedKeys = attributes(row);
+      return assignedKeys.some(key => keys.includes(key)) && assignedKeys.every(key => !keys.includes(key) || normalize(row[key]) === normalize(selected[key]));
+    }).sort((a, b) => attributes(b).length - attributes(a).length).flatMap(rowImages) : [];
     if (assigned.length) return uniqueImages(assigned);
     // Sin fotos asignadas al color no mostramos fotos pertenecientes a otro.
     const assignedKeys = new Set(rows.flatMap(rowImages).map(imageKey));
     const general = uniqueImages([product?.imageUrl || product?.image, ...(Array.isArray(product?.imagesExtra) ? product.imagesExtra : [])].filter(Boolean));
-    if (color) return general.filter(url => !assignedKeys.has(imageKey(url)));
+    if (keys.length) return general.filter(url => !assignedKeys.has(imageKey(url)));
     return uniqueImages([...general, ...rows.flatMap(rowImages)]);
   }
   window.TintinProductMedia = Object.freeze({ imageKey, uniqueImages, mediaRows, rowImages, isColorKey, colorKey, galleryImages });

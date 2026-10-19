@@ -150,3 +150,22 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await expect(page.locator('[data-variant-value="ovalado"]')).toHaveAttribute('aria-pressed','true');
   await expect(page.locator('#btn-product-add-cart')).toBeEnabled();
 });
+
+for (const [width,height] of [[320,568],[667,375],[768,1024],[1024,768],[1366,768],[1920,1080]]) {
+  for (const attribute of ['Color', 'Tamaño', 'Sabor']) test(`${attribute}: variante y miniatura en ambos sentidos en ${width}x${height}`, async ({page}) => {
+    await page.setViewportSize({width,height});
+    const values = ['Primero','Segundo','Tercero'];
+    const item = {...product, stock:3, variantInventory:undefined, variantMedia:undefined, variants:{[attribute]:values}};
+    const errors = await openFixture(page,item);
+    for (const [index,value] of values.entries()) {
+      await page.locator(`[data-variant-value="${value}"]`).click();
+      await expect(page.locator('#gallery-main img')).toHaveAttribute('src',new RegExp(`shape-${index}.svg$`));
+      await expect(page.locator('#gallery-thumbs .active')).toHaveAttribute('data-src',new RegExp(`shape-${index}.svg$`));
+    }
+    await page.locator('#gallery-thumbs [data-gallery-index="0"]').click();
+    await expect(page.locator('[data-variant-value="Primero"]')).toHaveAttribute('aria-pressed','true');
+    expect(await page.evaluate(()=>window.shapeSelection())).toBe('Primero');
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+  });
+}

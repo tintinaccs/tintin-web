@@ -48,3 +48,14 @@ test('ANILLO CRISTAL importado resuelve cada forma por el orden publicado de sus
  assert.equal(productVariantImage({...item,imagesExtra:[silver]},'redondo'),gold);
  assert.equal(productVariantImage({...item,variantMedia:[{'Forma de la piedra':'ovalado',imageUrl:photos[2]}]},'ovalado'),photos[2]);
 });
+
+for (const key of ['Color', 'Tamaño', 'Sabor', 'Acabado', 'Modo']) test(`una foto por opción enlaza ${key} en el orden publicado`, () => {
+  const photos = [gold, silver, 'https://cdn.example.test/third.jpg'];
+  const item = { imageUrl: photos[0], imagesExtra: photos.slice(1), variants: { [key]: ['Primero', 'Segundo', 'Tercero'] } };
+  for (const [index, value] of item.variants[key].entries()) assert.equal(productVariantImage(item, value), photos[index]);
+  assert.equal(productVariantImage({ ...item, variantMedia: [{ [key]: 'Segundo', imageUrl: photos[2] }] }, 'Segundo'), photos[2]);
+});
+test('no infiere asociaciones posicionales para una matriz de atributos', () => {
+  const item = { imageUrl: gold, imagesExtra: [silver], variants: { Color: ['Dorado'], Sabor: ['A', 'B'] } };
+  assert.equal(productVariantImage(item, 'Dorado / B'), gold);
+});

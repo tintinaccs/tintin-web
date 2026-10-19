@@ -65,6 +65,27 @@ const styleLinks = [...productHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)
 const productSectionStart = productHtml.indexOf('<section class="tt-product-page"');
 const productSection = productHtml.slice(productSectionStart, productHtml.indexOf('</section>', productSectionStart) + '</section>'.length);
 const minimalFixture = `<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${styleLinks}<link rel="stylesheet" href="/css/pages/product/product-maintenance.css"></head><body class="tt-product-maintenance tt-product-runtime-ready">${productSection}<script src="/js/components/images/galeria-producto.js"></script><script src="/gallery-fixture.js"></script></body></html>`;
+for (const [width,height] of [[320,568],[667,375],[768,1024],[1024,768],[1440,900]]) test(`editor conserva fotos exactas de combinación y color en ${width}x${height}`,async({page})=>{
+  await page.setViewportSize({width,height});
+  const combinationFixture=fixture.replace('Color: Dorado\nColor: Plateado','Color: Dorado\nColor: Plateado\nForma: Ovalado, Redondo').replace('<textarea id="options">','<textarea id="options" readonly>');
+  const combinationHarness=harness.replace("variants:{Color:['Dorado','Plateado']}","variants:{Color:['Dorado','Plateado'],Forma:['Ovalado','Redondo']}").replace("{Color:'Plateado',imageUrls:['/silver1.svg','/silver2.svg','/silver3.svg']}","{Color:'Plateado',imageUrls:['/silver1.svg','/silver2.svg','/silver3.svg']},{Color:'Dorado',Forma:'Ovalado',imageUrls:['/gold2.svg']}");
+  await page.route('**/color-gallery-fixture',r=>r.fulfill({contentType:'text/html',body:combinationFixture}));
+  await page.route('**/gallery-fixture.js',r=>r.fulfill({contentType:'text/javascript',body:combinationHarness}));
+  await page.route(/\/(gold|silver)\d\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"/>'}));
+  await page.goto('/color-gallery-fixture');await page.waitForFunction(()=>window.editorReady);
+  const form=page.getByRole('combobox',{name:'Fotos de variante: Forma',exact:true});
+  await expect(form).toBeEnabled();
+  await expect(page.getByRole('checkbox',{name:'Asignar foto 2 a variante Dorado / Ovalado',exact:true})).toBeChecked();
+  await form.selectOption('Redondo');
+  await page.getByRole('checkbox',{name:'Asignar foto 3 a variante Dorado / Redondo',exact:true}).check();
+  let rows=await page.evaluate(()=>window.editor.serialize());
+  expect(rows.find(row=>row.Color==='Dorado'&&row.Forma==='Ovalado').imageUrls).toEqual(['/gold2.svg']);
+  expect(rows.find(row=>row.Color==='Dorado'&&row.Forma==='Redondo').imageUrls).toEqual(['/gold3.svg']);
+  expect(rows.find(row=>row.Color==='Dorado'&&!row.Forma).imageUrls).toEqual(['/gold1.svg','/gold2.svg','/gold3.svg']);
+  await page.evaluate(()=>window.editor.refresh());
+  await expect(page.getByRole('checkbox',{name:'Asignar foto 3 a variante Dorado / Redondo',exact:true})).toBeChecked();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
 for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real minimalista, orden y controles en ${width}px`, async ({page}) => {
   const pageErrors=[];page.on('pageerror',error=>pageErrors.push(error.message));
   await page.setViewportSize({width,height:1000});

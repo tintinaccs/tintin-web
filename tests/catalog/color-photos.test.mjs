@@ -7,6 +7,18 @@ const context = vm.createContext({ URL, window: { location: { href: 'https://exa
 vm.runInContext(fs.readFileSync(new URL('../../js/components/images/galeria-producto.js', import.meta.url), 'utf8'), context);
 const media = context.window.TintinProductMedia;
 const image = (name, transform = '') => `https://res.cloudinary.com/shop/image/upload/${transform}v1/${name}.webp`;
+for (const key of ['Color', 'Tamaño', 'Sabor', 'Acabado', 'Modo']) test(`galería y selección enlazan ${key} sin depender del nombre del atributo`, () => {
+  const photos = ['left','middle','right'].map(name => image(name));
+  const item = { imageUrl: photos[0], imagesExtra: photos.slice(1), variants: { [key]: ['A','B','C'] } };
+  assert.equal(media.mediaRows(item).length, 3);
+  for (const [index, value] of item.variants[key].entries()) assert.deepEqual(Array.from(media.galleryImages(item, { [key]: value })), [photos[index]]);
+});
+test('la galería prioriza la combinación exacta y excluye asociaciones incompatibles', () => {
+  const photos = ['general','round','oval'].map(name => image(name));
+  const item = { imageUrl: photos[0], variants: { Color: ['Oro'], Forma: ['Redondo','Ovalado'] }, variantMedia: [{Color:'Oro',imageUrl:photos[0]},{Color:'Oro',Forma:'Redondo',imageUrl:photos[1]},{Color:'Oro',Forma:'Ovalado',imageUrl:photos[2]}] };
+  assert.deepEqual(Array.from(media.galleryImages(item, {Color:'Oro',Forma:'Ovalado'})), [photos[2],photos[0]]);
+  assert.deepEqual(Array.from(media.galleryImages({...item,variantMedia:item.variantMedia.slice(1)}, {Color:'Oro'})), [photos[1],photos[2]]);
+});
 test('las cuatro URLs de CELINA representan sólo dos fotos; se conservan los recortes distintos', () => {
   const list = [image('gold','f_auto,q_auto/'),image('silver','f_auto,q_auto/'),image('gold'),image('silver')];
   assert.equal(media.uniqueImages(list).length, 2);

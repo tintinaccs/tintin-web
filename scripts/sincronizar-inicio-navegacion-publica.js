@@ -13,15 +13,15 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261019-product-boutique-3';
+const TIENDA_VERSION = 'tintin-20261019-variant-links-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261017-domain-cutover-1';
-const LOADER_VERSION = 'tintin-20261019-privacy-copy-1';
+const LOADER_VERSION = 'tintin-20261019-variant-links-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261019-superadmin-live-1';
-const NAV_ENTRY_VERSION = 'tintin-20261019-superadmin-live-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261019-variant-links-1';
+const NAV_ENTRY_VERSION = 'tintin-20261019-variant-links-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261019-product-boutique-3';
+const VISUAL_BUILDER_VERSION = 'tintin-20261019-variant-links-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261017-domain-cutover-1';
 const PROFILE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
@@ -519,7 +519,7 @@ function centralizeRuntime(html) {
   // Todas las tarjetas comparten la misma autoridad de fotos y paleta.
   // Los scripts defer conservan este orden antes del renderer clásico.
   if (!out.includes('src="js/components/images/galeria-producto.js?')) {
-    out = out.replace(/<script\b[^>]*src=["']tienda\.js[^"']*["'][^>]*><\/script>/i, tag => `<script src="js/components/images/galeria-producto.js?v=tintin-20261019-product-boutique-3" defer></script>\n${tag}`);
+    out = out.replace(/<script\b[^>]*src=["']tienda\.js[^"']*["'][^>]*><\/script>/i, tag => `<script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>\n${tag}`);
   }
   return out;
 }
