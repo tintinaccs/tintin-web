@@ -172,15 +172,17 @@ for (const width of [390,768,1366]) test(`actualización en vivo conserva el foc
  await expect(page.locator('[data-action="drawer-order"][data-id="order_fixture_0"]')).toBeFocused();
 });
 
-for (const width of [320, 768, 1440]) test('reinicio independiente confirmado y persistido en ' + width, async ({ page }) => {
+for (const mode of ['reset', 'today']) for (const width of [320, 768, 1440]) test('reinicio independiente ' + mode + ' confirmado y persistido en ' + width, async ({ page }) => {
   await page.setViewportSize({ width, height: 900 });
+  const { statisticsTodayStart } = await import('../../js/admin/statistics/modelo-reinicios.mjs');
+  const dayStart = statisticsTodayStart().getTime();
   let saved = { resets: {}, lastChangeId: '' }, writes = [];
   await page.route('https://statistics-controls.test/**', async route => {
     const url = new URL(route.request().url());
     if (url.pathname === '/api/admin-commerce-controls') {
       if (route.request().method() === 'POST') {
         const input = route.request().postDataJSON(); writes.push(input);
-        saved = { resets: Object.fromEntries(input.metrics.map(key => [key, new Date().toISOString()])), lastChangeId: input.changeId };
+        saved = { resets: Object.fromEntries(input.metrics.map(key => [key, (input.mode === 'today' ? new Date(dayStart - 1).toISOString() : new Date().toISOString())])), lastChangeId: input.changeId };
       }
       return route.fulfill({ json: { ok: true, result: saved } });
     }
@@ -191,19 +193,19 @@ for (const width of [320, 768, 1440]) test('reinicio independiente confirmado y 
     }
     return route.fulfill({ contentType: 'text/html', body: `<meta name="viewport" content="width=device-width,initial-scale=1"><div class="adm-statistics-toolbar"></div><div id="statistics-data-status"></div><script type="module">
       import {ensureStatisticsControls,filterStatisticsRows} from 'https://statistics-controls.test/js/admin/statistics/controles-estadisticas.js';
-      const rows=[{at:Date.now()-100000,total:100}];
+      const rows=[{at:${dayStart - 1},total:200},{at:${dayStart + 1},total:100}];
       function render(){if(!ensureStatisticsControls(render,async options=>options.action({start(){},ok(){}})))return;window.amount=filterStatisticsRows('revenue',rows,row=>row.at).reduce((sum,row)=>sum+row.total,0);window.orders=filterStatisticsRows('orders',rows,row=>row.at).length;}
       render();</script>` });
   });
   await page.goto('https://statistics-controls.test/');
-  await page.waitForFunction(() => window.amount === 100);
+  await page.waitForFunction(() => window.amount === 300);
   await page.getByRole('button', { name: 'Reiniciar contadores' }).click();
   await page.getByRole('checkbox', { name: 'Facturación', exact: true }).check();
-  await page.getByRole('button', { name: 'Reiniciar seleccionados' }).click();
-  await page.waitForFunction(() => window.amount === 0);
-  expect(await page.evaluate(() => window.orders)).toBe(1);
-  expect(writes).toHaveLength(1); expect(writes[0].metrics).toEqual(['revenue']);
-  await page.reload(); await page.waitForFunction(() => window.amount === 0);
+  await page.getByRole('button', { name: mode === 'today' ? 'Contar desde el inicio de hoy (Paraguay)' : 'Reiniciar seleccionados', exact: true }).click();
+  await page.waitForFunction(expected => window.amount === expected, mode === 'today' ? 100 : 0);
+  expect(await page.evaluate(() => window.orders)).toBe(2);
+  expect(writes).toHaveLength(1); expect(writes[0].metrics).toEqual(['revenue']); expect(writes[0].mode).toBe(mode);
+  await page.reload(); await page.waitForFunction(expected => window.amount === expected, mode === 'today' ? 100 : 0);
   await page.getByRole('button', { name: 'Reiniciar contadores' }).click();
   await page.getByRole('button', { name: 'Cancelar', exact: true }).click();
   expect(writes).toHaveLength(1);

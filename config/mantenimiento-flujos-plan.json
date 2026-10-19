@@ -1,23 +1,42 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "6dcd9f8b10b9902515c0653f64120f27ea1f8e9e",
-  "reason": "Alinear los bordes internos de Imágenes y publicar la mejora responsive con una URL CSS nueva tras comprobar caché anterior en producción.",
+  "baseCommit": "d2cf6f18589c0cff464c1f9d8025ce9b0c402f2b",
+  "reason": "Contar facturación desde medianoche en Paraguay sin alterar usuarios ni pedidos",
   "files": [
     {
-      "path": "admin-images.html",
-      "oldHash": "5f99f39bb628fd889091fa4a9643eaa0783a53f5c4fd963f058e872052f105b9",
-      "newHash": "a0b2ff8faa68f4b2e84a6062ac69416ea487759ae4db149917dfd40fde9b74b7"
+      "path": "admin.html",
+      "oldHash": "2e334699049525b7dfbc54471e93dae5917ea71924729ac0452e259c9cdb8ff8",
+      "newHash": "40c2d7230ce0d026e7f388672182b37de7c100e2504899030318e6f20b2d2f94"
     },
     {
-      "path": "admin.html",
-      "oldHash": "a5b856a1f73478ce11b553aa161de2296066e9cdb71c096bf12fc102c18ee5ff",
-      "newHash": "2e334699049525b7dfbc54471e93dae5917ea71924729ac0452e259c9cdb8ff8"
+      "path": "js/admin/admin-app.js",
+      "oldHash": "ff3e8d79a551a188603ded153de3290a9d0446f34ed61bb82e38e892012adc1e",
+      "newHash": "a522b8b5fe6d6b71a0859f16484d89ba670338dad2bfe80d4f662435b086c36c"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "ee495fc836afbf8cfeba63a25dd9a9cb0133068bde1b23d6134f4b2428f733fa",
-      "newHash": "9e705bf709605c642cbf1f95f9841d7a231661a0592a0391926bd4be0965625a"
+      "oldHash": "9e705bf709605c642cbf1f95f9841d7a231661a0592a0391926bd4be0965625a",
+      "newHash": "af719a30d74781421d5ff1c9972be5d450b773cea0414e4e296bd2c962083a6a"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "correos",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

@@ -1,6 +1,6 @@
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
 import { productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261018-products-master-1';
-import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261017-stat-controls-1';
+import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261019-revenue-start-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
@@ -1494,7 +1494,7 @@ function renderStatisticsTrend() {
 
 function renderGeneralStatistics() {
   if (currentRole !== 'superadmin') return;
-  if (!ensureStatisticsControls(renderGeneralStatistics, runAdminCrudOperation)) return;
+  if (!ensureStatisticsControls(refreshStatisticsViews, runAdminCrudOperation)) return;
   const now = Date.now();
   const rangeStart = statisticsStartDate().getTime();
   const rangeOrders = allOrders.filter(order => activityTimestampMillis(order.createdAt) >= rangeStart);
@@ -2075,7 +2075,13 @@ function startDashboardActivityMetrics() {
 
 window.addEventListener('pagehide', stopDashboardActivityMetrics);
 
+function refreshStatisticsViews() {
+  renderDashboardData();
+  renderGeneralStatistics();
+}
+
 function renderDashboardData() {
+    const statisticsReady = currentRole !== 'superadmin' || ensureStatisticsControls(refreshStatisticsViews, runAdminCrudOperation);
     // Users count — el Modder no tiene permiso para leer la colección users
     // (ni debería: expondría emails/teléfonos de todas las clientas), así que
     // ni se intenta la lectura para no generar un error de permisos silencioso.
@@ -2118,10 +2124,10 @@ function renderDashboardData() {
       statOrdersTodayEl.textContent = '—';
     }
 
-    if (canVentas && ordersReady) {
+    if (canVentas && ordersReady && statisticsReady) {
       const today2 = new Date();
       const monthStart = new Date(today2.getFullYear(), today2.getMonth(), 1);
-      const monthSales = orders
+      const monthSales = filterStatisticsRows('revenue', orders, row => activityTimestampMillis(row.createdAt))
         .filter(o => {
           if (!o.createdAt) return false;
           const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);

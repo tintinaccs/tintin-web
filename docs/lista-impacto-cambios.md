@@ -1,3 +1,7 @@
+## 2026-10-19 — Inicio de ventas por día en Paraguay
+
+Dashboard aplica el filtro canónico de Facturación y actualiza ambas vistas al cambiar el corte. Modo `today` en el endpoint/control ya existente, con medianoche determinada por el servidor en America/Asuncion e inclusión del límite exacto. No cambia métricas de usuarios o pedidos si no se seleccionan, ni historial, inventario, Rules o permisos. Nuevas regresiones de límites, preservación y dashboard; matriz visual extendida a ambos modos. Caché, diagnóstico y plan protegido se regeneran desde autoridades existentes. Evidencia y limitaciones en CURRENT_STATE.
+
 ## 2026-10-19 — Alineación de Imágenes y entrega del CSS responsive
 
 Se alinea la grilla/encabezado interno de Imágenes con su barra compartida y se agrega comprobación de ambos bordes en cuatro tamaños. Ambas páginas usan responsive-2 para evitar el CSS anterior retenido en caché bajo la primera URL, observado en lectura pública. Baseline, plan y diagnóstico se regeneran; sin cambios de negocio ni controles. PR1165 ya integrado y aprobado por CI y salud de producción; se verifica la entrega de bytes del nuevo candidato.
