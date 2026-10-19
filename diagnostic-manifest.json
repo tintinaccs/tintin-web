@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b6ff16d7872876f2e9acb66ddff169c9a9fa2eecd9d5ef61efabcf44dbf6fa59",
+  "sourceFingerprint": "475dda4e2aae20c16f8af8ba32a191d841c44a465700b7812c78fca513c88da3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1324,
     "textFiles": 1238,
-    "totalBytes": 24796666,
+    "totalBytes": 24796870,
     "pages": 19,
     "modules": 933
   },
@@ -48647,8 +48647,8 @@
     },
     {
       "path": "tests/ui-ux/admin-workspaces.spec.js",
-      "bytes": 9175,
-      "sha256": "6f81952f5bb6fb44c5c922631ccf14f038b41f9c269688ff07c20f098b515e78",
+      "bytes": 9379,
+      "sha256": "d37975bb685ea9e76f34c1dac89dfe777c36cb07df6fd2d14de6ea656d0d3455",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48657,11 +48657,11 @@
       "endpoints": [
         {
           "url": "https://tintin.test/fixture",
-          "line": 23
+          "line": 25
         },
         {
           "url": "https://tintin.test/admin-commerce-fixture",
-          "line": 138
+          "line": 140
         }
       ]
     },
@@ -57734,8 +57734,8 @@
     {
       "path": "tests/ui-ux/admin-workspaces.spec.js",
       "extension": ".js",
-      "bytes": 9175,
-      "sha256": "6f81952f5bb6fb44c5c922631ccf14f038b41f9c269688ff07c20f098b515e78"
+      "bytes": 9379,
+      "sha256": "d37975bb685ea9e76f34c1dac89dfe777c36cb07df6fd2d14de6ea656d0d3455"
     },
     {
       "path": "tests/ui-ux/alternating-section-colors.spec.js",

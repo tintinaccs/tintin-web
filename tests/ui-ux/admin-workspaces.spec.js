@@ -9,12 +9,14 @@ async function load(page, width, file = 'admin.html') {
   await page.setViewportSize({ width, height: 800 });
   // Markup y estilos reales; ningún controlador de negocio, sesión o red real.
   const shell = fs.readFileSync(path.join(root, file), 'utf8')
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
-    .replace('</body>', `<script type="module" src="${runtimePath}"></script></body>`);
+    .replace('</body>', `<script nonce="dGludGluLWZpeHR1cmU=" type="module" src="${runtimePath}"></script></body>`);
   await page.route('**/*', route => {
     const url = new URL(route.request().url());
     if (url.hostname !== 'tintin.test') return route.abort();
-    if (url.pathname === '/fixture') return route.fulfill({ contentType: 'text/html', body: shell });
+    if (url.pathname === '/fixture') return route.fulfill({
+      contentType: 'text/html', body: shell,
+      headers: { 'Content-Security-Policy': "default-src 'none'; script-src 'nonce-dGludGluLWZpeHR1cmU=' 'strict-dynamic'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none';" },
+    });
     const allowed = /\.(css|woff2|png|svg|ico)$/.test(url.pathname) || url.pathname === runtimePath || url.pathname === '/js/admin/maestro/registro-maestro.js';
     const filePath = path.resolve(root, `.${url.pathname}`);
     if (!allowed || !filePath.startsWith(`${root}/`) || !fs.existsSync(filePath)) return route.abort();
