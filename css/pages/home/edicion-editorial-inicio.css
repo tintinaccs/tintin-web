@@ -233,13 +233,16 @@ body.tt-home-premium .tt-footer-tagline { max-width: 28ch; color: var(--tt-home-
 body.tt-home-premium .tt-collection-carousel { padding-block:clamp(28px,4vw,52px); }
 body.tt-home-premium .tt-footer .tt-footer-wa svg { color:#168541!important; }
 /* El arte editorial ocupa el alto de su columna sin bandas alrededor. */
-html:root body.tt-home-premium .tt-watch-feature { border: 0 !important; }
+html:root body.tt-home-premium .tt-watch-feature { border: 0 !important; box-shadow: none !important; }
 body.tt-home-premium .tt-watch-feature-img { align-self: stretch; min-height: 0; border: 0; }
 body.tt-home-premium .tt-watch-feature-img :is(.tt-img-placeholder, picture, img) {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 0;
-  border: 0;
+  min-height: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
-body.tt-home-premium .tt-watch-feature-img img { object-fit: cover; }
+body.tt-home-premium .tt-watch-feature-img .tt-img-placeholder { background: transparent !important; }
+/* El runtime inserta object-fit inline; esta geometría pertenece a la sección. */
+body.tt-home-premium .tt-watch-feature-img img { object-fit: cover !important; }

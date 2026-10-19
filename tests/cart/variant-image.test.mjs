@@ -27,3 +27,17 @@ test('no se admiten protocolos ejecutables en las fotos del color', () => {
   const best = optimized.replace('q_auto,', 'q_auto:best,');
   assert.equal(productVariantImage({ imageUrl: best, variants: { Color: ['Dorado', 'Azul'] }, variantMedia: [{ Color: 'Dorado', imageUrl: original }] }, 'Azul', best), '');
 });
+
+test('forma y combinación exacta conservan la foto elegida al agregar al carrito', () => {
+  const item = { imageUrl: gold, variants: { Color: ['Dorado'], Forma: ['ovalado','redondo'] },
+    variantMedia: [{Color:'Dorado',imageUrl:gold},{Color:'Dorado',Forma:'redondo',imageUrl:silver}] };
+  assert.equal(productVariantImage(item, 'Dorado / redondo'), silver);
+  assert.equal(productVariantImage(item, 'Dorado / ovalado'), gold);
+  assert.equal(productVariantImage({imageUrl:gold,variants:{Forma:['ovalado','redondo']},variantMedia:[{Forma:'redondo',imageUrl:silver}]}, 'redondo'), silver);
+});
+
+test('sin asociación de una forma no reutiliza la foto de otra forma del mismo color', () => {
+  const item={imageUrl:gold,variants:{Color:['Dorado'],Forma:['ovalado','redondo']},variantMedia:[{Color:'Dorado',Forma:'ovalado',imageUrl:gold}]};
+  assert.equal(productVariantImage(item,'Dorado / redondo'), '');
+  assert.equal(productVariantImage({...item,imagesExtra:[silver]},'Dorado / redondo'), silver);
+});

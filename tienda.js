@@ -279,7 +279,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261017-domain-cutover-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261019-product-boutique-2');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1026,7 +1026,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261017-domain-cutover-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261019-product-boutique-2');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1143,7 +1143,7 @@ function _pdUpdateQtyUI() {
   if (qtyMinus) qtyMinus.disabled = _pdQty <= 1;
   if (qtyPlus) qtyPlus.disabled = _pdQty >= _pdMaxQty;
   const qtyStock = document.getElementById('qty-stock');
-  if (variantLimit != null && qtyStock) qtyStock.textContent = variantLimit === 0 ? 'Esta opción está sin stock' : `Disponibles en esta opción: ${_pdMaxQty}`;
+  if (qtyStock) qtyStock.textContent = variantLimit != null ? (variantLimit === 0 ? 'Esta opción está sin stock' : `Disponibles en esta opción: ${_pdMaxQty}`) : total === 0 ? 'Sin stock' : total <= 10 ? `Solo ${total} disponibles` : '';
   const unavailable = _pdMaxQty <= 0;
   const gallery = document.getElementById('gallery-main');
   gallery?.classList.toggle('tt-stock-unavailable', unavailable);
@@ -1197,7 +1197,7 @@ function productColorSwatch(value, product) {
 }
 
 function productOptionUnavailable(product, groupIndex, option) {
-  if (product?.stock != null && Number(product.stock) <= 0) return true;
+  if (product?.stock != null && product.stock !== '' && Number(product.stock) <= 0) return true;
   if (!Array.isArray(product?.variantInventory)) return false;
   const entries = product.variantInventory.filter(row => String(row.variant || '').split('/').map(v => v.trim())[groupIndex] === option);
   return !entries.some(row => Number.isInteger(row.stock) && row.stock > 0);
@@ -1231,6 +1231,28 @@ function productMediaForOption(product, key, value) {
   const normalized = text => String(text ?? '').trim().toLocaleLowerCase('es');
   const row = productVariantMediaRows(product).find(row => normalized(row[key]) === normalized(value) && window.TintinProductMedia.rowImages(row).length);
   return window.TintinProductMedia.rowImages(row)[0] || '';
+}
+
+// Las asociaciones de fotos admiten cualquier atributo, no sólo Color.
+function productSelectionMediaRows(product, selected) {
+  const keys = productVariantGroups(product).map(([key]) => key);
+  const normalize = value => String(value ?? '').trim().toLocaleLowerCase('es');
+  return productVariantMediaRows(product).filter(row => {
+    const assigned = keys.filter(key => row?.[key] != null && String(row[key]).trim());
+    return assigned.length && assigned.every(key => normalize(row[key]) === normalize(selected[key])) && window.TintinProductMedia.rowImages(row).length;
+  }).sort((a, b) => keys.filter(key => b[key] != null).length - keys.filter(key => a[key] != null).length);
+}
+
+function productMediaUnavailable(product, row) {
+  if (!isInStock(product)) return true;
+  if (!Array.isArray(product?.variantInventory)) return false;
+  const groups = productVariantGroups(product);
+  const assigned = groups.map(([key], index) => [index, row?.[key]]).filter(([, value]) => value != null && String(value).trim());
+  if (!assigned.length) return false;
+  return !product.variantInventory.some(entry => {
+    const parts = String(entry.variant || '').split('/').map(value => value.trim().toLocaleLowerCase('es'));
+    return Number.isInteger(entry.stock) && entry.stock > 0 && assigned.every(([index, value]) => parts[index] === String(value).trim().toLocaleLowerCase('es'));
+  });
 }
 
 function productCardColorOptions(product) {
@@ -1455,6 +1477,15 @@ function _pdSelectedValues() {
   }));
 }
 
+function _pdUpdateSelectionLabels() {
+  document.querySelectorAll('#product-variants .tt-product-variants').forEach(group => {
+    const option = group.querySelector('.tt-variant-option.active');
+    const label = group.querySelector('.tt-variant-current');
+    const value = option?.dataset.variantValue || '';
+    if (label && label.textContent !== value) label.textContent = value;
+  });
+}
+
 function _renderProductGallery(product, selected = {}, resetIndex = false) {
   const mainImgUrl = sanitizeClassicImageUrl(product.imageUrl || product.image || getProductImage(product.id) || '', 900);
   const favoriteButton = document.getElementById('btn-product-favorite');
@@ -1478,10 +1509,14 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     ...rows.flatMap(media.rowImages),
     ...media.galleryImages(galleryProduct),
   ].map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean));
+  const previousImage = _pdGalleryImages[_pdGalleryIndex];
   _pdGalleryImages = allImages;
-  if (resetIndex) {
-    const hasColor = Boolean(selected[media.colorKey(product)]);
-    const target = hasColor ? media.galleryImages(galleryProduct, selected)[0] : mainImgUrl || allImages[0];
+  if (!resetIndex) _pdGalleryIndex = allImages.findIndex(url => productPhotoIdentity(url) === productPhotoIdentity(previousImage));
+  if (resetIndex || _pdGalleryIndex < 0) {
+    const assigned = productSelectionMediaRows(product, selected);
+    const assignedPhotos = new Set(rows.flatMap(media.rowImages).map(productPhotoIdentity));
+    const general = [mainImgUrl, ...(Array.isArray(product.imagesExtra) ? product.imagesExtra : [])].find(url => url && !assignedPhotos.has(productPhotoIdentity(url)));
+    const target = assigned.flatMap(media.rowImages)[0] || general || (!Object.keys(selected).length ? mainImgUrl || allImages[0] : '');
     _pdGalleryIndex = target ? allImages.findIndex(url => media.imageKey(url) === media.imageKey(sanitizeClassicImageUrl(target, 900))) : -1;
   }
   if (_pdGalleryIndex >= allImages.length) _pdGalleryIndex = 0;
@@ -1521,7 +1556,7 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
     thumbsEl.innerHTML = allImages.length ? allImages.map((url, i) => `
       <button type="button" class="tt-gallery-thumb${i === _pdGalleryIndex ? ' active' : ''}" data-src="${escapeAttribute(url)}" data-gallery-index="${i}" aria-label="Ver imagen ${i + 1}" aria-pressed="${i === _pdGalleryIndex}">
         <img src="${escapeAttribute(withCloudinaryWidth(url, 200))}" alt="" class="tt-gallery-thumb-img" loading="lazy" decoding="async" fetchpriority="low" style="object-fit:contain;background:transparent;width:100%;height:100%;">
-        ${rows.filter(row => media.rowImages(row).some(image => media.imageKey(image) === media.imageKey(url))).every(row => productOptionUnavailable(product, groupIndex, row[colorKey])) && rows.some(row => media.rowImages(row).some(image => media.imageKey(image) === media.imageKey(url))) ? '<span class="tt-stock-label" aria-hidden="true">AGOTADO</span>' : ''}
+        ${rows.filter(row => media.rowImages(row).some(image => productPhotoIdentity(image) === productPhotoIdentity(url))).every(row => productMediaUnavailable(product, row)) && rows.some(row => media.rowImages(row).some(image => productPhotoIdentity(image) === productPhotoIdentity(url))) ? '<span class="tt-stock-label" aria-hidden="true">AGOTADO</span>' : ''}
       </button>
     `).join('') : '';
     if (!thumbsEl.dataset.ttBound) {
@@ -1656,8 +1691,8 @@ function _renderProductDetail(product) {
     const variantGroups = productVariantGroups(product);
     if (variantGroups.length) {
       variantsContainer.innerHTML = variantGroups.map(([key, values], groupIndex) => `
-        <div class="tt-product-variants${window.TintinProductMedia.isColorKey(key) ? ' tt-variant-color-group' : ''}" data-variant-key="${escapeAttribute(key)}">
-          <div class="tt-variant-label">${escapeHtml(window.TintinProductMedia.isColorKey(key) ? 'Color' : key.charAt(0).toUpperCase() + key.slice(1))}</div>
+        <div class="tt-product-variants${window.TintinProductMedia.isColorKey(key) ? ' tt-variant-color-group' : ''}" data-variant-key="${escapeAttribute(key)}" role="group" aria-label="${escapeAttribute(key)}">
+          <div class="tt-variant-heading"><div class="tt-variant-label">${escapeHtml(window.TintinProductMedia.isColorKey(key) ? 'Color' : key.charAt(0).toUpperCase() + key.slice(1))}</div><span class="tt-variant-current" aria-live="polite" aria-atomic="true"></span></div>
           <div class="tt-variant-options">
             ${Array.isArray(values) ? values.map(v => `
               <button type="button" data-variant-value="${escapeAttribute(v)}" class="tt-variant-option${window.TintinProductMedia.isColorKey(key) ? ' tt-color-option' : ''}${selectedVariants.get(key) === String(v) ? ' active' : ''}${productOptionUnavailable(product, groupIndex, String(v)) ? ' tt-stock-unavailable' : ''}" aria-pressed="${selectedVariants.get(key) === String(v)}" aria-label="${escapeAttribute(v)}${productOptionUnavailable(product, groupIndex, String(v)) ? ' — Agotado, podés verlo' : ''}">${window.TintinProductMedia.isColorKey(key) ? `<span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(v, product)}"></span>` : ''}<span class="tt-variant-name">${escapeHtml(v)}</span></button>
@@ -1677,7 +1712,7 @@ function _renderProductDetail(product) {
     }
   }
 
-  _pdSyncVariantToImage(_pdGalleryImages[_pdGalleryIndex]);
+  _pdUpdateSelectionLabels();
 
   // Quantity selector — _pdQty/_pdMaxQty are shared across re-renders (see
   // definition above _showProductNotFound) so the +/- buttons stay correct
@@ -1881,6 +1916,7 @@ function _galleryThumbClick(thumb) {
   const src = sanitizeClassicImageUrl(thumb.dataset.src);
   _pdGalleryIndex = Number(thumb.dataset.galleryIndex) || 0;
   _pdSyncVariantToImage(src);
+  _pdUpdateSelectionLabels();
   _pdUpdateQtyUI();
   if (galleryMain && src) {
     const img = galleryMain.querySelector('img');
@@ -1904,7 +1940,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261017-domain-cutover-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261019-product-boutique-2');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1966,6 +2002,7 @@ function selectVariant(btn) {
   btn.classList.add('active');
   btn.setAttribute('aria-pressed', 'true');
   _renderProductGallery(_pdProduct, _pdSelectedValues(), true);
+  _pdUpdateSelectionLabels();
   _pdUpdateQtyUI();
   group.classList.remove('tt-variant-required');
   if (group.nextElementSibling?.classList.contains('tt-variant-required-msg')) {

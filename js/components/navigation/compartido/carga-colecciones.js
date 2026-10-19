@@ -209,7 +209,7 @@ function renderInto(container, collections, buildNode) {
 }
 
 function renderLoading() {
-  document.querySelectorAll('[data-collections-nav]').forEach(container => {
+  document.querySelectorAll('[data-collections-nav]:not([data-collections-nav="footer"])').forEach(container => {
     removeStateNodes(container);
     container.dataset.phase4CollectionsState = 'loading';
     container.setAttribute('aria-busy', 'true');
@@ -220,7 +220,7 @@ function renderLoading() {
 }
 
 function renderError() {
-  document.querySelectorAll('[data-collections-nav]').forEach(container => {
+  document.querySelectorAll('[data-collections-nav]:not([data-collections-nav="footer"])').forEach(container => {
     removeStateNodes(container);
     container.removeAttribute('aria-busy');
     container.dataset.phase4CollectionsState = 'error';
@@ -228,8 +228,26 @@ function renderError() {
   });
 }
 
+function renderFooter(container, collections) {
+  const signature = JSON.stringify(collections.map(({ slug, name }) => [slug, name]));
+  if (container.dataset.collectionsSignature === signature) return;
+  const catalog = container.querySelector('[data-footer-catalog]');
+  const items = collections.map(collection => {
+    const item = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = catalogHref(collection.slug);
+    link.textContent = text(collection.name) || text(collection.slug);
+    item.appendChild(link);
+    return item;
+  });
+  container.replaceChildren(...(catalog ? [catalog] : []), ...items);
+  container.dataset.collectionsSignature = signature;
+  container.dataset.phase4CollectionsState = 'ready';
+}
+
 function renderAll(collections) {
   const visible = visibleCollections(collections);
+  document.querySelectorAll('[data-collections-nav="footer"]').forEach(container => renderFooter(container, visible));
   document.querySelectorAll('[data-collections-nav="desktop"]').forEach(container => renderInto(container, visible, buildDesktopCard));
   document.querySelectorAll('[data-collections-nav="tablet"]').forEach(container => renderInto(container, visible, buildTabletCard));
   document.querySelectorAll('[data-collections-nav="mobile"]').forEach(container => renderInto(container, visible, collection => buildMobileNode(container, collection)));

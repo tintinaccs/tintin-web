@@ -197,10 +197,6 @@ body.tt-home-premium .tt-wa-float * {
 
 /* Mobile */
 @media (max-width: 768px) {
-  body.tt-home-premium {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom));
-  }
-
   body.tt-home-premium .tt-look-actions {
     width: 100%;
   }

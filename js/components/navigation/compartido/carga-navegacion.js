@@ -13,9 +13,9 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261017-domain-cutover-1';
-const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261016-story-66a2a617ce';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261017-data-refresh-1';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261019-product-boutique-2';
+const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261019-footer-collections-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261019-product-boutique-2';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -92,7 +92,7 @@ function loadHomeMaintenance() {
     const link = document.createElement('link');
     link.id = 'tt-home-maintenance-css';
     link.rel = 'stylesheet';
-    link.href = new URL('/css/pages/home/mantenimiento-inicio.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1', location.href).href;
+    link.href = new URL('/css/pages/home/mantenimiento-inicio.css?v=tintin-20261019-footer-spacing-1', location.href).href;
     document.head.appendChild(link);
   }
 
@@ -202,6 +202,22 @@ function attachProductsDemand() {
   });
 }
 
+function attachFooterCollectionsDemand() {
+  const footer = document.querySelector('[data-collections-nav="footer"]');
+  if (!footer) return;
+  // Al llegar al footer basta la metadata compartida; no se necesitan productos.
+  const load = () => import(COLLECTIONS_RUNTIME_URL)
+    .then(module => module.initNavCollections())
+    .catch(error => console.warn('[PublicShell] No se pudieron actualizar las colecciones del footer.', error));
+  if (!('IntersectionObserver' in window)) { void load(); return; }
+  const observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    observer.disconnect();
+    void load();
+  }, { rootMargin: '200px' });
+  observer.observe(footer);
+}
+
 function attachLightweightCommerceDemand() {
   bindDemand(
     '[data-nav-action="account"],[data-shell-route="account"],#tabbar-account',
@@ -278,7 +294,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(new URL('/js/components/navigation/compartido/enrutador.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
-      import('./control-busqueda.js?v=tintin-20261017-data-refresh-1'),
+      import('./control-busqueda.js?v=tintin-20261019-product-boutique-2'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);
@@ -313,6 +329,7 @@ export function loadSharedRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return;
 
   attachNotificationsDemand();
+  attachFooterCollectionsDemand();
 
   // Las páginas informativas resuelven Auth globalmente para que el header
   // conozca la sesión en cualquier ruta. El menú ya tiene el mismo respaldo

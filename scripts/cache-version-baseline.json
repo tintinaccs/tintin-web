@@ -111,6 +111,10 @@
     "version": "tintin-20260817-cls-desktop-stable-3-checkout-20261008-2-palette-20261014-1",
     "sha256": "945342dbf5702aca27d5b5056777061757100ba8d6080c073b590f73c44920b9"
   },
+  "css/components/navigation/movil/marca-movil.css": {
+    "version": "tintin-20261019-mobile-brand-2",
+    "sha256": "1ca6c238eb573ebef2c3d3a04051a58717d91eecb01dd9f172ac5b44388ad65a"
+  },
   "css/components/navigation/tableta/encabezado-tableta.css": {
     "version": "tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1",
     "sha256": "70f35fdbf24641535ff3f1c9db2da8c5d4c1f8c31310c5ea6916864e6f3c6371"
@@ -156,8 +160,8 @@
     "sha256": "715aa9eb030929cb7aa712e3d5ae79ca14777441bd3f0c222ddd7568cec90e60"
   },
   "css/generated/inicio.css": {
-    "version": "tintin-home-f28f773d94f20b12",
-    "sha256": "f28f773d94f20b1249ca8ac22cfbb87eac84c3b103d0b9fbe766db2d58b8b8be"
+    "version": "tintin-home-00e70f762f60845f",
+    "sha256": "00e70f762f60845f76b086bda0e9dc3bf678c033bdaf5c2b5a5b07f04aea954a"
   },
   "css/pages/catalog/catalog-maintenance.css": {
     "version": "tintin-20260817-margin-consistency-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
@@ -192,16 +196,16 @@
     "sha256": "dab1b294554c6a7aa634b7652da243543dfef90b83e034b08349dc669c6b944e"
   },
   "css/pages/home/edicion-editorial-inicio.css": {
-    "version": "tintin-20261016-story-5b05cd17d5",
-    "sha256": "5b05cd17d5d1fd16b296adb326626a7d24c92a9daaa09e0786ecf674e1d10dbe"
+    "version": "tintin-20261019-watch-no-bands-1",
+    "sha256": "8d3b032c3ab859f33a740d77a0128c353ba454bc71423dc2fb2046f439381c7f"
   },
   "css/pages/home/hero-bienvenida-inicio.css": {
     "version": "tintin-20260930-hero-touch-target-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
     "sha256": "b982f2bb96572e875550f431ade3bcefc0dea5a8d9c7a9643eb114cc30885fd8"
   },
   "css/pages/home/mantenimiento-inicio.css": {
-    "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1",
-    "sha256": "0bae8cfd95ae6c8821c670a848d33324d2a454f9eb1613fea57130fd64644711"
+    "version": "tintin-20261019-footer-spacing-1",
+    "sha256": "2d26111a958bc16a142fbda3bcaec32e57f91cd28b035e2117e8bf2c337aa57a"
   },
   "css/pages/home/mas-vendidos.css": {
     "version": "tintin-20261016-bestsellers-1",
@@ -214,6 +218,10 @@
   "css/pages/institutional/about-maintenance.css": {
     "version": "tintin-20261016-story-d0a8aa1277",
     "sha256": "d0a8aa127735734d165b7d2326d1bc06d203928cad9fd4bfde30f79a0d80a7e3"
+  },
+  "css/pages/institutional/about-signature.css": {
+    "version": "tintin-20261019-signature-position-1",
+    "sha256": "0452596031d0e9c156a7cc12a677e2ecb2af994d8293b46ba1d40096c63ad1e7"
   },
   "css/pages/legal.css": {
     "version": "tintin-20261010-first-render-merge-1-palette-20261014-1",
@@ -248,8 +256,8 @@
     "sha256": "99d311d251b2b4972b78c636fda00b0dc45640b5a8a666c12600ad31cee15246"
   },
   "css/pages/product/product-maintenance.css": {
-    "version": "tintin-20261011-boutique-2-palette-20261014-1-ui-fixes-20261014-1",
-    "sha256": "c1540764cba8aa5d5bf324295819f99fbadbdcbd97290e69a27c8800666c53b5"
+    "version": "tintin-20261019-product-boutique-1",
+    "sha256": "e9876410a092ad94acbb2d5e5c9f654105cae67d0d76d70d3d1608bee4676b72"
   },
   "css/pages/product/product-premium-overhaul.css": {
     "version": "tintin-20261015-fast-d2a8c25e9-1",
@@ -300,8 +308,8 @@
     "sha256": "fa173a16e64ca3b4e1c4b4ffe500d10802cd473ea708fd6c242f0ffa336562db"
   },
   "css/theme/paridad-segura-tintin.css": {
-    "version": "tintin-20261010-whatsapp-release-5-palette-20261014-1",
-    "sha256": "e3ca9fbe631f4d41b58b548c4638386ca8ef9a88ab505961f633a06953a0e91a"
+    "version": "tintin-20261019-footer-spacing-2",
+    "sha256": "209ec053852561b97d3b7503b505ec16f0d20a5d6ec0c17d13bab87671b5143f"
   },
   "css/theme/pulido-marca-responsive-tintin.css": {
     "version": "tintin-20260903-loader-white-brand-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
@@ -600,7 +608,7 @@
     "sha256": "303d72298286ae3d0658e8d4b0d0ff35cc99d11e5baa59e165fedf74e19e7e53"
   },
   "js/analytics/actividad-sitio.js": {
-    "version": "tintin-20261017-domain-cutover-1",
+    "version": "tintin-20261019-product-boutique-1",
     "sha256": "6a51f04769d95a0a7db91d53fe326709f14bb5bbc1e3d3683435b19ab31f3a3d"
   },
   "js/analytics/analitica.js": {
@@ -616,20 +624,20 @@
     "sha256": "88752a7c08d50d9c5f8bddff573a6b9070613fbd8d148cd6a07ef28e532ba962"
   },
   "js/cargador-mantenimiento-pagina.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "8aaeb990381002025863616b3a3be9c8a89bd64dbec31a5604e052118d94d188"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "012958d4517870eb2d5aaef98cb5b5aee22a91d0cc9ab1306ee7dfe1008109f2"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20261018-page-updates-1",
-    "sha256": "fe66cf8655214ad9fece3b26699cc8161e0f95b1dbf3c96f4c8ff8a9c1d4b1a0"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "ef756af5e0a6daeb9ca66bb791c7e288bba380ce7644c384b69d4a53104db194"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
     "sha256": "21e0e15543f0d6f1eb367641152ec88cfa3428063db6add13b70244f30db6c44"
   },
   "js/components/cart/sincronizacion-carrito.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "b87b7e5a43b6db07e3535958f74457b2002cd21229f3cf5ea37da6bdea80df7f"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "aa9d35fa2df9459dece741a05782bf08eb2fd2106d2e029ce84a4c51c3957a09"
   },
   "js/components/color/esquema-color-catalogo.js": {
     "version": "tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1",
@@ -668,8 +676,8 @@
     "sha256": "d5eb84962ad0a0960de13b6f49e245569357486b5138ee218ba746d8d72f92f6"
   },
   "js/components/favorites/sincronizacion-favoritos.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "fe25c60101f4e93fd780c829ec3312406d8df34429dcf1d3bac0c019c8caaf80"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "0373525ad0c18e9aa9c8a30e2bda895ff45b69da4c77ce492e5025b28adfddee"
   },
   "js/components/forms/entrada-codigo-otp.js": {
     "version": "tintin-20260803-otp-input-1",
@@ -708,16 +716,16 @@
     "sha256": "ac63b20bb400330a141113fa2e35512fb5e6b722fdd41ebc49ffb0931d3b45bd"
   },
   "js/components/images/foto-variante.mjs": {
-    "version": "tintin-20261015-images-1",
-    "sha256": "0a5bd1519cb60bfceaad9e3e33749a6913c03bb4512f9e0e88bf9319f34e3cd9"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "64b6f1b72abf29fc892bf7028025c8b140dedb57bd5f837cd547dc1d5ee64e0e"
   },
   "js/components/images/galeria-producto.js": {
     "version": "tintin-20261015-images-1",
     "sha256": "1f40b67428e46a285c83c97fb911a01ed1137813d9c29fe62d8e87af4b42362e"
   },
   "js/components/images/gestion-imagenes.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "4dd4a505dea668c9fe527f08c2c0ecba0ff681d8dcf00f5d340a6b70ea30385a"
+    "version": "tintin-20261019-hero-centered-1",
+    "sha256": "12ae3413d597c7c59002680711b175fafc7240e9a8fa478ba9a5390dd3cea2e9"
   },
   "js/components/images/imagenes.js": {
     "version": "tintin-20261017-domain-cutover-1",
@@ -788,12 +796,12 @@
     "sha256": "871630dce82a24cfebf50ca451ef981447ab08ab4e1154f325bee693a19b4891"
   },
   "js/components/navigation/compartido/carga-colecciones.js": {
-    "version": "tintin-20261016-story-66a2a617ce",
-    "sha256": "66a2a617ce17d95a27888f169ad23de816708497d9b37368e75bcaa59327301c"
+    "version": "tintin-20261019-footer-collections-1",
+    "sha256": "1bae93d7a04b1176f375edb7ba23038aa2b156386a155e155a1bfbe96de5c830"
   },
   "js/components/navigation/compartido/carga-navegacion.js": {
-    "version": "tintin-20261017-data-refresh-1",
-    "sha256": "536a05a6d16e009ca62b98214b6240bdd4665eda4da370f8b1c71589d3c31df4"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "e47834adc1554cac32429a873b91680d1ebf4c53fd2f57b8151706195ff53b38"
   },
   "js/components/navigation/compartido/compatibilidad-cuenta-movil.js": {
     "version": "tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1-ui-reconciled-20261014-1-ui-reconciled-20261014-1",
@@ -808,8 +816,8 @@
     "sha256": "a451f8ae70cc10eccd5cdb58d5b0282e22c43247cf4109446df80c1291cd29ce"
   },
   "js/components/navigation/compartido/control-busqueda.js": {
-    "version": "tintin-20261017-data-refresh-1",
-    "sha256": "cda3d3d82a3a2d0720c3b23a0b61875d6e7020b309acbcdf356f2997e607d6ee"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "4a0bce01b0944d82203d81fbe093bf4b6585eba75905425d30905397f852ee15"
   },
   "js/components/navigation/compartido/control-paneles.js": {
     "version": "tintin-20261012-checkout-ready-3-control-paneles-js",
@@ -864,8 +872,8 @@
     "sha256": "77a06b5b72be1130c0e030597f7973a5c690ab7db4e0a7a80f8faddda77b8f8b"
   },
   "js/components/navigation/entrada-navegacion-publica.js": {
-    "version": "tintin-20261017-data-refresh-1",
-    "sha256": "d3e2a1f28db0c362d32e901f9909d57f37da20acc4396e7fef63db29f7f99c9a"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "5f43c0129c1a455821d41820f2b12d74fbdd032840449bdd13d42cfe3e2c6425"
   },
   "js/components/navigation/escritorio/encabezado-escritorio.js": {
     "version": "tintin-20261010-whatsapp-release-5-boutique-20261011-1-profile-pulseras-20261014-1-bags-20261014-1",
@@ -882,6 +890,10 @@
   "js/components/navigation/movil/indicador-navegacion-movil.js": {
     "version": "tintin-20261010-whatsapp-release-5",
     "sha256": "3241be7269e8f930578633a510ade772e3e35d94f4dc43dbfc2b097414d3f9b9"
+  },
+  "js/components/navigation/movil/marca-movil.js": {
+    "version": "tintin-20261019-mobile-brand-2",
+    "sha256": "980de5076752ed9a6a69b3949ccdc7eb79a5196e3f8354761846f8f7dde7aa72"
   },
   "js/components/navigation/movil/navegacion-compacta-movil.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -1024,8 +1036,8 @@
     "sha256": "de6d06aa047acbba8ac1989bb89226f034176676eba52891737372d4d7974f6a"
   },
   "js/core/store/contenido-sitio.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "1c0e9d411012d8b8cba238131b9e90453cce9910ce95e01f5d09eb0251dbcd12"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "fa64a13d3b7a0470e44b96c31b4880412e79a6559262d5733e78e96d9e964dc6"
   },
   "js/core/store/contrato-estructura-sitio.js": {
     "version": "tintin-20261016-story-dec66f9427",
@@ -1044,8 +1056,8 @@
     "sha256": "ff21e619b5952063e48d34f1fe84806433799cdb2c8a367961a198b501b00eca"
   },
   "js/core/store/editor-visual-runtime.js": {
-    "version": "tintin-20261016-story-2943605fd2",
-    "sha256": "2943605fd224aa5858c8adbc69b82f06303f68bc7ee9ef22b94387154dfae9f9"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "60a96cc7f810342681f5955a228cc9ec78ece4a40e9f71bb9db9bab25c3fadca"
   },
   "js/core/store/esquema-contenido.js": {
     "version": "tintin-20261016-story-1715905a45",
@@ -1056,8 +1068,8 @@
     "sha256": "f07f6242271e02a318def81b8e6d2059c64ce9f65b4e44396816bdc4d9615327"
   },
   "js/core/store/estado-productos.js": {
-    "version": "tintin-20261017-data-refresh-1",
-    "sha256": "54e8f49760c0ce7d409f634752c6924ff4b0ee629195eeb6fdfe623eddf110bb"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "db6c92a40de13ada13afc433b33a42438e9745a583a87d42b7ff0e280c029f36"
   },
   "js/core/store/inventario-variantes.mjs": {
     "version": "tintin-20261003-variant-inventory-1-stock-flow-20261014-1",
@@ -1136,8 +1148,8 @@
     "sha256": "823fd16bab57d517b3989cffdfa64b22bac05e671f55f8ede2b6b8c2e6831e68"
   },
   "js/inicio-navegacion-publica.js": {
-    "version": "tintin-20261017-data-refresh-1",
-    "sha256": "f7e8154b851f4416fae7065f770aa48f8d6a09c569c636b5bb42d8691c6c205c"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "1ae12de44fe7bb4982d846d3f9be133949c0fc96f282b30e59397311d373fe3f"
   },
   "js/orders/ciclo-pedido.mjs": {
     "version": "tintin-20261012-orders-board-1",
@@ -1164,8 +1176,8 @@
     "sha256": "cd8cbe015a5e703ca52e3ca4407edd38cd30acf8e5e84dba138612055f289316"
   },
   "js/pages/catalog/politica-visibilidad-catalogo.js": {
-    "version": "tintin-20261015-fast-8824493a4-1-admin-live-20261016-1",
-    "sha256": "6f29e8be03d7e32f61ca0997a350b6ee16776eb8b7fff6ab85fddf333b620eba"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "4ff5e2749cd62daca6cf45e03a1939f8d52a1d1583b20d4a000f78bf1e00e928"
   },
   "js/pages/catalog/prioridad-stock-catalogo.js": {
     "version": "tintin-20260731-stock-priority-1-stock-flow-20261014-1",
@@ -1184,8 +1196,8 @@
     "sha256": "ce9197c23c5068c771a96513b1e6c6e86518e321fa6a9c0b9dd118ee21bb5d14"
   },
   "js/pages/checkout/checkout-hardening.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "251de7bdd6cb32aae020a3b59d7a843a9373af8930fca97528b9c4d59ca5574d"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "43fb87c638725b5f603bc2896cbaa633f5709feab126f68a1cb3d094da8b774a"
   },
   "js/pages/checkout/checkout-mantenimiento.js": {
     "version": "tintin-20261012-checkout-ready-2-checkout-mantenimiento-js-palette-20261014-1",
@@ -1240,8 +1252,8 @@
     "sha256": "be83dd72d0faf7ac1e59e7c95b29035f632374b44e39695531ab3081aeea3b1f"
   },
   "js/pages/collections/pagina-colecciones.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "2c5576f1a2aaf9de598f869df40bfbbdb53a22b6a5c96f5327ef57e3ef2b5aac"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "721b2c203595684465ece1dd51bc8b95bcc632e08c97705a213079dff6772a01"
   },
   "js/pages/collections/presentacion-colecciones.js": {
     "version": "tintin-20261017-domain-cutover-1",
@@ -1284,8 +1296,8 @@
     "sha256": "cb266eb7a814eb74bf5296d969f087530090d37baa74d92ed69bd96229e92f21"
   },
   "js/pages/product/mantenimiento-producto.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "81ace4ff693e7728e479daba7560443289e819897108d4c27f41127e239ee157"
+    "version": "tintin-20261019-product-boutique-1",
+    "sha256": "a7394edc124caea85e4b7f7bc5f4a5f1b6462ac6a115cacfa6a670a251e92d1b"
   },
   "js/pages/product/precarga-datos-producto.js": {
     "version": "tintin-20261015-product-fast-1",
@@ -1324,8 +1336,8 @@
     "sha256": "fbd5b6554c7e0888e2913220204b08851ab182c408f1ff2ff675e5d2f791cd32"
   },
   "js/pages/profile/favoritos-perfil.js": {
-    "version": "tintin-20261017-domain-cutover-1",
-    "sha256": "154972d1114a8f3797451f980132f7fba437df9c54bb7067a15ce5ee492d43c5"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "d65136ecd9543a2108cd2d5a98072faf7512d06c01dec80498ee8c5f91473026"
   },
   "js/pages/profile/libreta-direcciones.mjs": {
     "version": "tintin-20261015-images-1",
@@ -1348,8 +1360,8 @@
     "sha256": "dbe03617213adb9883f42cb85199b88e47e3122d681f446b3248e0613de0a9ff"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20261017-responsive-layout-1",
-    "sha256": "34fd63a5e00946e2fdd4d479eccd1bb8550a87a9f6b9fdc908d1770c27492b46"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "5fbd6a26467e885d0e1906f1cf09e2d38b1880c52efa80fdd9e38724c93f51ae"
   },
   "js/quality/cambios-tienda.js": {
     "version": "tintin-20261018-page-updates-1",
@@ -1404,15 +1416,15 @@
     "sha256": "db49d009c841f5ca34a888c96511ae936fd9f5533e90d8b2c4d57596f4e5641a"
   },
   "js/visual-builder-bootstrap.js": {
-    "version": "tintin-20261016-story-d168192765",
-    "sha256": "d1681927650286d8a9b777ca34db57e492bc33e51d4e3145cc1ce99566335085"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "d05fc5ed1a1d403f339a40e96402f894070936a3c4b163db41d915c1b4c5b672"
   },
   "styles.min.css": {
     "version": "tintin-20261010-social-mobile-styles-3",
     "sha256": "cb4ab1be22ae05b9594f2e35012ef958ec1dcf3636d17feed9fbbdbcddd5f2ef"
   },
   "tienda.js": {
-    "version": "tintin-20261017-stock-card-1",
-    "sha256": "160a4e1e74b68b62f72aa770b19f979f9d2900e3018a971f1978bed0c6cae5a4"
+    "version": "tintin-20261019-product-boutique-2",
+    "sha256": "3eb4684f2e4f45e3dface83283a57670bc0a6970e9435329e2294393452423ae"
   }
 }

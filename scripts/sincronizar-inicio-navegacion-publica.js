@@ -4,21 +4,24 @@
 const fs = require('fs');
 const path = require('path');
 const { parse } = require('parse5');
+const { renderMobileBrandHeader } = require('../js/components/navigation/movil/marca-movil.js');
+const { LOGO_VERSION } = require('../js/components/navigation/compartido/configuracion.js');
+const { CATEGORIES } = require('../js/components/navigation/compartido/iconos.js');
 const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261017-stock-card-1';
+const TIENDA_VERSION = 'tintin-20261019-product-boutique-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261017-domain-cutover-1';
-const LOADER_VERSION = 'tintin-20261018-page-updates-1';
+const LOADER_VERSION = 'tintin-20261019-product-boutique-2';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261017-data-refresh-1';
-const NAV_ENTRY_VERSION = 'tintin-20261017-data-refresh-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261019-product-boutique-2';
+const NAV_ENTRY_VERSION = 'tintin-20261019-product-boutique-2';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261016-story-d168192765';
+const VISUAL_BUILDER_VERSION = 'tintin-20261019-product-boutique-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20261017-domain-cutover-1';
 const PROFILE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
@@ -92,6 +95,7 @@ const INITIAL_SHARED_STYLES = [
   ]
 ];
 const INITIAL_PUBLIC_STYLES = [
+  ['id="tt-mobile-brand-css"', 'css/components/navigation/movil/marca-movil.css', 'tintin-20261019-mobile-brand-2'],
   [
     "id=\"tt-global-studio-runtime-css\"",
     "css/components/visual-studio-global-runtime.css",
@@ -158,7 +162,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "id=\"tt-home-maintenance-css\"",
       "css/pages/home/mantenimiento-inicio.css",
-      "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1"
+      "tintin-20261019-footer-spacing-1"
     ]
   ],
   "catalogo.html": [
@@ -345,6 +349,21 @@ function removeLegacyComments(html) {
   });
 }
 
+function ensureMobileBrandHeader(html, page) {
+  html = removeElementById(html, 'tt-mobile-brand');
+  if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(html)) return html;
+  const brand = renderMobileBrandHeader(page, `/assets-tintin/images/general/logo.png?v=${LOGO_VERSION}`);
+  if (!brand) return html;
+  let bodyEnd = null;
+  const visit = node => {
+    if (node.tagName === 'body') bodyEnd = node.sourceCodeLocation?.startTag?.endOffset;
+    node.childNodes?.forEach(visit);
+  };
+  visit(parse(html, { sourceCodeLocationInfo: true }));
+  if (bodyEnd == null) throw new Error(`No se encontró el body real de ${page}`);
+  return html.slice(0, bodyEnd) + `\n${brand}` + html.slice(bodyEnd).replace(/^\s*/, '\n');
+}
+
 function sharedFooter(absoluteAssets = false) {
   return `<!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
@@ -363,9 +382,9 @@ function sharedFooter(absoluteAssets = false) {
 
       <nav class="tt-footer-col" aria-label="Tienda">
         <div class="tt-footer-col-title">Tienda</div>
-        <ul>
-          <li><a href="/catalogo">Catálogo</a></li>
-          <li><a href="/catalogo?cat=relojes">Relojes</a></li>
+        <ul data-collections-nav="footer">
+          <li data-footer-catalog><a href="/catalogo">Catálogo</a></li>
+${CATEGORIES.map(({ slug, label }) => `          <li><a href="/catalogo?cat=${encodeURIComponent(slug)}">${label}</a></li>`).join('\n')}
         </ul>
       </nav>
 
@@ -378,7 +397,6 @@ function sharedFooter(absoluteAssets = false) {
           <li><a href="/preguntas-frecuentes">Preguntas frecuentes</a></li>
           <li><a href="/terminos">Términos y condiciones</a></li>
           <li><a href="/privacidad">Privacidad</a></li>
-          <li><a href="/sitemap.xml">Mapa del sitio</a></li>
         </ul>
       </nav>
 
@@ -481,7 +499,7 @@ function ensureShellScript(html) {
     /\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script\s*>/gi,
     /\s*<script\b[^>]*data-tt-shell-startup-hold[^>]*>[\s\S]*?<\/script\s*>/gi,
   ]) out = replaceUntilStable(out, pattern, '');
-  const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
+  const loader = /(<script\b[^>]*src=["']\/?js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
 
   return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
@@ -515,7 +533,7 @@ function versionFirstPaint(html) {
 
 function versionRuntimeLoader(html) {
   return html.replace(
-    /(<script\b[^>]*src=["']js\/cargador-pagina\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
+    /(<script\b[^>]*src=["']\/?js\/cargador-pagina\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
     `$1?v=${LOADER_VERSION}$2`
   );
 }
@@ -587,6 +605,7 @@ for (const page of PUBLIC_PAGES) {
   html = removeLegacyComments(html);
   // Login es una pantalla de acceso aislada: no comparte el pie público.
   html = page === 'login.html' ? removeSharedFooter(html) : replaceSharedFooter(html);
+  html = ensureMobileBrandHeader(html, page);
   html = ensureStyles(html);
   html = ensureNavigationPreloads(html);
   html = ensureShellScript(html);
@@ -616,9 +635,13 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
   const file = path.join(ROOT, page);
   const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
   let html = versionUnifiedTheme(versionVisualBuilder(versionProfileGate(versionSessionProtection(before))));
+  html = versionRuntimeLoader(html);
   html = ensureSectionFlow(html, page === '404.html');
   if (page === '404.html') {
     html = replaceSharedFooter(html, true);
+    html = ensureMobileBrandHeader(html, page);
+    html = html.replace(/(\/?js\/inicio-navegacion-publica\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${PUBLIC_SHELL_VERSION}`);
+    html = html.replace(/(\/?js\/components\/navigation\/entrada-navegacion-publica\.js)\?v=[A-Za-z0-9._-]+/g, `$1?v=${NAV_ENTRY_VERSION}`);
     html = html.replace(/(\b(?:src|href)=["'])(?=(?:js|css|assets-tintin)\/)/g, '$1/');
     html = ensurePublicStructuralStyles(html, true);
     html = html.replace(/(<script\b[^>]*src=["']\/tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
