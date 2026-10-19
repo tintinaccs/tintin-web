@@ -436,3 +436,8 @@ Resumen del componente compartido de consentimiento simplificado para todas las 
 ## 2026-10-19 — Super Admin adaptable y notificaciones identificadas
 
 Navegación agrupada y búsqueda desde lateral/cajón mediante controles existentes; superficies rosadas suaves, logo original blanco, campos táctiles de 44px y tipografía móvil sin zoom. Aplica al shell y las 26 superficies del registro Maestro, incluida Imágenes. Push corrige destinos históricos y ventanas que fallan al navegar; el pedido consume la suscripción autenticada, conserva destino tardío/reintento y elimina el parámetro al abrir. Login identifica el perfil del servidor, conserva auth_time y deduplicación; no publica correos ni datos de envío. Iconos derivados originales sólo en app/admin/push. Telemetría y espejo local refrescan visibles sin pisar borradores; API autenticada canónica renueva 401. Auditor push alinea sus comprobaciones con el guard central vigente y el aviso explícito de pantalla bloqueada. Sin operaciones reales, cambios de roles, Rules, infraestructura ni dominio. Evidencia por módulo y límites en SUPERADMIN_REVIEW_20261019 y CURRENT_STATE.
+
+
+## 2026-10-19 — Rendimiento del candidato consolidado
+
+El loader comparte la preferencia canónica y difiere el runtime de estadísticas hasta el permiso afirmativo. Reduce tres módulos innecesarios para visitas sin consentimiento, conserva consentimiento guardado y posterior, y mantiene presupuestos de rendimiento. Referencias de caché del loader y derivados se regeneran. La ficha/variantes y el stock no cambian por esta optimización; la devolución de pedidos de prueba queda explícitamente autorizada pero pendiente de acceso autenticado y verificación de origen.
