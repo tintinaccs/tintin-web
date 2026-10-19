@@ -74,7 +74,7 @@
     "deploy:spark": "npm run audit:final && firebase deploy --only firestore:rules --project tintin-accesorios",
     "audit:deep": "node scripts/auditar-profunda.js",
     "audit:postphase": "node scripts/auditar-posterior-fases-seguridad.js",
-    "audit:reliability": "node scripts/auditar-sitio-confiabilidad.js",
+    "audit:reliability": "node scripts/auditar-sitio-confiabilidad.js && npm run test:site-activity",
     "audit:admin-sync": "node scripts/auditar-admin-publico-sincronizar.js && node scripts/auditar-admin-commerce-shopify.js && node --test tests/admin/dashboard-data.test.mjs tests/admin/cambios-confirmados.test.mjs tests/admin/usuarios-paginados.test.mjs tests/admin/catalogo-paginado.test.mjs tests/admin/notificaciones-sesion.test.mjs tests/admin/revision-reconexion.test.mjs tests/admin/paginas-atomicas.test.mjs tests/admin/commerce-products-paged.test.mjs tests/admin/product-toggle-result.test.mjs tests/admin/maestro-productos.test.mjs tests/admin/maestro-productos-controlador.test.mjs",
     "audit:admin-foundation": "node scripts/auditar-admin-fundamentos.js",
     "audit:products-media": "node scripts/auditar-admin-productos-multimedia.js",
