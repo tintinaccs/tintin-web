@@ -111,7 +111,7 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
         expect(Math.abs(final.width - initial.width), url).toBeLessThanOrEqual(1);
         if (url === '/about.html') {
           const gap = await page.locator('.tt-page-hero .tt-section-sub').evaluate(label => {
-            const header = [...document.querySelectorAll('.tt-header-desktop, #tt-header-tablet')]
+            const header = [...document.querySelectorAll('.tt-header-desktop, #tt-header-tablet, #tt-mobile-brand')]
               .find(node => node.getBoundingClientRect().height > 0);
             return label.getBoundingClientRect().top - (header?.getBoundingClientRect().bottom || 0);
           });

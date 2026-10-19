@@ -2,11 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { statisticsSince } from '../../js/admin/statistics/modelo-reinicios.mjs';
 
 const source = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
 function functionSource(name, next) { return source.slice(source.indexOf(`function ${name}(`), source.indexOf(next, source.indexOf(`function ${name}(`))); }
 
-function dashboard(orders, ready = true, permissions = true) {
+function dashboard(orders, ready = true, permissions = true, resets = {}, statisticsReady = true) {
   const card = { style: {} };
   const fields = new Map();
   const field = id => { if (!fields.has(id)) fields.set(id, { textContent: '', innerHTML: '', closest: () => card }); return fields.get(id); };
@@ -15,6 +16,8 @@ function dashboard(orders, ready = true, permissions = true) {
     adminRealtimeReady: { users: ready, orders: ready }, adminRealtimeErrors: {},
     allUsers: [{ uid: 'one' }], allOrders: orders, roleCanDo: () => permissions,
     formatPrice: String, formatDate: () => 'Fecha', escapeHtmlAdmin: String, orderStatusBadgeHtml: String,
+    ensureStatisticsControls: () => statisticsReady, refreshStatisticsViews() {}, runAdminCrudOperation() {},
+    filterStatisticsRows: (metric, rows, timeOf) => statisticsSince(rows, metric, resets, timeOf),
   };
   vm.createContext(context);
   vm.runInContext(functionSource('activityTimestampMillis', '\nfunction activityLocationLabel') + '\n' + functionSource('renderDashboardData', '\nfunction loadDashboard') + '\nrenderDashboardData();', context);
@@ -32,6 +35,22 @@ test('Últimos pedidos mezcla fechas ISO y Timestamp, ordena del más nuevo y li
   assert.ok(html.indexOf('pedido-5') < html.indexOf('pedido-2'));
   assert.ok(!html.includes('pedido-1') && !html.includes('antiguo'));
   assert.equal((html.match(/<tr>/g) || []).length, 5);
+});
+
+test('Ventas del mes respeta el inicio elegido sin reiniciar usuarios ni pedidos', () => {
+  const now = new Date(), today = new Date(now); today.setHours(0, 0, 0, 0);
+  const orders = [{ createdAt: new Date(today.getTime() - 1), total: 999 }, { createdAt: now, total: 120 }];
+  const { field } = dashboard(orders, true, true, { revenue: new Date(today.getTime() - 1) });
+  assert.equal(field('stat-sales-month').textContent, '120');
+  assert.equal(field('stat-orders-today').textContent, 1);
+  assert.equal(field('stat-orders-total').textContent, 2);
+  assert.equal(field('stat-users').textContent, 1);
+});
+
+test('Ventas del mes espera el inicio confirmado en lugar de mostrar ventas históricas', () => {
+  const { field } = dashboard([{ createdAt: new Date(), total: 999 }], true, true, {}, false);
+  assert.equal(field('stat-sales-month').textContent, '—');
+  assert.equal(field('stat-orders-today').textContent, 1);
 });
 
 test('Dashboard conserva estado desconocido ante datos no confirmados y respeta permisos', () => {

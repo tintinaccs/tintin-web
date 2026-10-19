@@ -1,6 +1,14 @@
+## 2026-10-19 — Etapas de pedidos pastel y prioridad de clientes recientes
+
+Presentación de Pedidos: pasos numerados, colores semánticos compartidos entre resumen/pasos/columnas/badges y tablero ajustado al ancho, con selección de etapa hasta1180px. El ciclo de negocio, transiciones, entregas y pagos conservan su autoridad. Usuarios ordena clientes por registro/login usando la suscripción actual y relega al equipo sin alterar cuentas ni roles. Mantiene filtros y orden manual. Se conserva el trabajo de Super Admin/Push del PR1169 y la medición móvil corregida de PR1167. Caché/CSP/diagnóstico y plan protegido se regeneran; evidencia y limitaciones en CURRENT_STATE.
+
 # Ficha de producto y fotos por forma — 2026-10-19
 
 Fuentes funcionales: tienda.js, foto-variante.mjs y product-maintenance.css. Selección de cualquier atributo/combinación, asociación bidireccional con fotos y miniaturas, autoridad de selección disponible inicial, identidad de fotografía al reordenar por stock, estados de agotado y cantidad. Foto del carrito respeta forma y combinación exacta; sin asociación sólo se admite foto general. Superficies relacionadas: ficha en desktop/laptop/tablet ambas orientaciones/mobile, representación de variantes en carrito/checkout/favoritos/catálogo/editor; los consumidores y cargadores reciben únicamente URLs coherentes de caché. No modifica inventario, precios, permisos, transacciones ni datos remotos. Pruebas de selección/galería, primer render, stock, carrito invitado, márgenes, teclado y formatos de variantes; detalle y límites en CURRENT_STATE. Shell, caché, CSP y manifiestos se regeneran por sus herramientas. Se conservan los arreglos anteriores y se difieren merge/publicación.
+## 2026-10-19 — Inicio de ventas por día en Paraguay
+
+Dashboard aplica el filtro canónico de Facturación y actualiza ambas vistas al cambiar el corte. Modo `today` en el endpoint/control ya existente, con medianoche determinada por el servidor en America/Asuncion e inclusión del límite exacto. No cambia métricas de usuarios o pedidos si no se seleccionan, ni historial, inventario, Rules o permisos. Nuevas regresiones de límites, preservación y dashboard; matriz visual extendida a ambos modos. Caché, diagnóstico y plan protegido se regeneran desde autoridades existentes. Evidencia y limitaciones en CURRENT_STATE.
+
 ## 2026-10-19 — Alineación de Imágenes y entrega del CSS responsive
 
 Se alinea la grilla/encabezado interno de Imágenes con su barra compartida y se agrega comprobación de ambos bordes en cuatro tamaños. Ambas páginas usan responsive-2 para evitar el CSS anterior retenido en caché bajo la primera URL, observado en lectura pública. Baseline, plan y diagnóstico se regeneran; sin cambios de negocio ni controles. PR1165 ya integrado y aprobado por CI y salud de producción; se verifica la entrega de bytes del nuevo candidato.

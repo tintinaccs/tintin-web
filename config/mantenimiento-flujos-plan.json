@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "d2cf6f18589c0cff464c1f9d8025ce9b0c402f2b",
-  "reason": "Integrar los ajustes públicos del PR 1167 y mejorar navegación, presentación responsive y actualización del Super Admin, corrigiendo identidad y enlaces push sin cambiar roles, reglas ni controles de publicación.",
+  "reason": "Completar panel, pedidos por etapas pastel, clientes por último acceso y ventas desde hoy",
   "files": [
     {
       "path": "_headers",
@@ -31,7 +31,7 @@
     {
       "path": "admin.html",
       "oldHash": "2e334699049525b7dfbc54471e93dae5917ea71924729ac0452e259c9cdb8ff8",
-      "newHash": "d2b93361e717582d1fa5342074251acf9786f61dde1e22ea12aabe99ce263360"
+      "newHash": "4446dc37cb3c00901a2d30b8e9df1fc0b716a886aed178eecf7038d502a67796"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -116,7 +116,7 @@
     {
       "path": "js/admin/admin-app.js",
       "oldHash": "ff3e8d79a551a188603ded153de3290a9d0446f34ed61bb82e38e892012adc1e",
-      "newHash": "a462768a739f302f5565f0591ff9c6ed6cfeb7e6af2c36017d19e7d6d372e5ff"
+      "newHash": "9c0999752eec08336e03cbfe1facffc9f0addf9c02c17f8f7413acc6145290af"
     },
     {
       "path": "js/admin/notifications/enlace-pedido-push.js",
@@ -137,6 +137,11 @@
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
       "oldHash": "c75a45bbf3689c93d6ee8bee6ad9ea3654c3ad5c59de237487757e76bf1f40fd",
       "newHash": "48f8ad072ba40cc633493b005db5548c5cede4ae3155ebc42fa04ceebb731325"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "c4b0cf84aa9f7bc40105dfeafa059649b8d5eb9b8bf10b548a8fb8fa71695b51",
+      "newHash": "b0bee305283f6a4604457cd71ab6117526bf4da906ade6de0cf731327ce48f75"
     },
     {
       "path": "js/analytics/actividad-sitio.js",
@@ -311,7 +316,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "9e705bf709605c642cbf1f95f9841d7a231661a0592a0391926bd4be0965625a",
-      "newHash": "f82f8f762aa90ebae19ad37e3401e4ab2f6d9e3a2cad43dfca8208ca37ef4d7d"
+      "newHash": "f6e56d4a0eebe6a104f5a0aba1994cffa21d4a49aed6f25da67043c2a5c789d5"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
