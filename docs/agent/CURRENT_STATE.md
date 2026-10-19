@@ -2719,3 +2719,10 @@ La validación de CodeQL del intento ec6c525a mantuvo las observaciones: no bast
 ## 2026-10-19 — Aviso de cookies breve (Codex)
 
 Pedido del titular: quitar menciones técnicas a IP/GPS del aviso compartido. Resumen reducido a cookies/almacenamiento de sesión y carrito, y estadísticas de visitas opcionales. Preferencias, consentimiento y política detallada conservados. PASS_LOCAL: Chromium en 320/768/1440px comprueba texto, ancho y tres acciones; 4 pruebas de actividad y auditoría de confiabilidad aprobadas. Referencias inmutables y derivados regenerados. Se incorpora al PR 1167; publicación pendiente de los controles remotos existentes.
+
+
+## 2026-10-19 — Gate de geometría del PR 1167
+
+CI del SHA cc294521 completó build, integridad, contrato estático, reglas y Maestro; falló en dos geometrías de about móvil (320/390): gap 112 frente a máximo 72. La medición restaba únicamente headers desktop/tablet y omitía la nueva marca móvil de 76px en flujo. El espacio real bajo la barra era 36px. Se incluye #tt-mobile-brand en el mismo selector; los límites 32–72 y las comprobaciones de overflow, CLS, retratos y roles permanecen intactos. Esto corrige la referencia geométrica del test sin modificar la interfaz ni relajar el umbral. Se repite el spec contra el candidato local y se vuelve a requerir CI del nuevo SHA antes de merge. Autor: Codex.
+
+PASS_LOCAL: spec public-initial-layout completo 13/13 Chromium en 320–1920px contra servidor del candidato; manifiesto y flujos protegidos correctos. Cambio limitado al selector de medición y esta evidencia. CI y publicación vuelven a quedar pendientes del SHA actualizado.
