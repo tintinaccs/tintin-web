@@ -29,6 +29,41 @@ function node(tag, className, value) {
   return element;
 }
 
+function arrow() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  for (const [name, value] of Object.entries({ width: '16', height: '16', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'aria-hidden': 'true' })) svg.setAttribute(name, value);
+  const path = document.createElementNS(svg.namespaceURI, 'path'); path.setAttribute('d', 'M7 17 17 7M7 7h10v10'); svg.append(path);
+  return svg;
+}
+
+function mountDashboard() {
+  const dashboard = document.getElementById('section-dashboard');
+  if (!dashboard || dashboard.querySelector('.tt-dashboard-hero')) return;
+  // El shell administrativo conserva su presupuesto de carga inicial; esta
+  // presentación diferida no agrega métricas ni lecturas de datos.
+  const hero = node('section', 'tt-dashboard-hero'); hero.setAttribute('aria-labelledby', 'tt-dashboard-heading');
+  const intro = node('div', 'tt-dashboard-intro');
+  const heading = node('h2', ''); heading.id = 'tt-dashboard-heading';
+  heading.append('Tu tienda,', document.createElement('br'), node('span', '', 'en foco.'));
+  const explore = node('button', 'adm-btn adm-btn-outline', 'Explorar módulos'); explore.type = 'button'; explore.dataset.adminLauncher = ''; explore.append(arrow());
+  intro.append(node('p', 'tt-control-eyebrow', 'TINTIN · PANEL DE CONTROL'), heading,
+    node('p', 'tt-dashboard-description', 'Personas, pedidos y catálogo. Una vista clara para organizar tu día.'), explore);
+  const shortcuts = node('div', 'tt-dashboard-shortcuts'); shortcuts.setAttribute('aria-label', 'Accesos rápidos');
+  const items = [
+    ['pedidos', '01 / OPERACIÓN', 'Gestionar pedidos'],
+    ['productos', '02 / CATÁLOGO', 'Precios y existencias'],
+    ['usuarios', '03 / PERSONAS', 'Administrar cuentas'],
+    ['configuracion', '04 / TU TIENDA', 'Preferencias y envíos'],
+  ];
+  for (const [id, category, description] of items) {
+    const button = node('button', 'tt-dashboard-link'); button.type = 'button'; button.hidden = true; button.dataset.adminOpen = id;
+    const detail = node('span', '', description); detail.append(arrow());
+    button.append(node('span', 'tt-control-eyebrow', category), node('strong', '', MAESTRO_MODULES.find(module => module.id === id).label), detail);
+    shortcuts.append(button);
+  }
+  hero.append(intro, shortcuts); dashboard.prepend(hero);
+}
+
 function close() { dialog?.close(); }
 
 function navigate(id) {
@@ -127,4 +162,5 @@ const observer = new MutationObserver(() => {
 const navigation = document.getElementById('adm-nav');
 if (navigation) observer.observe(navigation, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'hidden', 'disabled', 'class'] });
 observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+mountDashboard();
 syncShortcuts();

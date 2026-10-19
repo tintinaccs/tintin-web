@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "9ac62e637a46df8e57ff096e61d0992eb9b3faf2",
-  "reason": "Renovar el panel con jerarquía H1 y tipografía canónicas; corregir paginación y fechas; validar interfaces y dominios admin.",
+  "reason": "Renovar el panel con UI diferida bajo 200 KB, H1 y tipografía canónicos; corregir paginación y fechas y validar regresiones.",
   "files": [
     {
       "path": "admin-images.html",
@@ -11,7 +11,7 @@
     {
       "path": "admin.html",
       "oldHash": "878b9e080d14899debaee7436db57392171377dbe0a3649b78c8da9997a401f5",
-      "newHash": "3ddccdedc56e15cff58c9c3c95d353df85c2edeb007e4c02df5bb0575b1ae540"
+      "newHash": "e895201adfe3959111878a6d1aad699de3a38bab00e2a01396188a56d4e072b0"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -26,7 +26,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "574927fdf6d817a4255ac6a030bd91037a3eec9fe51b76cddb8336ff565d3e85",
-      "newHash": "50db324465da910f7bb797d593ac3185c9b5b9d83666d5e3fdd290c0aa1a95a5"
+      "newHash": "936cfba30a55e163c3fb2e5150639424b3698675054eec3c85a58881bb2208cb"
     }
   ],
   "affectedRecords": [

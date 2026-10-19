@@ -66,7 +66,6 @@ html:root body.tt-admin-control .tt-dashboard-hero h2 { color: var(--admin-color
 }
 .tt-dashboard-link strong { font-size: 17px; letter-spacing: -.035em; overflow-wrap: anywhere; }
 .tt-dashboard-link > span:last-child { font-size: 10px; line-height: 1.5; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.tt-dashboard-link b { font-size: 20px; font-weight: 400; }
 .tt-dashboard-link:hover { background: var(--admin-color-background-sidebar-active); border-color: var(--admin-color-brand); }
 .tt-control-text-link { background: none; border: 0; color: var(--admin-color-text-primary); font: inherit; font-size: 11px; font-weight: 700; min-height: 44px; padding: 8px; cursor: pointer; }
 html:root body.tt-admin-control #dash-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-bottom: 24px; }
