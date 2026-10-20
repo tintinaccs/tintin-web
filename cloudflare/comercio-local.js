@@ -1,3 +1,4 @@
+import { ordersForView } from '../js/orders/pedidos-prueba.mjs';
 import { decodeFirestoreFields, encodeFirestoreFields, firestoreAdminGet, firestoreAdminListAll } from './firebase-admin-ligero.js';
 import { firestoreAdminBatchCommit } from './firestore-admin-batch.js';
 
@@ -75,9 +76,9 @@ export function historicalOrder(entry, contact = {}) {
   const items=entry.lines.filter(line=>line.detail && line.quantity>0).map(line=>({name:line.detail,qty:line.quantity,imageUrl:line.image,price:line.amount==null?null:line.amount/line.quantity,historical:true}));
   return {orderNumber:`LOCAL-${entry.year}-${String(entry.month).padStart(2,'0')}-${entry.orderCode||entry.id}`,source:'google-sheets-local',channel:'Venta local · Sheets',localEntryId:entry.id,customerId:entry.customerId,userId:'',userName:entry.customerName,userEmail:'',contactEmail:contact.email||'',userPhone:contact.phone||'',items,subtotal:entry.total,shippingCost:entry.shippingCost||0,total:entry.total+(entry.shippingCost||0),createdAt:new Date(entry.occurredOn+'T12:00:00Z'),paymentStatus:entry.paymentStatus||'sin_registrar',paymentMethod:entry.paymentMethod,payment:{status:entry.paymentStatus||'sin_registrar',method:entry.paymentMethod},status:['cancelado','rechazado'].includes(entry.paymentStatus)?entry.paymentStatus:'historico',shipping:{method:entry.deliveryMethod,city:entry.city},notes:entry.notes,inventoryState:'historical_unmanaged',historical:true,localSale:entry};
 }
-export function purchasedCustomers(contacts, orders) {
+export function purchasedCustomers(contacts, orders, { includeTestOrders = false } = {}) {
   const customers=new Map(contacts.map(c=>[c.id,{...c,origin:'local',hasWebAccount:false,orderCount:0,paidOrderCount:0,totalPurchased:0,totalPaid:0,lastPurchase:'',orderIds:[]}]));
-  for(const order of orders) {
+  for(const order of ordersForView(orders, includeTestOrders)) {
     if(order.isTest===true || order.technicalTest===true || order.deleted===true) continue;
     const key=order.userId?`WEB_${order.userId}`:order.customerId||`ORDER_${order.id}`;
     if(!customers.has(key)) customers.set(key,{id:key,name:order.userName||'Cliente sin nombre',phone:order.userPhone||'',email:order.contactEmail||order.userEmail||'',city:order.shipping?.city||'',address:order.shipping?.address||'',notes:'',origin:order.userId?'web':'local',hasWebAccount:!!order.userId,orderCount:0,paidOrderCount:0,totalPurchased:0,totalPaid:0,lastPurchase:'',orderIds:[]});
@@ -92,14 +93,14 @@ export function purchasedCustomers(contacts, orders) {
 }
 const realDependencies={get:firestoreAdminGet,list:firestoreAdminListAll,commit:firestoreAdminBatchCommit};
 function unpack(doc){return doc?{id:String(doc.name||'').split('/').pop(),...decodeFirestoreFields(doc.fields||{})}:null;}
-export async function localCommerceSnapshot(env,{revisionOnly=false}={},deps=realDependencies) {
+export async function localCommerceSnapshot(env,{revisionOnly=false,includeTestOrders=false}={},deps=realDependencies) {
   const meta=unpack(await deps.get(env,META_PATH))||{};
   if(revisionOnly)return {revision:meta.revision||'',checkedAt:new Date().toISOString()};
   const [entries,contacts,orders]=await Promise.all([deps.list(env,ENTRY_COLLECTION,5000),deps.list(env,CONTACT_COLLECTION,5000),deps.list(env,'orders',5000)]);
   // A bounded snapshot must fail rather than falsely certify a truncated mirror.
   if([entries,contacts,orders].some(list=>list.length>=5000)) fail('El espejo necesita paginación adicional; no se devuelve una copia truncada.',409);
   const orderRecords=orders.map(unpack),contactRecords=contacts.map(unpack);
-  return {revision:meta.revision||'',entries:entries.map(unpack),contacts:contactRecords,customers:purchasedCustomers(contactRecords,orderRecords),webOrders:orderRecords.filter(o=>!o.localEntryId),checkedAt:new Date().toISOString()};
+  return {revision:meta.revision||'',entries:entries.map(unpack),contacts:contactRecords,customers:purchasedCustomers(contactRecords,orderRecords,{includeTestOrders}),webOrders:ordersForView(orderRecords,includeTestOrders).filter(o=>!o.localEntryId),checkedAt:new Date().toISOString()};
 }
 export async function upsertLocalEntries(env,input,actor,deps=realDependencies) {
   if(input.action!=='upsert' || !Array.isArray(input.entries) || !input.entries.length || input.entries.length>20) fail('Enviá entre 1 y 20 registros.');

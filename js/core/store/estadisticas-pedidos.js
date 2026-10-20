@@ -1,3 +1,4 @@
+import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-1';
 /* =============================================================
    TINTIN — Order Stats centralizadas
    =============================================================
@@ -91,8 +92,8 @@ export async function getOrdersForUserIdentity({ uid, email } = {}) {
   return uniqOrders(orders);
 }
 
-export function calculateOrderStats(orders = []) {
-  const clean = uniqOrders(orders);
+export function calculateOrderStats(orders = [], { includeTestOrders = false } = {}) {
+  const clean = uniqOrders(ordersForView(orders, includeTestOrders));
   const completed = clean.filter(isCompleted);
   const cancelled = clean.filter(isCancelled);
   const pending = clean.filter(isPending);

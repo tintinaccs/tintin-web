@@ -5,7 +5,7 @@ const path=require('node:path');
 const {mockRuntime,fixtureHtml}=require('./helpers/admin-commerce-fixture.cjs');
 const ROOT=path.resolve(__dirname,'../..');
 const seed=()=>['pendiente','preparando','listo','listo_retiro','en_camino','entregado','cancelado','rechazado','devuelto','incidencia'].map((status,i)=>({
-  id:`order_fixture_${i}`,orderNumber:`TINPED${String(i+1).padStart(2,'0')}`,status,shippingMethod:status==='listo_retiro'?'retiro':'delivery',
+  id:`order_fixture_${i}`,orderNumber:`TINPED${String(i+101).padStart(2,'0')}`,status,shippingMethod:status==='listo_retiro'?'retiro':'delivery',
   createdAt:{seconds:1791840000-i*60},lastChangeId:`initial_${i}`,inventoryRevision:1,
   userName:i===0?'Cliente de prueba con nombre y apellido extraordinariamente extensos':'Cliente QA '+i,userPhone:'0981123456',userEmail:'cliente@example.test',
   shipping:{method:status==='listo_retiro'?'retiro':'delivery',city:'San Lorenzo',address:'Dirección de prueba registrada, sin destino real',referencia:'Portón de prueba',mapLocation:{lat:-25.3,lng:-57.5}},
@@ -61,8 +61,8 @@ test('una actualización individual conserva las otras tarjetas, filtros y posic
   await page.evaluate(()=>{window.__untouched=document.querySelector('[data-order-card="order_fixture_1"]');document.querySelector('[data-orders-board]').scrollLeft=0;window.__orders[0].paymentStatus='pagado';window.__publishOrders();});
   expect(await page.evaluate(()=>window.__untouched===document.querySelector('[data-order-card="order_fixture_1"]'))).toBe(true);
   expect(await page.locator('[data-orders-board]').evaluate(e=>e.scrollLeft)).toBe(0);
-  await page.locator('[data-filter="order-search"]').fill('TINPED01');await expect(page.locator('[data-order-card]')).toHaveCount(1);
-  await page.reload();await expect(page.locator('[data-filter="order-search"]')).toHaveValue('TINPED01');
+  await page.locator('[data-filter="order-search"]').fill('TINPED101');await expect(page.locator('[data-order-card]')).toHaveCount(1);
+  await page.reload();await expect(page.locator('[data-filter="order-search"]')).toHaveValue('TINPED101');
 });
 test('falla de operación y clics rápidos no mueven ni duplican el pedido',async({page})=>{
   await open(page);await page.evaluate(()=>{window.__failChange=true;window.__changeDelay=200;});
@@ -101,7 +101,7 @@ test('histórico, cancelado y devolución siguen disponibles sin reactivar inven
   await open(page);await page.locator('[data-tab="attention"]').click();await expect(page.locator('[data-order-card="order_fixture_6"]')).toBeVisible();await expect(page.locator('[data-order-card="order_fixture_8"]')).toBeVisible();expect(await page.evaluate(()=>window.__calls.filter(c=>c[0]==='updateOrderStatus').length)).toBe(0);
 });
 test('mil pedidos: contadores completos y tarjetas limitadas por etapa',async({page})=>{
-  const rows=Array.from({length:1000},(_,i)=>({...seed()[i%6],id:`order_large_${i}`,orderNumber:`TINPED${i}`}));await open(page,rows);
+  const rows=Array.from({length:1000},(_,i)=>({...seed()[i%6],id:`order_large_${i}`,orderNumber:`TINPED${i+1000}`}));await open(page,rows);
   await expect(page.locator('[data-orders-status]')).toContainText('1000 pedidos');expect(await page.locator('[data-order-card]').count()).toBeLessThanOrEqual(150);
   await expect(page.locator('#orders-tbody tr')).toHaveCount(0);
   await page.locator('[data-order-lane="new"] [data-action="order-show-more"]').click();expect(await page.locator('[data-order-lane="new"] [data-order-card]').count()).toBe(60);
@@ -234,4 +234,56 @@ for (const width of [320, 768, 1440]) test('devolución por línea, cancelación
   const result=await page.evaluate(()=>window.result);expect(result.selections.order_test.returnItems).toEqual([{index:0,qty:1},{index:1,qty:0}]);expect(result.selections.order_test.baseChangeId).toBe('v1');
   await page.evaluate(orders=>{window.result=window.pick(orders);},fixture);await page.keyboard.press('Escape');expect(await page.evaluate(()=>window.result)).toBeNull();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth)).toBeLessThanOrEqual(2);
+});
+
+for(const [width,height] of [[320,568],[390,844],[568,320],[844,390],[768,1024],[1024,768],[1280,800],[1440,900],[1920,1080]])test(`selección de pedidos reales flota sobre la navegación sin solaparse ${width}x${height}`,async({page})=>{
+ await page.setViewportSize({width,height});await open(page,[{...seed()[0],orderNumber:'TINPED26'}]);
+ // Markup y CSS reales de la navegación inferior; sólo el controlador de pedidos usa datos locales.
+ const nav=fs.readFileSync(path.join(ROOT,'admin.html'),'utf8').match(/<nav class="adm-mobile-tabs"[\s\S]*?<\/nav>/)[0];
+ await page.addStyleTag({path:path.join(ROOT,'css/admin/admin.css')});
+ await page.addStyleTag({path:path.join(ROOT,'css/admin/dashboard-control.css')});
+ await page.evaluate(html=>document.body.insertAdjacentHTML('beforeend',html),nav);
+ // Los controles de navegación móvil dejan cuatro primarios y Más.
+ await page.evaluate(()=>document.querySelectorAll('#adm-mobile-tabs > button:not([data-mobile-primary]):not(#adm-mobile-more-toggle)').forEach(el=>el.hidden=true));
+ await page.locator('[data-select-order="order_fixture_0"]').check();
+ const bar=page.locator('[data-order-bulk]');await expect(bar).toBeVisible();await expect(bar).toContainText('1 seleccionado');
+ await expect.poll(async()=>{const b=await bar.boundingBox(),nav=await page.locator('#adm-mobile-tabs').boundingBox();return !!b&&b.x>=11&&b.x+b.width<=width-11&&b.y>=0&&b.y+b.height<=(nav?nav.y-11:height-11);}).toBe(true);
+ expect(await bar.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
+ const filters=page.locator('.tt-order-toolbar');expect(await filters.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
+ for(const element of await bar.getByRole('button').all())expect((await element.boundingBox()).height).toBeGreaterThanOrEqual(44);
+ await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));await expect(bar).toBeInViewport();
+ if(process.env.TINTIN_REVIEW_DIR){fs.mkdirSync(process.env.TINTIN_REVIEW_DIR,{recursive:true});await page.screenshot({path:path.join(process.env.TINTIN_REVIEW_DIR,`seleccion-pedidos-${width}x${height}.png`),fullPage:false});}
+ await bar.getByRole('button',{name:'Limpiar selección'}).click();await expect(bar).toBeHidden();
+ await page.locator('[data-select-order="order_fixture_0"]').check();
+ await page.evaluate(()=>document.getElementById('section-pedidos').classList.remove('active'));await expect(bar).toBeHidden();
+});
+
+test('ocultar pruebas elimina tarjetas, búsquedas, importes y selección; mostrar restaura sólo el lote renombrado',async({page})=>{
+ const original=seed()[0];
+ const rows=Array.from({length:26},(_,i)=>({...original,id:`lot_${i+1}`,orderNumber:`TINPED${String(i+1).padStart(2,'0')}`,userName:i===25?'Cliente real':'Cliente ficticia',total:i===25?205000:999999}));
+ await open(page,rows);
+ await expect(page.locator('[data-order-card]')).toHaveCount(1);await expect(page.locator('[data-orders-status]')).toContainText('1 pedidos sincronizados');
+ await expect(page.locator('[data-stage-count="new"]')).toHaveText('1');
+ await expect(page.locator('[data-order-card="lot_26"]')).toContainText('TINPED26');
+ await page.locator('[data-filter="order-search"]').fill('Cliente ficticia');await expect(page.locator('[data-order-card]')).toHaveCount(0);
+ await page.locator('[data-filter="order-search"]').fill('');
+ await page.getByRole('button',{name:'Mostrar pedidos de prueba',exact:true}).click();
+ await expect(page.locator('[data-order-card]')).toHaveCount(26);await expect(page.locator('[data-order-card="lot_1"]')).toContainText('TINPEDPRUEBA01');await expect(page.locator('[data-order-card="lot_25"]')).toContainText('TINPEDPRUEBA25');
+ await expect(page.locator('[data-select-order]')).toHaveCount(1);
+ await page.reload();await expect(page.getByRole('button',{name:'Ocultar pedidos de prueba',exact:true})).toBeVisible();
+ await page.locator('[data-select-order="lot_26"]').check();await expect(page.locator('[data-order-bulk]')).toBeVisible();
+ await page.getByRole('button',{name:'Ocultar pedidos de prueba',exact:true}).click();
+ await expect(page.locator('[data-order-card]')).toHaveCount(1);await expect(page.locator('[data-order-bulk]')).toBeHidden();
+ expect(await page.evaluate(()=>window.__orders[0].orderNumber)).toBe('TINPED01');
+ expect(await page.evaluate(()=>window.__orders[25].orderNumber)).toBe('TINPED26');
+ expect(await page.evaluate(()=>window.__calls)).toEqual([]);
+});
+
+test('la barra respeta el área visible cuando el teclado reduce visualViewport',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await open(page,[{...seed()[0],orderNumber:'TINPED26'}]);
+ await page.locator('[data-select-order="order_fixture_0"]').check();
+ await page.evaluate(()=>{const viewport=new EventTarget();Object.assign(viewport,{offsetTop:0,height:444});Object.defineProperty(window,'visualViewport',{configurable:true,value:viewport});dispatchEvent(new Event('resize'));});
+ const bar=page.locator('[data-order-bulk]');
+ await expect.poll(async()=>{const b=await bar.boundingBox();return b.y>=0&&b.y+b.height<=432;}).toBe(true);
+ await page.getByRole('button',{name:'Limpiar selección',exact:true}).click();await expect(bar).toBeHidden();
 });

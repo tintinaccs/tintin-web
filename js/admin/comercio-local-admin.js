@@ -8,7 +8,9 @@ const money=value=>Number(value||0).toLocaleString('es-PY')+' Gs.';
 let snapshot=null,busy=false,lastLoaded=0,editor=null,search='',month='',kind='',archiveView='active',pendingLocalId='',pendingRefresh=false;
 const active=()=>document.getElementById('section-pedidos')?.classList.contains('active')&&document.getElementById('local-order-buyers')?'pedidos':sections.find(name=>document.getElementById('section-'+name)?.classList.contains('active'));
 async function api(method='GET',body,view=''){
-  const response=await authenticatedFetch('/api/local-commerce'+(view?'?view='+encodeURIComponent(view):''),{method,...(method==='GET'?{signal:AbortSignal.timeout(12000)}:{}),headers:body?{'content-type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});
+  const params=new URLSearchParams(view?{view}:{});
+  if(method==='GET'&&window.TintinAdminOrders?.includesTestOrders?.())params.set('includeTestOrders','1');
+  const response=await authenticatedFetch('/api/local-commerce'+(params.size?'?'+params:''),{method,...(method==='GET'?{signal:AbortSignal.timeout(12000)}:{}),headers:body?{'content-type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});
   const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.error||'No se pudo sincronizar el espejo.');return data;
 }
 function status(message,error=false){document.querySelectorAll('[data-local-status]').forEach(node=>{node.textContent=message;node.setAttribute('role',error?'alert':'status');});}
@@ -73,3 +75,5 @@ function resumeLocalData(){if(!document.hidden&&active()){pendingRefresh=true;if
 window.addEventListener('online',resumeLocalData);
 window.addEventListener('focus',resumeLocalData);
 document.addEventListener('visibilitychange',resumeLocalData);
+
+window.addEventListener('tintin:order-test-visibility',()=>{snapshot=null;lastLoaded=0;pendingRefresh=true;void load(true);});
