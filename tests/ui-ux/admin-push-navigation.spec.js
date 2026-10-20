@@ -154,6 +154,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[820,1180]
   await page.locator('#adm-topbar-title').evaluate(node=>{node.textContent='Pedidos mayoristas';});
   const logo=page.locator('.tt-control-brand');
   await expect(logo).toBeVisible();
+  await expect(page.locator('.adm-topbar-title .tt-control-brand')).toBeVisible();
   await expect.poll(()=>logo.evaluate(node=>node.naturalWidth)).toBe(192);
   const geometry=await page.locator('.adm-topbar').evaluate(node=>{
    const items=[...node.children].filter(item=>getComputedStyle(item).display!=='none').map(item=>{const r=item.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};});
