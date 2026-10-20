@@ -1,57 +1,32 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "b63e0b628e7c5360b0a5bb8b9fb22afc71595caa",
-  "reason": "Consolidar guardado concurrente, acceso administrativo claro, editor modal y configuracion explicita de stock por opcion; 133 pruebas Node y 60 escenarios Chromium-WebKit aprobados",
+  "baseCommit": "dc424fa01892912be6a8d181e6554079d79f49cb",
+  "reason": "Aplicar maqueta aprobada de editor minimalista responsive con controles visuales y preservar CRUD e inventario por variante.",
   "files": [
     {
-      "path": "_headers",
-      "oldHash": "852c64d8583029043d23a74e27c7e423c19b353a164be03594937ac3c0d28b40",
-      "newHash": "40f50256dafd06471e123f658820180688c513d77b34b52b4af1f75bac449465"
-    },
-    {
       "path": "admin.html",
-      "oldHash": "586806e70e4c6c42119cef29cd548ac0d972475f88daf6413b630f8c212f7394",
-      "newHash": "813ea213ebfa2f29f7661befd3f11a5fc04d4b1ddf292527929cbb86d442e4e6"
-    },
-    {
-      "path": "config/csp-runtime.js",
-      "oldHash": "949e0e820349791674c235c61b9caa2661182118e191ea9ed5c811e011c06fe1",
-      "newHash": "e81fc9610e0751a08a90e163aef645046500474d3ee92ed242cd7f966f30d627"
-    },
-    {
-      "path": "config/csp-runtime.json",
-      "oldHash": "e3bf4c87fd9c06be9c3ac19e611bc47d15e4ee1df3646cf89a04ed0e33a65e36",
-      "newHash": "c81e7968c74c2cd102e3ec4c47ecba5aa185f1498e721d4076f2b7a38ffed34c"
+      "oldHash": "813ea213ebfa2f29f7661befd3f11a5fc04d4b1ddf292527929cbb86d442e4e6",
+      "newHash": "21e458eab9eac227f620f890a8b62c554bd6752b42275bedba528776cb445f49"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "f5be917fa1397878aa2cfd83efe6a17dee116daf212924ab42156b6696d65a75",
-      "newHash": "159d60ba83a901867badc490f8cdcfe773471033ef85fb8da4f300d71561dcb1"
+      "oldHash": "159d60ba83a901867badc490f8cdcfe773471033ef85fb8da4f300d71561dcb1",
+      "newHash": "604eeff0f141377802f5d4f36902820ba793568650d3b2214abe290d7f3e766c"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "5c5c8cbaf5e10b14ac8f9ad2bc0c594b9276060d383ebd641648f465694ae2e8",
-      "newHash": "8f78917a463e44846afc98ba1a1630651e2224d308e30d673dcf14ce8569908a"
+      "oldHash": "8f78917a463e44846afc98ba1a1630651e2224d308e30d673dcf14ce8569908a",
+      "newHash": "8ffdc56e56e9bab68d544eab3dff2fbb6444381c607c6a1bad9c4ad75348d6b1"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "960c77547225f4fe25a67a24391d4f9ef8ecea66c0662ea4363983a6783fb8ec",
-      "newHash": "8dada1d6394aa8946e2e659565a9801ab490f915b687aa4d08bf2482bf9cb95b"
-    },
-    {
-      "path": "login.html",
-      "oldHash": "2bebb2442c4b7040e1b4bbc181b2bf77792352bbce96c041aea261796256d4bd",
-      "newHash": "4f8921ce476eccb477a666d8471db5b0a129f1f6a122a3d5806cdd10a6fc79b7"
+      "oldHash": "8dada1d6394aa8946e2e659565a9801ab490f915b687aa4d08bf2482bf9cb95b",
+      "newHash": "e64f77a0ca65b3d41d2127d300b8a5344318cba1dd3e0afbf943a1964100a842"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "944a911769b9ac1320a3903ba2828b765f6f784fc9862fadb5de5e4046ac8990",
-      "newHash": "a656d81fa969239a0476959bd9c0b9d9ef9cf83c45c6f00e91fafa58676d6df0"
-    },
-    {
-      "path": "tests/login/redirect-by-role.test.mjs",
-      "oldHash": "57c791cfbca3098c8ed4327e50c6efb258724810a5e08bba663a12a3fecc4ba2",
-      "newHash": "c5ac393abaad028f7837d116d9e6de23743cb01265ffe4db2382c1c2aec14520"
+      "oldHash": "a656d81fa969239a0476959bd9c0b9d9ef9cf83c45c6f00e91fafa58676d6df0",
+      "newHash": "f0b95272b015d581f6948c1999c0cb4ad7f2e8ecc087d708a963ea6f758d1f6f"
     }
   ],
   "affectedRecords": [
@@ -59,46 +34,19 @@
     "admin-guard__firestore-fuente-verdad__16",
     "apis-internas__correos__41",
     "apis-internas__pedidos__32",
-    "cf-functions",
-    "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
     "correos",
-    "csp",
-    "cuenta-bloqueada",
-    "entrada-login",
-    "entrada-login__google-btn__1",
-    "entrada-login__login-codigo__2",
-    "firebase-auth__redirect-result__5",
-    "firestore__users-uid__8",
-    "google-btn",
-    "google-btn__firebase-auth__3",
-    "login-codigo",
-    "login-codigo__firebase-auth__4",
     "pagina-perfil",
-    "pagina-principal",
     "pedidos",
     "pedidos__inventario__33",
-    "perfil",
-    "perfil__ultimos-datos__11",
     "productos",
-    "redirect-result",
     "redirect-result__sesion-estado__6",
     "roles__pagina-perfil__18",
-    "roles__pagina-principal__17",
-    "roles__perfil__10",
     "roles__super-panel__14",
     "sesion-estado",
     "sesion-estado__firestore__7",
     "super-panel",
     "super-panel__admin-guard__15",
     "super-panel__pedidos__35",
-    "super-panel__productos__34",
-    "ultimos-datos",
-    "ultimos-datos__perfil__13",
-    "users-uid",
-    "users-uid__cuenta-bloqueada__12",
-    "users-uid__roles__9"
+    "super-panel__productos__34"
   ]
 }

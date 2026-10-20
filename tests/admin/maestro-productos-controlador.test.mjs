@@ -122,3 +122,9 @@ test('controlador masivo confirma Firestore aunque fallen Sheets/auditoría; un 
  const result=await r.ctx.window.TintinProductAdmin.applyBulkChanges(request);assert.equal(result.confirmed,true);assert.equal(result.syncPending,true);assert.equal(result.auditPending,true);assert.equal(r.rows.get('products/source').stock,5);
  await assert.rejects(r.ctx.window.TintinProductAdmin.applyBulkChanges(request),/cambió/);assert.equal(r.rows.get('products/source').stock,5);assert.equal(r.ctx.productMasterBusy,false);
 });
+
+test('nuevo inicia sin stock y editar conserva visibilidad y cantidades previas',()=>{
+ const r=runtime({stock:700,active:false});
+ r.ctx._prodNuevoNow();assert.equal(r.control('prod-stock').value,'0');assert.equal(r.control('prod-active').checked,false);assert.equal(r.control('prod-save-btn').textContent,'Guardar producto');
+ r.ctx._prodEditarNow('source');assert.equal(r.control('prod-stock').value,'700');assert.equal(r.control('prod-active').checked,false);assert.equal(r.control('prod-save-btn').textContent,'Guardar cambios');assert.deepEqual(r.writes,[]);
+});

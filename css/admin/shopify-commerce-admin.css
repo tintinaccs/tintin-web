@@ -1002,10 +1002,12 @@ html.tt-product-panel-open { overflow:hidden; }
 
 /* Editor visual: mismos campos y guardado, con espacio real para cada control. */
 #prod-form-card {
-  --editor-line: color-mix(in srgb, var(--tt-commerce-text) 14%, var(--tt-commerce-surface));
-  --editor-soft: color-mix(in srgb, var(--tt-commerce-brand) 7%, var(--tt-commerce-surface));
+  --editor-line: color-mix(in srgb, var(--tt-commerce-text) 10%, var(--tt-commerce-surface));
+  --editor-soft: color-mix(in srgb, var(--tt-commerce-text) 3%, var(--tt-commerce-surface));
   container: product-editor / inline-size;
   min-width:0;
+  display:flex;
+  flex-direction:column;
   font-family:Montserrat;
 }
 #section-productos.tt-commerce-mounted #prod-form-card .adm-card-body {
@@ -1015,20 +1017,11 @@ html.tt-product-panel-open { overflow:hidden; }
 #prod-form-card .tt-product-section-nav { margin-bottom:20px; }
 #prod-form-card .tt-product-section-nav > label { color:var(--tt-commerce-muted); font-size:12px; }
 #prod-form-card .tt-product-section-nav > select { width:min(100%,320px); }
-.tt-editor-shortcuts { display:flex; flex-wrap:wrap; gap:6px; }
-#prod-form-card .tt-editor-shortcuts button {
-  min-height:40px; padding:9px 14px; border:1px solid var(--editor-line); border-radius:999px;
-  background:var(--tt-commerce-surface); color:var(--tt-commerce-text); font:inherit; font-size:12px;
-  font-weight:600; cursor:pointer; transition:background .16s ease,border-color .16s ease;
-}
-#prod-form-card .tt-editor-shortcuts [aria-pressed=true] {
-  background:var(--tt-commerce-text); border-color:var(--tt-commerce-text); color:var(--tt-commerce-surface);
-}
 .tt-editor-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; align-items:start; min-width:0; }
 #prod-form-card .tt-product-fields { grid-template-columns:minmax(0,1fr) !important; gap:20px !important; }
 .tt-editor-section, .tt-editor-preview {
   box-sizing:border-box; min-width:0; padding:clamp(16px,2vw,26px); border:1px solid var(--editor-line);
-  border-radius:16px; background:var(--tt-commerce-surface);
+  border-radius:12px; background:var(--tt-commerce-surface);
 }
 #prod-form-card .tt-editor-section h2 { margin:0 0 6px; color:var(--tt-commerce-text); font-size:17px; line-height:1.4; font-weight:650; letter-spacing:-.025em; }
 #prod-form-card .tt-editor-caption { margin:0 0 20px; color:var(--tt-commerce-muted); font-size:12px; line-height:1.65; font-weight:400; }
@@ -1075,8 +1068,44 @@ html.tt-product-panel-open { overflow:hidden; }
 .tt-editor-preview { align-self:start; }
 .tt-editor-preview-jump { display:none; }
 @container product-editor (max-width:849px) {
+  #prod-form-card .tt-product-section-nav > label { display:block; }
+  #prod-form-card .tt-product-section-nav > select { display:block; width:100%; }
   #prod-form-card .tt-editor-preview-jump { display:inline-flex; justify-self:start; width:fit-content; min-height:44px; font:inherit; font-size:12px; }
   .tt-editor-preview > .tt-editor-preview-jump { margin-bottom:16px; }
+}
+.tt-editor-section-toggle { display:flex; align-items:center; justify-content:space-between; gap:16px; width:100%; min-height:44px; padding:0; border:0; background:transparent; color:inherit; font:inherit; text-align:left; cursor:pointer; }
+.tt-editor-chevron { font-size:20px; font-weight:400; }
+.tt-editor-section-toggle[aria-expanded=false] .tt-editor-chevron { transform:rotate(180deg); }
+#prod-form-card .tt-editor-choices { display:flex; flex-wrap:wrap; gap:6px; min-width:0; }
+#prod-form-card .tt-editor-choice { box-sizing:border-box; min-width:44px; min-height:44px; max-width:100%; padding:8px 12px; border:1px solid var(--editor-line); border-radius:8px; background:var(--tt-commerce-surface); color:var(--tt-commerce-text); font:inherit; font-size:12px; line-height:1.5; overflow-wrap:anywhere; cursor:pointer; }
+#prod-form-card .tt-editor-choice:hover { border-color:var(--tt-commerce-brand); }
+#prod-form-card .tt-editor-choice[aria-pressed=true] { background:var(--tt-commerce-soft); border-color:var(--tt-commerce-brand); }
+#prod-form-card .tt-editor-choice:disabled { opacity:.5; cursor:default; }
+.tt-editor-quantity { display:grid; grid-template-columns:minmax(0,1fr); gap:10px; min-width:0; }
+.tt-editor-stepper { display:grid; grid-template-columns:44px minmax(0,1fr) 44px; gap:4px; min-width:0; }
+#prod-form-card .tt-editor-stepper input { padding-inline:4px; text-align:center; font-variant-numeric:tabular-nums; }
+.tt-editor-stock-status { display:flex; align-items:center; gap:7px; font-size:12px; margin:0; }
+.tt-editor-stock-status::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--tt-commerce-muted); }
+.tt-editor-stock-status[data-available=true]::before { background:var(--tt-commerce-success); }
+.tt-editor-money { display:flex; align-items:center; gap:8px; min-width:0; }
+.tt-editor-money > span { font-size:13px; }
+#prod-form-card .tt-editor-money > input { flex:1; width:0; }
+#prod-form-card .tt-editor-stock-row .tt-editor-quantity { grid-column:1/-1; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; }
+.tt-editor-variant-builder { display:grid; gap:10px; min-width:0; }
+.tt-editor-variant-add { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; }
+.tt-editor-variant-add > button { grid-column:1/-1; }
+.tt-editor-variant-groups { display:flex; gap:6px; flex-wrap:wrap; min-width:0; }
+.tt-editor-control-error { margin:0; font-size:12px; line-height:1.6; color:var(--tt-commerce-error); }
+.tt-editor-control-error:empty { display:none; }
+.tt-editor-advanced summary { padding:12px 0; font-size:12px; cursor:pointer; }
+#prod-form-card .adm-card-head { background:var(--tt-commerce-surface); }
+#prod-form-card #prod-form-title { text-transform:none; letter-spacing:-.025em; }
+#prod-form-card .tt-product-editor-actions { position:sticky; bottom:0; z-index:2; background:var(--tt-commerce-surface); }
+@media (min-width:1200px) and (pointer:fine), (min-width:1401px) {
+  #prod-form-card { max-height:calc(100dvh - 140px); overflow:hidden; }
+  #section-productos.tt-commerce-mounted #prod-form-card .adm-card-body { flex:1 1 auto; min-height:0; overflow:auto; overscroll-behavior:contain; }
+  #prod-form-card > :is(.adm-card-head,.tt-product-editor-actions) { flex:0 0 auto; }
+  #prod-form-card .tt-editor-preview { max-height:calc(100dvh - 320px); }
 }
 .tt-editor-preview-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; font-size:14px; font-weight:650; }
 .tt-editor-live { font-size:10px; font-weight:500; padding:4px 8px; border:1px solid var(--editor-line); border-radius:999px; }
@@ -1124,7 +1153,6 @@ html.tt-product-panel-open { overflow:hidden; }
 }
 @container product-editor (max-width:600px) {
   .tt-editor-section-fields { grid-template-columns:minmax(0,1fr); gap:16px; }
-  #prod-form-card .tt-editor-shortcuts { display:none; }
   #prod-form-card .tt-product-section-nav > select { width:100%; }
   #prod-form-card .tt-editor-stock-row { grid-template-columns:44px minmax(0,1fr) 76px; gap:8px; padding:10px; }
   .tt-editor-stock-thumb { width:44px; height:44px; }
@@ -1135,7 +1163,6 @@ html.tt-product-panel-open { overflow:hidden; }
 #tt-commerce-products .tt-commerce-product-grid tr { border-color:color-mix(in srgb,var(--tt-commerce-text) 14%,var(--tt-commerce-surface)); border-radius:14px; }
 #tt-commerce-products .tt-commerce-money { font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
 @media (prefers-reduced-motion:reduce) { #prod-form-card * { scroll-behavior:auto !important; transition:none !important; } }
-@media (max-height:600px) { #prod-form-card .tt-editor-shortcuts { display:none; } }
 html.tt-product-order-open { overflow:hidden; }
 html.tt-product-order-open #unsaved-modal { z-index:9500 !important; }
 #tinped-crud-overlay .tinped-item-image { width:92px; height:92px; object-fit:contain; background:#FFFFFF; border:1px solid var(--tt-commerce-border,#F1E4E7); border-radius:12px; }
@@ -1173,3 +1200,7 @@ html.tt-product-order-open #unsaved-modal { z-index:9500 !important; }
 
 #tinped-items [data-remove-item] { min-width:44px; min-height:44px; justify-self:end; font-size:20px; line-height:1; }
 #tinped-modal-subtitle { font-size:13px !important; line-height:1.5; overflow-wrap:anywhere; }
+
+#prod-form-card .tt-editor-stepper input { appearance:textfield; }
+#prod-form-card .tt-editor-stepper input::-webkit-inner-spin-button,
+#prod-form-card .tt-editor-stepper input::-webkit-outer-spin-button { appearance:none; margin:0; }
