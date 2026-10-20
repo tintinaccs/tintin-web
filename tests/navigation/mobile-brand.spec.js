@@ -55,7 +55,7 @@ test('excluye checkout, acceso, administración y redirecciones; tablet/desktop 
   }
 });
 
-test('el contraste alterna con el contenido, conserva el PNG original y no duplica la marca', async ({ page }) => {
+test('la marca blanca sobre rosa enlaza el fondo del contenido, conserva el PNG original y no se duplica', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.route('**/__brand-fixture', route => route.fulfill({ contentType: 'text/html', body: fixture('about') }));
   await page.goto('/__brand-fixture');
@@ -70,10 +70,11 @@ test('el contraste alterna con el contenido, conserva el PNG original y no dupli
   await expect(brand).toHaveCount(1);
   await expect(image).toHaveAttribute('src', /\/assets-tintin\/images\/general\/logo\.png\?v=/);
   await expect(image).toHaveCSS('filter', /tt-mobile-brand-tint/);
-  for (const [background, surface, ink] of [['#9a2f55', 'light', 'rgb(184, 76, 114)'], ['#fff0f7', 'pink', 'rgb(253, 236, 242)']]) {
+  for (const [background, surface, next] of [['#9a2f55', 'light', 'rgb(154, 47, 85)'], ['#fff0f7', 'pink', 'rgb(255, 240, 247)']]) {
     await page.locator('.tt-page-hero').evaluate((el, color) => el.style.setProperty('background', color, 'important'), background);
     await expect(brand).toHaveAttribute('data-brand-surface', surface);
-    await expect(brand.locator('feFlood')).toHaveCSS('flood-color', ink);
+    await expect(brand.locator('feFlood')).toHaveCSS('flood-color', 'rgb(255, 255, 255)');
+    await expect.poll(() => brand.evaluate(el => el.style.getPropertyValue('--tt-mobile-brand-next'))).toBe(next);
     await expect(brand).toHaveCSS('background-image', /linear-gradient/);
   }
   await page.locator('.tt-page-hero').evaluate(el => { el.style.removeProperty('background'); el.id = 'brand-test-content'; });

@@ -128,8 +128,12 @@ const dynamicFunctionRoutes = [
   '/products/*', '/collections/*', '/pages/*', '/policies/*',
   '/robots.txt', '/sitemap-products.xml', '/sitemap-collections.xml'
 ];
-// Both error-document forms share one narrow rule to respect Pages' 100-rule limit.
-const compactHtmlRoutes = htmlFunctionRoutes.map(route => route === '/404' || route === '/404.html' ? '/404*' : route);
+// Compact the error and legacy About aliases to preserve Pages' 100-rule limit.
+const compactHtmlRoutes = htmlFunctionRoutes.map(route => {
+  if (route === '/404' || route === '/404.html') return '/404*';
+  if (route === '/nosotros' || route === '/nosotros.html') return '/nosotros*';
+  return route;
+});
 const expectedRoutes = [...new Set([...apiFunctions, '/__/auth/*', ...compactHtmlRoutes, ...dynamicFunctionRoutes])].sort();
 const routeConfig = JSON.parse(read('_routes.json'));
 const routes = [...new Set(routeConfig.include || [])].sort();

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderProductMetadataHtml } from '../functions/product.js';
 import { lightenHtml, isLightweightPageName } from '../functions/[page].js';
+import { onRequestGet as instagramFeed } from '../functions/api/instagram-feed.js';
 
 const port = Math.max(1024, Math.min(65535, Number(process.argv[2]) || 4184));
 const root = process.argv[3]
@@ -68,9 +69,15 @@ function serveCleanHtmlRoute(url, response) {
   return true;
 }
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
   const url = new URL(request.url || '/', `http://${host}:${port}`);
   if (serveSeoProductFixture(url, response)) return;
+  if (url.pathname === '/api/instagram-feed' && request.method === 'GET') {
+    const result = await instagramFeed({ env: {}, request: new Request(url) });
+    response.writeHead(result.status, Object.fromEntries(result.headers));
+    response.end(await result.text());
+    return;
+  }
   if (url.pathname === '/api/public-catalog') {
     const resource = url.searchParams.get('resource');
     if (resource === 'storeGate') {
