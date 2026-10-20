@@ -56,7 +56,7 @@ export function createVariantPhotoEditor({ variantsInput, media, initialRows, sa
     const add = value => { const url = sanitizeImageUrl(value); if (url) { if (!pool.some(photo => media.imageKey(photo) === media.imageKey(url))) pool.push(url); save([...photos, url]); refresh(); } };
     const library = document.createElement('button'); library.type = 'button'; library.className = 'adm-btn adm-btn-outline'; library.textContent = 'Elegir foto para esta variante';
     library.addEventListener('click', async () => { try { const url = await openLibrary(); if (url) add(url); } catch { hint.textContent = 'No pudimos abrir la biblioteca. Reintentá.'; } }); container.append(library);
-    if (attachUpload) { const upload = document.createElement('div'); container.append(upload); uploads.push(attachUpload(upload, { label: 'Agregar foto a esta variante', hint: 'Subí una foto o pegá su enlace.', onOpenLibrary: openLibrary, onChange: add })); }
+    if (attachUpload) { const upload = document.createElement('div'); container.append(upload); uploads.push(attachUpload(upload, { label: 'Agregar foto a esta variante', hint: 'Subí una foto o pegá su enlace.', onOpenLibrary: openLibrary, onChange: add, cleanupPrevious: false })); }
   }
   return { render, serialize, destroy: destroyUploads };
 }

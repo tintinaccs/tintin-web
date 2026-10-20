@@ -1,6 +1,7 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { createVariantPhotoEditor } from './fotos-por-variante.js?v=tintin-20261019-variant-links-1';
+import { createVariantPhotoEditor } from './fotos-por-variante.js?v=tintin-20261019-product-editor-1';
+import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261019-product-editor-1';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
   const media = window.TintinProductMedia;
@@ -146,11 +147,12 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
       field.append(library);
       if (attachUpload) {
         const upload = document.createElement('div'); field.append(upload);
-        uploads.push(attachUpload(upload, { label: `Agregar foto a ${color}`, hint: 'Podés subir otra foto o pegar su enlace.', onOpenLibrary: openLibrary, onChange: add }));
+        uploads.push(attachUpload(upload, { label: `Agregar foto a ${color}`, hint: 'Podés subir otra foto o pegar su enlace.', onOpenLibrary: openLibrary, onChange: add, cleanupPrevious: false }));
       }
       container.append(field);
     }
     variantPhotos.render(container, pool, render);
+    notifyPreview();
     void analyzePhotos();
   }
   function serialize() {
@@ -160,9 +162,16 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     const otherRows = initialRows.filter(row => !row || !Object.keys(row).some(key => /^colou?r$/i.test(key)) || Object.keys(row).some(key => !['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key)));
     return variantPhotos.serialize([...otherRows, ...options.map(color => ({ [activeKey]: color, imageUrls: assignments.get(color) || [], ...(appearances.get(color) || {}) }))]);
   }
+  function notifyPreview() {
+    if (!destroyed) setProductPreviewMedia(container.closest('#prod-form-card'), serialize());
+  }
+  // Dejar que el control actualice la asociación antes de leer su snapshot.
+  const onMediaInput = () => queueMicrotask(notifyPreview);
+  container.addEventListener('input', onMediaInput);
+  container.addEventListener('change', onMediaInput);
   variantsInput.addEventListener('input', render);
   imagesInput.addEventListener('input', render);
   mainInput.addEventListener('change', render);
   render();
-  return { serialize, refresh: render, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
+  return { serialize, refresh: render, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); container.removeEventListener('input', onMediaInput); container.removeEventListener('change', onMediaInput); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
 }

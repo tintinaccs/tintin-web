@@ -1,5 +1,5 @@
 import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261018-products-master-1';
-import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261019-admin-mobile-1';
+import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261019-product-editor-1';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261019-variant-links-1';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
@@ -35,7 +35,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261018-products-master-2';
+const VERSION = 'tintin-20261019-product-editor-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -851,8 +851,8 @@ function ensureDrawerDom() {
 }
 
 let productReturnFocus=null;
-function openDrawer(type, id) {
-  if(type==='product') productReturnFocus={element:document.activeElement,id};
+function openDrawer(type, id, opener=document.activeElement) {
+  if(type==='product') productReturnFocus={element:opener,id};
   if(type==='order') { orderReturnFocus=document.activeElement;refreshOrderHistory(id);refreshOrderContacts(id); }
   state.drawer = { type, id, baseChangeId: type==='order' ? state.orders.find(o=>o.id===id)?.lastChangeId || '' : '' };
   renderDrawer();
@@ -865,7 +865,8 @@ function closeDrawer() {
   state.drawer = null;renderDrawer();
   syncProductSurfaces();
   if(wasProduct && productReturnFocus) {
-    const target=productReturnFocus.element?.isConnected ? productReturnFocus.element : [...document.querySelectorAll('.tt-commerce-product-open')].find(node=>node.dataset.id===productReturnFocus.id);target?.focus({preventScroll:true});
+    const candidate=productReturnFocus.element;
+    const target=candidate?.isConnected && candidate.matches('button,a[href],input,select,textarea,[tabindex]') ? candidate : [...document.querySelectorAll('.tt-commerce-product-open')].find(node=>node.dataset.id===productReturnFocus.id);target?.focus({preventScroll:true});
   }
   if(wasOrder) { const target=orderReturnFocus?.isConnected ? orderReturnFocus : [...document.querySelectorAll('[data-action="drawer-order"]')].find(e=>e.dataset.id===orderId);target?.focus?.({preventScroll:true}); }
 }
@@ -1233,7 +1234,7 @@ async function handleAction(action, element) {
     return window.prodToggleActive?.(id, p.active !== false);
   }
   if (action === 'product-delete' || action === 'drawer-product-delete') { closeDrawer(); return callLegacyAction('prodEliminar', id, state.products.find(p => p._docId === id)?.name || id); }
-  if (action === 'drawer-product') return openDrawer('product', id);
+  if (action === 'drawer-product') return openDrawer('product', id, element);
 
   if (action === 'collection-new') { closeDrawer(); return window.collNueva?.(); }
   if (action === 'collections-export-selected') return exportCollections(true);

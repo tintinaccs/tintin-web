@@ -45,6 +45,7 @@ window.__orderConsumers=new Set();window.__publishOrders=(error='')=>{for(const 
 window.TintinAdminOrders={subscribe(fn){window.__orderConsumers.add(fn);queueMicrotask(()=>window.__publishOrders());return()=>window.__orderConsumers.delete(fn);},retry(){window.__publishOrders();}};
 window.dispatchEvent(new Event('tintin:admin-orders-source'));
 export const where = (field,operator,value) => ({__where:true,field,operator,value});
+export const documentId = () => '__name__';
 export const collection = (_db, name) => name;
 export const doc = (_db, name, id) => name+'/'+id;
 export const serverTimestamp = () => new Date();
