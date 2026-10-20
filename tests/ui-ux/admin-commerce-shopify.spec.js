@@ -27,7 +27,7 @@ test('renderiza los tres módulos con datos, filtros y colores Tintin', async ({
 });
 
 test('abre ficha rápida y reutiliza la edición real de producto', async ({ page }) => {
-  await page.locator('tr[data-open="product"][data-id="p-reloj"]').click();
+  await page.locator('[data-action="drawer-product"][data-id="p-reloj"]').click();
   await expect(page.locator('#tt-commerce-drawer')).toHaveClass(/open/);
   await expect(page.locator('#tt-commerce-drawer')).toContainText('Reloj Clásico Negro');
   await page.locator('[data-action="drawer-product-edit"]').click();
@@ -69,7 +69,8 @@ test('la interfaz sigue utilizable en móvil sin desbordar el documento', async 
   await expect(page.locator('#tt-commerce-products')).toBeVisible();
   const dimensions = await page.evaluate(() => ({ viewport: window.innerWidth, page: document.documentElement.scrollWidth }));
   expect(dimensions.page).toBeLessThanOrEqual(dimensions.viewport + 2);
-  await page.locator('tr[data-open="product"][data-id="p-reloj"]').click();
+  await page.locator('[data-action="drawer-product"][data-id="p-reloj"]').click();
+  await expect(page.locator('#tt-commerce-drawer')).toBeVisible();
   const box = await page.locator('#tt-commerce-drawer').boundingBox();
   expect(box?.width || 9999).toBeLessThanOrEqual(390.5);
 });

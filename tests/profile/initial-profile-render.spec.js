@@ -21,12 +21,12 @@ test('el resumen muestra la dirección principal sin copiar controles ni direcci
   await page.evaluate(() => { document.querySelector('#perfil-location-content strong').textContent = 'Casa nueva QA'; });
   await expect(summary).toHaveText('Casa nueva QA');
   await page.evaluate(() => { document.getElementById('perfil-location-content').replaceChildren(); });
-  await expect(summary).toHaveText('Dirección anterior QA');
+  await expect(summary).toHaveText('Sin dirección guardada');
   await page.evaluate(() => {
     document.getElementById('perfil-dir').value = '';
     document.getElementById('perfil-location-content').append(document.createElement('p'));
   });
-  await expect(summary).toHaveText('Sin ubicación guardada');
+  await expect(summary).toHaveText('Sin dirección guardada');
 });
 
 async function fixture(page, width, securityReady = true) {

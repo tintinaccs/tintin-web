@@ -19,7 +19,8 @@ function mainImage(p) { return context.renderProductCardMarkup(p).match(/<img sr
 test('catálogo y colecciones muestran el plateado con stock aunque la portada sea dorada', () => {
  const p=product(); assert.equal(mainImage(p),'https://example.test/silver.jpg');
  const html=context.renderProductCardMarkup(p);
- assert.match(html,/data-card-color="Dorado"[^>]*disabled aria-disabled="true"/);
+ const gold=html.match(/<button[^>]*data-card-color="Dorado"[^>]*>/)[0];
+ assert.match(gold,/\bdisabled\b/);assert.match(gold,/aria-disabled="true"/);
  assert.match(html,/href="\/product\?id=p&color=Plateado"/);
 });
 test('al agotarse el color recordado se cambia a una opción disponible tras repintar', () => {

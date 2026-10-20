@@ -546,9 +546,6 @@ html body:not(:has(.adm-main)) :is(.tt-info-block,.tt-legal-nav,.tt-contact-info
 html body:not(:has(.adm-main)) .tt-legal-content .tt-info-block { border:0!important; border-bottom:1px solid var(--color-border-primary)!important; border-radius:0!important; padding:20px 0!important; background:transparent!important; }
 html body:not(:has(.adm-main)) .tt-contact-info-item { padding:14px 16px!important; }
 html body:not(:has(.adm-main)) .tt-contact-alt { padding:20px!important; }
-/* Historia y misión usan el mismo slot about_foto: se muestra una sola vez. */
-html body:not(:has(.adm-main)) .tt-about-mission-section .tt-about-img { display:none!important; }
-html body:not(:has(.adm-main)) .tt-about-mission-section .tt-about-grid { grid-template-columns:minmax(0,1fr)!important; max-width:780px; margin-inline:auto; }
 html body:not(:has(.adm-main)) .perfil-card:has(> #btn-guardar-perfil) { padding:0!important; background:transparent!important; border:0!important; }
 html body:not(:has(.adm-main)) :is(.tt-product-name,.cat-product-name) { font-size:14px!important; line-height:1.4; }
 html body:not(:has(.adm-main)) :is(.login-heading-sub,.login-box small,.login-methods-note,.login-hint) { font-size:13px!important; line-height:1.5; }
@@ -570,7 +567,6 @@ html body:not(:has(.adm-main)) .tt-about-text strong { color:var(--color-text-pr
   html body:not(:has(.adm-main)) .tt-gallery-thumbs { flex-wrap:nowrap!important; overflow-x:auto; }
   html body:not(:has(.adm-main)) .tt-gallery-thumb { flex:0 0 56px; width:56px; height:56px; }
   html body:not(:has(.adm-main)) .tt-watch-feature h2 { font-size:28px!important; line-height:1.25; }
-  html body:not(:has(.adm-main)) .tt-watch-feature img { max-height:360px; object-fit:contain; }
   html body:not(:has(.adm-main)) .tt-wa-float { bottom:calc(84px + env(safe-area-inset-bottom))!important; }
   html body:not(:has(.adm-main)) :is(.tt-products-section,.tt-colls-page-section,.tt-related-section) { padding-bottom:100px!important; }
 }

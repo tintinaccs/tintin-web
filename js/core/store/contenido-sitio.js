@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20261016-story-1715905a45-instagram-structure-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261019-variant-links-1-instagram-structure-1';
+} from './esquema-contenido.js?v=tintin-20261020-domain-cutover-consolidated-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261020-domain-cutover-consolidated-1';
 
 const subscriptions = new Map();
 const latestData = new Map();
