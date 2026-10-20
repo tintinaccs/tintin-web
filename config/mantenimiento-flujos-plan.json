@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "dc6da947a4d0d88de4dc7f1b353faa5982c242f7",
-  "reason": "Tarjetas e Instagram con estructura canónica y regresión móvil del botón de ficha; integración/publicación autorizadas",
+  "reason": "Tarjetas e Instagram: estados, rutas, presupuestos, regresiones UI y servidor de pruebas coherentes; publicación autorizada",
   "files": [
     {
       "path": "_headers",
@@ -16,42 +16,42 @@
     {
       "path": "404.html",
       "oldHash": "b9ab32e7c9d7ef2848d20afffcd46df8c345145c228a094af07d0677697e93e9",
-      "newHash": "91eeb874ac6e6ae1f5e9a03d0585a50d6998f95cdf6b626518f4c8a01a6dc4d1"
+      "newHash": "63d0e81c0e0b4cbd5a9caf7adc9bfb81776ae07b3aaf0aec1fb640220644b154"
     },
     {
       "path": "about.html",
       "oldHash": "b57f9cdf10dc3edda18853f9dd89761970b7f0b8ffb59aa59beb4dfb48638415",
-      "newHash": "d3f7fa5d8059a8d703e5087f69930ff2f1fbe4bc98f6acc7943c095fed10871d"
+      "newHash": "52d63ebcd1b6d79e3a4d3e943a012d8289ba1a0fdb76735d482812711f79d106"
     },
     {
       "path": "admin-images.html",
       "oldHash": "1e0d0bd562162f46a62bdd02b16592968735da282200f45910188b626d5ef389",
-      "newHash": "d2dedc760666fee5ab186f498f2b086f71221d68c0fb6c69a1bab97099e8dd68"
+      "newHash": "39d813e1f44fc9e91e2b84ebae77e159430bcf8a833e949c230659f38908d908"
     },
     {
       "path": "admin.html",
       "oldHash": "489bbb2e2216f17accb5b230acc6f36ee062596e7698763ee02fa254a796c94a",
-      "newHash": "9b9a5f25a34860f2320e572e9f944eafc711f97d089c9e3f9cad6300154acf8b"
+      "newHash": "1a876367b95ce8fa78e35dafc30a9ad04062fd2ede6eb3cd93bd8fff3a178369"
     },
     {
       "path": "cambios-devoluciones.html",
       "oldHash": "d711036d19f9021193c7e4dcbb4c07be5974e60a32c4fcd211d5561d580a374b",
-      "newHash": "3af36262fa0a2d7033a4c8e519b6b49027499d385b2502fcaca332dfe4fa5d2f"
+      "newHash": "77c8e245af1b66c815db4f71de181519b14d620c1e937d3631bf5468726f2a18"
     },
     {
       "path": "catalogo.html",
       "oldHash": "6caee997ce0d9d15c885edd91aca8793741042fda660fc78b9e5c58d44449eef",
-      "newHash": "471cb465c7a73f0f09deba040df11c3820f8d9e9f217f9dca130f08f7a765108"
+      "newHash": "70520f5accf32cd9959067b5da5e233866ab3baa18a824e0ba86a32944bd6285"
     },
     {
       "path": "checkout.html",
       "oldHash": "bfc7ee31bebf087ca278633b1fd2c591507a542da4e042bbe6d91993075db7a6",
-      "newHash": "a3e998924f931731dc0857d4831b6c32fdd34546e5f1fbe51006c343e3694fef"
+      "newHash": "4a55eb988ccd4d3fe6aceb4ca88753bbbb9ac76a13f104fbae8f911f0ce8bbfc"
     },
     {
       "path": "collections.html",
       "oldHash": "b96208ade9fe84e4abd7b0fcc4d76c4996f35cff9fbc3e7af702d80a628316be",
-      "newHash": "82c1b421e5ed81edf51210e6bf4507ca8709be9082eaf055a556f598877f4248"
+      "newHash": "227b6d4d9b7b1350f03a365158dc142065140d9105c2117f821f3f823cde5ccd"
     },
     {
       "path": "config/csp-runtime.js",
@@ -66,7 +66,7 @@
     {
       "path": "contact.html",
       "oldHash": "70bdb5dbe78490cbbfd89ca26b1de193581d9c8653cccc278242237e898176c0",
-      "newHash": "561ac53f7f0583289ae92872ddf6751cd7195be5a737dce6e02dba3bb8d20f81"
+      "newHash": "76359a1035913ca9cb6a8eb6cf6c5e95610d5c79ced4c1714419c2d0eb20970c"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -76,7 +76,7 @@
     {
       "path": "envios.html",
       "oldHash": "30ff4ac3f81234eb0ad1be6102d48bb480009b36196a9bb7a81e08bc7f23cef1",
-      "newHash": "0f65fbc6c1474dac7e5ff459b0c41a4bd1184ada9f48ea1f69a6e8d6ff7fcdb5"
+      "newHash": "9e5ffdb5748e3368b18843ddc720414760b099a0c3dec89c3dd83d1a97cf3358"
     },
     {
       "path": "functions/_middleware.js",
@@ -86,7 +86,7 @@
     {
       "path": "index.html",
       "oldHash": "b89844e2a4f9d277bbb8c49507239600bd11779ec7f11c8edd386dcf40c42662",
-      "newHash": "357ba9f25307f0eed0d0c781f7515c6e0f16a6145727cf39715fa9e32616c76f"
+      "newHash": "bcf4bc2e9097e44ff58bb40bdc2bc9e16a321800f4ec2f67de103cab06f5ab41"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -106,12 +106,12 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "2a98904564da5fefb05e0e46de63d546eb5551ca6c7a1981b3b233d448753d31",
-      "newHash": "3d2aee3a8232e48bc721f885227c3973e157ec6653a19fc452ed6afd7db7136b"
+      "newHash": "02dca1e21c674450ac025de0c525a79c8973bcbfc8311652894e6f542fba6f21"
     },
     {
       "path": "js/cargador-pagina.js",
       "oldHash": "20dec7b42c1e967d7d57a9594ebcb3ba464d1720f6d7a7c8eafaef95e4698b9c",
-      "newHash": "120d954acd60acaaa18389c529eac4cc16b36d12ea6491e2590fb1965bc14ebc"
+      "newHash": "38d4a7e7d830f1ea9fa08f0414e75bc428983421d21ce3a37e57d5dfee54ab27"
     },
     {
       "path": "js/core/store/contenido-sitio.js",
@@ -146,12 +146,12 @@
     {
       "path": "login.html",
       "oldHash": "85af066d83d68a2f5f6ed2ff6fdb2cca2a2543ae6830b402e8769b5c600ae731",
-      "newHash": "84b1d1b13cbba9fa4fc17a33d15a2e0c6614f0a0d1feb9f5f69b7627dac8401b"
+      "newHash": "8f6363eef41a1cabef4e434b0fbd6448f57b7516d0185cfcb53d6716565f2e17"
     },
     {
       "path": "nosotros.html",
       "oldHash": "693bb9a9cf2af3331f74b2f554808765a8e9141b35932fd43ddd37180151cf2b",
-      "newHash": "3544fb46600000547f37960924325db9e37b12d48774bc710f5585cf2075c90d"
+      "newHash": "cad7d7dc858742f17ddec12bec3c1e128f7e6fa787c446f543537b512de8c9dc"
     },
     {
       "path": "package.json",
@@ -161,27 +161,27 @@
     {
       "path": "perfil.html",
       "oldHash": "5e7e9bdcc2ec2eba31400f308fd534ee3cec42446113313d1bc754cf8017a09d",
-      "newHash": "d1bb0ee9858fae007fd22646e26f9db9b50b89a45f694814d79b6007bc932225"
+      "newHash": "25a717abf8cbe2f97a7c3adbcd336e3062059e0b7b812bf3ce5ba75f47dde26c"
     },
     {
       "path": "preguntas-frecuentes.html",
       "oldHash": "9ccaa328353224e5158817b55a0211506021720fd8debbfe509822141034f006",
-      "newHash": "95606148ceced6f6f2d607381d971d8c9255969a0193f750c6b7f6bfb8656b41"
+      "newHash": "c6f9c9c197b88013b4b7b3c6d77fdaf39d58743720d81d905ef3dd34a17e74f2"
     },
     {
       "path": "privacidad.html",
       "oldHash": "f3a138bd57168d02a10cbac7ea6cc9c0af43d53eee45541f606a173f5b099e12",
-      "newHash": "12e0bb8e010dff738b0ce10bdc694b66aab23c03dd8b3a6022d46cab385cc567"
+      "newHash": "6c0669228b462594fcb3fd087d8b26ae03656be35cbb1044c72586424e86802e"
     },
     {
       "path": "product.html",
       "oldHash": "65772a6d4c052f13f5cb105f544a1f4bd2fa26acdbc7f56d8dc0e2f24c465021",
-      "newHash": "d739b71a4ea1d974e1b9ff8f8535c29fe4ae67a1edd1bdd6ff27acffd8bbf84f"
+      "newHash": "da2f82abea87734f63074af84f0a20e1ba7696d4b2caa8accd5995ab6785b312"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "c581480b39a442f2561a7fa8e36147e35fd03e4200c643a381c036ad2295633b",
-      "newHash": "173dc17526acabb2816906b7d8bf848ae77786cac329f7de695ea8cdf5596066"
+      "newHash": "4b9b982a2478d59c34ac07f98b5f54b89ce9c0962c3896587bd8e09d9062f1cc"
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
@@ -191,12 +191,12 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "oldHash": "9bc7e9d5bc3deb9825e368aeacff295ef73fc8e374f70ca63dca4cdc5a5e6f42",
-      "newHash": "6802d16e671aa2819ebfad8315695146fbe16c0b6bef1ed27f7fd247a39794d2"
+      "newHash": "1a46a202221e92c3e272e615836f0aa5c6a3278b599b1fa00e39c3792f40a132"
     },
     {
       "path": "terminos.html",
       "oldHash": "4c38dfcbba115d67bbec76ed9a9478ec4c68b988a1e0fa4900081e2ca204a8cb",
-      "newHash": "b44d6ade7f6eb4c63aff93c2a21fbffbc8872a62cf940227292cd7e80b02c1ee"
+      "newHash": "9191e3c543da24491c1c2da980e614093244ddefc5cc7edaf885674bf7baadeb"
     }
   ],
   "affectedRecords": [

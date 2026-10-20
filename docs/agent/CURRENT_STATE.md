@@ -2922,3 +2922,18 @@ Reconciliación autorizada de PR1182: durante el cierre main avanzó a dc6da947 
 
 
 CI39503283596 aprobó la generación exacta, sin deriva, pero la regresión de comercio móvil medía una ficha cerrada después de pulsar el centro de una tarjeta que ahora contiene el campo de stock. La prueba usa el botón accesible del nombre del producto y espera la ficha abierta antes de medirla; no se cambia ni se relaja el límite de ancho, ni se hace que un clic en cantidad abra una ficha. La matriz específica se repite sin reintentos antes del nuevo candidato.
+
+
+CI39504129814 avanzó hasta la matriz de administración:195/196 casos aprobados. La tarjeta usaba el rótulo Sin stock para cantidad cero y el resto del panel conserva Agotado; se preserva este estado canónico, con color rojo y variante agotada específica. Se renueva la URL del renderer, sin modificar lógica ni la condición de filtrado activo. Se repite el caso Activos y las tarjetas antes del candidato siguiente.
+
+
+La revisión local del tramo restante de audit:final detectó que la extensión del tag del cargador llevaba el stub legacy Nosotros apenas por encima del presupuesto existente. Se adopta un tag breve e independiente para la versión social del cargador y su módulo de calidad, conservando todas las funciones, referencias y el presupuesto sin excepciones. El registro de caché y los derivados se regeneran de forma canónica.
+
+
+El tramo restante se revisa localmente antes del nuevo push. Integración final conserva comparación exacta de rutas, compactando también los dos alias Nosotros en la ruta estrecha registrada, igual que ya hacía con404; no permite APIs sin registrar ni excepciones amplias. Auxiliares, integración, rendimiento estático y207 contratos de acceso/perfil pasan; la ejecución ampliada con emuladores sigue en curso. Build y CI del candidato final deben confirmar esta revisión.
+
+
+Cierre local del tramo de entrega: Auxiliares, Integración final y los controles desde performance hasta login isolation y desde hero/background hasta caché pasan; Fases8/10 conservan las suites anteriores y admiten sus regresiones adicionales. Los207 contratos de acceso/perfil pasan. La ejecución local ampliada de357 casos con emuladores se detuvo tras26 casos Chromium para concentrar la verificación completa en CI, que dispone de los motores requeridos; no se registra como PASS de esa matriz. La generación definitiva sucede después de esta evidencia y de todas las fuentes del candidato.
+
+
+El servidor local de pruebas sirve ahora /api/instagram-feed mediante el manejador real, con env vacío: devuelve la cuenta no conectada y no contacta Meta ni usa secretos. Así la navegación local puede visitar la nueva sección sin404 artificiales. Sus cuatro contratos Node pasan. La generación final se reinicia tras una reconexión del transporte del entorno; no se atribuye éxito a procesos interrumpidos.
