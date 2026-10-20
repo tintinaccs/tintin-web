@@ -2,7 +2,7 @@
  * No crea autoridades paralelas: solo fortalece las superficies ya renderizadas
  * por Producto, Perfil y el shell modular de navegación. */
 
-const VERSION = 'tintin-20260829-final-stability-1-brand-runtime-20261004-1';
+const VERSION = 'tintin-20261018-profile-summary-1';
 const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
 function injectStyles() {

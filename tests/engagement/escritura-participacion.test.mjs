@@ -157,6 +157,33 @@ test('repetir el "me gusta" es idempotente: no crea un segundo registro ni cambi
   });
 });
 
+test('quitar y volver a guardar un favorito no duplica ni elimina el Me gusta histórico', async () => {
+  await withFirestore(SEED, async firestore => {
+    const first = await toggleFavorite(ENV, CLIENTA, { productId: 'aros1', selected: true });
+    const originalLike = firestore.read(`likeRecords/${first.record.likeId}`);
+    const notices = firestore.paths('adminNotifications/').length;
+    await toggleFavorite(ENV, CLIENTA, { productId: 'aros1', selected: false, uid: 'otra' });
+    assert.equal(firestore.read('users/clienta1/favorites/aros1'), null);
+    assert.deepEqual(firestore.read(`likeRecords/${first.record.likeId}`), originalLike);
+    assert.equal((await getProductLikeStats(ENV, 'aros1')).likeCount, 1);
+    assert.equal((await toggleFavorite(ENV, CLIENTA, { productId: 'aros1', selected: false })).changed, false);
+    await toggleFavorite(ENV, CLIENTA, { productId: 'aros1', selected: true });
+    assert.equal(firestore.read('users/clienta1/favorites/aros1').productId, 'aros1');
+    assert.equal(firestore.paths('likeRecords/').length, 1);
+    assert.equal(firestore.paths('adminNotifications/').length, notices);
+  });
+});
+
+test('quitar favorito ausente o de producto eliminado es seguro y una cuenta bloqueada no puede escribir', async () => {
+  await withFirestore({ ...SEED, 'users/clienta1/favorites/eliminado': { productId: 'eliminado' }, 'users/otra/favorites/eliminado': { productId: 'eliminado' } }, async firestore => {
+    await toggleFavorite(ENV, CLIENTA, { productId: 'eliminado', selected: false });
+    assert.equal(firestore.read('users/clienta1/favorites/eliminado'), null);
+    assert.ok(firestore.read('users/otra/favorites/eliminado'));
+    await assert.rejects(toggleFavorite(ENV, { uid: 'bloqueada1' }, { productId: 'aros1', selected: false }), /no puede realizar/);
+    await assert.rejects(toggleFavorite(ENV, CLIENTA, { productId: '../otra', selected: false }), /inválido/);
+  });
+});
+
 test('producto inexistente o pausado y cuenta bloqueada no escriben nada', async () => {
   await withFirestore(SEED, async firestore => {
     await assert.rejects(toggleFavorite(ENV, CLIENTA, { productId: 'no-existe' }), /ya no existe/);

@@ -9,6 +9,26 @@ const profile = read('perfil.html');
 const code = withoutImports(profile.match(/<script type="module">([\s\S]*?)<\/script>/)[1]);
 const identity = withoutImports(read('js/pages/profile/estado-canonico-perfil.mjs'));
 
+test('el resumen muestra la dirección principal sin copiar controles ni direcciones secundarias', async ({ page }) => {
+  await fixture(page, 390);
+  await page.evaluate(() => {
+    document.getElementById('perfil-dir').value = 'Dirección anterior QA';
+    document.getElementById('perfil-location-content').innerHTML = '<article><div class="tt-saved-address-heading"><strong>Casa QA</strong><span>Principal</span></div><p>Punto guardado</p><button>Eliminar</button><a>Waze</a></article><article><div class="tt-saved-address-heading"><strong>Trabajo QA</strong></div><button>Hacer principal</button></article><p>La principal se usa para completar la ubicación</p>';
+  });
+  await page.addScriptTag({ type: 'module', content: read('js/quality/estabilidad-final-publica.js') });
+  const summary = page.locator('[data-profile-summary-location]');
+  await expect(summary).toHaveText('Casa QA');
+  await page.evaluate(() => { document.querySelector('#perfil-location-content strong').textContent = 'Casa nueva QA'; });
+  await expect(summary).toHaveText('Casa nueva QA');
+  await page.evaluate(() => { document.getElementById('perfil-location-content').replaceChildren(); });
+  await expect(summary).toHaveText('Dirección anterior QA');
+  await page.evaluate(() => {
+    document.getElementById('perfil-dir').value = '';
+    document.getElementById('perfil-location-content').append(document.createElement('p'));
+  });
+  await expect(summary).toHaveText('Sin ubicación guardada');
+});
+
 async function fixture(page, width, securityReady = true) {
   const height = { 320: 568, 390: 844, 768: 1024, 1024: 768, 1280: 720, 1440: 900, 1920: 1080 }[width];
   await page.setViewportSize({ width, height });
