@@ -406,17 +406,16 @@ html:root body :is(main, .cat-wrap, .login-page, .ck-body, .perfil-wrap, .tt-404
   color: var(--color-text-primary, #222222) !important;
 }
 
-/* Cada bloque conserva su rosa pleno. Sólo 70 px de cada extremo se mezclan.
+/* El degradado recorre todo el bloque y comparte el color de sus uniones.
    Los bloques ocultos por hidden o display:none no cuentan en la secuencia. */
-html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
   --tt-section-background: var(--color-brand-accent, #FDECF2);
   --tt-footer-logo-filter: url("#tt-brand-logo-tint");
   --tt-section-start: var(--tt-flow-join);
   --tt-section-end: var(--tt-flow-join);
   --tt-section-gradient: linear-gradient(180deg,
     var(--tt-section-start) 0%,
-    var(--tt-section-background) min(var(--tt-flow-fade), 25%),
-    var(--tt-section-background) max(calc(100% - var(--tt-flow-fade)), 75%),
+    var(--tt-section-background) 50%,
     var(--tt-section-end) 100%);
   background: var(--tt-section-gradient) var(--tt-section-background) !important;
   color: var(--color-text-primary, #222222) !important;
@@ -425,16 +424,16 @@ html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dia
   box-shadow: 0 1px 0 var(--tt-section-end) !important;
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(even of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(even of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-background: var(--color-brand-primary, #F8AACA);
   --tt-footer-logo-filter: url("#tt-brand-logo-tint-light");
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-start: var(--tt-section-background);
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-last-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-last-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-end: var(--tt-section-background);
 }
 
@@ -465,8 +464,7 @@ html:root body [data-tt-flow-block] > [data-tt-flow-background] {
   border-radius: 0;
   background: linear-gradient(180deg,
     var(--tt-section-start) 0%,
-    var(--tt-section-background) min(var(--tt-flow-fade), 25%),
-    var(--tt-section-background) max(calc(100% - var(--tt-flow-fade)), 75%),
+    var(--tt-section-background) 50%,
     var(--tt-section-end) 100%) !important;
 }
 html:root body #hero .tt-hero-media { background: transparent !important; }
@@ -509,3 +507,18 @@ html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-c
 html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) > img { opacity:.55 !important; }
 
 html:root body .tt-stock-label { color:#4B5563 !important; background:#E5E7EB !important; border-color:#9CA3AF !important; }
+
+/* Un mismo rosa suave en todos los encabezados. El degradado y el desenfoque
+   afectan únicamente al fondo; marca, texto y controles conservan nitidez. */
+html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header.scrolled,
+html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header,
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
+  .ck-header, .login-brand, .adm-topbar, .adm-header) {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--tt-flow-pink) 94%, transparent) 0%,
+    color-mix(in srgb, var(--tt-flow-light) 94%, transparent) 100%) !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(18px) saturate(110%) !important;
+  backdrop-filter: blur(18px) saturate(110%) !important;
+}
