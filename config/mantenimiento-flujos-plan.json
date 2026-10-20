@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "dc6da947a4d0d88de4dc7f1b353faa5982c242f7",
-  "reason": "Tarjetas e Instagram: estados, rutas, presupuestos, regresiones UI y servidor de pruebas coherentes; publicación autorizada",
+  "reason": "Conciliación autorizada de tarjetas, Instagram, encabezados y aislamiento de pruebas: conservar estados, rutas y controles canónicos",
   "files": [
     {
       "path": "_headers",
@@ -14,44 +14,49 @@
       "newHash": "a61121663a5346c43b24f25f8d4957deefb604a2c9c40b0ac34f0370cff59c93"
     },
     {
+      "path": ".github/workflows/auditar-tintin.yml",
+      "oldHash": "f2246dce1a0162c60cc9c34bc2797a7c04f10251fe8366d0fddf7d69f638bdb2",
+      "newHash": "ad799bc387a2bf6a77d808fccbf071c268771e61cffd3d297ce0d1fd060401f2"
+    },
+    {
       "path": "404.html",
       "oldHash": "b9ab32e7c9d7ef2848d20afffcd46df8c345145c228a094af07d0677697e93e9",
-      "newHash": "63d0e81c0e0b4cbd5a9caf7adc9bfb81776ae07b3aaf0aec1fb640220644b154"
+      "newHash": "7785e6e77cbfee199df429a83708a9edfa63a90c00eb3b61fc228b9fcdcb5345"
     },
     {
       "path": "about.html",
       "oldHash": "b57f9cdf10dc3edda18853f9dd89761970b7f0b8ffb59aa59beb4dfb48638415",
-      "newHash": "52d63ebcd1b6d79e3a4d3e943a012d8289ba1a0fdb76735d482812711f79d106"
+      "newHash": "df9d2472bae797898c78faf1cc0cb8d0551b0370e9c974382f2cd4a539417bdc"
     },
     {
       "path": "admin-images.html",
       "oldHash": "1e0d0bd562162f46a62bdd02b16592968735da282200f45910188b626d5ef389",
-      "newHash": "39d813e1f44fc9e91e2b84ebae77e159430bcf8a833e949c230659f38908d908"
+      "newHash": "544d6fffcfa88e347bc3550027edc20822a7146212f26015a8597c8864acc8cd"
     },
     {
       "path": "admin.html",
       "oldHash": "489bbb2e2216f17accb5b230acc6f36ee062596e7698763ee02fa254a796c94a",
-      "newHash": "1a876367b95ce8fa78e35dafc30a9ad04062fd2ede6eb3cd93bd8fff3a178369"
+      "newHash": "c9d8b626fc4a2880a06aeda24e8eaf6c25e1ab917520b2da4681b97c3310a501"
     },
     {
       "path": "cambios-devoluciones.html",
       "oldHash": "d711036d19f9021193c7e4dcbb4c07be5974e60a32c4fcd211d5561d580a374b",
-      "newHash": "77c8e245af1b66c815db4f71de181519b14d620c1e937d3631bf5468726f2a18"
+      "newHash": "f924e955f0df37c214c35b4046028f796651d427a20ea0c2fbef8670768ad723"
     },
     {
       "path": "catalogo.html",
       "oldHash": "6caee997ce0d9d15c885edd91aca8793741042fda660fc78b9e5c58d44449eef",
-      "newHash": "70520f5accf32cd9959067b5da5e233866ab3baa18a824e0ba86a32944bd6285"
+      "newHash": "c2b54ce06aa1ddc0b7aea8dde2b8f883477ef011632471665b98748d1c3519ea"
     },
     {
       "path": "checkout.html",
       "oldHash": "bfc7ee31bebf087ca278633b1fd2c591507a542da4e042bbe6d91993075db7a6",
-      "newHash": "4a55eb988ccd4d3fe6aceb4ca88753bbbb9ac76a13f104fbae8f911f0ce8bbfc"
+      "newHash": "2a577011966edfe9d4fbd4eb3308134940944091ac1ad40d42a60873bb87e034"
     },
     {
       "path": "collections.html",
       "oldHash": "b96208ade9fe84e4abd7b0fcc4d76c4996f35cff9fbc3e7af702d80a628316be",
-      "newHash": "227b6d4d9b7b1350f03a365158dc142065140d9105c2117f821f3f823cde5ccd"
+      "newHash": "38fce56f41e368eb7ca7aff57835c8035f51d8d1c7f9f30b8524366da749cc92"
     },
     {
       "path": "config/csp-runtime.js",
@@ -66,17 +71,22 @@
     {
       "path": "contact.html",
       "oldHash": "70bdb5dbe78490cbbfd89ca26b1de193581d9c8653cccc278242237e898176c0",
-      "newHash": "76359a1035913ca9cb6a8eb6cf6c5e95610d5c79ced4c1714419c2d0eb20970c"
+      "newHash": "b06d50ccd9afa528516266f9193dcde9b126459cb8cad35cea438383581e6518"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "oldHash": "56538db3f9b9e37864259e8736fbad0ff876246ac8489c29ec1d5a803bfabcaa",
-      "newHash": "72ad7b3ad53fac426739953481ca1a24103837fa60ab2977aee74d87c999ab65"
+      "newHash": "74753c7b0f3a9af94b882bf039ae401f22d2d9d19197e70c478e0b95730363bd"
+    },
+    {
+      "path": "css/theme/sistema-superficies-tintin.css",
+      "oldHash": "f56ef08bee8eb0197b33765fad014b3ee1130aa43c016c5aa5b9ccca9b218afe",
+      "newHash": "c34826310d8739290990fcc13c2cceb16b27664bc1523f4439e101e749327ecd"
     },
     {
       "path": "envios.html",
       "oldHash": "30ff4ac3f81234eb0ad1be6102d48bb480009b36196a9bb7a81e08bc7f23cef1",
-      "newHash": "9e5ffdb5748e3368b18843ddc720414760b099a0c3dec89c3dd83d1a97cf3358"
+      "newHash": "590cf36c63175a0f3acd8d9c1dc20a416fbec3d7291b59840050b0c823fe000a"
     },
     {
       "path": "functions/_middleware.js",
@@ -86,7 +96,7 @@
     {
       "path": "index.html",
       "oldHash": "b89844e2a4f9d277bbb8c49507239600bd11779ec7f11c8edd386dcf40c42662",
-      "newHash": "bcf4bc2e9097e44ff58bb40bdc2bc9e16a321800f4ec2f67de103cab06f5ab41"
+      "newHash": "5b2ea38ce0e958629e4a05d7c0c3eb9557a8dc3334b6b653c8b7b0d207408925"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -106,12 +116,27 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "2a98904564da5fefb05e0e46de63d546eb5551ca6c7a1981b3b233d448753d31",
-      "newHash": "02dca1e21c674450ac025de0c525a79c8973bcbfc8311652894e6f542fba6f21"
+      "newHash": "6aedf2c82bf11067172936885cddc3824e55475ff4a6963208994c81d3f4853e"
     },
     {
       "path": "js/cargador-pagina.js",
       "oldHash": "20dec7b42c1e967d7d57a9594ebcb3ba464d1720f6d7a7c8eafaef95e4698b9c",
       "newHash": "38d4a7e7d830f1ea9fa08f0414e75bc428983421d21ce3a37e57d5dfee54ab27"
+    },
+    {
+      "path": "js/components/navigation/compartido/carga-navegacion.js",
+      "oldHash": "883cde1b806ba9b50ad95f4c7ab01b02fd460f41f90836d76318803dd86e72ba",
+      "newHash": "ef6abaaf014142340cf95ac2c42ed94deb1e6ae175c5aabcf23c59951fe3f0bd"
+    },
+    {
+      "path": "js/components/navigation/entrada-navegacion-publica.js",
+      "oldHash": "defddd0a2350808a2da7ac35e0956c58243d7b7af05d0de6fd43e01a03819c33",
+      "newHash": "c4121ce574dafa97dc6bc101f39aa69cc727b63f8c0fa4a17c6df7b857e6ac2d"
+    },
+    {
+      "path": "js/components/notifications/notificaciones-clientes.js",
+      "oldHash": "a6943c063af4b7d6edbe63a309b50b90e19ba4affd7f1b2b3c71a76391369628",
+      "newHash": "aef2fdaf8a09398b227406cbe5e03215ff2a6fb505ecac35bc0b9fac2a5b81bf"
     },
     {
       "path": "js/core/store/contenido-sitio.js",
@@ -134,6 +159,11 @@
       "newHash": "9a62ef563baeb2e3bc15e1214e1106c5a97d2a0c9f1bc306df01843202458130"
     },
     {
+      "path": "js/inicio-navegacion-publica.js",
+      "oldHash": "5a045754298884e5a9940d1a36a6e22db9e1352c1c9134a8a054500a943f8895",
+      "newHash": "a6aebcb7fd7d3aaf4576ffb715a9cc7c78a04fba4b57b80bfbefa960a9c2cf29"
+    },
+    {
       "path": "js/quality/calidad-interfaz.js",
       "oldHash": "10ae65106fff40e48361c717a2f130f107ae7ddc8263423f36735c018722fbcc",
       "newHash": "afcc79d38858fbfd0bc5d62eb00691f8442dfea0bca087a946cd6127d4c7ede6"
@@ -146,12 +176,12 @@
     {
       "path": "login.html",
       "oldHash": "85af066d83d68a2f5f6ed2ff6fdb2cca2a2543ae6830b402e8769b5c600ae731",
-      "newHash": "8f6363eef41a1cabef4e434b0fbd6448f57b7516d0185cfcb53d6716565f2e17"
+      "newHash": "50c1925b1a01588a275a1baa077dfff05eeb07895255f6b7534c9d0c5c0f70de"
     },
     {
       "path": "nosotros.html",
       "oldHash": "693bb9a9cf2af3331f74b2f554808765a8e9141b35932fd43ddd37180151cf2b",
-      "newHash": "cad7d7dc858742f17ddec12bec3c1e128f7e6fa787c446f543537b512de8c9dc"
+      "newHash": "d4c2f763f52a51c0631deda1594a09c029871a5b961b9a378c2b7e1480639785"
     },
     {
       "path": "package.json",
@@ -161,27 +191,32 @@
     {
       "path": "perfil.html",
       "oldHash": "5e7e9bdcc2ec2eba31400f308fd534ee3cec42446113313d1bc754cf8017a09d",
-      "newHash": "25a717abf8cbe2f97a7c3adbcd336e3062059e0b7b812bf3ce5ba75f47dde26c"
+      "newHash": "2ebad17e5fdc78a22cc9bca275b0614ac7723e32c821d8ac9d82b7f24ff1c66b"
+    },
+    {
+      "path": "playwright.config.js",
+      "oldHash": "dd2c4c21e1edb204d56d718be89a5ed9fae12820d0871cf033ee7117f0214d23",
+      "newHash": "8e2fc437b2c804eefaa676ce1ba12a443f6efc81d378b764f7adddc3a41bf452"
     },
     {
       "path": "preguntas-frecuentes.html",
       "oldHash": "9ccaa328353224e5158817b55a0211506021720fd8debbfe509822141034f006",
-      "newHash": "c6f9c9c197b88013b4b7b3c6d77fdaf39d58743720d81d905ef3dd34a17e74f2"
+      "newHash": "7679e18c20ae45615693cd08531d9d56d9e8dd237e2f0421b1418b6c997cff1d"
     },
     {
       "path": "privacidad.html",
       "oldHash": "f3a138bd57168d02a10cbac7ea6cc9c0af43d53eee45541f606a173f5b099e12",
-      "newHash": "6c0669228b462594fcb3fd087d8b26ae03656be35cbb1044c72586424e86802e"
+      "newHash": "7bfe680258c124f75dfec3349b379808e899dcbba91d1d95623ace0f657df7be"
     },
     {
       "path": "product.html",
       "oldHash": "65772a6d4c052f13f5cb105f544a1f4bd2fa26acdbc7f56d8dc0e2f24c465021",
-      "newHash": "da2f82abea87734f63074af84f0a20e1ba7696d4b2caa8accd5995ab6785b312"
+      "newHash": "a298a30405564ae9e70f4e8845378c17686ee5cbdc993b58c2fd3853ad8cbe00"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "c581480b39a442f2561a7fa8e36147e35fd03e4200c643a381c036ad2295633b",
-      "newHash": "4b9b982a2478d59c34ac07f98b5f54b89ce9c0962c3896587bd8e09d9062f1cc"
+      "newHash": "f2c2a42adc0508b41ffdd06b3ae5b5da99865e37a4c96aac2f4485c00163e564"
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
@@ -191,12 +226,12 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "oldHash": "9bc7e9d5bc3deb9825e368aeacff295ef73fc8e374f70ca63dca4cdc5a5e6f42",
-      "newHash": "1a46a202221e92c3e272e615836f0aa5c6a3278b599b1fa00e39c3792f40a132"
+      "newHash": "e51f5e13f0d177f103c591d6723e4121d8d7da1b7cc5297c88c86e4701c80a60"
     },
     {
       "path": "terminos.html",
       "oldHash": "4c38dfcbba115d67bbec76ed9a9478ec4c68b988a1e0fa4900081e2ca204a8cb",
-      "newHash": "9191e3c543da24491c1c2da980e614093244ddefc5cc7edaf885674bf7baadeb"
+      "newHash": "6a537ecedd5ce1f129f03127135853bc150a8c32d496996d2ceb55fcb0e9d54c"
     }
   ],
   "affectedRecords": [
@@ -217,6 +252,9 @@
     "entrada-login__login-codigo__2",
     "firebase-auth__redirect-result__5",
     "firestore__users-uid__8",
+    "github-actions",
+    "github-actions__deployments__30",
+    "github-actions__pruebas-automatizadas__31",
     "google-btn",
     "google-btn__firebase-auth__3",
     "login-codigo",
@@ -228,6 +266,7 @@
     "perfil",
     "perfil__ultimos-datos__11",
     "productos",
+    "pruebas-automatizadas",
     "redirect-result",
     "redirect-result__sesion-estado__6",
     "roles__pagina-perfil__18",

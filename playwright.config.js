@@ -24,7 +24,7 @@ module.exports = defineConfig({
     baseURL:
       process.env.PLAYWRIGHT_BASE_URL ||
       process.env.PERF_BASE_URL ||
-      'https://tintinaccs.com',
+      'http://127.0.0.1:4173',
     launchOptions: executablePath
       ? { executablePath, args: ['--no-sandbox'] }
       : { args: ['--no-sandbox'] }

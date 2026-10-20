@@ -1,3 +1,4 @@
+import { testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { appCheckReady, auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
@@ -331,6 +332,7 @@ function subscribe(user, { preserve = false } = {}) {
     hasOlderNotifications = snapshot.docs.length === historyLimit;
     notifications = snapshot.docs
       .map(document => ({ id: document.id, ...document.data() }))
+      .filter(item => testOrderNumber(item) === null)
       .filter(item => adminFeed || isVisibleCustomerNotification(item));
     if (adminFeed) liveNotices.update(`admin:${user.uid}`, notifications);
     else liveNotices.clear();

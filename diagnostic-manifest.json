@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "960c4d6687d8026be85c8a5a8c67a4e5448b7af657f84c246ee2e120432c7286",
+  "sourceFingerprint": "b284198778bca75876269e4f61d7bd311557c830da62f1c9d6d25f9ba816a753",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1366,
-    "textFiles": 1276,
-    "totalBytes": 28829019,
+    "files": 1367,
+    "textFiles": 1277,
+    "totalBytes": 28864753,
     "pages": 19,
-    "modules": 961
+    "modules": 962
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18271,
-      "sha256": "63d0e81c0e0b4cbd5a9caf7adc9bfb81776ae07b3aaf0aec1fb640220644b154",
+      "bytes": 18041,
+      "sha256": "7785e6e77cbfee199df429a83708a9edfa63a90c00eb3b61fc228b9fcdcb5345",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -119,12 +119,12 @@
           "line": 9
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "/js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "/js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 133
         },
@@ -236,7 +236,7 @@
           "line": 131
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 132
         },
@@ -271,7 +271,7 @@
           "line": 140
         },
         {
-          "raw": "/css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "/css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 141
         },
@@ -717,13 +717,13 @@
           "exists": true
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "/js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "/js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 133,
           "exists": true
@@ -855,7 +855,7 @@
           "exists": true
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 132,
           "exists": true
@@ -897,7 +897,7 @@
           "exists": true
         },
         {
-          "raw": "/css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "/css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 141,
           "exists": true
@@ -1158,8 +1158,8 @@
         "guest",
         "client"
       ],
-      "bytes": 31420,
-      "sha256": "52d63ebcd1b6d79e3a4d3e943a012d8289ba1a0fdb76735d482812711f79d106",
+      "bytes": 31190,
+      "sha256": "df9d2472bae797898c78faf1cc0cb8d0551b0370e9c974382f2cd4a539417bdc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1209,12 +1209,12 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 54
         },
@@ -1266,7 +1266,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-75213d532d558235",
+          "raw": "css/generated/nosotros.css?v=tintin-about-2a205c1f9047ef1a",
           "target": "css/generated/nosotros.css",
           "line": 34
         },
@@ -1346,7 +1346,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -1391,7 +1391,7 @@
           "line": 61
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 62
         },
@@ -1796,13 +1796,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 54,
           "exists": true
@@ -1862,7 +1862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-75213d532d558235",
+          "raw": "css/generated/nosotros.css?v=tintin-about-2a205c1f9047ef1a",
           "target": "css/generated/nosotros.css",
           "line": 34,
           "exists": true
@@ -1958,7 +1958,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -2012,7 +2012,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 62,
           "exists": true
@@ -2257,8 +2257,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44893,
-      "sha256": "39d813e1f44fc9e91e2b84ebae77e159430bcf8a833e949c230659f38908d908",
+      "bytes": 44654,
+      "sha256": "544d6fffcfa88e347bc3550027edc20822a7146212f26015a8597c8864acc8cd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2298,7 +2298,7 @@
           "line": 8
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 317
         },
@@ -2375,7 +2375,7 @@
           "line": 313
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 314
         },
@@ -2442,7 +2442,7 @@
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 317,
           "exists": true
@@ -2532,7 +2532,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 314,
           "exists": true
@@ -2881,8 +2881,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204566,
-      "sha256": "1a876367b95ce8fa78e35dafc30a9ad04062fd2ede6eb3cd93bd8fff3a178369",
+      "bytes": 204312,
+      "sha256": "c9d8b626fc4a2880a06aeda24e8eaf6c25e1ab917520b2da4681b97c3310a501",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2916,7 +2916,7 @@
           "line": 8
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 79
         },
@@ -2956,7 +2956,7 @@
           "line": 2084
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261020-instagram-editor-merged-1-status-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261020-commerce-combined-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2085
         },
@@ -3133,7 +3133,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -3262,7 +3262,7 @@
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 79,
           "exists": true
@@ -3310,7 +3310,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261020-instagram-editor-merged-1-status-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261020-commerce-combined-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2085,
           "exists": true
@@ -3520,7 +3520,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -8985,8 +8985,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20021,
-      "sha256": "77c8e245af1b66c815db4f71de181519b14d620c1e937d3631bf5468726f2a18",
+      "bytes": 19791,
+      "sha256": "f924e955f0df37c214c35b4046028f796651d427a20ea0c2fbef8670768ad723",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9030,12 +9030,12 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51
         },
@@ -9157,7 +9157,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -9192,7 +9192,7 @@
           "line": 58
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 59
         },
@@ -9568,13 +9568,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51,
           "exists": true
@@ -9718,7 +9718,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -9760,7 +9760,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 59,
           "exists": true
@@ -9979,8 +9979,8 @@
         "guest",
         "client"
       ],
-      "bytes": 59448,
-      "sha256": "70520f5accf32cd9959067b5da5e233866ab3baa18a824e0ba86a32944bd6285",
+      "bytes": 59218,
+      "sha256": "c2b54ce06aa1ddc0b7aea8dde2b8f883477ef011632471665b98748d1c3519ea",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10036,12 +10036,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 354
         },
@@ -10163,7 +10163,7 @@
           "line": 53
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54
         },
@@ -10198,7 +10198,7 @@
           "line": 361
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 362
         },
@@ -10569,13 +10569,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 354,
           "exists": true
@@ -10719,7 +10719,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54,
           "exists": true
@@ -10761,7 +10761,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 362,
           "exists": true
@@ -11080,8 +11080,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 131995,
-      "sha256": "4a55eb988ccd4d3fe6aceb4ca88753bbbb9ac76a13f104fbae8f911f0ce8bbfc",
+      "bytes": 131765,
+      "sha256": "2a577011966edfe9d4fbd4eb3308134940944091ac1ad40d42a60873bb87e034",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11131,12 +11131,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 48
         },
@@ -11263,7 +11263,7 @@
           "line": 46
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 47
         },
@@ -11303,7 +11303,7 @@
           "line": 56
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 57
         },
@@ -11691,13 +11691,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 48,
           "exists": true
@@ -11847,7 +11847,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 47,
           "exists": true
@@ -11895,7 +11895,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 57,
           "exists": true
@@ -12600,8 +12600,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21685,
-      "sha256": "227b6d4d9b7b1350f03a365158dc142065140d9105c2117f821f3f823cde5ccd",
+      "bytes": 21455,
+      "sha256": "38fce56f41e368eb7ca7aff57835c8035f51d8d1c7f9f30b8524366da749cc92",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12651,12 +12651,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 56
         },
@@ -12783,7 +12783,7 @@
           "line": 54
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55
         },
@@ -12818,7 +12818,7 @@
           "line": 63
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 64
         },
@@ -13204,13 +13204,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 56,
           "exists": true
@@ -13360,7 +13360,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55,
           "exists": true
@@ -13402,7 +13402,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 64,
           "exists": true
@@ -13627,8 +13627,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26710,
-      "sha256": "76359a1035913ca9cb6a8eb6cf6c5e95610d5c79ced4c1714419c2d0eb20970c",
+      "bytes": 26480,
+      "sha256": "b06d50ccd9afa528516266f9193dcde9b126459cb8cad35cea438383581e6518",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13678,12 +13678,12 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51
         },
@@ -13805,7 +13805,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -13845,7 +13845,7 @@
           "line": 59
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60
         },
@@ -14261,13 +14261,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51,
           "exists": true
@@ -14411,7 +14411,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -14459,7 +14459,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60,
           "exists": true
@@ -14739,8 +14739,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23707,
-      "sha256": "9e5ffdb5748e3368b18843ddc720414760b099a0c3dec89c3dd83d1a97cf3358",
+      "bytes": 23477,
+      "sha256": "590cf36c63175a0f3acd8d9c1dc20a416fbec3d7291b59840050b0c823fe000a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14790,12 +14790,12 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 57
         },
@@ -14917,7 +14917,7 @@
           "line": 53
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54
         },
@@ -14952,7 +14952,7 @@
           "line": 64
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 65
         },
@@ -15328,13 +15328,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 57,
           "exists": true
@@ -15478,7 +15478,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54,
           "exists": true
@@ -15520,7 +15520,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 65,
           "exists": true
@@ -15779,8 +15779,8 @@
         "guest",
         "client"
       ],
-      "bytes": 46955,
-      "sha256": "bcf4bc2e9097e44ff58bb40bdc2bc9e16a321800f4ec2f67de103cab06f5ab41",
+      "bytes": 46725,
+      "sha256": "5b2ea38ce0e958629e4a05d7c0c3eb9557a8dc3334b6b653c8b7b0d207408925",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15836,12 +15836,12 @@
           "line": 14
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 15
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 96
         },
@@ -15918,7 +15918,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-ea04f2a0fb717159",
+          "raw": "css/generated/inicio.css?v=tintin-home-89a452df43e1903c",
           "target": "css/generated/inicio.css",
           "line": 57
         },
@@ -16013,7 +16013,7 @@
           "line": 90
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 91
         },
@@ -16063,7 +16063,7 @@
           "line": 103
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 104
         },
@@ -16766,13 +16766,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 15,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 96,
           "exists": true
@@ -16862,7 +16862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-ea04f2a0fb717159",
+          "raw": "css/generated/inicio.css?v=tintin-home-89a452df43e1903c",
           "target": "css/generated/inicio.css",
           "line": 57,
           "exists": true
@@ -16976,7 +16976,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 91,
           "exists": true
@@ -17036,7 +17036,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 104,
           "exists": true
@@ -17570,8 +17570,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72567,
-      "sha256": "8f6363eef41a1cabef4e434b0fbd6448f57b7516d0185cfcb53d6716565f2e17",
+      "bytes": 72337,
+      "sha256": "50c1925b1a01588a275a1baa077dfff05eeb07895255f6b7534c9d0c5c0f70de",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17627,12 +17627,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52
         },
@@ -17749,7 +17749,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -17784,7 +17784,7 @@
           "line": 59
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60
         },
@@ -17922,13 +17922,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52,
           "exists": true
@@ -18066,7 +18066,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -18108,7 +18108,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60,
           "exists": true
@@ -18411,8 +18411,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1995,
-      "sha256": "cad7d7dc858742f17ddec12bec3c1e128f7e6fa787c446f543537b512de8c9dc",
+      "bytes": 1758,
+      "sha256": "d4c2f763f52a51c0631deda1594a09c029871a5b961b9a378c2b7e1480639785",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18456,7 +18456,7 @@
           "line": 1
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 1
         }
@@ -18506,7 +18506,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 1,
           "exists": true
@@ -18542,8 +18542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 56923,
-      "sha256": "25a717abf8cbe2f97a7c3adbcd336e3062059e0b7b812bf3ce5ba75f47dde26c",
+      "bytes": 56693,
+      "sha256": "2ebad17e5fdc78a22cc9bca275b0614ac7723e32c821d8ac9d82b7f24ff1c66b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18599,7 +18599,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -18609,7 +18609,7 @@
           "line": 46
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 47
         },
@@ -18741,7 +18741,7 @@
           "line": 42
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 43
         },
@@ -18781,7 +18781,7 @@
           "line": 54
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 55
         },
@@ -19197,7 +19197,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -19209,7 +19209,7 @@
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 47,
           "exists": true
@@ -19365,7 +19365,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 43,
           "exists": true
@@ -19413,7 +19413,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 55,
           "exists": true
@@ -19999,8 +19999,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21376,
-      "sha256": "c6f9c9c197b88013b4b7b3c6d77fdaf39d58743720d81d905ef3dd34a17e74f2",
+      "bytes": 21146,
+      "sha256": "7679e18c20ae45615693cd08531d9d56d9e8dd237e2f0421b1418b6c997cff1d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20044,12 +20044,12 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51
         },
@@ -20171,7 +20171,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -20206,7 +20206,7 @@
           "line": 58
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 59
         },
@@ -20582,13 +20582,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51,
           "exists": true
@@ -20732,7 +20732,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -20774,7 +20774,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 59,
           "exists": true
@@ -20993,8 +20993,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25565,
-      "sha256": "6c0669228b462594fcb3fd087d8b26ae03656be35cbb1044c72586424e86802e",
+      "bytes": 25335,
+      "sha256": "7bfe680258c124f75dfec3349b379808e899dcbba91d1d95623ace0f657df7be",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -21038,12 +21038,12 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51
         },
@@ -21160,7 +21160,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -21200,7 +21200,7 @@
           "line": 59
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60
         },
@@ -21696,13 +21696,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51,
           "exists": true
@@ -21840,7 +21840,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -21888,7 +21888,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60,
           "exists": true
@@ -22124,8 +22124,8 @@
         "guest",
         "client"
       ],
-      "bytes": 27167,
-      "sha256": "da2f82abea87734f63074af84f0a20e1ba7696d4b2caa8accd5995ab6785b312",
+      "bytes": 26937,
+      "sha256": "a298a30405564ae9e70f4e8845378c17686ee5cbdc993b58c2fd3853ad8cbe00",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -22169,7 +22169,7 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -22184,7 +22184,7 @@
           "line": 63
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 64
         },
@@ -22336,7 +22336,7 @@
           "line": 58
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 59
         },
@@ -22381,7 +22381,7 @@
           "line": 71
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 72
         },
@@ -22777,7 +22777,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -22795,7 +22795,7 @@
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 64,
           "exists": true
@@ -22975,7 +22975,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 59,
           "exists": true
@@ -23029,7 +23029,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 72,
           "exists": true
@@ -23374,7 +23374,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 236
+          "line": 237
         },
         {
           "id": "tinsel-checkout-btn",
@@ -23389,7 +23389,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 237
+          "line": 238
         },
         {
           "id": "related-refresh",
@@ -23421,8 +23421,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23550,
-      "sha256": "9191e3c543da24491c1c2da980e614093244ddefc5cc7edaf885674bf7baadeb",
+      "bytes": 23320,
+      "sha256": "6a537ecedd5ce1f129f03127135853bc150a8c32d496996d2ceb55fcb0e9d54c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -23459,12 +23459,12 @@
           "line": 9
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51
         },
@@ -23581,7 +23581,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -23621,7 +23621,7 @@
           "line": 59
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60
         },
@@ -24137,13 +24137,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/inicio-navegacion-publica.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 51,
           "exists": true
@@ -24281,7 +24281,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261012-unified-2-sistema-superficies-tintin-css-palette-20261014-1-stock-flow-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-ui-fixes-20261014-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1-tarjetas-stock-20261015-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-pink-flow-3",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -24329,7 +24329,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261019-mobile-brand-2",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-pink-header-3",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60,
           "exists": true
@@ -30474,8 +30474,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 127392,
-      "sha256": "02dca1e21c674450ac025de0c525a79c8973bcbfc8311652894e6f542fba6f21",
+      "bytes": 127386,
+      "sha256": "6aedf2c82bf11067172936885cddc3824e55475ff4a6963208994c81d3f4853e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31825,8 +31825,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 14798,
-      "sha256": "883cde1b806ba9b50ad95f4c7ab01b02fd460f41f90836d76318803dd86e72ba",
+      "bytes": 14803,
+      "sha256": "ef6abaaf014142340cf95ac2c42ed94deb1e6ae175c5aabcf23c59951fe3f0bd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31851,7 +31851,7 @@
           "line": 121
         },
         {
-          "raw": "../../../components/notifications/notificaciones-clientes.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "../../../components/notifications/notificaciones-clientes.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/components/notifications/notificaciones-clientes.js",
           "dynamic": true,
           "line": 141
@@ -32195,8 +32195,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 12926,
-      "sha256": "defddd0a2350808a2da7ac35e0956c58243d7b7af05d0de6fd43e01a03819c33",
+      "bytes": 12931,
+      "sha256": "c4121ce574dafa97dc6bc101f39aa69cc727b63f8c0fa4a17c6df7b857e6ac2d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32275,7 +32275,7 @@
           "line": 12
         },
         {
-          "raw": "./compartido/carga-navegacion.js?v=tintin-20261020-iconos-globales-1",
+          "raw": "./compartido/carga-navegacion.js?v=tintin-20261020-public-order-notices-3",
           "target": "js/components/navigation/compartido/carga-navegacion.js",
           "dynamic": false,
           "line": 13
@@ -32459,66 +32459,72 @@
     },
     {
       "path": "js/components/notifications/notificaciones-clientes.js",
-      "bytes": 20708,
-      "sha256": "a6943c063af4b7d6edbe63a309b50b90e19ba4affd7f1b2b3c71a76391369628",
+      "bytes": 20862,
+      "sha256": "aef2fdaf8a09398b227406cbe5e03215ff2a6fb505ecac35bc0b9fac2a5b81bf",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
+          "raw": "../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2",
+          "target": "js/orders/pedidos-prueba.mjs",
+          "dynamic": false,
+          "line": 1
+        },
+        {
           "raw": "../../core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/core/firebase/suscripcion-app-check.js",
           "dynamic": false,
-          "line": 1
+          "line": 2
         },
         {
           "raw": "../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/core/firebase/firebase.js",
           "dynamic": false,
-          "line": 2
+          "line": 3
         },
         {
           "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js",
           "target": "js/core/auth/diagnostico-sesion.js",
           "dynamic": false,
-          "line": 4
+          "line": 5
         },
         {
           "raw": "../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2",
           "target": "js/core/auth/identidad-super-admin.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         },
         {
           "raw": "./avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1-palette-20261014-1",
           "target": "js/components/notifications/avisos-en-vivo.mjs",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "../../admin/notifications/notificaciones-push.js?v=tintin-20261020-iconos-globales-1",
           "target": "js/admin/notifications/notificaciones-push.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 9
+          "line": 10
         }
       ]
     },
@@ -34251,8 +34257,8 @@
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "bytes": 1885,
-      "sha256": "5a045754298884e5a9940d1a36a6e22db9e1352c1c9134a8a054500a943f8895",
+      "bytes": 1890,
+      "sha256": "a6aebcb7fd7d3aaf4576ffb715a9cc7c78a04fba4b57b80bfbefa960a9c2cf29",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35830,8 +35836,8 @@
     },
     {
       "path": "js/theme/alternancia-secciones.js",
-      "bytes": 6752,
-      "sha256": "e4852b0fd2923faf45a5fe59f6d240356afbe600884cb8e4c0c9879acffd2d37",
+      "bytes": 6761,
+      "sha256": "a7ecc0ec39926e61af723374d2061eede12a98e3bb2bd2ff246f21b22b991d07",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35913,8 +35919,8 @@
     },
     {
       "path": "playwright.config.js",
-      "bytes": 948,
-      "sha256": "dd2c4c21e1edb204d56d718be89a5ed9fae12820d0871cf033ee7117f0214d23",
+      "bytes": 947,
+      "sha256": "8e2fc437b2c804eefaa676ce1ba12a443f6efc81d378b764f7adddc3a41bf452",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40558,8 +40564,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 30000,
-      "sha256": "1a46a202221e92c3e272e615836f0aa5c6a3278b599b1fa00e39c3792f40a132",
+      "bytes": 30007,
+      "sha256": "e51f5e13f0d177f103c591d6723e4121d8d7da1b7cc5297c88c86e4701c80a60",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42128,6 +42134,61 @@
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode",
           "line": 26
+        }
+      ]
+    },
+    {
+      "path": "tests/architecture/browser-test-isolation.test.mjs",
+      "bytes": 1972,
+      "sha256": "590515fc36476c13569517a6e8e421ad3274f55df71a55cdcf181b4211d2e6b7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "http://127.0.0.1:4173/",
+          "line": 15
+        },
+        {
+          "url": "https://performance.example.invalid/",
+          "line": 18
+        },
+        {
+          "url": "http://127.0.0.1:4179/",
+          "line": 19
         }
       ]
     },
@@ -45228,8 +45289,8 @@
     },
     {
       "path": "tests/engagement/header-activity-feed.test.mjs",
-      "bytes": 6314,
-      "sha256": "499e813c42f5982fc08282e7bbb9d134665896d645f08c4b7765a9e6a58c55db",
+      "bytes": 7809,
+      "sha256": "009df24a0bf905b98b74ae7a3c7f9195c01941475a9c5ff255df3a143984c11e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45264,6 +45325,12 @@
           "target": "js/components/notifications/avisos-en-vivo.mjs",
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "../../js/orders/pedidos-prueba.mjs",
+          "target": "js/orders/pedidos-prueba.mjs",
+          "dynamic": false,
+          "line": 6
         }
       ],
       "endpoints": []
@@ -47653,8 +47720,8 @@
     },
     {
       "path": "tests/navigation/mobile-brand.spec.js",
-      "bytes": 6896,
-      "sha256": "5529022293225a7778805f7693e3cea2dbeef658ea1bdb44834c14d898e7d745",
+      "bytes": 7041,
+      "sha256": "c662660d8dbba08315808d28cdeda6f01a3e76479b2f95215166ed488f5f2ead",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52243,8 +52310,8 @@
     },
     {
       "path": "tests/ui-ux/admin-push-navigation.spec.js",
-      "bytes": 14064,
-      "sha256": "f9cdfc1fdf2b20ab5098e47ad973961815c09387d1d0f11670bbbfdac91f0f02",
+      "bytes": 14249,
+      "sha256": "a55fa5d64102fb223031652eb5bd7bd44185696793622aea457d251dca50bfee",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52277,7 +52344,7 @@
         },
         {
           "url": "https://fixture.test/borrador.mp3",
-          "line": 196
+          "line": 199
         }
       ]
     },
@@ -52957,8 +53024,8 @@
     },
     {
       "path": "tests/ui-ux/products-master.spec.js",
-      "bytes": 18092,
-      "sha256": "04f907ff6a43cde0c95397b686a7f80791604a608c13f7abbe769e9c1dd726d0",
+      "bytes": 18336,
+      "sha256": "e1a1cf9c2c12cd8b52aef56c1291aff7e441981920fe98fc94e5f5f92cd7565d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53013,8 +53080,8 @@
     },
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
-      "bytes": 37274,
-      "sha256": "04e4b3079a992b37357e660e1ecc19b3acefd48d2233fbd41391020aef24442b",
+      "bytes": 38488,
+      "sha256": "567c56d988b92faaf397decc24cb4096b181541a8b1909c859a704e3bfb4b90a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53031,47 +53098,47 @@
         },
         {
           "url": "https://img.test/**",
-          "line": 184
+          "line": 203
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 184
+          "line": 203
         },
         {
           "url": "https://img.test/rota.webp",
-          "line": 186
+          "line": 205
         },
         {
           "url": "https://img.test/principal.webp",
-          "line": 248
+          "line": 267
         },
         {
           "url": "https://img.test/coctel.webp",
-          "line": 273
+          "line": 292
         },
         {
           "url": "https://img.test/banda.webp",
-          "line": 273
+          "line": 292
         },
         {
           "url": "https://img.test/portada.webp",
-          "line": 322
+          "line": 341
         },
         {
           "url": "https://img.test/extra-$%7B++number%7D.webp",
-          "line": 324
+          "line": 343
         },
         {
           "url": "https://img.test/extra-1.webp/nhttps://img.test/extra-2.webp",
-          "line": 331
+          "line": 350
         },
         {
           "url": "https://img.test/extra-1.webp",
-          "line": 336
+          "line": 355
         },
         {
           "url": "https://img.test/tardia.webp",
-          "line": 349
+          "line": 368
         }
       ]
     },
@@ -53088,13 +53155,26 @@
     },
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
-      "bytes": 10725,
-      "sha256": "a66e3db125bf3f52d89b0006cafe49fc17533bd11e091bd0c21e409d2d00eca3",
+      "bytes": 14819,
+      "sha256": "19d3d48fa6e76ce876035122de41551d467165599add804e74c67c4192f63efb",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "../../js/components/navigation/escritorio/encabezado-escritorio.js",
+          "target": "js/components/navigation/escritorio/encabezado-escritorio.js",
+          "dynamic": false,
+          "line": 45
+        },
+        {
+          "raw": "../../js/components/navigation/tableta/encabezado-tableta.js",
+          "target": "js/components/navigation/tableta/encabezado-tableta.js",
+          "dynamic": false,
+          "line": 45
+        }
+      ],
       "endpoints": []
     },
     {
@@ -53883,8 +53963,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 7443,
-      "sha256": "f2246dce1a0162c60cc9c34bc2797a7c04f10251fe8366d0fddf7d69f638bdb2"
+      "bytes": 7544,
+      "sha256": "ad799bc387a2bf6a77d808fccbf071c268771e61cffd3d297ce0d1fd060401f2"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -53949,8 +54029,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 18271,
-      "sha256": "63d0e81c0e0b4cbd5a9caf7adc9bfb81776ae07b3aaf0aec1fb640220644b154"
+      "bytes": 18041,
+      "sha256": "7785e6e77cbfee199df429a83708a9edfa63a90c00eb3b61fc228b9fcdcb5345"
     },
     {
       "path": "AGENTS.md",
@@ -53985,14 +54065,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 31420,
-      "sha256": "52d63ebcd1b6d79e3a4d3e943a012d8289ba1a0fdb76735d482812711f79d106"
+      "bytes": 31190,
+      "sha256": "df9d2472bae797898c78faf1cc0cb8d0551b0370e9c974382f2cd4a539417bdc"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 44893,
-      "sha256": "39d813e1f44fc9e91e2b84ebae77e159430bcf8a833e949c230659f38908d908"
+      "bytes": 44654,
+      "sha256": "544d6fffcfa88e347bc3550027edc20822a7146212f26015a8597c8864acc8cd"
     },
     {
       "path": "admin-manifest.json",
@@ -54003,8 +54083,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204566,
-      "sha256": "1a876367b95ce8fa78e35dafc30a9ad04062fd2ede6eb3cd93bd8fff3a178369"
+      "bytes": 204312,
+      "sha256": "c9d8b626fc4a2880a06aeda24e8eaf6c25e1ab917520b2da4681b97c3310a501"
     },
     {
       "path": "apple-touch-icon.png",
@@ -54639,20 +54719,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 20021,
-      "sha256": "77c8e245af1b66c815db4f71de181519b14d620c1e937d3631bf5468726f2a18"
+      "bytes": 19791,
+      "sha256": "f924e955f0df37c214c35b4046028f796651d427a20ea0c2fbef8670768ad723"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 59448,
-      "sha256": "70520f5accf32cd9959067b5da5e233866ab3baa18a824e0ba86a32944bd6285"
+      "bytes": 59218,
+      "sha256": "c2b54ce06aa1ddc0b7aea8dde2b8f883477ef011632471665b98748d1c3519ea"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 131995,
-      "sha256": "4a55eb988ccd4d3fe6aceb4ca88753bbbb9ac76a13f104fbae8f911f0ce8bbfc"
+      "bytes": 131765,
+      "sha256": "2a577011966edfe9d4fbd4eb3308134940944091ac1ad40d42a60873bb87e034"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -54933,8 +55013,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 21685,
-      "sha256": "227b6d4d9b7b1350f03a365158dc142065140d9105c2117f821f3f823cde5ccd"
+      "bytes": 21455,
+      "sha256": "38fce56f41e368eb7ca7aff57835c8035f51d8d1c7f9f30b8524366da749cc92"
     },
     {
       "path": "config/account-contract.json",
@@ -54957,8 +55037,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 10215,
-      "sha256": "9a1d945f6f50d0b312e2bbc742878ed77be6a0871c64ce6e26981294b445d128"
+      "bytes": 12054,
+      "sha256": "e45d09c6532b393e0e1b2359add58562fb69c02a50862435bab3a90ef507cf6c"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -54970,7 +55050,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "6f74dc14d297ae8cda6fdc5426c21d9f2599a02589cda8c7a0f094c730d4b5fa"
+      "sha256": "d92d95595e835ef28bc2f4de9d026cc31991143ffd3eb047379c6e055228e24c"
     },
     {
       "path": "config/public-site.json",
@@ -54987,8 +55067,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 26710,
-      "sha256": "76359a1035913ca9cb6a8eb6cf6c5e95610d5c79ced4c1714419c2d0eb20970c"
+      "bytes": 26480,
+      "sha256": "b06d50ccd9afa528516266f9193dcde9b126459cb8cad35cea438383581e6518"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -55077,8 +55157,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 68313,
-      "sha256": "72ad7b3ad53fac426739953481ca1a24103837fa60ab2977aee74d87c999ab65"
+      "bytes": 68339,
+      "sha256": "74753c7b0f3a9af94b882bf039ae401f22d2d9d19197e70c478e0b95730363bd"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -55203,8 +55283,8 @@
     {
       "path": "css/components/navigation/movil/marca-movil.css",
       "extension": ".css",
-      "bytes": 2210,
-      "sha256": "1ca6c238eb573ebef2c3d3a04051a58717d91eecb01dd9f172ac5b44388ad65a"
+      "bytes": 2221,
+      "sha256": "ad9971234d4fd998eea9f64f7d038afdfc21149e68c026f21b67941ca32f8f1a"
     },
     {
       "path": "css/components/navigation/tableta/encabezado-tableta.css",
@@ -55281,14 +55361,14 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 463700,
-      "sha256": "ea04f2a0fb71715938ac89c0faf9ec93373bb1e8b581ca6ad501d163efbc2916"
+      "bytes": 464359,
+      "sha256": "89a452df43e1903ce8d7f93d838995ee3ac0e2061dfe37cb7861ddfbf346e03c"
     },
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 381185,
-      "sha256": "75213d532d55823533208f4606acbb71248572be1c8da3fea706ea60cc61e889"
+      "bytes": 381844,
+      "sha256": "2a205c1f9047ef1a28a5bd7bdfa5430fafa9050540a9d314839e132eef0670aa"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -55527,8 +55607,8 @@
     {
       "path": "css/theme/sistema-superficies-tintin.css",
       "extension": ".css",
-      "bytes": 21188,
-      "sha256": "f56ef08bee8eb0197b33765fad014b3ee1130aa43c016c5aa5b9ccca9b218afe"
+      "bytes": 21836,
+      "sha256": "c34826310d8739290990fcc13c2cceb16b27664bc1523f4439e101e749327ecd"
     },
     {
       "path": "css/theme/superficies-marca-responsive-tintin.css",
@@ -55617,8 +55697,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 690719,
-      "sha256": "255edf044a2b63cea9937bbe7d99a48bfaf5d1794ceff7d196eae566afa15f1f"
+      "bytes": 712764,
+      "sha256": "bd2fcb4bf14930c691d7e8b61105628711195c1fc555ad9326010a0d11446ea1"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -55989,8 +56069,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 73896,
-      "sha256": "cc06b60832094708d591be75bc8b3b53c64c306508a46f88b72dab3c9dfd1f98"
+      "bytes": 78536,
+      "sha256": "41148d164ab6c08f8b2362980bd2608677f78307858cb48cebcb27e8a74b8ca1"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -56133,8 +56213,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 23707,
-      "sha256": "9e5ffdb5748e3368b18843ddc720414760b099a0c3dec89c3dd83d1a97cf3358"
+      "bytes": 23477,
+      "sha256": "590cf36c63175a0f3acd8d9c1dc20a416fbec3d7291b59840050b0c823fe000a"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -56667,8 +56747,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 46955,
-      "sha256": "bcf4bc2e9097e44ff58bb40bdc2bc9e16a321800f4ec2f67de103cab06f5ab41"
+      "bytes": 46725,
+      "sha256": "5b2ea38ce0e958629e4a05d7c0c3eb9557a8dc3334b6b653c8b7b0d207408925"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -57063,8 +57143,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 127392,
-      "sha256": "02dca1e21c674450ac025de0c525a79c8973bcbfc8311652894e6f542fba6f21"
+      "bytes": 127386,
+      "sha256": "6aedf2c82bf11067172936885cddc3824e55475ff4a6963208994c81d3f4853e"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -57399,8 +57479,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 14798,
-      "sha256": "883cde1b806ba9b50ad95f4c7ab01b02fd460f41f90836d76318803dd86e72ba"
+      "bytes": 14803,
+      "sha256": "ef6abaaf014142340cf95ac2c42ed94deb1e6ae175c5aabcf23c59951fe3f0bd"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -57531,8 +57611,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 12926,
-      "sha256": "defddd0a2350808a2da7ac35e0956c58243d7b7af05d0de6fd43e01a03819c33"
+      "bytes": 12931,
+      "sha256": "c4121ce574dafa97dc6bc101f39aa69cc727b63f8c0fa4a17c6df7b857e6ac2d"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -57591,8 +57671,8 @@
     {
       "path": "js/components/notifications/notificaciones-clientes.js",
       "extension": ".js",
-      "bytes": 20708,
-      "sha256": "a6943c063af4b7d6edbe63a309b50b90e19ba4affd7f1b2b3c71a76391369628"
+      "bytes": 20862,
+      "sha256": "aef2fdaf8a09398b227406cbe5e03215ff2a6fb505ecac35bc0b9fac2a5b81bf"
     },
     {
       "path": "js/components/reviews/valoraciones-catalogo.js",
@@ -57999,8 +58079,8 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 1885,
-      "sha256": "5a045754298884e5a9940d1a36a6e22db9e1352c1c9134a8a054500a943f8895"
+      "bytes": 1890,
+      "sha256": "a6aebcb7fd7d3aaf4576ffb715a9cc7c78a04fba4b57b80bfbefa960a9c2cf29"
     },
     {
       "path": "js/orders/ciclo-pedido.mjs",
@@ -58407,8 +58487,8 @@
     {
       "path": "js/theme/alternancia-secciones.js",
       "extension": ".js",
-      "bytes": 6752,
-      "sha256": "e4852b0fd2923faf45a5fe59f6d240356afbe600884cb8e4c0c9879acffd2d37"
+      "bytes": 6761,
+      "sha256": "a7ecc0ec39926e61af723374d2061eede12a98e3bb2bd2ff246f21b22b991d07"
     },
     {
       "path": "js/vendor/gsap.min.js",
@@ -58473,8 +58553,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72567,
-      "sha256": "8f6363eef41a1cabef4e434b0fbd6448f57b7516d0185cfcb53d6716565f2e17"
+      "bytes": 72337,
+      "sha256": "50c1925b1a01588a275a1baa077dfff05eeb07895255f6b7534c9d0c5c0f70de"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -58659,8 +58739,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1995,
-      "sha256": "cad7d7dc858742f17ddec12bec3c1e128f7e6fa787c446f543537b512de8c9dc"
+      "bytes": 1758,
+      "sha256": "d4c2f763f52a51c0631deda1594a09c029871a5b961b9a378c2b7e1480639785"
     },
     {
       "path": "package-lock.json",
@@ -58677,14 +58757,14 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 56923,
-      "sha256": "25a717abf8cbe2f97a7c3adbcd336e3062059e0b7b812bf3ce5ba75f47dde26c"
+      "bytes": 56693,
+      "sha256": "2ebad17e5fdc78a22cc9bca275b0614ac7723e32c821d8ac9d82b7f24ff1c66b"
     },
     {
       "path": "playwright.config.js",
       "extension": ".js",
-      "bytes": 948,
-      "sha256": "dd2c4c21e1edb204d56d718be89a5ed9fae12820d0871cf033ee7117f0214d23"
+      "bytes": 947,
+      "sha256": "8e2fc437b2c804eefaa676ce1ba12a443f6efc81d378b764f7adddc3a41bf452"
     },
     {
       "path": "playwright.operations.config.js",
@@ -58701,14 +58781,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 21376,
-      "sha256": "c6f9c9c197b88013b4b7b3c6d77fdaf39d58743720d81d905ef3dd34a17e74f2"
+      "bytes": 21146,
+      "sha256": "7679e18c20ae45615693cd08531d9d56d9e8dd237e2f0421b1418b6c997cff1d"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 25565,
-      "sha256": "6c0669228b462594fcb3fd087d8b26ae03656be35cbb1044c72586424e86802e"
+      "bytes": 25335,
+      "sha256": "7bfe680258c124f75dfec3349b379808e899dcbba91d1d95623ace0f657df7be"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -58719,8 +58799,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 27167,
-      "sha256": "da2f82abea87734f63074af84f0a20e1ba7696d4b2caa8accd5995ab6785b312"
+      "bytes": 26937,
+      "sha256": "a298a30405564ae9e70f4e8845378c17686ee5cbdc993b58c2fd3853ad8cbe00"
     },
     {
       "path": "robots.txt",
@@ -59553,8 +59633,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74715,
-      "sha256": "4b9b982a2478d59c34ac07f98b5f54b89ce9c0962c3896587bd8e09d9062f1cc"
+      "bytes": 74474,
+      "sha256": "f2c2a42adc0508b41ffdd06b3ae5b5da99865e37a4c96aac2f4485c00163e564"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -59817,8 +59897,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 30000,
-      "sha256": "1a46a202221e92c3e272e615836f0aa5c6a3278b599b1fa00e39c3792f40a132"
+      "bytes": 30007,
+      "sha256": "e51f5e13f0d177f103c591d6723e4121d8d7da1b7cc5297c88c86e4701c80a60"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -59895,8 +59975,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 23550,
-      "sha256": "9191e3c543da24491c1c2da980e614093244ddefc5cc7edaf885674bf7baadeb"
+      "bytes": 23320,
+      "sha256": "6a537ecedd5ce1f129f03127135853bc150a8c32d496996d2ceb55fcb0e9d54c"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -60101,6 +60181,12 @@
       "extension": ".mjs",
       "bytes": 1692,
       "sha256": "644015965f7663b21cf218c0b301ace2860f4028ea089a024bc951585ead9476"
+    },
+    {
+      "path": "tests/architecture/browser-test-isolation.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1972,
+      "sha256": "590515fc36476c13569517a6e8e421ad3274f55df71a55cdcf181b4211d2e6b7"
     },
     {
       "path": "tests/architecture/critical-resource-urls.test.mjs",
@@ -60603,8 +60689,8 @@
     {
       "path": "tests/engagement/header-activity-feed.test.mjs",
       "extension": ".mjs",
-      "bytes": 6314,
-      "sha256": "499e813c42f5982fc08282e7bbb9d134665896d645f08c4b7765a9e6a58c55db"
+      "bytes": 7809,
+      "sha256": "009df24a0bf905b98b74ae7a3c7f9195c01941475a9c5ff255df3a143984c11e"
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
@@ -60987,8 +61073,8 @@
     {
       "path": "tests/navigation/mobile-brand.spec.js",
       "extension": ".js",
-      "bytes": 6896,
-      "sha256": "5529022293225a7778805f7693e3cea2dbeef658ea1bdb44834c14d898e7d745"
+      "bytes": 7041,
+      "sha256": "c662660d8dbba08315808d28cdeda6f01a3e76479b2f95215166ed488f5f2ead"
     },
     {
       "path": "tests/navigation/mobile-halo-checkout-labels.spec.js",
@@ -61731,8 +61817,8 @@
     {
       "path": "tests/ui-ux/admin-push-navigation.spec.js",
       "extension": ".js",
-      "bytes": 14064,
-      "sha256": "f9cdfc1fdf2b20ab5098e47ad973961815c09387d1d0f11670bbbfdac91f0f02"
+      "bytes": 14249,
+      "sha256": "a55fa5d64102fb223031652eb5bd7bd44185696793622aea457d251dca50bfee"
     },
     {
       "path": "tests/ui-ux/admin-sidebar-interaction.spec.js",
@@ -61905,8 +61991,8 @@
     {
       "path": "tests/ui-ux/products-master.spec.js",
       "extension": ".js",
-      "bytes": 18092,
-      "sha256": "04f907ff6a43cde0c95397b686a7f80791604a608c13f7abbe769e9c1dd726d0"
+      "bytes": 18336,
+      "sha256": "e1a1cf9c2c12cd8b52aef56c1291aff7e441981920fe98fc94e5f5f92cd7565d"
     },
     {
       "path": "tests/ui-ux/products-mosaic.spec.js",
@@ -61917,8 +62003,8 @@
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
       "extension": ".js",
-      "bytes": 37274,
-      "sha256": "04e4b3079a992b37357e660e1ecc19b3acefd48d2233fbd41391020aef24442b"
+      "bytes": 38488,
+      "sha256": "567c56d988b92faaf397decc24cb4096b181541a8b1909c859a704e3bfb4b90a"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",
@@ -61929,8 +62015,8 @@
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
       "extension": ".js",
-      "bytes": 10725,
-      "sha256": "a66e3db125bf3f52d89b0006cafe49fc17533bd11e091bd0c21e409d2d00eca3"
+      "bytes": 14819,
+      "sha256": "19d3d48fa6e76ce876035122de41551d467165599add804e74c67c4192f63efb"
     },
     {
       "path": "tests/ui-ux/site-first-paint.spec.js",
@@ -62680,14 +62766,14 @@
     },
     {
       "file": "js/components/notifications/notificaciones-clientes.js",
-      "line": 56,
+      "line": 57,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/components/notifications/notificaciones-clientes.js",
-      "line": 57,
+      "line": 58,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -63828,7 +63914,7 @@
     },
     {
       "file": "js/components/notifications/notificaciones-clientes.js",
-      "line": 230,
+      "line": 231,
       "target": "/api/notifications",
       "method": "POST"
     },
@@ -63936,7 +64022,7 @@
           },
           {
             "file": "js/components/notifications/notificaciones-clientes.js",
-            "line": 328,
+            "line": 329,
             "operation": "collection"
           }
         ]
@@ -65301,7 +65387,7 @@
           },
           {
             "file": "js/components/notifications/notificaciones-clientes.js",
-            "line": 328,
+            "line": 329,
             "operation": "collection"
           },
           {
