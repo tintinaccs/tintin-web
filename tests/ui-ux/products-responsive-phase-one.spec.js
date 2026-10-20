@@ -5,12 +5,15 @@ const path=require('node:path');
 const {mockRuntime,fixtureHtml}=require('./helpers/admin-commerce-fixture.cjs');
 const root=path.resolve(__dirname,'../..');
 const shell=fs.readFileSync(path.join(root,'admin.html'),'utf8');
+const adminSource=fs.readFileSync(path.join(root,'js/admin/admin-app.js'),'utf8');
+const stockRenderer=adminSource.slice(adminSource.indexOf('let productVariantStockBaseline = null;'),adminSource.indexOf('function serializeProductForm()'));
+const inventorySource=fs.readFileSync(path.join(root,'js/core/store/inventario-variantes.mjs'),'utf8').replaceAll('export ','');
 const formStart=shell.indexOf('<div class="adm-card" id="prod-form-card"');
 const form=shell.slice(formStart,shell.indexOf('\n    </div>\n\n    <!-- ===================== COLECCIONES',formStart));
 const promptStart=shell.indexOf('<div id="unsaved-modal"');
 const prompt=shell.slice(promptStart,shell.indexOf('\n<!-- ═',promptStart));
 
-async function openEditor(page,width,height,withImages=false){
+async function openEditor(page,width,height,withImages=false,beforeOpen=null){
  await page.setViewportSize({width,height});await mockRuntime(page);
  if(withImages) await page.route('https://tintin.test/js/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:'export const deleteMediaByUrlIfUnused=()=>{window.__imageCleanup=(window.__imageCleanup||0)+1;throw Error("Sin escrituras");};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=deleteMediaByUrlIfUnused;'}));
  const html=fixtureHtml();const start=html.indexOf('<div class="adm-card" id="prod-form-card"');
@@ -18,6 +21,7 @@ async function openEditor(page,width,height,withImages=false){
  await page.route('https://tintin.test/admin-commerce-fixture',route=>route.fulfill({contentType:'text/html',body:full}));
  await page.goto('https://tintin.test/admin-commerce-fixture');
  await expect(page.locator('[data-action="product-new"]')).toBeVisible();
+ if(beforeOpen) await beforeOpen(page);
  await page.evaluate(()=>{
   window.prodNuevo=()=>{document.getElementById('prod-form-card').style.display='';};
   window.prodCancelForm=()=>{window.__calls.push(['prodCancelForm']);document.getElementById('prod-form-card').style.display='none';};
@@ -52,6 +56,47 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   await save.click();expect(await page.evaluate(()=>window.__calls.at(-1))).toEqual(['prodGuardar','Anillo de prueba','45000']);
   await page.screenshot({path:`test-results/products-editor-phase1-${width}x${height}.png`});
   await card.locator('.adm-card-head button').click();await expect(card).toBeHidden();await expect(page.locator('[data-action="product-new"]')).toBeFocused();
+ });
+}
+
+test('configurar stock por color exige cantidades explícitas y recalcula total y vista previa',async({page})=>{
+ await openEditor(page,775,900);await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.evaluate(({renderer,inventory})=>{
+  window.__stockEditor=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,baseline:()=>productVariantStockBaseline};')();
+  window.__stockEditor.renderProductVariantStock({stock:1});
+ },{renderer:stockRenderer,inventory:inventorySource});
+ await page.locator('#prod-variants-text').fill('Color: dorado, plateado');
+ await page.getByRole('button',{name:'Distribuir stock por opción',exact:true}).click();
+ const quantities=page.locator('#prod-variant-stock input');await expect(quantities).toHaveCount(2);
+ await expect(quantities.nth(0)).toHaveValue('');await expect(quantities.nth(1)).toHaveValue('');
+ await quantities.nth(0).fill('1');await quantities.nth(1).fill('1');
+ await expect(page.locator('#prod-stock')).toHaveValue('2');await expect(page.locator('#prod-stock')).toHaveAttribute('readonly','');
+ await expect(page.locator('#prod-variants-text')).toHaveAttribute('readonly','');
+ expect(await page.evaluate(()=>window.__stockEditor.baseline().expectedEntries)).toBe(null);
+ expect(await page.evaluate(()=>window.__stockEditor.baseline().variants)).toEqual({Color:['dorado','plateado']});
+ await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Azzura');
+ await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('50000');
+ await expect(page.locator('#prod-live-preview')).toContainText('2 unidades disponibles');
+});
+
+for(const [width,height] of [[390,844],[775,582],[1024,768]]){
+ test(`editor modal no queda debajo de la navegación y la restaura al cerrar ${width}`,async({page})=>{
+  let originalVisibility;
+  await openEditor(page,width,height,false,async()=>{
+   originalVisibility=await page.evaluate(()=>{
+    const sidebar=document.createElement('aside');sidebar.className='adm-sidebar';sidebar.textContent='Navegación del panel';
+    sidebar.style.cssText='position:fixed;inset:0 auto 0 0;width:84px;background:pink;z-index:300';document.body.append(sidebar);
+    // El shell administrativo puede crear un contexto inferior al de su barra lateral.
+    const main=document.querySelector('.adm-main');main.style.position='relative';main.style.zIndex='1';
+    return getComputedStyle(sidebar).visibility;
+   });
+  });
+  await expect(page.locator('.adm-sidebar')).toBeHidden();
+  expect(await page.evaluate(()=>Boolean(document.elementFromPoint(20,20)?.closest('#prod-form-card')))).toBe(true);
+  await page.locator('#prod-form-card .adm-card-head button').click();
+  // En móvil vuelve a su estado normal plegado, sin quedar oculta por el editor.
+  await expect(page.locator('html')).not.toHaveClass(/tt-product-editor-open/);
+  await expect(page.locator('.adm-sidebar')).toHaveCSS('visibility',originalVisibility);
  });
 }
 
@@ -161,8 +206,6 @@ test('salir de Productos libera el scroll y regresar conserva el editor visible'
  await expect(page.locator('html')).toHaveClass(/tt-product-editor-open/);await expect(page.locator('#prod-name')).toHaveValue('Borrador');
 });
 
-const adminSource = fs.readFileSync(path.join(root,'js/admin/admin-app.js'),'utf8');
-const stockRenderer = adminSource.slice(adminSource.indexOf('let productVariantStockBaseline = null;'),adminSource.indexOf('function serializeProductForm()'));
 for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]]) {
  test(`vista previa conectada, cantidades y fotos sin desbordes ${width}x${height}`,async({page})=>{
   await openEditor(page,width,height);

@@ -1,57 +1,57 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "ab6c972acdc5214357683fda89b8857b2cbbf6e3",
-  "reason": "Corregir tipografia del editor de Productos y publicar PR1171 autorizado por el titular, conservando controles y contratos de negocio; pruebas focalizadas y artefactos canonicos regenerados.",
+  "baseCommit": "b63e0b628e7c5360b0a5bb8b9fb22afc71595caa",
+  "reason": "Consolidar guardado concurrente, acceso administrativo claro, editor modal y configuracion explicita de stock por opcion; 133 pruebas Node y 60 escenarios Chromium-WebKit aprobados",
   "files": [
     {
-      "path": ".github/workflows/auditar-tintin.yml",
-      "oldHash": "7d5c54ef5c30cb945d9ae99e97def7b9b2732fdcba384f2784935e7282847075",
-      "newHash": "f2246dce1a0162c60cc9c34bc2797a7c04f10251fe8366d0fddf7d69f638bdb2"
-    },
-    {
-      "path": "admin-images.html",
-      "oldHash": "b156efc6bbdb8a80dd7558104b39a51f94037e9af184b5d8e0e9bf6bf00ec35b",
-      "newHash": "6eb39848f1b19aa80a963d5bf8d739c55ac3fd65c27d0d59c9795104944250e0"
+      "path": "_headers",
+      "oldHash": "852c64d8583029043d23a74e27c7e423c19b353a164be03594937ac3c0d28b40",
+      "newHash": "40f50256dafd06471e123f658820180688c513d77b34b52b4af1f75bac449465"
     },
     {
       "path": "admin.html",
-      "oldHash": "b2318b8ec116fd2253781e584ec64d35f13a0c25f02b684b6cae546259d32fe7",
-      "newHash": "586806e70e4c6c42119cef29cd548ac0d972475f88daf6413b630f8c212f7394"
+      "oldHash": "586806e70e4c6c42119cef29cd548ac0d972475f88daf6413b630f8c212f7394",
+      "newHash": "813ea213ebfa2f29f7661befd3f11a5fc04d4b1ddf292527929cbb86d442e4e6"
     },
     {
       "path": "config/csp-runtime.js",
-      "oldHash": "be37a0558969768d25770946667059e94e4ccf643a368c476504f8daa69e2938",
-      "newHash": "949e0e820349791674c235c61b9caa2661182118e191ea9ed5c811e011c06fe1"
+      "oldHash": "949e0e820349791674c235c61b9caa2661182118e191ea9ed5c811e011c06fe1",
+      "newHash": "e81fc9610e0751a08a90e163aef645046500474d3ee92ed242cd7f966f30d627"
     },
     {
       "path": "config/csp-runtime.json",
-      "oldHash": "16ce8aa299ce17904bd5bb19f5c83fbc8628b7a726c16679c587bed30d1ae400",
-      "newHash": "e3bf4c87fd9c06be9c3ac19e611bc47d15e4ee1df3646cf89a04ed0e33a65e36"
+      "oldHash": "e3bf4c87fd9c06be9c3ac19e611bc47d15e4ee1df3646cf89a04ed0e33a65e36",
+      "newHash": "c81e7968c74c2cd102e3ec4c47ecba5aa185f1498e721d4076f2b7a38ffed34c"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "7744538c4d2d5a7e6cd61bda4cc1c7c0bdc16a699a27cd87ea95f419e394f581",
-      "newHash": "f5be917fa1397878aa2cfd83efe6a17dee116daf212924ab42156b6696d65a75"
+      "oldHash": "f5be917fa1397878aa2cfd83efe6a17dee116daf212924ab42156b6696d65a75",
+      "newHash": "159d60ba83a901867badc490f8cdcfe773471033ef85fb8da4f300d71561dcb1"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "e09660addf40eb2647b7dd3d1d5a22788cd867f4bdfd9e7d16a510ee2aff9c8d",
-      "newHash": "5c5c8cbaf5e10b14ac8f9ad2bc0c594b9276060d383ebd641648f465694ae2e8"
+      "oldHash": "5c5c8cbaf5e10b14ac8f9ad2bc0c594b9276060d383ebd641648f465694ae2e8",
+      "newHash": "8f78917a463e44846afc98ba1a1630651e2224d308e30d673dcf14ce8569908a"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "88076200e39255843c55e36e1e623ee8025c92890f1c0d2be4cc1ea862393187",
-      "newHash": "960c77547225f4fe25a67a24391d4f9ef8ecea66c0662ea4363983a6783fb8ec"
+      "oldHash": "960c77547225f4fe25a67a24391d4f9ef8ecea66c0662ea4363983a6783fb8ec",
+      "newHash": "8dada1d6394aa8946e2e659565a9801ab490f915b687aa4d08bf2482bf9cb95b"
     },
     {
-      "path": "js/components/images/carga-imagenes.js",
-      "oldHash": "c6ac085dc6e0654c3a5044b1ef65428591d58bb5ec3092319e054fdffaff46fc",
-      "newHash": "e9cbf0c70f7894a33d0d4e56a114bff5f093f04767b633c072611086c0fa662f"
+      "path": "login.html",
+      "oldHash": "2bebb2442c4b7040e1b4bbc181b2bf77792352bbce96c041aea261796256d4bd",
+      "newHash": "4f8921ce476eccb477a666d8471db5b0a129f1f6a122a3d5806cdd10a6fc79b7"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "c439ebb07329ab29f8254f1523e304dedb86cfe39b2aec0fc3e285fea60d49fa",
-      "newHash": "944a911769b9ac1320a3903ba2828b765f6f784fc9862fadb5de5e4046ac8990"
+      "oldHash": "944a911769b9ac1320a3903ba2828b765f6f784fc9862fadb5de5e4046ac8990",
+      "newHash": "a656d81fa969239a0476959bd9c0b9d9ef9cf83c45c6f00e91fafa58676d6df0"
+    },
+    {
+      "path": "tests/login/redirect-by-role.test.mjs",
+      "oldHash": "57c791cfbca3098c8ed4327e50c6efb258724810a5e08bba663a12a3fecc4ba2",
+      "newHash": "c5ac393abaad028f7837d116d9e6de23743cb01265ffe4db2382c1c2aec14520"
     }
   ],
   "affectedRecords": [
@@ -66,22 +66,39 @@
     "cf-pages__cf-functions__19",
     "correos",
     "csp",
-    "github-actions",
-    "github-actions__deployments__30",
-    "github-actions__pruebas-automatizadas__31",
+    "cuenta-bloqueada",
+    "entrada-login",
+    "entrada-login__google-btn__1",
+    "entrada-login__login-codigo__2",
+    "firebase-auth__redirect-result__5",
+    "firestore__users-uid__8",
+    "google-btn",
+    "google-btn__firebase-auth__3",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
     "pagina-perfil",
+    "pagina-principal",
     "pedidos",
     "pedidos__inventario__33",
+    "perfil",
+    "perfil__ultimos-datos__11",
     "productos",
-    "pruebas-automatizadas",
+    "redirect-result",
     "redirect-result__sesion-estado__6",
     "roles__pagina-perfil__18",
+    "roles__pagina-principal__17",
+    "roles__perfil__10",
     "roles__super-panel__14",
     "sesion-estado",
     "sesion-estado__firestore__7",
     "super-panel",
     "super-panel__admin-guard__15",
     "super-panel__pedidos__35",
-    "super-panel__productos__34"
+    "super-panel__productos__34",
+    "ultimos-datos",
+    "ultimos-datos__perfil__13",
+    "users-uid",
+    "users-uid__cuenta-bloqueada__12",
+    "users-uid__roles__9"
   ]
 }

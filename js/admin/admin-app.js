@@ -1005,7 +1005,23 @@ window.addEventListener('tintin:app-check-ready', event => {
   window.location.reload();
 });
 
-function showAdminAuthUnknown() {
+function adminSessionPresentation(reason, handoffPending = false) {
+  const absent = !handoffPending && ['AUTHORITATIVE_EMPTY', 'EXPLICIT_LOGOUT', 'AUTH_REVOKED_OR_SIGNED_OUT'].includes(reason);
+  return absent ? {
+    title: reason === 'AUTHORITATIVE_EMPTY' ? 'Ingresá a tu panel' : 'Tu sesión terminó',
+    message: reason === 'AUTHORITATIVE_EMPTY'
+      ? 'Este navegador no tiene una sesión iniciada. Ingresá una vez para acceder al panel; la sesión se guarda en este navegador.'
+      : 'Ingresá para continuar en la misma sección del panel.',
+    retry: false,
+  } : {
+    title: 'No pudimos confirmar tu sesión',
+    message: 'La verificación de acceso no terminó. Podés reintentar sin cerrar tu cuenta o volver al ingreso si el problema continúa.',
+    retry: true,
+  };
+}
+
+function showAdminAuthUnknown(reason, handoffPending = false) {
+  const presentation = adminSessionPresentation(reason, handoffPending);
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-auth-unknown');
   if (!overlay) {
@@ -1014,16 +1030,20 @@ function showAdminAuthUnknown() {
     overlay.setAttribute('role', 'status');
     overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#713C53';
     overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
-      '<h1 style="font-size:22px;margin:0 0 10px">No pudimos restaurar tu sesión</h1>' +
-      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">La sesión de Firebase no se confirmó en este momento. No se cerró tu cuenta ni se borró ningún dato.</p>' +
+      '<h1 style="font-size:22px;margin:0 0 10px"></h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960"></p>' +
       '<div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">' +
       '<button type="button" id="adm-auth-unknown-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#F8AACA;color:#713C53;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
-      '<a href="login.html" id="adm-auth-login" style="display:inline-flex;align-items:center;border:1px solid #F8AACA;border-radius:10px;padding:10px 17px;color:#713C53;font:inherit;font-weight:700;text-decoration:none">Ingresar nuevamente</a>' +
+      '<a href="/login" id="adm-auth-login" style="display:inline-flex;align-items:center;border:1px solid #F8AACA;border-radius:10px;padding:10px 17px;color:#713C53;font:inherit;font-weight:700;text-decoration:none">Ingresar al panel</a>' +
       '</div>' +
       '</div>';
     document.body.appendChild(overlay);
     overlay.querySelector('#adm-auth-unknown-retry')?.addEventListener('click', () => window.location.reload());
   }
+  overlay.querySelector('h1').textContent = presentation.title;
+  overlay.querySelector('p').textContent = presentation.message;
+  overlay.querySelector('#adm-auth-unknown-retry').hidden = !presentation.retry;
+  overlay.querySelector('#adm-auth-login').href = '/login?from=' + encodeURIComponent('/admin' + window.location.search + window.location.hash);
   hideOverlay();
 }
 
@@ -1142,7 +1162,7 @@ async function startAdminAuthGuard() {
       const failureReason = classifyAdminSessionFailure(snapshot.reason, handoffPending);
       if (failureReason) persistAuthDiagnosticFailure(failureReason);
       teardownAdminRealtimeOnSessionLoss();
-      showAdminAuthUnknown();
+      showAdminAuthUnknown(snapshot.reason, handoffPending);
       return;
     }
     recordAuthDiagnostic('AUTH_USER_AVAILABLE', {
@@ -5462,6 +5482,8 @@ const UnsavedGuard = {
    PRODUCTOS — CRUD
    ============================================= */
 let _allProducts = [];
+// La comparación concurrente usa el documento original, no su presentación saneada.
+let _productSourceById = new Map();
 let _productosUnsub = null;
 let _productInventoryUnsub = null;
 const _productInventoryById = new Map();
@@ -5537,6 +5559,7 @@ function loadProductos() {
       // del propio admin puede producir pero que un editor externo directo
       // sobre Firestore sí podría dejar) rompía el formulario entero al
       // abrir justo ese producto.
+      _productSourceById = new Map(records.map(({ id, record: data }) => [id, data]));
       _allProducts = records.map(({ id, record: data }) => ({ _docId: id, ...data,
         category: wristCategory(data.category || ''), variants: sanitizeVariantData(data.variants || null) }))
         .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
@@ -5779,7 +5802,24 @@ function mountProductColorPhotos(product) {
 }
 
 let productVariantStockBaseline = null;
-function renderProductVariantStock(product) {
+function productVariantStockConfiguration(text) {
+  const attributes = new Map();
+  for (const line of String(text || '').split(/\r?\n/).filter(line => line.trim())) {
+    const separator = line.indexOf(':');
+    const key = line.slice(0, separator).replace(/\s+/g, ' ').trim();
+    const values = line.slice(separator + 1).split(',').map(value => value.replace(/\s+/g, ' ').trim()).filter(Boolean);
+    if (separator < 1 || !key || key.length > 60 || /[<>]/.test(key) || ['__proto__','constructor','prototype'].includes(key) || !values.length || values.some(value => value.length > 120 || /[\/<>]/.test(value))) {
+      throw new Error('Escribí las opciones como Color: dorado, plateado, sin barras ni valores vacíos.');
+    }
+    attributes.set(key, [...new Set([...(attributes.get(key) || []), ...values])]);
+  }
+  if (attributes.size !== 1) throw new Error('Para distribuir el stock, definí una característica con sus opciones. Las matrices existentes conservan su inventario.');
+  const [key, values] = [...attributes][0];
+  if (values.length > 50) throw new Error('Podés configurar hasta 50 opciones.');
+  return {variants: Object.fromEntries([[key, values]]), entries: values.map(variant => ({variant, stock:''}))};
+}
+
+function renderProductVariantStock(product, configuration = null) {
   productVariantStockBaseline = null;
   let panel = document.getElementById('prod-variant-stock');
   if (!panel) {
@@ -5792,12 +5832,33 @@ function renderProductVariantStock(product) {
   const optionsInput = document.getElementById('prod-variants-text');
   stockInput.readOnly = false;
   optionsInput.readOnly = false;
-  if (product?.variantInventory == null) return;
-  productVariantStockBaseline = { stock: product.stock, entries: variantInventoryEntries(product), variants: product.variants };
+  const expectedEntries = variantInventoryEntries(product);
+  if (expectedEntries === null && !configuration) {
+    const configure = document.createElement('button');
+    configure.type = 'button'; configure.className = 'adm-btn adm-btn-outline';
+    configure.textContent = 'Distribuir stock por opción';
+    configure.addEventListener('click', () => {
+      const error = document.getElementById('prod-form-error');
+      try {
+        const draft = productVariantStockConfiguration(optionsInput.value);
+        renderProductVariantStock(product, draft);
+        error.style.display = 'none';
+        optionsInput.dispatchEvent(new Event('input', {bubbles:true}));
+      } catch (failure) {
+        error.textContent = failure.message; error.style.display = '';
+      }
+    });
+    panel.append(configure);
+    return;
+  }
+  productVariantStockBaseline = { stock: product?.stock, expectedEntries, entries: configuration?.entries || expectedEntries, variants: configuration?.variants || product.variants };
   stockInput.readOnly = true;
   optionsInput.readOnly = true;
   const hint = document.createElement('p');
-  hint.textContent = 'Stock por opción. El total se calcula con estas cantidades.';
+  hint.textContent = configuration
+    ? `Distribuí las cantidades de cada opción. Stock anterior: ${product?.stock ?? 'sin control'}. No se guardará hasta completar todas las cantidades.`
+    : 'Stock por opción. El total se calcula con estas cantidades.';
+  if (configuration) stockInput.value = '';
   panel.append(hint);
   for (const entry of productVariantStockBaseline.entries) {
     const label = document.createElement('label');
@@ -5904,7 +5965,8 @@ function _prodEditarNow(docId, duplicate=false) {
   const source = _allProducts.find(x => x._docId === docId);
   if (!source) return;
   const p=duplicate ? productDuplicateData(source) : source;
-  productEditBaseline=duplicate ? null : productFingerprint(source);
+  const stored = _productSourceById.get(docId) || source;
+  productEditBaseline=duplicate ? null : productFingerprint(stored);
   const inventory = duplicate ? {} : _productInventoryById.get(docId) || {};
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = duplicate ? '' : docId;
@@ -5959,6 +6021,8 @@ function _prodEditarNow(docId, duplicate=false) {
   }
   document.getElementById('prod-variants-text').value = variantsText;
   renderProductVariantStock(p);
+  // El inventario por opción bloquea editar las opciones: conservar su representación original.
+  if (!duplicate && productVariantStockBaseline) productVariantStockBaseline.variants = stored.variants;
   mountProductColorPhotos(p);
   document.getElementById('prod-active').checked = p.active !== false;
   document.getElementById('prod-oferta').checked = !!p.oferta;
@@ -6130,6 +6194,7 @@ async function prodGuardar() {
     const docId = document.getElementById('prod-id').value;
     if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
+      let savedProduct;
       if (productVariantStockBaseline) {
         const original=productVariantStockBaseline;
         await withAdminSiteChange(async () => runTransaction(db, async transaction => {
@@ -6137,20 +6202,22 @@ async function prodGuardar() {
           const snapshot = await transaction.get(ref);
           const current = snapshot.data();
           if(productEditBaseline && productFingerprint(current)!==productEditBaseline) throw new Error('El producto cambió en otra sesión. Volvé a abrirlo antes de guardar.');
-          if (!snapshot.exists() || current.stock !== original.stock || JSON.stringify(variantInventoryEntries(current)) !== JSON.stringify(original.entries) || JSON.stringify(current.variants) !== JSON.stringify(original.variants)) {
+          if (!snapshot.exists() || current.stock !== original.stock || JSON.stringify(variantInventoryEntries(current)) !== JSON.stringify(original.expectedEntries)) {
             throw new Error('El stock o las opciones cambiaron mientras editabas. Volvé a abrir el producto antes de guardar.');
           }
           transaction.update(ref, data);
+          savedProduct={...current,...data};
         }));
       } else {
         await withAdminSiteChange(async () => runTransaction(db,async transaction=>{
           const ref=doc(db,'products',docId),snapshot=await transaction.get(ref);
           if(!snapshot.exists() || (productEditBaseline && productFingerprint(snapshot.data())!==productEditBaseline)) throw new Error('El producto cambió o fue eliminado. Volvé a abrirlo antes de guardar.');
           transaction.update(ref,data);
+          savedProduct={...snapshot.data(),...data,variants:variantsParsed || undefined};
         }));
       }
-      productEditBaseline=productFingerprint({...oldProd,...data,variants:productVariantStockBaseline?.variants || variantsParsed || undefined});
-      if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,entries:variantInventoryEntries(data),variants:data.variants};
+      productEditBaseline=productFingerprint(savedProduct);
+      if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,expectedEntries:variantInventoryEntries(data),entries:variantInventoryEntries(data),variants:data.variants};
       if (currentRole === 'superadmin') {
         await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true }));
       }
@@ -6189,7 +6256,7 @@ async function prodGuardar() {
       // conserva el ID ya creado y reintenta como edición, sin duplicar.
       document.getElementById('prod-id').value = newRef.id;
       productEditBaseline=productFingerprint(data);
-      if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,entries:variantInventoryEntries(data),variants:data.variants};
+      if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,expectedEntries:variantInventoryEntries(data),entries:variantInventoryEntries(data),variants:data.variants};
       if (currentRole === 'superadmin') {
         await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true }));
       }

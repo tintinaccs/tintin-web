@@ -431,7 +431,16 @@ async function redirectByRole(role, email, options = {}) {
     recordAuthDiagnostic('PERSISTENCE_WAIT_BEFORE_ADMIN', { source: 'login', persisted });
     recordAuthDiagnostic('REDIRECT_REASON', { source: 'login', reason: 'authenticated-internal-role' });
     recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'login', destination: 'admin' });
-    window.location.replace('admin.html');
+    // Sólo cuentas internas pueden volver al panel. El destino se restringe
+    // a su ruta local y conserva la sección; nunca acepta un host externo.
+    const requestedAdmin = new URLSearchParams(window.location.search).get('from') || '';
+    const adminReturn = /^\/admin(?:\.html)?(?:[?#]|$)/.test(requestedAdmin)
+      ? new URL(requestedAdmin, window.location.origin) : null;
+    if (adminReturn?.origin === window.location.origin) {
+      window.location.replace(adminReturn.pathname + adminReturn.search + adminReturn.hash);
+    } else {
+      window.location.replace('admin.html');
+    }
     return;
   }
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));

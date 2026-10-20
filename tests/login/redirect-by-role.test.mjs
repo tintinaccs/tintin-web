@@ -112,6 +112,23 @@ test('un rol desconocido o vacío se trata como clienta, nunca como personal', a
   }
 });
 
+test('el personal vuelve a la sección administrativa solicitada y rechaza otros destinos', async () => {
+  for (const [target, expected] of [
+    ['/admin#productos', '/admin#productos'],
+    ['/admin.html?vista=lista#productos', '/admin.html?vista=lista#productos'],
+    ['https://evil.example/admin#productos', 'admin.html'],
+    ['//evil.example/admin', 'admin.html'],
+    ['/admin/../checkout', 'admin.html'],
+    ['/administrator', 'admin.html'],
+    ['/login', 'admin.html'],
+  ]) {
+    const {redirectByRole, world} = createLogin({search:'?from=' + encodeURIComponent(target)});
+    await redirectByRole('admin', 'admin@example.com', {user:{uid:'u-interno'}});
+    assert.deepEqual(world.redirects, [expected], target);
+    assert.equal(world.persistenceWaits, 1);
+  }
+});
+
 test('tienda cerrada confirmada o configuración sin confirmar: no se navega', async () => {
   const closed = createLogin({ allowed: false, storeConfig: { __storeConfigStatus: 'ok' } });
   await closed.redirectByRole('client', 'clienta@example.com', {});
