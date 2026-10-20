@@ -151,7 +151,7 @@ function setVisualStep(target) {
     if (index === target) step.classList.add('active');
     if (index < target) step.classList.add('done');
   });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.TintinPageScroll?.reset(document.querySelector(`${PANEL_SELECTOR}.active`));
 }
 
 function nativeBackButtonFor(step) {

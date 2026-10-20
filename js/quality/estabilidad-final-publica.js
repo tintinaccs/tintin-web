@@ -175,6 +175,7 @@ async function enhanceProfile() {
     tabs.querySelectorAll('[data-profile-tab]').forEach(button => button.setAttribute('aria-selected', button.dataset.profileTab === id ? 'true' : 'false'));
     const orderHash = /^#pedido-[A-Za-z0-9_-]+$/.test(location.hash) && id === 'pedidos' ? location.hash : `#${id}`;
     history.replaceState(null, '', id === 'resumen' ? '/perfil' : `/perfil${orderHash}`);
+    window.TintinPageScroll?.reset(wrap);
   }
   tabs.addEventListener('click', event => {
     const button = event.target.closest?.('[data-profile-tab]');

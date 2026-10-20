@@ -103,6 +103,7 @@ function refresh(root, state) {
   }
 }
 
+let resetNavigation = true;
 let queued = false;
 function schedule() {
   if (queued) return;
@@ -116,19 +117,34 @@ function schedule() {
       if (!root.isConnected) roots.delete(root);
       else refresh(root, state);
     }
+    if (resetNavigation) {
+      resetNavigation = false;
+      const active = document.querySelector('.adm-content > .adm-section.active,[data-admin-workspace]');
+      if (active) window.TintinPageScroll?.reset(active);
+    }
   });
 }
 
 // Observar contenido y visibilidad, también en módulos montados después del auth.
 // No se observa class/aria: las mejoras no realimentan el observer ni interceptan eventos.
 const observer = new MutationObserver(records => {
+  if (records.some(record => [...record.addedNodes].some(node => node.matches?.('.adm-section.active')))) resetNavigation = true;
   if (records.some(record => !record.target.closest?.('.tt-admin-workspace-bar,.tt-admin-table-hint'))) schedule();
 });
 for (const surface of document.querySelectorAll('.adm-content,[data-admin-workspace]')) {
   observer.observe(surface, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'hidden'] });
 }
 // La activación nativa cambia class; se observa sólo el contenedor de secciones.
-const sections = new MutationObserver(schedule);
-for (const root of document.querySelectorAll('.adm-content')) sections.observe(root, { attributes: true, subtree: true, attributeFilter: ['class'] });
+const sections = new MutationObserver(records => {
+  // Sólo una navegación aceptada reinicia la posición; editar o renderizar datos no lo hace.
+  for (const record of records) {
+    const target = record.target;
+    if (target.closest('dialog,[role="dialog"]')) continue;
+    if (record.attributeName === 'class' && target.matches('.adm-section,.correos-panel,.ship-tab-panel,.correos-tab-btn,.ship-tab-btn,.user-tab-btn,[role="tab"]') && target.classList.contains('active') && !(record.oldValue || '').split(/\s+/).includes('active')) resetNavigation = true;
+    if (record.attributeName === 'aria-selected' && target.matches('[role="tab"]') && target.getAttribute('aria-selected') === 'true' && record.oldValue === 'false') resetNavigation = true;
+  }
+  schedule();
+});
+for (const root of document.querySelectorAll('.adm-content')) sections.observe(root, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-selected'], attributeOldValue: true });
 window.addEventListener('resize', schedule, { passive: true });
 schedule();

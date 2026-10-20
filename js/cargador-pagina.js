@@ -17,15 +17,24 @@
   // forzarlo aquí (en head, antes de pintar contenido) evita que cualquier
   // ruta aparezca a mitad de página.
   try { history.scrollRestoration = 'manual'; } catch {}
-  function resetEntryScroll() {
+  var entryScrollBehavior;
+  var entryScrollRevision = 0;
+  function resetEntryScroll(surface) {
+    window.TintinScrollLock?.resetPosition?.();
+    if (surface?.nodeType === 1) {
+      for (var node = surface; node; node = node.parentElement) { node.scrollTo?.({top:0,behavior:'instant'}); node.scrollTop = 0; }
+      surface.querySelectorAll('.adm-card-body,[role="tabpanel"]').forEach(function (panel) { panel.scrollTo?.({top:0,behavior:'instant'}); panel.scrollTop = 0; });
+    }
     var root = document.documentElement;
     var body = document.body;
-    var previous = root.style.scrollBehavior;
+    var revision = ++entryScrollRevision;
+    if (entryScrollBehavior === undefined) entryScrollBehavior = root.style.scrollBehavior;
     root.style.scrollBehavior = 'auto';
     window.scrollTo(0, 0);
     root.scrollTop = 0;
     if (body) body.scrollTop = 0;
     requestAnimationFrame(function () {
+      if (revision !== entryScrollRevision) return;
       try {
         // Una navegación con View Transitions puede abortar el frame mientras
         // cambia de documento. El scroll es accesorio y nunca debe producir
@@ -36,10 +45,12 @@
       } catch (error) {
         if (error?.name !== 'AbortError') console.warn('[Tintin] No se pudo reiniciar el scroll:', error);
       } finally {
-        root.style.scrollBehavior = previous;
+        root.style.scrollBehavior = entryScrollBehavior;
+        entryScrollBehavior = undefined;
       }
     });
   }
+  window.TintinPageScroll = { reset: resetEntryScroll };
   resetEntryScroll();
   document.addEventListener('DOMContentLoaded', resetEntryScroll, { once: true });
   window.addEventListener('load', resetEntryScroll, { once: true, passive: true });
@@ -518,7 +529,10 @@
     window.scrollTo(0, savedScrollY || 0);
   }
 
-  window.TintinScrollLock = { lock: lockScroll, unlock: unlockScroll };
+  window.TintinScrollLock = { lock: lockScroll, unlock: unlockScroll, resetPosition: function () {
+    savedScrollY = 0;
+    if (scrollLockCount > 0 && document.body) document.body.style.top = '0px';
+  } };
 
   function escText(value) {
     const d = document.createElement('div');

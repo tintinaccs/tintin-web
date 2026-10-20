@@ -30,6 +30,7 @@ export function syncProductSurfaces() {
   if (editor) {
     if (!editorWasOpen) {
       editorOpener = document.activeElement;
+      window.TintinPageScroll?.reset(editor);
       (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
     if (compactProductUI()) {
@@ -77,7 +78,7 @@ export function enhanceProductEditor() {
       const option = document.createElement('option');option.value=value;option.textContent=label;select.append(option);
     }
     select.value = 'general';
-    select.addEventListener('change',()=>showSection(card,grid,select.value));
+    select.addEventListener('change',()=>showSection(card,grid,select.value,true));
     navigation.append(text,select);body.prepend(navigation);
   }
   let layout = body.querySelector('.tt-editor-layout');
@@ -107,7 +108,7 @@ export function enhanceProductEditor() {
     const shortcuts = document.createElement('div'); shortcuts.className = 'tt-editor-shortcuts'; shortcuts.setAttribute('aria-label','Secciones del producto');
     for (const [value,title] of [['all','Todo'],...sections.map(([id,title])=>[id,title])]) {
       const button = document.createElement('button'); button.type = 'button'; button.textContent = title; button.dataset.editorSection = value;
-      button.addEventListener('click',()=>showSection(card,grid,value)); shortcuts.append(button);
+      button.addEventListener('click',()=>showSection(card,grid,value,true)); shortcuts.append(button);
     }
     navigation.append(shortcuts);
     mountProductPreview(card,layout);
@@ -145,12 +146,17 @@ export function enhanceProductEditor() {
   refreshProductPreview(card);
 }
 
-function showSection(card,grid,value) {
+function showSection(card,grid,value,resetScroll=false) {
   card.querySelector('#prod-editor-section').value=value;
   for (const button of card.querySelectorAll('[data-editor-section]')) button.setAttribute('aria-pressed',String(button.dataset.editorSection === value));
   for (const field of grid.querySelectorAll(':scope > [data-product-section]')) {
     const hidden=value !== 'all' && field.dataset.productSection !== value;
     if (field.hidden !== hidden) field.hidden=hidden;
+  }
+  if (resetScroll) {
+    card.scrollTop = 0;
+    card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});
+    window.TintinPageScroll?.reset(card);
   }
 }
 

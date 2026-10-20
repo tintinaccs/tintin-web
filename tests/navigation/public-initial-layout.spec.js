@@ -181,3 +181,57 @@ for (const width of [320, 390, 768, 1024, 1280, 1440, 1920]) {
     }
   });
 }
+
+// Inventario completo: incluye acceso, administración, redirección histórica y verificación de Google.
+const entryInventory=JSON.parse(fs.readFileSync(path.join(__dirname,'../../diagnostic-manifest.json'),'utf8')).pages.map(page=>page.path);
+const entryLoader=fs.readFileSync(path.join(__dirname,'../../js/cargador-pagina.js'),'utf8');
+const entryReset=entryLoader.slice(entryLoader.indexOf("  try { history.scrollRestoration"),entryLoader.indexOf('  // El sitio oficial'));
+for(const width of [320,390,768,1024,1440,1920])test(`las 19 rutas del inventario entran, recargan y vuelven arriba · ${width}`,async({page})=>{
+ test.setTimeout(180000);
+ await page.setViewportSize({width,height:800});
+ const root=path.resolve(__dirname,'../..');
+ await page.addInitScript(()=>{document.addEventListener('DOMContentLoaded',()=>{
+  if(!window.TintinPageScroll)return;
+  document.body.style.minHeight='300vh';
+  scrollTo(0,500);
+ },{once:true});});
+ await page.route('**/*',route=>{
+  const url=new URL(route.request().url());
+  if(url.hostname!=='entry.test')return route.abort();
+  const relative=url.pathname==='/about'?'about.html':url.pathname.slice(1);
+  const file=path.resolve(root,relative);
+  if(!file.startsWith(root+path.sep)||!fs.existsSync(file))return route.abort();
+  if(relative.endsWith('.html')){
+   const source=fs.readFileSync(file,'utf8');
+   let html=removeFixtureScripts(source,{removeModulePreloads:true});
+   if(source.includes('js/cargador-pagina.js'))html=html.replace('</head>',`<script>${entryReset}</script></head>`);
+   return route.fulfill({contentType:'text/html',body:html});
+  }
+  if(/\.(css|woff2|png|webp|svg|jpg|jpeg|ico)$/.test(relative))return route.fulfill({path:file});
+  return route.abort();
+ });
+ for(const file of entryInventory){
+  await page.goto(`https://entry.test/${file}`);
+  if(file==='nosotros.html')await page.waitForURL('https://entry.test/about');
+  await expect.poll(()=>page.evaluate(()=>scrollY),file).toBe(0);
+  if(file.startsWith('google')){
+   await expect(page.locator('body')).toHaveText('google-site-verification: googlef396be0b943aa3d1.html');
+   continue;
+  }
+  expect(await page.evaluate(()=>history.scrollRestoration),file).toBe('manual');
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await page.evaluate(()=>{document.body.style.minHeight='300vh';scrollTo({top:500,behavior:'instant'});});
+  await expect.poll(()=>page.evaluate(()=>scrollY),file).toBeGreaterThan(0);
+  await page.reload();
+  await expect.poll(()=>page.evaluate(()=>scrollY),file).toBe(0);
+  await page.evaluate(()=>{scrollTo({top:500,behavior:'instant'});dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
+  await expect.poll(()=>page.evaluate(()=>scrollY),file).toBe(0);
+ }
+ await page.goto('https://entry.test/contact.html');
+ await page.evaluate(()=>scrollTo({top:500,behavior:'instant'}));
+ await page.goto('https://entry.test/envios.html');
+ await page.goBack();
+ await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
+ await page.goForward();
+ await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
+});

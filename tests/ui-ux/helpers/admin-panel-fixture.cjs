@@ -3,12 +3,16 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '../../..');
 const runtimePath = '/js/admin/maestro/espacio-modulos-admin.js';
+const loader = fs.readFileSync(path.join(root, 'js/cargador-pagina.js'), 'utf8');
+const entryScroll = loader.slice(loader.indexOf("  try { history.scrollRestoration"), loader.indexOf('  // El sitio oficial'));
+
 
 async function load(page, width, file = 'admin.html', options = {}) {
   await page.setViewportSize({ width, height: 800 });
   // Markup y estilos reales; ningún controlador de negocio, sesión o red real.
   const scripts = [runtimePath, ...(options.mobile ? ['/js/admin/maestro/navegacion-movil-admin.js'] : []), '/js/admin/maestro/buscador-modulos-admin.js', ...(options.sidebar ? ['/js/admin/sidebar-expandible-admin.js'] : []), ...(options.guard ? ['/js/admin/proteccion-cambios-pendientes-admin.js'] : [])];
   const shell = fs.readFileSync(path.join(root, file), 'utf8')
+    .replace('</head>', `<script nonce="dGludGluLWZpeHR1cmU=">${entryScroll}</script></head>`)
     .replace('</body>', scripts.map(src => `<script nonce="dGludGluLWZpeHR1cmU=" type="module" src="${src}"></script>`).join('') + '</body>' );
   await page.route('**/*', route => {
     const url = new URL(route.request().url());
@@ -31,6 +35,8 @@ async function load(page, width, file = 'admin.html', options = {}) {
     if (layout) layout.style.display = 'flex';
   });
   await expect(page.locator('.tt-admin-workspace-bar').first()).toBeAttached();
+  await page.evaluate(()=>document.fonts.ready);
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 }
 
 module.exports = { load };
