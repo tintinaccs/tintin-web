@@ -852,7 +852,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261020-orders-clean-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261020-orders-clean-2');
     }
   }
 
@@ -922,7 +922,7 @@
   function bootAdminAndProfileFixes() {
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
-      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261020-orders-clean-1');
+      importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261020-orders-clean-2');
       importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261017-domain-cutover-1');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
       importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261017-domain-cutover-1');

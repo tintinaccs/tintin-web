@@ -9,6 +9,6 @@ export function orderDisplayCode(order) {
   const number = testOrderNumber(order);
   return number === null ? String(order?.orderNumber || order?.shortId || order?.orderCode || order?.id || '—') : `TINPEDPRUEBA${String(number).padStart(2, '0')}`;
 }
-export function ordersForView(orders, includeTests = false) {
-  return orders.filter(order => includeTests || testOrderNumber(order) === null).map(order => testOrderNumber(order) === null ? order : { ...order, orderNumber: orderDisplayCode(order) });
+export function ordersForView(orders = [], includeTests = false) {
+  return (orders || []).filter(order => includeTests || testOrderNumber(order) === null).map(order => testOrderNumber(order) === null ? order : { ...order, orderNumber: orderDisplayCode(order) });
 }

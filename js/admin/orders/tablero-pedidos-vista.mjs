@@ -1,4 +1,4 @@
-import { orderDisplayCode, testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-1';
+import { orderDisplayCode, testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { ORDER_STAGES, orderStage, orderStatusLabel, nextOrderStatus, orderNeedsAttention, shippingMethod } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

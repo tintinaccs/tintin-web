@@ -1,4 +1,4 @@
-import { testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-1';
+import { testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { waitForAdminAppCheck, recoverAdminSecurity } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';

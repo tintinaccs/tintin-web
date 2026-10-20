@@ -1,3 +1,4 @@
+import { orderDisplayCode } from '../../js/orders/pedidos-prueba.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -33,15 +34,15 @@ test('el mensaje al cliente usa el número público del pedido', () => {
   const whatsapp = source.slice(source.indexOf('function openWhatsApp('), source.indexOf('async function handleAction('));
   let opened;
   const context = vm.createContext({
-    orderCustomer: order => order.customer,
+    orderDisplayCode, orderCustomer: order => order.customer,
     toast: () => {}, window: { open: url => { opened = new URL(url); } }
   });
   vm.runInContext(display + whatsapp, context);
-  for (const identification of [{ orderNumber: 'TINPED23' }, { shortId: 'TINPED24' }]) {
+  for (const [identification, expectedCode] of [[{ orderNumber: 'TINPED26' }, 'TINPED26'], [{ shortId: 'TINPED27' }, 'TINPED27'], [{ orderNumber: 'TINPED23' }, 'TINPEDPRUEBA23']]) {
     context.order = { id: 'public_INTERNAL_UUID', ...identification, customer: { name: 'Flor', phone: '0981000001' } };
     vm.runInContext('openWhatsApp(order);', context);
     assert.equal(opened.pathname, '/595981000001');
-    assert.match(opened.searchParams.get('text'), /#TINPED2[34]/);
+    assert.ok(opened.searchParams.get('text').includes('#'+expectedCode));
     assert.doesNotMatch(opened.searchParams.get('text'), /public_INTERNAL_UUID/);
   }
 });

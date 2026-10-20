@@ -1,4 +1,4 @@
-import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-1';
+import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 /* =============================================================
    TINTIN — Order Stats centralizadas
    =============================================================

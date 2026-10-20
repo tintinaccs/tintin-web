@@ -22,7 +22,7 @@ function statsRuntime(){
  const c={ordersForView};vm.createContext(c);vm.runInContext(head+calc,c);return c.calculateOrderStats;
 }
 test('totales, última compra y perfil ignoran pruebas; la revisión administrativa puede incluirlas',()=>{
- const calculate=statsRuntime();const clean=calculate(samples);assert.equal(clean.totalOrders,2);assert.equal(clean.totalSpent,215000);
+ const calculate=statsRuntime();assert.equal(calculate(null).totalOrders,0);const clean=calculate(samples);assert.equal(clean.totalOrders,2);assert.equal(clean.totalSpent,215000);
  assert.equal(calculate(samples.slice(0,25)).lastOrderId,'');assert.equal(calculate(samples,{includeTestOrders:true}).totalOrders,27);
  assert.equal(calculate([...samples,samples[25]]).totalOrders,2);
 });

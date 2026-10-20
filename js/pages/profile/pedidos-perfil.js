@@ -1,8 +1,8 @@
-import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-1';
+import { ordersForView } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
 import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-1';
+import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1-ui-fixes-20261014-1-admin-live-20261016-1';
 import { ORDER_LIFECYCLE_LABELS, orderStatusLabel, orderTimeline, customerOrderMessage } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 

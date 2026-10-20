@@ -1,7 +1,7 @@
-import { ordersForView, testOrderNumber, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-1';
+import { ordersForView, testOrderNumber, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261018-products-master-1';
 import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261020-selection-top-1';
-import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261020-orders-clean-1';
+import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261020-orders-clean-2';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';

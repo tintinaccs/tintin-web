@@ -1,4 +1,4 @@
-import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-1';
+import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 /* =============================================================
    TINTIN — Ficha de usuario (helper de solo lectura)
 
@@ -108,7 +108,7 @@ if (!window.TintinAdminUserFichaBooted) {
       const orders = ordersResult.status === 'fulfilled' ? ordersResult.value : [];
       // Las cifras de la ficha siguen la fuente completa del panel, no cachés históricas del perfil.
       if(window.TintinAdminOrders?.ready?.()) {
-        const {calculateOrderStats}=await import('../../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-1');
+        const {calculateOrderStats}=await import('../../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2');
         let snapshot;const stop=window.TintinAdminOrders.subscribe(value=>{snapshot=value;});stop();
         const accountOrders=(snapshot?.orders||[]).filter(order=>order.userId===uid || (user.email && String(order.userEmail||'').toLowerCase()===String(user.email).toLowerCase()));
         user={...user,...calculateOrderStats(accountOrders,{includeTestOrders:snapshot?.includeTestOrders===true})};
