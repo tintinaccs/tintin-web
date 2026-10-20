@@ -2991,3 +2991,6 @@ Seguimiento PR1182 tras autorización explícita del titular para integrar y pub
 
 
 Reconciliación autorizada de PR1182: durante el cierre main avanzó a dc6da947 con1175/1183/1184. Se integran editor visual, iconos rosa/blanco y recuperación/contraste, conservando la edición de tarjetas y el feed. Conflictos de versiones/documentación/pruebas se combinan; todos los derivados y el plan se regeneran contra esta base. No se hereda como PASS_CI la ejecución del candidato anterior ni se altera el trabajo remoto. Se repiten productos/controlador, responsive y contrato de entrega del candidato consolidado.
+
+
+CI39503283596 aprobó la generación exacta, sin deriva, pero la regresión de comercio móvil medía una ficha cerrada después de pulsar el centro de una tarjeta que ahora contiene el campo de stock. La prueba usa el botón accesible del nombre del producto y espera la ficha abierta antes de medirla; no se cambia ni se relaja el límite de ancho, ni se hace que un clic en cantidad abra una ficha. La matriz específica se repite sin reintentos antes del nuevo candidato.
