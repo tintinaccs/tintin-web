@@ -5462,6 +5462,8 @@ const UnsavedGuard = {
    PRODUCTOS — CRUD
    ============================================= */
 let _allProducts = [];
+// La comparación concurrente usa el documento original, no su presentación saneada.
+let _productSourceById = new Map();
 let _productosUnsub = null;
 let _productInventoryUnsub = null;
 const _productInventoryById = new Map();
@@ -5537,6 +5539,7 @@ function loadProductos() {
       // del propio admin puede producir pero que un editor externo directo
       // sobre Firestore sí podría dejar) rompía el formulario entero al
       // abrir justo ese producto.
+      _productSourceById = new Map(records.map(({ id, record: data }) => [id, data]));
       _allProducts = records.map(({ id, record: data }) => ({ _docId: id, ...data,
         category: wristCategory(data.category || ''), variants: sanitizeVariantData(data.variants || null) }))
         .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
@@ -5904,7 +5907,8 @@ function _prodEditarNow(docId, duplicate=false) {
   const source = _allProducts.find(x => x._docId === docId);
   if (!source) return;
   const p=duplicate ? productDuplicateData(source) : source;
-  productEditBaseline=duplicate ? null : productFingerprint(source);
+  const stored = _productSourceById.get(docId) || source;
+  productEditBaseline=duplicate ? null : productFingerprint(stored);
   const inventory = duplicate ? {} : _productInventoryById.get(docId) || {};
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = duplicate ? '' : docId;
@@ -5959,6 +5963,8 @@ function _prodEditarNow(docId, duplicate=false) {
   }
   document.getElementById('prod-variants-text').value = variantsText;
   renderProductVariantStock(p);
+  // El inventario por opción bloquea editar las opciones: conservar su representación original.
+  if (!duplicate && productVariantStockBaseline) productVariantStockBaseline.variants = stored.variants;
   mountProductColorPhotos(p);
   document.getElementById('prod-active').checked = p.active !== false;
   document.getElementById('prod-oferta').checked = !!p.oferta;
@@ -6130,6 +6136,7 @@ async function prodGuardar() {
     const docId = document.getElementById('prod-id').value;
     if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
+      let savedProduct;
       if (productVariantStockBaseline) {
         const original=productVariantStockBaseline;
         await withAdminSiteChange(async () => runTransaction(db, async transaction => {
@@ -6137,19 +6144,21 @@ async function prodGuardar() {
           const snapshot = await transaction.get(ref);
           const current = snapshot.data();
           if(productEditBaseline && productFingerprint(current)!==productEditBaseline) throw new Error('El producto cambió en otra sesión. Volvé a abrirlo antes de guardar.');
-          if (!snapshot.exists() || current.stock !== original.stock || JSON.stringify(variantInventoryEntries(current)) !== JSON.stringify(original.entries) || JSON.stringify(current.variants) !== JSON.stringify(original.variants)) {
+          if (!snapshot.exists() || current.stock !== original.stock || JSON.stringify(variantInventoryEntries(current)) !== JSON.stringify(original.entries)) {
             throw new Error('El stock o las opciones cambiaron mientras editabas. Volvé a abrir el producto antes de guardar.');
           }
           transaction.update(ref, data);
+          savedProduct={...current,...data};
         }));
       } else {
         await withAdminSiteChange(async () => runTransaction(db,async transaction=>{
           const ref=doc(db,'products',docId),snapshot=await transaction.get(ref);
           if(!snapshot.exists() || (productEditBaseline && productFingerprint(snapshot.data())!==productEditBaseline)) throw new Error('El producto cambió o fue eliminado. Volvé a abrirlo antes de guardar.');
           transaction.update(ref,data);
+          savedProduct={...snapshot.data(),...data,variants:variantsParsed || undefined};
         }));
       }
-      productEditBaseline=productFingerprint({...oldProd,...data,variants:productVariantStockBaseline?.variants || variantsParsed || undefined});
+      productEditBaseline=productFingerprint(savedProduct);
       if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,entries:variantInventoryEntries(data),variants:data.variants};
       if (currentRole === 'superadmin') {
         await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true }));
