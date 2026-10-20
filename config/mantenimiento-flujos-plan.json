@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "bec9d6018f06af703a5614e685af07ce08607a8a",
+  "baseCommit": "cc7bb539d98bd747160a4c1b2ceaf65133fe4d12",
   "reason": "Evitar cabeceras repetidas de etapas de Pedidos en escritorio y compacto; conservar navegacion accesible, seleccion y contadores sin modificar datos, permisos o stock. Correccion y publicacion solicitadas por el titular.",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "365d058e4cba7107d76bcee3e9ba15383837f9833448c0f0c3462b9e3f9a16ea",
-      "newHash": "d81830b6f32c2b3c02fb6b34e8650d236f3224801d4f4291aac89d8e09f6e7ee"
+      "oldHash": "d81830b6f32c2b3c02fb6b34e8650d236f3224801d4f4291aac89d8e09f6e7ee",
+      "newHash": "cb2197c95a5c6633f9691ecbf1dddb8f7ec61227304f13a123372ee7df5672b4"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "2590cb3f1cdafa6b1610b08406841070908deb3d36e165a887a45dd6707f61dc",
-      "newHash": "a045067768e4ffb9a6aaf9a29a9066a4e762bc71816faca7f79ce8324f7582b9"
+      "oldHash": "a045067768e4ffb9a6aaf9a29a9066a4e762bc71816faca7f79ce8324f7582b9",
+      "newHash": "16988c059ce95f4229a3b9065ebfb136bde2371e47dc0e29e8aaf73380be9831"
     }
   ],
   "affectedRecords": []
