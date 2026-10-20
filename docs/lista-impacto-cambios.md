@@ -1,3 +1,7 @@
+## 2026-10-20 — Compatibilidad con1175 ya integrado
+
+Se preservan todos sus controles y contratos. Este candidato sólo suma la precedencia de navegación modal y sus referencias, junto a la alternancia pública, encabezados y filtro de avisos. La nueva base de mantenimiento es main453686c66. No replica el rediseño ni modifica la autoridad de stock/guardado.
+
 ## 2026-10-20 — Encabezados rosa y alternancia completa de bloques
 
 Fuentes: sistema-superficies-tintin.css, marca-movil.css y product.html. Degradado de fondo completo y blur sólo del fondo en encabezados públicos/Admin/acceso/checkout, sin violeta ni borde inferior duro. Tu selección conserva su región comercial protegida (div role=region), como hermana de la ficha, y .tinsel participa en el selector visual y su fallback CSS para participar en la misma secuencia visible que ficha, recomendaciones y footer; se conservan IDs, controles, datos y contratos del carrito. Impacto responsive compartido en todas las rutas que cargan el sistema de superficies. Veinte regresiones nuevas en el spec de superficies, aserciones de header administrativo y las suites existentes de selección/espaciado; URLs y bundle de Inicio se regeneran canónicamente. No hay cambios de stock, pagos, roles ni escrituras comerciales adicionales.
@@ -7,6 +11,14 @@ Fuente: shopify-commerce-admin.css y su versión canónica. La ocultación compa
 ## 2026-10-20 — Pedidos de prueba en la campana pública
 
 Fuente funcional: notificaciones-clientes.js reutiliza pedidos-prueba.mjs antes de lista, badge y avisos en vivo del canal público, tanto para Super Admin como para clientas. Conserva TINPED26+, actividad social, autorización de las consultas y documentos originales. No elimina ni migra notificaciones ni altera pagos/stock. Los consumidores del shell reciben sólo nuevas referencias inmutables, generadas desde la fuente canónica. Regresión de suscripción en header-activity-feed.test.mjs. El ajuste Windows del fixture del panel se verificó localmente y se excluyó del candidato al corroborarlo ya publicado en1179. CSP, caché, manifiesto y mantenimiento se regeneran; evidencia y pendientes actuales en CURRENT_STATE.
+
+## 2026-10-20 — Integración del editor de Productos PR1175
+
+Reconciliación con main5c005560: autoridades funcionales de Productos y controles del PR conservados; navegación de sección mantiene reset de scroll y borrador. Referencias nuevas del conjunto JS/CSS invalidan caché sin retroceder Pedidos/push/PWA. El contraste se verifica sobre selecciones visuales existentes. Se comprueba creación con0 y edición del mismo documento, visibilidad manual, variantes y geometría en11 dimensiones. Derivados/plan protegido se generan contra main vigente; sin cambios de Rules, Auth, pedidos ni datos de catálogo real. Evidencia actual en CURRENT_STATE.
+
+## 2026-10-20 — Crear y editar productos con controles visuales
+
+Fuentes: formulario admin compartido, interfaz-productos-adaptable.js, controles-editor-producto.js y shopify-commerce-admin.css. Se conservan campos/roles/CRUD, fotos y cantidades por variante; controles nuevos escriben sólo los campos canónicos del borrador. Nuevo parte de stock cero/inactivo; modificar cantidad actualiza active, manteniendo ajuste explícito en Visibilidad y sin activar al abrir. Cantidades históricas, stock sin control y opciones de texto avanzadas conservados. Tarjetas plegables, selector único y acciones accesibles en móvil/tablets/laptop/desktop. Impacta sólo editor de Productos; consumidores cambian URLs de caché y derivados por herramientas canónicas. Evidencia y límites en CURRENT_STATE; no hay escrituras comerciales de prueba.
 
 ## 2026-10-20 — Pedidos reales, filtros y barra de selección
 

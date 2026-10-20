@@ -1,4 +1,5 @@
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261019-product-editor-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261020-minimal-editor-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
   ['general', 'Datos generales', ['prod-name','prod-sku','prod-category','prod-collection','prod-description','prod-tags']],
@@ -77,7 +78,7 @@ export function enhanceProductEditor() {
     for (const [value,label] of [['all','Todos los campos'],...sections.map(([id,title])=>[id,title])]) {
       const option = document.createElement('option');option.value=value;option.textContent=label;select.append(option);
     }
-    select.value = 'general';
+    select.value = 'all';
     select.addEventListener('change',()=>showSection(card,grid,select.value,true));
     navigation.append(text,select);body.prepend(navigation);
   }
@@ -96,21 +97,23 @@ export function enhanceProductEditor() {
     const originalFields = [...grid.children];
     for (const [section,title,ids] of sections) {
       const group = document.createElement('section'); group.className = 'tt-editor-section'; group.dataset.productSection = section;
-      const heading = document.createElement('h2'); heading.textContent = title;
+      const heading = document.createElement('h2');
+      const toggle = document.createElement('button');toggle.type='button';toggle.className='tt-editor-section-toggle';toggle.textContent=title;
+      const open=!['specs','visibility'].includes(section);
+      toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-controls',`prod-section-${section}`);
+      const chevron=document.createElement('span');chevron.className='tt-editor-chevron';chevron.setAttribute('aria-hidden','true');chevron.textContent='⌃';toggle.append(chevron);heading.append(toggle);
       const description = document.createElement('p'); description.className = 'tt-editor-caption'; description.textContent = descriptions[section];
       const fields = document.createElement('div'); fields.className = 'tt-editor-section-fields';
+      fields.id=`prod-section-${section}`;fields.hidden=!open;description.hidden=!open;
+      toggle.addEventListener('click',()=>{
+        const expanded=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(expanded));fields.hidden=!expanded;description.hidden=!expanded;
+      });
       group.append(heading,description,fields); grid.append(group);
       for (const id of ids) {
         const field = originalFields.find(field=>field.id === id || field.querySelector(`#${id}`));
         if (field) fields.append(field);
       }
     }
-    const shortcuts = document.createElement('div'); shortcuts.className = 'tt-editor-shortcuts'; shortcuts.setAttribute('aria-label','Secciones del producto');
-    for (const [value,title] of [['all','Todo'],...sections.map(([id,title])=>[id,title])]) {
-      const button = document.createElement('button'); button.type = 'button'; button.textContent = title; button.dataset.editorSection = value;
-      button.addEventListener('click',()=>showSection(card,grid,value,true)); shortcuts.append(button);
-    }
-    navigation.append(shortcuts);
     mountProductPreview(card,layout);
     const previewButton = document.createElement('button'); previewButton.type='button';previewButton.className='adm-btn adm-btn-outline tt-editor-preview-jump';
     previewButton.textContent='Ver vista previa';previewButton.setAttribute('aria-controls','prod-live-preview');
@@ -140,20 +143,24 @@ export function enhanceProductEditor() {
   }
   const selected=card.querySelector('#prod-editor-section').value;
   const message=error?.style.display !== 'none' ? error?.textContent.trim() || '' : '';
-  showSection(card,grid,message ? 'all' : selected);
+  showSection(card,grid,message ? 'all' : selected,Boolean(message));
   if(message && message!==lastError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
   lastError=message;
   refreshProductPreview(card);
+  installEditorControls(card);refreshEditorControls(card);
 }
 
-function showSection(card,grid,value,resetScroll=false) {
+function showSection(card,grid,value,expand=false) {
   card.querySelector('#prod-editor-section').value=value;
-  for (const button of card.querySelectorAll('[data-editor-section]')) button.setAttribute('aria-pressed',String(button.dataset.editorSection === value));
   for (const field of grid.querySelectorAll(':scope > [data-product-section]')) {
     const hidden=value !== 'all' && field.dataset.productSection !== value;
     if (field.hidden !== hidden) field.hidden=hidden;
+    if (!hidden && expand) {
+      field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
+      for(const content of field.querySelectorAll(':scope > .tt-editor-section-fields,:scope > .tt-editor-caption')) if(content.hidden)content.hidden=false;
+    }
   }
-  if (resetScroll) {
+  if (expand) {
     card.scrollTop = 0;
     card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});
     window.TintinPageScroll?.reset(card);
