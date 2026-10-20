@@ -817,6 +817,7 @@ document.addEventListener('click', event => {
   const card = button.closest('.tt-product-card');
   if (!card) return;
   event.preventDefault();
+  if (button.dataset.cardAvailable === 'false') return;
   cardColorSelections.set(card.dataset.id, button.dataset.cardColor);
   if (cardColorSelections.size > 500) cardColorSelections.delete(cardColorSelections.keys().next().value);
   card.querySelectorAll('[data-card-color]').forEach(option => option.setAttribute('aria-pressed', String(option === button)));

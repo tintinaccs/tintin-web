@@ -40,7 +40,7 @@
     "test:cart-quantity-browser": "playwright test tests/cart/quantity-browser.spec.js --project=chromium",
     "test:engagement": "node --test tests/engagement/*.test.mjs",
     "test:site-activity": "node --test tests/analytics/site-activity-contract.test.mjs",
-    "test:products-sync": "node --test tests/sync/*.test.mjs",
+    "test:products-sync": "node --test tests/sync/*.test.mjs tests/catalog/available-color-card.test.mjs",
     "test:visual-builder": "node --test tests/visual-builder/*.test.mjs",
     "test:visual-builder-ui": "playwright test tests/visual-builder/visual-builder-ui.spec.js tests/visual-builder/visual-builder-runtime.spec.js --project=chromium",
     "test:navigation-header": "playwright test tests/navigation/header-responsive.spec.js tests/navigation/loader-shell-wait.spec.js tests/navigation/public-initial-layout.spec.js tests/profile/initial-profile-render.spec.js tests/profile/profile-location-recovery.spec.js tests/ui-ux/home-footer-spacing.spec.js tests/ui-ux/version-notice.spec.js tests/navigation/mobile-brand.spec.js tests/navigation/footer-collections.spec.js --project=chromium",

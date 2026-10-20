@@ -1,3 +1,7 @@
+## 2026-10-18 — Corrección acotada de Productos después de1150
+
+Admin usa snapshot crudo e inmutable para la revisión de inventario; mantiene las opciones originales y rechaza concurrencia real. ID de Firestore canónico. Tarjetas bloquean selección de colores agotados y conservan foto disponible; prioridad de stock y cartel existentes. Regresiones se conectan a admin-sync/products-sync. Se conservan todos los cambios de1150, incluidas estadísticas/pedidos. Sin escrituras reales, cambios de reglas, permisos o controles de borrado. Referencias inmutables nuevas, shell, CSP, diagnóstico y mantenimiento canónico contra46c10ef5. Se conservan1153 y1155 (Tu selección y mosaico de Productos).
+
 ## 2026-10-18 — Resumen de dirección principal
 
 El diagnóstico completo incluye la intención explícita de favorito personal (selected) en el dominio existente de participación, diferenciada del Me gusta permanente. Quitar sólo la ruta del usuario autenticado y volver a guardar no modifica el registro social ni genera avisos/contadores duplicados. Se permite quitar productos ya ausentes y se deniega a cuentas bloqueadas; versión optimista de borrado. Cliente, Perfil y cargador reciben referencias nuevas.41 pruebas relacionadas aprobadas, incluidos consumos anteriores sin selected.

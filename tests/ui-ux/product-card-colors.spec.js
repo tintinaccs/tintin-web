@@ -12,12 +12,12 @@ ${media}
 ${renderer}
 const product={id:'fixture',name:'Colores reales',variants:{Color:['Dorado','Plateado']},imageUrl:'/gold1.svg',variantMedia:[{Color:'Dorado',imageUrls:['/gold1.svg','/gold2.svg'],colorHex:'#123ABC'},{Color:'Plateado',imageUrls:['/silver1.svg']}]};
 function paint(){document.getElementById('cards').innerHTML=renderProductCardMarkup(product);}
-paint();window.paint=paint;window.paintSoldOut=()=>{product.stock=0;paint();};`;
+paint();window.paint=paint;window.paintOnlySilver=()=>{product.stock=2;product.variantInventory=[{variant:'Dorado',stock:0},{variant:'Plateado',stock:2}];paint();};window.paintSoldOut=()=>{product.stock=0;paint();};`;
 for(const width of [320,390,768,1024,1280,1440,1920]) test(`tarjeta cambia foto inmediatamente y conserva color en ${width}px`,async({page})=>{
   await page.setViewportSize({width,height:900});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.route('**/card-color-fixture',r=>r.fulfill({contentType:'text/html',body:`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/css/core/tema-unificado-tintin.css"><link rel="stylesheet" href="/css/theme/sistema-superficies-tintin.css"><style>body{margin:16px}.tt-product-card{max-width:300px}.tt-product-img-real{width:100%}.tt-card-color{width:44px;height:44px}.tt-color-swatch{display:block;width:24px;height:24px;border-radius:50%}</style></head><body><div id="cards"></div><script src="/js/components/images/galeria-producto.js"></script><script src="/card-color-harness.js"></script></body></html>`}));
-  await page.route('**/card-color-harness.js',r=>r.fulfill({contentType:'text/javascript',body:harness}));
+  await page.route('**/card-color-fixture',r=>r.fulfill({contentType:'text/html',body:`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/styles.min.css"><link rel="stylesheet" href="/css/core/tema-unificado-tintin.css"><link rel="stylesheet" href="/css/theme/sistema-superficies-tintin.css"><style>body{margin:16px}.tt-product-card{max-width:300px}.tt-product-img-real{width:100%}.tt-card-color{width:44px;height:44px}.tt-color-swatch{display:block;width:24px;height:24px;border-radius:50%}</style></head><body><div id="cards"></div><script src="/js/components/images/galeria-producto.js"></script><script src="/card-color-harness.js"></script></body></html>`}));
+  await page.route('**/card-color-harness.js',r=>r.fulfill({contentType:'text/javascript; charset=utf-8',body:harness}));
   await page.route(/\/(gold|silver)\d\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"/>'}));
   await page.goto('/card-color-fixture');
   await expect(page.getByRole('button',{name:'Dorado',exact:true})).toHaveAttribute('aria-pressed','true');
@@ -35,6 +35,9 @@ for(const width of [320,390,768,1024,1280,1440,1920]) test(`tarjeta cambia foto 
   await expect(page.locator('.tt-product-info')).toHaveCSS('border-top-style','solid');
   await expect(page.locator('.tt-product-info')).toHaveCSS('border-top-width','1px');
   await expect(image).toHaveCSS('opacity','1');
+  await page.evaluate(()=>window.paintOnlySilver());
+  await expect(image).toHaveAttribute('src',/silver1.svg$/);
+  await expect(page.getByRole('button',{name:'Dorado — Agotado',exact:true})).toBeDisabled();
   await page.evaluate(()=>window.paintSoldOut());
   const label=page.locator('.tt-stock-label');
   await expect(label).toBeVisible();

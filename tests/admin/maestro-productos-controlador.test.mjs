@@ -140,3 +140,12 @@ test('nuevo con stock cero se guarda y se vuelve a editar con el mismo controlad
  assert.equal(r.rows.get('products/new-1').stock,0);assert.equal(r.rows.get('products/new-1').price,50000);
  assert.equal([...r.rows.keys()].filter(key=>key.startsWith('products/new-')).length,1);
 });
+
+
+test('inventario legado sin variants no envía undefined al guardar stock cero',async()=>{
+ const r=runtime({variantInventory:[{variant:'Oro',stock:4}]});
+ r.ctx._prodEditarNow('source');r.variantInputs[0].value='0';r.control('prod-active').checked=false;
+ assert.equal(await r.ctx.window.saveTest(),true,r.calls.join('; '));
+ const saved=r.rows.get('products/source');assert.equal(saved.stock,0);assert.equal(saved.active,false);
+ assert.equal(Object.hasOwn(saved,'variants'),false);
+});

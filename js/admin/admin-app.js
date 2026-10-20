@@ -5601,7 +5601,7 @@ function loadProductos() {
       // sobre Firestore sí podría dejar) rompía el formulario entero al
       // abrir justo ese producto.
       _productSourceById = new Map(records.map(({ id, record: data }) => [id, data]));
-      _allProducts = records.map(({ id, record: data }) => ({ _docId: id, ...data,
+      _allProducts = records.map(({ id, record: data }) => ({ ...data, _docId: id,
         category: wristCategory(data.category || ''), variants: sanitizeVariantData(data.variants || null) }))
         .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
       adminRealtimeReady.products = true;
@@ -6230,7 +6230,8 @@ async function prodGuardar() {
         data.variantInventory = variantInventoryEntries({ variantInventory: entries });
         data.stock = entries.reduce((sum, entry) => sum + entry.stock, 0);
         if (data.stock > 1000000) throw new Error('El stock total supera 1.000.000.');
-        data.variants = original.variants;
+        if (original.variants === undefined) delete data.variants;
+        else data.variants = original.variants;
   }
     const operation = await runAdminCrudOperation({
       title: _isEdit ? 'Actualizar producto' : 'Crear producto',
