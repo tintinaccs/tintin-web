@@ -60,3 +60,14 @@ test('el controlador real del perfil filtra antes de renderizar y sumar aunque u
  assert.deepEqual(Array.from(renders.at(-1),o=>o.id),['fixture_26','fixture_27']);assert.equal(stats.at(-1).totalOrders,2);assert.equal(stats.at(-1).totalSpent,215000);
  controller.start({uid:'other'});callbacks[0].next(samples);assert.equal(renders.at(-1).length,0);assert.equal(controller.orders.length,0);
 });
+
+
+test('la exportación legacy aplica el corte también cuando el código sólo existe como ID del documento',async()=>{
+ const source=fs.readFileSync(new URL('../../js/admin/admin-app.js',import.meta.url),'utf8');
+ const start=source.indexOf("document.getElementById('btn-exportar-pedidos').onclick = async () => {")+"document.getElementById('btn-exportar-pedidos').onclick = async () => {".length;
+ const end=source.indexOf("\n  };",start);
+ const rows=[{id:'TINPED01',data:()=>({total:999999})},{id:'TINPED26',data:()=>({total:205000})}];let csv;
+ const context={getDocsPaginated:async()=>({docs:rows,size:2}),collection:()=>({}),db:{},ordersForView,includesTestOrders:()=>false,orderDisplayCode,formatDate:()=>'',ORDER_STATUS_LABELS:{},PAY_STATUS_LABELS:{},toast(){},downloadCsv:(name,records)=>{csv=records;}};vm.createContext(context);
+ await vm.runInContext('(async()=>{'+source.slice(start,end)+'})()',context);
+ assert.equal(csv.length,2);assert.equal(csv[1][0],'TINPED26');assert.equal(csv[1][8],205000);
+});

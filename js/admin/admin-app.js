@@ -7245,7 +7245,7 @@ function loadImportar() {
     ]];
     snap.docs.forEach(d => {
       const o = d.data();
-      if (!ordersForView([o], includesTestOrders()).length) return;
+      if (!ordersForView([{id:d.id,...o}], includesTestOrders()).length) return;
       const productos = (o.items || []).map(i => `${i.qty}x ${i.name}${i.variant ? ' (' + i.variant + ')' : ''}`).join('; ');
       const metodo = SHIP_LABELS[o.shipping?.method] || o.shipping?.method || '—';
       const ciudadZona = [o.shipping?.city, o.shipping?.zone].filter(Boolean).join(' / ') || '—';
