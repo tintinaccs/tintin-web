@@ -105,7 +105,13 @@ test('perder la sesión elimina el editor de compra y sus datos del DOM',async({
  await start(page,390,844);await nativeOrders(page);await page.evaluate(()=>window.TintinOrderAdmin.openAdvancedOrderEditor('1024',{productIds:['p-reloj']}));await expect(page.locator('#tinped-crud-overlay')).toBeVisible();await page.evaluate(()=>window.__authCallback(null));await expect(page.locator('#tinped-crud-overlay')).toHaveCount(0);await expect(page.locator('html')).not.toHaveClass(/tt-product-order-open/);
 });
 
-test('Activos cuenta el estado real incluso con stock agotado',async({page})=>{await start(page,1440,900);await expect(page.locator('[data-product-metric="active"]')).toContainText('2');await page.locator('[data-product-metric="active"]').click();await expect(page.locator('#tt-commerce-products tbody tr')).toHaveCount(2);await expect(page.locator('#tt-commerce-products tbody')).toContainText('Agotado');});
+test('Activos cuenta el estado real incluso con stock agotado',async({page})=>{
+ await start(page,1440,900);await expect(page.locator('[data-product-metric="active"]')).toContainText('2');
+ await page.locator('[data-product-metric="active"]').click();await expect(page.locator('#tt-commerce-products tbody tr')).toHaveCount(2);
+ const row=page.locator('tr[data-id="p-pulsera"]');await expect(row.locator('.tt-commerce-badge').first()).toHaveText('Sin stock');
+ await expect(row.getByLabel('Estado de Pulsera Cuero Café',{exact:true})).toHaveValue('true');
+ await expect(row.getByLabel('Stock de Pulsera Cuero Café',{exact:true})).toHaveValue('0');
+});
 
 test('inactivar varios usa un solo lote con revisión y confirmación explícita',async({page})=>{
  await start(page,1440,900);await bulkBridge(page);await page.locator('[data-select-product="p-reloj"]').check();await page.locator('[data-select-product="p-pulsera"]').check();await page.locator('[data-action="products-bulk-deactivate"]').click();
