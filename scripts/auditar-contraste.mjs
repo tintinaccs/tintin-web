@@ -65,6 +65,9 @@ for (const pag of paginas) {
           return [255,255,255]; };
         const malos = [];
         for (const el of document.querySelectorAll('button,a,input,label,p,span,h1,h2,h3,h4,li,td,th,small,strong')) {
+          // WCAG 1.4.3: el logotipo decorativo no tiene requisito de contraste.
+          // La excepción es específica; no excluye texto por aria-hidden ni controles.
+          if (el.closest('#tt-loader-wordmark[aria-hidden="true"]') && !el.closest('a,button,[role="button"]')) continue;
           const s = getComputedStyle(el), b = el.getBoundingClientRect();
           if (s.display === 'none' || s.visibility === 'hidden' || Number(s.opacity||1) < .1) continue;
           if (b.width < 4 || b.height < 4) continue;

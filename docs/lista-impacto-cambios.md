@@ -1,3 +1,7 @@
+## 2026-10-20 — Cierre de pendientes de revisión global
+
+Alternancia de superficies observa atributos de html además de body para recuperar el login al revelarse, sin duplicar fondos ni releer por mutaciones irrelevantes. Checkout vacío usa el par semántico de colores de botón, con destino conservado. El generador propaga una versión nueva del runtime; afecta19entradas HTML inventariadas/17con runtime. Lock de Hono de herramientas se actualiza a4.13.13 por advisory confirmado. Pruebas existentes se alinean con paginación, corte de métricas, menú4+Más, sesiones filtradas y revalidación canónica de iconos; se agrega recuperación real de métricas y matrices de ocho dimensiones para los dos arreglos. No modifica datos, Rules, Auth, pedidos ni el editor1175. Mapa, evidencia y límites en los informes del ciclo; derivados y plan desde autoridades canónicas contra main vigente.
+
 ## 2026-10-20 — Integración del editor de Productos PR1175
 
 Reconciliación con main5c005560: autoridades funcionales de Productos y controles del PR conservados; navegación de sección mantiene reset de scroll y borrador. Referencias nuevas del conjunto JS/CSS invalidan caché sin retroceder Pedidos/push/PWA. El contraste se verifica sobre selecciones visuales existentes. Se comprueba creación con0 y edición del mismo documento, visibilidad manual, variantes y geometría en11 dimensiones. Derivados/plan protegido se generan contra main vigente; sin cambios de Rules, Auth, pedidos ni datos de catálogo real. Evidencia actual en CURRENT_STATE.

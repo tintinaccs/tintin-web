@@ -39,7 +39,7 @@ test('dashboard never renders order read failures as commercial zeroes', async (
 
   assert.match(source, /const ordersReady = adminRealtimeReady\.orders === true/);
   assert.match(source, /if \(canMetricas && ordersReady\)/);
-  assert.match(source, /if \(canVentas && ordersReady\)/);
+  assert.match(source, /if \(canVentas && ordersReady && statisticsReady\)/);
   assert.match(source, /statOrdersTotalEl\.textContent = '—'/);
   assert.match(source, /statOrdersTodayEl\.textContent = '—'/);
   assert.match(source, /statSalesMonthEl\.textContent = '—'/);
