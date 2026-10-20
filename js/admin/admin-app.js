@@ -5,7 +5,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261019-variant-links-1';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261019-product-editor-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -37,7 +37,7 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261019-variant-links-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261019-product-editor-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261017-domain-cutover-1";
@@ -5714,8 +5714,60 @@ function mountFormImageWidget(containerId, hiddenInputId, { value, label, hint }
 }
 
 let productColorPhotos = null;
+let productGalleryListener = null;
 function mountProductColorPhotos(product) {
   productColorPhotos?.destroy();
+  productGalleryListener?.abort();
+  productGalleryListener = new AbortController();
+  const gallerySignal = productGalleryListener.signal;
+  const galleryInput = document.getElementById('prod-images-extra');
+  let gallery = document.getElementById('prod-gallery-widget');
+  if (!gallery) {
+    gallery = document.createElement('div'); gallery.id = 'prod-gallery-widget';
+    galleryInput.before(gallery);
+  }
+  _formImageWidgets.get('prod-gallery-widget')?.destroy();
+  let galleryPendingUrl = '';
+  _formImageWidgets.set('prod-gallery-widget', attachImageUploadWidget(gallery, {
+    label: 'Agregar fotos a la galería', hint: 'Subí una foto o elegila de la biblioteca. Se agrega sin reemplazar la portada.',
+    onOpenLibrary: openMediaLibraryPicker,
+    cleanupPrevious: false,
+    onChange: value => {
+      if (gallerySignal.aborted) throw new Error('El producto cambió. Volvé a elegir la foto en su galería.');
+      const url = sanitizeImageUrl(value);
+      const current = galleryInput.value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      const urls = url ? [...new Set([...current, url])] : current.filter(item=>item !== galleryPendingUrl);
+      galleryPendingUrl = url;
+      galleryInput.value = urls.join('\n'); galleryInput.dispatchEvent(new Event('input', { bubbles: true }));
+    },
+  }));
+  let galleryGrid = document.getElementById('prod-gallery-thumbs');
+  if (!galleryGrid) {
+    galleryGrid = document.createElement('div'); galleryGrid.id = 'prod-gallery-thumbs'; galleryGrid.className = 'tt-editor-gallery-grid';
+    gallery.after(galleryGrid);
+  }
+  if (!document.getElementById('prod-gallery-links')) {
+    const links = document.createElement('details'); links.id = 'prod-gallery-links';
+    const summary = document.createElement('summary'); summary.textContent = 'Enlaces de imágenes (opcional)'; links.append(summary);
+    galleryInput.before(links); links.append(galleryInput);
+  }
+  const renderGallery = () => {
+    galleryGrid.replaceChildren();
+    const urls = [...new Set(galleryInput.value.split(/\r?\n/).map(value=>sanitizeImageUrl(value)).filter(Boolean))];
+    urls.forEach((url,index)=>{
+      const item = document.createElement('div');
+      const image = document.createElement('img'); image.src = url; image.alt = `Foto de galería ${index+1}`; image.loading = 'lazy';
+      const remove = document.createElement('button'); remove.type='button';remove.className='adm-btn adm-btn-outline';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar foto ${index+1} de la galería`);
+      remove.addEventListener('click',()=>{
+        galleryInput.value=urls.filter(value=>value!==url).join('\n');
+        if(galleryPendingUrl===url){galleryPendingUrl='';_formImageWidgets.get('prod-gallery-widget')?.setValue('');}
+        galleryInput.dispatchEvent(new Event('input',{bubbles:true}));
+      });
+      item.append(image,remove);galleryGrid.append(item);
+    });
+  };
+  galleryInput.addEventListener('input',renderGallery,{signal:productGalleryListener.signal});
+  renderGallery();
   let container = document.getElementById('prod-color-photos');
   if (!container) {
     container = document.createElement('div'); container.id = 'prod-color-photos'; container.style.gridColumn = '1 / -1';

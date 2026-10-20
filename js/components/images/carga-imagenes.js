@@ -75,7 +75,8 @@ function iconSvg() {
 /**
  * Monta el widget dentro de `container`.
  * options: value, label, hint, maxWidth, maxHeight, quality, thumbSize,
- * section, slotKey, onChange(url, meta), onOpenLibrary(), confirmRemove.
+ * section, slotKey, onChange(url, meta), onOpenLibrary(), confirmRemove,
+ * cleanupPrevious (false para un cargador que agrega varias fotos).
  */
 export function attachImageUploadWidget(container, options = {}) {
   if (!container) return { setValue() {}, destroy() {} };
@@ -93,6 +94,7 @@ export function attachImageUploadWidget(container, options = {}) {
     onChange,
     onOpenLibrary,
     confirmRemove = true,
+    cleanupPrevious = true,
   } = options;
 
   let currentUrl = options.value || '';
@@ -203,7 +205,7 @@ export function attachImageUploadWidget(container, options = {}) {
   }
 
   async function cleanPreviousUrl(previousUrl, nextUrl) {
-    if (!previousUrl || previousUrl === nextUrl) return;
+    if (!cleanupPrevious || !previousUrl || previousUrl === nextUrl) return;
     try {
       await deleteMediaByUrlIfUnused(previousUrl);
     } catch (error) {

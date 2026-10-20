@@ -72,6 +72,7 @@ jobs:
         run: |
           node --test tests/operations/*.test.mjs
           node --test tests/admin/lecturas-admin.test.mjs tests/admin/webhook-diagnostico.test.mjs tests/admin/firebase-permission-recovery.test.mjs
+          node --test tests/admin/maestro-productos.test.mjs tests/admin/maestro-productos-controlador.test.mjs
           npm run test:phase2-import
           node --test tests/import/inventory-reservation-review.test.mjs
           npm run audit:phase2-contract
@@ -128,6 +129,7 @@ jobs:
           npm run test:cart-quantity-browser
           npm run test:phase8-ui
           npx playwright test tests/ui-ux/product-shape-selection.spec.js --project=chromium --retries=0
+          npx playwright test tests/ui-ux/products-responsive-phase-one.spec.js tests/ui-ux/products-mosaic.spec.js tests/ui-ux/products-master.spec.js --project=chromium --retries=0
           npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium
           npx playwright test tests/ui-ux/admin-sidebar-interaction.spec.js --project=chromium
           npx playwright test tests/navigation/header-responsive.spec.js --grep footer --project=chromium

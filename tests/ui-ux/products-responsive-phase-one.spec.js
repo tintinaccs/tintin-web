@@ -10,8 +10,9 @@ const form=shell.slice(formStart,shell.indexOf('\n    </div>\n\n    <!-- =======
 const promptStart=shell.indexOf('<div id="unsaved-modal"');
 const prompt=shell.slice(promptStart,shell.indexOf('\n<!-- ═',promptStart));
 
-async function openEditor(page,width,height){
+async function openEditor(page,width,height,withImages=false){
  await page.setViewportSize({width,height});await mockRuntime(page);
+ if(withImages) await page.route('https://tintin.test/js/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:'export const deleteMediaByUrlIfUnused=()=>{window.__imageCleanup=(window.__imageCleanup||0)+1;throw Error("Sin escrituras");};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=deleteMediaByUrlIfUnused;'}));
  const html=fixtureHtml();const start=html.indexOf('<div class="adm-card" id="prod-form-card"');
  const full=html.slice(0,start)+form+html.slice(html.indexOf('</section>',start));
  await page.route('https://tintin.test/admin-commerce-fixture',route=>route.fulfill({contentType:'text/html',body:full}));
@@ -105,7 +106,7 @@ test('la biblioteca queda sobre el editor y Escape cierra sólo la biblioteca',a
 
 test('cancelar respeta el guard nativo: seguir editando conserva datos y descartar vuelve al listado',async({page})=>{
  await openEditor(page,390,844);
- await page.evaluate(markup=>{const parsed=new DOMParser().parseFromString(markup,'text/html');document.body.append(parsed.getElementById('unsaved-modal'));},prompt);
+ await page.evaluate(markup=>{if(document.getElementById('unsaved-modal'))return;const parsed=new DOMParser().parseFromString(markup,'text/html');document.body.append(parsed.getElementById('unsaved-modal'));},prompt);
  await page.addScriptTag({url:'/js/admin/proteccion-cambios-pendientes-admin.js'});
  await page.evaluate(()=>{
   window.AdminUnsaved.register('primary-editor',{root:'#prod-form-card',serialize:()=>JSON.stringify({name:document.getElementById('prod-name').value,price:document.getElementById('prod-price').value}),save:window.prodGuardar});
@@ -143,8 +144,7 @@ test('selección entre páginas y barra sobre navegación sin tapar el último p
 });
 
 test('foto principal completa en editor real y rotación conserva borrador y pie de acciones',async({page})=>{
- await openEditor(page,390,844);await page.locator('#prod-name').fill('Borrador conservado');await page.locator('#prod-editor-section').selectOption('photos');
- await page.route('https://tintin.test/js/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:'export const deleteMediaByUrlIfUnused=()=>{throw Error("Sin escrituras");};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=deleteMediaByUrlIfUnused;'}));
+ await openEditor(page,390,844,true);await page.locator('#prod-name').fill('Borrador conservado');await page.locator('#prod-editor-section').selectOption('photos');
  await page.evaluate(async url=>{const {attachImageUploadWidget}=await import(url);attachImageUploadWidget(document.getElementById('prod-image-widget'),{label:'Imagen principal',value:'https://img.test/principal.webp'});},'/js/components/images/carga-imagenes.js?fixture');
  const image=page.locator('#prod-image-widget .tt-iuw-preview');await expect(image).toBeVisible();expect((await image.boundingBox()).width).toBeGreaterThan(250);await expect(image.locator('img')).toHaveCSS('object-fit','contain');
  await page.setViewportSize({width:844,height:390});await expect(page.locator('#prod-form-card')).toHaveCSS('height','390px');
@@ -159,4 +159,96 @@ test('salir de Productos libera el scroll y regresar conserva el editor visible'
  await expect(page.locator('html')).not.toHaveCSS('overflow','hidden');
  await page.evaluate(()=>document.getElementById('section-productos').style.display='');
  await expect(page.locator('html')).toHaveClass(/tt-product-editor-open/);await expect(page.locator('#prod-name')).toHaveValue('Borrador');
+});
+
+const adminSource = fs.readFileSync(path.join(root,'js/admin/admin-app.js'),'utf8');
+const stockRenderer = adminSource.slice(adminSource.indexOf('let productVariantStockBaseline = null;'),adminSource.indexOf('function serializeProductForm()'));
+for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]]) {
+ test(`vista previa conectada, cantidades y fotos sin desbordes ${width}x${height}`,async({page})=>{
+  await openEditor(page,width,height);
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.evaluate(async renderer=>{
+   const loadModule=url=>import(new URL(url,location.origin).href);
+   const card=document.getElementById('prod-form-card');
+   const put=(id,value)=>document.getElementById('prod-'+id).value=value;
+   put('name','Anillo Amore');put('description','Un detalle que transforma tu día.');put('price','75000');put('price-before','100000');put('stock','3');
+   put('imageUrl','https://img.test/coctel.webp');put('images-extra','https://img.test/banda.webp');put('material','Acero inoxidable');
+   put('variants-text','Diseño de anillo: coctel, banda');
+   const {variantInventoryEntries}=await loadModule('/js/core/store/inventario-variantes.mjs');
+   const product={variants:{'Diseño de anillo':['coctel','banda']},variantInventory:[{variant:'coctel',stock:1},{variant:'banda',stock:2}],stock:3};
+   new Function('variantInventoryEntries','product',renderer+';renderProductVariantStock(product);')(variantInventoryEntries,product);
+   const {setProductPreviewMedia}=await loadModule('/js/admin/products/vista-previa-producto.js?v=tintin-20261019-product-editor-1');
+   setProductPreviewMedia(card,[{'Diseño de anillo':'coctel',imageUrls:['https://img.test/coctel.webp']},{'Diseño de anillo':'banda',imageUrls:['https://img.test/banda.webp']}]);
+   card.dispatchEvent(new Event('input',{bubbles:true}));
+  },stockRenderer);
+  await page.locator('#prod-editor-section').selectOption('inventory');
+  await expect(page.getByLabel('Stock de coctel',{exact:true})).toHaveValue('1');
+  await page.getByLabel('Stock de banda',{exact:true}).fill('0');
+  await expect(page.locator('#prod-stock')).toHaveValue('1');
+  await expect(page.locator('.tt-editor-stock-row').last()).toContainText('Agotado');
+  await expect(page.locator('.tt-editor-stock-row').last().locator('img')).toHaveAttribute('src',/banda.webp/);
+  const preview=page.locator('#prod-live-preview');
+  await expect(preview.locator('h2')).toHaveText('Anillo Amore');
+  await expect(preview.locator('.tt-editor-preview-money')).toContainText('75.000');
+  await expect(preview.locator('.tt-editor-preview-money')).toContainText('−25%');
+  await preview.getByLabel('Vista previa: Diseño de anillo',{exact:true}).focus();
+  await preview.getByLabel('Vista previa: Diseño de anillo',{exact:true}).selectOption('banda');
+  await expect(preview.locator('.tt-editor-cover img')).toHaveAttribute('src',/banda.webp/);
+  await expect(preview.locator('.tt-editor-preview-stock')).toHaveText('Agotado');
+  await expect(preview.getByLabel('Vista previa: Diseño de anillo',{exact:true})).toBeFocused();
+  await expect(page.locator('#prod-stock')).toHaveValue('1');
+  await expect(page.locator('#prod-variants-text')).toHaveValue('Diseño de anillo: coctel, banda');
+  await preview.getByLabel('Vista previa: Diseño de anillo',{exact:true}).selectOption('');
+  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('80000');
+  await expect(preview.locator('.tt-editor-preview-money')).toContainText('80.000');
+  await expect(preview.locator('.tt-editor-preview-money')).toContainText('−20%');
+  await page.locator('#prod-editor-section').selectOption('all');
+  const boxes=await page.locator('#prod-form-card input:not([type=hidden]),#prod-form-card button,#prod-form-card select,#prod-form-card textarea,#prod-live-preview').evaluateAll(nodes=>nodes.filter(n=>n.getClientRects().length).map(n=>({id:n.id,left:n.getBoundingClientRect().left,right:n.getBoundingClientRect().right})));
+  for(const box of boxes){expect(box.left,box.id).toBeGreaterThanOrEqual(-1);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
+  expect(errors).toEqual([]);
+  expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
+  await page.locator('#prod-editor-section').selectOption('inventory');
+  await page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop=0);await page.evaluate(()=>scrollTo(0,0));
+  await page.screenshot({path:`test-results/product-editor-visual-${width}x${height}.png`});
+ });
+}
+
+test('galería agrega varias fotos y quita la elegida sin borrar fotos pendientes ni cambiar la portada',async({page})=>{
+ await openEditor(page,390,844,true);
+ const mount=adminSource.slice(adminSource.indexOf('let productColorPhotos = null;'),adminSource.indexOf('let productVariantStockBaseline = null;'));
+ await page.evaluate(async source=>{
+  const loadModule=url=>import(new URL(url,location.origin).href);
+  const {attachImageUploadWidget}=await loadModule('/js/components/images/carga-imagenes.js?fixture');
+  const {attachColorPhotos}=await loadModule('/js/admin/products/fotos-por-color.js');
+  const {sanitizeImageUrl}=await loadModule('/js/components/images/utilidades-imagenes.js');
+  document.getElementById('prod-imageUrl').value='https://img.test/portada.webp';
+  document.getElementById('prod-variants-text').value='Diseño: Coctel, Banda';
+  let number=0;const library=async()=>window.__delayGalleryChoice ? new Promise(resolve=>{window.__resolveGalleryChoice=resolve;}) : `https://img.test/extra-${++number}.webp`;
+  window.__remountGallery=new Function('attachImageUploadWidget','attachColorPhotos','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachColorPhotos,library,sanitizeImageUrl,new Map());
+ },mount);
+ await page.locator('#prod-editor-section').selectOption('photos');
+ const gallery=page.locator('#prod-gallery-widget');
+ await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp\nhttps://img.test/extra-2.webp');
+ await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/portada.webp');
+ await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(3);
+ await expect(page.locator('#prod-gallery-thumbs img')).toHaveCount(2);
+ page.once('dialog',dialog=>dialog.accept());await gallery.getByRole('button',{name:'Quitar',exact:true}).click();
+ await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp');
+ await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(2);
+ await page.getByRole('button',{name:'Quitar foto 1 de la galería',exact:true}).click();
+ await expect(page.locator('#prod-images-extra')).toHaveValue('');
+ await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(1);
+ expect(await page.evaluate(()=>window.__imageCleanup||0)).toBe(0);
+ await page.locator('.tt-product-section-nav .tt-editor-preview-jump').click();
+ await expect(page.locator('#prod-live-preview')).toBeFocused();
+ await page.locator('#prod-live-preview').getByRole('button',{name:'Volver a editar'}).click();
+ await expect(page.locator('#prod-editor-section')).toBeFocused();
+ // Una selección pendiente del producto anterior nunca debe tocar el nuevo formulario.
+ await page.evaluate(()=>{window.__delayGalleryChoice=true;window.__oldGalleryRoot=document.querySelector('#prod-gallery-widget .tt-iuw');});
+ await gallery.getByRole('button',{name:'Elegir de la biblioteca',exact:true}).click();
+ await page.evaluate(()=>{window.__remountGallery({variants:{Diseño:['Coctel','Banda']}});window.__resolveGalleryChoice('https://img.test/tardia.webp');});
+ await page.waitForFunction(()=>window.__oldGalleryRoot.textContent.includes('El producto cambió'));
+ await expect(page.locator('#prod-images-extra')).toHaveValue('');
 });
