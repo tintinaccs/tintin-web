@@ -5156,7 +5156,7 @@ html:root body :is(main, .cat-wrap, .login-page, .ck-body, .perfil-wrap, .tt-404
   color: var(--color-text-primary, #222222) !important;
 }
 
-/* Cada bloque conserva su rosa pleno. Sólo 70 px de cada extremo se mezclan.
+/* El degradado recorre todo el bloque y comparte el color de sus uniones.
    Los bloques ocultos por hidden o display:none no cuentan en la secuencia. */
 html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
   --tt-section-background: var(--color-brand-accent, #FDECF2);
@@ -5165,8 +5165,7 @@ html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dia
   --tt-section-end: var(--tt-flow-join);
   --tt-section-gradient: linear-gradient(180deg,
     var(--tt-section-start) 0%,
-    var(--tt-section-background) min(var(--tt-flow-fade), 25%),
-    var(--tt-section-background) max(calc(100% - var(--tt-flow-fade)), 75%),
+    var(--tt-section-background) 50%,
     var(--tt-section-end) 100%);
   background: var(--tt-section-gradient) var(--tt-section-background) !important;
   color: var(--color-text-primary, #222222) !important;
@@ -5215,8 +5214,7 @@ html:root body [data-tt-flow-block] > [data-tt-flow-background] {
   border-radius: 0;
   background: linear-gradient(180deg,
     var(--tt-section-start) 0%,
-    var(--tt-section-background) min(var(--tt-flow-fade), 25%),
-    var(--tt-section-background) max(calc(100% - var(--tt-flow-fade)), 75%),
+    var(--tt-section-background) 50%,
     var(--tt-section-end) 100%) !important;
 }
 html:root body #hero .tt-hero-media { background: transparent !important; }
@@ -5259,6 +5257,21 @@ html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-c
 html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) > img { opacity:.55 !important; }
 
 html:root body .tt-stock-label { color:#4B5563 !important; background:#E5E7EB !important; border-color:#9CA3AF !important; }
+
+/* Un mismo rosa suave en todos los encabezados. El degradado y el desenfoque
+   afectan únicamente al fondo; marca, texto y controles conservan nitidez. */
+html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header.scrolled,
+html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header,
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
+  .ck-header, .login-brand, .adm-topbar, .adm-header) {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--tt-flow-pink) 94%, transparent) 0%,
+    color-mix(in srgb, var(--tt-flow-light) 94%, transparent) 100%) !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(18px) saturate(110%) !important;
+  backdrop-filter: blur(18px) saturate(110%) !important;
+}
 
 
 /* css/pages/home/mas-vendidos.css */
@@ -6661,8 +6674,8 @@ html.tt-phase8-ux-ready .perfil-card {
 html body #tt-mobile-brand { display: none !important; }
 @media (max-width: 767px) {
   html body #tt-mobile-brand {
-    --tt-mobile-brand-bg: #B84C72;
-    --tt-mobile-brand-ink: #FDECF2;
+    --tt-mobile-brand-bg: var(--color-brand-primary, #F8AACA);
+    --tt-mobile-brand-ink: #FFFFFF;
     --tt-mobile-brand-next: #FDECF2;
     display: flex !important;
     position: relative;
@@ -6675,11 +6688,11 @@ html body #tt-mobile-brand { display: none !important; }
     padding: calc(8px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 16px max(20px, env(safe-area-inset-left, 0px));
     border: 0;
     box-shadow: none;
-    background: linear-gradient(180deg, var(--tt-mobile-brand-bg) 0%, var(--tt-mobile-brand-bg) calc(100% - 18px), var(--tt-mobile-brand-next) 100%);
+    background: linear-gradient(180deg, var(--tt-mobile-brand-bg) 0%, var(--tt-mobile-brand-next) 100%);
   }
   html body #tt-mobile-brand[data-brand-surface="light"] {
-    --tt-mobile-brand-bg: #FDECF2;
-    --tt-mobile-brand-ink: #B84C72;
+    --tt-mobile-brand-bg: var(--color-brand-primary, #F8AACA);
+    --tt-mobile-brand-ink: #FFFFFF;
   }
   #tt-mobile-brand .tt-mobile-brand-link {
     display: grid;

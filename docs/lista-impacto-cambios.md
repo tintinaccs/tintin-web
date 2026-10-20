@@ -1,3 +1,9 @@
+## 2026-10-20 — Encabezados rosa y alternancia completa de bloques
+
+Fuentes: sistema-superficies-tintin.css, marca-movil.css y product.html. Degradado de fondo completo y blur sólo del fondo en encabezados públicos/Admin/acceso/checkout, sin violeta ni borde inferior duro. Tu selección pasa a sección hermana para participar en la misma secuencia visible que ficha, recomendaciones y footer; se conservan IDs, controles, datos y contratos del carrito. Impacto responsive compartido en todas las rutas que cargan el sistema de superficies. Veinte regresiones nuevas en el spec de superficies, aserciones de header administrativo y las suites existentes de selección/espaciado; URLs y bundle de Inicio se regeneran canónicamente. No hay cambios de stock, pagos, roles ni escrituras comerciales adicionales.
+## 2026-10-20 — Precedencia de navegación del editor autenticado
+
+Fuente: shopify-commerce-admin.css y su versión canónica. La ocultación compacta debe prevalecer sobre visibility:visible!important del guard de autenticación inline, sólo mientras el editor está abierto. Regresión en el spec responsive existente usa el guard real y seis tamaños; no altera autorización, stock, guardado ni borradores. Se conserva main1179 y se actualiza1180 para incluir esta corrección visual junto al filtro de la campana pública. Evidencia y validación en CURRENT_STATE.
 ## 2026-10-20 — Pedidos de prueba en la campana pública
 
 Fuente funcional: notificaciones-clientes.js reutiliza pedidos-prueba.mjs antes de lista, badge y avisos en vivo del canal público, tanto para Super Admin como para clientas. Conserva TINPED26+, actividad social, autorización de las consultas y documentos originales. No elimina ni migra notificaciones ni altera pagos/stock. Los consumidores del shell reciben sólo nuevas referencias inmutables, generadas desde la fuente canónica. Regresión de suscripción en header-activity-feed.test.mjs. El ajuste Windows del fixture del panel se verificó localmente y se excluyó del candidato al corroborarlo ya publicado en1179. CSP, caché, manifiesto y mantenimiento se regeneran; evidencia y pendientes actuales en CURRENT_STATE.
@@ -463,6 +469,10 @@ Fuentes: interfaz-productos-adaptable.js, vista-previa-producto.js, admin-app.js
 ## 2026-10-20 — Comparación concurrente del editor de Productos
 
 Fuente: admin-app.js, listener de catálogo y guardado transaccional del editor. Impacto: edición de precios/datos, stock total y por variante, representación histórica de opciones, reintentos después de fallo de inventario privado o sincronización. La comparación usa el documento original; la interfaz conserva el saneado. La huella completa sigue detectando cambios reales de otra sesión y productos borrados. No cambia esquema, permisos, reglas, cantidades reales, borrado ni contraseñas. Regresión en maestro-productos-controlador.test.mjs; caché, plan protegido y diagnóstico se generan con las herramientas existentes. Evidencia y límites en CURRENT_STATE.
+## 2026-10-20 — Notificaciones con retorno a ficha y marca instalada responsive
+
+Autoridad compartida destino-admin.mjs para productor Cloudflare, campana, login y consumidor del enlace: rutas administrativas locales, identidad del registro, sesión/permisos vigentes y retorno efímero sin credenciales. Pedidos conservan su fuente canónica; usuarios/participación/mayoristas reutilizan sus fichas y lecturas puntuales, sin aprobar pedidos ni modificar inventario al navegar. Metadatos theme-color y manifiestos se alinean con la muestra #F8AACA; íconos originales blancos/rosados se vuelven a referenciar con versión. Encabezado administrativo translúcido con marca y blur para todos los anchos; pruebas de320a1920px, giro de tablet y móvil, datos tardíos, reintento y sesión no autorizada. Cargadores/baseline/CSP/diagnóstico/plan protegido se regeneran desde sus autoridades. No se cambia autenticación, permisos, reglas, credenciales ni catálogo real. Evidencias en CURRENT_STATE.
+
 
 ## 2026-10-20 — Cabeceras únicas de etapas de Pedidos
 

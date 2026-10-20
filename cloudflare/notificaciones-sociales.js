@@ -6,6 +6,7 @@ import {
   getGoogleAccessToken,
 } from './firebase-admin-ligero.js';
 import { dispatchSocialPushEvent, recordPushFailure } from './servicio-push.js';
+import { adminNotificationLink } from '../js/core/auth/destino-admin.mjs';
 
 const MAX_TITLE = 180;
 const MAX_BODY = 420;
@@ -252,7 +253,7 @@ export async function dispatchAdminNotificationPush(env, built) {
     title: presentation.title,
     body: presentation.body,
     tag: presentation.tag,
-    url: record.targetUrl || '/admin.html?section=notificaciones-push',
+    url: adminNotificationLink(record),
   });
 }
 

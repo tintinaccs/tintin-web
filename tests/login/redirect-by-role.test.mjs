@@ -6,6 +6,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
+import { normalizeAdminDestination, pendingAdminDestination, adminReturnStorage } from '../../js/core/auth/destino-admin.mjs';
 
 const LOGIN = fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf8');
 const SUPER_ADMIN = 'tintinaccs@gmail.com';
@@ -30,15 +31,17 @@ function extractFunction(source, signature) {
 const SAFE_LOCAL_REDIRECT = extractFunction(LOGIN, 'function safeLocalRedirect(value) {');
 const REDIRECT_BY_ROLE = extractFunction(LOGIN, 'async function redirectByRole(role, email, options = {}) {');
 
-function createLogin({ search = '', storeConfig = { __storeConfigStatus: 'ok', open: true }, allowed = true } = {}) {
+function createLogin({ search = '', storeConfig = { __storeConfigStatus: 'ok', open: true }, allowed = true, sessionStorage } = {}) {
   const world = { redirects: [], overlays: [], handoffs: [], diagnostics: [], persistenceWaits: 0, configReads: 0 };
   const window = {
+    sessionStorage,
     location: { origin: ORIGIN, search, replace: url => world.redirects.push(url) },
   };
   const deps = {
     window,
     URL,
     URLSearchParams,
+    normalizeAdminDestination, pendingAdminDestination, adminReturnStorage,
     SUPER_ADMIN,
     PROFILE_READ_DEADLINE_MS: 15000,
     withDeadline: promise => promise,
@@ -114,8 +117,8 @@ test('un rol desconocido o vacío se trata como clienta, nunca como personal', a
 
 test('el personal vuelve a la sección administrativa solicitada y rechaza otros destinos', async () => {
   for (const [target, expected] of [
-    ['/admin#productos', '/admin#productos'],
-    ['/admin.html?vista=lista#productos', '/admin.html?vista=lista#productos'],
+    ['/admin#productos', '/admin?section=productos'],
+    ['/admin.html?vista=lista#productos', '/admin?vista=lista&section=productos'],
     ['https://evil.example/admin#productos', 'admin.html'],
     ['//evil.example/admin', 'admin.html'],
     ['/admin/../checkout', 'admin.html'],
@@ -127,6 +130,17 @@ test('el personal vuelve a la sección administrativa solicitada y rechaza otros
     assert.deepEqual(world.redirects, [expected], target);
     assert.equal(world.persistenceWaits, 1);
   }
+});
+
+test('el personal recupera la ficha tras volver del proveedor sin from; una clienta no recibe ese destino', async () => {
+  const saved = JSON.stringify({url:'/admin?section=usuarios&user=user_123',at:Date.now()});
+  const sessionStorage = {getItem:()=>saved};
+  const staff = createLogin({sessionStorage});
+  await staff.redirectByRole('admin','admin@example.com',{});
+  assert.deepEqual(staff.world.redirects,['/admin?section=usuarios&user=user_123']);
+  const customer = createLogin({sessionStorage});
+  await customer.redirectByRole('client','client@example.com',{});
+  assert.deepEqual(customer.world.redirects,['index.html']);
 });
 
 test('tienda cerrada confirmada o configuración sin confirmar: no se navega', async () => {

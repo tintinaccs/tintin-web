@@ -10,7 +10,7 @@ import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { authenticatedFetch, apiFailureMessage } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
-import { collection, limit, onSnapshot, orderBy, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { collection, doc, getDoc, limit, onSnapshot, orderBy, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const STATUS_LABELS = { pendiente: 'Pendiente', aprobada: 'Aprobada', rechazada: 'Rechazada', cancelada: 'Cancelada' };
 const STATUS_TONES = { pendiente: '#b7791f', aprobada: '#2f855a', rechazada: '#c53030', cancelada: '#718096' };
@@ -338,4 +338,18 @@ export function initWholesaleAdmin() {
     renderUsers();renderRows();
   },()=>{const container=root?.querySelector('[data-wholesale-users]');if(container)container.textContent='No se pudieron cargar las cuentas mayoristas. Reintentá al recargar.';});
   window.TintinWholesaleAdminRefresh = () => { renderRows(); renderDetail(); };
+  window.TintinWholesaleOpenQuote = async id => {
+    if (!isSuperAdmin() || !/^[A-Za-z0-9_-]{1,220}$/.test(id)) return false;
+    const uid = auth.currentUser.uid;
+    const snapshot = await getDoc(doc(db, 'wholesaleQuotes', id));
+    if (auth.currentUser?.uid !== uid || !snapshot.exists()) return false;
+    state.quotes = [...state.quotes.filter(quote => quote.id !== id), { ...snapshot.data(), id }];
+    state.tab = 'quotes'; state.filter = ''; state.search = ''; state.openId = id;
+    root.querySelector('[data-wholesale-filter]').value = '';
+    root.querySelector('[data-wholesale-search]').value = '';
+    renderRows(); renderDetail();
+    root.querySelector('[data-wholesale-detail]')?.scrollIntoView({block:'nearest'});
+    return true;
+  };
+  window.dispatchEvent(new Event('tintin:admin-ficha-source'));
 }

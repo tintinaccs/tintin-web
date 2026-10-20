@@ -1,7 +1,58 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
+const path = require('node:path');
+const root = path.resolve(__dirname,'../..');
+test.beforeEach(async({page})=>{
+  await page.route('**/*',route=>{
+    const url=new URL(route.request().url());
+    const file=path.resolve(root,'.'+url.pathname);
+    if(route.request().method()!=='GET'||!file.startsWith(root+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile())return route.abort();
+    const type={'.css':'text/css','.js':'text/javascript','.mjs':'text/javascript','.woff2':'font/woff2'}[path.extname(file)];
+    return route.fulfill({path:file,contentType:type});
+  });
+});
 const styles = fs.readFileSync('css/theme/sistema-superficies-tintin.css', 'utf8');
 const runtime = fs.readFileSync('js/theme/alternancia-secciones.js', 'utf8');
+const viewports = [[320,568],[390,844],[768,1024],[1024,768],[1180,820],[1181,820],[1366,768],[1440,900],[1920,1080],[844,390]];
+for (const [width,height] of viewports) {
+  test(`producto alterna selección, recomendaciones y footer con fondo completo · ${width}x${height}`, async ({ page }) => {
+    await page.setViewportSize({width,height});
+    const product = removeFixtureScripts(fs.readFileSync('product.html','utf8'), {removeModulePreloads:true});
+    await page.route('**/__product-surfaces', route => route.fulfill({contentType:'text/html',body:product}));
+    await page.goto('/__product-surfaces');
+    await page.addScriptTag({content:runtime});
+    const blocks=page.locator('[data-tt-flow-block]');
+    await expect.poll(()=>blocks.evaluateAll(nodes=>nodes.map(n=>n.dataset.ttFlowBlock))).toEqual(['light','pink','light','pink']);
+    await expect(page.locator('#tinsel-root')).toHaveAttribute('data-tt-flow-block','pink');
+    await expect(page.locator('.tt-related-section')).toHaveAttribute('data-tt-flow-block','light');
+    await expect(page.locator('.tt-footer')).toHaveAttribute('data-tt-flow-block','pink');
+    const rows=await blocks.evaluateAll(nodes=>nodes.map(n=>{
+      const layer=n.querySelector('[data-tt-flow-background]');const s=getComputedStyle(layer),r=layer.getBoundingClientRect();
+      return {left:r.left,width:r.width,gradient:s.backgroundImage,start:getComputedStyle(n).getPropertyValue('--tt-section-start'),end:getComputedStyle(n).getPropertyValue('--tt-section-end')};
+    }));
+    for(let i=0;i<rows.length;i++) {
+      expect(Math.abs(rows[i].left)).toBeLessThan(1);expect(rows[i].width).toBe(width);
+      expect(rows[i].gradient).toContain('50%');
+      if(i)expect(rows[i-1].end).toBe(rows[i].start);
+    }
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+    await page.screenshot({path:`artifacts/local-close/product-tones-${width}.png`,fullPage:true});
+  });
+  test(`encabezado público rosa difuminado en todo el fondo · ${width}x${height}`,async({page})=>{
+    await page.setViewportSize({width,height});
+    await page.route('**/__header-surfaces',route=>route.fulfill({contentType:'text/html',body:removeFixtureScripts(fs.readFileSync('404.html','utf8'),{removeModulePreloads:true})}));
+    await page.goto('/__header-surfaces');
+    await page.addScriptTag({type:'module',content:`import {renderDesktopHeader} from '../../js/components/navigation/escritorio/encabezado-escritorio.js';import {renderTabletHeader} from '../../js/components/navigation/tableta/encabezado-tableta.js';document.body.insertAdjacentHTML('afterbegin',renderDesktopHeader()+renderTabletHeader());`});
+    const header=page.locator(width<768?'#tt-mobile-brand':width<1025?'#tt-header-tablet':'#tt-header-desktop-tablet');
+    await expect(header).toBeVisible();
+    const style=await header.evaluate(n=>{const s=getComputedStyle(n);return {background:s.backgroundImage,blur:s.backdropFilter,border:s.borderBottomWidth};});
+    expect(style.background).toContain('linear-gradient');expect(style.background).not.toContain('184, 76, 114');
+    expect(style.blur).toContain('blur(18px)');expect(style.border).toBe('0px');
+    if(width<768)await expect(page.locator('.tt-mobile-brand-ink')).toHaveCSS('flood-color','rgb(255, 255, 255)');
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+    await page.screenshot({path:`artifacts/local-close/header-tones-${width}.png`});
+  });
+}
 for (const width of [390, 1440]) test(`bloques entre wrappers llenan el ancho y alternan al ocultar secciones en ${width}px`, async ({ page }) => {
   await page.setViewportSize({ width, height: 900 });
   await page.setContent(`<style>${styles}body{margin:0}.cat-wrap{max-width:800px;margin:auto;padding:24px}.cat-hero{height:160px;border-radius:24px;margin-bottom:32px}.cat-layout{height:200px}.tt-footer{height:140px}.white-card{background:white;height:60px;width:120px}</style><body><div class="cat-wrap"><section class="cat-hero"><h1>Catálogo</h1></section><section id="hidden-block" hidden>Oculto</section><div class="cat-layout"><article class="white-card">Tarjeta blanca</article></div></div><footer class="tt-footer">Pie</footer><section role="dialog">Panel</section></body>`);

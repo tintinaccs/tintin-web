@@ -4,7 +4,7 @@ import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-doma
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
-import { collection, doc, limit,  query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { collection, doc, getDoc, limit,  query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { runAdminBulk } from '../utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 
 const DEFAULT_SETTINGS = {
@@ -43,8 +43,47 @@ let likeView = 'activity';
 let selectedReviews = new Set();
 let selectedLikes = new Set();
 let currentDrawer = null;
+let linkedReview = null;
+let linkedLike = null;
+
+// Lectura puntual de la ficha elegida: no depende de filtros ni del límite
+// de la bandeja. Reutiliza los mismos drawers y sus acciones autorizadas.
+window.TintinAdminEngagement = {
+  async openNotificationTarget(kind, id, replyId = '') {
+    if (!isSuperAdmin(user) || !/^[A-Za-z0-9_-]{1,220}$/.test(id)) return false;
+    const ownerUid = user.uid;
+    if (!await waitForAdminAppCheck(12000) || user?.uid !== ownerUid) return false;
+    const names = { review: 'reviewRecords', like: 'likeRecords', report: 'commentReports' };
+    if (!names[kind]) return false;
+    const snapshot = await getDoc(doc(db, names[kind], id));
+    if (user?.uid !== ownerUid || !snapshot.exists()) return false;
+    const record = snapshot.data();
+    if (kind === 'review') {
+      linkedReview = { ...record, reviewId: id };
+      reviews = [...reviews.filter(item => item.reviewId !== id), linkedReview];
+      openReviewDrawer(id, false, replyId);
+    } else if (kind === 'like') {
+      linkedLike = { ...record, likeId: id };
+      likes = [...likes.filter(item => item.likeId !== id), linkedLike];
+      openLikeDrawer(id);
+    } else {
+      switchReviewView('reports', false);
+      reports = [...reports.filter(item => item.reportId !== id), { ...record, reportId: id }];
+      $('#reports-filter').value = '';
+      $('#reports-search').value = '';
+      const groups = groupedReports();
+      const index = groups.findIndex(item => item.reports.some(report => report.reportId === id));
+      reportPage = Math.floor(Math.max(0, index) / 20) + 1;
+      renderReports();
+      const target = document.querySelector(`[data-report-id="${CSS.escape(groups[index]?.reportId || id)}"]`);
+      if (target) { target.querySelector('details').open = true; target.scrollIntoView({block:'center'}); }
+    }
+    return true;
+  },
+};
 
 const $ = (selector, root = document) => root.querySelector(selector);
+window.dispatchEvent(new Event('tintin:admin-ficha-source'));
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const asDate = value => value?.toDate?.() || (value instanceof Date ? value : value ? new Date(value) : null);
@@ -373,13 +412,13 @@ function editReviewDialog(review) {
   });
 }
 
-function switchReviewView(view) {
+function switchReviewView(view, refreshReports = true) {
   reviewView = view;
   $$('[data-eg-review-view]').forEach(button => button.classList.toggle('is-active', button.dataset.egReviewView === view));
   $$('[data-eg-review-panel]').forEach(panel => { panel.hidden = panel.dataset.egReviewPanel !== view; });
   if (settings.rememberView) localStorage.setItem('tt-admin-review-view', view);
   if (view === 'settings') renderSettings();
-  if (view === 'reports') loadReports().catch(error => toast(error.message, 'error'));
+  if (view === 'reports' && refreshReports) loadReports().catch(error => toast(error.message, 'error'));
 }
 function switchLikeView(view) {
   likeView = view;
@@ -791,7 +830,7 @@ function renderSettings() {
   document.documentElement.classList.toggle('eg-dense', Boolean(settings.denseMode));
 }
 
-function openReviewDrawer(reviewId, focusReply = false) {
+function openReviewDrawer(reviewId, focusReply = false, targetReplyId = '') {
   const review = reviews.find(item => item.reviewId === reviewId);
   if (!review) return;
   currentDrawer = { type: 'review', id: reviewId };
@@ -813,7 +852,7 @@ function openReviewDrawer(reviewId, focusReply = false) {
         <div><span>ID producto</span><code>${escapeHtml(review.productId || '')}</code></div>
       </div><button type="button" class="adm-btn adm-btn-sm adm-btn-outline" data-view-profile data-owner-uid="${escapeHtml(review.ownerUid || '')}" data-email="${escapeHtml(review.email || '')}">Ver perfil completo</button></section>
       <section class="eg-detail-section"><div class="eg-detail-section-head"><h3>Conversación</h3><span>${plural(conversation.length, 'mensaje')}</span></div>
-        <div class="eg-conversation">${conversation.length ? conversation.map(item => `<div class="eg-message ${item.authorType === 'store' ? 'is-store' : 'is-customer'}"><div><strong>${item.authorType === 'store' ? 'Tintin Accesorios' : escapeHtml(profileName(review))}</strong><span>${formatDate(item.createdAt)}</span></div><p>${escapeHtml(item.text)}</p></div>`).join('') : '<div class="eg-empty eg-empty-small">Todavía no hay respuestas.</div>'}</div>
+        <div class="eg-conversation">${conversation.length ? conversation.map(item => `<div data-notification-reply="${escapeHtml(item.replyId || item.id || String())}" class="eg-message ${item.authorType === 'store' ? 'is-store' : 'is-customer'}"><div><strong>${item.authorType === 'store' ? 'Tintin Accesorios' : escapeHtml(profileName(review))}</strong><span>${formatDate(item.createdAt)}</span></div><p>${escapeHtml(item.text)}</p></div>`).join('') : '<div class="eg-empty eg-empty-small">Todavía no hay respuestas.</div>'}</div>
         ${review.deleted ? '' : `<div class="eg-reply-box"><textarea class="adm-input eg-textarea" id="eg-drawer-reply" rows="3" maxlength="1200" placeholder="Responder como Tintin Accesorios…"></textarea><div><select class="adm-select" id="eg-drawer-quick"><option value="">Respuesta rápida…</option>${quickReplies.map(text => `<option value="${escapeHtml(text)}">${escapeHtml(text)}</option>`).join('')}</select><button type="button" class="adm-btn adm-btn-primary" data-eg-action="reviewReplySend" data-id="${escapeHtml(review.reviewId)}">Responder</button></div></div>`}
       </section>
       <section class="eg-detail-section"><h3>Gestión interna</h3>
@@ -832,6 +871,10 @@ function openReviewDrawer(reviewId, focusReply = false) {
     </div>
   </aside>`;
   if (focusReply) setTimeout(() => $('#eg-drawer-reply')?.focus(), 50);
+  if (targetReplyId) {
+    const message = document.querySelector(`[data-notification-reply="${CSS.escape(targetReplyId)}"]`);
+    if (message) { message.classList.add('adm-notification-focus'); message.scrollIntoView({block:'center'}); }
+  }
 }
 function openLikeDrawer(likeId) {
   const item = likes.find(entry => entry.likeId === likeId);
@@ -1210,7 +1253,7 @@ subscribeAuthState(async current => {
   // listeners seguían corriendo tras una pérdida real de sesión y cada uno
   // chocaba por separado con "Missing or insufficient permissions".
   stopEngagementRealtime();
-  if (!isSuperAdmin(current)) { user = null; return; }
+  if (!isSuperAdmin(current)) { user = null; linkedReview = null; linkedLike = null; return; }
   user = current;
   engagementRealtimeErrorNotified = false;
   if (!await waitForAdminAppCheck(12000)) return;
@@ -1221,11 +1264,13 @@ subscribeAuthState(async current => {
   }, engagementRealtimeError('usuarios')));
   realtimeUnsubscribers.push(onSnapshot(query(collection(db, 'reviewRecords'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     reviews = snapshot.docs.map(item => ({ ...item.data(), reviewId: item.data().reviewId || item.id })).sort((a,b) => timeValue(b.createdAt) - timeValue(a.createdAt));
+    if (linkedReview && !reviews.some(item => item.reviewId === linkedReview.reviewId)) reviews.push(linkedReview);
     setBadge('reviews-unread-badge', reviews.filter(item => item.unread).length);
     renderReviews(); refreshDrawer();
   }, engagementRealtimeError('reseñas')));
   realtimeUnsubscribers.push(onSnapshot(query(collection(db, 'likeRecords'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     likes = snapshot.docs.map(item => ({ ...item.data(), likeId: item.data().likeId || item.id })).sort((a,b) => timeValue(b.createdAt) - timeValue(a.createdAt));
+    if (linkedLike && !likes.some(item => item.likeId === linkedLike.likeId)) likes.push(linkedLike);
     setBadge('likes-unread-badge', likes.filter(item => item.unread).length);
     renderLikes(); refreshDrawer();
   }, engagementRealtimeError('favoritos')));

@@ -1,15 +1,17 @@
 // =============================================================
-// TINTIN — Enlace directo desde la notificación al pedido
+// TINTIN — Enlace directo desde la notificación a su ficha
 // =============================================================
 // La notificación abre /admin.html?section=pedidos&order=<orderId>.
 // La sección la resuelve el deep-link que ya tiene js/admin/admin-app.js
 // (?section=…), con todos sus chequeos de permisos. Este módulo se ocupa
-// sólo del parámetro `order`: espera a que los pedidos estén cargados y
-// abre el pedido con el mismo openOrderEdit() del panel.
+// del parámetro `order` y de las fichas de usuarios, participación y mayoristas:
+// espera sesión, permisos y controladores antes de abrir la ficha solicitada.
 //
 // El parámetro no ejecuta ninguna acción administrativa: como máximo abre
 // un editor que el propio panel ya restringe por rol, y sólo después de
 // que la sesión esté autenticada y los pedidos leídos desde Firestore.
+
+import { adminReturnStorage, adminTargetId, normalizeAdminDestination, rememberAdminDestination, consumeAdminDestination } from '../../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 
 const PENDING_KEY = 'tt_push_pending_order';
 const PENDING_MAX_AGE_MS = 10 * 60 * 1000;
@@ -38,19 +40,21 @@ function clearPending() {
 }
 
 function requestedOrderId() {
-  const fromUrl = new URLSearchParams(location.search).get('order') || '';
+  const params = new URLSearchParams(location.search);
+  if (params.has('section') && params.get('section') !== 'pedidos') return '';
+  const fromUrl = params.get('order') || '';
   if (ORDER_ID_PATTERN.test(fromUrl)) return fromUrl;
   return readPending();
 }
 
-function notify(message, retry) {
+function notify(message, retry, section = 'pedidos') {
   let detail = document.getElementById('push-order-status');
   if (!detail) {
     detail = document.createElement('div');
     detail.id = 'push-order-status';
     detail.className = 'tt-push-order-status';
     detail.setAttribute('role', 'status');
-    const root = document.getElementById('section-pedidos');
+    const root = document.getElementById(`section-${section}`);
     if (!root) return;
     root.prepend(detail);
   }
@@ -58,7 +62,7 @@ function notify(message, retry) {
   if (retry) {
     const button = document.createElement('button');
     button.type = 'button'; button.className = 'adm-btn adm-btn-outline';
-    button.textContent = 'Reintentar abrir pedido';
+    button.textContent = section === 'pedidos' ? 'Reintentar abrir pedido' : 'Reintentar abrir ficha';
     button.addEventListener('click', retry, { once: true });
     detail.append(button);
   }
@@ -94,9 +98,12 @@ function openWhenReady(orderId) {
       return;
     }
     clearPending();
+    consumeAdminDestination(location.href, adminReturnStorage(window), location.origin);
     // Consumir la URL evita volver a abrir el editor después de cerrarlo y recargar.
     const url = new URL(location.href);
     url.searchParams.delete('order');
+    url.searchParams.delete('section');
+    url.hash = 'pedidos';
     history.replaceState(history.state, '', url);
     document.getElementById('push-order-status')?.remove();
     window.openOrderEdit(orderId);
@@ -123,7 +130,67 @@ function openWhenReady(orderId) {
   attach();
 }
 
+function openRecordWhenReady(section, key, id) {
+  const destination = location.href;
+  let busy = false, done = false, polls = 0;
+  const stop = () => {
+    window.clearInterval(timer); observer.disconnect();
+    window.removeEventListener('tintin:admin-ficha-source', sourceReady);
+  };
+  const retry = () => { stop(); openRecordWhenReady(section, key, id); };
+  const attempt = async () => {
+    if (done || busy || !document.documentElement.classList.contains('adm-auth-ready')) return;
+    const active = document.querySelector('.adm-section.active');
+    if (active?.id !== `section-${section}`) return; // switchSection mantiene la autoridad del rol.
+    const open = key === 'user' ? window.openClientFichaByUid : key === 'quote' ? window.TintinWholesaleOpenQuote : window.TintinAdminEngagement?.openNotificationTarget;
+    if (typeof open !== 'function') return;
+    busy = true;
+    try {
+      const opened = key === 'user' || key === 'quote' ? await open(id) : await open(key, id, adminTargetId(new URLSearchParams(location.search).get('reply')));
+      stop();
+      if (!opened) { notify('No pudimos abrir esta ficha. El destino sigue guardado.', retry, section); return; }
+      done = true;
+      consumeAdminDestination(destination, adminReturnStorage(window), location.origin);
+      const url = new URL(location.href);
+      url.searchParams.delete(key);
+      url.searchParams.delete('reply');
+      url.searchParams.delete('section');
+      url.hash = section;
+      history.replaceState(history.state, '', url);
+      document.getElementById('push-order-status')?.remove();
+    } catch {
+      stop();
+      notify('No pudimos cargar esta ficha. Tu enlace sigue guardado.', retry, section);
+    } finally { busy = false; }
+  };
+  const observer = new MutationObserver(() => { void attempt(); });
+  const sourceReady = () => { void attempt(); };
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  const timer = window.setInterval(() => {
+    void attempt();
+    if (++polls >= MAX_POLLS) {
+      window.clearInterval(timer);
+      if (!done) notify('La ficha todavía no está lista. Tu enlace sigue guardado.', retry, section);
+    }
+  }, POLL_INTERVAL_MS);
+  window.addEventListener('pagehide', stop, { once: true });
+  window.addEventListener('tintin:admin-ficha-source', sourceReady);
+  void attempt();
+}
+
 function boot() {
+  const normalized = normalizeAdminDestination(location.href, location.origin);
+  if (normalized && location.hash.includes('?')) history.replaceState(history.state, '', normalized);
+  rememberAdminDestination(location.href, adminReturnStorage(window), location.origin);
+  const params = new URLSearchParams(location.search);
+  const section = params.get('section');
+  const key = { usuarios: 'user', 'me-gusta': 'like', resenas: params.has('report') ? 'report' : 'review', mayoristas: 'quote' }[section];
+  const id = key && adminTargetId(params.get(key));
+  if (id) {
+    clearPending();
+    openRecordWhenReady(section, key, id);
+    return;
+  }
   const orderId = requestedOrderId();
   if (!orderId) return;
   // Se guarda antes de esperar: si la sesión venció y el panel manda a
@@ -137,8 +204,8 @@ function boot() {
 navigator.serviceWorker?.addEventListener?.('message', event => {
   const data = event?.data;
   if (data?.type !== 'tintin-push-navigate' || typeof data.url !== 'string') return;
-  if (!data.url.startsWith('/admin.html?')) return;
-  location.href = data.url;
+  const target = normalizeAdminDestination(data.url, location.origin);
+  if (target) location.href = target;
 });
 
 if (document.readyState === 'loading') {

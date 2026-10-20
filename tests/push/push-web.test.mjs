@@ -430,7 +430,7 @@ function workerFixture(clients = []) {
     registration: { async showNotification(title, options) { shown.push({ title, ...options }); } },
   };
   vm.runInNewContext(read('firebase-messaging-sw.js'), {
-    self, URL, console,
+    self, URL, URLSearchParams, console,
     importScripts() { clickRegisteredBeforeSdk = Boolean(handlers.notificationclick); },
     firebase: { initializeApp() {}, messaging() { return { onBackgroundMessage(handle) { handlers.message = handle; } }; } },
   });
@@ -452,7 +452,7 @@ test('push resuelve enlaces sociales históricos y conserva el módulo correcto'
     assert.equal(w.shown.at(-1).data.url, expected);
   }
   assert.equal(w.clickRegisteredBeforeSdk, true);
-  assert.equal(w.shown[0].icon, '/assets-tintin/images/admin/push-icon-192.png');
+  assert.equal(w.shown[0].icon, '/assets-tintin/images/admin/push-icon-192.png?v=tintin-20261020-push-return-1');
 });
 test('el clic push no reemplaza la tienda y abre una ventana si navigate falla', async () => {
   let focused = 0, navigated = 0;

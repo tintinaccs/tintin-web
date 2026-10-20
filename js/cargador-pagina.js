@@ -852,7 +852,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261020-orders-clean-2');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261020-push-return-1');
     }
   }
 
