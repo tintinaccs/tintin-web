@@ -96,8 +96,9 @@ if (!window.TintinAdminUserFichaBooted) {
   async function openClientFicha(uid) {
     const overlay = document.getElementById('client-ficha-overlay');
     const body = document.getElementById('client-ficha-body');
-    if (!overlay || !body) return;
-    if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return;
+    if (!overlay || !body) return false;
+    if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return false;
+    const ownerUid = auth.currentUser.uid;
 
     body.replaceChildren(el('div', 'adm-loading', 'Cargando ficha…'));
     overlay.style.display = 'block';
@@ -114,6 +115,7 @@ if (!window.TintinAdminUserFichaBooted) {
         user={...user,...calculateOrderStats(accountOrders,{includeTestOrders:snapshot?.includeTestOrders===true})};
       }
       const logs = auditResult.status === 'fulfilled' ? auditResult.value : [];
+      if (auth.currentUser?.uid !== ownerUid) return false;
 
       const identity = section('Identidad');
       identity.grid.append(
@@ -199,8 +201,10 @@ if (!window.TintinAdminUserFichaBooted) {
       auditSection.wrapper.appendChild(auditList);
 
       body.replaceChildren(identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
+      return true;
     } catch (error) {
       showError(error?.message || 'No se pudo cargar la ficha de la cuenta.');
+      return false;
     }
   }
 
@@ -252,6 +256,7 @@ if (!window.TintinAdminUserFichaBooted) {
   }
 
   window.openClientFichaByUid = openClientFicha;
+  window.dispatchEvent(new Event('tintin:admin-ficha-source'));
   window.closeClientFicha = closeClientFicha;
 
   if (document.readyState === 'loading') {

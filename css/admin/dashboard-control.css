@@ -14,6 +14,15 @@ html:root body.tt-admin-control .adm-sidebar { border-right: 1px solid var(--tt-
 html:root body.tt-admin-control .adm-topbar { border-bottom: 1px solid var(--tt-control-line); gap: 16px; }
 html:root body.tt-admin-control .adm-topbar-actions { display: flex; align-items: center; gap: 10px; }
 html:root body.tt-admin-control .adm-topbar-title { letter-spacing: -.025em; }
+  html:root body.tt-admin-control :is(.adm-topbar,.adm-header) {
+    background: color-mix(in srgb, var(--admin-color-background-surface) 86%, transparent) !important;
+    border-bottom-color: color-mix(in srgb, var(--admin-color-brand) 50%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(110%) !important;
+    backdrop-filter: blur(18px) saturate(110%) !important;
+  }
+  html:root body.tt-admin-control .tt-control-brand {
+    display: block; width: 32px; height: 32px; flex: 0 0 32px; border-radius: 9px; object-fit: contain;
+  }
 html:root body.tt-admin-control .adm-content { max-width: 1480px; }
 html:root body.tt-admin-control :is(.adm-card,.adm-stat,.adm-img-card,.tt-commerce-card,.tt-order-card,.tt-welcome-admin-card,.tt-maestro-card) {
   border: 1px solid var(--tt-control-line) !important;
@@ -315,4 +324,15 @@ html:root body.tt-admin-control .tt-admin-workspace-bar { padding-bottom: 16px; 
 
 .tt-admin-nav-group { padding: 18px 12px 6px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--adm-muted); }
 .tt-push-lockscreen-note { margin: 0 0 18px; padding: 12px 14px; border: 1px solid var(--tt-control-line); border-radius: 12px; font-size: 12px; line-height: 1.7; }
+html:root body.tt-admin-control .tt-control-heading { display: flex; align-items: center; gap: 8px; }
+html:root body.tt-admin-control .tt-control-heading > span { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width:540px) {
+  html:root body.tt-admin-control .adm-topbar {
+    display: grid; grid-template-columns: 44px minmax(0,1fr); grid-template-areas: "menu title" "actions actions";
+    align-items: center; gap: 6px 10px;
+  }
+  html:root body.tt-admin-control .adm-hamburger { grid-area: menu; }
+  html:root body.tt-admin-control .tt-control-heading { grid-area: title; }
+  html:root body.tt-admin-control .adm-topbar-actions { grid-area: actions; justify-content: flex-end; flex-wrap: nowrap; }
+}
 @media (min-width:541px) { html.adm-sidebar-is-collapsed .tt-admin-nav-group { display: none; } }

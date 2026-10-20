@@ -23,7 +23,7 @@ async function load(page, width, file = 'admin.html', options = {}) {
     });
     const allowed = /\.(css|woff2|png|svg|ico)$/.test(url.pathname) || scripts.includes(url.pathname) || url.pathname === '/js/admin/maestro/registro-maestro.js';
     const filePath = path.resolve(root, `.${url.pathname}`);
-    if (!allowed || !filePath.startsWith(`${root}/`) || !fs.existsSync(filePath)) return route.abort();
+    if (!allowed || !filePath.startsWith(root + path.sep) || !fs.existsSync(filePath)) return route.abort();
     return route.fulfill({ path: filePath, contentType: /\.js$/.test(filePath) ? 'text/javascript' : undefined });
   });
   await page.goto('https://tintin.test/fixture');

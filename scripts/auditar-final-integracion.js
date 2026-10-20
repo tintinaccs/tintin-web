@@ -114,7 +114,7 @@ try { manifest = JSON.parse(read('manifest.json')); } catch {}
 check(
   'manifest es válido y sus iconos existen',
   manifest && manifest.name && manifest.start_url && manifest.scope && manifest.theme_color &&
-    Array.isArray(manifest.icons) && manifest.icons.length > 0 && manifest.icons.every(icon => exists(icon.src)),
+    Array.isArray(manifest.icons) && manifest.icons.length > 0 && manifest.icons.every(icon => typeof icon.src === "string" && exists(icon.src.split(/[?#]/, 1)[0])),
   'manifest.json o sus recursos son inválidos.'
 );
 
