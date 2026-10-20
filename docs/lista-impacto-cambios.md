@@ -1,3 +1,11 @@
+## 2026-10-20 — Reconciliar encabezados y editor con revisión global
+
+PR1180 integra main dc6da947 sin perder observación de raíz, contraste de compra ni iconos. Alternancia incluye selección como bloque hermano y usa una URL inédita para los bytes combinados. Se alinea la prueba de marca con el logo blanco sobre rosa solicitado y se verifica su unión al contenido. Se preservan los demás controles y las pruebas nuevas del editor autenticado. Derivados y plan regenerados desde autoridades; no cambia datos, Rules ni dominios. Evidencia en CURRENT_STATE.
+
+## 2026-10-20 — Cierre de pendientes de revisión global
+
+Alternancia de superficies observa atributos de html además de body para recuperar el login al revelarse, sin duplicar fondos ni releer por mutaciones irrelevantes. Checkout vacío usa el par semántico de colores de botón, con destino conservado. El generador propaga una versión nueva del runtime; afecta19entradas HTML inventariadas/17con runtime. Lock de Hono de herramientas se actualiza a4.13.13 por advisory confirmado. Pruebas existentes se alinean con paginación, corte de métricas, menú4+Más, sesiones filtradas y revalidación canónica de iconos; se agrega recuperación real de métricas y matrices de ocho dimensiones para los dos arreglos. No modifica datos, Rules, Auth, pedidos ni el editor1175. Mapa, evidencia y límites en los informes del ciclo; derivados y plan desde autoridades canónicas contra main vigente.
+
 ## 2026-10-20 — Pruebas de candidato aisladas de producción
 
 Fuente: playwright.config.js y workflow canónico auditar-tintin.yml. UI usa un origen local por defecto, manteniendo overrides explícitos; CI levanta su servidor existente antes de todos los gates que incluyen navegador y fija ambos orígenes locales en el job. Los comandos, requisitos, checks y seguridad permanecen. Regresión de arquitectura verifica default, precedencia explícita y orden del servidor. El plan protegido incluye ambos archivos de control. Las URLs finales de entrega pública se reservan con referencia3 para cerrar el incidente de consultas prematuras sin reutilizar respuestas dudosas.
