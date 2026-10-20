@@ -5315,6 +5315,38 @@ body.tt-home-premium .tt-reviews-dialog .tt-review-screens { grid-template-colum
 }
 
 
+/* css/components/social/instagram-tintin.css */
+.tt-instagram-section{padding:clamp(40px,6vw,80px) 0;text-align:center;background:var(--tt-bg,#fff)}
+.tt-instagram-section .container{max-width:1200px;margin-inline:auto;padding-inline:20px}
+.tt-instagram-profile{display:inline-flex;align-items:center;gap:12px;margin:16px auto;color:var(--tt-text,#63344a);text-decoration:none;font-weight:700;overflow-wrap:anywhere}
+.tt-instagram-avatar{width:56px;height:56px;display:grid;place-items:center;border:1px solid #e8bdcb;border-radius:50%;background:#fff2f6;font-size:26px;color:#a54168}
+.tt-instagram-intro{max-width:600px;margin:0 auto 24px;line-height:1.7;color:var(--tt-text,#63344a)}
+.tt-instagram-feed{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:16px 0 24px}
+.tt-instagram-feed:empty{display:none}
+.tt-instagram-video{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:end;min-width:0;aspect-ratio:4/5;overflow:hidden;border:1px solid #e8cbd6;border-radius:18px;background:linear-gradient(145deg,#fce5ee,#b35478);color:#fff;cursor:pointer;padding:16px;font:inherit;text-align:left}
+.tt-instagram-video img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.tt-instagram-video::after{position:absolute;inset:0;content:'';background:linear-gradient(transparent 40%,rgb(0 0 0 / 72%));z-index:-1}
+.tt-instagram-play{display:grid;place-items:center;position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:56px;height:56px;border:1px solid rgb(255 255 255 / 65%);border-radius:50%;background:rgb(0 0 0 / 36%);font-size:22px}
+.tt-instagram-caption{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.tt-instagram-link{display:inline-flex;justify-content:center;align-items:center;gap:8px;min-height:44px;max-width:100%;padding:10px 20px;border:1px solid #d9afbf;border-radius:999px;background:#fff;color:#883958;text-decoration:none;font:inherit;font-weight:600;text-align:center;cursor:pointer;overflow-wrap:anywhere}
+.tt-instagram-link:focus-visible,.tt-instagram-video:focus-visible,.tt-instagram-close:focus-visible{outline:3px solid #b54d79;outline-offset:4px}
+.tt-instagram-player{box-sizing:border-box;position:fixed;inset:0;margin:auto;width:min(480px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:12px;border:1px solid #f0d4de;border-radius:20px;background:#fff;color:#63344a;overflow:auto}
+.tt-instagram-player::backdrop{background:rgb(25 15 22 / 76%);backdrop-filter:blur(6px)}
+.tt-instagram-player-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 0 8px}
+.tt-instagram-close{width:44px;height:44px;flex-shrink:0;border:1px solid #ebcfda;border-radius:50%;background:#fff;color:#63344a;font-size:28px;cursor:pointer}
+.tt-instagram-player iframe{display:block;width:100%;height:min(620px,calc(100dvh - 160px));min-height:160px;border:0;border-radius:10px;background:#faf5f7}
+.tt-instagram-player>.tt-instagram-link{display:flex;margin-top:10px}
+html.tt-instagram-playing{overflow:hidden;scrollbar-gutter:auto}
+.tt-about-story-video{margin-top:20px}
+@media(max-width:900px){.tt-instagram-feed{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+@media(max-width:400px){.tt-instagram-video{border-radius:12px;padding:10px}.tt-instagram-caption{font-size:12px}.tt-instagram-section .container{padding-inline:16px}}
+@media(prefers-reduced-motion:reduce){.tt-instagram-player{scroll-behavior:auto}}
+
+.tt-instagram-play::before,.tt-instagram-inline-play{content:"";display:inline-block;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:11px solid currentColor}
+
+.tt-instagram-avatar img{box-sizing:border-box;width:100%;height:100%;padding:8px;object-fit:contain;border-radius:50%}
+
+
 /* css/theme/superficies-marca-responsive-tintin.css */
 /* =============================================================
    TINTIN — Superficies de marca responsive
@@ -9230,4 +9262,3 @@ body.tt-home-premium .tt-wa-float * {
     animation-iteration-count: infinite !important;
   }
 }
-

@@ -43,6 +43,7 @@ const frameOrigins = [
   'https://www.youtube.com',
   'https://www.youtube-nocookie.com',
   'https://player.vimeo.com',
+  'https://www.instagram.com',
   'https://*.paypal.com'
 ];
 const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html', 'perfil.html']);

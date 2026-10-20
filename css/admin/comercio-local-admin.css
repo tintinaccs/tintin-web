@@ -1,1 +1,29 @@
 .local-toolbar{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:16px 0}.local-toolbar label,.local-form label{display:grid;gap:6px;font-size:13px;font-weight:600;min-width:0}.local-toolbar input,.local-toolbar select,.local-form input,.local-form textarea,.local-form select{font:inherit;box-sizing:border-box;width:100%;min-width:0;border:1px solid var(--adm-border);border-radius:10px;padding:10px;background:#fff;color:var(--adm-text)}.local-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px;margin:16px 0}.local-record{border:1px solid var(--adm-border);border-radius:14px;padding:16px;background:var(--adm-card,#fff);overflow-wrap:anywhere}.local-record span,.local-table small{display:block;color:var(--adm-muted);font-size:12px;margin-top:6px}.local-record h3{font-size:16px;margin:12px 0}.local-record p{font-size:13px;line-height:1.5;margin:8px 0}.local-summary{font-weight:700}.local-table{overflow:auto}.local-table table{width:100%;border-collapse:collapse;text-align:left}.local-table td,.local-table th{padding:12px;border-bottom:1px solid var(--adm-border);font-size:13px}.local-dialog{box-sizing:border-box;border:1px solid var(--adm-border);border-radius:18px;max-width:800px;width:calc(100% - 24px);max-height:90dvh;padding:24px;color:var(--adm-text)}.local-dialog::backdrop{background:rgb(0 0 0 / 40%)}.local-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.local-wide{grid-column:1/-1}.local-dialog textarea{resize:vertical}.local-dialog small{font-weight:400;line-height:1.5}.local-dialog>form>p{overflow-wrap:anywhere;font-size:13px}.local-toolbar button{white-space:normal}@media(max-width:600px){.local-form{grid-template-columns:1fr}.local-dialog{padding:16px}.local-toolbar label{flex:1 1 100%}.local-table th,.local-table td{min-width:130px}}
+
+/* Superficies de operaciones locales, clientes y espejo sin bordes apretados. */
+:is(#section-ventas-locales,#section-clientes-compraron,#section-espejos-sheets)>.adm-card{box-sizing:border-box;min-width:0;width:100%;padding:clamp(16px,2.5vw,30px);border:1px solid var(--adm-border,#e6d9df);border-radius:20px;background:var(--adm-card,#fff)}
+:is(#section-ventas-locales,#section-clientes-compraron,#section-espejos-sheets)>.adm-card>h2{margin:0 0 12px;line-height:1.4;font-size:clamp(19px,2vw,25px);overflow-wrap:anywhere}
+:is(#section-ventas-locales,#section-clientes-compraron,#section-espejos-sheets) [data-local-status]{line-height:1.6;color:var(--adm-muted,#75616b);font-size:12px}
+.local-toolbar{gap:14px;padding:14px;border:1px solid var(--adm-border,#e6d9df);border-radius:14px;background:var(--adm-bg,#faf7f9)}
+.local-toolbar label{flex:1 1 150px;line-height:1.5}
+.local-toolbar input,.local-toolbar select,.local-toolbar button{min-height:44px}
+.local-record{padding:20px;border-radius:18px;line-height:1.65;min-width:0}
+.local-record h3{margin-top:4px;line-height:1.5}
+.local-record a,.local-record button{display:inline-flex;align-items:center;min-height:44px;max-width:100%;margin-top:8px;white-space:normal}
+.local-table{margin-top:18px;border:1px solid var(--adm-border,#e6d9df);border-radius:14px;max-width:100%;overscroll-behavior-inline:contain}
+.local-table table{min-width:560px}
+.local-table th{background:var(--adm-bg,#faf7f9);line-height:1.5}
+.local-table td{line-height:1.6;vertical-align:top;overflow-wrap:anywhere}
+@media(max-width:600px){.local-toolbar{padding:12px;gap:12px}.local-toolbar>button{flex:1 1 150px}.local-grid{gap:12px}.local-record{padding:16px}:is(#section-ventas-locales,#section-clientes-compraron,#section-espejos-sheets)>.adm-card{border-radius:16px}}
+@media(max-width:600px){
+ #local-mirror-map .local-table table{min-width:0;display:block}
+ #local-mirror-map .local-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ #local-mirror-map .local-table tbody{display:grid;gap:12px;padding:12px}
+ #local-mirror-map .local-table tr{display:grid;border:1px solid var(--adm-border,#e6d9df);border-radius:12px;overflow:hidden}
+ #local-mirror-map .local-table td{display:grid;gap:5px;min-width:0;padding:12px}
+ #local-mirror-map .local-table td::before{font-size:11px;font-weight:700;color:var(--adm-muted,#75616b)}
+ #local-mirror-map .local-table td:nth-child(1)::before{content:'Sheets'}
+ #local-mirror-map .local-table td:nth-child(2)::before{content:'Panel'}
+ #local-mirror-map .local-table td:nth-child(3)::before{content:'Casillas y campos'}
+ #local-mirror-map .local-table td:last-child{border-bottom:0}
+}

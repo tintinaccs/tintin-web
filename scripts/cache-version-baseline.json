@@ -8,8 +8,8 @@
     "sha256": "c1288d5d4537cc819e81c149545e6caf32266aaff34ad450388da93c3dcdcf54"
   },
   "css/admin/comercio-local-admin.css": {
-    "version": "tintin-20261009-local-commerce-2",
-    "sha256": "26d1f7aa3dc50459bd167acbeffefcd0d8279357e62ae20ac87893b4e51d60d0"
+    "version": "tintin-20261009-local-commerce-2-task-20261020-1",
+    "sha256": "a3cf040056fccbfddc55d4bd7d5817c5a19ed42a46149d03ed8593783ff9f386"
   },
   "css/admin/dashboard-control.css": {
     "version": "tintin-20261020-push-return-1",
@@ -48,8 +48,8 @@
     "sha256": "1250e8f1efcc9860a190cc34c829b8b968fbe968b4c24130820921e8d868d9c3"
   },
   "css/admin/shopify-commerce-admin.css": {
-    "version": "tintin-20261020-orders-clean-1",
-    "sha256": "936ae6f3ba89d859f57255b253e56614537f50b4518841284fcd39d9876b3ab2"
+    "version": "tintin-20261020-product-cards-1",
+    "sha256": "eeb893bfad05debf774a6f75a16f41e299decdd44a2f5bf4b402f18952e9f4e6"
   },
   "css/admin/sidebar-interaccion.css": {
     "version": "tintin-20261019-superadmin-live-1",
@@ -135,6 +135,10 @@
     "version": "tintin-20261012-checkout-ready-3-payment-methods-css-palette-20261014-1",
     "sha256": "1ee064fafe1a87ecca2373c34853d2b59d0b3d1db3aa236ae10092561e1b890d"
   },
+  "css/components/social/instagram-tintin.css": {
+    "version": "tintin-20261020-instagram-1",
+    "sha256": "1f4315b47cb39c93a8a29ae144b515b43af04e4c0275a1c176ca11550644cfac"
+  },
   "css/components/visual-studio-global-runtime.css": {
     "version": "tintin-20260810-global-studio-4-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
     "sha256": "00e6cb9727f313e83cda208a4e279357ae5a9fd36d14980a4595846d45638b0b"
@@ -160,8 +164,12 @@
     "sha256": "715aa9eb030929cb7aa712e3d5ae79ca14777441bd3f0c222ddd7568cec90e60"
   },
   "css/generated/inicio.css": {
-    "version": "tintin-home-00e70f762f60845f",
-    "sha256": "00e70f762f60845f76b086bda0e9dc3bf678c033bdaf5c2b5a5b07f04aea954a"
+    "version": "tintin-home-ea04f2a0fb717159",
+    "sha256": "ea04f2a0fb71715938ac89c0faf9ec93373bb1e8b581ca6ad501d163efbc2916"
+  },
+  "css/generated/nosotros.css": {
+    "version": "tintin-about-75213d532d558235",
+    "sha256": "75213d532d55823533208f4606acbb71248572be1c8da3fea706ea60cc61e889"
   },
   "css/pages/catalog/catalog-maintenance.css": {
     "version": "tintin-20260817-margin-consistency-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
@@ -332,8 +340,8 @@
     "sha256": "de5f789d28a5d132bcaeda507df5371112be6ff20c8e8f6e367ef17e327c2fdc"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261020-push-return-1",
-    "sha256": "e4b28fb716b430e0a783260c89d4703a0f8e84f943ce151b7cec7d866502b86a"
+    "version": "tintin-20261020-push-return-1-task-20261020-1",
+    "sha256": "f237783bd8eb1f7accc7afa835f0b7e5f40b6bd413bca09354ae23d10ebcd740"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -540,12 +548,12 @@
     "sha256": "82142ffacb064b81003f583d74df677ee02d028dc849f17b50e7e1bdc9d6a93d"
   },
   "js/admin/products/maestro-productos-core.mjs": {
-    "version": "tintin-20261018-products-master-1",
-    "sha256": "eab68675f0a3a508188deb43c98f3ed77b62d0ec3daf2b15b6d0491054128228"
+    "version": "tintin-20261018-products-master-1-task-20261020-1",
+    "sha256": "38115bcd36e998fdd122a6c478411fb8e5ebf6afa5c590989b2b1181b0e68e8d"
   },
   "js/admin/products/maestro-productos-interfaz.js": {
-    "version": "tintin-20261018-products-master-1",
-    "sha256": "efe71e723720fe1ddcb8912202eb1a01ca59c5942af1f7df894ae9c465ca833c"
+    "version": "tintin-20261018-products-master-1-task-20261020-1",
+    "sha256": "ca32e34bce0702c57dc33b56e2e4e415164d3c07202a46acf5fe3dec42dcef70"
   },
   "js/admin/products/vista-previa-producto.js": {
     "version": "tintin-20261019-product-editor-1",
@@ -584,8 +592,8 @@
     "sha256": "d0f95fa17e61309a8f92dc0e8ea443bd7094e210d204d6c420fcc01adb87d12b"
   },
   "js/admin/shopify-commerce-admin.js": {
-    "version": "tintin-20261020-orders-clean-2",
-    "sha256": "6c0e90e0247b6b4d5d65195749938c317cf73c52f0d8b4bcfd14ead9a5a181f6"
+    "version": "tintin-20261020-orders-clean-2-task-20261020-1",
+    "sha256": "c313dd3a1de074047bc5b7b99bc70ad2d527100ff062d58382e4951a031c84cd"
   },
   "js/admin/sidebar-expandible-admin.js": {
     "version": "tintin-20261004-admin-connections-3",
@@ -926,6 +934,10 @@
   "js/components/reviews/valoraciones-catalogo.js": {
     "version": "tintin-20261017-domain-cutover-1",
     "sha256": "b478e0e8437f0222159404b96fef67ad3624771e9db8ca3a69bae3b2f1ee988f"
+  },
+  "js/components/social/instagram-tintin.js": {
+    "version": "tintin-20261020-instagram-1",
+    "sha256": "a94baf378c252a301ced1b3ca6f5fc47868f4ada2bf972797d20c2a243499c3e"
   },
   "js/components/welcome/configuracion-bienvenida.js": {
     "version": "tintin-20261015-images-1",

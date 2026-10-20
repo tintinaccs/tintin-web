@@ -2,7 +2,7 @@ import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
-import { productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261018-products-master-1';
+import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261018-products-master-1-task-20261020-1';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261019-revenue-start-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
@@ -6384,6 +6384,44 @@ window.prodDuplicar = function(docId) {
 };
 
 window.TintinProductAdmin = Object.freeze({
+  async updateCard(request) {
+    if (!auth.currentUser || !currentUser || auth.currentUser.uid !== currentUser.uid || navigator.onLine === false) throw new Error('La sesión o la conexión no están disponibles.');
+    if (!can(currentRole, 'editProducts') || !roleCanDo('productos', request.field === 'active' ? 'activarDesactivar' : 'editar')) throw new Error('No tenés permiso para modificar este producto.');
+    if (productMasterBusy) throw new Error('Ya hay una operación de productos en curso.');
+    productBulkIds([request.id]);
+    const ownerUid = auth.currentUser.uid;
+    const product = _allProducts.find(item => item._docId === request.id);
+    productMasterBusy = true;
+    try {
+      return await runAdminCrudOperation({
+        title: 'Actualizar producto', name: product?.name || request.id, module: 'productos',
+        stages: [{id:'save', label:'Confirmar el cambio en el catálogo'}, {id:'sync', label:'Actualizar las vistas conectadas'}],
+        action: async ctx => {
+          ctx.start('save');
+          let before, patch;
+          await withAdminSiteChange(() => runTransaction(db, async transaction => {
+            if (auth.currentUser?.uid !== ownerUid) throw new Error('La sesión cambió. Volvé a abrir el panel.');
+            const ref = doc(db, 'products', request.id), snapshot = await transaction.get(ref);
+            if (auth.currentUser?.uid !== ownerUid) throw new Error('La sesión cambió. Volvé a abrir el panel.');
+            if (!snapshot.exists() || productFingerprint(snapshot.data()) !== request.expected) throw new Error('El producto cambió en otra sesión. Revisá sus cantidades antes de guardar.');
+            before = snapshot.data();
+            patch = productCardPatch(before, request);
+            transaction.update(ref, {...patch, updatedAt:serverTimestamp()});
+          }));
+          if (product) Object.assign(product, patch);
+          ctx.ok('save');
+          ctx.start('sync');
+          applyProductFilters();
+          // La escritura confirmada actualiza los listeners. Sheets conserva
+          // su respaldo durable y no bloquea el cierre de la ventana.
+          void pushProductsToSheets([request.id]).catch(error => console.warn('[products] Sincronización pendiente:', error?.code || 'unavailable'));
+          await logAudit('editar_producto', 'producto', request.id, product?.name || request.id, `Tarjeta: ${request.field}${request.variant ? ` / ${request.variant}` : ''}`, {productHistory:[{productId:request.id,stockBefore:before.stock ?? null,stockAfter:patch.stock ?? before.stock ?? null}]}).catch(error => console.warn('[products] Auditoría pendiente:', error?.code || 'unavailable'));
+          ctx.ok('sync');
+          return {confirmed:true, fingerprint:productFingerprint({...before,...patch})};
+        },
+      });
+    } finally { productMasterBusy = false; }
+  },
   async applyBulkChanges(request) {
     if(!auth.currentUser || !currentUser || navigator.onLine===false)throw new Error('La sesión o la conexión no están disponibles.');
     if(productMasterBusy) throw new Error('Ya hay una operación de productos en curso.');

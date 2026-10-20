@@ -54,7 +54,7 @@
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261020-selection-top-1">
   <!-- Cada variante del header solo se descarga en el viewport que la utiliza. -->
-  <link rel="stylesheet" id="tt-home-css-bundle" href="css/generated/inicio.css?v=tintin-home-00e70f762f60845f" onerror="var bundle=this;function restore(){document.querySelectorAll('link[data-tt-style-bundle]').forEach(function(link){if(link.dataset.ttStyleBundle===bundle.id){link.disabled=false;link.rel='stylesheet';delete link.dataset.ttStyleBundle;}});}bundle.dataset.ttBundleError='1';restore();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});">
+  <link rel="stylesheet" id="tt-home-css-bundle" href="css/generated/inicio.css?v=tintin-home-ea04f2a0fb717159" onerror="var bundle=this;function restore(){document.querySelectorAll('link[data-tt-style-bundle]').forEach(function(link){if(link.dataset.ttStyleBundle===bundle.id){link.disabled=false;link.rel='stylesheet';delete link.dataset.ttStyleBundle;}});}bundle.dataset.ttBundleError='1';restore();if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});">
   <link rel="tt-bundled-stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2" disabled data-tt-style-bundle="tt-home-css-bundle">
   <!-- Google Search Console (Fase 2): creá la propiedad en
        https://search.google.com/search-console con esta misma URL, elegí
@@ -92,6 +92,7 @@
   <script type="application/ld+json" id="tt-store-jsonld">{"@context":"https://schema.org","@type":"Store","@id":"https://tintinaccs.com/#store","name":"Tintin Accesorios & Relojes","url":"https://tintinaccs.com/","logo":"https://tintinaccs.com/assets-tintin/images/general/logo.png","image":"https://tintinaccs.com/assets/og-cover.jpg","description":"Tintin Accesorios & Relojes — tienda de accesorios femeninos elegantes en Paraguay. Relojes, collares, aros, pulseras y más.","areaServed":{"@type":"Country","name":"Paraguay"},"currenciesAccepted":"PYG"}</script>
   <link rel="tt-bundled-stylesheet" href="css/pages/home/mas-vendidos.css?v=tintin-20261016-bestsellers-1" disabled data-tt-style-bundle="tt-home-css-bundle">
   <link rel="tt-bundled-stylesheet" href="css/pages/home/resenas-clientas.css?v=tintin-20261016-reviews-1" disabled data-tt-style-bundle="tt-home-css-bundle">
+<link rel="tt-bundled-stylesheet" href="css/components/social/instagram-tintin.css?v=tintin-20261020-instagram-1" disabled data-tt-style-bundle="tt-home-css-bundle">
   <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-20261015-flow-startup-2" defer></script>
   <!-- Estructura pública disponible desde el primer render -->
   <link id="tt-responsive-brand-surfaces-css" rel="tt-bundled-stylesheet" href="css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1" disabled data-tt-style-bundle="tt-home-css-bundle">
@@ -307,6 +308,17 @@
   </div>
 </section>
 
+<section class="tt-instagram-section" id="instagram" aria-labelledby="tt-instagram-title">
+  <div class="container">
+    <p class="tt-section-sub">Un poquito más de Tintin</p>
+    <h2 class="tt-section-title" id="tt-instagram-title">NOS VEMOS EN INSTAGRAM</h2>
+    <a class="tt-instagram-profile" href="https://www.instagram.com/tintinaccs/" target="_blank" rel="noopener noreferrer"><span class="tt-instagram-avatar" aria-hidden="true"><img src="assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2" alt="" width="56" height="56" loading="lazy" decoding="async"></span><span>@tintinaccs</span></a>
+    <p class="tt-instagram-intro">Novedades, detalles que enamoran y la historia detrás de cada elección. Descubrí nuestros últimos videos.</p>
+    <div class="tt-instagram-feed" data-instagram-feed></div>
+    <a class="tt-instagram-link" href="https://www.instagram.com/tintinaccs/" target="_blank" rel="noopener noreferrer">Ir a Instagram</a>
+  </div>
+</section>
+
 <!-- ══════════════════════════════════════
      FOOTER
 ══════════════════════════════════════ -->
@@ -505,5 +517,6 @@ initSiteContent('index');
       <figure class="tt-review-screen"><img src="assets-tintin/images/home/resenas-clientas/img_9620.jpg" width="1179" height="1551" alt="Reseña de una clienta de Tintin, captura 27" loading="lazy" decoding="async"></figure>
 </div></template>
 <script src="js/pages/home/resenas-clientas.js?v=tintin-20261016-reviews-1" defer></script>
+<script type="module" src="js/components/social/instagram-tintin.js?v=tintin-20261020-instagram-1"></script>
 </body>
 </html>

@@ -10,6 +10,7 @@ const { CATEGORIES } = require('../js/components/navigation/compartido/iconos.js
 const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
 
 const ROOT = path.resolve(__dirname, '..');
+const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about' };
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
@@ -600,6 +601,7 @@ for (const page of PUBLIC_PAGES) {
   const before = html;
 
   if (page === 'index.html') html = restoreStyleSources(html);
+  if (page === 'about.html') html = restoreStyleSources(html, ABOUT_STYLES.id);
 
   for (const id of SHELL_IDS) html = removeElementById(html, id);
   html = removeLegacyComments(html);
@@ -623,6 +625,7 @@ for (const page of PUBLIC_PAGES) {
   html = ensureInitialRuntimeStyles(html, page);
   html = normalizeWhitespace(html);
   if (page === 'index.html') html = writeHomeStyles(html, ROOT);
+  if (page === 'about.html') html = writeHomeStyles(html, ROOT, ABOUT_STYLES);
 
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');
