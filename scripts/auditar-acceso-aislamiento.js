@@ -7,6 +7,7 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const css = read('css/theme/fondo-solido-cargador.css');
 const login = read('login.html');
+const googlePopup = read('js/core/auth/espera-popup-google.mjs');
 const authNav = read('js/core/auth/navegacion-autenticacion.js');
 const session = read('js/core/auth/proteccion-sesion.js');
 const firebase = read('js/core/firebase/firebase.js');
@@ -69,7 +70,10 @@ const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 
 // copy del loader o la forma de encadenar una Promise cambien legítimamente.
   const googleRedirectPath =
     /await withDeadline\(signInWithRedirect\(auth, provider\), AUTH_NETWORK_DEADLINE_MS\)/.test(login) &&
-    /result = await signInWithPopup\(auth, provider\)/.test(login) &&
+    /result = await waitForGooglePopup\(\(\) => signInWithPopup\(auth, provider\)\)/.test(login) &&
+    googlePopup.includes('popup?.closed') &&
+    googlePopup.includes("code: 'auth/popup-closed-by-user'") &&
+    googlePopup.includes('host.clearInterval(timer)') &&
     login.includes("['auth/popup-blocked', 'auth/operation-not-supported-in-this-environment'].includes(popupError?.code)") &&
     login.includes('await finishGoogleLogin(result.user)');
   const googleHandoffKeepsOverlay =

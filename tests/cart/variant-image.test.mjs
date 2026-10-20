@@ -4,6 +4,9 @@ import { productVariantImage } from '../../js/components/images/foto-variante.mj
 
 const gold = 'https://cdn.example.test/gold.jpg';
 const silver = 'https://cdn.example.test/silver.jpg';
+test('el diseño también usa su asociación de foto, sin depender de una opción Color', () => {
+  assert.equal(productVariantImage({imageUrl:gold,variants:{Diseño:['piedra','solitario']},variantMedia:[{Diseño:'solitario',imageUrl:silver}]},'solitario'),silver);
+});
 const product = { imageUrl: gold, variants: { Talla: ['6', '7'], Color: ['Dorado', 'Plateado', 'Azul'] },
   variantMedia: [{ Color: 'Dorado', imageUrls: [gold] }, { Color: 'Plateado', imageUrl: silver }] };
 

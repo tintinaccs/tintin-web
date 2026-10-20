@@ -483,6 +483,7 @@ function sanitizeCheckoutProduct(id, raw = {}) {
     category: cleanText(raw.category || raw.cat || '', 120),
     price: Number(raw.price || 0),
     stock: raw.stock == null ? null : Number(raw.stock),
+    variants: raw.variants && typeof raw.variants === 'object' ? raw.variants : {},
     imageUrl: sanitizeImageUrl(raw.imageUrl || raw.image || raw.img || ''),
     active: raw.active !== false,
   };
@@ -900,7 +901,7 @@ async function renderCart() {
               <div class="ck-sug-name">${safeName}</div>
               <div class="ck-sug-cat">${safeCat}</div>
               <div class="ck-sug-price">${formatPrice(p.price)}</div>
-              <button type="button" class="ck-sug-add" data-id="${safeId}" data-name="${safeName}" data-cat="${safeCat}" data-price="${Number(p.price) || 0}" data-stock="${p.stock == null ? '' : Number(p.stock)}" data-img="${escapeSearchHtml(img)}">+ Agregar</button>
+              ${p.variants && Object.keys(p.variants).length ? `<a class="ck-sug-add" href="/product?id=${encodeURIComponent(p.id)}">Elegir opciones</a>` : `<button type="button" class="ck-sug-add" data-id="${safeId}" data-name="${safeName}" data-cat="${safeCat}" data-price="${Number(p.price) || 0}" data-stock="${p.stock == null ? '' : Number(p.stock)}" data-img="${escapeSearchHtml(img)}">+ Agregar</button>`}
             </div>`;
           }).join('')}
         </div>
@@ -908,7 +909,7 @@ async function renderCart() {
 
     subtotalEl.textContent = 'Gs. 0';
 
-    container.querySelectorAll('.ck-sug-add').forEach(btn => {
+    container.querySelectorAll('button.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
         const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261019-variant-links-1');
@@ -919,7 +920,7 @@ async function renderCart() {
         }
         btn.textContent = result.changed ? '✓ Agregado' : 'Ya está en tu carrito';
         btn.disabled = !result.changed || result.reason === 'already_in_cart';
-        btn.style.background = result.changed ? '#4caf50' : '#8f294f';
+        btn.classList.toggle('is-added', result.changed);
         renderCart();
       });
     });
@@ -1194,6 +1195,16 @@ document.getElementById('btn-step1-next').onclick = async () => {
 
 // ---- STEP 2: SHIPPING ----
 document.getElementById('ck-city').onchange = function() {
+  hideErrors();
+  if (orderData.city !== this.value) {
+    orderData.mapLocation = null;
+    window.__TintinCheckoutPoint = null;
+    _mapInstance?.clearLocation();
+    const coords = document.getElementById('ck-map-coords');
+    coords.textContent = 'Marcá tu ubicación en el mapa';
+    coords.classList.add('ck-map-coords-missing');
+    hideSavedLocationHint();
+  }
   const val = this.value;
   const infoEl = document.getElementById('ck-ship-info');
   const methodEl = document.getElementById('ck-ship-method');
@@ -1304,6 +1315,7 @@ function showEncomiendaModes() {
       referenceField: document.getElementById('ck-referencia-field'),
       mapWrap: document.getElementById('ck-map-wrap'),
     }, mode => {
+      hideErrors();
       orderData.encomiendaMode = mode;
       document.getElementById('ck-address-label').textContent = 'Dirección de entrega *';
       if (mode === ENCOMIENDA_MODES.PUERTA) {

@@ -270,10 +270,12 @@ function showAddedToCart(productName) {
 }
 
 // null/undefined stock means "not tracked" — treat as unlimited
-function getStockLimit(productId) {
+function getStockLimit(productId, variant) {
   const product = getProductById(productId);
-  if (!product || product.stock === null || product.stock === undefined) return Infinity;
-  return Math.max(Number(product.stock), 0);
+  if (!product) return Infinity;
+  const total = product.stock == null ? Infinity : Math.max(Number(product.stock), 0);
+  const option = window.TintinCatalogPolicy?.variantStockLimit?.(product, variant);
+  return Math.min(total, option ?? Infinity);
 }
 
 async function addToCart(productId) {
@@ -320,7 +322,7 @@ function updateQty(productId, delta, variant) {
     && (!hasVariant || String(i.variant || '') === normalizedVariant)
   );
   if (!item) return;
-  if (delta > 0 && item.qty >= getStockLimit(productId)) {
+  if (delta > 0 && item.qty >= getStockLimit(productId, item.variant)) {
     showCartToast(`Ya tenés el máximo disponible de "${item.name}" en el carrito`);
     return;
   }
@@ -436,7 +438,7 @@ function renderCart() {
         <div class="tt-cart-qty">
           <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="-1" aria-label="Restar">−</button>
           <span class="tt-cart-qty-val">${item.qty}</span>
-          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="1" aria-label="Sumar">+</button>
+          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="1" aria-label="Sumar" ${item.qty >= getStockLimit(item.id, item.variant) ? 'disabled' : ''}>+</button>
         </div>
       </div>
       <div class="tt-cart-item-actions">

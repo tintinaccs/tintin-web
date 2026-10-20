@@ -206,9 +206,10 @@ import {
 import { findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
-import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261017-domain-cutover-1";
-import { clearProfileGateCache, consumeBlockedEmail } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261017-domain-cutover-1";
-import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1";
+import { waitForGooglePopup } from "./js/core/auth/espera-popup-google.mjs?v=tintin-20261013-client-integrated-1";
+import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261012-auth-privacy-1-perfil-usuario-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
+import { clearProfileGateCache, consumeBlockedEmail } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261012-auth-privacy-1-control-acceso-perfil-js-domain-prepared-20261012-6-precutover-20261013-2-security-ready-20261013-2";
+import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261012-auth-privacy-1-coordinador-sesion-js-domain-prepared-20261012-6-pedidos-styles-20261013-2-security-ready-20261013-2";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import { showBlockedModal, accountProblemHtml } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20261017-domain-cutover-1";
@@ -674,7 +675,7 @@ async function ensureProfileComplete(user, role, options = {}) {
       const phoneRaw = phoneInput.value.trim();
       const country = findCountryByCode(countrySelect.value);
       if (plan.needsName && !isValidCustomerName(name)) {
-        fieldError(firstNameInput, 'login-first-name-error', 'Ingresá tu nombre y apellido (al menos dos palabras, con tres letras cada una).');
+        fieldError(firstNameInput, 'login-first-name-error', 'Ingresá tu nombre y apellido reales: al menos dos palabras de tres letras. No uses etiquetas como Cliente, Prueba o Demo.');
         return;
       }
       if (plan.needsPhone && !isNationalMobileInput(phoneRaw)) {
@@ -1038,7 +1039,7 @@ const loginConGoogle = async () => {
     // navegador. La persistencia ya fue confirmada antes de habilitar el acceso.
     let result;
     try {
-      result = await signInWithPopup(auth, provider);
+      result = await waitForGooglePopup(() => signInWithPopup(auth, provider));
     } catch (popupError) {
       // Sólo un rechazo explícito de apertura permite el fallback. Cancelar,
       // perder la red o tardar en elegir cuenta nunca abre un segundo flujo.
@@ -1188,16 +1189,19 @@ document.getElementById('login-error').addEventListener('click', event => {
 });
 
 async function sendOtp(identifier) {
+  if (explicitLoginInProgress) return;
   hideMessages();
   hideGoogleNudge();
   const activeBtn = document.getElementById(otpEmail === identifier && document.getElementById('login-otp-block').style.display !== 'none' ? 'btn-resend-otp' : 'btn-send-otp');
   activeBtn.disabled = true;
+  let sent = false;
   try {
     await requestOtpCode(identifier);
     otpEmail = identifier;
     showSuccess(`Te mandamos un código de 6 dígitos a ${escapeHtml(identifier)}. Vence en 5 minutos.`);
     showOtpStep();
     startOtpResendCooldown();
+    sent = true;
   } catch (e) {
     if (e.code === 'google_account_exists') {
       showGoogleNudge();
@@ -1205,7 +1209,7 @@ async function sendOtp(identifier) {
       showError(otpErrorMessage(e.code));
     }
   } finally {
-    activeBtn.disabled = false;
+    if (!sent || activeBtn.id !== 'btn-resend-otp') activeBtn.disabled = false;
   }
 }
 
@@ -1252,6 +1256,7 @@ document.getElementById('login-otp-input').addEventListener('keydown', e => {
 attachOtpCodeInput(document.getElementById('login-otp-input'), {
   length: 6,
   onInput: () => hideMessages(),
+  onComplete: () => document.getElementById('btn-verify-otp').click(),
   onInvalidPaste: digits => {
     showError(digits.length
       ? `Lo que pegaste tiene ${digits.length} de los 6 dígitos. Copiá el código completo del correo.`
@@ -1272,6 +1277,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
   }
   const btn = document.getElementById('btn-verify-otp');
   btn.disabled = true;
+  btn.textContent = 'Verificando…';
   explicitLoginInProgress = true;
   loginSessionGeneration++;
   showOverlay();
@@ -1281,6 +1287,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
   } catch (e) {
     explicitLoginInProgress = false;
     btn.disabled = false;
+    btn.textContent = 'Confirmar código';
     hideLoginOverlay();
     showError(e.code === 'auth/user-disabled' || e.code === 'account_blocked' ? accountProblemHtml(otpEmail) : otpErrorMessage(e.code));
   }

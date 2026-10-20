@@ -563,6 +563,7 @@ function attachSearchDemand() {
 }
 
 window.TintinProductsStore = {
+  readProduct: id => runSingleFlight(`product:cart:${String(id)}`, () => fetchSingleProductFromEdge(String(id))),
   loadAll: loadAllProducts,
   loadHome: loadHomeProducts,
   loadProductPage,
