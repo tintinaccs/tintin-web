@@ -17,6 +17,8 @@
   // forzarlo aquí (en head, antes de pintar contenido) evita que cualquier
   // ruta aparezca a mitad de página.
   try { history.scrollRestoration = 'manual'; } catch {}
+  var entryScrollBehavior;
+  var entryScrollRevision = 0;
   function resetEntryScroll(surface) {
     window.TintinScrollLock?.resetPosition?.();
     if (surface?.nodeType === 1) {
@@ -25,12 +27,14 @@
     }
     var root = document.documentElement;
     var body = document.body;
-    var previous = root.style.scrollBehavior;
+    var revision = ++entryScrollRevision;
+    if (entryScrollBehavior === undefined) entryScrollBehavior = root.style.scrollBehavior;
     root.style.scrollBehavior = 'auto';
     window.scrollTo(0, 0);
     root.scrollTop = 0;
     if (body) body.scrollTop = 0;
     requestAnimationFrame(function () {
+      if (revision !== entryScrollRevision) return;
       try {
         // Una navegación con View Transitions puede abortar el frame mientras
         // cambia de documento. El scroll es accesorio y nunca debe producir
@@ -41,7 +45,8 @@
       } catch (error) {
         if (error?.name !== 'AbortError') console.warn('[Tintin] No se pudo reiniciar el scroll:', error);
       } finally {
-        root.style.scrollBehavior = previous;
+        root.style.scrollBehavior = entryScrollBehavior;
+        entryScrollBehavior = undefined;
       }
     });
   }

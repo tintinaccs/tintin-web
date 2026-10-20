@@ -35,6 +35,8 @@ async function load(page, width, file = 'admin.html', options = {}) {
     if (layout) layout.style.display = 'flex';
   });
   await expect(page.locator('.tt-admin-workspace-bar').first()).toBeAttached();
+  await page.evaluate(()=>document.fonts.ready);
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 }
 
 module.exports = { load };

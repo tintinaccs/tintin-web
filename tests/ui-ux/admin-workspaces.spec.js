@@ -128,16 +128,24 @@ test('convive con el controlador real de comercio sin perder filtros ni acciones
 
 for (const width of [390,768,1440]) test(`todos los módulos aceptados empiezan arriba y las mutaciones no arrastran el scroll ${width}`,async({page})=>{
  await load(page,width);
+
+ await page.evaluate(()=>{const reset=window.TintinPageScroll.reset;window.__entryResets=0;window.TintinPageScroll.reset=(...args)=>{window.__entryResets++;return reset(...args);};});
  const ids=await page.locator('.adm-content > .adm-section').evaluateAll(nodes=>nodes.map(node=>node.id));
  for(const id of ids){
   await page.evaluate(id=>{
    document.querySelectorAll('.adm-section').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');
-   const section=document.getElementById(id);section.style.minHeight='300vh';scrollTo(0,500);
+   const section=document.getElementById(id);section.style.minHeight='300vh';scrollTo({top:500,behavior:'instant'});
   },id);
   await expect.poll(()=>page.evaluate(()=>scrollY),id).toBe(0);
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-  await page.evaluate(()=>{scrollTo(0,200);const item=document.createElement('span');item.textContent='Actualización de datos';document.querySelector('.adm-section.active').append(item);});
+  await page.evaluate(()=>scrollTo({top:200,behavior:'instant'}));
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  const before=await page.evaluate(()=>({y:scrollY,resets:window.__entryResets}));
+  expect(before.y,id).toBeGreaterThan(0);
+  await page.evaluate(()=>{const item=document.createElement('span');item.textContent='Actualización de datos';document.querySelector('.adm-section.active').append(item);});
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  // El navegador puede ajustar el anclaje al cambiar el layout; una actualización no debe activar navegación.
+  expect(await page.evaluate(()=>window.__entryResets),id).toBe(before.resets);
   expect(await page.evaluate(()=>scrollY),id).toBeGreaterThan(0);
  }
 });

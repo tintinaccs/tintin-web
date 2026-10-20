@@ -45,3 +45,14 @@ test('navegar durante un bloqueo lleva arriba y cerrar un modal normal conserva 
  win.TintinScrollLock.unlock();
  assert.equal(win.scrollY,0);assert.equal(root.scrollTop,0);
 });
+
+test('reinicios coincidentes conservan el estilo de desplazamiento original',()=>{
+ const frames=[];
+ const root={style:{scrollBehavior:'smooth'},scrollTop:0},body={scrollTop:0};
+ const context=vm.createContext({history:{},document:{documentElement:root,body,addEventListener(){}},window:{scrollTo(){},addEventListener(){}},requestAnimationFrame:fn=>frames.push(fn),console});
+ vm.runInContext(loader.slice(loader.indexOf("  try { history.scrollRestoration"),loader.indexOf('  // El sitio oficial')),context);
+ context.window.TintinPageScroll.reset();context.window.TintinPageScroll.reset();
+ while(frames.length)frames.shift()();
+ assert.equal(root.style.scrollBehavior,'smooth');
+ assert.equal(root.scrollTop,0);assert.equal(body.scrollTop,0);
+});
