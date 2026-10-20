@@ -30,13 +30,25 @@ for(const [width,height] of VIEWPORTS)test(`tablero y detalles utilizables en ${
   await expect(page.locator('[data-stage-count="ready"]')).toHaveText('2');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
   expect(await page.locator('[data-orders-board]').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
-  await expect(page.locator('.tt-order-stage-tabs')).toBeVisible();
-  const stepColors=await page.locator('[data-action="order-stage"]').evaluateAll(elements=>elements.map(e=>getComputedStyle(e).backgroundColor));
-  expect(new Set(stepColors).size).toBe(5);
-  expect(await page.locator('.tt-order-stage-tabs').evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
   const mobile=width<=1180;
-  if(mobile){await expect(page.locator('.tt-order-stage-tabs')).toBeVisible();await expect(page.locator('[data-order-lane="preparing"]')).toBeHidden();await page.locator('[data-action="order-stage"][data-stage="ready"]').click();await expect(page.locator('[data-order-lane="ready"]')).toBeVisible();await page.locator('[data-action="order-stage"][data-stage="new"]').click();}
-  else {await expect(page.locator('[data-order-lane="new"]')).toBeVisible();await expect(page.locator('[data-order-lane="done"]')).toBeVisible();}
+  const tabs=page.locator('.tt-order-stage-tabs');
+  const headings=page.locator('.tt-order-lane:not([data-order-lane="attention"]):not([data-order-lane="history"]) > h2');
+  if(mobile){
+    await expect(tabs).toBeVisible();
+    expect(await tabs.evaluate(e=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
+    for(const heading of await headings.all())await expect(heading).toBeHidden();
+    await expect(page.locator('[data-order-lane="preparing"]')).toBeHidden();
+    await page.locator('[data-action="order-stage"][data-stage="ready"]').click();
+    await expect(page.locator('[data-order-lane="ready"]')).toBeVisible();
+    await page.locator('[data-action="order-stage"][data-stage="new"]').click();
+  } else {
+    await expect(tabs).toBeHidden();
+    for(const heading of await headings.all())await expect(heading).toBeVisible();
+    await expect(page.locator('[data-order-lane="new"]')).toBeVisible();
+    await expect(page.locator('[data-order-lane="done"]')).toBeVisible();
+  }
+  const stageColors=await page.locator(mobile?'[data-action="order-stage"]':'.tt-order-lane:not([data-order-lane="attention"]):not([data-order-lane="history"])').evaluateAll(elements=>elements.map(e=>getComputedStyle(e).backgroundColor));
+  expect(new Set(stageColors).size).toBe(5);
   if(process.env.TINTIN_REVIEW_DIR && [320,768,1440,1920].includes(width)){fs.mkdirSync(process.env.TINTIN_REVIEW_DIR,{recursive:true});await page.screenshot({path:path.join(process.env.TINTIN_REVIEW_DIR,`pedidos-${width}.png`),fullPage:true,animations:'disabled'});}
   const trigger=page.locator('[data-action="drawer-order"][data-id="order_fixture_0"]');await trigger.click();
   const drawer=page.getByRole('dialog',{name:/Detalles del pedido/});await expect(drawer).toBeVisible();await expect(drawer).toContainText('Rosa Tintin');await expect(drawer).toContainText('Historial');
@@ -49,6 +61,24 @@ for(const [width,height] of VIEWPORTS)test(`tablero y detalles utilizables en ${
   await expect(drawer.getByRole('link',{name:'Enviar a Fito',exact:true})).toHaveAttribute('href',/^https:\/\/wa\.me\/595982518206/);
   if(process.env.TINTIN_REVIEW_DIR && [320,1440].includes(width))await page.screenshot({path:path.join(process.env.TINTIN_REVIEW_DIR,`detalle-${width}.png`),animations:'disabled'});
   await drawer.getByRole('button',{name:'Cerrar',exact:true}).click();await expect(drawer).toBeHidden();await expect(trigger).toBeFocused();expect(errors).toEqual([]);
+});
+test('cambiar entre columnas y pestañas conserva una sola cabecera y la etapa seleccionada',async({page})=>{
+  await page.setViewportSize({width:1180,height:820});await open(page);
+  await page.locator('[data-action="order-stage"][data-stage="done"]').click();
+  for(const width of [1181,1180,1440,390]){
+    await page.setViewportSize({width,height:900});
+    const compact=width<=1180;
+    await expect(page.locator('.tt-order-stage-tabs')).toBeVisible({visible:compact});
+    await expect(page.locator('[data-order-lane="done"] > h2')).toBeVisible({visible:!compact});
+    await expect(page.locator('[data-order-lane="done"]')).toBeVisible();
+    await expect(page.locator('[data-action="order-stage"][data-stage="done"]')).toHaveAttribute('aria-selected','true');
+    await expect(page.locator('[data-order-card="order_fixture_5"]')).toHaveCount(1);
+  }
+  await page.locator('[data-tab="attention"]').click();
+  await expect(page.locator('[data-order-lane="attention"] > h2')).toBeVisible();
+  await expect(page.locator('.tt-order-stage-tabs')).toBeHidden();
+  await page.locator('[data-tab="history"]').click();
+  await expect(page.locator('[data-order-lane="history"] > h2')).toBeVisible();
 });
 test('tarjetas se mueven sin recarga ni duplicación y actualizan contadores',async({page})=>{
   await open(page);await page.locator('[data-order-card="order_fixture_0"] [data-action="order-advance"]').click();

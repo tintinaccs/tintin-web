@@ -459,3 +459,7 @@ Fuentes: interfaz-productos-adaptable.js, vista-previa-producto.js, admin-app.js
 ## 2026-10-20 — Comparación concurrente del editor de Productos
 
 Fuente: admin-app.js, listener de catálogo y guardado transaccional del editor. Impacto: edición de precios/datos, stock total y por variante, representación histórica de opciones, reintentos después de fallo de inventario privado o sincronización. La comparación usa el documento original; la interfaz conserva el saneado. La huella completa sigue detectando cambios reales de otra sesión y productos borrados. No cambia esquema, permisos, reglas, cantidades reales, borrado ni contraseñas. Regresión en maestro-productos-controlador.test.mjs; caché, plan protegido y diagnóstico se generan con las herramientas existentes. Evidencia y límites en CURRENT_STATE.
+
+## 2026-10-20 — Cabeceras únicas de etapas de Pedidos
+
+Fuente: tablero-pedidos.css. Escritorio usa títulos y contadores de las cinco columnas; hasta 1180px usa pestañas y oculta sólo los títulos repetidos de etapas estándar. Incidencias e Históricos conservan sus títulos. No cambia renderizado, selección, datos, permisos, cantidades ni transiciones. Caché del CSS y derivados regenerados; matriz de 24 tamaños y cruce de breakpoint con etapa persistida en orders-board.spec.js.
