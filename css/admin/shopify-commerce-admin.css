@@ -1204,3 +1204,8 @@ html.tt-product-order-open #unsaved-modal { z-index:9500 !important; }
 #prod-form-card .tt-editor-stepper input { appearance:textfield; }
 #prod-form-card .tt-editor-stepper input::-webkit-inner-spin-button,
 #prod-form-card .tt-editor-stepper input::-webkit-outer-spin-button { appearance:none; margin:0; }
+
+/* Los campos táctiles mantienen 16px para evitar el zoom de entrada en iOS. */
+@media (max-width:1199px), (pointer:coarse) and (max-width:1400px) {
+  #section-productos.tt-commerce-mounted #prod-form-card .adm-input { font-size:16px; }
+}

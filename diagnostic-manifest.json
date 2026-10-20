@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b8bd7e059ade1b192550483fd4df22fe7db419174f5150518c97c821c5a7e7bf",
+  "sourceFingerprint": "b77aa21ccef9d1f12efa3e59acc539e1d7893d5d7db7e2b7cb7395251bd41552",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1348,
     "textFiles": 1258,
-    "totalBytes": 28275107,
+    "totalBytes": 28275707,
     "pages": 19,
     "modules": 948
   },
@@ -2839,7 +2839,7 @@
         "viewer"
       ],
       "bytes": 204207,
-      "sha256": "21e458eab9eac227f620f890a8b62c554bd6752b42275bedba528776cb445f49",
+      "sha256": "67c9c75d8c849dd5bfc1b143ee4ac1c4670665d4162c024549a4d015b017aa21",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2913,7 +2913,7 @@
           "line": 2084
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261020-minimal-editor-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261020-minimal-editor-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2085
         },
@@ -3259,7 +3259,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261020-minimal-editor-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20261020-minimal-editor-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2085,
           "exists": true
@@ -30272,7 +30272,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "bytes": 119524,
-      "sha256": "e64f77a0ca65b3d41d2127d300b8a5344318cba1dd3e0afbf943a1964100a842",
+      "sha256": "67750b41b51516eb15f3262270c1ee620d87e997d37b88eda34e161ba302fb4b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52264,8 +52264,8 @@
     },
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
-      "bytes": 32698,
-      "sha256": "74d41082a3ba7da3dd7d4e108a797a7576f618759c1a5bc3d172e1d7100e3c45",
+      "bytes": 32851,
+      "sha256": "e3948899d92ec15fd4fc952c81d35e295015ec64194666c5ffd714558e2603b6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52282,47 +52282,47 @@
         },
         {
           "url": "https://img.test/**",
-          "line": 178
-        },
-        {
-          "url": "http://www.w3.org/2000/svg",
-          "line": 178
-        },
-        {
-          "url": "https://img.test/rota.webp",
           "line": 180
         },
         {
+          "url": "http://www.w3.org/2000/svg",
+          "line": 180
+        },
+        {
+          "url": "https://img.test/rota.webp",
+          "line": 182
+        },
+        {
           "url": "https://img.test/principal.webp",
-          "line": 242
+          "line": 244
         },
         {
           "url": "https://img.test/coctel.webp",
-          "line": 267
+          "line": 269
         },
         {
           "url": "https://img.test/banda.webp",
-          "line": 267
+          "line": 269
         },
         {
           "url": "https://img.test/portada.webp",
-          "line": 316
-        },
-        {
-          "url": "https://img.test/extra-$%7B++number%7D.webp",
           "line": 318
         },
         {
+          "url": "https://img.test/extra-$%7B++number%7D.webp",
+          "line": 320
+        },
+        {
           "url": "https://img.test/extra-1.webp/nhttps://img.test/extra-2.webp",
-          "line": 325
+          "line": 327
         },
         {
           "url": "https://img.test/extra-1.webp",
-          "line": 330
+          "line": 332
         },
         {
           "url": "https://img.test/tardia.webp",
-          "line": 343
+          "line": 345
         }
       ]
     },
@@ -53255,7 +53255,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204207,
-      "sha256": "21e458eab9eac227f620f890a8b62c554bd6752b42275bedba528776cb445f49"
+      "sha256": "67c9c75d8c849dd5bfc1b143ee4ac1c4670665d4162c024549a4d015b017aa21"
     },
     {
       "path": "apple-touch-icon.png",
@@ -54208,8 +54208,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1919,
-      "sha256": "6151680a0935c3f318d4df9ceb1ac7fb7b7c4c963ee1f2a43d0a947ef50ab742"
+      "bytes": 1922,
+      "sha256": "dace0c96e90e12c86347ef03a5ce37e7802211c2eb6fb2d0d7eae9a6a5dd1abe"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -54221,7 +54221,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "678e46424beb4aa2817ea605ba0180d829b11b7a73694d230bf1c5c56041008a"
+      "sha256": "61b4b6f89cc20fa13a2287a321516fe2279fe3907930d6f1b7f0148ddd43d681"
     },
     {
       "path": "config/public-site.json",
@@ -54328,8 +54328,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 61861,
-      "sha256": "604eeff0f141377802f5d4f36902820ba793568650d3b2214abe290d7f3e766c"
+      "bytes": 62102,
+      "sha256": "eb4370c3fa7bbff7d25ebb6c20f5c992ce2617169f2690ee70cadaef6cb97fe4"
     },
     {
       "path": "css/admin/sidebar-interaccion.css",
@@ -54856,8 +54856,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 661876,
-      "sha256": "2a5b11d234eca942b389fb21a36a62e0ccfbbba8ea918b3844653bf200850669"
+      "bytes": 662079,
+      "sha256": "55cab1cfd0df58a571cae6d8acbdeaf0918724736c3c2a19c35efacd3dd4b2d8"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56279,7 +56279,7 @@
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
       "bytes": 119524,
-      "sha256": "e64f77a0ca65b3d41d2127d300b8a5344318cba1dd3e0afbf943a1964100a842"
+      "sha256": "67750b41b51516eb15f3262270c1ee620d87e997d37b88eda34e161ba302fb4b"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -58751,7 +58751,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 73680,
-      "sha256": "f0b95272b015d581f6948c1999c0cb4ad7f2e8ecc087d708a963ea6f758d1f6f"
+      "sha256": "eb5069762a01171ed9276ca11710281510d507a7b50b86ae0783ed0241dde611"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -61060,8 +61060,8 @@
     {
       "path": "tests/ui-ux/products-responsive-phase-one.spec.js",
       "extension": ".js",
-      "bytes": 32698,
-      "sha256": "74d41082a3ba7da3dd7d4e108a797a7576f618759c1a5bc3d172e1d7100e3c45"
+      "bytes": 32851,
+      "sha256": "e3948899d92ec15fd4fc952c81d35e295015ec64194666c5ffd714558e2603b6"
     },
     {
       "path": "tests/ui-ux/public-spacing-product.spec.js",

@@ -41,6 +41,8 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   });
   await page.getByRole('group',{name:'Categorías rápidas',exact:true}).getByRole('button',{name:'Relojes',exact:true}).click();await expect(page.locator('#prod-category')).toHaveValue('relojes');
   await expect(card.locator('[data-product-section]')).toHaveCount(6);
+  if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
+  await expect(page.locator('#prod-save-btn')).toBeInViewport();
   await page.getByRole('button',{name:'Stock: 10 unidades',exact:true}).click();
   await expect(page.locator('#prod-stock')).toHaveValue('10');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByLabel('Elegir cantidad: Stock',{exact:true}).selectOption('500');await expect(page.locator('#prod-stock')).toHaveValue('500');

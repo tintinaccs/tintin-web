@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
   "baseCommit": "dc424fa01892912be6a8d181e6554079d79f49cb",
-  "reason": "Aplicar maqueta aprobada de editor minimalista responsive con controles visuales y preservar CRUD e inventario por variante.",
+  "reason": "Aplicar editor minimalista aprobado con controles visuales, stock canónico y campos táctiles de 16px para evitar zoom en iOS.",
   "files": [
     {
       "path": "admin.html",
       "oldHash": "813ea213ebfa2f29f7661befd3f11a5fc04d4b1ddf292527929cbb86d442e4e6",
-      "newHash": "21e458eab9eac227f620f890a8b62c554bd6752b42275bedba528776cb445f49"
+      "newHash": "67c9c75d8c849dd5bfc1b143ee4ac1c4670665d4162c024549a4d015b017aa21"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "oldHash": "159d60ba83a901867badc490f8cdcfe773471033ef85fb8da4f300d71561dcb1",
-      "newHash": "604eeff0f141377802f5d4f36902820ba793568650d3b2214abe290d7f3e766c"
+      "newHash": "eb4370c3fa7bbff7d25ebb6c20f5c992ce2617169f2690ee70cadaef6cb97fe4"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -21,12 +21,12 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "8dada1d6394aa8946e2e659565a9801ab490f915b687aa4d08bf2482bf9cb95b",
-      "newHash": "e64f77a0ca65b3d41d2127d300b8a5344318cba1dd3e0afbf943a1964100a842"
+      "newHash": "67750b41b51516eb15f3262270c1ee620d87e997d37b88eda34e161ba302fb4b"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "a656d81fa969239a0476959bd9c0b9d9ef9cf83c45c6f00e91fafa58676d6df0",
-      "newHash": "f0b95272b015d581f6948c1999c0cb4ad7f2e8ecc087d708a963ea6f758d1f6f"
+      "newHash": "eb5069762a01171ed9276ca11710281510d507a7b50b86ae0783ed0241dde611"
     }
   ],
   "affectedRecords": [
