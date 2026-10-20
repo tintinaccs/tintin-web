@@ -129,7 +129,7 @@ check('Expone sonido configurable con limitación de foreground', masterModule.i
 check('El módulo la muestra sólo al Super Admin', clientModule.includes('identidad-super-admin.js?v=') && clientModule.includes('const owner = isSuperAdmin(user)') && clientModule.includes("dom.card.style.display = owner ? '' : 'none'"));
 check('Todos los estados visibles están definidos', ['No configuradas', 'Listas para activar', 'Activas en este dispositivo', 'Permiso bloqueado', 'Navegador no compatible', 'Instalación requerida en iPhone', 'Error de configuración'].every(label => clientModule.includes(label)));
 check('Comprueba isSupported() antes de ofrecer nada', clientModule.includes('isSupported()'));
-check('Registra el service worker con alcance raíz', clientModule.includes("register(SW_PATH, { scope: '/' })"));
+check('Registra el service worker con alcance raíz', clientModule.includes("register(SW_PATH, { scope: '/', updateViaCache: 'none' })"));
 check('No inicializa una segunda aplicación Firebase',
   clientModule.includes('getMessaging(auth.app)') &&
   clientModule.includes('import { auth }') &&

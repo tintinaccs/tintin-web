@@ -5,7 +5,7 @@ import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tint
 import { recordAuthDiagnostic } from '../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { createLiveActivityNotices } from './avisos-en-vivo.mjs?v=tintin-20261008-producto-superficies-1-palette-20261014-1';
-import '../../admin/notifications/notificaciones-push.js?v=tintin-20261019-superadmin-live-1';
+import '../../admin/notifications/notificaciones-push.js?v=tintin-20261020-iconos-globales-1';
 import {
   collection, limit, orderBy, query} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 

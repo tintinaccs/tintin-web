@@ -135,17 +135,18 @@ test('el icono de notificación y ambas apps instaladas conservan rosa de muestr
  }
  const pixels=await page.evaluate(async()=>{
   const result=[];
-  for(const name of ['push-icon-192.png','app-icon-512.png','push-badge-96.png']) {
-   const image=new Image();image.src='/assets-tintin/images/admin/'+name;await image.decode();
+  for(const name of ['/assets-tintin/images/admin/push-icon-192.png','/assets-tintin/images/admin/app-icon-512.png','/assets-tintin/images/admin/push-badge-96.png','/apple-touch-icon.png','/favicon-192x192.png','/favicon-512x512.png','/favicon-16x16.png','/favicon-32x32.png','/favicon.ico']) {
+   const image=new Image();image.src=name+'?v=tintin-20261020-iconos-globales-1';try { await image.decode(); } catch { throw new Error("No se decodifica "+name); }
    const canvas=document.createElement('canvas');canvas.width=image.width;canvas.height=image.height;
    const context=canvas.getContext('2d');context.drawImage(image,0,0);
    const data=context.getImageData(0,0,image.width,image.height).data;
-   let white=0;for(let i=0;i<data.length;i+=4)if(data[i]>250&&data[i+1]>250&&data[i+2]>250&&data[i+3]>200)white++;
+   const threshold=image.width<=32?210:250;
+   let white=0;for(let i=0;i<data.length;i+=4)if(data[i]>threshold&&data[i+1]>threshold&&data[i+2]>threshold&&data[i+3]>200)white++;
    result.push({name,corner:[...data.slice(0,4)],white});
   }
   return result;
  });
- for(const image of pixels){expect(image.white).toBeGreaterThan(100);expect(image.corner).toEqual(image.name.includes('badge')?[0,0,0,0]:[248,170,202,255]);}
+ for(const image of pixels){expect(image.white,image.name).toBeGreaterThan(/favicon-(16|32)|favicon\.ico/.test(image.name)?0:100);expect(image.corner,image.name).toEqual(image.name.includes('badge')?[0,0,0,0]:[248,170,202,255]);}
 });
 for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[820,1180],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]]) {
  test(`marca push y encabezado difuminado sin cruces a ${width}x${height}`,async({page})=>{
