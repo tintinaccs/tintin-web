@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "288d0dd8244ffe67fa18f022a2f3902b58a050d1bbdc1d509c4a61608222ed73",
+  "sourceFingerprint": "88db097b766ed7ecfdfc90f1163661b64169b9882731553bcf000d5f39cca8fb",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1352,
-    "textFiles": 1262,
-    "totalBytes": 28345455,
+    "files": 1353,
+    "textFiles": 1263,
+    "totalBytes": 28348190,
     "pages": 19,
-    "modules": 952
+    "modules": 953
   },
   "viewports": [
     {
@@ -18305,15 +18305,15 @@
       "sourceFile": "nosotros.html",
       "label": "Nosotros alternativo",
       "title": "Tintin — Quiénes somos",
-      "description": "Tintin Accesorios.",
+      "description": "Tintin.",
       "visibility": "hidden",
       "requiresAuth": false,
       "roles": [
         "guest",
         "client"
       ],
-      "bytes": 2011,
-      "sha256": "5e2d6f43e3f682d2f037397e77e58a6cdd5d4b4b38bc6fd17477a2df58e455cd",
+      "bytes": 2000,
+      "sha256": "693bb9a9cf2af3331f74b2f554808765a8e9141b35932fd43ddd37180151cf2b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -37200,8 +37200,8 @@
     },
     {
       "path": "scripts/auditar-fase-10-accessibility.js",
-      "bytes": 5131,
-      "sha256": "59dc796f85bd68c2c5209d45452182f25ec5b94b016f23080802836fa19e707a",
+      "bytes": 5371,
+      "sha256": "8729c8fe3cbc33c39715207200a33d52ce77677a8968a596bdf55e9758a146f1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37311,8 +37311,8 @@
     },
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",
-      "bytes": 7043,
-      "sha256": "8a57bb80e2298ffc341d695701507e05fa5b5dae084ff57be76e93056dd7585f",
+      "bytes": 7283,
+      "sha256": "33bd38406c30e0feb27824ddd37bcd172058f2c90eb3fdb1227877b0e04c3fdf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37344,8 +37344,8 @@
     },
     {
       "path": "scripts/auditar-final-integracion.js",
-      "bytes": 10654,
-      "sha256": "4e3fced239c20b267d095ff4f481d50ac0efd5da3a83c7df438fdccc6644b5dd",
+      "bytes": 10706,
+      "sha256": "b0c9d1f733e6b591c2dc105c5c7c351ef695ed11cd1f507aef779375ed75bb68",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49874,6 +49874,54 @@
       "endpoints": []
     },
     {
+      "path": "tests/push/manifest-icon-audit.test.mjs",
+      "bytes": 1709,
+      "sha256": "4eac70a8addf244718b7cf5c4b74b03bfe9fb9e4f5b57c6558d124fc25f910ea",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/push/push-web.test.mjs",
       "bytes": 24630,
       "sha256": "9d38d83819b0f0f194bb1e379eac390fdb3f233c3426ffb6d25d00e5f0b4ebfb",
@@ -54519,7 +54567,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 10772,
-      "sha256": "993fa6b1df818ef22324c76e0aa299987c01e3b02980ae2f667048c5f27a5319"
+      "sha256": "e25fa31937d633b34c21aebf7c353739eb699d3aae6ee0d8e31a646d92f02967"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -54531,7 +54579,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "206339c97024db1ce5358826fd4f654b09548c2418473a65d4dcaf186063129f"
+      "sha256": "26781445ca9a3fcd1fa3a9b7ba384f1c9918e0e0ef60c7ba17aaf4f87b593e04"
     },
     {
       "path": "config/public-site.json",
@@ -55166,8 +55214,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 672215,
-      "sha256": "74715f8026f42ce067e0b70d7948798274cc93a499e9bef5b9686cc18ac5e757"
+      "bytes": 672720,
+      "sha256": "2eb027be14036707f6b6549d8ef47c6345f401c31b53aa85ea8bda8f201c3c65"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -58172,8 +58220,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 2011,
-      "sha256": "5e2d6f43e3f682d2f037397e77e58a6cdd5d4b4b38bc6fd17477a2df58e455cd"
+      "bytes": 2000,
+      "sha256": "693bb9a9cf2af3331f74b2f554808765a8e9141b35932fd43ddd37180151cf2b"
     },
     {
       "path": "package-lock.json",
@@ -58586,8 +58634,8 @@
     {
       "path": "scripts/auditar-fase-10-accessibility.js",
       "extension": ".js",
-      "bytes": 5131,
-      "sha256": "59dc796f85bd68c2c5209d45452182f25ec5b94b016f23080802836fa19e707a"
+      "bytes": 5371,
+      "sha256": "8729c8fe3cbc33c39715207200a33d52ce77677a8968a596bdf55e9758a146f1"
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
@@ -58622,8 +58670,8 @@
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",
       "extension": ".js",
-      "bytes": 7043,
-      "sha256": "8a57bb80e2298ffc341d695701507e05fa5b5dae084ff57be76e93056dd7585f"
+      "bytes": 7283,
+      "sha256": "33bd38406c30e0feb27824ddd37bcd172058f2c90eb3fdb1227877b0e04c3fdf"
     },
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
@@ -58640,8 +58688,8 @@
     {
       "path": "scripts/auditar-final-integracion.js",
       "extension": ".js",
-      "bytes": 10654,
-      "sha256": "4e3fced239c20b267d095ff4f481d50ac0efd5da3a83c7df438fdccc6644b5dd"
+      "bytes": 10706,
+      "sha256": "b0c9d1f733e6b591c2dc105c5c7c351ef695ed11cd1f507aef779375ed75bb68"
     },
     {
       "path": "scripts/auditar-firestore-lecturas-presupuesto.js",
@@ -60922,6 +60970,12 @@
       "extension": ".mjs",
       "bytes": 2463,
       "sha256": "5ebd2de22e7bc7458100aed5fe91f258986d2abf90e0cb05d5a09512fc554e4d"
+    },
+    {
+      "path": "tests/push/manifest-icon-audit.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1709,
+      "sha256": "4eac70a8addf244718b7cf5c4b74b03bfe9fb9e4f5b57c6558d124fc25f910ea"
     },
     {
       "path": "tests/push/push-web.test.mjs",

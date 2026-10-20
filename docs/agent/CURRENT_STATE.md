@@ -1,5 +1,7 @@
 ## 2026-10-20 — Destino exacto de notificaciones y marca PWA global (Codex /root)
 
+CI39447417663 aprobó derivados y controles previos, pero el ícono versionado hizo crecer el stub Nosotros de1948a2006 caracteres. Se compacta sólo su descripción meta a1995 caracteres, preservando destino, tema e ícono. Además el auditor de manifest resuelve la ruta sin query/fragmento (dos regresiones verifican recurso existente/inexistente) y los contratos UI reconocen la suite ampliada exacta, conservando todas las suites previas. Auditorías auxiliares, integración y fases8/10 aprobadas.
+
 CI39444301853 de8db14c1e detuvo el candidato en Reject generated artifact drift: el diagnóstico se generó antes del plan y todavía describía las huellas/tamaño anteriores de config/mantenimiento-flujos-plan.json y config/proteccion-flujos.json. Se regenera diagnóstico/versión después del plan definitivo; no se altera código funcional ni se omite ese control. Se verifica el nuevo artefacto exacto antes de actualizar PR1179 y repetir CI.
 
 La revisión visual adicional agrupó logo y título en el mismo encabezado, preservando el span actualizado por el controlador. Hasta540px el menú/marca/título y las acciones usan filas explícitas, evitando el logo aislado por auto-placement. El conjunto final volvió a aprobar38 Chromium y38 WebKit; se revisaron capturas de móvil y laptop y se guardaron también tablet vertical/horizontal, móvil horizontal y escritorio.
