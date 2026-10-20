@@ -26,7 +26,7 @@ import {
   getVisualBlockAnchorIds,
   isTopVisualAnchorAllowed,
   sanitizeSiteSectionOrder,
-} from './contrato-estructura-sitio.js?v=tintin-20261016-story-dec66f9427';
+} from './contrato-estructura-sitio.js?v=tintin-20261016-story-dec66f9427-instagram-structure-1';
 
 export {
   SITE_PUBLIC_PAGE_IDS,
