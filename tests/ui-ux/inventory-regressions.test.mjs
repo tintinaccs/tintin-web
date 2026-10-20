@@ -33,10 +33,10 @@ test('reseñas no encoge el CTA y permite wrap cerca de 924px', async () => {
   assert.match(css, /@media \(max-width:\s*940px\)[\s\S]*?flex-wrap:\s*wrap/);
 });
 
-test('admin móvil mantiene cinco accesos principales con etiquetas cortas y Más', async () => {
+test('admin móvil mantiene cuatro accesos directos y Más con etiquetas cortas', async () => {
   const html = await read('admin.html');
   const primaries = html.match(/data-mobile-primary/g) || [];
-  assert.equal(primaries.length, 5);
+  assert.equal(primaries.length, 4);
   assert.match(html, /data-mobile-primary data-section="dashboard"[\s\S]{0,500}>Inicio<\/button>/);
   assert.match(html, /data-mobile-primary data-section="estadisticas"[\s\S]{0,500}>Stats<\/button>/);
   assert.match(html, /id="adm-mobile-more-toggle"/);
@@ -65,7 +65,7 @@ test('copy visible corrige opiniones y sesiones', async () => {
   ]);
   assert.match(reviews, /count === 1 \? 'opinión' : 'opiniones'/);
   assert.doesNotMatch(reviews, /opinión\$\{count === 1 \? '' : 'es'\}/);
-  assert.match(admin, /statisticsTrafficSessions\.length === 1 \? 'sesión' : 'sesiones'/);
+  assert.match(admin, /sessionsFor\('visitors'\)\.length === 1 \? 'sesión' : 'sesiones'/);
   assert.doesNotMatch(admin, /sesión\$\{statisticsTrafficSessions\.length === 1 \? '' : 'es'\}/);
   // Cualquier "…ión${… ? '' : 'es'}" produce "…iónes" (tilde mal puesta).
   for (const source of [reviews, admin]) assert.doesNotMatch(source, /ión\$\{[^}]*\? '' : 'es'\}/);

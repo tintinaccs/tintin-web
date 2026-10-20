@@ -25,8 +25,13 @@ test('assets versionables conservan caché inmutable', () => {
     '/*.mjs',
     '/assets-tintin/fonts/*',
     '/assets-tintin/images/*',
-    '/assets/*',
-    '/*.png',
-    '/*.ico'
+    '/assets/*'
   ]) expectImmutable(route);
+});
+
+
+test('iconos canónicos sin nombre de versión se revalidan para actualizar instalaciones existentes', () => {
+  for (const route of ['/favicon-*.png','/apple-touch-icon.png','/favicon.ico']) {
+    assert.ok(headers.includes(`${route}\n  Cache-Control: no-cache, must-revalidate`), route);
+  }
 });

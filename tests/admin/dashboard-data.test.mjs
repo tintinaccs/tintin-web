@@ -21,7 +21,7 @@ function dashboard(orders, ready = true, permissions = true, resets = {}, statis
   };
   vm.createContext(context);
   vm.runInContext(functionSource('activityTimestampMillis', '\nfunction activityLocationLabel') + '\n' + functionSource('renderDashboardData', '\nfunction loadDashboard') + '\nrenderDashboardData();', context);
-  return { field, card };
+  return { field, card, context, render: () => vm.runInContext("renderDashboardData();", context) };
 }
 
 test('Últimos pedidos mezcla fechas ISO y Timestamp, ordena del más nuevo y limita a cinco', () => {
@@ -79,4 +79,21 @@ test('el paginador real de Usuarios ofrece los registros de la segunda página',
   assert.equal((fields.get('users-tbody').innerHTML.match(/<tr>/g) || []).length, 5);
   assert.match(fields.get('users-tbody').innerHTML, new RegExp(`Cuenta ${size}`));
   assert.match(fields.get('users-pagination').innerHTML, /Página 2 de 2/);
+});
+
+
+test('un error de lectura no convierte pedidos confirmados en ceros comerciales y se recupera al confirmar', () => {
+  const { field, context, render } = dashboard([{ createdAt: new Date(), total: 120 }]);
+  assert.equal(field('stat-orders-total').textContent, 1);
+  context.adminRealtimeReady.orders = false;
+  context.adminRealtimeErrors.orders = 'permission-denied';
+  render();
+  for (const id of ['stat-orders-total','stat-orders-today','stat-sales-month']) assert.equal(field(id).textContent, '—');
+  assert.equal(field('stat-users').textContent, 1);
+  assert.match(field('dash-recent-orders').innerHTML, /Pedidos no disponibles/);
+  context.adminRealtimeReady.orders = true;
+  delete context.adminRealtimeErrors.orders;
+  render();
+  assert.equal(field('stat-orders-total').textContent, 1);
+  assert.equal(field('stat-sales-month').textContent, '120');
 });

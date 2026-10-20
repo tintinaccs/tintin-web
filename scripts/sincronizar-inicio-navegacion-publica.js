@@ -70,7 +70,7 @@ function ensureSectionFlow(html, absolute = false) {
   if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(out)) return out;
   const beforeHeadEnd = out.slice(0, out.indexOf('</head>'));
   const join = beforeHeadEnd.endsWith('\n') ? '' : '\n';
-  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261015-flow-startup-2" defer></script>\n</head>`);
+  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1" defer></script>\n</head>`);
 }
 function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   let out = ensureSectionFlow(html, absolute).replace(/\s*<!-- Estructura pública disponible desde el primer render -->/g, '');

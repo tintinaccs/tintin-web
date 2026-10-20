@@ -132,3 +132,24 @@ test('medir sin cambios no reescribe los tonos de las superficies', async ({ pag
   await page.locator('#first').evaluate(node => { node.hidden=true; });
   await expect(page.locator('#second')).toHaveAttribute('data-tt-flow-block', 'light');
 });
+
+for (const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1280,720],[1440,900],[1920,1080]]) {
+  test(`login revelado desde html recupera sus superficies sin resize ${width}x${height}`,async({page})=>{
+    await page.setViewportSize({width,height});
+    const loginGate=fs.readFileSync('login.html','utf8').match(/<style>(html\.login-auth-pending[\s\S]*?)<\/style>/)[1];
+    await page.setContent(`<style>${styles}${loginGate}body{margin:0}.login-page{height:240px}.tt-footer{height:100px}</style><main class="login-page">Acceso</main><footer class="tt-footer">Pie</footer>`);
+    await page.evaluate(()=>document.documentElement.classList.add('login-auth-pending'));
+    await page.addScriptTag({content:runtime});
+    await expect(page.locator('[data-tt-flow-block]')).toHaveCount(0);
+    await page.waitForTimeout(100);
+    await page.evaluate(()=>document.documentElement.classList.remove('login-auth-pending'));
+    await expect(page.locator('.login-page')).toHaveAttribute('data-tt-flow-block','light');
+    await expect(page.locator('.tt-footer')).toHaveAttribute('data-tt-flow-block','pink');
+    await page.evaluate(()=>document.documentElement.classList.add('login-auth-pending'));
+    await expect(page.locator('[data-tt-flow-block]')).toHaveCount(0);
+    await page.evaluate(()=>document.documentElement.classList.remove('login-auth-pending'));
+    await expect(page.locator('[data-tt-flow-block]')).toHaveCount(2);
+    await expect(page.locator('[data-tt-flow-background]')).toHaveCount(2);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  });
+}
