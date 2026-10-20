@@ -114,6 +114,25 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
  });
 }
 
+for (const [width,height] of [[320,568],[390,844],[768,1024],[1024,768],[1180,820],[844,390]]) {
+ test(`la navegación autenticada no tapa las acciones del editor ${width}x${height}`,async({page})=>{
+  const nav=shell.match(/<nav class="adm-mobile-tabs"[\s\S]*?<\/nav>/)[0];
+  const guard=shell.match(/<style>[\s\S]*?<\/style>/g).find(style=>style.includes('html.adm-auth-ready #adm-sidebar'));
+  expect(guard).toBeTruthy();
+  await openEditor(page,width,height,false,async()=>{
+   await page.evaluate(({nav,guard})=>{document.head.insertAdjacentHTML('beforeend',guard);document.body.insertAdjacentHTML('beforeend',nav);},{nav,guard});
+  });
+  const navigation=page.locator('#adm-mobile-tabs');
+  await expect(navigation).toHaveCSS('visibility','hidden');
+  const save=page.locator('#prod-save-btn');
+  await expect(save).toBeVisible();
+  const hit=await save.evaluate(button=>{const r=button.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('#prod-save-btn')===button;});
+  expect(hit).toBe(true);
+  await page.locator('#prod-form-card').getByRole('button',{name:'Cancelar',exact:true}).click();
+  await expect(navigation).toHaveCSS('visibility','visible');
+ });
+}
+
 test('configurar stock por color exige cantidades explícitas y recalcula total y vista previa',async({page})=>{
  await openEditor(page,775,900);await page.locator('#prod-editor-section').selectOption('inventory');
  await page.evaluate(({renderer,inventory})=>{

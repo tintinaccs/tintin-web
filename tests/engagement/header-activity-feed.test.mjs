@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import { createActivityTracker } from '../../js/components/notifications/avisos-en-vivo.mjs';
+import { testOrderNumber } from '../../js/orders/pedidos-prueba.mjs';
 
 const source = fs.readFileSync(new URL('../../js/components/notifications/notificaciones-clientes.js', import.meta.url), 'utf8');
 const notification = (id, extra = {}) => ({ id, title: 'Actividad', read: false, createdAt: '2026-10-05T10:00:00Z', updatedAt: '2026-10-05T10:00:00Z', ...extra });
@@ -34,7 +35,7 @@ function subscriptionHarness() {
     subscriptionGeneration: 0, unsubscribe: null, subscribeRetryTimer: 0,
     historyLimit: 100, hasOlderNotifications: false,
     listenerFailed: false, notifications: [], subscribeRetryAttempt: 0, subscribeAuthRecoveryAttempted: false,
-    currentUser: null, db: {}, window: { clearTimeout() {} }, console,
+    currentUser: null, db: {}, window: { clearTimeout() {} }, console, testOrderNumber,
     isSuperAdmin: user => user?.email === 'admin@example.invalid',
     collection: (_db, ...path) => path, orderBy: field => field, limit: count => count,
     query: (...args) => args,
@@ -81,6 +82,24 @@ test('Super Admin usa la misma colección global del panel; el cliente sólo su 
   subscriptions[1].next(snapshot([notification('like', { kind: 'product_like' }), notification('order', { kind: 'order_created' })]));
   assert.deepEqual(Array.from(context.notifications, item => item.id), ['order']);
   assert.equal(notices.length, adminNoticeCount, 'el cliente no recibe avisos flotantes de actividad');
+});
+
+test('la campana pública excluye pruebas antes de contadores y avisos para ambos roles', () => {
+  for (const email of ['admin@example.invalid', 'client@example.invalid']) {
+    const { context, subscriptions, notices } = subscriptionHarness();
+    context.currentUser = { uid: 'account', email };
+    context.subscribe(context.currentUser);
+    const tests = Array.from({ length: 25 }, (_, i) => notification(`test-${i}`, { kind: 'order_created', orderNumber: `TINPED${String(i + 1).padStart(2, '0')}` }));
+    const alias = notification('alias', { kind: 'order_status', orderNumber: 'TINPEDPRUEBA25' });
+    const real = notification('real', { kind: 'order_created', orderNumber: 'TINPED26', shortId: 'TINPED01' });
+    const future = notification('future', { kind: 'order_status', orderNumber: 'TINPED27' });
+    const social = notification('social', { kind: 'store_review_reply', actorType: 'store', title: 'Consulta por TINPED01' });
+    subscriptions[0].next(snapshot([...tests, alias, real, future, social]));
+    assert.deepEqual(Array.from(context.notifications, item => item.id), ['real', 'future', 'social']);
+    assert.equal(context.notifications.filter(item => item.read !== true).length, 3);
+    if (email === 'admin@example.invalid') assert.deepEqual(Array.from(notices.at(-1)[1], item => item.id), ['real', 'future', 'social']);
+    assert.equal(tests[0].orderNumber, 'TINPED01');
+  }
 });
 
 test('un snapshot administrativo tardío no reaparece después de cambiar de cuenta', () => {

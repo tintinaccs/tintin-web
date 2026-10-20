@@ -18,8 +18,8 @@ const COLOR_FIRST_PAINT_VERSION = 'tintin-20261017-domain-cutover-1';
 const LOADER_VERSION = 'tintin-20261020-push-return-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261020-iconos-globales-1';
-const NAV_ENTRY_VERSION = 'tintin-20261020-iconos-globales-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261020-public-order-notices-3';
+const NAV_ENTRY_VERSION = 'tintin-20261020-public-order-notices-3';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261019-variant-links-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261017-domain-cutover-1';
@@ -95,7 +95,7 @@ const INITIAL_SHARED_STYLES = [
   ]
 ];
 const INITIAL_PUBLIC_STYLES = [
-  ['id="tt-mobile-brand-css"', 'css/components/navigation/movil/marca-movil.css', 'tintin-20261019-mobile-brand-2'],
+  ['id="tt-mobile-brand-css"', 'css/components/navigation/movil/marca-movil.css', 'tintin-20261020-pink-header-3'],
   [
     "id=\"tt-global-studio-runtime-css\"",
     "css/components/visual-studio-global-runtime.css",

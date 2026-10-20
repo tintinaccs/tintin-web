@@ -1,3 +1,20 @@
+## 2026-10-20 — Pruebas de candidato aisladas de producción
+
+Fuente: playwright.config.js y workflow canónico auditar-tintin.yml. UI usa un origen local por defecto, manteniendo overrides explícitos; CI levanta su servidor existente antes de todos los gates que incluyen navegador y fija ambos orígenes locales en el job. Los comandos, requisitos, checks y seguridad permanecen. Regresión de arquitectura verifica default, precedencia explícita y orden del servidor. El plan protegido incluye ambos archivos de control. Las URLs finales de entrega pública se reservan con referencia3 para cerrar el incidente de consultas prematuras sin reutilizar respuestas dudosas.
+## 2026-10-20 — Compatibilidad con1175 ya integrado
+
+Se preservan todos sus controles y contratos. Este candidato sólo suma la precedencia de navegación modal y sus referencias, junto a la alternancia pública, encabezados y filtro de avisos. La nueva base de mantenimiento es main453686c66. No replica el rediseño ni modifica la autoridad de stock/guardado.
+
+## 2026-10-20 — Encabezados rosa y alternancia completa de bloques
+
+Fuentes: sistema-superficies-tintin.css, marca-movil.css y product.html. Degradado de fondo completo y blur sólo del fondo en encabezados públicos/Admin/acceso/checkout, sin violeta ni borde inferior duro. Tu selección conserva su región comercial protegida (div role=region), como hermana de la ficha, y .tinsel participa en el selector visual y su fallback CSS para participar en la misma secuencia visible que ficha, recomendaciones y footer; se conservan IDs, controles, datos y contratos del carrito. Impacto responsive compartido en todas las rutas que cargan el sistema de superficies. Veinte regresiones nuevas en el spec de superficies, aserciones de header administrativo y las suites existentes de selección/espaciado; URLs y bundle de Inicio se regeneran canónicamente. No hay cambios de stock, pagos, roles ni escrituras comerciales adicionales.
+## 2026-10-20 — Precedencia de navegación del editor autenticado
+
+Fuente: shopify-commerce-admin.css y su versión canónica. La ocultación compacta debe prevalecer sobre visibility:visible!important del guard de autenticación inline, sólo mientras el editor está abierto. Regresión en el spec responsive existente usa el guard real y seis tamaños; no altera autorización, stock, guardado ni borradores. Se conserva main1179 y se actualiza1180 para incluir esta corrección visual junto al filtro de la campana pública. Evidencia y validación en CURRENT_STATE.
+## 2026-10-20 — Pedidos de prueba en la campana pública
+
+Fuente funcional: notificaciones-clientes.js reutiliza pedidos-prueba.mjs antes de lista, badge y avisos en vivo del canal público, tanto para Super Admin como para clientas. Conserva TINPED26+, actividad social, autorización de las consultas y documentos originales. No elimina ni migra notificaciones ni altera pagos/stock. Los consumidores del shell reciben sólo nuevas referencias inmutables, generadas desde la fuente canónica. Regresión de suscripción en header-activity-feed.test.mjs. El ajuste Windows del fixture del panel se verificó localmente y se excluyó del candidato al corroborarlo ya publicado en1179. CSP, caché, manifiesto y mantenimiento se regeneran; evidencia y pendientes actuales en CURRENT_STATE.
+
 ## 2026-10-18 — Corrección acotada de Productos después de1150
 
 Admin usa snapshot crudo e inmutable para la revisión de inventario; mantiene las opciones originales y rechaza concurrencia real. ID de Firestore canónico. Tarjetas bloquean selección de colores agotados y conservan foto disponible; prioridad de stock y cartel existentes. Regresiones se conectan a admin-sync/products-sync. Se conservan todos los cambios de1150, incluidas estadísticas/pedidos. Sin escrituras reales, cambios de reglas, permisos o controles de borrado. Referencias inmutables nuevas, shell, CSP, diagnóstico y mantenimiento canónico contra46c10ef5. Se conservan1153 y1155 (Tu selección y mosaico de Productos).
