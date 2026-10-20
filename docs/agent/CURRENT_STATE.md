@@ -1,3 +1,13 @@
+## 2026-10-20 — Candidato conjunto de PR1180 y PR1182
+
+Codex /root. Autorización del titular: «MERGEALO TODO». Se consolidan los dos pendientes recientes en PR1182, mediante merges normales de PR1180 y del commit concurrente69364ab1, sin reescribir ni descartar trabajo. Base protegida dc6da947 (incluye1175/1179/1183/1184). PR1180 queda temporalmente borrador para evitar publicación paralela incompleta; se cerrará como incorporado tras integrar el conjunto. Los PR históricos y el antiguo cutover no se mezclan con esta entrega mientras la consulta de alcance permanece sin respuesta.
+
+Se conservan editor minimalista y guardado, tarjetas con stock/fotos por opción y borradores concurrentes, Instagram/Historia con fallback sin credenciales, ajustes locales responsive, encabezados rosa, alternancia de selección, filtro de avisos de prueba, iconos y la revisión de seguridad. El módulo comercio combinado tiene una URL inédita commerce-combined-1; las referencias de superficies y marca de1180 y el empaquetado de1182 se regeneran juntos.
+
+Fallos de CI reproducidos y resueltos:39491678211 esperaba tinta rosa antigua en la marca que ahora es blanca sobre rosa; se conserva y comprueba el enlace al fondo del contenido.39503283596 pulsaba el centro de una tarjeta ocupado ahora por controles inline; se abre la ficha desde su botón accesible (incluido el ajuste concurrente del otro agente). Una regresión adicional aún esperaba «Agotado» donde el diseño nuevo dice «Sin stock»; ahora comprueba ese badge, stock0 y active=true simultáneamente, conservando el contrato comercial.
+
+PASS_LOCAL fresco del conjunto:223/223 Chromium de marca, superficies, Productos/editor/tarjetas/Maestro, Instagram y destinos push; seis casos del spec de apertura nuevamente aprobados con el selector accesible concurrente.57/57 Node de aislamiento, notificaciones, Productos/controlador, feed y empaquetado. Auditorías CSS, estructura, multimedia, arquitectura e integraciones aprobadas. No hay escrituras comerciales, pushes ni pedidos reales. Instagram real requiere conexión Meta/secretos de servidor; no se simula una conexión. Se generan caché/CSP/diagnóstico/plan exactos antes del commit final; CI, merge y publicación PENDING para ese SHA.
+
 ## 2026-10-20 — Integración autorizada de pendientes: PR1180
 
 Codex /root. El titular pidió «MERGEALO TODO». Se reconcilia PR1180 con main dc6da947, conservando editor1175, iconos1183, seguridad/contraste1184 y los dos cambios de alternancia (selección como bloque hermano y observación de atributos de la raíz). Conflictos de URLs se resuelven con una URL nueva headers-merge-1 para el módulo combinado; caché, CSP, diagnóstico y plan protegido se regeneran. No se reescribe historia ni se alteran datos reales.
