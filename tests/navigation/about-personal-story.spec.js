@@ -23,7 +23,8 @@ for (const width of [320, 390, 767, 768, 1024, 1440]) {
       expect(introBox.y).toBeGreaterThan(photoBox.y + photoBox.height);
     }
     await expect(page.locator('#origen h2')).toHaveText('¿Por qué Tintin se llama Tintin? 🎀');
-    await expect(page.locator('#origen .tt-about-mission-text')).toHaveCount(7);
+    await expect(page.locator('#origen .tt-about-mission-text')).toHaveCount(5);
+    await expect(page.locator('#origen [data-instagram-video]')).toHaveAttribute('href', 'https://www.instagram.com/reel/DekE_RMBPjv/');
     await expect(page.locator('.tt-about-actions, .tt-about-signature')).toHaveCount(0);
     await expect(page.locator('.tt-about-childhood figcaption')).toHaveCount(0);
     const child = page.locator('.tt-about-childhood img');

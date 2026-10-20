@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import {productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds} from '../../js/admin/products/maestro-productos-core.mjs';
+import {productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds} from '../../js/admin/products/maestro-productos-core.mjs';
 import {variantInventoryEntries} from '../../js/core/store/inventario-variantes.mjs';
 import {sanitizeVariantData} from '../../js/core/auth/utilidades-seguridad.js';
 const source=fs.readFileSync('js/admin/admin-app.js','utf8');
@@ -16,7 +16,7 @@ function runtime(product={}){
  let count=0;
  const ctx={window:{},document:{getElementById:control,querySelectorAll:selector=>selector==='#prod-variant-stock input'?variantInputs:[]},auth:{currentUser:{uid:'super'}},currentUser:{uid:'super'},navigator:{onLine:true},productMasterBusy:false,currentRole:'superadmin',can:()=>true,roleCanDo:()=>true,
   _allProducts:[original],_productSourceById:new Map([['source',structuredClone(original)]]),_allCollections:[{slug:'anillos'}],_productInventoryById:new Map([['source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'}]]),productEditBaseline:null,productVariantStockBaseline:null,
-  productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,productColorPhotos:{serialize:()=>[]},
+  productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,productColorPhotos:{serialize:()=>[]},
   wristCategory:x=>x,sanitizeImageUrl:x=>typeof x==='string'&&x.startsWith('https://')?x:'',mountFormImageWidget:()=>{},mountProductColorPhotos:()=>{},
   renderProductVariantStock:product=>{variantInputs.length=0;ctx.productVariantStockBaseline=product?.variantInventory?{stock:product.stock,expectedEntries:variantInventoryEntries(product),entries:variantInventoryEntries(product),variants:product.variants}:null;for(const entry of product?.variantInventory || [])variantInputs.push({value:String(entry.stock)});},
   UnsavedGuard:{confirmLeave:fn=>fn(),track:()=>{},clear:()=>{}},toast:()=>{},db:{},collection:(_db,name)=>name,
@@ -25,7 +25,7 @@ function runtime(product={}){
   withAdminSiteChange:write=>write(),setDoc:async(ref,data)=>{if(ctx.failInventory && ref.path.startsWith('productInventory/'))throw Error('Inventario privado temporalmente sin conexión');apply(ref,data);},
   runTransaction:async(_db,fn)=>{const pending=[];const result=await fn({get:async ref=>({exists:()=>rows.has(ref.path),data:()=>structuredClone(rows.get(ref.path))}),update:(ref,data)=>pending.push([ref,data])});for(const args of pending)apply(...args);return result;},
   pushProductsToSheets:async()=>{calls.push('sheets');if(ctx.failSheets)throw Error('Sheets sin conexión');},logAudit:async()=>{calls.push('audit');if(ctx.failAudit)throw Error('Auditoría sin conexión');},applyProductFilters:()=>calls.push('filters'),loadProductos:()=>calls.push('render'),
-  runAdminCrudOperation:async config=>{try{await config.action({start(){},ok(){}});return{status:'green'};}catch(error){calls.push(error.message);return{status:'red'};}},console};
+  runAdminCrudOperation:async config=>{try{const value=await config.action({start(){},ok(){}});return{status:'green',value};}catch(error){calls.push(error.message);return{status:'red'};}},console};
  vm.createContext(ctx);vm.runInContext(code+'\nwindow.saveTest=prodGuardar;',ctx);
  return {ctx,fields,control,original,rows,writes,calls,variantInputs};
 }
@@ -121,6 +121,22 @@ test('controlador masivo confirma Firestore aunque fallen Sheets/auditoría; un 
  const request={ids:['source'],field:'stockDelta',value:1,expected:{source:productFingerprint(r.original)}};
  const result=await r.ctx.window.TintinProductAdmin.applyBulkChanges(request);assert.equal(result.confirmed,true);assert.equal(result.syncPending,true);assert.equal(result.auditPending,true);assert.equal(r.rows.get('products/source').stock,5);
  await assert.rejects(r.ctx.window.TintinProductAdmin.applyBulkChanges(request),/cambió/);assert.equal(r.rows.get('products/source').stock,5);assert.equal(r.ctx.productMasterBusy,false);
+});
+
+test('tarjeta guarda por el controlador real y rechaza stock ajeno o permisos insuficientes', async()=>{
+ const r=runtime({variants:{Color:['Dorado','Plateado']},stock:3,variantInventory:[{variant:'Dorado',stock:0},{variant:'Plateado',stock:3}]});
+ const request={id:'source',field:'stock',variant:'Dorado',value:500,expected:productFingerprint(r.original)};
+ r.ctx.auth.currentUser.uid='otra';await assert.rejects(()=>r.ctx.window.TintinProductAdmin.updateCard(request),/sesión/);assert.equal(r.writes.length,0);r.ctx.auth.currentUser.uid='super';
+ const transaction=r.ctx.runTransaction;r.ctx.runTransaction=(db,execute)=>transaction(db,tx=>execute({...tx,get:async ref=>{const snapshot=await tx.get(ref);r.ctx.auth.currentUser.uid='otra';return snapshot;}}));
+ assert.equal((await r.ctx.window.TintinProductAdmin.updateCard(request)).status,'red');assert.equal(r.writes.length,0);r.ctx.auth.currentUser.uid='super';r.ctx.runTransaction=transaction;
+ const saved=await r.ctx.window.TintinProductAdmin.updateCard(request);assert.equal(saved.status,'green');assert.equal(saved.value.fingerprint,productFingerprint(r.rows.get('products/source')));
+ assert.equal(r.rows.get('products/source').stock,503);
+ assert.deepEqual(r.rows.get('products/source').variantInventory,[{variant:'Dorado',stock:500},{variant:'Plateado',stock:3}]);
+ assert.ok(r.calls.includes('sheets'));assert.ok(r.calls.includes('audit'));assert.ok(r.calls.includes('filters'));
+ assert.equal((await r.ctx.window.TintinProductAdmin.updateCard({...request,value:0})).status,'red');
+ assert.equal(r.rows.get('products/source').stock,503);
+ r.ctx.can=()=>false;
+ await assert.rejects(()=>r.ctx.window.TintinProductAdmin.updateCard(request),/permiso/);
 });
 
 test('nuevo inicia sin stock y editar conserva visibilidad y cantidades previas',()=>{

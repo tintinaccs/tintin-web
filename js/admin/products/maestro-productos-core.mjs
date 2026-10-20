@@ -1,3 +1,4 @@
+import { variantInventoryEntries } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 // Contrato de las operaciones del maestro; Firestore y permisos se inyectan desde Admin.
 const FIELDS = ['name','sku','category','collection','price','priceBefore','stock','active','oferta','destacado','badge','description','desc','image','imageUrl','imagesExtra','variantMedia','variants','variantInventory','tags','material','measurements','colorFinish','care','waterResistance','warranty','sizeFit','packageContents'];
 export const PRODUCT_BULK_FIELDS = ['price','pricePercent','priceBefore','stock','stockDelta','category','active','oferta','destacado','badge','tags'];
@@ -75,4 +76,21 @@ export function productDuplicateData(product) {
   copy.sku='';copy.active=false;copy.oferta=false;copy.destacado=false;copy.badge=null;copy.priceBefore=null;copy.stock=0;
   if(Array.isArray(product.variantInventory)) copy.variantInventory=product.variantInventory.map(entry=>({variant:entry.variant,stock:0}));
   return copy;
+}
+
+// Una edición puntual mantiene el total igual a la suma de sus variantes.
+export function productCardPatch(product, request) {
+  if (['active', 'oferta', 'destacado'].includes(request.field)) return productBulkPatch(product, request.field, request.value);
+  if (request.field !== 'stock') throw Error('Campo de tarjeta no válido.');
+  const quantity = integer(request.value, 0, 1000000, 'Stock');
+  const entries = variantInventoryEntries(product);
+  if (entries === null) {
+    if (request.variant) throw Error('Este producto todavía no tiene inventario por variante. Usá Editar producto para distribuirlo.');
+    return {stock: quantity};
+  }
+  if (!entries.some(entry => entry.variant === request.variant)) throw Error('Elegí una variante válida.');
+  const variantInventory = entries.map(entry => entry.variant === request.variant ? {...entry, stock: quantity} : entry);
+  const stock = variantInventory.reduce((sum, entry) => sum + entry.stock, 0);
+  if (stock > 1000000) throw Error('El stock total supera el límite permitido.');
+  return {variantInventory, stock};
 }

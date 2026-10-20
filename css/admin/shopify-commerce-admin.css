@@ -1238,3 +1238,41 @@ html.tt-product-order-open #unsaved-modal { z-index:9500 !important; }
   #tt-commerce-orders .tt-order-selection .tt-commerce-btn { flex:1 1 calc(50% - 8px); }
 }
 @media(max-width:360px) { #tt-commerce-orders .tt-order-toolbar { grid-template-columns:minmax(0,1fr); } }
+
+/* Edición puntual desde la tarjeta, con controles táctiles y estados legibles. */
+#tt-commerce-products .tt-commerce-product-main,
+#tt-commerce-products .tt-commerce-product-price,
+#tt-commerce-products .tt-commerce-product-collection { text-align:center; }
+#tt-commerce-products .tt-commerce-product-open { text-align:center; }
+#tt-commerce-products .tt-commerce-product-inventory { grid-column:1 / -1; grid-row:4; }
+#tt-commerce-products .tt-commerce-product-price { grid-column:1 / -1; grid-row:5; }
+#tt-commerce-products .tt-commerce-product-collection { grid-row:6; }
+#tt-commerce-products .tt-commerce-product-status { justify-content:center; background:transparent; }
+#tt-commerce-products .tt-card-state { display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; width:100%; }
+#tt-commerce-products .tt-card-visibility { display:grid; gap:3px; min-width:0; font-size:11px; text-align:center; }
+#tt-commerce-products .tt-card-visibility select { width:100%; min-width:0; min-height:44px; padding:8px 26px 8px 12px; border:1px solid currentColor; border-radius:12px; font:inherit; font-weight:700; }
+#tt-commerce-products .tt-card-visibility.is-active select { color:#216442; background:#edf8f0; }
+#tt-commerce-products .tt-card-visibility.is-inactive select { color:#735519; background:#fff6d8; }
+#tt-commerce-products .tt-card-variants { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; }
+#tt-commerce-products .tt-card-variants button { max-width:100%; min-height:44px; padding:7px 10px; border:1px solid var(--tt-commerce-border); border-radius:999px; background:var(--tt-commerce-surface); color:var(--tt-commerce-text); font:inherit; font-size:11px; overflow-wrap:anywhere; cursor:pointer; }
+#tt-commerce-products .tt-card-variants [aria-pressed='true'] { border-color:var(--tt-commerce-brand); background:var(--tt-commerce-soft); box-shadow:inset 0 0 0 1px var(--tt-commerce-brand); }
+#tt-commerce-products .tt-card-variants .is-out { color:#a42d36; }
+#tt-commerce-products .tt-card-stock-label { display:grid; gap:6px; text-align:center; font-size:12px; }
+#tt-commerce-products .tt-card-stock-control { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; }
+#tt-commerce-products .tt-card-stock-control input { width:100%; min-width:0; max-width:110px; min-height:44px; border:1px solid var(--tt-commerce-border); border-radius:10px; padding:8px; font:inherit; font-size:16px; text-align:center; background:var(--tt-commerce-surface); color:var(--tt-commerce-text); }
+#tt-commerce-products .tt-card-stock-control button { min-height:44px; min-width:0; max-width:100%; }
+#tt-commerce-products .tt-commerce-product-inventory small { display:block; margin-top:6px; font-size:11px; text-align:center; line-height:1.5; }
+#tt-commerce-products .tt-product-filter-panel label { display:grid; gap:7px; min-width:0; align-content:start; }
+#tt-commerce-products .tt-product-filter-panel select { min-height:44px; border-radius:12px; background-color:var(--tt-commerce-surface); }
+#tt-commerce-products .tt-commerce-product-grid tr { gap:14px; }
+@media(max-width:480px) {
+ #tt-commerce-products .tt-commerce-product-grid tbody { gap:10px; padding-inline:10px; }
+ #tt-commerce-products .tt-commerce-product-grid tr { padding:9px; gap:10px; }
+ #tt-commerce-products .tt-card-state { gap:6px; }
+ #tt-commerce-products .tt-card-visibility { width:100%; }
+ #tt-commerce-products .tt-card-stock-control input { max-width:100%; }
+ #tt-commerce-products .tt-card-stock-control button { width:100%; }
+}
+
+#tt-commerce-products .tt-card-discard{display:block;margin:4px auto 0;min-height:44px;padding:6px;border:0;background:transparent;color:var(--tt-commerce-muted);font:inherit;font-size:12px;text-decoration:underline;cursor:pointer}
+#tt-commerce-products .tt-card-discard[hidden]{display:none}
