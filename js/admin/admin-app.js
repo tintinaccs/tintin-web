@@ -5959,12 +5959,15 @@ function _prodNuevoNow() {
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = '';
   document.getElementById('prod-form-title').textContent = 'Nuevo producto';
+  document.getElementById('prod-save-btn').textContent = 'Guardar producto';
+  const sectionSelect = document.getElementById('prod-editor-section');
+  if (sectionSelect) sectionSelect.value = 'all';
   document.getElementById('prod-name').value = '';
   document.getElementById('prod-sku').value = '';
   document.getElementById('prod-category').value = '';
   document.getElementById('prod-price').value = '';
   document.getElementById('prod-price-before').value = '';
-  document.getElementById('prod-stock').value = '';
+  document.getElementById('prod-stock').value = '0';
   document.getElementById('prod-imageUrl').value = '';
   mountFormImageWidget('prod-image-widget', 'prod-imageUrl', {
     label: 'Imagen principal',
@@ -5989,7 +5992,7 @@ function _prodNuevoNow() {
   mountProductColorPhotos({});
   document.getElementById('prod-badge').value = '';
   document.getElementById('prod-collection').value = '';
-  document.getElementById('prod-active').checked = true;
+  document.getElementById('prod-active').checked = false;
   document.getElementById('prod-oferta').checked = false;
   document.getElementById('prod-destacado').checked = false;
   document.getElementById('prod-form-error').style.display = 'none';
@@ -6012,6 +6015,9 @@ function _prodEditarNow(docId, duplicate=false) {
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = duplicate ? '' : docId;
   document.getElementById('prod-form-title').textContent = duplicate ? 'Duplicar producto · copia inactiva y sin stock' : 'Editar producto';
+  document.getElementById('prod-save-btn').textContent = duplicate ? 'Guardar producto' : 'Guardar cambios';
+  const sectionSelect = document.getElementById('prod-editor-section');
+  if (sectionSelect) sectionSelect.value = 'all';
   document.getElementById('prod-name').value = p.name || '';
   document.getElementById('prod-sku').value = p.sku || '';
   document.getElementById('prod-category').value = p.category || '';
@@ -6147,7 +6153,7 @@ async function prodGuardar() {
     if (Object.keys(vObj).length > 20) {
       errEl.textContent = 'Un producto puede tener hasta 20 grupos de variantes.';
       errEl.style.display = '';
-      btn.textContent = 'Guardar producto'; btn.disabled = false;
+      btn.textContent = _isEdit ? 'Guardar cambios' : 'Guardar producto'; btn.disabled = false;
       return false;
     }
     if (Object.keys(vObj).length) {
@@ -6180,7 +6186,7 @@ async function prodGuardar() {
     .some(value => value != null && (!Number.isInteger(value) || value < 0 || value > 1000000000))) {
     errEl.textContent = 'Costo, cantidad comprada y stock mínimo deben ser enteros positivos o quedar vacíos.';
     errEl.style.display = '';
-    btn.textContent = 'Guardar producto'; btn.disabled = false;
+    btn.textContent = _isEdit ? 'Guardar cambios' : 'Guardar producto'; btn.disabled = false;
     return false;
   }
 
@@ -6322,7 +6328,7 @@ async function prodGuardar() {
     errEl.style.display = '';
     return false;
   } finally {
-    btn.textContent = 'Guardar producto'; btn.disabled = false;
+    btn.textContent = _isEdit ? 'Guardar cambios' : 'Guardar producto'; btn.disabled = false;
   }
 }
 

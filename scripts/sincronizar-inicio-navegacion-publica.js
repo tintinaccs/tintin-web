@@ -19,8 +19,8 @@ const COLOR_FIRST_PAINT_VERSION = 'tintin-20261017-domain-cutover-1';
 const LOADER_VERSION = 'tintin-20261020-push-return-1-instagram-structure-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261020-selection-top-1';
-const NAV_ENTRY_VERSION = 'tintin-20261020-selection-top-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261020-iconos-globales-1';
+const NAV_ENTRY_VERSION = 'tintin-20261020-iconos-globales-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261019-variant-links-1-instagram-structure-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261017-domain-cutover-1';
@@ -71,7 +71,7 @@ function ensureSectionFlow(html, absolute = false) {
   if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(out)) return out;
   const beforeHeadEnd = out.slice(0, out.indexOf('</head>'));
   const join = beforeHeadEnd.endsWith('\n') ? '' : '\n';
-  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261015-flow-startup-2" defer></script>\n</head>`);
+  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261020-root-visibility-1" defer></script>\n</head>`);
 }
 function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   let out = ensureSectionFlow(html, absolute).replace(/\s*<!-- Estructura pública disponible desde el primer render -->/g, '');

@@ -48,8 +48,8 @@
     "sha256": "1250e8f1efcc9860a190cc34c829b8b968fbe968b4c24130820921e8d868d9c3"
   },
   "css/admin/shopify-commerce-admin.css": {
-    "version": "tintin-20261020-product-cards-1",
-    "sha256": "eeb893bfad05debf774a6f75a16f41e299decdd44a2f5bf4b402f18952e9f4e6"
+    "version": "tintin-20261020-instagram-editor-merged-1",
+    "sha256": "72ad7b3ad53fac426739953481ca1a24103837fa60ab2977aee74d87c999ab65"
   },
   "css/admin/sidebar-interaccion.css": {
     "version": "tintin-20261019-superadmin-live-1",
@@ -340,8 +340,8 @@
     "sha256": "de5f789d28a5d132bcaeda507df5371112be6ff20c8e8f6e367ef17e327c2fdc"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20261020-push-return-1-task-20261020-1",
-    "sha256": "f237783bd8eb1f7accc7afa835f0b7e5f40b6bd413bca09354ae23d10ebcd740"
+    "version": "tintin-20261020-instagram-editor-merged-1",
+    "sha256": "824564e160257ecfcf648358660271d92a1b9d13a35c1782cd81ad9698484e4a"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -472,8 +472,8 @@
     "sha256": "ec201837091f3db47e0390e60905895040d8fc5c2c4cc9c2d896c6b122ea81af"
   },
   "js/admin/notifications/notificaciones-push.js": {
-    "version": "tintin-20261019-superadmin-live-1",
-    "sha256": "ee2d938ba4eab685f040ba35fe8d9c1bea9eb6883341aa4c7a8da3d25abcfa03"
+    "version": "tintin-20261020-iconos-globales-1",
+    "sha256": "45415823c6a6804c87ce5f9ac6a3fcdfc9d7aa87e4e621fa935fdd050e5ca2d5"
   },
   "js/admin/operaciones/nucleo-operaciones.js": {
     "version": "tintin-20260925-admin-ops-1",
@@ -527,6 +527,10 @@
     "version": "tintin-20261017-domain-cutover-1",
     "sha256": "7ab36f2f37766e3281543b8fdeead482c3ba5611d2031dbbcf1c68cb6401f461"
   },
+  "js/admin/products/controles-editor-producto.js": {
+    "version": "tintin-20261020-minimal-editor-1",
+    "sha256": "5a82aaa54f68fa61e4f5be482a8e1feaf29a6b796bab21612f551269ad88f5e6"
+  },
   "js/admin/products/fotos-por-color.js": {
     "version": "tintin-20261019-product-editor-1",
     "sha256": "49887c457370e9263ead12ad2358417df414574337387d624e73dc50459afc69"
@@ -544,8 +548,8 @@
     "sha256": "71a41c6002e14c326518a1ec4588cd7f2294bbac98b4639d74410ae2b96c09ab"
   },
   "js/admin/products/interfaz-productos-adaptable.js": {
-    "version": "tintin-20261020-selection-top-1",
-    "sha256": "82142ffacb064b81003f583d74df677ee02d028dc849f17b50e7e1bdc9d6a93d"
+    "version": "tintin-20261020-editor-integrated-1",
+    "sha256": "6108fb5da75c1f52d70193eb449c818ecd409e9bdfaf0f9ed873b8de30e6c50b"
   },
   "js/admin/products/maestro-productos-core.mjs": {
     "version": "tintin-20261018-products-master-1-task-20261020-1",
@@ -592,8 +596,8 @@
     "sha256": "d0f95fa17e61309a8f92dc0e8ea443bd7094e210d204d6c420fcc01adb87d12b"
   },
   "js/admin/shopify-commerce-admin.js": {
-    "version": "tintin-20261020-orders-clean-2-task-20261020-1",
-    "sha256": "c313dd3a1de074047bc5b7b99bc70ad2d527100ff062d58382e4951a031c84cd"
+    "version": "tintin-20261020-instagram-editor-merged-1",
+    "sha256": "3d2aee3a8232e48bc721f885227c3973e157ec6653a19fc452ed6afd7db7136b"
   },
   "js/admin/sidebar-expandible-admin.js": {
     "version": "tintin-20261004-admin-connections-3",
@@ -816,8 +820,8 @@
     "sha256": "1bae93d7a04b1176f375edb7ba23038aa2b156386a155e155a1bfbe96de5c830"
   },
   "js/components/navigation/compartido/carga-navegacion.js": {
-    "version": "tintin-20261020-selection-top-1",
-    "sha256": "cd63ef1b98744fa72317109df5f7f679501606eb9edd7b6fee0e3584fc375952"
+    "version": "tintin-20261020-iconos-globales-1",
+    "sha256": "883cde1b806ba9b50ad95f4c7ab01b02fd460f41f90836d76318803dd86e72ba"
   },
   "js/components/navigation/compartido/compatibilidad-cuenta-movil.js": {
     "version": "tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1-ui-reconciled-20261014-1-ui-reconciled-20261014-1",
@@ -888,8 +892,8 @@
     "sha256": "77a06b5b72be1130c0e030597f7973a5c690ab7db4e0a7a80f8faddda77b8f8b"
   },
   "js/components/navigation/entrada-navegacion-publica.js": {
-    "version": "tintin-20261020-selection-top-1",
-    "sha256": "04f9c70a4f4b373c9d3c1fb7238b6e570890eaa6c49651fbace36579ed97bde3"
+    "version": "tintin-20261020-iconos-globales-1",
+    "sha256": "defddd0a2350808a2da7ac35e0956c58243d7b7af05d0de6fd43e01a03819c33"
   },
   "js/components/navigation/escritorio/encabezado-escritorio.js": {
     "version": "tintin-20261010-whatsapp-release-5-boutique-20261011-1-profile-pulseras-20261014-1-bags-20261014-1",
@@ -928,8 +932,8 @@
     "sha256": "d0ef74e8b985e859af6bfe14b1cb4ff16bae05f702897e3dec2125ce62e30535"
   },
   "js/components/notifications/notificaciones-clientes.js": {
-    "version": "tintin-20261019-superadmin-live-1",
-    "sha256": "622cd0a98c2468988d0e5d401ddd9d10528ff8571dc7aa4482e6d1e4edfa336c"
+    "version": "tintin-20261020-iconos-globales-1",
+    "sha256": "a6943c063af4b7d6edbe63a309b50b90e19ba4affd7f1b2b3c71a76391369628"
   },
   "js/components/reviews/valoraciones-catalogo.js": {
     "version": "tintin-20261017-domain-cutover-1",
@@ -1172,8 +1176,8 @@
     "sha256": "823fd16bab57d517b3989cffdfa64b22bac05e671f55f8ede2b6b8c2e6831e68"
   },
   "js/inicio-navegacion-publica.js": {
-    "version": "tintin-20261020-selection-top-1",
-    "sha256": "2a0732a4a58aff495665790d23ab21b265a4f6bc5c7196b0815bd58aa4fc3bc6"
+    "version": "tintin-20261020-iconos-globales-1",
+    "sha256": "5a045754298884e5a9940d1a36a6e22db9e1352c1c9134a8a054500a943f8895"
   },
   "js/orders/ciclo-pedido.mjs": {
     "version": "tintin-20261012-orders-board-1",
@@ -1428,8 +1432,8 @@
     "sha256": "1b12cc0d29059eefe6c5b019c469cbb24ead0baa9e875978af7829a48e6ec19a"
   },
   "js/theme/alternancia-secciones.js": {
-    "version": "tintin-20261015-flow-startup-2",
-    "sha256": "4e0f28410c3a640b2efec6a822c3e5bf8cebefd1a5b9642a68f30e961f856351"
+    "version": "tintin-20261020-root-visibility-1",
+    "sha256": "e4852b0fd2923faf45a5fe59f6d240356afbe600884cb8e4c0c9879acffd2d37"
   },
   "js/vendor/gsap.min.js": {
     "version": "3.13.0",

@@ -191,7 +191,7 @@ async function messagingSupported() {
 
 async function ensureServiceWorker() {
   if (swRegistration) return swRegistration;
-  swRegistration = await navigator.serviceWorker.register(SW_PATH, { scope: '/' });
+  swRegistration = await navigator.serviceWorker.register(SW_PATH, { scope: '/', updateViaCache: 'none' });
   await navigator.serviceWorker.ready;
   return swRegistration;
 }
@@ -226,8 +226,8 @@ async function ensureMessaging() {
         const url = target.startsWith('/') && !target.startsWith('//') ? target : '/admin?section=notificaciones-push';
         void swRegistration.showNotification(title, {
           body,
-          icon: '/assets-tintin/images/admin/push-icon-192.png',
-          badge: '/assets-tintin/images/admin/push-badge-96.png',
+          icon: '/assets-tintin/images/admin/push-icon-192.png?v=tintin-20261020-iconos-globales-1',
+          badge: '/assets-tintin/images/admin/push-badge-96.png?v=tintin-20261020-iconos-globales-1',
           tag: String(data.tag || data.eventId || 'tintin-push'),
           silent: false,
           data: { url }

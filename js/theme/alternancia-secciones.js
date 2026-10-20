@@ -91,10 +91,12 @@
         }
         if (record.oldValue === record.target.getAttribute(record.attributeName)) return false;
         if (record.attributeName === 'style' && appliedStyles.get(record.target) === record.target.getAttribute('style')) return false;
-        return record.target.matches(`${selector}, body, main, .cat-wrap`);
+        return record.target.matches(`${selector}, html, body, main, .cat-wrap`);
       })) schedule();
     });
     observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeOldValue: true, attributeFilter: ['hidden', 'style', 'class'] });
+    // El login se revela cambiando html, fuera del subárbol observado del body.
+    observer.observe(document.documentElement, { attributes: true, attributeOldValue: true, attributeFilter: ['hidden', 'style', 'class'] });
     window.addEventListener('resize', schedule, { passive: true });
     window.addEventListener('tintin:global-layout-ready', schedule);
     window.TintinSectionFlow = Object.freeze({ refresh: schedule });
