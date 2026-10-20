@@ -1,5 +1,6 @@
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
+import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
 import { productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261018-products-master-1';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261019-revenue-start-1';
@@ -42,7 +43,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261019-product-editor-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
-import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261017-domain-cutover-1";
+import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261020-push-return-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261017-domain-cutover-1";
 import "./pages/paginas-admin.js?v=tintin-20261017-domain-cutover-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
@@ -828,6 +829,10 @@ function applyInitialSectionFromUrl() {
   }
   const target = sectionFromUrl();
   if (target && target !== 'dashboard') switchSection(target);
+  const params = new URLSearchParams(location.search);
+  if (!['order', 'user', 'like', 'review', 'report', 'quote'].some(key => params.has(key))) {
+    consumeAdminDestination(location.href, adminReturnStorage(window), location.origin);
+  }
 }
 window.addEventListener('hashchange', () => {
   if (admSuppressHashSync) return;
@@ -1045,6 +1050,7 @@ function adminSessionPresentation(reason, handoffPending = false) {
 }
 
 function showAdminAuthUnknown(reason, handoffPending = false) {
+  rememberAdminDestination(location.href, adminReturnStorage(window), location.origin);
   const presentation = adminSessionPresentation(reason, handoffPending);
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-auth-unknown');

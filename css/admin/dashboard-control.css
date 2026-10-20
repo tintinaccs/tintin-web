@@ -14,6 +14,15 @@ html:root body.tt-admin-control .adm-sidebar { border-right: 1px solid var(--tt-
 html:root body.tt-admin-control .adm-topbar { border-bottom: 1px solid var(--tt-control-line); gap: 16px; }
 html:root body.tt-admin-control .adm-topbar-actions { display: flex; align-items: center; gap: 10px; }
 html:root body.tt-admin-control .adm-topbar-title { letter-spacing: -.025em; }
+  html:root body.tt-admin-control :is(.adm-topbar,.adm-header) {
+    background: color-mix(in srgb, var(--admin-color-background-surface) 86%, transparent) !important;
+    border-bottom-color: color-mix(in srgb, var(--admin-color-brand) 50%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(110%) !important;
+    backdrop-filter: blur(18px) saturate(110%) !important;
+  }
+  html:root body.tt-admin-control .tt-control-brand {
+    display: block; width: 32px; height: 32px; flex: 0 0 32px; border-radius: 9px; object-fit: contain;
+  }
 html:root body.tt-admin-control .adm-content { max-width: 1480px; }
 html:root body.tt-admin-control :is(.adm-card,.adm-stat,.adm-img-card,.tt-commerce-card,.tt-order-card,.tt-welcome-admin-card,.tt-maestro-card) {
   border: 1px solid var(--tt-control-line) !important;

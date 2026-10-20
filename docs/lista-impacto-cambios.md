@@ -459,6 +459,10 @@ Fuentes: interfaz-productos-adaptable.js, vista-previa-producto.js, admin-app.js
 ## 2026-10-20 — Comparación concurrente del editor de Productos
 
 Fuente: admin-app.js, listener de catálogo y guardado transaccional del editor. Impacto: edición de precios/datos, stock total y por variante, representación histórica de opciones, reintentos después de fallo de inventario privado o sincronización. La comparación usa el documento original; la interfaz conserva el saneado. La huella completa sigue detectando cambios reales de otra sesión y productos borrados. No cambia esquema, permisos, reglas, cantidades reales, borrado ni contraseñas. Regresión en maestro-productos-controlador.test.mjs; caché, plan protegido y diagnóstico se generan con las herramientas existentes. Evidencia y límites en CURRENT_STATE.
+## 2026-10-20 — Notificaciones con retorno a ficha y marca instalada responsive
+
+Autoridad compartida destino-admin.mjs para productor Cloudflare, campana, login y consumidor del enlace: rutas administrativas locales, identidad del registro, sesión/permisos vigentes y retorno efímero sin credenciales. Pedidos conservan su fuente canónica; usuarios/participación/mayoristas reutilizan sus fichas y lecturas puntuales, sin aprobar pedidos ni modificar inventario al navegar. Metadatos theme-color y manifiestos se alinean con la muestra #F8AACA; íconos originales blancos/rosados se vuelven a referenciar con versión. Encabezado administrativo translúcido con marca y blur para todos los anchos; pruebas de320a1920px, giro de tablet y móvil, datos tardíos, reintento y sesión no autorizada. Cargadores/baseline/CSP/diagnóstico/plan protegido se regeneran desde sus autoridades. No se cambia autenticación, permisos, reglas, credenciales ni catálogo real. Evidencias en CURRENT_STATE.
+
 
 ## 2026-10-20 — Cabeceras únicas de etapas de Pedidos
 

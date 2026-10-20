@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { rememberAdminDestination, adminReturnStorage } from '../../js/core/auth/destino-admin.mjs';
 
 const source = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
 const code = source.slice(source.indexOf('function adminSessionPresentation('), source.indexOf('async function recoverAdminUserFromHandoff('));
@@ -9,6 +10,8 @@ function fixture() {
   let overlay;
   const nodes = Object.fromEntries(['h1', 'p', '#adm-auth-unknown-retry', '#adm-auth-login'].map(key => [key, {addEventListener(){}}]));
   const context = vm.createContext({
+    location: {href:'https://tintin.example/admin?section=pedidos&order=order_123',origin:'https://tintin.example'},
+    rememberAdminDestination, adminReturnStorage,
     document: {
       documentElement: {classList: {remove(){}}},
       getElementById: () => overlay,
