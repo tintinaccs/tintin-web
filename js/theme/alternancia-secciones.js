@@ -1,7 +1,7 @@
 /* Superficies de página completas: una sola secuencia incluso entre wrappers. */
 (() => {
   'use strict';
-  const selector = 'body > section:not([role="dialog"]), main > section:not([role="dialog"]), [role="main"] > section:not([role="dialog"]), .cat-wrap > section, .cat-layout, .tt-footer, .tt-visual-block, .login-page, .ck-body, .perfil-wrap, .tt-404-wrap, .adm-content > .adm-section';
+  const selector = 'body > section:not([role="dialog"]), main > section:not([role="dialog"]), [role="main"] > section:not([role="dialog"]), .cat-wrap > section, .cat-layout, .tinsel, .tt-footer, .tt-visual-block, .login-page, .ck-body, .perfil-wrap, .tt-404-wrap, .adm-content > .adm-section';
   let queued = false;
   const measured = new WeakSet();
   const excluded = '[role="dialog"], [aria-modal="true"], .tt-privacy-consent, .tt-drawer, .adm-sidebar';

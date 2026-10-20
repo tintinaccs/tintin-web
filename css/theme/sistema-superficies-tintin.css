@@ -408,7 +408,7 @@ html:root body :is(main, .cat-wrap, .login-page, .ck-body, .perfil-wrap, .tt-404
 
 /* El degradado recorre todo el bloque y comparte el color de sus uniones.
    Los bloques ocultos por hidden o display:none no cuentan en la secuencia. */
-html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
   --tt-section-background: var(--color-brand-accent, #FDECF2);
   --tt-footer-logo-filter: url("#tt-brand-logo-tint");
   --tt-section-start: var(--tt-flow-join);
@@ -424,16 +424,16 @@ html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dia
   box-shadow: 0 1px 0 var(--tt-section-end) !important;
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(even of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(even of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-background: var(--color-brand-primary, #F8AACA);
   --tt-footer-logo-filter: url("#tt-brand-logo-tint-light");
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-start: var(--tt-section-background);
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-last-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-last-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-end: var(--tt-section-background);
 }
 
