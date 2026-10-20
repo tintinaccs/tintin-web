@@ -1,3 +1,4 @@
+import { testOrderNumber } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { waitForAdminAppCheck, recoverAdminSecurity } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
@@ -363,7 +364,7 @@ async function subscribeNotifications() {
   notificationsRetryTimer = 0;
   unsubscribeNotifications = onSnapshot(source, snapshot => {
     if (generation !== notificationGeneration || user?.uid !== targetUser.uid) return;
-    notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
+    notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() })).filter(item=>testOrderNumber(item)===null);
     liveNotices.update(`admin:${targetUser.uid}`, notifications);
     notificationsRetryAttempt = 0;
     notificationsAuthRecoveryAttempted = false;
@@ -442,6 +443,7 @@ async function subscribeOrderStatusChanges() {
     const recovery = [];
     snapshot.docs.forEach(document => {
       const data = document.data() || {};
+      if(testOrderNumber({id:document.id,...data})!==null)return;
       const signature = orderSignature(data);
       next.set(document.id, signature);
       if (!ordersPrimed && orderNeedsRecovery(data)) recovery.push(document.id);
