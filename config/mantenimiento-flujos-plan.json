@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "dc424fa01892912be6a8d181e6554079d79f49cb",
-  "reason": "Aplicar editor minimalista aprobado con controles visuales, stock canónico y campos táctiles de 16px para evitar zoom en iOS.",
+  "baseCommit": "5c005560d4cc2f838efa30a1346d282138681c29",
+  "reason": "Reconciliar PR1175 con main conservando editor minimalista, stock, variantes, scroll y cambios de Pedidos/push/PWA; 96 Chromium y controladores verificados.",
   "files": [
     {
       "path": "admin.html",
-      "oldHash": "813ea213ebfa2f29f7661befd3f11a5fc04d4b1ddf292527929cbb86d442e4e6",
-      "newHash": "67c9c75d8c849dd5bfc1b143ee4ac1c4670665d4162c024549a4d015b017aa21"
+      "oldHash": "c751cba38cb18c50b4422b44edae1635a528e5ac5e710bd4d618864e4b851107",
+      "newHash": "eb06c50b8ac11b5e14a60d5d96b741f266e5b74f03e906d38fcae8415ab13c37"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
-      "oldHash": "159d60ba83a901867badc490f8cdcfe773471033ef85fb8da4f300d71561dcb1",
-      "newHash": "eb4370c3fa7bbff7d25ebb6c20f5c992ce2617169f2690ee70cadaef6cb97fe4"
+      "oldHash": "936ae6f3ba89d859f57255b253e56614537f50b4518841284fcd39d9876b3ab2",
+      "newHash": "56538db3f9b9e37864259e8736fbad0ff876246ac8489c29ec1d5a803bfabcaa"
     },
     {
       "path": "js/admin/admin-app.js",
-      "oldHash": "8f78917a463e44846afc98ba1a1630651e2224d308e30d673dcf14ce8569908a",
-      "newHash": "8ffdc56e56e9bab68d544eab3dff2fbb6444381c607c6a1bad9c4ad75348d6b1"
+      "oldHash": "e4b28fb716b430e0a783260c89d4703a0f8e84f943ce151b7cec7d866502b86a",
+      "newHash": "aa40653400bd7f04fb9e0b8ba82dcf03db82fd28d7f782331f1fd559e9312f93"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "oldHash": "8dada1d6394aa8946e2e659565a9801ab490f915b687aa4d08bf2482bf9cb95b",
-      "newHash": "67750b41b51516eb15f3262270c1ee620d87e997d37b88eda34e161ba302fb4b"
+      "oldHash": "6c0e90e0247b6b4d5d65195749938c317cf73c52f0d8b4bcfd14ead9a5a181f6",
+      "newHash": "2a98904564da5fefb05e0e46de63d546eb5551ca6c7a1981b3b233d448753d31"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "a656d81fa969239a0476959bd9c0b9d9ef9cf83c45c6f00e91fafa58676d6df0",
-      "newHash": "eb5069762a01171ed9276ca11710281510d507a7b50b86ae0783ed0241dde611"
+      "oldHash": "cb4c754eba39386de86a9b7b020b26ddd3b43b22a18835504d8be00de8fdfadf",
+      "newHash": "af1652db05ceea79742b0676850e4a032da544bdc602e082af41582a16cdc86a"
     }
   ],
   "affectedRecords": [

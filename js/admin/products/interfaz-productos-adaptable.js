@@ -31,6 +31,7 @@ export function syncProductSurfaces() {
   if (editor) {
     if (!editorWasOpen) {
       editorOpener = document.activeElement;
+      window.TintinPageScroll?.reset(editor);
       (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
     if (compactProductUI()) {
@@ -158,6 +159,11 @@ function showSection(card,grid,value,expand=false) {
       field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
       for(const content of field.querySelectorAll(':scope > .tt-editor-section-fields,:scope > .tt-editor-caption')) if(content.hidden)content.hidden=false;
     }
+  }
+  if (expand) {
+    card.scrollTop = 0;
+    card.querySelector('.adm-card-body')?.scrollTo({top:0,behavior:'instant'});
+    window.TintinPageScroll?.reset(card);
   }
 }
 

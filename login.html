@@ -6,16 +6,16 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261017-domain-cutover-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261019-consent-performance-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261020-push-return-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261019-variant-links-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261020-selection-top-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets-tintin/images/admin/apple-touch-icon.png?v=tintin-20261020-push-return-1">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#AD3F67">
+  <meta name="theme-color" content="#F8AACA">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261019-variant-links-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261020-selection-top-1">
   <link rel="preconnect" href="https://www.google.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -215,6 +215,10 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, render
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidCustomerName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1";
 import { PROFILE_STATE, PROFILE_ACTION, detectAuthMethod, readProfileSnapshot, resolveProfileState, resolveProfileAction, withDeadline } from "./js/core/auth/estado-perfil-sesion.mjs?v=tintin-20261015-images-1";
 
+import { adminReturnStorage, normalizeAdminDestination, rememberAdminDestination, pendingAdminDestination } from './js/core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
+
+const requestedAdminReturn = new URLSearchParams(window.location.search).get('from');
+if (requestedAdminReturn) rememberAdminDestination(requestedAdminReturn, adminReturnStorage(window), window.location.origin);
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
 recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'login' });
@@ -434,10 +438,11 @@ async function redirectByRole(role, email, options = {}) {
     // Sólo cuentas internas pueden volver al panel. El destino se restringe
     // a su ruta local y conserva la sección; nunca acepta un host externo.
     const requestedAdmin = new URLSearchParams(window.location.search).get('from') || '';
-    const adminReturn = /^\/admin(?:\.html)?(?:[?#]|$)/.test(requestedAdmin)
-      ? new URL(requestedAdmin, window.location.origin) : null;
-    if (adminReturn?.origin === window.location.origin) {
-      window.location.replace(adminReturn.pathname + adminReturn.search + adminReturn.hash);
+    const adminReturn = requestedAdmin
+      ? normalizeAdminDestination(requestedAdmin, window.location.origin)
+      : pendingAdminDestination(adminReturnStorage(window), window.location.origin);
+    if (adminReturn) {
+      window.location.replace(adminReturn);
     } else {
       window.location.replace('admin.html');
     }
@@ -621,7 +626,7 @@ async function ensureProfileComplete(user, role, options = {}) {
       if (input === phoneInput) document.getElementById('login-phone-help').style.display = 'none';
     };
   }
-  window.scrollTo({ top: 0, behavior: 'auto' });
+  window.TintinPageScroll?.reset(profileBlock);
   const phoneAvailability = async raw => {
     const controller = new AbortController();
     try {
@@ -1110,7 +1115,8 @@ function showOtpStep() {
   otpInput.value = '';
   document.getElementById('login-otp-clipboard-status').textContent = '';
   document.getElementById('btn-paste-otp').textContent = 'Pegar código';
-  otpInput.focus();
+  otpInput.focus({preventScroll:true});
+  window.TintinPageScroll?.reset(document.getElementById('login-otp-block'));
 }
 
 function showEmailStep() {
@@ -1118,6 +1124,7 @@ function showEmailStep() {
   document.getElementById('login-otp-block').style.display = 'none';
   document.getElementById('login-email-block').style.display = '';
   setIdentifierMode('email');
+  window.TintinPageScroll?.reset(document.getElementById('login-email-block'));
 }
 
 // Cuando una cuenta ya está atada a un método (Google o correo) y se

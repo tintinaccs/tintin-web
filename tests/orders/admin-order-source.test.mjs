@@ -54,7 +54,7 @@ test('adaptador administrativo original limita cada consulta y espera confirmaci
   for(const role of ['superadmin','admin']) {
     const watches=[],ready={orders:false};
     const deps={createAdminOrderSource,reconcileAdminOrderSnapshot,currentRole:role,adminRealtimeReady:ready,adminRealtimeErrors:{},ADMIN_REALTIME_LIMIT:250,db:{},collection:(_db,name)=>name,orderBy:()=>({order:true}),limit:n=>({limit:n}),startAfter:cursor=>({cursor}),query:(...parts)=>parts,activityTimestampMillis:v=>v?.seconds || 0,refreshRealtimeConsumers(){},statisticsSetText(){},recoverAdminRealtimeAuth(){},onSnapshot(q,options,next,error){watches.push({q,options,next,error});return()=>{};}};
-    const runtime=new Function('deps',`let {${Object.keys(deps).join(',')}}=deps;let allOrders=[],adminOrdersUnsubscribe;${original.slice(start,end)};return {read:()=>allOrders,stop:()=>adminOrdersUnsubscribe()};`)(deps);
+    const runtime=new Function('deps',`let {${Object.keys(deps).join(',')}}=deps;let allOrders=[],rawAdminOrders=[],adminOrdersUnsubscribe;function projectAdminOrders(){allOrders=rawAdminOrders;}${original.slice(start,end)};return {read:()=>allOrders,stop:()=>adminOrdersUnsubscribe()};`)(deps);
     const docs=Array.from({length:600},(_,i)=>({id:`fixture-${i}`,data:()=>({createdAt:{seconds:600-i},inventoryRevision:1})}));
     watches[0].next({docs:[],metadata:{fromCache:true}});assert.equal(ready.orders,false);
     for(let page=0;page<watches.length;page++) {

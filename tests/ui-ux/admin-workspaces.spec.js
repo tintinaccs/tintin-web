@@ -125,3 +125,42 @@ test('convive con el controlador real de comercio sin perder filtros ni acciones
   expect(await page.evaluate(() => window.__calls)).toContainEqual(['prodNuevo']);
   await expect(page.locator('#prod-form-card')).toBeVisible();
 });
+
+for (const width of [390,768,1440]) test(`todos los módulos aceptados empiezan arriba y las mutaciones no arrastran el scroll ${width}`,async({page})=>{
+ await load(page,width);
+
+ await page.evaluate(()=>{const reset=window.TintinPageScroll.reset;window.__entryResets=0;window.TintinPageScroll.reset=(...args)=>{window.__entryResets++;return reset(...args);};});
+ const ids=await page.locator('.adm-content > .adm-section').evaluateAll(nodes=>nodes.map(node=>node.id));
+ for(const id of ids){
+  await page.evaluate(id=>{
+   document.querySelectorAll('.adm-section').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');
+   const section=document.getElementById(id);section.style.minHeight='300vh';scrollTo({top:500,behavior:'instant'});
+  },id);
+  await expect.poll(()=>page.evaluate(()=>scrollY),id).toBe(0);
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await page.evaluate(()=>scrollTo({top:200,behavior:'instant'}));
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  const before=await page.evaluate(()=>({y:scrollY,resets:window.__entryResets}));
+  expect(before.y,id).toBeGreaterThan(0);
+  await page.evaluate(()=>{const item=document.createElement('span');item.textContent='Actualización de datos';document.querySelector('.adm-section.active').append(item);});
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  // El navegador puede ajustar el anclaje al cambiar el layout; una actualización no debe activar navegación.
+  expect(await page.evaluate(()=>window.__entryResets),id).toBe(before.resets);
+  expect(await page.evaluate(()=>scrollY),id).toBeGreaterThan(0);
+ }
+});
+
+for(const width of [390,1440])test(`subapartados de correos, envíos y apariencia empiezan arriba ${width}`,async({page})=>{
+ await load(page,width);
+ const panels=await page.locator('.correos-panel[id],.ship-tab-panel[id]').evaluateAll(nodes=>nodes.filter(node=>node.closest('.adm-section')).map(node=>({id:node.id,root:node.closest('.adm-section').id})));
+ expect(panels.length).toBeGreaterThan(6);
+ for(const panel of panels){
+  await page.evaluate(({id,root})=>{
+   document.querySelectorAll('.adm-section').forEach(el=>el.classList.toggle('active',el.id===root));
+   const section=document.getElementById(root);section.style.minHeight='300vh';
+   section.querySelectorAll('.correos-panel,.ship-tab-panel').forEach(el=>el.classList.remove('active'));
+   document.getElementById(id).classList.add('active');scrollTo({top:500,behavior:'instant'});
+  },panel);
+  await expect.poll(()=>page.evaluate(()=>scrollY),panel.id).toBe(0);
+ }
+});

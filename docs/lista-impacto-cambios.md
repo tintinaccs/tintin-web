@@ -1,6 +1,18 @@
+## 2026-10-20 — Integración del editor de Productos PR1175
+
+Reconciliación con main5c005560: autoridades funcionales de Productos y controles del PR conservados; navegación de sección mantiene reset de scroll y borrador. Referencias nuevas del conjunto JS/CSS invalidan caché sin retroceder Pedidos/push/PWA. El contraste se verifica sobre selecciones visuales existentes. Se comprueba creación con0 y edición del mismo documento, visibilidad manual, variantes y geometría en11 dimensiones. Derivados/plan protegido se generan contra main vigente; sin cambios de Rules, Auth, pedidos ni datos de catálogo real. Evidencia actual en CURRENT_STATE.
+
 ## 2026-10-20 — Crear y editar productos con controles visuales
 
 Fuentes: formulario admin compartido, interfaz-productos-adaptable.js, controles-editor-producto.js y shopify-commerce-admin.css. Se conservan campos/roles/CRUD, fotos y cantidades por variante; controles nuevos escriben sólo los campos canónicos del borrador. Nuevo parte de stock cero/inactivo; modificar cantidad actualiza active, manteniendo ajuste explícito en Visibilidad y sin activar al abrir. Cantidades históricas, stock sin control y opciones de texto avanzadas conservados. Tarjetas plegables, selector único y acciones accesibles en móvil/tablets/laptop/desktop. Impacta sólo editor de Productos; consumidores cambian URLs de caché y derivados por herramientas canónicas. Evidencia y límites en CURRENT_STATE; no hay escrituras comerciales de prueba.
+
+## 2026-10-20 — Pedidos reales, filtros y barra de selección
+
+Fuentes: pedidos-prueba.mjs (clasificación estricta 01–25 y alias de presentación), admin-app y renderers de Pedidos/fichas, estadísticas de perfil, comercio-local backend/cliente, notificaciones administrativas y CSS de comercio. La proyección se aplica antes de derivar listas y cifras, con muestra reversible exclusiva del Super Admin y preferencia por uid/navegador; las clientas conservan sólo historial real. No borra documentos, reasigna IDs/correlativos, modifica stock/pagos ni ejecuta limpieza externa de Sheets. Los alias son de presentación, no una migración de claves históricas. Selección sólo de pedidos reales: barra fija que respeta navegación móvil y visualViewport; controles de 44px y espacio reservado. Impacta Pedidos/Dashboard/Estadísticas/Usuarios/perfil/compradores/exportación, no Auth/Rules/cobros. Tests del lote y derivados se agregan al gate canónico de Pedidos, matriz responsive al spec existente; fixtures de pruebas comerciales generales usan códigos fuera del lote explícitamente excluido. Evidencia y límites en CURRENT_STATE. Caché, CSP, diagnóstico y mantenimiento se generan desde autoridades existentes.
+
+## 2026-10-20 — Contraste de selección y entrada superior en todo el sitio
+
+Fuentes: cargador-pagina.js, interfaz/hoja de Productos, espacio-modulos-admin.js, pasos de checkout, acceso y pestañas/pedidos de Perfil. El reset de scroll existente se comparte con apartados aceptados y posiciones guardadas por el bloqueo; la carga de datos y las entradas del usuario no reinician la posición. Las cápsulas seleccionadas respetan los tokens primarios con contraste frente al tema global. Impacta las 19 rutas inventariadas (incluida redirección y verificación estática), módulos y subapartados, sin cambios de datos, permisos, stock, Auth ni sincronización. Se conserva PR1173. Regresiones de navegador en seis viewports, estado/guardias y contraste, y cuatro contratos Node del reset, conectados a gates existentes. Versiones, CSP, diagnóstico y mantenimiento se regeneran canónicamente. Evidencia en CURRENT_STATE.
 
 ## 2026-10-20 — Acceso claro, navegación modal y stock por opción
 
@@ -455,3 +467,11 @@ Fuentes: interfaz-productos-adaptable.js, vista-previa-producto.js, admin-app.js
 ## 2026-10-20 — Comparación concurrente del editor de Productos
 
 Fuente: admin-app.js, listener de catálogo y guardado transaccional del editor. Impacto: edición de precios/datos, stock total y por variante, representación histórica de opciones, reintentos después de fallo de inventario privado o sincronización. La comparación usa el documento original; la interfaz conserva el saneado. La huella completa sigue detectando cambios reales de otra sesión y productos borrados. No cambia esquema, permisos, reglas, cantidades reales, borrado ni contraseñas. Regresión en maestro-productos-controlador.test.mjs; caché, plan protegido y diagnóstico se generan con las herramientas existentes. Evidencia y límites en CURRENT_STATE.
+## 2026-10-20 — Notificaciones con retorno a ficha y marca instalada responsive
+
+Autoridad compartida destino-admin.mjs para productor Cloudflare, campana, login y consumidor del enlace: rutas administrativas locales, identidad del registro, sesión/permisos vigentes y retorno efímero sin credenciales. Pedidos conservan su fuente canónica; usuarios/participación/mayoristas reutilizan sus fichas y lecturas puntuales, sin aprobar pedidos ni modificar inventario al navegar. Metadatos theme-color y manifiestos se alinean con la muestra #F8AACA; íconos originales blancos/rosados se vuelven a referenciar con versión. Encabezado administrativo translúcido con marca y blur para todos los anchos; pruebas de320a1920px, giro de tablet y móvil, datos tardíos, reintento y sesión no autorizada. Cargadores/baseline/CSP/diagnóstico/plan protegido se regeneran desde sus autoridades. No se cambia autenticación, permisos, reglas, credenciales ni catálogo real. Evidencias en CURRENT_STATE.
+
+
+## 2026-10-20 — Cabeceras únicas de etapas de Pedidos
+
+Fuente: tablero-pedidos.css. Escritorio usa títulos y contadores de las cinco columnas; hasta 1180px usa pestañas y oculta sólo los títulos repetidos de etapas estándar. Incidencias e Históricos conservan sus títulos. No cambia renderizado, selección, datos, permisos, cantidades ni transiciones. Caché del CSS y derivados regenerados; matriz de 24 tamaños y cruce de breakpoint con etapa persistida en orders-board.spec.js.

@@ -1,1 +1,1 @@
-import './gestion-participacion-admin-v2.js?v=tintin-20261017-domain-cutover-1';
+import './gestion-participacion-admin-v2.js?v=tintin-20261020-push-return-1';

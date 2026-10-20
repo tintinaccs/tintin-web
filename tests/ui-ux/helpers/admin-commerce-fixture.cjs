@@ -41,8 +41,8 @@ window.__orders=window.__commerceFixtureConfig?.orders ? structuredClone(window.
 window.__productRows=DATA.products;
 window.__productConsumers=new Set();
 window.__publishProducts=()=>{for(const fn of window.__productConsumers)fn({docs:window.__productRows.map(entry=>({id:entry.id,data:()=>structuredClone(entry.data)})),metadata:{fromCache:false}});};
-window.__orderConsumers=new Set();window.__publishOrders=(error='')=>{for(const fn of window.__orderConsumers)fn({uid:'super-1',orders:window.__orders,ready:true,error});};
-window.TintinAdminOrders={subscribe(fn){window.__orderConsumers.add(fn);queueMicrotask(()=>window.__publishOrders());return()=>window.__orderConsumers.delete(fn);},retry(){window.__publishOrders();}};
+window.__includeTestOrders=localStorage.getItem('fixture:test-orders')==='show';window.__orderConsumers=new Set();window.__publishOrders=(error='')=>{for(const fn of window.__orderConsumers)fn({uid:'super-1',orders:window.__orders,includeTestOrders:window.__includeTestOrders===true,ready:true,error});};
+window.TintinAdminOrders={includesTestOrders(){return window.__includeTestOrders===true;},setTestVisibility(show){window.__includeTestOrders=show;localStorage.setItem('fixture:test-orders',show?'show':'hide');window.__publishOrders();window.dispatchEvent(new Event('tintin:order-test-visibility'));},subscribe(fn){window.__orderConsumers.add(fn);queueMicrotask(()=>window.__publishOrders());return()=>window.__orderConsumers.delete(fn);},retry(){window.__publishOrders();}};
 window.dispatchEvent(new Event('tintin:admin-orders-source'));
 export const where = (field,operator,value) => ({__where:true,field,operator,value});
 export const documentId = () => '__name__';

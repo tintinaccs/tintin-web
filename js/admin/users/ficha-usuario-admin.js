@@ -1,3 +1,4 @@
+import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 /* =============================================================
    TINTIN — Ficha de usuario (helper de solo lectura)
 
@@ -80,8 +81,7 @@ if (!window.TintinAdminUserFichaBooted) {
 
   async function loadOrders(uid) {
     const snap = await getDocs(query(collection(db, 'orders'), where('userId', '==', uid), limit(100)));
-    return snap.docs
-      .map(item => ({ id: item.id, ...item.data() }))
+    return ordersForView(snap.docs.map(item => ({ id: item.id, ...item.data() })), window.TintinAdminOrders?.includesTestOrders?.())
       .sort((a, b) => (b.createdAt?.toDate?.() || new Date(0)) - (a.createdAt?.toDate?.() || new Date(0)));
   }
 
@@ -96,17 +96,26 @@ if (!window.TintinAdminUserFichaBooted) {
   async function openClientFicha(uid) {
     const overlay = document.getElementById('client-ficha-overlay');
     const body = document.getElementById('client-ficha-body');
-    if (!overlay || !body) return;
-    if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return;
+    if (!overlay || !body) return false;
+    if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return false;
+    const ownerUid = auth.currentUser.uid;
 
     body.replaceChildren(el('div', 'adm-loading', 'Cargando ficha…'));
     overlay.style.display = 'block';
 
     try {
-      const user = await loadUser(uid);
+      let user = await loadUser(uid);
       const [ordersResult, auditResult] = await Promise.allSettled([loadOrders(uid), loadAudit(uid)]);
       const orders = ordersResult.status === 'fulfilled' ? ordersResult.value : [];
+      // Las cifras de la ficha siguen la fuente completa del panel, no cachés históricas del perfil.
+      if(window.TintinAdminOrders?.ready?.()) {
+        const {calculateOrderStats}=await import('../../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2');
+        let snapshot;const stop=window.TintinAdminOrders.subscribe(value=>{snapshot=value;});stop();
+        const accountOrders=(snapshot?.orders||[]).filter(order=>order.userId===uid || (user.email && String(order.userEmail||'').toLowerCase()===String(user.email).toLowerCase()));
+        user={...user,...calculateOrderStats(accountOrders,{includeTestOrders:snapshot?.includeTestOrders===true})};
+      }
       const logs = auditResult.status === 'fulfilled' ? auditResult.value : [];
+      if (auth.currentUser?.uid !== ownerUid) return false;
 
       const identity = section('Identidad');
       identity.grid.append(
@@ -168,7 +177,7 @@ if (!window.TintinAdminUserFichaBooted) {
       orders.slice(0, 10).forEach(order => {
         const row = el('div', 'ficha-order-row');
         row.append(
-          el('span', '', `#${text(order.id).slice(-6).toUpperCase()} · ${formatDate(order.createdAt)}`),
+          el('span', '', `#${orderDisplayCode(order)} · ${formatDate(order.createdAt)}`),
           el('span', 'adm-badge', order.status || 'Pendiente'),
           el('span', '', formatPrice(order.total)),
         );
@@ -192,8 +201,10 @@ if (!window.TintinAdminUserFichaBooted) {
       auditSection.wrapper.appendChild(auditList);
 
       body.replaceChildren(identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
+      return true;
     } catch (error) {
       showError(error?.message || 'No se pudo cargar la ficha de la cuenta.');
+      return false;
     }
   }
 
@@ -245,6 +256,7 @@ if (!window.TintinAdminUserFichaBooted) {
   }
 
   window.openClientFichaByUid = openClientFicha;
+  window.dispatchEvent(new Event('tintin:admin-ficha-source'));
   window.closeClientFicha = closeClientFicha;
 
   if (document.readyState === 'loading') {

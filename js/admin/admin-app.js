@@ -1,3 +1,6 @@
+import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
+import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
+import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
 import { productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261018-products-master-1';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261019-revenue-start-1';
@@ -40,7 +43,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261019-product-editor-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
-import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261017-domain-cutover-1";
+import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261020-push-return-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20261017-domain-cutover-1";
 import "./pages/paginas-admin.js?v=tintin-20261017-domain-cutover-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
@@ -68,6 +71,28 @@ let adminGuardInitializedUid = '';
 let adminGuardInitializingUid = '';
 let allUsers = [];
 let allOrders = [];
+let rawAdminOrders = [];
+function includesTestOrders() {
+  if (currentRole !== 'superadmin' || !currentUser?.uid) return false;
+  try { return localStorage.getItem(`tt-test-orders:${currentUser.uid}`) === 'show'; } catch { return false; }
+}
+function projectAdminOrders() {
+  allOrders = ordersForView(rawAdminOrders, includesTestOrders());
+}
+function projectAdminUserStats() {
+  if (!adminRealtimeReady.orders || currentRole !== 'superadmin') return;
+  const byUid=new Map(),byEmail=new Map();
+  for(const order of allOrders){
+    if(order.userId){if(!byUid.has(order.userId))byUid.set(order.userId,[]);byUid.get(order.userId).push(order);}
+    const email=String(order.userEmail||'').trim().toLowerCase();
+    if(email){if(!byEmail.has(email))byEmail.set(email,[]);byEmail.get(email).push(order);}
+  }
+  allUsers = adminUsersLive.map(user => {
+    const email = String(user.email || '').trim().toLowerCase();
+    const orders = [...(byUid.get(user.uid)||[]),...(byEmail.get(email)||[])];
+    return { ...user, ...calculateOrderStats(orders, { includeTestOrders: includesTestOrders() }) };
+  }).sort(compareUsersByRecentCustomerActivity);
+}
 let adminOrdersUnsubscribe = null;
 let adminUsersUnsubscribe = null;
 let adminUsersLive = [];
@@ -804,6 +829,10 @@ function applyInitialSectionFromUrl() {
   }
   const target = sectionFromUrl();
   if (target && target !== 'dashboard') switchSection(target);
+  const params = new URLSearchParams(location.search);
+  if (!['order', 'user', 'like', 'review', 'report', 'quote'].some(key => params.has(key))) {
+    consumeAdminDestination(location.href, adminReturnStorage(window), location.origin);
+  }
 }
 window.addEventListener('hashchange', () => {
   if (admSuppressHashSync) return;
@@ -1021,6 +1050,7 @@ function adminSessionPresentation(reason, handoffPending = false) {
 }
 
 function showAdminAuthUnknown(reason, handoffPending = false) {
+  rememberAdminDestination(location.href, adminReturnStorage(window), location.origin);
   const presentation = adminSessionPresentation(reason, handoffPending);
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-auth-unknown');
@@ -1661,6 +1691,7 @@ function sectionIsActive(name) {
 }
 
 function refreshRealtimeConsumers() {
+  projectAdminUserStats();
   publishAdminOrders();
   renderDashboardData();
   renderGeneralStatistics();
@@ -1677,10 +1708,18 @@ function refreshRealtimeConsumers() {
 const adminOrderConsumers = new Set();
 let adminOrdersOwnerUid = '';
 function publishAdminOrders() {
-  const snapshot = { uid: currentUser?.uid || '', ready: adminRealtimeReady.orders, error: adminRealtimeErrors.orders, orders: currentUser && adminOrdersOwnerUid===currentUser.uid ? allOrders : [] };
+  const snapshot = { uid: currentUser?.uid || '', ready: adminRealtimeReady.orders, error: adminRealtimeErrors.orders, includeTestOrders: includesTestOrders(), orders: currentUser && adminOrdersOwnerUid===currentUser.uid ? allOrders : [] };
   for (const consume of adminOrderConsumers) { try { consume(snapshot); } catch(error) { console.error('No se pudo actualizar la vista de pedidos.',error?.message); } }
 }
 window.TintinAdminOrders = {
+  includesTestOrders,
+  setTestVisibility(show) {
+    if (currentRole !== 'superadmin' || !currentUser?.uid) throw new Error('Acción reservada al Super Admin.');
+    if(!adminRealtimeReady.orders) throw new Error('Esperá a que los pedidos terminen de sincronizarse.');
+    localStorage.setItem(`tt-test-orders:${currentUser.uid}`, show ? 'show' : 'hide');
+    projectAdminOrders(); refreshRealtimeConsumers();
+    window.dispatchEvent(new Event('tintin:order-test-visibility'));
+  },
   ready: () => adminRealtimeReady.orders === true,
   has: orderId => allOrders.some(order => order.id === orderId),
   get: orderId => currentUser && adminOrdersOwnerUid === currentUser.uid ? allOrders.find(order => order.id === orderId) : undefined,
@@ -1810,7 +1849,7 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { ...adminRealtimeReady, orders: false, users: currentRole !== 'superadmin' };
   adminRealtimeErrors = { orders: '', users: '' };
-  if(adminOrdersOwnerUid!==currentUser?.uid)allOrders=[];
+  if(adminOrdersOwnerUid!==currentUser?.uid){allOrders=[];rawAdminOrders=[];}
   adminOrdersOwnerUid=currentUser?.uid || '';
   publishAdminOrders();
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
@@ -1830,7 +1869,8 @@ function startAdminRealtimeData() {
       },
       onLoading() { adminRealtimeReady.orders = false; refreshRealtimeConsumers(); },
       onData(orders) {
-        allOrders = reconcileAdminOrderSnapshot(orders, allOrders).sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
+        rawAdminOrders = reconcileAdminOrderSnapshot(orders, rawAdminOrders).sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
+        projectAdminOrders();
         adminRealtimeReady.orders = true;
         adminRealtimeErrors.orders = '';
         refreshRealtimeConsumers();
@@ -2996,7 +3036,7 @@ window.deleteOrder = async (orderId) => {
       const result = await window.TintinOrderAdmin.trashOrder(orderId, reason);
       ctx.ok('trash');
       ctx.start('refresh');
-      if (result.moved) allOrders = allOrders.filter(o => o.id !== orderId);
+      if (result.moved) {allOrders = allOrders.filter(o => o.id !== orderId);rawAdminOrders = rawAdminOrders.filter(o=>o.id!==orderId);}
       if (result.moved) {
         await logAudit('mover_pedido_borrados', 'pedido', orderId, orderBefore?.orderNumber || orderBefore?.shortId || orderId, `Cliente: ${orderBefore?.userName || orderBefore?.userEmail || '—'}${reason ? ` · ${reason}` : ''}`);
       }
@@ -3224,6 +3264,7 @@ window.bulkDeleteOrders = async function() {
     }
   });
   allOrders = allOrders.filter(order => !removedIds.has(order.id));
+  rawAdminOrders = rawAdminOrders.filter(order => !removedIds.has(order.id));
   _selectedOrders.clear();
   failed.forEach(item => _selectedOrders.add(item.id));
   if (movedOrders.length) logAudit('mover_pedido_borrados', 'pedido', '', '', `${movedOrders.length} pedidos movidos a Borrados`, { bulk: true, count: movedOrders.length, failed: failed.length });
@@ -7216,11 +7257,12 @@ function loadImportar() {
     ]];
     snap.docs.forEach(d => {
       const o = d.data();
+      if (!ordersForView([{id:d.id,...o}], includesTestOrders()).length) return;
       const productos = (o.items || []).map(i => `${i.qty}x ${i.name}${i.variant ? ' (' + i.variant + ')' : ''}`).join('; ');
       const metodo = SHIP_LABELS[o.shipping?.method] || o.shipping?.method || '—';
       const ciudadZona = [o.shipping?.city, o.shipping?.zone].filter(Boolean).join(' / ') || '—';
       rows.push([
-        o.shortId || d.id.slice(0, 8).toUpperCase(),
+        orderDisplayCode({id:d.id,...o}),
         formatDate(o.createdAt),
         o.userName || '—',
         o.userEmail || '—',
@@ -7234,7 +7276,7 @@ function loadImportar() {
       ]);
     });
     downloadCsv('tintin-pedidos-' + new Date().toISOString().slice(0, 10) + '.csv', rows);
-    toast(`${snap.size} pedidos exportados`);
+    toast(`${rows.length - 1} pedidos exportados`);
   };
 
   // ── EXPORTAR USUARIOS (CSV) — Fase 2

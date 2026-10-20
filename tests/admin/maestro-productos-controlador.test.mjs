@@ -128,3 +128,15 @@ test('nuevo inicia sin stock y editar conserva visibilidad y cantidades previas'
  r.ctx._prodNuevoNow();assert.equal(r.control('prod-stock').value,'0');assert.equal(r.control('prod-active').checked,false);assert.equal(r.control('prod-save-btn').textContent,'Guardar producto');
  r.ctx._prodEditarNow('source');assert.equal(r.control('prod-stock').value,'700');assert.equal(r.control('prod-active').checked,false);assert.equal(r.control('prod-save-btn').textContent,'Guardar cambios');assert.deepEqual(r.writes,[]);
 });
+
+test('nuevo con stock cero se guarda y se vuelve a editar con el mismo controlador',async()=>{
+ const r=runtime();r.ctx._prodNuevoNow();
+ r.control('prod-name').value='Producto sin stock';r.control('prod-category').value='anillos';r.control('prod-price').value='45000';
+ assert.equal(await r.ctx.window.saveTest(),true,r.calls.join('; '));
+ const saved=r.rows.get('products/new-1');assert.equal(saved.stock,0);assert.equal(saved.active,false);assert.equal(saved.price,45000);
+ r.ctx._allProducts.push({...saved,_docId:'new-1'});r.ctx._productSourceById.set('new-1',structuredClone(saved));
+ r.ctx._prodEditarNow('new-1');assert.equal(r.control('prod-stock').value,'0');assert.equal(r.control('prod-active').checked,false);
+ r.control('prod-price').value='50000';assert.equal(await r.ctx.window.saveTest(),true,r.calls.join('; '));
+ assert.equal(r.rows.get('products/new-1').stock,0);assert.equal(r.rows.get('products/new-1').price,50000);
+ assert.equal([...r.rows.keys()].filter(key=>key.startsWith('products/new-')).length,1);
+});

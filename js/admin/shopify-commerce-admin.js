@@ -1,6 +1,7 @@
+import { ordersForView, testOrderNumber, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261018-products-master-1';
-import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261020-minimal-editor-1';
-import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261019-variant-links-1';
+import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261020-editor-integrated-1';
+import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261020-orders-clean-2';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
@@ -35,7 +36,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261020-minimal-editor-2';
+const VERSION = 'tintin-20261020-editor-integrated-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -88,7 +89,7 @@ const state = {
   ordersError: '',
   productTab: 'all',
   collectionTab: 'all',
-  orderTab: 'all', orderStage: 'new', orderDelivery: '', orderVisible: {}, orderBusyIds: new Set(), orderSound: false, orderHistory: new Map(), orderContacts: new Map(),
+  orderTab: 'all', orderStage: 'new', orderDelivery: '', orderVisible: {}, orderBusyIds: new Set(), orderSound: false, includeTestOrders: false, orderHistory: new Map(), orderContacts: new Map(),
   productView: 'grid',
   productFiltersOpen: false,
   productBulkOpen: false,
@@ -270,7 +271,7 @@ function orderItems(order) {
 }
 
 function orderDisplayId(order) {
-  return String(order?.orderNumber || order?.shortId || order?.id || '—');
+  return orderDisplayCode(order);
 }
 
 function productVariantsCount(product) {
@@ -298,7 +299,7 @@ function productTabCounts() {
 }
 
 function orderTabCounts() {
-  return { all: state.orders.length, unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length, unfulfilled: state.orders.filter(o => !o.localEntryId && !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length, delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length, canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length, refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length, deleted: state.trashOrders.length };
+  return { all: state.orders.length, unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length, unfulfilled: state.orders.filter(o => !o.localEntryId && !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length, delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length, canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length, refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length, deleted: ordersForView(state.trashOrders,state.includeTestOrders).length };
 }
 
 function collectionTabCounts() {
@@ -362,7 +363,7 @@ function filteredCollections() {
 }
 
 function filteredOrders() {
-  let list = state.orderTab === 'deleted' ? [...state.trashOrders] : [...state.orders];
+  let list = ordersForView(state.orderTab === 'deleted' ? state.trashOrders : state.orders, state.includeTestOrders);
   const q = normalizeText(state.orderSearch);
   if (q) list = list.filter(order => { const customer = orderCustomer(order); const items = orderItems(order).map(item => item?.name || item?.title || '').join(' '); return [orderDisplayId(order), order?.id, customer.name, customer.email, customer.phone, items].some(v => normalizeText(v).includes(q)); });
   if (state.orderTab === 'unpaid') list = list.filter(o => payStatus(o) !== 'pagado');
@@ -668,7 +669,7 @@ function payStatusBadge(status) {
 
 function renderOrders() {
   const root = document.getElementById('tt-commerce-orders'); if (!root) return;
-  if (['buyers','deleted'].includes(state.orderTab)) return renderOrderArchive();
+  if (['buyers','deleted'].includes(state.orderTab)) {root.style.removeProperty('--tt-order-selection-space');return renderOrderArchive();}
   if(state.user)try {sessionStorage.setItem(`tt-orders-ui:${state.user.uid}`,JSON.stringify({tab:state.orderTab,stage:state.orderStage,search:state.orderSearch,pay:state.orderPay,delivery:state.orderDelivery,sort:state.orderSort}));}catch{}
   renderOrderBoard(root, { orders: filteredOrders(), allOrders: state.orders,
     selected: state.orderSelected, canBulk: perm('pedidos','accionesMasivas','manageOrders'),
@@ -677,13 +678,15 @@ function renderOrders() {
     offline: navigator.onLine === false, payLabels: PAY_STATUS_LABELS,
     tab: state.orderTab, stage: state.orderStage, visible: state.orderVisible,
     search: state.orderSearch, pay: state.orderPay, delivery: state.orderDelivery,
-    sort: state.orderSort, sound: state.orderSound });
+    sort: state.orderSort, sound: state.orderSound, includeTestOrders: state.includeTestOrders });
 }
+
+function orderTestToggle() {return state.role==='superadmin'?button(state.includeTestOrders?'Ocultar pedidos de prueba':'Mostrar pedidos de prueba','orders-toggle-tests',{extra:`aria-pressed="${state.includeTestOrders}"`}):'';}
 
 function renderOrderArchive() {
   const root = document.getElementById('tt-commerce-orders'); if (!root) return;
   if (state.orderTab === 'buyers') {
-    root.innerHTML = `<div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos · Clientes que compraron</h1><p>Compradores de Sheets y de la tienda, con sus pedidos e importes.</p></div></div><div class="tt-commerce-card"><div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos los pedidos', state.orders.length, state.orderTab)}${tabButton('orders', 'buyers', 'Clientes que compraron', '', state.orderTab)}</div><p data-local-status role="status">Consultando compradores…</p><button type="button" class="adm-btn adm-btn-outline" data-local-refresh>Actualizar</button><div id="local-order-buyers"></div></div>`;
+    root.innerHTML = `<div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos · Clientes que compraron</h1><p>Compradores de Sheets y de la tienda, con sus pedidos e importes.</p></div></div><div class="tt-commerce-card">${orderTestToggle()}<div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos los pedidos', state.orders.length, state.orderTab)}${tabButton('orders', 'buyers', 'Clientes que compraron', '', state.orderTab)}</div><p data-local-status role="status">Consultando compradores…</p><button type="button" class="adm-btn adm-btn-outline" data-local-refresh>Actualizar</button><div id="local-order-buyers"></div></div>`;
     window.dispatchEvent(new Event('tintin:show-order-buyers'));
     return;
   }
@@ -747,7 +750,7 @@ function renderOrderArchive() {
   root.innerHTML = `
     <div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${!showingTrash && state.ordersError ? "—" : sourceTotal}</span></h1><div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div></div><div class="tt-commerce-actions">${isSuper ? button('Verificar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div></div>
     ${!showingTrash ? `<div class="tt-commerce-order-metrics" aria-label="Resumen del grupo cargado de pedidos"><div><strong>${metricValue(metrics.today)}</strong><span>Pedidos hoy</span></div><div><strong>${metricMoney(metrics.revenue)}</strong><span>Ventas de hoy</span></div><div><strong>${metricValue(metrics.pending)}</strong><span>Pagos pendientes</span></div><div><strong>${metricValue(metrics.unfulfilled)}</strong><span>Sin preparar</span></div><div><strong>${metricValue(metrics.delivered)}</strong><span>Entregados</span></div><div><strong>${metricValue(metrics.items)}</strong><span>Artículos hoy</span></div></div>` : ''}
-    <div class="tt-commerce-card">${ordersWarning}<div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'buyers', 'Clientes que compraron', '', state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>${rangeLabel(page, 'pedidos cargados', ordersUnavailable)}</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
+    <div class="tt-commerce-card">${orderTestToggle()}${ordersWarning}<div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'buyers', 'Clientes que compraron', '', state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>${rangeLabel(page, 'pedidos cargados', ordersUnavailable)}</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
 }
 
 function renderAll() {
@@ -1123,7 +1126,7 @@ async function bulkProducts(active) {
 }
 
 async function bulkOrders(kind) {
-  const ids = [...state.orderSelected];
+  const ids = [...state.orderSelected].filter(id => state.orders.some(order => order.id === id && testOrderNumber(order) === null));
   if (!ids.length || state.busy) return;
   if (ids.length > MAX_BULK_SELECTION) {
     toast(`Solo se pueden procesar ${MAX_BULK_SELECTION} pedidos por vez.`);
@@ -1182,6 +1185,12 @@ async function handleAction(action, element) {
   if (action === 'drawer-close') return closeDrawer();
   if (action === 'order-advance') return advanceOrder(id);
   if (action === 'order-contacts-retry') { state.orderContacts.delete(id); return refreshOrderContacts(id); }
+  if (action === 'orders-toggle-tests') {
+    if(state.role!=='superadmin') return;
+    try { closeDrawer(); state.orderSelected.clear(); window.TintinAdminOrders.setTestVisibility(!state.includeTestOrders); }
+    catch(error) { toast('No se pudo cambiar la vista: '+error.message); }
+    return;
+  }
   if (action === 'order-stage') { state.orderStage=element.dataset.stage;renderOrders();return; }
   if (action === 'order-show-more') { const key=element.dataset.stage;state.orderVisible[key]=(state.orderVisible[key] || 30)+30;return renderOrders(); }
   if (action === 'orders-sound') {
@@ -1346,6 +1355,7 @@ function onChange(event) {
   }
   if (target.matches('[data-select-order]')) {
     const id = target.dataset.selectOrder;
+    if(!state.orders.some(order=>order.id===id && testOrderNumber(order)===null)){target.checked=false;return;}
     addToLimitedSelection(state.orderSelected, id, target.checked);
     target.checked = state.orderSelected.has(id);
     return renderOrders();
@@ -1573,15 +1583,17 @@ function bindCanonicalOrders() {
   const expectedUid=orderSourceUid;
   orderSourceStop=window.TintinAdminOrders.subscribe(snapshot => {
     if (state.user?.uid !== expectedUid || snapshot.uid !== expectedUid) return;
-    const fresh = orderSourcePrimed && snapshot.ready ? snapshot.orders.filter(o=>!orderSeenIds.has(o.id) && !o.localEntryId && (orderStage(o)==='new' || o.status==='confirmado')) : [];
+    const fresh = orderSourcePrimed && snapshot.ready ? ordersForView(snapshot.orders).filter(o=>!orderSeenIds.has(o.id) && !o.localEntryId && (orderStage(o)==='new' || o.status==='confirmado')) : [];
     if (snapshot.ready) {
       for(const order of snapshot.orders) orderSeenIds.add(order.id);
       orderSourcePrimed=true;
     }
-    state.orders=snapshot.orders; state.ordersReady=snapshot.ready; state.ordersError=snapshot.error || '';
+    state.includeTestOrders=snapshot.includeTestOrders===true;
+    state.orders=ordersForView(snapshot.orders,state.includeTestOrders); state.ordersReady=snapshot.ready; state.ordersError=snapshot.error || '';
     state.ordersHasMore=false;
-    state.orderSelected=new Set([...state.orderSelected].filter(id=>state.orders.some(o=>o.id===id)));
+    state.orderSelected=new Set([...state.orderSelected].filter(id=>state.orders.some(o=>o.id===id && testOrderNumber(o)===null)));
     window.dispatchEvent(new Event('tintin:orders-updated'));
+    if(state.drawer?.type==='order' && !state.orders.some(order=>order.id===state.drawer.id)) closeDrawer();
     renderOrders(); if (state.drawer?.type==='order') { refreshOrderHistory(state.drawer.id); refreshOrderContacts(state.drawer.id); renderDrawer(); }
     if (fresh.length && document.getElementById('section-pedidos')?.classList.contains('active')) {
       const notice=document.querySelector('[data-order-notice]');
