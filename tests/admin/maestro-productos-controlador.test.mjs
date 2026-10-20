@@ -7,7 +7,7 @@ import {variantInventoryEntries} from '../../js/core/store/inventario-variantes.
 import {sanitizeVariantData} from '../../js/core/auth/utilidades-seguridad.js';
 const source=fs.readFileSync('js/admin/admin-app.js','utf8');
 const block=(from,to)=>source.slice(source.indexOf(from),source.indexOf(to,source.indexOf(from)));
-const code=[block('function serializeProductForm()','window.prodNuevo ='),block('function _prodNuevoNow()','window.prodEditar ='),block('function _prodEditarNow(','window.prodToggleActive ='),block('window.prodDuplicar =','window.TintinProductAdmin ='),block('window.TintinProductAdmin =','window.prodGuardar =')].join('\n');
+const code=[block('function productVariantStockConfiguration(','function renderProductVariantStock('),block('function serializeProductForm()','window.prodNuevo ='),block('function _prodNuevoNow()','window.prodEditar ='),block('function _prodEditarNow(','window.prodToggleActive ='),block('window.prodDuplicar =','window.TintinProductAdmin ='),block('window.TintinProductAdmin =','window.prodGuardar =')].join('\n');
 function runtime(product={}){
  const fields=new Map(),variantInputs=[],writes=[],rows=new Map(),calls=[];
  const control=id=>{if(!fields.has(id)){let value='';fields.set(id,{id,get value(){return value;},set value(next){value=String(next ?? '');},checked:false,style:{},textContent:'',disabled:false,readOnly:false});}return fields.get(id);};
@@ -18,7 +18,7 @@ function runtime(product={}){
   _allProducts:[original],_productSourceById:new Map([['source',structuredClone(original)]]),_allCollections:[{slug:'anillos'}],_productInventoryById:new Map([['source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'}]]),productEditBaseline:null,productVariantStockBaseline:null,
   productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,productColorPhotos:{serialize:()=>[]},
   wristCategory:x=>x,sanitizeImageUrl:x=>typeof x==='string'&&x.startsWith('https://')?x:'',mountFormImageWidget:()=>{},mountProductColorPhotos:()=>{},
-  renderProductVariantStock:product=>{variantInputs.length=0;ctx.productVariantStockBaseline=product?.variantInventory?{stock:product.stock,entries:variantInventoryEntries(product),variants:product.variants}:null;for(const entry of product?.variantInventory || [])variantInputs.push({value:String(entry.stock)});},
+  renderProductVariantStock:product=>{variantInputs.length=0;ctx.productVariantStockBaseline=product?.variantInventory?{stock:product.stock,expectedEntries:variantInventoryEntries(product),entries:variantInventoryEntries(product),variants:product.variants}:null;for(const entry of product?.variantInventory || [])variantInputs.push({value:String(entry.stock)});},
   UnsavedGuard:{confirmLeave:fn=>fn(),track:()=>{},clear:()=>{}},toast:()=>{},db:{},collection:(_db,name)=>name,
   doc:(...args)=>args.length===1?{path:`products/new-${++count}`,id:`new-${count}`}:{path:args[1]+'/'+args[2],id:args[2]},
   serverTimestamp:()=>123,deleteField:()=>({__delete:true}),
@@ -85,6 +85,31 @@ test('editar variantes sigue rechazando cambios reales, incluso después de refr
 });
 test('no puede duplicar sin permiso de creación',()=>{
  const r=runtime();r.ctx.can=()=>false;r.ctx.window.prodDuplicar('source');assert.equal(r.control('prod-name').value,'');assert.deepEqual(r.writes,[]);
+});
+
+test('distribuir stock total en colores guarda cantidades explícitas y admite reintento sin duplicar',async()=>{
+ const r=runtime({stock:1});r.ctx._prodEditarNow('source');
+ const draft=r.ctx.productVariantStockConfiguration('Color: dorado, plateado');
+ r.ctx.productVariantStockBaseline={stock:1,expectedEntries:null,...draft};r.variantInputs.push({value:'1'},{value:'1'});
+ r.ctx.failInventory=true;assert.equal(await r.ctx.window.saveTest(),false);
+ const saved=r.rows.get('products/source');assert.equal(saved.stock,2);assert.deepEqual(saved.variants,{Color:['dorado','plateado']});assert.deepEqual(saved.variantInventory,[{variant:'dorado',stock:1},{variant:'plateado',stock:1}]);
+ r.ctx.failInventory=false;assert.equal(await r.ctx.window.saveTest(),true,r.calls.join('; '));assert.equal(r.rows.get('products/source').stock,2);
+});
+
+test('distribución rechaza cantidades sin completar y cambios concurrentes del inventario original',async()=>{
+ for(const conflict of [false,true]){
+  const r=runtime({stock:1});r.ctx._prodEditarNow('source');
+  const draft=r.ctx.productVariantStockConfiguration('Color: dorado, plateado');r.ctx.productVariantStockBaseline={stock:1,expectedEntries:null,...draft};
+  r.variantInputs.push({value:conflict?'1':''},{value:'1'});
+  if(conflict)r.rows.get('products/source').stock=3;
+  assert.equal(await r.ctx.window.saveTest(),false);assert.deepEqual(r.writes,[]);assert.equal(r.rows.get('products/source').stock,conflict?3:1);
+ }
+});
+
+test('distribución no inventa matrices, admite opciones únicas y rechaza atributos inseguros',()=>{
+ const r=runtime();
+ const draft=r.ctx.productVariantStockConfiguration('Color: dorado, dorado\nColor: plateado');assert.equal(draft.entries.length,2);assert.equal(draft.entries[0].stock,'');
+ for(const text of ['', 'Color:', 'sin separador', 'Color: dorado\nTalle: pequeño', '__proto__: valor', 'Color: dorado/plateado', 'Color: '+Array.from({length:51},(_,i)=>'opcion'+i).join(',')])assert.throws(()=>r.ctx.productVariantStockConfiguration(text));
 });
 
 test('controlador masivo: permiso, sesión y conectividad se validan antes de escribir',async()=>{
