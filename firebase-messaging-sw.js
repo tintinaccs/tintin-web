@@ -21,7 +21,7 @@
 // Cambiar esta versión fuerza a los navegadores a tratar el archivo como
 // nuevo. Junto con la regla no-cache de _headers y skipWaiting/clients.claim
 // de abajo, ningún dispositivo queda atrapado en una versión vieja.
-const TINTIN_SW_VERSION = '2026-10-20-push-return-1';
+const TINTIN_SW_VERSION = '2026-10-20-iconos-globales-1';
 
 self.addEventListener('notificationclick', event => {
   event.notification.close();
@@ -65,8 +65,8 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 const DEFAULT_LINK = '/admin.html?section=pedidos';
-const NOTIFICATION_ICON = '/assets-tintin/images/admin/push-icon-192.png?v=tintin-20261020-push-return-1';
-const NOTIFICATION_BADGE = '/assets-tintin/images/admin/push-badge-96.png?v=tintin-20261020-push-return-1';
+const NOTIFICATION_ICON = '/assets-tintin/images/admin/push-icon-192.png?v=tintin-20261020-iconos-globales-1';
+const NOTIFICATION_BADGE = '/assets-tintin/images/admin/push-badge-96.png?v=tintin-20261020-iconos-globales-1';
 
 self.addEventListener('install', () => {
   // Sin esto, una pestaña abierta del panel puede dejar activa la versión
