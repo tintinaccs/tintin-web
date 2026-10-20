@@ -95,3 +95,51 @@ test('los banners originales se muestran completos por dispositivo y conservan e
     }
   } finally { await browser.close(); }
 });
+
+test('el reloj llena su marco sin franjas antes y después del snapshot en tablet y demás tamaños', { timeout: 60000 }, async () => {
+  const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
+  const section = home.match(/<section[^>]*data-tt-section="editorial_relojes"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(section);
+  const bundle = await fs.readFile(path.join(root, 'css/generated/inicio.css'), 'utf8');
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage();
+    await page.route('**/*', async route => {
+      const url = new URL(route.request().url());
+      if (url.host !== 'tintin.test') return route.abort();
+      if (url.pathname === '/index.html') return route.fulfill({ contentType: 'text/html', body: '<!doctype html><body></body>' });
+      if (url.pathname.endsWith('/imagenes.js')) return route.fulfill({ contentType: 'text/javascript', body: "export const HERO_IMAGE_CONFIG_VERSION='test';export const HERO_IMAGE_FALLBACKS={};export const resolveSlotImage=()=>'';export const onImagesUpdate=callback=>{window.confirmImages=callback;callback({});};" });
+      const file = path.resolve(root, '.' + url.pathname);
+      if (!file.startsWith(root)) return route.abort();
+      try { await route.fulfill({ body: await fs.readFile(file), contentType: file.endsWith('.js') ? 'text/javascript' : file.endsWith('.jpg') ? 'image/jpeg' : 'application/octet-stream' }); }
+      catch { await route.abort(); }
+    });
+    for (const [width, height] of [[320,568],[390,844],[768,1024],[820,1180],[1024,768],[1180,820],[1366,768],[1920,1080]]) {
+      await page.setViewportSize({ width, height });
+      await page.goto('https://tintin.test/index.html');
+      await page.setContent(`<meta name="viewport" content="width=device-width,initial-scale=1"><style>${bundle}</style><body class="tt-home-premium">${section}</body>`);
+      for (const phase of ['HTML', 'snapshot']) {
+        if (phase === 'snapshot') {
+          await page.addScriptTag({ type: 'module', url: '/js/components/images/gestion-imagenes.js' });
+          await page.waitForFunction(() => !!window.confirmImages);
+          await page.evaluate(() => window.confirmImages({}));
+          await page.waitForFunction(() => !!document.querySelector('[data-img-slot="edit_relojes"] picture'));
+        }
+        const image = page.locator('[data-img-slot="edit_relojes"] img');
+        await image.scrollIntoViewIfNeeded();
+        await page.waitForFunction(() => { const img = document.querySelector('[data-img-slot="edit_relojes"] img'); return img.complete && img.naturalWidth > 0; }, null, { timeout: 5000 }).catch(async error => { throw new Error(`${width}x${height} ${phase}: ${await image.evaluate(img => JSON.stringify({ src: img.src, current: img.currentSrc, complete: img.complete, natural: img.naturalWidth, html: img.outerHTML }))}: ${error}`); });
+        const g = await image.evaluate(img => {
+          const frame = img.closest('.tt-watch-feature-img').getBoundingClientRect();
+          const rect = img.getBoundingClientRect(), css = getComputedStyle(img);
+          const scale = css.objectFit === 'cover' ? Math.max(rect.width / img.naturalWidth, rect.height / img.naturalHeight) : Math.min(rect.width / img.naturalWidth, rect.height / img.naturalHeight);
+          return { frame: { width: frame.width, height: frame.height }, width: rect.width, height: rect.height, paintedWidth: img.naturalWidth * scale, paintedHeight: img.naturalHeight * scale, border: getComputedStyle(img.closest('.tt-watch-feature')).borderTopWidth };
+        });
+        const label = `${width}x${height} ${phase}: ${JSON.stringify(g)}`;
+        assert.ok(g.paintedWidth >= g.frame.width - 1 && g.paintedHeight >= g.frame.height - 1, `Franjas en el reloj: ${label}`);
+        assert.ok(Math.abs(g.height - g.frame.height) < 1 && Math.abs(g.width - g.frame.width) < 1, `Imagen fuera del marco: ${label}`);
+        assert.equal(g.border, '0px', label);
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label);
+      }
+    }
+  } finally { await browser.close(); }
+});
