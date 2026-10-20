@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a4bc970b69e99d262f11912b46767163848c3c8b223770e8b5e279f88ff043ac",
+  "sourceFingerprint": "288d0dd8244ffe67fa18f022a2f3902b58a050d1bbdc1d509c4a61608222ed73",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1352,
     "textFiles": 1262,
-    "totalBytes": 28344330,
+    "totalBytes": 28345455,
     "pages": 19,
     "modules": 952
   },
@@ -2839,7 +2839,7 @@
         "viewer"
       ],
       "bytes": 204385,
-      "sha256": "7698feca7e82123d365ec1dc37eacf7272a316796dba7ba2d87331f71e7e87fc",
+      "sha256": "c751cba38cb18c50b4422b44edae1635a528e5ac5e710bd4d618864e4b851107",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3100,7 +3100,7 @@
           "line": 75
         },
         {
-          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261020-order-headers-1",
+          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261020-order-headers-2",
           "target": "css/admin/tablero-pedidos.css",
           "line": 76
         },
@@ -3489,7 +3489,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261020-order-headers-1",
+          "raw": "css/admin/tablero-pedidos.css?v=tintin-20261020-order-headers-2",
           "target": "css/admin/tablero-pedidos.css",
           "line": 76,
           "exists": true
@@ -53565,7 +53565,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 204385,
-      "sha256": "7698feca7e82123d365ec1dc37eacf7272a316796dba7ba2d87331f71e7e87fc"
+      "sha256": "c751cba38cb18c50b4422b44edae1635a528e5ac5e710bd4d618864e4b851107"
     },
     {
       "path": "apple-touch-icon.png",
@@ -54519,7 +54519,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 10772,
-      "sha256": "397c1fc72c5a576195800b0d44ba4887053c50be5fe2f49d13b7939cccd6f8ae"
+      "sha256": "993fa6b1df818ef22324c76e0aa299987c01e3b02980ae2f667048c5f27a5319"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -54531,7 +54531,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "0bc75ab8aec465aa5f66cee17c8cb74ad42b876cb048872f152fe31cf55d03ab"
+      "sha256": "206339c97024db1ce5358826fd4f654b09548c2418473a65d4dcaf186063129f"
     },
     {
       "path": "config/public-site.json",
@@ -54650,8 +54650,8 @@
     {
       "path": "css/admin/tablero-pedidos.css",
       "extension": ".css",
-      "bytes": 14409,
-      "sha256": "20b1c918227c5e376be33b3c2ce2d7bf78bedee78d42228f975062a6b6ab8f42"
+      "bytes": 14479,
+      "sha256": "707694af839fc6819f247466245d1186529207ae0e06b2c1bdb61a27c1c3886b"
     },
     {
       "path": "css/admin/visual-studio-global-admin.css",
@@ -55166,8 +55166,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 671160,
-      "sha256": "6c9fe3217fa8b1bd336391cf96426eabbaa897ea58886fc80806530366a6362b"
+      "bytes": 672215,
+      "sha256": "74715f8026f42ce067e0b70d7948798274cc93a499e9bef5b9686cc18ac5e757"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59067,7 +59067,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 73746,
-      "sha256": "eb2eac6d064db3bc0d13cb294c1e629072ee79d43517016e19b9f69b027eaec0"
+      "sha256": "cb4c754eba39386de86a9b7b020b26ddd3b43b22a18835504d8be00de8fdfadf"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
