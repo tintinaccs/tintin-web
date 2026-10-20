@@ -1,3 +1,6 @@
+## 2026-10-20 — Pruebas de candidato aisladas de producción
+
+Fuente: playwright.config.js y workflow canónico auditar-tintin.yml. UI usa un origen local por defecto, manteniendo overrides explícitos; CI levanta su servidor existente antes de todos los gates que incluyen navegador y fija ambos orígenes locales en el job. Los comandos, requisitos, checks y seguridad permanecen. Regresión de arquitectura verifica default, precedencia explícita y orden del servidor. El plan protegido incluye ambos archivos de control. Las URLs finales de entrega pública se reservan con referencia3 para cerrar el incidente de consultas prematuras sin reutilizar respuestas dudosas.
 ## 2026-10-20 — Compatibilidad con1175 ya integrado
 
 Se preservan todos sus controles y contratos. Este candidato sólo suma la precedencia de navegación modal y sus referencias, junto a la alternancia pública, encabezados y filtro de avisos. La nueva base de mantenimiento es main453686c66. No replica el rediseño ni modifica la autoridad de stock/guardado.

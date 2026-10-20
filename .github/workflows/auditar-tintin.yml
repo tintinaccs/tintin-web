@@ -21,6 +21,9 @@ jobs:
     name: Repository audit
     runs-on: ubuntu-24.04
     timeout-minutes: 75
+    env:
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+      PERF_BASE_URL: http://127.0.0.1:4173
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -60,6 +63,17 @@ jobs:
 
       - name: Canonical integrations and authority map
         run: node scripts/auditar-integraciones-canonicas.mjs
+
+      - name: Serve exact commit for browser gates
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
+          echo $! > /tmp/tintin-ci-http.pid
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/tintin-ci-http.log || true
+          exit 1
 
       - name: Full static contract
         run: npm run audit:final
@@ -106,17 +120,6 @@ jobs:
           node scripts/auditar-superadmin-modulos-completos.mjs
           node scripts/auditar-superadmin-maestro-responsive.mjs
           node scripts/auditar-borrado-global-catalogo.mjs
-
-      - name: Serve exact commit for browser gates
-        run: |
-          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
-          echo $! > /tmp/tintin-ci-http.pid
-          for attempt in {1..30}; do
-            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
-            sleep 1
-          done
-          cat /tmp/tintin-ci-http.log || true
-          exit 1
 
       - name: Browser, accessibility, SEO and performance gates
         env:
