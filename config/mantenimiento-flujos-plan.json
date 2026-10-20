@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "ab6c972acdc5214357683fda89b8857b2cbbf6e3",
-  "reason": "Modernizar Productos con vista previa conectada, galeria acumulativa y adaptacion responsive; 194 escenarios Chromium/WebKit, pruebas de seleccion tardia y 51 pruebas Node verificadas. Mantener este candidato en borrador, sin publicar.",
+  "reason": "Corregir tipografia del editor de Productos y publicar PR1171 autorizado por el titular, conservando controles y contratos de negocio; pruebas focalizadas y artefactos canonicos regenerados.",
   "files": [
     {
       "path": ".github/workflows/auditar-tintin.yml",
@@ -16,7 +16,7 @@
     {
       "path": "admin.html",
       "oldHash": "b2318b8ec116fd2253781e584ec64d35f13a0c25f02b684b6cae546259d32fe7",
-      "newHash": "93e5a1216bdb94c21669dcbd92a785569ba1b0a550d12819212f3a59d754f530"
+      "newHash": "586806e70e4c6c42119cef29cd548ac0d972475f88daf6413b630f8c212f7394"
     },
     {
       "path": "config/csp-runtime.js",
@@ -31,7 +31,7 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "oldHash": "7744538c4d2d5a7e6cd61bda4cc1c7c0bdc16a699a27cd87ea95f419e394f581",
-      "newHash": "9c3132f9ff237b9fb61db182b808f5cc5e00f8e94770dc64a8ed1dc5c4436f75"
+      "newHash": "f5be917fa1397878aa2cfd83efe6a17dee116daf212924ab42156b6696d65a75"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -41,7 +41,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "oldHash": "88076200e39255843c55e36e1e623ee8025c92890f1c0d2be4cc1ea862393187",
-      "newHash": "429f6b365fb58bfe0bae006ae69f26914ffee1d87c556d874bb5a0791cecd216"
+      "newHash": "960c77547225f4fe25a67a24391d4f9ef8ecea66c0662ea4363983a6783fb8ec"
     },
     {
       "path": "js/components/images/carga-imagenes.js",
@@ -51,7 +51,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "c439ebb07329ab29f8254f1523e304dedb86cfe39b2aec0fc3e285fea60d49fa",
-      "newHash": "7d56912557b5a901ed20ef6371518c479683aba081e54eef95f64ff3654369ad"
+      "newHash": "944a911769b9ac1320a3903ba2828b765f6f784fc9862fadb5de5e4046ac8990"
     }
   ],
   "affectedRecords": [

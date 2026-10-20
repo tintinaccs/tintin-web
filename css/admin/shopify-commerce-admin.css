@@ -1005,7 +1005,7 @@ html.tt-product-panel-open { overflow:hidden; }
   --editor-soft: color-mix(in srgb, var(--tt-commerce-brand) 7%, var(--tt-commerce-surface));
   container: product-editor / inline-size;
   min-width:0;
-  font-family:Montserrat,system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-family:Montserrat;
 }
 #section-productos.tt-commerce-mounted #prod-form-card .adm-card-body {
   box-sizing:border-box; width:100%; max-width:none; padding:clamp(16px,2.3vw,32px) !important;
@@ -1041,13 +1041,13 @@ html.tt-product-panel-open { overflow:hidden; }
 }
 #prod-form-card .tt-editor-section-fields label:not(.tt-editor-stock-row) {
   font-size:12px !important; font-weight:600 !important; text-transform:none !important; letter-spacing:0 !important; line-height:1.5;
-  font-family:inherit !important;
+  font-family:Montserrat !important;
 }
 #section-productos.tt-commerce-mounted #prod-form-card .adm-input {
   box-sizing:border-box; min-width:0; width:100%; max-width:100%; min-height:46px; padding:12px 14px;
   border:1px solid var(--editor-line) !important; border-radius:10px !important; background:var(--tt-commerce-surface);
   color:var(--tt-commerce-text); font-size:15px; line-height:1.45; box-shadow:none;
-  font-family:inherit !important;
+  font-family:Montserrat !important;
 }
 #prod-form-card .adm-input:focus-visible, #prod-form-card button:focus-visible, #prod-form-card select:focus-visible {
   outline:2px solid var(--tt-commerce-text); outline-offset:3px;
