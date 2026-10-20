@@ -179,7 +179,6 @@ export function startProfileOrders() {
         if (focusedOrderId !== requested) {
           focusedOrderId = requested;
           requestAnimationFrame(() => {
-            target.scrollIntoView({block:'start',behavior:'smooth'});
             target.setAttribute('tabindex','-1');
             target.focus({preventScroll:true});
           });

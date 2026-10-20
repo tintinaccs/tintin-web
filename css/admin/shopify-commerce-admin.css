@@ -1017,12 +1017,14 @@ html.tt-product-panel-open { overflow:hidden; }
 #prod-form-card .tt-product-section-nav > select { width:min(100%,320px); }
 .tt-editor-shortcuts { display:flex; flex-wrap:wrap; gap:6px; }
 #prod-form-card .tt-editor-shortcuts button {
-  min-height:40px; padding:9px 14px; border:1px solid var(--editor-line); border-radius:999px;
+  min-height:44px; padding:9px 14px; border:1px solid var(--editor-line); border-radius:999px;
   background:var(--tt-commerce-surface); color:var(--tt-commerce-text); font:inherit; font-size:12px;
-  font-weight:600; cursor:pointer; transition:background .16s ease,border-color .16s ease;
+  font-weight:600; cursor:pointer; transition:border-color .16s ease;
 }
 #prod-form-card .tt-editor-shortcuts [aria-pressed=true] {
-  background:var(--tt-commerce-text); border-color:var(--tt-commerce-text); color:var(--tt-commerce-surface);
+  background:var(--admin-color-button-primary-background, #F8AACA);
+  border-color:var(--admin-color-button-primary-background, #F8AACA);
+  color:var(--admin-color-button-primary-text, #222222) !important;
 }
 .tt-editor-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; align-items:start; min-width:0; }
 #prod-form-card .tt-product-fields { grid-template-columns:minmax(0,1fr) !important; gap:20px !important; }

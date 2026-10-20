@@ -10,7 +10,7 @@
     "fix:tintin": "node scripts/corregir-fuente-tintin.js",
     "sync:public-shell": "node scripts/sincronizar-inicio-navegacion-publica.js",
     "sync:public-origin": "node scripts/sincronizar-origen-publico.js",
-    "audit:public-shell": "node scripts/auditar-inicio-navegacion-publica.js && node --test tests/navigation/section-flow-generator.test.mjs",
+    "audit:public-shell": "node scripts/auditar-inicio-navegacion-publica.js && node --test tests/navigation/section-flow-generator.test.mjs tests/navigation/page-entry-scroll.test.mjs",
     "audit:site-structure": "node scripts/auditar-contrato-estructura-sitio.mjs && node scripts/auditar-estructura-canonica-sitio.js && node scripts/auditar-migraciones-secciones.mjs",
     "audit:domain-consumers": "node scripts/auditar-contratos-arquitectura.mjs domain-consumers",
     "audit:component-registry": "node scripts/auditar-contratos-arquitectura.mjs component-registry",

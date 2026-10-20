@@ -8,6 +8,9 @@ const shell=fs.readFileSync(path.join(root,'admin.html'),'utf8');
 const adminSource=fs.readFileSync(path.join(root,'js/admin/admin-app.js'),'utf8');
 const stockRenderer=adminSource.slice(adminSource.indexOf('let productVariantStockBaseline = null;'),adminSource.indexOf('function serializeProductForm()'));
 const inventorySource=fs.readFileSync(path.join(root,'js/core/store/inventario-variantes.mjs'),'utf8').replaceAll('export ','');
+const loader=fs.readFileSync(path.join(root,'js/cargador-pagina.js'),'utf8');
+const entryScroll=loader.slice(loader.indexOf("  try { history.scrollRestoration"),loader.indexOf('  // El sitio oficial'));
+
 const formStart=shell.indexOf('<div class="adm-card" id="prod-form-card"');
 const form=shell.slice(formStart,shell.indexOf('\n    </div>\n\n    <!-- ===================== COLECCIONES',formStart));
 const promptStart=shell.indexOf('<div id="unsaved-modal"');
@@ -20,6 +23,7 @@ async function openEditor(page,width,height,withImages=false,beforeOpen=null){
  const full=html.slice(0,start)+form+html.slice(html.indexOf('</section>',start));
  await page.route('https://tintin.test/admin-commerce-fixture',route=>route.fulfill({contentType:'text/html',body:full}));
  await page.goto('https://tintin.test/admin-commerce-fixture');
+ await page.addScriptTag({content:entryScroll});
  await expect(page.locator('[data-action="product-new"]')).toBeVisible();
  if(beforeOpen) await beforeOpen(page);
  await page.evaluate(()=>{
@@ -294,4 +298,41 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await page.evaluate(()=>{window.__remountGallery({variants:{Diseño:['Coctel','Banda']}});window.__resolveGalleryChoice('https://img.test/tardia.webp');});
  await page.waitForFunction(()=>window.__oldGalleryRoot.textContent.includes('El producto cambió'));
  await expect(page.locator('#prod-images-extra')).toHaveValue('');
+});
+
+for (const width of [1200,1440,1920]) test(`apartado seleccionado conserva texto legible con el tema real ${width}`,async({page})=>{
+ await openEditor(page,width,900);
+ await page.addStyleTag({path:path.join(root,'css/core/tema-unificado-tintin.css')});
+ for(const colors of [['#F8AACA','#222222'],['#222222','#FFFFFF']]) {
+  await page.evaluate(([background,text])=>{document.documentElement.style.setProperty('--admin-color-button-primary-background',background);document.documentElement.style.setProperty('--admin-color-button-primary-text',text);},colors);
+  for (const button of await page.locator('.tt-editor-shortcuts button').all()) {
+   await button.click();
+   await expect(button).toHaveAttribute('aria-pressed','true');
+   expect((await button.innerText()).trim()).not.toBe('');
+   const contrast=await button.evaluate(el=>{
+    const rgb=value=>value.match(/[\d.]+/g).slice(0,3).map(Number);
+    const luminance=value=>rgb(value).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+    const css=getComputedStyle(el),a=luminance(css.color),b=luminance(css.backgroundColor);
+    return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+   });
+   expect(contrast).toBeGreaterThanOrEqual(4.5);
+  }
+ }
+});
+for (const width of [320,390,768,1440]) test(`cambiar apartado reinicia el editor sin perder el borrador ${width}`,async({page})=>{
+ await openEditor(page,width,800);
+ const select=page.locator('#prod-editor-section');
+ await select.selectOption('all');
+ await page.locator('#prod-name').fill('Borrador conservado');
+ await page.evaluate(()=>{document.querySelector('#prod-form-card .adm-card-body').scrollTop=700;scrollTo(0,500);});
+ await select.selectOption('prices');
+ await expect.poll(()=>page.locator('#prod-form-card .adm-card-body').evaluate(el=>el.scrollTop)).toBe(0);
+ await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
+ await select.selectOption('all');
+ await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ const before=await page.evaluate(()=>{const body=document.querySelector('#prod-form-card .adm-card-body');body.scrollTop=250;scrollTo(0,250);return {window:scrollY,body:body.scrollTop};});
+ await page.evaluate(()=>{const input=document.getElementById('prod-price');input.value='65000';input.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ expect(await page.evaluate(()=>({window:scrollY,body:document.querySelector('#prod-form-card .adm-card-body').scrollTop}))).toEqual(before);
 });
