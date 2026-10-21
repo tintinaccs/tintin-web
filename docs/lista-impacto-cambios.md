@@ -1,3 +1,7 @@
+## 2026-10-21 — Texto, jerarquía e iconos de la guía
+
+Fuentes: configuración compartida, tutorial público y preview del editor de bienvenida. Un título por paso, texto directo coherente con Catálogo/carrito/checkout, indicador de paso visible e iconos SVG constantes; conserva imágenes/emojis propios, edición, aparición, cuentas y flujo de compra. Compatibiliza sólo copias base anteriores. Cuerpo y acciones legibles con texto largo y móvil horizontal; WELCOME_VERSION conserva la identidad de onboarding. Se verifica normalización real, cuatro recorridos y paridad de preview; dependencias versionadas, CSP, protección y diagnóstico se regeneran desde sus autoridades. No cambia datos ni reactiva cuentas.
+
 ## 2026-10-21 — Recuperar ubicación y pedir popup de Google
 
 Fuentes canónicas: geolocalizacion.mjs y mapa-ubicacion.js compartidos por Perfil/Checkout; espera-popup-google.mjs consumido por login. El GPS tiene dos plazos de5s y señal de cancelación: marcar/buscar, limpiar o desmontar conserva el punto actual e invalida respuestas tardías. No guarda una dirección ni inventa coordenadas ante un fallo. Google pide popup=yes sólo para Auth y conserva nombre, dimensiones, opener y resultado del SDK; el sistema móvil sigue determinando la presentación soportada. Login no cambia persistencia, roles, confirmaciones ni fallback ante bloqueo. Las tres referencias se renuevan juntas; CSP/caché/manifiestos y plan desde autoridades existentes. Pruebas de negativas, cancelación, reintento, callback tardío, una solicitud y matriz de diez geometrías en Chromium/WebKit; dos specs existentes se conectan al gate de acceso/perfil. Evidencia y límites en CURRENT_STATE. Sin escrituras comerciales, dirección real, cierre de sesión ni cambios de permisos.
@@ -545,3 +549,6 @@ Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187
 Avance final1180: orden visual compartido entre galería y selectores, sin modificar inventario/fotos; diagnóstico Auth demo al salir; regresiones y artefactos canónicos sobre main6033.
 
 2026-10-21: selector de color de ficha con nombre visible, muestra, marca seleccionada, teclado y estado Agotado; fuente product-maintenance.css y fallback vigente, caché transitiva y artefactos canónicos. Datos/comercio conservados.
+## 2026-10-21 — Reconciliar bienvenida y seguimiento de pendientes
+
+PR1188 sobre main vigente: la fuente compartida de bienvenida adapta únicamente las dos frases antiguas Tienda/Catálogo. Conserva mensajes personalizados, controles de Admin, GPS cancelable y popup Google ya publicados. Los conflictos de CSP, diagnóstico, caché y protección se regeneran desde sus autoridades; los informes previos se conservan como evidencia histórica. Drenajes y respaldos usan los workflows existentes sin cambios de permisos, stock, pedidos ni credenciales. El estado actual distingue publicación pendiente, configuración externa y verificaciones físicas no realizadas.

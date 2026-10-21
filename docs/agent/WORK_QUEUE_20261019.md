@@ -1,6 +1,6 @@
 # Cola de trabajo autorizada — 19/10/2026
 
-Estado vigente del trabajo de Codex. Base de código inspeccionada: ab6c972a (#1169). No representa cierre ni PASS de tareas pendientes. Fecha comercial: America/Asuncion.
+Registro histórico del trabajo del19/10 sobre ab6c972a (#1169). No es la cola vigente ni una autorización para repetir operaciones. Consultar `CURRENT_STATE.md` y main actual antes de actuar. En particular, el cierre posterior adoptó ocultación reversible de pedidos de prueba: no ejecutar las bajas o devoluciones de stock descritas abajo como si siguieran pendientes. Se conserva el texto como evidencia de aquella fecha, sin heredar PASS ni presumir que todo quedó cerrado. Fecha comercial: America/Asuncion.
 
 ## Reglas de integridad
 
@@ -29,4 +29,3 @@ Estado vigente del trabajo de Codex. Base de código inspeccionada: ab6c972a (#1
 ## Trabajos anteriores que no deben confundirse con esta cola
 
 Transferencia del registro del dominio: solicitada/pagada; correo Tucows indica liberación automática 24/10/2026 14:30:23 UTC si no se cancela. Registrador/vencimiento/renovación final todavía requieren comprobación. La renovación del dominio y la desactivación del plan Shopify son independientes. Organización de Gmail anterior no es autorización para enviar mensajes.
-
