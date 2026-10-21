@@ -1,4 +1,10 @@
 
+Sobre main4202dd26e:69/69 contratos de sincronización administrativa PASS_LOCAL;16 recorridos de consentimiento,6 del módulo de comercio y10 de Pulseras aprobados. El último grupo comprueba contador22, selección Pulseras de un producto histórico Brazaletes y conservación de los9 documentos crudos. Se ajusta la inicialización de datos del fixture compartido para conservar su nueva fuente de colecciones. Gates estáticos de Fase8/Fase10, tipografía, protección y caché aprobados; regeneración final y CI/publicación pendientes del árbol conciliado.
+
+
+Conciliación de #1193: se incorpora main4202dd26e mediante merge normal. Se conservan edición rápida, tarjetas adaptables y consentimiento/ejemplos del acceso. El selector editable de colección compara categorías canónicas y muestra Pulseras en productos históricos Brazaletes; la visibilidad usa el documento fuente cuando falta el principal. Se actualiza el caso13+9 para el contador y selector nuevos. CodeQL del SHAec8809b60 PASS, sin alertas nuevas tras sustituir la expresión regular por el parser canónico; se exige CI nueva del árbol integrado. No se hereda el resultado del SHA anterior.
+
+
 Batería administrativa adicional202/202 Chromium PASS_LOCAL. El análisis CodeQL del SHA14880a4 informó dos alertas nuevas de severidad alta. Se reemplaza la eliminación de nodos ejecutables mediante expresión regular en la maqueta del checkout por el parser canónico removeFixtureScripts (también retira precargas de módulos). El análisis de la nueva cabeza debe confirmar su resultado: no se descartan alertas ni se desactiva CodeQL. Sin cambios de negocio adicionales.
 
 

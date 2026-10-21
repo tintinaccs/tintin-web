@@ -38,11 +38,11 @@ const DATA = {
   ]
 };
 window.__orders=window.__commerceFixtureConfig?.orders ? structuredClone(window.__commerceFixtureConfig.orders) : DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));
+if(window.__commerceFixtureConfig?.collections) DATA.collections=structuredClone(window.__commerceFixtureConfig.collections);
 window.__collectionRows=DATA.collections;
 window.__collectionConsumers=new Set();
 window.__publishCollections=()=>{for(const fn of window.__collectionConsumers)fn({docs:window.__collectionRows.map(entry=>({id:entry.id,data:()=>structuredClone(entry.data)})),metadata:{fromCache:false}});};
 window.__productRows=DATA.products;
-if(window.__commerceFixtureConfig?.collections) DATA.collections=structuredClone(window.__commerceFixtureConfig.collections);
 window.__productConsumers=new Set();
 window.__publishProducts=()=>{for(const fn of window.__productConsumers)fn({docs:window.__productRows.map(entry=>({id:entry.id,data:()=>structuredClone(entry.data)})),metadata:{fromCache:false}});};
 window.__includeTestOrders=localStorage.getItem('fixture:test-orders')==='show';window.__orderConsumers=new Set();window.__publishOrders=(error='')=>{for(const fn of window.__orderConsumers)fn({uid:'super-1',orders:window.__orders,includeTestOrders:window.__includeTestOrders===true,ready:true,error});};

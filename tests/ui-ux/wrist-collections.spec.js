@@ -17,7 +17,7 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(page.locator('[data-filter="product-category"]')).toHaveValue('pulseras');
  await expect(page.locator('#tt-commerce-products .tt-commerce-footer')).toContainText('22');
  await expect(page.locator('[data-card-category]')).toHaveCount(22);
- await expect(page.locator('[data-card-category]').last()).toHaveValue('pulseras');
+ await expect(page.locator('[data-card-category="wrist-21"]')).toHaveValue('pulseras');
  expect(await page.evaluate(()=>window.__productRows.filter(p=>p.data.category==='brazaletes').length)).toBe(9);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.locator('#tt-commerce-collections').screenshot({path:`artifacts/commerce/pulseras-${width}x${height}.png`});
