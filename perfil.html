@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261019-footer-spacing-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261008-producto-superficies-1-palette-20261014-1">
+  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261021-location-recovery-1">
   <link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-2" integrity="sha256-ugti1XvT9fCYo/vrONAf0r5FKu/U8H04PwZikxySCts=" crossorigin="anonymous" />
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-footer-gradient-20261016-1">
   <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2">
@@ -153,12 +153,12 @@
           <input class="perfil-input" id="perfil-location-name" placeholder="Casa, trabajo…" maxlength="60" />
           <label class="perfil-label" for="perfil-location-address">Dirección y referencia (opcional)</label>
           <input class="perfil-input" id="perfil-location-address" placeholder="Calle, número o referencia para llegar" maxlength="240" />
-          <button type="button" class="tt-map-locate" id="perfil-location-locate">📍 Usar mi ubicación actual</button>
+          <button type="button" class="tt-map-locate" id="perfil-location-locate">Usar mi ubicación actual</button>
           <div class="tt-map-canvas" id="perfil-location-map"></div>
           <p class="tt-map-coords tt-map-coords-missing" id="perfil-location-selected" aria-live="polite">Todavía no marcaste tu ubicación</p>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-          <button type="button" class="perfil-btn" id="btn-guardar-ubicacion">Guardar ubicación</button>
+        <div class="tt-location-actions">
+          <button type="button" class="perfil-btn tt-location-save" id="btn-guardar-ubicacion" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Guardar ubicación</button>
           <button type="button" class="perfil-btn perfil-btn-outline" id="btn-cancelar-ubicacion">Cancelar</button>
         </div>
       </div>
@@ -264,7 +264,7 @@ import {
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20261017-domain-cutover-1";
 import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20261015-images-1";
-import { createLocationMap, renderSavedMapPreviews } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261017-domain-cutover-1";
+import { createLocationMap, renderSavedMapPreviews } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261021-location-recovery-1";
 import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1";
 import { MAX_SAVED_LOCATIONS, readAddressBook, addressBookPatch, addAddress, removeAddress, makePrimary } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261015-images-1";
 import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1-ui-fixes-20261014-1-admin-live-20261016-1";
@@ -564,6 +564,7 @@ async function loadProfile(user, attempt = 0) {
       ? `📍 ${place.name || place.address || 'Ubicación marcada'} · ${Number(place.lat).toFixed(5)}, ${Number(place.lng).toFixed(5)}`
       : 'Todavía no marcaste tu ubicación';
     locationSelected.classList.toggle('tt-map-coords-missing', !valid);
+    document.getElementById('btn-guardar-ubicacion').disabled = !valid;
     document.getElementById('perfil-location-address').value = place?.address || '';
   };
   const ensureLocationMap = async () => {

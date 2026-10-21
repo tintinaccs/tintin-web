@@ -1,3 +1,6 @@
+## 2026-10-21 — Ubicación de Perfil, alta y Checkout
+
+Fuentes: geolocalizacion.mjs, mapa-ubicacion.js, selector-ubicacion.css, resumen/acciones de perfil.html y validación de checkout-ubicacion-guardada.js. Recuperación acotada con watchPosition después del primer fallo, cancelación/limpieza al elegir/cerrar/destruir y avisos de mosaicos separados del GPS. Controles de48px, campos fluidos, guardado rosa con borde/icono y sólo habilitado con punto. Sin proveedor nuevo, geolocalización por IP, cambios de esquema, permisos o pedidos. Versionado de los cuatro recursos compartidos, consumidores alta/Perfil/Checkout y fixtures; CSP/diagnóstico/mantenimiento desde generadores.110 Node,18 Chromium y17 WebKit sin reintentos aprobados; ocho tamaños. Límites físicos/productivos en CURRENT_STATE.
 ## 2026-10-21 — Reaplicar el espejo mensual al actualizar su formato
 
 Fuente: apps-script/ComercioLocal.gs. La caché de revisión/firma también compara la versión del espejo y la confirma sólo después del snapshot aplicado. Fuerza una reconciliación tras la actualización para retirar líneas web obsoletas conservando ventas locales, gastos, compras, fórmulas, locks y conflictos. Dos regresiones reproducen datos sin cambios y snapshot fallido;22/22 aprobadas. CI, publicación y verificación de hoja real pendientes del candidato; no se heredan resultados de1180.
