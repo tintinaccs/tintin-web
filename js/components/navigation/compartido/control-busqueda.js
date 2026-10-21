@@ -1,6 +1,10 @@
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
+<<<<<<< HEAD
 const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261021-workspace-account-1';
+=======
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261021-domain-cutover-color-selector-1';
+>>>>>>> origin/main
 
 const MAX_RESULTS = 10;
 import { hasProductStock, firstAvailableVariant } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';

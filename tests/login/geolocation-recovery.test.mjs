@@ -33,10 +33,19 @@ test('un proveedor que nunca responde termina ambos intentos y permite reintenta
   const navigator = { geolocation: { getCurrentPosition: () => { calls++; } } };
   const pending = requestCurrentLocation({ navigator, secure: true });
   const rejected = assert.rejects(pending, /tardó demasiado/);
-  t.mock.timers.tick(11000);
+  t.mock.timers.tick(5000);
   await Promise.resolve();
   assert.equal(calls, 2);
-  t.mock.timers.tick(16000);
+  t.mock.timers.tick(5000);
+  await rejected;
+});
+
+test('elegir un punto o cerrar el editor cancela la espera aunque el GPS no responda', async () => {
+  const controller = new AbortController();
+  const navigator = { geolocation: { getCurrentPosition: () => {} } };
+  const pending = requestCurrentLocation({ navigator, secure: true, signal: controller.signal });
+  const rejected = assert.rejects(pending, { name: 'AbortError' });
+  controller.abort();
   await rejected;
 });
 

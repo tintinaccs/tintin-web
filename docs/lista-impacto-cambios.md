@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 ## 2026-10-21 — Tarjetas compactas y editor de Productos a pantalla completa
 
 Fuentes canónicas: shopify-commerce-admin.js/css e interfaz-productos-adaptable.js. Las tarjetas agrupan imagen contenida, identidad/precio, estado semántico y controles de visibilidad/stock; muestran muestras de la paleta existente y selector nativo cuando hay más de cuatro opciones. Una columna en móvil, dos en tablet y tres en escritorio, conservando vista Lista. El editor ocupa el área bajo la cabecera en todos los tamaños, utiliza un único desplazamiento principal y dos acciones flotantes, y ordena fotos por color y vista previa sin una barra de pie. Conserva los controladores de guardado, permisos, inventario, guardia de borradores y sincronización. La captura de foco y Escape se aplican también al editor de escritorio. No cambia datos reales, Auth, Rules, pagos ni integraciones. Se actualizan referencias inmutables, diagnóstico y plan protegido desde sus herramientas; evidencia y límites en CURRENT_STATE.
+=======
+## 2026-10-21 — Recuperar ubicación y pedir popup de Google
+
+Fuentes canónicas: geolocalizacion.mjs y mapa-ubicacion.js compartidos por Perfil/Checkout; espera-popup-google.mjs consumido por login. El GPS tiene dos plazos de5s y señal de cancelación: marcar/buscar, limpiar o desmontar conserva el punto actual e invalida respuestas tardías. No guarda una dirección ni inventa coordenadas ante un fallo. Google pide popup=yes sólo para Auth y conserva nombre, dimensiones, opener y resultado del SDK; el sistema móvil sigue determinando la presentación soportada. Login no cambia persistencia, roles, confirmaciones ni fallback ante bloqueo. Las tres referencias se renuevan juntas; CSP/caché/manifiestos y plan desde autoridades existentes. Pruebas de negativas, cancelación, reintento, callback tardío, una solicitud y matriz de diez geometrías en Chromium/WebKit; dos specs existentes se conectan al gate de acceso/perfil. Evidencia y límites en CURRENT_STATE. Sin escrituras comerciales, dirección real, cierre de sesión ni cambios de permisos.
+>>>>>>> origin/main
 
 ## 2026-10-21 — Reaplicar el espejo mensual al actualizar su formato
 
@@ -543,3 +549,5 @@ Consolidación1185: incorpora cb8e28ee de1180, preserva logos blancos bajo tinte
 Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.
 
 Avance final1180: orden visual compartido entre galería y selectores, sin modificar inventario/fotos; diagnóstico Auth demo al salir; regresiones y artefactos canónicos sobre main6033.
+
+2026-10-21: selector de color de ficha con nombre visible, muestra, marca seleccionada, teclado y estado Agotado; fuente product-maintenance.css y fallback vigente, caché transitiva y artefactos canónicos. Datos/comercio conservados.

@@ -15,7 +15,11 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261019-footer-collections-1';
+<<<<<<< HEAD
 const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261021-workspace-account-1';
+=======
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261021-domain-cutover-color-selector-1';
+>>>>>>> origin/main
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -294,7 +298,11 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(new URL('/js/components/navigation/compartido/enrutador.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
+<<<<<<< HEAD
       import('./control-busqueda.js?v=tintin-20261021-workspace-account-1'),
+=======
+      import('./control-busqueda.js?v=tintin-20261021-domain-cutover-color-selector-1'),
+>>>>>>> origin/main
     ]))
     .then(results => {
       reportRuntimeFailures(results);
