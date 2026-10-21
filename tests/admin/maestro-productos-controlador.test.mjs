@@ -24,7 +24,7 @@ function runtime(product={}){
   serverTimestamp:()=>123,deleteField:()=>({__delete:true}),
   withAdminSiteChange:write=>write(),setDoc:async(ref,data)=>{if(ctx.failInventory && ref.path.startsWith('productInventory/'))throw Error('Inventario privado temporalmente sin conexión');apply(ref,data);},
   runTransaction:async(_db,fn)=>{const pending=[];const result=await fn({get:async ref=>({exists:()=>rows.has(ref.path),data:()=>structuredClone(rows.get(ref.path))}),update:(ref,data)=>pending.push([ref,data])});for(const args of pending)apply(...args);return result;},
-  pushProductsToSheets:async()=>{calls.push('sheets');if(ctx.failSheets)throw Error('Sheets sin conexión');},logAudit:async()=>{calls.push('audit');if(ctx.failAudit)throw Error('Auditoría sin conexión');},applyProductFilters:()=>calls.push('filters'),loadProductos:()=>calls.push('render'),
+  pushProductsToSheets:async()=>{calls.push('sheets');if(ctx.failSheets)throw Error('Sheets sin conexión');},logAudit:async()=>{calls.push('audit');if(ctx.failAudit)throw Error('Auditoría sin conexión');},applyCollFilter:rows=>rows,renderColeccionesGrid:()=>calls.push('collections-render'),applyProductFilters:()=>calls.push('filters'),loadProductos:()=>calls.push('render'),
   runAdminCrudOperation:async config=>{try{const value=await config.action({start(){},ok(){}});return{status:'green',value};}catch(error){calls.push(error.message);return{status:'red'};}},console};
  vm.createContext(ctx);vm.runInContext(code+'\nwindow.saveTest=prodGuardar;',ctx);
  return {ctx,fields,control,original,rows,writes,calls,variantInputs};
@@ -164,4 +164,23 @@ test('inventario legado sin variants no envía undefined al guardar stock cero',
  assert.equal(await r.ctx.window.saveTest(),true,r.calls.join('; '));
  const saved=r.rows.get('products/source');assert.equal(saved.stock,0);assert.equal(saved.active,false);
  assert.equal(Object.hasOwn(saved,'variants'),false);
+});
+
+
+test('tarjeta reasigna sólo la colección existente y conserva stock y metadatos',async()=>{
+ const r=runtime({stock:5,collection:'Etiqueta interna'});r.rows.set('collections/pulseras',{name:'Pulseras'});
+ const result=await r.ctx.window.TintinProductAdmin.updateCard({id:'source',field:'category',value:'pulseras',expected:productFingerprint(r.original)});
+ assert.equal(result.status,'green');assert.equal(r.rows.get('products/source').category,'pulseras');assert.equal(r.rows.get('products/source').stock,5);assert.equal(r.rows.get('products/source').collection,'Etiqueta interna');
+});
+test('tarjeta rechaza asignar una colección borrada sin escribir el producto',async()=>{
+ const r=runtime();const result=await r.ctx.window.TintinProductAdmin.updateCard({id:'source',field:'category',value:'borrada',expected:productFingerprint(r.original)});
+ assert.equal(result.status,'red');assert.equal(r.writes.length,0);
+});
+test('visibilidad de colección confirma sólo su campo y rechaza un estado concurrente',async()=>{
+ const r=runtime();r.rows.set('collections/anillos',{name:'Anillos',visible:true,order:7});
+ const update=r.ctx.window.TintinProductAdmin.updateCollectionVisibility;
+ assert.equal((await update({id:'anillos',visible:false,expectedVisible:true})).status,'green');
+ assert.deepEqual(r.rows.get('collections/anillos'),{name:'Anillos',visible:false,order:7,updatedAt:123});
+ assert.equal((await update({id:'anillos',visible:true,expectedVisible:true})).status,'red');assert.equal(r.writes.length,1);
+ r.ctx.can=()=>false;await assert.rejects(()=>update({id:'anillos',visible:true,expectedVisible:false}),/permiso/);assert.equal(r.writes.length,1);
 });

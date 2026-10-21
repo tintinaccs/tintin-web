@@ -14,10 +14,6 @@ let editorOpener = null;
 let installed = false;
 let lastError = '';
 
-export function compactProductUI() {
-  return matchMedia('(max-width:1199px), (pointer:coarse) and (max-width:1400px)').matches;
-}
-
 export function visibleProductEditor() {
   const card = document.getElementById('prod-form-card');
   return card && !card.hidden && card.getClientRects().length && getComputedStyle(card).visibility !== 'hidden' ? card : null;
@@ -34,13 +30,9 @@ export function syncProductSurfaces() {
       window.TintinPageScroll?.reset(editor);
       (editor.querySelector('#prod-editor-section') || editor.querySelector('#prod-name,button'))?.focus({preventScroll:true});
     }
-    if (compactProductUI()) {
-      editor.setAttribute('role','dialog');
-      editor.setAttribute('aria-modal','true');
-      editor.setAttribute('aria-labelledby','prod-form-title');
-    } else {
-      editor.removeAttribute('role'); editor.removeAttribute('aria-modal'); editor.removeAttribute('aria-labelledby');
-    }
+    editor.setAttribute('role','dialog');
+    editor.setAttribute('aria-modal','true');
+    editor.setAttribute('aria-labelledby','prod-form-title');
   } else if (editorWasOpen) {
     requestAnimationFrame(()=>{
       const target=editorOpener?.isConnected && editorOpener !== document.body && editorOpener.getClientRects().length ? editorOpener : document.querySelector('[data-action="product-new"]');
@@ -61,6 +53,11 @@ export function syncProductSurfaces() {
   const viewport = window.visualViewport;
   document.documentElement.style.setProperty('--tt-product-viewport-height', `${viewport?.height || innerHeight}px`);
   document.documentElement.style.setProperty('--tt-product-viewport-top', `${viewport?.offsetTop || 0}px`);
+  const header = document.querySelector('.adm-topbar');
+  const headerBottom = header?.getClientRects().length ? header.getBoundingClientRect().bottom : 0;
+  const editorTop = Math.max(viewport?.offsetTop || 0, headerBottom);
+  document.documentElement.style.setProperty('--tt-product-editor-top', `${editorTop}px`);
+  document.documentElement.style.setProperty('--tt-product-editor-height', `${Math.max(0, (viewport?.height || innerHeight) + (viewport?.offsetTop || 0) - editorTop)}px`);
 }
 
 export function enhanceProductEditor() {

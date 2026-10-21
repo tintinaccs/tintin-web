@@ -1,17 +1,27 @@
 const {test,expect}=require('@playwright/test');
 const {mockRuntime}=require('./helpers/admin-commerce-fixture.cjs');
+const fs=require('node:fs');
+const path=require('node:path');
+const font=fs.readFileSync(path.resolve(__dirname,'../../assets-tintin/fonts/montserrat-latin-wght-normal.woff2')).toString('base64');
 async function loadCards(page,width,height=844){
  await page.setViewportSize({width,height});await mockRuntime(page);await page.goto('https://tintin.test/admin-commerce-fixture');
+ await page.addStyleTag({content:`@font-face{font-family:Montserrat;src:url(data:font/woff2;base64,${font}) format('woff2');font-weight:100 900;font-style:normal}`});
+ await page.evaluate(()=>document.fonts.ready);
  await expect(page.locator('#tt-commerce-products tbody tr')).toHaveCount(3);
  await page.evaluate(async()=>{
   const product=window.__productRows[0].data;
   Object.assign(product,{variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'Dorado',stock:0},{variant:'Plateado',stock:3}],stock:3,variantMedia:[{Color:'Dorado',imageUrl:'https://img.test/dorado.webp'},{Color:'Plateado',imageUrl:'https://img.test/plateado.webp'}]});
+  const options=['coctel','solitario','banda','apilable','con-cuentas','halo','piedra-del-zodiaco','claddagh','eternity'];
+  Object.assign(window.__productRows[2].data,{variants:{'Diseño de anillo':options},variantInventory:options.map((variant,index)=>({variant,stock:index===1?0:1})),stock:8});
   window.__cardCalls=[];
   const {productCardPatch,productFingerprint}=await import('../../js/admin/products/maestro-productos-core.mjs');
   window.TintinProductAdmin={async updateCard(request){
    const item=window.__productRows.find(row=>row.id===request.id);window.__cardCalls.push(request);
    if(productFingerprint(item.data)!==request.expected)throw Error('El producto cambió en otra sesión.');
-   Object.assign(item.data,productCardPatch(item.data,request));window.__publishProducts();return{status:'green',value:{confirmed:true,fingerprint:productFingerprint(item.data)}};
+   Object.assign(item.data,productCardPatch(item.data,request,window.__collectionRows.map(row=>({slug:row.id}))));window.__publishProducts();return{status:'green',value:{confirmed:true,fingerprint:productFingerprint(item.data)}};
+  },async updateCollectionVisibility(request){
+   const row=window.__collectionRows.find(row=>row.id===request.id);if((row.data.visible!==false)!==request.expectedVisible)throw Error('La colección cambió.');
+   row.data.visible=request.visible;window.__publishCollections();return {status:'green',value:{confirmed:true}};
   }};
   window.__publishProducts();
  });
@@ -36,6 +46,18 @@ for(const [width,height] of [[320,740],[390,844],[600,960],[768,1024],[1024,768]
   await expect(card.locator('.tt-commerce-badge').filter({hasText:'Inactivo'})).toHaveCount(1);
   expect(await page.evaluate(()=>window.__productRows[0].data.active)).toBe(false);
   if(width===390||width===1440)await page.screenshot({path:test.info().outputPath('product-card.png'),fullPage:true});
+  const many=page.locator('tr[data-id="p-aro"]');
+  await expect(many.locator('[data-card-variant]')).toBeVisible();
+  await many.locator('[data-card-variant]').selectOption('solitario');
+  await expect(many.locator('[data-card-stock]')).toHaveValue('0');
+  await expect(many.locator('.tt-commerce-badge').first()).toHaveText('Variante agotada');
+  const frame=await card.locator('.tt-commerce-thumb').boundingBox(),image=await card.locator('.tt-commerce-thumb img').boundingBox();
+  expect(image.y).toBeGreaterThanOrEqual(frame.y);expect(image.y+image.height).toBeLessThanOrEqual(frame.y+frame.height+1);
+  const first=await card.boundingBox(),second=await page.locator('tr[data-id="p-pulsera"]').boundingBox();
+  if(width<=600){expect(first.x).toBeCloseTo(second.x,0);expect(first.y+first.height<=second.y+1 || second.y+second.height<=first.y+1).toBe(true);}
+  const collections=page.locator('#tt-commerce-collections');
+  expect(await collections.evaluate(node=>node.scrollWidth<=node.clientWidth+1)).toBe(true);
+  for(const box of await collections.locator('tbody tr,input,select,button').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).map(el=>el.getBoundingClientRect().toJSON()))){expect(box.x).toBeGreaterThanOrEqual(0);expect(box.right).toBeLessThanOrEqual(width+1);}
   const geometry=await card.evaluate(node=>({width:node.clientWidth,scroll:node.scrollWidth,controls:[...node.querySelectorAll('input,select,button')].filter(el=>el.getClientRects().length).map(el=>{const b=el.getBoundingClientRect();return{x:b.x,right:b.right,width:b.width};}),box:node.getBoundingClientRect().toJSON(),page:document.documentElement.scrollWidth,viewport:innerWidth}));
   expect(geometry.scroll).toBeLessThanOrEqual(geometry.width+1);expect(geometry.page).toBeLessThanOrEqual(geometry.viewport+1);
   for(const control of geometry.controls){expect(control.x).toBeGreaterThanOrEqual(geometry.box.x-1);expect(control.right).toBeLessThanOrEqual(geometry.box.right+1);}
@@ -81,4 +103,22 @@ for(const [id,index] of [['p-reloj',0],['p-pulsera',1]])test(`guardar un estado 
  await card.getByRole('button',{name:'Guardar',exact:true}).click();
  expect(await page.evaluate(index=>window.__productRows[index].data.stock,index)).toBe(20);
  expect(await page.evaluate(index=>window.__productRows[index].data.active,index)).toBe(false);
+});
+
+for(const width of [390,1440])test(`colección puntual y visibilidad desde tarjetas ${width}`,async({page})=>{
+ await loadCards(page,width,900);
+ const product=page.locator('#tt-commerce-products tr[data-id="p-reloj"]');
+ await product.locator('[data-card-stock]').fill('20');
+ await product.getByLabel('Colección de Reloj Clásico Negro',{exact:true}).selectOption('pulseras');
+ expect(await page.evaluate(()=>window.__productRows[0].data.category)).toBe('pulseras');
+ await expect(product.locator('[data-card-stock]')).toHaveValue('20');
+ await product.getByRole('button',{name:'Guardar',exact:true}).click();
+ expect(await page.evaluate(()=>window.__productRows[0].data.stock)).toBe(20);
+ const collection=page.locator('#tt-commerce-collections tr[data-id="relojes"]');
+ await collection.getByLabel('Estado de Relojes',{exact:true}).selectOption('false');
+ await expect(collection.getByLabel('Estado de Relojes',{exact:true})).toHaveValue('false');
+ await expect(collection.locator('.tt-commerce-badge')).toHaveText('Oculta');
+ expect(await page.evaluate(()=>window.__collectionRows.find(row=>row.id==='relojes').data.visible)).toBe(false);
+ await collection.getByLabel('Estado de Relojes',{exact:true}).selectOption('true');
+ await expect(collection.locator('.tt-commerce-badge')).toHaveText('Visible');
 });

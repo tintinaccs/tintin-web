@@ -1,3 +1,7 @@
+## 2026-10-21 — Tarjetas compactas y editor de Productos a pantalla completa
+
+Fuentes canónicas: shopify-commerce-admin.js/css e interfaz-productos-adaptable.js. Las tarjetas agrupan imagen contenida, identidad/precio, estado semántico y controles de visibilidad/stock; muestran muestras de la paleta existente y selector nativo cuando hay más de cuatro opciones. Una columna en móvil, dos en tablet y tres en escritorio, conservando vista Lista. El editor ocupa el área bajo la cabecera en todos los tamaños, utiliza un único desplazamiento principal y dos acciones flotantes, y ordena fotos por color y vista previa sin una barra de pie. Conserva los controladores de guardado, permisos, inventario, guardia de borradores y sincronización. La captura de foco y Escape se aplican también al editor de escritorio. No cambia datos reales, Auth, Rules, pagos ni integraciones. Se actualizan referencias inmutables, diagnóstico y plan protegido desde sus herramientas; evidencia y límites en CURRENT_STATE.
+
 ## 2026-10-21 — Reaplicar el espejo mensual al actualizar su formato
 
 Fuente: apps-script/ComercioLocal.gs. La caché de revisión/firma también compara la versión del espejo y la confirma sólo después del snapshot aplicado. Fuerza una reconciliación tras la actualización para retirar líneas web obsoletas conservando ventas locales, gastos, compras, fórmulas, locks y conflictos. Dos regresiones reproducen datos sin cambios y snapshot fallido;22/22 aprobadas. CI, publicación y verificación de hoja real pendientes del candidato; no se heredan resultados de1180.
