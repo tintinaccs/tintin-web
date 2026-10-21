@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "74c7041d099b413a3f6903abe073abeb501547c74c6cea19fe04cacca9a33f73",
+  "sourceFingerprint": "d78457a682a5bb321f90ccb01ce1a6e1c63315fe814123b225e354a1f7e1617a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1378,
     "textFiles": 1288,
-    "totalBytes": 28979621,
+    "totalBytes": 28985135,
     "pages": 19,
     "modules": 968
   },
@@ -11080,8 +11080,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 132515,
-      "sha256": "6e56a58d05e446b3b4e2e8f4807dbb2cce8c9aae87a616f61d5f070e8e6ac064",
+      "bytes": 132518,
+      "sha256": "fe3a3efc24e2900ef4b89ece9ed8252bb50b6589dd12270465090ebc953817ea",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17570,8 +17570,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72916,
-      "sha256": "13fc128f7796778ec4cae9503264c4189ac8db9e45cc914a6220fdf23f648393",
+      "bytes": 72901,
+      "sha256": "1ae7d108a35745d6a6a764b067ef7795147f4354b06fa2b5879c3197ccb46176",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18542,8 +18542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 56859,
-      "sha256": "085ecad62c2a790d77b4c7c1f9b0a7ccb0b55dcfc9d2e9ecdb9065e54741ffe1",
+      "bytes": 56862,
+      "sha256": "b46896faefc2cd5744a2ea8776458b05c0ca79dc383b670dbdf52130e9cb27a1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -25842,7 +25842,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 353689,
-      "sha256": "eb9ee5c23f89db4648bc0833505014625b23cc4c0ab1b1611200b6f677ac814f",
+      "sha256": "eeda4ea48db81185537e211d95a4efee032472de7e84de8d97fb8808f00c7e36",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31648,8 +31648,8 @@
     },
     {
       "path": "js/components/location/geolocalizacion.mjs",
-      "bytes": 3153,
-      "sha256": "9cc52847c96650ab1ac3e39e9100b20f081a10da314c281c465c641767aad840",
+      "bytes": 3545,
+      "sha256": "284fec00454a9fa45fc61228afc30090c6f8ab24b5562f71416ffe38319553eb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31659,8 +31659,8 @@
     },
     {
       "path": "js/components/location/mapa-ubicacion.js",
-      "bytes": 18898,
-      "sha256": "07fdf8e7421bcb7e9ff4a765aa112b88700ecb9a3dedb1e02dda457670287fa3",
+      "bytes": 19513,
+      "sha256": "60a2caa4f343c4f78e802d971cf1a202914694d02075d3e8c24a32ff647b0d1e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31673,7 +31673,7 @@
           "line": 7
         },
         {
-          "raw": "./geolocalizacion.mjs?v=tintin-20261004-location-consistency-1-stock-flow-20261014-1",
+          "raw": "./geolocalizacion.mjs?v=tintin-20261021-location-recovery-1",
           "target": "js/components/location/geolocalizacion.mjs",
           "dynamic": false,
           "line": 8
@@ -31690,11 +31690,11 @@
         },
         {
           "url": "https://www.google.com/maps/search/",
-          "line": 161
+          "line": 173
         },
         {
           "url": "https://waze.com/ul",
-          "line": 162
+          "line": 174
         }
       ]
     },
@@ -32743,8 +32743,8 @@
     },
     {
       "path": "js/core/auth/espera-popup-google.mjs",
-      "bytes": 1432,
-      "sha256": "93169c6f1b4d443ff5d078f6ac0d7536363061597c127f94e58c043aa03570c7",
+      "bytes": 1853,
+      "sha256": "583d5deeec08c3dd69e212cb1bdeb32b9ba42766305d50d24557c5181a178035",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47015,8 +47015,8 @@
     },
     {
       "path": "tests/login/geolocation-recovery.test.mjs",
-      "bytes": 3204,
-      "sha256": "58c474d69a7a158ee99911ff1054459747a9d5b33455c59c47252a61697c585c",
+      "bytes": 3629,
+      "sha256": "7ebf221eaf3d5902a75747418346bf7c62dfadace44ed77ca66a57b176182003",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47051,8 +47051,8 @@
     },
     {
       "path": "tests/login/google-loader-recovery.spec.js",
-      "bytes": 10939,
-      "sha256": "0c3d7d25187c20ea2cb741b0174e1d304c0d5ec68fd425316978659973b63886",
+      "bytes": 11400,
+      "sha256": "957027bf092f41d77c5317c7e079d1c23150e581ac46ccbc2cda3d2563d298cb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47062,8 +47062,8 @@
     },
     {
       "path": "tests/login/google-popup-close.test.mjs",
-      "bytes": 1710,
-      "sha256": "65958d4fddd4e6cfc788cb36a2d5493f68cf6ad47ca137a9e0e3d34dbb2f89cf",
+      "bytes": 2426,
+      "sha256": "153b3eef271c9e7974a00861a0a8b704876e106a3ff48c3d65a9ab5e241d7a45",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47088,12 +47088,17 @@
           "line": 3
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://auth.example/__/auth/handler",
+          "line": 36
+        }
+      ]
     },
     {
       "path": "tests/login/location-map-browser.spec.js",
-      "bytes": 4558,
-      "sha256": "fb41f32a167fe99363eb9de2516cf2221dfb0457bf675a4314bf9993d8ba5525",
+      "bytes": 4737,
+      "sha256": "bbadec46106170480cc0e145e244158d812a8893837a491f4a5a0f8174a10aed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47584,8 +47589,8 @@
     },
     {
       "path": "tests/login/single-interactive-flow.test.mjs",
-      "bytes": 16231,
-      "sha256": "5287d413e479b9937da9b35fe7227a3af012d6265910424ee6e8403826766713",
+      "bytes": 16275,
+      "sha256": "2fc7aa33f4d7a83ce043248119601b4abeb2fbda1cbebff7e647fc51b81f5b7b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50099,8 +50104,8 @@
     },
     {
       "path": "tests/profile/profile-location-recovery.spec.js",
-      "bytes": 3135,
-      "sha256": "4fc3ec3367a8660e47828728104a8876ded8ac000390eb337741b7177363a693",
+      "bytes": 3615,
+      "sha256": "019425d60f09c4d9cfa2eb0851831b4af561c819f39db3f706d17cb5f10c90e2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -54257,7 +54262,7 @@
       "path": "_headers",
       "extension": "",
       "bytes": 4162,
-      "sha256": "72d5e96b556ce3fcb03ad2a5e554cc305eae704b99a25e07998c279d7ce04041"
+      "sha256": "3604c43eef8446a710a7ad7a0ff68a192e06a85a707fe6d49aba1eb8c1b40dec"
     },
     {
       "path": "_redirects",
@@ -54940,8 +54945,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 132515,
-      "sha256": "6e56a58d05e446b3b4e2e8f4807dbb2cce8c9aae87a616f61d5f070e8e6ac064"
+      "bytes": 132518,
+      "sha256": "fe3a3efc24e2900ef4b89ece9ed8252bb50b6589dd12270465090ebc953817ea"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -55235,19 +55240,19 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 353689,
-      "sha256": "eb9ee5c23f89db4648bc0833505014625b23cc4c0ab1b1611200b6f677ac814f"
+      "sha256": "eeda4ea48db81185537e211d95a4efee032472de7e84de8d97fb8808f00c7e36"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 353604,
-      "sha256": "0ba5277d169dc346fa3ae1598c0087b61dc87654ae3028feaa5f7931b14f23d2"
+      "sha256": "62338920578322f0bbc85d2db9a69e1ac410f7b9c67a370ad67936457fe5fca9"
     },
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 6751,
-      "sha256": "19a42f4b8f73f81271a1dfa18addcced951e3784996e910e1a9f00be89d9c681"
+      "bytes": 3466,
+      "sha256": "a7713edb657fd5c81f909cecef984332e1d328b96797e3396907fd39e4f1c052"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55259,7 +55264,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "dae6a7c2e7c962af5e25dbe55f9584f4638d2a999273154203a3eea1b2070dcc"
+      "sha256": "0a554138b46634fd8ebfbec581aa6f97dd34e953bef013cbe34f1c0877ae2001"
     },
     {
       "path": "config/public-site.json",
@@ -55918,8 +55923,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 734671,
-      "sha256": "d26f07dcf0a76616851e16cda999b9863acc160ff594337a8f20ebc9d67d7e16"
+      "bytes": 738593,
+      "sha256": "3d88f63686f3ec6a1178e598f94f43370ddd0f50b0501fceef22f4e3c1321354"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56308,8 +56313,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 83946,
-      "sha256": "ba10d68be2a96c131faa1dfbc20a262a4fb6868c90618338b19300d76eb0895e"
+      "bytes": 85014,
+      "sha256": "8523f6eeb3e99665c7ade19009d677f4c5311eae6be83fd6b583306dad1ae642"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -57652,14 +57657,14 @@
     {
       "path": "js/components/location/geolocalizacion.mjs",
       "extension": ".mjs",
-      "bytes": 3153,
-      "sha256": "9cc52847c96650ab1ac3e39e9100b20f081a10da314c281c465c641767aad840"
+      "bytes": 3545,
+      "sha256": "284fec00454a9fa45fc61228afc30090c6f8ab24b5562f71416ffe38319553eb"
     },
     {
       "path": "js/components/location/mapa-ubicacion.js",
       "extension": ".js",
-      "bytes": 18898,
-      "sha256": "07fdf8e7421bcb7e9ff4a765aa112b88700ecb9a3dedb1e02dda457670287fa3"
+      "bytes": 19513,
+      "sha256": "60a2caa4f343c4f78e802d971cf1a202914694d02075d3e8c24a32ff647b0d1e"
     },
     {
       "path": "js/components/location/selector-ubicacion.js",
@@ -57970,8 +57975,8 @@
     {
       "path": "js/core/auth/espera-popup-google.mjs",
       "extension": ".mjs",
-      "bytes": 1432,
-      "sha256": "93169c6f1b4d443ff5d078f6ac0d7536363061597c127f94e58c043aa03570c7"
+      "bytes": 1853,
+      "sha256": "583d5deeec08c3dd69e212cb1bdeb32b9ba42766305d50d24557c5181a178035"
     },
     {
       "path": "js/core/auth/estado-perfil-sesion.mjs",
@@ -58798,8 +58803,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72916,
-      "sha256": "13fc128f7796778ec4cae9503264c4189ac8db9e45cc914a6220fdf23f648393"
+      "bytes": 72901,
+      "sha256": "1ae7d108a35745d6a6a764b067ef7795147f4354b06fa2b5879c3197ccb46176"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -58996,14 +59001,14 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 16671,
-      "sha256": "2a37a71060ced72cf8ddf21fb2f3d870d0b86a1c401e3382c3f450f65f780b26"
+      "bytes": 16793,
+      "sha256": "9a0e4b811b8c8404b48ed5323f74452c9989befab319beaf4248e5807162056b"
     },
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 56859,
-      "sha256": "085ecad62c2a790d77b4c7c1f9b0a7ccb0b55dcfc9d2e9ecdb9065e54741ffe1"
+      "bytes": 56862,
+      "sha256": "b46896faefc2cd5744a2ea8776458b05c0ca79dc383b670dbdf52130e9cb27a1"
     },
     {
       "path": "playwright.config.js",
@@ -59878,8 +59883,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 75184,
-      "sha256": "4ef0da4b5f86e12e524b9a67112e700119a653b806678556eb6cfe2b925bb65c"
+      "bytes": 75147,
+      "sha256": "59ddffc232a731f1f0777343d330b6e5524957d4cf3b40e29d54ef8dda3decbb"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -61168,26 +61173,26 @@
     {
       "path": "tests/login/geolocation-recovery.test.mjs",
       "extension": ".mjs",
-      "bytes": 3204,
-      "sha256": "58c474d69a7a158ee99911ff1054459747a9d5b33455c59c47252a61697c585c"
+      "bytes": 3629,
+      "sha256": "7ebf221eaf3d5902a75747418346bf7c62dfadace44ed77ca66a57b176182003"
     },
     {
       "path": "tests/login/google-loader-recovery.spec.js",
       "extension": ".js",
-      "bytes": 10939,
-      "sha256": "0c3d7d25187c20ea2cb741b0174e1d304c0d5ec68fd425316978659973b63886"
+      "bytes": 11400,
+      "sha256": "957027bf092f41d77c5317c7e079d1c23150e581ac46ccbc2cda3d2563d298cb"
     },
     {
       "path": "tests/login/google-popup-close.test.mjs",
       "extension": ".mjs",
-      "bytes": 1710,
-      "sha256": "65958d4fddd4e6cfc788cb36a2d5493f68cf6ad47ca137a9e0e3d34dbb2f89cf"
+      "bytes": 2426,
+      "sha256": "153b3eef271c9e7974a00861a0a8b704876e106a3ff48c3d65a9ab5e241d7a45"
     },
     {
       "path": "tests/login/location-map-browser.spec.js",
       "extension": ".js",
-      "bytes": 4558,
-      "sha256": "fb41f32a167fe99363eb9de2516cf2221dfb0457bf675a4314bf9993d8ba5525"
+      "bytes": 4737,
+      "sha256": "bbadec46106170480cc0e145e244158d812a8893837a491f4a5a0f8174a10aed"
     },
     {
       "path": "tests/login/location-picker.test.mjs",
@@ -61270,8 +61275,8 @@
     {
       "path": "tests/login/single-interactive-flow.test.mjs",
       "extension": ".mjs",
-      "bytes": 16231,
-      "sha256": "5287d413e479b9937da9b35fe7227a3af012d6265910424ee6e8403826766713"
+      "bytes": 16275,
+      "sha256": "2fc7aa33f4d7a83ce043248119601b4abeb2fbda1cbebff7e647fc51b81f5b7b"
     },
     {
       "path": "tests/navigation/about-personal-story.spec.js",
@@ -61726,8 +61731,8 @@
     {
       "path": "tests/profile/profile-location-recovery.spec.js",
       "extension": ".js",
-      "bytes": 3135,
-      "sha256": "4fc3ec3367a8660e47828728104a8876ded8ac000390eb337741b7177363a693"
+      "bytes": 3615,
+      "sha256": "019425d60f09c4d9cfa2eb0851831b4af561c819f39db3f706d17cb5f10c90e2"
     },
     {
       "path": "tests/profile/profile-presentation.test.mjs",

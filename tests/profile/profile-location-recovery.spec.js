@@ -9,9 +9,9 @@ import {createLocationMap} from '${mapImport}';
 window.controller=await createLocationMap({mapEl:document.getElementById('perfil-location-map'),locateButton:document.getElementById('perfil-location-locate'),onChange:place=>{window.picked=place;document.getElementById('perfil-location-selected').textContent=place?String(place.lat):'Sin punto';}});
 window.ready=true;</script></body></html>`;
 
-for (const width of [390, 768, 1440]) {
+for (const [width, height] of [[320,568],[390,844],[768,1024],[1024,768],[1180,820],[1181,820],[1366,768],[1440,900],[1920,1080],[844,390]]) {
   test(`perfil marca ubicación y libera el botón · ${width}`, async ({ page, context }) => {
-    await page.setViewportSize({ width, height: 900 });
+    await page.setViewportSize({ width, height });
     await context.grantPermissions(['geolocation']);
     await context.setGeolocation({ latitude: -25.3, longitude: -57.6, accuracy: 20 });
     await page.route('**/__profile-map', route => route.fulfill({ contentType: 'text/html', body: fixture }));
@@ -30,9 +30,10 @@ for (const width of [390, 768, 1440]) {
     await button.click();
     await page.evaluate(() => {
       window.controller.setLocation({lat:-25.32,lng:-57.62,name:'Casa'}, {scroll:false});
-      window.finishGPS({coords:{latitude:-25.4,longitude:-57.7,accuracy:20}});
     });
+    // Se libera al elegir el punto, incluso antes de la respuesta del GPS.
     await expect(button).toBeEnabled();
+    await page.evaluate(() => window.finishGPS({coords:{latitude:-25.4,longitude:-57.7,accuracy:20}}));
     expect(await page.evaluate(() => window.picked.lat)).toBe(-25.32);
     await page.clock.install();
     await page.evaluate(() => {
@@ -40,10 +41,15 @@ for (const width of [390, 768, 1440]) {
     });
     await button.click();
     await expect(button).toBeDisabled();
-    await page.clock.runFor(11000);
-    await page.clock.runFor(16000);
+    await page.clock.runFor(5001);
+    await page.clock.runFor(5001);
     await expect(button).toBeEnabled();
     await expect(page.locator('.tt-map-status')).toContainText('tardó demasiado');
     expect(await page.evaluate(() => window.picked.lat)).toBe(-25.32);
+    // Cerrar/limpiar permite reabrir y volver a pedir ubicación sin esperas viejas.
+    await button.click();
+    await page.evaluate(() => window.controller.clearLocation());
+    await expect(button).toBeEnabled();
+    expect(await page.evaluate(() => window.picked)).toBeNull();
   });
 }
