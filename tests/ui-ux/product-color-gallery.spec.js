@@ -65,6 +65,29 @@ const styleLinks = [...productHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)
 const productSectionStart = productHtml.indexOf('<section class="tt-product-page"');
 const productSection = productHtml.slice(productSectionStart, productHtml.indexOf('</section>', productSectionStart) + '</section>'.length);
 const minimalFixture = `<!doctype html><html lang="es"><head><meta name="viewport" content="width=device-width,initial-scale=1">${styleLinks}<link rel="stylesheet" href="/css/pages/product/product-maintenance.css"></head><body class="tt-product-maintenance tt-product-runtime-ready">${productSection}<script src="/js/components/images/galeria-producto.js"></script><script src="/gallery-fixture.js"></script></body></html>`;
+for (const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[1024,768],[1280,720],[1440,900],[1920,1080]]) test(`miniaturas y colores respetan el mismo orden global ${width}x${height}`,async({page})=>{
+  await page.setViewportSize({width,height});
+  const partial = harness.replace("{Color:'Dorado',imageUrls:['/gold1.svg','/gold2.svg','/gold3.svg']}","{Color:'Dorado',imageUrls:[]}")
+    .replace("imagesExtra:['/gold1.svg','/gold2.svg','/gold3.svg','/silver1.svg','/silver2.svg','/silver3.svg']","imagesExtra:[]")
+    .replace("{Color:'Plateado',imageUrls:['/silver1.svg','/silver2.svg','/silver3.svg']}","{Color:'Plateado',imageUrls:['/silver1.svg']}");
+  await page.route('**/ordered-color-fixture',r=>r.fulfill({contentType:'text/html',body:minimalFixture}));
+  await page.route('**/gallery-fixture.js',r=>r.fulfill({contentType:'text/javascript',body:partial}));
+  await page.route(/\/(gold|silver)\d\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"/>'}));
+  await page.goto('/ordered-color-fixture');await page.waitForFunction(()=>window.fixtureReady);
+  expect(await page.locator('#gallery-thumbs button').evaluateAll(nodes=>nodes.map(n=>n.dataset.src.split('/').pop()))).toEqual(['silver1.svg','gold1.svg']);
+  expect(await page.locator('#product-variants [data-variant-value]').evaluateAll(nodes=>nodes.map(n=>n.dataset.variantValue))).toEqual(['Plateado','Dorado']);
+  for (const [color,photo] of [['Plateado','silver1.svg'],['Dorado','gold1.svg']]) {
+    await page.locator(`#product-variants [data-variant-value="${color}"]`).click();
+    await expect(page.locator('#gallery-main img')).toHaveAttribute('src',new RegExp(photo+'$'));
+    expect(await page.locator('#product-variants [data-variant-value]').evaluateAll(nodes=>nodes.map(n=>n.dataset.variantValue))).toEqual(['Plateado','Dorado']);
+  }
+  for (const [index,color] of [[0,'Plateado'],[1,'Dorado']]) {
+    await page.locator('#gallery-thumbs button').nth(index).click();
+    await expect(page.locator(`#product-variants [data-variant-value="${color}"]`)).toHaveAttribute('aria-pressed','true');
+    expect(await page.evaluate(()=>_pdGetSelectedVariant())).toBe(color);
+  }
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
 for (const [width,height] of [[320,568],[667,375],[768,1024],[1024,768],[1440,900]]) test(`editor conserva fotos exactas de combinación y color en ${width}x${height}`,async({page})=>{
   await page.setViewportSize({width,height});
   const combinationFixture=fixture.replace('Color: Dorado\nColor: Plateado','Color: Dorado\nColor: Plateado\nForma: Ovalado, Redondo').replace('<textarea id="options">','<textarea id="options" readonly>');

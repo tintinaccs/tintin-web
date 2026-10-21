@@ -1255,9 +1255,33 @@ function productMediaUnavailable(product, row) {
   });
 }
 
+function productGalleryMedia(product) {
+  const media = window.TintinProductMedia;
+  const groups = productVariantGroups(product);
+  const key = media.colorKey(product);
+  const order = groups.find(([name]) => name === key)?.[1] || [];
+  const groupIndex = groups.findIndex(([name]) => name === key);
+  const rows = [...media.mediaRows(product)].sort((a, b) =>
+    Number(productOptionUnavailable(product, groupIndex, a[key])) - Number(productOptionUnavailable(product, groupIndex, b[key])) || order.indexOf(a[key]) - order.indexOf(b[key]));
+  return { rows, images: media.uniqueImages([...rows.flatMap(media.rowImages), ...media.galleryImages(product)]) };
+}
+
+function productPresentationOptions(product, key, values) {
+  const media = window.TintinProductMedia;
+  if (!media.isColorKey(key)) return values;
+  const images = productGalleryMedia(product).images.map(media.imageKey);
+  const positions = new Map(values.map(value => {
+    const matches = new Set(media.galleryImages(product, { [key]: value }).map(media.imageKey));
+    const index = images.findIndex(image => matches.has(image));
+    return [value, index < 0 ? Infinity : index];
+  }));
+  // Orden visual únicamente: no cambia variantes, asociaciones ni claves de stock.
+  return [...values].sort((a, b) => positions.get(a) - positions.get(b));
+}
+
 function productCardColorOptions(product) {
   const group = productVariantGroups(product).find(([key]) => window.TintinProductMedia.isColorKey(key));
-  if (group) return group;
+  if (group) return [group[0], productPresentationOptions(product, ...group)];
   const colors = [...new Set(String(product?.colorFinish || '').split(/[,/;·]/).map(value => value.split(':').at(-1).trim()).filter(value => window.TintinProductColors.preset(value)))];
   return colors.length ? ['Color', colors] : null;
 }
@@ -1499,16 +1523,10 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
   }
   const media = window.TintinProductMedia;
   const galleryProduct = { ...product, imageUrl: mainImgUrl };
-  const colorKey = media.colorKey(product);
-  const colorOrder = productVariantGroups(product).find(([key]) => key === colorKey)?.[1] || [];
-  const groupIndex = productVariantGroups(product).findIndex(([key]) => key === colorKey);
-  const rows = [...media.mediaRows(product)].sort((a, b) => Number(productOptionUnavailable(product, groupIndex, a[colorKey])) - Number(productOptionUnavailable(product, groupIndex, b[colorKey])) || colorOrder.indexOf(a[colorKey]) - colorOrder.indexOf(b[colorKey]));
+  const { rows, images } = productGalleryMedia(galleryProduct);
   // Todas las fotos permanecen visibles; las asociaciones agrupan las de
   // cada color. Seleccionar un círculo cambia la foto, no recorta la galería.
-  const allImages = media.uniqueImages([
-    ...rows.flatMap(media.rowImages),
-    ...media.galleryImages(galleryProduct),
-  ].map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean));
+  const allImages = media.uniqueImages(images.map(url => sanitizeClassicImageUrl(url, 900)).filter(Boolean));
   const previousImage = _pdGalleryImages[_pdGalleryIndex];
   _pdGalleryImages = allImages;
   if (!resetIndex) _pdGalleryIndex = allImages.findIndex(url => productPhotoIdentity(url) === productPhotoIdentity(previousImage));
@@ -1566,7 +1584,8 @@ function _renderProductGallery(product, selected = {}, resetIndex = false) {
         if (!thumb) return;
         const image = thumb.dataset.src;
         const colorKey = window.TintinProductMedia.colorKey(_pdProduct);
-        const matchingColors = [...new Set(window.TintinProductMedia.mediaRows(_pdProduct).filter(row => window.TintinProductMedia.rowImages(row).some(url => window.TintinProductMedia.imageKey(url) === window.TintinProductMedia.imageKey(image))).map(row => row[colorKey]).filter(Boolean))];
+        const colorValues = productVariantGroups(_pdProduct).find(([key]) => key === colorKey)?.[1] || [];
+        const matchingColors = colorValues.filter(value => window.TintinProductMedia.galleryImages(_pdProduct, { [colorKey]: value }).some(url => window.TintinProductMedia.imageKey(url) === window.TintinProductMedia.imageKey(image)));
         if (matchingColors.length === 1) {
           const group = [...document.querySelectorAll('#product-variants .tt-product-variants')].find(group => group.dataset.variantKey === colorKey);
           const option = [...(group?.querySelectorAll('.tt-variant-option') || [])].find(option => String(option.dataset.variantValue).trim().toLocaleLowerCase('es') === String(matchingColors[0]).trim().toLocaleLowerCase('es'));
@@ -1694,7 +1713,7 @@ function _renderProductDetail(product) {
         <div class="tt-product-variants${window.TintinProductMedia.isColorKey(key) ? ' tt-variant-color-group' : ''}" data-variant-key="${escapeAttribute(key)}" role="group" aria-label="${escapeAttribute(key)}">
           <div class="tt-variant-heading"><div class="tt-variant-label">${escapeHtml(window.TintinProductMedia.isColorKey(key) ? 'Color' : key.charAt(0).toUpperCase() + key.slice(1))}</div><span class="tt-variant-current" aria-live="polite" aria-atomic="true"></span></div>
           <div class="tt-variant-options">
-            ${Array.isArray(values) ? values.map(v => `
+            ${Array.isArray(values) ? productPresentationOptions(product, key, values).map(v => `
               <button type="button" data-variant-value="${escapeAttribute(v)}" class="tt-variant-option${window.TintinProductMedia.isColorKey(key) ? ' tt-color-option' : ''}${selectedVariants.get(key) === String(v) ? ' active' : ''}${productOptionUnavailable(product, groupIndex, String(v)) ? ' tt-stock-unavailable' : ''}" aria-pressed="${selectedVariants.get(key) === String(v)}" aria-label="${escapeAttribute(v)}${productOptionUnavailable(product, groupIndex, String(v)) ? ' — Agotado, podés verlo' : ''}">${window.TintinProductMedia.isColorKey(key) ? `<span class="tt-color-swatch" aria-hidden="true" style="background:${productColorSwatch(v, product)}"></span>` : ''}<span class="tt-variant-name">${escapeHtml(v)}</span></button>
             `).join('') : ''}
           </div>

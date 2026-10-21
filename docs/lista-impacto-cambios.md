@@ -1,3 +1,7 @@
+## 2026-10-20 — Fotos y círculos de color en el mismo orden global
+
+El renderer público de tienda usa el orden canónico de galería también en selectores y tarjetas. Portadas y fotos generales no asignadas mantienen sus asociaciones; una miniatura selecciona el color sólo si es inequívoco. No reordena datos, atributos ni inventario, ni cambia disponibilidad, fotos, precios o carrito. Regresiones cubren portada general, varias fotos, agotados, stock actualizado, otros atributos y ocho geometrías; lectura completa del catálogo sin mutaciones. TIENDA_VERSION color-gallery-order-1 se propaga desde el generador, con caché y derivados canónicos. El monitor de runtime reconoce únicamente el nuevo diagnóstico nativo del endpoint demo de renovación al salir del documento, conservando todos los fallos activos/JS/producción y las aserciones de autorización. Evidencia y límites en CURRENT_STATE.
+
 ## 2026-10-20 — Contrato rosa/blanco consistente en encabezados
 
 Sólo los logos de los encabezados públicos desktop/tablet conservan tinta blanca sobre el nuevo fondo rosa frente al tinte global; src/alfa y recorte originales no cambian. El contrato móvil deja de exigir el violeta rechazado por el titular y exige blanco, rosa, degradado, blur y ausencia de borde duro, conservando imagen, geometría, foco y unicidad. El fixture desktop/tablet carga el tinte real para impedir un PASS con la imagen sin runtime. Footer y fotos quedan fuera de la regla. Sistema de superficies4 y bundle canónico; marca/shell3 y demás referencias sin nuevos bumps.

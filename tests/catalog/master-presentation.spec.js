@@ -10,7 +10,7 @@ for(const width of [320,390,768,1440])test(`opciones importadas, fotos y agotado
  const black=page.getByRole('button',{name:'Negro — Agotado, podés verlo',exact:true});await expect(black).toBeEnabled();await black.click();
  await expect(black).toHaveAttribute('aria-pressed','true');await expect(page.locator('#btn-product-add-cart')).toBeDisabled();await expect(page.locator('#btn-product-buy-now')).toBeDisabled();
  await expect(page.locator('#gallery-main')).toHaveClass(/tt-stock-unavailable/);await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/col-collares/);
- await expect(page.locator('#gallery-main img')).toHaveCSS('filter','grayscale(1)');
+ await expect(page.locator('#gallery-main img')).toHaveCSS('filter','none');
  await expect(page.locator('#gallery-main')).toHaveCSS('overflow','hidden');expect(await page.locator('#gallery-main').evaluate(n=>getComputedStyle(n,'::after').content)).toBe('none');
  const placement=await page.evaluate(()=>{const r=id=>document.getElementById(id).getBoundingClientRect();return{picture:r('gallery-main').bottom,options:r('product-variants').top,overflow:document.documentElement.scrollWidth>innerWidth};});expect(placement.options).toBeGreaterThanOrEqual(placement.picture);expect(placement.overflow).toBe(false);
  await expect(page.locator('.tt-wrist-guide')).not.toHaveAttribute('open');await page.locator('.tt-wrist-guide summary').click();await expect(page.locator('.tt-wrist-guide li')).toHaveCount(6);

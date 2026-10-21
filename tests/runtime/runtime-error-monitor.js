@@ -20,6 +20,12 @@ async function installRuntimeErrorMonitor(page,context){
     const authLookup=error.message==='/127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=demo-key due to access control checks.' &&
       (error.stack?.endsWith('    at fetch ([native code]:0:0)') ||
         error.stack?.includes('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:'));
+    // CI39523440101: el redirect del rol cliente también puede interrumpir
+    // la renovación de Auth. Sólo el endpoint demo y el caller fijado/nativo;
+    // se mantienen obligatorios el diagnóstico de WebKit y la ventana de salida.
+    const authTokenRefresh=error.message==='/127.0.0.1:9099/securetoken.googleapis.com/v1/token?key=demo-key due to access control checks.' &&
+      (error.stack?.endsWith('    at fetch ([native code]:0:0)') ||
+        error.stack?.includes('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js:'));
     // Trace 38282508656: WebKit cancels batchGet 6 ms after beforeunload.
     // Only this demo emulator endpoint and Firebase SDK stack are diagnostic.
     const firestoreBatchGet=error.message==='/127.0.0.1:8080/v1/projects/demo-tintin-interactions/databases/(default)/documents:batchGet due to access control checks.' &&
@@ -40,7 +46,7 @@ async function installRuntimeErrorMonitor(page,context){
     // native access diagnostic and the canonical fetchResource caller.
     const publicCatalogProducts=error.message==='/127.0.0.1:4174/api/public-catalog?resource=products due to access control checks.' &&
       error.stack?.includes('    at fetchResource (http://127.0.0.1:4174/js/core/firebase/catalogo-publico-api.js?');
-    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || visualStudioPublic || siteVersionPublic || publicCatalogProducts);
+    const navigationCancellation=leavingDocument && nativeAccessCancellation && (firestoreChannel || firestoreBatchGet || authLookup || authTokenRefresh || visualStudioPublic || siteVersionPublic || publicCatalogProducts);
     if(navigationCancellation)browserDiagnostics.push({kind:'native-emulator-channel-cancelled-on-navigation',message:error.message});
     else errors.push(error.message);
   });

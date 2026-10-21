@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "dc6da947a4d0d88de4dc7f1b353faa5982c242f7",
-  "reason": "Preservar main y ambos contratos de encabezados rosa blanco y flujo de login",
+  "reason": "Alinear globalmente miniaturas y colores conservando fotos inventario y encabezados aprobados localmente",
   "files": [
     {
       "path": ".github/workflows/auditar-tintin.yml",
@@ -11,12 +11,12 @@
     {
       "path": "404.html",
       "oldHash": "b9ab32e7c9d7ef2848d20afffcd46df8c345145c228a094af07d0677697e93e9",
-      "newHash": "3615f8a4f00d07d8e6b516d526a0f9cdd22c2f1e663ac228eb5b05709217de2b"
+      "newHash": "adf849e22d3448215944ffca6d7f4af94e6315316fc74d7cf1568845e3895a78"
     },
     {
       "path": "about.html",
       "oldHash": "b57f9cdf10dc3edda18853f9dd89761970b7f0b8ffb59aa59beb4dfb48638415",
-      "newHash": "d31dea6e75e53f66f7eb22b3b7356b65b1487edce5673530659bb8acf19d1a3c"
+      "newHash": "673f45c667b7c4094123540c6908f379fbf0cda683a62801783a45d5c35b9063"
     },
     {
       "path": "admin-images.html",
@@ -31,27 +31,27 @@
     {
       "path": "cambios-devoluciones.html",
       "oldHash": "d711036d19f9021193c7e4dcbb4c07be5974e60a32c4fcd211d5561d580a374b",
-      "newHash": "a8c87cb7f23bc8f728469d0700a2f5b205454d5bf5070ef470b98638e52f7f78"
+      "newHash": "5e7b379c3933237fe64b2b4b235c19860924f515673a1a4a4b5d7d2805bf4ac5"
     },
     {
       "path": "catalogo.html",
       "oldHash": "6caee997ce0d9d15c885edd91aca8793741042fda660fc78b9e5c58d44449eef",
-      "newHash": "35094e70abfef8d5dced8028fd383d75438a95dc111b0b3fe38882913e553aad"
+      "newHash": "5e97188304e86e9c2eaacd697877db58b653eb60f8357bf76cc67ab9e6ff5f8b"
     },
     {
       "path": "checkout.html",
       "oldHash": "bfc7ee31bebf087ca278633b1fd2c591507a542da4e042bbe6d91993075db7a6",
-      "newHash": "4c26b5af41174c2bb3c1ba8cb0430c8a5071ac7aaf2324a9cd4e8d2c3c51a498"
+      "newHash": "9ef7d9592217e0a6f4ae2db1692bd808100e84b2c1f6e5d9e44bdfa242b641bd"
     },
     {
       "path": "collections.html",
       "oldHash": "b96208ade9fe84e4abd7b0fcc4d76c4996f35cff9fbc3e7af702d80a628316be",
-      "newHash": "eebae5997fb6102df1cb2979370b622ae32066c7f0c0bb9a82fa3a1b9f01c395"
+      "newHash": "9fd94acd0a8f1d14a9f8af58dfe2aac4ace82f7c7b8cf1aea5ac26ab050081d1"
     },
     {
       "path": "contact.html",
       "oldHash": "70bdb5dbe78490cbbfd89ca26b1de193581d9c8653cccc278242237e898176c0",
-      "newHash": "d604bd45b10096f375dca4bf3bd8dae36d761babcb39ca10b54f08c21eb06fe6"
+      "newHash": "9a1a73138356577153d9ffbcb67a650395816c601b026abc8350166da7879320"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -66,12 +66,12 @@
     {
       "path": "envios.html",
       "oldHash": "30ff4ac3f81234eb0ad1be6102d48bb480009b36196a9bb7a81e08bc7f23cef1",
-      "newHash": "b94bec135f88ddd4ea8bc746d079bc37ad8ee68bc033845dd55db0305fa419de"
+      "newHash": "0fca370e204779488bd38cd816ab1f8b043a7a32ff554828e251f7f65d7bf5da"
     },
     {
       "path": "index.html",
       "oldHash": "b89844e2a4f9d277bbb8c49507239600bd11779ec7f11c8edd386dcf40c42662",
-      "newHash": "e89ee8949af1d3b6c6e044db287cd9f5604ac5341e6a3fa0336feb51550920f3"
+      "newHash": "ef05c881792dfc4e4ada30cbd0639cf30c0ee6f919ca93631c1785e0e872e513"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
@@ -101,7 +101,7 @@
     {
       "path": "login.html",
       "oldHash": "85af066d83d68a2f5f6ed2ff6fdb2cca2a2543ae6830b402e8769b5c600ae731",
-      "newHash": "cc8ad1dde3eb326bb14575a611f9b9dab4ed64892497961fea94264c11bd9e0a"
+      "newHash": "8f1e457b92bc5d3ccae1a5671eb84e73a2411dd53ea92c68599baa96ded7aa69"
     },
     {
       "path": "nosotros.html",
@@ -111,7 +111,7 @@
     {
       "path": "perfil.html",
       "oldHash": "5e7e9bdcc2ec2eba31400f308fd534ee3cec42446113313d1bc754cf8017a09d",
-      "newHash": "2e9dd0450bd5c741fbb3997c9e3481b41326c79595396ab3580fe03631972a10"
+      "newHash": "20d4a0876a971472902d085cbe8050eca9b3572e7a4a9e82f75aeb6d2e503cb3"
     },
     {
       "path": "playwright.config.js",
@@ -121,32 +121,37 @@
     {
       "path": "preguntas-frecuentes.html",
       "oldHash": "9ccaa328353224e5158817b55a0211506021720fd8debbfe509822141034f006",
-      "newHash": "9179fcb49685bc3a71cc677dfcd0aa15f8ff018b30b3261116fc8696cee779fa"
+      "newHash": "85df13b78d0cdf518cd2b601fc788f240586465c1436195685c2538c8c4f4d81"
     },
     {
       "path": "privacidad.html",
       "oldHash": "f3a138bd57168d02a10cbac7ea6cc9c0af43d53eee45541f606a173f5b099e12",
-      "newHash": "3361bbfc7fe0ddddc0dbd0c378726cbdec3850881a54a44e17dc82643b29eb73"
+      "newHash": "a62a84f9eaf624797d072d714f05183f107cd9bbddf5a2abaaa328c43e95adc5"
     },
     {
       "path": "product.html",
       "oldHash": "65772a6d4c052f13f5cb105f544a1f4bd2fa26acdbc7f56d8dc0e2f24c465021",
-      "newHash": "81bcfdad318097577cbd9345104600a7dbfa115a1f7de3f319c5e0d78252243a"
+      "newHash": "4abd564ff7ced07ea1deef998a23c266fc9305b5577f6b60a3ec9a471e263bdf"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "c581480b39a442f2561a7fa8e36147e35fd03e4200c643a381c036ad2295633b",
-      "newHash": "e44c7cf0e2b96f9f3f94e02ccbf4c66a15f097f6ae05f1609c214d8825458ca3"
+      "newHash": "559bbf388cf15af01a4a39a299badee67f045bf1c98771db641c5cdccf436f65"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "oldHash": "9bc7e9d5bc3deb9825e368aeacff295ef73fc8e374f70ca63dca4cdc5a5e6f42",
-      "newHash": "1f94b93b10bf8ae668312585d8058bb0a0b68be9beafedfde38099e584aa2eb0"
+      "newHash": "15d55119b1007d082ef20c8389ad242ebd3e8069eb25142603b1957f6ee37aff"
     },
     {
       "path": "terminos.html",
       "oldHash": "4c38dfcbba115d67bbec76ed9a9478ec4c68b988a1e0fa4900081e2ca204a8cb",
-      "newHash": "2674954b3fc195ed0d3007dcce931f971d9b8267bf1cd800ab6161457f8a543a"
+      "newHash": "efae17d258bea0df0e726387e522d4d8609ab8fca05b71adfa9c0cc2430e88e6"
+    },
+    {
+      "path": "tienda.js",
+      "oldHash": "c8374035c63d760df14b088f01a44710a24d33813471b4733c130414e8aab024",
+      "newHash": "1f5de857ca29acf0ca482144b022e8b245fadd44d479e9cda442ea13b3004b4d"
     }
   ],
   "affectedRecords": [

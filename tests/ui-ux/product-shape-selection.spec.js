@@ -94,7 +94,9 @@ test('un cambio de stock reordena miniaturas y conserva la foto elegida por iden
   const item={...product,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'Dorado',stock:0},{variant:'Plateado',stock:2}],variantMedia:[{Color:'Dorado',imageUrl:'/shape-0.svg'},{Color:'Plateado',imageUrl:'/shape-1.svg'}],imagesExtra:[]};
   await openFixture(page,item);
   await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/shape-1.svg$/);
+  expect(await page.locator('#product-variants [data-variant-value]').evaluateAll(nodes=>nodes.map(node=>node.dataset.variantValue))).toEqual(['Plateado','Dorado']);
   await page.evaluate(item=>window.renderShapeProduct({...item,variantInventory:[{variant:'Dorado',stock:2},{variant:'Plateado',stock:0}]}),item);
+  expect(await page.locator('#product-variants [data-variant-value]').evaluateAll(nodes=>nodes.map(node=>node.dataset.variantValue))).toEqual(['Dorado','Plateado']);
   await expect(page.locator('[data-variant-value="Plateado"]')).toHaveAttribute('aria-pressed','true');
   await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/shape-1.svg$/);
   await expect(page.locator('#gallery-thumbs .active')).toHaveAttribute('data-src',/shape-1.svg$/);
