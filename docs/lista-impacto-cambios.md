@@ -521,3 +521,8 @@ Fuente: tablero-pedidos.css. Escritorio usa títulos y contadores de las cinco c
 ## 2026-10-20 — Consolidación de los nueve PR pendientes
 
 Se concilian historias929/1122/1134/1146/1154/1156/1170/1180/1182 con main dc6da947 y el avance concurrente9d58fca0. Afecta acceso/OTP, stock de carrito, favoritos, avisos, revisión de inventario, fuente del espejo mensual, superficies y tarjetas/Instagram. Se preservan1175/1179/1183/1184, comparadores canónicos y guardas; las reglas visuales antiguas incompatibles ceden al diseño posterior. Referencias, bundles y derivados se generan; CI conserva todos sus controles. El cambio de workflows sólo añade validación previa al despliegue manual de Rules, instala navegador de diagnóstico y asegura origen local desde antes de los gates. No despliega Rules ni instala Apps Script, cambia DNS o escribe datos comerciales. Inventario y límites en docs/agent/CONSOLIDACION_PR_20261020.md.
+
+
+## 2026-10-20 — Rutas de Pages y fixture canónicos en la consolidación
+
+Se integra el avance concurrente fb95aa72: rutas, CSP y verificador final comparten scripts/lib/rutas-pages.js; las100 reglas mantienen el mismo conjunto y sólo cambia su generación/orden. El fixture de inventario usa el renderer vigente sin importar el comparador ya sustituido por1175. Trece regresiones Node y el caso Chromium aislado pasan; derivados y plan se regeneran. No modifica runtime, datos, permisos ni umbrales. CI completa requerida para el nuevo candidato1185.

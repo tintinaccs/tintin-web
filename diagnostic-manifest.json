@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5e0118d1ef4a71ec4a084b3f40591d2e538829ce91721138d92c88bcf712d795",
+  "sourceFingerprint": "52b1ad37b1c3044d875c92c51412fc3de8c528293f2e2abc5ad48561af488395",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1374,
-    "textFiles": 1284,
-    "totalBytes": 28949568,
+    "files": 1378,
+    "textFiles": 1288,
+    "totalBytes": 28969634,
     "pages": 19,
-    "modules": 966
+    "modules": 968
   },
   "viewports": [
     {
@@ -37546,8 +37546,8 @@
     },
     {
       "path": "scripts/auditar-final-integracion.js",
-      "bytes": 10807,
-      "sha256": "f69d94fa8f7fc7860f20311266168e585ac35fb5052273cc1925e8b28fab8d01",
+      "bytes": 9987,
+      "sha256": "0a3b2bc198bcd75502e391dc83145d6915667ce629d448c0c93ccb9657b444df",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37557,17 +37557,17 @@
           "raw": "./nucleo-control-tienda.js",
           "target": "scripts/nucleo-control-tienda.js",
           "dynamic": false,
-          "line": 44
+          "line": 45
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccs.com/",
-          "line": 84
+          "line": 85
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 158
+          "line": 143
         }
       ]
     },
@@ -39571,8 +39571,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 13873,
-      "sha256": "295f7d27e37c997616409f43d9261b3d14dae2acea276b803f67e78423819534",
+      "bytes": 13775,
+      "sha256": "aea60ca1f5758299870e665fdabbd10db253d00c7b907ea9ce6dd67b2b009c2a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39882,6 +39882,17 @@
       ]
     },
     {
+      "path": "scripts/lib/rutas-pages.js",
+      "bytes": 1253,
+      "sha256": "de593cdd3ed24beec4120be4d0b08a08f8df64beba4f67e4fcc8daba3ff85722",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "scripts/mantenimiento-flujos-core.mjs",
       "bytes": 4322,
       "sha256": "805397b557af972d1ec49e966228ddec7a40184cb8fadba90a2d1639ed31b719",
@@ -39946,8 +39957,8 @@
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
-      "bytes": 4648,
-      "sha256": "a333769f0cff5b8e9d7a4a3f368927451a184e31dd0dff8d646d68242f0e8ce2",
+      "bytes": 5077,
+      "sha256": "68fd109a0b137a679d75e543629e8b803b8efd6fd89c64e2e74930d64dbcdb8c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -42305,6 +42316,54 @@
       ]
     },
     {
+      "path": "tests/architecture/pages-routes.test.mjs",
+      "bytes": 2931,
+      "sha256": "45bca7cf00ff2548071966128231e569208a58f965347be0543ec444b53fff43",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/architecture/product-fast-path.test.mjs",
       "bytes": 7747,
       "sha256": "429e4cfa48196ed5ae3ef438ee39f92c069976845749bfc7cff873928b5181e6",
@@ -43209,8 +43268,8 @@
     },
     {
       "path": "tests/cart/quantity-browser.spec.js",
-      "bytes": 7355,
-      "sha256": "e098bade74a82377ff4613210882e3b2d674004bc9d9482863d3f2b2a3072a37",
+      "bytes": 7026,
+      "sha256": "0ced36125628affb6a76c28fe44847ced1c9904e4412d64c828d467e437b6a1a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45979,8 +46038,8 @@
     },
     {
       "path": "tests/flow-connections/produccion-verificacion.test.mjs",
-      "bytes": 1162,
-      "sha256": "a97221ebb264daffd046f7ae4b135165666d1aa9a24b656215bc1f2e5d4f1108",
+      "bytes": 1186,
+      "sha256": "2e4ebc7f7cf81d68eeb242a67980faa85e3c46e25b8a42d395148e92b36cded0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50322,8 +50381,8 @@
     },
     {
       "path": "tests/push/manifest-icon-audit.test.mjs",
-      "bytes": 1709,
-      "sha256": "4eac70a8addf244718b7cf5c4b74b03bfe9fb9e4f5b57c6558d124fc25f910ea",
+      "bytes": 1861,
+      "sha256": "3df4fbd46bc89bc882b990a0d96a90e891e04c38773803a68307b50f1262e86c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -50364,6 +50423,12 @@
           "target": null,
           "dynamic": false,
           "line": 6
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 7
         }
       ],
       "endpoints": []
@@ -54171,8 +54236,8 @@
     {
       "path": "AGENTS.md",
       "extension": ".md",
-      "bytes": 5340,
-      "sha256": "a522599c625e5847c89736134cb97f72a015869022663d85cb0976a87ff4b46d"
+      "bytes": 5772,
+      "sha256": "384915dc1c72c63bc9b47f4f420c885d4bfdaa97d0c6b785df1fa5c3a5ad7a92"
     },
     {
       "path": "README.md",
@@ -54196,7 +54261,7 @@
       "path": "_routes.json",
       "extension": ".json",
       "bytes": 2652,
-      "sha256": "a61121663a5346c43b24f25f8d4957deefb604a2c9c40b0ac34f0370cff59c93"
+      "sha256": "eaff1adf4ab9331fff485cd139ff52ea7ce939e5bec97bb643c5d4a894d4ce10"
     },
     {
       "path": "about.html",
@@ -55173,8 +55238,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 17875,
-      "sha256": "77517abea5a7acde7523eb63950828675436e4a58b93f175642aeec4c33dd613"
+      "bytes": 18320,
+      "sha256": "17da849c13868f1d47280514601fa1481b765ef5df6d1be49f101c51cd985ddc"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55186,7 +55251,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "d4d53fe59a961db8ddfbe3699ae8de0cae4ce843e98318c1d82cddd6c7bbdcb5"
+      "sha256": "c516eead0ce3a58b62df94bf4aa7745fbc29ee8db4bf9bbf160823a37ab4fc7f"
     },
     {
       "path": "config/public-site.json",
@@ -55833,8 +55898,8 @@
     {
       "path": "docs/agent/CONSOLIDACION_PR_20261020.md",
       "extension": ".md",
-      "bytes": 5613,
-      "sha256": "26d2a839d40a314b31cd38871cd5e99fa42fee6b9fff9f8182849328e370c970"
+      "bytes": 6588,
+      "sha256": "93dca654afccfdf598fd6ffda1c039d80136ed73cf9441cf2512f3369792cfc6"
     },
     {
       "path": "docs/agent/CONTINUACION_PREPARACION_20261011.md",
@@ -55845,8 +55910,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 728258,
-      "sha256": "34390a3a5f104b389a68451c66e165ca01d338f488f51935926960a031a593d7"
+      "bytes": 729667,
+      "sha256": "c44e21d795a745c5adff2494d797be02aa0558f10a094d984cb9b155e7f94e3c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56035,6 +56100,12 @@
       "sha256": "83df9812bd08652a5a5399f82df7f896b2674468f1aad60bf96333a23d6ab441"
     },
     {
+      "path": "docs/arquitectura-versiones-canonicas.md",
+      "extension": ".md",
+      "bytes": 3593,
+      "sha256": "29cfc400953c3d146b3806d3daaf401c2f544290edb87e3f01d4e3a7ba732f58"
+    },
+    {
       "path": "docs/arquitectura.md",
       "extension": ".md",
       "bytes": 5628,
@@ -56051,6 +56122,12 @@
       "extension": ".md",
       "bytes": 1627,
       "sha256": "2bc4316044c81b3f42d955216f8a50bd9cf5e5b18d5fb36d038488faabbf1a9a"
+    },
+    {
+      "path": "docs/auditoria-versiones-20261020.md",
+      "extension": ".md",
+      "bytes": 9113,
+      "sha256": "c824e6e0f8a95e2fc1fbba22f26d664ca654e56cc044b0802562d5cb4d14a3db"
     },
     {
       "path": "docs/autoridades-sincronizacion.md",
@@ -56223,8 +56300,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 81505,
-      "sha256": "8a03525fa377dee235c103a397d39a5ae5b7a45a11695361f0f651fe60ad926d"
+      "bytes": 82062,
+      "sha256": "ef63aab99ebe8938fb8d8987e14865bdd865506437c63384a8d8bc1eaa52f56b"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -59367,8 +59444,8 @@
     {
       "path": "scripts/auditar-final-integracion.js",
       "extension": ".js",
-      "bytes": 10807,
-      "sha256": "f69d94fa8f7fc7860f20311266168e585ac35fb5052273cc1925e8b28fab8d01"
+      "bytes": 9987,
+      "sha256": "0a3b2bc198bcd75502e391dc83145d6915667ce629d448c0c93ccb9657b444df"
     },
     {
       "path": "scripts/auditar-firestore-lecturas-presupuesto.js",
@@ -59853,8 +59930,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 13873,
-      "sha256": "295f7d27e37c997616409f43d9261b3d14dae2acea276b803f67e78423819534"
+      "bytes": 13775,
+      "sha256": "aea60ca1f5758299870e665fdabbd10db253d00c7b907ea9ce6dd67b2b009c2a"
     },
     {
       "path": "scripts/generar-flujo-decisiones-acceso.mjs",
@@ -59935,6 +60012,12 @@
       "sha256": "7c7bd73e29c765155172240e1bbd4dca052597d7cfca144353cb1fd5132e930c"
     },
     {
+      "path": "scripts/lib/rutas-pages.js",
+      "extension": ".js",
+      "bytes": 1253,
+      "sha256": "de593cdd3ed24beec4120be4d0b08a08f8df64beba4f67e4fcc8daba3ff85722"
+    },
+    {
       "path": "scripts/mantenimiento-flujos-core.mjs",
       "extension": ".mjs",
       "bytes": 4322,
@@ -59949,8 +60032,8 @@
     {
       "path": "scripts/normalizar-rutas-publicas.js",
       "extension": ".js",
-      "bytes": 4648,
-      "sha256": "a333769f0cff5b8e9d7a4a3f368927451a184e31dd0dff8d646d68242f0e8ce2"
+      "bytes": 5077,
+      "sha256": "68fd109a0b137a679d75e543629e8b803b8efd6fd89c64e2e74930d64dbcdb8c"
     },
     {
       "path": "scripts/preparar-hosting.js",
@@ -60367,6 +60450,12 @@
       "sha256": "ce7eff592dfc4f7c4d0787250f7800f35c6013015c72e30d459e423be04f9ed0"
     },
     {
+      "path": "tests/architecture/pages-routes.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2931,
+      "sha256": "45bca7cf00ff2548071966128231e569208a58f965347be0543ec444b53fff43"
+    },
+    {
       "path": "tests/architecture/product-fast-path.test.mjs",
       "extension": ".mjs",
       "bytes": 7747,
@@ -60507,8 +60596,8 @@
     {
       "path": "tests/cart/quantity-browser.spec.js",
       "extension": ".js",
-      "bytes": 7355,
-      "sha256": "e098bade74a82377ff4613210882e3b2d674004bc9d9482863d3f2b2a3072a37"
+      "bytes": 7026,
+      "sha256": "0ced36125628affb6a76c28fe44847ced1c9904e4412d64c828d467e437b6a1a"
     },
     {
       "path": "tests/cart/stock-variant-client.test.mjs",
@@ -60939,8 +61028,8 @@
     {
       "path": "tests/flow-connections/produccion-verificacion.test.mjs",
       "extension": ".mjs",
-      "bytes": 1162,
-      "sha256": "a97221ebb264daffd046f7ae4b135165666d1aa9a24b656215bc1f2e5d4f1108"
+      "bytes": 1186,
+      "sha256": "2e4ebc7f7cf81d68eeb242a67980faa85e3c46e25b8a42d395148e92b36cded0"
     },
     {
       "path": "tests/flow-connections/proteccion-flujos.test.mjs",
@@ -61683,8 +61772,8 @@
     {
       "path": "tests/push/manifest-icon-audit.test.mjs",
       "extension": ".mjs",
-      "bytes": 1709,
-      "sha256": "4eac70a8addf244718b7cf5c4b74b03bfe9fb9e4f5b57c6558d124fc25f910ea"
+      "bytes": 1861,
+      "sha256": "3df4fbd46bc89bc882b990a0d96a90e891e04c38773803a68307b50f1262e86c"
     },
     {
       "path": "tests/push/push-web.test.mjs",
@@ -65305,17 +65394,17 @@
           },
           {
             "file": "scripts/auditar-final-integracion.js",
-            "line": 45,
+            "line": 46,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-final-integracion.js",
-            "line": 51,
+            "line": 52,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-final-integracion.js",
-            "line": 58,
+            "line": 59,
             "operation": "doc"
           },
           {

@@ -30,3 +30,10 @@ Merge y despliegue web están autorizados. La publicación de código no acredit
 ## Seguimiento del control de bienvenida
 
 La CI39519261730 confirmó build reproducible y sin drift, dominio, CSS e integraciones. El siguiente contrato detectó una referencia literal histórica en el auditor de confiabilidad, aunque los dos consumidores usan la misma URL vigente. El auditor lee ahora la versión canónica del baseline y mantiene todas las otras condiciones. audit:reliability y7 regresiones de actividad pasan. Se regeneran plan y manifiestos; CI del nuevo SHA y publicación siguen PENDING hasta evidencia remota. La desconexión temporal del entorno se recuperó sin descartar los commits publicados.
+
+
+## Conciliación del avance concurrente y del fixture
+
+Incluye fb95aa72 de1182 mediante merge normal. La cobertura de Pages pasa a scripts/lib/rutas-pages.js, consumida por rutas, CSP y auditor final; el conjunto de100 rutas coincide exactamente con el candidato previo. Trece pruebas Node de rutas, monitor e iconos pasan. Se conservan AGENTS y documentos de coherencia añadidos en ese avance.
+
+La CI39520598235 aprobó contratos, operaciones, Rules, Maestro y navegación pública antes de detectar un consumidor de prueba pendiente: quantity-browser importaba el comparador retirado de1156 aunque el renderer actual no lo usa. Se migra el fixture al renderer canónico y la regresión de etiquetas/suma/readonly/reinicio pasa en Chromium sin reintentos. No se restaura una implementación paralela ni se modifica el producto. Se repiten los controles completos del nuevo SHA.1182 queda temporalmente borrador para evitar dos publicaciones paralelas del mismo conjunto.
