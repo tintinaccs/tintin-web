@@ -189,8 +189,8 @@ body:has(.login-page) :is(
 }
 
 body:has(.login-page) .login-email-input::placeholder {
-  color:var(--color-text-primary,#222222) !important;
-  opacity: 1;
+  color: #595959 !important;
+  opacity: .85;
 }
 
 body:has(.login-page) .login-email-input,

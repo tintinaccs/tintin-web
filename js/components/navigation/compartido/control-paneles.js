@@ -30,6 +30,10 @@
       document.addEventListener('click', this.onClick, true);
       addEventListener('resize', this.onResize, { passive: true });
       addEventListener('orientationchange', this.onResize, { passive: true });
+      // Privacidad es una superficie propia, por encima del panel, incluso si llega tarde.
+      if (document.body) new MutationObserver(records => {
+        if (records.some(record => [...record.addedNodes, ...record.removedNodes].some(node => node.id === 'tt-privacy-consent'))) this.syncModalAccessibility();
+      }).observe(document.body, { childList: true });
     }
 
     connect({ backdrop, morphLayer }) {
@@ -172,12 +176,24 @@
       return this.getBreakpoint() === 'mobile' ? document.getElementById('tt-tabbar') : null;
     }
 
+    getPrivacySurface() {
+      const banner = document.getElementById('tt-privacy-consent');
+      return banner && !banner.hidden && banner.getClientRects().length ? banner : null;
+    }
+
+    syncModalAccessibility() {
+      const config = this.registry.get(this.surface);
+      if (!config?.modal) return;
+      if (config.element.hasAttribute('aria-modal')) config.element.setAttribute('aria-modal', String(!this.getMobileNavigation() && !this.getPrivacySurface()));
+      if (!this.getPrivacySurface() && document.activeElement === document.body) this.focusFirst(config);
+    }
+
     setBackgroundInert(activeElement, inert) {
       if (inert) {
         this.inertState.clear();
         const navigation = this.getMobileNavigation();
         [...document.body.children].forEach(node => {
-          if (!(node instanceof HTMLElement) || node === activeElement || node.contains(activeElement) || (navigation && node.contains(navigation)) || node === this.backdrop || node === this.morphLayer || node.id === 'tt-cart-feedback' || node.tagName === 'SCRIPT') return;
+          if (!(node instanceof HTMLElement) || node === activeElement || node.contains(activeElement) || (navigation && node.contains(navigation)) || node === this.backdrop || node === this.morphLayer || node.id === 'tt-cart-feedback' || node.id === 'tt-privacy-consent' || node.tagName === 'SCRIPT') return;
           this.inertState.set(node, node.inert);
           node.inert = true;
         });
@@ -240,6 +256,7 @@
         this.setBackdrop(true, name);
         this.lockScroll();
         this.setBackgroundInert(config.element, true);
+        this.syncModalAccessibility();
       }
 
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -314,6 +331,8 @@
         return;
       }
 
+      if (target?.closest('#tt-privacy-consent')) return;
+
       const trigger = target?.closest('#btn-tienda,#btn-menu-tablet,#tabbar-tienda,[data-nav-action="search"],#tabbar-search,[data-nav-action="cart"],#tabbar-cart,[data-nav-action="account"],[data-nav-action="notifications"],#tabbar-notifications');
       if (!trigger && this.surface !== 'none') {
         const openConfig = this.registry.get(this.surface);
@@ -360,6 +379,8 @@
       const roots = [config.element];
       const navigation = this.getMobileNavigation();
       if (navigation) roots.push(navigation);
+      const privacy = this.getPrivacySurface();
+      if (privacy) roots.push(privacy);
       const nodes = roots.flatMap(root => [...root.querySelectorAll(FOCUSABLE)]).filter(node => node.offsetParent !== null);
       if (!nodes.length) {
         event.preventDefault();
@@ -369,10 +390,11 @@
 
       const first = nodes[0];
       const last = nodes[nodes.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
+      const outside = !roots.some(root => root.contains(document.activeElement));
+      if (event.shiftKey && (document.activeElement === first || outside)) {
         event.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
+      } else if (!event.shiftKey && (document.activeElement === last || outside)) {
         event.preventDefault();
         first.focus();
       }

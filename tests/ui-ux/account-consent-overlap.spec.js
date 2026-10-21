@@ -1,0 +1,46 @@
+const {test,expect}=require('@playwright/test');
+const fs=require('node:fs');
+const path=require('node:path');
+test.use({reducedMotion:'reduce'});
+const root=path.resolve(__dirname,'../..');
+const resources=fs.readFileSync(path.join(root,'js/components/navigation/compartido/recursos-navegacion.js'),'utf8');
+const css=['styles.min.css','css/core/tokens-tintin.css',...Array.from(resources.matchAll(/'([^']+\.css)'/g),m=>m[1])];
+const fixture=`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${css.map(p=>`<link rel="stylesheet" href="/${p}">`).join('')}</head><body><main id="background"><button id="open" data-nav-action="account">Mi cuenta</button><a href="/catalogo">Catálogo</a></main><script type="module">
+import {renderAccountDrawer} from '../../js/components/navigation/compartido/panel-cuenta.js';
+document.body.insertAdjacentHTML('beforeend',renderAccountDrawer()+'<div id="backdrop" class="tt-shared-backdrop" hidden></div>');
+document.getElementById('account-panel').innerHTML='<h3>Tu cuenta Tintin</h3><a href="/login">Iniciar sesión</a>';
+await import('../../js/components/navigation/compartido/control-paneles.js');
+window.TintinSurfaceController.connect({backdrop:document.getElementById('backdrop')}).register('account',{element:document.getElementById('account-drawer')});
+await import('../../js/analytics/consentimiento-privacidad.js');
+document.body.dataset.ready='true';
+</script></body></html>`;
+for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1366,768],[1440,900],[1920,1080]])for(const late of [false,true])test(`cuenta y cookies operables ${width}x${height}, aviso ${late?'posterior':'previo'}`,async({page})=>{
+ await page.setViewportSize({width,height});
+ await page.route('https://tintin.test/**',async route=>{
+  const url=new URL(route.request().url());if(url.pathname==='/__consent-panel')return route.fulfill({contentType:'text/html',body:fixture});
+  const file=path.join(root,url.pathname);if(!file.startsWith(root+path.sep)||!fs.existsSync(file)||!fs.statSync(file).isFile())return route.abort();
+  return route.fulfill({path:file,contentType:file.endsWith('.js')||file.endsWith('.mjs')?'text/javascript':undefined});
+ });
+ await page.route('https://www.gstatic.com/**',r=>r.abort());
+ await page.goto('https://tintin.test/__consent-panel');await expect(page.locator('body')).toHaveAttribute('data-ready','true');
+ if(!late)await expect(page.locator('#tt-privacy-consent')).toBeVisible();
+ await page.locator('#open').click();await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('open');
+ if(late)await expect(page.locator('#tt-privacy-consent')).toBeVisible();
+ const banner=page.locator('#tt-privacy-consent'),account=page.locator('#account-drawer');
+ await expect(banner).toBeVisible();expect(await banner.evaluate(el=>Boolean(el.closest('[inert]')))).toBe(false);
+ expect(await page.locator('#background').evaluate(el=>el.inert)).toBe(true);
+ await expect(account).toHaveAttribute('aria-modal','false');
+ await banner.getByRole('button',{name:'Personalizar',exact:true}).click();
+ await expect(banner.locator('#tt-privacy-statistics')).toBeFocused();
+ await banner.getByRole('button',{name:'Guardar elección',exact:true}).focus();await page.keyboard.press('Tab');
+ await expect(page.locator('#btn-account-close')).toBeFocused();
+ await banner.getByRole('button',{name:'Solo necesarias',exact:true}).click();
+ await expect(banner).toHaveCount(0);await expect(account).toHaveAttribute('aria-hidden','false');
+ expect(await page.evaluate(()=>document.cookie.includes('tt_privacy_choice=v2.necessary'))).toBe(true);
+ await expect(page.locator('#btn-account-close')).toBeFocused();
+ await page.evaluate(()=>window.TintinActivityPrivacy.open());
+ await page.getByRole('button',{name:'Cerrar preferencias',exact:true}).click();
+ await expect(banner).toHaveCount(0);await expect(account).toHaveAttribute('aria-hidden','false');
+ await page.locator('#btn-account-close').click();await expect(account).toHaveAttribute('aria-hidden','true');
+ expect(await page.locator('#background').evaluate(el=>el.inert)).toBe(false);
+});
