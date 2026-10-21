@@ -3,6 +3,8 @@
 var TINTIN_LOCAL_MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var TINTIN_LOCAL_PATH = '/api/local-commerce-webhook';
 var TINTIN_LOCAL_BOOK = '106Z1A8veL9fGMc4U7R10NVNMsJiEYt9wiGr4YFAav1U';
+// Una versión nueva debe reaplicar el espejo aunque los datos no hayan cambiado.
+var TINTIN_LOCAL_MIRROR_VERSION = 'web-orders-borrados-1';
 // Minute-level triggers should not require a Drive-backed DocumentProperties
 // lookup. One bound project owns this workbook; prefix its private state in
 // ScriptProperties so a Drive timeout cannot abort every reconciliation.
@@ -172,11 +174,11 @@ function tintinReconciliarComercioLocal_() {
   try {
     // Primero envía cambios pendientes. Si hay conflicto, no borra la edición local.
     tintinLocalPushAll_();var properties=tintinLocalProperties_(),revision=tintinLocalCall_({action:'snapshot',revisionOnly:true}),webSignature=tintinLocalWebSignature_();
-    if(properties.getProperty('LOCAL_LAST_REVISION')===revision.revision&&properties.getProperty('LOCAL_LAST_WEB_SIGNATURE')===webSignature)return {unchanged:true,revision:revision.revision};
+    if(properties.getProperty('LOCAL_MIRROR_VERSION')===TINTIN_LOCAL_MIRROR_VERSION&&properties.getProperty('LOCAL_LAST_REVISION')===revision.revision&&properties.getProperty('LOCAL_LAST_WEB_SIGNATURE')===webSignature)return {unchanged:true,revision:revision.revision};
     var before=tintinLocalCurrentFingerprints_();var snapshot=tintinLocalCall_({action:'snapshot'});
     if(before!==tintinLocalCurrentFingerprints_())throw new Error('La hoja se editó durante la consulta. La edición se conserva; reintentá.');
     tintinLocalApplySnapshot_(snapshot);tintinLocalRememberSnapshot_();
-    properties.setProperties({LOCAL_LAST_REVISION:snapshot.revision,LOCAL_LAST_WEB_SIGNATURE:webSignature},false);
+    properties.setProperties({LOCAL_LAST_REVISION:snapshot.revision,LOCAL_LAST_WEB_SIGNATURE:webSignature,LOCAL_MIRROR_VERSION:TINTIN_LOCAL_MIRROR_VERSION},false);
     message='Ventas, gastos, compras y clientes reflejados con versión '+snapshot.revision+'.';
     return {entries:snapshot.entries.length,customers:snapshot.customers.length,revision:snapshot.revision};
   } finally {lock.releaseLock();if(message)tintinRecordSyncSafely_('SYNCED','Ventas locales','bidireccional',message);}
