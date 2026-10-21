@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7786b4eaaacea9ff0804331b367b82c3f6c1fe480430ae74d45ed9a0382fccc5",
+  "sourceFingerprint": "5cddc90c1dc9bad7aec339db467b9f774badfbaca065a2d3786bb7fc9ef00bf1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1381,
-    "textFiles": 1290,
-    "totalBytes": 29187034,
+    "files": 1384,
+    "textFiles": 1293,
+    "totalBytes": 29202603,
     "pages": 19,
-    "modules": 970
+    "modules": 972
   },
   "viewports": [
     {
@@ -39348,6 +39348,54 @@
       "endpoints": []
     },
     {
+      "path": "scripts/copiar-respaldo-firestore-cifrado.mjs",
+      "bytes": 4241,
+      "sha256": "594ba21b8a6eb819bd68a54509d76ff021ffdb94cb85085dada6a6cf01555ef7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/corregir-fuente-tintin.js",
       "bytes": 4314,
       "sha256": "511a0800ea9c418ee3cc8560339cccc599f2a52bbc8cb65e4dcbd2b7dac88998",
@@ -48361,6 +48409,71 @@
       ]
     },
     {
+      "path": "tests/operations/encrypted-backup.test.mjs",
+      "bytes": 7484,
+      "sha256": "8116f301e3a4d67eec8cffe8bdc72000d68aa116e0c0466f475ec02506bedf50",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:os",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "../../scripts/copiar-respaldo-firestore-cifrado.mjs",
+          "target": "scripts/copiar-respaldo-firestore-cifrado.mjs",
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://example.com/",
+          "line": 54
+        }
+      ]
+    },
+    {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
       "bytes": 4736,
       "sha256": "04e66e329fae79a9deea9f8d033aa6b2c2e7b0c1cf1949ff3c8e83a64e0c2337",
@@ -54304,8 +54417,8 @@
     {
       "path": ".github/workflows/backup-firestore.yml",
       "extension": ".yml",
-      "bytes": 1265,
-      "sha256": "e7a0a548dc43a74976a7f0ed0eb404dd19f247ca4163e31ec86adcd8637116fd"
+      "bytes": 2894,
+      "sha256": "95be58b2c9fa36e23a527356ba32475e1271780909005de9ed2530540fa6e75c"
     },
     {
       "path": ".github/workflows/desplegar-pages.yml",
@@ -55366,8 +55479,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 9261,
-      "sha256": "3db14c67bf22e29ab84a321d6f7a2ad09525ae51426ab148d71c9870bb2c700a"
+      "bytes": 489,
+      "sha256": "4b55866cfea855399e9b2c00572f0741591d82f4ad467ba5b4ec06a014364bad"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55379,7 +55492,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "2b506015366a089fc8c4980327fc96293d68ee55f5b6a9bf9af30a861b8b66cc"
+      "sha256": "ab51c4f5139f6d57197e1e377acc3bb118d4bce863701d82346c44613c1b6ff9"
     },
     {
       "path": "config/public-site.json",
@@ -56038,8 +56151,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 755558,
-      "sha256": "12c5c836956750137cdac2714bed7759cc51db19d92e09dc4c686bd5118b7f64"
+      "bytes": 761343,
+      "sha256": "ba88564b102fdb5c7f5976844632ba068769c2dafe709a7964ee66da1bb471c6"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56428,8 +56541,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 89453,
-      "sha256": "9f9066043006e2bec8d2e718e42344ac7e859eaf73bb9f63d413eac96e0c3210"
+      "bytes": 90239,
+      "sha256": "91f34c054bcb82388acab63bb76e3526ccb54c033e39c21b11f71ce05d76ca6f"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -56520,6 +56633,12 @@
       "extension": ".md",
       "bytes": 12277,
       "sha256": "0fd371a097b95865a7ac2aac9a80a7a4763e1a829318b26e28ee71eb0eac7b03"
+    },
+    {
+      "path": "docs/respaldo-cifrado-local.md",
+      "extension": ".md",
+      "bytes": 4416,
+      "sha256": "9048641dc10272b6d914bf83658ffcf1cccd93868794ab3846dcbaead85e7cbd"
     },
     {
       "path": "docs/respaldo-recuperacion.md",
@@ -60008,6 +60127,12 @@
       "sha256": "65524849db10ab4bf4635879d7e66c20057afb0d000d691ab054c16cfd15fb90"
     },
     {
+      "path": "scripts/copiar-respaldo-firestore-cifrado.mjs",
+      "extension": ".mjs",
+      "bytes": 4241,
+      "sha256": "594ba21b8a6eb819bd68a54509d76ff021ffdb94cb85085dada6a6cf01555ef7"
+    },
+    {
       "path": "scripts/corregir-fuente-tintin.js",
       "extension": ".js",
       "bytes": 4314,
@@ -61542,6 +61667,12 @@
       "extension": ".mjs",
       "bytes": 6051,
       "sha256": "29c5205207e80f93612ceb6a51ec39ac3444ccb1b900508db533e8ebc7388a9f"
+    },
+    {
+      "path": "tests/operations/encrypted-backup.test.mjs",
+      "extension": ".mjs",
+      "bytes": 7484,
+      "sha256": "8116f301e3a4d67eec8cffe8bdc72000d68aa116e0c0466f475ec02506bedf50"
     },
     {
       "path": "tests/operations/firestore-restore-cli.test.mjs",

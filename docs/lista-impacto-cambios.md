@@ -573,3 +573,7 @@ Actualización1190 contra main cfd77c2c (#1191): conservar popup Google y GPS ca
 ## 2026-10-21 — Reconciliar bienvenida y seguimiento de pendientes
 
 PR1188 sobre main vigente: la fuente compartida de bienvenida adapta únicamente las dos frases antiguas Tienda/Catálogo. Conserva mensajes personalizados, controles de Admin, GPS cancelable y popup Google ya publicados. Los conflictos de CSP, diagnóstico, caché y protección se regeneran desde sus autoridades; los informes previos se conservan como evidencia histórica. Drenajes y respaldos usan los workflows existentes sin cambios de permisos, stock, pedidos ni credenciales. El estado actual distingue publicación pendiente, configuración externa y verificaciones físicas no realizadas.
+
+## 2026-10-21 — Copia cifrada de un respaldo existente
+
+Fuente: workflow Backup Firestore y helper de copia CMS; el cron diario y sus credenciales/entorno permanecen. Opción manual lee el último snapshot completo del bucket, usa sólo certificado público, cifra en temporal y publica CMS+recibo por1día. No inicia otro export, importa ni escribe Firestore. Helper Windows prepara destinatario y cifra/descifra sin exportar la clave privada ni sobrescribir archivos. Tests de interoperabilidad real, export incompleto, error/limpieza y límite de artefactos se conectan a operations existente. Estado y autorización local en CURRENT_STATE, procedimiento de recuperación en docs/respaldo-cifrado-local.md. Sin cambios de UI, catálogo, Auth, inventario, pagos o PR concurrentes.
