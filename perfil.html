@@ -665,10 +665,16 @@ async function loadProfile(user, attempt = 0) {
     }
     try {
       await persistAddressBook(added.list);
+      if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
       closeLocationEditor();
       toast('✅ Dirección guardada');
     } catch (err) { toast('❌ Error al guardar la dirección'); }
-    finally { window.TintinReleaseProfileButton?.('btn-guardar-ubicacion'); }
+    finally {
+      if (profileConfirmed && generation === profileGeneration && auth.currentUser?.uid === user.uid) {
+        window.TintinReleaseProfileButton?.('btn-guardar-ubicacion');
+        document.getElementById('btn-guardar-ubicacion').disabled = !toSavedLocation(locationMap?.getLocation() || {});
+      }
+    }
   };
 
   // Save
