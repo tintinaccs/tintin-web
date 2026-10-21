@@ -1,3 +1,6 @@
+
+Cierre de interfaz conciliada:230/230 Chromium UI,126/126 combinaciones canónicas,65/65 rendimiento y16/16 disponibilidad/PayPal sin reintentos. Gate tipográfico detectó una declaración font-family:inherit redundante del diálogo: retirada para heredar la fuente canónica sin añadir otra definición. Tipografía, colores, integridad CSS y arquitectura modular PASS_LOCAL. PR #1196 publicado; CI y producción pendientes de la cabeza corregida, sin heredar el preview del SHA anterior.
+
 ## 2026-10-21 — Respaldo remoto consultado y cierre de las pruebas (Codex /root)
 
 Run39647692594 Backup Firestore success; copia cifrada del último export completo conservada, artefacto no vencido de12.229.272 bytes creado2026-10-21T17:53:21Z (caduca2026-10-22T17:53:20Z). Exportar Firestore skipped: no equivale a nuevo snapshot ni restauración remota. Sin descargar datos comerciales.193/193 checkout/pagos tras recuperación del pago ya capturado;65/65 Chromium rendimiento y20/20 header conciliado PASS_LOCAL. La regresión de identidad ahora usa barrera de lectura, evitando carreras del fixture con plazos fijos. Build, resto de interfaz y CI pendientes del candidato final. Detalle en docs/revision-comercio-20261021.md.

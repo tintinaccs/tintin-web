@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "8081ab5159e9c7955b72937255de9c2db1723ac2",
-  "reason": "Reserva inmediata y recuperación de PayPal, búsqueda común, unificación de Pulseras y header extendido con versiones alineadas",
+  "reason": "Reserva inmediata autorizada, recuperación PayPal y mejoras de búsqueda, Pulseras y header con tipografía y caché canónicas",
   "files": [
     {
       "path": "_headers",
@@ -81,7 +81,7 @@
     {
       "path": "css/pages/checkout/checkout.css",
       "oldHash": "e9b5ffac0516d037aa721bd1ad9cac546fda86a8d67b7ee086ea72cdcc6c054e",
-      "newHash": "a46e6f1ac0ca7f4c3a5c04b83d87a9304ca54808673dcec77c3e487b5631eea3"
+      "newHash": "c586a2e952cf7c55a8792781db2a3cf500f5f0ccda170933f3f38c16598e55b1"
     },
     {
       "path": "css/theme/sistema-superficies-tintin.css",
@@ -261,7 +261,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "72b54169a202b89e53c10abf0c1c4b19fd14d30ce4152fb8a610b8f384205a8b",
-      "newHash": "68fd8b6795b8aa3ad5c8bb83821c0cda8196b99e5ae95670b368bf61d40da456"
+      "newHash": "94fd2160a6b9550753a88da3959939886064f22e136d8adf40a4349771423b4f"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
