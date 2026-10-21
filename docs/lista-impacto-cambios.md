@@ -545,3 +545,6 @@ Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187
 Avance final1180: orden visual compartido entre galería y selectores, sin modificar inventario/fotos; diagnóstico Auth demo al salir; regresiones y artefactos canónicos sobre main6033.
 
 2026-10-21: selector de color de ficha con nombre visible, muestra, marca seleccionada, teclado y estado Agotado; fuente product-maintenance.css y fallback vigente, caché transitiva y artefactos canónicos. Datos/comercio conservados.
+## 2026-10-21 — Copia cifrada de un respaldo existente
+
+Fuente: workflow Backup Firestore y helper de copia CMS; el cron diario y sus credenciales/entorno permanecen. Opción manual lee el último snapshot completo del bucket, usa sólo certificado público, cifra en temporal y publica CMS+recibo por1día. No inicia otro export, importa ni escribe Firestore. Helper Windows prepara destinatario y cifra/descifra sin exportar la clave privada ni sobrescribir archivos. Tests de interoperabilidad real, export incompleto, error/limpieza y límite de artefactos se conectan a operations existente. Estado y autorización local en CURRENT_STATE, procedimiento de recuperación en docs/respaldo-cifrado-local.md. Sin cambios de UI, catálogo, Auth, inventario, pagos o PR concurrentes.

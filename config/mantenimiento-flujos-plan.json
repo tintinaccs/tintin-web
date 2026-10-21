@@ -1,92 +1,13 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9147ab2feea93ff9e57817ebc854df65a7570264",
-  "reason": "Acotar y cancelar la espera GPS de Perfil/Checkout y solicitar popup Google explícito; 304 Node, 41 Chromium y 41 WebKit, sin escrituras reales.",
+  "baseCommit": "cfd77c2c43697339da6561945d3965308cc1e18e",
+  "reason": "Agregar copia manual cifrada sólo para titular sobre main, sin cambiar cron, credenciales ni datos de producción.",
   "files": [
     {
-      "path": "_headers",
-      "oldHash": "72d5e96b556ce3fcb03ad2a5e554cc305eae704b99a25e07998c279d7ce04041",
-      "newHash": "3604c43eef8446a710a7ad7a0ff68a192e06a85a707fe6d49aba1eb8c1b40dec"
-    },
-    {
-      "path": "checkout.html",
-      "oldHash": "6e56a58d05e446b3b4e2e8f4807dbb2cce8c9aae87a616f61d5f070e8e6ac064",
-      "newHash": "fe3a3efc24e2900ef4b89ece9ed8252bb50b6589dd12270465090ebc953817ea"
-    },
-    {
-      "path": "config/csp-runtime.js",
-      "oldHash": "eb9ee5c23f89db4648bc0833505014625b23cc4c0ab1b1611200b6f677ac814f",
-      "newHash": "eeda4ea48db81185537e211d95a4efee032472de7e84de8d97fb8808f00c7e36"
-    },
-    {
-      "path": "config/csp-runtime.json",
-      "oldHash": "0ba5277d169dc346fa3ae1598c0087b61dc87654ae3028feaa5f7931b14f23d2",
-      "newHash": "62338920578322f0bbc85d2db9a69e1ac410f7b9c67a370ad67936457fe5fca9"
-    },
-    {
-      "path": "js/components/location/geolocalizacion.mjs",
-      "oldHash": "9cc52847c96650ab1ac3e39e9100b20f081a10da314c281c465c641767aad840",
-      "newHash": "284fec00454a9fa45fc61228afc30090c6f8ab24b5562f71416ffe38319553eb"
-    },
-    {
-      "path": "js/components/location/mapa-ubicacion.js",
-      "oldHash": "07fdf8e7421bcb7e9ff4a765aa112b88700ecb9a3dedb1e02dda457670287fa3",
-      "newHash": "60a2caa4f343c4f78e802d971cf1a202914694d02075d3e8c24a32ff647b0d1e"
-    },
-    {
-      "path": "login.html",
-      "oldHash": "13fc128f7796778ec4cae9503264c4189ac8db9e45cc914a6220fdf23f648393",
-      "newHash": "1ae7d108a35745d6a6a764b067ef7795147f4354b06fa2b5879c3197ccb46176"
-    },
-    {
-      "path": "package.json",
-      "oldHash": "2a37a71060ced72cf8ddf21fb2f3d870d0b86a1c401e3382c3f450f65f780b26",
-      "newHash": "9a0e4b811b8c8404b48ed5323f74452c9989befab319beaf4248e5807162056b"
-    },
-    {
-      "path": "perfil.html",
-      "oldHash": "085ecad62c2a790d77b4c7c1f9b0a7ccb0b55dcfc9d2e9ecdb9065e54741ffe1",
-      "newHash": "b46896faefc2cd5744a2ea8776458b05c0ca79dc383b670dbdf52130e9cb27a1"
-    },
-    {
-      "path": "scripts/cache-version-baseline.json",
-      "oldHash": "4ef0da4b5f86e12e524b9a67112e700119a653b806678556eb6cfe2b925bb65c",
-      "newHash": "59ddffc232a731f1f0777343d330b6e5524957d4cf3b40e29d54ef8dda3decbb"
+      "path": ".github/workflows/backup-firestore.yml",
+      "oldHash": "e7a0a548dc43a74976a7f0ed0eb404dd19f247ca4163e31ec86adcd8637116fd",
+      "newHash": "b84f73348a46dbcfc581fb5aac96be411da4d32b92e46790b5c89890d0b90ba3"
     }
   ],
-  "affectedRecords": [
-    "cf-functions",
-    "cf-functions__apis-internas__20",
-    "cf-functions__csp__29",
-    "cf-functions__reglas-firestore__28",
-    "cf-pages__cf-functions__19",
-    "csp",
-    "cuenta-bloqueada",
-    "entrada-login",
-    "entrada-login__google-btn__1",
-    "entrada-login__login-codigo__2",
-    "firebase-auth__redirect-result__5",
-    "firestore__users-uid__8",
-    "google-btn",
-    "google-btn__firebase-auth__3",
-    "login-codigo",
-    "login-codigo__firebase-auth__4",
-    "pagina-principal",
-    "perfil",
-    "perfil__ultimos-datos__11",
-    "redirect-result",
-    "redirect-result__sesion-estado__6",
-    "roles__pagina-principal__17",
-    "roles__perfil__10",
-    "roles__super-panel__14",
-    "super-panel",
-    "super-panel__admin-guard__15",
-    "super-panel__pedidos__35",
-    "super-panel__productos__34",
-    "ultimos-datos",
-    "ultimos-datos__perfil__13",
-    "users-uid",
-    "users-uid__cuenta-bloqueada__12",
-    "users-uid__roles__9"
-  ]
+  "affectedRecords": []
 }
