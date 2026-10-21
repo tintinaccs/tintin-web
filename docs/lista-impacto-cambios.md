@@ -5,15 +5,28 @@ Amplía la mejora de Productos con category validada dentro de la transacción c
 ## 2026-10-21 — Tarjetas compactas y editor de Productos a pantalla completa
 
 Fuentes canónicas: shopify-commerce-admin.js/css e interfaz-productos-adaptable.js. Las tarjetas agrupan imagen contenida, identidad/precio, estado semántico y controles de visibilidad/stock; muestran muestras de la paleta existente y selector nativo cuando hay más de cuatro opciones. Una columna en móvil, dos en tablet y tres en escritorio, conservando vista Lista. El editor ocupa el área bajo la cabecera en todos los tamaños, utiliza un único desplazamiento principal y dos acciones flotantes, y ordena fotos por color y vista previa sin una barra de pie. Conserva los controladores de guardado, permisos, inventario, guardia de borradores y sincronización. La captura de foco y Escape se aplican también al editor de escritorio. No cambia datos reales, Auth, Rules, pagos ni integraciones. Se actualizan referencias inmutables, diagnóstico y plan protegido desde sus herramientas; evidencia y límites en CURRENT_STATE.
+## 2026-10-21 — Conciliación OAuth de1189 con Perfil/iconos
 
 ## 2026-10-21 — Texto, jerarquía e iconos de la guía
 
 Fuentes: configuración compartida, tutorial público y preview del editor de bienvenida. Un título por paso, texto directo coherente con Catálogo/carrito/checkout, indicador de paso visible e iconos SVG constantes; conserva imágenes/emojis propios, edición, aparición, cuentas y flujo de compra. Compatibiliza sólo copias base anteriores. Cuerpo y acciones legibles con texto largo y móvil horizontal; WELCOME_VERSION conserva la identidad de onboarding. Se verifica normalización real, cuatro recorridos y paridad de preview; dependencias versionadas, CSP, protección y diagnóstico se regeneran desde sus autoridades. No cambia datos ni reactiva cuentas.
 
+## 2026-10-21 — Contrato del guard Google sin cancelación paralela
+
+El auditor de aislamiento exigía la implementación anterior popup.closed/setInterval. Se actualiza a confirmación por la promesa del SDK, plazo y limpieza, preservando fallback restringido, persistencia, roles y handoff; regresiones negativas rechazan reintroducir sondeo, quitar limpieza o ampliar el redirect. Afecta sólo scripts/auditar-acceso-aislamiento.js y su nuevo test, más evidencia/plan/diagnóstico.21/21 aislamiento,106 regresiones y228 Node de dominio aprobados. No cambia runtime frente a44+44 navegadores aprobados; CI del nuevo SHA pendiente.
+## 2026-10-21 — Complemento responsive y avisos independientes de ubicación/Google
+
 ## 2026-10-21 — Recuperar ubicación y pedir popup de Google
 
-Fuentes canónicas: geolocalizacion.mjs y mapa-ubicacion.js compartidos por Perfil/Checkout; espera-popup-google.mjs consumido por login. El GPS tiene dos plazos de5s y señal de cancelación: marcar/buscar, limpiar o desmontar conserva el punto actual e invalida respuestas tardías. No guarda una dirección ni inventa coordenadas ante un fallo. Google pide popup=yes sólo para Auth y conserva nombre, dimensiones, opener y resultado del SDK; el sistema móvil sigue determinando la presentación soportada. Login no cambia persistencia, roles, confirmaciones ni fallback ante bloqueo. Las tres referencias se renuevan juntas; CSP/caché/manifiestos y plan desde autoridades existentes. Pruebas de negativas, cancelación, reintento, callback tardío, una solicitud y matriz de diez geometrías en Chromium/WebKit; dos specs existentes se conectan al gate de acceso/perfil. Evidencia y límites en CURRENT_STATE. Sin escrituras comerciales, dirección real, cierre de sesión ni cambios de permisos.
+Se integra1189f772 por merge normal, manteniendo los layouts/iconos del conjunto1190 y la recuperación GPS publicada. waitForGooglePopup entrega la decisión de éxito/cancelación a Firebase, conserva popup=yes y plazo120s con cleanup; Login usa mensajes neutrales. El auditor de aislamiento exige ese contrato y rechaza el sondeo paralelo de closed. Pruebas Node/navegador comprueban confirmación con referencia cerrada, cancelación del SDK, vencimiento y recuperación del formulario. Se renueva la URL inmutable del helper, CSP y plan exacto contra main vigente. Sin cambios de proveedor, permisos, cuentas ni datos reales.
 
+## 2026-10-21 — Favicon rosado y forma de iconos instalados
+
+Autoridad: scripts/generar-iconos-admin.mjs deriva del alfa de assets-tintin/images/general/logo.png, sin cambiar el logo original. Afecta ICO canónico, PNG16/32/192/512, Apple180, iconos Admin y badge, manifests público/privado y accesos, enlaces de todas las páginas, versiones de notificaciones y dependencias transitivas de navegación. Any circular transparente y maskable opaco son archivos distintos; el sistema aplica la máscara de instalación. Fuente de versiones del shell se actualiza junto al adaptador. Se conservan destinos y lógica push, CSP y política de caché. Contratos: decodificación, alfa/color/cobertura/cuerpo completo, zona segura maskable y regresiones push/cache/navegación; publicación exacta junto a Perfil en el PR1190.
+
+## 2026-10-21 — Ubicación de Perfil, alta y Checkout
+
+Fuentes: geolocalizacion.mjs, mapa-ubicacion.js, selector-ubicacion.css, resumen/acciones de perfil.html y validación de checkout-ubicacion-guardada.js. Recuperación acotada con watchPosition después del primer fallo, cancelación/limpieza al elegir/cerrar/destruir y avisos de mosaicos separados del GPS. Controles de48px, campos fluidos, guardado rosa con borde/icono y sólo habilitado con punto. Sin proveedor nuevo, geolocalización por IP, cambios de esquema, permisos o pedidos. Versionado de los cuatro recursos compartidos, consumidores alta/Perfil/Checkout y fixtures; CSP/diagnóstico/mantenimiento desde generadores.110 Node,18 Chromium y17 WebKit sin reintentos aprobados; ocho tamaños. Límites físicos/productivos en CURRENT_STATE.
 ## 2026-10-21 — Reaplicar el espejo mensual al actualizar su formato
 
 Fuente: apps-script/ComercioLocal.gs. La caché de revisión/firma también compara la versión del espejo y la confirma sólo después del snapshot aplicado. Fuerza una reconciliación tras la actualización para retirar líneas web obsoletas conservando ventas locales, gastos, compras, fórmulas, locks y conflictos. Dos regresiones reproducen datos sin cambios y snapshot fallido;22/22 aprobadas. CI, publicación y verificación de hoja real pendientes del candidato; no se heredan resultados de1180.
@@ -557,6 +570,27 @@ Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187
 Avance final1180: orden visual compartido entre galería y selectores, sin modificar inventario/fotos; diagnóstico Auth demo al salir; regresiones y artefactos canónicos sobre main6033.
 
 2026-10-21: selector de color de ficha con nombre visible, muestra, marca seleccionada, teclado y estado Agotado; fuente product-maintenance.css y fallback vigente, caché transitiva y artefactos canónicos. Datos/comercio conservados.
+
+2026-10-21: sección de agregar dirección en Perfil. HTML/campos agrupados y CSS responsive específico, mapa y acciones adaptables, foco visible y estados GPS conservados; libreta/IDs/permisos/guardado existentes. Validación12 viewports y giro de tablet, render de perfil y datos; CSS/caché/CSP/diagnóstico/plan desde autoridades canónicas.
+
+Conciliación1190+1189: layout único de Perfil; controles compartidos de ubicación/avisos separados, cancelación y recuperación de GPS y confirmación de coordenadas de Checkout. Conservar consumidores posteriores de main9147 y no heredar PASS de otros SHA.34 Chromium/111 Node del conjunto; versiones2 de ambos CSS y módulos GPS con sus versiones de origen.
+
+Actualización1190 contra main cfd77c2c (#1191): conservar popup Google y GPS cancelable de5s+5s publicados; separar avisos de teselas, recuperar lectura inicial inválida y mantener formulario único.14 viewports,57 Chromium/226 Node; nuevos Geo/Map3 y plan contra main vigente.
+
 ## 2026-10-21 — Reconciliar bienvenida y seguimiento de pendientes
 
 PR1188 sobre main vigente: la fuente compartida de bienvenida adapta únicamente las dos frases antiguas Tienda/Catálogo. Conserva mensajes personalizados, controles de Admin, GPS cancelable y popup Google ya publicados. Los conflictos de CSP, diagnóstico, caché y protección se regeneran desde sus autoridades; los informes previos se conservan como evidencia histórica. Drenajes y respaldos usan los workflows existentes sin cambios de permisos, stock, pedidos ni credenciales. El estado actual distingue publicación pendiente, configuración externa y verificaciones físicas no realizadas.
+
+## 2026-10-21 — Copia cifrada de un respaldo existente
+
+Fuente: workflow Backup Firestore y helper de copia CMS; el cron diario y sus credenciales/entorno permanecen. Opción manual lee el último snapshot completo del bucket, usa sólo certificado público, cifra en temporal y publica CMS+recibo por1día. No inicia otro export, importa ni escribe Firestore. Helper Windows prepara destinatario y cifra/descifra sin exportar la clave privada ni sobrescribir archivos. Tests de interoperabilidad real, export incompleto, error/limpieza y límite de artefactos se conectan a operations existente. Estado y autorización local en CURRENT_STATE, procedimiento de recuperación en docs/respaldo-cifrado-local.md. Sin cambios de UI, catálogo, Auth, inventario, pagos o PR concurrentes.
+
+## 2026-10-21 — Transparencia real al final del encabezado
+
+Fuente única: css/theme/sistema-superficies-tintin.css. Fondo y backdrop-filter18px pasan a ::before con máscara alfa, sin enmascarar contenido ni extender la capa fuera de la altura ocultable. Afecta header público escritorio/tablet/marca móvil y encabezados de checkout/login/Admin. Conserva tamaños, posición, navegación, logos y controles.18 consumidores HTML renuevan el URL CSS; bundles Inicio/Nosotros y baseline se regeneran. Smoke y contratos visuales inspeccionan la capa real y exigen contenedor transparente; la prueba nueva de píxeles/ocultación/clic se conecta al comando phase8 existente. Sin dependencias, datos reales ni cambios de seguridad. Evidencia y límites en CURRENT_STATE; CI y producción del SHA final pendientes.
+
+
+CI del encabezado: el auditor estático de Fase8 acepta ahora también la lista exacta que conserva sus pruebas previas y agrega la regresión del borde transparente. Se mantiene la comparación estricta, auditoría final y proyecto Chromium.15 controles y dos negativos verificados; sin cambios de runtime adicionales.
+
+
+Resolución final de conexión CI: se ubican las nuevas regresiones de transparencia dentro de section-flow-full-width.spec.js, que ya pertenece a la suite canónica. Package y auditores Fase8/Fase10 quedan exactamente como main; no se amplían sus listas ni se retira ningún gate.10 Chromium+10 WebKit integrados y27 controles estáticos pasan. La nota previa de ampliación del auditor describe un intento reemplazado, no el diff final.

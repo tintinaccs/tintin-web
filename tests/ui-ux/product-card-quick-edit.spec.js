@@ -108,6 +108,12 @@ for(const [id,index] of [['p-reloj',0],['p-pulsera',1]])test(`guardar un estado 
 
 for(const width of [390,1440])test(`colección puntual y visibilidad desde tarjetas ${width}`,async({page})=>{
  await loadCards(page,width,900);
+ const selectPage=page.getByLabel('Seleccionar esta página de colecciones',{exact:true});
+ await selectPage.check();
+ await expect(page.locator('[data-select-collection]:checked')).toHaveCount(3);
+ await expect(selectPage).toBeFocused();
+ await selectPage.uncheck();
+ await expect(page.locator('[data-select-collection]:checked')).toHaveCount(0);
  const product=page.locator('#tt-commerce-products tr[data-id="p-reloj"]');
  await product.locator('[data-card-stock]').fill('20');
  await product.getByLabel('Colección de Reloj Clásico Negro',{exact:true}).selectOption('pulseras');

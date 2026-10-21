@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: '17 5 * * *'
   workflow_dispatch:
+    inputs:
+      encrypted_copy:
+        description: Copiar el último export completo, cifrado para el destinatario (no inicia otro export)
+        type: boolean
+        default: false
+      recipient_pem:
+        description: Certificado público PEM del destinatario; nunca incluir una clave privada
+        type: string
+        required: false
 
 permissions:
   contents: read
@@ -22,6 +31,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Autorizar copia cifrada antes de cargar credenciales
+        if: ${{ inputs.encrypted_copy }}
+        run: |
+          node -e "if (process.env.GITHUB_REF !== 'refs/heads/main' || process.env.GITHUB_ACTOR !== process.env.GITHUB_REPOSITORY_OWNER) { console.error('La copia cifrada requiere main y ejecución del titular del repositorio.'); process.exit(1); }"
+
       - uses: google-github-actions/auth@v3
         with:
           credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}'
@@ -36,11 +50,31 @@ jobs:
           gcloud --quiet auth list --filter=status:ACTIVE --format='value(account)' | grep -q .
 
       - name: Exportar Firestore
+        if: ${{ !inputs.encrypted_copy }}
         env:
           FIREBASE_PROJECT_ID: tintin-accesorios
           FIRESTORE_BACKUP_BUCKET: '${{ secrets.FIRESTORE_BACKUP_BUCKET }}'
           FIRESTORE_BACKUP_PREFIX: production
         run: node scripts/backup-firestore.mjs
+
+      - name: Preparar copia cifrada del último export completo
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.encrypted_copy }}
+        env:
+          FIRESTORE_BACKUP_BUCKET: '${{ secrets.FIRESTORE_BACKUP_BUCKET }}'
+          BACKUP_RECIPIENT_PEM: '${{ inputs.recipient_pem }}'
+        run: node scripts/copiar-respaldo-firestore-cifrado.mjs
+
+      - name: Conservar únicamente la copia cifrada
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.encrypted_copy && success() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: firestore-encrypted-${{ github.run_id }}
+          path: |
+            artifacts/encrypted-backup/firestore-backup.p7m
+            artifacts/encrypted-backup/firestore-backup.json
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
 
       - name: Registrar resultado
         if: always()

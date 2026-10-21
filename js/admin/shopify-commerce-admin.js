@@ -645,6 +645,7 @@ function renderCollections() {
   const root = document.getElementById('tt-commerce-collections');
   if (!root) return;
   const focusedId=root.contains(document.activeElement) ? document.activeElement.dataset.collectionVisible : null;
+  const pageSelectionFocused=root.contains(document.activeElement) && document.activeElement.matches('[data-check-all="collections"]');
   const counts = collectionTabCounts();
   const list = filteredCollections();
   const page = pageSlice(list, state.collectionPage);
@@ -698,9 +699,10 @@ function renderCollections() {
       </div>
       ${collectionsWarning}
       ${!state.collectionsReady ? '<div class="tt-commerce-loading">Cargando colecciones…</div>' : collectionsUnavailable ? '' : page.items.length ? `
+      <label class="tt-collection-select-page"><input type="checkbox" data-check-all="collections" ${allVisibleSelected ? 'checked' : ''} aria-label="Seleccionar esta página de colecciones"><span>Seleccionar esta página</span></label>
       <div class="tt-commerce-tablewrap">
         <table class="tt-commerce-table tt-commerce-collection-grid">
-          <thead><tr><th class="checkcol"><input type="checkbox" data-check-all="collections" ${allVisibleSelected ? 'checked' : ''}></th><th>Colección</th><th>Visibilidad</th><th>Productos</th><th>Orden</th><th></th></tr></thead>
+          <thead><tr><th class="checkcol">Selección</th><th>Colección</th><th>Visibilidad</th><th>Productos</th><th>Orden</th><th></th></tr></thead>
           <tbody>${page.items.map(collectionItem => {
             const count = collectionProductCount(collectionItem.slug);
             const selected = state.collectionSelected.has(collectionItem.slug);
@@ -718,6 +720,7 @@ function renderCollections() {
       <div class="tt-commerce-footer"><span>${rangeLabel(page, 'colecciones', collectionsUnavailable)}</span><span>El orden y la visibilidad impactan la tienda pública.</span>${pageControls('collections-page', page.page, page.pages)}</div>
     </div>`;
   if(focusedId)root.querySelector(`[data-collection-visible="${CSS.escape(focusedId)}"]`)?.focus({preventScroll:true});
+  else if(pageSelectionFocused)root.querySelector('[data-check-all="collections"]')?.focus({preventScroll:true});
 }
 
 function orderStatusBadge(status) {

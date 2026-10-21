@@ -19,6 +19,11 @@ test('sin nombre tampoco: confirmar dos números no significa nada', () => {
   assert.equal(isConfirmableLocation({ lat: -25.29, lng: -57.63, name: '   ' }), false);
 });
 
+test('coordenadas fuera del planeta no se ofrecen para confirmar', () => {
+  assert.equal(isConfirmableLocation({ ...GUARDADA, lat: 91 }), false);
+  assert.equal(isConfirmableLocation({ ...GUARDADA, lng: -181 }), false);
+});
+
 test('no se rompe con nada', () => {
   assert.equal(isConfirmableLocation(null), false);
   assert.equal(isConfirmableLocation(undefined), false);
