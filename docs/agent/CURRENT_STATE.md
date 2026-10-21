@@ -1,5 +1,5 @@
 
-Cierre de interfaz conciliada:230/230 Chromium UI,126/126 combinaciones canónicas,65/65 rendimiento y16/16 disponibilidad/PayPal sin reintentos. Gate tipográfico detectó una declaración font-family:inherit redundante del diálogo: retirada para heredar la fuente canónica sin añadir otra definición. Tipografía, colores, integridad CSS y arquitectura modular PASS_LOCAL. PR #1196 publicado; CI y producción pendientes de la cabeza corregida, sin heredar el preview del SHA anterior.
+Cierre de interfaz conciliada:230/230 Chromium UI,126/126 combinaciones canónicas,65/65 rendimiento y16/16 disponibilidad/PayPal sin reintentos. Gate tipográfico detectó una declaración redundante de fuente en el diálogo: retirada para heredar la fuente canónica sin añadir otra definición. Tipografía, colores, integridad CSS y arquitectura modular PASS_LOCAL. PR #1196 publicado; CI y producción pendientes de la cabeza corregida, sin heredar el preview del SHA anterior.
 
 ## 2026-10-21 — Respaldo remoto consultado y cierre de las pruebas (Codex /root)
 
