@@ -43,12 +43,18 @@ for (const [width,height] of viewports) {
     await page.route('**/__header-surfaces',route=>route.fulfill({contentType:'text/html',body:removeFixtureScripts(fs.readFileSync('404.html','utf8'),{removeModulePreloads:true})}));
     await page.goto('/__header-surfaces');
     await page.addScriptTag({type:'module',content:`import {renderDesktopHeader} from '../../js/components/navigation/escritorio/encabezado-escritorio.js';import {renderTabletHeader} from '../../js/components/navigation/tableta/encabezado-tableta.js';document.body.insertAdjacentHTML('afterbegin',renderDesktopHeader()+renderTabletHeader());`});
+    await page.addScriptTag({url:'/js/components/color/logotipo-marca.js'});
     const header=page.locator(width<768?'#tt-mobile-brand':width<1025?'#tt-header-tablet':'#tt-header-desktop-tablet');
     await expect(header).toBeVisible();
     const style=await header.evaluate(n=>{const s=getComputedStyle(n);return {background:s.backgroundImage,blur:s.backdropFilter,border:s.borderBottomWidth};});
     expect(style.background).toContain('linear-gradient');expect(style.background).not.toContain('184, 76, 114');
     expect(style.blur).toContain('blur(18px)');expect(style.border).toBe('0px');
     if(width<768)await expect(page.locator('.tt-mobile-brand-ink')).toHaveCSS('flood-color','rgb(255, 255, 255)');
+    else {
+      const logo=header.locator('.tt-logo-img,.tt-tablet-logo-img');
+      await expect(logo).toHaveAttribute('src',/\/images\/general\/logo\.png\?v=/);
+      await expect(logo).toHaveCSS('filter','brightness(0) invert(1)');
+    }
     expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
     await page.screenshot({path:`artifacts/local-close/header-tones-${width}.png`});
   });

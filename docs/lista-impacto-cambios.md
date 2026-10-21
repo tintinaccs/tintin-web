@@ -526,3 +526,5 @@ Se concilian historias929/1122/1134/1146/1154/1156/1170/1180/1182 con main dc6da
 ## 2026-10-20 — Rutas de Pages y fixture canónicos en la consolidación
 
 Se integra el avance concurrente fb95aa72: rutas, CSP y verificador final comparten scripts/lib/rutas-pages.js; las100 reglas mantienen el mismo conjunto y sólo cambia su generación/orden. El fixture de inventario usa el renderer vigente sin importar el comparador ya sustituido por1175. Trece regresiones Node y el caso Chromium aislado pasan; derivados y plan se regeneran. No modifica runtime, datos, permisos ni umbrales. CI completa requerida para el nuevo candidato1185.
+
+Consolidación1185: incorpora cb8e28ee de1180, preserva logos blancos bajo tinte rosa real y sus pruebas; superficies consolidated-2, bundles y manifiestos regenerados; CI/publicación del SHA final pendientes.

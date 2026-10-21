@@ -3074,3 +3074,8 @@ Seguimiento PR1182 tras autorización explícita del titular para integrar y pub
 
 
 Reconciliación autorizada de PR1182: durante el cierre main avanzó a dc6da947 con1175/1183/1184. Se integran editor visual, iconos rosa/blanco y recuperación/contraste, conservando la edición de tarjetas y el feed. Conflictos de versiones/documentación/pruebas se combinan; todos los derivados y el plan se regeneran contra esta base. No se hereda como PASS_CI la ejecución del candidato anterior ni se altera el trabajo remoto. Se repiten productos/controlador, responsive y contrato de entrega del candidato consolidado.
+
+
+## Último avance de marca
+
+Se incorpora también cb8e28ee de1180 mediante merge normal: el logo desktop/tablet conserva el PNG original y blanco frente al tinte global. Se mantienen las regresiones reforzadas de marca y superficies. La hoja modificada usa una URL nueva consolidated-2 y ambos bundles se regeneran desde sus fuentes; no se reutiliza la URL de la vista previa previa. CI y producción del nuevo SHA quedan pendientes hasta evidencia remota.1180 permanece borrador para publicar el conjunto por1185.

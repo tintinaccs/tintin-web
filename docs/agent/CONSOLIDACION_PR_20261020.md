@@ -37,3 +37,8 @@ La CI39519261730 confirmó build reproducible y sin drift, dominio, CSS e integr
 Incluye fb95aa72 de1182 mediante merge normal. La cobertura de Pages pasa a scripts/lib/rutas-pages.js, consumida por rutas, CSP y auditor final; el conjunto de100 rutas coincide exactamente con el candidato previo. Trece pruebas Node de rutas, monitor e iconos pasan. Se conservan AGENTS y documentos de coherencia añadidos en ese avance.
 
 La CI39520598235 aprobó contratos, operaciones, Rules, Maestro y navegación pública antes de detectar un consumidor de prueba pendiente: quantity-browser importaba el comparador retirado de1156 aunque el renderer actual no lo usa. Se migra el fixture al renderer canónico y la regresión de etiquetas/suma/readonly/reinicio pasa en Chromium sin reintentos. No se restaura una implementación paralela ni se modifica el producto. Se repiten los controles completos del nuevo SHA.1182 queda temporalmente borrador para evitar dos publicaciones paralelas del mismo conjunto.
+
+
+## Último avance de marca
+
+Se incorpora también cb8e28ee de1180 mediante merge normal: el logo desktop/tablet conserva el PNG original y blanco frente al tinte global. Se mantienen las regresiones reforzadas de marca y superficies. La hoja modificada usa una URL nueva consolidated-2 y ambos bundles se regeneran desde sus fuentes; no se reutiliza la URL de la vista previa previa. CI y producción del nuevo SHA quedan pendientes hasta evidencia remota.1180 permanece borrador para publicar el conjunto por1185.

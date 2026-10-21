@@ -3154,6 +3154,12 @@ html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-bran
   backdrop-filter: blur(18px) saturate(110%) !important;
 }
 
+/* El tinte global rosa no debe fundir la marca con el encabezado rosa. */
+html:root body:not(:has(.adm-main)) :is(#tt-header-desktop-tablet, #tt-header-tablet)
+  :is(img.tt-logo-img, img.tt-tablet-logo-img) {
+  filter: brightness(0) invert(1) !important;
+}
+
 
 /* css/pages/institutional/about-signature.css */
 /* Firma junto al retrato en dos columnas y al cierre de la presentación móvil. */
