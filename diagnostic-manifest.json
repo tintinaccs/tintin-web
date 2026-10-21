@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fa9808a7a0d3ef6245b344af496afc8f1856582fcd67d7d3586cc4cb1cbfc792",
+  "sourceFingerprint": "fb53f43295044df7da228c72a5c95e0e1c0e5d352be49641bd334120f54de0af",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1385,
-    "textFiles": 1294,
-    "totalBytes": 29221359,
+    "files": 1384,
+    "textFiles": 1293,
+    "totalBytes": 29222140,
     "pages": 19,
-    "modules": 973
+    "modules": 972
   },
   "viewports": [
     {
@@ -37514,8 +37514,8 @@
     },
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",
-      "bytes": 7993,
-      "sha256": "16f63877084badea15d8585ad41ca17cc4b58d68783d052c489571da3b76c25c",
+      "bytes": 7613,
+      "sha256": "9b8c911d8dc7aec4ee03602abbed0d240a5dccc30387f77288fc9cb36d027d2f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52888,17 +52888,6 @@
       "endpoints": []
     },
     {
-      "path": "tests/ui-ux/header-transparent-fade.spec.js",
-      "bytes": 3308,
-      "sha256": "b0d86e89ff6d10500c550bf1ac2ffe36e504c9219f361a9061bb52ec1f1317b5",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [],
-      "endpoints": []
-    },
-    {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
       "bytes": 7704,
       "sha256": "20c21cdfde5c0df4b6d41e7e1c6e775a68e88c5b8ececba91b85b79a736553ec",
@@ -53602,8 +53591,8 @@
     },
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
-      "bytes": 15378,
-      "sha256": "87003d2f563bd07cc9f4bbb9b1f49890bf2a43fbb85626db5f913b3a454f2148",
+      "bytes": 18760,
+      "sha256": "c36b38bda75e8615d920564bbae5712cda7be492e79280e1ea578681618f3bf2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55490,8 +55479,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 5599,
-      "sha256": "a61447ce30f23ee103fab2d4c4d951058292a2d35e0d403a83e0ba7798d2b58c"
+      "bytes": 5396,
+      "sha256": "d095b3a2a31f17b35e171edf393a1e58c72178101fa53c325a509bc2a1736f93"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55503,7 +55492,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "7c9413fcf47d3c2ab2eed1f0b3c205ec957f876f7f6d04aa1afb9a515dcfe2fd"
+      "sha256": "7a917618a07d1355c11788d58670f9c0fe84fe0108af7c0083fdcb8123284b71"
     },
     {
       "path": "config/public-site.json",
@@ -56162,8 +56151,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 767249,
-      "sha256": "07cee0926d38202f3b6ce1f0651f33eac41fb44444752e507e40784c026ed4a1"
+      "bytes": 768141,
+      "sha256": "268dbfb2b3055f670d4d25ddd6adcacb9d89f29c6bafd09ab1a1f31c465b02e1"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56552,8 +56541,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 91375,
-      "sha256": "e5479ff10ff7169b2eb6bd77c4525da326f432718d91eefbc68f316f3bd1c02a"
+      "bytes": 91817,
+      "sha256": "56bc42960cbec4168c11706732e429adbdac31b12249fb21b9a4b9c3049b22e3"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -59246,8 +59235,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 16837,
-      "sha256": "379e9daf1e34ea842bdaa90cf410c01e31533646d917704e9dd493393b2f763c"
+      "bytes": 16793,
+      "sha256": "9a0e4b811b8c8404b48ed5323f74452c9989befab319beaf4248e5807162056b"
     },
     {
       "path": "perfil.html",
@@ -59684,8 +59673,8 @@
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",
       "extension": ".js",
-      "bytes": 7993,
-      "sha256": "16f63877084badea15d8585ad41ca17cc4b58d68783d052c489571da3b76c25c"
+      "bytes": 7613,
+      "sha256": "9b8c911d8dc7aec4ee03602abbed0d240a5dccc30387f77288fc9cb36d027d2f"
     },
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
@@ -62406,12 +62395,6 @@
       "sha256": "4b24d6ee16aeb31ce8bc98e046ff7d378389af8c71df9dfd6b6ebb884607dc2a"
     },
     {
-      "path": "tests/ui-ux/header-transparent-fade.spec.js",
-      "extension": ".js",
-      "bytes": 3308,
-      "sha256": "b0d86e89ff6d10500c550bf1ac2ffe36e504c9219f361a9061bb52ec1f1317b5"
-    },
-    {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
       "extension": ".mjs",
       "bytes": 7704,
@@ -62570,8 +62553,8 @@
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
       "extension": ".js",
-      "bytes": 15378,
-      "sha256": "87003d2f563bd07cc9f4bbb9b1f49890bf2a43fbb85626db5f913b3a454f2148"
+      "bytes": 18760,
+      "sha256": "c36b38bda75e8615d920564bbae5712cda7be492e79280e1ea578681618f3bf2"
     },
     {
       "path": "tests/ui-ux/site-first-paint.spec.js",

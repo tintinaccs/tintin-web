@@ -584,3 +584,6 @@ Fuente única: css/theme/sistema-superficies-tintin.css. Fondo y backdrop-filter
 
 
 CI del encabezado: el auditor estático de Fase8 acepta ahora también la lista exacta que conserva sus pruebas previas y agrega la regresión del borde transparente. Se mantiene la comparación estricta, auditoría final y proyecto Chromium.15 controles y dos negativos verificados; sin cambios de runtime adicionales.
+
+
+Resolución final de conexión CI: se ubican las nuevas regresiones de transparencia dentro de section-flow-full-width.spec.js, que ya pertenece a la suite canónica. Package y auditores Fase8/Fase10 quedan exactamente como main; no se amplían sus listas ni se retira ningún gate.10 Chromium+10 WebKit integrados y27 controles estáticos pasan. La nota previa de ampliación del auditor describe un intento reemplazado, no el diff final.

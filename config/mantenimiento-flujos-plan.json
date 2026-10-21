@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "6dfad30206c800dfc2c242e0e857fe5821e69c0e",
-  "reason": "Difuminar encabezados hasta transparencia y registrar la suite exacta ampliada, manteniendo todos los controles previos.",
+  "reason": "Difuminar encabezados hasta transparencia con regresiones integradas en la suite existente y todos los gates originales intactos.",
   "files": [
     {
       "path": "404.html",
@@ -72,11 +72,6 @@
       "path": "nosotros.html",
       "oldHash": "09e14dffeacce2e5678b0914842bd8c5d1940844d2fc593520c578393a464dbb",
       "newHash": "0bb262b92b71a1163a9a4b81be76c4088ef42ad17f10b09c1f490fd77056a508"
-    },
-    {
-      "path": "package.json",
-      "oldHash": "9a0e4b811b8c8404b48ed5323f74452c9989befab319beaf4248e5807162056b",
-      "newHash": "379e9daf1e34ea842bdaa90cf410c01e31533646d917704e9dd493393b2f763c"
     },
     {
       "path": "perfil.html",
