@@ -150,6 +150,7 @@ check(
   'La Fase 8 tiene auditoría estática y prueba de navegador dedicadas',
   packageJson.scripts['audit:phase8-ui'] === 'node scripts/auditar-fase-8-ui-ux.js' &&
     [
+      'playwright test tests/ui-ux/phase8-ui-ux.spec.js tests/ui-ux/public-spacing-product.spec.js tests/ui-ux/product-stock-first.spec.js tests/ui-ux/section-flow-full-width.spec.js tests/ui-ux/header-transparent-fade.spec.js tests/ui-ux/admin-push-navigation.spec.js --project=chromium tests/ui-ux/product-card-quick-edit.spec.js tests/ui-ux/local-commerce-responsive.spec.js',
       'playwright test tests/ui-ux/phase8-ui-ux.spec.js --project=chromium',
       'playwright test tests/ui-ux/phase8-ui-ux.spec.js tests/ui-ux/public-spacing-product.spec.js --project=chromium',
       'playwright test tests/ui-ux/phase8-ui-ux.spec.js tests/ui-ux/public-spacing-product.spec.js tests/ui-ux/product-stock-first.spec.js tests/ui-ux/section-flow-full-width.spec.js --project=chromium', 'playwright test tests/ui-ux/phase8-ui-ux.spec.js tests/ui-ux/public-spacing-product.spec.js tests/ui-ux/product-stock-first.spec.js tests/ui-ux/section-flow-full-width.spec.js tests/ui-ux/admin-push-navigation.spec.js --project=chromium', 'playwright test tests/ui-ux/phase8-ui-ux.spec.js tests/ui-ux/public-spacing-product.spec.js tests/ui-ux/product-stock-first.spec.js tests/ui-ux/section-flow-full-width.spec.js tests/ui-ux/admin-push-navigation.spec.js --project=chromium tests/ui-ux/product-card-quick-edit.spec.js tests/ui-ux/local-commerce-responsive.spec.js'

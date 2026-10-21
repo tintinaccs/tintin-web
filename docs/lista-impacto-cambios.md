@@ -581,3 +581,6 @@ Fuente: workflow Backup Firestore y helper de copia CMS; el cron diario y sus cr
 ## 2026-10-21 — Transparencia real al final del encabezado
 
 Fuente única: css/theme/sistema-superficies-tintin.css. Fondo y backdrop-filter18px pasan a ::before con máscara alfa, sin enmascarar contenido ni extender la capa fuera de la altura ocultable. Afecta header público escritorio/tablet/marca móvil y encabezados de checkout/login/Admin. Conserva tamaños, posición, navegación, logos y controles.18 consumidores HTML renuevan el URL CSS; bundles Inicio/Nosotros y baseline se regeneran. Smoke y contratos visuales inspeccionan la capa real y exigen contenedor transparente; la prueba nueva de píxeles/ocultación/clic se conecta al comando phase8 existente. Sin dependencias, datos reales ni cambios de seguridad. Evidencia y límites en CURRENT_STATE; CI y producción del SHA final pendientes.
+
+
+CI del encabezado: el auditor estático de Fase8 acepta ahora también la lista exacta que conserva sus pruebas previas y agrega la regresión del borde transparente. Se mantiene la comparación estricta, auditoría final y proyecto Chromium.15 controles y dos negativos verificados; sin cambios de runtime adicionales.
