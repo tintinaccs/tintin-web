@@ -4,6 +4,11 @@
 
 Fuentes: configuración compartida, tutorial público y preview del editor de bienvenida. Un título por paso, texto directo coherente con Catálogo/carrito/checkout, indicador de paso visible e iconos SVG constantes; conserva imágenes/emojis propios, edición, aparición, cuentas y flujo de compra. Compatibiliza sólo copias base anteriores. Cuerpo y acciones legibles con texto largo y móvil horizontal; WELCOME_VERSION conserva la identidad de onboarding. Se verifica normalización real, cuatro recorridos y paridad de preview; dependencias versionadas, CSP, protección y diagnóstico se regeneran desde sus autoridades. No cambia datos ni reactiva cuentas.
 
+## 2026-10-21 — Contrato del guard Google sin cancelación paralela
+
+El auditor de aislamiento exigía la implementación anterior popup.closed/setInterval. Se actualiza a confirmación por la promesa del SDK, plazo y limpieza, preservando fallback restringido, persistencia, roles y handoff; regresiones negativas rechazan reintroducir sondeo, quitar limpieza o ampliar el redirect. Afecta sólo scripts/auditar-acceso-aislamiento.js y su nuevo test, más evidencia/plan/diagnóstico.21/21 aislamiento,106 regresiones y228 Node de dominio aprobados. No cambia runtime frente a44+44 navegadores aprobados; CI del nuevo SHA pendiente.
+## 2026-10-21 — Complemento responsive y avisos independientes de ubicación/Google
+
 ## 2026-10-21 — Recuperar ubicación y pedir popup de Google
 
 Se integra1189f772 por merge normal, manteniendo los layouts/iconos del conjunto1190 y la recuperación GPS publicada. waitForGooglePopup entrega la decisión de éxito/cancelación a Firebase, conserva popup=yes y plazo120s con cleanup; Login usa mensajes neutrales. El auditor de aislamiento exige ese contrato y rechaza el sondeo paralelo de closed. Pruebas Node/navegador comprueban confirmación con referencia cerrada, cancelación del SDK, vencimiento y recuperación del formulario. Se renueva la URL inmutable del helper, CSP y plan exacto contra main vigente. Sin cambios de proveedor, permisos, cuentas ni datos reales.

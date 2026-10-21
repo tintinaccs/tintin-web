@@ -76,9 +76,10 @@ const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 
     googlePopup.includes("code: 'auth/popup-timeout'") &&
     googlePopup.includes('120000') &&
     googlePopup.includes('host.clearTimeout(deadline)') &&
+    googlePopup.includes('host.open = originalOpen') &&
     googlePopup.includes("'popup=yes'") &&
     !/\b(?:popup|opened)\??\.closed\b/.test(googlePopup) &&
-    !googlePopup.includes('host.setInterval') &&
+    !/\bsetInterval\s*\(/.test(googlePopup) &&
     login.includes("['auth/popup-blocked', 'auth/operation-not-supported-in-this-environment'].includes(popupError?.code)") &&
     login.includes('await finishGoogleLogin(result.user)');
   const googleHandoffKeepsOverlay =
