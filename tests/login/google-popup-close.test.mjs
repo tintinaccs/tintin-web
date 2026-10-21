@@ -26,3 +26,19 @@ test('ventana aislada no se confunde con cancelación y vence con error recupera
   assert.doesNotThrow(()=>f.callbacks.poll());f.callbacks.expire();
   await assert.rejects(pending,{code:'auth/popup-timeout'});
 });
+
+test('Google pide una ventana emergente explícita y conserva opciones del SDK',async()=>{
+  const f=fixture(), calls=[];
+  f.host.open=(...args)=>{calls.push(args);return f.popup;};
+  const original=f.host.open;
+  await waitForGooglePopup(()=>{
+    f.host.open('/ayuda','help','noopener');
+    f.host.open('https://auth.example/__/auth/handler?providerId=google.com','firebase','width=500,height=600,popup=no');
+    return Promise.resolve('ok');
+  },f.host);
+  assert.deepEqual(calls[0],['/ayuda','help','noopener']);
+  assert.match(calls[1][2],/(?:^|,)popup=yes(?:,|$)/);
+  assert.doesNotMatch(calls[1][2],/popup=no/);
+  assert.match(calls[1][2],/width=500,height=600/);
+  assert.equal(f.host.open,original);
+});
