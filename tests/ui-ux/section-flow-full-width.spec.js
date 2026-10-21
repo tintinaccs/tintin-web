@@ -49,6 +49,9 @@ for (const [width,height] of viewports) {
     const style=await header.evaluate(n=>{const s=getComputedStyle(n);return {background:s.backgroundImage,blur:s.backdropFilter,border:s.borderBottomWidth};});
     expect(style.background).toContain('linear-gradient');expect(style.background).not.toContain('184, 76, 114');
     expect(style.blur).toContain('blur(18px)');expect(style.border).toBe('0px');
+    const fade=await header.evaluate(n=>{const s=getComputedStyle(n,'::after');return {height:parseFloat(s.height),top:parseFloat(s.top),header:n.clientHeight,blur:s.backdropFilter,mask:s.maskImage,pointer:s.pointerEvents};});
+    expect(fade.height).toBeGreaterThanOrEqual(32);expect(fade.height).toBeLessThanOrEqual(56);
+    expect(fade.top).toBeGreaterThanOrEqual(fade.header-1);expect(fade.blur).toContain('blur(18px)');expect(fade.mask).toContain('linear-gradient');expect(fade.pointer).toBe('none');
     if(width<768)await expect(page.locator('.tt-mobile-brand-ink')).toHaveCSS('flood-color','rgb(255, 255, 255)');
     else {
       const logo=header.locator('.tt-logo-img,.tt-tablet-logo-img');

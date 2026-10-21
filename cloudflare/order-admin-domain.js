@@ -354,7 +354,11 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
   const shippingCost = money(input.shippingCost ?? 0, 'Costo de envío');
   const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   const total = subtotal + shippingCost;
-  const reserves = orderConfirmsInventory({ status, paymentStatus });
+  // Sólo el endpoint autenticado del checkout fija esta política. Un campo
+  // enviado desde el navegador no puede alterar el ciclo de inventario.
+  const inventoryPolicy = actor?.origin === 'public-checkout' && actor?.role === 'client'
+    ? 'reserve-on-checkout' : '';
+  const reserves = orderConfirmsInventory({ status, paymentStatus, inventoryPolicy });
   const checksAvailability = statusReservesInventory(status);
 
   // Cupón: sólo el checkout público lo establece. Se vuelve a leer y evaluar
@@ -433,6 +437,7 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
     invoice: input.invoice && typeof input.invoice === 'object' ? input.invoice : { wanted: false, razonSocial: '', ruc: '' },
     notificationStatus: 'pending',
     inventoryState: inventoryStateForStatus(status, reserves),
+    ...(inventoryPolicy ? { inventoryPolicy } : {}),
     inventoryRevision: 1,
     inventoryUpdatedAt: now,
     inventoryUpdatedBy: context.email,
@@ -465,8 +470,8 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
           requested: requestedQty,
         });
       }
-      // Sin confirmación solo se valida disponibilidad; el descuento ocurre
-      // cuando el pedido se paga o se confirma.
+      // Pedidos públicos nuevos apartan al registrarse. Los manuales conservan
+      // su política de confirmación/pago; ambos usan las mismas precondiciones.
       if (!reserves) continue;
       if (stock === null && variantInventory === null) continue;
       const productPatch = {

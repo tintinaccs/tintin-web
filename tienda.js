@@ -281,7 +281,7 @@ function getStockLimit(productId, variant) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261021-commerce-review-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -603,121 +603,15 @@ function initHeaderScroll() {
    SEARCH PANEL
 ────────────────────────────────────── */
 function initSearch() {
-  const panel = document.getElementById('search-panel');
-  const input = document.getElementById('search-input');
-  const results = document.getElementById('search-results');
-  if (!panel || !input || !results) return;
-
-  const renderState = (kind, message) => {
-    results.style.display = 'block';
-    results.dataset.searchState = kind;
-    results.innerHTML = `<div class="tt-search-state" role="${kind === 'error' ? 'alert' : 'status'}">${escapeHtml(message)}</div>`;
-  };
-  let searchAbort = null;
-  let searchDebounceTimer = 0;
-
-  addEventListener('tintin:surface-change', event => {
-    if (event.detail?.surface === 'search' && event.detail?.state === 'opening' && !input.value.trim()) {
-      renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.');
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (surfaceController?.surface !== 'search') return;
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      const items = results.querySelectorAll('.tt-search-result-item');
-      if (!items.length) return;
-      const focused = results.querySelector('.tt-search-focus');
-      let idx = focused ? Array.from(items).indexOf(focused) : -1;
-      if (focused) focused.classList.remove('tt-search-focus');
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, items.length - 1) : Math.max(idx - 1, 0);
-      items[idx].classList.add('tt-search-focus');
-      items[idx].scrollIntoView({ block: 'nearest' });
-    }
-    if (e.key === 'Enter') {
-      const focused = results.querySelector('.tt-search-focus');
-      if (focused) focused.click();
-    }
-  });
-
-  const SEARCH_RESULTS_LIMIT = 30;
-  input.addEventListener('input', () => {
-    searchAbort?.abort();
-    searchAbort = new AbortController();
-    clearTimeout(searchDebounceTimer);
-    if (!input.value.trim()) { renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.'); return; }
-    renderState('searching', 'Buscando productos…');
-    const signal = searchAbort.signal;
-    searchDebounceTimer = setTimeout(() => { if (!signal.aborted) runSearch(signal); }, 180);
-  });
-
-    function runSearch(signal) {
-      if (signal?.aborted) return;
-      const q = input.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
-      if (!q) {
-        renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.');
-        return;
-      }
-
-      if (!Array.isArray(window.PRODUCTS)) {
-        renderState('searching', 'Cargando el catálogo para buscar…');
-        return;
-      }
-      const productPool = window.PRODUCTS;
-
-      const searchable = value => String(value == null ? '' : value)
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const visiblePool = productPool.filter(p =>
-        window.TintinCatalogPolicy?.isCatalogVisible
-          ? window.TintinCatalogPolicy.isCatalogVisible(p)
-          : p.active !== false && hasValidName(p) && Number(p.price) > 0
-      );
-      const orderedPool = window.TintinCatalogMerchandising?.sortCatalogProducts
-        ? window.TintinCatalogMerchandising.sortCatalogProducts(visiblePool)
-        : visiblePool;
-      const matches = orderedPool.filter(p =>
-        searchable(p.name).includes(q) ||
-        searchable(p.cat || p.category).includes(q) ||
-        searchable(p.desc || p.description).includes(q) ||
-        searchable((p.tags || []).join(' ')).includes(q) ||
-        searchable(JSON.stringify(p.variants || {})).includes(q)
-      ).slice(0, SEARCH_RESULTS_LIMIT);
-
-      if (matches.length === 0) {
-        renderState('empty', 'No encontramos productos con esa búsqueda.');
-      } else {
-        results.dataset.searchState = 'results';
-        results.innerHTML = matches.map(p => {
-          const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 160);
-          const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;
-          const thumb = imgUrl
-            ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" loading="lazy">`
-            : '';
-          return `
-          <a class="tt-search-result-item" href="${productHref}" style="color:inherit!important;text-decoration:none;">
-            <div class="tt-search-result-thumb">${thumb}</div>
-            <div class="tt-search-result-info">
-              <div class="tt-search-result-name">${escapeHtml(p.name)}</div>
-              <div class="tt-search-result-price">${priceMarkup(p)}${isInStock(p) ? '' : ' · Agotado'}</div>
-            </div>
-          </a>
-        `;
-        }).join('');
-      }
-
-      results.style.display = 'block';
-    }
-
-  addEventListener('tintin:products-loaded', () => {
-    if (surfaceController?.surface === 'search' && input.value.trim()) runSearch(searchAbort?.signal);
-  });
-  addEventListener('tintin:products-error', () => {
-    if (surfaceController?.surface === 'search') renderState('error', 'No pudimos cargar el catálogo. Revisá tu conexión e intentá nuevamente.');
-  });
-  panel.addEventListener('click', event => {
-    if (event.target.closest('.tt-search-result-item')) surfaceController?.close('search-result', { restoreFocus: false });
-  });
+  // El script clásico delega al mismo controlador que monta el shell.
+  // Su inicialización es idempotente: no se instalan dos buscadores.
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261021-commerce-review-1')
+    .then(module => module.initSearchController())
+    .catch(error => {
+      console.error('[search] No se pudo iniciar el buscador:', error);
+      const results = document.getElementById('search-results');
+      if (results) results.innerHTML = '<p class="tt-search-state" role="alert">No pudimos iniciar el buscador. Recargá la página para reintentar.</p>';
+    });
 }
 
 /* ──────────────────────────────────────
@@ -1029,7 +923,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261021-commerce-review-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1397,10 +1291,10 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
     document.head.appendChild(tag);
   }
   const images = mainImgUrl ? [mainImgUrl, ...extraImages] : extraImages;
-  const description = product.desc
-    ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  const description = (product.desc || product.description)
+    ? String(product.desc || product.description).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
     : undefined;
-  const available = !(stock !== null && stock <= 0);
+  const available = product.active !== false && isInStock(product);
   const canonicalProductUrl = new URL('/product', 'https://tintinaccs.com');
   canonicalProductUrl.searchParams.set('id', String(product.id));
   const data = {
@@ -1436,8 +1330,8 @@ function _updateProductMeta(product, mainImgUrl) {
     if (el && value) el.setAttribute(attr, value);
   };
   const title = `${product.name} | TINTIN Accesorios & Relojes`;
-  const description = product.desc
-    ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200)
+  const description = (product.desc || product.description)
+    ? String(product.desc || product.description).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200)
     : `${product.name} — Tintin Accesorios & Relojes, tu boutique femenina en Paraguay.`;
   const productUrl = new URL('/product', window.location.origin);
   productUrl.search = '';
@@ -1655,11 +1549,11 @@ function _renderProductDetail(product) {
   if (catEl) catEl.textContent = (product.category || product.cat || '').toUpperCase();
   // Conditional rendering: an empty/missing description has no place in the DOM at all
   if (descEl) {
-    const hasDesc = product.desc && String(product.desc).trim();
+    const hasDesc = String(product.desc || product.description || '').trim();
     if (hasDesc) {
       // Las descripciones importadas se muestran como texto plano. Nunca se
       // ejecuta HTML almacenado en Firestore o proveniente de un CSV.
-      descEl.textContent = sanitizePlainText(product.desc, 4000);
+      descEl.textContent = sanitizePlainText(hasDesc, 4000);
       descEl.style.display = '';
     } else {
       descEl.textContent = '';
@@ -1677,7 +1571,7 @@ function _renderProductDetail(product) {
       ['Garantía', product.warranty],
       ['Talle / ajuste', product.sizeFit],
       ['Contenido del paquete', product.packageContents],
-    ].filter(([, value]) => value && String(value).trim());
+    ].filter(([label, value]) => productSpecDisplayValue(label, value));
     specsEl.hidden = specs.length === 0;
     specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(productSpecDisplayValue(label, value))}</dd></div>`).join('');
     const specsTrigger = document.getElementById('specs-trigger');
@@ -1691,7 +1585,7 @@ function _renderProductDetail(product) {
   // Stock status
   const stock = (product.stock !== null && product.stock !== undefined) ? Number(product.stock) : null;
   if (statusEl) {
-    if (stock !== null && stock <= 0) {
+    if (!isInStock(product)) {
       statusEl.textContent = 'Sin stock';
       statusEl.style.background = '#fce4ec';
       statusEl.style.color = '#b84c72';
@@ -1962,7 +1856,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261021-commerce-review-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,

@@ -6,9 +6,9 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20261017-domain-cutover-1"></script>
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
-<script src="js/cargador-pagina.js?v=tintin-20261021-welcome-guide-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20261021-commerce-review-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261021-iconos-rosa-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261021-commerce-review-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261021-iconos-rosa-1">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261021-iconos-rosa-1">
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261021-iconos-rosa-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261021-commerce-review-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="canonical" href="https://tintinaccs.com/checkout.html" />
@@ -35,16 +35,16 @@
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20261010-auto-flow-responsive-1-first-render-merge-20261010-1-palette-20261014-1">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20261012-unified-2-tokens-color-css-palette-20261014-1-logos-bottom-20261015-1">
   <link rel="stylesheet" href="styles.min.css?v=tintin-20261010-social-mobile-styles-3">
-  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20261012-checkout-ready-2-checkout-css-palette-20261014-1">
+  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20261021-commerce-review-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260926-consent-network-notice-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-final-production-stability-quality-2-palette-20261014-1">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261020-domain-cutover-consolidated-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20261021-commerce-review-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261019-footer-spacing-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-footer-gradient-20261016-1">
-  <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2">
+  <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1">
   <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1" defer></script>
   <!-- Estructura pública disponible desde el primer render -->
   <link id="tt-responsive-brand-surfaces-css" rel="stylesheet" href="css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1">
@@ -201,7 +201,7 @@
 
       <div class="ck-field" id="ck-address-field" style="display:none;margin-top:16px">
         <label class="ck-label" id="ck-address-label" for="ck-address">Dirección de entrega *</label>
-        <input type="text" class="ck-input" id="ck-address" placeholder="Ej: Av. España 1234, Barrio San José" />
+        <input type="text" class="ck-input" id="ck-address" autocomplete="street-address" placeholder="Ej: Av. España 1234, Barrio San José" />
       </div>
 
       <div class="ck-field" id="ck-referencia-field" style="display:none">
@@ -263,7 +263,7 @@
       <button type="button" class="ck-btn-secondary" id="ck-edit-identity" hidden>Editar datos para este pedido</button>
       <div class="ck-field" id="ck-name-field">
         <label class="ck-label" for="ck-name">Nombre y apellido *</label>
-        <input type="text" class="ck-input" id="ck-name" placeholder="Tu nombre y apellido" />
+        <input type="text" class="ck-input" id="ck-name" autocomplete="name" placeholder="Tu nombre y apellido" />
       </div>
       <div class="ck-field" id="ck-phone-field">
         <label class="ck-label" for="ck-phone-number">Teléfono / WhatsApp *</label>
@@ -275,7 +275,7 @@
       <div class="ck-field">
         <label class="ck-label" for="ck-email">Correo de contacto adicional (opcional)</label>
         <p class="ck-field-help" id="ck-email-destination"></p>
-        <input type="email" class="ck-input" id="ck-email" aria-describedby="ck-email-destination" placeholder="Ej: nombre@email.com" />
+        <input type="email" class="ck-input" id="ck-email" autocomplete="email" inputmode="email" aria-describedby="ck-email-destination" placeholder="Ej: nombre@email.com" />
       </div>
       <div class="ck-field">
         <label class="ck-label" for="ck-notes">Notas opcionales</label>
@@ -454,7 +454,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261021-commerce-review-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isNationalMobileInput, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial, isValidTaxpayerType } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20261001-bloqueo-1";
@@ -821,6 +821,7 @@ let lastCartRenderKey = null;
 let cartRenderGeneration = 0;
 async function renderCart() {
   if (!sessionCanMakeCheckoutDecision()) return;
+  if (window.TintinCheckoutOrderInFlight || window.TintinCheckoutOrderCompleted) return;
   cartItems = getCartLocal();
 
   // Drop items whose product was deleted/deactivated and refresh price/name from
@@ -874,7 +875,7 @@ async function renderCart() {
       .filter((p, index, list) => list.findIndex(item => String(item.id) === String(p.id)) === index)
       .slice(0, 5);
 
-    if (generation !== cartRenderGeneration) return;
+    if (generation !== cartRenderGeneration || window.TintinCheckoutOrderInFlight || window.TintinCheckoutOrderCompleted) return;
     container.innerHTML = `
       <div class="ck-empty">
         <div class="ck-empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
@@ -912,7 +913,7 @@ async function renderCart() {
     container.querySelectorAll('button.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261021-commerce-review-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1138,6 +1139,7 @@ document.getElementById('ck-items').addEventListener('click', async e => {
 // a propósito — así también corta el paso si alguien llama a goToStep(n) a
 // mano desde la consola para saltarse el paso 1, no solo con clicks reales.
 function goToStep(n) {
+  if (window.TintinCheckoutOrderInFlight) return;
   if (n >= 1 && !sessionCanMakeCheckoutDecision()) {
     showError(0, 'No pudimos verificar tu sesión todavía. Esperá un momento y reintentá.');
     return;
@@ -2054,9 +2056,9 @@ subscribeSession(snapshot => {
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20261019-privacy-copy-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20261017-domain-cutover-1"></script>
-<script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20261017-domain-cutover-1"></script>
+<script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20261021-commerce-review-1"></script>
 <script src="js/components/images/galeria-producto.js?v=tintin-20261019-variant-links-1" defer></script>
-<script src="tienda.js?v=tintin-20261020-domain-cutover-color-order-1" defer></script>
+<script src="tienda.js?v=tintin-20261021-commerce-review-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20261017-domain-cutover-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

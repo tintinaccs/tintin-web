@@ -67,8 +67,12 @@ async function render() {
   }
 }
 
-window.addEventListener('tintin:paypal-order-ready', event => {
-  state.pending = event.detail;
+function receivePendingOrder(detail) {
+  if (!detail?.orderId) return;
+  state.pending = detail;
   $('tt-paypal-checkout')?.style.setProperty('display', 'block');
   render();
-});
+}
+window.addEventListener('tintin:paypal-order-ready', event => receivePendingOrder(event.detail));
+// El pedido puede restaurarse antes de que termine de cargar este módulo.
+if (window.TintinPaypalPendingOrder) receivePendingOrder(window.TintinPaypalPendingOrder);

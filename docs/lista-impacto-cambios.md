@@ -1,3 +1,11 @@
+## 2026-10-21 — Reserva al registrar, cola del header y Pulseras unificada
+
+Autorización del titular: apartar al tocar Confirmar pedido aunque el pago esté pendiente. Fuente: dominio servidor de pedidos y modelo compartido; política confiable sólo para actor client/public-checkout, persistida en pedidos nuevos. Reserva atómica de agregado/variante, idempotencia y liberación/reapertura; históricos/manuales preservados y PayPal concilia sin duplicar. Ticket comunica reserva real. Header extiende32–56px el difuminado con máscara y sin interceptar punteros desde superficies canónicas. Colecciones del panel comercial reutiliza alias canónicos para principal Pulseras, conteos/filtros/ficha/productos de ambos grupos sin mutar datos crudos. Pruebas concurrentes, pagos, rechazo/cancelación/reapertura, spoofing y20 Chromium de diez tamaños; derivados/versiones/plan y evidencia del candidato se regeneran antes de CI.
+
+## 2026-10-21 — Checkout ante agotados y búsqueda tolerante
+
+Fuentes: runtime canónico del carrito (evento único de ajuste real, con identidad), pedido-checkout-seguro y su helper/estilos, buscador compartido de catálogo/panel, tienda.js y semántica del checkout. Se conserva la autoridad transaccional del servidor, idempotencia, reserva al confirmar/pagar y datos comerciales reales. Se anticipa disponibilidad con lectura de servidor/plazo y se ofrece salida al catálogo/inicio; los demás artículos permanecen. Búsqueda tolera una errata sin consultas extra ni cambiar orden comercial. Ficha/JSON-LD de cliente respetan variantes, descripción alternativa y características existentes; favorito recibe categoría real. Consumidores transitivos se versionan y shell/CSP/diagnóstico/plan se regeneran desde autoridades. Cobertura de pruebas de stock, red, sesión, teclado, dimensiones, búsqueda, ficha, pedidos, rendimiento, accesibilidad y SEO; límites remotos/emulador en la revisión y CURRENT_STATE.
+
 ## 2026-10-21 — Conciliación OAuth de1189 con Perfil/iconos
 
 ## 2026-10-21 — Texto, jerarquía e iconos de la guía

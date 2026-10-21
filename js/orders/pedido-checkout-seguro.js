@@ -1,3 +1,4 @@
+import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261021-commerce-review-1';
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
@@ -8,6 +9,7 @@ import { AUTH_STATES, getSessionUser, waitForSession, subscribeAuthState } from 
 import {
   doc,
   getDoc,
+  getDocFromServer,
   onSnapshot,
   runTransaction,
   serverTimestamp,
@@ -60,6 +62,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   const GUEST_ACTIVITY_KEY = 'tt_cart_guest_activity_v1';
   const CHECKOUT_DEFAULTS_FIELD = 'checkoutDefaults';
   let submitting = false;
+  let availabilityBlocked = false;
+  const pendingStockControls = new WeakSet();
   let orderCompleted = false;
   let recoveringReceipt = false;
   let recoveredReceiptUid = '';
@@ -209,7 +213,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   function forceBackToCart(message = 'Tu carrito está vacío. Agregá productos antes de continuar.') {
-    if (orderCompleted || recoveringReceipt) return;
+    if (orderCompleted || recoveringReceipt || availabilityBlocked) return;
     document.querySelectorAll('.ck-panel').forEach((panel, index) => {
       panel.classList.toggle('active', index === 0);
     });
@@ -335,25 +339,66 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     event.stopImmediatePropagation();
     event.stopPropagation();
 
+    if (availabilityBlocked || pendingStockControls.has(button)) return;
+    pendingStockControls.add(button);
+    button.setAttribute('aria-busy', 'true');
     Promise.resolve().then(async () => {
       const items = await ensureCartAvailable();
       if (!items.length) return;
+      const uid = getSessionUser()?.uid;
+      // El acceso de invitada conserva su guardia de sesión. Para una cuenta
+      // resuelta no se usan el catálogo edge ni el caché offline como prueba.
+      if (uid) {
+        let timer;
+        const verdict = await Promise.race([
+          inspectCheckoutAvailability(items, async id => {
+            const snapshot = await getDocFromServer(doc(db, 'products', id));
+            return snapshot.exists() ? snapshot.data() : null;
+          }),
+          new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('stock_check_timeout')), 8000); }),
+        ]).finally(() => clearTimeout(timer));
+        if (getSessionUser()?.uid !== uid || JSON.stringify(getCartLocal()) !== JSON.stringify(items)) return;
+        if (verdict.issues.length) {
+          availabilityBlocked = true;
+          setCartLocal(verdict.items);
+          showCheckoutAvailabilityDialog(verdict.issues[0]);
+          return;
+        }
+      }
       replayValidatedForward(button, event, 'cart');
     }).catch(error => {
       console.error('[secure-checkout-order] No se pudo validar el carrito antes de avanzar:', error);
-      forceBackToCart('No pudimos cargar tu carrito. Recargá la página e intentá de nuevo.');
+      const box = document.getElementById(`error-${Math.max(0, activeCheckoutStep())}`);
+      if (box) {
+        box.textContent = 'No pudimos comprobar la disponibilidad. Tus productos siguen en el carrito; revisá tu conexión y volvé a intentar.';
+        box.classList.add('show');
+      }
+    }).finally(() => {
+      pendingStockControls.delete(button);
+      button.removeAttribute('aria-busy');
     });
   }, true);
 
   // Si el carrito cambia mientras la clienta ya está en Envío/Datos/Pago o
   // Confirmación y queda realmente vacío, no puede permanecer en un resumen
   // de Gs. 0 ni conservar Confirmar pedido habilitado.
+  window.addEventListener('tintin:cart-stock-adjusted', event => {
+    if (orderCompleted || submitting || pendingPaypal || availabilityBlocked || recoveringReceipt) return;
+    if (event.detail?.userId !== (getSessionUser()?.uid || null)) return;
+    const issue = event.detail?.issues?.[0];
+    if (!issue) return;
+    availabilityBlocked = true;
+    setConfirmDisabledByCart(true);
+    showCheckoutAvailabilityDialog(issue);
+  });
+
   window.addEventListener('tt_cart_updated', () => {
-    if (orderCompleted) return;
+    if (orderCompleted || submitting || pendingPaypal || availabilityBlocked) return;
     window.clearTimeout(cartGuardTimer);
     cartGuardTimer = window.setTimeout(async () => {
       try {
         const items = await readyCartItems();
+        if (orderCompleted || submitting || pendingPaypal) return;
         if (!items.length && activeCheckoutStep() > 0) {
           forceBackToCart();
         } else {
@@ -379,13 +424,23 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     window.TintinCheckoutReceiptRestoring = true;
     try {
       await awaitCartReady();
-      if (getCartLocal().length) { try { sessionStorage.removeItem('tt_checkout_receipt_v1'); } catch {} return; }
+      if (saved.paymentPending !== true && getCartLocal().length) { try { sessionStorage.removeItem('tt_checkout_receipt_v1'); } catch {} return; }
       const snapshot = await getDoc(doc(db, 'orders', saved.orderId));
       if (getSessionUser()?.uid !== user.uid || !snapshot.exists()) return;
       const result = { ...snapshot.data(), orderId: snapshot.id };
       if (result.userId !== user.uid) return;
+      const draft = { ...result.shipping, shippingMethod: result.shippingMethod, selectedCity: result.shippingCity, paymentMethod: result.paymentMethod, name: result.userName, phone: result.userPhone, ci: result.ci, wantsInvoice: result.invoice?.wanted, razonSocial: result.invoice?.razonSocial, ruc: result.invoice?.ruc };
+      if (saved.paymentPending === true && ['cancelado', 'rechazado'].includes(result.status)) {
+        try { sessionStorage.removeItem('tt_checkout_receipt_v1'); sessionStorage.removeItem(REQUEST_KEY); } catch {}
+        inMemoryRequestId = null;
+        return;
+      }
+      if (saved.paymentPending === true && result.paymentMethod === 'paypal' && (result.paymentStatus || result.payment?.status) !== 'pagado') {
+        beginPaypalPayment(result, draft);
+        return;
+      }
       orderCompleted = true;
-      success(result, { ...result.shipping, shippingMethod: result.shippingMethod, selectedCity: result.shippingCity, paymentMethod: result.paymentMethod, name: result.userName, phone: result.userPhone, ci: result.ci, wantsInvoice: result.invoice?.wanted, razonSocial: result.invoice?.razonSocial, ruc: result.invoice?.ruc });
+      success(result, draft);
     } catch (error) { recoveredReceiptUid = ''; console.warn('[checkout] No se pudo recuperar el ticket:', error?.message); }
     finally { recoveringReceipt = false; window.TintinCheckoutReceiptRestoring = false; }
   }
@@ -400,6 +455,10 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       receiptUnsubscribe = null;
       orderCompleted = false;
       window.TintinCheckoutOrderCompleted = false;
+      window.TintinCheckoutOrderInFlight = false;
+      pendingPaypal = null;
+      window.TintinPaypalPendingOrder = null;
+      document.getElementById('tt-paypal-checkout')?.style.setProperty('display', 'none');
       window._lastOrderId = '';
       recoveredReceiptUid = '';
       try { sessionStorage.removeItem('tt_checkout_receipt_v1'); } catch {}
@@ -854,6 +913,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       ['Ciudad', result.shipping?.city || result.shippingCity], ['Envío', SHIPPING_LABELS[result.shipping?.method || result.shippingMethod] || result.shippingMethod],
       ['Dirección', result.shipping?.address || result.address], ['Referencia', result.shipping?.referencia],
       ['Pago', PAYMENT_LABELS[result.payment?.method || result.paymentMethod] || result.paymentMethod],
+      ...(result.inventoryPolicy === 'reserve-on-checkout' && result.inventoryState === 'reserved' ? [['Reserva', 'Productos apartados para este pedido']] : []),
       ['CI', result.ci], ['Notas', result.notes],
       ...(result.invoice?.wanted ? [['Razón social', result.invoice.razonSocial], ['RUC', result.invoice.ruc]] : []),
     ];
@@ -861,6 +921,24 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       + [['Subtotal', formatPrice(result.subtotal)], ['Costo de envío', result.shippingMethod === 'encomienda' ? 'Se paga a la transportadora al recibir' : result.shippingPending ? 'A confirmar' : formatPrice(result.shippingCost || 0)], ['TOTAL', formatPrice(result.total) + (result.shippingPending ? ' + envío a confirmar' : '')]].map(([label, value]) => `<div class="ck-summary-total"><span>${escapeHtml(label)}</span><span class="ck-summary-total-val">${escapeHtml(value)}</span></div>`).join('')
       + rows.filter(([, value]) => value).map(([label, value]) => `<div class="ck-summary-row"><span>${escapeHtml(label)}</span><span class="ck-summary-val">${escapeHtml(value)}</span></div>`).join('')
       + (result.shippingMethod === 'retiro' ? '<p class="ck-summary-shipping-note">La ubicación exacta y el horario de retiro se coordinan por WhatsApp.</p>' : result.shippingMethod === 'encomienda' ? '<p class="ck-summary-shipping-note">El envío se paga a la transportadora al recibir y no está incluido en el total.</p>' : '');
+  }
+
+  function beginPaypalPayment(result, draft) {
+    pendingPaypal = { result, draft };
+    window.TintinCheckoutOrderInFlight = true;
+    const detail = { orderId: result.orderId, shortId: result.shortId, total: result.total };
+    // Sólo identidad y referencia: sin tokens ni datos personales persistidos.
+    try { sessionStorage.setItem('tt_checkout_receipt_v1', JSON.stringify({ uid: result.userId || getSessionUser()?.uid, orderId: result.orderId, savedAt: Date.now(), paymentPending: true })); } catch {}
+    window.TintinPaypalPendingOrder = detail;
+    renderConfirmedOrder(result);
+    document.querySelectorAll('.ck-panel').forEach((panel, index) => panel.classList.toggle('active', index === 4));
+    document.querySelectorAll('.ck-step').forEach((step, index) => {
+      step.classList.toggle('active', index === 4);
+      step.classList.toggle('done', index < 4);
+    });
+    document.getElementById('ck-confirm-btn')?.style.setProperty('display', 'none');
+    document.getElementById('tt-paypal-checkout')?.style.setProperty('display', 'block');
+    window.dispatchEvent(new CustomEvent('tintin:paypal-order-ready', { detail: { ...detail, result, draft } }));
   }
 
   function updateReceiptEmailStatus(status, recipient, customerSent = false) {
@@ -920,6 +998,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   function success(result, draft) {
+    window.TintinPaypalPendingOrder = null;
     renderConfirmedOrder(result);
     updateReceiptEmailStatus(result.notificationStatus, result.userEmail, result.notificationCustomerSent);
     const receiptUid = result.userId || (typeof getSessionUser === 'function' ? getSessionUser()?.uid : '');
@@ -1039,8 +1118,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   async function submit(button) {
-    if (submitting || orderCompleted) return;
+    if (submitting || orderCompleted || availabilityBlocked) return;
     submitting = true;
+    window.TintinCheckoutOrderInFlight = true;
     hideError();
     button.disabled = true;
     button.innerHTML = '<span class="ck-spinner"></span> Comprobando precios y stock…';
@@ -1059,12 +1139,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       const result = await createOrderOnServer(draft);
       if (result.userId && result.userId !== getSessionUser()?.uid) throw appError('session_changed', 'Tu sesión cambió. Consultá el pedido desde la cuenta que lo realizó.');
       if (draft.paymentMethod === 'paypal') {
-        pendingPaypal = { result, draft };
-        button.style.display = 'none';
-        document.getElementById('tt-paypal-checkout')?.style.setProperty('display', 'block');
-        window.dispatchEvent(new CustomEvent('tintin:paypal-order-ready', {
-          detail: { orderId: result.orderId, shortId: result.shortId, total: result.total, result, draft }
-        }));
+        beginPaypalPayment(result, draft);
         return;
       }
       orderCompleted = true;
@@ -1085,6 +1160,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         button.disabled = false;
         button.textContent = '✓ Confirmar pedido actualizado';
       } else if (code === 'insufficient_stock') {
+        availabilityBlocked = true;
         const productId = String(error.details?.productId || '');
         const available = Number(error.details?.available || 0);
         const variant = String(error.details?.variant || '');
@@ -1097,16 +1173,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         );
         button.disabled = true;
         button.textContent = 'Revisá el carrito para continuar';
-        showError(
-          available > 0
-            ? `Cambió el stock. Dejamos la cantidad disponible: ${available}.`
-            : 'Uno de los productos se agotó y lo quitamos del carrito.',
-          true
-        );
+        showCheckoutAvailabilityDialog({ available });
       } else if (code === 'product_not_found' || code === 'product_inactive') {
         button.disabled = true;
         button.textContent = 'Revisá el carrito para continuar';
-        showError('Uno de los productos ya no está disponible.', true);
+        availabilityBlocked = true;
+        const productId = String(error.details?.productId || '');
+        if (productId) setCartLocal(getCartLocal().filter(item => String(item.id) !== productId));
+        showCheckoutAvailabilityDialog({ unavailable: true });
       } else if (code === 'empty_cart') {
         forceBackToCart();
         button.textContent = '✓ Confirmar pedido';
@@ -1121,6 +1195,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
     } finally {
       submitting = false;
+      window.TintinCheckoutOrderInFlight = Boolean(pendingPaypal);
     }
   }
 
@@ -1130,6 +1205,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (event.detail?.orderId !== result.orderId) return;
     orderCompleted = true;
     pendingPaypal = null;
+    window.TintinCheckoutOrderInFlight = false;
     success(result, draft);
     try { await clearCart(); } catch (error) { console.warn('[secure-checkout-order] No se pudo limpiar el carrito tras PayPal:', error); }
     try { sessionStorage.removeItem(REQUEST_KEY); } catch {}

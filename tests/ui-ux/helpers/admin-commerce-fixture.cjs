@@ -39,6 +39,7 @@ const DATA = {
 };
 window.__orders=window.__commerceFixtureConfig?.orders ? structuredClone(window.__commerceFixtureConfig.orders) : DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));
 window.__productRows=DATA.products;
+if(window.__commerceFixtureConfig?.collections) DATA.collections=structuredClone(window.__commerceFixtureConfig.collections);
 window.__productConsumers=new Set();
 window.__publishProducts=()=>{for(const fn of window.__productConsumers)fn({docs:window.__productRows.map(entry=>({id:entry.id,data:()=>structuredClone(entry.data)})),metadata:{fromCache:false}});};
 window.__includeTestOrders=localStorage.getItem('fixture:test-orders')==='show';window.__orderConsumers=new Set();window.__publishOrders=(error='')=>{for(const fn of window.__orderConsumers)fn({uid:'super-1',orders:window.__orders,includeTestOrders:window.__includeTestOrders===true,ready:true,error});};
@@ -148,9 +149,9 @@ function fixtureHtml() {
   </body></html>`;
 }
 
-async function mockRuntime(page, {orders,role='superadmin',forbiddenActions=[]} = {}) {
+async function mockRuntime(page, {orders,collections,role='superadmin',forbiddenActions=[]} = {}) {
   // Datos estructurados, nunca interpolados dentro del código del SDK simulado.
-  await page.addInitScript(config => { window.__commerceFixtureConfig = config; }, {role,forbiddenActions,orders:orders || null});
+  await page.addInitScript(config => { window.__commerceFixtureConfig = config; }, {role,forbiddenActions,orders:orders || null,collections:collections || null});
   await page.route('**/*', async route=>{
     const url=new URL(route.request().url());
     if(url.hostname!=='tintin.test')return route.abort();

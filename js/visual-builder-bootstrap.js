@@ -1,5 +1,5 @@
 import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20261020-domain-cutover-consolidated-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261020-domain-cutover-consolidated-1';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261021-commerce-review-1';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 
