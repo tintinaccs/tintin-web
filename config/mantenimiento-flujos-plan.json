@@ -1,27 +1,27 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "069c3ba0cf76102f52fd24b197217a96d7b22a58",
-  "reason": "Recuperar geolocalizacion compartida, conservar la confirmacion de entrega y mejorar el editor responsive de direcciones",
+  "baseCommit": "cfd77c2c43697339da6561945d3965308cc1e18e",
+  "reason": "Completar interfaz responsive de direcciones y separar avisos de mapa y confirmacion Google conservando PR1191",
   "files": [
     {
       "path": "_headers",
-      "oldHash": "72d5e96b556ce3fcb03ad2a5e554cc305eae704b99a25e07998c279d7ce04041",
-      "newHash": "950bf6fa8503b0b05bc43a0cc6b4e09384b56ab7a35c4d92863960b080a3d40e"
+      "oldHash": "3604c43eef8446a710a7ad7a0ff68a192e06a85a707fe6d49aba1eb8c1b40dec",
+      "newHash": "8b5b4d5346caa5cfc9b53efbb92885bd2bf755f39f5399364220d3a46a87c8e1"
     },
     {
       "path": "checkout.html",
-      "oldHash": "cb8e478a8c2e846d5b26e1ab565dfba10dc9ed3931d196f5468b11204fcb6e92",
-      "newHash": "7d66677e6a9cfa4b49ffb564bd54d76615aa64a135bb31b2e358b1d64fe53759"
+      "oldHash": "fe3a3efc24e2900ef4b89ece9ed8252bb50b6589dd12270465090ebc953817ea",
+      "newHash": "ef1e5d9c591c21a2475cadffdff5c1110d90189899cdea47bd2667b48e8c6c88"
     },
     {
       "path": "config/csp-runtime.js",
-      "oldHash": "eb9ee5c23f89db4648bc0833505014625b23cc4c0ab1b1611200b6f677ac814f",
-      "newHash": "5be5352d8a2849fe0ce7adc9040bfa5abd5462b4cc1e275534c1751792cccc8d"
+      "oldHash": "eeda4ea48db81185537e211d95a4efee032472de7e84de8d97fb8808f00c7e36",
+      "newHash": "0dd155f7c809bfc4abd9c663eca978dd496ac7a370849d389cdd0b8d54224988"
     },
     {
       "path": "config/csp-runtime.json",
-      "oldHash": "0ba5277d169dc346fa3ae1598c0087b61dc87654ae3028feaa5f7931b14f23d2",
-      "newHash": "5cc3a41da24f702f533d0aa1af2e8d3d614f8208bd5117466944b737e9e74f86"
+      "oldHash": "62338920578322f0bbc85d2db9a69e1ac410f7b9c67a370ad67936457fe5fca9",
+      "newHash": "fc074ad4671675dd56b21e7701587857c746f7720a55340411500d30e40b3699"
     },
     {
       "path": "css/components/location/selector-ubicacion.css",
@@ -29,14 +29,9 @@
       "newHash": "0cae3fc1c8c0cb3e74e6cd4e55344176304de05b1dac0b76dc8725d1ee46c446"
     },
     {
-      "path": "js/components/location/geolocalizacion.mjs",
-      "oldHash": "9cc52847c96650ab1ac3e39e9100b20f081a10da314c281c465c641767aad840",
-      "newHash": "2497d329e789a3ff126a1fb02fbf3e822dc5c17a213f890fc9da5a4f18aef933"
-    },
-    {
       "path": "js/components/location/mapa-ubicacion.js",
-      "oldHash": "07fdf8e7421bcb7e9ff4a765aa112b88700ecb9a3dedb1e02dda457670287fa3",
-      "newHash": "62ca8e565322ec9139155925b287d5c6299d661cd1394d592488569d1a49547f"
+      "oldHash": "60a2caa4f343c4f78e802d971cf1a202914694d02075d3e8c24a32ff647b0d1e",
+      "newHash": "eca327dc6fbe12a197d0be0f1635d99827ea4ceac5e62a5fa3a49050b0037ec4"
     },
     {
       "path": "js/pages/checkout/checkout-ubicacion-guardada.js",
@@ -45,18 +40,18 @@
     },
     {
       "path": "login.html",
-      "oldHash": "96b1ffab025c1a7b321c4c3f3941bebaaeac362bd74e02c9e7777dc4dd5c9c71",
-      "newHash": "a66f720c1cf83db074eb35d4b1aaa64b125355465a17fd95f526a19d1649c447"
+      "oldHash": "1ae7d108a35745d6a6a764b067ef7795147f4354b06fa2b5879c3197ccb46176",
+      "newHash": "e2bd312ebd1b9f6d2e976cb0465bcd303e8c91f12f13ea74d8d259cfa51e6ce7"
     },
     {
       "path": "perfil.html",
-      "oldHash": "208572a52a9a8643b896c14f0b6a30218d6c66f4fcdfbe344af27e1f70244027",
-      "newHash": "a9945f0e8e1b5cad5d10002abdc268c649342821fe28832244e6fde95da8db6e"
+      "oldHash": "b46896faefc2cd5744a2ea8776458b05c0ca79dc383b670dbdf52130e9cb27a1",
+      "newHash": "9caa53303575b0eee42ad0f126c4f5c772823f03f5df283becc17182198a1834"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "407336caa3bc2d16f605854e20ca1c54dfa4ba69fc6b84dcfa9537e488e935fc",
-      "newHash": "e21fac71ec71383b94ae3ece3df967ceb828ec0168667b0dcf0bcc57849059a0"
+      "oldHash": "59ddffc232a731f1f0777343d330b6e5524957d4cf3b40e29d54ef8dda3decbb",
+      "newHash": "5eed4369d2a0407b2fd88c8bd7d69d61c93499cac643bcbbefe3ebcd6780b177"
     }
   ],
   "affectedRecords": [

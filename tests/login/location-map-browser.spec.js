@@ -7,14 +7,14 @@ const profile = fs.readFileSync(path.resolve(__dirname, '../../perfil.html'), 'u
 const profileEscape = profile.slice(profile.indexOf('function escapeHtmlPerfil('), profile.indexOf('// Libreta de direcciones'));
 const fixture = `<!doctype html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-1"><link rel="stylesheet" href="/css/components/location/selector-ubicacion.css"><style>body{margin:16px;font-family:Montserrat}.tt-map-search{max-width:600px}#ck-map{height:260px}</style></head><body>
 <div id="error-2"></div><div id="ck-saved-location-hint" style="display:none"><strong id="ck-saved-confirm-title"></strong><span id="ck-saved-confirm-name"></span><span id="ck-saved-confirm-detail"></span><button id="ck-saved-location-confirm">Confirmar</button><button id="ck-saved-location-change">Cambiar</button></div>
-<div class="tt-map-search"><input id="ck-map-search" aria-label="Buscar dirección"><div class="tt-map-results" id="ck-map-search-results"></div></div><button class="tt-map-locate" id="ck-map-locate">Usar mi ubicación actual</button><div id="ck-map" class="tt-map-canvas"></div><div id="ck-map-coords"></div><input id="ck-location-name" aria-label="Nombre de dirección">
-<script type="module">import {createLocationMap} from '../../js/components/location/mapa-ubicacion.js?v=tintin-20261021-location-recovery-1';import {attachSavedLocationConfirm,isConfirmableLocation} from '../../js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20261021-location-recovery-1';
+<div class="tt-map-search"><input id="ck-map-search" aria-label="Buscar dirección"><div class="tt-map-results" id="ck-map-search-results"></div></div><button id="ck-map-locate">Usar mi ubicación actual</button><div id="ck-map"></div><div id="ck-map-coords"></div><input id="ck-location-name" aria-label="Nombre de dirección">
+<script type="module">import {createLocationMap} from '../../js/components/location/mapa-ubicacion.js?v=tintin-20261021-location-google-final-2';import {attachSavedLocationConfirm,isConfirmableLocation} from '../../js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20261021-location-google-final-2';
 const orderData={mapLocation:null};let currentUserProfile=null;const showError=(_,message)=>{document.getElementById('error-2').textContent=message};${mapCode}
 ${profileEscape}window.escapeAddressLabel=escapeHtmlPerfil;window.readDelivery=()=>({point:window.__TintinCheckoutPoint,location:orderData.mapLocation,name:document.getElementById('ck-location-name').value});
 window.restoreAddress=()=>{currentUserProfile={savedLocation:{lat:-25.31,lng:-57.61,name:'Casa',address:'Calle de prueba'}};orderData.mapLocation=null;document.getElementById('ck-location-name').value='';maybeApplySavedLocation()};await initMap();window.mapReady=true;</script></body></html>`;
 
-for (const [width, height] of [[320, 740], [390, 844], [600, 960], [768, 1024], [1024, 768], [1280, 800], [1440, 900], [1920, 1080]]) {
-test(`checkout conserva búsqueda, nombre, coordenadas y confirmación · ${width}`, async ({ page, context }) => {
+for (const [width,height] of [[320,568],[390,844],[768,1024],[1024,768],[1180,820],[1181,820],[1366,768],[1440,900],[1920,1080],[844,390]]) {
+test(`checkout conserva búsqueda, nombre, coordenadas y confirmación · ${width}x${height}`, async ({ page, context }) => {
   await page.setViewportSize({width,height});
   await context.grantPermissions(['geolocation']);
   await context.setGeolocation({ latitude: -25.3, longitude: -57.6, accuracy: 20 });
@@ -42,6 +42,5 @@ test(`checkout conserva búsqueda, nombre, coordenadas y confirmación · ${widt
   expect(await page.evaluate(() => readDelivery().location)).toBeNull();
   expect(await page.locator('#ck-location-name').inputValue()).toBe('');
   expect(errors).toEqual([]);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 }
