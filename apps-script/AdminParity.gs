@@ -85,9 +85,9 @@ function tintinParityUpsertOrder_(orderId, order) {
     ? sheet.getRange(2, 1, lastRow - 1, 1).createTextFinder(safeId).matchEntireCell(true).findNext()
     : null;
   var rowNumber = found ? found.getRow() : Math.max(2, lastRow + 1);
-  sheet.getRange(rowNumber, 1, 1, TINTIN_PARITY_ORDERS_WIDTH).setValues([
+  sheet.getRange(rowNumber, 1, 1, TINTIN_PARITY_ORDERS_WIDTH).setValues(tintinSheetLiteralRows_([
     tintinParityOrderRow_(safeId, order || {})
-  ]);
+  ]));
   return rowNumber;
 }
 

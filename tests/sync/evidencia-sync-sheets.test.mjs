@@ -126,6 +126,7 @@ async function withFirestore(commitStatus, run) {
     if (url === 'https://oauth2.googleapis.com/token') {
       return new Response(JSON.stringify({ access_token: 'test-only-access-token', expires_in: 3600 }), { status: 200 });
     }
+    if (url.endsWith('/documents/products/PROD-1')) return Response.json({ fields: { stock: { integerValue: '3' } }, updateTime: '2026-10-21T10:00:00.000000Z' });
     if (url.endsWith('/documents:commit')) {
       commits.push(JSON.parse(init.body));
       return new Response('{}', { status: commitStatus });

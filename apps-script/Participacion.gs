@@ -133,7 +133,7 @@ function tintinLikeRow_(record) {
 
 function tintinUpsert_(sheet, row) {
   var rowNumber = tintinFindRow_(sheet, row[0]) || sheet.getLastRow() + 1;
-  sheet.getRange(rowNumber, 1, 1, row.length).setValues([row]);
+  sheet.getRange(rowNumber, 1, 1, row.length).setValues(tintinSheetLiteralRows_([row]));
   tintinAplicarBordeFilaParticipacion_(sheet, rowNumber, row.length);
   return rowNumber;
 }
@@ -285,7 +285,7 @@ function tintinEngagementOnEdit(e) {
   }
   var result = JSON.parse(response.getContentText() || '{}');
   if (!result.ok || !result.record) throw new Error(result.error || 'Respuesta de sincronizacion invalida.');
-  sheet.getRange(e.range.getRow(), 1, 1, TINTIN_REVIEW_HEADERS_.length).setValues([tintinReviewRow_(result.record)]);
+  sheet.getRange(e.range.getRow(), 1, 1, TINTIN_REVIEW_HEADERS_.length).setValues(tintinSheetLiteralRows_([tintinReviewRow_(result.record)]));
   tintinAplicarBordeFilaParticipacion_(sheet, e.range.getRow(), TINTIN_REVIEW_HEADERS_.length);
 }
 

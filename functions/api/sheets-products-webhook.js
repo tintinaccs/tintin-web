@@ -1,10 +1,14 @@
 import { corsHeaders } from '../../cloudflare/seguridad-cloudinary.js';
 import { sheetsInboundSecret } from '../../cloudflare/secretos-sheets.js';
 import {
+  decodeFirestoreFields,
+  firestoreAdminGet,
   encodeFirestoreFields,
   firestoreAdminCommit,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { beginSheetsOperation, recordSheetsEvidence } from '../../cloudflare/evidencia-sync-sheets.js';
+
+import { variantInventoryEntries } from '../../js/core/store/inventario-variantes.mjs';
 
 const MAX_BODY_BYTES = 32 * 1024;
 export const PRODUCTS_WEBHOOK_REVISION = 'products-canonical-v3';
@@ -189,7 +193,8 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
     }
     if (input.action !== 'saveProduct') throw new Error('Accion no permitida.');
 
-    const fields = selectedFields(input.changedFields, id);
+    // Un ID recién generado no convierte un alta en una edición parcial.
+    const fields = selectedFields(input.changedFields, text(input.productId, 128));
     const name = text(input.name, 180);
     const category = text(input.category, 120);
     const price = optionalInteger(input.price);
@@ -234,12 +239,33 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
     addIf(inventoryData, fields, 'internalNotes', text(input.internalNotes, 1000));
     if (Object.keys(inventoryData).length) inventoryData.updatedAt = new Date();
 
+    // Sheets no administra la distribución por variante. Leer la autoridad
+    // antes de tocar stock/opciones y rechazar cambios agregados que destruirían
+    // esa distribución. La precondición evita perder una venta concurrente.
+    let productPrecondition;
+    if (has(fields, 'stock') || has(fields, 'variants')) {
+      const current = await firestoreAdminGet(env, `products/${id}`);
+      const currentProduct = current ? decodeFirestoreFields(current.fields || {}) : {};
+      const entries = variantInventoryEntries(currentProduct);
+      if (entries !== null) {
+        const total = entries.reduce((sum, entry) => sum + entry.stock, 0);
+        const stockChanged = has(fields, 'stock') && publicData.stock !== total;
+        const variantsChanged = has(fields, 'variants')
+          && JSON.stringify(publicData.variants) !== JSON.stringify(currentProduct.variants || null);
+        if (stockChanged || variantsChanged) {
+          throw Object.assign(new Error('Este producto tiene stock por variante. Editá las cantidades y opciones desde Productos en el administrador; Sheets conserva el espejo.'), { status: 409 });
+        }
+      }
+      if (current && !current.updateTime) throw new Error('No se pudo verificar la versión del inventario.');
+      productPrecondition = current ? { updateTime: current.updateTime } : { exists: false };
+    }
+
     // Un único commit evita que products cambie si falla productInventory (o
     // viceversa). updateMask conserva metadatos que Sheets no administra.
     const publicFields = encodeFirestoreFields(publicData);
     const inventoryFields = encodeFirestoreFields(inventoryData);
     const writes = [];
-    if (Object.keys(publicFields).length) writes.push({ path: `products/${id}`, fields: publicFields, mergeFields: Object.keys(publicFields) });
+    if (Object.keys(publicFields).length) writes.push({ path: `products/${id}`, fields: publicFields, mergeFields: Object.keys(publicFields), ...(productPrecondition ? { currentDocument: productPrecondition } : {}) });
     if (Object.keys(inventoryFields).length) writes.push({ path: `productInventory/${id}`, fields: inventoryFields, mergeFields: Object.keys(inventoryFields) });
     if (!writes.length) throw new Error('No hay campos de producto permitidos para sincronizar.');
     operation = beginSheetsOperation();
