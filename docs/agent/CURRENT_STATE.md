@@ -3084,3 +3084,10 @@ Se incorpora también cb8e28ee de1180 mediante merge normal: el logo desktop/tab
 ## Conciliación final del smoke de encabezados
 
 Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.
+
+
+## Avance final de1180 sobre la consolidación publicada
+
+PR1185 está integrado por6033bc4b, CI39526399800 aprobada, Cloudflare producción2cfb9d0f-317b-432a-884d-816b809a7d1d success. Revisión pública a6db51db4d06ca41d4ea5c99b16077094d59aee2947c7ad3c8f0638c6dd629ff,17 recursos idénticos,8 rutas, CSP checkout, monitor31 y headers aprobados. Rendimiento nativo tuvo64 aprobados directamente y1 flaky en el reintento configurado (Envíos);187 geometrías y18 rutas smoke aprobadas. Ocho originales se cerraron como incorporados.
+
+1180 recibió después0daeda42: tarjetas/ficha ordenan colores según las miniaturas y enlazan cada foto a su color cuando es inequívoco. Se incorpora mediante merge normal con main6033, preservando todos los consumidores de la consolidación. No cambia inventario, precios ni fotos guardadas. La calibración de diagnóstico nativo se limita al endpoint demo de renovación Auth, caller fijado y salida del documento; errores reales siguen fallando. Nueva URL de tienda color-order-1; generación canónica de shell/CSP/caché/manifiestos y plan nuevo contra6033. Este avance requiere CI propia y producción antes de declararse cerrado.

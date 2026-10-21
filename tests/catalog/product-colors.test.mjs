@@ -33,6 +33,23 @@ test('sugerencias aproximadas ignoran el fondo blanco y requieren señal suficie
 const storeSource = fs.readFileSync(new URL('../../tienda.js', import.meta.url), 'utf8');
 vm.runInContext(storeSource.slice(storeSource.indexOf('function productVariantGroups'), storeSource.indexOf('function productPhotoIdentity')), context);
 const cardColors = product => JSON.parse(JSON.stringify(context.productCardColorOptions(product)));
+
+test('los colores siguen las fotos visibles aun cuando la portada no tiene asignación explícita', () => {
+  const product = { imageUrl:'https://example.test/gold.webp', stock:2,
+    variants:{Color:['Dorado','Plateado']},
+    variantInventory:[{variant:'Dorado',stock:1},{variant:'Plateado',stock:1}],
+    variantMedia:[{Color:'Dorado',imageUrls:[]},{Color:'Plateado',imageUrls:['https://example.test/silver.webp']}] };
+  const before = JSON.stringify(product);
+  assert.deepEqual(cardColors(product), ['Color',['Plateado','Dorado']]);
+  assert.equal(JSON.stringify(product), before, 'ordenar la presentación no modifica asociaciones ni inventario');
+});
+
+test('sin fotos distinguibles conserva opciones y los atributos que no son colores', () => {
+  const product={variants:{Color:['Azul','Rosa'],Talle:['M','S']}};
+  assert.deepEqual(cardColors(product),['Color',['Azul','Rosa']]);
+  assert.deepEqual(Array.from(context.productPresentationOptions(product,'Talle',product.variants.Talle)),['M','S']);
+  assert.deepEqual(JSON.parse(JSON.stringify(context.productVariantGroups(product))),[['Color',['Azul','Rosa']],['Talle',['M','S']]]);
+});
 test('la tarjeta de ÉLISE muestra sólo dorado; clara no inventa una opción gris', () => {
   assert.deepEqual(cardColors({ colorFinish: 'Color de lente: clara · Color de las varillas: dorado' }), ['Color', ['dorado']]);
   assert.equal(cardColors({ colorFinish: 'Color de lente: clara' }), null);
