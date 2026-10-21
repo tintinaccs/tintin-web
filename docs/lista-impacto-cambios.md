@@ -528,3 +528,8 @@ Se concilian historias929/1122/1134/1146/1154/1156/1170/1180/1182 con main dc6da
 Se integra el avance concurrente fb95aa72: rutas, CSP y verificador final comparten scripts/lib/rutas-pages.js; las100 reglas mantienen el mismo conjunto y sólo cambia su generación/orden. El fixture de inventario usa el renderer vigente sin importar el comparador ya sustituido por1175. Trece regresiones Node y el caso Chromium aislado pasan; derivados y plan se regeneran. No modifica runtime, datos, permisos ni umbrales. CI completa requerida para el nuevo candidato1185.
 
 Consolidación1185: incorpora cb8e28ee de1180, preserva logos blancos bajo tinte rosa real y sus pruebas; superficies consolidated-2, bundles y manifiestos regenerados; CI/publicación del SHA final pendientes.
+
+
+## Conciliación final del smoke de encabezados
+
+Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.

@@ -42,3 +42,8 @@ La CI39520598235 aprobó contratos, operaciones, Rules, Maestro y navegación p�
 ## Último avance de marca
 
 Se incorpora también cb8e28ee de1180 mediante merge normal: el logo desktop/tablet conserva el PNG original y blanco frente al tinte global. Se mantienen las regresiones reforzadas de marca y superficies. La hoja modificada usa una URL nueva consolidated-2 y ambos bundles se regeneran desde sus fuentes; no se reutiliza la URL de la vista previa previa. CI y producción del nuevo SHA quedan pendientes hasta evidencia remota.1180 permanece borrador para publicar el conjunto por1185.
+
+
+## Conciliación final del smoke de encabezados
+
+Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.

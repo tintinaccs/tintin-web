@@ -408,6 +408,11 @@ try {
       await page.waitForSelector('#tt-header-desktop-tablet #btn-tienda', { state: 'attached', timeout: 10_000 });
       await page.waitForTimeout(350);
       const surfaces = await page.evaluate(() => {
+        const brandProbe = document.createElement('div');
+        brandProbe.style.setProperty('background-image', 'linear-gradient(180deg, color-mix(in srgb, #F8AACA 94%, transparent) 0%, color-mix(in srgb, #FDECF2 94%, transparent) 100%)', 'important');
+        document.body.appendChild(brandProbe);
+        const expectedHeaderGradient = getComputedStyle(brandProbe).backgroundImage;
+        brandProbe.remove();
         const ids = [
           'tt-header-desktop-tablet', 'btn-tienda', 'btn-search', 'btn-cuenta', 'btn-cart',
           'tt-tienda-dropdown-panel', 'search-panel', 'account-panel', 'cart-drawer',
@@ -424,20 +429,27 @@ try {
             borderWidth: style.borderWidth,
             boxShadow: style.boxShadow,
             opacity: style.opacity,
+            backdropFilter: style.backdropFilter,
+            filter: style.filter,
+            expectedHeaderGradient,
           }];
         }));
       });
       const borderedSurfaces = new Set(['btn-search','btn-cuenta','btn-cart','tt-tienda-dropdown-panel','search-panel','account-panel','cart-drawer']);
       for (const [id, style] of Object.entries(surfaces)) {
         if (!style) { failures.push(`Header desktop/tablet ${width}px: falta #${id}.`); continue; }
-        if (id === 'btn-tienda') {
+        if (id === 'tt-header-desktop-tablet') {
+          if (style.backgroundImage !== style.expectedHeaderGradient) failures.push(`Header desktop/tablet ${width}px: no conserva el degradado rosa claro aprobado (${style.backgroundImage}).`);
+          if (!style.backdropFilter.includes('blur(18px)')) failures.push(`Header desktop/tablet ${width}px: falta el difuminado del fondo.`);
+          if (style.filter !== 'none') failures.push(`Header desktop/tablet ${width}px: el filtro afecta también a marca y controles.`);
+        } else if (id === 'btn-tienda') {
           if (style.backgroundColor !== 'rgba(0, 0, 0, 0)') failures.push(`Header desktop/tablet ${width}px: #btn-tienda conserva fondo propio (${style.backgroundColor}).`);
           if (style.borderColor !== 'rgba(0, 0, 0, 0)') failures.push(`Header desktop/tablet ${width}px: #btn-tienda conserva segundo borde (${style.borderColor}).`);
           if (style.boxShadow !== 'none') failures.push(`Header desktop/tablet ${width}px: #btn-tienda conserva sombra propia (${style.boxShadow}).`);
         } else if (style.backgroundColor !== 'rgb(255, 255, 255)') {
           failures.push(`Header desktop/tablet ${width}px: #${id} no es blanco (${style.backgroundColor}).`);
         }
-        if (style.backgroundImage !== 'none') failures.push(`Header desktop/tablet ${width}px: #${id} conserva imagen o degradado de fondo.`);
+        if (id !== 'tt-header-desktop-tablet' && style.backgroundImage !== 'none') failures.push(`Header desktop/tablet ${width}px: #${id} conserva imagen o degradado de fondo.`);
         if (style.opacity !== '1') failures.push(`Header desktop/tablet ${width}px: #${id} conserva opacidad ${style.opacity}.`);
         if (borderedSurfaces.has(id) && (style.borderColor !== 'rgb(253, 236, 242)' || style.borderStyle === 'none' || style.borderWidth === '0px')) {
           failures.push(`Header desktop/tablet ${width}px: #${id} no conserva el borde rosado sólido.`);
