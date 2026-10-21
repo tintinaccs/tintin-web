@@ -38,6 +38,9 @@ const DATA = {
   ]
 };
 window.__orders=window.__commerceFixtureConfig?.orders ? structuredClone(window.__commerceFixtureConfig.orders) : DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));
+window.__collectionRows=DATA.collections;
+window.__collectionConsumers=new Set();
+window.__publishCollections=()=>{for(const fn of window.__collectionConsumers)fn({docs:window.__collectionRows.map(entry=>({id:entry.id,data:()=>structuredClone(entry.data)})),metadata:{fromCache:false}});};
 window.__productRows=DATA.products;
 if(window.__commerceFixtureConfig?.collections) DATA.collections=structuredClone(window.__commerceFixtureConfig.collections);
 window.__productConsumers=new Set();
@@ -60,6 +63,7 @@ export const limit = () => null;
 export const startAfter = () => null;
 export function onSnapshot(ref, options, next) {
   const success=typeof options==='function'?options:next;
+  if(ref==='collections'){window.__collectionConsumers.add(success);queueMicrotask(()=>window.__publishCollections());return()=>window.__collectionConsumers.delete(success);}
   if(ref==='products'){
     window.__productConsumers.add(success);queueMicrotask(()=>window.__publishProducts());
     return()=>window.__productConsumers.delete(success);

@@ -1,10 +1,10 @@
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { productFingerprint } from './products/maestro-productos-core.mjs?v=tintin-20261020-domain-cutover-consolidated-1';
+import { productFingerprint } from './products/maestro-productos-core.mjs?v=tintin-20261021-workspace-account-1';
 import { variantInventoryEntries, firstAvailableVariant } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import { productVariantImage } from '../components/images/foto-variante.mjs?v=tintin-20261019-variant-links-1';
 import { ordersForView, testOrderNumber, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
-import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261020-domain-cutover-consolidated-1';
-import { installProductInterface, syncProductSurfaces, visibleProductEditor, compactProductUI } from './products/interfaz-productos-adaptable.js?v=tintin-20261020-editor-integrated-1';
+import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261021-workspace-account-1';
+import { installProductInterface, syncProductSurfaces, visibleProductEditor } from './products/interfaz-productos-adaptable.js?v=tintin-20261021-product-workspace-1';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261020-orders-clean-2';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
@@ -40,7 +40,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
-const VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
+const VERSION = 'tintin-20261021-product-workspace-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -251,15 +251,24 @@ function productCardControls(product, status) {
   const draft = state.cardDrafts.get(id + '/' + variant);
   const cardStatus = quantity != null && Number(quantity) === 0 ? {cls:'error',label:variant?'Variante agotada':'Agotado'} : status;
   const disabled = state.busy || !perm('productos', 'editar', 'editProducts');
-  const options = entries?.length ? `<div class="tt-card-variants" role="group" aria-label="Elegir variante de ${esc(product.name)}">${entries.map(entry => `<button type="button" data-action="product-card-variant" data-id="${esc(id)}" data-variant="${esc(entry.variant)}" aria-pressed="${entry.variant===variant}" class="${entry.stock===0?'is-out':''}">${esc(entry.variant)}${entry.stock===0?' · agotado':''}</button>`).join('')}</div>` : '';
-  return {options, status:`<div class="tt-card-state"><span class="tt-commerce-badge ${cardStatus.cls}">${cardStatus.label}</span><label class="tt-card-visibility ${product.active===false?'is-inactive':'is-active'}"><span>Visibilidad</span><select data-card-active="${esc(id)}" aria-label="Estado de ${esc(product.name)}" ${state.busy || !perm('productos','activarDesactivar','editProducts')?'disabled':''}><option value="true" ${product.active!==false?'selected':''}>Activo</option><option value="false" ${product.active===false?'selected':''}>Inactivo</option></select></label></div>`, stock:`<label class="tt-card-stock-label"><span>${variant ? `Stock · ${esc(variant)}` : 'Inventario'}</span><div class="tt-card-stock-control"><input type="number" min="0" max="1000000" step="1" inputmode="numeric" data-card-stock="${esc(id)}" data-variant="${esc(variant)}" value="${esc(draft?.value ?? quantity ?? '')}" placeholder="Sin límite" aria-label="Stock de ${esc(product.name)}${variant?' · '+esc(variant):''}" ${disabled || entries?.length===0?'disabled':''}><button type="button" class="tt-commerce-btn" data-action="product-card-save" data-id="${esc(id)}" data-variant="${esc(variant)}" ${disabled || entries?.length===0?'disabled':''}>Guardar</button></div></label><button type="button" class="tt-card-discard" data-action="product-card-cancel" data-id="${esc(id)}" data-variant="${esc(variant)}" ${draft?'':'hidden'}>Descartar borrador</button><small class="tt-card-total">Total: <span class="tt-commerce-stock">${product.stock == null ? 'Sin límite' : esc(product.stock)}</span>${product.stock == null ? '' : ' unidades'}</small>${productVariantsCount(product)>1 && entries===null?'<small>Stock total. Distribuí por opción desde Editar producto.</small>':''}`};
+  const colorKey = window.TintinProductMedia?.colorKey(product);
+  let options = `<div class="tt-card-variants${entries?.length ? '' : ' tt-card-variants-empty'}" ${entries?.length ? `role="group" aria-label="Elegir variante de ${esc(product.name)}"` : 'aria-hidden="true"'}>${(entries || []).map(entry => {
+    const metadata = colorKey && window.TintinProductMedia?.mediaRows(product).find(row => String(row[colorKey] || '').trim().toLocaleLowerCase('es') === entry.variant.toLocaleLowerCase('es'));
+    const color = colorKey && window.TintinProductColors?.swatch(entry.variant, metadata || {});
+    const dot = color ? `<span class="tt-card-swatch" style="background:${esc(color)}" aria-hidden="true"></span>` : '';
+    return `<button type="button" data-action="product-card-variant" data-id="${esc(id)}" data-variant="${esc(entry.variant)}" aria-pressed="${entry.variant===variant}" class="${entry.stock===0?'is-out':''}">${dot}<span>${esc(entry.variant)}${entry.stock===0?' · agotado':''}</span></button>`;
+  }).join('')}</div>`;
+  if (entries?.length > 4) options = `<div class="tt-card-variants"><select class="tt-card-variant-select" data-card-variant="${esc(id)}" aria-label="Elegir variante de ${esc(product.name)}">${entries.map(entry => `<option value="${esc(entry.variant)}" ${entry.variant===variant?'selected':''}>${esc(entry.variant)}${entry.stock===0?' · agotado':''}</option>`).join('')}</select></div>`;
+  const visibility = `<label class="tt-card-visibility ${product.active===false?'is-inactive':'is-active'}"><span>Visibilidad</span><select data-card-active="${esc(id)}" aria-label="Estado de ${esc(product.name)}" ${state.busy || !perm('productos','activarDesactivar','editProducts')?'disabled':''}><option value="true" ${product.active!==false?'selected':''}>Activo</option><option value="false" ${product.active===false?'selected':''}>Inactivo</option></select></label>`;
+  const stock = `<div class="tt-card-stock-field"><span class="tt-card-stock-label">${variant ? `Stock · ${esc(variant)}` : 'Inventario'}</span><div class="tt-card-stock-control"><input type="number" min="0" max="1000000" step="1" inputmode="numeric" data-card-stock="${esc(id)}" data-variant="${esc(variant)}" value="${esc(draft?.value ?? quantity ?? '')}" placeholder="Sin límite" aria-label="Stock de ${esc(product.name)}${variant?' · '+esc(variant):''}" ${disabled || entries?.length===0?'disabled':''}><button type="button" class="tt-commerce-btn" data-action="product-card-save" data-id="${esc(id)}" data-variant="${esc(variant)}" ${disabled || entries?.length===0?'disabled':''}>Guardar</button></div></div>`;
+  return {options, status:`<span class="tt-commerce-badge ${cardStatus.cls}">${cardStatus.label}</span>`, stock:`<div class="tt-card-edit-grid">${visibility}${stock}</div><button type="button" class="tt-card-discard" data-action="product-card-cancel" data-id="${esc(id)}" data-variant="${esc(variant)}" ${draft?'':'hidden'}>Descartar borrador</button><small class="tt-card-total">Total: <span class="tt-commerce-stock">${product.stock == null ? 'Sin límite' : esc(product.stock)}</span>${product.stock == null ? '' : ' unidades'}</small>${productVariantsCount(product)>1 && entries===null?'<small>Stock total. Distribuí por opción desde Editar producto.</small>':''}`};
 }
 async function saveProductCard(product, field, value, variant='') {
   if (state.busy || !product || !state.user?.uid) return;
   const ownerUid = state.user.uid;
   const draftKey = product._docId + '/' + variant;
   const expected = field==='stock' ? state.cardDrafts.get(draftKey)?.expected || productFingerprint(product) : productFingerprint(product);
-  if (typeof window.TintinProductAdmin?.updateCard !== 'function') return toast('El guardado todavía está cargando. Reintentá.');
+  if (typeof window.TintinProductAdmin?.updateCard !== 'function') { toast('El guardado todavía está cargando. Reintentá.'); renderProducts(); return; }
   setBusy(true);
   try {
     const result = await window.TintinProductAdmin.updateCard({id:product._docId,field,value,variant,expected});
@@ -269,7 +278,20 @@ async function saveProductCard(product, field, value, variant='') {
       if(fingerprint)for(const [key,draft] of state.cardDrafts)if(key.startsWith(product._docId+'/') && draft.expected===expected)draft.expected=fingerprint;
     }
   } catch (error) { if(state.user?.uid===ownerUid)toast(error.message); }
-  finally { setBusy(false); if(state.user?.uid===ownerUid)renderProducts(); }
+  finally { setBusy(false); if(state.user?.uid===ownerUid){renderProducts();renderCollections();} }
+}
+
+async function saveCollectionVisibility(target) {
+  if (state.busy || !state.user?.uid || !perm('colecciones','activarDesactivar','manageContent')) return;
+  const collection=state.collections.find(item=>item.slug===target.dataset.collectionVisible);
+  if (!collection) return;
+  const controller=window.TintinProductAdmin;
+  if(typeof controller?.updateCollectionVisibility !== 'function'){toast('El guardado todavía está cargando. Reintentá.');renderCollections();return;}
+  const ownerUid=state.user?.uid;
+  setBusy(true);
+  try {await controller.updateCollectionVisibility({id:collection.sourceSlugs?.includes(collection.slug) ? collection.slug : collection.sourceSlugs?.[0] || collection.slug,visible:target.value==='true',expectedVisible:collection.visible!==false});}
+  catch(error){if(state.user?.uid===ownerUid)toast(error.message);}
+  finally{setBusy(false);if(state.user?.uid===ownerUid){renderProducts();renderCollections();document.querySelector(`[data-collection-visible="${CSS.escape(collection.slug)}"]`)?.focus({preventScroll:true});}}
 }
 
 function productStatus(product) {
@@ -495,7 +517,7 @@ function renderProducts() {
   const root = document.getElementById('tt-commerce-products');
   if (!root) return;
   const activeControl=document.activeElement;
-  const focusAttribute=root.contains(activeControl) ? ['data-card-stock','data-card-active','data-product-metric','data-filter','data-select-product','data-check-all','data-action','data-tab'].find(attribute=>activeControl.hasAttribute(attribute)) : null;
+  const focusAttribute=root.contains(activeControl) ? ['data-card-stock','data-card-active','data-card-category','data-card-variant','data-product-metric','data-filter','data-select-product','data-check-all','data-action','data-tab'].find(attribute=>activeControl.hasAttribute(attribute)) : null;
   const focusSelector=focusAttribute ? `[${focusAttribute}="${CSS.escape(activeControl.getAttribute(focusAttribute))}"]` + ['data-id','data-variant'].filter(attribute=>activeControl.hasAttribute(attribute)).map(attribute=>`[${attribute}="${CSS.escape(activeControl.getAttribute(attribute))}"]`).join('') : null;
   const caret=focusAttribute && typeof activeControl.selectionStart==='number' ? [activeControl.selectionStart,activeControl.selectionEnd] : null;
   root.dataset.view=state.productView;root.dataset.filtersOpen=String(state.productFiltersOpen);root.dataset.bulkOpen=String(state.productBulkOpen);
@@ -587,11 +609,11 @@ function renderProducts() {
             const selected = state.productSelected.has(product._docId);
             return `<tr data-open="product" data-id="${esc(product._docId)}" data-product-active="${product.active !== false}" class="${selected ? 'is-selected' : ''}">
               <td class="checkcol" data-stop><label class="tt-commerce-product-check"><input type="checkbox" data-select-product="${esc(product._docId)}" ${selected ? 'checked' : ''} aria-label="Seleccionar ${esc(product.name || 'producto')}"></label></td>
-              <td class="tt-commerce-product-main"><div class="tt-commerce-productcell">${thumbHtml(cardImage, product.name || 'Producto')}${controls.options}<div><button type="button" class="tt-commerce-product-open" data-action="drawer-product" data-id="${esc(product._docId)}">${esc(product.name || 'Sin nombre')}</button><div class="tt-commerce-subtext">${variants ? `${variants} variante${variants === 1 ? '' : 's'} · ` : ''}${product.sku?`SKU: ${esc(product.sku)} · `:''}${esc(product._docId)}</div></div></div></td>
+              <td class="tt-commerce-product-main"><div class="tt-commerce-productcell">${thumbHtml(cardImage, product.name || 'Producto')}${controls.options}<div class="tt-card-identity"><button type="button" class="tt-commerce-product-open" data-action="drawer-product" data-id="${esc(product._docId)}">${esc(product.name || 'Sin nombre')}</button><div class="tt-commerce-subtext tt-card-code" title="${esc(product.sku || product._docId)}">${variants ? `${variants} variante${variants === 1 ? '' : 's'} · ` : ''}${product.sku?`SKU: ${esc(product.sku)} · `:''}${esc(product._docId)}</div></div></div></td>
               <td class="tt-commerce-product-status">${controls.status}${product.destacado ? '<span class="tt-commerce-badge">Destacado</span>' : ''}${product.oferta || Number(product.priceBefore) > Number(product.price) ? '<span class="tt-commerce-badge">Oferta</span>' : ''}</td>
               <td class="tt-commerce-product-inventory">${controls.stock}</td>
               <td class="tt-commerce-product-price"><span class="tt-commerce-product-label">Precio</span><span class="tt-commerce-money">${formatMoney(product.price)}</span>${Number(product.priceBefore) > Number(product.price) ? `<div class="tt-commerce-subtext"><s>${formatMoney(product.priceBefore)}</s></div>` : ''}</td>
-              <td class="tt-commerce-product-collection"><span class="tt-commerce-product-label">Colección</span>${esc(state.collections.find(c => wristCategory(c.slug) === wristCategory(product.category || product.cat))?.name || product.category || 'Sin colección')}</td>
+              <td class="tt-commerce-product-collection" data-stop><label class="tt-card-collection"><span>Colección</span><select data-card-category="${esc(product._docId)}" aria-label="Colección de ${esc(product.name)}" ${state.busy || !perm('productos','editar','editProducts') || !state.collectionsReady?'disabled':''}>${!state.collections.some(c=>wristCategory(c.slug)===wristCategory(product.category || product.cat))?`<option value="" selected disabled>${esc(product.category || 'Elegir colección')}</option>`:''}${state.collections.map(c=>`<option value="${esc(c.slug)}" ${wristCategory(c.slug)===wristCategory(product.category || product.cat)?'selected':''}>${esc(c.name || c.slug)}${c.visible===false?' · oculta':''}</option>`).join('')}</select></label></td>
               <td class="tt-commerce-product-menu" data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="product" data-id="${esc(product._docId)}" aria-label="Acciones de ${esc(product.name || 'producto')}">⋯</button></td>
             </tr>`;
           }).join('')}</tbody>
@@ -623,6 +645,8 @@ function renderProducts() {
 function renderCollections() {
   const root = document.getElementById('tt-commerce-collections');
   if (!root) return;
+  const focusedId=root.contains(document.activeElement) ? document.activeElement.dataset.collectionVisible : null;
+  const pageSelectionFocused=root.contains(document.activeElement) && document.activeElement.matches('[data-check-all="collections"]');
   const counts = collectionTabCounts();
   const list = filteredCollections();
   const page = pageSlice(list, state.collectionPage);
@@ -676,25 +700,28 @@ function renderCollections() {
       </div>
       ${collectionsWarning}
       ${!state.collectionsReady ? '<div class="tt-commerce-loading">Cargando colecciones…</div>' : collectionsUnavailable ? '' : page.items.length ? `
+      <label class="tt-collection-select-page"><input type="checkbox" data-check-all="collections" ${allVisibleSelected ? 'checked' : ''} aria-label="Seleccionar esta página de colecciones"><span>Seleccionar esta página</span></label>
       <div class="tt-commerce-tablewrap">
-        <table class="tt-commerce-table">
-          <thead><tr><th class="checkcol"><input type="checkbox" data-check-all="collections" ${allVisibleSelected ? 'checked' : ''}></th><th>Colección</th><th>Visibilidad</th><th>Productos</th><th>Orden</th><th></th></tr></thead>
+        <table class="tt-commerce-table tt-commerce-collection-grid">
+          <thead><tr><th class="checkcol">Selección</th><th>Colección</th><th>Visibilidad</th><th>Productos</th><th>Orden</th><th></th></tr></thead>
           <tbody>${page.items.map(collectionItem => {
             const count = collectionProductCount(collectionItem.slug);
             const selected = state.collectionSelected.has(collectionItem.slug);
             return `<tr data-open="collection" data-id="${esc(collectionItem.slug)}" class="${selected ? 'is-selected' : ''}">
-              <td class="checkcol" data-stop><input type="checkbox" data-select-collection="${esc(collectionItem.slug)}" ${selected ? 'checked' : ''}></td>
-              <td><div class="tt-commerce-collectioncell">${thumbHtml(collectionItem.image, collectionItem.name || 'Colección')}<div style="min-width:0"><div class="tt-commerce-maintext">${esc(collectionItem.name || collectionItem.slug)}</div><div class="tt-commerce-subtext">/${esc(collectionItem.slug)}</div></div></div></td>
-              <td><span class="tt-commerce-badge ${collectionItem.visible === false ? 'neutral' : 'success'}">${collectionItem.visible === false ? 'Oculta' : 'Visible'}</span></td>
-              <td>${count}</td>
-              <td>${Number(collectionItem.order) || 0}</td>
-              <td data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="collection" data-id="${esc(collectionItem.slug)}" aria-label="Acciones">⋯</button></td>
+              <td class="checkcol" data-stop><label class="tt-commerce-product-check"><input type="checkbox" data-select-collection="${esc(collectionItem.slug)}" ${selected ? 'checked' : ''} aria-label="Seleccionar ${esc(collectionItem.name || collectionItem.slug)}"></label></td>
+              <td class="tt-collection-main"><div class="tt-commerce-collectioncell">${thumbHtml(collectionItem.image, collectionItem.name || 'Colección')}<div style="min-width:0"><div class="tt-commerce-maintext">${esc(collectionItem.name || collectionItem.slug)}</div><div class="tt-commerce-subtext">/${esc(collectionItem.slug)}</div></div></div></td>
+              <td class="tt-collection-state" data-stop><span class="tt-commerce-badge ${collectionItem.visible === false ? 'warning' : 'success'}">${collectionItem.visible === false ? 'Oculta' : 'Visible'}</span><label class="tt-collection-visibility"><span>Estado</span><select data-collection-visible="${esc(collectionItem.slug)}" aria-label="Estado de ${esc(collectionItem.name || collectionItem.slug)}" ${state.busy || !canToggle?'disabled':''}><option value="true" ${collectionItem.visible!==false?'selected':''}>Activa</option><option value="false" ${collectionItem.visible===false?'selected':''}>Inactiva</option></select></label></td>
+              <td class="tt-collection-count"><span>Productos</span><strong>${count}</strong></td>
+              <td class="tt-collection-order"><span>Orden</span><strong>${Number(collectionItem.order) || 0}</strong></td>
+              <td class="tt-collection-menu" data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="collection" data-id="${esc(collectionItem.slug)}" aria-label="Acciones">⋯</button></td>
             </tr>`;
           }).join('')}</tbody>
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay colecciones que coincidan con esta vista.</div>'}
       <div class="tt-commerce-footer"><span>${rangeLabel(page, 'colecciones', collectionsUnavailable)}</span><span>El orden y la visibilidad impactan la tienda pública.</span>${pageControls('collections-page', page.page, page.pages)}</div>
     </div>`;
+  if(focusedId)root.querySelector(`[data-collection-visible="${CSS.escape(focusedId)}"]`)?.focus({preventScroll:true});
+  else if(pageSelectionFocused)root.querySelector('[data-check-all="collections"]')?.focus({preventScroll:true});
 }
 
 function orderStatusBadge(status) {
@@ -1403,6 +1430,9 @@ function onClick(event) {
 
 function onChange(event) {
   const target = event.target;
+  if (target.matches('[data-card-variant]')) { state.cardVariants.set(target.dataset.cardVariant, target.value); return renderProducts(); }
+  if (target.matches('[data-card-category]')) return saveProductCard(state.products.find(item=>item._docId===target.dataset.cardCategory), 'category', target.value);
+  if (target.matches('[data-collection-visible]')) return saveCollectionVisibility(target);
   if (target.matches('[data-card-active]')) return saveProductCard(state.products.find(item=>item._docId===target.dataset.cardActive), 'active', target.value==='true');
   if (target.matches('[data-select-product]')) {
     const id = target.dataset.selectProduct;
@@ -1795,13 +1825,13 @@ function boot() {
       const picker=document.querySelector('.tt-mlib-overlay');
       if(visibleProductEditor() && picker){event.preventDefault();picker.querySelector('.tt-mlib-close')?.click();return;}
       const editor=visibleProductEditor();
-      if(editor && compactProductUI()){event.preventDefault();window.prodCancelForm?.();return;}
+      if(editor){event.preventDefault();window.prodCancelForm?.();return;}
       closeMenu();closeDrawer();
     }
   });
 
   document.addEventListener('keydown',event=>{
-    if((state.drawer?.type==='order' || state.drawer?.type==='product' || (visibleProductEditor() && compactProductUI())) && event.key==='Tab') {
+    if((state.drawer?.type==='order' || state.drawer?.type==='product' || visibleProductEditor()) && event.key==='Tab') {
       if (document.querySelector('#unsaved-modal[aria-hidden="false"]')) return;
       const drawer=(visibleProductEditor() && document.querySelector('.tt-mlib-overlay')) || visibleProductEditor() || document.getElementById('tt-commerce-drawer');
       const controls=[...drawer.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]')].filter(e=>e.getClientRects().length);

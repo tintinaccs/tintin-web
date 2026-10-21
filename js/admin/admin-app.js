@@ -2,7 +2,7 @@ import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
-import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261020-domain-cutover-consolidated-1';
+import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261021-workspace-account-1';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261019-revenue-start-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
@@ -6396,6 +6396,7 @@ window.TintinProductAdmin = Object.freeze({
     if (!can(currentRole, 'editProducts') || !roleCanDo('productos', request.field === 'active' ? 'activarDesactivar' : 'editar')) throw new Error('No tenés permiso para modificar este producto.');
     if (productMasterBusy) throw new Error('Ya hay una operación de productos en curso.');
     productBulkIds([request.id]);
+    if (request.field === 'category') productBulkIds([request.value]);
     const ownerUid = auth.currentUser.uid;
     const product = _allProducts.find(item => item._docId === request.id);
     productMasterBusy = true;
@@ -6408,11 +6409,17 @@ window.TintinProductAdmin = Object.freeze({
           let before, patch;
           await withAdminSiteChange(() => runTransaction(db, async transaction => {
             if (auth.currentUser?.uid !== ownerUid) throw new Error('La sesión cambió. Volvé a abrir el panel.');
+            let collections = [];
+            if (request.field === 'category') {
+              const collection = await transaction.get(doc(db, 'collections', request.value));
+              if (!collection.exists()) throw new Error('La colección ya no existe. Actualizá antes de asignarla.');
+              collections = [{slug:request.value}];
+            }
             const ref = doc(db, 'products', request.id), snapshot = await transaction.get(ref);
             if (auth.currentUser?.uid !== ownerUid) throw new Error('La sesión cambió. Volvé a abrir el panel.');
             if (!snapshot.exists() || productFingerprint(snapshot.data()) !== request.expected) throw new Error('El producto cambió en otra sesión. Revisá sus cantidades antes de guardar.');
             before = snapshot.data();
-            patch = productCardPatch(before, request);
+            patch = productCardPatch(before, request, collections);
             transaction.update(ref, {...patch, updatedAt:serverTimestamp()});
           }));
           if (product) Object.assign(product, patch);
@@ -6428,6 +6435,35 @@ window.TintinProductAdmin = Object.freeze({
         },
       });
     } finally { productMasterBusy = false; }
+  },
+  async updateCollectionVisibility(request) {
+    if (!auth.currentUser || !currentUser || auth.currentUser.uid !== currentUser.uid || navigator.onLine === false) throw new Error('La sesión o la conexión no están disponibles.');
+    if (!can(currentRole,'manageContent') || !roleCanDo('colecciones','activarDesactivar')) throw new Error('No tenés permiso para modificar esta colección.');
+    productBulkIds([request.id]);
+    if (typeof request.visible !== 'boolean' || typeof request.expectedVisible !== 'boolean') throw new Error('Estado de colección no válido.');
+    if (productMasterBusy) throw new Error('Ya hay una operación de catálogo en curso.');
+    const ownerUid = auth.currentUser.uid;
+    productMasterBusy = true;
+    try {
+      return await runAdminCrudOperation({title:'Actualizar colección',name:request.id,module:'colecciones',
+        stages:[{id:'save',label:'Confirmar la visibilidad'},{id:'sync',label:'Actualizar las vistas conectadas'}],
+        action:async ctx=>{
+          ctx.start('save');
+          await withAdminSiteChange(()=>runTransaction(db,async transaction=>{
+            const ref=doc(db,'collections',request.id),snapshot=await transaction.get(ref);
+            if (auth.currentUser?.uid !== ownerUid) throw new Error('La sesión cambió. Volvé a abrir el panel.');
+            if (!snapshot.exists() || (snapshot.data().visible !== false) !== request.expectedVisible) throw new Error('La colección cambió en otra sesión. Actualizá antes de guardar.');
+            transaction.update(ref,{visible:request.visible,updatedAt:serverTimestamp()});
+          }));
+          ctx.ok('save');ctx.start('sync');
+          const collection=_allCollections.find(item=>item.slug===request.id);
+          if(collection)collection.visible=request.visible;
+          renderColeccionesGrid(applyCollFilter(_allCollections));
+          await logAudit('editar_coleccion','coleccion',request.id,collection?.name || request.id,request.visible?'Colección activada':'Colección desactivada').catch(error=>console.warn('[collections] Auditoría pendiente:',error?.code || 'unavailable'));
+          ctx.ok('sync');return {confirmed:true};
+        }
+      });
+    } finally {productMasterBusy=false;}
   },
   async applyBulkChanges(request) {
     if(!auth.currentUser || !currentUser || navigator.onLine===false)throw new Error('La sesión o la conexión no están disponibles.');

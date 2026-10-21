@@ -156,6 +156,7 @@ body:has(.login-page).login-setup-open #login-profile-block .login-outlined-fiel
   transform: translateY(-50%);
   margin: 0 !important;
   padding: 0 6px;
+  border-radius: 6px;
   max-width: calc(100% - 44px);
   background: #fff;
   font-size: 14px !important;
@@ -173,7 +174,7 @@ body:has(.login-page).login-setup-open #login-profile-block .login-outlined-fiel
   margin: 0 !important;
   padding: 12px 0 !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: inherit !important;
   background: transparent !important;
   box-shadow: none !important;
   outline: none !important;

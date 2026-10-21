@@ -79,7 +79,8 @@ export function productDuplicateData(product) {
 }
 
 // Una edición puntual mantiene el total igual a la suma de sus variantes.
-export function productCardPatch(product, request) {
+export function productCardPatch(product, request, collections = []) {
+  if (request.field === 'category') return productBulkPatch(product, 'category', request.value, collections);
   if (['active', 'oferta', 'destacado'].includes(request.field)) return productBulkPatch(product, request.field, request.value);
   if (request.field !== 'stock') throw Error('Campo de tarjeta no válido.');
   const quantity = integer(request.value, 0, 1000000, 'Stock');
