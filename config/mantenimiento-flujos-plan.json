@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "baseCommit": "cfd77c2c43697339da6561945d3965308cc1e18e",
-  "reason": "Agregar copia manual cifrada sólo para titular sobre main, sin cambiar cron, credenciales ni datos de producción.",
+  "reason": "Agregar copia manual cifrada sólo para titular sobre main, aislada del artefacto público y sin cambiar datos.",
   "files": [
     {
       "path": ".github/workflows/backup-firestore.yml",
       "oldHash": "e7a0a548dc43a74976a7f0ed0eb404dd19f247ca4163e31ec86adcd8637116fd",
-      "newHash": "b84f73348a46dbcfc581fb5aac96be411da4d32b92e46790b5c89890d0b90ba3"
+      "newHash": "95be58b2c9fa36e23a527356ba32475e1271780909005de9ed2530540fa6e75c"
     }
   ],
   "affectedRecords": []

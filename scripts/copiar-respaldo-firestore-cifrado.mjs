@@ -59,7 +59,7 @@ export function copyEncryptedBackup({ bucket, recipientPem, outputDirectory, run
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const result = copyEncryptedBackup({ bucket: process.env.FIRESTORE_BACKUP_BUCKET, recipientPem: process.env.BACKUP_RECIPIENT_PEM, outputDirectory: 'encrypted-backup' });
+    const result = copyEncryptedBackup({ bucket: process.env.FIRESTORE_BACKUP_BUCKET, recipientPem: process.env.BACKUP_RECIPIENT_PEM, outputDirectory: 'artifacts/encrypted-backup' });
     console.log(JSON.stringify(result));
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }

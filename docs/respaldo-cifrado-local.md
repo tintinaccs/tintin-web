@@ -2,7 +2,7 @@
 
 Se reutiliza Backup Firestore, su entorno `production-backup`, credenciales existentes y bucket canónico. El export diario sigue igual. El modo manual `encrypted_copy=true` sólo lee el último export que tenga su archivo `overall_export_metadata`; no inicia otro export ni importa, restaura o cambia producción. Requiere ejecución del titular desde `main`, comprobada antes de cargar las credenciales, y el certificado **público** PEM del destinatario en `recipient_pem`. No pasar claves privadas, cookies ni contraseñas a Actions o al chat.
 
-El runner descarga el export a una carpeta temporal privada, lo empaqueta y cifra mediante CMS EnvelopedData/AES-256-CBC con OpenSSL de la plataforma. El artefacto contiene exclusivamente `firestore-backup.p7m` y un recibo con SHA-256, fecha e identificador del snapshot. No contiene el export en claro, certificado privado ni credenciales. La carpeta temporal se elimina incluso ante fallo y el artefacto cifrado caduca en un día. El recibo detecta corrupción; descargar siempre desde el workflow autorizado del repositorio.
+El runner descarga el export a una carpeta temporal privada, lo empaqueta y cifra mediante CMS EnvelopedData/AES-256-CBC con OpenSSL de la plataforma. El resultado queda en `artifacts/encrypted-backup`, fuera de Git y del artefacto público del sitio. El artefacto contiene exclusivamente `firestore-backup.p7m` y un recibo con SHA-256, fecha e identificador del snapshot. No contiene el export en claro, certificado privado ni credenciales. La carpeta temporal se elimina incluso ante fallo y el artefacto cifrado caduca en un día. El recibo detecta corrupción; descargar siempre desde el workflow autorizado del repositorio.
 
 ## Preparar el destinatario Windows
 

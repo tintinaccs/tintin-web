@@ -81,9 +81,13 @@ test('el workflow conserva el export diario y sólo sube los dos artefactos cifr
   assert.match(source, /GITHUB_REF !== 'refs\/heads\/main'/);
   assert.match(source, /GITHUB_ACTOR !== process\.env\.GITHUB_REPOSITORY_OWNER/);
   const upload = source.slice(source.indexOf('uses: actions/upload-artifact'));
-  assert.match(upload, /encrypted-backup\/firestore-backup\.p7m/);
-  assert.match(upload, /encrypted-backup\/firestore-backup\.json/);
+  assert.match(upload, /artifacts\/encrypted-backup\/firestore-backup\.p7m/);
+  assert.match(upload, /artifacts\/encrypted-backup\/firestore-backup\.json/);
   assert.doesNotMatch(upload, /path:.*\*|retention-days: (?:[2-9]|\d{2})/);
+  const ignore = fs.readFileSync(new URL('../../.gitignore', import.meta.url), 'utf8');
+  assert.match(ignore, /^artifacts\/$/m);
+  const helper = fs.readFileSync(new URL('../../scripts/copiar-respaldo-firestore-cifrado.mjs', import.meta.url), 'utf8');
+  assert.match(helper, /outputDirectory: 'artifacts\/encrypted-backup'/);
 });
 
 test('borra temporales en claro y el cifrado parcial si falla el cifrado final', () => {
