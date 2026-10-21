@@ -388,7 +388,7 @@ test('Apps Script conserva Productos y agrega un dispatcher de paridad instalabl
 test('una edición parcial no valida ni reemplaza las demás columnas del producto', () => {
   const source = read('functions/api/sheets-products-webhook.js');
   const appScript = read('apps-script/ProductosUnificados.gs');
-  assert.match(source, /const fields = selectedFields\(input\.changedFields, id\);/);
+  assert.match(source, /const fields = selectedFields\(input\.changedFields, text\(input\.productId, 128\)\);/);
   assert.match(source, /if \(\(!fields \|\| fields\.has\('name'\)\) && !name\)/);
   assert.match(source, /if \(Object\.keys\(publicData\)\.length\) publicData\.updatedAt/);
   assert.match(appScript, /function tintinProductFieldsForColumns_/);

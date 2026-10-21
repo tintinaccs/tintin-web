@@ -193,7 +193,8 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
     }
     if (input.action !== 'saveProduct') throw new Error('Accion no permitida.');
 
-    const fields = selectedFields(input.changedFields, id);
+    // Un ID recién generado no convierte un alta en una edición parcial.
+    const fields = selectedFields(input.changedFields, text(input.productId, 128));
     const name = text(input.name, 180);
     const category = text(input.category, 120);
     const price = optionalInteger(input.price);

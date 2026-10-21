@@ -190,3 +190,18 @@ test('rejected paste restores existing rows from canonical stock, including prev
   assert.deepEqual(written, [{ row: 9, stock: 0 }, { row: 10, stock: 2 }]);
   assert.equal(names[0].value, "'=literal");
 });
+
+test('new rows cannot bypass required product validation through changedFields', async () => {
+  const f = webhookFixture(null);
+  const r = await f.send({ productId: '', name: 'Only a name', changedFields: ['name'] });
+  assert.equal(r.status, 400); assert.match((await r.json()).error, /categoria/);
+  assert.deepEqual(f.writes, []); assert.equal(f.reads(), 0);
+});
+test('valid new rows keep full validation and save a complete inactive zero-stock product', async () => {
+  const f = webhookFixture(null);
+  const r = await f.send({ productId: '', name: 'Fixture', category: 'aros', price: 100, stock: 0, active: false, changedFields: ['name'] });
+  assert.equal(r.status, 200);
+  assert.equal(f.writes[0].fields.name, 'Fixture'); assert.equal(f.writes[0].fields.category, 'aros');
+  assert.equal(f.writes[0].fields.price, 100); assert.equal(f.writes[0].fields.stock, 0); assert.equal(f.writes[0].fields.active, false);
+  assert.deepEqual(f.writes[0].currentDocument, { exists: false });
+});

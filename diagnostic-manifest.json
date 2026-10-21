@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "69af8c6f07608e59306ad2134db9cd302fb61a90da0da0c511f4cee297c8c94b",
+  "sourceFingerprint": "38b5cbc859487ec0ef1c92859edffd12734813142f314796ba98a2fb15dbce8c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1385,
     "textFiles": 1294,
-    "totalBytes": 29244478,
+    "totalBytes": 29246108,
     "pages": 19,
     "modules": 973
   },
@@ -27514,8 +27514,8 @@
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
-      "bytes": 13919,
-      "sha256": "c9d5053a87ede9361b460b11f5d30cc0c85db3abbeba7db8ed1e58b52cdd544a",
+      "bytes": 14019,
+      "sha256": "a6514a525be412e7e97e8dba424f7f1b6799e3c5497b5053173fea4fbea341ca",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52255,8 +52255,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 22572,
-      "sha256": "6365f3702a8da13357075444969af29f3e0043b0ddfc49d23f1dd7119a39d6f6",
+      "bytes": 22599,
+      "sha256": "04c2425056b0f31a15589e38f7fc25c08a2f49478e9e81a7deb479b49240ad03",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52562,8 +52562,8 @@
     },
     {
       "path": "tests/sync/sheets-integrity-regressions.test.mjs",
-      "bytes": 12655,
-      "sha256": "1e4fecfabe8b2a13890503b095c430f2f9035f895fe9f2d33fa573ca3213b761",
+      "bytes": 13650,
+      "sha256": "7c3c13912b7382369e644f702541525d2bdbea7db9edfc3d110d8a002846160d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55541,7 +55541,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 2150,
-      "sha256": "41db2d586ebaa6183e77054b6fabf2263e98d7014d1fec97b7e6d737b6a26d25"
+      "sha256": "1e24a1b6bc0560e949ac817eb63e4a72e809af31bf54314cdc9fa97c9e8830f2"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55553,7 +55553,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "668517495075a6a05550aa6907ffae31ad76e254f60e18ec8efafae97e36fe5b"
+      "sha256": "80a80ff669c8162c10d6c3ad2a848a373f8487f2d80f87ba04b0dc6f23bfecef"
     },
     {
       "path": "config/public-site.json",
@@ -56212,8 +56212,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 772667,
-      "sha256": "5f7e4438dc92f8d7a3b3c56e7b85dfc80c3188e4bff85a7fce5ab41b1c390866"
+      "bytes": 773175,
+      "sha256": "2dc09615933fd29a05b50bb0628aee96b21dc58d5ca81acc66b54d180f377e8c"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57112,8 +57112,8 @@
     {
       "path": "functions/api/sheets-products-webhook.js",
       "extension": ".js",
-      "bytes": 13919,
-      "sha256": "c9d5053a87ede9361b460b11f5d30cc0c85db3abbeba7db8ed1e58b52cdd544a"
+      "bytes": 14019,
+      "sha256": "a6514a525be412e7e97e8dba424f7f1b6799e3c5497b5053173fea4fbea341ca"
     },
     {
       "path": "functions/api/sheets-sync-snapshot.js",
@@ -62344,8 +62344,8 @@
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 22572,
-      "sha256": "6365f3702a8da13357075444969af29f3e0043b0ddfc49d23f1dd7119a39d6f6"
+      "bytes": 22599,
+      "sha256": "04c2425056b0f31a15589e38f7fc25c08a2f49478e9e81a7deb479b49240ad03"
     },
     {
       "path": "tests/sync/public-consistency-regressions.test.mjs",
@@ -62374,8 +62374,8 @@
     {
       "path": "tests/sync/sheets-integrity-regressions.test.mjs",
       "extension": ".mjs",
-      "bytes": 12655,
-      "sha256": "1e4fecfabe8b2a13890503b095c430f2f9035f895fe9f2d33fa573ca3213b761"
+      "bytes": 13650,
+      "sha256": "7c3c13912b7382369e644f702541525d2bdbea7db9edfc3d110d8a002846160d"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
