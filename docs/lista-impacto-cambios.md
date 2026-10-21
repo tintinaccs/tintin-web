@@ -1,12 +1,14 @@
-<<<<<<< HEAD
+## 2026-10-21 — Colección puntual, tarjetas de Colecciones y privacidad operable
+
+Amplía la mejora de Productos con category validada dentro de la transacción canónica, sin alterar stock ni etiqueta interna. La visibilidad de Colecciones usa la misma autoridad administrativa con permiso específico, estado esperado, revisión y auditoría. Nueva presentación de sus tarjetas y filtros acotada a ese módulo. El controlador compartido mantiene inert para el fondo y permite el aviso real de privacidad, su teclado y restauración de foco; cubre montaje previo/tardío. Login usa el ejemplo genérico0912 345 678 en gris, con etiquetas redondeadas, sin cambiar valores guardados o validación. Se preservan1191/1187 al conciliar main y se renueva toda la cadena de consumidores con el auditor de caché; derivados y plan se generan. Evidencia actual y límites en CURRENT_STATE; no hay datos comerciales reales modificados.
+
 ## 2026-10-21 — Tarjetas compactas y editor de Productos a pantalla completa
 
 Fuentes canónicas: shopify-commerce-admin.js/css e interfaz-productos-adaptable.js. Las tarjetas agrupan imagen contenida, identidad/precio, estado semántico y controles de visibilidad/stock; muestran muestras de la paleta existente y selector nativo cuando hay más de cuatro opciones. Una columna en móvil, dos en tablet y tres en escritorio, conservando vista Lista. El editor ocupa el área bajo la cabecera en todos los tamaños, utiliza un único desplazamiento principal y dos acciones flotantes, y ordena fotos por color y vista previa sin una barra de pie. Conserva los controladores de guardado, permisos, inventario, guardia de borradores y sincronización. La captura de foco y Escape se aplican también al editor de escritorio. No cambia datos reales, Auth, Rules, pagos ni integraciones. Se actualizan referencias inmutables, diagnóstico y plan protegido desde sus herramientas; evidencia y límites en CURRENT_STATE.
-=======
+
 ## 2026-10-21 — Recuperar ubicación y pedir popup de Google
 
 Fuentes canónicas: geolocalizacion.mjs y mapa-ubicacion.js compartidos por Perfil/Checkout; espera-popup-google.mjs consumido por login. El GPS tiene dos plazos de5s y señal de cancelación: marcar/buscar, limpiar o desmontar conserva el punto actual e invalida respuestas tardías. No guarda una dirección ni inventa coordenadas ante un fallo. Google pide popup=yes sólo para Auth y conserva nombre, dimensiones, opener y resultado del SDK; el sistema móvil sigue determinando la presentación soportada. Login no cambia persistencia, roles, confirmaciones ni fallback ante bloqueo. Las tres referencias se renuevan juntas; CSP/caché/manifiestos y plan desde autoridades existentes. Pruebas de negativas, cancelación, reintento, callback tardío, una solicitud y matriz de diez geometrías en Chromium/WebKit; dos specs existentes se conectan al gate de acceso/perfil. Evidencia y límites en CURRENT_STATE. Sin escrituras comerciales, dirección real, cierre de sesión ni cambios de permisos.
->>>>>>> origin/main
 
 ## 2026-10-21 — Reaplicar el espejo mensual al actualizar su formato
 

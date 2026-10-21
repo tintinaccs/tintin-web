@@ -18,15 +18,9 @@ const TIENDA_VERSION = 'tintin-20261020-domain-cutover-color-order-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261017-domain-cutover-1';
 const LOADER_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
-<<<<<<< HEAD
 const PANEL_COMPAT_VERSION = 'tintin-20261021-workspace-account-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
-const NAV_ENTRY_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
-=======
-const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261021-domain-cutover-color-selector-1';
-const NAV_ENTRY_VERSION = 'tintin-20261021-domain-cutover-color-selector-1';
->>>>>>> origin/main
+const PUBLIC_SHELL_VERSION = 'tintin-20261021-workspace-account-1';
+const NAV_ENTRY_VERSION = 'tintin-20261021-workspace-account-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261017-domain-cutover-1';

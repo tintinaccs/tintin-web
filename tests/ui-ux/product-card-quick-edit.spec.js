@@ -1,4 +1,5 @@
 const {test,expect}=require('@playwright/test');
+test.use({reducedMotion:'reduce'});
 const {mockRuntime}=require('./helpers/admin-commerce-fixture.cjs');
 const fs=require('node:fs');
 const path=require('node:path');
@@ -121,4 +122,15 @@ for(const width of [390,1440])test(`colección puntual y visibilidad desde tarje
  expect(await page.evaluate(()=>window.__collectionRows.find(row=>row.id==='relojes').data.visible)).toBe(false);
  await collection.getByLabel('Estado de Relojes',{exact:true}).selectOption('true');
  await expect(collection.locator('.tt-commerce-badge')).toHaveText('Visible');
+});
+
+test('un controlador aún cargando restaura la selección confirmada de producto y colección',async({page})=>{
+ await loadCards(page,390);await page.evaluate(()=>{window.TintinProductAdmin=null;});
+ const product=page.locator('#tt-commerce-products tr[data-id="p-reloj"]');
+ await product.getByLabel('Colección de Reloj Clásico Negro',{exact:true}).selectOption('pulseras');
+ await expect(product.getByLabel('Colección de Reloj Clásico Negro',{exact:true})).toHaveValue('relojes');
+ const collection=page.locator('#tt-commerce-collections tr[data-id="relojes"]');
+ await collection.getByLabel('Estado de Relojes',{exact:true}).selectOption('false');
+ await expect(collection.getByLabel('Estado de Relojes',{exact:true})).toHaveValue('true');
+ expect(await page.evaluate(()=>window.__cardCalls.length)).toBe(0);
 });

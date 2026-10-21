@@ -267,7 +267,7 @@ async function saveProductCard(product, field, value, variant='') {
   const ownerUid = state.user.uid;
   const draftKey = product._docId + '/' + variant;
   const expected = field==='stock' ? state.cardDrafts.get(draftKey)?.expected || productFingerprint(product) : productFingerprint(product);
-  if (typeof window.TintinProductAdmin?.updateCard !== 'function') return toast('El guardado todavía está cargando. Reintentá.');
+  if (typeof window.TintinProductAdmin?.updateCard !== 'function') { toast('El guardado todavía está cargando. Reintentá.'); renderProducts(); return; }
   setBusy(true);
   try {
     const result = await window.TintinProductAdmin.updateCard({id:product._docId,field,value,variant,expected});
@@ -277,19 +277,20 @@ async function saveProductCard(product, field, value, variant='') {
       if(fingerprint)for(const [key,draft] of state.cardDrafts)if(key.startsWith(product._docId+'/') && draft.expected===expected)draft.expected=fingerprint;
     }
   } catch (error) { if(state.user?.uid===ownerUid)toast(error.message); }
-  finally { setBusy(false); if(state.user?.uid===ownerUid)renderProducts(); }
+  finally { setBusy(false); if(state.user?.uid===ownerUid){renderProducts();renderCollections();} }
 }
 
 async function saveCollectionVisibility(target) {
-  if (state.busy || !perm('colecciones','activarDesactivar','manageContent')) return;
+  if (state.busy || !state.user?.uid || !perm('colecciones','activarDesactivar','manageContent')) return;
   const collection=state.collections.find(item=>item.slug===target.dataset.collectionVisible);
   if (!collection) return;
   const controller=window.TintinProductAdmin;
-  if(typeof controller?.updateCollectionVisibility !== 'function')return toast('El guardado todavía está cargando. Reintentá.');
+  if(typeof controller?.updateCollectionVisibility !== 'function'){toast('El guardado todavía está cargando. Reintentá.');renderCollections();return;}
+  const ownerUid=state.user?.uid;
   setBusy(true);
   try {await controller.updateCollectionVisibility({id:collection.slug,visible:target.value==='true',expectedVisible:collection.visible!==false});}
-  catch(error){toast(error.message);}
-  finally{setBusy(false);renderCollections();document.querySelector(`[data-collection-visible="${CSS.escape(collection.slug)}"]`)?.focus({preventScroll:true});}
+  catch(error){if(state.user?.uid===ownerUid)toast(error.message);}
+  finally{setBusy(false);if(state.user?.uid===ownerUid){renderProducts();renderCollections();document.querySelector(`[data-collection-visible="${CSS.escape(collection.slug)}"]`)?.focus({preventScroll:true});}}
 }
 
 function productStatus(product) {
