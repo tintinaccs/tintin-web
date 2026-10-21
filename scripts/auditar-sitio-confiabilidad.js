@@ -8,6 +8,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\
 const failures = [];
 const cacheVersions = JSON.parse(read('scripts/cache-version-baseline.json'));
 const consentVersion = cacheVersions['js/analytics/consentimiento-privacidad.js']?.version;
+const welcomeConfigVersion = cacheVersions['js/components/welcome/configuracion-bienvenida.js']?.version;
 
 function stripScriptBlocks(html) {
   let out = '';
@@ -187,8 +188,8 @@ check('La primera sesión de una clienta llega a inicio con bienvenida pendiente
   welcomeRuntime.includes('data?.welcomeTutorialPending === true'));
 check('Bienvenida pública y Super Admin usan una sola configuración',
   welcomeConfig.includes("export const WELCOME_VERSION = 'home-welcome-v5-media'") &&
-  welcomeRuntime.includes("from './configuracion-bienvenida.js?v=tintin-20261015-images-1'") &&
-  welcomeAdmin.includes("from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20261015-images-1'") &&
+  welcomeRuntime.includes(`from './configuracion-bienvenida.js?v=${welcomeConfigVersion}'`) &&
+  welcomeAdmin.includes(`from '../../components/welcome/configuracion-bienvenida.js?v=${welcomeConfigVersion}'`) &&
   !fs.existsSync(path.join(root, 'js', 'onboarding.js')) &&
   !fs.existsSync(path.join(root, 'js', 'welcome-tutorial-init.js')) &&
   !profile.includes('./js/onboarding.js'));

@@ -25,3 +25,8 @@ Caché, bundles, CSP, plan protegido y manifiestos se regeneran desde sus autori
 ## Límites de publicación
 
 Merge y despliegue web están autorizados. La publicación de código no acredita la instalación de Apps Script, la conexión profesional de Instagram/secretos Meta, OAuth real, notificación física, compras, pagos ni escrituras comerciales. No se ejecutan esas operaciones. Instagram conserva su enlace/fallback si no existe conexión. Las colas históricas de datos y tareas comerciales no quedan completadas por integrar estos PR.
+
+
+## Seguimiento del control de bienvenida
+
+La CI39519261730 confirmó build reproducible y sin drift, dominio, CSS e integraciones. El siguiente contrato detectó una referencia literal histórica en el auditor de confiabilidad, aunque los dos consumidores usan la misma URL vigente. El auditor lee ahora la versión canónica del baseline y mantiene todas las otras condiciones. audit:reliability y7 regresiones de actividad pasan. Se regeneran plan y manifiestos; CI del nuevo SHA y publicación siguen PENDING hasta evidencia remota. La desconexión temporal del entorno se recuperó sin descartar los commits publicados.

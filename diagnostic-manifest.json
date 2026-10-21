@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2b818b79d999d57912e6960b09bfe6afdb85588128a346cd0676de5894c43863",
+  "sourceFingerprint": "5e0118d1ef4a71ec4a084b3f40591d2e538829ce91721138d92c88bcf712d795",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1374,
     "textFiles": 1284,
-    "totalBytes": 28947948,
+    "totalBytes": 28949568,
     "pages": 19,
     "modules": 966
   },
@@ -38846,8 +38846,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 20795,
-      "sha256": "f989b65e9980c1d060e31c1e71341810dff3d31b0829650df46915a204058f68",
+      "bytes": 20899,
+      "sha256": "f1a88793f3a983e64752b2b7d4925a3e45a9bb81fcc1b3f5f0b188b956340227",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38857,37 +38857,37 @@
           "raw": "./consentimiento-privacidad.js?v=${consentVersion}",
           "target": null,
           "dynamic": false,
-          "line": 129
+          "line": 130
         },
         {
           "raw": "./consentimiento-privacidad.js?v=${consentVersion}",
           "target": null,
           "dynamic": false,
-          "line": 131
+          "line": 132
         },
         {
           "raw": "../core/firebase/origen-funciones.js",
           "target": "core/firebase/origen-funciones.js",
           "dynamic": false,
-          "line": 140
+          "line": 141
         },
         {
-          "raw": "./configuracion-bienvenida.js?v=tintin-20261015-images-1",
-          "target": "scripts/configuracion-bienvenida.js",
-          "dynamic": false,
-          "line": 190
-        },
-        {
-          "raw": "../../components/welcome/configuracion-bienvenida.js?v=tintin-20261015-images-1",
+          "raw": "./configuracion-bienvenida.js?v=${welcomeConfigVersion}",
           "target": null,
           "dynamic": false,
           "line": 191
+        },
+        {
+          "raw": "../../components/welcome/configuracion-bienvenida.js?v=${welcomeConfigVersion}",
+          "target": null,
+          "dynamic": false,
+          "line": 192
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccs.com/",
-          "line": 143
+          "line": 144
         }
       ]
     },
@@ -55833,8 +55833,8 @@
     {
       "path": "docs/agent/CONSOLIDACION_PR_20261020.md",
       "extension": ".md",
-      "bytes": 4987,
-      "sha256": "4efdd51031e797e67e5ce1c633057136c570dc1272ab76aed4a481e9fc8ff8d6"
+      "bytes": 5613,
+      "sha256": "26d2a839d40a314b31cd38871cd5e99fa42fee6b9fff9f8182849328e370c970"
     },
     {
       "path": "docs/agent/CONTINUACION_PREPARACION_20261011.md",
@@ -55845,8 +55845,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 727368,
-      "sha256": "9275b4017018335fedf21cebe82b08b236e443c6748db83e346f3b6480397b44"
+      "bytes": 728258,
+      "sha256": "34390a3a5f104b389a68451c66e165ca01d338f488f51935926960a031a593d7"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -59673,8 +59673,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 20795,
-      "sha256": "f989b65e9980c1d060e31c1e71341810dff3d31b0829650df46915a204058f68"
+      "bytes": 20899,
+      "sha256": "f1a88793f3a983e64752b2b7d4925a3e45a9bb81fcc1b3f5f0b188b956340227"
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
@@ -65710,7 +65710,7 @@
           },
           {
             "file": "scripts/auditar-sitio-confiabilidad.js",
-            "line": 174,
+            "line": 175,
             "operation": "collection"
           }
         ]
