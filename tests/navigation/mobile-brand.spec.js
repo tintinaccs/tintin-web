@@ -16,8 +16,9 @@ for (const [width, height] of [[320, 568], [390, 844], [430, 932], [600, 960], [
       await expect(brand, name).toHaveCount(1);
       await expect(brand, name).toBeVisible();
       await expect(brand.locator('feFlood'), name).toHaveCSS('flood-color', 'rgb(255, 255, 255)');
-      await expect(brand, name).toHaveCSS('background-image', /linear-gradient/);
-      await expect(brand, name).not.toHaveCSS('background-image', /184,\s*76,\s*114/);
+      expect(await brand.evaluate(el=>getComputedStyle(el,'::before').backgroundImage)).toMatch(/linear-gradient/);
+      expect(await brand.evaluate(el=>getComputedStyle(el,'::before').backgroundImage)).not.toMatch(/184,\s*76,\s*114/);
+      await expect(brand, name).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
       const image = brand.locator('img');
       await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth === 480 && img.naturalHeight === 600)).toBe(true);
       const geometry = await brand.evaluate(el => {
@@ -79,10 +80,12 @@ test('el encabezado conserva rosa y logo blanco al cambiar contenido, sin duplic
     await expect.poll(() => brand.evaluate(el => el.style.getPropertyValue('--tt-mobile-brand-next'))).toBe(next);
     await expect(brand.locator('feFlood')).toHaveCSS('flood-color', 'rgb(255, 255, 255)');
     expect(await brand.evaluate(el => getComputedStyle(el).getPropertyValue('--tt-mobile-brand-bg').trim().toLowerCase())).toBe('#f8aaca');
-    await expect(brand).toHaveCSS('background-image', /linear-gradient/);
-    await expect(brand).not.toHaveCSS('background-image', /184,\s*76,\s*114/);
+    expect(await brand.evaluate(el=>getComputedStyle(el,'::before').backgroundImage)).toMatch(/linear-gradient/);
+    expect(await brand.evaluate(el=>getComputedStyle(el,'::before').backgroundImage)).not.toMatch(/184,\s*76,\s*114/);
+    await expect(brand).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     await expect(brand).toHaveCSS('border-bottom-width', '0px');
-    await expect(brand).toHaveCSS('backdrop-filter', /blur\(18px\)/);
+    expect(await brand.evaluate(el=>getComputedStyle(el,'::before').backdropFilter)).toMatch(/blur\(18px\)/);
+    expect(await brand.evaluate(el=>getComputedStyle(el,'::before').maskImage)).toMatch(/linear-gradient/);
   }
   await page.locator('.tt-page-hero').evaluate(el => { el.style.removeProperty('background'); el.id = 'brand-test-content'; });
   await page.addStyleTag({ content: 'html:root body #brand-test-content { background:#fff0f7!important } @media (orientation:landscape) { html:root body #brand-test-content { background:#9a2f55!important } }' });

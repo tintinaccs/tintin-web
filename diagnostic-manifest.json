@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5cddc90c1dc9bad7aec339db467b9f774badfbaca065a2d3786bb7fc9ef00bf1",
+  "sourceFingerprint": "f354b4068e5980584a7341a7f7c0fbc9d26f9c5f6fe9d3746870368c66a4de1d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1384,
-    "textFiles": 1293,
-    "totalBytes": 29202603,
+    "files": 1385,
+    "textFiles": 1294,
+    "totalBytes": 29219871,
     "pages": 19,
-    "modules": 972
+    "modules": 973
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18221,
-      "sha256": "4c65d8d00e950ff4c84f19d69dfc63076eb91d42e520e779b1a51a85da4695e7",
+      "bytes": 18211,
+      "sha256": "b864e4f696cc5d2f4ec5e594f7139b2abdeb5a00c0003b76abbcaf46a9f364ff",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -236,7 +236,7 @@
           "line": 131
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 132
         },
@@ -855,7 +855,7 @@
           "exists": true
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 132,
           "exists": true
@@ -1158,8 +1158,8 @@
         "guest",
         "client"
       ],
-      "bytes": 31257,
-      "sha256": "03d84d0c31f548f34f505223213b8dd9fd60be4c4e08806674590124d8476cee",
+      "bytes": 31247,
+      "sha256": "a7dbb7d7f2719805f8eae0e7f274d5dda9063e549aa502e63d235b7be8ee6b7a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1266,7 +1266,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-d4ec5bef2c9950a3",
+          "raw": "css/generated/nosotros.css?v=tintin-about-b4cdc01985d5e455",
           "target": "css/generated/nosotros.css",
           "line": 34
         },
@@ -1346,7 +1346,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -1862,7 +1862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-d4ec5bef2c9950a3",
+          "raw": "css/generated/nosotros.css?v=tintin-about-b4cdc01985d5e455",
           "target": "css/generated/nosotros.css",
           "line": 34,
           "exists": true
@@ -1958,7 +1958,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -2257,8 +2257,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44693,
-      "sha256": "abd989464d22a517cd55871bfa29db444b8da5824166a3c2331519662c62e062",
+      "bytes": 44683,
+      "sha256": "f5d3391692a03b673c28dad835dfa42f8b9b4e827a9841eede5d80e993f72fb9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2375,7 +2375,7 @@
           "line": 313
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 314
         },
@@ -2532,7 +2532,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 314,
           "exists": true
@@ -2881,8 +2881,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204359,
-      "sha256": "7640d4620f3408fdecedc0a9f637d41ed515be1b4cf9ee501075056a90889408",
+      "bytes": 204349,
+      "sha256": "3c0a3ef3ab9e46d043d97688f395afcf18113a7a22ad509a499cf00afe87fc2f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3133,7 +3133,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -3520,7 +3520,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -8985,8 +8985,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19823,
-      "sha256": "b072eb89cfdf378240c7eb8a9827188f60a80c1f063735213dcd7ea04455341b",
+      "bytes": 19813,
+      "sha256": "a0bce62af34a7cd2a3d5cb7069b029943923946accd8f5e4825887f73f85f34c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9157,7 +9157,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -9718,7 +9718,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -9979,8 +9979,8 @@
         "guest",
         "client"
       ],
-      "bytes": 59264,
-      "sha256": "191f363193df92863e6184790048df5fd01c79e83c89bbcca26ef083bcf3e403",
+      "bytes": 59254,
+      "sha256": "1962504cd5e38e51c3d9b6e8067e6ab01cf8c12b9816dfddd2c2255c7ce25507",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10163,7 +10163,7 @@
           "line": 53
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54
         },
@@ -10719,7 +10719,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54,
           "exists": true
@@ -11080,8 +11080,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 132431,
-      "sha256": "20d0912eb8c64c9322773a72404d41067e7467eba5230b0786bfcd4b658450c7",
+      "bytes": 132421,
+      "sha256": "63bf63e88d044df1c6976c792f28f14ef5f765080a4d2c819823be94fdded015",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11263,7 +11263,7 @@
           "line": 46
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 47
         },
@@ -11847,7 +11847,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 47,
           "exists": true
@@ -12600,8 +12600,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21501,
-      "sha256": "1d447f4db3e86a21dba31121f6cacdb03bc480341884efcd8bd5db8789504496",
+      "bytes": 21491,
+      "sha256": "65709c63a17b83b1a0a75f3c74fc58870a822808371f38039cf9b1a8132aa776",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12783,7 +12783,7 @@
           "line": 54
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55
         },
@@ -13360,7 +13360,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55,
           "exists": true
@@ -13627,8 +13627,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26512,
-      "sha256": "af190789a337f9e3ff7786875f3af4be050a4d43c4ecc626512ede2c5df72468",
+      "bytes": 26502,
+      "sha256": "e8fc7a86e8200ddc03f0a3891b4f966d5e6d075a31801e2dd4355087defea70f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13805,7 +13805,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -14411,7 +14411,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -14739,8 +14739,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23509,
-      "sha256": "0c3297105967ec6046890108d979753b1951bf710ed2713c68057e3e66093685",
+      "bytes": 23499,
+      "sha256": "666357571c15b36f0d072f8aae3a4ca7660fc4a1ea0636336b212e8dbf758ff4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14917,7 +14917,7 @@
           "line": 53
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54
         },
@@ -15478,7 +15478,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 54,
           "exists": true
@@ -15779,8 +15779,8 @@
         "guest",
         "client"
       ],
-      "bytes": 46792,
-      "sha256": "c336e176ae8ebf9fb76f69dfcd36b94669483ceb978e4ffb9d8fbb8493f0ceca",
+      "bytes": 46782,
+      "sha256": "073aebd2976ac085a4e081dc84325dd2519c02ddaecd0fc3a6c75efdff828360",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15918,7 +15918,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-d3cbee59b2206b8e",
+          "raw": "css/generated/inicio.css?v=tintin-home-4f57b4e5d1e7013d",
           "target": "css/generated/inicio.css",
           "line": 57
         },
@@ -16013,7 +16013,7 @@
           "line": 90
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 91
         },
@@ -16862,7 +16862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-d3cbee59b2206b8e",
+          "raw": "css/generated/inicio.css?v=tintin-home-4f57b4e5d1e7013d",
           "target": "css/generated/inicio.css",
           "line": 57,
           "exists": true
@@ -16976,7 +16976,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 91,
           "exists": true
@@ -17570,8 +17570,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72907,
-      "sha256": "10bca6fe7314570d45ba034861ed61e248a3bea5a538cd38b69d29a931dc76ca",
+      "bytes": 72897,
+      "sha256": "a378d5392b44504d05e05c569318cee2ca60fc8c9e2f440d5a25cee42a2f0c4d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17749,7 +17749,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -18066,7 +18066,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -18411,8 +18411,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1879,
-      "sha256": "09e14dffeacce2e5678b0914842bd8c5d1940844d2fc593520c578393a464dbb",
+      "bytes": 1869,
+      "sha256": "0bb262b92b71a1163a9a4b81be76c4088ef42ad17f10b09c1f490fd77056a508",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18456,7 +18456,7 @@
           "line": 1
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 1
         }
@@ -18506,7 +18506,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 1,
           "exists": true
@@ -18542,8 +18542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 57755,
-      "sha256": "c87ed7fe5a7f39898a23f85fed0edea19d339e8cfdcb5f832eb9d79d3efde108",
+      "bytes": 57745,
+      "sha256": "b8a179ad2643ba203d8ca148292ce27a1fd63c62e8f65d8033d85844595fdb8a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18741,7 +18741,7 @@
           "line": 42
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 43
         },
@@ -19365,7 +19365,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 43,
           "exists": true
@@ -20000,8 +20000,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21178,
-      "sha256": "ea09a6ab2c8945fa85047f0cee66fe45e7c7c43f11fe904c93f5e48522afb2f5",
+      "bytes": 21168,
+      "sha256": "672c79b59c27ea6d1ce0856ed573ba27ada17c68f3c8ee06c9dce9cb8a3adde2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20172,7 +20172,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -20733,7 +20733,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -20994,8 +20994,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25375,
-      "sha256": "0c98026ce4d2c4cd8605dc5efe8c767701116d52f9490a62ff05d7ec9e421eed",
+      "bytes": 25365,
+      "sha256": "6fff3e549aec8390fd984d6ee6f418b2c051a13071b8a9a205670319bb1f2ec0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -21161,7 +21161,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -21841,7 +21841,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -22125,8 +22125,8 @@
         "guest",
         "client"
       ],
-      "bytes": 27005,
-      "sha256": "ce310173798865d27a8ebd5813a0d462e6b7842533260e341191b5ccbc4effe5",
+      "bytes": 26995,
+      "sha256": "64b8cca8a3341c377799421344b1d9484fc3861aeb6eb200fd69ca4ef28b2b96",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -22337,7 +22337,7 @@
           "line": 58
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 59
         },
@@ -22976,7 +22976,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 59,
           "exists": true
@@ -23422,8 +23422,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23360,
-      "sha256": "3a2c70935c5449a1dc694e086523d234ad5cf585929d76be0147975f4d623f21",
+      "bytes": 23350,
+      "sha256": "daf0c01c8560639315bc5c799d91907aa7abab97b8d16930dc4bff1f4f45093d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -23582,7 +23582,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -24282,7 +24282,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-header-alpha-fade-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -40699,8 +40699,8 @@
     },
     {
       "path": "scripts/smoke-todas-paginas.mjs",
-      "bytes": 22906,
-      "sha256": "808aea73aea2ccb1022f937e0d99e95b3cd8be46f5db328be623da1eb6e4870b",
+      "bytes": 23272,
+      "sha256": "1f53a997e811e06dfd26562a076aff04f5173c10d20eae9285240c69a11703a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48066,8 +48066,8 @@
     },
     {
       "path": "tests/navigation/mobile-brand.spec.js",
-      "bytes": 7757,
-      "sha256": "b48fb9c8b00062ccbe8b466a3c3d1df89606533d1c741757cad75dff4b7d9166",
+      "bytes": 8211,
+      "sha256": "feba5acf44a04e92508a135aa3f5e41bf479d574a3800e4fc5bbd1dc54fad353",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52742,8 +52742,8 @@
     },
     {
       "path": "tests/ui-ux/admin-push-navigation.spec.js",
-      "bytes": 15202,
-      "sha256": "acf065b4dac15739701ab6c2aecd45ad9940615b5a0e1f7a95fdc8fc727acdaa",
+      "bytes": 15398,
+      "sha256": "9d9e334826cc0472e4b426e2cc53f4a4351705bd6190c879ff657c1a0aa5b7c1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52776,7 +52776,7 @@
         },
         {
           "url": "https://fixture.test/borrador.mp3",
-          "line": 217
+          "line": 219
         }
       ]
     },
@@ -52880,6 +52880,17 @@
       "path": "tests/ui-ux/connectivity-hit-target.spec.js",
       "bytes": 1499,
       "sha256": "4b24d6ee16aeb31ce8bc98e046ff7d378389af8c71df9dfd6b6ebb884607dc2a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/ui-ux/header-transparent-fade.spec.js",
+      "bytes": 3308,
+      "sha256": "b0d86e89ff6d10500c550bf1ac2ffe36e504c9219f361a9061bb52ec1f1317b5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53591,8 +53602,8 @@
     },
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
-      "bytes": 15138,
-      "sha256": "c6132b9d3b097f0f4affbf81d7e60b0c819f649aa6a7f84fa40eeed47b85f525",
+      "bytes": 15378,
+      "sha256": "87003d2f563bd07cc9f4bbb9b1f49890bf2a43fbb85626db5f913b3a454f2148",
       "syntax": {
         "ok": true,
         "error": ""
@@ -54465,8 +54476,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 18221,
-      "sha256": "4c65d8d00e950ff4c84f19d69dfc63076eb91d42e520e779b1a51a85da4695e7"
+      "bytes": 18211,
+      "sha256": "b864e4f696cc5d2f4ec5e594f7139b2abdeb5a00c0003b76abbcaf46a9f364ff"
     },
     {
       "path": "AGENTS.md",
@@ -54501,14 +54512,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 31257,
-      "sha256": "03d84d0c31f548f34f505223213b8dd9fd60be4c4e08806674590124d8476cee"
+      "bytes": 31247,
+      "sha256": "a7dbb7d7f2719805f8eae0e7f274d5dda9063e549aa502e63d235b7be8ee6b7a"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 44693,
-      "sha256": "abd989464d22a517cd55871bfa29db444b8da5824166a3c2331519662c62e062"
+      "bytes": 44683,
+      "sha256": "f5d3391692a03b673c28dad835dfa42f8b9b4e827a9841eede5d80e993f72fb9"
     },
     {
       "path": "admin-manifest.json",
@@ -54519,8 +54530,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204359,
-      "sha256": "7640d4620f3408fdecedc0a9f637d41ed515be1b4cf9ee501075056a90889408"
+      "bytes": 204349,
+      "sha256": "3c0a3ef3ab9e46d043d97688f395afcf18113a7a22ad509a499cf00afe87fc2f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -55161,20 +55172,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 19823,
-      "sha256": "b072eb89cfdf378240c7eb8a9827188f60a80c1f063735213dcd7ea04455341b"
+      "bytes": 19813,
+      "sha256": "a0bce62af34a7cd2a3d5cb7069b029943923946accd8f5e4825887f73f85f34c"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 59264,
-      "sha256": "191f363193df92863e6184790048df5fd01c79e83c89bbcca26ef083bcf3e403"
+      "bytes": 59254,
+      "sha256": "1962504cd5e38e51c3d9b6e8067e6ab01cf8c12b9816dfddd2c2255c7ce25507"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 132431,
-      "sha256": "20d0912eb8c64c9322773a72404d41067e7467eba5230b0786bfcd4b658450c7"
+      "bytes": 132421,
+      "sha256": "63bf63e88d044df1c6976c792f28f14ef5f765080a4d2c819823be94fdded015"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -55455,8 +55466,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 21501,
-      "sha256": "1d447f4db3e86a21dba31121f6cacdb03bc480341884efcd8bd5db8789504496"
+      "bytes": 21491,
+      "sha256": "65709c63a17b83b1a0a75f3c74fc58870a822808371f38039cf9b1a8132aa776"
     },
     {
       "path": "config/account-contract.json",
@@ -55479,8 +55490,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 489,
-      "sha256": "4b55866cfea855399e9b2c00572f0741591d82f4ad467ba5b4ec06a014364bad"
+      "bytes": 5614,
+      "sha256": "2369377c270128215f71acdbc058ad8981dddfa9978176437465b91c3a458365"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55492,7 +55503,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "ab51c4f5139f6d57197e1e377acc3bb118d4bce863701d82346c44613c1b6ff9"
+      "sha256": "7c9413fcf47d3c2ab2eed1f0b3c205ec957f876f7f6d04aa1afb9a515dcfe2fd"
     },
     {
       "path": "config/public-site.json",
@@ -55509,8 +55520,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 26512,
-      "sha256": "af190789a337f9e3ff7786875f3af4be050a4d43c4ecc626512ede2c5df72468"
+      "bytes": 26502,
+      "sha256": "e8fc7a86e8200ddc03f0a3891b4f966d5e6d075a31801e2dd4355087defea70f"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -55803,14 +55814,14 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 468343,
-      "sha256": "d3cbee59b2206b8e101f34e8b01376ddab7896ece4135aa4557ddd1942f05d6f"
+      "bytes": 468945,
+      "sha256": "4f57b4e5d1e7013d6f91c6272fcc4792c893f8269f1e95377a43c5f2b5082bea"
     },
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 385828,
-      "sha256": "d4ec5bef2c9950a38a1bf616207fe7c8b6b580f7e1a6294d7b6c6f309d9daa46"
+      "bytes": 386430,
+      "sha256": "b4cdc01985d5e455b813765b70631281b098d75bbf52d00ccd94cad543fe264b"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -56049,8 +56060,8 @@
     {
       "path": "css/theme/sistema-superficies-tintin.css",
       "extension": ".css",
-      "bytes": 22095,
-      "sha256": "6803623806ae2c8ebb4f9853036ddf0c8700b004fa40336781b84368d8a25d2a"
+      "bytes": 22697,
+      "sha256": "4e83b836c48d1a153cbf278c41484848cf4935c3b6966338de1af6a3a61b9a6a"
     },
     {
       "path": "css/theme/superficies-marca-responsive-tintin.css",
@@ -56151,8 +56162,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 761343,
-      "sha256": "ba88564b102fdb5c7f5976844632ba068769c2dafe709a7964ee66da1bb471c6"
+      "bytes": 766448,
+      "sha256": "0b1f7a43fb7192755e574df25d4ac9da1bce57db64e3476f43dba77a54e66827"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56541,8 +56552,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 90239,
-      "sha256": "91f34c054bcb82388acab63bb76e3526ccb54c033e39c21b11f71ce05d76ca6f"
+      "bytes": 91053,
+      "sha256": "280fc714f6d83d7ec5c8d740730aa1e98d5c2ebaf16e7153343d9691bac36aef"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -56691,8 +56702,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 23509,
-      "sha256": "0c3297105967ec6046890108d979753b1951bf710ed2713c68057e3e66093685"
+      "bytes": 23499,
+      "sha256": "666357571c15b36f0d072f8aae3a4ca7660fc4a1ea0636336b212e8dbf758ff4"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -57225,8 +57236,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 46792,
-      "sha256": "c336e176ae8ebf9fb76f69dfcd36b94669483ceb978e4ffb9d8fbb8493f0ceca"
+      "bytes": 46782,
+      "sha256": "073aebd2976ac085a4e081dc84325dd2519c02ddaecd0fc3a6c75efdff828360"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -59037,8 +59048,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72907,
-      "sha256": "10bca6fe7314570d45ba034861ed61e248a3bea5a538cd38b69d29a931dc76ca"
+      "bytes": 72897,
+      "sha256": "a378d5392b44504d05e05c569318cee2ca60fc8c9e2f440d5a25cee42a2f0c4d"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -59223,8 +59234,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1879,
-      "sha256": "09e14dffeacce2e5678b0914842bd8c5d1940844d2fc593520c578393a464dbb"
+      "bytes": 1869,
+      "sha256": "0bb262b92b71a1163a9a4b81be76c4088ef42ad17f10b09c1f490fd77056a508"
     },
     {
       "path": "package-lock.json",
@@ -59235,14 +59246,14 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 16793,
-      "sha256": "9a0e4b811b8c8404b48ed5323f74452c9989befab319beaf4248e5807162056b"
+      "bytes": 16837,
+      "sha256": "379e9daf1e34ea842bdaa90cf410c01e31533646d917704e9dd493393b2f763c"
     },
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 57755,
-      "sha256": "c87ed7fe5a7f39898a23f85fed0edea19d339e8cfdcb5f832eb9d79d3efde108"
+      "bytes": 57745,
+      "sha256": "b8a179ad2643ba203d8ca148292ce27a1fd63c62e8f65d8033d85844595fdb8a"
     },
     {
       "path": "playwright.config.js",
@@ -59265,14 +59276,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 21178,
-      "sha256": "ea09a6ab2c8945fa85047f0cee66fe45e7c7c43f11fe904c93f5e48522afb2f5"
+      "bytes": 21168,
+      "sha256": "672c79b59c27ea6d1ce0856ed573ba27ada17c68f3c8ee06c9dce9cb8a3adde2"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 25375,
-      "sha256": "0c98026ce4d2c4cd8605dc5efe8c767701116d52f9490a62ff05d7ec9e421eed"
+      "bytes": 25365,
+      "sha256": "6fff3e549aec8390fd984d6ee6f418b2c051a13071b8a9a205670319bb1f2ec0"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -59283,8 +59294,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 27005,
-      "sha256": "ce310173798865d27a8ebd5813a0d462e6b7842533260e341191b5ccbc4effe5"
+      "bytes": 26995,
+      "sha256": "64b8cca8a3341c377799421344b1d9484fc3861aeb6eb200fd69ca4ef28b2b96"
     },
     {
       "path": "robots.txt",
@@ -60117,8 +60128,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74949,
-      "sha256": "0fcab2d6089b8c3a3d553e248acd366283e84546a44695dcab8be896d58da70c"
+      "bytes": 74939,
+      "sha256": "72b54169a202b89e53c10abf0c1c4b19fd14d30ce4152fb8a610b8f384205a8b"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -60411,8 +60422,8 @@
     {
       "path": "scripts/smoke-todas-paginas.mjs",
       "extension": ".mjs",
-      "bytes": 22906,
-      "sha256": "808aea73aea2ccb1022f937e0d99e95b3cd8be46f5db328be623da1eb6e4870b"
+      "bytes": 23272,
+      "sha256": "1f53a997e811e06dfd26562a076aff04f5173c10d20eae9285240c69a11703a4"
     },
     {
       "path": "scripts/styles-integrity.json",
@@ -60471,8 +60482,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 23360,
-      "sha256": "3a2c70935c5449a1dc694e086523d234ad5cf585929d76be0147975f4d623f21"
+      "bytes": 23350,
+      "sha256": "daf0c01c8560639315bc5c799d91907aa7abab97b8d16930dc4bff1f4f45093d"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -61605,8 +61616,8 @@
     {
       "path": "tests/navigation/mobile-brand.spec.js",
       "extension": ".js",
-      "bytes": 7757,
-      "sha256": "b48fb9c8b00062ccbe8b466a3c3d1df89606533d1c741757cad75dff4b7d9166"
+      "bytes": 8211,
+      "sha256": "feba5acf44a04e92508a135aa3f5e41bf479d574a3800e4fc5bbd1dc54fad353"
     },
     {
       "path": "tests/navigation/mobile-halo-checkout-labels.spec.js",
@@ -62355,8 +62366,8 @@
     {
       "path": "tests/ui-ux/admin-push-navigation.spec.js",
       "extension": ".js",
-      "bytes": 15202,
-      "sha256": "acf065b4dac15739701ab6c2aecd45ad9940615b5a0e1f7a95fdc8fc727acdaa"
+      "bytes": 15398,
+      "sha256": "9d9e334826cc0472e4b426e2cc53f4a4351705bd6190c879ff657c1a0aa5b7c1"
     },
     {
       "path": "tests/ui-ux/admin-sidebar-interaction.spec.js",
@@ -62393,6 +62404,12 @@
       "extension": ".js",
       "bytes": 1499,
       "sha256": "4b24d6ee16aeb31ce8bc98e046ff7d378389af8c71df9dfd6b6ebb884607dc2a"
+    },
+    {
+      "path": "tests/ui-ux/header-transparent-fade.spec.js",
+      "extension": ".js",
+      "bytes": 3308,
+      "sha256": "b0d86e89ff6d10500c550bf1ac2ffe36e504c9219f361a9061bb52ec1f1317b5"
     },
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
@@ -62553,8 +62570,8 @@
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
       "extension": ".js",
-      "bytes": 15138,
-      "sha256": "c6132b9d3b097f0f4affbf81d7e60b0c819f649aa6a7f84fa40eeed47b85f525"
+      "bytes": 15378,
+      "sha256": "87003d2f563bd07cc9f4bbb9b1f49890bf2a43fbb85626db5f913b3a454f2148"
     },
     {
       "path": "tests/ui-ux/site-first-paint.spec.js",

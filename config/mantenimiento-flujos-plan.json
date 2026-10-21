@@ -1,13 +1,142 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "7c52bb03e5f7ad5de5aa7d6a42a1562392831f60",
-  "reason": "Copiar respaldo cifrado local conservando Perfil e iconos publicados por1190 y prueba CMS sin falso secreto.",
+  "baseCommit": "6dfad30206c800dfc2c242e0e857fe5821e69c0e",
+  "reason": "Desvanecer fondo y blur de todos los encabezados hasta transparencia real; pruebas visuales, responsive y smoke sin alterar navegacion.",
   "files": [
     {
-      "path": ".github/workflows/backup-firestore.yml",
-      "oldHash": "e7a0a548dc43a74976a7f0ed0eb404dd19f247ca4163e31ec86adcd8637116fd",
-      "newHash": "95be58b2c9fa36e23a527356ba32475e1271780909005de9ed2530540fa6e75c"
+      "path": "404.html",
+      "oldHash": "4c65d8d00e950ff4c84f19d69dfc63076eb91d42e520e779b1a51a85da4695e7",
+      "newHash": "b864e4f696cc5d2f4ec5e594f7139b2abdeb5a00c0003b76abbcaf46a9f364ff"
+    },
+    {
+      "path": "about.html",
+      "oldHash": "03d84d0c31f548f34f505223213b8dd9fd60be4c4e08806674590124d8476cee",
+      "newHash": "a7dbb7d7f2719805f8eae0e7f274d5dda9063e549aa502e63d235b7be8ee6b7a"
+    },
+    {
+      "path": "admin-images.html",
+      "oldHash": "abd989464d22a517cd55871bfa29db444b8da5824166a3c2331519662c62e062",
+      "newHash": "f5d3391692a03b673c28dad835dfa42f8b9b4e827a9841eede5d80e993f72fb9"
+    },
+    {
+      "path": "admin.html",
+      "oldHash": "7640d4620f3408fdecedc0a9f637d41ed515be1b4cf9ee501075056a90889408",
+      "newHash": "3c0a3ef3ab9e46d043d97688f395afcf18113a7a22ad509a499cf00afe87fc2f"
+    },
+    {
+      "path": "cambios-devoluciones.html",
+      "oldHash": "b072eb89cfdf378240c7eb8a9827188f60a80c1f063735213dcd7ea04455341b",
+      "newHash": "a0bce62af34a7cd2a3d5cb7069b029943923946accd8f5e4825887f73f85f34c"
+    },
+    {
+      "path": "catalogo.html",
+      "oldHash": "191f363193df92863e6184790048df5fd01c79e83c89bbcca26ef083bcf3e403",
+      "newHash": "1962504cd5e38e51c3d9b6e8067e6ab01cf8c12b9816dfddd2c2255c7ce25507"
+    },
+    {
+      "path": "checkout.html",
+      "oldHash": "20d0912eb8c64c9322773a72404d41067e7467eba5230b0786bfcd4b658450c7",
+      "newHash": "63bf63e88d044df1c6976c792f28f14ef5f765080a4d2c819823be94fdded015"
+    },
+    {
+      "path": "collections.html",
+      "oldHash": "1d447f4db3e86a21dba31121f6cacdb03bc480341884efcd8bd5db8789504496",
+      "newHash": "65709c63a17b83b1a0a75f3c74fc58870a822808371f38039cf9b1a8132aa776"
+    },
+    {
+      "path": "contact.html",
+      "oldHash": "af190789a337f9e3ff7786875f3af4be050a4d43c4ecc626512ede2c5df72468",
+      "newHash": "e8fc7a86e8200ddc03f0a3891b4f966d5e6d075a31801e2dd4355087defea70f"
+    },
+    {
+      "path": "css/theme/sistema-superficies-tintin.css",
+      "oldHash": "6803623806ae2c8ebb4f9853036ddf0c8700b004fa40336781b84368d8a25d2a",
+      "newHash": "4e83b836c48d1a153cbf278c41484848cf4935c3b6966338de1af6a3a61b9a6a"
+    },
+    {
+      "path": "envios.html",
+      "oldHash": "0c3297105967ec6046890108d979753b1951bf710ed2713c68057e3e66093685",
+      "newHash": "666357571c15b36f0d072f8aae3a4ca7660fc4a1ea0636336b212e8dbf758ff4"
+    },
+    {
+      "path": "index.html",
+      "oldHash": "c336e176ae8ebf9fb76f69dfcd36b94669483ceb978e4ffb9d8fbb8493f0ceca",
+      "newHash": "073aebd2976ac085a4e081dc84325dd2519c02ddaecd0fc3a6c75efdff828360"
+    },
+    {
+      "path": "login.html",
+      "oldHash": "10bca6fe7314570d45ba034861ed61e248a3bea5a538cd38b69d29a931dc76ca",
+      "newHash": "a378d5392b44504d05e05c569318cee2ca60fc8c9e2f440d5a25cee42a2f0c4d"
+    },
+    {
+      "path": "nosotros.html",
+      "oldHash": "09e14dffeacce2e5678b0914842bd8c5d1940844d2fc593520c578393a464dbb",
+      "newHash": "0bb262b92b71a1163a9a4b81be76c4088ef42ad17f10b09c1f490fd77056a508"
+    },
+    {
+      "path": "package.json",
+      "oldHash": "9a0e4b811b8c8404b48ed5323f74452c9989befab319beaf4248e5807162056b",
+      "newHash": "379e9daf1e34ea842bdaa90cf410c01e31533646d917704e9dd493393b2f763c"
+    },
+    {
+      "path": "perfil.html",
+      "oldHash": "c87ed7fe5a7f39898a23f85fed0edea19d339e8cfdcb5f832eb9d79d3efde108",
+      "newHash": "b8a179ad2643ba203d8ca148292ce27a1fd63c62e8f65d8033d85844595fdb8a"
+    },
+    {
+      "path": "preguntas-frecuentes.html",
+      "oldHash": "ea09a6ab2c8945fa85047f0cee66fe45e7c7c43f11fe904c93f5e48522afb2f5",
+      "newHash": "672c79b59c27ea6d1ce0856ed573ba27ada17c68f3c8ee06c9dce9cb8a3adde2"
+    },
+    {
+      "path": "privacidad.html",
+      "oldHash": "0c98026ce4d2c4cd8605dc5efe8c767701116d52f9490a62ff05d7ec9e421eed",
+      "newHash": "6fff3e549aec8390fd984d6ee6f418b2c051a13071b8a9a205670319bb1f2ec0"
+    },
+    {
+      "path": "product.html",
+      "oldHash": "ce310173798865d27a8ebd5813a0d462e6b7842533260e341191b5ccbc4effe5",
+      "newHash": "64b8cca8a3341c377799421344b1d9484fc3861aeb6eb200fd69ca4ef28b2b96"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "0fcab2d6089b8c3a3d553e248acd366283e84546a44695dcab8be896d58da70c",
+      "newHash": "72b54169a202b89e53c10abf0c1c4b19fd14d30ce4152fb8a610b8f384205a8b"
+    },
+    {
+      "path": "terminos.html",
+      "oldHash": "3a2c70935c5449a1dc694e086523d234ad5cf585929d76be0147975f4d623f21",
+      "newHash": "daf0c01c8560639315bc5c799d91907aa7abab97b8d16930dc4bff1f4f45093d"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "cuenta-bloqueada",
+    "entrada-login",
+    "entrada-login__google-btn__1",
+    "entrada-login__login-codigo__2",
+    "firebase-auth__redirect-result__5",
+    "firestore__users-uid__8",
+    "google-btn",
+    "google-btn__firebase-auth__3",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
+    "pagina-principal",
+    "perfil",
+    "perfil__ultimos-datos__11",
+    "productos",
+    "redirect-result",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-principal__17",
+    "roles__perfil__10",
+    "roles__super-panel__14",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34",
+    "ultimos-datos",
+    "ultimos-datos__perfil__13",
+    "users-uid",
+    "users-uid__cuenta-bloqueada__12",
+    "users-uid__roles__9"
+  ]
 }

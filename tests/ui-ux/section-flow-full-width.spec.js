@@ -46,9 +46,10 @@ for (const [width,height] of viewports) {
     await page.addScriptTag({url:'/js/components/color/logotipo-marca.js'});
     const header=page.locator(width<768?'#tt-mobile-brand':width<1025?'#tt-header-tablet':'#tt-header-desktop-tablet');
     await expect(header).toBeVisible();
-    const style=await header.evaluate(n=>{const s=getComputedStyle(n);return {background:s.backgroundImage,blur:s.backdropFilter,border:s.borderBottomWidth};});
+    const style=await header.evaluate(n=>{const s=getComputedStyle(n),paint=getComputedStyle(n,'::before');return {background:paint.backgroundImage,blur:paint.backdropFilter,mask:paint.maskImage,border:s.borderBottomWidth,canvas:s.backgroundColor,filter:s.filter};});
     expect(style.background).toContain('linear-gradient');expect(style.background).not.toContain('184, 76, 114');
     expect(style.blur).toContain('blur(18px)');expect(style.border).toBe('0px');
+    expect(style.mask).toContain('linear-gradient');expect(style.canvas).toBe('rgba(0, 0, 0, 0)');expect(style.filter).toBe('none');
     if(width<768)await expect(page.locator('.tt-mobile-brand-ink')).toHaveCSS('flood-color','rgb(255, 255, 255)');
     else {
       const logo=header.locator('.tt-logo-img,.tt-tablet-logo-img');
