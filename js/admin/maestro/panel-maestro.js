@@ -5,7 +5,7 @@ import {
   BASE_ADMIN_SECTIONS,
   MAESTRO_MODULES,
   capabilityLabel
-} from './registro-maestro.js?v=tintin-20261009-local-ledger-master-1';
+} from './registro-maestro.js?v=tintin-20261021-identidad-1';
 
 (function () {
   'use strict';
@@ -15,7 +15,7 @@ import {
   const isAdminRoute = /(^|\/)admin(?:\.html)?$/i.test(location.pathname.replace(/\/$/, ''));
   if (!isAdminRoute) return;
 
-  const VERSION = 'tintin-20261017-domain-cutover-maestro-2';
+  const VERSION = 'tintin-20261021-identidad-maestro-2';
   const CAP_COLUMNS = [
     ['create', 'C'], ['read', 'R'], ['update', 'U'], ['archive', 'Arch.'],
     ['delete', 'D'], ['search', 'Buscar'], ['export', 'Exportar'],
@@ -310,19 +310,19 @@ import {
     section.innerHTML = `
       <div class="tt-maestro-shell" data-maestro-version="${VERSION}">
         <section class="tt-maestro-hero">
-          <div class="tt-maestro-eyebrow">Super Admin · Control total verificable</div>
+          <div class="tt-maestro-eyebrow">Tintin · Revisión del panel</div>
           <h1>Maestro</h1>
-          <p>Inventario único de módulos, capacidades CRUD, protecciones, sincronización y salud del ecosistema. Maestro no escribe directamente en Firestore: todas las mutaciones siguen pasando por los módulos y contratos existentes.</p>
+          <p>Revisá las secciones disponibles, sus permisos y si están conectadas correctamente.</p>
           <div class="tt-maestro-actions">
             <button type="button" class="adm-btn adm-btn-primary" id="maestro-run-checks">Comprobar ahora</button>
             <button type="button" class="adm-btn" id="maestro-open-diagnostic">Diagnóstico integral</button>
-            <button type="button" class="adm-btn" id="maestro-export">Exportar matriz JSON</button>
+            <button type="button" class="adm-btn" id="maestro-export">Descargar revisión (JSON)</button>
           </div>
         </section>
         <div class="tt-maestro-kpis">
-          <article class="tt-maestro-kpi"><span>Estado Maestro</span><strong>${score.percent}%</strong><small>${score.pass}/${score.total} comprobaciones runtime correctas</small></article>
-          <article class="tt-maestro-kpi"><span>Superficies gobernadas</span><strong>${MAESTRO_MODULES.length}</strong><small>Base + dinámicas + Imágenes + Maestro</small></article>
-          <article class="tt-maestro-kpi"><span>CRUD / contenido</span><strong>${fullCrudCount()}</strong><small>Módulos con ciclo de entidad completo</small></article>
+          <article class="tt-maestro-kpi"><span>Estado Maestro</span><strong>${score.percent}%</strong><small>${score.pass}/${score.total} comprobaciones de esta sesión correctas</small></article>
+          <article class="tt-maestro-kpi"><span>Secciones del panel</span><strong>${MAESTRO_MODULES.length}</strong><small>Tienda, administración e imágenes</small></article>
+          <article class="tt-maestro-kpi"><span>Gestión de contenido</span><strong>${fullCrudCount()}</strong><small>Secciones con creación, edición y consulta</small></article>
           <article class="tt-maestro-kpi"><span>Operaciones protegidas</span><strong>${protectedCount()}</strong><small>Módulos con borrado/cambio sensible guardado</small></article>
         </div>
         <div class="tt-maestro-grid">
@@ -344,7 +344,7 @@ import {
           <div class="tt-maestro-card-head"><div><h2>Matriz de capacidades</h2><div class="tt-maestro-footer-note">C/R/U/D = Crear / Leer / Actualizar / Eliminar. “Protegido” significa que exige permisos, confirmación, ciclo de vida o contrato específico.</div></div><input id="maestro-filter" class="adm-input tt-maestro-search" type="search" placeholder="Buscar módulo o capacidad…"></div>
           <div class="tt-maestro-table-wrap"><table class="tt-maestro-table"><thead><tr><th>Módulo</th>${CAP_COLUMNS.map(([, label]) => `<th>${escapeHtml(label)}</th>`).join('')}<th>Acciones</th></tr></thead><tbody id="maestro-modules-body">${moduleRows()}</tbody></table></div>
         </section>
-        <div class="tt-maestro-footer-note">Cobertura automática: cualquier nueva sección agregada a la navegación que no exista en el registro Maestro debe hacer fallar la auditoría de CI. Versión ${VERSION}.</div>
+        <div class="tt-maestro-footer-note">La revisión usa los permisos de tu cuenta y muestra el estado de esta sesión.</div>
       </div>`;
     wireSectionControls();
   }

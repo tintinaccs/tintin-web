@@ -66,7 +66,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-hero',
         allowVisibility: true,
         fields: [
-          field('title', 'Título', '.tt-hero-title', 'DETALLES QUE ELEVAN TU ESTILO', { type: 'multiline', rows: 3, maxLength: 220 }),
+          field('title', 'Título', '.tt-hero-title', 'UN DETALLE MUY VOS', { type: 'multiline', rows: 3, maxLength: 220 }),
           field('subtitle', 'Subtítulo', '.tt-hero-subtitle', 'Joyitas únicas, como vos.', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('primaryText', 'Botón principal', '.tt-hero-actions a', 'Comprar ahora', { index: 0, maxLength: 80 }),
           field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', '/catalogo', { index: 0, type: 'href', maxLength: 500 }),
@@ -101,7 +101,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         allowVisibility: true,
         fields: [
           field('eyebrow', 'Texto pequeño', '.tt-watch-eyebrow', 'Nueva colección', { maxLength: 120 }),
-          field('title', 'Título', '.tt-watch-title', 'EL RELOJ DEL QUE\nTODAS SE ENAMORAN', { type: 'multiline', rows: 3, maxLength: 220 }),
+          field('title', 'Título', '.tt-watch-title', 'RELOJES TINTIN', { type: 'multiline', rows: 3, maxLength: 220 }),
           field('body', 'Descripción', '.tt-watch-desc', 'Relojes de acero inoxidable, elegantes y femeninos, para acompañarte del día a la noche.', { type: 'multiline', rows: 5, maxLength: 1200 }),
           field('btnText', 'Texto del botón', 'a.tt-btn', 'VER RELOJES →', { maxLength: 80 }),
           field('btnHref', 'Enlace del botón', 'a.tt-btn', '/catalogo?cat=relojes', { type: 'href', maxLength: 500 }),
@@ -112,7 +112,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-reviews-section',
         allowVisibility: true,
         fields: [
-          field('eyebrow', 'Texto pequeño', '.tt-reviews-header .tt-section-sub', 'Ellas ya eligieron brillar', { maxLength: 120 }),
+          field('eyebrow', 'Texto pequeño', '.tt-reviews-header .tt-section-sub', 'Lo que cuentan nuestras tintinas', { maxLength: 120 }),
           field('title', 'Título', '.tt-reviews-header .tt-section-title', 'TINTINAS QUE YA NOS ELIGIERON', { maxLength: 180 }),
         ],
       },
@@ -433,8 +433,11 @@ export function sanitizeContentText(value, maxLength = CONTENT_MAX_LENGTH) {
 export function normalizeContentValue(pageId, sectionId, key, value) {
   const text = String(value == null ? '' : value);
   if (pageId === 'index' && sectionId === 'hero' && key === 'title') {
-    return text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
+    const corrected = text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
+    return /^\s*DETALLES QUE ELEVAN\s+TU ESTILO\s*$/i.test(corrected) ? 'UN DETALLE\nMUY VOS' : corrected;
   }
+  if (pageId === 'index' && sectionId === 'editorial_relojes' && key === 'title' && /^\s*EL RELOJ DEL QUE\s+TODAS SE ENAMORAN\s*$/i.test(text)) return 'RELOJES TINTIN';
+  if (pageId === 'index' && sectionId === 'reviews' && key === 'eyebrow' && /^\s*Ellas ya eligieron brillar\s*$/i.test(text)) return 'Lo que cuentan nuestras tintinas';
   if (pageId === 'index' && sectionId === 'trust' && key === 'items.1.label' && /^\s*Acero inoxidable\s*$/i.test(text)) return 'Materiales de calidad';
   if (pageId === 'index' && sectionId === 'trust' && key === 'items.1.desc' && /^\s*No se oxida ni decolora\s*$/i.test(text)) return 'Distintos materiales para cada estilo';
   if (pageId === 'index' && sectionId === 'trust' && key === 'items.2.label') {

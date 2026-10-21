@@ -13,6 +13,10 @@ test('la fachada usa las definiciones actuales y conserva copys personalizados',
   const facade = await fs.readFile(path.join(root, 'js/core/store/esquema-contenido.js'), 'utf8');
   const dependency = './definiciones-contenido.js' + '?v=';
   assert.ok(facade.includes(dependency), 'Las definiciones deben tener una versión de caché');
+  assert.equal(normalizeContentValue('index', 'hero', 'title', 'DETALLES QUE ELEVAN TU ESTILO'), 'UN DETALLE\nMUY VOS');
+  assert.equal(normalizeContentValue('index', 'hero', 'title', 'Mi texto propio'), 'Mi texto propio');
+  assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'EL RELOJ DEL QUE\nTODAS SE ENAMORAN'), 'RELOJES TINTIN');
+  assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'Mis relojes favoritos'), 'Mis relojes favoritos');
   assert.equal(normalizeContentValue('index', 'trust', 'items.2.label', 'Pago segurooxsd'), 'Pago seguro');
   assert.equal(normalizeContentValue('index', 'trust', 'items.2.label', 'Tu compra está protegida'), 'Tu compra está protegida');
 });
