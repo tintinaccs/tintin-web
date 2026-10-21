@@ -1,4 +1,7 @@
 
+Batería administrativa adicional202/202 Chromium PASS_LOCAL. El análisis CodeQL del SHA14880a4 informó dos alertas nuevas de severidad alta. Se reemplaza la eliminación de nodos ejecutables mediante expresión regular en la maqueta del checkout por el parser canónico removeFixtureScripts (también retira precargas de módulos). El análisis de la nueva cabeza debe confirmar su resultado: no se descartan alertas ni se desactiva CodeQL. Sin cambios de negocio adicionales.
+
+
 Ampliación de validación administrativa: el auditor y el recorrido anterior exigían llamar al filtro de la tabla oculta. Se actualizan para comprobar el controlador visible y la categoría canónica; regresiones negativas rechazan perder el alias, el enlace de navegación, el reinicio de búsqueda o volver al puente antiguo.66/66 contratos y el recorrido de colección Relojes con una sola fila visible PASS_LOCAL;71/72 recorridos anteriores ya aprobados, con su única expectativa antigua corregida y repetida. El lote adicional de gates sólo conserva BLOCKED en el runtime con emulador, porque falla la descarga del mismo JAR; las30 pruebas de login/ubicación previas sí pasan. La batería administrativa restante y CI del nuevo SHA siguen pendientes.
 
 

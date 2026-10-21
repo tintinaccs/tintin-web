@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ca8560dbfb586880d04d32b25816a13cf0b934c220777ca454758f7044a25379",
+  "sourceFingerprint": "68c4680a54bfd994add63cc3be8e9a7a409e104e203f79f468b417288fb762b1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1394,
     "textFiles": 1303,
-    "totalBytes": 29302228,
+    "totalBytes": 29303279,
     "pages": 19,
     "modules": 981
   },
@@ -44258,8 +44258,8 @@
     },
     {
       "path": "tests/checkout/availability-browser.spec.js",
-      "bytes": 8741,
-      "sha256": "29daf0f421e6f5a620a2a61a341d75f493b0175cbb3ffe0a9c86fd118119f8bc",
+      "bytes": 8829,
+      "sha256": "4d8db287b8f24da1cfd1cf7b1eef660e5163ebc6b9afd549bb46957e02654231",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44269,31 +44269,31 @@
           "raw": "../../js/pages/checkout/disponibilidad-checkout.js",
           "target": "js/pages/checkout/disponibilidad-checkout.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "../../js/pages/checkout/validacion-avance.js",
           "target": "js/pages/checkout/validacion-avance.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../../js/quality/accesibilidad-global.js",
           "target": "js/quality/accesibilidad-global.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "../../js/pages/checkout/paypal-checkout.js?fixture=late",
           "target": "js/pages/checkout/paypal-checkout.js",
           "dynamic": true,
-          "line": 98
+          "line": 99
         }
       ],
       "endpoints": [
         {
           "url": "https://**/",
-          "line": 8
+          "line": 9
         }
       ]
     },
@@ -56438,8 +56438,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 775070,
-      "sha256": "8b9005c796b59e911db1a0b5883d8e96b3613c833dac0f30917ec074c4541a4f"
+      "bytes": 775552,
+      "sha256": "f5a4cf9b3532e0994e5f0699dd3636e8f36c818eea12592848627ec134ff4db6"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56936,8 +56936,8 @@
     {
       "path": "docs/revision-comercio-20261021.md",
       "extension": ".md",
-      "bytes": 13401,
-      "sha256": "dc5a00ce48beda87d921f8c7a755e4ba2527be6a9b6879c36f1488909dee96a6"
+      "bytes": 13882,
+      "sha256": "cb3e3ed1c134097bd0d88f9bf00fa0be70312473c420fd878e59804ce747dc77"
     },
     {
       "path": "docs/revision-global-2026-10-20.md",
@@ -61292,8 +61292,8 @@
     {
       "path": "tests/checkout/availability-browser.spec.js",
       "extension": ".js",
-      "bytes": 8741,
-      "sha256": "29daf0f421e6f5a620a2a61a341d75f493b0175cbb3ffe0a9c86fd118119f8bc"
+      "bytes": 8829,
+      "sha256": "4d8db287b8f24da1cfd1cf7b1eef660e5163ebc6b9afd549bb46957e02654231"
     },
     {
       "path": "tests/checkout/availability.test.mjs",

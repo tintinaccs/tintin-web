@@ -1,8 +1,9 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('fs');
+const {removeFixtureScripts}=require('../../scripts/lib/html-layout-fixture.js');
 const runtime=fs.readFileSync('js/orders/pedido-checkout-seguro.js','utf8').replace(/^import[\s\S]*?;\s*/gm,'');
 const pageSource=fs.readFileSync('checkout.html','utf8');
-const clean=pageSource.replace(/<script\b[\s\S]*?<\/script>/gi,'');
+const clean=removeFixtureScripts(pageSource,{removeModulePreloads:true});
 const sizes=[[320,568],[390,844],[844,390],[768,1024],[1024,768],[820,1180],[1180,820],[1366,768],[1440,900],[1920,1080]];
 async function mount(page,{stock=0,offline=false,delay=0,deferReads=false}={}){
  await page.route('https://**',r=>r.abort());
