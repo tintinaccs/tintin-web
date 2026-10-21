@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e19f92cafe470f5c11e04986cab750e5f84372dc433bcd93e17558715d495985",
+  "sourceFingerprint": "9d179cb9aa813a3002c97402566809b9ca249e2ac1822d937f8506f15a722349",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1388,
     "textFiles": 1297,
-    "totalBytes": 29319112,
+    "totalBytes": 29319532,
     "pages": 19,
     "modules": 974
   },
@@ -2881,8 +2881,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204254,
-      "sha256": "61706b244c52a1581c178408589f8006d6abb2b43d5c4af39eb0ef9479ff68dd",
+      "bytes": 204262,
+      "sha256": "dcdd960c9472cad0dbc6ad1e2bc51f0a0a956883dccca965a31ceeaa9c495503",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -3006,7 +3006,7 @@
           "line": 2303
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261021-identidad-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261021-identidad-maestro-2",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2304
         },
@@ -3370,7 +3370,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261021-identidad-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20261021-identidad-maestro-2",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2304,
           "exists": true
@@ -29280,8 +29280,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 28299,
-      "sha256": "b07d0d4f1b405010bcfe12b87d6cc58ba30a7cfc072660155f92905eb64626ce",
+      "bytes": 28070,
+      "sha256": "cde423f05dba0d38434ed9af5dde7dd10d54164430bbf3526999c710c1f6ecd5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -54635,8 +54635,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204254,
-      "sha256": "61706b244c52a1581c178408589f8006d6abb2b43d5c4af39eb0ef9479ff68dd"
+      "bytes": 204262,
+      "sha256": "dcdd960c9472cad0dbc6ad1e2bc51f0a0a956883dccca965a31ceeaa9c495503"
     },
     {
       "path": "apple-touch-icon.png",
@@ -55596,7 +55596,7 @@
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
       "bytes": 9567,
-      "sha256": "0f0cde2d75e415dbcc6e35d380448234acd39c7aef06b860e2278ac58cfa07f0"
+      "sha256": "75aa811f9c47c33dadf4b2e5d7dec5a1bb86a6f43f1358c37db3a8743195551c"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55608,7 +55608,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "3cfe7992d2aecadc467b6639a444c67038e153d2431897e95de7e9102d1c0db2"
+      "sha256": "ddf1ab17b048d1bebbbc96c7840128dbf967a6af7d6b4fa9f9b88d016c01925f"
     },
     {
       "path": "config/public-site.json",
@@ -56267,8 +56267,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 782545,
-      "sha256": "cb099f62860d6c576832b112550ce19d4a473ef5d7beb8cf8ded1b7fc1bae108"
+      "bytes": 783178,
+      "sha256": "18b885e370e5e004c6f53a01d71586ef809646b5fc647ef0b720f982d6069e5e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57527,8 +57527,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 28299,
-      "sha256": "b07d0d4f1b405010bcfe12b87d6cc58ba30a7cfc072660155f92905eb64626ce"
+      "bytes": 28070,
+      "sha256": "cde423f05dba0d38434ed9af5dde7dd10d54164430bbf3526999c710c1f6ecd5"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -60245,8 +60245,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74485,
-      "sha256": "cbf8ad479c0ee282cd0d5c8ef243f8b2521a6bb41c749ae179143dda92199e1c"
+      "bytes": 74493,
+      "sha256": "f0b4083ab593c975c618c2e349ad2d266cce17b424a4a7897a93e2ea5edbd30d"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
