@@ -1836,6 +1836,42 @@ html body:not(:has(.adm-main)) .tt-product-card .tt-card-colors { gap:2px; margi
 
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-actions .tt-btn:only-child { grid-column:1 / -1; }
 
+/* Auditoría del cliente: jerarquía compacta, tokens compartidos y lectura clara. */
+html body:not(:has(.adm-main)) :is(.tt-page-hero-title,.tt-section-title,.tt-cart-title,.tt-notifications-title) { color:var(--color-text-title)!important; }
+html body:not(:has(.adm-main)) .tt-page-hero { padding-block:32px 24px!important; }
+/* En escritorio el encabezado fijo ocupa --header-h; el aire visible sigue siendo 32px. */
+@media (min-width:1025px) {
+  html body:not(:has(.adm-main)) .tt-page-hero { padding-block-start:calc(var(--header-h,88px) + 32px)!important; }
+}
+html body:not(:has(.adm-main)) .tt-page-hero-title { font-size:clamp(28px,3.2vw,40px)!important; line-height:1.2; }
+html body:not(:has(.adm-main)) .tt-page-hero + .section { padding-top:24px!important; }
+html body:not(:has(.adm-main)) .tt-faq-q { min-height:56px; padding:16px 20px!important; font-size:16px!important; line-height:1.5; }
+html body:not(:has(.adm-main)) .tt-faq-item { margin-bottom:8px!important; padding:0!important; }
+html body:not(:has(.adm-main)) .tt-faq-item.tt-faq-open .tt-faq-a { padding:0 20px 16px!important; }
+html body:not(:has(.adm-main)) :is(.tt-info-block,.tt-legal-nav,.tt-contact-info-item,.perfil-card) { box-shadow:none!important; border-radius:14px!important; }
+html body:not(:has(.adm-main)) .tt-legal-content .tt-info-block { border:0!important; border-bottom:1px solid var(--color-border-primary)!important; border-radius:0!important; padding:20px 0!important; background:transparent!important; }
+html body:not(:has(.adm-main)) .tt-contact-info-item { padding:14px 16px!important; }
+html body:not(:has(.adm-main)) .tt-contact-alt { padding:20px!important; }
+html body:not(:has(.adm-main)) .perfil-card:has(> #btn-guardar-perfil) { padding:0!important; background:transparent!important; border:0!important; }
+html body:not(:has(.adm-main)) :is(.tt-product-name,.cat-product-name) { font-size:14px!important; line-height:1.4; }
+html body:not(:has(.adm-main)) :is(.login-heading-sub,.login-box small,.login-methods-note,.login-hint) { font-size:13px!important; line-height:1.5; }
+html body:not(:has(.adm-main)) .tt-footer :is(p,.tt-footer-desc,.tt-footer-hours) { font-weight:400!important; }
+html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body { min-height:160px!important; padding:16px!important; gap:8px; }
+html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body > .tt-btn { margin-top:12px!important; }
+html body:not(:has(.adm-main)) .tt-lightbox :is(button,button svg) { color:#fff!important; }
+html body:not(:has(.adm-main)) .tt-lightbox button { background:#713c53!important; border-color:#fff!important; min-width:44px; min-height:44px; }
+html body:not(:has(.adm-main)) .ck-sug-add { display:inline-flex; justify-content:center; align-items:center; min-height:44px; text-decoration:none; }
+html body:not(:has(.adm-main)) [data-profile-summary-location] { white-space:normal; overflow-wrap:anywhere; }
+html body:not(:has(.adm-main)) .tt-about-text strong { color:var(--color-text-primary)!important; }
+@media(max-width:767px) {
+  html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body { min-height:148px!important; }
+  html body:not(:has(.adm-main)) .tt-gallery-thumbs { flex-wrap:nowrap!important; overflow-x:auto; }
+  html body:not(:has(.adm-main)) .tt-gallery-thumb { flex:0 0 56px; width:56px; height:56px; }
+  html body:not(:has(.adm-main)) .tt-watch-feature h2 { font-size:28px!important; line-height:1.25; }
+  html body:not(:has(.adm-main)) .tt-wa-float { bottom:calc(84px + env(safe-area-inset-bottom))!important; }
+  html body:not(:has(.adm-main)) :is(.tt-products-section,.tt-colls-page-section,.tt-related-section) { padding-bottom:100px!important; }
+}
+
 /* El aviso de stock conserva la fotografía y el color real del accesorio. */
 html body .tt-stock-unavailable :is(.tt-product-img-real,.tt-search-result-image),
 html body #gallery-main.tt-stock-unavailable img { filter: none !important; }
@@ -5156,17 +5192,16 @@ html:root body :is(main, .cat-wrap, .login-page, .ck-body, .perfil-wrap, .tt-404
   color: var(--color-text-primary, #222222) !important;
 }
 
-/* Cada bloque conserva su rosa pleno. Sólo 70 px de cada extremo se mezclan.
+/* El degradado recorre todo el bloque y comparte el color de sus uniones.
    Los bloques ocultos por hidden o display:none no cuentan en la secuencia. */
-html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"]) {
   --tt-section-background: var(--color-brand-accent, #FDECF2);
   --tt-footer-logo-filter: url("#tt-brand-logo-tint");
   --tt-section-start: var(--tt-flow-join);
   --tt-section-end: var(--tt-flow-join);
   --tt-section-gradient: linear-gradient(180deg,
     var(--tt-section-start) 0%,
-    var(--tt-section-background) min(var(--tt-flow-fade), 25%),
-    var(--tt-section-background) max(calc(100% - var(--tt-flow-fade)), 75%),
+    var(--tt-section-background) 50%,
     var(--tt-section-end) 100%);
   background: var(--tt-section-gradient) var(--tt-section-background) !important;
   color: var(--color-text-primary, #222222) !important;
@@ -5175,16 +5210,16 @@ html:root :is(body, main, [role="main"], .cat-wrap) > :is(section:not([role="dia
   box-shadow: 0 1px 0 var(--tt-section-end) !important;
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(even of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(even of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-background: var(--color-brand-primary, #F8AACA);
   --tt-footer-logo-filter: url("#tt-brand-logo-tint-light");
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-start: var(--tt-section-background);
 }
 
-html:root :is(body, main, [role="main"], .cat-wrap) > :nth-last-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
+html:root :is(body, main, [role="main"], .cat-wrap) > :nth-last-child(1 of :is(section:not([role="dialog"]), .cat-layout, .tinsel, .tt-footer):not([hidden]):not([style*="display: none"]):not([style*="display:none"])) {
   --tt-section-end: var(--tt-section-background);
 }
 
@@ -5215,8 +5250,7 @@ html:root body [data-tt-flow-block] > [data-tt-flow-background] {
   border-radius: 0;
   background: linear-gradient(180deg,
     var(--tt-section-start) 0%,
-    var(--tt-section-background) min(var(--tt-flow-fade), 25%),
-    var(--tt-section-background) max(calc(100% - var(--tt-flow-fade)), 75%),
+    var(--tt-section-background) 50%,
     var(--tt-section-end) 100%) !important;
 }
 html:root body #hero .tt-hero-media { background: transparent !important; }
@@ -5259,6 +5293,27 @@ html:root body:not(:has(.adm-main)) :is(.tt-product-card,.cat-product-card,.tt-c
 html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label) > img { opacity:.55 !important; }
 
 html:root body .tt-stock-label { color:#4B5563 !important; background:#E5E7EB !important; border-color:#9CA3AF !important; }
+
+/* Un mismo rosa suave en todos los encabezados. El degradado y el desenfoque
+   afectan únicamente al fondo; marca, texto y controles conservan nitidez. */
+html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header.scrolled,
+html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header,
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
+  .ck-header, .login-brand, .adm-topbar, .adm-header) {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--tt-flow-pink) 94%, transparent) 0%,
+    color-mix(in srgb, var(--tt-flow-light) 94%, transparent) 100%) !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(18px) saturate(110%) !important;
+  backdrop-filter: blur(18px) saturate(110%) !important;
+}
+
+/* El tinte global rosa no debe fundir la marca con el encabezado rosa. */
+html:root body:not(:has(.adm-main)) :is(#tt-header-desktop-tablet, #tt-header-tablet)
+  :is(img.tt-logo-img, img.tt-tablet-logo-img) {
+  filter: brightness(0) invert(1) !important;
+}
 
 
 /* css/pages/home/mas-vendidos.css */
@@ -5313,6 +5368,38 @@ body.tt-home-premium .tt-reviews-dialog .tt-review-screens { grid-template-colum
   .tt-reviews-dialog__content { padding: 0 12px 16px; }
   body.tt-home-premium .tt-reviews-dialog .tt-review-screens { grid-template-columns: minmax(0, 1fr); }
 }
+
+
+/* css/components/social/instagram-tintin.css */
+.tt-instagram-section{padding:clamp(40px,6vw,80px) 0;text-align:center;background:var(--tt-bg,#fff)}
+.tt-instagram-section .container{max-width:1200px;margin-inline:auto;padding-inline:20px}
+.tt-instagram-profile{display:inline-flex;align-items:center;gap:12px;margin:16px auto;color:var(--tt-text,#63344a);text-decoration:none;font-weight:700;overflow-wrap:anywhere}
+.tt-instagram-avatar{width:56px;height:56px;display:grid;place-items:center;border:1px solid #e8bdcb;border-radius:50%;background:#fff2f6;font-size:26px;color:#a54168}
+.tt-instagram-intro{max-width:600px;margin:0 auto 24px;line-height:1.7;color:var(--tt-text,#63344a)}
+.tt-instagram-feed{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:16px 0 24px}
+.tt-instagram-feed:empty{display:none}
+.tt-instagram-video{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:end;min-width:0;aspect-ratio:4/5;overflow:hidden;border:1px solid #e8cbd6;border-radius:18px;background:linear-gradient(145deg,#fce5ee,#b35478);color:#fff;cursor:pointer;padding:16px;font:inherit;text-align:left}
+.tt-instagram-video img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.tt-instagram-video::after{position:absolute;inset:0;content:'';background:linear-gradient(transparent 40%,rgb(0 0 0 / 72%));z-index:-1}
+.tt-instagram-play{display:grid;place-items:center;position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:56px;height:56px;border:1px solid rgb(255 255 255 / 65%);border-radius:50%;background:rgb(0 0 0 / 36%);font-size:22px}
+.tt-instagram-caption{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.tt-instagram-link{display:inline-flex;justify-content:center;align-items:center;gap:8px;min-height:44px;max-width:100%;padding:10px 20px;border:1px solid #d9afbf;border-radius:999px;background:#fff;color:#883958;text-decoration:none;font:inherit;font-weight:600;text-align:center;cursor:pointer;overflow-wrap:anywhere}
+.tt-instagram-link:focus-visible,.tt-instagram-video:focus-visible,.tt-instagram-close:focus-visible{outline:3px solid #b54d79;outline-offset:4px}
+.tt-instagram-player{box-sizing:border-box;position:fixed;inset:0;margin:auto;width:min(480px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:12px;border:1px solid #f0d4de;border-radius:20px;background:#fff;color:#63344a;overflow:auto}
+.tt-instagram-player::backdrop{background:rgb(25 15 22 / 76%);backdrop-filter:blur(6px)}
+.tt-instagram-player-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 0 8px}
+.tt-instagram-close{width:44px;height:44px;flex-shrink:0;border:1px solid #ebcfda;border-radius:50%;background:#fff;color:#63344a;font-size:28px;cursor:pointer}
+.tt-instagram-player iframe{display:block;width:100%;height:min(620px,calc(100dvh - 160px));min-height:160px;border:0;border-radius:10px;background:#faf5f7}
+.tt-instagram-player>.tt-instagram-link{display:flex;margin-top:10px}
+html.tt-instagram-playing{overflow:hidden;scrollbar-gutter:auto}
+.tt-about-story-video{margin-top:20px}
+@media(max-width:900px){.tt-instagram-feed{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+@media(max-width:400px){.tt-instagram-video{border-radius:12px;padding:10px}.tt-instagram-caption{font-size:12px}.tt-instagram-section .container{padding-inline:16px}}
+@media(prefers-reduced-motion:reduce){.tt-instagram-player{scroll-behavior:auto}}
+
+.tt-instagram-play::before,.tt-instagram-inline-play{content:"";display:inline-block;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:11px solid currentColor}
+
+.tt-instagram-avatar img{box-sizing:border-box;width:100%;height:100%;padding:8px;object-fit:contain;border-radius:50%}
 
 
 /* css/theme/superficies-marca-responsive-tintin.css */
@@ -6661,8 +6748,8 @@ html.tt-phase8-ux-ready .perfil-card {
 html body #tt-mobile-brand { display: none !important; }
 @media (max-width: 767px) {
   html body #tt-mobile-brand {
-    --tt-mobile-brand-bg: #B84C72;
-    --tt-mobile-brand-ink: #FDECF2;
+    --tt-mobile-brand-bg: var(--color-brand-primary, #F8AACA);
+    --tt-mobile-brand-ink: #FFFFFF;
     --tt-mobile-brand-next: #FDECF2;
     display: flex !important;
     position: relative;
@@ -6675,11 +6762,11 @@ html body #tt-mobile-brand { display: none !important; }
     padding: calc(8px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 16px max(20px, env(safe-area-inset-left, 0px));
     border: 0;
     box-shadow: none;
-    background: linear-gradient(180deg, var(--tt-mobile-brand-bg) 0%, var(--tt-mobile-brand-bg) calc(100% - 18px), var(--tt-mobile-brand-next) 100%);
+    background: linear-gradient(180deg, var(--tt-mobile-brand-bg) 0%, var(--tt-mobile-brand-next) 100%);
   }
   html body #tt-mobile-brand[data-brand-surface="light"] {
-    --tt-mobile-brand-bg: #FDECF2;
-    --tt-mobile-brand-ink: #B84C72;
+    --tt-mobile-brand-bg: var(--color-brand-primary, #F8AACA);
+    --tt-mobile-brand-ink: #FFFFFF;
   }
   #tt-mobile-brand .tt-mobile-brand-link {
     display: grid;
@@ -9230,4 +9317,3 @@ body.tt-home-premium .tt-wa-float * {
     animation-iteration-count: infinite !important;
   }
 }
-

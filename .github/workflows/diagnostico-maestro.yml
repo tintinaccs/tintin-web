@@ -111,6 +111,9 @@ jobs:
       - name: Construir artefactos derivados
         run: npm run build:pages
 
+      - name: Instalar Chromium para las regresiones de acceso
+        run: npx playwright install --with-deps chromium
+
       - name: Ejecutar suite de comercio y datos
         id: suite
         continue-on-error: true

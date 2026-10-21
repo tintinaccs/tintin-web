@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { functionRoutes } = require('./lib/rutas-pages.js');
 const root = path.resolve(__dirname, '..');
 const cache = new Map();
 
@@ -118,19 +119,7 @@ check(
   'manifest.json o sus recursos son inválidos.'
 );
 
-const apiFunctions = fs.readdirSync(path.join(root, 'functions/api'))
-  .filter(file => file.endsWith('.js')).map(file => `/api/${file.replace(/\.js$/, '')}`);
-const htmlFunctionRoutes = htmlFiles.flatMap(file => {
-  if (file === 'index.html') return ['/', '/index.html'];
-  return [`/${path.basename(file, '.html')}`, `/${file}`];
-});
-const dynamicFunctionRoutes = [
-  '/products/*', '/collections/*', '/pages/*', '/policies/*',
-  '/robots.txt', '/sitemap-products.xml', '/sitemap-collections.xml'
-];
-// Both error-document forms share one narrow rule to respect Pages' 100-rule limit.
-const compactHtmlRoutes = htmlFunctionRoutes.map(route => route === '/404' || route === '/404.html' ? '/404*' : route);
-const expectedRoutes = [...new Set([...apiFunctions, '/__/auth/*', ...compactHtmlRoutes, ...dynamicFunctionRoutes])].sort();
+const expectedRoutes = functionRoutes(root).include;
 const routeConfig = JSON.parse(read('_routes.json'));
 const routes = [...new Set(routeConfig.include || [])].sort();
 check(

@@ -31,7 +31,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20261016-story-1715905a45';
+} from '../../core/store/esquema-contenido.js?v=tintin-20261020-domain-cutover-consolidated-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

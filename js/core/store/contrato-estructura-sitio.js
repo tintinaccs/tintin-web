@@ -65,6 +65,10 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
       zone: 'home-main', hideable: true, operational: true,
       reason: 'Capturas reales de clientas: cuatro iniciales y una galería diferida; sólo el encabezado es texto editorial editable.',
     }),
+    section('instagram', 'Instagram de Tintin', '#instagram', {
+      zone: 'home-social', kind: 'operational', movable: false, hideable: false, visualEditable: false, blockAnchor: false, operational: true,
+      reason: 'Los videos provienen de la cuenta profesional conectada; el feed permanece debajo de reseñas y antes del footer.',
+    }),
   ]),
 
   nosotros: page('Nosotros', 'about.html', SITE_STRUCTURE_MODES.editable, [

@@ -43,6 +43,7 @@ const frameOrigins = [
   'https://www.youtube.com',
   'https://www.youtube-nocookie.com',
   'https://player.vimeo.com',
+  'https://www.instagram.com',
   'https://*.paypal.com'
 ];
 const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html', 'perfil.html']);
@@ -199,11 +200,7 @@ function pagePolicy(file) {
   ].join('; ') + ';';
 }
 
-function routesForFile(file) {
-  if (file === 'index.html') return ['/', '/index.html'];
-  const clean = `/${path.basename(file, '.html')}`;
-  return [clean, `/${file}`];
-}
+const { documentRoutes: routesForFile } = require('./lib/rutas-pages.js');
 
 function cleanRoutes() {
   const routes = new Set();

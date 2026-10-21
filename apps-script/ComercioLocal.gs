@@ -122,6 +122,18 @@ function tintinLocalApplySnapshot_(snapshot) {
     });
     var existingRows=sheet.getRange(10,1,Math.max(1,sheet.getLastRow()-9),38).getValues(),existing=existingRows.map(function(row){return row.slice(32,38);}),positions={};
     existing.forEach(function(v,i){[0,2,4].forEach(function(c){if(v[c]){positions[v[c]]=positions[v[c]]||[];positions[v[c]].push(i+10);}});});
+    // webOrders es el snapshot canónico completo (el servidor rechaza truncados).
+    // Quitar del espejo mensual pedidos enviados a Borrados, sin tocar casillas
+    // locales, gastos/compras, formato ni fórmulas auxiliares compartidas.
+    if(Array.isArray(snapshot.webOrders)) {
+      var liveWebIds={};entries.forEach(function(entry){if(entry.id.indexOf('WEB_')===0)liveWebIds[entry.id]=true;});
+      existingRows.forEach(function(values,index){
+        var id=String(values[32]||'');
+        if(id.indexOf('WEB_')!==0||liveWebIds[id])return;
+        sheet.getRange(index+10,2,1,17).clearContent();
+        sheet.getRange(index+10,33,1,2).clearContent();
+      });
+    }
     entries.forEach(function(entry){
       var cols=entry.kind==='sale'?[2,17,33]:entry.kind==='expense'?[19,4,35]:[24,4,37];
       var target=positions[entry.id]||[],needed=entry.kind==='sale'?Math.max(1,entry.lines.length):1;

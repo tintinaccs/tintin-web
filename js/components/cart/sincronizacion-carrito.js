@@ -206,7 +206,9 @@ function createRuntime() {
     return normalized.flatMap(item => {
       const limit = stockLimit(item.id);
       const used = usedByProduct.get(String(item.id)) || 0;
-      const allowed = Math.max(0, Math.min(item.qty, limit - used));
+      const product = window.PRODUCTS.find(entry => String(entry.id) === String(item.id));
+      const optionLimit = variantStockLimit(product, item.variant);
+      const allowed = Math.max(0, Math.min(item.qty, limit - used, optionLimit ?? MAX_QTY));
       if (!allowed) return [];
       usedByProduct.set(String(item.id), used + allowed);
       return [{ ...item, qty: allowed }];
@@ -412,7 +414,7 @@ function createRuntime() {
         const productQty = items
           .filter(entry => String(entry.id) === String(item.id))
           .reduce((sum, entry) => sum + entry.qty, 0);
-        const maxed = productQty >= limit;
+        const maxed = productQty >= limit || availableVariantQuantity(items, item) === 0;
         qtyButtons[1].disabled = maxed;
         qtyButtons[1].setAttribute('aria-disabled', String(maxed));
         qtyButtons[1].title = maxed ? `Stock máximo disponible: ${limit}` : '';
@@ -437,7 +439,7 @@ function createRuntime() {
         const productQty = items
           .filter(entry => String(entry.id) === String(item.id))
           .reduce((sum, entry) => sum + entry.qty, 0);
-        const maxed = productQty >= limit;
+        const maxed = productQty >= limit || availableVariantQuantity(items, item) === 0;
         plus.disabled = maxed;
         plus.setAttribute('aria-disabled', String(maxed));
         plus.title = maxed ? `Stock máximo disponible: ${limit}` : '';
@@ -447,6 +449,7 @@ function createRuntime() {
   }
 
   function refreshVisibleCart() {
+    for (const item of currentLocalCart()) void refreshProductStock(item.id).then(enhanceCartRows).catch(() => {});
     try { window.updateCartBadge?.(); } catch (error) { console.warn('[cart-sync-v2] badge:', error); }
     try {
       const rendered = window.renderCart?.();
@@ -850,6 +853,20 @@ function createRuntime() {
     };
   }
 
+  const cartStockReads = new Map();
+  async function refreshProductStock(id) {
+    if (window.PRODUCTS?.some(product => String(product.id) === String(id))) return;
+    if (!window.TintinProductsStore?.readProduct) throw new Error('stock_not_ready');
+    if (!cartStockReads.has(String(id))) {
+      const request = window.TintinProductsStore.readProduct(id).then(product => {
+        if (!product) throw new Error('product_unavailable');
+        window.PRODUCTS = [...(window.PRODUCTS || []).filter(entry => String(entry.id) !== String(id)), product];
+      }).catch(error => { cartStockReads.delete(String(id)); throw error; });
+      cartStockReads.set(String(id), request);
+    }
+    return cartStockReads.get(String(id));
+  }
+
   function stockLimit(productId, fallbackStock = undefined) {
     const pool = window.PRODUCTS;
     const product = Array.isArray(pool)
@@ -938,6 +955,14 @@ function createRuntime() {
   }
 
   async function updateQty(identifier, delta, variantValue = undefined) {
+    const currentLine = findLine(currentLocalCart(), identifier, variantValue);
+    if (currentLine && Number(delta) > 0) {
+      try { await refreshProductStock(currentLine.id); }
+      catch {
+        showFeedback('No pudimos comprobar el stock. Reintentá en un momento.', 'warning');
+        return { capped: false, changed: false, item: currentLine, reason: 'stock_unavailable' };
+      }
+    }
     return withCartMutation(() => {
       const items = currentLocalCart();
       const line = findLine(items, identifier, variantValue);

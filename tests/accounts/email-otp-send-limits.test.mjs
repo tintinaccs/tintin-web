@@ -52,7 +52,7 @@ test('200 solicitudes del mismo correo desde diferentes IPs sólo envían un OTP
 });
 
 test('consumir el código no reinicia el límite persistente de ocho envíos diarios',async t=>{
-  const store=rateStore();let now=Date.now();t.mock.method(Date,'now',()=>now);
+  const store=rateStore();let now=Date.UTC(2026,9,20,12);t.mock.method(Date,'now',()=>now);
   for(let i=0;i<8;i++) {
     const result=await sendCode(store,'client@example.com',`203.0.113.${i+1}`);
     assert.equal(result.status,200);

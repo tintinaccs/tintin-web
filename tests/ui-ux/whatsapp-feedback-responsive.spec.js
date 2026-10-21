@@ -39,7 +39,7 @@ for(const width of [320,390,768,1024,1280,1440,1920]) test(`registro breve valid
  await page.route('**/__brief-registration',route=>route.fulfill({contentType:'text/html',body:html}));
  await page.goto('/__brief-registration');
  const name=page.locator('#login-profile-first-name'),phone=page.locator('#login-profile-phone'),button=page.locator('#btn-save-profile');
- await expect(name).toBeVisible();expect((await page.locator('.login-shell').boundingBox()).y).toBeLessThan(100);await expect(page.locator('#login-profile-block input')).toHaveCount(2);
+ await expect(name).toBeVisible();expect((await page.locator('.login-shell').boundingBox()).y).toBeLessThan(100);await expect(page.locator('#login-profile-block input:not([type=hidden])')).toHaveCount(2);
  await name.fill('María');await phone.fill('0912345678');await button.click();
  await expect(name).toHaveAttribute('aria-invalid','true');await expect(page.locator('#login-first-name-error')).toContainText('dos palabras');
  expect(await page.evaluate(()=>window.profileWrites)).toBe(0);

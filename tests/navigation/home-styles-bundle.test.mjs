@@ -22,3 +22,13 @@ test('no altera URLs absolutas, datos ni referencias locales SVG', () => {
   assert.equal(rebaseCss(css, 'css/a.css'), css);
   assert.throws(() => rebaseCss(`@import "other${'.css'}";`, 'css/a.css'), /no combinable/);
 });
+
+test('Nosotros reutiliza el empaquetado con identidad independiente, reversible e idempotente',()=>{
+ const html='<html><head>\n  <link id="about" rel="stylesheet" href="css/about.css?v=1">\n</head><body></body></html>';
+ const options={id:'tt-about-css-bundle',file:'css/generated/nosotros.css',versionPrefix:'tintin-about'};
+ const result=bundleHomeStyles(html,()=>'.about{color:pink}',options);
+ assert.match(result.html,/id="tt-about-css-bundle" href="css\/generated\/nosotros\.css\?v=tintin-about-/);
+ assert.match(result.html,/data-tt-style-bundle="tt-about-css-bundle"/);
+ assert.deepEqual(bundleHomeStyles(result.html,()=>'.about{color:pink}',options),result);
+ assert.equal(restoreStyleSources(result.html,options.id),html);
+});

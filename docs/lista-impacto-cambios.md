@@ -1,3 +1,40 @@
+## 2026-10-20 — Tarjetas de Productos e Instagram responsive
+
+Fuentes: controlador/contrato de Productos y listado de comercio; CSS de tarjetas y operaciones locales; Inicio/Nosotros y componente compartido de Instagram; endpoint GET con caché y lectura de Meta. Guardado puntual de visibilidad y stock por variante con fingerprint, límites, permisos y suma consistente; mantiene revisión del sitio, auditoría y sincronización existente. Reordena filtros, Clientes, Ventas locales y Sheets; en móvil apila las casillas del espejo. Preserva foto y actualiza relato/reel de la historia; feed automático configurado por servidor con token privado. El empaquetador existente acepta identidad independiente para Nosotros y reduce sus solicitudes sin cambiar presupuestos. Se regeneran caché, CSS generado, CSP, diagnóstico y mantenimiento desde sus herramientas. No cambia Rules, precios, transiciones de pedidos ni datos reales. Estado y límites de Meta/producción en CURRENT_STATE; retorno push conserva la implementación integrada de main1179.
+
+## 2026-10-20 — Pruebas de candidato aisladas de producción
+
+Fuente: playwright.config.js y workflow canónico auditar-tintin.yml. UI usa un origen local por defecto, manteniendo overrides explícitos; CI levanta su servidor existente antes de todos los gates que incluyen navegador y fija ambos orígenes locales en el job. Los comandos, requisitos, checks y seguridad permanecen. Regresión de arquitectura verifica default, precedencia explícita y orden del servidor. El plan protegido incluye ambos archivos de control. Las URLs finales de entrega pública se reservan con referencia3 para cerrar el incidente de consultas prematuras sin reutilizar respuestas dudosas.
+## 2026-10-20 — Compatibilidad con1175 ya integrado
+
+Se preservan todos sus controles y contratos. Este candidato sólo suma la precedencia de navegación modal y sus referencias, junto a la alternancia pública, encabezados y filtro de avisos. La nueva base de mantenimiento es main453686c66. No replica el rediseño ni modifica la autoridad de stock/guardado.
+
+## 2026-10-20 — Encabezados rosa y alternancia completa de bloques
+
+Fuentes: sistema-superficies-tintin.css, marca-movil.css y product.html. Degradado de fondo completo y blur sólo del fondo en encabezados públicos/Admin/acceso/checkout, sin violeta ni borde inferior duro. Tu selección conserva su región comercial protegida (div role=region), como hermana de la ficha, y .tinsel participa en el selector visual y su fallback CSS para participar en la misma secuencia visible que ficha, recomendaciones y footer; se conservan IDs, controles, datos y contratos del carrito. Impacto responsive compartido en todas las rutas que cargan el sistema de superficies. Veinte regresiones nuevas en el spec de superficies, aserciones de header administrativo y las suites existentes de selección/espaciado; URLs y bundle de Inicio se regeneran canónicamente. No hay cambios de stock, pagos, roles ni escrituras comerciales adicionales.
+## 2026-10-20 — Precedencia de navegación del editor autenticado
+
+Fuente: shopify-commerce-admin.css y su versión canónica. La ocultación compacta debe prevalecer sobre visibility:visible!important del guard de autenticación inline, sólo mientras el editor está abierto. Regresión en el spec responsive existente usa el guard real y seis tamaños; no altera autorización, stock, guardado ni borradores. Se conserva main1179 y se actualiza1180 para incluir esta corrección visual junto al filtro de la campana pública. Evidencia y validación en CURRENT_STATE.
+## 2026-10-20 — Pedidos de prueba en la campana pública
+
+Fuente funcional: notificaciones-clientes.js reutiliza pedidos-prueba.mjs antes de lista, badge y avisos en vivo del canal público, tanto para Super Admin como para clientas. Conserva TINPED26+, actividad social, autorización de las consultas y documentos originales. No elimina ni migra notificaciones ni altera pagos/stock. Los consumidores del shell reciben sólo nuevas referencias inmutables, generadas desde la fuente canónica. Regresión de suscripción en header-activity-feed.test.mjs. El ajuste Windows del fixture del panel se verificó localmente y se excluyó del candidato al corroborarlo ya publicado en1179. CSP, caché, manifiesto y mantenimiento se regeneran; evidencia y pendientes actuales en CURRENT_STATE.
+
+## 2026-10-18 — Corrección acotada de Productos después de1150
+
+Admin usa snapshot crudo e inmutable para la revisión de inventario; mantiene las opciones originales y rechaza concurrencia real. ID de Firestore canónico. Tarjetas bloquean selección de colores agotados y conservan foto disponible; prioridad de stock y cartel existentes. Regresiones se conectan a admin-sync/products-sync. Se conservan todos los cambios de1150, incluidas estadísticas/pedidos. Sin escrituras reales, cambios de reglas, permisos o controles de borrado. Referencias inmutables nuevas, shell, CSP, diagnóstico y mantenimiento canónico contra46c10ef5. Se conservan1153 y1155 (Tu selección y mosaico de Productos).
+
+## 2026-10-18 — Resumen de dirección principal
+
+El diagnóstico completo incluye la intención explícita de favorito personal (selected) en el dominio existente de participación, diferenciada del Me gusta permanente. Quitar sólo la ruta del usuario autenticado y volver a guardar no modifica el registro social ni genera avisos/contadores duplicados. Se permite quitar productos ya ausentes y se deniega a cuentas bloqueadas; versión optimista de borrado. Cliente, Perfil y cargador reciben referencias nuevas.41 pruebas relacionadas aprobadas, incluidos consumos anteriores sin selected.
+
+Favoritos en Perfil: se respeta el contrato existente de TintinFavorites.toggle enviando objeto con id, no string. Un resultado sin cambio vuelve al control de error/reintento en lugar de dejar deshabilitado el botón. No cambia el endpoint, cuotas, permisos ni la semántica del favorito. Dos regresiones FAIL/PASS y conjunto de ocho tests de Perfil/carrito. Reparación operativa de fórmulas vacías y publicación del bloque canónico de capacidad de Apps Script documentadas con backup en CURRENT_STATE; sin nueva lógica ni permisos en el motor.
+
+Fuente: enhanceProfile en estabilidad-final-publica, sobre el listado canónico de direcciones ya renderizado. El resumen usa sólo el encabezado principal, con respaldo del campo legado y estado vacío. Sin cambios de direcciones, checkout, autenticación ni Rules. Impacta únicamente el texto resumido y las referencias transitivas de caché del shell que importa el módulo. Regresión sobre el módulo real cubre dirección principal/secundaria, controles, actualización observada, respaldo y vacío; suite de Perfil 12/12. Evidencia y límites del recorrido productivo en CURRENT_STATE.
+
+## 2026-10-16 — Aviso de actualización por dispositivo y encuadre del reloj
+
+Fuentes: vigilancia-version.js, gestion-imagenes.js e index.html. Recuperación al volver de pestaña/historial/conexión, sondeo visible60s y ubicación sobre tt-tabbar/admin real. Se conservan aviso único, decisión del usuario, almacenamiento y exclusión del sondeo de Checkout. El reloj usa cover tanto en HTML como tras snapshot para llenar su marco sin bandas, con proporción intacta. Calidad-interfaz, cambios-tienda, cargador y referencias HTML sólo versionan el grafo afectado; artefactos generados desde fuentes. Pruebas de aviso en celular/tablet vertical y horizontal/laptop/escritorio y encuadre antes/después del snapshot. La espera inicial de App Check conserva el listener recuperable existente, sin reintentos ni avisos de fallo prematuros; los errores reales siguen visibles. Sin cambios a pedidos, Rules, pagos, credenciales o controles de publicación.
+
 ## 2026-10-20 — Cierre de pendientes de revisión global
 
 Alternancia de superficies observa atributos de html además de body para recuperar el login al revelarse, sin duplicar fondos ni releer por mutaciones irrelevantes. Checkout vacío usa el par semántico de colores de botón, con destino conservado. El generador propaga una versión nueva del runtime; afecta19entradas HTML inventariadas/17con runtime. Lock de Hono de herramientas se actualiza a4.13.13 por advisory confirmado. Pruebas existentes se alinean con paginación, corte de métricas, menú4+Más, sesiones filtradas y revalidación canónica de iconos; se agrega recuperación real de métricas y matrices de ocho dimensiones para los dos arreglos. No modifica datos, Rules, Auth, pedidos ni el editor1175. Mapa, evidencia y límites en los informes del ciclo; derivados y plan desde autoridades canónicas contra main vigente.
@@ -479,3 +516,20 @@ Autoridad compartida destino-admin.mjs para productor Cloudflare, campana, login
 ## 2026-10-20 — Cabeceras únicas de etapas de Pedidos
 
 Fuente: tablero-pedidos.css. Escritorio usa títulos y contadores de las cinco columnas; hasta 1180px usa pestañas y oculta sólo los títulos repetidos de etapas estándar. Incidencias e Históricos conservan sus títulos. No cambia renderizado, selección, datos, permisos, cantidades ni transiciones. Caché del CSS y derivados regenerados; matriz de 24 tamaños y cruce de breakpoint con etapa persistida en orders-board.spec.js.
+
+
+## 2026-10-20 — Consolidación de los nueve PR pendientes
+
+Se concilian historias929/1122/1134/1146/1154/1156/1170/1180/1182 con main dc6da947 y el avance concurrente9d58fca0. Afecta acceso/OTP, stock de carrito, favoritos, avisos, revisión de inventario, fuente del espejo mensual, superficies y tarjetas/Instagram. Se preservan1175/1179/1183/1184, comparadores canónicos y guardas; las reglas visuales antiguas incompatibles ceden al diseño posterior. Referencias, bundles y derivados se generan; CI conserva todos sus controles. El cambio de workflows sólo añade validación previa al despliegue manual de Rules, instala navegador de diagnóstico y asegura origen local desde antes de los gates. No despliega Rules ni instala Apps Script, cambia DNS o escribe datos comerciales. Inventario y límites en docs/agent/CONSOLIDACION_PR_20261020.md.
+
+
+## 2026-10-20 — Rutas de Pages y fixture canónicos en la consolidación
+
+Se integra el avance concurrente fb95aa72: rutas, CSP y verificador final comparten scripts/lib/rutas-pages.js; las100 reglas mantienen el mismo conjunto y sólo cambia su generación/orden. El fixture de inventario usa el renderer vigente sin importar el comparador ya sustituido por1175. Trece regresiones Node y el caso Chromium aislado pasan; derivados y plan se regeneran. No modifica runtime, datos, permisos ni umbrales. CI completa requerida para el nuevo candidato1185.
+
+Consolidación1185: incorpora cb8e28ee de1180, preserva logos blancos bajo tinte rosa real y sus pruebas; superficies consolidated-2, bundles y manifiestos regenerados; CI/publicación del SHA final pendientes.
+
+
+## Conciliación final del smoke de encabezados
+
+Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.

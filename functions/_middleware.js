@@ -31,7 +31,7 @@ const MUTATION_LIMITS = Object.freeze([
 const READ_LIMITS = Object.freeze([
   [/^\/(?:product(?:\.html)?|products\/[^/]+|pages\/[^/]+)\/?$/, 60, 60_000, 'public-render'],
   [/^\/api\/health$/, 12, 60_000, 'health'],
-  [/^\/api\/(public-catalog|visual-builder-public|visual-studio-global-public)$/, 60, 10_000, 'public-content'],
+  [/^\/api\/(public-catalog|visual-builder-public|visual-studio-global-public|instagram-feed)$/, 60, 10_000, 'public-content'],
   [/^\/api\/(geo-search|location-search)$/, 30, 60_000, 'geo-search'],
   [/^\/api\/visitor-geo$/, 60, 60_000, 'visitor-geo'],
   [/^\/api\/paypal-config$/, 60, 60_000, 'paypal-config']
