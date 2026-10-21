@@ -176,3 +176,24 @@ test('textos externos de ventas y contactos se escriben como literales, sin ejec
   assert.equal(h.contacts.cells[6][3],"'=1+1");assert.equal(h.contacts.cells[6][10],"'=SUM(1,2)");
   assert.equal(h.month.cells[10][9],150000);assert.equal(h.month.cells[9][28],'FORMULA_AC_INTACTA');
 });
+
+test('actualizar el espejo reconcilia Borrados una vez aunque revisión y firma no cambien',()=>{
+  const h=bridgeHarness();h.context.tintinReconciliarComercioLocal_();
+  const props=h.context.tintinLocalProperties_();props.setProperty('LOCAL_MIRROR_VERSION','anterior');
+  const row=h.month.cells[20];row[1]='PEDIDO_RETIRADO';row[9]=100000;row[32]='WEB_archived';row[33]='v1';
+  row[21]=9000;row[28]='FORMULA_INTACTA';row[34]='GASTO_INTACTO';
+  const result=h.context.tintinReconciliarComercioLocal_();
+  assert.notEqual(result.unchanged,true);assert.equal(row[32],'');assert.equal(row[9],'');
+  assert.equal(row[21],9000);assert.equal(row[28],'FORMULA_INTACTA');assert.equal(row[34],'GASTO_INTACTO');
+  assert.equal(props.getProperty('LOCAL_MIRROR_VERSION'),h.context.TINTIN_LOCAL_MIRROR_VERSION);
+  assert.equal(h.context.tintinReconciliarComercioLocal_().unchanged,true);
+});
+
+test('un snapshot fallido no marca la migración como aplicada ni borra el espejo',()=>{
+  const h=bridgeHarness();h.context.tintinReconciliarComercioLocal_();
+  const props=h.context.tintinLocalProperties_();props.setProperty('LOCAL_MIRROR_VERSION','anterior');
+  h.month.cells[20][32]='WEB_archived';const call=h.context.tintinLocalCall_;
+  h.context.tintinLocalCall_=input=>{if(input.action==='snapshot'&&!input.revisionOnly)throw new Error('Snapshot no disponible');return call(input);};
+  assert.throws(()=>h.context.tintinReconciliarComercioLocal_(),/Snapshot no disponible/);
+  assert.equal(props.getProperty('LOCAL_MIRROR_VERSION'),'anterior');assert.equal(h.month.cells[20][32],'WEB_archived');
+});
