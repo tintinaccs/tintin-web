@@ -462,8 +462,8 @@ test('Historial sync conserva el contrato de estados, fila 8 y máximo 500', () 
   assert.match(source, /tintinRecordSyncSafely_\('LOCAL'/);
   assert.match(source, /isRejected \? 'REJECTED' : 'ERROR'/);
   assert.match(source, /function tintinSendProductRowWithRetry_/);
-  assert.match(source, /status !== 409 && status !== 502/);
-  assert.match(source, /if \(isRejected && e\.range\.getNumRows\(\) === 1/);
+  assert.match(source, /status !== 502/);
+  assert.match(source, /if \(isRejected && !isConflict && e\.range\.getNumRows\(\) === 1/);
   assert.match(source, /function tintinClaimProductEdit_/);
   assert.match(source, /if \(!tintinClaimProductEdit_\(e\)\) return;/);
 });

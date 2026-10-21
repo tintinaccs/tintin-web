@@ -348,15 +348,15 @@ function tintinSendProductRow_(sheet, rowNumber, changedFields) {
   sheet.getRange(rowNumber, 35).clearContent();
 }
 
-// Un 409/502 es recuperable (conflicto o indisponibilidad transitoria del
-// servicio). Reintenta una vez antes de informar el fallo, sin duplicar una
-// escritura que el endpoint ya confirmó.
+// Sólo indisponibilidad transitoria admite reintento automático. Un conflicto
+// requiere revisar el estado canónico: reintentar el total antiguo podría
+// pisar una venta que ocurrió entre la lectura y el commit.
 function tintinSendProductRowWithRetry_(sheet, rowNumber, changedFields) {
   try {
     return tintinSendProductRow_(sheet, rowNumber, changedFields);
   } catch (firstError) {
     var status = Number(firstError && firstError.tintinHttpStatus || 0);
-    if (status !== 409 && status !== 502) throw firstError;
+    if (status !== 502) throw firstError;
     Utilities.sleep(750);
     return tintinSendProductRow_(sheet, rowNumber, changedFields);
   }
@@ -364,6 +364,24 @@ function tintinSendProductRowWithRetry_(sheet, rowNumber, changedFields) {
 
 // Crear como activador instalable "Al editar". Un activador simple no tiene
 // permiso para UrlFetchApp.
+// Reponer desde Firestore todas las filas existentes del pegado rechazado,
+// incluso si una fila anterior del mismo evento ya se guardó correctamente.
+function tintinRestoreProductConflict_(sheet, range) {
+  var ids = sheet.getRange(range.getRow(), 1, range.getNumRows(), 1).getValues();
+  var products = tintinSnapshot_('products');
+  var byId = Object.create(null);
+  products.forEach(function(product) { byId[product.id] = product; });
+  ids.forEach(function(row, offset) {
+    var id = String(row[0] || '').trim();
+    if (!id) return;
+    var product = byId[id];
+    if (!product) throw new Error('El producto cambió o ya no existe; actualizá el catálogo antes de reintentar.');
+    var rowNumber = range.getRow() + offset;
+    sheet.getRange(rowNumber, 2).setValue(tintinSheetLiteral_(product.name || ''));
+    tintinWriteProductRow_(sheet, rowNumber, product, product);
+  });
+}
+
 function tintinProductosOnEdit(e) {
   tintinHandleProductEdit_(e);
 }
@@ -388,9 +406,15 @@ function tintinHandleProductEdit_(e) {
         tintinSendProductRowWithRetry_(sheet, rowNumber, changedFields);
         tintinRecordSyncSafely_('SYNCED', sheet.getName(), cell, 'Producto sincronizado: ' + (changedFields.join(', ') || 'acción') + '.');
       } catch (error) {
-        var isRejected = error && error.tintinHttpStatus === 400 || /valor numerico invalido/i.test(String(error && error.message || error));
-        // Sólo se revierte la celda editada si ese valor concreto fue rechazado.
-        if (isRejected && e.range.getNumRows() === 1 && e.range.getNumColumns() === 1) {
+        var isConflict = error && error.tintinHttpStatus === 409;
+        var isRejected = error && (error.tintinHttpStatus === 400 || isConflict) || /valor numerico invalido/i.test(String(error && error.message || error));
+        if (isConflict) {
+          try { tintinRestoreProductConflict_(sheet, e.range); }
+          catch (restoreError) { console.error('No se pudo reponer el espejo canónico: ' + String(restoreError && restoreError.message || restoreError)); }
+        }
+        // Para validación local, revertir sólo la celda; un conflicto siempre
+        // requiere la lectura canónica, nunca volver al oldValue desactualizado.
+        if (isRejected && !isConflict && e.range.getNumRows() === 1 && e.range.getNumColumns() === 1) {
           if (Object.prototype.hasOwnProperty.call(e, 'oldValue')) e.range.setValue(tintinSheetLiteral_(e.oldValue));
           else e.range.clearContent();
         }

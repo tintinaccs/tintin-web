@@ -170,3 +170,23 @@ test('authenticated snapshot marks principal from canonical account contract, ig
   assert.equal(users.find(x => x.uid === 'principal').protectedAccount, true);
   assert.equal(users.find(x => x.uid === 'other').protectedAccount, false);
 });
+
+for (const status of [409, 502]) {
+  test(`Apps Script ${status === 409 ? 'does not retry a rejected aggregate or concurrent sale' : 'retries transient upstream failure once'}`, () => {
+    const c = apps(); let calls = 0; let sleeps = 0;
+    c.Utilities = { sleep: () => sleeps++ };
+    c.tintinSendProductRow_ = () => { calls++; if (calls === 1) throw Object.assign(new Error('fixture'), { tintinHttpStatus: status }); return 'confirmed'; };
+    if (status === 409) assert.throws(() => c.tintinSendProductRowWithRetry_({}, 7, ['stock']), /fixture/);
+    else assert.equal(c.tintinSendProductRowWithRetry_({}, 7, ['stock']), 'confirmed');
+    assert.equal(calls, status === 409 ? 1 : 2); assert.equal(sleeps, status === 409 ? 0 : 1);
+  });
+}
+test('rejected paste restores existing rows from canonical stock, including previously accepted rows', () => {
+  const c = apps(); const written = []; const names = [];
+  c.tintinSnapshot_ = entity => { assert.equal(entity, 'products'); return [{ id: 'a', stock: 0, name: '=literal' }, { id: 'b', stock: 2, name: 'B' }]; };
+  c.tintinWriteProductRow_ = (_sheet, row, product, inventory) => { written.push({ row, stock: product.stock }); assert.equal(product, inventory); };
+  const sheet = { getRange: (row, col) => ({ getValues: () => [['a'], ['b']], setValue: value => names.push({ row, col, value }) }) };
+  c.tintinRestoreProductConflict_(sheet, { getRow: () => 9, getNumRows: () => 2 });
+  assert.deepEqual(written, [{ row: 9, stock: 0 }, { row: 10, stock: 2 }]);
+  assert.equal(names[0].value, "'=literal");
+});

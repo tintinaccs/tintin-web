@@ -209,3 +209,7 @@ protección restringida existente a B:L de esa fila después de repintar usuario
 sin cambiar sus editores ni compartir el libro. Rechaza identidades ambiguas,
 protecciones ausentes/duplicadas, advertencias sin restricción y ejecuciones sin
 permiso para moverla. Así no depende de un número de fila histórico.
+
+Un409 por conflicto o edición agregada incompatible no se reintenta
+automáticamente: se repone el rango afectado desde el snapshot canónico y
+se registra REJECTED. Sólo un502 transitorio admite el reintento automático.
