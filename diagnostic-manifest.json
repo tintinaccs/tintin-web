@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "80178096bf134eb950892f002daf8655af1f5976ebfb8c04b9b6724aecfc3730",
+  "sourceFingerprint": "d116280f67b6d6386b3c977e57475bf6271dc3394355d17df10933214eb6dcee",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1378,
-    "textFiles": 1288,
-    "totalBytes": 28993332,
+    "files": 1379,
+    "textFiles": 1289,
+    "totalBytes": 28997272,
     "pages": 19,
-    "modules": 968
+    "modules": 969
   },
   "viewports": [
     {
@@ -35991,8 +35991,8 @@
     },
     {
       "path": "scripts/auditar-acceso-aislamiento.js",
-      "bytes": 7917,
-      "sha256": "3bff43ede37f45ef707d08f6319ce3d2b7e0c6b9da789989f437cd7d70254131",
+      "bytes": 8139,
+      "sha256": "a196b9383b96661a290e651697e6c45b8db230fec194f36bf00e266d72debfbd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -47062,6 +47062,54 @@
       "endpoints": []
     },
     {
+      "path": "tests/login/google-popup-audit-contract.test.mjs",
+      "bytes": 2073,
+      "sha256": "8499cdefbeb19da9e7bc177fc9fb292c1e29b48de6034e11c882817301972d68",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/login/google-popup-close.test.mjs",
       "bytes": 2794,
       "sha256": "d764660ef61894e8b3206e446e2111adee73f4a0f2632d1d89c035a82022fd9a",
@@ -55252,8 +55300,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 3471,
-      "sha256": "6a59c72acca977019454bb1faee0b5b4da140d87a03d71a938e62c0a2c4eb9d2"
+      "bytes": 3467,
+      "sha256": "8a21dab6ac612574d9914ca4841ec6fd2bb3aa1c19dcb67ba1e22f514542faa1"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55924,8 +55972,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 740800,
-      "sha256": "4963405c63449c43b362ca9dacb39c1e66d331c137e65ffe86677c5530a0c374"
+      "bytes": 741813,
+      "sha256": "aad8eb3edd6528908f05363f787203210ea631488b1e344fcc8abc32a6f138d8"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56314,8 +56362,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 85828,
-      "sha256": "54eb62f66d8f7361ec71c45e146661c3cceb00247363ec16d086bc6d283e67e2"
+      "bytes": 86464,
+      "sha256": "241c1d81ece78382b69b68d25469a52b2d30b773f4d06f35233b36c2805d0c16"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -59062,8 +59110,8 @@
     {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "extension": ".js",
-      "bytes": 7917,
-      "sha256": "3bff43ede37f45ef707d08f6319ce3d2b7e0c6b9da789989f437cd7d70254131"
+      "bytes": 8139,
+      "sha256": "a196b9383b96661a290e651697e6c45b8db230fec194f36bf00e266d72debfbd"
     },
     {
       "path": "scripts/auditar-acceso-pagina.js",
@@ -61182,6 +61230,12 @@
       "extension": ".js",
       "bytes": 11995,
       "sha256": "d7d42ffb1f4962b42650dc9524db92e783c0408d5c52870f68a7578371cb4d81"
+    },
+    {
+      "path": "tests/login/google-popup-audit-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2073,
+      "sha256": "8499cdefbeb19da9e7bc177fc9fb292c1e29b48de6034e11c882817301972d68"
     },
     {
       "path": "tests/login/google-popup-close.test.mjs",

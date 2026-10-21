@@ -71,9 +71,13 @@ const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 
   const googleRedirectPath =
     /await withDeadline\(signInWithRedirect\(auth, provider\), AUTH_NETWORK_DEADLINE_MS\)/.test(login) &&
     /result = await waitForGooglePopup\(\(\) => signInWithPopup\(auth, provider\)\)/.test(login) &&
-    googlePopup.includes('popup?.closed') &&
-    googlePopup.includes("code: 'auth/popup-closed-by-user'") &&
-    googlePopup.includes('host.clearInterval(timer)') &&
+    googlePopup.includes('const operation = start()') &&
+    googlePopup.includes('Promise.race([operation, timeout])') &&
+    googlePopup.includes("code: 'auth/popup-timeout'") &&
+    googlePopup.includes('host.clearTimeout(deadline)') &&
+    googlePopup.includes('host.open = originalOpen') &&
+    !/\bsetInterval\s*\(/.test(googlePopup) &&
+    !googlePopup.includes('popup?.closed') &&
     login.includes("['auth/popup-blocked', 'auth/operation-not-supported-in-this-environment'].includes(popupError?.code)") &&
     login.includes('await finishGoogleLogin(result.user)');
   const googleHandoffKeepsOverlay =
