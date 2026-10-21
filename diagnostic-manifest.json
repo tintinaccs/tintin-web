@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "22d91b6271265d12824447f9378178e29828e341f4d4578b7beb0a5806dfcbf8",
+  "sourceFingerprint": "638815ae6a16a621237af5903cd95e5bd3912abbcc13f03dc5c970c0817c2645",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1386,
-    "textFiles": 1295,
-    "totalBytes": 29296960,
+    "files": 1387,
+    "textFiles": 1296,
+    "totalBytes": 29301684,
     "pages": 19,
-    "modules": 974
+    "modules": 975
   },
   "viewports": [
     {
@@ -15779,8 +15779,8 @@
         "guest",
         "client"
       ],
-      "bytes": 46747,
-      "sha256": "7cae00b8b9c2a50b80db39f888cad8e0c4d1072b36051e7aedf03e32f7060cc5",
+      "bytes": 46823,
+      "sha256": "e2388db9061e9ed02e4fc4f4f878890f2798336fa86b950364cec0a10a5e8e2e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15918,7 +15918,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-4f57b4e5d1e7013d",
+          "raw": "css/generated/inicio.css?v=tintin-home-0009ad018d1f1606",
           "target": "css/generated/inicio.css",
           "line": 57
         },
@@ -15988,7 +15988,7 @@
           "line": 85
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261017-home-actions-spacing-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261021-banner-complete-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 86
         },
@@ -16862,7 +16862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-4f57b4e5d1e7013d",
+          "raw": "css/generated/inicio.css?v=tintin-home-0009ad018d1f1606",
           "target": "css/generated/inicio.css",
           "line": 57,
           "exists": true
@@ -16946,7 +16946,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261017-home-actions-spacing-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261021-banner-complete-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 86,
           "exists": true
@@ -52992,6 +52992,22 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/hero-complete-borders.spec.js",
+      "bytes": 3933,
+      "sha256": "1de793260a9bd1d6b20350334aec724f4e55dc4a0d46d06bbb4c7cbaa8c1ac01",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://layout.test/",
+          "line": 21
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
       "bytes": 7704,
       "sha256": "20c21cdfde5c0df4b6d41e7e1c6e775a68e88c5b8ececba91b85b79a736553ec",
@@ -55595,8 +55611,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 2150,
-      "sha256": "e9dde3e7040eae6eacf37688d02f1015c8bdb24773d6fed0c093b6eaa81f16b3"
+      "bytes": 945,
+      "sha256": "90fe829a8cd9aefff5ec2b68a853029731269f690ea1fe737cc14277d33e11e6"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55608,7 +55624,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "edf515e353d812426a7d38ee1ab883d174bb411afb0cb84e5035bd74ae587d8a"
+      "sha256": "28ca62420bdb18fa81110f55848089f8866d34d61c5b427512fd83aad09ff78e"
     },
     {
       "path": "config/public-site.json",
@@ -55919,8 +55935,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 468945,
-      "sha256": "4f57b4e5d1e7013d6f91c6272fcc4792c893f8269f1e95377a43c5f2b5082bea"
+      "bytes": 469022,
+      "sha256": "0009ad018d1f1606385008652e2da09569a8ceab2f474c9dab2a7f8344e12364"
     },
     {
       "path": "css/generated/nosotros.css",
@@ -55967,8 +55983,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 44682,
-      "sha256": "4394e0706ad0f5f571183daf0857f7dc7d7f3d12d84f783d07c6e7a6b13a94c8"
+      "bytes": 44759,
+      "sha256": "b24ff61ce8968be143857707c2f78108f221d2dd89e0f80628a6aad5f73f2855"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -56267,8 +56283,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 780240,
-      "sha256": "3f47df09e392ba898ac1856aaca07be81c70126ab553350a0ef198c5a437a2ec"
+      "bytes": 782011,
+      "sha256": "e052c9f8f161d14ba869f1e883afbe356c7244967428ec7a25f658c2802ebab5"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57341,8 +57357,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 46747,
-      "sha256": "7cae00b8b9c2a50b80db39f888cad8e0c4d1072b36051e7aedf03e32f7060cc5"
+      "bytes": 46823,
+      "sha256": "e2388db9061e9ed02e4fc4f4f878890f2798336fa86b950364cec0a10a5e8e2e"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -60233,8 +60249,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74657,
-      "sha256": "ac78ea35696d78e914a296408a9842abb59b319c07fe0dcdf550340efdec2ee7"
+      "bytes": 74652,
+      "sha256": "c15d0e6e6df2638f1c5e4c35ee5b16f8f00142ad9f46f7ac5e423cd7fe000462"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -62521,6 +62537,12 @@
       "extension": ".js",
       "bytes": 1499,
       "sha256": "4b24d6ee16aeb31ce8bc98e046ff7d378389af8c71df9dfd6b6ebb884607dc2a"
+    },
+    {
+      "path": "tests/ui-ux/hero-complete-borders.spec.js",
+      "extension": ".js",
+      "bytes": 3933,
+      "sha256": "1de793260a9bd1d6b20350334aec724f4e55dc4a0d46d06bbb4c7cbaa8c1ac01"
     },
     {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",

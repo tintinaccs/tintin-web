@@ -1,50 +1,23 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "4202dd26e0b763afaad8a502ee0e2fc00d34b24e",
-  "reason": "Corregir espejos Sheets desde autoridad Firestore, inventario por variante, literales y protección nativa vinculada a identidad",
+  "baseCommit": "e96eea9300ec6c2be9aa7a1a73b4aba4618f8823",
+  "reason": "Conservar los cuatro bordes y proporción natural de la bienvenida en todas las pantallas y evitar superposición de WhatsApp",
   "files": [
     {
-      "path": "apps-script/AdminParity.gs",
-      "oldHash": "1189a59a98d45e7609ce1ba383ae4f066cf56359a6072c7e592b9338f51176cb",
-      "newHash": "4322ec2e729d96726da5fa25a22fce92ac47e0dfb6eaf0846d33f4dda61a2743"
+      "path": "css/pages/home/ajuste-inicio.css",
+      "oldHash": "4394e0706ad0f5f571183daf0857f7dc7d7f3d12d84f783d07c6e7a6b13a94c8",
+      "newHash": "b24ff61ce8968be143857707c2f78108f221d2dd89e0f80628a6aad5f73f2855"
     },
     {
-      "path": "apps-script/Participacion.gs",
-      "oldHash": "dc596a418ff832d58d10c548540a77047b06c38bdd54dd71e0353d1347a81dd5",
-      "newHash": "747d515d1e0a6e8ef9c62e8bb83e8cd28d8c5da12ae3bcf7ec00c2d467bb28c2"
+      "path": "index.html",
+      "oldHash": "7cae00b8b9c2a50b80db39f888cad8e0c4d1072b36051e7aedf03e32f7060cc5",
+      "newHash": "e2388db9061e9ed02e4fc4f4f878890f2798336fa86b950364cec0a10a5e8e2e"
     },
     {
-      "path": "apps-script/ProductosUnificados.gs",
-      "oldHash": "6133186ac63149fa10cdb06ccf9c0def82b6b860e345214126da240c38680e25",
-      "newHash": "f132a606d6b6231f984e781bf064fdd85ae0c3c64791fb3057ca621f28649724"
-    },
-    {
-      "path": "functions/api/sheets-product-sync.js",
-      "oldHash": "313b4468c1d05ca16758d15cd0bec5e8fe5e44aa1b55c607b854290c0c1ffa5d",
-      "newHash": "002abab4a21aa465f953b55765f6c92384d114219ab32677c4984d4354889833"
-    },
-    {
-      "path": "functions/api/sheets-products-webhook.js",
-      "oldHash": "5806613f5dbf20513f452e151a7ce08fe48b42303303b7ed3f065ac33d1d933d",
-      "newHash": "a6514a525be412e7e97e8dba424f7f1b6799e3c5497b5053173fea4fbea341ca"
-    },
-    {
-      "path": "functions/api/sheets-sync-snapshot.js",
-      "oldHash": "b1517cb617eb120ddfe66e0691ad69b1b26f3f6d86135c5b57c72531c3b518ea",
-      "newHash": "90873d0ff613df9041ab2c0075557355dcb76c81e91f88c065e663d6af255a7f"
-    },
-    {
-      "path": "tests/sync/evidencia-sync-sheets.test.mjs",
-      "oldHash": "e2f8f76074dd5fc9ce3b940e9e3a382d3761554e2c20ea0f49494e40560f0461",
-      "newHash": "6122fe21e0d36a566f67f6bfc074398c5d81681ae5a20b0b6ae6456c85c467a9"
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "ac78ea35696d78e914a296408a9842abb59b319c07fe0dcdf550340efdec2ee7",
+      "newHash": "c15d0e6e6df2638f1c5e4c35ee5b16f8f00142ad9f46f7ac5e423cd7fe000462"
     }
   ],
-  "affectedRecords": [
-    "apps-script__google-sheets__24",
-    "apps-script__sheets-products-webhook__26",
-    "firestore__apps-script__23",
-    "google-sheets__apps-script__25",
-    "sheets-products-webhook",
-    "sheets-products-webhook__firestore__27"
-  ]
+  "affectedRecords": []
 }
