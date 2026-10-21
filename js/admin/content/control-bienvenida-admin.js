@@ -17,7 +17,7 @@ import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
   normalizeWelcomeStep
-} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20261020-domain-cutover-consolidated-1';
+} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20261021-welcome-catalogo-1';
 
 const REF = doc(db, 'settings', 'welcomeTutorial');
 

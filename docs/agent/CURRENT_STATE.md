@@ -1,3 +1,9 @@
+## 2026-10-21 — Catálogo en el mensaje de bienvenida (Codex /root)
+
+Solicitud del titular: reemplazar Tienda por Catálogo en la captura de la segunda pantalla de bienvenida; se deja el trabajo de Google Sheets. Base069c3ba0, rama aislada codex/bienvenida-catalogo-20261021. Los defaults ya decían Catálogo, pero normalizeWelcomeStep conservaba el texto anterior guardado. La misma normalización compartida por público y Admin convierte únicamente el título «Explorá la tienda» y el inicio «Desde “Tienda”» a Catálogo; mantiene el resto del mensaje, los campos y la configuración personalizada. No se reinicia el onboarding ni se escribe configuración/datos reales.
+
+PASS_LOCAL: comprobación directa de las dos frases, datos persistidos simulados, idempotencia y texto personalizado;6/6 Chromium del componente de bienvenida, sin reintentos. Nueva URL del módulo y de sus consumidores transitivos, registrada en el baseline existente, para no reutilizar bytes immutable. Shell, plan protegido y manifiestos se generan desde sus autoridades. Los cambios anteriores de conciliación permanecen en su otro worktree; este candidato contiene sólo la bienvenida y los derivados necesarios. CI/merge/publicación no acreditados por las pruebas locales.
+
 ## 2026-10-21 — Migración del espejo mensual con caché vigente (Codex /root)
 
 Evidencia directa de producción: PR1180 integrado en15d75d6b, árbol0c57c901 idéntico al candidato0cc2c496,56/56 recursos publicados y31 respuestas de salud aprobadas. Motor Apps Script actualizado a versión26, mismo deployment/URL/permisos; ComercioLocal leído de vuelta con SHA256 b669ef493fa51241efcb8b0bfcb9e57191695cdc011a5f232019a050b6ecb769. Se conservaron dos respaldos privados del libro y del contenedor Motor. Las ejecuciones doPost26 y el reconciliador automático completan, pero Octubre aún muestra11 líneas WEB_ de siete pedidos ausentes del espejo Pedidos web. La lectura no acredita por sí sola el estado canónico de esos siete pedidos.

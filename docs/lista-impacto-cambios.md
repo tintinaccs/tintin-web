@@ -1,3 +1,7 @@
+## 2026-10-21 — Nombre Catálogo en la bienvenida
+
+Fuente: normalizeWelcomeStep en configuracion-bienvenida.js, compartida por tutorial público y control administrativo. Compatibiliza las dos frases anteriores guardadas con el nombre Catálogo; no cambia mensajes personalizados, permisos, aparición de la guía ni datos. Se propagan URLs nuevas por dependencias y generador del loader; caché, mantenimiento y manifiestos se regeneran canónicamente.
+
 ## 2026-10-21 — Reaplicar el espejo mensual al actualizar su formato
 
 Fuente: apps-script/ComercioLocal.gs. La caché de revisión/firma también compara la versión del espejo y la confirma sólo después del snapshot aplicado. Fuerza una reconciliación tras la actualización para retirar líneas web obsoletas conservando ventas locales, gastos, compras, fórmulas, locks y conflictos. Dos regresiones reproducen datos sin cambios y snapshot fallido;22/22 aprobadas. CI, publicación y verificación de hoja real pendientes del candidato; no se heredan resultados de1180.

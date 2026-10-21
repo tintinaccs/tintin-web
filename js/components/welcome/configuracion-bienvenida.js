@@ -17,8 +17,9 @@ export function normalizeWelcomeStep(step = {}, index = 0) {
     // vez del emoji-ícono. Se sanitiza acá (fuente única de verdad para
     // admin y runtime público) para no confiar en lo que venga de Firestore.
     image: sanitizeImageUrl(step.image || ''),
-    title: String(step.title || `Mensaje ${index + 1}`).slice(0, 90),
-    text: String(step.text || '').slice(0, 420),
+    // Compatibilidad con la guía anterior guardada; Admin y público comparten el nombre actual.
+    title: String(step.title || `Mensaje ${index + 1}`).replace(/^Explorá la tienda$/i, 'Explorá el catálogo').slice(0, 90),
+    text: String(step.text || '').replace(/^Desde “Tienda”/, 'Desde “Catálogo”').slice(0, 420),
     cta: String(step.cta || (index === 0 ? 'Empezar' : 'Siguiente')).slice(0, 40),
     active: step.active !== false
   };
