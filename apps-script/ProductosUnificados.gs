@@ -951,6 +951,24 @@ function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
   return rows.length;
 }
 
+// La identidad protegida la marca el snapshot autenticado desde Firestore,
+// no el correo/rol editable en una celda. Mover el rango mantiene su ACL y evita
+// que una inserción/reordenación deje protegida la cuenta equivocada.
+function tintinProtectSuperAdminMirror_(sheet, users) {
+  var matches = [];
+  users.forEach(function(user, index) { if (user.protectedAccount === true) matches.push(index); });
+  if (matches.length !== 1) throw new Error('No se pudo identificar de forma única la cuenta protegida en el snapshot.');
+  var protections = sheet.getProtections(SpreadsheetApp.ProtectionType.RANGE).filter(function(protection) {
+    return String(protection.getDescription() || '').indexOf('Cuenta Super Admin protegida') === 0;
+  });
+  if (protections.length !== 1 || protections[0].isWarningOnly() || !protections[0].canEdit()) {
+    throw new Error('Revisá la protección restringida de la cuenta Super Admin; no se modificaron sus permisos.');
+  }
+  var firstColumn = TINTIN_USERS_COL.uid;
+  protections[0].setRange(sheet.getRange(TINTIN_USERS_FIRST_ROW + matches[0], firstColumn, 1,
+    TINTIN_USERS_COL.blocked - firstColumn + 1));
+}
+
 function tintinPullUsersFromWeb_() {
   var usersSheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_USERS_SHEET);
   // Firestore es la fuente de verdad. Las validaciones antiguas de la hoja no
@@ -963,7 +981,8 @@ function tintinPullUsersFromWeb_() {
     var roleColumn = tintinColumnLetter_(TINTIN_USERS_COL.role);
     usersSheet.getRange(TINTIN_USERS_FIRST_ROW, 1, Math.max(1, usersSheet.getMaxRows() - TINTIN_USERS_FIRST_ROW + 1), TINTIN_USERS_COL.updatedAt).clearDataValidations();
   }
-  var rows = tintinSnapshot_('users').map(function(user) {
+  var users = tintinSnapshot_('users');
+  var rows = users.map(function(user) {
     var row = new Array(TINTIN_USERS_COL.updatedAt).fill('');
     row[TINTIN_USERS_COL.uid - 1] = user.uid;
     row[TINTIN_USERS_COL.name - 1] = user.name;
@@ -1004,6 +1023,7 @@ function tintinPullUsersFromWeb_() {
     usersSheet.getRange(blockedColumn + TINTIN_USERS_FIRST_ROW + ':' + blockedColumn).setDataValidation(tintinParityValidation_(['Sí', 'No']));
     usersSheet.getRange(actionColumn + TINTIN_USERS_FIRST_ROW + ':' + actionColumn).clearDataValidations();
   }
+  if (usersSheet) tintinProtectSuperAdminMirror_(usersSheet, users);
   return count;
 }
 

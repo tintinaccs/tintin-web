@@ -139,3 +139,34 @@ for (const stock of [0, 1, 7]) {
     for (const column of [7, 8, 10, 11, 13]) assert.equal(writes.has(column), false, 'computed/manual columns preserved');
   });
 }
+
+test('native principal protection follows trusted snapshot identity after insertion/reorder, preserving ACL', () => {
+  const c = apps(); c.SpreadsheetApp.ProtectionType = { RANGE: 'range' };
+  const moved = [];
+  const protection = { getDescription: () => 'Cuenta Super Admin protegida · identidad', isWarningOnly: () => false, canEdit: () => true, setRange: range => moved.push(range) };
+  const sheet = { getProtections: () => [protection], getRange: (row, col, height, width) => ({ row, col, height, width }) };
+  c.tintinProtectSuperAdminMirror_(sheet, [{ uid: 'other' }, { uid: 'principal', protectedAccount: true }]);
+  c.tintinProtectSuperAdminMirror_(sheet, [{ uid: 'new' }, { uid: 'other' }, { uid: 'principal', protectedAccount: true }]);
+  assert.deepEqual(moved, [{ row: 8, col: 2, height: 1, width: 11 }, { row: 9, col: 2, height: 1, width: 11 }]);
+});
+test('native protection does not guess a row or change permissions when identity/ACL is unverified', () => {
+  const c = apps(); c.SpreadsheetApp.ProtectionType = { RANGE: 'range' };
+  let moves = 0;
+  for (const users of [[], [{ email: 'principal@example.test' }], [{ protectedAccount: true }, { protectedAccount: true }]]) {
+    assert.throws(() => c.tintinProtectSuperAdminMirror_({}, users), /identificar/);
+  }
+  for (const warning of [false, true]) {
+    const protection = { getDescription: () => 'Cuenta Super Admin protegida', isWarningOnly: () => warning, canEdit: () => false, setRange: () => moves++ };
+    assert.throws(() => c.tintinProtectSuperAdminMirror_({ getProtections: () => [protection] }, [{ protectedAccount: true }]), /protección/);
+  }
+  assert.equal(moves, 0);
+});
+test('authenticated snapshot marks principal from canonical account contract, ignoring document-supplied flags', async () => {
+  const context = loadModule('functions/api/sheets-sync-snapshot.js', {
+    SUPERADMIN_EMAIL: 'principal@example.test', decodeFirestoreFields: value => value,
+    firestoreAdminListAll: async () => [{ name: 'users/principal', fields: { email: ' Principal@Example.Test ', protectedAccount: false } }, { name: 'users/other', fields: { email: 'other@example.test', protectedAccount: true } }],
+  });
+  const users = await context.snapshot({}, 'users');
+  assert.equal(users.find(x => x.uid === 'principal').protectedAccount, true);
+  assert.equal(users.find(x => x.uid === 'other').protectedAccount, false);
+});

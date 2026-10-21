@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "958e5eefbe6c654a80a267bc6781e51cd47f88b7",
-  "reason": "Corregir integridad de Sheets y alinear auditor con lotes2 probados, autenticación con env y derivados canónicos",
+  "baseCommit": "8081ab5159e9c7955b72937255de9c2db1723ac2",
+  "reason": "Corregir espejos Sheets desde autoridad Firestore, inventario por variante, literales y protección nativa vinculada a identidad",
   "files": [
     {
       "path": "apps-script/AdminParity.gs",
@@ -16,7 +16,7 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "oldHash": "6133186ac63149fa10cdb06ccf9c0def82b6b860e345214126da240c38680e25",
-      "newHash": "46e28a5c1df5815c0ca5acb722ba2b283054168929035c4c8011915ecc6c0372"
+      "newHash": "aa6e9a3438af1d4ea718aa609ebca472876e7e3e5b4499c60a7672a5f58adea5"
     },
     {
       "path": "functions/api/sheets-product-sync.js",
@@ -27,6 +27,11 @@
       "path": "functions/api/sheets-products-webhook.js",
       "oldHash": "5806613f5dbf20513f452e151a7ce08fe48b42303303b7ed3f065ac33d1d933d",
       "newHash": "c9d5053a87ede9361b460b11f5d30cc0c85db3abbeba7db8ed1e58b52cdd544a"
+    },
+    {
+      "path": "functions/api/sheets-sync-snapshot.js",
+      "oldHash": "b1517cb617eb120ddfe66e0691ad69b1b26f3f6d86135c5b57c72531c3b518ea",
+      "newHash": "90873d0ff613df9041ab2c0075557355dcb76c81e91f88c065e663d6af255a7f"
     },
     {
       "path": "tests/sync/evidencia-sync-sheets.test.mjs",

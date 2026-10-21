@@ -149,7 +149,8 @@ check(
     /payload\.action !== 'syncProducts'/.test(sheets) &&
     /requireSuperAdmin\(request, env\)/.test(sheets) &&
     /syncProductsPayloadWithRetry/.test(sheets) &&
-    /appScriptChunkSize:\s*5/.test(sheets) &&
+    /appScriptChunkSize:\s*2/.test(sheets) &&
+    /const \{ request, env \} = context;/.test(sheets) &&
     /queueCatalogSheetSync/.test(sheets) &&
     /await pushProductsToSheets\(\[docId\]\)/.test(admin),
   'Cada cambio debe entrar por el endpoint autenticado, delegar el payload acotado al servidor y conservar cola de recuperación.'

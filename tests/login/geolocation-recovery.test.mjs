@@ -53,6 +53,15 @@ test('coordenadas inválidas no se guardan como ubicación encontrada', async ()
   const navigator = { geolocation: { getCurrentPosition: ok => ok({ coords: { latitude: NaN, longitude: -57 } }) } };
   await assert.rejects(requestCurrentLocation({ navigator, secure: true }), /no pudo determinar/);
 });
+test('una lectura inválida del proveedor se recupera con el segundo intento válido', async () => {
+  let calls=0;
+  const navigator={geolocation:{getCurrentPosition:ok=>{
+    calls++;
+    ok({coords:calls===1?{latitude:91,longitude:-57.6}:{latitude:-25.3,longitude:-57.6,accuracy:20}});
+  }}};
+  assert.deepEqual(await requestCurrentLocation({navigator,secure:true}),{lat:-25.3,lng:-57.6,accuracy:20});
+  assert.equal(calls,2);
+});
 test('código por correo usado en una cuenta Google se muestra desde el token de sesión', () => {
   const data = accountAccessSummary({ provider: 'google', authMethods: ['google', 'emailOtp'] }, { firebase: { sign_in_provider: 'custom' } });
   assert.equal(data.current, 'Código por correo');

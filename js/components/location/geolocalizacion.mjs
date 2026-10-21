@@ -22,7 +22,12 @@ export async function requestCurrentLocation({ navigator: nav = globalThis.navig
     const timer = setTimeout(() => finish(reject)({ code: 3 }), options.timeout);
     signal?.addEventListener('abort', cancel, { once: true });
     if (signal?.aborted) { cancel(); return; }
-    try { nav.geolocation.getCurrentPosition(finish(resolve), finish(reject), options); }
+    try { nav.geolocation.getCurrentPosition(position => {
+      const { latitude: lat, longitude: lng } = position?.coords || {};
+      // Una lectura inválida también permite recuperar un punto fresco.
+      if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) finish(reject)({ code: 2 });
+      else finish(resolve)(position);
+    }, finish(reject), options); }
     catch (error) { finish(reject)(error); }
   });
   try {

@@ -126,27 +126,45 @@ test('retoma el destino tras navegar al login y volver sin from desde el proveed
 });
 
 const {load: loadPanel}=require('./helpers/admin-panel-fixture.cjs');
-test('el icono de notificación y ambas apps instaladas conservan rosa de muestra y logo blanco',async({page})=>{
+test('favicons transparentes, apps circulares y máscara segura usan la marca rosada',async({page})=>{
  await loadPanel(page,390);
  for(const file of ['manifest.json','admin-manifest.json']) {
   const manifest=JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
   expect(manifest.theme_color).toBe('#F8AACA');
-  for(const icon of manifest.icons) expect(icon.src).toMatch(/assets-tintin\/images\/admin\/(?:push-icon-192|app-icon-512)\.png\?v=/);
+  expect(manifest.icons.some(icon=>icon.purpose==='maskable')).toBe(true);
+  for(const icon of manifest.icons) expect(icon.src).toMatch(/assets-tintin\/images\/admin\/(?:push-icon-192|app-icon-(?:maskable-)?512)\.png\?v=tintin-20261021-iconos-rosa-1$/);
  }
  const pixels=await page.evaluate(async()=>{
   const result=[];
-  for(const name of ['/assets-tintin/images/admin/push-icon-192.png','/assets-tintin/images/admin/app-icon-512.png','/assets-tintin/images/admin/push-badge-96.png','/apple-touch-icon.png','/favicon-192x192.png','/favicon-512x512.png','/favicon-16x16.png','/favicon-32x32.png','/favicon.ico']) {
-   const image=new Image();image.src=name+'?v=tintin-20261020-iconos-globales-1';try { await image.decode(); } catch { throw new Error("No se decodifica "+name); }
+  for(const name of ['/assets-tintin/images/admin/push-icon-192.png','/assets-tintin/images/admin/app-icon-512.png','/assets-tintin/images/admin/app-icon-maskable-512.png','/assets-tintin/images/admin/push-badge-96.png','/apple-touch-icon.png','/favicon-192x192.png','/favicon-512x512.png','/favicon-16x16.png','/favicon-32x32.png','/favicon.ico']) {
+   const image=new Image();image.src=name+'?v=tintin-20261021-iconos-rosa-1';await image.decode();
    const canvas=document.createElement('canvas');canvas.width=image.width;canvas.height=image.height;
    const context=canvas.getContext('2d');context.drawImage(image,0,0);
    const data=context.getImageData(0,0,image.width,image.height).data;
-   const threshold=image.width<=32?210:250;
-   let white=0;for(let i=0;i<data.length;i+=4)if(data[i]>threshold&&data[i+1]>threshold&&data[i+2]>threshold&&data[i+3]>200)white++;
-   result.push({name,corner:[...data.slice(0,4)],white});
+   let white=0,pink=0,left=image.width,right=0,unsafePink=0,tail=0;
+   for(let y=0;y<image.height;y++)for(let x=0;x<image.width;x++){
+    const i=(y*image.width+x)*4;
+    if(data[i+3]>200&&data[i]>250&&data[i+1]>250&&data[i+2]>250)white++;
+    if(data[i+3]>128&&data[i]>180&&data[i+1]<100&&data[i+2]>90){
+     pink++;left=Math.min(left,x);right=Math.max(right,x+1);
+     if(y>image.height*.6&&Math.abs(x+.5-image.width/2)<image.width*.1)tail++;
+     if(Math.hypot(x+.5-image.width/2,y+.5-image.height/2)>image.width*.4)unsafePink++;
+    }
+   }
+   result.push({name,corner:[...data.slice(0,4)],white,pink,coverage:(right-left)/image.width,unsafePink,tail});
   }
   return result;
  });
- for(const image of pixels){expect(image.white,image.name).toBeGreaterThan(/favicon-(16|32)|favicon\.ico/.test(image.name)?0:100);expect(image.corner,image.name).toEqual(image.name.includes('badge')?[0,0,0,0]:[248,170,202,255]);}
+ for(const image of pixels){
+  const badge=image.name.includes('badge'),opaque=/apple-touch|maskable/.test(image.name);
+  expect(image.corner,image.name).toEqual(opaque?[255,241,247,255]:[0,0,0,0]);
+  if(badge){expect(image.white).toBeGreaterThan(100);continue;} // Android requires a monochrome badge.
+  expect(image.white,image.name).toBe(0);
+  expect(image.pink,image.name).toBeGreaterThan(5);
+  expect(image.tail,image.name+' conserva el cuerpo completo').toBeGreaterThan(0);
+  if(/favicon-(16|32)|favicon\.ico/.test(image.name))expect(image.coverage,image.name).toBeGreaterThan(.8);
+  if(image.name.includes('maskable'))expect(image.unsafePink).toBe(0);
+ }
 });
 for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[820,1180],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]]) {
  test(`marca push y encabezado difuminado sin cruces a ${width}x${height}`,async({page})=>{
@@ -159,11 +177,13 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[820,1180]
   await expect.poll(()=>logo.evaluate(node=>node.naturalWidth)).toBe(192);
   const geometry=await page.locator('.adm-topbar').evaluate(node=>{
    const items=[...node.children].filter(item=>getComputedStyle(item).display!=='none').map(item=>{const r=item.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};});
-   const style=getComputedStyle(node);
-   return {blur:style.backdropFilter,background:style.backgroundImage,border:style.borderBottomWidth,items,overflow:document.documentElement.scrollWidth>innerWidth+1};
+   const style=getComputedStyle(node),paint=getComputedStyle(node,'::before');
+   return {blur:paint.backdropFilter,background:paint.backgroundImage,mask:paint.maskImage,canvas:style.backgroundColor,border:style.borderBottomWidth,items,overflow:document.documentElement.scrollWidth>innerWidth+1};
   });
   expect(geometry.blur).toContain('blur(18px)');
   expect(geometry.background).toContain('linear-gradient');
+  expect(geometry.mask).toContain('linear-gradient');
+  expect(geometry.canvas).toBe('rgba(0, 0, 0, 0)');
   expect(geometry.border).toBe('0px');
   expect(geometry.overflow).toBe(false);
   for(let i=0;i<geometry.items.length;i++)for(let j=i+1;j<geometry.items.length;j++){

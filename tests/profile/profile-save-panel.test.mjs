@@ -50,3 +50,32 @@ test('Guardar conserva teléfono E164 compatible con su reserva al editar sólo 
  const value=phoneBlock({getElementById:()=>({value:'981123456'})},normalizePhone,DEFAULT_COUNTRY,isNationalMobileInput,()=>{},()=>{});
  assert.equal(value,'+595981123456');
 });
+
+const {toSavedLocation}=await import('../../js/pages/profile/configuracion-inicial-perfil.mjs');
+const {addAddress,MAX_SAVED_LOCATIONS}=await import('../../js/pages/profile/libreta-direcciones.mjs');
+const locationStart=source.indexOf("document.getElementById('btn-guardar-ubicacion').onclick = async");
+const locationEnd=source.indexOf('  // Save',locationStart);
+const installLocationSave=new Function('document','auth','user','profileConfirmed','generation','profileGeneration','locationMap','toSavedLocation','addAddress','addressBook','MAX_SAVED_LOCATIONS','persistAddressBook','closeLocationEditor','toast','window',source.slice(locationStart,locationEnd));
+function locationSaveFixture(persist){
+ const button={disabled:false};const fields={'btn-guardar-ubicacion':button,'perfil-location-name':{value:'Casa'},'perfil-location-address':{value:'Calle 123'}};
+ let point={lat:-25.3,lng:-57.6,name:'Punto'},closes=0;const auth={currentUser:{uid:'owner'}};
+ installLocationSave({getElementById:id=>fields[id]},auth,{uid:'owner'},true,1,1,{getLocation:()=>point},toSavedLocation,addAddress,[],MAX_SAVED_LOCATIONS,persist,()=>{closes++;point=null;button.disabled=true;},()=>{},{TintinReleaseProfileButton:()=>{button.disabled=false;}});
+ return {button,auth,fields,get closes(){return closes;}};
+}
+test('guardar y cerrar una dirección conserva Guardar deshabilitado después de liberar el botón',async()=>{
+ let saved;const {button}=locationSaveFixture(async list=>{saved=list;});
+ await button.onclick();
+ assert.equal(saved[0].name,'Casa');assert.equal(saved[0].address,'Calle 123');
+ assert.equal(button.disabled,true,'un editor reabierto sin punto no puede guardar');
+});
+test('un error de guardado conserva el punto y permite reintentar sin vaciar los campos',async()=>{
+ const {button,fields}=locationSaveFixture(async()=>{throw Error('offline');});
+ await button.onclick();
+ assert.equal(button.disabled,false);assert.equal(fields['perfil-location-name'].value,'Casa');
+ assert.equal(fields['perfil-location-address'].value,'Calle 123');
+});
+test('una respuesta tardía de otra cuenta no habilita el botón de la cuenta nueva',async()=>{
+ let finish;const pending=new Promise(resolve=>{finish=resolve;});const fixture=locationSaveFixture(()=>pending);const {button,auth}=fixture;
+ const saving=button.onclick();auth.currentUser={uid:'other'};button.disabled=true;
+ finish();await saving;assert.equal(button.disabled,true);assert.equal(fixture.closes,0);
+});

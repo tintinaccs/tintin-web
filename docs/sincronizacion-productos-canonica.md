@@ -202,3 +202,10 @@ por productos, cuentas, pedidos, auditoría, historial y participación. Las
 fórmulas intencionales se conservan mediante sus APIs de fórmulas; importes,
 booleanos y fechas mantienen sus tipos. Al desplegar deben actualizarse juntos
 ProductosUnificados, AdminParity y Participacion para conservar esta dependencia.
+
+La protección nativa de la cuenta oficial sigue la identidad marcada por el
+snapshot autenticado desde el contrato canónico. El reconciliador mueve la
+protección restringida existente a B:L de esa fila después de repintar usuarios,
+sin cambiar sus editores ni compartir el libro. Rechaza identidades ambiguas,
+protecciones ausentes/duplicadas, advertencias sin restricción y ejecuciones sin
+permiso para moverla. Así no depende de un número de fila histórico.

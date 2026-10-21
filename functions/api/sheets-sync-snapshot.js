@@ -2,7 +2,7 @@ import {
   decodeFirestoreFields,
   firestoreAdminListAll,
 } from '../../cloudflare/firebase-admin-ligero.js';
-import { jsonResponse } from '../../cloudflare/seguridad-cloudinary.js';
+import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloudinary.js';
 import { sheetsInboundSecret } from '../../cloudflare/secretos-sheets.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
@@ -122,7 +122,9 @@ async function snapshot(env, entity) {
   }
   const collection = entity === 'users' ? 'users' : entity === 'orders' ? 'orders' : 'auditLog';
   const documents = await firestoreAdminListAll(env, collection, MAX_RECORDS);
-  if (entity === 'users') return newestFirst(documents.map(userRecord), ['createdAt', 'updatedAt', 'lastAccess'], 'uid');
+  if (entity === 'users') return newestFirst(documents.map(userRecord).map(user => ({
+    ...user, protectedAccount: String(user.email || '').trim().toLowerCase() === SUPERADMIN_EMAIL,
+  })), ['createdAt', 'updatedAt', 'lastAccess'], 'uid');
   if (entity === 'orders') return newestFirst(documents.map(orderRecord), ['createdAt', 'updatedAt'], 'orderId');
   return newestFirst(documents.map(auditRecord), ['timestamp'], 'eventId');
 }

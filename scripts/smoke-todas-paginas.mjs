@@ -409,7 +409,7 @@ try {
       await page.waitForTimeout(350);
       const surfaces = await page.evaluate(() => {
         const brandProbe = document.createElement('div');
-        brandProbe.style.setProperty('background-image', 'linear-gradient(180deg, color-mix(in srgb, #F8AACA 94%, transparent) 0%, color-mix(in srgb, #FDECF2 94%, transparent) 100%)', 'important');
+        brandProbe.style.setProperty('background-image', 'linear-gradient(180deg, color-mix(in srgb, #F8AACA 94%, transparent) 0%, color-mix(in srgb, #FDECF2 90%, transparent) 52%, transparent 100%)', 'important');
         document.body.appendChild(brandProbe);
         const expectedHeaderGradient = getComputedStyle(brandProbe).backgroundImage;
         brandProbe.remove();
@@ -421,15 +421,17 @@ try {
           const element = document.getElementById(id);
           if (!element) return [id, null];
           const style = getComputedStyle(element);
+          const paint = id === 'tt-header-desktop-tablet' ? getComputedStyle(element, '::before') : style;
           return [id, {
             backgroundColor: style.backgroundColor,
-            backgroundImage: style.backgroundImage,
+            backgroundImage: paint.backgroundImage,
             borderColor: style.borderColor,
             borderStyle: style.borderStyle,
             borderWidth: style.borderWidth,
             boxShadow: style.boxShadow,
             opacity: style.opacity,
-            backdropFilter: style.backdropFilter,
+            backdropFilter: paint.backdropFilter,
+            maskImage: paint.maskImage,
             filter: style.filter,
             expectedHeaderGradient,
           }];
@@ -441,6 +443,7 @@ try {
         if (id === 'tt-header-desktop-tablet') {
           if (style.backgroundImage !== style.expectedHeaderGradient) failures.push(`Header desktop/tablet ${width}px: no conserva el degradado rosa claro aprobado (${style.backgroundImage}).`);
           if (!style.backdropFilter.includes('blur(18px)')) failures.push(`Header desktop/tablet ${width}px: falta el difuminado del fondo.`);
+          if (style.backgroundColor !== 'rgba(0, 0, 0, 0)' || !style.maskImage.includes('linear-gradient')) failures.push(`Header desktop/tablet ${width}px: falta la transparencia gradual del borde.`);
           if (style.filter !== 'none') failures.push(`Header desktop/tablet ${width}px: el filtro afecta también a marca y controles.`);
         } else if (id === 'btn-tienda') {
           if (style.backgroundColor !== 'rgba(0, 0, 0, 0)') failures.push(`Header desktop/tablet ${width}px: #btn-tienda conserva fondo propio (${style.backgroundColor}).`);
