@@ -8,7 +8,7 @@
    y de explicar por qué, igual que antes.
    ============================================================= */
 
-import { IMAGE_SLOTS } from '../../components/images/imagenes.js?v=tintin-20261020-domain-cutover-consolidated-1';
+import { IMAGE_SLOTS } from '../../components/images/imagenes.js?v=tintin-20261021-welcome-guide-1';
 
 if (!window.TintinAdminImagesPhase5Booted) {
   window.TintinAdminImagesPhase5Booted = true;
