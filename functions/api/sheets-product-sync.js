@@ -12,7 +12,7 @@ import {
 const MAX_BODY_BYTES = 64 * 1024;
 
 export async function onRequest(context) {
-  const { request } = context;
+  const { request, env } = context;
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
 
@@ -65,7 +65,7 @@ export async function onRequest(context) {
     // sheets-sync-config.js con el health check; no se duplica aquí.
     const result = await syncProductsPayloadWithRetry(context.env, productIds, {
       attempts: 2,
-      appScriptChunkSize: 5,
+      appScriptChunkSize: 2,
     });
     return jsonResponse({ ...result, ok: true, sheetName: 'Productos' }, 200, origin, requestUrl);
   } catch (error) {

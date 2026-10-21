@@ -181,3 +181,24 @@ Puede borrarse manualmente únicamente cuando se demuestre en producción:
 
 Hasta entonces la pestaña puede permanecer físicamente, pero ningún código
 canónico debe crearla ni escribirla.
+
+## Autoridad de stock y edición por variante
+
+El stock disponible canónico es `products.stock` en Firestore. Al reflejarlo en
+Productos se conserva `K = I - J`: la base de compras mostrada en I se ajusta a
+`products.stock + vendidos(J)`. Un `productInventory.purchased` histórico no
+puede reemplazar el stock actual; esta proyección no modifica ese documento en
+Firestore ni la fórmula de vendidos.
+
+Sheets permite editar stock agregado de productos sin distribución por variante.
+Si existe `variantInventory`, no permite cambiar el total ni las definiciones de
+opciones desde esa superficie: debe usarse Productos en el administrador para
+editar cada cantidad. El rechazo es atómico (HTTP409), también para los campos
+privados incluidos en el mismo envío. Las lecturas previas de stock/opciones
+se confirman con `currentDocument.updateTime` para rechazar una venta concurrente.
+
+Los textos externos se escriben mediante `tintinSheetLiteralRows_`, compartido
+por productos, cuentas, pedidos, auditoría, historial y participación. Las
+fórmulas intencionales se conservan mediante sus APIs de fórmulas; importes,
+booleanos y fechas mantienen sus tipos. Al desplegar deben actualizarse juntos
+ProductosUnificados, AdminParity y Participacion para conservar esta dependencia.

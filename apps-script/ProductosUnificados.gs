@@ -150,7 +150,7 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
   if (!lock.tryLock(10000)) throw new Error('No se pudo obtener el lock de Historial sync.');
   try {
     history.insertRowBefore(TINTIN_SYNC_HISTORY_FIRST_ROW);
-    history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
+    history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues(tintinSheetLiteralRows_([values]));
     var firstExcessRow = TINTIN_SYNC_HISTORY_FIRST_ROW + TINTIN_SYNC_HISTORY_MAX_ROWS;
     if (history.getLastRow() >= firstExcessRow) {
       history.deleteRows(firstExcessRow, history.getLastRow() - firstExcessRow + 1);
@@ -391,7 +391,7 @@ function tintinHandleProductEdit_(e) {
         var isRejected = error && error.tintinHttpStatus === 400 || /valor numerico invalido/i.test(String(error && error.message || error));
         // Sólo se revierte la celda editada si ese valor concreto fue rechazado.
         if (isRejected && e.range.getNumRows() === 1 && e.range.getNumColumns() === 1) {
-          if (Object.prototype.hasOwnProperty.call(e, 'oldValue')) e.range.setValue(e.oldValue);
+          if (Object.prototype.hasOwnProperty.call(e, 'oldValue')) e.range.setValue(tintinSheetLiteral_(e.oldValue));
           else e.range.clearContent();
         }
         var status = isRejected ? 'REJECTED' : 'ERROR';
@@ -487,6 +487,16 @@ function tintinFindProductRow_(sheet, productId, rowIndex) {
   return sheet.getLastRow() + 1;
 }
 
+// Todo valor externo se escribe como literal. Conserva números, booleanos y
+// fechas; las fórmulas intencionales siguen usando setFormula/R1C1.
+function tintinSheetLiteral_(value) {
+  return typeof value === 'string' && /^[\s\u0000-\u001f]*[=+@-]/.test(value) ? "'" + value : value;
+}
+
+function tintinSheetLiteralRows_(rows) {
+  return rows.map(function(row) { return row.map(tintinSheetLiteral_); });
+}
+
 function tintinYesNo_(value) {
   return value === true ? 'Sí' : 'No';
 }
@@ -532,15 +542,18 @@ function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
   tintinMarkRowPushInProgress_(sheet, rowNumber);
   var current = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
   var sold = Number(current[9] || 0);
-  var purchased = inventory.purchased == null
-    ? (product.stock == null ? current[8] : Number(product.stock) + sold)
-    : inventory.purchased;
+  // K = I - J debe reflejar products.stock, incluso si purchased histórico
+  // quedó desactualizado tras una venta o ajuste desde la web. No se modifica
+  // productInventory en Firestore ni la fórmula/columna de vendidos.
+  var purchased = product.stock == null
+    ? (inventory.purchased == null ? current[8] : inventory.purchased)
+    : Number(product.stock) + sold;
 
-  sheet.getRange(rowNumber, 4, 1, 3).setValues([[
+  sheet.getRange(rowNumber, 4, 1, 3).setValues(tintinSheetLiteralRows_([[
     product.category || '',
     inventory.costUnit == null ? '' : inventory.costUnit,
     product.price == null ? '' : product.price
-  ]]);
+  ]]));
   sheet.getRange(rowNumber, 9).setValue(purchased == null ? '' : purchased);
   sheet.getRange(rowNumber, 12).setValue(inventory.stockMinimum == null ? '' : inventory.stockMinimum);
   // Los campos descriptivos (material, acabado, talles, colección, etiquetas)
@@ -552,7 +565,7 @@ function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
   var detailValidations = detailRange.getDataValidations();
   try {
     detailRange.clearDataValidations();
-    sheet.getRange(rowNumber, 14, 1, 21).setValues([[
+    sheet.getRange(rowNumber, 14, 1, 21).setValues(tintinSheetLiteralRows_([[
     inventory.internalNotes || '',
     tintinYesNo_(product.active !== false),
     tintinYesNo_(product.oferta === true),
@@ -574,7 +587,7 @@ function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
     product.collection || '',
     Array.isArray(product.tags) ? product.tags.join(', ') : '',
     product.variants ? JSON.stringify(product.variants) : ''
-    ]]);
+    ]]));
     SpreadsheetApp.flush();
   } finally {
     detailRange.setDataValidations(detailValidations);
@@ -604,7 +617,7 @@ function tintinSyncProductsFromFirestore_(body) {
     var inventoryResult = phase3FetchDocument_('productInventory/' + encodeURIComponent(id), body.idToken);
     var inventory = inventoryResult.ok ? inventoryResult.data || {} : {};
     tintinPrepareNewProductRow_(sheet, rowNumber);
-    sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
+    sheet.getRange(rowNumber, 1, 1, 2).setValues(tintinSheetLiteralRows_([[id, product.name || '']]));
     tintinWriteProductRow_(sheet, rowNumber, product, inventory);
   });
 
@@ -644,7 +657,7 @@ function tintinSyncProductsFromPayload_(body) {
     }
     var product = item.product || {};
     tintinPrepareNewProductRow_(sheet, rowNumber);
-    sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
+    sheet.getRange(rowNumber, 1, 1, 2).setValues(tintinSheetLiteralRows_([[id, product.name || '']]));
     tintinWriteProductRow_(sheet, rowNumber, product, item.inventory || {});
     rowIndex[id] = rowNumber;
   });
@@ -882,7 +895,7 @@ function tintinHandleOrderEdit_(e) {
   if (!e || !e.range || e.range.getRow() < 2 || [11, 13].indexOf(e.range.getColumn()) === -1) return;
   var message = 'Pedidos web es un espejo de solo lectura. Cambiá estados desde Superadmin para conservar la integridad de stock.';
   if (e.range.getNumRows() === 1 && e.range.getNumColumns() === 1 && Object.prototype.hasOwnProperty.call(e, 'oldValue')) {
-    e.range.setValue(e.oldValue);
+    e.range.setValue(tintinSheetLiteral_(e.oldValue));
   } else {
     tintinPullOrdersFromWeb_();
   }
@@ -934,7 +947,7 @@ function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
   if (!sheet) return 0;
   var existing = Math.max(0, sheet.getLastRow() - firstRow + 1);
   if (existing) sheet.getRange(firstRow, 1, existing, width).clearContent();
-  if (rows.length) sheet.getRange(firstRow, 1, rows.length, width).setValues(rows);
+  if (rows.length) sheet.getRange(firstRow, 1, rows.length, width).setValues(tintinSheetLiteralRows_(rows));
   return rows.length;
 }
 

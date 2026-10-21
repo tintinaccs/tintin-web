@@ -3143,3 +3143,13 @@ Agente: Codex. Esta sección reemplaza únicamente el estado de los pendientes e
 - Google OAuth completo, entrega push física y pago real: NOT_VERIFIED en este ciclo. Las pruebas automatizadas y configuración no equivalen a recepción física o cobro real.
 
 Las colas de trabajo fechadas y los issues antiguos deben contrastarse con esta evidencia y main actual. No ejecutar borrados o devoluciones de stock descritos en colas antiguas: el cierre publicado adoptó ocultación reversible de pedidos de prueba. No se modifica ningún pedido, stock, dirección real ni contraseña durante esta reconciliación.
+
+## 2026-10-21 — Reparación de paridad Sheets solicitada tras auditoría (Codex /root)
+
+Base origin/main958e5eef; rama aislada codex/repair-sheets-authority. La titular confirma que Firestore es autoridad y autoriza reflejar el catálogo vigente en Sheets, corregir env, proteger stock por variante y serializar textos como literales. Se conserva la conciliación mensual1186 y no se alteran datos comerciales de Firestore, pedidos ni permisos como prueba.
+
+PASS_LOCAL:209/209 pruebas de sync/secretos/import/mayoristas/webhook, incluidos14 escenarios nuevos de handler real con dependencias controladas, recuperación duradera, stock agregado/distribuido, concurrencia, fórmulas inyectadas y prioridad de stock canónico frente a purchased histórico. Snapshot mínimo de Firestore incorporado a los fixtures previos que ahora requieren lectura/versionado. Contratos de sincronización y autoridad única aprobados.
+
+Cambios: routeAdmin obtiene env y usa sublotes2; webhook lee stock/opciones actuales y aplica precondición de versión, rechazando total/opciones incompatibles con variantInventory sin modificar productos/inventario parcialmente; proyección I=products.stock+J preserva K=I-J y deja productInventory histórico intacto. Serializador compartido de literales aplicado a identidad/descripciones, pedidos, cuentas/auditoría, historial y participación (también retorno de moderación).
+
+Protección nativa inspeccionada: Cuenta Super Admin protege F18:I18 con restricción solo propietario, pero Rol(K)/Bloqueado(L) están fuera. No se cambian ACL sin validar el usuario/rango actual. Otras protecciones indicadoras C1:F1 no cubren esos campos; restricción precisa no certificada. Código completo desplegado, CI/publicación del candidato y conciliación real permanecen pendientes de evidencia; no heredar PASS del informe anterior.

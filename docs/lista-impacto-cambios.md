@@ -1,3 +1,7 @@
+## 2026-10-21 — Integridad del espejo de Productos y literales de Sheets
+
+Fuentes: sheets-product-sync, sheets-products-webhook y Apps Script ProductosUnificados/AdminParity/Participacion. Admin recupera env y sublotes2; el stock proyectado sigue products.stock conservando fórmulas, y las ediciones agregadas/opciones se rechazan cuando hay inventario por variante, con precondición de versión. Textos externos usan serializador de literales compartido, incluidos historial, espejos administrativos y moderación. No cambia la autoridad Firestore, precios/stock reales ni reglas/permisos; requiere actualizar conjuntamente los tres archivos de Apps Script conservando router y URL.209 regresiones locales y contratos de autoridad aprobados; publicación y paridad real se verifican por separado en CURRENT_STATE.
+
 ## 2026-10-21 — Texto, jerarquía e iconos de la guía
 
 Fuentes: configuración compartida, tutorial público y preview del editor de bienvenida. Un título por paso, texto directo coherente con Catálogo/carrito/checkout, indicador de paso visible e iconos SVG constantes; conserva imágenes/emojis propios, edición, aparición, cuentas y flujo de compra. Compatibiliza sólo copias base anteriores. Cuerpo y acciones legibles con texto largo y móvil horizontal; WELCOME_VERSION conserva la identidad de onboarding. Se verifica normalización real, cuatro recorridos y paridad de preview; dependencias versionadas, CSP, protección y diagnóstico se regeneran desde sus autoridades. No cambia datos ni reactiva cuentas.

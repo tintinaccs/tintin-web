@@ -242,6 +242,7 @@ test('el payload mínimo del canary escribe catálogo e inventario por webhook a
         status: 200, headers: { 'content-type': 'application/json' },
       });
     }
+    if (url.endsWith('/documents/products/CANARY-SHEETS-FIRESTORE')) return new Response('{}', { status: 404 });
     if (url.endsWith('/documents:commit')) {
       writes.push(JSON.parse(init.body));
       return new Response('{}', { status: 200, headers: { 'content-type': 'application/json' } });
