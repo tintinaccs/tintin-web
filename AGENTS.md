@@ -69,6 +69,7 @@ When auditing CRUD, verify only operations the feature genuinely requires: creat
 - Validate untrusted input at the correct trust boundary.
 
 ## Verification
+- Update notices apply to every role, route and device, including installed apps and Checkout: notify only when the currently open document or a client resource it actually loaded changed semantically and requires reloading. New deployments, propagated cache tags, backend-only changes and commercial CRUD (products, collections, prices, inventory, visibility, orders) must not trigger reload notices. Navigation to another document loads its current release normally. Preserve drafts, sessions and carts; never force a reload. Keep this contract covered by watcher tests and generate publication markers from the canonical builder.
 - Never claim completion merely because files were edited.
 - Use targeted verification first and existing repository scripts when available.
 - Run the smallest relevant tests/audits for the affected area; broaden only when impact justifies it.
