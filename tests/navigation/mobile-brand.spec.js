@@ -15,6 +15,9 @@ for (const [width, height] of [[320, 568], [390, 844], [430, 932], [600, 960], [
       const brand = page.locator('#tt-mobile-brand');
       await expect(brand, name).toHaveCount(1);
       await expect(brand, name).toBeVisible();
+      await expect(brand.locator('feFlood'), name).toHaveCSS('flood-color', 'rgb(255, 255, 255)');
+      await expect(brand, name).toHaveCSS('background-image', /linear-gradient/);
+      await expect(brand, name).not.toHaveCSS('background-image', /184,\s*76,\s*114/);
       const image = brand.locator('img');
       await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth === 480 && img.naturalHeight === 600)).toBe(true);
       const geometry = await brand.evaluate(el => {
@@ -55,7 +58,7 @@ test('excluye checkout, acceso, administración y redirecciones; tablet/desktop 
   }
 });
 
-test('la marca blanca sobre rosa enlaza el fondo del contenido, conserva el PNG original y no se duplica', async ({ page }) => {
+test('el encabezado conserva rosa y logo blanco al cambiar contenido, sin duplicar ni alterar el PNG original', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.route('**/__brand-fixture', route => route.fulfill({ contentType: 'text/html', body: fixture('about') }));
   await page.goto('/__brand-fixture');
@@ -73,14 +76,19 @@ test('la marca blanca sobre rosa enlaza el fondo del contenido, conserva el PNG 
   for (const [background, surface, next] of [['#9a2f55', 'light', 'rgb(154, 47, 85)'], ['#fff0f7', 'pink', 'rgb(255, 240, 247)']]) {
     await page.locator('.tt-page-hero').evaluate((el, color) => el.style.setProperty('background', color, 'important'), background);
     await expect(brand).toHaveAttribute('data-brand-surface', surface);
-    await expect(brand.locator('feFlood')).toHaveCSS('flood-color', 'rgb(255, 255, 255)');
     await expect.poll(() => brand.evaluate(el => el.style.getPropertyValue('--tt-mobile-brand-next'))).toBe(next);
+    await expect(brand.locator('feFlood')).toHaveCSS('flood-color', 'rgb(255, 255, 255)');
+    expect(await brand.evaluate(el => getComputedStyle(el).getPropertyValue('--tt-mobile-brand-bg').trim().toLowerCase())).toBe('#f8aaca');
     await expect(brand).toHaveCSS('background-image', /linear-gradient/);
+    await expect(brand).not.toHaveCSS('background-image', /184,\s*76,\s*114/);
+    await expect(brand).toHaveCSS('border-bottom-width', '0px');
+    await expect(brand).toHaveCSS('backdrop-filter', /blur\(18px\)/);
   }
   await page.locator('.tt-page-hero').evaluate(el => { el.style.removeProperty('background'); el.id = 'brand-test-content'; });
   await page.addStyleTag({ content: 'html:root body #brand-test-content { background:#fff0f7!important } @media (orientation:landscape) { html:root body #brand-test-content { background:#9a2f55!important } }' });
   await page.setViewportSize({ width: 667, height: 375 });
   await expect(brand).toHaveAttribute('data-brand-surface', 'light');
+  await expect(brand.locator('feFlood')).toHaveCSS('flood-color', 'rgb(255, 255, 255)');
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(brand).toHaveAttribute('data-brand-surface', 'pink');
   await page.setViewportSize({ width: 1024, height: 768 });

@@ -1,3 +1,7 @@
+## 2026-10-20 — Contrato rosa/blanco consistente en encabezados
+
+Sólo los logos de los encabezados públicos desktop/tablet conservan tinta blanca sobre el nuevo fondo rosa frente al tinte global; src/alfa y recorte originales no cambian. El contrato móvil deja de exigir el violeta rechazado por el titular y exige blanco, rosa, degradado, blur y ausencia de borde duro, conservando imagen, geometría, foco y unicidad. El fixture desktop/tablet carga el tinte real para impedir un PASS con la imagen sin runtime. Footer y fotos quedan fuera de la regla. Sistema de superficies4 y bundle canónico; marca/shell3 y demás referencias sin nuevos bumps.
+
 ## 2026-10-20 — Reconciliar encabezados y editor con revisión global
 
 PR1180 integra main dc6da947 sin perder observación de raíz, contraste de compra ni iconos. Alternancia incluye selección como bloque hermano y usa una URL inédita para los bytes combinados. Se alinea la prueba de marca con el logo blanco sobre rosa solicitado y se verifica su unión al contenido. Se preservan los demás controles y las pruebas nuevas del editor autenticado. Derivados y plan regenerados desde autoridades; no cambia datos, Rules ni dominios. Evidencia en CURRENT_STATE.

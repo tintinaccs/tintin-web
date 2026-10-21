@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "dc6da947a4d0d88de4dc7f1b353faa5982c242f7",
-  "reason": "Reconciliar PR1180 con revisión global e iconos, preservar navegación autenticada y validar marca blanca sobre encabezado rosa.",
+  "reason": "Preservar main y ambos contratos de encabezados rosa blanco y flujo de login",
   "files": [
     {
       "path": ".github/workflows/auditar-tintin.yml",
@@ -11,47 +11,47 @@
     {
       "path": "404.html",
       "oldHash": "b9ab32e7c9d7ef2848d20afffcd46df8c345145c228a094af07d0677697e93e9",
-      "newHash": "646f06577040c8368bd1fcd3a72412edacde0a9ed1b9f1aacc23337ae786183b"
+      "newHash": "3615f8a4f00d07d8e6b516d526a0f9cdd22c2f1e663ac228eb5b05709217de2b"
     },
     {
       "path": "about.html",
       "oldHash": "b57f9cdf10dc3edda18853f9dd89761970b7f0b8ffb59aa59beb4dfb48638415",
-      "newHash": "2d727d05ade3c9e8672c617dc9bc53df97902474821816974af348e4e309165b"
+      "newHash": "d31dea6e75e53f66f7eb22b3b7356b65b1487edce5673530659bb8acf19d1a3c"
     },
     {
       "path": "admin-images.html",
       "oldHash": "1e0d0bd562162f46a62bdd02b16592968735da282200f45910188b626d5ef389",
-      "newHash": "925ca5d559a0837008443cf4779c0b62178e14013b90ac9ac2ed5eee056daf60"
+      "newHash": "e78e987cd8c0aac5188b03abb58aba5262f67d08fdcc29eef0a7a665ca8b8fcf"
     },
     {
       "path": "admin.html",
       "oldHash": "489bbb2e2216f17accb5b230acc6f36ee062596e7698763ee02fa254a796c94a",
-      "newHash": "b73015ca477bb44312c4cfe592b53574ec7988c35d6d0da083719d105fc6d618"
+      "newHash": "d355679d2a41eda5648f97844916c1ae5286dcba13359d39a6b943b19eebc774"
     },
     {
       "path": "cambios-devoluciones.html",
       "oldHash": "d711036d19f9021193c7e4dcbb4c07be5974e60a32c4fcd211d5561d580a374b",
-      "newHash": "d6ce8787be47f536a185ab52ef5f769c2fc5fa146eaaa3289829859d1411f9ee"
+      "newHash": "a8c87cb7f23bc8f728469d0700a2f5b205454d5bf5070ef470b98638e52f7f78"
     },
     {
       "path": "catalogo.html",
       "oldHash": "6caee997ce0d9d15c885edd91aca8793741042fda660fc78b9e5c58d44449eef",
-      "newHash": "ef965318d99a4b6a5d6f4aae0788e18f6a0ed6e46ea342ed9e925c26e2371398"
+      "newHash": "35094e70abfef8d5dced8028fd383d75438a95dc111b0b3fe38882913e553aad"
     },
     {
       "path": "checkout.html",
       "oldHash": "bfc7ee31bebf087ca278633b1fd2c591507a542da4e042bbe6d91993075db7a6",
-      "newHash": "b199f0297a0af354f63fb2f5df4791e85e560ef02d0552c5e511972b8cb6fd95"
+      "newHash": "4c26b5af41174c2bb3c1ba8cb0430c8a5071ac7aaf2324a9cd4e8d2c3c51a498"
     },
     {
       "path": "collections.html",
       "oldHash": "b96208ade9fe84e4abd7b0fcc4d76c4996f35cff9fbc3e7af702d80a628316be",
-      "newHash": "378046bc6e93e04f4ffeeeff4fe8ebab1b33e5e0fc6affbb812740c26df92a1a"
+      "newHash": "eebae5997fb6102df1cb2979370b622ae32066c7f0c0bb9a82fa3a1b9f01c395"
     },
     {
       "path": "contact.html",
       "oldHash": "70bdb5dbe78490cbbfd89ca26b1de193581d9c8653cccc278242237e898176c0",
-      "newHash": "db10f46c227c9c247cf0ab75a690cf3a2443947e201481af823bb3b035c186a8"
+      "newHash": "d604bd45b10096f375dca4bf3bd8dae36d761babcb39ca10b54f08c21eb06fe6"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -61,17 +61,17 @@
     {
       "path": "css/theme/sistema-superficies-tintin.css",
       "oldHash": "f56ef08bee8eb0197b33765fad014b3ee1130aa43c016c5aa5b9ccca9b218afe",
-      "newHash": "c34826310d8739290990fcc13c2cceb16b27664bc1523f4439e101e749327ecd"
+      "newHash": "6803623806ae2c8ebb4f9853036ddf0c8700b004fa40336781b84368d8a25d2a"
     },
     {
       "path": "envios.html",
       "oldHash": "30ff4ac3f81234eb0ad1be6102d48bb480009b36196a9bb7a81e08bc7f23cef1",
-      "newHash": "b6fc940a605b2c08f6630ed05676996a9428ecf9cb84aa8e2bb5e659f617aa55"
+      "newHash": "b94bec135f88ddd4ea8bc746d079bc37ad8ee68bc033845dd55db0305fa419de"
     },
     {
       "path": "index.html",
       "oldHash": "b89844e2a4f9d277bbb8c49507239600bd11779ec7f11c8edd386dcf40c42662",
-      "newHash": "b00f16a7a98c61531f540ea9e74acc706fcfa0345d595917c21d8c71426d6281"
+      "newHash": "e89ee8949af1d3b6c6e044db287cd9f5604ac5341e6a3fa0336feb51550920f3"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
@@ -101,17 +101,17 @@
     {
       "path": "login.html",
       "oldHash": "85af066d83d68a2f5f6ed2ff6fdb2cca2a2543ae6830b402e8769b5c600ae731",
-      "newHash": "ba057643babe8766eef537b39634a9582bce590e2866d233b38a04b17eb09a4a"
+      "newHash": "cc8ad1dde3eb326bb14575a611f9b9dab4ed64892497961fea94264c11bd9e0a"
     },
     {
       "path": "nosotros.html",
       "oldHash": "693bb9a9cf2af3331f74b2f554808765a8e9141b35932fd43ddd37180151cf2b",
-      "newHash": "2c5e8eaf2e14d6f81f8e6ee25c1fd35b538cb5d3db9302dad3886cb6be60fe5e"
+      "newHash": "cc2854734ed9ad9a4be3d9fcdb7810502b04210d92ba63ff2735c891ddeccc68"
     },
     {
       "path": "perfil.html",
       "oldHash": "5e7e9bdcc2ec2eba31400f308fd534ee3cec42446113313d1bc754cf8017a09d",
-      "newHash": "eb0a4c7bb2cf9b55324d10571f192d28a738fc16d8a4e25556814e8b58b48c30"
+      "newHash": "2e9dd0450bd5c741fbb3997c9e3481b41326c79595396ab3580fe03631972a10"
     },
     {
       "path": "playwright.config.js",
@@ -121,22 +121,22 @@
     {
       "path": "preguntas-frecuentes.html",
       "oldHash": "9ccaa328353224e5158817b55a0211506021720fd8debbfe509822141034f006",
-      "newHash": "aa2419d6f2771d3b43bc60e3fdd61b0495988e8d1033153116b0692dbd0576e8"
+      "newHash": "9179fcb49685bc3a71cc677dfcd0aa15f8ff018b30b3261116fc8696cee779fa"
     },
     {
       "path": "privacidad.html",
       "oldHash": "f3a138bd57168d02a10cbac7ea6cc9c0af43d53eee45541f606a173f5b099e12",
-      "newHash": "d0e52e3f5539f4cdc9a3202a9e65964e53e314287c7eebc4170685798cb40635"
+      "newHash": "3361bbfc7fe0ddddc0dbd0c378726cbdec3850881a54a44e17dc82643b29eb73"
     },
     {
       "path": "product.html",
       "oldHash": "65772a6d4c052f13f5cb105f544a1f4bd2fa26acdbc7f56d8dc0e2f24c465021",
-      "newHash": "4dbbf3938c1103145a4bdb1f0a4c694aa8a35df9198c7a1ff87235e946fd4479"
+      "newHash": "81bcfdad318097577cbd9345104600a7dbfa115a1f7de3f319c5e0d78252243a"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "c581480b39a442f2561a7fa8e36147e35fd03e4200c643a381c036ad2295633b",
-      "newHash": "a99c5038567de5e08ae5895f41ca7d44bd2d8dde78f175e04689171629573cc8"
+      "newHash": "e44c7cf0e2b96f9f3f94e02ccbf4c66a15f097f6ae05f1609c214d8825458ca3"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
@@ -146,7 +146,7 @@
     {
       "path": "terminos.html",
       "oldHash": "4c38dfcbba115d67bbec76ed9a9478ec4c68b988a1e0fa4900081e2ca204a8cb",
-      "newHash": "38cf2f5cc6169a2a8718ea57169d8a2d071909180c874d2557cb2706ca88c14d"
+      "newHash": "2674954b3fc195ed0d3007dcce931f971d9b8267bf1cd800ab6161457f8a543a"
     }
   ],
   "affectedRecords": [
