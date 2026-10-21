@@ -541,3 +541,5 @@ Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187
 Avance final1180: orden visual compartido entre galería y selectores, sin modificar inventario/fotos; diagnóstico Auth demo al salir; regresiones y artefactos canónicos sobre main6033.
 
 2026-10-21: selector de color de ficha con nombre visible, muestra, marca seleccionada, teclado y estado Agotado; fuente product-maintenance.css y fallback vigente, caché transitiva y artefactos canónicos. Datos/comercio conservados.
+
+2026-10-21: sección de agregar dirección en Perfil. HTML/campos agrupados y CSS responsive específico, mapa y acciones adaptables, foco visible y estados GPS conservados; libreta/IDs/permisos/guardado existentes. Validación12 viewports y giro de tablet, render de perfil y datos; CSS/caché/CSP/diagnóstico/plan desde autoridades canónicas.
