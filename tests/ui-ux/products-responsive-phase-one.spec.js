@@ -40,6 +40,12 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
  test(`editor minimal: botones, stock y tarjetas accesibles ${width}x${height}`,async({page})=>{
   await openEditor(page,width,height);
   const card=page.locator('#prod-form-card');
+  const bounds=await card.boundingBox();
+  expect(bounds.x).toBe(0);expect(bounds.y).toBe(0);expect(bounds.width).toBe(width);expect(bounds.height).toBe(height);
+  const floating=page.locator('.tt-product-editor-actions');
+  await expect(floating).toHaveCSS('position','absolute');
+  await expect(floating).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
+  await expect(floating.locator('button')).toHaveCount(2);
   await page.evaluate(()=>{
    const select=document.getElementById('prod-category');for(const [value,title]of [['relojes','Relojes'],['anillos','Anillos'],['collares','Collares']]){const option=document.createElement('option');option.value=value;option.textContent=title;select.append(option);}
   });
@@ -430,4 +436,54 @@ test('abrir conserva producto oculto y visibilidad manual independiente de la ca
  await page.getByRole('button',{name:'Stock: 0 unidades',exact:true}).click();
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await expect(page.locator('.tt-editor-stock-status')).toHaveText('Sin stock');
+});
+
+for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]])test(`editor ocupa el área bajo Productos sin barras anidadas ${width}x${height}`,async({page})=>{
+ await openEditor(page,width,height,false,async()=>{
+  await page.evaluate(()=>{const header=document.createElement('header');header.className='adm-topbar';header.textContent='Productos';header.style.cssText='position:fixed;inset:0 0 auto;height:56px;box-sizing:border-box';document.body.prepend(header);});
+ });
+ const editor=page.locator('#prod-form-card');
+ const header=await page.locator('.adm-topbar').boundingBox(),bounds=await editor.boundingBox();
+ expect(bounds.x).toBe(0);expect(bounds.y).toBe(header.y+header.height);expect(bounds.width).toBe(width);expect(bounds.height).toBe(height-bounds.y);
+ await expect(editor).toHaveCSS('border-radius','0px');
+ await expect(editor).toHaveAttribute('role','dialog');
+ await expect(editor).toHaveAttribute('aria-modal','true');
+ await editor.locator('.tt-product-editor-actions button').last().focus();await page.keyboard.press('Tab');
+ await expect(editor.locator('.adm-card-head button')).toBeFocused();
+ await expect(editor.locator('.tt-editor-preview')).toHaveCSS('overflow','visible');
+ const footer=editor.locator('.tt-product-editor-actions'),buttons=footer.locator('button');
+ await expect(buttons).toHaveCount(2);
+ const body=editor.locator('.adm-card-body');await body.evaluate(el=>el.scrollTop=el.scrollHeight);
+ for(const button of await buttons.all()){
+  await expect(button).toBeInViewport();
+  expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===el;})).toBe(true);
+ }
+ await expect(footer).toHaveCSS('border-top-width','0px');
+ if(width===390||width===1440)await page.screenshot({path:test.info().outputPath(`editor-full-${width}.png`)});
+ await editor.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(editor).toBeHidden();
+ await expect(page.locator('[data-action="product-new"]')).toBeFocused();
+});
+
+for(const [width,height] of [[320,700],[768,1024],[1440,900]])test(`fotos por color ordenadas y editables ${width}x${height}`,async({page})=>{
+ await openEditor(page,width,height,true);
+ await page.evaluate(async()=>{
+  const load=url=>import(new URL(url,location.origin).href);
+  const {attachColorPhotos}=await load('/js/admin/products/fotos-por-color.js');
+  const {attachImageUploadWidget}=await load('/js/components/images/carga-imagenes.js');
+  const main=document.getElementById('prod-imageUrl'),extra=document.getElementById('prod-images-extra'),variants=document.getElementById('prod-variants-text');
+  const container=document.createElement('div');container.id='prod-color-photos';variants.parentElement.after(container);
+  main.value='https://img.test/rosa.webp';extra.value='https://img.test/rojo.webp';variants.value='Color: rosa, rojo';
+  window.__colorPhotos=attachColorPhotos({container:document.getElementById('prod-color-photos'),product:{imageUrl:main.value,imagesExtra:[extra.value],variants:{Color:['rosa','rojo']},variantMedia:[{Color:'rosa',imageUrl:main.value},{Color:'rojo',imageUrl:extra.value}]},mainInput:main,imagesInput:extra,variantsInput:variants,attachUpload:attachImageUploadWidget,openLibrary:async()=>'https://img.test/biblioteca.webp'});
+ });
+ await page.locator('#prod-editor-section').selectOption('photos');
+ const colors=page.locator('#prod-color-photos');
+ await expect(colors.locator('fieldset')).toHaveCount(2);
+ await colors.getByRole('checkbox',{name:'Asignar foto 2 a rosa',exact:true}).check();
+ await colors.getByLabel('Color personalizado de rosa',{exact:true}).fill('#cc99dd');
+ const serialized=await page.evaluate(()=>window.__colorPhotos.serialize());
+ expect(serialized.find(row=>row.Color==='rosa')).toMatchObject({colorHex:'#cc99dd',imageUrls:['https://img.test/rosa.webp','https://img.test/rojo.webp']});
+ for(const box of await colors.locator('fieldset,input,select,button,img').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).map(el=>el.getBoundingClientRect().toJSON()))){expect(box.x).toBeGreaterThanOrEqual(0);expect(box.right).toBeLessThanOrEqual(width);}
+ await colors.getByRole('button',{name:'Elegir foto de biblioteca para rojo',exact:true}).click();
+ await expect(colors.getByRole('checkbox',{name:'Asignar foto 3 a rojo',exact:true})).toBeChecked();
+ expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
 });

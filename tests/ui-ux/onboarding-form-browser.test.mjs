@@ -25,6 +25,8 @@ test('Últimos datos mantiene una columna, foco continuo y errores junto al camp
     await page.route('**/*', route => route.abort());
     await page.setContent(html);
     const ids = ['login-profile-first-name','login-profile-phone'];
+    assert.equal(await page.locator('#login-profile-phone').getAttribute('placeholder'), '0912 345 678');
+    assert.equal(await page.locator('#login-profile-phone').inputValue(), '', 'El ejemplo no debe ser un valor guardado');
     for (const [width,height] of sizes) {
       await page.setViewportSize({width,height});
       const geometry = await page.evaluate(ids => {
@@ -37,6 +39,9 @@ test('Últimos datos mantiene una columna, foco continuo y errores junto al camp
         assert.ok(field.w > 80 && field.x >= geometry.form.x-2 && field.x+field.w <= geometry.form.x+geometry.form.w+2, `campo comprimido/fuera a ${width}`);
         if(index) assert.ok(field.y >= geometry.fields[index-1].bottom, `orden visual roto a ${width}`);
       });
+      const presentation = await page.locator('#login-profile-phone').evaluate(el => ({placeholder:getComputedStyle(el,'::placeholder').color,text:getComputedStyle(el).color,opacity:Number(getComputedStyle(el,'::placeholder').opacity),radius:parseFloat(getComputedStyle(el.closest('.login-outlined-field')).borderRadius),labelRadius:parseFloat(getComputedStyle(el.closest('.login-outlined-field').querySelector('label')).borderRadius)}));
+      assert.notEqual(presentation.placeholder, presentation.text, 'El ejemplo debe distinguirse del texto ingresado');
+      assert.ok(presentation.opacity < 1 && presentation.radius >= 20 && presentation.labelRadius > 0, `ejemplo y bordes a ${width}`);
       await page.locator('#login-profile-first-name').focus();
       for (const id of ids.slice(1)) {
         await page.keyboard.press('Tab');

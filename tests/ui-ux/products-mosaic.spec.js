@@ -2,7 +2,7 @@
 const {test,expect}=require('@playwright/test');
 const {mockRuntime}=require('./helpers/admin-commerce-fixture.cjs');
 
-for(const [width,height,columns,touch] of [[320,700,2,true],[390,844,2,true],[844,390,2,true],[768,1024,2,true],[820,1180,2,true],[1024,768,2,true],[1366,1024,2,true],[1280,800,3,false],[1440,900,3,false]]){
+for(const [width,height,columns,touch] of [[320,700,1,true],[390,844,1,true],[844,390,2,true],[768,1024,2,true],[820,1180,2,true],[1024,768,2,true],[1366,1024,2,true],[1280,800,3,false],[1440,900,3,false]]){
  test(`mosaico Productos y foto grande sin desborde ${width}x${height}`,async({browser})=>{
   const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'});
   try{
@@ -11,7 +11,7 @@ for(const [width,height,columns,touch] of [[320,700,2,true],[390,844,2,true],[84
    const cards=page.locator('#tt-commerce-products tbody tr');await expect(cards).toHaveCount(3);
    const layout=await cards.evaluateAll(nodes=>nodes.map(el=>{const r=el.getBoundingClientRect(),image=el.querySelector('.tt-commerce-thumb').getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,width:r.width,image:image.width};}));
    expect(new Set(layout.slice(0,columns).map(r=>Math.round(r.top))).size).toBe(1);
-   if(columns===2)expect(layout[2].top).toBeGreaterThan(layout[0].top+20);
+   if(columns<3)expect(layout[columns].top).toBeGreaterThan(layout[0].top+20);
    for(const row of layout){expect(row.left).toBeGreaterThanOrEqual(0);expect(row.right).toBeLessThanOrEqual(width+1);expect(row.image).toBeGreaterThan(row.width*.7);}
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
    await expect(page.locator('tr[data-id="p-aro"]')).toContainText('Inactivo');

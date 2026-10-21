@@ -18,9 +18,9 @@ const TIENDA_VERSION = 'tintin-20261020-domain-cutover-color-order-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261017-domain-cutover-1';
 const LOADER_VERSION = 'tintin-20261021-welcome-guide-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
-const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261021-iconos-rosa-1';
-const NAV_ENTRY_VERSION = 'tintin-20261021-iconos-rosa-1';
+const PANEL_COMPAT_VERSION = 'tintin-20261021-workspace-account-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261021-workspace-account-1';
+const NAV_ENTRY_VERSION = 'tintin-20261021-workspace-account-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261017-domain-cutover-1';
@@ -196,7 +196,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-login-maintenance=\"1\"",
       "css/pages/login/login-maintenance.css",
-      "tintin-20260925-contrast-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1"
+      "tintin-20261021-workspace-account-1"
     ],
     [
       "data-tt-login-fluid=\"1\"",
@@ -211,7 +211,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-login-onboarding-layout=\"1\"",
       "css/pages/login/login-onboarding-form-layout.css",
-      "tintin-20261016-outlined-fields-2"
+      "tintin-20261021-workspace-account-1"
     ]
   ],
   "admin.html": [
