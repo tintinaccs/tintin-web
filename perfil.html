@@ -8,12 +8,12 @@
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20261021-welcome-guide-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261021-domain-cutover-color-selector-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261021-iconos-rosa-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
-  <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261020-iconos-globales-1">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261020-iconos-globales-1">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=tintin-20261020-iconos-globales-1">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets-tintin/images/admin/apple-touch-icon.png?v=tintin-20261020-push-return-1">
+  <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261021-iconos-rosa-1">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261021-iconos-rosa-1">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=tintin-20261021-iconos-rosa-1">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets-tintin/images/admin/apple-touch-icon.png?v=tintin-20261021-iconos-rosa-1">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#F8AACA">
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
@@ -21,7 +21,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261021-domain-cutover-color-selector-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261021-iconos-rosa-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
   <link rel="canonical" href="https://tintinaccs.com/perfil.html" />
@@ -37,12 +37,12 @@
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-palette-20261014-1">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261019-footer-spacing-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261008-producto-superficies-1-palette-20261014-1">
+  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261021-location-profile-layout-2">
   <link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-2" integrity="sha256-ugti1XvT9fCYo/vrONAf0r5FKu/U8H04PwZikxySCts=" crossorigin="anonymous" />
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-footer-gradient-20261016-1">
   <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2">
   <script>document.documentElement.classList.add('profile-auth-pending');</script>
-  <link rel="stylesheet" href="css/pages/perfil.css?v=tintin-20261016-story-b349c08426">
+  <link rel="stylesheet" href="css/pages/perfil.css?v=tintin-20261021-profile-address-layout-2">
   <script type="module" src="js/quality/estabilidad-final-publica.js?v=tintin-20261020-domain-cutover-consolidated-1"></script>
   <script id="tt-section-flow-runtime" src="js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1" defer></script>
   <!-- Estructura pública disponible desde el primer render -->
@@ -136,29 +136,40 @@
       </div>
     </div>
   </div>
-<div class="perfil-card">
+<div class="perfil-card tt-profile-address-card">
     <div class="perfil-body">
       <div class="perfil-section-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Mis direcciones guardadas (hasta 5)</div>
       <div id="perfil-location-content"></div>
       <button type="button" class="perfil-btn perfil-btn-outline" id="btn-cambiar-ubicacion" style="margin-top:12px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Agregar dirección</button>
       <div id="perfil-location-editor" hidden>
-        <label class="perfil-label" for="perfil-location-search">Buscá tu dirección o marcala en el mapa</label>
+        <div class="tt-profile-address-intro">
+          <h3>Nueva dirección</h3>
+          <p>Buscá un lugar o marcá el punto de entrega en el mapa.</p>
+        </div>
         <div class="tt-map-block tt-profile-location-map">
-          <p class="tt-map-tip">Buscá una calle o punto de referencia, usá tu ubicación actual o tocá el lugar exacto.</p>
-          <div class="tt-map-search">
-          <input type="text" class="perfil-input" id="perfil-location-search" placeholder="Calle, barrio o punto de referencia…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="perfil-location-results" />
-            <div class="tt-map-results" id="perfil-location-results" role="listbox"></div>
+          <div class="perfil-field tt-profile-address-search">
+            <label class="perfil-label" for="perfil-location-search">Buscar en el mapa</label>
+            <div class="tt-map-search">
+              <input type="text" class="perfil-input" id="perfil-location-search" placeholder="Calle, barrio o punto de referencia…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="perfil-location-results" />
+              <div class="tt-map-results" id="perfil-location-results" role="listbox"></div>
+            </div>
           </div>
-          <label class="perfil-label" for="perfil-location-name">Nombre de esta dirección</label>
-          <input class="perfil-input" id="perfil-location-name" placeholder="Casa, trabajo…" maxlength="60" />
-          <label class="perfil-label" for="perfil-location-address">Dirección y referencia (opcional)</label>
-          <input class="perfil-input" id="perfil-location-address" placeholder="Calle, número o referencia para llegar" maxlength="240" />
-          <button type="button" class="tt-map-locate" id="perfil-location-locate">📍 Usar mi ubicación actual</button>
-          <div class="tt-map-canvas" id="perfil-location-map"></div>
+          <div class="tt-profile-address-fields">
+            <div class="perfil-field">
+              <label class="perfil-label" for="perfil-location-name">Nombre de la dirección</label>
+              <input class="perfil-input" id="perfil-location-name" placeholder="Casa, trabajo…" maxlength="60" />
+            </div>
+            <div class="perfil-field">
+              <label class="perfil-label" for="perfil-location-address">Dirección y referencia <span>(opcional)</span></label>
+              <input class="perfil-input" id="perfil-location-address" placeholder="Calle, número o referencia" maxlength="240" />
+            </div>
+          </div>
+          <button type="button" class="tt-map-locate" id="perfil-location-locate">Usar mi ubicación actual</button>
+          <div class="tt-profile-address-map"><div class="tt-map-canvas" id="perfil-location-map"></div></div>
           <p class="tt-map-coords tt-map-coords-missing" id="perfil-location-selected" aria-live="polite">Todavía no marcaste tu ubicación</p>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-          <button type="button" class="perfil-btn" id="btn-guardar-ubicacion">Guardar ubicación</button>
+        <div class="tt-profile-address-actions">
+          <button type="button" class="perfil-btn perfil-btn-primary" id="btn-guardar-ubicacion" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Guardar dirección</button>
           <button type="button" class="perfil-btn perfil-btn-outline" id="btn-cancelar-ubicacion">Cancelar</button>
         </div>
       </div>
@@ -264,7 +275,7 @@ import {
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20261017-domain-cutover-1";
 import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20261015-images-1";
-import { createLocationMap, renderSavedMapPreviews } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261021-location-recovery-1";
+import { createLocationMap, renderSavedMapPreviews } from "./js/components/location/mapa-ubicacion.js?v=tintin-20261021-location-profile-layout-3";
 import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1";
 import { MAX_SAVED_LOCATIONS, readAddressBook, addressBookPatch, addAddress, removeAddress, makePrimary } from "./js/pages/profile/libreta-direcciones.mjs?v=tintin-20261015-images-1";
 import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1-ui-fixes-20261014-1-admin-live-20261016-1";
@@ -564,6 +575,7 @@ async function loadProfile(user, attempt = 0) {
       ? `📍 ${place.name || place.address || 'Ubicación marcada'} · ${Number(place.lat).toFixed(5)}, ${Number(place.lng).toFixed(5)}`
       : 'Todavía no marcaste tu ubicación';
     locationSelected.classList.toggle('tt-map-coords-missing', !valid);
+    document.getElementById('btn-guardar-ubicacion').disabled = !valid;
     document.getElementById('perfil-location-address').value = place?.address || '';
   };
   const ensureLocationMap = async () => {
@@ -653,10 +665,16 @@ async function loadProfile(user, attempt = 0) {
     }
     try {
       await persistAddressBook(added.list);
+      if (!profileConfirmed || generation !== profileGeneration || auth.currentUser?.uid !== user.uid) return;
       closeLocationEditor();
       toast('✅ Dirección guardada');
     } catch (err) { toast('❌ Error al guardar la dirección'); }
-    finally { window.TintinReleaseProfileButton?.('btn-guardar-ubicacion'); }
+    finally {
+      if (profileConfirmed && generation === profileGeneration && auth.currentUser?.uid === user.uid) {
+        window.TintinReleaseProfileButton?.('btn-guardar-ubicacion');
+        document.getElementById('btn-guardar-ubicacion').disabled = !toSavedLocation(locationMap?.getLocation() || {});
+      }
+    }
   };
 
   // Save

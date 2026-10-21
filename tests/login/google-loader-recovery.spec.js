@@ -25,7 +25,7 @@ function getRedirectResult(){const selected=sessionStorage.getItem('fixture-sele
 ${redirectInit}
 const layer=document.createElement('div');layer.id='auth-test-overlay';layer.hidden=true;layer.textContent='Abriendo Google';layer.style.cssText='position:fixed;inset:0;background:#F8AACA;z-index:999999';document.body.appendChild(layer);
 window.TintinLoader={show(){layer.hidden=false;},hide(){layer.hidden=true;},beginWait(){},endWait(){},setText(){}};
-function signInWithPopup(){window.__calls.popup++;if(window.__popupMode==='native-close'){window.open('/__/auth/handler','fixtureGoogle','width=500,height=600,toolbar=no');return new Promise(()=>{});}if(window.__popupMode==='success')return Promise.resolve({user:{uid:'isolated-popup'}});if(window.__popupMode==='pending')return new Promise(resolve=>{window.__resolvePopup=resolve;});return Promise.reject({code:window.__popupMode==='blocked'?'auth/popup-blocked':window.__popupMode});}
+function signInWithPopup(){window.__calls.popup++;if(window.__popupMode==='native-close'){window.open('/__/auth/handler','fixtureGoogle','width=500,height=600,toolbar=no');return new Promise((_,reject)=>{window.__rejectPopup=reject;});}if(window.__popupMode==='success')return Promise.resolve({user:{uid:'isolated-popup'}});if(window.__popupMode==='pending')return new Promise(resolve=>{window.__resolvePopup=resolve;});return Promise.reject({code:window.__popupMode==='blocked'?'auth/popup-blocked':window.__popupMode});}
 function signInWithRedirect(){window.__calls.redirect++;if(window.__redirectMode==='error')return Promise.reject({code:'auth/network-request-failed'});if(window.__redirectMode==='navigate')location.assign('/google-chooser-fixture');return new Promise(()=>{});}
 function finishGoogleLogin(){window.__calls.finish++;if(window.__profileFails)return Promise.reject({code:'profile/deadline'});window.TintinLoader.hide();const status=document.createElement('p');status.id='fixture-confirmed';status.textContent='Credencial de prueba confirmada';document.body.appendChild(status);return Promise.resolve();}
 function googleIdleLabel(){return 'Continuar con Google';}
@@ -135,6 +135,7 @@ test(`Google solicita popup y cerrar recupera el login · ${width}x${height}`, a
   const popup = await opened;
   expect(await page.evaluate(()=>window.__popupFeatures)).toMatch(/(?:^|,)popup=yes(?:,|$)/);
   await popup.close();
+  await page.evaluate(()=>window.__rejectPopup({code:'auth/popup-closed-by-user'}));
   await page.clock.runFor(500);
   await expect(page.locator('#btn-google')).toBeEnabled();
   await expect(page.locator('#auth-test-overlay')).toBeHidden();
@@ -143,6 +144,16 @@ test(`Google solicita popup y cerrar recupera el login · ${width}x${height}`, a
   expect(await page.evaluate(() => window.__calls.finish)).toBe(0);
 });
 }
+
+test('Firebase sin respuesta recupera la interfaz por plazo sin inventar un cierre',async({page})=>{
+  await load(page,390);
+  await page.evaluate(()=>{window.__popupMode='pending';});
+  await page.locator('#btn-google').click();
+  await page.clock.runFor(120001);
+  await expect(page.locator('#btn-google')).toBeEnabled();
+  await expect(page.locator('#login-error')).toHaveText('auth/popup-timeout');
+  expect(await page.evaluate(()=>window.__calls.finish)).toBe(0);
+});
 
 test('un plazo de perfil agotado conserva Auth y devuelve controles sin culpar al selector Google',async({page})=>{
   await load(page,768);

@@ -22,6 +22,7 @@ export function isConfirmableLocation(saved) {
     saved &&
     typeof saved.lat === 'number' && Number.isFinite(saved.lat) &&
     typeof saved.lng === 'number' && Number.isFinite(saved.lng) &&
+    Math.abs(saved.lat) <= 90 && Math.abs(saved.lng) <= 180 &&
     String(saved.name || '').trim()
   );
 }

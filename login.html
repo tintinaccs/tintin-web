@@ -8,12 +8,12 @@
   <script defer src="js/components/color/logotipo-marca.js?v=tintin-20261008-producto-superficies-1-logos-bottom-20261015-1-footer-transparente-20261015-1-footer-opuesto-20261015-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20261021-welcome-guide-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20261021-domain-cutover-color-selector-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20261021-iconos-rosa-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
-  <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261020-iconos-globales-1">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261020-iconos-globales-1">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=tintin-20261020-iconos-globales-1">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets-tintin/images/admin/apple-touch-icon.png?v=tintin-20261020-push-return-1">
+  <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico?v=tintin-20261021-iconos-rosa-1">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=tintin-20261021-iconos-rosa-1">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=tintin-20261021-iconos-rosa-1">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets-tintin/images/admin/apple-touch-icon.png?v=tintin-20261021-iconos-rosa-1">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#F8AACA">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261021-domain-cutover-color-selector-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20261021-iconos-rosa-1">
   <link rel="preconnect" href="https://www.google.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -43,7 +43,7 @@
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20261019-footer-spacing-2">
   <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260906-login-mode-toggle-1-brand-20261004-1-owner-pink-20261004-1-first-render-merge-20261010-1-palette-20261014-1">
   <link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css?v=leaflet-1.9.4-tintin-2" integrity="sha256-ugti1XvT9fCYo/vrONAf0r5FKu/U8H04PwZikxySCts=" crossorigin="anonymous" />
-  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261008-producto-superficies-1-palette-20261014-1">
+  <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20261021-location-profile-layout-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1-footer-gradient-20261016-1">
   <link rel="stylesheet" href="css/theme/sistema-superficies-tintin.css?v=tintin-20261020-domain-cutover-consolidated-2">
@@ -206,7 +206,7 @@ import {
 import { findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
-import { waitForGooglePopup } from "./js/core/auth/espera-popup-google.mjs?v=tintin-20261021-google-popup-1";
+import { waitForGooglePopup } from "./js/core/auth/espera-popup-google.mjs?v=tintin-20261021-google-popup-confirmation-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261017-domain-cutover-1";
 import { clearProfileGateCache, consumeBlockedEmail } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261017-domain-cutover-1";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1";
@@ -356,9 +356,9 @@ function errMsg(code, email = '') {
     return accountProblemHtml(safeEmail) + emailRecovery;
   }
   const msgs = {
-    "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
+    "auth/popup-closed-by-user":      "No se completó el ingreso con Google. Podés volver a intentar o usar tu correo.",
     "auth/popup-timeout":             "Google no terminó de responder. Podés volver a intentar el ingreso o usar tu correo.",
-    "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
+    "auth/cancelled-popup-request":   "El intento de ingreso con Google se interrumpió. Podés volver a intentar.",
     "auth/popup-blocked":             "El navegador bloqueó la ventana de Google — permití ventanas emergentes para este sitio e intentá de nuevo.",
     "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo.",
     "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo.",
@@ -991,9 +991,9 @@ subscribeSession(async snapshot => {
   }
 });
 
-// GOOGLE — el selector se abre en esta misma pestaña. El proxy /__/auth/
-// conserva el origen de Firebase al volver; no dependemos de una ventana
-// emergente, su foco ni el sondeo de window.closed del SDK.
+// GOOGLE — abrir el selector desde el clic y dejar a Firebase confirmar el
+// resultado. Si el navegador bloquea la apertura, usar la misma pestaña con
+// el proxy /__/auth/ y conservar el destino solicitado al volver.
 let _googleLoginToken = 0;
 function releaseGoogleAttempt(message) {
   clearGoogleRedirectPending();

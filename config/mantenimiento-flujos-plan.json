@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "958e5eefbe6c654a80a267bc6781e51cd47f88b7",
-  "reason": "Copiar respaldo cifrado para titular desde main, fuera del artefacto público, conservando la bienvenida publicada.",
+  "baseCommit": "7c52bb03e5f7ad5de5aa7d6a42a1562392831f60",
+  "reason": "Copiar respaldo cifrado local conservando Perfil e iconos publicados por1190 y prueba CMS sin falso secreto.",
   "files": [
     {
       "path": ".github/workflows/backup-firestore.yml",
