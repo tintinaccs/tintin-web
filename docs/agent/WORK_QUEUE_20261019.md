@@ -1,6 +1,6 @@
 # Cola de trabajo autorizada — 19/10/2026
 
-Estado vigente del trabajo de Codex. Base de código inspeccionada: ab6c972a (#1169). No representa cierre ni PASS de tareas pendientes. Fecha comercial: America/Asuncion.
+Registro histórico del trabajo del19/10 sobre ab6c972a (#1169). No es la cola vigente ni una autorización para repetir operaciones. Consultar `CURRENT_STATE.md` y main actual antes de actuar. En particular, el cierre posterior adoptó ocultación reversible de pedidos de prueba: no ejecutar las bajas o devoluciones de stock descritas abajo como si siguieran pendientes. Se conserva el texto como evidencia de aquella fecha, sin heredar PASS ni presumir que todo quedó cerrado. Fecha comercial: America/Asuncion.
 
 ## Reglas de integridad
 
