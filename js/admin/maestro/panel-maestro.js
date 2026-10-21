@@ -5,7 +5,7 @@ import {
   BASE_ADMIN_SECTIONS,
   MAESTRO_MODULES,
   capabilityLabel
-} from './registro-maestro.js?v=tintin-20261009-local-ledger-master-1';
+} from './registro-maestro.js?v=tintin-20261021-identidad-1';
 
 (function () {
   'use strict';

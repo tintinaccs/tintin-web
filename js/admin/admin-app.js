@@ -617,7 +617,7 @@ const navItems = document.querySelectorAll('[data-section]');
 const topbarTitle = document.getElementById('adm-topbar-title');
 
 const SECTION_LABELS = {
-  dashboard: 'Dashboard',
+  dashboard: 'Inicio',
   estadisticas: 'Estadísticas',
   usuarios: 'Usuarios',
   pedidos: 'Pedidos',

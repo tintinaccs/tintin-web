@@ -1,5 +1,5 @@
 // Presentación compartida. No consulta datos ni sustituye navegación o CRUD.
-import { MAESTRO_MODULES } from './registro-maestro.js?v=tintin-20261009-local-ledger-master-1';
+import { MAESTRO_MODULES } from './registro-maestro.js?v=tintin-20261021-identidad-1';
 
 const modules = new Map(MAESTRO_MODULES.map(module => [module.id, module]));
 const roots = new Map();
