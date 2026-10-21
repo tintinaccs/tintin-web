@@ -65,6 +65,7 @@ export function mapProduct(id, d) {
   const rawExtraImages = Array.isArray(d.imagesExtra) ? d.imagesExtra : Array.isArray(d.images) ? d.images : [];
   return {
     id: String(id),
+    sku: cleanText(d.sku ?? '', 120),
     name: cleanText(d.name || d.title || d.Title || d.handle || d.Handle || '', 180),
     cat: category,
     category,
@@ -107,6 +108,7 @@ export function mapProduct(id, d) {
 function compactProduct(product) {
   return {
     id: product.id,
+    sku: product.sku,
     name: product.name,
     cat: product.cat,
     category: product.category,

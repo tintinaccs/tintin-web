@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "4202dd26e0b763afaad8a502ee0e2fc00d34b24e",
-  "reason": "Reserva al confirmar y recuperación PayPal, búsqueda compartida y Pulseras integradas con los controles de Productos y acceso publicados",
+  "reason": "Reserva inmediata y PayPal recuperable, comprobante y SKU público con búsqueda compartida, Pulseras y controles publicados integrados",
   "files": [
     {
       "path": "_headers",
@@ -94,6 +94,11 @@
       "newHash": "2abe36574d9ad90b8b61cf45be2d8bc0411e8bf9bfdb9040b9838d3a90ab11aa"
     },
     {
+      "path": "functions/api/public-catalog.js",
+      "oldHash": "22e2e6b27c91e62ae82f4299030bf01f478b0d8a2dc55a76ae74834d05339c67",
+      "newHash": "b2a8226afd5f32e6bf7b85146adbeb1ce3ef473bfd5ac310f311d20dc9337bc2"
+    },
+    {
       "path": "index.html",
       "oldHash": "7cae00b8b9c2a50b80db39f888cad8e0c4d1072b36051e7aedf03e32f7060cc5",
       "newHash": "81376940df5db1ef16c8da24e0ce3180fd89ae1954f8f51fd13be9ac69945502"
@@ -166,7 +171,7 @@
     {
       "path": "js/core/store/estado-productos.js",
       "oldHash": "ea6f2d43d73cb7c7340ca18d0772262438bb5d237cedbc5f3fbe87945ba2db92",
-      "newHash": "391a4f6ca644a2d6fb62d1b0082fd7719c79cfde91759a4e8efec1dc9bc2f24e"
+      "newHash": "65b2259cb6ae1c0af9e63605ee978cd9f4b4a25dba745b2c374bfb180cbc3e43"
     },
     {
       "path": "js/core/store/modelo-inventario.mjs",
@@ -236,7 +241,7 @@
     {
       "path": "package.json",
       "oldHash": "c09f8d627eb3119c457aa359f0be9d3595d02ff4f14ce6d5b36381cb9824134b",
-      "newHash": "a62fea143f309ae1252ef68753bf43647489447738a6cc85f1ff9101f07432bf"
+      "newHash": "f4d576bdc29437fbd3924844c4919497e639ec3913218d178e844ceec47256f3"
     },
     {
       "path": "perfil.html",
@@ -261,7 +266,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "ac78ea35696d78e914a296408a9842abb59b319c07fe0dcdf550340efdec2ee7",
-      "newHash": "42ef937f63d515455e3dda2562257e6ea0735a2256ac76e793efd541a1871968"
+      "newHash": "9ebff39e5ce4bd8e2628c25fe2788d5cba6855b956c0c2664ff27cb160bac58e"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

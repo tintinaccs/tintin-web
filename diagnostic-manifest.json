@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "24978dbdb64ea066600b4a427f8e1f27fd126fcbb8cc9bb629f82cfdfbee7450",
+  "sourceFingerprint": "17e97d023b830144b460f9f2ee2c28b5f133f5cc0647d11991c64cf601de0f53",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1395,
     "textFiles": 1304,
-    "totalBytes": 29356851,
+    "totalBytes": 29360921,
     "pages": 19,
     "modules": 982
   },
@@ -27232,8 +27232,8 @@
     },
     {
       "path": "functions/api/public-catalog.js",
-      "bytes": 7157,
-      "sha256": "22e2e6b27c91e62ae82f4299030bf01f478b0d8a2dc55a76ae74834d05339c67",
+      "bytes": 7164,
+      "sha256": "b2a8226afd5f32e6bf7b85146adbeb1ce3ef473bfd5ac310f311d20dc9337bc2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33615,8 +33615,8 @@
     },
     {
       "path": "js/core/store/estado-productos.js",
-      "bytes": 25864,
-      "sha256": "391a4f6ca644a2d6fb62d1b0082fd7719c79cfde91759a4e8efec1dc9bc2f24e",
+      "bytes": 25924,
+      "sha256": "65b2259cb6ae1c0af9e63605ee978cd9f4b4a25dba745b2c374bfb180cbc3e43",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44075,30 +44075,36 @@
     },
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
-      "bytes": 1468,
-      "sha256": "86002d6b94776f7c207b2a49ec40ddfae76f5ca14389cccdbf51b04239f8fd66",
+      "bytes": 2372,
+      "sha256": "b0bba82c3d95b02a1bec822138227c4b9f17a8777af67930fe478c30f8591bd3",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "node:test",
-          "target": null,
+          "raw": "../../js/core/store/busqueda-productos.mjs",
+          "target": "js/core/store/busqueda-productos.mjs",
           "dynamic": false,
           "line": 1
         },
         {
-          "raw": "node:assert/strict",
+          "raw": "node:test",
           "target": null,
           "dynamic": false,
           "line": 2
         },
         {
-          "raw": "node:fs",
+          "raw": "node:assert/strict",
           "target": null,
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -44200,8 +44206,8 @@
     },
     {
       "path": "tests/catalog/search-responsive.spec.js",
-      "bytes": 2626,
-      "sha256": "56e45838ed04d7581b720b569d7c875052e9582dd9d0367abe53aff790801fae",
+      "bytes": 2957,
+      "sha256": "a60a5124c11832bff0d135fdcfbd56baeecd87c68284b6e7cbdd2a53ddecbc94",
       "syntax": {
         "ok": true,
         "error": ""
@@ -51073,8 +51079,8 @@
     },
     {
       "path": "tests/runtime/checkout-receipt.spec.js",
-      "bytes": 14621,
-      "sha256": "68865ede3a9951430e886438659bb0ff07b832ce2d6209d534efa75564eb2d54",
+      "bytes": 14650,
+      "sha256": "0b1e88e71223f90858c52dc1cfa9f28d54d6c280c7761110a90256b2169ae3d7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55821,8 +55827,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 15021,
-      "sha256": "ef039f297ea4560c6cecbcdc7a30cfa72a3a0d493750cdd442cc50c029411f71"
+      "bytes": 15249,
+      "sha256": "4ce21dd8e66347d0697d0e8a7d0b8aaa068255ba18364741076f8b3ead4ceb00"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55834,7 +55840,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "490a4efa4017a1a29dc97b85fddd4c83aeac68e3896186bcbe0e487c6337905f"
+      "sha256": "0ab7464c3f6c4775217cd5221026c04aae59b1f121254dc9a2bf6b54c1eaceb8"
     },
     {
       "path": "config/public-site.json",
@@ -56493,8 +56499,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 783104,
-      "sha256": "e7581a5ee2456767eb8b0e4121704392ead1cf539557b16dd94594f662753e9c"
+      "bytes": 784338,
+      "sha256": "0571852173b943e83a15b113a7abb4635f04650e1b40aaac5bb0cf29d76af3ba"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56991,8 +56997,8 @@
     {
       "path": "docs/revision-comercio-20261021.md",
       "extension": ".md",
-      "bytes": 15055,
-      "sha256": "750fee0f066a038b79d19dad28fdbeebef2fb7edd154cd133dd3a74f578f70b5"
+      "bytes": 16288,
+      "sha256": "c033787207cf932c8a0a422c07f0d16cb7c35250f79502a84b2d4b52f9197048"
     },
     {
       "path": "docs/revision-global-2026-10-20.md",
@@ -57345,8 +57351,8 @@
     {
       "path": "functions/api/public-catalog.js",
       "extension": ".js",
-      "bytes": 7157,
-      "sha256": "22e2e6b27c91e62ae82f4299030bf01f478b0d8a2dc55a76ae74834d05339c67"
+      "bytes": 7164,
+      "sha256": "b2a8226afd5f32e6bf7b85146adbeb1ce3ef473bfd5ac310f311d20dc9337bc2"
     },
     {
       "path": "functions/api/push-admin.js",
@@ -58755,8 +58761,8 @@
     {
       "path": "js/core/store/estado-productos.js",
       "extension": ".js",
-      "bytes": 25864,
-      "sha256": "391a4f6ca644a2d6fb62d1b0082fd7719c79cfde91759a4e8efec1dc9bc2f24e"
+      "bytes": 25924,
+      "sha256": "65b2259cb6ae1c0af9e63605ee978cd9f4b4a25dba745b2c374bfb180cbc3e43"
     },
     {
       "path": "js/core/store/inventario-variantes.mjs",
@@ -59595,8 +59601,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 16992,
-      "sha256": "a62fea143f309ae1252ef68753bf43647489447738a6cc85f1ff9101f07432bf"
+      "bytes": 17036,
+      "sha256": "f4d576bdc29437fbd3924844c4919497e639ec3913218d178e844ceec47256f3"
     },
     {
       "path": "perfil.html",
@@ -60478,7 +60484,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 74413,
-      "sha256": "42ef937f63d515455e3dda2562257e6ea0735a2256ac76e793efd541a1871968"
+      "sha256": "9ebff39e5ce4bd8e2628c25fe2788d5cba6855b956c0c2664ff27cb160bac58e"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -61317,8 +61323,8 @@
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
       "extension": ".mjs",
-      "bytes": 1468,
-      "sha256": "86002d6b94776f7c207b2a49ec40ddfae76f5ca14389cccdbf51b04239f8fd66"
+      "bytes": 2372,
+      "sha256": "b0bba82c3d95b02a1bec822138227c4b9f17a8777af67930fe478c30f8591bd3"
     },
     {
       "path": "tests/catalog/related-cycles.test.mjs",
@@ -61335,8 +61341,8 @@
     {
       "path": "tests/catalog/search-responsive.spec.js",
       "extension": ".js",
-      "bytes": 2626,
-      "sha256": "56e45838ed04d7581b720b569d7c875052e9582dd9d0367abe53aff790801fae"
+      "bytes": 2957,
+      "sha256": "a60a5124c11832bff0d135fdcfbd56baeecd87c68284b6e7cbdd2a53ddecbc94"
     },
     {
       "path": "tests/catalog/variant-presentation.test.mjs",
@@ -62463,8 +62469,8 @@
     {
       "path": "tests/runtime/checkout-receipt.spec.js",
       "extension": ".js",
-      "bytes": 14621,
-      "sha256": "68865ede3a9951430e886438659bb0ff07b832ce2d6209d534efa75564eb2d54"
+      "bytes": 14650,
+      "sha256": "0b1e88e71223f90858c52dc1cfa9f28d54d6c280c7761110a90256b2169ae3d7"
     },
     {
       "path": "tests/runtime/client-navigation-actions.spec.js",
@@ -65753,12 +65759,12 @@
           },
           {
             "file": "js/core/store/estado-productos.js",
-            "line": 256,
+            "line": 258,
             "operation": "doc"
           },
           {
             "file": "js/core/store/estado-productos.js",
-            "line": 426,
+            "line": 428,
             "operation": "doc"
           },
           {

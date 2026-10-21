@@ -1,4 +1,9 @@
 
+Cierre del comprobante y búsqueda por código: la prueba runtime que extrae submit se reproduce fallando al faltar el nuevo estado de disponibilidad; se inicializa ese estado del fixture como en el arranque real.10/10 Chromium del comprobante PASS_LOCAL, incluidos siete tamaños, errores, descarga/compartir/impresión y teclado, ejecutables de forma aislada sin emulador. La proyección pública y la caché compacta descartaban SKU, por lo que el índice no lo recibía en el encabezado: se conserva y limpia ese identificador de producto, manteniendo fuera costos/proveedor/notas internas.195/195 productos/sync y8/8 navegador de búsqueda por código/errata/variante/precio anterior PASS_LOCAL. Se exige CI del SHA nuevo.
+
+Verificación adicional de datos reales, de sólo lectura: API pública con215 productos activos,215 con imagen,214 con descripción,163 con material y sin campos específicos de medidas/cuidados completos. Se solicita fuente real para completar esa información comercial. Backup Firestore39581982200 del2026-10-21T10:05:25Z terminó success y su etapa Exportar Firestore también; complementa la copia cifrada39647692594 ya comprobada. Sin restauración remota ni cambios de productos/pedidos reales.
+
+
 Sobre main4202dd26e:69/69 contratos de sincronización administrativa PASS_LOCAL;16 recorridos de consentimiento,6 del módulo de comercio y10 de Pulseras aprobados. El último grupo comprueba contador22, selección Pulseras de un producto histórico Brazaletes y conservación de los9 documentos crudos. Se ajusta la inicialización de datos del fixture compartido para conservar su nueva fuente de colecciones. Gates estáticos de Fase8/Fase10, tipografía, protección y caché aprobados; regeneración final y CI/publicación pendientes del árbol conciliado.
 
 
