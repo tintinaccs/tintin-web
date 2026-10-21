@@ -33,10 +33,19 @@ test('un proveedor que nunca responde termina ambos intentos y permite reintenta
   const navigator = { geolocation: { getCurrentPosition: () => { calls++; } } };
   const pending = requestCurrentLocation({ navigator, secure: true });
   const rejected = assert.rejects(pending, /tardó demasiado/);
-  t.mock.timers.tick(11000);
+  t.mock.timers.tick(5000);
   await Promise.resolve();
   assert.equal(calls, 2);
-  t.mock.timers.tick(16000);
+  t.mock.timers.tick(5000);
+  await rejected;
+});
+
+test('elegir un punto o cerrar el editor cancela la espera aunque el GPS no responda', async () => {
+  const controller = new AbortController();
+  const navigator = { geolocation: { getCurrentPosition: () => {} } };
+  const pending = requestCurrentLocation({ navigator, secure: true, signal: controller.signal });
+  const rejected = assert.rejects(pending, { name: 'AbortError' });
+  controller.abort();
   await rejected;
 });
 
@@ -44,55 +53,14 @@ test('coordenadas inválidas no se guardan como ubicación encontrada', async ()
   const navigator = { geolocation: { getCurrentPosition: ok => ok({ coords: { latitude: NaN, longitude: -57 } }) } };
   await assert.rejects(requestCurrentLocation({ navigator, secure: true }), /no pudo determinar/);
 });
-
-test('recuperación espera un punto válido después de errores transitorios y detiene el GPS', async () => {
-  const cleared = [];
-  const navigator = { geolocation: {
-    getCurrentPosition: (_, fail) => fail({ code: 3 }),
-    watchPosition: (ok, fail) => {
-      queueMicrotask(() => {
-        fail({ code: 2 });
-        ok({ coords: { latitude: NaN, longitude: -57 } });
-        ok({ coords: { latitude: -25.3, longitude: -57.6, accuracy: 30 } });
-      });
-      return 7;
-    },
-    clearWatch: id => cleared.push(id),
-  } };
-  assert.deepEqual(await requestCurrentLocation({ navigator, secure: true }), { lat: -25.3, lng: -57.6, accuracy: 30 });
-  assert.deepEqual(cleared, [7]);
-});
-
-test('cancelar libera el observador y no inicia otra solicitud', async () => {
-  const controller = new AbortController();
-  const cleared = [];
-  const navigator = { geolocation: {
-    getCurrentPosition: (_, fail) => fail({ code: 2 }),
-    watchPosition: () => 8,
-    clearWatch: id => cleared.push(id),
-  } };
-  const pending = requestCurrentLocation({ navigator, secure: true, signal: controller.signal });
-  const rejected = assert.rejects(pending, { name: 'AbortError' });
-  await Promise.resolve();
-  controller.abort();
-  await rejected;
-  assert.deepEqual(cleared, [8]);
-});
-
-test('recuperación sin respuesta termina y limpia el observador', async t => {
-  t.mock.timers.enable({ apis: ['setTimeout'] });
-  const cleared = [];
-  const navigator = { geolocation: {
-    getCurrentPosition: (_, fail) => fail({ code: 3 }),
-    watchPosition: () => 9,
-    clearWatch: id => cleared.push(id),
-  } };
-  const pending = requestCurrentLocation({ navigator, secure: true });
-  const rejected = assert.rejects(pending, /tardó demasiado/);
-  await Promise.resolve();
-  t.mock.timers.tick(16000);
-  await rejected;
-  assert.deepEqual(cleared, [9]);
+test('una lectura inválida del proveedor se recupera con el segundo intento válido', async () => {
+  let calls=0;
+  const navigator={geolocation:{getCurrentPosition:ok=>{
+    calls++;
+    ok({coords:calls===1?{latitude:91,longitude:-57.6}:{latitude:-25.3,longitude:-57.6,accuracy:20}});
+  }}};
+  assert.deepEqual(await requestCurrentLocation({navigator,secure:true}),{lat:-25.3,lng:-57.6,accuracy:20});
+  assert.equal(calls,2);
 });
 test('código por correo usado en una cuenta Google se muestra desde el token de sesión', () => {
   const data = accountAccessSummary({ provider: 'google', authMethods: ['google', 'emailOtp'] }, { firebase: { sign_in_provider: 'custom' } });

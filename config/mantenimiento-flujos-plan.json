@@ -1,27 +1,27 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "9147ab2feea93ff9e57817ebc854df65a7570264",
-  "reason": "Conciliar Perfil responsive y recuperación GPS de1189 sobre main9147:34 Chromium/111 Node, estados de mapa y confirmación de coordenadas, sin datos comerciales.",
+  "baseCommit": "cfd77c2c43697339da6561945d3965308cc1e18e",
+  "reason": "Perfil responsive y ubicación sobre maincfd:57 Chromium/226 Node,14 viewports, mantener popup Google y GPS canónicos, avisos de mapa y guards de guardado.",
   "files": [
     {
       "path": "_headers",
-      "oldHash": "72d5e96b556ce3fcb03ad2a5e554cc305eae704b99a25e07998c279d7ce04041",
-      "newHash": "9b8b0a5d161d173ceced91120b2ec842ad8a799e83f969993fbcf4b7c1ff9057"
+      "oldHash": "3604c43eef8446a710a7ad7a0ff68a192e06a85a707fe6d49aba1eb8c1b40dec",
+      "newHash": "c187b1fb651c1c1d6e41b0772ddb6890a62507d9798fc496f53b379223c640cf"
     },
     {
       "path": "checkout.html",
-      "oldHash": "6e56a58d05e446b3b4e2e8f4807dbb2cce8c9aae87a616f61d5f070e8e6ac064",
-      "newHash": "c9f9bf7b185f46974bcac9e0fdd1023f1c101cc908fdba6c8d60cdb04a56b294"
+      "oldHash": "fe3a3efc24e2900ef4b89ece9ed8252bb50b6589dd12270465090ebc953817ea",
+      "newHash": "e4c177fd5b95fbea3d2bca0f8cdf2ef0d1f898c0013c4bcd99b4e4d8f27b93f4"
     },
     {
       "path": "config/csp-runtime.js",
-      "oldHash": "eb9ee5c23f89db4648bc0833505014625b23cc4c0ab1b1611200b6f677ac814f",
-      "newHash": "0e67830337450f38f017f055ad69c64a7617fd7c4c22cb2a709b6352d01e7214"
+      "oldHash": "eeda4ea48db81185537e211d95a4efee032472de7e84de8d97fb8808f00c7e36",
+      "newHash": "36d68a266936d9e8a1be2fb27d8d40d47cac3d9f33c437d52d0f7384861bd04f"
     },
     {
       "path": "config/csp-runtime.json",
-      "oldHash": "0ba5277d169dc346fa3ae1598c0087b61dc87654ae3028feaa5f7931b14f23d2",
-      "newHash": "13eab9eee487ce25b9cbfac9852dbbebdc3692200a0958ffff5c200984d524f9"
+      "oldHash": "62338920578322f0bbc85d2db9a69e1ac410f7b9c67a370ad67936457fe5fca9",
+      "newHash": "b9683f52495cf02f11be3ff64248fdb16665846b460ace70cec6b8fb5b9156c9"
     },
     {
       "path": "css/components/location/selector-ubicacion.css",
@@ -30,13 +30,13 @@
     },
     {
       "path": "js/components/location/geolocalizacion.mjs",
-      "oldHash": "9cc52847c96650ab1ac3e39e9100b20f081a10da314c281c465c641767aad840",
-      "newHash": "2497d329e789a3ff126a1fb02fbf3e822dc5c17a213f890fc9da5a4f18aef933"
+      "oldHash": "284fec00454a9fa45fc61228afc30090c6f8ab24b5562f71416ffe38319553eb",
+      "newHash": "f223a38042031d500299c7e80c07cb69ea926bcf8a03fb85fdc84620342b8ada"
     },
     {
       "path": "js/components/location/mapa-ubicacion.js",
-      "oldHash": "07fdf8e7421bcb7e9ff4a765aa112b88700ecb9a3dedb1e02dda457670287fa3",
-      "newHash": "62ca8e565322ec9139155925b287d5c6299d661cd1394d592488569d1a49547f"
+      "oldHash": "60a2caa4f343c4f78e802d971cf1a202914694d02075d3e8c24a32ff647b0d1e",
+      "newHash": "a8404639703c053e7ec948c7c2f47268ce53f304d17fd3588f211422fd3be93f"
     },
     {
       "path": "js/pages/checkout/checkout-ubicacion-guardada.js",
@@ -45,18 +45,18 @@
     },
     {
       "path": "login.html",
-      "oldHash": "13fc128f7796778ec4cae9503264c4189ac8db9e45cc914a6220fdf23f648393",
-      "newHash": "ab04fe63de754127bba51941b3cb4c39e07dab446f4fe5afa734e96edecc48f6"
+      "oldHash": "1ae7d108a35745d6a6a764b067ef7795147f4354b06fa2b5879c3197ccb46176",
+      "newHash": "eebc55a9f5c95f75680981f7e297bd5a72d0c9bd87e32dda7a2c28f8dfde4d6b"
     },
     {
       "path": "perfil.html",
-      "oldHash": "085ecad62c2a790d77b4c7c1f9b0a7ccb0b55dcfc9d2e9ecdb9065e54741ffe1",
-      "newHash": "ede881ebdb312deb59a231912862330f33136c6cfabbfc5d0c1d81e26e16df91"
+      "oldHash": "b46896faefc2cd5744a2ea8776458b05c0ca79dc383b670dbdf52130e9cb27a1",
+      "newHash": "72774ddcb5699939a36f53d55a293875e174c80dea5793b7a945ad11228c58fc"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "4ef0da4b5f86e12e524b9a67112e700119a653b806678556eb6cfe2b925bb65c",
-      "newHash": "ed875c4da7b9014a9fa21ff09a46220ad3f1793bee21f14ca1b330559b133a3f"
+      "oldHash": "59ddffc232a731f1f0777343d330b6e5524957d4cf3b40e29d54ef8dda3decbb",
+      "newHash": "cc595a1490a1668e8752f8e18d11793567cd7e4a6ce21c6f0c68492fd1b554f4"
     }
   ],
   "affectedRecords": [

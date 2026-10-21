@@ -28,7 +28,7 @@ test('un fondo de mapa caído no oculta el GPS ni permite guardar sin punto', as
   expect(await page.evaluate(() => window.picked.lat)).toBe(-25.3);
 });
 
-for (const [width,height] of [[320,568],[390,844],[430,932],[667,375],[768,1024],[820,1180],[1024,768],[1180,820],[1280,720],[1366,768],[1440,900],[1920,1080]]) {
+for (const [width,height] of [[320,568],[390,844],[430,932],[667,375],[768,1024],[820,1180],[844,390],[1024,768],[1180,820],[1181,820],[1280,720],[1366,768],[1440,900],[1920,1080]]) {
   test(`perfil dirección alineada, mapa y GPS · ${width}x${height}`, async ({ page, context }) => {
     await page.setViewportSize({ width, height });
     await context.grantPermissions(['geolocation']);
@@ -97,8 +97,8 @@ for (const [width,height] of [[320,568],[390,844],[430,932],[667,375],[768,1024]
     });
     await button.click();
     await expect(button).toBeDisabled();
-    await page.clock.runFor(11000);
-    await page.clock.runFor(16000);
+    await page.clock.runFor(5001);
+    await page.clock.runFor(5001);
     await expect(button).toBeEnabled();
     await expect(page.locator('.tt-map-status')).toContainText('tardó demasiado');
     expect(await page.evaluate(() => window.picked.lat)).toBe(-25.32);

@@ -3131,3 +3131,10 @@ Guardado del conjunto: se detectó que la liberación general del botón podía 
 
 
 Seguimiento de CI39595526443: la prueba VM single-interactive-flow no exponía AbortController ni transmitía la señal al adaptador GPS. Se agregan ambos en el entorno simulado, conservando un clic/una solicitud, doble clic sin duplicación y cancelación al destruir.226/226 Node de acceso, Perfil y ubicación pasan con Chromium del entorno para sus fixtures de navegador. Se regeneran manifiesto y plan; se requiere CI del nuevo SHA.
+
+
+## Actualización contra main publicado durante CI
+
+La CI39597038002 de24a49894 aprobó el conjunto (152 navegación+1 skip, carrito4, UI208, rendimiento65, geometrías187/187 y smoke18), pero main avanzó durante la ejecución a cfd77c2c (#1191, Cloudflare85583bc9 success). Se integra ese main por merge normal, preservando la petición explícita de popup Google y su recuperación GPS canónica de dos intentos acotados/cancelables (5s+5s). Se conserva de1189 la separación de fallos de teselas y los guards de dirección; su estrategia watchPosition se sustituye por la implementación publicada para mantener una sola autoridad. Cada lectura inválida permite el intento fresco en el mismo plazo; una prueba nueva cubre coordenada inválida inicial seguida de un punto válido. Geo y mapa usan URLs nuevas3 para los bytes conciliados.
+
+PASS_LOCAL actualizado:57/57 Chromium sin reintentos (incluye14 tamaños de Perfil, ambas orientaciones y las regresiones de popup Google publicadas) y226/226 Node de acceso/Perfil/ubicación. Los módulos de Google y el paquete permanecen iguales a main; CSS propio conserva el formulario verificado. Los scripts/datos de commits anteriores no acreditan CI del nuevo SHA. Se regenera plan exacto contra cfd77c2c; CI y producción pendientes del candidato actualizado.

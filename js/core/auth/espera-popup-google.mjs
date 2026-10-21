@@ -6,10 +6,16 @@ export async function waitForGooglePopup(start, host = window) {
   let timer;
   let deadline;
   const trackingOpen = function (...args) {
+    const url = String(args[0] || '');
+    const isAuthPopup = !url || /^(?:https?:\/\/[^/]+)?\/__\/auth\/handler(?:[?#]|$)/.test(url);
+    if (!popup && isAuthPopup) {
+      // Se pide explícitamente una ventana. Firebase conserva URL, nombre,
+      // tamaño y comunicación OAuth; el navegador móvil decide su presentación.
+      args[2] = [...String(args[2] || '').split(',').filter(option => option.trim() && !/^popup(?:\s*=|$)/i.test(option.trim())), 'popup=yes'].join(',');
+    }
     const opened = originalOpen.apply(host, args);
     // Sólo se intercepta durante esta operación explícita de Google.
-    const url = String(args[0] || '');
-    if (!popup && opened && (!url || url.includes('/__/auth/handler'))) {
+    if (!popup && opened && isAuthPopup) {
       popup = opened;
       if (host.open === trackingOpen) host.open = originalOpen;
     }

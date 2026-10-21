@@ -548,3 +548,5 @@ Avance final1180: orden visual compartido entre galería y selectores, sin modif
 2026-10-21: sección de agregar dirección en Perfil. HTML/campos agrupados y CSS responsive específico, mapa y acciones adaptables, foco visible y estados GPS conservados; libreta/IDs/permisos/guardado existentes. Validación12 viewports y giro de tablet, render de perfil y datos; CSS/caché/CSP/diagnóstico/plan desde autoridades canónicas.
 
 Conciliación1190+1189: layout único de Perfil; controles compartidos de ubicación/avisos separados, cancelación y recuperación de GPS y confirmación de coordenadas de Checkout. Conservar consumidores posteriores de main9147 y no heredar PASS de otros SHA.34 Chromium/111 Node del conjunto; versiones2 de ambos CSS y módulos GPS con sus versiones de origen.
+
+Actualización1190 contra main cfd77c2c (#1191): conservar popup Google y GPS cancelable de5s+5s publicados; separar avisos de teselas, recuperar lectura inicial inválida y mantener formulario único.14 viewports,57 Chromium/226 Node; nuevos Geo/Map3 y plan contra main vigente.
