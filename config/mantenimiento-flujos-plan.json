@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "baseCommit": "cfd77c2c43697339da6561945d3965308cc1e18e",
-  "reason": "Perfil responsive e iconos rosados:113 Chromium/279 Node más9 contratos shell; conservar GPS/popup Google publicados, coordenadas/guardado, favicon transparente y máscara segura, caché/CSP canónicos.",
+  "reason": "Perfil responsive e iconos rosados:114 Chromium/280 Node más9 contratos shell; conservar GPS publicado y confirmar popup Google desde Firebase sin sondeo paralelo, coordenadas/guardado, favicon transparente y máscara segura, caché/CSP canónicos.",
   "files": [
     {
       "path": "_headers",
       "oldHash": "3604c43eef8446a710a7ad7a0ff68a192e06a85a707fe6d49aba1eb8c1b40dec",
-      "newHash": "c187b1fb651c1c1d6e41b0772ddb6890a62507d9798fc496f53b379223c640cf"
+      "newHash": "0f8567a904cd88079cf70d60ba1313c648b0ffeddd545dbf97ad8b1feac91f3e"
     },
     {
       "path": "404.html",
@@ -56,12 +56,12 @@
     {
       "path": "config/csp-runtime.js",
       "oldHash": "eeda4ea48db81185537e211d95a4efee032472de7e84de8d97fb8808f00c7e36",
-      "newHash": "36d68a266936d9e8a1be2fb27d8d40d47cac3d9f33c437d52d0f7384861bd04f"
+      "newHash": "a9738f50d79b6cc62159cc4d9aee9e7bfe2fe2abe59dba1a90a51c7b5f04dfbb"
     },
     {
       "path": "config/csp-runtime.json",
       "oldHash": "62338920578322f0bbc85d2db9a69e1ac410f7b9c67a370ad67936457fe5fca9",
-      "newHash": "b9683f52495cf02f11be3ff64248fdb16665846b460ace70cec6b8fb5b9156c9"
+      "newHash": "c8898b718a1a5b9bd4c108cda26d8b2125ab5e9dda48be4d56f980ecbbe530e7"
     },
     {
       "path": "contact.html",
@@ -131,7 +131,7 @@
     {
       "path": "login.html",
       "oldHash": "1ae7d108a35745d6a6a764b067ef7795147f4354b06fa2b5879c3197ccb46176",
-      "newHash": "2483202b0331b9d768eaf550e68f3d45075a0c7a68ae31c403f6bc32e3e951fc"
+      "newHash": "2e91d04ae9b85b545252576fbccbf0a185b3733ee95546fb40337a5b9cb1b3bb"
     },
     {
       "path": "manifest.json",
@@ -166,7 +166,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "59ddffc232a731f1f0777343d330b6e5524957d4cf3b40e29d54ef8dda3decbb",
-      "newHash": "a34b4de7854d7768a383d60f1441a459b24a344e525f278aaee86e1a84315cb7"
+      "newHash": "b19b8f1f43dd246f29e04b613f47f698947c2954038cb20fbaba0de29b5cce6f"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

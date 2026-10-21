@@ -1,3 +1,7 @@
+## 2026-10-21 — Conciliación OAuth de1189 con Perfil/iconos
+
+Se integra1189f772 por merge normal, manteniendo los layouts/iconos del conjunto1190 y la recuperación GPS publicada. waitForGooglePopup entrega la decisión de éxito/cancelación a Firebase, conserva popup=yes y plazo120s con cleanup; Login usa mensajes neutrales. El auditor de aislamiento exige ese contrato y rechaza el sondeo paralelo de closed. Pruebas Node/navegador comprueban confirmación con referencia cerrada, cancelación del SDK, vencimiento y recuperación del formulario. Se renueva la URL inmutable del helper, CSP y plan exacto contra main vigente. Sin cambios de proveedor, permisos, cuentas ni datos reales.
+
 ## 2026-10-21 — Favicon rosado y forma de iconos instalados
 
 Autoridad: scripts/generar-iconos-admin.mjs deriva del alfa de assets-tintin/images/general/logo.png, sin cambiar el logo original. Afecta ICO canónico, PNG16/32/192/512, Apple180, iconos Admin y badge, manifests público/privado y accesos, enlaces de todas las páginas, versiones de notificaciones y dependencias transitivas de navegación. Any circular transparente y maskable opaco son archivos distintos; el sistema aplica la máscara de instalación. Fuente de versiones del shell se actualiza junto al adaptador. Se conservan destinos y lógica push, CSP y política de caché. Contratos: decodificación, alfa/color/cobertura/cuerpo completo, zona segura maskable y regresiones push/cache/navegación; publicación exacta junto a Perfil en el PR1190.

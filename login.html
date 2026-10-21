@@ -206,7 +206,7 @@ import {
 import { findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone, isNationalMobileInput } from "./js/components/forms/utilidades-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20261008-producto-superficies-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
-import { waitForGooglePopup } from "./js/core/auth/espera-popup-google.mjs?v=tintin-20261021-google-popup-1";
+import { waitForGooglePopup } from "./js/core/auth/espera-popup-google.mjs?v=tintin-20261021-google-popup-confirmation-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20261017-domain-cutover-1";
 import { clearProfileGateCache, consumeBlockedEmail } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20261017-domain-cutover-1";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1";
@@ -356,9 +356,9 @@ function errMsg(code, email = '') {
     return accountProblemHtml(safeEmail) + emailRecovery;
   }
   const msgs = {
-    "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
+    "auth/popup-closed-by-user":      "No se completó el ingreso con Google. Podés volver a intentar o usar tu correo.",
     "auth/popup-timeout":             "Google no terminó de responder. Podés volver a intentar el ingreso o usar tu correo.",
-    "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
+    "auth/cancelled-popup-request":   "El intento de ingreso con Google se interrumpió. Podés volver a intentar.",
     "auth/popup-blocked":             "El navegador bloqueó la ventana de Google — permití ventanas emergentes para este sitio e intentá de nuevo.",
     "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo.",
     "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo.",
@@ -991,9 +991,9 @@ subscribeSession(async snapshot => {
   }
 });
 
-// GOOGLE — el selector se abre en esta misma pestaña. El proxy /__/auth/
-// conserva el origen de Firebase al volver; no dependemos de una ventana
-// emergente, su foco ni el sondeo de window.closed del SDK.
+// GOOGLE — abrir el selector desde el clic y dejar a Firebase confirmar el
+// resultado. Si el navegador bloquea la apertura, usar la misma pestaña con
+// el proxy /__/auth/ y conservar el destino solicitado al volver.
 let _googleLoginToken = 0;
 function releaseGoogleAttempt(message) {
   clearGoogleRedirectPending();
