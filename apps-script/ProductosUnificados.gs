@@ -150,7 +150,7 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
   if (!lock.tryLock(10000)) throw new Error('No se pudo obtener el lock de Historial sync.');
   try {
     history.insertRowBefore(TINTIN_SYNC_HISTORY_FIRST_ROW);
-    history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
+    history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues(tintinSheetLiteralRows_([values]));
     var firstExcessRow = TINTIN_SYNC_HISTORY_FIRST_ROW + TINTIN_SYNC_HISTORY_MAX_ROWS;
     if (history.getLastRow() >= firstExcessRow) {
       history.deleteRows(firstExcessRow, history.getLastRow() - firstExcessRow + 1);
@@ -348,15 +348,15 @@ function tintinSendProductRow_(sheet, rowNumber, changedFields) {
   sheet.getRange(rowNumber, 35).clearContent();
 }
 
-// Un 409/502 es recuperable (conflicto o indisponibilidad transitoria del
-// servicio). Reintenta una vez antes de informar el fallo, sin duplicar una
-// escritura que el endpoint ya confirmó.
+// Sólo indisponibilidad transitoria admite reintento automático. Un conflicto
+// requiere revisar el estado canónico: reintentar el total antiguo podría
+// pisar una venta que ocurrió entre la lectura y el commit.
 function tintinSendProductRowWithRetry_(sheet, rowNumber, changedFields) {
   try {
     return tintinSendProductRow_(sheet, rowNumber, changedFields);
   } catch (firstError) {
     var status = Number(firstError && firstError.tintinHttpStatus || 0);
-    if (status !== 409 && status !== 502) throw firstError;
+    if (status !== 502) throw firstError;
     Utilities.sleep(750);
     return tintinSendProductRow_(sheet, rowNumber, changedFields);
   }
@@ -364,6 +364,24 @@ function tintinSendProductRowWithRetry_(sheet, rowNumber, changedFields) {
 
 // Crear como activador instalable "Al editar". Un activador simple no tiene
 // permiso para UrlFetchApp.
+// Reponer desde Firestore todas las filas existentes del pegado rechazado,
+// incluso si una fila anterior del mismo evento ya se guardó correctamente.
+function tintinRestoreProductConflict_(sheet, range) {
+  var ids = sheet.getRange(range.getRow(), 1, range.getNumRows(), 1).getValues();
+  var products = tintinSnapshot_('products');
+  var byId = Object.create(null);
+  products.forEach(function(product) { byId[product.id] = product; });
+  ids.forEach(function(row, offset) {
+    var id = String(row[0] || '').trim();
+    if (!id) return;
+    var product = byId[id];
+    if (!product) throw new Error('El producto cambió o ya no existe; actualizá el catálogo antes de reintentar.');
+    var rowNumber = range.getRow() + offset;
+    sheet.getRange(rowNumber, 2).setValue(tintinSheetLiteral_(product.name || ''));
+    tintinWriteProductRow_(sheet, rowNumber, product, product);
+  });
+}
+
 function tintinProductosOnEdit(e) {
   tintinHandleProductEdit_(e);
 }
@@ -388,10 +406,16 @@ function tintinHandleProductEdit_(e) {
         tintinSendProductRowWithRetry_(sheet, rowNumber, changedFields);
         tintinRecordSyncSafely_('SYNCED', sheet.getName(), cell, 'Producto sincronizado: ' + (changedFields.join(', ') || 'acción') + '.');
       } catch (error) {
-        var isRejected = error && error.tintinHttpStatus === 400 || /valor numerico invalido/i.test(String(error && error.message || error));
-        // Sólo se revierte la celda editada si ese valor concreto fue rechazado.
-        if (isRejected && e.range.getNumRows() === 1 && e.range.getNumColumns() === 1) {
-          if (Object.prototype.hasOwnProperty.call(e, 'oldValue')) e.range.setValue(e.oldValue);
+        var isConflict = error && error.tintinHttpStatus === 409;
+        var isRejected = error && (error.tintinHttpStatus === 400 || isConflict) || /valor numerico invalido/i.test(String(error && error.message || error));
+        if (isConflict) {
+          try { tintinRestoreProductConflict_(sheet, e.range); }
+          catch (restoreError) { console.error('No se pudo reponer el espejo canónico: ' + String(restoreError && restoreError.message || restoreError)); }
+        }
+        // Para validación local, revertir sólo la celda; un conflicto siempre
+        // requiere la lectura canónica, nunca volver al oldValue desactualizado.
+        if (isRejected && !isConflict && e.range.getNumRows() === 1 && e.range.getNumColumns() === 1) {
+          if (Object.prototype.hasOwnProperty.call(e, 'oldValue')) e.range.setValue(tintinSheetLiteral_(e.oldValue));
           else e.range.clearContent();
         }
         var status = isRejected ? 'REJECTED' : 'ERROR';
@@ -487,6 +511,16 @@ function tintinFindProductRow_(sheet, productId, rowIndex) {
   return sheet.getLastRow() + 1;
 }
 
+// Todo valor externo se escribe como literal. Conserva números, booleanos y
+// fechas; las fórmulas intencionales siguen usando setFormula/R1C1.
+function tintinSheetLiteral_(value) {
+  return typeof value === 'string' && /^[\s\u0000-\u001f]*[=+@-]/.test(value) ? "'" + value : value;
+}
+
+function tintinSheetLiteralRows_(rows) {
+  return rows.map(function(row) { return row.map(tintinSheetLiteral_); });
+}
+
 function tintinYesNo_(value) {
   return value === true ? 'Sí' : 'No';
 }
@@ -532,15 +566,18 @@ function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
   tintinMarkRowPushInProgress_(sheet, rowNumber);
   var current = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
   var sold = Number(current[9] || 0);
-  var purchased = inventory.purchased == null
-    ? (product.stock == null ? current[8] : Number(product.stock) + sold)
-    : inventory.purchased;
+  // K = I - J debe reflejar products.stock, incluso si purchased histórico
+  // quedó desactualizado tras una venta o ajuste desde la web. No se modifica
+  // productInventory en Firestore ni la fórmula/columna de vendidos.
+  var purchased = product.stock == null
+    ? (inventory.purchased == null ? current[8] : inventory.purchased)
+    : Number(product.stock) + sold;
 
-  sheet.getRange(rowNumber, 4, 1, 3).setValues([[
+  sheet.getRange(rowNumber, 4, 1, 3).setValues(tintinSheetLiteralRows_([[
     product.category || '',
     inventory.costUnit == null ? '' : inventory.costUnit,
     product.price == null ? '' : product.price
-  ]]);
+  ]]));
   sheet.getRange(rowNumber, 9).setValue(purchased == null ? '' : purchased);
   sheet.getRange(rowNumber, 12).setValue(inventory.stockMinimum == null ? '' : inventory.stockMinimum);
   // Los campos descriptivos (material, acabado, talles, colección, etiquetas)
@@ -552,7 +589,7 @@ function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
   var detailValidations = detailRange.getDataValidations();
   try {
     detailRange.clearDataValidations();
-    sheet.getRange(rowNumber, 14, 1, 21).setValues([[
+    sheet.getRange(rowNumber, 14, 1, 21).setValues(tintinSheetLiteralRows_([[
     inventory.internalNotes || '',
     tintinYesNo_(product.active !== false),
     tintinYesNo_(product.oferta === true),
@@ -574,7 +611,7 @@ function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
     product.collection || '',
     Array.isArray(product.tags) ? product.tags.join(', ') : '',
     product.variants ? JSON.stringify(product.variants) : ''
-    ]]);
+    ]]));
     SpreadsheetApp.flush();
   } finally {
     detailRange.setDataValidations(detailValidations);
@@ -604,7 +641,7 @@ function tintinSyncProductsFromFirestore_(body) {
     var inventoryResult = phase3FetchDocument_('productInventory/' + encodeURIComponent(id), body.idToken);
     var inventory = inventoryResult.ok ? inventoryResult.data || {} : {};
     tintinPrepareNewProductRow_(sheet, rowNumber);
-    sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
+    sheet.getRange(rowNumber, 1, 1, 2).setValues(tintinSheetLiteralRows_([[id, product.name || '']]));
     tintinWriteProductRow_(sheet, rowNumber, product, inventory);
   });
 
@@ -644,7 +681,7 @@ function tintinSyncProductsFromPayload_(body) {
     }
     var product = item.product || {};
     tintinPrepareNewProductRow_(sheet, rowNumber);
-    sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
+    sheet.getRange(rowNumber, 1, 1, 2).setValues(tintinSheetLiteralRows_([[id, product.name || '']]));
     tintinWriteProductRow_(sheet, rowNumber, product, item.inventory || {});
     rowIndex[id] = rowNumber;
   });
@@ -882,7 +919,7 @@ function tintinHandleOrderEdit_(e) {
   if (!e || !e.range || e.range.getRow() < 2 || [11, 13].indexOf(e.range.getColumn()) === -1) return;
   var message = 'Pedidos web es un espejo de solo lectura. Cambiá estados desde Superadmin para conservar la integridad de stock.';
   if (e.range.getNumRows() === 1 && e.range.getNumColumns() === 1 && Object.prototype.hasOwnProperty.call(e, 'oldValue')) {
-    e.range.setValue(e.oldValue);
+    e.range.setValue(tintinSheetLiteral_(e.oldValue));
   } else {
     tintinPullOrdersFromWeb_();
   }
@@ -934,8 +971,26 @@ function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
   if (!sheet) return 0;
   var existing = Math.max(0, sheet.getLastRow() - firstRow + 1);
   if (existing) sheet.getRange(firstRow, 1, existing, width).clearContent();
-  if (rows.length) sheet.getRange(firstRow, 1, rows.length, width).setValues(rows);
+  if (rows.length) sheet.getRange(firstRow, 1, rows.length, width).setValues(tintinSheetLiteralRows_(rows));
   return rows.length;
+}
+
+// La identidad protegida la marca el snapshot autenticado desde Firestore,
+// no el correo/rol editable en una celda. Mover el rango mantiene su ACL y evita
+// que una inserción/reordenación deje protegida la cuenta equivocada.
+function tintinProtectSuperAdminMirror_(sheet, users) {
+  var matches = [];
+  users.forEach(function(user, index) { if (user.protectedAccount === true) matches.push(index); });
+  if (matches.length !== 1) throw new Error('No se pudo identificar de forma única la cuenta protegida en el snapshot.');
+  var protections = sheet.getProtections(SpreadsheetApp.ProtectionType.RANGE).filter(function(protection) {
+    return String(protection.getDescription() || '').indexOf('Cuenta Super Admin protegida') === 0;
+  });
+  if (protections.length !== 1 || protections[0].isWarningOnly() || !protections[0].canEdit()) {
+    throw new Error('Revisá la protección restringida de la cuenta Super Admin; no se modificaron sus permisos.');
+  }
+  var firstColumn = TINTIN_USERS_COL.uid;
+  protections[0].setRange(sheet.getRange(TINTIN_USERS_FIRST_ROW + matches[0], firstColumn, 1,
+    TINTIN_USERS_COL.blocked - firstColumn + 1));
 }
 
 function tintinPullUsersFromWeb_() {
@@ -950,7 +1005,8 @@ function tintinPullUsersFromWeb_() {
     var roleColumn = tintinColumnLetter_(TINTIN_USERS_COL.role);
     usersSheet.getRange(TINTIN_USERS_FIRST_ROW, 1, Math.max(1, usersSheet.getMaxRows() - TINTIN_USERS_FIRST_ROW + 1), TINTIN_USERS_COL.updatedAt).clearDataValidations();
   }
-  var rows = tintinSnapshot_('users').map(function(user) {
+  var users = tintinSnapshot_('users');
+  var rows = users.map(function(user) {
     var row = new Array(TINTIN_USERS_COL.updatedAt).fill('');
     row[TINTIN_USERS_COL.uid - 1] = user.uid;
     row[TINTIN_USERS_COL.name - 1] = user.name;
@@ -991,6 +1047,7 @@ function tintinPullUsersFromWeb_() {
     usersSheet.getRange(blockedColumn + TINTIN_USERS_FIRST_ROW + ':' + blockedColumn).setDataValidation(tintinParityValidation_(['Sí', 'No']));
     usersSheet.getRange(actionColumn + TINTIN_USERS_FIRST_ROW + ':' + actionColumn).clearDataValidations();
   }
+  if (usersSheet) tintinProtectSuperAdminMirror_(usersSheet, users);
   return count;
 }
 

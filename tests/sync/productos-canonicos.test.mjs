@@ -242,6 +242,7 @@ test('el payload mínimo del canary escribe catálogo e inventario por webhook a
         status: 200, headers: { 'content-type': 'application/json' },
       });
     }
+    if (url.endsWith('/documents/products/CANARY-SHEETS-FIRESTORE')) return new Response('{}', { status: 404 });
     if (url.endsWith('/documents:commit')) {
       writes.push(JSON.parse(init.body));
       return new Response('{}', { status: 200, headers: { 'content-type': 'application/json' } });
@@ -387,7 +388,7 @@ test('Apps Script conserva Productos y agrega un dispatcher de paridad instalabl
 test('una edición parcial no valida ni reemplaza las demás columnas del producto', () => {
   const source = read('functions/api/sheets-products-webhook.js');
   const appScript = read('apps-script/ProductosUnificados.gs');
-  assert.match(source, /const fields = selectedFields\(input\.changedFields, id\);/);
+  assert.match(source, /const fields = selectedFields\(input\.changedFields, text\(input\.productId, 128\)\);/);
   assert.match(source, /if \(\(!fields \|\| fields\.has\('name'\)\) && !name\)/);
   assert.match(source, /if \(Object\.keys\(publicData\)\.length\) publicData\.updatedAt/);
   assert.match(appScript, /function tintinProductFieldsForColumns_/);
@@ -461,8 +462,8 @@ test('Historial sync conserva el contrato de estados, fila 8 y máximo 500', () 
   assert.match(source, /tintinRecordSyncSafely_\('LOCAL'/);
   assert.match(source, /isRejected \? 'REJECTED' : 'ERROR'/);
   assert.match(source, /function tintinSendProductRowWithRetry_/);
-  assert.match(source, /status !== 409 && status !== 502/);
-  assert.match(source, /if \(isRejected && e\.range\.getNumRows\(\) === 1/);
+  assert.match(source, /status !== 502/);
+  assert.match(source, /if \(isRejected && !isConflict && e\.range\.getNumRows\(\) === 1/);
   assert.match(source, /function tintinClaimProductEdit_/);
   assert.match(source, /if \(!tintinClaimProductEdit_\(e\)\) return;/);
 });
