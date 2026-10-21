@@ -27,4 +27,6 @@ El destino debe ser nuevo. El TAR contiene la estructura nativa del export de Fi
 
 El mismo helper cifra/restaura un bundle de código con `-Operation Encrypt`/`Decrypt`. La verificación final del código es `node scripts/verificar-respaldo-repositorio.mjs RUTA/restaurado.bundle`, que clona en una carpeta temporal y ejecuta `git fsck --full` sin tocar el checkout de trabajo.
 
+Límite observado en Windows: un CMS monolítico de225MB produjo `ASN1 demasiado largo` al descifrar. Para copias grandes, dividir el archivo antes de cifrar en partes de hasta64MiB, conservar orden y SHA256 de cada parte y del archivo completo, y verificar el descifrado y rearmado. La copia local de Cloudinary del21/10 usa cuatro partes verificadas y su restaurador; no considerar recuperable un cifrado sólo porque `Encrypt` terminó correctamente.
+
 Este mecanismo no exporta originales de Cloudinary ni configura Instagram/PayPal. Esas integraciones conservan sus propias autorizaciones. Las pruebas Node usan OpenSSL disponible en Ubuntu/Git para Windows; `OPENSSL_BIN` permite especificar otra instalación sin cambiar el helper de producción.

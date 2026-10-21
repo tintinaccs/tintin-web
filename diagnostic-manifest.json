@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "037f609af8779cb157caccacad7593e7bd0b901b385cc063582e391aef3ffe11",
+  "sourceFingerprint": "e942d1198a19e80c31a0ae6ee2e5cbe1661db4045d87faf9bd6f06c9ed4985a2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1382,
     "textFiles": 1292,
-    "totalBytes": 29023564,
+    "totalBytes": 29025666,
     "pages": 19,
     "modules": 971
   },
@@ -48361,8 +48361,8 @@
     },
     {
       "path": "tests/operations/encrypted-backup.test.mjs",
-      "bytes": 7406,
-      "sha256": "86be1549b0e468f3f75a2934d11203fa44049768aa9da7cf85331739f2ab83dd",
+      "bytes": 7484,
+      "sha256": "8116f301e3a4d67eec8cffe8bdc72000d68aa116e0c0466f475ec02506bedf50",
       "syntax": {
         "ok": true,
         "error": ""
@@ -56079,8 +56079,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 748188,
-      "sha256": "2a75c4b27ef52a6e0ff02742905fc5d9ec67166e70879f488d5fd4d93b520f38"
+      "bytes": 749757,
+      "sha256": "1deec0a6cabc8a2cb788073fc875fc844772220f1a1951b55cc93e01c3db1d9b"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56565,8 +56565,8 @@
     {
       "path": "docs/respaldo-cifrado-local.md",
       "extension": ".md",
-      "bytes": 3961,
-      "sha256": "c6996cca68881ecd81335863d8cfeae00ed4fc90e51d3f18b52e3a02d2505d4e"
+      "bytes": 4416,
+      "sha256": "9048641dc10272b6d914bf83658ffcf1cccd93868794ab3846dcbaead85e7cbd"
     },
     {
       "path": "docs/respaldo-recuperacion.md",
@@ -61593,8 +61593,8 @@
     {
       "path": "tests/operations/encrypted-backup.test.mjs",
       "extension": ".mjs",
-      "bytes": 7406,
-      "sha256": "86be1549b0e468f3f75a2934d11203fa44049768aa9da7cf85331739f2ab83dd"
+      "bytes": 7484,
+      "sha256": "8116f301e3a4d67eec8cffe8bdc72000d68aa116e0c0466f475ec02506bedf50"
     },
     {
       "path": "tests/operations/firestore-restore-cli.test.mjs",

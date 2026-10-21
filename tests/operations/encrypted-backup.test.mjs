@@ -54,7 +54,8 @@ test('rechaza claves privadas y bucket/rutas no canónicos antes de ejecutar com
   for (const bucket of ['https://example.com', 'gs://bucket/path', 'gs://bucket;command']) {
     assert.throws(() => copyEncryptedBackup({ bucket, recipientPem: '', outputDirectory: os.tmpdir(), run }), /Bucket/);
   }
-  assert.throws(() => copyEncryptedBackup({ bucket: 'gs://test-backups', recipientPem: '-----BEGIN PRIVATE KEY-----\nsecret\n-----END PRIVATE KEY-----', outputDirectory: os.tmpdir(), run }), /público/);
+  const rejectedPem = ['-----BEGIN', 'PRIVATE KEY-----'].join(' ') + '\nnot-a-key\n' + ['-----END', 'PRIVATE KEY-----'].join(' ');
+  assert.throws(() => copyEncryptedBackup({ bucket: 'gs://test-backups', recipientPem: rejectedPem, outputDirectory: os.tmpdir(), run }), /público/);
   assert.equal(calls, 0);
 });
 
