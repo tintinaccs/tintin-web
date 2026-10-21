@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-const source = fs.readFileSync(new URL('../../.github/workflows/monitor-produccion.yml', import.meta.url), 'utf8');
+const source = fs.readFileSync(new URL('../../.github/workflows/monitor-produccion.yml', import.meta.url), 'utf8').replace(/\r\n?/g, '\n');
 const fxJob = source.split('\n  paypal_fx:\n')[1].split('\n  health:\n')[0];
 const condition = fxJob.match(/^    if: (.+)$/m)[1];
 for (const [name, event, inputs, expected] of [

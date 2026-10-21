@@ -530,6 +530,42 @@ html body:not(:has(.adm-main)) .tt-product-card .tt-card-colors { gap:2px; margi
 
 html body:not(:has(.adm-main)) .tt-product-card .tt-product-actions .tt-btn:only-child { grid-column:1 / -1; }
 
+/* Auditoría del cliente: jerarquía compacta, tokens compartidos y lectura clara. */
+html body:not(:has(.adm-main)) :is(.tt-page-hero-title,.tt-section-title,.tt-cart-title,.tt-notifications-title) { color:var(--color-text-title)!important; }
+html body:not(:has(.adm-main)) .tt-page-hero { padding-block:32px 24px!important; }
+/* En escritorio el encabezado fijo ocupa --header-h; el aire visible sigue siendo 32px. */
+@media (min-width:1025px) {
+  html body:not(:has(.adm-main)) .tt-page-hero { padding-block-start:calc(var(--header-h,88px) + 32px)!important; }
+}
+html body:not(:has(.adm-main)) .tt-page-hero-title { font-size:clamp(28px,3.2vw,40px)!important; line-height:1.2; }
+html body:not(:has(.adm-main)) .tt-page-hero + .section { padding-top:24px!important; }
+html body:not(:has(.adm-main)) .tt-faq-q { min-height:56px; padding:16px 20px!important; font-size:16px!important; line-height:1.5; }
+html body:not(:has(.adm-main)) .tt-faq-item { margin-bottom:8px!important; padding:0!important; }
+html body:not(:has(.adm-main)) .tt-faq-item.tt-faq-open .tt-faq-a { padding:0 20px 16px!important; }
+html body:not(:has(.adm-main)) :is(.tt-info-block,.tt-legal-nav,.tt-contact-info-item,.perfil-card) { box-shadow:none!important; border-radius:14px!important; }
+html body:not(:has(.adm-main)) .tt-legal-content .tt-info-block { border:0!important; border-bottom:1px solid var(--color-border-primary)!important; border-radius:0!important; padding:20px 0!important; background:transparent!important; }
+html body:not(:has(.adm-main)) .tt-contact-info-item { padding:14px 16px!important; }
+html body:not(:has(.adm-main)) .tt-contact-alt { padding:20px!important; }
+html body:not(:has(.adm-main)) .perfil-card:has(> #btn-guardar-perfil) { padding:0!important; background:transparent!important; border:0!important; }
+html body:not(:has(.adm-main)) :is(.tt-product-name,.cat-product-name) { font-size:14px!important; line-height:1.4; }
+html body:not(:has(.adm-main)) :is(.login-heading-sub,.login-box small,.login-methods-note,.login-hint) { font-size:13px!important; line-height:1.5; }
+html body:not(:has(.adm-main)) .tt-footer :is(p,.tt-footer-desc,.tt-footer-hours) { font-weight:400!important; }
+html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body { min-height:160px!important; padding:16px!important; gap:8px; }
+html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body > .tt-btn { margin-top:12px!important; }
+html body:not(:has(.adm-main)) .tt-lightbox :is(button,button svg) { color:#fff!important; }
+html body:not(:has(.adm-main)) .tt-lightbox button { background:#713c53!important; border-color:#fff!important; min-width:44px; min-height:44px; }
+html body:not(:has(.adm-main)) .ck-sug-add { display:inline-flex; justify-content:center; align-items:center; min-height:44px; text-decoration:none; }
+html body:not(:has(.adm-main)) [data-profile-summary-location] { white-space:normal; overflow-wrap:anywhere; }
+html body:not(:has(.adm-main)) .tt-about-text strong { color:var(--color-text-primary)!important; }
+@media(max-width:767px) {
+  html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body { min-height:148px!important; }
+  html body:not(:has(.adm-main)) .tt-gallery-thumbs { flex-wrap:nowrap!important; overflow-x:auto; }
+  html body:not(:has(.adm-main)) .tt-gallery-thumb { flex:0 0 56px; width:56px; height:56px; }
+  html body:not(:has(.adm-main)) .tt-watch-feature h2 { font-size:28px!important; line-height:1.25; }
+  html body:not(:has(.adm-main)) .tt-wa-float { bottom:calc(84px + env(safe-area-inset-bottom))!important; }
+  html body:not(:has(.adm-main)) :is(.tt-products-section,.tt-colls-page-section,.tt-related-section) { padding-bottom:100px!important; }
+}
+
 /* El aviso de stock conserva la fotografía y el color real del accesorio. */
 html body .tt-stock-unavailable :is(.tt-product-img-real,.tt-search-result-image),
 html body #gallery-main.tt-stock-unavailable img { filter: none !important; }

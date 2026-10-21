@@ -78,6 +78,7 @@ async function stableAuthSnapshot() {
 async function toggle(raw) {
   const item = normalize(raw);
   if (!item) return { selected: false, changed: false };
+  const selected = typeof raw.selected === 'boolean' ? raw.selected : !items.some(entry => entry.id === item.id);
   const snapshot = await stableAuthSnapshot();
   if (snapshot.status === AUTH_STATES.UNKNOWN) {
     throw new Error('No pudimos verificar tu sesión en este momento. Tu cuenta sigue iniciada; volvé a intentar en unos segundos.');
@@ -93,7 +94,7 @@ async function toggle(raw) {
       method: 'POST',
       cache: 'no-store',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'toggleFavorite', productId: item.id, ...item }),
+      body: JSON.stringify({ action: 'toggleFavorite', productId: item.id, ...item, selected }),
     });
     const result = await response.json().catch(() => ({}));
     if (response.ok && result.ok === true) {
@@ -135,7 +136,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261019-variant-links-1');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 

@@ -6,7 +6,7 @@ import {
   DEFAULT_WELCOME_STEPS,
   WELCOME_VERSION,
   normalizeWelcomeConfig
-} from './configuracion-bienvenida.js?v=tintin-20261015-images-1';
+} from './configuracion-bienvenida.js?v=tintin-20261020-domain-cutover-consolidated-1';
 
 (function(){
   'use strict';

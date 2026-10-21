@@ -872,6 +872,20 @@ export async function likeReply(env, user, input) {
 }
 
 export async function toggleFavorite(env, user, input) {
+  // Quitar un favorito personal no retira el Me gusta histórico, sus avisos
+  // ni sus contadores. También permite limpiar productos ya eliminados.
+  if (input.selected === false) {
+    const uid = safeId(user.uid, 'Cuenta');
+    const productId = safeId(input.productId, 'Producto');
+    const profile = decoded(await firestoreAdminGet(env, `users/${uid}`));
+    if (!profile || profile.blocked === true) throw new Error('La cuenta no puede realizar esta acción');
+    const path = `users/${uid}/favorites/${productId}`;
+    const favorite = await firestoreAdminGet(env, path);
+    if (favorite) await firestoreAdminCommit(env, [{
+      path, delete: true, currentDocument: { updateTime: favorite.updateTime },
+    }]);
+    return { selected: false, alreadyLiked: true, changed: Boolean(favorite) };
+  }
   const context = await readContext(env, user, input.productId);
   const uid = safeId(user.uid, 'Cuenta');
   const legacyLikeId = await opaqueId(uid, context.productId, 'favorite');
@@ -883,6 +897,16 @@ export async function toggleFavorite(env, user, input) {
   const existingDoc = modernDoc || legacyDoc;
   if (existingDoc) {
     const existing = decoded(existingDoc);
+    if (input.selected === true) {
+      const path = `users/${uid}/favorites/${context.productId}`;
+      if (!await firestoreAdminGet(env, path)) await firestoreAdminCommit(env, [{
+        path, currentDocument: { exists: false }, fields: encodeFirestoreFields({
+          schemaVersion: 3, productId: context.productId, name: context.productName,
+          cat: clean(input.cat, 120), price: Math.max(0, Number(input.price) || 0),
+          imageUrl: context.imageUrl, createdAt: new Date(), updatedAt: new Date(),
+        }),
+      }]);
+    }
     const likeCount = await updateProductLikeStats(env, context.productId);
     return { selected: true, alreadyLiked: true, likeCount, record: existing };
   }

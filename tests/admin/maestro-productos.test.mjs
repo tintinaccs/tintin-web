@@ -51,3 +51,14 @@ test('vinculación rechaza selección inválida y cantidades máximas sin altera
 });
 
 test('quitar oferta elimina también el precio anterior y su badge, sin alterar el precio real',()=>{assert.deepEqual(productBulkPatch({...product,badge:'Oferta'},'oferta',false),{oferta:false,priceBefore:null,badge:null});});
+
+test('la tarjeta actualiza sólo la variante elegida y conserva el total consistente', async () => {
+ const {productCardPatch}=await import('../../js/admin/products/maestro-productos-core.mjs');
+ const product={stock:3,variantInventory:[{variant:'Dorado',stock:0},{variant:'Plateado',stock:3}]};
+ assert.deepEqual(productCardPatch(product,{field:'stock',variant:'Dorado',value:'500'}),{stock:503,variantInventory:[{variant:'Dorado',stock:500},{variant:'Plateado',stock:3}]});
+ assert.deepEqual(productCardPatch(product,{field:'stock',variant:'Plateado',value:0}),{stock:0,variantInventory:[{variant:'Dorado',stock:0},{variant:'Plateado',stock:0}]});
+ for(const value of [-1,1.5,'',1000001])assert.throws(()=>productCardPatch(product,{field:'stock',variant:'Dorado',value}));
+ assert.throws(()=>productCardPatch(product,{field:'stock',variant:'Inexistente',value:5}));
+ assert.deepEqual(productCardPatch({stock:3},{field:'stock',value:0}),{stock:0});
+ assert.deepEqual(productCardPatch(product,{field:'active',value:false}),{active:false});
+});

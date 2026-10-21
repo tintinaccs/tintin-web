@@ -10,24 +10,25 @@ const { CATEGORIES } = require('../js/components/navigation/compartido/iconos.js
 const { restoreStyleSources, writeHomeStyles } = require('./lib/estilos-inicio.js');
 
 const ROOT = path.resolve(__dirname, '..');
+const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.css', versionPrefix: 'tintin-about' };
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261020-color-gallery-order-1';
+const TIENDA_VERSION = 'tintin-20261020-domain-cutover-color-order-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261017-domain-cutover-1';
-const LOADER_VERSION = 'tintin-20261020-push-return-1';
+const LOADER_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261012-checkout-ready-3-control-paneles-js-bootstrap-rejection-20261011-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261020-public-order-notices-3';
-const NAV_ENTRY_VERSION = 'tintin-20261020-public-order-notices-3';
+const PUBLIC_SHELL_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
+const NAV_ENTRY_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261019-variant-links-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261017-domain-cutover-1';
 const PROFILE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1';
-const UNIFIED_THEME_VERSION = 'tintin-20261017-responsive-footer-1';
+const UNIFIED_THEME_VERSION = 'tintin-20261020-domain-cutover-consolidated-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
@@ -70,7 +71,7 @@ function ensureSectionFlow(html, absolute = false) {
   if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(out)) return out;
   const beforeHeadEnd = out.slice(0, out.indexOf('</head>'));
   const join = beforeHeadEnd.endsWith('\n') ? '' : '\n';
-  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261020-headers-merge-1" defer></script>\n</head>`);
+  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1" defer></script>\n</head>`);
 }
 function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   let out = ensureSectionFlow(html, absolute).replace(/\s*<!-- Estructura pública disponible desde el primer render -->/g, '');
@@ -95,7 +96,7 @@ const INITIAL_SHARED_STYLES = [
   ]
 ];
 const INITIAL_PUBLIC_STYLES = [
-  ['id="tt-mobile-brand-css"', 'css/components/navigation/movil/marca-movil.css', 'tintin-20261020-pink-header-3'],
+  ['id="tt-mobile-brand-css"', 'css/components/navigation/movil/marca-movil.css', 'tintin-20261020-domain-cutover-consolidated-1'],
   [
     "id=\"tt-global-studio-runtime-css\"",
     "css/components/visual-studio-global-runtime.css",
@@ -600,6 +601,7 @@ for (const page of PUBLIC_PAGES) {
   const before = html;
 
   if (page === 'index.html') html = restoreStyleSources(html);
+  if (page === 'about.html') html = restoreStyleSources(html, ABOUT_STYLES.id);
 
   for (const id of SHELL_IDS) html = removeElementById(html, id);
   html = removeLegacyComments(html);
@@ -623,6 +625,7 @@ for (const page of PUBLIC_PAGES) {
   html = ensureInitialRuntimeStyles(html, page);
   html = normalizeWhitespace(html);
   if (page === 'index.html') html = writeHomeStyles(html, ROOT);
+  if (page === 'about.html') html = writeHomeStyles(html, ROOT, ABOUT_STYLES);
 
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');

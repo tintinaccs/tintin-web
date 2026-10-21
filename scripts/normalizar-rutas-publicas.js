@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { functionRoutes } = require('./lib/rutas-pages.js');
 
 const root = path.resolve(__dirname, '..');
 const checkOnly = process.argv.includes('--check');
@@ -95,6 +96,12 @@ const files = [...new Set([...htmlFiles, ...rootRuntimeJs, ...jsFiles])]
   .filter(file => !excludedFiles.includes(path.resolve(file)));
 
 const changed = [];
+const functionRoutesPath = path.join(root, '_routes.json');
+const expectedFunctionRoutes = JSON.stringify(functionRoutes(root), null, 2) + '\n';
+if (fs.readFileSync(functionRoutesPath, 'utf8').replace(/\r\n?/g, '\n') !== expectedFunctionRoutes) {
+  changed.push('_routes.json');
+  if (!checkOnly) fs.writeFileSync(functionRoutesPath, expectedFunctionRoutes, 'utf8');
+}
 for (const file of files) {
   const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
   const after = file.endsWith('.html') ? normalizeHtml(before) : normalizeJs(before);
@@ -104,7 +111,7 @@ for (const file of files) {
 }
 
 if (checkOnly && changed.length) {
-  console.error('ERROR — todavía existen rutas internas .html que pueden normalizarse:');
+  console.error('ERROR — rutas internas o Pages Functions fuera de la fuente canónica:');
   changed.forEach(file => console.error('- ' + file));
   process.exit(1);
 }

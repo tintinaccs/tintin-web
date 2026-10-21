@@ -270,16 +270,18 @@ function showAddedToCart(productName) {
 }
 
 // null/undefined stock means "not tracked" — treat as unlimited
-function getStockLimit(productId) {
+function getStockLimit(productId, variant) {
   const product = getProductById(productId);
-  if (!product || product.stock === null || product.stock === undefined) return Infinity;
-  return Math.max(Number(product.stock), 0);
+  if (!product) return Infinity;
+  const total = product.stock == null ? Infinity : Math.max(Number(product.stock), 0);
+  const option = window.TintinCatalogPolicy?.variantStockLimit?.(product, variant);
+  return Math.min(total, option ?? Infinity);
 }
 
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261019-variant-links-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -320,7 +322,7 @@ function updateQty(productId, delta, variant) {
     && (!hasVariant || String(i.variant || '') === normalizedVariant)
   );
   if (!item) return;
-  if (delta > 0 && item.qty >= getStockLimit(productId)) {
+  if (delta > 0 && item.qty >= getStockLimit(productId, item.variant)) {
     showCartToast(`Ya tenés el máximo disponible de "${item.name}" en el carrito`);
     return;
   }
@@ -436,7 +438,7 @@ function renderCart() {
         <div class="tt-cart-qty">
           <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="-1" aria-label="Restar">−</button>
           <span class="tt-cart-qty-val">${item.qty}</span>
-          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="1" aria-label="Sumar">+</button>
+          <button type="button" class="tt-cart-qty-btn" data-cart-action="quantity" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" data-cart-delta="1" aria-label="Sumar" ${item.qty >= getStockLimit(item.id, item.variant) ? 'disabled' : ''}>+</button>
         </div>
       </div>
       <div class="tt-cart-item-actions">
@@ -815,6 +817,7 @@ document.addEventListener('click', event => {
   const card = button.closest('.tt-product-card');
   if (!card) return;
   event.preventDefault();
+  if (button.dataset.cardAvailable === 'false') return;
   cardColorSelections.set(card.dataset.id, button.dataset.cardColor);
   if (cardColorSelections.size > 500) cardColorSelections.delete(cardColorSelections.keys().next().value);
   card.querySelectorAll('[data-card-color]').forEach(option => option.setAttribute('aria-pressed', String(option === button)));
@@ -1026,7 +1029,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261019-variant-links-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -1959,7 +1962,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261019-variant-links-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
