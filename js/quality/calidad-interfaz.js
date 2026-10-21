@@ -20,7 +20,7 @@ function css(){
   var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=versioned('../../css/'+file,f[2]);document.head.appendChild(l);
  });
 }
-function bootThemeSanitizer(){import(versioned('../components/color/normalizador-color-tema.js', 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
+function bootThemeSanitizer(){import(versioned('../components/color/normalizador-color-tema.js', 'tintin-20261021-commerce-review-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}
 function bootMobileHeader(){import(versioned('../components/navigation/compartido/compatibilidad-cuenta-movil.js', 'tintin-20260930-shell-canonical-1-brand-20261004-1-owner-pink-20261004-1-loads-20261007-1-master-20261007-1-encomienda-20261008-1-checkout-20261008-2-first-render-merge-20261010-1-palette-20261014-1-ui-reconciled-20261014-1-ui-reconciled-20261014-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Mobile Header Fix:',e)})}
 function bootPageAudit(){import(versioned('./correccion-auditoria-pagina.js', 'tintin-20261012-checkout-ready-3-control-paneles-js-palette-20261014-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Page Audit Fix:',e)})}
 function bootCollectionsPhase4(){import(versioned('../pages/collections/presentacion-colecciones.js', 'tintin-20261021-commerce-review-1')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Collections Phase 4:',e)})}

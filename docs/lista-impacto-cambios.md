@@ -1,3 +1,7 @@
+## 2026-10-21 — Consumidores de reserva propia y PayPal
+
+Autoridad: pedido-checkout-seguro.js. Checkout HTML, hardening, confiabilidad y navegación suspenden sólo sus guardias durante creación/pago pendiente para conservar el resumen de la reserva propia. PayPal recibe también pedidos recuperados antes de cargar el módulo. Pruebas de servidor, recuperación por identidad, referencia mínima y navegador tardío; sin operaciones comerciales reales. Se incorpora #1195 y se extiende su única capa de fondo; ocultamiento al scroll incluye su profundidad. Plan y derivados se regeneran sobre main8081ab515.
+
 ## 2026-10-21 — Reserva al registrar, cola del header y Pulseras unificada
 
 Autorización del titular: apartar al tocar Confirmar pedido aunque el pago esté pendiente. Fuente: dominio servidor de pedidos y modelo compartido; política confiable sólo para actor client/public-checkout, persistida en pedidos nuevos. Reserva atómica de agregado/variante, idempotencia y liberación/reapertura; históricos/manuales preservados y PayPal concilia sin duplicar. Ticket comunica reserva real. Header extiende32–56px el difuminado con máscara y sin interceptar punteros desde superficies canónicas. Colecciones del panel comercial reutiliza alias canónicos para principal Pulseras, conteos/filtros/ficha/productos de ambos grupos sin mutar datos crudos. Pruebas concurrentes, pagos, rechazo/cancelación/reapertura, spoofing y20 Chromium de diez tamaños; derivados/versiones/plan y evidencia del candidato se regeneran antes de CI.

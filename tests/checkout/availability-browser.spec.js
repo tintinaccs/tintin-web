@@ -4,7 +4,7 @@ const runtime=fs.readFileSync('js/orders/pedido-checkout-seguro.js','utf8').repl
 const pageSource=fs.readFileSync('checkout.html','utf8');
 const clean=pageSource.replace(/<script\b[\s\S]*?<\/script>/gi,'');
 const sizes=[[320,568],[390,844],[844,390],[768,1024],[1024,768],[820,1180],[1180,820],[1366,768],[1440,900],[1920,1080]];
-async function mount(page,{stock=0,offline=false,delay=0}={}){
+async function mount(page,{stock=0,offline=false,delay=0,deferReads=false}={}){
  await page.route('https://**',r=>r.abort());
  await page.route('**/__availability-test',r=>r.fulfill({contentType:'text/html',body:clean.replace('</body>',`<script type="module">
  import '../../js/quality/accesibilidad-global.js';
@@ -15,7 +15,8 @@ async function mount(page,{stock=0,offline=false,delay=0}={}){
  const waitForSession=async()=>({status:'authenticated',user:activeUser});const subscribeAuthState=()=>{};
  const db={};const doc=(_db,col,id)=>({col,id});
  let stock=${JSON.stringify(stock)};window.setStock=value=>{stock=value};
- const getDocFromServer=async ref=>{window.stockReads=(window.stockReads||0)+1;await new Promise(r=>setTimeout(r,${delay}));${offline ? "throw Error('offline');" : ''}return {exists:()=>true,data:()=>({stock,active:true})};};
+ const stockReadWaiters=[];window.releaseStockReads=()=>stockReadWaiters.splice(0).forEach(resolve=>resolve());
+ const getDocFromServer=async ref=>{window.stockReads=(window.stockReads||0)+1;await new Promise(r=>${deferReads} ? stockReadWaiters.push(r) : setTimeout(r,${delay}));${offline ? "throw Error('offline');" : ''}return {exists:()=>true,data:()=>({stock,active:true})};};
  window.TintinCheckoutEmailBridgeLoading=true;window.TintinCheckoutState={clear(){window.stateCleared=true}};
  let cart=[{id:'p',name:'Anillo corazón',qty:1},{id:'q',name:'Otro producto',qty:1}];
  window.TintinCartRuntime={getCartLocal:()=>cart.map(i=>({...i})),setCartLocal:items=>{cart=items;window.cart=cart},awaitCartReady:async()=>{},formatPrice:n=>'Gs. '+n};window.cart=cart;
@@ -62,7 +63,9 @@ test('fallo de red conserva los productos y permite reintentar',async({page})=>{
  await page.locator('#btn-step1-next').click();await expect.poll(()=>page.evaluate(()=>window.stockReads)).toBeGreaterThanOrEqual(4);
 });
 test('respuesta de una sesión anterior no altera carrito ni abre diálogo',async({page})=>{
- await mount(page,{delay:150});await page.locator('#btn-step1-next').click();await page.evaluate(()=>window.changeSession());
+ await mount(page,{deferReads:true});await page.locator('#btn-step1-next').click();
+ await expect.poll(()=>page.evaluate(()=>window.stockReads||0)).toBeGreaterThan(0);
+ await page.evaluate(()=>{window.changeSession();window.releaseStockReads();});
  await expect(page.locator('#btn-step1-next')).not.toHaveAttribute('aria-busy','true');
  await expect(page.locator('#ck-availability-dialog')).toHaveCount(0);expect(await page.evaluate(()=>window.cart.length)).toBe(2);
 });
@@ -91,8 +94,8 @@ test('la reserva propia conserva el resumen y PayPal recupera un pedido antes de
  expect(pointer).toMatchObject({uid:'fixture',orderId:'public_fixture_reserva',paymentPending:true});
  expect(Object.keys(pointer).sort()).toEqual(['orderId','paymentPending','savedAt','uid']);
  await page.route('**/api/paypal-config',r=>r.fulfill({contentType:'application/json',body:JSON.stringify({enabled:false})}));
- await page.route('**/__paypal-late-runtime',r=>r.fulfill({contentType:'text/javascript',body:fs.readFileSync('js/pages/checkout/paypal-checkout.js','utf8').replace(/^import[^\n]*\n/gm,'')}));
- await page.evaluate(()=>import('/__paypal-late-runtime'));
+ await page.route('**/js/pages/checkout/paypal-checkout.js?fixture=late',r=>r.fulfill({contentType:'text/javascript',body:fs.readFileSync('js/pages/checkout/paypal-checkout.js','utf8').replace(/^import[^\n]*\n/gm,'')}));
+ await page.evaluate(()=>import('../../js/pages/checkout/paypal-checkout.js?fixture=late'));
  await expect(page.locator('#tt-paypal-status')).toHaveText('PayPal no está disponible todavía.');
  await expect(page.locator('.ck-panel').nth(4)).toHaveClass(/active/);
 });

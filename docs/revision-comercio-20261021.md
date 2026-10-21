@@ -1,6 +1,6 @@
 # Revisión de comercio y experiencia — 21/10/2026
 
-Responsable: Codex /root. Base: main `6dfad3020` (incluye Perfil, iconos y respaldo cifrado de1192). Alcance solicitado por la titular: stock/checkout, totales, seguimiento, catálogo/ficha, consistencia visual, formularios, rendimiento, operación administrativa, seguridad, recuperación, accesibilidad y SEO. El carrito persistente ya fue validado por la titular; sus regresiones relacionadas se conservan.
+Responsable: Codex /root. Base integrada: main `8081ab515` (incluye Perfil, iconos y respaldo cifrado de #1192). Alcance solicitado por la titular: stock/checkout, totales, seguimiento, catálogo/ficha, consistencia visual, formularios, rendimiento, operación administrativa, seguridad, recuperación, accesibilidad y SEO. El carrito persistente ya fue validado por la titular; sus regresiones relacionadas se conservan.
 
 ## Cambios con evidencia
 
@@ -27,7 +27,7 @@ Responsable: Codex /root. Base: main `6dfad3020` (incluye Perfil, iconos y respa
 | Rendimiento | Suite completa de65 pruebas aprobada: cargas iniciales, imágenes, CLS, consultas/listeners, catálogo por demanda y dimensiones320–1440. Buscador probado con1000 entradas. |
 | Administración | Suites de pedidos y navegación entre módulos/acciones/edición, búsqueda y borradores. No se cambian estados ni se escriben pedidos/productos reales para probar. |
 | Seguridad | Políticas públicas y servidor: datos vigentes, permisos, propiedad, bloqueo y cotización; auditoría estática aprobada. No se cambian Rules ni se rebajan permisos. |
-| Recuperación | Salud/conciliación y recuperación de correo; tests de copia cifrada con cifrado/descifrado real y comparación de bytes. El estado de respaldos remotos actuales no se infiere de documentación histórica. |
+| Recuperación | Salud/conciliación y recuperación de correo; tests de copia cifrada con cifrado/descifrado real y comparación de bytes. Se verificó el workflow remoto39647692594 y su artefacto cifrado; ver detalle de alcance al cierre. |
 | Accesibilidad | Etiquetas, error, foco, teclado, región offline; diálogo integrado con el gestor canónico de accesibilidad, acciones48px y viewport bajo. |
 | Google/WhatsApp | HTML inicial con canonical/social/Product JSON-LD, indexación de privados y actualización cliente coherente con variantes. |
 
@@ -40,10 +40,10 @@ Responsable: Codex /root. Base: main `6dfad3020` (incluye Perfil, iconos y respa
 
 ## Evidencia de esta rama
 
-- 452/452 Node: checkout, carrito, catálogo, búsqueda, pedidos, pagos, cifrado y notificaciones. Incluye mutaciones negativas del auditor para impedir retirar tags, variantes, visibilidad o reintroducir un segundo buscador.
-- 210/210 Chromium de UI pública/administrativa: producto, variantes, selección, catálogo/colecciones, panel y push; mobile/tablets en ambas orientaciones, laptop y desktop.
-- 126/126 combinaciones del auditor canónico (18 páginas ×7 dimensiones).
-- 62/64 Chromium de dominio:15 del nuevo agotado,8 de búsqueda, ficha, accesibilidad, SEO, módulos y2 controles de cantidades. Dos integraciones de cantidades adicionales están bloqueadas por el CDN, como se detalla arriba.
+- Lote inicial 452/452 Node: checkout, carrito, catálogo, búsqueda, pedidos, pagos, cifrado y notificaciones. Incluye mutaciones negativas del auditor para impedir retirar tags, variantes, visibilidad o reintroducir un segundo buscador.
+- Lote inicial 210/210 Chromium de UI pública/administrativa: producto, variantes, selección, catálogo/colecciones, panel y push; mobile/tablets en ambas orientaciones, laptop y desktop.
+- Lote inicial 126/126 combinaciones del auditor canónico (18 páginas ×7 dimensiones).
+- Lote inicial 62/64 Chromium de dominio:15 del nuevo agotado,8 de búsqueda, ficha, accesibilidad, SEO, módulos y2 controles de cantidades. Dos integraciones de cantidades adicionales están bloqueadas por el CDN, como se detalla arriba.
 - 8/8 recorridos de búsqueda repetidos después de retirar el controlador competidor; precio anterior/descuento visibles y navegación por teclado conservados. Auditor de búsqueda desktop/mobile aprobado con colecciones reales de fixture.
 - Build, CSP, rutas, caché y protección se regeneran desde autoridades; no se eliminan comprobaciones para superar el cambio de controlador.
 
@@ -53,3 +53,17 @@ La titular confirmó expresamente: «Sí, apartarla al confirmar el pedido». Se
 
 - Header público: la misma fuente de superficies extiende fondo y blur mediante una cola enmascarada de32–56px debajo del área del encabezado. No cambia altura, layout ni nitidez del texto y la cola no captura punteros.10 dimensiones aprobadas, incluidas ambas orientaciones.
 - Colecciones del panel comercial: se reutiliza `unifyWristCollections` que ya usa el sitio y el panel anterior. Pulseras es principal; listado, total, filtros, ficha, clasificación y vista de productos incluyen categorías históricas. No altera snapshots crudos para concurrencia ni borra productos/documentos. El enlace Ver productos aplica el filtro al controlador visible. Caso13+9=22 aprobado en10 dimensiones;20/20 Chromium del conjunto header/colecciones.
+
+## Cierre de la reserva y conciliación
+
+El pedido que acaba de reservar sus propias unidades conserva su resumen durante la petición y el pago PayPal: los consumidores canónicos del carrito, guardias y navegación respetan el estado en curso. El recibo indica la reserva real. Recargar PayPal recupera por UID/referencia el pedido pendiente sin volver a crearlo, y su módulo consume la referencia aunque cargue tarde. La referencia en sessionStorage contiene sólo UID, orderId, savedAt y paymentPending; nunca dirección ni tokens. Cancelados/rechazados no se restauran como compra terminada.
+
+Evidencia local del cierre: 404/404 Node checkout/pedidos/pagos/catálogo/carrito; 191/191 de sincronización/productos y buscador; 50/50 del dominio de pedidos al añadir liberación explícita de cancelados y rechazados sin pago; 16/16 Chromium de disponibilidad, identidad, navegación y PayPal tardío. Los lotes se solapan y no se suman como pruebas únicas.
+
+Se integra #1195 desde main mediante merge normal. Se extiende la misma capa enmascarada del header, sin añadir un segundo fondo; el ocultamiento contempla también su extensión para no dejar halo. Se conservan las regresiones de transparencia/píxeles y ambas evidencias documentales. Los derivados y el plan se regeneran contra main8081ab515. La verificación final de la interfaz conciliada, CI y publicación siguen pendientes hasta obtener resultados del SHA correspondiente.
+
+Recuperación de PayPal ya pagado al recargar: consulta al servidor para evitar estado offline obsoleto, muestra comprobante y limpia carrito/requestId una sola vez; no reinicia el pago. Caso pendiente conserva carrito y reserva. Contrato de recuperación cubre ambas salidas e identidad.
+
+Respaldo remoto comprobado por API de GitHub: run39647692594, main6dfad3020, concluido success. La etapa Exportar Firestore fue omitida: esta ejecución preparó una copia cifrada del último export completo y la conservó correctamente. Artefacto firestore-encrypted-39647692594, 12.229.272 bytes, creado2026-10-21T17:53:21Z, no vencido al consultar y con expiración2026-10-22T17:53:20Z. Esto verifica la copia cifrada disponible; no certifica fecha del snapshot original ni una restauración real remota. No se descargó ni expuso contenido comercial. Consulta: https://github.com/tintinaccs/tintin-web/actions/runs/39647692594.
+
+Rendimiento del candidato conciliado:65/65 Chromium PASS_LOCAL. Transparencia/ocultamiento del header:20/20 PASS_LOCAL. El fixture de cambio de sesión se sincroniza con una barrera explícita de lectura para no depender de150ms de reloj bajo carga.

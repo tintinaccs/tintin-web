@@ -425,7 +425,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     try {
       await awaitCartReady();
       if (saved.paymentPending !== true && getCartLocal().length) { try { sessionStorage.removeItem('tt_checkout_receipt_v1'); } catch {} return; }
-      const snapshot = await getDoc(doc(db, 'orders', saved.orderId));
+      const readReceipt = saved.paymentPending === true ? getDocFromServer : getDoc;
+      const snapshot = await readReceipt(doc(db, 'orders', saved.orderId));
       if (getSessionUser()?.uid !== user.uid || !snapshot.exists()) return;
       const result = { ...snapshot.data(), orderId: snapshot.id };
       if (result.userId !== user.uid) return;
@@ -441,6 +442,13 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       orderCompleted = true;
       success(result, draft);
+      if (saved.paymentPending === true) {
+        // El proveedor pudo completar el pago antes de recargar, sin que se
+        // ejecutara el evento local de captura. Finalizar ese mismo pedido.
+        try { await clearCart(); } catch (error) { console.warn('[checkout] No se pudo limpiar el carrito recuperado:', error); }
+        try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
+        inMemoryRequestId = null;
+      }
     } catch (error) { recoveredReceiptUid = ''; console.warn('[checkout] No se pudo recuperar el ticket:', error?.message); }
     finally { recoveringReceipt = false; window.TintinCheckoutReceiptRestoring = false; }
   }

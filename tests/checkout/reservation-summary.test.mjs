@@ -39,13 +39,15 @@ test('PayPal conserva una referencia mínima para reanudar el pedido ya reservad
 });
 test('recargar reanuda PayPal del titular; no confirma pago ni duplica reserva y descarta cancelados',async()=>{
  for(const mode of ['pending','paid','canceled','other']){
-  let reads=0,paid=0,resumed=0;const removed=[];
+  let reads=0,paid=0,resumed=0,cleared=0;const removed=[];
   const saved={uid:mode==='other'?'other':'owner',orderId:'public_owner_req',paymentPending:true,savedAt:Date.now()};
-  const c=vm.createContext({window:{},recoveredReceiptUid:'',recoveringReceipt:false,orderCompleted:false,REQUEST_KEY:'request-key',inMemoryRequestId:'request-id',console:{warn(){}},sessionStorage:{getItem:()=>JSON.stringify(saved),removeItem:k=>removed.push(k)},getSessionUser:()=>({uid:'owner'}),awaitCartReady:async()=>{},getCartLocal:()=>[{id:'unlimited',qty:1}],db:{},doc:(_db,_col,id)=>id,getDoc:async()=>{reads++;return{id:saved.orderId,exists:()=>true,data:()=>({userId:'owner',paymentMethod:'paypal',paymentStatus:mode==='paid'?'pagado':'pendiente',status:mode==='canceled'?'cancelado':'pendiente'})};},success:()=>paid++,beginPaypalPayment:()=>resumed++});
+  const c=vm.createContext({window:{},recoveredReceiptUid:'',recoveringReceipt:false,orderCompleted:false,REQUEST_KEY:'request-key',inMemoryRequestId:'request-id',console:{warn(){}},sessionStorage:{getItem:()=>JSON.stringify(saved),removeItem:k=>removed.push(k)},getSessionUser:()=>({uid:'owner'}),awaitCartReady:async()=>{},getCartLocal:()=>[{id:'unlimited',qty:1}],db:{},doc:(_db,_col,id)=>id,clearCart:async()=>cleared++,getDocFromServer:async()=>{reads++;return{id:saved.orderId,exists:()=>true,data:()=>({userId:'owner',paymentMethod:'paypal',paymentStatus:mode==='paid'?'pagado':'pendiente',status:mode==='canceled'?'cancelado':'pendiente'})};},success:()=>paid++,beginPaypalPayment:()=>resumed++});
   vm.runInContext(source.slice(source.indexOf('  async function restoreConfirmedReceipt('),source.indexOf("  window.addEventListener('tintin:order-email-result'")),c);
   await c.restoreConfirmedReceipt({uid:'owner',emailVerified:true});
   assert.equal(reads,mode==='other'?0:1);assert.equal(paid,mode==='paid'?1:0);assert.equal(resumed,mode==='pending'?1:0);
-  if(mode==='canceled')assert.ok(removed.includes('request-key'));
+  assert.equal(cleared,mode==='paid'?1:0);
+  if(mode==='canceled'||mode==='paid')assert.ok(removed.includes('request-key'));
+  if(mode==='paid')assert.equal(c.inMemoryRequestId,null);
   assert.equal(c.window.TintinCheckoutReceiptRestoring===true,false);
  }
 });
