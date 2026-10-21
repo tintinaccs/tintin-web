@@ -516,3 +516,8 @@ Autoridad compartida destino-admin.mjs para productor Cloudflare, campana, login
 ## 2026-10-20 — Cabeceras únicas de etapas de Pedidos
 
 Fuente: tablero-pedidos.css. Escritorio usa títulos y contadores de las cinco columnas; hasta 1180px usa pestañas y oculta sólo los títulos repetidos de etapas estándar. Incidencias e Históricos conservan sus títulos. No cambia renderizado, selección, datos, permisos, cantidades ni transiciones. Caché del CSS y derivados regenerados; matriz de 24 tamaños y cruce de breakpoint con etapa persistida en orders-board.spec.js.
+
+
+## 2026-10-20 — Consolidación de los nueve PR pendientes
+
+Se concilian historias929/1122/1134/1146/1154/1156/1170/1180/1182 con main dc6da947 y el avance concurrente9d58fca0. Afecta acceso/OTP, stock de carrito, favoritos, avisos, revisión de inventario, fuente del espejo mensual, superficies y tarjetas/Instagram. Se preservan1175/1179/1183/1184, comparadores canónicos y guardas; las reglas visuales antiguas incompatibles ceden al diseño posterior. Referencias, bundles y derivados se generan; CI conserva todos sus controles. El cambio de workflows sólo añade validación previa al despliegue manual de Rules, instala navegador de diagnóstico y asegura origen local desde antes de los gates. No despliega Rules ni instala Apps Script, cambia DNS o escribe datos comerciales. Inventario y límites en docs/agent/CONSOLIDACION_PR_20261020.md.

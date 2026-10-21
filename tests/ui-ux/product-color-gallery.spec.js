@@ -102,9 +102,8 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   expect(geometry.thumbs.bottom).toBeLessThanOrEqual(geometry.colors.top);
   expect(geometry.overflow).toBe(false);
   if (width < 768) {
+    expect(geometry.main.bottom).toBeLessThanOrEqual(geometry.panel.top);
     expect(geometry.name.height).toBeGreaterThan(0);
-    expect(geometry.name.bottom).toBeLessThanOrEqual(geometry.main.top);
-    expect(geometry.price.bottom).toBeLessThanOrEqual(geometry.main.top);
   }
   expect(geometry.main.left).toBeGreaterThanOrEqual(16);
   expect(geometry.main.right).toBeLessThanOrEqual(width-16);

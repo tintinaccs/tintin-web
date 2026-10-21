@@ -139,7 +139,7 @@ test('el orden de secciones se sanea: solo ids reales, sin duplicados, nunca pie
   assert.ok(new Set(clean.sectionOrder).size === clean.sectionOrder.length);
 
   const empty = sanitizeVisualConfig('index', {});
-  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'collections_carousel', 'best_sellers', 'editorial_relojes', 'reviews']);
+  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'collections_carousel', 'best_sellers', 'editorial_relojes', 'reviews', 'instagram']);
 });
 
 test('referencias de secciones viejas se reconectan a la implementación canónica sin copiar datos incompatibles', () => {

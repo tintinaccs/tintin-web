@@ -559,11 +559,6 @@ html body:not(:has(.adm-main)) [data-profile-summary-location] { white-space:nor
 html body:not(:has(.adm-main)) .tt-about-text strong { color:var(--color-text-primary)!important; }
 @media(max-width:767px) {
   html body:not(:has(.adm-main)) .tt-collections-page .tt-coll-page-body { min-height:148px!important; }
-  html body:not(:has(.adm-main)) .tt-product-detail-grid { display:flex; flex-direction:column; gap:20px; }
-  html body:not(:has(.adm-main)) .tt-product-info-panel { display:contents; }
-  html body:not(:has(.adm-main)) .tt-product-info-panel > * { order:3; }
-  html body:not(:has(.adm-main)) .tt-product-info-panel > :is(.tt-product-name-row,.tt-product-detail-price,.tt-product-detail-cat,.tt-product-status) { order:1; margin:0; }
-  html body:not(:has(.adm-main)) .tt-product-gallery { order:2; width:100%; }
   html body:not(:has(.adm-main)) .tt-gallery-thumbs { flex-wrap:nowrap!important; overflow-x:auto; }
   html body:not(:has(.adm-main)) .tt-gallery-thumb { flex:0 0 56px; width:56px; height:56px; }
   html body:not(:has(.adm-main)) .tt-watch-feature h2 { font-size:28px!important; line-height:1.25; }
