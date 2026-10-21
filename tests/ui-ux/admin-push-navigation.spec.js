@@ -177,11 +177,13 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[820,1180]
   await expect.poll(()=>logo.evaluate(node=>node.naturalWidth)).toBe(192);
   const geometry=await page.locator('.adm-topbar').evaluate(node=>{
    const items=[...node.children].filter(item=>getComputedStyle(item).display!=='none').map(item=>{const r=item.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};});
-   const style=getComputedStyle(node);
-   return {blur:style.backdropFilter,background:style.backgroundImage,border:style.borderBottomWidth,items,overflow:document.documentElement.scrollWidth>innerWidth+1};
+   const style=getComputedStyle(node),paint=getComputedStyle(node,'::before');
+   return {blur:paint.backdropFilter,background:paint.backgroundImage,mask:paint.maskImage,canvas:style.backgroundColor,border:style.borderBottomWidth,items,overflow:document.documentElement.scrollWidth>innerWidth+1};
   });
   expect(geometry.blur).toContain('blur(18px)');
   expect(geometry.background).toContain('linear-gradient');
+  expect(geometry.mask).toContain('linear-gradient');
+  expect(geometry.canvas).toBe('rgba(0, 0, 0, 0)');
   expect(geometry.border).toBe('0px');
   expect(geometry.overflow).toBe(false);
   for(let i=0;i<geometry.items.length;i++)for(let j=i+1;j<geometry.items.length;j++){

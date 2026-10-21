@@ -508,19 +508,36 @@ html:root body:not(:has(.adm-main)) .tt-visual-product-card:has(.tt-stock-label)
 
 html:root body .tt-stock-label { color:#4B5563 !important; background:#E5E7EB !important; border-color:#9CA3AF !important; }
 
-/* Un mismo rosa suave en todos los encabezados. El degradado y el desenfoque
-   afectan únicamente al fondo; marca, texto y controles conservan nitidez. */
+/* El fondo y su desenfoque se desvanecen juntos sobre el contenido actual.
+   La máscara pertenece sólo a esta capa: nunca recorta marca ni desplegables. */
+:where(.ck-header, .login-brand, .adm-header) { position: relative; }
 html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header.scrolled,
 html:root body:not(:has(.adm-main)) #tt-header-desktop-tablet.tt-header,
 html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
   .ck-header, .login-brand, .adm-topbar, .adm-header) {
-  background: linear-gradient(180deg,
-    color-mix(in srgb, var(--tt-flow-pink) 94%, transparent) 0%,
-    color-mix(in srgb, var(--tt-flow-light) 94%, transparent) 100%) !important;
+  isolation: isolate;
+  background: transparent !important;
   border-bottom: 0 !important;
   box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand,
+  .ck-header, .login-brand, .adm-topbar, .adm-header)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--tt-flow-pink) 94%, transparent) 0%,
+    color-mix(in srgb, var(--tt-flow-light) 90%, transparent) 52%,
+    transparent 100%);
   -webkit-backdrop-filter: blur(18px) saturate(110%) !important;
   backdrop-filter: blur(18px) saturate(110%) !important;
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
 }
 
 /* El tinte global rosa no debe fundir la marca con el encabezado rosa. */
@@ -528,21 +545,8 @@ html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-bran
   --tt-header-fade-depth: clamp(32px, 4vw, 56px);
   overflow: visible !important;
 }
-html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand)::after {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  top: 100%;
-  height: var(--tt-header-fade-depth);
-  pointer-events: none;
-  z-index: -1;
-  background: linear-gradient(180deg,
-    color-mix(in srgb, var(--tt-flow-light) 94%, transparent) 0%,
-    color-mix(in srgb, var(--tt-flow-light) 55%, transparent) 45%, transparent 100%);
-  -webkit-backdrop-filter: blur(18px) saturate(110%);
-  backdrop-filter: blur(18px) saturate(110%);
-  -webkit-mask-image: linear-gradient(#000, transparent);
-  mask-image: linear-gradient(#000, transparent);
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand)::before {
+  bottom: calc(-1 * var(--tt-header-fade-depth));
 }
 
 html:root body:not(:has(.adm-main)) :is(#tt-header-desktop-tablet, #tt-header-tablet)

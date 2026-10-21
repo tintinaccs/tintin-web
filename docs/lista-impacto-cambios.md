@@ -585,3 +585,13 @@ PR1188 sobre main vigente: la fuente compartida de bienvenida adapta únicamente
 ## 2026-10-21 — Copia cifrada de un respaldo existente
 
 Fuente: workflow Backup Firestore y helper de copia CMS; el cron diario y sus credenciales/entorno permanecen. Opción manual lee el último snapshot completo del bucket, usa sólo certificado público, cifra en temporal y publica CMS+recibo por1día. No inicia otro export, importa ni escribe Firestore. Helper Windows prepara destinatario y cifra/descifra sin exportar la clave privada ni sobrescribir archivos. Tests de interoperabilidad real, export incompleto, error/limpieza y límite de artefactos se conectan a operations existente. Estado y autorización local en CURRENT_STATE, procedimiento de recuperación en docs/respaldo-cifrado-local.md. Sin cambios de UI, catálogo, Auth, inventario, pagos o PR concurrentes.
+
+## 2026-10-21 — Transparencia real al final del encabezado
+
+Fuente única: css/theme/sistema-superficies-tintin.css. Fondo y backdrop-filter18px pasan a ::before con máscara alfa, sin enmascarar contenido ni extender la capa fuera de la altura ocultable. Afecta header público escritorio/tablet/marca móvil y encabezados de checkout/login/Admin. Conserva tamaños, posición, navegación, logos y controles.18 consumidores HTML renuevan el URL CSS; bundles Inicio/Nosotros y baseline se regeneran. Smoke y contratos visuales inspeccionan la capa real y exigen contenedor transparente; la prueba nueva de píxeles/ocultación/clic se conecta al comando phase8 existente. Sin dependencias, datos reales ni cambios de seguridad. Evidencia y límites en CURRENT_STATE; CI y producción del SHA final pendientes.
+
+
+CI del encabezado: el auditor estático de Fase8 acepta ahora también la lista exacta que conserva sus pruebas previas y agrega la regresión del borde transparente. Se mantiene la comparación estricta, auditoría final y proyecto Chromium.15 controles y dos negativos verificados; sin cambios de runtime adicionales.
+
+
+Resolución final de conexión CI: se ubican las nuevas regresiones de transparencia dentro de section-flow-full-width.spec.js, que ya pertenece a la suite canónica. Package y auditores Fase8/Fase10 quedan exactamente como main; no se amplían sus listas ni se retira ningún gate.10 Chromium+10 WebKit integrados y27 controles estáticos pasan. La nota previa de ampliación del auditor describe un intento reemplazado, no el diff final.
