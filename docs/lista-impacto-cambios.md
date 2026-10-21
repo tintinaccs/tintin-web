@@ -539,3 +539,5 @@ Consolidación1185: incorpora cb8e28ee de1180, preserva logos blancos bajo tinte
 Codex /root: CI39522066942 del candidato fb95aa72 aprobó los contratos y187/187 geometrías, pero su smoke final todavía exigía encabezado desktop blanco sin degradado. Ese supuesto contradice el rosa difuminado aprobado y las regresiones de marca. El smoke comprueba ahora el degradado exacto F8AACA/FDECF2 con94% de opacidad, blur18 sólo de fondo y contenido sin filtro; conserva blanco, bordes, opacidad y acciones de las otras superficies. No se cambia CSS ni producto. El candidato conjunto d456bbeb pasó1755/1755 Node y114/114 Chromium sin reintentos; la CI del nuevo SHA y producción siguen pendientes.
 
 Avance final1180: orden visual compartido entre galería y selectores, sin modificar inventario/fotos; diagnóstico Auth demo al salir; regresiones y artefactos canónicos sobre main6033.
+
+2026-10-21: selector de color de ficha con nombre visible, muestra, marca seleccionada, teclado y estado Agotado; fuente product-maintenance.css y fallback vigente, caché transitiva y artefactos canónicos. Datos/comercio conservados.

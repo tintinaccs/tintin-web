@@ -138,9 +138,14 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   for (const button of geometry.actions) {
     expect(button.left).toBeGreaterThanOrEqual(geometry.panel.left-1);expect(button.right).toBeLessThanOrEqual(geometry.panel.right+1);expect(button.height).toBeGreaterThanOrEqual(52);
   }
-  const circle = page.getByRole('button',{name:'Dorado',exact:true});
-  expect(await circle.evaluate(node=>getComputedStyle(node).borderRadius)).toBe('50%');
-  expect(await circle.locator('.tt-variant-name').evaluate(node=>getComputedStyle(node).clipPath)).toBe('inset(50%)');
+  const colorOption = page.getByRole('button',{name:'Dorado',exact:true});
+  await expect(colorOption.locator('.tt-variant-name')).toBeVisible();
+  expect(await colorOption.locator('.tt-variant-name').evaluate(node=>getComputedStyle(node).clipPath)).toBe('none');
+  expect(await colorOption.evaluate(node=>node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(48);
+  await colorOption.focus();
+  await page.keyboard.press('Space');
+  await expect(colorOption).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#product-variants .tt-variant-current')).toHaveText('Dorado');
   // Elegir una foto primero selecciona su color y conserva la miniatura activa.
   await page.getByRole('button',{name:'Ver imagen 5',exact:true}).click();
   await expect(page.getByRole('button',{name:'Plateado',exact:true})).toHaveAttribute('aria-pressed','true');
@@ -148,6 +153,7 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   await expect(page.locator('#gallery-thumbs button.active')).toHaveAttribute('data-src',/\/silver2.svg$/);
   await expect(page.locator('#gallery-thumbs button.active')).toBeFocused();
   expect(await page.evaluate(()=>_pdGetSelectedVariant())).toBe('Plateado');
+  if ([390,1440].includes(width)) await page.locator('#product-variants').screenshot({path:`artifacts/color-selector/selector-${width}.png`});
 });
 
 test('las sugerencias agrupan varias fotos y respetan el cambio manual',async({page})=>{
