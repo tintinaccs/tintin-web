@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "958e5eefbe6c654a80a267bc6781e51cd47f88b7",
-  "reason": "Corregir conector y consistencia de stock/literales de Sheets preservando autoridad Firestore y fórmulas",
+  "reason": "Corregir integridad de Sheets y alinear auditor con lotes2 probados, autenticación con env y derivados canónicos",
   "files": [
     {
       "path": "apps-script/AdminParity.gs",

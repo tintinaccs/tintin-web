@@ -152,7 +152,8 @@ check(
     /await pushProductsToSheets\(\[docId\]\)/.test(adminApp) &&
     /await pushProductsToSheets\(ids0\)/.test(adminApp) &&
     /syncProductsPayloadWithRetry/.test(sheetsSyncFunction) &&
-    /appScriptChunkSize:\s*5/.test(sheetsSyncFunction) &&
+    /appScriptChunkSize:\s*2/.test(sheetsSyncFunction) &&
+    /const \{ request, env \} = context;/.test(sheetsSyncFunction) &&
     /queueCatalogSheetSync/.test(sheetsSyncFunction),
   'Todo guardado individual, masivo o importado debe avisar al sincronizador server-side de Sheets y conservar la cola de recuperación.'
 );
