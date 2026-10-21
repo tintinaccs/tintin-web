@@ -1,5 +1,11 @@
 ## 2026-10-21 — Conciliación OAuth de1189 con Perfil/iconos
 
+## 2026-10-21 — Texto, jerarquía e iconos de la guía
+
+Fuentes: configuración compartida, tutorial público y preview del editor de bienvenida. Un título por paso, texto directo coherente con Catálogo/carrito/checkout, indicador de paso visible e iconos SVG constantes; conserva imágenes/emojis propios, edición, aparición, cuentas y flujo de compra. Compatibiliza sólo copias base anteriores. Cuerpo y acciones legibles con texto largo y móvil horizontal; WELCOME_VERSION conserva la identidad de onboarding. Se verifica normalización real, cuatro recorridos y paridad de preview; dependencias versionadas, CSP, protección y diagnóstico se regeneran desde sus autoridades. No cambia datos ni reactiva cuentas.
+
+## 2026-10-21 — Recuperar ubicación y pedir popup de Google
+
 Se integra1189f772 por merge normal, manteniendo los layouts/iconos del conjunto1190 y la recuperación GPS publicada. waitForGooglePopup entrega la decisión de éxito/cancelación a Firebase, conserva popup=yes y plazo120s con cleanup; Login usa mensajes neutrales. El auditor de aislamiento exige ese contrato y rechaza el sondeo paralelo de closed. Pruebas Node/navegador comprueban confirmación con referencia cerrada, cancelación del SDK, vencimiento y recuperación del formulario. Se renueva la URL inmutable del helper, CSP y plan exacto contra main vigente. Sin cambios de proveedor, permisos, cuentas ni datos reales.
 
 ## 2026-10-21 — Favicon rosado y forma de iconos instalados
@@ -558,3 +564,7 @@ Avance final1180: orden visual compartido entre galería y selectores, sin modif
 Conciliación1190+1189: layout único de Perfil; controles compartidos de ubicación/avisos separados, cancelación y recuperación de GPS y confirmación de coordenadas de Checkout. Conservar consumidores posteriores de main9147 y no heredar PASS de otros SHA.34 Chromium/111 Node del conjunto; versiones2 de ambos CSS y módulos GPS con sus versiones de origen.
 
 Actualización1190 contra main cfd77c2c (#1191): conservar popup Google y GPS cancelable de5s+5s publicados; separar avisos de teselas, recuperar lectura inicial inválida y mantener formulario único.14 viewports,57 Chromium/226 Node; nuevos Geo/Map3 y plan contra main vigente.
+
+## 2026-10-21 — Reconciliar bienvenida y seguimiento de pendientes
+
+PR1188 sobre main vigente: la fuente compartida de bienvenida adapta únicamente las dos frases antiguas Tienda/Catálogo. Conserva mensajes personalizados, controles de Admin, GPS cancelable y popup Google ya publicados. Los conflictos de CSP, diagnóstico, caché y protección se regeneran desde sus autoridades; los informes previos se conservan como evidencia histórica. Drenajes y respaldos usan los workflows existentes sin cambios de permisos, stock, pedidos ni credenciales. El estado actual distingue publicación pendiente, configuración externa y verificaciones físicas no realizadas.
