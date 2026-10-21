@@ -76,9 +76,9 @@ test('home alinea fallback con el título publicado y sanea el typo de pago segu
     read('index.html'),
     read('js/core/store/definiciones-contenido.js'),
   ]);
-  assert.match(home, /DETALLES QUE ELEVAN[\s\S]*?TU ESTILO/);
+  assert.match(home, /UN DETALLE[\s\S]*?MUY VOS/);
   assert.doesNotMatch(home, /Un detalle[\s\S]*?cambia todo/);
-  assert.match(definitions, /DETALLES QUE ELEVAN TU ESTILO/);
+  assert.match(definitions, /UN DETALLE MUY VOS/);
   assert.match(definitions, /PAGO SEGUROOXSD/);
   assert.match(definitions, /'Pago seguro'/);
 });

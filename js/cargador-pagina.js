@@ -852,7 +852,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261021-welcome-guide-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261021-identidad-1');
     }
   }
 
@@ -905,10 +905,10 @@
     try { framed = window.top !== window; } catch { framed = true; }
     if (isVisualPreviewFrame || framed) return;
     if (!window.TintinSiteChangesBooted) {
-      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261021-visual-scope-1');
+      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261021-visual-scope-2');
     }
     if (!window.TintinVersionWatchBooted) {
-      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261021-visual-scope-1');
+      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261021-visual-scope-2');
     }
   }
 

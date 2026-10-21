@@ -47,7 +47,7 @@ export const MAESTRO_MODULES = Object.freeze([
     read: YES, export: YES
   }, { surface: 'dynamic', evidence: ['js/admin/maestro/panel-maestro.js'] }),
 
-  moduleDef('dashboard', 'Dashboard', 'read-only', 'Resumen operativo y actividad reciente. No representa una entidad editable.', {
+  moduleDef('dashboard', 'Inicio', 'read-only', 'Resumen operativo y actividad reciente. No representa una entidad editable.', {
     read: YES
   }, { evidence: ['section-dashboard', 'dash-recent-orders'] }),
 

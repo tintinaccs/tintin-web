@@ -1,4 +1,4 @@
-import { MAESTRO_MODULES } from './registro-maestro.js?v=tintin-20261009-local-ledger-master-1';
+import { MAESTRO_MODULES } from './registro-maestro.js?v=tintin-20261021-identidad-1';
 
 // Navega mediante los controles originales: conserva autorización y borradores.
 const normalize = value => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
@@ -44,16 +44,16 @@ function mountDashboard() {
   const hero = node('section', 'tt-dashboard-hero'); hero.setAttribute('aria-labelledby', 'tt-dashboard-heading');
   const intro = node('div', 'tt-dashboard-intro');
   const heading = node('h2', ''); heading.id = 'tt-dashboard-heading';
-  heading.append('Tu tienda,', document.createElement('br'), node('span', '', 'en foco.'));
-  const explore = node('button', 'adm-btn adm-btn-outline', 'Explorar módulos'); explore.type = 'button'; explore.dataset.adminLauncher = ''; explore.append(arrow());
-  intro.append(node('p', 'tt-control-eyebrow', 'TINTIN · PANEL DE CONTROL'), heading,
-    node('p', 'tt-dashboard-description', 'Personas, pedidos y catálogo. Una vista clara para organizar tu día.'), explore);
+  heading.textContent = 'Hoy en Tintin';
+  const explore = node('button', 'adm-btn adm-btn-outline', 'Ver secciones'); explore.type = 'button'; explore.dataset.adminLauncher = ''; explore.append(arrow());
+  intro.append(node('p', 'tt-control-eyebrow', 'Tu espacio Tintin'), heading,
+    node('p', 'tt-dashboard-description', 'Tus pedidos, tus accesorios y tus tintinas. Todo a mano.'), explore);
   const shortcuts = node('div', 'tt-dashboard-shortcuts'); shortcuts.setAttribute('aria-label', 'Accesos rápidos');
   const items = [
-    ['pedidos', '01 / OPERACIÓN', 'Gestionar pedidos'],
-    ['productos', '02 / CATÁLOGO', 'Precios y existencias'],
-    ['usuarios', '03 / PERSONAS', 'Administrar cuentas'],
-    ['configuracion', '04 / TU TIENDA', 'Preferencias y envíos'],
+    ['pedidos', 'Tu día', 'Gestionar pedidos'],
+    ['productos', 'Tus accesorios', 'Precios y existencias'],
+    ['usuarios', 'Tus tintinas', 'Administrar cuentas'],
+    ['configuracion', 'A tu manera', 'Preferencias y envíos'],
   ];
   for (const [id, category, description] of items) {
     const button = node('button', 'tt-dashboard-link'); button.type = 'button'; button.hidden = true; button.dataset.adminOpen = id;

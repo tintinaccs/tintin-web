@@ -5,7 +5,7 @@ const source = fs.readFileSync(path.resolve(__dirname, '../../js/quality/vigilan
 const revisionSource = fs.readFileSync(path.resolve(__dirname, '../../js/quality/revision-visual.mjs'), 'utf8');
 const { createHash } = require('node:crypto');
 
-async function scopedMount(page, pathname = '/') {
+async function scopedMount(page, pathname = '/', {unlisted=false,status=200} = {}) {
   const { visualSource } = await import('../../js/quality/revision-visual.mjs');
   const hash = value => createHash('sha256').update(visualSource(value)).digest('hex');
   const file = pathname === '/' ? 'index.html' : `${pathname.slice(1)}.html`;
@@ -20,9 +20,9 @@ async function scopedMount(page, pathname = '/') {
     if (url.pathname === '/watch.js') return route.fulfill({contentType:'text/javascript',body:source});
     if (url.pathname === '/loader.js') return route.fulfill({contentType:'text/javascript',headers:{'cache-control':'public, max-age=31536000, immutable'},body:url.searchParams.get('v') === '1' ? originalLoader : loader()});
     if (url.pathname === '/product.js') return route.fulfill({contentType:'text/javascript',body:product()});
-    if (url.pathname === '/site-version.json') return route.fulfill({json:{schemaVersion:2,revision:String(release).padStart(64,'0'),pages:{[file]:pageMarker,'product.html':productMarker},clientResources:{'loader.js':{version:String(loaderTag),revision:hash(loader())},'product.js':{version:String(productTag),revision:hash(product())}}}});
+    if (url.pathname === '/site-version.json') return route.fulfill({json:{schemaVersion:2,revision:String(release).padStart(64,'0'),pages:{...(unlisted?{}:{[file]:pageMarker}),'product.html':productMarker},clientResources:{'loader.js':{version:String(loaderTag),revision:hash(loader())},'product.js':{version:String(productTag),revision:hash(product())}}}});
     const isProduct = url.pathname === '/product';
-    return route.fulfill({contentType:'text/html',body:`<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="tintin-page-revision" content="${isProduct ? productMarker : pageMarker}"><input aria-label="Borrador"><a href="/product">Abrir producto</a><script src="/loader.js?v=${loaderTag}"></script>${isProduct ? `<script src="/product.js?v=${productTag}"></script>` : ''}<script type="module" src="/watch.js?v=1"></script>`});
+    return route.fulfill({status,contentType:'text/html',body:`<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="tintin-page-revision" content="${isProduct ? productMarker : pageMarker}"><input aria-label="Borrador"><a href="/product">Abrir producto</a><script src="/loader.js?v=${loaderTag}"></script>${isProduct ? `<script src="/product.js?v=${productTag}"></script>` : ''}<script type="module" src="/watch.js?v=1"></script>`});
   });
   await page.goto('https://scope.test'+pathname);
   await page.waitForFunction(() => !!window.TintinVersionWatch);
@@ -35,6 +35,50 @@ async function scopedMount(page, pathname = '/') {
     if (action === 'html') pageMarker = 'b'.repeat(64);
   };
 }
+
+test('una ruta personalizada también detecta recursos cargados sin una entrada estática',async({page})=>{
+  const publish=await scopedMount(page,'/pages/guia',{unlisted:true});
+  publish('product');publish('propagate');
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+  publish('shared');
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(page.locator('#tt-version-notice')).toBeVisible();
+});
+
+test('una página 404 real usa su marcador aunque la dirección no figure en el inventario',async({page})=>{
+  const publish=await scopedMount(page,'/no-existe',{unlisted:true,status:404});
+  publish('html');
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(page.locator('#tt-version-notice')).toBeVisible();
+});
+
+test('el renderer personalizado avisa por diseño visible y carga lo último al volver a entrar',async({page})=>{
+  const {renderPage}=await import('../../functions/pages/[slug].js');
+  const data={title:'Guía',contentHtml:'<h2>Contenido anterior</h2>',template:'standard',metaDescription:'SEO anterior'};
+  await page.route('https://custom.test/**',async route=>{
+    const request=route.request(),url=new URL(request.url());
+    if(url.pathname==='/js/quality/vigilancia-version.js')return route.fulfill({contentType:'text/javascript',body:source});
+    if(url.pathname==='/js/quality/revision-visual.mjs')return route.fulfill({contentType:'text/javascript',body:revisionSource});
+    if(url.pathname==='/site-version.json')return route.fulfill({json:{schemaVersion:2,pages:{'index.html':'a'.repeat(64)},clientResources:{}}});
+    const response=await renderPage(data,new Request(request.url()));
+    return route.fulfill({status:response.status,headers:Object.fromEntries(response.headers),body:await response.text()});
+  });
+  await page.goto('https://custom.test/pages/guia');
+  await page.waitForFunction(()=>!!window.TintinVersionWatch);
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('current');
+  data.metaDescription='SEO actualizado';data.stock=0;
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+  data.contentHtml='<h2>Contenido vigente</h2>';
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(page.locator('#tt-version-notice')).toBeVisible();
+  await page.reload();
+  await page.waitForFunction(()=>!!window.TintinVersionWatch);
+  await expect(page.getByRole('heading',{name:'Contenido vigente'})).toBeVisible();
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+});
 
 for (const pathname of ['/', '/catalogo', '/collections', '/perfil', '/admin', '/admin-images', '/checkout', '/login']) {
   test(`regla global por pantalla y datos sin aviso · ${pathname}`, async ({page}) => {

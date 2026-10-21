@@ -1,4 +1,4 @@
-import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261019-product-editor-1';
+import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261021-visual-scope-2';
 import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261020-minimal-editor-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [

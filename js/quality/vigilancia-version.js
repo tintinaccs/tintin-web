@@ -135,7 +135,7 @@ async function fetchCurrentHtml() {
       headers: { Accept: 'text/html' },
       signal: controller?.signal,
     });
-    if (!response.ok || response.redirected) return null;
+    if ((!response.ok && response.status !== 404) || response.redirected) return null;
     if (!/text\/html/i.test(response.headers.get('content-type') || '')) return null;
     return await response.text();
   } catch {
@@ -257,7 +257,9 @@ function boot() {
     }));
     return hashes.get(href);
   };
-  const initialVersion = fetchSiteVersion().then(data => {
+  // El documento moderno ya trae su referencia: no descarga el inventario
+  // global durante la carga. Se consulta al comprobar actualizaciones.
+  const initialVersion = revision ? Promise.resolve() : fetchSiteVersion().then(data => {
     revision ||= pageRevision(data, location.pathname);
     initialResources = data?.schemaVersion === 2 ? data.clientResources || {} : {};
   });
@@ -274,20 +276,16 @@ function boot() {
       await initialVersion;
       const data = await fetchSiteVersion();
       const nextRevision = pageRevision(data, location.pathname);
-      const changes = nextRevision ? await changedLoadedResources(data, loadedResources(), location.href, digest) : [];
+      const changes = await changedLoadedResources(data, loadedResources(), location.href, digest);
       const freshResources = changes.filter(key => !notifiedResources.has(key));
       changes.forEach(key => notifiedResources.add(key));
-      if (revision && nextRevision && revision !== nextRevision) {
-        revision = nextRevision;
+      if ((revision && nextRevision && revision !== nextRevision) || freshResources.length) {
+        revision = nextRevision || revision;
         showNotice();
         return 'outdated';
       }
       if (nextRevision) {
         revision = nextRevision;
-        if (freshResources.length) {
-          showNotice();
-          return 'outdated';
-        }
         // Con marcador válido no hace falta descargar la página completa.
         return 'current';
       }
@@ -337,4 +335,4 @@ export function notifySiteContentChange() {
   window.dispatchEvent(new CustomEvent('tintin:site-content-updated'));
 }
 
-if (typeof window !== 'undefined' && typeof document !== 'undefined') boot();
+if (typeof window !== 'undefined' && typeof document !== 'undefined' && window.top === window) boot();
