@@ -3,25 +3,24 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const source=fs.readFileSync('js/components/welcome/tutorial-bienvenida.js','utf8').replace(/^import[\s\S]*?from\s+['"][^'"]+['"];\s*/gm,'');
-async function mount(page,profile,{ready=true,failWrite=false,preview=false}={}){
+const configSource=fs.readFileSync('js/components/welcome/configuracion-bienvenida.js','utf8').replace(/^import .*;\n/,'').replace(/^export /gm,'');
+async function mount(page,profile,{ready=true,failWrite=false,preview=false,settings={}}={}){
   await page.route('https://welcome.test/**',r=>r.fulfill({contentType:'text/html',body:'<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><header class="tt-header">Tintin</header><main>Inicio</main><nav id="tt-tabbar">Menú</nav></body></html>'}));
   await page.goto('https://welcome.test/index.html?welcome=1'+(preview?'&welcomePreview=1':''));
-  await page.evaluate(({profile,ready,failWrite,preview})=>{
-    window.fixture={profile,writes:0};
+  await page.evaluate(({profile,ready,failWrite,preview,settings})=>{
+    window.fixture={profile,writes:0,settings};
     window.auth={};window.db={};window.appCheckReady=Promise.resolve(ready);
     window.doc=(_db,...parts)=>parts.join('/');
-    window.getDoc=async ref=>({exists:()=>true,data:()=>ref==='settings/welcomeTutorial'?{enabled:true,previewEnabled:true}:window.fixture.profile});
+    window.getDoc=async ref=>({exists:()=>true,data:()=>ref==='settings/welcomeTutorial'?{enabled:true,previewEnabled:true,...window.fixture.settings}:window.fixture.profile});
     window.runTransaction=async (_db,fn)=>{
       if(failWrite)throw Error('permission-denied');
       return fn({get:async()=>({exists:()=>true,data:()=>window.fixture.profile}),update:(_ref,patch)=>{window.fixture.profile={...window.fixture.profile,...patch};window.fixture.writes++;}});
     };
     window.serverTimestamp=()=> 'confirmed-test-timestamp';
     window.SUPER_ADMIN='owner@example.test';window.getUserRole=async()=>profile.role||'client';
-    window.DEFAULT_WELCOME_STEPS=[{title:'Bienvenida a Tintin',text:'Cómo comprar',cta:'Empezar'}];
-    window.WELCOME_VERSION='test';
-    window.normalizeWelcomeConfig=config=>({enabled:true,previewEnabled:true,title:'Mensaje de bienvenida',steps:window.DEFAULT_WELCOME_STEPS,...config});
     window.subscribeAuthState=callback=>{window.authCallback=callback;callback({uid:'customer',email:preview?window.SUPER_ADMIN:'customer@example.test'});};
-  },{profile,ready,failWrite,preview});
+  },{profile,ready,failWrite,preview,settings});
+  await page.addScriptTag({content:"const sanitizeImageUrl=value=>String(value||'');\n"+configSource});
   await page.addScriptTag({content:source});
 }
 const fresh={role:'client',profileStatus:'active',welcomeTutorialPending:true,onboardingCompleted:false};
@@ -84,4 +83,88 @@ test('preview explícito de Super Admin no altera el onboarding de clientes',asy
   await expect(page.locator('#tt-welcome-tutorial')).toBeVisible();
   await page.locator('#tt-welcome-close').click();await expect(page.locator('#tt-welcome-tutorial')).toHaveCount(0);
   expect(await page.evaluate(()=>window.fixture.writes)).toBe(0);
+});
+
+
+for (const [width,height] of [[320,568],[390,844],[768,1024],[1440,900]]) {
+  test(`cuatro pasos con título propio, iconos consistentes y navegación en ${width}px`,async({page})=>{
+    await page.setViewportSize({width,height});
+    await mount(page,{...fresh});
+    const titles=['Bienvenida a Tintin','Explorá el catálogo','Revisá tu carrito','Completá tu pedido'];
+    for(let i=0;i<titles.length;i++) {
+      await expect(page.getByRole('dialog')).toHaveAccessibleName(titles[i]);
+      await expect(page.locator('.tt-welcome-title')).toHaveText(titles[i]);
+      await expect(page.locator('.tt-welcome-count')).toHaveText(`Paso ${i+1} de 4`);
+      await expect(page.locator('.tt-welcome-icon svg')).toHaveCount(1);
+      await expect(page.locator('.tt-welcome-step-title')).toHaveCount(0);
+      await expect(page.locator('#tt-welcome-next')).toBeInViewport();
+      const box=await page.locator('.tt-welcome-card').boundingBox();
+      expect(box.x).toBeGreaterThanOrEqual(0);expect(box.x+box.width).toBeLessThanOrEqual(width);
+      expect(box.y).toBeGreaterThanOrEqual(0);expect(box.y+box.height).toBeLessThanOrEqual(height);
+      if(i===2) {
+        await page.locator('#tt-welcome-prev').click();
+        await expect(page.locator('.tt-welcome-title')).toHaveText(titles[1]);
+        await page.locator('#tt-welcome-next').click();
+      }
+      await page.locator('#tt-welcome-next').click();
+    }
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    expect(await page.evaluate(()=>window.fixture.writes)).toBe(1);
+  });
+}
+
+test('configuración anterior recibe el nuevo texto sin reactivar cuentas y los mensajes propios se conservan',async({page})=>{
+  await mount(page,{...fresh},{settings:{title:'Mensaje de bienvenida',subtitle:'Tu primera guía Tintin',steps:[{id:'custom-id',icon:'🌸',title:'Bienvenida a Tintin',text:'Te cuento rapidito cómo comprar y encontrar tus accesorios favoritos sin perderte.',cta:'Empezar'}]}});
+  await expect(page.locator('.tt-welcome-sub')).toHaveText('Tintin · Cómo comprar');
+  await expect(page.locator('.tt-welcome-text')).toContainText('Conocé el catálogo');
+  await expect(page.locator('#tt-welcome-next')).toHaveText('Comenzar');
+  await expect(page.locator('.tt-welcome-icon svg')).toHaveCount(1);
+  await mount(page,{...fresh},{settings:{title:'Mi marca',subtitle:'Mi guía',steps:[{id:'custom',icon:'♥',title:'Un mensaje propio',text:'Texto configurado por la tienda.',cta:'Mi botón'}]}});
+  await expect(page.locator('.tt-welcome-title')).toHaveText('Un mensaje propio');
+  await expect(page.locator('.tt-welcome-sub')).toHaveText('Mi marca · Mi guía');
+  await expect(page.locator('.tt-welcome-icon')).toHaveText('♥');
+  await expect(page.locator('#tt-welcome-next')).toHaveText('Mi botón');
+});
+
+test('imagen inaccesible recupera el icono vectorial del paso',async({page})=>{
+  await page.route('https://media.test/missing.png',route=>route.abort());
+  await mount(page,{...fresh},{settings:{steps:[{title:'Con imagen',text:'Descripción',icon:'catalogo',image:'https://media.test/missing.png'}]}});
+  await expect(page.locator('.tt-welcome-icon svg')).toHaveCount(1);
+  await expect(page.locator('.tt-welcome-icon')).not.toHaveClass(/has-image/);
+});
+
+test('la vista previa de Super Admin comparte título, texto, icono y botón del último paso',async({page})=>{
+  await page.setContent('<main></main>');
+  const admin=fs.readFileSync('js/admin/content/control-bienvenida-admin.js','utf8');
+  const start=admin.indexOf('  function renderMiniPreview()');
+  const end=admin.indexOf('\n  function updateLivePreview()',start);
+  const escapeHelper=admin.match(/  function escapeHtml\(value\) \{[\s\S]*?\n  \}/)[0];
+  await page.addScriptTag({content:"const sanitizeImageUrl=value=>String(value||'');\n"+configSource});
+  await page.evaluate(({render,escapeHelper})=>{
+    const draw=new Function('state','welcomeIconSvg',`${escapeHelper};const escapeAttr=escapeHtml;let previewIndex=3;${render};return renderMiniPreview();`);
+    document.querySelector('main').innerHTML=draw(normalizeWelcomeConfig(),welcomeIconSvg);
+  },{render:admin.slice(start,end),escapeHelper});
+  await expect(page.locator('.tt-welcome-mini-title')).toHaveText('Completá tu pedido');
+  await expect(page.locator('.tt-welcome-mini-text')).toContainText('Revisá el total antes de confirmar');
+  await expect(page.locator('.tt-welcome-mini-icon svg')).toHaveCount(1);
+  await expect(page.locator('.tt-welcome-mini-count')).toHaveText('Paso 4 de 4');
+  await expect(page.locator('[data-preview-nav="next"]')).toHaveText('Entendido');
+});
+
+
+test('superficies reales conservan lectura y acciones en móvil pequeño y horizontal con texto largo',async({page})=>{
+  const css=['styles.min.css','css/core/tokens-color.css','css/core/tokens-tintin.css','css/core/tema-unificado-tintin.css','css/theme/superficies-solidas-interfaz.css'].map(path=>fs.readFileSync(path,'utf8')).join('\n');
+  for(const [width,height] of [[320,568],[844,390]]) {
+    await page.setViewportSize({width,height});
+    await mount(page,{...fresh},{settings:{steps:[{title:'Un título personalizado para una guía de compra',text:'Información para elegir productos, revisar sus opciones y completar el pedido. '.repeat(6),icon:'pedido',cta:'Entendido'}]}});
+    await page.addStyleTag({content:css});
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await page.locator('#tt-welcome-next').scrollIntoViewIfNeeded();
+    await expect(page.locator('#tt-welcome-next')).toBeInViewport();
+    const action=await page.locator('#tt-welcome-next').boundingBox();
+    expect(action.height).toBeGreaterThanOrEqual(44);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    await page.locator('#tt-welcome-next').click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  }
 });

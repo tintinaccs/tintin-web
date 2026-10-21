@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "cfd77c2c43697339da6561945d3965308cc1e18e",
-  "reason": "Agregar copia manual cifrada sólo para titular sobre main, aislada del artefacto público y sin cambiar datos.",
+  "baseCommit": "958e5eefbe6c654a80a267bc6781e51cd47f88b7",
+  "reason": "Copiar respaldo cifrado para titular desde main, fuera del artefacto público, conservando la bienvenida publicada.",
   "files": [
     {
       "path": ".github/workflows/backup-firestore.yml",
