@@ -250,13 +250,16 @@ body[data-tt-profile-v2="1"] .tt-profile-tabs{background:#fff!important}
 .tt-profile-address-map { min-width:0; }
 .tt-profile-location-map .tt-map-canvas { box-sizing:border-box; width:100%; height:clamp(240px,34vh,320px); min-height:240px; margin:0; border-radius:14px; }
 .tt-profile-location-map .leaflet-control-zoom a { width:44px; height:44px; line-height:44px; }
-.tt-profile-location-map .tt-map-status { margin:0 0 12px; overflow-wrap:anywhere; }
+.tt-profile-location-map .tt-map-status,
+.tt-profile-location-map .tt-map-tile-status { margin:0 0 12px; overflow-wrap:anywhere; }
 .tt-profile-location-map .tt-map-navigation { margin:12px 0 0; }
 .tt-profile-location-map .tt-map-coords { margin:0; font-size:12px; line-height:1.7; overflow-wrap:anywhere; }
 .tt-profile-location-map .tt-map-coords-missing { color:var(--color-text-secondary,#666666); }
 .tt-profile-address-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; padding-top:20px; border-top:1px solid var(--border,#ecd5de); }
-.tt-profile-address-actions .perfil-btn { box-sizing:border-box; width:auto; min-height:48px; max-width:100%; margin:0; padding:12px 20px; border-radius:12px; font-size:12px; font-weight:600; line-height:1.5; letter-spacing:0; text-transform:none; white-space:normal; }
+.tt-profile-address-actions .perfil-btn { box-sizing:border-box; gap:8px; width:auto; min-height:48px; max-width:100%; margin:0; padding:12px 20px; border:1px solid var(--border,#ecd5de); border-radius:12px; font-size:12px; font-weight:600; line-height:1.5; letter-spacing:0; text-transform:none; white-space:normal; }
 .tt-profile-address-actions .perfil-btn-primary { background:var(--color-button-primary-background,#F8AACA)!important; color:var(--color-button-primary-text,#222222)!important; }
+.tt-profile-address-actions .perfil-btn-primary:disabled { opacity:.55; cursor:not-allowed; }
+.tt-profile-address-actions .perfil-btn svg { flex-shrink:0; }
 .tt-profile-address-actions .perfil-btn:focus-visible,
 #perfil-location-editor .tt-map-locate:focus-visible { outline:2px solid var(--color-text-primary,#222222)!important; outline-offset:3px; }
 @media(min-width:700px) {

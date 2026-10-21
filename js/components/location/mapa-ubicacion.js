@@ -5,7 +5,7 @@
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
 import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261017-domain-cutover-1";
-import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1-stock-flow-20261014-1';
+import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261021-location-recovery-1';
 
 const LEAFLET_JS = '/js/vendor/leaflet/leaflet.js?v=leaflet-1.9.4';
 const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
@@ -84,6 +84,7 @@ export async function createLocationMap({
   let location = null;
   let debounce = null;
   let locating = false;
+  let locationRequest = null;
   let locationRevision = 0;
   let searchGeneration = 0;
   let resizeObserver = null;
@@ -96,6 +97,11 @@ export async function createLocationMap({
   status.setAttribute('role', 'status');
   status.hidden = true;
   mapEl.before(status);
+  const tileStatus = document.createElement('p');
+  tileStatus.className = 'tt-map-tile-status';
+  tileStatus.setAttribute('role', 'status');
+  tileStatus.hidden = true;
+  mapEl.before(tileStatus);
   const tools = document.createElement('div');
   tools.className = 'tt-map-navigation';
   tools.hidden = true;
@@ -107,10 +113,11 @@ export async function createLocationMap({
   tools.append(googleLink, wazeLink);
   mapEl.after(tools);
   tiles.on('tileerror', () => {
-    if (destroyed) return;
-    status.hidden = false;
-    status.textContent = 'No pudimos cargar el fondo del mapa. Tu ubicación se conserva. Podés buscar un lugar o abrir el punto en Google Maps o Waze.';
-    if (typeof onError === 'function') onError(status.textContent);
+    if (destroyed || !tileStatus.hidden) return;
+    // El proveedor de imágenes no debe tapar el resultado del GPS ni emitir
+    // un aviso por cada mosaico fallido.
+    tileStatus.hidden = false;
+    tileStatus.textContent = 'No pudimos cargar parte del mapa. Si ya marcaste un punto, se conserva. Podés buscar tu dirección o abrir el punto en Google Maps o Waze.';
   });
 
   const emit = () => { if (typeof onChange === 'function') onChange(location); };
@@ -120,7 +127,7 @@ export async function createLocationMap({
     resolvedLocateButton.disabled = loading;
     resolvedLocateButton.setAttribute('aria-busy', String(loading));
     resolvedLocateButton.textContent = loading
-      ? '📍 Obteniendo ubicación…'
+      ? 'Obteniendo ubicación…'
       : 'Usar mi ubicación actual';
   };
 
@@ -147,6 +154,7 @@ export async function createLocationMap({
 
   const setLocation = (lat, lng, place) => {
     if (!usablePlace({ lat, lng })) return;
+    cancelLocate();
     locationRevision += 1;
     const hasPlace = Boolean(place);
     const hasName = hasPlace && Object.prototype.hasOwnProperty.call(place, 'name');
@@ -215,12 +223,14 @@ export async function createLocationMap({
   const locateCurrent = async () => {
     if (locating || destroyed) return false;
     locating = true;
+    const request = new AbortController();
+    locationRequest = request;
     setButtonLoading(true);
     status.hidden = false;
     status.textContent = 'Buscando tu ubicación…';
     const revision = locationRevision;
     try {
-      const position = await requestCurrentLocation();
+      const position = await requestCurrentLocation({ signal: request.signal });
       if (destroyed || revision !== locationRevision) return false;
       applyPlace({ ...position, name: 'Mi ubicación actual', address: '' }, { scroll: false });
       status.hidden = false;
@@ -229,9 +239,22 @@ export async function createLocationMap({
         : 'Ubicación encontrada. Revisá el punto antes de guardar.';
       return true;
     } catch (error) {
-      if (!destroyed && revision === locationRevision) { status.hidden = false; status.textContent = error.message; }
+      if (error.name !== 'AbortError' && !destroyed && revision === locationRevision) { status.hidden = false; status.textContent = error.message; }
       return false;
-    } finally { locating = false; if (!destroyed) setButtonLoading(false); }
+    } finally {
+      if (locationRequest === request) {
+        locationRequest = null;
+        locating = false;
+        if (!destroyed) setButtonLoading(false);
+      }
+    }
+  };
+
+  const cancelLocate = () => {
+    locationRequest?.abort();
+    locationRequest = null;
+    locating = false;
+    if (!destroyed) setButtonLoading(false);
   };
 
   const onLocateClick = event => {
@@ -397,11 +420,12 @@ export async function createLocationMap({
   return {
     getLocation: () => location,
     setLocation: (place, options) => applyPlace(place, options),
-    clearLocation: () => { locationRevision += 1; clearTimeout(debounce); searchGeneration += 1; inFlight?.abort(); location = null; if (marker) { marker.remove(); marker = null; } tools.hidden = true; status.hidden = true; closeResults(); emit(); },
+    clearLocation: () => { locationRevision += 1; cancelLocate(); clearTimeout(debounce); searchGeneration += 1; inFlight?.abort(); location = null; if (marker) { marker.remove(); marker = null; } tools.hidden = true; status.hidden = true; closeResults(); emit(); },
     locateCurrent,
     invalidateSize: () => map.invalidateSize(),
     destroy: () => {
       destroyed = true;
+      cancelLocate();
       inFlight?.abort();
       clearTimeout(debounce);
       resizeTimers.forEach(clearTimeout);
@@ -415,6 +439,7 @@ export async function createLocationMap({
       resolvedLocationNameInput?.removeEventListener('input', onLocationNameInput);
       resizeObserver?.disconnect();
       status.remove();
+      tileStatus.remove();
       tools.remove();
       map.remove();
     },
