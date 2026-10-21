@@ -19,6 +19,8 @@
 - This protocol does not authorize merge, deploy, destructive production writes, real purchases/orders/emails, force-pushes, or secret handling.
 
 ## Scope and judgment
+- Before changing a feature, identify its canonical implementation, affected consumers and any competing active implementation. Migrate consumers together; do not create parallel replacements or mix incompatible releases.
+- Use the existing route, CSP, cache and diagnostic generators and their verification gates. Do not maintain a second manual definition of a generated artifact. See `docs/arquitectura-versiones-canonicas.md`.
 - Do exactly the requested task. Do not expand into unrelated refactors or speculative improvements.
 - Inspect existing implementation before declaring something missing.
 - Fix root causes rather than masking symptoms.

@@ -508,3 +508,6 @@ Autoridad compartida destino-admin.mjs para productor Cloudflare, campana, login
 ## 2026-10-20 — Cabeceras únicas de etapas de Pedidos
 
 Fuente: tablero-pedidos.css. Escritorio usa títulos y contadores de las cinco columnas; hasta 1180px usa pestañas y oculta sólo los títulos repetidos de etapas estándar. Incidencias e Históricos conservan sus títulos. No cambia renderizado, selección, datos, permisos, cantidades ni transiciones. Caché del CSS y derivados regenerados; matriz de 24 tamaños y cruce de breakpoint con etapa persistida en orders-board.spec.js.
+## 2026-10-20 — Fuente canónica de rutas de Pages
+
+El cierre forense reutiliza build/verify:routes para generar _routes desde HTML/APIs reales, con helper compartido por CSP y auditor final. Conserva100reglas, Auth, APIs exactas y aliases compactos existentes. Impacta build/controles; no modifica permisos ni datos del runtime. Cinco regresiones y barrido1737Node/143Chromium; Rules200+identidad34 y cuota200 peticiones aisladas aprobadas. Autoridades y riesgos en docs/arquitectura-versiones-canonicas.md y docs/auditoria-versiones-20261020.md. CI y publicación se verifican por SHA; no se hereda evidencia de otra rama.

@@ -108,7 +108,7 @@ test('perder la sesión elimina el editor de compra y sus datos del DOM',async({
 test('Activos cuenta el estado real incluso con stock agotado',async({page})=>{
  await start(page,1440,900);await expect(page.locator('[data-product-metric="active"]')).toContainText('2');
  await page.locator('[data-product-metric="active"]').click();await expect(page.locator('#tt-commerce-products tbody tr')).toHaveCount(2);
- const row=page.locator('tr[data-id="p-pulsera"]');await expect(row.locator('.tt-commerce-badge').first()).toHaveText('Sin stock');
+ const row=page.locator('tr[data-id="p-pulsera"]');await expect(row.locator('.tt-commerce-badge').first()).toHaveText('Agotado');
  await expect(row.getByLabel('Estado de Pulsera Cuero Café',{exact:true})).toHaveValue('true');
  await expect(row.getByLabel('Stock de Pulsera Cuero Café',{exact:true})).toHaveValue('0');
 });
