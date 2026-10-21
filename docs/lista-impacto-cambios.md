@@ -1,3 +1,7 @@
+## 2026-10-21 — Texto, jerarquía e iconos de la guía
+
+Fuentes: configuración compartida, tutorial público y preview del editor de bienvenida. Un título por paso, texto directo coherente con Catálogo/carrito/checkout, indicador de paso visible e iconos SVG constantes; conserva imágenes/emojis propios, edición, aparición, cuentas y flujo de compra. Compatibiliza sólo copias base anteriores. Cuerpo y acciones legibles con texto largo y móvil horizontal; WELCOME_VERSION conserva la identidad de onboarding. Se verifica normalización real, cuatro recorridos y paridad de preview; dependencias versionadas, CSP, protección y diagnóstico se regeneran desde sus autoridades. No cambia datos ni reactiva cuentas.
+
 ## 2026-10-21 — Nombre Catálogo en la bienvenida
 
 Fuente: normalizeWelcomeStep en configuracion-bienvenida.js, compartida por tutorial público y control administrativo. Compatibiliza las dos frases anteriores guardadas con el nombre Catálogo; no cambia mensajes personalizados, permisos, aparición de la guía ni datos. Se propagan URLs nuevas por dependencias y generador del loader; caché, mantenimiento y manifiestos se regeneran canónicamente.
