@@ -4,9 +4,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const source = fs.readFileSync(path.join(root, 'scripts/auditar-final-integracion.js'), 'utf8');
+const requireAudit = createRequire(path.join(root, 'scripts/auditar-final-integracion.js'));
 
 function auditIcon(src) {
   const messages = [];
@@ -19,7 +21,7 @@ function auditIcon(src) {
   const stopped = new Error('audit exit');
   try {
     vm.runInNewContext(source, {
-      require: name => name === 'fs' ? mockFs : path,
+      require: name => name === 'fs' ? mockFs : requireAudit(name),
       __dirname: path.join(root, 'scripts'),
       console: { log: value => messages.push(value), error: () => {} },
       process: { env: {}, exit: () => { throw stopped; } },
