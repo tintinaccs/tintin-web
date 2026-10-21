@@ -1,5 +1,6 @@
 // Una sola solicitud y diagnóstico para perfil, alta y checkout.
-export async function requestCurrentLocation({ navigator: nav = globalThis.navigator, secure = globalThis.isSecureContext, document: doc = globalThis.document } = {}) {
+export async function requestCurrentLocation({ navigator: nav = globalThis.navigator, secure = globalThis.isSecureContext, document: doc = globalThis.document, signal } = {}) {
+  signal?.throwIfAborted();
   if (!secure) throw new Error('La ubicación actual necesita HTTPS. Abrí la página en una conexión segura.');
   const policy = doc?.permissionsPolicy || doc?.featurePolicy;
   if (policy?.allowsFeature && !policy.allowsFeature('geolocation')) {
@@ -9,23 +10,35 @@ export async function requestCurrentLocation({ navigator: nav = globalThis.navig
   const read = options => new Promise((resolve, reject) => {
     // El timeout nativo puede quedar esperando permisos o un proveedor del sistema.
     // Este límite también cubre navegadores que nunca ejecutan sus callbacks.
-    const timer = setTimeout(() => reject({ code: 3 }), options.timeout + 1000);
-    const finish = callback => value => { clearTimeout(timer); callback(value); };
+    let settled = false;
+    const finish = callback => value => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      signal?.removeEventListener('abort', cancel);
+      callback(value);
+    };
+    const cancel = () => finish(reject)(signal.reason);
+    const timer = setTimeout(() => finish(reject)({ code: 3 }), options.timeout);
+    signal?.addEventListener('abort', cancel, { once: true });
+    if (signal?.aborted) { cancel(); return; }
     try { nav.geolocation.getCurrentPosition(finish(resolve), finish(reject), options); }
-    catch (error) { clearTimeout(timer); reject(error); }
+    catch (error) { finish(reject)(error); }
   });
   try {
     // Un GPS de alta precisión obligatorio puede fallar en equipos de escritorio.
     let position;
-    try { position = await read({ enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }); }
+    try { position = await read({ enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }); }
     catch (error) {
+      signal?.throwIfAborted();
       if (![2, 3].includes(error?.code)) throw error;
-      position = await read({ enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+      position = await read({ enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
     }
     const { latitude: lat, longitude: lng, accuracy } = position?.coords || {};
     if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) throw { code: 2 };
     return { lat, lng, accuracy };
   } catch (error) {
+    signal?.throwIfAborted();
     let permission;
     if (error?.code === 1) {
       let timer;

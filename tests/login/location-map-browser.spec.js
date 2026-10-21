@@ -13,7 +13,9 @@ const orderData={mapLocation:null};let currentUserProfile=null;const showError=(
 ${profileEscape}window.escapeAddressLabel=escapeHtmlPerfil;window.readDelivery=()=>({point:window.__TintinCheckoutPoint,location:orderData.mapLocation,name:document.getElementById('ck-location-name').value});
 window.restoreAddress=()=>{currentUserProfile={savedLocation:{lat:-25.31,lng:-57.61,name:'Casa',address:'Calle de prueba'}};orderData.mapLocation=null;document.getElementById('ck-location-name').value='';maybeApplySavedLocation()};await initMap();window.mapReady=true;</script></body></html>`;
 
-test('checkout conserva búsqueda, nombre, coordenadas y confirmación al usar el componente compartido', async ({ page, context }) => {
+for (const [width,height] of [[320,568],[390,844],[768,1024],[1024,768],[1180,820],[1181,820],[1366,768],[1440,900],[1920,1080],[844,390]]) {
+test(`checkout conserva búsqueda, nombre, coordenadas y confirmación · ${width}x${height}`, async ({ page, context }) => {
+  await page.setViewportSize({width,height});
   await context.grantPermissions(['geolocation']);
   await context.setGeolocation({ latitude: -25.3, longitude: -57.6, accuracy: 20 });
   await page.route('**/__checkout-location-contract', route => route.fulfill({ contentType: 'text/html; charset=utf-8', body: fixture }));
@@ -41,3 +43,4 @@ test('checkout conserva búsqueda, nombre, coordenadas y confirmación al usar e
   expect(await page.locator('#ck-location-name').inputValue()).toBe('');
   expect(errors).toEqual([]);
 });
+}

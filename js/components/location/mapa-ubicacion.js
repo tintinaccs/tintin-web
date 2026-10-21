@@ -5,7 +5,7 @@
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
 import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261017-domain-cutover-1";
-import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261004-location-consistency-1-stock-flow-20261014-1';
+import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261021-location-recovery-1';
 
 const LEAFLET_JS = '/js/vendor/leaflet/leaflet.js?v=leaflet-1.9.4';
 const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
@@ -84,6 +84,7 @@ export async function createLocationMap({
   let location = null;
   let debounce = null;
   let locating = false;
+  let locationRequest = null;
   let locationRevision = 0;
   let searchGeneration = 0;
   let resizeObserver = null;
@@ -124,6 +125,16 @@ export async function createLocationMap({
       : 'Usar mi ubicación actual';
   };
 
+  const cancelLocationRequest = () => {
+    if (!locationRequest) return;
+    const request = locationRequest;
+    locationRequest = null;
+    locating = false;
+    setButtonLoading(false);
+    status.hidden = true;
+    request.abort();
+  };
+
   const syncLocationFields = place => {
     if (!place) return;
     if (searchInput && place.name) searchInput.value = place.name;
@@ -147,6 +158,7 @@ export async function createLocationMap({
 
   const setLocation = (lat, lng, place) => {
     if (!usablePlace({ lat, lng })) return;
+    cancelLocationRequest();
     locationRevision += 1;
     const hasPlace = Boolean(place);
     const hasName = hasPlace && Object.prototype.hasOwnProperty.call(place, 'name');
@@ -215,13 +227,16 @@ export async function createLocationMap({
   const locateCurrent = async () => {
     if (locating || destroyed) return false;
     locating = true;
+    const request = new AbortController();
+    locationRequest = request;
     setButtonLoading(true);
     status.hidden = false;
     status.textContent = 'Buscando tu ubicación…';
     const revision = locationRevision;
     try {
-      const position = await requestCurrentLocation();
-      if (destroyed || revision !== locationRevision) return false;
+      const position = await requestCurrentLocation({ signal: request.signal });
+      if (destroyed || request.signal.aborted || revision !== locationRevision) return false;
+      locationRequest = null;
       applyPlace({ ...position, name: 'Mi ubicación actual', address: '' }, { scroll: false });
       status.hidden = false;
       status.textContent = Number(position.accuracy) > 100
@@ -229,9 +244,12 @@ export async function createLocationMap({
         : 'Ubicación encontrada. Revisá el punto antes de guardar.';
       return true;
     } catch (error) {
-      if (!destroyed && revision === locationRevision) { status.hidden = false; status.textContent = error.message; }
+      if (!destroyed && !request.signal.aborted && revision === locationRevision) { status.hidden = false; status.textContent = error.message; }
       return false;
-    } finally { locating = false; if (!destroyed) setButtonLoading(false); }
+    } finally {
+      if (locationRequest === request) locationRequest = null;
+      if (!locationRequest) { locating = false; if (!destroyed) setButtonLoading(false); }
+    }
   };
 
   const onLocateClick = event => {
@@ -397,10 +415,11 @@ export async function createLocationMap({
   return {
     getLocation: () => location,
     setLocation: (place, options) => applyPlace(place, options),
-    clearLocation: () => { locationRevision += 1; clearTimeout(debounce); searchGeneration += 1; inFlight?.abort(); location = null; if (marker) { marker.remove(); marker = null; } tools.hidden = true; status.hidden = true; closeResults(); emit(); },
+    clearLocation: () => { cancelLocationRequest(); locationRevision += 1; clearTimeout(debounce); searchGeneration += 1; inFlight?.abort(); location = null; if (marker) { marker.remove(); marker = null; } tools.hidden = true; status.hidden = true; closeResults(); emit(); },
     locateCurrent,
     invalidateSize: () => map.invalidateSize(),
     destroy: () => {
+      cancelLocationRequest();
       destroyed = true;
       inFlight?.abort();
       clearTimeout(debounce);
