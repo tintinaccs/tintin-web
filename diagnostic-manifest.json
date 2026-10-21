@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4f3f1c9e57c53c7e7a9425aac33e962e3cea141c4effdebb09cfd7008a9698f1",
+  "sourceFingerprint": "cd4d2160e3925e564c09fefd757c87544819614b8fd0e11efd16cfa3ed910dd2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1379,
-    "textFiles": 1289,
-    "totalBytes": 29009597,
+    "files": 1380,
+    "textFiles": 1290,
+    "totalBytes": 29018736,
     "pages": 19,
-    "modules": 969
+    "modules": 970
   },
   "viewports": [
     {
@@ -27489,8 +27489,8 @@
     },
     {
       "path": "functions/api/sheets-product-sync.js",
-      "bytes": 3441,
-      "sha256": "313b4468c1d05ca16758d15cd0bec5e8fe5e44aa1b55c607b854290c0c1ffa5d",
+      "bytes": 3446,
+      "sha256": "002abab4a21aa465f953b55765f6c92384d114219ab32677c4984d4354889833",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27513,8 +27513,8 @@
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
-      "bytes": 12340,
-      "sha256": "5806613f5dbf20513f452e151a7ce08fe48b42303303b7ed3f065ac33d1d933d",
+      "bytes": 13919,
+      "sha256": "c9d5053a87ede9361b460b11f5d30cc0c85db3abbeba7db8ed1e58b52cdd544a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27536,13 +27536,19 @@
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 6
+          "line": 8
         },
         {
           "raw": "../../cloudflare/evidencia-sync-sheets.js",
           "target": "cloudflare/evidencia-sync-sheets.js",
           "dynamic": false,
-          "line": 7
+          "line": 9
+        },
+        {
+          "raw": "../../js/core/store/inventario-variantes.mjs",
+          "target": "js/core/store/inventario-variantes.mjs",
+          "dynamic": false,
+          "line": 11
         }
       ],
       "endpoints": []
@@ -51763,8 +51769,8 @@
     },
     {
       "path": "tests/sync/evidencia-sync-sheets.test.mjs",
-      "bytes": 21508,
-      "sha256": "e2f8f76074dd5fc9ce3b940e9e3a382d3761554e2c20ea0f49494e40560f0461",
+      "bytes": 21671,
+      "sha256": "6122fe21e0d36a566f67f6bfc074398c5d81681ae5a20b0b6ae6456c85c467a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -51834,7 +51840,7 @@
           "raw": "../../cloudflare/sincronizacion-participacion-sheets.js",
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": true,
-          "line": 377
+          "line": 378
         }
       ],
       "endpoints": [
@@ -51848,7 +51854,7 @@
         },
         {
           "url": "https://signed.example/",
-          "line": 370
+          "line": 371
         }
       ]
     },
@@ -52070,8 +52076,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 22462,
-      "sha256": "efb82e907e66fe588769134c804c88e276942c136786be2b229125bb849496db",
+      "bytes": 22575,
+      "sha256": "2c3c2dd0d253058038d7a715ab3802e312ae0b07a7814644260e05d053ba3910",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52135,23 +52141,23 @@
         },
         {
           "url": "https://res.cloudinary.com/tintin/image/upload/canary.webp",
-          "line": 265
+          "line": 266
         },
         {
           "url": "https://cdn.shopify.com/s/files/1/product.png",
-          "line": 297
+          "line": 298
         },
         {
           "url": "https://store.myshopify.com/cdn/product.png",
-          "line": 299
-        },
-        {
-          "url": "https://shopify.com/producto",
           "line": 300
         },
         {
+          "url": "https://shopify.com/producto",
+          "line": 301
+        },
+        {
           "url": "https://cdn.shopify.com/s/files/1/old.png",
-          "line": 360
+          "line": 361
         }
       ]
     },
@@ -52374,6 +52380,61 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "tests/sync/sheets-integrity-regressions.test.mjs",
+      "bytes": 8695,
+      "sha256": "c56588c184f4f87f6a7c3fefbd82de33e71a575f37e19656abdf86639ebbabeb",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../js/core/store/inventario-variantes.mjs",
+          "target": "js/core/store/inventario-variantes.mjs",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://fixture.invalid/api/sheets-product-sync",
+          "line": 35
+        },
+        {
+          "url": "https://fixture.invalid/",
+          "line": 36
+        },
+        {
+          "url": "https://fixture.invalid/webhook",
+          "line": 58
+        }
+      ]
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
@@ -54352,8 +54413,8 @@
     {
       "path": "apps-script/AdminParity.gs",
       "extension": ".gs",
-      "bytes": 27050,
-      "sha256": "1189a59a98d45e7609ce1ba383ae4f066cf56359a6072c7e592b9338f51176cb"
+      "bytes": 27075,
+      "sha256": "4322ec2e729d96726da5fa25a22fce92ac47e0dfb6eaf0846d33f4dda61a2743"
     },
     {
       "path": "apps-script/BorradoCatalogoPayload.gs",
@@ -54394,14 +54455,14 @@
     {
       "path": "apps-script/Participacion.gs",
       "extension": ".gs",
-      "bytes": 13574,
-      "sha256": "dc596a418ff832d58d10c548540a77047b06c38bdd54dd71e0353d1347a81dd5"
+      "bytes": 13624,
+      "sha256": "747d515d1e0a6e8ef9c62e8bb83e8cd28d8c5da12ae3bcf7ec00c2d467bb28c2"
     },
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 53362,
-      "sha256": "6133186ac63149fa10cdb06ccf9c0def82b6b860e345214126da240c38680e25"
+      "bytes": 54191,
+      "sha256": "46e28a5c1df5815c0ca5acb722ba2b283054168929035c4c8011915ecc6c0372"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -55294,8 +55355,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 8173,
-      "sha256": "8c31d0ccaef66d404f8cc5ac8b8255f0b6d81e0d616a5fe54ce1250d3a14fe8c"
+      "bytes": 1890,
+      "sha256": "155abb0029c11bb5d1c5db89ddcc85a5c94a23ab61f12359277a172b8d9354af"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -55307,7 +55368,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "af040b9e0462a19b4b45eda56dfea1e15b4638772ca9be5e39b129c7c28d102c"
+      "sha256": "fee17b5fea49fa12f71de3f41d7b54f71bb7b8f972a89802c9dcba70eb58dadc"
     },
     {
       "path": "config/public-site.json",
@@ -55966,8 +56027,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 744567,
-      "sha256": "2bdc7bf84d93d1b20651ef2a6c671fe2f1e1f026c3cd09a619e8c47586cbe453"
+      "bytes": 746424,
+      "sha256": "7e4ca01f2e624b2c6515d19a99cbafc798d77fd9c33c2547fef1d3e71ce8adaf"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56356,8 +56417,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 86410,
-      "sha256": "c695bc141f7b5379ac413163cfd60fb776a3583dddddcf4661c155203edf40b8"
+      "bytes": 87230,
+      "sha256": "eb4a696bc41a0f2f3ed580efd89d21c46fccbaa1101bcd075c8582bd8c34826e"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -56488,8 +56549,8 @@
     {
       "path": "docs/sincronizacion-productos-canonica.md",
       "extension": ".md",
-      "bytes": 9310,
-      "sha256": "5b3241989e686534b333fdfcdd0fd4f2bf78014cb1359676683e5eba6d098187"
+      "bytes": 10596,
+      "sha256": "e320b86b928380e8e7bda6783316f99cda98837026eb81532443ee585afca6fe"
     },
     {
       "path": "docs/system-health.md",
@@ -56854,14 +56915,14 @@
     {
       "path": "functions/api/sheets-product-sync.js",
       "extension": ".js",
-      "bytes": 3441,
-      "sha256": "313b4468c1d05ca16758d15cd0bec5e8fe5e44aa1b55c607b854290c0c1ffa5d"
+      "bytes": 3446,
+      "sha256": "002abab4a21aa465f953b55765f6c92384d114219ab32677c4984d4354889833"
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
       "extension": ".js",
-      "bytes": 12340,
-      "sha256": "5806613f5dbf20513f452e151a7ce08fe48b42303303b7ed3f065ac33d1d933d"
+      "bytes": 13919,
+      "sha256": "c9d5053a87ede9361b460b11f5d30cc0c85db3abbeba7db8ed1e58b52cdd544a"
     },
     {
       "path": "functions/api/sheets-sync-snapshot.js",
@@ -62032,8 +62093,8 @@
     {
       "path": "tests/sync/evidencia-sync-sheets.test.mjs",
       "extension": ".mjs",
-      "bytes": 21508,
-      "sha256": "e2f8f76074dd5fc9ce3b940e9e3a382d3761554e2c20ea0f49494e40560f0461"
+      "bytes": 21671,
+      "sha256": "6122fe21e0d36a566f67f6bfc074398c5d81681ae5a20b0b6ae6456c85c467a9"
     },
     {
       "path": "tests/sync/firestore-admin-batch-get-parser.test.mjs",
@@ -62074,8 +62135,8 @@
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 22462,
-      "sha256": "efb82e907e66fe588769134c804c88e276942c136786be2b229125bb849496db"
+      "bytes": 22575,
+      "sha256": "2c3c2dd0d253058038d7a715ab3802e312ae0b07a7814644260e05d053ba3910"
     },
     {
       "path": "tests/sync/public-consistency-regressions.test.mjs",
@@ -62100,6 +62161,12 @@
       "extension": ".mjs",
       "bytes": 3692,
       "sha256": "319f41b95d2e92f6b4d995cd1fc28d19e68de56c304bb2ad904341cf688932c2"
+    },
+    {
+      "path": "tests/sync/sheets-integrity-regressions.test.mjs",
+      "extension": ".mjs",
+      "bytes": 8695,
+      "sha256": "c56588c184f4f87f6a7c3fefbd82de33e71a575f37e19656abdf86639ebbabeb"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
