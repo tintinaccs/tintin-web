@@ -452,7 +452,7 @@ test('push resuelve enlaces sociales históricos y conserva el módulo correcto'
     assert.equal(w.shown.at(-1).data.url, expected);
   }
   assert.equal(w.clickRegisteredBeforeSdk, true);
-  assert.equal(w.shown[0].icon, '/assets-tintin/images/admin/push-icon-192.png?v=tintin-20261020-iconos-globales-1');
+  assert.equal(w.shown[0].icon, '/assets-tintin/images/admin/push-icon-192.png?v=tintin-20261021-iconos-rosa-1');
 });
 test('el clic push no reemplaza la tienda y abre una ventana si navigate falla', async () => {
   let focused = 0, navigated = 0;

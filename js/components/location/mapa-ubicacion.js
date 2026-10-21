@@ -5,7 +5,7 @@
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
 import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20261017-domain-cutover-1";
-import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261021-location-recovery-1';
+import { requestCurrentLocation } from './geolocalizacion.mjs?v=tintin-20261021-location-profile-layout-3';
 
 const LEAFLET_JS = '/js/vendor/leaflet/leaflet.js?v=leaflet-1.9.4';
 const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
@@ -97,6 +97,11 @@ export async function createLocationMap({
   status.setAttribute('role', 'status');
   status.hidden = true;
   mapEl.before(status);
+  const tileStatus = document.createElement('p');
+  tileStatus.className = 'tt-map-tile-status';
+  tileStatus.setAttribute('role','status');
+  tileStatus.hidden = true;
+  mapEl.before(tileStatus);
   const tools = document.createElement('div');
   tools.className = 'tt-map-navigation';
   tools.hidden = true;
@@ -108,10 +113,9 @@ export async function createLocationMap({
   tools.append(googleLink, wazeLink);
   mapEl.after(tools);
   tiles.on('tileerror', () => {
-    if (destroyed) return;
-    status.hidden = false;
-    status.textContent = 'No pudimos cargar el fondo del mapa. Tu ubicación se conserva. Podés buscar un lugar o abrir el punto en Google Maps o Waze.';
-    if (typeof onError === 'function') onError(status.textContent);
+    if (destroyed || !tileStatus.hidden) return;
+    tileStatus.hidden = false;
+    tileStatus.textContent = 'No pudimos cargar parte del mapa. Si ya marcaste un punto, se conserva. Podés buscar tu dirección o abrir el punto en Google Maps o Waze.';
   });
 
   const emit = () => { if (typeof onChange === 'function') onChange(location); };
@@ -121,7 +125,7 @@ export async function createLocationMap({
     resolvedLocateButton.disabled = loading;
     resolvedLocateButton.setAttribute('aria-busy', String(loading));
     resolvedLocateButton.textContent = loading
-      ? '📍 Obteniendo ubicación…'
+      ? 'Obteniendo ubicación…'
       : 'Usar mi ubicación actual';
   };
 
@@ -434,6 +438,7 @@ export async function createLocationMap({
       resolvedLocationNameInput?.removeEventListener('input', onLocationNameInput);
       resizeObserver?.disconnect();
       status.remove();
+      tileStatus.remove();
       tools.remove();
       map.remove();
     },
