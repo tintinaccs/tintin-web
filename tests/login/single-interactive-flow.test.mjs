@@ -229,7 +229,8 @@ test('ubicación del checkout tiene un solo dueño: un clic solicita geolocaliza
   const fakeElement = () => ({ setAttribute() {}, remove() {}, append() {}, hidden: false });
   const navigator = { geolocation: { getCurrentPosition() { locationCalls++; } } };
   const context = vm.createContext({
-    requestCurrentLocation: () => requestCurrentLocation({ navigator, secure: true }),
+    AbortController,
+    requestCurrentLocation: options => requestCurrentLocation({ navigator, secure: true, ...options }),
     window: { isSecureContext: true, L: { map: () => map, tileLayer: () => ({addTo() {return this;},on() {return this;}}) } },
     document: { createElement: fakeElement, getElementById: () => null, removeEventListener() {} },
     navigator,

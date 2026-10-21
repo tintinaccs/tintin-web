@@ -3128,3 +3128,6 @@ PASS_LOCAL del conjunto:34/34 Chromium y111/111 Node de Perfil, alta, mapa y con
 
 
 Guardado del conjunto: se detectó que la liberación general del botón podía habilitar Guardar después de cerrar/limpiar el punto. El finally restablece la disponibilidad desde toSavedLocation canónico y sólo para la misma cuenta/generación; la respuesta persistida revalida identidad antes de cerrar el editor. Tres pruebas ejecutan el handler real con persistencia simulada: éxito queda deshabilitado al cerrar, error conserva punto/campos para reintentar y respuesta tardía no cierra/habilita otra cuenta.114/114 Node del conjunto aprobados;34 Chromium anteriores cubren la estructura y el mapa sin cambios adicionales. Se regeneran CSP/plan/manifiesto de este cierre antes de CI.
+
+
+Seguimiento de CI39595526443: la prueba VM single-interactive-flow no exponía AbortController ni transmitía la señal al adaptador GPS. Se agregan ambos en el entorno simulado, conservando un clic/una solicitud, doble clic sin duplicación y cancelación al destruir.226/226 Node de acceso, Perfil y ubicación pasan con Chromium del entorno para sus fixtures de navegador. Se regeneran manifiesto y plan; se requiere CI del nuevo SHA.
