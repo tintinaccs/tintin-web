@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "806efc3a13e7d494189278d6d4045cfc30464d8e",
-  "reason": "Conciliar avatar propio sin destello Google y destino canonico del Diagnostico Maestro conservando bienvenida publicada",
+  "reason": "Corregir avatar inicial, servidor de pruebas Maestro y control del degradado sin alterar permisos ni contratos",
   "files": [
     {
       "path": "_headers",
@@ -11,7 +11,7 @@
     {
       "path": ".github/workflows/diagnostico-maestro.yml",
       "oldHash": "1fcab11b042d818031b968f2b2269a3927b4dbea69db8d4ef3560221bba3bd6a",
-      "newHash": "c6ed9bb8ab9e484cb3a92086f62a2ebd704b7e03aaf807a90314ff618cfac427"
+      "newHash": "4b1ccaef38d74334195156feb03590bbe3e04525c8cb113634b9aafa6597b0fc"
     },
     {
       "path": "404.html",
@@ -156,7 +156,7 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "oldHash": "cde423f05dba0d38434ed9af5dde7dd10d54164430bbf3526999c710c1f6ecd5",
-      "newHash": "f31cbd66cff0f88830ed7419dd9e10a20fe11ef14bc26681bd2c2a60e7fc4e73"
+      "newHash": "67f78b299f77458a9ada838b3b19e1e136543a5b677d4a478473d47c112263b3"
     },
     {
       "path": "js/admin/mayoristas/mayoristas-admin.js",
@@ -511,7 +511,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "fd6be661d6a174656694470207cfca5f2bc9ed3410126d462b75dda9ee1d8941",
-      "newHash": "cb69df287aa474f52d2ad770612676b50e8329f491e48323d86255b46d535a5f"
+      "newHash": "ac22fe212cc30823624ca11d0af06ef09af070df11383fa67e01a160d933a0ce"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

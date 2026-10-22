@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3ec7d0563a23bcf5858c0aa2f0ff21e966175e0f9f2d1edac0b33ffbdfbdb0c4",
+  "sourceFingerprint": "c1b0cdf8068809433e6da1100d11e065f1fe09565cff1a75f79855110f4092d7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1402,
-    "textFiles": 1311,
-    "totalBytes": 29479640,
+    "files": 1404,
+    "textFiles": 1313,
+    "totalBytes": 29486968,
     "pages": 19,
-    "modules": 987
+    "modules": 989
   },
   "viewports": [
     {
@@ -29280,8 +29280,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 28070,
-      "sha256": "f31cbd66cff0f88830ed7419dd9e10a20fe11ef14bc26681bd2c2a60e7fc4e73",
+      "bytes": 28067,
+      "sha256": "67f78b299f77458a9ada838b3b19e1e136543a5b677d4a478473d47c112263b3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38761,8 +38761,8 @@
     },
     {
       "path": "scripts/auditar-responsive-navegacion.mjs",
-      "bytes": 14774,
-      "sha256": "6f9adc49e23f2cb25f19597dd4c91562e1c5acec0b4f40f9c895c87b3e22d85d",
+      "bytes": 14660,
+      "sha256": "95b8fdc3b363f14c2a0be130808ffaa12be5c20a8e8cff999c8717aa0a06fb6d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38797,6 +38797,12 @@
           "target": null,
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "./lib/superficie-navegacion.mjs",
+          "target": "scripts/lib/superficie-navegacion.mjs",
+          "dynamic": false,
+          "line": 6
         }
       ],
       "endpoints": []
@@ -40005,6 +40011,17 @@
       "path": "scripts/lib/rutas-pages.js",
       "bytes": 1253,
       "sha256": "de593cdd3ed24beec4120be4d0b08a08f8df64beba4f67e4fcc8daba3ff85722",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/lib/superficie-navegacion.mjs",
+      "bytes": 1870,
+      "sha256": "28483ef6ea81539618a4e16027e84ccbc647e4a51a617edcb2ad1a5d1d7b5a2e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45690,8 +45707,8 @@
     },
     {
       "path": "tests/diagnostics/master-current-evidence.test.mjs",
-      "bytes": 1647,
-      "sha256": "2f7db8c84ec4531d70e47ecf9ce6e2aa3784d5cecf03b89c84081139812305ce",
+      "bytes": 2522,
+      "sha256": "4384c3c2be09f8fcf8331d807313c160ab57d7659c60410770c8378a620aba75",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45725,11 +45742,11 @@
       "endpoints": [
         {
           "url": "https://github.com/tintinaccs/tintin-web/actions/runs/1",
-          "line": 21
+          "line": 34
         },
         {
           "url": "https://dash.cloudflare.com/pages/deployments/1",
-          "line": 28
+          "line": 41
         }
       ]
     },
@@ -48502,6 +48519,42 @@
           "target": "js/components/navigation/compartido/control-paneles.js",
           "dynamic": true,
           "line": 19
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/navigation/navigation-paint.test.mjs",
+      "bytes": 1563,
+      "sha256": "81583c56e3fd8612d14e8921500f71609c4d94e3540ebf796936ede7b4a45ebc",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../scripts/lib/superficie-navegacion.mjs",
+          "target": "scripts/lib/superficie-navegacion.mjs",
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -55043,8 +55096,8 @@
     {
       "path": ".github/workflows/diagnostico-maestro.yml",
       "extension": ".yml",
-      "bytes": 15540,
-      "sha256": "c6ed9bb8ab9e484cb3a92086f62a2ebd704b7e03aaf807a90314ff618cfac427"
+      "bytes": 16830,
+      "sha256": "4b1ccaef38d74334195156feb03590bbe3e04525c8cb113634b9aafa6597b0fc"
     },
     {
       "path": ".github/workflows/drenar-cola-correo-pedidos.yml",
@@ -56087,8 +56140,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 26189,
-      "sha256": "58555572298e9bbae0541393f7c99009eda77959ee2dcef9a286c3af4a69d23f"
+      "bytes": 26180,
+      "sha256": "3bef2b1cd48c082af1788634794ddf2d4d6e2ee1b65c622f38969601f1fc1fa8"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56100,7 +56153,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "8e6085140c1fcb4d29c1db3f8da006d756e3dcf590a3c3baf00546ebd2aba522"
+      "sha256": "a612f689c00462f31a08fcc87fd921bfadc62795724ef610cbdd36c84779f0a7"
     },
     {
       "path": "config/public-site.json",
@@ -56759,8 +56812,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 807667,
-      "sha256": "97f7b21a654f663a966e1152460059c6d53aecdf82ff58275164cc670da81e64"
+      "bytes": 809523,
+      "sha256": "3b828cc23e6c76f5c7156c78d66985301de2132f88a7929c3deebb1fdd39ba53"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -58025,8 +58078,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 28070,
-      "sha256": "f31cbd66cff0f88830ed7419dd9e10a20fe11ef14bc26681bd2c2a60e7fc4e73"
+      "bytes": 28067,
+      "sha256": "67f78b299f77458a9ada838b3b19e1e136543a5b677d4a478473d47c112263b3"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -60605,8 +60658,8 @@
     {
       "path": "scripts/auditar-responsive-navegacion.mjs",
       "extension": ".mjs",
-      "bytes": 14774,
-      "sha256": "6f9adc49e23f2cb25f19597dd4c91562e1c5acec0b4f40f9c895c87b3e22d85d"
+      "bytes": 14660,
+      "sha256": "95b8fdc3b363f14c2a0be130808ffaa12be5c20a8e8cff999c8717aa0a06fb6d"
     },
     {
       "path": "scripts/auditar-seguridad-fase-8.js",
@@ -60762,7 +60815,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 74382,
-      "sha256": "cb69df287aa474f52d2ad770612676b50e8329f491e48323d86255b46d535a5f"
+      "sha256": "ac22fe212cc30823624ca11d0af06ef09af070df11383fa67e01a160d933a0ce"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -60913,6 +60966,12 @@
       "extension": ".js",
       "bytes": 1253,
       "sha256": "de593cdd3ed24beec4120be4d0b08a08f8df64beba4f67e4fcc8daba3ff85722"
+    },
+    {
+      "path": "scripts/lib/superficie-navegacion.mjs",
+      "extension": ".mjs",
+      "bytes": 1870,
+      "sha256": "28483ef6ea81539618a4e16027e84ccbc647e4a51a617edcb2ad1a5d1d7b5a2e"
     },
     {
       "path": "scripts/mantenimiento-flujos-core.mjs",
@@ -61865,8 +61924,8 @@
     {
       "path": "tests/diagnostics/master-current-evidence.test.mjs",
       "extension": ".mjs",
-      "bytes": 1647,
-      "sha256": "2f7db8c84ec4531d70e47ecf9ce6e2aa3784d5cecf03b89c84081139812305ce"
+      "bytes": 2522,
+      "sha256": "4384c3c2be09f8fcf8331d807313c160ab57d7659c60410770c8378a620aba75"
     },
     {
       "path": "tests/engagement/avisos-eventos-unicos.test.mjs",
@@ -62305,6 +62364,12 @@
       "extension": ".js",
       "bytes": 5791,
       "sha256": "a3d710ce037022e61feb07d4b830b8db3907850bd92384035c3992b9dcf54d8f"
+    },
+    {
+      "path": "tests/navigation/navigation-paint.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1563,
+      "sha256": "81583c56e3fd8612d14e8921500f71609c4d94e3540ebf796936ede7b4a45ebc"
     },
     {
       "path": "tests/navigation/page-entry-scroll.test.mjs",
