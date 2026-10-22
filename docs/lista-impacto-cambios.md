@@ -646,3 +646,8 @@ Autoridades conservadas: admin-app (CRUD/stock y concurrencia), interfaz-product
 ## 2026-10-22 — Fotos por color: cerrar runtime del catálogo maestro
 
 Autoridades fotos-por-color/fotos-por-variante y sus consumidores admin-app/admin.html. El análisis local recorre la biblioteca sin referenciar un color fuera de alcance; conserva asociaciones explícitas y cancelación. El número accesible de cada foto se resuelve por identidad normalizada contra la biblioteca, independiente del orden de la combinación. El recorrido de navegador distingue botones públicos y filtros administrativos, abriendo el color antes de asignar. Se conservan controles y serialización; sin nuevas dependencias, permisos o escrituras comerciales. Versiones/caché, plan y diagnóstico se generan de forma canónica. Evidencia del candidato y límites en CURRENT_STATE y PR1203.
+
+
+## 2026-10-22 — Actualizacion puntual de dependencias
+
+package.json/lock: DOMPurify3.4.17 y ip-address10.7.4. Actualizar plan protegido y diagnostico desde sus autoridades; verificar instalacion fija, audit completo/produccion y compatibilidad del watcher Firebase. El bundle distribuido por Monaco permanece intacto; no atribuirle la version del paquete npm sustituido. No se modifica el PR de Productos ni sus fuentes.
