@@ -1,4 +1,4 @@
-import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261017-domain-cutover-1";
+import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1";
 // =============================================================
 // TINTIN ACCESORIOS — Flujo real de decisiones y conexiones (render)
 // =============================================================
@@ -7,7 +7,7 @@ import { readAdminFirestore } from "../auth/lecturas-admin.js?v=tintin-20261017-
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261010-auto-flow-1';
 import { resolveAutomaticState, isAttentionState, liveMarker, shouldShowFlowEdge, createAutomaticMonitor, CHECK_INTERVAL_MS, EVIDENCE_MAX_AGE_MS } from './estado-flujo.js?v=tintin-20261010-auto-flow-1-connections-20261014-1';
 import { buildLiveChecks, buildLiveEdges, ciEvidenceProblem } from './live-checks.js?v=tintin-20261010-auto-flow-1-connections-20261014-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 import { collection, doc, getDocFromServer as getDoc, getDocsFromServer as getDocs, limit, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';

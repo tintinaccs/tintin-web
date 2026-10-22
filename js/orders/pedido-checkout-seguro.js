@@ -5,7 +5,7 @@ import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../component
 import { hasForwardValidation, replayValidatedForward } from '../pages/checkout/validacion-avance.js?v=tintin-20261007-checkout-guards-1';
 import { db } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { AUTH_STATES, getSessionUser, waitForSession, subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { AUTH_STATES, getSessionUser, waitForSession, subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import {
   doc,
   getDoc,
@@ -42,7 +42,7 @@ import {
   isValidRazonSocial,
   isValidTaxpayerType
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1';
-import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20261017-domain-cutover-1';
+import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20261022-avatar-inicial-1';
 import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2-cupones-1-master-20261007-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {

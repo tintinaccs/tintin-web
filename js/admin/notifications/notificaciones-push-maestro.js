@@ -1,8 +1,8 @@
 // TINTIN — Centro maestro de Web Push (sólo Super Admin)
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1';
 
 const SOUND_KEY = 'tt_push_foreground_sound';

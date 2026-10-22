@@ -1,4 +1,4 @@
-import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAdminSnapshot as onSnapshot } from '../auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
 /**
  * TINTIN — Motor de esquema de colores del SUPER ADMIN (Super Admin →
@@ -77,5 +77,5 @@ async function subscribeToScheme(schemeId) {
 // admin-images.html comparte este motor de colores, pero no debe cargar ese
 // editor ni dejar observadores esperando una interfaz que allí no existe.
 if (document.getElementById('visual-editor')) {
-  import('../appearance/visual-studio-global-admin.js?v=tintin-20261017-domain-cutover-1');
+  import('../appearance/visual-studio-global-admin.js?v=tintin-20261022-avatar-inicial-1');
 }
