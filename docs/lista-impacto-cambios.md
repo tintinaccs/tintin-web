@@ -1,3 +1,7 @@
+## 2026-10-22 — Identidad provisional de avatar
+
+Fuentes: estado-canonico-perfil.mjs, navegacion-autenticacion.js y módulo de perfil.html. Perfil pendiente sólo muestra foto propia conservada para el mismo UID o iniciales; el fallback Google espera la lectura confirmada del perfil. Consumidores sincronizados: hero, encabezado, panel de cuenta y barra móvil, con guardias existentes de cuenta/lecturas tardías. Versionado transitivo, shell, CSP, manifiesto y plan protegido se regeneran mediante sus autoridades. No hay escrituras de datos reales, cambios de Auth/Rules ni reactivación de comunidad. Evidencia actual en CURRENT_STATE.
+
 ## 2026-10-21 — Cierre comercial sobre la paridad de Sheets
 
 Se integra main e96eea930 conservando su sincronización y validación de literales. Medidas y cuidados permanecen opcionales y vacíos por decisión de la titular; el renderizado sólo muestra los datos reales presentes. No cambia el catálogo real.217 pruebas de productos/sincronización y311 de pedidos/pagos/checkout aprobadas tras la conciliación; se renuevan protección y diagnóstico desde sus autoridades.

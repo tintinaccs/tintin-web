@@ -7,7 +7,7 @@ import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs 
 import { installProductInterface, syncProductSurfaces, visibleProductEditor } from './products/interfaz-productos-adaptable.js?v=tintin-20261021-visual-scope-2';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261020-orders-clean-2';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
-import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 /* ========================================================================
    TINTIN — Productos, Colecciones y Pedidos
@@ -24,7 +24,7 @@ import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tint
 
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { recordAuthDiagnostic } from '../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import {
   collection,
@@ -36,8 +36,8 @@ import {
   startAfter, where
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261017-domain-cutover-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261022-avatar-inicial-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
 const VERSION = 'tintin-20261021-product-workspace-1';

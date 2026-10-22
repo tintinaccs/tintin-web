@@ -5,7 +5,7 @@
    ============================================================= */
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { notify, runOperation, GLOBAL_STATUS } from '../operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 import { DIAGNOSIS_KIND } from '../operaciones/nucleo-operaciones.js?v=tintin-20260925-admin-ops-1';

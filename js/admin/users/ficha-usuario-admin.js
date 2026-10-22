@@ -13,7 +13,7 @@ import { ordersForView, orderDisplayCode } from '../../orders/pedidos-prueba.mjs
    ============================================================= */
 
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import {
   collection,
   doc,

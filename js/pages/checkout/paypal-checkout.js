@@ -1,5 +1,5 @@
 import './checkout-resumen-confirmacion.js?v=tintin-20260914-summary-svg-fix-1';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 
 const state = { config: null, pending: null, sdkPromise: null, providerOrderId: '' };
 const $ = id => document.getElementById(id);

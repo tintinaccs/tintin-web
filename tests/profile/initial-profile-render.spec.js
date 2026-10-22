@@ -179,3 +179,19 @@ test('App Check tardío recupera el perfil sin recargar ni abrir escrituras ante
   await expect(page.locator('#perfil-nombre-display')).toHaveText('Ana recuperada');
   await expect(page.locator('#btn-guardar-perfil')).toBeEnabled();
 });
+
+for (const width of [320,390,768,1024,1280,1440,1920]) {
+ test('foto propia sin destello de Google con handoff incompleto · '+width, async ({page}) => {
+  await fixture(page,width);
+  await page.route('**/custom-avatar.png',route=>route.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jxioAAAAASUVORK5CYII=','base64')}));
+  await page.evaluate(() => {
+   const google='https://lh3.googleusercontent.com/google.png';
+   window.handoff={uid:'client',photoURL:google,profile:{avatarURL:google}};
+   window.changeUser({...window.profileUser('client'),photoURL:google,providerData:[{providerId:'google.com',photoURL:google}]});
+  });
+  await expect.poll(()=>page.evaluate(()=>Boolean(window.profileReads?.client))).toBe(true);
+  await expect(page.locator('#perfil-avatar img')).toHaveCount(0);
+  await page.evaluate(()=>window.resolveProfile('client',{name:'Ana',avatarURL:'/custom-avatar.png'}));
+  await expect(page.locator('#perfil-avatar img')).toHaveAttribute('src','/custom-avatar.png');
+ });
+}
