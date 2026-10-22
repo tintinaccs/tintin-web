@@ -39,6 +39,14 @@ export function mountProductPreview(card, layout) {
   back.addEventListener('click',()=>{const section=card.querySelector('#prod-editor-section');section?.focus();section?.scrollIntoView({block:'start'});});
   aside.prepend(back);
   const refresh = () => refreshProductPreview(card);
+  // Las URLs blob son sólo una vista local: nunca pasan al campo persistido
+  // ni a las asociaciones del catálogo.
+  card.addEventListener('tintin:image-preview', event => {
+    if (event.target.id !== 'prod-image-widget') return;
+    stateFor(card).pendingPhoto = event.detail?.pending ? event.detail.url : '';
+    stateFor(card).photo = stateFor(card).pendingPhoto || '';
+    refresh();
+  });
   card.addEventListener('input', refresh);
   card.addEventListener('change', refresh);
   refresh();
@@ -61,6 +69,7 @@ export function refreshProductPreview(card) {
   for (const key of Object.keys(state.selected)) if (!groups[key]?.includes(state.selected[key])) delete state.selected[key];
   const product = { imageUrl: value('imageUrl'), imagesExtra: value('images-extra').split(/\r?\n/), variants: groups, variantMedia: state.rows };
   const photos = media.uniqueImages(media.galleryImages(product, state.selected).map(url => sanitizeImageUrl(url)).filter(Boolean));
+  if (state.pendingPhoto) photos.unshift(state.pendingPhoto);
   if (!photos.includes(state.photo)) state.photo = photos[0] || '';
   const image = aside.querySelector('.tt-editor-cover img'), placeholder = aside.querySelector('.tt-editor-cover span');
   if (image.dataset.source !== state.photo) {

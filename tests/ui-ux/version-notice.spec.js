@@ -2,12 +2,133 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
 const source = fs.readFileSync(path.resolve(__dirname, '../../js/quality/vigilancia-version.js'), 'utf8');
+const revisionSource = fs.readFileSync(path.resolve(__dirname, '../../js/quality/revision-visual.mjs'), 'utf8');
+const { createHash } = require('node:crypto');
+
+async function scopedMount(page, pathname = '/', {unlisted=false,status=200} = {}) {
+  const { visualSource } = await import('../../js/quality/revision-visual.mjs');
+  const hash = value => createHash('sha256').update(visualSource(value)).digest('hex');
+  const file = pathname === '/' ? 'index.html' : `${pathname.slice(1)}.html`;
+  let release = 1, loaderTag = 1, productTag = 1, productVisual = 'anterior', loaderVisual = '';
+  const loader = () => `window.fixtureLoader=true;const version='tintin-202610${loaderTag === 1 ? '20-old' : '21-new'}-1';${loaderVisual}`;
+  const product = () => `document.body.dataset.productDesign=${JSON.stringify(productVisual)};`;
+  const originalLoader = loader();
+  let productMarker = 'a'.repeat(64), pageMarker = 'a'.repeat(64);
+  await page.route('https://scope.test/**', async route => {
+    const url = new URL(route.request().url());
+    if (url.pathname.endsWith('/revision-visual.mjs')) return route.fulfill({contentType:'text/javascript',body:revisionSource});
+    if (url.pathname === '/watch.js') return route.fulfill({contentType:'text/javascript',body:source});
+    if (url.pathname === '/loader.js') return route.fulfill({contentType:'text/javascript',headers:{'cache-control':'public, max-age=31536000, immutable'},body:url.searchParams.get('v') === '1' ? originalLoader : loader()});
+    if (url.pathname === '/product.js') return route.fulfill({contentType:'text/javascript',body:product()});
+    if (url.pathname === '/site-version.json') return route.fulfill({json:{schemaVersion:2,revision:String(release).padStart(64,'0'),pages:{...(unlisted?{}:{[file]:pageMarker}),'product.html':productMarker},clientResources:{'loader.js':{version:String(loaderTag),revision:hash(loader())},'product.js':{version:String(productTag),revision:hash(product())}}}});
+    const isProduct = url.pathname === '/product';
+    return route.fulfill({status,contentType:'text/html',body:`<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="tintin-page-revision" content="${isProduct ? productMarker : pageMarker}"><input aria-label="Borrador"><a href="/product">Abrir producto</a><script src="/loader.js?v=${loaderTag}"></script>${isProduct ? `<script src="/product.js?v=${productTag}"></script>` : ''}<script type="module" src="/watch.js?v=1"></script>`});
+  });
+  await page.goto('https://scope.test'+pathname);
+  await page.waitForFunction(() => !!window.TintinVersionWatch);
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+  return action => {
+    release++;
+    if (action === 'product') { productTag++; productVisual = 'nuevo'; productMarker = 'b'.repeat(64); }
+    if (action === 'propagate') loaderTag++;
+    if (action === 'shared') { loaderTag++; loaderVisual = 'document.body.dataset.sharedDesign="nuevo";'; }
+    if (action === 'html') pageMarker = 'b'.repeat(64);
+  };
+}
+
+test('una ruta personalizada también detecta recursos cargados sin una entrada estática',async({page})=>{
+  const publish=await scopedMount(page,'/pages/guia',{unlisted:true});
+  publish('product');publish('propagate');
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+  publish('shared');
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(page.locator('#tt-version-notice')).toBeVisible();
+});
+
+test('una página 404 real usa su marcador aunque la dirección no figure en el inventario',async({page})=>{
+  const publish=await scopedMount(page,'/no-existe',{unlisted:true,status:404});
+  publish('html');
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(page.locator('#tt-version-notice')).toBeVisible();
+});
+
+test('el renderer personalizado avisa por diseño visible y carga lo último al volver a entrar',async({page})=>{
+  const {renderPage}=await import('../../functions/pages/[slug].js');
+  const data={title:'Guía',contentHtml:'<h2>Contenido anterior</h2>',template:'standard',metaDescription:'SEO anterior'};
+  await page.route('https://custom.test/**',async route=>{
+    const request=route.request(),url=new URL(request.url());
+    if(url.pathname==='/js/quality/vigilancia-version.js')return route.fulfill({contentType:'text/javascript',body:source});
+    if(url.pathname==='/js/quality/revision-visual.mjs')return route.fulfill({contentType:'text/javascript',body:revisionSource});
+    if(url.pathname==='/site-version.json')return route.fulfill({json:{schemaVersion:2,pages:{'index.html':'a'.repeat(64)},clientResources:{}}});
+    const response=await renderPage(data,new Request(request.url()));
+    return route.fulfill({status:response.status,headers:Object.fromEntries(response.headers),body:await response.text()});
+  });
+  await page.goto('https://custom.test/pages/guia');
+  await page.waitForFunction(()=>!!window.TintinVersionWatch);
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('current');
+  data.metaDescription='SEO actualizado';data.stock=0;
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+  data.contentHtml='<h2>Contenido vigente</h2>';
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(page.locator('#tt-version-notice')).toBeVisible();
+  await page.reload();
+  await page.waitForFunction(()=>!!window.TintinVersionWatch);
+  await expect(page.getByRole('heading',{name:'Contenido vigente'})).toBeVisible();
+  expect(await page.evaluate(()=>window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+});
+
+for (const pathname of ['/', '/catalogo', '/collections', '/perfil', '/admin', '/admin-images', '/checkout', '/login']) {
+  test(`regla global por pantalla y datos sin aviso · ${pathname}`, async ({page}) => {
+    const publish = await scopedMount(page, pathname);
+    await page.getByRole('textbox').fill('Conservar borrador');
+    await page.evaluate(() => { window.dispatchEvent(new CustomEvent('tintin:site-content-updated')); localStorage.setItem('cart','conservar'); });
+    publish('data');
+    expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+    publish('product');
+    publish('propagate');
+    expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+    await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+    publish('shared');
+    expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('outdated');
+    await expect(page.locator('#tt-version-notice')).toBeVisible();
+    await expect(page.getByRole('textbox')).toHaveValue('Conservar borrador');
+    await page.getByRole('button',{name:'Más tarde',exact:true}).click();
+    publish('product'); // No insiste por una publicación ajena al posponer.
+    expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+    await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+    expect(await page.evaluate(() => localStorage.getItem('cart'))).toBe('conservar');
+  });
+}
+
+test('al entrar después a la página modificada carga directamente el diseño vigente', async ({page}) => {
+  const publish = await scopedMount(page);
+  publish('product'); publish('propagate');
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+  await page.getByRole('link',{name:'Abrir producto'}).click();
+  await page.waitForFunction(() => !!window.TintinVersionWatch);
+  await expect(page.locator('body')).toHaveAttribute('data-product-design','nuevo');
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('current');
+  await expect(page.locator('#tt-version-notice')).toHaveCount(0);
+});
+
+test('el HTML cargado conserva su referencia aunque la publicación cambie antes del primer sondeo', async ({page}) => {
+  await scopedMount(page);
+  await page.route('**/site-version.json',route=>route.fulfill({json:{schemaVersion:2,pages:{'index.html':'b'.repeat(64)},clientResources:{}}}));
+  await page.reload();
+  await page.waitForFunction(() => !!window.TintinVersionWatch);
+  expect(await page.evaluate(() => window.TintinVersionWatch.checkNow())).toBe('outdated');
+  await expect(page.locator('#tt-version-notice')).toBeVisible();
+});
 
 async function mount(page, { cookies = false } = {}) {
   let revision = 'a'.repeat(64);
   let otherPageRevision = 'a'.repeat(64);
   await page.route('https://version.test/**', route => {
     const url = new URL(route.request().url());
+    if (url.pathname === '/revision-visual.mjs') return route.fulfill({ contentType: 'text/javascript', body: revisionSource });
     if (url.pathname === '/site-version.json') return route.fulfill({ json: { revision: otherPageRevision, pages: { 'index.html': revision, 'product.html': otherPageRevision } } });
     if (url.pathname === '/watch.js') return route.fulfill({ contentType: 'text/javascript', body: source });
     return route.fulfill({ contentType: 'text/html', body: `<meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0}#tt-tabbar{position:fixed;bottom:16px;right:16px;left:16px;height:72px;background:#eee;z-index:1100}@media(min-width:1100px){#tt-tabbar{display:none}}#tt-privacy-consent{position:fixed;bottom:0;right:0;width:100%;height:85vh;background:#ccc;z-index:2147483600}</style><input aria-label="Borrador"><div id="tt-tabbar">Navegación</div>${cookies ? '<div id="tt-privacy-consent">Cookies</div>' : ''}<script type="module" src="/watch.js?v=initial"></script>` });
