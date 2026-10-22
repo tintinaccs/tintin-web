@@ -2,7 +2,7 @@ import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
-import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261021-workspace-account-1';
+import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261022-catalog-reconcile-1';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261022-avatar-inicial-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
@@ -5529,6 +5529,7 @@ let _productosUnsub = null;
 let _productInventoryUnsub = null;
 const _productInventoryById = new Map();
 let productEditBaseline=null;
+let productCommercialBaseline=null;
 let productMasterBusy=false;
 
 // Combina las opciones curadas de cada <datalist> de ficha técnica con los
@@ -5998,6 +5999,7 @@ window.prodNuevo = function() {
 };
 
 function _prodNuevoNow() {
+  productCommercialBaseline=null;
   productEditBaseline=null;
   renderProductVariantStock(null);
   document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
@@ -6121,6 +6123,7 @@ function _prodEditarNow(docId, duplicate=false) {
   document.getElementById('prod-form-error').style.display = 'none';
   document.getElementById('prod-list-card').style.display = 'none';
   document.getElementById('prod-form-card').style.display = '';
+  productCommercialBaseline = duplicate ? null : JSON.parse(JSON.stringify(serializeProductForm()));
   UnsavedGuard.track(serializeProductForm, prodGuardar);
 }
 
@@ -6279,17 +6282,19 @@ async function prodGuardar() {
     updatedAt: serverTimestamp(),
   };
 
-  // Una edición puramente de inventario queda detrás de etiquetas y cambios comerciales.
+  // Comparar contra la misma vista normalizada que se abrió, no contra campos
+  // opcionales ausentes en documentos legados. La activación que acompaña una
+  // cantidad positiva es parte de la reposición, no una edición comercial.
   if (_isEdit) {
-    const before = _allProducts.find(p => p._docId === document.getElementById('prod-id').value);
+    const current = serializeProductForm(), before = productCommercialBaseline;
     const comparable = ['name','sku','category','collection','price','priceBefore','imageUrl','description',
       'material','measurements','colorFinish','care','waterResistance','warranty','sizeFit',
       'packageContents','imagesExtra','variantMedia','tags','badge','active','oferta','destacado','variants'];
-    const equal = (a,b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
-    const stockOnly = before && comparable.every(key => equal(
-      key === 'variants' ? (variantsParsed || null) : data[key],
-      key === 'variants' ? (before.variants || null) : before[key]
-    ));
+    const equal = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+    const stockChanged = before && (!equal(current.stock,before.stock) || !equal(current.variantStock,before.variantStock));
+    const stockOnly = before && comparable.every(key =>
+      (key === 'active' && stockChanged && current.stock !== '' && current.active === (Number(current.stock) > 0))
+      || equal(current[key],before[key]));
     if (stockOnly) data.restockedAt = serverTimestamp();
     else data.merchandisingUpdatedAt = serverTimestamp();
   } else {
@@ -6339,6 +6344,7 @@ async function prodGuardar() {
         }));
       }
       productEditBaseline=productFingerprint(savedProduct);
+      productCommercialBaseline=JSON.parse(JSON.stringify(serializeProductForm()));
       if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,expectedEntries:variantInventoryEntries(data),entries:variantInventoryEntries(data),variants:data.variants};
       if (currentRole === 'superadmin') {
         await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true }));
@@ -6378,6 +6384,7 @@ async function prodGuardar() {
       // conserva el ID ya creado y reintenta como edición, sin duplicar.
       document.getElementById('prod-id').value = newRef.id;
       productEditBaseline=productFingerprint(data);
+      productCommercialBaseline=JSON.parse(JSON.stringify(serializeProductForm()));
       if(productVariantStockBaseline) productVariantStockBaseline={stock:data.stock,expectedEntries:variantInventoryEntries(data),entries:variantInventoryEntries(data),variants:data.variants};
       if (currentRole === 'superadmin') {
         await withAdminSiteChange(async () => setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true }));

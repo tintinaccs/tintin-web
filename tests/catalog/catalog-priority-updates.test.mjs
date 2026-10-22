@@ -32,7 +32,7 @@ test('agotados al final y prioridad consistente con fecha y desempate', () => {
     {...available,id:'b',name:'B',badge:'Nuevo',updatedAt:1000},
     {...available,id:'a',name:'A',badge:'Nuevo',updatedAt:1000},
   ];
-  assert.deepEqual(sortCatalogProducts(products).map(item=>item.id),['a','b','out']);
+  assert.deepEqual(Array.from(sortCatalogProducts(products), item=>item.id),['a','b','out']);
 });
 
 test('reponer una novedad no supera una edición comercial más reciente', () => {

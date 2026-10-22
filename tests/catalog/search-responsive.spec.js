@@ -30,3 +30,25 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await page.locator('#search-input').press('ArrowDown');await expect(page.locator('#search-input')).toHaveAttribute('aria-activedescendant',/tt-search-result-/);
  await page.screenshot({path:`artifacts/commerce/search-${width}x${height}.png`});
 });
+
+for(const [width,height,path] of [[390,844,'envios'],[844,390,'preguntas-frecuentes'],[1366,768,'envios']])test(`página informativa carga búsqueda al usarla y conserva texto temprano ${width}×${height}`,async({page})=>{
+ await page.setViewportSize({width,height});
+ await page.route('**/api/public-catalog?**',route=>{
+  const resource=new URL(route.request().url()).searchParams.get('resource');
+  if(!['products','collections'].includes(resource))return route.continue();
+  return route.fulfill({json:{ok:true,resource,items:(resource==='products'?products:[{id:'anillos',name:'Anillos',slug:'anillos',visible:true}]).map(({id,...data})=>({id,data}))}});
+ });
+ await page.goto('/'+path,{waitUntil:'domcontentloaded'});
+ await page.waitForFunction(()=>window.TintinAccountMobileFixBooted);
+ await page.waitForTimeout(1000);
+ expect(await page.evaluate(()=>performance.getEntriesByType('resource').some(r=>/control-busqueda|busqueda-productos|extension-revelado-marca/.test(r.name)))).toBe(false);
+ if(width===1366)expect(await page.evaluate(()=>new Set(performance.getEntriesByType('resource').filter(r=>r.name.startsWith(location.origin)).map(r=>r.name)).size)).toBeLessThanOrEqual(120);
+ await page.route('**/control-busqueda.js?**',async route=>{await new Promise(resolve=>setTimeout(resolve,350));await route.continue();});
+ await page.locator('[aria-controls="search-panel"]:visible').first().click();
+ await page.locator('#search-input').fill('TIN-00042');
+ await expect(page.locator('#search-results .tt-search-result-copy strong')).toHaveText(['Anillo corazón']);
+ await expect.poll(()=>page.evaluate(()=>window.TintinBrandRevealExtensionBooted===true)).toBe(true);
+ await page.locator('#btn-search-close').click();
+ await page.locator('[aria-controls="search-panel"]:visible').first().click();
+ await expect(page.locator('#search-input')).toHaveValue('');
+});

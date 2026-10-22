@@ -94,7 +94,7 @@ test('concurrent sale rejects entire product/inventory commit', async () => {
 test('price-only edits preserve inventory without unnecessary stock read', async () => {
   const f = webhookFixture(matrix);
   assert.equal((await f.send({ changedFields: ['price'], price: 100 })).status, 200);
-  assert.equal(f.reads(), 0); assert.deepEqual(Object.keys(f.writes[0].fields).sort(), ['price', 'updatedAt']);
+  assert.equal(f.reads(), 0); assert.deepEqual(Object.keys(f.writes[0].fields).sort(), ['merchandisingUpdatedAt', 'price', 'updatedAt']);
 });
 test('malformed distributed inventory fails closed', async () => {
   const f = webhookFixture({ stock: 3, variantInventory: [] });

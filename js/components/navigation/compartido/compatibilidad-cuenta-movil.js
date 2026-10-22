@@ -65,7 +65,17 @@ function bindAvatarRefreshEvents(){
 }
 
 loadResponsiveBrandStyles();
-bootBrandReveal();
+// Estas páginas no tienen bloques de contenido con reveal: sólo sus paneles.
+// Cargar la animación cuando se abre uno conserva el runtime informativo liviano.
+var textPage=/\/(?:envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)(?:\.html)?$/.test(location.pathname);
+if(textPage&&(!window.TintinSurfaceController||window.TintinSurfaceController.surface==='none')){
+ window.addEventListener('tintin:surface-change',function revealOnOpen(event){
+  if(event.detail&&event.detail.state==='open'){
+   window.removeEventListener('tintin:surface-change',revealOnOpen);
+   bootBrandReveal();
+  }
+ });
+}else bootBrandReveal();
 
 ready(bindAvatarRefreshEvents);
 })();

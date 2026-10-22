@@ -15,7 +15,7 @@ function runtime(product={}){
  const apply=(ref,data)=>{const current={...rows.get(ref.path)};for(const [key,value]of Object.entries(data)){if(value?.__delete)delete current[key];else current[key]=structuredClone(value);}rows.set(ref.path,current);writes.push(ref.path);};
  let count=0;
  const ctx={window:{},document:{getElementById:control,querySelectorAll:selector=>selector==='#prod-variant-stock input'?variantInputs:[]},auth:{currentUser:{uid:'super'}},currentUser:{uid:'super'},navigator:{onLine:true},productMasterBusy:false,currentRole:'superadmin',can:()=>true,roleCanDo:()=>true,
-  _allProducts:[original],_productSourceById:new Map([['source',structuredClone(original)]]),_allCollections:[{slug:'anillos'}],_productInventoryById:new Map([['source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'}]]),productEditBaseline:null,productVariantStockBaseline:null,
+  _allProducts:[original],_productSourceById:new Map([['source',structuredClone(original)]]),_allCollections:[{slug:'anillos'}],_productInventoryById:new Map([['source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'}]]),productEditBaseline:null,productCommercialBaseline:null,productVariantStockBaseline:null,
   productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,_formImageWidgets:new Map(),productColorPhotos:{serialize:()=>[],flush:async()=>{}},
   wristCategory:x=>x,sanitizeImageUrl:x=>typeof x==='string'&&x.startsWith('https://')?x:'',mountFormImageWidget:()=>{},mountProductColorPhotos:()=>{},
   renderProductVariantStock:product=>{variantInputs.length=0;ctx.productVariantStockBaseline=product?.variantInventory?{stock:product.stock,expectedEntries:variantInventoryEntries(product),entries:variantInventoryEntries(product),variants:product.variants}:null;for(const entry of product?.variantInventory || [])variantInputs.push({value:String(entry.stock)});},
@@ -214,4 +214,17 @@ test("guardar colección espera portada antes de leer el payload; error no escri
   else assert.equal(r.rows.get("collections/nuevos").image,"https://img.test/portada.png");
   assert.equal(r.control("coll-save-btn").disabled,false);
  }
+});
+
+test('stock de producto legado sin opcionales no se convierte en edición comercial',async()=>{
+ const r=runtime({stock:0,active:false});r.ctx._prodEditarNow('source');
+ r.control('prod-stock').value='2';r.control('prod-active').checked=true;
+ assert.equal(await r.ctx.window.saveTest(),true);
+ const saved=r.rows.get('products/source');assert.equal(saved.stock,2);assert.equal(saved.active,true);
+ assert.equal(saved.restockedAt,123);assert.equal(saved.merchandisingUpdatedAt,undefined);
+});
+test('edición de precio o visibilidad conserva prioridad comercial aun en producto legado',async()=>{
+ for(const field of ['prod-price','prod-active']){const r=runtime();r.ctx._prodEditarNow('source');
+ if(field==='prod-price')r.control(field).value='35000';else r.control(field).checked=false;
+ assert.equal(await r.ctx.window.saveTest(),true);assert.equal(r.rows.get('products/source').merchandisingUpdatedAt,123);assert.equal(r.rows.get('products/source').restockedAt,undefined);}
 });

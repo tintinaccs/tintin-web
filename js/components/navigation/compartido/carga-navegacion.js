@@ -7,6 +7,7 @@ let cartRuntimePromise = null;
 let notificationsRuntimePromise = null;
 let collectionsRuntimePromise = null;
 let navigationBehaviorsPromise = null;
+let searchControllerPromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar-notifications';
@@ -15,7 +16,7 @@ const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get(
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20261022-avatar-inicial-1';
 const COLLECTIONS_RUNTIME_URL = './carga-colecciones.js?v=tintin-20261019-footer-collections-1';
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261022-avatar-inicial-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261022-catalog-reconcile-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -180,13 +181,28 @@ function loadCollectionsRuntime() {
   return collectionsRuntimePromise;
 }
 
+// En páginas informativas, la búsqueda se inicia al usarla. Conserva la
+// consulta escrita mientras termina de cargar el controlador compartido.
+function loadSearchRuntime() {
+  if (!searchControllerPromise) {
+    searchControllerPromise = import('./control-busqueda.js?v=tintin-20261022-catalog-reconcile-1')
+      .then(module => {
+        module.initSearchController();
+        window.TintinSearchController?.renderCurrentQuery();
+        return module;
+      })
+      .catch(error => { searchControllerPromise = null; throw error; });
+  }
+  return searchControllerPromise;
+}
+
 function attachProductsDemand() {
   let started = false;
 
   const load = () => {
     if (started) return;
     started = true;
-    loadProductsRuntime({ forSearch: true }).then(() => {
+    Promise.all([loadSearchRuntime(), loadProductsRuntime({ forSearch: true })]).then(() => {
       const input = document.getElementById('search-input');
       if (input?.value) input.dispatchEvent(new Event('input', { bubbles: true }));
     }).catch(error => {
@@ -195,7 +211,10 @@ function attachProductsDemand() {
     });
   };
 
-  document.querySelectorAll('[data-nav-action="search"],#tabbar-search').forEach(control => {
+  window.addEventListener('tintin:surface-change', event => {
+    if (event.detail?.surface === 'search') load();
+  });
+  document.querySelectorAll('[data-nav-action="search"],#tabbar-search,#search-input').forEach(control => {
     control.addEventListener('pointerenter', load, { once: true, passive: true });
     control.addEventListener('focus', load, { once: true });
     control.addEventListener('click', load, { once: true });
@@ -294,7 +313,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(new URL('/js/components/navigation/compartido/enrutador.js?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', location.href).href),
-      import('./control-busqueda.js?v=tintin-20261022-avatar-inicial-1'),
+      FULL_COMMERCE_PAGES.has(currentPage()) ? loadSearchRuntime() : Promise.resolve(),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

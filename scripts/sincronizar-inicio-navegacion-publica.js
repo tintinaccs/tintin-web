@@ -14,13 +14,13 @@ const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261022-avatar-inicial-1';
+const TIENDA_VERSION = 'tintin-20261022-catalog-reconcile-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261022-avatar-inicial-1';
+const LOADER_VERSION = 'tintin-20261022-catalog-reconcile-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261021-workspace-account-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261022-avatar-inicial-1';
-const NAV_ENTRY_VERSION = 'tintin-20261022-avatar-inicial-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261022-catalog-reconcile-1';
+const NAV_ENTRY_VERSION = 'tintin-20261022-catalog-reconcile-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261021-commerce-review-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261022-avatar-inicial-1';
@@ -170,7 +170,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-catalog-maintenance=\"1\"",
       "css/pages/catalog/catalog-maintenance.css",
-      "tintin-20261022-pr1200-catalog-layout-1"
+      "tintin-20261022-catalog-reconcile-1"
     ]
   ],
   "about.html": [
