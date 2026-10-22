@@ -15,7 +15,7 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20261020-domain-cutover-consolidated-1';
+} from './esquema-contenido.js?v=tintin-20261021-identidad-1';
 import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20261021-commerce-review-1';
 
 const subscriptions = new Map();

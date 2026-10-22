@@ -1,6 +1,6 @@
 # Revisión de comercio y experiencia — 21/10/2026
 
-Responsable: Codex /root. Base integrada: main `e96eea930` (incluye Perfil/iconos, tarjetas administrativas y paridad de Sheets). Alcance solicitado por la titular: stock/checkout, totales, seguimiento, catálogo/ficha, consistencia visual, formularios, rendimiento, operación administrativa, seguridad, recuperación, accesibilidad y SEO. El carrito persistente ya fue validado por la titular; sus regresiones relacionadas se conservan.
+Responsable: Codex /root. Base integrada: main `aa1cfaa97` (incluye Perfil/iconos, administración, Sheets, identidad y avisos por documento). Alcance solicitado por la titular: stock/checkout, totales, seguimiento, catálogo/ficha, consistencia visual, formularios, rendimiento, operación administrativa, seguridad, recuperación, accesibilidad y SEO. El carrito persistente ya fue validado por la titular; sus regresiones relacionadas se conservan.
 
 ## Cambios con evidencia
 
@@ -86,3 +86,8 @@ Verificación adicional de datos reales, de sólo lectura: API pública con215 p
 ## Conciliación final y datos opcionales
 
 Se incorpora #1194 desde main e96eea930 mediante merge normal, conservando la autoridad Firestore y la paridad de Sheets. Validación posterior:217/217 pruebas de productos/sincronización,311/311 de checkout/pedidos/pagos y auditorías de Fase7 e imágenes aprobadas. Los lotes anteriores se solapan y no se suman. La titular confirma que medidas y cuidados deben permanecer vacíos hasta que los complete; no se requiere una fuente adicional para cerrar este alcance, no se inventan datos ni se modifican los productos reales. CI y publicación se verifican sobre la nueva cabeza.
+
+
+Se integran #1198 y #1199 desde main aa1cfaa97, preservando identidad y avisos limitados al documento/recurso que cambió semánticamente. La maqueta de acceso al checkout omitía las dependencias de la comprobación anticipada y falló en CI; se incorporan el estado y el helper real con una lectura de producto aislada, sin eliminar la guardia.14/14 pruebas de acceso aprobadas, incluido bloqueo de cuenta;36/36 contratos de avisos/página personalizada/productos, tipografía, Fase8 y Fase10 aprobados. Se exige CI nueva del árbol integrado, sin certificar la ejecución anterior que falló.
+
+Tanda posterior a ambas integraciones:112/112 Chromium (acceso al checkout, superficies/header, avisos por documento y Pulseras) PASS_LOCAL, sin reintentos.

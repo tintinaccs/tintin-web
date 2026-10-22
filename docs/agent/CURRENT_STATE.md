@@ -1,3 +1,7 @@
+## 2026-10-21 — Integración de identidad y avisos por página
+
+Main aa1cfaa97 (#1198/#1199) integrado; se preserva el contrato nuevo de AGENTS.md sobre avisos semánticos del documento/recursos cargados. CI de b0e9029ee aprobó contrato estático, operaciones y reglas adversariales, pero falló en la maqueta de acceso: omitía las dependencias nuevas del control de disponibilidad. Corregida usando el helper real;112/112 Chromium integrados (acceso, superficies/header, avisos y Pulseras) y36/36 contratos de avisos/productos PASS_LOCAL; tipografía, Fase8 y Fase10 PASS_LOCAL. Datos comerciales opcionales permanecen vacíos por decisión de la titular. El nuevo plan/build/CI deben certificar la cabeza posterior; no se hereda PASS del run anterior.
+
 ## 2026-10-21 — Candidato comercial integrado con Sheets y datos opcionales
 
 Base e96eea930 (#1194) integrada mediante merge normal.217/217 productos/sincronización,311/311 checkout/pedidos/pagos, Fase7 e imágenes PASS_LOCAL. Decisión expresa de la titular: dejar medidas y cuidados opcionales y vacíos hasta que ella los complete; la ficha omite los vacíos. No existe bloqueo de datos ni se inventa información. Se regeneran plan y derivados contra esa base; CI, merge y producción requieren evidencia de la nueva cabeza de #1196.
