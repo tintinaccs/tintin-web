@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../../scripts/verificar-salud-ci-global.mjs', import.meta.url), 'utf8');
+const conclusions = source.slice(source.indexOf('const blockingConclusions ='), source.indexOf('function ensureDir('));
 const logic = source.slice(source.indexOf('function isCurrentMasterCheck('), source.indexOf('async function verifyGlobalCi('));
 const sha = 'a'.repeat(40), repo = 'tintinaccs/tintin-web', current = 100;
 const run = (id, values = {}) => ({id, workflow_id: 10, name: 'Diagnóstico Maestro Tintin',
@@ -18,14 +19,13 @@ const check = (id, values = {}) => ({id, name: 'Validar y publicar automáticame
 
 async function snapshot({runs = [], checks = [], own = true} = {}) {
   const c = vm.createContext({repo, sha, currentRunId: current, URL, Set, waitSeconds: 0,
-    blockingConclusions: new Set(['failure','cancelled','timed_out','action_required','startup_failure','stale']),
     githubApi: async endpoint => {
       if (endpoint.includes('/actions/runs?')) return {workflow_runs: [...(own ? [run(current, {status:'in_progress',conclusion:null})] : []), ...runs]};
       if (endpoint.includes('/check-runs?')) return {check_runs: checks};
       if (endpoint.includes('/check-suites?')) return {check_suites: []};
       return [];
     }});
-  vm.runInContext(logic, c);
+  vm.runInContext(conclusions + logic, c);
   return {state: await c.collectState(), render: c.renderEvidence};
 }
 const ids = items => Array.from(items, item => item.id);
