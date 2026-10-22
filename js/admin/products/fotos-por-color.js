@@ -1,6 +1,6 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { createVariantPhotoEditor } from './fotos-por-variante.js?v=tintin-20261021-visual-scope-2';
+import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261022-products-master-1';
 import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261021-visual-scope-2';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
@@ -17,6 +17,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   const uploads = [];
   let pool = media.uniqueImages(media.galleryImages(product).map(url => sanitizeImageUrl(url)).filter(Boolean));
   let activeKey = media.colorKey(product);
+  let visibleColor = null;
   for (const row of initialRows) {
     if (!activeKey || !row?.[activeKey]) continue;
     if (Object.keys(row).some(key => !['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key))) continue;
@@ -62,7 +63,9 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     if (!colors().length && variantsInput.value.trim()) return;
     analyzing = true;
     try {
-      for (const url of pool) {
+      const ordered=media.uniqueImages([...(assignments.get(color) || []), ...pool]);
+      for (const url of ordered) {
+        const tile=document.createElement('div');tile.className='tt-color-photo-tile';
         const identity = media.imageKey(url);
         if (destroyed) break;
         if (analyzed.has(identity)) continue;
@@ -87,11 +90,16 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     if (destroyed || flushing || uploads.some(widget => widget.hasPending?.()) || variantPhotos.hasPending()) return;
     destroyUploads(); container.replaceChildren();
     const options = colors();
+    if(visibleColor===null || (visibleColor && !options.includes(visibleColor)))visibleColor=options[0] || '';
     pool = media.uniqueImages([...pool, mainInput.value, ...imagesInput.value.split(/\r?\n/)].map(url => sanitizeImageUrl(url)).filter(Boolean));
     const heading = document.createElement('h3'); heading.textContent = 'Fotos por color'; container.append(heading);
     const hint = document.createElement('p');
     hint.textContent = 'Sugerimos un color para las fotos sin asignar cuando la imagen permite estimarlo. Revisá la propuesta y cambiá lo que necesites. Las fotos y los círculos se aplican al guardar el producto.';
     container.append(hint);
+    const filters=document.createElement('div');filters.className='tt-editor-choices tt-editor-photo-filters';filters.setAttribute('role','group');filters.setAttribute('aria-label','Ver fotos por color');
+    const applyFilter=()=>{for(const field of container.querySelectorAll(':scope > fieldset[data-media-color]'))field.hidden=Boolean(visibleColor && field.dataset.mediaColor!==visibleColor);for(const button of filters.children)button.setAttribute('aria-pressed',String(button.dataset.photoColor===visibleColor));};
+    for(const color of ['',...options]){const button=document.createElement('button');button.type='button';button.className='tt-editor-choice';button.textContent=color || 'Todas';button.dataset.photoColor=color;button.addEventListener('click',()=>{visibleColor=color;applyFilter();});filters.append(button);}
+    if(options.length)container.append(filters);
     const paletteRow = document.createElement('div'); paletteRow.className = 'adm-color-palette';
     const palette = presetSelect('', 'Paleta de colores');
     const addButton = document.createElement('button'); addButton.type = 'button'; addButton.className = 'adm-btn adm-btn-outline'; addButton.textContent = 'Agregar color';
@@ -102,7 +110,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
       const note = document.createElement('p'); note.textContent = 'Para agregar un color con stock, editá primero las variantes de inventario. Aquí podés asignar sus fotos y cambiar el círculo.'; container.append(note);
     }
     for (const color of options) {
-      const field = document.createElement('fieldset'); field.className = 'adm-color-photos';
+      const field = document.createElement('fieldset'); field.className = 'adm-color-photos';field.dataset.mediaColor=color;
       const legend = document.createElement('legend'); legend.textContent = color; field.append(legend);
       const appearance = appearances.get(color) || {};
       const controls = document.createElement('div'); controls.className = 'adm-color-palette';
@@ -118,7 +126,9 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
       custom.addEventListener('input', () => { appearances.set(color, { colorHex: custom.value }); preview.style.background = custom.value; });
       customLabel.append(custom); controls.append(preview, preset, customLabel); field.append(controls);
       const grid = document.createElement('div'); grid.className = 'adm-color-photo-grid';
-      for (const url of pool) {
+      const ordered=media.uniqueImages([...(assignments.get(color) || []), ...pool]);
+      for (const url of ordered) {
+        const tile=document.createElement('div');tile.className='tt-color-photo-tile';
         const label = document.createElement('label');
         const check = document.createElement('input'); check.type = 'checkbox';
         check.setAttribute('aria-label', `Asignar foto ${pool.indexOf(url) + 1} a ${color}`);
@@ -128,11 +138,15 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
           manuallyAssigned.add(media.imageKey(url));
           const current = assignments.get(color) || [];
           assignments.set(color, check.checked ? media.uniqueImages([...current, url]) : current.filter(value => media.imageKey(value) !== media.imageKey(url)));
+          render();
         });
         label.append(check, image);
         const suggestion = suggestions.get(media.imageKey(url));
         if (suggestion) { const text = document.createElement('small'); text.textContent = `Sugerido: ${suggestion}`; label.append(text); }
-        grid.append(label);
+        tile.append(label);
+        appendPhotoOrderControls(tile,{url,photos:assignments.get(color) || [],label:color,update:urls=>{assignments.set(color,urls);render();}});
+        const cover=document.createElement('button');cover.type='button';cover.className='adm-btn adm-btn-outline';cover.textContent=media.imageKey(mainInput.value)===media.imageKey(url)?'Portada del producto':'Usar de portada';cover.setAttribute('aria-label',`Portada del producto: foto ${pool.indexOf(url)+1} de ${color}`);cover.setAttribute('aria-pressed',String(media.imageKey(mainInput.value)===media.imageKey(url)));
+        cover.addEventListener('click',()=>{mainInput.value=url;mainInput.dispatchEvent(new Event('input',{bubbles:true}));mainInput.dispatchEvent(new Event('change',{bubbles:true}));});tile.append(cover);grid.append(tile);
       }
       field.append(grid);
       const add = url => {
@@ -151,6 +165,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
       }
       container.append(field);
     }
+    applyFilter();
     variantPhotos.render(container, pool, render);
     notifyPreview();
     void analyzePhotos();
@@ -160,7 +175,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     // Las asociaciones de otros atributos se conservan; se reemplazan sólo
     // las filas de colores gestionadas en este editor.
     const otherRows = initialRows.filter(row => !row || !Object.keys(row).some(key => /^colou?r$/i.test(key)) || Object.keys(row).some(key => !['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key)));
-    return variantPhotos.serialize([...otherRows, ...options.map(color => ({ [activeKey]: color, imageUrls: assignments.get(color) || [], ...(appearances.get(color) || {}) }))]);
+    return variantPhotos.serialize([...otherRows, ...options.map(color => {const row={...initialRows.find(row=>String(row?.[activeKey] || '').trim()===color && !Object.keys(row).some(key=>!['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key))),[activeKey]:color,imageUrls:assignments.get(color) || [],...(appearances.get(color) || {})};delete row.imageUrl;delete row.colorHex;delete row.swatch;Object.assign(row,appearances.get(color) || {});return row;})]);
   }
   function notifyPreview() {
     if (!destroyed) setProductPreviewMedia(container.closest('#prod-form-card'), serialize());
@@ -179,5 +194,5 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     render();
   }
   render();
-  return { serialize, flush, refresh: render, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); container.removeEventListener('input', onMediaInput); container.removeEventListener('change', onMediaInput); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
+  return { serialize, flush, pendingSignature:()=>[variantPhotos.pendingSignature(),...uploads.map(widget=>widget.pendingSignature?.() || [])], refresh: render, removePhoto(url){const key=media.imageKey(url);pool=pool.filter(photo=>media.imageKey(photo)!==key);for(const [color,photos] of assignments)assignments.set(color,photos.filter(photo=>media.imageKey(photo)!==key));variantPhotos.removePhoto(url);render();}, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); container.removeEventListener('input', onMediaInput); container.removeEventListener('change', onMediaInput); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
 }

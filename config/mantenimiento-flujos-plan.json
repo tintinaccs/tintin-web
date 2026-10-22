@@ -1,23 +1,78 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "5d7aba6f773e3fa528a00dc097eebf2d1f02b375",
-  "reason": "Completar entorno Java21 del Diagnostico Maestro y ajustes responsive de firma y video Nosotros",
+  "baseCommit": "293949fab186679f82c0a00801b22f27ba804b5a",
+  "reason": "Organizar Productos y catálogo del Super Admin, stock por opción explícito, fotos múltiples ordenables y editor adaptable sin superposición",
   "files": [
     {
-      "path": ".github/workflows/diagnostico-maestro.yml",
-      "oldHash": "4b1ccaef38d74334195156feb03590bbe3e04525c8cb113634b9aafa6597b0fc",
-      "newHash": "f30bf30e05e5ba1bd4fcd54791e0a3663f55375996522c652615959ba7567958"
+      "path": "admin-images.html",
+      "oldHash": "d7fea1a26d992db2b0156bd1d080aed7b07e516f749f720cf42f6fff6ef9ac07",
+      "newHash": "60dfa884e0de565d4ec47ab50156804e98703fe743897b77adb764d6aae0a3c7"
     },
     {
-      "path": "about.html",
-      "oldHash": "24641b2e49b6ea9666f14f7c76ee32e5c695d979d0144267e71f605b1ff7cb73",
-      "newHash": "0697a4751fb9ab5aa6750ecbc098acc8f6e2c0a3df397238272f4318576f6110"
+      "path": "admin.html",
+      "oldHash": "b0c1229962ddf6805fd2bc38b6584f2f3f1495f93a41f3517881875d4ddb5b61",
+      "newHash": "012542a79c9f74448616eaf4ef83d7c71c63602f5837aacec61f7b0d2915e127"
+    },
+    {
+      "path": "config/csp-runtime.js",
+      "oldHash": "f5aef1d54654b57ddc968f69402f87e38f485212dc6359f1523d87ea4eeb30af",
+      "newHash": "93714fe2061b31cd3d5f3ead45235690ea5059f57daf441432445d1a393ce303"
+    },
+    {
+      "path": "config/csp-runtime.json",
+      "oldHash": "721ccdd304b76c791f11724ee5e35ae65bc4ccca710c15372648b79769f5e473",
+      "newHash": "67ec2a69ca44df0f7fa3c501e93523737f186e96e3c5b125d904860ee3027410"
+    },
+    {
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "dfac4e3dcdfca8d1200770c0b42ac80577956b5d7b8a833ff5226007730ac51a",
+      "newHash": "f4238754df7685915221a9b8c6bdac49bdcfc206c0976e516684d039eb6b7ce7"
+    },
+    {
+      "path": "js/admin/admin-app.js",
+      "oldHash": "8a739d7e645af3526834f0c5aca9aa4bb545e5ff83e817b454f88ae0751e2365",
+      "newHash": "73257f5d775b5bd471b6456e82314561baa398e93ea240fd72d5d5c16f2deaca"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "e3c1a434a24f20a97b49830bb8713deaa4330a976b932ca1ed7a2564b8aa1d65",
+      "newHash": "8173ac61535bc64b35e09f7891839641e2d136fb272f14721f7697c774eedf34"
+    },
+    {
+      "path": "js/components/images/carga-imagenes.js",
+      "oldHash": "31aaa020b4e5be3a0f0738321814776a46bde1b6cb6dea415f9db5a9753896c1",
+      "newHash": "767e7088edccdb2f48eef99d00045bb94c84ef76a9a48ce5880b08a73b2fa797"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "ac22fe212cc30823624ca11d0af06ef09af070df11383fa67e01a160d933a0ce",
-      "newHash": "9d6e82607fda585452f50f1e398e43290175bc5378405d4c6f5c6a533f6c3af1"
+      "oldHash": "9d6e82607fda585452f50f1e398e43290175bc5378405d4c6f5c6a533f6c3af1",
+      "newHash": "04b39572801e81eb1c03ee928aa08cb613e58a62f3ed7abc10f01c3eb815a249"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "admin-guard",
+    "admin-guard__firestore-fuente-verdad__16",
+    "apis-internas__correos__41",
+    "apis-internas__pedidos__32",
+    "cf-functions",
+    "cf-functions__apis-internas__20",
+    "cf-functions__csp__29",
+    "cf-functions__reglas-firestore__28",
+    "cf-pages__cf-functions__19",
+    "correos",
+    "csp",
+    "pagina-perfil",
+    "pedidos",
+    "pedidos__inventario__33",
+    "productos",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-perfil__18",
+    "roles__super-panel__14",
+    "sesion-estado",
+    "sesion-estado__firestore__7",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34"
+  ]
 }

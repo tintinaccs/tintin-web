@@ -383,6 +383,7 @@ export function attachImageUploadWidget(container, options = {}) {
 
   return {
     hasPending() { return busy || !!pendingFile; },
+    pendingSignature() {return pendingFile ? [pendingFile.name,pendingFile.size,pendingFile.lastModified] : busy ? ['processing'] : [];},
     async flush() {
       await validation;
       if (operation) await operation;
@@ -391,7 +392,8 @@ export function attachImageUploadWidget(container, options = {}) {
       if (failure) throw failure;
       if (destroyed) throw new Error('El formulario cambió. Volvé a abrirlo antes de guardar.');
     },
-    setValue(url) {
+    setValue(url, {discardPending = false} = {}) {
+      if(discardPending) {if(pendingPreviewUrl)URL.revokeObjectURL(pendingPreviewUrl);pendingFile=null;pendingPreviewUrl='';failure=null;}
       currentUrl = url || '';
       renderPreview();
       renderActions();
@@ -402,4 +404,93 @@ export function attachImageUploadWidget(container, options = {}) {
       container.replaceChildren();
     },
   };
+}
+
+// Cola visual del mismo transporte y validación que la carga individual.
+// Un fallo conserva las fotos pendientes; guardar espera toda la cola.
+export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary, remaining = () => 12} = {}) {
+  ensureStyles();
+  const root = document.createElement('div');root.className='tt-iuw tt-iuw-multiple';
+  const input=document.createElement('input');input.type='file';input.multiple=true;input.accept='image/jpeg,image/png,image/webp,image/avif';input.className='tt-iuw-input';input.setAttribute('aria-label','Subir varias fotos');
+  const drop=document.createElement('button');drop.type='button';drop.className='tt-iuw-drop';drop.textContent='Subir fotos o arrastrarlas aquí';
+  const hint=document.createElement('p');hint.className='tt-iuw-hint';hint.textContent='Elegí varias juntas. Se suben al confirmar o guardar el producto.';
+  const grid=document.createElement('div');grid.className='tt-editor-upload-queue';
+  const actions=document.createElement('div');actions.className='tt-iuw-actions';
+  const confirm=document.createElement('button');confirm.type='button';confirm.className='tt-iuw-btn tt-iuw-btn-primary';confirm.textContent='Confirmar y subir fotos';
+  const library=document.createElement('button');library.type='button';library.className='tt-iuw-btn';library.textContent='Elegir de la biblioteca';library.hidden=typeof onOpenLibrary!=='function';
+  const status=document.createElement('p');status.className='tt-iuw-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+  actions.append(confirm,library);root.append(drop,hint,grid,actions,status,input);container.replaceChildren(root);
+  let queue=[], destroyed=false, operation=null, validation=Promise.resolve(), validating=0;
+  const busy=()=>!!operation;
+  function render() {
+    grid.replaceChildren();
+    for(const item of queue) {
+      const tile=document.createElement('div');tile.className='tt-editor-upload-item';
+      const image=document.createElement('img');image.src=item.preview;image.alt=item.file.name;
+      const remove=document.createElement('button');remove.type='button';remove.className='tt-iuw-btn';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar pendiente ${item.file.name}`);remove.disabled=busy();
+      remove.addEventListener('click',()=>{queue=queue.filter(other=>other!==item);URL.revokeObjectURL(item.preview);render();});
+      tile.append(image,remove);grid.append(tile);
+    }
+    confirm.disabled=!queue.length || busy();drop.disabled=library.disabled=busy();input.disabled=busy();
+    root.setAttribute('aria-busy',String(busy()));
+  }
+  function addFiles(files) {
+    if (destroyed || busy()) return;
+    const selected=Array.from(files || []);
+    validating++;
+    if(selected.length)container.dispatchEvent(new CustomEvent('tintin:image-pending',{bubbles:true,detail:{pending:true}}));
+    validation=validation.then(async()=>{
+      let rejected=0;
+      for(const file of selected) {
+        if(destroyed) return;
+        if(queue.some(item=>item.file.name===file.name && item.file.size===file.size && item.file.lastModified===file.lastModified)) continue;
+        if(queue.length>=Math.max(0,remaining())) {rejected++;continue;}
+        const verdict=await validateImageFile(file);
+        if(destroyed) return;
+        if(!verdict.ok){rejected++;continue;}
+        queue.push({file,preview:URL.createObjectURL(file)});
+      }
+      status.textContent=`${queue.length} foto${queue.length===1?'':'s'} pendiente${queue.length===1?'':'s'}.${rejected ? ` ${rejected} no se agregaron: revisá el formato, tamaño o límite de 12 fotos de galería.` : ''}`;
+      render();
+    }).catch(error=>{status.textContent=error.message;}).finally(()=>{validating--;});
+    return validation;
+  }
+  async function upload() {
+    await validation;
+    if(destroyed) throw new Error('El producto cambió. Volvé a abrir su galería.');
+    if(operation) return operation;
+    if(!queue.length) return;
+    operation=(async()=>{
+      while(queue.length) {
+        if(destroyed) throw new Error('El producto cambió durante la carga.');
+        if(remaining()<1) throw new Error('La galería admite hasta 12 fotos. Quitá una antes de continuar.');
+        const item=queue[0];
+        status.textContent=`Subiendo ${item.file.name} · ${queue.length} pendiente${queue.length===1?'':'s'}…`;
+        const result=await uploadImageToLibrary(item.file,{section:'productos'});
+        try {
+          if(destroyed) throw new Error('El producto cambió durante la carga.');
+          await onChange?.(result.url,result);
+        } catch(error) {
+          if(result.mediaId) {try {await deleteMediaItem(result.mediaId,{force:true});} catch {}}
+          throw error;
+        }
+        queue.shift();URL.revokeObjectURL(item.preview);
+      }
+      status.textContent='Fotos listas. Guardá el producto para publicar los cambios.';
+    })().catch(error=>{status.textContent=error.message || 'No se pudo subir. Las fotos pendientes se conservan.';throw error;}).finally(()=>{operation=null;if(!destroyed)render();});
+    render();return operation;
+  }
+  drop.addEventListener('click',()=>input.click());
+  input.addEventListener('change',()=>{void addFiles(input.files);input.value='';});
+  for(const name of ['dragenter','dragover'])root.addEventListener(name,event=>{event.preventDefault();root.classList.add('tt-iuw-drag');});
+  for(const name of ['dragleave','drop'])root.addEventListener(name,event=>{event.preventDefault();root.classList.remove('tt-iuw-drag');});
+  root.addEventListener('drop',event=>void addFiles(event.dataTransfer.files));
+  confirm.addEventListener('click',()=>void upload().catch(()=>{}));
+  library.addEventListener('click',async()=>{
+    if(busy())return;
+    try {const url=await onOpenLibrary();if(!url)return;if(destroyed)throw new Error('El producto cambió. Volvé a elegir la foto.');if(remaining()<1)throw new Error('La galería admite hasta 12 fotos.');await onChange?.(url,{fromLibrary:true});}
+    catch(error){status.textContent=error.message || 'No pudimos abrir la biblioteca.';}
+  });
+  render();
+  return {flush:upload,hasPending:()=>!!queue.length || busy() || validating>0,pendingSignature:()=>[validating,...queue.map(item=>[item.file.name,item.file.size,item.file.lastModified])],setValue(){},destroy(){destroyed=true;for(const item of queue)URL.revokeObjectURL(item.preview);container.replaceChildren();}};
 }

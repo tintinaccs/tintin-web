@@ -109,7 +109,10 @@ test('distribución rechaza cantidades sin completar y cambios concurrentes del 
 test('distribución no inventa matrices, admite opciones únicas y rechaza atributos inseguros',()=>{
  const r=runtime();
  const draft=r.ctx.productVariantStockConfiguration('Color: dorado, dorado\nColor: plateado');assert.equal(draft.entries.length,2);assert.equal(draft.entries[0].stock,'');
- for(const text of ['', 'Color:', 'sin separador', 'Color: dorado\nTalle: pequeño', '__proto__: valor', 'Color: dorado/plateado', 'Color: '+Array.from({length:51},(_,i)=>'opcion'+i).join(',')])assert.throws(()=>r.ctx.productVariantStockConfiguration(text));
+ const matrix=r.ctx.productVariantStockConfiguration('Color: dorado, plateado\nTalle: pequeño, grande');assert.deepEqual(JSON.parse(JSON.stringify(matrix.entries)).map(entry=>entry.variant),['dorado / pequeño','dorado / grande','plateado / pequeño','plateado / grande']);
+ assert.throws(()=>r.ctx.productVariantStockConfiguration('Color: plateado',[{variant:'dorado',stock:1}]),/Primero dejá en 0/);
+ const retained=r.ctx.productVariantStockConfiguration('Color: dorado, plateado',[{variant:'dorado',stock:2}]);assert.equal(retained.entries[0].stock,2);assert.equal(retained.entries[1].stock,'');
+ for(const text of ['', 'Color:', 'sin separador', '__proto__: valor', 'Color: dorado/plateado', 'Color: '+Array.from({length:51},(_,i)=>'opcion'+i).join(',')])assert.throws(()=>r.ctx.productVariantStockConfiguration(text));
 });
 
 test('controlador masivo: permiso, sesión y conectividad se validan antes de escribir',async()=>{

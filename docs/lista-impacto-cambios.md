@@ -632,3 +632,7 @@ Productos y Colecciones: el guardado espera validación y subida antes de leer l
 ## 2026-10-22 — Cierre PR1197: coherencia de entrega de bienvenida
 
 Se preservan el banner completo, proporciones naturales, enlaces accesibles y separación de WhatsApp de la rama original. Se integra main posterior con comercio y correcciones de fotos intactos. Corrección del bloqueo de CI: preparar protección antes del manifiesto final para que el diagnóstico describa los mismos archivos comprometidos. Sin relajar gates, CSP ni permisos. Matriz14tamaños Chromium/WebKit, layout canónico, caché y flujos protegidos; CI/publicación deben acreditarse sobre el nuevo SHA.
+
+## 2026-10-22 — Editor y catálogo administrativo maestro
+
+Autoridades conservadas: admin-app (CRUD/stock y concurrencia), interfaz-productos-adaptable, controles-editor-producto, fotos-por-color/fotos-por-variante, carga-imagenes y shopify-commerce-admin.css. Esenciales arriba, opciones avanzadas plegables; combinaciones de inventario explícitas, fotos múltiples con cola/guard y orden por color, pie sin superposición y controles táctiles. Consumidores de carga de imágenes en admin-images mantienen la API individual. URLs nuevas de recursos modificados, plan protegido y derivados desde generadores. No cambia el storefront, Firestore Rules, datos comerciales, conectores ni permisos.

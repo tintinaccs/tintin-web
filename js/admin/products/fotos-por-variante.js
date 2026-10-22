@@ -1,3 +1,22 @@
+// Orden explícito compartido por color y por combinación; teclado y táctil.
+export function appendPhotoOrderControls(tile, {url, photos, label, update}) {
+  const media=window.TintinProductMedia;
+  const index=photos.findIndex(photo=>media.imageKey(photo)===media.imageKey(url));
+  if(index<0)return;
+  tile.dataset.photoGroup=label;tile.dataset.photoKey=media.imageKey(url);
+  const publish=next=>{const root=tile.closest('#prod-color-photos') || tile.parentElement?.parentElement;update(next);if(root?.isConnected){const target=[...root.querySelectorAll('.tt-color-photo-tile')].find(item=>item.dataset.photoGroup===label && item.dataset.photoKey===media.imageKey(url));target?.querySelector('button:not(:disabled)')?.focus({preventScroll:true});}};
+  const badge=document.createElement('small');badge.className='tt-photo-order-badge';badge.textContent=index===0?'Primera foto':`Foto ${index+1}`;tile.append(badge);
+  const controls=document.createElement('div');controls.className='tt-photo-order-actions';
+  const move=to=>{const next=[...photos];next.splice(index,1);next.splice(to,0,url);publish(next);};
+  for(const [text,name,to] of [['Primera',`Usar como primera foto de ${label}`,0],['←',`Mover foto anterior en ${label}`,index-1],['→',`Mover foto siguiente en ${label}`,index+1]]) {
+    const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=text;button.setAttribute('aria-label',name);button.disabled=to<0 || to>=photos.length || to===index;button.addEventListener('click',()=>move(to));controls.append(button);
+  }
+  tile.append(controls);tile.draggable=true;
+  tile.addEventListener('dragstart',event=>{event.dataTransfer.setData('application/x-tintin-photo',JSON.stringify({label,url}));event.dataTransfer.effectAllowed='move';});
+  tile.addEventListener('dragover',event=>{if(event.dataTransfer.types.includes('application/x-tintin-photo'))event.preventDefault();});
+  tile.addEventListener('drop',event=>{event.preventDefault();try {const item=JSON.parse(event.dataTransfer.getData('application/x-tintin-photo'));if(item.label!==label)return;const from=photos.findIndex(photo=>media.imageKey(photo)===media.imageKey(item.url));if(from<0 || from===index)return;const next=[...photos];const [photo]=next.splice(from,1);next.splice(index,0,photo);publish(next);}catch{}});
+}
+
 /* Asociaciones explícitas para cualquier atributo y combinación del catálogo. */
 export function createVariantPhotoEditor({ variantsInput, media, initialRows, sanitizeImageUrl, openLibrary, attachUpload }) {
   const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active', 'colorHex', 'swatch']);
@@ -45,12 +64,13 @@ export function createVariantPhotoEditor({ variantsInput, media, initialRows, sa
     let photos = media.rowImages(row);
     const save = urls => { photos = media.uniqueImages(urls); const next = { ...row, ...selected, imageUrls: photos }; delete next.imageUrl; changed.set(key, next); };
     const grid = document.createElement('div'); grid.className = 'adm-color-photo-grid';
-    for (const [index, url] of media.uniqueImages([...pool, ...photos]).entries()) {
+    for (const [index, url] of media.uniqueImages([...photos, ...pool]).entries()) {
+      const tile=document.createElement('div');tile.className='tt-color-photo-tile';
       const label = document.createElement('label'); const check = document.createElement('input'); check.type = 'checkbox';
       check.setAttribute('aria-label', `Asignar foto ${index + 1} a variante ${options.map(([name]) => selection[name]).join(' / ')}`);
       check.checked = photos.some(photo => media.imageKey(photo) === media.imageKey(url));
-      check.addEventListener('change', () => save(check.checked ? [...photos, url] : photos.filter(photo => media.imageKey(photo) !== media.imageKey(url))));
-      const image = document.createElement('img'); image.src = url; image.alt = ''; image.loading = 'lazy'; label.append(check, image); grid.append(label);
+      check.addEventListener('change', () => {save(check.checked ? [...photos, url] : photos.filter(photo => media.imageKey(photo) !== media.imageKey(url)));refresh();});
+      const image = document.createElement('img'); image.src = url; image.alt = ''; image.loading = 'lazy'; label.append(check, image);tile.append(label);appendPhotoOrderControls(tile,{url,photos,label:options.map(([name])=>selection[name]).join(' / '),update:urls=>{save(urls);refresh();}});grid.append(tile);
     }
     container.append(grid);
     const add = value => { const url = sanitizeImageUrl(value); if (url) { if (!pool.some(photo => media.imageKey(photo) === media.imageKey(url))) pool.push(url); save([...photos, url]); refresh(); } };
@@ -58,6 +78,7 @@ export function createVariantPhotoEditor({ variantsInput, media, initialRows, sa
     library.addEventListener('click', async () => { try { const url = await openLibrary(); if (url) add(url); } catch { hint.textContent = 'No pudimos abrir la biblioteca. Reintentá.'; } }); container.append(library);
     if (attachUpload) { const upload = document.createElement('div'); container.append(upload); uploads.push(attachUpload(upload, { label: 'Agregar foto a esta variante', hint: 'Subí una foto o pegá su enlace.', onOpenLibrary: openLibrary, onChange: add, cleanupPrevious: false })); }
   }
-  return { render, serialize, hasPending: () => uploads.some(widget => widget.hasPending?.()),
+  return { render, serialize, removePhoto(url) {for(const row of serialize(initialRows)){if(attributes(row).length===1 && media.isColorKey(attributes(row)[0]))continue;const photos=media.rowImages(row).filter(photo=>media.imageKey(photo)!==media.imageKey(url));if(photos.length===media.rowImages(row).length)continue;const next={...row,imageUrls:photos};delete next.imageUrl;changed.set(identity(row),next);}}, hasPending: () => uploads.some(widget => widget.hasPending?.()),
+    pendingSignature:()=>uploads.map(widget=>widget.pendingSignature?.() || []),
     flush: () => Promise.all(uploads.map(widget => widget.flush?.())), destroy: destroyUploads };
 }
