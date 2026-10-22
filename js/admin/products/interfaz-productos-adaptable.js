@@ -1,13 +1,13 @@
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261021-visual-scope-2';
-import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261020-minimal-editor-1';
+import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261022-products-master-1';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
-  ['general', 'Datos generales', ['prod-name','prod-sku','prod-category','prod-collection','prod-description','prod-tags']],
-  ['photos', 'Fotos y galería', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
-  ['prices', 'Precios', ['prod-price','prod-price-before']],
-  ['inventory', 'Inventario y variantes', ['prod-stock','prod-variants-text','prod-inventory-fields']],
-  ['specs', 'Ficha técnica', ['prod-material','prod-measurements','prod-color-finish','prod-care','prod-water-resistance','prod-warranty','prod-size-fit','prod-package-contents']],
-  ['visibility', 'Visibilidad', ['prod-active','prod-oferta','prod-destacado','prod-badge']],
+  ['general', 'Datos principales', ['prod-name','prod-category','prod-price']],
+  ['inventory', 'Colores y stock', ['prod-variants-text','prod-stock']],
+  ['photos', 'Fotos del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
+  ['specs', 'Descripción y ficha técnica', ['prod-description','prod-material','prod-measurements','prod-color-finish','prod-care','prod-water-resistance','prod-warranty','prod-size-fit','prod-package-contents']],
+  ['prices', 'Ofertas y etiquetas', ['prod-price-before','prod-badge']],
+  ['visibility', 'Organización y publicación', ['prod-sku','prod-collection','prod-tags','prod-inventory-fields','prod-active','prod-oferta','prod-destacado']],
 ];
 let editorWasOpen = false;
 let editorOpener = null;
@@ -70,7 +70,7 @@ export function enhanceProductEditor() {
   if (!navigation) {
     navigation = document.createElement('div');
     navigation.className = 'tt-product-section-nav';
-    const text = document.createElement('label');text.htmlFor = 'prod-editor-section';text.textContent = 'Sección del producto';
+    const text = document.createElement('label');text.htmlFor = 'prod-editor-section';text.textContent = 'Ir a sección';
     const select = document.createElement('select');select.id = 'prod-editor-section';select.className = 'adm-input';
     for (const [value,label] of [['all','Todos los campos'],...sections.map(([id,title])=>[id,title])]) {
       const option = document.createElement('option');option.value=value;option.textContent=label;select.append(option);
@@ -84,19 +84,23 @@ export function enhanceProductEditor() {
     layout = document.createElement('div'); layout.className = 'tt-editor-layout';
     grid.before(layout); layout.append(grid);
     const descriptions = {
-      general:'El nombre, la colección y la historia de tu producto.',
-      photos:'Una buena foto hace la diferencia. Organizá la portada y sus variantes.',
-      prices:'Montos en guaraníes, claros para vos y para tus clientes.',
-      inventory:'Revisá las cantidades de cada opción antes de guardar.',
-      specs:'Detalles que ayudan a elegir con confianza.',
-      visibility:'Elegí cómo aparece este producto en la tienda.',
+      general:'Lo necesario para identificar y vender tu producto.',
+      photos:'Subí varias fotos, ordenalas y elegí la portada de cada color.',
+      prices:'Precio anterior y etiquetas para destacar tu producto.',
+      inventory:'Elegí los colores y asigná sus cantidades. El total se calcula automáticamente.',
+      specs:'Detalles opcionales que ayudan a elegir.',
+      visibility:'Códigos, costos internos y opciones de publicación.',
     };
     const originalFields = [...grid.children];
     for (const [section,title,ids] of sections) {
       const group = document.createElement('section'); group.className = 'tt-editor-section'; group.dataset.productSection = section;
       const heading = document.createElement('h2');
       const toggle = document.createElement('button');toggle.type='button';toggle.className='tt-editor-section-toggle';toggle.textContent=title;
-      const open=!['specs','visibility'].includes(section);
+      const open=['general','inventory','photos'].includes(section);
+      group.dataset.advanced=String(!open);
+      if(section==='specs') {
+        const advanced=document.createElement('p');advanced.className='tt-editor-advanced-heading';advanced.textContent='Opciones avanzadas';grid.append(advanced);
+      }
       toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-controls',`prod-section-${section}`);
       const chevron=document.createElement('span');chevron.className='tt-editor-chevron';chevron.setAttribute('aria-hidden','true');chevron.textContent='⌃';toggle.append(chevron);heading.append(toggle);
       const description = document.createElement('p'); description.className = 'tt-editor-caption'; description.textContent = descriptions[section];

@@ -12,8 +12,8 @@ import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20261017-d
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange
-} from './consentimiento-privacidad.js?v=tintin-20261019-privacy-copy-1';
-import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-final-1';
+} from './consentimiento-privacidad.js?v=tintin-20261022-products-master-1';
+import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20261022-products-master-1';
 import {
   heartbeatDecision,
   MIN_HEARTBEAT_INTERVAL_MS

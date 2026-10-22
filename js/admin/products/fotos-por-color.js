@@ -1,6 +1,6 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { createVariantPhotoEditor } from './fotos-por-variante.js?v=tintin-20261021-visual-scope-2';
+import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261022-products-master-1';
 import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261021-visual-scope-2';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
@@ -62,7 +62,9 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     if (!colors().length && variantsInput.value.trim()) return;
     analyzing = true;
     try {
-      for (const url of pool) {
+      const ordered=media.uniqueImages([...(assignments.get(color) || []), ...pool]);
+      for (const url of ordered) {
+        const tile=document.createElement('div');tile.className='tt-color-photo-tile';
         const identity = media.imageKey(url);
         if (destroyed) break;
         if (analyzed.has(identity)) continue;
@@ -118,7 +120,9 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
       custom.addEventListener('input', () => { appearances.set(color, { colorHex: custom.value }); preview.style.background = custom.value; });
       customLabel.append(custom); controls.append(preview, preset, customLabel); field.append(controls);
       const grid = document.createElement('div'); grid.className = 'adm-color-photo-grid';
-      for (const url of pool) {
+      const ordered=media.uniqueImages([...(assignments.get(color) || []), ...pool]);
+      for (const url of ordered) {
+        const tile=document.createElement('div');tile.className='tt-color-photo-tile';
         const label = document.createElement('label');
         const check = document.createElement('input'); check.type = 'checkbox';
         check.setAttribute('aria-label', `Asignar foto ${pool.indexOf(url) + 1} a ${color}`);
@@ -128,11 +132,15 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
           manuallyAssigned.add(media.imageKey(url));
           const current = assignments.get(color) || [];
           assignments.set(color, check.checked ? media.uniqueImages([...current, url]) : current.filter(value => media.imageKey(value) !== media.imageKey(url)));
+          render();
         });
         label.append(check, image);
         const suggestion = suggestions.get(media.imageKey(url));
         if (suggestion) { const text = document.createElement('small'); text.textContent = `Sugerido: ${suggestion}`; label.append(text); }
-        grid.append(label);
+        tile.append(label);
+        appendPhotoOrderControls(tile,{url,photos:assignments.get(color) || [],label:color,update:urls=>{assignments.set(color,urls);render();}});
+        const cover=document.createElement('button');cover.type='button';cover.className='adm-btn adm-btn-outline';cover.textContent=media.imageKey(mainInput.value)===media.imageKey(url)?'Portada del producto':'Usar de portada';cover.setAttribute('aria-label',`Portada del producto: foto ${pool.indexOf(url)+1} de ${color}`);cover.setAttribute('aria-pressed',String(media.imageKey(mainInput.value)===media.imageKey(url)));
+        cover.addEventListener('click',()=>{mainInput.value=url;mainInput.dispatchEvent(new Event('input',{bubbles:true}));mainInput.dispatchEvent(new Event('change',{bubbles:true}));});tile.append(cover);grid.append(tile);
       }
       field.append(grid);
       const add = url => {
@@ -160,7 +168,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     // Las asociaciones de otros atributos se conservan; se reemplazan sólo
     // las filas de colores gestionadas en este editor.
     const otherRows = initialRows.filter(row => !row || !Object.keys(row).some(key => /^colou?r$/i.test(key)) || Object.keys(row).some(key => !['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key)));
-    return variantPhotos.serialize([...otherRows, ...options.map(color => ({ [activeKey]: color, imageUrls: assignments.get(color) || [], ...(appearances.get(color) || {}) }))]);
+    return variantPhotos.serialize([...otherRows, ...options.map(color => {const row={...initialRows.find(row=>String(row?.[activeKey] || '').trim()===color && !Object.keys(row).some(key=>!['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key))),[activeKey]:color,imageUrls:assignments.get(color) || [],...(appearances.get(color) || {})};delete row.imageUrl;return row;})]);
   }
   function notifyPreview() {
     if (!destroyed) setProductPreviewMedia(container.closest('#prod-form-card'), serialize());
@@ -179,5 +187,5 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     render();
   }
   render();
-  return { serialize, flush, refresh: render, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); container.removeEventListener('input', onMediaInput); container.removeEventListener('change', onMediaInput); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
+  return { serialize, flush, pendingSignature:()=>[variantPhotos.pendingSignature(),...uploads.map(widget=>widget.pendingSignature?.() || [])], refresh: render, removePhoto(url){const key=media.imageKey(url);pool=pool.filter(photo=>media.imageKey(photo)!==key);for(const [color,photos] of assignments)assignments.set(color,photos.filter(photo=>media.imageKey(photo)!==key));variantPhotos.removePhoto(url);render();}, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); container.removeEventListener('input', onMediaInput); container.removeEventListener('change', onMediaInput); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
 }

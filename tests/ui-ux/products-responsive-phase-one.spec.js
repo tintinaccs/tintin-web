@@ -90,13 +90,13 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   const bounds=await card.boundingBox();
   expect(bounds.x).toBe(0);expect(bounds.y).toBe(0);expect(bounds.width).toBe(width);expect(bounds.height).toBe(height);
   const floating=page.locator('.tt-product-editor-actions');
-  await expect(floating).toHaveCSS('position','absolute');
-  await expect(floating).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
+  await expect(floating).toHaveCSS('position','relative');
+  await expect(floating).toHaveCSS('background-color','rgb(255, 255, 255)');
   await expect(floating.locator('button')).toHaveCount(2);
   await page.evaluate(()=>{
    const select=document.getElementById('prod-category');for(const [value,title]of [['relojes','Relojes'],['anillos','Anillos'],['collares','Collares']]){const option=document.createElement('option');option.value=value;option.textContent=title;select.append(option);}
   });
-  await page.getByRole('group',{name:'Categorías rápidas',exact:true}).getByRole('button',{name:'Relojes',exact:true}).click();await expect(page.locator('#prod-category')).toHaveValue('relojes');
+  await page.locator('#prod-category').selectOption('relojes');await expect(page.locator('#prod-category')).toHaveValue('relojes');
   await expect(card.locator('[data-product-section]')).toHaveCount(6);
   if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
   await expect(page.locator('#prod-save-btn')).toBeInViewport();
@@ -107,11 +107,11 @@ for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180]
   await expect(page.locator('#prod-stock')).toHaveValue('0');await expect(page.locator('#prod-active')).not.toBeChecked();
   await page.getByRole('button',{name:'Sumar una unidad: Stock',exact:true}).click();await expect(page.locator('#prod-stock')).toHaveValue('1');await expect(page.locator('#prod-active')).toBeChecked();
   await page.locator('#prod-price').fill('70000');
-  await card.locator('[data-product-section=prices]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
-  const general=page.getByRole('button',{name:'Datos generales',exact:true});
+  await card.locator('[data-product-section=general]').getByRole('button',{name:'Ajustar Precio (Gs.) * en 5000 guaraníes',exact:true}).click();await expect(page.locator('#prod-price')).toHaveValue('75000');
+  const general=page.getByRole('button',{name:'Datos principales',exact:true});
   await page.locator('#prod-name').fill('Reloj Alissia');await general.click();await expect(page.locator('#prod-name')).toBeHidden();
   await general.click();await expect(page.locator('#prod-name')).toHaveValue('Reloj Alissia');
-  await page.getByRole('button',{name:'Ficha técnica',exact:true}).click();
+  await page.getByRole('button',{name:'Descripción y ficha técnica',exact:true}).click();
   await page.getByRole('group',{name:'Sugerencias: Material',exact:true}).getByRole('button',{name:'Acero inoxidable',exact:true}).click();await expect(page.locator('#prod-material')).toHaveValue('Acero inoxidable');
   const geometry=await card.locator('input:not([type=hidden]),select,button,textarea').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).map(el=>({id:el.id,left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right})));
   for(const box of geometry){expect(box.left,box.id).toBeGreaterThanOrEqual(-1);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
@@ -133,7 +133,7 @@ test('variantes visuales conservan formatos previos y bloquean controles del tot
  await expect(page.locator('#prod-stock')).toHaveValue('700');
  await expect(page.getByLabel('Elegir cantidad: Stock',{exact:true})).toBeDisabled();
  await expect(page.getByRole('button',{name:'No controlar stock',exact:true})).toBeDisabled();
- await expect(page.getByRole('button',{name:'Agregar opción',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Agregar opción',exact:true})).toBeEnabled();
  await page.getByRole('button',{name:'Restar una unidad: Stock de Plateado',exact:true}).click();
  await expect(page.locator('#prod-stock')).toHaveValue('699');await expect(page.getByLabel('Stock de Plateado',{exact:true})).toHaveValue('699');
 });
@@ -144,8 +144,8 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   const card=page.locator('#prod-form-card'),section=page.locator('#prod-editor-section');
   await expect(page.locator('#prod-name')).toBeVisible();await expect(page.locator('#prod-price')).toBeVisible();
   await page.locator('#prod-name').fill('Anillo de prueba');
-  await section.selectOption('prices');await page.locator('#prod-price').fill('45000');
-  await section.selectOption('inventory');await expect(page.locator('#prod-cost-unit')).toBeVisible();
+  await section.selectOption('general');await page.locator('#prod-price').fill('45000');
+  await section.selectOption('visibility');await expect(page.locator('#prod-cost-unit')).toBeVisible();
   // El selector de secciones no puede descubrir campos que el controlador oculte por rol.
   await page.locator('#prod-inventory-fields').evaluate(el=>el.style.display='none');
   await section.selectOption('all');await expect(page.locator('#prod-cost-unit')).toBeHidden();
@@ -193,16 +193,16 @@ test('configurar stock por color exige cantidades explícitas y recalcula total 
   window.__stockEditor.renderProductVariantStock({stock:1});
  },{renderer:stockRenderer,inventory:inventorySource});
  await page.getByText('Editar opciones en texto',{exact:true}).click();await page.locator('#prod-variants-text').fill('Color: dorado, plateado');
- await page.getByRole('button',{name:'Distribuir stock por opción',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Asignar stock por color u opción',exact:true})).toHaveCount(0);
  const quantities=page.locator('#prod-variant-stock input');await expect(quantities).toHaveCount(2);
  await expect(quantities.nth(0)).toHaveValue('');await expect(quantities.nth(1)).toHaveValue('');
  await quantities.nth(0).fill('1');await quantities.nth(1).fill('1');
  await expect(page.locator('#prod-stock')).toHaveValue('2');await expect(page.locator('#prod-stock')).toHaveAttribute('readonly','');
- await expect(page.locator('#prod-variants-text')).toHaveAttribute('readonly','');
+ await expect(page.locator('#prod-variants-text')).not.toHaveAttribute('readonly','');
  expect(await page.evaluate(()=>window.__stockEditor.baseline().expectedEntries)).toBe(null);
  expect(await page.evaluate(()=>window.__stockEditor.baseline().variants)).toEqual({Color:['dorado','plateado']});
  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-name').fill('Azzura');
- await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('50000');
+ await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-price').fill('50000');
  await expect(page.locator('#prod-live-preview')).toContainText('2 unidades disponibles');
 });
 
@@ -256,6 +256,7 @@ test('foto vertical, horizontal y faltante no se recorta ni invade controles',as
  await page.route('https://img.test/**',route=>route.request().url().includes('rota') ? route.abort() : route.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="900" height="120"><rect width="900" height="120" fill="pink"/></svg>'}));
  await page.goto('https://tintin.test/admin-commerce-fixture');
  await page.evaluate(()=>{window.__productRows[0].data.image='https://img.test/rota.webp';window.__publishProducts();});
+ await page.locator('tr[data-id="p-reloj"] .tt-commerce-thumb').scrollIntoViewIfNeeded();
  await expect(page.locator('tr[data-id="p-reloj"] .tt-commerce-thumb')).toContainText('Imagen no disponible');
  for(const row of await page.locator('#tt-commerce-products tbody tr').all()){
   const photo=await row.locator('.tt-commerce-thumb').boundingBox(),check=await row.locator('.tt-commerce-product-check').boundingBox(),menu=await row.locator('.tt-commerce-product-menu button').boundingBox();
@@ -284,7 +285,7 @@ test('cancelar respeta el guard nativo: seguir editando conserva datos y descart
   window.AdminUnsaved.register('primary-editor',{root:'#prod-form-card',serialize:()=>JSON.stringify({name:document.getElementById('prod-name').value,price:document.getElementById('prod-price').value}),save:window.prodGuardar});
   window.prodCancelForm=()=>window.AdminUnsaved.requestNavigation(()=>{window.AdminUnsaved.unregister('primary-editor');document.getElementById('prod-form-card').style.display='none';});
  });
- await page.locator('#prod-editor-section').selectOption('prices');
+ await page.locator('#prod-editor-section').selectOption('general');
  expect(await page.evaluate(()=>window.AdminUnsaved.isDirty('primary-editor'))).toBe(false);
  await page.locator('#prod-price').fill('15000');
  await page.locator('.adm-card-head button[onclick="prodCancelForm()"]').click();
@@ -369,7 +370,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
   await expect(page.locator('#prod-stock')).toHaveValue('1');
   await expect(page.locator('#prod-variants-text')).toHaveValue('Diseño de anillo: coctel, banda');
   await preview.getByLabel('Vista previa: Diseño de anillo',{exact:true}).selectOption('');
-  await page.locator('#prod-editor-section').selectOption('prices');await page.locator('#prod-price').fill('80000');
+  await page.locator('#prod-editor-section').selectOption('general');await page.locator('#prod-price').fill('80000');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('80.000');
   await expect(preview.locator('.tt-editor-preview-money')).toContainText('−20%');
   await page.locator('#prod-editor-section').selectOption('all');
@@ -388,13 +389,13 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  const mount=adminSource.slice(adminSource.indexOf('let productColorPhotos = null;'),adminSource.indexOf('let productVariantStockBaseline = null;'));
  await page.evaluate(async source=>{
   const loadModule=url=>import(new URL(url,location.origin).href);
-  const {attachImageUploadWidget}=await loadModule('/js/components/images/carga-imagenes.js?fixture');
+  const {attachImageUploadWidget,attachMultiImageUploadWidget}=await loadModule('/js/components/images/carga-imagenes.js?fixture');
   const {attachColorPhotos}=await loadModule('/js/admin/products/fotos-por-color.js');
   const {sanitizeImageUrl}=await loadModule('/js/components/images/utilidades-imagenes.js');
   document.getElementById('prod-imageUrl').value='https://img.test/portada.webp';
   document.getElementById('prod-variants-text').value='Diseño: Coctel, Banda';
   let number=0;const library=async()=>window.__delayGalleryChoice ? new Promise(resolve=>{window.__resolveGalleryChoice=resolve;}) : `https://img.test/extra-${++number}.webp`;
-  window.__remountGallery=new Function('attachImageUploadWidget','attachColorPhotos','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachColorPhotos,library,sanitizeImageUrl,new Map());
+  window.__remountGallery=new Function('attachImageUploadWidget','attachMultiImageUploadWidget','attachColorPhotos','openMediaLibraryPicker','sanitizeImageUrl','_formImageWidgets',source+';mountProductColorPhotos({variants:{Diseño:["Coctel","Banda"]}});return mountProductColorPhotos;')(attachImageUploadWidget,attachMultiImageUploadWidget,attachColorPhotos,library,sanitizeImageUrl,new Map());
  },mount);
  await page.locator('#prod-editor-section').selectOption('photos');
  const gallery=page.locator('#prod-gallery-widget');
@@ -403,11 +404,11 @@ test('galería agrega varias fotos y quita la elegida sin borrar fotos pendiente
  await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp\nhttps://img.test/extra-2.webp');
  await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/portada.webp');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(3);
- await expect(page.locator('#prod-gallery-thumbs img')).toHaveCount(2);
- page.once('dialog',dialog=>dialog.accept());await gallery.getByRole('button',{name:'Quitar',exact:true}).click();
+ await expect(page.locator('#prod-gallery-thumbs img')).toHaveCount(3);
+ await page.getByRole('button',{name:'Quitar foto 3 del producto',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('https://img.test/extra-1.webp');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(2);
- await page.getByRole('button',{name:'Quitar foto 1 de la galería',exact:true}).click();
+ await page.getByRole('button',{name:'Quitar foto 2 del producto',exact:true}).click();
  await expect(page.locator('#prod-images-extra')).toHaveValue('');
  await expect(page.locator('.tt-editor-thumbnails button')).toHaveCount(1);
  expect(await page.evaluate(()=>window.__imageCleanup||0)).toBe(0);
@@ -475,7 +476,7 @@ test('abrir conserva producto oculto y visibilidad manual independiente de la ca
  await expect(page.locator('#prod-active')).toBeChecked();
  await page.locator('#prod-editor-section').selectOption('visibility');
  await page.locator('#prod-active').uncheck();
- await page.locator('#prod-editor-section').selectOption('prices');
+ await page.locator('#prod-editor-section').selectOption('general');
  await page.locator('#prod-price').fill('50000');
  await expect(page.locator('#prod-active')).not.toBeChecked();
  await expect(page.locator('#prod-stock')).toHaveValue('1');
@@ -505,7 +506,8 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
   await expect(button).toBeInViewport();
   expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===el;})).toBe(true);
  }
- await expect(footer).toHaveCSS('border-top-width','0px');
+ await expect(footer).toHaveCSS('border-top-width','1px');
+ const contentBox=await body.boundingBox(),footerBox=await footer.boundingBox();expect(contentBox.y+contentBox.height).toBeLessThanOrEqual(footerBox.y+1);
  if(width===390||width===1440)await page.screenshot({path:test.info().outputPath(`editor-full-${width}.png`)});
  await editor.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(editor).toBeHidden();
  await expect(page.locator('[data-action="product-new"]')).toBeFocused();
@@ -533,4 +535,59 @@ for(const [width,height] of [[320,700],[768,1024],[1440,900]])test(`fotos por co
  await colors.getByRole('button',{name:'Elegir foto de biblioteca para rojo',exact:true}).click();
  await expect(colors.getByRole('checkbox',{name:'Asignar foto 3 a rojo',exact:true})).toBeChecked();
  expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
+});
+
+test('stock maestro conserva cantidades al agregar colores y evita quitar stock existente',async({page})=>{
+ await openEditor(page,390,844);await page.locator('#prod-editor-section').selectOption('inventory');
+ await page.evaluate(({renderer,inventory})=>{
+  document.getElementById('prod-variants-text').value='Color: Dorado, Plateado';
+  window.__masterStock=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock,baseline:()=>productVariantStockBaseline};')();
+  window.__masterStock.renderProductVariantStock({stock:2,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'Dorado',stock:1},{variant:'Plateado',stock:1}]});
+ },{renderer:stockRenderer,inventory:inventorySource});
+ await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.getByLabel('Stock de Plateado',{exact:true})).toHaveValue('1');
+ await expect(page.locator('#prod-stock')).toHaveValue('2');
+ await page.getByLabel('Nueva opción de variante',{exact:true}).fill('Oro rosa');await page.getByRole('button',{name:'Agregar opción',exact:true}).click();
+ await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.getByLabel('Stock de Oro rosa',{exact:true})).toHaveValue('');
+ await page.getByLabel('Stock de Oro rosa',{exact:true}).fill('0');await expect(page.locator('#prod-stock')).toHaveValue('2');
+ await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
+ await expect(page.locator('#prod-form-error')).toContainText('Primero dejá en 0');await expect(page.locator('#prod-variants-text')).toHaveValue(/Dorado/);
+ await page.getByLabel('Stock de Dorado',{exact:true}).fill('0');await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
+ await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveCount(0);await expect(page.locator('#prod-stock')).toHaveValue('1');
+ expect(await page.evaluate(()=>window.__masterStock.baseline().expectedEntries)).toEqual([{variant:'Dorado',stock:1},{variant:'Plateado',stock:1}]);
+ expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
+});
+
+test('portada por color es explícita, reordenable y conserva metadatos de variante',async({page})=>{
+ await openEditor(page,1024,768,true);await page.locator('#prod-editor-section').selectOption('photos');
+ await page.evaluate(async()=>{
+  const {attachColorPhotos}=await import('/js/admin/products/fotos-por-color.js');
+  const container=document.createElement('div');container.id='master-color-photos';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);
+  document.getElementById('prod-variants-text').value='Color: Dorado, Plateado';document.getElementById('prod-imageUrl').value='https://img.test/a.webp';document.getElementById('prod-images-extra').value='https://img.test/b.webp\nhttps://img.test/c.webp';
+  window.__masterPhotos=attachColorPhotos({container,product:{imageUrl:'https://img.test/a.webp',imagesExtra:['https://img.test/b.webp','https://img.test/c.webp'],variants:{Color:['Dorado','Plateado']},variantMedia:[{Color:'Dorado',imageUrls:['https://img.test/a.webp','https://img.test/b.webp'],sku:'GOLD',price:150000},{Color:'Plateado',imageUrls:['https://img.test/c.webp']}]},variantsInput:document.getElementById('prod-variants-text'),imagesInput:document.getElementById('prod-images-extra'),mainInput:document.getElementById('prod-imageUrl'),openLibrary:async()=>null});
+ });
+ const gold=page.locator('#master-color-photos fieldset').filter({has:page.locator('legend',{hasText:/^Dorado$/})});
+ await gold.getByRole('button',{name:'Usar como primera foto de Dorado',exact:true}).nth(1).click();
+ const saved=await page.evaluate(()=>window.__masterPhotos.serialize());const row=saved.find(row=>row.Color==='Dorado');
+ expect(row.imageUrls).toEqual(['https://img.test/b.webp','https://img.test/a.webp']);expect(row.sku).toBe('GOLD');expect(row.price).toBe(150000);
+ expect(saved.find(row=>row.Color==='Plateado').imageUrls).toEqual(['https://img.test/c.webp']);
+ await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/a.webp');
+ await gold.getByRole('button',{name:'Portada del producto: foto 2 de Dorado',exact:true}).click();await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/b.webp');
+ expect((await page.evaluate(()=>window.__masterPhotos.serialize())).find(row=>row.Color==='Plateado').imageUrls).toEqual(['https://img.test/c.webp']);
+});
+
+test('carga múltiple espera archivos, conserva fallidos y reintenta sin duplicar los subidos',async({page})=>{
+ await openEditor(page,390,844,`
+ export const deleteMediaByUrlIfUnused=async()=>{},deleteMediaItem=async()=>{};
+ export async function uploadImageToLibrary(file){window.__masterAttempts??={};window.__masterAttempts[file.name]=(window.__masterAttempts[file.name]||0)+1;if(file.name==='dos.png' && !window.__retryMaster)throw Error('Red interrumpida');return {url:'https://img.test/'+file.name,mediaId:file.name};}
+ `);await page.locator('#prod-editor-section').selectOption('photos');
+ await page.evaluate(async()=>{const {attachMultiImageUploadWidget}=await import('/js/components/images/carga-imagenes.js');const container=document.createElement('div');container.id='master-multiple';document.querySelector('[data-product-section=photos] .tt-editor-section-fields').append(container);window.__masterUploaded=[];window.__bulk=attachMultiImageUploadWidget(container,{remaining:()=>2-window.__masterUploaded.length,onChange:url=>window.__masterUploaded.push(url)});});
+ const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;return canvas.toDataURL('image/png').split(',')[1];});
+ await page.locator('#master-multiple input[type=file]').setInputFiles(['uno.png','dos.png'].map(name=>({name,mimeType:'image/png',buffer:Buffer.from(png,'base64')})));
+ await expect(page.locator('#master-multiple .tt-editor-upload-item')).toHaveCount(2);
+ expect(await page.evaluate(()=>window.__bulk.pendingSignature().length)).toBeGreaterThan(1);
+ const message=await page.evaluate(()=>window.__bulk.flush().then(()=>'',error=>error.message));expect(message).toBe('Red interrumpida');
+ expect(await page.evaluate(()=>window.__masterUploaded)).toEqual(['https://img.test/uno.png']);await expect(page.locator('#master-multiple .tt-editor-upload-item')).toHaveCount(1);
+ await page.evaluate(async()=>{window.__retryMaster=true;await window.__bulk.flush();});
+ expect(await page.evaluate(()=>window.__masterUploaded)).toEqual(['https://img.test/uno.png','https://img.test/dos.png']);expect(await page.evaluate(()=>window.__masterAttempts)).toEqual({'uno.png':1,'dos.png':2});
+ expect(await page.evaluate(()=>window.__bulk.hasPending())).toBe(false);await expect(page.locator('#master-multiple .tt-editor-upload-item')).toHaveCount(0);
 });

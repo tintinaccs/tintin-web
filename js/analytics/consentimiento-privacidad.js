@@ -1,4 +1,4 @@
-import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-final-1';
+import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20261022-products-master-1';
 
 /**
  * Preferencias de privacidad del sitio.

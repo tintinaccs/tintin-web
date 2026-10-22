@@ -68,7 +68,7 @@ function quantity(input, label, main = false) {
     choice.setAttribute('aria-pressed', String(choice.textContent === (input.value===''?'Sin control':input.value)));
   }
   if (state.status) {
-    const text = locked ? 'Total calculado por variantes' : input.value === '' ? 'Sin control de stock' : Number(input.value) > 0 ? `${Number(input.value).toLocaleString('es-PY')} unidades disponibles` : 'Sin stock';
+    const text = locked ? input.value === '' ? 'Completá la cantidad de cada opción' : `Stock total · ${Number(input.value).toLocaleString('es-PY')} unidades` : input.value === '' ? 'Sin control de stock' : Number(input.value) > 0 ? `${Number(input.value).toLocaleString('es-PY')} unidades disponibles` : 'Sin stock';
     if (state.status.textContent !== text) state.status.textContent = text;
     state.status.dataset.available = String(Number(input.value) > 0);
   }
@@ -167,7 +167,7 @@ export function refreshEditorControls(card) {
     const input=card.querySelector(`#${id}`);if(input)quantity(input,input.labels?.[0]?.textContent || id);
   }
   for(const id of ['prod-price','prod-price-before','prod-cost-unit']) {const input=card.querySelector(`#${id}`);if(input)money(input);}
-  for(const id of ['prod-category','prod-badge']) {
+  for(const id of ['prod-badge']) {
     const input=card.querySelector(`#${id}`); if(input)selection(input,[...input.options].filter(option=>option.value || id==='prod-badge').slice(0,id==='prod-category'?4:6).map(option=>[option.value,option.textContent]),id==='prod-category'?'Categorías rápidas':'Etiqueta del producto');
   }
   for(const input of card.querySelectorAll('input[list]')) {

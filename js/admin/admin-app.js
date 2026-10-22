@@ -8,7 +8,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261021-visual-scope-2';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261022-products-master-1';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -40,7 +40,7 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261021-visual-scope-2";
+import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261022-products-master-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261020-push-return-1";
@@ -5785,6 +5785,8 @@ function mountProductColorPhotos(product) {
   productGalleryListener = new AbortController();
   const gallerySignal = productGalleryListener.signal;
   const galleryInput = document.getElementById('prod-images-extra');
+  const coverInput = document.getElementById('prod-imageUrl');
+  coverInput.addEventListener('change',()=>_formImageWidgets.get('prod-image-widget')?.setValue(coverInput.value,{discardPending:true}),{signal:gallerySignal});
   let gallery = document.getElementById('prod-gallery-widget');
   if (!gallery) {
     gallery = document.createElement('div'); gallery.id = 'prod-gallery-widget';
@@ -5792,13 +5794,15 @@ function mountProductColorPhotos(product) {
   }
   _formImageWidgets.get('prod-gallery-widget')?.destroy();
   let galleryPendingUrl = '';
-  _formImageWidgets.set('prod-gallery-widget', attachImageUploadWidget(gallery, {
+  _formImageWidgets.set('prod-gallery-widget', attachMultiImageUploadWidget(gallery, {
+    remaining: () => 12 - galleryInput.value.split(/\r?\n/).filter(value=>value.trim()).length + (coverInput.value ? 0 : 1),
     label: 'Agregar fotos a la galería', hint: 'Subí una foto o elegila de la biblioteca. Se agrega sin reemplazar la portada.',
     onOpenLibrary: openMediaLibraryPicker,
     cleanupPrevious: false,
     onChange: value => {
       if (gallerySignal.aborted) throw new Error('El producto cambió. Volvé a elegir la foto en su galería.');
       const url = sanitizeImageUrl(value);
+      if(url && !coverInput.value) {coverInput.value=url;coverInput.dispatchEvent(new Event('input',{bubbles:true}));coverInput.dispatchEvent(new Event('change',{bubbles:true}));return;}
       const current = galleryInput.value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
       const urls = url ? [...new Set([...current, url])] : current.filter(item=>item !== galleryPendingUrl);
       galleryPendingUrl = url;
@@ -5817,19 +5821,30 @@ function mountProductColorPhotos(product) {
   }
   const renderGallery = () => {
     galleryGrid.replaceChildren();
-    const urls = [...new Set(galleryInput.value.split(/\r?\n/).map(value=>sanitizeImageUrl(value)).filter(Boolean))];
+    const urls = window.TintinProductMedia.uniqueImages([coverInput.value,...galleryInput.value.split(/\r?\n/)].map(value=>sanitizeImageUrl(value)).filter(Boolean));
+    const publish = next => {
+      coverInput.value=next[0] || '';galleryInput.value=next.slice(1).join('\n');
+      coverInput.dispatchEvent(new Event('input',{bubbles:true}));coverInput.dispatchEvent(new Event('change',{bubbles:true}));
+      galleryInput.dispatchEvent(new Event('input',{bubbles:true}));
+    };
     urls.forEach((url,index)=>{
-      const item = document.createElement('div');
-      const image = document.createElement('img'); image.src = url; image.alt = `Foto de galería ${index+1}`; image.loading = 'lazy';
-      const remove = document.createElement('button'); remove.type='button';remove.className='adm-btn adm-btn-outline';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar foto ${index+1} de la galería`);
-      remove.addEventListener('click',()=>{
-        galleryInput.value=urls.filter(value=>value!==url).join('\n');
-        if(galleryPendingUrl===url){galleryPendingUrl='';_formImageWidgets.get('prod-gallery-widget')?.setValue('');}
-        galleryInput.dispatchEvent(new Event('input',{bubbles:true}));
-      });
-      item.append(image,remove);galleryGrid.append(item);
+      const item = document.createElement('div');item.className='tt-color-photo-tile';
+      const image = document.createElement('img');image.src=url;image.alt=`Foto del producto ${index+1}`;image.loading='lazy';
+      const badge=document.createElement('small');badge.className='tt-photo-order-badge';badge.textContent=index===0?'Portada del producto':`Foto ${index+1}`;
+      const controls=document.createElement('div');controls.className='tt-photo-order-actions';
+      for(const [text,label,to] of [['Portada',`Usar foto ${index+1} como portada`,0],['←',`Mover foto ${index+1} antes`,index-1],['→',`Mover foto ${index+1} después`,index+1]]) {
+        const button=document.createElement('button');button.type='button';button.className='adm-btn adm-btn-outline';button.textContent=text;button.setAttribute('aria-label',label);button.disabled=to<0 || to>=urls.length || to===index;
+        button.addEventListener('click',()=>{const next=[...urls];next.splice(index,1);next.splice(to,0,url);publish(next);});controls.append(button);
+      }
+      const remove=document.createElement('button');remove.type='button';remove.className='adm-btn adm-btn-outline';remove.textContent='Quitar';remove.setAttribute('aria-label',`Quitar foto ${index+1} del producto`);
+      remove.addEventListener('click',()=>{publish(urls.filter(value=>value!==url));productColorPhotos?.removePhoto(url);});
+      item.draggable=true;item.addEventListener('dragstart',event=>{event.dataTransfer.setData('application/x-tintin-gallery',url);event.dataTransfer.effectAllowed='move';});
+      item.addEventListener('dragover',event=>{if(event.dataTransfer.types.includes('application/x-tintin-gallery'))event.preventDefault();});
+      item.addEventListener('drop',event=>{event.preventDefault();const from=urls.indexOf(event.dataTransfer.getData('application/x-tintin-gallery'));if(from<0 || from===index)return;const next=[...urls];const [photo]=next.splice(from,1);next.splice(index,0,photo);publish(next);});
+      item.append(image,badge,controls,remove);galleryGrid.append(item);
     });
   };
+  coverInput.addEventListener('change',renderGallery,{signal:gallerySignal});
   galleryInput.addEventListener('input',renderGallery,{signal:productGalleryListener.signal});
   renderGallery();
   let container = document.getElementById('prod-color-photos');
@@ -5843,7 +5858,8 @@ function mountProductColorPhotos(product) {
 }
 
 let productVariantStockBaseline = null;
-function productVariantStockConfiguration(text) {
+let productVariantStockEvents = null;
+function productVariantStockConfiguration(text, previous = []) {
   const attributes = new Map();
   for (const line of String(text || '').split(/\r?\n/).filter(line => line.trim())) {
     const separator = line.indexOf(':');
@@ -5854,13 +5870,23 @@ function productVariantStockConfiguration(text) {
     }
     attributes.set(key, [...new Set([...(attributes.get(key) || []), ...values])]);
   }
-  if (attributes.size !== 1) throw new Error('Para distribuir el stock, definí una característica con sus opciones. Las matrices existentes conservan su inventario.');
-  const [key, values] = [...attributes][0];
-  if (values.length > 50) throw new Error('Podés configurar hasta 50 opciones.');
-  return {variants: Object.fromEntries([[key, values]]), entries: values.map(variant => ({variant, stock:''}))};
+  if (!attributes.size) throw new Error('Agregá al menos un color u opción para distribuir el stock.');
+  if (attributes.size > 20 || [...attributes.values()].some(values => values.length > 50)) throw new Error('Hay demasiadas opciones. Usá hasta 20 características y 50 opciones por característica.');
+  let combinations = [''];
+  for (const values of attributes.values()) {
+    if (combinations.length * values.length > 1000) throw new Error('El máximo es de 1.000 combinaciones por producto.');
+    combinations = combinations.flatMap(prefix => values.map(value => prefix ? `${prefix} / ${value}` : value));
+  }
+  if (combinations.some(value => value.length > 120)) throw new Error('Los nombres combinados deben tener hasta 120 caracteres.');
+  const retained = new Set(combinations);
+  if (previous.some(entry => Number(entry.stock) > 0 && !retained.has(entry.variant))) throw new Error('Primero dejá en 0 el stock de la opción que querés quitar.');
+  const quantities = new Map(previous.map(entry => [entry.variant, entry.stock]));
+  return {variants: Object.fromEntries(attributes), entries: combinations.map(variant => ({variant, stock: quantities.get(variant) ?? ''}))};
 }
 
 function renderProductVariantStock(product, configuration = null) {
+  productVariantStockEvents?.abort();
+  productVariantStockEvents = new AbortController();
   productVariantStockBaseline = null;
   let panel = document.getElementById('prod-variant-stock');
   if (!panel) {
@@ -5874,10 +5900,24 @@ function renderProductVariantStock(product, configuration = null) {
   stockInput.readOnly = false;
   optionsInput.readOnly = false;
   const expectedEntries = variantInventoryEntries(product);
+  let acceptedOptions = optionsInput.value;
+  optionsInput.addEventListener('input', () => {
+    try {
+      if (!optionsInput.value.trim() && !productVariantStockBaseline) return;
+      const previous = productVariantStockBaseline?.entries.map((entry, index) => ({variant:entry.variant, stock:panel.querySelectorAll('input')[index]?.value ?? entry.stock})) || [];
+      const draft = productVariantStockConfiguration(optionsInput.value, previous);
+      acceptedOptions = optionsInput.value;
+      renderProductVariantStock(product, draft);
+      const error = document.getElementById('prod-form-error'); error.textContent='';error.style.display='none';
+    } catch (failure) {
+      optionsInput.value = acceptedOptions;
+      const error = document.getElementById('prod-form-error');error.textContent=failure.message;error.style.display='';
+    }
+  }, {signal:productVariantStockEvents.signal});
   if (expectedEntries === null && !configuration) {
     const configure = document.createElement('button');
     configure.type = 'button'; configure.className = 'adm-btn adm-btn-outline';
-    configure.textContent = 'Distribuir stock por opción';
+    configure.textContent = 'Asignar stock por color u opción';
     configure.addEventListener('click', () => {
       const error = document.getElementById('prod-form-error');
       try {
@@ -5894,7 +5934,7 @@ function renderProductVariantStock(product, configuration = null) {
   }
   productVariantStockBaseline = { stock: product?.stock, expectedEntries, entries: configuration?.entries || expectedEntries, variants: configuration?.variants || product.variants };
   stockInput.readOnly = true;
-  optionsInput.readOnly = true;
+  optionsInput.readOnly = false;
   const hint = document.createElement('p');
   hint.textContent = configuration
     ? `Distribuí las cantidades de cada opción. Stock anterior: ${product?.stock ?? 'sin control'}. No se guardará hasta completar todas las cantidades.`
@@ -5906,12 +5946,14 @@ function renderProductVariantStock(product, configuration = null) {
     label.textContent = `${entry.variant} `;
     const input = document.createElement('input');
     input.type = 'number'; input.min = '0'; input.max = '1000000'; input.step = '1';
-    input.className = 'adm-input'; input.value = String(entry.stock);
+    input.className = 'adm-input'; input.value = String(entry.stock);input.setAttribute('aria-label', `Stock de ${entry.variant}`);
     input.addEventListener('input', () => {
       stockInput.value = String([...panel.querySelectorAll('input')].reduce((sum, item) => sum + Number(item.value || 0), 0));
     });
     label.append(input); panel.append(label);
   }
+  const complete = productVariantStockBaseline.entries.every(entry => entry.stock !== '');
+  stockInput.value = complete ? String(productVariantStockBaseline.entries.reduce((sum, entry) => sum + Number(entry.stock), 0)) : '';
 }
 
 function serializeProductForm() {
@@ -5940,6 +5982,8 @@ function serializeProductForm() {
     tags: document.getElementById('prod-tags').value,
     variants: document.getElementById('prod-variants-text').value,
     variantMedia: productColorPhotos?.serialize() || [],
+    pendingPhotos:[..._formImageWidgets].filter(([id])=>id.startsWith('prod-')).map(([id,widget])=>[id,widget.pendingSignature?.() || []]),
+    pendingColorPhotos:productColorPhotos?.pendingSignature?.() || [],
     variantStock: [...document.querySelectorAll('#prod-variant-stock input')].map(input => input.value),
     badge: document.getElementById('prod-badge').value,
     collection: document.getElementById('prod-collection').value,
