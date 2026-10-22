@@ -1,3 +1,7 @@
+## 2026-10-22 — Cargas de páginas informativas
+
+Fuentes: cargador-pagina.js y compatibilidad-cuenta-movil.js. Logo del loader comparte URL con el shell; la animación auxiliar de paneles se descarga al abrirlos en rutas informativas. Cuenta, checkout y mapas iniciales mantienen el arranque directo. Afecta entrega del loader público en todas las pantallas y apertura de paneles en Nosotros/Contacto/Envíos/legales/preguntas. Se conservan estilos, avatar propio, control canónico de superficies y límites de rendimiento. Regresión de grafo diferido/logo único y apertura de cuenta en390/820/1440,68 Chromium de rendimiento,3 WebKit y14 Node PASS_LOCAL. Caché, shell, protección y diagnóstico mediante sus generadores; evidencia vigente en CURRENT_STATE.
+
 ## 2026-10-22 — Identidad provisional de avatar
 
 Fuentes: estado-canonico-perfil.mjs, navegacion-autenticacion.js y módulo de perfil.html. Perfil pendiente sólo muestra foto propia conservada para el mismo UID o iniciales; el fallback Google espera la lectura confirmada del perfil. Consumidores sincronizados: hero, encabezado, panel de cuenta y barra móvil, con guardias existentes de cuenta/lecturas tardías. Versionado transitivo, shell, CSP, manifiesto y plan protegido se regeneran mediante sus autoridades. No hay escrituras de datos reales, cambios de Auth/Rules ni reactivación de comunidad. Evidencia actual en CURRENT_STATE.

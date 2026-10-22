@@ -1,23 +1,152 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "5d7aba6f773e3fa528a00dc097eebf2d1f02b375",
-  "reason": "Completar entorno Java21 del Diagnostico Maestro y ajustes responsive de firma y video Nosotros",
+  "baseCommit": "293949fab186679f82c0a00801b22f27ba804b5a",
+  "reason": "Eliminar cargas redundantes del loader y animaciones auxiliares en paginas informativas",
   "files": [
     {
-      "path": ".github/workflows/diagnostico-maestro.yml",
-      "oldHash": "4b1ccaef38d74334195156feb03590bbe3e04525c8cb113634b9aafa6597b0fc",
-      "newHash": "f30bf30e05e5ba1bd4fcd54791e0a3663f55375996522c652615959ba7567958"
+      "path": "404.html",
+      "oldHash": "bd7ebf3bd34ceb7010a7e3e23a066945976b8896af9b2a32feebd19c0a740c37",
+      "newHash": "d0e1be1c89928f998cb17d02ec5991b421b2ed4110ffbcb8b605e0fa01b1a066"
     },
     {
       "path": "about.html",
-      "oldHash": "24641b2e49b6ea9666f14f7c76ee32e5c695d979d0144267e71f605b1ff7cb73",
-      "newHash": "0697a4751fb9ab5aa6750ecbc098acc8f6e2c0a3df397238272f4318576f6110"
+      "oldHash": "0697a4751fb9ab5aa6750ecbc098acc8f6e2c0a3df397238272f4318576f6110",
+      "newHash": "7d524cffda07259ca0387360811859d563712de29ec96501efcb085980c6a28e"
+    },
+    {
+      "path": "admin-images.html",
+      "oldHash": "d7fea1a26d992db2b0156bd1d080aed7b07e516f749f720cf42f6fff6ef9ac07",
+      "newHash": "a8851e53d7d917d36e3abb601065acea3e21b53458a6f3a4a3afec9626b0ea54"
+    },
+    {
+      "path": "admin.html",
+      "oldHash": "b0c1229962ddf6805fd2bc38b6584f2f3f1495f93a41f3517881875d4ddb5b61",
+      "newHash": "c9a9f7a46e559c84bb62b377168d153440f40f0dbb32a809774e42239bd2c2cb"
+    },
+    {
+      "path": "cambios-devoluciones.html",
+      "oldHash": "8660fb9d11dd55e8ebe70b107889036881f96ea18a7777d15aac525e58aa21c2",
+      "newHash": "778f35d33f33f6e06a285945ae3d53740566c326fa6a3a7e5f88c716726805f7"
+    },
+    {
+      "path": "catalogo.html",
+      "oldHash": "1e994d7a7fa50c7d07b1084b09a254d1195e1da8e1a1ca8ab80d9d5ff4f1bbde",
+      "newHash": "b16a6d2aa5f01862fbf825ed8ddf0fb07818f8a63100925505982a14fe9adae0"
+    },
+    {
+      "path": "checkout.html",
+      "oldHash": "b49ec80bc0a88eb3806cb4c2a50b691437f443121a869e2aa72b0bfd2298791d",
+      "newHash": "7eaf126ffc0e5d07e63cff5fbbae40782b8aa31e9aa45e357bb4082698c2b150"
+    },
+    {
+      "path": "collections.html",
+      "oldHash": "cceb1f4ebb397716afe3af4f6313f662ec5b58b02612573bad2f2b5b396466fd",
+      "newHash": "f1b92178a2518ec8c4626b14dca6e59fe5a82bc581f213b8e1e7aed4f749b07f"
+    },
+    {
+      "path": "contact.html",
+      "oldHash": "ccd26ccc0e5a943043ea8b854d21df3d0f1c8eec50d4fa8602979aaabf113299",
+      "newHash": "cf1ed6fc9811e8bac832cee10f7e168b80d77e46334f0905f735d92a2b5fd188"
+    },
+    {
+      "path": "envios.html",
+      "oldHash": "6c1690503a8bf81103ff9d6f7eaacd54db5e05329b888bc4f909ff3cf03378b7",
+      "newHash": "579cee2ada298665e02cea930472a3d320478471fa4de143a84edefa68e0b508"
+    },
+    {
+      "path": "index.html",
+      "oldHash": "0d41739ab4229cc4bea82b01fa26c90dbf73920483af8a0d81a69ab086b7dd45",
+      "newHash": "5ff912d72955cee2bb84487f5f175e05f3d06926dffaef9bb28b4a260706de61"
+    },
+    {
+      "path": "js/cargador-pagina.js",
+      "oldHash": "d3d56eb11a8315ed623f901248a72c8ed93d21b5f20ee4093b032c59cc9fafcc",
+      "newHash": "11ce700863450e1505d3585650a685a6fe4d74be475860b708cb8ae70516f36b"
+    },
+    {
+      "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
+      "oldHash": "81846e8f1a9d4f42e4f5da9a27655e2e12efc18ef2b97132d8377ac092b5d9cb",
+      "newHash": "9d0b45c893ba77487c94ffda0e22821c5adf7561801eed38148f2bd55babb918"
+    },
+    {
+      "path": "js/quality/calidad-interfaz.js",
+      "oldHash": "ac4182217d3a09400eee1b204ada37735fa5e5cc380284f0ce0538dc30211bd0",
+      "newHash": "60acea3db2a03aeea8dc1afb8ba1443f9b9f985b68903e5f888a83bfb1d8ad1d"
+    },
+    {
+      "path": "login.html",
+      "oldHash": "cd9a73dadd106f7832590edf03b23d535e1072133c5dff8cbb2dcd0436461341",
+      "newHash": "a465498f320f72663f10ee78f68752a6dd3255d6061b6f059df65a40609a982c"
+    },
+    {
+      "path": "nosotros.html",
+      "oldHash": "10d010cf730ee8dfd6e832960fa3fa2ca6845f482ebea084b0b9da98eba0d967",
+      "newHash": "ff4b34a94a9c4cb534a284edeac7a5fb6645147e59c2390b2eb2953718b6d040"
+    },
+    {
+      "path": "perfil.html",
+      "oldHash": "45c826c53abe327ed86ca2c25b77c1b33ed7787ee133cd5a4f603be52ce0e931",
+      "newHash": "e87336c0fd497c899466af63d42d2dbf7635aba916b86f25943cc8811ddba3a2"
+    },
+    {
+      "path": "preguntas-frecuentes.html",
+      "oldHash": "13f6b5848d0fc100e84b46157f7cec122680bb4be190043aeddb93c845f2a202",
+      "newHash": "4154496870317972bb6646527383b7137518d4a4a9d658122977cc2b8d33fadf"
+    },
+    {
+      "path": "privacidad.html",
+      "oldHash": "4ac3ee1068a03863fc8012fcdf362820d82e7eefa07fe3f07b353a258c13caee",
+      "newHash": "63cbdfd0a920ae70e87fb3fcb1fae2c855d08fc5d2612aac51a2947e98cd1a22"
+    },
+    {
+      "path": "product.html",
+      "oldHash": "9aa2093c34f4adbcb23bc9d2570a124d10fda05fd2909e78d94523d51179027a",
+      "newHash": "c174151b7a2365b7ec00909f75cef5ac1b71634f257cbd0831a4b74ddd21c4db"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "ac22fe212cc30823624ca11d0af06ef09af070df11383fa67e01a160d933a0ce",
-      "newHash": "9d6e82607fda585452f50f1e398e43290175bc5378405d4c6f5c6a533f6c3af1"
+      "oldHash": "9d6e82607fda585452f50f1e398e43290175bc5378405d4c6f5c6a533f6c3af1",
+      "newHash": "f328bd575f5d0084add18ae85edd94cd0142f1ddeb73821b85340dd095194fa5"
+    },
+    {
+      "path": "scripts/sincronizar-inicio-navegacion-publica.js",
+      "oldHash": "f6557ca887c3f23611cbc13de49a952fcce4afc0929e4b5255c348074c0307e7",
+      "newHash": "8faa1178c20784b1d7be79f7dc97a3f0e8e4b14553031f2dab5485a67cf497dc"
+    },
+    {
+      "path": "terminos.html",
+      "oldHash": "e658ffedc804695eeed3e79a73abc5eca349c50eecfdf63589faaeaa5f96ed8c",
+      "newHash": "edcdfc245b385b02df6c4ac5608854a22120fb07ba2355d3e92a70c847ee0aac"
     }
   ],
-  "affectedRecords": []
+  "affectedRecords": [
+    "cuenta-bloqueada",
+    "entrada-login",
+    "entrada-login__google-btn__1",
+    "entrada-login__login-codigo__2",
+    "firebase-auth__redirect-result__5",
+    "firestore__users-uid__8",
+    "google-btn",
+    "google-btn__firebase-auth__3",
+    "login-codigo",
+    "login-codigo__firebase-auth__4",
+    "pagina-principal",
+    "perfil",
+    "perfil__ultimos-datos__11",
+    "productos",
+    "redirect-result",
+    "redirect-result__sesion-estado__6",
+    "roles__pagina-principal__17",
+    "roles__perfil__10",
+    "roles__super-panel__14",
+    "super-panel",
+    "super-panel__admin-guard__15",
+    "super-panel__pedidos__35",
+    "super-panel__productos__34",
+    "ultimos-datos",
+    "ultimos-datos__perfil__13",
+    "users-uid",
+    "users-uid__cuenta-bloqueada__12",
+    "users-uid__roles__9"
+  ]
 }
