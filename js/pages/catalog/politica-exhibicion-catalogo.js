@@ -47,6 +47,7 @@ export function productCreatedAtMillis(product) {
 export function productActivityAtMillis(product) {
   return Math.max(
     timestampToMillis(product?.catalogActivityAt),
+    timestampToMillis(product?.merchandisingUpdatedAt),
     timestampToMillis(product?.restockedAt),
     timestampToMillis(product?.updatedAt),
     timestampToMillis(product?.modifiedAt),
@@ -78,6 +79,18 @@ function compareStable(a, b) {
   return String(a?.id || '').localeCompare(String(b?.id || ''));
 }
 
+// Las novedades y ediciones comerciales nunca quedan por debajo de un
+// artículo actualizado únicamente por inventario. Las fechas ordenan
+// cronológicamente dentro de cada nivel, sin prioridades por sesión.
+export function productPriorityLevel(product, now = Date.now()) {
+  if (isNewProduct(product, now)
+    || product?.destacado === true || product?.oferta === true
+    || (String(product?.badge || '').trim() && String(product.badge).trim().toLowerCase() !== 'agotado')
+    || timestampToMillis(product?.merchandisingUpdatedAt) > 0) return 0;
+  if (timestampToMillis(product?.restockedAt) > 0) return 1;
+  return 2;
+}
+
 function compareActivity(a, b) {
   const activityDifference = productActivityAtMillis(b) - productActivityAtMillis(a);
   return activityDifference || compareStable(a, b);
@@ -96,7 +109,10 @@ function compareByMode(mode) {
   if (mode === 'stock') {
     return (a, b) => Number(b?.stock ?? Number.MAX_SAFE_INTEGER) - Number(a?.stock ?? Number.MAX_SAFE_INTEGER) || compareActivity(a, b);
   }
-  return compareActivity;
+  // Se conserva el nivel comercial también entre productos antiguos.
+  const now = Date.now();
+  return (a, b) => productPriorityLevel(a, now) - productPriorityLevel(b, now)
+    || compareActivity(a, b);
 }
 
 export function sortCatalogProducts(products, options = {}) {
@@ -120,6 +136,7 @@ export function productMerchandisingState(product, now = Date.now()) {
     new: isNewProduct(product, now),
     createdAt: productCreatedAtMillis(product),
     activityAt: productActivityAtMillis(product),
+    priorityLevel: productPriorityLevel(product, now),
   };
 }
 
@@ -130,6 +147,7 @@ window.TintinCatalogMerchandising = Object.freeze({
   productActivityAtMillis,
   isProductInStock,
   isNewProduct,
+  productPriorityLevel,
   sortCatalogProducts,
   productMerchandisingState,
 });
