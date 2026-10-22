@@ -90,6 +90,7 @@ export function normalizeProduct(product) {
     updatedAt: timestampToMillis(p.updatedAt ?? p.updated_at ?? p.modifiedAt),
     restockedAt: timestampToMillis(p.restockedAt),
     catalogActivityAt: timestampToMillis(p.catalogActivityAt),
+    merchandisingUpdatedAt: timestampToMillis(p.merchandisingUpdatedAt),
     tags: unique(Array.isArray(p.tags) ? p.tags : String(p.tags || '').split(','), 30, 60),
     variants: normalizeVariantOptions(p.variants),
     // Conserva la relación opción/foto cuando el store transforma las filas
