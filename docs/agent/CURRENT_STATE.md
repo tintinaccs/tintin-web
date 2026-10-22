@@ -3472,3 +3472,10 @@ El titular autorizo resolver los dos PR y repetir Maestro, integrar automaticame
 ## 2026-10-22 — Selector accesible de cantidades tras PR1203
 
 CI39864494004 aprobo contratos estaticos, cuentas/sync, reglas y Super Admin; el grupo quantity-browser fallo porque buscaba label exacto 6/7 aunque el editor canonico ya expone aria-label Stock de 6/7. Se conserva el nombre descriptivo y se actualiza la prueba al rol spinbutton y nombre exacto; permanecen las aserciones de cantidades 1/4, suma5, total readonly y reinicio para producto nuevo. Cuatro recorridos Chromium completos PASS_LOCAL sin reintentos. No cambian codigo de produccion, datos, inventario ni umbrales. Se regenera diagnostico desde su autoridad antes del nuevo SHA; la CI previa no acredita este ajuste.
+
+
+## 2026-10-22 — Dependencias tras integrar PR1203 (Codex /root)
+
+Base5ec776f04, PR1203 y1205 integrados. Dependabot93/92/91 corresponde a DOMPurify3.4.16 de desarrollo: override minimo3.4.17 y lock oficial con integridad verificada. npm audit encontro tambien GHSA-rxp7-6hxx-x8q5 en ip-address10.7.2: lock actualizado a10.7.4 compatible sin cambiar rangos de los padres. npm ci reproducible, npm audit completo y omit=dev:0 vulnerabilidades. Smoke Chromium sobre la dependencia3.4.17 conserva HTML seguro y retira scripts/eventos; IPv6 normal y zona100000 caracteres sin coste cuadratico; watcher Firebase PASS. Una expectativa exploratoria de rechazo de zonas largas se corrigio: la API las acepta y se comprueba su procesamiento rapido.
+
+Alcance: actualiza dependencias instaladas, no reemplaza el DOMPurify3.4.15 incorporado por Microsoft en el bundle Monaco0.57.0. Monaco sigue siendo la version oficial actual; su sanitizador no utiliza SAFE_FOR_TEMPLATES, IN_PLACE ni PARSER_MEDIA_TYPE, modos implicados en estas alertas. No se parchean bundles minificados ni se acredita una actualizacion de esa copia incorporada. Sin cambios en interfaces, datos, permisos, Rules, pagos ni catalogo. CI y publicacion del candidato final pendientes.
