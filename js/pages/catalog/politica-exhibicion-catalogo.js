@@ -47,6 +47,7 @@ export function productCreatedAtMillis(product) {
 export function productActivityAtMillis(product) {
   return Math.max(
     timestampToMillis(product?.catalogActivityAt),
+    timestampToMillis(product?.merchandisingUpdatedAt),
     timestampToMillis(product?.restockedAt),
     timestampToMillis(product?.updatedAt),
     timestampToMillis(product?.modifiedAt),
@@ -78,6 +79,32 @@ function compareStable(a, b) {
   return String(a?.id || '').localeCompare(String(b?.id || ''));
 }
 
+// Las novedades y ediciones comerciales nunca quedan por debajo de un
+// artículo actualizado únicamente por inventario. Las fechas ordenan
+// cronológicamente dentro de cada nivel, sin prioridades por sesión.
+export function productPriorityLevel(product, now = Date.now()) {
+  if (isNewProduct(product, now)
+    || product?.destacado === true || product?.oferta === true
+    || (String(product?.badge || '').trim() && String(product.badge).trim().toLowerCase() !== 'agotado')
+    || timestampToMillis(product?.merchandisingUpdatedAt) > 0) return 0;
+  if (timestampToMillis(product?.restockedAt) > 0) return 1;
+  return 2;
+}
+
+// La reposición modifica updatedAt, pero NO la posición entre novedades y
+// ediciones comerciales. Separamos la fecha de actividad comercial del inventario.
+export function productPriorityAtMillis(product, level = productPriorityLevel(product)) {
+  const merchandising = timestampToMillis(product?.merchandisingUpdatedAt);
+  const restocked = timestampToMillis(product?.restockedAt);
+  if (level === 0) {
+    if (merchandising) return merchandising;
+    // Productos legados con etiqueta y reposición, sin campo comercial.
+    if (restocked) return productCreatedAtMillis(product) || 0;
+  }
+  if (level === 1 && restocked) return restocked;
+  return productActivityAtMillis(product);
+}
+
 function compareActivity(a, b) {
   const activityDifference = productActivityAtMillis(b) - productActivityAtMillis(a);
   return activityDifference || compareStable(a, b);
@@ -96,7 +123,14 @@ function compareByMode(mode) {
   if (mode === 'stock') {
     return (a, b) => Number(b?.stock ?? Number.MAX_SAFE_INTEGER) - Number(a?.stock ?? Number.MAX_SAFE_INTEGER) || compareActivity(a, b);
   }
-  return compareActivity;
+  // Se conserva el nivel comercial también entre productos antiguos.
+  const now = Date.now();
+  return (a, b) => {
+    const ap = productPriorityLevel(a, now), bp = productPriorityLevel(b, now);
+    return ap - bp
+      || productPriorityAtMillis(b, bp) - productPriorityAtMillis(a, ap)
+      || compareStable(a, b);
+  };
 }
 
 export function sortCatalogProducts(products, options = {}) {
@@ -120,6 +154,7 @@ export function productMerchandisingState(product, now = Date.now()) {
     new: isNewProduct(product, now),
     createdAt: productCreatedAtMillis(product),
     activityAt: productActivityAtMillis(product),
+    priorityLevel: productPriorityLevel(product, now),
   };
 }
 
@@ -130,6 +165,8 @@ window.TintinCatalogMerchandising = Object.freeze({
   productActivityAtMillis,
   isProductInStock,
   isNewProduct,
+  productPriorityLevel,
+  productPriorityAtMillis,
   sortCatalogProducts,
   productMerchandisingState,
 });

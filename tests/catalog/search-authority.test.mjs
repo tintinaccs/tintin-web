@@ -9,7 +9,7 @@ const root=process.cwd();
 const controller=fs.readFileSync('js/components/navigation/compartido/control-busqueda.js','utf8');
 function audit(mutate=(_file,source)=>source){
  const source=fs.readFileSync('scripts/auditar-fase-7-catalogo.js','utf8');let exit=0;
- const context=vm.createContext({__dirname:path.join(root,'scripts'),require(name){if(name==='path')return path;if(name==='fs')return {readFileSync(file){return mutate(path.relative(root,file),fs.readFileSync(file,'utf8'));}};throw Error(name);},console:{log(){},error(){}},process:{exit:code=>{exit=code;}}});
+ const context=vm.createContext({__dirname:path.join(root,'scripts'),require(name){if(name==='path')return path;if(name==='fs')return {readFileSync(file){return mutate(path.relative(root,file).split(path.sep).join('/'),fs.readFileSync(file,'utf8'));}};throw Error(name);},console:{log(){},error(){}},process:{exit:code=>{exit=code;}}});
  vm.runInContext(source,context);return exit;
 }
 test('el auditor exige campos, delegación clásica y política de visibilidad en la autoridad compartida',()=>{

@@ -13,7 +13,7 @@ const PRODUCT_FIELDS = new Set([
   'imageUrl', 'image', 'img', 'photo', 'imageSrc', 'image_src', 'imagesExtra', 'images',
   'stock', 'active', 'oferta', 'destacado', 'tags', 'variants', 'variantMedia', 'variantInventory', 'collectionOrder',
   'createdAt', 'created_at', 'importedAt', 'updatedAt', 'updated_at', 'modifiedAt',
-  'restockedAt', 'catalogActivityAt', 'Image Src', 'Variant Image', 'Variant Price',
+  'restockedAt', 'catalogActivityAt', 'merchandisingUpdatedAt', 'Image Src', 'Variant Image', 'Variant Price',
   'Variant Inventory Qty', 'Product Category', 'Category', 'Title', 'Handle', 'Body (HTML)'
 ]);
 const COLLECTION_FIELDS = new Set(['name', 'title', 'description', 'image', 'imageUrl', 'order', 'visible']);
@@ -158,7 +158,7 @@ export async function onRequest({ request, env, waitUntil }) {
     const payload = await buildPayload(env, resource, productId);
     const response = Response.json(payload, {
       headers: {
-        'cache-control': 'public, max-age=30, s-maxage=60',
+        'cache-control': 'public, max-age=5, s-maxage=10',
         'x-content-type-options': 'nosniff',
         'x-tintin-cache': 'miss'
       }

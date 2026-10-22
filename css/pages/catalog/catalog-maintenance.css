@@ -264,3 +264,23 @@ body.tt-catalog-maintenance .tt-footer-tagline {
     animation-iteration-count: infinite !important;
   }
 }
+
+/* Tarjetas responsive: el contenido nunca fuerza columnas desbordadas. */
+body.tt-catalog-maintenance .cat-main,
+body.tt-catalog-maintenance .cat-grid,
+body.tt-catalog-maintenance .cat-grid > *,
+body.tt-catalog-maintenance .tt-card-info,
+body.tt-catalog-maintenance .tt-card-btns { min-width: 0; }
+body.tt-catalog-maintenance .tt-card-name,
+body.tt-catalog-maintenance .tt-card-cat,
+body.tt-catalog-maintenance .tt-card-price { overflow-wrap: anywhere; }
+body.tt-catalog-maintenance .tt-card-btn { min-width: 0; overflow-wrap: anywhere; }
+body.tt-catalog-maintenance .tt-card-img-wrap img { max-width: 100%; object-fit: contain; }
+@media (max-width: 480px) {
+  body.tt-catalog-maintenance .cat-wrap { padding-inline: clamp(8px, 3vw, 16px); }
+  body.tt-catalog-maintenance .tt-card-info { padding: 10px 8px; }
+  body.tt-catalog-maintenance .tt-card-btns { gap: 6px; }
+  body.tt-catalog-maintenance .tt-card-btn { font-size: clamp(9px, 2.5vw, 11px); letter-spacing: 0; padding: 8px 4px; }
+  body.tt-catalog-maintenance .tt-card-badge { left: 7px; top: 7px; font-size: 9px; padding-inline: 5px; }
+  body.tt-catalog-maintenance .tt-card-favorite { right: 6px; top: 6px; width: 36px; height: 36px; }
+}

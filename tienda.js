@@ -603,9 +603,11 @@ function initHeaderScroll() {
    SEARCH PANEL
 ────────────────────────────────────── */
 function initSearch() {
+  // El shell modular administra también la carga bajo demanda.
+  if (window.TintinPublicShellBootstrapStarted) return;
   // El script clásico delega al mismo controlador que monta el shell.
   // Su inicialización es idempotente: no se instalan dos buscadores.
-  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261022-avatar-inicial-1')
+  import('./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261022-catalog-reconcile-1')
     .then(module => module.initSearchController())
     .catch(error => {
       console.error('[search] No se pudo iniciar el buscador:', error);

@@ -1,8 +1,8 @@
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261022-avatar-inicial-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261022-avatar-inicial-1';
-import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1-stock-flow-20261014-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261022-catalog-reconcile-1';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261022-catalog-reconcile-1';
+import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261022-catalog-reconcile-1';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -15,15 +15,14 @@ import {
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1-first-render-merge-20261010-1-bags-20261014-1';
-import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1-stock-flow-20261014-1';
+import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20261022-catalog-reconcile-1';
 
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';
-const HOME_CACHE_TTL = 60 * 1000;
-// El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
-// Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
-// de precio, stock o estado durante diez minutos en otros dispositivos.
-const ALL_CACHE_TTL = 60 * 1000;
+const HOME_CACHE_TTL = 10 * 1000;
+// La caché local acompaña la frescura del edge (10 segundos) para mostrar
+// cambios de precio, stock y estado al volver a la categoría.
+const ALL_CACHE_TTL = 10 * 1000;
 const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
 const PUBLIC_CATALOG_ENDPOINT = '/api/public-catalog';
 const PUBLIC_PRODUCT_TIMEOUT_MS = 8000;
@@ -101,7 +100,8 @@ export function mapProduct(id, d) {
     createdAt: timestampToMillis(d.createdAt ?? d.created_at ?? d.importedAt),
     updatedAt: timestampToMillis(d.updatedAt ?? d.updated_at ?? d.modifiedAt),
     restockedAt: timestampToMillis(d.restockedAt),
-    catalogActivityAt: timestampToMillis(d.catalogActivityAt)
+    catalogActivityAt: timestampToMillis(d.catalogActivityAt),
+    merchandisingUpdatedAt: timestampToMillis(d.merchandisingUpdatedAt)
   };
 }
 
@@ -139,7 +139,8 @@ function compactProduct(product) {
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
     restockedAt: product.restockedAt,
-    catalogActivityAt: product.catalogActivityAt
+    catalogActivityAt: product.catalogActivityAt,
+    merchandisingUpdatedAt: product.merchandisingUpdatedAt
   };
 }
 

@@ -25,7 +25,7 @@ function transactionFor(rows){const updates=[],reads=[];return {updates,reads,as
 test('transacción sólo escribe después de leer y validar el lote entero',async()=>{
  const rows={a:product,b:{...product,stock:2}},tx=transactionFor(rows);
  const result=await applyProductBulkTransaction(tx,{ids:['a','b'],field:'stockDelta',value:2,expected:{a:productFingerprint(rows.a),b:productFingerprint(rows.b)}},collections,id=>id,()=>123);
- assert.deepEqual(tx.updates,[['a',{stock:6,updatedAt:123}],['b',{stock:4,updatedAt:123}]]);assert.equal(result.length,2);
+ assert.deepEqual(tx.updates,[['a',{stock:6,updatedAt:123,restockedAt:123}],['b',{stock:4,updatedAt:123,restockedAt:123}]]);assert.equal(result.length,2);
 });
 test('cambio concurrente, borrado o variante invalidan todo el lote sin escrituras parciales',async()=>{
  for(const rows of [{a:product,b:{...product,stock:9}},{a:product},{a:product,b:{...product,variantInventory:[]}}]){
@@ -61,4 +61,17 @@ test('la tarjeta actualiza sólo la variante elegida y conserva el total consist
  assert.throws(()=>productCardPatch(product,{field:'stock',variant:'Inexistente',value:5}));
  assert.deepEqual(productCardPatch({stock:3},{field:'stock',value:0}),{stock:0});
  assert.deepEqual(productCardPatch(product,{field:'active',value:false}),{active:false});
+});
+
+test('lote comercial actualiza su prioridad sin simular una reposición',async()=>{
+ const rows={a:product,b:product},tx=transactionFor(rows);
+ await applyProductBulkTransaction(tx,{ids:['a','b'],field:'price',value:40000,expected:{a:productFingerprint(product),b:productFingerprint(product)}},collections,id=>id,()=>456);
+ assert.equal(tx.updates.length,2);
+ for(const [,patch] of tx.updates){assert.equal(patch.merchandisingUpdatedAt,456);assert.equal(patch.restockedAt,undefined);assert.equal(patch.price,40000);}
+});
+
+test('un lote destacado registra su fecha comercial sin convertirlo en reposición',async()=>{
+ const rows={a:product,b:{...product,price:20000}},tx=transactionFor(rows);
+ await applyProductBulkTransaction(tx,{ids:['a','b'],field:'destacado',value:true,expected:{a:productFingerprint(rows.a),b:productFingerprint(rows.b)}},collections,id=>id,()=>456);
+ assert.deepEqual(tx.updates,[['a',{destacado:true,updatedAt:456,merchandisingUpdatedAt:456}],['b',{destacado:true,updatedAt:456,merchandisingUpdatedAt:456}]]);
 });
