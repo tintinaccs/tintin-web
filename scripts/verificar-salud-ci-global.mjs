@@ -115,14 +115,6 @@ async function githubApi(endpoint) {
   throw lastInfraError;
 }
 
-function isCurrentMasterCheck(check) {
-  if (!currentRunId) return false;
-  const needle = `/actions/runs/${currentRunId}/`;
-  return [check?.html_url, check?.details_url]
-    .filter(Boolean)
-    .some(url => String(url).includes(needle));
-}
-
 function latestLegacyStatuses(statuses) {
   const latest = new Map();
   for (const item of statuses || []) {
@@ -130,6 +122,47 @@ function latestLegacyStatuses(statuses) {
     if (!latest.has(context)) latest.set(context, item);
   }
   return [...latest.values()];
+}
+
+function workflowScope(runs) {
+  const own = runs.find(run => Number(run.id) === currentRunId);
+  const masterPath = '.github/workflows/diagnostico-maestro.yml';
+  const pathOf = run => String(run.path || '').split('@')[0];
+  const ignored = [];
+  const evaluated = [];
+  for (const run of runs) {
+    let reason = '';
+    if (Number(run.id) === currentRunId) reason = 'Diagnóstico actual: su gate final evalúa sus suites.';
+    else if (own?.workflow_id && pathOf(own) === masterPath &&
+      run.workflow_id === own.workflow_id && pathOf(run) === masterPath && run.head_sha === sha) {
+      reason = 'Diagnóstico anterior del mismo workflow: evitar una dependencia circular; el gate actual exige sus suites nuevas.';
+    } else if (run.event === 'workflow_run' && run.head_sha === sha && run.head_branch === 'main' &&
+      run.head_repository?.full_name === repo && pathOf(run) === '.github/workflows/auditoria-dependencias.yml') {
+      // Este workflow se ejecuta desde main confiable, pero valida el SHA de
+      // otro PR. Sus checks de protección siguen asociados al candidato.
+      reason = 'Automatización de un PR ejecutada desde main; no es una validación del artefacto de este commit.';
+    }
+    if (reason) ignored.push({...run, scopeReason: reason});
+    else evaluated.push(run);
+  }
+  return {evaluated, ignored};
+}
+
+function belongsToIgnoredRun(check, ignoredRuns) {
+  const suiteId = Number(check.check_suite?.id);
+  if (check.head_sha !== sha || check.app?.slug !== 'github-actions' ||
+    !Number.isSafeInteger(suiteId) || suiteId <= 0) return false;
+  return [check.html_url, check.details_url].some(value => {
+    try {
+      const url = new URL(value);
+      if (url.hostname !== 'github.com') return false;
+      const prefix = `/${repo}/actions/runs/`;
+      if (!url.pathname.startsWith(prefix)) return false;
+      const match = url.pathname.slice(prefix.length).match(/^(\d+)(?:\/|$)/);
+      const run = match ? ignoredRuns.get(Number(match[1])) : null;
+      return !!run && Number(run.check_suite_id) === suiteId;
+    } catch { return false; }
+  });
 }
 
 async function collectState() {
@@ -140,8 +173,14 @@ async function collectState() {
     githubApi(`/commits/${encodeURIComponent(sha)}/statuses?per_page=100`)
   ]);
 
-  const workflowRuns = (runsPayload.workflow_runs || []).filter(run => Number(run.id) !== currentRunId);
-  const checkRuns = (checksPayload.check_runs || []).filter(check => !isCurrentMasterCheck(check));
+  const observedWorkflowRuns = runsPayload.workflow_runs || [];
+  const scope = workflowScope(observedWorkflowRuns);
+  const workflowRuns = scope.evaluated;
+  const ignoredWorkflowRuns = scope.ignored;
+  const ignoredById = new Map(ignoredWorkflowRuns.map(run => [Number(run.id), run]));
+  const ignoredCheckRuns = (checksPayload.check_runs || []).filter(check =>
+    belongsToIgnoredRun(check, ignoredById));
+  const checkRuns = (checksPayload.check_runs || []).filter(check => !ignoredCheckRuns.includes(check));
   const legacyStatuses = latestLegacyStatuses(statusesPayload || []);
 
   const failedWorkflowRuns = workflowRuns.filter(run =>
@@ -163,6 +202,9 @@ async function collectState() {
   );
 
   return {
+    observedWorkflowRuns,
+    ignoredWorkflowRuns,
+    ignoredCheckRuns,
     workflowRuns,
     checkRuns,
     legacyStatuses,
@@ -198,7 +240,8 @@ function renderEvidence(payload) {
     '',
     `Commit: \`${sha}\``,
     `Workflow actual excluido del cómputo: \`${currentRunId || 'desconocido'}\``,
-    `Workflow runs externos observados: ${payload.workflowRuns.length}`,
+    `Workflow runs observados: ${payload.observedWorkflowRuns?.length ?? payload.workflowRuns.length}`,
+    `Workflow runs externos evaluados: ${payload.workflowRuns.length}`,
     `Check runs vigentes observados: ${payload.checkRuns.length}`,
     `Estados legacy observados: ${payload.legacyStatuses.length}`,
     '',
@@ -209,6 +252,14 @@ function renderEvidence(payload) {
     '## Checks reales pendientes al cierre',
     '',
     pending.length ? pending.map(item => `- ${item}`).join('\n') : '- Ninguno.',
+    '',
+    '## Ejecuciones conservadas como evidencia fuera del alcance del commit',
+    '',
+    (payload.ignoredWorkflowRuns || []).length
+      ? payload.ignoredWorkflowRuns.map(run => `- ${run.name} (${run.id}): ${run.conclusion || run.status}. ${run.scopeReason}`).join('\n')
+      : '- Ninguna.',
+    '',
+    'Los checks de protección del candidato, CI del artefacto, dependencias programadas y errores sin asociación comprobada siguen siendo bloqueantes.',
     '',
     '## Suites externas vacías/no materializadas',
     '',

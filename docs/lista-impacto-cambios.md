@@ -1,3 +1,7 @@
+## 2026-10-22 — Diagnóstico de CI por el commit realmente validado
+
+Fuente única: verificar-salud-ci-global.mjs. El workflow_run de mantenimiento corre código confiable de main, pero valida otro candidato; el Maestro conserva esa ejecución y sus jobs como evidencia con asociación explícita. Los diagnósticos anteriores del mismo workflow no son dependencias del gate actual. Checks del candidato, CI del artefacto, dependencias programadas/manuales y metadatos sin asociación segura mantienen sus bloqueos. No cambian workflows, permisos, protección de ramas, suites ni frontend; no se duplica el trabajo de Productos consolidado en #1203. Se cubre con regresiones negativas y snapshot real, y se regenera el diagnóstico desde su constructor.
+
 ## 2026-10-22 — Identidad provisional de avatar
 
 Fuentes: estado-canonico-perfil.mjs, navegacion-autenticacion.js y módulo de perfil.html. Perfil pendiente sólo muestra foto propia conservada para el mismo UID o iniciales; el fallback Google espera la lectura confirmada del perfil. Consumidores sincronizados: hero, encabezado, panel de cuenta y barra móvil, con guardias existentes de cuenta/lecturas tardías. Versionado transitivo, shell, CSP, manifiesto y plan protegido se regeneran mediante sus autoridades. No hay escrituras de datos reales, cambios de Auth/Rules ni reactivación de comunidad. Evidencia actual en CURRENT_STATE.
