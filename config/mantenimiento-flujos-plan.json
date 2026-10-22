@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "aa1cfaa97b7b0e2ea74f9ece428db0323ea1fe7b",
-  "reason": "Conservar los cuatro bordes y proporción natural de la bienvenida en todas las pantallas y evitar superposición de WhatsApp",
+  "baseCommit": "1a1e81ca792856aa65e0b41336258dac6fa3a893",
+  "reason": "Cerrar bienvenida completa responsive y coherencia entre plan protegido y manifiesto final de publicacion",
   "files": [
     {
       "path": "css/pages/home/ajuste-inicio.css",
@@ -10,13 +10,13 @@
     },
     {
       "path": "index.html",
-      "oldHash": "a7763fa573c477c28a077aa98975309391c5d798ac32b88a7ed8fcf7cac775c6",
-      "newHash": "e50d99b7f419ac76c83f2806b245126f2631374a38c74957aed7c3059f6ad7f9"
+      "oldHash": "3af388237716fa1d26f3104c65370cfb724a3106a97c91c6e681852b8500e2ed",
+      "newHash": "42313487998acadb38ebd68010ba4e12341785f78587702c08bbd699ceb3e230"
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "89dcfc7dd2e1fad0c91f12fb887b75b280315e5846375b59585492717ed63fb8",
-      "newHash": "57cd52f328ffa1ec76807c4a61cc439a06916a980375c71a6a665963859f1c59"
+      "oldHash": "03d6baf41c868dfd78328345fbf1865de379ba521ef99b17e3e48f3a95dea142",
+      "newHash": "fd6be661d6a174656694470207cfca5f2bc9ed3410126d462b75dda9ee1d8941"
     }
   ],
   "affectedRecords": []

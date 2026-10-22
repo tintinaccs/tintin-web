@@ -45,7 +45,9 @@ test('colecciones navegan a sus productos sin inventar colecciones inteligentes'
   await page.locator('tr[data-open="collection"][data-id="relojes"]').click();
   await expect(page.locator('#tt-commerce-drawer')).toContainText('Relojes');
   await page.locator('[data-action="drawer-collection-products"]').click();
-  expect(await page.evaluate(() => window.__calls)).toContainEqual(['collVerProductos', 'relojes']);
+  await expect(page.locator('[data-filter="product-category"]')).toHaveValue('relojes');
+  await expect(page.locator('#tt-commerce-products tbody tr')).toHaveCount(1);
+  await expect(page.locator('#tt-commerce-products tbody tr')).toHaveAttribute('data-id','p-reloj');
   await expect(page.locator('#tt-commerce-collections')).not.toContainText('Automatizada');
 });
 

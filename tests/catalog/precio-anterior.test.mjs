@@ -22,8 +22,11 @@ test('tarjeta y ficha de producto usan priceMarkup', () => {
   assert.match(src, /priceEl\.innerHTML = priceMarkup\(product\)/);
 });
 
-test('búsqueda y carrito muestran precio anterior y avisan cambio de precio', () => {
-  assert.match(src, /tt-search-result-price">\$\{priceMarkup\(p\)\}/);
+test('búsqueda y carrito muestran precio anterior y avisan cambio de precio', async () => {
+  const search = await fs.readFile('js/components/navigation/compartido/control-busqueda.js', 'utf8');
+  assert.match(src, /module => module\.initSearchController\(\)/);
+  assert.match(search, /Number\(product\.priceBefore\)/);
+  assert.match(search, /document\.createElement\('s'\)/);
   assert.match(src, /priceBefore: \(Array\.isArray\(window\.PRODUCTS\)/);
   assert.match(src, /Cambió el precio de tu carrito/);
   assert.match(src, /dismiss-price-notice/);

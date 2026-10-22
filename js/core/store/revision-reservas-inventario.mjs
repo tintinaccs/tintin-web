@@ -1,4 +1,4 @@
-import { orderReservesInventory } from './modelo-inventario.mjs?v=tintin-20261001-stock-pago-1';
+import { orderReservesInventory } from './modelo-inventario.mjs?v=tintin-20261021-commerce-review-1';
 import { normalizeVariantInventoryItems } from './inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 
 // Read-only projection. Never spreads order documents: customer, payment and

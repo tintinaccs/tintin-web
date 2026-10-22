@@ -3196,6 +3196,14 @@ html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-bran
 }
 
 /* El tinte global rosa no debe fundir la marca con el encabezado rosa. */
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand) {
+  --tt-header-fade-depth: clamp(32px, 4vw, 56px);
+  overflow: visible !important;
+}
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-mobile-brand)::before {
+  bottom: calc(-1 * var(--tt-header-fade-depth));
+}
+
 html:root body:not(:has(.adm-main)) :is(#tt-header-desktop-tablet, #tt-header-tablet)
   :is(img.tt-logo-img, img.tt-tablet-logo-img) {
   filter: brightness(0) invert(1) !important;

@@ -109,7 +109,9 @@ test('checkout válido de 60 productos usa un batch sin lecturas duplicadas en p
   assert.equal(created.order.items.length, 60);
   assert.equal(created.order.total, 26000);
   assert.equal(created.order.paymentStatus, 'pendiente');
-  assert.equal(created.order.inventoryState, 'unreserved');
+  assert.equal(created.order.inventoryState, 'reserved');
+  assert.equal(created.order.inventoryPolicy, 'reserve-on-checkout');
+  assert.equal(store.commits[0].filter(write => write.path.startsWith('products/')).length, 60);
   assert.equal(store.commits.length, 1);
   assert.equal(store.batchReads.length, 1);
   assert.equal(store.batchReads[0].length, 60);
@@ -143,12 +145,15 @@ test('el navegador no puede fijar estado, pago, correo de cuenta ni costo de env
     userEmail: 'otra@example.com',
     shippingCost: 0,
     customerId: 'CUS_otra',
+    inventoryPolicy: 'never-reserve',
     userId: 'otra',
     invoice: { wanted: true, razonSocial: '<script>', ruc: 'x' },
   }));
   const order = orderWrite(store);
   assert.equal(created.duplicate, undefined);
   assert.equal(order.status, 'pendiente');
+  assert.equal(order.inventoryState, 'reserved');
+  assert.equal(order.inventoryPolicy, 'reserve-on-checkout');
   assert.equal(order.paymentStatus, 'pendiente');
   assert.deepEqual(order.payment, { method: 'transferencia', status: 'pendiente' });
   assert.equal(order.userEmail, 'cuenta@example.com');

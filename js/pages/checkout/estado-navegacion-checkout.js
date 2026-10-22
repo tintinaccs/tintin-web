@@ -204,7 +204,7 @@ async function navigateForward(target) {
 async function navigateTo(target) {
   const current = activeStep();
   if (!Number.isInteger(target) || target < 0 || target > 4 || target === current) return;
-  if (window.TintinCheckoutOrderCompleted) return;
+  if (window.TintinCheckoutOrderCompleted || window.TintinCheckoutOrderInFlight) return;
   if (target > maxNavigableStep) return;
   if (target < current) await navigateBackward(target);
   else await navigateForward(target);

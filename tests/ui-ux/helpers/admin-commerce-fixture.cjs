@@ -38,6 +38,7 @@ const DATA = {
   ]
 };
 window.__orders=window.__commerceFixtureConfig?.orders ? structuredClone(window.__commerceFixtureConfig.orders) : DATA.orders.map(o=>({id:o.id,...structuredClone(o.data),lastChangeId:'fixture_initial',inventoryRevision:1}));
+if(window.__commerceFixtureConfig?.collections) DATA.collections=structuredClone(window.__commerceFixtureConfig.collections);
 window.__collectionRows=DATA.collections;
 window.__collectionConsumers=new Set();
 window.__publishCollections=()=>{for(const fn of window.__collectionConsumers)fn({docs:window.__collectionRows.map(entry=>({id:entry.id,data:()=>structuredClone(entry.data)})),metadata:{fromCache:false}});};
@@ -152,9 +153,9 @@ function fixtureHtml() {
   </body></html>`;
 }
 
-async function mockRuntime(page, {orders,role='superadmin',forbiddenActions=[]} = {}) {
+async function mockRuntime(page, {orders,collections,role='superadmin',forbiddenActions=[]} = {}) {
   // Datos estructurados, nunca interpolados dentro del código del SDK simulado.
-  await page.addInitScript(config => { window.__commerceFixtureConfig = config; }, {role,forbiddenActions,orders:orders || null});
+  await page.addInitScript(config => { window.__commerceFixtureConfig = config; }, {role,forbiddenActions,orders:orders || null,collections:collections || null});
   await page.route('**/*', async route=>{
     const url=new URL(route.request().url());
     if(url.protocol==='blob:')return route.continue();
