@@ -230,7 +230,14 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
     // stale values in untouched columns; those must neither block a price/stock
     // change nor be copied back into Firestore.
     assertNoShopifyHostedUrls(publicData);
-    if (Object.keys(publicData).length) publicData.updatedAt = new Date();
+    if (Object.keys(publicData).length) {
+      const now = new Date();
+      publicData.updatedAt = now;
+      const changed = Object.keys(publicData).filter(key => key !== 'updatedAt');
+      const inventoryOnly = changed.length > 0 && changed.every(key => key === 'stock');
+      if (inventoryOnly) publicData.restockedAt = now;
+      else publicData.merchandisingUpdatedAt = now;
+    }
 
     const inventoryData = {};
     addIf(inventoryData, fields, 'costUnit', optionalInteger(input.costUnit));
