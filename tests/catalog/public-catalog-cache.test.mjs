@@ -13,6 +13,8 @@ const routes = fs.readFileSync('_routes.json', 'utf8');
 test('catálogo público pasa por caché edge y usa lista blanca', () => {
   assert.match(api, /caches\.default/);
   assert.match(api, /public, max-age=5, s-maxage=10/);
+  assert.match(products, /const HOME_CACHE_TTL = 10 \* 1000/);
+  assert.match(products, /const ALL_CACHE_TTL = 10 \* 1000/);
   assert.match(api, /PRODUCT_FIELDS/);
   assert.match(api, /COLLECTION_FIELDS/);
   assert.match(api, /pickKnownFields/);

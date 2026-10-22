@@ -390,7 +390,7 @@ test('una edición parcial no valida ni reemplaza las demás columnas del produc
   const appScript = read('apps-script/ProductosUnificados.gs');
   assert.match(source, /const fields = selectedFields\(input\.changedFields, text\(input\.productId, 128\)\);/);
   assert.match(source, /if \(\(!fields \|\| fields\.has\('name'\)\) && !name\)/);
-  assert.match(source, /if \(Object\.keys\(publicData\)\.length\) publicData\.updatedAt/);
+  assert.match(source, /if \(Object\.keys\(publicData\)\.length\)\s*\{[\s\S]*?publicData\.updatedAt/);
   assert.match(appScript, /function tintinProductFieldsForColumns_/);
   assert.match(appScript, /2: \['name'\]/);
   assert.match(appScript, /33: \['tags'\], 34: \['variants'\]/);

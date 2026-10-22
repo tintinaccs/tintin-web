@@ -69,3 +69,9 @@ test('lote comercial actualiza su prioridad sin simular una reposición',async()
  assert.equal(tx.updates.length,2);
  for(const [,patch] of tx.updates){assert.equal(patch.merchandisingUpdatedAt,456);assert.equal(patch.restockedAt,undefined);assert.equal(patch.price,40000);}
 });
+
+test('un lote destacado registra su fecha comercial sin convertirlo en reposición',async()=>{
+ const rows={a:product,b:{...product,price:20000}},tx=transactionFor(rows);
+ await applyProductBulkTransaction(tx,{ids:['a','b'],field:'destacado',value:true,expected:{a:productFingerprint(rows.a),b:productFingerprint(rows.b)}},collections,id=>id,()=>456);
+ assert.deepEqual(tx.updates,[['a',{destacado:true,updatedAt:456,merchandisingUpdatedAt:456}],['b',{destacado:true,updatedAt:456,merchandisingUpdatedAt:456}]]);
+});
