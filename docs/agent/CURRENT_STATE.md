@@ -3467,3 +3467,8 @@ PASS_LOCAL:21 contratos Node de fotos, paleta y biblioteca;100 recorridos Chromi
 ## 2026-10-22 — Cierre coordinado de PR1203 y PR1205
 
 El titular autorizo resolver los dos PR y repetir Maestro, integrar automaticamente al aprobar y evitar colisiones. PR1205 33c9848f aprobo su auditoria reanudada39841056537 y quedo integrado por27b1cfa43. Sus118 pruebas operations tambien aprobaron localmente. Se concilia PR1203 d4dc3bf7 con ese main mediante merge normal: conflictos exclusivamente en diagnostic-manifest.json y site-version.json, regenerados desde su autoridad. Fuentes de Productos conservadas sin cambios funcionales nuevos; no se cancela trabajo de otros agentes. Se renueva plan contra main actual. CI y Maestro del conjunto final pendientes: no se heredan resultados de otro SHA.
+
+
+## 2026-10-22 — Selector accesible de cantidades tras PR1203
+
+CI39864494004 aprobo contratos estaticos, cuentas/sync, reglas y Super Admin; el grupo quantity-browser fallo porque buscaba label exacto 6/7 aunque el editor canonico ya expone aria-label Stock de 6/7. Se conserva el nombre descriptivo y se actualiza la prueba al rol spinbutton y nombre exacto; permanecen las aserciones de cantidades 1/4, suma5, total readonly y reinicio para producto nuevo. Cuatro recorridos Chromium completos PASS_LOCAL sin reintentos. No cambian codigo de produccion, datos, inventario ni umbrales. Se regenera diagnostico desde su autoridad antes del nuevo SHA; la CI previa no acredita este ajuste.

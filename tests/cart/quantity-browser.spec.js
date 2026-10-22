@@ -15,8 +15,8 @@ test('admin stock editor labels each option, sums quantities and resets for a ne
     window.qaRenderStock = new Function('variantInventoryEntries', editor + '\nreturn renderProductVariantStock;')(variantInventoryEntries);
     window.qaRenderStock({ stock: 3, variants: { Talla: ['6', '7'] }, variantInventory: [{ variant: '6', stock: 1 }, { variant: '7', stock: 2 }] });
   }, editor);
-  await expect(page.getByLabel('6', { exact: true })).toHaveValue('1');
-  await page.getByLabel('7', { exact: true }).fill('4');
+  await expect(page.getByRole('spinbutton', { name: 'Stock de 6', exact: true })).toHaveValue('1');
+  await page.getByRole('spinbutton', { name: 'Stock de 7', exact: true }).fill('4');
   await expect(page.locator('#prod-stock')).toHaveValue('5');
   await expect(page.locator('#prod-stock')).toHaveAttribute('readonly', '');
   await page.evaluate(() => window.qaRenderStock(null));
