@@ -624,3 +624,7 @@ Autoridad: vigilancia-version.js y contrato puro revision-visual.mjs compartido 
 ## 2026-10-21 — PR1199: fotos y regla global de actualización
 
 Productos y Colecciones: el guardado espera validación y subida antes de leer la URL; conserva formulario si falla y comparte la operación activa. Incluye galería, colores y combinaciones. La foto principal elegida se muestra también en la vista previa mediante blob local que nunca se persiste. Se mantienen controles de formato, firma, permisos y CSP. Revisión global: se incluyen páginas personalizadas y404, sin aviso por SEO/metadata no visible; los documentos modernos no descargan inventario de versiones durante la carga inicial. Base #1198 preservada. Contratos Node y matrices Chromium/WebKit; CI/merge/publicación se verifican sobre el SHA final, sin reutilizar el resultado fallido de71ec418c.
+
+## 2026-10-22 — Cierre PR1197: coherencia de entrega de bienvenida
+
+Se preservan el banner completo, proporciones naturales, enlaces accesibles y separación de WhatsApp de la rama original. Se integra main posterior con comercio y correcciones de fotos intactos. Corrección del bloqueo de CI: preparar protección antes del manifiesto final para que el diagnóstico describa los mismos archivos comprometidos. Sin relajar gates, CSP ni permisos. Matriz14tamaños Chromium/WebKit, layout canónico, caché y flujos protegidos; CI/publicación deben acreditarse sobre el nuevo SHA.
