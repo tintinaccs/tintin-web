@@ -7,7 +7,8 @@ const loaderSource = fs.readFileSync(new URL('../../js/cargador-mantenimiento-pa
 
 test('checkout carga el controlador de estado sólo desde su runtime de mantenimiento', () => {
   assert.match(loaderSource, /pages\/checkout\/estado-navegacion-checkout\.js/);
-  // La identidad puede cambiar con cada publicación; exigimos la carga versionada del módulo correcto.\n  assert.match(loaderSource, /load\('pages\/checkout\/estado-navegacion-checkout\.js',\s*'tintin-[^']+'\)/);
+  // La identidad puede cambiar con cada publicación; exigimos la carga versionada del módulo correcto.
+  assert.match(loaderSource, /load\('pages\/checkout\/estado-navegacion-checkout\.js',\s*'tintin-[^']+'\)/);
 });
 
 test('los pasos 1-5 son interactivos pero el avance reutiliza validadores nativos', () => {
