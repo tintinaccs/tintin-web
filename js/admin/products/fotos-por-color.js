@@ -1,7 +1,7 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { createVariantPhotoEditor } from './fotos-por-variante.js?v=tintin-20261019-product-editor-1';
-import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261019-product-editor-1';
+import { createVariantPhotoEditor } from './fotos-por-variante.js?v=tintin-20261021-visual-scope-2';
+import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261021-visual-scope-2';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
   const media = window.TintinProductMedia;
@@ -13,7 +13,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   const analyzed = new Set();
   const suggestions = new Map();
   const controller = new AbortController();
-  let destroyed = false, analyzing = false;
+  let destroyed = false, analyzing = false, flushing = false;
   const uploads = [];
   let pool = media.uniqueImages(media.galleryImages(product).map(url => sanitizeImageUrl(url)).filter(Boolean));
   let activeKey = media.colorKey(product);
@@ -84,7 +84,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     } finally { analyzing = false; }
   }
   function render() {
-    if (destroyed) return;
+    if (destroyed || flushing || uploads.some(widget => widget.hasPending?.()) || variantPhotos.hasPending()) return;
     destroyUploads(); container.replaceChildren();
     const options = colors();
     pool = media.uniqueImages([...pool, mainInput.value, ...imagesInput.value.split(/\r?\n/)].map(url => sanitizeImageUrl(url)).filter(Boolean));
@@ -172,6 +172,12 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   variantsInput.addEventListener('input', render);
   imagesInput.addEventListener('input', render);
   mainInput.addEventListener('change', render);
+  async function flush() {
+    flushing = true;
+    try { await Promise.all([variantPhotos.flush(), ...uploads.map(widget => widget.flush?.())]); }
+    finally { flushing = false; }
+    render();
+  }
   render();
-  return { serialize, refresh: render, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); container.removeEventListener('input', onMediaInput); container.removeEventListener('change', onMediaInput); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
+  return { serialize, flush, refresh: render, destroy() { destroyed = true; controller.abort(); destroyUploads(); variantPhotos.destroy(); container.removeEventListener('input', onMediaInput); container.removeEventListener('change', onMediaInput); variantsInput.removeEventListener('input', render); imagesInput.removeEventListener('input', render); mainInput.removeEventListener('change', render); container.replaceChildren(); } };
 }

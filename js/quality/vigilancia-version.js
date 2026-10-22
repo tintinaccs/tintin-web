@@ -10,6 +10,8 @@
    las preferencias se conservan. Nunca recarga por su cuenta.
    ============================================================= */
 
+import { visualSource, clientResourcePath } from './revision-visual.mjs?v=tintin-20261021-visual-scope-1';
+
 // El primer snapshot establece la referencia de esta pestaña. Una aparición
 // posterior a un documento inicialmente ausente también es una actualización.
 export function createSiteRevisionObserver(onChange) {
@@ -44,10 +46,9 @@ async function fetchSiteVersion() {
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
     const response = await fetch('/site-version.json', { cache: 'no-store', credentials: 'same-origin', signal: controller.signal });
-    if (!response.ok || response.redirected || !/application\/json/i.test(response.headers.get('content-type') || '')) return '';
-    const data = await response.json();
-    return pageRevision(data, location.pathname);
-  } catch { return ''; }
+    if (!response.ok || response.redirected || !/application\/json/i.test(response.headers.get('content-type') || '')) return null;
+    return await response.json();
+  } catch { return null; }
   finally { clearTimeout(timer); }
 }
 
@@ -82,6 +83,46 @@ function collectKnown(into) {
   return into;
 }
 
+function loadedResources() {
+  const hrefs = [...document.querySelectorAll('script[src], link[rel="stylesheet"][href]')]
+    .filter(el => !el.closest('noscript, template'))
+    .map(el => el.src || el.href);
+  try {
+    for (const entry of performance.getEntriesByType('resource')) {
+      if (entry.initiatorType === 'script' || entry.initiatorType === 'css') hrefs.push(entry.name);
+    }
+  } catch {}
+  return hrefs;
+}
+
+// Sólo recursos que esta pestaña ejecutó/cargó. El grafo completo del loader
+// también contiene entradas de páginas que la persona todavía no abrió.
+export async function changedLoadedResources(data, hrefs, baseHref, digest) {
+  if (data?.schemaVersion !== 2 || !data.clientResources) return [];
+  const changes = await Promise.all([...new Set(hrefs)].map(async href => {
+    const path = clientResourcePath(href, baseHref);
+    const current = data.clientResources[path];
+    if (!current || !/^[a-f0-9]{64}$/.test(current.revision || '')) return '';
+    if (new URL(href, baseHref).searchParams.get('v') === current.version) return '';
+    const loaded = await digest(new URL(href, baseHref).href);
+    return loaded && loaded !== current.revision ? `${path}:${current.revision}` : '';
+  }));
+  return [...new Set(changes.filter(Boolean))];
+}
+
+async function resourceDigest(href) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const response = await fetch(href, { cache: 'force-cache', credentials: 'same-origin', signal: controller.signal });
+    if (!response.ok || response.redirected || !/(?:javascript|text\/css)/i.test(response.headers.get('content-type') || '')) return '';
+    const bytes = new TextEncoder().encode(visualSource(await response.text()));
+    const hash = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
+  } catch { return ''; }
+  finally { clearTimeout(timer); }
+}
+
 async function fetchCurrentHtml() {
   const controller = typeof AbortController === 'function' ? new AbortController() : null;
   const timer = controller ? setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS) : 0;
@@ -94,7 +135,7 @@ async function fetchCurrentHtml() {
       headers: { Accept: 'text/html' },
       signal: controller?.signal,
     });
-    if (!response.ok || response.redirected) return null;
+    if ((!response.ok && response.status !== 404) || response.redirected) return null;
     if (!/text\/html/i.test(response.headers.get('content-type') || '')) return null;
     return await response.text();
   } catch {
@@ -122,7 +163,7 @@ function ensureStyle() {
   document.head.appendChild(style);
 }
 
-function showNotice(message = 'Hay una versión nueva del sitio.') {
+function showNotice(message = 'Hay una actualización para esta página.') {
   if (document.getElementById(NOTICE_ID)) return;
   ensureStyle();
   const box = document.createElement('div');
@@ -204,8 +245,24 @@ function boot() {
   let lastCheck = Date.now();
   let running = false;
   const notifiedRefs = new Set();
-  let revision = '';
-  const initialVersion = fetchSiteVersion().then(value => { revision = value; });
+  let revision = document.querySelector('meta[name="tintin-page-revision"]')?.content || '';
+  let initialResources = {};
+  const hashes = new Map(), notifiedResources = new Set();
+  const digest = href => {
+    const path = clientResourcePath(href, location.href), initial = initialResources[path];
+    if (initial?.version === new URL(href).searchParams.get('v')) return Promise.resolve(initial.revision);
+    if (!hashes.has(href)) hashes.set(href, resourceDigest(href).then(value => {
+      if (!value) hashes.delete(href);
+      return value;
+    }));
+    return hashes.get(href);
+  };
+  // El documento moderno ya trae su referencia: no descarga el inventario
+  // global durante la carga. Se consulta al comprobar actualizaciones.
+  const initialVersion = revision ? Promise.resolve() : fetchSiteVersion().then(data => {
+    revision ||= pageRevision(data, location.pathname);
+    initialResources = data?.schemaVersion === 2 ? data.clientResources || {} : {};
+  });
 
   async function check(force = false) {
     if (running) return 'skipped';
@@ -217,9 +274,13 @@ function boot() {
     lastCheck = Date.now();
     try {
       await initialVersion;
-      const nextRevision = await fetchSiteVersion();
-      if (revision && nextRevision && revision !== nextRevision) {
-        revision = nextRevision;
+      const data = await fetchSiteVersion();
+      const nextRevision = pageRevision(data, location.pathname);
+      const changes = await changedLoadedResources(data, loadedResources(), location.href, digest);
+      const freshResources = changes.filter(key => !notifiedResources.has(key));
+      changes.forEach(key => notifiedResources.add(key));
+      if ((revision && nextRevision && revision !== nextRevision) || freshResources.length) {
+        revision = nextRevision || revision;
         showNotice();
         return 'outdated';
       }
@@ -230,7 +291,15 @@ function boot() {
       }
       const html = await fetchCurrentHtml();
       if (!html) return 'inconclusive';
-      const fresh = versionedRefs(new DOMParser().parseFromString(html, 'text/html'), location.href);
+      const freshDocument = new DOMParser().parseFromString(html, 'text/html');
+      const freshMarker = freshDocument.querySelector('meta[name="tintin-page-revision"]')?.content;
+      if (revision && /^[a-f0-9]{64}$/.test(freshMarker || '')) {
+        if (revision === freshMarker) return 'current';
+        revision = freshMarker;
+        showNotice();
+        return 'outdated';
+      }
+      const fresh = versionedRefs(freshDocument, location.href);
       // Una respuesta sin referencias versionadas (página de error, mantenimiento,
       // respuesta cortada) no prueba nada: no se avisa.
       if (!fresh.length) return 'inconclusive';
@@ -266,4 +335,4 @@ export function notifySiteContentChange() {
   window.dispatchEvent(new CustomEvent('tintin:site-content-updated'));
 }
 
-if (typeof window !== 'undefined' && typeof document !== 'undefined' && !/(?:^|\/)checkout(?:\.html)?\/?$/i.test(location.pathname)) boot();
+if (typeof window !== 'undefined' && typeof document !== 'undefined' && window.top === window) boot();

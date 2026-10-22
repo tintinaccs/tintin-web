@@ -7,6 +7,53 @@ const root=path.resolve(__dirname,'../..');
 const shell=fs.readFileSync(path.join(root,'admin.html'),'utf8');
 const adminSource=fs.readFileSync(path.join(root,'js/admin/admin-app.js'),'utf8');
 const stockRenderer=adminSource.slice(adminSource.indexOf('let productVariantStockBaseline = null;'),adminSource.indexOf('function serializeProductForm()'));
+
+for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768],[1366,768],[1920,1080]])test(`foto local visible y guardado espera subida en producto y colección ${width}x${height}`,async({page})=>{
+ await openEditor(page,width,height,`
+ export const deleteMediaByUrlIfUnused=async()=>{};export const deleteMediaItem=async()=>{};
+ export async function uploadImageToLibrary(file){window.uploadCount=(window.uploadCount||0)+1;await new Promise(resolve=>{window.releasePhoto=resolve;});if(window.failPhoto)throw Error('Subida de prueba fallida');return {url:'https://img.test/subida.png',mediaId:'foto'};}
+ `);
+ await page.locator('#prod-editor-section').selectOption('photos');
+ const mount=adminSource.slice(adminSource.indexOf('const _formImageWidgets = new Map();'),adminSource.indexOf('let productColorPhotos = null;'));
+ await page.evaluate(async source=>{
+  const loadModule=url=>import(new URL(url,location.origin).href);
+  const {attachImageUploadWidget}=await loadModule('/js/components/images/carga-imagenes.js');
+  window.photoControllers=new Function('attachImageUploadWidget','openMediaLibraryPicker',source+';mountFormImageWidget("prod-image-widget","prod-imageUrl");return _formImageWidgets;')(attachImageUploadWidget,async()=>null);
+  document.getElementById('coll-image')?.remove();document.getElementById('coll-image-widget')?.remove();
+  const coll=document.createElement('section');coll.innerHTML='<input type=hidden id=coll-image><div id=coll-image-widget></div>';document.querySelector('#prod-form-card .adm-card-body').append(coll);
+  window.photoControllers.set('coll-image-widget',attachImageUploadWidget(document.getElementById('coll-image-widget'),{label:'Portada de colección',onChange:url=>{document.getElementById('coll-image').value=url;}}));
+ },mount);
+ const png=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=40;canvas.height=40;canvas.getContext('2d').fillRect(0,0,40,40);return canvas.toDataURL('image/png').split(',')[1];});
+ for(const [widget,field] of [['prod-image-widget','prod-imageUrl'],['coll-image-widget','coll-image']]){
+  await page.locator('#'+widget+' input[type=file]').setInputFiles({name:'foto.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+  const preview=page.locator('#'+widget+' .tt-iuw-preview img');await expect(preview).toBeVisible();
+  await expect(preview).toHaveJSProperty('complete',true);
+  await expect.poll(()=>preview.evaluate(img=>img.naturalWidth)).toBeGreaterThan(0);
+  await expect(page.locator('#'+field)).toHaveValue('');
+  if(widget==='prod-image-widget')await expect(page.locator('#prod-live-preview .tt-editor-cover img')).toHaveAttribute('src',/^blob:/);
+  await page.evaluate(id=>{window.photoSaved=false;window.photoError='';window.photoSave=window.photoControllers.get(id).flush().then(()=>{window.photoSaved=true;}).catch(error=>{window.photoError=error.message;});},widget);
+  await page.waitForFunction(()=>typeof window.releasePhoto==='function');expect(await page.evaluate(()=>window.photoSaved)).toBe(false);
+  await page.evaluate(()=>{window.releasePhoto();delete window.releasePhoto;});await page.evaluate(()=>window.photoSave);
+  expect(await page.evaluate(()=>window.photoError)).toBe('');await expect(page.locator('#'+field)).toHaveValue('https://img.test/subida.png');
+ }
+ expect(await page.evaluate(()=>window.uploadCount)).toBe(2);
+ if(width===390){
+  const widget=page.locator('#prod-image-widget');
+  await widget.locator('input[type=file]').setInputFiles({name:'otra.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+  await expect(widget.getByRole('button',{name:'Confirmar y subir',exact:true})).toBeEnabled();
+  await page.evaluate(()=>{window.failPhoto=true;window.photoSave=window.photoControllers.get('prod-image-widget').flush().catch(error=>{window.photoError=error.message;});});
+  await page.waitForFunction(()=>typeof window.releasePhoto==='function');
+  await page.evaluate(()=>{window.releasePhoto();delete window.releasePhoto;});await page.evaluate(()=>window.photoSave);
+  expect(await page.evaluate(()=>window.photoError)).toBe('Subida de prueba fallida');
+  await expect(page.locator('#prod-imageUrl')).toHaveValue('https://img.test/subida.png');
+  await expect(widget.locator('.tt-iuw-preview img')).toHaveAttribute('src',/^blob:/);
+  await page.evaluate(()=>{window.failPhoto=false;});
+  await widget.getByRole('button',{name:'Confirmar y subir',exact:true}).click();
+  await page.waitForFunction(()=>typeof window.releasePhoto==='function');
+  await page.evaluate(()=>{window.photoSave=window.photoControllers.get('prod-image-widget').flush();window.releasePhoto();delete window.releasePhoto;});await page.evaluate(()=>window.photoSave);
+  expect(await page.evaluate(()=>window.uploadCount)).toBe(4);
+ }
+});
 const inventorySource=fs.readFileSync(path.join(root,'js/core/store/inventario-variantes.mjs'),'utf8').replaceAll('export ','');
 const loader=fs.readFileSync(path.join(root,'js/cargador-pagina.js'),'utf8');
 const entryScroll=loader.slice(loader.indexOf("  try { history.scrollRestoration"),loader.indexOf('  // El sitio oficial'));
@@ -18,7 +65,7 @@ const prompt=shell.slice(promptStart,shell.indexOf('\n<!-- ═',promptStart));
 
 async function openEditor(page,width,height,withImages=false,beforeOpen=null){
  await page.setViewportSize({width,height});await mockRuntime(page);
- if(withImages) await page.route('https://tintin.test/js/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:'export const deleteMediaByUrlIfUnused=()=>{window.__imageCleanup=(window.__imageCleanup||0)+1;throw Error("Sin escrituras");};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=deleteMediaByUrlIfUnused;'}));
+ if(withImages) await page.route('https://tintin.test/js/components/images/biblioteca-multimedia.js*',route=>route.fulfill({contentType:'text/javascript',body:typeof withImages==='string'?withImages:'export const deleteMediaByUrlIfUnused=()=>{window.__imageCleanup=(window.__imageCleanup||0)+1;throw Error("Sin escrituras");};export const deleteMediaItem=deleteMediaByUrlIfUnused;export const uploadImageToLibrary=deleteMediaByUrlIfUnused;'}));
  const html=fixtureHtml();const start=html.indexOf('<div class="adm-card" id="prod-form-card"');
  const full=html.slice(0,start)+form+html.slice(html.indexOf('</section>',start));
  await page.route('https://tintin.test/admin-commerce-fixture',route=>route.fulfill({contentType:'text/html',body:full}));
@@ -300,7 +347,7 @@ for (const [width,height] of [[320,700],[390,844],[600,900],[768,1024],[820,1180
    const {variantInventoryEntries}=await loadModule('/js/core/store/inventario-variantes.mjs');
    const product={variants:{'Diseño de anillo':['coctel','banda']},variantInventory:[{variant:'coctel',stock:1},{variant:'banda',stock:2}],stock:3};
    new Function('variantInventoryEntries','product',renderer+';renderProductVariantStock(product);')(variantInventoryEntries,product);
-   const {setProductPreviewMedia}=await loadModule('/js/admin/products/vista-previa-producto.js?v=tintin-20261019-product-editor-1');
+   const {setProductPreviewMedia}=await loadModule('/js/admin/products/vista-previa-producto.js?v=tintin-20261021-visual-scope-2');
    setProductPreviewMedia(card,[{'Diseño de anillo':'coctel',imageUrls:['https://img.test/coctel.webp']},{'Diseño de anillo':'banda',imageUrls:['https://img.test/banda.webp']}]);
    card.dispatchEvent(new Event('input',{bubbles:true}));
   },stockRenderer);

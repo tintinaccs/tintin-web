@@ -101,6 +101,13 @@ export function attachImageUploadWidget(container, options = {}) {
   let pendingFile = null;
   let pendingPreviewUrl = '';
   let busy = false;
+  let validation = Promise.resolve(), operation = null, failure = null, destroyed = false;
+
+  function runOperation(action) {
+    if (operation) return operation;
+    operation = Promise.resolve().then(action).finally(() => { operation = null; });
+    return operation;
+  }
 
   const root = document.createElement('div');
   root.className = 'tt-iuw';
@@ -134,6 +141,8 @@ export function attachImageUploadWidget(container, options = {}) {
   progress.innerHTML = '<div class="tt-iuw-progress-bar"></div>';
   const status = document.createElement('div');
   status.className = 'tt-iuw-status';
+  status.setAttribute('role', 'status');
+  status.setAttribute('aria-live', 'polite');
   root.append(head, body, actions, progress, status, input);
   container.replaceChildren(root);
 
@@ -157,6 +166,8 @@ export function attachImageUploadWidget(container, options = {}) {
     } else {
       preview.innerHTML = '<div class="tt-iuw-preview-empty">Sin imagen</div>';
     }
+    container.dispatchEvent(new CustomEvent('tintin:image-preview', { bubbles: true,
+      detail: { url: pendingPreviewUrl, pending: !!pendingFile } }));
   }
 
   function createButton(text, className, handler) {
@@ -170,7 +181,7 @@ export function attachImageUploadWidget(container, options = {}) {
       icon.innerHTML = iconSvg();
       button.prepend(icon);
     }
-    button.addEventListener('click', handler);
+    button.addEventListener('click', () => runOperation(handler));
     return button;
   }
 
@@ -215,6 +226,7 @@ export function attachImageUploadWidget(container, options = {}) {
 
   async function pickFromLibrary() {
     if (busy) return;
+    failure = null;
     try {
       const picked = await onOpenLibrary();
       if (!picked || picked === currentUrl) return;
@@ -232,11 +244,13 @@ export function attachImageUploadWidget(container, options = {}) {
     } catch (error) {
       setBusy(false);
       renderActions();
+      failure = error;
       setStatus(error?.message || 'No se pudo abrir la biblioteca.', 'error');
     }
   }
 
   function cancelPendingFile() {
+    failure = null;
     if (pendingPreviewUrl) URL.revokeObjectURL(pendingPreviewUrl);
     pendingFile = null;
     pendingPreviewUrl = '';
@@ -249,6 +263,7 @@ export function attachImageUploadWidget(container, options = {}) {
     if (busy || !currentUrl) return;
     if (confirmRemove && !window.confirm('¿Quitar esta imagen?')) return;
     const previousUrl = currentUrl;
+    failure = null;
     try {
       setBusy(true, 'saving');
       await onChange?.(null, null);
@@ -262,16 +277,21 @@ export function attachImageUploadWidget(container, options = {}) {
       setBusy(false);
       renderPreview();
       renderActions();
+      failure = error;
       setStatus(error?.message || 'No se pudo quitar la imagen.', 'error');
     }
   }
 
   async function handleFile(file) {
     if (!file || busy) return;
-    setStatus('Validando archivo…', 'busy');
-    const validation = await validateImageFile(file);
-    if (!validation.ok) {
-      setStatus(validation.error, 'error');
+    failure = null;
+    setBusy(true, 'validating');
+    const result = await validateImageFile(file);
+    setBusy(false);
+    if (destroyed) return;
+    if (!result.ok) {
+      failure = new Error(result.error);
+      setStatus(result.error, 'error');
       return;
     }
     if (pendingPreviewUrl) URL.revokeObjectURL(pendingPreviewUrl);
@@ -279,7 +299,7 @@ export function attachImageUploadWidget(container, options = {}) {
     pendingPreviewUrl = URL.createObjectURL(file);
     renderPreview();
     renderActions();
-    setStatus('Vista previa lista. Confirmá para subir la imagen.');
+    setStatus('Vista previa lista. Podés subirla ahora o al guardar el formulario.');
   }
 
   async function commitPendingFile() {
@@ -293,6 +313,7 @@ export function attachImageUploadWidget(container, options = {}) {
     const previousUrl = currentUrl;
     let result = null;
     setBusy(true, 'processing');
+    failure = null;
     try {
       result = await uploadImageToLibrary(file, {
         maxWidth,
@@ -304,6 +325,7 @@ export function attachImageUploadWidget(container, options = {}) {
         alt: label,
         onProgress: stage => setBusy(true, stage),
       });
+      if (destroyed) throw new Error('El formulario cambió. Volvé a elegir la foto.');
       await onChange?.(result.url, result);
       currentUrl = result.url;
       await cleanPreviousUrl(previousUrl, result.url);
@@ -315,6 +337,7 @@ export function attachImageUploadWidget(container, options = {}) {
       renderActions();
       setStatus('Imagen guardada correctamente', 'success');
     } catch (error) {
+      failure = error;
       console.error('[image-upload-widget] upload failed:', error);
       if (result?.mediaId) {
         try { await deleteMediaItem(result.mediaId, { force: true }); } catch {}
@@ -335,7 +358,7 @@ export function attachImageUploadWidget(container, options = {}) {
   input.addEventListener('change', () => {
     const file = input.files?.[0];
     input.value = '';
-    if (file) handleFile(file);
+    if (file) validation = handleFile(file);
   });
 
   ['dragenter', 'dragover'].forEach(name => {
@@ -352,19 +375,29 @@ export function attachImageUploadWidget(container, options = {}) {
   });
   drop.addEventListener('drop', event => {
     const file = event.dataTransfer?.files?.[0];
-    if (file) handleFile(file);
+    if (file) validation = handleFile(file);
   });
 
   renderPreview();
   renderActions();
 
   return {
+    hasPending() { return busy || !!pendingFile; },
+    async flush() {
+      await validation;
+      if (operation) await operation;
+      if (failure) throw failure;
+      if (pendingFile) await runOperation(commitPendingFile);
+      if (failure) throw failure;
+      if (destroyed) throw new Error('El formulario cambió. Volvé a abrirlo antes de guardar.');
+    },
     setValue(url) {
       currentUrl = url || '';
       renderPreview();
       renderActions();
     },
     destroy() {
+      destroyed = true;
       if (pendingPreviewUrl) URL.revokeObjectURL(pendingPreviewUrl);
       container.replaceChildren();
     },

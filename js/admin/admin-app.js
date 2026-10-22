@@ -8,7 +8,7 @@ import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-202
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 import { withAdminSiteChange } from '../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261019-product-editor-1';
+import { attachColorPhotos } from './products/fotos-por-color.js?v=tintin-20261021-visual-scope-2';
 import { allowedOrderStatuses, orderStatusLabel } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import { createAdminOrderSource, reconcileAdminOrderSnapshot } from './orders/fuente-pedidos-admin.mjs?v=tintin-20261013-orders-board-4-fuente-pedidos-admin-mjs-admin-live-20261016-1';
 import { auth, db } from "../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
@@ -40,7 +40,7 @@ import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tint
 import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261019-product-editor-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261021-visual-scope-2";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20261019-variant-links-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20261017-domain-cutover-1";
 import { initWholesaleAdmin } from "./mayoristas/mayoristas-admin.js?v=tintin-20261020-push-return-1";
@@ -617,7 +617,7 @@ const navItems = document.querySelectorAll('[data-section]');
 const topbarTitle = document.getElementById('adm-topbar-title');
 
 const SECTION_LABELS = {
-  dashboard: 'Dashboard',
+  dashboard: 'Inicio',
   estadisticas: 'Estadísticas',
   usuarios: 'Usuarios',
   pedidos: 'Pedidos',
@@ -6089,6 +6089,7 @@ window.prodCancelForm = function() {
 };
 
 async function prodGuardar() {
+  if (document.getElementById('prod-save-btn')?.disabled) return false;
   const errEl = document.getElementById('prod-form-error');
   const _isEdit = !!document.getElementById('prod-id').value;
   const _permOk = _isEdit
@@ -6132,6 +6133,18 @@ async function prodGuardar() {
 
   const btn = document.getElementById('prod-save-btn');
   btn.textContent = 'Guardando…'; btn.disabled = true;
+
+  try {
+    // La vista previa local no es una URL persistida. Completar todas las
+    // cargas antes de construir el payload evita guardar sin la foto elegida.
+    await productColorPhotos?.flush();
+    await Promise.all(['prod-image-widget', 'prod-gallery-widget'].map(id => _formImageWidgets.get(id)?.flush()));
+  } catch (error) {
+    errEl.textContent = 'No se guardó el producto: ' + (error?.message || 'No se pudo subir la imagen.');
+    errEl.style.display = '';
+    btn.textContent = _isEdit ? 'Guardar cambios' : 'Guardar producto'; btn.disabled = false;
+    return false;
+  }
 
   // Parse variants from text: "Color: Rojo\nColor: Dorado" → {Color: ['Rojo','Dorado']}
   const variantsRaw = document.getElementById('prod-variants-text').value.trim();
@@ -7111,6 +7124,7 @@ window.collPickerAddSelected = async function() {
 };
 
 window.collGuardar = async function() {
+  if (document.getElementById('coll-save-btn')?.disabled) return false;
   const errEl = document.getElementById('coll-form-error');
   errEl.style.display = 'none';
   const originalSlug = document.getElementById('coll-original-slug').value;
@@ -7126,7 +7140,6 @@ window.collGuardar = async function() {
   const name = document.getElementById('coll-name').value.trim();
   const slug = originalSlug || collSlugify(document.getElementById('coll-slug').value);
   const description = document.getElementById('coll-description').value.trim();
-  const image = document.getElementById('coll-image').value.trim();
   const order = parseInt(document.getElementById('coll-order').value) || 0;
   const visible = document.getElementById('coll-visible').checked;
 
@@ -7145,6 +7158,8 @@ window.collGuardar = async function() {
   const btn = document.getElementById('coll-save-btn');
   btn.textContent = 'Guardando...'; btn.disabled = true;
   try {
+    await _formImageWidgets.get('coll-image-widget')?.flush();
+    const image = document.getElementById('coll-image').value.trim();
     const operation = await runAdminCrudOperation({
       title: _isEdit ? 'Actualizar colección' : 'Crear colección', name,
       module: 'colecciones',

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { visualSource } = require('../js/quality/revision-visual.mjs');
 
 const ROOT = path.resolve(__dirname, '..');
 const MANIFEST_PATH = path.join(ROOT, 'diagnostic-manifest.json');
@@ -51,7 +52,14 @@ if (manifest.schemaVersion !== 2 || !Array.isArray(manifest.pages)) {
 try {
   const version = JSON.parse(fs.readFileSync(path.join(ROOT, 'site-version.json'), 'utf8'));
   if (version.revision !== manifest.sourceFingerprint) fail('site-version.json no corresponde al artefacto diagnóstico actual.');
-  if (!version.pages || Object.keys(version.pages).length !== manifest.pages.length || manifest.pages.some(page => version.pages[page.path] !== page.sha256)) fail('site-version.json no corresponde a las páginas inventariadas.');
+  if (version.schemaVersion !== 2 || !version.pages || Object.keys(version.pages).length !== manifest.pages.length || manifest.pages.some(page => {
+    const html = fs.readFileSync(path.join(ROOT, page.path), 'utf8');
+    const expected = sha256(Buffer.from(visualSource(html)));
+    return version.pages[page.path] !== expected || (/<head\b/i.test(html) && !html.includes(`name="tintin-page-revision" content="${expected}"`));
+  })) fail('site-version.json no corresponde a las interfaces inventariadas.');
+  const cacheVersions = { ...JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/cache-version-baseline.json'))), ...JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/cache-version-approvals.json'))).approved };
+  const resources = Object.keys(cacheVersions).filter(file => fs.existsSync(path.join(ROOT, file)) && manifest.files.some(item => item.path === file));
+  if (!version.clientResources || resources.some(file => version.clientResources[file]?.version !== cacheVersions[file].version || version.clientResources[file]?.revision !== sha256(Buffer.from(visualSource(fs.readFileSync(path.join(ROOT, file), 'utf8')))))) fail('Los recursos de interfaz no corresponden a sus fuentes y versiones inmutables.');
 } catch {
   fail('Falta el marcador de publicación site-version.json o no es JSON válido.');
 }

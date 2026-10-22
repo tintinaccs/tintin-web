@@ -58,5 +58,6 @@ export function createVariantPhotoEditor({ variantsInput, media, initialRows, sa
     library.addEventListener('click', async () => { try { const url = await openLibrary(); if (url) add(url); } catch { hint.textContent = 'No pudimos abrir la biblioteca. Reintentá.'; } }); container.append(library);
     if (attachUpload) { const upload = document.createElement('div'); container.append(upload); uploads.push(attachUpload(upload, { label: 'Agregar foto a esta variante', hint: 'Subí una foto o pegá su enlace.', onOpenLibrary: openLibrary, onChange: add, cleanupPrevious: false })); }
   }
-  return { render, serialize, destroy: destroyUploads };
+  return { render, serialize, hasPending: () => uploads.some(widget => widget.hasPending?.()),
+    flush: () => Promise.all(uploads.map(widget => widget.flush?.())), destroy: destroyUploads };
 }

@@ -16,7 +16,7 @@ function runtime(product={}){
  let count=0;
  const ctx={window:{},document:{getElementById:control,querySelectorAll:selector=>selector==='#prod-variant-stock input'?variantInputs:[]},auth:{currentUser:{uid:'super'}},currentUser:{uid:'super'},navigator:{onLine:true},productMasterBusy:false,currentRole:'superadmin',can:()=>true,roleCanDo:()=>true,
   _allProducts:[original],_productSourceById:new Map([['source',structuredClone(original)]]),_allCollections:[{slug:'anillos'}],_productInventoryById:new Map([['source',{costUnit:100,purchased:5,stockMinimum:2,internalNotes:'Privado'}]]),productEditBaseline:null,productVariantStockBaseline:null,
-  productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,productColorPhotos:{serialize:()=>[]},
+  productCardPatch,productFingerprint,productDuplicateData,applyProductBulkTransaction,productBulkIds,variantInventoryEntries,_formImageWidgets:new Map(),productColorPhotos:{serialize:()=>[],flush:async()=>{}},
   wristCategory:x=>x,sanitizeImageUrl:x=>typeof x==='string'&&x.startsWith('https://')?x:'',mountFormImageWidget:()=>{},mountProductColorPhotos:()=>{},
   renderProductVariantStock:product=>{variantInputs.length=0;ctx.productVariantStockBaseline=product?.variantInventory?{stock:product.stock,expectedEntries:variantInventoryEntries(product),entries:variantInventoryEntries(product),variants:product.variants}:null;for(const entry of product?.variantInventory || [])variantInputs.push({value:String(entry.stock)});},
   UnsavedGuard:{confirmLeave:fn=>fn(),track:()=>{},clear:()=>{}},toast:()=>{},db:{},collection:(_db,name)=>name,
@@ -183,4 +183,32 @@ test('visibilidad de colección confirma sólo su campo y rechaza un estado conc
  assert.deepEqual(r.rows.get('collections/anillos'),{name:'Anillos',visible:false,order:7,updatedAt:123});
  assert.equal((await update({id:'anillos',visible:true,expectedVisible:true})).status,'red');assert.equal(r.writes.length,1);
  r.ctx.can=()=>false;await assert.rejects(()=>update({id:'anillos',visible:true,expectedVisible:false}),/permiso/);assert.equal(r.writes.length,1);
+});
+
+
+test("guardar producto espera la foto y persiste su URL; error de subida no escribe",async()=>{
+ for(const fail of [false,true]){
+  const r=runtime();r.ctx._prodEditarNow("source");
+  let release;const pending=new Promise(resolve=>{release=resolve;});
+  r.ctx._formImageWidgets.set("prod-image-widget",{flush:async()=>{await pending;if(fail)throw Error("Cloudinary sin conexión");r.control("prod-imageUrl").value="https://img.test/subida.png";}});
+  const saving=r.ctx.window.saveTest();await Promise.resolve();assert.equal(r.writes.length,0);assert.equal(r.control("prod-save-btn").disabled,true);
+  assert.equal(await r.ctx.window.saveTest(),false);release();assert.equal(await saving,!fail);
+  if(fail){assert.equal(r.writes.length,0);assert.match(r.control("prod-form-error").textContent,/Cloudinary sin conexión/);}
+  else assert.equal(r.rows.get("products/source").imageUrl,"https://img.test/subida.png");
+  assert.equal(r.control("prod-save-btn").disabled,false);
+ }
+});
+
+test("guardar colección espera portada antes de leer el payload; error no escribe",async()=>{
+ for(const fail of [false,true]){
+  const r=runtime();r.ctx.collSlugify=x=>x;r.ctx._collCloseForm=()=>{};
+  vm.runInContext(block("window.collGuardar = async function()","window.collEliminar ="),r.ctx);
+  r.control("coll-name").value="Nuevos";r.control("coll-slug").value="nuevos";
+  let release;const pending=new Promise(resolve=>{release=resolve;});
+  r.ctx._formImageWidgets.set("coll-image-widget",{flush:async()=>{await pending;if(fail)throw Error("No se pudo subir la portada");r.control("coll-image").value="https://img.test/portada.png";}});
+  const saving=r.ctx.window.collGuardar();await Promise.resolve();assert.equal(r.writes.length,0);assert.equal(r.control("coll-save-btn").disabled,true);release();assert.equal(await saving,!fail);
+  if(fail){assert.equal(r.writes.length,0);assert.match(r.control("coll-form-error").textContent,/No se pudo subir la portada/);}
+  else assert.equal(r.rows.get("collections/nuevos").image,"https://img.test/portada.png");
+  assert.equal(r.control("coll-save-btn").disabled,false);
+ }
 });

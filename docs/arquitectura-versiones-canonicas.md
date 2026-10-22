@@ -2,6 +2,8 @@
 
 Esta política acompaña los contratos existentes; no crea otro sistema de versiones o publicación.
 
+Regla global de avisos: una publicación sólo ofrece actualizar en la página que necesita una carga nueva de su HTML o recursos de cliente realmente cargados. Aplica a visitantes, cuentas y Super Admin, escritorio/tablets/móviles y apps instaladas; Checkout también puede posponer el aviso sin recargar ni alterar el pago. Un cambio de otra página no avisa; al navegar se obtiene su HTML vigente por la política existente sin caché. Las altas/ediciones/bajas/ocultaciones/movimientos de productos, colecciones, precios, stock u otros datos usan sus suscripciones y no se convierten en versiones de aplicación. Tampoco avisan los cambios exclusivos de servidor ni la propagación mecánica de tags de imports. Los cambios compartidos reales sí afectan a las páginas que utilizan esos recursos. Las huellas semánticas no sustituyen los hashes exactos de integridad, las URLs inmutables ni los gates de publicación. El marcador embebido del documento impide adoptar una publicación posterior como referencia del HTML anterior durante el arranque. Si la red no prueba un cambio, no se inventa un aviso. Nunca se fuerza una recarga ni se borran sesiones, borradores, carrito o preferencias.
+
 | Responsabilidad | Fuente y aplicación | Control |
 | --- | --- | --- |
 | Código autorizado | Rama `main`, PR y SHA exacto | `auditar-tintin.yml` y mantenimiento protegido |
@@ -10,7 +12,7 @@ Esta política acompaña los contratos existentes; no crea otro sistema de versi
 | Políticas CSP por documento | `scripts/generar-csp-cloudflare.js` y `documentRoutes` compartido | `build:csp` / `verify:csp`; middleware falla cerrado |
 | Identidad de release y páginas | `scripts/construir-manifiesto-diagnostico.js` → `diagnostic-manifest.json` y `site-version.json` | Reproducibilidad y verificación del artefacto publicado |
 | URLs inmutables JS/CSS y dependencias dinámicas | `scripts/auditar-versionado-cache.mjs`, baseline y generadores del shell | Cambio de bytes exige URL nueva; una URL por módulo |
-| Aviso de actualización | `js/quality/vigilancia-version.js` | Pruebas de versión y navegación; no recarga automática ni borra datos |
+| Aviso de actualización | `js/quality/vigilancia-version.js`, normalización compartida `revision-visual.mjs` y marcador generado `site-version.json` | Sólo documento abierto o recursos de cliente cargados con cambios semánticos; pruebas de versión/navegación, sin recarga automática ni borrado de datos |
 | Revisión de datos comerciales | Contratos de `revision-tienda`, cambios confirmados y watchers | Se distingue de una nueva versión de aplicación |
 | Notificación push | `firebase-messaging-sw.js` y controlador administrativo | Datos FCM sin notificación duplicada; iconos generados y destinos comprobados |
 

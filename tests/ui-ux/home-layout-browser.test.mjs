@@ -13,6 +13,10 @@ test('la fachada usa las definiciones actuales y conserva copys personalizados',
   const facade = await fs.readFile(path.join(root, 'js/core/store/esquema-contenido.js'), 'utf8');
   const dependency = './definiciones-contenido.js' + '?v=';
   assert.ok(facade.includes(dependency), 'Las definiciones deben tener una versión de caché');
+  assert.equal(normalizeContentValue('index', 'hero', 'title', 'DETALLES QUE ELEVAN TU ESTILO'), 'UN DETALLE\nMUY VOS');
+  assert.equal(normalizeContentValue('index', 'hero', 'title', 'Mi texto propio'), 'Mi texto propio');
+  assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'EL RELOJ DEL QUE\nTODAS SE ENAMORAN'), 'RELOJES TINTIN');
+  assert.equal(normalizeContentValue('index', 'editorial_relojes', 'title', 'Mis relojes favoritos'), 'Mis relojes favoritos');
   assert.equal(normalizeContentValue('index', 'trust', 'items.2.label', 'Pago segurooxsd'), 'Pago seguro');
   assert.equal(normalizeContentValue('index', 'trust', 'items.2.label', 'Tu compra está protegida'), 'Tu compra está protegida');
 });
@@ -65,6 +69,7 @@ test('los banners originales se muestran completos por dispositivo y conservan e
         const box = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height }; };
         const heroElement = document.querySelector('.tt-hero');
         return { hero: box('.tt-hero'), media: box('.tt-hero-media'), content: box('.tt-hero-content'), title: box('.tt-hero-title'), welcome: box('.tt-hero-welcome'), eyebrow: box('.tt-hero-eyebrow'), actions: box('.tt-hero-actions'), next: box('#next-section'),
+          imageRatio: document.getElementById('tt-hero-img').naturalWidth / document.getElementById('tt-hero-img').naturalHeight,
           viewport: innerHeight, scrollWidth: document.documentElement.scrollWidth,
           titleAlign: getComputedStyle(document.querySelector('.tt-hero-title')).textAlign,
           targets: [...document.querySelectorAll('.tt-hero-actions a')].map(link => Math.round(link.getBoundingClientRect().height)),
@@ -73,7 +78,7 @@ test('los banners originales se muestran completos por dispositivo y conservan e
       });
       const detail = `${width}x${height}: ${JSON.stringify(g)}`;
       const inside = (inner, outer, slack = 1) => inner.left >= outer.left - slack && inner.right <= outer.right + slack && inner.top >= outer.top - slack && inner.bottom <= outer.bottom + slack;
-      const ratio = phone ? 1024 / 1366 : width <= 1120 ? 1536 / 1024 : 1920 / 900;
+      const ratio = g.imageRatio;
       assert.ok(Math.abs(g.media.width / g.media.height - ratio) <= .002, `Banner original deformado o recortado a ${detail}`);
       assert.ok(g.scrollWidth <= width + 1, `Overflow horizontal a ${detail}`);
       assert.ok(Math.abs(g.next.top - g.hero.bottom) <= 1, `Hueco después del banner a ${detail}`);
