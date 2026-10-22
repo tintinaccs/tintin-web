@@ -9,7 +9,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
       const values = { 'stat-users': '1.248', 'stat-orders-today': '24', 'stat-sales-month': '25.850.000 Gs.', 'stat-orders-total': '1.482', 'stat-visits-today': '368', 'stat-online-now': '12' };
       for (const [id, value] of Object.entries(values)) document.getElementById(id).textContent = value;
     });
-    await expect(page.getByRole('heading', { name: 'Tu tienda, en foco.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Hoy en Tintin' })).toBeVisible();
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('.tt-dashboard-shortcuts button:visible')).toHaveCount(4);
     const surfaces = await page.locator('.tt-dashboard-hero,#dash-stats .adm-stat,.tt-dashboard-link').evaluateAll(nodes => nodes.map(node => {

@@ -158,6 +158,7 @@ async function mockRuntime(page, {orders,collections,role='superadmin',forbidden
   await page.addInitScript(config => { window.__commerceFixtureConfig = config; }, {role,forbiddenActions,orders:orders || null,collections:collections || null});
   await page.route('**/*', async route=>{
     const url=new URL(route.request().url());
+    if(url.protocol==='blob:')return route.continue();
     if(url.hostname!=='tintin.test')return route.abort();
     const relative=decodeURIComponent(url.pathname).replace(/^\//,'');
     const local=path.resolve(ROOT,relative);

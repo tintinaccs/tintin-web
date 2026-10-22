@@ -899,7 +899,7 @@
 
   // Avisa (sin recargar ni borrar datos) si se publicó una versión nueva mientras
   // la pestaña seguía abierta. No corre en vistas previas embebidas ni en el
-  // checkout, donde recargar a mitad del pago haría perder lo escrito.
+  // checkout también puede posponerlo: nunca se recarga automáticamente.
   function bootVersionWatch() {
     let framed = false;
     try { framed = window.top !== window; } catch { framed = true; }
@@ -907,7 +907,6 @@
     if (!window.TintinSiteChangesBooted) {
       importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261021-commerce-review-1');
     }
-    if (/\/checkout(?:\.html)?$/.test(currentPath())) return;
     if (!window.TintinVersionWatchBooted) {
       importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261021-commerce-review-1');
     }

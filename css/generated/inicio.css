@@ -4793,6 +4793,9 @@ html body.tt-catalog-maintenance .cat-hero,
  * la última autoridad visual sin depender de estilos inline de cada módulo.
  */
 :root {
+  --tt-ui-heading-weight: 600;
+  --tt-ui-label-weight: 600;
+  --tt-ui-heading-tracking: -.02em;
   --tt-ui-canvas: #FDECF2;
   --tt-ui-surface: #ffffff;
   --tt-ui-surface-soft: var(--color-brand-accent, #FDECF2);
@@ -4809,6 +4812,27 @@ html body.tt-catalog-maintenance .cat-hero,
   --tt-ui-gutter: clamp(16px, 3vw, 32px);
   --tt-ui-inset: clamp(16px, 2.2vw, 28px);
   --tt-ui-gap: clamp(12px, 2vw, 24px);
+}
+
+/* Una misma voz visual en tienda, cuenta, compra y panel. Los tamaños de
+   cada contexto conservan su jerarquía; la marca no necesita titulares negros
+   ni subrayados de presentación. Los estados operativos conservan sus colores. */
+html:root body :is(h1, h2, h3, .tt-hero-title, .tt-section-title, .tt-page-hero-title,
+  .tt-related-heading, .tt-editorial-title, .tt-watch-title, .cat-hero-title,
+  .tt-about-greeting, .tt-about-mission-title, .tt-info-title,
+  .tt-contact-form-title, .login-heading, .perfil-name, .perfil-section-title,
+  .ck-panel-title, .tt-product-detail-name, .tt-product-selection-title,
+  .tinsel-title, .adm-card-title, .tt-admin-workspace-title, .tt-maestro-hero h1,
+  .tt-commerce-pagehead h1, .tt-dashboard-intro h2, .tt-control-dialog-head h2) {
+  font-weight: var(--tt-ui-heading-weight) !important;
+  letter-spacing: var(--tt-ui-heading-tracking) !important;
+  line-height: 1.25;
+}
+html:root body :is(.tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
+  .login-email-btn, .ck-btn, .adm-btn, .adm-btn-primary, .adm-btn-save,
+  .tt-commerce-btn, .tt-control-text-link, .tt-dashboard-link strong) {
+  font-weight: var(--tt-ui-label-weight) !important;
+  letter-spacing: .01em;
 }
 
 /* Public surfaces ------------------------------------------------------- */

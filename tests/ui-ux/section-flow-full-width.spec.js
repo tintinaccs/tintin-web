@@ -78,6 +78,34 @@ for (const width of [390, 1440]) test(`bloques entre wrappers llenan el ancho y 
 });
 
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
+
+for (const width of [390, 1024, 1440]) {
+  test(`identidad tipográfica compartida en las páginas completas · ${width}px`, async ({ page }, info) => {
+    await page.setViewportSize({ width, height: 900 });
+    const pages = fs.readdirSync(root).filter(file => file.endsWith('.html') && !file.startsWith('google'));
+    const inventory = [];
+    for (const file of pages) {
+      await page.route('**/__identity-page', route => route.fulfill({
+        // Nosotros es un alias con meta-refresh; se revisa su destino canónico.
+        contentType: 'text/html', body: removeFixtureScripts(fs.readFileSync(path.join(root, file === 'nosotros.html' ? 'about.html' : file), 'utf8'), { removeModulePreloads: true }),
+      }));
+      await page.goto('/__identity-page');
+      await page.evaluate(() => document.fonts.ready);
+      const headings = await page.locator('h1,h2,h3').evaluateAll(nodes => nodes.map(node => {
+        const style = getComputedStyle(node);
+        return { text: node.textContent.trim(), weight: style.fontWeight, font: style.fontFamily };
+      }));
+      for (const heading of headings) {
+        expect(heading.font, `${file}: ${heading.text}`).toContain('Montserrat');
+        expect(heading.weight, `${file}: ${heading.text}`).toBe('600');
+      }
+      inventory.push({ file, headings });
+      await page.unroute('**/__identity-page');
+    }
+    expect(inventory).toHaveLength(18);
+    await info.attach('identidad-18-paginas', { body: JSON.stringify(inventory), contentType: 'application/json' });
+  });
+}
 const html = removeFixtureScripts(fs.readFileSync('perfil.html', 'utf8'));
 const flow = runtime;
 for (const width of [320, 390, 768, 1024, 1440, 1920]) {

@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const childProcess = require('child_process');
+const { visualSource } = require('../js/quality/revision-visual.mjs');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUTPUT = path.join(ROOT, 'diagnostic-manifest.json');
@@ -554,6 +555,14 @@ function extractRuleCollections() {
   return names.sort();
 }
 
+// El marcador viaja con el HTML que realmente se abrió. No se toma como base
+// un deployment más nuevo que pudo aparecer mientras arrancaba la pestaña.
+for (const file of fs.readdirSync(ROOT).filter(file => file.endsWith('.html'))) {
+  const html = read(file).replace(/<meta\b[^>]*name=["']tintin-page-revision["'][^>]*>\s*\n?/gi, '');
+  const revision = hash(Buffer.from(visualSource(html)));
+  const next = html.replace(/<head\b[^>]*>\s*\n?/i, match => `${match}<meta name="tintin-page-revision" content="${revision}">\n`);
+  if (next !== read(file)) fs.writeFileSync(path.join(ROOT, file), next, 'utf8');
+}
 const allFiles = walk(ROOT).filter(file => !['diagnostic-manifest.json', 'site-version.json'].includes(file));
 const allPaths = new Set(allFiles);
 const textFiles = allFiles.filter(file => TEXT_EXTENSIONS.has(path.extname(file).toLowerCase()));
@@ -715,6 +724,9 @@ const manifest = {
 };
 
 // Marcador derivado excluido del inventario para evitar autorreferencia.
-fs.writeFileSync(path.join(ROOT, 'site-version.json'), `${JSON.stringify({ revision: manifest.sourceFingerprint, pages: Object.fromEntries(pages.map(page => [page.path, page.sha256])) })}\n`, 'utf8');
+const cacheVersions = { ...JSON.parse(read('scripts/cache-version-baseline.json')), ...JSON.parse(read('scripts/cache-version-approvals.json')).approved };
+const clientResources = Object.fromEntries(files.filter(file => /\.(?:css|m?js)$/.test(file.path) && cacheVersions[file.path])
+  .map(file => [file.path, { version: cacheVersions[file.path].version, revision: hash(Buffer.from(visualSource(read(file.path)))) }]));
+fs.writeFileSync(path.join(ROOT, 'site-version.json'), `${JSON.stringify({ schemaVersion: 2, revision: manifest.sourceFingerprint, pages: Object.fromEntries(pages.map(page => [page.path, hash(Buffer.from(visualSource(read(page.path))))])), clientResources })}\n`, 'utf8');
 fs.writeFileSync(OUTPUT, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 console.log(`Diagnostic manifest: ${pages.length} pages, ${modules.length} modules, ${files.length} files.`);
