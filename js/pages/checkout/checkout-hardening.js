@@ -4,7 +4,7 @@ import {
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20261021-commerce-review-1';
 import { AUTH_STATES, subscribeSession, waitForSession, getSessionUser } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
 import { readCheckoutProfile } from './perfil-checkout.js?v=tintin-20261017-domain-cutover-1';
 
@@ -45,7 +45,7 @@ function showError(message, step = 0) {
 }
 
 function forceCart(message = '') {
-  if (window.TintinCheckoutOrderCompleted || window.TintinCheckoutReceiptRestoring) return;
+  if (window.TintinCheckoutOrderCompleted || window.TintinCheckoutReceiptRestoring || window.TintinCheckoutOrderInFlight) return;
   document.querySelectorAll('.ck-panel').forEach((panel, index) => {
     panel.classList.toggle('active', index === 0);
   });
@@ -63,6 +63,7 @@ function forceCart(message = '') {
 }
 
 function syncConfirmCartGuard() {
+  if (window.TintinCheckoutOrderInFlight) return;
   const confirm = document.getElementById('ck-confirm-btn');
   if (!confirm) return;
   const hasItems = getCartLocal().length > 0;

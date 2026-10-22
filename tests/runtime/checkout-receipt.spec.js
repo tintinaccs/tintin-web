@@ -57,7 +57,7 @@ async function fixture(page) {
     let cartReady = true;
     ${forceCart}
     ${cartListeners}
-    let submitting = false, orderCompleted = false, inMemoryRequestId = 'local', pendingPaypal = null;
+    let submitting = false, orderCompleted = false, availabilityBlocked = false, inMemoryRequestId = 'local', pendingPaypal = null;
     const REQUEST_KEY = 'tt-receipt-fixture-request';
     const buildDraft = async () => ({paymentMethod:'transferencia', shippingMethod:'encomienda'});
     const persistCheckoutDefaults = async () => {};

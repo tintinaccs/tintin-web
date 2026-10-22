@@ -17,7 +17,7 @@ export async function renderPage(data, request) {
   const visible = body.replace(/<meta name="description" content="[^"]*">/, '').replace(/\r\n?/g, '\n');
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(visible));
   const revision = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
-  const html = body.replace('</head>', `<meta name="tintin-page-revision" content="${revision}"><script type="module" src="/js/quality/vigilancia-version.js?v=tintin-20261021-visual-scope-2"></script></head>`);
+  const html = body.replace('</head>', `<meta name="tintin-page-revision" content="${revision}"><script type="module" src="/js/quality/vigilancia-version.js?v=tintin-20261021-commerce-review-1"></script></head>`);
   return new Response(request.method === 'HEAD' ? null : html, { status:200, headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-cache, must-revalidate','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin'} });
 }
 export async function onRequest({ request, params, env }) {

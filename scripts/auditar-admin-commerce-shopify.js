@@ -34,7 +34,7 @@ expect(!/onSnapshot\(ordersPage/.test(js), 'el tablero reutiliza la única fuent
 
 for (const action of [
   'window.prodNuevo', 'window.prodEditar', 'window.prodToggleActive', 'window.prodEliminar',
-  'window.collNueva', 'window.collEditar', 'window.collVerProductos', 'window.collEliminar',
+  'window.collNueva', 'window.collEditar', 'window.collEliminar',
   'window.openOrderEdit', 'window.updateOrderStatus', 'window.updatePayStatus',
   'window.resendOrderEmail', 'window.deleteOrder'
 ]) {
@@ -42,6 +42,16 @@ for (const action of [
   const delegated = new RegExp(`callLegacyAction\\(['\"]${legacyName}['\"]`).test(js);
   expect(js.includes(action) || delegated, `reutiliza el contrato existente ${action}.`);
 }
+
+// Navegar a productos pertenece al controlador visible; el puente anterior
+// sólo filtraba la tabla heredada que esta vista mantiene oculta.
+const collectionProducts = js.slice(js.indexOf("  if (action === 'collection-products'"), js.indexOf("  if (action === 'collection-delete'"));
+expect(collectionProducts.includes('state.productCategory = wristCategory(id)') &&
+  collectionProducts.includes("state.productSearch = ''") && collectionProducts.includes("state.productTab = 'all'") &&
+  collectionProducts.includes('state.productPage = 0') && collectionProducts.includes('[data-section="productos"]') &&
+  collectionProducts.includes('?.click()') && collectionProducts.includes('return renderProducts()') &&
+  !/collVerProductos|callLegacyAction/.test(collectionProducts),
+  'Ver productos usa la colección canónica y el único controlador visible, sin filtrar una tabla oculta.');
 
 for (const forbiddenWrite of ['updateDoc', 'setDoc', 'addDoc', 'deleteDoc', 'writeBatch', 'runTransaction']) {
   expect(!new RegExp(`\\b${forbiddenWrite}\\b`).test(js), `la capa visual no escribe Firestore directamente con ${forbiddenWrite}.`);

@@ -1,3 +1,20 @@
+## 2026-10-21 — Cierre comercial sobre la paridad de Sheets
+
+Se integra main e96eea930 conservando su sincronización y validación de literales. Medidas y cuidados permanecen opcionales y vacíos por decisión de la titular; el renderizado sólo muestra los datos reales presentes. No cambia el catálogo real.217 pruebas de productos/sincronización y311 de pedidos/pagos/checkout aprobadas tras la conciliación; se renuevan protección y diagnóstico desde sus autoridades.
+
+## 2026-10-21 — Consumidores de reserva propia y PayPal
+
+Autoridad: pedido-checkout-seguro.js. Checkout HTML, hardening, confiabilidad y navegación suspenden sólo sus guardias durante creación/pago pendiente para conservar el resumen de la reserva propia. PayPal recibe también pedidos recuperados antes de cargar el módulo. Pruebas de servidor, recuperación por identidad, referencia mínima y navegador tardío; sin operaciones comerciales reales. Se incorpora #1195 y se extiende su única capa de fondo; ocultamiento al scroll incluye su profundidad. Plan y derivados se regeneran sobre main8081ab515.
+
+## 2026-10-21 — Reserva al registrar, cola del header y Pulseras unificada
+
+Autorización del titular: apartar al tocar Confirmar pedido aunque el pago esté pendiente. Fuente: dominio servidor de pedidos y modelo compartido; política confiable sólo para actor client/public-checkout, persistida en pedidos nuevos. Reserva atómica de agregado/variante, idempotencia y liberación/reapertura; históricos/manuales preservados y PayPal concilia sin duplicar. Ticket comunica reserva real. Header extiende32–56px el difuminado con máscara y sin interceptar punteros desde superficies canónicas. Colecciones del panel comercial reutiliza alias canónicos para principal Pulseras, conteos/filtros/ficha/productos de ambos grupos sin mutar datos crudos. Pruebas concurrentes, pagos, rechazo/cancelación/reapertura, spoofing y20 Chromium de diez tamaños; derivados/versiones/plan y evidencia del candidato se regeneran antes de CI.
+
+## 2026-10-21 — Checkout ante agotados y búsqueda tolerante
+
+Fuentes: runtime canónico del carrito (evento único de ajuste real, con identidad), pedido-checkout-seguro y su helper/estilos, buscador compartido de catálogo/panel, tienda.js y semántica del checkout. Se conserva la autoridad transaccional del servidor, idempotencia, reserva al confirmar/pagar y datos comerciales reales. Se anticipa disponibilidad con lectura de servidor/plazo y se ofrece salida al catálogo/inicio; los demás artículos permanecen. Búsqueda tolera una errata sin consultas extra ni cambiar orden comercial. Ficha/JSON-LD de cliente respetan variantes, descripción alternativa y características existentes; favorito recibe categoría real. Consumidores transitivos se versionan y shell/CSP/diagnóstico/plan se regeneran desde autoridades. Cobertura de pruebas de stock, red, sesión, teclado, dimensiones, búsqueda, ficha, pedidos, rendimiento, accesibilidad y SEO; límites remotos/emulador en la revisión y CURRENT_STATE.
+
+
 ## 2026-10-21 — Una identidad visual en tienda y panel
 
 Fuente canónica de superficies: peso semibold/tracking compartidos en encabezados y botones, conservando tamaño contextual, alternancia rosa y máscara alfa del header. Dashboard usa Hoy en Tintin/Inicio, sin numeración o subrayado decorativo. Defaults editoriales y tres migraciones exactas de textos de portada conservan títulos personalizados; Nosotros expresa valores sin superlativos absolutos. Afecta18 páginas, módulos administrativos y cadena de imports de contenido: nuevas URLs inmutables propagadas, bundles/baseline/CSP/diagnóstico/plan desde autoridades. Sin cambios de datos comerciales, eventos, roles o reglas. Mapa y evidencia en docs/agent/IDENTIDAD_TINTIN_20261021.md y CURRENT_STATE.

@@ -1,3 +1,4 @@
+import {productSearchScore} from '../../js/core/store/busqueda-productos.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -26,4 +27,14 @@ test('clientes usan edge sin fallback Firestore de colección completa', () => {
 
 test('catálogo comercial no abre automáticamente el listener completo', () => {
   assert.doesNotMatch(products, /catalogo\|collections[\s\S]{0,160}return startPublicProductsRealtime\(\)/);
+});
+
+test('la proyección pública conserva SKU para buscar y excluye campos internos',()=>{
+ const fields=api.slice(api.indexOf('const PRODUCT_FIELDS'),api.indexOf('const COLLECTION_FIELDS'));
+ const pick=api.slice(api.indexOf('function pickKnownFields('),api.indexOf('function normalizeResource('));
+ const project=new Function(`${fields}\n${pick}\nreturn data=>pickKnownFields(data,PRODUCT_FIELDS);`)();
+ const product=project({name:'Anillo',sku:'TIN-00042',price:25000,stock:2,costPrice:12000,supplier:'Interno',internalNotes:'Privado'});
+ assert.equal(product.sku,'TIN-00042');
+ assert.equal(product.costPrice,undefined);assert.equal(product.supplier,undefined);assert.equal(product.internalNotes,undefined);
+ assert.ok(productSearchScore(product,'TIN-00042')>0);assert.equal(productSearchScore(product,'TIN-00043'),0);
 });
