@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fba8fe74a6d6b71b342f82c7f845291752b5ab62d45682e2f6c9ff96bf17f1b0",
+  "sourceFingerprint": "297bc7b54a469b25cd5bc3193afb0c6ad73f684e1af582d8077788bfb9e3d0ed",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1407,
-    "textFiles": 1316,
-    "totalBytes": 29552551,
+    "files": 1408,
+    "textFiles": 1317,
+    "totalBytes": 29566034,
     "pages": 19,
-    "modules": 992
+    "modules": 993
   },
   "viewports": [
     {
@@ -40918,8 +40918,8 @@
     },
     {
       "path": "scripts/verificar-salud-ci-global.mjs",
-      "bytes": 15263,
-      "sha256": "3a21e1746f7448a0fe1a3e0ebe29983d0d439d7f438743ad89f5a7ea300c662a",
+      "bytes": 18065,
+      "sha256": "091b49fce4898dd6841b114cdeb848ecfdc9affaef7307ac7a09a777753c855f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49141,6 +49141,55 @@
       ]
     },
     {
+      "path": "tests/operations/github-ci-scope.test.mjs",
+      "bytes": 5936,
+      "sha256": "dc490ebee69d6b195a0806789eb14d1a498e0382a194e5f7041e7f50f5bbc709",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://github.com/$%7Brepo%7D/actions/runs/$%7Bid%7D/job/123",
+          "line": 17
+        },
+        {
+          "url": "https://github.com.ejemplo.test/tintinaccs/tintin-web/actions/runs/200/job/123",
+          "line": 83
+        },
+        {
+          "url": "https://github.com/otro/repo/actions/runs/200/job/123",
+          "line": 84
+        }
+      ]
+    },
+    {
       "path": "tests/operations/html-layout-fixture.test.mjs",
       "bytes": 1512,
       "sha256": "eab2d25ee1672cf736fb34f6acf64563eed10ed5a42d2f0141346f429529054d",
@@ -56263,8 +56312,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 11487,
-      "sha256": "f8fbd313643babb259fecd62a0fb12fdd88c2f8ecb50167906dacde45d053df1"
+      "bytes": 11512,
+      "sha256": "c8714f67120e8e97e2e843c5da1aca6dcc19832b76b9511c050d80e1e5cad455"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56935,8 +56984,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 822485,
-      "sha256": "8e4491ee01c1ee071ab0760d54e8abd1e25096f04a786926e0210e6094b0cee1"
+      "bytes": 825350,
+      "sha256": "2e72d7519977e75538229ac3a5fed60fb2cf467947f77817bdd05a5a2d4b762e"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56953,8 +57002,8 @@
     {
       "path": "docs/agent/MANTENIMIENTO_FLUJOS.md",
       "extension": ".md",
-      "bytes": 4963,
-      "sha256": "506855de8161d049e985d9ddd48ec2e7896a9d2610a85f41cfdb8a3f3c54b070"
+      "bytes": 6061,
+      "sha256": "e3bcd2bc698bbea61d05278101109e5e142ec7a4d5dfd0c8722320b04a555392"
     },
     {
       "path": "docs/agent/MIGRACION_CONTROL_20261010.md",
@@ -57337,8 +57386,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 103340,
-      "sha256": "6430b7ec2b3946f0a9f2031a23034ce4c186f473e8b8681c4674f6caeedab634"
+      "bytes": 104097,
+      "sha256": "87d5c83dba7948370e58e02964395e566a26c1cdce1a7d116791325da662c727"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -61267,8 +61316,8 @@
     {
       "path": "scripts/verificar-salud-ci-global.mjs",
       "extension": ".mjs",
-      "bytes": 15263,
-      "sha256": "3a21e1746f7448a0fe1a3e0ebe29983d0d439d7f438743ad89f5a7ea300c662a"
+      "bytes": 18065,
+      "sha256": "091b49fce4898dd6841b114cdeb848ecfdc9affaef7307ac7a09a777753c855f"
     },
     {
       "path": "sitemap-pages.xml",
@@ -62583,6 +62632,12 @@
       "extension": ".mjs",
       "bytes": 7105,
       "sha256": "9b697a01b0177059710386ea2073be55700fa95ebf00ff7c0d3cd26aea298296"
+    },
+    {
+      "path": "tests/operations/github-ci-scope.test.mjs",
+      "extension": ".mjs",
+      "bytes": 5936,
+      "sha256": "dc490ebee69d6b195a0806789eb14d1a498e0382a194e5f7041e7f50f5bbc709"
     },
     {
       "path": "tests/operations/html-layout-fixture.test.mjs",
