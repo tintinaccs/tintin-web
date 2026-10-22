@@ -19,11 +19,11 @@ import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/poli
 
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';
-const HOME_CACHE_TTL = 60 * 1000;
+const HOME_CACHE_TTL = 10 * 1000;
 // El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
 // Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
 // de precio, stock o estado durante diez minutos en otros dispositivos.
-const ALL_CACHE_TTL = 60 * 1000;
+const ALL_CACHE_TTL = 10 * 1000;
 const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
 const PUBLIC_CATALOG_ENDPOINT = '/api/public-catalog';
 const PUBLIC_PRODUCT_TIMEOUT_MS = 8000;
@@ -100,7 +100,8 @@ export function mapProduct(id, d) {
     createdAt: timestampToMillis(d.createdAt ?? d.created_at ?? d.importedAt),
     updatedAt: timestampToMillis(d.updatedAt ?? d.updated_at ?? d.modifiedAt),
     restockedAt: timestampToMillis(d.restockedAt),
-    catalogActivityAt: timestampToMillis(d.catalogActivityAt)
+    catalogActivityAt: timestampToMillis(d.catalogActivityAt),
+    merchandisingUpdatedAt: timestampToMillis(d.merchandisingUpdatedAt)
   };
 }
 
@@ -137,7 +138,8 @@ function compactProduct(product) {
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
     restockedAt: product.restockedAt,
-    catalogActivityAt: product.catalogActivityAt
+    catalogActivityAt: product.catalogActivityAt,
+    merchandisingUpdatedAt: product.merchandisingUpdatedAt
   };
 }
 
