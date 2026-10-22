@@ -407,7 +407,7 @@
 
   const BRAND_LABEL = computeBrandLabel();
   const DEFAULT_LOGO_SRC = resolveAsset(
-    'assets-tintin/images/general/logo.png?v=tintin-20261009-whatsapp-responsive-1', false
+    'assets-tintin/images/general/logo.png?v=tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2', false
   );
   const LOGO_SRC = DEFAULT_LOGO_SRC;
 
@@ -852,7 +852,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261022-catalog-reconcile-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261022-informational-merged-2');
     }
   }
 
@@ -873,7 +873,7 @@
   // segundo sistema de menús.
   function bootHeaderAccountFix() {
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20261022-catalog-reconcile-1');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20261022-informational-merged-2');
     }
   }
 

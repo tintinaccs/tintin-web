@@ -37,6 +37,23 @@ function bootBrandReveal(){
   .catch(function(error){console.warn('[TintinBrand] No se pudo cargar el reveal de marca:',error);});
 }
 
+// Las páginas informativas no tienen tarjetas de perfil/checkout que revelar.
+// Conservamos la animación del panel cuando realmente se abre, sin descargar
+// su extensión al consultar únicamente el texto de envíos o preguntas.
+function scheduleBrandReveal(){
+ var informational=/\/(?:about|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad|404)(?:\.html)?\/?$/i.test(location.pathname);
+ if(!informational){bootBrandReveal();return;}
+ ready(function(){
+  if(document.querySelector('.tt-map-block')||['opening','open'].includes(window.TintinSurfaceController&&window.TintinSurfaceController.state)){bootBrandReveal();return;}
+  function openSurface(event){
+   if(!['opening','open'].includes(event.detail&&event.detail.state))return;
+   removeEventListener('tintin:surface-change',openSurface);
+   bootBrandReveal();
+  }
+  addEventListener('tintin:surface-change',openSurface);
+ });
+}
+
 function cleanTabbarAvatar(){
  var tab=document.getElementById('tabbar-cuenta');
  if(!tab)return;
@@ -65,17 +82,7 @@ function bindAvatarRefreshEvents(){
 }
 
 loadResponsiveBrandStyles();
-// Estas páginas no tienen bloques de contenido con reveal: sólo sus paneles.
-// Cargar la animación cuando se abre uno conserva el runtime informativo liviano.
-var textPage=/\/(?:envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)(?:\.html)?$/.test(location.pathname);
-if(textPage&&(!window.TintinSurfaceController||window.TintinSurfaceController.surface==='none')){
- window.addEventListener('tintin:surface-change',function revealOnOpen(event){
-  if(event.detail&&event.detail.state==='open'){
-   window.removeEventListener('tintin:surface-change',revealOnOpen);
-   bootBrandReveal();
-  }
- });
-}else bootBrandReveal();
+scheduleBrandReveal();
 
 ready(bindAvatarRefreshEvents);
 })();

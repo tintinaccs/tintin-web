@@ -86,9 +86,10 @@ check(
     /Array\.isArray\(cached\)\s*&&\s*cached\.length/.test(products),
   'Una lectura vacía puede dejar el catálogo en 0 productos durante todo el TTL.'
 );
+const allCacheTtlSeconds = Number(products.match(/const\s+ALL_CACHE_TTL\s*=\s*(\d+)\s*\*\s*1000\s*;/)?.[1] ?? Infinity);
 check(
   'El catálogo público no oculta cambios de stock por más de un minuto',
-  /const\s+ALL_CACHE_TTL\s*=\s*60\s*\*\s*1000/.test(products),
+  Number.isFinite(allCacheTtlSeconds) && allCacheTtlSeconds > 0 && allCacheTtlSeconds <= 60,
   'La caché pública puede conservar precio o stock obsoleto más de un minuto.'
 );
 check('La ficha mantiene su lectura individual y comparte relacionados por API edge',

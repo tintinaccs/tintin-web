@@ -22,6 +22,7 @@ const readCache = read('js/core/firebase/cache-lecturas-firestore.js');
 const publicCatalogApi = read('functions/api/public-catalog.js');
 const publicCatalogClient = read('js/core/firebase/catalogo-publico-api.js');
 const routesConfig = read('_routes.json');
+const edgeCacheSeconds = Number(publicCatalogApi.match(/s-maxage=(\d+)/)?.[1] ?? NaN);
 
 // El guard de cuota debe vivir únicamente dentro de la rama de Checkout del
 // cargador por página, con una versión de caché inmutable explícita.
@@ -43,7 +44,7 @@ check(
 check(
   'Catálogo público usa caché edge con fallback seguro',
   publicCatalogApi.includes('caches.default') &&
-    publicCatalogApi.includes("s-maxage=60") &&
+    Number.isFinite(edgeCacheSeconds) && edgeCacheSeconds >= 10 && edgeCacheSeconds <= 60 &&
     publicCatalogApi.includes('PRODUCT_FIELDS') &&
     publicCatalogClient.includes("/api/public-catalog") &&
     products.includes("fetchPublicCatalogResource('products')") &&
