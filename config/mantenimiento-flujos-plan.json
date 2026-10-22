@@ -1,12 +1,17 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "1a1e81ca792856aa65e0b41336258dac6fa3a893",
-  "reason": "Conservar avatar propio durante hidratacion inicial y fallback lento sin pintar Google antes de confirmar el perfil",
+  "baseCommit": "806efc3a13e7d494189278d6d4045cfc30464d8e",
+  "reason": "Conciliar avatar propio sin destello Google y destino canonico del Diagnostico Maestro conservando bienvenida publicada",
   "files": [
     {
       "path": "_headers",
       "oldHash": "36e5b06f1d6bcb69b705eee717d27880f988a585fe48b63f876b177b82d7e539",
       "newHash": "39de483791a1620df577875b569ebd73b6e0885b3fff455964c62452f9afc780"
+    },
+    {
+      "path": ".github/workflows/diagnostico-maestro.yml",
+      "oldHash": "1fcab11b042d818031b968f2b2269a3927b4dbea69db8d4ef3560221bba3bd6a",
+      "newHash": "c6ed9bb8ab9e484cb3a92086f62a2ebd704b7e03aaf807a90314ff618cfac427"
     },
     {
       "path": "404.html",
@@ -85,8 +90,8 @@
     },
     {
       "path": "index.html",
-      "oldHash": "3af388237716fa1d26f3104c65370cfb724a3106a97c91c6e681852b8500e2ed",
-      "newHash": "0898144bf568ad5323cb4891e0edaef7c3cb11fe0ae7ace7f7f3a053a26232ab"
+      "oldHash": "42313487998acadb38ebd68010ba4e12341785f78587702c08bbd699ceb3e230",
+      "newHash": "0d41739ab4229cc4bea82b01fa26c90dbf73920483af8a0d81a69ab086b7dd45"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -505,13 +510,13 @@
     },
     {
       "path": "scripts/cache-version-baseline.json",
-      "oldHash": "03d6baf41c868dfd78328345fbf1865de379ba521ef99b17e3e48f3a95dea142",
-      "newHash": "18ec8efd853c508ecd2bcba287ecb1da0c33fae0879d1378f9a3b0ef40090c5a"
+      "oldHash": "fd6be661d6a174656694470207cfca5f2bc9ed3410126d462b75dda9ee1d8941",
+      "newHash": "cb69df287aa474f52d2ad770612676b50e8329f491e48323d86255b46d535a5f"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "oldHash": "6d73208f5b08a60e9db074e6dc430626f80939dd76d7f0dc98d58832deba0484",
-      "newHash": "a9205c478e0d0be084196d4555c58d50752e9d182731833b8ab0bce3ef5a9e19"
+      "newHash": "f6557ca887c3f23611cbc13de49a952fcce4afc0929e4b5255c348074c0307e7"
     },
     {
       "path": "terminos.html",

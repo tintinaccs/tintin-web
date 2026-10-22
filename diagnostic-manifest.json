@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ccd86a9edb632026cdfe106e851cbcc8125190d11d711094f21946f95acf9829",
+  "sourceFingerprint": "3ec7d0563a23bcf5858c0aa2f0ff21e966175e0f9f2d1edac0b33ffbdfbdb0c4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1400,
-    "textFiles": 1309,
-    "totalBytes": 29468089,
+    "files": 1402,
+    "textFiles": 1311,
+    "totalBytes": 29479640,
     "pages": 19,
-    "modules": 985
+    "modules": 987
   },
   "viewports": [
     {
@@ -15779,8 +15779,8 @@
         "guest",
         "client"
       ],
-      "bytes": 46763,
-      "sha256": "0898144bf568ad5323cb4891e0edaef7c3cb11fe0ae7ace7f7f3a053a26232ab",
+      "bytes": 46759,
+      "sha256": "0d41739ab4229cc4bea82b01fa26c90dbf73920483af8a0d81a69ab086b7dd45",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15918,7 +15918,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-a29fdc9c29c63a7c",
+          "raw": "css/generated/inicio.css?v=tintin-home-7bf155c0a858b897",
           "target": "css/generated/inicio.css",
           "line": 58
         },
@@ -15988,7 +15988,7 @@
           "line": 86
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261017-home-actions-spacing-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261022-welcome-ci-close-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 87
         },
@@ -16862,7 +16862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-a29fdc9c29c63a7c",
+          "raw": "css/generated/inicio.css?v=tintin-home-7bf155c0a858b897",
           "target": "css/generated/inicio.css",
           "line": 58,
           "exists": true
@@ -16946,7 +16946,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261017-home-actions-spacing-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20261022-welcome-ci-close-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 87,
           "exists": true
@@ -40706,8 +40706,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 29811,
-      "sha256": "a9205c478e0d0be084196d4555c58d50752e9d182731833b8ab0bce3ef5a9e19",
+      "bytes": 29827,
+      "sha256": "f6557ca887c3f23611cbc13de49a952fcce4afc0929e4b5255c348074c0307e7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -43296,6 +43296,54 @@
       "endpoints": []
     },
     {
+      "path": "tests/cache/generator-comment-tags.test.mjs",
+      "bytes": 1061,
+      "sha256": "5434ee9888782901532ceecd10e27783d47c79f5a480c30b92d2a7af774dca7f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "${url}?v=old-version",
+          "target": null,
+          "dynamic": false,
+          "line": 15
+        },
+        {
+          "raw": "${url}?v=new-version",
+          "target": null,
+          "dynamic": false,
+          "line": 15
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/cart/color-choice-browser.spec.js",
       "bytes": 5483,
       "sha256": "92999d4301ca823d63c61af3ccbfba0f64fe1bae1dd2b52cd3280f83f97a078e",
@@ -45642,8 +45690,8 @@
     },
     {
       "path": "tests/diagnostics/master-current-evidence.test.mjs",
-      "bytes": 1022,
-      "sha256": "93fe32d0645ddbab5ceacdfbf02183fff62b5b429bd4d25f1e6d48cc61c6b532",
+      "bytes": 1647,
+      "sha256": "2f7db8c84ec4531d70e47ecf9ce6e2aa3784d5cecf03b89c84081139812305ce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45662,20 +45710,26 @@
           "line": 2
         },
         {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
           "raw": "../../functions/api/master-diagnostics.js",
           "target": "functions/api/master-diagnostics.js",
           "dynamic": false,
-          "line": 3
+          "line": 4
         }
       ],
       "endpoints": [
         {
           "url": "https://github.com/tintinaccs/tintin-web/actions/runs/1",
-          "line": 12
+          "line": 21
         },
         {
           "url": "https://dash.cloudflare.com/pages/deployments/1",
-          "line": 19
+          "line": 28
         }
       ]
     },
@@ -53361,6 +53415,22 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/hero-complete-borders.spec.js",
+      "bytes": 3933,
+      "sha256": "1de793260a9bd1d6b20350334aec724f4e55dc4a0d46d06bbb4c7cbaa8c1ac01",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://layout.test/",
+          "line": 21
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
       "bytes": 7704,
       "sha256": "20c21cdfde5c0df4b6d41e7e1c6e775a68e88c5b8ececba91b85b79a736553ec",
@@ -53429,8 +53499,8 @@
     },
     {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
-      "bytes": 12814,
-      "sha256": "15f766d5c4bae6392b88141ece906003eeb8b785effc2eb6a0ea0afab9b93df8",
+      "bytes": 12894,
+      "sha256": "580f66e3b4c3bb5cf659c9d803ec9f335e29a54db028e44a2e4b0e6fcb38198b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -53480,7 +53550,7 @@
         },
         {
           "url": "https://tintin.test/index.html",
-          "line": 123
+          "line": 124
         }
       ]
     },
@@ -54973,8 +55043,8 @@
     {
       "path": ".github/workflows/diagnostico-maestro.yml",
       "extension": ".yml",
-      "bytes": 15552,
-      "sha256": "1fcab11b042d818031b968f2b2269a3927b4dbea69db8d4ef3560221bba3bd6a"
+      "bytes": 15540,
+      "sha256": "c6ed9bb8ab9e484cb3a92086f62a2ebd704b7e03aaf807a90314ff618cfac427"
     },
     {
       "path": ".github/workflows/drenar-cola-correo-pedidos.yml",
@@ -56017,8 +56087,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 25944,
-      "sha256": "bd9f5f9fcef5176e993b21b3cadceefb2ab2db27084bc2ac8de437e16887caa7"
+      "bytes": 26189,
+      "sha256": "58555572298e9bbae0541393f7c99009eda77959ee2dcef9a286c3af4a69d23f"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56030,7 +56100,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "e7148a6b0d3acb907a398408091959223148c9b4942112806b92bab2e0e2c65d"
+      "sha256": "8e6085140c1fcb4d29c1db3f8da006d756e3dcf590a3c3baf00546ebd2aba522"
     },
     {
       "path": "config/public-site.json",
@@ -56341,8 +56411,8 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 470575,
-      "sha256": "a29fdc9c29c63a7c6688675b0211fec7b92d01ebbdd8a364a27cfcd356fcdc62"
+      "bytes": 470652,
+      "sha256": "7bf155c0a858b89743bf8b2fc8a89c923444c5a351a835e9ddaecc7b74c7fa8d"
     },
     {
       "path": "css/generated/nosotros.css",
@@ -56389,8 +56459,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 44682,
-      "sha256": "4394e0706ad0f5f571183daf0857f7dc7d7f3d12d84f783d07c6e7a6b13a94c8"
+      "bytes": 44759,
+      "sha256": "b24ff61ce8968be143857707c2f78108f221d2dd89e0f80628a6aad5f73f2855"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -56689,8 +56759,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 802795,
-      "sha256": "392a1aefc4c566f1307da860af9cece79e3d0dfcee80893ead4ae1065bfd98fd"
+      "bytes": 807667,
+      "sha256": "97f7b21a654f663a966e1152460059c6d53aecdf82ff58275164cc670da81e64"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57091,8 +57161,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 100834,
-      "sha256": "572bff4e69ad7f9894d231a31d862527bf96b0cfcdf30c9b8b7f0669ea349fbd"
+      "bytes": 101419,
+      "sha256": "23cb3c02e3ac8dfd4089d4bc029a93134d9588599245d9f90ae496752382c6b4"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -57781,8 +57851,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 46763,
-      "sha256": "0898144bf568ad5323cb4891e0edaef7c3cb11fe0ae7ace7f7f3a053a26232ab"
+      "bytes": 46759,
+      "sha256": "0d41739ab4229cc4bea82b01fa26c90dbf73920483af8a0d81a69ab086b7dd45"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -60691,8 +60761,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74386,
-      "sha256": "18ec8efd853c508ecd2bcba287ecb1da0c33fae0879d1378f9a3b0ef40090c5a"
+      "bytes": 74382,
+      "sha256": "cb69df287aa474f52d2ad770612676b50e8329f491e48323d86255b46d535a5f"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -60967,8 +61037,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 29811,
-      "sha256": "a9205c478e0d0be084196d4555c58d50752e9d182731833b8ab0bce3ef5a9e19"
+      "bytes": 29827,
+      "sha256": "f6557ca887c3f23611cbc13de49a952fcce4afc0929e4b5255c348074c0307e7"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -61397,6 +61467,12 @@
       "sha256": "4d597d28bb0f9fb5e83e96335a873f136f7eac66aebb18fe9015a893feb04f75"
     },
     {
+      "path": "tests/cache/generator-comment-tags.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1061,
+      "sha256": "5434ee9888782901532ceecd10e27783d47c79f5a480c30b92d2a7af774dca7f"
+    },
+    {
       "path": "tests/cart/color-choice-browser.spec.js",
       "extension": ".js",
       "bytes": 5483,
@@ -61789,8 +61865,8 @@
     {
       "path": "tests/diagnostics/master-current-evidence.test.mjs",
       "extension": ".mjs",
-      "bytes": 1022,
-      "sha256": "93fe32d0645ddbab5ceacdfbf02183fff62b5b429bd4d25f1e6d48cc61c6b532"
+      "bytes": 1647,
+      "sha256": "2f7db8c84ec4531d70e47ecf9ce6e2aa3784d5cecf03b89c84081139812305ce"
     },
     {
       "path": "tests/engagement/avisos-eventos-unicos.test.mjs",
@@ -63023,6 +63099,12 @@
       "sha256": "4b24d6ee16aeb31ce8bc98e046ff7d378389af8c71df9dfd6b6ebb884607dc2a"
     },
     {
+      "path": "tests/ui-ux/hero-complete-borders.spec.js",
+      "extension": ".js",
+      "bytes": 3933,
+      "sha256": "1de793260a9bd1d6b20350334aec724f4e55dc4a0d46d06bbb4c7cbaa8c1ac01"
+    },
+    {
       "path": "tests/ui-ux/hero-imagen-confirmada.test.mjs",
       "extension": ".mjs",
       "bytes": 7704,
@@ -63037,8 +63119,8 @@
     {
       "path": "tests/ui-ux/home-layout-browser.test.mjs",
       "extension": ".mjs",
-      "bytes": 12814,
-      "sha256": "15f766d5c4bae6392b88141ece906003eeb8b785effc2eb6a0ea0afab9b93df8"
+      "bytes": 12894,
+      "sha256": "580f66e3b4c3bb5cf659c9d803ec9f335e29a54db028e44a2e4b0e6fcb38198b"
     },
     {
       "path": "tests/ui-ux/home-render-performance.spec.js",

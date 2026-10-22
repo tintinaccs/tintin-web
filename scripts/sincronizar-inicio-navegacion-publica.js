@@ -562,7 +562,7 @@ function versionSessionProtection(html) {
 
 function versionProfileGate(html) {
   return html.replace(
-    /(js\/pages\/profile\/control-acceso-perfil\.js)(?:\?v=[A-Za-z0-9._-]+)?/gi,
+    /(["'](?:\.\/|\/)?js\/pages\/profile\/control-acceso-perfil\.js)(?:\?v=[A-Za-z0-9._-]+)?/gi,
     `$1?v=${PROFILE_GATE_VERSION}`
   );
 }

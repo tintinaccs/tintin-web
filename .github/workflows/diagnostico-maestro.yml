@@ -6,7 +6,7 @@ on:
       production_origin:
         description: Origen público que debe auditarse como producción real
         required: true
-        default: https://tintinaccesorios.pages.dev
+        default: https://tintinaccs.com
         type: string
       include_production:
         description: Incluir pruebas contra producción real
