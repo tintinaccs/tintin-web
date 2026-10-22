@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sortCatalogProducts, productPriorityLevel } from '../../js/pages/catalog/politica-exhibicion-catalogo.js';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import { hasProductStock } from '../../js/core/store/inventario-variantes.mjs';
+const source = fs.readFileSync(new URL('../../js/pages/catalog/politica-exhibicion-catalogo.js', import.meta.url), 'utf8')
+  .replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
+const context = vm.createContext({ window: {}, hasProductStock });
+vm.runInContext(source, context);
+const { sortCatalogProducts, productPriorityLevel } = context;
 
 const available = {stock:5,active:true,price:50000,category:'relojes'};
 test('badge NUEVO vence una reposición de stock más reciente', () => {
@@ -17,7 +24,7 @@ test('destacado y modificación comercial van delante de inventario', () => {
     {...available,id:'featured',name:'Destacado',destacado:true,updatedAt:2000},
   ];
   assert.equal(productPriorityLevel(products[0]),1);
-  assert.deepEqual(sortCatalogProducts(products).map(item=>item.id), ['price','featured','stock']);
+  assert.deepEqual(Array.from(sortCatalogProducts(products), item=>item.id), ['price','featured','stock']);
 });
 test('agotados al final y prioridad consistente con fecha y desempate', () => {
   const products = [
@@ -26,4 +33,14 @@ test('agotados al final y prioridad consistente con fecha y desempate', () => {
     {...available,id:'a',name:'A',badge:'Nuevo',updatedAt:1000},
   ];
   assert.deepEqual(sortCatalogProducts(products).map(item=>item.id),['a','b','out']);
+});
+
+test('reponer una novedad no supera una edición comercial más reciente', () => {
+  const products = [
+    {...available,id:'reposicion',name:'Novedad',badge:'Nuevo',merchandisingUpdatedAt:1000,restockedAt:9000,updatedAt:9000},
+    {...available,id:'edicion',name:'Precio editado',merchandisingUpdatedAt:6000,updatedAt:6000},
+    {...available,id:'soloStock',name:'Sin badge',restockedAt:10000,updatedAt:10000},
+  ];
+  assert.deepEqual(Array.from(sortCatalogProducts(products), p=>p.id),
+    ['edicion','reposicion','soloStock']);
 });
