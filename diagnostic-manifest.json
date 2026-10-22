@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c1b0cdf8068809433e6da1100d11e065f1fe09565cff1a75f79855110f4092d7",
+  "sourceFingerprint": "4914075373fe9e0662e6e1f8cc3f1151c43cc271ef628e5e71093d59d9295387",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1404,
-    "textFiles": 1313,
-    "totalBytes": 29486968,
+    "files": 1405,
+    "textFiles": 1314,
+    "totalBytes": 29469918,
     "pages": 19,
-    "modules": 989
+    "modules": 990
   },
   "viewports": [
     {
@@ -1158,8 +1158,8 @@
         "guest",
         "client"
       ],
-      "bytes": 31283,
-      "sha256": "24641b2e49b6ea9666f14f7c76ee32e5c695d979d0144267e71f605b1ff7cb73",
+      "bytes": 31278,
+      "sha256": "0697a4751fb9ab5aa6750ecbc098acc8f6e2c0a3df397238272f4318576f6110",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1266,7 +1266,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-a99eb3809df855f2",
+          "raw": "css/generated/nosotros.css?v=tintin-about-603578b0d0670e7e",
           "target": "css/generated/nosotros.css",
           "line": 35
         },
@@ -1351,7 +1351,7 @@
           "line": 50
         },
         {
-          "raw": "css/pages/institutional/about-signature.css?v=tintin-20261019-signature-position-1",
+          "raw": "css/pages/institutional/about-signature.css?v=tintin-20261022-about-details-1",
           "target": "css/pages/institutional/about-signature.css",
           "line": 51
         },
@@ -1862,7 +1862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-a99eb3809df855f2",
+          "raw": "css/generated/nosotros.css?v=tintin-about-603578b0d0670e7e",
           "target": "css/generated/nosotros.css",
           "line": 35,
           "exists": true
@@ -1964,7 +1964,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/institutional/about-signature.css?v=tintin-20261019-signature-position-1",
+          "raw": "css/pages/institutional/about-signature.css?v=tintin-20261022-about-details-1",
           "target": "css/pages/institutional/about-signature.css",
           "line": 51,
           "exists": true
@@ -38353,8 +38353,8 @@
     },
     {
       "path": "scripts/auditar-nosotros-pagina.js",
-      "bytes": 3466,
-      "sha256": "868a814382b655fce63440e2e2a23c39fdf234d2360367bfa7d007848ef021d0",
+      "bytes": 3641,
+      "sha256": "b6f43fb0898c9fff63d5dfd5bc880b00de50252e066607e2814b31bb13b3141c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45751,6 +45751,36 @@
       ]
     },
     {
+      "path": "tests/diagnostics/master-emulator-runtime.test.mjs",
+      "bytes": 804,
+      "sha256": "c5282cfc5a98083df2168e33f7ebfa6a1bd1b01878ba4037037ddf7911213a18",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/engagement/avisos-eventos-unicos.test.mjs",
       "bytes": 1046,
       "sha256": "2d322ccaeb29ee99942c2c0897e12d3b0e95301408b2b043ffd8f7868559c5f0",
@@ -48143,8 +48173,8 @@
     },
     {
       "path": "tests/navigation/about-personal-story.spec.js",
-      "bytes": 7014,
-      "sha256": "2c3c19282aa4ba459221f323e35111f2cebf9cad381431e9dddc75c857917c39",
+      "bytes": 7816,
+      "sha256": "be9237feac4a5795e35fce997e32f24969fe8aca21e08277771bc5f50b6cc294",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55096,8 +55126,8 @@
     {
       "path": ".github/workflows/diagnostico-maestro.yml",
       "extension": ".yml",
-      "bytes": 16830,
-      "sha256": "4b1ccaef38d74334195156feb03590bbe3e04525c8cb113634b9aafa6597b0fc"
+      "bytes": 17164,
+      "sha256": "f30bf30e05e5ba1bd4fcd54791e0a3663f55375996522c652615959ba7567958"
     },
     {
       "path": ".github/workflows/drenar-cola-correo-pedidos.yml",
@@ -55162,8 +55192,8 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 31283,
-      "sha256": "24641b2e49b6ea9666f14f7c76ee32e5c695d979d0144267e71f605b1ff7cb73"
+      "bytes": 31278,
+      "sha256": "0697a4751fb9ab5aa6750ecbc098acc8f6e2c0a3df397238272f4318576f6110"
     },
     {
       "path": "admin-images.html",
@@ -56140,8 +56170,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 26180,
-      "sha256": "3bef2b1cd48c082af1788634794ddf2d4d6e2ee1b65c622f38969601f1fc1fa8"
+      "bytes": 924,
+      "sha256": "e937e4b0b376b735908326d64347d97e07f8a7e2ca7e14acb4c8641c2df42118"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56153,7 +56183,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "a612f689c00462f31a08fcc87fd921bfadc62795724ef610cbdd36c84779f0a7"
+      "sha256": "115f9c58a9ac8bdd96d8ec72d7ae0dcf65f8a608c61df8bdbc8e6942e62394a2"
     },
     {
       "path": "config/public-site.json",
@@ -56470,8 +56500,8 @@
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 388060,
-      "sha256": "a99eb3809df855f2ca5cd27f3233b741173d3074d8c0a0a296431829b0f88a7f"
+      "bytes": 389268,
+      "sha256": "603578b0d0670e7e9b5f2ea1622cb3084bb84d58b4e148c82c341ad8f09c7c08"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -56560,8 +56590,8 @@
     {
       "path": "css/pages/institutional/about-signature.css",
       "extension": ".css",
-      "bytes": 460,
-      "sha256": "0452596031d0e9c156a7cc12a677e2ecb2af994d8293b46ba1d40096c63ad1e7"
+      "bytes": 1668,
+      "sha256": "89eae96859f17d26faf8950a49e12801af9d8bae97a377441a40893584e4595f"
     },
     {
       "path": "css/pages/legal.css",
@@ -56812,8 +56842,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 809523,
-      "sha256": "3b828cc23e6c76f5c7156c78d66985301de2132f88a7929c3deebb1fdd39ba53"
+      "bytes": 813208,
+      "sha256": "8ad1d166645a001697df1903f791e0831f4d1d378e208c522ade335e7eefc9e4"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -60544,8 +60574,8 @@
     {
       "path": "scripts/auditar-nosotros-pagina.js",
       "extension": ".js",
-      "bytes": 3466,
-      "sha256": "868a814382b655fce63440e2e2a23c39fdf234d2360367bfa7d007848ef021d0"
+      "bytes": 3641,
+      "sha256": "b6f43fb0898c9fff63d5dfd5bc880b00de50252e066607e2814b31bb13b3141c"
     },
     {
       "path": "scripts/auditar-pagina-carga.js",
@@ -60814,8 +60844,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74382,
-      "sha256": "ac22fe212cc30823624ca11d0af06ef09af070df11383fa67e01a160d933a0ce"
+      "bytes": 74377,
+      "sha256": "9d6e82607fda585452f50f1e398e43290175bc5378405d4c6f5c6a533f6c3af1"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -61928,6 +61958,12 @@
       "sha256": "4384c3c2be09f8fcf8331d807313c160ab57d7659c60410770c8378a620aba75"
     },
     {
+      "path": "tests/diagnostics/master-emulator-runtime.test.mjs",
+      "extension": ".mjs",
+      "bytes": 804,
+      "sha256": "c5282cfc5a98083df2168e33f7ebfa6a1bd1b01878ba4037037ddf7911213a18"
+    },
+    {
       "path": "tests/engagement/avisos-eventos-unicos.test.mjs",
       "extension": ".mjs",
       "bytes": 1046,
@@ -62278,8 +62314,8 @@
     {
       "path": "tests/navigation/about-personal-story.spec.js",
       "extension": ".js",
-      "bytes": 7014,
-      "sha256": "2c3c19282aa4ba459221f323e35111f2cebf9cad381431e9dddc75c857917c39"
+      "bytes": 7816,
+      "sha256": "be9237feac4a5795e35fce997e32f24969fe8aca21e08277771bc5f50b6cc294"
     },
     {
       "path": "tests/navigation/account-panel-contract.test.mjs",

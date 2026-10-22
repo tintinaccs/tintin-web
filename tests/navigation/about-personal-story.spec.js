@@ -4,7 +4,7 @@ const path = require('node:path');
 const { removeFixtureScripts } = require('../../scripts/lib/html-layout-fixture.js');
 const html = removeFixtureScripts(fs.readFileSync(path.join(__dirname, '../../about.html'), 'utf8'));
 
-for (const width of [320, 390, 767, 768, 1024, 1440]) {
+for (const width of [320, 390, 767, 768, 820, 1024, 1180, 1366, 1440, 1920]) {
   test(`fotos alternadas, historia y firma centrada sin recuadro en ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });
     await page.route('**/__about-story', route => route.fulfill({ contentType: 'text/html', body: html }));
@@ -41,9 +41,18 @@ for (const width of [320, 390, 767, 768, 1024, 1440]) {
       expect(Math.abs(signatureBox.x + signatureBox.width / 2 - currentPhotoBox.x - currentPhotoBox.width / 2)).toBeLessThanOrEqual(1);
     } else {
       expect(signatureBox.y).toBeGreaterThanOrEqual(currentIntroBox.y + currentIntroBox.height);
+      expect(signatureBox.y - currentIntroBox.y - currentIntroBox.height).toBeLessThanOrEqual(18);
       const originBox = await page.locator('#origen').boundingBox();
       expect(signatureBox.y + signatureBox.height).toBeLessThanOrEqual(originBox.y);
+      const childhoodBox = await page.locator('.tt-about-childhood').boundingBox();
+      expect(childhoodBox.y - signatureBox.y - signatureBox.height).toBeLessThanOrEqual(40);
     }
+    const video = await page.locator('.tt-about-story-video').boundingBox();
+    const videoParent = await page.locator('#origen .tt-about-content').boundingBox();
+    expect(video.height).toBeGreaterThanOrEqual(44);
+    expect(video.x).toBeGreaterThanOrEqual(videoParent.x - 1);
+    expect(video.x + video.width).toBeLessThanOrEqual(videoParent.x + videoParent.width + 1);
+    if (width < 768) expect(Math.abs(video.x + video.width / 2 - videoParent.x - videoParent.width / 2)).toBeLessThanOrEqual(1);
     await signature.scrollIntoViewIfNeeded();
     await expect.poll(() => signature.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
     const alignment = await signature.evaluate(img => {

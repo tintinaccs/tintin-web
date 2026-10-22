@@ -47,6 +47,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
+      - name: Configurar Java para emuladores Firebase
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
       - name: Instalar dependencias
         run: npm ci
 
@@ -121,6 +127,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
+
+      - name: Configurar Java para emuladores Firebase
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
 
       - name: Instalar dependencias
         run: npm ci
