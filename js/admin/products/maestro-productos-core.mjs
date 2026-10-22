@@ -66,7 +66,10 @@ export async function applyProductBulkTransaction(transaction,request,collection
     if(!Object.hasOwn(request.expected || {},id) || request.expected[id]!==productFingerprint(before)) throw Error('Un producto cambió en otra sesión. Actualizá y revisá la selección.');
     return {id,before,patch:productBulkPatch(before,request.field,request.value,collections)};
   });
-  for(const change of changes) transaction.update(refForId(change.id),{...change.patch,updatedAt:timestamp()});
+  for(const change of changes) {
+    const stockOnly = Object.keys(change.patch).every(key => key === 'stock' || key === 'variantInventory');
+    transaction.update(refForId(change.id),{...change.patch,updatedAt:timestamp(),...(stockOnly ? {restockedAt:timestamp()} : {merchandisingUpdatedAt:timestamp()})});
+  }
   return changes;
 }
 export function productDuplicateData(product) {
