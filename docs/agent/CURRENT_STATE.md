@@ -1,3 +1,7 @@
+## 2026-10-21 — Candidato comercial integrado con Sheets y datos opcionales
+
+Base e96eea930 (#1194) integrada mediante merge normal.217/217 productos/sincronización,311/311 checkout/pedidos/pagos, Fase7 e imágenes PASS_LOCAL. Decisión expresa de la titular: dejar medidas y cuidados opcionales y vacíos hasta que ella los complete; la ficha omite los vacíos. No existe bloqueo de datos ni se inventa información. Se regeneran plan y derivados contra esa base; CI, merge y producción requieren evidencia de la nueva cabeza de #1196.
+
 
 Cierre del comprobante y búsqueda por código: la prueba runtime que extrae submit se reproduce fallando al faltar el nuevo estado de disponibilidad; se inicializa ese estado del fixture como en el arranque real.10/10 Chromium del comprobante PASS_LOCAL, incluidos siete tamaños, errores, descarga/compartir/impresión y teclado, ejecutables de forma aislada sin emulador. La proyección pública y la caché compacta descartaban SKU, por lo que el índice no lo recibía en el encabezado: se conserva y limpia ese identificador de producto, manteniendo fuera costos/proveedor/notas internas.195/195 productos/sync y8/8 navegador de búsqueda por código/errata/variante/precio anterior PASS_LOCAL. Se exige CI del SHA nuevo.
 

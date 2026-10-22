@@ -1,3 +1,7 @@
+## 2026-10-21 — Cierre comercial sobre la paridad de Sheets
+
+Se integra main e96eea930 conservando su sincronización y validación de literales. Medidas y cuidados permanecen opcionales y vacíos por decisión de la titular; el renderizado sólo muestra los datos reales presentes. No cambia el catálogo real.217 pruebas de productos/sincronización y311 de pedidos/pagos/checkout aprobadas tras la conciliación; se renuevan protección y diagnóstico desde sus autoridades.
+
 ## 2026-10-21 — Consumidores de reserva propia y PayPal
 
 Autoridad: pedido-checkout-seguro.js. Checkout HTML, hardening, confiabilidad y navegación suspenden sólo sus guardias durante creación/pago pendiente para conservar el resumen de la reserva propia. PayPal recibe también pedidos recuperados antes de cargar el módulo. Pruebas de servidor, recuperación por identidad, referencia mínima y navegador tardío; sin operaciones comerciales reales. Se incorpora #1195 y se extiende su única capa de fondo; ocultamiento al scroll incluye su profundidad. Plan y derivados se regeneran sobre main8081ab515.

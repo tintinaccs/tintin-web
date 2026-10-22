@@ -1,6 +1,6 @@
 # Revisión de comercio y experiencia — 21/10/2026
 
-Responsable: Codex /root. Base integrada: main `4202dd26e` (incluye Perfil, iconos y respaldo cifrado de #1192). Alcance solicitado por la titular: stock/checkout, totales, seguimiento, catálogo/ficha, consistencia visual, formularios, rendimiento, operación administrativa, seguridad, recuperación, accesibilidad y SEO. El carrito persistente ya fue validado por la titular; sus regresiones relacionadas se conservan.
+Responsable: Codex /root. Base integrada: main `e96eea930` (incluye Perfil/iconos, tarjetas administrativas y paridad de Sheets). Alcance solicitado por la titular: stock/checkout, totales, seguimiento, catálogo/ficha, consistencia visual, formularios, rendimiento, operación administrativa, seguridad, recuperación, accesibilidad y SEO. El carrito persistente ya fue validado por la titular; sus regresiones relacionadas se conservan.
 
 ## Cambios con evidencia
 
@@ -21,7 +21,7 @@ Responsable: Codex /root. Base integrada: main `4202dd26e` (incluye Perfil, icon
 | Totales y envío | Cotización autoritativa, cambio de precio/envío exige reconfirmar, ciudades/tarifas, encomienda y cupones. No se introduce un motor paralelo de descuentos. |
 | Seguimiento y notificaciones | Estados canónicos, correo recuperable e idempotente, destino push/propiedad del pedido y pruebas existentes. |
 | Catálogo | Buscador compartido, filtros, vacío/reinicio, variantes y agotados al final; límite público1000 y umbral operativo800 conservados. |
-| Ficha | Descripción alternativa, características reales, fotos/variante, disponibilidad y SEO coherentes. Completar datos comerciales ausentes requiere información real del producto. |
+| Ficha | Descripción alternativa, características reales, fotos/variante, disponibilidad y SEO coherentes. Medidas y cuidados quedan opcionales y vacíos por decisión expresa de la titular; los completará cuando disponga de los datos. La ficha oculta los campos vacíos. |
 | Consistencia visual | Se conserva la fuente global de tokens/superficies tipográficas, focus y controles; no se superpone un segundo tema. Pruebas públicas y administrativas responsive. |
 | Formularios | Tokens de autocompletado; validación accesible y conservación del borrador existente. |
 | Rendimiento | Suite completa de65 pruebas aprobada: cargas iniciales, imágenes, CLS, consultas/listeners, catálogo por demanda y dimensiones320–1440. Buscador probado con1000 entradas. |
@@ -81,3 +81,8 @@ Sobre main4202dd26e:69/69 contratos de sincronización administrativa PASS_LOCAL
 Cierre del comprobante y búsqueda por código: la prueba runtime que extrae submit se reproduce fallando al faltar el nuevo estado de disponibilidad; se inicializa ese estado del fixture como en el arranque real.10/10 Chromium del comprobante PASS_LOCAL, incluidos siete tamaños, errores, descarga/compartir/impresión y teclado, ejecutables de forma aislada sin emulador. La proyección pública y la caché compacta descartaban SKU, por lo que el índice no lo recibía en el encabezado: se conserva y limpia ese identificador de producto, manteniendo fuera costos/proveedor/notas internas.195/195 productos/sync y8/8 navegador de búsqueda por código/errata/variante/precio anterior PASS_LOCAL. Se exige CI del SHA nuevo.
 
 Verificación adicional de datos reales, de sólo lectura: API pública con215 productos activos,215 con imagen,214 con descripción,163 con material y sin campos específicos de medidas/cuidados completos. Se solicita fuente real para completar esa información comercial. Backup Firestore39581982200 del2026-10-21T10:05:25Z terminó success y su etapa Exportar Firestore también; complementa la copia cifrada39647692594 ya comprobada. Sin restauración remota ni cambios de productos/pedidos reales.
+
+
+## Conciliación final y datos opcionales
+
+Se incorpora #1194 desde main e96eea930 mediante merge normal, conservando la autoridad Firestore y la paridad de Sheets. Validación posterior:217/217 pruebas de productos/sincronización,311/311 de checkout/pedidos/pagos y auditorías de Fase7 e imágenes aprobadas. Los lotes anteriores se solapan y no se suman. La titular confirma que medidas y cuidados deben permanecer vacíos hasta que los complete; no se requiere una fuente adicional para cerrar este alcance, no se inventan datos ni se modifican los productos reales. CI y publicación se verifican sobre la nueva cabeza.
