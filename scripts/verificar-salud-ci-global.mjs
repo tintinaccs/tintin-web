@@ -115,14 +115,6 @@ async function githubApi(endpoint) {
   throw lastInfraError;
 }
 
-function isCurrentMasterCheck(check) {
-  if (!currentRunId) return false;
-  const needle = `/actions/runs/${currentRunId}/`;
-  return [check?.html_url, check?.details_url]
-    .filter(Boolean)
-    .some(url => String(url).includes(needle));
-}
-
 function latestLegacyStatuses(statuses) {
   const latest = new Map();
   for (const item of statuses || []) {
@@ -156,8 +148,10 @@ function workflowScope(runs) {
   return {evaluated, ignored};
 }
 
-function belongsToIgnoredRun(check, ignoredIds) {
-  if (check.head_sha !== sha) return false;
+function belongsToIgnoredRun(check, ignoredRuns) {
+  const suiteId = Number(check.check_suite?.id);
+  if (check.head_sha !== sha || check.app?.slug !== 'github-actions' ||
+    !Number.isSafeInteger(suiteId) || suiteId <= 0) return false;
   return [check.html_url, check.details_url].some(value => {
     try {
       const url = new URL(value);
@@ -165,7 +159,8 @@ function belongsToIgnoredRun(check, ignoredIds) {
       const prefix = `/${repo}/actions/runs/`;
       if (!url.pathname.startsWith(prefix)) return false;
       const match = url.pathname.slice(prefix.length).match(/^(\d+)(?:\/|$)/);
-      return !!match && ignoredIds.has(Number(match[1]));
+      const run = match ? ignoredRuns.get(Number(match[1])) : null;
+      return !!run && Number(run.check_suite_id) === suiteId;
     } catch { return false; }
   });
 }
@@ -182,9 +177,9 @@ async function collectState() {
   const scope = workflowScope(observedWorkflowRuns);
   const workflowRuns = scope.evaluated;
   const ignoredWorkflowRuns = scope.ignored;
-  const ignoredIds = new Set(ignoredWorkflowRuns.map(run => Number(run.id)));
+  const ignoredById = new Map(ignoredWorkflowRuns.map(run => [Number(run.id), run]));
   const ignoredCheckRuns = (checksPayload.check_runs || []).filter(check =>
-    isCurrentMasterCheck(check) || belongsToIgnoredRun(check, ignoredIds));
+    belongsToIgnoredRun(check, ignoredById));
   const checkRuns = (checksPayload.check_runs || []).filter(check => !ignoredCheckRuns.includes(check));
   const legacyStatuses = latestLegacyStatuses(statusesPayload || []);
 

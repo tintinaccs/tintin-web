@@ -5,15 +5,15 @@ import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../../scripts/verificar-salud-ci-global.mjs', import.meta.url), 'utf8');
 const conclusions = source.slice(source.indexOf('const blockingConclusions ='), source.indexOf('function ensureDir('));
-const logic = source.slice(source.indexOf('function isCurrentMasterCheck('), source.indexOf('async function verifyGlobalCi('));
+const logic = source.slice(source.indexOf('function latestLegacyStatuses('), source.indexOf('async function verifyGlobalCi('));
 const sha = 'a'.repeat(40), repo = 'tintinaccs/tintin-web', current = 100;
-const run = (id, values = {}) => ({id, workflow_id: 10, name: 'Diagnóstico Maestro Tintin',
+const run = (id, values = {}) => ({id, check_suite_id: 1000 + id, workflow_id: 10, name: 'Diagnóstico Maestro Tintin',
   path: '.github/workflows/diagnostico-maestro.yml', event: 'workflow_dispatch',
   head_sha: sha, head_branch: 'main', head_repository: {full_name: repo},
   status: 'completed', conclusion: 'failure', ...values});
 const control = values => run(200, {workflow_id: 20, name: 'Mantenimiento',
   path: '.github/workflows/auditoria-dependencias.yml', event: 'workflow_run', ...values});
-const check = (id, values = {}) => ({id, name: 'Validar y publicar automáticamente', head_sha: sha,
+const check = (id, values = {}) => ({id, check_suite: {id:1000 + id}, app:{slug:'github-actions'}, name: 'Validar y publicar automáticamente', head_sha: sha,
   details_url: `https://github.com/${repo}/actions/runs/${id}/job/123`,
   status: 'completed', conclusion: 'failure', ...values});
 
@@ -83,6 +83,9 @@ test('URL ajena y checks sin SHA no quedan ocultos por parecerse al enlace de un
     {details_url:'https://github.com.ejemplo.test/tintinaccs/tintin-web/actions/runs/200/job/123'},
     {details_url:'https://github.com/otro/repo/actions/runs/200/job/123'},
     {head_sha:undefined},
+    {check_suite:undefined},
+    {check_suite:{id:9999}},
+    {app:{slug:'otro'}},
   ]) {
     const {state} = await snapshot({runs:[control()],checks:[check(200,values)]});
     assert.deepEqual(ids(state.failedCheckRuns), [200]);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ef5db950aa68ea4cadeee56cd5abaabf2eebd6bbde73d9b4926d171a2bf6a7a0",
+  "sourceFingerprint": "ca1013cce5f882883d9b3d0bb03b82b02e9b90c35776bb3f74f7bfbac665bc1d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1406,
     "textFiles": 1315,
-    "totalBytes": 29482089,
+    "totalBytes": 29482663,
     "pages": 19,
     "modules": 991
   },
@@ -40918,8 +40918,8 @@
     },
     {
       "path": "scripts/verificar-salud-ci-global.mjs",
-      "bytes": 18115,
-      "sha256": "63d162f82dd1cc61b976e6124a5ce67a9588ee995859a554f9977c5b28db4bbc",
+      "bytes": 18065,
+      "sha256": "091b49fce4898dd6841b114cdeb848ecfdc9affaef7307ac7a09a777753c855f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49088,8 +49088,8 @@
     },
     {
       "path": "tests/operations/github-ci-scope.test.mjs",
-      "bytes": 5749,
-      "sha256": "18c1f0453d6bb5d1082f8d6c3a6212551f1a26906c8a15f1deed0315bc5bc9f1",
+      "bytes": 5936,
+      "sha256": "dc490ebee69d6b195a0806789eb14d1a498e0382a194e5f7041e7f50f5bbc709",
       "syntax": {
         "ok": true,
         "error": ""
@@ -49123,7 +49123,7 @@
       "endpoints": [
         {
           "url": "https://github.com/$%7Brepo%7D/actions/runs/$%7Bid%7D/job/123",
-          "line": 16
+          "line": 17
         },
         {
           "url": "https://github.com.ejemplo.test/tintinaccs/tintin-web/actions/runs/200/job/123",
@@ -56891,8 +56891,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 815042,
-      "sha256": "32784655fb9025fa66ce192115f908b1190339f0385ba91f131911e89a40772c"
+      "bytes": 815360,
+      "sha256": "3b1fac6cfb69265067a9b15792b2dd458eef787c49638fe1e0667970ca3370ed"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -56909,8 +56909,8 @@
     {
       "path": "docs/agent/MANTENIMIENTO_FLUJOS.md",
       "extension": ".md",
-      "bytes": 5942,
-      "sha256": "7f43fac0b1c07cbbc8b7dca7b8fcf008e434a8ef6ff351233932607725460887"
+      "bytes": 6061,
+      "sha256": "e3bcd2bc698bbea61d05278101109e5e142ec7a4d5dfd0c8722320b04a555392"
     },
     {
       "path": "docs/agent/MIGRACION_CONTROL_20261010.md",
@@ -61223,8 +61223,8 @@
     {
       "path": "scripts/verificar-salud-ci-global.mjs",
       "extension": ".mjs",
-      "bytes": 18115,
-      "sha256": "63d162f82dd1cc61b976e6124a5ce67a9588ee995859a554f9977c5b28db4bbc"
+      "bytes": 18065,
+      "sha256": "091b49fce4898dd6841b114cdeb848ecfdc9affaef7307ac7a09a777753c855f"
     },
     {
       "path": "sitemap-pages.xml",
@@ -62537,8 +62537,8 @@
     {
       "path": "tests/operations/github-ci-scope.test.mjs",
       "extension": ".mjs",
-      "bytes": 5749,
-      "sha256": "18c1f0453d6bb5d1082f8d6c3a6212551f1a26906c8a15f1deed0315bc5bc9f1"
+      "bytes": 5936,
+      "sha256": "dc490ebee69d6b195a0806789eb14d1a498e0382a194e5f7041e7f50f5bbc709"
     },
     {
       "path": "tests/operations/html-layout-fixture.test.mjs",
