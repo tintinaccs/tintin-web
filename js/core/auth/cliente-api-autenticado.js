@@ -1,6 +1,6 @@
 // Cliente autenticado único para APIs de la tienda.
 // Nunca cierra la sesión ante errores HTTP, red, rate limiting o permisos.
-import { AUTH_STATES, waitForSession } from './coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { AUTH_STATES, waitForSession } from './coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 
 export async function currentAuthenticatedUser() {
   const snapshot = await waitForSession();

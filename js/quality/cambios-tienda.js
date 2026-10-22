@@ -1,7 +1,7 @@
 import { db } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { onAppCheckSnapshot } from '../core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { doc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { createSiteRevisionObserver, notifySiteContentChange } from './vigilancia-version.js?v=tintin-20261021-visual-scope-2';
+import { createSiteRevisionObserver, notifySiteContentChange } from './vigilancia-version.js?v=tintin-20261021-commerce-review-1';
 
 if (!window.TintinSiteChangesBooted) {
   window.TintinSiteChangesBooted = true;

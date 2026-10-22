@@ -122,7 +122,7 @@ async function enhanceProfile() {
           import('../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-          import('../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1'),
+          import('../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1'),
         ]);
         const snapshot = await sessionApi.waitForSession();
         if (snapshot.status === sessionApi.AUTH_STATES.UNKNOWN) throw new Error('No pudimos verificar tu sesión. Volvé a intentar en unos segundos.');
@@ -202,7 +202,7 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
-  void import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20261017-domain-cutover-1')
+  void import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20261022-avatar-inicial-1')
     .catch(error => console.warn('[Perfil] Pedidos pendientes:', error?.code || error?.message));
   activate(initialPanel);
 }

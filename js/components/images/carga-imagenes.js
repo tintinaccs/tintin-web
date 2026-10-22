@@ -438,6 +438,7 @@ export function attachMultiImageUploadWidget(container, {onChange, onOpenLibrary
     if (destroyed || busy()) return;
     const selected=Array.from(files || []);
     validating++;
+    if(selected.length)container.dispatchEvent(new CustomEvent('tintin:image-pending',{bubbles:true,detail:{pending:true}}));
     validation=validation.then(async()=>{
       let rejected=0;
       for(const file of selected) {

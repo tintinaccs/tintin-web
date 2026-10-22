@@ -852,18 +852,18 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261021-identidad-1');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20261022-avatar-inicial-1');
     }
   }
 
   function bootStoreGate() {
     if (!storeGateRequired) return;
-    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261020-domain-cutover-consolidated-1');
+    importSibling('core/store-gate/control-tienda.js', 'Store Gate', showEmergencyStoreGate, 'tintin-20261022-avatar-inicial-1');
   }
 
   function bootHeaderMode() {
     if (!window.TintinHeaderModeBooted) {
-      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261020-domain-cutover-consolidated-1');
+      importSibling('components/navigation/compartido/visibilidad-navegacion-por-dispositivo.js', 'Header Mode', undefined, 'tintin-20261021-commerce-review-1');
     }
   }
 
@@ -905,16 +905,16 @@
     try { framed = window.top !== window; } catch { framed = true; }
     if (isVisualPreviewFrame || framed) return;
     if (!window.TintinSiteChangesBooted) {
-      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261021-visual-scope-2');
+      importSibling('quality/cambios-tienda.js', 'Site Changes', undefined, 'tintin-20261021-commerce-review-1');
     }
     if (!window.TintinVersionWatchBooted) {
-      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261021-visual-scope-2');
+      importSibling('quality/vigilancia-version.js', 'Version Watch', undefined, 'tintin-20261021-commerce-review-1');
     }
   }
 
   function bootHeaderScrollHide() {
     if (!window.TintinHeaderScrollHideBooted) {
-      importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
+      importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide', undefined, 'tintin-20261021-commerce-review-1');
     }
   }
 
@@ -922,43 +922,43 @@
     const current = currentPath();
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
       importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix', undefined, 'tintin-20261020-orders-clean-2');
-      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261021-welcome-guide-1');
-      importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
-      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261020-domain-cutover-consolidated-1');
+      importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control', undefined, 'tintin-20261022-avatar-inicial-1');
+      importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix', undefined, 'tintin-20261021-commerce-review-1');
+      importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync', undefined, 'tintin-20261022-avatar-inicial-1');
     }
   }
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
+      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal', undefined, 'tintin-20261021-commerce-review-1');
     }
   }
 
   function bootImagePerformance() {
     if (!window.TintinImagePerformanceBooted) {
-      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
+      importSibling('components/images/rendimiento-imagenes.js', 'Image Performance', undefined, 'tintin-20261021-commerce-review-1');
     }
   }
 
   function bootImagesPhase5Public() {
     if (!window.TintinImagesPhase5Booted) {
-      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261021-welcome-guide-1');
+      importSibling('components/images/gestion-imagenes.js', 'Images Phase 5', undefined, 'tintin-20261022-avatar-inicial-1');
     }
   }
 
   function bootCollectionsPhase4Public() {
     if (!window.TintinCollectionsPhase4Booted) {
-      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261020-domain-cutover-consolidated-1');
+      importSibling('pages/collections/presentacion-colecciones.js', 'Collections Phase 4', undefined, 'tintin-20261022-avatar-inicial-1');
     }
   }
 
   function bootFavoritesPublic() {
-    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261020-domain-cutover-consolidated-1');
+    importSibling('components/favorites/sincronizacion-favoritos.js', 'Favorites', undefined, 'tintin-20261022-avatar-inicial-1');
   }
 
   function bootThemeColorSanitizerPublic() {
     if (!window.TintinThemeColorSanitizerBooted) {
-      importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer', undefined, 'tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2');
+      importSibling('components/color/normalizador-color-tema.js', 'Theme Color Sanitizer', undefined, 'tintin-20261021-commerce-review-1');
     }
   }
 

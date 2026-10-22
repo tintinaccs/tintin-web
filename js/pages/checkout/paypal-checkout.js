@@ -1,5 +1,5 @@
 import './checkout-resumen-confirmacion.js?v=tintin-20260914-summary-svg-fix-1';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 
 const state = { config: null, pending: null, sdkPromise: null, providerOrderId: '' };
 const $ = id => document.getElementById(id);
@@ -67,8 +67,12 @@ async function render() {
   }
 }
 
-window.addEventListener('tintin:paypal-order-ready', event => {
-  state.pending = event.detail;
+function receivePendingOrder(detail) {
+  if (!detail?.orderId) return;
+  state.pending = detail;
   $('tt-paypal-checkout')?.style.setProperty('display', 'block');
   render();
-});
+}
+window.addEventListener('tintin:paypal-order-ready', event => receivePendingOrder(event.detail));
+// El pedido puede restaurarse antes de que termine de cargar este módulo.
+if (window.TintinPaypalPendingOrder) receivePendingOrder(window.TintinPaypalPendingOrder);

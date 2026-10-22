@@ -1,7 +1,7 @@
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261021-workspace-account-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261020-domain-cutover-consolidated-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261022-avatar-inicial-1';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261022-avatar-inicial-1';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1-stock-flow-20261014-1';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
@@ -65,6 +65,7 @@ export function mapProduct(id, d) {
   const rawExtraImages = Array.isArray(d.imagesExtra) ? d.imagesExtra : Array.isArray(d.images) ? d.images : [];
   return {
     id: String(id),
+    sku: cleanText(d.sku ?? '', 120),
     name: cleanText(d.name || d.title || d.Title || d.handle || d.Handle || '', 180),
     cat: category,
     category,
@@ -107,6 +108,7 @@ export function mapProduct(id, d) {
 function compactProduct(product) {
   return {
     id: product.id,
+    sku: product.sku,
     name: product.name,
     cat: product.cat,
     category: product.category,

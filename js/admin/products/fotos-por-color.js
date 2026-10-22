@@ -17,6 +17,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
   const uploads = [];
   let pool = media.uniqueImages(media.galleryImages(product).map(url => sanitizeImageUrl(url)).filter(Boolean));
   let activeKey = media.colorKey(product);
+  let visibleColor = null;
   for (const row of initialRows) {
     if (!activeKey || !row?.[activeKey]) continue;
     if (Object.keys(row).some(key => !['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key))) continue;
@@ -89,11 +90,16 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     if (destroyed || flushing || uploads.some(widget => widget.hasPending?.()) || variantPhotos.hasPending()) return;
     destroyUploads(); container.replaceChildren();
     const options = colors();
+    if(visibleColor===null || (visibleColor && !options.includes(visibleColor)))visibleColor=options[0] || '';
     pool = media.uniqueImages([...pool, mainInput.value, ...imagesInput.value.split(/\r?\n/)].map(url => sanitizeImageUrl(url)).filter(Boolean));
     const heading = document.createElement('h3'); heading.textContent = 'Fotos por color'; container.append(heading);
     const hint = document.createElement('p');
     hint.textContent = 'Sugerimos un color para las fotos sin asignar cuando la imagen permite estimarlo. Revisá la propuesta y cambiá lo que necesites. Las fotos y los círculos se aplican al guardar el producto.';
     container.append(hint);
+    const filters=document.createElement('div');filters.className='tt-editor-choices tt-editor-photo-filters';filters.setAttribute('role','group');filters.setAttribute('aria-label','Ver fotos por color');
+    const applyFilter=()=>{for(const field of container.querySelectorAll(':scope > fieldset[data-media-color]'))field.hidden=Boolean(visibleColor && field.dataset.mediaColor!==visibleColor);for(const button of filters.children)button.setAttribute('aria-pressed',String(button.dataset.photoColor===visibleColor));};
+    for(const color of ['',...options]){const button=document.createElement('button');button.type='button';button.className='tt-editor-choice';button.textContent=color || 'Todas';button.dataset.photoColor=color;button.addEventListener('click',()=>{visibleColor=color;applyFilter();});filters.append(button);}
+    if(options.length)container.append(filters);
     const paletteRow = document.createElement('div'); paletteRow.className = 'adm-color-palette';
     const palette = presetSelect('', 'Paleta de colores');
     const addButton = document.createElement('button'); addButton.type = 'button'; addButton.className = 'adm-btn adm-btn-outline'; addButton.textContent = 'Agregar color';
@@ -104,7 +110,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
       const note = document.createElement('p'); note.textContent = 'Para agregar un color con stock, editá primero las variantes de inventario. Aquí podés asignar sus fotos y cambiar el círculo.'; container.append(note);
     }
     for (const color of options) {
-      const field = document.createElement('fieldset'); field.className = 'adm-color-photos';
+      const field = document.createElement('fieldset'); field.className = 'adm-color-photos';field.dataset.mediaColor=color;
       const legend = document.createElement('legend'); legend.textContent = color; field.append(legend);
       const appearance = appearances.get(color) || {};
       const controls = document.createElement('div'); controls.className = 'adm-color-palette';
@@ -159,6 +165,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
       }
       container.append(field);
     }
+    applyFilter();
     variantPhotos.render(container, pool, render);
     notifyPreview();
     void analyzePhotos();
@@ -168,7 +175,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     // Las asociaciones de otros atributos se conservan; se reemplazan sólo
     // las filas de colores gestionadas en este editor.
     const otherRows = initialRows.filter(row => !row || !Object.keys(row).some(key => /^colou?r$/i.test(key)) || Object.keys(row).some(key => !['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key)));
-    return variantPhotos.serialize([...otherRows, ...options.map(color => {const row={...initialRows.find(row=>String(row?.[activeKey] || '').trim()===color && !Object.keys(row).some(key=>!['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key))),[activeKey]:color,imageUrls:assignments.get(color) || [],...(appearances.get(color) || {})};delete row.imageUrl;return row;})]);
+    return variantPhotos.serialize([...otherRows, ...options.map(color => {const row={...initialRows.find(row=>String(row?.[activeKey] || '').trim()===color && !Object.keys(row).some(key=>!['price','sku','imageUrl','imageUrls','stock','active','colorHex','swatch',activeKey].includes(key))),[activeKey]:color,imageUrls:assignments.get(color) || [],...(appearances.get(color) || {})};delete row.imageUrl;delete row.colorHex;delete row.swatch;Object.assign(row,appearances.get(color) || {});return row;})]);
   }
   function notifyPreview() {
     if (!destroyed) setProductPreviewMedia(container.closest('#prod-form-card'), serialize());

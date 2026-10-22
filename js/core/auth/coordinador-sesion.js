@@ -9,7 +9,7 @@ import {
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { AUTH_STATES, createSessionStateMachine } from './estado-sesion.mjs?v=tintin-20260921-auth-session-never-unknown-4';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
-import { projectAccountPresentation } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1-ui-fixes-20261014-1-admin-live-20261016-1';
+import { projectAccountPresentation } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261022-avatar-inicial-1';
 
 export { AUTH_STATES };
 export const SESSION_HANDOFF_KEY = 'tt_auth_handoff_v2';

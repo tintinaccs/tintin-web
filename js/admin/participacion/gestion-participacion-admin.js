@@ -1,1 +1,1 @@
-import './gestion-participacion-admin-v2.js?v=tintin-20261020-push-return-1';
+import './gestion-participacion-admin-v2.js?v=tintin-20261022-avatar-inicial-1';

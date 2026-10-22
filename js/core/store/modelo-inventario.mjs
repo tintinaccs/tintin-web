@@ -22,12 +22,11 @@ export function statusReservesInventory(status) {
   return !TERMINAL_STATUSES.has(String(status || 'pendiente'));
 }
 
-// Modelo "descontar al confirmar": un pedido nuevo (pendiente y sin pago) no
-// toca el stock. Se descuenta cuando el pago queda 'pagado' o cuando el equipo
-// lo avanza más allá de 'pendiente'. Cancelado/rechazado nunca descuentan.
-export function orderConfirmsInventory({ status, paymentStatus } = {}) {
+// El checkout nuevo aparta la unidad al registrar la solicitud. Pedidos
+// anteriores/manuales mantienen confirmación/pago. Cancelados nunca reservan.
+export function orderConfirmsInventory({ status, paymentStatus, inventoryPolicy } = {}) {
   if (!statusReservesInventory(status)) return false;
-  return String(paymentStatus || '') === 'pagado' || String(status || 'pendiente') !== 'pendiente';
+  return inventoryPolicy === 'reserve-on-checkout' || String(paymentStatus || '') === 'pagado' || String(status || 'pendiente') !== 'pendiente';
 }
 
 export function orderReservesInventory(order) {
@@ -52,9 +51,9 @@ export function computeInventoryDeltas(beforeOrder, patch = {}, maxDistinct = 4)
     ? patch.paymentStatus
     : beforeOrder?.paymentStatus || beforeOrder?.payment?.status;
   // Lo ya descontado se conserva (pedidos anteriores a este modelo incluidos)
-  // hasta que el pedido termine; lo no descontado solo se descuenta al confirmar.
+  // hasta que el pedido termine; una reapertura respeta la política registrada.
   const afterReserved = statusReservesInventory(afterStatus) &&
-    (beforeReserved || orderConfirmsInventory({ status: afterStatus, paymentStatus: afterPaymentStatus }));
+    (beforeReserved || orderConfirmsInventory({ status: afterStatus, paymentStatus: afterPaymentStatus, inventoryPolicy: beforeOrder?.inventoryPolicy }));
   const ids = new Set([...beforeItems.keys(), ...afterItems.keys()]);
   const deltas = new Map();
 

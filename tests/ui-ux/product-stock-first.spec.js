@@ -98,3 +98,19 @@ for (const width of [390, 1440]) test(`catálogo actualiza stock y foto sin pedi
   await expect(card.locator('.tt-stock-label')).toBeVisible();
   await expect(page.locator('#tt-version-notice')).toHaveCount(0);
 });
+
+for(const width of [390,1440])test(`ficha y SEO conservan descripción y disponibilidad por variante ${width}px`,async({page})=>{
+ await page.setViewportSize({width,height:900});await catalog(page,[product]);await page.goto(`/product?id=${product.id}`);
+ await page.waitForFunction(()=>window._renderProductDetail&&window.TintinCatalogMerchandising?.isProductInStock);
+ await page.evaluate(product=>{
+  const exhausted={...product,description:'Acero con medidas reales del catálogo',material:'acero-inoxidable',measurements:'2 cm',care:'Limpiar con paño suave',variantInventory:product.variantInventory.map(v=>({...v,stock:0}))};
+  Object.defineProperty(window,'PRODUCTS',{configurable:true,get:()=>[exhausted],set(){}});window._renderProductDetail(exhausted);
+ },product);
+ await expect(page.locator('#product-desc')).toHaveText('Acero con medidas reales del catálogo');
+ await expect(page.locator('#product-status')).toHaveText('Agotado');
+ await expect(page.locator('#product-specifications')).toContainText('Acero inoxidable');
+ await expect(page.locator('#product-specifications')).toContainText('2 cm');
+ await expect(page.locator('#product-specifications')).toContainText('Limpiar con paño suave');
+ expect(await page.locator('#tt-product-jsonld').evaluate(el=>JSON.parse(el.textContent).offers.availability)).toBe('https://schema.org/OutOfStock');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});

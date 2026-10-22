@@ -1,4 +1,4 @@
-import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 
 const sections=['ventas-locales','clientes-compraron','espejos-sheets'];
 const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];

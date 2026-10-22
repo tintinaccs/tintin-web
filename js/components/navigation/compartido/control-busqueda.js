@@ -1,6 +1,7 @@
+import { normalizeProductSearch as normalize, productSearchText, productSearchScore } from '../../../core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261021-workspace-account-1';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261022-avatar-inicial-1';
 
 const MAX_RESULTS = 10;
 import { hasProductStock, firstAvailableVariant } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
@@ -11,15 +12,6 @@ let index = [];
 let timer = 0;
 let activeIndex = -1;
 let loadPromise = null;
-
-function normalize(value) {
-  return String(value == null ? '' : value)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9ñ]+/g, ' ')
-    .trim();
-}
 
 function safeImageUrl(value) {
   try {
@@ -38,35 +30,16 @@ function formatPrice(value) {
   return `Gs. ${Math.round(amount).toLocaleString('es-PY')}`;
 }
 
-function productSearchText(product) {
-  const variants = product?.variants && typeof product.variants === 'object'
-    ? JSON.stringify(product.variants)
-    : '';
-  return normalize([
-    product?.name,
-    product?.category,
-    product?.cat,
-    product?.description,
-    product?.desc,
-    ...(Array.isArray(product?.tags) ? product.tags : []),
-    variants,
-  ].filter(Boolean).join(' '));
-}
-
 function buildIndex(products) {
   index = (Array.isArray(products) ? products : [])
-    .filter(product => product && product.active !== false)
+    .filter(product => product && (window.TintinCatalogPolicy?.isCatalogVisible
+      ? window.TintinCatalogPolicy.isCatalogVisible(product)
+      : product.active !== false && String(product.name || '').trim() && Number(product.price) > 0))
     .map(product => ({ product, searchText: productSearchText(product) }));
 }
 
 function resultScore(entry, query) {
-  const name = normalize(entry.product?.name);
-  if (name === query) return 100;
-  if (name.startsWith(query)) return 80;
-  if (name.includes(query)) return 60;
-  if (entry.searchText.includes(query)) return 30;
-  const words = query.split(' ').filter(Boolean);
-  return words.length && words.every(word => entry.searchText.includes(word)) ? 20 : 0;
+  return productSearchScore(entry.product, query, entry.searchText);
 }
 
 function searchProducts(query) {
@@ -75,7 +48,7 @@ function searchProducts(query) {
   return index
     .map(entry => ({ ...entry, score: resultScore(entry, normalizedQuery) }))
     .filter(entry => entry.score > 0)
-    .sort((a, b) => b.score - a.score || String(a.product.name).localeCompare(String(b.product.name), 'es'))
+    .sort((a, b) => Number(hasProductStock(b.product)) - Number(hasProductStock(a.product)) || b.score - a.score || String(a.product.name).localeCompare(String(b.product.name), 'es'))
     .slice(0, MAX_RESULTS)
     .map(entry => entry.product);
 }
@@ -142,7 +115,17 @@ function createResult(product, position) {
   name.textContent = String(product.name || 'Producto');
   const meta = document.createElement('span');
   meta.textContent = [String(product.category || product.cat || '').trim(), formatPrice(product.price)].filter(Boolean).join(' · ');
-  if (!inStock) meta.textContent += ' · Agotado';
+  const previous = Number(product.priceBefore);
+  const current = Number(product.price);
+  if (Number.isFinite(previous) && Number.isFinite(current) && current > 0 && previous > current) {
+    const oldPrice = document.createElement('s');
+    oldPrice.textContent = formatPrice(previous);
+    oldPrice.setAttribute('aria-label', `Precio anterior ${formatPrice(previous)}`);
+    const discount = document.createElement('span');
+    discount.textContent = ` · −${Math.max(1, Math.round((1 - current / previous) * 100))}%`;
+    meta.append(' · ', oldPrice, discount);
+  }
+  if (!inStock) meta.append(' · Agotado');
   body.append(name, meta);
   link.appendChild(body);
   return link;

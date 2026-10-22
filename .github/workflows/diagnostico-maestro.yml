@@ -6,7 +6,7 @@ on:
       production_origin:
         description: Origen público que debe auditarse como producción real
         required: true
-        default: https://tintinaccesorios.pages.dev
+        default: https://tintinaccs.com
         type: string
       include_production:
         description: Incluir pruebas contra producción real
@@ -47,15 +47,38 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
+      - name: Configurar Java para emuladores Firebase
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
       - name: Instalar dependencias
         run: npm ci
 
       - name: Instalar Chromium para auditorías que lo requieran
         run: npx playwright install --with-deps chromium
 
+      - name: Servir el árbol exacto auditado (static)
+        shell: bash
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-master-static-http.log 2>&1 &
+          echo $! > /tmp/tintin-master-static-http.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/index.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/tintin-master-static-http.log || true
+          exit 1
+
       - name: Ejecutar suite de integridad
         id: suite
         continue-on-error: true
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+          PERF_BASE_URL: http://127.0.0.1:4173
         run: node scripts/ejecutar-diagnostico-maestro.mjs static
 
       - name: Verificar estado global del commit en GitHub/CI
@@ -105,6 +128,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
+      - name: Configurar Java para emuladores Firebase
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
       - name: Instalar dependencias
         run: npm ci
 
@@ -114,9 +143,26 @@ jobs:
       - name: Instalar Chromium para las regresiones de acceso
         run: npx playwright install --with-deps chromium
 
+      - name: Servir el árbol exacto auditado (commerce)
+        shell: bash
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-master-commerce-http.log 2>&1 &
+          echo $! > /tmp/tintin-master-commerce-http.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/index.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/tintin-master-commerce-http.log || true
+          exit 1
+
       - name: Ejecutar suite de comercio y datos
         id: suite
         continue-on-error: true
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+          PERF_BASE_URL: http://127.0.0.1:4173
         run: node scripts/ejecutar-diagnostico-maestro.mjs commerce
 
       - name: Guardar evidencia de comercio

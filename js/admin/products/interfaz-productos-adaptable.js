@@ -87,7 +87,7 @@ export function enhanceProductEditor() {
       general:'Lo necesario para identificar y vender tu producto.',
       photos:'Subí varias fotos, ordenalas y elegí la portada de cada color.',
       prices:'Precio anterior y etiquetas para destacar tu producto.',
-      inventory:'Elegí los colores y asigná sus cantidades. El total se calcula automáticamente.',
+      inventory:'Cantidad por color. Total automático.',
       specs:'Detalles opcionales que ayudan a elegir.',
       visibility:'Códigos, costos internos y opciones de publicación.',
     };
@@ -132,6 +132,7 @@ export function enhanceProductEditor() {
     const label=control.parentElement.querySelector(':scope > label');
     if (label) label.htmlFor=control.id;
   }
+  const variantsLabel=card.querySelector('label[for="prod-variants-text"]');if(variantsLabel && variantsLabel.textContent!=='Colores y opciones')variantsLabel.textContent='Colores y opciones';
   const save = card.querySelector('#prod-save-btn');
   const footer=save?.parentElement;
   if (footer && !footer.classList.contains('tt-product-editor-actions')) {

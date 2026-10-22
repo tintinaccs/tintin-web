@@ -1521,3 +1521,16 @@ html.tt-product-editor-open #section-productos.tt-commerce-mounted #prod-form-ca
   #prod-form-card #prod-variant-stock .tt-editor-quantity { grid-column:1/-1; }
   #prod-form-card #prod-variant-stock .tt-editor-stepper > button { flex-basis:36px; padding:4px; }
 }
+#prod-form-card .adm-color-photos[hidden] { display:none !important; }
+#prod-form-card .tt-editor-color-presets .tt-editor-choice { display:inline-flex; align-items:center; gap:7px; }
+#prod-form-card .tt-editor-color-presets .adm-color-circle { width:14px; height:14px; flex:none; border:1px solid #d1ccd0; }
+#prod-form-card .tt-editor-photo-filters { padding-block:8px; }
+#prod-form-card .tt-photo-order-actions { grid-template-columns:minmax(0,1fr) 44px 44px; }
+#prod-form-card #prod-variant-stock .tt-editor-stock-row { grid-template-columns:44px minmax(0,1fr); }
+#prod-form-card #prod-variant-stock .tt-editor-quantity { grid-column:1/-1; }
+#prod-form-card #prod-variant-stock .tt-editor-stepper > button { flex-basis:44px; min-width:44px; }
+@media(max-width:600px) {
+  #prod-form-card .tt-photo-order-actions { grid-template-columns:repeat(2,minmax(44px,1fr)); }
+}
+#prod-form-card .tt-photo-order-actions { grid-template-columns:repeat(2,minmax(44px,1fr)); }
+#prod-form-card .tt-photo-order-actions > :first-child { grid-column:1/-1; }

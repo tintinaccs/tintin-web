@@ -1,3 +1,5 @@
+import vm from 'node:vm';
+import {createRequire} from 'node:module';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -19,4 +21,21 @@ for(const role of ['superadmin','admin'])test(`catálogo operativo ${role}: pág
  }
  assert.equal(values.at(-1).length,role==='superadmin'?1201:1000);assert.ok(loading>0);
  stop();const count=values.length;watches[0].next({docs:[],metadata:{fromCache:false}});assert.equal(values.length,count);assert.ok(watches.every(w=>w.stopped));
+});
+
+test('el auditor rechaza perder el alias, la navegación visible o volver al filtro heredado',()=>{
+ const require=createRequire(import.meta.url);
+ const audit=fs.readFileSync('scripts/auditar-admin-commerce-shopify.js','utf8');
+ function rejects(candidate){
+  const process={exitCode:0};
+  const mockFs={...fs,readFileSync:(file,...args)=>String(file).endsWith('js/admin/shopify-commerce-admin.js')?candidate:fs.readFileSync(file,...args)};
+  vm.runInNewContext(audit,{require:name=>name==='node:fs'?mockFs:require(name),__dirname:require('node:path').resolve('scripts'),console:{log(){},error(){}},process});
+  return process.exitCode===1;
+ }
+ assert.equal(rejects(source),false);
+ const begin=source.indexOf("  if (action === 'collection-products'");const end=source.indexOf("  if (action === 'collection-delete'",begin);
+ const block=source.slice(begin,end);assert.ok(block.length>0);
+ for(const changed of [block.replace('wristCategory(id)','id'),block.replace('return renderProducts()', 'return window.collVerProductos?.(id)'),block.replace('?.click()',''),block.replace("state.productSearch = ''", "state.productSearch = 'anterior'")]){
+  assert.notEqual(changed,block);assert.equal(rejects(source.slice(0,begin)+changed+source.slice(end)),true);
+ }
 });

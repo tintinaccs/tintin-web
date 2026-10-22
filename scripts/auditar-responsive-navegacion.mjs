@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { navigationPaintState } from './lib/superficie-navegacion.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = '127.0.0.1';
@@ -10,7 +11,7 @@ const port = 4198;
 const baseURL = `http://${host}:${port}`;
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
-const mime = { '.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2' };
+const mime = { '.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2' };
 const UI_WAIT_MS = 4000;
 const NAVIGATION_WAIT_MS = 8000;
 const SHELL_READY_MS = 6500;
@@ -147,7 +148,6 @@ try {
     }
     const state = await page.evaluate(() => {
       const visible = node => !!node && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden' && node.getBoundingClientRect().width > 0;
-      const solidWhite = node => ['rgb(255, 255, 255)','rgba(255, 255, 255, 1)'].includes(getComputedStyle(node).backgroundColor);
       const hitTarget = node => {
         const rect = node.getBoundingClientRect();
         const top = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
@@ -169,9 +169,6 @@ try {
         activeMobile:document.querySelector('#tt-tabbar [aria-current="page"]')?.getAttribute('aria-label') || '',
         haloReady:document.getElementById('tt-tabbar')?.classList.contains('tt-mobile-nav-ready') || false,
         pillWidth:document.querySelector('.tt-desktop-active-pill')?.getBoundingClientRect().width || 0,
-        solidDesktop:solidWhite(document.getElementById('tt-header-desktop-tablet')),
-        solidTablet:solidWhite(document.getElementById('tt-header-tablet')),
-        solidMobile:solidWhite(document.getElementById('tt-tabbar')),
         activeControlsClickable:blockedControls.length === 0,
         blockedControls,
       };
@@ -179,7 +176,9 @@ try {
     const expected = width < 768 ? [false,false,true] : width <= 1024 ? [false,true,false] : [true,false,false];
     check([state.desktop,state.tablet,state.mobile].filter(Boolean).length === 1, `${width}px no tiene exactamente una navegación visible (${JSON.stringify(state)})`);
     check(state.desktop === expected[0] && state.tablet === expected[1] && state.mobile === expected[2], `${width}px muestra el dispositivo incorrecto (${JSON.stringify(state)})`);
-    check(width < 768 ? state.solidMobile : width <= 1024 ? state.solidTablet : state.solidDesktop, `${width}px conserva un fondo transparente en la navegación activa (${JSON.stringify(state)})`);
+    const activeHeader = width < 768 ? '#tt-tabbar' : width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
+    state.background = await page.locator(activeHeader).evaluate(navigationPaintState);
+    check(state.background.painted, `${width}px carece de fondo visible en la navegación activa (${JSON.stringify(state)})`);
     check(state.activeControlsClickable, `${width}px tiene controles visibles cubiertos o no clicables (${JSON.stringify(state)})`);
     check(state.duplicates.length === 0, `${width}px contiene IDs duplicados: ${state.duplicates.join(', ')}`);
     check(state.overflow <= 1, `${width}px desborda horizontalmente ${state.overflow}px`);

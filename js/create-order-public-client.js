@@ -7,7 +7,7 @@
  * checkout.
  */
 import { apiUrl } from './core/firebase/origen-funciones.js?v=tintin-20261017-domain-cutover-1';
-import { currentAuthenticatedUser, authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { currentAuthenticatedUser, authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;
 const CREATE_ORDER_ENDPOINT = apiUrl('apps-script-bridge');

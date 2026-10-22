@@ -9,7 +9,7 @@
  */
 import { onAppCheckSnapshot as onSnapshot } from '../firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import {
   doc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { getUserRole } from '../auth/roles.js?v=tintin-20261017-domain-cutover-1';
