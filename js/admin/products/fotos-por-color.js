@@ -1,6 +1,6 @@
 import '../../components/images/galeria-producto.js?v=tintin-20261019-variant-links-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261022-products-master-1';
+import { createVariantPhotoEditor, appendPhotoOrderControls } from './fotos-por-variante.js?v=tintin-20261022-color-editor-repair-1';
 import { setProductPreviewMedia } from './vista-previa-producto.js?v=tintin-20261021-visual-scope-2';
 
 export function attachColorPhotos({ container, product = {}, variantsInput, imagesInput, mainInput, openLibrary, attachUpload }) {
@@ -63,9 +63,7 @@ export function attachColorPhotos({ container, product = {}, variantsInput, imag
     if (!colors().length && variantsInput.value.trim()) return;
     analyzing = true;
     try {
-      const ordered=media.uniqueImages([...(assignments.get(color) || []), ...pool]);
-      for (const url of ordered) {
-        const tile=document.createElement('div');tile.className='tt-color-photo-tile';
+      for (const url of [...pool]) {
         const identity = media.imageKey(url);
         if (destroyed) break;
         if (analyzed.has(identity)) continue;

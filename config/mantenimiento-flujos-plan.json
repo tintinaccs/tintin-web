@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "293949fab186679f82c0a00801b22f27ba804b5a",
-  "reason": "Integrar editor maestro y catálogo coherente, stock y fotos por color, prioridad comercial y búsqueda informativa bajo demanda",
+  "reason": "Conservar catálogo maestro integrado y corregir detección de color y numeración estable de fotos por combinación",
   "files": [
     {
       "path": "404.html",
@@ -21,7 +21,7 @@
     {
       "path": "admin.html",
       "oldHash": "b0c1229962ddf6805fd2bc38b6584f2f3f1495f93a41f3517881875d4ddb5b61",
-      "newHash": "da375e972215ee2d8eee1a67146a676701b3fe4b647c831bbe05dbc4f4f7aefa"
+      "newHash": "bd732a93f0bd9e1b89f70b6310f99d6e351dd3e80f6672157b9c0c3c04ebaf4d"
     },
     {
       "path": "cambios-devoluciones.html",
@@ -91,7 +91,7 @@
     {
       "path": "js/admin/admin-app.js",
       "oldHash": "8a739d7e645af3526834f0c5aca9aa4bb545e5ff83e817b454f88ae0751e2365",
-      "newHash": "7adc14333cf1146af308c9e0192f558edf88e68dbbd08497b6ab858c243de50e"
+      "newHash": "3842dceaeecd82b3f6651903f445dc9e03f11c37dd2fc96ffc54d56c2bd0a177"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
@@ -201,7 +201,7 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "9d6e82607fda585452f50f1e398e43290175bc5378405d4c6f5c6a533f6c3af1",
-      "newHash": "75d0c41a6a90777fa6eb4cf3adc1a80100b2c62e4f35660d4eb4cde61846957f"
+      "newHash": "317851d52ee6d484f43364d44ee51ab518195e941f211a5d47533924cdf25415"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

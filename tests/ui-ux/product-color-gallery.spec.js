@@ -25,12 +25,12 @@ for(const width of [320,390,709,768,1024,1440,1920]) test(`galería y editor de 
   await page.route(/\/(gold|silver)\d\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><circle cx="60" cy="60" r="40" fill="${r.request().url().includes('gold')?'gold':'silver'}"/></svg>`}));
   await page.goto('/color-gallery-fixture');await page.waitForFunction(()=>window.fixtureReady&&window.editorReady);
   await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);
-  await page.getByRole('button',{name:'Dorado',exact:true}).click();await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);
+  await page.locator('#product-variants').getByRole('button',{name:'Dorado',exact:true}).click();await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);
   await page.getByRole('button',{name:'Ver imagen 3',exact:true}).click();await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/gold3.svg$/);
-  await page.getByRole('button',{name:'Plateado',exact:true}).click();await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/silver1.svg$/);
+  await page.locator('#product-variants').getByRole('button',{name:'Plateado',exact:true}).click();await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/silver1.svg$/);
   await expect(page.locator('#gallery-thumbs button.active')).toHaveAttribute('data-src',/silver1.svg$/);
   await page.getByRole('button',{name:'Ver imagen 2',exact:true}).click();await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/gold2.svg$/);
-  await expect(page.getByRole('button',{name:'Dorado',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#product-variants').getByRole('button',{name:'Dorado',exact:true})).toHaveAttribute('aria-pressed','true');
   await expect(page.locator('#gallery-thumbs button')).toHaveCount(6);
   await page.getByRole('button',{name:'Ampliar',exact:true}).click();expect(await page.evaluate(()=>window.lightboxImages.length)).toBe(6);
   const rows=await page.evaluate(()=>window.editor.serialize());expect(rows.map(r=>r.imageUrls.length)).toEqual([3,3]);
@@ -138,7 +138,7 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   for (const button of geometry.actions) {
     expect(button.left).toBeGreaterThanOrEqual(geometry.panel.left-1);expect(button.right).toBeLessThanOrEqual(geometry.panel.right+1);expect(button.height).toBeGreaterThanOrEqual(52);
   }
-  const colorOption = page.getByRole('button',{name:'Dorado',exact:true});
+  const colorOption = page.locator('#product-variants').getByRole('button',{name:'Dorado',exact:true});
   await expect(colorOption.locator('.tt-variant-name')).toBeVisible();
   expect(await colorOption.locator('.tt-variant-name').evaluate(node=>getComputedStyle(node).clipPath)).toBe('none');
   expect(await colorOption.evaluate(node=>node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(48);
@@ -148,7 +148,7 @@ for (const width of [320,390,709,768,1024,1280,1440,1920]) test(`ficha real mini
   await expect(page.locator('#product-variants .tt-variant-current')).toHaveText('Dorado');
   // Elegir una foto primero selecciona su color y conserva la miniatura activa.
   await page.getByRole('button',{name:'Ver imagen 5',exact:true}).click();
-  await expect(page.getByRole('button',{name:'Plateado',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#product-variants').getByRole('button',{name:'Plateado',exact:true})).toHaveAttribute('aria-pressed','true');
   await expect(page.locator('#gallery-main img')).toHaveAttribute('src',/silver2.svg$/);
   await expect(page.locator('#gallery-thumbs button.active')).toHaveAttribute('data-src',/\/silver2.svg$/);
   await expect(page.locator('#gallery-thumbs button.active')).toBeFocused();
@@ -165,6 +165,7 @@ test('las sugerencias agrupan varias fotos y respetan el cambio manual',async({p
   const rows=await page.evaluate(()=>window.editor.serialize());
   expect(rows[0].imageUrls.every(url=>url.includes('gold'))).toBe(true);expect(rows[1].imageUrls.every(url=>url.includes('silver'))).toBe(true);
   await page.getByRole('checkbox',{name:'Asignar foto 1 a Dorado',exact:true}).uncheck();
+  await page.getByRole('group',{name:'Ver fotos por color',exact:true}).getByRole('button',{name:'Plateado',exact:true}).click();
   await page.getByRole('checkbox',{name:'Asignar foto 1 a Plateado',exact:true}).check();
   await page.evaluate(()=>window.editor.refresh());
   expect((await page.evaluate(()=>window.editor.serialize()))[0].imageUrls).toHaveLength(2);
@@ -181,6 +182,7 @@ test('paleta administrativa y reemplazo manual se conservan al serializar',async
   await page.getByRole('combobox',{name:'Paleta de colores',exact:true}).selectOption('fucsia');
   await page.getByRole('button',{name:'Agregar color',exact:true}).click();
   expect((await page.evaluate(()=>window.editor.serialize())).map(row=>row.Color)).toContain('fucsia');
+  await page.getByRole('group',{name:'Ver fotos por color',exact:true}).getByRole('button',{name:'fucsia',exact:true}).click();
   await page.getByRole('checkbox',{name:'Asignar foto 1 a fucsia',exact:true}).check();
   expect((await page.evaluate(()=>window.editor.serialize())).find(row=>row.Color==='fucsia').imageUrls.some(url=>url.endsWith('/gold1.svg'))).toBe(true);
 });
@@ -192,13 +194,13 @@ for (const width of [390,1440]) test(`color descriptivo sincroniza foto responsi
   await page.route(/\/(gold|silver)\d\.svg$/,r=>r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"/>'}));
   await page.goto('/minimal-product-fixture');await page.waitForFunction(()=>window.fixtureReady);
   await expect(page.locator('#product-variants .tt-variant-label')).toHaveText('Color');
-  await page.getByRole('button',{name:'Plateado',exact:true}).click();
+  await page.locator('#product-variants').getByRole('button',{name:'Plateado',exact:true}).click();
   await expect(page.locator('#gallery-thumbs .active')).toHaveAttribute('data-src',/silver1.svg$/);
   await expect(page.locator('#gallery-thumbs .active')).toHaveAttribute('aria-pressed','true');
   await page.getByRole('button',{name:'Ver imagen 2',exact:true}).click();
-  await expect(page.getByRole('button',{name:'Dorado',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#product-variants').getByRole('button',{name:'Dorado',exact:true})).toHaveAttribute('aria-pressed','true');
   await expect(page.locator('#gallery-main img')).toHaveAttribute('srcset',/gold2.svg/);
   await expect.poll(()=>page.locator('#gallery-main img').evaluate(img=>img.currentSrc)).toMatch(/gold2.svg$/);
-  const plateado=page.getByRole('button',{name:'Plateado',exact:true});
+  const plateado=page.locator('#product-variants').getByRole('button',{name:'Plateado',exact:true});
   expect(await plateado.locator('.tt-color-swatch').evaluate(n=>getComputedStyle(n).backgroundImage)).toBe('none');
 });

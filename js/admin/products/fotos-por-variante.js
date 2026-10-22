@@ -64,10 +64,12 @@ export function createVariantPhotoEditor({ variantsInput, media, initialRows, sa
     let photos = media.rowImages(row);
     const save = urls => { photos = media.uniqueImages(urls); const next = { ...row, ...selected, imageUrls: photos }; delete next.imageUrl; changed.set(key, next); };
     const grid = document.createElement('div'); grid.className = 'adm-color-photo-grid';
-    for (const [index, url] of media.uniqueImages([...photos, ...pool]).entries()) {
+    const photoPool = media.uniqueImages([...pool, ...photos]);
+    for (const url of media.uniqueImages([...photos, ...pool])) {
       const tile=document.createElement('div');tile.className='tt-color-photo-tile';
       const label = document.createElement('label'); const check = document.createElement('input'); check.type = 'checkbox';
-      check.setAttribute('aria-label', `Asignar foto ${index + 1} a variante ${options.map(([name]) => selection[name]).join(' / ')}`);
+      const photoNumber = photoPool.findIndex(photo => media.imageKey(photo) === media.imageKey(url)) + 1;
+      check.setAttribute('aria-label', `Asignar foto ${photoNumber} a variante ${options.map(([name]) => selection[name]).join(' / ')}`);
       check.checked = photos.some(photo => media.imageKey(photo) === media.imageKey(url));
       check.addEventListener('change', () => {save(check.checked ? [...photos, url] : photos.filter(photo => media.imageKey(photo) !== media.imageKey(url)));refresh();});
       const image = document.createElement('img'); image.src = url; image.alt = ''; image.loading = 'lazy'; label.append(check, image);tile.append(label);appendPhotoOrderControls(tile,{url,photos,label:options.map(([name])=>selection[name]).join(' / '),update:urls=>{save(urls);refresh();}});grid.append(tile);

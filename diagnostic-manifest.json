@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "255dc6923b2bd1f111791b0ede3e1ebcd85d78f5cb6080692551eec9e04db511",
+  "sourceFingerprint": "fba8fe74a6d6b71b342f82c7f845291752b5ab62d45682e2f6c9ff96bf17f1b0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1407,
     "textFiles": 1316,
-    "totalBytes": 29549936,
+    "totalBytes": 29552551,
     "pages": 19,
     "modules": 992
   },
@@ -2881,8 +2881,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204385,
-      "sha256": "da375e972215ee2d8eee1a67146a676701b3fe4b647c831bbe05dbc4f4f7aefa",
+      "bytes": 204387,
+      "sha256": "bd732a93f0bd9e1b89f70b6310f99d6e351dd3e80f6672157b9c0c3c04ebaf4d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2931,7 +2931,7 @@
           "line": 2080
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261022-color-editor-repair-1",
           "target": "js/admin/admin-app.js",
           "line": 2081
         },
@@ -3280,7 +3280,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20261022-color-editor-repair-1",
           "target": "js/admin/admin-app.js",
           "line": 2081,
           "exists": true
@@ -28082,8 +28082,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 509418,
-      "sha256": "7adc14333cf1146af308c9e0192f558edf88e68dbbd08497b6ab858c243de50e",
+      "bytes": 509422,
+      "sha256": "3842dceaeecd82b3f6651903f445dc9e03f11c37dd2fc96ffc54d56c2bd0a177",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28150,7 +28150,7 @@
           "line": 10
         },
         {
-          "raw": "./products/fotos-por-color.js?v=tintin-20261022-products-master-1",
+          "raw": "./products/fotos-por-color.js?v=tintin-20261022-color-editor-repair-1",
           "target": "js/admin/products/fotos-por-color.js",
           "dynamic": false,
           "line": 11
@@ -29951,8 +29951,8 @@
     },
     {
       "path": "js/admin/products/fotos-por-color.js",
-      "bytes": 15182,
-      "sha256": "4c1299d454dc507537d537518cd1032d7e60cc7f3003ffa171a48e5c0ce8b585",
+      "bytes": 15015,
+      "sha256": "22f20b5ed33cd85a6ca61a6ecd37e677b2e4d8efca36491ef19efb0bc674ab1a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29965,7 +29965,7 @@
           "line": 2
         },
         {
-          "raw": "./fotos-por-variante.js?v=tintin-20261022-products-master-1",
+          "raw": "./fotos-por-variante.js?v=tintin-20261022-color-editor-repair-1",
           "target": "js/admin/products/fotos-por-variante.js",
           "dynamic": false,
           "line": 3
@@ -29987,8 +29987,8 @@
     },
     {
       "path": "js/admin/products/fotos-por-variante.js",
-      "bytes": 8249,
-      "sha256": "3a761e4bd37e5fbf395abbe4aa51792aeead4acd0190d4c29a545ba83a4119f8",
+      "bytes": 8403,
+      "sha256": "b3993c1639d051ea6cc16845518b4331981c8803129d735de51899a9e2e3fc81",
       "syntax": {
         "ok": true,
         "error": ""
@@ -54038,8 +54038,8 @@
     },
     {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
-      "bytes": 22098,
-      "sha256": "38e02024366e95982e7459baaea23ca4f958e815a8bc9a20b77f6030c9ba798e",
+      "bytes": 22588,
+      "sha256": "fbcfbfe73b3091a19677cb435135611c70a3c0f1779adcde8904e3e708b50bfd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55303,8 +55303,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204385,
-      "sha256": "da375e972215ee2d8eee1a67146a676701b3fe4b647c831bbe05dbc4f4f7aefa"
+      "bytes": 204387,
+      "sha256": "bd732a93f0bd9e1b89f70b6310f99d6e351dd3e80f6672157b9c0c3c04ebaf4d"
     },
     {
       "path": "apple-touch-icon.png",
@@ -56263,8 +56263,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 11499,
-      "sha256": "71dc10c4206b13569b47ae11cdbee0018333071e15aecc6ba095191fb3c04339"
+      "bytes": 11487,
+      "sha256": "f8fbd313643babb259fecd62a0fb12fdd88c2f8ecb50167906dacde45d053df1"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56276,7 +56276,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "11663aa8a81a6b79fc7938ca19b5af0f207e9bb217afbfa19cc22db1bf35de97"
+      "sha256": "59b8806da0552c60a459484ba646e2b21596b72a4c67f6fbf044b1bffab825a8"
     },
     {
       "path": "config/public-site.json",
@@ -56935,8 +56935,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 821134,
-      "sha256": "a27d8a2a59c5fed1dbe8ce3e321d97caea16b10b616c240ad28deea4dc5b9397"
+      "bytes": 822485,
+      "sha256": "8e4491ee01c1ee071ab0760d54e8abd1e25096f04a786926e0210e6094b0cee1"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57337,8 +57337,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 102557,
-      "sha256": "a90327de4402ed7ecb00077be01f96676091144822391c59b981c8b3331a7aa3"
+      "bytes": 103340,
+      "sha256": "6430b7ec2b3946f0a9f2031a23034ce4c186f473e8b8681c4674f6caeedab634"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -58033,8 +58033,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 509418,
-      "sha256": "7adc14333cf1146af308c9e0192f558edf88e68dbbd08497b6ab858c243de50e"
+      "bytes": 509422,
+      "sha256": "3842dceaeecd82b3f6651903f445dc9e03f11c37dd2fc96ffc54d56c2bd0a177"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -58327,14 +58327,14 @@
     {
       "path": "js/admin/products/fotos-por-color.js",
       "extension": ".js",
-      "bytes": 15182,
-      "sha256": "4c1299d454dc507537d537518cd1032d7e60cc7f3003ffa171a48e5c0ce8b585"
+      "bytes": 15015,
+      "sha256": "22f20b5ed33cd85a6ca61a6ecd37e677b2e4d8efca36491ef19efb0bc674ab1a"
     },
     {
       "path": "js/admin/products/fotos-por-variante.js",
       "extension": ".js",
-      "bytes": 8249,
-      "sha256": "3a761e4bd37e5fbf395abbe4aa51792aeead4acd0190d4c29a545ba83a4119f8"
+      "bytes": 8403,
+      "sha256": "b3993c1639d051ea6cc16845518b4331981c8803129d735de51899a9e2e3fc81"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -60937,8 +60937,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74106,
-      "sha256": "75d0c41a6a90777fa6eb4cf3adc1a80100b2c62e4f35660d4eb4cde61846957f"
+      "bytes": 74116,
+      "sha256": "317851d52ee6d484f43364d44ee51ab518195e941f211a5d47533924cdf25415"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -63409,8 +63409,8 @@
     {
       "path": "tests/ui-ux/product-color-gallery.spec.js",
       "extension": ".js",
-      "bytes": 22098,
-      "sha256": "38e02024366e95982e7459baaea23ca4f958e815a8bc9a20b77f6030c9ba798e"
+      "bytes": 22588,
+      "sha256": "fbcfbfe73b3091a19677cb435135611c70a3c0f1779adcde8904e3e708b50bfd"
     },
     {
       "path": "tests/ui-ux/product-first-paint.spec.js",
