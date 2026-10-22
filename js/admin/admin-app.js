@@ -6235,6 +6235,23 @@ async function prodGuardar() {
     updatedAt: serverTimestamp(),
   };
 
+  // Una edición puramente de inventario queda detrás de etiquetas y cambios comerciales.
+  if (_isEdit) {
+    const before = _allProducts.find(p => p._docId === document.getElementById('prod-id').value);
+    const comparable = ['name','sku','category','collection','price','priceBefore','imageUrl','description',
+      'material','measurements','colorFinish','care','waterResistance','warranty','sizeFit',
+      'packageContents','imagesExtra','variantMedia','tags','badge','active','oferta','destacado','variants'];
+    const equal = (a,b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+    const stockOnly = before && comparable.every(key => equal(
+      key === 'variants' ? (variantsParsed || null) : data[key],
+      key === 'variants' ? (before.variants || null) : before[key]
+    ));
+    if (stockOnly) data.restockedAt = serverTimestamp();
+    else data.merchandisingUpdatedAt = serverTimestamp();
+  } else {
+    data.merchandisingUpdatedAt = serverTimestamp();
+  }
+
   try {
   if (productVariantStockBaseline) {
         const original = productVariantStockBaseline;
@@ -6433,7 +6450,8 @@ window.TintinProductAdmin = Object.freeze({
             if (!snapshot.exists() || productFingerprint(snapshot.data()) !== request.expected) throw new Error('El producto cambió en otra sesión. Revisá sus cantidades antes de guardar.');
             before = snapshot.data();
             patch = productCardPatch(before, request, collections);
-            transaction.update(ref, {...patch, updatedAt:serverTimestamp()});
+            transaction.update(ref, {...patch, updatedAt:serverTimestamp(),
+              ...(request.field === 'stock' ? { restockedAt:serverTimestamp() } : { merchandisingUpdatedAt:serverTimestamp() })});
           }));
           if (product) Object.assign(product, patch);
           ctx.ok('save');
