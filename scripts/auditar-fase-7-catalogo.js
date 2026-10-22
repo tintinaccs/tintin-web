@@ -18,6 +18,8 @@ const merchandising = read('js/pages/catalog/politica-exhibicion-catalogo.js');
 const products = read('js/core/store/estado-productos.js');
 const storefront = read('tienda.js');
 const catalog = read('catalogo.html');
+const search = read('js/components/navigation/compartido/control-busqueda.js');
+const searchCore = read('js/core/store/busqueda-productos.mjs');
 const stockPriority = read('js/pages/catalog/prioridad-stock-catalogo.js');
 const admin = read('js/admin/admin-app.js');
 const sheets = read('functions/api/sheets-product-sync.js');
@@ -87,17 +89,21 @@ check(
 
 check(
   'La búsqueda global y la del catálogo incluyen tags y variantes',
-  /searchable\(\(p\.tags \|\| \[\]\)\.join\(' '\)\)/.test(storefront) &&
-    /searchable\(JSON\.stringify\(p\.variants \|\| \{\}\)\)/.test(storefront) &&
-    /normalizeSearch\(\(p\.tags \|\| \[\]\)\.join\(' '\)\)/.test(catalog) &&
-    /normalizeSearch\(JSON\.stringify\(p\.variants \|\| \{\}\)\)/.test(catalog),
+  /busqueda-productos\.mjs/.test(search) && /busqueda-productos\.mjs/.test(catalog) &&
+    /productSearchScore\(entry\.product, query, entry\.searchText\)/.test(search) &&
+    /productSearchScore\(p, q, cachedSearchText\(p\)\)/.test(catalog) &&
+    /Array\.isArray\(product\?\.tags\)/.test(searchCore) &&
+    /JSON\.stringify\(product\.variants\)/.test(searchCore) &&
+    /module => module\.initSearchController\(\)/.test(storefront) &&
+    !/function runSearch\(/.test(storefront),
   'La búsqueda debe encontrar productos por términos del Admin, no solo por nombre.'
 );
 
 check(
   'La búsqueda pública excluye productos no comprables',
-  /window\.TintinCatalogPolicy\?\.isCatalogVisible/.test(storefront) &&
-    /orderedPool\.filter\(p =>/.test(storefront),
+  /window\.TintinCatalogPolicy\?\.isCatalogVisible/.test(search) &&
+    /window\.TintinCatalogPolicy\.isCatalogVisible\(product\)/.test(search) &&
+    /product\.active !== false/.test(search),
   'Resultados globales no deben enlazar productos agotados, ocultos o inválidos.'
 );
 

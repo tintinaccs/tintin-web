@@ -7,7 +7,7 @@ import {
 import { rateLimit } from '../lib/operational-guard.js';
 
 const PRODUCT_FIELDS = new Set([
-  'name', 'title', 'handle', 'category', 'collectionSlug', 'collection', 'cat', 'type',
+  'sku', 'name', 'title', 'handle', 'category', 'collectionSlug', 'collection', 'cat', 'type',
   'price', 'priceBefore', 'badge', 'description', 'desc', 'material', 'measurements',
   'colorFinish', 'care', 'waterResistance', 'warranty', 'sizeFit', 'packageContents',
   'imageUrl', 'image', 'img', 'photo', 'imageSrc', 'image_src', 'imagesExtra', 'images',

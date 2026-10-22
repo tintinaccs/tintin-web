@@ -381,7 +381,7 @@
       helper.id = 'tt-checkout-name-auth-sync';
       helper.type = 'module';
       helper.src = new URL(
-        '../../pages/checkout/checkout-sincronizacion-nombre.js?v=tintin-20261017-domain-cutover-1',
+        '../../pages/checkout/checkout-sincronizacion-nombre.js?v=tintin-20261022-avatar-inicial-1',
         scriptUrl || window.location.href
       ).href;
       document.head.appendChild(helper);

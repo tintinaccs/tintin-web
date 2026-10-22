@@ -1,6 +1,6 @@
 import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { AUTH_STATES, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { AUTH_STATES, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from './icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
@@ -136,7 +136,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261020-domain-cutover-consolidated-1');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261022-avatar-inicial-1');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 

@@ -1,11 +1,51 @@
-/* Firma junto al retrato en dos columnas y al cierre de la presentación móvil. */
+/* Firma y enlace del video de la historia personal de Tintin. */
 .tt-about-maintained .tt-about-visual {
   width: 100%;
   max-width: 440px;
   justify-self: center;
 }
+.tt-about-maintained .tt-about-story-video {
+  box-sizing: border-box;
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  gap: 10px;
+  min-height: 48px;
+  margin-top: 20px;
+  padding: 10px 16px;
+  border: 1px solid var(--about-border);
+  border-radius: 999px;
+  background: var(--about-surface);
+  color: var(--about-text);
+  font-size: .875rem;
+  line-height: 1.5;
+  box-shadow: 0 4px 14px rgb(60 18 39 / 8%);
+}
+.tt-about-maintained .tt-about-story-video:hover { background: var(--about-soft); }
+.tt-about-maintained .tt-about-story-video .tt-instagram-inline-play {
+  position: relative;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--about-border);
+  color: var(--about-text);
+}
+.tt-about-maintained .tt-about-story-video .tt-instagram-inline-play::before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  left: 11px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid currentColor;
+}
 @media (max-width: 767px) {
+  .tt-about-maintained .tt-about-story-video { margin-inline: auto; }
   .tt-about-maintained .tt-about-visual { display: contents; }
   .tt-about-maintained .tt-about-section .tt-about-content { grid-row: 2; }
-  .tt-about-maintained .tt-about-section .tt-about-handwritten-signature { grid-row: 3; margin-top: 0; }
+  .tt-about-maintained .tt-about-section .tt-about-handwritten-signature { grid-row: 3; margin: -12px auto -6px; }
+  .tt-about-maintained .tt-about-section { padding-bottom: 18px; }
+  .tt-about-maintained .tt-about-mission-section { padding-top: 18px; }
 }

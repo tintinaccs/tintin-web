@@ -16,7 +16,7 @@
 // tienda como visitante, sin cuenta.
 
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1";
-import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1";
+import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1";
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js";
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";

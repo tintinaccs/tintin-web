@@ -1,5 +1,5 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import {

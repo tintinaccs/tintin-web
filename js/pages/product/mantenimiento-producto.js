@@ -1,7 +1,7 @@
 
 /* TINTIN — Runtime integral de product.html */
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 
 const PRODUCT_PATH_RE = /(?:^|\/)product(?:\.html)?\/?$/i;

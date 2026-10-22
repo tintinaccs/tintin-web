@@ -1,8 +1,8 @@
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261022-pr1200-maintenance-loader-1';
-import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261022-pr1200-visibility-1';
-import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261022-pr1200-stock-priority-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261022-avatar-inicial-1';
+import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261022-avatar-inicial-1';
+import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1-stock-flow-20261014-1';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -20,9 +20,8 @@ import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/poli
 const ALL_CACHE_KEY = 'products:cards';
 const HOME_CACHE_KEY = 'products:home-featured';
 const HOME_CACHE_TTL = 10 * 1000;
-// El catálogo operativo se reconcilia con Sheets/Firestore cada minuto.
-// Un TTL de un minuto mantiene la navegación rápida sin ocultar cambios
-// de precio, stock o estado durante diez minutos en otros dispositivos.
+// La caché local acompaña la frescura del edge (10 segundos) para mostrar
+// cambios de precio, stock y estado al volver a la categoría.
 const ALL_CACHE_TTL = 10 * 1000;
 const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
 const PUBLIC_CATALOG_ENDPOINT = '/api/public-catalog';
@@ -65,6 +64,7 @@ export function mapProduct(id, d) {
   const rawExtraImages = Array.isArray(d.imagesExtra) ? d.imagesExtra : Array.isArray(d.images) ? d.images : [];
   return {
     id: String(id),
+    sku: cleanText(d.sku ?? '', 120),
     name: cleanText(d.name || d.title || d.Title || d.handle || d.Handle || '', 180),
     cat: category,
     category,
@@ -108,6 +108,7 @@ export function mapProduct(id, d) {
 function compactProduct(product) {
   return {
     id: product.id,
+    sku: product.sku,
     name: product.name,
     cat: product.cat,
     category: product.category,

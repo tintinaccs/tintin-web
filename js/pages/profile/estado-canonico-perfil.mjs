@@ -29,20 +29,24 @@ function providerPhoto(user = {}) {
  * cargada conscientemente desde "Cambiar foto" vive ahora en `avatarURL` y
  * sí tiene prioridad explícita.
  */
-export function resolveAccountAvatar(profile = {}, user = {}) {
+export function resolveAccountAvatar(profile = {}, user = {}, { profilePending = false } = {}) {
+  const googlePhoto = value => { try { const host = new URL(value).hostname; return host === "googleusercontent.com" || host.endsWith(".googleusercontent.com"); } catch { return false; } };
   const explicitAvatar = clean(firstPresent(
     profile.avatarURL,
     profile.avatarUrl,
     profile.customAvatarURL,
     profile.customAvatarUrl,
   ));
-  if (explicitAvatar) return explicitAvatar;
+  if (explicitAvatar && (!profilePending || !googlePhoto(explicitAvatar))) return explicitAvatar;
 
   const legacyAvatar = clean(profile.photoURL);
   // Las subidas anteriores se guardaban sólo en photoURL. Una copia de
   // Google no debe tapar su foto actual, pero una foto propia sí prevalece.
-  const googlePhoto = value => { try { const host = new URL(value).hostname; return host === "googleusercontent.com" || host.endsWith(".googleusercontent.com"); } catch { return false; } };
   if (legacyAvatar && !googlePhoto(legacyAvatar)) return legacyAvatar;
+
+  // La restauración de Auth no confirma si existe una foto propia. Hasta
+  // leer el perfil, sólo conservar una foto propia del mismo UID o iniciales.
+  if (profilePending) return '';
 
   const signedInProviderPhoto = providerPhoto(user);
   if (signedInProviderPhoto) return signedInProviderPhoto;
@@ -50,7 +54,7 @@ export function resolveAccountAvatar(profile = {}, user = {}) {
   return clean(firstPresent(user.photoURL, profile.photoURL));
 }
 
-export function readAccountIdentity(profile = {}, user = {}) {
+export function readAccountIdentity(profile = {}, user = {}, options = {}) {
   const firstName = clean(firstPresent(profile.firstName, profile.first_name, profile.nombre));
   const lastName = clean(firstPresent(profile.lastName, profile.last_name, profile.apellido));
   const fullName = clean(firstPresent(profile.name, profile.fullName, profile.nombreCompleto));
@@ -64,7 +68,7 @@ export function readAccountIdentity(profile = {}, user = {}) {
     phone: clean(firstPresent(profile.phone, profile.phoneNumber, profile.whatsapp, profile.whatsappNumber, profile.telefono, profile.celular)),
     address: clean(firstPresent(profile.address, profile.direccion)),
     dob: profile.dob ?? profile.birthDate ?? profile.dateOfBirth ?? profile.fechaNacimiento ?? profile.fecha_nacimiento ?? null,
-    photoURL: resolveAccountAvatar(profile, user),
+    photoURL: resolveAccountAvatar(profile, user, options),
     savedLocation: profile.savedLocation ?? null,
   };
 }

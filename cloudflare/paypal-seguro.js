@@ -278,9 +278,9 @@ export async function markPaid(env, mapping, capture, deps = {}) {
   await (deps.notify || notifyOrderConfirmed)(env, mapping, cents, currency);
 }
 
-// El pedido nace sin descontar stock; al confirmarse el pago se descuenta con
-// las mismas precondiciones atómicas del dominio de pedidos. Si el stock ya no
-// alcanza, el cobro queda registrado y se avisa al equipo para resolverlo.
+// El checkout nuevo ya aparta stock antes del pago. La conciliación conserva
+// esa reserva sin repetir el descuento y también atiende pedidos históricos
+// sin reserva. Un conflicto queda registrado y se comunica al equipo.
 async function deductStockForPaidOrder(env, mapping) {
   try {
     await applyOrderAdminMutation(env, {

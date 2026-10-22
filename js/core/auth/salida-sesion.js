@@ -1,6 +1,6 @@
 import { auth } from '../firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { markExplicitLogout, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { markExplicitLogout, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { withDeadline } from './estado-perfil-sesion.mjs?v=tintin-20261015-images-1';
 
 let pendingLogout = null;

@@ -56,21 +56,21 @@ El historial nunca debe reconstruirse usando el catálogo actual. Cambiar o elim
 
 ## 5. Inventario
 
-El ciclo actual es:
+Los nuevos pedidos del checkout apartan inventario al tocar **Confirmar pedido**, aunque el pago siga pendiente. El servidor asigna `inventoryPolicy: reserve-on-checkout`; el navegador no puede escoger ni desactivar esta política.
 
 ```text
-pending → reserved → released
+Nuevo checkout: reserved → released al cancelar/rechazar
+Pedido manual o anterior sin reserva: unreserved → reserved al confirmar/pagar → released
 ```
 
-- El pedido se crea inicialmente como `inventory_pending` / `pending`.
-- Descontar stock y activar el pedido como `pendiente` / `reserved` ocurre en una única transacción.
-- Cada producto registra `lastStockOrderId` para vincular la reserva.
-- Eliminar un pedido que todavía reserva inventario libera stock antes del borrado.
-- El estado `released` se guarda antes de borrar para que un reintento no devuelva stock dos veces.
-- Un fallo parcial debe indicar qué pedidos se procesaron y cuáles permanecen pendientes.
-- Los ajustes manuales posteriores no deben confundirse con una devolución automática.
-
-Cuando se incorporen variantes con inventario propio, la reserva deberá operar sobre la variante exacta y no solamente sobre el stock global del producto.
+- Registrar el pedido público, reservar la variante exacta y descontar el agregado es una sola operación atómica con precondiciones de versión. No queda creado un segundo pedido si otra clienta tomó la última unidad.
+- `status: pendiente` y `paymentStatus: pendiente` se conservan: apartar no equivale a pagar.
+- Reintentar el mismo `requestId`, confirmar el pedido en el panel o registrar su pago no descuenta de nuevo lo ya reservado.
+- Cancelar/rechazar libera lo reservado exactamente una vez. Reabrir un pedido nuevo conserva su política y vuelve a validar stock antes de apartar.
+- No hay vencimiento automático nuevo. El equipo gestiona los pedidos pendientes y libera mediante el flujo canónico de cancelación/rechazo.
+- Los pedidos previos y manuales conservan su política; no se migran reservas históricas ni se descuentan pedidos pendientes existentes en lote.
+- Eliminar/archivar y restaurar conserva el modelo canónico y la huella de cantidades/variantes para no devolver más de lo reservado.
+- Un fallo parcial comunica los pedidos procesados y los pendientes; ajustes manuales no se confunden con una devolución automática.
 
 ## 6. Estados de pedido y pago
 

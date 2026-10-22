@@ -24,7 +24,11 @@ async function fixture(page,{emptyCart=false,profile={blocked:false}}={}) {
     window.resolveSession=user=>{currentUser=user;sessionStatus=user?'AUTHENTICATED':'UNAUTHENTICATED';listeners.forEach(fn=>fn({status:sessionStatus,user}));ready();};
     function showError(step,msg){document.getElementById('error-'+step).textContent=msg;}function hideErrors(){}
     window.__clickCount=0;window.addEventListener('click',event=>{if(++window.__clickCount>50){event.preventDefault();event.stopImmediatePropagation();window.__guardLoop=true;}},true);
-    let orderCompleted=false;const ensureCartAvailable=async()=>cart;const forceBackToCart=message=>showError(0,message);
+    let orderCompleted=false,availabilityBlocked=false;const pendingStockControls=new WeakSet();
+    const getSessionUser=()=>currentUser,db={},doc=(_db,_collection,id)=>id;
+    const getDocFromServer=async()=>({exists:()=>true,data:()=>({active:true,stock:10})});
+    const inspectCheckoutAvailability=async(...args)=>(await import(new URL('/js/pages/checkout/disponibilidad-checkout.js',location.origin).href)).inspectCheckoutAvailability(...args);
+    const ensureCartAvailable=async()=>cart;const forceBackToCart=message=>showError(0,message);
     ${access}${navigation}${next}${hardening}${secureGuard}
     </script></body></html>`}));
   await page.goto('/checkout');

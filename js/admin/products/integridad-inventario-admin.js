@@ -1,7 +1,7 @@
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 import {
   collection,
   doc,
@@ -15,7 +15,7 @@ import {
 import {
   normalizeInventoryItems,
   orderReservesInventory
-} from '../../core/store/modelo-inventario.mjs?v=tintin-20261001-stock-pago-1';
+} from '../../core/store/modelo-inventario.mjs?v=tintin-20261021-commerce-review-1';
 
 function actorEmail() {
   return String(auth.currentUser?.email || '').trim().toLowerCase();
