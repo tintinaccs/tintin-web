@@ -42,3 +42,10 @@ node scripts/auditar-proteccion-flujos.mjs
 ```
 
 Las pruebas locales incluyen plan exacto, retiro de protección/alcances/sellos, autores/forks no autorizados, CI falso/pendiente/fallido, cambios de main/head, API denegada, espera y éxito posterior, merge con SHA exacto y dispatch explícito de las comprobaciones posteriores. Los fixtures interceptan toda la API y no fusionan ni despliegan repositorios reales.
+
+
+## Alcance del estado global de un commit
+
+El controlador automático activado por workflow_run ejecuta main confiable para validar el SHA de un PR. Su job no es una prueba del artefacto de main. El Diagnóstico Maestro conserva esa ejecución y sus checks de job como evidencia fuera del cómputo del commit únicamente cuando comprueba workflow, evento, rama, repositorio y SHA. Los checks personalizados de protección se evalúan sobre el candidato y siguen bloqueando. Los runs programados/manuales de dependencias permanecen dentro del cómputo. Ante metadata o enlaces insuficientes no se descarta el error.
+
+Al repetir Maestro, los runs anteriores de ese mismo workflow no son dependencias del actual: su gate final sigue exigiendo todas las suites nuevas. Esta distinción evita una dependencia circular; no permite presentar como aprobadas las pruebas pendientes o fallidas del candidato. Los contratos de alcance forman parte de tests/operations y del CI canónico.
