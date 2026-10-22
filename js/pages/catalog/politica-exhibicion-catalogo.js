@@ -91,6 +91,20 @@ export function productPriorityLevel(product, now = Date.now()) {
   return 2;
 }
 
+// La reposición modifica updatedAt, pero NO la posición entre novedades y
+// ediciones comerciales. Separamos la fecha de actividad comercial del inventario.
+export function productPriorityAtMillis(product, level = productPriorityLevel(product)) {
+  const merchandising = timestampToMillis(product?.merchandisingUpdatedAt);
+  const restocked = timestampToMillis(product?.restockedAt);
+  if (level === 0) {
+    if (merchandising) return merchandising;
+    // Productos legados con etiqueta y reposición, sin campo comercial.
+    if (restocked) return productCreatedAtMillis(product) || 0;
+  }
+  if (level === 1 && restocked) return restocked;
+  return productActivityAtMillis(product);
+}
+
 function compareActivity(a, b) {
   const activityDifference = productActivityAtMillis(b) - productActivityAtMillis(a);
   return activityDifference || compareStable(a, b);
@@ -111,8 +125,12 @@ function compareByMode(mode) {
   }
   // Se conserva el nivel comercial también entre productos antiguos.
   const now = Date.now();
-  return (a, b) => productPriorityLevel(a, now) - productPriorityLevel(b, now)
-    || compareActivity(a, b);
+  return (a, b) => {
+    const ap = productPriorityLevel(a, now), bp = productPriorityLevel(b, now);
+    return ap - bp
+      || productPriorityAtMillis(b, bp) - productPriorityAtMillis(a, ap)
+      || compareStable(a, b);
+  };
 }
 
 export function sortCatalogProducts(products, options = {}) {
@@ -148,6 +166,7 @@ window.TintinCatalogMerchandising = Object.freeze({
   isProductInStock,
   isNewProduct,
   productPriorityLevel,
+  productPriorityAtMillis,
   sortCatalogProducts,
   productMerchandisingState,
 });
