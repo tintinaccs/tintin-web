@@ -1,11 +1,11 @@
 import { mergeSelectedOrderProducts } from './seleccion-productos-pedido.mjs?v=tintin-20261018-products-master-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { chooseOrderTrash } from './seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 import { allowedOrderStatuses, ORDER_LIFECYCLE_STATUSES, orderStatusLabel } from '../../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
 import {
   collection,

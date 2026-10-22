@@ -1,4 +1,4 @@
-import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
+import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20261022-avatar-inicial-1';
 
 const IMAGE_BASE = '/assets-tintin/images/collections/';
 const PLACEHOLDER = `${IMAGE_BASE}col-placeholder.webp`;

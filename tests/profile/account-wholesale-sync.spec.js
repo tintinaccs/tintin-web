@@ -16,15 +16,16 @@ async function fixture(page,width,body){
   await page.evaluate(()=>{document.documentElement.classList.add('adm-auth-ready');document.querySelector('#section-mayoristas').classList.add('adm-main');});
  }
 }
-for(const width of [390,768,1440]){
- test('identidad atómica y sincronizada, cambio de cuenta y logout '+width,async({page})=>{
+for(const width of [390,768,1440]) { for(const pendingAvatar of [null, "https://lh3.googleusercontent.com/google.png", "/photo-custom.png"]){
+ test('identidad atómica y sincronizada, cambio de cuenta y logout '+width+' '+(pendingAvatar||'sin handoff'),async({page})=>{
  await fixture(page,width,'<div id="tt-header-desktop-tablet"><div class="tt-header-actions"><button data-auth-account-button style="width:48px;height:48px;border:0;border-radius:50%">Cuenta</button></div></div><div id="account-panel"></div><a id="tabbar-cuenta">Cuenta</a><div id="perfil-avatar"></div><div id="perfil-nombre-display"></div>');
+ await page.clock.install();
  await page.addScriptTag({content:identity+`
  const auth={currentUser:{uid:'u1',email:'user@example.com',photoURL:'https://provider.example/old.png'}};
  const db={};const AUTH_STATES={AUTHENTICATED:'authenticated',RESTORING:'restoring',UNKNOWN:'unknown'};
  const ROLES={CLIENT:'client',SUPERADMIN:'superadmin'};const SUPER_ADMIN='owner@example.com';
  const can=()=>false;const sanitizeImageUrl=value=>value;const recordAuthDiagnostic=()=>{};
- const readAuthHandoff=()=>null;const createAuthHandoff=(uid,visual)=>{window.lastHandoff={uid,...visual};};const clearAuthHandoff=()=>{};
+ const readAuthHandoff=()=>(${JSON.stringify(pendingAvatar ? {uid:"u1",photoURL:pendingAvatar,profile:{avatarURL:pendingAvatar}} : null)});const createAuthHandoff=(uid,visual)=>{window.lastHandoff={uid,...visual};};const clearAuthHandoff=()=>{};
  const logoutSession=async()=>{};const getSessionUser=()=>auth.currentUser;
  const subscribeSession=callback=>{window.sessionCallback=callback;};
  const doc=(_db,_collection,id)=>id;
@@ -32,8 +33,16 @@ for(const width of [390,768,1440]){
  window.fixtureAuth=auth;
  `+source('js/core/auth/navegacion-autenticacion.js')});
  await page.evaluate(()=>window.sessionCallback({status:'authenticated',user:window.fixtureAuth.currentUser}));
- await expect(page.locator('[data-auth-account-button] img')).toHaveCount(0);
- await expect(page.locator('#account-panel')).toContainText('Cargando tu cuenta');
+ if(pendingAvatar==='/photo-custom.png') await expect(page.locator('[data-auth-account-button] img')).toHaveAttribute('src',pendingAvatar);
+ else await expect(page.locator('[data-auth-account-button] img')).toHaveCount(0);
+ if(!pendingAvatar) await expect(page.locator('#account-panel')).toContainText('Cargando tu cuenta');
+ // El timeout de Firestore tampoco debe pintar Google en ninguna superficie.
+ await page.clock.fastForward(5100);
+ for(const selector of ['[data-auth-account-button]','#perfil-avatar','#tabbar-cuenta','#account-panel']) {
+  if(pendingAvatar==='/photo-custom.png') await expect(page.locator(selector+' img')).toHaveAttribute('src',pendingAvatar);
+  else await expect(page.locator(selector+' img')).toHaveCount(0);
+ }
+ await page.clock.resume();
  await page.evaluate(()=>window.profileCallbacks.u1({exists:()=>true,data:()=>({firstName:'Ana',lastName:'Ruiz',avatarURL:'/photo-custom.png',username:'ana',wholesaleStatus:'solicitado'})}));
  await expect(page.locator('[data-auth-account-button] img')).toHaveAttribute('src','/photo-custom.png');
  await expect(page.locator('#account-panel')).toContainText('Ana Ruiz');
@@ -58,6 +67,7 @@ for(const width of [390,768,1440]){
  await expect(page.locator('#account-panel')).toContainText('Iniciar sesión');
  expect(await page.evaluate(()=>window.stopped)).toEqual(['u1','u2']);
  });
+ }
  test('mayoristas distingue nuevas, vistas y decisiones; usuarios en pestaña '+width,async({page},testInfo)=>{
  await fixture(page,width,'<main id="section-mayoristas"></main>');
  await page.addScriptTag({content:identity+`

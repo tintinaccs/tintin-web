@@ -876,3 +876,44 @@ test('maestro: selección sin stock rechaza el pedido entero y conserva cuenta y
  await assert.rejects(applyOrderAdminMutation({}, {orderId:created.orderId,baseChangeId:created.order.lastChangeId,changeId:'master_no_stock',items},actor,store),/stock/i);
  assert.equal(store.commits.length,count);assert.deepEqual(store.map.get('orders/'+created.orderId),baseline);
 });
+
+const checkoutActor=uid=>({uid,email:`${uid}@example.test`,role:'client',origin:'public-checkout'});
+test('dos clientas pendientes no pueden apartar la misma última variante al confirmar checkout',async()=>{
+ const store=variantStore();
+ const input={userName:'Clienta Test',shippingMethod:'retiro',paymentStatus:'pendiente',items:[{id:'ring',qty:2,variant:'6'}]};
+ const results=await Promise.allSettled([
+  createOrderAdmin({}, {...input,orderId:'public_checkout_first'}, checkoutActor('first'),store),
+  createOrderAdmin({}, {...input,orderId:'public_checkout_second'}, checkoutActor('second'),store),
+ ]);
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,1);
+ const failure=results.find(r=>r.status==='rejected');assert.equal(failure.reason.code,'insufficient_stock');assert.equal(failure.reason.available,0);
+ const created=results.find(r=>r.status==='fulfilled').value;
+ assert.equal(created.order.paymentStatus,'pendiente');assert.equal(created.order.inventoryState,'reserved');
+ assert.equal(created.order.inventoryPolicy,'reserve-on-checkout');
+ assert.equal(decodeFirestoreFields(store.map.get('products/ring').fields).variantInventory[0].stock,0);
+ assert.equal([...store.map.keys()].filter(key=>key.startsWith('orders/')).length,1);
+});
+test('reintento, pago y confirmación no duplican la reserva; cancelación y reapertura son recuperables',async()=>{
+ const store=variantStore();const input={orderId:'public_checkout_retry',userName:'Clienta Test',shippingMethod:'retiro',paymentStatus:'pendiente',items:[{id:'ring',qty:1,variant:'6'}]};
+ const first=await createOrderAdmin({},input,checkoutActor('first'),store);
+ const stock=()=>decodeFirestoreFields(store.map.get('products/ring').fields);
+ assert.equal(stock().stock,4);assert.equal(stock().variantInventory[0].stock,1);
+ const retry=await createOrderAdmin({},input,checkoutActor('first'),store);assert.equal(retry.duplicate,true);assert.equal(stock().stock,4);
+ await applyOrderAdminMutation({}, {orderId:first.orderId,paymentStatus:'pagado',status:'confirmado',changeId:'public_checkout_paid'},ACTOR,store);assert.equal(stock().stock,4);
+ await applyOrderAdminMutation({}, {orderId:first.orderId,status:'cancelado',changeId:'public_checkout_cancel'},ACTOR,store);assert.equal(stock().stock,5);assert.equal(stock().variantInventory[0].stock,2);
+ await applyOrderAdminMutation({}, {orderId:first.orderId,status:'cancelado',changeId:'public_checkout_cancel'},ACTOR,store);assert.equal(stock().stock,5);
+ await applyOrderAdminMutation({}, {orderId:first.orderId,status:'pendiente',paymentStatus:'pendiente',changeId:'public_checkout_reopen'},ACTOR,store);assert.equal(stock().stock,4);assert.equal(stock().variantInventory[0].stock,1);
+});
+test('campo de política aportado por navegador no modifica la creación manual',async()=>{
+ const store=variantStore();const result=await createOrderAdmin({}, {userName:'Manual Test',shippingMethod:'retiro',inventoryPolicy:'reserve-on-checkout',items:[{id:'ring',qty:1,variant:'6'}]},ACTOR,store);
+ assert.equal(result.order.inventoryState,'unreserved');assert.equal(result.order.inventoryPolicy,undefined);assert.equal(decodeFirestoreFields(store.map.get('products/ring').fields).stock,5);
+});
+for(const status of ['cancelado','rechazado']) test(`pedido público sin pago libera la reserva una sola vez al quedar ${status}`,async()=>{
+ const store=variantStore();const created=await createOrderAdmin({}, {orderId:`public_unpaid_${status}`,userName:'Clienta Test',shippingMethod:'retiro',paymentStatus:'pendiente',items:[{id:'ring',qty:1,variant:'6'}]},checkoutActor('first'),store);
+ const stock=()=>decodeFirestoreFields(store.map.get('products/ring').fields);
+ assert.equal(stock().stock,4);
+ const change={orderId:created.orderId,status,changeId:`public_release_${status}`};
+ await applyOrderAdminMutation({},change,ACTOR,store);await applyOrderAdminMutation({},change,ACTOR,store);
+ assert.equal(stock().stock,5);assert.equal(stock().variantInventory[0].stock,2);
+ const order=decodeFirestoreFields(store.map.get('orders/'+created.orderId).fields);assert.equal(order.inventoryState,'released');assert.equal(order.paymentStatus,'pendiente');
+});

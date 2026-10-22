@@ -50,6 +50,9 @@ for (const [width,height] of viewports) {
     expect(style.background).toContain('linear-gradient');expect(style.background).not.toContain('184, 76, 114');
     expect(style.blur).toContain('blur(18px)');expect(style.border).toBe('0px');
     expect(style.mask).toContain('linear-gradient');expect(style.canvas).toBe('rgba(0, 0, 0, 0)');expect(style.filter).toBe('none');
+    const extension=await header.evaluate(n=>{const s=getComputedStyle(n,'::before');return {depth:-parseFloat(s.bottom),height:parseFloat(s.height),header:n.clientHeight,pointer:s.pointerEvents};});
+    expect(extension.depth).toBeGreaterThanOrEqual(32);expect(extension.depth).toBeLessThanOrEqual(56);
+    expect(extension.height).toBeGreaterThanOrEqual(extension.header+extension.depth-1);expect(extension.pointer).toBe('none');
     if(width<768)await expect(page.locator('.tt-mobile-brand-ink')).toHaveCSS('flood-color','rgb(255, 255, 255)');
     else {
       const logo=header.locator('.tt-logo-img,.tt-tablet-logo-img');
@@ -256,14 +259,15 @@ for(const[width,height]of sizes)test(`borde transparente sobre fondos cambiantes
   for(const tone of ['#ffffff','#f8aaca','#303846']){
    await page.evaluate(tone=>document.documentElement.style.setProperty('--under',tone),tone);
    const layer=await header.evaluate(n=>{const s=getComputedStyle(n,'::before');return{mask:s.maskImage||s.webkitMaskImage,blur:s.backdropFilter||s.webkitBackdropFilter,pointer:s.pointerEvents};});
-   const pixels=await pixelsAt(page,{x:8,y:48,width:1,height:92});
-   let jump=0;for(let y=1;y<92;y++)for(let c=0;c<3;c++)jump=Math.max(jump,Math.abs(pixels[y*4+c]-pixels[(y-1)*4+c]));
+   const bottom=await header.evaluate(n=>Math.ceil(n.getBoundingClientRect().bottom-Math.min(0,parseFloat(getComputedStyle(n,'::before').bottom))));
+   const pixels=await pixelsAt(page,{x:8,y:48,width:1,height:bottom-48+52});
+   let jump=0;for(let y=1;y<pixels.length/4;y++)for(let c=0;c<3;c++)jump=Math.max(jump,Math.abs(pixels[y*4+c]-pixels[(y-1)*4+c]));
    expect(jump,`${surface} sobre ${tone}: no debe haber una línea de corte`).toBeLessThan(18);
    expect(layer.mask).toContain('linear-gradient');expect(layer.blur).toContain('blur(18px)');expect(layer.pointer).toBe('none');
    const expected=tone.match(/[a-f0-9]{2}/g).map(x=>parseInt(x,16));
    expect(pixels.slice(-4,-1),`${surface}: el extremo debe revelar exactamente el fondo`).toEqual(expected);
   }
-  await page.evaluate(()=>scrollTo(0,500));await header.evaluate(n=>n.style.transform='translateY(calc(-100% - 12px))');
+  await page.evaluate(()=>scrollTo(0,500));await header.evaluate(n=>n.style.transform='translateY(calc(-100% - var(--tt-header-fade-depth, 0px) - 12px))');
   expect((await pixelsAt(page,{x:8,y:0,width:1,height:1})).slice(0,3),'ocultar el header no debe dejar un halo').toEqual([48,56,70]);
   await header.evaluate(n=>{n.style.transform='';n.classList.add('scrolled');});
   await expect(header).toBeVisible();await header.locator('button').click();await expect(header.locator('button')).toHaveAttribute('data-clicked','yes');

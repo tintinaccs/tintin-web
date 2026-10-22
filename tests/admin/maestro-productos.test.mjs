@@ -25,7 +25,13 @@ function transactionFor(rows){const updates=[],reads=[];return {updates,reads,as
 test('transacción sólo escribe después de leer y validar el lote entero',async()=>{
  const rows={a:product,b:{...product,stock:2}},tx=transactionFor(rows);
  const result=await applyProductBulkTransaction(tx,{ids:['a','b'],field:'stockDelta',value:2,expected:{a:productFingerprint(rows.a),b:productFingerprint(rows.b)}},collections,id=>id,()=>123);
- assert.deepEqual(tx.updates,[['a',{stock:6,updatedAt:123}],['b',{stock:4,updatedAt:123}]]);assert.equal(result.length,2);
+ assert.deepEqual(tx.updates,[['a',{stock:6,updatedAt:123,restockedAt:123}],['b',{stock:4,updatedAt:123,restockedAt:123}]]);assert.equal(result.length,2);
+});
+
+test('un lote comercial registra su fecha sin convertirlo en reposición',async()=>{
+ const rows={a:product,b:{...product,price:20000}},tx=transactionFor(rows);
+ await applyProductBulkTransaction(tx,{ids:['a','b'],field:'destacado',value:true,expected:{a:productFingerprint(rows.a),b:productFingerprint(rows.b)}},collections,id=>id,()=>456);
+ assert.deepEqual(tx.updates,[['a',{destacado:true,updatedAt:456,merchandisingUpdatedAt:456}],['b',{destacado:true,updatedAt:456,merchandisingUpdatedAt:456}]]);
 });
 test('cambio concurrente, borrado o variante invalidan todo el lote sin escrituras parciales',async()=>{
  for(const rows of [{a:product,b:{...product,stock:9}},{a:product},{a:product,b:{...product,variantInventory:[]}}]){

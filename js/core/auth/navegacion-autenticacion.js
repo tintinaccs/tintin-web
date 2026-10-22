@@ -2,13 +2,13 @@
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
 import { onAppCheckSnapshot as onSnapshot } from '../firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { auth, db } from '../firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
-import { logoutSession } from './salida-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { logoutSession } from './salida-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { doc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { AUTH_STATES, subscribeSession, getSessionUser, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261003-profile-avatar-identity-1-first-render-merge-20261010-1-ui-fixes-20261014-1-admin-live-20261016-1';
+import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs?v=tintin-20261022-avatar-inicial-1';
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 // La vista previa embebida es sólo visual: no debe suscribirse a Auth ni leer
@@ -88,10 +88,10 @@ function watchNavigationProfile(user, generation){
   document.documentElement.dataset.ttWholesaleApproved=String(profile.wholesaleStatus==='aprobado');
   const role=roleFromProfile(user,profile);
   publishStaffVisibility(user,role);
-  renderAccountButtonPhoto(user,profile);
-  renderMobileTabbarPhoto(user,profile);
-  renderAccountPanel(user,role,profile);
-  renderProfileIdentity(user,profile);
+  renderAccountButtonPhoto(user,profile,!confirmed);
+  renderMobileTabbarPhoto(user,profile,!confirmed);
+  renderAccountPanel(user,role,profile,!confirmed);
+  renderProfileIdentity(user,profile,!confirmed);
   const visual=readAccountIdentity(profile,user);
   createAuthHandoff(user.uid,{photoURL:visual.photoURL,displayName:visual.name,profile});
   if(confirmed) window.dispatchEvent(new CustomEvent('tintin:profile-data', { detail: { uid: user.uid, profile } }));
@@ -120,7 +120,7 @@ if(initialAuthHandoff?.uid){
   uid:initialAuthHandoff.uid,
   photoURL:initialAuthHandoff.photoURL,
   displayName:initialAuthHandoff.displayName
- },{}));
+ },initialAuthHandoff.profile || {avatarURL:initialAuthHandoff.photoURL},true));
  queueMicrotask(()=>window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
   detail:{authenticated:true,role:ROLES.CLIENT,provisional:true}
  })));
@@ -219,7 +219,7 @@ subscribeSession(async snapshot=>{
   renderMobileTabbarPhoto(null,{});
  }
  if(initialAuthHandoff?.uid===user.uid){
-  renderAccountPanel(user,ROLES.CLIENT,{avatarURL:initialAuthHandoff.photoURL,name:initialAuthHandoff.displayName});
+  renderAccountPanel(user,ROLES.CLIENT,initialAuthHandoff.profile || {avatarURL:initialAuthHandoff.photoURL,name:initialAuthHandoff.displayName},true);
  }else{
   const panel=document.getElementById('account-panel');
   if(panel)panel.innerHTML='<p class="tt-account-help" role="status">Cargando tu cuenta…</p>';
@@ -227,11 +227,11 @@ subscribeSession(async snapshot=>{
  stopNavigationProfile=watchNavigationProfile(user,generation);
 });
 
-function renderAccountButtonPhoto(user,profile={}){
- const identity=readAccountIdentity(profile,user||{});
+function renderAccountButtonPhoto(user,profile={},profilePending=false){
+ const identity=readAccountIdentity(profile,user||{},{profilePending});
  document.querySelectorAll('[data-auth-account-button]').forEach(btn=>{
   if(!accountBtnDefaults.has(btn))accountBtnDefaults.set(btn,btn.innerHTML);
-  const photoUrl=sanitizeImageUrl(identity.photoURL||user?.photoURL||'');
+  const photoUrl=sanitizeImageUrl(identity.photoURL||'');
   if(user&&photoUrl){
    const name=identity.name||identity.username||user.displayName||user.email||'Mi cuenta';
    const current=btn.querySelector('img.tt-account-avatar-btn');
@@ -246,12 +246,12 @@ function renderAccountButtonPhoto(user,profile={}){
  });
 }
 
-function renderMobileTabbarPhoto(user,profile={}){
+function renderMobileTabbarPhoto(user,profile={},profilePending=false){
  const tab=document.getElementById('tabbar-cuenta');
  if(!tab)return;
  if(!tab.dataset.ttDefaultHtml)tab.dataset.ttDefaultHtml=tab.innerHTML;
- const identity=readAccountIdentity(profile,user||{});
- const photoUrl=sanitizeImageUrl(identity.photoURL||user?.photoURL||'');
+ const identity=readAccountIdentity(profile,user||{},{profilePending});
+ const photoUrl=sanitizeImageUrl(identity.photoURL||'');
  if(user&&photoUrl){
   const name=escapeHtmlNav(identity.name||identity.username||user.displayName||user.email||'Mi cuenta');
   tab.innerHTML=`<img class="tt-tabbar-avatar" src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" width="24" height="24"><span>Cuenta</span>`;
@@ -260,7 +260,7 @@ function renderMobileTabbarPhoto(user,profile={}){
  }else tab.innerHTML=tab.dataset.ttDefaultHtml;
 }
 
-function renderAccountPanel(user,role=ROLES.CLIENT,profile={}){
+function renderAccountPanel(user,role=ROLES.CLIENT,profile={},profilePending=false){
  const panel=document.getElementById('account-panel');
  if(!panel)return;
  if(!user){
@@ -268,12 +268,12 @@ function renderAccountPanel(user,role=ROLES.CLIENT,profile={}){
   panel.innerHTML=`<div class="tt-account-guest"><p class="tt-account-guest-title">Tu cuenta Tintin</p><p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p></div><a class="tt-account-item tt-account-primary" href="${loginHref}">Iniciar sesión</a><a class="tt-account-item" href="${loginHref}">Crear una cuenta</a>`;
   return;
  }
- const identity=readAccountIdentity(profile,user);
+ const identity=readAccountIdentity(profile,user,{profilePending});
  const rawName=identity.name||identity.username||user.displayName||user.email||'Mi cuenta';
  const name=escapeHtmlNav(rawName);
  const secondaryRaw=identity.username?`@${identity.username}`:(identity.email||user.email||'');
  const secondary=escapeHtmlNav(secondaryRaw);
- const photoUrl=sanitizeImageUrl(identity.photoURL||user.photoURL||'');
+ const photoUrl=sanitizeImageUrl(identity.photoURL||'');
  const photo=photoUrl?`<img class="tt-account-panel-avatar" src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" width="44" height="44">`:`<span class="tt-account-panel-avatar tt-account-panel-initials">${initials(rawName)}</span>`;
  const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item tt-account-internal" href="/admin" data-internal-admin-link="true" data-account-role="${escapeHtmlNav(role)}">${roleLabel(role)}</a>`:'';
  panel.innerHTML=`<div class="tt-account-header">${photo}<div class="tt-account-identity"><strong>${name}</strong>${secondary?`<span>${secondary}</span>`:''}</div></div><nav class="tt-account-links" aria-label="Opciones de la cuenta">${adminLink}<a class="tt-account-item" href="/perfil">Mi cuenta</a><a class="tt-account-item" href="/perfil#mis-pedidos">Mis pedidos</a></nav><button type="button" class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
@@ -282,10 +282,10 @@ function renderAccountPanel(user,role=ROLES.CLIENT,profile={}){
 
 function wireLogout(panel){const btn=panel.querySelector('#account-logout-btn');if(btn)btn.onclick=doLogout;}
 
-function renderProfileIdentity(user,profile){
+function renderProfileIdentity(user,profile,profilePending=false){
  const avatar=document.getElementById('perfil-avatar');
  if(!avatar)return;
- const identity=readAccountIdentity(profile,user);
+ const identity=readAccountIdentity(profile,user,{profilePending});
  const url=sanitizeImageUrl(identity.photoURL||'');
  const name=document.getElementById('perfil-nombre-display');
  if(name)name.textContent=identity.name||identity.email||'Cuenta Tintin';

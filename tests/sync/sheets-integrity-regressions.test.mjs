@@ -84,6 +84,8 @@ test('aggregate model uses a version precondition and new products require absen
     const f = webhookFixture(product);
     assert.equal((await f.send({ changedFields: ['stock'], stock: 0 })).status, 200);
     assert.deepEqual(f.writes[0].currentDocument, condition);
+    assert.equal(f.writes[0].fields.restockedAt, f.writes[0].fields.updatedAt);
+    assert.equal('merchandisingUpdatedAt' in f.writes[0].fields, false);
   }
 });
 test('concurrent sale rejects entire product/inventory commit', async () => {
@@ -94,7 +96,8 @@ test('concurrent sale rejects entire product/inventory commit', async () => {
 test('price-only edits preserve inventory without unnecessary stock read', async () => {
   const f = webhookFixture(matrix);
   assert.equal((await f.send({ changedFields: ['price'], price: 100 })).status, 200);
-  assert.equal(f.reads(), 0); assert.deepEqual(Object.keys(f.writes[0].fields).sort(), ['price', 'updatedAt']);
+  assert.equal(f.reads(), 0); assert.deepEqual(Object.keys(f.writes[0].fields).sort(), ['merchandisingUpdatedAt', 'price', 'updatedAt']);
+  assert.equal(f.writes[0].fields.merchandisingUpdatedAt, f.writes[0].fields.updatedAt);
 });
 test('malformed distributed inventory fails closed', async () => {
   const f = webhookFixture({ stock: 3, variantInventory: [] });

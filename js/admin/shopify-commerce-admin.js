@@ -1,4 +1,5 @@
-import { productFingerprint } from './products/maestro-productos-core.mjs?v=tintin-20261022-pr1200-product-core-1';
+import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
+import { productFingerprint } from './products/maestro-productos-core.mjs?v=tintin-20261022-pr1200-reconciled-1';
 import { variantInventoryEntries, firstAvailableVariant } from '../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
 import { productVariantImage } from '../components/images/foto-variante.mjs?v=tintin-20261019-variant-links-1';
 import { ordersForView, testOrderNumber, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
@@ -6,7 +7,7 @@ import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs 
 import { installProductInterface, syncProductSurfaces, visibleProductEditor } from './products/interfaz-productos-adaptable.js?v=tintin-20261021-visual-scope-2';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261020-orders-clean-2';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';
-import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261017-domain-cutover-1';
+import { authenticatedFetch } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
 /* ========================================================================
    TINTIN — Productos, Colecciones y Pedidos
@@ -23,7 +24,7 @@ import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tint
 
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { recordAuthDiagnostic } from '../core/auth/diagnostico-sesion.js?v=tintin-20261012-auth-privacy-1-diagnostico-sesion-js';
 import {
   collection,
@@ -35,8 +36,8 @@ import {
   startAfter, where
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261017-domain-cutover-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261017-domain-cutover-1';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20261022-avatar-inicial-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20261022-avatar-inicial-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 
 const VERSION = 'tintin-20261021-product-workspace-1';
@@ -288,7 +289,7 @@ async function saveCollectionVisibility(target) {
   if(typeof controller?.updateCollectionVisibility !== 'function'){toast('El guardado todavía está cargando. Reintentá.');renderCollections();return;}
   const ownerUid=state.user?.uid;
   setBusy(true);
-  try {await controller.updateCollectionVisibility({id:collection.slug,visible:target.value==='true',expectedVisible:collection.visible!==false});}
+  try {await controller.updateCollectionVisibility({id:collection.sourceSlugs?.includes(collection.slug) ? collection.slug : collection.sourceSlugs?.[0] || collection.slug,visible:target.value==='true',expectedVisible:collection.visible!==false});}
   catch(error){if(state.user?.uid===ownerUid)toast(error.message);}
   finally{setBusy(false);if(state.user?.uid===ownerUid){renderProducts();renderCollections();document.querySelector(`[data-collection-visible="${CSS.escape(collection.slug)}"]`)?.focus({preventScroll:true});}}
 }
@@ -344,7 +345,7 @@ function productVariantsCount(product) {
 }
 
 function collectionProductCount(slug) {
-  return state.products.filter(product => String(product?.category || '') === String(slug || '')).length;
+  return state.products.filter(product => wristCategory(product?.category || product?.cat || '') === wristCategory(slug || '')).length;
 }
 
 function productTabCounts() {
@@ -357,7 +358,7 @@ function productTabCounts() {
     featured: state.products.filter(p => p?.destacado === true).length,
     low:state.products.filter(p=>p.stock!=null && Number(p.stock)>0 && Number(p.stock)<=5).length,
     missingphoto:state.products.filter(p=>!productImage(p)).length,
-    unclassified:state.products.filter(p=>!state.collections.some(c=>c.slug===p.category)).length
+    unclassified:state.products.filter(p=>!state.collections.some(c=>wristCategory(c.slug)===wristCategory(p.category || p.cat))).length
   };
 }
 
@@ -385,9 +386,9 @@ function filteredProducts() {
   if (state.productTab === 'sale') list = list.filter(p => p?.oferta === true || Number(p?.priceBefore) > Number(p?.price));
   if(state.productTab==='low')list=list.filter(p=>p.stock!=null && Number(p.stock)>0 && Number(p.stock)<=5);
   if(state.productTab==='missingphoto')list=list.filter(p=>!productImage(p));
-  if(state.productTab==='unclassified')list=list.filter(p=>!state.collections.some(c=>c.slug===p.category));
+  if(state.productTab==='unclassified')list=list.filter(p=>!state.collections.some(c=>wristCategory(c.slug)===wristCategory(p.category || p.cat)));
   if (state.productTab === 'featured') list = list.filter(p => p?.destacado === true);
-  if (state.productCategory) list = list.filter(p => String(p?.category || '') === state.productCategory);
+  if (state.productCategory) list = list.filter(p => wristCategory(p?.category || p?.cat || '') === wristCategory(state.productCategory));
   if (state.productStock === 'in') list = list.filter(p => p?.stock == null || Number(p.stock) > 0);
   if (state.productStock === 'out') list = list.filter(p => p?.stock != null && Number(p.stock) <= 0);
   if (state.productStock === 'unlimited') list = list.filter(p => p?.stock == null);
@@ -612,7 +613,7 @@ function renderProducts() {
               <td class="tt-commerce-product-status">${controls.status}${product.destacado ? '<span class="tt-commerce-badge">Destacado</span>' : ''}${product.oferta || Number(product.priceBefore) > Number(product.price) ? '<span class="tt-commerce-badge">Oferta</span>' : ''}</td>
               <td class="tt-commerce-product-inventory">${controls.stock}</td>
               <td class="tt-commerce-product-price"><span class="tt-commerce-product-label">Precio</span><span class="tt-commerce-money">${formatMoney(product.price)}</span>${Number(product.priceBefore) > Number(product.price) ? `<div class="tt-commerce-subtext"><s>${formatMoney(product.priceBefore)}</s></div>` : ''}</td>
-              <td class="tt-commerce-product-collection" data-stop><label class="tt-card-collection"><span>Colección</span><select data-card-category="${esc(product._docId)}" aria-label="Colección de ${esc(product.name)}" ${state.busy || !perm('productos','editar','editProducts') || !state.collectionsReady?'disabled':''}>${!state.collections.some(c=>c.slug===product.category)?`<option value="" selected disabled>${esc(product.category || 'Elegir colección')}</option>`:''}${state.collections.map(c=>`<option value="${esc(c.slug)}" ${c.slug===product.category?'selected':''}>${esc(c.name || c.slug)}${c.visible===false?' · oculta':''}</option>`).join('')}</select></label></td>
+              <td class="tt-commerce-product-collection" data-stop><label class="tt-card-collection"><span>Colección</span><select data-card-category="${esc(product._docId)}" aria-label="Colección de ${esc(product.name)}" ${state.busy || !perm('productos','editar','editProducts') || !state.collectionsReady?'disabled':''}>${!state.collections.some(c=>wristCategory(c.slug)===wristCategory(product.category || product.cat))?`<option value="" selected disabled>${esc(product.category || 'Elegir colección')}</option>`:''}${state.collections.map(c=>`<option value="${esc(c.slug)}" ${wristCategory(c.slug)===wristCategory(product.category || product.cat)?'selected':''}>${esc(c.name || c.slug)}${c.visible===false?' · oculta':''}</option>`).join('')}</select></label></td>
               <td class="tt-commerce-product-menu" data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="product" data-id="${esc(product._docId)}" aria-label="Acciones de ${esc(product.name || 'producto')}">⋯</button></td>
             </tr>`;
           }).join('')}</tbody>
@@ -960,7 +961,7 @@ function kvRow(label, value) {
 function productDrawer(product) {
   if (!product) return null;
   const status = productStatus(product);
-  const collectionItem = state.collections.find(c => c.slug === product.category);
+  const collectionItem = state.collections.find(c => wristCategory(c.slug) === wristCategory(product.category || product.cat));
   const variants = productVariantsCount(product);
   const gallery=[...new Set([productImage(product),...(Array.isArray(product.imagesExtra)?product.imagesExtra:[]),...(Array.isArray(product.variantMedia)?product.variantMedia.flatMap(row=>[row.imageUrl,...(Array.isArray(row.imageUrls)?row.imageUrls:[])]):[])].map(sanitizeImageUrl).filter(Boolean))];
   const imageIndex=Math.min(Number(state.drawer?.imageIndex)||0,Math.max(0,gallery.length-1));
@@ -992,7 +993,7 @@ function productDrawer(product) {
 }
 
 function collectionDrawer(collectionItem) {
-  const products = state.products.filter(p => p.category === collectionItem.slug).sort((a, b) => (Number(a.collectionOrder ?? 9999) - Number(b.collectionOrder ?? 9999)));
+  const products = state.products.filter(p => wristCategory(p.category || p.cat) === wristCategory(collectionItem.slug)).sort((a, b) => (Number(a.collectionOrder ?? 9999) - Number(b.collectionOrder ?? 9999)));
   return {
     title: collectionItem.name || collectionItem.slug,
     kicker: `Colección · /${collectionItem.slug}`,
@@ -1335,7 +1336,15 @@ async function handleAction(action, element) {
   if (action === 'collections-page-prev') { state.collectionPage = Math.max(0, state.collectionPage - 1); return renderCollections(); }
   if (action === 'collections-page-next') { state.collectionPage += 1; return renderCollections(); }
   if (action === 'collection-edit' || action === 'drawer-collection-edit') { closeDrawer(); return window.collEditar?.(id); }
-  if (action === 'collection-products' || action === 'drawer-collection-products') { closeDrawer(); return window.collVerProductos?.(id); }
+  if (action === 'collection-products' || action === 'drawer-collection-products') {
+    closeDrawer();
+    state.productCategory = wristCategory(id);
+    state.productSearch = '';
+    state.productTab = 'all';
+    state.productPage = 0;
+    document.querySelector('[data-section="productos"]')?.click();
+    return renderProducts();
+  }
   if (action === 'collection-delete' || action === 'drawer-collection-delete') {
     const count = collectionProductCount(id); closeDrawer(); return window.collEliminar?.(id, count);
   }
@@ -1640,7 +1649,7 @@ function subscribeData() {
 
   // Firestore rules require a bounded list for non-superadmin roles.
   state.unsubscribers.push(onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
-    state.collections = snapshot.docs.map(snap => normalizeCollectionDoc(snap.id, snap.data())).filter(Boolean);
+    state.collections = unifyWristCollections(snapshot.docs.map(snap => normalizeCollectionDoc(snap.id, snap.data())).filter(Boolean));
     state.collectionsReady = true;
     state.collectionsError = '';
     state.collectionSelected = new Set([...state.collectionSelected].filter(slug => state.collections.some(c => c.slug === slug)));

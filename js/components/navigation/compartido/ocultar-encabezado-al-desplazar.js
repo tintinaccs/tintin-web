@@ -21,7 +21,7 @@
         }
         #tt-header-desktop-tablet.tt-header-hidden-desktop,
         #tt-header-tablet.tt-header-hidden-desktop {
-          transform: translateY(calc(-100% - 12px)) !important;
+          transform: translateY(calc(-100% - var(--tt-header-fade-depth, 0px) - 12px)) !important;
           pointer-events: none;
         }
       }

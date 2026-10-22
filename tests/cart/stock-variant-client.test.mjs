@@ -28,3 +28,15 @@ test('una variante disponible aumenta sin exceder la suma del inventario',async(
   assert.equal((await f.c.updateQty('ring-solitario',1)).changed,true);
   assert.equal((await f.c.updateQty('ring-solitario',1)).changed,false);assert.equal(f.items[0].qty,2);
 });
+
+test('recorte de stock en tiempo real informa una sola vez y descarta otra identidad',async()=>{
+ for(const changeUser of [false,true]){
+  let items=[{id:'ring',lineId:'ring',name:'Anillo',qty:1}],serialized=JSON.stringify(items);const jobs=[],events=[];
+  const c=vm.createContext({activeCartKey:'user-a',GUEST_CART_KEY:'guest',currentUser:{uid:'a'},normalizeCart:i=>i,enforceStockLimits:()=>[],rawGet:()=>items,rawString:()=>serialized,rawSet:(_,value)=>{items=value;serialized=JSON.stringify(value);},queueMicrotask:fn=>jobs.push(fn),CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}},window:{dispatchEvent:event=>events.push(event)}});
+  vm.runInContext(slice('  function currentLocalCart()','  function writeLocal('),c);
+  c.currentLocalCart();c.currentLocalCart();assert.equal(jobs.length,1);
+  if(changeUser)c.activeCartKey='user-b';jobs[0]();
+  assert.equal(events.length,changeUser?0:1);
+  if(!changeUser){assert.equal(events[0].type,'tintin:cart-stock-adjusted');assert.equal(events[0].detail.issues[0].available,0);}
+ }
+});

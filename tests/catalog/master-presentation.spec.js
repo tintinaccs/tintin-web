@@ -23,5 +23,5 @@ test('un mapa oculto recupera geometría y conserva coordenadas al mostrarlo y f
  await page.goto('/__map-master');await page.waitForFunction(()=>window.ready);await page.evaluate(()=>document.getElementById('map').style.display='block');
  await expect.poll(()=>page.locator('#map .leaflet-marker-icon').evaluate(e=>{const a=e.getBoundingClientRect(),b=e.closest('#map').getBoundingClientRect();return Math.abs(a.left+16-(b.left+b.width/2));})).toBeLessThan(3);
  expect(await page.evaluate(()=>window.api.getLocation())).toMatchObject({lat:-25.3,lng:-57.6,name:'Casa'});
- await expect(page.locator('.tt-map-status')).toContainText('Tu ubicación se conserva');await page.evaluate(()=>window.api.destroy());expect(await page.locator('#map').evaluate(el=>el._leaflet_id)).toBeUndefined();await expect(page.locator('#map .leaflet-pane')).toHaveCount(0);
+ await expect(page.locator('.tt-map-tile-status')).toBeVisible();await expect(page.locator('.tt-map-tile-status')).toContainText('Si ya marcaste un punto, se conserva');await page.evaluate(()=>window.api.destroy());expect(await page.locator('#map').evaluate(el=>el._leaflet_id)).toBeUndefined();await expect(page.locator('#map .leaflet-pane')).toHaveCount(0);
 });

@@ -1,5 +1,5 @@
 import { withAdminSiteChange } from '../../core/store/publicar-cambio-administrativo.js?v=tintin-20261017-domain-cutover-1';
-import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261017-domain-cutover-1';
+import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261022-avatar-inicial-1';
 /* =============================================================
    TINTIN — Super Admin: Mensaje de bienvenida
    =============================================================
@@ -9,7 +9,7 @@ import { readAdminFirestore } from '../auth/lecturas-admin.js?v=tintin-20261017-
 
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20261017-domain-cutover-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261017-domain-cutover-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20261017-domain-cutover-1';
 import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';

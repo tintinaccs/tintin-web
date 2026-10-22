@@ -28,7 +28,8 @@ const server = http.createServer((request, response) => {
       return response.end('{"ok":false,"error":"resource_invalid"}');
     }
     response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json; charset=utf-8', 'x-tintin-cache':'audit' });
-    return response.end(JSON.stringify({ ok:true, resource, items:[], count:0 }));
+    const items = resource === 'collections' ? [{ id:'relojes', data:{ name:'Relojes', slug:'relojes', visible:true } }, { id:'collares', data:{ name:'Collares', slug:'collares', visible:true } }] : [];
+    return response.end(JSON.stringify({ ok:true, resource, items, count:items.length }));
   }
   if (pathname === '/api/visual-builder-public') {
     response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json' });

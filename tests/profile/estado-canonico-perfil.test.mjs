@@ -62,3 +62,11 @@ test('pedidos se deduplican y una consulta incompleta falla explícitamente', ()
 test('una copia antigua de Google usa la foto actual de Google como respaldo',()=>{
  assert.equal(resolveAccountAvatar({photoURL:'https://lh3.googleusercontent.com/old'},{providerData:[{providerId:'google.com',photoURL:'https://lh3.googleusercontent.com/current'}]}),'https://lh3.googleusercontent.com/current');
 });
+
+test('perfil pendiente conserva sólo foto propia; Google espera confirmación',()=>{
+ const google='https://lh3.googleusercontent.com/current';
+ const user={photoURL:google,providerData:[{providerId:'google.com',photoURL:google}]};
+ for(const profile of [{},{avatarURL:google},{photoURL:google}]) assert.equal(resolveAccountAvatar(profile,user,{profilePending:true}),'');
+ for(const profile of [{avatarURL:'/custom.png'},{photoURL:'/custom.png'}]) assert.equal(resolveAccountAvatar(profile,user,{profilePending:true}),'/custom.png');
+ assert.equal(resolveAccountAvatar({},user),google);
+});
