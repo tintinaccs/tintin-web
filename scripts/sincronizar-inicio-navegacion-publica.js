@@ -170,7 +170,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-catalog-maintenance=\"1\"",
       "css/pages/catalog/catalog-maintenance.css",
-      "tintin-20260817-margin-consistency-2-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
+      "tintin-20261022-pr1200-catalog-layout-1"
     ]
   ],
   "about.html": [
