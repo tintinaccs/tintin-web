@@ -136,7 +136,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261022-avatar-inicial-1');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20261023-checkout-variant-identity-1');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 

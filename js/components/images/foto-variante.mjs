@@ -1,3 +1,4 @@
+import { resolveProductVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variant-identity-1';
 /* Misma foto por color en producto, carrito, checkout y pedido canónico. */
 const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active', 'colorHex', 'swatch']);
 function safeImage(value) {
@@ -14,6 +15,7 @@ function imageKey(value) {
   return url.href;
 }
 export function productVariantImage(product, selection, fallback = '') {
+  selection = resolveProductVariant(product, selection) ?? selection;
   const variants = product?.variants || {};
   const keys = Array.isArray(variants)
     ? [...new Set(variants.flatMap(row => row && typeof row === 'object' ? Object.keys(row).filter(key => !metadata.has(key)) : []))]
