@@ -21,3 +21,6 @@ Cambios futuros: añadir ID, fecha, autor, evidencia, alternativa descartada si 
 - D011 /2026-10-23, PROPUESTA: matriz mixta produce totalnull; desactivación conserva inventario; precio anterior no se hereda engañosamente con override. Requiere aprobación de la titular antes de implementar.
 - D012 /2026-10-23: no cerrar HTTP422 por inferencia. #1214 integrado y CI verde, regresiones locales ejecutadas; flujo autenticado y bytes publicados NOT_VERIFIED en esta fase. Se conserva el informe histórico con sus límites.
 - D013 /2026-10-23, PROPUESTA: rollback comercial compatible, no simple vuelta a lector v1 que ignore precios v2. No restaurar datos/pedidos de producción sin autorización.
+
+
+- D014 /2026-10-23: la titular entregó expresamente «FASE2: MOTOR COMERCIAL Y COMPATIBILIDAD» después de la entrega/aprobación solicitada de fase1. Se registra como aprobación y autorización para implementar el motor, reemplazando la fase2 visual propuesta por este alcance explícito. No autoriza fase3 ni publicación.

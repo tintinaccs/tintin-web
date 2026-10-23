@@ -1,6 +1,6 @@
 # Estado y relevo — fase1
 
-Fecha2026-10-23; Codex /root. **Fase1 auditada y plan preparado; pendiente de aprobación de la titular. Fase2 NO iniciada.**
+Fecha2026-10-23; Codex /root. **Fase1 aprobada mediante instrucción expresa de FASE2. Fase2 motor comercial IN_PROGRESS; sin autorización de publicación o fase3.**
 
 ## Referencias exactas
 
@@ -31,3 +31,6 @@ PASS_LOCAL: ocho suites dirigidas; reproducciones aisladas H2/H3/H4. Verificaci�
 ## Continuidad histórica
 
 Fase0 creada por PROMPT0: nueve documentos y entrada CURRENT_STATE, sin funcionalidades; seis fases inicialmente propuestas porque ese prompt no las definía. Su autorización limitaba a documentación y PR. El pedido posterior de FASE1 amplió sólo investigación/plan. El registro de decisiones y bitácora conserva esa transición; no existe autorización implícita de fases posteriores.
+
+
+Rama de implementación separada: codex/motor-comercial-variantes-v2, parte de a0f89051f (documentación fase1) con fuentes funcionales idénticas a main6ac1. No hubo cambios funcionales de main entre auditoría e inicio. PR documental1216 permanece intacto.
