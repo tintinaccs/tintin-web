@@ -164,8 +164,11 @@ function createRuntime() {
       try { price = productVariantPrice(product, variantKey ? {variantKey} : variant).price; variant = variantSelectionLabel(product,variantKey ? {variantKey} : variant); } catch { return null; }
     }
     const imageUrl = sanitizeImageUrl(input.imageUrl || input.imgUrl || input.image || '');
+    const identity = variantKey
+      ? { lineId: lineIdFor({ id, variant, variantKey }) }
+      : { lineId: lineIdFor({ id, variant }) };
     return {
-      lineId: variantKey ? lineIdFor({ id, variant, variantKey }) : lineIdFor({ id, variant }),
+      ...identity,
       ...(product?.variantCommerceVersion === 2 ? {variantKey:stableVariantSelection(product,variantKey ? {variantKey} : variant)} : variantKey ? {variantKey} : {}),
       id,
       variant,

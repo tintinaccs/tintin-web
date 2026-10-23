@@ -58,3 +58,12 @@ test('persisted legacy label keeps its original combination when overlapping att
  assert.equal(row.variantKey,'S / L');assert.equal(row.variant,'L / S');assert.equal(row.price,150);
  assert.equal(c.normalizeCart([row])[0].lineId,row.lineId);
 });
+
+test('legacy identities remain distinct by product and option with the original line ID contract',()=>{
+ const c=vm.createContext({window:{PRODUCTS:[]},MAX_QTY:99,MAX_CART_LINES:100,sanitizeImageUrl:v=>v});
+ vm.runInContext(slice('  function cleanText(', '  function enforceStockLimits('),c);
+ const rows=c.normalizeCart([{id:'a',variant:'Plateado',qty:1},{id:'a',variant:'Dorado',qty:1},{id:'b',variant:'Plateado',qty:1}]);
+ assert.equal(rows.length,3);
+ assert.equal(new Set(rows.map(row=>row.lineId)).size,3);
+ for(const row of rows) assert.equal(row.lineId,c.lineIdFor({id:row.id,variant:row.variant}));
+});
