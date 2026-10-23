@@ -285,3 +285,68 @@ for(const [width,height]of viewports)test(`fondos globales respetan navegación 
  const geometry=await page.evaluate(()=>{const rect=sel=>{const r=document.querySelector(sel).getBoundingClientRect();return {top:r.top,bottom:r.bottom};};return {first:rect('section > [data-tt-flow-background]'),nav:rect('nav'),next:rect('.cat-layout > [data-tt-flow-background]')};});expect(geometry.first.bottom).toBeLessThanOrEqual(geometry.nav.top+1);expect(geometry.next.top).toBeGreaterThanOrEqual(geometry.nav.bottom-1);
  await page.locator('nav').evaluate(el=>el.hidden=true);await expect.poll(()=>page.locator('section').evaluate(el=>parseFloat(el.style.getPropertyValue('--tt-flow-after')))).toBeGreaterThan(0);
 });
+
+// El mismo HTML y las mismas hojas de producción, sin ejecutar autenticación ni
+// CRUD. Este recorrido protege espacios reales, no sólo valores de tokens.
+const {restoreStyleSources: restoreSpacingStyles}=require('../../scripts/lib/estilos-inicio.js');
+const spacingDocuments=fs.readdirSync(root).filter(name=>name.endsWith('.html')&&!name.startsWith('google'));
+const spacingViewports=[...viewports,[430,932],[568,320],[767,1024],[820,1180],[1025,768],[1280,800],[2560,1440]];
+for(const [width,height]of spacingViewports)test(`espaciado completo de páginas y módulos ${width}x${height}`,async({page},info)=>{
+  await page.setViewportSize({width,height});
+  await page.emulateMedia({reducedMotion:'reduce'});
+  const inventory=[];
+  for(const name of spacingDocuments){
+    let source=fs.readFileSync(path.join(root,name==='nosotros.html'?'about.html':name),'utf8');
+    for(const id of ['tt-home-css-bundle','tt-about-css-bundle'])source=restoreSpacingStyles(source,id);
+    source=removeFixtureScripts(source,{removeModulePreloads:true}).replace('<head>','<head><base href="/">');
+    await page.route('**/__spacing-page',route=>route.fulfill({contentType:'text/html',body:source}));
+    await page.goto('/__spacing-page',{waitUntil:'load'});
+    await page.evaluate(()=>{
+      document.documentElement.classList.remove('tt-initializing');
+      document.documentElement.classList.add('adm-auth-ready');
+      document.body.classList.add('tt-public-shell-mounted','tt-home-runtime-ready');
+      // Sólo el fixture de Imágenes: el documento real se abre tras Auth.
+      const images=document.querySelector('#adm-layout');if(images)images.style.display='flex';
+    });
+    await page.evaluate(()=>document.fonts.ready);
+    const geometry=await page.evaluate(()=>{
+      const result={overflow:document.documentElement.scrollWidth-innerWidth,sections:[],tails:[],gutters:[]};
+      for(const node of document.querySelectorAll('.section,.section-sm,.tt-collection-carousel,.tt-look-section,.tt-home-random-products,.tt-best-sellers-section,.tt-reviews-section,.tt-instagram-section,.tt-products-section,.tt-colls-page-section,.tt-related-section')){
+        const r=node.getBoundingClientRect();if(!r.height||getComputedStyle(node).display==='none')continue;
+        const s=getComputedStyle(node);result.sections.push({name:node.className,top:parseFloat(s.paddingTop),bottom:parseFloat(s.paddingBottom)});
+      }
+      for(const node of document.querySelectorAll('.perfil-wrap,.ck-body,.adm-content')){
+        if(!node.getBoundingClientRect().height)continue;const s=getComputedStyle(node);
+        result.tails.push({name:node.className,bottom:parseFloat(s.paddingBottom),margin:parseFloat(s.marginBottom)});
+      }
+      for(const node of document.querySelectorAll('.tt-page-hero>.container,.section>.container')){
+        if(!node.getBoundingClientRect().height)continue;const s=getComputedStyle(node);
+        result.gutters.push({left:parseFloat(s.paddingLeft),right:parseFloat(s.paddingRight)});
+      }
+      return result;
+    });
+    expect(geometry.overflow,name).toBeLessThanOrEqual(1);
+    for(const section of geometry.sections){
+      expect(section.top,`${name} ${section.name}`).toBeGreaterThanOrEqual(16);
+      expect(section.top,`${name} ${section.name}`).toBeLessThanOrEqual(32);
+      expect(section.bottom,`${name} ${section.name}`).toBeGreaterThanOrEqual(16);
+      expect(section.bottom,`${name} ${section.name}`).toBeLessThanOrEqual(32);
+    }
+    for(const tail of geometry.tails){expect(tail.bottom,`${name} ${tail.name}`).toBeLessThanOrEqual(32);expect(tail.margin).toBe(0);}
+    for(const gutter of geometry.gutters){expect(gutter.left).toBeGreaterThanOrEqual(16);expect(gutter.left).toBeLessThanOrEqual(32);expect(gutter.right).toBe(gutter.left);}
+    const adminSections=await page.locator('.adm-section').count();
+    for(let i=0;i<adminSections;i++){
+      const state=await page.evaluate(index=>{
+        const sections=[...document.querySelectorAll('.adm-section')];sections.forEach((n,i)=>n.classList.toggle('active',i===index));
+        const n=sections[index],s=getComputedStyle(document.querySelector('.adm-content'));
+        return {id:n.id,overflow:document.documentElement.scrollWidth-innerWidth,bottom:parseFloat(s.paddingBottom)};
+      },i);
+      expect(state.overflow,`${name} ${state.id}`).toBeLessThanOrEqual(1);expect(state.bottom,state.id).toBeLessThanOrEqual(32);
+    }
+    inventory.push({name,geometry,adminSections});
+    await page.unroute('**/__spacing-page');
+  }
+  expect(inventory).toHaveLength(18);
+  expect(inventory.find(row=>row.name==='admin.html').adminSections).toBeGreaterThanOrEqual(23);
+  await info.attach('espaciado-todas-las-paginas',{body:JSON.stringify(inventory),contentType:'application/json'});
+});
