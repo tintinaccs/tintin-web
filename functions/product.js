@@ -4,7 +4,7 @@ import {
 } from '../cloudflare/firebase-admin-ligero.js';
 
 import { hasPublicProductFields } from '../js/core/store/publicacion-producto.mjs';
-import { firstAvailableVariant, hasProductStock } from '../js/core/store/inventario-variantes.mjs';
+import { firstAvailableVariant, hasProductStock } from '../js/core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variant-identity-1';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 
 const PUBLIC_ORIGIN = 'https://tintinaccs.com';

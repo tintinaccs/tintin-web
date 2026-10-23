@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "18c3b9ec24030749e9de82fdf24952e63259fff6982ce6bf5dc737bf4d76fe24",
+  "sourceFingerprint": "a6e275afca01f34c1b360807f2d83bdf5c2f61a2949e58886909da96924d3f60",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1413,
     "textFiles": 1322,
-    "totalBytes": 29669731,
+    "totalBytes": 29670785,
     "pages": 19,
     "modules": 994
   },
@@ -27963,8 +27963,8 @@
     },
     {
       "path": "functions/product.js",
-      "bytes": 13587,
-      "sha256": "143c7f3a0a663511adfa4e951acd0b6880cf362b85fe255a23e898d01bb6130b",
+      "bytes": 13633,
+      "sha256": "a758d3320ee0529c8f82b82089d5a9441b1bc5b0a5b25c4896b6f647a2b29a7c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27983,7 +27983,7 @@
           "line": 6
         },
         {
-          "raw": "../js/core/store/inventario-variantes.mjs",
+          "raw": "../js/core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variant-identity-1",
           "target": "js/core/store/inventario-variantes.mjs",
           "dynamic": false,
           "line": 7
@@ -56352,8 +56352,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 13570,
-      "sha256": "f75e5acbebdc76303090aee1f794f7ad6f69d1e105146e0d6945353b81b6cdb6"
+      "bytes": 13741,
+      "sha256": "97ed3dbbd8bf250c3fc7c853797aee37c11a0c201752d1d39f917a34af504ff7"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56365,7 +56365,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "2c7672f2a83edde02bc80b80d3a7b202189e4e8616c049d50b642ab943fc4651"
+      "sha256": "ec04fab894b2a1967fbf0312cd26a2f8b36b731e70245a56b839a3943cc80694"
     },
     {
       "path": "config/public-site.json",
@@ -57024,8 +57024,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 837508,
-      "sha256": "63229e69f83f6ca11e4d5bcdae2e24d325a91a93325f6bd3b3fdf8e553300084"
+      "bytes": 838345,
+      "sha256": "3485fda8e00f551eacee862b35a5a5094d97d2b91006339d117961947562abda"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -58110,8 +58110,8 @@
     {
       "path": "functions/product.js",
       "extension": ".js",
-      "bytes": 13587,
-      "sha256": "143c7f3a0a663511adfa4e951acd0b6880cf362b85fe255a23e898d01bb6130b"
+      "bytes": 13633,
+      "sha256": "a758d3320ee0529c8f82b82089d5a9441b1bc5b0a5b25c4896b6f647a2b29a7c"
     },
     {
       "path": "functions/products/[handle].js",

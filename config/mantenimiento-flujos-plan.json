@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "a2bd6fadaac991ad34170375bd6e71c5285658d8",
-  "reason": "Corregir el rechazo de selecciones validas por orden de atributos para todo el catalogo; compartir seleccion entre carrito, checkout, fotos y stock. Publicacion autorizada; sin pruebas manuales por instruccion del usuario, CI obligatorio conservado.",
+  "reason": "Corregir seleccion de variantes en todo el catalogo y unificar la dependencia compartida de metadata/fotos. Publicacion autorizada; build y CI obligatorio conservados, sin pruebas manuales ni compras.",
   "files": [
     {
       "path": "_headers",
@@ -72,6 +72,11 @@
       "path": "envios.html",
       "oldHash": "13b7cd48a2b323ae85dff5445bdcb61ad7b4045812eeb6fd56ccc3c7c0a5305f",
       "newHash": "6e6611f92f226dae7459dc6071deda341a187f8d3b437ee41e371d2aa762bf1e"
+    },
+    {
+      "path": "functions/product.js",
+      "oldHash": "143c7f3a0a663511adfa4e951acd0b6880cf362b85fe255a23e898d01bb6130b",
+      "newHash": "a758d3320ee0529c8f82b82089d5a9441b1bc5b0a5b25c4896b6f647a2b29a7c"
     },
     {
       "path": "index.html",

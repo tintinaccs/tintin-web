@@ -1,3 +1,7 @@
+## 2026-10-23 — Conciliación de imports de metadata durante la publicación (Codex /root)
+
+PR #1214, candidato bd4c0f2b: CI39980171129 aprobó construcción reproducible, contrato estático, operaciones/cuentas/sync, reglas adversariales y panel. Falló únicamente en dos comprobaciones SEO de metadata: ERR_VM_MODULE_LINK_FAILURE al cargar inventario-variantes por una URL sin versión desde functions/product y por URL versionada desde foto-variante. Se unifica la importación directa de functions/product con la misma URL canónica versionada del helper de fotos, conservando los contratos y las aserciones. CodeQL y el despliegue de revisión de Cloudflare aprobaron ese candidato; no se hereda su aprobación al SHA corregido. Pruebas locales y compras siguen omitidas según instrucción; nueva CI y publicación pendientes.
+
 ## 2026-10-23 — Publicación autorizada de la corrección de variantes (Codex /root)
 
 El usuario autorizó expresamente publicar e integrar la corrección. Se prepara PR propio contra main a2bd6fad con plan exacto de mantenimiento y generación canónica del artefacto. No se lanzan pruebas manuales ni compras; los controles automáticos obligatorios de la publicación se conservan. Estado: IN_PROGRESS hasta CI, integración y observación de la versión desplegada. La evidencia y límites de la inspección de los 222 productos activos permanecen en la entrada siguiente.
