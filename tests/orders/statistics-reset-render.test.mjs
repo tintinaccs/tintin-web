@@ -5,11 +5,12 @@ import { statisticsSince } from '../../js/admin/statistics/modelo-reinicios.mjs'
 import { onRequest } from '../../functions/api/admin-commerce-controls.js';
 const source = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
 const renderer = source.slice(source.indexOf('function renderGeneralStatistics()'), source.indexOf('async function listenStatisticsTraffic()'));
-function render(resets = {}) {
+function render(resets = {}, extraOrders = []) {
   const values = {}, bars = {}, rankings = {};
   const now = Date.now();
   const allOrders = [{ createdAt: now - 10000, status: 'entregado', paymentStatus: 'pagado', total: 200, items: [], shipping: { city: 'A' } },
-    { createdAt: now - 1000, status: 'pendiente', paymentStatus: 'pendiente', total: 100, items: [], shipping: { city: 'B' } }];
+    { createdAt: now - 1000, status: 'pendiente', paymentStatus: 'pendiente', total: 100, items: [], shipping: { city: 'B' } },
+    ...extraOrders.map(order=>({createdAt:now-500,status:'entregado',paymentStatus:'pagado',...order}))];
   const dependencies = { currentRole: 'superadmin', ensureStatisticsControls: () => true, refreshStatisticsViews() {}, runAdminCrudOperation() {},
     statisticsStartDate: () => new Date(now - 100000), allOrders, allUsers: [{ createdAt: now - 10000 }],
     activityTimestampMillis: value => Number(value), statisticsOrderIsValid: () => true,
@@ -47,4 +48,14 @@ test('endpoint rechaza origen ajeno, sesión ausente y métodos no permitidos si
   }
   const wrongMethod = await onRequest({ request: new Request('https://tintinaccs.com/api/admin-commerce-controls', { method: 'DELETE', headers: { origin: 'https://tintinaccs.com' } }), env: {} });
   assert.equal(wrongMethod.status, 405);
+});
+
+
+test('product ranking separates identical names and joins renamed snapshots by stable ID',()=>{
+ const orders=[{items:[{id:'a',name:'Mismo',qty:1,price:100},{id:'b',name:'Mismo',qty:1,price:200}]},{items:[{id:'a',name:'Renombrado',qty:2,price:120}]}];
+ const result=render({},orders),rows=result.rankings['statistics-top-products'];
+ assert.equal(rows.length,2);
+ assert.equal(rows.find(row=>row.id==='a')?.value,3);
+ assert.equal(rows.find(row=>row.id==='b')?.value,1);
+ assert.equal(render({products:new Date(result.now+1000)},orders).rankings['statistics-top-products'].length,0);
 });

@@ -1602,11 +1602,13 @@ function renderGeneralStatistics() {
     if (orderIncluded('orderLocations', order)) orderLocations.set(location, (orderLocations.get(location) || 0) + 1);
     (orderIncluded('products', order) ? (order.items || []) : []).forEach(item => {
       const name = String(item.name || 'Producto sin nombre').trim();
+      const productId = String(item.id || item.productId || '').trim();
+      const productKey = productId ? `id:${productId}` : `legacy-name:${name}`;
       const quantity = Math.max(1, Number(item.qty || item.quantity || 1));
-      const previous = products.get(name) || { quantity: 0, revenue: 0 };
+      const previous = products.get(productKey) || { id: productId, name, quantity: 0, revenue: 0 };
       previous.quantity += quantity;
       previous.revenue += quantity * Number(item.price || 0);
-      products.set(name, previous);
+      products.set(productKey, previous);
     });
   });
 
@@ -1628,7 +1630,7 @@ function renderGeneralStatistics() {
   renderStatisticsBars('statistics-payment-status', paymentStatuses, PAY_STATUS_LABELS);
   renderStatisticsBars('statistics-live-pages', livePages);
   renderStatisticsRanking('statistics-top-products', [...products.entries()]
-    .map(([name, data]) => ({ name, value: data.quantity, displayValue: data.quantity, meta: `${data.quantity} unidades · ${formatPrice(data.revenue)}` }))
+    .map(([, data]) => ({ id: data.id, name: data.name, value: data.quantity, displayValue: data.quantity, meta: `${data.quantity} unidades · ${formatPrice(data.revenue)}` }))
     .sort((a, b) => b.value - a.value));
   renderStatisticsRanking('statistics-order-locations', [...orderLocations.entries()]
     .map(([name, value]) => ({ name, value, displayValue: value, meta: `${value} pedido${value === 1 ? '' : 's'}` }))
