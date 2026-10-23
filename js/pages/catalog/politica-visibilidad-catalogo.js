@@ -73,7 +73,11 @@ export function normalizeVariantOptions(value) {
 export function normalizeProduct(product) {
   const p = product && typeof product === 'object' ? product : {};
   const price = Number(p.price);
-  const rawStock = p.variantCommerceVersion === 2 ? productStockTotal(p) : p.stock;
+  let rawStock = p.stock;
+  if (p.variantCommerceVersion != null && p.variantCommerceVersion !== 1) {
+    try { if (p.variantCommerceVersion !== 2) throw new Error('Versión no compatible'); rawStock = productStockTotal(p); }
+    catch { return {...p,active:false,price:NaN,stock:0}; }
+  }
   const stock = rawStock == null || rawStock === '' ? null : Number(rawStock);
   const category = wristCategory(clean(p.category || p.cat || '', 120));
   const description = clean(p.description || p.desc || '', 4000);

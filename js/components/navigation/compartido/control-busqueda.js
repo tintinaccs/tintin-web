@@ -1,11 +1,11 @@
 import { normalizeProductSearch as normalize, productSearchText, productSearchScore } from '../../../core/store/busqueda-productos.mjs?v=tintin-20261021-commerce-review-1';
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261023-checkout-variants-header-2';
+const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261023-variant-engine-v2-1';
 
 const MAX_RESULTS = 10;
-import { hasProductStock, firstAvailableVariant } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
-import { productVariantImage } from '../../images/foto-variante.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { hasProductStock, firstAvailableVariant, productVariantPrice } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { productVariantImage } from '../../images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-1';
 const INPUT_DELAY_MS = 120;
 
 let index = [];
@@ -114,9 +114,10 @@ function createResult(product, position) {
   const name = document.createElement('strong');
   name.textContent = String(product.name || 'Producto');
   const meta = document.createElement('span');
-  meta.textContent = [String(product.category || product.cat || '').trim(), formatPrice(product.price)].filter(Boolean).join(' · ');
-  const previous = Number(product.priceBefore);
-  const current = Number(product.price);
+  const money = product.variantCommerceVersion === 2 ? productVariantPrice(product, firstAvailableVariant(product) || {variantKey:product.variantInventory?.[0]?.variant}) : product;
+  meta.textContent = [String(product.category || product.cat || '').trim(), formatPrice(money.price)].filter(Boolean).join(' · ');
+  const previous = Number(money.priceBefore);
+  const current = Number(money.price);
   if (Number.isFinite(previous) && Number.isFinite(current) && current > 0 && previous > current) {
     const oldPrice = document.createElement('s');
     oldPrice.textContent = formatPrice(previous);
