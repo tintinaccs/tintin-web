@@ -23,7 +23,7 @@ if (!/\/(?:about|nosotros|contact|envios|cambios-devoluciones|preguntas-frecuent
 
 export function loadPageMaintenance() {
   const path = pathName();
-  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261023-global-layout-1');
+  if (/\/catalogo(?:\.html)?$/.test(path)) return load('pages/catalog/mantenimiento-catalogo.js', 'tintin-20261023-global-layout-2');
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js', 'tintin-20260927-visual-1-brand-20261004-1-owner-pink-20261004-1-master-20261007-1');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js', 'tintin-20261022-avatar-inicial-1');
   if (/\/checkout(?:\.html)?$/.test(path)) {

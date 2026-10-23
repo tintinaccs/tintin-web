@@ -492,3 +492,39 @@ for(const route of ['/catalogo?cat=pulseras','/collections','/about','/contact',
  if(route.startsWith('/catalogo')&&width<768){await page.waitForFunction(()=>document.querySelector('.cat-hero')?.hasAttribute('data-tt-flow-block'));const layer=await page.locator('.cat-hero > [data-tt-flow-background]').boundingBox(),tabs=await page.locator('#cat-tabs-mobile').boundingBox();expect(layer.y+layer.height).toBeLessThanOrEqual(tabs.y+1);}
  if(route.startsWith('/catalogo')&&width===390)await page.screenshot({path:test.info().outputPath('global-corregido-390.png')});
 });
+
+for (const [width, height] of [[320,568],[350,724],[390,844],[600,960],[768,1024],
+  [769,1024],[844,390],[1024,768],[1025,768],[1440,900],[2560,1440]]) {
+  test(`catálogo compacto conserva categorías y márgenes ${width}x${height}`, async ({ page }) => {
+    await mockGuestNavigation(page);
+    await openPublicPage(page, { width, height }, '/catalogo?cat=bags');
+    const header = page.locator(width < 768 ? '#tt-mobile-brand' : width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet');
+    const hero = page.locator('.cat-hero');
+    const headerBox = await header.boundingBox(), heroBox = await hero.boundingBox();
+    const gap = heroBox.y - (headerBox.y + headerBox.height);
+    expect(gap).toBeGreaterThanOrEqual(0);
+    expect(gap).toBeLessThanOrEqual(32);
+    const nav = page.locator('#cat-tabs-mobile');
+    if (await nav.isVisible()) {
+      const navBox = await nav.boundingBox(), subtitle = await page.locator('#cat-subtitulo').boundingBox();
+      expect(navBox.y - (subtitle.y + subtitle.height)).toBeLessThanOrEqual(28);
+      const filter = await page.locator('#filter-toggle').boundingBox();
+      expect(filter.y - (navBox.y + navBox.height)).toBeGreaterThanOrEqual(8);
+      expect(filter.y - (navBox.y + navBox.height)).toBeLessThanOrEqual(16);
+      expect(filter.height).toBeGreaterThanOrEqual(44);
+      await page.waitForFunction(() => document.querySelector('.cat-hero > [data-tt-flow-background]'));
+      const paint = await page.locator('.cat-hero > [data-tt-flow-background]').boundingBox();
+      expect(paint.y + paint.height).toBeLessThanOrEqual(navBox.y + 1);
+    } else {
+      const layout = await page.locator('.cat-layout').boundingBox();
+      expect(layout.y - (heroBox.y + heroBox.height)).toBeGreaterThanOrEqual(8);
+      expect(layout.y - (heroBox.y + heroBox.height)).toBeLessThanOrEqual(24);
+    }
+    if ([350,1440].includes(width)) await page.screenshot({ path: test.info().outputPath('catalogo-compacto.png') });
+    await page.locator('#cat-titulo').evaluate(n => { n.textContent = 'Bags y accesorios para acompañarte todos los días'; });
+    // El fondo del hero ocupa deliberadamente todo el viewport. Medir el
+    // contenido del título distingue ese sangrado de un texto recortado.
+    expect(await page.locator('#cat-titulo').evaluate(n => n.scrollWidth <= n.clientWidth + 1)).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}

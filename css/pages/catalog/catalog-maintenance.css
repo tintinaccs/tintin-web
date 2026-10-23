@@ -22,6 +22,8 @@ body.tt-catalog-maintenance .cat-hero {
   background: var(--color-background-surface-soft, #FDECF2) !important;
   border: 1px solid var(--color-border-primary, #FDECF2);
   box-shadow: 0 10px 30px var(--color-card-shadow, rgba(248,170,202,.10));
+  padding: 24px 28px;
+  margin-bottom: 20px;
 }
 
 body.tt-catalog-maintenance .cat-hero-title {
@@ -200,8 +202,11 @@ body.tt-catalog-maintenance .tt-footer-tagline {
   body.tt-catalog-maintenance .cat-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
 }
 
+/* La cabecera tablet ya reserva su altura en el documento; el margen del
+   hero de escritorio la estaba sumando por segunda vez. */
 @media (min-width: 769px) and (max-width: 1024px) {
-  body.tt-catalog-maintenance .cat-wrap { padding-inline: 24px; }
+  body.tt-catalog-maintenance .cat-wrap { padding-inline: 24px; padding-top: 12px; }
+  body.tt-catalog-maintenance .cat-hero { margin-top: 0; padding: 20px 24px; }
   body.tt-catalog-maintenance .cat-layout { grid-template-columns: 210px minmax(0,1fr); gap: 18px; }
   body.tt-catalog-maintenance .cat-sidebar { padding: 18px; }
   body.tt-catalog-maintenance .cat-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
@@ -210,8 +215,9 @@ body.tt-catalog-maintenance .tt-footer-tagline {
 
 @media (max-width: 768px) {
   body.tt-catalog-maintenance { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
-  body.tt-catalog-maintenance .cat-wrap { padding: 16px 24px 90px; }
-  body.tt-catalog-maintenance .cat-hero { margin-top: 0; padding: 16px; border-radius: 16px; }
+  body.tt-catalog-maintenance .cat-wrap { padding: 8px 24px 90px; }
+  body.tt-catalog-maintenance .cat-hero { margin-top: 0; padding: 12px 16px; margin-bottom: 12px; border-radius: 16px; }
+  body.tt-catalog-maintenance .cat-tabs-mobile { margin-bottom: 12px; }
   body.tt-catalog-maintenance .cat-sidebar {
     display: none !important;
     max-height: none !important;
