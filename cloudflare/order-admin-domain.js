@@ -747,7 +747,7 @@ export async function applyOrderAdminMutation(
         if (!historical) throw new Error('La referencia histórica requiere revisión.');
         reference.variantKey = historical.variant;
       }
-      for (const item of afterItems.filter(item => item.id === productId && !item.variantKey)) {
+      for (const item of [...afterItems, ...(patch.items || [])].filter(item => item.id === productId && !item.variantKey)) {
         const unchanged = beforeOrder.items.some(previous => previous.id === item.id && previous.variant === item.variant);
         const historical = unchanged ? entries.find(entry => entry.variant === item.variant) : null;
         if (historical) item.variantKey = historical.variant;
@@ -776,7 +776,9 @@ export async function applyOrderAdminMutation(
       if (product.variantCommerceVersion !== 2) continue;
       const key = stableVariantSelection(product, item.variantKey ? item : item.variant);
       if (key === null) throw new Error('La combinación no existe.');
-      const historical = beforeOrder.items.find(previous => previous.id === item.id && stableVariantSelection(product, previous.variantKey ? previous : previous.variant) === key);
+      const entries = variantInventoryEntries(product);
+      const historical = beforeOrder.items.find(previous => previous.id === item.id &&
+        (previous.variantKey || entries.find(entry => entry.variant === previous.variant)?.variant || stableVariantSelection(product, previous.variant)) === key);
       item.variantKey = key;
       item.variant = variantSelectionLabel(product,{variantKey:key});
       item.price = historical ? historical.price : productVariantPrice(product, {variantKey:key}).price;

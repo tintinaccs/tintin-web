@@ -958,12 +958,17 @@ test('v2 cancellation after overlapping attribute reorder releases the saved ref
  const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
 });
 
-test('cancel legacy reservation after explicit v2 fixture upgrade retains its immutable matrix reference',async()=>{
+test('edit and cancel legacy reservation after explicit v2 fixture upgrade retain historical price and immutable reference',async()=>{
  const old={name:'Legacy overlap',price:100,stock:2,active:true,variants:{Color:['S','L'],Talle:['S','L']},variantInventory:[{variant:'S / L',stock:1},{variant:'L / S',stock:1}]};
  const store=fakeStore({'products/ring':document('products/ring',old)}, {transactional:true});
  const created=await createOrderAdmin({}, {orderId:'v1_to_v2_fixture',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'S / L',qty:1}]},checkoutActor('legacy'),store);
  const p=decodeFirestoreFields(store.map.get('products/ring').fields);p.variantCommerceVersion=2;p.variants={Talle:['S','L'],Color:['S','L']};p.variantInventory[0].attributes={Color:'S',Talle:'L'};p.variantInventory[1].attributes={Color:'L',Talle:'S'};
  store.map.set('products/ring',document('products/ring',p,'2099-01-01T00:00:00Z'));
+ const edited=await applyOrderAdminMutation({}, {orderId:created.orderId,changeId:'legacy_v2_edit',items:[{id:'ring',variant:'S / L',qty:1,price:999}]},ACTOR,store);
+ assert.equal(edited.order.items[0].price,100);
+ assert.equal(edited.order.items[0].variantKey,'S / L');
+ assert.equal(edited.order.items[0].variant,'L / S');
+ assert.equal(edited.order.variantInventoryItems[0].variantKey,'S / L');
  await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',changeId:'legacy_v2_cancel'},ACTOR,store);
  const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
 });
