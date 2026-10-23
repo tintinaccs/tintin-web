@@ -165,7 +165,7 @@ function createRuntime() {
     }
     const imageUrl = sanitizeImageUrl(input.imageUrl || input.imgUrl || input.image || '');
     return {
-      lineId: lineIdFor({ id, variant, ...(variantKey ? {variantKey} : {}) }),
+      lineId: variantKey ? lineIdFor({ id, variant, variantKey }) : lineIdFor({ id, variant }),
       ...(product?.variantCommerceVersion === 2 ? {variantKey:stableVariantSelection(product,variantKey ? {variantKey} : variant)} : variantKey ? {variantKey} : {}),
       id,
       variant,
