@@ -9,4 +9,4 @@
 - Verificación documental: resultados finales en [matriz](05-MATRIZ-DE-PRUEBAS.md) y [relevo](08-ESTADO-Y-RELEVO.md).
 - No ejecutado: suites funcionales, navegador, compras, CRUD, migraciones, merge y publicación.
 - Pendientes: revisión del PR documental; autorización explícita antes de fase1. No hay certificación de implementación completa del editorv2.
-- Commit documental: consultar HEAD de la rama y el PR del relevo; no usar el SHA base como si incluyera esta documentación.
+- Primer commit documental: ed438c660; PR [#1216](https://github.com/tintinaccs/tintin-web/pull/1216) en borrador. Actualización posterior sólo de referencias de relevo. No usar el SHA base como commit documental.

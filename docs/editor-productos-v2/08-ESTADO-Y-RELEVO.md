@@ -5,8 +5,8 @@ Fecha: 2026-10-23. Agente: Codex /root.
 - Fase actual: **0 — documentación**, documentación preparada y comprobada. Fases1–6 NO iniciadas.
 - Último commit funcional inspeccionado: `6ac1fdf2546fa859412399f88eccf207991880de` (main al crear la rama; incluye #1214).
 - Rama documental: `codex/documentacion-editor-v2-20261023`.
-- PR documental: pendiente de creación; se completará esta referencia antes de la entrega.
-- Commit que contiene documentos: resolver HEAD de esta rama/PR al continuar; el SHA anterior es la base, no el commit documental.
+- PR documental: [#1216](https://github.com/tintinaccs/tintin-web/pull/1216), en borrador, sin auto-merge.
+- Primer commit documental: ed438c660. Consultar HEAD del PR para incluir la actualización de este relevo; el SHA base no incluye la documentación.
 - PR ajeno abierto al inicio: #1213, tema global. No se tocó su rama. Estado remoto puede cambiar: verificar GitHub antes de actuar.
 
 ## Qué se hizo
