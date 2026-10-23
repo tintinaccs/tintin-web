@@ -56,7 +56,12 @@ export function resolveProductVariant(product, selection) {
   return values.join(' / ');
 }
 
-function inventorySelection(product, entries, selection) {
+export function inventorySelection(product, entries, selection) {
+  if (product?.variantCommerceVersion === 2) {
+    const attrs = variantAttributes(product, selection);
+    if (!attrs) return null;
+    return entries.find(entry => attributesKey(entry.attributes) === attributesKey(attrs)) || null;
+  }
   const selected = normalizeVariantSelection(selection);
   const exact = entries.find(entry => entry.variant === selected);
   if (exact) return exact;
@@ -67,18 +72,37 @@ function inventorySelection(product, entries, selection) {
 }
 
 export function variantInventoryEntries(product) {
-  if (product?.variantInventory == null) return null;
+  if (product?.variantInventory == null) {
+    if (product?.variantCommerceVersion === 2) throw new Error('Falta la matriz comercial de variantes.');
+    return null;
+  }
   const entries = product.variantInventory;
   if (!Array.isArray(entries) || !entries.length || entries.length > 1000) throw new Error('Inventario de variantes inválido.');
   const seen = new Set();
   return entries.map(entry => {
     const variant = normalizeVariantSelection(entry?.variant);
     const stock = entry?.stock;
-    if (!variant || variant.length > 120 || seen.has(variant) || !Number.isInteger(stock) || stock < 0 || stock > 1000000) {
+    if (!variant || variant.length > 120 || seen.has(variant) || (!(product?.variantCommerceVersion === 2 && stock === null) && (!Number.isInteger(stock) || stock < 0 || stock > 1000000))) {
       throw new Error('Inventario de variantes inválido.');
     }
     seen.add(variant);
-    return { variant, stock };
+    if (product?.variantCommerceVersion !== 2) return { variant, stock };
+    const attributes = entry.attributes;
+    const groups = namedVariantGroups(product);
+    if (!attributes || typeof attributes !== 'object' || Array.isArray(attributes)
+      || Object.keys(attributes).length !== groups.length
+      || groups.some(([key, values]) => typeof attributes[key] !== 'string' || !values.includes(attributes[key]))) throw new Error('Atributos comerciales inválidos.');
+    const identity = attributesKey(attributes);
+    if (seen.has(identity)) throw new Error('Combinación comercial duplicada.');
+    seen.add(identity);
+    for (const field of ['price', 'priceBefore']) {
+      if (entry[field] != null && (!Number.isInteger(entry[field]) || entry[field] < 1 || entry[field] > 1e9)) throw new Error('Precio de variante inválido.');
+    }
+    if (entry.active != null && typeof entry.active !== 'boolean') throw new Error('Disponibilidad de variante inválida.');
+    const price = entry.price ?? product.price;
+    const before = entry.priceBefore ?? (entry.price == null ? product.priceBefore : null);
+    if (before != null && (!Number.isInteger(before) || before <= price)) throw new Error('Precio anterior de variante inválido.');
+    return { ...entry, variant, stock, attributes: { ...attributes } };
   });
 }
 
@@ -86,21 +110,22 @@ export function variantStockLimit(product, selection) {
   try {
     const entries = variantInventoryEntries(product);
     if (entries === null) return null;
-    return inventorySelection(product, entries, selection)?.stock ?? 0;
+    const entry = inventorySelection(product, entries, selection);
+    return !entry || entry.active === false ? 0 : entry.stock;
   } catch { return 0; }
 }
 
 export function hasProductStock(product) {
-  if (product?.stock != null && product.stock !== '' && Number(product.stock) <= 0) return false;
+  if (product?.variantCommerceVersion !== 2 && product?.stock != null && product.stock !== '' && Number(product.stock) <= 0) return false;
   try {
     const entries = variantInventoryEntries(product);
-    return entries === null || entries.some(entry => entry.stock > 0);
+    return entries === null || entries.some(entry => entry.active !== false && (entry.stock === null || entry.stock > 0));
   } catch { return false; }
 }
 
 export function firstAvailableVariant(product) {
   if (!hasProductStock(product)) return '';
-  try { return variantInventoryEntries(product)?.find(entry => entry.stock > 0)?.variant || ''; }
+  try { return variantInventoryEntries(product)?.find(entry => entry.active !== false && (entry.stock === null || entry.stock > 0))?.variant || ''; }
   catch { return ''; }
 }
 
@@ -127,6 +152,8 @@ export function applyVariantInventoryDeltas(product, deltas) {
   for (const delta of deltas) {
     const entry = inventorySelection(product, entries, delta.variant);
     if (!entry) throw new Error('La variante del pedido ya no existe.');
+    if (delta.qty > 0 && entry.active === false) throw new Error('La variante no está disponible.');
+    if (entry.stock === null) continue;
     const stock = entry.stock - delta.qty;
     if (stock < 0) throw Object.assign(new Error(`Stock insuficiente para la variante ${entry.variant}. Disponible: ${entry.stock}.`), {
       code: 'insufficient_stock', status: 422, variant: entry.variant, available: entry.stock, requested: delta.qty,
@@ -147,4 +174,65 @@ export function variantInventoryDeltas(beforeItems, afterItems) {
     }
   }
   return [...deltas.values()].filter(item => item.qty !== 0);
+}
+
+// Version 2 is opt-in on a product; no writer enables it automatically.
+function namedVariantGroups(product) {
+  const groups = new Map();
+  for (const row of Array.isArray(product?.variants) ? product.variants : [product?.variants]) {
+    if (!row || typeof row !== 'object') continue;
+    for (const [key, raw] of Object.entries(row)) {
+      if (VARIANT_METADATA.has(key)) continue;
+      const values = (Array.isArray(raw) ? raw : String(raw ?? '').split(',')).map(variantText).filter(Boolean);
+      if (values.length) groups.set(key, [...new Set([...(groups.get(key) || []), ...values])]);
+    }
+  }
+  return [...groups];
+}
+export function attributesKey(attributes) {
+  return JSON.stringify(Object.keys(attributes).sort().map(key => [key, attributes[key]]));
+}
+export function variantAttributes(product, selection) {
+  const canonical = resolveProductVariant(product, selection);
+  if (canonical === null) return null;
+  const parts = canonical.split(' / ');
+  return Object.fromEntries(namedVariantGroups(product).map(([key], index) => [key, parts[index]]));
+}
+export function productVariantPrice(product, selection = '') {
+  let entry = null;
+  if (product?.variantCommerceVersion === 2) {
+    entry = inventorySelection(product, variantInventoryEntries(product), selection);
+    if (!entry) throw new Error('La combinación seleccionada no existe.');
+  }
+  const price = entry?.price ?? product?.price;
+  const priceBefore = entry?.priceBefore ?? (entry?.price == null ? product?.priceBefore : null) ?? null;
+  if (typeof price !== 'number' || !Number.isInteger(price) || price < 1 || price > 1e9) throw new Error('Precio comercial inválido.');
+  return { price, priceBefore: priceBefore != null && priceBefore > price ? priceBefore : null };
+}
+export function variantInventoryTotal(entries) {
+  if (entries == null || entries.some(entry => entry.stock === null)) return null;
+  const stock = entries.reduce((sum, entry) => sum + entry.stock, 0);
+  if (!Number.isInteger(stock) || stock < 0 || stock > 1000000) throw new Error('Stock total inválido.');
+  return stock;
+}
+export function productStockTotal(product) {
+  return product?.variantCommerceVersion === 2 ? variantInventoryTotal(variantInventoryEntries(product)) : product?.stock;
+}
+export function stableVariantSelection(product, selection) {
+  const canonical = resolveProductVariant(product, selection);
+  if (canonical === null) return null;
+  const entries = variantInventoryEntries(product);
+  return entries ? inventorySelection(product, entries, selection)?.variant ?? null : canonical;
+}
+// Called before any definition edit, including import. Commercial references must
+// be supplied by the authorized caller; absence never grants deletion of v2 rows.
+export function assertVariantCompatibility(before, after) {
+  if (before?.variantCommerceVersion !== 2) return;
+  if (after?.variantCommerceVersion !== 2) throw new Error('No se puede degradar un producto comercial v2.');
+  const next = variantInventoryEntries(after);
+  for (const entry of variantInventoryEntries(before)) {
+    if (!next.some(row => row.variant === entry.variant && attributesKey(row.attributes) === attributesKey(entry.attributes))) {
+      throw new Error('Conservá la combinación comercial; podés desactivarla, no eliminarla.');
+    }
+  }
 }
