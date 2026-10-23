@@ -14,7 +14,7 @@ import {
   statusReservesInventory,
   orderReservesInventory,
 } from '../js/core/store/modelo-inventario.mjs';
-import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantInventoryDeltas, variantInventoryDeltas } from '../js/core/store/inventario-variantes.mjs';
+import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantInventoryDeltas, variantInventoryDeltas, productVariantPrice, productStockTotal, variantInventoryTotal, resolveProductVariant, stableVariantSelection } from '../js/core/store/inventario-variantes.mjs';
 import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 import { ORDER_LIFECYCLE_STATUSES, assertOrderTransition, lifecycleStatus } from '../js/orders/ciclo-pedido.mjs';
@@ -297,7 +297,13 @@ async function resolveCanonicalCreationItems(env, rawItems, batchGet) {
   const items = lines.map(line => {
     const product = decodeFirestoreFields(documents.get(line.id)?.fields || {});
     if (product.active === false) throw creationError(`El producto ${line.id} no está activo.`, 'product_inactive', { productId: line.id });
-    const price = Number(product.price);
+    let price = Number(product.price);
+    if (product.variantCommerceVersion === 2) {
+      const selection = resolveProductVariant(product, line.variant);
+      if (selection === null) throw creationError('La combinación no existe.', 'invalid_variant', {productId:line.id});
+      try { price = productVariantPrice(product, selection).price; }
+      catch { throw creationError('Precio de combinación inválido.', 'invalid_price', {productId:line.id}); }
+    }
     if (!Number.isFinite(price) || price < 0) throw creationError(`Precio inválido para ${line.id}.`, 'invalid_price', { productId: line.id });
     return {
       id: line.id,
@@ -460,7 +466,8 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
         if (variantInventoryEntries(product) !== null) variantInventory = applyVariantInventoryDeltas(product, variantItems);
       } catch (error) { error.productId = productId; throw error; }
       if (reserves && variantInventory !== null) order.variantInventoryItems.push(...variantItems);
-      const stock = product.stock === null || product.stock === undefined || product.stock === '' ? null : Number(product.stock);
+      const totalStock = productStockTotal(product);
+      const stock = totalStock === null || totalStock === undefined || totalStock === '' ? null : Number(totalStock);
       if (stock !== null && (!Number.isFinite(stock) || stock < 0)) throw new Error(`Stock inválido para ${productId}.`);
       const nextStock = stock === null ? null : Math.floor(stock) - requestedQty;
       if (nextStock !== null && nextStock < 0) {
@@ -475,7 +482,7 @@ async function createOrderAttempt(env, input, actor, { get, batchGet, commit, in
       if (!reserves) continue;
       if (stock === null && variantInventory === null) continue;
       const productPatch = {
-        ...(stock === null ? {} : { stock: nextStock }),
+        ...(product.variantCommerceVersion === 2 ? {stock:variantInventoryTotal(variantInventory)} : stock === null ? {} : { stock: nextStock }),
         ...(variantInventory === null ? {} : { variantInventory }),
         lastInventoryOrderId: orderId,
         lastInventoryAction: 'reserve',
@@ -715,7 +722,7 @@ export async function applyOrderAdminMutation(
   const beforeItems = normalizeVariantInventoryItems(beforeOrder.items);
   const afterVariantItems = [];
   const productIds = new Set([...inventory.deltas.keys(), ...beforeVariantItems.map(item => item.id),
-    ...(inventory.afterReserved && (!orderReservesInventory(beforeOrder) || patch.items) ? afterItems.map(item => item.id) : [])]);
+    ...(patch.items || (inventory.afterReserved && !orderReservesInventory(beforeOrder)) ? afterItems.map(item => item.id) : [])]);
   const productDocuments = await readProductDocuments(env, productIds, batchGet);
   for (const productId of productIds) {
     const document = productDocuments.get(productId);
@@ -732,6 +739,19 @@ export async function applyOrderAdminMutation(
     }
     afterVariantItems.push(...afterItems.filter(item => item.id === productId));
   }
+  if (patch.items) {
+    for (const item of patch.items) {
+      const product = decodeFirestoreFields(productDocuments.get(item.id)?.fields || {});
+      if (product.variantCommerceVersion !== 2) continue;
+      const key = stableVariantSelection(product, item.variant);
+      if (key === null) throw new Error('La combinación no existe.');
+      const historical = beforeOrder.items.find(previous => previous.id === item.id && stableVariantSelection(product, previous.variant) === key);
+      item.price = historical ? historical.price : productVariantPrice(product, item.variant).price;
+      item.imageUrl = historical?.imageUrl || productVariantImage(product, item.variant);
+    }
+    patch.subtotal = patch.items.reduce((sum, item) => sum + item.qty * item.price, 0);
+    patch.total = patch.subtotal + (patch.shippingCost ?? beforeOrder.shippingCost ?? 0);
+  }
   const variantDeltas = variantInventoryDeltas(beforeVariantItems, afterVariantItems);
 
   const now = new Date();
@@ -743,13 +763,14 @@ export async function applyOrderAdminMutation(
     const product = decodeFirestoreFields(document.fields || {});
     const deltas = variantDeltas.filter(item => item.id === productId);
     const variantInventory = deltas.length ? applyVariantInventoryDeltas(product, deltas) : null;
-    const currentStock = product.stock === null || product.stock === undefined || product.stock === '' ? null : Number(product.stock);
+    const rawStock = productStockTotal(product);
+    const currentStock = rawStock === null || rawStock === undefined || rawStock === '' ? null : Number(rawStock);
     if (currentStock !== null && (!Number.isFinite(currentStock) || currentStock < 0)) throw new Error(`Stock inválido para ${productId}.`);
     const nextStock = currentStock === null ? null : Math.floor(currentStock) - reserveDelta;
     if (nextStock !== null && nextStock < 0) throw new Error(`Stock insuficiente para volver a activar o ampliar el pedido (${productId}).`);
     if (currentStock === null && variantInventory === null) continue;
     const productPatch = {
-      ...(currentStock === null ? {} : { stock: nextStock }),
+      ...(product.variantCommerceVersion === 2 ? {stock:variantInventoryTotal(variantInventory ?? variantInventoryEntries(product))} : currentStock === null ? {} : { stock: nextStock }),
       ...(variantInventory === null ? {} : { variantInventory }),
       lastInventoryOrderId: orderId,
       lastInventoryAction: reserveDelta > 0 ? 'reserve' : 'release',

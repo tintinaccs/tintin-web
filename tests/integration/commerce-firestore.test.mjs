@@ -82,3 +82,17 @@ test('Firestore aislado: pedido, precio canónico, reserva, concurrencia e idemp
     assert.equal(await deps.get({}, 'orders/commerce_deleted'), null);
   });
 });
+
+test('Firestore real aislado: v2 prices, mixed stock, concurrent reserve, cancellation and replay',async()=>{
+ await seed('products/v2',{name:'Fixture v2',price:100,stock:null,active:true,variantCommerceVersion:2,variants:{Talle:['M'],Color:['Plateado','Dorado']},
+ variantInventory:[{variant:'Plateado / M',attributes:{Color:'Plateado',Talle:'M'},stock:1,price:250},{variant:'Dorado / M',attributes:{Color:'Dorado',Talle:'M'},stock:null}],
+ variantMedia:[{Color:'Plateado',imageUrl:'https://example.invalid/silver.png'}]});
+ const results=await Promise.allSettled(['v2_real_a','v2_real_b'].map(orderId=>createOrderAdmin({},input(orderId,'v2','M / Plateado'),actor,deps)));
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(results.filter(r=>r.status==='rejected').length,1);
+ const winner=results.find(r=>r.status==='fulfilled').value;
+ assert.equal(winner.order.items[0].price,250);assert.match(winner.order.items[0].imageUrl,/silver/);
+ let p=await product('v2');assert.equal(p.variantInventory[0].stock,0);assert.equal(p.stock,null);
+ const cancel={orderId:winner.orderId,status:'cancelado',changeId:'v2_real_cancel'};
+ await applyOrderAdminMutation({},cancel,admin,deps);await applyOrderAdminMutation({},cancel,admin,deps);
+ p=await product('v2');assert.equal(p.variantInventory[0].stock,1);assert.equal(p.variantInventory[0].price,250);assert.equal(p.variantInventory[1].stock,null);
+});

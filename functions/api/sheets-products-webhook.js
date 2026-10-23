@@ -181,6 +181,11 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
     const id = productId(input.productId, input.action === 'saveProduct');
 
     if (input.action === 'deleteProduct') {
+      const existing = await firestoreAdminGet(env, `products/${id}`);
+      if (existing && decodeFirestoreFields(existing.fields || {}).variantCommerceVersion === 2) {
+        throw Object.assign(new Error('La eliminación de un producto comercial v2 está protegida.'),{status:409});
+      }
+
       operation = beginSheetsOperation();
       committing = 'deleteProduct';
       await firestoreAdminCommit(env, [
@@ -254,6 +259,9 @@ export async function onRequestPost(context, recordEvidence = recordSheetsEviden
       const current = await firestoreAdminGet(env, `products/${id}`);
       const currentProduct = current ? decodeFirestoreFields(current.fields || {}) : {};
       const entries = variantInventoryEntries(currentProduct);
+      if (currentProduct.variantCommerceVersion === 2 && (has(fields,'variants') || has(fields,'stock'))) {
+        throw Object.assign(new Error('El producto comercial v2 se edita desde el motor de variantes; Sheets conserva sus combinaciones.'), {status:409});
+      }
       if (entries !== null) {
         const total = entries.reduce((sum, entry) => sum + entry.stock, 0);
         const stockChanged = has(fields, 'stock') && publicData.stock !== total;

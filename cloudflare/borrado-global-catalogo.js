@@ -235,6 +235,7 @@ async function queueDeletedProductsSheet(env, ids, actor) {
 
 export async function deleteProductsGlobally(env, { scope = 'selected', productIds = [], dryRun = true, idToken = '', actor = null, deferProductsSheet = false } = {}) {
   const products = await resolveProducts(env, scope, productIds);
+  if (!dryRun && products.some(product => product.variantCommerceVersion === 2)) throw new Error('La eliminación de productos comerciales v2 está protegida.');
   const ids = products.map(product => product.id);
   if (dryRun) {
     const impact = await previewProductDeletion(env, products);

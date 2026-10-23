@@ -1301,25 +1301,25 @@ service cloud.firestore {
           request.query.limit <= 1000
         );
 
-      allow create: if isSuperAdmin() ||
+      allow create: if request.resource.data.get('variantCommerceVersion', 1) != 2 && (isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
           (isAdmin() || isAgent()) &&
           currentRolePermAllows('productos', 'crear')
-        );
+        ));
 
       // El checkout actual reserva stock desde Apps Script con OAuth del
       // propietario. El navegador ya no puede descontar inventario usando la
       // ruta heredada sparkStockUpdateValid().
-      allow update: if adminInventoryStockUpdateValid(productId);
-      allow update: if isSuperAdmin() ||
+      allow update: if resource.data.get('variantCommerceVersion', 1) != 2 && request.resource.data.get('variantCommerceVersion', 1) != 2 && adminInventoryStockUpdateValid(productId);
+      allow update: if resource.data.get('variantCommerceVersion', 1) != 2 && request.resource.data.get('variantCommerceVersion', 1) != 2 && (isSuperAdmin() ||
         (
           isStoreOpenOrAllowed() &&
           (isAdmin() || isAgent()) &&
           currentRolePermAllows('productos', 'editar')
-        );
+        ));
 
-      allow delete: if isSuperAdmin();
+      allow delete: if resource.data.get('variantCommerceVersion', 1) != 2 && isSuperAdmin();
 
       // Solo contiene la versión pública anonimizada. Nombre real, correo,
       // historial y UID viven en reviewRecords y nunca se entregan al sitio.

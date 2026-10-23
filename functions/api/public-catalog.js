@@ -11,7 +11,7 @@ const PRODUCT_FIELDS = new Set([
   'price', 'priceBefore', 'badge', 'description', 'desc', 'material', 'measurements',
   'colorFinish', 'care', 'waterResistance', 'warranty', 'sizeFit', 'packageContents',
   'imageUrl', 'image', 'img', 'photo', 'imageSrc', 'image_src', 'imagesExtra', 'images',
-  'stock', 'active', 'oferta', 'destacado', 'tags', 'variants', 'variantMedia', 'variantInventory', 'collectionOrder',
+  'variantCommerceVersion', 'stock', 'active', 'oferta', 'destacado', 'tags', 'variants', 'variantMedia', 'variantInventory', 'collectionOrder',
   'createdAt', 'created_at', 'importedAt', 'updatedAt', 'updated_at', 'modifiedAt',
   'restockedAt', 'catalogActivityAt', 'merchandisingUpdatedAt', 'Image Src', 'Variant Image', 'Variant Price',
   'Variant Inventory Qty', 'Product Category', 'Category', 'Title', 'Handle', 'Body (HTML)'

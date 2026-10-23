@@ -396,3 +396,33 @@ test('nombre de compra y factura física necesitan nombre y apellido', async () 
   const {store: valid} = await checkout(draft({name: 'María González', wantsInvoice: true, taxpayerType: 'fisica', razonSocial: 'María González', ruc: '1234567-8'}));
   assert.equal(orderWrite(valid).invoice.razonSocial, 'María González');
 });
+
+function v2CheckoutProduct() {
+ return {name:'Fixture v2',price:50000,priceBefore:60000,active:true,stock:999,variantCommerceVersion:2,
+ variants:{Color:['Plateado','Dorado'],Talle:['M']},
+ variantInventory:[{variant:'Plateado / M',attributes:{Color:'Plateado',Talle:'M'},stock:2,price:70000},
+ {variant:'Dorado / M',attributes:{Color:'Dorado',Talle:'M'},stock:null}],
+ variantMedia:[{Color:'Plateado',imageUrl:'https://example.invalid/silver.png'},{Color:'Dorado',imageUrl:'https://example.invalid/gold.png'}]};
+}
+test('v2 checkout uses persisted prices for multiple combinations, legacy selection order and photos',async()=>{
+ const p=v2CheckoutProduct();p.variants={Talle:['M'],Color:['Dorado','Plateado']};
+ const store=fakeStore({'products/aro_1':p});
+ const {created}=await checkout(draft({cartLines:[{id:'aro_1',qty:2,variant:'Plateado / M'},{id:'aro_1',qty:1,variant:'M / Dorado'}],expectedSubtotal:190000,expectedTotal:210000}),store);
+ assert.equal(created.order.subtotal,190000);assert.equal(created.order.items[0].price,70000);
+ assert.equal(created.order.items[1].price,50000);assert.match(created.order.items[0].imageUrl,/silver/);
+ const write=store.commits[0].find(w=>w.path==='products/aro_1');
+ const saved=decodeFirestoreFields(write.fields);assert.equal(saved.stock,null);
+ assert.equal(saved.variantInventory[0].stock,0);assert.equal(saved.variantInventory[0].price,70000);
+ assert.equal(saved.variantInventory[1].stock,null);
+});
+test('v2 price changed and exhausted selection reject before any commit, valid selection avoids 422',async()=>{
+ const p=v2CheckoutProduct(),store=fakeStore({'products/aro_1':p});
+ await assert.rejects(checkout(draft({cartLines:[{id:'aro_1',qty:1,variant:'Plateado / M'}],expectedSubtotal:50000,expectedTotal:70000}),store),e=>e.status===422&&e.code==='quote_changed');
+ assert.equal(store.commits.length,0);
+ p.variantInventory[0].stock=0;
+ const exhausted=fakeStore({'products/aro_1':p});
+ await assert.rejects(checkout(draft({cartLines:[{id:'aro_1',qty:1,variant:'Plateado / M'}],expectedSubtotal:70000,expectedTotal:90000}),exhausted),e=>e.code==='insufficient_stock');
+ assert.equal(exhausted.commits.length,0);
+ p.variantInventory[0].stock=1;
+ await checkout(draft({cartLines:[{id:'aro_1',qty:1,variant:'M / Plateado'}],expectedSubtotal:70000,expectedTotal:90000}),fakeStore({'products/aro_1':p}));
+});
