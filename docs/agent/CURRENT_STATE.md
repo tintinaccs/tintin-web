@@ -1,3 +1,7 @@
+## 2026-10-23 — Tema Tintín único (Codex /root)
+
+PASS_LOCAL. El propietario aclara que pide una identidad global propia, minimalista y un único esquema, también para administración. Se retira la carga independiente de activeAdminSchemeId; los alias administrativos derivan del catálogo global, conservando gate estricto y documentos históricos. La capa de superficies unifica radios/elevación/bordes y conecta botones/estados al esquema, sin reemplazar navegación ni contratos comerciales. 187/187 geometrías públicas, 84 Chromium y 33 posteriores de interacciones/colores (solapados), 54 regresiones relacionadas y 20 WebKit finales aprobados. Auditorías específicas, gate estricto y contrato de aviso por pantalla aprobados. Cuatro capturas locales revisadas. Evidencia y límites: TEMA_TINTIN_UNICO_20261023.md. CI, merge y publicación del candidato pendientes; privados probados con fixtures, sin datos reales guardados.
+
 ## 2026-10-22 — Alcance de GitHub/CI y coordinación de PR (Codex /root)
 
 Petición expresa: no tocar #1200 si otro agente lo trabaja. Se conserva sin publicar el checkpoint local a2cad6ba4 en codex/pr1200-repair; no se subió ningún cambio a esa rama remota. El agente responsable consolidó #1200 y #1204 en #1203 y cerró los dos anteriores. No se modifica su editor, catálogo, prioridad, frescura ni carga informativa. Revisión de archivos confirma que ninguna de esas ramas modifica verificar-salud-ci-global.mjs.

@@ -669,3 +669,8 @@ Autoridades: alternancia-secciones para impedir que fondos cubran navegación in
 ## 2026-10-23 — Compacidad de Catálogo y contrato de pruebas UI
 
 catalog-maintenance.css reduce rellenos/márgenes y retira la doble reserva de cabecera en tablet; conserva navegación, dibujo completo y áreas táctiles. Se versionan sus consumidores transitivos y el generador de shell. El auditor Fase8 reconoce el comando actual de pruebas con global-form-fit sin retirar verificaciones. Geometría en11 tamaños Chromium/WebKit y35 regresiones compartidas; fuentes de protección, caché y diagnóstico regeneradas. No modifica datos, Auth ni Rules; evidencia en CURRENT_STATE y UI_RESPONSIVE_GLOBAL_20261023.md.
+
+
+### 2026-10-23 — Un único tema Tintín
+
+Autoridades: GLOBAL_TOKENS/runtime global, alias administrativos y sistema-superficies. Por petición explícita del propietario, el panel adopta el mismo esquema publicado tras Auth/App Check y Apariencia deja de activar un esquema exclusivo de Super Admin. Los documentos históricos permanecen intactos; no se realiza migración ni escritura de datos reales. Se unifican bordes/radios/elevación de tienda, cuenta, compra, formularios y panel preservando semántica de errores/peligro, logo, imágenes, fondos difuminados y geometrías del editor. Verificar esquema en vivo/gate denegado/resize, formularios, superficies, módulos administrativos, ficha y Nosotros; regenerar versiones transitivas, shell, CSP, plan protegido y diagnóstico. Detalle: docs/agent/TEMA_TINTIN_UNICO_20261023.md.

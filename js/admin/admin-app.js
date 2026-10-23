@@ -48,8 +48,8 @@ import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.j
 import "./pages/paginas-admin.js?v=tintin-20261022-avatar-inicial-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1-master-20261007-1";
 import {
-  GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
-  GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
+  GLOBAL_TOKENS, GLOBAL_CATEGORIES,
+  GLOBAL_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
@@ -8584,7 +8584,6 @@ document.querySelectorAll('#apar-main-tabs .correos-tab-btn').forEach(btn => {
 // ══════════════════════════════════════════════════════════════
 const APAR_CATALOG = {
   global: { tokens: GLOBAL_TOKENS, categories: GLOBAL_CATEGORIES, pairs: GLOBAL_CONTRAST_PAIRS, defaultSchemeId: 'default-global' },
-  admin:  { tokens: ADMIN_TOKENS,  categories: ADMIN_CATEGORIES,  pairs: ADMIN_CONTRAST_PAIRS,  defaultSchemeId: 'default-admin' },
 };
 const APAR_PREVIEW_ROLES = {
   global: { bgPage:'bg-page', bgSurface:'bg-surface', textPrimary:'text-primary', textSecondary:'text-secondary', textTertiary:'text-tertiary', textTitle:'text-title',
@@ -8593,26 +8592,20 @@ const APAR_PREVIEW_ROLES = {
     tableHeaderBg:'table-header-bg', tableHeaderText:'table-header-text', tableBorder:'table-border',
     successBg:'state-success-bg', successText:'state-success-text', errorBg:'state-error-bg', errorText:'state-error-text', warningBg:'state-warning-bg', warningText:'state-warning-text',
     link:'text-link', badgeBg:'badge-bg', badgeText:'badge-text', border:'border-primary' },
-  admin: { bgPage:'bg-page', bgSurface:'bg-surface', textPrimary:'text-primary', textSecondary:'text-secondary', textTertiary:'text-tertiary', textTitle:'text-title',
-    btnPrimaryBg:'btn-primary-bg', btnPrimaryText:'btn-primary-text', btnSecondaryBg:'bg-surface', btnSecondaryText:'btn-outline-text', btnSecondaryBorder:'btn-outline-text',
-    fieldBg:'field-bg', fieldBorder:'field-border', fieldText:'text-primary', cardBorder:'border',
-    tableHeaderBg:'table-header-bg', tableHeaderText:'text-title', tableBorder:'border',
-    successBg:'state-success-bg', successText:'state-success-text', errorBg:'state-error-bg', errorText:'state-error-text', warningBg:'state-warning-bg', warningText:'state-warning-text',
-    link:'brand', badgeBg:'badge-bg', badgeText:'badge-text', border:'border' },
 };
 
-let aparScope = 'global';
-let aparSchemes = { global: [], admin: [] };
-let aparEditingSchemeId = { global: null, admin: null };
-let aparActiveSchemeId = { global: null, admin: null };
-let aparDraft = { global: {}, admin: {} };
-let aparPublished = { global: {}, admin: {} };
+const aparScope = 'global';
+let aparSchemes = { global: [] };
+let aparEditingSchemeId = { global: null };
+let aparActiveSchemeId = { global: null };
+let aparDraft = { global: {} };
+let aparPublished = { global: {} };
 let aparDeviceOverrideEnabled = { global: false };
 let aparDeviceOverrides = { global: {} };
 let aparPublishedDeviceOverrideEnabled = { global: false };
 let aparPublishedDeviceOverrides = { global: {} };
-let aparSavedState = { global: '', admin: '' };
-let aparUndoStack = { global: [], admin: [] };
+let aparSavedState = { global: '' };
+let aparUndoStack = { global: [] };
 let aparTransientColor = null;
 let aparSearchTerm = '';
 let aparPreviewDevice = 'desktop';
@@ -8634,16 +8627,6 @@ const APAR_CATEGORY_IMPACT = {
     modales: 'modales, fondos oscurecidos, tooltips, popups y estados vacíos',
     productos: 'productos, precios, promociones, valoraciones y carrito',
     avanzado: 'íconos, scrollbars, switches, checks, radios, progreso, skeletons, selección y carga',
-  },
-  admin: {
-    generales: 'acento y acciones compartidas de todo el Super Admin',
-    estructura: 'dashboard, sidebar, header, superficies y bordes del panel',
-    tipografia: 'títulos, textos principales y textos secundarios del panel',
-    botones: 'botones administrativos y sus estados',
-    tarjetas: 'tarjetas, tablas, filas y badges administrativos',
-    formularios: 'campos, filtros, buscadores y estados de foco',
-    estados: 'alertas y mensajes de éxito, error y advertencia',
-    modales: 'modales y overlays del Super Admin',
   },
 };
 
@@ -8688,7 +8671,7 @@ function aparStateString(scope = aparScope) {
   return JSON.stringify(aparStateObject(scope));
 }
 function aparAllStateString() {
-  return JSON.stringify({ global: aparStateObject('global'), admin: aparStateObject('admin') });
+  return JSON.stringify({ global: aparStateObject('global') });
 }
 function aparSnapshot(scope = aparScope) {
   return JSON.parse(JSON.stringify(aparStateObject(scope)));
@@ -8757,8 +8740,7 @@ async function aparEnsureBootstrap() {
     let cfg = appearanceSnap.exists() ? appearanceSnap.data() : {};
     let changed = false;
     if (!cfg.activeGlobalSchemeId) { cfg = { ...cfg, activeGlobalSchemeId: 'default-global' }; changed = true; }
-    if (!cfg.activeAdminSchemeId) { cfg = { ...cfg, activeAdminSchemeId: 'default-admin' }; changed = true; }
-    for (const scope of ['global', 'admin']) {
+    for (const scope of ['global']) {
       const id = APAR_CATALOG[scope].defaultSchemeId;
       const schemeSnap = await getDoc(doc(db, 'colorSchemes', id));
       if (!schemeSnap.exists()) {
@@ -8779,40 +8761,20 @@ async function aparEnsureBootstrap() {
 async function loadApariencia() {
   await aparEnsureBootstrap();
   await aparLoadSchemesList('global');
-  await aparLoadSchemesList('admin');
   try {
     const appearanceSnap = await getDoc(doc(db, 'settings', 'appearance'));
     const cfg = appearanceSnap.exists() ? appearanceSnap.data() : {};
     aparActiveSchemeId.global = cfg.activeGlobalSchemeId || 'default-global';
-    aparActiveSchemeId.admin = cfg.activeAdminSchemeId || 'default-admin';
   } catch (e) {
     console.error('[apariencia] no se pudo leer settings/appearance:', e);
     aparActiveSchemeId.global = aparActiveSchemeId.global || 'default-global';
-    aparActiveSchemeId.admin = aparActiveSchemeId.admin || 'default-admin';
   }
   aparEditingSchemeId.global = aparEditingSchemeId.global || aparActiveSchemeId.global;
-  aparEditingSchemeId.admin = aparEditingSchemeId.admin || aparActiveSchemeId.admin;
   await aparLoadSchemeIntoDraft('global', aparEditingSchemeId.global);
-  await aparLoadSchemeIntoDraft('admin', aparEditingSchemeId.admin);
   aparRenderAll();
   aparRegisterUnsavedGuard();
   window.AdminUnsaved?.markClean?.('appearance-colors');
 
-  document.querySelectorAll('#apar-scope-tabs .correos-tab-btn').forEach(btn => {
-    btn.onclick = async () => {
-      const nextScope = btn.dataset.aparScope;
-      if (nextScope === aparScope) return;
-      if (aparHasPending(aparScope)) {
-        const leave = confirm('Hay cambios sin guardar en este esquema. Si cambiás de pestaña se descartarán. ¿Continuar?');
-        if (!leave) return;
-        await aparReloadCurrentScheme(aparScope);
-      }
-      aparScope = nextScope;
-      document.querySelectorAll('#apar-scope-tabs .correos-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
-      aparRenderAll();
-      window.AdminUnsaved?.markClean?.('appearance-colors');
-    };
-  });
   const searchEl = document.getElementById('apar-search');
   searchEl.value = aparSearchTerm;
   searchEl.oninput = () => { aparSearchTerm = searchEl.value.trim().toLowerCase(); aparRenderCategories(); };
@@ -9184,9 +9146,7 @@ function aparPublishImpactMessage(changedTokens, devicesChanged) {
   const impacts = categories.map(category => APAR_CATEGORY_IMPACT[aparScope]?.[category]).filter(Boolean);
   const shown = changedTokens.slice(0, 10).map(tok => `• ${tok.label} (${tok.cssVar})`).join('\n');
   const remaining = changedTokens.length > 10 ? `\n• y ${changedTokens.length - 10} colores más` : '';
-  const scopeText = aparScope === 'global'
-    ? 'todas las páginas públicas y privadas de clientes y visitantes'
-    : 'todas las secciones del Super Admin';
+  const scopeText = 'toda Tintín: tienda, cuenta, checkout y administración';
   return `Se publicarán ${changedTokens.length} color(es)${devicesChanged ? ' y cambios por dispositivo' : ''} en ${scopeText}.
 
 ${shown || '• Configuración por dispositivo'}${remaining}
@@ -9333,7 +9293,7 @@ async function aparRestoreVersion(entryId) {
 
 async function aparActivateScheme() {
   const schemeId = aparEditingSchemeId[aparScope];
-  const field = aparScope === 'global' ? 'activeGlobalSchemeId' : 'activeAdminSchemeId';
+  const field = 'activeGlobalSchemeId';
   if (aparHasPending() && !confirm('Este esquema tiene cambios sin publicar. Al activarlo se usará la última versión publicada, no el borrador actual. ¿Continuar?')) return;
   try {
     await withAdminSiteChange(async () => setDoc(doc(db, 'settings', 'appearance'), { [field]: schemeId }, { merge: true }));

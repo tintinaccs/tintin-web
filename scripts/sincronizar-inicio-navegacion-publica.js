@@ -16,7 +16,7 @@ const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-sec
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
 const TIENDA_VERSION = 'tintin-20261023-global-layout-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261022-informational-merged-2';
+const LOADER_VERSION = 'tintin-20261023-tema-unico-1';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261021-workspace-account-1';
 const PUBLIC_SHELL_VERSION = 'tintin-20261023-global-layout-2';
@@ -28,7 +28,7 @@ const PROFILE_GATE_VERSION = 'tintin-20261022-avatar-inicial-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_TABLET_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
 const NAV_MOBILE_VERSION = 'tintin-20261010-mobile-single-selection-2-palette-20261014-1';
-const UNIFIED_THEME_VERSION = 'tintin-20261021-commerce-review-1';
+const UNIFIED_THEME_VERSION = 'tintin-20261023-tema-unico-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
