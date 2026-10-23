@@ -8,11 +8,17 @@ con `success`; un fallo, cancelación, omisión o resultado ausente lo bloquea.
 
 ```sh
 npm ci
-npm run test:fast
+npm run ci:preflight
 npm run test:commerce
 ```
 
-`test:fast` no instala Chromium ni inicia emuladores. Analiza la sintaxis de los
+`ci:preflight` ejecuta además todas las auditorías estáticas de Calidad, el
+contrato 2H y el auditor legal antes de iniciar Comercio. Resuelve la conexión
+workflow → scripts npm → plan de fases → gate final; rechaza fases desconectadas
+u opcionales y componentes ausentes de `audit:final`. Las pruebas de regresión
+introducen esas roturas deliberadamente. No necesita navegador ni emuladores.
+
+`test:fast` conserva el subconjunto mínimo y no instala Chromium ni inicia emuladores. Analiza la sintaxis de los
 JS/CJS/MJS propios, comprueba los destinos de imports estáticos y dependencias
 directas, recorre el grafo servidor, importa las 72 funciones sin permitir fetch,
 ejecuta contratos de variantes/inventario/carrito/checkout y carga metadata con
@@ -56,11 +62,11 @@ identidad es un fixture: no acredita Auth, pago externo ni una compra E2E.
 
 | Fase | Espera | Contenido |
 |---|---|---|
-| A: preflight | Nada | `test:fast`, build reproducible, drift, CSS, dominio e integraciones |
+| A: preflight | Nada | `test:fast`, auditorías estáticas, 2H/legal, build reproducible, drift, CSS, dominio e integraciones |
 | B: commerce | A | Productos, pedidos, pagos, cuentas, stock, carrito, checkout y navegador comercial |
 | B: rules | B commerce | Firestore con proyectos `demo-*` y Java 21 |
 | C: admin | B commerce | Editor, persistencia, importación, imágenes, panel, operaciones y conectores |
-| D: quality | B commerce | Contratos técnicos, seguridad, auditorías transversales y runtime aislado Auth/Firestore con Java 21 |
+| D: quality | B commerce | Regresiones técnicas Node/navegador y runtime aislado Auth/Firestore con Java 21; runtime largo al final |
 | D: browser | B commerce | SEO, interfaz, responsive, accesibilidad y rendimiento |
 | E: Repository audit | Todas, incluso si fallaron | Exige `success` en las seis fases anteriores |
 
@@ -70,6 +76,18 @@ sobre máquinas independientes. Se conserva `npm ci` y caché npm; Chromium tien
 caché por SO/arquitectura/lockfile. No se comparten datos de producción.
 
 ## Cobertura y tiempos
+
+Seguimiento del 2026-10-23: el preflight ampliado completó 39 comandos en
+20,352 segundos (suma medida con Node 22.23.4; otra ejecución Node 24 dio
+20,327 segundos). Incluye 37 componentes estáticos de `audit:final`, `test:fast`
+y el auditor legal; el build tiene su medición y sigue siendo obligatorio después.
+Estos tiempos son mediciones locales, no una duración garantizada de GitHub.
+La ejecución 39995716643 del SHA 3c072c1d aprobó 405 casos del runtime con
+Auth/Firestore (11,8 minutos de Playwright), pero falló posteriormente en el
+contrato estático 2H y en el auditor legal. Ambos todavía buscaban comandos
+literales en el workflow anterior. Ahora leen la cobertura conectada al gate final
+y corren en preflight; los demás componentes estáticos de Calidad también se
+adelantan. La validación completa del SHA que incorpora este ajuste sigue pendiente.
 
 `config/ci-stages.json` asigna exactamente una vez cada componente del comando
 local `audit:final`, que permanece disponible sin cambios. El runner, el auditor

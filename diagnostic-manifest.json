@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "39d84a6139801676069237cd795501b337ee7cbeadeab1f02468697a30356bf0",
+  "sourceFingerprint": "cf80e3de3508491a5e9ce2f2e937c9a6ff6f1d2b953f03b3c9251815913eb6ac",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1423,
-    "textFiles": 1332,
-    "totalBytes": 29715307,
+    "files": 1425,
+    "textFiles": 1334,
+    "totalBytes": 29724942,
     "pages": 19,
-    "modules": 1002
+    "modules": 1004
   },
   "viewports": [
     {
@@ -37615,8 +37615,8 @@
     },
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
-      "bytes": 9913,
-      "sha256": "4f1a5f829300d83d036e7a8160648301779846312c48138b54067537834e8a2b",
+      "bytes": 10014,
+      "sha256": "33440d1f3d1f0e66c76c94e541ba9c7ca95af392962989d6cf108abe0ee5e251",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38163,8 +38163,8 @@
     },
     {
       "path": "scripts/auditar-legal-paginas.js",
-      "bytes": 3505,
-      "sha256": "1aa45236dc9e39ccdb3f1a8905f32ecf7c69c1f2ee0555ef72dd66c281cb920b",
+      "bytes": 3522,
+      "sha256": "72e7364149448b2f5575087d7990fab7aabe06a0d166646831221e31d36e0720",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38334,8 +38334,8 @@
     },
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
-      "bytes": 7635,
-      "sha256": "4c51c0ad3eb6f982c9ad560f99c03b631a5711841c7da2dca1a05fa16255f6ac",
+      "bytes": 7313,
+      "sha256": "6464d73e0d90b11b7dc5235b45db0f4ee762394a6f7828e039e6fdaf97fdc9fc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39430,6 +39430,17 @@
           "line": 1
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/ci-commands.js",
+      "bytes": 2672,
+      "sha256": "2236cb5a2914e1e9a490fda1740672ccb5b953a7bbf939159681c346250c56b8",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -45828,6 +45839,60 @@
           "line": 28
         }
       ]
+    },
+    {
+      "path": "tests/ci/commands.test.mjs",
+      "bytes": 4026,
+      "sha256": "616a6a95026e17781ddbeed559616a9a27d24c67261a7508da39542f9df8f65f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../scripts/ci-commands.js",
+          "target": "scripts/ci-commands.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "tests/ci/final-gate.test.mjs",
@@ -56603,8 +56668,8 @@
     {
       "path": "config/ci-stages.json",
       "extension": ".json",
-      "bytes": 5695,
-      "sha256": "6f479c66773ace0e34f48efeb2a3d5fa58d30c006a0e5469e8ceb48d5d42b205"
+      "bytes": 5699,
+      "sha256": "0a02d39d130bdd61b133657b814a8e64a12fb6b27a050c5e794b33783b28f616"
     },
     {
       "path": "config/csp-runtime.js",
@@ -57293,8 +57358,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 842927,
-      "sha256": "a98a3e495c9b9f5364160c13a141d26fbd8a1b65600d6fe9a9db82fb0eef6421"
+      "bytes": 844707,
+      "sha256": "81cd691dbfec10035cb359693118e08eb02a995f52fc9dee8b1969b37e721f35"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57551,8 +57616,8 @@
     {
       "path": "docs/ci-preflight.md",
       "extension": ".md",
-      "bytes": 5962,
-      "sha256": "8942245b090a1bf098751748686433b742b16b28e2b6e94d95e7b545e98cac86"
+      "bytes": 7319,
+      "sha256": "43f3ede891247cbcae97ec110c240cea1bad5d724fa987e69e34862009ae6937"
     },
     {
       "path": "docs/cierre-operativo-2026-08-20.md",
@@ -60887,8 +60952,8 @@
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
       "extension": ".js",
-      "bytes": 9913,
-      "sha256": "4f1a5f829300d83d036e7a8160648301779846312c48138b54067537834e8a2b"
+      "bytes": 10014,
+      "sha256": "33440d1f3d1f0e66c76c94e541ba9c7ca95af392962989d6cf108abe0ee5e251"
     },
     {
       "path": "scripts/auditar-final-entrega.js",
@@ -61001,8 +61066,8 @@
     {
       "path": "scripts/auditar-legal-paginas.js",
       "extension": ".js",
-      "bytes": 3505,
-      "sha256": "1aa45236dc9e39ccdb3f1a8905f32ecf7c69c1f2ee0555ef72dd66c281cb920b"
+      "bytes": 3522,
+      "sha256": "72e7364149448b2f5575087d7990fab7aabe06a0d166646831221e31d36e0720"
     },
     {
       "path": "scripts/auditar-limpiar-ramas.mjs",
@@ -61037,8 +61102,8 @@
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
       "extension": ".js",
-      "bytes": 7635,
-      "sha256": "4c51c0ad3eb6f982c9ad560f99c03b631a5711841c7da2dca1a05fa16255f6ac"
+      "bytes": 7313,
+      "sha256": "6464d73e0d90b11b7dc5235b45db0f4ee762394a6f7828e039e6fdaf97fdc9fc"
     },
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
@@ -61327,6 +61392,12 @@
       "extension": ".json",
       "bytes": 74320,
       "sha256": "4bf9bf492c4e54b4fefcfe3fc1028f6419ccdb673bf44e1ec5403fb973c21685"
+    },
+    {
+      "path": "scripts/ci-commands.js",
+      "extension": ".js",
+      "bytes": 2672,
+      "sha256": "2236cb5a2914e1e9a490fda1740672ccb5b953a7bbf939159681c346250c56b8"
     },
     {
       "path": "scripts/ci-preflight.mjs",
@@ -62449,6 +62520,12 @@
       "extension": ".mjs",
       "bytes": 2670,
       "sha256": "81773f9623bdab5deff6884b03814e6169282d641a2976b2c30998bbb6406918"
+    },
+    {
+      "path": "tests/ci/commands.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4026,
+      "sha256": "616a6a95026e17781ddbeed559616a9a27d24c67261a7508da39542f9df8f65f"
     },
     {
       "path": "tests/ci/final-gate.test.mjs",

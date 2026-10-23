@@ -1,3 +1,11 @@
+## 2026-10-23 — Fallos tardíos 2H/legal trasladados a preflight (Codex /root)
+
+Reproducción del CI39995716643, HEAD3c072c1d: Comercio, Administración y Reglas PASS_CI. Java21 sí resolvió el arranque de emuladores: runtime405/405 PASS en11,8min; Calidad falló después en audit:part2h por8 búsquedas literales obsoletas del workflow. Browser aprobó sus recorridos, accesibilidad, rendimiento,126 viewports,187 geometrías y18 rutas; falló al final en el auditor legal por la misma dependencia del formato anterior. No se heredan esos PASS al nuevo SHA ni se acredita compra/pago real.
+
+Se resuelve la cobertura real workflow→scripts→fases→Repository audit en una autoridad compartida; exige fases invocadas, runner canónico, dependencias del agregador, ausencia de condiciones/continue-on-error y cobertura exacta de audit:final. Nivel1,2H y legal usan esa autoridad. Se trasladan37 componentes estáticos de audit:final y el auditor legal a preflight, sin eliminar controles; runtime largo pasa al final de Calidad. Búsqueda completa de referencias activas al workflow central en scripts/tests: los consumidores restantes ya verifican fases o metadatos, sin otras búsquedas literales heredadas de comandos del workflow central.
+
+PASS_LOCAL: preflight39comandos Node22.23.4 en20,352s (suma de tiempos; Node24 en20,327s);54contratos de arquitectura/evidencia relacionados. Regresiones negativas desconectan cada fase, la retiran del agregador, la vuelven condicional o cambian su runner; también eliminan cobertura legal/accesibilidad y comprueban el rechazo de los auditores reales. No hay navegador instalado en este entorno; la validación completa del nuevo SHA sigue PENDING de CI. Se conservan el borrador y la prohibición de merge/deploy/datos reales.
+
 ## 2026-10-23 — Seguimiento de CI PR1214 (Codex /root)
 
 Cabeza comprobada 855d2f2b3e273862368b50b2d52cb28d9c813e76, ejecución 39993823749: preflight, comercio y reglas/Firestore PASS_CI; calidad FAIL en audit:login-profile → test:critical-runtime antes de arrancar Auth/Firestore porque el runner no selecciona Java 21. Se añade actions/setup-java@v5 con Temurin 21 también al trabajo quality, que ejecuta esos emuladores; rules ya lo configuraba. No se eliminan ni omiten pruebas. Administración y navegador seguían en ejecución al diagnosticar el fallo.
