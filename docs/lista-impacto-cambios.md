@@ -1,3 +1,7 @@
+## 2026-10-23 — Márgenes globales sin reservas duplicadas
+
+Autoridad visual: sistema-superficies-tintin.css, con adm-content específico en dashboard-control.css. Afecta18 documentos, bloques públicos y23 módulos del panel. Una escala20–32px reduce rellenos acumulados y gutters dobles sin alterar navegación fija, safe areas, fotos/mapas, lectura legal, flujo de Login ni datos comerciales. Regresión en el spec canónico section-flow-full-width cubre17 tamaños320–2560 y activa los módulos sólo en fixtures de presentación. Se conservan controles y consumidores de #1211; HTML, bundles, caché, CSP, diagnóstico y protección se generan por sus autoridades existentes. Estado y evidencia actual en CURRENT_STATE/ESPACIADO_GLOBAL_20261023.
+
 ## 2026-10-22 — Diagnóstico de CI por el commit realmente validado
 
 Fuente única: verificar-salud-ci-global.mjs. El workflow_run de mantenimiento corre código confiable de main, pero valida otro candidato; el Maestro conserva esa ejecución y sus jobs como evidencia con asociación explícita. Los diagnósticos anteriores del mismo workflow no son dependencias del gate actual. Checks del candidato, CI del artefacto, dependencias programadas/manuales y metadatos sin asociación segura mantienen sus bloqueos. No cambian workflows, permisos, protección de ramas, suites ni frontend; no se duplica el trabajo de Productos consolidado en #1203. Se cubre con regresiones negativas y snapshot real, y se regenera el diagnóstico desde su constructor.

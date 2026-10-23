@@ -201,7 +201,7 @@ html:root body.tt-admin-control :is(.adm-nav-item,.adm-nav-btn) { border-radius:
 html:root body.tt-admin-control { --tt-control-gutter: clamp(16px,2vw,32px); }
 html:root body.tt-admin-control .adm-content {
   width: 100% !important; max-width: 1680px !important; min-width: 0;
-  margin-inline: auto !important; padding: var(--tt-control-gutter) var(--tt-control-gutter) 48px !important;
+  margin-inline: auto !important; padding: var(--tt-control-gutter) var(--tt-control-gutter) var(--tt-ui-section-space,32px) !important;
 }
 html:root body.tt-admin-control .adm-topbar {
   min-height: 68px; padding-block: 12px;
