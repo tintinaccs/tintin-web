@@ -57,7 +57,7 @@ import { contrastRatio, passesWcag } from "../components/color/utilidades-contra
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20261023-variant-engine-v2-1';
 import './settings/cupones-admin.js?v=tintin-20261022-avatar-inicial-1';
-import './products/integridad-inventario-admin.js?v=tintin-20261022-avatar-inicial-1';
+import './products/integridad-inventario-admin.js?v=tintin-20261023-variant-engine-v2-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
 import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20261010-loader-front-2';
 

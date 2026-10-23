@@ -43,7 +43,7 @@ import {
   isValidTaxpayerType
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1';
 import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20261022-avatar-inicial-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2-cupones-1-master-20261007-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20261023-variant-engine-v2-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;

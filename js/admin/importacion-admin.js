@@ -29,12 +29,12 @@ import {
   safeImportUrl,
   sanitizeShopifyBodyHtml,
   summarizeImportRecords,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20261005-import-one-click-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
-import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1-loads-20261007-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
-import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261004-import-identity-review-1-loads-20261007-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20261023-variant-engine-v2-1';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261017-domain-cutover-1';
-import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20261023-variant-engine-v2-1';
+import { buildInventoryReservationReview } from '../core/store/revision-reservas-inventario.mjs?v=tintin-20261023-variant-engine-v2-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;

@@ -1,9 +1,9 @@
 import { wristCategory, unifyWristCollections } from '../core/store/categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import { productFingerprint } from './products/maestro-productos-core.mjs?v=tintin-20261023-checkout-variants-header-2';
-import { variantInventoryEntries, firstAvailableVariant } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
-import { productVariantImage } from '../components/images/foto-variante.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { productFingerprint } from './products/maestro-productos-core.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { variantInventoryEntries, firstAvailableVariant } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { productVariantImage } from '../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-1';
 import { ordersForView, testOrderNumber, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
-import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261023-checkout-variants-header-2';
+import { openProductBulkEditor, openProductOrderLink, closeProductMasterDialogs } from './products/maestro-productos-interfaz.js?v=tintin-20261023-variant-engine-v2-1';
 import { installProductInterface, syncProductSurfaces, visibleProductEditor } from './products/interfaz-productos-adaptable.js?v=tintin-20261022-editor-menu-1';
 import { renderOrderBoard, deliveryLabel } from './orders/tablero-pedidos-vista.mjs?v=tintin-20261020-orders-clean-2';
 import { allowedOrderStatuses, orderStatusLabel, nextOrderStatus, shippingMethod, orderStage } from '../orders/ciclo-pedido.mjs?v=tintin-20261012-orders-board-1';

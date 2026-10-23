@@ -1,4 +1,4 @@
-import { normalizeImportKey, stableProductDocumentId } from './shopify-import-core.mjs?v=tintin-20261005-import-one-click-1-sheets-auth-images-20261011-1-profile-pulseras-20261014-1-pulseras-lifecycle-20261014-1';
+import { normalizeImportKey, stableProductDocumentId } from './shopify-import-core.mjs?v=tintin-20261023-variant-engine-v2-1';
 
 function asRecord(record) {
   return record?.product ? record : { product: record, errors: [], warnings: [] };
