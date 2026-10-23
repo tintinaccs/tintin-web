@@ -669,3 +669,7 @@ Autoridades: alternancia-secciones para impedir que fondos cubran navegación in
 ## 2026-10-23 — Compacidad de Catálogo y contrato de pruebas UI
 
 catalog-maintenance.css reduce rellenos/márgenes y retira la doble reserva de cabecera en tablet; conserva navegación, dibujo completo y áreas táctiles. Se versionan sus consumidores transitivos y el generador de shell. El auditor Fase8 reconoce el comando actual de pruebas con global-form-fit sin retirar verificaciones. Geometría en11 tamaños Chromium/WebKit y35 regresiones compartidas; fuentes de protección, caché y diagnóstico regeneradas. No modifica datos, Auth ni Rules; evidencia en CURRENT_STATE y UI_RESPONSIVE_GLOBAL_20261023.md.
+
+## 2026-10-23 — Dropup y headers adaptables
+
+Fuentes: control-paneles.js y coherencia-visual.css. Tienda, búsqueda, carrito, cuenta y alertas comparten presentación ascendente en móvil; altura del viewport visual y espacio real para la barra/teclado, contenido desplazable y acciones persistentes. Tablet conserva su menú y escritorio limita el mega menú a la altura disponible; controles activos, foco y cierres con mínimo44px. Se protege el cierre asíncrono ante cambios rápidos de superficie y se excluyen controles ocultos/inert del ciclo de foco. El aviso tardío de conexión queda sobre la barra y se oculta durante modales. No cambia datos comerciales, sesiones, roles ni rutas. Versiones transitivas, bundles, CSP, diagnóstico y mantenimiento se renuevan desde sus generadores. Evidencia en CURRENT_STATE.
