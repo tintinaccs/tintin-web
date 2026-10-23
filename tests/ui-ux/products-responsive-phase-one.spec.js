@@ -548,7 +548,7 @@ for(const [width,height] of [[320,700],[768,1024],[1440,900]])test(`fotos por co
  expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
 });
 
-test('stock maestro conserva cantidades al agregar colores y evita quitar stock existente',async({page})=>{
+test('stock maestro conserva cantidades y protege referencias existentes incluso con stock cero',async({page})=>{
  await openEditor(page,390,844);await page.locator('#prod-editor-section').selectOption('inventory');
  await page.evaluate(({renderer,inventory})=>{
   document.getElementById('prod-variants-text').value='Color: Dorado, Plateado';
@@ -561,9 +561,9 @@ test('stock maestro conserva cantidades al agregar colores y evita quitar stock 
  await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('1');await expect(page.getByLabel('Stock de Oro rosa',{exact:true})).toHaveValue('');
  await page.getByLabel('Stock de Oro rosa',{exact:true}).fill('0');await expect(page.locator('#prod-stock')).toHaveValue('2');
  await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
- await expect(page.locator('#prod-form-error')).toContainText('Primero dejá en 0');await expect(page.locator('#prod-variants-text')).toHaveValue(/Dorado/);
+  await expect(page.locator('#prod-form-error')).toContainText('historial potencial');await expect(page.locator('#prod-variants-text')).toHaveValue(/Dorado/);
  await page.getByLabel('Stock de Dorado',{exact:true}).fill('0');await page.getByRole('button',{name:'Quitar Color: Dorado',exact:true}).click();
- await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveCount(0);await expect(page.locator('#prod-stock')).toHaveValue('1');
+  await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('0');await expect(page.locator('#prod-variants-text')).toHaveValue(/Dorado/);await expect(page.locator('#prod-stock')).toHaveValue('1');
  expect(await page.evaluate(()=>window.__masterStock.baseline().expectedEntries)).toEqual([{variant:'Dorado',stock:1},{variant:'Plateado',stock:1}]);
  expect(await page.evaluate(()=>window.__calls.filter(call=>call[0]==='prodGuardar'))).toEqual([]);
 });

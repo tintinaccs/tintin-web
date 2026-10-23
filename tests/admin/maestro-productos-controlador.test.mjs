@@ -228,3 +228,22 @@ test('edición de precio o visibilidad conserva prioridad comercial aun en produ
  if(field==='prod-price')r.control(field).value='35000';else r.control(field).checked=false;
  assert.equal(await r.ctx.window.saveTest(),true);assert.equal(r.rows.get('products/source').merchandisingUpdatedAt,123);assert.equal(r.rows.get('products/source').restockedAt,undefined);}
 });
+
+
+test('audit: technical and private fields survive opening and serializing the existing editor',()=>{
+ const fields={material:'Acero',measurements:'20 mm',colorFinish:'Plateado',care:'Paño seco',waterResistance:'Salpicaduras',warranty:'6 meses',sizeFit:'Ajustable',packageContents:'Caja',stock:null,destacado:true,badge:'Nuevo'};
+ const r=runtime(fields);r.ctx._prodEditarNow('source');
+ const draft=r.ctx.serializeProductForm();
+ for(const key of ['material','measurements','colorFinish','care','waterResistance','warranty','sizeFit','packageContents','destacado','badge']) assert.equal(draft[key],fields[key],key);
+ assert.equal(draft.stock,'');
+ assert.equal(draft.costUnit,'100');assert.equal(draft.purchased,'5');assert.equal(draft.stockMinimum,'2');assert.equal(draft.internalNotes,'Privado');
+ assert.deepEqual(r.writes,[]);
+});
+
+test('audit: old editor cannot save a v2 product and does not claim success',async()=>{
+ const r=runtime({variantCommerceVersion:2,variants:{Color:['Plateado']},variantInventory:[{variant:'Plateado',attributes:{Color:'Plateado'},stock:4,price:40000}]});
+ r.ctx._prodEditarNow('source');r.control('prod-price').value='1';
+ assert.equal(await r.ctx.window.saveTest(),false);
+ assert.deepEqual(r.writes,[]);
+ assert.match(r.control('prod-form-error').textContent,/editor compatible/);
+});
