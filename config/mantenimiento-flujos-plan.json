@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "b3997c7cc991f3c7a45f4f650146fbdbad2015a4",
-  "reason": "Conciliar Checkout1215 y variantes1214 conservando CodeQL corregido y validación comercial completa",
+  "reason": "Separar edición y vista previa visual aislada de la publicación completa, preservando autoridades de checkout y encabezado",
   "files": [
     {
       "path": "_headers",
@@ -221,7 +221,7 @@
     {
       "path": "package.json",
       "oldHash": "27ff34031a07043b93a11f7d8727add590f96e4f2c1feaf08bb5e99ab49cac4b",
-      "newHash": "c6446d7ea1b7640733a618d549ea6d09a658be25d15125fb42fdb96c2cb8ce00"
+      "newHash": "38055bc12ef9073284e8eba5bdb35ec52585d196aed2ca1d309db2c30452a7e3"
     },
     {
       "path": "perfil.html",

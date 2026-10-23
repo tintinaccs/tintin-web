@@ -1,0 +1,6 @@
+#preview-tools { position:fixed; z-index:2147483647; bottom:8px; left:8px; max-width:calc(100vw - 16px); box-sizing:border-box; padding:10px 14px; border:1px solid #d96e9e; border-radius:12px; background:#fff1f7; color:#35212b; font:12px/1.5 'Montserrat',sans-serif; box-shadow:0 2px 12px #0002; }
+#preview-tools nav { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+#preview-tools a { color:#70334e; text-decoration:underline; }
+#preview-tools button, #preview-tools select { font:inherit; border:1px solid #a85c7b; background:white; color:#35212b; padding:4px 8px; border-radius:6px; }
+#preview-tools output { display:block; }
+body { padding-bottom:150px; }

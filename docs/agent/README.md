@@ -37,6 +37,16 @@ La frase exacta "reparación integral" significa continuar por todos los criteri
 
 `CURRENT_STATE.md` registra únicamente evidencia del commit/rama que se está verificando. Un PASS histórico no se hereda automáticamente a otro commit.
 
+## Circuito de edición y vista previa
+
+Para iterar en bloques/estilos sin esperar un merge, usar la rama
+`edicion/vista-previa`, `npm run dev` y los perfiles de `npm run dev:check`.
+El enlace visual aislado se actualiza por push, sin abrir un PR por cada intento.
+Ver [el procedimiento y sus límites](../edicion-vista-previa.md).
+Abrir el PR contra main cuando el candidato esté listo: ese paso conserva todas
+las fases y reglas obligatorias de publicación. El preview no acredita compra,
+sesión ni escrituras comerciales y nunca sustituye Repository audit.
+
 ## Gates existentes
 
 Preferir los mecanismos existentes. Entre otros:

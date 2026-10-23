@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d04bd24e3053e6d2100ac61e98ceaff383a68708c45b83563fdcda60d52edb97",
+  "sourceFingerprint": "4dab29ee77bb72ea0b6293eebfeb9a4ca6efda2bbbe0c3a24db3fe163227ab17",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1425,
-    "textFiles": 1334,
-    "totalBytes": 29768206,
+    "files": 1436,
+    "textFiles": 1345,
+    "totalBytes": 29801305,
     "pages": 19,
-    "modules": 1004
+    "modules": 1012
   },
   "viewports": [
     {
@@ -39652,6 +39652,65 @@
       "endpoints": []
     },
     {
+      "path": "scripts/dev-area.mjs",
+      "bytes": 1327,
+      "sha256": "2e537a949b0aa27d757d90f97c87b67fd1f021a36bc00fc15cdfe20fa595e7d5",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/dev-check.mjs",
+      "bytes": 2455,
+      "sha256": "f6ba885a92b9fb133b710f447978b70a67391f03e0b2eb7c04a1949ad5124062",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:events",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "http://127.0.0.1:4191/",
+          "line": 17
+        }
+      ]
+    },
+    {
       "path": "scripts/ejecutar-auditoria-responsive-con-reintento.mjs",
       "bytes": 1203,
       "sha256": "009fdda057952e348dfb3763cee79767256522d9d02bf46809cfcb9daa41a7f3",
@@ -40162,6 +40221,66 @@
       "endpoints": []
     },
     {
+      "path": "scripts/lib/vista-previa.mjs",
+      "bytes": 5908,
+      "sha256": "0c1268f4e65d470f747cabec11da8138261cf4bf2eaf3c4b38e18bec8b09d921",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "parse5",
+          "target": "scripts/lib/parse5",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../js/components/navigation/escritorio/encabezado-escritorio.js",
+          "target": "js/components/navigation/escritorio/encabezado-escritorio.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../js/components/navigation/tableta/encabezado-tableta.js",
+          "target": "js/components/navigation/tableta/encabezado-tableta.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../js/components/navigation/movil/marca-movil.js",
+          "target": "js/components/navigation/movil/marca-movil.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../js/components/navigation/movil/encabezado-movil.js",
+          "target": "js/components/navigation/movil/encabezado-movil.js",
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "./estilos-inicio.js",
+          "target": "scripts/lib/estilos-inicio.js",
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/mantenimiento-flujos-core.mjs",
       "bytes": 4322,
       "sha256": "805397b557af972d1ec49e966228ddec7a40184cb8fadba90a2d1639ed31b719",
@@ -40280,6 +40399,28 @@
           "line": 4
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/preview-client.js",
+      "bytes": 1287,
+      "sha256": "97ba8d52d03b42a50479379183ce3f716dbf9cd726c0ff5e95a134dc35f70e97",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/preview-worker.js",
+      "bytes": 1143,
+      "sha256": "f0ec813a6be273f9b63d92311d13148c049406c9e3c9c940e31d4ba716a9f95e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -41106,6 +41247,47 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "scripts/vista-previa.mjs",
+      "bytes": 4347,
+      "sha256": "27a5f4e18f00f8a9ec9130ae19a9117c26c6edcbc041af1bbcfc5e95e9dc330a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:http",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "./lib/vista-previa.mjs",
+          "target": "scripts/lib/vista-previa.mjs",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "http://127.0.0.1/",
+          "line": 41
+        }
+      ]
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -45959,6 +46141,67 @@
       "endpoints": []
     },
     {
+      "path": "tests/ci/preview-boundary.test.mjs",
+      "bytes": 3501,
+      "sha256": "25249410c64cd55c3c52187ef4cddd60acbdd9438e26e32d56d919403a18cdb3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../scripts/lib/vista-previa.mjs",
+          "target": "scripts/lib/vista-previa.mjs",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../scripts/preview-worker.js",
+          "target": "scripts/preview-worker.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://example.test/",
+          "line": 28
+        },
+        {
+          "url": "https://preview.example.test${pathname}/",
+          "line": 43
+        },
+        {
+          "url": "https://preview.example.test/checkout",
+          "line": 47
+        }
+      ]
+    },
+    {
       "path": "tests/ci/server-import.spec.js",
       "bytes": 414,
       "sha256": "0af909bd30546444b7855b54c61d6b90bbd290c945477072799412bffe5e116c",
@@ -46048,6 +46291,22 @@
         {
           "url": "https://example.test/photo.png",
           "line": 30
+        }
+      ]
+    },
+    {
+      "path": "tests/development/visual-preview.spec.js",
+      "bytes": 2595,
+      "sha256": "38244e044dfcab1a5b9f5d869015c890bace9ea73bf27d6ebd511e5945079789",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "http://127.0.0.1:4192/",
+          "line": 11
         }
       ]
     },
@@ -55680,6 +55939,12 @@
       "sha256": "33d14707339a3f310f3b3c0cbccaf6a9d7fe9ebff4c33fe5f8856fbebc33a2bf"
     },
     {
+      "path": ".github/workflows/edicion-rapida.yml",
+      "extension": ".yml",
+      "bytes": 1395,
+      "sha256": "733a4f2ae0aea41f323939cc3e7c6e5fe6708b6be61421f2ad30f852d722c507"
+    },
+    {
       "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
       "bytes": 5633,
@@ -56714,8 +56979,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 14471,
-      "sha256": "4cc9800791a2dfb24b630f3312151e310d7cf02d7df538f45f166d3e4bfb7a3e"
+      "bytes": 14495,
+      "sha256": "d676c4613bcd21250eea31bc201a142fdb4944a9f71bd0c617097eeb6b72236d"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56727,7 +56992,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "f115b9e212f254b127bf65ce1455ea34367d468bff085bfb3e72e7e7acbd279f"
+      "sha256": "5873663db3b921430f396f61247f286b4a18225e0da288213a91ec1ce326ef10"
     },
     {
       "path": "config/public-site.json",
@@ -57386,8 +57651,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 856859,
-      "sha256": "d21162bd8dec404ac4b7e1d4c6aa07719deb93390a87d979e2584f93acd265b8"
+      "bytes": 859927,
+      "sha256": "1e38f9abf86c1d95e28727242c86f2f75b181f62aa653572b69fe60085c53a7a"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57482,8 +57747,8 @@
     {
       "path": "docs/agent/README.md",
       "extension": ".md",
-      "bytes": 2781,
-      "sha256": "7d92880e54cb19623b903afb7aa1bd68305a3ef8a80b3e6f287407713a27fe07"
+      "bytes": 3345,
+      "sha256": "106de25307e6b06c9905d1ebe0f09d18363a8bb16beda5c5076a1d47f824b7ec"
     },
     {
       "path": "docs/agent/REAL_INTERACTIONS_20261011.md",
@@ -57730,6 +57995,12 @@
       "extension": ".md",
       "bytes": 4391,
       "sha256": "3369dd31f3c0df6f975f66d1642e19d6c199443a99f02ffac7827b91eb595778"
+    },
+    {
+      "path": "docs/edicion-vista-previa.md",
+      "extension": ".md",
+      "bytes": 4497,
+      "sha256": "156f0dbe42ac73c1e8defd8ea6eda6a84334c7702bc3a8471ed176bfee632488"
     },
     {
       "path": "docs/editor-visual-seguro.md",
@@ -60536,8 +60807,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 18395,
-      "sha256": "c6446d7ea1b7640733a618d549ea6d09a658be25d15125fb42fdb96c2cb8ce00"
+      "bytes": 18710,
+      "sha256": "38055bc12ef9073284e8eba5bdb35ec52585d196aed2ca1d309db2c30452a7e3"
     },
     {
       "path": "perfil.html",
@@ -61470,6 +61741,18 @@
       "sha256": "258aa91331c0c2ffff924ad4ee6f0852cf7edf6dc49029a8f4cb1719468de726"
     },
     {
+      "path": "scripts/dev-area.mjs",
+      "extension": ".mjs",
+      "bytes": 1327,
+      "sha256": "2e537a949b0aa27d757d90f97c87b67fd1f021a36bc00fc15cdfe20fa595e7d5"
+    },
+    {
+      "path": "scripts/dev-check.mjs",
+      "extension": ".mjs",
+      "bytes": 2455,
+      "sha256": "f6ba885a92b9fb133b710f447978b70a67391f03e0b2eb7c04a1949ad5124062"
+    },
+    {
       "path": "scripts/ejecutar-auditoria-responsive-con-reintento.mjs",
       "extension": ".mjs",
       "bytes": 1203,
@@ -61602,6 +61885,12 @@
       "sha256": "28483ef6ea81539618a4e16027e84ccbc647e4a51a617edcb2ad1a5d1d7b5a2e"
     },
     {
+      "path": "scripts/lib/vista-previa.mjs",
+      "extension": ".mjs",
+      "bytes": 5908,
+      "sha256": "0c1268f4e65d470f747cabec11da8138261cf4bf2eaf3c4b38e18bec8b09d921"
+    },
+    {
       "path": "scripts/mantenimiento-flujos-core.mjs",
       "extension": ".mjs",
       "bytes": 4322,
@@ -61630,6 +61919,24 @@
       "extension": ".mjs",
       "bytes": 2511,
       "sha256": "96de0d0cc0e72c489c3df055af79e71870da5fec09eae074e2c6bc3914978901"
+    },
+    {
+      "path": "scripts/preview-client.js",
+      "extension": ".js",
+      "bytes": 1287,
+      "sha256": "97ba8d52d03b42a50479379183ce3f716dbf9cd726c0ff5e95a134dc35f70e97"
+    },
+    {
+      "path": "scripts/preview-style.css",
+      "extension": ".css",
+      "bytes": 673,
+      "sha256": "1753304671a2875df71feab16be166b1dcba33c68c2ecc3d2bb0de5188ee345a"
+    },
+    {
+      "path": "scripts/preview-worker.js",
+      "extension": ".js",
+      "bytes": 1143,
+      "sha256": "f0ec813a6be273f9b63d92311d13148c049406c9e3c9c940e31d4ba716a9f95e"
     },
     {
       "path": "scripts/probar-api-limites-emulador.mjs",
@@ -61780,6 +62087,12 @@
       "extension": ".mjs",
       "bytes": 1055,
       "sha256": "c2a12399bf274d0fcd792d59b8178617952a7d608a647aaa0b4693617e7d16ff"
+    },
+    {
+      "path": "scripts/vista-previa.mjs",
+      "extension": ".mjs",
+      "bytes": 4347,
+      "sha256": "27a5f4e18f00f8a9ec9130ae19a9117c26c6edcbc041af1bbcfc5e95e9dc330a"
     },
     {
       "path": "sitemap-pages.xml",
@@ -62562,6 +62875,12 @@
       "sha256": "758fd6505fe60119193e84f4796614a839d91fba8d23fb7ce3fab24a13873bd7"
     },
     {
+      "path": "tests/ci/preview-boundary.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3501,
+      "sha256": "25249410c64cd55c3c52187ef4cddd60acbdd9438e26e32d56d919403a18cdb3"
+    },
+    {
       "path": "tests/ci/server-import.spec.js",
       "extension": ".js",
       "bytes": 414,
@@ -62578,6 +62897,12 @@
       "extension": ".mjs",
       "bytes": 2549,
       "sha256": "eb1afcf34e5cc67836da3183b20fe08284f372cb28cb9ca06d6c27e6a4b1c3e6"
+    },
+    {
+      "path": "tests/development/visual-preview.spec.js",
+      "extension": ".js",
+      "bytes": 2595,
+      "sha256": "38244e044dfcab1a5b9f5d869015c890bace9ea73bf27d6ebd511e5945079789"
     },
     {
       "path": "tests/diagnostics/manifest-exclusions.test.mjs",

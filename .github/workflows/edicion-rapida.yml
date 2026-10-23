@@ -1,0 +1,44 @@
+name: Edición — controles rápidos
+on:
+  push:
+    branches:
+      - 'edicion/**'
+  workflow_dispatch:
+    inputs:
+      area:
+        description: Componente a comprobar (el preflight siempre se ejecuta)
+        type: choice
+        options: [quick, checkout, header, catalogo, inicio]
+        default: quick
+permissions:
+  contents: read
+concurrency:
+  group: edicion-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  edit:
+    name: Controles de edición (no autoriza publicación)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Select component from changes
+        env:
+          REQUESTED_AREA: ${{ inputs.area }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: node scripts/dev-area.mjs >> "$GITHUB_ENV"
+      - name: Install browser for selected component
+        if: env.EDIT_AREA == 'checkout' || env.EDIT_AREA == 'header' || env.EDIT_AREA == 'inicio'
+        run: npx playwright install --with-deps chromium
+      - name: Fast checks and selected component
+        run: npm run dev:check -- "$EDIT_AREA"
+      - name: Verify visual preview boundary
+        run: npm run test:preview && npm run preview:build
