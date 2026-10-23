@@ -12,8 +12,10 @@
    que el panel tenga una altura definida en vez de auto. Solo se fuerza
    cuando hay contenido real (carga, resultados o error) para no mostrar un
    recuadro vacío mientras el usuario todavía no escribió nada. */
-#search-panel.tt-search-panel.open.tt-has-results {
-  height: min(82dvh, 780px) !important;
+@media (min-width: 1025px) {
+  #search-panel.tt-search-panel.open.tt-has-results {
+    height: min(82dvh, 780px) !important;
+  }
 }
 
 #search-panel.tt-search-panel > svg {

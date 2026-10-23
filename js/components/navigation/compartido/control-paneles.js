@@ -30,6 +30,9 @@
       document.addEventListener('click', this.onClick, true);
       addEventListener('resize', this.onResize, { passive: true });
       addEventListener('orientationchange', this.onResize, { passive: true });
+      window.visualViewport?.addEventListener('resize', this.onResize, { passive: true });
+      window.visualViewport?.addEventListener('scroll', this.onResize, { passive: true });
+      this.syncViewport();
       // Privacidad es una superficie propia, por encima del panel, incluso si llega tarde.
       if (document.body) new MutationObserver(records => {
         if (records.some(record => [...record.addedNodes, ...record.removedNodes].some(node => node.id === 'tt-privacy-consent'))) this.syncModalAccessibility();
@@ -64,9 +67,19 @@
       return 'desktop';
     }
 
+    syncViewport() {
+      const viewport = window.visualViewport;
+      const style = document.documentElement.style;
+      style.setProperty('--tt-panel-viewport-height', `${viewport?.height || innerHeight}px`);
+      style.setProperty('--tt-panel-viewport-top', `${viewport?.offsetTop || 0}px`);
+      const keyboardOpen = viewport && innerHeight - viewport.height > 150;
+      style.setProperty('--tt-panel-nav-space', keyboardOpen ? '12px' : 'calc(108px + env(safe-area-inset-bottom))');
+    }
+
     onResize() {
       cancelAnimationFrame(this.resizeFrame);
       this.resizeFrame = requestAnimationFrame(() => {
+        this.syncViewport();
         const next = this.getBreakpoint();
         const changed = next !== this.breakpoint;
         this.breakpoint = next;
@@ -81,6 +94,23 @@
       this.animations.forEach(animation => animation.cancel());
       this.animations.clear();
       this.morphLayer?.classList.remove('is-active');
+    }
+
+    async animateSurface(element, opening) {
+      if (reduceMotion.matches || this.breakpoint === 'desktop') return;
+      // Independent translate composes with the canonical CSS transform, even
+      // where legacy styles use !important. Keep display until exit finishes.
+      const mobile = this.breakpoint === 'mobile';
+      const start = mobile ? '0 100%' : '32px 0';
+      const animation = element.animate(
+        opening ? [{ translate: start }, { translate: '0 0' }]
+          : [{ translate: '0 0' }, { translate: start }],
+        { duration: opening ? 300 : 200, easing: 'cubic-bezier(.2,.82,.2,1)', fill: 'both' }
+      );
+      this.animations.add(animation);
+      try { await animation.finished; } catch {}
+      this.animations.delete(animation);
+      animation.cancel();
     }
 
     async animateMorph(trigger, target, opening, token) {
@@ -190,11 +220,10 @@
 
     setBackgroundInert(activeElement, inert) {
       if (inert) {
-        this.inertState.clear();
         const navigation = this.getMobileNavigation();
         [...document.body.children].forEach(node => {
           if (!(node instanceof HTMLElement) || node === activeElement || node.contains(activeElement) || (navigation && node.contains(navigation)) || node === this.backdrop || node === this.morphLayer || node.id === 'tt-cart-feedback' || node.id === 'tt-privacy-consent' || node.tagName === 'SCRIPT') return;
-          this.inertState.set(node, node.inert);
+          if (!this.inertState.has(node)) this.inertState.set(node, node.inert);
           node.inert = true;
         });
         return;
@@ -264,6 +293,8 @@
       if (token !== this.operation) return false;
 
       config.element.classList.remove('tt-surface-preparing');
+      await this.animateSurface(config.element, true);
+      if (token !== this.operation) return false;
       this.state = 'open';
       if (config.modal || this.trigger?.matches?.(':focus-visible')) this.focusFirst(config);
       config.afterOpen?.({ trigger: this.trigger, controller: this });
@@ -288,7 +319,12 @@
 
       await config?.beforeClose?.({ reason, controller: this });
       if (!preserveOperation && token !== this.operation) return false;
-      if (config) await this.animateMorph(returnTarget, config.element, false, token);
+      if (config) {
+        await this.animateMorph(returnTarget, config.element, false, token);
+        if (token !== this.operation) return false;
+        await this.animateSurface(config.element, false);
+        if (token !== this.operation) return false;
+      }
 
       if (config) {
         config.element.classList.remove('open', 'tt-surface-preparing');
@@ -381,7 +417,7 @@
       if (navigation) roots.push(navigation);
       const privacy = this.getPrivacySurface();
       if (privacy) roots.push(privacy);
-      const nodes = roots.flatMap(root => [...root.querySelectorAll(FOCUSABLE)]).filter(node => node.offsetParent !== null);
+      const nodes = roots.flatMap(root => [...root.querySelectorAll(FOCUSABLE)]).filter(node => node.getClientRects().length && !node.closest('[inert],[hidden]') && getComputedStyle(node).visibility !== 'hidden');
       if (!nodes.length) {
         event.preventDefault();
         config.element.focus();
