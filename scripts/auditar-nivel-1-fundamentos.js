@@ -181,9 +181,14 @@ check(
 
 const packageJson = JSON.parse(read('package.json'));
 const finalAuditScript = String(packageJson?.scripts?.['audit:final'] || '');
+const ciStages = JSON.parse(read('config/ci-stages.json'));
+const assignedAudits = Object.values(ciStages).flatMap(stage => stage.audits.map(name => `npm run ${name}`));
 check(
   'El barrido final permanece cubierto después de consolidar workflows',
-  ciWorkflow.includes('npm run audit:final') && finalAuditScript.includes('npm run audit:part2h')
+  JSON.stringify(assignedAudits.sort()) === JSON.stringify(finalAuditScript.split(' && ').sort()) &&
+    Object.keys(ciStages).every(stage => ciWorkflow.includes(`npm run ci:${stage}`) &&
+      packageJson.scripts[`ci:${stage}`] === `node scripts/ci-stage.mjs ${stage}`) &&
+    ciWorkflow.includes('node scripts/ci-result.mjs') && finalAuditScript.includes('npm run audit:part2h')
 );
 
 const visualWorkflow = read('.github/workflows/auditoria-visual.yml');

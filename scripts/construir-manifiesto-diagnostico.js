@@ -583,23 +583,21 @@ const pages = allFiles
   .filter(file => !file.includes('/') && file.endsWith('.html'))
   .map(file => extractPage(file, allPaths, jsCorpus));
 
+// One V8 parser process for the entire inventory instead of one Node startup
+// per file. This preserves per-file syntax evidence without executing sources.
+const syntaxByFile = JSON.parse(childProcess.execFileSync(process.execPath,
+  ['--experimental-vm-modules', path.join(ROOT, 'scripts/verificar-sintaxis-lote.mjs')], {
+    cwd: ROOT, input: JSON.stringify(jsFiles), encoding: 'utf8',
+    maxBuffer: 16 * 1024 * 1024, stdio: ['pipe', 'pipe', 'pipe']
+  }));
 const modules = jsFiles.map(file => {
   const source = read(file);
   const buffer = canonicalBuffer(file);
-  const syntax = childProcess.spawnSync(process.execPath, ['--check', path.join(ROOT, file)], {
-    encoding: 'utf8',
-    maxBuffer: 1024 * 1024
-  });
   return {
     path: file,
     bytes: buffer.length,
     sha256: hash(buffer),
-    syntax: {
-      ok: syntax.status === 0,
-      error: syntax.status === 0
-        ? ''
-        : String(syntax.stderr || syntax.stdout || 'Error de sintaxis').trim().slice(0, 1200)
-    },
+    syntax: syntaxByFile[file],
     imports: extractImports(file, source),
     endpoints: extractEndpoints(file, source)
   };

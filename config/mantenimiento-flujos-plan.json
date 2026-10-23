@@ -1,12 +1,17 @@
 {
   "schemaVersion": 1,
   "baseCommit": "a2bd6fadaac991ad34170375bd6e71c5285658d8",
-  "reason": "Corregir seleccion de variantes en todo el catalogo y unificar la dependencia compartida de metadata/fotos. Publicacion autorizada; build y CI obligatorio conservados, sin pruebas manuales ni compras.",
+  "reason": "Reparar imports SEO y separar CI en preflight comercio administracion y calidad sin reducir controles",
   "files": [
     {
       "path": "_headers",
       "oldHash": "39de483791a1620df577875b569ebd73b6e0885b3fff455964c62452f9afc780",
       "newHash": "99fcfe6a9585ccb60913616a02285fb07808c27af738e4846ffd9e6544f64e24"
+    },
+    {
+      "path": ".github/workflows/auditar-tintin.yml",
+      "oldHash": "f95be5e266613b63b7f753518b6d30ec1ae9cd3b0bd130564fba278a4a03663c",
+      "newHash": "afe8407e224d38b0ea442d1810a58676852aefe2b819759afe0469f56f5775ca"
     },
     {
       "path": "404.html",
@@ -72,11 +77,6 @@
       "path": "envios.html",
       "oldHash": "13b7cd48a2b323ae85dff5445bdcb61ad7b4045812eeb6fd56ccc3c7c0a5305f",
       "newHash": "6e6611f92f226dae7459dc6071deda341a187f8d3b437ee41e371d2aa762bf1e"
-    },
-    {
-      "path": "functions/product.js",
-      "oldHash": "143c7f3a0a663511adfa4e951acd0b6880cf362b85fe255a23e898d01bb6130b",
-      "newHash": "a758d3320ee0529c8f82b82089d5a9441b1bc5b0a5b25c4896b6f647a2b29a7c"
     },
     {
       "path": "index.html",
@@ -219,9 +219,19 @@
       "newHash": "9b296c1a33bb1b7fabd90f9aef35a8d0bcfd660a035290b3de4595fd1ec17fb9"
     },
     {
+      "path": "package.json",
+      "oldHash": "27ff34031a07043b93a11f7d8727add590f96e4f2c1feaf08bb5e99ab49cac4b",
+      "newHash": "c6446d7ea1b7640733a618d549ea6d09a658be25d15125fb42fdb96c2cb8ce00"
+    },
+    {
       "path": "perfil.html",
       "oldHash": "1e9a6566ecb9e6ef3580df1f4eff7eef342e308a5c70ee1ab85abef40fdd4d78",
       "newHash": "407325b83f2f5743a493905d67e7b10cf0d40c94c9aecd75768c06d30c39bb1d"
+    },
+    {
+      "path": "playwright.config.js",
+      "oldHash": "8e2fc437b2c804eefaa676ce1ba12a443f6efc81d378b764f7adddc3a41bf452",
+      "newHash": "8d2f4e98d34abbd3987154c311a5127c7bcfc2c587872a03f51c646bc51c2f26"
     },
     {
       "path": "preguntas-frecuentes.html",
@@ -242,6 +252,11 @@
       "path": "scripts/cache-version-baseline.json",
       "oldHash": "dbb1bb2411328bb650082c86e159bb086754395f4eac6c09d720cc08cf6cf2f3",
       "newHash": "4bf9bf492c4e54b4fefcfe3fc1028f6419ccdb673bf44e1ec5403fb973c21685"
+    },
+    {
+      "path": "scripts/construir-manifiesto-diagnostico.js",
+      "oldHash": "158cb111324bb25dc98daa0594865ee13ce88566b1fc9d303f8574408b86ce35",
+      "newHash": "39953c81e7782ccafbdcd691476b88a78960226c9391d194fe07e4a7e943b7a9"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
@@ -288,6 +303,9 @@
     "firebase-auth__redirect-result__5",
     "firestore__apps-script__23",
     "firestore__users-uid__8",
+    "github-actions",
+    "github-actions__deployments__30",
+    "github-actions__pruebas-automatizadas__31",
     "google-btn",
     "google-btn__firebase-auth__3",
     "google-sheets__apps-script__25",
@@ -300,6 +318,7 @@
     "perfil",
     "perfil__ultimos-datos__11",
     "productos",
+    "pruebas-automatizadas",
     "redirect-result",
     "redirect-result__sesion-estado__6",
     "roles__pagina-perfil__18",

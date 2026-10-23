@@ -1,0 +1,149 @@
+{
+  "commerce": {
+    "audits": [
+      "audit:level2",
+      "audit:store-gate",
+      "audit:secure-orders",
+      "audit:checkout-delivery",
+      "audit:cart",
+      "audit:admin-orders"
+    ],
+    "commands": [
+      "node --test tests/auth/*.test.mjs",
+      "npm run test:accounts",
+      "node --test tests/wholesale/*.test.mjs",
+      "npm run test:cart-persistence",
+      "node --test tests/catalog/color-photos.test.mjs tests/catalog/variant-presentation.test.mjs tests/catalog/product-colors.test.mjs",
+      "npm run test:products-sync",
+      "npm run test:cart-quantity-browser",
+      "npx playwright test tests/ui-ux/product-shape-selection.spec.js --project=chromium --retries=0",
+      "npx playwright test tests/checkout/coupon-recovery.spec.js tests/ui-ux/product-small-controls.spec.js tests/login/profile-availability-recovery.spec.js --project=chromium",
+      "npx playwright test tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium",
+      "npx playwright test tests/profile/wholesale-session-recovery.spec.js --project=chromium",
+      "npx playwright test tests/cart/color-choice-browser.spec.js --project=chromium --retries=0"
+    ]
+  },
+  "admin": {
+    "audits": [
+      "audit:admin-sync",
+      "audit:admin-foundation",
+      "audit:products-media",
+      "audit:admin-responsive",
+      "audit:users-roles",
+      "audit:content-appearance",
+      "audit:appearance-unified",
+      "audit:email-messaging",
+      "audit:analytics-audit"
+    ],
+    "commands": [
+      "node --test tests/operations/*.test.mjs",
+      "node --test tests/admin/lecturas-admin.test.mjs tests/admin/webhook-diagnostico.test.mjs tests/admin/firebase-permission-recovery.test.mjs",
+      "npm run test:phase2-import",
+      "node --test tests/import/inventory-reservation-review.test.mjs",
+      "npm run audit:phase2-contract",
+      "node --test tests/seo/shopify-independent-media.test.mjs",
+      "node --test tests/seo/pages-dev-indexing-middleware.test.mjs",
+      "node scripts/backup-firestore.mjs --dry-run",
+      "node scripts/restore-firestore.mjs --dry-run",
+      "npm run test:web-push",
+      "npm run test:engagement",
+      "npm run test:visual-builder",
+      "node scripts/auditar-superadmin-maestro.mjs",
+      "node scripts/auditar-superadmin-maestro-conexiones.mjs",
+      "node scripts/auditar-superadmin-cierre-total.mjs",
+      "node scripts/auditar-superadmin-modulos-completos.mjs",
+      "node scripts/auditar-superadmin-maestro-responsive.mjs",
+      "node scripts/auditar-borrado-global-catalogo.mjs"
+    ]
+  },
+  "quality": {
+    "audits": [
+      "sync:public-shell",
+      "audit:site-structure",
+      "audit:architecture-contracts",
+      "test:architecture-gates",
+      "audit:level1",
+      "audit:level3",
+      "audit:typography",
+      "audit:colors",
+      "audit:styles",
+      "audit:modular-architecture",
+      "audit:public-shell",
+      "audit:tintin",
+      "audit:emails",
+      "audit:collections",
+      "audit:images",
+      "audit:content",
+      "audit:security",
+      "test:phase9-import",
+      "audit:release",
+      "audit:integral",
+      "audit:diagnostics",
+      "test:flow-connections",
+      "audit:flow-connections-responsive",
+      "audit:system-health",
+      "audit:diagnostic-findings",
+      "audit:postphase",
+      "audit:reliability",
+      "audit:help-pages",
+      "audit:aux-pages",
+      "audit:final-integration",
+      "audit:performance",
+      "audit:performance-regressions",
+      "audit:page-loading",
+      "audit:critical-healing",
+      "audit:login-isolation",
+      "audit:login-profile",
+      "audit:hero-background-controls",
+      "audit:storegate-deadlock",
+      "audit:app-check-bootstrap",
+      "audit:part2h",
+      "audit:phase5",
+      "audit:phase6",
+      "audit:phase7-catalog",
+      "audit:phase8-ui",
+      "audit:phase10",
+      "audit:phase11",
+      "test:shopify-product-redirect",
+      "audit:public-operational-contract",
+      "audit:cache-versioning"
+    ],
+    "commands": []
+  },
+  "browser": {
+    "audits": [],
+    "commands": [
+      "npm run test:phase11-seo",
+      "node --test tests/ui-ux/brand-palette.test.mjs tests/ui-ux/onboarding-form-browser.test.mjs tests/ui-ux/home-layout-browser.test.mjs",
+      "npm run test:admin-operations-browser",
+      "npm run test:navigation-header",
+      "npm run test:phase8-ui",
+      "npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium",
+      "npx playwright test tests/ui-ux/admin-sidebar-interaction.spec.js --project=chromium",
+      "npx playwright test tests/navigation/collection-menu-parity.spec.js tests/navigation/live-activity-notices.spec.js --project=chromium",
+      "npx playwright test tests/login/google-loader-recovery.spec.js --project=chromium",
+      "npx playwright test tests/ui-ux/inventory-reservation-review.spec.js --project=chromium",
+      "npx playwright test tests/ui-ux/import-identity-review.spec.js --project=chromium",
+      "npm run test:phase10-a11y",
+      "npm run test:performance",
+      "npm run audit:canonical-viewports",
+      "npm run audit:global-responsive-geometry",
+      "npm run test:pages",
+      "node scripts/auditar-legal-paginas.js"
+    ]
+  },
+  "rules": {
+    "audits": [],
+    "commands": [
+      "npm run test:rules-critical",
+      "npm run test:rules-phone",
+      "npm run test:rules-username"
+    ]
+  },
+  "preflight": {
+    "audits": [],
+    "commands": [
+      "npm run test:fast"
+    ]
+  }
+}

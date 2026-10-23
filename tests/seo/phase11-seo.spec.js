@@ -2,11 +2,8 @@
 const { test, expect } = require('@playwright/test');
 const { origin: PUBLIC_ORIGIN } = require('../../config/public-site.json');
 
-test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
-});
-
 test('inicio publica canonical, OG y Store JSON-LD consistentes', async ({ page }) => {
+  await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
   await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `${PUBLIC_ORIGIN}/`);
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `${PUBLIC_ORIGIN}/`);

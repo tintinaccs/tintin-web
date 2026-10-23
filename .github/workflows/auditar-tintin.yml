@@ -1,26 +1,72 @@
 name: CI Tintin — contrato único
-
 on:
   pull_request:
-    branches: [main]
-    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
   push:
-    branches: [main]
-  workflow_dispatch:
-
+    branches:
+      - main
+  workflow_dispatch: null
 permissions:
   contents: read
   checks: read
-
 concurrency:
   group: repository-audit-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
 jobs:
-  audit:
-    name: Repository audit
+  preflight:
+    name: VALIDACIÓN RÁPIDA — PREFLIGHT
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies once
+        run: npm ci
+      - name: VALIDACIÓN RÁPIDA — PREFLIGHT
+        run: npm run ci:preflight
+      - name: Build exact public artifact
+        run: npm run build:pages
+      - name: Reject generated artifact drift
+        run: git diff --exit-code -- .
+      - name: Validate non-destructive domain migration preflight
+        run: node scripts/auditar-preparacion-dominio.mjs
+      - name: Verify CSS source and minified artifact integrity
+        run: npm run audit:styles
+      - name: Canonical integrations and authority map
+        run: node scripts/auditar-integraciones-canonicas.mjs
+      - name: Save timings and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ci-${{ github.job }}-${{ github.run_id }}
+          path: |
+            artifacts/**
+            playwright-report/**
+            test-results/**
+            firebase-debug.log
+            firestore-debug.log
+            /tmp/tintin-ci-http.log
+          if-no-files-found: warn
+          retention-days: 14
+  commerce:
+    name: B — Comercio crítico
+    needs: preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
     env:
       PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
       PERF_BASE_URL: http://127.0.0.1:4173
@@ -30,40 +76,20 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
-
-      - name: Setup Java for Firestore emulator
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '21'
-
       - name: Install locked dependencies once
         run: npm ci
-
+      - name: Cache Playwright Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-${{ runner.arch }}-chromium-${{ hashFiles('package-lock.json') }}
       - name: Install Chromium once
         run: npx playwright install --with-deps chromium
-
-      - name: Build exact public artifact
-        run: npm run build:pages
-
-      - name: Reject generated artifact drift
-        run: git diff --exit-code -- .
-
-      - name: Validate non-destructive domain migration preflight
-        run: node scripts/auditar-preparacion-dominio.mjs
-
-      - name: Verify CSS source and minified artifact integrity
-        run: npm run audit:styles
-
-      - name: Canonical integrations and authority map
-        run: node scripts/auditar-integraciones-canonicas.mjs
-
       - name: Serve exact commit for browser gates
         run: |
           node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
@@ -74,88 +100,13 @@ jobs:
           done
           cat /tmp/tintin-ci-http.log || true
           exit 1
-
-      - name: Full static contract
-        run: npm run audit:final
-
-      - name: Operational, account and sync contracts
-        env:
-          FIREBASE_PROJECT_ID: demo-tintin-backup-contract
-          FIRESTORE_BACKUP_BUCKET: gs://example-backups
-          FIRESTORE_RESTORE_SOURCE: gs://example-backups/snapshot
-        run: |
-          node --test tests/operations/*.test.mjs
-          node --test tests/admin/lecturas-admin.test.mjs tests/admin/webhook-diagnostico.test.mjs tests/admin/firebase-permission-recovery.test.mjs
-          node --test tests/admin/maestro-productos.test.mjs tests/admin/maestro-productos-controlador.test.mjs
-          npm run test:phase2-import
-          node --test tests/import/inventory-reservation-review.test.mjs
-          npm run audit:phase2-contract
-          node --test tests/seo/shopify-independent-media.test.mjs
-          node --test tests/seo/pages-dev-indexing-middleware.test.mjs
-          node scripts/backup-firestore.mjs --dry-run
-          node scripts/restore-firestore.mjs --dry-run
-          npm run test:accounts
-          npm run test:checkout-contract
-          node --test tests/wholesale/*.test.mjs
-          node --test tests/orders/order-admin-domain.test.mjs tests/orders/variant-inventory.test.mjs
-          npm run test:cart-persistence
-          node --test tests/catalog/color-photos.test.mjs tests/catalog/variant-presentation.test.mjs tests/catalog/product-colors.test.mjs
-          npm run test:web-push
-          npm run test:engagement
-          npm run test:products-sync
-          npm run test:visual-builder
-          node --test tests/code-studio/*.test.mjs
-
-      - name: Firestore identity and adversarial rules
-        run: |
-          npm run test:rules-critical
-          npm run test:rules-phone
-          npm run test:rules-username
-
-      - name: Super Admin master contracts
-        run: |
-          node scripts/auditar-superadmin-maestro.mjs
-          node scripts/auditar-superadmin-maestro-conexiones.mjs
-          node scripts/auditar-superadmin-cierre-total.mjs
-          node scripts/auditar-superadmin-modulos-completos.mjs
-          node scripts/auditar-superadmin-maestro-responsive.mjs
-          node scripts/auditar-borrado-global-catalogo.mjs
-
-      - name: Browser, accessibility, SEO and performance gates
-        env:
-          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
-          PERF_BASE_URL: http://127.0.0.1:4173
-        run: |
-          node --test tests/ui-ux/brand-palette.test.mjs tests/ui-ux/onboarding-form-browser.test.mjs tests/ui-ux/home-layout-browser.test.mjs
-          npm run test:admin-operations-browser
-          npm run test:navigation-header
-          npm run test:cart-quantity-browser
-          npm run test:phase8-ui
-          npx playwright test tests/ui-ux/product-shape-selection.spec.js --project=chromium --retries=0
-          npx playwright test tests/ui-ux/products-responsive-phase-one.spec.js tests/ui-ux/products-mosaic.spec.js tests/ui-ux/products-master.spec.js --project=chromium --retries=0
-          npx playwright test tests/ui-ux/admin-white-icons.spec.js --project=chromium
-          npx playwright test tests/ui-ux/admin-sidebar-interaction.spec.js --project=chromium
-          npx playwright test tests/navigation/header-responsive.spec.js --grep footer --project=chromium
-          npx playwright test tests/navigation/collection-menu-parity.spec.js tests/navigation/live-activity-notices.spec.js --project=chromium
-          npx playwright test tests/login/google-loader-recovery.spec.js --project=chromium
-          npx playwright test tests/checkout/coupon-recovery.spec.js tests/ui-ux/product-small-controls.spec.js tests/login/profile-availability-recovery.spec.js --project=chromium
-          npx playwright test tests/checkout/login-required-browser.spec.js tests/checkout/availability-browser.spec.js tests/catalog/search-responsive.spec.js tests/checkout/navigation-responsive.spec.js tests/operations/loader-palette.spec.js tests/profile/account-wholesale-sync.spec.js --project=chromium
-          npx playwright test tests/profile/wholesale-session-recovery.spec.js --project=chromium
-          npx playwright test tests/ui-ux/inventory-reservation-review.spec.js --project=chromium
-          npx playwright test tests/ui-ux/import-identity-review.spec.js --project=chromium
-          npm run test:phase10-a11y
-          npm run test:phase11-seo
-          npm run test:performance
-          npm run audit:canonical-viewports
-          npm run audit:global-responsive-geometry
-          npm run test:pages
-          node scripts/auditar-legal-paginas.js
-
-      - name: Save failure evidence
-        if: failure()
+      - name: B — Comercio crítico
+        run: npm run ci:commerce
+      - name: Save timings and failure evidence
+        if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: repository-audit-failure-${{ github.run_id }}
+          name: ci-${{ github.job }}-${{ github.run_id }}
           path: |
             artifacts/**
             playwright-report/**
@@ -165,7 +116,240 @@ jobs:
             /tmp/tintin-ci-http.log
           if-no-files-found: warn
           retention-days: 14
-
+  admin:
+    name: C — Administración
+    needs: commerce
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+      PERF_BASE_URL: http://127.0.0.1:4173
+      FIREBASE_PROJECT_ID: demo-tintin-backup-contract
+      FIRESTORE_BACKUP_BUCKET: gs://example-backups
+      FIRESTORE_RESTORE_SOURCE: gs://example-backups/snapshot
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies once
+        run: npm ci
+      - name: Cache Playwright Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-${{ runner.arch }}-chromium-${{ hashFiles('package-lock.json') }}
+      - name: Install Chromium once
+        run: npx playwright install --with-deps chromium
+      - name: Serve exact commit for browser gates
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
+          echo $! > /tmp/tintin-ci-http.pid
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/tintin-ci-http.log || true
+          exit 1
+      - name: C — Administración
+        run: npm run ci:admin
+      - name: Save timings and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ci-${{ github.job }}-${{ github.run_id }}
+          path: |
+            artifacts/**
+            playwright-report/**
+            test-results/**
+            firebase-debug.log
+            firestore-debug.log
+            /tmp/tintin-ci-http.log
+          if-no-files-found: warn
+          retention-days: 14
+  quality:
+    name: D — Calidad técnica
+    needs: commerce
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+      PERF_BASE_URL: http://127.0.0.1:4173
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies once
+        run: npm ci
+      - name: Cache Playwright Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-${{ runner.arch }}-chromium-${{ hashFiles('package-lock.json') }}
+      - name: Install Chromium once
+        run: npx playwright install --with-deps chromium
+      - name: Serve exact commit for browser gates
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
+          echo $! > /tmp/tintin-ci-http.pid
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/tintin-ci-http.log || true
+          exit 1
+      - name: Full static contract
+        run: npm run ci:quality
+      - name: Save timings and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ci-${{ github.job }}-${{ github.run_id }}
+          path: |
+            artifacts/**
+            playwright-report/**
+            test-results/**
+            firebase-debug.log
+            firestore-debug.log
+            /tmp/tintin-ci-http.log
+          if-no-files-found: warn
+          retention-days: 14
+  browser:
+    name: D — Interfaz, SEO y rendimiento
+    needs: commerce
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+      PERF_BASE_URL: http://127.0.0.1:4173
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies once
+        run: npm ci
+      - name: Cache Playwright Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-${{ runner.arch }}-chromium-${{ hashFiles('package-lock.json') }}
+      - name: Install Chromium once
+        run: npx playwright install --with-deps chromium
+      - name: Serve exact commit for browser gates
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
+          echo $! > /tmp/tintin-ci-http.pid
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/tintin-ci-http.log || true
+          exit 1
+      - name: Browser, accessibility, SEO and performance gates
+        run: npm run ci:browser
+      - name: Save timings and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ci-${{ github.job }}-${{ github.run_id }}
+          path: |
+            artifacts/**
+            playwright-report/**
+            test-results/**
+            firebase-debug.log
+            firestore-debug.log
+            /tmp/tintin-ci-http.log
+          if-no-files-found: warn
+          retention-days: 14
+  rules:
+    name: B — Reglas e identidad aisladas
+    needs: commerce
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+      PERF_BASE_URL: http://127.0.0.1:4173
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Setup Java for Firestore emulator
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install locked dependencies once
+        run: npm ci
+      - name: B — Reglas e identidad aisladas
+        run: npm run ci:rules
+      - name: Save timings and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ci-${{ github.job }}-${{ github.run_id }}
+          path: |
+            artifacts/**
+            playwright-report/**
+            test-results/**
+            firebase-debug.log
+            firestore-debug.log
+            /tmp/tintin-ci-http.log
+          if-no-files-found: warn
+          retention-days: 14
+  audit:
+    name: Repository audit
+    if: ${{ always() }}
+    needs:
+      - preflight
+      - commerce
+      - admin
+      - quality
+      - browser
+      - rules
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: E — Validación final obligatoria
+        env:
+          CI_NEEDS: ${{ toJSON(needs) }}
+        run: node scripts/ci-result.mjs
   protected-flows:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     name: Protected flows

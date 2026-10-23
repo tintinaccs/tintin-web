@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a6e275afca01f34c1b360807f2d83bdf5c2f61a2949e58886909da96924d3f60",
+  "sourceFingerprint": "6f88bedcd32ba6f4859ad2df8551fb2def57bf825a76eb8a4a853ef371b48026",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1413,
-    "textFiles": 1322,
-    "totalBytes": 29670785,
+    "files": 1423,
+    "textFiles": 1332,
+    "totalBytes": 29714074,
     "pages": 19,
-    "modules": 994
+    "modules": 1002
   },
   "viewports": [
     {
@@ -27963,8 +27963,8 @@
     },
     {
       "path": "functions/product.js",
-      "bytes": 13633,
-      "sha256": "a758d3320ee0529c8f82b82089d5a9441b1bc5b0a5b25c4896b6f647a2b29a7c",
+      "bytes": 13587,
+      "sha256": "143c7f3a0a663511adfa4e951acd0b6880cf362b85fe255a23e898d01bb6130b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27983,7 +27983,7 @@
           "line": 6
         },
         {
-          "raw": "../js/core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "../js/core/store/inventario-variantes.mjs",
           "target": "js/core/store/inventario-variantes.mjs",
           "dynamic": false,
           "line": 7
@@ -36021,8 +36021,8 @@
     },
     {
       "path": "playwright.config.js",
-      "bytes": 947,
-      "sha256": "8e2fc437b2c804eefaa676ce1ba12a443f6efc81d378b764f7adddc3a41bf452",
+      "bytes": 1168,
+      "sha256": "8d2f4e98d34abbd3987154c311a5127c7bcfc2c587872a03f51c646bc51c2f26",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38334,8 +38334,8 @@
     },
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
-      "bytes": 7182,
-      "sha256": "a5a0f20158c3387ca13a53ec5e0d44412a7dee605680d8f03f1b3b830fcfe7b6",
+      "bytes": 7635,
+      "sha256": "4c51c0ad3eb6f982c9ad560f99c03b631a5711841c7da2dca1a05fa16255f6ac",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39433,9 +39433,111 @@
       "endpoints": []
     },
     {
+      "path": "scripts/ci-preflight.mjs",
+      "bytes": 3800,
+      "sha256": "731ee677db180631cd4c7b9b23ab70cb4657c14447c46bc97ea6179656b92025",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "./verificar-sintaxis-lote.mjs",
+          "target": "scripts/verificar-sintaxis-lote.mjs",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:module",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "node:perf_hooks",
+          "target": null,
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/ci-result.mjs",
+      "bytes": 640,
+      "sha256": "ef1c7cc469022179d4ddb7da71c071f0600a48b899174a1f9c0cc88a0da53e30",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/ci-stage.mjs",
+      "bytes": 1800,
+      "sha256": "895b65ace5ef7c976b720f987fbfc65845d60eedd249e6312341923ae8ebe869",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:perf_hooks",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/construir-manifiesto-diagnostico.js",
-      "bytes": 27444,
-      "sha256": "158cb111324bb25dc98daa0594865ee13ce88566b1fc9d303f8574408b86ce35",
+      "bytes": 27595,
+      "sha256": "39953c81e7782ccafbdcd691476b88a78960226c9391d194fe07e4a7e943b7a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40965,6 +41067,36 @@
       ]
     },
     {
+      "path": "scripts/verificar-sintaxis-lote.mjs",
+      "bytes": 1055,
+      "sha256": "c2a12399bf274d0fcd792d59b8178617952a7d608a647aaa0b4693617e7d16ff",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/accounts/account-contract.test.mjs",
       "bytes": 3642,
       "sha256": "ed90306edcf814ef674184f24eea8094549c024d712888ddf1d234352701edf9",
@@ -42337,8 +42469,8 @@
     },
     {
       "path": "tests/architecture/browser-test-isolation.test.mjs",
-      "bytes": 1972,
-      "sha256": "590515fc36476c13569517a6e8e421ad3274f55df71a55cdcf181b4211d2e6b7",
+      "bytes": 2520,
+      "sha256": "149791697c145de49bc5851375de5ceee4f290107d7df342fe06018a42317c73",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45236,8 +45368,8 @@
     },
     {
       "path": "tests/checkout/public-checkout-policy.test.mjs",
-      "bytes": 16714,
-      "sha256": "bb4e9588595b3aa6fc5cfc1721cfbe25a56d635f6395bfff17e6698864facd01",
+      "bytes": 18924,
+      "sha256": "d0a67082c5ef41ef86283bde0a3d693c3344b4a49c56e5837b10e7c974d7cc9e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45696,6 +45828,96 @@
           "line": 28
         }
       ]
+    },
+    {
+      "path": "tests/ci/final-gate.test.mjs",
+      "bytes": 2326,
+      "sha256": "758fd6505fe60119193e84f4796614a839d91fba8d23fb7ce3fab24a13873bd7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../scripts/ci-result.mjs",
+          "target": "scripts/ci-result.mjs",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/ci/server-import.spec.js",
+      "bytes": 414,
+      "sha256": "0af909bd30546444b7855b54c61d6b90bbd290c945477072799412bffe5e116c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../functions/product.js",
+          "target": "functions/product.js",
+          "dynamic": true,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/ci/syntax.test.mjs",
+      "bytes": 1275,
+      "sha256": "f891978e947cfb7e22e4778f86963f5b41997d2e284546a2dea42bca1c389712",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 11
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "tests/content/welcome-copy.test.mjs",
@@ -46167,8 +46389,8 @@
     },
     {
       "path": "tests/flow-connections/conexiones-con-evidencia.test.mjs",
-      "bytes": 33588,
-      "sha256": "fbd4412f6077315748decd0325fd0ef94b639a2fb126822c5f501acb1f5a2c7f",
+      "bytes": 34557,
+      "sha256": "702e76979c92fac90900a0e74bc4a06530baa2deb7bb747fc1859c1220115f55",
       "syntax": {
         "ok": true,
         "error": ""
@@ -46214,23 +46436,23 @@
           "raw": "../../functions/api/master-diagnostics.js",
           "target": "functions/api/master-diagnostics.js",
           "dynamic": true,
-          "line": 430
+          "line": 454
         },
         {
           "raw": "../../js/admin/flujo-conexiones/live-checks.js",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": true,
-          "line": 445
+          "line": 469
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/api/master-diagnostics",
-          "line": 432
+          "line": 456
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 434
+          "line": 458
         }
       ]
     },
@@ -47433,6 +47655,47 @@
         {
           "url": "https://cdn.shopify.com/copy.webp",
           "line": 124
+        }
+      ]
+    },
+    {
+      "path": "tests/integration/commerce-firestore.test.mjs",
+      "bytes": 6221,
+      "sha256": "98b223029da916548776899bb178ae94f4cc204ab336995c71e39abe02ce1438",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/order-admin-domain.js",
+          "target": "cloudflare/order-admin-domain.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "http://${host}/v1/$%7Bprefix.slice(0",
+          "line": 12
         }
       ]
     },
@@ -52047,8 +52310,8 @@
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
-      "bytes": 7192,
-      "sha256": "3af1af03765ec2e2653c71272f3f8d6dfbd117cadca913ac993453b08c4f070c",
+      "bytes": 7149,
+      "sha256": "7b2fee8701a0a45aebf04e20e5a76dfea0c4daa0737acdf6640b339b42937a72",
       "syntax": {
         "ok": true,
         "error": ""
@@ -52058,27 +52321,27 @@
           "raw": "../../functions/product.js",
           "target": "functions/product.js",
           "dynamic": true,
-          "line": 51
+          "line": 48
         },
         {
           "raw": "../../functions/product.js",
           "target": "functions/product.js",
           "dynamic": true,
-          "line": 59
+          "line": 56
         }
       ],
       "endpoints": [
         {
           "url": "https://schema.org/OutOfStock",
-          "line": 47
+          "line": 44
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 83
+          "line": 80
         },
         {
           "url": "https://tintin.test/product",
-          "line": 91
+          "line": 88
         }
       ]
     },
@@ -55272,8 +55535,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 7628,
-      "sha256": "f95be5e266613b63b7f753518b6d30ec1ae9cd3b0bd130564fba278a4a03663c"
+      "bytes": 11705,
+      "sha256": "afe8407e224d38b0ea442d1810a58676852aefe2b819759afe0469f56f5775ca"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -56338,6 +56601,12 @@
       "sha256": "463713cd3b697b38649f9564f37f4533b2a48bada32e1a8ff036150f7f03f24e"
     },
     {
+      "path": "config/ci-stages.json",
+      "extension": ".json",
+      "bytes": 5695,
+      "sha256": "6f479c66773ace0e34f48efeb2a3d5fa58d30c006a0e5469e8ceb48d5d42b205"
+    },
+    {
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 353689,
@@ -56352,8 +56621,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 13741,
-      "sha256": "97ed3dbbd8bf250c3fc7c853797aee37c11a0c201752d1d39f917a34af504ff7"
+      "bytes": 14472,
+      "sha256": "429e078f5528276c55c33bbb1a2ea9f1fc222d0bada5474b371d55079f9d0012"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56365,7 +56634,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "ec04fab894b2a1967fbf0312cd26a2f8b36b731e70245a56b839a3943cc80694"
+      "sha256": "551aac4a58926ba392225e789328f091baa70987841651fda91db250f35f13cf"
     },
     {
       "path": "config/public-site.json",
@@ -57024,8 +57293,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 838345,
-      "sha256": "3485fda8e00f551eacee862b35a5a5094d97d2b91006339d117961947562abda"
+      "bytes": 841896,
+      "sha256": "c435d97b206839fbc0665ef0ee197e0b16c862c94742e5c6ed3a6d3a9eee55d6"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57278,6 +57547,12 @@
       "extension": ".md",
       "bytes": 5609,
       "sha256": "142acb02418d05b7482432a67fa21a73ce2bcb757929af01280d1b540132a335"
+    },
+    {
+      "path": "docs/ci-preflight.md",
+      "extension": ".md",
+      "bytes": 5918,
+      "sha256": "ad6a5c42eefeb2c6f93767545005be460a003315c1a6876dabe2889d1834d296"
     },
     {
       "path": "docs/cierre-operativo-2026-08-20.md",
@@ -58110,8 +58385,8 @@
     {
       "path": "functions/product.js",
       "extension": ".js",
-      "bytes": 13633,
-      "sha256": "a758d3320ee0529c8f82b82089d5a9441b1bc5b0a5b25c4896b6f647a2b29a7c"
+      "bytes": 13587,
+      "sha256": "143c7f3a0a663511adfa4e951acd0b6880cf362b85fe255a23e898d01bb6130b"
     },
     {
       "path": "functions/products/[handle].js",
@@ -60168,8 +60443,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 17072,
-      "sha256": "27ff34031a07043b93a11f7d8727add590f96e4f2c1feaf08bb5e99ab49cac4b"
+      "bytes": 18395,
+      "sha256": "c6446d7ea1b7640733a618d549ea6d09a658be25d15125fb42fdb96c2cb8ce00"
     },
     {
       "path": "perfil.html",
@@ -60180,8 +60455,8 @@
     {
       "path": "playwright.config.js",
       "extension": ".js",
-      "bytes": 947,
-      "sha256": "8e2fc437b2c804eefaa676ce1ba12a443f6efc81d378b764f7adddc3a41bf452"
+      "bytes": 1168,
+      "sha256": "8d2f4e98d34abbd3987154c311a5127c7bcfc2c587872a03f51c646bc51c2f26"
     },
     {
       "path": "playwright.operations.config.js",
@@ -60762,8 +61037,8 @@
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
       "extension": ".js",
-      "bytes": 7182,
-      "sha256": "a5a0f20158c3387ca13a53ec5e0d44412a7dee605680d8f03f1b3b830fcfe7b6"
+      "bytes": 7635,
+      "sha256": "4c51c0ad3eb6f982c9ad560f99c03b631a5711841c7da2dca1a05fa16255f6ac"
     },
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
@@ -61054,10 +61329,28 @@
       "sha256": "4bf9bf492c4e54b4fefcfe3fc1028f6419ccdb673bf44e1ec5403fb973c21685"
     },
     {
+      "path": "scripts/ci-preflight.mjs",
+      "extension": ".mjs",
+      "bytes": 3800,
+      "sha256": "731ee677db180631cd4c7b9b23ab70cb4657c14447c46bc97ea6179656b92025"
+    },
+    {
+      "path": "scripts/ci-result.mjs",
+      "extension": ".mjs",
+      "bytes": 640,
+      "sha256": "ef1c7cc469022179d4ddb7da71c071f0600a48b899174a1f9c0cc88a0da53e30"
+    },
+    {
+      "path": "scripts/ci-stage.mjs",
+      "extension": ".mjs",
+      "bytes": 1800,
+      "sha256": "895b65ace5ef7c976b720f987fbfc65845d60eedd249e6312341923ae8ebe869"
+    },
+    {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "extension": ".js",
-      "bytes": 27444,
-      "sha256": "158cb111324bb25dc98daa0594865ee13ce88566b1fc9d303f8574408b86ce35"
+      "bytes": 27595,
+      "sha256": "39953c81e7782ccafbdcd691476b88a78960226c9391d194fe07e4a7e943b7a9"
     },
     {
       "path": "scripts/copiar-respaldo-firestore-cifrado.mjs",
@@ -61384,6 +61677,12 @@
       "sha256": "091b49fce4898dd6841b114cdeb848ecfdc9affaef7307ac7a09a777753c855f"
     },
     {
+      "path": "scripts/verificar-sintaxis-lote.mjs",
+      "extension": ".mjs",
+      "bytes": 1055,
+      "sha256": "c2a12399bf274d0fcd792d59b8178617952a7d608a647aaa0b4693617e7d16ff"
+    },
+    {
       "path": "sitemap-pages.xml",
       "extension": ".xml",
       "bytes": 1418,
@@ -61620,8 +61919,8 @@
     {
       "path": "tests/architecture/browser-test-isolation.test.mjs",
       "extension": ".mjs",
-      "bytes": 1972,
-      "sha256": "590515fc36476c13569517a6e8e421ad3274f55df71a55cdcf181b4211d2e6b7"
+      "bytes": 2520,
+      "sha256": "149791697c145de49bc5851375de5ceee4f290107d7df342fe06018a42317c73"
     },
     {
       "path": "tests/architecture/critical-resource-urls.test.mjs",
@@ -62076,8 +62375,8 @@
     {
       "path": "tests/checkout/public-checkout-policy.test.mjs",
       "extension": ".mjs",
-      "bytes": 16714,
-      "sha256": "bb4e9588595b3aa6fc5cfc1721cfbe25a56d635f6395bfff17e6698864facd01"
+      "bytes": 18924,
+      "sha256": "d0a67082c5ef41ef86283bde0a3d693c3344b4a49c56e5837b10e7c974d7cc9e"
     },
     {
       "path": "tests/checkout/reliability-closure.test.mjs",
@@ -62150,6 +62449,24 @@
       "extension": ".mjs",
       "bytes": 2670,
       "sha256": "81773f9623bdab5deff6884b03814e6169282d641a2976b2c30998bbb6406918"
+    },
+    {
+      "path": "tests/ci/final-gate.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2326,
+      "sha256": "758fd6505fe60119193e84f4796614a839d91fba8d23fb7ce3fab24a13873bd7"
+    },
+    {
+      "path": "tests/ci/server-import.spec.js",
+      "extension": ".js",
+      "bytes": 414,
+      "sha256": "0af909bd30546444b7855b54c61d6b90bbd290c945477072799412bffe5e116c"
+    },
+    {
+      "path": "tests/ci/syntax.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1275,
+      "sha256": "f891978e947cfb7e22e4778f86963f5b41997d2e284546a2dea42bca1c389712"
     },
     {
       "path": "tests/content/welcome-copy.test.mjs",
@@ -62226,8 +62543,8 @@
     {
       "path": "tests/flow-connections/conexiones-con-evidencia.test.mjs",
       "extension": ".mjs",
-      "bytes": 33588,
-      "sha256": "fbd4412f6077315748decd0325fd0ef94b639a2fb126822c5f501acb1f5a2c7f"
+      "bytes": 34557,
+      "sha256": "702e76979c92fac90900a0e74bc4a06530baa2deb7bb747fc1859c1220115f55"
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
@@ -62384,6 +62701,12 @@
       "extension": ".mjs",
       "bytes": 8156,
       "sha256": "4c006496c360b20d5939c0f2c83a3c42e34245f6028f4baf09320d2206c0efdc"
+    },
+    {
+      "path": "tests/integration/commerce-firestore.test.mjs",
+      "extension": ".mjs",
+      "bytes": 6221,
+      "sha256": "98b223029da916548776899bb178ae94f4cc204ab336995c71e39abe02ce1438"
     },
     {
       "path": "tests/login/canonical-profile-recovery.test.mjs",
@@ -63186,8 +63509,8 @@
     {
       "path": "tests/seo/phase11-seo.spec.js",
       "extension": ".js",
-      "bytes": 7192,
-      "sha256": "3af1af03765ec2e2653c71272f3f8d6dfbd117cadca913ac993453b08c4f070c"
+      "bytes": 7149,
+      "sha256": "7b2fee8701a0a45aebf04e20e5a76dfea0c4daa0737acdf6640b339b42937a72"
     },
     {
       "path": "tests/seo/shopify-independent-media.test.mjs",
