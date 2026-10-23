@@ -294,6 +294,27 @@ test('selección de color/talle reordenada llega al pedido y reserva la clave or
   }
 });
 
+test('el reloj de tres atributos fijos admite el carrito existente en los seis órdenes de campos', async () => {
+  // Caso comunicado: mismo producto y opciones, sin datos de clientas ni red.
+  const groups = [['Diseño', ['Clásico y elegante']], ['Material', ['Acero inoxidable']], ['Talle', ['Ajustable']]];
+  const orders = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]];
+  for (const order of orders) {
+    const product = {
+      name: 'RELOJ LARTRA DORÉ', price: 180000, active: true, stock: 1,
+      variants: Object.fromEntries(order.map(index => groups[index])),
+    };
+    const store = fakeStore({ 'products/reloj_1': product });
+    await checkout(draft({ cartLines: [{ id: 'reloj_1', qty: 1, variant: 'Clásico y elegante / Acero inoxidable / Ajustable' }], expectedSubtotal: 180000, expectedTotal: 200000 }), store);
+    const saved = orderWrite(store);
+    assert.equal(saved.items[0].variant, order.map(index => groups[index][1][0]).join(' / '));
+    assert.equal(saved.items[0].price, 180000);
+    assert.equal(saved.inventoryState, 'reserved');
+    const stockWrite = store.commits[0].find(write => write.path === 'products/reloj_1');
+    assert.equal(decodeFirestoreFields(stockWrite.fields).stock, 0);
+    assert.equal(product.stock, 1);
+  }
+});
+
 test('una combinación eliminada o agotada bloquea checkout sin escribir pedido ni inventario', async () => {
   for (const stock of [0, 2]) {
     const store = fakeStore({ 'products/anillo_1': {

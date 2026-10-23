@@ -80,12 +80,12 @@
     "sha256": "0e31ff28485a2ca50a0dfb79694ad25fc68a40305bddf8c95e2d52319e8c9285"
   },
   "css/components/navigation/compartido/busqueda.css": {
-    "version": "tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
-    "sha256": "07c40b852e1565faf3690561922b9866db3a3ba63ec2acc6fd3bbc4538bb7c0b"
+    "version": "tintin-20261023-search-panel-height-1",
+    "sha256": "2af24661a35aef3f2b094307842e2e1fc5dfb2ff5496d5ea7b411dfeb0f96292"
   },
   "css/components/navigation/compartido/coherencia-visual.css": {
-    "version": "tintin-20261011-boutique-4-palette-20261014-1",
-    "sha256": "4f9bb343cec43d4b2d9c2b0a9d16a216bc42294d972fa55d6227d4d47aa9e639"
+    "version": "tintin-20261023-header-dropup-4",
+    "sha256": "e1cdb929ea1f9e52e33ae6c4133a4c13a17abe8466564c19efd9ca6e03425676"
   },
   "css/components/navigation/compartido/paneles.css": {
     "version": "tintin-20260916-surface-z-index-fallback-1-brand-20261004-1-owner-pink-20261004-1-domain-prepared-20261012-6-palette-20261014-1",
@@ -164,12 +164,12 @@
     "sha256": "715aa9eb030929cb7aa712e3d5ae79ca14777441bd3f0c222ddd7568cec90e60"
   },
   "css/generated/inicio.css": {
-    "version": "tintin-home-59dbcab7bb874526",
-    "sha256": "59dbcab7bb87452669202788937cf290b6e3e2d922b490e177db494869328ca8"
+    "version": "tintin-home-d0a0c0033b04a4f2",
+    "sha256": "d0a0c0033b04a4f276ed204bbc6a7fd2ee862fd7b5c26285f0d8702ee21d6b63"
   },
   "css/generated/nosotros.css": {
-    "version": "tintin-about-b891ddd7b3774323",
-    "sha256": "b891ddd7b377432386800e48cc952140f0cffc6ebe57c3d55e978c379291edb3"
+    "version": "tintin-about-4749e701a6cd4c50",
+    "sha256": "4749e701a6cd4c5079913c794f12ce45d0a087f551fd9714f48a00aea0c57eea"
   },
   "css/pages/catalog/catalog-maintenance.css": {
     "version": "tintin-20261023-global-layout-2",
@@ -840,8 +840,8 @@
     "sha256": "3873085c9cb8cae4e3b234501f2169519be4f9a67c0f9ab45e026f4c805c129d"
   },
   "js/components/navigation/compartido/control-paneles.js": {
-    "version": "tintin-20261021-workspace-account-1",
-    "sha256": "e65eaf49266ce461c53a548fe31ca70f8ae4306e7df5fa89382d30793b2d421f"
+    "version": "tintin-20261023-header-dropup-2",
+    "sha256": "c1cd319cea3b1f536d4b275294952941614f12f179b06b9e17d7b166972c0d12"
   },
   "js/components/navigation/compartido/enrutador.js": {
     "version": "tintin-20261004-final-integration-2-master-20261007-1-encomienda-20261008-1-checkout-20261008-2",
@@ -876,8 +876,8 @@
     "sha256": "ef2b0a5c95e31b32d8101218894e202f61c0982512ab9cb389386d9c2c445dd5"
   },
   "js/components/navigation/compartido/recursos-navegacion.js": {
-    "version": "tintin-20261011-boutique-4-domain-prepared-20261012-6-palette-20261014-1-logos-bottom-20261015-1-css-20261015-1",
-    "sha256": "6adaece219353b8c62f95a2184c641c0e5926e22edd4781ab6f86c119f60433d"
+    "version": "tintin-20261023-header-dropup-5",
+    "sha256": "da1ff64795405806968a7436dc115e10e0211300c296b492f9a0cae7d8fc8466"
   },
   "js/components/navigation/compartido/registro-paneles.js": {
     "version": "tintin-20260916-final-production-stability-registry-1",
@@ -888,12 +888,12 @@
     "sha256": "0112790e16fdd1df36d27246a70b56c426cf319b54af9696f3d8375e8c734ed5"
   },
   "js/components/navigation/compatibilidad/inicio-control-paneles.js": {
-    "version": "tintin-20261021-workspace-account-1",
-    "sha256": "d6a8363fadb58263fb7d30df6df6165c8d5aa3220b40b30c14fcfc95cb9c471d"
+    "version": "tintin-20261023-header-dropup-2",
+    "sha256": "f64330450dba5a7ca23f033786fbb5f97994129c2b80510c80e54f66b7f96d0e"
   },
   "js/components/navigation/entrada-navegacion-publica.js": {
-    "version": "tintin-20261023-checkout-variant-identity-1",
-    "sha256": "0ac95d5d2a8920c5ba112fec4a8c2b3724838408066665589f84d0b14a5b012e"
+    "version": "tintin-20261023-checkout-header-reconciled-1",
+    "sha256": "76ae7d07a542966f20c95092e9358d7bc5bd600140edce38fdfb1c33cd2ee22b"
   },
   "js/components/navigation/escritorio/encabezado-escritorio.js": {
     "version": "tintin-20261010-whatsapp-release-5-boutique-20261011-1-profile-pulseras-20261014-1-bags-20261014-1",
@@ -1184,8 +1184,8 @@
     "sha256": "823fd16bab57d517b3989cffdfa64b22bac05e671f55f8ede2b6b8c2e6831e68"
   },
   "js/inicio-navegacion-publica.js": {
-    "version": "tintin-20261023-checkout-variant-identity-1",
-    "sha256": "6b5cc7fdf563e92024afa65146022de4bf7d106c34c20bae5133b351e2feaf05"
+    "version": "tintin-20261023-checkout-header-reconciled-1",
+    "sha256": "5ecfab4341caca09eb1582f60b23fc51ba50ec67d83bf548619b016b509fb608"
   },
   "js/orders/ciclo-pedido.mjs": {
     "version": "tintin-20261012-orders-board-1",

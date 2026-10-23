@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "cf80e3de3508491a5e9ce2f2e937c9a6ff6f1d2b953f03b3c9251815913eb6ac",
+  "sourceFingerprint": "0b5bd1ecaf010794b49422ea652925f5353cab7a3f340530723d6ffcae085a30",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1425,
     "textFiles": 1334,
-    "totalBytes": 29724942,
+    "totalBytes": 29758599,
     "pages": 19,
     "modules": 1004
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18268,
-      "sha256": "57bd7dc7b5f64d9b2747862c2325e991255a8a6b22c468dd9175efc6a9147e5b",
+      "bytes": 18171,
+      "sha256": "761115df5ed365559670aa4c0bac7278987e01fff403446c38f7705bee520220",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -114,12 +114,12 @@
           "line": 9
         },
         {
-          "raw": "/js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "/js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -321,12 +321,12 @@
           "line": 151
         },
         {
-          "raw": "/css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "/css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 152
         },
         {
-          "raw": "/css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "/css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 153
         }
@@ -711,13 +711,13 @@
           "exists": true
         },
         {
-          "raw": "/js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "/js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -957,13 +957,13 @@
           "exists": true
         },
         {
-          "raw": "/css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "/css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 152,
           "exists": true
         },
         {
-          "raw": "/css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "/css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 153,
           "exists": true
@@ -1158,8 +1158,8 @@
         "guest",
         "client"
       ],
-      "bytes": 31313,
-      "sha256": "cfe82bef1875c49649df165b3234f3eea740f10eedc4fb456546a58eacbfe59b",
+      "bytes": 31216,
+      "sha256": "64ac7216a3126645b893d23a71324a16292556772d92a2101e23073f9f7413ed",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1204,12 +1204,12 @@
           "line": 9
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -1266,7 +1266,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-b891ddd7b3774323",
+          "raw": "css/generated/nosotros.css?v=tintin-about-4749e701a6cd4c50",
           "target": "css/generated/nosotros.css",
           "line": 35
         },
@@ -1441,12 +1441,12 @@
           "line": 72
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 73
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 74
         },
@@ -1790,13 +1790,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -1862,7 +1862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-b891ddd7b3774323",
+          "raw": "css/generated/nosotros.css?v=tintin-about-4749e701a6cd4c50",
           "target": "css/generated/nosotros.css",
           "line": 35,
           "exists": true
@@ -2072,13 +2072,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 73,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 74,
           "exists": true
@@ -8985,8 +8985,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19868,
-      "sha256": "408ffaa59b24caa3734052286ac36a04e622f219aa28054260aa11ad75d5123a",
+      "bytes": 19771,
+      "sha256": "662d3cd20d0273255ffa87197fa230f0ac48957a95cdaa004b29f989584d4433",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9025,12 +9025,12 @@
           "line": 9
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -9242,12 +9242,12 @@
           "line": 69
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 70
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 71
         }
@@ -9562,13 +9562,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -9820,13 +9820,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 70,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 71,
           "exists": true
@@ -9979,8 +9979,8 @@
         "guest",
         "client"
       ],
-      "bytes": 59250,
-      "sha256": "7b24b0fd5956ef3e9a02463aa123c935a913919f1f659b249ebe158d1e288d42",
+      "bytes": 59153,
+      "sha256": "14d5162c751fa62d9ffb6ff967be92fd9a750804fa5daf7d29afc6b0ce950edc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10031,12 +10031,12 @@
           "line": 10
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -10248,12 +10248,12 @@
           "line": 372
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 373
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 374
         },
@@ -10563,13 +10563,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -10821,13 +10821,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 373,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 374,
           "exists": true
@@ -11080,8 +11080,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 132762,
-      "sha256": "5582d2faff27633658911b3c2b5d99b6ca960c5988fb28d2cc1d601eceb4d381",
+      "bytes": 132665,
+      "sha256": "e8de48530b60bdfbf89453490aacea27bd451392dfc7bcd286d516cabee687c8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11126,12 +11126,12 @@
           "line": 10
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -11353,12 +11353,12 @@
           "line": 67
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 68
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 69
         },
@@ -11685,13 +11685,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -11955,13 +11955,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 68,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 69,
           "exists": true
@@ -12600,8 +12600,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21544,
-      "sha256": "c1faf0b98ed14b9027a6a8c0b4c64325c89081f5875b6899622d7e601fdfeea5",
+      "bytes": 21447,
+      "sha256": "c0be487b768350f1b5e91a565ee39ec172160a4af19c98485ae83fe77b35421a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12646,12 +12646,12 @@
           "line": 10
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -12868,12 +12868,12 @@
           "line": 74
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 75
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 76
         }
@@ -13198,13 +13198,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -13462,13 +13462,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 75,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 76,
           "exists": true
@@ -13627,8 +13627,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26557,
-      "sha256": "01960949b7463325bd287cb255da0ac7e1a360c408e9959f3a5fccafc6cdb5fb",
+      "bytes": 26460,
+      "sha256": "22b99616e9e499fafdab8ae5cb5cb765ff1bed04f0eedf8d99d1642a85700d43",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13673,12 +13673,12 @@
           "line": 9
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -13895,12 +13895,12 @@
           "line": 70
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 71
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 72
         }
@@ -14255,13 +14255,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -14519,13 +14519,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 71,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 72,
           "exists": true
@@ -14739,8 +14739,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23554,
-      "sha256": "6e6611f92f226dae7459dc6071deda341a187f8d3b437ee41e371d2aa762bf1e",
+      "bytes": 23457,
+      "sha256": "13ec2bf58b428fed189c7743aa8a8d1483fb9bff46e977be293d858fef76a054",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14785,12 +14785,12 @@
           "line": 9
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -15002,12 +15002,12 @@
           "line": 75
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 76
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 77
         }
@@ -15322,13 +15322,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -15580,13 +15580,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 76,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 77,
           "exists": true
@@ -15779,8 +15779,8 @@
         "guest",
         "client"
       ],
-      "bytes": 46794,
-      "sha256": "d87bacb0c2b465e49352a70819812447a7090deabfbc6cf06a5e6e69948de2e9",
+      "bytes": 46697,
+      "sha256": "2d9f162a9f9d7f9b2c41ec9d8a25b4426a047c7ded30901b1800e849dc0cb23a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15831,12 +15831,12 @@
           "line": 14
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 15
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 16
         },
@@ -15918,7 +15918,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-59dbcab7bb874526",
+          "raw": "css/generated/inicio.css?v=tintin-home-d0a0c0033b04a4f2",
           "target": "css/generated/inicio.css",
           "line": 58
         },
@@ -16113,12 +16113,12 @@
           "line": 114
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 115
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 116
         },
@@ -16760,13 +16760,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 15,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 16,
           "exists": true
@@ -16862,7 +16862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-59dbcab7bb874526",
+          "raw": "css/generated/inicio.css?v=tintin-home-d0a0c0033b04a4f2",
           "target": "css/generated/inicio.css",
           "line": 58,
           "exists": true
@@ -17096,13 +17096,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 115,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 116,
           "exists": true
@@ -17570,8 +17570,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72803,
-      "sha256": "ac2e851d454abed46d024655f7efe74188f2a39574ebae30a4a4d685cc3e0421",
+      "bytes": 72706,
+      "sha256": "c69e09e3cdc7f692bbe0294d397e0303a8557f3c714e9b2db1409afd7d526b15",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17622,12 +17622,12 @@
           "line": 10
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -17834,12 +17834,12 @@
           "line": 70
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 71
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 72
         },
@@ -17916,13 +17916,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -18168,13 +18168,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 71,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 72,
           "exists": true
@@ -18542,8 +18542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 57682,
-      "sha256": "407325b83f2f5743a493905d67e7b10cf0d40c94c9aecd75768c06d30c39bb1d",
+      "bytes": 57585,
+      "sha256": "66e955411ad3cde6539b1109c2f39aa0cbae3e8b25cad15836acedc967f57cf3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18594,12 +18594,12 @@
           "line": 10
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -18831,12 +18831,12 @@
           "line": 65
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 66
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 67
         }
@@ -19191,13 +19191,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -19473,13 +19473,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 66,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 67,
           "exists": true
@@ -20000,8 +20000,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21223,
-      "sha256": "2433c279527546f679458bc95b274e2d72a349f6d4841bb704899569ea6777cc",
+      "bytes": 21126,
+      "sha256": "f2abad7aaab4bf14a23f453bacfbf4efce6a106e19e0660fb0c486eb6e6e8324",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20040,12 +20040,12 @@
           "line": 9
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -20257,12 +20257,12 @@
           "line": 69
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 70
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 71
         }
@@ -20577,13 +20577,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -20835,13 +20835,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 70,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 71,
           "exists": true
@@ -20994,8 +20994,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25422,
-      "sha256": "f952bdd3ff31d0449edf12217fa553153740184eed437a17a1f7edef79266d74",
+      "bytes": 25325,
+      "sha256": "acd4982d82bf8819eb0276bf22a0fe08e5e24fb23ed5a42e0a037c0a8c0daea5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -21034,12 +21034,12 @@
           "line": 9
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -21251,12 +21251,12 @@
           "line": 70
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 71
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 72
         }
@@ -21691,13 +21691,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -21949,13 +21949,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 71,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 72,
           "exists": true
@@ -22125,8 +22125,8 @@
         "guest",
         "client"
       ],
-      "bytes": 27049,
-      "sha256": "5cd8a8de3b4ba0a067acb9e7a8ec3c7399541f819e77a85ef5b1573b83066967",
+      "bytes": 26952,
+      "sha256": "2b3eb69e43aaf906e2900b18ef8f0e80d5db8fe15b28dd6657b86c864cfaefb2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -22165,12 +22165,12 @@
           "line": 10
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -22432,12 +22432,12 @@
           "line": 82
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 83
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 84
         }
@@ -22772,13 +22772,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -23090,13 +23090,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 83,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 84,
           "exists": true
@@ -23422,8 +23422,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23407,
-      "sha256": "ffa872564814535ea3d75699410b4514681766c823c8b949dfde3bc11c5d7bb0",
+      "bytes": 23310,
+      "sha256": "17b04d2f3389ef424057d2f7e06ceba42dcd49e67128dfd98600e812ba77f7c5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -23455,12 +23455,12 @@
           "line": 9
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
@@ -23672,12 +23672,12 @@
           "line": 70
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 71
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 72
         }
@@ -24132,13 +24132,13 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261021-workspace-account-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20261023-header-dropup-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 10,
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-variant-identity-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-checkout-header-reconciled-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
@@ -24390,13 +24390,13 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/busqueda.css?v=tintin-20261023-search-panel-height-1",
           "target": "css/components/navigation/compartido/busqueda.css",
           "line": 71,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261011-boutique-4-palette-20261014-1",
+          "raw": "css/components/navigation/compartido/coherencia-visual.css?v=tintin-20261023-header-dropup-4",
           "target": "css/components/navigation/compartido/coherencia-visual.css",
           "line": 72,
           "exists": true
@@ -31957,8 +31957,8 @@
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
-      "bytes": 16173,
-      "sha256": "e65eaf49266ce461c53a548fe31ca70f8ae4306e7df5fa89382d30793b2d421f",
+      "bytes": 18086,
+      "sha256": "c1cd319cea3b1f536d4b275294952941614f12f179b06b9e17d7b166972c0d12",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32102,8 +32102,8 @@
     },
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
-      "bytes": 6240,
-      "sha256": "6adaece219353b8c62f95a2184c641c0e5926e22edd4781ab6f86c119f60433d",
+      "bytes": 6145,
+      "sha256": "da1ff64795405806968a7436dc115e10e0211300c296b492f9a0cae7d8fc8466",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32178,8 +32178,8 @@
     },
     {
       "path": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
-      "bytes": 1552,
-      "sha256": "d6a8363fadb58263fb7d30df6df6165c8d5aa3220b40b30c14fcfc95cb9c471d",
+      "bytes": 1548,
+      "sha256": "f64330450dba5a7ca23f033786fbb5f97994129c2b80510c80e54f66b7f96d0e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32233,8 +32233,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 12937,
-      "sha256": "0ac95d5d2a8920c5ba112fec4a8c2b3724838408066665589f84d0b14a5b012e",
+      "bytes": 12857,
+      "sha256": "76ae7d07a542966f20c95092e9358d7bc5bd600140edce38fdfb1c33cd2ee22b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32307,7 +32307,7 @@
           "line": 11
         },
         {
-          "raw": "./compartido/recursos-navegacion.js?v=tintin-20261011-boutique-4-domain-prepared-20261012-6-palette-20261014-1-logos-bottom-20261015-1-css-20261015-1",
+          "raw": "./compartido/recursos-navegacion.js?v=tintin-20261023-header-dropup-5",
           "target": "js/components/navigation/compartido/recursos-navegacion.js",
           "dynamic": false,
           "line": 12
@@ -34317,8 +34317,8 @@
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "bytes": 1895,
-      "sha256": "6b5cc7fdf563e92024afa65146022de4bf7d106c34c20bae5133b351e2feaf05",
+      "bytes": 1896,
+      "sha256": "5ecfab4341caca09eb1582f60b23fc51ba50ec67d83bf548619b016b509fb608",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40855,8 +40855,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 29790,
-      "sha256": "9ea4acf54a53ac0afa0b4d171299691edf46bda4f162b1d53e7a490185a5366e",
+      "bytes": 29693,
+      "sha256": "4c0a0afd75059a3771ddcdd297f88bc7dbb1882d8866879a79e8614afba19a43",
       "syntax": {
         "ok": true,
         "error": ""
@@ -44519,8 +44519,8 @@
     },
     {
       "path": "tests/catalog/search-responsive.spec.js",
-      "bytes": 4832,
-      "sha256": "20b3c154f81a8cb9588a7e6e471ee19cec5c44bd094f00cc35d674a9d4975e3f",
+      "bytes": 5118,
+      "sha256": "fca516e74a717359060c94761fa9b488013d08b827a8710756a43193cc679464",
       "syntax": {
         "ok": true,
         "error": ""
@@ -45379,8 +45379,8 @@
     },
     {
       "path": "tests/checkout/public-checkout-policy.test.mjs",
-      "bytes": 18924,
-      "sha256": "d0a67082c5ef41ef86283bde0a3d693c3344b4a49c56e5837b10e7c974d7cc9e",
+      "bytes": 20214,
+      "sha256": "9316f677d29dfbffdb98ee3f67b9a402a8fb25e8bbbd7074f07ceaa537f42d68",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48704,8 +48704,8 @@
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
-      "bytes": 31592,
-      "sha256": "7011f162b5cad375ce96f47e183a68c748a39863cdc15a9962b5a4c5bb980853",
+      "bytes": 38851,
+      "sha256": "f1b139b871193fe409086fb69fdcb7ef8fd523ce713fffb2227e1f2620acff75",
       "syntax": {
         "ok": true,
         "error": ""
@@ -51779,8 +51779,8 @@
     },
     {
       "path": "tests/runtime/boutique-surfaces.spec.js",
-      "bytes": 8820,
-      "sha256": "515c89f1dfd88f906ca03681d24347e3bf9ce2b6f31b4cb5d42c6906fb66d5c1",
+      "bytes": 8955,
+      "sha256": "3607145bf385c6c8b48d70fb7c58b578e62a0371073889cd7a170ad3d606c582",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55666,8 +55666,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 18268,
-      "sha256": "57bd7dc7b5f64d9b2747862c2325e991255a8a6b22c468dd9175efc6a9147e5b"
+      "bytes": 18171,
+      "sha256": "761115df5ed365559670aa4c0bac7278987e01fff403446c38f7705bee520220"
     },
     {
       "path": "AGENTS.md",
@@ -55702,8 +55702,8 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 31313,
-      "sha256": "cfe82bef1875c49649df165b3234f3eea740f10eedc4fb456546a58eacbfe59b"
+      "bytes": 31216,
+      "sha256": "64ac7216a3126645b893d23a71324a16292556772d92a2101e23073f9f7413ed"
     },
     {
       "path": "admin-images.html",
@@ -56362,20 +56362,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 19868,
-      "sha256": "408ffaa59b24caa3734052286ac36a04e622f219aa28054260aa11ad75d5123a"
+      "bytes": 19771,
+      "sha256": "662d3cd20d0273255ffa87197fa230f0ac48957a95cdaa004b29f989584d4433"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 59250,
-      "sha256": "7b24b0fd5956ef3e9a02463aa123c935a913919f1f659b249ebe158d1e288d42"
+      "bytes": 59153,
+      "sha256": "14d5162c751fa62d9ffb6ff967be92fd9a750804fa5daf7d29afc6b0ce950edc"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 132762,
-      "sha256": "5582d2faff27633658911b3c2b5d99b6ca960c5988fb28d2cc1d601eceb4d381"
+      "bytes": 132665,
+      "sha256": "e8de48530b60bdfbf89453490aacea27bd451392dfc7bcd286d516cabee687c8"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -56656,8 +56656,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 21544,
-      "sha256": "c1faf0b98ed14b9027a6a8c0b4c64325c89081f5875b6899622d7e601fdfeea5"
+      "bytes": 21447,
+      "sha256": "c0be487b768350f1b5e91a565ee39ec172160a4af19c98485ae83fe77b35421a"
     },
     {
       "path": "config/account-contract.json",
@@ -56686,8 +56686,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 14472,
-      "sha256": "429e078f5528276c55c33bbb1a2ea9f1fc222d0bada5474b371d55079f9d0012"
+      "bytes": 14465,
+      "sha256": "513736ab75fb08a86fafc26260e6e472fcb4b61235383482865e5492358b0303"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56699,7 +56699,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "551aac4a58926ba392225e789328f091baa70987841651fda91db250f35f13cf"
+      "sha256": "c115a57a5946ed1b031c57051d968bcd1a895c14c13734adf7f5c079ef237d02"
     },
     {
       "path": "config/public-site.json",
@@ -56716,8 +56716,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 26557,
-      "sha256": "01960949b7463325bd287cb255da0ac7e1a360c408e9959f3a5fccafc6cdb5fb"
+      "bytes": 26460,
+      "sha256": "22b99616e9e499fafdab8ae5cb5cb765ff1bed04f0eedf8d99d1642a85700d43"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -56854,14 +56854,14 @@
     {
       "path": "css/components/navigation/compartido/busqueda.css",
       "extension": ".css",
-      "bytes": 4434,
-      "sha256": "07c40b852e1565faf3690561922b9866db3a3ba63ec2acc6fd3bbc4538bb7c0b"
+      "bytes": 4471,
+      "sha256": "2af24661a35aef3f2b094307842e2e1fc5dfb2ff5496d5ea7b411dfeb0f96292"
     },
     {
       "path": "css/components/navigation/compartido/coherencia-visual.css",
       "extension": ".css",
-      "bytes": 20606,
-      "sha256": "4f9bb343cec43d4b2d9c2b0a9d16a216bc42294d972fa55d6227d4d47aa9e639"
+      "bytes": 25690,
+      "sha256": "e1cdb929ea1f9e52e33ae6c4133a4c13a17abe8466564c19efd9ca6e03425676"
     },
     {
       "path": "css/components/navigation/compartido/control-paneles.css",
@@ -57010,14 +57010,14 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 474620,
-      "sha256": "59dbcab7bb87452669202788937cf290b6e3e2d922b490e177db494869328ca8"
+      "bytes": 479741,
+      "sha256": "d0a0c0033b04a4f276ed204bbc6a7fd2ee862fd7b5c26285f0d8702ee21d6b63"
     },
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 393236,
-      "sha256": "b891ddd7b377432386800e48cc952140f0cffc6ebe57c3d55e978c379291edb3"
+      "bytes": 398357,
+      "sha256": "4749e701a6cd4c5079913c794f12ce45d0a087f551fd9714f48a00aea0c57eea"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
@@ -57358,8 +57358,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 844707,
-      "sha256": "81cd691dbfec10035cb359693118e08eb02a995f52fc9dee8b1969b37e721f35"
+      "bytes": 852636,
+      "sha256": "4b758005aab694d732b50c6fbe2fa8e4e58489c5919ad6e7ae2864c5f84f0edf"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57778,8 +57778,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 108686,
-      "sha256": "875db8790c60e81329cf735e400f76fc78245da85c44a7e93c267d99076aaeb7"
+      "bytes": 110086,
+      "sha256": "2d2ecf138e6912bf82c9832673d4f74ecdaa72cdbc029cf92511020ed3c5c71c"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -57946,8 +57946,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 23554,
-      "sha256": "6e6611f92f226dae7459dc6071deda341a187f8d3b437ee41e371d2aa762bf1e"
+      "bytes": 23457,
+      "sha256": "13ec2bf58b428fed189c7743aa8a8d1483fb9bff46e977be293d858fef76a054"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -58480,8 +58480,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 46794,
-      "sha256": "d87bacb0c2b465e49352a70819812447a7090deabfbc6cf06a5e6e69948de2e9"
+      "bytes": 46697,
+      "sha256": "2d9f162a9f9d7f9b2c41ec9d8a25b4426a047c7ded30901b1800e849dc0cb23a"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -59236,8 +59236,8 @@
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
       "extension": ".js",
-      "bytes": 16173,
-      "sha256": "e65eaf49266ce461c53a548fe31ca70f8ae4306e7df5fa89382d30793b2d421f"
+      "bytes": 18086,
+      "sha256": "c1cd319cea3b1f536d4b275294952941614f12f179b06b9e17d7b166972c0d12"
     },
     {
       "path": "js/components/navigation/compartido/enrutador.js",
@@ -59290,8 +59290,8 @@
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
       "extension": ".js",
-      "bytes": 6240,
-      "sha256": "6adaece219353b8c62f95a2184c641c0e5926e22edd4781ab6f86c119f60433d"
+      "bytes": 6145,
+      "sha256": "da1ff64795405806968a7436dc115e10e0211300c296b492f9a0cae7d8fc8466"
     },
     {
       "path": "js/components/navigation/compartido/registro-paneles.js",
@@ -59314,8 +59314,8 @@
     {
       "path": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
       "extension": ".js",
-      "bytes": 1552,
-      "sha256": "d6a8363fadb58263fb7d30df6df6165c8d5aa3220b40b30c14fcfc95cb9c471d"
+      "bytes": 1548,
+      "sha256": "f64330450dba5a7ca23f033786fbb5f97994129c2b80510c80e54f66b7f96d0e"
     },
     {
       "path": "js/components/navigation/compatibilidad/navegacion-compartida.js",
@@ -59344,8 +59344,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 12937,
-      "sha256": "0ac95d5d2a8920c5ba112fec4a8c2b3724838408066665589f84d0b14a5b012e"
+      "bytes": 12857,
+      "sha256": "76ae7d07a542966f20c95092e9358d7bc5bd600140edce38fdfb1c33cd2ee22b"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -59824,8 +59824,8 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 1895,
-      "sha256": "6b5cc7fdf563e92024afa65146022de4bf7d106c34c20bae5133b351e2feaf05"
+      "bytes": 1896,
+      "sha256": "5ecfab4341caca09eb1582f60b23fc51ba50ec67d83bf548619b016b509fb608"
     },
     {
       "path": "js/orders/ciclo-pedido.mjs",
@@ -60310,8 +60310,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72803,
-      "sha256": "ac2e851d454abed46d024655f7efe74188f2a39574ebae30a4a4d685cc3e0421"
+      "bytes": 72706,
+      "sha256": "c69e09e3cdc7f692bbe0294d397e0303a8557f3c714e9b2db1409afd7d526b15"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -60514,8 +60514,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 57682,
-      "sha256": "407325b83f2f5743a493905d67e7b10cf0d40c94c9aecd75768c06d30c39bb1d"
+      "bytes": 57585,
+      "sha256": "66e955411ad3cde6539b1109c2f39aa0cbae3e8b25cad15836acedc967f57cf3"
     },
     {
       "path": "playwright.config.js",
@@ -60538,14 +60538,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 21223,
-      "sha256": "2433c279527546f679458bc95b274e2d72a349f6d4841bb704899569ea6777cc"
+      "bytes": 21126,
+      "sha256": "f2abad7aaab4bf14a23f453bacfbf4efce6a106e19e0660fb0c486eb6e6e8324"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 25422,
-      "sha256": "f952bdd3ff31d0449edf12217fa553153740184eed437a17a1f7edef79266d74"
+      "bytes": 25325,
+      "sha256": "acd4982d82bf8819eb0276bf22a0fe08e5e24fb23ed5a42e0a037c0a8c0daea5"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -60556,8 +60556,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 27049,
-      "sha256": "5cd8a8de3b4ba0a067acb9e7a8ec3c7399541f819e77a85ef5b1573b83066967"
+      "bytes": 26952,
+      "sha256": "2b3eb69e43aaf906e2900b18ef8f0e80d5db8fe15b28dd6657b86c864cfaefb2"
     },
     {
       "path": "robots.txt",
@@ -61390,8 +61390,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74320,
-      "sha256": "4bf9bf492c4e54b4fefcfe3fc1028f6419ccdb673bf44e1ec5403fb973c21685"
+      "bytes": 74139,
+      "sha256": "80773c8295d936ef21557540c2304ddee45945bbc8dad55811e326910db0ee06"
     },
     {
       "path": "scripts/ci-commands.js",
@@ -61696,8 +61696,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 29790,
-      "sha256": "9ea4acf54a53ac0afa0b4d171299691edf46bda4f162b1d53e7a490185a5366e"
+      "bytes": 29693,
+      "sha256": "4c0a0afd75059a3771ddcdd297f88bc7dbb1882d8866879a79e8614afba19a43"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -61780,8 +61780,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 23407,
-      "sha256": "ffa872564814535ea3d75699410b4514681766c823c8b949dfde3bc11c5d7bb0"
+      "bytes": 23310,
+      "sha256": "17b04d2f3389ef424057d2f7e06ceba42dcd49e67128dfd98600e812ba77f7c5"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -62296,8 +62296,8 @@
     {
       "path": "tests/catalog/search-responsive.spec.js",
       "extension": ".js",
-      "bytes": 4832,
-      "sha256": "20b3c154f81a8cb9588a7e6e471ee19cec5c44bd094f00cc35d674a9d4975e3f"
+      "bytes": 5118,
+      "sha256": "fca516e74a717359060c94761fa9b488013d08b827a8710756a43193cc679464"
     },
     {
       "path": "tests/catalog/variant-presentation.test.mjs",
@@ -62446,8 +62446,8 @@
     {
       "path": "tests/checkout/public-checkout-policy.test.mjs",
       "extension": ".mjs",
-      "bytes": 18924,
-      "sha256": "d0a67082c5ef41ef86283bde0a3d693c3344b4a49c56e5837b10e7c974d7cc9e"
+      "bytes": 20214,
+      "sha256": "9316f677d29dfbffdb98ee3f67b9a402a8fb25e8bbbd7074f07ceaa537f42d68"
     },
     {
       "path": "tests/checkout/reliability-closure.test.mjs",
@@ -62956,8 +62956,8 @@
     {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
-      "bytes": 31592,
-      "sha256": "7011f162b5cad375ce96f47e183a68c748a39863cdc15a9962b5a4c5bb980853"
+      "bytes": 38851,
+      "sha256": "f1b139b871193fe409086fb69fdcb7ef8fd523ce713fffb2227e1f2620acff75"
     },
     {
       "path": "tests/navigation/home-collection-links.test.mjs",
@@ -63478,8 +63478,8 @@
     {
       "path": "tests/runtime/boutique-surfaces.spec.js",
       "extension": ".js",
-      "bytes": 8820,
-      "sha256": "515c89f1dfd88f906ca03681d24347e3bf9ce2b6f31b4cb5d42c6906fb66d5c1"
+      "bytes": 8955,
+      "sha256": "3607145bf385c6c8b48d70fb7c58b578e62a0371073889cd7a170ad3d606c582"
     },
     {
       "path": "tests/runtime/checkout-receipt.spec.js",
