@@ -1,17 +1,27 @@
 {
   "schemaVersion": 1,
-  "baseCommit": "5ec776f0431e6daa18d9b943eff36d2c1643b7e9",
-  "reason": "Actualizar DOMPurify a3.4.17 e ip-address a10.7.4 por avisos vigentes; npm audit completo y produccion sin vulnerabilidades, smoke de sanitizacion e IPv6 y watcher Firebase aprobados",
+  "baseCommit": "2050f5cb68780443d400a9725aa04d2f61b87e23",
+  "reason": "Reubicar acciones canónicas del editor en menú superior accesible y recuperar espacio en todos los dispositivos",
   "files": [
     {
-      "path": "package-lock.json",
-      "oldHash": "f3d1bf889f377c647a207d30781da9272ca5a964c7bf8ac266657b62a9c2d05c",
-      "newHash": "67e53d15c132cf439a86a42041bdd74cecb90d3ad39cd2cbfc58a44b75ba04bd"
+      "path": "admin.html",
+      "oldHash": "bd732a93f0bd9e1b89f70b6310f99d6e351dd3e80f6672157b9c0c3c04ebaf4d",
+      "newHash": "5e4c8a5061be43666ba877d128e34b5f792235a014059de8d5204fc3a2da1038"
     },
     {
-      "path": "package.json",
-      "oldHash": "f4d576bdc29437fbd3924844c4919497e639ec3913218d178e844ceec47256f3",
-      "newHash": "adf302ffb300ffbdc0ca1cd12fa1e1a4b7ca3bd4eeadd738cefe183aee0a7693"
+      "path": "css/admin/shopify-commerce-admin.css",
+      "oldHash": "f4238754df7685915221a9b8c6bdac49bdcfc206c0976e516684d039eb6b7ce7",
+      "newHash": "88ea6abcb8108988cbea78ea722724ade10511c06a58c66688c8137201814fa2"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "oldHash": "3fa4c50b37b55aa68553377fe040cc2c5e7abeb2a41e9ec43dc82dc4cdb001fb",
+      "newHash": "b0e166c8f0cc4b569f76c0234743094d9903a288e0c2cd0e7cab344096960205"
+    },
+    {
+      "path": "scripts/cache-version-baseline.json",
+      "oldHash": "317851d52ee6d484f43364d44ee51ab518195e941f211a5d47533924cdf25415",
+      "newHash": "6cc2db16ad087fd166668f9a168f20a78bada2b58b86e00279691cb3476278e3"
     }
   ],
   "affectedRecords": []

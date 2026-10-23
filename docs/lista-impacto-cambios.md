@@ -651,3 +651,7 @@ Autoridades fotos-por-color/fotos-por-variante y sus consumidores admin-app/admi
 ## 2026-10-22 — Actualizacion puntual de dependencias
 
 package.json/lock: DOMPurify3.4.17 y ip-address10.7.4. Actualizar plan protegido y diagnostico desde sus autoridades; verificar instalacion fija, audit completo/produccion y compatibilidad del watcher Firebase. El bundle distribuido por Monaco permanece intacto; no atribuirle la version del paquete npm sustituido. No se modifica el PR de Productos ni sus fuentes.
+
+## 2026-10-22 — Menú de acciones del editor
+
+Autoridades: interfaz-productos-adaptable, shopify-commerce-admin/CSS y admin.html. Guardar/Cancelar conservan IDs y handlers; sus nodos se mueven al menú del encabezado y se retira el Volver redundante. Cierre accesible por Escape, foco y puntero fuera; el editor mantiene su guard de borradores, controles de subida y permisos. Se eliminan estilos antiguos del pie, sin cambios al encabezado público de otro agente. Matriz de botones/stock/fotos/borradores/rotación actualizada; fuentes CSS/JS usan tag inmutable nuevo, plan y manifiesto canónicos. Evidencia y límites en CURRENT_STATE y PR.
