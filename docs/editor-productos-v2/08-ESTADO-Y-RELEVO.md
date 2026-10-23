@@ -7,7 +7,7 @@
 - Worktree: C:/Users/Windows/.codex/worktrees/variant-engine-v2/tintinaccs.
 - Rama: codex/motor-comercial-variantes-v2. Consultar su HEAD al retomar; no usar SHA de fase1 como validación funcional.
 - Base funcional6ac1fdf2546fa859412399f88eccf207991880de; documentación heredada a0f89051f de PR1216. El PR documental queda intacto; la nueva entrega incluye esos documentos y depende de su revisión.
-- Fuentes del motor en commits separados, listados en07. PR funcional en borrador, nunca auto-merge. Ver referencia final en la entrega y GitHub de esta rama.
+- Fuentes del motor en commits separados, listados en07. [PR1217](https://github.com/tintinaccs/tintin-web/pull/1217) OPEN/en borrador, sin auto-merge. GitHub verificó autoMergeRequest=null; CI del HEAD final pendiente. Consultar Git al retomar, no heredar CI de otra cabeza.
 - Checkout principal sucio y rama visual1213 ajenos: no tocarlos. No activar automations antiguas de publicación para esta fase.
 
 ## Resultado comprobado
@@ -71,3 +71,5 @@ Fase0 creada por PROMPT0: nueve documentos y entrada CURRENT_STATE, sin funciona
 
 
 Rama de implementación separada: codex/motor-comercial-variantes-v2, parte de a0f89051f (documentación fase1) con fuentes funcionales idénticas a main6ac1. No hubo cambios funcionales de main entre auditoría e inicio. PR documental1216 permanece intacto.
+
+Cierre local: build Pages/CSP/rutas/diagnóstico19páginas, caché364/67 y protección78registros/544archivos PASS; plan canónico67archivos/68registros contra6ac1. audit:architecture-contracts,36architecture-gates,contenido/fase6 y diffcheck PASS. PR1217 sólo revisión: no publicar ni iniciar fase3.

@@ -4,7 +4,7 @@ Instrucción expresa FASE2 registrada como aprobación de fase1 en D014. Rama se
 
 PASS_LOCAL fresco:454commerce,406compatibilidad,84fast+1Chromium import,51Chromiumselección+1tarjeta/búsqueda; conteos solapados. Emulador Firestore real/demo/loopback213controles+6integración: carrera última unidad, precio canónico, cancelación/replay. Detectado y corregido RED/verde: cancelación120 unidades de dos combinaciones; límite99 por combinación. Comandos/evidencia y fallos intermedios corregidos en [matriz](../editor-productos-v2/05-MATRIZ-DE-PRUEBAS.md), contrato10 y [relevo](../editor-productos-v2/08-ESTADO-Y-RELEVO.md). Commits pequeños, sin motor ni colecciones alternativos. No se heredan PASS.
 
-Entrega para revisión en borrador; CI del HEAD y producción NOT_VERIFIED. No publicación, reglas desplegadas, migraciones ni compras reales; fase3 no iniciada. V2 no expuesto: falta escritor/editor compatible antes de activar productos reales. H5/H6 y futuras capacidades visuales/estadísticas no se cierran. No reactivar seguimiento antiguo de merge/deploy. Se conserva el historial debajo.
+Entrega [PR1217](https://github.com/tintinaccs/tintin-web/pull/1217) en borrador, sin auto-merge; CI del HEAD y producción NOT_VERIFIED. Build Pages/CSP/rutas/diagnóstico19páginas, caché364/67, protección78/544 y plan67/68 PASS_LOCAL; arquitectura36/36, contenido/fase6 y diffcheck correctos. No publicación, reglas desplegadas, migraciones ni compras reales; fase3 no iniciada. V2 no expuesto: falta escritor/editor compatible antes de activar productos reales. H5/H6 y futuras capacidades visuales/estadísticas no se cierran. No reactivar seguimiento antiguo de merge/deploy. Se conserva el historial debajo.
 
 ## 2026-10-23 — Editor v2 fase1: auditoría y plan (Codex /root)
 
