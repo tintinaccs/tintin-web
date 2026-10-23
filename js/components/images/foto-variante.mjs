@@ -1,4 +1,4 @@
-import { resolveProductVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variant-identity-1';
+import { resolveProductVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
 /* Misma foto por color en producto, carrito, checkout y pedido canónico. */
 const metadata = new Set(['price', 'sku', 'imageUrl', 'imageUrls', 'stock', 'active', 'colorHex', 'swatch']);
 function safeImage(value) {

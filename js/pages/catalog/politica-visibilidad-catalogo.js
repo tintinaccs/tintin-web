@@ -6,10 +6,10 @@ import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
 import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261015-public-collection-data-1';
-import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20261023-checkout-variant-identity-1';
+import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20261023-checkout-variants-header-2';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
-import { variantStockLimit, hasProductStock, resolveProductVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variant-identity-1';
-import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-checkout-variant-identity-1';
+import { variantStockLimit, hasProductStock, resolveProductVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-checkout-variants-header-2';
 
 import { hasPublicProductFields } from '../../core/store/publicacion-producto.mjs?v=tintin-20261007-public-consistency-1';
 

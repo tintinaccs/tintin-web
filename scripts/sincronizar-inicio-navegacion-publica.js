@@ -14,15 +14,15 @@ const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261023-checkout-variant-identity-1';
+const TIENDA_VERSION = 'tintin-20261023-checkout-variants-header-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
-const LOADER_VERSION = 'tintin-20261023-checkout-variant-identity-1';
+const LOADER_VERSION = 'tintin-20261023-checkout-variants-header-2';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261023-header-dropup-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20261023-checkout-header-reconciled-1';
-const NAV_ENTRY_VERSION = 'tintin-20261023-checkout-header-reconciled-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261023-checkout-variants-header-2';
+const NAV_ENTRY_VERSION = 'tintin-20261023-checkout-variants-header-2';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
-const VISUAL_BUILDER_VERSION = 'tintin-20261023-checkout-variant-identity-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20261023-checkout-variants-header-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20261022-avatar-inicial-1';
 const PROFILE_GATE_VERSION = 'tintin-20261022-avatar-inicial-1';
 const NAV_HEADER_VERSION = 'tintin-20261010-whatsapp-release-5-palette-20261014-1-logos-bottom-20261015-1';
@@ -184,7 +184,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-checkout-maintenance=\"1\"",
       "css/pages/checkout/checkout-maintenance.css",
-      "tintin-20261008-checkout-step-labels-1-palette-20261014-1"
+      "tintin-20261023-checkout-header-clearance-1"
     ],
     [
       "id=\"tt-payment-methods-style\"",
