@@ -7136,7 +7136,9 @@ html body :is(#tt-header-desktop-tablet,#tt-header-tablet,#tt-tabbar,[data-tt-su
 @media (max-width:767px) and (max-height:500px) {
   html body :is(#cart-drawer,#account-drawer,#notifications-drawer,#collections-sheet) :is(.tt-cart-header,.tt-account-drawer-header,.tt-notifications-head,.tt-sheet-header) { min-height:64px !important; padding-block:8px !important; }
   html body :is(#cart-drawer,#notifications-drawer,#collections-sheet) .tt-drawer-brand-logo { display:none !important; }
-  html body #collections-sheet .tt-sheet-info-links { display:none; }
+  html body #collections-sheet .tt-sheet-footer { display:flex !important; align-items:center; gap:12px; }
+  html body #collections-sheet .tt-sheet-info-links { display:flex; flex:0 0 auto; gap:12px; margin:0; }
+  html body #collections-sheet .tt-sheet-footer > .tt-btn { flex:1 1 0%; min-width:0; width:auto !important; white-space:normal; padding-inline:12px; font-size:12px; line-height:1.3; }
 }
 /* The late Store Gate stylesheet must not place its retry notice over the
    header controls or a modal's footer, including a landscape phone. */

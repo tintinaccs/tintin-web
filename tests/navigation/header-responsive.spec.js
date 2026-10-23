@@ -529,7 +529,7 @@ for (const [width, height] of [[320,568],[350,724],[390,844],[600,960],[768,1024
   });
 }
 
-for (const [width, height] of [[320,700],[390,844],[667,375],[768,1024],[844,390],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]]) {
+for (const [width, height] of [[320,375],[320,700],[390,844],[667,375],[768,1024],[844,390],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]]) {
   test(`paneles del header: acciones, foco y límites ${width}x${height}`, async ({ page }) => {
     await mockGuestNavigation(page);
     await openPublicPage(page, { width, height }, '/envios');
@@ -553,6 +553,12 @@ for (const [width, height] of [[320,700],[390,844],[667,375],[768,1024],[844,390
         const nav = await page.locator('#tt-tabbar').boundingBox();
         expect(bounds.y + bounds.height).toBeLessThanOrEqual(nav.y);
         await expect(page.locator(panel)).toHaveCSS('border-top-left-radius','24px');
+        if (panel === '#collections-sheet') {
+          for (const link of await page.locator('#collections-sheet .tt-sheet-footer a').all()) {
+            await expect(link).toBeVisible();
+            await link.click({trial:true});
+          }
+        }
       }
       if (panel === '#search-panel') await expect(page.locator('#search-input')).toBeFocused();
       if (width === 390 && panel === '#collections-sheet') await page.screenshot({ path:test.info().outputPath('mobile-dropup.png') });
