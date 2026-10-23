@@ -553,6 +553,7 @@ for (const [width, height] of [[320,375],[320,700],[390,844],[667,375],[768,1024
         const nav = await page.locator('#tt-tabbar').boundingBox();
         expect(bounds.y + bounds.height).toBeLessThanOrEqual(nav.y);
         await expect(page.locator(panel)).toHaveCSS('border-top-left-radius','24px');
+        await expect(page.locator(panel)).toHaveCSS('border-color','rgb(253, 236, 242)');
         if (panel === '#collections-sheet') {
           for (const link of await page.locator('#collections-sheet .tt-sheet-footer a').all()) {
             await expect(link).toBeVisible();
