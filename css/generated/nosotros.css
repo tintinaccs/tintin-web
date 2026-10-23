@@ -7046,8 +7046,8 @@ html body :is(#tt-header-desktop-tablet,#tt-header-tablet,#tt-tabbar,[data-tt-su
 @media (max-width:767px) {
   html body :is(#search-panel.tt-search-panel,#cart-drawer,#account-drawer,#notifications-drawer,#collections-sheet) {
     inset:calc(var(--tt-panel-viewport-top,0px) + max(12px,env(safe-area-inset-top))) 0 auto !important;
-    width:100% !important;
-    max-width:100% !important;
+    width:100vw !important;
+    max-width:100vw !important;
     height:calc(var(--tt-panel-viewport-height,100dvh) - max(12px,env(safe-area-inset-top)) - var(--tt-panel-nav-space,108px)) !important;
     max-height:calc(var(--tt-panel-viewport-height,100dvh) - max(12px,env(safe-area-inset-top)) - var(--tt-panel-nav-space,108px)) !important;
     border:1px solid var(--tt-drawer-border,#ecd8e0) !important;
