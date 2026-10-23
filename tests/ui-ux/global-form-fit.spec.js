@@ -114,7 +114,13 @@ for (const width of [390, 844, 1024, 1440]) {
     await expect.poll(() => page.evaluate(() => window.colorReads)).toEqual(['appearance','tintin-unico']);
     // El fixture ya confirmó su sesión simulada; revelar el shell como hace Auth.
     await page.evaluate(() => document.documentElement.classList.add('adm-auth-ready'));
+    // CI puede conservar el puntero sobre Comprar al revelar el formulario.
+    // Reproducir ese estado y comprobar la publicación tanto en hover como en reposo.
+    await page.locator('#public-action').hover();
     await page.evaluate(() => window.publishTintin({tokens:{'btn-primary-bg':'#E8AFC2','btn-primary-hover':'#D894AF','btn-danger-bg':'#B91C1C','field-border':'#D5A5B8','field-border-focus':'#B87694'}}));
+    await expect(page.locator('#public-action')).toHaveCSS('background-color','rgb(216, 148, 175)');
+    await page.mouse.move(width - 1, 899);
+    await expect.poll(() => page.locator('#public-action').evaluate(el => el.matches(':hover'))).toBe(false);
     await expect(page.locator('#public-action')).toHaveCSS('background-color','rgb(232, 175, 194)');
     await expect(page.locator('#admin-action')).toHaveCSS('background-color','rgb(232, 175, 194)');
     await expect(page.locator('#danger')).toHaveCSS('background-color','rgb(185, 28, 28)');

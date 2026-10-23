@@ -95,3 +95,12 @@ color, y la comprobación de hover real se mantiene.
 PASS_LOCAL de la corrección: 40/40 Chromium (10 repeticiones en cuatro anchos)
 y 20/20 WebKit (cinco repeticiones), sin reintentos. La auditoría del nuevo SHA
 y su publicación siguen pendientes; el resultado fallido anterior no se omite.
+
+
+## 2026-10-23 — Contraste con los logs y conciliación final
+
+La revisión de Actions obtiene el log original del job120500210905: el fallo era la primera comprobación del color de #public-action, línea118, antes del resize. Recibía el color hover correcto mientras la prueba esperaba reposo. La sección anterior atribuía el problema al resize; el ajuste de c86201bf sólo estabilizaba ese estado posterior y no cubría el origen mostrado en el log.
+
+Se reproduce de forma determinista colocando el puntero en Comprar antes de publicar el esquema. El fixture conserva ese caso: verifica el color hover actualizado durante la publicación, retira el puntero, exige ausencia real de :hover y verifica el color de reposo. Conserva los controles posteriores de hover, peligro, foco y resize; no cambia CSS ni tokens esperados. La rama incorpora mainb3997c7c por merge normal y preserva sus fuentes de encabezados/dropup y reservas de Checkout. Inventario de Actions, excepción del job del otro agente y verificación actual: RECUPERACION_ACTIONS_PR_20261023.md.
+
+Verificación de la conciliación:231/231 Chromium y20/20 WebKit, más18/18 contratos de permisos/color/paleta. Corrección focal posterior:40/40 Chromium y20/20 WebKit repetidos sin reintentos. Los lotes focales se solapan con la matriz y no se suman como casos únicos. CI nueva del SHA final requerida.

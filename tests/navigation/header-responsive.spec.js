@@ -426,10 +426,10 @@ test('las imágenes de Tienda usan el mismo origen absoluto en desktop, tablet y
   }
 });
 
-test('Alertas usa la superficie compartida sólida y conserva el foco', async ({ page }) => {
+for (const [width,height] of [[390,844],[667,375],[768,1024],[1024,768],[1440,900]]) test(`Alertas usa la superficie compartida sólida y conserva el foco ${width}x${height}`, async ({ page }) => {
   await mockGuestNavigation(page);
   await mockNotificationData(page);
-  await openPublicPage(page, { width: 1440, height: 900 }, '/contact');
+  await openPublicPage(page, { width, height }, '/contact');
   await expect(page.locator('#account-panel .tt-account-primary')).toBeAttached();
 
   // El evento representa la resolución autenticada del coordinador sin
@@ -440,7 +440,7 @@ test('Alertas usa la superficie compartida sólida y conserva el foco', async ({
     }));
   });
 
-  const trigger = page.locator('#btn-notifications');
+  const trigger = page.locator(width < 768 ? '#tabbar-notifications' : width <= 1024 ? '#btn-notifications-tablet' : '#btn-notifications');
   await expect(trigger).toBeVisible();
   await trigger.click();
 
@@ -528,3 +528,123 @@ for (const [width, height] of [[320,568],[350,724],[390,844],[600,960],[768,1024
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }
+
+for (const [width, height] of [[320,375],[320,700],[390,844],[667,375],[768,1024],[844,390],[1024,768],[1180,820],[1366,768],[1440,900],[1920,1080]]) {
+  test(`paneles del header: acciones, foco y límites ${width}x${height}`, async ({ page }) => {
+    await mockGuestNavigation(page);
+    await openPublicPage(page, { width, height }, '/envios');
+    const mobile = width < 768, tablet = width <= 1024;
+    const actions = [
+      [mobile ? '#tabbar-tienda' : tablet ? '#btn-menu-tablet' : '#btn-tienda', mobile ? '#collections-sheet' : tablet ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel'],
+      [mobile ? '#tabbar-search' : tablet ? '#btn-search-tablet' : '#btn-search', '#search-panel'],
+      [mobile ? '#tabbar-cart' : tablet ? '#btn-cart-tablet' : '#btn-cart', '#cart-drawer'],
+      [mobile ? '#tabbar-cuenta' : tablet ? '#btn-cuenta-tablet' : '#btn-cuenta', '#account-drawer'],
+    ];
+    for (const [trigger, panel] of actions) {
+      await page.locator(trigger).click();
+      await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('open');
+      await expect(page.locator(panel)).toHaveAttribute('aria-hidden','false');
+      const bounds = await page.locator(panel).boundingBox();
+      expect(bounds.x).toBeGreaterThanOrEqual(-1);
+      expect(bounds.y).toBeGreaterThanOrEqual(-1);
+      expect(bounds.x + bounds.width).toBeLessThanOrEqual(width + 1);
+      expect(bounds.y + bounds.height).toBeLessThanOrEqual(height + 1);
+      if (mobile) {
+        const nav = await page.locator('#tt-tabbar').boundingBox();
+        expect(bounds.y + bounds.height).toBeLessThanOrEqual(nav.y);
+        await expect(page.locator(panel)).toHaveCSS('border-top-left-radius','24px');
+        await expect(page.locator(panel)).toHaveCSS('border-color','rgb(253, 236, 242)');
+        if (panel === '#collections-sheet') {
+          for (const link of await page.locator('#collections-sheet .tt-sheet-footer a').all()) {
+            await expect(link).toBeVisible();
+            await link.click({trial:true});
+          }
+        }
+      }
+      if (panel === '#search-panel') await expect(page.locator('#search-input')).toBeFocused();
+      if (width === 390 && panel === '#collections-sheet') await page.screenshot({ path:test.info().outputPath('mobile-dropup.png') });
+      await page.keyboard.press('Escape');
+      await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('idle');
+      await expect(page.locator(trigger)).toBeFocused();
+      expect(await page.evaluate(() => document.documentElement.classList.contains('tt-surface-locked'))).toBe(false);
+    }
+  });
+}
+
+test('el dropup anima, permite cambiar durante el cierre y libera el fondo', async ({ page }) => {
+  await mockGuestNavigation(page);
+  await openPublicPage(page,{width:390,height:844},'/envios');
+  await page.evaluate(() => {
+    window.__sheetFrames = [];
+    const element = document.getElementById('collections-sheet');
+    const animate = element.animate.bind(element);
+    element.animate = (frames, options) => {
+      window.__sheetFrames.push(frames);
+      return animate(frames, options);
+    };
+  });
+  await page.locator('#tabbar-tienda').click();
+  await expect.poll(() => page.evaluate(() => window.__sheetFrames.flat().some(k => k.translate === '0 100%'))).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('open');
+  await page.locator('#tabbar-search').click();
+  await page.locator('#tabbar-cuenta').click();
+  await expect.poll(() => page.evaluate(() => [window.TintinSurfaceController.surface,window.TintinSurfaceController.state])).toEqual(['account','open']);
+  await expect(page.locator('[data-tt-surface].open')).toHaveCount(1);
+  await page.keyboard.press('Tab');
+  expect(await page.evaluate(() => !!document.activeElement.closest('#account-drawer,#tt-tabbar,#tt-privacy-consent'))).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('idle');
+  expect(await page.locator('.tt-footer').evaluate(el => !!el.closest('[inert]'))).toBe(false);
+});
+
+test('búsqueda se adapta al teclado y cierra al cruzar de dispositivo', async ({ page }) => {
+  await mockGuestNavigation(page);
+  await openPublicPage(page,{width:390,height:844},'/envios');
+  await page.locator('#tabbar-search').click();
+  await expect(page.locator('#search-input')).toBeFocused();
+  await page.evaluate(() => {
+    const viewport = new EventTarget();
+    viewport.height = 420; viewport.offsetTop = 24;
+    Object.defineProperty(window,'visualViewport',{value:viewport,configurable:true});
+    // Invoke the same resize path used by the real visual viewport.
+    window.dispatchEvent(new Event('resize'));
+  });
+  await expect.poll(() => page.locator('#search-panel').evaluate(el => Math.round(el.getBoundingClientRect().bottom))).toBe(432);
+  await expect(page.locator('#search-input')).toBeFocused();
+  await page.setViewportSize({width:1024,height:768});
+  await expect(page.locator('#search-panel')).toHaveAttribute('aria-hidden','true');
+  await expect(page.locator('html')).not.toHaveClass(/tt-surface-locked/);
+});
+
+test('movimiento reducido abre y cierra sin animación de desplazamiento', async ({ page }) => {
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await mockGuestNavigation(page);
+  await openPublicPage(page,{width:390,height:844},'/envios');
+  await page.locator('#tabbar-cart').click();
+  await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('open');
+  expect(await page.locator('#cart-drawer').evaluate(el => el.getAnimations().length)).toBe(0);
+  await page.locator('#btn-cart-close').click();
+  await expect(page.locator('#tabbar-cart')).toBeFocused();
+});
+
+test('las categorías se desplazan con el dedo y el fondo conserva su posición', async ({ page }) => {
+  await mockGuestNavigation(page);
+  await openPublicPage(page,{width:390,height:844},'/envios');
+  await page.evaluate(() => scrollTo(0,200));
+  await page.locator('#tabbar-tienda').click();
+  await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('open');
+  const grid = page.locator('#collections-sheet .tt-sheet-grid');
+  const box = await grid.boundingBox();
+  const session = await page.context().newCDPSession(page);
+  const x = box.x + box.width / 2, y = box.y + box.height - 30;
+  await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+  for (let step=1;step<=8;step++) {
+    await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:y-step*30}]});
+    await page.waitForTimeout(20);
+  }
+  await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  await expect.poll(() => grid.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
+  await page.keyboard.press('Escape');
+  await expect.poll(() => page.evaluate(() => window.TintinSurfaceController.state)).toBe('idle');
+  await expect.poll(() => page.evaluate(() => Math.round(scrollY))).toBe(200);
+});

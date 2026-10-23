@@ -22,11 +22,14 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.evaluate(()=>window.scrollTo(0,0));
  await page.locator('[aria-controls="search-panel"]:visible').first().click();
+ await expect.poll(()=>page.evaluate(()=>window.TintinSurfaceController.state)).toBe('open');
+ const searchHeight=(await page.locator('#search-panel').boundingBox()).height;
  await page.locator('#search-input').fill('TIN-00042');await expect(page.locator('#search-results .tt-search-result-copy strong')).toHaveText(['Anillo corazón']);
  await page.locator('#search-input').fill('anilo corazon');
  await expect(page.locator('#search-results .tt-search-result-copy strong')).toHaveText(['Anillo corazón']);
  await expect(page.locator('#search-results s')).toHaveText('Gs. 35.000');
  await expect(page.locator('#search-results')).toContainText('−29%');
+ if(width<=1024)expect((await page.locator('#search-panel').boundingBox()).height).toBeCloseTo(searchHeight,0);
  await page.locator('#search-input').press('ArrowDown');await expect(page.locator('#search-input')).toHaveAttribute('aria-activedescendant',/tt-search-result-/);
  await page.screenshot({path:`artifacts/commerce/search-${width}x${height}.png`});
 });

@@ -19,9 +19,9 @@ for(const width of [320,390,768,1024,1280,1440,1920])test(`paneles sólidos y ca
   for(const id of panels){
     await page.evaluate(id=>{document.querySelectorAll('[role="dialog"]').forEach(p=>{p.classList.toggle('open',p.matches(id));p.setAttribute('aria-hidden',String(!p.matches(id)));});},id);
     await page.waitForFunction(()=>document.getAnimations().every(a=>a.playState!=='running'));
-    const g=await page.locator(id).evaluate(el=>{const r=el.getBoundingClientRect();const h=el.querySelector('[class$="header"],.tt-notifications-head').getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,width:r.width,headWidth:h.width,scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,blur:getComputedStyle(el).backdropFilter};});
+    const g=await page.locator(id).evaluate(el=>{const r=el.getBoundingClientRect();const h=el.querySelector('[class$="header"],.tt-notifications-head').getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom,radius:getComputedStyle(el).borderTopLeftRadius,width:r.width,headWidth:h.width,scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,blur:getComputedStyle(el).backdropFilter};});
     expect(g.right).toBeLessThanOrEqual(width+1);expect(g.left).toBeGreaterThanOrEqual(-1);expect(g.scrollWidth).toBeLessThanOrEqual(g.clientWidth+1);expect(g.headWidth).toBeGreaterThanOrEqual(g.width-2);expect(g.blur).toBe('none');
-    if(width<768){expect(g.top).toBe(0);expect(g.width).toBe(width);}
+    if(width<768){expect(g.top).toBe(12);expect(g.width).toBe(width);expect(g.bottom).toBeCloseTo(900-108,0);expect(g.radius).toBe('24px');}
   }
   await page.evaluate(()=>{document.querySelectorAll('[role="dialog"]').forEach(p=>{p.classList.toggle('open',p.id==='collections-sheet');p.setAttribute('aria-hidden',String(p.id!=='collections-sheet'));});});
   await expect(page.locator('.tt-sheet-handle')).toHaveCount(0);
