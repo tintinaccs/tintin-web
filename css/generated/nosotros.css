@@ -2650,8 +2650,9 @@ body:has(.adm-main) .adm-cards-grid {
   --tt-ui-radius-md: 14px;
   --tt-ui-radius-card: clamp(16px, 2vw, 20px);
   --tt-ui-gutter: clamp(16px, 3vw, 32px);
-  --tt-ui-inset: clamp(16px, 2.2vw, 28px);
+  --tt-ui-inset: clamp(16px, 2vw, 24px);
   --tt-ui-gap: clamp(12px, 2vw, 24px);
+  --tt-ui-section-space: clamp(20px, 2.5vw, 32px);
 }
 
 /* Una misma voz visual en tienda, cuenta, compra y panel. Los tamaños de
@@ -2848,7 +2849,7 @@ html body:has(.adm-main) .adm-topbar {
 html body:has(.adm-main) .adm-content {
   max-width: 1600px;
   margin-inline: auto;
-  padding: clamp(20px, 3vw, 42px) clamp(16px, 3vw, 44px) 64px !important;
+  padding: var(--tt-ui-inset) var(--tt-ui-gutter) var(--tt-ui-section-space) !important;
 }
 
 html body:has(.adm-main) :is(.adm-card, .adm-table-wrap, .adm-modal, .adm-img-card) {
@@ -2859,13 +2860,13 @@ html body:has(.adm-main) :is(.adm-card, .adm-table-wrap, .adm-modal, .adm-img-ca
 
 html body:has(.adm-main) .adm-card-head {
   min-height: 64px;
-  padding: 18px 22px !important;
+  padding: 14px 18px !important;
   background: var(--tt-ui-surface) !important;
   border-bottom: 1px solid var(--tt-ui-line) !important;
 }
 
 html body:has(.adm-main) .adm-card-body {
-  padding: clamp(18px, 2.2vw, 28px) !important;
+  padding: var(--tt-ui-inset) !important;
 }
 
 html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-engagement-list,
@@ -2947,7 +2948,7 @@ html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea):focus {
 /* Responsive contract: menu never occupies the logo zone and toolbars can
    wrap/scroll without forcing the page wider than the viewport. */
 @media (max-width: 900px) {
-  html body:has(.adm-main) .adm-content { padding: 18px 16px 48px !important; }
+  html body:has(.adm-main) .adm-content { padding: 18px 16px var(--tt-ui-section-space) !important; }
   html body:has(.adm-main) .adm-card-head { align-items: flex-start; gap: 12px; flex-wrap: wrap; }
   html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-bulk-toolbar) { overflow-x: auto; }
 }
@@ -2956,7 +2957,7 @@ html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea):focus {
   html body:not(:has(.adm-main)) :is(.tt-product-card, .tt-coll-card, .tt-coll-page-card,
     .tt-review-card, .tt-review-form) { border-radius: 16px !important; }
   html body:has(.adm-main) .adm-sidebar-logo { min-height: 76px; padding: 16px 14px 12px !important; }
-  html body:has(.adm-main) .adm-content { padding: 14px 12px 38px !important; }
+  html body:has(.adm-main) .adm-content { padding: 14px 12px var(--tt-ui-section-space) !important; }
   html body:has(.adm-main) .adm-card { border-radius: 16px !important; }
   html body:has(.adm-main) .adm-card-body { padding: 16px !important; }
   html body:has(.adm-main) .adm-nav-item { margin-inline: 8px; }
@@ -3090,6 +3091,59 @@ html body:not(:has(.adm-main)) :is(.tt-colls-page-grid, .tt-products-grid):not(:
     flex: none;
   }
   html body:not(:has(.adm-main)) .cat-top { gap: 12px; }
+}
+
+/* Ritmo de contenido común: una sola reserva de navegación en body y una
+   escala corta entre bloques. No modifica alturas de fotos, mapas, controles
+   ni la pantalla independiente de acceso. El ancho de lectura de textos
+   legales y los gutters específicos de Catálogo se conservan. */
+html:root body:not(:has(.adm-main)) :is(.section, .section-sm,
+  .tt-collection-carousel, .tt-look-section, .tt-home-random-products,
+  .tt-best-sellers-section, .tt-reviews-section, .tt-instagram-section,
+  .tt-products-section, .tt-colls-page-section, .tt-related-section) {
+  padding-block: var(--tt-ui-section-space) !important;
+}
+html:root body:not(:has(.adm-main)) .tt-page-hero {
+  padding-block-end: 16px !important;
+}
+/* Las páginas secundarias restaban dos gutters al ancho y además aplicaban
+   padding al contenedor. El margen exterior se cuenta una sola vez. */
+html:root body:not(:has(.adm-main)) :is(.tt-page-hero, .section) > .container {
+  width: min(100%, 1180px);
+  margin-inline: auto;
+  padding-inline: var(--tt-ui-gutter);
+}
+html:root body:not(:has(.adm-main)) :is(.tt-collection-carousel__heading,
+  .tt-look-header, .tt-products-header, .tt-related-header, .tt-products-intro,
+  .tt-best-sellers-heading, .tt-instagram-heading, .tt-reviews-header) {
+  margin-block-end: var(--tt-ui-gap) !important;
+}
+html:root body:not(:has(.adm-main)) .tt-best-sellers-status:empty {
+  min-height: 0;
+  margin: 0;
+}
+html:root body:not(:has(.adm-main)) .tt-watch-feature {
+  margin-block: var(--tt-ui-gap) !important;
+}
+/* El tabbar ya tiene una reserva en body. Repetirla en cada sección y antes
+   del footer producía hasta 100px vacíos por bloque en teléfonos. */
+html:root body:not(:has(.adm-main)) :is(.perfil-wrap, .ck-body) {
+  padding-block-end: var(--tt-ui-section-space) !important;
+  margin-block-end: 0 !important;
+}
+html:root body:not(:has(.adm-main)) .tt-footer {
+  padding-block-start: var(--tt-ui-section-space) !important;
+}
+html:root body:not(:has(.adm-main)) .tt-404-wrap {
+  width: min(100%, 680px);
+  min-height: 0;
+  padding-block: var(--tt-ui-section-space) !important;
+  padding-inline: var(--tt-ui-gutter);
+}
+@media (min-width: 1025px) {
+  html:root body:not(:has(.adm-main)) .tt-404-wrap {
+    padding-block-start: calc(var(--header-h, 88px) + var(--tt-ui-section-space)) !important;
+  }
 }
 
 /* Paleta y continuidad compartidas por todas las páginas, incluido el panel.

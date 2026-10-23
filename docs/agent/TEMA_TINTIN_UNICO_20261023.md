@@ -64,3 +64,20 @@ La inspección privada utiliza HTML/CSS reales con sesión y transporte simulado
 no acredita sesiones reales ni hardware físico. No se publican esquemas ni se
 modifican datos comerciales durante las pruebas. CI, merge y publicación del
 tema requieren evidencia posterior del SHA aprobado.
+
+## Conciliación con #1212
+
+Mientras se subía #1213, main avanzó a a2bd6fada (#1212). Se incorporan sus
+fuentes sin cambios: escala de espacios, retiro de reservas duplicadas,
+dashboard-control y regresiones de espaciado. El único conflicto de fuente
+combina el padding administrativo de #1212 con los colores semánticos de este
+tema. Los derivados se regeneran; la superficie compartida utiliza una URL
+nueva `tintin-20261023-tema-unico-2`, sin reutilizar la URL anterior.
+
+PASS_LOCAL de la combinación: 98/98 Chromium de superficies y formularios,
+21/21 WebKit de esquema vivo y matriz de espaciado de 18 páginas/23 módulos,
+incluidos 17 tamaños. Sin reintentos. Los cuatro contratos de autoridades y
+consumidores, Apariencia, el gate estricto y caché vuelven a aprobar. Capturas
+de Contacto/Configuración renovadas y revisadas. Esto actualiza la evidencia
+del candidato conciliado; no hereda una publicación del primer candidato.
+La PR tiene auto merge solicitado; CI/merge/producción del nuevo SHA pendientes.
