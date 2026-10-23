@@ -96,3 +96,21 @@ test('Firestore real aislado: v2 prices, mixed stock, concurrent reserve, cancel
  await applyOrderAdminMutation({},cancel,admin,deps);await applyOrderAdminMutation({},cancel,admin,deps);
  p=await product('v2');assert.equal(p.variantInventory[0].stock,1);assert.equal(p.variantInventory[0].price,250);assert.equal(p.variantInventory[1].stock,null);
 });
+
+test('Firestore real aislado: dos combinaciones de 60 unidades se reservan y devuelven una sola vez', async () => {
+ await seed('products/v2_bulk', {name:'Fixture cantidad',price:100,stock:120,active:true,variantCommerceVersion:2,
+  variants:{Color:['Plateado','Dorado']},variantInventory:[
+   {variant:'Plateado',attributes:{Color:'Plateado'},stock:60,price:200},
+   {variant:'Dorado',attributes:{Color:'Dorado'},stock:60}]});
+ const draft={...input('v2_bulk_real','v2_bulk'),items:[
+  {id:'v2_bulk',variant:'Plateado',qty:60},{id:'v2_bulk',variant:'Dorado',qty:60}]};
+ const created=await createOrderAdmin({},draft,actor,deps);
+ assert.equal(created.order.total,18000);
+ assert.equal((await product('v2_bulk')).stock,0);
+ const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_bulk_cancel'};
+ await applyOrderAdminMutation({},cancel,admin,deps);
+ await applyOrderAdminMutation({},cancel,admin,deps);
+ const restored=await product('v2_bulk');
+ assert.equal(restored.stock,120);
+ assert.deepEqual(restored.variantInventory.map(row=>row.stock),[60,60]);
+});

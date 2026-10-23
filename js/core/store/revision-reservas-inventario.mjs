@@ -1,5 +1,5 @@
-import { orderReservesInventory } from './modelo-inventario.mjs?v=tintin-20261021-commerce-review-1';
-import { normalizeVariantInventoryItems } from './inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { orderReservesInventory, normalizeInventoryItems } from './modelo-inventario.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { normalizeVariantInventoryItems } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
 
 // Read-only projection. Never spreads order documents: customer, payment and
 // address fields do not belong in an inventory reconciliation export.
@@ -18,6 +18,7 @@ export function buildInventoryReservationReview(orders = []) {
     if (['cancelado', 'rechazado'].includes(order?.status)) issues.push({ orderId, code: 'TERMINAL_ORDER_STILL_RESERVED' });
     if (legacy) issues.push({ orderId, code: 'LEGACY_RESERVATION_REQUIRES_REVIEW' });
     const items = [];
+    const quantityItems = [];
     for (const raw of Array.isArray(order?.items) ? order.items : []) {
       const productId = String(raw?.id || raw?.productId || '').trim();
       const qty = Number(raw?.qty ?? raw?.quantity);
@@ -26,6 +27,7 @@ export function buildInventoryReservationReview(orders = []) {
         continue;
       }
       items.push({ id: productId, qty });
+      quantityItems.push({ id: productId, qty, variant: raw?.variant, variantKey: raw?.variantKey });
     }
     if (!items.length) issues.push({ orderId, code: 'RESERVED_ORDER_WITHOUT_VALID_ITEMS' });
     let variants = [];
@@ -33,7 +35,10 @@ export function buildInventoryReservationReview(orders = []) {
     catch { issues.push({ orderId, code: 'INVALID_VARIANT_RESERVATION' }); }
     const aggregate = new Map();
     for (const item of items) aggregate.set(item.id, (aggregate.get(item.id) || 0) + item.qty);
-    for (const [productId, qty] of aggregate) if (qty > 99) issues.push({ orderId, productId, code: 'INVALID_AGGREGATE_QUANTITY' });
+    if (quantityItems.length) {
+      try { normalizeInventoryItems(quantityItems, Number.MAX_SAFE_INTEGER); }
+      catch { issues.push({ orderId, code: 'INVALID_AGGREGATE_QUANTITY' }); }
+    }
     const tracked = new Map();
     for (const item of variants) tracked.set(item.id, (tracked.get(item.id) || 0) + item.qty);
     for (const [productId, qty] of tracked) {

@@ -967,3 +967,13 @@ test('cancel legacy reservation after explicit v2 fixture upgrade retains its im
  await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',changeId:'legacy_v2_cancel'},ACTOR,store);
  const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
 });
+
+test('multiple combinations may exceed 99 units in aggregate and still cancel without double release',async()=>{
+ const p={name:'Bulk combinations',price:100,stock:120,active:true,variantCommerceVersion:2,variants:{Color:['Plateado','Dorado']},variantInventory:[{variant:'Plateado',attributes:{Color:'Plateado'},stock:60,price:200},{variant:'Dorado',attributes:{Color:'Dorado'},stock:60}]};
+ const store=fakeStore({'products/ring':document('products/ring',p)}, {transactional:true});
+ const created=await createOrderAdmin({}, {orderId:'v2_multi_quantity',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'Plateado',qty:60},{id:'ring',variant:'Dorado',qty:60}]},checkoutActor('multi_quantity'),store);
+ assert.equal(created.order.total,18000);assert.equal(decodeFirestoreFields(store.map.get('products/ring').fields).stock,0);
+ const cancel={orderId:created.orderId,status:'cancelado',changeId:'v2_multi_cancel'};
+ await applyOrderAdminMutation({},cancel,ACTOR,store);await applyOrderAdminMutation({},cancel,ACTOR,store);
+ const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.stock,120);assert.equal(after.variantInventory[0].stock,60);assert.equal(after.variantInventory[1].stock,60);
+});

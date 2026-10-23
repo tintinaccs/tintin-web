@@ -1,20 +1,24 @@
+import { normalizeVariantSelection } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
+
 const TERMINAL_STATUSES = new Set(['cancelado', 'rechazado']);
 
 export function normalizeInventoryItems(items, maxDistinct = 4) {
   const grouped = new Map();
+  const combinations = new Map();
   for (const raw of Array.isArray(items) ? items : []) {
     const id = String(raw?.id || '').trim();
     const qty = Number(raw?.qty ?? raw?.quantity ?? 0);
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) {
       throw new Error('El pedido contiene una cantidad o producto inválido.');
     }
+    const key = JSON.stringify([id, normalizeVariantSelection(raw?.variantKey ?? raw?.variant ?? '')]);
+    const combined = (combinations.get(key) || 0) + qty;
+    if (combined > 99) throw new Error('La cantidad acumulada de una combinación supera 99 unidades.');
+    combinations.set(key, combined);
     grouped.set(id, (grouped.get(id) || 0) + qty);
   }
   if (!grouped.size) throw new Error('El pedido debe contener al menos un producto.');
   if (grouped.size > maxDistinct) throw new Error(`El pedido supera el máximo de ${maxDistinct} productos distintos.`);
-  for (const qty of grouped.values()) {
-    if (qty > 99) throw new Error('La cantidad acumulada de un producto supera 99 unidades.');
-  }
   return grouped;
 }
 
