@@ -20,10 +20,12 @@ Agente: Codex /root. Candidato local conciliado con main 0a719fabd (#1208). Alca
 - Formulario real con sesión/transporte aislados:9 Chromium y9 WebKit, cuatro páginas por caso,320–2560px. Verifica campos dentro del contenedor, radios compartidos, tamaño táctil, foco visible y ausencia de intersecciones. La prueba abre el paso Datos del checkout sin crear pedidos ni guardar perfiles.
 - Integridad CSS, shell público15 pantallas, tipografía37702 comprobaciones/18 páginas/10 WOFF2, caché364 archivos y9 contratos Node PASS_LOCAL. Bundles, CSP, rutas, protección y diagnóstico se generan desde las autoridades correspondientes.
 
-Son203 casos Chromium y29 WebKit distintos, además del barrido187 y9 Node; repetir una suite no suma casos nuevos. Las capturas se revisaron en390/1440; el catálogo también se comprobó con datos públicos reales y los cuatro recursos candidatos interceptados en un navegador independiente. Esa simulación no acredita publicación.
+Son212 casos Chromium y29 WebKit distintos (incluidos9 de marca móvil en13 rutas), además del barrido187 y9 Node; repetir una suite no suma casos nuevos. Las capturas se revisaron en390/1440; el catálogo también se comprobó con datos públicos reales y los cuatro recursos candidatos interceptados en un navegador independiente. Esa simulación no acredita publicación.
 
 ## Límites de la evidencia
 
 La cobertura privada usa HTML/CSS reales y fixtures de sesión/datos: no equivale a comprobar todas las cuentas reales en producción. Chromium/WebKit son motores de prueba, no una inspección física de cada teléfono. Las dimensiones intermedias usan reglas fluidas; el informe enumera las dimensiones efectivamente verificadas, sin afirmar que se probaron todas las resoluciones posibles.
 
 El editor superior y sus cantidades se conservan desde la entrega integrada #1208: esta revisión no reinicia Actions ni modifica PR de otro agente. La publicación del candidato global exige CI del SHA final, merge y comprobación posterior de los recursos públicos. Hasta entonces el estado es PASS_LOCAL, no PASS_PRODUCTION.
+
+La expectativa histórica de76px de la suite de marca móvil se actualiza a68px, manteniendo las comprobaciones de dibujo completo, centrado, área táctil y contenido sin invasión. La vista previa de Cloudflare existe pero exige Cloudflare Access; no se elude esa protección ni se presenta como navegación validada. La comprobación remota de la interfaz se hará en el sitio público una vez integrado el candidato.
