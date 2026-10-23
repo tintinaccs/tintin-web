@@ -6,10 +6,10 @@ import { wristCategory } from '../../core/store/categorias-pulseras.mjs?v=tintin
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
 import { loadCollections, normalizeCollectionSlug } from '../collections/datos-publicos-colecciones.js?v=tintin-20261015-public-collection-data-1';
-import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20261023-checkout-variants-header-2';
+import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20261023-variant-engine-v2-1';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
-import { variantStockLimit, hasProductStock, resolveProductVariant } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
-import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { variantStockLimit, hasProductStock, resolveProductVariant, productVariantPrice, productStockTotal, stableVariantSelection, variantSelectionLabel } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-1';
 
 import { hasPublicProductFields } from '../../core/store/publicacion-producto.mjs?v=tintin-20261007-public-consistency-1';
 
@@ -73,7 +73,8 @@ export function normalizeVariantOptions(value) {
 export function normalizeProduct(product) {
   const p = product && typeof product === 'object' ? product : {};
   const price = Number(p.price);
-  const stock = p.stock == null || p.stock === '' ? null : Number(p.stock);
+  const rawStock = p.variantCommerceVersion === 2 ? productStockTotal(p) : p.stock;
+  const stock = rawStock == null || rawStock === '' ? null : Number(rawStock);
   const category = wristCategory(clean(p.category || p.cat || '', 120));
   const description = clean(p.description || p.desc || '', 4000);
   return {
@@ -126,7 +127,7 @@ export function hasVariants(product) {
 
 function variantIsValid(product, selectedVariant) {
   if (variantStockLimit(product, selectedVariant) === 0) return false;
-  return resolveProductVariant(product, selectedVariant) !== null;
+  return product?.variantCommerceVersion === 2 ? stableVariantSelection(product,selectedVariant) !== null : resolveProductVariant(product, selectedVariant) !== null;
 }
 
 function sameJson(a, b) {
@@ -154,21 +155,21 @@ export function reconcileCatalogCart(products = window.PRODUCTS || []) {
   const next = current.slice(0, 100).map(raw => {
     if (!raw || typeof raw !== 'object') return null;
     const product = catalog.get(String(raw.id || ''));
-    if (!product || !variantIsValid(product, raw.variant)) return null;
+    if (!product || !variantIsValid(product, raw.variantKey ? raw : raw.variant)) return null;
     const requested = Number(raw.qty);
-    const max = Math.min(product.stock == null ? 99 : product.stock, variantStockLimit(product, raw.variant) ?? 99);
+    const max = Math.min(product.stock == null ? 99 : product.stock, variantStockLimit(product, raw.variantKey ? raw : raw.variant) ?? 99);
     const qty = Math.max(1, Math.min(max, Number.isFinite(requested) ? Math.floor(requested) : 1));
     return {
       ...raw,
       id: product.id,
       name: product.name,
       cat: product.category,
-      price: product.price,
+      price: product.variantCommerceVersion === 2 ? productVariantPrice(product, raw.variantKey ? raw : raw.variant).price : product.price,
       qty,
       stock: product.stock,
-      imageUrl: productVariantImage(product, raw.variant, raw.imageUrl),
-      imgUrl: productVariantImage(product, raw.variant, raw.imgUrl || raw.imageUrl),
-      variant: clean(raw.variant || '', 240),
+      imageUrl: productVariantImage(product, raw.variantKey ? raw : raw.variant, raw.imageUrl),
+      imgUrl: productVariantImage(product, raw.variantKey ? raw : raw.variant, raw.imgUrl || raw.imageUrl),
+      variant: product.variantCommerceVersion === 2 ? variantSelectionLabel(product,raw.variantKey ? raw : raw.variant) : clean(raw.variant || '', 240),
     };
   }).filter(Boolean);
 
@@ -273,6 +274,9 @@ window.addEventListener('pagehide', () => {
 
 window.TintinCatalogPolicy = {
   variantStockLimit,
+  priceFor: productVariantPrice,
+  stockTotal: productStockTotal,
+  stableVariantSelection,
   isInStock: hasProductStock,
   normalizeProduct,
   normalizeVariantOptions,

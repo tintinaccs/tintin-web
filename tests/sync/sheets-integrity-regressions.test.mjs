@@ -208,3 +208,13 @@ test('valid new rows keep full validation and save a complete inactive zero-stoc
   assert.equal(f.writes[0].fields.price, 100); assert.equal(f.writes[0].fields.stock, 0); assert.equal(f.writes[0].fields.active, false);
   assert.deepEqual(f.writes[0].currentDocument, { exists: false });
 });
+
+test('Sheets v2 cannot replace combinations, aggregate or delete; partial price merge preserves metadata',async()=>{
+ const product={price:100,stock:null,variantCommerceVersion:2,variants:{Color:['Dorado']},variantInventory:[{variant:'Dorado',attributes:{Color:'Dorado'},stock:null,price:150}],variantMedia:[{Color:'Dorado',imageUrl:'https://example.invalid/gold.png'}]};
+ for(const body of [{changedFields:['variants'],variants:{Color:['Negro']}},{changedFields:['stock'],stock:0},{action:'deleteProduct'}]){
+  const f=webhookFixture(product);assert.equal((await f.send(body)).status,409);assert.deepEqual(f.writes,[]);
+ }
+ const f=webhookFixture(product);assert.equal((await f.send({changedFields:['price'],price:120})).status,200);
+ assert.deepEqual(f.writes[0].mergeFields.sort(),['merchandisingUpdatedAt','price','updatedAt']);
+ assert.equal('variantInventory' in f.writes[0].fields,false);assert.equal('variantCommerceVersion' in f.writes[0].fields,false);
+});

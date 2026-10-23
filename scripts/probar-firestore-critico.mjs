@@ -513,6 +513,9 @@ try {
     await fails(deleteDoc(doc(sdk,'products','v2_protected')));
   }
   await fails(setDoc(doc(superDb,'products','v2_new'),{variantCommerceVersion:2,price:1}));
+  await fails(setDoc(doc(superDb,'products','v3_new'),{variantCommerceVersion:3,price:1}));
+  await succeeds(setDoc(doc(client1,'users','client1','cart','v2_line_fixture'),{schemaVersion:2,lineId:'v2_line_fixture',id:'v2_protected',variant:'Plateado',variantKey:'Plateado',qty:1,name:'Fixture',cat:'aros',price:150,imageUrl:'',updatedAt:serverTimestamp(),updatedByDevice:'fixture_device'}));
+  await fails(updateDoc(doc(client1,'users','client1','cart','v2_line_fixture'),{variantKey:123,updatedAt:serverTimestamp()}));
   console.log('Reglas Fase 6: ' + checks + ' ataques/controles verificados.');
 } finally {
   await testEnv.cleanup();

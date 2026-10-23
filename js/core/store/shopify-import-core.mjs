@@ -1,3 +1,4 @@
+import { variantInventoryEntries, variantInventoryTotal } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
 const ALLOWED_BODY_TAGS = new Set(['p', 'br', 'strong', 'em', 'ul', 'ol', 'li']);
 const BLOCKED_BODY_TAGS = new Set(['script', 'iframe', 'object', 'embed', 'style', 'link', 'svg', 'math', 'template', 'form']);
@@ -599,7 +600,7 @@ export function importVariantOptions(variants) {
  * Catalog document for one grouped Shopify product, with the same limits the
  * Admin product form enforces. Timestamps are added by the writer.
  */
-export function buildCatalogProductFromImport(product) {
+export function buildCatalogProductFromImport(product, { variantCommerce = false } = {}) {
   const source = product && typeof product === 'object' ? product : {};
   const price = Math.round(Number(source.price));
   const before = source.priceBefore == null || source.priceBefore === '' ? null : Math.round(Number(source.priceBefore));
@@ -659,6 +660,27 @@ export function buildCatalogProductFromImport(product) {
         return { variant: selection, stock: Math.min(1000000, variant.stock) };
       });
     }
+  }
+  if (variantCommerce) {
+    if (!Array.isArray(source.variants) || !source.variants.length) return data;
+    const keys = [...new Set(source.variants.flatMap(row => Object.keys(row).filter(key => !['sku','price','priceBefore','stock','imageUrl','imageUrls','active','colorHex','swatch'].includes(key))))];
+    if (!keys.length) return data;
+    data.variants = Object.fromEntries(keys.map(key => [key,[...new Set(source.variants.map(row => cleanImportText(row[key],120)))]]));
+    data.variantCommerceVersion = 2;
+    data.variantInventory = source.variants.map(row => ({
+      variant: keys.map(key => cleanImportText(row[key],120)).join(' / '),
+      attributes: Object.fromEntries(keys.map(key => [key,cleanImportText(row[key],120)])),
+      stock: row.stock ?? null,
+      ...(row.price == null ? {} : {price:row.price}),
+      ...(row.priceBefore == null ? {} : {priceBefore:row.priceBefore}),
+      ...(row.active == null ? {} : {active:row.active}),
+    }));
+    data.variantInventory = variantInventoryEntries(data);
+    data.stock = variantInventoryTotal(data.variantInventory);
+    data.variantMedia = source.variants.filter(row => row.imageUrl || row.imageUrls?.length).map(row => ({
+      ...Object.fromEntries(keys.map(key => [key,cleanImportText(row[key],120)])),
+      imageUrls:[row.imageUrl,...(row.imageUrls || [])].filter(Boolean).map(safeImportUrl).filter(Boolean),
+    }));
   }
   return data;
 }

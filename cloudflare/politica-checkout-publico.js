@@ -28,7 +28,7 @@ const REQUEST_ID_PATTERN = /^[A-Za-z0-9_-]{12,100}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CI_PATTERN = /^\d{5,8}$/;
 const PAYMENT_METHODS = new Set(['efectivo', 'transferencia', 'paypal']);
-const CART_LINE_KEYS = new Set(['id', 'qty', 'variant', 'variants']);
+const CART_LINE_KEYS = new Set(['id', 'qty', 'variant', 'variants', 'variantKey']);
 const MAP_KEYS = new Set(['lat', 'lng', 'name', 'address']);
 
 function checkoutError(code, status = 400, details = {}) {
@@ -91,9 +91,11 @@ function normalizeCartLines(cartLines) {
     const id = cleanText(raw.id, 180);
     const qty = Number(raw.qty);
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) throw checkoutError('invalid_cart');
+    if (raw.variantKey !== undefined && (typeof raw.variantKey !== 'string' || !raw.variantKey.trim() || raw.variantKey.length > 120)) throw checkoutError('invalid_cart');
+    const variantKey = raw.variantKey === undefined ? undefined : cleanText(raw.variantKey,120);
     const variant = explicitVariant || migratedVariant;
-    const key = JSON.stringify([id, variant]);
-    const line = byLine.get(key) || { id, qty: 0, variant };
+    const key = JSON.stringify([id, variantKey ?? variant]);
+    const line = byLine.get(key) || { id, qty: 0, variant, ...(variantKey ? {variantKey} : {}) };
     line.qty += qty;
     if (line.qty > 99) throw checkoutError('invalid_cart');
     byLine.set(key, line);

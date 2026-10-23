@@ -17,11 +17,11 @@
 import { onAppCheckSnapshot as onSnapshot } from '../../core/firebase/suscripcion-app-check.js?v=tintin-20261017-domain-cutover-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20261017-domain-cutover-1';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20261015-images-1';
-import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { productVariantImage } from '../images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-1';
 export { productVariantImage };
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
-import { variantStockLimit } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { variantStockLimit, productVariantPrice, stableVariantSelection, variantSelectionLabel } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
 import {
   collection,
   doc,
@@ -142,7 +142,8 @@ function createRuntime() {
       ? itemOrId
       : { id: itemOrId, variant: variantValue };
     const id = cleanText(item?.id, 180);
-    const variant = normalizeVariant(item?.variant);
+    const product = (Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).find(p => String(p.id) === id);
+    const variant = product?.variantCommerceVersion === 2 ? stableVariantSelection(product,item?.variantKey ? item : item?.variant) ?? normalizeVariant(item?.variant) : normalizeVariant(item?.variant);
     const prefix = (id || 'item').replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 60);
     return `ln_${prefix}_${hashLine(`${id}\u241f${variant}`)}`;
   }
@@ -151,15 +152,21 @@ function createRuntime() {
     if (!input || typeof input !== 'object') return null;
     const id = cleanText(input.id, 180);
     if (!id) return null;
-    const variant = normalizeVariant(input.variant);
+    let variant = normalizeVariant(input.variant);
     const parsedQty = Number(input.qty == null ? 1 : input.qty);
     if (!Number.isFinite(parsedQty)) return null;
     const qty = Math.max(1, Math.min(MAX_QTY, Math.floor(parsedQty)));
     const parsedPrice = Number(input.price);
-    const price = Number.isFinite(parsedPrice) && parsedPrice >= 0 ? parsedPrice : 0;
+    let price = Number.isFinite(parsedPrice) && parsedPrice >= 0 ? parsedPrice : 0;
+    const product = (Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).find(p => String(p.id) === id);
+    const variantKey = input.variantKey || (product?.variantCommerceVersion === 2 ? product.variantInventory?.find(entry => entry.variant === variant)?.variant : undefined);
+    if (product?.variantCommerceVersion === 2) {
+      try { price = productVariantPrice(product, variantKey ? {variantKey} : variant).price; variant = variantSelectionLabel(product,variantKey ? {variantKey} : variant); } catch { return null; }
+    }
     const imageUrl = sanitizeImageUrl(input.imageUrl || input.imgUrl || input.image || '');
     return {
-      lineId: lineIdFor({ id, variant }),
+      lineId: lineIdFor({ id, variant, ...(variantKey ? {variantKey} : {}) }),
+      ...(product?.variantCommerceVersion === 2 ? {variantKey:stableVariantSelection(product,variantKey ? {variantKey} : variant)} : variantKey ? {variantKey} : {}),
       id,
       variant,
       qty,
@@ -207,7 +214,7 @@ function createRuntime() {
       const limit = stockLimit(item.id);
       const used = usedByProduct.get(String(item.id)) || 0;
       const product = window.PRODUCTS.find(entry => String(entry.id) === String(item.id));
-      const optionLimit = variantStockLimit(product, item.variant);
+      const optionLimit = variantStockLimit(product, item.variantKey ? item : item.variant);
       const allowed = Math.max(0, Math.min(item.qty, limit - used, optionLimit ?? MAX_QTY));
       if (!allowed) return [];
       usedByProduct.set(String(item.id), used + allowed);
@@ -496,10 +503,10 @@ function createRuntime() {
     if (!Array.isArray(pool)) return item;
     const product = pool.find(entry => String(entry.id) === String(item.id));
     if (!product) return item;
-    const imageUrl = productVariantImage(product, item.variant, item.imageUrl);
+    const imageUrl = productVariantImage(product, item.variantKey ? item : item.variant, item.imageUrl);
     return normalizeItem({
       ...mergeMetadata({ ...item, name: product.name || item.name,
-        cat: product.cat || product.category || item.cat, price: product.price }, item),
+        cat: product.cat || product.category || item.cat, price: product.variantCommerceVersion === 2 ? productVariantPrice(product,item.variantKey ? item : item.variant).price : product.price }, item),
       imageUrl,
       imgUrl: imageUrl,
     });
@@ -554,6 +561,7 @@ function createRuntime() {
       lineId: item.lineId,
       id: item.id,
       variant: item.variant,
+      ...(item.variantKey ? {variantKey:item.variantKey} : {}),
       qty: item.qty,
       name: item.name,
       cat: item.cat,
@@ -906,13 +914,19 @@ function createRuntime() {
 
   function availableVariantQuantity(items, item) {
     const product = window.PRODUCTS?.find(entry => String(entry.id) === String(item.id));
-    const limit = variantStockLimit(product, item.variant);
+    const limit = variantStockLimit(product, item.variantKey ? item : item.variant);
     if (limit === null) return MAX_QTY;
     const used = items.filter(entry => entry.lineId === item.lineId).reduce((sum, entry) => sum + entry.qty, 0);
     return Math.max(0, limit - used);
   }
 
   async function addToCart(item) {
+    const product = (Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).find(p => String(p.id) === String(item?.id));
+    if (product?.variantCommerceVersion === 2 && !item?.variantKey) {
+      const variantKey = stableVariantSelection(product,item?.variant);
+      if (variantKey === null) return {item:null,capped:false,changed:false,reason:'invalid'};
+      item = {...item,variantKey};
+    }
     const incoming = normalizeItem(item);
     if (!incoming) return { item: null, capped: false, changed: false, reason: 'invalid' };
     return withCartMutation(() => {
@@ -1189,7 +1203,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261023-checkout-variants-header-2').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20261023-variant-engine-v2-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

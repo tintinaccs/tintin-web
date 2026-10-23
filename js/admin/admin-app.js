@@ -1,8 +1,9 @@
+import { reorderVariantInventory } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
 import { ordersForView, orderDisplayCode } from '../orders/pedidos-prueba.mjs?v=tintin-20261020-orders-clean-2';
 import { calculateOrderStats } from '../core/store/estadisticas-pedidos.js?v=tintin-20261020-orders-clean-2';
 import { adminReturnStorage, rememberAdminDestination, consumeAdminDestination } from '../core/auth/destino-admin.mjs?v=tintin-20261020-push-return-1';
 import { closeMobileMore } from './maestro/navegacion-movil-admin.js?v=tintin-20261019-admin-mobile-3';
-import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { productCardPatch, productFingerprint, productDuplicateData, applyProductBulkTransaction, productBulkIds } from './products/maestro-productos-core.mjs?v=tintin-20261023-variant-engine-v2-1';
 import { filterStatisticsRows, ensureStatisticsControls } from './statistics/controles-estadisticas.js?v=tintin-20261022-avatar-inicial-1';
 import { chooseOrderTrash } from './orders/seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';
 import { createAdminPagedSource } from './datos/fuente-paginada-admin.mjs?v=tintin-20261016-admin-live-1';
@@ -37,7 +38,7 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, render
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20261022-avatar-inicial-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { variantInventoryEntries } from '../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
 import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20261022-avatar-inicial-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
 import { attachImageUploadWidget, attachMultiImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20261022-products-master-1";
@@ -54,7 +55,7 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20261012-unified-2-esquema-color-catalogo-js-palette-20261014-1-logos-wa-20261015-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1-brand-runtime-20261004-1-owner-pink-20261004-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20261022-avatar-inicial-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20261023-variant-engine-v2-1';
 import './settings/cupones-admin.js?v=tintin-20261022-avatar-inicial-1';
 import './products/integridad-inventario-admin.js?v=tintin-20261022-avatar-inicial-1';
 import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20261010-loader-front-2';
@@ -5860,7 +5861,7 @@ function mountProductColorPhotos(product) {
 
 let productVariantStockBaseline = null;
 let productVariantStockEvents = null;
-function productVariantStockConfiguration(text, previous = []) {
+function productVariantStockConfiguration(text, previous = [], previousVariants = null) {
   const attributes = new Map();
   for (const line of String(text || '').split(/\r?\n/).filter(line => line.trim())) {
     const separator = line.indexOf(':');
@@ -5879,6 +5880,7 @@ function productVariantStockConfiguration(text, previous = []) {
     combinations = combinations.flatMap(prefix => values.map(value => prefix ? `${prefix} / ${value}` : value));
   }
   if (combinations.some(value => value.length > 120)) throw new Error('Los nombres combinados deben tener hasta 120 caracteres.');
+  if (previousVariants && previous.length) return {variants:Object.fromEntries(attributes),entries:reorderVariantInventory({variants:previousVariants},Object.fromEntries(attributes),previous)};
   const retained = new Set(combinations);
   if (previous.some(entry => Number(entry.stock) > 0 && !retained.has(entry.variant))) throw new Error('Primero dejá en 0 el stock de la opción que querés quitar.');
   const quantities = new Map(previous.map(entry => [entry.variant, entry.stock]));
@@ -5905,8 +5907,8 @@ function renderProductVariantStock(product, configuration = null) {
   optionsInput.addEventListener('input', () => {
     try {
       if (!optionsInput.value.trim() && !productVariantStockBaseline) return;
-      const previous = productVariantStockBaseline?.entries.map((entry, index) => ({variant:entry.variant, stock:panel.querySelectorAll('input')[index]?.value ?? entry.stock})) || [];
-      const draft = productVariantStockConfiguration(optionsInput.value, previous);
+      const previous = productVariantStockBaseline?.entries.map((entry, index) => ({...entry, stock:panel.querySelectorAll('input')[index]?.value ?? entry.stock})) || [];
+      const draft = productVariantStockConfiguration(optionsInput.value, previous, productVariantStockBaseline?.variants || product.variants);
       acceptedOptions = optionsInput.value;
       renderProductVariantStock(product, draft);
       const error = document.getElementById('prod-form-error'); error.textContent='';error.style.display='none';
@@ -6136,6 +6138,13 @@ window.prodCancelForm = function() {
 };
 
 async function prodGuardar() {
+  const existingProduct = _allProducts.find(product => product._docId === document.getElementById('prod-id').value);
+  if (existingProduct?.variantCommerceVersion === 2) {
+    const error = document.getElementById('prod-form-error');
+    error.textContent = 'Este producto usa el motor comercial v2. Su edición está protegida hasta habilitar el editor compatible.';
+    error.style.display = ''; return false;
+  }
+
   if (document.getElementById('prod-save-btn')?.disabled) return false;
   const errEl = document.getElementById('prod-form-error');
   const _isEdit = !!document.getElementById('prod-id').value;

@@ -14,7 +14,7 @@ import {
   statusReservesInventory,
   orderReservesInventory,
 } from '../js/core/store/modelo-inventario.mjs';
-import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantInventoryDeltas, variantInventoryDeltas, productVariantPrice, productStockTotal, variantInventoryTotal, resolveProductVariant, stableVariantSelection } from '../js/core/store/inventario-variantes.mjs';
+import { variantInventoryEntries, normalizeVariantInventoryItems, applyVariantInventoryDeltas, variantInventoryDeltas, productVariantPrice, productStockTotal, variantInventoryTotal, resolveProductVariant, stableVariantSelection, inventorySelection, variantSelectionLabel } from '../js/core/store/inventario-variantes.mjs';
 import { couponDocPath, evaluateCoupon, normalizeCouponCode, redemptionDocPath } from './cupones.js';
 import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 import { ORDER_LIFECYCLE_STATUSES, assertOrderTransition, lifecycleStatus } from '../js/orders/ciclo-pedido.mjs';
@@ -69,6 +69,7 @@ function sanitizeItems(items, { canonicalPrices = false } = {}) {
   return items.map(raw => {
     const id = clean(raw?.id, 180);
     const qty = Number(raw?.qty ?? raw?.quantity ?? 0);
+    if (raw?.variantKey != null && (typeof raw.variantKey !== 'string' || !raw.variantKey.trim() || raw.variantKey.length > 120)) throw new Error('Identidad de variante inválida.');
     const price = canonicalPrices ? 0 : Number(raw?.price);
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99 || (!canonicalPrices && (!Number.isFinite(price) || price < 0))) {
       throw new Error('El pedido contiene una línea inválida.');
@@ -80,6 +81,7 @@ function sanitizeItems(items, { canonicalPrices = false } = {}) {
       price: canonicalPrices ? 0 : Math.round(price),
       qty,
       variant: clean(raw?.variant, 120),
+      ...(raw?.variantKey ? {variantKey:clean(raw.variantKey,120)} : {}),
       imageUrl: clean(raw?.imageUrl, 900),
     };
   });
@@ -297,11 +299,15 @@ async function resolveCanonicalCreationItems(env, rawItems, batchGet) {
   const items = lines.map(line => {
     const product = decodeFirestoreFields(documents.get(line.id)?.fields || {});
     if (product.active === false) throw creationError(`El producto ${line.id} no está activo.`, 'product_inactive', { productId: line.id });
-    let price = Number(product.price);
+    if (product.variantCommerceVersion != null && ![1,2].includes(product.variantCommerceVersion)) throw creationError('Versión comercial no compatible.', 'invalid_variant');
+    let price = Number(product.price), variantKey;
+    let variant = line.variant;
     if (product.variantCommerceVersion === 2) {
-      const selection = resolveProductVariant(product, line.variant);
-      if (selection === null) throw creationError('La combinación no existe.', 'invalid_variant', {productId:line.id});
-      try { price = productVariantPrice(product, selection).price; }
+      const entry = inventorySelection(product,variantInventoryEntries(product),line.variantKey ? line : line.variant);
+      if (!entry) throw creationError('La combinación no existe.', 'invalid_variant', {productId:line.id});
+      variantKey = entry.variant;
+      variant = variantSelectionLabel(product,{variantKey});
+      try { price = productVariantPrice(product, {variantKey}).price; }
       catch { throw creationError('Precio de combinación inválido.', 'invalid_price', {productId:line.id}); }
     }
     if (!Number.isFinite(price) || price < 0) throw creationError(`Precio inválido para ${line.id}.`, 'invalid_price', { productId: line.id });
@@ -311,8 +317,9 @@ async function resolveCanonicalCreationItems(env, rawItems, batchGet) {
       cat: clean(product.category || product.collectionSlug || product.collection || product.cat || '', 120),
       price: Math.round(price),
       qty: line.qty,
-      variant: line.variant,
-      imageUrl: clean(productVariantImage(product, line.variant), 900),
+      variant,
+      ...(variantKey ? {variantKey} : {}),
+      imageUrl: clean(productVariantImage(product, variant), 900),
     };
   });
 
@@ -718,6 +725,11 @@ export async function applyOrderAdminMutation(
   }
   const inventory = computeInventoryDeltas(beforeOrder, patch, MAX_ADMIN_DISTINCT_PRODUCTS);
   const beforeVariantItems = normalizeVariantInventoryItems(beforeOrder.variantInventoryItems || []);
+  if (patch.items) for (const item of patch.items) {
+    if (item.variantKey) continue;
+    const previous = beforeOrder.items.find(row => row.id === item.id && row.variant === item.variant && row.variantKey);
+    if (previous) item.variantKey = previous.variantKey;
+  }
   const afterItems = normalizeVariantInventoryItems(patch.items || beforeOrder.items);
   const beforeItems = normalizeVariantInventoryItems(beforeOrder.items);
   const afterVariantItems = [];
@@ -728,6 +740,19 @@ export async function applyOrderAdminMutation(
     const document = productDocuments.get(productId);
     if (!document) throw new Error(`No se puede reconciliar el stock: el producto ${productId} ya no existe.`);
     const product = decodeFirestoreFields(document.fields || {});
+    if (product.variantCommerceVersion === 2) {
+      const entries = variantInventoryEntries(product);
+      for (const reference of beforeVariantItems.filter(item => item.id === productId && !item.variantKey)) {
+        const historical = entries.find(entry => entry.variant === reference.variant);
+        if (!historical) throw new Error('La referencia histórica requiere revisión.');
+        reference.variantKey = historical.variant;
+      }
+      for (const item of afterItems.filter(item => item.id === productId && !item.variantKey)) {
+        const unchanged = beforeOrder.items.some(previous => previous.id === item.id && previous.variant === item.variant);
+        const historical = unchanged ? entries.find(entry => entry.variant === item.variant) : null;
+        if (historical) item.variantKey = historical.variant;
+      }
+    }
     if (!inventory.afterReserved || variantInventoryEntries(product) === null) continue;
     const legacyReservation = orderReservesInventory(beforeOrder) && beforeItems.some(item => item.id === productId) && !beforeVariantItems.some(item => item.id === productId);
     if (legacyReservation) {
@@ -737,16 +762,24 @@ export async function applyOrderAdminMutation(
       if (JSON.stringify(before) !== JSON.stringify(after)) throw new Error('El pedido anterior requiere revisar su reserva por variante antes de cambiar sus artículos.');
       continue;
     }
-    afterVariantItems.push(...afterItems.filter(item => item.id === productId));
+    const selected = afterItems.filter(item => item.id === productId);
+    if (product.variantCommerceVersion === 2) for (const item of selected) {
+      const key = stableVariantSelection(product,item.variantKey ? item : item.variant);
+      if (key === null) throw new Error('La combinación no existe.');
+      item.variantKey = key;
+    }
+    afterVariantItems.push(...selected);
   }
   if (patch.items) {
     for (const item of patch.items) {
       const product = decodeFirestoreFields(productDocuments.get(item.id)?.fields || {});
       if (product.variantCommerceVersion !== 2) continue;
-      const key = stableVariantSelection(product, item.variant);
+      const key = stableVariantSelection(product, item.variantKey ? item : item.variant);
       if (key === null) throw new Error('La combinación no existe.');
-      const historical = beforeOrder.items.find(previous => previous.id === item.id && stableVariantSelection(product, previous.variant) === key);
-      item.price = historical ? historical.price : productVariantPrice(product, item.variant).price;
+      const historical = beforeOrder.items.find(previous => previous.id === item.id && stableVariantSelection(product, previous.variantKey ? previous : previous.variant) === key);
+      item.variantKey = key;
+      item.variant = variantSelectionLabel(product,{variantKey:key});
+      item.price = historical ? historical.price : productVariantPrice(product, {variantKey:key}).price;
       item.imageUrl = historical?.imageUrl || productVariantImage(product, item.variant);
     }
     patch.subtotal = patch.items.reduce((sum, item) => sum + item.qty * item.price, 0);

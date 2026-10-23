@@ -147,7 +147,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   const imageSrcset = [480, 900, 1440].map(width => `${productImageUrl(image, width)} ${width}w`).join(', ');
   const imageSizes = '(max-width:767px) calc(100vw - 32px), (max-width:1024px) 45vw, 560px';
   const canonical = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(safeId)}`;
-  const price = data.variantCommerceVersion === 2 ? productVariantPrice(data, firstAvailableVariant(data)).price : firstValue(data, ['price', 'Variant Price']);
+  const price = data.variantCommerceVersion === 2 ? productVariantPrice(data, firstAvailableVariant(data) || {variantKey:data.variantInventory?.[0]?.variant}).price : firstValue(data, ['price', 'Variant Price']);
   const title = `${name} | Tintin Accesorios & Relojes`;
 
   let html = String(sourceHtml || '');

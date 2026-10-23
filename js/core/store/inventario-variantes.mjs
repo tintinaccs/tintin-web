@@ -58,6 +58,7 @@ export function resolveProductVariant(product, selection) {
 
 export function inventorySelection(product, entries, selection) {
   if (product?.variantCommerceVersion === 2) {
+    if (selection && typeof selection === 'object' && selection.variantKey) return entries.find(entry => entry.variant === selection.variantKey) || null;
     const attrs = variantAttributes(product, selection);
     if (!attrs) return null;
     return entries.find(entry => attributesKey(entry.attributes) === attributesKey(attrs)) || null;
@@ -72,6 +73,8 @@ export function inventorySelection(product, entries, selection) {
 }
 
 export function variantInventoryEntries(product) {
+  if (product?.variantCommerceVersion != null && ![1,2].includes(product.variantCommerceVersion)) throw new Error('Versión comercial no compatible.');
+  if (product?.variantCommerceVersion === 2 && (!Number.isInteger(product.price) || product.price < 1 || product.price > 1e9)) throw new Error('Precio general de compatibilidad inválido.');
   if (product?.variantInventory == null) {
     if (product?.variantCommerceVersion === 2) throw new Error('Falta la matriz comercial de variantes.');
     return null;
@@ -88,10 +91,12 @@ export function variantInventoryEntries(product) {
     seen.add(variant);
     if (product?.variantCommerceVersion !== 2) return { variant, stock };
     const attributes = entry.attributes;
+    if (!product.variants || Array.isArray(product.variants) || Object.keys(product.variants).length > 20) throw new Error('Definición comercial inválida.');
     const groups = namedVariantGroups(product);
+    if (!groups.length || groups.some(([key,values]) => !key.trim() || key.length > 60 || values.length > 50 || values.some(value => value.includes('/')))) throw new Error('Opciones comerciales inválidas.');
     if (!attributes || typeof attributes !== 'object' || Array.isArray(attributes)
       || Object.keys(attributes).length !== groups.length
-      || groups.some(([key, values]) => typeof attributes[key] !== 'string' || !values.includes(attributes[key]))) throw new Error('Atributos comerciales inválidos.');
+      || groups.some(([key, values]) => ['__proto__','prototype','constructor'].includes(key) || !Object.hasOwn(attributes,key) || typeof attributes[key] !== 'string' || !values.includes(attributes[key]))) throw new Error('Atributos comerciales inválidos.');
     const identity = attributesKey(attributes);
     if (seen.has(identity)) throw new Error('Combinación comercial duplicada.');
     seen.add(identity);
@@ -100,7 +105,7 @@ export function variantInventoryEntries(product) {
     }
     if (entry.active != null && typeof entry.active !== 'boolean') throw new Error('Disponibilidad de variante inválida.');
     const price = entry.price ?? product.price;
-    const before = entry.priceBefore ?? (entry.price == null ? product.priceBefore : null);
+    const before = Object.hasOwn(entry,'priceBefore') ? entry.priceBefore : entry.price == null ? product.priceBefore : null;
     if (before != null && (!Number.isInteger(before) || before <= price)) throw new Error('Precio anterior de variante inválido.');
     return { ...entry, variant, stock, attributes: { ...attributes } };
   });
@@ -125,7 +130,7 @@ export function hasProductStock(product) {
 
 export function firstAvailableVariant(product) {
   if (!hasProductStock(product)) return '';
-  try { return variantInventoryEntries(product)?.find(entry => entry.active !== false && (entry.stock === null || entry.stock > 0))?.variant || ''; }
+  try { const entry = variantInventoryEntries(product)?.find(entry => entry.active !== false && (entry.stock === null || entry.stock > 0)); return entry ? product.variantCommerceVersion === 2 ? variantSelectionLabel(product,{variantKey:entry.variant}) : entry.variant : ''; }
   catch { return ''; }
 }
 
@@ -134,13 +139,17 @@ export function normalizeVariantInventoryItems(items) {
   for (const item of items || []) {
     const id = String(item.id || '').trim();
     const variant = normalizeVariantSelection(item.variant);
+    if (item.variantKey != null && (typeof item.variantKey !== 'string' || !item.variantKey.trim() || item.variantKey.length > 120)) throw new Error('Identidad de variante inválida.');
+    const variantKey = item.variantKey == null ? undefined : normalizeVariantSelection(item.variantKey);
     const qty = Number(item.qty);
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) throw new Error('Cantidad de variante inválida.');
-    const key = JSON.stringify([id, variant]);
+    const key = JSON.stringify([id, variantKey ?? variant]);
     const previous = grouped.get(key);
-    grouped.set(key, { id, variant, qty: (previous?.qty || 0) + qty });
+    grouped.set(key, { id, variant, ...(variantKey ? {variantKey} : {}), qty: (previous?.qty || 0) + qty });
   }
-  return [...grouped.values()];
+  const result = [...grouped.values()];
+  if (result.some(item => item.qty > 99)) throw new Error('Cantidad acumulada de variante inválida.');
+  return result;
 }
 
 export function applyVariantInventoryDeltas(product, deltas) {
@@ -150,7 +159,7 @@ export function applyVariantInventoryDeltas(product, deltas) {
     return null;
   }
   for (const delta of deltas) {
-    const entry = inventorySelection(product, entries, delta.variant);
+    const entry = inventorySelection(product, entries, delta.variantKey ? delta : delta.variant);
     if (!entry) throw new Error('La variante del pedido ya no existe.');
     if (delta.qty > 0 && entry.active === false) throw new Error('La variante no está disponible.');
     if (entry.stock === null) continue;
@@ -168,7 +177,7 @@ export function variantInventoryDeltas(beforeItems, afterItems) {
   const deltas = new Map();
   for (const [items, sign] of [[beforeItems, -1], [afterItems, 1]]) {
     for (const item of normalizeVariantInventoryItems(items)) {
-      const key = JSON.stringify([item.id, item.variant]);
+      const key = JSON.stringify([item.id, item.variantKey ?? item.variant]);
       const previous = deltas.get(key);
       deltas.set(key, { ...item, qty: (previous?.qty || 0) + sign * item.qty });
     }
@@ -193,6 +202,10 @@ export function attributesKey(attributes) {
   return JSON.stringify(Object.keys(attributes).sort().map(key => [key, attributes[key]]));
 }
 export function variantAttributes(product, selection) {
+  if (product?.variantCommerceVersion === 2 && selection && typeof selection === 'object' && selection.variantKey) {
+    const entry = product.variantInventory?.find(row => row.variant === selection.variantKey);
+    return entry?.attributes ? {...entry.attributes} : null;
+  }
   const canonical = resolveProductVariant(product, selection);
   if (canonical === null) return null;
   const parts = canonical.split(' / ');
@@ -205,7 +218,7 @@ export function productVariantPrice(product, selection = '') {
     if (!entry) throw new Error('La combinación seleccionada no existe.');
   }
   const price = entry?.price ?? product?.price;
-  const priceBefore = entry?.priceBefore ?? (entry?.price == null ? product?.priceBefore : null) ?? null;
+  const priceBefore = entry && Object.hasOwn(entry,'priceBefore') ? entry.priceBefore : (entry?.price == null ? product?.priceBefore : null) ?? null;
   if (typeof price !== 'number' || !Number.isInteger(price) || price < 1 || price > 1e9) throw new Error('Precio comercial inválido.');
   return { price, priceBefore: priceBefore != null && priceBefore > price ? priceBefore : null };
 }
@@ -219,6 +232,7 @@ export function productStockTotal(product) {
   return product?.variantCommerceVersion === 2 ? variantInventoryTotal(variantInventoryEntries(product)) : product?.stock;
 }
 export function stableVariantSelection(product, selection) {
+  if (product?.variantCommerceVersion === 2 && typeof selection === 'object' && selection?.variantKey) return inventorySelection(product,variantInventoryEntries(product),selection)?.variant ?? null;
   const canonical = resolveProductVariant(product, selection);
   if (canonical === null) return null;
   const entries = variantInventoryEntries(product);
@@ -231,8 +245,40 @@ export function assertVariantCompatibility(before, after) {
   if (after?.variantCommerceVersion !== 2) throw new Error('No se puede degradar un producto comercial v2.');
   const next = variantInventoryEntries(after);
   for (const entry of variantInventoryEntries(before)) {
-    if (!next.some(row => row.variant === entry.variant && attributesKey(row.attributes) === attributesKey(entry.attributes))) {
+    if (!next.some(row => row.variant === entry.variant && attributesKey(row.attributes) === attributesKey(entry.attributes) && (row.stock === null) === (entry.stock === null))) {
       throw new Error('Conservá la combinación comercial; podés desactivarla, no eliminarla.');
     }
   }
+}
+
+// Pure draft reconciliation; no Firestore writes and no positional stock transfer.
+export function reorderVariantInventory(product, nextVariants, previous = product.variantInventory || []) {
+  const byIdentity = new Map(previous.map(entry => {
+    const attrs = entry.attributes || variantAttributes(product, entry.variant);
+    if (!attrs) throw new Error('La combinación anterior requiere revisión.');
+    return [attributesKey(attrs),entry];
+  }));
+  let combinations = [{}];
+  for (const [key,values] of namedVariantGroups({variants:nextVariants})) {
+    if (combinations.length * values.length > 1000) throw new Error('El máximo es de 1.000 combinaciones por producto.');
+    combinations = combinations.flatMap(row => values.map(value => ({...row,[key]:value})));
+  }
+  if (product.variantCommerceVersion !== 2) {
+    const oldGroups = namedVariantGroups(product), nextGroups = namedVariantGroups({variants:nextVariants});
+    const reordered = oldGroups.map(([key]) => key).join(' / ') !== nextGroups.map(([key]) => key).join(' / ');
+    const overlap = oldGroups.some(([,values],index) => oldGroups.slice(index+1).some(([,others]) => values.some(value => others.includes(value))));
+    if (reordered && overlap) throw new Error('La reordenación tiene valores ambiguos; requiere el editor con referencias estables.');
+  }
+  const retained = new Set(combinations.map(attributesKey));
+  if ([...byIdentity.keys()].some(key => !retained.has(key))) throw new Error('La combinación tiene historial potencial. Conservála o desactivála desde el editor compatible.');
+  return combinations.map(attrs => {
+    const existing = byIdentity.get(attributesKey(attrs));
+    return existing ? {...existing} : {variant:Object.values(attrs).join(' / '),stock:'',...(product.variantCommerceVersion===2 ? {attributes:attrs} : {})};
+  });
+}
+
+export function variantSelectionLabel(product, selection) {
+  const attrs = variantAttributes(product,selection);
+  if (!attrs) return null;
+  return namedVariantGroups(product).map(([key]) => attrs[key]).join(' / ');
 }

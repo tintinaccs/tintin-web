@@ -947,3 +947,23 @@ test('v2 cancel, replay, reopen and quantity edits retain historical unit price 
  now=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(now.variantInventory[0].stock,0);assert.equal(now.variantInventory[0].price,900);
  const order=decodeFirestoreFields(store.map.get('orders/'+created.orderId).fields);assert.equal(order.items[0].price,250);
 });
+
+test('v2 cancellation after overlapping attribute reorder releases the saved reference, not the new positional label',async()=>{
+ const data={name:'Overlap',price:100,stock:2,active:true,variantCommerceVersion:2,variants:{Color:['S','L'],Talle:['S','L']},variantInventory:[{variant:'S / L',attributes:{Color:'S',Talle:'L'},price:250,stock:1},{variant:'L / S',attributes:{Color:'L',Talle:'S'},price:300,stock:1}]};
+ const store=fakeStore({'products/ring':document('products/ring',data)}, {transactional:true});
+ const created=await createOrderAdmin({}, {orderId:'v2_overlap',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'S / L',qty:1}]},checkoutActor('overlap'),store);
+ assert.equal(created.order.items[0].price,250);assert.equal(created.order.variantInventoryItems[0].variantKey,'S / L');
+ const p=decodeFirestoreFields(store.map.get('products/ring').fields);p.variants={Talle:['S','L'],Color:['S','L']};store.map.set('products/ring',document('products/ring',p,'2099-01-01T00:00:00Z'));
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',changeId:'overlap_cancel'},ACTOR,store);
+ const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
+});
+
+test('cancel legacy reservation after explicit v2 fixture upgrade retains its immutable matrix reference',async()=>{
+ const old={name:'Legacy overlap',price:100,stock:2,active:true,variants:{Color:['S','L'],Talle:['S','L']},variantInventory:[{variant:'S / L',stock:1},{variant:'L / S',stock:1}]};
+ const store=fakeStore({'products/ring':document('products/ring',old)}, {transactional:true});
+ const created=await createOrderAdmin({}, {orderId:'v1_to_v2_fixture',userName:'Clienta Test',shippingMethod:'retiro',items:[{id:'ring',variant:'S / L',qty:1}]},checkoutActor('legacy'),store);
+ const p=decodeFirestoreFields(store.map.get('products/ring').fields);p.variantCommerceVersion=2;p.variants={Talle:['S','L'],Color:['S','L']};p.variantInventory[0].attributes={Color:'S',Talle:'L'};p.variantInventory[1].attributes={Color:'L',Talle:'S'};
+ store.map.set('products/ring',document('products/ring',p,'2099-01-01T00:00:00Z'));
+ await applyOrderAdminMutation({}, {orderId:created.orderId,status:'cancelado',changeId:'legacy_v2_cancel'},ACTOR,store);
+ const after=decodeFirestoreFields(store.map.get('products/ring').fields);assert.equal(after.variantInventory[0].stock,1);assert.equal(after.variantInventory[1].stock,1);
+});
