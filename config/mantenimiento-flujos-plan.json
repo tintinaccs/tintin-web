@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baseCommit": "b3997c7cc991f3c7a45f4f650146fbdbad2015a4",
-  "reason": "Recuperar PR1213 sobre main vigente, conservando tema y correcciones publicadas; verificar conflictos, colores, permisos y geometria sin cambiar gates.",
+  "reason": "Recuperar PR1213 y exigir el check publicado por Cloudflare para el mismo proyecto y app85455, preservando todos los controles y correcciones de main.",
   "files": [
     {
       "path": "404.html",
@@ -42,6 +42,11 @@
       "path": "collections.html",
       "oldHash": "03e49ef89d06192215a6bdaad8247f7f347d93f3b31f67586912b5f23a268a48",
       "newHash": "ceb7ec8703421513a4929c96a52cd9dd9d50f3cb5bdcc2ef37a2c1197d4fd5f2"
+    },
+    {
+      "path": "config/mantenimiento-flujos.json",
+      "oldHash": "67b9d30c59418b2829e2d53fc006788b3535e55035aa771ddc4cebe801df2605",
+      "newHash": "cefd7344792deca6699f6d885a15f191f0039698b8e3fa97f61b5d55381f083c"
     },
     {
       "path": "contact.html",

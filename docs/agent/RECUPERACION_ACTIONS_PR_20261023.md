@@ -38,3 +38,11 @@ PASS_LOCAL:20/20 WebKit de formularios, esquema publicado en cuatro anchos, gate
 Una copia temporal del test c86201bf con el puntero colocado explícitamente en Comprar reprodujo la misma aserción fallida de CI, antes de cualquier resize. El test vigente ahora establece ese hover inicial de forma deliberada, publica el esquema y exige el color hover actualizado. Después mueve el puntero fuera del botón, comprueba que :hover sea falso y exige el color de reposo original. Mantiene las comprobaciones separadas de hover en ambos botones, peligro, campos/foco y resize. No modifica CSS, colores esperados ni controles de publicación.
 
 La sección histórica de TEMA_TINTIN_UNICO_20261023.md atribuía el fallo al resize; esta evidencia de logs corrige esa atribución. Los20 WebKit iniciales y las231 regresiones corresponden a la conciliación; la verificación focal posterior cubre el cambio adicional del fixture.
+
+## Discrepancia de nombre en Cloudflare
+
+El SHA6184a0d3 recibió un check genérico Cloudflare Pages120617438864 pendiente y un check Cloudflare Pages: tintinaccesorios120617701868 aprobado, ambos de la aplicación85455. Tras el reintento manual del titular, el nuevo despliegue1794697d-ede4-4040-bdc8-1a1146ac7120 aprobó con el check120623300894 y el nombre por proyecto; el genérico siguió pendiente. No se atribuye una causa interna al proveedor.
+
+La configuración del controlador exige ahora el nombre real Cloudflare Pages: tintinaccesorios, conservando aplicación85455, SHA exacto, estado completed y conclusión success; Repository audit y ambos análisis CodeQL siguen obligatorios. El ruleset18212422 aún exige el nombre antiguo: la actualización al mismo proveedor y proyecto devuelve403 por permisos de la integración. Requiere que un administrador sustituya únicamente ese contexto en Protect main, conservando el resto de las reglas. No se falsificaron checks ni se retiró la validación del despliegue. La auditoría40012886302 del candidato anterior seguía en ejecución, sin fallos observados; la nueva revisión requiere su propia CI.
+
+Validación del ajuste de nombre:38/38 contratos existentes de mantenimiento aprobados, incluidos rechazos de app falsa, SHA antiguo, pending, skipped y failure. Build canónico completo aprobado y git diff --check sin errores; CI del nuevo SHA pendiente.

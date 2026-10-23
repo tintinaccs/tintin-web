@@ -1,3 +1,7 @@
+## Actualización — 23/10/2026 — nombre del check Cloudflare
+
+El reintento manual del titular aprobó el despliegue del SHA6184a0d3 bajo Cloudflare Pages: tintinaccesorios (app85455), pero no cerró Cloudflare Pages. Se actualiza el nombre exigido por el controlador, manteniendo proveedor y validación estricta. El ruleset Protect main18212422 necesita la misma sustitución por un administrador: la integración devuelve403 al actualizarlo. Merge bloqueado hasta ese ajuste y CI aprobada del nuevo SHA; no se hereda PASS. Evidencia en RECUPERACION_ACTIONS_PR_20261023.md.
+
 ## 2026-10-23 — Recuperar Actions y PR respetando #1214 (Codex /root)
 
 Petición: corregir cruces vigentes excepto40009824667/job120608130701. Se identifica como Comercio crítico de #1214 y se preservan rama y ejecuciones completas del otro agente. Inventario207 registros de workflows/12 YAML vigentes y dos PR abiertos: el problema vigente adicional es #1213, con Repository audit39988953497 cancelado, dos checks de protección fallidos por esa ausencia de CI y conflictos con main. Se trabaja sobre c86201bf en worktree aislado pr1213-actions-recovery, incorporando mainb3997c7c mediante merge normal. Fuentes del tema, encabezados/dropup y arreglo Checkout se preservan; sólo se concilian referencias/documentación y derivados canónicos. No se fuerza historial, se relajan gates ni se borran fallos históricos.
