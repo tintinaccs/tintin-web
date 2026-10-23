@@ -192,6 +192,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Setup Java for runtime emulators
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
       - name: Install locked dependencies once
         run: npm ci
       - name: Cache Playwright Chromium

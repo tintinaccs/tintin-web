@@ -60,7 +60,7 @@ identidad es un fixture: no acredita Auth, pago externo ni una compra E2E.
 | B: commerce | A | Productos, pedidos, pagos, cuentas, stock, carrito, checkout y navegador comercial |
 | B: rules | B commerce | Firestore con proyectos `demo-*` y Java 21 |
 | C: admin | B commerce | Editor, persistencia, importación, imágenes, panel, operaciones y conectores |
-| D: quality | B commerce | Contratos técnicos, seguridad y auditorías transversales |
+| D: quality | B commerce | Contratos técnicos, seguridad, auditorías transversales y runtime aislado Auth/Firestore con Java 21 |
 | D: browser | B commerce | SEO, interfaz, responsive, accesibilidad y rendimiento |
 | E: Repository audit | Todas, incluso si fallaron | Exige `success` en las seis fases anteriores |
 

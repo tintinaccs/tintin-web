@@ -1,3 +1,9 @@
+## 2026-10-23 — Seguimiento de CI PR1214 (Codex /root)
+
+Cabeza comprobada 855d2f2b3e273862368b50b2d52cb28d9c813e76, ejecución 39993823749: preflight, comercio y reglas/Firestore PASS_CI; calidad FAIL en audit:login-profile → test:critical-runtime antes de arrancar Auth/Firestore porque el runner no selecciona Java 21. Se añade actions/setup-java@v5 con Temurin 21 también al trabajo quality, que ejecuta esos emuladores; rules ya lo configuraba. No se eliminan ni omiten pruebas. Administración y navegador seguían en ejecución al diagnosticar el fallo.
+
+PASS_LOCAL de la corrección: tres contratos existentes de aislamiento/origen/gate, test:fast (73 Node + 1 Playwright sin navegador) y build:pages con verificadores/manifiesto/caché. Entorno actual Node24 y Java21; no tiene Chromium/WebKit instalados, por lo que el runtime completo queda PENDING de CI del nuevo SHA. La corrección de configuración no acredita una compra ni pagos reales. PR debe continuar en borrador, sin merge ni despliegue de producción.
+
 ## 2026-10-23 — Preflight y reparación de CI del PR1214 (Codex /root)
 
 Base main a2bd6fada; cabeza inspeccionada del PR17bdcdc2. La ejecución39984870281 falla al transformar la importación versionada de functions/product.js en CommonJS. Se restaura la ruta física del servidor. El helper compartido foto-variante conserva su URL del navegador; Playwright carga functions/cloudflare mediante ESM nativo para no convertir las URLs compartidas en require. Se retiró el fixture page global innecesario en SEO: las aserciones siguen intactas y los dos tests de servidor originales pueden correr sin Chromium.
