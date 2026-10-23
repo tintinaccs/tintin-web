@@ -19,8 +19,8 @@ const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
 const LOADER_VERSION = 'tintin-20261022-informational-merged-2';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261023-header-dropup-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20261023-header-dropup-2';
-const NAV_ENTRY_VERSION = 'tintin-20261023-header-dropup-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20261023-header-dropup-3';
+const NAV_ENTRY_VERSION = 'tintin-20261023-header-dropup-3';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261021-commerce-review-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261022-avatar-inicial-1';
@@ -150,7 +150,7 @@ const INITIAL_PUBLIC_STYLES = [
   [
     "id=\"tt-navigation-search-css\"",
     "css/components/navigation/compartido/busqueda.css",
-    "tintin-20260921-document-navigation-no-view-transition-css-1-brand-20261004-1-owner-pink-20261004-1-palette-20261014-1"
+    "tintin-20261023-search-panel-height-1"
   ],
   [
     "id=\"tt-navigation-coherence-css\"",
