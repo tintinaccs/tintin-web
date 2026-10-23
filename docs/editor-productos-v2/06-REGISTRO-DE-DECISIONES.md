@@ -24,3 +24,14 @@ Cambios futuros: añadir ID, fecha, autor, evidencia, alternativa descartada si 
 
 
 - D014 /2026-10-23: la titular entregó expresamente «FASE2: MOTOR COMERCIAL Y COMPATIBILIDAD» después de la entrega/aprobación solicitada de fase1. Se registra como aprobación y autorización para implementar el motor, reemplazando la fase2 visual propuesta por este alcance explícito. No autoriza fase3 ni publicación.
+
+
+- D015 /2026-10-23: formato ejecutable variantCommerceVersion2 reutiliza variantInventory y una referencia variantKey a la fila inmutable, con attributes explícitos. Reemplaza la propuesta más amplia de IDs/configuración separada; menos cambios de esquema, misma autoridad compartida.
+- D016 /2026-10-23: precio ausente/null hereda general; anterior ausente sólo hereda si el precio también hereda; anteriornull explícito elimina descuento. Total de matriz mixta esnull; disponibilidad no destruye cantidades.
+- D017 /2026-10-23: activar sólo por marcador persistido, sin escritor ni migración automática. UI/SDK antiguos y borrado v2 protegidos; importador con opción interna false por defecto. Nueva fase3 y publicación no autorizadas.
+- D018 /2026-10-23: snapshots/carritos/reservas incorporan variantKey opcional. Los nombres/orden actuales no son referencia comercial. Los legacy se conservan y su correspondencia se comprueba, sin reescribir pedidos históricos.
+- D019 /2026-10-23: creador GS heredado falla cerrado para v2 y remite al motor servidor; no duplicar la lógica de precio en Apps Script.
+- D020 /2026-10-23: preflight Windows necesitó ejecutar npm mediante shell del sistema con comando/argumentos constantes. Dos mutadores negativos de TTL normalizan separadores de ruta para ejecutarse realmente en Windows. No se cambian umbrales, suites, permisos ni workflows.
+- D021 /2026-10-23: límite99 por combinación; los agregados de varias combinaciones pueden superarlo. Se corrige la cancelación y el reporte de revisión usando la autoridad existente, con regresión RED/verde y prueba REST/CAS en emulador. No se amplía el límite por línea ni se permiten alias para eludirlo.
+
+- D022 /2026-10-23: el gate de imports Shopify reutiliza la versión exacta del baseline canónico en vez de una fecha histórica literal. Negativos nuevos prueban rechazo de URL sin versión/obsoleta; no se modifica el auditor ni su cobertura. Edición de pedidos legacy identifica filas históricas por la referencia original antes de interpretar el orden actual.

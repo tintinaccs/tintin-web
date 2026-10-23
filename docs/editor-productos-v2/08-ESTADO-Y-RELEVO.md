@@ -1,3 +1,40 @@
+# Estado y relevo — fase2 comercial
+
+2026-10-23, Codex /root. **Motor implementado y validado localmente; entrega para revisión, no publicación. Fase3 NO iniciada.** La instrucción expresa de FASE2 aprueba la continuación del plan de fase1 (D014) y reemplaza su propuesta visual de fase2.
+
+## Referencias actuales
+
+- Worktree: C:/Users/Windows/.codex/worktrees/variant-engine-v2/tintinaccs.
+- Rama: codex/motor-comercial-variantes-v2. Consultar su HEAD al retomar; no usar SHA de fase1 como validación funcional.
+- Base funcional6ac1fdf2546fa859412399f88eccf207991880de; documentación heredada a0f89051f de PR1216. El PR documental queda intacto; la nueva entrega incluye esos documentos y depende de su revisión.
+- Fuentes del motor en commits separados, listados en07. PR funcional en borrador, nunca auto-merge. Ver referencia final en la entrega y GitHub de esta rama.
+- Checkout principal sucio y rama visual1213 ajenos: no tocarlos. No activar automations antiguas de publicación para esta fase.
+
+## Resultado comprobado
+
+Contrato real en10-MOTOR-COMERCIAL-FASE-2: opt-in variantCommerceVersion2, variant inmutable/variantKey opcional, atributos por nombre, precio entero override/fallback, descuento explícito y stocknull/0/finito. Lógica existente compartida con servidor, consumidores y reserva/liberación. No SKU obligatorio ni colección paralela. Snapshot de pedido conserva precio; CAS/changeId evita doble descuento/devolución.
+
+PASS_LOCAL:454 Node comerciales;406 compatibilidad/import/sync/catálogo;84 fast+1Chromium imports;51Chromium carrito/ficha y1tarjeta/búsqueda, sin reintentos. Emulador loopback/demo:213controlesreglas+6tests integración con REST/CAS real, incluida carrera última unidad y cancelación60+60/replay. Conteos solapados; comandos/logs/límites en05. Generación de caché/CSP/rutas/diagnóstico y controles afectados se registran al cierre, sin heredar pruebas de otro SHA.
+
+La última regresión encontrada fue rechazo al cancelar120 unidades de dos combinaciones válidas: corregida a límite99 por combinación, también en revisión de reservas;64pruebas dirigidas y emulador final verdes. La tarjeta inline de Catálogo quedó conectada al resolvedor común. No queda un fallo crítico conocido en las ejecuciones locales enumeradas.
+
+## Activación y riesgos pendientes
+
+- Formato nuevo **no expuesto** en editor/importaciones reales. Las guardas impiden que el escritor antiguo borre metadatosv2. Falta editor/escritor confiable compatible, autorización y CI del SHA antes de habilitar productos reales.
+- No migrar automáticamente. Reservas antiguas sólo agregadas requieren revisión antes de asignarles variantes; no inventar distribución. Reordenación legacy ambigua queda bloqueada;v2 mantiene claves explícitas.
+- Sheets parcial preserva campos; stock/opciones/deletev2 rechazados. GS creador legacy falla cerrado; antes de usarlo con nuevos productos requiere adaptación autorizada, no quitar guardas.
+- CI remoto, Node22 remoto, Auth y carrito multidispositivo reales, Sheets/GS desplegados, pagos, producción y dispositivos físicos NOT_VERIFIED en esta entrega local. No afirmar compra real ni desplegar reglas.
+- H5guardado distribuido general/H6ranking por nombre no resueltos; funciones editoriales/estadísticas/plantillas futuras no se consideran completas. Fase2 no es rediseño visual.
+- Rollback: antes de cualquier activación revisar10. No volver a lectoresv1 que ignoren overrides ni borrar campos/historial. No tocar producción.
+
+## Próximo paso
+
+Revisión del PR en borrador y CI de su HEAD exacto. Corregir sólo defectos comprobados dentro de alcance. No merge/deploy, no migraciones ni fase3 sin nuevo pedido. Mantener contrato, pruebas y protección; si main cambia, comparar fuentes antes de incorporar avances.
+
+---
+
+## Archivo histórico de fase1 — superado sólo en autorización/alcance por D014
+
 # Estado y relevo — fase1
 
 Fecha2026-10-23; Codex /root. **Fase1 aprobada mediante instrucción expresa de FASE2. Fase2 motor comercial IN_PROGRESS; sin autorización de publicación o fase3.**

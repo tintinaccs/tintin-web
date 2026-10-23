@@ -65,3 +65,12 @@ flowchart LR
 ```
 
 Lectura estática y simulaciones locales no acreditan paridad de reglas/Apps Script desplegados ni una compra autenticada real. Historial y reproducciones: [auditoría](09-AUDITORIA-FASE-1.md).
+
+
+## Delta de implementación fase2
+
+La base funcional sigue6ac1fdf25. Se extendió el resolvedor **existente** inventario-variantes.mjs, sin una colección ni motor paralelo. variantCommerceVersion2 activa lectura de attributes/precios/disponibilidad/stock nullable en variantInventory; variantKey opcional enlaza carrito, cotización, pedido y huella de reserva con su fila inmutable. Se mantienen los paths y schemaVersion2 del carrito.
+
+Se comprobaron también los renderizadores que no delegaban en tienda.js: catalogo.html tiene su propia tarjeta inline; ahora usa el mismo precio representativo del motor. Búsqueda, ordenación del catálogo, favoritos de Perfil y metadata comparten productDefaultPrice; ficha/carrito usan precio de la selección. Las estadísticas/recibos continúan leyendo importes históricos de orders, sin recalcularlos desde el catálogo. Se mantiene pendiente el cambio de ranking por nombre H6, fuera del alcance comercial de esta fase.
+
+Firestore SDK, formularios/lotes/tarjetas antiguos y borrado global rechazan editar/degradar/borrar productos v2 hasta disponer de un escritor compatible. Sheets rechaza cambiar sus opciones/total o borrar; price parcial conserva matriz y metadatos. CrearPedido.gs antiguo rechaza v2 y exige el motor servidor, sin implementar un segundo resolvedor GS. buildCatalogProductFromImport dispone de opt-in interno que sus consumidores actuales NO habilitan.

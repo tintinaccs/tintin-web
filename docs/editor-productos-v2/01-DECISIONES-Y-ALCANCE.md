@@ -79,3 +79,8 @@ Mantener Firestore, Sheets, catálogo, carrito, checkout, pedidos, inventario, m
 ## Lectura de estados fase1
 
 Clasificación estática: **23 existentes, 9 parciales, 1 faltante y 10 no incorporadas**. «Existente» indica implementación localizada, no PASS de producción. «Faltante» se limita al editor y rutas inspeccionadas; no niega APIs de otros módulos. Las diez NO son decisiones de producto, no diez defectos. Detalles H1–H6 en la auditoría. La evidencia inicial se conserva como fotografía del PROMPT0; la inspección ampliada de fase1 prevalece para la arquitectura actual.
+
+
+## Delta de fase2 comercial
+
+La matriz anterior conserva su clasificación de fase1. La titular aprobó continuar mediante el pedido expreso de fase2 motor comercial, sin publicación. Precio por variante, stock nullable, referencias estables y adaptación de consumidores se implementan bajo opt-in; la interfaz antigua no habilita edición de v2 y no se inicia el rediseño completo. No equivale a cerrar las33 funciones aprobadas: estados editoriales, plantillas, estadísticas por ID y otras capacidades visuales siguen en sus fases autorizables posteriores. Funciones44–58 y las diez NO no se eliminan. Contrato real y evidencia en10-MOTOR-COMERCIAL-FASE-2.

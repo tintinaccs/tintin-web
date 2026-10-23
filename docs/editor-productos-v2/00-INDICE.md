@@ -1,6 +1,6 @@
 # Editor de productos v2 — entrada para agentes
 
-Fecha: 2026-10-23. Fase autorizada actual: **1, auditoría y plan**, por pedido expreso posterior al PROMPT0. No iniciar fase2, implementación, migración ni publicación.
+Fecha: 2026-10-23. Fase autorizada actual: **2, motor comercial y compatibilidad**, por instrucción expresa posterior al cierre de fase1. No publicar, migrar datos reales ni iniciar fase3. La fase2 comercial de la titular reemplaza la fase2 visual del plan inicial.
 
 Esta carpeta conserva las decisiones de la titular del «PROMPT 0». No reemplaza las autoridades técnicas existentes ni certifica funcionalidades por estar aprobadas.
 
@@ -13,6 +13,7 @@ Esta carpeta conserva las decisiones de la titular del «PROMPT 0». No reemplaz
 7. [Bitácora de agentes](07-BITACORA-DE-AGENTES.md).
 8. [Estado y relevo](08-ESTADO-Y-RELEVO.md).
 9. [Hallazgos, reproducción e historial 422](09-AUDITORIA-FASE-1.md).
+10. [Motor comercial implementado y activación protegida](10-MOTOR-COMERCIAL-FASE-2.md).
 
 ## Antes de cada tarea
 

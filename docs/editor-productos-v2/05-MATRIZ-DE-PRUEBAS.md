@@ -57,3 +57,48 @@ GitHub leído: candidato de #1214 y run main40015443643 SUCCESS del código audi
 | H6 /4 | dos IDs con mismo nombre, nombre nuevo con mismo ID, cancelados/reembolsados y rango temporal | Definiciones aprobadas; totales reproducibles desde pedidos históricos. |
 
 Pruebas de navegador posteriores deben usar las suites existentes y MCP Playwright con extensión si se inspecciona la sesión Chrome de la titular. No usar TinyFish ni modificar su Perfil/dirección pendiente. Dispositivos físicos, pago real y recepción física de notificaciones quedan fuera de esta fase.
+
+## Ejecución fase2 — motor comercial, 2026-10-23
+
+Base funcional6ac1fdf, rama codex/motor-comercial-variantes-v2; fuentes de esta fase en commits pequeños desde e0ea8e65f hasta1d3106ca8 y propagación de referencias posterior. Consultar el HEAD del PR para el conjunto final, no usar un SHA de fase1 como prueba del motor. Windows, Node24.19.0, Chromium headless local; CI usa Node22 y queda separada del PASS_LOCAL.
+
+Todos los comandos de la tabla terminaron exit0. Las cantidades se solapan: **no sumarlas como pruebas únicas**. Logs en artifacts/ del worktree aislado; no contienen una compra ni datos productivos.
+
+| Comando ejecutado | Resultado actual | Evidencia local |
+| --- | --- | --- |
+| `npm run test:commerce` |454/454 Node |variant-commerce-final.log |
+| `node --test tests/import/*.test.mjs tests/sync/*.test.mjs tests/admin/maestro-productos*.test.mjs tests/catalog/*.test.mjs tests/profile/favorite-current-product.test.mjs` |406/406 Node |variant-compatibility-final.log |
+| `npm run test:fast` | preflight1007 archivos/72 funciones,84/84 Node y1/1 Chromium de importación del servidor |variant-fast-final.log |
+| `node --test tests/orders/order-admin-domain.test.mjs tests/orders/variant-inventory.test.mjs tests/import/inventory-reservation-review.test.mjs` |64/64; caso de cancelación120 unidades corregido |variant-multiquantity.log |
+| `npx playwright test tests/cart/color-choice-browser.spec.js tests/ui-ux/product-shape-selection.spec.js --project=chromium --workers=1 --retries=0` |51/51 Chromium, sin reintentos |variant-browser-final.log |
+| `npx playwright test tests/catalog/search-responsive.spec.js --project=chromium --workers=1 --retries=0 --grep "motor comercial v2"` |1/1 Chromium, sin reintentos |variant-search-browser-final.log |
+| `npx firebase emulators:exec --only firestore --project demo-tintin-variant-v2 --config .firebase-variant-v2.json "node scripts/probar-firestore-critico.mjs && node --test tests/integration/commerce-firestore.test.mjs"` |213 ataques/controles de reglas y6 pruebas de integración incluidas subpruebas, exit0 |variant-emulator-final.log |
+
+Navegador de fixtures: PLAYWRIGHT_BASE_URL=http://127.0.0.1:4295, host estático privado con rutas HTML limpias. Prueba visual v2 en390/1366 y regresiones de selección preexistentes320–1920/tablet/rotación. No se atribuyen pruebas físicas ni cobertura de toda la interfaz nueva a estos casos.
+
+Emulador: reglas locales firestore.rules, Firestore127.0.0.1:18083/hub14403/logging14503, UI deshabilitada y singleProjectMode=false. JAVA_HOME/PATH sólo del proceso con Java21. Proyectos de prueba demo; identidades fixture, sin Firebase Auth productivo. El archivo temporal de configuración se retira al cerrar; emulador detenido por su propio CLI. La integración usa REST/CAS real del emulador, no simula el commit en memoria.
+
+### Correspondencia de aceptación
+
+- Producto simple/antiguo, una o varias opciones, sin SKU, override/fallback, descuentos/null/precio inválido: variant-commerce-v2, variant-inventory, precio-anterior y public-checkout-policy.
+- Identidad al reordenar, valores superpuestos, foto específica/general/color, carrito antiguo y snapshot remoto con clave opcional: stock-variant-client, variant-image, variant-commerce-v2 y order-admin-domain.
+- Stock0/null/mixto, varias combinaciones, cambios de precio antes de confirmar, selección válida sin422 espurio y rechazos reales antes de escribir: suites de checkout y fixtures Chromium de carrito/ficha/catálogo/búsqueda.
+- Pedidos concurrentes sobre última unidad, CAS, reserva/confirmación sin doble descuento, cancelar/reintentar/reabrir y precio histórico: order-admin-domain y commerce-firestore. El caso nuevo60+60 reserva y devuelve120 una sola vez; el límite99 permanece por combinación, no por producto agregado.
+- SDK/roles/cartKey, prohibición de degradar/eliminar productosv2, precio privado y reglas:213 controles reales en emulador. No se despliegan reglas.
+- Sheets parcial preserva matriz/campos/fotos, cambios incompatibles409 sin escribir; GS antiguo rechaza v2; Shopify opt-in interno y pipeline antiguo intacto: suites sync/import/order-contract.
+
+### Fallos detectados y corregidos durante el ciclo
+
+1. Sheets leía el producto innecesariamente para actualizar sólo precio: restaurado el merge parcial existente.
+2. Preflight Windows no lanzaba npm.cmd y dos negativos TTL no aplicaban por separadores: ejecución Windows y mutadores corregidos; auditores/umbrales intactos. No se quitaron pruebas.
+3. Host estático inicial no resolvía /product: host privado corregido; pruebas finales no usaron ese fallo como PASS.
+4. La tarjeta propia inline de Catálogo seguía cotizando el precio general: conectada al mismo resolvedor de búsqueda/ficha. Test nuevo de tarjeta/búsqueda reproduce y verifica el override.
+5. La edición de un pedido legacy después de una conversión explícita de fixture y reordenación con valores superpuestos podía guardar una referencia distinta de la reserva: se conserva la referencia histórica también al editar; regresión RED/verde en order-admin-domain. No se hizo conversión real.
+6. El gate de imports fijaba una versión Shopify antigua: ahora compara la URL exacta con el baseline canónico ya usado por ese test; dos negativos nuevos rechazan URL obsoleta o sin versión. Auditor intacto.
+7. La cancelación rechazaba120 unidades de dos combinaciones válidas: prueba RED reproducida, autoridad agregada corregida para límite99 por combinación y revisión de reservas alineada;64 Node y emulador final6/6 verifican cancelación/replay.
+
+No quedan fallos críticos observados en estas ejecuciones locales. CI del HEAD final, proveedor Sheets real, Apps Script desplegado, carrito multidispositivo autenticado, pagos, compras reales y producción comercial: **NOT_VERIFIED aquí**. El formato no se activa ni migra en datos reales. La habilitación exige escritor/editor compatible y aprobación independiente.
+
+### Controles finales del repositorio
+
+PASS_LOCAL adicionales: audit:architecture-contracts (autoridades/consumidores), test:architecture-gates36/36 incluidos negativos, audit:content y audit:phase6. Build:pages y verificadores canónicos de Pages/CSP/rutas/diagnóstico/caché ejecutados; cierre final de protección tras regenerar hashes desde main y diffcheck en bitácora. No se quitaron gates ni se relajaron permisos/umbrales.

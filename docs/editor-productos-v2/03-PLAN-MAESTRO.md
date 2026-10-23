@@ -61,3 +61,10 @@ Aprobar fases2–6, diseño y contrato propuesto; confirmar estados editoriales 
 ## Reversión propuesta
 
 Antes de activar v2: fixtures y copia/export autorizado con prueba de recuperación; identificar SHA anterior compatible, sin crear respaldos reales en esta fase. Desactivar edición/activación nueva si falla el gate y mantener lectores compatibles. Revertir presentación puede ser un commit normal; **no volver a un servidor que cobre sólo precio base si ya hay overrides v2**. Volver atrás requiere versión comercial compatible o transformación explícita revisada y aprobada; nunca borrar campos para hacer compatible un rollback. Conservar pedidos/reservas/auditoría y tratar Sheets como espejo, no restaurarlo sobre Firestore. No force-push ni restauración productiva automática.
+
+
+## Revisión autorizada por la titular: fase2 comercial
+
+El pedido posterior «FASE2: MOTOR COMERCIAL Y COMPATIBILIDAD» aprueba la continuación y reemplaza el alcance de fase2 visual propuesto anteriormente. Se implementa el motor de precios/stock/referencias y sus consumidores con activación protegida, no un rediseño completo. El resto del plan se conserva como propuesta histórica; su numeración no autoriza ejecutar fase3.
+
+Cierre de esta entrega: código y pruebas en rama separada, commits revisables y PR en borrador, contrato actualizado y evidencia local; no hay merge/deploy, activación de datos reales ni inicio de fase3. Antes de activar v2 faltan aprobación/publicación separadas y editor/escritor compatible. Los controles completos de CI del nuevo SHA deben revisarse cuando existan; la CI de6ac1 no se hereda.

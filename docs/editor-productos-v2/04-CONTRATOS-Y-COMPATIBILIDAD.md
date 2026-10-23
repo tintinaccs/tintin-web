@@ -64,3 +64,12 @@ La siguiente es una propuesta de evolución del modelo existente. **No son campo
 - Reglas/APIs públicas: ampliar allowlists y validaciones conscientemente, sin filtrar campos privados. No dar por válido un nuevo campo porque un rol privilegiado pueda escribirlo.
 
 Esta propuesta necesita aprobación antes de fase2; el detalle de stock mixto, rango de precios y semántica de estados/plantillas/estadísticas se registra como decisión de la titular, no como función implementada.
+
+
+## Contrato realmente implementado en fase2
+
+La propuesta anterior de IDs opacos/configuración nueva se sustituye por una extensión menor del modelo existente. **variantCommerceVersion:2**, variantInventory con attributes por nombre y referencia inmutable en el campo variant, y variantKey opcional en líneas/reservas. No se implementó variantSchemaVersion ni una colección nueva. No confundir el contrato previo propuesto con este formato ejecutable.
+
+Precio explícito entero1..1e9 por combinación; null/ausencia de price hereda products.price. priceBefore explícito null desactiva descuento; ausente hereda el general sólo si también se hereda precio. Stock null es sin control,0 agotado; totalnull si alguna fila es sin control, suma si todas finitas. Se conserva la referencia de la fila al reordenar; las etiquetas mostradas se derivan de attributes en el orden visual actual. Los snapshots de pedidos y reservas guardan variantKey para que cancelar no dependa de la posición o etiqueta visible.
+
+El motor admite referencias de reservas v1 al convertir fixtures de prueba a v2 manteniendo sus claves; no hace esa conversión en datos reales. No permite eliminar/degradar combinaciones v2 ni cambiar control finito/null mediante assertVariantCompatibility. Reordenación legacy con atributos de valores superpuestos queda bloqueada de forma explícita hasta usar referencias estables; no se adivina su asociación. Detalle y límites en10-MOTOR-COMERCIAL-FASE-2.
