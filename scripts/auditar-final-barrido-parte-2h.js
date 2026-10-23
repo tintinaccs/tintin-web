@@ -97,6 +97,8 @@ const centralWorkflowPath = '.github/workflows/auditar-tintin.yml';
 const visualWorkflowPath = '.github/workflows/auditoria-visual.yml';
 const centralWorkflow = exists(centralWorkflowPath) ? read(centralWorkflowPath) : '';
 const visualWorkflow = exists(visualWorkflowPath) ? read(visualWorkflowPath) : '';
+const { readCICommands } = require('./ci-commands.js');
+const centralCommands = readCICommands(root);
 
 // Las antiguas Partes 2A–2G ya no tienen un workflow por separado. Su cobertura
 // se conserva como contratos dentro del único gate de PR y del barrido visual
@@ -169,7 +171,7 @@ check(
 for (const contract of partContracts) {
   const commandsExist = contract.packageScripts.every(name => typeof pkg.scripts?.[name] === 'string');
   const finalConnected = contract.finalNeedles.every(needle => finalAudit.includes(needle));
-  const ciConnected = contract.ciNeedles.every(needle => centralWorkflow.includes(needle));
+  const ciConnected = contract.ciNeedles.every(needle => centralCommands.has(needle));
   const visualConnected = contract.visualNeedles.every(needle => visualWorkflow.includes(needle));
 
   check(
@@ -220,11 +222,11 @@ check(
     centralWorkflow.includes('push:') &&
     centralWorkflow.includes('npm run build:pages') &&
     centralWorkflow.includes('node scripts/auditar-integraciones-canonicas.mjs') &&
-    centralWorkflow.includes('npm run audit:final') &&
-    centralWorkflow.includes('npm run test:phase10-a11y') &&
-    centralWorkflow.includes('npm run test:phase11-seo') &&
-    centralWorkflow.includes('npm run test:performance') &&
-    centralWorkflow.includes('npm run audit:global-responsive-geometry'),
+    finalAudit.split(' && ').every(command => centralCommands.has(command)) &&
+    centralCommands.has('npm run test:phase10-a11y') &&
+    centralCommands.has('npm run test:phase11-seo') &&
+    centralCommands.has('npm run test:performance') &&
+    centralCommands.has('npm run audit:global-responsive-geometry'),
   'El gate central dejó de ejecutar alguna protección estática o de navegador obligatoria.'
 );
 

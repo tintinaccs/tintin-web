@@ -1,3 +1,11 @@
+## 2026-10-23 — Conciliar variantes con encabezado publicado
+
+Se conservan las autoridades de PR1211 para encabezado/búsqueda/dropup y de PR1214 para selección, fotos, carrito, checkout e inventario. El conflicto se resuelve en referencias transitivas y shell, con una URL nueva para los dos módulos de navegación conciliados. Derivados de caché/CSP/diagnóstico y plan se regeneran. La regresión de tres atributos fijos verifica los seis órdenes del producto comunicado, sin datos ni operaciones comerciales reales. Evidencia y límites de red en CURRENT_STATE.
+
+## 2026-10-23 — Selección compartida entre catálogo, carrito, fotos y checkout
+
+Autoridad: resolveProductVariant en inventario-variantes.mjs. Consumidores: política pública de catálogo/carrito, fotos por variante y política de checkout del servidor; reserva/liberación reconoce matrices con claves existentes aunque cambie el orden de atributos. Se completa la selección vacía sólo cuando todas las características son fijas; opciones inexistentes/ambiguas y stock insuficiente conservan sus rechazos. Datos públicos de 222 productos activos inspeccionados de sólo lectura; no se alteran datos, Auth ni pagos. Referencias transitivas, shell, CSP, baseline y diagnóstico se actualizan desde sus autoridades. Pruebas omitidas por instrucción expresa; publicación pendiente. Evidencia y límites en CURRENT_STATE y docs/reviews/catalogo-variantes-20261023.json.
+
 ## 2026-10-23 — Márgenes globales sin reservas duplicadas
 
 Autoridad visual: sistema-superficies-tintin.css, con adm-content específico en dashboard-control.css. Afecta18 documentos, bloques públicos y23 módulos del panel. Una escala20–32px reduce rellenos acumulados y gutters dobles sin alterar navegación fija, safe areas, fotos/mapas, lectura legal, flujo de Login ni datos comerciales. Regresión en el spec canónico section-flow-full-width cubre17 tamaños320–2560 y activa los módulos sólo en fixtures de presentación. Se conservan controles y consumidores de #1211; HTML, bundles, caché, CSP, diagnóstico y protección se generan por sus autoridades existentes. Estado y evidencia actual en CURRENT_STATE/ESPACIADO_GLOBAL_20261023.

@@ -181,9 +181,12 @@ check(
 
 const packageJson = JSON.parse(read('package.json'));
 const finalAuditScript = String(packageJson?.scripts?.['audit:final'] || '');
+const { readCICommands } = require('./ci-commands.js');
+const ciCommands = readCICommands(root);
 check(
   'El barrido final permanece cubierto después de consolidar workflows',
-  ciWorkflow.includes('npm run audit:final') && finalAuditScript.includes('npm run audit:part2h')
+  finalAuditScript.split(' && ').every(command => ciCommands.has(command)) &&
+    finalAuditScript.includes('npm run audit:part2h')
 );
 
 const visualWorkflow = read('.github/workflows/auditoria-visual.yml');

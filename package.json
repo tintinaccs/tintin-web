@@ -97,7 +97,7 @@
     "test:otp-rate-emulator": "firebase emulators:exec --only firestore --project demo-tintin-otp-limits \"node --test scripts/probar-otp-limites-emulador.mjs\"",
     "test:rules-phone": "firebase emulators:exec --only firestore --project demo-tintin-phone \"node scripts/probar-firestore-telefono-unico.mjs\"",
     "test:rules-username": "firebase emulators:exec --only firestore --project demo-tintin-username \"node scripts/probar-firestore-username-unico.mjs\"",
-    "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/probar-firestore-critico.mjs && node --test scripts/probar-api-limites-emulador.mjs\"",
+    "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/probar-firestore-critico.mjs && node --test tests/integration/commerce-firestore.test.mjs && node --test scripts/probar-api-limites-emulador.mjs\"",
     "audit:login-isolation": "node scripts/auditar-acceso-aislamiento.js && node --test tests/auth/*.test.mjs",
     "audit:login-profile": "node scripts/auditar-acceso-perfil-incorporacion.js && node --test tests/login/*.test.mjs tests/profile/*.test.mjs tests/navigation/controller-bootstrap.test.mjs && playwright test tests/login/google-loader-recovery.spec.js tests/login/location-map-browser.spec.js --project=chromium && npm run test:critical-runtime",
     "audit:hero-background-controls": "node scripts/auditar-hero-fondo-controles.js",
@@ -134,7 +134,16 @@
     "audit:names": "node scripts/auditar-convenciones-nombres.mjs",
     "audit:appearance-unified": "node scripts/auditar-admin-apariencia-unificada.js",
     "test:shopify-product-redirect": "node --test tests/seo/shopify-product-redirect.test.mjs",
-    "test:critical-runtime": "node scripts/probar-flujos-runtime.mjs"
+    "test:critical-runtime": "node scripts/probar-flujos-runtime.mjs",
+    "test:commerce": "node --test tests/checkout/*.test.mjs tests/orders/*.test.mjs tests/cart/*.test.mjs tests/payments/*.test.mjs tests/catalog/variant-presentation.test.mjs tests/catalog/product-colors.test.mjs tests/catalog/precio-anterior.test.mjs tests/auth/*.test.mjs",
+    "test:fast": "node --experimental-vm-modules scripts/ci-preflight.mjs && node --test tests/ci/*.test.mjs tests/checkout/public-checkout-policy.test.mjs tests/checkout/order-contract.test.mjs tests/orders/variant-inventory.test.mjs tests/cart/stock-variant-client.test.mjs tests/cart/variant-image.test.mjs tests/catalog/variant-presentation.test.mjs tests/catalog/product-colors.test.mjs && playwright test tests/ci/server-import.spec.js --project=chromium --retries=0",
+    "ci:commerce": "node scripts/ci-stage.mjs commerce",
+    "ci:admin": "node scripts/ci-stage.mjs admin",
+    "ci:quality": "node scripts/ci-stage.mjs quality",
+    "ci:browser": "node scripts/ci-stage.mjs browser",
+    "ci:rules": "node scripts/ci-stage.mjs rules",
+    "ci:preflight": "node scripts/ci-stage.mjs preflight",
+    "test:commerce-integration": "firebase emulators:exec --only firestore --project demo-tintin-commerce-integration \"node --test tests/integration/commerce-firestore.test.mjs\""
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "6.0.0",

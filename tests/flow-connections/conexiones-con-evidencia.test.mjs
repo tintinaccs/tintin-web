@@ -21,6 +21,31 @@ import {
 
 const AT = '2026-10-06T00:00:00.000Z';
 const read = relative => fs.readFileSync(new URL(`../../${relative}`, import.meta.url), 'utf8');
+function executedCICommands() {
+  const workflow = read('.github/workflows/auditar-tintin.yml');
+  const scripts = JSON.parse(read('package.json')).scripts;
+  const stages = JSON.parse(read('config/ci-stages.json'));
+  const commands = new Set();
+  function expand(command) {
+    if (commands.has(command)) return;
+    commands.add(command);
+    for (const match of command.matchAll(/npm run ([\w:-]+)/g)) {
+      assert.ok(scripts[match[1]], `Script de CI inexistente: ${match[1]}`);
+      expand(scripts[match[1]]);
+    }
+    for (const match of command.matchAll(/(tests\/[\w/-]+)\/\*\.test\.mjs/g)) {
+      for (const file of fs.readdirSync(new URL(`../../${match[1]}/`, import.meta.url))) {
+        if (file.endsWith('.test.mjs')) commands.add(`${match[1]}/${file}`);
+      }
+    }
+  }
+  for (const [name, stage] of Object.entries(stages)) {
+    assert.ok(workflow.includes(`run: npm run ci:${name}`), `La fase ${name} debe invocarse en CI`);
+    assert.equal(scripts[`ci:${name}`], `node scripts/ci-stage.mjs ${name}`);
+    for (const command of [...stage.audits.map(name => `npm run ${name}`), ...stage.commands]) expand(command);
+  }
+  return [...commands].join('\n');
+}
 const edgeOf = (from, to) => {
   const edge = EDGES.find(item => item.from === from && item.to === to);
   assert.ok(edge, `${from} → ${to} debe existir en el flujo`);
@@ -66,12 +91,11 @@ test('bloqueo y destino por rol sólo quedan verdes con el Repository audit del 
 
 test('las pruebas que sostienen esos verdes existen, ejecutan código real y corren en el Repository audit', () => {
   const scripts = JSON.parse(read('package.json')).scripts;
-  const workflow = read('.github/workflows/auditar-tintin.yml');
-  const auditFinal = scripts['audit:final'];
+  const workflow = executedCICommands();
   const runners = {
     'tests/accounts/': ['test:accounts', () => /npm run test:accounts/.test(workflow)],
-    'tests/login/': ['audit:login-profile', () => auditFinal.includes('npm run audit:login-profile') && /npm run audit:final/.test(workflow)],
-    'tests/auth/': ['audit:login-isolation', () => auditFinal.includes('npm run audit:login-isolation') && /npm run audit:final/.test(workflow)],
+    'tests/login/': ['audit:login-profile', () => /npm run audit:login-profile/.test(workflow)],
+    'tests/auth/': ['audit:login-isolation', () => /npm run audit:login-isolation/.test(workflow)],
   };
   for (const [from, to, file] of ACCESS_DECISION_EDGES) {
     const source = read(file);
@@ -272,7 +296,7 @@ test('firestore → carrito exige la lectura real del carrito y las Rules del ca
   assert.match(cartBlock, /succeeds\(deleteDoc\(ownCartLine\)\)/);
   assert.ok((cartBlock.match(/await fails\(/g) || []).length >= 10, 'los rechazos del carrito también se ejecutan');
   assert.match(JSON.parse(read('package.json')).scripts['test:rules-critical'], /^firebase emulators:exec .*node scripts\/probar-firestore-critico\.mjs/);
-  assert.match(read('.github/workflows/auditar-tintin.yml'), /npm run test:rules-critical/);
+  assert.match(executedCICommands(), /npm run test:rules-critical/);
   assert.ok(edgeOf('firestore', 'carrito').evidence.some(item => item.file === 'scripts/probar-firestore-critico.mjs'));
 });
 
@@ -317,7 +341,7 @@ test('la prueba de escritura de participación ejecuta el código real y corre e
   assert.match(source, /documents:commit/, 'pasa por el commit real de firebase-admin-ligero');
   const scripts = JSON.parse(read('package.json')).scripts;
   assert.ok(scripts['test:engagement'].includes('tests/engagement/*.test.mjs'));
-  assert.match(read('.github/workflows/auditar-tintin.yml'), /npm run test:engagement/);
+  assert.match(executedCICommands(), /npm run test:engagement/);
   assert.ok(WRITE_CONTRACT_SUITES.engagement.includes(file));
   for (const record of [NODES.find(node => node.id === 'likes'), NODES.find(node => node.id === 'comentarios'), edgeOf('apis-internas', 'likes'), edgeOf('apis-internas', 'comentarios')]) {
     assert.ok(record.evidence.some(item => item.file === file), `${record.id} debe citar ${file}`);

@@ -1,4 +1,4 @@
-import { variantInventoryEntries } from '../../core/store/inventario-variantes.mjs?v=tintin-20261003-variant-inventory-1-stock-flow-20261014-1';
+import { variantInventoryEntries } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
 // Contrato de las operaciones del maestro; Firestore y permisos se inyectan desde Admin.
 const FIELDS = ['name','sku','category','collection','price','priceBefore','stock','active','oferta','destacado','badge','description','desc','image','imageUrl','imagesExtra','variantMedia','variants','variantInventory','tags','material','measurements','colorFinish','care','waterResistance','warranty','sizeFit','packageContents'];
 export const PRODUCT_BULK_FIELDS = ['price','pricePercent','priceBefore','stock','stockDelta','category','active','oferta','destacado','badge','tags'];

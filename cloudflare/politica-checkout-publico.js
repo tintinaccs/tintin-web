@@ -1,3 +1,5 @@
+import { resolveProductVariant } from '../js/core/store/inventario-variantes.mjs';
+import { productVariantImage } from '../js/components/images/foto-variante.mjs';
 import { isValidCustomerName } from '../js/pages/profile/configuracion-inicial-perfil.mjs';
 import { shippingDepartment } from '../js/components/location/departamento-ciudad.mjs';
 import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../js/components/location/tarifas-delivery.mjs';
@@ -28,7 +30,6 @@ const CI_PATTERN = /^\d{5,8}$/;
 const PAYMENT_METHODS = new Set(['efectivo', 'transferencia', 'paypal']);
 const CART_LINE_KEYS = new Set(['id', 'qty', 'variant', 'variants']);
 const MAP_KEYS = new Set(['lat', 'lng', 'name', 'address']);
-const VARIANT_META_KEYS = new Set(['price', 'sku', 'imageUrl', 'stock', 'active']);
 
 function checkoutError(code, status = 400, details = {}) {
   return Object.assign(new Error(code), { code, status, ...details });
@@ -178,40 +179,8 @@ function resolveShipping(rates, selectedCity, selectedDepartment, requestedMetho
   throw checkoutError('shipping_invalid');
 }
 
-function variantGroups(value) {
-  const groups = [];
-  const positions = new Map();
-  const add = (rawKey, rawValue) => {
-    const key = cleanText(rawKey, 60);
-    if (!key) return;
-    const values = Array.isArray(rawValue) ? rawValue : String(rawValue == null ? '' : rawValue).split(',');
-    const options = [...new Set(values.map(option => cleanText(option, 120)).filter(Boolean))];
-    if (!options.length) return;
-    if (!positions.has(key)) {
-      positions.set(key, groups.length);
-      groups.push([]);
-    }
-    const target = groups[positions.get(key)];
-    for (const option of options) if (!target.includes(option)) target.push(option);
-  };
-  if (Array.isArray(value)) {
-    for (const item of value.slice(0, 100)) {
-      if (!isPlainObject(item)) continue;
-      for (const key of Object.keys(item)) if (!VARIANT_META_KEYS.has(key)) add(key, item[key]);
-    }
-  } else if (isPlainObject(value)) {
-    for (const key of Object.keys(value).slice(0, 20)) add(key, value[key]);
-  }
-  return groups;
-}
-
 export function variantIsValid(product, selectedVariant) {
-  const groups = variantGroups(product?.variants);
-  const selected = cleanText(selectedVariant, 120);
-  if (!groups.length) return !selected;
-  if (!selected) return false;
-  const parts = selected.split('/').map(part => cleanText(part, 120)).filter(Boolean);
-  return parts.length === groups.length && parts.every((part, index) => groups[index].includes(part));
+  return resolveProductVariant(product, selectedVariant) !== null;
 }
 
 async function readDocument(env, get, path) {
@@ -378,9 +347,12 @@ export async function preparePublicCheckoutOrder(env, payload, authenticatedUser
   const inspect = ({ items, documents, subtotal, shippingCost: computedShipping, total }) => {
     for (const item of items) {
       const product = decodeFirestoreFields(documents.get(item.id)?.fields || {});
-      if (!variantIsValid(product, item.variant)) {
+      const canonicalVariant = resolveProductVariant(product, item.variant);
+      if (canonicalVariant === null) {
         throw checkoutError(item.variant ? 'invalid_variant' : 'variant_required', 422, { productId: item.id });
       }
+      item.variant = canonicalVariant;
+      item.imageUrl = productVariantImage(product, canonicalVariant);
     }
     if (
       payload.expectedSubtotal !== subtotal ||

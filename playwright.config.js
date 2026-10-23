@@ -14,6 +14,9 @@ const { defineConfig, devices } = require('@playwright/test');
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined;
 
 module.exports = defineConfig({
+  // Server sources are native JavaScript. Keep Node's ESM loader (including
+  // shared browser URL imports) instead of rewriting them to CommonJS require.
+  build: { external: ['**/functions/**', '**/cloudflare/**'] },
   testDir: './tests',
   timeout: 60000,
   expect: { timeout: 15000 },
