@@ -5,6 +5,7 @@ import { statisticsSince } from '../../js/admin/statistics/modelo-reinicios.mjs'
 import { onRequest } from '../../functions/api/admin-commerce-controls.js';
 const source = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
 const renderer = source.slice(source.indexOf('function renderGeneralStatistics()'), source.indexOf('async function listenStatisticsTraffic()'));
+const validOrder = new Function(source.slice(source.indexOf('function statisticsOrderIsValid('),source.indexOf('function statisticsActivePresence('))+';return statisticsOrderIsValid;')();
 function render(resets = {}, extraOrders = []) {
   const values = {}, bars = {}, rankings = {};
   const now = Date.now();
@@ -13,7 +14,7 @@ function render(resets = {}, extraOrders = []) {
     ...extraOrders.map(order=>({createdAt:now-500,status:'entregado',paymentStatus:'pagado',...order}))];
   const dependencies = { currentRole: 'superadmin', ensureStatisticsControls: () => true, refreshStatisticsViews() {}, runAdminCrudOperation() {},
     statisticsStartDate: () => new Date(now - 100000), allOrders, allUsers: [{ createdAt: now - 10000 }],
-    activityTimestampMillis: value => Number(value), statisticsOrderIsValid: () => true,
+    activityTimestampMillis: value => Number(value), statisticsOrderIsValid: validOrder,
     statisticsPaymentStatus: order => order.paymentStatus, statisticsTrafficSessions: [{ startedAt: now - 10000, visitorId: 'old' }, { startedAt: now - 1000, visitorId: 'new' }],
     statisticsActivePresence: () => [], _allProducts: [], filterStatisticsRows: (metric, rows, timeOf) => statisticsSince(rows, metric, resets, timeOf),
     statisticsSetText: (key, value) => { values[key] = value; }, formatPrice: value => Number(value),
@@ -58,4 +59,10 @@ test('product ranking separates identical names and joins renamed snapshots by s
  assert.equal(rows.find(row=>row.id==='a')?.value,3);
  assert.equal(rows.find(row=>row.id==='b')?.value,1);
  assert.equal(render({products:new Date(result.now+1000)},orders).rankings['statistics-top-products'].length,0);
+});
+
+test('product ranking respects the existing invalid-order policy for cancelled and rejected orders',()=>{
+ const items=[{id:'a',name:'Fixture',qty:1,price:100}];
+ const {rankings}=render({},[{status:'cancelado',items},{status:'rechazado',items}]);
+ assert.deepEqual(rankings['statistics-top-products'],[]);
 });

@@ -1600,7 +1600,7 @@ function renderGeneralStatistics() {
     if (orderIncluded('paymentStatus', order)) paymentStatuses.set(paymentStatus, (paymentStatuses.get(paymentStatus) || 0) + 1);
     const location = String(order.shipping?.city || order.city || order.shipping?.zone || order.shipping?.department || 'Sin ubicación').trim();
     if (orderIncluded('orderLocations', order)) orderLocations.set(location, (orderLocations.get(location) || 0) + 1);
-    (orderIncluded('products', order) ? (order.items || []) : []).forEach(item => {
+    (orderIncluded('products', order) && statisticsOrderIsValid(order) ? (order.items || []) : []).forEach(item => {
       const name = String(item.name || 'Producto sin nombre').trim();
       const productId = String(item.id || item.productId || '').trim();
       const productKey = productId ? `id:${productId}` : `legacy-name:${name}`;
