@@ -11,9 +11,9 @@ html body #tt-mobile-brand { display: none !important; }
     justify-content: center;
     align-items: flex-start;
     width: 100%;
-    height: calc(76px + env(safe-area-inset-top, 0px));
+    height: calc(68px + env(safe-area-inset-top, 0px));
     margin: 0;
-    padding: calc(8px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 16px max(20px, env(safe-area-inset-left, 0px));
+    padding: calc(8px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 8px max(20px, env(safe-area-inset-left, 0px));
     border: 0;
     box-shadow: none;
     background: linear-gradient(180deg, var(--tt-mobile-brand-bg) 0%, var(--tt-mobile-brand-next) 100%);

@@ -14,13 +14,13 @@ const ABOUT_STYLES = { id: 'tt-about-css-bundle', file: 'css/generated/nosotros.
 const VERSION = 'tintin-20261010-social-mobile-styles-3';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1-palette-20261014-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2-palette-20261014-1';
-const TIENDA_VERSION = 'tintin-20261022-catalog-reconcile-1';
+const TIENDA_VERSION = 'tintin-20261023-global-layout-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20261022-avatar-inicial-1';
 const LOADER_VERSION = 'tintin-20261022-informational-merged-2';
 const STORE_GATE_VERSION = 'tintin-20261017-domain-cutover-1';
 const PANEL_COMPAT_VERSION = 'tintin-20261021-workspace-account-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20261022-catalog-reconcile-1';
-const NAV_ENTRY_VERSION = 'tintin-20261022-catalog-reconcile-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20261023-global-layout-1';
+const NAV_ENTRY_VERSION = 'tintin-20261023-global-layout-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20261021-commerce-review-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20261022-avatar-inicial-1';
@@ -71,7 +71,7 @@ function ensureSectionFlow(html, absolute = false) {
   if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(out)) return out;
   const beforeHeadEnd = out.slice(0, out.indexOf('</head>'));
   const join = beforeHeadEnd.endsWith('\n') ? '' : '\n';
-  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1" defer></script>\n</head>`);
+  return out.replace('</head>', `${join}  <script id="tt-section-flow-runtime" src="${absolute ? '/' : ''}js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1" defer></script>\n</head>`);
 }
 function ensurePublicStructuralStyles(html, absolute = false, page = '') {
   let out = ensureSectionFlow(html, absolute).replace(/\s*<!-- Estructura pública disponible desde el primer render -->/g, '');
@@ -96,7 +96,7 @@ const INITIAL_SHARED_STYLES = [
   ]
 ];
 const INITIAL_PUBLIC_STYLES = [
-  ['id="tt-mobile-brand-css"', 'css/components/navigation/movil/marca-movil.css', 'tintin-20261020-domain-cutover-consolidated-1'],
+  ['id="tt-mobile-brand-css"', 'css/components/navigation/movil/marca-movil.css', 'tintin-20261023-global-layout-1'],
   [
     "id=\"tt-global-studio-runtime-css\"",
     "css/components/visual-studio-global-runtime.css",
@@ -170,7 +170,7 @@ const INITIAL_PAGE_STYLES = {
     [
       "data-tt-catalog-maintenance=\"1\"",
       "css/pages/catalog/catalog-maintenance.css",
-      "tintin-20261022-catalog-reconcile-1"
+      "tintin-20261023-global-layout-1"
     ]
   ],
   "about.html": [

@@ -279,3 +279,9 @@ for(const[width,height]of sizes)test(`borde transparente sobre fondos cambiantes
 });
 
 }
+
+for(const [width,height]of viewports)test(`fondos globales respetan navegación y texto entre secciones ${width}x${height}`,async({page})=>{
+ await page.setViewportSize({width,height});await page.setContent('<style>body{margin:0}section{height:100px}nav{height:48px;margin:18px 0}article{height:100px}.cat-layout{margin-top:16px;height:100px}</style><div class="cat-wrap"><section>Cabecera</section><nav><button>Categoría</button> Texto intermedio</nav><div class="cat-layout"><article>Productos</article></div></div>');await page.addStyleTag({content:styles});await page.addScriptTag({content:runtime});await expect(page.locator('[data-tt-flow-block]')).toHaveCount(2);
+ const geometry=await page.evaluate(()=>{const rect=sel=>{const r=document.querySelector(sel).getBoundingClientRect();return {top:r.top,bottom:r.bottom};};return {first:rect('section > [data-tt-flow-background]'),nav:rect('nav'),next:rect('.cat-layout > [data-tt-flow-background]')};});expect(geometry.first.bottom).toBeLessThanOrEqual(geometry.nav.top+1);expect(geometry.next.top).toBeGreaterThanOrEqual(geometry.nav.bottom-1);
+ await page.locator('nav').evaluate(el=>el.hidden=true);await expect.poll(()=>page.locator('section').evaluate(el=>parseFloat(el.style.getPropertyValue('--tt-flow-after')))).toBeGreaterThan(0);
+});

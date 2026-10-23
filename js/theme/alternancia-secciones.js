@@ -31,12 +31,27 @@
     const rects = list.map(node => node.getBoundingClientRect());
     const positions = list.map(node => getComputedStyle(node).position);
     const width = document.documentElement.clientWidth;
+    // Sólo extender el fondo por espacio vacío: una navegación o texto entre
+    // secciones debe permanecer visible aunque no forme parte de la secuencia.
+    const gaps = list.slice(1).map((next, index) => {
+      const previous = rects[index], following = rects[index + 1];
+      const half = Math.max(0, Math.min(256, following.top - previous.bottom)) / 2;
+      if (!half) return { before: 0, after: 0 };
+      const range = document.createRange();
+      range.setStartAfter(list[index]);range.setEndBefore(next);
+      let first = following.top, last = previous.bottom;
+      for (const rect of range.getClientRects()) {
+        if (!rect.width || !rect.height || rect.bottom <= previous.bottom || rect.top >= following.top) continue;
+        first = Math.min(first, rect.top);last = Math.max(last, rect.bottom);
+      }
+      return { after: Math.min(half, Math.max(0, first - previous.bottom)), before: Math.min(half, Math.max(0, following.top - last)) };
+    });
     list.forEach((node, index) => {
       const tone = index % 2 ? 'pink' : 'light';
       if (node.dataset.ttFlowBlock !== tone) node.dataset.ttFlowBlock = tone;
       const rect = rects[index];
-      const before = index ? Math.max(0, Math.min(256, rect.top - rects[index - 1].bottom)) / 2 : 0;
-      const after = index < list.length - 1 ? Math.max(0, Math.min(256, rects[index + 1].top - rect.bottom)) / 2 : 0;
+      const before = gaps[index - 1]?.before || 0;
+      const after = gaps[index]?.after || 0;
       const customFooter = node.matches('.tt-footer') && document.documentElement.hasAttribute('data-tt-footer-bg-custom');
       const customVisual = node.style.getPropertyValue('--tt-visual-bg');
       const customBackground = customFooter ? 'var(--tt-global-footer-bg)' : customVisual ? 'var(--tt-visual-bg)' : '';
@@ -85,13 +100,14 @@
           const changed = [...record.addedNodes, ...record.removedNodes].filter(affectsFlow);
           if (!changed.length) return false;
           if (record.target.matches('body, main, [role="main"], .cat-wrap')) return true;
+          if (!record.target.closest('[data-tt-flow-block]')) return true;
           return changed.some(node => node.nodeType === 1
             && (node.matches(selector) || node.hasAttribute('data-tt-flow-block')
               || node.querySelector(`${selector}, [data-tt-flow-block]`)));
         }
         if (record.oldValue === record.target.getAttribute(record.attributeName)) return false;
         if (record.attributeName === 'style' && appliedStyles.get(record.target) === record.target.getAttribute('style')) return false;
-        return record.target.matches(`${selector}, html, body, main, .cat-wrap`);
+        return record.target.matches(`${selector}, html, body, main, .cat-wrap, nav, [role="navigation"]`);
       })) schedule();
     });
     observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeOldValue: true, attributeFilter: ['hidden', 'style', 'class'] });

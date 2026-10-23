@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a26ac21ad206148d7f8cbe2ee0b74b1df55521f09df43d56f5d8066c9703ddb4",
+  "sourceFingerprint": "9d9440eb9833a54a85220f6f0ff020545820ce15db9700ac392bc45d17188094",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 1408,
-    "textFiles": 1317,
-    "totalBytes": 29567130,
+    "files": 1410,
+    "textFiles": 1319,
+    "totalBytes": 29592615,
     "pages": 19,
-    "modules": 993
+    "modules": 994
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18258,
-      "sha256": "1202304074aadb659528a3b00f362090d02891fda433d68cce740740b829f0e6",
+      "bytes": 18216,
+      "sha256": "a17e153e09203b4e04c779220f8a183e102d5e1a53ba825a3ba0beb2ff73478a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -119,12 +119,12 @@
           "line": 10
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "/js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "/js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 134
         },
@@ -144,7 +144,7 @@
           "line": 196
         },
         {
-          "raw": "/tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "/tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 197
         },
@@ -236,7 +236,7 @@
           "line": 132
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 133
         },
@@ -271,7 +271,7 @@
           "line": 141
         },
         {
-          "raw": "/css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "/css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 142
         },
@@ -717,13 +717,13 @@
           "exists": true
         },
         {
-          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "/js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "/js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "/js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 134,
           "exists": true
@@ -747,7 +747,7 @@
           "exists": true
         },
         {
-          "raw": "/tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "/tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 197,
           "exists": true
@@ -855,7 +855,7 @@
           "exists": true
         },
         {
-          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "/css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 133,
           "exists": true
@@ -897,7 +897,7 @@
           "exists": true
         },
         {
-          "raw": "/css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "/css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 142,
           "exists": true
@@ -1158,8 +1158,8 @@
         "guest",
         "client"
       ],
-      "bytes": 31293,
-      "sha256": "9ed1eb89d558590d85095a1c7fa36029452bba09b3174e4b0518856133f26b58",
+      "bytes": 31251,
+      "sha256": "efa2af07ff05eb61fd30e429fa3700d966c85d66731cba6d8aa65d489096f112",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1209,12 +1209,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 55
         },
@@ -1224,7 +1224,7 @@
           "line": 277
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 278
         },
@@ -1266,7 +1266,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-603578b0d0670e7e",
+          "raw": "css/generated/nosotros.css?v=tintin-about-376deb2ec17e85fa",
           "target": "css/generated/nosotros.css",
           "line": 35
         },
@@ -1346,7 +1346,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -1391,7 +1391,7 @@
           "line": 62
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 63
         },
@@ -1796,13 +1796,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 55,
           "exists": true
@@ -1814,7 +1814,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 278,
           "exists": true
@@ -1862,7 +1862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/nosotros.css?v=tintin-about-603578b0d0670e7e",
+          "raw": "css/generated/nosotros.css?v=tintin-about-376deb2ec17e85fa",
           "target": "css/generated/nosotros.css",
           "line": 35,
           "exists": true
@@ -1958,7 +1958,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -2012,7 +2012,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 63,
           "exists": true
@@ -2257,8 +2257,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 44781,
-      "sha256": "899e1e4ac51dc9443c41b9651d6fe62d5414c4773825ebc5f392febbda682994",
+      "bytes": 44765,
+      "sha256": "775c5310b949a91c2bc49989331229b9ff431f479bcaf22ffae5bcfc251e7410",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2298,7 +2298,7 @@
           "line": 9
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 318
         },
@@ -2375,7 +2375,7 @@
           "line": 314
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 315
         },
@@ -2442,7 +2442,7 @@
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 318,
           "exists": true
@@ -2532,7 +2532,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 315,
           "exists": true
@@ -2881,8 +2881,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 204380,
-      "sha256": "4ca583e0e3d45bfcba9cd54f6a8399d0108afbf8991273c5c0c6fd28bbba6007",
+      "bytes": 204364,
+      "sha256": "9fb20568c5f1d7e8d123e3b5fff1cd909707344a699bc1c123e44f21a73dd651",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2916,7 +2916,7 @@
           "line": 9
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 80
         },
@@ -3133,7 +3133,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -3262,7 +3262,7 @@
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 80,
           "exists": true
@@ -3520,7 +3520,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -8985,8 +8985,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19848,
-      "sha256": "fbcfa3967b7e7b0a6e2904daa8f3582945738d16f1aa1189fbe025224b33c7d6",
+      "bytes": 19806,
+      "sha256": "8eaf385a5cd4f068ab0a8e04f96e287d77f898d6e136bda9d5dfbe25ddde3390",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9030,12 +9030,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52
         },
@@ -9045,7 +9045,7 @@
           "line": 204
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 205
         },
@@ -9157,7 +9157,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -9192,7 +9192,7 @@
           "line": 59
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60
         },
@@ -9568,13 +9568,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52,
           "exists": true
@@ -9586,7 +9586,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 205,
           "exists": true
@@ -9718,7 +9718,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -9760,7 +9760,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60,
           "exists": true
@@ -9979,8 +9979,8 @@
         "guest",
         "client"
       ],
-      "bytes": 59225,
-      "sha256": "076a69deb8268ab1e874d73a7cc5f16d8a7ccde58c6d3da92ad6d65e294d258b",
+      "bytes": 59179,
+      "sha256": "6a75781d2c377c1a57f6bcf717fa3a0e2fc42e40bbcac79873053f2452bc903f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10036,12 +10036,12 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 355
         },
@@ -10051,7 +10051,7 @@
           "line": 522
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 523
         },
@@ -10163,7 +10163,7 @@
           "line": 54
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55
         },
@@ -10198,7 +10198,7 @@
           "line": 362
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 363
         },
@@ -10258,7 +10258,7 @@
           "line": 374
         },
         {
-          "raw": "css/pages/catalog/catalog-maintenance.css?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "css/pages/catalog/catalog-maintenance.css?v=tintin-20261023-global-layout-1",
           "target": "css/pages/catalog/catalog-maintenance.css",
           "line": 375
         }
@@ -10569,13 +10569,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 355,
           "exists": true
@@ -10587,7 +10587,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 523,
           "exists": true
@@ -10719,7 +10719,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55,
           "exists": true
@@ -10761,7 +10761,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 363,
           "exists": true
@@ -10833,7 +10833,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/catalog/catalog-maintenance.css?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "css/pages/catalog/catalog-maintenance.css?v=tintin-20261023-global-layout-1",
           "target": "css/pages/catalog/catalog-maintenance.css",
           "line": 375,
           "exists": true
@@ -11080,8 +11080,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 132728,
-      "sha256": "e76d2028686a2e7a98b4420da984df9d9f737bdacc10df3d9d5fa57e39059361",
+      "bytes": 132686,
+      "sha256": "45ae674c2bd2f9215048dc9f14fb1db2961b074a060f1b62e929b0f5b887d9ed",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11131,12 +11131,12 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 49
         },
@@ -11161,7 +11161,7 @@
           "line": 2061
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 2062
         },
@@ -11263,7 +11263,7 @@
           "line": 47
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48
         },
@@ -11303,7 +11303,7 @@
           "line": 57
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 58
         },
@@ -11691,13 +11691,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 49,
           "exists": true
@@ -11727,7 +11727,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 2062,
           "exists": true
@@ -11847,7 +11847,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 48,
           "exists": true
@@ -11895,7 +11895,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 58,
           "exists": true
@@ -12600,8 +12600,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21513,
-      "sha256": "6b5196f387d240dd2ef72de19ddadb6ed3b415af25a140f5accce99988e2f6a6",
+      "bytes": 21471,
+      "sha256": "891cdf1dc5a7f2f0a2d456f9fcf2a14fa29b218d644ce5bd9fad15c0e19e7d07",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12651,12 +12651,12 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 57
         },
@@ -12666,7 +12666,7 @@
           "line": 224
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 225
         },
@@ -12783,7 +12783,7 @@
           "line": 55
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 56
         },
@@ -12818,7 +12818,7 @@
           "line": 64
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 65
         },
@@ -13204,13 +13204,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 57,
           "exists": true
@@ -13222,7 +13222,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 225,
           "exists": true
@@ -13360,7 +13360,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 56,
           "exists": true
@@ -13402,7 +13402,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 65,
           "exists": true
@@ -13627,8 +13627,8 @@
         "guest",
         "client"
       ],
-      "bytes": 26537,
-      "sha256": "69435c1fefac3e8b7d45b8515d8dc901590d6fcc04c784465c7a3ddf10d957f2",
+      "bytes": 26495,
+      "sha256": "828c1fd8eecf0f86201171d24240e7765f173650c5069cc49822e26746501750",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13678,12 +13678,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52
         },
@@ -13693,7 +13693,7 @@
           "line": 246
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 247
         },
@@ -13805,7 +13805,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -13845,7 +13845,7 @@
           "line": 60
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 61
         },
@@ -14261,13 +14261,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52,
           "exists": true
@@ -14279,7 +14279,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 247,
           "exists": true
@@ -14411,7 +14411,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -14459,7 +14459,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 61,
           "exists": true
@@ -14739,8 +14739,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23534,
-      "sha256": "e6e81056c2e66e420d46834ffe19d37722958e094bbc8df210c3de7f610cecd5",
+      "bytes": 23492,
+      "sha256": "4d8538ab12c1fb98e08e7ea7ec3b62339c22e33250b46010564ce51e4ffa2809",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14790,12 +14790,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 58
         },
@@ -14805,7 +14805,7 @@
           "line": 203
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 204
         },
@@ -14917,7 +14917,7 @@
           "line": 54
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55
         },
@@ -14952,7 +14952,7 @@
           "line": 65
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 66
         },
@@ -15328,13 +15328,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 58,
           "exists": true
@@ -15346,7 +15346,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 204,
           "exists": true
@@ -15478,7 +15478,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 55,
           "exists": true
@@ -15520,7 +15520,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 66,
           "exists": true
@@ -15779,8 +15779,8 @@
         "guest",
         "client"
       ],
-      "bytes": 46774,
-      "sha256": "65546b69309f2db176c7ce955c68c466b0400e99f09dc578c87ad171b4fb0d71",
+      "bytes": 46732,
+      "sha256": "0e89b9d049bfb039cfd65a2f461fb9314a4e05e59b3ac59bc664ef2311d3419e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15836,12 +15836,12 @@
           "line": 15
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 16
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 97
         },
@@ -15851,7 +15851,7 @@
           "line": 440
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 441
         },
@@ -15918,7 +15918,7 @@
       ],
       "styles": [
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-7bf155c0a858b897",
+          "raw": "css/generated/inicio.css?v=tintin-home-3cdf18185118aa8a",
           "target": "css/generated/inicio.css",
           "line": 58
         },
@@ -16013,7 +16013,7 @@
           "line": 91
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 92
         },
@@ -16063,7 +16063,7 @@
           "line": 104
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 105
         },
@@ -16766,13 +16766,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 16,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 97,
           "exists": true
@@ -16784,7 +16784,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 441,
           "exists": true
@@ -16862,7 +16862,7 @@
           "exists": true
         },
         {
-          "raw": "css/generated/inicio.css?v=tintin-home-7bf155c0a858b897",
+          "raw": "css/generated/inicio.css?v=tintin-home-3cdf18185118aa8a",
           "target": "css/generated/inicio.css",
           "line": 58,
           "exists": true
@@ -16976,7 +16976,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 92,
           "exists": true
@@ -17036,7 +17036,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 105,
           "exists": true
@@ -17570,8 +17570,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 72803,
-      "sha256": "c1257d39f1da0c5588d1df5392f962e3ebd51a3a6b57c035d48574dd60577bbd",
+      "bytes": 72761,
+      "sha256": "7f2758711d2dff58737f8fd11c0b4e7ba27f5e4a012332aebb208cf9acc555e2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17627,12 +17627,12 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 53
         },
@@ -17647,7 +17647,7 @@
           "line": 1298
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 1299
         },
@@ -17749,7 +17749,7 @@
           "line": 49
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50
         },
@@ -17784,7 +17784,7 @@
           "line": 60
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 61
         },
@@ -17922,13 +17922,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 53,
           "exists": true
@@ -17946,7 +17946,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 1299,
           "exists": true
@@ -18066,7 +18066,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 50,
           "exists": true
@@ -18108,7 +18108,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 61,
           "exists": true
@@ -18411,8 +18411,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1984,
-      "sha256": "b94419d30622f609fab3a2c11472bdfe5883ae083c1077342a19a09956827d83",
+      "bytes": 1982,
+      "sha256": "27a9eb552cf6b6312989ea868dbf3ef286479e73fbdca28247ed88bb0818f283",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18456,7 +18456,7 @@
           "line": 2
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 2
         }
@@ -18506,7 +18506,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 2,
           "exists": true
@@ -18542,8 +18542,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 57649,
-      "sha256": "fadcc2e6cbccabfa8c366e659a04538b6caa39e56180ca456b0a569625acb7ae",
+      "bytes": 57607,
+      "sha256": "71ab5b3037f0bd6ff4d81fdb38abb2e1edb608196f7237dac81947947f012ed5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18599,7 +18599,7 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -18609,7 +18609,7 @@
           "line": 47
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 48
         },
@@ -18619,7 +18619,7 @@
           "line": 266
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 267
         },
@@ -18741,7 +18741,7 @@
           "line": 43
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 44
         },
@@ -18781,7 +18781,7 @@
           "line": 55
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 56
         },
@@ -19197,7 +19197,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -19209,7 +19209,7 @@
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 48,
           "exists": true
@@ -19221,7 +19221,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 267,
           "exists": true
@@ -19365,7 +19365,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 44,
           "exists": true
@@ -19413,7 +19413,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 56,
           "exists": true
@@ -20000,8 +20000,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21203,
-      "sha256": "235c500f18196f9828de8dfe795f9d5f5d7225a4f0eba39aa2ad812a4a4fb093",
+      "bytes": 21161,
+      "sha256": "c28068f1adb88e64cb73628825e78e99e9f7c5ce4590f4a4459cabe9195527d2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -20045,12 +20045,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52
         },
@@ -20060,7 +20060,7 @@
           "line": 229
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 230
         },
@@ -20172,7 +20172,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -20207,7 +20207,7 @@
           "line": 59
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60
         },
@@ -20583,13 +20583,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52,
           "exists": true
@@ -20601,7 +20601,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 230,
           "exists": true
@@ -20733,7 +20733,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -20775,7 +20775,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 60,
           "exists": true
@@ -20994,8 +20994,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25412,
-      "sha256": "737eecfab41df1b88d4cac22323fbd1ed3784a1175d8cd5cc31c12f6087b5e86",
+      "bytes": 25370,
+      "sha256": "0d4dc0ea8e1eb8ba57231032546397e528b5bd8f692ec120d76b1100a14992a8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -21039,12 +21039,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52
         },
@@ -21054,7 +21054,7 @@
           "line": 245
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 246
         },
@@ -21161,7 +21161,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -21201,7 +21201,7 @@
           "line": 60
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 61
         },
@@ -21697,13 +21697,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52,
           "exists": true
@@ -21715,7 +21715,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 246,
           "exists": true
@@ -21841,7 +21841,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -21889,7 +21889,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 61,
           "exists": true
@@ -22125,8 +22125,8 @@
         "guest",
         "client"
       ],
-      "bytes": 27031,
-      "sha256": "fbabab9b014f4242f99feac5fd7f9150a7d1e86d2349c64019e5f6b983ddec69",
+      "bytes": 26985,
+      "sha256": "2d21a958488a0e06d2ae46be1070ed2c1bf2eb68108f1c84d5c6c54ce01aec45",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -22170,7 +22170,7 @@
           "line": 11
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12
         },
@@ -22180,12 +22180,12 @@
           "line": 63
         },
         {
-          "raw": "js/core/store/estado-productos.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/core/store/estado-productos.js?v=tintin-20261023-global-layout-1",
           "target": "js/core/store/estado-productos.js",
           "line": 64
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 65
         },
@@ -22195,7 +22195,7 @@
           "line": 329
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 330
         },
@@ -22337,7 +22337,7 @@
           "line": 59
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 60
         },
@@ -22382,7 +22382,7 @@
           "line": 72
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 73
         },
@@ -22778,7 +22778,7 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 12,
           "exists": true
@@ -22790,13 +22790,13 @@
           "exists": true
         },
         {
-          "raw": "js/core/store/estado-productos.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/core/store/estado-productos.js?v=tintin-20261023-global-layout-1",
           "target": "js/core/store/estado-productos.js",
           "line": 64,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 65,
           "exists": true
@@ -22808,7 +22808,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 330,
           "exists": true
@@ -22976,7 +22976,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 60,
           "exists": true
@@ -23030,7 +23030,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 73,
           "exists": true
@@ -23422,8 +23422,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23397,
-      "sha256": "dd01f8c645a993cefcb1c8157113880412e2ea8fe8fac76d22c9c22933befc35",
+      "bytes": 23355,
+      "sha256": "75d1598f3f4cdf0843ffc595e66c3dabcc3642b2679df0f9eaf96b348d824506",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -23460,12 +23460,12 @@
           "line": 10
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52
         },
@@ -23475,7 +23475,7 @@
           "line": 226
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 227
         },
@@ -23582,7 +23582,7 @@
           "line": 48
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49
         },
@@ -23622,7 +23622,7 @@
           "line": 60
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 61
         },
@@ -24138,13 +24138,13 @@
           "exists": true
         },
         {
-          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "js/inicio-navegacion-publica.js?v=tintin-20261023-global-layout-1",
           "target": "js/inicio-navegacion-publica.js",
           "line": 11,
           "exists": true
         },
         {
-          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "js/theme/alternancia-secciones.js?v=tintin-20261023-global-layout-1",
           "target": "js/theme/alternancia-secciones.js",
           "line": 52,
           "exists": true
@@ -24156,7 +24156,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "tienda.js?v=tintin-20261023-global-layout-1",
           "target": "tienda.js",
           "line": 227,
           "exists": true
@@ -24282,7 +24282,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261021-commerce-review-1",
+          "raw": "css/theme/sistema-superficies-tintin.css?v=tintin-20261023-global-layout-1",
           "target": "css/theme/sistema-superficies-tintin.css",
           "line": 49,
           "exists": true
@@ -24330,7 +24330,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261020-domain-cutover-consolidated-1",
+          "raw": "css/components/navigation/movil/marca-movil.css?v=tintin-20261023-global-layout-1",
           "target": "css/components/navigation/movil/marca-movil.css",
           "line": 61,
           "exists": true
@@ -30902,8 +30902,8 @@
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
-      "bytes": 3536,
-      "sha256": "3f8d85d3644c3f01529bd52b9d6a481e18e2870fcf805e20b9480ba06e4da664",
+      "bytes": 3532,
+      "sha256": "726d6e58f113f2e37613166fb29dd210aa6b568692a3c4b12203772159c33d2a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31838,8 +31838,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 15582,
-      "sha256": "e0deced231924ba4b3cfbca78f9b6188fd6c7ec01ad796a257f90fe611aab023",
+      "bytes": 15574,
+      "sha256": "c8c999952f3852d18ca3fb66a308b2c4c5de7f0d4692241bd5e0f1a04266fdde",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31870,7 +31870,7 @@
           "line": 142
         },
         {
-          "raw": "./control-busqueda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "./control-busqueda.js?v=tintin-20261023-global-layout-1",
           "target": "js/components/navigation/compartido/control-busqueda.js",
           "dynamic": true,
           "line": 188
@@ -31908,8 +31908,8 @@
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
-      "bytes": 11611,
-      "sha256": "29b6d19f38af437fa8f36c71cdcc6a1fd2f81a7159c2432a7738eca80c540c2d",
+      "bytes": 11607,
+      "sha256": "9ca5c5cf8c05addc0adb9e315bd9b966d8d47d22f0d57e5963d18a8519014a2c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32214,8 +32214,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 12929,
-      "sha256": "28631c10331d02be4248ab99e573c85784625e8ec5abe4db1b0f0f9549255c67",
+      "bytes": 12925,
+      "sha256": "b44cfa8f4bd6ae47a89a583c61fcebb7100b17215713ed0e5742968d3273b535",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32294,7 +32294,7 @@
           "line": 12
         },
         {
-          "raw": "./compartido/carga-navegacion.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "./compartido/carga-navegacion.js?v=tintin-20261023-global-layout-1",
           "target": "js/components/navigation/compartido/carga-navegacion.js",
           "dynamic": false,
           "line": 13
@@ -33621,8 +33621,8 @@
     },
     {
       "path": "js/core/store/estado-productos.js",
-      "bytes": 25943,
-      "sha256": "6fe704dba055faa16cb4f4152334d637769fc6b7cb244b66b33bb86eaa7d1fd6",
+      "bytes": 25939,
+      "sha256": "1a602a21674e12cc314ac19355280b4d073b29d1e84acf5cea482da1b2a525f7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33683,7 +33683,7 @@
           "line": 18
         },
         {
-          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20261023-global-layout-1",
           "target": "js/cargador-mantenimiento-pagina.js",
           "dynamic": false,
           "line": 3
@@ -34298,8 +34298,8 @@
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "bytes": 1887,
-      "sha256": "a329263cb164ef7ae54f38e689371bead9b99670fdb547c14ec712fbfcd734b7",
+      "bytes": 1883,
+      "sha256": "09b394d3bc1878a70820d079b358278c04f9c88902adfc36f0231cefeb573780",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34458,8 +34458,8 @@
     },
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
-      "bytes": 10273,
-      "sha256": "0d05ce1516a8b5915f12999924c6e53d911be58b21bef8b322326ca321655e4e",
+      "bytes": 10269,
+      "sha256": "ca71656f9be5d8e1487f6f72a38e01d072f81642634bdabf06595686e2936185",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35919,8 +35919,8 @@
     },
     {
       "path": "js/theme/alternancia-secciones.js",
-      "bytes": 6761,
-      "sha256": "a7ecc0ec39926e61af723374d2061eede12a98e3bb2bd2ff246f21b22b991d07",
+      "bytes": 7716,
+      "sha256": "e6ce23b9a6c8b0483485a21248cb3f6d3274b31b40048f1842c9fdc5cbee15c9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -40723,8 +40723,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 29783,
-      "sha256": "02e1ce93fc403319706884d2a94b1e0555b4fe041e887fb5243bcaa1e04c4f84",
+      "bytes": 29739,
+      "sha256": "51d66986113253fd0685033185a85478f952d9a49899706eacb8be4e0ed6321a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -48357,14 +48357,19 @@
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
-      "bytes": 27241,
-      "sha256": "b1e206f501eb158463156d335c7cd06092e624682801caec6890d7b0386e9291",
+      "bytes": 29119,
+      "sha256": "42a3e39e068f671422ecc57b0926f100519e3646f454e9b8a15752a5e3ff4a3a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "http://www.w3.org/2000/svg",
+          "line": 490
+        }
+      ]
     },
     {
       "path": "tests/navigation/home-collection-links.test.mjs",
@@ -53612,6 +53617,22 @@
       "endpoints": []
     },
     {
+      "path": "tests/ui-ux/global-form-fit.spec.js",
+      "bytes": 4217,
+      "sha256": "de2799bde621815f845774ffc531d308759bb4099479f52bda0157c4317e8672",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://surface.test/",
+          "line": 26
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
       "bytes": 3933,
       "sha256": "1de793260a9bd1d6b20350334aec724f4e55dc4a0d46d06bbb4c7cbaa8c1ac01",
@@ -54379,8 +54400,8 @@
     },
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
-      "bytes": 20936,
-      "sha256": "a12e5f1ce1f44048fd1995fe4f7b4766ca62c3887bae7145671d7e22b7753eed",
+      "bytes": 22236,
+      "sha256": "ef546a1e9366bd536f0a919a7a620ce776ffc5d7a37c4d1eade4472abe665b2b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55138,8 +55159,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 121389,
-      "sha256": "9ec48f2f7a47d343f8b7a486a8c9488bb221d56036910f850244e1ba98f35c4b",
+      "bytes": 121385,
+      "sha256": "266613e70e230f3c27ac5f1bbe59904e235e8e7c316d88da42d56f2b5fe8f843",
       "syntax": {
         "ok": true,
         "error": ""
@@ -55152,7 +55173,7 @@
           "line": 284
         },
         {
-          "raw": "./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261022-catalog-reconcile-1",
+          "raw": "./js/components/navigation/compartido/control-busqueda.js?v=tintin-20261023-global-layout-1",
           "target": "js/components/navigation/compartido/control-busqueda.js",
           "dynamic": true,
           "line": 610
@@ -55298,8 +55319,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 18258,
-      "sha256": "1202304074aadb659528a3b00f362090d02891fda433d68cce740740b829f0e6"
+      "bytes": 18216,
+      "sha256": "a17e153e09203b4e04c779220f8a183e102d5e1a53ba825a3ba0beb2ff73478a"
     },
     {
       "path": "AGENTS.md",
@@ -55334,14 +55355,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 31293,
-      "sha256": "9ed1eb89d558590d85095a1c7fa36029452bba09b3174e4b0518856133f26b58"
+      "bytes": 31251,
+      "sha256": "efa2af07ff05eb61fd30e429fa3700d966c85d66731cba6d8aa65d489096f112"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 44781,
-      "sha256": "899e1e4ac51dc9443c41b9651d6fe62d5414c4773825ebc5f392febbda682994"
+      "bytes": 44765,
+      "sha256": "775c5310b949a91c2bc49989331229b9ff431f479bcaf22ffae5bcfc251e7410"
     },
     {
       "path": "admin-manifest.json",
@@ -55352,8 +55373,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 204380,
-      "sha256": "4ca583e0e3d45bfcba9cd54f6a8399d0108afbf8991273c5c0c6fd28bbba6007"
+      "bytes": 204364,
+      "sha256": "9fb20568c5f1d7e8d123e3b5fff1cd909707344a699bc1c123e44f21a73dd651"
     },
     {
       "path": "apple-touch-icon.png",
@@ -55994,20 +56015,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 19848,
-      "sha256": "fbcfa3967b7e7b0a6e2904daa8f3582945738d16f1aa1189fbe025224b33c7d6"
+      "bytes": 19806,
+      "sha256": "8eaf385a5cd4f068ab0a8e04f96e287d77f898d6e136bda9d5dfbe25ddde3390"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 59225,
-      "sha256": "076a69deb8268ab1e874d73a7cc5f16d8a7ccde58c6d3da92ad6d65e294d258b"
+      "bytes": 59179,
+      "sha256": "6a75781d2c377c1a57f6bcf717fa3a0e2fc42e40bbcac79873053f2452bc903f"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 132728,
-      "sha256": "e76d2028686a2e7a98b4420da984df9d9f737bdacc10df3d9d5fa57e39059361"
+      "bytes": 132686,
+      "sha256": "45ae674c2bd2f9215048dc9f14fb1db2961b074a060f1b62e929b0f5b887d9ed"
     },
     {
       "path": "cierre-produccion-2026-09-17.md",
@@ -56288,8 +56309,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 21513,
-      "sha256": "6b5196f387d240dd2ef72de19ddadb6ed3b415af25a140f5accce99988e2f6a6"
+      "bytes": 21471,
+      "sha256": "891cdf1dc5a7f2f0a2d456f9fcf2a14fa29b218d644ce5bd9fad15c0e19e7d07"
     },
     {
       "path": "config/account-contract.json",
@@ -56312,8 +56333,8 @@
     {
       "path": "config/mantenimiento-flujos-plan.json",
       "extension": ".json",
-      "bytes": 1158,
-      "sha256": "14cfa2a72f6058ca9f9458abb6a7e5fc425b3a1c6e871a04c70984b8bec04ee3"
+      "bytes": 7966,
+      "sha256": "d1a534721094f373a86848973937280caccd5febf22b6816e0ecd1e5f24e21e3"
     },
     {
       "path": "config/mantenimiento-flujos.json",
@@ -56325,7 +56346,7 @@
       "path": "config/proteccion-flujos.json",
       "extension": ".json",
       "bytes": 155536,
-      "sha256": "1aa9ce66dd686452468e18c503455fd4ca7a1f4bdead5f37b2e91443e5234312"
+      "sha256": "d3ab3ac750f64ef768218fad4b82c8bacf40d65a47197b926ecacaff4446ea95"
     },
     {
       "path": "config/public-site.json",
@@ -56342,8 +56363,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 26537,
-      "sha256": "69435c1fefac3e8b7d45b8515d8dc901590d6fcc04c784465c7a3ddf10d957f2"
+      "bytes": 26495,
+      "sha256": "828c1fd8eecf0f86201171d24240e7765f173650c5069cc49822e26746501750"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -56558,8 +56579,8 @@
     {
       "path": "css/components/navigation/movil/marca-movil.css",
       "extension": ".css",
-      "bytes": 2221,
-      "sha256": "ad9971234d4fd998eea9f64f7d038afdfc21149e68c026f21b67941ca32f8f1a"
+      "bytes": 2220,
+      "sha256": "775efba96cc93401b53a3cb6979e0cc42afb18ea32de2e683a29e8b894a559e2"
     },
     {
       "path": "css/components/navigation/tableta/encabezado-tableta.css",
@@ -56636,20 +56657,20 @@
     {
       "path": "css/generated/inicio.css",
       "extension": ".css",
-      "bytes": 470652,
-      "sha256": "7bf155c0a858b89743bf8b2fc8a89c923444c5a351a835e9ddaecc7b74c7fa8d"
+      "bytes": 472192,
+      "sha256": "3cdf18185118aa8a54679f349fc9dd5f1b0acd16d27e370a99d1d69bec8c043b"
     },
     {
       "path": "css/generated/nosotros.css",
       "extension": ".css",
-      "bytes": 389268,
-      "sha256": "603578b0d0670e7e9b5f2ea1622cb3084bb84d58b4e148c82c341ad8f09c7c08"
+      "bytes": 390808,
+      "sha256": "376deb2ec17e85faa7befac68e930648f0afbee639d04c188f691b23fac137c6"
     },
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
       "extension": ".css",
-      "bytes": 11445,
-      "sha256": "dd76759b51a4b72310af9ecf43a09764732687dd454e186698eb465b56d0061a"
+      "bytes": 11440,
+      "sha256": "18bac61c40fd6a736c8371619e66d9fbf13b34ab655796e345f8e540e8ace359"
     },
     {
       "path": "css/pages/checkout-confiabilidad.css",
@@ -56882,8 +56903,8 @@
     {
       "path": "css/theme/sistema-superficies-tintin.css",
       "extension": ".css",
-      "bytes": 24327,
-      "sha256": "be9d994c173768dd5cb08124b5bdaab502d0bd51b366c2ff78bf8b375bac83f9"
+      "bytes": 25868,
+      "sha256": "79fdbb1925b684482f31b0115c55fcedf68862d4c97adc91ee7859526202441b"
     },
     {
       "path": "css/theme/superficies-marca-responsive-tintin.css",
@@ -56984,8 +57005,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 831046,
-      "sha256": "b031235c8da3d68baa8082f901a653e490e2987965d4c9916532a163775d2849"
+      "bytes": 832067,
+      "sha256": "705e0e65cbbe96cdc6adcfd61453537aeb4453bc54d648bcef9cead79db3a079"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -57124,6 +57145,12 @@
       "extension": ".md",
       "bytes": 5127,
       "sha256": "230963b061fb20a5421f405bada655d1fc1db19b8102f5a8d503904886c2d879"
+    },
+    {
+      "path": "docs/agent/UI_RESPONSIVE_GLOBAL_20261023.md",
+      "extension": ".md",
+      "bytes": 4811,
+      "sha256": "3f1e8e0b13db55e8b4fc68ac3f23776149f037ef5b3e999cf89fc2c9fbeafbbb"
     },
     {
       "path": "docs/agent/WHATSAPP_REVISION_20261010.md",
@@ -57386,8 +57413,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 105765,
-      "sha256": "6ceed1267e9c5257e328b7f303767f608f22aa29fa42d6a62d47e171e4bf897c"
+      "bytes": 106427,
+      "sha256": "4b7a5af2f773c5a5c9af9f4d11edd4dc64d4265fc1b3cd6c52019d381a4729e1"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -57542,8 +57569,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 23534,
-      "sha256": "e6e81056c2e66e420d46834ffe19d37722958e094bbc8df210c3de7f610cecd5"
+      "bytes": 23492,
+      "sha256": "4d8538ab12c1fb98e08e7ea7ec3b62339c22e33250b46010564ce51e4ffa2809"
     },
     {
       "path": "estado-final-visual-frontend.md",
@@ -58076,8 +58103,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 46774,
-      "sha256": "65546b69309f2db176c7ce955c68c466b0400e99f09dc578c87ad171b4fb0d71"
+      "bytes": 46732,
+      "sha256": "0e89b9d049bfb039cfd65a2f461fb9314a4e05e59b3ac59bc664ef2311d3419e"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -58544,8 +58571,8 @@
     {
       "path": "js/cargador-mantenimiento-pagina.js",
       "extension": ".js",
-      "bytes": 3536,
-      "sha256": "3f8d85d3644c3f01529bd52b9d6a481e18e2870fcf805e20b9480ba06e4da664"
+      "bytes": 3532,
+      "sha256": "726d6e58f113f2e37613166fb29dd210aa6b568692a3c4b12203772159c33d2a"
     },
     {
       "path": "js/cargador-pagina.js",
@@ -58808,8 +58835,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 15582,
-      "sha256": "e0deced231924ba4b3cfbca78f9b6188fd6c7ec01ad796a257f90fe611aab023"
+      "bytes": 15574,
+      "sha256": "c8c999952f3852d18ca3fb66a308b2c4c5de7f0d4692241bd5e0f1a04266fdde"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -58826,8 +58853,8 @@
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
       "extension": ".js",
-      "bytes": 11611,
-      "sha256": "29b6d19f38af437fa8f36c71cdcc6a1fd2f81a7159c2432a7738eca80c540c2d"
+      "bytes": 11607,
+      "sha256": "9ca5c5cf8c05addc0adb9e315bd9b966d8d47d22f0d57e5963d18a8519014a2c"
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
@@ -58940,8 +58967,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 12929,
-      "sha256": "28631c10331d02be4248ab99e573c85784625e8ec5abe4db1b0f0f9549255c67"
+      "bytes": 12925,
+      "sha256": "b44cfa8f4bd6ae47a89a583c61fcebb7100b17215713ed0e5742968d3273b535"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -59258,8 +59285,8 @@
     {
       "path": "js/core/store/estado-productos.js",
       "extension": ".js",
-      "bytes": 25943,
-      "sha256": "6fe704dba055faa16cb4f4152334d637769fc6b7cb244b66b33bb86eaa7d1fd6"
+      "bytes": 25939,
+      "sha256": "1a602a21674e12cc314ac19355280b4d073b29d1e84acf5cea482da1b2a525f7"
     },
     {
       "path": "js/core/store/inventario-variantes.mjs",
@@ -59420,8 +59447,8 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 1887,
-      "sha256": "a329263cb164ef7ae54f38e689371bead9b99670fdb547c14ec712fbfcd734b7"
+      "bytes": 1883,
+      "sha256": "09b394d3bc1878a70820d079b358278c04f9c88902adfc36f0231cefeb573780"
     },
     {
       "path": "js/orders/ciclo-pedido.mjs",
@@ -59456,8 +59483,8 @@
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
       "extension": ".js",
-      "bytes": 10273,
-      "sha256": "0d05ce1516a8b5915f12999924c6e53d911be58b21bef8b322326ca321655e4e"
+      "bytes": 10269,
+      "sha256": "ca71656f9be5d8e1487f6f72a38e01d072f81642634bdabf06595686e2936185"
     },
     {
       "path": "js/pages/catalog/politica-exhibicion-catalogo.js",
@@ -59840,8 +59867,8 @@
     {
       "path": "js/theme/alternancia-secciones.js",
       "extension": ".js",
-      "bytes": 6761,
-      "sha256": "a7ecc0ec39926e61af723374d2061eede12a98e3bb2bd2ff246f21b22b991d07"
+      "bytes": 7716,
+      "sha256": "e6ce23b9a6c8b0483485a21248cb3f6d3274b31b40048f1842c9fdc5cbee15c9"
     },
     {
       "path": "js/vendor/gsap.min.js",
@@ -59906,8 +59933,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 72803,
-      "sha256": "c1257d39f1da0c5588d1df5392f962e3ebd51a3a6b57c035d48574dd60577bbd"
+      "bytes": 72761,
+      "sha256": "7f2758711d2dff58737f8fd11c0b4e7ba27f5e4a012332aebb208cf9acc555e2"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -60092,8 +60119,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1984,
-      "sha256": "b94419d30622f609fab3a2c11472bdfe5883ae083c1077342a19a09956827d83"
+      "bytes": 1982,
+      "sha256": "27a9eb552cf6b6312989ea868dbf3ef286479e73fbdca28247ed88bb0818f283"
     },
     {
       "path": "package-lock.json",
@@ -60104,14 +60131,14 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 17036,
-      "sha256": "adf302ffb300ffbdc0ca1cd12fa1e1a4b7ca3bd4eeadd738cefe183aee0a7693"
+      "bytes": 17072,
+      "sha256": "27ff34031a07043b93a11f7d8727add590f96e4f2c1feaf08bb5e99ab49cac4b"
     },
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 57649,
-      "sha256": "fadcc2e6cbccabfa8c366e659a04538b6caa39e56180ca456b0a569625acb7ae"
+      "bytes": 57607,
+      "sha256": "71ab5b3037f0bd6ff4d81fdb38abb2e1edb608196f7237dac81947947f012ed5"
     },
     {
       "path": "playwright.config.js",
@@ -60134,14 +60161,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 21203,
-      "sha256": "235c500f18196f9828de8dfe795f9d5f5d7225a4f0eba39aa2ad812a4a4fb093"
+      "bytes": 21161,
+      "sha256": "c28068f1adb88e64cb73628825e78e99e9f7c5ce4590f4a4459cabe9195527d2"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 25412,
-      "sha256": "737eecfab41df1b88d4cac22323fbd1ed3784a1175d8cd5cc31c12f6087b5e86"
+      "bytes": 25370,
+      "sha256": "0d4dc0ea8e1eb8ba57231032546397e528b5bd8f692ec120d76b1100a14992a8"
     },
     {
       "path": "procedimiento-migracion-shopify-2026-09-18.md",
@@ -60152,8 +60179,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 27031,
-      "sha256": "fbabab9b014f4242f99feac5fd7f9150a7d1e86d2349c64019e5f6b983ddec69"
+      "bytes": 26985,
+      "sha256": "2d21a958488a0e06d2ae46be1070ed2c1bf2eb68108f1c84d5c6c54ce01aec45"
     },
     {
       "path": "robots.txt",
@@ -60986,8 +61013,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 74100,
-      "sha256": "6132be39ae21bcb8f1b797f324b0dfd5afae64abc088bc7ef52135c69a92bfc6"
+      "bytes": 74034,
+      "sha256": "26db479197c390c810a1be0b8191f588ae3e17d90b694a05ffcd7dc39e60c01e"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -61268,8 +61295,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 29783,
-      "sha256": "02e1ce93fc403319706884d2a94b1e0555b4fe041e887fb5243bcaa1e04c4f84"
+      "bytes": 29739,
+      "sha256": "51d66986113253fd0685033185a85478f952d9a49899706eacb8be4e0ed6321a"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -61346,8 +61373,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 23397,
-      "sha256": "dd01f8c645a993cefcb1c8157113880412e2ea8fe8fac76d22c9c22933befc35"
+      "bytes": 23355,
+      "sha256": "75d1598f3f4cdf0843ffc595e66c3dabcc3642b2679df0f9eaf96b348d824506"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -62492,8 +62519,8 @@
     {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
-      "bytes": 27241,
-      "sha256": "b1e206f501eb158463156d335c7cd06092e624682801caec6890d7b0386e9291"
+      "bytes": 29119,
+      "sha256": "42a3e39e068f671422ecc57b0926f100519e3646f454e9b8a15752a5e3ff4a3a"
     },
     {
       "path": "tests/navigation/home-collection-links.test.mjs",
@@ -63360,6 +63387,12 @@
       "sha256": "4b24d6ee16aeb31ce8bc98e046ff7d378389af8c71df9dfd6b6ebb884607dc2a"
     },
     {
+      "path": "tests/ui-ux/global-form-fit.spec.js",
+      "extension": ".js",
+      "bytes": 4217,
+      "sha256": "de2799bde621815f845774ffc531d308759bb4099479f52bda0157c4317e8672"
+    },
+    {
       "path": "tests/ui-ux/hero-complete-borders.spec.js",
       "extension": ".js",
       "bytes": 3933,
@@ -63524,8 +63557,8 @@
     {
       "path": "tests/ui-ux/section-flow-full-width.spec.js",
       "extension": ".js",
-      "bytes": 20936,
-      "sha256": "a12e5f1ce1f44048fd1995fe4f7b4766ca62c3887bae7145671d7e22b7753eed"
+      "bytes": 22236,
+      "sha256": "ef546a1e9366bd536f0a919a7a620ce776ffc5d7a37c4d1eade4472abe665b2b"
     },
     {
       "path": "tests/ui-ux/site-first-paint.spec.js",
@@ -63656,8 +63689,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 121389,
-      "sha256": "9ec48f2f7a47d343f8b7a486a8c9488bb221d56036910f850244e1ba98f35c4b"
+      "bytes": 121385,
+      "sha256": "266613e70e230f3c27ac5f1bbe59904e235e8e7c316d88da42d56f2b5fe8f843"
     }
   ],
   "sitemapRoutes": [],

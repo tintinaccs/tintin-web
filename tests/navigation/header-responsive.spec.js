@@ -480,3 +480,15 @@ test('cuenta mantiene cabecera rosa con logo y título blancos centrados y CTA l
     await page.keyboard.press('Escape');
   }
 });
+
+
+for(const route of ['/catalogo?cat=pulseras','/collections','/about','/contact','/envios','/preguntas-frecuentes','/privacidad'])for(const [width,height]of [[320,700],[390,844],[768,1024],[1024,768],[1440,900]])test(`encabezado global compacto y cuenta clara: ${route} ${width}`,async({page})=>{
+ await mockGuestNavigation(page);await openPublicPage(page,{width,height},route);
+ if(width<768){const brand=page.locator('#tt-mobile-brand');await expect(brand).toBeVisible();expect((await brand.boundingBox()).height).toBeLessThanOrEqual(70);}
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+ const button=page.locator(width<768?'#tabbar-cuenta':width<=1024?'#btn-cuenta-tablet':'#btn-cuenta');
+ await button.evaluate((el,mobile)=>{const image=document.createElement('img');image.className=mobile?'tt-tabbar-avatar':'tt-account-avatar-btn';image.alt='Foto clara';image.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><path fill="white" d="M0 0h48v48H0z"/></svg>');image.width=mobile?24:48;image.height=mobile?24:48;el.querySelector('svg')?.replaceWith(image);},width<768);
+ await expect(button.locator('img')).toHaveCSS('border-top-color','rgb(34, 34, 34)');expect(await button.locator('img').evaluate(el=>parseFloat(getComputedStyle(el).borderTopWidth))).toBeGreaterThanOrEqual(1);
+ if(route.startsWith('/catalogo')&&width<768){await page.waitForFunction(()=>document.querySelector('.cat-hero')?.hasAttribute('data-tt-flow-block'));const layer=await page.locator('.cat-hero > [data-tt-flow-background]').boundingBox(),tabs=await page.locator('#cat-tabs-mobile').boundingBox();expect(layer.y+layer.height).toBeLessThanOrEqual(tabs.y+1);}
+ if(route.startsWith('/catalogo')&&width===390)await page.screenshot({path:test.info().outputPath('global-corregido-390.png')});
+});
