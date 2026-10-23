@@ -36,3 +36,5 @@
 - Entrega: rama/PR en borrador para revisión; CI del SHA final se informa separada de PASS_LOCAL. No hubo compras, migraciones, sesiones ni datos productivos de prueba. No se heredan PASS históricos.
 
 - Cierre de entrega: [PR1217](https://github.com/tintinaccs/tintin-web/pull/1217) creado en borrador y adjunto al chat; autoMergeRequest=null. fc5b29479 derivados/versiones y a3243b2e1 contratos/evidencia; el presente relevo registra PR/controles. Protección78/544, plan67/68 y build/diagnóstico19páginas/caché364/67 PASS_LOCAL,36architecture-gates, contenido/fase6 y diffcheck correctos. CI remoto del HEAD final PENDING.
+
+- Seguimiento CI1217: dos cabezas iniciales fallaron sólo en el control literal de identidad legacy audit:integral; se inspeccionaron ambos logs.965cd1f07 preserva la llamada original para legacy sin tocar el auditor. Tag2 nuevo evita reutilizar bytes del preview1.39comandos preflight canónico local,454commerce y5Chromium finales PASS; se exige CI propia del nuevo HEAD, sin ocultar fallos previos.

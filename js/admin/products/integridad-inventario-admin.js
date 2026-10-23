@@ -15,7 +15,7 @@ import {
 import {
   normalizeInventoryItems,
   orderReservesInventory
-} from '../../core/store/modelo-inventario.mjs?v=tintin-20261023-variant-engine-v2-1';
+} from '../../core/store/modelo-inventario.mjs?v=tintin-20261023-variant-engine-v2-2';
 
 function actorEmail() {
   return String(auth.currentUser?.email || '').trim().toLowerCase();

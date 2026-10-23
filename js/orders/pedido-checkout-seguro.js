@@ -1,4 +1,4 @@
-import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261023-variant-engine-v2-1';
+import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261023-variant-engine-v2-2';
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
@@ -43,7 +43,7 @@ import {
   isValidTaxpayerType
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1-master-20261007-1';
 import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20261022-avatar-inicial-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20261023-variant-engine-v2-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20261023-variant-engine-v2-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;

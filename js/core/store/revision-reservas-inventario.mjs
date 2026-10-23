@@ -1,5 +1,5 @@
-import { orderReservesInventory, normalizeInventoryItems } from './modelo-inventario.mjs?v=tintin-20261023-variant-engine-v2-1';
-import { normalizeVariantInventoryItems } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { orderReservesInventory, normalizeInventoryItems } from './modelo-inventario.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { normalizeVariantInventoryItems } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 
 // Read-only projection. Never spreads order documents: customer, payment and
 // address fields do not belong in an inventory reconciliation export.

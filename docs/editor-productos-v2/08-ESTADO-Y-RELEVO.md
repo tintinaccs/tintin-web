@@ -73,3 +73,5 @@ Fase0 creada por PROMPT0: nueve documentos y entrada CURRENT_STATE, sin funciona
 Rama de implementación separada: codex/motor-comercial-variantes-v2, parte de a0f89051f (documentación fase1) con fuentes funcionales idénticas a main6ac1. No hubo cambios funcionales de main entre auditoría e inicio. PR documental1216 permanece intacto.
 
 Cierre local: build Pages/CSP/rutas/diagnóstico19páginas, caché364/67 y protección78registros/544archivos PASS; plan canónico67archivos/68registros contra6ac1. audit:architecture-contracts,36architecture-gates,contenido/fase6 y diffcheck PASS. PR1217 sólo revisión: no publicar ni iniciar fase3.
+
+Seguimiento de CI:40039955108/a3243 y40040078842/fa485 fallaron por control literal de identidad legacy.965cd1f07 mantiene la llamada antigua junto con referencia v2 sin tocar el auditor;39comandos de ci:preflight completos,454commerce y5Chromium dirigidos PASS_LOCAL tras el arreglo. Nuevo tag2; no reutilizar URL1 del preview. La cabeza final debe aprobar su propia CI. No cerrar la fase como aprobada remotamente mientras esté pendiente o haya un fallo crítico vigente.

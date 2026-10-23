@@ -7,8 +7,8 @@ import {
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
 
 const DEVICES = ['desktop', 'tablet', 'mobile'];
-import { hasProductStock, firstAvailableVariant } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
-import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { hasProductStock, firstAvailableVariant } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { productVariantImage } from '../../components/images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-2';
 const OPTIONS = Object.freeze(
   Object.fromEntries(Object.entries(VISUAL_STYLE_OPTIONS).map(([key, values]) => [key, new Set(values)]))
 );

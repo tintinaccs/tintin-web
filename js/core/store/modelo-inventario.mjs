@@ -1,4 +1,4 @@
-import { normalizeVariantSelection } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { normalizeVariantSelection } from './inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-2';
 
 const TERMINAL_STATUSES = new Set(['cancelado', 'rechazado']);
 

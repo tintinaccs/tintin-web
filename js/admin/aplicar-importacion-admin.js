@@ -18,12 +18,12 @@ import {
   chunkImportRecords,
   pendingCollectionGroups,
   stableProductDocumentId,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20261023-variant-engine-v2-1';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20261023-variant-engine-v2-2';
 import {
   isShopifyMediaUrl,
   rewriteImportedShopifyMedia,
-} from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20261023-variant-engine-v2-1';
-import { confirmDistinctShopifyImport } from '../core/store/shopify-import-identity.mjs?v=tintin-20261023-variant-engine-v2-1';
+} from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20261023-variant-engine-v2-2';
+import { confirmDistinctShopifyImport } from '../core/store/shopify-import-identity.mjs?v=tintin-20261023-variant-engine-v2-2';
 
 const BATCH_SIZE = 50;
 const MEDIA_COPY_BATCH_SIZE = 5;

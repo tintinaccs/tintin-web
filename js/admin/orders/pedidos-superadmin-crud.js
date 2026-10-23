@@ -1,4 +1,4 @@
-import { mergeSelectedOrderProducts } from './seleccion-productos-pedido.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { mergeSelectedOrderProducts } from './seleccion-productos-pedido.mjs?v=tintin-20261023-variant-engine-v2-2';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20261022-avatar-inicial-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20261015-images-1';
 import { chooseOrderTrash } from './seleccion-devolucion.mjs?v=tintin-20261017-stat-controls-1';

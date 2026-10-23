@@ -102,3 +102,9 @@ No quedan fallos críticos observados en estas ejecuciones locales. CI del HEAD 
 ### Controles finales del repositorio
 
 PASS_LOCAL adicionales: audit:architecture-contracts (autoridades/consumidores), test:architecture-gates36/36 incluidos negativos, audit:content y audit:phase6. Build:pages y verificadores canónicos de Pages/CSP/rutas/diagnóstico/caché ejecutados; cierre final de protección tras regenerar hashes desde main y diffcheck en bitácora. No se quitaron gates ni se relajaron permisos/umbrales.
+
+### Corrección del primer control remoto
+
+CI40039955108/a3243b2e1 y40040078842/fa4852c19 fallaron en audit:integral: el detector exigía la llamada literal de identidad legacy del carrito. Commit965cd1f07 conserva esa llamada real cuando no hay variantKey y la ruta estable cuando existe. No se modifica el auditor. Tras corregirlo: `npm run ci:preflight` completo PASS_LOCAL (39 comandos, incluido test:fast), `npm run test:commerce`454/454 otra vez y5 Chromium dirigidos de carrito legacy/v2, tarjeta/búsqueda y ficha v2 sin reintentos. Evidencia variant-ci-preflight-final.log, artifacts/ci/preflight.json y variant-v2-final-tag2.log.
+
+Tag final tintin-20261023-variant-engine-v2-2: no se reutiliza la URL1 que ya tuvo preview. Los SHA de CI roja anteriores NO acreditan la cabeza corregida; CI remoto final sigue pendiente hasta observarlo. No se considera la fase aprobada por CI ni autorizada para publicación.
