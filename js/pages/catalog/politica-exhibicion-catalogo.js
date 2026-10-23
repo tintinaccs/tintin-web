@@ -9,7 +9,7 @@
    5. Los desempates son estables: orden manual de colección, nombre e ID.
    ============================================================= */
 
-import { hasProductStock } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-checkout-variants-header-2';
+import { hasProductStock, productDefaultPrice } from '../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
 
 export const NEW_PRODUCT_WINDOW_MS = 5 * 24 * 60 * 60 * 1000;
 
@@ -112,10 +112,10 @@ function compareActivity(a, b) {
 
 function compareByMode(mode) {
   if (mode === 'precio-asc') {
-    return (a, b) => Number(a?.price || 0) - Number(b?.price || 0) || compareActivity(a, b);
+    return (a, b) => Number(a?.variantCommerceVersion === 2 ? productDefaultPrice(a).price : a?.price || 0) - Number(b?.variantCommerceVersion === 2 ? productDefaultPrice(b).price : b?.price || 0) || compareActivity(a, b);
   }
   if (mode === 'precio-desc') {
-    return (a, b) => Number(b?.price || 0) - Number(a?.price || 0) || compareActivity(a, b);
+    return (a, b) => Number(b?.variantCommerceVersion === 2 ? productDefaultPrice(b).price : b?.price || 0) - Number(a?.variantCommerceVersion === 2 ? productDefaultPrice(a).price : a?.price || 0) || compareActivity(a, b);
   }
   if (mode === 'nombre') {
     return (a, b) => nameSorter.compare(String(a?.name || ''), String(b?.name || '')) || compareActivity(a, b);

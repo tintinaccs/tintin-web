@@ -794,7 +794,7 @@ function renderProductCardMarkup(p, options = {}) {
       <div class="tt-product-info">
         <div class="tt-product-cat">${escapeHtml(p.category || p.cat || '')}</div>
         <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
-        <div class="tt-product-price">${priceMarkup(selectedProductMoney(p))}</div>
+        <div class="tt-product-price">${priceMarkup(p.variantCommerceVersion === 2 ? selectedProductMoney(p) : p)}</div>
         ${colorsHTML}
         <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
@@ -1580,7 +1580,7 @@ function _renderProductDetail(product) {
   const statusEl = document.getElementById('product-status');
 
   if (nameEl) nameEl.textContent = product.name;
-  if (priceEl) priceEl.innerHTML = priceMarkup(selectedProductMoney(product));
+  if (priceEl) priceEl.innerHTML = priceMarkup(product.variantCommerceVersion === 2 ? selectedProductMoney(product) : product);
   if (catEl) catEl.textContent = (product.category || product.cat || '').toUpperCase();
   // Conditional rendering: an empty/missing description has no place in the DOM at all
   if (descEl) {

@@ -4,7 +4,7 @@ import { normalizeProductSearch as normalize, productSearchText, productSearchSc
 const PRODUCTS_RUNTIME_URL = '../../../core/store/estado-productos.js?v=tintin-20261023-variant-engine-v2-1';
 
 const MAX_RESULTS = 10;
-import { hasProductStock, firstAvailableVariant, productVariantPrice } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
+import { hasProductStock, firstAvailableVariant, productDefaultPrice } from '../../../core/store/inventario-variantes.mjs?v=tintin-20261023-variant-engine-v2-1';
 import { productVariantImage } from '../../images/foto-variante.mjs?v=tintin-20261023-variant-engine-v2-1';
 const INPUT_DELAY_MS = 120;
 
@@ -114,7 +114,7 @@ function createResult(product, position) {
   const name = document.createElement('strong');
   name.textContent = String(product.name || 'Producto');
   const meta = document.createElement('span');
-  const money = product.variantCommerceVersion === 2 ? productVariantPrice(product, firstAvailableVariant(product) || {variantKey:product.variantInventory?.[0]?.variant}) : product;
+  const money = productDefaultPrice(product);
   meta.textContent = [String(product.category || product.cat || '').trim(), formatPrice(money.price)].filter(Boolean).join(' · ');
   const previous = Number(money.priceBefore);
   const current = Number(money.price);

@@ -124,7 +124,8 @@ export function hasProductStock(product) {
   if (product?.variantCommerceVersion !== 2 && product?.stock != null && product.stock !== '' && Number(product.stock) <= 0) return false;
   try {
     const entries = variantInventoryEntries(product);
-    return entries === null || entries.some(entry => entry.active !== false && (entry.stock === null || entry.stock > 0));
+    if (product?.variantCommerceVersion === 2) return entries.some(entry => entry.active !== false && (entry.stock === null || entry.stock > 0));
+    return entries === null || entries.some(entry => entry.stock > 0);
   } catch { return false; }
 }
 
@@ -281,4 +282,11 @@ export function variantSelectionLabel(product, selection) {
   const attrs = variantAttributes(product,selection);
   if (!attrs) return null;
   return namedVariantGroups(product).map(([key]) => attrs[key]).join(' / ');
+}
+
+export function productDefaultPrice(product) {
+  if (product?.variantCommerceVersion !== 2) return {price:product?.price,priceBefore:product?.priceBefore ?? null};
+  const entries = variantInventoryEntries(product);
+  const entry = entries.find(row => row.active !== false && (row.stock === null || row.stock > 0)) || entries[0];
+  return productVariantPrice(product,{variantKey:entry.variant});
 }

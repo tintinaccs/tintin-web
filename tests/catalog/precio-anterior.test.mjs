@@ -19,8 +19,8 @@ test('precio anterior tachado y % solo si priceBefore > price', async () => {
 });
 
 test('tarjeta y ficha de producto usan priceMarkup', () => {
-  assert.match(src, /tt-product-price">\$\{priceMarkup\(selectedProductMoney\(p\)\)\}/);
-  assert.match(src, /priceEl\.innerHTML = priceMarkup\(selectedProductMoney\(product\)\)/);
+  assert.match(src, /tt-product-price">\$\{priceMarkup\(p\.variantCommerceVersion === 2 \? selectedProductMoney\(p\) : p\)\}/);
+  assert.match(src, /priceEl\.innerHTML = priceMarkup\(product\.variantCommerceVersion === 2 \? selectedProductMoney\(product\) : product\)/);
 });
 
 test('búsqueda y carrito muestran precio anterior y avisan cambio de precio', async () => {

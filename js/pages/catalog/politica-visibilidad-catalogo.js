@@ -78,7 +78,7 @@ export function normalizeProduct(product) {
     try { if (p.variantCommerceVersion !== 2) throw new Error('Versión no compatible'); rawStock = productStockTotal(p); }
     catch { return {...p,active:false,price:NaN,stock:0}; }
   }
-  const stock = rawStock == null || rawStock === '' ? null : Number(rawStock);
+  const stock = p.variantCommerceVersion === 2 ? (rawStock == null ? null : Number(rawStock)) : (p.stock == null || p.stock === '' ? null : Number(p.stock));
   const category = wristCategory(clean(p.category || p.cat || '', 120));
   const description = clean(p.description || p.desc || '', 4000);
   return {

@@ -55,3 +55,20 @@ for(const [width,height,path] of [[390,844,'envios'],[844,390,'preguntas-frecuen
  await page.locator('[aria-controls="search-panel"]:visible').first().click();
  await expect(page.locator('#search-input')).toHaveValue('');
 });
+
+test('motor comercial v2 comparte precio y descuento entre tarjeta y búsqueda',async({page})=>{
+ const fixture={id:'v2search',sku:'V2-FIXTURE',name:'Anillo Fixture V2',category:'anillos',price:100,priceBefore:120,stock:null,active:true,variantCommerceVersion:2,variants:{Color:['Plateado','Dorado']},variantInventory:[{variant:'Plateado',attributes:{Color:'Plateado'},stock:0,price:150},{variant:'Dorado',attributes:{Color:'Dorado'},stock:null,price:250,priceBefore:300}]};
+ await page.setViewportSize({width:390,height:844});
+ await page.route('**/api/public-catalog?**',route=>{
+  const resource=new URL(route.request().url()).searchParams.get('resource');
+  if(!['products','collections'].includes(resource))return route.continue();
+  const rows=resource==='products'?[fixture]:[{id:'anillos',name:'Anillos',slug:'anillos',visible:true}];
+  return route.fulfill({json:{ok:true,resource,items:rows.map(({id,...data})=>({id,data}))}});
+ });
+ await page.goto('/catalogo');
+ await expect(page.locator('#cat-grid .tt-card-price')).toContainText('250');
+ await page.locator('[aria-controls="search-panel"]:visible').first().click();
+ await page.locator('#search-input').fill('V2-FIXTURE');
+ await expect(page.locator('#search-results .tt-search-result-copy')).toContainText('Gs. 250');
+ await expect(page.locator('#search-results s')).toHaveText('Gs. 300');
+});
