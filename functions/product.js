@@ -1,4 +1,4 @@
-import { productDefaultPrice } from '../js/core/store/inventario-variantes.mjs';
+import { productDefaultPrice, productStockTotal } from '../js/core/store/inventario-variantes.mjs';
 import {
   decodeFirestoreFields,
   firestoreAdminGet
@@ -172,7 +172,7 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
     canonical,
     price,
     active: data?.active,
-    stock: hasProductStock(data) ? (data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null) : 0,
+    stock: hasProductStock(data) ? (data.variantCommerceVersion === 2 ? productStockTotal(data) : data?.stock === null || data?.stock === '' ? null : data?.stock ?? data?.['Variant Inventory Qty'] ?? null) : 0,
     sku: firstValue(data, ['handle', 'Handle'])
   });
   // El servidor ya validó la publicación: el texto no debe esperar al SDK.
