@@ -659,3 +659,8 @@ Autoridades: interfaz-productos-adaptable, shopify-commerce-admin/CSS y admin.ht
 ## 2026-10-23 — Menú y cantidades sin superposición
 
 Fuente shopify-commerce-admin.css y versiones del consumidor shopify-commerce-admin/admin.html. La cabecera del editor no hereda wrap del workspace; título flexible y menú44px en la misma fila. Cantidades y selector ocupan filas completas; el grid de variantes usa el ancho disponible en lugar de forzar dos tarjetas en móvil. Regresión con estilos globales reales, activación de sección, geometría e interacción y guard nativo. Sin tocar encabezado público ni controles de otros agentes. Evidencia y límites en CURRENT_STATE.
+
+
+## 2026-10-22 — Ajuste global de categorías, Cuenta y formularios
+
+Autoridades: alternancia-secciones para impedir que fondos cubran navegación intermedia; sistema-superficies para contorno del avatar, radios compartidos de campos/tarjetas y tamaño táctil; marca-movil/catalog-maintenance para compactar24px el inicio móvil. Consumidores de las18 páginas conservan semántica, controles y datos; imports transitivos y bundles reciben versiones inmutables coherentes mediante generadores. Cobertura, hallazgos y límites en docs/agent/UI_RESPONSIVE_GLOBAL_20261023.md; no acredita sesión privada ni hardware físico ni publicación antes del CI final.

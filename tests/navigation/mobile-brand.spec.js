@@ -35,7 +35,7 @@ for (const [width, height] of [[320, 568], [390, 844], [430, 932], [600, 960], [
           alphaTop: rect.top + 172 * rect.height / 600, alphaBottom: rect.top + 429 * rect.height / 600,
           clipTop: clip.top, clipBottom: clip.bottom };
       });
-      expect(geometry.height, name).toBe(76);
+      expect(geometry.height, name).toBe(68);
       expect(geometry.contentTop, name).toBeGreaterThanOrEqual(geometry.bottom);
       expect(geometry.center, name).toBeLessThanOrEqual(1);
       expect(geometry.target, name).toBeGreaterThanOrEqual(44);

@@ -211,7 +211,7 @@ body.tt-catalog-maintenance .tt-footer-tagline {
 @media (max-width: 768px) {
   body.tt-catalog-maintenance { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
   body.tt-catalog-maintenance .cat-wrap { padding: 16px 24px 90px; }
-  body.tt-catalog-maintenance .cat-hero { margin-top: 0; padding: 24px 16px; border-radius: 16px; }
+  body.tt-catalog-maintenance .cat-hero { margin-top: 0; padding: 16px; border-radius: 16px; }
   body.tt-catalog-maintenance .cat-sidebar {
     display: none !important;
     max-height: none !important;

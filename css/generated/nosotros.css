@@ -2654,6 +2654,7 @@ body:has(.adm-main) .adm-cards-grid {
   --tt-ui-radius-xl: 28px;
   --tt-ui-radius-lg: 20px;
   --tt-ui-radius-md: 14px;
+  --tt-ui-radius-card: clamp(16px, 2vw, 20px);
   --tt-ui-gutter: clamp(16px, 3vw, 32px);
   --tt-ui-inset: clamp(16px, 2.2vw, 28px);
   --tt-ui-gap: clamp(12px, 2vw, 24px);
@@ -2979,6 +2980,33 @@ html body:not(:has(.adm-main)) :is(.tt-editorial-content, .tt-watch-feature-cont
   .ck-panel-body) {
   padding: var(--tt-ui-inset);
 }
+/* Misma escala de esquinas para superficies de texto y formularios. No se
+   aplica a fotografías, indicadores, mapas ni controles compuestos: sus
+   recortes y estados siguen perteneciendo a cada componente. */
+html:root body :is(.tt-info-block, .tt-contact-info-item, #contact-form,
+  .tt-contact-alt, .cat-top, .perfil-card, .tt-profile-summary-card, .ck-panel) {
+  border-radius: var(--tt-ui-radius-card) !important;
+  min-width: 0;
+}
+html:root body :is(.tt-form-input, .tt-form-textarea, .perfil-input,
+  .ck-input, .ck-select, .ck-textarea, .login-email-input,
+  .adm-input, .adm-select, .adm-textarea) {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 44px;
+  border-radius: var(--tt-ui-radius-md) !important;
+}
+/* Un campo enfocado no debe ampliar automáticamente Safari y desplazar los
+   controles vecinos. Conservamos los tamaños mayores de cada formulario. */
+@media (max-width: 1024px) {
+  html:root body :is(.tt-form-input, .tt-form-textarea, .perfil-input,
+    .ck-input, .ck-select, .ck-textarea, .login-email-input,
+    .adm-input, .adm-select, .adm-textarea) {
+    font-size: max(16px, 1em);
+  }
+}
+
 /* No truncar información para forzar tarjetas de igual altura. */
 html body:not(:has(.adm-main)) :is(.tt-product-name, .tt-card-name,
   .tt-coll-page-name, .tt-coll-page-desc, .tt-look-card-name,
@@ -3124,6 +3152,12 @@ html:root body [data-tt-flow-block] > [data-tt-flow-background] {
 }
 html:root body #hero .tt-hero-media { background: transparent !important; }
 html:root body { overflow-x: clip; }
+/* Una foto muy clara conserva un contorno visible, sin sustituir su identidad. */
+html:root body :is(#tt-header-desktop-tablet, #tt-header-tablet, #tt-tabbar) :is(img.tt-account-avatar-btn, img.tt-tabbar-avatar) {
+  box-sizing: border-box;
+  border: 1.5px solid var(--color-text-primary, #222222) !important;
+  background: #FFFFFF !important;
+}
 html:root body :is(main,.cat-wrap):has([data-tt-flow-block]) {
   background: none !important; transform: none !important; opacity: 1 !important;
 }
@@ -4651,9 +4685,9 @@ html body #tt-mobile-brand { display: none !important; }
     justify-content: center;
     align-items: flex-start;
     width: 100%;
-    height: calc(76px + env(safe-area-inset-top, 0px));
+    height: calc(68px + env(safe-area-inset-top, 0px));
     margin: 0;
-    padding: calc(8px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 16px max(20px, env(safe-area-inset-left, 0px));
+    padding: calc(8px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) 8px max(20px, env(safe-area-inset-left, 0px));
     border: 0;
     box-shadow: none;
     background: linear-gradient(180deg, var(--tt-mobile-brand-bg) 0%, var(--tt-mobile-brand-next) 100%);
