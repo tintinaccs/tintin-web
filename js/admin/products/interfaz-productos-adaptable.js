@@ -34,6 +34,7 @@ export function syncProductSurfaces() {
     editor.setAttribute('aria-modal','true');
     editor.setAttribute('aria-labelledby','prod-form-title');
   } else if (editorWasOpen) {
+    closeEditorActions(document.getElementById('prod-form-card'));
     requestAnimationFrame(()=>{
       const target=editorOpener?.isConnected && editorOpener !== document.body && editorOpener.getClientRects().length ? editorOpener : document.querySelector('[data-action="product-new"]');
       target?.focus({preventScroll:true});
@@ -134,9 +135,24 @@ export function enhanceProductEditor() {
   }
   const variantsLabel=card.querySelector('label[for="prod-variants-text"]');if(variantsLabel && variantsLabel.textContent!=='Colores y opciones')variantsLabel.textContent='Colores y opciones';
   const save = card.querySelector('#prod-save-btn');
-  const footer=save?.parentElement;
-  if (footer && !footer.classList.contains('tt-product-editor-actions')) {
-    footer.classList.add('tt-product-editor-actions');card.append(footer);
+  const actions=save?.parentElement;
+  if (actions && !card.querySelector('.tt-product-editor-menu')) {
+    const menu=document.createElement('div');menu.className='tt-product-editor-menu';
+    const toggle=document.createElement('button');toggle.type='button';toggle.className='adm-btn tt-product-editor-menu-toggle';
+    toggle.setAttribute('aria-label','Acciones del producto');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','prod-editor-actions');
+    const icon=document.createElement('span');icon.textContent='⋯';icon.setAttribute('aria-hidden','true');toggle.append(icon);
+    actions.removeAttribute('style');actions.className='tt-product-editor-action-list';actions.id='prod-editor-actions';actions.hidden=true;
+    actions.setAttribute('role','group');actions.setAttribute('aria-label','Guardar o cancelar producto');
+    toggle.addEventListener('click',()=>{
+      const open=actions.hidden;actions.hidden=!open;toggle.setAttribute('aria-expanded',String(open));
+      if(open)actions.querySelector('button:not(:disabled)')?.focus();
+    });
+    menu.addEventListener('keydown',event=>{
+      if(event.key==='Escape' && !actions.hidden){event.preventDefault();event.stopPropagation();closeEditorActions(card,true);}
+    });
+    menu.append(toggle,actions);
+    card.querySelector('.adm-card-head button[onclick="prodCancelForm()"]')?.remove();
+    card.querySelector('.adm-card-head')?.append(menu);
   }
   const error=card.querySelector('#prod-form-error');
   if (error) {
@@ -150,6 +166,14 @@ export function enhanceProductEditor() {
   lastError=message;
   refreshProductPreview(card);
   installEditorControls(card);refreshEditorControls(card);
+}
+
+function closeEditorActions(card,restoreFocus=false) {
+  const actions=card?.querySelector('#prod-editor-actions');
+  const toggle=card?.querySelector('.tt-product-editor-menu-toggle');
+  if(!actions || actions.hidden)return;
+  actions.hidden=true;toggle?.setAttribute('aria-expanded','false');
+  if(restoreFocus)toggle?.focus({preventScroll:true});
 }
 
 function showSection(card,grid,value,expand=false) {
@@ -173,6 +197,12 @@ export function installProductInterface() {
   enhanceProductEditor();syncProductSurfaces();
   if (installed) return;
   installed=true;
+  const closeActionsOutside=event=>{
+    const card=visibleProductEditor();
+    if(card && !event.target.closest('.tt-product-editor-menu'))closeEditorActions(card);
+  };
+  document.addEventListener('pointerdown',closeActionsOutside);
+  document.addEventListener('focusin',closeActionsOutside);
   let queued=false;
   const card=document.getElementById('prod-form-card');
   if (card) new MutationObserver(()=>{

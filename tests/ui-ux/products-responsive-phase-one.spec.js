@@ -83,23 +83,28 @@ async function openEditor(page,width,height,withImages=false,beforeOpen=null){
  await page.locator('[data-action="product-new"]').click();await expect(page.locator('#prod-editor-section')).toBeVisible();
 }
 
+async function openActions(page) {
+ const toggle=page.getByRole('button',{name:'Acciones del producto',exact:true});
+ if(await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
+ return page.locator('#prod-editor-actions');
+}
+
 for(const [width,height] of [[320,568],[390,844],[667,375],[768,1024],[820,1180],[1024,768],[1180,820],[1280,720],[1366,768],[1440,900],[1920,1080]]) {
  test(`editor minimal: botones, stock y tarjetas accesibles ${width}x${height}`,async({page})=>{
   await openEditor(page,width,height);
   const card=page.locator('#prod-form-card');
   const bounds=await card.boundingBox();
   expect(bounds.x).toBe(0);expect(bounds.y).toBe(0);expect(bounds.width).toBe(width);expect(bounds.height).toBe(height);
-  const floating=page.locator('.tt-product-editor-actions');
-  await expect(floating).toHaveCSS('position','relative');
-  await expect(floating).toHaveCSS('background-color','rgb(255, 255, 255)');
-  await expect(floating.locator('button')).toHaveCount(2);
+  await expect(page.locator('.tt-product-editor-actions')).toHaveCount(0);
+  await expect(page.locator('#prod-editor-actions')).toBeHidden();
+  await expect(page.getByRole('button',{name:'Acciones del producto',exact:true})).toBeInViewport();
   await page.evaluate(()=>{
    const select=document.getElementById('prod-category');for(const [value,title]of [['relojes','Relojes'],['anillos','Anillos'],['collares','Collares']]){const option=document.createElement('option');option.value=value;option.textContent=title;select.append(option);}
   });
   await page.locator('#prod-category').selectOption('relojes');await expect(page.locator('#prod-category')).toHaveValue('relojes');
   await expect(card.locator('[data-product-section]')).toHaveCount(6);
   if(width<1200)await expect(page.locator('#prod-name')).toHaveCSS('font-size','16px');
-  await expect(page.locator('#prod-save-btn')).toBeInViewport();
+  await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
   await page.getByRole('button',{name:'Stock: 10 unidades',exact:true}).click();
   await expect(page.locator('#prod-stock')).toHaveValue('10');await expect(page.locator('#prod-active')).toBeChecked();
   await page.getByLabel('Elegir cantidad: Stock',{exact:true}).selectOption('500');await expect(page.locator('#prod-stock')).toHaveValue('500');
@@ -153,17 +158,17 @@ for(const [width,height] of [[320,700],[390,844],[844,390],[768,1024],[1024,768]
   await expect(page.locator('#prod-name')).toHaveAccessibleName('Nombre *');
   const boxes=await card.locator('input:not([type=hidden]),textarea,select,button').evaluateAll(nodes=>nodes.map(el=>{const r=el.getBoundingClientRect();return{id:el.id,x:r.x,right:r.right,width:r.width};}).filter(r=>r.width>0));
   for(const box of boxes){expect(box.x,box.id).toBeGreaterThanOrEqual(0);expect(box.right,box.id).toBeLessThanOrEqual(width+1);}
+  await openActions(page);
   const save=page.locator('#prod-save-btn');
   if(width<1200){
    await expect(card).toHaveAttribute('role','dialog');
    const rect=await card.boundingBox();expect(rect.x).toBe(0);expect(rect.y).toBe(0);expect(rect.width).toBe(width);expect(rect.height).toBe(height);
    const footer=await save.boundingBox();expect(footer.y).toBeGreaterThan(0);expect(footer.y+footer.height).toBeLessThanOrEqual(height);
-   await page.locator('.tt-product-editor-actions button').last().focus();await page.keyboard.press('Tab');
-   await expect(card.locator('.adm-card-head button')).toBeFocused();
+   await page.keyboard.press('Escape');await expect(card.locator('.tt-product-editor-menu-toggle')).toBeFocused();await openActions(page);
   }
   await save.click();expect(await page.evaluate(()=>window.__calls.at(-1))).toEqual(['prodGuardar','Anillo de prueba','45000']);
   await page.screenshot({path:`test-results/products-editor-phase1-${width}x${height}.png`});
-  await card.locator('.adm-card-head button').click();await expect(card).toBeHidden();await expect(page.locator('[data-action="product-new"]')).toBeFocused();
+  await openActions(page);await card.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(card).toBeHidden();await expect(page.locator('[data-action="product-new"]')).toBeFocused();
  });
 }
 
@@ -177,6 +182,7 @@ for (const [width,height] of [[320,568],[390,844],[768,1024],[1024,768],[1180,82
   });
   const navigation=page.locator('#adm-mobile-tabs');
   await expect(navigation).toHaveCSS('visibility','hidden');
+  await openActions(page);
   const save=page.locator('#prod-save-btn');
   await expect(save).toBeVisible();
   const hit=await save.evaluate(button=>{const r=button.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('#prod-save-btn')===button;});
@@ -220,7 +226,7 @@ for(const [width,height] of [[390,844],[775,582],[1024,768]]){
   });
   await expect(page.locator('.adm-sidebar')).toBeHidden();
   expect(await page.evaluate(()=>Boolean(document.elementFromPoint(20,20)?.closest('#prod-form-card')))).toBe(true);
-  await page.locator('#prod-form-card .adm-card-head button').click();
+  await openActions(page);await page.locator('#prod-form-card').getByRole('button',{name:'Cancelar',exact:true}).click();
   // En móvil vuelve a su estado normal plegado, sin quedar oculta por el editor.
   await expect(page.locator('html')).not.toHaveClass(/tt-product-editor-open/);
   await expect(page.locator('.adm-sidebar')).toHaveCSS('visibility',originalVisibility);
@@ -288,7 +294,7 @@ test('cancelar respeta el guard nativo: seguir editando conserva datos y descart
  await page.locator('#prod-editor-section').selectOption('general');
  expect(await page.evaluate(()=>window.AdminUnsaved.isDirty('primary-editor'))).toBe(false);
  await page.locator('#prod-price').fill('15000');
- await page.locator('.adm-card-head button[onclick="prodCancelForm()"]').click();
+ await openActions(page);await page.locator('#prod-form-card').getByRole('button',{name:'Cancelar',exact:true}).click();
  const guard=page.locator('#unsaved-modal');await expect(guard).toBeVisible();
  const box=await page.locator('#unsaved-modal-stay').boundingBox();expect(await page.evaluate(({x,y})=>Boolean(document.elementFromPoint(x+5,y+5)?.closest('#unsaved-modal')),box)).toBe(true);
  await page.locator('#unsaved-modal-stay').click();await expect(guard).toBeHidden();await expect(page.locator('#prod-price')).toHaveValue('15000');
@@ -316,12 +322,12 @@ test('selección entre páginas y barra sobre navegación sin tapar el último p
  await page.locator('[data-action="products-clear-selection"]').click();await expect(page.locator('.tt-product-selection')).toBeHidden();
 });
 
-test('foto principal completa en editor real y rotación conserva borrador y pie de acciones',async({page})=>{
+test('foto principal completa en editor real y rotación conserva borrador y acciones superiores',async({page})=>{
  await openEditor(page,390,844,true);await page.locator('#prod-name').fill('Borrador conservado');await page.locator('#prod-editor-section').selectOption('photos');
  await page.evaluate(async url=>{const {attachImageUploadWidget}=await import(url);attachImageUploadWidget(document.getElementById('prod-image-widget'),{label:'Imagen principal',value:'https://img.test/principal.webp'});},'/js/components/images/carga-imagenes.js?fixture');
  const image=page.locator('#prod-image-widget .tt-iuw-preview');await expect(image).toBeVisible();expect((await image.boundingBox()).width).toBeGreaterThan(250);await expect(image.locator('img')).toHaveCSS('object-fit','contain');
  await page.setViewportSize({width:844,height:390});await expect(page.locator('#prod-form-card')).toHaveCSS('height','390px');
- await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');await expect(page.locator('#prod-save-btn')).toBeInViewport();
+ await expect(page.locator('#prod-name')).toHaveValue('Borrador conservado');await openActions(page);await expect(page.locator('#prod-save-btn')).toBeInViewport();
  await page.screenshot({path:'test-results/product-editor-photo-landscape.png'});
 });
 
@@ -496,18 +502,22 @@ for(const [width,height] of [[320,568],[390,844],[844,390],[768,1024],[1024,768]
  await expect(editor).toHaveCSS('border-radius','0px');
  await expect(editor).toHaveAttribute('role','dialog');
  await expect(editor).toHaveAttribute('aria-modal','true');
- await editor.locator('.tt-product-editor-actions button').last().focus();await page.keyboard.press('Tab');
- await expect(editor.locator('.adm-card-head button')).toBeFocused();
- await expect(editor.locator('.tt-editor-preview')).toHaveCSS('overflow','visible');
- const footer=editor.locator('.tt-product-editor-actions'),buttons=footer.locator('button');
- await expect(buttons).toHaveCount(2);
+ const toggle=editor.getByRole('button',{name:'Acciones del producto',exact:true});
+ await expect(editor.locator('.tt-product-editor-actions')).toHaveCount(0);
+ await expect(editor.locator('#prod-editor-actions')).toBeHidden();
  const body=editor.locator('.adm-card-body');await body.evaluate(el=>el.scrollTop=el.scrollHeight);
+ const contentBox=await body.boundingBox();expect(contentBox.y+contentBox.height).toBeGreaterThanOrEqual(height-1);
+ await toggle.focus();await page.keyboard.press('Enter');
+ const menu=editor.locator('#prod-editor-actions'),buttons=menu.locator('button');
+ await expect(buttons).toHaveCount(2);await expect(editor.locator('#prod-save-btn')).toBeFocused();
  for(const button of await buttons.all()){
   await expect(button).toBeInViewport();
   expect(await button.evaluate(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===el;})).toBe(true);
  }
- await expect(footer).toHaveCSS('border-top-width','1px');
- const contentBox=await body.boundingBox(),footerBox=await footer.boundingBox();expect(contentBox.y+contentBox.height).toBeLessThanOrEqual(footerBox.y+1);
+ await buttons.last().focus();await page.keyboard.press('Tab');await expect(menu).toBeHidden();
+ await openActions(page);await page.keyboard.press('Escape');await expect(menu).toBeHidden();await expect(toggle).toBeFocused();await expect(editor).toBeVisible();
+ await openActions(page);await editor.locator('#prod-form-title').click();await expect(menu).toBeHidden();
+ await openActions(page);
  if(width===390||width===1440)await page.screenshot({path:test.info().outputPath(`editor-full-${width}.png`)});
  await editor.getByRole('button',{name:'Cancelar',exact:true}).click();await expect(editor).toBeHidden();
  await expect(page.locator('[data-action="product-new"]')).toBeFocused();
@@ -614,7 +624,7 @@ test('salir con fotos masivas pendientes activa el guard real sin subir ni borra
  await page.locator('#master-guard-queue input[type=file]').setInputFiles({name:'pendiente.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
  await expect(page.locator('#master-guard-queue .tt-editor-upload-item')).toHaveCount(1);
  expect(await page.evaluate(()=>window.AdminUnsaved.isDirty('primary-editor'))).toBe(true);
- await page.locator('#prod-form-card .adm-card-head button').click();await expect(page.locator('#unsaved-modal')).toBeVisible();
+ await openActions(page);await page.locator('#prod-form-card').getByRole('button',{name:'Cancelar',exact:true}).click();await expect(page.locator('#unsaved-modal')).toBeVisible();
  await page.locator('#unsaved-modal-stay').click();await expect(page.locator('#master-guard-queue .tt-editor-upload-item')).toHaveCount(1);
  expect(await page.evaluate(()=>window.__imageCleanup || 0)).toBe(0);
 });
