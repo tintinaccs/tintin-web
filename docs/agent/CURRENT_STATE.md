@@ -1,3 +1,9 @@
+## 2026-10-23 — Autorización de merge y corrección de comentarios CodeQL (Codex /root)
+
+El titular autorizó expresamente integrar PR1214 y publicar la versión validada. La cabeza7ea37040 aprobó todas las fases, Repository audit, Cloudflare y CodeQL; al quitar el borrador, GitHub inició otra ejecución por ready_for_review y rechazó el merge por conversaciones CodeQL201/202 pendientes sobre construcción de código en ci-preflight.mjs. No se eluden las reglas ni se cierra la revisión sin corregir su causa.
+
+El smoke de servidor conserva código ejecutable constante; las rutas de módulos y raíz se pasan como argumentos de datos JSON/URL, sin interpolarlas en la fuente JavaScript. Conserva proceso aislado, prohibición de fetch, timeout, salida de error y carga de todas las funciones. test:fast Node22 PASS_LOCAL. Se requiere CI/CodeQL del nuevo SHA antes de integrar. La publicación se verificará por lectura del artefacto, sin pedidos, cobros ni escrituras sobre datos reales.
+
 ## 2026-10-23 — Conciliación de PR1214 con main620d8b9c (Codex /root)
 
 El titular pidió resolver los conflictos. Se incorpora main620d8b9c (PR1211) a la rama del PR1214, conservando intactas sus fuentes de encabezado/dropup/búsqueda y sus regresiones. Se concilian las referencias de navegación con el runtime comercial de variantes; shell, CSS compartido, caché, CSP, diagnóstico y plan de integridad se regeneran desde sus autoridades. La rama permanece en borrador, sin integración a main ni publicación autorizadas.

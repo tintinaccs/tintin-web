@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0b5bd1ecaf010794b49422ea652925f5353cab7a3f340530723d6ffcae085a30",
+  "sourceFingerprint": "23e0ec0809b5bb0fa8f17892f681ebad19deca422e4db682987cc736925b219a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 1425,
     "textFiles": 1334,
-    "totalBytes": 29758599,
+    "totalBytes": 29759757,
     "pages": 19,
     "modules": 1004
   },
@@ -39445,8 +39445,8 @@
     },
     {
       "path": "scripts/ci-preflight.mjs",
-      "bytes": 3800,
-      "sha256": "731ee677db180631cd4c7b9b23ab70cb4657c14447c46bc97ea6179656b92025",
+      "bytes": 3956,
+      "sha256": "b84900e3c80301f11f98976629dfd0f32dbbf2ce372510d877ad51142789e886",
       "syntax": {
         "ok": true,
         "error": ""
@@ -57358,8 +57358,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 852636,
-      "sha256": "4b758005aab694d732b50c6fbe2fa8e4e58489c5919ad6e7ae2864c5f84f0edf"
+      "bytes": 853638,
+      "sha256": "af7112cf7be661021c8f877fea42f48ef2d206633611789a46964a34e7c4761b"
     },
     {
       "path": "docs/agent/DECISIONES_CUESTIONARIO.md",
@@ -61402,8 +61402,8 @@
     {
       "path": "scripts/ci-preflight.mjs",
       "extension": ".mjs",
-      "bytes": 3800,
-      "sha256": "731ee677db180631cd4c7b9b23ab70cb4657c14447c46bc97ea6179656b92025"
+      "bytes": 3956,
+      "sha256": "b84900e3c80301f11f98976629dfd0f32dbbf2ce372510d877ad51142789e886"
     },
     {
       "path": "scripts/ci-result.mjs",

@@ -54,8 +54,10 @@ if (errors.length) {
 // Import entrypoints in a separate process: unresolved exports, dependencies and
 // top-level ReferenceErrors fail before any browser installation or full audit.
 const entries = sources.filter(file => file.startsWith('functions/'));
-const code = `globalThis.fetch = () => { throw new Error('Red prohibida durante import smoke'); }; for (const file of ${JSON.stringify(entries)}) { try { await import(new URL(file, ${JSON.stringify(pathToFileURL(root + '/').href)})); } catch (error) { console.error(file, error); process.exit(1); } }`;
-const loaded = spawnSync(process.execPath, ['--input-type=module', '-e', code], { encoding: 'utf8', timeout: 30000 });
+// Keep executable source constant. Repository paths are JSON data in argv,
+// never fragments interpolated into JavaScript source.
+const code = "globalThis.fetch = () => { throw new Error('Red prohibida durante import smoke'); }; for (const file of JSON.parse(process.argv[1])) { try { await import(new URL(file, process.argv[2])); } catch (error) { console.error(file, error); process.exit(1); } }";
+const loaded = spawnSync(process.execPath, ['--input-type=module', '-e', code, JSON.stringify(entries), pathToFileURL(root + '/').href], { encoding: 'utf8', timeout: 30000 });
 if (loaded.status !== 0) {
   console.error(loaded.stderr || loaded.error || 'El smoke de servidor no terminó correctamente');
   process.exit(1);
