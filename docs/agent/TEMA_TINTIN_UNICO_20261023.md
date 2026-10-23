@@ -81,3 +81,17 @@ consumidores, Apariencia, el gate estricto y caché vuelven a aprobar. Capturas
 de Contacto/Configuración renovadas y revisadas. Esto actualiza la evidencia
 del candidato conciliado; no hereda una publicación del primer candidato.
 La PR tiene auto merge solicitado; CI/merge/producción del nuevo SHA pendientes.
+
+## Corrección del control de hover tras resize
+
+La auditoría 39978762259 aprobó el contrato estático completo, cuentas/sync,
+reglas y Super Admin. En el lote visual final hubo 291 aprobados y un fallo:
+el control del esquema en 390px esperaba reposo después de resize y recibió
+el color hover correcto. El puntero ahora se retira al fondo de la nueva vista
+tras cambiar su ancho; se exige explícitamente que el botón no coincida con
+:hover antes de verificar su color de reposo. No cambia CSS ni expectativas de
+color, y la comprobación de hover real se mantiene.
+
+PASS_LOCAL de la corrección: 40/40 Chromium (10 repeticiones en cuatro anchos)
+y 20/20 WebKit (cinco repeticiones), sin reintentos. La auditoría del nuevo SHA
+y su publicación siguen pendientes; el resultado fallido anterior no se omite.

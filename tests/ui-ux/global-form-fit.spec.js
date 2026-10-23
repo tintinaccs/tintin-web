@@ -123,10 +123,14 @@ for (const width of [390, 844, 1024, 1440]) {
       await page.locator(action).hover();
       await expect(page.locator(action)).toHaveCSS('background-color','rgb(216, 148, 175)');
     }
-    await page.mouse.move(0,0);
+    await page.mouse.move(width - 1, 899);
     await page.locator('#admin-field').focus();
     await expect(page.locator('#admin-field')).toHaveCSS('border-top-color','rgb(184, 118, 148)');
-    await page.setViewportSize({width:width===390?1440:390,height:900});
+    const resizedWidth = width === 390 ? 1440 : 390;
+    await page.setViewportSize({width:resizedWidth,height:900});
+    // Resize puede recalcular :hover; retirar el puntero antes de comprobar reposo.
+    await page.mouse.move(resizedWidth - 1, 899);
+    await expect.poll(() => page.locator('#admin-action').evaluate(el => el.matches(':hover'))).toBe(false);
     await expect(page.locator('#admin-action')).toHaveCSS('background-color','rgb(232, 175, 194)');
     expect(await page.evaluate(() => localStorage.getItem('tt_color_scheme_admin'))).toBeNull();
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('tt_color_scheme_global')).tokens['--color-button-primary-background'])).toBe('#E8AFC2');
