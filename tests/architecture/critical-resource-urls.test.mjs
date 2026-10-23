@@ -26,10 +26,16 @@ test('todos los img estáticos del logo consumen el mismo recurso que el shell',
 });
 
 test('imports del admin reutilizan URLs versionadas de sus dependencias compartidas',()=>{
+  const coreUrl=`shopify-import-core.mjs?v=${versions['js/core/store/shopify-import-core.mjs'].version}`;
+  const checkCore=(source,file)=>{
+    assert.ok(source.includes(`${coreUrl}'`) || source.includes(`${coreUrl}"`),`${file} debe reutilizar la URL canónica del motor de importación`);
+    assert.doesNotMatch(source,/from ['"]\.\/shopify-import-core\.mjs['"]/);
+  };
   for(const file of ['js/core/store/shopify-import-identity.mjs','js/core/store/shopify-phase2-pipeline.mjs']) {
     const source=fs.readFileSync(new URL(file,root),'utf8');
-    assert.match(source,/shopify-import-core\.mjs\?v=tintin-20261005-import-one-click-1/);
-    assert.doesNotMatch(source,/from ['"]\.\/shopify-import-core\.mjs['"]/);
+    checkCore(source,file);
+    assert.throws(()=>checkCore(source.replaceAll(coreUrl,'shopify-import-core.mjs?v=obsolete'),file));
+    assert.throws(()=>checkCore(source.replaceAll(coreUrl,'shopify-import-core.mjs'),file));
   }
   for(const file of ['js/admin/notifications/notificaciones-push.js','js/admin/notifications/notificaciones-push-maestro.js']) {
     const source=fs.readFileSync(new URL(file,root),'utf8');
