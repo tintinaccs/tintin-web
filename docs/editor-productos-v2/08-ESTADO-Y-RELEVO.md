@@ -1,28 +1,33 @@
-# Estado y relevo
+# Estado y relevo — fase1
 
-Fecha: 2026-10-23. Agente: Codex /root.
+Fecha2026-10-23; Codex /root. **Fase1 auditada y plan preparado; pendiente de aprobación de la titular. Fase2 NO iniciada.**
 
-- Fase actual: **0 — documentación**, documentación preparada y comprobada. Fases1–6 NO iniciadas.
-- Último commit funcional inspeccionado: `6ac1fdf2546fa859412399f88eccf207991880de` (main al crear la rama; incluye #1214).
-- Rama documental: `codex/documentacion-editor-v2-20261023`.
-- PR documental: [#1216](https://github.com/tintinaccs/tintin-web/pull/1216), en borrador, sin auto-merge.
-- Primer commit documental: ed438c660. Consultar HEAD del PR para incluir la actualización de este relevo; el SHA base no incluye la documentación.
-- PR ajeno abierto al inicio: #1213, tema global. No se tocó su rama. Estado remoto puede cambiar: verificar GitHub antes de actuar.
+## Referencias exactas
 
-## Qué se hizo
+- Base funcional auditada:6ac1fdf2546fa859412399f88eccf207991880de (main al iniciar; #1214).
+- Rama: codex/documentacion-editor-v2-20261023.
+- [PR1216](https://github.com/tintinaccs/tintin-web/pull/1216), documental en borrador, sin auto-merge.
+- Primer commit documental ed438c660; relevo fase0 f5a905dc1; commit final fase1: consultar HEAD e historial del PR (no confundir con base funcional).
+- #1213 tema global sigue siendo trabajo ajeno al inicio de esta fase; verificar situación remota antes de retomar y no reescribir su rama.
 
-Nueve documentos permanentes, 43 decisiones (33SÍ/10NO), correspondencia de funciones44–58 con campos actuales, autoridades/consumidores, contratos existentes, seis fases propuestas, matriz de pruebas y protocolo de continuidad.
+## Resultado y pendientes
 
-## Qué no se hizo
+Mapa real y matriz43 ampliados;23 existentes,9 parciales,1 faltante,10 no incorporadas. Las15 funciones propias44–58 siguen preservadas en contrato. Seis hallazgos documentados: H1precio por variante no autoritativo, H2reordenación bloqueada con stock, H3fallback de fotos por posición, H4identidad de carrito posicional, H5guardado por etapas, H6ranking por nombre.
 
-No se modificó código funcional, datos, permisos, fotografías, stock ni precios. No se inició fase1, no se implementaron brechas, no se ejecutaron pruebas funcionales ni se publicó. La presencia de código existente no prueba que las 33 funciones estén terminadas.
+H2/H3/H4 reproducidos con fixtures y funciones reales; ocho suites Node aprobadas. Se documentó #1214 MERGED/CI de su SHA, sin declarar compra ni producción comercial verificada. Ver [hallazgos](09-AUDITORIA-FASE-1.md) y [pruebas](05-MATRIZ-DE-PRUEBAS.md).
 
-## Bloqueos, riesgos y próximo paso
+Propuestos contrato versionado aditivo, identidad estable, stock no controlado, precio override/fallback y compatibilidad; diseño Tintin; fases2–6 con aceptación y reversión. **No implementado**. No código, datos reales, infraestructura ni producción modificados. No navegador/emulador/pedidos reales ejecutados.
 
-No hay bloqueo técnico para revisar estos documentos. Para iniciar implementación falta autorización de fase. La secuencia de seis fases es propuesta; el prompt no la especificaba. Semántica de plantillas, estadísticas, estados y precio por variante requiere contrato concreto antes de cambiar datos/consumidores.
+## Próximo paso autorizado
 
-El siguiente agente debe leer índice/alcance/plan/relevo y protocolo; comprobar main/PR/rama, conservar avances concurrentes y validar cada afirmación contra ese SHA. Revisar el PR documental. Si se autoriza fase1, producir inventario de brechas/prototipo y criterios verificables sin migraciones ni publicación automática. No reimplementar maestro, resolvedores de variantes/fotos ni sincronización existentes.
+Presentar el plan a la titular y pedir aprobación. Confirmar estados editoriales, alcance de plantillas/estadísticas, semántica de precio heredado/rangos y stock mixto antes de implementar esas decisiones. No iniciar fase2 hasta respuesta explícita; no confundir aprobar el plan con autorizar merge/deploy o migraciones reales.
 
-## Verificación
+Al recibir aprobación: leer00/01/03/08 y protocolo, verificar Git/main/PR abiertos, comparar nuevas fuentes con6ac1, conservar avances ajenos y resolver conflictos sólo documentales primero. Ejecutar la fase autorizada con pruebas proporcionales; cerrar riesgos con evidencia del SHA, no con PASS históricos.
 
-PASS_LOCAL documental: nueve documentos, filas1–58 consecutivas,33 SÍ/10NO, enlaces relativos existentes y git diff --check. Sólo Markdown en el diff. CI no verificada todavía; no reutilizar PASS de otros PR.
+## Verificación y límites
+
+PASS_LOCAL: ocho suites dirigidas; reproducciones aisladas H2/H3/H4. Verificación documental: conteos, enlaces, rutas, Markdown exclusivo y diffcheck se registran al cierre en la bitácora. CI del nuevo commit documental PENDING; no se hereda de #1214. NOT_VERIFIED: UI completa, compras reales, datos activos actuales, configuración desplegada de reglas/Apps Script y paridad de bytes comerciales en producción.
+
+## Continuidad histórica
+
+Fase0 creada por PROMPT0: nueve documentos y entrada CURRENT_STATE, sin funcionalidades; seis fases inicialmente propuestas porque ese prompt no las definía. Su autorización limitaba a documentación y PR. El pedido posterior de FASE1 amplió sólo investigación/plan. El registro de decisiones y bitácora conserva esa transición; no existe autorización implícita de fases posteriores.

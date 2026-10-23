@@ -1,6 +1,6 @@
 # Editor de productos v2 — entrada para agentes
 
-Fecha: 2026-10-23. Fase autorizada: **0, documentación**. No iniciar implementación, migración ni publicación.
+Fecha: 2026-10-23. Fase autorizada actual: **1, auditoría y plan**, por pedido expreso posterior al PROMPT0. No iniciar fase2, implementación, migración ni publicación.
 
 Esta carpeta conserva las decisiones de la titular del «PROMPT 0». No reemplaza las autoridades técnicas existentes ni certifica funcionalidades por estar aprobadas.
 
@@ -12,6 +12,7 @@ Esta carpeta conserva las decisiones de la titular del «PROMPT 0». No reemplaz
 6. [Registro de decisiones](06-REGISTRO-DE-DECISIONES.md).
 7. [Bitácora de agentes](07-BITACORA-DE-AGENTES.md).
 8. [Estado y relevo](08-ESTADO-Y-RELEVO.md).
+9. [Hallazgos, reproducción e historial 422](09-AUDITORIA-FASE-1.md).
 
 ## Antes de cada tarea
 
