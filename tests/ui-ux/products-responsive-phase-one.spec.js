@@ -628,3 +628,27 @@ test('salir con fotos masivas pendientes activa el guard real sin subir ni borra
  await page.locator('#unsaved-modal-stay').click();await expect(page.locator('#master-guard-queue .tt-editor-upload-item')).toHaveCount(1);
  expect(await page.evaluate(()=>window.__imageCleanup || 0)).toBe(0);
 });
+
+for(const [width,height] of [[320,700],[390,844],[768,1024],[1024,768],[1280,720],[1440,900]])test(`panel completo mantiene título, menú y cantidades sin solaparse ${width}x${height}`,async({page})=>{
+ await openEditor(page,width,height);
+ for(const file of ['css/admin/admin.css','css/admin/espacio-modulos-admin.css','css/admin/dashboard-control.css','css/theme/sistema-superficies-tintin.css'])await page.addStyleTag({content:fs.readFileSync(path.join(root,file),'utf8')});
+ await page.evaluate(({renderer,inventory})=>{
+  document.body.classList.add('tt-admin-control');document.getElementById('section-productos').classList.add('tt-admin-workspace','active');
+  document.getElementById('prod-form-title').textContent='Editar producto';
+  window.__stockRegression=new Function(inventory+'\n'+renderer+'\nreturn {renderProductVariantStock};')();
+  window.__stockRegression.renderProductVariantStock({stock:1,variants:{Color:['Dorado','Plateado']},variantInventory:[{variant:'Dorado',stock:1},{variant:'Plateado',stock:0}]});
+ },{renderer:stockRenderer,inventory:inventorySource});
+ const title=await page.locator('#prod-form-title').boundingBox(),menu=await page.locator('.tt-product-editor-menu-toggle').boundingBox();
+ expect(Math.abs(title.y+title.height/2-menu.y-menu.height/2)).toBeLessThanOrEqual(1);
+ expect(menu.x).toBeGreaterThanOrEqual(title.x+title.width);
+ await page.locator('#prod-editor-section').selectOption('inventory');
+ for(const row of await page.locator('#prod-variant-stock .tt-editor-stock-row').all()){
+  const controls=row.locator('.tt-editor-stepper > *, .tt-editor-quantity-select');const boxes=await controls.evaluateAll(nodes=>nodes.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width};}));
+  const bounds=await row.boundingBox();
+  for(const box of boxes){expect(box.width).toBeGreaterThanOrEqual(44);expect(box.x).toBeGreaterThanOrEqual(bounds.x);expect(box.right).toBeLessThanOrEqual(bounds.x+bounds.width+1);}
+  for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];expect(a.right<=b.x+1 || b.right<=a.x+1 || a.bottom<=b.y+1 || b.bottom<=a.y+1).toBe(true);}
+ }
+ await page.getByRole('button',{name:'Sumar una unidad: Stock de Dorado',exact:true}).click();await expect(page.getByLabel('Stock de Dorado',{exact:true})).toHaveValue('2');
+ await openActions(page);await expect(page.locator('#prod-save-btn')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('#prod-form-card')).toBeVisible();
+ if(width===390||width===1440)await page.screenshot({path:test.info().outputPath('controles-'+width+'.png')});
+});

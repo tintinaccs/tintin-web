@@ -655,3 +655,7 @@ package.json/lock: DOMPurify3.4.17 y ip-address10.7.4. Actualizar plan protegido
 ## 2026-10-22 — Menú de acciones del editor
 
 Autoridades: interfaz-productos-adaptable, shopify-commerce-admin/CSS y admin.html. Guardar/Cancelar conservan IDs y handlers; sus nodos se mueven al menú del encabezado y se retira el Volver redundante. Cierre accesible por Escape, foco y puntero fuera; el editor mantiene su guard de borradores, controles de subida y permisos. Se eliminan estilos antiguos del pie, sin cambios al encabezado público de otro agente. Matriz de botones/stock/fotos/borradores/rotación actualizada; fuentes CSS/JS usan tag inmutable nuevo, plan y manifiesto canónicos. Evidencia y límites en CURRENT_STATE y PR.
+
+## 2026-10-23 — Menú y cantidades sin superposición
+
+Fuente shopify-commerce-admin.css y versiones del consumidor shopify-commerce-admin/admin.html. La cabecera del editor no hereda wrap del workspace; título flexible y menú44px en la misma fila. Cantidades y selector ocupan filas completas; el grid de variantes usa el ancho disponible en lugar de forzar dos tarjetas en móvil. Regresión con estilos globales reales, activación de sección, geometría e interacción y guard nativo. Sin tocar encabezado público ni controles de otros agentes. Evidencia y límites en CURRENT_STATE.
