@@ -9,6 +9,68 @@ const navigationStyles=[...fs.readFileSync(path.join(root,'js/components/navigat
 const goToStep=source.slice(source.indexOf('function goToStep(n)'),source.indexOf('function showError(stepIdx'));
 const forwardValidation=fs.readFileSync('js/pages/checkout/validacion-avance.js','utf8').replace(/export function/g,'function');
 const hardening=forwardValidation+fs.readFileSync(path.join(root,'js/pages/checkout/checkout-hardening.js'),'utf8').replace(/^import[\s\S]*?;\r?\n/gm,'');
+
+// Use the real Checkout document and shell renderers; isolate commercial
+// controllers so layout checks never depend on a session or place an order.
+const checkoutViewports=[[320,568],[390,844],[430,932],[568,320],[767,900],[768,1024],[820,1180],[844,390],[1024,768],[1025,768],[1180,820],[1280,720],[1366,768],[1440,900],[1920,1080]];
+async function openCheckoutLayout(page,viewport) {
+  await page.setViewportSize(viewport);
+  await page.route('https://**',route=>route.abort());
+  const fixture=removeFixtureScripts(source,{removeModulePreloads:true});
+  await page.route('**/__checkout-layout',route=>route.fulfill({contentType:'text/html',body:fixture}));
+  await page.goto('/__checkout-layout');
+  await page.addScriptTag({type:'module',content:`
+    import {renderDesktopHeader} from '../../js/components/navigation/escritorio/encabezado-escritorio.js';
+    import {renderTabletHeader} from '../../js/components/navigation/tableta/encabezado-tableta.js';
+    import {renderMobileBrandHeader} from '../../js/components/navigation/movil/marca-movil.js';
+    import {renderMobileTabbar} from '../../js/components/navigation/movil/encabezado-movil.js';
+    document.body.insertAdjacentHTML('afterbegin',renderDesktopHeader()+renderTabletHeader()+renderMobileBrandHeader('/checkout','/assets-tintin/images/general/logo.png'));
+    document.body.insertAdjacentHTML('beforeend',renderMobileTabbar());
+  `});
+  await expect(page.locator('#tt-header-tablet')).toHaveCount(1);
+  await page.evaluate(()=>document.fonts.ready);
+}
+async function expectCheckoutClearOfHeader(page) {
+  await page.evaluate(()=>scrollTo(0,0));
+  const geometry=await page.evaluate(()=>{
+    const rect=el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right};};
+    const header=innerWidth<768?null:document.querySelector(innerWidth<=1024?'#tt-header-tablet':'#tt-header-desktop-tablet');
+    const back=document.querySelector('.ck-header-back');
+    const backRect=rect(back);
+    const fade=header?Math.max(0,-parseFloat(getComputedStyle(header,'::before').bottom)||0):0;
+    return {header:header?rect(header):{bottom:0},fade,back:backRect,
+      backClickable:document.elementFromPoint((backRect.left+backRect.right)/2,(backRect.top+backRect.bottom)/2)?.closest('.ck-header-back')===back,
+      steps:rect(document.querySelector('#ck-steps')),labels:[...document.querySelectorAll('.ck-step-label')].map(rect),
+      overflow:document.documentElement.scrollWidth>innerWidth,width:innerWidth};
+  });
+  // The fade may extend below the header, but must end before the first action.
+  expect(geometry.back.top).toBeGreaterThanOrEqual(geometry.header.bottom+geometry.fade-1);
+  expect(geometry.backClickable).toBe(true);
+  expect(geometry.steps.top).toBeGreaterThanOrEqual(geometry.back.bottom);
+  expect(geometry.overflow).toBe(false);
+  for(const label of geometry.labels){expect(label.left).toBeGreaterThanOrEqual(0);expect(label.right).toBeLessThanOrEqual(geometry.width);}
+  await expect(page.locator('.ck-step-label')).toHaveCount(5);
+}
+for(const [width,height] of checkoutViewports)test(`checkout sin contenido bajo el encabezado (${width}x${height})`,async({page})=>{
+  await openCheckoutLayout(page,{width,height});
+  await expectCheckoutClearOfHeader(page);
+  for(let step=0;step<5;step++){
+    await page.locator('.ck-panel').evaluateAll((panels,index)=>panels.forEach((panel,i)=>panel.classList.toggle('active',i===index)),step);
+    await expect(page.locator(`#panel-${step}`)).toBeVisible();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+  }
+  if([390,1024,1366].includes(width)){
+    await page.locator('.ck-panel').evaluateAll(panels=>panels.forEach((panel,i)=>panel.classList.toggle('active',i===0)));
+    await page.screenshot({path:`artifacts/checkout-header-${width}.png`,fullPage:true});
+  }
+});
+test('checkout conserva la separación al girar y cruzar los breakpoints',async({page})=>{
+  await openCheckoutLayout(page,{width:390,height:844});
+  for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768],[1025,768],[1366,768],[767,900],[390,844]]){
+    await page.setViewportSize({width,height});
+    await expectCheckoutClearOfHeader(page);
+  }
+});
 for(const width of [390,768,1440]) test(`el avance y retorno siguen respondiendo a ${width}px`,async({page})=>{
   await page.clock.install({time:new Date('2026-10-10T12:00:00Z')});
   await page.clock.pauseAt(new Date('2026-10-10T12:01:00Z'));

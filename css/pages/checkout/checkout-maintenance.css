@@ -231,6 +231,20 @@ body:has(.ck-body) .ck-body { margin-bottom:32px; }
 
 html body:has(.ck-body) :is(.ck-back-row,.ck-steps) { background:transparent !important; box-shadow:none !important; border:0 !important; }
 html body:has(.ck-body) .ck-back-row { padding-top:16px !important; padding-bottom:8px !important; }
+/* Tablet ya reserva sus 84px en body (paneles.css); escritorio reserva el
+   header aquí. El difuminado compartido también debe acabar antes del enlace,
+   para que ni la acción ni los pasos queden bajo su backdrop-filter. Móvil
+   no tiene cabecera superior fija y conserva su separación de 16px. */
+@media (min-width: 768px) {
+  html body:has(.ck-body) .ck-back-row {
+    padding-top:calc(clamp(32px, 4vw, 56px) + 16px) !important;
+  }
+}
+@media (min-width: 1025px) {
+  html body:has(.ck-body) .ck-back-row {
+    padding-top:calc(var(--header-h, 88px) + clamp(32px, 4vw, 56px) + 16px) !important;
+  }
+}
 html body:has(.ck-body) .ck-steps { display:grid !important; grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.6fr); width:min(700px,calc(100% - 24px)) !important; box-sizing:border-box; padding:12px 0 !important; gap:0; overflow:visible; }
 html body:has(.ck-body) .ck-step { min-width:0; }
 html body:has(.ck-body) .ck-step-label {
