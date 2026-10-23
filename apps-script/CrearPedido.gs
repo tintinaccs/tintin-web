@@ -635,6 +635,7 @@ function phase4CreateOrder_(payload, idToken) {
       var productId = phase4CleanText_(line.id, 180);
       var product = docs['products/' + productId];
       if (!product) { phase4Rollback_(transactionId); return { ok: false, error: 'product_not_found', productId: productId }; }
+      if (product.variantCommerceVersion != null && product.variantCommerceVersion !== 1) { phase4Rollback_(transactionId); return { ok: false, error: 'variant_engine_requires_server', productId: productId }; }
       if (product.active === false) { phase4Rollback_(transactionId); return { ok: false, error: 'product_inactive', productId: productId }; }
       var price = phase4ParseMoney_(product.price);
       if (!isFinite(price) || price < 0) { phase4Rollback_(transactionId); return { ok: false, error: 'invalid_price', productId: productId }; }

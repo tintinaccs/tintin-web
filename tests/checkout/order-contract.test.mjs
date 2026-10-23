@@ -324,3 +324,14 @@ test('pedido manipulado con productId repetido descuenta stock agregado una sola
   }, 'token');
   assert.equal(mismatchedShipping.error, 'shipping_changed');
 });
+
+test('legacy Apps Script refuses v2 before quoting a base price or writing an order',()=>{
+ const server=phase4Context();let writes=0,rollbacks=0;
+ server.SUPER_ADMIN_EMAIL='teamdinas@gmail.com';
+ server.verifyFirebaseIdToken_=()=>({ok:true,emailVerified:true,uid:'admin-uid',email:'teamdinas@gmail.com'});
+ server.phase3EmailMatches_=(a,b)=>a===b;server.phase4BeginTransaction_=()=>({ok:true,transaction:'fixture'});server.phase4Rollback_=()=>rollbacks++;
+ server.phase4BatchGet_=()=>({ok:true,documents:{'orders/admin-uid_request_123456789':null,'settings/general':{paymentMethods:{transferencia:true}},'settings/shippingRates':{},'settings/orderSequence':{lastNumber:1},'users/admin-uid':{role:'superadmin'},'products/p1':{name:'Fixture',price:100,stock:1,active:true,variantCommerceVersion:2}}});
+ server.phase4Commit_=()=>{writes++;return {ok:true};};
+ const result=server.phase4CreateOrder_({requestId:'request_123456789',cartLines:[{id:'p1',qty:1,variant:'Plateado'}],name:'Admin Tintin',phone:'595981123456',contactEmail:'teamdinas@gmail.com',selectedCity:'__retiro__',shippingMethod:'retiro',paymentMethod:'transferencia',expectedSubtotal:100,expectedShippingCost:0,expectedShippingPending:false,expectedTotal:100},'fixture');
+ assert.equal(result.error,'variant_engine_requires_server');assert.equal(writes,0);assert.equal(rollbacks,1);
+});
