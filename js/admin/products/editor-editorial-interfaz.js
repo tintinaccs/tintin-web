@@ -2,15 +2,24 @@
 export function ensureEditorialFields(card) {
   if(!card?.querySelector || card.querySelector('#prod-publicationStatus'))return;
   const anchor=card.querySelector('#prod-form-error');if(!anchor)return;
-  anchor.insertAdjacentHTML('beforebegin', `<section class="tt-editor-section tt-product-editorial" aria-label="Publicación y SEO">
-            <h2>Publicación y presentación</h2>
-            <label for="prod-publicationStatus">Estado</label>
+  anchor.insertAdjacentHTML('beforebegin', `<section class="tt-editor-section tt-product-editorial tt-product-editorial-publication" aria-labelledby="prod-publication-heading">
+            <h2 id="prod-publication-heading">Publicación</h2>
+            <label for="prod-publicationStatus">Estado del producto</label>
             <select id="prod-publicationStatus" class="adm-input"><option value="active">Activo</option><option value="draft">Borrador</option><option value="archived">Archivado</option></select>
-            <p>El estado controla la publicación. Una variante agotada conserva el estado del producto.</p>
-            <label for="prod-productTemplate">Plantilla</label>
+            <p class="tt-editor-caption">El stock y el estado se gestionan por separado.</p>
+            <label for="prod-productTemplate">Presentación de la ficha</label>
             <select id="prod-productTemplate" class="adm-input"><option value="default">Actual</option><option value="gallery">Galería ampliada</option></select>
-            <label for="prod-seoTitle">Título para Google</label><input id="prod-seoTitle" class="adm-input" maxlength="70" placeholder="Automático si queda vacío">
-            <label for="prod-seoDescription">Descripción para Google</label><textarea id="prod-seoDescription" class="adm-input" maxlength="220" rows="3" placeholder="Automática si queda vacía"></textarea>
-            <div id="prod-statistics" aria-live="polite"></div>
-          </section>`);
+          </section>
+          <details class="tt-editor-section tt-product-editorial tt-product-editorial-seo">
+            <summary>Vista en Google</summary>
+            <div class="tt-editor-detail-fields">
+              <p class="tt-editor-caption">Si los dejás vacíos, se usan el nombre y la descripción del producto.</p>
+              <label for="prod-seoTitle">Título para Google</label><input id="prod-seoTitle" class="adm-input" maxlength="70" placeholder="Título automático">
+              <label for="prod-seoDescription">Descripción para Google</label><textarea id="prod-seoDescription" class="adm-input" maxlength="220" rows="3" placeholder="Descripción automática"></textarea>
+            </div>
+          </details>
+          <details class="tt-editor-section tt-product-editorial tt-product-editorial-statistics">
+            <summary>Estadísticas del producto</summary>
+            <div id="prod-statistics" class="tt-editor-detail-fields" aria-live="polite"></div>
+          </details>`);
 }

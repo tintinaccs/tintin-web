@@ -1,3 +1,7 @@
+## 2026-10-24 — Distribución visual del editor tipo Shopify
+
+Interfaz canónica de Productos: tarjetas y columnas del formulario, lateral editorial y vista previa, cabecera con Guardar/Cancelar originales. Se reubican nodos sin duplicar IDs ni cambiar escrituras; privado respeta la visibilidad del controlador, SEO/estadísticas son plegables y móvil conserva un único desplazamiento principal. Tema Tintin intacto, sin nuevas rutas/reglas/API. Consumidores y CSS renuevan URLs inmutables; plan y manifiestos se regeneran. Evidencia: docs/editor-productos-v2/16-REDISENO-VISUAL.md y CURRENT_STATE.
+
 ## 2026-10-23 — Continuación editor comercial v2
 
 Formulario/guardado canónicos con matriz compatible y escritor administrativo CAS; inventario privado y auditoría en el mismo commit. Lote mixto usa applyProductBulkTransaction; estado editorial comparte política pública/servidor. SEO editable, dos plantillas acotadas y métricas históricas brutas por ID. Galería y precio/inventario siguen las autoridades de fase2. Conserva SDK/Sheets antiguos protegidos y bloquea convertir stock agregado sin revisar reservas. Sin datos comerciales reales modificados. Referencias transitivas, rutas/CSP/caché/diagnóstico y protección se regeneran desde sus autoridades. Evidencia actual en docs/editor-productos-v2/14-CONTINUIDAD-Y-CANDIDATO.md y CURRENT_STATE.

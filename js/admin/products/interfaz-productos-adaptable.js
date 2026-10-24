@@ -1,14 +1,15 @@
-import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-v2-3';
+import {ensureEditorialFields} from './editor-editorial-interfaz.js?v=tintin-20261024-editor-shopify-1';
 import { mountProductPreview, refreshProductPreview } from './vista-previa-producto.js?v=tintin-20261024-editor-v2-3';
 import { installEditorControls, refreshEditorControls } from './controles-editor-producto.js?v=tintin-20261024-editor-v2-3';
 // Presentación del editor; los campos, eventos y controladores CRUD son canónicos.
 const sections = [
-  ['general', 'Datos principales', ['prod-name','prod-category','prod-price']],
-  ['inventory', 'Colores y stock', ['prod-variants-text','prod-stock']],
-  ['photos', 'Fotos del producto', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
-  ['specs', 'Descripción y ficha técnica', ['prod-description','prod-material','prod-measurements','prod-color-finish','prod-care','prod-water-resistance','prod-warranty','prod-size-fit','prod-package-contents']],
-  ['prices', 'Ofertas y etiquetas', ['prod-price-before','prod-badge']],
-  ['visibility', 'Organización y publicación', ['prod-sku','prod-collection','prod-tags','prod-inventory-fields','prod-active','prod-oferta','prod-destacado']],
+  ['general', 'Producto', ['prod-name','prod-description']],
+  ['photos', 'Fotos y galería', ['prod-imageUrl','prod-images-extra','prod-color-photos']],
+  ['prices', 'Precio', ['prod-price','prod-price-before','prod-badge','prod-oferta']],
+  ['inventory', 'Variantes e inventario', ['prod-variants-text','prod-stock']],
+  ['specs', 'Detalles del producto', ['prod-material','prod-measurements','prod-color-finish','prod-care','prod-water-resistance','prod-warranty','prod-size-fit','prod-package-contents']],
+  ['visibility', 'Organización', ['prod-category','prod-collection','prod-tags','prod-sku','prod-destacado','prod-active']],
+  ['private', 'Inventario interno', ['prod-inventory-fields']],
 ];
 let editorWasOpen = false;
 let editorOpener = null;
@@ -35,7 +36,6 @@ export function syncProductSurfaces() {
     editor.setAttribute('aria-modal','true');
     editor.setAttribute('aria-labelledby','prod-form-title');
   } else if (editorWasOpen) {
-    closeEditorActions(document.getElementById('prod-form-card'));
     requestAnimationFrame(()=>{
       const target=editorOpener?.isConnected && editorOpener !== document.body && editorOpener.getClientRects().length ? editorOpener : document.querySelector('[data-action="product-new"]');
       target?.focus({preventScroll:true});
@@ -79,31 +79,31 @@ export function enhanceProductEditor() {
       const option = document.createElement('option');option.value=value;option.textContent=label;select.append(option);
     }
     select.value = 'all';
-    select.addEventListener('change',()=>showSection(card,grid,select.value,true));
+    select.addEventListener('change',()=>showSection(card,select.value,true));
     navigation.append(text,select);body.prepend(navigation);
   }
   let layout = body.querySelector('.tt-editor-layout');
   if (!layout) {
     layout = document.createElement('div'); layout.className = 'tt-editor-layout';
     grid.before(layout); layout.append(grid);
+    const sidebar=document.createElement('aside');sidebar.className='tt-editor-sidebar';sidebar.setAttribute('aria-label','Publicación y organización del producto');layout.append(sidebar);
     const descriptions = {
-      general:'Lo necesario para identificar y vender tu producto.',
+      general:'Nombre y descripción que verán tus clientes.',
       photos:'Subí varias fotos, ordenalas y elegí la portada de cada color.',
-      prices:'Precio anterior y etiquetas para destacar tu producto.',
-      inventory:'Cantidad por color. Total automático.',
+      prices:'Definí el precio general y las promociones.',
+      inventory:'Opciones, precios y cantidades de cada combinación.',
       specs:'Detalles opcionales que ayudan a elegir.',
-      visibility:'Códigos, costos internos y opciones de publicación.',
+      visibility:'Colección, búsqueda y referencias del producto.',
+      private:'Costo y notas internas, disponibles sólo con permiso.',
     };
     const originalFields = [...grid.children];
     for (const [section,title,ids] of sections) {
       const group = document.createElement('section'); group.className = 'tt-editor-section'; group.dataset.productSection = section;
       const heading = document.createElement('h2');
       const toggle = document.createElement('button');toggle.type='button';toggle.className='tt-editor-section-toggle';toggle.textContent=title;
-      const open=['general','inventory','photos'].includes(section);
+      const open=!['specs','private'].includes(section);
       group.dataset.advanced=String(!open);
-      if(section==='specs') {
-        const advanced=document.createElement('p');advanced.className='tt-editor-advanced-heading';advanced.textContent='Opciones avanzadas';grid.append(advanced);
-      }
+
       toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-controls',`prod-section-${section}`);
       const chevron=document.createElement('span');chevron.className='tt-editor-chevron';chevron.setAttribute('aria-hidden','true');chevron.textContent='⌃';toggle.append(chevron);heading.append(toggle);
       const description = document.createElement('p'); description.className = 'tt-editor-caption'; description.textContent = descriptions[section];
@@ -112,25 +112,27 @@ export function enhanceProductEditor() {
       toggle.addEventListener('click',()=>{
         const expanded=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(expanded));fields.hidden=!expanded;description.hidden=!expanded;
       });
-      group.append(heading,description,fields); grid.append(group);
+      group.append(heading,description,fields); (section==='visibility'?sidebar:grid).append(group);
       for (const id of ids) {
         const field = originalFields.find(field=>field.id === id || field.querySelector(`#${id}`));
         if (field) fields.append(field);
       }
     }
-    mountProductPreview(card,layout);
+    const previewShell=document.createElement('details');previewShell.className='tt-editor-preview-shell';previewShell.open=false;
+    const previewSummary=document.createElement('summary');previewSummary.textContent='Vista previa';previewShell.append(previewSummary);sidebar.append(previewShell);
+    mountProductPreview(card,previewShell);
     const previewButton = document.createElement('button'); previewButton.type='button';previewButton.className='adm-btn adm-btn-outline tt-editor-preview-jump';
     previewButton.textContent='Ver vista previa';previewButton.setAttribute('aria-controls','prod-live-preview');
-    previewButton.addEventListener('click',()=>{const preview=card.querySelector('#prod-live-preview');preview.focus({preventScroll:true});preview.scrollIntoView({block:'start'});});
+    previewButton.addEventListener('click',()=>{const preview=card.querySelector('#prod-live-preview');const shell=preview.closest('details');if(shell)shell.open=true;preview.focus({preventScroll:true});preview.scrollIntoView({block:'start'});});
     navigation.append(previewButton);
   }
   for (const [section,,ids] of sections) for (const id of ids) {
     // La galería se monta al abrir cada producto; se reubica sin recrear sus controles.
     if (id !== 'prod-color-photos') continue;
-    const field = card.querySelector(`#${id}`), target = grid.querySelector(`[data-product-section="${section}"] .tt-editor-section-fields`);
+    const field = card.querySelector(`#${id}`), target = card.querySelector(`[data-product-section="${section}"] .tt-editor-section-fields`);
     if (field && target && field.parentElement !== target) target.append(field);
   }
-  for (const control of grid.querySelectorAll('input[id],select[id],textarea[id]')) {
+  for (const control of layout.querySelectorAll('input[id],select[id],textarea[id]')) {
     if (control.type === 'hidden' || control.closest('label')) continue;
     const label=control.parentElement.querySelector(':scope > label');
     if (label) label.htmlFor=control.id;
@@ -138,50 +140,68 @@ export function enhanceProductEditor() {
   const variantsLabel=card.querySelector('label[for="prod-variants-text"]');if(variantsLabel && variantsLabel.textContent!=='Colores y opciones')variantsLabel.textContent='Colores y opciones';
   const save = card.querySelector('#prod-save-btn');
   const actions=save?.parentElement;
-  if (actions && !card.querySelector('.tt-product-editor-menu')) {
-    const menu=document.createElement('div');menu.className='tt-product-editor-menu';
-    const toggle=document.createElement('button');toggle.type='button';toggle.className='adm-btn tt-product-editor-menu-toggle';
-    toggle.setAttribute('aria-label','Acciones del producto');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','prod-editor-actions');
-    const icon=document.createElement('span');icon.textContent='⋯';icon.setAttribute('aria-hidden','true');toggle.append(icon);
-    actions.removeAttribute('style');actions.className='tt-product-editor-action-list';actions.id='prod-editor-actions';actions.hidden=true;
-    actions.setAttribute('role','group');actions.setAttribute('aria-label','Guardar o cancelar producto');
-    toggle.addEventListener('click',()=>{
-      const open=actions.hidden;actions.hidden=!open;toggle.setAttribute('aria-expanded',String(open));
-      if(open)actions.querySelector('button:not(:disabled)')?.focus();
-    });
-    menu.addEventListener('keydown',event=>{
-      if(event.key==='Escape' && !actions.hidden){event.preventDefault();event.stopPropagation();closeEditorActions(card,true);}
-    });
-    menu.append(toggle,actions);
-    card.querySelector('.adm-card-head button[onclick="prodCancelForm()"]')?.remove();
-    card.querySelector('.adm-card-head')?.append(menu);
+  if(actions && !actions.classList.contains('tt-product-primary-actions')) {
+    actions.removeAttribute('style');actions.className='tt-product-primary-actions';actions.id='prod-editor-actions';actions.hidden=false;
+    actions.setAttribute('role','group');actions.setAttribute('aria-label','Guardar o cancelar producto');actions.append(save);
+    const header=card.querySelector('.adm-card-head');
+    header?.querySelector('button[onclick="prodCancelForm()"]')?.remove();
+    header?.append(actions);
   }
+  const sidebar=layout.querySelector('.tt-editor-sidebar');
+  if(sidebar) {
+    const publication=card.querySelector('.tt-product-editorial-publication');
+    const organization=sidebar.querySelector('[data-product-section="visibility"]');
+    if(publication && sidebar.firstElementChild!==publication)sidebar.prepend(publication);
+    for(const panel of card.querySelectorAll('.tt-product-editorial-seo,.tt-product-editorial-statistics')) {
+      if(panel.parentElement!==sidebar) sidebar.append(panel);
+    }
+    const preview=sidebar.querySelector('.tt-editor-preview-shell');
+    if(preview && publication?.nextElementSibling!==preview)publication?.after(preview);
+    if(organization && preview?.nextElementSibling!==organization)preview?.after(organization);
+  }
+  const privateSection=grid.querySelector('[data-product-section="private"]');
+  const privateField=card.querySelector('#prod-inventory-fields');
+  const privateHidden=!privateField || privateField.hidden || privateField.style.display==='none';
+  if(privateSection)privateSection.dataset.permissionHidden=String(privateHidden);
+  const privateOption=card.querySelector('#prod-editor-section option[value="private"]');
+  if(privateOption){if(privateOption.hidden!==privateHidden)privateOption.hidden=privateHidden;if(privateOption.disabled!==privateHidden)privateOption.disabled=privateHidden;}
+  refreshEditorHeading(card);
   const error=card.querySelector('#prod-form-error');
   if (error) {
     error.setAttribute('role','alert');error.setAttribute('tabindex','-1');
     if(error.nextElementSibling!==layout) body.insertBefore(error,layout);
   }
-  const selected=card.querySelector('#prod-editor-section').value;
+  const selected=privateHidden && card.querySelector('#prod-editor-section').value==='private'?'all':card.querySelector('#prod-editor-section').value;
   const message=error?.style.display !== 'none' ? error?.textContent.trim() || '' : '';
-  showSection(card,grid,message ? 'all' : selected,Boolean(message));
+  showSection(card,message ? 'all' : selected,Boolean(message));
   if(message && message!==lastError && visibleProductEditor()) {error.focus({preventScroll:true});error.scrollIntoView({block:'nearest'});}
   lastError=message;
   refreshProductPreview(card);
   installEditorControls(card);refreshEditorControls(card);
 }
 
-function closeEditorActions(card,restoreFocus=false) {
-  const actions=card?.querySelector('#prod-editor-actions');
-  const toggle=card?.querySelector('.tt-product-editor-menu-toggle');
-  if(!actions || actions.hidden)return;
-  actions.hidden=true;toggle?.setAttribute('aria-expanded','false');
-  if(restoreFocus)toggle?.focus({preventScroll:true});
+function refreshEditorHeading(card) {
+  const title=card.querySelector('#prod-form-title');if(!title)return;
+  title.setAttribute('role','heading');title.setAttribute('aria-level','1');
+  let heading=card.querySelector('.tt-product-editor-heading');
+  if(!heading){heading=document.createElement('div');heading.className='tt-product-editor-heading';title.before(heading);heading.append(title);}
+  const name=card.querySelector('#prod-name')?.value.trim();
+  const text=name || (card.querySelector('#prod-id')?.value?'Editar producto':'Nuevo producto');
+  if(title.textContent!==text)title.textContent=text;
+  if(title.title!==text)title.title=text;
+  let state=heading.querySelector('.tt-product-editor-state');
+  if(!state){state=document.createElement('span');state.className='tt-product-editor-state';heading.append(state);}
+  const value=card.querySelector('#prod-publicationStatus')?.value || 'draft';
+  const label={active:'Activo',draft:'Borrador',archived:'Archivado'}[value] || 'Borrador';
+  if(state.textContent!==label)state.textContent=label;
+  if(state.dataset.state!==value)state.dataset.state=value;
 }
 
-function showSection(card,grid,value,expand=false) {
+function showSection(card,value,expand=false) {
   card.querySelector('#prod-editor-section').value=value;
-  for (const field of grid.querySelectorAll(':scope > [data-product-section]')) {
-    const hidden=value !== 'all' && field.dataset.productSection !== value;
+  card.querySelector('.tt-editor-layout').dataset.editorSection=value;
+  for (const field of card.querySelectorAll('[data-product-section]')) {
+    const hidden=field.dataset.permissionHidden==='true' || value !== 'all' && field.dataset.productSection !== value;
     if (field.hidden !== hidden) field.hidden=hidden;
     if (!hidden && expand) {
       field.querySelector('.tt-editor-section-toggle')?.setAttribute('aria-expanded','true');
@@ -199,14 +219,10 @@ export function installProductInterface() {
   enhanceProductEditor();syncProductSurfaces();
   if (installed) return;
   installed=true;
-  const closeActionsOutside=event=>{
-    const card=visibleProductEditor();
-    if(card && !event.target.closest('.tt-product-editor-menu'))closeEditorActions(card);
-  };
-  document.addEventListener('pointerdown',closeActionsOutside);
-  document.addEventListener('focusin',closeActionsOutside);
   let queued=false;
   const card=document.getElementById('prod-form-card');
+  card?.addEventListener('input',()=>refreshEditorHeading(card));
+  card?.addEventListener('change',()=>refreshEditorHeading(card));
   if (card) new MutationObserver(()=>{
     if (queued) return;
     queued=true;queueMicrotask(()=>{queued=false;enhanceProductEditor();syncProductSurfaces();});
