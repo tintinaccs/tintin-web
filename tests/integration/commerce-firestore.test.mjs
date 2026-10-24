@@ -178,3 +178,87 @@ test('Editor v2: lote mixto comercial atómico y conflicto antes de escribir',as
  assert.equal((await product('editor_fixture')).price,35000);assert.equal((await product('editor_fixture')).variantInventory[0].price,40000);
  assert.equal((await product('editor_simple')).price,35000);
 });
+
+// All actors, products, orders and payment captures below are synthetic and
+// confined by the local emulator guard above. No provider, email or Sheets call.
+import { createPaypalOrder, capturePaypalOrder, markPaid, markReversed, paypalAmountFromPyg } from '../../cloudflare/paypal-seguro.js';
+import { withPaypalSimulator } from './helpers/paypal-simulator.mjs';
+test('compra enteramente ficticia: producto → pedido → captura simulada → devolución/cancelación', async () => {
+  const id = 'qa_fake_product_payment', requestId = 'qa_fake_payment_20261024';
+  await seed('settings/orderSequence', { lastNumber: 0, highWaterMark: 0, historyReconciledAt: new Date() });
+  await seed('settings/general', { storeOpen: true, paypal: { enabled: true }, paymentMethods: { paypal: true } });
+  await seed('collections/qa_fake_collection', { name: 'Colección ficticia' });
+  await seed(`checkoutGuards/${actor.uid}`, { lastCheckoutOrderId: `${actor.uid}_${requestId}`, lastCheckoutAt: new Date() });
+  const draftProduct = commercialDraft({ name: 'Producto ficticio QA', category: 'qa_fake_collection', price: 30000, active: true, publicationStatus: 'active', productTemplate: 'default', seoTitle: '', seoDescription: '', oferta: false, destacado: false, variants: { Color: ['Dorado'] } });
+  draftProduct.variantInventory[0].stock = 2; draftProduct.variantInventory[0].price = 45000; draftProduct.stock = 2;
+  await saveProductEditor({}, { productId: id, expected: null, changeId: 'qa_fake_product_create', product: draftProduct }, admin, deps);
+  const stored = await product(id), key = stored.variantInventory[0].variant;
+  const draft = composeCheckoutDraft({ requestId, items: [{ id, qty: 1, variant: 'Dorado', variantKey: key }], name: 'Ana Gómez', phone: '595981123456', contactEmail: 'qa@example.invalid', notes: 'Sólo emulador', selectedCity: '__retiro__', departamento: '', address: '', referencia: '', shipping: { method: 'retiro', cost: 0, pending: false }, paymentMethod: 'paypal', subtotal: 45000 });
+  await assert.rejects((async () => {
+    const tampered = await preparePublicCheckoutOrder({}, { ...draft, expectedSubtotal: 1, expectedTotal: 1 }, actor, deps);
+    return createOrderAdmin({}, tampered.input, actor, { ...deps, inspect: tampered.inspect });
+  })(), error => error.code === 'quote_changed');
+  assert.equal((await product(id)).stock, 2, 'un importe manipulado no reserva stock');
+  const prepared = await preparePublicCheckoutOrder({}, draft, actor, deps);
+  const result = await createOrderAdmin({}, prepared.input, actor, { ...deps, inspect: prepared.inspect });
+  assert.equal(result.order.total, 45000, 'se confirma únicamente la cotización autorizada');
+  assert.equal(result.order.paymentStatus, 'pendiente'); assert.equal((await product(id)).stock, 1);
+  const duplicate = await createOrderAdmin({}, prepared.input, actor, { ...deps, inspect: prepared.inspect });
+  assert.equal(duplicate.duplicate, true); assert.equal((await product(id)).stock, 1);
+  const providerId = 'QA_PROVIDER_ORDER_20261024', captureId = 'QA_CAPTURE_20261024';
+  const amount = paypalAmountFromPyg(result.order.total, 7500);
+  assert.equal(amount.value, '6.00');
+  await withPaypalSimulator(project, host, { providerId, captureId, value: amount.value, failCaptureOnce: true }, async ({ env, calls }) => {
+  const created = await createPaypalOrder(env, { orderId: result.orderId, uid: actor.uid });
+  assert.equal(created.providerOrderId, providerId); assert.equal(created.value, '6.00');
+  const request = calls.find(call => call.path === '/v2/checkout/orders');
+  assert.deepEqual(request.body.purchase_units[0].amount, { currency_code: 'USD', value: '6.00' });
+  const mapping = async () => { const doc = await deps.get({}, `paypalOrders/${providerId}`); return { ...decodeFirestoreFields(doc.fields), id: providerId, updateTime: doc.updateTime }; };
+  await assert.rejects(markPaid({}, await mapping(), { id: captureId, amount: { currency_code: 'USD', value: '5.99' } }, deps), /no coincide/);
+  let order = decodeFirestoreFields((await deps.get({}, `orders/${result.orderId}`)).fields);
+  assert.equal(order.paymentStatus, 'pendiente');
+  await assert.rejects(capturePaypalOrder(env, { providerOrderId: providerId, uid: actor.uid }), /PayPal API falló/);
+  assert.equal(decodeFirestoreFields((await deps.get({}, `orders/${result.orderId}`)).fields).paymentStatus, 'pendiente');
+  assert.equal((await product(id)).stock, 1);
+  const paid = await capturePaypalOrder(env, { providerOrderId: providerId, uid: actor.uid });
+  assert.equal(paid.paid, true);
+  order = decodeFirestoreFields((await deps.get({}, `orders/${result.orderId}`)).fields);
+  assert.equal(order.paymentStatus, 'pagado'); assert.equal(order.payment.captureId, captureId);
+  assert.equal((await product(id)).stock, 1, 'cobrar no descuenta dos veces la reserva');
+  const repeated = await capturePaypalOrder(env, { providerOrderId: providerId, uid: actor.uid });
+  assert.equal(repeated.idempotent, true); assert.equal((await product(id)).stock, 1);
+  const attempts = calls.filter(call => call.path.endsWith('/capture'));
+  assert.equal(attempts.length, 2); assert.ok(attempts[0].requestId); assert.equal(attempts[0].requestId, attempts[1].requestId);
+  const notice = await deps.findFirst({}, 'adminNotifications', ['orderId'], result.orderId);
+  const noticeBody = decodeFirestoreFields(notice.fields).body;
+  assert.match(noticeBody, /Gs\. 45\.000/, 'el aviso usa el total del pedido en guaraníes');
+  assert.doesNotMatch(noticeBody, /USD|Gs\. 6(?:\D|$)/);
+  await markReversed({}, await mapping(), { kind: 'refunded', refundId: 'QA_REFUND_20261024', eventId: 'QA_EVENT_REFUND_20261024', captureId, currency: 'USD', cents: amount.cents }, { ...deps, notify: async () => {} });
+  order = decodeFirestoreFields((await deps.get({}, `orders/${result.orderId}`)).fields);
+  assert.equal(order.paymentStatus, 'reembolsado');
+  await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', changeId: 'qa_fake_payment_cancel' }, admin, deps);
+  await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', changeId: 'qa_fake_payment_cancel' }, admin, deps);
+  assert.equal((await product(id)).stock, 2, 'cancelar dos veces restituye una sola vez');
+  });
+});
+
+test('pago ficticio: un pedido cancelado después de abrir PayPal no se puede capturar', async () => {
+  const id = 'qa_cancel_before_payment', requestId = 'qa_cancel_before_payment_20261024';
+  await seed('settings/orderSequence', { lastNumber: 0, highWaterMark: 0, historyReconciledAt: new Date() });
+  await seed('settings/general', { storeOpen: true, paypal: { enabled: true }, paymentMethods: { paypal: true } });
+  await seed(`products/${id}`, { name: 'Producto ficticio para cancelación', active: true, stock: 1, price: 45000 });
+  await seed(`checkoutGuards/${actor.uid}`, { lastCheckoutOrderId: `${actor.uid}_${requestId}`, lastCheckoutAt: new Date() });
+  const draft = composeCheckoutDraft({ requestId, items: [{ id, qty: 1 }], name: 'Ana Gómez', phone: '595981123456', contactEmail: 'qa@example.invalid', selectedCity: '__retiro__', shipping: { method: 'retiro', cost: 0, pending: false }, paymentMethod: 'paypal', subtotal: 45000 });
+  const prepared = await preparePublicCheckoutOrder({}, draft, actor, deps);
+  const result = await createOrderAdmin({}, prepared.input, actor, { ...deps, inspect: prepared.inspect });
+  const providerId = 'QA_PROVIDER_CANCEL_20261024';
+  await withPaypalSimulator(project, host, { providerId, captureId: 'QA_CAPTURE_CANCEL_20261024', value: '6.00' }, async ({ env, calls }) => {
+    await createPaypalOrder(env, { orderId: result.orderId, uid: actor.uid });
+    await applyOrderAdminMutation({}, { orderId: result.orderId, status: 'cancelado', changeId: 'qa_cancel_before_capture' }, admin, deps);
+    assert.equal((await product(id)).stock, 1);
+    await assert.rejects(capturePaypalOrder(env, { providerOrderId: providerId, uid: actor.uid }), /cerrado/);
+    assert.equal(calls.filter(call => call.path.endsWith('/capture')).length, 0, 'rechaza antes de pedir un cobro al proveedor');
+    const order = decodeFirestoreFields((await deps.get({}, `orders/${result.orderId}`)).fields);
+    assert.notEqual(order.paymentStatus, 'pagado'); assert.equal((await product(id)).stock, 1);
+  });
+});

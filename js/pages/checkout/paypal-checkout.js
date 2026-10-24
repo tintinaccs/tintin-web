@@ -18,13 +18,17 @@ function loadSdk(clientId, environment) {
   if (window.paypal) return Promise.resolve(window.paypal);
   if (state.sdkPromise) return state.sdkPromise;
   const base = environment === 'live' ? 'www.paypal.com' : 'www.paypal.com';
+  const script = document.createElement('script');
   state.sdkPromise = new Promise((resolve, reject) => {
-    const script = document.createElement('script');
     script.src = `https://${base}/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=USD&intent=capture&components=buttons`;
     script.async = true;
     script.onload = () => window.paypal ? resolve(window.paypal) : reject(new Error('PayPal SDK no disponible.'));
     script.onerror = () => reject(new Error('No se pudo cargar PayPal. Revisá tu conexión.'));
     document.head.appendChild(script);
+  }).catch(error => {
+    script.remove();
+    state.sdkPromise = null;
+    throw error;
   });
   return state.sdkPromise;
 }
@@ -43,7 +47,7 @@ async function render() {
     })();
     status('Elegí PayPal para abrir el pago seguro.');
     const paypal = await loadSdk(state.config.clientId, state.config.environment);
-    paypal.Buttons({
+    await paypal.Buttons({
       style: { layout: 'vertical', shape: 'rect', label: 'paypal' },
       createOrder: async () => {
         status('Preparando el importe verificado…');
