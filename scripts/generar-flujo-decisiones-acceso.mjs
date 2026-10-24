@@ -7,7 +7,7 @@ const sources = [
   ['js/core/store/perfil-usuario.js', ['profileStatus', 'Google Sheets en este proyecto sincroniza productos, no usuarios']],
   ['js/pages/profile/configuracion-inicial-perfil.mjs', ['getProfileCompletionPlan', "profileStatus = 'active'"]],
   ['functions/api/email-otp-send.js', ['emailIsValid', 'Sólo correo']],
-  ['js/pages/profile/control-acceso-perfil.js', ['leaveBlockedAccount', 'onSnapshot']],
+  ['js/pages/profile/control-acceso-perfil.js', ['leaveBlockedAccount', 'onAppCheckSnapshot', '../../core/firebase/suscripcion-app-check.js']],
   ['cloudflare/firebase-admin-ligero.js', ['usernameReservations', 'users']]
 ];
 const verified = [];

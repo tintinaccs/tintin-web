@@ -22,7 +22,7 @@ test('sin poder leer el perfil el guardia no bloquea y no marca como completo', 
 
 test('una cuenta bloqueada pierde la sesión al instante (también si se bloquea mientras navega)', async () => {
   const gate = await read('js/pages/profile/control-acceso-perfil.js');
-  assert.match(gate, /onSnapshot\(doc\(db, 'users', user\.uid\)/);
+  assert.match(gate, /onAppCheckSnapshot\(doc\(db, 'users', user\.uid\)/);
   assert.match(gate, /data\.blocked === true\) \{\s*leaveBlockedAccount\(user\)/);
   assert.match(gate, /await signOut\(auth\)[\s\S]{0,80}location\.replace\('\/login\?blocked=1'\)/);
   const login = await read('login.html');

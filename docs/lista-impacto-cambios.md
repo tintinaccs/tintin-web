@@ -1,3 +1,7 @@
+## 2026-10-24 — Arranque seguro del perfil y eventos de mantenimiento
+
+La verificación global del perfil usa la suscripción canónica que espera App Check y admite token tardío; logout/cambio de cuenta cancelan el listener pendiente y los rechazos reales siguen visibles. Mantenimiento descarta eventos de CI no aprobada y PR borrador sin crear estados de aprobación ni intentar publicar; conserva validaciones de dispatch, base, autor, SHA y CI. Pruebas ejecutan módulos/runner reales; grafo de URLs, contrato de acceso y derivados regenerados. No se modifican editor, ticket, reglas ni datos reales. Evidencia y límites en CURRENT_STATE.
+
 ## 2026-10-24 — Cierre accesible de paneles de navegación
 
 SurfaceController retira el foco antes de aria-hidden y restituye la campana con inert liberado. Accesibilidad global delega el foco de los paneles registrados a esa autoridad; mantiene los diálogos genéricos. Regresión de Alertas comprueba el orden de ocultamiento y cierre por Escape/botón en cinco resoluciones. Versiones transitivas y derivados canónicos renovados; sin reglas ni datos reales modificados. Evidencia en CURRENT_STATE.

@@ -108,9 +108,13 @@ if (process.env.GITHUB_EVENT_NAME === 'workflow_run') {
   const run = event.workflow_run;
   assert(run?.path === '.github/workflows/auditar-tintin.yml' && run.event === 'pull_request' &&
     run.head_repository?.full_name === config.repository, 'Evento CI ajeno al repositorio o workflow esperado.');
+  if (run.conclusion !== 'success') {
+    console.log('La CI no terminó aprobada: no hay candidato para publicación automática.');
+    process.exit(0);
+  }
   const candidates = await list(`commits/${run.head_sha}/pulls`);
-  const pr = candidates.find(item => item.state === 'open' && item.base?.ref === config.branch && item.head?.sha === run.head_sha);
-  if (!pr) { console.log('La ejecución ya no corresponde a un PR abierto vigente.'); process.exit(0); }
+  const pr = candidates.find(item => item.state === 'open' && !item.draft && item.base?.ref === config.branch && item.head?.sha === run.head_sha);
+  if (!pr) { console.log('La ejecución no corresponde a un PR abierto vigente listo para revisión.'); process.exit(0); }
   prNumber = String(pr.number); headSha = pr.head.sha;
 }
 assert(/^[a-f0-9]{40}$/.test(headSha) && /^[1-9][0-9]*$/.test(prNumber), 'PR y SHA completo obligatorios.');

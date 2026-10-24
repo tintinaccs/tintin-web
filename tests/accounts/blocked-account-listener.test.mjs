@@ -48,7 +48,7 @@ function loadGate({ pathname = '/catalogo', search = '', hash = '' } = {}) {
     subscribeSession: callback => { world.sessionCallback = callback; },
     recordAuthDiagnostic: (event, detail) => world.diagnostics.push({ event, ...detail }),
     doc: (db, collection, id) => ({ path: `${collection}/${id}` }),
-    onSnapshot: (ref, next, error) => {
+    onAppCheckSnapshot: (ref, next, error) => {
       world.listeners.push({ path: ref.path, next, error });
       return () => { world.unsubscribed += 1; };
     },
