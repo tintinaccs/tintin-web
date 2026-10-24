@@ -1,5 +1,5 @@
 import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20261021-identidad-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261021-commerce-review-1';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20261023-checkout-variants-header-2';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 

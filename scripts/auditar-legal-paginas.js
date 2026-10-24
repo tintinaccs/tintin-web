@@ -55,8 +55,9 @@ const pageFunction = fs.readFileSync('functions/[page].js', 'utf8');
 if (!runtimeVersion || !pageFunction.includes(`mantenimiento-legal.js?v=${runtimeVersion}`)) errors.push('Pages Function no inyecta runtime legal versionado canónico');
 if (!pageFunction.includes("page === 'terminos' || page === 'privacidad'")) errors.push('Pages Function no limita runtime legal a rutas legales');
 
-const workflow = fs.readFileSync('.github/workflows/auditar-tintin.yml', 'utf8');
-if (!workflow.includes('node scripts/auditar-legal-paginas.js')) errors.push('workflow no ejecuta auditoría legal');
+const { readCICommands } = require('./ci-commands.js');
+const commands = readCICommands(process.cwd());
+if (!commands.has('node scripts/auditar-legal-paginas.js')) errors.push('workflow no ejecuta auditoría legal');
 
 if (errors.length) {
   console.error('Auditoría de páginas informativas falló:');

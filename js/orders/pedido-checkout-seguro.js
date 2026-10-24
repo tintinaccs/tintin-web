@@ -1,4 +1,4 @@
-import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261021-commerce-review-1';
+import { inspectCheckoutAvailability, showCheckoutAvailabilityDialog } from '../pages/checkout/disponibilidad-checkout.js?v=tintin-20261023-checkout-variants-header-2';
 import { isValidCustomerName } from '../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261015-images-1';
 import { shippingDepartment } from '../components/location/departamento-ciudad.mjs?v=tintin-20261008-shipping-department-1';
 import { canonicalDeliveryCities, normalizeDeliveryCityName } from '../components/location/tarifas-delivery.mjs?v=tintin-20261007-master-audit-1';
@@ -1088,6 +1088,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       too_many_products: error?.message || 'Tu pedido tiene demasiados productos distintos. Escribinos por WhatsApp para coordinarlo.',
       invalid_cart: error?.message,
       invalid_price: 'No pudimos comprobar el precio de uno de los productos.',
+      invalid_variant: 'Las opciones de un producto cambiaron. Volvé a elegirlas desde su ficha para continuar.',
+      variant_required: 'Elegí las opciones del producto desde su ficha para continuar.',
       coupon_invalid: 'El código del cupón no es válido.',
       coupon_not_found: 'El cupón no existe.',
       coupon_inactive: 'El cupón no está activo.',
