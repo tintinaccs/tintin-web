@@ -1,6 +1,6 @@
 import { getProductPagePrefetch } from '../../pages/product/precarga-datos-producto.js?v=tintin-20261015-product-fast-1';
 import { wristCategory } from './categorias-pulseras.mjs?v=tintin-20261014-pulseras-2';
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20261024-editor-v2-6';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20261024-ticket-image-1';
 import { catalogVisibilityReady } from '../../pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20261024-editor-v2-6';
 import '../../pages/catalog/prioridad-stock-catalogo.js?v=tintin-20261023-variant-engine-v2-2';
 import { loadProductRealtimeDependencies } from './tiempo-real-producto.js?v=tintin-20261017-domain-cutover-1';
